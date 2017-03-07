@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Sms\Service\Impl;
 
 use Biz\BaseService;
@@ -30,10 +31,10 @@ class SmsServiceImpl extends BaseService implements SmsService
 
         //这里不考虑去重，只考虑unlock
         $mobiles = $this->getUserService()->findUnlockedUserMobilesByUserIds($userIds);
-        $to      = implode(',', $mobiles);
+        $to = implode(',', $mobiles);
         try {
-            $api    = $this->createCloudeApi();
-            $result = $api->post("/sms/send", array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'parameters' => $parameters));
+            $api = $this->createCloudeApi();
+            $result = $api->post('/sms/send', array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'parameters' => $parameters));
         } catch (\RuntimeException $e) {
             throw new \RuntimeException($this->getKernel()->trans('发送失败！'));
         }
@@ -83,7 +84,7 @@ class SmsServiceImpl extends BaseService implements SmsService
 
         if ($smsType == 'sms_forget_password') {
             $description = $this->getKernel()->trans('登录密码重置');
-            $targetUser  = $this->getUserService()->getUserByVerifiedMobile($to);
+            $targetUser = $this->getUserService()->getUserByVerifiedMobile($to);
 
             if (empty($targetUser)) {
                 throw new \RuntimeException($this->getKernel()->trans('用户不存在'));
@@ -118,26 +119,27 @@ class SmsServiceImpl extends BaseService implements SmsService
         }
 
         if ($smsType == 'system_remind') {
-            $to          = $to;
+            $to = $to;
             $description = '直播公开课';
         }
 
         $smsCode = $this->generateSmsCode();
 
         try {
-            $api    = $this->createCloudeApi();
+            $api = $this->createCloudeApi();
             $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'verify' => $smsCode));
             if (isset($result['error'])) {
                 return array('error' => $this->getKernel()->trans('发送失败, %resulterror%', array('%resulterror%' => $result['error'])));
             }
         } catch (\RuntimeException $e) {
             $message = $e->getMessage();
+
             return array('error' => $this->getKernel()->trans('发送失败, %message%', array('%message%' => $message)));
         }
 
-        $result['to']      = $to;
+        $result['to'] = $to;
         $result['smsCode'] = $smsCode;
-        $result['userId']  = $currentUser['id'];
+        $result['userId'] = $currentUser['id'];
 
         if ($currentUser['id'] != 0) {
             $result['nickname'] = $currentUser['nickname'];
@@ -146,9 +148,9 @@ class SmsServiceImpl extends BaseService implements SmsService
         $this->getLogService()->info('sms', $smsType, $this->getKernel()->trans('userId:%currentUserid%,对%to%发送用于%smsType%的验证短信%smsCode%', array('%currentUserid%' => $currentUser['id'], '%to%' => $to, '%smsType%' => $smsType, '%smsCode%' => $smsCode)), $result);
 
         return array(
-            'to'            => $to,
-            'captcha_code'  => $smsCode,
-            'sms_last_time' => $currentTime
+            'to' => $to,
+            'captcha_code' => $smsCode,
+            'sms_last_time' => $currentTime,
         );
     }
 
@@ -193,7 +195,7 @@ class SmsServiceImpl extends BaseService implements SmsService
     {
         $code = rand(0, 9);
 
-        for ($i = 1; $i < $length; $i++) {
+        for ($i = 1; $i < $length; ++$i) {
             $code = $code.rand(0, 9);
         }
 
@@ -213,6 +215,7 @@ class SmsServiceImpl extends BaseService implements SmsService
         if (($currentTime - $smsLastTime) < $allowedTime) {
             return true;
         }
+
         return false;
     }
 
@@ -221,6 +224,7 @@ class SmsServiceImpl extends BaseService implements SmsService
         if (!$this->apiFactory) {
             $this->apiFactory = CloudAPIFactory::create('leaf');
         }
+
         return $this->apiFactory;
     }
 

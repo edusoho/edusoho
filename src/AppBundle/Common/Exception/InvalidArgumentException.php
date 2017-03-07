@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Common\Exception;
 
 class InvalidArgumentException extends BaseException

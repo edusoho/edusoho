@@ -5,12 +5,12 @@ use Phpmig\Migration\Migration;
 class Question extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
         $biz = $this->getContainer();
-        $db  = $biz['db'];
+        $db = $biz['db'];
         $db->exec("
             ALTER TABLE question add courseId INT(10) UNSIGNED NOT NULL DEFAULT '0' AFTER `target`
         ");
@@ -21,13 +21,13 @@ class Question extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
         $biz = $this->getContainer();
-        $db  = $biz['db'];
-        $db->exec("ALTER TABLE `question` DROP `courseId`");
-        $db->exec("ALTER TABLE `question` DROP `lessonId`");
+        $db = $biz['db'];
+        $db->exec('ALTER TABLE `question` DROP `courseId`');
+        $db->exec('ALTER TABLE `question` DROP `lessonId`');
     }
 }

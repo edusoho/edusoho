@@ -1547,6 +1547,10 @@ course_activity_trigger:
     defaults: { _controller: AppBundle:Activity/Activity:trigger }
     methods: [POST]
 
+course_acitvity_watch:
+    path:  /course/{courseId}/activity/{id}/watch
+    defaults: { _controller: AppBundle:Activity/Video:watch}
+
 course_activity_download:
     path: /course/{courseId}/activiy/{activityId}/download
     defaults: { _controller: AppBundle:Activity/Download:downloadFile }
@@ -1571,10 +1575,6 @@ course_task_activity_show:
 course_task_trigger:
     path:  /course/{courseId}/task/{id}/trigger
     defaults: { _controller: AppBundle:Task:trigger }
-
-course_task_report:
-    path:  /course/{courseId}/task/{id}/report
-    defaults: { _controller: AppBundle:Task:report }
 
 course_task_finish:
     path:  /course/{courseId}/task/{id}/finish
@@ -2188,6 +2188,10 @@ course_set_manage_testpaper_questions:
 course_manage_testpaper_check:
   path: /course/{id}/manage/testpaper/{resultId}/check
   defaults: { _controller: AppBundle:Course/TestpaperManage:check }
+
+testpaper_check:
+  path: /testpaper/{resultId}/check
+  defaults: { _controller: AppBundle:Course/TestpaperManage:checkForword }
 
 course_manage_testpaper_check_list:
   path: /course/{id}/manage/testpaper/check

@@ -1,7 +1,7 @@
 <?php
+
 namespace AppBundle\Command;
 
-use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,14 +22,15 @@ class CountOnlineCommand extends BaseCommand
         $type = $input->getArgument('type');
         if (!in_array($type, array('login', 'total'))) {
             $output->writeln('type参数不正确，type的值是枚举类型：login, total');
+
             return;
         }
         $minute = $input->getArgument('minute');
 
         $currentTime = time();
-        $start       = $currentTime - $minute * 60;
-        $value       = $this->convert($type);
-        $count       = $this->getServiceKernel()->getRedis()->zCount("session:{$value}", $start, $currentTime);
+        $start = $currentTime - $minute * 60;
+        $value = $this->convert($type);
+        $count = $this->getServiceKernel()->getRedis()->zCount("session:{$value}", $start, $currentTime);
 
         $output->write($count);
     }
@@ -38,8 +39,9 @@ class CountOnlineCommand extends BaseCommand
     {
         $map = array(
             'login' => 'logined',
-            'total' => 'online'
+            'total' => 'online',
         );
+
         return $map[$type];
     }
 

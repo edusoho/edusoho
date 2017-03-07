@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Classroom;
 
 use AppBundle\Common\Paginator;
@@ -22,9 +23,9 @@ class CourseController extends BaseController
 
         $excludeIds = ArrayToolkit::column($activeCourses, 'parentCourseSetId');
         $conditions = array(
-            'status'     => 'published',
-            'parentId'   => 0,
-            'excludeIds' => $excludeIds
+            'status' => 'published',
+            'parentId' => 0,
+            'excludeIds' => $excludeIds,
         );
 
         $user = $this->getCurrentUser();
@@ -46,32 +47,32 @@ class CourseController extends BaseController
 
         $users = $this->getUsers($courseSets);
 
-        return $this->render("classroom-manage/course/course-pick-modal.html.twig", array(
-            'users'       => $users,
-            'courseSets'  => $courseSets,
+        return $this->render('classroom-manage/course/course-pick-modal.html.twig', array(
+            'users' => $users,
+            'courseSets' => $courseSets,
             'classroomId' => $classroomId,
-            'paginator'   => $paginator
+            'paginator' => $paginator,
         ));
     }
 
     public function listAction(Request $request, $classroomId)
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
-        $previewAs = "";
+        $previewAs = '';
 
         if (empty($classroom)) {
             throw $this->createNotFoundException();
         }
 
-        $courses       = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
-        $currentUser   = $this->getCurrentUser();
+        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
+        $currentUser = $this->getCurrentUser();
         $courseMembers = array();
-        $teachers      = array();
+        $teachers = array();
 
         foreach ($courses as &$course) {
             $courseMembers[$course['id']] = $this->getCourseMemberService()->getCourseMember($course['id'], $currentUser['id']);
 
-            $course['teachers']      = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
+            $course['teachers'] = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
             $teachers[$course['id']] = $course['teachers'];
         }
 
@@ -80,6 +81,7 @@ class CourseController extends BaseController
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
             $classroomName = $this->setting('classroom.name', '班级');
+
             return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomName}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
 
@@ -91,7 +93,9 @@ class CourseController extends BaseController
         $member = $this->previewAsMember($previewAs, $member, $classroom);
 
         $layout = 'classroom/layout.html.twig';
-        if ($member && !$member["locked"]) {
+        $isCourseMember = false;
+        if ($member && !$member['locked']) {
+            $isCourseMember = true;
             $layout = 'classroom/join-layout.html.twig';
         }
         if (!$classroom) {
@@ -99,30 +103,32 @@ class CourseController extends BaseController
         } else {
             $classroomDescription = $classroom['about'];
             $classroomDescription = strip_tags($classroomDescription, '');
-            $classroomDescription = preg_replace("/ /", "", $classroomDescription);
+            $classroomDescription = preg_replace('/ /', '', $classroomDescription);
         }
-        return $this->render("classroom/course/list.html.twig", array(
-            'classroom'            => $classroom,
-            'member'               => $member,
-            'teachers'             => $teachers,
-            'courses'              => $courses,
-            'courseMembers'        => $courseMembers,
-            'layout'               => $layout,
-            'classroomDescription' => $classroomDescription
+
+        return $this->render('classroom/course/list.html.twig', array(
+            'classroom' => $classroom,
+            'member' => $member,
+            'teachers' => $teachers,
+            'courses' => $courses,
+            'courseMembers' => $courseMembers,
+            'layout' => $layout,
+            'classroomDescription' => $classroomDescription,
+            'isCourseMember' => $isCourseMember,
         ));
     }
 
     public function searchAction(Request $request, $classroomId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
-        $key = $request->request->get("key");
+        $key = $request->request->get('key');
 
         $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
-        $excludeIds    = ArrayToolkit::column($activeCourses, 'parentCourseSetId');
+        $excludeIds = ArrayToolkit::column($activeCourses, 'parentCourseSetId');
 
-        $conditions               = array("title" => "%{$key}%");
-        $conditions['status']     = 'published';
-        $conditions['parentId']   = 0;
+        $conditions = array('title' => "%{$key}%");
+        $conditions['status'] = 'published';
+        $conditions['parentId'] = 0;
         $conditions['excludeIds'] = $excludeIds;
 
         $user = $this->getCurrentUser();
@@ -146,11 +152,11 @@ class CourseController extends BaseController
         $users = $this->getUsers($courseSets);
 
         return $this->render('course/course-select-list.html.twig', array(
-            'users'       => $users,
-            'courseSets'  => $courseSets,
-            'paginator'   => $paginator,
+            'users' => $users,
+            'courseSets' => $courseSets,
+            'paginator' => $paginator,
             'classroomId' => $classroomId,
-            'type'        => 'ajax_pagination'
+            'type' => 'ajax_pagination',
         ));
     }
 
@@ -163,11 +169,16 @@ class CourseController extends BaseController
                 $tags = $this->getTagService()->findTagsByIds($courseSet['tags']);
 
                 $courseSet['tags'] = ArrayToolkit::column($tags, 'id');
-                $userIds           = array_merge($userIds, array($courseSet['creator']));
             }
+            $userIds = array_merge($userIds, array($courseSet['creator']));
         }
 
-        return $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        if (!empty($users)) {
+            $users = ArrayToolkit::index($users, 'id');
+        }
+
+        return $users;
     }
 
     private function previewAsMember($previewAs, $member, $classroom)
@@ -180,17 +191,17 @@ class CourseController extends BaseController
             }
 
             $member = array(
-                'id'          => 0,
+                'id' => 0,
                 'classroomId' => $classroom['id'],
-                'userId'      => $user['id'],
-                'orderId'     => 0,
-                'levelId'     => 0,
-                'noteNum'     => 0,
-                'threadNum'   => 0,
-                'remark'      => '',
-                'role'        => array('auditor'),
-                'locked'      => 0,
-                'createdTime' => 0
+                'userId' => $user['id'],
+                'orderId' => 0,
+                'levelId' => 0,
+                'noteNum' => 0,
+                'threadNum' => 0,
+                'remark' => '',
+                'role' => array('auditor'),
+                'locked' => 0,
+                'createdTime' => 0,
             );
 
             if ($previewAs == 'member') {
@@ -210,7 +221,7 @@ class CourseController extends BaseController
         }
 
         $courseSets = ArrayToolkit::index($courseSets, 'id');
-        $courses    = $this->getCourseService()->findCoursesByCourseSetIds(array_keys($courseSets));
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds(array_keys($courseSets));
         if (!empty($courses)) {
             foreach ($courses as $course) {
                 if ($course['status'] != 'published') {

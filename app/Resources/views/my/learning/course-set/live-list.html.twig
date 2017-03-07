@@ -15,7 +15,7 @@
             {% set task = courseSet['task'] %}
             <li class="course-item clearfix">
               <a class="course-picture-link" href="{{ path('course_set_show', {id:courseSet.id}) }}">
-                <img class="course-picture" src="{{ filepath(courseSet.cover.middlePicture|default(null), 'course.png') }}" alt="{{ courseSet.title }}">
+                <img class="course-picture" src="{{ filepath(courseSet.cover.middle|default(null), 'courseSet.png') }}" alt="{{ courseSet.title }}">
               </a>
               <div class="course-body">
                 <h4 class="course-title"><a href="{{ path('course_set_show', {id:courseSet.id}) }}">{{ courseSet.title }}</a>
@@ -27,7 +27,7 @@
                 </h4>
                 <div class="course-about ellipsis">{{ courseSet.subtitle }}</div>
                 <div class="live-course-lesson mtm">
-                  <span class="text-success fsl mrl">{{ task.startTime|date('n月j日 H:i') }} ~ {{ task.endTime|date('H:i') }}</span>
+                  <span class="color-success fsl mrl">{{ task.startTime|date('n月j日 H:i') }} ~ {{ task.endTime|date('H:i') }}</span>
                   <span class="text-muted fsl mrl">{{'第%number%课时'|trans({'%number%': task.number})}}</span>
                 </div>
               </div>

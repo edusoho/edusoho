@@ -14,7 +14,6 @@ class DocPlayer {
     this.init();
 
     console.log(watermarkOptions);
-
   }
 
   init() {

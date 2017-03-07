@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Topxia\Service\Common\ServiceKernel;
@@ -18,18 +19,17 @@ class WarmupCommand extends BaseCommand
         $output->writeln('<info>开始初始化系统</info>');
         $users = $this->getUserService()->searchUsers(array(), array(), 0, 100000);
         $time = time();
-        ServiceKernel::instance()->getConnection()->update('user', array('updatedTime' => $time), array(1=>1));
+        ServiceKernel::instance()->getConnection()->update('user', array('updatedTime' => $time), array(1 => 1));
 
         foreach ($users as $user) {
-			$this->getUserService()->getUser($user['id']);
-			$this->getUserService()->getUserByNickname($user['nickname']);
+            $this->getUserService()->getUser($user['id']);
+            $this->getUserService()->getUserByNickname($user['nickname']);
             $this->getUserService()->getUserByEmail($user['email']);
 
             $this->getServiceKernel()->createDao('Course:CourseMemberDao')->getByCourseIdAndUserId(1, $user['id']);
 
             $this->getServiceKernel()->createDao('Course:LessonLearnDao')->getLearnByUserIdAndLessonId($user['id'], 1);
         }
-
 
         $this->getCacheService()->get('settings');
 

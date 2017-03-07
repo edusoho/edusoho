@@ -28,7 +28,7 @@
             </button>
           </div>
           <div class="col-md-10">
-            <span class="text-danger text-sm">{{'抱歉，您尚未接入教育云，不能使用即时聊天服务！'|trans}}</span>
+            <span class="color-danger text-sm">{{'抱歉，您尚未接入教育云，不能使用即时聊天服务！'|trans}}</span>
             <p><a href="http://open.edusoho.com/educloud" target="_blank">{{'立即接入'|trans}}</a></p>
           </div>
         {% elseif data.status == 'unbinded' %}
@@ -37,7 +37,7 @@
             </button>
           </div>
           <div class="col-md-10">
-            <span class="text-danger text-sm">{{'未绑定授权域名不能开通即时聊天！'|trans}}</span>
+            <span class="color-danger text-sm">{{'未绑定授权域名不能开通即时聊天！'|trans}}</span>
             <p><a href="{{ path('admin_setting_cloud') }}">{{'立即设置'|trans}}</a></p>
           </div>
         {% elseif data.status == 'binded_error' %}
@@ -46,7 +46,7 @@
             </button>
           </div>
           <div class="col-md-10">
-            <span class="text-danger text-sm">{{'当前域名与授权域名不符，不能开通即时聊天！'|trans}}</span>
+            <span class="color-danger text-sm">{{'当前域名与授权域名不符，不能开通即时聊天！'|trans}}</span>
             <p><a href="{{ path('admin_setting_cloud') }}" target="_blank">{{'立即设置'|trans}}</a></p>
           </div>
         {% else %}
@@ -56,7 +56,7 @@
             </div>
           {% else %}
             <div class="col-md-2 control-cloud success">
-              <span class="text-success">{{'已开启'|trans}}</span>
+              <span class="color-success">{{'已开启'|trans}}</span>
             </div>
             <div class="controls col-md-8 cloud-warning">
               <button class="btn btn-primary mhs app-im-close" type="submit" data-loading-text="{{'正在关闭...'|trans}}" data-url="{{ path('admin_app_im_update') }}" data-status="0">{{'关闭'|trans}}</button>

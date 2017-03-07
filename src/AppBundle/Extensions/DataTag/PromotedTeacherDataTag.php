@@ -2,17 +2,15 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use AppBundle\Extensions\DataTag\DataTag;
-
-class PromotedTeacherDataTag extends CourseBaseDataTag implements DataTag  
+class PromotedTeacherDataTag extends CourseBaseDataTag implements DataTag
 {
-    
     /**
-     * 获取一个教师
-     * @param  array $arguments 参数
+     * 获取一个教师.
+     *
+     * @param array $arguments 参数
+     *
      * @return array 用户
      */
-    
     public function getData(array $arguments)
     {
         $teacher = $this->getUserService()->findLatestPromotedTeacher(0, 1);
@@ -30,5 +28,4 @@ class PromotedTeacherDataTag extends CourseBaseDataTag implements DataTag
 
         return $teacher;
     }
-
 }

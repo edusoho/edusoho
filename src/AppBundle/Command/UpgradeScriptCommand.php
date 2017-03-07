@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Biz\Util\PluginUtil;
@@ -21,17 +22,17 @@ class UpgradeScriptCommand extends BaseCommand
     {
         $this->initServiceKernel();
 
-        $code    = 'MAIN';
+        $code = 'MAIN';
         $version = $input->getArgument('version');
 
         $this->executeScript($code, $version);
-        $output->writeln("<info>执行脚本</info>");
+        $output->writeln('<info>执行脚本</info>');
 
         $this->removeCache();
-        $output->writeln("<info>删除缓存</info>");
+        $output->writeln('<info>删除缓存</info>');
 
         $this->updateApp($code, $version);
-        $output->writeln("<info>元数据更新</info>");
+        $output->writeln('<info>元数据更新</info>');
     }
 
     protected function executeScript($code, $version, $index = 0)
@@ -56,7 +57,8 @@ class UpgradeScriptCommand extends BaseCommand
 
     protected function removeCache()
     {
-        $cachePath  = $this->getServiceKernel()->getParameter('kernel.root_dir').'/cache/'.$this->getServiceKernel()->getEnvironment();
+        $cachePath = $this->getServiceKernel()->getParameter('kernel.root_dir').'/cache/'.$this->getServiceKernel(
+            )->getEnvironment();
         $filesystem = new Filesystem();
         $filesystem->remove($cachePath);
 
@@ -70,19 +72,22 @@ class UpgradeScriptCommand extends BaseCommand
         $app = $this->getAppService()->getAppByCode($code);
 
         $newApp = array(
-            'code'        => $code,
-            'version'     => $version,
+            'code' => $code,
+            'version' => $version,
             'fromVersion' => $app['version'],
-            'updatedTime' => time()
+            'updatedTime' => time(),
         );
 
         $this->getLogService()->info('system', 'update_app_version', "命令行更新应用「{$app['name']}」版本为「{$version}」");
-        return $this->getAppDao()->updateApp($app['id'], $newApp);
+
+        return $this->getAppDao()->update($app['id'], $newApp);
     }
 
     protected function getAppDao()
     {
-        return $this->getServiceKernel()->createDao('CloudPlatform:CloudAppDao');
+        $biz = $this->getServiceKernel()->getBiz();
+
+        return $biz->dao('CloudPlatform:CloudAppDao');
     }
 
     protected function getAppService()

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\AssetsInstallCommand;
@@ -6,7 +7,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use AppBundle\Common\SystemInitializer;
-
 
 class InitCommand extends BaseCommand
 {
@@ -23,10 +23,10 @@ class InitCommand extends BaseCommand
         $this->initServiceKernel();
         $initializer = new SystemInitializer($output);
         $fields = array(
-            'email'     => 'test@edusoho.com',
-            'nickname'  => '测试管理员',
-            'password'  => 'kaifazhe',
-            'createdIp' => '127.0.0.1'
+            'email' => 'test@edusoho.com',
+            'nickname' => '测试管理员',
+            'password' => 'kaifazhe',
+            'createdIp' => '127.0.0.1',
         );
 
         $user = $initializer->initAdminUser($fields);

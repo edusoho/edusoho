@@ -33,24 +33,19 @@
  * </code>
  *
  * @category  Crypt
- * @package   DES
  *
  * @author    Jim Wigginton <terrafrost@php.net>
  * @copyright 2007 Jim Wigginton
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  *
- * @link      http://phpseclib.sourceforge.net
+ * @see      http://phpseclib.sourceforge.net
  */
 
 namespace Biz\Util\Phpsec\Crypt;
 
-use Biz\Util\Phpsec\Crypt\Base;
-
 /**
  * Pure-PHP implementation of DES.
  *
- * @access  public
- * @package DES
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
@@ -62,103 +57,103 @@ class DES extends Base
      * @see \Biz\Util\Phpsec\Crypt\DES::_processBlock()
      */
     /**
-     * Contains $keys[self::ENCRYPT]
+     * Contains $keys[self::ENCRYPT].
      */
     const ENCRYPT = 0;
     /**
-     * Contains $keys[self::DECRYPT]
+     * Contains $keys[self::DECRYPT].
      */
     const DECRYPT = 1;
     /**#@-*/
 
     /**
-     * Block Length of the cipher
+     * Block Length of the cipher.
      *
-     * @var Integer
-     * @access private
+     * @var int
+     *
      * @see \Biz\Util\Phpsec\Crypt\Base::block_size
      */
     public $block_size = 8;
 
     /**
-     * The Key
+     * The Key.
      *
-     * @var String
-     * @access private
+     * @var string
+     *
      * @see \Biz\Util\Phpsec\Crypt\Base::key
      * @see setKey()
      */
     public $key = "\0\0\0\0\0\0\0\0";
 
     /**
-     * The default password key_size used by setPassword()
+     * The default password key_size used by setPassword().
      *
-     * @var Integer
-     * @access private
+     * @var int
+     *
      * @see \Biz\Util\Phpsec\Crypt\Base::password_key_size
      * @see \Biz\Util\Phpsec\Crypt\Base::setPassword()
      */
     public $password_key_size = 8;
 
     /**
-     * The mcrypt specific name of the cipher
+     * The mcrypt specific name of the cipher.
      *
-     * @var String
-     * @access private
+     * @var string
+     *
      * @see \Biz\Util\Phpsec\Crypt\Base::cipher_name_mcrypt
      */
     public $cipher_name_mcrypt = 'des';
 
     /**
-     * The OpenSSL names of the cipher / modes
+     * The OpenSSL names of the cipher / modes.
      *
-     * @var Array
-     * @access private
+     * @var array
+     *
      * @see \Biz\Util\Phpsec\Crypt\Base::openssl_mode_names
      */
     public $openssl_mode_names = array(
         self::MODE_ECB => 'des-ecb',
         self::MODE_CBC => 'des-cbc',
         self::MODE_CFB => 'des-cfb',
-        self::MODE_OFB => 'des-ofb'
+        self::MODE_OFB => 'des-ofb',
         // self::MODE_CTR is undefined for DES
     );
 
     /**
-     * Optimizing value while CFB-encrypting
+     * Optimizing value while CFB-encrypting.
      *
-     * @var Integer
-     * @access private
+     * @var int
+     *
      * @see \Biz\Util\Phpsec\Crypt\Base::cfb_init_len
      */
     public $cfb_init_len = 500;
 
     /**
-     * Switch for DES/3DES encryption
+     * Switch for DES/3DES encryption.
      *
      * Used only if $engine == self::ENGINE_INTERNAL
      *
-     * @var Integer
-     * @access private
+     * @var int
+     *
      * @see \Biz\Util\Phpsec\Crypt\DES::_setupKey()
      * @see \Biz\Util\Phpsec\Crypt\DES::_processBlock()
      */
     public $des_rounds = 1;
 
     /**
-     * max possible size of $key
+     * max possible size of $key.
      *
-     * @var String
-     * @access private
+     * @var string
+     *
      * @see \Biz\Util\Phpsec\Crypt\DES::setKey()
      */
     public $key_size_max = 8;
 
     /**
-     * The Key Schedule
+     * The Key Schedule.
      *
-     * @var Array
-     * @access private
+     * @var array
+     *
      * @see \Biz\Util\Phpsec\Crypt\DES::_setupKey()
      */
     public $keys;
@@ -170,8 +165,8 @@ class DES extends Base
      * with each byte containing all bits in the same state as the
      * corresponding bit in the index value.
      *
-     * @var Array
-     * @access private
+     * @var array
+     *
      * @see \Biz\Util\Phpsec\Crypt\DES::_processBlock()
      * @see \Biz\Util\Phpsec\Crypt\DES::_setupKey()
      */
@@ -303,7 +298,7 @@ class DES extends Base
         "\xFF\xFF\xFF\xFF\xFF\x00\x00\x00", "\xFF\xFF\xFF\xFF\xFF\x00\x00\xFF",
         "\xFF\xFF\xFF\xFF\xFF\x00\xFF\x00", "\xFF\xFF\xFF\xFF\xFF\x00\xFF\xFF",
         "\xFF\xFF\xFF\xFF\xFF\xFF\x00\x00", "\xFF\xFF\xFF\xFF\xFF\xFF\x00\xFF",
-        "\xFF\xFF\xFF\xFF\xFF\xFF\xFF\x00", "\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF"
+        "\xFF\xFF\xFF\xFF\xFF\xFF\xFF\x00", "\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF",
     );
 
     /**
@@ -311,8 +306,7 @@ class DES extends Base
      *
      * Indexing this table with each source byte performs the initial bit permutation.
      *
-     * @var Array
-     * @access private
+     * @var array
      */
     public $ipmap = array(
         0x00, 0x10, 0x01, 0x11, 0x20, 0x30, 0x21, 0x31,
@@ -346,15 +340,14 @@ class DES extends Base
         0x8C, 0x9C, 0x8D, 0x9D, 0xAC, 0xBC, 0xAD, 0xBD,
         0x8E, 0x9E, 0x8F, 0x9F, 0xAE, 0xBE, 0xAF, 0xBF,
         0xCC, 0xDC, 0xCD, 0xDD, 0xEC, 0xFC, 0xED, 0xFD,
-        0xCE, 0xDE, 0xCF, 0xDF, 0xEE, 0xFE, 0xEF, 0xFF
+        0xCE, 0xDE, 0xCF, 0xDF, 0xEE, 0xFE, 0xEF, 0xFF,
     );
 
     /**
      * Inverse IP mapping helper table.
      * Indexing this table with a byte value reverses the bit order.
      *
-     * @var Array
-     * @access private
+     * @var array
      */
     public $invipmap = array(
         0x00, 0x80, 0x40, 0xC0, 0x20, 0xA0, 0x60, 0xE0,
@@ -388,17 +381,16 @@ class DES extends Base
         0x07, 0x87, 0x47, 0xC7, 0x27, 0xA7, 0x67, 0xE7,
         0x17, 0x97, 0x57, 0xD7, 0x37, 0xB7, 0x77, 0xF7,
         0x0F, 0x8F, 0x4F, 0xCF, 0x2F, 0xAF, 0x6F, 0xEF,
-        0x1F, 0x9F, 0x5F, 0xDF, 0x3F, 0xBF, 0x7F, 0xFF
+        0x1F, 0x9F, 0x5F, 0xDF, 0x3F, 0xBF, 0x7F, 0xFF,
     );
 
     /**
-     * Pre-permuted S-box1
+     * Pre-permuted S-box1.
      *
      * Each box ($sbox1-$sbox8) has been vectorized, then each value pre-permuted using the
      * P table: concatenation can then be replaced by exclusive ORs.
      *
-     * @var Array
-     * @access private
+     * @var array
      */
     public $sbox1 = array(
         0x00808200, 0x00000000, 0x00008000, 0x00808202,
@@ -416,14 +408,13 @@ class DES extends Base
         0x00808202, 0x00008002, 0x00808000, 0x00800202,
         0x00800002, 0x00000202, 0x00008202, 0x00808200,
         0x00000202, 0x00800200, 0x00800200, 0x00000000,
-        0x00008002, 0x00008200, 0x00000000, 0x00808002
+        0x00008002, 0x00008200, 0x00000000, 0x00808002,
     );
 
     /**
-     * Pre-permuted S-box2
+     * Pre-permuted S-box2.
      *
-     * @var Array
-     * @access private
+     * @var array
      */
     public $sbox2 = array(
         0x40084010, 0x40004000, 0x00004000, 0x00084010,
@@ -441,14 +432,13 @@ class DES extends Base
         0x00004010, 0x40084000, 0x00080000, 0x40000010,
         0x00080010, 0x40004010, 0x40000010, 0x00080010,
         0x00084000, 0x00000000, 0x40004000, 0x00004010,
-        0x40000000, 0x40080010, 0x40084010, 0x00084000
+        0x40000000, 0x40080010, 0x40084010, 0x00084000,
     );
 
     /**
-     * Pre-permuted S-box3
+     * Pre-permuted S-box3.
      *
-     * @var Array
-     * @access private
+     * @var array
      */
     public $sbox3 = array(
         0x00000104, 0x04010100, 0x00000000, 0x04010004,
@@ -466,14 +456,13 @@ class DES extends Base
         0x04000104, 0x00010000, 0x04000000, 0x04010104,
         0x00000004, 0x00010104, 0x00010100, 0x04000004,
         0x04010000, 0x04000104, 0x00000104, 0x04010000,
-        0x00010104, 0x00000004, 0x04010004, 0x00010100
+        0x00010104, 0x00000004, 0x04010004, 0x00010100,
     );
 
     /**
-     * Pre-permuted S-box4
+     * Pre-permuted S-box4.
      *
-     * @var Array
-     * @access private
+     * @var array
      */
     public $sbox4 = array(
         0x80401000, 0x80001040, 0x80001040, 0x00000040,
@@ -491,14 +480,13 @@ class DES extends Base
         0x80401040, 0x80000040, 0x80000000, 0x00001000,
         0x80400000, 0x80001000, 0x00401040, 0x80400040,
         0x80001000, 0x00001040, 0x00400000, 0x80401000,
-        0x00000040, 0x00400000, 0x00001000, 0x00401040
+        0x00000040, 0x00400000, 0x00001000, 0x00401040,
     );
 
     /**
-     * Pre-permuted S-box5
+     * Pre-permuted S-box5.
      *
-     * @var Array
-     * @access private
+     * @var array
      */
     public $sbox5 = array(
         0x00000080, 0x01040080, 0x01040000, 0x21000080,
@@ -516,14 +504,13 @@ class DES extends Base
         0x21040080, 0x00040080, 0x21000000, 0x21040080,
         0x01040000, 0x00000000, 0x20040000, 0x21000000,
         0x00040080, 0x01000080, 0x20000080, 0x00040000,
-        0x00000000, 0x20040000, 0x01040080, 0x20000080
+        0x00000000, 0x20040000, 0x01040080, 0x20000080,
     );
 
     /**
-     * Pre-permuted S-box6
+     * Pre-permuted S-box6.
      *
-     * @var Array
-     * @access private
+     * @var array
      */
     public $sbox6 = array(
         0x10000008, 0x10200000, 0x00002000, 0x10202008,
@@ -541,14 +528,13 @@ class DES extends Base
         0x00202008, 0x10202000, 0x00000000, 0x10200008,
         0x00000008, 0x00002000, 0x10200000, 0x00202008,
         0x00002000, 0x00200008, 0x10002008, 0x00000000,
-        0x10202000, 0x10000000, 0x00200008, 0x10002008
+        0x10202000, 0x10000000, 0x00200008, 0x10002008,
     );
 
     /**
-     * Pre-permuted S-box7
+     * Pre-permuted S-box7.
      *
-     * @var Array
-     * @access private
+     * @var array
      */
     public $sbox7 = array(
         0x00100000, 0x02100001, 0x02000401, 0x00000000,
@@ -566,14 +552,13 @@ class DES extends Base
         0x00000401, 0x02000001, 0x02100401, 0x02100000,
         0x00100400, 0x00000000, 0x00000001, 0x02100401,
         0x00000000, 0x00100401, 0x02100000, 0x00000400,
-        0x02000001, 0x02000400, 0x00000400, 0x00100001
+        0x02000001, 0x02000400, 0x00000400, 0x00100001,
     );
 
     /**
-     * Pre-permuted S-box8
+     * Pre-permuted S-box8.
      *
-     * @var Array
-     * @access private
+     * @var array
      */
     public $sbox8 = array(
         0x08000820, 0x00000800, 0x00020000, 0x08020820,
@@ -591,26 +576,26 @@ class DES extends Base
         0x00000000, 0x08020820, 0x00020020, 0x08000020,
         0x08020000, 0x08000800, 0x08000820, 0x00000000,
         0x08020820, 0x00020800, 0x00020800, 0x00000820,
-        0x00000820, 0x00020020, 0x08000000, 0x08020800
+        0x00000820, 0x00020020, 0x08000000, 0x08020800,
     );
 
     /**
-     * Test for engine validity
+     * Test for engine validity.
      *
      * This is mainly just a wrapper to set things up for Crypt_Base::isValidEngine()
      *
-     * @access public
      * @see \Biz\Util\Phpsec\Crypt\Base::isValidEngine()
      *
-     * @param  Integer   $engine
-     * @return Boolean
+     * @param int $engine
+     *
+     * @return bool
      */
     public function isValidEngine($engine)
     {
         if ($this->key_size_max == 8) {
             if ($engine == self::ENGINE_OPENSSL) {
                 $this->cipher_name_openssl_ecb = 'des-ecb';
-                $this->cipher_name_openssl     = 'des-'.$this->_openssl_translate_mode();
+                $this->cipher_name_openssl = 'des-'.$this->_openssl_translate_mode();
             }
         }
 
@@ -628,10 +613,9 @@ class DES extends Base
      *
      * If the key is not explicitly set, it'll be assumed to be all zero's.
      *
-     * @access public
      * @see \Biz\Util\Phpsec\Crypt\Base::setKey()
      *
-     * @param String $key
+     * @param string $key
      */
     public function setKey($key)
     {
@@ -647,15 +631,15 @@ class DES extends Base
     }
 
     /**
-     * Encrypts a block
+     * Encrypts a block.
      *
-     * @access private
      * @see \Biz\Util\Phpsec\Crypt\Base::_encryptBlock()
      * @see \Biz\Util\Phpsec\Crypt\Base::encrypt()
      * @see \Biz\Util\Phpsec\Crypt\DES::encrypt()
      *
-     * @param  String   $in
-     * @return String
+     * @param string $in
+     *
+     * @return string
      */
     public function _encryptBlock($in)
     {
@@ -663,15 +647,15 @@ class DES extends Base
     }
 
     /**
-     * Decrypts a block
+     * Decrypts a block.
      *
-     * @access private
      * @see \Biz\Util\Phpsec\Crypt\Base::_decryptBlock()
      * @see \Biz\Util\Phpsec\Crypt\Base::decrypt()
      * @see \Biz\Util\Phpsec\Crypt\DES::decrypt()
      *
-     * @param  String   $in
-     * @return String
+     * @param string $in
+     *
+     * @return string
      */
     public function _decryptBlock($in)
     {
@@ -679,48 +663,48 @@ class DES extends Base
     }
 
     /**
-     * Encrypts or decrypts a 64-bit block
+     * Encrypts or decrypts a 64-bit block.
      *
      * $mode should be either self::ENCRYPT or self::DECRYPT.  See
      * {@link http://en.wikipedia.org/wiki/Image:Feistel.png Feistel.png} to get a general
      * idea of what this function does.
      *
-     * @access private
      * @see \Biz\Util\Phpsec\Crypt\DES::_encryptBlock()
      * @see \Biz\Util\Phpsec\Crypt\DES::_decryptBlock()
      *
-     * @param  String    $block
-     * @param  Integer   $mode
-     * @return String
+     * @param string $block
+     * @param int    $mode
+     *
+     * @return string
      */
     public function _processBlock($block, $mode)
     {
         static $sbox1, $sbox2, $sbox3, $sbox4, $sbox5, $sbox6, $sbox7, $sbox8, $shuffleip, $shuffleinvip;
 
         if (!$sbox1) {
-            $sbox1 = array_map("intval", $this->sbox1);
-            $sbox2 = array_map("intval", $this->sbox2);
-            $sbox3 = array_map("intval", $this->sbox3);
-            $sbox4 = array_map("intval", $this->sbox4);
-            $sbox5 = array_map("intval", $this->sbox5);
-            $sbox6 = array_map("intval", $this->sbox6);
-            $sbox7 = array_map("intval", $this->sbox7);
-            $sbox8 = array_map("intval", $this->sbox8);
+            $sbox1 = array_map('intval', $this->sbox1);
+            $sbox2 = array_map('intval', $this->sbox2);
+            $sbox3 = array_map('intval', $this->sbox3);
+            $sbox4 = array_map('intval', $this->sbox4);
+            $sbox5 = array_map('intval', $this->sbox5);
+            $sbox6 = array_map('intval', $this->sbox6);
+            $sbox7 = array_map('intval', $this->sbox7);
+            $sbox8 = array_map('intval', $this->sbox8);
             /* Merge $shuffle with $[inv]ipmap */
 
             for ($i = 0; $i < 256; ++$i) {
-                $shuffleip[]    = $this->shuffle[$this->ipmap[$i]];
+                $shuffleip[] = $this->shuffle[$this->ipmap[$i]];
                 $shuffleinvip[] = $this->shuffle[$this->invipmap[$i]];
             }
         }
 
         $keys = $this->keys[$mode];
-        $ki   = -1;
+        $ki = -1;
 
         // Do the initial IP permutation.
-        $t           = unpack('Nl/Nr', $block);
+        $t = unpack('Nl/Nr', $block);
         list($l, $r) = array($t['l'], $t['r']);
-        $block       = ($shuffleip[$r & 0xFF] & "\x80\x80\x80\x80\x80\x80\x80\x80") |
+        $block = ($shuffleip[$r & 0xFF] & "\x80\x80\x80\x80\x80\x80\x80\x80") |
         ($shuffleip[($r >> 8) & 0xFF] & "\x40\x40\x40\x40\x40\x40\x40\x40") |
         ($shuffleip[($r >> 16) & 0xFF] & "\x20\x20\x20\x20\x20\x20\x20\x20") |
         ($shuffleip[($r >> 24) & 0xFF] & "\x10\x10\x10\x10\x10\x10\x10\x10") |
@@ -730,13 +714,13 @@ class DES extends Base
         ($shuffleip[($l >> 24) & 0xFF] & "\x01\x01\x01\x01\x01\x01\x01\x01");
 
         // Extract L0 and R0.
-        $t           = unpack('Nl/Nr', $block);
+        $t = unpack('Nl/Nr', $block);
         list($l, $r) = array($t['l'], $t['r']);
 
         for ($des_round = 0; $des_round < $this->des_rounds; ++$des_round) {
             // Perform the 16 steps.
 
-            for ($i = 0; $i < 16; $i++) {
+            for ($i = 0; $i < 16; ++$i) {
                 // start of "the Feistel (F) function" - see the following URL:
                 // http://en.wikipedia.org/wiki/Image:Data_Encryption_Standard_InfoBox_Diagram.png
                 // Merge key schedule.
@@ -772,9 +756,8 @@ class DES extends Base
     }
 
     /**
-     * Creates the key schedule
+     * Creates the key schedule.
      *
-     * @access private
      * @see \Biz\Util\Phpsec\Crypt\Base::_setupKey()
      */
     public function _setupKey()
@@ -787,7 +770,7 @@ class DES extends Base
         $this->kl = array('key' => $this->key, 'des_rounds' => $this->des_rounds);
 
         static $shifts = array( // number of key bits shifted per round
-            1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1
+            1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1,
         );
 
         static $pc1map = array(
@@ -822,7 +805,7 @@ class DES extends Base
             0xE0, 0xE0, 0xE8, 0xE8, 0xE4, 0xE4, 0xEC, 0xEC,
             0xE2, 0xE2, 0xEA, 0xEA, 0xE6, 0xE6, 0xEE, 0xEE,
             0xF0, 0xF0, 0xF8, 0xF8, 0xF4, 0xF4, 0xFC, 0xFC,
-            0xF2, 0xF2, 0xFA, 0xFA, 0xF6, 0xF6, 0xFE, 0xFE
+            0xF2, 0xF2, 0xFA, 0xFA, 0xF6, 0xF6, 0xFE, 0xFE,
         );
 
         // Mapping tables for the PC-2 transformation.
@@ -830,7 +813,7 @@ class DES extends Base
             0x00000000, 0x00000400, 0x00200000, 0x00200400,
             0x00000001, 0x00000401, 0x00200001, 0x00200401,
             0x02000000, 0x02000400, 0x02200000, 0x02200400,
-            0x02000001, 0x02000401, 0x02200001, 0x02200401
+            0x02000001, 0x02000401, 0x02200001, 0x02200401,
         );
         static $pc2mapc2 = array(
             0x00000000, 0x00000800, 0x08000000, 0x08000800,
@@ -896,7 +879,7 @@ class DES extends Base
             0x01040110, 0x01040910, 0x09040110, 0x09040910,
             0x01050110, 0x01050910, 0x09050110, 0x09050910,
             0x01040110, 0x01040910, 0x09040110, 0x09040910,
-            0x01050110, 0x01050910, 0x09050110, 0x09050910
+            0x01050110, 0x01050910, 0x09050110, 0x09050910,
         );
         static $pc2mapc3 = array(
             0x00000000, 0x00000004, 0x00001000, 0x00001004,
@@ -962,7 +945,7 @@ class DES extends Base
             0x20080022, 0x20080026, 0x20081022, 0x20081026,
             0x20080022, 0x20080026, 0x20081022, 0x20081026,
             0x30080022, 0x30080026, 0x30081022, 0x30081026,
-            0x30080022, 0x30080026, 0x30081022, 0x30081026
+            0x30080022, 0x30080026, 0x30081022, 0x30081026,
         );
         static $pc2mapc4 = array(
             0x00000000, 0x00100000, 0x00000008, 0x00100008,
@@ -1028,13 +1011,13 @@ class DES extends Base
             0x04022000, 0x04122000, 0x04022008, 0x04122008,
             0x04022200, 0x04122200, 0x04022208, 0x04122208,
             0x04022000, 0x04122000, 0x04022008, 0x04122008,
-            0x04022200, 0x04122200, 0x04022208, 0x04122208
+            0x04022200, 0x04122200, 0x04022208, 0x04122208,
         );
         static $pc2mapd1 = array(
             0x00000000, 0x00000001, 0x08000000, 0x08000001,
             0x00200000, 0x00200001, 0x08200000, 0x08200001,
             0x00000002, 0x00000003, 0x08000002, 0x08000003,
-            0x00200002, 0x00200003, 0x08200002, 0x08200003
+            0x00200002, 0x00200003, 0x08200002, 0x08200003,
         );
         static $pc2mapd2 = array(
             0x00000000, 0x00100000, 0x00000800, 0x00100800,
@@ -1100,7 +1083,7 @@ class DES extends Base
             0x00020204, 0x00120204, 0x00020A04, 0x00120A04,
             0x00020204, 0x00120204, 0x00020A04, 0x00120A04,
             0x04020204, 0x04120204, 0x04020A04, 0x04120A04,
-            0x04020204, 0x04120204, 0x04020A04, 0x04120A04
+            0x04020204, 0x04120204, 0x04020A04, 0x04120A04,
         );
         static $pc2mapd3 = array(
             0x00000000, 0x00010000, 0x02000000, 0x02010000,
@@ -1166,7 +1149,7 @@ class DES extends Base
             0x20002010, 0x20012010, 0x22002010, 0x22012010,
             0x20002030, 0x20012030, 0x22002030, 0x22012030,
             0x20042010, 0x20052010, 0x22042010, 0x22052010,
-            0x20042030, 0x20052030, 0x22042030, 0x22052030
+            0x20042030, 0x20052030, 0x22042030, 0x22052030,
         );
         static $pc2mapd4 = array(
             0x00000000, 0x00000400, 0x01000000, 0x01000400,
@@ -1232,7 +1215,7 @@ class DES extends Base
             0x10081008, 0x10081408, 0x11081008, 0x11081408,
             0x10081008, 0x10081408, 0x11081008, 0x11081408,
             0x10081108, 0x10081508, 0x11081108, 0x11081508,
-            0x10081108, 0x10081508, 0x11081108, 0x11081508
+            0x10081108, 0x10081508, 0x11081108, 0x11081508,
         );
 
         $keys = array();
@@ -1242,9 +1225,9 @@ class DES extends Base
             $key = str_pad(substr($this->key, $des_round * 8, 8), 8, "\0");
 
             // Perform the PC/1 transformation and compute C and D.
-            $t           = unpack('Nl/Nr', $key);
+            $t = unpack('Nl/Nr', $key);
             list($l, $r) = array($t['l'], $t['r']);
-            $key         = ($this->shuffle[$pc1map[$r & 0xFF]] & "\x80\x80\x80\x80\x80\x80\x80\x00") |
+            $key = ($this->shuffle[$pc1map[$r & 0xFF]] & "\x80\x80\x80\x80\x80\x80\x80\x00") |
             ($this->shuffle[$pc1map[($r >> 8) & 0xFF]] & "\x40\x40\x40\x40\x40\x40\x40\x00") |
             ($this->shuffle[$pc1map[($r >> 16) & 0xFF]] & "\x20\x20\x20\x20\x20\x20\x20\x00") |
             ($this->shuffle[$pc1map[($r >> 24) & 0xFF]] & "\x10\x10\x10\x10\x10\x10\x10\x00") |
@@ -1253,12 +1236,12 @@ class DES extends Base
             ($this->shuffle[$pc1map[($l >> 16) & 0xFF]] & "\x02\x02\x02\x02\x02\x02\x02\x00") |
             ($this->shuffle[$pc1map[($l >> 24) & 0xFF]] & "\x01\x01\x01\x01\x01\x01\x01\x00");
             $key = unpack('Nc/Nd', $key);
-            $c   = ($key['c'] >> 4) & 0x0FFFFFFF;
-            $d   = (($key['d'] >> 4) & 0x0FFFFFF0) | ($key['c'] & 0x0F);
+            $c = ($key['c'] >> 4) & 0x0FFFFFFF;
+            $d = (($key['d'] >> 4) & 0x0FFFFFF0) | ($key['c'] & 0x0F);
 
             $keys[$des_round] = array(
                 self::ENCRYPT => array(),
-                self::DECRYPT => array_fill(0, 32, 0)
+                self::DECRYPT => array_fill(0, 32, 0),
             );
 
             for ($i = 0, $ki = 31; $i < 16; ++$i, $ki -= 2) {
@@ -1278,10 +1261,10 @@ class DES extends Base
                 (($dp >> 16) & 0x0000FF00) | (($dp >> 8) & 0x000000FF);
                 $val2 = (($cp << 8) & 0xFF000000) | (($cp << 16) & 0x00FF0000) |
                 (($dp >> 8) & 0x0000FF00) | ($dp & 0x000000FF);
-                $keys[$des_round][self::ENCRYPT][]        = $val1;
+                $keys[$des_round][self::ENCRYPT][] = $val1;
                 $keys[$des_round][self::DECRYPT][$ki - 1] = $val1;
-                $keys[$des_round][self::ENCRYPT][]        = $val2;
-                $keys[$des_round][self::DECRYPT][$ki]     = $val2;
+                $keys[$des_round][self::ENCRYPT][] = $val2;
+                $keys[$des_round][self::DECRYPT][$ki] = $val2;
             }
         }
 
@@ -1297,22 +1280,21 @@ class DES extends Base
                         $keys[2][self::DECRYPT],
                         $keys[1][self::ENCRYPT],
                         $keys[0][self::DECRYPT]
-                    )
+                    ),
                 );
                 break;
             // case 1: // DES keys
             default:
                 $this->keys = array(
                     self::ENCRYPT => $keys[0][self::ENCRYPT],
-                    self::DECRYPT => $keys[0][self::DECRYPT]
+                    self::DECRYPT => $keys[0][self::DECRYPT],
                 );
         }
     }
 
     /**
-     * Setup the performance-optimized function for de/encrypt()
+     * Setup the performance-optimized function for de/encrypt().
      *
-     * @access private
      * @see \Biz\Util\Phpsec\Crypt\Base::_setupInlineCrypt()
      */
     public function _setupInlineCrypt()
@@ -1371,7 +1353,7 @@ class DES extends Base
                     // That is the extra performance boost.
                     $k = array(
                         self::ENCRYPT => $this->keys[self::ENCRYPT],
-                        self::DECRYPT => $this->keys[self::DECRYPT]
+                        self::DECRYPT => $this->keys[self::DECRYPT],
                     );
                     $init_encrypt = '';
                     $init_decrypt = '';
@@ -1381,7 +1363,7 @@ class DES extends Base
                     // our key schedule as $ke/$kd arrays. (with hardcoded indexes...)
                     $k = array(
                         self::ENCRYPT => array(),
-                        self::DECRYPT => array()
+                        self::DECRYPT => array(),
                     );
 
                     for ($i = 0, $c = count($this->keys[self::ENCRYPT]); $i < $c; ++$i) {
@@ -1463,11 +1445,11 @@ class DES extends Base
             // Creates the inline-crypt function
             $lambda_functions[$code_hash] = $this->_createInlineCryptFunction(
                 array(
-                    'init_crypt'    => $init_crypt,
-                    'init_encrypt'  => $init_encrypt,
-                    'init_decrypt'  => $init_decrypt,
+                    'init_crypt' => $init_crypt,
+                    'init_encrypt' => $init_encrypt,
+                    'init_decrypt' => $init_decrypt,
                     'encrypt_block' => $crypt_block[self::ENCRYPT],
-                    'decrypt_block' => $crypt_block[self::DECRYPT]
+                    'decrypt_block' => $crypt_block[self::DECRYPT],
                 )
             );
         }

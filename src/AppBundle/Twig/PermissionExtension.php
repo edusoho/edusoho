@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Twig;
 
 use Biz\Role\Util\PermissionBuilder;
@@ -20,7 +21,7 @@ class PermissionExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            new \Twig_SimpleFilter('parent_permission', array($this, 'getParentPermission'))
+            new \Twig_SimpleFilter('parent_permission', array($this, 'getParentPermission')),
         );
     }
 
@@ -33,8 +34,7 @@ class PermissionExtension extends \Twig_Extension
             new \Twig_SimpleFunction('grouped_permissions', array($this, 'groupedPermissions')),
             new \Twig_SimpleFunction('has_permission', array($this, 'hasPermission')),
             new \Twig_SimpleFunction('eval_expression', array($this, 'evalExpression'), array('needs_context' => true, 'needs_environment' => true)),
-            new \Twig_SimpleFunction('first_child_permission', array($this, 'getFirstChild'))
-
+            new \Twig_SimpleFunction('first_child_permission', array($this, 'getFirstChild')),
         );
     }
 
@@ -56,12 +56,12 @@ class PermissionExtension extends \Twig_Extension
 
     public function getPermissionPath($env, $context, $menu)
     {
-        $route  = empty($menu['router_name']) ? $menu['code'] : $menu['router_name'];
+        $route = empty($menu['router_name']) ? $menu['code'] : $menu['router_name'];
         $params = empty($menu['router_params']) ? array() : $menu['router_params'];
 
         foreach ($params as $key => $value) {
-            if (strpos($value, "(") === 0) {
-                $value        = $this->evalExpression($env, $context['_context'], $value);
+            if (strpos($value, '(') === 0) {
+                $value = $this->evalExpression($env, $context['_context'], $value);
                 $params[$key] = $value;
             } else {
                 $params[$key] = "{$value}";
@@ -74,14 +74,14 @@ class PermissionExtension extends \Twig_Extension
     public function evalExpression($twig, $context, $code)
     {
         $code = trim($code);
-        if (strpos($code, "(") === 0) {
+        if (strpos($code, '(') === 0) {
             $code = substr($code, 1, strlen($code) - 2);
         } else {
             $code = "'{$code}'";
         }
 
         $loader = new \Twig_Loader_Array(array(
-            'expression.twig' => '{{'.$code.'}}'
+            'expression.twig' => '{{'.$code.'}}',
         ));
 
         $loader = new \Twig_Loader_Chain(array($loader, $twig->getLoader()));
@@ -99,6 +99,7 @@ class PermissionExtension extends \Twig_Extension
     public function hasPermission($code)
     {
         $currentUser = ServiceKernel::instance()->getCurrentUser();
+
         return $currentUser->hasPermission($code);
     }
 

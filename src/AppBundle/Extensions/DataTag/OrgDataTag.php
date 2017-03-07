@@ -1,10 +1,11 @@
 <?php
+
 namespace AppBundle\Extensions\DataTag;
 
 class OrgDataTag extends BaseDataTag implements DataTag
 {
     /**
-     * 根据Id 或者orgCode 获取组织机构
+     * 根据Id 或者orgCode 获取组织机构.
      */
     public function getData(array $arguments)
     {

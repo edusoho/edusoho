@@ -1,6 +1,6 @@
 <?php
-namespace Biz\Common;
 
+namespace Biz\Common;
 
 class EsKeywordFilter
 {

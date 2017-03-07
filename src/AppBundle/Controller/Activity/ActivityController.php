@@ -1,36 +1,37 @@
 <?php
+
 namespace AppBundle\Controller\Activity;
 
+use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
-use Biz\Course\Service\CourseService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ActivityController extends BaseController
 {
-
-    public function showAction(Request $request, $id, $courseId, $preview)
+    public function showAction($task, $preview)
     {
-        $activity = $this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         if (empty($activity)) {
             throw $this->createNotFoundException('activity not found');
         }
         $actionConfig = $this->getActivityActionConfig($activity['mediaType']);
+
         return $this->forward($actionConfig['show'], array(
-            'id' => $id,
-            'courseId' => $courseId,
+            'activity' => $activity,
             'preview' => $preview,
         ));
     }
 
-    public function previewAction(Request $request, $task)
+    public function previewAction($task)
     {
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         if (empty($activity)) {
             throw $this->createNotFoundException('activity not found');
         }
         $actionConfig = $this->getActivityActionConfig($activity['mediaType']);
+
         return $this->forward($actionConfig['preview'], array(
             'task' => $task,
         ));
@@ -40,6 +41,7 @@ class ActivityController extends BaseController
     {
         $activity = $this->getActivityService()->getActivity($id);
         $actionConfig = $this->getActivityActionConfig($activity['mediaType']);
+
         return $this->forward($actionConfig['edit'], array(
             'id' => $activity['id'],
             'courseId' => $courseId,
@@ -49,6 +51,7 @@ class ActivityController extends BaseController
     public function createAction($type, $courseId)
     {
         $actionConfig = $this->getActivityActionConfig($type);
+
         return $this->forward($actionConfig['create'], array(
             'courseId' => $courseId,
         ));
@@ -88,6 +91,7 @@ class ActivityController extends BaseController
     protected function getActivityActionConfig($type)
     {
         $config = $this->getActivityConfig();
+
         return $config[$type]['actions'];
     }
 
@@ -98,7 +102,6 @@ class ActivityController extends BaseController
     {
         return $this->createService('Activity:ActivityService');
     }
-
 
     /**
      * @return CourseService

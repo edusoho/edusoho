@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\RefererLog\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
@@ -12,9 +13,9 @@ class OrderRefererLogDaoImpl extends GeneralDaoImpl implements OrderRefererLogDa
     {
         return array(
             'timestamps' => array('createdTime'),
-            'orderbys'   => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum'),
+            'orderbys' => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum'),
             'conditions' => array(
-                "id IN ( :ids )",
+                'id IN ( :ids )',
                 'refererLogId = :refererLogId',
                 'refererLogId IN (:refererLogIds)',
                 'targetId = :targetId',
@@ -22,8 +23,8 @@ class OrderRefererLogDaoImpl extends GeneralDaoImpl implements OrderRefererLogDa
                 'sourceTargetId = :sourceTargetId',
                 'sourceTargetType = :sourceTargetType',
                 'createdTime >= :startTime',
-                'createdTime <= :endTime'
-            )
+                'createdTime <= :endTime',
+            ),
         );
     }
 

@@ -2,33 +2,32 @@
 
 namespace AppBundle\Extensions\DataTag\Test;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 use AppBundle\Extensions\DataTag\TeacherCoursesDataTag;
 
 class TeacherCoursesDataTagTest extends BaseTestCase
 {
-
     public function testGetData()
     {
         $user1 = $this->getUserService()->register(array(
-            'email'           => '1234@qq.com',
-            'nickname'        => 'user1',
-            'password'        => '123456',
+            'email' => '1234@qq.com',
+            'nickname' => 'user1',
+            'password' => '123456',
             'confirmPassword' => '123456',
-            'createdIp'       => '127.0.0.1'
+            'createdIp' => '127.0.0.1',
         ));
         $this->getUserService()->changeUserRoles($user1['id'], array('ROLE_USER', 'ROLE_TEACHER'));
         $course1 = array(
-            'type'  => 'normal',
-            'title' => 'course1'
+            'type' => 'normal',
+            'title' => 'course1',
         );
         $course2 = array(
-            'type'  => 'normal',
-            'title' => 'course2'
+            'type' => 'normal',
+            'title' => 'course2',
         );
         $course3 = array(
-            'type'  => 'normal',
-            'title' => 'course3'
+            'type' => 'normal',
+            'title' => 'course3',
         );
 
         $course1 = $this->getCourseService()->createCourse($course1);
@@ -43,7 +42,6 @@ class TeacherCoursesDataTagTest extends BaseTestCase
         $datatag = new TeacherCoursesDataTag();
         $courses = $datatag->getData(array('userId' => $user1['id'], 'count' => 5));
         $this->assertEquals(2, count($courses));
-
     }
 
     public function getUserService()

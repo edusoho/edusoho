@@ -17,5 +17,4 @@ class SignTargetStatisticsDaoImpl extends GeneralDaoImpl implements SignTargetSt
     {
         return $this->getByFields(array('targetType' => $targetType, 'targetId' => $targetId, 'date' => $date));
     }
-
 }

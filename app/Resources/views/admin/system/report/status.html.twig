@@ -19,7 +19,7 @@
       <td>{{ '操作系统'|trans }}</td>
       <td>Linux</td>
       <td>
-        <span class="text-success">√ {{ env.os }}</span>
+        <span class="color-success">√ {{ env.os }}</span>
       </td>
       <td>--</td>
     </tr>
@@ -29,9 +29,9 @@
       <td>5.5.x</td>
       <td>
         {% if env.phpVersionOk %}
-          <span class="text-success">√ {{ env.phpVersion }}</span>
+          <span class="color-success">√ {{ env.phpVersion }}</span>
         {% else %}
-          <span class="text-danger">X {{ env.phpVersion }}</span>
+          <span class="color-danger">X {{ env.phpVersion }}</span>
         {% endif %}
       </td>
       <td>5.3.3</td>
@@ -41,7 +41,7 @@
       <td>{{ 'PHP运行用户'|trans }}</td>
       <td>-</td>
       <td>
-        <span class="text-success">√ {{ env.user }}</span>
+        <span class="color-success">√ {{ env.user }}</span>
       </td>
       <td>-</td>
     </tr>
@@ -51,9 +51,9 @@
       <td>{{ '关闭'|trans }}</td>
       <td>
         {% if env.safemode == 'Off' %}
-          <span class="text-danger">X {{ '开启'|trans }}</span>
+          <span class="color-danger">X {{ '开启'|trans }}</span>
         {% else %}
-          <span class="text-success">√ {{ '关闭'|trans }}</span>
+          <span class="color-success">√ {{ '关闭'|trans }}</span>
         {% endif %}
       </td>
       <td>{{ '关闭'|trans }}</td>
@@ -64,9 +64,9 @@
       <td>{{ '必须'|trans }}</td>
       <td>
         {% if env.pdoMysqlOk %}
-          <span class="text-success">√ {{ '已安装'|trans }}</span>
+          <span class="color-success">√ {{ '已安装'|trans }}</span>
         {% else %}
-          <span class="text-danger">X {{ '尚未安装MySQL_PDO'|trans }}</span>
+          <span class="color-danger">X {{ '尚未安装MySQL_PDO'|trans }}</span>
         {% endif %}
       </td>
       <td>{{ '必须'|trans }}</td>
@@ -80,9 +80,9 @@
       <td>{{ '大于200M'|trans }}</td>
       <td>
         {% if env.uploadMaxFilesizeOk %}
-          <span class="text-success">√ {{ env.uploadMaxFilesize }}</span>
+          <span class="color-success">√ {{ env.uploadMaxFilesize }}</span>
         {% else %}
-          <span class="text-danger">X {{ env.uploadMaxFilesize }}</span>
+          <span class="color-danger">X {{ env.uploadMaxFilesize }}</span>
         {% endif %}
       </td>
       <td>2M</td>
@@ -96,9 +96,9 @@
       <td>{{ '大于200M'|trans }}</td>
       <td>
         {% if env.postMaxsizeOk %}
-          <span class="text-success">√ {{ env.postMaxsize }}</span>
+          <span class="color-success">√ {{ env.postMaxsize }}</span>
         {% else %}
-          <span class="text-danger">X {{ env.postMaxsize }}</span>
+          <span class="color-danger">X {{ env.postMaxsize }}</span>
         {% endif %}
       </td>
       <td>8M</td>
@@ -112,9 +112,9 @@
       <td>{{ '大于300秒'|trans }}</td>
       <td>
         {% if env.maxExecutionTimeOk %}
-          <span class="text-success">√ {{ env.maxExecutionTime }}{{ '秒'|trans }}</span>
+          <span class="color-success">√ {{ env.maxExecutionTime }}{{ '秒'|trans }}</span>
         {% else %}
-          <span class="text-danger">X {{ env.maxExecutionTime }}{{ '秒'|trans }}</span>
+          <span class="color-danger">X {{ env.maxExecutionTime }}{{ '秒'|trans }}</span>
         {% endif %}
       </td>
       <td>{{ '30秒'|trans }}</td>
@@ -128,9 +128,9 @@
       <td>{{ '必须'|trans }}</td>
       <td>
         {% if env.mbstringOk %}
-          <span class="text-success">√ {{ '已安装'|trans }}</span>
+          <span class="color-success">√ {{ '已安装'|trans }}</span>
         {% else %}
-          <span class="text-danger">X {{ '尚未安装'|trans }}</span>
+          <span class="color-danger">X {{ '尚未安装'|trans }}</span>
         {% endif %}
       </td>
       <td>{{ '必须'|trans }}</td>
@@ -144,9 +144,9 @@
       <td>{{ '必须'|trans }}</td>
       <td>
         {% if env.curlOk %}
-          <span class="text-success">√ {{ '已安装'|trans }}</span>
+          <span class="color-success">√ {{ '已安装'|trans }}</span>
         {% else %}
-          <span class="text-danger">X {{ '尚未安装'|trans }}</span>
+          <span class="color-danger">X {{ '尚未安装'|trans }}</span>
         {% endif %}
       </td>
       <td>{{ '必须'|trans }}</td>
@@ -160,9 +160,9 @@
       <td>{{ '必须'|trans }}</td>
       <td>
         {% if env.gdOk %}
-          <span class="text-success">√ {{ '已安装'|trans }}</span>
+          <span class="color-success">√ {{ '已安装'|trans }}</span>
         {% else %}
-          <span class="text-danger">X {{ '尚未安装'|trans }}</span>
+          <span class="color-danger">X {{ '尚未安装'|trans }}</span>
         {% endif %}
       </td>
       <td>{{ '必须'|trans }}</td>

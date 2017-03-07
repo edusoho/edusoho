@@ -25,6 +25,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
     {
         sort($memberIds);
         $memberHash = $this->buildMemberHash($memberIds);
+
         return $this->getConversationDao()->getByMemberHash($memberHash);
     }
 
@@ -35,14 +36,14 @@ class ConversationServiceImpl extends BaseService implements ConversationService
 
     public function createConversation($title, $targetType, $targetId, $members)
     {
-        $conversation               = array();
-        $conversation['title']      = $title;
+        $conversation = array();
+        $conversation['title'] = $title;
         $conversation['targetType'] = $targetType;
-        $conversation['targetId']   = empty($targetId) ? 0 : intval($targetId);
+        $conversation['targetId'] = empty($targetId) ? 0 : intval($targetId);
 
         $memberIds = ArrayToolkit::column($members, 'id');
         if ($targetType == 'private') {
-            $conversation['title']     = join(ArrayToolkit::column($members, 'nickname'), '-').'的私聊';
+            $conversation['title'] = join(ArrayToolkit::column($members, 'nickname'), '-').'的私聊';
             $conversation['memberIds'] = $memberIds;
         } else {
             $conversation['memberIds'] = array();
@@ -69,10 +70,10 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         if ($targetType != 'private') {
             foreach ($members as $member) {
                 $this->addMember(array(
-                    'convNo'     => $conversation['no'],
+                    'convNo' => $conversation['no'],
                     'targetType' => $conversation['targetType'],
-                    'targetId'   => $conversation['targetId'],
-                    'userId'     => $member['id']
+                    'targetId' => $conversation['targetId'],
+                    'userId' => $member['id'],
                 ));
             }
         }
@@ -92,8 +93,8 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         }
 
         $message = array(
-            'name'    => $title,
-            'clients' => $clients
+            'name' => $title,
+            'clients' => $clients,
         );
 
         $result = $this->createImApi()->post('/me/conversation', $message);
@@ -157,6 +158,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
     public function addMember($member)
     {
         $member['createdTime'] = time();
+
         return $this->getConversationMemberDao()->create($member);
     }
 
@@ -191,10 +193,10 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         }
 
         $member = array(
-            'convNo'     => $conv['no'],
-            'targetId'   => $conv['targetId'],
+            'convNo' => $conv['no'],
+            'targetId' => $conv['targetId'],
             'targetType' => $conv['targetType'],
-            'userId'     => $user['id']
+            'userId' => $user['id'],
         );
 
         return $this->addMember($member);
@@ -260,7 +262,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         $result = $this->createImApi()->get("/conversations/{$convNo}/members");
 
         if ($result) {
-            $onlineCount  = empty($result['online']) ? 0 : count($result['online']);
+            $onlineCount = empty($result['online']) ? 0 : count($result['online']);
             $offlineCount = empty($result['offline']) ? 0 : count($result['offline']);
 
             if (($onlineCount + $offlineCount) >= $limit) {
@@ -309,7 +311,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
             'no',
             'userId',
             'createdTime',
-            'updatedTime'
+            'updatedTime',
         ));
 
         if (empty($fields['no'])) {
@@ -353,6 +355,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         if (!$this->imApi) {
             $this->imApi = IMAPIFactory::create();
         }
+
         return $this->imApi;
     }
 

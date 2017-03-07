@@ -58,24 +58,24 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
             foreach ($tagNames as $key => $tagName) {
                 $tag = $this->getTagService()->getTagByName($tagName);
 
-                $result     = $this->getUploadFileTagService()->findByFileId($fileId);
+                $result = $this->getUploadFileTagService()->findByFileId($fileId);
                 $fileTagIds = ArrayToolkit::column($result, 'tagId');
 
                 if (!in_array($tag['id'], $fileTagIds)) {
                     $this->getUploadFileTagService()->add(array(
                         'fileId' => $fileId,
-                        'tagId'  => $tag['id']
+                        'tagId' => $tag['id'],
                     ));
                 }
             }
 
             $result = $this->getUploadFileTagService()->findByFileId($fileId);
 
-            $tagIds       = ArrayToolkit::column($result, 'tagId');
-            $tags         = $this->getTagService()->findTagsByIds($tagIds);
+            $tagIds = ArrayToolkit::column($result, 'tagId');
+            $tags = $this->getTagService()->findTagsByIds($tagIds);
             $editTagNames = ArrayToolkit::column($tags, 'name');
 
-            $conditions         = array();
+            $conditions = array();
             $conditions['tags'] = implode(',', $editTagNames);
 
             $this->getUploadFileService()->update($fileId, $conditions);
@@ -110,7 +110,8 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     public function reconvert($globalId, $options = array())
     {
         $result = $this->getCloudFileService()->reconvert($globalId, $options);
-        $file   = $this->getByGlobalId($globalId);
+        $file = $this->getByGlobalId($globalId);
+
         return $file;
     }
 
@@ -132,9 +133,10 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     public function synData()
     {
         $conditions = array(
-            'globalId' => '0'
+            'globalId' => '0',
         );
         $oldFiles = $this->getCloudFileService()->synData($conditions);
+
         return $oldFiles;
     }
 
@@ -165,5 +167,4 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     {
         return ServiceKernel::instance()->createService('User:UserService');
     }
-
 }

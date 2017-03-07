@@ -8,47 +8,46 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TestpaperController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId, $preview = 0)
+    public function showAction(Request $request, $activity, $preview = 0)
     {
         if ($preview) {
             return $this->forward('AppBundle:Activity/Testpaper:preview', array(
-                'id'       => $id,
-                'courseId' => $courseId
+                'id' => $activity['id'],
+                'courseId' => $activity['fromCourseId'],
             ));
         }
 
-        $user              = $this->getUser();
-        $activity          = $this->getActivityService()->getActivity($id);
+        $user = $this->getUser();
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
-        $testpaper         = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
 
         $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaperActivity['mediaId'], $activity['fromCourseSetId'], $activity['id'], $activity['mediaType']);
 
-        if (!$testpaperResult || ($testpaperResult['status'] == 'doing' && !$testpaperResult['updateTime'])) {
+        if (!$testpaperResult || ($testpaperResult['status'] == 'doing' && !$testpaperResult['updateTime']) || $testpaper['status'] != 'open') {
             return $this->render('activity/testpaper/show.html.twig', array(
-                'activity'          => $activity,
+                'activity' => $activity,
                 'testpaperActivity' => $testpaperActivity,
-                'testpaperResult'   => $testpaperResult,
-                'testpaper'         => $testpaper,
-                'courseId'          => $activity['fromCourseId']
+                'testpaperResult' => $testpaperResult,
+                'testpaper' => $testpaper,
+                'courseId' => $activity['fromCourseId'],
             ));
         } elseif ($testpaperResult['status'] == 'finished') {
             return $this->forward('AppBundle:Testpaper/Testpaper:showResult', array(
-                'resultId' => $testpaperResult['id']
+                'resultId' => $testpaperResult['id'],
             ));
         }
 
         return $this->forward('AppBundle:Testpaper/Testpaper:doTestpaper', array(
-            'testId'   => $testpaperActivity['mediaId'],
-            'lessonId' => $activity['id']
+            'testId' => $testpaperActivity['mediaId'],
+            'lessonId' => $activity['id'],
         ));
     }
 
     public function previewAction(Request $request, $id, $courseId)
     {
-        $activity          = $this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->getActivity($id);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
-        $testpaper         = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
 
         if (!$testpaper) {
             return $this->createMessageResponse('error', 'testpaper not found');
@@ -61,13 +60,13 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         $attachments = $this->getTestpaperService()->findAttachments($testpaper['id']);
 
         return $this->render('activity/testpaper/preview.html.twig', array(
-            'questions'     => $questions,
-            'limitedTime'   => $testpaperActivity['limitedTime'],
-            'paper'         => $testpaper,
-            'paperResult'   => array(),
-            'total'         => $total,
-            'attachments'   => $attachments,
-            'questionTypes' => $this->getCheckedQuestionType($testpaper)
+            'questions' => $questions,
+            'limitedTime' => $testpaperActivity['limitedTime'],
+            'paper' => $testpaper,
+            'paperResult' => array(),
+            'total' => $total,
+            'attachments' => $attachments,
+            'questionTypes' => $this->getCheckedQuestionType($testpaper),
         ));
     }
 
@@ -75,7 +74,7 @@ class TestpaperController extends BaseController implements ActivityActionInterf
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
-        $activity          = $this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->getActivity($id);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
         if ($testpaperActivity) {
@@ -89,25 +88,25 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
         return $this->render('activity/testpaper/modal.html.twig', array(
-            'activity'   => $activity,
+            'activity' => $activity,
             'testpapers' => $testpapers,
-            'features'   => $features,
-            'courseId'   => $activity['fromCourseId'],
-            'course'     => $course
+            'features' => $features,
+            'courseId' => $activity['fromCourseId'],
+            'course' => $course,
         ));
     }
 
     public function createAction(Request $request, $courseId)
     {
-        $course     = $this->getCourseService()->getCourse($courseId);
+        $course = $this->getCourseService()->getCourse($courseId);
         $testpapers = $this->findCourseTestpapers($course);
 
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
         return $this->render('activity/testpaper/modal.html.twig', array(
             'testpapers' => $testpapers,
-            'features'   => $features,
-            'course'     => $course
+            'features' => $features,
+            'course' => $course,
         ));
     }
 
@@ -116,7 +115,7 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
         return $this->render('activity/testpaper/finish-condition.html.twig', array(
-            'testpaperActivity' => $testpaperActivity
+            'testpaperActivity' => $testpaperActivity,
         ));
     }
 
@@ -124,8 +123,8 @@ class TestpaperController extends BaseController implements ActivityActionInterf
     {
         $conditions = array(
             'courseSetId' => $course['courseSetId'],
-            'status'      => 'open',
-            'type'        => 'testpaper'
+            'status' => 'open',
+            'type' => 'testpaper',
         );
 
         if ($course['parentId'] > 0) {

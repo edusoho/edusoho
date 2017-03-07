@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Search\Adapter;
 
 use AppBundle\Common\ArrayToolkit;
@@ -9,13 +10,13 @@ class CourseSearchAdapter extends AbstractSearchAdapter
     public function adapt(array $courses)
     {
         $adaptResult = array();
-        $user        = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
 
         $learningCourseIds = array();
 
         if (!empty($user['id'])) {
-            $courseIds         = ArrayToolkit::column($courses, 'courseId');
-            $learningCourse    = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($user['id'], $courseIds);
+            $courseIds = ArrayToolkit::column($courses, 'courseId');
+            $learningCourse = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($user['id'], $courseIds);
             $learningCourseIds = ArrayToolkit::column($learningCourse, 'courseId');
         }
 
@@ -37,19 +38,19 @@ class CourseSearchAdapter extends AbstractSearchAdapter
         $courseLocal = $this->getCourseService()->getCourse($course['courseId']);
 
         if (!empty($courseLocal)) {
-            $course['rating']        = $courseLocal['rating'];
-            $course['ratingNum']     = $courseLocal['ratingNum'];
-            $course['studentNum']    = $courseLocal['studentNum'];
+            $course['rating'] = $courseLocal['rating'];
+            $course['ratingNum'] = $courseLocal['ratingNum'];
+            $course['studentNum'] = $courseLocal['studentNum'];
             $course['middlePicture'] = $courseLocal['middlePicture'];
-            $course['learning']      = in_array($course['courseId'], $learningCourseIds);
-            $course['id']            = $courseLocal['id'];
+            $course['learning'] = in_array($course['courseId'], $learningCourseIds);
+            $course['id'] = $courseLocal['id'];
         } else {
-            $course['rating']        = 0;
-            $course['ratingNum']     = 0;
-            $course['studentNum']    = 0;
+            $course['rating'] = 0;
+            $course['ratingNum'] = 0;
+            $course['studentNum'] = 0;
             $course['middlePicture'] = '';
-            $course['learning']      = false;
-            $course['id']            = $course['courseId'];
+            $course['learning'] = false;
+            $course['id'] = $course['courseId'];
         }
 
         return $course;
@@ -60,10 +61,10 @@ class CourseSearchAdapter extends AbstractSearchAdapter
         $local = $this->getOpenCourseService()->getCourse($openCourse['courseId']);
 
         if (!empty($local)) {
-            $openCourse['id']            = $local['id'];
+            $openCourse['id'] = $local['id'];
             $openCourse['middlePicture'] = $local['middlePicture'];
         } else {
-            $openCourse['id']            = $openCourse['courseId'];
+            $openCourse['id'] = $openCourse['courseId'];
             $openCourse['middlePicture'] = '';
         }
 

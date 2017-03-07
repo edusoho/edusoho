@@ -8,10 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TextController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $activity)
     {
-        $activity = $this->getActivityService()->getActivity($id);
-
         if (empty($activity)) {
             throw $this->createNotFoundException('activity not found');
         }
@@ -24,10 +22,9 @@ class TextController extends BaseController implements ActivityActionInterface
 
         return $this->render('activity/text/show.html.twig', array(
             'activity' => $activity,
-            'text'     => $text
+            'text' => $text,
         ));
     }
-
 
     public function previewAction(Request $request, $task)
     {
@@ -45,18 +42,18 @@ class TextController extends BaseController implements ActivityActionInterface
 
         return $this->render('activity/text/preview.html.twig', array(
             'activity' => $activity,
-            'text'     => $text
+            'text' => $text,
         ));
     }
 
     public function editAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
-        $text     = $this->getActivityService()->getActivityConfig('text')->get($activity['mediaId']);
+        $text = $this->getActivityService()->getActivityConfig('text')->get($activity['mediaId']);
 
         return $this->render('activity/text/modal.html.twig', array(
             'activity' => $activity,
-            'text'     => $text
+            'text' => $text,
         ));
     }
 
@@ -70,7 +67,7 @@ class TextController extends BaseController implements ActivityActionInterface
         $media = $this->getActivityService()->getActivityConfig('text')->get($activity['mediaId']);
 
         return $this->render('activity/text/finish-condition.html.twig', array(
-            'media' => $media
+            'media' => $media,
         ));
     }
 

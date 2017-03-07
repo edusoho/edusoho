@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AppBundle\Controller\My;
-
 
 use AppBundle\Controller\BaseController;
 use Biz\OpenCourse\Service\OpenCourseService;
@@ -35,9 +33,9 @@ class OpenCourseController extends BaseController
         );
 
         return $this->render('my/teaching/open-course.html.twig', array(
-            'courses'   => $openCourses,
+            'courses' => $openCourses,
             'paginator' => $paginator,
-            'filter'    => $filter
+            'filter' => $filter,
         ));
     }
 
@@ -46,14 +44,14 @@ class OpenCourseController extends BaseController
         $user = $this->getCurrentUser();
 
         $conditions = array(
-            'type' => $filter
+            'type' => $filter,
         );
 
         if ($user->isAdmin()) {
             $conditions['userId'] = $user['id'];
         } else {
             $conditions['courseIds'] = array(-1);
-            $members                 = $this->getOpenCourseService()->searchMembers(
+            $members = $this->getOpenCourseService()->searchMembers(
                 array('userId' => $user['id'], 'role' => 'teacher'),
                 array('createdTime', 'ASC'),
                 0,

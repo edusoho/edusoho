@@ -3,12 +3,13 @@ namespace Codeages\PluginBundle\System\Slot;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
 
-abstract class SlotInjection extends ContainerAware implements SlotInjectionInterface
+class SlotInjection extends ContainerAware
 {
-    public function setArguments($arguments)
+    public function setArgements($argements)
     {
-        foreach ($arguments as $name => $value) {
+        foreach ($argements as $name => $value) {
             $this->{$name} = $value;
         }
     }
+
 }

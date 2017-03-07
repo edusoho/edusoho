@@ -8,6 +8,7 @@ ReactDOM.render(
 		addable={true}  
 		dataSource= {$('#course-teachers').data('init-value')}  
 		outputDataElement='teachers' 
+    inputName="ids[]"
 		searchable={{enable:true,url:$('#course-teachers').data('query-url') + "?q="}} 
 	/>,
   document.getElementById('course-teachers')

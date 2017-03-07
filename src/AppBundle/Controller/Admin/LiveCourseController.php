@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use Biz\Task\Service\TaskService;
@@ -18,8 +19,8 @@ class LiveCourseController extends BaseController
         $taskConditions = $request->query->all();
 
         $courseConditions = array(
-            'type'   => 'live',
-            'status' => 'published'
+            'type' => 'live',
+            'status' => 'published',
         );
 
         $courseConditions = array_merge($courseConditions, $taskConditions);
@@ -35,11 +36,11 @@ class LiveCourseController extends BaseController
         }
 
         $courseConditions = $this->fillOrgCode($courseConditions);
-        $courseSets   = $this->getCourseSetService()->searchCourseSets($courseConditions, array(), 0, 10000);
+        $courseSets = $this->getCourseSetService()->searchCourseSets($courseConditions, array(), 0, 10000);
         $courseSetIds = ArrayToolkit::column($courseSets, 'id');
         $taskConditions['fromCourseSetIds'] = $courseSetIds;
 
-        $taskConditions['type'] = "live";
+        $taskConditions['type'] = 'live';
         $taskConditions['status'] = 'published';
 
         list($taskConditions, $orderBy) = $this->getConditionAndOrderByStatus($status, $taskConditions);
@@ -58,12 +59,12 @@ class LiveCourseController extends BaseController
         $this->migrate($courseSets, $liveTasks);
 
         return $this->render('admin/live-course/index.html.twig', array(
-            'status'    => $status,
-            'liveTasks'   => $liveTasks,
-            'courseSets'   => ArrayToolkit::index($courseSets, 'id'),
+            'status' => $status,
+            'liveTasks' => $liveTasks,
+            'courseSets' => ArrayToolkit::index($courseSets, 'id'),
             'paginator' => $paginator,
-            'default'   => $default,
-            'eduCloudStatus' => $eduCloudStatus
+            'default' => $default,
+            'eduCloudStatus' => $eduCloudStatus,
         ));
     }
 

@@ -2,7 +2,6 @@
 
 namespace AppBundle\Handler;
 
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Topxia\Service\Common\ServiceKernel;
 use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
@@ -19,7 +18,7 @@ class LoginSuccessHandler
     private $checker;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param AuthorizationChecker $checker
      * @param Doctrine             $doctrine
@@ -36,7 +35,6 @@ class LoginSuccessHandler
      */
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
-
         if ($this->checker->isGranted('IS_AUTHENTICATED_FULLY')) {
             // user has just logged in
         }
@@ -51,7 +49,7 @@ class LoginSuccessHandler
         // ...
         $this->getUserService()->markLoginInfo();
 
-        $request   = $event->getRequest();
+        $request = $event->getRequest();
         $sessionId = $request->getSession()->getId();
         $request->getSession()->set('loginIp', $request->getClientIp());
 

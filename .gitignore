@@ -72,3 +72,5 @@ chunk-manifest.json
 .sonar
 .happypack
 .chokidar-watch-add.log
+project.sublime-workspace
+.php_cs.cache

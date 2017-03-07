@@ -2,26 +2,24 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use AppBundle\Extensions\DataTag\DataTag;
-
 /**
- * @todo  
+ * @todo
  */
-class UserClassroomPlanTaskNumInfoDataTag extends BaseDataTag implements DataTag  
+class UserClassroomPlanTaskNumInfoDataTag extends BaseDataTag implements DataTag
 {
-
     /**
      * 获取用户今日任务
      *
      * 可传入的参数：
      *   classroomId   必需 班级ID
      *   userId        必需　用户ID
-     * 
-     * @param  array $arguments 参数
+     *
+     * @param array $arguments 参数
+     *
      * @return array 用户班级学习计划任务数量信息
      */
     public function getData(array $arguments)
-    {   
+    {
         $this->checkArguments($arguments);
         $classroomPlan = $this->getClassroomPlanService()->getPlanByClassroomId($arguments['classroomId']);
         if (!$classroomPlan) {
@@ -32,7 +30,7 @@ class UserClassroomPlanTaskNumInfoDataTag extends BaseDataTag implements DataTag
         if (!$planMember) {
             return array();
         }
-        
+
         $userDoneInfo = array();
 
         $userDoneInfo['homeworkDoneNum'] = $this->getTaskService()->countTasks(array(
@@ -40,13 +38,13 @@ class UserClassroomPlanTaskNumInfoDataTag extends BaseDataTag implements DataTag
             'batchId' => $classroomPlan['id'],
             'taskType' => 'studyplan',
             'status' => 'completed',
-            'targetType' => 'homework'
+            'targetType' => 'homework',
         ));
         $userDoneInfo['homeworkTaskNum'] = $this->getTaskService()->countTasks(array(
             'userId' => $arguments['userId'],
             'batchId' => $classroomPlan['id'],
             'taskType' => 'studyplan',
-            'targetType' => 'homework'
+            'targetType' => 'homework',
         ));
 
         $userDoneInfo['testpaperDoneNum'] = $this->getTaskService()->countTasks(array(
@@ -54,13 +52,13 @@ class UserClassroomPlanTaskNumInfoDataTag extends BaseDataTag implements DataTag
             'batchId' => $classroomPlan['id'],
             'taskType' => 'studyplan',
             'status' => 'completed',
-            'targetType' => 'testpaper'
+            'targetType' => 'testpaper',
         ));
         $userDoneInfo['testpaperTaskNum'] = $this->getTaskService()->countTasks(array(
             'userId' => $arguments['userId'],
             'batchId' => $classroomPlan['id'],
             'taskType' => 'studyplan',
-            'targetType' => 'testpaper'
+            'targetType' => 'testpaper',
         ));
 
         $userDoneInfo['allDoneNum'] = $this->getTaskService()->countTasks(array(
@@ -91,7 +89,6 @@ class UserClassroomPlanTaskNumInfoDataTag extends BaseDataTag implements DataTag
             throw new \InvalidArgumentException($this->getServiceKernel()->trans('classroomId参数缺失'));
         }
     }
-
 
     protected function getClassroomPlanService()
     {

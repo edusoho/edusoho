@@ -7,15 +7,15 @@
   <ol>
     <li>{{'设置头像。'|trans}}
       {% if app.user.largeAvatar %}
-        <span class="text-success"><span class="glyphicon glyphicon-ok-circle"></span> {{'已完成'|trans}}</span> </li>
+        <span class="color-success"><span class="glyphicon glyphicon-ok-circle"></span> {{'已完成'|trans}}</span> </li>
       {% else %}
-        <span class="text-danger"><span class="glyphicon glyphicon-remove-circle"></span> {{'未完成'|trans}}</span>
+        <span class="color-danger"><span class="glyphicon glyphicon-remove-circle"></span> {{'未完成'|trans}}</span>
       {% endif %}
     <li>{{'设置头衔 、自我介绍。'|trans}}
       {% if app.user.title and userProfile.about %}
-        <span class="text-success"><span class="glyphicon glyphicon-ok-circle"></span> {{'已完成'|trans}}</span> </li>
+        <span class="color-success"><span class="glyphicon glyphicon-ok-circle"></span> {{'已完成'|trans}}</span> </li>
       {% else %}
-        <span class="text-danger"><span class="glyphicon glyphicon-remove-circle"></span> {{'未完成'|trans}}</span>
+        <span class="color-danger"><span class="glyphicon glyphicon-remove-circle"></span> {{'未完成'|trans}}</span>
       {% endif %}
     </li>
   </ol>
@@ -44,7 +44,7 @@
     <div class="col-md-2 control-label"></div>
     <div class="controls col-md-8 controls">
       <a id="upload-picture-btn"
-      class="btn btn-primary"
+      class="btn btn-primary upload-picture-btn"
       data-upload-token="{{ upload_token('tmp', 'image') }}"
       data-goto-url="{{path('settings_avatar_crop_modal')}}"
       >{{'上传新头像'|trans}}</a>

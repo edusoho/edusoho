@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Course\Service\Impl;
-
 
 use Biz\BaseService;
 use Biz\Course\Dao\CourseNoteDao;
@@ -32,10 +30,9 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
     {
         return $this->countCourseNotes(array(
             'courseId' => $courseId,
-            'status'   => CourseNoteService::PUBLIC_STATUS
+            'status' => CourseNoteService::PUBLIC_STATUS,
         ));
     }
-
 
     public function getCourseNoteByUserIdAndTaskId($userId, $taskId)
     {
@@ -46,12 +43,13 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
     {
         $conditions = array(
             'courseSetId' => $courseSetId,
-            'status'      => 1
+            'status' => 1,
         );
+
         return $this->searchNotes(
             $conditions,
             array(
-                'createdTime' => 'DESC'
+                'createdTime' => 'DESC',
             ),
             0,
             $this->countCourseNotes($conditions)
@@ -67,18 +65,18 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
     {
         $conditions = array(
             'courseId' => $courseId,
-            'status'   => 1
+            'status' => CourseNoteService::PUBLIC_STATUS,
         );
+
         return $this->searchNotes(
             $conditions,
             array(
-                'createdTime' => 'DESC'
+                'createdTime' => 'DESC',
             ),
             0,
             $this->countCourseNotes($conditions)
         );
     }
-
 
     public function findCourseNotesByUserIdAndCourseId($userId, $courseId)
     {
@@ -88,12 +86,14 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
     public function searchNotes($conditions, $sort, $start, $limit)
     {
         $conditions = $this->prepareSearchNoteConditions($conditions);
+
         return $this->getNoteDao()->search($conditions, $sort, $start, $limit);
     }
 
     public function countCourseNotes($conditions)
     {
         $conditions = $this->prepareSearchNoteConditions($conditions);
+
         return $this->getNoteDao()->count($conditions);
     }
 
@@ -120,26 +120,26 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         $course = $this->getCourseService()->getCourse($task['courseId']);
 
         if (empty($course)) {
-            throw $this->createNotFoundException('course not found. #' . $task['courseId']);
+            throw $this->createNotFoundException('course not found. #'.$task['courseId']);
         } else {
             $note['courseSetId'] = $course['courseSetId'];
         }
 
         $note = ArrayToolkit::filter($note, array(
-            'courseId'    => 0,
+            'courseId' => 0,
             'courseSetId' => 0,
-            'taskId'      => 0,
-            'content'     => '',
-            'status'      => 0
+            'taskId' => 0,
+            'content' => '',
+            'status' => 0,
         ));
 
         $note['content'] = $this->biz['html_helper']->purify($note['content']) ?: '';
-        $note['length']  = $this->calculateContentLength($note['content']);
+        $note['length'] = $this->calculateContentLength($note['content']);
 
         $existNote = $this->getCourseNoteByUserIdAndTaskId($user['id'], $note['taskId']);
         if (!$existNote) {
             $note['userId'] = $user['id'];
-            $note           = $this->getNoteDao()->create($note);
+            $note = $this->getNoteDao()->create($note);
             $this->dispatchEvent('course.note.create', $note);
         } else {
             unset($note['id']);
@@ -183,7 +183,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
     public function waveLikeNum($id, $num)
     {
         $this->getNoteDao()->wave(array($id), array(
-            'likeNum' => $num
+            'likeNum' => $num,
         ));
     }
 
@@ -207,13 +207,14 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         }
 
         $noteLike = array(
-            'noteId'      => $noteId,
-            'userId'      => $user['id'],
-            'createdTime' => time()
+            'noteId' => $noteId,
+            'userId' => $user['id'],
+            'createdTime' => time(),
         );
 
         $this->dispatchEvent('course.note.liked', $note);
         $like = $this->getNoteLikeDao()->create($noteLike);
+
         return !empty($like);
     }
 
@@ -232,6 +233,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         $this->getNoteLikeDao()->deleteByNoteIdAndUserId($noteId, $user['id']);
 
         $this->dispatchEvent('course.note.cancelLike', $note);
+
         return true;
     }
 
@@ -276,19 +278,19 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
     /**
      * @param $courseSetId
      *
-     * @return integer
+     * @return int
      */
     public function countCourseNoteByCourseSetId($courseSetId)
     {
         return $this->countCourseNotes(array(
             'courseSetId' => $courseSetId,
-            'status'      => CourseNoteService::PUBLIC_STATUS
+            'status' => CourseNoteService::PUBLIC_STATUS,
         ));
     }
 
     protected function calculateContentLength($content)
     {
-        $content = strip_tags(trim(str_replace(array("\\t", "\\r\\n", "\\r", "\\n"), '', $content)));
+        $content = strip_tags(trim(str_replace(array('\\t', '\\r\\n', '\\r', '\\n'), '', $content)));
 
         return mb_strlen($content, 'utf-8');
     }
@@ -297,6 +299,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
      * @param $conditions
      *
      * @return array
+     *
      * @throws \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     protected function prepareSearchNoteConditions($conditions)
@@ -314,7 +317,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         unset($conditions['keyword']);
 
         if (isset($conditions['author'])) {
-            $author               = $this->getUserService()->getUserByNickname($conditions['author']);
+            $author = $this->getUserService()->getUserByNickname($conditions['author']);
             $conditions['userId'] = $author ? $author['id'] : -1;
             unset($conditions['author']);
         }

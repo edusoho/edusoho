@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AppBundle\Controller\Activity;
-
 
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
@@ -13,10 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DocController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $activity)
     {
-        $activity = $this->getActivityService()->getActivity($id);
-
         if (empty($activity)) {
             throw $this->createNotFoundException('activity not found');
         }
@@ -25,12 +21,11 @@ class DocController extends BaseController implements ActivityActionInterface
         list($result, $error) = $this->getDocFilePlayer($doc);
 
         return $this->render('activity/doc/show.html.twig', array(
-            'doc'      => $doc,
-            'error'    => $error,
-            'docMedia' => $result
+            'doc' => $doc,
+            'error' => $error,
+            'docMedia' => $result,
         ));
     }
-
 
     public function previewAction(Request $request, $task)
     {
@@ -44,31 +39,32 @@ class DocController extends BaseController implements ActivityActionInterface
         list($result, $error) = $this->getDocFilePlayer($doc);
 
         return $this->render('activity/doc/preview.html.twig', array(
-            'doc'      => $doc,
-            'error'    => $error,
-            'docMedia' => $result
+            'doc' => $doc,
+            'error' => $error,
+            'docMedia' => $result,
         ));
     }
 
     public function editAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
-        $config   = $this->getActivityService()->getActivityConfig('doc');
-        $doc      = $config->get($activity['mediaId']);
+        $config = $this->getActivityService()->getActivityConfig('doc');
+        $doc = $config->get($activity['mediaId']);
 
-        $file         = $this->getUploadFileService()->getFile($doc['mediaId']);
+        $file = $this->getUploadFileService()->getFile($doc['mediaId']);
         $doc['media'] = $file;
+
         return $this->render('activity/doc/edit-modal.html.twig', array(
             'activity' => $activity,
             'courseId' => $courseId,
-            'doc'      => $doc
+            'doc' => $doc,
         ));
     }
 
     public function createAction(Request $request, $courseId)
     {
         return $this->render('activity/doc/edit-modal.html.twig', array(
-            'courseId' => $courseId
+            'courseId' => $courseId,
         ));
     }
 
@@ -77,7 +73,7 @@ class DocController extends BaseController implements ActivityActionInterface
         $media = $this->getActivityService()->getActivityConfig('doc')->get($activity['mediaId']);
 
         return $this->render('activity/doc/finish-condition.html.twig', array(
-            'media' => $media
+            'media' => $media,
         ));
     }
 
@@ -109,7 +105,7 @@ class DocController extends BaseController implements ActivityActionInterface
         if ($isConvertNotSuccess) {
             if ($file['convertStatus'] == FileImplementor::CONVERT_STATUS_ERROR) {
                 $message = '文档转换失败，请到课程文件管理中，重新转换。';
-                $error   = array('code' => 'error', 'message' => $message);
+                $error = array('code' => 'error', 'message' => $message);
             } else {
                 $error = array('code' => 'processing', 'message' => '文档还在转换中，还不能查看，请稍等。');
             }
@@ -119,7 +115,6 @@ class DocController extends BaseController implements ActivityActionInterface
 
         return array($result, $error);
     }
-
 
     /**
      * @return ActivityService

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Cash\Service;
 
 interface CashService
@@ -19,7 +20,7 @@ interface CashService
 
     public function analysisAmount($conditions);
 
-    public function findUserIdsByFlows($type,$createdTime,$orderBy, $start, $limit);
+    public function findUserIdsByFlows($type, $createdTime, $orderBy, $start, $limit);
 
-    public function findUserIdsByFlowsCount($type,$createdTime);
+    public function findUserIdsByFlowsCount($type, $createdTime);
 }

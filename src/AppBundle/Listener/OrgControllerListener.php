@@ -26,8 +26,8 @@ class OrgControllerListener
         preg_match($this->makeRegex(), $url, $matches);
 
         if (!empty($matches[0])) {
-            $match           = $matches[0];
-            $target          = array_values(array_filter(explode('/', $match)));
+            $match = $matches[0];
+            $target = array_values(array_filter(explode('/', $match)));
             list($type, $id) = $target;
             $this->_process($type, $id);
         }
@@ -36,8 +36,8 @@ class OrgControllerListener
     private function _process($type, $id)
     {
         list($service, $method) = $this->_serviceMapper[$type];
-        $user                   = ServiceKernel::instance()->getCurrentUser();
-        $object                 = ServiceKernel::instance()->createService($service)->$method($id);
+        $user = ServiceKernel::instance()->getCurrentUser();
+        $object = ServiceKernel::instance()->createService($service)->$method($id);
 
         if (empty($object['orgCode']) || !$this->_existInSubOrg($user->currentOrgCode, $object['orgCode'])) {
             throw new NotFoundHttpException("{$type} #{$id} not in this org");
@@ -55,15 +55,15 @@ class OrgControllerListener
 
     private function makeRegex()
     {
-        $str     = implode('|', array_keys($this->_serviceMapper));
+        $str = implode('|', array_keys($this->_serviceMapper));
         $pattern = sprintf("/^\/(%s)\/\d+/", $str); // example: /^\/(course|classroom)\/\d+/
         return $pattern;
     }
 
     private $_serviceMapper = array(
-        'user'      => array('User.UserService', 'getUser'),
-        'course'    => array('Course.CourseService', 'getCourse'),
+        'user' => array('User.UserService', 'getUser'),
+        'course' => array('Course.CourseService', 'getCourse'),
         'classroom' => array('Classroom:ClassroomService', 'getClassroom'),
-        'article'   => array('Article.ArticleService', 'getArticle')
+        'article' => array('Article.ArticleService', 'getArticle'),
     );
 }

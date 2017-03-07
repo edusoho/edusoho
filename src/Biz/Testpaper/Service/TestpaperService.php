@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Testpaper\Service;
 
 interface TestpaperService
@@ -26,9 +27,8 @@ interface TestpaperService
     public function closeTestpaper($id);
 
     /**
-     * testpaper_item
+     * testpaper_item.
      */
-
     public function getItem($id);
 
     public function createItem($fields);
@@ -60,16 +60,15 @@ interface TestpaperService
     public function findItemResultsByResultId($resultId);
 
     /**
-     * testpaper_result
+     * testpaper_result.
      */
-
     public function getTestpaperResult($id);
 
     public function getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId);
 
     public function getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type);
 
-    public function findPaperResultsStatusNumGroupByStatus($testId);
+    public function findPaperResultsStatusNumGroupByStatus($testId, $courseIds);
 
     public function addTestpaperResult($fields);
 
@@ -86,9 +85,10 @@ interface TestpaperService
     public function canBuildTestpaper($type, $options);
 
     /**
-     * 开始做试卷
+     * 开始做试卷.
      *
-     * @param  [type] $id             [description]
+     * @param [type] $id [description]
+     *
      * @return [type] [description]
      */
     public function startTestpaper($id, $fields);
@@ -110,5 +110,4 @@ interface TestpaperService
     public function canLookTestpaper($resultId);
 
     public function updateTestpaperItems($testpaperId, $items);
-
 }

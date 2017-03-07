@@ -208,7 +208,7 @@
       <label for="" class="col-sm-3 control-label">启用云视频：</label>
       <div class="controls col-md-9 radios">
         <div>
-          <span class="text-success">{{ '已启用'|trans }}</span>
+          <span class="color-success">{{ '已启用'|trans }}</span>
           <button type="submit" class="btn btn-default btn-sm mlm" name="upload_mode" value="local"><span class="text-muted">{{ '关闭'|trans }}</span></button>
         </div>
         <div class="help-block">
@@ -239,7 +239,7 @@
     <div class="row form-group">
       <label for="" class="col-sm-3 control-label">视频转码画质：</label>
       <div class="controls col-sm-9 radios">
-        {{ radios('video_quality', {'low':'流畅 %<span class="text-muted">%(适合PPT讲解)%</span>%'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'}), 'normal':'标准 %<span class="text-muted">%(适合屏幕录制、摄像头拍摄)%</span>%'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'}), 'high': '精细 %<span class="text-muted">%(适合动态电影)%</span>%'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'})}, storageSetting.video_quality) }}
+        {{ radios('video_quality', {'low':'流畅 %<span class="text-muted">%(适合PPT讲解)%</span>%'|trans({'%<span class="text-muted">%':'<span class="color-danger">','%</span>%':'</span>'}), 'normal':'标准 %<span class="text-muted">%(适合屏幕录制、摄像头拍摄)%</span>%'|trans({'%<span class="text-muted">%':'<span class="color-danger">','%</span>%':'</span>'}), 'high': '精细 %<span class="text-muted">%(适合动态电影)%</span>%'|trans({'%<span class="text-muted">%':'<span class="color-danger">','%</span>%':'</span>'})}, storageSetting.video_quality) }}
       </div>
     </div>
     

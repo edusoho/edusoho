@@ -5,30 +5,30 @@ namespace AppBundle\Extensions\DataTag;
 use Biz\Announcement\Service\AnnouncementService;
 
 /**
- * @todo  
+ * @todo
  */
-class AnnouncementDataTag extends BaseDataTag implements DataTag  
+class AnnouncementDataTag extends BaseDataTag implements DataTag
 {
-
     /**
-     * 获取公告列表
+     * 获取公告列表.
      *
      * 可传入的参数：
      *   count    必需 取值不超过10
-     * 
-     * @param  array $arguments 参数
+     *
+     * @param array $arguments 参数
+     *
      * @return array 公告列表
      */
     public function getData(array $arguments)
-    {   
+    {
         $this->checkCount($arguments);
 
         $currentTime = time();
 
-        $conditions  = $this->fillOrgCode(array('targetType'=>'global', 'startTime'=>$currentTime, 'endTime'=>$currentTime));
+        $conditions = $this->fillOrgCode(array('targetType' => 'global', 'startTime' => $currentTime, 'endTime' => $currentTime));
 
-        $announcement = $this->getAnnouncementService()->searchAnnouncements($conditions,array('createdTime' => 'DESC'), 0, $arguments['count']);
-        
+        $announcement = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime' => 'DESC'), 0, $arguments['count']);
+
         return $announcement;
     }
 

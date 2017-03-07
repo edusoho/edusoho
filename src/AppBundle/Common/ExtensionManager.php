@@ -4,12 +4,11 @@ namespace AppBundle\Common;
 
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Finder\Finder;
-use AppBundle\Common\ExtensionalBundle;
 use Topxia\Service\Common\ServiceKernel;
 
 /**
- * Class ExtensionManager
- * @package AppBundle\Common
+ * Class ExtensionManager.
+ *
  * @deprecated since version 7.0 to be removed in 8.0, use codeages_plugin.dict_twig_extension twig extension
  */
 class ExtensionManager
@@ -32,18 +31,18 @@ class ExtensionManager
 
     private function __construct($kernel)
     {
-        $this->kernel                = $kernel;
-        $this->bundles               = array(
-            'DataTag'              => array(),
-            'StatusTemplate'       => array(),
-            'DataDict'             => array(),
-            'NotificationTemplate' => array()
+        $this->kernel = $kernel;
+        $this->bundles = array(
+            'DataTag' => array(),
+            'StatusTemplate' => array(),
+            'DataDict' => array(),
+            'NotificationTemplate' => array(),
         );
-        $this->booted                = false;
-        $this->statusTemplates       = array();
-        $this->dataDict              = array();
-        $this->dataTagClassmap       = array();
-        $this->dataTags              = array();
+        $this->booted = false;
+        $this->statusTemplates = array();
+        $this->dataDict = array();
+        $this->dataTagClassmap = array();
+        $this->dataTags = array();
         $this->notificationTemplates = array();
     }
 
@@ -148,25 +147,25 @@ class ExtensionManager
         $finder = new Finder();
         $finder->files()->name('*DataTag.php')->depth('== 0');
 
-        $root = realpath($this->kernel->getContainer()->getParameter('kernel.root_dir') . '/../');
+        $root = realpath($this->kernel->getContainer()->getParameter('kernel.root_dir').'/../');
 
         $dirNamespaces = array();
 
         foreach ($this->bundles['DataTag'] as $bundle) {
-            $directory = $bundle->getPath() . '/Extensions/DataTag';
+            $directory = $bundle->getPath().'/Extensions/DataTag';
 
             if (!is_dir($directory)) {
                 continue;
             }
 
-            $dirNamespaces[$directory] = $bundle->getNamespace() . "\\Extensions\\DataTag";
+            $dirNamespaces[$directory] = $bundle->getNamespace().'\\Extensions\\DataTag';
 
             $finder->in($directory);
         }
 
         foreach ($finder as $file) {
-            $name                         = $file->getBasename('DataTag.php');
-            $this->dataTagClassmap[$name] = $dirNamespaces[$file->getPath()] . "\\{$name}DataTag";
+            $name = $file->getBasename('DataTag.php');
+            $this->dataTagClassmap[$name] = $dirNamespaces[$file->getPath()]."\\{$name}DataTag";
         }
 
         return $this->dataTagClassmap;
@@ -183,7 +182,7 @@ class ExtensionManager
         $files = array();
 
         foreach ($this->bundles['DataDict'] as $bundle) {
-            $file = $bundle->getPath() . '/Resources/config/dict.yml';
+            $file = $bundle->getPath().'/Resources/config/dict.yml';
 
             if (!file_exists($file)) {
                 continue;
@@ -206,11 +205,11 @@ class ExtensionManager
         $finder = new Finder();
         $finder->files()->name('*.tpl.html.twig')->depth('== 0');
 
-        $root       = realpath($this->kernel->getContainer()->getParameter('kernel.root_dir') . '/../');
+        $root = realpath($this->kernel->getContainer()->getParameter('kernel.root_dir').'/../');
         $bundleName = substr(ucwords($type), 0, strlen(ucwords($type)) - 1);
 
         foreach ($this->bundles[$bundleName] as $bundle) {
-            $directory = $bundle->getPath() . '/Extensions/' . $bundleName;
+            $directory = $bundle->getPath().'/Extensions/'.$bundleName;
 
             if (!is_dir($directory)) {
                 continue;
@@ -222,8 +221,8 @@ class ExtensionManager
         $tempName = array();
 
         foreach ($finder as $file) {
-            $template            = $file->getBasename('.tpl.html.twig');
-            $path                = str_replace($root, '@root', $file->getRealPath());
+            $template = $file->getBasename('.tpl.html.twig');
+            $path = str_replace($root, '@root', $file->getRealPath());
             $tempName[$template] = $path;
         }
 

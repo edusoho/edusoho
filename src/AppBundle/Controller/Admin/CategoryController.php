@@ -1,8 +1,8 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class CategoryController extends BaseController
 {
@@ -16,10 +16,10 @@ class CategoryController extends BaseController
         $categories = $this->getCategoryService()->getCategoryStructureTree($group['id']);
 
         return $this->render('admin/category/embed.html.twig', array(
-            'group'      => $group,
-            'menu'       => $menu,
+            'group' => $group,
+            'menu' => $menu,
             'categories' => $categories,
-            'layout'     => $layout
+            'layout' => $layout,
         ));
     }
 
@@ -27,22 +27,23 @@ class CategoryController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $category = $this->getCategoryService()->createCategory($request->request->all());
+
             return $this->renderTbody($category['groupId']);
         }
 
         $category = array(
-            'id'          => 0,
-            'name'        => '',
-            'code'        => '',
+            'id' => 0,
+            'name' => '',
+            'code' => '',
             'description' => '',
-            'groupId'     => (int) $request->query->get('groupId'),
-            'parentId'    => (int) $request->query->get('parentId', 0),
-            'weight'      => 0,
-            'icon'        => ''
+            'groupId' => (int) $request->query->get('groupId'),
+            'parentId' => (int) $request->query->get('parentId', 0),
+            'weight' => 0,
+            'icon' => '',
         );
 
         return $this->render('admin/category/modal.html.twig', array(
-            'category' => $category
+            'category' => $category,
         ));
     }
 
@@ -56,11 +57,12 @@ class CategoryController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $category = $this->getCategoryService()->updateCategory($id, $request->request->all());
+
             return $this->renderTbody($category['groupId']);
         }
 
         return $this->render('admin/category/modal.html.twig', array(
-            'category' => $category
+            'category' => $category,
         ));
     }
 
@@ -90,7 +92,7 @@ class CategoryController extends BaseController
 
     public function checkCodeAction(Request $request)
     {
-        $code    = $request->query->get('value');
+        $code = $request->query->get('value');
         $exclude = $request->query->get('exclude');
 
         $avaliable = $this->getCategoryService()->isCategoryCodeAvaliable($code, $exclude);
@@ -106,11 +108,12 @@ class CategoryController extends BaseController
 
     protected function renderTbody($groupId)
     {
-        $group      = $this->getCategoryService()->getGroup($groupId);
+        $group = $this->getCategoryService()->getGroup($groupId);
         $categories = $this->getCategoryService()->getCategoryStructureTree($groupId);
+
         return $this->render('admin/category/tbody.html.twig', array(
             'categories' => $categories,
-            'group'      => $group
+            'group' => $group,
         ));
     }
 

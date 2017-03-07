@@ -9,44 +9,50 @@ class OptimizeController extends BaseController
 {
     public function indexAction()
     {
-       return $this->render('admin/system/optimize.html.twig', array());
+        return $this->render('admin/system/optimize.html.twig', array());
     }
 
     public function removeCacheAction()
     {
-         FileUtil::emptyDir(SystemUtil::getCachePath());
+        FileUtil::emptyDir(SystemUtil::getCachePath());
+
         return $this->createJsonResponse(true);
     }
+
     public function removeTempAction()
     {
-        if(!$this->isDisabledUpgrade()){
+        if (!$this->isDisabledUpgrade()) {
             FileUtil::emptyDir(SystemUtil::getDownloadPath());
         }
-         FileUtil::emptyDir(SystemUtil::getUploadTmpPath());
+        FileUtil::emptyDir(SystemUtil::getUploadTmpPath());
+
         return $this->createJsonResponse(true);
-    }    
+    }
 
     public function removeBackupAction()
     {
-        if(!$this->isDisabledUpgrade()){
-             FileUtil::emptyDir(SystemUtil::getBackUpPath());
-         }
+        if (!$this->isDisabledUpgrade()) {
+            FileUtil::emptyDir(SystemUtil::getBackUpPath());
+        }
+
         return $this->createJsonResponse(true);
     }
+
     public function backupdbAction()
     {
         $db = SystemUtil::backupdb();
         $downloadFile = '/files/tmp/'.basename($db);
-        return $this->createJsonResponse(array('status' => 'ok', 'result'=>$downloadFile));
+
+        return $this->createJsonResponse(array('status' => 'ok', 'result' => $downloadFile));
     }
 
     public function removeUnusedFilesAction()
     {
         $result = $this->getSystemUtilService()->removeUnusedUploadFiles();
-        if($result){
-            return $this->createJsonResponse(array("success"=>true,'message'=>'优化文件'));
-        }else{
-            return $this->createJsonResponse(array("success"=>false,'message'=>'无可优化文件'));
+        if ($result) {
+            return $this->createJsonResponse(array('success' => true, 'message' => '优化文件'));
+        } else {
+            return $this->createJsonResponse(array('success' => false, 'message' => '无可优化文件'));
         }
     }
 
@@ -73,6 +79,4 @@ class OptimizeController extends BaseController
     {
         return $this->createService('Util:SystemUtilService');
     }
-
-
 }

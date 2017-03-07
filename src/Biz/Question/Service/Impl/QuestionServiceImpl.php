@@ -1,7 +1,9 @@
 <?php
+
 namespace Biz\Question\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Question\Service\QuestionService;
@@ -16,12 +18,12 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function create($fields)
     {
-        $argument         = $fields;
-        $user             = $this->getCurrentuser();
+        $argument = $fields;
+        $user = $this->getCurrentuser();
         $fields['userId'] = $user['id'];
 
         $questionConfig = $this->getQuestionConfig($fields['type']);
-        $media          = $questionConfig->create($fields);
+        $media = $questionConfig->create($fields);
 
         if (!empty($media)) {
             $fields['metas']['mediaId'] = $media['id'];
@@ -29,7 +31,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
         $fields['createdTime'] = time();
         $fields['updatedTime'] = time();
-        $fields                = $questionConfig->filter($fields);
+        $fields = $questionConfig->filter($fields);
 
         $question = $this->getQuestionDao()->create($fields);
 
@@ -56,7 +58,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
 
         $fields['updatedTime'] = time();
-        $fields                = $questionConfig->filter($fields);
+        $fields = $questionConfig->filter($fields);
 
         $question = $this->getQuestionDao()->update($id, $fields);
 
@@ -113,6 +115,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function findQuestionsByIds(array $ids)
     {
         $questions = $this->getQuestionDao()->findQuestionsByIds($ids);
+
         return ArrayToolkit::index($questions, 'id');
     }
 
@@ -129,8 +132,8 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function search($conditions, $sort, $start, $limit)
     {
         $conditions = $this->filterQuestionFields($conditions);
-        $questions  = $this->getQuestionDao()->search($conditions, $sort, $start, $limit);
-
+        $questions = $this->getQuestionDao()->search($conditions, $sort, $start, $limit);
+        // var_dump($conditions);
         $that = $this;
         array_walk($questions, function (&$question) use ($that) {
             $question = $that->hasStemImg($question);
@@ -142,6 +145,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function searchCount($conditions)
     {
         $conditions = $this->filterQuestionFields($conditions);
+
         return $this->getQuestionDao()->count($conditions);
     }
 
@@ -166,6 +170,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
 
         $questionConfig = $this->getQuestionConfig($question['type']);
+
         return $questionConfig->judge($question, $answer);
     }
 
@@ -186,9 +191,8 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     }
 
     /**
-     * question_favorite
+     * question_favorite.
      */
-
     public function getFavoriteQuestion($favoriteId)
     {
         return $this->getQuestionFavoriteDao()->get($favoriteId);
@@ -198,8 +202,8 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     {
         $user = $this->getCurrentUser();
 
-        $fields['userId']      = $user['id'];
-        $fields['target']      = $fields['targetType']."-".$fields['targetId'];
+        $fields['userId'] = $user['id'];
+        $fields['target'] = $fields['targetType'].'-'.$fields['targetId'];
         $fields['createdTime'] = time();
 
         return $this->getQuestionFavoriteDao()->create($fields);
@@ -250,8 +254,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
 
         if (!empty($conditions['target'])) {
-            $conditions['lessonId'] = $conditions['target'];
-            unset($conditions['target']);
+            $conditions = $this->prepareCourseIdAndActvityId($conditions);
         } else {
             unset($conditions['target']);
         }
@@ -272,9 +275,9 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
 
         $conditions = array(
-            'type'        => 'attachment',
+            'type' => 'attachment',
             'targetTypes' => array('question.stem', 'question.analysis'),
-            'targetIds'   => $questionIds
+            'targetIds' => $questionIds,
         );
         $attachments = $this->getUploadFileService()->searchUseFiles($conditions);
         array_walk($attachments, function (&$attachment) {
@@ -308,5 +311,37 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
+    protected function prepareCourseIdAndActvityId($conditions)
+    {
+        $targets = explode('/', $conditions['target']);
+        array_walk($targets, function ($target) use (&$conditions) {
+            if (strpos($target, 'course') !== false) {
+                $courseIds = explode('-', $target);
+                $conditions['courseId'] = array_pop($courseIds);
+            }
+            if (strpos($target, 'task') !== false) {
+                $taskIds = explode('-', $target);
+                $conditions['taskId'] = array_pop($taskIds);
+            }
+        });
+        if (isset($conditions['taskId'])) {
+            $task = $this->getTaskService()->getTask($conditions['taskId']);
+            if (!empty($task)) {
+                $conditions['lessonId'] = $task['activityId'];
+            }
+        }
+        unset($conditions['target']);
+
+        return $conditions;
     }
 }

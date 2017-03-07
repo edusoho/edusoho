@@ -9,9 +9,9 @@
       {% elseif mediaStatus == 'doing' %}
       <i class="fa fa-file-video-o text-info"></i>
       {% elseif mediaStatus == 'error' %}
-      <i class="fa fa-file-video-o text-danger"></i>
+      <i class="fa fa-file-video-o color-danger"></i>
       {% else %}
-      <i class="fa fa-file-video-o text-success"></i>
+      <i class="fa fa-file-video-o color-success"></i>
       {% endif %}
     {% elseif lesson.type == 'liveOpen' %}
       {% if mediaStatus == 'waiting' %}
@@ -19,12 +19,12 @@
       {% elseif mediaStatus == 'doing' %}
       <i class="fa fa-video-camera text-info"></i>
       {% elseif mediaStatus == 'error' %}
-      <i class="fa fa-video-camera text-danger"></i>
+      <i class="fa fa-video-camera color-danger"></i>
       {% else %}
-      <i class="fa fa-video-camera text-success"></i>
+      <i class="fa fa-video-camera color-success"></i>
       {% endif %}
     {% else %}
-      <i class="fa fa-file-powerpoint-o text-success"></i>
+      <i class="fa fa-file-powerpoint-o color-success"></i>
     {% endif %}
     课时 <span class="number">{{ lesson.number }}</span>：
 
@@ -52,7 +52,7 @@
       {% elseif mediaStatus == 'doing' %}
         <span class="text-info">(正在转换{{ mediaTypeName }}格式)</span>
       {% elseif mediaStatus == 'error' %}
-        <span class="text-danger">({{ mediaTypeName }}格式转换失败)</span>
+        <span class="color-danger">({{ mediaTypeName }}格式转换失败)</span>
       {% endif %}
     {% endif  %}
 

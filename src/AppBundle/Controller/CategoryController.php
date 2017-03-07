@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\Taxonomy\Service\CategoryService;
@@ -73,10 +74,10 @@ class CategoryController extends BaseController
 
         $parentCategory = $this->getCategoryService()->getCategoryByCode($category['subCategory']);
 
-        return $this->getCategoryService()->findAllCategoriesByParentId($parentCategory['id']);        
+        return $this->getCategoryService()->findAllCategoriesByParentId($parentCategory['id']);
     }
 
-    public function treeNavAction(Request $request, $category, $tags, $path, $filter = array('price'=>'all','type'=>'all', 'currentLevelId'=>'all'), $orderBy = 'latest', $group = 'course')
+    public function treeNavAction(Request $request, $category, $tags, $path, $filter = array('price' => 'all', 'type' => 'all', 'currentLevelId' => 'all'), $orderBy = 'latest', $group = 'course')
     {
         $categories = $this->makeCategories($group);
 
@@ -86,19 +87,19 @@ class CategoryController extends BaseController
 
         $thirdLevelCategories = $this->makeThirdCategories($category);
 
-        return $this->render("category/explore-nav.html.twig", array(
-            'selectedCategory'           => $category['category'],
-            'selectedSubCategory'        => $category['subCategory'],
+        return $this->render('category/explore-nav.html.twig', array(
+            'selectedCategory' => $category['category'],
+            'selectedSubCategory' => $category['subCategory'],
             'selectedthirdLevelCategory' => $category['thirdLevelCategory'],
-            'thirdLevelCategories'       => $thirdLevelCategories,
-            'categories'                 => $categories,
-            'subCategories'              => $subCategories,
-            'path'                       => $path,
-            'filter'                     => $filter,
-            'orderBy'                    => $orderBy,
-            'tagGroups'                  => $tagGroups,
-            'tags'                       => $tags,
-            'group'                      => $group
+            'thirdLevelCategories' => $thirdLevelCategories,
+            'categories' => $categories,
+            'subCategories' => $subCategories,
+            'path' => $path,
+            'filter' => $filter,
+            'orderBy' => $orderBy,
+            'tagGroups' => $tagGroups,
+            'tags' => $tags,
+            'group' => $group,
         ));
     }
 

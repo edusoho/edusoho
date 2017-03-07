@@ -11,7 +11,6 @@
 
 namespace AppBundle\SfExtend;
 
-use AppBundle\SfExtend\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\Yaml\Parser as YamlParser;
@@ -22,13 +21,14 @@ use Biz\Role\Util\PermissionBuilder;
  * YamlFileLoader loads Yaml routing files.
  *
  * @api
+ *
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Tobias Schultze <http://tobion.de>
  */
 class YamlFileLoader extends FileLoader
 {
     private static $availableKeys = array(
-        'resource', 'type', 'prefix', 'pattern', 'path', 'host', 'schemes', 'methods', 'defaults', 'requirements', 'options','permissions'
+        'resource', 'type', 'prefix', 'pattern', 'path', 'host', 'schemes', 'methods', 'defaults', 'requirements', 'options', 'permissions',
     );
     private $yamlParser;
 
@@ -36,10 +36,13 @@ class YamlFileLoader extends FileLoader
      * Loads a Yaml file.
      *
      * @api
-     * @param  string                    $file A Yaml file path
-     * @param  string|null               $type The resource type
+     *
+     * @param string      $file A Yaml file path
+     * @param string|null $type The resource type
+     *
      * @throws \InvalidArgumentException When a route can't be parsed because YAML is invalid
-     * @return RouteCollection           A RouteCollection instance
+     *
+     * @return RouteCollection A RouteCollection instance
      */
     public function load($file, $type = null)
     {
@@ -116,16 +119,16 @@ class YamlFileLoader extends FileLoader
      */
     protected function parseRoute(RouteCollection $collection, $name, array $config, $path)
     {
-        $defaults     = isset($config['defaults']) ? $config['defaults'] : array();
+        $defaults = isset($config['defaults']) ? $config['defaults'] : array();
         $requirements = isset($config['requirements']) ? $config['requirements'] : array();
-        $options      = isset($config['options']) ? $config['options'] : array();
-        $host         = isset($config['host']) ? $config['host'] : '';
-        $schemes      = isset($config['schemes']) ? $config['schemes'] : array();
-        $methods      = isset($config['methods']) ? $config['methods'] : array();
+        $options = isset($config['options']) ? $config['options'] : array();
+        $host = isset($config['host']) ? $config['host'] : '';
+        $schemes = isset($config['schemes']) ? $config['schemes'] : array();
+        $methods = isset($config['methods']) ? $config['methods'] : array();
 
         $permissions = $this->getPermissions($name, $config);
 
-        $route        = new Route($config['path'], $defaults, $requirements, $options, $host, $schemes, $methods, $permissions);
+        $route = new Route($config['path'], $defaults, $requirements, $options, $host, $schemes, $methods, $permissions);
         $collection->add($name, $route);
     }
 
@@ -133,21 +136,22 @@ class YamlFileLoader extends FileLoader
     {
         $permissions = array();
 
-        if(preg_match('/^admin_/', $name)
+        if (preg_match('/^admin_/', $name)
             || preg_match('/^\/course\/\{\w+\}\/manage/', $config['path'])
-            || preg_match('/^\/classroom\/\{\w+\}\/manage/', $config['path'])){
-            if(isset($config['permissions'])){
-                $permissions  =  $config['permissions'];
+            || preg_match('/^\/classroom\/\{\w+\}\/manage/', $config['path'])) {
+            if (isset($config['permissions'])) {
+                $permissions = $config['permissions'];
             } else {
                 $orginPermissions = PermissionBuilder::instance()->getOriginPermissions();
                 $permissionKeys = array_keys($orginPermissions);
-                if(in_array($name, $permissionKeys)) {
+                if (in_array($name, $permissionKeys)) {
                     $permissions = array($name);
                 }
             }
         } else {
-            $permissions  = isset($config['permissions']) ? $config['permissions'] : array();
+            $permissions = isset($config['permissions']) ? $config['permissions'] : array();
         }
+
         return $permissions;
     }
 
@@ -161,14 +165,14 @@ class YamlFileLoader extends FileLoader
      */
     protected function parseImport(RouteCollection $collection, array $config, $path, $file)
     {
-        $type         = isset($config['type']) ? $config['type'] : null;
-        $prefix       = isset($config['prefix']) ? $config['prefix'] : '';
-        $defaults     = isset($config['defaults']) ? $config['defaults'] : array();
+        $type = isset($config['type']) ? $config['type'] : null;
+        $prefix = isset($config['prefix']) ? $config['prefix'] : '';
+        $defaults = isset($config['defaults']) ? $config['defaults'] : array();
         $requirements = isset($config['requirements']) ? $config['requirements'] : array();
-        $options      = isset($config['options']) ? $config['options'] : array();
-        $host         = isset($config['host']) ? $config['host'] : null;
-        $schemes      = isset($config['schemes']) ? $config['schemes'] : null;
-        $methods      = isset($config['methods']) ? $config['methods'] : null;
+        $options = isset($config['options']) ? $config['options'] : array();
+        $host = isset($config['host']) ? $config['host'] : null;
+        $schemes = isset($config['schemes']) ? $config['schemes'] : null;
+        $methods = isset($config['methods']) ? $config['methods'] : null;
 
         $this->setCurrentDir(dirname($path));
 
@@ -200,9 +204,11 @@ class YamlFileLoader extends FileLoader
      *
      *
      *                                   something is missing or the combination is nonsense
-     * @param  array                     $config A resource config
-     * @param  string                    $name   The config key
-     * @param  string                    $path   The loaded file path
+     *
+     * @param array  $config A resource config
+     * @param string $name   The config key
+     * @param string $path   The loaded file path
+     *
      * @throws \InvalidArgumentException If one of the provided config keys is not supported,
      */
     protected function validate($config, $name, $path)

@@ -1,1 +1,1 @@
-console.log(333)
+import '../less/default-b.less';

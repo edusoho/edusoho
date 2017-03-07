@@ -1,11 +1,12 @@
 <?php
+
 namespace AppBundle\Component\Payment;
 
 class Payment
 {
     public static function createRequest($name, $options = array())
     {
-        $name  = ucfirst(strtolower($name));
+        $name = ucfirst(strtolower($name));
         $class = __NAMESPACE__."\\{$name}\\{$name}Request";
 
         if (!class_exists($class)) {
@@ -17,7 +18,7 @@ class Payment
 
     public static function createCloseTradeRequest($name, $options = array())
     {
-        $name  = ucfirst(strtolower($name));
+        $name = ucfirst(strtolower($name));
         $class = __NAMESPACE__."\\{$name}\\{$name}CloseTradeRequest";
 
         if (!class_exists($class)) {
@@ -29,7 +30,7 @@ class Payment
 
     public static function createAuthBankRequest($name, $options = array())
     {
-        $name  = ucfirst(strtolower($name));
+        $name = ucfirst(strtolower($name));
         $class = __NAMESPACE__."\\{$name}\\{$name}AuthBankRequest";
 
         if (!class_exists($class)) {
@@ -41,7 +42,7 @@ class Payment
 
     public static function createUnbindAuthRequest($name, $options = array())
     {
-        $name  = ucfirst(strtolower($name));
+        $name = ucfirst(strtolower($name));
         $class = __NAMESPACE__."\\{$name}\\{$name}UnbindAuthRequest";
 
         if (!class_exists($class)) {
@@ -53,7 +54,7 @@ class Payment
 
     public static function createResponse($name, $options = array())
     {
-        $name  = ucfirst(strtolower($name));
+        $name = ucfirst(strtolower($name));
         $class = __NAMESPACE__."\\{$name}\\{$name}Response";
 
         if (!class_exists($class)) {
@@ -65,7 +66,7 @@ class Payment
 
     public static function createTradeQueryRequest($name, $options = array())
     {
-        $name  = ucfirst(strtolower($name));
+        $name = ucfirst(strtolower($name));
         $class = __NAMESPACE__."\\{$name}\\{$name}TradeQueryRequest";
 
         if (!class_exists($class)) {
@@ -76,5 +77,6 @@ class Payment
     }
 
     private function __construct()
-    {}
+    {
+    }
 }

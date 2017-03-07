@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b706a8bf618c85b6b6224a76e4a6d2de",
-    "content-hash": "4a1afaed0fab6ec1d8c808f852ac123a",
+    "hash": "756686a045b8f6da1ff1ca4ecd1e19d0",
+    "content-hash": "3b32b955914c86c2c59cff6bab396882",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -59,7 +59,7 @@
                 "extension",
                 "twig"
             ],
-            "time": "2016-06-14 09:16:57"
+            "time": "2016-06-14T09:16:57+00:00"
         },
         {
             "name": "bshaffer/oauth2-server-bundle",
@@ -108,7 +108,7 @@
                 "oauth2",
                 "security"
             ],
-            "time": "2014-10-15 22:50:28"
+            "time": "2014-10-15T22:50:28+00:00"
         },
         {
             "name": "bshaffer/oauth2-server-httpfoundation-bridge",
@@ -154,7 +154,7 @@
                 "oauth",
                 "oauth2"
             ],
-            "time": "2014-08-27 15:40:29"
+            "time": "2014-08-27T15:40:29+00:00"
         },
         {
             "name": "bshaffer/oauth2-server-php",
@@ -203,7 +203,7 @@
                 "oauth",
                 "oauth2"
             ],
-            "time": "2015-09-18 18:05:10"
+            "time": "2015-09-18T18:05:10+00:00"
         },
         {
             "name": "codeages/biz-framework",
@@ -238,7 +238,7 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2017-01-18 06:55:29"
+            "time": "2017-01-18T06:55:29+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -269,29 +269,32 @@
                 "MIT"
             ],
             "description": "Rate limiter with Biz Framework.",
-            "time": "2017-01-19 02:12:01"
+            "time": "2017-01-19T02:12:01+00:00"
         },
         {
             "name": "codeages/plugin-bundle",
-            "version": "v0.1.5",
+            "version": "v0.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/plugin-bundle.git",
-                "reference": "a3a15620a464a0c67edbd793004eeb41d11c753c"
+                "reference": "9e212c1a5ce98464ae73250df4bb0717732277d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/a3a15620a464a0c67edbd793004eeb41d11c753c",
-                "reference": "a3a15620a464a0c67edbd793004eeb41d11c753c",
+                "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/9e212c1a5ce98464ae73250df4bb0717732277d0",
+                "reference": "9e212c1a5ce98464ae73250df4bb0717732277d0",
                 "shasum": ""
             },
             "require": {
                 "codeages/biz-framework": "^0.1.7 || ^0.2",
                 "php": "^5.3.3 || ^7.0",
-                "symfony/framework-bundle": "^2.8 || ^3.0"
+                "symfony/framework-bundle": "^2.8 || ^3.0",
+                "symfony/twig-bundle": "^2.8 || ^3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.8|~5.0"
+                "phpunit/phpunit": "~4.8 || ~5.0",
+                "symfony/browser-kit": "^2.8 || ^3.0",
+                "symfony/phpunit-bridge": "~3.2"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -312,11 +315,11 @@
             "description": "Symfony PluginBundle",
             "homepage": "https://github.com/codeages/plugin-bundle",
             "keywords": [
-                "Extendsion",
+                "extension",
                 "plugin",
                 "theme"
             ],
-            "time": "2017-02-07 03:41:06"
+            "time": "2017-02-27T08:46:09+00:00"
         },
         {
             "name": "codeages/rate-limiter",
@@ -358,7 +361,7 @@
                 }
             ],
             "description": "Rate Limiting Library With Token Bucket Algorithm",
-            "time": "2016-12-05 08:06:43"
+            "time": "2016-12-05T08:06:43+00:00"
         },
         {
             "name": "codeages/rest-api-client",
@@ -397,7 +400,7 @@
                 }
             ],
             "description": "A PHP REST API Client.",
-            "time": "2016-10-18 06:00:00"
+            "time": "2016-10-18T06:00:00+00:00"
         },
         {
             "name": "davedevelopment/phpmig",
@@ -462,7 +465,7 @@
                 "database migrations",
                 "migrations"
             ],
-            "time": "2015-07-29 08:00:40"
+            "time": "2015-07-29T08:00:40+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -530,7 +533,7 @@
                 "docblock",
                 "parser"
             ],
-            "time": "2015-08-31 12:32:49"
+            "time": "2015-08-31T12:32:49+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -600,7 +603,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2015-12-31 16:37:02"
+            "time": "2015-12-31T16:37:02+00:00"
         },
         {
             "name": "doctrine/collections",
@@ -666,7 +669,7 @@
                 "collections",
                 "iterator"
             ],
-            "time": "2015-04-14 22:21:58"
+            "time": "2015-04-14T22:21:58+00:00"
         },
         {
             "name": "doctrine/common",
@@ -739,7 +742,7 @@
                 "persistence",
                 "spl"
             ],
-            "time": "2015-08-31 14:38:45"
+            "time": "2015-08-31T14:38:45+00:00"
         },
         {
             "name": "doctrine/dbal",
@@ -810,7 +813,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2016-09-09 19:13:33"
+            "time": "2016-09-09T19:13:33+00:00"
         },
         {
             "name": "doctrine/doctrine-bundle",
@@ -891,7 +894,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2016-08-10 15:35:22"
+            "time": "2016-08-10T15:35:22+00:00"
         },
         {
             "name": "doctrine/doctrine-cache-bundle",
@@ -979,7 +982,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2016-01-26 17:28:51"
+            "time": "2016-01-26T17:28:51+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -1046,7 +1049,7 @@
                 "singularize",
                 "string"
             ],
-            "time": "2015-11-06 14:35:42"
+            "time": "2015-11-06T14:35:42+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -1100,7 +1103,7 @@
                 "lexer",
                 "parser"
             ],
-            "time": "2014-09-09 13:34:57"
+            "time": "2014-09-09T13:34:57+00:00"
         },
         {
             "name": "doctrine/orm",
@@ -1173,7 +1176,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2015-08-31 13:19:01"
+            "time": "2015-08-31T13:19:01+00:00"
         },
         {
             "name": "endroid/qrcode",
@@ -1224,7 +1227,7 @@
                 "qr",
                 "qrcode"
             ],
-            "time": "2016-07-26 09:39:07"
+            "time": "2016-07-26T09:39:07+00:00"
         },
         {
             "name": "endroid/qrcode-bundle",
@@ -1283,7 +1286,7 @@
                 "symfony"
             ],
             "abandoned": "endroid/qrcode",
-            "time": "2016-01-16 00:41:57"
+            "time": "2016-01-16T00:41:57+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -1327,7 +1330,56 @@
             "keywords": [
                 "html"
             ],
-            "time": "2016-07-16 12:58:58"
+            "time": "2016-07-16T12:58:58+00:00"
+        },
+        {
+            "name": "facebook/webdriver",
+            "version": "1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/facebook/php-webdriver.git",
+                "reference": "77300c4ab2025d4316635f592ec849ca7323bd8c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://packagist.phpcomposer.com/files/facebook/php-webdriver/77300c4ab2025d4316635f592ec849ca7323bd8c.zip",
+                "reference": "77300c4ab2025d4316635f592ec849ca7323bd8c",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": "^5.5 || ~7.0",
+                "symfony/process": "^2.8 || ^3.1"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^1.11",
+                "php-mock/php-mock-phpunit": "^1.1",
+                "phpunit/phpunit": "4.6.* || ~5.0",
+                "satooshi/php-coveralls": "^1.0",
+                "squizlabs/php_codesniffer": "^2.6"
+            },
+            "suggest": {
+                "phpdocumentor/phpdocumentor": "2.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Facebook\\WebDriver\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "A PHP client for WebDriver",
+            "homepage": "https://github.com/facebook/php-webdriver",
+            "keywords": [
+                "facebook",
+                "php",
+                "selenium",
+                "webdriver"
+            ],
+            "time": "2017-01-13 15:48:08"
         },
         {
             "name": "flexihash/flexihash",
@@ -1380,7 +1432,7 @@
             ],
             "description": "Flexihash is a small PHP library which implements consistent hashing",
             "homepage": "https://github.com/pda/flexihash",
-            "time": "2016-04-22 21:03:23"
+            "time": "2016-04-22T21:03:23+00:00"
         },
         {
             "name": "gregwar/captcha",
@@ -1428,7 +1480,7 @@
                 "captcha",
                 "spam"
             ],
-            "time": "2015-09-11 15:23:20"
+            "time": "2015-09-11T15:23:20+00:00"
         },
         {
             "name": "imagine/imagine",
@@ -1485,7 +1537,7 @@
                 "image manipulation",
                 "image processing"
             ],
-            "time": "2015-09-19 16:54:05"
+            "time": "2015-09-19T16:54:05+00:00"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -1536,7 +1588,7 @@
             "keywords": [
                 "parameters management"
             ],
-            "time": "2015-11-10 17:04:01"
+            "time": "2015-11-10T17:04:01+00:00"
         },
         {
             "name": "ircmaxell/password-compat",
@@ -1578,7 +1630,7 @@
                 "hashing",
                 "password"
             ],
-            "time": "2014-11-20 16:49:30"
+            "time": "2014-11-20T16:49:30+00:00"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -1628,7 +1680,7 @@
                 "highlight",
                 "sql"
             ],
-            "time": "2014-01-12 16:20:24"
+            "time": "2014-01-12T16:20:24+00:00"
         },
         {
             "name": "kriswallsmith/assetic",
@@ -1705,7 +1757,7 @@
                 "compression",
                 "minification"
             ],
-            "time": "2015-11-12 13:51:40"
+            "time": "2015-11-12T13:51:40+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -1783,7 +1835,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2016-07-29 03:23:52"
+            "time": "2016-07-29T03:23:52+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -1831,7 +1883,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2016-10-17 15:23:22"
+            "time": "2016-10-17T15:23:22+00:00"
         },
         {
             "name": "phpoffice/phpexcel",
@@ -1888,7 +1940,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2015-05-01 07:00:55"
+            "time": "2015-05-01T07:00:55+00:00"
         },
         {
             "name": "pimple/pimple",
@@ -1934,7 +1986,7 @@
                 "container",
                 "dependency injection"
             ],
-            "time": "2015-09-11 15:10:35"
+            "time": "2015-09-11T15:10:35+00:00"
         },
         {
             "name": "psr/log",
@@ -1981,7 +2033,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-10-10 12:19:37"
+            "time": "2016-10-10T12:19:37+00:00"
         },
         {
             "name": "sensio/distribution-bundle",
@@ -2033,7 +2085,7 @@
                 "configuration",
                 "distribution"
             ],
-            "time": "2016-10-08 18:50:33"
+            "time": "2016-10-08T18:50:33+00:00"
         },
         {
             "name": "sensio/framework-extra-bundle",
@@ -2095,7 +2147,7 @@
                 "annotations",
                 "controllers"
             ],
-            "time": "2016-03-25 17:08:27"
+            "time": "2016-03-25T17:08:27+00:00"
         },
         {
             "name": "sensiolabs/security-checker",
@@ -2139,7 +2191,7 @@
                 }
             ],
             "description": "A security checker for your composer.lock",
-            "time": "2016-09-23 18:09:57"
+            "time": "2016-09-23T18:09:57+00:00"
         },
         {
             "name": "silex/silex",
@@ -2224,7 +2276,7 @@
             "keywords": [
                 "microframework"
             ],
-            "time": "2016-08-22 17:50:21"
+            "time": "2016-08-22T17:50:21+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -2277,7 +2329,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2016-07-08 11:51:25"
+            "time": "2016-07-08T11:51:25+00:00"
         },
         {
             "name": "symfony/assetic-bundle",
@@ -2347,7 +2399,7 @@
                 "compression",
                 "minification"
             ],
-            "time": "2015-12-28 13:12:39"
+            "time": "2015-12-28T13:12:39+00:00"
         },
         {
             "name": "symfony/monolog-bundle",
@@ -2407,7 +2459,7 @@
                 "log",
                 "logging"
             ],
-            "time": "2016-04-13 16:21:01"
+            "time": "2016-04-13T16:21:01+00:00"
         },
         {
             "name": "symfony/polyfill-apcu",
@@ -2460,7 +2512,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-05-18 14:26:46"
+            "time": "2016-05-18T14:26:46+00:00"
         },
         {
             "name": "symfony/polyfill-intl-icu",
@@ -2518,7 +2570,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-05-18 14:26:46"
+            "time": "2016-05-18T14:26:46+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -2577,7 +2629,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-05-18 14:26:46"
+            "time": "2016-05-18T14:26:46+00:00"
         },
         {
             "name": "symfony/polyfill-php54",
@@ -2635,7 +2687,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-05-18 14:26:46"
+            "time": "2016-05-18T14:26:46+00:00"
         },
         {
             "name": "symfony/polyfill-php55",
@@ -2691,7 +2743,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-05-18 14:26:46"
+            "time": "2016-05-18T14:26:46+00:00"
         },
         {
             "name": "symfony/polyfill-php56",
@@ -2747,7 +2799,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-05-18 14:26:46"
+            "time": "2016-05-18T14:26:46+00:00"
         },
         {
             "name": "symfony/polyfill-php70",
@@ -2806,7 +2858,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-05-18 14:26:46"
+            "time": "2016-05-18T14:26:46+00:00"
         },
         {
             "name": "symfony/polyfill-util",
@@ -2858,7 +2910,7 @@
                 "polyfill",
                 "shim"
             ],
-            "time": "2016-05-18 14:26:46"
+            "time": "2016-05-18T14:26:46+00:00"
         },
         {
             "name": "symfony/security-acl",
@@ -2919,7 +2971,7 @@
             ],
             "description": "Symfony Security Component - ACL (Access Control List)",
             "homepage": "https://symfony.com",
-            "time": "2015-12-28 09:39:09"
+            "time": "2015-12-28T09:39:09+00:00"
         },
         {
             "name": "symfony/swiftmailer-bundle",
@@ -2976,7 +3028,7 @@
             ],
             "description": "Symfony SwiftmailerBundle",
             "homepage": "http://symfony.com",
-            "time": "2016-01-15 16:41:20"
+            "time": "2016-01-15T16:41:20+00:00"
         },
         {
             "name": "symfony/symfony",
@@ -3111,7 +3163,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2016-10-03 18:44:12"
+            "time": "2016-10-03T18:44:12+00:00"
         },
         {
             "name": "twig/twig",
@@ -3172,7 +3224,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-10-05 18:57:41"
+            "time": "2016-10-05T18:57:41+00:00"
         },
         {
             "name": "willdurand/js-translation-bundle",
@@ -3231,7 +3283,7 @@
                 "symfony",
                 "translation"
             ],
-            "time": "2015-11-10 13:04:08"
+            "time": "2015-11-10T13:04:08+00:00"
         },
         {
             "name": "xxtea/xxtea",
@@ -3282,7 +3334,7 @@
                 "security",
                 "xxtea"
             ],
-            "time": "2016-02-13 11:45:07"
+            "time": "2016-02-13T11:45:07+00:00"
         }
     ],
     "packages-dev": [
@@ -3296,7 +3348,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hamcrest/hamcrest-php/zipball/b37020aa976fa52d3de9aa904aa2522dc518f79c",
+                "url": "https://packagist.phpcomposer.com/files/hamcrest/hamcrest-php/b37020aa976fa52d3de9aa904aa2522dc518f79c.zip",
                 "reference": "b37020aa976fa52d3de9aa904aa2522dc518f79c",
                 "shasum": ""
             },
@@ -3329,7 +3381,7 @@
             "keywords": [
                 "test"
             ],
-            "time": "2015-05-11 14:41:42"
+            "time": "2015-05-11T14:41:42+00:00"
         },
         {
             "name": "mockery/mockery",
@@ -3341,7 +3393,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/4db079511a283e5aba1b3c2fb19037c645e70fc2",
+                "url": "https://packagist.phpcomposer.com/files/padraic/mockery/4db079511a283e5aba1b3c2fb19037c645e70fc2.zip",
                 "reference": "4db079511a283e5aba1b3c2fb19037c645e70fc2",
                 "shasum": ""
             },
@@ -3394,7 +3446,7 @@
                 "test double",
                 "testing"
             ],
-            "time": "2016-05-22 21:52:33"
+            "time": "2016-05-22T21:52:33+00:00"
         },
         {
             "name": "sensio/generator-bundle",
@@ -3406,7 +3458,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioGeneratorBundle/zipball/b9be7f1b3b2e8bcfc1debefc901b71da923a5e5c",
+                "url": "https://packagist.phpcomposer.com/files/sensiolabs/SensioGeneratorBundle/b9be7f1b3b2e8bcfc1debefc901b71da923a5e5c.zip",
                 "reference": "b9be7f1b3b2e8bcfc1debefc901b71da923a5e5c",
                 "shasum": ""
             },
@@ -3446,7 +3498,7 @@
                 }
             ],
             "description": "This bundle generates code for you",
-            "time": "2016-10-10 14:17:42"
+            "time": "2016-10-10T14:17:42+00:00"
         },
         {
             "name": "symfony/phpunit-bridge",
@@ -3458,7 +3510,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/1f4e2059cf4ecae1053b9c3027b3fc548fd077b9",
+                "url": "https://packagist.phpcomposer.com/files/symfony/phpunit-bridge/1f4e2059cf4ecae1053b9c3027b3fc548fd077b9.zip",
                 "reference": "1f4e2059cf4ecae1053b9c3027b3fc548fd077b9",
                 "shasum": ""
             },
@@ -3501,7 +3553,7 @@
             ],
             "description": "Symfony PHPUnit Bridge",
             "homepage": "https://symfony.com",
-            "time": "2016-08-19 06:48:39"
+            "time": "2016-08-19T06:48:39+00:00"
         }
     ],
     "aliases": [],

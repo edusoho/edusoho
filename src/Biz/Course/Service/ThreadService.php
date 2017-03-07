@@ -22,7 +22,7 @@ interface ThreadService
     public function searchThreadInCourseIds($conditions, $sort, $start, $limit);
 
     /**
-     * 创建话题
+     * 创建话题.
      */
     public function createThread($thread);
 
@@ -39,24 +39,25 @@ interface ThreadService
     public function uneliteThread($courseId, $threadId);
 
     /**
-     * 点击查看话题
+     * 点击查看话题.
      *
      * 此方法，用来增加话题的查看数。
      *
-     * @param integer $courseId 课程ID
-     * @param integer $threadId 话题ID
+     * @param int $courseId 课程ID
+     * @param int $threadId 话题ID
      */
     public function hitThread($courseId, $threadId);
 
     /**
-     * 获得话题的回帖
+     * 获得话题的回帖.
      *
-     * @param  integer $courseId                        话题的课程ID
-     * @param  integer $threadId                        话题ID
-     * @param  string  $sort                            排序方式： defalut按帖子的发表时间顺序；best按顶的次序排序。
-     * @param  integer $start                           开始行数
-     * @param  integer $limit                           获取数据的限制行数
-     * @return array   获得的话题回帖列表。
+     * @param int    $courseId 话题的课程ID
+     * @param int    $threadId 话题ID
+     * @param string $sort     排序方式： defalut按帖子的发表时间顺序；best按顶的次序排序
+     * @param int    $start    开始行数
+     * @param int    $limit    获取数据的限制行数
+     *
+     * @return array 获得的话题回帖列表
      */
     public function findThreadPosts($courseId, $threadId, $sort, $start, $limit);
 
@@ -69,18 +70,19 @@ interface ThreadService
     public function getThreadPostCountByThreadId($threadId);
 
     /**
-     * 获得话题回帖的数量
-     * @param  integer $courseId               话题的课程ID
-     * @param  integer $threadId               话题ID
-     * @return integer 话题回帖的数量
+     * 获得话题回帖的数量.
+     *
+     * @param int $courseId 话题的课程ID
+     * @param int $threadId 话题ID
+     *
+     * @return int 话题回帖的数量
      */
     public function getThreadPostCount($courseId, $threadId);
 
     public function findThreadElitePosts($courseId, $threadId, $start, $limit);
 
     /**
-     * 回复话题
-     *
+     * 回复话题.
      */
     public function getPost($courseId, $id);
 
@@ -89,5 +91,4 @@ interface ThreadService
     public function updatePost($courseId, $id, $fields);
 
     public function deletePost($courseId, $id);
-
 }

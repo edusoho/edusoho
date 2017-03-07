@@ -11,7 +11,6 @@ use AppBundle\Common\StringToolkit;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\Common\ServiceKernel;
 
 class BlockController extends BaseController
 {
@@ -35,30 +34,30 @@ class BlockController extends BaseController
 
         $blockTemplateIds = ArrayToolkit::column($blockTemplates, 'id');
 
-        $blocks          = $this->getBlockService()->getBlocksByBlockTemplateIdsAndOrgId($blockTemplateIds, $user['orgId']);
-        $blockIds        = ArrayToolkit::column($blocks, 'id');
+        $blocks = $this->getBlockService()->getBlocksByBlockTemplateIdsAndOrgId($blockTemplateIds, $user['orgId']);
+        $blockIds = ArrayToolkit::column($blocks, 'id');
         $latestHistories = $this->getBlockService()->getLatestBlockHistoriesByBlockIds($blockIds);
-        $userIds         = ArrayToolkit::column($latestHistories, 'userId');
-        $users           = $this->getUserService()->findUsersByIds($userIds);
+        $userIds = ArrayToolkit::column($latestHistories, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('admin/block/index.html.twig', array(
-            'blockTemplates'  => $blockTemplates,
-            'users'           => $users,
+            'blockTemplates' => $blockTemplates,
+            'users' => $users,
             'latestHistories' => $latestHistories,
-            'paginator'       => $paginator,
-            'type'            => $category
+            'paginator' => $paginator,
+            'type' => $category,
         ));
     }
 
     protected function dealQueryFields($category)
     {
-        $sort      = array();
+        $sort = array();
         $condation = array();
         if ($category == 'lastest') {
-            $sort = array('updateTime'=>'DESC');
+            $sort = array('updateTime' => 'DESC');
         } elseif ($category != 'all') {
             if ($category == 'theme') {
-                $theme    = $this->getSettingService()->get('theme', array());
+                $theme = $this->getSettingService()->get('theme', array());
                 $category = $theme['uri'];
             }
             $condation['category'] = $category;
@@ -70,7 +69,7 @@ class BlockController extends BaseController
     public function blockMatchAction(Request $request)
     {
         $likeString = $request->query->get('q');
-        $blocks     = $this->getBlockService()->searchBlockTemplates(array('title' => $likeString), array('updateTime' => 'DESC'), 0, 10);
+        $blocks = $this->getBlockService()->searchBlockTemplates(array('title' => $likeString), array('updateTime' => 'DESC'), 0, 10);
 
         return $this->createJsonResponse($blocks);
     }
@@ -80,7 +79,7 @@ class BlockController extends BaseController
         $blockHistory = $this->getBlockService()->getBlockHistory($id);
 
         return $this->render('admin/block/blockhistory-preview.html.twig', array(
-            'blockHistory' => $blockHistory
+            'blockHistory' => $blockHistory,
         ));
     }
 
@@ -89,20 +88,20 @@ class BlockController extends BaseController
         $user = $this->getUser();
 
         if ('POST' == $request->getMethod()) {
-            $fields           = $request->request->all();
+            $fields = $request->request->all();
             $fields['userId'] = $user['id'];
-            $fields['orgId']  = $user['orgId'];
+            $fields['orgId'] = $user['orgId'];
             if (empty($fields['blockId'])) {
                 $block = $this->getBlockService()->createBlock($fields);
             } else {
                 $block = $this->getBlockService()->updateBlock($fields['blockId'], $fields);
             }
             $latestBlockHistory = $this->getBlockService()->getLatestBlockHistory();
-            $latestUpdateUser   = $this->getUserService()->getUser($latestBlockHistory['userId']);
-            $html               = $this->renderView('admin/block/list-tr.html.twig', array(
-                'blockTemplate'    => $block,
+            $latestUpdateUser = $this->getUserService()->getUser($latestBlockHistory['userId']);
+            $html = $this->renderView('admin/block/list-tr.html.twig', array(
+                'blockTemplate' => $block,
                 'latestUpdateUser' => $latestUpdateUser,
-                'latestHistory'    => $latestBlockHistory
+                'latestHistory' => $latestBlockHistory,
             ));
 
             return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
@@ -111,18 +110,18 @@ class BlockController extends BaseController
         $block = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplateId, $user['orgId']);
 
         return $this->render('admin/block/block-update-modal.html.twig', array(
-            'block' => $block
+            'block' => $block,
         ));
     }
 
     public function blockHistoriesDataAction($blockId)
     {
-        $block         = $this->getBlockService()->getBlock($blockId);
-        $templateData  = array();
+        $block = $this->getBlockService()->getBlock($blockId);
+        $templateData = array();
         $templateItems = array();
         $blockHistorys = array();
-        $historyUsers  = array();
-        $paginator     = new Paginator(
+        $historyUsers = array();
+        $paginator = new Paginator(
             $this->get('request'),
             null,
             5);
@@ -146,10 +145,10 @@ class BlockController extends BaseController
         }
 
         return $this->render('admin/block/block-history-table.html.twig', array(
-            'block'         => $block,
+            'block' => $block,
             'blockHistorys' => $blockHistorys,
-            'historyUsers'  => $historyUsers,
-            'paginator'     => $paginator
+            'historyUsers' => $historyUsers,
+            'paginator' => $paginator,
         ));
     }
 
@@ -159,17 +158,17 @@ class BlockController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $fields = $request->request->all();
-            $block  = $this->getBlockService()->updateBlockTemplate($block['id'], $fields);
-            $user   = $this->getUser();
-            $html   = $this->renderView('admin/block/list-tr.html.twig', array(
-                'blockTemplate' => $block, 'latestUpdateUser' => $user
+            $block = $this->getBlockService()->updateBlockTemplate($block['id'], $fields);
+            $user = $this->getUser();
+            $html = $this->renderView('admin/block/list-tr.html.twig', array(
+                'blockTemplate' => $block, 'latestUpdateUser' => $user,
             ));
 
             return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
         }
 
         return $this->render('admin/block/block-modal.html.twig', array(
-            'editBlock' => $block
+            'editBlock' => $block,
         ));
     }
 
@@ -177,18 +176,18 @@ class BlockController extends BaseController
     {
         $user = $this->getUser();
         if ('POST' == $request->getMethod()) {
-            $condation             = $request->request->all();
-            $block['data']         = $condation['data'];
+            $condation = $request->request->all();
+            $block['data'] = $condation['data'];
             $block['templateName'] = $condation['templateName'];
-            $html                  = BlockToolkit::render($block, $this->container);
-            $fields                = array(
-                'data'            => $block['data'],
-                'content'         => $html,
-                'userId'          => $user['id'],
+            $html = BlockToolkit::render($block, $this->container);
+            $fields = array(
+                'data' => $block['data'],
+                'content' => $html,
+                'userId' => $user['id'],
                 'blockTemplateId' => $condation['blockTemplateId'],
-                'orgId'           => $user['orgId'],
-                'code'            => $condation['code'],
-                'mode'            => $condation['mode']
+                'orgId' => $user['orgId'],
+                'code' => $condation['code'],
+                'mode' => $condation['mode'],
             );
             if (empty($condation['blockId'])) {
                 $block = $this->getBlockService()->createBlock($fields);
@@ -202,8 +201,8 @@ class BlockController extends BaseController
         $block = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplateId, $user['orgId']);
 
         return $this->render('admin/block/block-visual-edit.html.twig', array(
-            'block'  => $block,
-            'action' => 'edit'
+            'block' => $block,
+            'action' => 'edit',
         ));
     }
 
@@ -222,14 +221,14 @@ class BlockController extends BaseController
     {
         $user = $this->getUser();
 
-        $block     = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplateId, $user['orgId']);
+        $block = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplateId, $user['orgId']);
         $paginator = new Paginator(
             $this->get('request'),
             null,
             5
         );
         $blockHistorys = array();
-        $historyUsers  = array();
+        $historyUsers = array();
 
         if (!empty($block)) {
             $paginator = new Paginator(
@@ -247,10 +246,10 @@ class BlockController extends BaseController
         }
 
         return $this->render('admin/block/block-visual-history.html.twig', array(
-            'block'         => $block,
-            'paginator'     => $paginator,
+            'block' => $block,
+            'paginator' => $paginator,
             'blockHistorys' => $blockHistorys,
-            'historyUsers'  => $historyUsers
+            'historyUsers' => $historyUsers,
         ));
     }
 
@@ -258,22 +257,22 @@ class BlockController extends BaseController
     {
         if ('POST' == $request->getMethod()) {
             $block = $this->getBlockService()->createBlock($request->request->all());
-            $user  = $this->getUser();
-            $html  = $this->renderView('admin/block/list-tr.html.twig', array('blockTemplate' => $block, 'latestUpdateUser' => $user));
+            $user = $this->getUser();
+            $html = $this->renderView('admin/block/list-tr.html.twig', array('blockTemplate' => $block, 'latestUpdateUser' => $user));
 
             return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
         }
 
         $editBlock = array(
-            'id'       => 0,
-            'title'    => '',
-            'code'     => '',
-            'mode'     => 'html',
-            'template' => ''
+            'id' => 0,
+            'title' => '',
+            'code' => '',
+            'mode' => 'html',
+            'template' => '',
         );
 
         return $this->render('admin/block/block-modal.html.twig', array(
-            'editBlock' => $editBlock
+            'editBlock' => $editBlock,
         ));
     }
 
@@ -290,7 +289,7 @@ class BlockController extends BaseController
 
     public function checkBlockCodeForCreateAction(Request $request)
     {
-        $code                = $request->query->get('value');
+        $code = $request->query->get('value');
         $blockTemplateByCode = $this->getBlockService()->getBlockTemplateByCode($code);
         if (empty($blockTemplateByCode)) {
             return $this->createJsonResponse(array('success' => true, 'message' => '此编码可以使用'));
@@ -301,7 +300,7 @@ class BlockController extends BaseController
 
     public function checkBlockTemplateCodeForEditAction(Request $request, $id)
     {
-        $code                = $request->query->get('value');
+        $code = $request->query->get('value');
         $blockTemplateByCode = $this->getBlockService()->getBlockTemplateByCode($code);
         if (empty($blockTemplateByCode) || $id == $blockTemplateByCode['id']) {
             return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
@@ -322,14 +321,14 @@ class BlockController extends BaseController
             $filename = 'block_picture_'.time().'.'.$file->getClientOriginalExtension();
 
             $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
-            $file      = $file->move($directory, $filename);
+            $file = $file->move($directory, $filename);
 
             $block = $this->getBlockService()->getBlock($blockId);
 
             $url = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
 
             $response = array(
-                'url' => $url
+                'url' => $url,
             );
         }
 
@@ -341,15 +340,15 @@ class BlockController extends BaseController
         $url = $request->query->get('url', '');
 
         return $this->render('admin/block/picture-preview-modal.html.twig', array(
-            'url' => $url
+            'url' => $url,
         ));
     }
 
     public function recoveryAction(Request $request, $blockTemplateId, $historyId)
     {
         $history = $this->getBlockService()->getBlockHistory($historyId);
-        $user    = $this->getUser();
-        $block   = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplateId, $user['orgId']);
+        $user = $this->getUser();
+        $block = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplateId, $user['orgId']);
         $this->getBlockService()->recovery($block['blockId'], $history);
         $this->setFlashMessage('success', '恢复成功!');
 

@@ -139,19 +139,19 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 
     protected function fillCourseSetTeachersAndCategoriesAttribute(array $courseSets)
     {
-        $userIds     = array();
+        $userIds = array();
         $categoryIds = array();
 
         foreach ($courseSets as &$set) {
             $course = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($set['id']);
             if (!empty($course)) {
                 $set['teacherIds'] = $course['teacherIds'];
-                $userIds           = array_merge($userIds, $course['teacherIds']);
+                $userIds = array_merge($userIds, $course['teacherIds']);
             }
             $categoryIds[] = $set['categoryId'];
         }
 
-        $users    = $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->getUserService()->findUsersByIds($userIds);
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
 
         foreach ($users as $key => $user) {
@@ -187,12 +187,13 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
             $set['teachers'] = $teachers;
             unset($set['teacherIds']);
         }
+
         return $courseSets;
     }
 
     protected function getCourseTeachersAndCategories($courses)
     {
-        $userIds     = array();
+        $userIds = array();
         $categoryIds = array();
 
         foreach ($courses as $course) {
@@ -200,7 +201,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
             //$categoryIds[] = $course['categoryId'];
         }
 
-        $users    = $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->getUserService()->findUsersByIds($userIds);
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
 
         foreach ($users as $key => $user) {
@@ -239,26 +240,26 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 
     protected function getCoursesAndUsers($courseRelations)
     {
-        $userIds   = array();
+        $userIds = array();
         $courseIds = array();
 
         foreach ($courseRelations as &$courseRelation) {
-            $userIds[]   = $courseRelation['userId'];
+            $userIds[] = $courseRelation['userId'];
             $courseIds[] = $courseRelation['courseId'];
         }
 
-        $users   = $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->getUserService()->findUsersByIds($userIds);
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         foreach ($courseRelations as &$courseRelation) {
             $userId = $courseRelation['userId'];
-            $user   = $users[$userId];
+            $user = $users[$userId];
             unset($user['password']);
             unset($user['salt']);
             $courseRelation['User'] = $user;
 
-            $courseId                 = $courseRelation['courseId'];
-            $course                   = $courses[$courseId];
+            $courseId = $courseRelation['courseId'];
+            $course = $courses[$courseId];
             $courseRelation['course'] = $course;
         }
 

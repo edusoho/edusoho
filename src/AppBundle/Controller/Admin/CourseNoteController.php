@@ -16,7 +16,7 @@ class CourseNoteController extends BaseController
             $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($conditions['keyword']);
             $conditions['courseSetIds'] = ArrayToolkit::column($courseSets, 'id');
             unset($conditions['keywordType'], $conditions['keyword']);
-            $conditions['courseSetIds'] = $conditions['courseSetIds'] ? : array(-1);
+            $conditions['courseSetIds'] = $conditions['courseSetIds'] ?: array(-1);
         }
 
         $paginator = new Paginator(

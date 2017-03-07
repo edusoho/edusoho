@@ -55,7 +55,7 @@
               </div>
               <div class="mts">
                 {% if classroom %}
-                  <a class="text-success text-sm" href="{{ path('classroom_show', {id:review.classroomId}) }}" target="_blank">{{ classrooms[review.classroomId].title }}</a>
+                  <a class="color-success text-sm" href="{{ path('classroom_show', {id:review.classroomId}) }}" target="_blank">{{ classrooms[review.classroomId].title }}</a>
                 {% else %}
                   <span class="text-muted text-sm">{{'%classroomName%已删除'|trans({'%classroomName%':setting('classroom.name')|default('班级'|trans)})}}</span>
                 {% endif %}

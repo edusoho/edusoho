@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Question\Service;
 
 interface QuestionService
@@ -32,9 +33,8 @@ interface QuestionService
     public function getQuestionCountGroupByTypes($conditions);
 
     /**
-     * question_favorite
+     * question_favorite.
      */
-
     public function getFavoriteQuestion($favoriteId);
 
     public function createFavoriteQuestion($fields);
@@ -48,5 +48,4 @@ interface QuestionService
     public function findUserFavoriteQuestions($userId);
 
     public function deleteFavoriteByQuestionId($questionId);
-
 }

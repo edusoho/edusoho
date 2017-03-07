@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Task\Strategy\Impl;
 
 use AppBundle\Common\ArrayToolkit;
@@ -19,23 +20,12 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         $this->validateTaskMode($field);
 
         if ($field['mode'] == 'lesson') {
-            $chapter             = array(
-                'courseId' => $field['fromCourseId'],
-                'title'    => $field['title'],
-                'type'     => 'lesson'
-            );
-            $chapter             = $this->getCourseService()->createChapter($chapter);
-            $field['categoryId'] = $chapter['id'];
+            // 创建课时
+            return $this->_createLesson($field);
         } else {
-            $lessonTask = $this->getTaskDao()->getByChapterIdAndMode($field['categoryId'], 'lesson');
-            if (empty($lessonTask)) {
-                throw new NotFoundException('lesson task is not found');
-            }
-            $field['status'] = $lessonTask['status'];
+            // 创建课时中的环节
+            return $this->_createLessonLink($field);
         }
-
-        $task = parent::createTask($field);
-        return $task;
     }
 
     public function updateTask($id, $fields)
@@ -80,14 +70,14 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         }
     }
 
-    public function prepareCourseItems($courseId, $tasks)
+    public function prepareCourseItems($courseId, $tasks, $limitNum)
     {
         $tasks = ArrayToolkit::group($tasks, 'categoryId');
 
-        $items    = array();
+        $items = array();
         $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
         foreach ($chapters as $chapter) {
-            $chapter['itemType']               = 'chapter';
+            $chapter['itemType'] = 'chapter';
             $items["chapter-{$chapter['id']}"] = $chapter;
         }
 
@@ -95,41 +85,48 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             return $item1['seq'] > $item2['seq'];
         });
 
+        $taskCount = 0;
         foreach ($items as $key => $item) {
+            if ($limitNum and $taskCount >= $limitNum) {
+                unset($items[$key]);
+            }
             if ($item['type'] != 'lesson') {
                 continue;
             }
+
             if (!empty($tasks[$item['id']])) {
                 $items[$key]['tasks'] = $tasks[$item['id']];
+                $taskCount += count($tasks[$item['id']]);
             } else {
                 unset($items[$key]);
                 //throw new NotFoundException(json_encode($item));
             }
         }
+
         return $items;
     }
 
     public function sortCourseItems($courseId, array $ids)
     {
         $parentChapters = array(
-            'lesson'  => array(),
-            'unit'    => array(),
-            'chapter' => array()
+            'lesson' => array(),
+            'unit' => array(),
+            'chapter' => array(),
         );
 
-        $chapterTypes       = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
+        $chapterTypes = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
         $lessonChapterTypes = array();
-        $seq                = 0;
+        $seq = 0;
 
         foreach ($ids as $key => $id) {
             if (strpos($id, 'chapter') !== 0) {
                 continue;
             }
-            $id      = str_replace('chapter-', '', $id);
+            $id = str_replace('chapter-', '', $id);
             $chapter = $this->getChapterDao()->get($id);
-            $seq++;
+            ++$seq;
 
-            $index  = $chapterTypes[$chapter['type']];
+            $index = $chapterTypes[$chapter['type']];
             $fields = array('seq' => $seq);
 
             switch ($index) {
@@ -180,15 +177,15 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             $tasks = $this->getTaskService()->findTasksByChapterId($chapter['id']);
             $tasks = ArrayToolkit::index($tasks, 'mode');
             foreach ($tasks as $task) {
-                $seq    = $this->getTaskSeq($task['mode'], $chapter['seq']);
+                $seq = $this->getTaskSeq($task['mode'], $chapter['seq']);
                 $fields = array(
-                    'seq'        => $seq,
+                    'seq' => $seq,
                     'categoryId' => $chapter['id'],
-                    'number'     => $taskNumber
+                    'number' => $taskNumber,
                 );
                 $this->getTaskService()->updateSeq($task['id'], $fields);
-                if($task['mode'] == 'lesson'){
-                    $taskNumber++;
+                if ($task['mode'] == 'lesson') {
+                    ++$taskNumber;
                 }
             }
         }
@@ -201,6 +198,8 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         foreach ($tasks as $task) {
             $this->getTaskDao()->update($task['id'], array('status' => 'published'));
         }
+        $task['status'] = 'published';
+
         return $task;
     }
 
@@ -208,10 +207,39 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     public function unpublishTask($task)
     {
         $tasks = $this->getTaskDao()->findByChapterId($task['categoryId']);
-        foreach ($tasks as $key => $task) {
+        foreach ($tasks as $task) {
             $this->getTaskDao()->update($task['id'], array('status' => 'unpublished'));
         }
+        $task['status'] = 'unpublished';
+
         return $task;
+    }
+
+    private function _createLesson($task)
+    {
+        $chapter = array(
+            'courseId' => $task['fromCourseId'],
+            'title' => $task['title'],
+            'type' => 'lesson',
+        );
+        $chapter = $this->getCourseService()->createChapter($chapter);
+        $task['categoryId'] = $chapter['id'];
+
+        return parent::createTask($task);
+    }
+
+    private function _createLessonLink($task)
+    {
+        $lessonTask = $this->getTaskDao()->getByChapterIdAndMode($task['categoryId'], 'lesson');
+
+        if (empty($lessonTask)) {
+            throw new NotFoundException('lesson task is not found');
+        }
+
+        $task = parent::createTask($task);
+        $this->getTaskService()->publishTask($task['id']);
+
+        return $this->getTaskService()->getTask($task['id']);
     }
 
     protected function getTaskSeq($taskMode, $chapterSeq)
@@ -220,6 +248,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         if (!in_array($taskMode, array_keys($taskModes))) {
             throw new InvalidArgumentException('task mode is invalida');
         }
+
         return $chapterSeq + $taskModes[$taskMode];
     }
 }

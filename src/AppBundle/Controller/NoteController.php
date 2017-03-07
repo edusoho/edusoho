@@ -13,36 +13,38 @@ class NoteController extends BaseController
 {
     public function listAction(Request $request, $courseIds, $filters)
     {
-        $conditions      = $this->convertFiltersToConditions($courseIds, $filters);
-        $notes           = array();
+        $conditions = $this->convertFiltersToConditions($courseIds, $filters);
+        $notes = array();
         $result['notes'] = $notes;
         if ((isset($conditions['courseIds']) && !empty($conditions['courseIds'])) ||
             (isset($conditions['courseId']) && !empty($conditions['courseId']))
         ) {
-            $paginator           = new Paginator(
+            $paginator = new Paginator(
                 $request,
                 $this->getNoteService()->countCourseNotes($conditions),
                 20
             );
-            $orderBy             = $this->convertFiltersToOrderBy($filters);
-            $notes               = $this->getNoteService()->searchNotes(
+            $orderBy = $this->convertFiltersToOrderBy($filters);
+            $notes = $this->getNoteService()->searchNotes(
                 $conditions,
                 $orderBy,
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
-            $result              = $this->makeNotesRelated($notes, $courseIds);
+            $result = $this->makeNotesRelated($notes, $courseIds);
             $result['paginator'] = $paginator;
         }
+
         return $this->render('classroom/note/list.html.twig', $result);
     }
 
     /**
-     * create note or update note
+     * create note or update note.
      *
-     * @param  Request $request
+     * @param Request $request
      * @param  $courseId
      * @param  $taskId
+     *
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function saveCourseNoteAction(Request $request, $courseId, $taskId)
@@ -50,11 +52,12 @@ class NoteController extends BaseController
         $this->getCourseService()->tryTakeCourse($courseId);
 
         if ($request->isMethod('POST')) {
-            $note             = $request->request->all();
+            $note = $request->request->all();
             $note['courseId'] = $courseId;
-            $note['taskId']   = $taskId;
-            $note['status']   = isset($note['status']) && $note['status'] === 'on' ? 1 : 0;
-            $note             = $this->getNoteService()->saveNote($note);
+            $note['taskId'] = $taskId;
+            $note['status'] = isset($note['status']) && $note['status'] === 'on' ? 1 : 0;
+            $note = $this->getNoteService()->saveNote($note);
+
             return $this->createJsonResponse($note);
         }
     }
@@ -83,29 +86,30 @@ class NoteController extends BaseController
 
     protected function makeNotesRelated($notes, $courseIds)
     {
-        $user                = $this->getCurrentUser();
-        $result              = array();
-        $noteLikes           = $this->getNoteService()->findNoteLikesByNoteIdsAndUserId(ArrayToolkit::column($notes, 'id'), $user['id']);
-        $userIds             = ArrayToolkit::column($notes, 'userId');
-        $users               = $this->getUserService()->findUsersByIds($userIds);
+        $user = $this->getCurrentUser();
+        $result = array();
+        $noteLikes = $this->getNoteService()->findNoteLikesByNoteIdsAndUserId(ArrayToolkit::column($notes, 'id'), $user['id']);
+        $userIds = ArrayToolkit::column($notes, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
         $result['noteLikes'] = $noteLikes;
-        $result['users']     = $users;
-        $tasksIds            = ArrayToolkit::column($notes, 'taskId');
-        $tasks              = $this->getTaskService()->findTasksByIds($tasksIds);
-        $result['tasks']     = $tasks;
+        $result['users'] = $users;
+        $tasksIds = ArrayToolkit::column($notes, 'taskId');
+        $tasks = $this->getTaskService()->findTasksByIds($tasksIds);
+        $result['tasks'] = $tasks;
         if (is_array($courseIds)) {
-            $courseIds         = ArrayToolkit::column($notes, 'courseId');
-            $courses           = $this->getCourseService()->findCoursesByIds($courseIds);
+            $courseIds = ArrayToolkit::column($notes, 'courseId');
+            $courses = $this->getCourseService()->findCoursesByIds($courseIds);
             $result['courses'] = $courses;
         }
         $result['notes'] = $notes;
+
         return $result;
     }
 
     protected function convertFiltersToConditions($courseIds, $filters)
     {
         $conditions = array(
-            'status' => 1
+            'status' => 1,
         );
         if (is_numeric($courseIds)) {
             $conditions['courseId'] = $courseIds;
@@ -119,6 +123,7 @@ class NoteController extends BaseController
         if (!empty($filters['taskId'])) {
             $conditions['taskId'] = $filters['taskId'];
         }
+
         return $conditions;
     }
 
@@ -136,6 +141,7 @@ class NoteController extends BaseController
                 $orderBy['updatedTime'] = 'DESC';
                 break;
         }
+
         return $orderBy;
     }
 

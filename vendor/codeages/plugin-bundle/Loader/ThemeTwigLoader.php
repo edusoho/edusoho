@@ -2,10 +2,7 @@
 
 namespace Codeages\PluginBundle\Loader;
 
-
 use Codeages\PluginBundle\System\PluginableHttpKernelInterface;
-use Symfony\Component\Config\FileLocatorInterface;
-use Symfony\Component\Templating\TemplateNameParserInterface;
 
 class ThemeTwigLoader extends \Twig_Loader_Filesystem
 {
@@ -14,91 +11,64 @@ class ThemeTwigLoader extends \Twig_Loader_Filesystem
      */
     private $kernel;
 
-    public function __construct(PluginableHttpKernelInterface $kernel, FileLocatorInterface $locator, TemplateNameParserInterface $parser)
+    public function __construct(PluginableHttpKernelInterface $kernel)
     {
         $this->kernel = $kernel;
         parent::__construct(array());
     }
 
-    public function findTemplate($template, $throw = true)
+    public function findTemplate($name, $throw = true)
     {
-        $logicalName = (string) $template;
+        $logicalName = (string)$name;
 
         if (isset($this->cache[$logicalName])) {
             return $this->cache[$logicalName];
         }
 
-        $file = null;
         $previous = null;
-        try {
+        $file     = $this->getCustomFile($logicalName);
+
+        if (is_null($file)) {
             $file = $this->getThemeFile($logicalName);
-        } catch (\Twig_Error_Loader $e) {
-            $twigLoaderException = $e;
-
-            try{
-                $file = $this->getCustomFile($logicalName);
-            }catch (\Twig_Error_Loader $exception){
-
-            }
-
-            // for BC
-            try {
-                $template = $this->parser->parse($template);
-                $file = $this->locator->locate($template);
-            } catch (\Exception $e) {
-            }
         }
 
-        if (false === $file || null === $file) {
-            throw $twigLoaderException;
+        if ($file === false || null === $file) {
+            throw new \Twig_Error_Loader(sprintf('Unable to find template "%s".', $logicalName));
         }
 
         return $this->cache[$logicalName] = $file;
     }
 
-    protected function getThemeFile($file){
-        if($this->isAppResourceFile($file)){
+    protected function getThemeFile($file)
+    {
+
+        if ($this->isAppResourceFile($file)) {
             $themeDir = $this->kernel->getPluginConfigurationManager()->getActiveThemeDirectory();
-            $file = $themeDir . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . $file;
+            $file     = $themeDir.'/views/'.$file;
         }
 
-        if(is_file($file)){
+        if (is_file($file)) {
             return $file;
         }
 
-        throw new \Twig_Error_Loader( sprintf('Unable to find template "%s".', $file));
+        return null;
     }
 
-    protected function getCustomFile($template)
+    protected function getCustomFile($file)
     {
-        if($this->isAppResourceFile($template)){
-            try{
-                if(strpos($template, 'admin') === 0){
-                    return $this->getCustomAdminFile($template);
-                }else{
-                    return $this->getCustomWebFile($template);
-                }
-            }catch (\InvalidArgumentException $exception){
-            }catch (\Twig_Error_Loader $exception){
-                throw $exception;
-            }
+        if ($this->isAppResourceFile($file)) {
+            $file = $this->kernel->getRootDir().'/../src/Custom/Resources/views/'.$file;
         }
 
-        throw new \Twig_Error_Loader( sprintf('Unable to find template "%s".', $template));
+        if (is_file($file)) {
+            return $file;
+        }
+
+        return null;
     }
 
     protected function isAppResourceFile($file)
     {
-        return strpos((string) $file, 'Bundle') === false && strpos((string) $file, '@') !== 0;
-    }
-
-    private function getCustomAdminFile($template)
-    {
-        return $this->kernel->locateResource('@CustomAdminBundle/Resources/views/' . $template);
-    }
-
-    private function getCustomWebFile($template)
-    {
-        return $this->kernel->locateResource('@CustomWebBundle/Resources/views/' . $template);
+        return strpos((string)$file, '@') !== 0 && strpos((string)$file, ':') === false;
     }
 }

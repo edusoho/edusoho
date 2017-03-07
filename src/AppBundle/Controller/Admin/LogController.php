@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
@@ -9,14 +10,14 @@ class LogController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $fields     = $request->query->all();
+        $fields = $request->query->all();
         $conditions = array(
             'startDateTime' => '',
-            'endDateTime'   => '',
-            'nickname'      => '',
-            'level'         => '',
-            'action'        => '',
-            'module'        => ''
+            'endDateTime' => '',
+            'nickname' => '',
+            'level' => '',
+            'action' => '',
+            'module' => '',
         );
 
         if (!empty($fields)) {
@@ -36,29 +37,29 @@ class LogController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $users       = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
         $moduleDicts = $this->getLogService()->getLogModuleDicts();
-        $actions     = $this->getLogService()->findLogActionDictsyModule($conditions['module']);
+        $actions = $this->getLogService()->findLogActionDictsyModule($conditions['module']);
 
         return $this->render('admin/system/log/logs.html.twig', array(
-            'logs'        => $logs,
-            'paginator'   => $paginator,
-            'users'       => $users,
+            'logs' => $logs,
+            'paginator' => $paginator,
+            'users' => $users,
             'moduleDicts' => $moduleDicts,
-            'actions'     => $actions
+            'actions' => $actions,
         ));
     }
 
     public function logActionsAction(Request $request)
     {
-        $module  = $request->query->get('module');
+        $module = $request->query->get('module');
         $actions = array();
         if (!empty($module)) {
             $actions = $this->getLogService()->findLogActionDictsyModule($module);
         }
 
         return $this->render('admin/system/log/log-action-options.html.twig', array(
-            'actions' => $actions
+            'actions' => $actions,
         ));
     }
 
@@ -72,7 +73,7 @@ class LogController extends BaseController
         }
 
         return $this->render('admin/system/log/logs-prod.html.twig', array(
-            'logs' => $logs
+            'logs' => $logs,
         ));
     }
 
@@ -82,21 +83,22 @@ class LogController extends BaseController
             throw new \RuntimeException('打开文件失败，请检查文件路径是否正确，路径和文件名不要包含中文');
         }
         $pos = -2;
-        $eof = "";
-        $str = "";
+        $eof = '';
+        $str = '';
         while ($n > 0) {
             while ($eof != "\n") {
                 if (!fseek($fp, $pos, SEEK_END)) {
                     $eof = fgetc($fp);
-                    $pos--;
+                    --$pos;
                 } else {
                     break;
                 }
             }
             $str .= fgets($fp);
-            $eof = "";
-            $n--;
+            $eof = '';
+            --$n;
         }
+
         return $str;
     }
 

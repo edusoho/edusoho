@@ -2,16 +2,17 @@
 
 namespace AppBundle\Controller\My;
 
+use AppBundle\Common\Paginator;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
-use Biz\Task\Service\TaskService;
-use AppBundle\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\Course\CourseBaseController;
 
 class CourseController extends CourseBaseController
 {
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         if ($this->getCurrentUser()->isTeacher()) {
             return $this->redirect($this->generateUrl('my_teaching_course_sets'));
@@ -23,7 +24,7 @@ class CourseController extends CourseBaseController
     public function learningAction(Request $request)
     {
         $currentUser = $this->getUser();
-        $paginator   = new Paginator(
+        $paginator = new Paginator(
             $request,
             $this->getCourseService()->countUserLearningCourses($currentUser['id']),
             12
@@ -36,15 +37,15 @@ class CourseController extends CourseBaseController
         );
 
         return $this->render('my/learning/course/learning.html.twig', array(
-            'courses'   => $courses,
-            'paginator' => $paginator
+            'courses' => $courses,
+            'paginator' => $paginator,
         ));
     }
 
-    public function learnedAction(Request $request)
+    public function learnedAction()
     {
         $currentUser = $this->getCurrentUser();
-        $paginator   = new Paginator(
+        $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->countUserLearnedCourses($currentUser['id']),
             12
@@ -58,7 +59,7 @@ class CourseController extends CourseBaseController
 
         $userIds = array();
         foreach ($courses as $key => $course) {
-            $userIds   = array_merge($userIds, $course['teacherIds']);
+            $userIds = array_merge($userIds, $course['teacherIds']);
             $learnTime = $this->getTaskResultService()->sumLearnTimeByCourseIdAndUserId($course['id'], $currentUser['id']);
 
             $courses[$key]['learnTime'] = intval($learnTime / 60).'小时'.($learnTime % 60).'分钟';
@@ -66,20 +67,19 @@ class CourseController extends CourseBaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('my/learning/course/learned.html.twig', array(
-            'courses'   => $courses,
-            'users'     => $users,
-            'paginator' => $paginator
+            'courses' => $courses,
+            'users' => $users,
+            'paginator' => $paginator,
         ));
     }
 
-
-    public function headerForMemberAction(Request $request, $course, $member)
+    public function headerForMemberAction($course, $member)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $courses   = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
+        $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
 
         $taskCount = $this->getTaskService()->countTasks(array('courseId' => $course['id'], 'status' => 'published'));
-        $progress  = $taskResultCount = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
+        $progress = $taskResultCount = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
 
         $user = $this->getUser();
         if ($taskCount && empty($member['previewAs'])) {
@@ -108,18 +108,19 @@ class CourseController extends CourseBaseController
         }
 
         return $this->render('course/header/header-for-member.html.twig', array(
-            'courseSet'            => $courseSet,
-            'courses'              => $courses,
-            'course'               => $course,
-            'member'               => $member,
-            'progress'             => $progress,
-            'taskCount'            => $taskCount,
-            'taskResultCount'      => $taskResultCount,
-            'toLearnTasks'         => $toLearnTasks,
-            'taskPerDay'           => $taskPerDay,
-            'planStudyTaskCount'   => $planStudyTaskCount,
+            'courseSet' => $courseSet,
+            'courses' => $courses,
+            'course' => $course,
+            'member' => $member,
+            'progress' => $progress,
+            'taskCount' => $taskCount,
+            'taskResultCount' => $taskResultCount,
+            'toLearnTasks' => $toLearnTasks,
+            'taskPerDay' => $taskPerDay,
+            'planStudyTaskCount' => $planStudyTaskCount,
             'planProgressProgress' => $planProgressProgress,
-            'isUserFavorite'       => $isUserFavorite
+            'isUserFavorite' => $isUserFavorite,
+            'marketingPage' => 0,
         ));
     }
 
@@ -130,15 +131,21 @@ class CourseController extends CourseBaseController
 
         if (empty($member)) {
             return $this->redirect($this->generateUrl('course_show', array(
-                'id'  => $id,
-                'tab' => $tab
+                'id' => $id,
+                'tab' => $tab,
             )));
         }
 
+        $classroom = array();
+        if ($course['parentId'] > 0) {
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+        }
+
         return $this->render('course/course-show.html.twig', array(
-            'tab'    => $tab,
+            'tab' => $tab,
             'member' => $member,
-            'course' => $course
+            'course' => $course,
+            'classroom' => $classroom,
         ));
     }
 
@@ -159,9 +166,10 @@ class CourseController extends CourseBaseController
         if ($course['expiryMode'] == 'days') {
             $finishedTaskPerDay = empty($course['expiryDays']) ? false : $taskNum / $course['expiryDays'];
         } else {
-            $diffDay            = ($course['expiryEndDate'] - $course['expiryStartDate']) / (24 * 60 * 60);
+            $diffDay = ($course['expiryEndDate'] - $course['expiryStartDate']) / (24 * 60 * 60);
             $finishedTaskPerDay = empty($diffDay) ? false : $taskNum / $diffDay;
         }
+
         return round($finishedTaskPerDay);
     }
 
@@ -197,5 +205,13 @@ class CourseController extends CourseBaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 }

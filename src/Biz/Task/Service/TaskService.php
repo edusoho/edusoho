@@ -2,15 +2,13 @@
 
 namespace Biz\Task\Service;
 
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-
 interface TaskService
 {
     const LEARN_TIME_STEP = 2;
 
     public function getTask($id);
 
-    public function getCourseTask($courseId,$id);
+    public function getCourseTask($courseId, $id);
 
     public function createTask($task);
 
@@ -39,7 +37,7 @@ interface TaskService
     public function countTasks($conditions);
 
     /**
-     * @param  array $ids
+     * @param array $ids
      *
      * @return array
      */
@@ -50,10 +48,10 @@ interface TaskService
     public function findTasksFetchActivityAndResultByCourseId($courseId);
 
     /**
-     * for question and testpaper ranges
+     * for question and testpaper ranges.
      *
-     * @param  [type]  $userId
-     * @param  [type]  $courseSetId
+     * @param [type] $userId
+     * @param [type] $courseSetId
      *
      * @return array
      */
@@ -65,6 +63,8 @@ interface TaskService
 
     public function doTask($taskId, $time = self::LEARN_TIME_STEP);
 
+    public function watchTask($taskId, $watchTime = self::WATCH_TIME_STEP);
+
     public function finishTask($taskId);
 
     public function isFinished($taskId);
@@ -74,7 +74,7 @@ interface TaskService
     public function trigger($id, $eventName, $data = array());
 
     /**
-     * return next Task that can be learned of the  course plan, or return empty array()
+     * return next Task that can be learned of the  course plan, or return empty array().
      *
      * @param  $taskId
      *
@@ -83,20 +83,22 @@ interface TaskService
     public function getNextTask($taskId);
 
     /**
-     *  return if the task can learn or not
+     *  return if the task can learn or not.
      *
      * @param  $taskId
      *
-     * @return True|False
+     * @return true|false
      */
-    public function canLearnTask($taskId); // 任务是否可学
+    public function canLearnTask($taskId);
+
+ // 任务是否可学
 
     /**
-     * return if the task has been learned
+     * return if the task has been learned.
      *
      * @param  $taskId
      *
-     * @return True|False
+     * @return true|false
      */
     public function isTaskLearned($taskId);
 
@@ -113,7 +115,7 @@ interface TaskService
     public function findFreeTasksByCourseId($courseId);
 
     /**
-     * 设置当前任务最大可同时进行的人数  如直播任务等
+     * 设置当前任务最大可同时进行的人数  如直播任务等.
      *
      * @param  $taskId
      * @param  $maxNum
@@ -123,12 +125,12 @@ interface TaskService
     public function setTaskMaxOnlineNum($taskId, $maxNum);
 
     /**
-     * 统计当前时间以后每天的直播次数
+     * 统计当前时间以后每天的直播次数.
      *
      * @param  $courseSetIds
      * @param  $limit
      *
-     * @return array           <string, int|string>
+     * @return array <string, int|string>
      */
     public function findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, $limit);
 
@@ -147,14 +149,13 @@ interface TaskService
     public function findFutureLiveTasks();
 
     /**
-     * 返回过去直播过的课程ID
+     * 返回过去直播过的课程ID.
      *
      * @return array<int>
      */
     public function findPastLivedCourseSetIds();
 
     /**
-     *
      * 自由式
      * 1.获取所有的在学中的任务结果，如果为空，则学员学员未开始学习或者已经学完，取第一个任务作为下一个学习任务，
      * 2.如果不为空，则按照任务序列返回第一个作为下一个学习任务
@@ -166,12 +167,12 @@ interface TaskService
      *
      * @param  $courseId
      *
-     * @return array       tasks
+     * @return array tasks
      */
     public function findToLearnTasksByCourseId($courseId);
 
     /**
-     * 侧边栏的任务中心不区分课程类型
+     * 侧边栏的任务中心不区分课程类型.
      *
      * @param $courseId
      *
@@ -182,7 +183,7 @@ interface TaskService
     public function getTaskByCourseIdAndActivityId($courseId, $activityId);
 
     /**
-     * 获得课程的总学习时间
+     * 获得课程的总学习时间.
      */
     public function sumCourseSetLearnedTimeByCourseSetId($courseSetId);
 
@@ -190,8 +191,14 @@ interface TaskService
 
     /**
      * 获取用户最近进行的一个任务
+     *
      * @param int $userId
+     *
      * @return array
      */
     public function getUserRecentlyStartTask($userId);
+
+    public function findPublishedLivingTasksByCourseSetId($courseSetId);
+
+    public function findPublishedTasksByCourseSetId($courseSetId);
 }

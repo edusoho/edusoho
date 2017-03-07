@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Classroom\Dao\Impl;
 
 use Biz\Classroom\Dao\ClassroomReviewDao;
@@ -11,17 +12,17 @@ class ClassroomReviewDaoImpl extends GeneralDaoImpl implements ClassroomReviewDa
     public function declares()
     {
         $declares['serializes'] = array(
-            'meta' => 'json'
+            'meta' => 'json',
         );
 
         $declares['orderbys'] = array(
             'createdTime',
             'updatedTime',
-            'rating'
+            'rating',
         );
 
         $declares['timestamps'] = array(
-            'createdTime'
+            'createdTime',
         );
 
         $declares['conditions'] = array(
@@ -30,14 +31,16 @@ class ClassroomReviewDaoImpl extends GeneralDaoImpl implements ClassroomReviewDa
             'rating = :rating',
             'content LIKE :content',
             'parentId = :parentId',
-            'classroomId IN (:classroomIds)'
+            'classroomId IN (:classroomIds)',
         );
+
         return $declares;
     }
 
     public function sumReviewRatingByClassroomId($classroomId)
     {
         $sql = "SELECT sum(rating) FROM {$this->table} WHERE classroomId = ? AND parentId = 0";
+
         return $this->db()->fetchColumn($sql, array($classroomId));
     }
 
@@ -56,6 +59,7 @@ class ClassroomReviewDaoImpl extends GeneralDaoImpl implements ClassroomReviewDa
         if (isset($conditions['content'])) {
             $conditions['content'] = "%{$conditions['content']}%";
         }
+
         return parent::_createQueryBuilder($conditions);
     }
 }

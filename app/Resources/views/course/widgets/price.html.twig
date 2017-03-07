@@ -50,13 +50,13 @@
             {{ course.price * setting('coin.cash_rate')}}
             {{setting('coin.coin_name', '虚拟币'|trans)}} 
           {% else %} 
-            <span class="text-success">{{'免费'|trans}}</span> 
+            <span class="color-success">{{'免费'|trans}}</span> 
           {% endif  %}
         {% else %}
           {% if course.price > 0 %}
             {{'%price%元'|trans({'%price%': course.price})}}
           {% else %} 
-            <span class="text-success">{{'免费'|trans}}</span> 
+            <span class="color-success">{{'免费'|trans}}</span> 
           {% endif %} 
         {% endif %}
       </span>

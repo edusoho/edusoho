@@ -9,7 +9,6 @@ use Doctrine\DBAL\Types\Type;
 
 class DoctrineEnumType extends Type
 {
-
     public function getSqlDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
         $comment = $this->removeDoctrineTypeFromComment($fieldDeclaration['comment'], 'enum');
@@ -44,5 +43,4 @@ class DoctrineEnumType extends Type
     {
         return 'enum';
     }
-
 }

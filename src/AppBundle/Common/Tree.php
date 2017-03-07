@@ -4,12 +4,10 @@ namespace AppBundle\Common;
 
 /**
  * Class Tree 多叉树 数据结构类
- * 对树的操作是递归的，如有特殊需求导致递归会爆栈 可以改用stack来实现递归的效果
- * @package AppBundle\Common
+ * 对树的操作是递归的，如有特殊需求导致递归会爆栈 可以改用stack来实现递归的效果.
  */
 class Tree
 {
-
     /**
      * @var array<Tree>
      */
@@ -27,28 +25,33 @@ class Tree
 
     public function __construct($data = array(), Tree $parent = null)
     {
-        $this->data   = $data;
+        $this->data = $data;
         $this->parent = $parent;
     }
 
     /**
-     * Like ArrayToolkit::column
+     * Like ArrayToolkit::column.
+     *
      * @param $key
+     *
      * @return mixed
      */
     public function column($key)
     {
-        return $this->reduce(function ($ret, $tree) use ($key){
-            if(!empty($tree->data[$key])){
+        return $this->reduce(function ($ret, $tree) use ($key) {
+            if (!empty($tree->data[$key])) {
                 array_push($ret, $tree->data[$key]);
             }
+
             return $ret;
         }, array());
     }
 
     /**
-     * each Tree Node call closure
+     * each Tree Node call closure.
+     *
      * @param \Closure $closure
+     *
      * @return $this
      */
     public function each(\Closure $closure)
@@ -62,19 +65,22 @@ class Tree
     }
 
     /**
-     * Like array_reduce
+     * Like array_reduce.
+     *
      * @see http://php.net/manual/zh/function.array-reduce.php
+     *
      * @param \Closure $closure
      * @param null     $initial
+     *
      * @return mixed
      */
     public function reduce(\Closure $closure, $initial = null)
     {
         is_null($initial) ? $ret = $this : $ret = $initial;
 
-        $ret = $closure($ret ,$this);
+        $ret = $closure($ret, $this);
 
-        foreach ($this->children as $child){
+        foreach ($this->children as $child) {
             $ret = $child->reduce($closure, $ret);
         }
 
@@ -98,17 +104,18 @@ class Tree
 
     /**
      * @param \Closure $closure
+     *
      * @return Tree
      */
     public function find(\Closure $closure)
     {
-        if($closure($this)){
+        if ($closure($this)) {
             return $this;
         }
         $ret = null;
-        foreach ($this->children as $child){
+        foreach ($this->children as $child) {
             $ret = $child->find($closure);
-            if(!is_null($ret)){
+            if (!is_null($ret)) {
                 break;
             }
         }
@@ -120,8 +127,8 @@ class Tree
     {
         $parent = $this;
         $ret = array();
-        while (!is_null($parent)){
-            if($closure($parent)){
+        while (!is_null($parent)) {
+            if ($closure($parent)) {
                 $ret[] = $parent;
             }
 
@@ -134,12 +141,12 @@ class Tree
     public static function buildWithArray(array $input, $rootId = 0, $key = 'id', $parentKey = 'parentId')
     {
         $root = new self(array(
-            $key => $rootId
+            $key => $rootId,
         ));
 
         // 方便找到父节点
         $map = array(
-            $rootId => $root
+            $rootId => $root,
         );
 
         $buildingArray = $input;
@@ -149,7 +156,7 @@ class Tree
             foreach ($buildingArray as $index => $value) {
                 if (isset($map[$value[$parentKey]])) {
                     $parent = $map[$value[$parentKey]];
-                    $tree = new Tree($value, $parent);
+                    $tree = new self($value, $parent);
                     $parent->addChild($tree);
                     $map[$value[$key]] = $tree;
                     unset($buildingArray[$index]);
@@ -157,7 +164,7 @@ class Tree
             }
 
             //一次构建树后剩下元素不变。 说明这些元素的父节点不存在树的节点里，是构建不出的树的
-            if($buildingCount === count($buildingArray)){
+            if ($buildingCount === count($buildingArray)) {
                 break;
             }
         }
@@ -167,11 +174,13 @@ class Tree
 
     /**
      * @param Tree $child
+     *
      * @return $this
      */
     public function addChild(Tree $child)
     {
         array_push($this->children, $child);
+
         return $this;
     }
 
@@ -193,11 +202,13 @@ class Tree
 
     /**
      * @param Tree $parent
+     *
      * @return $this
      */
     public function setParent(Tree $parent)
     {
         $this->parent = $parent;
+
         return $this;
     }
 

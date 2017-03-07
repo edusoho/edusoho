@@ -19,10 +19,10 @@ class DownloadActivityServiceImpl extends BaseService implements DownloadActivit
         }
         $record = array(
             'downloadActivityId' => $activity['id'],
-            'materialId'         => $material['id'],
-            'fileId'             => $material['fileId'],
-            'link'               => $material['link'],
-            'userId'             => $user->getId()
+            'materialId' => $material['id'],
+            'fileId' => $material['fileId'],
+            'link' => $material['link'],
+            'userId' => $user->getId(),
         );
 
         return $this->getDownloadFileRecordDao()->create($record);

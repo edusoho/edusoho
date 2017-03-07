@@ -1,8 +1,8 @@
-{% set course = data('CourseByCourseSet', {courseSetId: courseSet.id }) %}
+{% set course = data('PublishedCourseByCourseSet', {courseSetId: courseSet.id }) %}
 
 <li class="autumn-grid autumn-course-grid">
   <a href="{{ path('course_set_show', {id: courseSet.id}) }}" class="course-picture">
-    {{ lazy_img(filepath(course.cover.middle|default(null), 'course.png'), 'img-responsive', '') }}
+    {{ lazy_img(filepath(courseSet.cover.middle|default(null), 'courseSet.png'), 'img-responsive', '') }}
     <div class="course-label">
     {% if courseSet.status == 'draft' %}
       <span class="label  label-warning">{{'未发布'|trans}}</span>

@@ -8,15 +8,15 @@ use AppBundle\System;
 
 class SysteminfoController extends BaseController
 {
-    public function indexAction (Request $request)
+    public function indexAction(Request $request)
     {
-        $version = $this->getParam($request, "version", '1');
+        $version = $this->getParam($request, 'version', '1');
 
         $info = array(
             'version' => System::VERSION,
             'name' => $this->setting('site.name', ''),
             'mobileApiVersion' => $version,
-            'mobileApiUrl' => $request->getSchemeAndHttpHost() . '/mapi_v' . $version,
+            'mobileApiUrl' => $request->getSchemeAndHttpHost().'/mapi_v'.$version,
         );
 
         return $this->createJson($request, $info);
@@ -24,7 +24,7 @@ class SysteminfoController extends BaseController
 
     protected function getParam(Request $request, $name, $default = null)
     {
-        if ($request->getMethod() == "POST") {
+        if ($request->getMethod() == 'POST') {
             $result = $request->request->get($name);
         } else {
             $result = $request->query->get($name);
@@ -47,6 +47,7 @@ class SysteminfoController extends BaseController
     {
         $response = new JsonResponse($data);
         $response->setCallback($callback);
+
         return $response;
     }
 }

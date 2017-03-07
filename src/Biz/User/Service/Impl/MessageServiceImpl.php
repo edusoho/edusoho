@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
@@ -10,12 +11,14 @@ class MessageServiceImpl extends BaseService implements MessageService
     public function countMessages($conditions)
     {
         $conditions = $this->filterMessageConditions($conditions);
+
         return $this->getMessageDao()->count($conditions);
     }
 
     public function searchMessages($conditions, $order, $start, $limit)
     {
         $conditions = $this->filterMessageConditions($conditions);
+
         return $this->getMessageDao()->search($conditions, $order, $start, $limit);
     }
 
@@ -34,10 +37,11 @@ class MessageServiceImpl extends BaseService implements MessageService
         }
 
         $createdTime = empty($createdTime) ? time() : $createdTime;
-        $message     = $this->addMessage($fromId, $toId, $content, $type, $createdTime);
+        $message = $this->addMessage($fromId, $toId, $content, $type, $createdTime);
         $this->prepareConversationAndRelationForSender($message, $toId, $fromId, $createdTime);
         $this->prepareConversationAndRelationForReceiver($message, $fromId, $toId, $createdTime);
         $this->getUserService()->waveUserCounter($toId, 'newMessageNum', 1);
+
         return $message;
     }
 
@@ -48,7 +52,7 @@ class MessageServiceImpl extends BaseService implements MessageService
 
     public function deleteConversationMessage($conversationId, $messageId)
     {
-        $relation     = $this->getRelationDao()->getByConversationIdAndMessageId($conversationId, $messageId);
+        $relation = $this->getRelationDao()->getByConversationIdAndMessageId($conversationId, $messageId);
         $conversation = $this->getConversationDao()->get($conversationId);
 
         if ($relation['isRead'] == self::RELATION_ISREAD_OFF) {
@@ -68,10 +72,10 @@ class MessageServiceImpl extends BaseService implements MessageService
     public function deleteMessagesByIds(array $ids = null)
     {
         if (empty($ids)) {
-            throw $this->createInvalidArgumentException("Invalid Argument");
+            throw $this->createInvalidArgumentException('Invalid Argument');
         }
         foreach ($ids as $id) {
-            $message      = $this->getMessageDao()->get($id);
+            $message = $this->getMessageDao()->get($id);
             $conversation = $this->getConversationDao()->getByFromIdAndToId($message['fromId'], $message['toId']);
             if (!empty($conversation)) {
                 $this->getRelationDao()->deleteByConversationIdAndMessageId($conversation['id'], $message['id']);
@@ -84,12 +88,14 @@ class MessageServiceImpl extends BaseService implements MessageService
 
             $this->getMessageDao()->delete($id);
         }
+
         return true;
     }
 
     public function findUserConversations($userId, $start, $limit)
     {
         $conditions = array('toId' => $userId);
+
         return $this->getConversationDao()->search($conditions, array('latestMessageTime' => 'DESC'), $start, $limit);
     }
 
@@ -106,6 +112,7 @@ class MessageServiceImpl extends BaseService implements MessageService
     public function deleteConversation($conversationId)
     {
         $this->getRelationDao()->deleteByConversationId($conversationId);
+
         return $this->getConversationDao()->delete($conversationId);
     }
 
@@ -117,13 +124,14 @@ class MessageServiceImpl extends BaseService implements MessageService
         }
         $updatedConversation = $this->getConversationDao()->update($conversation['id'], array('unreadNum' => 0));
         $this->getRelationDao()->updateByConversationId($conversationId, array('isRead' => 1));
+
         return $updatedConversation;
     }
 
     public function findConversationMessages($conversationId, $start, $limit)
     {
-        $relations   = $this->getRelationDao()->searchByConversationId($conversationId, $start, $limit);
-        $messages    = $this->getMessageDao()->findByIds(ArrayToolkit::column($relations, 'messageId'));
+        $relations = $this->getRelationDao()->searchByConversationId($conversationId, $start, $limit);
+        $messages = $this->getMessageDao()->findByIds(ArrayToolkit::column($relations, 'messageId'));
         $createUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($messages, 'fromId'));
 
         foreach ($messages as &$message) {
@@ -133,6 +141,7 @@ class MessageServiceImpl extends BaseService implements MessageService
                 }
             }
         }
+
         return $this->sortMessages($messages);
     }
 
@@ -149,12 +158,13 @@ class MessageServiceImpl extends BaseService implements MessageService
     protected function addMessage($fromId, $toId, $content, $type, $createdTime)
     {
         $message = array(
-            'fromId'      => $fromId,
-            'toId'        => $toId,
-            'type'        => $type,
-            'content'     => $this->biz['html_helper']->purify($content),
-            'createdTime' => $createdTime
+            'fromId' => $fromId,
+            'toId' => $toId,
+            'type' => $type,
+            'content' => $this->biz['html_helper']->purify($content),
+            'createdTime' => $createdTime,
         );
+
         return $this->getMessageDao()->create($message);
     }
 
@@ -163,31 +173,31 @@ class MessageServiceImpl extends BaseService implements MessageService
         $conversation = $this->getConversationDao()->getByFromIdAndToId($toId, $fromId);
         if ($conversation) {
             $this->getConversationDao()->update($conversation['id'], array(
-                'messageNum'           => $conversation['messageNum'] + 1,
-                'latestMessageUserId'  => $message['fromId'],
+                'messageNum' => $conversation['messageNum'] + 1,
+                'latestMessageUserId' => $message['fromId'],
                 'latestMessageContent' => $message['content'],
-                'latestMessageTime'    => $message['createdTime'],
-                'latestMessageType'    => $message['type']
+                'latestMessageTime' => $message['createdTime'],
+                'latestMessageType' => $message['type'],
             ));
         } else {
             $conversation = array(
-                'fromId'               => $toId,
-                'toId'                 => $fromId,
-                'messageNum'           => 1,
-                'latestMessageUserId'  => $message['fromId'],
+                'fromId' => $toId,
+                'toId' => $fromId,
+                'messageNum' => 1,
+                'latestMessageUserId' => $message['fromId'],
                 'latestMessageContent' => $message['content'],
-                'latestMessageTime'    => $message['createdTime'],
-                'latestMessageType'    => $message['type'],
-                'unreadNum'            => 0,
-                'createdTime'          => $createdTime
+                'latestMessageTime' => $message['createdTime'],
+                'latestMessageType' => $message['type'],
+                'unreadNum' => 0,
+                'createdTime' => $createdTime,
             );
             $conversation = $this->getConversationDao()->create($conversation);
         }
 
         $relation = array(
             'conversationId' => $conversation['id'],
-            'messageId'      => $message['id'],
-            'isRead'         => 0
+            'messageId' => $message['id'],
+            'isRead' => 0,
         );
         $this->getRelationDao()->create($relation);
     }
@@ -197,29 +207,29 @@ class MessageServiceImpl extends BaseService implements MessageService
         $conversation = $this->getConversationDao()->getByFromIdAndToId($fromId, $toId);
         if ($conversation) {
             $this->getConversationDao()->update($conversation['id'], array(
-                'messageNum'           => $conversation['messageNum'] + 1,
-                'latestMessageUserId'  => $message['fromId'],
+                'messageNum' => $conversation['messageNum'] + 1,
+                'latestMessageUserId' => $message['fromId'],
                 'latestMessageContent' => $message['content'],
-                'latestMessageTime'    => $message['createdTime'],
-                'unreadNum'            => $conversation['unreadNum'] + 1
+                'latestMessageTime' => $message['createdTime'],
+                'unreadNum' => $conversation['unreadNum'] + 1,
             ));
         } else {
             $conversation = array(
-                'fromId'               => $fromId,
-                'toId'                 => $toId,
-                'messageNum'           => 1,
-                'latestMessageUserId'  => $message['fromId'],
+                'fromId' => $fromId,
+                'toId' => $toId,
+                'messageNum' => 1,
+                'latestMessageUserId' => $message['fromId'],
                 'latestMessageContent' => $message['content'],
-                'latestMessageTime'    => $message['createdTime'],
-                'unreadNum'            => 1,
-                'createdTime'          => $createdTime
+                'latestMessageTime' => $message['createdTime'],
+                'unreadNum' => 1,
+                'createdTime' => $createdTime,
             );
             $conversation = $this->getConversationDao()->create($conversation);
         }
         $relation = array(
             'conversationId' => $conversation['id'],
-            'messageId'      => $message['id'],
-            'isRead'         => 0
+            'messageId' => $message['id'],
+            'isRead' => 0,
         );
         $this->getRelationDao()->create($relation);
     }
@@ -257,6 +267,7 @@ class MessageServiceImpl extends BaseService implements MessageService
                 return 1;
             }
         });
+
         return $messages;
     }
 
@@ -266,9 +277,9 @@ class MessageServiceImpl extends BaseService implements MessageService
             $conditions['fromIds'] = array(-1);
 
             $userConditions = array('nickname' => trim($conditions['nickname']));
-            $userCount      = $this->getUserService()->searchUserCount($userConditions);
+            $userCount = $this->getUserService()->searchUserCount($userConditions);
             if ($userCount) {
-                $users                 = $this->getUserService()->searchUsers($userConditions, array('createdTime' => 'DESC'), 0, $userCount);
+                $users = $this->getUserService()->searchUsers($userConditions, array('createdTime' => 'DESC'), 0, $userCount);
                 $conditions['fromIds'] = ArrayToolkit::column($users, 'id');
             }
         }
