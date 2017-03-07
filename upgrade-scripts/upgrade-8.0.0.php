@@ -524,7 +524,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("update `course_task`  ck set  `activityId` = (select `id` from  `activity` ay  where  ck.id = ay.id)
             ");
             //courseSetId
-            $this->getConnection()->exec("update `activity` AS  `ct` set `ct`.fromCourseSetId = (select `courseSetId` from `c2_course` AS `ce` where `ct`.fromCourseId = `ce`.id)");
+            $this->getConnection()->exec("update `activity` AS  `ct` set `ct`.fromCourseSetId   = (select `courseSetId` from `c2_course` AS `ce` where `ct`.fromCourseId = `ce`.id)");
         }
     }
 
@@ -994,7 +994,7 @@ class EduSohoUpgrade extends AbstractUpdater
               KEY `testPaperResultId` (`resultId`)
             ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `testpaper_activity` (
+            CREATE TABLE IF NOT EXISTS `testpaper_activity` (
               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '关联activity表的ID',
               `mediaId` int(10) NOT NULL DEFAULT '0' COMMENT '试卷ID',
               `doTimes` smallint(6) NOT NULL DEFAULT '0' COMMENT '考试次数',
@@ -1015,7 +1015,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function testpaperUpgrade()
     {
-        $sql = "select * from testpaper";
+        $sql = "select * from testpaper where id not in (select id from c2_testpaper where type='testpaper')";
         $testpapers = $this->getConnection()->fetchAll($sql);
         foreach ($testpapers as $testpaper) {
             $targetArr = explode('/', $testpaper['target']);
@@ -1029,19 +1029,135 @@ class EduSohoUpgrade extends AbstractUpdater
 
             $courseSetId = $courseArr[1];
 
-            $insertSql = "insert into c2_testpaper (id,name,description,courseId,lessonId,limitedTime,pattern,target,status,score,passedCondition,itemCount,createdUserId,createdTime,updatedUserId,updatedTime,metas,copyId,type,courseSetId,oldTestId) values({$testpaper['id']},'".$testpaper['name']."','".$testpaper['description']."',{$courseSetId},{$lessonId},{$testpaper['limitedTime']},'questionType','".$testpaper['target']."','".$testpaper['status']."',{$testpaper['score']},'".$passedCondition."',{$testpaper['itemCount']},{$testpaper['createdUserId']},{$testpaper['createdTime']},{$testpaper['updatedUserId']},{$testpaper['updatedTime']},'".$testpaper['metas']."',{$testpaper['copyId']},'testpaper',{$courseSetId},{$testpaper['id']})";
+            $insertSql = "INSERT INTO c2_testpaper (
+                id,
+                name,
+                description,
+                courseId,
+                lessonId,
+                limitedTime,
+                pattern,
+                target,
+                status,
+                score,
+                passedCondition,
+                itemCount,
+                createdUserId,
+                createdTime,
+                updatedUserId,
+                updatedTime,
+                metas,
+                copyId,
+                type,
+                courseSetId,
+                oldTestId
+                ) VALUES (
+                {$testpaper['id']},
+                '".$testpaper['name']."',
+                '".$testpaper['description']."',
+                {$courseSetId},
+                {$lessonId},
+                {$testpaper['limitedTime']},
+                'questionType',
+                '".$testpaper['target']."',
+                '".$testpaper['status']."',
+                {$testpaper['score']},
+                '".$passedCondition."',
+                {$testpaper['itemCount']},
+                {$testpaper['createdUserId']},
+                {$testpaper['createdTime']},
+                {$testpaper['updatedUserId']},
+                {$testpaper['updatedTime']},
+                '".$testpaper['metas']."',
+                {$testpaper['copyId']},
+                'testpaper',
+                {$courseSetId},
+                {$testpaper['id']}
+                )";
             $this->getConnection()->exec($insertSql);
         }
 
         //testpaper_item
-        $sql = "insert into c2_testpaper_item (id,testId,seq,questionId,questionType,parentId,score,missScore,oldItemId,type) select id,testId,seq,questionId,questionType,parentId,score,missScore,id,'testpaper' from testpaper_item";
+        $sql = "INSERT INTO c2_testpaper_item (
+            id,
+            testId,
+            seq,
+            questionId,
+            questionType,
+            parentId,
+            score,
+            missScore,
+            oldItemId,
+            type
+            ) SELECT
+            id,
+            testId,
+            seq,
+            questionId,
+            questionType,
+            parentId,
+            score,
+            missScore,
+            id,
+            'testpaper' FROM testpaper_item
+            WHERE id NOT IN (SELECT `id` FROM `c2_testpaper_item`)";
         $this->getConnection()->exec($sql);
 
         //testpaper_result
-        $sql = "insert into c2_testpaper_result(id,paperName,testId,userId,courseId,lessonId,score,objectiveScore,subjectiveScore,teacherSay,rightItemCount,passedStatus,limitedTime,beginTime,endTime,updateTime,active,status,target,checkTeacherId,checkedTime,usedTime,oldResultId,type) select id,paperName,testId,userId,0,0,score,objectiveScore,subjectiveScore,teacherSay,rightItemCount,passedStatus,limitedTime,beginTime,endTime,updateTime,active,status,target,checkTeacherId,checkedTime,usedTime,id as oldResultId,'testpaper' from testpaper_result";
+        $sql = "INSERT INTO c2_testpaper_result(
+            id,
+            paperName,
+            testId,
+            userId,
+            courseId,
+            lessonId,
+            score,
+            objectiveScore,
+            subjectiveScore,
+            teacherSay,
+            rightItemCount,
+            passedStatus,
+            limitedTime,
+            beginTime,
+            endTime,
+            updateTime,
+            active,
+            status,
+            target,
+            checkTeacherId,
+            checkedTime,
+            usedTime,
+            oldResultId,
+            type
+            ) SELECT
+            id,
+            paperName,
+            testId,
+            userId,
+            0,
+            0,
+            score,
+            objectiveScore,
+            subjectiveScore,
+            teacherSay,
+            rightItemCount,
+            passedStatus,
+            limitedTime,
+            beginTime,
+            endTime,
+            updateTime,
+            active,
+            status,
+            target,
+            checkTeacherId,
+            checkedTime,
+            usedTime,
+            id AS oldResultId,
+            'testpaper'
+            FROM testpaper_result WHERE id NOT IN (SELECT id FROM c2_testpaper_result)";
         $this->getConnection()->exec($sql);
 
-        $sql = "select * from c2_testpaper_result";
+        $sql = "select * from c2_testpaper_result where id not in (select id from c2_testpaper_result where type = 'testpaper')";
         $newTestpaperResults = $this->getConnection()->fetchAll($sql);
         foreach ($newTestpaperResults as $testpaperResult) {
             $targetArr = explode('/', $testpaperResult['target']);
@@ -1053,24 +1169,56 @@ class EduSohoUpgrade extends AbstractUpdater
 
             $lessonId = empty($lessonArr[1]) ? 0 : $lessonArr[1];
 
-            $sql = "update c2_testpaper_result set courseId={$course['id']},courseSetId={$course['courseSetId']},lessonId = {$lessonId} where id={$testpaperResult['id']}";
+            $sql = "UPDATE c2_testpaper_result SET
+                courseId = {$course['id']},
+                courseSetId = {$course['courseSetId']},
+                lessonId = {$lessonId}
+                WHERE id = {$testpaperResult['id']}";
 
             $this->getConnection()->exec($sql);
         }
 
         //testpaper_item_result
-        $sql = "insert into c2_testpaper_item_result (id,itemId,testId,resultId,userId,questionId,status,score,answer,teacherSay,pId,oldItemResultId,type) select id,itemId,testId,testPaperResultId,userId,questionId,status,score,answer,teacherSay,pId,id,'testpaper' from testpaper_item_result";
+        $sql = "INSERT INTO c2_testpaper_item_result (
+            id,
+            itemId,
+            testId,
+            resultId,
+            userId,
+            questionId,
+            status,
+            score,
+            answer,
+            teacherSay,
+            pId,
+            oldItemResultId,
+            type
+            ) SELECT
+            id,
+            itemId,
+            testId,
+            testPaperResultId,
+            userId,
+            questionId,
+            status,
+            score,
+            answer,
+            teacherSay,
+            pId,
+            id,
+            'testpaper'
+            FROM testpaper_item_result WHERE id NOT IN (SELECT id FROM c2_testpaper_item_result)";
         $this->getConnection()->exec($sql);
 
-        $sql = "update c2_testpaper_item_result as ir set ir.testId = (select id from c2_testpaper where oldTestId = ir.testId)";
+        $sql = "UPDATE c2_testpaper_item_result AS ir SET ir.testId = (SELECT id FROM c2_testpaper WHERE oldTestId = ir.testId)";
         $this->getConnection()->exec($sql);
 
-        $sql = "update c2_testpaper_item_result as ir set ir.resultId = (select id from c2_testpaper_result where oldResultId = ir.resultId)";
+        $sql = "UPDATE c2_testpaper_item_result AS ir SET ir.resultId = (SELECT id FROM c2_testpaper_result WHERE oldResultId = ir.resultId)";
         $this->getConnection()->exec($sql);
 
         $this->testpaperActivity();
 
-        $sql = "update c2_testpaper_result as tr set lessonId = (select activityId from course_task where lessonId = tr.lessonId and type='testpaper') where type='testpaper'";
+        $sql = "UPDATE c2_testpaper_result AS tr SET lessonId = (SELECT activityId FROM course_task WHERE lessonId = tr.lessonId AND type='testpaper') WHERE type='testpaper'";
         $this->exec($sql);
     }
 
@@ -1082,7 +1230,7 @@ class EduSohoUpgrade extends AbstractUpdater
             return;
         }
 
-        $sql = "select * from homework";
+        $sql = "SELECT * FROM homework WHERE id not IN (SELECT oldTestId FROM c2_testpaper WHERE type = 'homework')";
         $homeworks = $this->getConnection()->fetchAll($sql);
         if (!$homeworks) {
             return;
@@ -1093,18 +1241,60 @@ class EduSohoUpgrade extends AbstractUpdater
 
             $passedCondition = !empty($homework['correctPercent']) ? $homework['correctPercent'] : null;
 
-            $insertSql = "insert into c2_testpaper (name,description,courseId,lessonId,limitedTime,pattern,target,status,score,passedCondition,itemCount,createdUserId,createdTime,updatedUserId,updatedTime,metas,copyId,type,courseSetId,oldTestId) values('','".$homework['description']."',{$homework['courseId']},{$homework['lessonId']},0,'questionType','','open',0,'".$passedCondition."',{$homework['itemCount']},{$homework['createdUserId']},{$homework['createdTime']},{$homework['updatedUserId']},{$homework['updatedTime']},null,{$homework['copyId']},'homework',{$courseSetId},{$homework['id']})";
+            $insertSql = "INSERT INTO c2_testpaper (
+                name,
+                description,
+                courseId,
+                lessonId,
+                limitedTime,
+                pattern,
+                target,
+                status,
+                score,
+                passedCondition,
+                itemCount,
+                createdUserId,
+                createdTime,
+                updatedUserId,
+                updatedTime,
+                metas,
+                copyId,
+                type,
+                courseSetId,
+                oldTestId
+                ) VALUES (
+                '',
+                '".$homework['description']."',
+                {$homework['courseId']},
+                {$homework['lessonId']},
+                0,
+                'questionType',
+                '',
+                'open',
+                0,
+                '".$passedCondition."',
+                {$homework['itemCount']},
+                {$homework['createdUserId']},
+                {$homework['createdTime']},
+                {$homework['updatedUserId']},
+                {$homework['updatedTime']},
+                null,
+                {$homework['copyId']},
+                'homework',
+                {$courseSetId},
+                {$homework['id']}
+            )";
 
             $this->getConnection()->exec($insertSql);
             $homeworkId = $this->getConnection()->lastInsertId();
-            $homeworkNew = $this->getConnection()->fetchAssoc("select * from c2_testpaper where id={$homeworkId}");
+            $homeworkNew = $this->getConnection()->fetchAssoc("SELECT * FROM c2_testpaper WHERE id={$homeworkId}");
 
             if ($homework['copyId'] == 0) {
-                $subSql = "update c2_testpaper set copyId = {$homeworkNew['id']} where copyId={$homework['id']} and type='homework'";
+                $subSql = "UPDATE c2_testpaper SET copyId = {$homeworkNew['id']} WHERE copyId = {$homework['id']} AND type = 'homework'";
             }
 
             //homework_item
-            $itemSql = "select * from homework_item where homeworkId={$homework['id']}";
+            $itemSql = "SELECT * FROM homework_item WHERE homeworkId = {$homework['id']} AND id NOT IN (SELECT oldItemId FROM c2_testpaper_item WHERE type = 'homework' AND testId = {$homework['id']})";
             $items = $this->getConnection()->fetchAll($itemSql);
 
             if (!$items) {
@@ -1112,12 +1302,30 @@ class EduSohoUpgrade extends AbstractUpdater
             }
 
             foreach ($items as $item) {
-                $sql = "insert into c2_testpaper_item (testId,seq,questionId,questionType,parentId,score,missScore,oldItemId) values({$homeworkNew['id']},{$item['seq']},{$item['questionId']},'".$item['questionType']."',{$item['parentId']},{$item['score']},{$item['missScore']},{$item['id']})";
+                $sql = "INSERT INTO c2_testpaper_item (
+                    testId,
+                    seq,
+                    questionId,
+                    questionType,
+                    parentId,
+                    score,
+                    missScore,
+                    oldItemId
+                    ) VALUES (
+                    {$homeworkNew['id']},
+                    {$item['seq']},
+                    {$item['questionId']},
+                    '".$item['questionType']."',
+                    {$item['parentId']},
+                    {$item['score']},
+                    {$item['missScore']},
+                    {$item['id']}
+                )";
                 $this->getConnection()->exec($sql);
             }
         }
 
-        $sql = "insert into c2_testpaper_result (
+        $sql = "INSERT INTO c2_testpaper_result (
                 paperName,
                 testId,
                 userId,
@@ -1133,8 +1341,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 usedTime,
                 type,
                 courseSetId,
-                oldResultId )
-            SELECT
+                oldResultId
+            )SELECT
                 '',
                 homeworkId,
                 userId,
@@ -1150,18 +1358,18 @@ class EduSohoUpgrade extends AbstractUpdater
                 usedTime,
                 'homework',
                 0,
-                id as oldResultId from homework_result ";
+                id AS oldResultId FROM homework_result WHERE id NOT IN (SELECT oldResultId FROM c2_testpaper_result WHERE type = 'homework')";
         $this->exec($sql);
 
-        $sql = "update c2_testpaper_result as tr set
-            testId = (select id from c2_testpaper where oldTestId = tr.testId and type='homework'),
-            courseId = (select id from c2_course where id = tr.courseId),
-            courseSetId = (select id from c2_course_set where id = tr.courseId),
-            lessonId = (select activityId from course_task where lessonId = tr.lessonId and type='homework')
-            where type = 'homework'";
+        $sql = "UPDATE c2_testpaper_result AS tr SET
+            testId = (SELECT id FROM c2_testpaper WHERE oldTestId = tr.testId AND type ='homework'),
+            courseId = (SELECT id FROM c2_course WHERE id = tr.courseId),
+            courseSetId = (SELECT id FROM c2_course_set WHERE id = tr.courseId),
+            lessonId = (SELECT activityId FROM course_task WHERE lessonId = tr.lessonId AND type ='homework')
+            WHERE type = 'homework'";
         $this->exec($sql);
 
-        $sql = "insert into c2_testpaper_item_result (
+        $sql = "INSERT INTO c2_testpaper_item_result (
             testId,
             resultId,
             userId,
@@ -1170,8 +1378,8 @@ class EduSohoUpgrade extends AbstractUpdater
             answer,
             teacherSay,
             oldItemResultId,
-            type)
-        select
+            type
+        ) SELECT
             homeworkId,
             homeworkResultId,
             userId,
@@ -1179,16 +1387,17 @@ class EduSohoUpgrade extends AbstractUpdater
             status,
             answer,
             teacherSay,
-            id as oldItemResultId,
-            'homework' from homework_item_result";
+            id AS oldItemResultId,
+            'homework'
+            FROM homework_item_result WHERE id NOT IN (SELECT oldItemResultId FROM c2_testpaper_item_result)";
         $this->getConnection()->exec($sql);
 
-        $sql = "update c2_testpaper_item_result as rt set
-            testId = (select id from c2_testpaper where oldTestId = rt.testId and type='homework'),
-            resultId = (select id from c2_testpaper_result where rt.resultId = oldResultId and type = 'homework') where type='homework'";
+        $sql = "UPDATE c2_testpaper_item_result AS rt SET
+            testId = (SELECT id FROM c2_testpaper WHERE oldTestId = rt.testId AND type = 'homework'),
+            resultId = (SELECT id FROM c2_testpaper_result WHERE rt.resultId = oldResultId AND type = 'homework') WHERE type = 'homework'";
         $this->exec($sql);
 
-        $sql = "update c2_testpaper_result as tr set lessonId = (select activityId from course_task where lessonId = tr.lessonId and type='homework') where type='homework'";
+        $sql = "UPDATE c2_testpaper_result AS tr SET lessonId = (SELECT activityId FROM course_task WHERE lessonId = tr.lessonId AND type='homework') WHERE type = 'homework'";
         $this->exec($sql);
     }
 
@@ -1200,7 +1409,7 @@ class EduSohoUpgrade extends AbstractUpdater
             return;
         }
 
-        $sql = "select * from exercise";
+        $sql = "SELECT * FROM exercise WHERE id NOT IN (SELECT oldTestId FROM c2_testpaper WHERE type = 'exercise')";
         $exercises = $this->getConnection()->fetchAll($sql);
         if (!$exercises) {
             return;
@@ -1222,19 +1431,59 @@ class EduSohoUpgrade extends AbstractUpdater
             $metas['questionTypes'] = json_decode($exercise['questionTypeRange']);
             $metas = json_encode($metas);
 
-            $insertSql = "insert into c2_testpaper (name,description,courseId,lessonId,limitedTime,pattern,target,status,score,passedCondition,itemCount,createdUserId,createdTime,updatedUserId,updatedTime,metas,copyId,type,courseSetId) values('','',{$exercise['courseId']},{$exercise['lessonId']},0,'questionType','','open',0,'".$passedCondition."',{$exercise['itemCount']},{$exercise['createdUserId']},{$exercise['createdTime']},0,0,'".$metas."',{$exercise['copyId']},'exercise',{$courseSetId})";
+            $insertSql = "INSERT INTO c2_testpaper (
+                name,
+                description,
+                courseId,
+                lessonId,
+                limitedTime,
+                pattern,
+                target,
+                status,
+                score,
+                passedCondition,
+                itemCount,
+                createdUserId,
+                createdTime,
+                updatedUserId,
+                updatedTime,
+                metas,
+                copyId,
+                type,
+                courseSetId
+            ) VALUES (
+                '',
+                '',
+                {$exercise['courseId']},
+                {$exercise['lessonId']},
+                0,
+                'questionType',
+                '',
+                'open',
+                0,
+                '".$passedCondition."',
+                {$exercise['itemCount']},
+                {$exercise['createdUserId']},
+                {$exercise['createdTime']},
+                0,
+                0,
+                '".$metas."',
+                {$exercise['copyId']},
+                'exercise',
+                {$courseSetId}
+            )";
 
             $this->getConnection()->exec($insertSql);
             $exerciseId = $this->getConnection()->lastInsertId();
 
-            $exerciseNew = $this->getConnection()->fetchAssoc("select * from c2_testpaper where id={$exerciseId}");
+            $exerciseNew = $this->getConnection()->fetchAssoc("SELECT * FROM c2_testpaper WHERE id={$exerciseId}");
 
             if ($exercise['copyId'] == 0) {
-                $subSql = "update c2_testpaper set copyId = {$exerciseNew['id']} where copyId={$exercise['id']} and type='exercise'";
+                $subSql = "UPDATE c2_testpaper SET copyId = {$exerciseNew['id']} WHERE copyId = {$exercise['id']} AND type = 'exercise'";
             }
 
             //exercise_item
-            $itemSql = "select * from exercise_item where exerciseId={$exercise['id']}";
+            $itemSql = "SELECT * FROM exercise_item WHERE exerciseId = {$exercise['id']} WHERE id NOT IN (SELECT oldItemId FROM c2_testpaper_item WHERE type = 'exercise' AND testId = {$exercise['id']})";
             $items = $this->getConnection()->fetchAll($itemSql);
 
             if (!$items) {
@@ -1242,7 +1491,25 @@ class EduSohoUpgrade extends AbstractUpdater
             }
 
             foreach ($items as $item) {
-                $sql = "insert into c2_testpaper_item (testId,seq,questionId,questionType,parentId,score,missScore,oldItemId) values({$exerciseNew['id']},{$item['seq']},{$item['questionId']},'',{$item['parentId']},{$item['score']},{$item['missScore']},{$item['id']})";
+                $sql = "INSERT INTO c2_testpaper_item (
+                    testId,
+                    seq,
+                    questionId,
+                    questionType,
+                    parentId,
+                    score,
+                    missScore,
+                    oldItemId
+                ) values (
+                    {$exerciseNew['id']},
+                    {$item['seq']},
+                    {$item['questionId']},
+                    '',
+                    {$item['parentId']},
+                    {$item['score']},
+                    {$item['missScore']},
+                    {$item['id']}
+                )";
                 $this->getConnection()->exec($sql);
             }
         }
@@ -1256,7 +1523,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = "update c2_testpaper_item as it set it.parentId = (select id from (select * from c2_testpaper_item) as tmp where tmp.oldItemId = it.parentId and tmp.type = 'exercise') where it.type ='exercise' and it.parentId > 0";
         $this->exec($sql);*/
 
-        $sql = "insert into c2_testpaper_result (
+        $sql = "INSERT INTO c2_testpaper_result (
                 testId,
                 userId,
                 courseId,
@@ -1279,18 +1546,19 @@ class EduSohoUpgrade extends AbstractUpdater
                 usedTime,
                 'exercise',
                 0,
-                id as oldResultId from exercise_result ";
+                id AS oldResultId
+            FROM exercise_result WHERE id NOT IN (SELECT oldResultId FROM c2_testpaper_result WHERE type = 'exercise')";
         $this->exec($sql);
 
-        $sql = "update c2_testpaper_result as tr set
-            testId = (select id from c2_testpaper where oldTestId = tr.testId and type='exercise'),
-            courseId = (select id from c2_course where id = tr.courseId),
-            courseSetId = (select id from c2_course_set where id = tr.courseId),
-            lessonId = (select activityId from course_task where lessonId = tr.lessonId and type='exercise')
-            where type = 'exercise'";
+        $sql = "UPDATE c2_testpaper_result AS tr SET
+            testId = (SELECT id FROM c2_testpaper WHERE oldTestId = tr.testId AND type = 'exercise'),
+            courseId = (SELECT id FROM c2_course WHERE id = tr.courseId),
+            courseSetId = (SELECT id FROM c2_course_set WHERE id = tr.courseId),
+            lessonId = (SELECT activityId FROM course_task WHERE lessonId = tr.lessonId AND type = 'exercise')
+            WHERE type = 'exercise'";
         $this->exec($sql);
 
-        $sql = "insert into c2_testpaper_item_result (
+        $sql = "INSERT INTO c2_testpaper_item_result (
             testId,
             resultId,
             userId,
@@ -1299,8 +1567,8 @@ class EduSohoUpgrade extends AbstractUpdater
             answer,
             teacherSay,
             oldItemResultId,
-            type)
-        select
+            type
+        ) SELECT
             exerciseId,
             exerciseResultId,
             userId,
@@ -1308,29 +1576,49 @@ class EduSohoUpgrade extends AbstractUpdater
             status,
             answer,
             teacherSay,
-            id as oldItemResultId,
-            'exercise' from exercise_item_result";
+            id AS oldItemResultId,
+            'exercise' FROM exercise_item_result WHERE id NOT IN (SELECT oldItemResultId FROM c2_testpaper_item_result WHERE type = 'exercise')";
         $this->getConnection()->exec($sql);
 
-        $sql = "update c2_testpaper_item_result as rt set
-            testId = (select id from c2_testpaper where oldTestId = rt.testId and type='exercise'),
-            resultId = (select id from c2_testpaper_result where rt.resultId = oldResultId and type = 'exercise') where type='exercise'";
+        $sql = "UPDATE c2_testpaper_item_result AS rt SET
+            testId = (SELECT id FROM c2_testpaper WHERE oldTestId = rt.testId AND type = 'exercise'),
+            resultId = (SELECT id FROM c2_testpaper_result WHERE rt.resultId = oldResultId AND type = 'exercise') WHERE type = 'exercise'";
         $this->exec($sql);
 
-        $sql = "update c2_testpaper_result as tr set lessonId = (select activityId from course_task where lessonId = tr.lessonId and type='exercise') where type='exercise'";
+        $sql = "UPDATE c2_testpaper_result AS tr SET lessonId = (SELECT activityId FROM course_task WHERE lessonId = tr.lessonId AND type='exercise') WHERE type = 'exercise'";
         $this->exec($sql);
     }
 
     protected function testpaperActivity()
     {
         if (!$this->isFieldExist('testpaper_activity', 'lessonId')) {
-            $this->exec("alter table `testpaper_activity` add `lessonId` int(10) ;");
+            $this->exec("ALTER TABLE `testpaper_activity` add `lessonId` int(10) ;");
         }
 
-        $sql = "insert into testpaper_activity (lessonId,mediaId,checkType,finishCondition,requireCredit,doTimes,redoInterval) select cl.id,cl.mediaId,'score','{\"type\":\"submit\",\"finishScore\":\"0\"}',cl.requireCredit,cle.doTimes,cle.redoInterval from course_lesson as cl left join course_lesson_extend as cle on cl.id=cle.id where cl.type='testpaper'and cl.mediaId > 0";
+        $sql = "INSERT INTO testpaper_activity (
+            id,
+            mediaId,
+            checkType,
+            finishCondition,
+            requireCredit,
+            doTimes,
+            redoInterval
+        )SELECT
+            cl.id,
+            cl.mediaId,
+            'score',
+            '{\"type\":\"submit\",\"finishScore\":\"0\"}',
+            cl.requireCredit,
+            cle.doTimes,
+            cle.redoInterval
+            FROM course_lesson AS cl
+            LEFT JOIN
+            course_lesson_extend AS cle
+            ON cl.id=cle.id
+            WHERE cl.type='testpaper' AND cl.mediaId > 0 AND cl.id NOT IN (SELECT id FROM testpaper_activity)";
         $this->getConnection()->exec($sql);
 
-        $sql = "update testpaper_activity as ta,(select id,limitedTime,oldTestId from c2_testpaper) as tmp set ta.mediaId = tmp.id,ta.limitedTime=tmp.limitedTime where tmp.oldTestId = ta.mediaId";
+        $sql = "UPDATE testpaper_activity AS ta,(SELECT id,limitedTime,oldTestId FROM c2_testpaper) AS tmp SET ta.mediaId = tmp.id, ta.limitedTime = tmp.limitedTime WHERE tmp.oldTestId = ta.mediaId";
         $this->getConnection()->exec($sql);
 
         $this->exec("
