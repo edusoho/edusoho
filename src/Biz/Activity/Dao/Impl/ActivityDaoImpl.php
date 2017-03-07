@@ -33,6 +33,7 @@ class ActivityDaoImpl extends GeneralDaoImpl implements ActivityDao
             'mediaType = :mediaType',
             'fromCourseId IN (:courseIds)',
             'mediaType IN (:mediaTypes)',
+            'mediaId = :mediaId',
         );
 
         return $declares;

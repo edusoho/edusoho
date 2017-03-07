@@ -387,6 +387,20 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertNotNull($result);
     }
 
+    public function testGetUserFinishedResult()
+    {
+        $testpaper = $this->createTestpaper1();
+
+        $result = $this->getTestpaperService()->getUserFinishedResult($testpaper['id'], 1, 1, $testpaper['type'], 1);
+        $this->assertNull($result);
+
+        $paperResult = $this->createTestpaperResult1($testpaper);
+
+        $result = $this->getTestpaperService()->getUserFinishedResult($testpaper['id'], 1, 1, $testpaper['type'], 1);
+
+        $this->assertNull($result);
+    }
+
     public function testGetUserLatelyResultByTestId()
     {
         $testpaper = $this->createTestpaper1();

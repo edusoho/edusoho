@@ -128,7 +128,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->validateExpiryMode($course);
 
         $course['status'] = 'draft';
-
         $course['creator'] = $this->getCurrentUser()->getId();
         try {
             $this->beginTransaction();
@@ -580,6 +579,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $chapter['seq'] = $this->getNextCourseItemSeq($chapter['courseId']);
         $chapter['createdTime'] = time();
+
         $chapter = $this->getChapterDao()->create($chapter);
 
         $this->dispatchEvent('course.chapter.create', new Event($chapter));
@@ -797,8 +797,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param int $userId
-     *
+     * @param  int     $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -1163,7 +1162,6 @@ class CourseServiceImpl extends BaseService implements CourseService
      * 当默认值未设置时，合并默认值
      *
      * @param  $course
-     *
      * @return array
      */
     protected function mergeCourseDefaultAttribute($course)
@@ -1189,7 +1187,6 @@ class CourseServiceImpl extends BaseService implements CourseService
      *
      * @param  $userId
      * @param  $filters
-     *
      * @return array
      */
     protected function prepareUserLearnCondition($userId, $filters)
