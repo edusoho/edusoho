@@ -1199,12 +1199,12 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = "UPDATE c2_testpaper_item_result AS ir, c2_testpaper as t SET ir.testId = t.id WHERE t.oldTestId = ir.testId";
         $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE c2_testpaper_item_result AS ir SET ir.resultId = (SELECT id FROM c2_testpaper_result WHERE oldResultId = ir.resultId)";
+        $sql = "UPDATE c2_testpaper_item_result AS ir, c2_testpaper_result AS tr SET ir.resultId = tr.id WHERE tr.oldResultId = ir.resultId";
         $this->getConnection()->exec($sql);
 
         $this->testpaperActivity();
 
-        $sql = "UPDATE c2_testpaper_result AS tr, course_task as ct SET tr.lessonId = ct.activityId WHERE tr.lessonId = ct.lessonId AND tr.type='testpaper'";
+        $sql = "UPDATE c2_testpaper_result AS tr, course_task as ct SET tr.lessonId = ct.activityId WHERE tr.lessonId = ct.id AND tr.type='testpaper'";
         $this->exec($sql);
     }
 
@@ -1277,6 +1277,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
             if ($homework['copyId'] == 0) {
                 $subSql = "UPDATE c2_testpaper SET copyId = {$homeworkNew['id']} WHERE copyId = {$homework['id']} AND type = 'homework'";
+                $this->exec($subSql);
             }
 
             //homework_item
@@ -1343,16 +1344,15 @@ class EduSohoUpgrade extends AbstractUpdater
                 checkedTime,
                 usedTime,
                 'homework',
-                0,
+                courseId AS courseSetId,
                 id AS oldResultId FROM homework_result WHERE id NOT IN (SELECT oldResultId FROM c2_testpaper_result WHERE type = 'homework')";
         $this->exec($sql);
 
-        $sql = "UPDATE c2_testpaper_result AS tr SET
-            testId = (SELECT id FROM c2_testpaper WHERE oldTestId = tr.testId AND type ='homework'),
-            courseId = (SELECT id FROM c2_course WHERE id = tr.courseId),
-            courseSetId = (SELECT id FROM c2_course_set WHERE id = tr.courseId),
-            lessonId = (SELECT activityId FROM course_task WHERE lessonId = tr.lessonId AND type ='homework')
-            WHERE type = 'homework'";
+        $sql = "UPDATE c2_testpaper_result AS tr,(SELECT id,oldTestId FROM c2_testpaper WHERE type ='homework') AS tmp, SET testId = tmp.id WHERE tr.type = 'homework' AND tmp.oldTestId = tr.testId";
+        $this->exec($sql);
+
+        //需要与刘洋洋那边做好后，最终确认 lesson->activityId
+        $sql = "UPDATE c2_testpaper_result AS tr,(SELECT id,mediaId FROM activity) AS tmp, SET lessonId = tmp.Id WHERE tr.type = 'homework' AND tmp.mediaId = tr.testId";
         $this->exec($sql);
 
         $sql = "INSERT INTO c2_testpaper_item_result (
@@ -1378,12 +1378,10 @@ class EduSohoUpgrade extends AbstractUpdater
             FROM homework_item_result WHERE id NOT IN (SELECT oldItemResultId FROM c2_testpaper_item_result)";
         $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE c2_testpaper_item_result AS rt SET
-            testId = (SELECT id FROM c2_testpaper WHERE oldTestId = rt.testId AND type = 'homework'),
-            resultId = (SELECT id FROM c2_testpaper_result WHERE rt.resultId = oldResultId AND type = 'homework') WHERE type = 'homework'";
+        $sql = "UPDATE c2_testpaper_item_result AS rt,(SELECT id,oldTestId FROM c2_testpaper WHERE type = 'homework') AS tmp SET rt.testId = tmp.id WHERE rt.type = 'homework' AND rt.testId = tmp.oldTestId;";
         $this->exec($sql);
 
-        $sql = "UPDATE c2_testpaper_result AS tr SET lessonId = (SELECT activityId FROM course_task WHERE lessonId = tr.lessonId AND type='homework') WHERE type = 'homework'";
+        $sql = "UPDATE c2_testpaper_item_result AS rt,(SELECT id,oldResultId FROM c2_testpaper_result WHERE type = 'homework') AS tmp SET rt.resultId = tmp.oldResultId WHERE rt.type = 'homework' AND rt.resultId = tmp.oldResultId;";
         $this->exec($sql);
     }
 
@@ -1466,6 +1464,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
             if ($exercise['copyId'] == 0) {
                 $subSql = "UPDATE c2_testpaper SET copyId = {$exerciseNew['id']} WHERE copyId = {$exercise['id']} AND type = 'exercise'";
+                $this->exec($subSql);
             }
 
             //exercise_item
@@ -1536,12 +1535,12 @@ class EduSohoUpgrade extends AbstractUpdater
             FROM exercise_result WHERE id NOT IN (SELECT oldResultId FROM c2_testpaper_result WHERE type = 'exercise')";
         $this->exec($sql);
 
-        $sql = "UPDATE c2_testpaper_result AS tr SET
-            testId = (SELECT id FROM c2_testpaper WHERE oldTestId = tr.testId AND type = 'exercise'),
-            courseId = (SELECT id FROM c2_course WHERE id = tr.courseId),
-            courseSetId = (SELECT id FROM c2_course_set WHERE id = tr.courseId),
-            lessonId = (SELECT activityId FROM course_task WHERE lessonId = tr.lessonId AND type = 'exercise')
-            WHERE type = 'exercise'";
+        //courseId,courseSetId 跟原来的值相同，只需要改testId和lessonId
+        $sql = "UPDATE c2_testpaper_result AS tr, (SELECT id,oldTestId FROM c2_testpaper WHERE type = 'exercise') as tmp set testId = tmp.id where tr.type = 'exercise' AND tr.testId = tmp.id";
+        $this->exec($sql);
+
+        //需要与刘洋洋那边做好后，最终确认 lesson->activityId
+        $sql = "UPDATE c2_testpaper_result AS tr, (SELECT id,mediaId FROM activity WHERE mediaType = 'exercise') as tmp set lessonId = tmp.id where tr.type = 'exercise' AND tr.testId = tmp.mediaId";
         $this->exec($sql);
 
         $sql = "INSERT INTO c2_testpaper_item_result (
@@ -1566,12 +1565,12 @@ class EduSohoUpgrade extends AbstractUpdater
             'exercise' FROM exercise_item_result WHERE id NOT IN (SELECT oldItemResultId FROM c2_testpaper_item_result WHERE type = 'exercise')";
         $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE c2_testpaper_item_result AS rt SET
-            testId = (SELECT id FROM c2_testpaper WHERE oldTestId = rt.testId AND type = 'exercise'),
-            resultId = (SELECT id FROM c2_testpaper_result WHERE rt.resultId = oldResultId AND type = 'exercise') WHERE type = 'exercise'";
+        $sql = "UPDATE c2_testpaper_item_result AS rt,(SELECT id ,oldTestId FROM c2_testpaper WHERE type = 'exercise') AS tmp SET
+            rt.testId = tmp.id WHERE rt.type = 'exercise' AND tmp.oldTestId = rt.testId ";
         $this->exec($sql);
 
-        $sql = "UPDATE c2_testpaper_result AS tr SET lessonId = (SELECT activityId FROM course_task WHERE lessonId = tr.lessonId AND type='exercise') WHERE type = 'exercise'";
+        $sql = "UPDATE c2_testpaper_item_result AS rt,(SELECT id,oldResultId FROM c2_testpaper_result WHERE type = 'exercise') AS tmp SET
+            rt.resultId = tmp.id WHERE rt.type = 'exercise' AND tmp.oldResultId = rt.resultId ";
         $this->exec($sql);
     }
 
