@@ -22,7 +22,7 @@
   {% else %}
     {% set targetType = 'coursematerial' %}
   {% endif %}
-  <div class="panel panel-default panel-col">
+  <div class="panel panel-default" role="courseset-manage-file">
     <div class="panel-heading">
       <a class="btn btn-info btn-sm pull-right"
         data-toggle="modal" data-target="#modal"
@@ -38,7 +38,7 @@
         <thead>
           <tr>
             <th width="5%"><input type="checkbox"  data-role="batch-select"></th>
-            <th>{{'文件名'|trans}}</th>
+            <th width="30%">{{'文件名'|trans}}</th>
             <th>{{'类型'|trans}}</th>
             <th>{{'大小'|trans}}</th>
             <th>{{'使用'|trans}}</th>

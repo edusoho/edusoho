@@ -21,7 +21,7 @@
     {{setting("coin.coin_name")}}
     {% endif %}
     <span class="coin-detail hidden-xs hidden-sm">
-      （{{'账户余额：'|trans}}<span class="text-danger" role="accountCash">{{account.cash|default(0)}}</span> {{setting("coin.coin_name")}}）
+      （{{'账户余额：'|trans}}<span class="color-danger" role="accountCash">{{account.cash|default(0)}}</span> {{setting("coin.coin_name")}}）
     </span>
     <input style="display:none">{# Prevent autocompleting #}
     <input type="password" style="display:none">{# Prevent autocompleting #}

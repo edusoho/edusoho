@@ -535,7 +535,10 @@ class CourseSetController extends BaseController
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseSets, 'categoryId'));
 
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseSets, 'creator'));
+
         return $this->render('admin/course/course-set-chooser.html.twig', array(
+            'users' => $users,
             'conditions' => $conditions,
             'courseSets' => $courseSets,
             'categories' => $categories,
