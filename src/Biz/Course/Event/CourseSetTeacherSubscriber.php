@@ -31,7 +31,11 @@ class CourseSetTeacherSubscriber extends EventSubscriber implements EventSubscri
         if (empty($course)) {
             return;
         }
+
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        if (empty($courseSet)) {
+            return;
+        }
 
         $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
 
@@ -60,8 +64,8 @@ class CourseSetTeacherSubscriber extends EventSubscriber implements EventSubscri
 
             return $t1['seq'] < $t2['seq'] ? -1 : 1;
         });
-        $courseSet['teacherIds'] = array($teachers[0]['userId']);
 
+        $courseSet['teacherIds'] = array($teachers[0]['userId']);
         $this->getCourseSetService()->updateCourseSet($courseSet['id'], $courseSet);
     }
 
