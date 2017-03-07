@@ -517,7 +517,7 @@ class ClassroomController extends BaseController
         }
 
         $classroom = $this->getClassroomService()->getClassroom($id);
-        if (ClassroomToolkit::isClassroomOverDue($classroom)) {
+        if ($this->getClassroomService()->isClassroomOverDue($classroom)) {
             return $this->redirect($this->generateUrl('classroom_introductions', array('id' => $id)));
         }
 
