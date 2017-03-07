@@ -18,7 +18,7 @@
 		<input id="data" data-markerid="{{markerId}}"data-type="{{question.type}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" data-show-questionanswer="{{ path('course_lesson_question_marker_answer_show',{markerId:markerId,questionId:question.id}) }}"data-lessonid="{{lessonId}}" hidden="hidden">
 		<div class="row">
 			<div class="col-xs-10 text-right">
-				<div class="pvm text-danger"></div>
+				<div class="pvm color-danger"></div>
 			</div>
 			<div class="col-xs-2">
 				<button id="submitQuestion" class="btn btn-primary btn-lg pull-right">{{'提 交'|trans}}</button>

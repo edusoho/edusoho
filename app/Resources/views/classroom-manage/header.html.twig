@@ -66,7 +66,7 @@
               <p>
                 {% if unsetted|length > 0 %}
                 {% set unsetted = sub_str(unsetted, 1, unsetted|length - 1 )|split(',')  %}
-                <span class="text-danger">
+                <span class="color-danger">
                     {{'%unsetted%还未设置'|trans({'%unsetted%':unsetted|join("，")})}}
                 </span>
                 {% endif %}

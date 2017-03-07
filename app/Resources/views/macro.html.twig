@@ -122,13 +122,13 @@
 
   {% if floorScore > 0 %}
     {% for i in range(1, floorScore) %}
-      <i class="es-icon es-icon-star"></i>
+      <i class="es-icon es-icon-star color-warning"></i>
     {% endfor %}
   {% endif %}
 
   {% if (score - floorScore) >= 0.5 %}
     {% set emptyNum = emptyNum - 1 %}
-    <i class="es-icon es-icon-starhalf"></i>
+    <i class="es-icon es-icon-starhalf color-warning"></i>
   {% endif %}
 
   {% if emptyNum > 0 %}

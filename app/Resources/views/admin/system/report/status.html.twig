@@ -31,7 +31,7 @@
         {% if env.phpVersionOk %}
           <span class="color-success">√ {{ env.phpVersion }}</span>
         {% else %}
-          <span class="text-danger">X {{ env.phpVersion }}</span>
+          <span class="color-danger">X {{ env.phpVersion }}</span>
         {% endif %}
       </td>
       <td>5.3.3</td>
@@ -51,7 +51,7 @@
       <td>{{ '关闭'|trans }}</td>
       <td>
         {% if env.safemode == 'Off' %}
-          <span class="text-danger">X {{ '开启'|trans }}</span>
+          <span class="color-danger">X {{ '开启'|trans }}</span>
         {% else %}
           <span class="color-success">√ {{ '关闭'|trans }}</span>
         {% endif %}
@@ -66,7 +66,7 @@
         {% if env.pdoMysqlOk %}
           <span class="color-success">√ {{ '已安装'|trans }}</span>
         {% else %}
-          <span class="text-danger">X {{ '尚未安装MySQL_PDO'|trans }}</span>
+          <span class="color-danger">X {{ '尚未安装MySQL_PDO'|trans }}</span>
         {% endif %}
       </td>
       <td>{{ '必须'|trans }}</td>
@@ -82,7 +82,7 @@
         {% if env.uploadMaxFilesizeOk %}
           <span class="color-success">√ {{ env.uploadMaxFilesize }}</span>
         {% else %}
-          <span class="text-danger">X {{ env.uploadMaxFilesize }}</span>
+          <span class="color-danger">X {{ env.uploadMaxFilesize }}</span>
         {% endif %}
       </td>
       <td>2M</td>
@@ -98,7 +98,7 @@
         {% if env.postMaxsizeOk %}
           <span class="color-success">√ {{ env.postMaxsize }}</span>
         {% else %}
-          <span class="text-danger">X {{ env.postMaxsize }}</span>
+          <span class="color-danger">X {{ env.postMaxsize }}</span>
         {% endif %}
       </td>
       <td>8M</td>
@@ -114,7 +114,7 @@
         {% if env.maxExecutionTimeOk %}
           <span class="color-success">√ {{ env.maxExecutionTime }}{{ '秒'|trans }}</span>
         {% else %}
-          <span class="text-danger">X {{ env.maxExecutionTime }}{{ '秒'|trans }}</span>
+          <span class="color-danger">X {{ env.maxExecutionTime }}{{ '秒'|trans }}</span>
         {% endif %}
       </td>
       <td>{{ '30秒'|trans }}</td>
@@ -130,7 +130,7 @@
         {% if env.mbstringOk %}
           <span class="color-success">√ {{ '已安装'|trans }}</span>
         {% else %}
-          <span class="text-danger">X {{ '尚未安装'|trans }}</span>
+          <span class="color-danger">X {{ '尚未安装'|trans }}</span>
         {% endif %}
       </td>
       <td>{{ '必须'|trans }}</td>
@@ -146,7 +146,7 @@
         {% if env.curlOk %}
           <span class="color-success">√ {{ '已安装'|trans }}</span>
         {% else %}
-          <span class="text-danger">X {{ '尚未安装'|trans }}</span>
+          <span class="color-danger">X {{ '尚未安装'|trans }}</span>
         {% endif %}
       </td>
       <td>{{ '必须'|trans }}</td>
@@ -162,7 +162,7 @@
         {% if env.gdOk %}
           <span class="color-success">√ {{ '已安装'|trans }}</span>
         {% else %}
-          <span class="text-danger">X {{ '尚未安装'|trans }}</span>
+          <span class="color-danger">X {{ '尚未安装'|trans }}</span>
         {% endif %}
       </td>
       <td>{{ '必须'|trans }}</td>
