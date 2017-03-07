@@ -316,6 +316,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 'title',
             )
         );
+
         $courseSet['status'] = 'draft';
         $courseSet['creator'] = $this->getCurrentUser()->getId();
         $created = $this->getCourseSetDao()->create($courseSet);
