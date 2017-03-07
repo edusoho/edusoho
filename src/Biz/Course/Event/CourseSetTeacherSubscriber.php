@@ -12,63 +12,46 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * 实现业务：将courseset下第一个course的第一个teacher作为courseSet的teacher
  * 当course新增、删除，course的teachers变更（增删）时触发
- * Class CourseSetTeacherSubscriber
- * @package Biz\Course\Event
+ * Class CourseSetTeacherSubscriber.
  */
 class CourseSetTeacherSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return array(
-            'course.create' => 'onCourseCreate',
-            'course.delete' => 'onCourseDelete',
-            'course.teachers.update' => 'onCourseTeachersChange'
+            'course.create' => 'calculateCourseTeacher',
+            'course.delete' => 'calculateCourseTeacher',
+            'course.teachers.update' => 'calculateCourseTeacher',
         );
     }
 
-    public function onCourseCreate(Event $event)
+    public function calculateCourseTeacher(Event $event)
     {
         $course = $event->getSubject();
-
-        $this->calculateCourseTeacher($course);
-    }
-
-    public function onCourseDelete(Event $event)
-    {
-        $course = $event->getSubject();
-        $this->calculateCourseTeacher($course);
-    }
-
-    public function onCourseTeachersChange(Event $event)
-    {
-        $course = $event->getSubject();
-        $this->calculateCourseTeacher($course);
-    }
-
-    private function calculateCourseTeacher($course)
-    {
-        if(empty($course)){
+        if (empty($course)) {
             return;
         }
         $courseSet = $this->getCourseSetService()->getCourseSet($course['id']);
 
         $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
-        usort($courses, function($c1, $c2){
-            if($c1['createdTime'] == $c2['createdTime']){
+        usort($courses, function ($c1, $c2) {
+            if ($c1['createdTime'] == $c2['createdTime']) {
                 return 0;
             }
+
             return $c1['createdTime'] < $c2['createdTime'] ? -1 : 1;
         });
 
         $teachers = $this->getMemberService()->findCourseTeachers($courses[0]['id']);
-        if(empty($teachers)){
+        if (empty($teachers)) {
             return;
         }
 
-        usort($teachers, function($t1, $t2){
-            if($t1['seq'] == $t2['seq']){
+        usort($teachers, function ($t1, $t2) {
+            if ($t1['seq'] == $t2['seq']) {
                 return $t1['createdTime'] < $t2['createdTime'] ? -1 : 1;
             }
+
             return $t1['seq'] < $t2['seq'] ? -1 : 1;
         });
 
@@ -84,6 +67,7 @@ class CourseSetTeacherSubscriber extends EventSubscriber implements EventSubscri
     {
         return $this->getBiz()->service('Course:CourseSetService');
     }
+
     /**
      * @return CourseService
      */
