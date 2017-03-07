@@ -333,8 +333,10 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = "UPDATE `c2_course` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.num  WHERE ce.id = cm.courseId;";
         $result = $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE `c2_course_set` cs, `c2_course` c
-        SET cs.minCoursePrice = c.price, cs.maxCoursePrice = c.price where cs.id = c.id";
+        $sql = "UPDATE `c2_course` c set `publishedTaskNum` = (select count(*) from course_lesson where courseId=c.id)";
+        $result = $this->getConnection()->exec($sql);
+
+        $sql = "UPDATE `c2_course_set` cs, `c2_course` c SET cs.minCoursePrice = c.price, cs.maxCoursePrice = c.price where cs.id = c.id";
         $result = $this->getConnection()->exec($sql);
     }
 
