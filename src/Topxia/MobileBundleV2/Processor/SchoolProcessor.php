@@ -1,45 +1,56 @@
 <?php
+
 namespace Topxia\MobileBundleV2\Processor;
 
 interface SchoolProcessor
 {
-	public function getSchoolSite();
-	public function getSchoolSiteByQrCode();
-	public function getSchoolBanner();
-	public function getSchoolAnnouncement();
-	public function getRecommendCourses();
-	public function getLiveRecommendCourses();
-	public function getHotCourses();
+    public function getSchoolSite();
 
-	public function getLatestCourses();
-	public function getLiveLatestCourses();
-	public function getWeekRecommendCourses();
-	public function getUserterms();
-	public function getSchoolInfo();
+    public function getSchoolSiteByQrCode();
 
-	public function getSchoolProfile();
+    public function getSchoolBanner();
 
-	public function sendSuggestion();
+    public function getSchoolAnnouncement();
 
-	public function getShradCourseUrl();
+    public function getRecommendCourses();
 
-	public function getClientVersion();
+    public function getLiveRecommendCourses();
 
-	public function getDownloadUrl();
+    public function getHotCourses();
 
-	public function getFlashApk();
+    public function getLatestCourses();
 
-	public function registDevice();
+    public function getLiveLatestCourses();
 
-	public function suggestionLog();
+    public function getWeekRecommendCourses();
 
-	public function loginSchoolWithSite();
+    public function getUserterms();
 
-	public function getSchoolApps();
+    public function getSchoolInfo();
 
-	public function getSchoolPlugins();
+    public function getSchoolProfile();
 
-	public function getSchoolVipList();
+    public function sendSuggestion();
 
-	public function getVipPayInfo();
+    public function getShradCourseUrl();
+
+    public function getClientVersion();
+
+    public function getDownloadUrl();
+
+    public function getFlashApk();
+
+    public function registDevice();
+
+    public function suggestionLog();
+
+    public function loginSchoolWithSite();
+
+    public function getSchoolApps();
+
+    public function getSchoolPlugins();
+
+    public function getSchoolVipList();
+
+    public function getVipPayInfo();
 }

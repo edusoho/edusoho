@@ -26,14 +26,14 @@ class MobileOrderController extends MobileBaseController
         }
 
         return $this->forward('TopxiaWebBundle:PayCenter:submitPayRequest', array(
-            'order' => $order
+            'order' => $order,
         ));
     }
 
     public function refundCourseAction(Request $request, $courseId)
     {
         $this->getUserToken($request);
-        $user                  = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
         if (empty($member) || empty($member['orderId'])) {
@@ -46,7 +46,7 @@ class MobileOrderController extends MobileBaseController
             return $this->createErrorResponse($request, 'order_error', '订单不存在，不能退学。');
         }
 
-        $data   = $request->query->all();
+        $data = $request->query->all();
         $reason = empty($data['reason']) ? array() : $data['reason'];
         $amount = empty($data['applyRefund']) ? 0 : null;
 
