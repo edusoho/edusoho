@@ -12,9 +12,6 @@ class DownloadActivityAddFileIds extends Migration
         $biz = $this->getContainer();
         $db = $biz['db'];
         $db->exec("
-            DROP TABLE IF EXISTS `download_file`;
-            DROP  TABLE IF EXISTS `download_file_record`;
-            ALTER TABLE  `download_activity` ADD  COLUMN    `fileIds` varchar(1024) DEFAULT NULL COMMENT '下载资料Ids';
             CREATE TABLE `download_file_record` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
               `downloadActivityId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料所属活动ID',

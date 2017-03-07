@@ -17,7 +17,7 @@
                {% elseif cardDetail.targetType == "vip" %}href="{{ path('vip') }}"
                {% elseif cardDetail.targetType == "classroom" and cardDetail.targetId == 0 %}href="{{ path('classroom_explore') }}"
                {% elseif cardDetail.targetType == "classroom" and cardDetail.targetId != 0 %}href="{{ path('classroom_show',{ id : cardDetail.targetId }) }}"
-               {% else %}href="{{ path('course_explore') }}"
+               {% else %}href="{{ path('course_set_explore') }}"
                 {% endif %}
             >立即使用</a>
           </div>

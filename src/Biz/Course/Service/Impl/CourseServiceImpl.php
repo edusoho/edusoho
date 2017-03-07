@@ -102,7 +102,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode', 'learnMode'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
-
         if (!in_array($course['learnMode'], array('freeMode', 'lockMode'))) {
             throw $this->createInvalidArgumentException('Param Invalid: LearnMode');
         }
