@@ -5,6 +5,7 @@ namespace Biz\Course\Dao\Impl;
 use Biz\Course\Dao\CourseMemberDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 use Codeages\Biz\Framework\Dao\DynamicQueryBuilder;
+use Biz\Course\Dao\CourseDao;
 
 class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 {
@@ -228,6 +229,86 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         $sql = "SELECT count(id) FROM course_thread_post WHERE userId = ? and threadId IN (SELECT id FROM course_thread WHERE courseId = ? AND type='discussion')";
 
         return $this->db()->fetchColumn($sql, array($userId, $courseId));
+    }
+
+    public function countMemberNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned)
+    {
+        $sql = "SELECT COUNT( m.courseId ) FROM {$this->getTable()} m ";
+        $sql .= " JOIN  ".CourseDao::TABLENAME." AS c ON m.userId = ? ";
+        $sql .= " AND m.role = ? AND c.type =  ? AND m.isLearned = ? AND m.courseId = c.id  AND c.parentId = 0";
+        return $this->db()->fetchColumn($sql, array($userId, $role, $type, $isLearned));
+    }
+
+    public function countMemberNotInClassroomByUserIdAndRoleAndIsLearned($userId, $role, $isLearned)
+    {
+        $sql = "SELECT COUNT( m.courseId ) FROM {$this->getTable()} m ";
+        $sql .= " JOIN  ".CourseDao::TABLENAME." AS c ON m.userId = ? ";
+        $sql .= " AND m.role = ? AND m.isLearned = ? AND m.courseId = c.id  AND c.parentId = 0";
+        return $this->db()->fetchColumn($sql, array($userId, $role, $isLearned));
+    }
+
+    public function countMemberNotInClassroomByUserIdAndRole($userId, $role, $onlyPublished = true)
+    {
+        $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
+        $sql .= " JOIN  ".CourseDao::TABLENAME." AS c ON m.userId = ? ";
+        $sql .= " AND m.role =  ? AND m.courseId = c.id AND c.parentId = 0";
+
+        if ($onlyPublished) {
+            $sql .= " AND c.status = 'published' ";
+        }
+        return $this->db()->fetchColumn($sql, array($userId, $role));
+    }
+
+    public function findMembersNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT m.* FROM {$this->table} m";
+        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? ';
+        $sql .= "AND m.role = ? AND c.type = ?  AND m.isLearned = ? AND m.courseId = c.id AND c.parentId = 0";
+        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        return $this->db()->fetchAll($sql, array($userId, $role, $type, $isLearned));
+    }
+
+    public function findMembersNotInClassroomByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT m.* FROM {$this->table} m ";
+        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? ';
+        $sql .= "AND m.role =  ? AND m.isLearned = ? AND m.courseId = c.id AND c.parentId = 0";
+
+        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
+        return $this->db()->fetchAll($sql, array($userId, $role, $isLearned));
+    }
+
+    public function countMemberByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned)
+    {
+        $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
+        $sql .= " JOIN  ".CourseDao::TABLENAME." AS c ON m.userId = ? ";
+        $sql .= " AND c.type =  ? AND m.courseId = c.id  AND m.isLearned = ? AND m.role = ?";
+
+        return $this->db()->fetchColumn($sql, array($userId, $type, $isLearned, $role));
+    }
+
+    public function countMemberByUserIdAndRoleAndIsLearned($userId, $role, $isLearned)
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  userId = ? AND role = ? AND isLearned = ?";
+        return $this->db()->fetchColumn($sql, array($userId, $role, $isLearned));
+    }
+
+    public function findMembersNotInClassroomByUserIdAndRoleAndType($userId, $role, $type, $start, $limit, $onlyPublished = true)
+    {
+        $sql = "SELECT m.* FROM {$this->table} m ";
+        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? ';
+        $sql .= " AND m.role =  ? AND c.type = ? AND m.courseId = c.id AND c.parentId = 0";
+
+        if ($onlyPublished) {
+            $sql .= " AND c.status = 'published' ";
+        }
+
+        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
+        return $this->db()->fetchAll($sql, array($userId, $role, $type));
     }
 
     protected function _buildJoinQueryBuilder($conditions, $joinConnections = '')

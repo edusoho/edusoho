@@ -2,6 +2,7 @@
 
 namespace Topxia\Api\Resource;
 
+use Biz\Course\Service\Impl\CourseServiceImpl;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -15,10 +16,10 @@ class MeCourses extends BaseResource
         $type       = $request->query->get('type', '');
         $relation   = $request->query->get('relation', '');
         $user       = getCurrentUser();
-
         if ($relation == 'learning') {
-            $total   = $this->getCourseService()->findUserLeaningCourseCount($user['id'], $conditions);
-            $courses = $this->getCourseService()->findUserLeaningCourses(
+
+            $total   = $this->getCourseService()->findUserLearningCourseCountNotInClassroom($user['id'], $conditions);
+            $courses = $this->getCourseService()->findUserLearningCoursesNotInClassroom(
                 $user['id'],
                 $start,
                 $limit,
@@ -26,32 +27,41 @@ class MeCourses extends BaseResource
             );
         } elseif ($relation == 'learned') {
             $total   = $this->getCourseService()->findUserLeanedCourseCount($user['id'], $conditions);
-            $courses = $this->getCourseService()->findUserLeanedCourses(
+            $courses = $this->getCourseService()->findUserLearnedCoursesNotInClassroom(
                 $user['id'],
                 $start,
                 $limit,
                 empty($type) ? array() : array('type' => $type)
             );
         } elseif ($relation == 'learn') {
-            $total              = $this->getCourseService()->findUserLearnCourseCount($user['id'], true);
-            $coursesAfterColumn = $this->getCourseService()->findUserLearnCourses(
-                $user['id'],
-                $start,
-                $limit,
-                empty($type) ? array() : array('type' => $type)
-            );
+            $total              = $this->getCourseService()->findUserLearnCourseCountNotInClassroom($user['id'], true);
+            if (empty($type)) {
+                $coursesAfterColumn = $this->getCourseService()->findUserLearnCoursesNotInClassroom(
+                    $user['id'],
+                    $start,
+                    $limit
+                );
+            } else {
+                $coursesAfterColumn = $this->getCourseService()->findUserLearnCoursesNotInClassroomWithType(
+                    $user['id'],
+                    $type,
+                    $start,
+                    $limit
+                );
+            }
+
             $courses = array_values($coursesAfterColumn);
         } elseif ($relation == 'teaching') {
-            $total   = $this->getCourseService()->findUserTeachCourseCount(array('userId' => $user['id']), false);
-            $courses = $this->getCourseService()->findUserTeachCourses(
+            $total   = $this->getCourseService()->findUserTeachCourseCountNotInClassroom(array('userId' => $user['id']), false);
+            $courses = $this->getCourseService()->findUserTeachCoursesNotInClassroom(
                 array('userId' => $user['id']),
                 $start,
                 $limit,
                 false
             );
         } elseif ($relation == 'favorited') {
-            $total   = $this->getCourseService()->findUserFavoritedCourseCount($user['id']);
-            $courses = $this->getCourseService()->findUserFavoritedCourses(
+            $total   = $this->getCourseService()->findUserFavoritedCourseCountNotInClassroom($user['id']);
+            $courses = $this->getCourseService()->findUserFavoritedCoursesNotInClassroom(
                 $user['id'],
                 $start,
                 $limit
@@ -88,11 +98,14 @@ class MeCourses extends BaseResource
 
     protected function getConversationService()
     {
-        return $this->getServiceKernel()->createService('IM:ConversationService');
+        return $this->createService('IM.ConversationService');
     }
 
+    /**
+     * @return CourseServiceImpl
+     */
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course.CourseService');
     }
 }
