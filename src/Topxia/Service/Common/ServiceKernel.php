@@ -1,4 +1,5 @@
 <?php
+
 namespace Topxia\Service\Common;
 
 use Biz\User\CurrentUser;
@@ -45,7 +46,7 @@ class ServiceKernel
     public function getRedis($group = 'default')
     {
         $redisFactory = RedisFactory::instance($this);
-        $redis        = $redisFactory->getRedis($group);
+        $redis = $redisFactory->getRedis($group);
 
         if ($redis) {
             return $redis;
@@ -60,9 +61,9 @@ class ServiceKernel
             return self::$_instance;
         }
 
-        $instance              = new self();
+        $instance = new self();
         $instance->environment = $environment;
-        $instance->debug       = (Boolean) $debug;
+        $instance->debug = (bool) $debug;
         $instance->registerModuleDirectory(realpath(__DIR__.'/../../../'));
 
         self::$_instance = $instance;
@@ -80,6 +81,7 @@ class ServiceKernel
         }
 
         self::$_instance->boot();
+
         return self::$_instance;
     }
 
@@ -153,6 +155,7 @@ class ServiceKernel
     public function setParameterBag($parameterBag)
     {
         $this->parameterBag = $parameterBag;
+
         return $this;
     }
 
@@ -168,6 +171,7 @@ class ServiceKernel
     public function setTranslator($translator)
     {
         $this->translator = $translator;
+
         return $this;
     }
 
@@ -183,6 +187,7 @@ class ServiceKernel
     public function setTranslatorEnabled($boolean = true)
     {
         $this->translatorEnabled = $boolean;
+
         return $this;
     }
 
@@ -202,8 +207,9 @@ class ServiceKernel
 
     public function setCurrentUser($currentUser)
     {
-        $biz         = $this->getBiz();
+        $biz = $this->getBiz();
         $biz['user'] = $currentUser;
+
         return $this;
     }
 
@@ -223,6 +229,7 @@ class ServiceKernel
     public function setEnvVariable(array $env)
     {
         $this->env = $env;
+
         return $this;
     }
 
@@ -267,7 +274,7 @@ class ServiceKernel
     {
         if (empty($this->pool[$name])) {
             $class = $this->getClassName('dao', $name);
-            $dao   = new $class();
+            $dao = new $class();
             $dao->setConnection($this->getConnection());
             $dao->setRedis($this->getRedis());
             $this->pool[$name] = $dao;
@@ -289,6 +296,7 @@ class ServiceKernel
     public function registerModuleDirectory($dir)
     {
         $this->_moduleDirectories[] = $dir;
+
         return $this;
     }
 
@@ -311,6 +319,7 @@ class ServiceKernel
         foreach ($messages as &$message) {
             $message = $this->trans($message, $arguments, $domain, $locale);
         }
+
         return $messages;
     }
 
@@ -319,6 +328,7 @@ class ServiceKernel
         if ($this->getTranslatorEnabled()) {
             return $this->getTranslator()->trans($message, $arguments, $domain, $locale);
         }
+
         return strtr((string) $message, $arguments);
     }
 
@@ -335,7 +345,7 @@ class ServiceKernel
 
     protected function getServiceClassName($type, $name)
     {
-        $type                   = strtolower($type);
+        $type = strtolower($type);
         list($namespace, $name) = explode(':', $name, 2);
 
         if (strpos($name, '.') > 0) {
@@ -361,6 +371,7 @@ class ServiceKernel
     public function setBiz(Biz $biz)
     {
         $this->biz = $biz;
+
         return $this;
     }
 
@@ -369,6 +380,7 @@ class ServiceKernel
         if (!$this->biz) {
             throw new \RuntimeException('The `Biz Container` of ServiceKernel is not setted!');
         }
+
         return $this->biz;
     }
 

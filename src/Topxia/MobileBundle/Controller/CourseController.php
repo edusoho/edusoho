@@ -10,9 +10,9 @@ class CourseController extends MobileController
 {
     public function coursesAction(Request $request)
     {
-        $conditions           = $request->query->all();
+        $conditions = $request->query->all();
         $conditions['status'] = 'published';
-        $conditions['type']   = 'normal';
+        $conditions['type'] = 'normal';
 
         $search = $request->query->get('search', '');
 
@@ -20,12 +20,12 @@ class CourseController extends MobileController
             $conditions['title'] = $search;
         }
 
-        $result          = array();
+        $result = array();
         $result['total'] = $this->getCourseService()->searchCourseCount($conditions);
         $result['start'] = (int) $request->query->get('start', 0);
         $result['limit'] = (int) $request->query->get('limit', 10);
 
-        $sort    = $request->query->get('sort', 'latest');
+        $sort = $request->query->get('sort', 'latest');
         $courses = $this->getCourseService()->searchCourses($conditions, $sort, $result['start'], $result['limit']);
 
         $result['data'] = $courses = $this->filterCourses($courses);
@@ -40,11 +40,12 @@ class CourseController extends MobileController
     public function courseAction(Request $request, $courseId)
     {
         $this->getUserToken($request);
-        $user   = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
             $error = array('error' => 'not_found', 'message' => "课程#{$courseId}不存在。");
+
             return $this->createJson($request, $error);
         }
 
@@ -52,19 +53,19 @@ class CourseController extends MobileController
             $error = array('error' => 'course_not_published', 'message' => "课程#{$courseId}未发布或已关闭。");
         }
 
-        $items         = $this->getCourseService()->getCourseItems($courseId);
-        $reviews       = $this->getReviewService()->findCourseReviews($courseId, 0, 100);
+        $items = $this->getCourseService()->getCourseItems($courseId);
+        $reviews = $this->getReviewService()->findCourseReviews($courseId, 0, 100);
         $learnStatuses = $user->isLogin() ? $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']) : array();
-        $member        = $user->isLogin() ? $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']) : null;
+        $member = $user->isLogin() ? $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']) : null;
 
         if ($member) {
             $member['createdTime'] = date('c', $member['createdTime']);
         }
 
-        $result                  = array();
-        $result['course']        = $this->filterCourse($course);
-        $result['reviews']       = $this->filterReviews($reviews);
-        $result['member']        = $member;
+        $result = array();
+        $result['course'] = $this->filterCourse($course);
+        $result['reviews'] = $this->filterReviews($reviews);
+        $result['member'] = $member;
         $result['userIsStudent'] = $user->isLogin() ? $this->getCourseMemberService()->isCourseStudent($courseId, $user['id']) : false;
 
         if (!$result['userIsStudent']) {
@@ -72,7 +73,7 @@ class CourseController extends MobileController
         }
 
         $result['userLearns'] = $learnStatuses;
-        $result['items']      = $this->filterItems($items);
+        $result['items'] = $this->filterItems($items);
 
         foreach ($result['userLearns'] as $lessonId => $status) {
             if (empty($result['items']['lesson-'.$lessonId])) {
@@ -87,9 +88,9 @@ class CourseController extends MobileController
         $result['userFavorited'] = $user->isLogin() ? $this->getCourseService()->hasFavoritedCourse($courseId) : false;
 
         if ($course) {
-            $this->getLogService()->info(MobileController::MOBILE_MODULE, "view_course", "浏览课程", array(
-                "courseId" => $course["id"],
-                "title"    => $course["title"]
+            $this->getLogService()->info(MobileController::MOBILE_MODULE, 'view_course', '浏览课程', array(
+                'courseId' => $course['id'],
+                'title' => $course['title'],
             )
             );
         }
@@ -101,13 +102,14 @@ class CourseController extends MobileController
     {
         $items = $this->getCourseService()->getCourseItems($courseId);
         $items = $this->filterItems($items);
+
         return $this->createJson($request, $items);
     }
 
     public function lessonAction(Request $request, $courseId, $lessonId)
     {
         $token = $this->getUserToken($request);
-        $user  = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
             return $this->createErrorResponse($request, 'not_login', '您尚未登录，不能查看课时！');
@@ -116,27 +118,27 @@ class CourseController extends MobileController
         $course = $this->getCourseService()->getCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
-        $json           = array();
+        $json = array();
         $json['number'] = $lesson['number'];
 
         $chapter = empty($lesson['chapterId']) ? null : $this->getCourseService()->getChapter($course['id'], $lesson['chapterId']);
 
         if ($chapter['type'] == 'unit') {
-            $unit               = $chapter;
+            $unit = $chapter;
             $json['unitNumber'] = $unit['number'];
 
-            $chapter               = $this->getCourseService()->getChapter($course['id'], $unit['parentId']);
+            $chapter = $this->getCourseService()->getChapter($course['id'], $unit['parentId']);
             $json['chapterNumber'] = empty($chapter) ? 0 : $chapter['number'];
         } else {
             $json['chapterNumber'] = empty($chapter) ? 0 : $chapter['number'];
-            $json['unitNumber']    = 0;
+            $json['unitNumber'] = 0;
         }
 
-        $json['title']   = $lesson['title'];
+        $json['title'] = $lesson['title'];
         $json['summary'] = $lesson['summary'];
-        $json['type']    = $lesson['type'];
+        $json['type'] = $lesson['type'];
         $json['content'] = $this->convertAbsoluteUrl($this->container->get('request'), $lesson['content']);
-        $json['status']  = $lesson['status'];
+        $json['status'] = $lesson['status'];
 
         if ($lesson['length'] > 0 && in_array($lesson['type'], array('audio', 'video'))) {
             $json['length'] = $this->container->get('web.twig.extension')->durationFilter($lesson['length']);
@@ -144,9 +146,9 @@ class CourseController extends MobileController
             $json['length'] = 0;
         }
 
-        $json['quizNum']     = $lesson['quizNum'];
+        $json['quizNum'] = $lesson['quizNum'];
         $json['materialNum'] = $lesson['materialNum'];
-        $json['mediaId']     = $lesson['mediaId'];
+        $json['mediaId'] = $lesson['mediaId'];
         $json['mediaSource'] = $lesson['mediaSource'];
 
         if ($json['mediaSource'] == 'self') {
@@ -155,19 +157,19 @@ class CourseController extends MobileController
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
                     $factory = new CloudClientFactory();
-                    $client  = $factory->createClient();
+                    $client = $factory->createClient();
 
                     $json['mediaConvertStatus'] = $file['convertStatus'];
 
                     if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
                             $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $file['id'], 'times' => 2, 'duration' => 3600));
-                            $url   = array(
+                            $url = array(
                                 'url' => $this->generateUrl('hls_playlist', array(
-                                    'id'    => $file['id'],
+                                    'id' => $file['id'],
                                     'token' => $token['token'],
-                                    'line'  => $request->query->get('line')
-                                ), true)
+                                    'line' => $request->query->get('line'),
+                                ), true),
                             );
                         } else {
                             $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
@@ -186,7 +188,7 @@ class CourseController extends MobileController
                         }
 
                         if ($key) {
-                            $url              = $client->generateFileUrl($key, 3600);
+                            $url = $client->generateFileUrl($key, 3600);
                             $json['mediaUri'] = $url['url'];
                         } else {
                             $json['mediaUri'] = '';
@@ -219,6 +221,7 @@ class CourseController extends MobileController
         }
 
         $this->getCourseService()->startLearnLesson($courseId, $lessonId);
+
         return $this->createJson($request, $json);
     }
 
@@ -228,7 +231,7 @@ class CourseController extends MobileController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能查看课时！");
+            return $this->createErrorResponse($request, 'not_login', '您尚未登录，不能查看课时！');
         }
 
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
@@ -245,7 +248,7 @@ class CourseController extends MobileController
     }
 
     /**
-     * 收藏课程
+     * 收藏课程.
      */
     public function favoriteAction(Request $request, $courseId)
     {
@@ -253,7 +256,7 @@ class CourseController extends MobileController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能收藏课程！");
+            return $this->createErrorResponse($request, 'not_login', '您尚未登录，不能收藏课程！');
         }
 
         if (!$this->getCourseService()->hasFavoritedCourse($courseId)) {
@@ -264,7 +267,7 @@ class CourseController extends MobileController
     }
 
     /**
-     * 取消收藏课程
+     * 取消收藏课程.
      */
     public function unfavoriteAction(Request $request, $courseId)
     {
@@ -272,11 +275,11 @@ class CourseController extends MobileController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能收藏课程！");
+            return $this->createErrorResponse($request, 'not_login', '您尚未登录，不能收藏课程！');
         }
 
         if (!$this->getCourseService()->hasFavoritedCourse($courseId)) {
-            return $this->createErrorResponse($request, 'runtime_error', "您尚未收藏课程，不能取消收藏！");
+            return $this->createErrorResponse($request, 'runtime_error', '您尚未收藏课程，不能取消收藏！');
         }
 
         $this->getCourseService()->unfavoriteCourse($courseId);
@@ -306,7 +309,7 @@ class CourseController extends MobileController
     }
 
     /**
-     * 获得当前用户收藏的课程
+     * 获得当前用户收藏的课程.
      */
     public function meFavoritesAction(Request $request)
     {
@@ -314,22 +317,22 @@ class CourseController extends MobileController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能收藏课程！");
+            return $this->createErrorResponse($request, 'not_login', '您尚未登录，不能收藏课程！');
         }
 
-        $result          = array();
+        $result = array();
         $result['total'] = $this->getCourseService()->findUserFavoritedCourseCount($user['id']);
         $result['start'] = (int) $request->query->get('start', 0);
         $result['limit'] = (int) $request->query->get('limit', 10);
 
-        $courses        = $this->getCourseService()->findUserFavoritedCourses($user['id'], $result['start'], $result['limit']);
+        $courses = $this->getCourseService()->findUserFavoritedCourses($user['id'], $result['start'], $result['limit']);
         $result['data'] = $this->filterCourses($courses);
 
         return $this->createJson($request, $result);
     }
 
     /**
-     * 获得当前用户正在学和已学完课程
+     * 获得当前用户正在学和已学完课程.
      */
     public function meLearningsAction(Request $request)
     {
@@ -337,15 +340,15 @@ class CourseController extends MobileController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse($request, 'not_login', "您尚未登录！");
+            return $this->createErrorResponse($request, 'not_login', '您尚未登录！');
         }
 
-        $result          = array();
+        $result = array();
         $result['total'] = $this->getCourseService()->countUserLearningCourses($user['id']);
         $result['start'] = (int) $request->query->get('start', 0);
         $result['limit'] = (int) $request->query->get('limit', 10);
-        $courses         = $this->getCourseService()->findUserLearningCourses($user['id'], $result['start'], $result['limit']);
-        $result['data']  = $this->array2Map($this->filterCourses($courses));
+        $courses = $this->getCourseService()->findUserLearningCourses($user['id'], $result['start'], $result['limit']);
+        $result['data'] = $this->array2Map($this->filterCourses($courses));
 
         return $this->createJson($request, $result);
     }
@@ -366,7 +369,7 @@ class CourseController extends MobileController
     }
 
     /**
-     * 获得当前用户已学过的课程
+     * 获得当前用户已学过的课程.
      */
     public function meLearnedsAction(Request $request)
     {
@@ -374,15 +377,15 @@ class CourseController extends MobileController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse($request, 'not_login', "您尚未登录！");
+            return $this->createErrorResponse($request, 'not_login', '您尚未登录！');
         }
 
-        $result          = array();
+        $result = array();
         $result['total'] = $this->getCourseService()->countUserLearnedCourses($user['id']);
         $result['start'] = (int) $request->query->get('start', 0);
         $result['limit'] = (int) $request->query->get('limit', 10);
-        $courses         = $this->getCourseService()->findUserLearnedCourses($user['id'], $result['start'], $result['limit']);
-        $result['data']  = $this->array2Map($this->filterCourses($courses));
+        $courses = $this->getCourseService()->findUserLearnedCourses($user['id'], $result['start'], $result['limit']);
+        $result['data'] = $this->array2Map($this->filterCourses($courses));
 
         return $this->createJson($request, $result);
     }
@@ -393,7 +396,7 @@ class CourseController extends MobileController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse($request, 'not_login', "您尚未登录！");
+            return $this->createErrorResponse($request, 'not_login', '您尚未登录！');
         }
 
         $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
@@ -407,7 +410,7 @@ class CourseController extends MobileController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse($request, 'not_login', "您尚未登录！");
+            return $this->createErrorResponse($request, 'not_login', '您尚未登录！');
         }
 
         $this->getCourseService()->cancelLearnLesson($courseId, $lessonId);
@@ -421,7 +424,7 @@ class CourseController extends MobileController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse($request, 'not_login', "您尚未登录！");
+            return $this->createErrorResponse($request, 'not_login', '您尚未登录！');
         }
 
         $status = $this->getCourseService()->getUserLearnLessonStatus($user['id'], $courseId, $lessonId);
@@ -455,13 +458,14 @@ class CourseController extends MobileController
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);
         $teachers = $this->simplifyUsers($teachers);
 
-        $self      = $this;
+        $self = $this;
         $container = $this->container;
+
         return array_map(function ($course) use ($self, $container, $teachers) {
-            $course['smallPicture']  = $container->get('web.twig.extension')->getFilePath($course['smallPicture'], 'course-large.png', true);
+            $course['smallPicture'] = $container->get('web.twig.extension')->getFilePath($course['smallPicture'], 'course-large.png', true);
             $course['middlePicture'] = $container->get('web.twig.extension')->getFilePath($course['middlePicture'], 'course-large.png', true);
-            $course['largePicture']  = $container->get('web.twig.extension')->getFilePath($course['largePicture'], 'course-large.png', true);
-            $course['about']         = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
+            $course['largePicture'] = $container->get('web.twig.extension')->getFilePath($course['largePicture'], 'course-large.png', true);
+            $course['about'] = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
 
             $course['teachers'] = array();
 
@@ -481,7 +485,7 @@ class CourseController extends MobileController
             return array();
         }
 
-        $self      = $this;
+        $self = $this;
         $container = $this->container;
 
         return array_map(function ($item) use ($self, $container) {
@@ -494,7 +498,7 @@ class CourseController extends MobileController
             }
 
             if (empty($item['content'])) {
-                $item['content'] = "";
+                $item['content'] = '';
             }
 
             $item['content'] = $self->convertAbsoluteUrl($container->get('request'), $item['content']);
@@ -506,7 +510,7 @@ class CourseController extends MobileController
     public function convertAbsoluteUrl($request, $html)
     {
         $baseUrl = $request->getSchemeAndHttpHost();
-        $html    = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function ($matches) use ($baseUrl) {
+        $html = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function ($matches) use ($baseUrl) {
             return "src=\"{$baseUrl}/{$matches[1]}\"";
         }, $html);
 

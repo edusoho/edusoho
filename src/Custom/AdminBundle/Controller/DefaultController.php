@@ -2,7 +2,6 @@
 
 namespace Custom\AdminBundle\Controller;
 
-
 use AppBundle\Controller\Admin\DefaultController as BaseDefaultController;
 
 class DefaultController extends BaseDefaultController
