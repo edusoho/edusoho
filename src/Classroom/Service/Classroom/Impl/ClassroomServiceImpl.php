@@ -62,7 +62,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroom($classroomIds[0]);
     }
 
-
     public function findClassroomByCourseId($courseId)
     {
         return $this->getClassroomCourseDao()->findClassroomByCourseId($courseId);
@@ -1501,6 +1500,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function updateMemberDeadline($id, $deadline)
     {
+        $member = $this->getClassroomMemberDao()->updateMember($id, $deadline);
+
+        $this->dispatchEvent('classroom.member.update', new ServiceEvent(array(
+            'classroomId' => $member['classroomId'],
+            'deadline'    => $deadline['deadline']
+        )));
+
         return $this->getClassroomMemberDao()->updateMember($id, $deadline);
     }
 

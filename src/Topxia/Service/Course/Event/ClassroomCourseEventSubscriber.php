@@ -13,7 +13,8 @@ class ClassroomCourseEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'classroom.update' => 'onClassroomUpdate',
+            'classroom.update'        => 'onClassroomUpdate',
+            'classroom.member.update' => 'onClassroomMemberUpdate'
         );
     }
 
@@ -40,6 +41,15 @@ class ClassroomCourseEventSubscriber implements EventSubscriberInterface
             $this->getConnection()->rollBack();
             throw $e;
         }
+    }
+
+    public function onClassroomMemberUpdate(ServiceEvent $event)
+    {
+        $arguments   = $event->getSubject();
+        $classroomId = $arguments['classroomId'];
+        $deadline    = $arguments['deadline'];
+
+        $this->getCourseService()->updateMembersDeadlineByClassroomId($classroomId, $deadline);
     }
 
     protected function canUpdateCourses($classroom, $expiryMode)

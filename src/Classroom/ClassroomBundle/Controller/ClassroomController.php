@@ -230,10 +230,10 @@ class ClassroomController extends BaseController
                 return;
             }
 
-            $deadline = ClassroomToolkit::buildMemberDeadline(array(
-                'expiryMode'  => $classroom['expiryMode'],
-                'expiryValue' => $classroom['expiryValue']
-            ));
+            $deadline = $classroom['expiryValue'];
+            if ($classroom['expiryMode'] == 'days') {
+                $deadline = time() + 24 * 60 * 60;
+            }
 
             $member = array(
                 'id'          => 0,
@@ -514,6 +514,11 @@ class ClassroomController extends BaseController
 
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
+        }
+
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        if (ClassroomToolkit::isClassroomOverDue($classroom)) {
+            return $this->redirect($this->generateUrl('classroom_introductions', array('id' => $id)));
         }
 
         $this->getClassroomService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));

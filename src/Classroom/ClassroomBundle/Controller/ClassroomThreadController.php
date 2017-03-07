@@ -4,6 +4,7 @@ namespace Classroom\ClassroomBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
+use Topxia\Common\ClassroomToolkit;
 
 class ClassroomThreadController extends BaseController
 {
@@ -54,6 +55,10 @@ class ClassroomThreadController extends BaseController
         }
 
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
+
+        if (ClassroomToolkit::isClassroomOverDue($classroom) && !ClassroomToolkit::hasAdminOrHeadTeacherRole($user, array('classroom' => $classroom))) {
+            return $this->redirect($this->generateUrl('classroom_threads', array('classroomId' => $classroomId)));
+        }
 
         if ($type == 'event' && !$this->getClassroomService()->canCreateThreadEvent(array('targetId' => $classroomId))) {
             throw $this->createAccessDeniedException($this->trans('无权限创建活动!'));

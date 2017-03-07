@@ -5,7 +5,6 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
-use Topxia\Common\ClassroomToolkit;
 
 class CourseController extends BaseController
 {
@@ -156,10 +155,10 @@ class CourseController extends BaseController
                 return;
             }
 
-            $deadline = ClassroomToolkit::buildMemberDeadline(array(
-                'expiryMode'  => $classroom['expiryMode'],
-                'expiryValue' => $classroom['expiryValue']
-            ));
+            $deadline = $classroom['expiryValue'];
+            if ($classroom['expiryMode'] == 'days') {
+                $deadline = time() + 24 * 60 * 60;
+            }
 
             $member = array(
                 'id'          => 0,

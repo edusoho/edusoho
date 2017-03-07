@@ -3,6 +3,7 @@ namespace Classroom\ClassroomBundle\Controller\Course;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
+use Topxia\Common\ClassroomToolkit;
 
 class LessonController extends BaseController
 {
@@ -27,6 +28,12 @@ class LessonController extends BaseController
                 'courseId' => $courseId,
                 'lessonId' => $lessonId
             ));
+        }
+
+        if (ClassroomToolkit::isClassroomOverdue($classroom)) {
+            return $this->redirect($this->generateUrl('classroom_courses', array(
+                'classroomId' => $classroomId
+            )));
         }
 
         return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course["id"])));
