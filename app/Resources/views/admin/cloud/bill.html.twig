@@ -32,7 +32,7 @@
         {{ bill.transferFee }}{{'元'|trans}}
         <br><small class="text-muted">({{'单价：'|trans}}{{ bill.transferPrice }}{{'元'|trans}}/G)</small>
       </td>
-      <td><strong class="color-success">{{ bill.totalFee }}{{'元'|trans}}</strong></td>
+      <td><strong class="text-success">{{ bill.totalFee }}{{'元'|trans}}</strong></td>
     </tr>
     {% else %}
       <tr><td colspan="20"><div class="empty">{{'暂无账单记录'|trans}}</div></td></tr>

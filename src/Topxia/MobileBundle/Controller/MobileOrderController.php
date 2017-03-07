@@ -3,14 +3,11 @@
 namespace Topxia\MobileBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Controller\BaseController;
-use AppBundle\Common\ArrayToolkit;
 use Topxia\MobileBundle\Alipay\MobileAlipayConfig;
 use Symfony\Component\HttpFoundation\Response;
 
 class MobileOrderController extends MobileController
 {
-
     public function payCourseAction(Request $request, $courseId)
     {
         $formData = $request->query->all();
@@ -44,9 +41,8 @@ class MobileOrderController extends MobileController
             if (empty($payment['alipay_type']) || $payment['alipay_type'] != 'direct') {
                 $result = array('status' => 'ok', 'paid' => false, 'payUrl' => $this->generateUrl('mapi_order_submit_pay_request', array('id' => $order['id'], 'token' => $token['token']), true));
             } else {
-                $result = array('status' => 'ok', 'paid' => false, 'payUrl' => MobileAlipayConfig::createAlipayOrderUrl($request, "edusoho", $order));
+                $result = array('status' => 'ok', 'paid' => false, 'payUrl' => MobileAlipayConfig::createAlipayOrderUrl($request, 'edusoho', $order));
             }
-
         }
 
         return $this->createJson($request, $result);
@@ -75,7 +71,7 @@ class MobileOrderController extends MobileController
             'notifyUrl' => $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
             'showUrl' => $this->generateUrl('pay_success_show', array('id' => $order['targetId']), true),
         );
-        
+
         return $this->forward('TopxiaWebBundle:Order:submitPayRequest', array(
             'order' => $order,
             'requestParams' => $payRequestParams,
@@ -87,7 +83,7 @@ class MobileOrderController extends MobileController
         $this->getUserToken($request);
         $user = $this->getCurrentUser();
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-        
+
         if (empty($member) || empty($member['orderId'])) {
             return $this->createErrorResponse($request, 'not_member', '您不是课程的学员或尚未购买该课程，不能退学。');
         }
@@ -116,7 +112,7 @@ class MobileOrderController extends MobileController
         return $this->getServiceKernel()->createService('Order:OrderService');
     }
 
-     protected function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
     }

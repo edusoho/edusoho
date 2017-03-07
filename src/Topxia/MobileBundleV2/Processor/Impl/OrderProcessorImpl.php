@@ -1,4 +1,5 @@
 <?php
+
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
 use AppBundle\Common\ArrayToolkit;
@@ -11,14 +12,14 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 {
     public function getPaymentMode()
     {
-        $coinSetting = $this->controller->setting("coin");
+        $coinSetting = $this->controller->setting('coin');
 
         $coinEnabled = true;
         if (empty($coinSetting)) {
             $coinEnabled = false;
         }
 
-        $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
+        $coinEnabled = isset($coinSetting['coin_enabled']) && $coinSetting['coin_enabled'];
 
         $payment = $this->controller->setting('payment', array());
 
@@ -36,12 +37,13 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         }
 
         //0 can buy
-        $magicSetting  = $this->getSettingService()->get('magic', array());
+        $magicSetting = $this->getSettingService()->get('magic', array());
         $iosBuyDisable = isset($magicSetting['ios_buy_disable']) ? $magicSetting['ios_buy_disable'] : 0;
+
         return array(
-            "coin"            => $coinEnabled,
-            "alipay"          => $apipayEnabled,
-            "ios_buy_disable" => $iosBuyDisable == 0
+            'coin' => $coinEnabled,
+            'alipay' => $apipayEnabled,
+            'ios_buy_disable' => $iosBuyDisable == 0,
         );
     }
 
@@ -50,22 +52,23 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         $user = $this->controller->getUserByToken($this->request);
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录");
+            return $this->createErrorResponse('not_login', '您尚未登录');
         }
 
-        $receipt = $this->getParam("receipt-data");
-        $amount  = $this->getParam("amount", 0);
-        return $this->requestReceiptData($user["id"], $amount, $receipt, false);
+        $receipt = $this->getParam('receipt-data');
+        $amount = $this->getParam('amount', 0);
+
+        return $this->requestReceiptData($user['id'], $amount, $receipt, false);
     }
 
     public function checkCoupon()
     {
         $code = $this->getParam('code');
         $type = $this->getParam('targetType');
-        $id   = $this->getParam('targetId');
+        $id = $this->getParam('targetId');
 
         if (!in_array($type, array('course', 'vip', 'classroom'))) {
-            return $this->createErrorResponse('error', "优惠码不支持的购买项目。");
+            return $this->createErrorResponse('error', '优惠码不支持的购买项目。');
         }
 
         $price = $this->getParam('amount');
@@ -83,31 +86,31 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
     {
         $payOrderInfo = array();
 
-        if ("course" == $targetType) {
+        if ('course' == $targetType) {
             $course = $this->controller->getCourseService()->getCourse($targetId);
 
-            if ($course["status"] != "published") {
-                return $this->createErrorResponse('course_close', "课程已关闭");
+            if ($course['status'] != 'published') {
+                return $this->createErrorResponse('course_close', '课程已关闭');
             }
 
             $payOrderInfo = array(
-                'title'   => $course['title'],
-                'price'   => $course['price'],
-                'picture' => $this->coverPic($course['middlePicture'], 'course-large.png')
+                'title' => $course['title'],
+                'price' => $course['price'],
+                'picture' => $this->coverPic($course['middlePicture'], 'course-large.png'),
             );
-        } elseif ("classroom" == $targetType) {
+        } elseif ('classroom' == $targetType) {
             $classroom = $this->getClassroomService()->getClassRoom($targetId);
 
             if (empty($classroom)) {
-                return $this->createErrorResponse('no_classroom', "no_classroom");
+                return $this->createErrorResponse('no_classroom', 'no_classroom');
             }
 
             $payOrderInfo = array(
-                'title'   => $classroom['title'],
-                'price'   => $classroom['price'],
-                'picture' => $this->coverPic($classroom['middlePicture'], 'course-large.png')
+                'title' => $classroom['title'],
+                'price' => $classroom['price'],
+                'picture' => $this->coverPic($classroom['middlePicture'], 'course-large.png'),
             );
-        } elseif ("vip" == $targetType) {
+        } elseif ('vip' == $targetType) {
             $result = $this->getVipOrderInfo($targetId);
 
             if (isset($result['error'])) {
@@ -122,7 +125,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
     private function getVipOrderInfo($levelId)
     {
-        if (!$this->controller->isinstalledPlugin("Vip")) {
+        if (!$this->controller->isinstalledPlugin('Vip')) {
             return $this->createErrorResponse('no_vip', '网校未安装vip插件');
         }
 
@@ -135,8 +138,8 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         }
 
         return array(
-            'level'   => $level,
-            'buyType' => $buyType
+            'level' => $level,
+            'buyType' => $buyType,
         );
     }
 
@@ -145,49 +148,50 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         $user = $this->controller->getUserByToken($this->request);
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录");
+            return $this->createErrorResponse('not_login', '您尚未登录');
         }
 
-        $targetId   = $this->getParam("targetId", 0);
-        $targetType = $this->getParam("targetType");
+        $targetId = $this->getParam('targetId', 0);
+        $targetType = $this->getParam('targetType');
 
         if (empty($targetId)) {
-            return $this->createErrorResponse('not_tergetId', "没有发现购买内容！");
+            return $this->createErrorResponse('not_tergetId', '没有发现购买内容！');
         }
 
         $payOrderInfo = $this->getPayOrderInfo($targetType, $targetId);
 
         if (isset($payOrderInfo['error'])) {
-            return $this->createErrorResponse('error', "没有发现购买内容！");
+            return $this->createErrorResponse('error', '没有发现购买内容！');
         }
 
-        $userProfile = $this->controller->getUserService()->getUserProfile($user["id"]);
+        $userProfile = $this->controller->getUserService()->getUserProfile($user['id']);
 
         foreach ($userProfile as $key => $value) {
             if (!in_array($key, array(
-                "truename", "id", "mobile", "qq", "weixin"))) {
+                'truename', 'id', 'mobile', 'qq', 'weixin', ))) {
                 unset($userProfile[$key]);
             }
         }
 
         $coin = $this->getCoinSetting();
+
         return array(
-            "userProfile"       => $userProfile,
-            "orderInfo"         => $payOrderInfo,
-            "coin"              => $coin,
-            "isInstalledCoupon" => $this->controller->isinstalledPlugin("Coupon")
+            'userProfile' => $userProfile,
+            'orderInfo' => $payOrderInfo,
+            'coin' => $coin,
+            'isInstalledCoupon' => $this->controller->isinstalledPlugin('Coupon'),
         );
     }
 
     private function getCoinSetting()
     {
-        $coinSetting = $this->controller->setting("coin");
+        $coinSetting = $this->controller->setting('coin');
 
         if (empty($coinSetting)) {
             return null;
         }
 
-        $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
+        $coinEnabled = isset($coinSetting['coin_enabled']) && $coinSetting['coin_enabled'];
 
         if (empty($coinEnabled)) {
             return null;
@@ -195,14 +199,14 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
         $cashRate = 1;
 
-        if (isset($coinSetting["cash_rate"])) {
-            $cashRate = $coinSetting["cash_rate"];
+        if (isset($coinSetting['cash_rate'])) {
+            $cashRate = $coinSetting['cash_rate'];
         }
 
         $coin = array(
-            "cashRate"  => $cashRate,
-            "priceType" => isset($coinSetting["price_type"]) ? $coinSetting["price_type"] : null,
-            "name"      => isset($coinSetting["coin_name"]) ? $coinSetting["coin_name"] : "虚拟币"
+            'cashRate' => $cashRate,
+            'priceType' => isset($coinSetting['price_type']) ? $coinSetting['price_type'] : null,
+            'name' => isset($coinSetting['coin_name']) ? $coinSetting['coin_name'] : '虚拟币',
         );
 
         return $coin;
@@ -229,30 +233,29 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 
         $response = curl_exec($ch);
-        $errno    = curl_errno($ch);
-        $errmsg   = curl_error($ch);
+        $errno = curl_errno($ch);
+        $errmsg = curl_error($ch);
         curl_close($ch);
 
         if ($errno != 0) {
-            return $this->createErrorResponse('error', "充值失败！".$errno);
+            return $this->createErrorResponse('error', '充值失败！'.$errno);
         }
 
         $data = json_decode($response, true);
         if (empty($data)) {
-            return $this->createErrorResponse('error', "充值验证失败");
+            return $this->createErrorResponse('error', '充值验证失败');
         }
 
-        if ($data['status'] == 21007) { //sandbox receipt 
+        if ($data['status'] == 21007) { //sandbox receipt
             return $this->requestReceiptData($userId, $amount, $receipt, true);
         }
 
         if (!isset($data['status']) || $data['status'] != 0) {
-            return $this->createErrorResponse('error', "充值失败！状态码 :".$data['status']);
+            return $this->createErrorResponse('error', '充值失败！状态码 :'.$data['status']);
         }
 
         if ($data['status'] == 0) {
             if (isset($data['receipt']) && !empty($data['receipt']['in_app']) && ArrayToolkit::requireds($data['receipt']['in_app'][0], array('transaction_id', 'quantity', 'product_id'))) {
-
                 $token = 'iap-'.$data['receipt']['in_app'][0]['transaction_id'];
                 $quantity = $data['receipt']['in_app'][0]['quantity'];
                 $productId = $data['receipt']['in_app'][0]['product_id'];
@@ -264,21 +267,19 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                     //     throw new \RuntimeException("金额校验错误，充值失败");
                     // }
 
-                    $status = $this->buyCoinByIAP($userId, $calculatedAmount, "none", $token);
-
+                    $status = $this->buyCoinByIAP($userId, $calculatedAmount, 'none', $token);
                 } catch (\Exception $e) {
                     return $this->createErrorResponse('error', $e->getMessage());
                 }
 
                 return array(
-                    "status" => $status
+                    'status' => $status,
                 );
             }
-            
         }
 
         return array(
-            'status' => false
+            'status' => false,
         );
     }
 
@@ -286,26 +287,28 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
     {
         $registeredProducts = $this->getSettingService()->get('mobile_iap_product', array());
         if (empty($registeredProducts[$productId])) {
-            throw new \RuntimeException("该商品信息未与苹果服务器同步，充值失败");
+            throw new \RuntimeException('该商品信息未与苹果服务器同步，充值失败');
         }
+
         return $registeredProducts[$productId]['price'] * $quantity;
     }
 
     private function coinPayNotify($payType, $amount, $sn, $status)
     {
         if (empty($sn) || empty($status)) {
-            return $this->createErrorResponse('error', "订单数据缺失，充值失败！");
+            return $this->createErrorResponse('error', '订单数据缺失，充值失败！');
         }
 
-        if ($payType == "iap") {
+        if ($payType == 'iap') {
             $payData = array(
-                "amount"   => $amount,
-                "sn"       => $sn,
-                "status"   => $status,
-                "paidTime" => 0
+                'amount' => $amount,
+                'sn' => $sn,
+                'status' => $status,
+                'paidTime' => 0,
             );
             try {
                 list($success, $order) = $this->getCashOrdersService()->payOrder($payData);
+
                 return $success;
             } catch (\Exception $e) {
                 return $this->createErrorResponse('error', $e->getMessage());
@@ -318,21 +321,22 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
     private function buyCoinByIAP($userId, $amount, $payment, $token)
     {
         $formData['payment'] = $payment;
-        $formData['userId']  = $userId;
-        $formData['amount']  = $amount;
-        $formData['token']  = $token;
+        $formData['userId'] = $userId;
+        $formData['amount'] = $amount;
+        $formData['token'] = $token;
 
         if ($this->getCashOrdersService()->getOrderByToken($token)) {
-            throw new \RuntimeException("订单重复，充值无效");
+            throw new \RuntimeException('订单重复，充值无效');
         }
 
         $order = $this->getCashOrdersService()->addOrder($formData);
 
         if (empty($order)) {
-            return $this->createErrorResponse('error', "充值失败！");
+            return $this->createErrorResponse('error', '充值失败！');
         }
 
-        $this->coinPayNotify("iap", $amount, $order["sn"], "success");
+        $this->coinPayNotify('iap', $amount, $order['sn'], 'success');
+
         return $order;
     }
 
@@ -342,20 +346,20 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         $user = $this->controller->getUserByToken($this->request);
 
         if (empty($user)) {
-            return $this->createErrorResponse('not_login', "您尚未登录！");
+            return $this->createErrorResponse('not_login', '您尚未登录！');
         }
 
-        $payType = $this->getParam("payType");
-        $amount  = $this->getParam("amount", 0);
+        $payType = $this->getParam('payType');
+        $amount = $this->getParam('amount', 0);
 
         $formData['payment'] = $payType;
-        $formData['userId']  = $user->id;
-        $formData['amount']  = $amount;
+        $formData['userId'] = $user->id;
+        $formData['amount'] = $amount;
 
         $order = $this->getCashOrdersService()->addOrder($formData);
 
         if (empty($order)) {
-            return $this->createErrorResponse('error', "充值失败！");
+            return $this->createErrorResponse('error', '充值失败！');
         }
 
         return $order;
@@ -369,7 +373,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             return;
         }
 
-        $userPass = $user["nickname"];
+        $userPass = $user['nickname'];
         $this->controller->getAuthService()->changePayPassword($user['id'], $userPass, $newPayPassword);
     }
 
@@ -377,7 +381,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
     {
         $fields = $this->request->request->all();
 
-        if ("vip" == $targetType) {
+        if ('vip' == $targetType) {
             $payVip = $this->controller->getLevelService()->getLevel($targetId);
 
             if (!$payVip) {
@@ -387,17 +391,17 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             $vip = $this->controller->getVipService()->getMemberByUserId($user['id']);
 
             if ($vip) {
-                $currentVipLevel = $this->controller->getLevelService()->getLevel($vip["levelId"]);
+                $currentVipLevel = $this->controller->getLevelService()->getLevel($vip['levelId']);
 
-                if ($payVip["seq"] >= $currentVipLevel["seq"]) {
-                    $fields["buyType"] = "upgrade";
+                if ($payVip['seq'] >= $currentVipLevel['seq']) {
+                    $fields['buyType'] = 'upgrade';
                 } else {
                     return $this->createErrorResponse('error', '会员类型不能降级付费!');
                 }
 
-                $fields["buyType"] = "renew";
+                $fields['buyType'] = 'renew';
             } else {
-                $fields["buyType"] = "new";
+                $fields['buyType'] = 'new';
             }
         }
 
@@ -407,11 +411,11 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
     public function createOrder()
     {
         $targetType = $this->getParam('targetType');
-        $targetId   = $this->getParam('targetId');
-        $payment    = $this->getParam('payment', 'alipay');
-        $fields     = $this->request->request->all();
+        $targetId = $this->getParam('targetId');
+        $payment = $this->getParam('payment', 'alipay');
+        $fields = $this->request->request->all();
 
-        if (empty($targetType) || empty($targetId) || !in_array($targetType, array("course", "vip", "classroom"))) {
+        if (empty($targetType) || empty($targetId) || !in_array($targetType, array('course', 'vip', 'classroom'))) {
             return $this->createErrorResponse('error', '参数不正确');
         }
 
@@ -421,18 +425,18 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             return $this->createErrorResponse('not_login', '用户未登录，购买失败！');
         }
 
-        $priceType   = "RMB";
-        $coinSetting = $this->controller->setting("coin");
-        $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
+        $priceType = 'RMB';
+        $coinSetting = $this->controller->setting('coin');
+        $coinEnabled = isset($coinSetting['coin_enabled']) && $coinSetting['coin_enabled'];
 
-        if ($coinEnabled && isset($coinSetting["price_type"])) {
-            $priceType = $coinSetting["price_type"];
+        if ($coinEnabled && isset($coinSetting['price_type'])) {
+            $priceType = $coinSetting['price_type'];
         }
 
         $cashRate = 1;
 
-        if ($coinEnabled && isset($coinSetting["cash_rate"])) {
-            $cashRate = $coinSetting["cash_rate"];
+        if ($coinEnabled && isset($coinSetting['cash_rate'])) {
+            $cashRate = $coinSetting['cash_rate'];
         }
 
         $fields = $this->initPayFieldsByTargetType($user, $targetType, $targetId);
@@ -441,76 +445,76 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             return $this->createErrorResponse($fields['error']['name'], $fields['error']['message']);
         }
 
-        if ($payment == "coin") {
+        if ($payment == 'coin') {
             try {
-                $this->checkUserSetPayPassword($user, $fields["payPassword"]);
+                $this->checkUserSetPayPassword($user, $fields['payPassword']);
             } catch (\Exception $e) {
                 //return $this->createErrorResponse('error', "修改失败, 请在pc端修改支付密码!");
             }
 
-            $fields["coinPayAmount"] = (float) $fields['totalPrice'] * (float) $cashRate;
+            $fields['coinPayAmount'] = (float) $fields['totalPrice'] * (float) $cashRate;
         }
 
-        if ($payment == "coin" && !$coinEnabled) {
+        if ($payment == 'coin' && !$coinEnabled) {
             return $this->createErrorResponse('coin_close', '网校关闭了课程购买！');
         }
 
         $processor = OrderProcessorFactory::create($targetType);
 
         try {
-            if (!isset($fields["couponCode"])) {
-                $fields["couponCode"] = "";
+            if (!isset($fields['couponCode'])) {
+                $fields['couponCode'] = '';
             }
 
             list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
 
-            if ($payment == "coin" && !$this->isCanPayByCoin($totalPrice, $user["id"], $cashRate)) {
+            if ($payment == 'coin' && !$this->isCanPayByCoin($totalPrice, $user['id'], $cashRate)) {
                 return $this->createErrorResponse('coin_no_enough', '账户余额不足！');
             }
 
             $amount = (string) ((float) $amount);
 
-            if (isset($couponResult["useable"]) && $couponResult["useable"] == "yes") {
-                $coupon         = $fields["couponCode"];
-                $couponDiscount = $couponResult["decreaseAmount"];
+            if (isset($couponResult['useable']) && $couponResult['useable'] == 'yes') {
+                $coupon = $fields['couponCode'];
+                $couponDiscount = $couponResult['decreaseAmount'];
             }
 
             $orderFileds = array(
-                'priceType'      => $priceType,
-                'totalPrice'     => $totalPrice,
-                'amount'         => $amount,
-                'coinRate'       => $cashRate,
-                'coinAmount'     => empty($fields["coinPayAmount"]) ? 0 : $fields["coinPayAmount"],
-                'userId'         => $user["id"],
-                'payment'        => empty($fields["payment"]) ? "alipay" : $fields["payment"],
-                'targetId'       => $targetId,
-                'coupon'         => empty($coupon) ? '' : $coupon,
-                'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount
+                'priceType' => $priceType,
+                'totalPrice' => $totalPrice,
+                'amount' => $amount,
+                'coinRate' => $cashRate,
+                'coinAmount' => empty($fields['coinPayAmount']) ? 0 : $fields['coinPayAmount'],
+                'userId' => $user['id'],
+                'payment' => empty($fields['payment']) ? 'alipay' : $fields['payment'],
+                'targetId' => $targetId,
+                'coupon' => empty($coupon) ? '' : $coupon,
+                'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount,
             );
 
             $order = $processor->createOrder($orderFileds, $fields);
 
-            if ($order["amount"] == 0 && $order["coinAmount"] == 0) {
+            if ($order['amount'] == 0 && $order['coinAmount'] == 0) {
                 $payData = array(
-                    'sn'       => $order['sn'],
-                    'status'   => 'success',
-                    'amount'   => $order['amount'],
-                    'paidTime' => time()
+                    'sn' => $order['sn'],
+                    'status' => 'success',
+                    'amount' => $order['amount'],
+                    'paidTime' => time(),
                 );
                 list($success, $order) = $this->getPayCenterService()->processOrder($payData);
-            } elseif ($order["amount"] == 0 && $order["coinAmount"] > 0) {
+            } elseif ($order['amount'] == 0 && $order['coinAmount'] > 0) {
                 $payData = array(
-                    'sn'       => $order['sn'],
-                    'status'   => 'success',
-                    'amount'   => $order['amount'],
+                    'sn' => $order['sn'],
+                    'status' => 'success',
+                    'amount' => $order['amount'],
                     'paidTime' => time(),
-                    'payment'  => 'coin'
+                    'payment' => 'coin',
                 );
                 list($success, $order) = $this->getPayCenterService()->pay($payData);
-                $processor             = OrderProcessorFactory::create($order["targetType"]);
+                $processor = OrderProcessorFactory::create($order['targetType']);
             }
 
-            if ($order["status"] == "paid") {
+            if ($order['status'] == 'paid') {
                 return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => '');
             }
 
@@ -523,11 +527,11 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
     public function payClassRoom()
     {
         $targetType = $this->getParam('targetType');
-        $targetId   = $this->getParam('targetId');
-        $payment    = $this->getParam('payment', 'alipay');
-        $fields     = $this->request->request->all();
+        $targetId = $this->getParam('targetId');
+        $payment = $this->getParam('payment', 'alipay');
+        $fields = $this->request->request->all();
 
-        if (empty($targetType) || empty($targetId) || !in_array($targetType, array("course", "vip", "classroom"))) {
+        if (empty($targetType) || empty($targetId) || !in_array($targetType, array('course', 'vip', 'classroom'))) {
             return $this->createErrorResponse('error', '参数不正确');
         }
 
@@ -537,80 +541,80 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             return $this->createErrorResponse('not_login', '用户未登录，购买失败！');
         }
 
-        $priceType   = "RMB";
-        $coinSetting = $this->controller->setting("coin");
-        $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
+        $priceType = 'RMB';
+        $coinSetting = $this->controller->setting('coin');
+        $coinEnabled = isset($coinSetting['coin_enabled']) && $coinSetting['coin_enabled'];
 
-        if ($coinEnabled && isset($coinSetting["price_type"])) {
-            $priceType = $coinSetting["price_type"];
+        if ($coinEnabled && isset($coinSetting['price_type'])) {
+            $priceType = $coinSetting['price_type'];
         }
 
         $cashRate = 1;
 
-        if ($coinEnabled && isset($coinSetting["cash_rate"])) {
-            $cashRate = $coinSetting["cash_rate"];
+        if ($coinEnabled && isset($coinSetting['cash_rate'])) {
+            $cashRate = $coinSetting['cash_rate'];
         }
 
-        if ($payment == "coin" && !$coinEnabled) {
+        if ($payment == 'coin' && !$coinEnabled) {
             return $this->createErrorResponse('coin_close', '网校关闭了课程购买！');
         }
 
         $processor = OrderProcessorFactory::create($targetType);
 
         try {
-            if (!isset($fields["couponCode"])) {
-                $fields["couponCode"] = "";
+            if (!isset($fields['couponCode'])) {
+                $fields['couponCode'] = '';
             }
 
             list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
 
-            if ($payment == "coin" && !$this->isCanPayByCoin($totalPrice, $user["id"], $cashRate)) {
+            if ($payment == 'coin' && !$this->isCanPayByCoin($totalPrice, $user['id'], $cashRate)) {
                 return $this->createErrorResponse('coin_no_enough', '账户余额不足！');
             }
 
             $amount = (string) ((float) $amount);
 
-            if (isset($couponResult["useable"]) && $couponResult["useable"] == "yes") {
-                $coupon         = $fields["couponCode"];
-                $couponDiscount = $couponResult["decreaseAmount"];
+            if (isset($couponResult['useable']) && $couponResult['useable'] == 'yes') {
+                $coupon = $fields['couponCode'];
+                $couponDiscount = $couponResult['decreaseAmount'];
             }
 
             $orderFileds = array(
-                'priceType'      => $priceType,
-                'totalPrice'     => $totalPrice,
-                'amount'         => $amount,
-                'coinRate'       => $cashRate,
-                'coinAmount'     => empty($fields["coinPayAmount"]) ? 0 : $fields["coinPayAmount"],
-                'userId'         => $user["id"],
-                'payment'        => empty($fields["payment"]) ? "alipay" : $fields["payment"],
-                'targetId'       => $targetId,
-                'coupon'         => empty($coupon) ? '' : $coupon,
-                'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount
+                'priceType' => $priceType,
+                'totalPrice' => $totalPrice,
+                'amount' => $amount,
+                'coinRate' => $cashRate,
+                'coinAmount' => empty($fields['coinPayAmount']) ? 0 : $fields['coinPayAmount'],
+                'userId' => $user['id'],
+                'payment' => empty($fields['payment']) ? 'alipay' : $fields['payment'],
+                'targetId' => $targetId,
+                'coupon' => empty($coupon) ? '' : $coupon,
+                'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount,
             );
 
             $order = $processor->createOrder($orderFileds, $fields);
 
-            if ($order["amount"] == 0 && $order["coinAmount"] == 0) {
+            if ($order['amount'] == 0 && $order['coinAmount'] == 0) {
                 $payData = array(
-                    'sn'       => $order['sn'],
-                    'status'   => 'success',
-                    'amount'   => $order['amount'],
-                    'paidTime' => time()
+                    'sn' => $order['sn'],
+                    'status' => 'success',
+                    'amount' => $order['amount'],
+                    'paidTime' => time(),
                 );
                 list($success, $order) = $this->getPayCenterService()->processOrder($payData);
-            } elseif ($order["amount"] == 0 && $order["coinAmount"] > 0) {
+            } elseif ($order['amount'] == 0 && $order['coinAmount'] > 0) {
                 $payData = array(
-                    'sn'       => $order['sn'],
-                    'status'   => 'success',
-                    'amount'   => $order['amount'],
+                    'sn' => $order['sn'],
+                    'status' => 'success',
+                    'amount' => $order['amount'],
                     'paidTime' => time(),
-                    'payment'  => 'coin'
+                    'payment' => 'coin',
                 );
                 list($success, $order) = $this->getPayCenterService()->pay($payData);
-                $processor             = OrderProcessorFactory::create($order["targetType"]);
+                $processor = OrderProcessorFactory::create($order['targetType']);
             }
 
-            if ($order["status"] == "paid") {
+            if ($order['status'] == 'paid') {
                 return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => '');
             }
 
@@ -642,14 +646,14 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
     public function payVip()
     {
-        $targetId = $this->getParam("targetId");
+        $targetId = $this->getParam('targetId');
 
         if (empty($targetId)) {
             return $this->createErrorResponse('error', '创建订单数据失败!');
         }
 
         $token = $this->controller->getUserToken($this->request);
-        $user  = $this->controller->getUser();
+        $user = $this->controller->getUser();
 
         if (!$user->isLogin()) {
             return $this->createErrorResponse('not_login', '用户未登录，购买失败！');
@@ -662,57 +666,57 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         }
 
         $fields = $this->request->query->all();
-        $vip    = $this->controller->getVipService()->getMemberByUserId($user['id']);
+        $vip = $this->controller->getVipService()->getMemberByUserId($user['id']);
 
         if ($vip) {
-            $currentVipLevel = $this->controller->getLevelService()->getLevel($vip["levelId"]);
+            $currentVipLevel = $this->controller->getLevelService()->getLevel($vip['levelId']);
 
-            if ($payVip["seq"] > $currentVipLevel["seq"]) {
-                $fields["buyType"] = "upgrade";
+            if ($payVip['seq'] > $currentVipLevel['seq']) {
+                $fields['buyType'] = 'upgrade';
             } else {
                 return $this->createErrorResponse('error', '会员类型不能降级付费!');
             }
 
-            $fields["buyType"] = "renew";
+            $fields['buyType'] = 'renew';
         } else {
-            $fields["buyType"] = "new";
+            $fields['buyType'] = 'new';
         }
 
-        $fields["targetType"] = "vip";
-        $targetType           = "vip";
-        $priceType            = "RMB";
-        $coinSetting          = $this->controller->setting("coin");
-        $coinEnabled          = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
+        $fields['targetType'] = 'vip';
+        $targetType = 'vip';
+        $priceType = 'RMB';
+        $coinSetting = $this->controller->setting('coin');
+        $coinEnabled = isset($coinSetting['coin_enabled']) && $coinSetting['coin_enabled'];
 
-        if ($coinEnabled && isset($coinSetting["price_type"])) {
-            $priceType = $coinSetting["price_type"];
+        if ($coinEnabled && isset($coinSetting['price_type'])) {
+            $priceType = $coinSetting['price_type'];
         }
 
         $cashRate = 1;
 
-        if ($coinEnabled && isset($coinSetting["cash_rate"])) {
-            $cashRate = $coinSetting["cash_rate"];
+        if ($coinEnabled && isset($coinSetting['cash_rate'])) {
+            $cashRate = $coinSetting['cash_rate'];
         }
 
-        if (!isset($fields["couponCode"])) {
-            $fields["couponCode"] = "";
+        if (!isset($fields['couponCode'])) {
+            $fields['couponCode'] = '';
         }
 
-        $processor                                = OrderProcessorFactory::create($targetType);
+        $processor = OrderProcessorFactory::create($targetType);
         list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
 
-        $fields["totalPrice"] = $totalPrice;
-        $orderFileds          = array(
-            'priceType'      => "RMB",
-            'totalPrice'     => $totalPrice,
-            'amount'         => $amount,
-            'coinAmount'     => 0,
-            'coinRate'       => $cashRate,
-            'userId'         => $user["id"],
-            'payment'        => 'alipay',
-            'targetId'       => $targetId,
-            'coupon'         => empty($coupon) ? '' : $coupon,
-            'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount
+        $fields['totalPrice'] = $totalPrice;
+        $orderFileds = array(
+            'priceType' => 'RMB',
+            'totalPrice' => $totalPrice,
+            'amount' => $amount,
+            'coinAmount' => 0,
+            'coinRate' => $cashRate,
+            'userId' => $user['id'],
+            'payment' => 'alipay',
+            'targetId' => $targetId,
+            'coupon' => empty($coupon) ? '' : $coupon,
+            'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount,
         );
         $order = $processor->createOrder($orderFileds, $fields);
 
@@ -720,15 +724,15 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => '');
         }
 
-        return $this->payByAlipay($order, $token["token"]);
+        return $this->payByAlipay($order, $token['token']);
     }
 
     /**
-     * payType iap, online
+     * payType iap, online.
      */
     public function payCourse()
     {
-        $payType  = $this->getParam("payType", "online");
+        $payType = $this->getParam('payType', 'online');
         $courseId = $this->getParam('courseId');
 
         if (empty($courseId)) {
@@ -736,28 +740,28 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         }
 
         $token = $this->controller->getUserToken($this->request);
-        $user  = $this->controller->getUser();
+        $user = $this->controller->getUser();
 
         if (!$user->isLogin()) {
             return $this->createErrorResponse('not_login', '用户未登录，加入学习失败！');
         }
 
         $this->formData['courseId'] = $courseId;
-        $coinRate                   = $this->controller->setting('coin.cash_rate');
+        $coinRate = $this->controller->setting('coin.cash_rate');
 
         if (!isset($coinRate)) {
             $coinRate = 1;
         }
 
-        $course              = $this->controller->getCourseService()->getCourse($courseId);
-        $order               = array();
-        $order['targetId']   = $courseId;
+        $course = $this->controller->getCourseService()->getCourse($courseId);
+        $order = array();
+        $order['targetId'] = $courseId;
         $order['targetType'] = 'course';
-        $order['payment']    = 'alipay';
-        $order['amount']     = $course['price'];
-        $order['priceType']  = 'RMB';
+        $order['payment'] = 'alipay';
+        $order['amount'] = $course['price'];
+        $order['priceType'] = 'RMB';
         $order['totalPrice'] = $course['price'];
-        $order['coinRate']   = $coinRate;
+        $order['coinRate'] = $coinRate;
         $order['coinAmount'] = 0;
 
         if ($payType == 'iap') {
@@ -774,17 +778,18 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => '');
         }
 
-        return $this->payByAlipay($order, $token["token"]);
+        return $this->payByAlipay($order, $token['token']);
     }
 
     private function payCourseByIAP($order, $userId)
     {
-        $result      = array('status' => 'error', 'message' => '', 'paid' => false, 'payUrl' => '');
-        $coinType    = $this->getSettingService()->get('coin', array());
+        $result = array('status' => 'error', 'message' => '', 'paid' => false, 'payUrl' => '');
+        $coinType = $this->getSettingService()->get('coin', array());
         $coinEnabled = $coinType['coin_enabled'];
 
         if (empty($coinEnabled) || $coinEnabled == 0) {
             $result['message'] = '网校虚拟币未开启！';
+
             return $result;
         }
 
@@ -794,26 +799,27 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             $account = $this->getCashAccountService()->createAccount($userId);
         }
 
-        $cash  = (float) $account['cash'] / (float) $coinType['cash_rate'];
+        $cash = (float) $account['cash'] / (float) $coinType['cash_rate'];
         $price = (float) $order['totalPrice'];
 
         if ($cash < $price) {
             $result['message'] = '账户余额不够';
+
             return $result;
         }
 
         $order['coinAmount'] = (string) ((float) $price * (float) $coinType['cash_rate']);
-        $order['priceType']  = $coinType['price_type'];
-        $order['amount']     = 0;
-        $order['userId']     = $userId;
-        $order['coinRate']   = $coinType['cash_rate'];
+        $order['priceType'] = $coinType['price_type'];
+        $order['amount'] = 0;
+        $order['userId'] = $userId;
+        $order['coinRate'] = $coinType['cash_rate'];
 
-        $order                 = $this->controller->getCourseOrderService()->createOrder($order);
+        $order = $this->controller->getCourseOrderService()->createOrder($order);
         list($success, $order) = $this->processorOrder($order);
 
         if ($success && $order['status'] == 'paid') {
             $result['status'] = 'ok';
-            $result['paid']   = true;
+            $result['paid'] = true;
         } else {
             $result['message'] = '支付失败!';
         }
@@ -825,21 +831,21 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
     {
         $success = false;
 
-        if ($order["amount"] == 0 && $order["coinAmount"] == 0) {
+        if ($order['amount'] == 0 && $order['coinAmount'] == 0) {
             $payData = array(
-                'sn'       => $order['sn'],
-                'status'   => 'success',
-                'amount'   => $order['amount'],
-                'paidTime' => time()
+                'sn' => $order['sn'],
+                'status' => 'success',
+                'amount' => $order['amount'],
+                'paidTime' => time(),
             );
             list($success, $order) = $this->getPayCenterService()->processOrder($payData);
-        } elseif ($order["amount"] == 0 && $order["coinAmount"] > 0) {
+        } elseif ($order['amount'] == 0 && $order['coinAmount'] > 0) {
             $payData = array(
-                'sn'       => $order['sn'],
-                'status'   => 'success',
-                'amount'   => $order['amount'],
+                'sn' => $order['sn'],
+                'status' => 'success',
+                'amount' => $order['amount'],
                 'paidTime' => time(),
-                'payment'  => 'coin'
+                'payment' => 'coin',
             );
             list($success, $order) = $this->getPayCenterService()->pay($payData);
         }
@@ -849,32 +855,36 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
     private function payByAlipay($order, $token)
     {
-        $result  = array('status' => 'error', 'message' => '', 'paid' => false, 'payUrl' => '');
+        $result = array('status' => 'error', 'message' => '', 'paid' => false, 'payUrl' => '');
         $payment = $this->controller->setting('payment', array());
 
         if (empty($payment['enabled'])) {
             $result['message'] = '支付功能未开启！';
+
             return $result;
         }
 
         if (empty($payment['alipay_enabled'])) {
             $result['message'] = '支付功能未开启！';
+
             return $result;
         }
 
         if (empty($payment['alipay_key']) || empty($payment['alipay_secret']) || empty($payment['alipay_account'])) {
             $result['message'] = '支付宝参数不正确！';
+
             return $result;
         }
 
         if (empty($payment['alipay_type']) || $payment['alipay_type'] != 'direct') {
-            $payUrl           = $this->controller->generateUrl('mapi_order_submit_pay_request', array('id' => $order['id'], 'token' => $token), true);
+            $payUrl = $this->controller->generateUrl('mapi_order_submit_pay_request', array('id' => $order['id'], 'token' => $token), true);
             $result['payUrl'] = $payUrl;
         } else {
             $result['payUrl'] = MobileAlipayConfig::createAlipayOrderUrl($this->request, 'edusoho', $order);
         }
 
         $result['status'] = 'ok';
+
         return $result;
     }
 
