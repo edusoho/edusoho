@@ -7,26 +7,26 @@ use Topxia\Service\Common\ServiceKernel;
 
 class BaseProcessor
 {
-
     const API_VERSIN_RANGE = '3.6.0';
 
-    public    $formData;
-    public    $controller;
-    public    $request;
+    public $formData;
+    public $controller;
+    public $request;
     protected $delegator;
 
     private function __construct($controller)
     {
         $this->controller = $controller;
-        $this->request    = $controller->request;
-        $this->formData   = $controller->formData;
+        $this->request = $controller->request;
+        $this->formData = $controller->formData;
     }
 
     public static function getInstance($class, $controller)
     {
-        $instance           = new $class($controller);
+        $instance = new $class($controller);
         $processorDelegator = new ProcessorDelegator($instance);
         $instance->setDelegator($processorDelegator);
+
         return $processorDelegator;
     }
 
@@ -38,35 +38,38 @@ class BaseProcessor
     protected function getParam($name, $default = null)
     {
         $result = $this->request->get($name, $default);
+
         return $result;
     }
 
     protected function filterUsersFiled($users)
     {
         $container = $this->controller->getContainer();
+
         return array_map(function ($user) use ($container) {
             foreach ($user as $key => $value) {
                 if (!in_array($key, array(
-                    "id", "email", "smallAvatar", "mediumAvatar", "largeAvatar", "nickname", "roles", "locked", "about", "title"))
+                    'id', 'email', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'nickname', 'roles', 'locked', 'about', 'title', ))
                 ) {
                     unset($user[$key]);
                 }
             }
 
-            $user['smallAvatar']  = $container->get('web.twig.extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
+            $user['smallAvatar'] = $container->get('web.twig.extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
             $user['mediumAvatar'] = $container->get('web.twig.extension')->getFilePath($user['mediumAvatar'], 'avatar.png', true);
-            $user['largeAvatar']  = $container->get('web.twig.extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
+            $user['largeAvatar'] = $container->get('web.twig.extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
 
             return $user;
         }, $users);
     }
 
     /**
-     * course-large.png
+     * course-large.png.
      */
     protected function coverPic($src, $srcType)
     {
         $container = $this->controller->getContainer();
+
         return $container->get('web.twig.extension')->getFilePath($src, $srcType, true);
     }
 
@@ -80,14 +83,16 @@ class BaseProcessor
     protected function filterAnnouncements($announcements)
     {
         $controller = $this->controller;
+
         return array_map(function ($announcement) use ($controller) {
-            unset($announcement["userId"]);
-            unset($announcement["courseId"]);
-            unset($announcement["updatedTime"]);
-            $announcement["content"]     = $controller->convertAbsoluteUrl($controller->request, $announcement["content"]);
-            $announcement["createdTime"] = date('c', $announcement['createdTime']);
-            $announcement["startTime"]   = date('c', $announcement['startTime']);
-            $announcement["endTime"]     = date('c', $announcement['endTime']);
+            unset($announcement['userId']);
+            unset($announcement['courseId']);
+            unset($announcement['updatedTime']);
+            $announcement['content'] = $controller->convertAbsoluteUrl($controller->request, $announcement['content']);
+            $announcement['createdTime'] = date('c', $announcement['createdTime']);
+            $announcement['startTime'] = date('c', $announcement['startTime']);
+            $announcement['endTime'] = date('c', $announcement['endTime']);
+
             return $announcement;
         }, $announcements);
     }
@@ -95,7 +100,7 @@ class BaseProcessor
     protected function filterAnnouncement($announcement)
     {
         return $this->filterAnnouncements(array(
-            $announcement
+            $announcement,
         ));
     }
 
@@ -261,10 +266,11 @@ class BaseProcessor
     {
         $error = array(
             'error' => array(
-                'name'    => $name,
-                'message' => $message
-            )
+                'name' => $name,
+                'message' => $message,
+            ),
         );
+
         return $error;
     }
 
@@ -279,8 +285,8 @@ class BaseProcessor
         if ($userIsTeacher) {
             $member['role'] = 'teacher';
         } else {
-            $userIsStudent  = $this->controller->getCourseMemberService()->isCourseStudent($courseId, $user['id']);
-            $member['role'] = $userIsStudent ? "student" : null;
+            $userIsStudent = $this->controller->getCourseMemberService()->isCourseStudent($courseId, $user['id']);
+            $member['role'] = $userIsStudent ? 'student' : null;
         }
 
         return $member;
@@ -303,7 +309,7 @@ class BaseProcessor
 
     protected function getSiteInfo($request, $version)
     {
-        $site   = $this->controller->getSettingService()->get('site', array());
+        $site = $this->controller->getSettingService()->get('site', array());
         $mobile = $this->controller->getSettingService()->get('mobile', array());
 
         if (!empty($mobile['logo'])) {
@@ -314,22 +320,22 @@ class BaseProcessor
 
         $splashs = array();
 
-        for ($i = 1; $i < 6; $i++) {
+        for ($i = 1; $i < 6; ++$i) {
             if (!empty($mobile['splash'.$i])) {
                 $splashs[] = $request->getSchemeAndHttpHost().'/'.$mobile['splash'.$i];
             }
         }
 
         return array(
-            'name'            => $site['name'],
-            'url'             => $request->getSchemeAndHttpHost().'/mapi_v'.$version,
-            'host'            => $request->getSchemeAndHttpHost(),
-            'logo'            => $logo,
-            'splashs'         => $splashs,
+            'name' => $site['name'],
+            'url' => $request->getSchemeAndHttpHost().'/mapi_v'.$version,
+            'host' => $request->getSchemeAndHttpHost(),
+            'logo' => $logo,
+            'splashs' => $splashs,
             'apiVersionRange' => array(
-                "min" => "1.0.0",
-                "max" => self::API_VERSIN_RANGE
-            )
+                'min' => '1.0.0',
+                'max' => self::API_VERSIN_RANGE,
+            ),
         );
     }
 
@@ -337,14 +343,14 @@ class BaseProcessor
     {
         $userAgent = strtolower($userAgent);
 
-        $ios = array("iphone", "ipad", "ipod");
+        $ios = array('iphone', 'ipad', 'ipod');
         foreach ($ios as $keyword) {
             if (strpos($userAgent, $keyword) > -1) {
                 return 'ios';
             }
         }
 
-        if (strpos($userAgent, "Android") > -1) {
+        if (strpos($userAgent, 'Android') > -1) {
             return 'android';
         }
 
@@ -355,7 +361,7 @@ class BaseProcessor
     {
         $curl = curl_init();
 
-        curl_setopt($curl, CURLOPT_USERAGENT, "video request");
+        curl_setopt($curl, CURLOPT_USERAGENT, 'video request');
 
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
         curl_setopt($curl, CURLOPT_TIMEOUT, 20);
@@ -381,11 +387,12 @@ class BaseProcessor
     }
 
     /**
-     * 把\t\n转化成空字符串
+     * 把\t\n转化成空字符串.
      */
     public function filterSpace($content)
     {
         $pattern = '[\\n\\t\\s]';
+
         return preg_replace($pattern, '', $content);
     }
 }
