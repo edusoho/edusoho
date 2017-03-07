@@ -41,9 +41,9 @@ class Course extends BaseResource
         );
         if (!empty($courseSet['cover'])) {
             $courseSetImg = array(
-                'smallPicture' => $courseSet['cover']['small'],
-                'middlePicture' => $courseSet['cover']['middle'],
-                'largePicture' => $courseSet['cover']['large']
+                'smallPicture' => $this->getFileUrl($courseSet['cover']['small']),
+                'middlePicture' => $this->getFileUrl($courseSet['cover']['middle']),
+                'largePicture' => $this->getFileUrl($courseSet['cover']['large'])
             );
             $courseSet = array_merge($courseSet, $courseSetImg);
         };
