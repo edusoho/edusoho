@@ -587,6 +587,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return (empty($member) || !in_array('headTeacher', $member['role'])) ? false : true;
     }
 
+    public function isClassroomOverDue($classroom)
+    {
+        if ($classroom['expiryMode'] == 'date' && $classroom['expiryValue'] < time()) {
+            return true;
+        }
+
+        return false;
+    }
+
     // becomeStudent的逻辑条件，写注释
     public function becomeStudent($classroomId, $userId, $info = array())
     {
