@@ -1051,7 +1051,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 type,
                 courseSetId,
                 oldTestId
-                ) VALUES (
+            ) VALUES (
                 {$testpaper['id']},
                 '".$testpaper['name']."',
                 '".$testpaper['description']."',
@@ -1089,7 +1089,7 @@ class EduSohoUpgrade extends AbstractUpdater
             missScore,
             oldItemId,
             type
-            ) SELECT
+        ) SELECT
             id,
             testId,
             seq,
@@ -1129,7 +1129,7 @@ class EduSohoUpgrade extends AbstractUpdater
             usedTime,
             oldResultId,
             type
-            ) SELECT
+        ) SELECT
             id,
             paperName,
             testId,
@@ -1193,7 +1193,7 @@ class EduSohoUpgrade extends AbstractUpdater
             pId,
             oldItemResultId,
             type
-            ) SELECT
+        ) SELECT
             id,
             itemId,
             testId,
@@ -1262,7 +1262,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 type,
                 courseSetId,
                 oldTestId
-                ) VALUES (
+            ) VALUES (
                 '',
                 '".$homework['description']."',
                 {$homework['courseId']},
@@ -1311,7 +1311,7 @@ class EduSohoUpgrade extends AbstractUpdater
                     score,
                     missScore,
                     oldItemId
-                    ) VALUES (
+                ) VALUES (
                     {$homeworkNew['id']},
                     {$item['seq']},
                     {$item['questionId']},
