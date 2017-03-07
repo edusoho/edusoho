@@ -56,8 +56,8 @@ class ClassroomThreadController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
-        if (ClassroomToolkit::isClassroomOverDue($classroom) && !ClassroomToolkit::hasAdminOrHeadTeacherRole($user, array('classroom' => $classroom))) {
-            return $this->redirect($this->generateUrl('classroom_threads', array('classroomId' => $classroomId)));
+        if(!$this->getClassroomService()->canCreateThreadWhenClassroomOverDue()){
+            throw $this->createAccessDeniedException($this->trans('班级已过期，无权限创建!'));
         }
 
         if ($type == 'event' && !$this->getClassroomService()->canCreateThreadEvent(array('targetId' => $classroomId))) {
