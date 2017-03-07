@@ -11,8 +11,8 @@ use AppBundle\Common\ArrayToolkit;
 
 class MobileController extends BaseController
 {
-    const TOKEN_TYPE    = 'mobile_login';
-    const MOBILE_MODULE = "mobile";
+    const TOKEN_TYPE = 'mobile_login';
+    const MOBILE_MODULE = 'mobile';
 
     protected $result = array();
 
@@ -20,7 +20,7 @@ class MobileController extends BaseController
     {
         $result = array(
             'mobileVersion' => 1,
-            'url'           => $request->getSchemeAndHttpHost()
+            'url' => $request->getSchemeAndHttpHost(),
         );
 
         return $this->createJson($request, $result);
@@ -28,47 +28,49 @@ class MobileController extends BaseController
 
     public function mobileSchoolLoginAction(Request $request)
     {
-        if ($request->getMethod() == "POST") {
+        if ($request->getMethod() == 'POST') {
             $parames = $request->request->all();
         } else {
             $parames = $request->query->all();
         }
 
-        $this->getLogService()->info(MobileController::MOBILE_MODULE, "school_login", "网校登录", $parames);
+        $this->getLogService()->info(self::MOBILE_MODULE, 'school_login', '网校登录', $parames);
 
         return $this->createJson($request, null);
     }
 
     public function mobileDeviceRegistAction(Request $request)
     {
-        $result                      = false;
-        $parames                     = array();
-        $parames["imei"]             = $this->getPostParam($request, "imei", "");
-        $parames["platform"]         = $this->getPostParam($request, "platform", "");
-        $parames["version"]          = $this->getPostParam($request, "version", "");
-        $parames["screenresolution"] = $this->getPostParam($request, "screenresolution", "");
-        $parames["kernel"]           = $this->getPostParam($request, "kernel", "");
+        $result = false;
+        $parames = array();
+        $parames['imei'] = $this->getPostParam($request, 'imei', '');
+        $parames['platform'] = $this->getPostParam($request, 'platform', '');
+        $parames['version'] = $this->getPostParam($request, 'version', '');
+        $parames['screenresolution'] = $this->getPostParam($request, 'screenresolution', '');
+        $parames['kernel'] = $this->getPostParam($request, 'kernel', '');
 
-        if (empty($parames["imei"]) || empty($parames["platform"])) {
-            return $this->createErrorResponse($request, "info_error", "串号或平台版本不能为空!");
+        if (empty($parames['imei']) || empty($parames['platform'])) {
+            return $this->createErrorResponse($request, 'info_error', '串号或平台版本不能为空!');
         }
         if ($this->getMobileDeviceService()->addMobileDevice($parames)) {
             $result = true;
         }
 
-        $this->getLogService()->info(MobileController::MOBILE_MODULE, "regist_device", "注册客户端", $parames);
+        $this->getLogService()->info(self::MOBILE_MODULE, 'regist_device', '注册客户端', $parames);
+
         return $this->createJson($request, $result);
     }
 
     protected function getPostParam($request, $name, $default = null)
     {
         $result = $request->request->get($name);
+
         return $result ? $result : $default;
     }
 
     public function notifyMobileVersionAction(Request $request)
     {
-        return new JsonResponse("success");
+        return new JsonResponse('success');
     }
 
     protected function createJson(Request $request, $data)
@@ -92,18 +94,20 @@ class MobileController extends BaseController
     {
         $response = new JsonResponse($data);
         $response->setCallback($callback);
+
         return $response;
     }
 
     protected function getParam($request, $name, $default = null)
     {
         $result = $request->query->get($name);
+
         return $result ? $result : $default;
     }
 
     private function setCurrentUser($userId, $request)
     {
-        $user        = $this->getUserService()->getUser($userId);
+        $user = $this->getUserService()->getUser($userId);
         if ($user) {
             $user['currentIp'] = $request->getClientIp();
         } else {
@@ -119,15 +123,16 @@ class MobileController extends BaseController
         if ($token) {
             $this->setCurrentUser($token['userId'], $request);
         }
+
         return $token;
     }
 
     protected function createToken($user, $request)
     {
         $tokenFields = array(
-            'userId'   => $user['id'],
+            'userId' => $user['id'],
             'duration' => 3600 * 24 * 30,
-            'times'    => 1
+            'times' => 1,
         );
 
         $token = $this->getTokenService()->makeToken(self::TOKEN_TYPE, $tokenFields);
@@ -145,6 +150,7 @@ class MobileController extends BaseController
             return null;
         }
         $users = $this->simplifyUsers(array($user));
+
         return current($users);
     }
 
@@ -157,10 +163,10 @@ class MobileController extends BaseController
         $simplifyUsers = array();
         foreach ($users as $key => $user) {
             $simplifyUsers[$key] = array(
-                'id'       => $user['id'],
+                'id' => $user['id'],
                 'nickname' => $user['nickname'],
-                'title'    => $user['title'],
-                'avatar'   => $this->container->get('web.twig.extension')->getFilePath($user['smallAvatar'], 'avatar.png', true),
+                'title' => $user['title'],
+                'avatar' => $this->container->get('web.twig.extension')->getFilePath($user['smallAvatar'], 'avatar.png', true),
             );
         }
 
@@ -177,14 +183,16 @@ class MobileController extends BaseController
         }
 
         $userIds = ArrayToolkit::column($reviews, 'userId');
-        $users   = $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->getUserService()->findUsersByIds($userIds);
 
         $self = $this;
+
         return array_map(function ($review) use ($self, $users) {
             $review['user'] = empty($users[$review['userId']]) ? null : $self->simpleUser($users[$review['userId']]);
             unset($review['userId']);
 
             $review['createdTime'] = date('c', $review['createdTime']);
+
             return $review;
         }, $reviews);
     }
@@ -199,12 +207,14 @@ class MobileController extends BaseController
         }
 
         $reviews = $this->filterReviews(array($review));
+
         return current($reviews);
     }
 
     protected function createErrorResponse($request, $name, $message)
     {
         $error = array('error' => array('name' => $name, 'message' => $message));
+
         return $this->createJson($request, $error);
     }
 

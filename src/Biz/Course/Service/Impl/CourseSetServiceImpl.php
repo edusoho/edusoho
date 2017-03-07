@@ -375,6 +375,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 'smallPicture',
                 'middlePicture',
                 'largePicture',
+                'teacherIds',
             )
         );
 
@@ -544,6 +545,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         return $this->getFavoriteDao()->countByUserId($userId);
     }
+
 
     public function searchUserFavorites($userId, $start, $limit)
     {
