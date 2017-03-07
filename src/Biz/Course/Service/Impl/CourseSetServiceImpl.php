@@ -38,7 +38,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $id,
             array(
                 'recommended' => 1,
-                'recommendedSeq' => (int)$number,
+                'recommendedSeq' => (int) $number,
                 'recommendedTime' => time(),
             )
         );
@@ -101,7 +101,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return !empty($favorite);
     }
 
-
     public function unfavorite($id)
     {
         $courseSet = $this->getCourseSet($id);
@@ -125,7 +124,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         return true;
     }
-
 
     public function isUserFavorite($userId, $courseSetId)
     {
@@ -199,7 +197,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $user->hasPermission('admin_course_content_manage');
     }
 
-
     public function searchCourseSets(array $conditions, $orderBys, $start, $limit)
     {
         $orderBys = $this->getOrderBys($orderBys);
@@ -208,12 +205,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->search($preparedCondtions, $orderBys, $start, $limit);
     }
 
-
     public function countCourseSets(array $conditions)
     {
         return $this->getCourseSetDao()->count($conditions);
     }
-
 
     public function countUserLearnCourseSets($userId)
     {
@@ -543,12 +538,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $this->dispatchEvent('course-set.closed', new Event($courseSet));
     }
 
-
     public function countUserFavorites($userId)
     {
         return $this->getFavoriteDao()->countByUserId($userId);
     }
-
 
     public function searchUserFavorites($userId, $start, $limit)
     {
