@@ -78,6 +78,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'tags' => 'delimiter',
                 'goals' => 'delimiter',
                 'audiences' => 'delimiter',
+                'teacherIds' => 'delimiter',
                 'cover' => 'json',
             ),
             'orderbys' => array(
