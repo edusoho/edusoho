@@ -17,7 +17,7 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
                 'role' => 'delimiter',
                 'assistantIds' => 'json',
                 'teacherIds' => 'json',
-                'service' => 'json'
+                'service' => 'json',
             ),
             'orderbys' => array('name', 'createdTime'),
             'conditions' => array(
@@ -29,7 +29,7 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
                 'userId IN ( :userIds)',
                 'createdTime >= :startTimeGreaterThan',
                 'createdTime >= :createdTime_GE',
-                'createdTime < :startTimeLessThan'
+                'createdTime < :startTimeLessThan',
             ),
         );
     }
