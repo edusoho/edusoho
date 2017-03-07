@@ -1194,7 +1194,7 @@ class EduSohoUpgrade extends AbstractUpdater
             FROM testpaper_item_result WHERE id NOT IN (SELECT id FROM c2_testpaper_item_result)";
         $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE c2_testpaper_item_result AS ir SET ir.testId = (SELECT id FROM c2_testpaper WHERE oldTestId = ir.testId)";
+        $sql = "UPDATE c2_testpaper_item_result AS ir, c2_testpaper as t SET ir.testId = t.id WHERE t.oldTestId = ir.testId";
         $this->getConnection()->exec($sql);
 
         $sql = "UPDATE c2_testpaper_item_result AS ir SET ir.resultId = (SELECT id FROM c2_testpaper_result WHERE oldResultId = ir.resultId)";
@@ -1202,7 +1202,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $this->testpaperActivity();
 
-        $sql = "UPDATE c2_testpaper_result AS tr SET lessonId = (SELECT activityId FROM course_task WHERE lessonId = tr.lessonId AND type='testpaper') WHERE type='testpaper'";
+        $sql = "UPDATE c2_testpaper_result AS tr, course_task as ct SET tr.lessonId = ct.activityId WHERE tr.lessonId = ct.lessonId AND tr.type='testpaper'";
         $this->exec($sql);
     }
 
@@ -1593,8 +1593,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'score',
             '{\"type\":\"submit\",\"finishScore\":\"0\"}',
             cl.requireCredit,
-            cle.doTimes,
-            cle.redoInterval
+            case when cle.doTimes is null then 0 else cle.doTimes end as doTimes,
+            case when cle.redoInterval is null then 0 else cle.redoInterval end as redoInterval
             FROM course_lesson AS cl
             LEFT JOIN
             course_lesson_extend AS cle
