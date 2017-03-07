@@ -19,12 +19,14 @@ class MeCourses extends BaseResource
         if ($relation == 'learning') {
 
             $total   = $this->getCourseService()->findUserLearningCourseCountNotInClassroom($user['id'], $conditions);
+
             $courses = $this->getCourseService()->findUserLearningCoursesNotInClassroom(
                 $user['id'],
                 $start,
                 $limit,
                 empty($type) ? array() : array('type' => $type)
             );
+
         } elseif ($relation == 'learned') {
             $total   = $this->getCourseService()->findUserLeanedCourseCount($user['id'], $conditions);
             $courses = $this->getCourseService()->findUserLearnedCoursesNotInClassroom(
@@ -98,7 +100,7 @@ class MeCourses extends BaseResource
 
     protected function getConversationService()
     {
-        return $this->createService('IM.ConversationService');
+        return $this->createService('IM:ConversationService');
     }
 
     /**
@@ -106,6 +108,6 @@ class MeCourses extends BaseResource
      */
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 }

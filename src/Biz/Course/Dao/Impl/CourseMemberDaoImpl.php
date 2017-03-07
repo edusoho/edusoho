@@ -233,7 +233,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
     public function countMemberNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned)
     {
-        $sql = "SELECT COUNT( m.courseId ) FROM {$this->getTable()} m ";
+        $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
         $sql .= " JOIN  ".CourseDao::TABLENAME." AS c ON m.userId = ? ";
         $sql .= " AND m.role = ? AND c.type =  ? AND m.isLearned = ? AND m.courseId = c.id  AND c.parentId = 0";
         return $this->db()->fetchColumn($sql, array($userId, $role, $type, $isLearned));
@@ -241,7 +241,8 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
     public function countMemberNotInClassroomByUserIdAndRoleAndIsLearned($userId, $role, $isLearned)
     {
-        $sql = "SELECT COUNT( m.courseId ) FROM {$this->getTable()} m ";
+
+        $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
         $sql .= " JOIN  ".CourseDao::TABLENAME." AS c ON m.userId = ? ";
         $sql .= " AND m.role = ? AND m.isLearned = ? AND m.courseId = c.id  AND c.parentId = 0";
         return $this->db()->fetchColumn($sql, array($userId, $role, $isLearned));
@@ -261,7 +262,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
     public function findMembersNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned, $start, $limit)
     {
-        $this->filterStartLimit($start, $limit);
         $sql = "SELECT m.* FROM {$this->table} m";
         $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? ';
         $sql .= "AND m.role = ? AND c.type = ?  AND m.isLearned = ? AND m.courseId = c.id AND c.parentId = 0";
@@ -271,7 +271,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
     public function findMembersNotInClassroomByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit)
     {
-        $this->filterStartLimit($start, $limit);
         $sql = "SELECT m.* FROM {$this->table} m ";
         $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? ';
         $sql .= "AND m.role =  ? AND m.isLearned = ? AND m.courseId = c.id AND c.parentId = 0";
