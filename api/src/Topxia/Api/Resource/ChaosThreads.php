@@ -216,13 +216,12 @@ class ChaosThreads extends BaseResource
 
         $courseIds = ArrayToolkit::column($courseThreads, "courseId");
         $courses   = $this->getCourseService()->findCoursesByIds($courseIds);
-
         $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
-        $courseSets = ArrayToolkit::index($courseSets, 'id');
 
-        foreach ($courses as &$course) {
-            $course['courseSet'] = $courseSets[$course['courseSetId']];
+        foreach ($courses as $key => $course) {
+            $courses[$key]['courseSet'] = $courseSets[$course['courseSetId']];
         }
+
         $courses = $this->multicallFilter('Course', $courses);
 
         foreach ($courseThreads as $key => $thread) {
@@ -235,7 +234,6 @@ class ChaosThreads extends BaseResource
                 unset($courseThreads[$key]);
             }
         }
-
         return $courseThreads;
     }
 
