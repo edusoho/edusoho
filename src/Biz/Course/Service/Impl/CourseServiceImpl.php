@@ -143,6 +143,8 @@ class CourseServiceImpl extends BaseService implements CourseService
                 )
             ));
 
+            $this->dispatchEvent('course.create', new Event($created));
+
             $this->commit();
 
             return $created;
@@ -334,7 +336,11 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createAccessDeniedException('课程下至少需保留一个教学计划');
         }
 
-        return $this->getCourseDeleteService()->deleteCourse($id);
+        $result = $this->getCourseDeleteService()->deleteCourse($id);
+        
+        $this->dispatchEvent('course.delete', new Event($course));
+
+        return $result;
     }
 
     public function closeCourse($id)

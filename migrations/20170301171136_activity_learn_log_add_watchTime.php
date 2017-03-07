@@ -11,7 +11,7 @@ class ActivityLearnLogAddWatchTime extends Migration
     {
         $biz = $this->getContainer();
 
-        $biz['db']->exec("ALTER TABLE `activity_learn_log` ADD `watchTime` int(10) unsigned NOT NULL DEFAULT '0';gi");
+        $biz['db']->exec("ALTER TABLE `activity_learn_log` ADD `watchTime` int(10) unsigned NOT NULL DEFAULT '0';");
     }
 
     /**
