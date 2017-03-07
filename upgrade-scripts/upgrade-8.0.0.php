@@ -117,6 +117,7 @@ class EduSohoUpgrade extends AbstractUpdater
               ,`cover`
               ,`creator`
               ,`summary`
+              ,`teacherIds`
           ) SELECT
               `id`
               ,`title`
@@ -147,11 +148,15 @@ class EduSohoUpgrade extends AbstractUpdater
               ,concat('{\"large\":\"',largePicture,'\",\"middle\":\"',middlePicture,'\",\"small\":\"',smallPicture,'\"}') as cover
               ,`userId`
               ,`about`
+              ,`teacherIds`
           FROM `course` where `id` not in (select `id` from `c2_course_set`);";
 
         $result = $this->getConnection()->exec($sql);
 
         $sql = "UPDATE `c2_course_set` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.num  WHERE ce.id = cm.`courseId`;";
+        $result = $this->getConnection()->exec($sql);
+
+        $sql = "UPDATE `c2_course_set` cs, `course` c SET cs.minCoursePrice = c.price, cs.maxCoursePrice = c.price where cs.id = c.id";
         $result = $this->getConnection()->exec($sql);
     }
 
@@ -274,6 +279,7 @@ class EduSohoUpgrade extends AbstractUpdater
               ,`threadNum`
               ,`enableFinish`
               ,`learnMode`
+              ,`maxRate`
           ) SELECT
               `id`
               ,`title`
@@ -325,6 +331,7 @@ class EduSohoUpgrade extends AbstractUpdater
               ,0
               ,1
               ,'freeMode'
+              ,`maxRate`
           FROM `course` where `id` not in (select `id` from `c2_course`);";
         $result = $this->getConnection()->exec($sql);
 
@@ -334,11 +341,9 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = "UPDATE `c2_course` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.num  WHERE ce.id = cm.courseId;";
         $result = $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE `c2_course` c set `publishedTaskNum` = (select count(*) from course_lesson where courseId=c.id)";
+        $sql = "UPDATE `c2_course` c set `publishedTaskNum` = (select count(*) from course_lesson where courseId=c.id and status = 'published')";
         $result = $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE `c2_course_set` cs, `c2_course` c SET cs.minCoursePrice = c.price, cs.maxCoursePrice = c.price where cs.id = c.id";
-        $result = $this->getConnection()->exec($sql);
     }
 
     /**
