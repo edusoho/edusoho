@@ -126,6 +126,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             'serializeMode'
         ));
 
+        if (!isset($course['isFree'])) {
+            $course['isFree'] = 1;//默认免费
+        }
+        
         $course = $this->validateExpiryMode($course);
 
         $course['status']  = 'draft';
