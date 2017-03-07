@@ -323,7 +323,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     protected function prepareCourseIdAndActvityId($conditions)
     {
-        $targets = explode("/", $conditions['target']);
+        $targets = explode('/', $conditions['target']);
         array_walk($targets, function ($target) use (&$conditions) {
             if (strpos($target, 'course') !== false) {
                 $courseIds = explode('-', $target);
@@ -341,6 +341,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             }
         }
         unset($conditions['target']);
+
         return $conditions;
     }
 }
