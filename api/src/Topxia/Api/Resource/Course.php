@@ -12,6 +12,8 @@ class Course extends BaseResource
     public function get(Application $app, Request $request, $id)
     {
         $course = $this->getCourseService()->getCourse($id);
+        $course['courseSet'] = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
         return $this->filter($course);
     }
 
@@ -34,7 +36,7 @@ class Course extends BaseResource
 
     private function filledCourseByCourseSet($course)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $courseSet = $course['courseSet'];
         $copyKeys = array('tags', 'hitNum', 'orgCode', 'orgId',
             'discount', 'categoryId', 'recommended', 'recommendedSeq', 'recommendedTime',
             'subtitle', 'discountId', 'smallPicture', 'middlePicture', 'largePicture'
@@ -61,6 +63,7 @@ class Course extends BaseResource
             $course['title'] = $courseSet['title'] . '-' . $course['title'];
         }
 
+        unset($course['courseSet']);
         return $course;
     }
 
