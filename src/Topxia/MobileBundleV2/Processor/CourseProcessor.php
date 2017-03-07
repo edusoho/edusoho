@@ -1,151 +1,156 @@
 <?php
+
 namespace Topxia\MobileBundleV2\Processor;
 
 interface CourseProcessor
 {
-	public function getVersion();
-	public function getCourses();
-	public function getLearningCourse();
-	public function getLearningCourseWithoutToken();
+    public function getVersion();
 
-	public function getUserTeachCourse();
-	public function getLearnedCourse();
-	public function getFavoriteCourse();
+    public function getCourses();
 
-	public function getFavoriteLiveCourse();
-	public function getFavoriteNormalCourse();
+    public function getLearningCourse();
 
-	/**
-	* tagId    	标签id 
-	* search 	搜索内容
-	* 参数只能有一个 tagId或search
-	*/
-	public function searchCourse();
-	
-	public function getCourse();
-	public function getCourseReviewInfo();
-	public function getReviews();
+    public function getLearningCourseWithoutToken();
 
-	public function favoriteCourse();
-	public function unFavoriteCourse();
-	public function getTeacherCourses();
+    public function getUserTeachCourse();
 
-	/**
-	*获取课程公告列表
-	*/
-	public function getCourseNotices();
+    public function getLearnedCourse();
 
-	public function unLearnCourse();
+    public function getFavoriteCourse();
 
-	/**
-	* 获取用户所学课程下的所有问题或者讨论
-	*/
-	public function getThreadsByUserCourseIds();
+    public function getFavoriteLiveCourse();
 
-	public function getCourseThreads();
+    public function getFavoriteNormalCourse();
 
-	public function commitCourse();
+    /**
+     * tagId    	标签id
+     * search 	搜索内容
+     * 参数只能有一个 tagId或search.
+     */
+    public function searchCourse();
 
-	/**
-	*获取用户 课程会员信息
-	* token 用户token
-	* courseId 课程id
-	*/
-	public function getCourseMember();
+    public function getCourse();
 
-	/**
-	 *  获取问题详情（包括提问的用户信息）
-	 *	courseId 课程id
-	 *	threadId 问答id
-	 *	token userToken
-	*/
-	public function getThread();
+    public function getCourseReviewInfo();
 
-	/**
-	 *	问题编辑更新
-	 *	courseId 课程id
-	 *	threadId 问答id
-	 */
-	public function updateThread();
+    public function getReviews();
 
-	public function getThreadTeacherPost();
+    public function favoriteCourse();
 
-	/**
-	 *	courseId 课程id
-	 *	threadId 问答id
-	 *	start 起始索引
-	 *	limit 分页
-	*/
-	public function getThreadPost();
+    public function unFavoriteCourse();
 
-	/**
-	 *	courseId
-	 *	threadId
-	 *	content 内容
-	 *	imageCount 图片数量
-	 *	image1， image2...
-	*/
-	public function postThread();
+    public function getTeacherCourses();
 
-	/** 更新一条回复
-	*
-	*
-	*
-	*/
-	public function updatePost();
+    /**
+     *获取课程公告列表.
+     */
+    public function getCourseNotices();
 
-	public function coupon();
+    public function unLearnCourse();
 
-	public function vipLearn();
+    /**
+     * 获取用户所学课程下的所有问题或者讨论.
+     */
+    public function getThreadsByUserCourseIds();
 
-	/**
-	 *
-	 *根据用户ID获取笔记信息(全部)
-	 */
-	public function getNoteList();
+    public function getCourseThreads();
 
-	/**
-	* 获取课程下所有笔记
-	*/
-	public function getCourseNotes();
+    public function commitCourse();
 
-	/**
-	*获取课时笔记
-	*/
-	public function getLessonNote();
+    /**
+     *获取用户 课程会员信息
+     * token 用户token
+     * courseId 课程id.
+     */
+    public function getCourseMember();
 
-	/**
-	 *
-	 *添加一条笔记
-	 */
-	public function AddNote();
+    /**
+     *  获取问题详情（包括提问的用户信息）
+     *	courseId 课程id
+     *	threadId 问答id
+     *	token userToken.
+     */
+    public function getThread();
 
-	/**
-	 *
-	 *删除一条笔记
-	 */
-	public function DeleteNote();
+    /**
+     *	问题编辑更新
+     *	courseId 课程id
+     *	threadId 问答id.
+     */
+    public function updateThread();
 
-	public function getOneNote();
+    public function getThreadTeacherPost();
 
-	/**
-	*获取单条回复信息
-	*/
-	public function getOneThreadPost();
+    /**
+     *	courseId 课程id
+     *	threadId 问答id
+     *	start 起始索引
+     *	limit 分页.
+     */
+    public function getThreadPost();
 
-	public function hitThread();
+    /**
+     *	courseId
+     *	threadId
+     *	content 内容
+     *	imageCount 图片数量
+     *	image1， image2...
+     */
+    public function postThread();
 
-	/**
-	*测试直播参数
-	*/
-	public function getLiveCourse();
+    /** 更新一条回复
+     *
+     */
+    public function updatePost();
 
-	public function getLiveCourses();
+    public function coupon();
 
-	public function getAllLiveCourses();
+    public function vipLearn();
 
-	public function getModifyInfo();
+    /**
+     *根据用户ID获取笔记信息(全部).
+     */
+    public function getNoteList();
 
-	public function updateModifyInfo();
+    /**
+     * 获取课程下所有笔记.
+     */
+    public function getCourseNotes();
 
+    /**
+     *获取课时笔记.
+     */
+    public function getLessonNote();
+
+    /**
+     *添加一条笔记.
+     */
+    public function AddNote();
+
+    /**
+     *删除一条笔记.
+     */
+    public function DeleteNote();
+
+    public function getOneNote();
+
+    /**
+     *获取单条回复信息.
+     */
+    public function getOneThreadPost();
+
+    public function hitThread();
+
+    /**
+     *测试直播参数.
+     */
+    public function getLiveCourse();
+
+    public function getLiveCourses();
+
+    public function getAllLiveCourses();
+
+    public function getModifyInfo();
+
+    public function updateModifyInfo();
 }
