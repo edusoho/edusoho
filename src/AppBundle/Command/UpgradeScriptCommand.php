@@ -57,7 +57,8 @@ class UpgradeScriptCommand extends BaseCommand
 
     protected function removeCache()
     {
-        $cachePath = $this->getServiceKernel()->getParameter('kernel.root_dir').'/cache/'.$this->getServiceKernel()->getEnvironment();
+        $cachePath = $this->getServiceKernel()->getParameter('kernel.root_dir').'/cache/'.$this->getServiceKernel(
+            )->getEnvironment();
         $filesystem = new Filesystem();
         $filesystem->remove($cachePath);
 
@@ -85,6 +86,7 @@ class UpgradeScriptCommand extends BaseCommand
     protected function getAppDao()
     {
         $biz = $this->getServiceKernel()->getBiz();
+
         return $biz->dao('CloudPlatform:CloudAppDao');
     }
 

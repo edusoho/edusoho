@@ -380,7 +380,11 @@ class CourseManageController extends BaseController
             if (empty($data) || !isset($data['teachers'])) {
                 throw new InvalidArgumentException('Empty Data');
             }
+            
             $teachers = json_decode($data['teachers'], true);
+            if (empty($teachers)) {
+                throw new InvalidArgumentException('Empty Data');
+            }
 
             $this->getCourseMemberService()->setCourseTeachers($courseId, $teachers);
 
@@ -495,7 +499,6 @@ class CourseManageController extends BaseController
 
     /**
      * @param  $tasks
-     *
      * @return array
      */
     public function prepareTaskActivityFiles($tasks)
@@ -725,12 +728,12 @@ class CourseManageController extends BaseController
             $students[$key]['nickname'] = $user['nickname'];
             $students[$key]['startTime'] = $result['createdTime'];
             $students[$key]['finishedTime'] = $result['finishedTime'];
-            $students[$key]['learnTime'] = $result['time'];
-            $students[$key]['watchTime'] = $result['time'];
+            $students[$key]['learnTime'] = ceil($result['time'] / 60);
+            $students[$key]['watchTime'] = ceil($result['time'] / 60);
 
             if ($activity['mediaType'] == 'testpaper') {
                 $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
-                $paperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaperActivity['mediaId'], $courseId, $activity['id'], 'testpaper');
+                $paperResult = $this->getTestpaperService()->getUserFinishedResult($testpaperActivity['mediaId'], $courseId, $activity['id'], 'testpaper', $user['id']);
                 $students[$key]['result'] = empty($paperResult) ? 0 : $paperResult['score'];
             }
         }
@@ -817,10 +820,15 @@ class CourseManageController extends BaseController
 
             if ($value['type'] == 'testpaper') {
                 $testpaperActivity = $this->getTestpaperActivityService()->getActivity($value['activity']['mediaId']);
-                $paperId = $testpaperActivity['mediaId'];
-                $score = $this->getTestpaperService()->searchTestpapersScore(array('testId' => $paperId));
-                $paperNum = $this->getTestpaperService()->searchTestpaperResultsCount(array('testId' => $paperId));
 
+                $conditions = array(
+                    'testId' => $testpaperActivity['mediaId'],
+                    'type' => 'testpaper',
+                    'status' => 'finished',
+                    'courseId' => $value['courseId'],
+                );
+                $score = $this->getTestpaperService()->searchTestpapersScore($conditions);
+                $paperNum = $this->getTestpaperService()->searchTestpaperResultsCount($conditions);
                 $tasks[$key]['score'] = ($finishedNum == 0 || $paperNum == 0) ? 0 : intval($score / $paperNum);
             }
         }
