@@ -2,12 +2,11 @@
 
 namespace AppBundle\Extensions\DataTag\Test;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 use AppBundle\Extensions\DataTag\CourseDataTag;
 
 class CourseDataTagTest extends BaseTestCase
-{   
-
+{
     public function testGetData()
     {
         $course = array(
@@ -26,5 +25,4 @@ class CourseDataTagTest extends BaseTestCase
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
     }
-
 }

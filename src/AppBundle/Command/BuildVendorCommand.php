@@ -10,16 +10,17 @@ use Symfony\Component\Finder\Finder;
 
 class BuildVendorCommand extends ContainerAwareCommand
 {
-
     /**
-     * project root dir
-     * @var string $rootDir
+     * project root dir.
+     *
+     * @var string
      */
     public $rootDir;
 
     /**
-     * build dir
-     * @var string $buildDir
+     * build dir.
+     *
+     * @var string
      */
     public $buildDir;
 
@@ -39,7 +40,7 @@ class BuildVendorCommand extends ContainerAwareCommand
         'VERSION',
         'CHANGES',
         '.gitattributes',
-        '.DS_Store'
+        '.DS_Store',
     );
 
     protected function configure()
@@ -52,29 +53,28 @@ class BuildVendorCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->rootDir  = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../vendor');
-        $this->buildDir = $this->rootDir . '/../build/vendor';
+        $this->rootDir = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../vendor');
+        $this->buildDir = $this->rootDir.'/../build/vendor';
 
         $fileSystem = new Filesystem();
 
-        if($fileSystem->exists($this->buildDir)){
+        if ($fileSystem->exists($this->buildDir)) {
             $fileSystem->remove($this->buildDir);
         }
 
         // copy autoload.php
         $fileSystem->mkdir($this->buildDir);
-        $fileSystem->copy($this->rootDir . DIRECTORY_SEPARATOR . 'autoload.php', $this->buildDir . DIRECTORY_SEPARATOR . 'autoload.php');
-
+        $fileSystem->copy($this->rootDir.DIRECTORY_SEPARATOR.'autoload.php', $this->buildDir.DIRECTORY_SEPARATOR.'autoload.php');
 
         // copy vendor
         $finder = new Finder();
         $finder->directories()->in($this->rootDir);
         $targetDirs = array();
-        foreach ($finder as $dir){
+        foreach ($finder as $dir) {
             $output->writeln(sprintf('<info>copying %s</info>', $dir));
-            $vendorDir = substr($dir, strpos($dir, 'vendor') + strlen('vendor' . DIRECTORY_SEPARATOR));
-            $targetDir = $this->buildDir . DIRECTORY_SEPARATOR . $vendorDir;
-            if($dir->isDir() && $dir->isReadable()){
+            $vendorDir = substr($dir, strpos($dir, 'vendor') + strlen('vendor'.DIRECTORY_SEPARATOR));
+            $targetDir = $this->buildDir.DIRECTORY_SEPARATOR.$vendorDir;
+            if ($dir->isDir() && $dir->isReadable()) {
                 $fileSystem->mirror($dir, $targetDir);
                 $targetDirs[] = $targetDir;
             }
@@ -82,13 +82,13 @@ class BuildVendorCommand extends ContainerAwareCommand
 
         // remove unneeded files
         $needRemove = array(
-            $this->buildDir . DIRECTORY_SEPARATOR . 'composer/installed.json',
+            $this->buildDir.DIRECTORY_SEPARATOR.'composer/installed.json',
         );
         $finder = new Finder();
         $finder->directories()->in($targetDirs);
-        foreach ($finder as $dir){
+        foreach ($finder as $dir) {
             $dirName = $dir->getFilename();
-            if(lcfirst($dirName) === 'tests'){
+            if (lcfirst($dirName) === 'tests') {
                 $output->writeln(sprintf('<info>removing unneeded dir %s</info>', $dirName));
                 $needRemove[] = $dir->getRealPath();
             }
@@ -96,8 +96,8 @@ class BuildVendorCommand extends ContainerAwareCommand
 
         $finder = new Finder();
         $finder->files()->ignoreDotFiles(false)->in($targetDirs);
-        foreach ($finder as $file){
-            if(in_array($file->getFilename(), $this->unneededFiles, true)){
+        foreach ($finder as $file) {
+            if (in_array($file->getFilename(), $this->unneededFiles, true)) {
                 $output->writeln(sprintf('<info>removing unneeded file %s</info>', $file->getFilename()));
                 $needRemove[] = $file->getRealPath();
             }

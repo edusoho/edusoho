@@ -4,7 +4,6 @@ namespace Biz\Group\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Content\Service\FileService;
-use Biz\File\Service\UploadFileService;
 use Biz\Group\Dao\GroupDao;
 use Biz\Group\Dao\MemberDao;
 use AppBundle\Common\ArrayToolkit;
@@ -26,6 +25,7 @@ class GroupServiceImpl extends BaseService implements GroupService
     public function getGroupsByIds($ids)
     {
         $groups = $this->getGroupDao()->findByIds($ids);
+
         return ArrayToolkit::index($groups, 'id');
     }
 
@@ -37,6 +37,7 @@ class GroupServiceImpl extends BaseService implements GroupService
     public function searchGroups($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->prepareGroupConditions($conditions);
+
         return $this->getGroupDao()->search($conditions, $orderBy, $start, $limit);
     }
 
@@ -45,6 +46,7 @@ class GroupServiceImpl extends BaseService implements GroupService
         if (isset($fields['about'])) {
             $fields['about'] = $this->biz['html_helper']->purify($fields['about']);
         }
+
         return $this->getGroupDao()->update($id, $fields);
     }
 
@@ -63,27 +65,28 @@ class GroupServiceImpl extends BaseService implements GroupService
         if (isset($group['about'])) {
             $group['about'] = $this->biz['html_helper']->purify($group['about']);
         }
-        $group['ownerId']     = $user['id'];
-        $group['memberNum']   = 1;
+        $group['ownerId'] = $user['id'];
+        $group['memberNum'] = 1;
         $group['createdTime'] = time();
-        $group                = $this->getGroupDao()->create($group);
-        $member               = array(
-            'groupId'     => $group['id'],
-            'userId'      => $user['id'],
+        $group = $this->getGroupDao()->create($group);
+        $member = array(
+            'groupId' => $group['id'],
+            'userId' => $user['id'],
             'createdTime' => time(),
-            'role'        => 'owner'
+            'role' => 'owner',
         );
         $this->getGroupMemberDao()->create($member);
+
         return $group;
     }
 
     public function addOwner($groupId, $userId)
     {
         $member = array(
-            'groupId'     => $groupId,
-            'userId'      => $userId,
+            'groupId' => $groupId,
+            'userId' => $userId,
             'createdTime' => time(),
-            'role'        => 'owner'
+            'role' => 'owner',
         );
 
         $member = $this->getGroupMemberDao()->create($member);
@@ -96,22 +99,20 @@ class GroupServiceImpl extends BaseService implements GroupService
     public function openGroup($id)
     {
         return $this->updateGroup($id, array(
-            'status' => 'open'
+            'status' => 'open',
         ));
     }
 
     public function closeGroup($id)
     {
         return $this->updateGroup($id, array(
-            'status' => 'close'
+            'status' => 'close',
         ));
     }
 
     public function changeGroupImg($id, $field, $data)
     {
-
-
-        if (!in_array($field, array("logo", "backgroundLogo"))) {
+        if (!in_array($field, array('logo', 'backgroundLogo'))) {
             throw $this->createInvalidArgumentException('Invalid Field :'.$field);
         }
 
@@ -120,19 +121,19 @@ class GroupServiceImpl extends BaseService implements GroupService
             throw $this->createNotFoundException('Group Not Found');
         }
 
-        $fileIds = ArrayToolkit::column($data, "id");
+        $fileIds = ArrayToolkit::column($data, 'id');
 
         $files = $this->getFileService()->getFilesByIds($fileIds);
-        $files = ArrayToolkit::index($files, "id");
+        $files = ArrayToolkit::index($files, 'id');
 
-        $fileIds = ArrayToolkit::index($data, "type");
+        $fileIds = ArrayToolkit::index($data, 'type');
 
         $fields = array(
-            $field => $files[$fileIds[$field]["id"]]["uri"]
+            $field => $files[$fileIds[$field]['id']]['uri'],
         );
 
-        $oldAvatars  = array(
-            $field => $group[$field] ? $group[$field] : null
+        $oldAvatars = array(
+            $field => $group[$field] ? $group[$field] : null,
         );
         $fileService = $this->getFileService();
         array_map(function ($oldAvatar) use ($fileService) {
@@ -156,9 +157,9 @@ class GroupServiceImpl extends BaseService implements GroupService
         }
 
         $member = array(
-            'groupId'     => $groupId,
-            'userId'      => $user['id'],
-            'createdTime' => time()
+            'groupId' => $groupId,
+            'userId' => $user['id'],
+            'createdTime' => time(),
         );
         $member = $this->getGroupMemberDao()->create($member);
 
@@ -194,8 +195,10 @@ class GroupServiceImpl extends BaseService implements GroupService
             foreach ($members as $key) {
                 $ids[] = $key['groupId'];
             }
+
             return $this->getGroupDao()->findByIds($ids);
         }
+
         return array();
     }
 
@@ -207,24 +210,28 @@ class GroupServiceImpl extends BaseService implements GroupService
     public function searchGroupsCount($conditions)
     {
         $conditions = $this->prepareGroupConditions($conditions);
+
         return $this->getGroupDao()->count($conditions);
     }
 
     public function isOwner($id, $userId)
     {
         $group = $this->getGroupDao()->get($id);
+
         return $group['ownerId'] == $userId ? true : false;
     }
 
     public function isAdmin($groupId, $userId)
     {
         $member = $this->getGroupMemberDao()->getByGroupIdAndUserId($groupId, $userId);
-        return $member['role'] == "admin" ? true : false;
+
+        return $member['role'] == 'admin' ? true : false;
     }
 
     public function isMember($groupId, $userId)
     {
         $member = $this->getGroupMemberDao()->getByGroupIdAndUserId($groupId, $userId);
+
         return $member ? true : false;
     }
 
@@ -269,7 +276,7 @@ class GroupServiceImpl extends BaseService implements GroupService
 
     protected function prepareGroupConditions($conditions)
     {
-        if (isset($conditions['ownerName']) && $conditions['ownerName'] !== "") {
+        if (isset($conditions['ownerName']) && $conditions['ownerName'] !== '') {
             $owner = $this->getUserService()->getUserByNickname($conditions['ownerName']);
 
             if (!empty($owner)) {
@@ -279,7 +286,7 @@ class GroupServiceImpl extends BaseService implements GroupService
             }
         }
         if (isset($conditions['status'])) {
-            if ($conditions['status'] == "") {
+            if ($conditions['status'] == '') {
                 unset($conditions['status']);
             }
         }

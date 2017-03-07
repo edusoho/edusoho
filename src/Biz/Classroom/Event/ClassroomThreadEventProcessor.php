@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Classroom\Event;
 
 use Codeages\Biz\Framework\Event\Event;
@@ -39,7 +40,7 @@ class ClassroomThreadEventProcessor extends EventSubscriber
 
         $adoptedPostCount = $this->getThreadService()->searchPostsCount(array(
             'threadId' => $post['threadId'],
-            'adopted'  => 1
+            'adopted' => 1,
         ));
 
         if (empty($adoptedPostCount)) {

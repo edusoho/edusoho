@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Twig;
 
 use Codeages\Biz\Framework\Context\Biz;
@@ -19,14 +20,14 @@ class ActivityExtension extends \Twig_Extension
     public function __construct(ContainerInterface $container, Biz $biz)
     {
         $this->container = $container;
-        $this->biz       = $biz;
+        $this->biz = $biz;
     }
 
     public function getFilters()
     {
         return array(
             new \Twig_SimpleFilter('activity_length_format', array($this, 'lengthFormat')),
-            new \Twig_SimpleFilter('activity_visible', array($this, 'isActivityVisible'))
+            new \Twig_SimpleFilter('activity_visible', array($this, 'isActivityVisible')),
         );
     }
 
@@ -34,7 +35,7 @@ class ActivityExtension extends \Twig_Extension
     {
         return array(
             new \Twig_SimpleFunction('activity_meta', array($this, 'getActivityMeta')),
-            new \Twig_SimpleFunction('activity_metas', array($this, 'getActivityMeta'))
+            new \Twig_SimpleFunction('activity_metas', array($this, 'getActivityMeta')),
         );
     }
 
@@ -46,14 +47,16 @@ class ActivityExtension extends \Twig_Extension
             $activities = array_map(function ($activity) {
                 return $activity['meta'];
             }, $activities);
+
             return $activities;
         } else {
             if (isset($activities[$type]) && isset($activities[$type]['meta'])) {
                 return $activities[$type]['meta'];
             }
+
             return array(
                 'icon' => '',
-                'name' => ''
+                'name' => '',
             );
         }
     }
@@ -68,6 +71,7 @@ class ActivityExtension extends \Twig_Extension
     public function isActivityVisible($type, $courseSet, $course)
     {
         $activities = $this->container->get('extension.default')->getActivities();
+
         return call_user_func($activities[$type]['visible'], $courseSet, $course);
     }
 
@@ -78,6 +82,7 @@ class ActivityExtension extends \Twig_Extension
         }
         $h = floor($len / 60);
         $m = fmod($len, 60);
+
         return ($h < 10 ? '0'.$h : $h).':'.($m < 10 ? '0'.$m : $m);
     }
 

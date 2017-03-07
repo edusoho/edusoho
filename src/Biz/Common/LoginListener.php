@@ -2,7 +2,6 @@
 
 namespace Biz\Common;
 
-
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,7 +9,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
-
 
 /**
  * Custom login listener.
@@ -47,19 +45,20 @@ class LoginListener implements AuthenticationSuccessHandlerInterface
     {
         if ($request->isXmlHttpRequest()) {
             $result = array('success' => true);
+
             return new Response(json_encode($result));
         } else {
             $referer = $request->headers->get('referer');
             if (strpos($referer, '/login')) {
                 $referer = str_replace('/login', '/my', $referer);
             }
+
             return new RedirectResponse($referer);
         }
     }
 
     protected function getUserService()
     {
-
         return $this->biz->service('User:UserService');
     }
 

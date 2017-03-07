@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class AddCourseSetFieldsParentId extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -15,12 +15,12 @@ class AddCourseSetFieldsParentId extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("ALTER TABLE `c2_course_set` DROP COLUMN `parentId`;");
-        $biz['db']->exec("ALTER TABLE `c2_course_set` DROP COLUMN `locked`;");
+        $biz['db']->exec('ALTER TABLE `c2_course_set` DROP COLUMN `parentId`;');
+        $biz['db']->exec('ALTER TABLE `c2_course_set` DROP COLUMN `locked`;');
     }
 }

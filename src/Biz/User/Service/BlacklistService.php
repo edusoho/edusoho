@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\Service;
 
 interface BlacklistService
@@ -14,5 +15,4 @@ interface BlacklistService
     public function deleteBlacklistByUserIdAndBlackId($userId, $blackId);
 
     public function canTakeBlacklist($userId);
-
 }

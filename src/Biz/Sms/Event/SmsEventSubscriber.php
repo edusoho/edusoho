@@ -1,7 +1,7 @@
 <?php
+
 namespace Biz\Sms\Event;
 
-use AppBundle\Common\StringToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\PluginBundle\Event\EventSubscriber;
@@ -13,7 +13,7 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
     {
         return array(
             'open.course.lesson.publish' => 'onLiveOpenCourseLessonCreate',
-            'open.course.lesson.update'  => 'onLiveOpenCourseLessonUpdate'
+            'open.course.lesson.update' => 'onLiveOpenCourseLessonUpdate',
         );
     }
 
@@ -31,7 +31,7 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
     public function onLiveOpenCourseLessonUpdate(Event $event)
     {
         $context = $event->getSubject();
-        $lesson  = $context['lesson'];
+        $lesson = $context['lesson'];
 
         if ($lesson['type'] == 'liveOpen' && isset($lesson['startTime'])
             && $lesson['startTime'] != $lesson['fields']['startTime']
@@ -51,31 +51,31 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
 
     protected function createJob($lesson, $targetType)
     {
-        $daySmsType  = 'sms_live_play_one_day';
+        $daySmsType = 'sms_live_play_one_day';
         $hourSmsType = 'sms_live_play_one_hour';
-        $dayIsOpen   = $this->getSmsService()->isOpen($daySmsType);
-        $hourIsOpen  = $this->getSmsService()->isOpen($hourSmsType);
+        $dayIsOpen = $this->getSmsService()->isOpen($daySmsType);
+        $hourIsOpen = $this->getSmsService()->isOpen($hourSmsType);
 
         if ($dayIsOpen && $lesson['startTime'] >= (time() + 24 * 60 * 60)) {
             $startJob = array(
-                'name'            => "SmsSendOneDayJob",
-                'cycle'           => 'once',
+                'name' => 'SmsSendOneDayJob',
+                'cycle' => 'once',
                 'nextExcutedTime' => $lesson['startTime'] - 24 * 60 * 60,
-                'jobClass'        => substr(__NAMESPACE__, 0, -5).'Job\\SmsSendOneDayJob',
-                'targetType'      => $targetType,
-                'targetId'        => $lesson['id']
+                'jobClass' => substr(__NAMESPACE__, 0, -5).'Job\\SmsSendOneDayJob',
+                'targetType' => $targetType,
+                'targetId' => $lesson['id'],
             );
             $startJob = $this->getCrontabService()->createJob($startJob);
         }
 
         if ($hourIsOpen && $lesson['startTime'] >= (time() + 60 * 60)) {
             $startJob = array(
-                'name'            => "SmsSendOneHourJob",
-                'cycle'           => 'once',
+                'name' => 'SmsSendOneHourJob',
+                'cycle' => 'once',
                 'nextExcutedTime' => $lesson['startTime'] - 60 * 60,
-                'jobClass'        => substr(__NAMESPACE__, 0, -5).'Job\\SmsSendOneHourJob',
-                'targetType'      => $targetType,
-                'targetId'        => $lesson['id']
+                'jobClass' => substr(__NAMESPACE__, 0, -5).'Job\\SmsSendOneHourJob',
+                'targetType' => $targetType,
+                'targetId' => $lesson['id'],
             );
             $startJob = $this->getCrontabService()->createJob($startJob);
         }

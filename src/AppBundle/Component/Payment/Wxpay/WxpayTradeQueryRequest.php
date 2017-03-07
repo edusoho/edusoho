@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Component\Payment\Wxpay;
 
 use AppBundle\Component\Payment\Request;
@@ -8,37 +9,40 @@ use Symfony\Component\DependencyInjection\SimpleXMLElement;
 class WxpayTradeQueryRequest extends Request
 {
     protected $unifiedOrderUrl = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
-    protected $orderQueryUrl   = 'https://api.mch.weixin.qq.com/pay/orderquery';
+    protected $orderQueryUrl = 'https://api.mch.weixin.qq.com/pay/orderquery';
 
     public function form()
     {
-        $params         = array();
+        $params = array();
         $form['action'] = $this->unifiedOrderUrl.'?_input_charset=utf-8';
         $form['method'] = 'post';
         $form['params'] = $this->convertParams($this->params);
+
         return $form;
     }
 
     public function tradeQuery()
     {
-        $params             = $this->params;
-        $converted          = array();
+        $params = $this->params;
+        $converted = array();
         $converted['appid'] = $this->options['key'];
 
-        $settings                  = $this->getSettingService()->get('payment');
-        $converted['mch_id']       = $settings["wxpay_account"];
-        $converted['nonce_str']    = $this->getNonceStr();
+        $settings = $this->getSettingService()->get('payment');
+        $converted['mch_id'] = $settings['wxpay_account'];
+        $converted['nonce_str'] = $this->getNonceStr();
         $converted['out_trade_no'] = $params['sn'];
-        $converted['sign']         = strtoupper($this->signParams($converted));
+        $converted['sign'] = strtoupper($this->signParams($converted));
 
-        $xml      = $this->toXml($converted);
+        $xml = $this->toXml($converted);
         $response = $this->postRequest($this->orderQueryUrl, $xml);
+
         return $response;
     }
 
     public function fromXml($xml)
     {
         $array = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+
         return $array;
     }
 
@@ -69,19 +73,19 @@ class WxpayTradeQueryRequest extends Request
     {
         $converted = array();
 
-        $converted['appid']            = $this->options['key'];
-        $converted['attach']           = '支付';
-        $converted['body']             = mb_substr($this->filterText($params['title']), 0, 49, 'utf-8');
-        $settings                      = $this->getSettingService()->get('payment');
-        $converted['mch_id']           = $settings["wxpay_account"];
-        $converted['nonce_str']        = $this->getNonceStr();
-        $converted['notify_url']       = $params['notifyUrl'];
-        $converted['out_trade_no']     = $params['orderSn'];
+        $converted['appid'] = $this->options['key'];
+        $converted['attach'] = '支付';
+        $converted['body'] = mb_substr($this->filterText($params['title']), 0, 49, 'utf-8');
+        $settings = $this->getSettingService()->get('payment');
+        $converted['mch_id'] = $settings['wxpay_account'];
+        $converted['nonce_str'] = $this->getNonceStr();
+        $converted['notify_url'] = $params['notifyUrl'];
+        $converted['out_trade_no'] = $params['orderSn'];
         $converted['spbill_create_ip'] = $this->getClientIp();
-        $converted['total_fee']        = intval($params['amount'] * 100);
-        $converted['trade_type']       = 'NATIVE';
-        $converted['product_id']       = $params['orderSn'];
-        $converted['sign']             = strtoupper($this->signParams($converted));
+        $converted['total_fee'] = intval($params['amount'] * 100);
+        $converted['trade_type'] = 'NATIVE';
+        $converted['product_id'] = $params['orderSn'];
+        $converted['sign'] = strtoupper($this->signParams($converted));
 
         return $converted;
     }
@@ -99,10 +103,10 @@ class WxpayTradeQueryRequest extends Request
 
     private function getNonceStr($length = 32)
     {
-        $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-        $str   = "";
+        $chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        $str = '';
 
-        for ($i = 0; $i < $length; $i++) {
+        for ($i = 0; $i < $length; ++$i) {
             $str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
         }
 

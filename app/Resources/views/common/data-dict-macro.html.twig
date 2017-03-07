@@ -30,7 +30,7 @@
     {% elseif status == 'refunding' %}
         <span class="text-warning">{{ '退款中'|trans }}</span>
     {% elseif status == 'refunded' %}
-        <span class="text-danger">{{ '已退款'|trans }}</span>
+        <span class="color-danger">{{ '已退款'|trans }}</span>
     {% elseif status == 'cancelled' %}
         <span class="text-muted">{{ '已关闭'|trans }}</span>
     {% endif %}
@@ -42,7 +42,7 @@
     {% elseif status == 'success' %}
         <span class="color-success">{{ '退款成功'|trans }}</span>
     {% elseif status == 'failed' %}
-        <span class="text-danger">{{ '退款失败'|trans }}</span>
+        <span class="color-danger">{{ '退款失败'|trans }}</span>
     {% elseif status == 'cancelled' %}
         <span class="text-muted">{{ '已取消'|trans }}</span>
     {% endif %}
@@ -54,7 +54,7 @@
     {% elseif level == 'warning' %}
         <span class="text-warning">{{ '警告'|trans }}</span>
     {% elseif level == 'error' %}
-        <span class="text-danger">{{ '错误'|trans }}</span>
+        <span class="color-danger">{{ '错误'|trans }}</span>
     {% endif %}
 {% endmacro %}
 

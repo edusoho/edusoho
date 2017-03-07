@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Twig;
 
 use Codeages\Biz\Framework\Context\Biz;
@@ -16,23 +17,24 @@ class HtmlExtension extends \Twig_Extension
     public function __construct($container, Biz $biz)
     {
         $this->container = $container;
-        $this->biz       = $biz;
+        $this->biz = $biz;
     }
 
     public function getFunctions()
     {
         $options = array('is_safe' => array('html'));
+
         return array(
             new \Twig_SimpleFunction('select_options', array($this, 'selectOptions'), $options),
             new \Twig_SimpleFunction('radios', array($this, 'radios'), $options),
             new \Twig_SimpleFunction('checkboxs', array($this, 'checkboxs'), $options),
             new \Twig_SimpleFunction('field_value', array($this, 'fieldValue'), $options),
-            new \Twig_SimpleFunction('countdown', array($this, 'countdown'), $options)
+            new \Twig_SimpleFunction('countdown', array($this, 'countdown'), $options),
         );
     }
 
     /**
-     * 这个不要使用，要废弃
+     * 这个不要使用，要废弃.
      */
     public function fieldValue($object, $key, $default = '')
     {
@@ -111,21 +113,22 @@ class HtmlExtension extends \Twig_Extension
     public function countdown($timestamp)
     {
         $countdown = $timestamp - time();
-        $unit      = '';
-        $result    = '';
+        $unit = '';
+        $result = '';
 
         if ($countdown >= 86400) {
-            $unit   = '天';
+            $unit = '天';
             $result = $countdown / 86400;
         } elseif ($countdown >= 3600) {
-            $unit   = '小时';
+            $unit = '小时';
             $result = $countdown / 3600;
         } else {
-            $unit   = '分钟';
+            $unit = '分钟';
             $result = $countdown / 60;
         }
 
         $result = intval($result + 0.5);
+
         return $result.$unit;
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Symfony\Component\Console\Input\ArrayInput;
@@ -75,11 +76,11 @@ class BuildCommand extends BaseCommand
 
     private function initBuild(InputInterface $input, OutputInterface $output)
     {
-        $this->input  = $input;
+        $this->input = $input;
         $this->output = $output;
 
-        $this->rootDirectory  = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../');
-        $this->buildDirectory = $this->rootDirectory . '/build';
+        $this->rootDirectory = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
+        $this->buildDirectory = $this->rootDirectory.'/build';
 
         $this->filesystem = new Filesystem();
 
@@ -87,7 +88,7 @@ class BuildCommand extends BaseCommand
             $this->filesystem->remove($this->buildDirectory);
         }
 
-        $this->distDirectory = $this->buildDirectory . DIRECTORY_SEPARATOR . 'edusoho';
+        $this->distDirectory = $this->buildDirectory.DIRECTORY_SEPARATOR.'edusoho';
         $this->filesystem->mkdir($this->distDirectory);
     }
 
@@ -99,7 +100,7 @@ class BuildCommand extends BaseCommand
 
         $input = new ArrayInput(array(
             'command' => 'topxia:copy-install-files',
-            'version' => System::VERSION
+            'version' => System::VERSION,
         ));
 
         $command->run($input, $this->output);
@@ -113,11 +114,11 @@ class BuildCommand extends BaseCommand
 
         $input = new ArrayInput(array(
             'command' => 'topxia:dump-init-data',
-            'domain'  => $this->input->getArgument('domain'),
-            'user'    => $this->input->getArgument('user'),
-            'password'=> $this->input->getArgument('password'),
-            'database'=> $this->input->getArgument('database'),
-            'projectPath' => $this->input->getArgument('projectPath')
+            'domain' => $this->input->getArgument('domain'),
+            'user' => $this->input->getArgument('user'),
+            'password' => $this->input->getArgument('password'),
+            'database' => $this->input->getArgument('database'),
+            'projectPath' => $this->input->getArgument('projectPath'),
         ));
 
         $returnCode = $dumpCommand->run($input, $this->output);
@@ -127,7 +128,7 @@ class BuildCommand extends BaseCommand
 
         $input = new ArrayInput(array(
             'command' => 'topxia:cutfile',
-            'line'    => 15
+            'line' => 15,
         ));
 
         $returnCode = $cutCommand->run($input, $this->output);
@@ -138,7 +139,7 @@ class BuildCommand extends BaseCommand
             false
         );
 
-        if(!$helper->ask($this->input, $this->output, $question)){
+        if (!$helper->ask($this->input, $this->output, $question)) {
             $this->output->writeln('<error>制作安装包终止!</error>');
             exit();
         }
@@ -150,7 +151,7 @@ class BuildCommand extends BaseCommand
 
         chdir($this->buildDirectory);
 
-        $command = "tar czvf edusoho-" . System::VERSION . ".tar.gz edusoho/";
+        $command = 'tar czvf edusoho-'.System::VERSION.'.tar.gz edusoho/';
         exec($command);
     }
 
@@ -346,7 +347,7 @@ class BuildCommand extends BaseCommand
     {
         $this->output->writeln('build default blocks .');
 
-        $themeDir = realpath(__DIR__ . '/../../../../web/themes/');
+        $themeDir = realpath(__DIR__.'/../../../../web/themes/');
         BlockToolkit::init("{$themeDir}/block.json", $this->getContainer());
         BlockToolkit::init("{$themeDir}/default/block.json", $this->getContainer());
         BlockToolkit::init("{$themeDir}/autumn/block.json", $this->getContainer());

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Twig;
 
 use Codeages\Biz\Framework\Context\Biz;
@@ -19,12 +20,13 @@ class DictionaryExtension extends \Twig_Extension
     public function __construct($container, Biz $biz)
     {
         $this->container = $container;
-        $this->biz       = $biz;
+        $this->biz = $biz;
     }
 
     public function getFunctions()
     {
         $options = array('is_safe' => array('html'));
+
         return array(
             new \Twig_SimpleFunction('dict_select_options', array($this, 'dictSelectOptions'), $options),
         );
@@ -45,14 +47,13 @@ class DictionaryExtension extends \Twig_Extension
 
         $html = '';
         if (!is_null($empty)) {
-            if(is_array($empty)){
+            if (is_array($empty)) {
                 foreach ($empty as $key => $value) {
                     $html .= "<option value=\"{$key}\">{$value}</option>";
                 }
             } else {
                 $html .= "<option value=\"\">{$empty}</option>";
             }
-
         }
 
         foreach ($choices as $value => $name) {
@@ -66,7 +67,7 @@ class DictionaryExtension extends \Twig_Extension
         return $html;
     }
 
-    public function getName ()
+    public function getName()
     {
         return 'topxia_dictionary_twig';
     }

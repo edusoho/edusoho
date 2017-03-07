@@ -1,8 +1,8 @@
 <?php
+
 namespace AppBundle\Twig;
 
 use Codeages\Biz\Framework\Context\Biz;
-use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Common\BlockToolkit;
 
 class BlockExtension extends \Twig_Extension
@@ -19,7 +19,7 @@ class BlockExtension extends \Twig_Extension
     public function __construct($container, Biz $biz)
     {
         $this->container = $container;
-        $this->biz       = $biz;
+        $this->biz = $biz;
     }
 
     public function getFilters()
@@ -31,7 +31,7 @@ class BlockExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('block_show', array($this, 'showBlock'), array('is_safe' => array('html')))
+            new \Twig_SimpleFunction('block_show', array($this, 'showBlock'), array('is_safe' => array('html'))),
         );
     }
 

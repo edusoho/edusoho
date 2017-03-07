@@ -1,19 +1,19 @@
 <?php
+
 namespace AppBundle\Component\MediaParser\ItemParser;
 
 class FallbackItemParser extends AbstractItemParser
 {
-
     private $patterns = array(
         'p1' => '/^https?:\/\/.+?[(\.mp4)|(\.swf)]/s',
     );
 
-	public function parse($url)
-	{
+    public function parse($url)
+    {
         $item = array();
 
         $item['id'] = md5($url);
-        $item['uuid'] = 'Fallback:' . $item['id'];
+        $item['uuid'] = 'Fallback:'.$item['id'];
         $item['type'] = 'video';
         $item['title'] = '';
 
@@ -26,11 +26,10 @@ class FallbackItemParser extends AbstractItemParser
         }
 
         return $item;
-	}
+    }
 
     public function detect($url)
     {
-        return !! preg_match($this->patterns['p1'], $url);
+        return (bool) preg_match($this->patterns['p1'], $url);
     }
-
 }

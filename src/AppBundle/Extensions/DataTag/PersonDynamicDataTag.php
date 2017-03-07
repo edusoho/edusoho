@@ -12,7 +12,7 @@ class PersonDynamicDataTag extends BaseDataTag implements DataTag
      *
      *   count    必需
      *
-     * @param  array $arguments 参数
+     * @param array $arguments 参数
      *
      * @return array 个人动态
      */
@@ -20,7 +20,7 @@ class PersonDynamicDataTag extends BaseDataTag implements DataTag
     {
         $personDynamics = $this->getStatusService()->searchStatuses(
             array('private' => 0),
-            array('createdTime'=> 'DESC'),
+            array('createdTime' => 'DESC'),
             0,
             $arguments['count']
         );
@@ -30,7 +30,6 @@ class PersonDynamicDataTag extends BaseDataTag implements DataTag
         $owners = $this->getUserService()->findUsersByIds($ownerIds);
 
         foreach ($personDynamics as $key => $personDynamic) {
-
             $personDynamics[$key]['user'] = $owners[$personDynamic['userId']];
         }
 
@@ -46,5 +45,4 @@ class PersonDynamicDataTag extends BaseDataTag implements DataTag
     {
         return ServiceKernel::instance()->createService('User:StatusService');
     }
-
 }

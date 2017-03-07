@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\PostFilter\Event;
 
 use Codeages\Biz\Framework\Event\Event;
@@ -44,12 +45,10 @@ class TokenBucketEventSubscriber extends EventSubscriber implements EventSubscri
             && $this->getTokenBucketService()->hasToken($currentUser['id'], 'threadLoginedUser'))) {
             $event->stopPropagation();
         }
-
     }
 
     public function incrToken(Event $event)
     {
-
         $currentUser = ServiceKernel::instance()->getCurrentUser();
         if ($currentUser->isAdmin() || $currentUser->isSuperAdmin() || $currentUser->isTeacher()) {
             return;

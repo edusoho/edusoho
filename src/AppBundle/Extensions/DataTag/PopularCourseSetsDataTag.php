@@ -2,11 +2,10 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-
 class PopularCourseSetsDataTag extends CourseBaseDataTag implements DataTag
 {
     /**
-     * 获取最热门课程列表
+     * 获取最热门课程列表.
      *
      * 可传入的参数：
      *   categoryId 可选 分类ID
@@ -23,7 +22,7 @@ class PopularCourseSetsDataTag extends CourseBaseDataTag implements DataTag
      *
      *   count    必需 课程数量，取值不能超过100
      *
-     * @param  array $arguments 参数
+     * @param array $arguments 参数
      *
      * @return array 课程列表
      */
@@ -45,16 +44,16 @@ class PopularCourseSetsDataTag extends CourseBaseDataTag implements DataTag
 
         $conditions['parentId'] = 0;
 
-        if (!isset($arguments["type"])) {
+        if (!isset($arguments['type'])) {
             $arguments['type'] = 'hitNum';
         }
 
         $typeOrderByMap = array(
-            'hitNum'         => array('hitNum' => 'DESC'),
-            'recommended'    => array('recommendedTime' => 'DESC'),
-            'rating'         => array('rating' => 'DESC'),
-            'studentNum'     => array('studentNum' => 'DESC'),
-            'recommendedSeq' => array('recommendedSeq' => 'ASC')
+            'hitNum' => array('hitNum' => 'DESC'),
+            'recommended' => array('recommendedTime' => 'DESC'),
+            'rating' => array('rating' => 'DESC'),
+            'studentNum' => array('studentNum' => 'DESC'),
+            'recommendedSeq' => array('recommendedSeq' => 'ASC'),
         );
 
         $orderBy = $typeOrderByMap[$arguments['type']];

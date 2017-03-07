@@ -1,13 +1,14 @@
 <?php
+
 namespace AppBundle\Common;
 
 class CurlToolkit
 {
     public static function request($method, $url, $params = array(), $conditions = array())
     {
-        $conditions['userAgent']      = isset($conditions['userAgent']) ? $conditions['userAgent'] : '';
+        $conditions['userAgent'] = isset($conditions['userAgent']) ? $conditions['userAgent'] : '';
         $conditions['connectTimeout'] = isset($conditions['connectTimeout']) ? $conditions['connectTimeout'] : 10;
-        $conditions['timeout']        = isset($conditions['timeout']) ? $conditions['timeout'] : 10;
+        $conditions['timeout'] = isset($conditions['timeout']) ? $conditions['timeout'] : 10;
 
         $curl = curl_init();
 
@@ -44,7 +45,7 @@ class CurlToolkit
         $curlinfo = curl_getinfo($curl);
 
         $header = substr($response, 0, $curlinfo['header_size']);
-        $body   = substr($response, $curlinfo['header_size']);
+        $body = substr($response, $curlinfo['header_size']);
 
         curl_close($curl);
 
@@ -57,6 +58,7 @@ class CurlToolkit
         }
 
         $body = json_decode($body, true);
+
         return $body;
     }
 }

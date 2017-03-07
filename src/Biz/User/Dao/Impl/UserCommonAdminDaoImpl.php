@@ -24,8 +24,8 @@ class UserCommonAdminDaoImpl extends GeneralDaoImpl implements UserCommonAdminDa
         return array(
             'conditions' => array(
                 'userId = :userId',
-                'url = :url'
-            )
+                'url = :url',
+            ),
         );
     }
 }

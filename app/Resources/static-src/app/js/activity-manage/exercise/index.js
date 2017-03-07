@@ -19,7 +19,9 @@ class Exercise {
         onkeyup: false,
         rules: {
           title: {
-            required:true
+            required:true,
+            maxlength: 50,
+            trim: true,
           },
           itemCount: {
             required: true,

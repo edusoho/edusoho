@@ -3,8 +3,6 @@
 namespace AppBundle\Command;
 
 use AppBundle\Common\BlockToolkit;
-use Biz\User\CurrentUser;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,9 +22,9 @@ class BuildPluginAppCommand extends BaseCommand
     {
         $this->initServiceKernel();
 
-        $this->output     = $output;
+        $this->output = $output;
         $this->filesystem = new Filesystem();
-        $name             = $input->getArgument('name');
+        $name = $input->getArgument('name');
 
         $this->output->writeln("<info>开始制作插件应用包 {$name}</info>");
 
@@ -36,9 +34,9 @@ class BuildPluginAppCommand extends BaseCommand
     private function _buildDistPackage($name)
     {
         $pluginDir = $this->getPluginDirectory($name);
-        $version   = $this->getPluginVersion($name, $pluginDir);
+        $version = $this->getPluginVersion($name, $pluginDir);
 
-        $distDir       = $this->_makeDistDirectory($name, $version);
+        $distDir = $this->_makeDistDirectory($name, $version);
         $sourceDistDir = $this->_copySource($name, $pluginDir, $distDir);
         $this->_copyScript($pluginDir, $distDir);
         $this->_generateBlocks($pluginDir, $distDir, $this->getContainer());
@@ -72,7 +70,7 @@ class BuildPluginAppCommand extends BaseCommand
 
     private function _copyScript($pluginDir, $distDir)
     {
-        $scriptDir     = "{$pluginDir}/Scripts";
+        $scriptDir = "{$pluginDir}/Scripts";
         $distScriptDir = "{$distDir}/Scripts";
 
         if ($this->filesystem->exists($scriptDir)) {

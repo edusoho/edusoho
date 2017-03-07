@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
@@ -25,36 +26,36 @@ class OldPluginRegisterCommand extends BaseCommand
         $code = $input->getArgument('code');
         $output->writeln("<comment>注册插件`{$code}`：</comment>");
 
-        $pluginDir = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/plugins/' . $code;
+        $pluginDir = dirname($this->getContainer()->getParameter('kernel.root_dir')).'/plugins/'.$code;
         if (!is_dir($pluginDir)) {
             throw new \RuntimeException("插件目录{$pluginDir}不存在！");
         }
-        $output->writeln("<comment>  - 检查插件目录...</comment><info>OK</info>");
+        $output->writeln('<comment>  - 检查插件目录...</comment><info>OK</info>');
 
         $meta = $this->parseMeta($code, $pluginDir);
-        $output->writeln("<comment>  - 获取插件元信息...</comment><info>OK</info>");
+        $output->writeln('<comment>  - 获取插件元信息...</comment><info>OK</info>');
 
         $this->executeInstall($pluginDir);
-        $output->writeln("<comment>  - 执行安装脚本...</comment><info>OK</info>");
+        $output->writeln('<comment>  - 执行安装脚本...</comment><info>OK</info>');
 
         $this->assetsInstall($code, $pluginDir);
-        $output->writeln("<comment>  - 拷贝资源文件...</comment><info>OK</info>");
+        $output->writeln('<comment>  - 拷贝资源文件...</comment><info>OK</info>');
 
         $app = $this->getAppService()->registerApp($meta);
-        $output->writeln("<comment>  - 添加应用记录...</comment><info>OK</info>");
+        $output->writeln('<comment>  - 添加应用记录...</comment><info>OK</info>');
 
         PluginUtil::refresh();
-        $output->writeln("<comment>  - 刷新插件缓存...</comment><info>OK</info>");
+        $output->writeln('<comment>  - 刷新插件缓存...</comment><info>OK</info>');
 
-        $this->initBlock($pluginDir . '/block.json', $this->getContainer());
-        $output->writeln("<comment>  - 插入编辑区元信息成功...</comment><info>OK</info>");
+        $this->initBlock($pluginDir.'/block.json', $this->getContainer());
+        $output->writeln('<comment>  - 插入编辑区元信息成功...</comment><info>OK</info>');
 
-        $output->writeln("<info>注册成功....</info>");
+        $output->writeln('<info>注册成功....</info>');
     }
 
     private function executeInstall($pluginDir)
     {
-        $installFile = $pluginDir . '/Scripts/InstallScript.php';
+        $installFile = $pluginDir.'/Scripts/InstallScript.php';
         if (!file_exists($installFile)) {
             throw new \RuntimeException("插件安装脚本{$installFile}不存在！");
         }
@@ -70,14 +71,14 @@ class OldPluginRegisterCommand extends BaseCommand
 
     private function assetsInstall($code)
     {
-        $rootDir = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../');
+        $rootDir = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
 
         $originDir = "{$rootDir}/plugins/{$code}/{$code}Bundle/Resources/public";
         if (!is_dir($originDir)) {
             return false;
         }
 
-        $targetDir = "{$rootDir}/web/bundles/" . strtolower($code);
+        $targetDir = "{$rootDir}/web/bundles/".strtolower($code);
 
         $filesystem = $this->getContainer()->get('filesystem');
         if ($filesystem->exists($targetDir)) {
@@ -94,7 +95,7 @@ class OldPluginRegisterCommand extends BaseCommand
 
     private function parseMeta($code, $pluginDir)
     {
-        $metaFile = $pluginDir . '/plugin.json';
+        $metaFile = $pluginDir.'/plugin.json';
         if (!file_exists($metaFile)) {
             throw new \RuntimeException("插件元信息文件{$metaFile}不存在！");
         }
@@ -105,7 +106,7 @@ class OldPluginRegisterCommand extends BaseCommand
         }
 
         if (empty($meta['code']) || empty($meta['name']) || empty($meta['version'])) {
-            throw new \RuntimeException("插件元信息必须包含code、name、version属性");
+            throw new \RuntimeException('插件元信息必须包含code、name、version属性');
         }
 
         //有些插件是supprot_version, 有些是support_version
@@ -118,10 +119,10 @@ class OldPluginRegisterCommand extends BaseCommand
         }
 
         if (empty($supportVersion)) {
-            throw new \RuntimeException("插件元信息必须包含support_version属性");
+            throw new \RuntimeException('插件元信息必须包含support_version属性');
         } else {
-            $sign           = substr($supportVersion, -1);
-            $compareSymbol  = $sign === '+' ? '>=' : '<=';
+            $sign = substr($supportVersion, -1);
+            $compareSymbol = $sign === '+' ? '>=' : '<=';
             $versionCompare = version_compare(System::VERSION, $supportVersion, $compareSymbol);
         }
 

@@ -3,16 +3,15 @@
 use Symfony\Component\Filesystem\Filesystem;
 use AppBundle\Common\BlockToolkit;
 
- class EduSohoUpgrade
- {
-
+class EduSohoUpgrade
+{
     protected $kernel;
 
     protected $upgradeType;
 
     protected $version;
-    
-    public function __construct ($kernel)
+
+    public function __construct($kernel)
     {
         $this->kernel = $kernel;
     }
@@ -20,7 +19,7 @@ use AppBundle\Common\BlockToolkit;
     public function update()
     {
         if (empty($this->upgradeType)) {
-            throw new \RuntimeException("Upgrade type is empty.");
+            throw new \RuntimeException('Upgrade type is empty.');
         }
 
         if (!in_array($this->upgradeType, array('install', 'upgrade'))) {
@@ -38,7 +37,7 @@ use AppBundle\Common\BlockToolkit;
 
     protected function installUpdate()
     {
-        $scriptFilePath = __DIR__ . '/Scripts/InstallScript.php';
+        $scriptFilePath = __DIR__.'/Scripts/InstallScript.php';
         if (file_exists($scriptFilePath)) {
             include $scriptFilePath;
             $updater = new \InstallScript($this->kernel);
@@ -50,20 +49,19 @@ use AppBundle\Common\BlockToolkit;
 
     protected function initBlock()
     {
-        BlockToolkit::init(__DIR__ . '/block.json', null, __DIR__ . '/blocks/');
+        BlockToolkit::init(__DIR__.'/block.json', null, __DIR__.'/blocks/');
     }
 
     protected function upgradeUpdate()
     {
-        $className = 'UpgradeScript' . str_replace('.', '', $this->upgradeVersion);
-        $scriptFilePath = __DIR__ . '/Scripts/' . $className . '.php';
+        $className = 'UpgradeScript'.str_replace('.', '', $this->upgradeVersion);
+        $scriptFilePath = __DIR__.'/Scripts/'.$className.'.php';
         if (file_exists($scriptFilePath)) {
             include $scriptFilePath;
             $className = "\\{$className}";
             $updater = new $className($this->kernel, $this->upgradeVersion);
             $updater->execute();
         }
-
     }
 
     public function setUpgradeType($type, $version = null)
@@ -71,5 +69,4 @@ use AppBundle\Common\BlockToolkit;
         $this->upgradeType = strtolower($type);
         $this->upgradeVersion = $version;
     }
-
- }
+}

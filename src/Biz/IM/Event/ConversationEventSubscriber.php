@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\IM\Event;
 
 use Codeages\Biz\Framework\Event\Event;
@@ -10,8 +11,8 @@ class ConversationEventSubscriber extends EventSubscriber implements EventSubscr
     public static function getSubscribedEvents()
     {
         return array(
-            'course.delete'    => 'onCourseDelete',
-            'classroom.delete' => 'onClassroomDelete'
+            'course.delete' => 'onCourseDelete',
+            'classroom.delete' => 'onClassroomDelete',
         );
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
@@ -22,11 +23,11 @@ class GenerateUsersCommand extends BaseCommand
         $index = $input->getArgument('index');
         $start = $input->getArgument('start', 0);
 
-        for ($i = $start; $i < $index; $i++) {
-            $user             = array();
+        for ($i = $start; $i < $index; ++$i) {
+            $user = array();
             $user['nickname'] = 'test_'.$i;
             $user['password'] = 'abcde';
-            $user['email']    = $user['nickname'].'@edusoho.com';
+            $user['email'] = $user['nickname'].'@edusoho.com';
             $this->getUserService()->register($user);
         }
     }

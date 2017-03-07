@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Role\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
@@ -6,7 +7,7 @@ use Biz\Role\Dao\RoleDao;
 
 class RoleDaoImpl extends GeneralDaoImpl implements RoleDao
 {
-    protected $table         = 'role';
+    protected $table = 'role';
 
     public function declares()
     {
@@ -24,7 +25,7 @@ class RoleDaoImpl extends GeneralDaoImpl implements RoleDao
 
         $declares['orderbys'] = array(
             'createdTime',
-            'updatedTime'
+            'updatedTime',
         );
 
         return $declares;

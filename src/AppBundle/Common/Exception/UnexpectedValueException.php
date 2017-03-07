@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Common\Exception;
 
 class UnexpectedValueException extends BaseException

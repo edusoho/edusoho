@@ -40,38 +40,32 @@
  * </code>
  *
  * @category  Crypt
- * @package   AES
  *
  * @author    Jim Wigginton <terrafrost@php.net>
  * @copyright 2008 Jim Wigginton
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  *
- * @link      http://phpseclib.sourceforge.net
+ * @see      http://phpseclib.sourceforge.net
  */
 
 namespace Biz\Util\Phpsec\Crypt;
 
-use Biz\Util\Phpsec\Crypt\Rijndael;
-
 /**
  * Pure-PHP implementation of AES.
  *
- * @access  public
- * @package AES
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
 class AES extends Rijndael
 {
     /**
-     * Dummy function
+     * Dummy function.
      *
      * Since Biz\Util\Phpsec\Crypt\AES extends Biz\Util\Phpsec\Crypt\Rijndael, this function is, technically, available, but it doesn't do anything.
      *
-     * @access public
      * @see Biz\Util\Phpsec\Crypt\Rijndael::setBlockLength()
      *
-     * @param Integer $length
+     * @param int $length
      */
     public function setBlockLength($length)
     {
@@ -79,15 +73,14 @@ class AES extends Rijndael
     }
 
     /**
-     * Sets the key length
+     * Sets the key length.
      *
      * Valid key lengths are 128, 192, and 256.  If the length is less than 128, it will be rounded up to
      * 128.  If the length is greater than 128 and invalid, it will be rounded down to the closest valid amount.
      *
-     * @access public
      * @see Biz\Util\Phpsec\Crypt\Rijndael:setKeyLength()
      *
-     * @param Integer $length
+     * @param int $length
      */
     public function setKeyLength($length)
     {
@@ -107,11 +100,10 @@ class AES extends Rijndael
      *
      * Rijndael supports five different key lengths, AES only supports three.
      *
-     * @access public
      * @see Biz\Util\Phpsec\Crypt\Rijndael:setKey()
      * @see setKeyLength()
      *
-     * @param String $key
+     * @param string $key
      */
     public function setKey($key)
     {

@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class DownloadActivityAddSummary extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -17,15 +17,14 @@ class DownloadActivityAddSummary extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
         $biz = $this->getContainer();
         $db = $biz['db'];
-        $db->exec("
+        $db->exec('
           ALTER TABLE `download_file` DROP  COLUMN `summary`;
-        ");
-
+        ');
     }
 }

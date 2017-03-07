@@ -5,14 +5,14 @@
  * PHP version 5
  *
  * @category  System
+ *
  * @internal  See http://api.libssh.org/rfc/PROTOCOL.agent
- * @package   SSH\Agent
  *
  * @author    Jim Wigginton <terrafrost@php.net>
  * @copyright 2009 Jim Wigginton
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  *
- * @link      http://phpseclib.sourceforge.net
+ * @see      http://phpseclib.sourceforge.net
  */
 
 namespace Biz\Util\Phpsec\System\SSH\Agent;
@@ -20,7 +20,7 @@ namespace Biz\Util\Phpsec\System\SSH\Agent;
 use Biz\Util\Phpsec\System\SSH\Agent;
 
 /**
- * Pure-PHP ssh-agent client identity object
+ * Pure-PHP ssh-agent client identity object.
  *
  * Instantiation should only be performed by \Biz\Util\Phpsec\System\SSH\Agent class.
  * This could be thought of as implementing an interface that Biz\Util\Phpsec\Crypt\RSA
@@ -29,36 +29,34 @@ use Biz\Util\Phpsec\System\SSH\Agent;
  * and sign since those are the methods phpseclib looks for to perform
  * public key authentication.
  *
- * @access  internal
- * @package SSH\Agent
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
 class Identity
 {
     /**
-     * Key Object
+     * Key Object.
      *
      * @var \Biz\Util\Phpsec\Crypt\RSA
-     * @access private
+     *
      * @see \Biz\Util\Phpsec\System\SSH\Agent\Identity::getPublicKey()
      */
     public $key;
 
     /**
-     * Key Blob
+     * Key Blob.
      *
-     * @var String
-     * @access private
+     * @var string
+     *
      * @see \Biz\Util\Phpsec\System\SSH\Agent\Identity::sign()
      */
     public $key_blob;
 
     /**
-     * Socket Resource
+     * Socket Resource.
      *
-     * @var Resource
-     * @access private
+     * @var resource
+     *
      * @see \Biz\Util\Phpsec\System\SSH\Agent\Identity::sign()
      */
     public $fsock;
@@ -66,8 +64,8 @@ class Identity
     /**
      * Default Constructor.
      *
-     * @access private
-     * @param  Resource                                                $fsock
+     * @param resource $fsock
+     *
      * @return \Biz\Util\Phpsec\System\SSH\Agent\Identity
      */
     public function __construct($fsock)
@@ -76,11 +74,10 @@ class Identity
     }
 
     /**
-     * Set Public Key
+     * Set Public Key.
      *
      * Called by \Biz\Util\Phpsec\System\SSH\Agent::requestIdentities()
      *
-     * @access private
      * @param \Biz\Util\Phpsec\Crypt\RSA $key
      */
     public function setPublicKey($key)
@@ -90,13 +87,12 @@ class Identity
     }
 
     /**
-     * Set Public Key
+     * Set Public Key.
      *
      * Called by \Biz\Util\Phpsec\System\SSH\Agent::requestIdentities(). The key blob could be extracted from $this->key
      * but this saves a small amount of computation.
      *
-     * @access private
-     * @param String $key_blob
+     * @param string $key_blob
      */
     public function setPublicKeyBlob($key_blob)
     {
@@ -104,13 +100,13 @@ class Identity
     }
 
     /**
-     * Get Public Key
+     * Get Public Key.
      *
      * Wrapper for $this->key->getPublicKey()
      *
-     * @access public
-     * @param  Integer $format optional
-     * @return Mixed
+     * @param int $format optional
+     *
+     * @return mixed
      */
     public function getPublicKey($format = null)
     {
@@ -118,26 +114,25 @@ class Identity
     }
 
     /**
-     * Set Signature Mode
+     * Set Signature Mode.
      *
      * Doesn't do anything as ssh-agent doesn't let you pick and choose the signature mode. ie.
      * ssh-agent's only supported mode is \Biz\Util\Phpsec\Crypt\RSA::SIGNATURE_PKCS1
      *
-     * @access public
-     * @param Integer $mode
+     * @param int $mode
      */
     public function setSignatureMode($mode)
     {
     }
 
     /**
-     * Create a signature
+     * Create a signature.
      *
      * See "2.6.2 Protocol 2 private key signature request"
      *
-     * @access public
-     * @param  String   $message
-     * @return String
+     * @param string $message
+     *
+     * @return string
      */
     public function sign($message)
     {
@@ -150,7 +145,7 @@ class Identity
         }
 
         $length = current(unpack('N', fread($this->fsock, 4)));
-        $type   = ord(fread($this->fsock, 1));
+        $type = ord(fread($this->fsock, 1));
 
         if ($type != Agent::SSH_AGENT_SIGN_RESPONSE) {
             user_error('Unable to retreive signature');

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
@@ -32,9 +33,9 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
         }
 
         $field['fieldName'] = $fieldName;
-        $field['title']     = $fields['field_title'];
-        $field['seq']       = $fields['field_seq'];
-        $field['enabled']   = 0;
+        $field['title'] = $fields['field_title'];
+        $field['seq'] = $fields['field_seq'];
+        $field['enabled'] = 0;
         if (isset($fields['field_enabled'])) {
             $field['enabled'] = 1;
         }
@@ -57,33 +58,33 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
     {
         $fields = $this->getUserFieldDao()->getEnabledFieldsOrderBySeq();
 
-        for ($i = 0; $i < count($fields); $i++) {
-            if (strstr($fields[$i]['fieldName'], "textField")) {
-                $fields[$i]['type'] = "text";
+        for ($i = 0; $i < count($fields); ++$i) {
+            if (strstr($fields[$i]['fieldName'], 'textField')) {
+                $fields[$i]['type'] = 'text';
             }
-            if (strstr($fields[$i]['fieldName'], "varcharField")) {
-                $fields[$i]['type'] = "varchar";
+            if (strstr($fields[$i]['fieldName'], 'varcharField')) {
+                $fields[$i]['type'] = 'varchar';
             }
-            if (strstr($fields[$i]['fieldName'], "intField")) {
-                $fields[$i]['type'] = "int";
+            if (strstr($fields[$i]['fieldName'], 'intField')) {
+                $fields[$i]['type'] = 'int';
             }
-            if (strstr($fields[$i]['fieldName'], "floatField")) {
-                $fields[$i]['type'] = "float";
+            if (strstr($fields[$i]['fieldName'], 'floatField')) {
+                $fields[$i]['type'] = 'float';
             }
-            if (strstr($fields[$i]['fieldName'], "dateField")) {
-                $fields[$i]['type'] = "date";
+            if (strstr($fields[$i]['fieldName'], 'dateField')) {
+                $fields[$i]['type'] = 'date';
             }
         }
 
         return $fields;
     }
-    
+
     public function updateField($id, $fields)
     {
         $fields = ArrayToolkit::filter($fields, array(
-            "title"   => "",
-            "seq"     => "",
-            "enabled" => 0
+            'title' => '',
+            'seq' => '',
+            'enabled' => 0,
         ));
 
         if (isset($fields['title']) && empty($fields['title'])) {
@@ -112,55 +113,56 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
 
     protected function checkType($type)
     {
-        $fieldName = "";
-        if ($type == "text") {
-            for ($i = 1; $i < 11; $i++) {
-                $field = $this->getUserFieldDao()->getByFieldName("textField".$i);
+        $fieldName = '';
+        if ($type == 'text') {
+            for ($i = 1; $i < 11; ++$i) {
+                $field = $this->getUserFieldDao()->getByFieldName('textField'.$i);
                 if (!$field) {
-                    $fieldName = "textField".$i;
+                    $fieldName = 'textField'.$i;
                     break;
                 }
             }
         }
-        if ($type == "int") {
-            for ($i = 1; $i < 6; $i++) {
-                $field = $this->getUserFieldDao()->getByFieldName("intField".$i);
+        if ($type == 'int') {
+            for ($i = 1; $i < 6; ++$i) {
+                $field = $this->getUserFieldDao()->getByFieldName('intField'.$i);
                 if (!$field) {
-                    $fieldName = "intField".$i;
+                    $fieldName = 'intField'.$i;
                     break;
                 }
             }
         }
-        if ($type == "date") {
-            for ($i = 1; $i < 6; $i++) {
-                $field = $this->getUserFieldDao()->getByFieldName("dateField".$i);
+        if ($type == 'date') {
+            for ($i = 1; $i < 6; ++$i) {
+                $field = $this->getUserFieldDao()->getByFieldName('dateField'.$i);
                 if (!$field) {
-                    $fieldName = "dateField".$i;
+                    $fieldName = 'dateField'.$i;
                     break;
                 }
             }
         }
-        if ($type == "float") {
-            for ($i = 1; $i < 6; $i++) {
-                $field = $this->getUserFieldDao()->getByFieldName("floatField".$i);
+        if ($type == 'float') {
+            for ($i = 1; $i < 6; ++$i) {
+                $field = $this->getUserFieldDao()->getByFieldName('floatField'.$i);
                 if (!$field) {
-                    $fieldName = "floatField".$i;
+                    $fieldName = 'floatField'.$i;
                     break;
                 }
             }
         }
-        if ($type == "varchar") {
-            for ($i = 1; $i < 11; $i++) {
-                $field = $this->getUserFieldDao()->getByFieldName("varcharField".$i);
+        if ($type == 'varchar') {
+            for ($i = 1; $i < 11; ++$i) {
+                $field = $this->getUserFieldDao()->getByFieldName('varcharField'.$i);
                 if (!$field) {
-                    $fieldName = "varcharField".$i;
+                    $fieldName = 'varcharField'.$i;
                     break;
                 }
             }
         }
-        if ($fieldName == "") {
+        if ($fieldName == '') {
             return false;
         }
+
         return $fieldName;
     }
 

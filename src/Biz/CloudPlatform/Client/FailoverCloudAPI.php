@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\CloudPlatform\Client;
 
 class FailoverCloudAPI extends AbstractCloudAPI
@@ -25,7 +26,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
             $result = parent::_request($method, $uri, $params, $headers);
 
             if ($this->servers['next_refresh_time'] < time()) {
-                $self          = $this;
+                $self = $this;
                 $this->servers = $this->refreshServerConfigFile(function () use ($self) {
                     return $self->getServerList(0);
                 }, 'noneblocking');
@@ -40,7 +41,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
             $that = $this;
             $this->refreshServerConfigFile(function ($fp, $data, $maxFailoverCount) use ($that) {
                 if (($data['failed_expired'] > 0) && ($data['failed_expired'] > time())) {
-                    $data['failed_count']++;
+                    ++$data['failed_count'];
                 } else {
                     $data['failed_count'] = 1;
                     $data['failed_expired'] = time() + 120;
@@ -64,11 +65,12 @@ class FailoverCloudAPI extends AbstractCloudAPI
         if ($lockMode == 'blocking') {
             if (!flock($fp, LOCK_EX)) {
                 fclose($fp);
-                throw new \RuntimeException("Lock server config file failed.");
+                throw new \RuntimeException('Lock server config file failed.');
             }
         } elseif ($lockMode == 'nonblocking') {
             if (!flock($fp, LOCK_EX | LOCK_NB)) {
                 fclose($fp);
+
                 return;
             }
         }
@@ -95,28 +97,28 @@ class FailoverCloudAPI extends AbstractCloudAPI
     }
 
     /**
-     * 选举新的Leaf Server
+     * 选举新的Leaf Server.
      */
     public function voteLeafServer($servers)
     {
         $leafs = $servers['leafs'];
 
         if (empty($leafs)) {
-            throw new \RuntimeException("No leafs server.");
+            throw new \RuntimeException('No leafs server.');
         }
 
         $newLeaf = array();
 
         uksort($leafs, function ($key1, $key2) {
             $results = array(true, false);
+
             return $results[rand(0, 1)];
         }
-
         );
 
         foreach ($leafs as $i => $leaf) {
             if ($leaf['url'] == $servers['current_leaf']) {
-                $servers['leafs'][$i]['used_count']++;
+                ++$servers['leafs'][$i]['used_count'];
                 continue;
             }
 
@@ -126,19 +128,19 @@ class FailoverCloudAPI extends AbstractCloudAPI
         }
 
         if (empty($newLeaf)) {
-            throw new \RuntimeException("New leaf server is empty.");
+            throw new \RuntimeException('New leaf server is empty.');
         }
 
         if ($newLeaf['used_count'] > 3) {
             // 确保1小时后更新地址列表
             $nextRefreshTime = time() + 3600;
-            $servers         = $this->getServerList($nextRefreshTime);
+            $servers = $this->getServerList($nextRefreshTime);
 
             return $servers;
         }
 
-        $servers['current_leaf']   = $newLeaf['url'];
-        $servers['failed_count']   = 0;
+        $servers['current_leaf'] = $newLeaf['url'];
+        $servers['failed_count'] = 0;
         $servers['failed_expired'] = 0;
 
         return $servers;
@@ -173,7 +175,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
             $data = file_get_contents($path);
 
             if (trim($data) == '') {
-                $self          = $this;
+                $self = $this;
                 $this->servers = $this->refreshServerConfigFile(function () use ($self) {
                     return $self->getServerList();
                 }, 'blocking');
@@ -195,7 +197,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
             $servers = $this->getServerListFromCdn();
 
             if (empty($servers) || empty($servers['root']) || empty($servers['leafs'])) {
-                throw new \RuntimeException("Requested API Server list from CDN failed.");
+                throw new \RuntimeException('Requested API Server list from CDN failed.');
             }
         }
 
@@ -208,14 +210,14 @@ class FailoverCloudAPI extends AbstractCloudAPI
             unset($leaf);
         }
 
-        $servers['failed_count']   = 0;
+        $servers['failed_count'] = 0;
         $servers['failed_expired'] = 0;
 
         if (empty($nextRefreshTime)) {
             //确保每天的凌晨0~5点之间的时间内更新
-            $hour            = rand(0, 5);
-            $minute          = rand(0, 59);
-            $second          = rand(0, 59);
+            $hour = rand(0, 5);
+            $minute = rand(0, 59);
+            $second = rand(0, 59);
             $nextRefreshTime = strtotime(date('Y-m-d 0:0:0', strtotime('+1 day'))) + $hour * 3600 + $minute * 60 + $second;
         }
 

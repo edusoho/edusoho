@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\Course\Service\CourseService;
@@ -6,7 +7,6 @@ use Biz\User\Service\BatchNotificationService;
 use Biz\User\Service\NotificationService;
 use AppBundle\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
-
 
 class NotificationController extends BaseController
 {
@@ -34,15 +34,16 @@ class NotificationController extends BaseController
 
         return $this->render('notification/index.html.twig', array(
             'notifications' => $notifications,
-            'paginator'     => $paginator
+            'paginator' => $paginator,
         ));
     }
 
     public function showAction(Request $request, $id)
     {
         $batchNotification = $this->getBatchNotificationService()->getBatchNotification($id);
+
         return $this->render('notification/batch-notification-show.html.twig', array(
-            'batchnotification' => $batchNotification
+            'batchnotification' => $batchNotification,
         ));
     }
 

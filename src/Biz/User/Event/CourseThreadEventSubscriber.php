@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\Event;
 
 use Biz\Classroom\Service\ClassroomService;
@@ -15,13 +16,13 @@ class CourseThreadEventSubscriber extends EventSubscriber implements EventSubscr
     public static function getSubscribedEvents()
     {
         return array(
-            'course.thread.post.create' => 'onThreadPostCreate'
+            'course.thread.post.create' => 'onThreadPostCreate',
         );
     }
 
     public function onThreadPostCreate(Event $event)
     {
-        $post   = $event->getSubject();
+        $post = $event->getSubject();
         $thread = $this->getThreadService()->getThread($post['courseId'], $post['threadId']);
 
         $course = $this->getCourseService()->getCourse($post['courseId']);
@@ -35,16 +36,16 @@ class CourseThreadEventSubscriber extends EventSubscriber implements EventSubscr
 
         if ($isTeacher && $thread['type'] == 'question') {
             $this->getStatusService()->publishStatus(array(
-                'userId'     => $thread['userId'],
-                'courseId'   => $post['courseId'],
-                'type'       => 'teacher_thread_post',
+                'userId' => $thread['userId'],
+                'courseId' => $post['courseId'],
+                'type' => 'teacher_thread_post',
                 'objectType' => 'thread_post',
-                'objectId'   => $post['id'],
-                'private'    => $course['status'] == 'published' ? 0 : 1,
+                'objectId' => $post['id'],
+                'private' => $course['status'] == 'published' ? 0 : 1,
                 'properties' => array(
                     'thread' => $thread,
-                    'post'   => $post
-                )
+                    'post' => $post,
+                ),
             ));
         }
     }

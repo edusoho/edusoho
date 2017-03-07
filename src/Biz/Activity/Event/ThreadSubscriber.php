@@ -15,8 +15,8 @@ class ThreadSubscriber extends EventSubscriber implements EventSubscriberInterfa
     public static function getSubscribedEvents()
     {
         return array(
-            'course.thread.create'      => 'onThreadCreate',
-            'course.thread.post.create' => 'onPostCreate'
+            'course.thread.create' => 'onThreadCreate',
+            'course.thread.post.create' => 'onPostCreate',
         );
     }
 
@@ -82,6 +82,7 @@ class ThreadSubscriber extends EventSubscriber implements EventSubscriberInterfa
     protected function getLogger($name)
     {
         $biz = $this->getBiz();
+
         return $biz['logger'];
     }
 }

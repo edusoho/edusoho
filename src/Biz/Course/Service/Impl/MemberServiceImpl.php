@@ -23,14 +23,13 @@ use Vip\Service\Vip\VipService;
 
 /**
  * Class MemberServiceImpl
- * 所有api 均迁移自 courseService 中的对member操作的api
- * @package Biz\Course\Service\Impl
+ * 所有api 均迁移自 courseService 中的对member操作的api.
  */
 class MemberServiceImpl extends BaseService implements MemberService
 {
     public function becomeStudentAndCreateOrder($userId, $courseId, $data)
     {
-        if (!ArrayToolkit::requireds($data, array("price", "remark"))) {
+        if (!ArrayToolkit::requireds($data, array('price', 'remark'))) {
             throw $this->createServiceException('parameter is invalid!');
         }
 
@@ -52,10 +51,10 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createNotFoundException('用户已经是学员，不能添加！');
         }
 
-        $courseSet  = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $orderTitle = "购买课程《{$courseSet['title']}》- {$course['title']}";
 
-        if (isset($data["isAdminAdded"]) && $data["isAdminAdded"] == 1) {
+        if (isset($data['isAdminAdded']) && $data['isAdminAdded'] == 1) {
             $orderTitle = $orderTitle.'(管理员添加)';
         }
 
@@ -64,20 +63,20 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         $systemOrder = array(
-            'userId'     => $userId,
-            'title'      => $orderTitle,
+            'userId' => $userId,
+            'title' => $orderTitle,
             'targetType' => OrderService::TARGETTYPE_COURSE,
-            'targetId'   => $courseId,
-            'amount'     => $data['price'],
+            'targetId' => $courseId,
+            'amount' => $data['price'],
             'totalPrice' => $course['price'],
-            'snPrefix'   => OrderService::SNPREFIX_C,
+            'snPrefix' => OrderService::SNPREFIX_C,
         );
 
         $order = $this->getOrderService()->createSystemOrder($systemOrder);
 
         $info = array(
-            'orderId'         => $order['id'],
-            'note'            => $data['remark'],
+            'orderId' => $order['id'],
+            'note' => $data['remark'],
             'becomeUseMember' => isset($data['becomeUseMember']) ? $data['becomeUseMember'] : false,
         );
 
@@ -85,12 +84,12 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $member = $this->getCourseMember($course['id'], $user['id']);
 
-        if (isset($data["isAdminAdded"]) && $data["isAdminAdded"] == 1) {
+        if (isset($data['isAdminAdded']) && $data['isAdminAdded'] == 1) {
             $this->getNotificationService()->notify(
                 $member['userId'],
                 'student-create',
                 array(
-                    'courseId'    => $course['id'],
+                    'courseId' => $course['id'],
                     'courseTitle' => $courseSet['title'],
                 )
             );
@@ -124,13 +123,13 @@ class MemberServiceImpl extends BaseService implements MemberService
         $course = $this->getCourseService()->getCourse($courseId);
         $this->dispatchEvent('course.quit', $course, array('userId' => $userId, 'member' => $member));
 
-        if($this->getCurrentUser()->isAdmin()){
+        if ($this->getCurrentUser()->isAdmin()) {
             $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
             $this->getNotificationService()->notify(
                 $member['userId'],
                 'student-remove',
                 array(
-                    'courseId'    => $course['id'],
+                    'courseId' => $course['id'],
                     'courseTitle' => $courseSet['title'],
                 )
             );
@@ -141,14 +140,14 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function searchMembers($conditions, $orderBy, $start, $limit)
     {
-        $conditions = $this->_prepareConditions($conditions);
+        $conditions = $this->prepareConditions($conditions);
 
         return $this->getMemberDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function countMembers($conditions)
     {
-        $conditions = $this->_prepareConditions($conditions);
+        $conditions = $this->prepareConditions($conditions);
 
         return $this->getMemberDao()->count($conditions);
     }
@@ -161,28 +160,28 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException('用户未登录');
         }
 
-        $condition     = array(
-            'userId'              => $currentUser["id"],
-            'role'                => 'student',
-            'deadlineNotified'    => 0,
+        $condition = array(
+            'userId' => $currentUser['id'],
+            'role' => 'student',
+            'deadlineNotified' => 0,
             'deadlineGreaterThan' => 0,
         );
         $courseMembers = $this->getMemberDao()->search($condition, array('createdTime' => 'ASC'), 0, 10);
-        $courseIds     = ArrayToolkit::column($courseMembers, "courseId");
-        $courses       = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courseIds = ArrayToolkit::column($courseMembers, 'courseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
-        $courseMembers = ArrayToolkit::index($courseMembers, "courseId");
+        $courseMembers = ArrayToolkit::index($courseMembers, 'courseId');
 
-        $shouldNotifyCourses       = array();
+        $shouldNotifyCourses = array();
         $shouldNotifyCourseMembers = array();
 
         $currentTime = time();
 
         foreach ($courses as $key => $course) {
-            $courseMember = $courseMembers[$course["id"]];
+            $courseMember = $courseMembers[$course['id']];
 
-            if ($course["expiryDays"] > 0 && $currentTime < $courseMember["deadline"] && (10 * 24 * 60 * 60 + $currentTime) > $courseMember["deadline"]) {
-                $shouldNotifyCourses[]       = $course;
+            if ($course['expiryDays'] > 0 && $currentTime < $courseMember['deadline'] && (10 * 24 * 60 * 60 + $currentTime) > $courseMember['deadline']) {
+                $shouldNotifyCourses[] = $course;
                 $shouldNotifyCourseMembers[] = $courseMember;
             }
         }
@@ -202,7 +201,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function searchMemberIds($conditions, $sort, $start, $limit)
     {
-        $conditions = $this->_prepareConditions($conditions);
+        $conditions = $this->prepareConditions($conditions);
 
         if (is_array($sort)) {
             $orderBy = $sort;
@@ -261,7 +260,7 @@ class MemberServiceImpl extends BaseService implements MemberService
     {
         $conditions = array(
             'courseId' => $courseId,
-            'role'     => 'student',
+            'role' => 'student',
         );
 
         return $this->getMemberDao()->count($conditions);
@@ -305,7 +304,7 @@ class MemberServiceImpl extends BaseService implements MemberService
     {
         // 过滤数据
         $teacherMembers = array();
-        $course         = $this->getCourseService()->getCourse($courseId);
+        $course = $this->getCourseService()->getCourse($courseId);
         foreach (array_values($teachers) as $index => $teacher) {
             if (empty($teacher['id'])) {
                 throw $this->createServiceException("教师ID不能为空，设置教学计划(#{$courseId})教师失败");
@@ -318,12 +317,12 @@ class MemberServiceImpl extends BaseService implements MemberService
             }
 
             $teacherMembers[] = array(
-                'courseId'    => $courseId,
+                'courseId' => $courseId,
                 'courseSetId' => $course['courseSetId'],
-                'userId'      => $user['id'],
-                'role'        => 'teacher',
-                'seq'         => $index,
-                'isVisible'   => empty($teacher['isVisible']) ? 0 : 1,
+                'userId' => $user['id'],
+                'role' => 'teacher',
+                'seq' => $index,
+                'isVisible' => empty($teacher['isVisible']) ? 0 : 1,
                 'createdTime' => time(),
             );
         }
@@ -398,7 +397,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException('教学计划学员不存在，备注失败!');
         }
 
-        $fields = array('remark' => empty($remark) ? '' : (string)$remark);
+        $fields = array('remark' => empty($remark) ? '' : (string) $remark);
 
         return $this->getMemberDao()->update($member['id'], $fields);
     }
@@ -442,11 +441,11 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         //查询出订单
         $order = $this->getOrderService()->getOrder($member['orderId']);
-        $user  = $this->getUserService()->getUser($userId);
+        $user = $this->getUserService()->getUser($userId);
         if (!empty($order)) {
             $reason = array(
-                'type'     => 'other',
-                'note'     => '达到有效期，用户自己退出',
+                'type' => 'other',
+                'note' => '达到有效期，用户自己退出',
                 'operator' => $user['id'],
             );
             $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
@@ -504,7 +503,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         //按照教学计划有效期模式计算学员有效期
         $deadline = 0;
         if ($course['expiryMode'] == 'days' && $course['expiryDays'] > 0) {
-            $endTime  = strtotime(date('Y-m-d', time())); //从第二天零点开始计算
+            $endTime = strtotime(date('Y-m-d', time())); //从第二天零点开始计算
             $deadline = $course['expiryDays'] * 24 * 60 * 60 + $endTime;
         } elseif ($course['expiryMode'] == 'date') {
             $deadline = $course['expiryEndDate'];
@@ -521,22 +520,22 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         $conditions = array(
-            'userId'   => $userId,
-            'status'   => 'finish',
+            'userId' => $userId,
+            'status' => 'finish',
             'courseId' => $courseId,
         );
-        $count      = $this->getTaskResult()->countTaskResults($conditions);
+        $count = $this->getTaskResult()->countTaskResults($conditions);
 
         $fields = array(
-            'courseId'    => $courseId,
-            'userId'      => $userId,
+            'courseId' => $courseId,
+            'userId' => $userId,
             'courseSetId' => $course['courseSetId'],
-            'orderId'     => empty($order) ? 0 : $order['id'],
-            'deadline'    => $deadline,
-            'levelId'     => empty($info['levelId']) ? 0 : $info['levelId'],
-            'role'        => 'student',
-            'remark'      => empty($order['note']) ? '' : $order['note'],
-            'learnedNum'  => $count,
+            'orderId' => empty($order) ? 0 : $order['id'],
+            'deadline' => $deadline,
+            'levelId' => empty($info['levelId']) ? 0 : $info['levelId'],
+            'role' => 'student',
+            'remark' => empty($order['note']) ? '' : $order['note'],
+            'learnedNum' => $count,
             'createdTime' => time(),
         );
 
@@ -640,26 +639,29 @@ class MemberServiceImpl extends BaseService implements MemberService
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
+        $deadline = 0;
         if (!empty($info['deadline'])) {
             $deadline = $info['deadline'];
-        } else {
-            $deadline = $course['expiryMode'] == 'days' ? strtotime(
-                '+'.$course['expiryDays'].' days'
-            ) : $course['expiryEndDate'];
+        } elseif ($course['expiryMode'] == 'days') {
+            if (!empty($course['expiryDays'])) {
+                $deadline = strtotime('+'.$course['expiryDays'].' days');
+            }
+        } elseif (!empty($course['expiryEndDate'])) {
+            $deadline = $course['expiryEndDate'];
         }
 
-        $fields   = array(
-            'courseId'    => $courseId,
+        $fields = array(
+            'courseId' => $courseId,
             'courseSetId' => $course['courseSetId'],
-            'userId'      => $userId,
-            'orderId'     => empty($info['orderId']) ? 0 : $info['orderId'],
-            'deadline'    => $deadline,
-            'levelId'     => empty($info['levelId']) ? 0 : $info['levelId'],
-            'role'        => 'student',
-            'remark'      => empty($info['orderNote']) ? '' : $info['orderNote'],
+            'userId' => $userId,
+            'orderId' => empty($info['orderId']) ? 0 : $info['orderId'],
+            'deadline' => $deadline,
+            'levelId' => empty($info['levelId']) ? 0 : $info['levelId'],
+            'role' => 'student',
+            'remark' => empty($info['orderNote']) ? '' : $info['orderNote'],
             'createdTime' => time(),
             'classroomId' => $classRoomId,
-            'joinedType'  => 'classroom',
+            'joinedType' => 'classroom',
         );
         $isMember = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
@@ -690,18 +692,20 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function becomeStudentByClassroomJoined($courseId, $userId)
     {
         $isCourseStudent = $this->isCourseStudent($courseId, $userId);
-        $classroom       = $this->getClassroomService()->getClassroomByCourseId($courseId);
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($courseId);
 
         if ($classroom['classroomId']) {
             $member = $this->getClassroomService()->getClassroomMember($classroom['classroomId'], $userId);
 
-            if (!$isCourseStudent && !empty($member) && array_intersect(
+            if (!$isCourseStudent
+                && !empty($member)
+                && array_intersect(
                     $member['role'],
                     array('student', 'teacher', 'headTeacher', 'assistant')
                 )
             ) {
-                $info   = ArrayToolkit::parts($member, array('levelId'));
-                $member = $this->createMemberByClassroomJoined($courseId, $userId, $member["classroomId"], $info);
+                $info = ArrayToolkit::parts($member, array('levelId'));
+                $member = $this->createMemberByClassroomJoined($courseId, $userId, $member['classroomId'], $info);
 
                 return $member;
             }
@@ -710,27 +714,27 @@ class MemberServiceImpl extends BaseService implements MemberService
         return array();
     }
 
-    protected function _prepareConditions($conditions)
+    protected function prepareConditions($conditions)
     {
         if (isset($conditions['date'])) {
             $dates = array(
-                'yesterday'  => array(
+                'yesterday' => array(
                     strtotime('yesterday'),
                     strtotime('today'),
                 ),
-                'today'      => array(
+                'today' => array(
                     strtotime('today'),
                     strtotime('tomorrow'),
                 ),
-                'this_week'  => array(
+                'this_week' => array(
                     strtotime('Monday this week'),
                     strtotime('Monday next week'),
                 ),
-                'last_week'  => array(
+                'last_week' => array(
                     strtotime('Monday last week'),
                     strtotime('Monday this week'),
                 ),
-                'next_week'  => array(
+                'next_week' => array(
                     strtotime('Monday next week'),
                     strtotime('Monday next week', strtotime('Monday next week')),
                 ),
@@ -750,19 +754,19 @@ class MemberServiceImpl extends BaseService implements MemberService
 
             if (array_key_exists($conditions['date'], $dates)) {
                 $conditions['startTimeGreaterThan'] = $dates[$conditions['date']][0];
-                $conditions['startTimeLessThan']    = $dates[$conditions['date']][1];
+                $conditions['startTimeLessThan'] = $dates[$conditions['date']][1];
                 unset($conditions['date']);
             }
         }
 
         if (isset($conditions['creator']) && !empty($conditions['creator'])) {
-            $user                 = $this->getUserService()->getUserByNickname($conditions['creator']);
+            $user = $this->getUserService()->getUserByNickname($conditions['creator']);
             $conditions['userId'] = $user ? $user['id'] : -1;
             unset($conditions['creator']);
         }
 
         if (isset($conditions['nickname'])) {
-            $user                 = $this->getUserService()->getUserByNickname($conditions['nickname']);
+            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
             $conditions['userId'] = $user ? $user['id'] : -1;
             unset($conditions['nickname']);
         }
@@ -783,7 +787,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $this->getMemberDao()->update(
             $member['id'],
             array(
-                'noteNum'            => (int)$number,
+                'noteNum' => (int) $number,
                 'noteLastUpdateTime' => time(),
             )
         );
@@ -808,7 +812,7 @@ class MemberServiceImpl extends BaseService implements MemberService
     }
 
     /**
-     * @param  int $userId
+     * @param int $userId
      *
      * @return mixed
      */

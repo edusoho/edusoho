@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Marker\Dao\Impl;
 
 use Biz\Marker\Dao\MarkerDao;
@@ -22,11 +23,11 @@ class MarkerDaoImpl extends GeneralDaoImpl implements MarkerDao
     {
         return array(
             'timestamps' => array('createdTime', 'updatedTime'),
-            'orderbys'   => array('createdTime'),
+            'orderbys' => array('createdTime'),
             'conditions' => array(
                 'mediaId = :mediaId',
-                'second = :second'
-            )
+                'second = :second',
+            ),
         );
     }
 }

@@ -5,11 +5,11 @@ use Phpmig\Migration\Migration;
 class VideoActivity extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
-        $biz        = $this->getContainer();
+        $biz = $this->getContainer();
         $connection = $biz['db'];
         $connection->exec("
            DROP TABLE  IF EXISTS `video_activity`;
@@ -24,10 +24,9 @@ class VideoActivity extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
-
     }
 }

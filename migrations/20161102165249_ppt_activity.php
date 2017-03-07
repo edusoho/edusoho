@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class PptActivity extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -26,12 +26,12 @@ class PptActivity extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
         $biz = $this->getContainer();
         $db = $biz['db'];
-        $db->exec("DROP TABLE IF EXISTS `ppt_activity`");
+        $db->exec('DROP TABLE IF EXISTS `ppt_activity`');
     }
 }

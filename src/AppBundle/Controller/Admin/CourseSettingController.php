@@ -3,37 +3,35 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class CourseSettingController extends BaseController
 {
     public function courseSettingAction(Request $request)
     {
-        $courseSetting        = $this->getSettingService()->get('course', array());
-        $liveCourseSetting    = $this->getSettingService()->get('live-course', array());
-        $userDefaultSetting   = $this->getSettingService()->get('user_default', array());
+        $courseSetting = $this->getSettingService()->get('course', array());
+        $liveCourseSetting = $this->getSettingService()->get('live-course', array());
+        $userDefaultSetting = $this->getSettingService()->get('user_default', array());
         $courseDefaultSetting = $this->getSettingService()->get('course_default', array());
-        $courseDefaultSet     = $this->getCourseDefaultSet();
-        $defaultSetting       = array_merge($courseDefaultSet, $courseDefaultSetting);
+        $courseDefaultSet = $this->getCourseDefaultSet();
+        $defaultSetting = array_merge($courseDefaultSet, $courseDefaultSetting);
 
         $default = array(
-            'welcome_message_enabled'  => '0',
-            'welcome_message_body'     => '{{nickname}},欢迎加入课程{{course}}',
-            'teacher_modify_price'     => '1',
-            'teacher_search_order'     => '0',
-            'teacher_manage_student'   => '0',
-            'teacher_export_student'   => '0',
-            'student_download_media'   => '0',
-            'explore_default_orderBy'  => 'latest',
+            'welcome_message_enabled' => '0',
+            'welcome_message_body' => '{{nickname}},欢迎加入课程{{course}}',
+            'teacher_modify_price' => '1',
+            'teacher_search_order' => '0',
+            'teacher_manage_student' => '0',
+            'teacher_export_student' => '0',
+            'student_download_media' => '0',
+            'explore_default_orderBy' => 'latest',
             'free_course_nologin_view' => '1',
-            'relatedCourses'           => '0',
-            'coursesPrice'             => '0',
-            'allowAnonymousPreview'    => '1',
-            "copy_enabled"             => '0',
-            "testpaperCopy_enabled"    => '0'
+            'relatedCourses' => '0',
+            'coursesPrice' => '0',
+            'allowAnonymousPreview' => '1',
+            'copy_enabled' => '0',
+            'testpaperCopy_enabled' => '0',
         );
 
         $this->getSettingService()->set('course', $courseSetting);
@@ -45,13 +43,13 @@ class CourseSettingController extends BaseController
 
             $courseDefaultSetting = array(
                 'chapter_name' => '章',
-                'part_name' => '节'
+                'part_name' => '节',
             );
 
             $courseDefaultSetting = array_merge($courseDefaultSetting, $defaultSetting);
             $this->getSettingService()->set('course_default', $courseDefaultSetting);
 
-            $default        = $this->getSettingService()->get('default', array());
+            $default = $this->getSettingService()->get('default', array());
             $defaultSetting = array_merge($default, $userDefaultSetting, $courseDefaultSetting);
             $this->getSettingService()->set('default', $defaultSetting);
 
@@ -66,9 +64,9 @@ class CourseSettingController extends BaseController
         }
 
         return $this->render('admin/system/course-setting.html.twig', array(
-            'courseSetting'   => $courseSetting,
-            'defaultSetting'  => $defaultSetting,
-            'hasOwnCopyright' => false
+            'courseSetting' => $courseSetting,
+            'defaultSetting' => $defaultSetting,
+            'hasOwnCopyright' => false,
         ));
     }
 
@@ -80,10 +78,10 @@ class CourseSettingController extends BaseController
             $defaultSetting = $request->request->all();
 
             $courseDefaultSetting = ArrayToolkit::parts($defaultSetting, array(
-                'defaultCoursePicture'
+                'defaultCoursePicture',
             ));
 
-            $default        = $this->getSettingService()->get('default', array());
+            $default = $this->getSettingService()->get('default', array());
             $defaultSetting = array_merge($default, $courseDefaultSetting);
 
             $this->getSettingService()->set('default', $defaultSetting);
@@ -93,20 +91,20 @@ class CourseSettingController extends BaseController
         }
 
         return $this->render('admin/system/course-avatar.html.twig', array(
-            'defaultSetting'  => $defaultSetting,
-            'hasOwnCopyright' => false
+            'defaultSetting' => $defaultSetting,
+            'hasOwnCopyright' => false,
         ));
     }
 
     public function liveCourseSettingAction(Request $request)
     {
-        $courseSetting     = $this->getSettingService()->get('course', array());
+        $courseSetting = $this->getSettingService()->get('course', array());
         $liveCourseSetting = $this->getSettingService()->get('live-course', array());
-        $client            = new EdusohoLiveClient();
-        $capacity          = $client->getCapacity();
+        $client = new EdusohoLiveClient();
+        $capacity = $client->getCapacity();
 
         $default = array(
-            'live_course_enabled' => '0'
+            'live_course_enabled' => '0',
         );
 
         $this->getSettingService()->set('course', $courseSetting);
@@ -114,9 +112,9 @@ class CourseSettingController extends BaseController
         $setting = array_merge($default, $liveCourseSetting);
 
         if ($request->getMethod() == 'POST') {
-            $liveCourseSetting                          = $request->request->all();
+            $liveCourseSetting = $request->request->all();
             $liveCourseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
-            $setting                                    = array_merge($courseSetting, $liveCourseSetting);
+            $setting = array_merge($courseSetting, $liveCourseSetting);
             $this->getSettingService()->set('live-course', $liveCourseSetting);
             $this->getSettingService()->set('course', $setting);
 
@@ -127,7 +125,7 @@ class CourseSettingController extends BaseController
                 unset($hiddenMenus['admin_live_course']);
             } else {
                 $hiddenMenus['admin_live_course_add'] = true;
-                $hiddenMenus['admin_live_course']     = true;
+                $hiddenMenus['admin_live_course'] = true;
             }
 
             $this->getSettingService()->set('menu_hiddens', $hiddenMenus);
@@ -137,9 +135,10 @@ class CourseSettingController extends BaseController
         }
 
         $setting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
+
         return $this->render('admin/system/live-course-setting.html.twig', array(
             'courseSetting' => $setting,
-            'capacity'      => $capacity
+            'capacity' => $capacity,
         ));
     }
 
@@ -148,8 +147,8 @@ class CourseSettingController extends BaseController
         $questionsSetting = $this->getSettingService()->get('questions', array());
 
         if (empty($questionsSetting)) {
-            $default          = array(
-                'testpaper_answers_show_mode' => 'submitted'
+            $default = array(
+                'testpaper_answers_show_mode' => 'submitted',
             );
             $questionsSetting = $default;
         }
@@ -167,14 +166,14 @@ class CourseSettingController extends BaseController
     protected function getCourseDefaultSet()
     {
         $default = array(
-            'defaultCoursePicture'         => 0,
+            'defaultCoursePicture' => 0,
             'defaultCoursePictureFileName' => 'coursePicture',
-            'articleShareContent'          => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
-            'courseShareContent'           => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
-            'groupShareContent'            => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
-            'classroomShareContent'        => '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！',
-            'chapter_name'                 => '章',
-            'part_name'                    => '节'
+            'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
+            'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
+            'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
+            'classroomShareContent' => '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！',
+            'chapter_name' => '章',
+            'part_name' => '节',
         );
 
         return $default;

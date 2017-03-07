@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Sensitive\Dao\Impl;
 
 use Biz\Sensitive\Dao\SensitiveDao;
@@ -16,6 +17,7 @@ class SensitiveDaoImpl extends GeneralDaoImpl implements SensitiveDao
     public function findAllKeywords()
     {
         $sql = "SELECT * FROM {$this->table} ORDER BY createdTime DESC";
+
         return $this->db()->fetchAll($sql, array());
     }
 
@@ -27,13 +29,13 @@ class SensitiveDaoImpl extends GeneralDaoImpl implements SensitiveDao
     public function declares()
     {
         $declares['orderbys'] = array(
-            'createdTime', 'id'
+            'createdTime', 'id',
         );
 
         $declares['conditions'] = array(
             'id = :id',
             'state = :state',
-            'UPPER(name) LIKE :name'
+            'UPPER(name) LIKE :name',
         );
 
         return $declares;
@@ -52,7 +54,6 @@ class SensitiveDaoImpl extends GeneralDaoImpl implements SensitiveDao
 
             return true;
         }
-
         );
 
         if (isset($conditions['keyword'])) {

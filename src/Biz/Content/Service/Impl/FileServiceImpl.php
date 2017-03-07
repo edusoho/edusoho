@@ -2,7 +2,6 @@
 
 namespace Biz\Content\Service\Impl;
 
-
 use Biz\BaseService;
 use Biz\Content\Dao\FileDao;
 use Biz\Content\Dao\FileGroupDao;
@@ -77,8 +76,8 @@ class FileServiceImpl extends BaseService implements FileService
         }
         $group = $this->getGroupDao()->getByCode($group);
 
-        $record           = array();
-        $user             = $this->getCurrentUser();
+        $record = array();
+        $user = $this->getCurrentUser();
         $record['userId'] = empty($user) || !$user->isLogin() ? 0 : $user['id'];
 
         if (!empty($group)) {
@@ -87,11 +86,11 @@ class FileServiceImpl extends BaseService implements FileService
         // @todo fix it.
         $record['mime'] = '';
         // $record['mime'] = $file->getMimeType();
-        $record['size']        = $file->getSize();
-        $record['uri']         = $this->generateUri($group, $file);
+        $record['size'] = $file->getSize();
+        $record['uri'] = $this->generateUri($group, $file);
         $record['createdTime'] = time();
-        $record                = $this->getFileDao()->create($record);
-        $record['file']        = $this->saveFile($file, $record['uri']);
+        $record = $this->getFileDao()->create($record);
+        $record['file'] = $this->saveFile($file, $record['uri']);
 
         return $record;
     }
@@ -104,9 +103,9 @@ class FileServiceImpl extends BaseService implements FileService
             $filename = $file->getFilename();
         }
         $errors = array();
-        $regex  = '/\.('.preg_replace('/ +/', '|', preg_quote($extensions)).')$/i';
+        $regex = '/\.('.preg_replace('/ +/', '|', preg_quote($extensions)).')$/i';
         if (!preg_match($regex, $filename)) {
-            $errors[] = '只允许上传以下扩展名的文件：' . $extensions;
+            $errors[] = '只允许上传以下扩展名的文件：'.$extensions;
         }
 
         return $errors;
@@ -169,7 +168,7 @@ class FileServiceImpl extends BaseService implements FileService
     public function getFileObject($fileId)
     {
         $fileInDao = $this->getFileDao()->get($fileId);
-        $parsed    = $this->parseFileUri($fileInDao['uri']);
+        $parsed = $this->parseFileUri($fileInDao['uri']);
 
         return new File($parsed['fullpath']);
     }
@@ -208,7 +207,7 @@ class FileServiceImpl extends BaseService implements FileService
         }
 
         $filenameParts = explode('.', $filename);
-        $ext           = array_pop($filenameParts);
+        $ext = array_pop($filenameParts);
         if (empty($ext)) {
             throw $this->createServiceException('获取文件扩展名失败！');
         }
@@ -227,14 +226,14 @@ class FileServiceImpl extends BaseService implements FileService
     public function parseFileUri($uri)
     {
         $parsed = array();
-        $parts  = explode('://', $uri);
+        $parts = explode('://', $uri);
         if (empty($parts) || count($parts) != 2) {
             throw $this->createServiceException(sprintf('解析文件URI(%s)失败！', $uri));
         }
-        $parsed['access']    = $parts[0];
-        $parsed['path']      = $parts[1];
+        $parsed['access'] = $parts[0];
+        $parsed['path'] = $parts[1];
         $parsed['directory'] = dirname($parsed['path']);
-        $parsed['name']      = basename($parsed['path']);
+        $parsed['name'] = basename($parsed['path']);
 
         if ($parsed['access'] == 'public') {
             $directory = $this->biz['topxia.upload.public_directory'];

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\AuthProvider;
 
 interface AuthProvider
@@ -34,5 +35,4 @@ interface AuthProvider
     public function getAvatar($userId, $size = 'middle');
 
     public function getProviderName();
-
 }

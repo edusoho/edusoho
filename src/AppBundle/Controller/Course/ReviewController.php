@@ -11,7 +11,7 @@ class ReviewController extends BaseController
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
 
-        $fields             = $request->request->all();
+        $fields = $request->request->all();
         $fields['courseId'] = $id;
         $this->getReviewService()->saveReview($fields);
 
@@ -30,18 +30,18 @@ class ReviewController extends BaseController
 
         $user = $this->getCurrentUser();
 
-        $fields             = $request->request->all();
-        $fields['userId']   = $user['id'];
+        $fields = $request->request->all();
+        $fields['userId'] = $user['id'];
         $fields['courseId'] = $course['id'];
-        $fields['rating']   = 1;
+        $fields['rating'] = 1;
         $fields['parentId'] = $reviewId;
 
         $post = $this->getReviewService()->saveReview($fields);
 
         return $this->render('review/widget/subpost-item.html.twig', array(
-            'post'      => $post,
-            'author'    => $this->getCurrentUser(),
-            'canAccess' => true
+            'post' => $post,
+            'author' => $this->getCurrentUser(),
+            'canAccess' => true,
         ));
     }
 
@@ -50,6 +50,7 @@ class ReviewController extends BaseController
         $this->getCourseService()->tryManageCourse($courseId);
 
         $this->getReviewService()->deleteReview($reviewId);
+
         return $this->createJsonResponse(true);
     }
 
