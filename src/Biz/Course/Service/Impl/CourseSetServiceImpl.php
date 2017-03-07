@@ -20,7 +20,6 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseDeleteService;
 use Biz\Course\Copy\Impl\ClassroomCourseCopy;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
@@ -475,10 +474,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
     }
 
-    /**
-     * @param  int $userId
-     * @return mixed
-     */
     public function findLearnCourseSetsByUserId($userId)
     {
         $courses = $this->getCourseService()->findLearnCoursesByUserId($userId);
@@ -487,10 +482,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->findPublicCourseSetsByIds($setIds);
     }
 
-    /**
-     * @param  array $ids
-     * @return mixed
-     */
     public function findPublicCourseSetsByIds(array $ids)
     {
         if (empty($ids)) {
