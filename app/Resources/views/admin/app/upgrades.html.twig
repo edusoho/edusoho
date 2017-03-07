@@ -35,7 +35,7 @@
                   <a href="#" class=""><h4><strong class="text-primary">{{ app.name }}</strong></h4>
                   </a> {% if version_compare(app.package.edusohoMinVersion, version, ">") %}
                     <div
-                        class="color-danger">{{ '需要主系统%edusohoMinVersion%及更高版本'|trans({'%edusohoMinVersion%': app.package.edusohoMinVersion}) }}</div>{% endif %}
+                        class="text-danger">{{ '需要主系统%edusohoMinVersion%及更高版本'|trans({'%edusohoMinVersion%': app.package.edusohoMinVersion}) }}</div>{% endif %}
                 </div>
 
                 <!-- <div class="info mtm mbm clearfix"> -->
