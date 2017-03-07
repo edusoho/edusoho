@@ -34,6 +34,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if (!is_numeric($number)) {
             throw $this->createAccessDeniedException('recmendNum should be number!');
         }
+
         $course = $this->getCourseSetDao()->update(
             $id,
             array(
@@ -374,6 +375,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 'smallPicture',
                 'middlePicture',
                 'largePicture',
+                'teacherIds',
             )
         );
 
@@ -543,6 +545,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         return $this->getFavoriteDao()->countByUserId($userId);
     }
+
 
     public function searchUserFavorites($userId, $start, $limit)
     {
