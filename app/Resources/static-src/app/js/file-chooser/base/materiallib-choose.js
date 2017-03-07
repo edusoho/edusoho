@@ -61,10 +61,10 @@ class MaterialLibChoose extends Chooser {
       case 'sharing':
         this._loadSharingContacts.call(this, $(that).data('sharingContactsUrl'));
         $('.js-file-name-group').removeClass('hidden');
-        $('.js-file-owner-group').removeClass('hidden');
+        $('.js-file-owner-group').addClass('hidden');
         break;
       default:
-        $('.js-file-name-group').addClass('hidden');
+        $('.js-file-name-group').removeClass('hidden');
         $('.js-file-owner-group').addClass('hidden');
         break;
     }
