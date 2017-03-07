@@ -29,11 +29,6 @@ class LessonController extends BaseController
             ));
         }
 
-        if ($this->getCourseService()->isCourseOverdue($course)) {
-            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('班级已经过期！'));
-            return $this->redirect($this->generateUrl('classroom_courses', array('classroomId' => $classroom['id'])));
-        }
-
         return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course["id"])));
     }
 

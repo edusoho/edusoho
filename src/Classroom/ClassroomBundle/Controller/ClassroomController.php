@@ -517,7 +517,7 @@ class ClassroomController extends BaseController
         }
 
         if ($this->getClassroomService()->isClassroomOverDue($id)) {
-            return $this->redirect($this->generateUrl('classroom_introductions', array('id' => $id)));
+            throw new \Exception("班级已过期");
         }
 
         $this->getClassroomService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));

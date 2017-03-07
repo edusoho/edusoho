@@ -215,7 +215,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $arguments = $fields;
 
         if (!empty($arguments['expiryMode']) && !empty($arguments['expiryValue'])) {
-            if ($this->canUpdateMembersDeadlines($classroom, $arguments['expiryMode'])) {
+            if ($this->canUpdateMembersDeadline($classroom, $arguments['expiryMode'])) {
                 $deadline = ClassroomToolkit::buildMemberDeadline(array(
                     'expiryMode'  => $arguments['expiryMode'],
                     'expiryValue' => $arguments['expiryValue']
@@ -237,7 +237,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $classroom;
     }
 
-    protected function canUpdateMembersDeadlines($classroom, $expiryMode)
+    protected function canUpdateMembersDeadline($classroom, $expiryMode)
     {
         if ($expiryMode == $classroom['expiryMode'] && $expiryMode != 'days') {
             return true;

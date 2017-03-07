@@ -188,14 +188,6 @@ class CourseController extends CourseBaseController
 
         list($course, $member) = $this->buildCourseLayoutData($request, $id);
 
-        $classroom = $this->getClassroomService()->getClassroomByCourseId($id);
-        if (!empty($classroom)) {
-            if ($this->getCourseService()->isCourseOverdue($course) && !$this->getClassroomService()->canManageClassroom($classroom['id'])) {
-                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('班级已经过期！'));
-                return $this->redirect($this->generateUrl('classroom_courses', array('classroomId' => $classroom['id'])));
-            }
-        }
-
         if (!array_intersect(array('ROLE_ADMIN','ROLE_SUPER_ADMIN'), $user['roles'])) {
             if ($course['status'] == 'closed' && $member == null) {
                 return $this->createMessageResponse('info', $this->getServiceKernel()->trans('课程已关闭，3秒后返回首页'), '', 3, $this->generateUrl('homepage'));
@@ -354,14 +346,6 @@ class CourseController extends CourseBaseController
 
         if (!$this->getCourseService()->canTakeCourse($id) ) {
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('您还不是课程《%courseTitle%》的学员，请先购买或加入学习。', array('%courseTitle%' => $course['title'])), null, 3000, $this->generateUrl('course_show', array('id' => $id)));
-        }
-
-        $classroom = $this->getClassroomService()->getClassroomByCourseId($id);
-        if (!empty($classroom)) {
-            if ($this->getCourseService()->isCourseOverdue($course) && !$this->getClassroomService()->canManageClassroom($classroom['id'])) {
-                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('班级已经过期！'));
-                return $this->redirect($this->generateUrl('classroom_courses', array('classroomId' => $classroom['id'])));
-            }
         }
 
         try {

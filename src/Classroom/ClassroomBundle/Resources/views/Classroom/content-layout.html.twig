@@ -10,7 +10,6 @@
 {% if is_plugin_installed('GroupSell') and not member %}
   {{ render(controller('GroupSellBundle:GroupSell:showGroup',{type:'classroom',targetId:classroom.id})) }}
 {% endif %}
-{{ web_macro.flash_messages() }}
 <div class="class-detail row" id="detail-content">
   <div class="col-lg-9 col-md-8 class-detail-main">
 
