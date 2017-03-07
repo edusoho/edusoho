@@ -1623,17 +1623,21 @@ class EduSohoUpgrade extends AbstractUpdater
       {
         $this->exec("ALTER TABLE `course_note` ADD COLUMN `courseSetId` INT(10) UNSIGNED NOT NULL;");
       }
+      $this->exec("UPDATE course_note SET courseSetId = courseId");
+
 
       if(!$this->isFieldExist('course_review', 'courseSetId'))
       {
         $this->exec("ALTER TABLE `course_review` add COLUMN `courseSetId` int(10) UNSIGNED NOT NULL DEFAULT '0';");
       }
+      $this->exec("UPDATE course_review SET courseSetId = courseId");
 
 
       if(!$this->isFieldExist('course_thread', 'courseSetId'))
       {
         $this->exec("ALTER TABLE `course_thread` ADD courseSetId INT(10) UNSIGNED NOT NULL;");
       }
+      $this->exec("UPDATE course_thread SET courseSetId = courseId");
 
       if($this->isFieldExist('course_thread', 'lessonId'))
       {
@@ -1649,6 +1653,7 @@ class EduSohoUpgrade extends AbstractUpdater
       {
         $this->exec('ALTER TABLE course_favorite ADD courseSetId INT(10) NOT NULL DEFAULT 0 COMMENT "课程ID";');
       }
+      $this->exec("UPDATE course_favorite SET courseSetId = courseId");
 
       if($this->isFieldExist('course_favorite', 'courseId'))
       {
@@ -1664,11 +1669,13 @@ class EduSohoUpgrade extends AbstractUpdater
       {
         $this->exec("ALTER TABLE course_material ADD COLUMN courseSetId int(10) default 0 COMMENT '课程ID';");
       }
+      $this->exec("UPDATE course_material SET courseSetId = courseId");
 
       if(!$this->isFieldExist('course_member', 'courseSetId'))
       {
         $this->exec("ALTER TABLE `course_member` ADD COLUMN  `courseSetId` int(10) unsigned NOT NULL COMMENT '课程ID';");
       }
+      $this->exec("UPDATE course_member SET courseSetId = courseId");
 
       if($this->isFieldExist('course_member', 'courseId'))
       {
@@ -1679,9 +1686,10 @@ class EduSohoUpgrade extends AbstractUpdater
       {
         $this->exec("ALTER TABLE `classroom_courses` ADD COLUMN `courseSetId` INT(10) NOT NULL DEFAULT '0' COMMENT '课程ID';");
       }
+      $this->exec("UPDATE classroom_courses SET courseSetId = courseId");
+
 
       $this->exec('UPDATE course_member AS cm INNER JOIN c2_course c ON c.id = cm.courseId SET cm.courseSetId=c.courseSetId;');
-
       $this->exec("UPDATE block_template SET templateName = 'block/live-top-banner.template.html.twig' WHERE code = 'live_top_banner';");
       $this->exec("UPDATE block_template SET templateName = 'block/open-course-top-banner.template.html.twig' WHERE code = 'open_course_top_banner';");
 
