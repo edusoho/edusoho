@@ -23,12 +23,12 @@ class CourseSetServiceTest extends BaseTestCase
     {
         $courseSet = array(
             'title' => '新课程开始！',
-            'type' => 'normal',
+            'type' => 'normal'
         );
         $expected = $this->getCourseSetService()->createCourseSet($courseSet);
         $res = $this->getCourseSetService()->findCourseSetsLikeTitle('开始');
 
-        $this->assertEquals(array($expected), $res);
+        $this->assertEquals($expected['title'], $res[0]['title']);
     }
 
     public function testUpdate()
