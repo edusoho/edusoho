@@ -2848,5 +2848,5 @@ course_task_question_marker_search:
     defaults: { _controller: AppBundle:QuestionMarker:search }
 
 callback:
-    path:  /callback/{$resourceType}
-    defaults: { _controller: AppBundle:Callback/index:index }
+    path:  /callback
+    defaults: { _controller: AppBundle:Callback/Index:index }
