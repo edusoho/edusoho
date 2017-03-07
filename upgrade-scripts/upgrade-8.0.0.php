@@ -999,7 +999,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function testpaperUpgrade()
     {
-        $sql = "select * from testpaper where id not in (select id from c2_testpaper where type='testpaper')";
+        $sql = "SELECT * FROM testpaper WHERE id NOT IN (SELECT id FROM c2_testpaper WHERE type = 'testpaper')";
         $testpapers = $this->getConnection()->fetchAll($sql);
         foreach ($testpapers as $testpaper) {
             $targetArr = explode('/', $testpaper['target']);
@@ -1141,14 +1141,14 @@ class EduSohoUpgrade extends AbstractUpdater
             FROM testpaper_result WHERE id NOT IN (SELECT id FROM c2_testpaper_result)";
         $this->getConnection()->exec($sql);
 
-        $sql = "select * from c2_testpaper_result where id not in (select id from c2_testpaper_result where type = 'testpaper')";
+        $sql = "SELECT * FROM c2_testpaper_result WHERE id NOT IN (SELECT id FROM c2_testpaper_result WHERE type = 'testpaper')";
         $newTestpaperResults = $this->getConnection()->fetchAll($sql);
         foreach ($newTestpaperResults as $testpaperResult) {
             $targetArr = explode('/', $testpaperResult['target']);
             $courseArr = explode('-', $targetArr[0]);
             $lessonArr = explode('-', $targetArr[1]);
 
-            $courseSql = "select * from c2_course where id = ".$courseArr[1];
+            $courseSql = "SELECT * FROM c2_course WHERE id = ".$courseArr[1];
             $course = $this->getConnection()->fetchAssoc($courseSql);
 
             $lessonId = empty($lessonArr[1]) ? 0 : $lessonArr[1];
