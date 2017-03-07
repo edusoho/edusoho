@@ -4,13 +4,13 @@
     {% for key, item in courseItems %}
       {% if item.type|default(null) == 'chapter' %}
         <li class="task-item bg-gray-lighter js-task-chapter"><i class="es-icon es-icon-menu left-menu"></i>
-          <a href="javascript:void(0);" class="text-overflow title gray-dark">第{{ item.number }}
+          <a href="javascript:void(0);" class="title gray-dark">第{{ item.number }}
             章: {{ item.title }}</a>
           <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
         </li>
       {% elseif item.type|default(null)  == 'unit' %}
         <li class="task-item color-gray bg-gray-lighter">
-          <span class="text-overflow title">第{{ item.number }}
+          <span class="title">第{{ item.number }}
             节: {{ item.title }}</span>
         </li>
       {% elseif  item.type|default(null)  == 'lesson' %}
@@ -32,7 +32,7 @@
               left-menu"></i>
 
             {% if task.status == 'published' %}
-              <a class="text-overflow title"
+              <a class="title"
                 {% if member %}
                   href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}"
                 {% else %}
@@ -64,7 +64,7 @@
               {% endif %}
               </span>
             {% else %}
-              <span class="text-overflow title">
+              <span class="title">
                 {% include 'course/task-list/parts/list-li-title.html.twig' %}
               </span>
               <span class="right-menu color-gray">
