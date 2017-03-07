@@ -427,6 +427,8 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 			}
 			return array_values($item);
 		}, $items);
+
+
 		foreach ($result as $key => $value) {
 			if (empty($value)) {
 				unset($result[$key]);
@@ -437,6 +439,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 			        unset($result[$key][$k]);
                 }
             }
+            sort($result[$key]);
 		}
 		return $result;
 	}
