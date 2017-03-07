@@ -1467,7 +1467,7 @@ class EduSohoUpgrade extends AbstractUpdater
             }
 
             //exercise_item
-            $itemSql = "SELECT * FROM exercise_item WHERE exerciseId = {$exercise['id']} WHERE id NOT IN (SELECT oldItemId FROM c2_testpaper_item WHERE type = 'exercise' AND testId = {$exercise['id']})";
+            $itemSql = "SELECT * FROM exercise_item WHERE exerciseId = {$exercise['id']} AND id NOT IN (SELECT oldItemId FROM c2_testpaper_item WHERE type = 'exercise' AND testId = {$exercise['id']})";
             $items = $this->getConnection()->fetchAll($itemSql);
 
             if (!$items) {
