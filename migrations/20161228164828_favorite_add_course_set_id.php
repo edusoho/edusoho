@@ -10,7 +10,7 @@ class FavoriteAddCourseSetId extends Migration
     public function up()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec('ALTER TABLE course_favorite ADD courseSetId INT(10) NOT NULL COMMENT "课程ID";');
+        $biz['db']->exec('ALTER TABLE course_favorite ADD courseSetId INT(10) NOT NULL DEFAULT '0' COMMENT "课程ID";');
         $biz['db']->exec("ALTER TABLE course_favorite MODIFY courseId INT(10) unsigned NOT NULL COMMENT '教学计划ID';");
     }
 
