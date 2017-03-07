@@ -516,8 +516,7 @@ class ClassroomController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-        $classroom = $this->getClassroomService()->getClassroom($id);
-        if ($this->getClassroomService()->isClassroomOverDue($classroom)) {
+        if ($this->getClassroomService()->isClassroomOverDue($id)) {
             return $this->redirect($this->generateUrl('classroom_introductions', array('id' => $id)));
         }
 

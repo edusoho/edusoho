@@ -24,8 +24,6 @@ interface ClassroomService
 
     public function canCreateThreadEvent($resource);
 
-    public function canCreateThreadWhenClassroomOverDue($classroom);
-
     public function addCoursesToClassroom($classroomId, $courseIds);
 
     public function isClassroomOverDue($classroom);

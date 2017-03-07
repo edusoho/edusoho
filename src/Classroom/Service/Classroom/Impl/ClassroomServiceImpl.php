@@ -587,8 +587,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return (empty($member) || !in_array('headTeacher', $member['role'])) ? false : true;
     }
 
-    public function isClassroomOverDue($classroom)
+    public function isClassroomOverDue($classroomId)
     {
+        $classroom = $this->getClassroom($classroomId);
+
         if ($classroom['expiryMode'] == 'date' && $classroom['expiryValue'] < time()) {
             return true;
         }
@@ -609,7 +611,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createServiceException($this->getKernel()->trans('不能加入未发布班级'));
         }
 
-        if (!$this->canCreateThreadWhenClassroomOverDue($classroom)) {
+        if (!$this->isClassroomOverDue($classroom)) {
             throw $this->createServiceException($this->getKernel()->trans('不能加入已过期的班级'));
         }
 
@@ -1175,15 +1177,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (!$this->canTakeClassroom($id, $includeAuditor)) {
             throw $this->createAccessDeniedException($this->getKernel()->trans('您无权操作！'));
         }
-    }
-
-    public function canCreateThreadWhenClassroomOverDue($classroom)
-    {
-        if ($classroom['expiryMode'] == 'date' && $classroom['expiryValue'] < time()) {
-            return false;
-        }
-
-        return true;
     }
 
     public function canHandleClassroom($id)
