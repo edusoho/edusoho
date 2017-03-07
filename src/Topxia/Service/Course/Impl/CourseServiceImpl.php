@@ -2885,15 +2885,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return false;
     }
 
-    public function isCourseOverdue($course)
-    {
-        if ($course['expiryMode'] == 'date' && $course['expiryDay'] < time()) {
-            return true;
-        }
-
-        return false;
-    }
-
     public function canTakeCourse($course)
     {
         $course = !is_array($course) ? $this->getCourse(intval($course)) : $course;

@@ -611,10 +611,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createServiceException($this->getKernel()->trans('不能加入未发布班级'));
         }
 
-        if (!$this->isClassroomOverDue($classroom)) {
-            throw $this->createServiceException($this->getKernel()->trans('不能加入已过期的班级'));
-        }
-
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {

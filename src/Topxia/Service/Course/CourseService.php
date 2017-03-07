@@ -472,6 +472,4 @@ interface CourseService
     public function findReplaysByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live');
 
     public function canTryLook($courseId, $type);
-
-    public function isCourseOverdue($course);
 }
