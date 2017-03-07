@@ -524,7 +524,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("update `course_task`  ck set  `activityId` = (select `id` from  `activity` ay  where  ck.id = ay.id)
             ");
             //courseSetId
-            $this->getConnection()->exec("update `activity` AS  `ct` set `ct`.fromCourseSetId   = (select `courseSetId` from `c2_course` AS `ce` where `ct`.courseId = `ce`.id)");
+            $this->getConnection()->exec("update `activity` AS  `ct` set `ct`.fromCourseSetId = (select `courseSetId` from `c2_course` AS `ce` where `ct`.fromCourseId = `ce`.id)");
         }
     }
 
