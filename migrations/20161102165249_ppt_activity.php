@@ -17,9 +17,9 @@ class PptActivity extends Migration
           `mediaId` int(11) NOT NULL,
           `finishType` varchar(32) NOT NULL DEFAULT '' COMMENT 'end, time',
           `finishDetail` varchar(32) DEFAULT '0' COMMENT '至少观看X分钟',
-          `createdTime` int(10) NOT NULL,
+          `createdTime` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '',
           `createdUserId` int(11) NOT NULL,
-          `updatedTime` int(11) DEFAULT NULL,
+          `updatedTime` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '',
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
         ");
