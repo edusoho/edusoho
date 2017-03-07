@@ -44,19 +44,60 @@ class ClassroomManageController extends BaseController
         $yesterdayTimeStart = strtotime(date('Y-m-d', $currentTime - 24 * 3600));
         $yesterdayTimeEnd = strtotime(date('Y-m-d', $currentTime));
 
-        $todayFinishedTaskNum = $this->getTaskResultService()->countTaskResults(array('courseIds' => $courseIds, 'finishedTime_GE' => $todayTimeStart, 'finishedTime_LE' => $todayTimeEnd, 'status' => 'finish'));
-        $yesterdayFinishedTaskNum = $this->getTaskResultService()->countTaskResults(array('courseIds' => $courseIds, 'finishedTime_GE' => $yesterdayTimeStart, 'finishedTime_LE' => $yesterdayTimeEnd, 'status' => 'finish'));
+        $todayFinishedTaskNum = $this->getTaskResultService()->countTaskResults(array(
+            'courseIds' => $courseIds,
+            'finishedTime_GE' => $todayTimeStart,
+            'finishedTime_LE' => $todayTimeEnd,
+            'status' => 'finish'
+        ));
+        $yesterdayFinishedTaskNum = $this->getTaskResultService()->countTaskResults(array(
+            'courseIds' => $courseIds,
+            'finishedTime_GE' => $yesterdayTimeStart,
+            'finishedTime_LE' => $yesterdayTimeEnd,
+            'status' => 'finish'
+        ));
 
-        $todayThreadCount = $this->getThreadService()->searchThreadCount(array('targetType' => 'classroom', 'targetId' => $id, 'type' => 'discussion', 'startTime' => $todayTimeStart, 'endTime' => $todayTimeEnd, 'status' => 'open'));
-        $yesterdayThreadCount = $this->getThreadService()->searchThreadCount(array('targetType' => 'classroom', 'targetId' => $id, 'type' => 'discussion', 'startTime' => $yesterdayTimeStart, 'endTime' => $yesterdayTimeEnd, 'status' => 'open'));
+        $todayThreadCount = $this->getThreadService()->searchThreadCount(array(
+            'targetType' => 'classroom',
+            'targetId' => $id,
+            'type' => 'discussion',
+            'startTime' => $todayTimeStart,
+            'endTime' => $todayTimeEnd,
+            'status' => 'open'
+        ));
+        $yesterdayThreadCount = $this->getThreadService()->searchThreadCount(array(
+            'targetType' => 'classroom',
+            'targetId' => $id,
+            'type' => 'discussion',
+            'startTime' => $yesterdayTimeStart,
+            'endTime' => $yesterdayTimeEnd,
+            'status' => 'open'));
 
-        $studentCount = $this->getClassroomService()->searchMemberCount(array('role' => 'student', 'classroomId' => $id, 'startTimeGreaterThan' => strtotime(date('Y-m-d'))));
-        $auditorCount = $this->getClassroomService()->searchMemberCount(array('role' => 'auditor', 'classroomId' => $id, 'startTimeGreaterThan' => strtotime(date('Y-m-d'))));
+        $studentCount = $this->getClassroomService()->searchMemberCount(array(
+            'role' => 'student',
+            'classroomId' => $id,
+            'startTimeGreaterThan' => $todayTimeStart
+        ));
+        $auditorCount = $this->getClassroomService()->searchMemberCount(array(
+            'role' => 'auditor',
+            'classroomId' => $id,
+            'startTimeGreaterThan' => $todayTimeStart
+        ));
 
         $allCount = $studentCount + $auditorCount;
 
-        $yestodayStudentCount = $this->getClassroomService()->searchMemberCount(array('role' => 'student', 'classroomId' => $id, 'startTimeLessThan' => strtotime(date('Y-m-d')), 'startTimeGreaterThan' => (strtotime(date('Y-m-d')) - 24 * 3600)));
-        $yestodayAuditorCount = $this->getClassroomService()->searchMemberCount(array('role' => 'auditor', 'classroomId' => $id, 'startTimeLessThan' => strtotime(date('Y-m-d')), 'startTimeGreaterThan' => (strtotime(date('Y-m-d')) - 24 * 3600)));
+        $yestodayStudentCount = $this->getClassroomService()->searchMemberCount(array(
+            'role' => 'student',
+            'classroomId' => $id,
+            'startTimeLessThan' => $yesterdayTimeEnd,
+            'startTimeGreaterThan' => $yesterdayTimeStart
+        ));
+        $yestodayAuditorCount = $this->getClassroomService()->searchMemberCount(array(
+            'role' => 'auditor',
+            'classroomId' => $id,
+            'startTimeLessThan' => $yesterdayTimeEnd,
+            'startTimeGreaterThan' => $yesterdayTimeStart
+        ));
 
         $yestodayAllCount = $yestodayStudentCount + $yestodayAuditorCount;
 
@@ -92,10 +133,8 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function menuAction(Request $request, $classroom, $sideNav, $context)
+    public function menuAction($classroom, $sideNav, $context)
     {
-        $user = $this->getCurrentUser();
-
         $canManage = $this->getClassroomService()->canManageClassroom($classroom['id']);
         $canHandle = $this->getClassroomService()->canHandleClassroom($classroom['id']);
 

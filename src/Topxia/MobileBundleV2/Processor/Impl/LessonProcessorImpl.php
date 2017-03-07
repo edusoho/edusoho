@@ -186,11 +186,22 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     public function getLearnStatus()
     {
-        $user     = $this->controller->getuserByToken($this->request);
-        $courseId = $this->getParam("courseId");
+        $user     = $this->controller->getUserByToken($this->request);
+        $courseId = $this->getParam('courseId');
 
-        if ($user->isLogin()) {
-            $learnStatuses = $this->controller->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
+        if ($user->isLogin() && !empty($courseId)) {
+            $taskResults = $this->controller->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
+            $learnStatuses = array();
+            foreach ($taskResults as $result) {
+                if($result['status'] === 'finish'){
+                    $status = 'finished';
+                }else if($result['status'] === 'start'){
+                    $status = 'learning';
+                }else{
+                    continue;
+                }
+                $learnStatuses[$result['courseTaskId']] = $status;
+            }
         } else {
             $learnStatuses = array();
         }

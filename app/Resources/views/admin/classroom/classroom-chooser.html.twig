@@ -47,7 +47,7 @@
 		    {% endif %}
 		  </td>
 		  <td>{{ classroom.studentNum }}</td>
-		  <td class="text-danger">
+		  <td class="color-danger">
 		   	{% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
             	{% if classroom.price > 0 %}
                     {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}

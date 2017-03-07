@@ -7,7 +7,7 @@ use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 
-class Courses extends CourseBaseResource
+class Courses extends BaseResource
 {
     public function get(Application $app, Request $request)
     {
@@ -25,9 +25,13 @@ class Courses extends CourseBaseResource
 
         $courses  = $this->getCourseService()->searchCourses($conditions, $order, $start, $limit);
         $courses  = $this->assemblyCourses($courses);
+        $courses = $this->filter($courses);
 
-        $next = isset($conditions['cursor']) ? $this->nextCursorPaging($conditions['cursor'], $start, $limit, $courses) :
-            $this->getCourseService()->searchCourseCount($conditions);
+        if (isset($conditions['cursor'])) {
+            $next = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $courses);
+        } else {
+            $next = $this->getCourseService()->searchCourseCount($conditions);
+        }
         return $this->wrap($courses, $next);
     }
 
@@ -69,6 +73,7 @@ class Courses extends CourseBaseResource
         $total   = $this->getCourseService()->searchCourseCount($conditions);
         $courses = $this->getCourseService()->searchCourses($conditions, $orderBy, 0, $result['showCount']);
         $courses = $this->filter($courses);
+
         foreach ($courses as $key => $value) {
             $courses[$key]['createdTime'] = strval(strtotime($value['createdTime']));
             $courses[$key]['updatedTime'] = strval(strtotime($value['updatedTime']));
@@ -80,9 +85,15 @@ class Courses extends CourseBaseResource
         return $this->wrap($courses, min($result['showCount'], $total));
     }
 
-    public function filter($course)
+    public function filter($courses)
     {
-        return $course;
+        $courseIds = ArrayToolkit::column($courses, 'id');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+        foreach($courses as &$course) {
+            $course['courseSet'] = $courseSets[$course['courseSetId']];
+        }
+        return $this->multicallFilter('Course', $courses);
     }
 
     public function post(Application $app, Request $request)
@@ -94,14 +105,7 @@ class Courses extends CourseBaseResource
     {
         $categoryIds = ArrayToolkit::column($courses, 'categoryId');
         $categories  = $this->getCategoryService()->findCategoriesByIds($categoryIds);
-        $courseIds = ArrayToolkit::column($courses, 'id');
-
-        $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
-        $courseSets = ArrayToolkit::index($courseSets, 'id');
-
         foreach ($courses as &$course) {
-            $course = $this->filledCourseByCourseSet($course, $courseSets[$course['courseSetId']]);
-            $course = $this->convertOldFields($course);
             if (isset($categories[$course['categoryId']])) {
                 $course['category'] = array(
                     'id'   => $categories[$course['categoryId']]['id'],
@@ -117,21 +121,21 @@ class Courses extends CourseBaseResource
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getCourseSetService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseSetService');
+        return $this->createService('Course:CourseSetService');
     }
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
+        return $this->createService('Taxonomy:CategoryService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 }
