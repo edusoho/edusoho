@@ -16,22 +16,11 @@ class Courses extends BaseResource
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 20);
 
-        if (isset($conditions['cursor'])) {
-            $conditions['status']         = 'published';
-            $conditions['parentId']       = 0;
-            $conditions['updatedTime_GE'] = $conditions['cursor'];
-            $courses                      = $this->getCourseService()->searchCourses($conditions, array('updatedTime' => 'ASC'), $start, $limit);
-            $courses                      = $this->assemblyCourses($courses);
-            $next                         = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $courses);
+        $total   = $this->getCourseService()->searchCourseCount($conditions);
+        $courses = $this->getCourseService()->searchCourses($conditions, array('createdTime' => 'DESC'), $start, $limit);
+        $courses = $this->assemblyCourses($courses);
 
-            return $this->wrap($this->filter($courses), $next);
-        } else {
-            $total   = $this->getCourseService()->searchCourseCount($conditions);
-            $courses = $this->getCourseService()->searchCourses($conditions, array('createdTime' => 'DESC'), $start, $limit);
-            $courses = $this->assemblyCourses($courses);
-
-            return $this->wrap($this->filter($courses), $total);
-        }
+        return $this->wrap($this->filter($courses), $total);
     }
 
     public function discoveryColumn(Application $app, Request $request)
