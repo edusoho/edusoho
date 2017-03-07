@@ -227,6 +227,7 @@ class ChaosThreads extends BaseResource
         foreach ($courseThreads as $key => $thread) {
             if (isset($courses[$thread['courseId']])) {
                 $thread                  = ArrayToolkit::rename($thread, array('private' => 'isPrivate'));
+                $thread['lessonId'] = $thread['taskId'];
                 $course                  = $courses[$thread['courseId']];
                 $thread['course']        = $this->filterCourse($course);
                 $courseThreads[$key]     = $thread;
