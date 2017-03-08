@@ -28,6 +28,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->findCourseSetsByParentIdAndLocked($parentId, $locked);
     }
 
+    // Refactor: recommendCourseSet
     public function recommendCourse($id, $number)
     {
         $this->tryManageCourseSet($id);
@@ -49,6 +50,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $course;
     }
 
+    // Refactor: cancelRecommendCourseSet
     public function cancelRecommendCourse($id)
     {
         $course = $this->tryManageCourseSet($id);
@@ -211,6 +213,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->count($conditions);
     }
 
+    // Refactor: countLearnCourseSets
     public function countUserLearnCourseSets($userId)
     {
         $courses = $this->getCourseService()->findLearnCoursesByUserId($userId);
@@ -219,6 +222,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return count($courseSets);
     }
 
+    // Refactor: searchLearnCourseSets
     public function searchUserLearnCourseSets($userId, $start, $limit)
     {
         $sets = $this->findLearnCourseSetsByUserId($userId);
@@ -242,6 +246,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
     }
 
+    // Refactor: countTeachingCourseSets
     public function countUserTeachingCourseSets($userId, array $conditions)
     {
         $members = $this->getCourseMemberService()->findTeacherMembersByUserId($userId);
@@ -256,6 +261,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->countCourseSets($conditions);
     }
 
+    // Refactor: searchTeachingCourseSets
     public function searchUserTeachingCourseSets($userId, array $conditions, $start, $limit)
     {
         $members = $this->getCourseMemberService()->findTeacherMembersByUserId($userId);
@@ -612,6 +618,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
     }
 
+    // Refactor: 函数意图不明显
     public function analysisCourseSetDataByTime($startTime, $endTime)
     {
         return $this->getCourseSetDao()->analysisCourseSetDataByTime($startTime, $endTime);
