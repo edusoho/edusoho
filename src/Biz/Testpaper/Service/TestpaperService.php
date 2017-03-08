@@ -49,19 +49,12 @@ interface TestpaperService
 
     public function searchItemCount($conditions);
 
-    /*
-     * testpaper_item_result
-     */
-
     public function createItemResult($fields);
 
     public function updateItemResult($itemResultId, $fields);
 
     public function findItemResultsByResultId($resultId);
 
-    /**
-     * testpaper_result.
-     */
     public function getTestpaperResult($id);
 
     public function getUserUnfinishResult($testId, $courseId, $activityId, $type, $userId);
@@ -88,9 +81,6 @@ interface TestpaperService
 
     /**
      * 开始做试卷.
-     *
-     * @param  [type] $id             [description]
-     * @return [type] [description]
      */
     public function startTestpaper($id, $fields);
 
