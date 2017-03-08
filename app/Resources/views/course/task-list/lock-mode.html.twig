@@ -42,7 +42,7 @@
               es-icon-iccheckcircleblack24px color-primary
               {% endif %}
               left-menu"></i>
-          {% if task.status == 'published' %}
+          {% if course.status=='published' and task.status == 'published' %}
             {% if member %}
               {% if task_lock is empty %}
                 <a class="title"
