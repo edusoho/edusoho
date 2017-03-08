@@ -269,6 +269,6 @@ classrom_course_lessons_list:
     path: /classroom/{classroomId}/course/{courseId}/lessons/list
     defaults: { _controller: ClassroomBundle:Course/Lesson:list }
 
-classroom_member_reach_deadline:
+classroom_member_deadline_reach:
     path: /classroom/{classroomId}/member/deadline/reach
     defaults: { _controller: ClassroomBundle:Classroom:deadlineReach }
