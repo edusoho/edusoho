@@ -5,6 +5,7 @@ namespace Biz\Crontab\Service\Impl;
 use Biz\BaseService;
 use Biz\Crontab\Dao\JobDao;
 use Biz\System\Service\LogService;
+use Codeages\Biz\Framework\Context\BizAware;
 use Symfony\Component\Yaml\Yaml;
 use Biz\Crontab\Service\CrontabService;
 use AppBundle\Common\ArrayToolkit;
@@ -31,11 +32,10 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             // 加锁
             $job = $this->getJob($id, true);
 
-            $jobParents = class_parents($job['jobClass']);
-            if (in_array('Codeages\Biz\Framework\Service\BaseService', $jobParents)) {
-                $jobInstance = new $job['jobClass']($this->biz);
-            } else {
-                $jobInstance = new $job['jobClass']();
+            $jobInstance = new $job['jobClass']();
+
+            if($jobInstance instanceof BizAware) {
+                $jobInstance->setBiz($this->biz);
             }
 
             if (!empty($job['targetType'])) {

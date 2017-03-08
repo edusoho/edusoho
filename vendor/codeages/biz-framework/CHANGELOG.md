@@ -1,7 +1,18 @@
 # CHANGELOG
 
+## v0.2.2
+
+  * 新增BizAware Class 和 BizAware Trait
+
+## v0.2.1
+
+  * 修复Bad Smells。
+  * GeneralDaoImpl的`_createQueryBuilder`重命名为`createQueryBuilder`，`_getQueryBuilder`重命名为`getQueryBuilder`。
+
 ## v0.2.0
+
   * DAO `declares`方法`IN`关键字,如果传入的参数是空数组会返回空记录
+
 ## v0.1.9
 
  * DAO `declares`方法的`LIKE`关键字默认是模糊全匹配，即'%xxx%';
@@ -10,11 +21,11 @@
 
 ## v0.0.5
 
- * `GeneralDaoInterface`的接口由`search($conditions, $orderby, $start, $limit)`变为``search($conditions, $orderbys, $start, $limit)`。
+ * `GeneralDaoInterface`的接口由`search($conditions, $orderby, $start, $limit)`变为`search($conditions, $orderbys, $start, $limit)`。
    变更后原先的`$orderby`参数传入的值`array('field', 'asc')`需改为`array('filed' => 'asc')`。
    变更后支持多个字段的排序，例如`array('field1' => 'asc', 'field2' => 'desc')`。
    其中排序的字段需在`declares`中声明，不然会抛出`DaoException`例如：
-   ```
+   ```php
    public function declares()
    {
        return array(

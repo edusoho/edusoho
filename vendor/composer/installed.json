@@ -3303,43 +3303,6 @@
         "description": "Rate limiter with Biz Framework."
     },
     {
-        "name": "codeages/biz-framework",
-        "version": "v0.2.0",
-        "version_normalized": "0.2.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "effdcd3621506df9a6b36665469f95c2eb60414e"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/effdcd3621506df9a6b36665469f95c2eb60414e",
-            "reference": "effdcd3621506df9a6b36665469f95c2eb60414e",
-            "shasum": ""
-        },
-        "require": {
-            "davedevelopment/phpmig": "^1.2.0",
-            "doctrine/dbal": "^2.4.5",
-            "php": "^5.3.3 || ^7.0",
-            "pimple/pimple": "^3.0.2",
-            "psr/log": "^1.0.0",
-            "symfony/event-dispatcher": "^2.8.9"
-        },
-        "time": "2017-01-18T06:55:29+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\Biz\\Framework\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "A service layer framework."
-    },
-    {
         "name": "sensio/generator-bundle",
         "version": "v3.0.11",
         "version_normalized": "3.0.11.0",
@@ -3627,7 +3590,7 @@
         },
         "dist": {
             "type": "zip",
-            "url": "https://packagist.phpcomposer.com/files/facebook/php-webdriver/77300c4ab2025d4316635f592ec849ca7323bd8c.zip",
+            "url": "https://api.github.com/repos/facebook/php-webdriver/zipball/77300c4ab2025d4316635f592ec849ca7323bd8c",
             "reference": "77300c4ab2025d4316635f592ec849ca7323bd8c",
             "shasum": ""
         },
@@ -3646,7 +3609,7 @@
         "suggest": {
             "phpdocumentor/phpdocumentor": "2.*"
         },
-        "time": "2017-01-13 15:48:08",
+        "time": "2017-01-13T15:48:08+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -3666,5 +3629,45 @@
             "selenium",
             "webdriver"
         ]
+    },
+    {
+        "name": "codeages/biz-framework",
+        "version": "v0.2.2",
+        "version_normalized": "0.2.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/biz-framework.git",
+            "reference": "14468de6d662e511184e600fdfb446dfdc21b3be"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/14468de6d662e511184e600fdfb446dfdc21b3be",
+            "reference": "14468de6d662e511184e600fdfb446dfdc21b3be",
+            "shasum": ""
+        },
+        "require": {
+            "davedevelopment/phpmig": "^1.2.0",
+            "doctrine/dbal": "^2.4.5",
+            "php": "^5.3.3 || ^7.0",
+            "pimple/pimple": "^3.0.2",
+            "psr/log": "^1.0.0",
+            "symfony/event-dispatcher": "^2.8.9"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
+        },
+        "time": "2017-03-07T10:13:10+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Biz\\Framework\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "A service layer framework."
     }
 ]
