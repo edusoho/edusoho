@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Classroom;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ExportHelp;
 use AppBundle\Twig\WebExtension;
+use Biz\Task\Service\TaskService;
 use Vip\Service\Vip\LevelService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Order\Service\OrderService;
@@ -1197,22 +1198,22 @@ class ClassroomManageController extends BaseController
     private function calculateUserLearnProgress($classroom, $member)
     {
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
-        $courseIds = ArrayToolkit::column($courses, 'id');
-        $findLearnedCourses = array();
+        $coursesCount = count($courses);
+        $learnedCoursesCount = 0;
 
-        foreach ($courseIds as $key => $value) {
-            $learnedCourses = $this->getCourseService()->findLearnedCoursesByCourseIdAndUserId(
-                $value,
-                $member['userId']
-            );
-
-            if (!empty($learnedCourses)) {
-                $findLearnedCourses[] = $learnedCourses;
+        foreach ($courses as $course) {
+            $taskCount = $this->getTaskService()->countTasks(array(
+                'courseId' => $course['id'],
+                'status' => 'published'
+            ));
+            $finishedTaskCount = $this->getTaskResultService()->countTaskResults(array(
+                'courseId' => $course['id'],
+                'userId' => $member['userId']
+            ));
+            if($finishedTaskCount >= $taskCount){
+                $learnedCoursesCount ++;
             }
         }
-
-        $learnedCoursesCount = count($findLearnedCourses);
-        $coursesCount = count($courses);
 
         if ($coursesCount == 0) {
             return array('percent' => '0%', 'number' => 0, 'total' => 0);
@@ -1225,6 +1226,8 @@ class ClassroomManageController extends BaseController
             'number' => $learnedCoursesCount,
             'total' => $coursesCount,
         );
+
+
     }
 
     private function getUserIds($keyword)
@@ -1399,5 +1402,13 @@ class ClassroomManageController extends BaseController
     protected function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 }
