@@ -43,11 +43,12 @@ $.validator.setDefaults({
       $.post($form.attr('action'), $form.serializeArray(), (data) => {
         settings.submitSuccess(data);
       }).error(() => {
-        settings.currentDom ? settings.currentDom.button('reset') : '';
+        settings.currentDom ? $(settings.currentDom).button('reset') : '';
         settings.submitError();
       });
     } else {
       form.submit();
+      settings.currentDom ? $(settings.currentDom).button('reset') : '';
     }
   }
 });
@@ -168,3 +169,23 @@ $.validator.addMethod('positive_integer', function (value, element) {
 $.validator.addMethod("currency", function (value, element, params) {
   return this.optional(element) || /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
 }, Translator.trans('请输入有效价格，最多两位小数，整数位不超个8位！'));
+
+$.validator.addMethod('passwordCheck', function(value, element) {
+  
+  let url = $(element).data('url') ? $(element).data('url') : null;
+  let type = $(element).data('type') ? $(element).data('type') : 'POST';
+  let isSuccess = 0;
+
+  $.ajax({
+    url: url,
+    type: type,
+    async: false,
+    data: {value: value},
+    dataType: 'json'
+  })
+  .success(function(response) {
+    isSuccess = response.success;
+  })
+
+  return this.optional(element) || isSuccess
+}, Translator.trans('密码错误'))
