@@ -41,7 +41,6 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
         if ($this->getTaskService()->isFinished($task['id'])) {
             $this->getTaskService()->finishTaskResult($task['id']);
         }
-
     }
 
     /**
