@@ -62,13 +62,36 @@ class CommonController extends BaseController
 
     public function crontabAction(Request $request)
     {
-        $setting = $this->getSettingService()->get('magic', array());
+        $triggerUser = $this->getCurrentUser();
 
-        if (empty($setting['disable_web_crontab'])) {
-            $this->getBiz()->service('Crontab:CrontabService')->scheduleJobs();
+        // 执行Job 应该是最高权限
+        $currentUser = new CurrentUser();
+
+        $currentUser->fromArray(array(
+            'id' => 1,
+            'email' => 'job@edusoho.com',
+            'nickname' => '定时任务',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
+            'org' => array('id' => 1),
+            'level' => 'SYSTEM',
+            'locale' => $request->getLocale()
+        ));
+
+        try{
+            $this->switchUser($request, $currentUser);
+
+            $setting = $this->getSettingService()->get('magic', array());
+
+            if (empty($setting['disable_web_crontab'])) {
+                $this->getBiz()->service('Crontab:CrontabService')->scheduleJobs();
+            }
+
+            $this->switchUser($request, $triggerUser);
+            return $this->createJsonResponse(true);
+        }catch (\Exception $exception){
+            throw $exception;
         }
-
-        return $this->createJsonResponse(true);
     }
 
     /**

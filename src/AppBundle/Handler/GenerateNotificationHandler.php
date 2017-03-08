@@ -63,11 +63,6 @@ class GenerateNotificationHandler
         return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
 
-    private function getCourseService()
-    {
-        return ServiceKernel::instance()->createService('Course:CourseService');
-    }
-
     private function getNotificationService()
     {
         return ServiceKernel::instance()->createService('User:NotificationService');
