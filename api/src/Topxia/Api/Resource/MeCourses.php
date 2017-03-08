@@ -2,7 +2,9 @@
 
 namespace Topxia\Api\Resource;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\Impl\CourseServiceImpl;
+use Biz\Course\Service\Impl\CourseSetServiceImpl;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -17,9 +19,7 @@ class MeCourses extends BaseResource
         $relation   = $request->query->get('relation', '');
         $user       = getCurrentUser();
         if ($relation == 'learning') {
-
             $total   = $this->getCourseService()->findUserLearningCourseCountNotInClassroom($user['id'], $conditions);
-
             $courses = $this->getCourseService()->findUserLearningCoursesNotInClassroom(
                 $user['id'],
                 $start,
@@ -43,6 +43,7 @@ class MeCourses extends BaseResource
                     $start,
                     $limit
                 );
+
             } else {
                 $coursesAfterColumn = $this->getCourseService()->findUserLearnCoursesNotInClassroomWithType(
                     $user['id'],
@@ -51,7 +52,6 @@ class MeCourses extends BaseResource
                     $limit
                 );
             }
-
             $courses = array_values($coursesAfterColumn);
         } elseif ($relation == 'teaching') {
             $total   = $this->getCourseService()->findUserTeachCourseCountNotInClassroom(array('userId' => $user['id']), false);
@@ -84,7 +84,10 @@ class MeCourses extends BaseResource
     protected function multicallFilter($name, $res)
     {
         $courses = array();
+        $courseIds = ArrayToolkit::column($res, 'id');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
         foreach ($res as $key => $one) {
+            $course['courseSet'] = $courseSets[$one['courseSetId']];
             $course           = $this->callFilter($name, $one);
             $courseConv       = $this->getConversationService()->getConversationByTarget($course['id'], 'course');
             $course['convNo'] = $courseConv ? $courseConv['no'] : '';
@@ -109,5 +112,13 @@ class MeCourses extends BaseResource
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return CourseSetServiceImpl
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 }

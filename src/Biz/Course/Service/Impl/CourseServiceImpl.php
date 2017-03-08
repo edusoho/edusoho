@@ -4,6 +4,8 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
+use Biz\Course\Dao\Impl\CourseMemberDaoImpl;
+use Biz\Course\Dao\Impl\FavoriteDaoImpl;
 use Biz\Course\Dao\ThreadDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Task\Service\TaskService;
@@ -1130,19 +1132,16 @@ class CourseServiceImpl extends BaseService implements CourseService
         $courseFavorites = $this->getFavoriteDao()->findCourseFavoritesNotInClassroomByUserId($userId, 0, PHP_INT_MAX);
         $courseIds = ArrayToolkit::column($courseFavorites, 'courseId');
         $conditions = array('courseIds' => $courseIds);
-
         if (count($courseIds) == 0) {
             return 0;
         }
-
         return $this->searchCourseCount($conditions);
     }
 
     public function findUserFavoritedCoursesNotInClassroom($userId, $start, $limit)
     {
         $courseFavorites = $this->getFavoriteDao()->findCourseFavoritesNotInClassroomByUserId($userId, $start, $limit);
-        $favoriteCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($courseFavorites, 'courseId'));
-        return CourseSerialize::unserializes($favoriteCourses);
+        return $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($courseFavorites, 'courseId'));
     }
 
     protected function _prepareCourseOrderBy($sort)
@@ -1201,7 +1200,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @return CourseMemberDao
+     * @return CourseMemberDaoImpl
      */
     protected function getMemberDao()
     {
@@ -1310,6 +1309,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return FavoriteDaoImpl
+     */
+    protected function getFavoriteDao()
+    {
+        return $this->createDao('Course:FavoriteDao');
     }
 
     /**

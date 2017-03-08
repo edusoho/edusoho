@@ -5,7 +5,6 @@ namespace Biz\Course\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Content\Service\FileService;
-use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Dao\FavoriteDao;
@@ -20,9 +19,6 @@ use Biz\System\Service\LogService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
-use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\CourseNoteService;
-use Biz\Course\Service\CourseDeleteService;
 use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
