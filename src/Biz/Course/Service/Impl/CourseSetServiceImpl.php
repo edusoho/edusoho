@@ -20,9 +20,6 @@ use Biz\System\Service\LogService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
-use Biz\Course\Service\CourseNoteService;
-use Biz\Course\Service\CourseDeleteService;
-use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
@@ -41,7 +38,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $id,
             array(
                 'recommended' => 1,
-                'recommendedSeq' => (int) $number,
+                'recommendedSeq' => (int)$number,
                 'recommendedTime' => time(),
             )
         );
