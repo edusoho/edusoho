@@ -180,6 +180,4 @@ interface CourseService
     public function findUserFavoritedCourseCountNotInClassroom($userId);
 
     public function findUserFavoritedCoursesNotInClassroom($userId, $start, $limit);
-
-
 }
