@@ -1204,14 +1204,14 @@ class ClassroomManageController extends BaseController
         foreach ($courses as $course) {
             $taskCount = $this->getTaskService()->countTasks(array(
                 'courseId' => $course['id'],
-                'status' => 'published'
+                'status' => 'published',
             ));
             $finishedTaskCount = $this->getTaskResultService()->countTaskResults(array(
                 'courseId' => $course['id'],
-                'userId' => $member['userId']
+                'userId' => $member['userId'],
             ));
-            if($finishedTaskCount >= $taskCount){
-                $learnedCoursesCount ++;
+            if ($finishedTaskCount >= $taskCount) {
+                ++$learnedCoursesCount;
             }
         }
 
@@ -1226,8 +1226,6 @@ class ClassroomManageController extends BaseController
             'number' => $learnedCoursesCount,
             'total' => $coursesCount,
         );
-
-
     }
 
     private function getUserIds($keyword)
