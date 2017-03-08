@@ -1671,9 +1671,9 @@ class EduSohoUpgrade extends AbstractUpdater
         $favorites = $this->getConnection()->fetchAll($sql);
 
         foreach ($favorites as $favorite) {
-            $targetArr = explode('/', $favorite['target']);
+            $targetArr = explode('-', $favorite['target']);
 
-            $sql = "UPDATE question_favorite set targetId = {$targetArr[1]},targetType={$targetArr[0]} WHERE id = {$favorite['id']}";
+            $sql = "UPDATE question_favorite set targetId = {$targetArr[1]},targetType='".$targetArr[0]."' WHERE id = {$favorite['id']}";
             $this->exec($sql);
         }
     }
