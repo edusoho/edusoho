@@ -52,14 +52,13 @@ class SearchServiceImpl extends BaseService implements SearchService
 
         $api = CloudAPIFactory::create('root');
         $urls = array(
-            // array('category' => 'course', 'url' => $siteUrl . '/api/courses?cursor=0&start=0&limit=100'),
-            array('category' => 'course', 'url' => $siteUrl . 'callback?res=cloud_search_courses&cursor=0&start=0&limit=100'),
-            array('category' => 'lesson', 'url' => $siteUrl . '/api/lessons?cursor=0&start=0&limit=100'),
-            array('category' => 'user', 'url' => $siteUrl . '/api/users?cursor=0&start=0&limit=100'),
-            array('category' => 'thread', 'url' => $siteUrl . '/api/chaos_threads?cursor=0,0,0&start=0,0,0&limit=50'),
-            array('category' => 'article', 'url' => $siteUrl . '/api/articles?cursor=0&start=0&limit=100'),
-            array('category' => 'openCourse', 'url' => $siteUrl . '/api/open_courses?cursor=0&start=0&limit=100'),
-            array('category' => 'openLesson', 'url' => $siteUrl . '/api/open_course_lessons?cursor=0&start=0&limit=100'),
+            array('category' => 'course', 'url' => $siteUrl.'/callback/cloud_search_courses?cursor=0&start=0&limit=100'),
+            array('category' => 'lesson', 'url' => $siteUrl.'/callback/cloud_search_lessons?cursor=0&start=0&limit=100'),
+            array('category' => 'user', 'url' => $siteUrl.'/callback/cloud_search_users?cursor=0&start=0&limit=100'),
+            array('category' => 'thread', 'url' => $siteUrl.'/callback/cloud_search_chaos_threads?cursor=0,0,0&start=0,0,0&limit=50'),
+            array('category' => 'article', 'url' => $siteUrl.'/callback/cloud_search_articles?cursor=0&start=0&limit=100'),
+            array('category' => 'openCourse', 'url' => $siteUrl.'/callback/cloud_search_open_courses?cursor=0&start=0&limit=100'),
+            array('category' => 'openLesson', 'url' => $siteUrl.'/callback/cloud_search_open_course_lessons?cursor=0&start=0&limit=100'),
         );
         $urls = urlencode(json_encode($urls));
 

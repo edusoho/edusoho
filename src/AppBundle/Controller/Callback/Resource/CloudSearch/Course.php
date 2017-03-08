@@ -2,38 +2,32 @@
 
 namespace AppBundle\Controller\Callback\Resource\CloudSearch;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\Callback\Resource\BaseResource;
-use Topxia\Api\Util\TagUtil;
 
+/**
+ * 单个课程资源(对应course_set表).
+ */
 class Course extends BaseResource
 {
-
     public function filter($res)
     {
         $res['createdTime'] = date('c', $res['createdTime']);
         $res['updatedTime'] = date('c', $res['updatedTime']);
-        $default            = $this->getSettingService()->get('default', array());
 
-        if (empty($res['smallPicture']) && empty($res['middlePicture']) && empty($res['largePicture'])) {
-            $res['smallPicture']  = !isset($default['course.png']) ? '' : $default['course.png'];
-            $res['middlePicture'] = !isset($default['course.png']) ? '' : $default['course.png'];
-            $res['largePicture']  = !isset($default['course.png']) ? '' : $default['course.png'];
-        }
-
+        $defaultSetting = $this->getSettingService()->get('default', array());
         foreach (array('smallPicture', 'middlePicture', 'largePicture') as $key) {
+            if (empty($res[$key])) {
+                $res[$key] = !isset($defaultSetting['course.png']) ? '' : $defaultSetting['course.png'];
+            }
             $res[$key] = $this->getFileUrl($res[$key]);
         }
 
-        // $res['tags'] = TagUtil::buildTags('course', $res['id']);
-        // $res['tags'] = ArrayToolkit::column($res['tags'], 'name');
-
         return $res;
     }
-    
-    /**
-     * @return Biz\System\Service\SettingService
-     */
+
+     /**
+      * @return Biz\System\Service\SettingService
+      */
      protected function getSettingService()
      {
          return $this->getBiz()->service('System:SettingService');

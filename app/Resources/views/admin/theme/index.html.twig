@@ -35,7 +35,7 @@
           <td>{{ theme.author }}</td>
           <td>
             {% if currentTheme.uri == theme.uri %}
-              <span class="color-success">{{'当前正在使用该主题'|trans}}</span>
+              <span class="text-success">{{'当前正在使用该主题'|trans}}</span>
             {% else %}
               <button class="btn btn-default btn-sm use-theme-btn" data-url="{{ path('admin_setting_theme_change', {uri:theme.uri}) }}">{{'使用'|trans}}</button>
             {% endif %}
