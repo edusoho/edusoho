@@ -799,7 +799,8 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param  int     $userId
+     * @param int $userId
+     *
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -998,17 +999,17 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (isset($filters['type'])) {
             return $this->getMemberDao()->countMemberNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters['type'], 0);
         }
+
         return $this->getMemberDao()->countMemberNotInClassroomByUserIdAndRoleAndIsLearned($userId, 'student', 0);
     }
 
     public function findUserLearningCoursesNotInClassroom($userId, $start, $limit, $filters = array())
     {
         if (isset($filters['type'])) {
-            $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters["type"], '0', $start, $limit);
+            $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters['type'], '0', $start, $limit);
         } else {
             $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRoleAndIsLearned($userId, 'student', 0, $start, $limit);
         }
-
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
 
@@ -1019,10 +1020,10 @@ class CourseServiceImpl extends BaseService implements CourseService
                 continue;
             }
 
-            $course                     = $courses[$member['courseId']];
-            $course['memberIsLearned']  = 0;
+            $course = $courses[$member['courseId']];
+            $course['memberIsLearned'] = 0;
             $course['memberLearnedNum'] = $member['learnedNum'];
-            $sortedCourses[]            = $course;
+            $sortedCourses[] = $course;
         }
 
         return $sortedCourses;
@@ -1030,8 +1031,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findUserLeanedCourseCount($userId, $filters = array())
     {
-        if (isset($filters["type"])) {
-            return $this->getMemberDao()->countMemberByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters["type"], 1);
+        if (isset($filters['type'])) {
+            return $this->getMemberDao()->countMemberByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters['type'], 1);
         }
 
         return $this->getMemberDao()->countMemberByUserIdAndRoleAndIsLearned($userId, 'student', 1);
@@ -1054,10 +1055,10 @@ class CourseServiceImpl extends BaseService implements CourseService
                 continue;
             }
 
-            $course                     = $courses[$member['courseId']];
-            $course['memberIsLearned']  = 1;
+            $course = $courses[$member['courseId']];
+            $course['memberIsLearned'] = 1;
             $course['memberLearnedNum'] = $member['learnedNum'];
-            $sortedCourses[]            = $course;
+            $sortedCourses[] = $course;
         }
 
         return $sortedCourses;
@@ -1091,15 +1092,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole($conditions['userId'], 'teacher', 0, PHP_INT_MAX, $onlyPublished);
         unset($conditions['userId']);
 
-        $courseIds               = ArrayToolkit::column($members, 'courseId');
-        $conditions["courseIds"] = $courseIds;
+        $courseIds = ArrayToolkit::column($members, 'courseId');
+        $conditions['courseIds'] = $courseIds;
 
         if (count($courseIds) == 0) {
             return 0;
         }
 
         if ($onlyPublished) {
-            $conditions["status"] = 'published';
+            $conditions['status'] = 'published';
         }
 
         return $this->searchCourseCount($conditions);
@@ -1110,16 +1111,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole($conditions['userId'], 'teacher', $start, $limit, $onlyPublished);
         unset($conditions['userId']);
 
-
-        $courseIds               = ArrayToolkit::column($members, 'courseId');
-        $conditions["courseIds"] = $courseIds;
+        $courseIds = ArrayToolkit::column($members, 'courseId');
+        $conditions['courseIds'] = $courseIds;
 
         if (count($courseIds) == 0) {
             return array();
         }
 
         if ($onlyPublished) {
-            $conditions["status"] = 'published';
+            $conditions['status'] = 'published';
         }
 
         $courses = $this->searchCourses($conditions, 'latest', 0, PHP_INT_MAX);
@@ -1135,12 +1135,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (count($courseIds) == 0) {
             return 0;
         }
+
         return $this->searchCourseCount($conditions);
     }
 
     public function findUserFavoritedCoursesNotInClassroom($userId, $start, $limit)
     {
         $courseFavorites = $this->getFavoriteDao()->findCourseFavoritesNotInClassroomByUserId($userId, $start, $limit);
+
         return $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($courseFavorites, 'courseId'));
     }
 
@@ -1323,6 +1325,7 @@ class CourseServiceImpl extends BaseService implements CourseService
      * 当默认值未设置时，合并默认值
      *
      * @param  $course
+     *
      * @return array
      */
     protected function mergeCourseDefaultAttribute($course)
@@ -1348,6 +1351,7 @@ class CourseServiceImpl extends BaseService implements CourseService
      *
      * @param  $userId
      * @param  $filters
+     *
      * @return array
      */
     protected function prepareUserLearnCondition($userId, $filters)
