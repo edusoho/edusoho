@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Coupon\Type;
-
 
 use Codeages\Biz\Framework\Context\Biz;
 

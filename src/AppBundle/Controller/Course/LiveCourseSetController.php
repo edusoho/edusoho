@@ -59,7 +59,8 @@ class LiveCourseSetController extends CourseBaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getTaskService()->countTasks($recentTasksCondition), 30
+            $this->getTaskService()->countTasks($recentTasksCondition),
+            30
         );
 
         $recentTasks = $this->getTaskService()->searchTasks(

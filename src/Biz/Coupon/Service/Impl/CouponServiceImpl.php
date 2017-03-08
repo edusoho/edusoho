@@ -209,10 +209,9 @@ class CouponServiceImpl extends BaseService implements CouponService
         $couponFactory = $this->biz['coupon_factory'];
         $couponModel = $couponFactory($coupon['targetType']);
         if ($coupon['targetId'] != 0 && !$couponModel->canUseable(
-                $coupon,
-                array('id' => $targetId, 'type' => $targetType)
-            )
-        ) {
+            $coupon,
+            array('id' => $targetId, 'type' => $targetType)
+        )) {
             return array(
                 'useable' => 'no',
                 'message' => '',
