@@ -49,7 +49,7 @@ define(function (require, exports, module) {
         $form.find('.js-btn-save').button('loading');
 
         $.post($form.attr('action'), $form.serialize(), function (json) {
-          $form.find('.text-success').fadeIn('fast', function () {
+          $form.find('.js-review-remind').fadeIn('fast', function () {
             window.location.reload();
           });
         }, 'json');

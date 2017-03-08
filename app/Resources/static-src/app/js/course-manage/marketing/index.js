@@ -15,16 +15,29 @@ class Marketing {
       onkeyup: false,
       rules: {
         originPrice: {
-          currency: true
+          required: function() {
+            return $("[name=isFree]:checked").val() == 0;
+          },
+          positive_currency: true
         },
         tryLookLength: {
           digits: true
         },
         tryLookLimit: {
           digits: true
+        },
+        buyExpiryTime: {
+          required: function(){
+            return $('input[name="enableBuyExpiryTime"]:checked').val() == 1;
+          },
+          date: true
         }
       },
+      messages: {
+        buyExpiryTime: '请选择有效的购买截止日期'
+      }
     });
+
     $('.js-task-price-setting').on('click', 'li', function (event) {
       let $li = $(this).toggleClass('open');
       let $input = $li.find('input');
@@ -60,6 +73,7 @@ class Marketing {
       autoclose: true,
       endDate: new Date(Date.now() + 86400 * 365 * 100 * 1000)
     });
+    $('input[name="buyExpiryTime"]').datetimepicker('setStartDate', new Date());
 
     $('input[name="tryLookable"]').on('change', function (event) {
       if ($('input[name="tryLookable"]:checked').val() == 1) {

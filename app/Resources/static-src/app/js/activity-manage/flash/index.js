@@ -12,6 +12,7 @@ function _inItStep2form() {
       title: {
         required: true,
         maxlength: 50,
+        trim: true,
       },
       mediaId: 'required',
     },

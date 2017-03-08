@@ -102,7 +102,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode', 'learnMode'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
-
         if (!in_array($course['learnMode'], array('freeMode', 'lockMode'))) {
             throw $this->createInvalidArgumentException('Param Invalid: LearnMode');
         }
@@ -144,6 +143,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             ));
 
             $this->commit();
+
+            $this->dispatchEvent('course.create', new Event($created));
 
             return $created;
         } catch (\Exception $e) {
@@ -266,6 +267,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if (!empty($fields['buyExpiryTime'])) {
             $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime']);
+        } else {
+            $fields['buyExpiryTime'] = 0;
         }
 
         $newCourse = $this->getCourseDao()->update($id, $fields);
@@ -335,7 +338,11 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createAccessDeniedException('课程下至少需保留一个教学计划');
         }
 
-        return $this->getCourseDeleteService()->deleteCourse($id);
+        $result = $this->getCourseDeleteService()->deleteCourse($id);
+
+        $this->dispatchEvent('course.delete', new Event($course));
+
+        return $result;
     }
 
     public function closeCourse($id)
@@ -575,6 +582,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $chapter['seq'] = $this->getNextCourseItemSeq($chapter['courseId']);
         $chapter['createdTime'] = time();
+
         $chapter = $this->getChapterDao()->create($chapter);
 
         $this->dispatchEvent('course.chapter.create', new Event($chapter));
@@ -792,8 +800,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param int $userId
-     *
+     * @param  int     $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -1158,7 +1165,6 @@ class CourseServiceImpl extends BaseService implements CourseService
      * 当默认值未设置时，合并默认值
      *
      * @param  $course
-     *
      * @return array
      */
     protected function mergeCourseDefaultAttribute($course)
@@ -1184,7 +1190,6 @@ class CourseServiceImpl extends BaseService implements CourseService
      *
      * @param  $userId
      * @param  $filters
-     *
      * @return array
      */
     protected function prepareUserLearnCondition($userId, $filters)
