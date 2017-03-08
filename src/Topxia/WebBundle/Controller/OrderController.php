@@ -254,14 +254,12 @@ class OrderController extends BaseController
         }
     }
 
-    protected function completeInfo($couponInfo, $code, $type)
+    protected function completeInfo($couponInfo, $code)
     {
         if ($couponInfo['useable'] == 'no' && empty($couponInfo['message'])) {
             $coupon     = $this->getCouponService()->getCouponByCode($code);
             $targetId   = $coupon['targetId'];
             $targetType = $coupon['targetType'];
-            $couponContent = '';
-            $target        = '';
 
             if ($targetType == 'course') {
                 if ($targetId != 0) {
