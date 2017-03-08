@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller\Course;
 
-use Biz\System\Service\SettingService;
-use Biz\Task\Service\TaskService;
-use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
+use Biz\Task\Service\TaskService;
+use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\SettingService;
+use Symfony\Component\HttpFoundation\Request;
 
 class LiveCourseSetController extends CourseBaseController
 {

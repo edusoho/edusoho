@@ -2,16 +2,16 @@
 
 namespace Biz\Coupon\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
-use Biz\Card\Service\CardService;
 use Biz\Coupon\Dao\CouponDao;
+use Biz\User\Service\UserService;
+use Biz\Card\Service\CardService;
+use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\LogService;
 use Biz\Coupon\Service\CouponService;
 use Biz\Course\Service\CourseService;
-use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\NotificationService;
-use Biz\User\Service\UserService;
 
 class CouponServiceImpl extends BaseService implements CouponService
 {
