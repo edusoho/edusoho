@@ -246,6 +246,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'buyExpiryTime',
             'services',
             'approval',
+            'coinPrice'
         ));
 
         $fields = $this->mergeCourseDefaultAttribute($fields);
@@ -283,6 +284,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->getCourse($id);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
+        if(empty($courseSet['discountId'])){
+            return $originPrice;
+        }
 
         return $originPrice * $courseSet['discount'] / 10;
     }

@@ -65,9 +65,10 @@ class CourseServiceTest extends BaseTestCase
 
     public function testUpdateCourseMarketing()
     {
+        $courseSet = $this->createNewCourseSet();
         $course = array(
             'title' => '第一个教学计划',
-            'courseSetId' => 1,
+            'courseSetId' => $courseSet['id'],
             'learnMode' => 'lockMode',
             'expiryMode' => 'days',
             'expiryDays' => 0,

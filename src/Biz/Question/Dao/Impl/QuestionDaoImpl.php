@@ -31,7 +31,7 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
 
     public function getQuestionCountGroupByTypes($conditions)
     {
-        $builder = $this->_createQueryBuilder($conditions)
+        $builder = $this->createQueryBuilder($conditions)
             ->select('count(id) as questionNum, type');
 
         $builder->addGroupBy('type');

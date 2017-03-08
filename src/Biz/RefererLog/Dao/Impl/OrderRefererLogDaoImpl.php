@@ -35,7 +35,7 @@ class OrderRefererLogDaoImpl extends GeneralDaoImpl implements OrderRefererLogDa
             $seachFields = 'id,orderId,targetId,targetType,COUNT(id) AS buyNum';
         }
 
-        $builder = $this->_createQueryBuilder($conditions)
+        $builder = $this->createQueryBuilder($conditions)
             ->select($seachFields)
             ->setFirstResult($start)
             ->setMaxResults($limit)
@@ -50,7 +50,7 @@ class OrderRefererLogDaoImpl extends GeneralDaoImpl implements OrderRefererLogDa
 
     public function countOrderRefererLogs($conditions, $groupBy)
     {
-        $builder = $this->_createQueryBuilder($conditions)
+        $builder = $this->createQueryBuilder($conditions)
             ->select('COUNT(id)')
             ->addGroupBy($groupBy);
 
@@ -59,7 +59,7 @@ class OrderRefererLogDaoImpl extends GeneralDaoImpl implements OrderRefererLogDa
 
     public function countDistinctOrderRefererLogs($conditions, $distinctField)
     {
-        $builder = $this->_createQueryBuilder($conditions, array())
+        $builder = $this->createQueryBuilder($conditions, array())
             ->select("COUNT(DISTINCT({$distinctField}))");
 
         return $builder->execute()->fetchColumn(0);

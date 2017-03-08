@@ -25,7 +25,7 @@ class CashFlowDaoImpl extends GeneralDaoImpl implements CashFlowDao
 
     public function analysisAmount($conditions)
     {
-        $builder = $this->_createQueryBuilder($conditions)
+        $builder = $this->createQueryBuilder($conditions)
             ->select('sum(amount)');
 
         return $builder->execute()->fetchColumn(0);

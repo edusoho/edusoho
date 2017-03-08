@@ -18,6 +18,7 @@
             <directory>../src/Topxia/Common/Tests</directory>
             <directory>../src/Topxia/Component/*/Tests</directory>
             <directory>../tests/Unit</directory>
+            <directory>../plugins/*/Tests</directory>
         </testsuite>
     </testsuites>
 

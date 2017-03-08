@@ -3,7 +3,7 @@
     {% set course = data('PublishedCourseByCourseSet',{ courseSetId: courseSet.id } ) %}
     <a href="{{ path('course_set_show', {id: courseSet.id }) }}" target="_blank">
       {% if courseSet.discountId > 0 %}
-        {% if courseSet.discount < 0.01 %}
+        {% if courseSet.discount == 0 %}
           <!-- 限免 -->
           <span class="tag-discount free"></span>
         {% else %}
