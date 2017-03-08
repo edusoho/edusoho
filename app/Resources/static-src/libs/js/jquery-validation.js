@@ -265,13 +265,14 @@ $.validator.addMethod("feature", function (value, element, params) {
   Translator.trans('购买截止时间需在当前时间之后')
 );
 
+$.validator.addMethod('qq', function(value, element) {
+  return /^[1-9]\d{4,}$/.test(value);
+}, jQuery.validator.format('请输入正确的QQ号'));
 
-$.validator.addMethod('passwordCheck', function (value, element) {
-
+$.validator.addMethod('passwordCheck', function(value, element) {
   let url = $(element).data('url') ? $(element).data('url') : null;
   let type = $(element).data('type') ? $(element).data('type') : 'POST';
   let isSuccess = 0;
-
   $.ajax({
     url: url,
     type: type,
