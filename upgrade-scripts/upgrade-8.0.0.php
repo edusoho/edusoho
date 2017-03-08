@@ -343,7 +343,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $sql = "UPDATE `c2_course` c set `publishedTaskNum` = (select count(*) from course_lesson where courseId=c.id and status = 'published')";
         $result = $this->getConnection()->exec($sql);
-
     }
 
     /**
@@ -1628,6 +1627,12 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
+        if (!$this->isFieldExist('question', 'courseSetId')) {
+            $this->exec("
+                ALTER TABLE `question` ADD COLUMN `courseSetId` INT(10) NOT NULL DEFAULT '0'  AFTER `target`
+            ");
+        }
+
         if (!$this->isFieldExist('question', 'lessonId')) {
             $this->exec("
                 ALTER TABLE question add lessonId INT(10) UNSIGNED NOT NULL DEFAULT '0' AFTER `courseId`
@@ -1646,7 +1651,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 $lessonId = $lessonArr[1];
             }
 
-            $sql = "UPDATE question set courseId = {$courseArr[1]},lessonId={$lessonId} WHERE id = {$question['id']}";
+            $sql = "UPDATE question set courseId = {$courseArr[1]},courseSetId = {$courseArr[1]},lessonId={$lessonId} WHERE id = {$question['id']}";
             $this->exec($sql);
         }
 
