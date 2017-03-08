@@ -3,7 +3,7 @@
 {% block title %}{{'基础信息'|trans}} - {{ parent() }}{% endblock %}
 
 {% set script_controller = 'settings/profile' %}
-{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/settings/profile/index.js']) %}
+{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js', 'libs/jquery-validation.js','app/js/settings/profile/index.js']) %}
 {% set side_nav = 'profile' %}
 
 {% block main %}

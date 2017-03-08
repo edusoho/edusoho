@@ -182,6 +182,10 @@ $.validator.addMethod("positive_currency", function (value, element, params) {
   return /^[1-9]{0,8}(\.\d{0,2})?$/.test(value);
 }, jQuery.validator.format('请输入大于0的有效价格，最多两位小数，整数位不超个8位！'));
 
+$.validator.addMethod('qq', function(value, element) {
+  return /^[1-9]\d{4,}$/.test(value);
+}, jQuery.validator.format('请输入正确的QQ号'));
+
 $.validator.addMethod('passwordCheck', function(value, element) {
   
   let url = $(element).data('url') ? $(element).data('url') : null;

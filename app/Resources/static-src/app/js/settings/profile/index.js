@@ -11,6 +11,14 @@ $(".date").datetimepicker({
 
 $("#user-profile-form").validate({
   rules: {
-    // title: 
+    '[name="profile[truename]': {
+      minlength: 4,
+    },
+    '[name="profile[title]"]': {
+      maxlength: 24
+    },
+    '[name="profile[qq]"]': {
+      qq: true
+    }
   }
 })
