@@ -19,12 +19,12 @@
 
     <div class="form-group note-actions">
       <div class="controls clearfix">
-        <span class="text-muted" data-role="saved-message"></span>
         <button id="note-save-btn" class="btn btn-primary pull-right" type="submit">{{'保存笔记'|trans}}</button>
-        <label class="text-gray mts">
+        <label class="color-gray mts">
           <input type="checkbox" name="status" {% if note.status|default(1) %}checked {% endif %}>
           {{'分享笔记'|trans}}
         </label>
+        <p class="color-gray mt10 text-right" data-role="saved-message"></p>
       </div>
     </div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

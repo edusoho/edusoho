@@ -15,8 +15,8 @@
             {% if data.totalPrice%}
               <tr>
                    <td>{{data.title}}<br>{{'订单号:'|trans}}{{data.sn}}</td>
-                    <td class="color-danger">{{data.amount}}</td>
-                    <td class="color-danger">{{data.totalPrice}}</td>
+                    <td class="text-danger">{{data.amount}}</td>
+                    <td class="text-danger">{{data.totalPrice}}</td>
                     <td>{% if  data.coupon %}{{'优惠码'|trans}}<br>[{{data.coupon}}]{% endif %}</td>
                    <td> {{ admin_macro.user_link(users[data.userId]) }}</td>
                    <td>{{data.createdTime|date("Y-m-d H:i:s")}}<br>{{data.paidTime|date("Y-m-d H:i:s")}}</td>
@@ -24,8 +24,8 @@
               {% else %}
               <tr class="danger">
                     <td>{{data.title}}({{'此课程已不存在'|trans}})<br>{{'订单号:'|trans}}{{data.sn}}</td>
-                    <td class="color-danger">{{data.amount}}</td>
-                    <td class="color-danger"> --</td>
+                    <td class="text-danger">{{data.amount}}</td>
+                    <td class="text-danger"> --</td>
                     <td>{% if  data.coupon %}{{'优惠码'|trans}}<br>[{{data.coupon}}]{% endif %}</td>
                    <td> {{ admin_macro.user_link(users[data.userId]) }}</td>
                    <td>{{data.createdTime|date("Y-m-d H:i:s")}}<br>{{data.paidTime|date("Y-m-d H:i:s")}}</td>

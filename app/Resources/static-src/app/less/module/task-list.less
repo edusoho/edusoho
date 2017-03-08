@@ -4,7 +4,6 @@
   margin-bottom: 0;
   .task-item {
     position: relative;
-    line-height: 1;
     background-color: transparent;
     &.task-content {
       .title {
@@ -13,16 +12,18 @@
     }
     .title {
       display: block;
-      padding: 12px 40px 12px 30px;
+      word-wrap: break-word;
+      word-break: break-all;
+      padding: 12px 70px 12px 30px;
     }
     .left-menu {
       position: absolute;
       left: 0;
-      top: 11px;
+      top: 14px;
     }
     .right-menu {
       position: absolute;
-      top:14px;
+      top:12px;
       right: 0;
     }
     .btn-learn {
@@ -35,11 +36,11 @@
     }
   }
   &.task-list-md {
-    .task-item {
+    .task-item{ 
       margin-bottom: 10px;
     }
     .title {
-      padding: 18px 80px 18px 45px;
+      padding: 15px 100px 15px 45px;
     }
     .left-menu {
       left: 20px;
@@ -47,7 +48,7 @@
     }
     .right-menu {
       right: 20px;
-      top: 16px;
+      top: 15px;
     }
   }
   &.task-list-hover {
@@ -84,7 +85,7 @@
       }
       .title {
         color: #616161;
-        padding: 18px 70px 28px 45px;
+        padding: 18px 80px 28px 45px;
         .task-overflow{
           display: block;
           overflow: hidden;
@@ -96,7 +97,7 @@
         top: 20px;
       }
       .right-menu {
-        top:20px;
+        top:18px;
       }
       .task-type-icon {
         font-size: 48px;
