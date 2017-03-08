@@ -16,6 +16,7 @@ use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
 use Biz\Course\Service\MaterialService;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\Course\Service\CourseSetService;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
