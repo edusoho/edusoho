@@ -4,8 +4,8 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Testpaper\Service\TestpaperService;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 
 class HomeworkManageController extends BaseController
@@ -16,7 +16,7 @@ class HomeworkManageController extends BaseController
 
         $conditions = $request->query->all();
 
-        $conditions['courseId'] = $courseSet['id'];
+        $conditions['courseSetId'] = $courseSet['id'];
         $conditions['parentId'] = 0;
 
         $paginator = new Paginator(

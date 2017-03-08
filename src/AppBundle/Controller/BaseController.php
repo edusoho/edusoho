@@ -6,10 +6,8 @@ use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
-use Biz\CloudPlatform\Service\AppService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Codeages\Biz\Framework\Service\BaseService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\SecurityEvents;
 use AppBundle\Common\Exception\ResourceNotFoundException;
@@ -19,9 +17,6 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class BaseController extends Controller
 {
-    /**
-     * @return CurrentUser
-     */
     protected function getCurrentUser()
     {
         return $this->getUser();
@@ -56,7 +51,7 @@ class BaseController extends Controller
         $this->container->get('security.token_storage')->setToken($token);
 
         $this->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, new InteractiveLoginEvent($request, $token));
-        $biz->service('System:LogService')->info('user', 'login_success', '登录成功');
+        $biz->getLogService()->info('user', 'login_success', '登录成功');
 
         return $user;
     }
@@ -135,7 +130,10 @@ class BaseController extends Controller
         if (isset($_SERVER['HTTP_ACCEPT'])) {
             // 如果只支持wml并且不支持html那一定是移动设备
             // 如果支持wml和html但是wml在html之前则是移动设备
-            if ((strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') !== false) && (strpos($_SERVER['HTTP_ACCEPT'], 'text/html') === false || (strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html')))) {
+            if ((strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') !== false)
+                && (strpos($_SERVER['HTTP_ACCEPT'], 'text/html') === false
+                    || (strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html'))
+                )) {
                 return true;
             }
         }
@@ -143,20 +141,9 @@ class BaseController extends Controller
         return false;
     }
 
-    /**
-     * @param  $pluginName
-     *
-     * @return bool
-     */
     protected function isPluginInstalled($pluginName)
     {
-        /**
-         * @var AppService
-         */
-        $appService = $this->getBiz()->service('CloudPlatform:AppService');
-        $app = $appService->getAppByCode($pluginName);
-
-        return !empty($app);
+        return $this->get('kernel')->getPluginConfigurationManager()->isPluginInstalled($pluginName);
     }
 
     protected function getTargetPath(Request $request)
@@ -283,11 +270,6 @@ class BaseController extends Controller
         return new ResourceNotFoundException($resourceType, $resourceId, $message);
     }
 
-    /**
-     * @param string $alias
-     *
-     * @return BaseService
-     */
     protected function createService($alias)
     {
         $biz = $this->getBiz();

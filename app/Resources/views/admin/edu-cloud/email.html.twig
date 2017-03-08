@@ -32,7 +32,7 @@
     				<button name="email-open" class="btn btn-primary" >{{'启用云邮件'|trans}}</button>
           {% elseif emailStatus.status|default('disable') == 'enable' and emailStatus.sign|default(null) != "" and accessCloud|default(0) != 0 %}
             <div name="status">
-              <span class="color-success">{{'已启用'|trans}}</span>
+              <span class="text-success">{{'已启用'|trans}}</span>
               <button  class="btn btn-default btn-sm mlm" name="email-close"><span class="text-muted">{{'关闭'|trans}}</span></button>
               <p><span>{{'发件人名称：'|trans}}{{ emailStatus.sign }}</span> <a href="#" name="sign-update">{{'修改'|trans}}</a></p>
             </div>

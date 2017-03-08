@@ -1,39 +1,40 @@
 <?php
+
 namespace Topxia\MobileBundleV2\Processor;
 
 interface ClassRoomProcessor
 {
-	public function getClassRooms();
+    public function getClassRooms();
 
-	public function myClassRooms();
+    public function myClassRooms();
 
-	public function getClassRoom();
+    public function getClassRoom();
 
-	public function getClassRoomCourses();
+    public function getClassRoomCourses();
 
-	public function getLatestClassrooms();
+    public function getLatestClassrooms();
 
-	public function getRecommendClassRooms();
+    public function getRecommendClassRooms();
 
-	public function getClassRoomMember();
+    public function getClassRoomMember();
 
-	public function learnByVip();
+    public function learnByVip();
 
-	public function unLearn();
+    public function unLearn();
 
-	public function getReviews();
+    public function getReviews();
 
-	public function getReviewInfo();
+    public function getReviewInfo();
 
-	public function getStudents();
+    public function getStudents();
 
-	public function getTeachers();
+    public function getTeachers();
 
-	public function getTodaySignInfo();
+    public function getTodaySignInfo();
 
-	public function sign();
+    public function sign();
 
-	public function search();
+    public function search();
 
-	public function getClassRoomCoursesAndProgress();
+    public function getClassRoomCoursesAndProgress();
 }

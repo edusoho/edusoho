@@ -3,11 +3,11 @@ let userAgent = navigator.userAgent.toLowerCase();
 let s;
 /* eslint-disable */
 (s = userAgent.match(/rv:([\d.]+)\) like gecko/)) ? Browser.ie = s[1] :
-(s = userAgent.match(/msie ([\d.]+)/)) ? Browser.ie = s[1] :
-(s = userAgent.match(/firefox\/([\d.]+)/)) ? Browser.firefox = s[1] :
-(s = userAgent.match(/chrome\/([\d.]+)/)) ? Browser.chrome = s[1] :
-(s = userAgent.match(/opera.([\d.]+)/)) ? Browser.opera = s[1] :
-(s = userAgent.match(/version\/([\d.]+).*safari/)) ? Browser.safari = s[1] : 0;
+  (s = userAgent.match(/msie ([\d.]+)/)) ? Browser.ie = s[1] :
+    (s = userAgent.match(/firefox\/([\d.]+)/)) ? Browser.firefox = s[1] :
+      (s = userAgent.match(/chrome\/([\d.]+)/)) ? Browser.chrome = s[1] :
+        (s = userAgent.match(/opera.([\d.]+)/)) ? Browser.opera = s[1] :
+          (s = userAgent.match(/version\/([\d.]+).*safari/)) ? Browser.safari = s[1] : 0;
 /* eslint-enable */
 
 Browser.ie10 = /MSIE\s+10.0/i.test(navigator.userAgent)
@@ -21,4 +21,13 @@ const isMobileDevice = () => {
 
 const isLogin = (() => { return $("meta[name='is-login']").attr("content") == 1 })();
 
-export { Browser, isMobileDevice, isLogin };
+const delHtmlTag = (str) => {
+  return str.replace(/<[^>]+>/g, '').replace(/&nbsp;/ig, '');
+}
+
+export {
+  Browser,
+  isMobileDevice,
+  delHtmlTag,
+  isLogin
+};

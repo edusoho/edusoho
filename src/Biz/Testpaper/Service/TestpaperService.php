@@ -49,24 +49,19 @@ interface TestpaperService
 
     public function searchItemCount($conditions);
 
-    /*
-     * testpaper_item_result
-     */
-
     public function createItemResult($fields);
 
     public function updateItemResult($itemResultId, $fields);
 
     public function findItemResultsByResultId($resultId);
 
-    /**
-     * testpaper_result.
-     */
     public function getTestpaperResult($id);
 
-    public function getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId);
+    public function getUserUnfinishResult($testId, $courseId, $activityId, $type, $userId);
 
-    public function getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type);
+    public function getUserFinishedResult($testId, $courseId, $activityId, $type, $userId);
+
+    public function getUserLatelyResultByTestId($userId, $testId, $courseId, $activityId, $type);
 
     public function findPaperResultsStatusNumGroupByStatus($testId, $courseIds);
 
@@ -86,10 +81,6 @@ interface TestpaperService
 
     /**
      * 开始做试卷.
-     *
-     * @param [type] $id [description]
-     *
-     * @return [type] [description]
      */
     public function startTestpaper($id, $fields);
 

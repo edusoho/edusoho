@@ -3,6 +3,7 @@
 namespace Biz\Question\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Question\Service\QuestionService;
@@ -132,7 +133,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     {
         $conditions = $this->filterQuestionFields($conditions);
         $questions = $this->getQuestionDao()->search($conditions, $sort, $start, $limit);
-
+        // var_dump($conditions);
         $that = $this;
         array_walk($questions, function (&$question) use ($that) {
             $question = $that->hasStemImg($question);
@@ -253,8 +254,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
 
         if (!empty($conditions['target'])) {
-            $conditions['lessonId'] = $conditions['target'];
-            unset($conditions['target']);
+            $conditions = $this->prepareCourseIdAndActvityId($conditions);
         } else {
             unset($conditions['target']);
         }
@@ -311,5 +311,37 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
+    protected function prepareCourseIdAndActvityId($conditions)
+    {
+        $targets = explode('/', $conditions['target']);
+        array_walk($targets, function ($target) use (&$conditions) {
+            if (strpos($target, 'course') !== false) {
+                $courseIds = explode('-', $target);
+                $conditions['courseId'] = array_pop($courseIds);
+            }
+            if (strpos($target, 'task') !== false) {
+                $taskIds = explode('-', $target);
+                $conditions['taskId'] = array_pop($taskIds);
+            }
+        });
+        if (isset($conditions['taskId'])) {
+            $task = $this->getTaskService()->getTask($conditions['taskId']);
+            if (!empty($task)) {
+                $conditions['lessonId'] = $task['activityId'];
+            }
+        }
+        unset($conditions['target']);
+
+        return $conditions;
     }
 }

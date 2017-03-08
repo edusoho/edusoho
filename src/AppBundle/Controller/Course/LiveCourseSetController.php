@@ -2,14 +2,25 @@
 
 namespace AppBundle\Controller\Course;
 
-use Biz\System\Service\SettingService;
-use Biz\Task\Service\TaskService;
-use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
+use Biz\Task\Service\TaskService;
+use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\SettingService;
+use Symfony\Component\HttpFoundation\Request;
 
 class LiveCourseSetController extends CourseBaseController
 {
+    public function courseSetsBlockAction($courseSets, $view = 'list', $mode = 'default')
+    {
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
+
+        return $this->forward('AppBundle:Course/LiveCourseSet:coursesBlock', array(
+            'courses' => $courses,
+            'view' => $view,
+            'mode' => $mode,
+        ));
+    }
+
     public function coursesBlockAction($courses, $view = 'list', $mode = 'default')
     {
         $userIds = array();
@@ -49,7 +60,8 @@ class LiveCourseSetController extends CourseBaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getTaskService()->countTasks($recentTasksCondition), 30
+            $this->getTaskService()->countTasks($recentTasksCondition),
+            30
         );
 
         $recentTasks = $this->getTaskService()->searchTasks(

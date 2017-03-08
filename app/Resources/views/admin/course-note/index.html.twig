@@ -58,14 +58,14 @@
 
               <div class="text-sm mts">
                 {% if course and courseSet %}
-                  <a href="{{ path('course_set_show', {id:courseSet.id}) }}" class="color-success" target="_blank">{{ courseSet.title }}</a>
+                  <a href="{{ path('course_set_show', {id:courseSet.id}) }}" class="text-success" target="_blank">{{ courseSet.title }}</a>
                   <span class="text-muted mhs">&raquo;</span>
-                  <a href="{{ path('course_show', {id:course.id}) }}" class="color-success" target="_blank">{{ course.title }}</a>
+                  <a href="{{ path('course_show', {id:course.id}) }}" class="text-success" target="_blank">{{ course.title }}</a>
                 {% endif %}
 
                 {% if task %}
                   <span class="text-muted mhs">&raquo;</span>
-                  <a class="color-success"  href="{{ path('course_task_show', {courseId:note.courseId, id:task.id}) }}" target="_blank">{{'任务'|trans}}{{ task.number }}：{{ task.title }}</a>
+                  <a class="text-success"  href="{{ path('course_task_show', {courseId:note.courseId, id:task.id}) }}" target="_blank">{{'任务'|trans}}{{ task.number }}：{{ task.title }}</a>
                 {% endif %}
               </div>
           </td>

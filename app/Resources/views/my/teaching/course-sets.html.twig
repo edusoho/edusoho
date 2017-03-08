@@ -8,8 +8,7 @@
 {% set type="question" %}
 
 {% block main %}
-   {#<div class="panel panel-default panel-col"> #}
-  <div class="panel panel-default lesson-manage-panel">
+  <div class="panel panel-default" role="my-teaching-course-sets">
     <div class="panel-heading">
       <span class="pull-right">
         <a id="create-course" href="{{ path('course_set_manage_create') }}" class="btn btn-info btn-sm">
@@ -23,9 +22,9 @@
       <table class="table table-striped" id="course-table" style="word-break:break-all;">
         <thead>
         <tr>
-          <th width="50%">{{ '名称'|trans }}</th>
+          <th width="45%">{{ '名称'|trans }}</th>
           {% if filter == 'classroom' %}
-            <th>{{ '所属%name%'|trans({'%name%':setting("classroom.name")|default('班级'|trans)}) }}</th>
+            <th width="20%">{{ '所属%name%'|trans({'%name%':setting("classroom.name")|default('班级'|trans)}) }}</th>
           {% else %}
             <th>{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{ '学员'|trans }}{% endif %}{{ '数'|trans }}</th>
             <th>{{ '价格(元)'|trans }}</th>
@@ -40,25 +39,24 @@
           <tr>
             <td>
               <a class="pull-left mrm" href="{{ path('course_set_show', {id: courseSet.id}) }}">
-                <img class="course-picture" src="{{ filepath(courseSet.cover.middle|default(null), 'courseSet.png') }}"
+                <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}"
                      alt="{{ courseSet.title }}" width="100">
               </a>
-
               <div class="mlm">
                 <a href="{{ path('course_set_show', {id: courseSet.id}) }}">{{ courseSet.title }}</a>
-
-                {% if courseSet.type == 'live' %}
-                  <span class="label label-success live-label">{{ '直播'|trans }}</span>
+                {% if courseSet.courses|length > 1 %}
+                   <span class="label label-warning ml5">{{ '多个教学计划'|trans }}</span>
                 {% endif %}
-
+                {% if courseSet.type == 'live' %}
+                  <span class="label label-success live-label ml5">{{ '直播'|trans }}</span>
+                {% endif %}
                 {% if filter == 'classroom' %}
                   {% set classroom = classrooms[courseSet.id]|default(null) %}
                   {% if not classroom %}
-                    <span class="label label-danger live-label mls">{{'已移除'|trans}}</span>
+                    <span class="label label-danger live-label ml5">{{'已移除'|trans}}</span>
                   {% endif %}
                 {% endif %}
               </div>
-
             </td>
             {% if filter == 'classroom' %}
             <td>
