@@ -497,11 +497,6 @@ class CourseManageController extends BaseController
         return $this->createJsonResponse(array('result' => true));
     }
 
-    /**
-     * @param  $tasks
-     *
-     * @return array
-     */
     public function prepareTaskActivityFiles($tasks)
     {
         $tasks = ArrayToolkit::index($tasks, 'id');

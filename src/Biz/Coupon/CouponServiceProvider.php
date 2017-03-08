@@ -2,9 +2,9 @@
 
 namespace Biz\Coupon;
 
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class CouponServiceProvider implements ServiceProviderInterface
 {
