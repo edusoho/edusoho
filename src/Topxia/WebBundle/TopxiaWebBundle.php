@@ -10,5 +10,4 @@ class TopxiaWebBundle extends ExtensionalBundle
     {
         return array('DataTag', 'StatusTemplate', 'DataDict', 'NotificationTemplate');
     }
-
 }

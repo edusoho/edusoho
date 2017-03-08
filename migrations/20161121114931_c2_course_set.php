@@ -42,6 +42,7 @@ class C2CourseSet extends Migration
             `locked` tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '是否锁住',
             `maxCoursePrice` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '已发布教学计划的最高价格',
             `minCoursePrice` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '已发布教学计划的最低价格',
+            `teacherIds` varchar(1024) DEFAULT null,
             `creator` int(11) DEFAULT '0',
             `createdTime` INT(11) unsigned NOT NULL DEFAULT 0 COMMENT '创建时间',
             `updatedTime` INT(11) unsigned NOT NULL DEFAULT 0 COMMENT '更新时间',

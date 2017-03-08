@@ -21,7 +21,7 @@ class PptActivity extends Migration
           `createdUserId` int(11) NOT NULL,
           `updatedTime` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '',
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
         ");
     }
 

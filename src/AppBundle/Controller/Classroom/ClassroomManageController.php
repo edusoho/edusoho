@@ -641,9 +641,9 @@ class ClassroomManageController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         if (!$this->isPluginInstalled('ClassroomPlan') && $classroom['service'] && in_array(
-                'studyPlan',
-                $classroom['service']
-            )
+            'studyPlan',
+            $classroom['service']
+        )
         ) {
             unset($classroom['service']['studyPlan']);
         }
