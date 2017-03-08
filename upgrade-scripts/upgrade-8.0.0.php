@@ -35,10 +35,10 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function batchUpdate($index)
     {
-        // $this->c2courseSetMigrate();
-        // $this->c2courseMigrate();
-        // $this->c2CourseLessonMigrate();
-        // $this->c2testpaperMigrate();
+        $this->c2courseSetMigrate();
+        $this->c2courseMigrate();
+        $this->c2CourseLessonMigrate();
+        $this->c2testpaperMigrate();
         $this->c2QuestionMigrate();
         $this->migrate();
     }
@@ -1356,11 +1356,11 @@ class EduSohoUpgrade extends AbstractUpdater
                 id AS oldResultId FROM homework_result WHERE id NOT IN (SELECT oldResultId FROM c2_testpaper_result WHERE type = 'homework')";
         $this->exec($sql);
 
-        $sql = "UPDATE c2_testpaper_result AS tr,(SELECT id,oldTestId FROM c2_testpaper WHERE type ='homework') AS tmp, SET testId = tmp.id WHERE tr.type = 'homework' AND tmp.oldTestId = tr.testId";
+        $sql = "UPDATE c2_testpaper_result AS tr,(SELECT id,oldTestId FROM c2_testpaper WHERE type ='homework') AS tmp SET testId = tmp.id WHERE tr.type = 'homework' AND tmp.oldTestId = tr.testId";
         $this->exec($sql);
 
         //需要与刘洋洋那边做好后，最终确认 lesson->activityId
-        $sql = "UPDATE c2_testpaper_result AS tr,(SELECT id,mediaId FROM activity) AS tmp, SET lessonId = tmp.Id WHERE tr.type = 'homework' AND tmp.mediaId = tr.testId";
+        $sql = "UPDATE c2_testpaper_result AS tr,(SELECT id,mediaId FROM activity) AS tmp SET lessonId = tmp.Id WHERE tr.type = 'homework' AND tmp.mediaId = tr.testId";
         $this->exec($sql);
 
         $sql = "INSERT INTO c2_testpaper_item_result (
