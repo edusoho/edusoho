@@ -2,13 +2,16 @@
 
 namespace AppBundle\Extensions\DataTag;
 
+use Biz\Classroom\Service\ClassroomService;
+
 class ClassroomDataTag extends BaseDataTag implements DataTag
 {
     /**
      * 获取一个班级.
      *
      * 可传入的参数：
-     *   classroomId 必需 班级ID
+     *   classroomId 班级ID
+     *   courseId 教学计划ID
      *
      * @param array $arguments 参数
      *
@@ -16,18 +19,18 @@ class ClassroomDataTag extends BaseDataTag implements DataTag
      */
     public function getData(array $arguments)
     {
-        $this->checkClassroomId($arguments);
-
-        return $this->getClassroomService()->getClassroom($arguments['classroomId']);
-    }
-
-    protected function checkClassroomId(array $arguments)
-    {
-        if (empty($arguments['classroomId'])) {
-            throw new \InvalidArgumentException($this->getServiceKernel()->trans('classroomId参数缺失'));
+        if (!empty($arguments['classroomId'])) {
+            return $this->getClassroomService()->getClassroom($arguments['classroomId']);
+        } elseif (!empty($arguments['courseId'])) {
+            return $this->getClassroomService()->getClassroomByCourseId($arguments['courseId']);
+        } else {
+            throw new \InvalidArgumentException('classroomId or courseId required');
         }
     }
 
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:ClassroomService');
