@@ -33,6 +33,7 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
 
         $classroom = $this->getClassroomService()->getClassroom($id);
+        $classroom['lessonNum'] = $this->getClassroomService()->countCourseTasksByClassroomId($id);
 
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
         $courseIds = ArrayToolkit::column($courses, 'id');
