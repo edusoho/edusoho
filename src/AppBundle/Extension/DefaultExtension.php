@@ -116,11 +116,6 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                         'number' => 'threadNum',
                         'content' => 'AppBundle:Course/Thread:index',
                     ),
-                    'reviews' => array(
-                        'name' => '评价',
-                        'number' => 'ratingNum',
-                        'content' => 'AppBundle:Course/Course:reviews',
-                    ),
                     'notes' => array(
                         'name' => '笔记',
                         'number' => 'noteNum',
@@ -130,6 +125,11 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                         'name' => '资料区',
                         'number' => 'materialNum',
                         'content' => 'AppBundle:Course/Material:index',
+                    ),
+                    'reviews' => array(
+                        'name' => '评价',
+                        'number' => 'ratingNum',
+                        'content' => 'AppBundle:Course/Course:reviews',
                     ),
                     'summary' => array(
                         'name' => '介绍',

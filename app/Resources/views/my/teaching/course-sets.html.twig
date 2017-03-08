@@ -39,25 +39,24 @@
           <tr>
             <td>
               <a class="pull-left mrm" href="{{ path('course_set_show', {id: courseSet.id}) }}">
-                <img class="course-picture" src="{{ filepath(courseSet.cover.middle|default(null), 'courseSet.png') }}"
+                <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}"
                      alt="{{ courseSet.title }}" width="100">
               </a>
-
               <div class="mlm">
                 <a href="{{ path('course_set_show', {id: courseSet.id}) }}">{{ courseSet.title }}</a>
-
-                {% if courseSet.type == 'live' %}
-                  <span class="label label-success live-label">{{ '直播'|trans }}</span>
+                {% if courseSet.courses|length > 1 %}
+                   <span class="label label-warning ml5">{{ '多个教学计划'|trans }}</span>
                 {% endif %}
-
+                {% if courseSet.type == 'live' %}
+                  <span class="label label-success live-label ml5">{{ '直播'|trans }}</span>
+                {% endif %}
                 {% if filter == 'classroom' %}
                   {% set classroom = classrooms[courseSet.id]|default(null) %}
                   {% if not classroom %}
-                    <span class="label label-danger live-label mls">{{'已移除'|trans}}</span>
+                    <span class="label label-danger live-label ml5">{{'已移除'|trans}}</span>
                   {% endif %}
                 {% endif %}
               </div>
-
             </td>
             {% if filter == 'classroom' %}
             <td>

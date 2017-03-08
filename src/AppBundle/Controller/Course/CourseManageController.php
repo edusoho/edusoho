@@ -380,7 +380,7 @@ class CourseManageController extends BaseController
             if (empty($data) || !isset($data['teachers'])) {
                 throw new InvalidArgumentException('Empty Data');
             }
-            
+
             $teachers = json_decode($data['teachers'], true);
             if (empty($teachers)) {
                 throw new InvalidArgumentException('Empty Data');
@@ -497,10 +497,6 @@ class CourseManageController extends BaseController
         return $this->createJsonResponse(array('result' => true));
     }
 
-    /**
-     * @param  $tasks
-     * @return array
-     */
     public function prepareTaskActivityFiles($tasks)
     {
         $tasks = ArrayToolkit::index($tasks, 'id');
