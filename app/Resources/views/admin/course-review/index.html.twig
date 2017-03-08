@@ -61,12 +61,12 @@
               </div>
               <div class="mts">
                 {% if courseSet %}
-                  <a class="color-success text-sm" href="{{ path('course_set_show', {id:courseSet.id}) }}" class="color-success" target="_blank">{{ courseSet.title }}</a>
+                  <a class="text-success text-sm" href="{{ path('course_set_show', {id:courseSet.id}) }}" class="text-success" target="_blank">{{ courseSet.title }}</a>
                 {% endif %}
 
                 {% if course %}
                   <span class="text-muted mhs text-sm">&raquo;</span>
-                  <a class="color-success text-sm" href="{{ path('course_show', {id:course.id}) }}" class="color-success" target="_blank">{{ course.title }}</a>
+                  <a class="text-success text-sm" href="{{ path('course_show', {id:course.id}) }}" class="text-success" target="_blank">{{ course.title }}</a>
                 {% endif %}
               </div>
             </td>

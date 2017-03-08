@@ -44,11 +44,14 @@ class FileChooserController extends BaseController
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
         $createdUsers = ArrayToolkit::index($createdUsers, 'id');
 
-        return $this->render('file-chooser/widget/choose-table.html.twig', array(
-            'files' => $files,
-            'createdUsers' => $createdUsers,
-            'paginator' => $paginator,
-        ));
+        return $this->render(
+            'file-chooser/widget/choose-table.html.twig',
+            array(
+                'files' => $files,
+                'createdUsers' => $createdUsers,
+                'paginator' => $paginator,
+            )
+        );
     }
 
     public function findMySharingContactsAction(Request $request)
@@ -78,6 +81,8 @@ class FileChooserController extends BaseController
         $conditions = array();
         $conditions['ids'] = $courseMaterials ? ArrayToolkit::column($courseMaterials, 'fileId') : array(-1);
         $conditions['type'] = (empty($query['type']) || $query['type'] == 'all') ? null : $query['type'];
+        $conditions['filenameLike'] = empty($query['keyword']) ? null : $query['keyword'];
+
 
         $paginator = new Paginator(
             $request,
@@ -95,11 +100,14 @@ class FileChooserController extends BaseController
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
         $createdUsers = ArrayToolkit::index($createdUsers, 'id');
 
-        return $this->render('file-chooser/widget/choose-table.html.twig', array(
-            'files' => $files,
-            'createdUsers' => $createdUsers,
-            'paginator' => $paginator,
-        ));
+        return $this->render(
+            'file-chooser/widget/choose-table.html.twig',
+            array(
+                'files' => $files,
+                'createdUsers' => $createdUsers,
+                'paginator' => $paginator,
+            )
+        );
     }
 
     public function importAction(Request $request, $courseId)
