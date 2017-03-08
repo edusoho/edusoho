@@ -11,7 +11,7 @@ use Topxia\Service\Common\ServiceKernel;
 
 class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 {
-    protected $router = 'course_show';
+    protected $router = 'my_course_show';
 
     public function getTarget($targetId)
     {
