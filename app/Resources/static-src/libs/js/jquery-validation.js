@@ -44,11 +44,12 @@ $.validator.setDefaults({
       $.post($form.attr('action'), $form.serializeArray(), (data) => {
         settings.submitSuccess(data);
       }).error(() => {
-        settings.currentDom ? settings.currentDom.button('reset') : '';
+        settings.currentDom ? $(settings.currentDom).button('reset') : '';
         settings.submitError();
       });
     } else {
       form.submit();
+      settings.currentDom ? $(settings.currentDom).button('reset') : '';
     }
   }
 });
@@ -264,6 +265,23 @@ $.validator.addMethod("feature", function (value, element, params) {
   Translator.trans('购买截止时间需在当前时间之后')
 );
 
-// jQuery.validator.addMethod("url", function (value, element) {
-//   return this.optional(element) || /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/.test(value);
-// }, "URL的格式不正确");
+
+$.validator.addMethod('passwordCheck', function (value, element) {
+
+  let url = $(element).data('url') ? $(element).data('url') : null;
+  let type = $(element).data('type') ? $(element).data('type') : 'POST';
+  let isSuccess = 0;
+
+  $.ajax({
+    url: url,
+    type: type,
+    async: false,
+    data: { value: value },
+    dataType: 'json'
+  })
+    .success(function (response) {
+      isSuccess = response.success;
+    })
+
+  return this.optional(element) || isSuccess
+}, Translator.trans('密码错误'))
