@@ -1,15 +1,12 @@
 <?php
-/**
- * User: Edusoho V8
- * Date: 31/10/2016
- * Time: 11:42.
- */
 
 namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\MaterialService;
 use Biz\File\Service\UploadFileService;
+use Biz\User\Service\UserService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Component\MediaParser\ParserProxy;
@@ -82,7 +79,6 @@ class FileChooserController extends BaseController
         $conditions['ids'] = $courseMaterials ? ArrayToolkit::column($courseMaterials, 'fileId') : array(-1);
         $conditions['type'] = (empty($query['type']) || $query['type'] == 'all') ? null : $query['type'];
         $conditions['filenameLike'] = empty($query['keyword']) ? null : $query['keyword'];
-
 
         $paginator = new Paginator(
             $request,
@@ -163,11 +159,17 @@ class FileChooserController extends BaseController
         return $this->createService('File:UploadFileService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
         return $this->createService('User:UserService');
     }
 
+    /**
+     * @return MaterialService
+     */
     protected function getMaterialService()
     {
         return $this->createService('Course:MaterialService');

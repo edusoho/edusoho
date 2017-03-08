@@ -10,9 +10,9 @@ class LiveActivityAddRoomCreated extends Migration
     public function up()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("
+        $biz['db']->exec('
             UPDATE `live_activity` SET roomCreated = 1 WHERE liveId > 0;
-        ");
+        ');
     }
 
     /**
