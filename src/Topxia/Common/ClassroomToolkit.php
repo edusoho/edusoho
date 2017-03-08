@@ -1,4 +1,4 @@
-<?php   
+<?php
 namespace Topxia\Common;
 
 use Topxia\Service\Common\ServiceKernel;

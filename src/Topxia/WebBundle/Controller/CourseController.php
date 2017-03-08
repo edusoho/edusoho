@@ -344,7 +344,7 @@ class CourseController extends CourseBaseController
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('该课程需要通过实名认证，你还没有通过实名认证。'), null, 3000, $this->generateUrl('course_show', array('id' => $id)));
         }
 
-        if (!$this->getCourseService()->canTakeCourse($id) ) {
+        if (!$this->getCourseService()->canTakeCourse($id)) {
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('您还不是课程《%courseTitle%》的学员，请先购买或加入学习。', array('%courseTitle%' => $course['title'])), null, 3000, $this->generateUrl('course_show', array('id' => $id)));
         }
 

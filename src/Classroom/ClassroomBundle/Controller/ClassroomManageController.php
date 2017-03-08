@@ -144,7 +144,7 @@ class ClassroomManageController extends BaseController
 
     public function setClassroomMemberDeadlineAction(Request $request, $classroomId, $userId)
     {
-        $this->getClassroomService()->tryManageClassroom($classroomId);   
+        $this->getClassroomService()->tryManageClassroom($classroomId);
 
         $member = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
 
