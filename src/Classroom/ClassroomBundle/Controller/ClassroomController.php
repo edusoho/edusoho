@@ -266,7 +266,7 @@ class ClassroomController extends BaseController
             throw $this->createAccessDeniedException($this->trans('不允许未登录访问'));
         }
 
-        $this->getClassroomService()->removeStudent($classroomId, $user['id']);
+        $this->getClassroomService()->exitClassroom($classroomId, $user['id']);
 
         return $this->redirect($this->generateUrl('classroom_introductions', array('id' => $classroomId)));
     }
