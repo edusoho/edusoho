@@ -70,6 +70,7 @@ class Choice implements TypeInterface
             'copyId',
             'target',
             'courseId',
+            'courseSetId',
             'lessonId',
             'subCount',
             'finishedTimes',
