@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Context\Biz;
 abstract class BaseCoupon
 {
     /**
-     * @var $biz
+     * @var
      */
     private $biz;
 
@@ -27,6 +27,7 @@ abstract class BaseCoupon
     /**
      * @param $coupon
      * @param array $target 例: {id: 1, type: course}
+     *
      * @return bool
      */
     abstract public function canUseable($coupon, $target);

@@ -4,7 +4,6 @@ namespace Biz;
 
 use Pimple\Container;
 use Biz\Common\HTMLHelper;
-use Biz\Coupon\Type\VipCoupon;
 use Pimple\ServiceProviderInterface;
 use Biz\File\FireWall\FireWallFactory;
 use Biz\Importer\CourseMemberImporter;

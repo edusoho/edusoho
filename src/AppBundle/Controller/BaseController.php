@@ -37,8 +37,9 @@ class BaseController extends Controller
     /**
      * switch current user.
      *
-     * @param  Request       $request
-     * @param  CurrentUser   $user
+     * @param Request     $request
+     * @param CurrentUser $user
+     *
      * @return CurrentUser
      */
     protected function switchUser(Request $request, CurrentUser $user)
@@ -241,11 +242,12 @@ class BaseController extends Controller
     /**
      * 创建消息提示响应.
      *
-     * @param  string     $type     消息类型：info, warning, error
-     * @param  string     $message  消息内容
-     * @param  string     $title    消息抬头
-     * @param  int        $duration 消息显示持续的时间
-     * @param  string     $goto     消息跳转的页面
+     * @param string $type     消息类型：info, warning, error
+     * @param string $message  消息内容
+     * @param string $title    消息抬头
+     * @param int    $duration 消息显示持续的时间
+     * @param string $goto     消息跳转的页面
+     *
      * @return Response
      */
     protected function createMessageResponse($type, $message, $title = '', $duration = 0, $goto = null)

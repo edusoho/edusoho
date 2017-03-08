@@ -187,6 +187,7 @@ class AppExtension extends \Twig_Extension
                 $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
             }
         }
+
         return $this->courseSetCover($courseSet, $type);
     }
 
@@ -204,6 +205,7 @@ class AppExtension extends \Twig_Extension
             $settings = $this->getSettingService()->get('default');
             $coverPath = $settings['course.png'] ? $settings['course.png'] : null;
         }
+
         return $coverPath;
     }
 

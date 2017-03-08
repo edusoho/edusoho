@@ -16,8 +16,8 @@ class CouponServiceProvider implements ServiceProviderInterface
                     throw new InvalidArgumentException('support vip or course, you give:'.$couponTypeName);
                 }
 
-                $cls = __NAMESPACE__ . '\\Type\\'.ucfirst($couponTypeName).'Coupon';
-                
+                $cls = __NAMESPACE__.'\\Type\\'.ucfirst($couponTypeName).'Coupon';
+
                 return new $cls($biz);
             };
         };

@@ -298,7 +298,7 @@ class CouponServiceImpl extends BaseService implements CouponService
     {
         $randomCode = '';
 
-        for ($j = 0; $j < (int)$length; ++$j) {
+        for ($j = 0; $j < (int) $length; ++$j) {
             $randomCode .= mt_rand(0, 9);
         }
 

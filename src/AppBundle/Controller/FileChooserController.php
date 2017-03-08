@@ -80,7 +80,6 @@ class FileChooserController extends BaseController
         $conditions['type'] = (empty($query['type']) || $query['type'] == 'all') ? null : $query['type'];
         $conditions['filenameLike'] = empty($query['keyword']) ? null : $query['keyword'];
 
-
         $paginator = new Paginator(
             $request,
             $this->getUploadFileService()->searchFileCount($conditions),

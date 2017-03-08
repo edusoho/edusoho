@@ -13,10 +13,11 @@ class LiveCourseSetController extends CourseBaseController
     public function courseSetsBlockAction($courseSets, $view = 'list', $mode = 'default')
     {
         $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
+
         return $this->forward('AppBundle:Course/LiveCourseSet:coursesBlock', array(
             'courses' => $courses,
-            'view'    => $view,
-            'mode'    => $mode
+        'view' => $view,
+        'mode' => $mode,
         ));
     }
 
@@ -241,7 +242,7 @@ class LiveCourseSetController extends CourseBaseController
         }
         $courses = $this->getCourseService()->findCoursesByCourseSetIds($allLiveLessonCourseIds);
         $courses = ArrayToolkit::index($courses, 'courseSetId');
-        $ret     = array();
+        $ret = array();
         foreach ($allLiveLessonCourseIds as $key => $courseSetId) {
             if (isset($liveCourseSets[$courseSetId])) {
                 $ret[$courseSetId] = $liveCourseSets[$courseSetId];
@@ -252,7 +253,7 @@ class LiveCourseSetController extends CourseBaseController
                     $tasks = $this->getTaskService()->searchTasks(array('fromCourseSetId' => $courseSetId, 'endTime_LT' => time()), array('startTime' => 'DESC'), 0, 1);
                 }
 
-                $ret[$courseSetId]['course']        = $courses[$courseSetId];
+                $ret[$courseSetId]['course'] = $courses[$courseSetId];
                 $ret[$courseSetId]['liveStartTime'] = $tasks[0]['startTime'];
                 $ret[$courseSetId]['liveEndTime'] = $tasks[0]['endTime'];
                 $ret[$courseSetId]['taskId'] = $tasks[0]['id'];
