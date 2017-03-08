@@ -2217,7 +2217,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         foreach ($courses as $key => $course) {
             $courseMember = $courseMembers[$course["id"]];
 
-            if ($course["expiryDay"] > 0 && $currentTime < $courseMember["deadline"] && (10 * 24 * 60 * 60 + $currentTime) > $courseMember["deadline"]) {
+            if ($course['parentId'] == 0 && $course["expiryDay"] > 0 && $currentTime < $courseMember["deadline"] && (10 * 24 * 60 * 60 + $currentTime) > $courseMember["deadline"]) {
                 $shouldNotifyCourses[]       = $course;
                 $shouldNotifyCourseMembers[] = $courseMember;
             }
