@@ -94,9 +94,9 @@ class ClassroomCourseExpiryDateEventSubscriber implements EventSubscriberInterfa
 
         foreach ($activeCourses as $course) {
             $this->getCourseDao()->updateCourse(
-                $course['id'], 
+                $course['id'],
                 array(
-                    'expiryMode' => $expiryDate['expiryMode'], 
+                    'expiryMode' => $expiryDate['expiryMode'],
                     'expiryDay'  => $expiryDate['expiryValue']
                 )
             );
