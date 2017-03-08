@@ -258,6 +258,19 @@ class ClassroomController extends BaseController
         return $member;
     }
 
+    public function deadlineReachAction(Request $request, $classroomId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException($this->trans('不允许未登录访问'));
+        }
+
+        $this->getClassroomService()->removeStudent($classroomId, $user['id']);
+
+        return $this->redirect($this->generateUrl('classroom_introductions', array('id' => $classroomId)));
+    }
+
     public function introductionAction(Request $request, $id)
     {
         $classroom    = $this->getClassroomService()->getClassroom($id);
