@@ -28,11 +28,17 @@ class ClassroomCourseExpiryDateEventSubscriber implements EventSubscriberInterfa
 
             if (!empty($fields['expiryMode'])) {
                 if ($this->canUpdateCoursesExpiryDate($classroom, $fields['expiryMode'])) {
-                    $this->updateCoursesExpiryDate($classroom['id'], array('expiryMode' => $fields['expiryMode'], 'expiryValue' => $fields['expiryValue']));
+                    $this->updateCoursesExpiryDate($classroom['id'], array(
+                        'expiryMode'  => $fields['expiryMode'],
+                        'expiryValue' => $fields['expiryValue']
+                    ));
                 }
 
                 if ($this->canUpdateCoursesMembersDeadline($classroom, $fields['expiryMode'])) {
-                    $this->updateCoursesStudentsDeadline($classroom['id'], array('expiryValue' => $fields['expiryValue'], 'expiryMode' => $fields['expiryMode'], 'classroomStatus' => $classroom['status']));
+                    $this->updateCoursesStudentsDeadline($classroom['id'], array(
+                        'expiryValue' => $fields['expiryValue'],
+                        'expiryMode'  => $fields['expiryMode']
+                    ));
                 }
             }
 
