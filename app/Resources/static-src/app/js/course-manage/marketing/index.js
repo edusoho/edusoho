@@ -18,7 +18,9 @@ class Marketing {
           required: function() {
             return $("[name=isFree]:checked").val() == 0;
           },
-          positive_currency: true
+          positive_currency: function() {
+            return $("[name=isFree]:checked").val() == 0;
+          },
         },
         tryLookLength: {
           digits: true
@@ -103,8 +105,8 @@ class Marketing {
     });
 
     $('#course-submit').click(function (evt) {
+      console.log();
       if (validator.form()) {
-        $(evt.currentTarget).button('loading');
         $form.submit();
       }
     });

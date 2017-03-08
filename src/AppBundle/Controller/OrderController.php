@@ -257,14 +257,14 @@ class OrderController extends BaseController
         $target = '';
 
         $coupon = $this->getCouponService()->getCouponByCode($code);
-        $couponId = $coupon['targetId'];
+        $targetId = $coupon['targetId'];
         $couponType = $coupon['targetType'];
 
         if ($couponType == 'course') {
-            if ($couponId != 0) {
-                $course = $this->getCourseService()->getCourse($couponId);
+            if ($targetId != 0) {
+                $course = $this->getCourseService()->getCourse($targetId);
                 $couponContent = '课程:'.$course['title'];
-                $url = $this->generateUrl('course_show', array('id' => $couponId));
+                $url = $this->generateUrl('course_show', array('id' => $targetId));
                 $target = "<a href='{$url}' target='_blank'>{$couponContent}</a>";
             } else {
                 $couponContent = '全部课程';
@@ -278,10 +278,10 @@ class OrderController extends BaseController
         }
 
         if ($couponType == 'classroom') {
-            if ($couponId != 0) {
-                $classroom = $this->getClassroomService()->getClassroom($couponId);
+            if ($targetId != 0) {
+                $classroom = $this->getClassroomService()->getClassroom($targetId);
                 $couponContent = '班级:'.$classroom['title'];
-                $url = $this->generateUrl('classroom_introductions', array('id' => $couponId));
+                $url = $this->generateUrl('classroom_introductions', array('id' => $targetId));
                 $target = "<a href='{$url}' target='_blank'>{$couponContent}</a>";
             } else {
                 $couponContent = '全部班级';
@@ -295,8 +295,8 @@ class OrderController extends BaseController
         }
 
         if ($couponType == 'vip' && $this->isPluginInstalled('Vip')) {
-            if ($couponId != 0) {
-                $level = $this->getLevelService()->getLevel($couponId);
+            if ($targetId != 0) {
+                $level = $this->getLevelService()->getLevel($targetId);
                 $couponContent = '会员:'.$level['name'];
             } else {
                 $couponContent = '全部VIP';

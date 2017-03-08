@@ -33,14 +33,13 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
             $time = $event->getArgument('timeStep');
         }
 
-        if (empty($taskId)) {
+        if (empty($task)) {
             return;
         }
-
         $this->getTaskService()->doTask($task['id'], $time);
 
-        if ($this->getTaskService()->isFinished($taskId)) {
-            $this->getTaskService()->finishTaskResult($taskId);
+        if ($this->getTaskService()->isFinished($task['id'])) {
+            $this->getTaskService()->finishTaskResult($task['id']);
         }
     }
 

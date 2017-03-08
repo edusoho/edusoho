@@ -351,7 +351,7 @@
                     <li class="media">
                       <a href="{{ path('course_set_show', {id:courseSet.id}) }}">
                         <div class="course-item">
-                          <img src="{{ filepath(courseSet.cover.large|default(), 'courseSet.png') }}"  class="img-responsive thumb pull-left">
+                          <img src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}"  class="img-responsive thumb pull-left">
                           <div class="course-title">{{ courseSet.title }}</div>
                         </div>
                       </a>
@@ -428,7 +428,7 @@
     {% for courseSet in courseSets %}
       <li class="course-grid">
         <a href="{{ path('course_set_show', {id:courseSet.id}) }}" class="grid-body">
-          {{ lazy_img(filepath(courseSet.cover.large|default(), 'courseSet.png'), 'img-responsive thumb', '') }}
+          {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'img-responsive thumb', '') }}
           {% if courseSet.status == 'draft' %}
             <span class="label  label-warning course-status">{{'未发布'|trans}}</span>
           {% elseif courseSet.status == 'closed' %}

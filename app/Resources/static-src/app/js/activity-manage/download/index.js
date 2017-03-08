@@ -106,19 +106,22 @@ function addFile(addToList) {
     item_tpl = `
     <li class="download-item " data-id="${media.link}">
         <a class="gray-primary" href="${ media.link}" target="_blank">${media.name}</a>
-        <a class="gray-primary phm btn-delete  js-btn-delete"  href="javascript:;"  title="{{'删除'|trans}}" data-url=""><i class="es-icon es-icon-cuowu"></i></a>
-        <span class="glyphicon glyphicon-new-window text-muted text-sm" title="{{'网络链接资料'|trans}}"></span>
+        <a class="gray-primary phm btn-delete  js-btn-delete"  href="javascript:;"  data-url="" data-toggle="tooltip" data-placement="top" title="{{ '删除'|trans }}"><i class="es-icon es-icon-delete"></i></a>
+        <span class="glyphicon glyphicon-new-window text-muted text-sm" title="${Translator.trans('删除')}"></span>
     </li>
   `;
   } else {
     item_tpl = `
     <li class="download-item " data-id="${media.id}">
       <a class="gray-primary" href="/materiallib/${ media.id}/download">${media.name}</a>
-      <a class="gray-primary phm  btn-delete js-btn-delete" href="javascript:;" title="{{'删除'|trans}}" data-url=""><i class="es-icon es-icon-cuowu"></i></a>
+      <a class="gray-primary phm  btn-delete js-btn-delete" href="javascript:;"  data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('删除')}"><i class="es-icon es-icon-delete"></i></a>
     </li>
   `;
   }
   $("#material-list").append(item_tpl);
+  $('[data-toggle="tooltip"]').tooltip();
+  $('.file-browser-item').removeClass('active');
+  notify('success', Translator.trans('添加成功，可继续选择资料添加或点击下一步！'));
   if ($('.jq-validate-error:visible').length > 0) {
     $("#step2-form").data('validator').form();
   }

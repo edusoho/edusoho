@@ -178,5 +178,5 @@ $.validator.addMethod("currency", function (value, element, params) {
 }, jQuery.validator.format('请输入有效价格，最多两位小数，整数位不超个8位！'));
 
 $.validator.addMethod("positive_currency", function (value, element, params) {
-  return this.optional(element) || /^[1-9]{0,8}(\.\d{0,2})?$/.test(value);
+  return /^[1-9]{0,8}(\.\d{0,2})?$/.test(value);
 }, jQuery.validator.format('请输入大于0的有效价格，最多两位小数，整数位不超个8位！'));

@@ -35,7 +35,7 @@
           </p>
           <span class="text-16">
             {% for toLearnTask in toLearnTasks %}
-              {{ toLearnTask.title }}
+              <a class="link-dark" href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">{{ toLearnTask.title }}</a>
             {% else %}
               暂无任务
             {% endfor %}
