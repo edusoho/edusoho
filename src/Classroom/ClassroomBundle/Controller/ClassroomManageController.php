@@ -8,6 +8,8 @@ use Topxia\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Controller\BaseController;
+use Topxia\Common\ClassroomToolkit;
+use Topxia\Service\Common\ServiceException;
 
 class ClassroomManageController extends BaseController
 {
@@ -137,6 +139,41 @@ class ClassroomManageController extends BaseController
             'progresses' => $progresses,
             'paginator'  => $paginator,
             'role'       => $role
+        ));
+    }
+
+    public function setClassroomMemberDeadlineAction(Request $request, $classroomId, $userId)
+    {
+        $this->getClassroomService()->tryManageClassroom($classroomId);
+
+        $member = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
+
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+
+            if (empty($fields['deadline'])) {
+                throw new ServiceException($this->getServiceKernel()->trans('缺少相关参数'));
+            }
+
+            $deadline = ClassroomToolkit::buildMemberDeadline(array(
+                'expiryMode'  => 'date',
+                'expiryValue' => strtotime($fields['deadline'].' 23:59:59')
+            ));
+
+            $this->getClassroomService()->updateMemberDeadlineByMemberId($member['id'], array(
+                'deadline' => $deadline
+            ));
+
+            return $this->createJsonResponse(true);
+        }
+
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        $user      = $this->getUserService()->getUser($userId);
+
+        return $this->render('ClassroomBundle:ClassroomManage/Member:set-deadline-modal.html.twig', array(
+            'classroom' => $classroom,
+            'user'      => $user,
+            'member'    => $member
         ));
     }
 
@@ -678,7 +715,12 @@ class ClassroomManageController extends BaseController
 
         if ($request->getMethod() == "POST") {
             $class = $request->request->all();
+
             $class['tagIds'] = $this->getTagIdsFromRequest($request);
+
+            if ($class['expiryMode'] == 'date') {
+                $class['expiryValue'] = strtotime($class['expiryValue'].' 23:59:59');
+            }
 
             $classroom = $this->getClassroomService()->updateClassroom($id, $class);
 

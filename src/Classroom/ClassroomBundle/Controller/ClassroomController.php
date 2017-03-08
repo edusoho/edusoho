@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\WebBundle\Controller\BaseController;
+use Topxia\Common\ClassroomToolkit;
 
 class ClassroomController extends BaseController
 {
@@ -136,6 +137,7 @@ class ClassroomController extends BaseController
         if ($member) {
             $isclassroomteacher = in_array('teacher', $member['role']) || in_array('headTeacher', $member['role']) ? true : false;
             $vipChecked = $this->isPluginInstalled('Vip') && $this->setting('vip.enabled') && $member['levelId']>0 ? $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) : 'ok';
+
             return $this->render("ClassroomBundle:Classroom:classroom-join-header.html.twig", array(
                 'classroom'              => $classroom,
                 'courses'                => $courses,
@@ -228,6 +230,11 @@ class ClassroomController extends BaseController
                 return;
             }
 
+            $deadline = ClassroomToolkit::buildMemberDeadline(array(
+                'expiryMode'  => $classroom['expiryMode'],
+                'expiryValue' => $classroom['expiryValue']
+            ));
+
             $member = array(
                 'id'          => 0,
                 'classroomId' => $classroom['id'],
@@ -239,7 +246,8 @@ class ClassroomController extends BaseController
                 'remark'      => '',
                 'role'        => array('auditor'),
                 'locked'      => 0,
-                'createdTime' => 0
+                'createdTime' => 0,
+                'deadline'    => $deadline
             );
 
             if ($previewAs == 'member') {
@@ -506,6 +514,10 @@ class ClassroomController extends BaseController
 
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
+        }
+
+        if ($this->getClassroomService()->isClassroomOverDue($id)) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('班级已过期'));
         }
 
         $this->getClassroomService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));

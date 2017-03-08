@@ -6,7 +6,6 @@
 
 
 {% block top_content %}
-
 {{ render(controller('ClassroomBundle:Classroom:header',{classroomId:classroom.id,previewAs:app.request.get('previewAs')|default("")})) }}
 
 {% endblock %}

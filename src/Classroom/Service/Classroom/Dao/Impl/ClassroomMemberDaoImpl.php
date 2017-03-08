@@ -71,6 +71,13 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         return $this->getMember($id);
     }
 
+    public function updateMembersDeadlineByClassroomId($id, $deadline)
+    {
+        $sql = "UPDATE {$this->table} SET deadline = ? WHERE classroomId = ? AND role LIKE '%|student|%'";
+
+        return $this->getConnection()->executeUpdate($sql, array($deadline, $id));
+    }
+
     public function findAssistants($classroomId)
     {
         $that = $this;
@@ -203,6 +210,12 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
     public function findUserJoinedClassroomIds($userId)
     {
         $sql = "SELECT classroomId FROM {$this->table} WHERE userId = ?";
+        return $this->getConnection()->fetchAll($sql, array($userId));
+    }
+
+    public function findMembersByUserId($userId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ?";
         return $this->getConnection()->fetchAll($sql, array($userId));
     }
 

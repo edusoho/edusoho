@@ -73,6 +73,10 @@ classroom_manage_student_remark:
     path:  /classroom/{classroomId}/manage/student/{userId}/remark
     defaults: { _controller: ClassroomBundle:ClassroomManage:remark }
 
+classroom_manage_member_deadline:
+    path: /classroom/{classroomId}/manage/member/{userId}/deadline
+    defaults: { _controller: ClassroomBundle:ClassroomManage:setClassroomMemberDeadline }
+
 classroom_manage_student_remove:
     path:  /classroom/{classroomId}/manage/student/{userId}/remove
     defaults: { _controller: ClassroomBundle:ClassroomManage:remove }

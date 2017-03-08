@@ -694,7 +694,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $fields        = $this->fillOrgId($fields);
         $fields        = CourseSerialize::serialize($fields);
-
         $updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
 
         if (isset($tagIds)) {
@@ -2265,6 +2264,16 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function updateMembers($conditions, $updateFields)
     {
         return $this->getMemberDao()->updateMembers($conditions, $updateFields);
+    }
+
+    public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline)
+    {
+        return $this->getMemberDao()->updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline);
+    }
+
+    public function updateMembersDeadlineByClassroomId($classroomId, $deadline)
+    {
+        return $this->getMemberDao()->updateMembersDeadlineByClassroomId($classroomId, $deadline);
     }
 
     public function getCourseMember($courseId, $userId)
