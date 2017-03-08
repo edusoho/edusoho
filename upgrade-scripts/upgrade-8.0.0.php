@@ -343,7 +343,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $sql = "UPDATE `c2_course` c set `publishedTaskNum` = (select count(*) from course_lesson where courseId=c.id and status = 'published')";
         $result = $this->getConnection()->exec($sql);
-
     }
 
     /**
@@ -1009,7 +1008,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function testpaperUpgrade()
     {
-        $sql = "SELECT * FROM testpaper WHERE id NOT IN (SELECT id FROM c2_testpaper WHERE type = 'testpaper')";
+        $sql = "SELECT * FROM testpaper WHERE id NOT IN (SELECT id FROM c2_testpaper WHERE type = 'testpaper') AND type = 'testpaper'";
         $testpapers = $this->getConnection()->fetchAll($sql);
         foreach ($testpapers as $testpaper) {
             $targetArr = explode('/', $testpaper['target']);
@@ -1151,7 +1150,7 @@ class EduSohoUpgrade extends AbstractUpdater
             FROM testpaper_result WHERE id NOT IN (SELECT id FROM c2_testpaper_result)";
         $this->getConnection()->exec($sql);
 
-        $sql = "SELECT * FROM c2_testpaper_result WHERE id NOT IN (SELECT id FROM c2_testpaper_result WHERE type = 'testpaper')";
+        $sql = "SELECT * FROM c2_testpaper_result WHERE id NOT IN (SELECT id FROM c2_testpaper_result WHERE type = 'testpaper') and type = 'testpaper'";
         $newTestpaperResults = $this->getConnection()->fetchAll($sql);
         foreach ($newTestpaperResults as $testpaperResult) {
             $targetArr = explode('/', $testpaperResult['target']);
@@ -1224,7 +1223,7 @@ class EduSohoUpgrade extends AbstractUpdater
             return;
         }
 
-        $sql = "SELECT * FROM homework WHERE id not IN (SELECT oldTestId FROM c2_testpaper WHERE type = 'homework')";
+        $sql = "SELECT * FROM homework WHERE id not IN (SELECT oldTestId FROM c2_testpaper WHERE type = 'homework') AND type = 'homework'";
         $homeworks = $this->getConnection()->fetchAll($sql);
         if (!$homeworks) {
             return;
@@ -1401,7 +1400,7 @@ class EduSohoUpgrade extends AbstractUpdater
             return;
         }
 
-        $sql = "SELECT * FROM exercise WHERE id NOT IN (SELECT oldTestId FROM c2_testpaper WHERE type = 'exercise')";
+        $sql = "SELECT * FROM exercise WHERE id NOT IN (SELECT oldTestId FROM c2_testpaper WHERE type = 'exercise') AND type = 'exercise'";
         $exercises = $this->getConnection()->fetchAll($sql);
         if (!$exercises) {
             return;
@@ -1628,6 +1627,12 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
+        if (!$this->isFieldExist('question', 'courseSetId')) {
+            $this->exec("
+                ALTER TABLE `question` ADD COLUMN `courseSetId` INT(10) NOT NULL DEFAULT '0'  AFTER `target`
+            ");
+        }
+
         if (!$this->isFieldExist('question', 'lessonId')) {
             $this->exec("
                 ALTER TABLE question add lessonId INT(10) UNSIGNED NOT NULL DEFAULT '0' AFTER `courseId`
@@ -1646,7 +1651,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 $lessonId = $lessonArr[1];
             }
 
-            $sql = "UPDATE question set courseId = {$courseArr[1]},lessonId={$lessonId} WHERE id = {$question['id']}";
+            $sql = "UPDATE question set courseId = {$courseArr[1]},courseSetId = {$courseArr[1]},lessonId={$lessonId} WHERE id = {$question['id']}";
             $this->exec($sql);
         }
 
