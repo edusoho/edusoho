@@ -23,7 +23,9 @@ class Marketing {
           },
         },
         tryLookLength: {
-          digits: true
+          digits: true,
+          min: 1,
+          max: 10
         },
         tryLookLimit: {
           digits: true
@@ -78,8 +80,10 @@ class Marketing {
     $('input[name="buyExpiryTime"]').datetimepicker('setStartDate', new Date());
 
     $('input[name="tryLookable"]').on('change', function (event) {
+      console.log('tryLook : ', $('input[name="tryLookable"]:checked').val());
       if ($('input[name="tryLookable"]:checked').val() == 1) {
         $('.js-enable-try-look').removeClass('hidden');
+        $('#tryLookLength').val('1');
       } else {
         $('.js-enable-try-look').addClass('hidden');
       }
@@ -105,7 +109,6 @@ class Marketing {
     });
 
     $('#course-submit').click(function (evt) {
-      console.log();
       if (validator.form()) {
         $form.submit();
       }
