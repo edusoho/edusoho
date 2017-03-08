@@ -62,13 +62,18 @@ class CommonController extends BaseController
 
     public function crontabAction(Request $request)
     {
+        $setting = $this->getSettingService()->get('magic', array());
+        if (!empty($setting['disable_web_crontab'])) {
+            return $this->createJsonResponse(true);
+        }
+
         $triggerUser = $this->getCurrentUser();
 
         // 执行Job 应该是最高权限
-        $currentUser = new CurrentUser();
+        $jobUser = new CurrentUser();
 
-        $currentUser->fromArray(array(
-            'id' => 1,
+        $jobUser->fromArray(array(
+            'id' => 0,
             'email' => 'job@edusoho.com',
             'nickname' => '定时任务',
             'currentIp' => '127.0.0.1',
@@ -79,17 +84,12 @@ class CommonController extends BaseController
         ));
 
         try{
-            $this->switchUser($request, $currentUser);
-
-            $setting = $this->getSettingService()->get('magic', array());
-
-            if (empty($setting['disable_web_crontab'])) {
-                $this->getBiz()->service('Crontab:CrontabService')->scheduleJobs();
-            }
-
+            $this->switchUser($request, $jobUser);
+            $this->getBiz()->service('Crontab:CrontabService')->scheduleJobs();
             $this->switchUser($request, $triggerUser);
             return $this->createJsonResponse(true);
         }catch (\Exception $exception){
+            $this->switchUser($request, $triggerUser);
             throw $exception;
         }
     }
