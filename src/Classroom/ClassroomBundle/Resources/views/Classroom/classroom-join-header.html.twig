@@ -84,7 +84,7 @@
               {% if classroom.expiryMode != 'none' %}
                 {% if 'student' in member.role or 'member' in member.role %}
                   <span class="mrm">班级有效期</span>
-                  <span>{{ memberDeadline|date('Y-n-d ') }}</span>
+                  <span>{{ memberDeadline|date('Y-n-d') }}</span>
                 {% endif %}
               {% endif %}
             </div>
@@ -103,7 +103,7 @@
               {% if classroom.expiryMode == 'date'%}
                  <div  class="alert alert-warning">你的班级已过有效期，无法继续学习</div>
               {% elseif classroom.expiryMode == 'days' %}
-               <div class="alert alert-warning">你的班级已过有效期，无法继续学习，请<a href="{{ path('classroom_member_reach_deadline', {classroomId:classroom.id}) }}">
+               <div class="alert alert-warning">你的班级已过有效期，无法继续学习，请<a href="{{ path('classroom_member_deadline_reach', {classroomId:classroom.id}) }}">
                   {% if classroom.buyable == 1 %}
                     {{ '重新购买'|trans }}
                   {% else %}
