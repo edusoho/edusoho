@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.2.3
+
+  * 修复单元测试 PHPUnit\Framework\TestCase Not Found
+
 ## v0.2.2
 
   * 新增BizAware Class 和 BizAware Trait

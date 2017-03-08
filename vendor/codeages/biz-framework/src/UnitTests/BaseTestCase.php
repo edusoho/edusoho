@@ -2,9 +2,8 @@
 
 namespace Codeages\Biz\Framework\UnitTests;
 
-use PHPUnit\Framework\TestCase;
 
-abstract class BaseTestCase extends TestCase
+abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
 {
     protected static $biz;
 
