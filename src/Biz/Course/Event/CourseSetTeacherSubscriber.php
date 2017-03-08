@@ -65,8 +65,7 @@ class CourseSetTeacherSubscriber extends EventSubscriber implements EventSubscri
             return $t1['seq'] < $t2['seq'] ? -1 : 1;
         });
 
-        $courseSet['teacherIds'] = array($teachers[0]['userId']);
-        $this->getCourseSetService()->updateCourseSet($courseSet['id'], $courseSet);
+        $this->getCourseSetService()->updateCourseSetTeacherIds($courseSet['id'], array($teachers[0]['userId']));
     }
 
     /**

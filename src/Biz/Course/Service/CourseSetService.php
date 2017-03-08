@@ -131,6 +131,8 @@ interface CourseSetService
      */
     public function updateCourseSetMarketing($id, $fields);
 
+    public function updateCourseSetTeacherIds($id, $teacherIds);
+
     public function changeCourseSetCover($id, $fields);
 
     public function deleteCourseSet($id);
