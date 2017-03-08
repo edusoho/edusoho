@@ -1008,7 +1008,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function testpaperUpgrade()
     {
-        $sql = "SELECT * FROM testpaper WHERE id NOT IN (SELECT id FROM c2_testpaper WHERE type = 'testpaper') AND type = 'testpaper'";
+        $sql = "SELECT * FROM testpaper WHERE id NOT IN (SELECT id FROM c2_testpaper WHERE type = 'testpaper')";
         $testpapers = $this->getConnection()->fetchAll($sql);
         foreach ($testpapers as $testpaper) {
             $targetArr = explode('/', $testpaper['target']);
@@ -1223,7 +1223,7 @@ class EduSohoUpgrade extends AbstractUpdater
             return;
         }
 
-        $sql = "SELECT * FROM homework WHERE id not IN (SELECT oldTestId FROM c2_testpaper WHERE type = 'homework') AND type = 'homework'";
+        $sql = "SELECT * FROM homework WHERE id not IN (SELECT oldTestId FROM c2_testpaper WHERE type = 'homework')";
         $homeworks = $this->getConnection()->fetchAll($sql);
         if (!$homeworks) {
             return;
@@ -1400,7 +1400,7 @@ class EduSohoUpgrade extends AbstractUpdater
             return;
         }
 
-        $sql = "SELECT * FROM exercise WHERE id NOT IN (SELECT oldTestId FROM c2_testpaper WHERE type = 'exercise') AND type = 'exercise'";
+        $sql = "SELECT * FROM exercise WHERE id NOT IN (SELECT oldTestId FROM c2_testpaper WHERE type = 'exercise')";
         $exercises = $this->getConnection()->fetchAll($sql);
         if (!$exercises) {
             return;
