@@ -164,4 +164,6 @@ interface ClassroomService
     public function findUserJoinedClassroomIds($userId);
 
     public function updateLearndNumByClassroomIdAndUserId($classroomId, $userId);
+
+    public function findWillOverdueClassrooms();
 }

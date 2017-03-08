@@ -778,6 +778,37 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomCourseDao()->findClassroomsByCoursesIds($courseIds);
     }
 
+    public function findWillOverdueClassrooms()
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createServiceException($this->getKernel()->trans('用户未登录'));
+        }
+
+        $members = $this->getClassroomMemberDao()->findMembersByUserId($user['id']);
+        $members = ArrayToolkit::index($members, 'classroomId');
+
+        $classroomIds = ArrayToolkit::column($members, 'classroomId');
+        $classrooms = $this->findClassroomsByIds($classroomIds);
+
+        $shouldNotifyClassrooms       = array();
+        $shouldNotifyClassroomMembers = array();
+
+        $currentTime = time();
+
+        foreach ($classrooms as $key => $classroom) {
+            $member = $members[$classroom['id']];
+
+            if ($classroom['expiryValue'] > 0 && $currentTime < $member['deadline'] && (10 * 24 * 60 * 60 + $currentTime) > $member['deadline']) {
+                $shouldNotifyClassrooms[]       = $classroom;
+                $shouldNotifyClassroomMembers[] = $member;
+            }
+        }
+
+        return array($shouldNotifyClassrooms, $shouldNotifyClassroomMembers);
+    }
+
     private function refreshCoursesSeq($classroomId, $courseIds)
     {
         $seq = 1;
