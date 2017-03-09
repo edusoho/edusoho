@@ -6,6 +6,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
+    private $api;
     public function update()
     {
         $this->getConnection()->beginTransaction();
@@ -84,19 +85,19 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function enableCloudSearch()
     {
-        $api  = CloudAPIFactory::create('root');
-        if ($this->isSaaSUser($api)) {
-            $searchOverview = $api->get("/me/search/overview");
-            $canOpen = $this->canOpenCloudSearch($searchOverview);
+        $this->api = CloudAPIFactory::create('root');
+        if ($this->isSaaSUser()) {
+            $canOpen = $this->canOpenCloudSearch();
             if ($canOpen) {
+                $searchOverview = $this->$api->get("/me/search/overview");
                 $this->dealSaaSCloudSearch($searchOverview);
             }
         }
     }
 
-    private function isSaaSUser($api)
+    private function isSaaSUser()
     {
-        $info = $api->get('/me');
+        $info = $this->api->get('/me');
         $eduCloudType = array('medium', 'personal', 'basic', 'advanced', 'gold');
         if (in_array($info['level'], $eduCloudType)) {
             return true;
@@ -140,54 +141,49 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    private function canOpenCloudSearch($searchOverview)
+    private function canOpenCloudSearch()
     {
         try {
-            $api = CloudAPIFactory::create('root');
-
-            $searchSetting = $this->getSettingService()->get('cloud_search', array());
-            $userOverview = $api->get("/users/{$api->getAccessKey()}/overview");
-            $data = $this->isSearchInited($api, $searchSetting);
+            $userOverview = $this->api->get("/users/{$this->api->getAccessKey()}/overview");
+            $this->isSearchInited();
         } catch (\RuntimeException $e) {
         }
 
         //判断云搜索状态
         if (empty($userOverview['user']['licenseDomains'])) {
-            $data['status'] = 'unbinded';
             return false;
         } else {
             $site = $this->getSettingService()->get('site');
             // $currentHost = $_SERVER['HTTP_HOST'];
             if (!in_array($site['url'], explode(';', $userOverview['user']['licenseDomains']))) {
-                $data['status'] = 'binded_error';
                 return false;
             }
         }
         return true;
     }
 
-    protected function isSearchInited($api, $data)
+    protected function isSearchInited()
     {
-        if (!$data) {
-            $data = array(
+        $searchSetting = $this->getSettingService()->get('cloud_search', array());
+
+        if (!$searchSetting) {
+            $searchSetting = array(
                 'search_enabled' => 0,
                 'status'         => 'closed' //'closed':未开启；'waiting':'索引中';'ok':'索引完成'
             );
         }
 
-        if ($data['status'] == 'waiting') {
-            $search_account = $api->get("/me/search_account");
+        if ($searchSetting['status'] == 'waiting') {
+            $search_account = $this->api->get("/me/search_account");
 
             if ($search_account['isInit'] == 'yes') {
-                $data = array(
-                    'search_enabled' => $data['search_enabled'],
+                $searchSetting = array(
+                    'search_enabled' => $searchSetting['search_enabled'],
                     'status'         => 'ok'
                 );
             }
         }
-        $this->getSettingService()->set('cloud_search', $data);
-
-        return $data;
+        $this->getSettingService()->set('cloud_search', $searchSetting);
     }
 
     protected function isFieldExist($table, $filedName)
