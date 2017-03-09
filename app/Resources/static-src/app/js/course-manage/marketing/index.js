@@ -4,44 +4,8 @@ class Marketing {
   }
 
   init() {
-    let $form = $('#course-marketing-form');
-    $('.js-task-price-setting').perfectScrollbar();
-    let validator = $form.validate({
-      onkeyup: false,
-      rules: {
-        originPrice: {
-          required: function () {
-            return $("[name=isFree]:checked").val() == 0;
-          },
-          positive_currency: function () {
-            return $("[name=isFree]:checked").val() == 0;
-          },
-        },
-        tryLookLength: {
-          required: function () {
-            return $("[name=tryLookable]:checked").val() == 1;
-          },
-          digits: true,
-          min: 1,
-          max: 10
-        },
-        tryLookLimit: {
-          digits: true
-        },
-        buyExpiryTime: {
-          required: function () {
-            return $('input[name="enableBuyExpiryTime"]:checked').val() == 1;
-          },
-        }
-      },
-      messages: {
-        buyExpiryTime: {
-          required: '请选择有效的购买截止日期',
-          date: '请选择有效的购买截止日期'
-        }
-      }
-    });
 
+    this.initValidator();
 
     $('.js-task-price-setting').on('click', 'li', function (event) {
       let $li = $(this).toggleClass('open');
@@ -108,9 +72,47 @@ class Marketing {
       }
       $('#course_services').val(JSON.stringify($values));
     });
+  }
 
+  initValidator() {
+    let $form = $('#course-marketing-form');
+    $('.js-task-price-setting').perfectScrollbar();
+    let validator = $form.validate({
+      onkeyup: false,
+      rules: {
+        originPrice: {
+          required: function () {
+            return $("[name=isFree]:checked").val() == 0;
+          },
+          positive_currency: function () {
+            return $("[name=isFree]:checked").val() == 0;
+          },
+        },
+        tryLookLength: {
+          required: function () {
+            return $("[name=tryLookable]:checked").val() == 1;
+          },
+          digits: true,
+          min: 1,
+          max: 10
+        },
+        tryLookLimit: {
+          digits: true
+        },
+        buyExpiryTime: {
+          required: function () {
+            return $('input[name="enableBuyExpiryTime"]:checked').val() == 1;
+          },
+        }
+      },
+      messages: {
+        buyExpiryTime: {
+          required: '请选择有效的购买截止日期',
+          date: '请选择有效的购买截止日期'
+        }
+      }
+    });
     $('#course-submit').click(function (evt) {
-      console.log('clicj');
       if (validator.form()) {
         $form.submit();
       }
