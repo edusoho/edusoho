@@ -170,6 +170,14 @@ $.validator.addMethod('positive_integer', function (value, element) {
   return this.optional(element) || parseInt(value) > 0;
 }, jQuery.validator.format("请输入正整数"));
 
+$.validator.addMethod('float', function (value, element) {
+  return this.optional(element) || /^(([+-]?[1-9]{1}\d*)|([+-]?[0]{1}))(\.(\d){1,2})?$/i.test(value);
+}, jQuery.validator.format("请输入正确的小数,只保留到两位小数"));
+
+$.validator.addMethod('date', function (value, element) {
+  return this.optional(element) || /^\d{4}\-[01]?\d\-[0-3]?\d$|^[01]\d\/[0-3]\d\/\d{4}$|^\d{4}年[01]?\d月[0-3]?\d[日号]$/.test(value);
+}, jQuery.validator.format("请输入正确的日期"));
+
 $.validator.addMethod("open_live_course_title", function (value, element, params) {
   return !params || /^[^(<|>|'|"|&|‘|’|”|“)]*$/.test(value);
 }, Translator.trans('直播公开课标题暂不支持<、>、\"、&、‘、’、”、“字符'));
@@ -183,8 +191,16 @@ $.validator.addMethod("positive_currency", function (value, element, params) {
 }, jQuery.validator.format('请输入大于0的有效价格，最多两位小数，整数位不超个8位！'));
 
 $.validator.addMethod('qq', function(value, element) {
-  return /^[1-9]\d{4,}$/.test(value);
+  return this.optional(element) || /^[1-9]\d{4,}$/.test(value);
 }, jQuery.validator.format('请输入正确的QQ号'));
+
+$.validator.addMethod('mobile', function(value, element) {
+  return this.optional(element) ||  /^1\d{10}$/.test(value);
+}, jQuery.validator.format('请输入正确的手机号'));
+
+$.validator.addMethod('url', function(value, element) {
+  return this.optional(element) || /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/.test(value)
+}, jQuery.validator.format('地址不正确，须以http://或者https://开头。'));
 
 $.validator.addMethod('passwordCheck', function(value, element) {
   
@@ -204,4 +220,4 @@ $.validator.addMethod('passwordCheck', function(value, element) {
   })
 
   return this.optional(element) || isSuccess
-}, Translator.trans('密码错误'))
+}, jQuery.validator.format('密码错误'))

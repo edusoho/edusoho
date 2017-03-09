@@ -160,10 +160,10 @@ class OrderCreate {
     let _this = this;
     $.post('/' + data.targetType + '/' + data.targetId + '/coupon/check', data, function(data) {
       $('[role="code-notify"]').css("display","inline-block");
-
       if (data.useable == "no") {
+        
         $('[role=no-use-coupon-code]').show();
-        $('[role="code-notify"]').removeClass('alert-success').addClass("alert-danger").html(data.message);
+        $('[role="code-notify"]').removeClass('alert-success').addClass("alert-danger").html(Translator.trans('优惠券不可用'));
 
       } else if (data.useable == "yes") {
         $('[role=no-use-coupon-code]').hide();
