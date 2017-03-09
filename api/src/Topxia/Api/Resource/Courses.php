@@ -155,7 +155,6 @@ class Courses extends BaseResource
          * ]
          */
         $orderedSetIds = array_flip($setIds);
-        var_dump($orderedSetIds);
         // 教学计划根据翻转后的setId集合来获得排序序号，然后根据序号来排序
         usort(
             $courses,
