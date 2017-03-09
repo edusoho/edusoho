@@ -3,7 +3,12 @@
 namespace Biz\Course\Copy\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Course\Copy\AbstractEntityCopy;
+use Biz\File\Service\UploadFileService;
+use Biz\Question\Service\QuestionService;
+use Biz\Testpaper\Service\TestpaperService;
 
 /**
  * Class QuestionCopy.
@@ -63,11 +68,27 @@ class QuestionCopy extends AbstractEntityCopy
             $newQuestion['parentId'] = $question['parentId'] > 0 ? $questionMap[$question['parentId']][0] : 0;
 
             $newQuestion = $this->getQuestionService()->create($newQuestion);
+            $this->copyAttachments($newQuestion, $question);
 
             $questionMap[$question['id']] = array($newQuestion['id'], $newQuestion['parentId']);
         }
 
         return $questionMap;
+    }
+
+    private function copyAttachments($newQuestion, $sourceQuestion)
+    {
+        $stems = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType('question.stem', $sourceQuestion['id'], 'attachment');
+        if (!empty($stems)) {
+            $fileIds = ArrayToolkit::column($stems, 'fileId');
+            $this->getUploadFileService()->createUseFiles($fileIds, $newQuestion['id'], 'question.stem', 'attachment');
+        }
+        $analysises = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType('question.analysis', $sourceQuestion['id'],
+            'attachment');
+        if (!empty($analysises)) {
+            $fileIds = ArrayToolkit::column($analysises, 'fileId');
+            $this->getUploadFileService()->createUseFiles($fileIds, $newQuestion['id'], 'question.analysis', 'attachment');
+        }
     }
 
     private function questionSort($questions)
@@ -106,23 +127,43 @@ class QuestionCopy extends AbstractEntityCopy
         return $newQuestion;
     }
 
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->biz->service('Testpaper:TestpaperService');
     }
 
+    /**
+     * @return TestpaperActivityService
+     */
     protected function getTestpaperActivityService()
     {
         return $this->biz->service('Activity:TestpaperActivityService');
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->biz->service('Activity:ActivityService');
     }
 
+    /**
+     * @return QuestionService
+     */
     protected function getQuestionService()
     {
         return $this->biz->service('Question:QuestionService');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->biz->service('File:UploadFileService');
     }
 }
