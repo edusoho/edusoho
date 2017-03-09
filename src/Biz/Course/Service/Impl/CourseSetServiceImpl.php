@@ -562,12 +562,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     /**
      * 根据排序规则返回排序数组.
-     * <<<<<<< HEAD
      *
      * @param  string $order
      * @return array
-    =======
-     * >>>>>>> origin/feature/x8-api
      */
     protected function getOrderBys($order)
     {
