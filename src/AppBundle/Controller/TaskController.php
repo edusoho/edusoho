@@ -356,7 +356,7 @@ class TaskController extends BaseController
      */
     protected function handleAccessDeniedException(\Exception $exception, Request $request, $taskId)
     {
-        // 学员动态跳转过来没有加入到教学计划下时候则跳转到课程营销页面
+        // 学员动态跳转到无权限任务进入到计划营销页
         if ($request->query->get('from', '') === 'student_status') {
             $task = $this->getTaskService()->getTask($taskId);
             return $this->redirectToRoute('course_show', array(
