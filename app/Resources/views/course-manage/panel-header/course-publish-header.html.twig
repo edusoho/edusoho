@@ -5,7 +5,7 @@
 {# 直播课程不需要显示计划发布功能 #}
 {% if courseSet.type != 'live' %}
   <div class="panel-heading">
-    {{ course.title }}<span class="mh5">／</span>{{ side_navs[code]|trans }}
+    {{ side_navs[code]|trans }}
     {% if course.status != 'published' %}
       <button class="btn btn-success btn-sm pull-right js-publish-course"
         data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">
