@@ -203,7 +203,7 @@ class AppExtension extends \Twig_Extension
 
         if (empty($coverPath)) {
             $settings = $this->getSettingService()->get('default');
-            $coverPath = $settings['course.png'] ? $settings['course.png'] : null;
+            $coverPath = !empty($settings['course.png']) ? $settings['course.png'] : null;
         }
 
         return $coverPath;

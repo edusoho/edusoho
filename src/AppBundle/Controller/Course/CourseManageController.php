@@ -478,10 +478,10 @@ class CourseManageController extends BaseController
         }
     }
 
-    public function publishAction(Request $request, $courseSetId, $courseId)
+    public function publishAction($courseSetId, $courseId)
     {
         try {
-            $this->getCourseService()->publishCourse($courseId);
+            $this->getCourseService()->publishCourse($courseId, true);
 
             return $this->createJsonResponse(array('success' => true));
         } catch (\Exception $e) {
