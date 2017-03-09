@@ -5,7 +5,6 @@ class TestpaperForm {
   constructor($form) {
     this.$form = $form;
     this.$description = this.$form.find('[name="description"]');
-    console.log(this.$description);
     this.validator = null;
     this.difficultySlider = null;
     this._initEvent();
@@ -190,8 +189,10 @@ class TestpaperForm {
   }
 
   _submit(event) {
+    let $target = $(event.currentTarget);
     let status = this.validator.form();
     if (status) {
+      $target.button('loading').addClass('disabled');
       this.$form.submit();
     }
   }
