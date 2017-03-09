@@ -191,11 +191,13 @@ class ArrayToolkit
 
         return false;
     }
-    
+
     /**
-     * 二维数组合并值，返回去除重复值的一维数组
-     * @param  [type] $doubleArrays [description]
-     * @return [type]               [description]
+     * 二维数组合并值，返回去除重复值的一维数组.
+     *
+     * @param [type] $doubleArrays [description]
+     *
+     * @return [type] [description]
      */
     public static function mergeArraysValue($doubleArrays)
     {
@@ -211,6 +213,7 @@ class ArrayToolkit
                 $values[] = $value;
             }
         }
+
         return $values;
     }
 }
