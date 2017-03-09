@@ -27,7 +27,7 @@ abstract class BaseConvertor
         if (empty($path)) {
             return '';
         }
-        if (strpos($path, $this->getHttpHost()."://") !== false) {
+        if (strpos($path, $this->getHttpHost().'://') !== false) {
             return $path;
         }
         $path = str_replace('public://', '', $path);

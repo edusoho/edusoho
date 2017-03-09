@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Callback\Convertor;
 
 class CourseConvertor extends Convertor

@@ -7,7 +7,7 @@ use AppBundle\Controller\Callback\Resource\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * 课程资源集合(对应course_set表)
+ * 课程资源集合(对应course_set表).
  */
 class Courses extends BaseResource
 {
