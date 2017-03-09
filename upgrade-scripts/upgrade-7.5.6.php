@@ -3,18 +3,14 @@
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Topxia\Common\ArrayToolkit;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
-    private static $pageNum = 2000;
-
-    public function update($index = 0)
+    public function update()
     {
         $this->getConnection()->beginTransaction();
         try {
-            $result = $this->batchUpdate($index);
+            $result = $this->batchUpdate();
             $this->getConnection()->commit();
             if (!empty($result)) {
                 return $result;
@@ -41,47 +37,11 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getSettingService()->set("crontab_next_executed_time", time());
     }
 
-    protected function generateIndex($step, $page)
-    {
-        return $step * 1000000 + $page;
-    }
-
-    protected function getStepAndPage($index)
-    {
-        $step = intval($index / 1000000);
-        $page = $index % 1000000;
-        return array($step, $page);
-    }
-
     protected function batchUpdate($index)
     {
-        $batchUpdates = array(
-            1 => 'updateAlipayType',
-            2 => 'cloudSearchEnable'
-        );
-        if ($index == 0) {
-            $this->updateScheme();
-            return array(
-                'index' => $this->generateIndex(1, 1),
-                'message' => '正在升级数据...',
-                'progress' => 0
-            );
-        }
-
-        list($step, $page) = $this->getStepAndPage($index);
-        $method = $batchUpdates[$step];
-        $page = $this->$method($page);
-
-        if ($page == 1) {
-            $step ++;
-        }
-        if ($step < 3) {
-            return array(
-                'index' => $this->generateIndex($step, $page),
-                'message' => '正在升级数据...',
-                'progress' => 0
-            );
-        }
+        $this->updateScheme();
+        $this->updateAlipayType();
+        $this->cloudSearchEnable();
     }
 
     protected function updateScheme()
@@ -120,8 +80,6 @@ class EduSohoUpgrade extends AbstractUpdater
             $payment['alipay_type'] = 'direct';
             $this->getSettingService()->set('payment', $payment);
         }
-
-        return 1;
     }
 
     protected function cloudSearchEnable()
@@ -133,8 +91,6 @@ class EduSohoUpgrade extends AbstractUpdater
         if ($status) {
             $this->dealSaaSCloudSearch($info, $searchOverview);
         }
-
-        return 1;
     }
 
     private function dealSaaSCloudSearch($info, $searchOverview)
