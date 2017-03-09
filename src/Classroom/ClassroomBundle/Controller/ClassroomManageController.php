@@ -1074,7 +1074,7 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function expiryDateRoleAction()
+    public function expiryDateRuleAction()
     {
         return $this->render('ClassroomBundle:ClassroomManage:rule.html.twig');
     }
