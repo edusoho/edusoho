@@ -371,13 +371,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
     }
 
-    public function publishCourse($id)
+    public function publishCourse($id, $withTasks = false)
     {
         $this->tryManageCourse($id);
         $course = $this->getCourseDao()->update($id, array(
             'status' => 'published',
         ));
         $this->dispatchEvent('course.publish', $course);
+
+        $this->getTaskService()->publishTasksByCourseId($id);
     }
 
     protected function validateExpiryMode($course)

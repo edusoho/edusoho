@@ -2,10 +2,10 @@
 
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
+use AppBundle\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\SchoolProcessor;
-use Symfony\Component\HttpFoundation\Response;
-use AppBundle\Common\ArrayToolkit;
 
 class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
 {
@@ -47,8 +47,8 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
         }
 
         return array(
-                'level' => $level,
-                'buyType' => $buyType,
+            'level' => $level,
+            'buyType' => $buyType,
         );
     }
 
@@ -74,8 +74,8 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
         $user = $this->controller->getUserService()->getUser($userId);
 
         return array(
-                'user' => $this->controller->filterUser($user),
-                'vips' => $levels,
+            'user' => $this->controller->filterUser($user),
+            'vips' => $levels,
         );
     }
 
@@ -87,7 +87,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
         foreach ($appsInstalled as $key => $value) {
             foreach ($value as $valueKey => $v) {
                 if (!in_array($valueKey, array(
-                    'id', 'version', 'type', ))) {
+                    'id', 'version', 'type'))) {
                     unset($value[$valueKey]);
                 }
 
@@ -175,7 +175,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
             'androidVersion' => $clientVersion->version,
             'updateInfo' => $clientVersion->updateInfo,
             'updateUrl' => $clientVersion->url,
-            );
+        );
 
         return $result;
     }
@@ -194,7 +194,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
             'info' => $info,
             'type' => $type,
             "$contact" => $contact,
-            ));
+        ));
 
         return true;
     }
@@ -213,7 +213,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
             'info' => $info,
             'type' => $type,
             'contact' => $contact,
-            ));
+        ));
 
         return true;
     }
@@ -251,7 +251,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
 
         return array(
             'data' => $content,
-            );
+        );
     }
 
     public function getSchoolInfo()
@@ -282,7 +282,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
         $result = array(
             'start' => 0,
             'limit' => 3,
-            'data' => $this->controller->filterCourses($sortedCourses), );
+            'data' => $this->controller->filterCourses($sortedCourses));
 
         return $result;
     }
@@ -356,7 +356,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
             'start' => $start,
             'limit' => $limit,
             'total' => $total,
-            'data' => $this->controller->filterCourses($courses), );
+            'data' => $this->controller->filterCourses($courses));
 
         return $result;
     }
@@ -369,7 +369,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
             'info' => $mobile['notice'],
             'action' => 'none',
             'params' => array(),
-            );
+        );
     }
 
     public function getSchoolBanner()
@@ -377,6 +377,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
         $banner = array();
         $mobile = $this->getSettingService()->get('mobile', array());
         $baseUrl = $this->request->getSchemeAndHttpHost();
+
         for ($i = 1; $i < 6; ++$i) {
             $bannerIndex = $mobile['banner'.$i];
             if (!empty($bannerIndex)) {
@@ -384,33 +385,38 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
                 $bannerParams = null;
                 $action = 'none';
                 switch ($bannerClick) {
-                        case 0:
-                            $action = 'none';
-                            $bannerParams = null;
-                            break;
-                        case 1:
-                            $action = 'webview';
-                            if (array_key_exists('bannerUrl'.$i, $mobile)) {
-                                $bannerParams = $mobile['bannerUrl'.$i];
-                            } else {
-                                $bannerParams = '';
-                            }
-                            break;
-                        case 2:
-                            $action = 'course';
-                            if (array_key_exists('bannerJumpToCourseId'.$i, $mobile)) {
-                                $bannerParams = $mobile['bannerJumpToCourseId'.$i];
-                            } else {
-                                $bannerParams = '';
-                            }
-                            break;
-                    }
+                    case 0:
+                        $action = 'none';
+                        $bannerParams = null;
+                        break;
+                    case 1:
+                        $action = 'webview';
+                        if (array_key_exists('bannerUrl'.$i, $mobile)) {
+                            $bannerParams = $mobile['bannerUrl'.$i];
+                        } else {
+                            $bannerParams = '';
+                        }
+                        break;
+                    case 2:
+                        $action = 'course';
+                        if (array_key_exists('bannerJumpToCourseId'.$i, $mobile)) {
+                            $bannerParams = $mobile['bannerJumpToCourseId'.$i];
+                        } else {
+                            $bannerParams = '';
+                        }
+                        break;
+                }
                 $banner[] = array(
-                        'url' => $baseUrl.'/'.$bannerIndex,
-                        'action' => $action,
-                        'params' => $bannerParams,
-                    );
+                    'url' => $baseUrl.'/'.$bannerIndex,
+                    'action' => $action,
+                    'params' => $bannerParams,
+                );
             }
+            $banner[] = array(
+                "url" => $baseUrl.'/'.$bannerIndex,
+                "action" => $action,
+                "params" => $bannerParams,
+            );
         }
 
         return $banner;
@@ -438,7 +444,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
                 'url' => $url,
                 'action' => 'webview',
                 'params' => $matches[1],
-                );
+            );
 
             return '';
         }, $blocks['home_top_banner']);
@@ -454,7 +460,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
                 'url' => $url,
                 'action' => 'none',
                 'params' => '',
-                );
+            );
 
             return '';
         }, $blocks);
@@ -518,17 +524,17 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
                 'url' => '',
                 'action' => 'none',
                 'params' => array(),
-                ),
+            ),
             array(
                 'url' => '',
                 'action' => 'none',
                 'params' => array(),
-                ),
+            ),
             array(
                 'url' => '',
                 'action' => 'none',
                 'params' => array(),
-                ),
+            ),
         );
 
         return $banner;

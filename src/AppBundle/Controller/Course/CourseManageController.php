@@ -478,10 +478,10 @@ class CourseManageController extends BaseController
         }
     }
 
-    public function publishAction(Request $request, $courseSetId, $courseId)
+    public function publishAction($courseSetId, $courseId)
     {
         try {
-            $this->getCourseService()->publishCourse($courseId);
+            $this->getCourseService()->publishCourse($courseId, true);
 
             return $this->createJsonResponse(array('success' => true));
         } catch (\Exception $e) {
@@ -565,6 +565,8 @@ class CourseManageController extends BaseController
         return $this->render('course-manage/orders.html.twig', array(
             'courseSet' => $courseSet,
             'course' => $course,
+            'courseSets' => array($courseSet['id'] => $courseSet),
+            'courses' => array($course['id'] => $course),
             'request' => $request,
             'orders' => $orders,
             'users' => $users,

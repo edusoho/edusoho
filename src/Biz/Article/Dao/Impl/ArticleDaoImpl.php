@@ -111,6 +111,10 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
                 'publishedTime',
                 'sticky',
                 'hits',
+                'updatedTime',
+            ),
+            'serializes' => array(
+                'tagIds' => 'delimiter',
             ),
             'conditions' => array(
                 'status = :status',
@@ -128,6 +132,9 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
                 'id = :articleId',
                 'thumb != :thumbNotEqual',
                 'orgCode = :orgCode',
+            ),
+            'serializes' => array(
+                'tagIds' => 'delimiter',
             ),
         );
     }

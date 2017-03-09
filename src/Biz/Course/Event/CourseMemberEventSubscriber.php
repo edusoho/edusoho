@@ -26,6 +26,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             'course.join' => 'onCourseJoin',
             'course.quit' => 'onMemberDelete',
 
+            'classroom.course.join' => 'onClassroomCourseJoin',
             'classroom.course.copy' => 'onClassroomCourseCopy',
 
             'course.task.delete' => 'onTaskDelete',
@@ -38,6 +39,11 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $this->countStudentMember($event);
         $this->countIncome($event);
         $this->sendWelcomeMsg($event);
+        $this->publishStatus($event, 'become_student');
+    }
+
+    public function onClassroomCourseJoin(Event $event)
+    {
         $this->publishStatus($event, 'become_student');
     }
 

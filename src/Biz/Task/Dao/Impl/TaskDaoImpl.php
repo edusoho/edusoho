@@ -187,6 +187,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'seq',
                 'startTime',
                 'createdTime',
+                'updatedTime',
             ),
             'conditions' => array(
                 'id = :id',

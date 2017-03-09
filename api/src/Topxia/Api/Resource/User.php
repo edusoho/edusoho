@@ -128,9 +128,4 @@ class User extends BaseResource
     {
         return $this->createService('Sms:SmsService');
     }
-
-    protected function getBiz()
-    {
-        return $this->getServiceKernel()->getBiz();
-    }
 }

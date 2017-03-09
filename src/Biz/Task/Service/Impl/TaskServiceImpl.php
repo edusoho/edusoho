@@ -144,6 +144,19 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $task;
     }
 
+    public function publishTasksByCourseId($courseId)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+        $tasks = $this->findTasksByCourseId($courseId);
+        if (!empty($tasks)) {
+            foreach ($tasks as $task) {
+                if ($task['status'] !== 'published') {
+                    $this->publishTask($task['id']);
+                }
+            }
+        }
+    }
+
     public function unpublishTask($id)
     {
         $task = $this->getTask($id);
@@ -239,10 +252,12 @@ class TaskServiceImpl extends BaseService implements TaskService
         $activities = $this->getActivityService()->findActivities($activityIds, true);
         $activities = ArrayToolkit::index($activities, 'id');
 
-        array_walk($tasks, function (&$task) use ($activities) {
-            $activity = $activities[$task['activityId']];
-            $task['activity'] = $activity;
-        }
+        array_walk(
+            $tasks,
+            function (&$task) use ($activities) {
+                $activity = $activities[$task['activityId']];
+                $task['activity'] = $activity;
+            }
         );
 
         return $tasks;
@@ -265,7 +280,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             }
             $task = $this->setTaskLockStatus($tasks, $task);
             //设置第一个发布的任务为解锁的
-            if ($task['status'] == 'published' && empty($isLock)) {
+            if ($task['status'] == 'published' && !$isLock) {
                 $task['lock'] = false;
                 $isLock = true;
             }

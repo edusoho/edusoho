@@ -437,6 +437,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $courseSet;
     }
 
+    public function updateCourseSetTeacherIds($id, $teacherIds)
+    {
+        $courseSet = $this->tryManageCourseSet($id);
+        $courseSet['teacherIds'] = $teacherIds;
+        $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $courseSet);
+        $this->dispatchEvent('course-set.update', new Event($courseSet));
+    }
+
     public function changeCourseSetCover($id, $coverArray)
     {
         if (empty($coverArray)) {

@@ -43,7 +43,11 @@
                      alt="{{ courseSet.title }}" width="100">
               </a>
               <div class="mlm">
-                <a href="{{ path('course_set_show', {id: courseSet.id}) }}">{{ courseSet.title }}</a>
+                {% if courseSet.status == 'published' %}
+                  <a href="{{ path('course_set_show', {id: courseSet.id}) }}">{{ courseSet.title }}</a>
+                {% else %}
+                  <a href="{{ path('course_set_show', {id: courseSet.id, previewAs: 'member'}) }}">{{ courseSet.title }}</a>
+                {% endif %}
                 {% if courseSet.courses|length > 1 %}
                    <span class="label label-warning ml5">{{ '多个教学计划'|trans }}</span>
                 {% endif %}

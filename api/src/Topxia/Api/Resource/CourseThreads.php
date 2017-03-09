@@ -4,8 +4,8 @@ namespace Topxia\Api\Resource;
 
 use Silex\Application;
 use AppBundle\Common\ArrayToolkit;
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Request;
 
 class CourseThreads extends BaseResource
 {
@@ -17,10 +17,10 @@ class CourseThreads extends BaseResource
         $simplify = $request->query->get('simplify', 0);
 
         $conditions = array(
-            'courseId' => $courseId
+            'courseId' => $courseId,
         );
 
-        $total = $this->getCourseThreadService()->searchThreadCount($conditions);
+        $total = $this->getCourseThreadService()->countThreads($conditions);
 
         $courseThreads = $this->getCourseThreadService()->searchThreads($conditions, $sort, $start, $limit);
 
