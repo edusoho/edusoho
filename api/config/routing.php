@@ -123,7 +123,7 @@ $app->post(_u('/emails'), 'res.Emails:post');
 $app->post(_u('/sms_codes'), 'res.SmsCodes:post');
 
 $app->get(_u('/courses/{id}'), 'res.Course:get');
-
+$app->get(_u('/my/learning'), 'res.MyLearning:get');
 
 
 
