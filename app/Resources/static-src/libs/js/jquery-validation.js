@@ -34,10 +34,11 @@ $.validator.setDefaults({
     console.log('submitSuccess');
   },
   submitHandler: function (form) {
+    console.log('submitHandler');
+    
     //规定全局不要用 submit按钮（<input type=’submit’>）提交表单；
     let $form = $(form);
     let settings = this.settings;
-    console.log('submitHandler');
     $(settings.currentDom) ? $(settings.currentDom).button('loading') : '';
     if (settings.ajax) {
       $.post($form.attr('action'), $form.serializeArray(), (data) => {
