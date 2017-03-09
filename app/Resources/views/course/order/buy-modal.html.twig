@@ -1,6 +1,12 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{{'购买课程'|trans}}{% endblock %}
+{% block title %}
+  {% if course.isFree %}
+    {{'加入课程'|trans}}
+  {% else %}
+    {{'购买课程'|trans}}
+  {% endif %}
+{% endblock %}
 
 {% block body %}
   <form id="course-buy-form" class="form-horizontal" method="post"
@@ -17,13 +23,18 @@
       <div class="col-sm-3 control-label">{{'价格'|trans}}</div>
       <div class="col-sm-9 controls money-text">
       	<span class="control-text">
-          {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-            <strong class="money">{{ course.price * setting('coin.cash_rate')}}</strong>
-            <span class="text-muted">{{setting('coin.coin_name')}}</span>
+          {% if course.isFree %}
+            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+              <strong class="money">{{ course.price * setting('coin.cash_rate')}}</strong>
+              <span class="text-muted">{{setting('coin.coin_name')}}</span>
+            {% else %}
+              <strong class="money">{{ course.price }}</strong>
+              <span class="text-muted">{{'元'|trans}}</span>
+            {% endif %}
           {% else %}
-            <strong class="money">{{ course.price }}</strong>
-        		<span class="text-muted">{{'元'|trans}}</span>
+            <strong class="money">{{ '免费'|trans }}</strong>
           {% endif %}
+          
       	</span>
       </div>
     </div>
@@ -39,7 +50,13 @@
 {% endblock %}
 
 {% block footer %}
-  <button id="course-pay" class="btn btn-primary" type="submit" data-loading-text="{{'正在创建订单'|trans}}..." data-toggle="form-submit" data-target="#course-buy-form">{{'去支付'|trans}}</button>
+  <button id="course-pay" class="btn btn-primary" type="submit" data-loading-text="{{'正在创建订单'|trans}}..." data-toggle="form-submit" data-target="#course-buy-form">
+  {% if course.isFree %}
+    {{'免费加入'|trans}}
+  {% else%}
+    {{'去支付'|trans}}
+  {% endif %}
+  </button>
   {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>
     app.lazyLoad = function() {app.load('course/buy-modal')};
