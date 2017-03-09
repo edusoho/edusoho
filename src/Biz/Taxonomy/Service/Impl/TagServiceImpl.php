@@ -2,6 +2,7 @@
 
 namespace Biz\Taxonomy\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Dao\TagDao;
@@ -9,14 +10,15 @@ use Biz\Taxonomy\Dao\TagGroupDao;
 use Biz\Taxonomy\Dao\TagGroupTagDao;
 use Biz\Taxonomy\Dao\TagOwnerDao;
 use Biz\Taxonomy\Service\TagService;
-use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
 class TagServiceImpl extends BaseService implements TagService
 {
     private $allowFields
         = array(
-            'name', 'scope', 'tagNum',
+            'name',
+            'scope',
+            'tagNum',
         );
 
     public function getTag($id)
@@ -36,7 +38,11 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function getTagOwnerRelationByTagIdAndOwner($tagId, $owner)
     {
-        return $this->getTagOwnerDao()->getTagOwnerRelationByTagIdAndOwnerTypeAndOwnerId($tagId, $owner['ownerType'], $owner['ownerId']);
+        return $this->getTagOwnerDao()->getTagOwnerRelationByTagIdAndOwnerTypeAndOwnerId(
+            $tagId,
+            $owner['ownerType'],
+            $owner['ownerId']
+        );
     }
 
     public function getTagByLikeName($name)
@@ -125,6 +131,7 @@ class TagServiceImpl extends BaseService implements TagService
     public function findTagsByIds(array $ids)
     {
         $tags = $this->getTagDao()->findByIds($ids);
+
         return ArrayToolkit::index($tags, 'id');
     }
 
@@ -195,10 +202,12 @@ class TagServiceImpl extends BaseService implements TagService
         $tagGroup = $this->getTagGroupDao()->create($fields);
 
         foreach ($tagIds as $tagId) {
-            $this->getTagGroupTagDao()->create(array(
-                'tagId' => $tagId,
-                'groupId' => $tagGroup['id'],
-            ));
+            $this->getTagGroupTagDao()->create(
+                array(
+                    'tagId' => $tagId,
+                    'groupId' => $tagGroup['id'],
+                )
+            );
         }
 
         $this->getLogService()->info('tagGroup', 'create', "添加标签组{$tagGroup['name']}(#{$tagGroup['id']})");
@@ -323,7 +332,7 @@ class TagServiceImpl extends BaseService implements TagService
             throw $this->createServiceException($this->getKernel()->trans('标签名不能为空，添加失败！'));
         }
 
-        $tag['name'] = (string) $tag['name'];
+        $tag['name'] = (string)$tag['name'];
 
         $exclude = $relatedTag ? $relatedTag['name'] : null;
 
