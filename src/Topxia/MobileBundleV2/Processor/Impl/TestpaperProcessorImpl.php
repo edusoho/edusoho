@@ -408,9 +408,8 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 		$result = array_map(function($item) use ($controller, $isShowTestResult){
 			$item = array_map(function($itemValue) use ($controller, $isShowTestResult){
 				$question = $itemValue['question'];
-				
 				if (isset($question['isDeleted']) && $question['isDeleted'] == true) {
-					return null;
+					return array();
 				}
 				if (isset($itemValue['items'])) {
 					$filterItems = array_values($itemValue['items']);
@@ -428,10 +427,19 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 			}
 			return array_values($item);
 		}, $items);
+
+
 		foreach ($result as $key => $value) {
 			if (empty($value)) {
 				unset($result[$key]);
 			}
+
+			foreach ($result[$key] as $k => $v){
+			    if (empty($v)){
+			        unset($result[$key][$k]);
+                }
+            }
+            sort($result[$key]);
 		}
 		return $result;
 	}
