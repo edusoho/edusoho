@@ -675,6 +675,8 @@ class MemberServiceImpl extends BaseService implements MemberService
         );
         $this->getCourseDao()->update($courseId, $fields);
 
+        $this->dispatchEvent('classroom.course.join', new Event($course, array('member' => $member)));
+
         return $member;
     }
 

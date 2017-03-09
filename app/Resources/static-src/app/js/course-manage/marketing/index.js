@@ -2,6 +2,7 @@ import { TabChange } from '../help';
 
 TabChange();
 
+<<<<<<< HEAD
 let $form = $('#course-marketing-form');
 $('.js-task-price-setting').perfectScrollbar();
 
@@ -35,6 +36,61 @@ let validator = $form.validate({
     buyExpiryTime: '请选择有效的购买截止日期'
   }
 });
+=======
+  init() {
+    $('.js-task-price-setting').perfectScrollbar();
+    let $form = $('#course-marketing-form');
+    $('.js-task-price-setting').perfectScrollbar();
+    TabChange();
+    let validator = $form.validate({
+      onkeyup: false,
+      rules: {
+        originPrice: {
+          required: function() {
+            return $("[name=isFree]:checked").val() == 0;
+          },
+          currency: function() {
+            return $("[name=isFree]:checked").val() == 0;
+          },
+        },
+        tryLookLength: {
+          digits: true,
+          min: 1,
+          max: 10
+        },
+        tryLookLimit: {
+          digits: true
+        },
+        buyExpiryTime: {
+          required: function(){
+            return $('input[name="enableBuyExpiryTime"]:checked').val() == 1;
+          },
+          date: true,
+          feature: true
+        }
+      },
+      messages: {
+        buyExpiryTime: {
+          required: '请选择有效的购买截止日期',
+          date: '请选择有效的购买截止日期'
+        }
+      }
+    });
+
+    $.validator.addMethod(
+      "feature",
+      function(value, element, params) {
+        return value && (new Date(value).getTime()) > Date.now();
+      },
+      Translator.trans('购买截止时间需在当前时间之后')
+    );
+
+    $('.js-task-price-setting').on('click', 'li', function (event) {
+      let $li = $(this).toggleClass('open');
+      let $input = $li.find('input');
+      $input.prop("checked", !$input.is(":checked"))
+    });
+>>>>>>> origin/feature/x8
 
 $('.js-task-price-setting').on('click', 'li', function (event) {
   let $li = $(this).toggleClass('open');
@@ -56,6 +112,7 @@ $('input[name="isFree"]').on('change', function (event) {
   }
 });
 
+<<<<<<< HEAD
 $('input[name="enableBuyExpiryTime"]').on('change', function (event) {
   if ($('input[name="enableBuyExpiryTime"]:checked').val() == 0) {
     $('#buyExpiryTime').addClass('hidden');
@@ -63,6 +120,16 @@ $('input[name="enableBuyExpiryTime"]').on('change', function (event) {
     $('#buyExpiryTime').removeClass('hidden');
   }
 });
+=======
+    $('input[name="buyExpiryTime"]').datetimepicker({
+      format: 'yyyy-mm-dd',
+      language: "zh",
+      minView: 2, //month
+      autoclose: true,
+      endDate: new Date(Date.now() + 86400 * 365 * 100 * 1000)
+    });
+    $('input[name="buyExpiryTime"]').datetimepicker('setStartDate', new Date(Date.now() + 86400 * 1000));
+>>>>>>> origin/feature/x8
 
 $('input[name="buyExpiryTime"]').datetimepicker({
   format: 'yyyy-mm-dd',
