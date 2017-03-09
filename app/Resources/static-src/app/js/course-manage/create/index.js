@@ -1,42 +1,17 @@
-import { TabChange } from '../help';
-jQuery.validator.addMethod("max_year", function (value, element) {
-  return this.optional(element) || value < 100000;
-}, "有效期最大值不能超过99,999天");
-
-
 class Creator {
   constructor() {
     this.init();
   }
 
   init() {
-    //init UI
-    this._initDatePicker('#expiryStartDate');
-    this._initDatePicker('#expiryEndDate');
-    TabChange();
+    this.initDatePicker('#expiryStartDate');
+    this.initDatePicker('#expiryEndDate');
+    this.checkBoxChange();
+    this.initValidator();
+  }
 
-    $('input[name="expiryMode"]').on('change', function(event){
-      if($('input[name="expiryMode"]:checked').val() == 'date'){
-        $('#expiry-days').removeClass('hidden').addClass('hidden');
-        $('#expiry-date').removeClass('hidden');
-      }else{
-        $('#expiry-date').removeClass('hidden').addClass('hidden');
-        $('#expiry-days').removeClass('hidden');
-      }
-    }); 
-
-    $('input[name="learnMode"]').on('change', function(event){
-      if($('input[name="learnMode"]:checked').val() == 'freeMode'){
-        $('#learnLockModeHelp').removeClass('hidden').addClass('hidden');
-        $('#learnFreeModeHelp').removeClass('hidden');
-      }else{
-        $('#learnFreeModeHelp').removeClass('hidden').addClass('hidden');
-        $('#learnLockModeHelp').removeClass('hidden');
-      }
-    }); 
-
+  initValidator() {
     let $form = $("#course-create-form");
-    //init validator
     let validator = $form.validate({
       onkeyup: false,
       groups: {
@@ -77,7 +52,7 @@ class Creator {
 
     $.validator.addMethod(
       "before",
-      function(value, element, params) {
+      function (value, element, params) {
         if ($('input[name="expiryMode"]:checked').val() !== 'date') {
           return true;
         }
@@ -88,7 +63,7 @@ class Creator {
 
     $.validator.addMethod(
       "after",
-      function(value, element, params) {
+      function (value, element, params) {
         if ($('input[name="expiryMode"]:checked').val() !== 'date') {
           return true;
         }
@@ -97,7 +72,7 @@ class Creator {
       Translator.trans('结束日期应晚于开始日期')
     );
 
-    $('#course-submit').click(function(evt) {
+    $('#course-submit').click(function (evt) {
       if (validator.form()) {
         $(evt.currentTarget).button('loading');
         $form.submit();
@@ -105,14 +80,38 @@ class Creator {
     });
   }
 
-  _initDatePicker($id) {
+
+  checkBoxChange() {
+    $('input[name="expiryMode"]').on('change', function (event) {
+      if ($('input[name="expiryMode"]:checked').val() == 'date') {
+        $('#expiry-days').removeClass('hidden').addClass('hidden');
+        $('#expiry-date').removeClass('hidden');
+      } else {
+        $('#expiry-date').removeClass('hidden').addClass('hidden');
+        $('#expiry-days').removeClass('hidden');
+      }
+    });
+
+    $('input[name="learnMode"]').on('change', function (event) {
+      if ($('input[name="learnMode"]:checked').val() == 'freeMode') {
+        $('#learnLockModeHelp').removeClass('hidden').addClass('hidden');
+        $('#learnFreeModeHelp').removeClass('hidden');
+      } else {
+        $('#learnFreeModeHelp').removeClass('hidden').addClass('hidden');
+        $('#learnLockModeHelp').removeClass('hidden');
+      }
+    });
+  }
+
+
+  initDatePicker($id) {
     let $picker = $($id);
     $picker.datetimepicker({
       format: 'yyyy-mm-dd',
       language: "zh",
       minView: 2, //month
       autoclose: true,
-      endDate: new Date(Date.now() + 86400*365*100*1000)
+      endDate: new Date(Date.now() + 86400 * 365 * 100 * 1000)
     });
     $picker.datetimepicker('setStartDate', new Date());
   }
