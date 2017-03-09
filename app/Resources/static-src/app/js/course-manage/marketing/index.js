@@ -18,7 +18,7 @@ class Marketing {
           required: function() {
             return $("[name=isFree]:checked").val() == 0;
           },
-          positive_currency: function() {
+          currency: function() {
             return $("[name=isFree]:checked").val() == 0;
           },
         },
@@ -34,13 +34,25 @@ class Marketing {
           required: function(){
             return $('input[name="enableBuyExpiryTime"]:checked').val() == 1;
           },
-          date: true
+          date: true,
+          feature: true
         }
       },
       messages: {
-        buyExpiryTime: '请选择有效的购买截止日期'
+        buyExpiryTime: {
+          required: '请选择有效的购买截止日期',
+          date: '请选择有效的购买截止日期'
+        }
       }
     });
+
+    $.validator.addMethod(
+      "feature",
+      function(value, element, params) {
+        return value && (new Date(value).getTime()) > Date.now();
+      },
+      Translator.trans('购买截止时间需在当前时间之后')
+    );
 
     $('.js-task-price-setting').on('click', 'li', function (event) {
       let $li = $(this).toggleClass('open');
@@ -77,7 +89,7 @@ class Marketing {
       autoclose: true,
       endDate: new Date(Date.now() + 86400 * 365 * 100 * 1000)
     });
-    $('input[name="buyExpiryTime"]').datetimepicker('setStartDate', new Date());
+    $('input[name="buyExpiryTime"]').datetimepicker('setStartDate', new Date(Date.now() + 86400 * 1000));
 
     $('input[name="tryLookable"]').on('change', function (event) {
       console.log('tryLook : ', $('input[name="tryLookable"]:checked').val());
