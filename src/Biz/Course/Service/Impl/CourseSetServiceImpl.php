@@ -17,6 +17,9 @@ use Biz\Course\Service\ReviewService;
 use Biz\Course\Service\MaterialService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\CourseNoteService;
+use Biz\Course\Service\CourseDeleteService;
+use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
@@ -31,11 +34,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if (!is_numeric($number)) {
             throw $this->createAccessDeniedException('recmendNum should be number!');
         }
+
         $course = $this->getCourseSetDao()->update(
             $id,
             array(
                 'recommended' => 1,
-                'recommendedSeq' => (int)$number,
+                'recommendedSeq' => (int) $number,
                 'recommendedTime' => time(),
             )
         );
@@ -270,8 +274,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
+        $sets = $this->findCourseSetsByIds($courseSetIds);
 
-        return $this->findCourseSetsByIds($courseSetIds);
+        return $sets;
     }
 
     public function findCourseSetsByIds(array $ids)
@@ -312,6 +317,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 'title',
             )
         );
+
         $courseSet['status'] = 'draft';
         $courseSet['creator'] = $this->getCurrentUser()->getId();
         $created = $this->getCourseSetDao()->create($courseSet);
