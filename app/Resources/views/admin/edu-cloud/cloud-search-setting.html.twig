@@ -80,7 +80,7 @@
               </div>
             {% elseif setting('cloud_search.search_enabled') and setting('cloud_search.status') == 'ok' %}
               <div class="col-md-2 control-cloud success">
-                <span class="color-success">{{'已启用'|trans}}</span>
+                <span class="text-success">{{'已启用'|trans}}</span>
               </div>
               <div class="controls col-md-8 cloud-warning">
                 <a class="btn btn-default btn-sm mhs" href="{{ path('admin_edu_cloud_search_close') }}">{{'关闭'|trans}}</a>

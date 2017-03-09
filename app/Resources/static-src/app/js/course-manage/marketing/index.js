@@ -15,10 +15,17 @@ class Marketing {
       onkeyup: false,
       rules: {
         originPrice: {
-          currency: true
+          required: function() {
+            return $("[name=isFree]:checked").val() == 0;
+          },
+          positive_currency: function() {
+            return $("[name=isFree]:checked").val() == 0;
+          },
         },
         tryLookLength: {
-          digits: true
+          digits: true,
+          min: 1,
+          max: 10
         },
         tryLookLimit: {
           digits: true
@@ -34,6 +41,7 @@ class Marketing {
         buyExpiryTime: '请选择有效的购买截止日期'
       }
     });
+
     $('.js-task-price-setting').on('click', 'li', function (event) {
       let $li = $(this).toggleClass('open');
       let $input = $li.find('input');
@@ -72,8 +80,10 @@ class Marketing {
     $('input[name="buyExpiryTime"]').datetimepicker('setStartDate', new Date());
 
     $('input[name="tryLookable"]').on('change', function (event) {
+      console.log('tryLook : ', $('input[name="tryLookable"]:checked').val());
       if ($('input[name="tryLookable"]:checked').val() == 1) {
         $('.js-enable-try-look').removeClass('hidden');
+        $('#tryLookLength').val('1');
       } else {
         $('.js-enable-try-look').addClass('hidden');
       }
@@ -100,7 +110,6 @@ class Marketing {
 
     $('#course-submit').click(function (evt) {
       if (validator.form()) {
-        $(evt.currentTarget).button('loading');
         $form.submit();
       }
     });

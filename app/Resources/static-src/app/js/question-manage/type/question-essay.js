@@ -8,14 +8,14 @@ class Essay extends QuestionFormBase {
     this.initAnalysisEditor();
 
     this.answerFieldId = 'question-answer-field';
-    this.$answerField = $('#'+this.answerFieldId);
+    this.$answerField = $('#' + this.answerFieldId);
 
     this.init();
   }
 
   init() {
-    this.$answerField.rules('add',{
-      required:true
+    this.$answerField.rules('add', {
+      required: true
     })
 
     let editor = CKEDITOR.replace(this.answerFieldId, {
@@ -24,12 +24,12 @@ class Essay extends QuestionFormBase {
       height: this.$answerField.height()
     });
 
-    editor.on( 'change', () => {    
+    editor.on('change', () => {
       this.$answerField.val(editor.getData());
     });
-    // editor.on('blur', function() {
-    //   validator.form();
-    // });
+    editor.on('blur', () => {
+      this.$answerField.val(editor.getData());
+    });
   }
 }
 

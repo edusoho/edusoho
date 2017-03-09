@@ -58,16 +58,16 @@
                         {% endif %}
                         left-menu"></i>
                         {% if  task_lock is empty %}
-                          <a class="text-overflow title"
+                          <a class="title"
                              href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">
                             <span class="task-overflow ml5">{{ task.title }}</span>
                           </a>
                         {% else %}
-                          <span class="text-overflow title"><span
+                          <span class="title"><span
                                 class="task-overflow ml5">{{ task.title }}</span></span>
                         {% endif %}
                         {% set meta =  activity_meta(task.activity.mediaType) %}
-                        <span class="mouse-leave es-icon es-icon {{ meta.icon }} right-menu task-type-icon "
+                        <span class="es-icon es-icon {{ meta.icon }} right-menu task-type-icon "
                               data-toggle="tooltip" data-placement="top" title=""
                               data-original-title="{{ meta.name }}任务"></span>
                       </li>
@@ -98,12 +98,12 @@
           {% endif %}
           left-menu"></i>
           {% if task_lock is empty %}
-            <a class="text-overflow title"
+            <a class="title"
                href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">{{ task.title }}</a>
           {% else %}
-            <span class="text-overflow title">{{ task.title }}</span>
+            <span class="title">{{ task.title }}</span>
           {% endif %}
-          <span class="right-menu mouse-leave">
+          <span class="right-menu">
           {{ task.activity.length|activity_length_format }}
             <i class="es-icon es-icon {{ meta.icon|default('') }} mlm"
                data-toggle="tooltip" data-placement="top"
