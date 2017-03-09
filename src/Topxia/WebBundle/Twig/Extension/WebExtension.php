@@ -483,6 +483,7 @@ class WebExtension extends \Twig_Extension
 
         $plugins = $this->container->get('kernel')->getPlugins();
         $names   = array();
+        $newPluginNames = array();
 
         foreach ($plugins as $plugin) {
             if (is_array($plugin)) {
@@ -490,7 +491,12 @@ class WebExtension extends \Twig_Extension
                     continue;
                 }
 
-                $names[] = $plugin['code'];
+                if ($plugin['protocol'] == 3) {
+                    $newPluginNames[] = $plugin['code'].'plugin';
+                } else {
+                    $names[] = $plugin['code'];
+                }
+
             } else {
                 $names[] = $plugin;
             }
@@ -514,6 +520,11 @@ class WebExtension extends \Twig_Extension
         foreach ($names as $name) {
             $name                   = strtolower($name);
             $paths["{$name}bundle"] = "{$basePath}/bundles/{$name}/js";
+        }
+
+        foreach ($newPluginNames as $newPluginName) {
+            $newPluginName = strtolower($newPluginName);
+            $paths["{$newPluginName}"] = "{$basePath}/bundles/{$newPluginName}/js";
         }
 
         // $paths['balloon-video-player'] = 'http://player-cdn.edusoho.net/balloon-video-player';
