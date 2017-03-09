@@ -37,10 +37,10 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         // $this->c2courseSetMigrate();
         // $this->c2courseMigrate();
-        // $this->c2CourseLessonMigrate();
+        $this->c2CourseLessonMigrate();
         // $this->c2testpaperMigrate();
         $this->c2QuestionMigrate();
-        $this->migrate();
+        // $this->migrate();
     }
 
     protected function c2courseSetMigrate()
@@ -82,7 +82,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `maxCoursePrice` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '已发布教学计划的最高价格',
                 `teacherIds` varchar(1024) DEFAULT null,
                 PRIMARY KEY (`id`)
-              ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+              ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
 
             $result = $this->getConnection()->exec($sql);
         }
@@ -218,7 +218,7 @@ class EduSohoUpgrade extends AbstractUpdater
                   `updatedTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间',
                   `creator` int(11) DEFAULT NULL,
                   PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
             $result = $this->getConnection()->exec($sql);
         }
@@ -362,6 +362,137 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->c2CourseTaskView();
 
         $this->c2CourseTaskResult();
+
+        //练习
+        $this->c2Exercise();
+
+        //作业
+        $this->c2Homework();
+
+        //course_material
+
+        $this->c2CourseMaterial();
+
+        $this->c2TagOwner();
+
+    }
+
+    protected function c2TagOwner()
+    {
+
+        $this->exec(
+            "
+        update `tag_owner` set `ownerType` = 'coruseSet' where `ownerType`='coruse';
+        "
+        );
+    }
+
+    protected function c2CourseMaterial()
+    {
+
+        if (!$this->isTableExist('download_activity')) {
+            $this->exec(
+                "
+                CREATE TABLE `download_activity` (
+                      `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+                      `mediaCount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料数',
+                      `createdTime` int(10) unsigned NOT NULL,
+                      `updatedTime` int(10) unsigned NOT NULL,
+                      `fileIds` varchar(1024) DEFAULT NULL COMMENT '下载资料Ids',
+                      PRIMARY KEY (`id`)
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            "
+            );
+        }
+
+        if (!$this->isFieldExist('download_activity', 'lessonId')) {
+            $this->exec("alter table `download_activity` add `lessonId` int(10) ;");
+        }
+
+        if (!$this->isFieldExist('course_material', 'courseSetId')) {
+            $this->exec("alter table `course_material` add `courseSetId` int(10) ;");
+        }
+        $this->exec(" UPDATE `course_material` SET `courseSetId` = courseId;");
+        $this->exec(" UPDATE `course_material` SET  `source`= 'courseactivity' WHERE source= 'courselesson';");
+
+
+        //查找有复习资料的记录
+        $downloadMaterials = $this->getConnection()->fetchAll(
+            " SELECT *  FROM course_material WHERE source ='coursematerial' AND lessonid >0"
+        );
+
+        $downloadMaterials = \AppBundle\Common\ArrayToolkit::group($downloadMaterials, 'lessonId');
+
+        //获取已经处理过的下载资料
+        $downloadActivities = $this->getConnection()->fetchAll('select * from download_activity');
+        $downloadActivities = \AppBundle\Common\ArrayToolkit::column($downloadActivities, 'lessonId');
+        foreach ($downloadMaterials as $lessonId => $materials) {
+
+            array_filter(
+                $materials,
+                function (&$material) {
+                    if (empty($material['fileId'])) {
+                        $material['fileId'] = $material['link'];
+                    }
+                }
+            );
+            if (in_array($lessonId, $downloadActivities)) {
+                continue;
+            }
+
+            $fileCount = count($materials);
+            $fileIds = \AppBundle\Common\ArrayToolkit::column($materials, 'fileId');
+            $material = array_pop($materials);
+
+            $download = array(
+                'mediaCount' => $fileCount,
+                'createdTime' => $material['createdTime'],
+                'updatedTime' => $material['createdTime'],
+                'fileIds' => json_encode($fileIds),
+                'lessonId' => $lessonId,
+            );
+
+            $this->getConnection()->insert('download_activity', $download);
+            $downloadId = $this->getConnection()->lastInsertId();
+
+            $activity = array(
+                'title' => '下载',
+                'mediaId' => $downloadId,
+                'mediaType' => 'download',
+                'fromCourseId' => $material['courseId'],
+                'fromCourseSetId' => $material['courseSetId'],
+                'fromUserId' => $material['userId'],
+                'createdTime' => $material['createdTime'],
+                'updatedTime' => $material['createdTime'],
+
+            );
+
+            $this->getConnection()->insert('activity', $activity);
+            $activityId = $this->getConnection()->lastInsertId();
+
+            $lesson = $this->getConnection()->fetchAssoc("SELECT * FROM `course_lesson` WHERE id = {$lessonId}  ");
+
+            $task = array(
+                'courseId' => $lesson['courseId'],
+                'seq' => $lesson['seq'],
+                'categoryId' => $lesson['chapterId'],
+                'activityId' => $activityId,
+                'title' => '下载',
+                'status' => $lesson['status'],
+                'createdUserId' => $lesson['userId'],
+                'createdTime' => $lesson['createdTime'],
+                'updatedTime' => $lesson['updatedTime'],
+                'mode' => 'preparation',
+                'number' => $lesson['number'],
+                'type' => 'download',
+            );
+
+            $this->getConnection()->insert('course_task', $task);
+        }
+
+        $this->getConnection()->exec(
+            "UPDATE `course_task` ck , `c2_course` ce SET ck.`fromCourseSetId` = ce.`courseSetId` WHERE ck.`courseId` =  ce.id AND ck.`fromCourseSetId` >0 ;"
+        );
     }
 
     /**
@@ -370,7 +501,8 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function c2CourseTaskMigrate()
     {
         if (!$this->isTableExist('course_task')) {
-            $this->getConnection()->exec("
+            $this->getConnection()->exec(
+                "
                   CREATE TABLE `course_task` (
                   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
                   `courseId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属课程的id',
@@ -394,14 +526,19 @@ class EduSohoUpgrade extends AbstractUpdater
                   `length` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '若是视频类型，则表示时长；若是ppt，则表示页数；由具体的活动业务来定义',
                   `maxOnlineNum` int(11) unsigned DEFAULT '0' COMMENT '任务最大可同时进行的人数，0为不限制',
                   `copyId` int(10) NOT NULL DEFAULT '0' COMMENT '复制来源task的id',
-                  `lessonId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '老课时Id',
                   PRIMARY KEY (`id`),
                   KEY `seq` (`seq`)
-                ) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8;
-            ");
+                ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+            "
+            );
         }
 
-        $this->getConnection()->exec("
+        if (!$this->isFieldExist('course_task', 'lessonId')) {
+            $this->exec("alter table `course_task` add `lessonId` int(10) ;");
+        }
+
+        $this->getConnection()->exec(
+            "
             insert into course_task(
                  `id`,
                  `courseId`,
@@ -445,15 +582,34 @@ class EduSohoUpgrade extends AbstractUpdater
                 `copyId`,
                 `id` as `lessonId`
             from `course_lesson` WHERE `id` NOT IN (SELECT id FROM `course_task`)
-        ");
+        "
+        );
 
-        $this->getConnection()->exec("update `course_task` AS  `ct` set `ct`.fromCourseSetId   = (select `courseSetId` from `c2_course` AS `ce` where `ct`.courseId = `ce`.id)");
+        $this->getConnection()->exec(
+            "UPDATE `course_task` ck , `c2_course` ce SET ck.`fromCourseSetId` = ce.`courseSetId` WHERE ck.`courseId` =  ce.id AND ck.`fromCourseSetId` >0 ;"
+        );
+
+
+        $tasks = $this->getConnection()->fetchAll('select * from `course_task`');
+
+        foreach ($tasks as $task) {
+            $chapter = array(
+                'courseId' => $task['fromCourseId'],
+                'title' => $task['title'],
+                'type' => 'lesson',
+            );
+            $chapter = $this->getConnection()->insert('course_chapter', $chapter);
+            $task['categoryId'] = $chapter['id'];
+
+            $this->getConnection()->update('course_task', array('categoryId' => $chapter['id']));
+        }
     }
 
     protected function c2Activity()
     {
         if (!$this->isTableExist('activity')) {
-            $this->getConnection()->exec("
+            $this->getConnection()->exec(
+                "
              CREATE TABLE `activity` (
                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
                   `title` varchar(255) NOT NULL COMMENT '标题',
@@ -471,10 +627,12 @@ class EduSohoUpgrade extends AbstractUpdater
                   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
                   `copyId` int(10) NOT NULL DEFAULT '0' COMMENT '复制来源activity的id',
                   PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=utf8;
-            ");
+                ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+            "
+            );
 
-            $this->getConnection()->exec("
+            $this->getConnection()->exec(
+                "
             insert into `activity`(
                 `id`,
                 `title` ,
@@ -506,21 +664,26 @@ class EduSohoUpgrade extends AbstractUpdater
                 `updatedTime`,
                 `copyId`
             from `course_lesson` where `id` not in (select id from `activity`);
-
-        ");
+        "
+            );
 
             //update activityId in table course_task
-            $this->getConnection()->exec("update `course_task`  ck set  `activityId` = (select `id` from  `activity` ay  where  ck.id = ay.id)
-            ");
+            $this->getConnection()->exec(
+                "update `course_task`  ck set  `activityId` = (select `id` from  `activity` ay  where  ck.id = ay.id)
+            "
+            );
             //courseSetId
-            $this->getConnection()->exec("update `activity` AS  `ct` set `ct`.fromCourseSetId   = (select `courseSetId` from `c2_course` AS `ce` where `ct`.fromCourseId = `ce`.id)");
+            $this->getConnection()->exec(
+                "update `activity` AS  `ct` set `ct`.fromCourseSetId   = (select `courseSetId` from `c2_course` AS `ce` where `ct`.fromCourseId = `ce`.id)"
+            );
         }
     }
 
     protected function c2VideoActivity()
     {
         if (!$this->isTableExist('video_activity')) {
-            $this->getConnection()->exec("
+            $this->getConnection()->exec(
+                "
                 CREATE TABLE `video_activity` (
                   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
                   `mediaSource` varchar(32) NOT NULL DEFAULT '' COMMENT '媒体文件来源(self:本站上传,youku:优酷)',
@@ -529,13 +692,15 @@ class EduSohoUpgrade extends AbstractUpdater
                   `finishType` varchar(60) DEFAULT NULL COMMENT '完成类型',
                   `finishDetail` text COMMENT '完成条件',
                   PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COMMENT='视频活动扩展表';
-            ");
+                ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='视频活动扩展表';
+            "
+            );
         }
         if (!$this->isFieldExist('video_activity', 'lessonId')) {
             $this->exec("alter table `video_activity` add `lessonId` int(10) ;");
         }
-        $this->getConnection()->exec("
+        $this->getConnection()->exec(
+            "
             insert into `video_activity` (
                 `mediaSource`,
                 `mediaId`,
@@ -552,18 +717,22 @@ class EduSohoUpgrade extends AbstractUpdater
                 '1',
                 `id`
             from `course_lesson` where  type ='video' and   `id` not in (select `lessonId` from `video_activity`);
-        ");
+        "
+        );
 
-        $this->getConnection()->exec("
+        $this->getConnection()->exec(
+            "
             UPDATE  `activity` AS ay ,`video_activity` AS vy   SET ay.`mediaId`  =  vy.id
             WHERE ay.id  = vy.lessonId   AND ay.`mediaType` = 'video';
-        ");
+        "
+        );
     }
 
     protected function c2TextActivity()
     {
         if (!$this->isTableExist("text_activity")) {
-            $this->getConnection()->exec("
+            $this->getConnection()->exec(
+                "
             CREATE TABLE `text_activity` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `finishType` varchar(32) NOT NULL DEFAULT '' COMMENT 'click, time',
@@ -572,15 +741,17 @@ class EduSohoUpgrade extends AbstractUpdater
               `createdUserId` int(11) NOT NULL,
               `updatedTime` int(11) DEFAULT NULL,
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
-            ");
+            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+            "
+            );
         }
 
         if (!$this->isFieldExist('text_activity', 'lessonId')) {
             $this->exec("alter table `text_activity` add `lessonId` int(10) ;");
         }
 
-        $this->getConnection()->exec("
+        $this->getConnection()->exec(
+            "
             INSERT INTO `text_activity` (
                 `finishType`,
                 `finishDetail`,
@@ -597,31 +768,37 @@ class EduSohoUpgrade extends AbstractUpdater
                 `updatedTime`,
                 `id`
             FROM `course_lesson` WHERE  `type`='text' AND  `id` NOT IN (SELECT `lessonId` FROM `text_activity`);
-        ");
+        "
+        );
 
-        $this->getConnection()->exec("
+        $this->getConnection()->exec(
+            "
              UPDATE  `activity` AS ay ,`text_activity` AS ty   SET ay.`mediaId`  =  ty.id
              WHERE ay.id  = ty.lessonId   AND ay.`mediaType` = 'text';
-        ");
+        "
+        );
     }
 
     protected function c2AudioActivity()
     {
         if (!$this->isTableExist('audio_activity')) {
-            $this->exec("
+            $this->exec(
+                "
                 CREATE TABLE `audio_activity` (
                   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
                   `mediaId` int(10) DEFAULT NULL COMMENT '媒体文件ID',
                   PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='音频活动扩展表';
-            ");
+                ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='音频活动扩展表';
+            "
+            );
         }
 
         if (!$this->isFieldExist('audio_activity', 'lessonId')) {
             $this->exec("alter table `audio_activity` add `lessonId` int(10) ;");
         }
 
-        $this->exec("
+        $this->exec(
+            "
             insert into `audio_activity`
             (
                 `mediaId`,
@@ -631,12 +808,15 @@ class EduSohoUpgrade extends AbstractUpdater
               `mediaId`,
               `id`
             from `course_lesson` where  type ='audio' and   `id` not in (select `lessonId` from `audio_activity`);
-        ");
+        "
+        );
 
-        $this->exec("
+        $this->exec(
+            "
           UPDATE  `activity` AS ay ,`audio_activity` AS ty   SET ay.`mediaId`  =  ty.id
           WHERE ay.id  = ty.lessonId   AND ay.`mediaType` = 'audio';
-         ");
+         "
+        );
 
         // $this->getConnection()->exec("alter table `audio_activity` add `lessonId` int(10) ;");
     }
@@ -644,7 +824,8 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function c2FlashActivity()
     {
         if (!$this->isTableExist("flash_activity")) {
-            $this->exec("
+            $this->exec(
+                "
                 CREATE TABLE `flash_activity` (
                   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                   `mediaId` int(11) NOT NULL,
@@ -655,14 +836,16 @@ class EduSohoUpgrade extends AbstractUpdater
                   `updatedTime` int(11) DEFAULT NULL,
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
+            "
+            );
         }
 
         if (!$this->isFieldExist('flash_activity', 'lessonId')) {
             $this->exec("alter table `flash_activity` add `lessonId` int(10) ;");
         }
 
-        $this->exec("
+        $this->exec(
+            "
             INSERT INTO `flash_activity`
             (
             `mediaId`,
@@ -682,18 +865,22 @@ class EduSohoUpgrade extends AbstractUpdater
                 `updatedTime`,
                 `id`
             FROM `course_lesson` WHERE TYPE ='flash' AND id NOT IN (SELECT `lessonId` FROM `flash_activity`)
-        ");
+        "
+        );
 
-        $this->exec("
+        $this->exec(
+            "
           UPDATE  `activity` AS ay ,`flash_activity` AS ty   SET ay.`mediaId`  =  ty.id
           WHERE ay.id  = ty.lessonId   AND ay.`mediaType` = 'flash';
-         ");
+         "
+        );
     }
 
     protected function c2PPtActivity()
     {
         if (!$this->isTableExist('ppt_activity')) {
-            $this->exec("
+            $this->exec(
+                "
                 CREATE TABLE `ppt_activity` (
                   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                   `mediaId` int(11) NOT NULL,
@@ -704,14 +891,16 @@ class EduSohoUpgrade extends AbstractUpdater
                   `updatedTime` int(11) unsigned NOT NULL DEFAULT '0',
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
+            "
+            );
         }
 
         if (!$this->isFieldExist('ppt_activity', 'lessonId')) {
             $this->exec("alter table `ppt_activity` add `lessonId` int(10) ;");
         }
 
-        $this->exec("
+        $this->exec(
+            "
             insert into `ppt_activity`
             (
             `mediaId`,
@@ -731,18 +920,22 @@ class EduSohoUpgrade extends AbstractUpdater
                 `updatedTime`,
                 `id`
             from `course_lesson` where type ='ppt' and id not in (select `lessonId` from `ppt_activity`);
-        ");
+        "
+        );
 
-        $this->exec("
+        $this->exec(
+            "
           UPDATE  `activity` AS ay ,`ppt_activity` AS ty   SET ay.`mediaId`  =  ty.id
           WHERE ay.id  = ty.lessonId   AND ay.`mediaType` = 'ppt';
-         ");
+         "
+        );
     }
 
     protected function c2DocActivity()
     {
         if (!$this->isTableExist('doc_activity')) {
-            $this->exec("
+            $this->exec(
+                "
                 CREATE TABLE `doc_activity` (
                   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                   `mediaId` int(11) NOT NULL,
@@ -752,15 +945,17 @@ class EduSohoUpgrade extends AbstractUpdater
                   `createdUserId` int(11) NOT NULL,
                   `updatedTime` int(11) DEFAULT NULL,
                   PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-            ");
+                ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+            "
+            );
         }
 
         if (!$this->isFieldExist('doc_activity', 'lessonId')) {
             $this->exec("alter table `doc_activity` add `lessonId` int(10) ;");
         }
 
-        $this->exec("
+        $this->exec(
+            "
             INSERT INTO `doc_activity`
             (
             `mediaId`,
@@ -780,18 +975,22 @@ class EduSohoUpgrade extends AbstractUpdater
                 `updatedTime`,
                 `id`
             FROM `course_lesson` WHERE TYPE ='document' AND id NOT IN (SELECT `lessonId` FROM `doc_activity`)
-        ");
+        "
+        );
 
-        $this->exec("
+        $this->exec(
+            "
           UPDATE  `activity` AS ay ,`doc_activity` AS ty   SET ay.`mediaId`  =  ty.id
           WHERE ay.id  = ty.lessonId   AND ay.`mediaType` = 'doc';
-         ");
+         "
+        );
     }
 
     protected function c2CourseTaskView()
     {
         if (!$this->isTableExist('course_task_view')) {
-            $this->exec("
+            $this->exec(
+                "
                 CREATE TABLE `course_task_view` (
                   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                   `courseSetId` int(10) NOT NULL,
@@ -805,10 +1004,12 @@ class EduSohoUpgrade extends AbstractUpdater
                   `createdTime` int(10) unsigned NOT NULL,
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
+            "
+            );
         }
 
-        $this->exec("
+        $this->exec(
+            "
             INSERT INTO `course_task_view`
             (
                 `id`,
@@ -834,15 +1035,19 @@ class EduSohoUpgrade extends AbstractUpdater
                 `fileSource`,
                 `createdTime`
             FROM `course_lesson_view` WHERE id NOT IN (SELECT id FROM `course_task_view`);
-        ");
+        "
+        );
 
-        $this->exec("UPDATE `course_task_view` AS cw , `c2_course` c SET cw.`courseSetId` = c.`courseSetId` WHERE cw.`courseId` = c.id ;");
+        $this->exec(
+            "UPDATE `course_task_view` AS cw , `c2_course` c SET cw.`courseSetId` = c.`courseSetId` WHERE cw.`courseId` = c.id ;"
+        );
     }
 
     protected function c2CourseTaskResult()
     {
         if (!$this->isTableExist('course_task_result')) {
-            $this->exec("
+            $this->exec(
+                "
                 CREATE TABLE `course_task_result` (
                   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
                   `activityId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '活动的id',
@@ -856,11 +1061,13 @@ class EduSohoUpgrade extends AbstractUpdater
                   `time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务进行时长（分钟）',
                   `watchTime` int(10) unsigned NOT NULL DEFAULT '0',
                   PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8;
-            ");
+                ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+            "
+            );
         }
 
-        $this->exec("
+        $this->exec(
+            "
             insert into `course_task_result`
             (
                 `id`,
@@ -886,16 +1093,270 @@ class EduSohoUpgrade extends AbstractUpdater
                 `learnTime`,
                 `watchTime`
             from `course_lesson_learn` where id not in (select id from `course_task_result`);
-        ");
+        "
+        );
 
-        $this->exec("
+        $this->exec(
+            "
             UPDATE `course_task_result` cl,  `course_task` ck SET cl.`activityId`= ck.`activityId` WHERE cl.`courseTaskId` = ck.`id`;
-        ");
+        "
+        );
+    }
+
+    /**
+     * 将原来的练习转为activity 和 task
+     */
+    protected function c2Exercise()
+    {
+        if (!$this->isFieldExist('activity', 'exerciseId')) {
+            $this->exec("alter table `activity` add `exerciseId` int(10) ;");
+            $this->exec("alter table `course_task` add `exerciseId` int(10) ;");
+        }
+
+        //update activity
+        $this->getConnection()->exec(
+            "
+            INSERT INTO `activity`
+            (
+                `title`,
+                `remark` ,
+                `mediaId` ,
+                `mediaType`,
+                `content`,
+                `length`,
+                `fromCourseId`,
+                `fromUserId`,
+                `startTime`,
+                `endTime`,
+                `createdTime`,
+                `updatedTime`,
+                `copyId`,
+                `exerciseId`
+            )
+            SELECT 
+                '练习',
+                `summary`,
+                `eexerciseId`,
+                'exercise',
+                `summary`,
+                `length`,
+                `courseId`,
+                `userId`,
+                `startTime`,
+                `endTime`,
+                `createdTime`,
+                `updatedTime`,
+                `ecopyId`,
+                `eexerciseId`
+            FROM (SELECT  ee.id AS eexerciseId, ee.`copyId` AS ecopyId , ce.*  
+            FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid) lesson  
+            WHERE lesson.eexerciseId NOT IN (SELECT exerciseId FROM activity WHERE exerciseId IS NOT NULL );
+                    "
+        );
+
+        //update fromCourseSetId
+        $this->exec(
+            "
+            UPDATE activity  AS a ,  `c2_course` AS c  SET a.`fromCourseSetId` = c.`courseSetId` 
+            WHERE  a.`mediaType` ='exercise' and a.`fromCourseSetId` = 0  AND a.`fromCourseId` = c.id;
+        "
+        );
+
+
+        $this->exec(
+            "
+            insert into course_task
+              (
+                `courseId`,
+                `categoryId`,
+                `seq`,
+                `title`,
+                `isFree`,
+                `startTime`,
+                `endTime`,
+                `status`,
+                `createdUserId`,
+                `createdTime`,
+                `updatedTime`,
+                `mode` ,
+                `number`,
+                `type`,
+                `length` ,
+                `maxOnlineNum`,
+                `copyId`,
+                `exerciseId`
+              ) 
+            select
+              `courseId`,
+              `chapterId`,
+              `seq`,
+              '练习',
+              `free`,
+              `startTime`,
+              `endTime`,
+              `status`,
+              `userId`,
+              `createdTime`,
+              `updatedTime`,
+              'exercise',
+              `number`,
+              'exercise',
+              `length`,
+              `maxOnlineNum`,
+              `copyId`,
+              `eexerciseId`
+              FROM (SELECT  ee.id AS eexerciseId, ee.`copyId` AS ecopyId , ce.*  
+                FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid) lesson  
+                    WHERE lesson.eexerciseId NOT IN (SELECT exerciseId FROM course_task WHERE exerciseId IS NOT NULL );
+            "
+        );
+
+
+        $this->exec(
+            "
+            UPDATE course_task  AS a ,  `c2_course` c  SET a.`fromCourseSetId` = c.`courseSetId` 
+            WHERE  a.`type` ='exercise' and a.`fromCourseSetId` = 0  AND a.`courseId` = c.id;
+        "
+        );
+
+        $this->exec(
+            "UPDATE `course_task` AS ck, activity AS a SET ck.`activityId` = a.`id` 
+          WHERE a.`exerciseId` = ck.`exerciseId` AND  ck.type = 'exercise' AND  ck.`activityId` = 0
+            "
+        );
+
+    }
+
+
+    /**
+     * 将原来的练习转为activity 和 task
+     */
+    protected function c2Homework()
+    {
+        if (!$this->isFieldExist('activity', 'exerciseId')) {
+            $this->exec("alter table `activity` add `homeworkId` int(10) ;");
+            $this->exec("alter table `course_task` add `homeworkId` int(10) ;");
+        }
+
+        //update activity
+        $this->getConnection()->exec(
+            "
+             INSERT INTO `activity`
+            (
+                `title`,
+                `remark` ,
+                `mediaId` ,
+                `mediaType`,
+                `content`,
+                `length`,
+                `fromCourseId`,
+                `fromUserId`,
+                `startTime`,
+                `endTime`,
+                `createdTime`,
+                `updatedTime`,
+                `copyId`,
+                `homeworkId`
+            )
+            SELECT 
+                '作业',
+                `summary`,
+                `hhomeworkId`,
+                'homework',
+                `summary`,
+                `length`,
+                `courseId`,
+                `userId`,
+                `startTime`,
+                `endTime`,
+                `createdTime`,
+                `updatedTime`,
+                `ecopyId`,
+                `hhomeworkId`
+            FROM (SELECT  ee.id AS hhomeworkId, ee.`copyId` AS ecopyId , ce.*  
+            FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonid) lesson  
+            WHERE hhomeworkId NOT IN (SELECT homeworkId FROM activity WHERE homeworkId IS NOT NULL );
+                    "
+        );
+
+        //update fromCourseSetId
+        $this->exec(
+            "
+            UPDATE activity  AS a ,  `c2_course` AS c  SET a.`fromCourseSetId` = c.`courseSetId` 
+            WHERE  a.`mediaType` ='homework' and a.`fromCourseSetId` = 0  AND a.`fromCourseId` = c.id;
+        "
+        );
+
+
+        $this->exec(
+            "
+            INSERT INTO course_task
+              (
+                `courseId`,
+                `categoryId`,
+                `seq`,
+                `title`,
+                `isFree`,
+                `startTime`,
+                `endTime`,
+                `status`,
+                `createdUserId`,
+                `createdTime`,
+                `updatedTime`,
+                `mode` ,
+                `number`,
+                `type`,
+                `length` ,
+                `maxOnlineNum`,
+                `copyId`,
+                `homeworkId`
+              ) 
+            SELECT
+              `courseId`,
+              `chapterId`,
+              `seq`,
+              '作业',
+              `free`,
+              `startTime`,
+              `endTime`,
+              `status`,
+              `userId`,
+              `createdTime`,
+              `updatedTime`,
+              'homework',
+              `number`,
+              'homework',
+              `length`,
+              `maxOnlineNum`,
+              `copyId`,
+              `hhomeworkId`
+              FROM (SELECT  ee.id AS hhomeworkId, ee.`copyId` AS ecopyId , ce.*  
+                FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonid) lesson  
+                    WHERE lesson.hhomeworkId NOT IN (SELECT homeworkId FROM course_task WHERE homeworkId IS NOT NULL );
+                    WHERE lesson.eexerciseId NOT IN (SELECT exerciseId FROM course_task WHERE exerciseId IS NOT NULL );
+            "
+        );
+
+
+        $this->exec(
+            "
+            UPDATE course_task  AS a ,  `c2_course` c  SET a.`courseId` = c.`courseSetId` 
+            WHERE  a.`type` ='homework' and a.`fromCourseSetId` = 0  AND a.`courseId` = c.id;
+        "
+        );
+
+        $this->exec(
+            "UPDATE `course_task` AS ck, activity AS a SET ck.`activityId` = a.`id` 
+          WHERE a.`homeworkId` = ck.`homeworkId` AND  ck.type = 'homework' AND  ck.`activityId` = 0
+            "
+        );
+
     }
 
     protected function c2testpaperMigrate()
     {
-        $this->getConnection()->exec("
+        $this->getConnection()->exec(
+            "
             CREATE TABLE IF NOT EXISTS `c2_testpaper` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
               `name` varchar(255) NOT NULL DEFAULT '' COMMENT '试卷名称',
@@ -919,7 +1380,7 @@ class EduSohoUpgrade extends AbstractUpdater
               `courseSetId` int(11) unsigned NOT NULL DEFAULT '0',
               `oldTestId` int(11) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
             CREATE TABLE IF NOT EXISTS `c2_testpaper_item` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '题目',
@@ -934,7 +1395,7 @@ class EduSohoUpgrade extends AbstractUpdater
               `oldItemId` int(11) unsigned NOT NULL DEFAULT '0',
               `type` varchar(32) NOT NULL DEFAULT 'testpaper' COMMENT '测验类型',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
             CREATE TABLE IF NOT EXISTS `c2_testpaper_result` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -963,7 +1424,7 @@ class EduSohoUpgrade extends AbstractUpdater
               `courseSetId` int(11) unsigned NOT NULL DEFAULT '0',
               `oldResultId` int(11) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
             CREATE TABLE IF NOT EXISTS `c2_testpaper_item_result` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -981,7 +1442,7 @@ class EduSohoUpgrade extends AbstractUpdater
               `type` varchar(32) NOT NULL DEFAULT 'testpaper' COMMENT '测验类型',
               PRIMARY KEY (`id`),
               KEY `testPaperResultId` (`resultId`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
             CREATE TABLE IF NOT EXISTS `testpaper_activity` (
               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '关联activity表的ID',
@@ -995,7 +1456,8 @@ class EduSohoUpgrade extends AbstractUpdater
               `testMode` varchar(50) NOT NULL DEFAULT 'normal' COMMENT '考试模式',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-        ");
+        "
+        );
 
         $this->testpaperUpgrade();
         $this->homeworkUpgrade();
@@ -1005,7 +1467,7 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function testpaperUpgrade()
     {
         $sql = "SELECT * FROM testpaper WHERE id NOT IN (SELECT id FROM c2_testpaper WHERE type = 'testpaper')";
-        $testpapers = $this->getConnection()->fetchAll($sql);
+        $testpapers = $this->getConnecfortion()->fetchAll($sql);
         foreach ($testpapers as $testpaper) {
             $targetArr = explode('/', $testpaper['target']);
             $courseArr = explode('-', $targetArr[0]);
@@ -1609,24 +2071,30 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = "UPDATE testpaper_activity AS ta,(SELECT id,limitedTime,oldTestId FROM c2_testpaper) AS tmp SET ta.mediaId = tmp.id, ta.limitedTime = tmp.limitedTime WHERE tmp.oldTestId = ta.mediaId";
         $this->getConnection()->exec($sql);
 
-        $this->exec("
+        $this->exec(
+            "
           UPDATE  `activity` AS ay ,`testpaper_activity` AS ty   SET ay.`mediaId`  =  ty.id
           WHERE ay.id  = ty.lessonId   AND ay.`mediaType` = 'testpaper';
-         ");
+         "
+        );
     }
 
     protected function c2QuestionMigrate()
     {
         if (!$this->isFieldExist('question', 'courseId')) {
-            $this->exec("
+            $this->exec(
+                "
                 ALTER TABLE question add courseId INT(10) UNSIGNED NOT NULL DEFAULT '0' AFTER `target`
-            ");
+            "
+            );
         }
 
         if (!$this->isFieldExist('question', 'lessonId')) {
-            $this->exec("
+            $this->exec(
+                "
                 ALTER TABLE question add lessonId INT(10) UNSIGNED NOT NULL DEFAULT '0' AFTER `courseId`
-            ");
+            "
+            );
         }
 
         $sql = "SELECT * FROM question";
@@ -1646,15 +2114,19 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if (!$this->isFieldExist('question_favorite', 'targetType')) {
-            $this->exec("
+            $this->exec(
+                "
                 ALTER TABLE question_favorite ADD targetType VARCHAR(50) NOT NULL DEFAULT '' AFTER `questionId`
-            ");
+            "
+            );
         }
 
         if (!$this->isFieldExist('question_favorite', 'targetId')) {
-            $this->exec("
+            $this->exec(
+                "
                 ALTER TABLE question_favorite ADD targetId INT(10) UNSIGNED NOT NULL DEFAULT '0' AFTER `targetType`
-            ");
+            "
+            );
         }
 
         $sql = "SELECT * FROM question_favorite";
@@ -1671,7 +2143,9 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function migrate()
     {
         if ($this->isFieldExist('course_note', 'lessonId')) {
-            $this->exec("ALTER TABLE `course_note` CHANGE `lessonId` `taskId` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务ID';");
+            $this->exec(
+                "ALTER TABLE `course_note` CHANGE `lessonId` `taskId` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务ID';"
+            );
         }
 
         if (!$this->isFieldExist('course_note', 'courseSetId')) {
@@ -1690,11 +2164,15 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->exec("UPDATE course_thread SET courseSetId = courseId");
 
         if ($this->isFieldExist('course_thread', 'lessonId')) {
-            $this->exec("ALTER TABLE `course_thread` CHANGE `lessonId` `taskId` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务ID';");
+            $this->exec(
+                "ALTER TABLE `course_thread` CHANGE `lessonId` `taskId` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务ID';"
+            );
         }
 
         if ($this->isFieldExist('course_thread_post', 'lessonId')) {
-            $this->exec("ALTER TABLE `course_thread_post` CHANGE `lessonId` `taskId` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务ID';");
+            $this->exec(
+                "ALTER TABLE `course_thread_post` CHANGE `lessonId` `taskId` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务ID';"
+            );
         }
 
         if (!$this->isFieldExist('course_favorite', 'courseSetId')) {
@@ -1707,7 +2185,9 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if ($this->isFieldExist('course_favorite', 'courseSetId')) {
-            $this->exec("ALTER TABLE `course_favorite` CHANGE `courseSetId` `courseSetId` INT(10) NOT NULL DEFAULT '0' COMMENT '课程ID';");
+            $this->exec(
+                "ALTER TABLE `course_favorite` CHANGE `courseSetId` `courseSetId` INT(10) NOT NULL DEFAULT '0' COMMENT '课程ID';"
+            );
         }
 
         if (!$this->isFieldExist('course_material', 'courseSetId')) {
@@ -1716,7 +2196,9 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->exec("UPDATE course_material SET courseSetId = courseId");
 
         if (!$this->isFieldExist('course_member', 'courseSetId')) {
-            $this->exec("ALTER TABLE `course_member` ADD COLUMN  `courseSetId` int(10) unsigned NOT NULL COMMENT '课程ID';");
+            $this->exec(
+                "ALTER TABLE `course_member` ADD COLUMN  `courseSetId` int(10) unsigned NOT NULL COMMENT '课程ID';"
+            );
         }
         $this->exec("UPDATE course_member SET courseSetId = courseId");
 
@@ -1725,25 +2207,37 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if (!$this->isFieldExist('classroom_courses', 'courseSetId')) {
-            $this->exec("ALTER TABLE `classroom_courses` ADD COLUMN `courseSetId` INT(10) NOT NULL DEFAULT '0' COMMENT '课程ID';");
+            $this->exec(
+                "ALTER TABLE `classroom_courses` ADD COLUMN `courseSetId` INT(10) NOT NULL DEFAULT '0' COMMENT '课程ID';"
+            );
         }
         $this->exec("UPDATE classroom_courses SET courseSetId = courseId");
 
-        $this->exec('UPDATE course_member AS cm INNER JOIN c2_course c ON c.id = cm.courseId SET cm.courseSetId=c.courseSetId;');
-        $this->exec("UPDATE block_template SET templateName = 'block/live-top-banner.template.html.twig' WHERE code = 'live_top_banner';");
-        $this->exec("UPDATE block_template SET templateName = 'block/open-course-top-banner.template.html.twig' WHERE code = 'open_course_top_banner';");
+        $this->exec(
+            'UPDATE course_member AS cm INNER JOIN c2_course c ON c.id = cm.courseId SET cm.courseSetId=c.courseSetId;'
+        );
+        $this->exec(
+            "UPDATE block_template SET templateName = 'block/live-top-banner.template.html.twig' WHERE code = 'live_top_banner';"
+        );
+        $this->exec(
+            "UPDATE block_template SET templateName = 'block/open-course-top-banner.template.html.twig' WHERE code = 'open_course_top_banner';"
+        );
 
         if ($this->isTableExist('live_activity')) {
             $this->exec("UPDATE `live_activity` SET roomCreated = 1 WHERE liveId > 0;");
         }
-        $this->exec("UPDATE crontab_job SET targetType = 'task' WHERE targetType = 'lesson' AND name = 'SmsSendOneDayJob';");
-        $this->exec("UPDATE crontab_job SET targetType = 'task' WHERE targetType = 'lesson' AND name = 'SmsSendOneHourJob';");
+        $this->exec(
+            "UPDATE crontab_job SET targetType = 'task' WHERE targetType = 'lesson' AND name = 'SmsSendOneDayJob';"
+        );
+        $this->exec(
+            "UPDATE crontab_job SET targetType = 'task' WHERE targetType = 'lesson' AND name = 'SmsSendOneHourJob';"
+        );
     }
 
     /**
      * Executes an SQL statement and return the number of affected rows.
      *
-     * @param  string                         $statement
+     * @param  string $statement
      * @throws \Doctrine\DBAL\DBALException
      * @return integer                        The number of affected rows.
      */
@@ -1756,6 +2250,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $sql = "DESCRIBE `{$table}` `{$filedName}`;";
         $result = $this->getConnection()->fetchAssoc($sql);
+
         return empty($result) ? false : true;
     }
 
@@ -1763,6 +2258,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $sql = "SHOW TABLES LIKE '{$table}'";
         $result = $this->getConnection()->fetchAssoc($sql);
+
         return empty($result) ? false : true;
     }
 
@@ -1770,6 +2266,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $sql = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
         $result = $this->getConnection()->fetchAssoc($sql);
+
         return empty($result) ? false : true;
     }
 
