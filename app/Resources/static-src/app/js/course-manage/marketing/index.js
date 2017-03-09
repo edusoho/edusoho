@@ -18,7 +18,7 @@ class Marketing {
           required: function () {
             return $("[name=isFree]:checked").val() == 0;
           },
-          currency: function () {
+          positive_currency: function () {
             return $("[name=isFree]:checked").val() == 0;
           },
         },
