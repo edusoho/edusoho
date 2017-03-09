@@ -235,7 +235,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
     {
         $courseId = $this->getParam('courseId');
         $course = $this->controller->getCourseService()->getCourse($courseId);
-        $lessons = $this->controller->getCourseService()->getCourseItems($courseId);
+        $lessons = $this->controller->getCourseService()->findCourseTasksAndChapters($courseId, 1);
 
         $lessons = $this->controller->filterItems($lessons);
 
