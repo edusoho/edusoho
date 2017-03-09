@@ -179,6 +179,7 @@ $.validator.addMethod('positive_integer', function (value, element, params = tru
   return this.optional(element) || /^\+?[1-9][0-9]*$/.test(value);
 }, jQuery.validator.format("请输入正整数"));
 
+<<<<<<< HEAD
 $.validator.addMethod('unsigned_integer', function (value, element) {
   return this.optional(element) || /^\+?[0-9][0-9]*$/.test(value);
 }, jQuery.validator.format("请输入非负整数"));
@@ -194,6 +195,15 @@ jQuery.validator.addMethod("second_range", function (value, element) {
 $.validator.addMethod("course_title", function (value, element, params) {
   return this.optional(element) || /^[^<|>]*$/.test(value);
 }, Translator.trans('不支持输入<、>字符'));
+=======
+$.validator.addMethod('float', function (value, element) {
+  return this.optional(element) || /^(([+-]?[1-9]{1}\d*)|([+-]?[0]{1}))(\.(\d){1,2})?$/i.test(value);
+}, jQuery.validator.format("请输入正确的小数,只保留到两位小数"));
+
+$.validator.addMethod('date', function (value, element) {
+  return this.optional(element) || /^\d{4}\-[01]?\d\-[0-3]?\d$|^[01]\d\/[0-3]\d\/\d{4}$|^\d{4}年[01]?\d月[0-3]?\d[日号]$/.test(value);
+}, jQuery.validator.format("请输入正确的日期"));
+>>>>>>> 6ee1cd7... 迁移个人基础信息
 
 $.validator.addMethod("open_live_course_title", function (value, element, params) {
   return this.optional(element) || /^[^<|>|'|"|&|‘|’|”|“]*$/.test(value);
@@ -265,11 +275,19 @@ $.validator.addMethod("feature", function (value, element, params) {
   Translator.trans('购买截止时间需在当前时间之后')
 );
 
-$.validator.addMethod('qq', function(value, element) {
-  return /^[1-9]\d{4,}$/.test(value);
+$.validator.addMethod('qq', function (value, element) {
+  return this.optional(element) || /^[1-9]\d{4,}$/.test(value);
 }, jQuery.validator.format('请输入正确的QQ号'));
 
-$.validator.addMethod('passwordCheck', function(value, element) {
+$.validator.addMethod('mobile', function (value, element) {
+  return this.optional(element) || /^1\d{10}$/.test(value);
+}, jQuery.validator.format('请输入正确的手机号'));
+
+$.validator.addMethod('url', function (value, element) {
+  return this.optional(element) || /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/.test(value)
+}, jQuery.validator.format('地址不正确，须以http://或者https://开头。'));
+
+$.validator.addMethod('passwordCheck', function (value, element) {
   let url = $(element).data('url') ? $(element).data('url') : null;
   let type = $(element).data('type') ? $(element).data('type') : 'POST';
   let isSuccess = 0;
@@ -280,9 +298,8 @@ $.validator.addMethod('passwordCheck', function(value, element) {
     data: { value: value },
     dataType: 'json'
   })
-    .success(function (response) {
-      isSuccess = response.success;
-    })
-
+  .success(function (response) {
+    isSuccess = response.success;
+  })
   return this.optional(element) || isSuccess
 }, Translator.trans('密码错误'))
