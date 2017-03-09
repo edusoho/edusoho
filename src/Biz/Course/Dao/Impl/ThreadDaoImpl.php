@@ -32,7 +32,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
         return array(
             'timestamps' => array('createdTime', 'updatedTime'),
             'serializes' => array(),
-            'orderbys' => array('isStick', 'latestPostTime', 'createdTime', 'latestPostTime', 'hitNum'),
+            'orderbys' => array('isStick', 'latestPostTime', 'createdTime', 'latestPostTime', 'hitNum', 'updatedTime'),
             'conditions' => array(
                 'updatedTime >= :updatedTime_GE',
                 'courseId = :courseId',

@@ -164,9 +164,4 @@ class SmsCodes extends BaseResource
     {
         return $this->createService('User:UserService');
     }
-
-    protected function getBiz()
-    {
-        return $this->getServiceKernel()->getBiz();
-    }
 }

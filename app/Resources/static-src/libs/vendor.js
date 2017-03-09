@@ -16,13 +16,6 @@ import './vendor.less';
 // 等待确认可删除Cookie
 // var Cookie = require('cookie');  
 
-//禁用默认的Enter事件处理
-$(document).on('keypress', function(e){
-  if((e.keyCode || e.which) === 13){
-    e.preventDefault();
-  }
-});
-
 $('[data-toggle="popover"]').popover({
   html: true,
 });

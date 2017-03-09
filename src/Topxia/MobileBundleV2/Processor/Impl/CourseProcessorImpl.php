@@ -2,12 +2,12 @@
 
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Util\EdusohoLiveClient;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\CourseProcessor;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 {
@@ -1013,13 +1013,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         if (empty($member)) {
-            $member = $this->getCourseMemberService()->becomeStudentByClassroomJoined($courseId, $user['id']);
-
+            $member = $this->controller->getCourseMemberService()->becomeStudentByClassroomJoined($courseId, $user["id"]);
             if (empty($member)) {
                 $member = null;
             }
         }
-
         $userFavorited = $user->isLogin() ? $this->controller->getCourseService()->hasFavoritedCourse($courseId) : false;
         $vipLevels = array();
 
@@ -1042,7 +1040,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
     private function setCourseTarget($courseId)
     {
-        $classroom = $this->getClassroomService()->getClassroomByCourseId($courseId);
+        $classroom = $this->controller->getClassroomService()->getClassroomByCourseId($courseId);
 
         return empty($classroom) ? null : 'classroom';
     }
@@ -1506,7 +1504,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return array(
             'start' => $start + count($resultLiveCourses),
             'limit' => $limit,
-            'data' => $resultLiveCourses, );
+            'data' => $resultLiveCourses);
     }
 
     public function hitThread()
@@ -1542,7 +1540,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'start' => $start,
             'limit' => $limit,
             'total' => $total,
-            'data' => $this->controller->filterCourses($liveCourses), );
+            'data' => $this->controller->filterCourses($liveCourses));
 
         return $result;
     }
@@ -1564,49 +1562,57 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $field = array();
 
             switch ($key) {
-                case 'truename':;
+                case 'truename':
+                    ;
                     $field = array(
                         'name' => $key,
                         'title' => '真实姓名',
                     );
                     break;
-                case 'mobile':;
+                case 'mobile':
+                    ;
                     $field = array(
                         'name' => $key,
                         'title' => '手机',
                     );
                     break;
-                case 'qq':;
+                case 'qq':
+                    ;
                     $field = array(
                         'name' => $key,
                         'title' => 'QQ',
                     );
                     break;
-                case 'job':;
+                case 'job':
+                    ;
                     $field = array(
                         'name' => $key,
                         'title' => '职业',
                     );
                     break;
-                case 'gender':;
+                case 'gender':
+                    ;
                     $field = array(
                         'name' => $key,
                         'title' => '性别',
                     );
                     break;
-                case 'idcard':;
+                case 'idcard':
+                    ;
                     $field = array(
                         'name' => $key,
                         'title' => '身份证',
                     );
                     break;
-                case 'weibo':;
+                case 'weibo':
+                    ;
                     $field = array(
                         'name' => $key,
                         'title' => '微博',
                     );
                     break;
-                case 'weixin':;
+                case 'weixin':
+                    ;
                     $field = array(
                         'name' => $key,
                         'title' => '微信',
@@ -1663,20 +1669,5 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         return true;
-    }
-
-    protected function getDiscountService()
-    {
-        return $this->controller->getService('Discount:Discount.DiscountService');
-    }
-
-    private function getClassroomService()
-    {
-        return $this->controller->getService('Classroom:ClassroomService');
-    }
-
-    protected function getCourseMemberService()
-    {
-        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

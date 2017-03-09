@@ -59,11 +59,11 @@ class HomeworkManager extends BaseResource
         $homeworksResultsCounts = $this->getHomeworkService()->findResultsCountsByCourseIdsAndStatus($courseIds, $status);
 
         if ($status == 'reviewing') {
-            $orderBy = array('usedTime', 'DESC');
+            $orderBy = array('usedTime'=> 'DESC');
         }
 
         if ($status == 'finished') {
-            $orderBy = array('checkedTime', 'DESC');
+            $orderBy = array('checkedTime'=> 'DESC');
         }
 
         $homeworksResults = $this->getHomeworkService()->findResultsByCourseIdsAndStatus($courseIds, $status, $orderBy, 0, $start);
