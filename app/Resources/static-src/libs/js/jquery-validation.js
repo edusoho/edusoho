@@ -179,7 +179,7 @@ $.validator.addMethod('positive_integer', function (value, element, params = tru
   return this.optional(element) || /^\+?[1-9][0-9]*$/.test(value);
 }, jQuery.validator.format("请输入正整数"));
 
-<<<<<<< HEAD
+
 $.validator.addMethod('unsigned_integer', function (value, element) {
   return this.optional(element) || /^\+?[0-9][0-9]*$/.test(value);
 }, jQuery.validator.format("请输入非负整数"));
@@ -195,7 +195,7 @@ jQuery.validator.addMethod("second_range", function (value, element) {
 $.validator.addMethod("course_title", function (value, element, params) {
   return this.optional(element) || /^[^<|>]*$/.test(value);
 }, Translator.trans('不支持输入<、>字符'));
-=======
+
 $.validator.addMethod('float', function (value, element) {
   return this.optional(element) || /^(([+-]?[1-9]{1}\d*)|([+-]?[0]{1}))(\.(\d){1,2})?$/i.test(value);
 }, jQuery.validator.format("请输入正确的小数,只保留到两位小数"));
@@ -203,7 +203,6 @@ $.validator.addMethod('float', function (value, element) {
 $.validator.addMethod('date', function (value, element) {
   return this.optional(element) || /^\d{4}\-[01]?\d\-[0-3]?\d$|^[01]\d\/[0-3]\d\/\d{4}$|^\d{4}年[01]?\d月[0-3]?\d[日号]$/.test(value);
 }, jQuery.validator.format("请输入正确的日期"));
->>>>>>> 6ee1cd7... 迁移个人基础信息
 
 $.validator.addMethod("open_live_course_title", function (value, element, params) {
   return this.optional(element) || /^[^<|>|'|"|&|‘|’|”|“]*$/.test(value);
@@ -303,3 +302,36 @@ $.validator.addMethod('passwordCheck', function (value, element) {
   })
   return this.optional(element) || isSuccess
 }, Translator.trans('密码错误'))
+
+$.validator.addMethod('chinese', function(value, element) {
+  return this.optional(element) ||  /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3])*$/i.test(value);
+}, jQuery.validator.format('必须是中文字'));
+
+$.validator.addMethod('isImage', function(value, element) {
+
+  if (navigator.userAgent.toLowerCase().indexOf('msie') > 0) {
+    return this.optional(element) || true;
+  }
+
+  const imgType = ['jpg','JPG','jpeg','JPEG','bmp','BMP','gif','GIF','png','PNG'];
+
+  // imgType = $(element).attr('accept').replace(/image\//g,"").split(',');
+
+  for (let i = 0; i < imgType.length; i ++) {
+    if(value.indexOf(imgType[i]) > 0) {
+      return this.optional(element) || true;
+    }
+  }
+
+}, jQuery.validator.format('只能上传图片'));
+
+$.validator.addMethod('limitSize', function(value, element) {
+  if (navigator.userAgent.toLowerCase().indexOf('msie') > 0) {
+    return this.optional(element) || true;
+  }
+
+  const fileSize = $(element)[0]['files'][0].size;
+
+  return this.optional(element) || fileSize / 1024 <= 2048;
+  
+}, jQuery.validator.format('大小不能超过2M'));

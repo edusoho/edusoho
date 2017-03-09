@@ -1,10 +1,6 @@
 {% extends 'settings/layout.html.twig' %}
 {% block title %}{{'基础信息'|trans}} - {{ parent() }}{% endblock %}
 
-<<<<<<< HEAD
-=======
-{#{% set script_controller = 'settings/profile' %}#}
->>>>>>> 6ee1cd7... 迁移个人基础信息
 {% do script(['libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js', 'libs/jquery-validation.js','app/js/settings/profile/index.js']) %}
 {% set side_nav = 'profile' %}
 
