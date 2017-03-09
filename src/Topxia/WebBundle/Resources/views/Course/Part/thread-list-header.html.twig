@@ -1,13 +1,21 @@
 <div class="nav-filter clearfix">
 
-  <div class="btn-group">
-    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{'发话题'|trans}} <span class="caret"></span></button>
-    <ul class="dropdown-menu" role="menu">
-      <li><a href="{{ path('course_thread_create', {id:course.id, type:'discussion'}) }}">{{'发话题'|trans}}</a></li>
-      <li><a href="{{ path('course_thread_create', {id:course.id, type:'question'}) }}">{{'提问题'|trans}}</a></li>
-    </ul>
-  </div>
-
+  {% if member %}
+    {% if member.deadline == 0 or member.deadline > 'now'|date('U') or course.parentId == 0 %}
+      <div class="btn-group">
+        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{'发话题'|trans}} <span class="caret"></span></button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="{{ path('course_thread_create', {id:course.id, type:'discussion'}) }}">{{'发话题'|trans}}</a></li>
+          <li><a href="{{ path('course_thread_create', {id:course.id, type:'question'}) }}">{{'提问题'|trans}}</a></li>
+        </ul>
+      </div>
+    {% else %}
+      <div class="btn-group">
+        <button type="button" class="btn btn-default btn-sm disabled" data-toggle="tooltip" data-placement="bottom" title="{{'当前班级已过有效期'|trans}}">{{'发话题'|trans}}
+        </button>
+      </div>
+    {% endif %}
+  {% endif %}
 
   <ul class="nav nav-pills nav-pills-sm">
     <li{% if filters.type == 'all' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({type:'all'})) }}">{{'全部'|trans}}</a></li>

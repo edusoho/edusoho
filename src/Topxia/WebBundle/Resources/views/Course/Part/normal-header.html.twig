@@ -81,13 +81,17 @@
             {% else %}
               {% set classroom = data('GetClassroomByCourseId', {courseId: course.id}) %}
                 {% if classroom %}
-                  <div class="alert alert-warning">你的班级已过有效期，无法继续学习，请<a href="{{ path('classroom_member_deadline_reach', {classroomId:classroom.id}) }}">
-                    {% if classroom.buyable == 1 %}
-                      {{ '重新购买'|trans }}
-                    {% else %}
-                      {{ '重新加入'|trans }}
-                    {% endif %}
-                  </a></div>
+                  {% if classroom.expiryMode == 'days' %}
+                    <div class="alert alert-warning">你的班级已过有效期，无法继续学习，请<a href="{{ path('classroom_member_deadline_reach', {classroomId:classroom.id}) }}">
+                      {% if classroom.buyable == 1 %}
+                        {{ '重新购买'|trans }}
+                      {% else %}
+                        {{ '重新加入'|trans }}
+                      {% endif %}
+                    </a></div>
+                  {% elseif classroom.expiryMode == 'date' %}
+                    <div class="alert alert-warning">{{ '你的班级已过有效期，无法继续学习'|trans }}</a></div>
+                  {% endif %}
                 {% endif %}
             {% endif %}
         {% endif %}
