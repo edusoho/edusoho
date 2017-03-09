@@ -221,3 +221,36 @@ $.validator.addMethod('passwordCheck', function(value, element) {
 
   return this.optional(element) || isSuccess
 }, jQuery.validator.format('密码错误'))
+
+$.validator.addMethod('chinese', function(value, element) {
+  return this.optional(element) ||  /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3])*$/i.test(value);
+}, jQuery.validator.format('必须是中文字'));
+
+$.validator.addMethod('isImage', function(value, element) {
+
+  if (navigator.userAgent.toLowerCase().indexOf('msie') > 0) {
+    return this.optional(element) || true;
+  }
+
+  const imgType = ['jpg','JPG','jpeg','JPEG','bmp','BMP','gif','GIF','png','PNG'];
+
+  // imgType = $(element).attr('accept').replace(/image\//g,"").split(',');
+
+  for (let i = 0; i < imgType.length; i ++) {
+    if(value.indexOf(imgType[i]) > 0) {
+      return this.optional(element) || true;
+    }
+  }
+
+}, jQuery.validator.format('只能上传图片'));
+
+$.validator.addMethod('limitSize', function(value, element) {
+  if (navigator.userAgent.toLowerCase().indexOf('msie') > 0) {
+    return this.optional(element) || true;
+  }
+
+  const fileSize = $(element)[0]['files'][0].size;
+
+  return this.optional(element) || fileSize / 1024 <= 2048;
+  
+}, jQuery.validator.format('大小不能超过2M'));

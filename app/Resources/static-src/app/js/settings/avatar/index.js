@@ -13,10 +13,10 @@ new EsWebUploader({
 
 //论坛头像
 $('.use-partner-avatar').on('click', function() {
-    let $this = $(this);
-    let goto = $this.data('goto');
+  let $this = $(this);
+  let goto = $this.data('goto');
 
-    $.post($this.data('url'), {imgUrl: $this.data('imgUrl')}, function() {
-      window.location.href = goto;
-    });
+  $.post($this.data('url'), {imgUrl: $this.data('imgUrl')}, function() {
+    window.location.href = goto;
+  });
 });
