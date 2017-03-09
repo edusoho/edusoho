@@ -225,7 +225,8 @@ class QuestionServiceTest extends BaseTestCase
         $favorites = $this->getQuestionService()->searchFavoriteQuestions(
             $conditions,
             array('createdTime' => 'DESC'),
-            0, 20
+            0,
+            20
         );
 
         $this->assertEquals(3, count($favorites));
@@ -277,6 +278,7 @@ class QuestionServiceTest extends BaseTestCase
             'type' => 'single_choice',
             'stem' => 'test single choice question 1.',
             'courseId' => 1,
+            'courseSetId' => 1,
             'lessonId' => 0,
             'choices' => array(
                 'question 1 -> choice 1',
@@ -297,6 +299,7 @@ class QuestionServiceTest extends BaseTestCase
             'type' => 'determine',
             'stem' => 'test material-determine question.',
             'courseId' => 1,
+            'courseSetId' => 1,
             'lessonId' => 0,
             'answer' => array(1),
             'target' => 'course-1',
@@ -311,6 +314,7 @@ class QuestionServiceTest extends BaseTestCase
             'type' => 'fill',
             'stem' => 'fill[[a|b]]',
             'courseId' => 1,
+            'courseSetId' => 1,
             'lessonId' => 0,
             'answer' => array(array('a', 'b')),
             'target' => 'course-1',
@@ -325,6 +329,7 @@ class QuestionServiceTest extends BaseTestCase
             'type' => 'fill',
             'stem' => 'fill[[a|b]]',
             'courseId' => 2,
+            'courseSetId' => 2,
             'lessonId' => 0,
             'answer' => array(array('a', 'b')),
             'target' => 'course-2',
@@ -339,6 +344,7 @@ class QuestionServiceTest extends BaseTestCase
             'type' => 'material',
             'stem' => 'test material question.',
             'courseId' => 1,
+            'courseSetId' => 1,
             'lessonId' => 0,
             'answer' => array(),
             'target' => 'course-1',
@@ -349,6 +355,7 @@ class QuestionServiceTest extends BaseTestCase
             'type' => 'single_choice',
             'stem' => 'test material-single choice question.',
             'courseId' => 1,
+            'courseSetId' => 1,
             'lessonId' => 0,
             'choices' => array(
                 'question 1 -> choice 1',
@@ -367,6 +374,7 @@ class QuestionServiceTest extends BaseTestCase
             'type' => 'determine',
             'stem' => 'test material-determine question.',
             'courseId' => 1,
+            'courseSetId' => 1,
             'lessonId' => 0,
             'answer' => array(1),
             'target' => 'course-1',

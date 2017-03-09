@@ -2,21 +2,22 @@
 
 namespace AppBundle\Controller\Course;
 
-use Biz\System\Service\SettingService;
-use Biz\Task\Service\TaskService;
-use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
+use Biz\Task\Service\TaskService;
+use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\SettingService;
+use Symfony\Component\HttpFoundation\Request;
 
 class LiveCourseSetController extends CourseBaseController
 {
     public function courseSetsBlockAction($courseSets, $view = 'list', $mode = 'default')
     {
         $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
+
         return $this->forward('AppBundle:Course/LiveCourseSet:coursesBlock', array(
             'courses' => $courses,
-            'view'    => $view,
-            'mode'    => $mode
+            'view' => $view,
+            'mode' => $mode,
         ));
     }
 
@@ -59,7 +60,8 @@ class LiveCourseSetController extends CourseBaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getTaskService()->countTasks($recentTasksCondition), 30
+            $this->getTaskService()->countTasks($recentTasksCondition),
+            30
         );
 
         $recentTasks = $this->getTaskService()->searchTasks(
@@ -222,7 +224,7 @@ class LiveCourseSetController extends CourseBaseController
         $levels = array();
 
         if ($this->isPluginInstalled('Vip')) {
-            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100), 'id');
+            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), array(),0, 100), 'id');
         }
 
         return $this->render('course-set/live/all-list.html.twig', array(
@@ -240,7 +242,7 @@ class LiveCourseSetController extends CourseBaseController
         }
         $courses = $this->getCourseService()->findCoursesByCourseSetIds($allLiveLessonCourseIds);
         $courses = ArrayToolkit::index($courses, 'courseSetId');
-        $ret     = array();
+        $ret = array();
         foreach ($allLiveLessonCourseIds as $key => $courseSetId) {
             if (isset($liveCourseSets[$courseSetId])) {
                 $ret[$courseSetId] = $liveCourseSets[$courseSetId];
@@ -251,7 +253,7 @@ class LiveCourseSetController extends CourseBaseController
                     $tasks = $this->getTaskService()->searchTasks(array('fromCourseSetId' => $courseSetId, 'endTime_LT' => time()), array('startTime' => 'DESC'), 0, 1);
                 }
 
-                $ret[$courseSetId]['course']        = $courses[$courseSetId];
+                $ret[$courseSetId]['course'] = $courses[$courseSetId];
                 $ret[$courseSetId]['liveStartTime'] = $tasks[0]['startTime'];
                 $ret[$courseSetId]['liveEndTime'] = $tasks[0]['endTime'];
                 $ret[$courseSetId]['taskId'] = $tasks[0]['id'];

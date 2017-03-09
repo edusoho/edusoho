@@ -2,7 +2,6 @@
 
 namespace Biz;
 
-use Biz\Coupon\Type\VipCoupon;
 use Pimple\Container;
 use Biz\Common\HTMLHelper;
 use Pimple\ServiceProviderInterface;

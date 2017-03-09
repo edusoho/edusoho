@@ -126,9 +126,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         ));
 
         if (!isset($course['isFree'])) {
-            $course['isFree'] = 1;//默认免费
+            $course['isFree'] = 1; //默认免费
         }
-        
+
         $course = $this->validateExpiryMode($course);
 
         $course['status'] = 'draft';
@@ -371,13 +371,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
     }
 
-    public function publishCourse($id)
+    public function publishCourse($id, $withTasks = false)
     {
         $this->tryManageCourse($id);
         $course = $this->getCourseDao()->update($id, array(
             'status' => 'published',
         ));
         $this->dispatchEvent('course.publish', $course);
+
+        $this->getTaskService()->publishTasksByCourseId($id);
     }
 
     protected function validateExpiryMode($course)
@@ -801,7 +803,8 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param  int     $userId
+     * @param int $userId
+     *
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -1166,6 +1169,7 @@ class CourseServiceImpl extends BaseService implements CourseService
      * 当默认值未设置时，合并默认值
      *
      * @param  $course
+     *
      * @return array
      */
     protected function mergeCourseDefaultAttribute($course)
@@ -1191,6 +1195,7 @@ class CourseServiceImpl extends BaseService implements CourseService
      *
      * @param  $userId
      * @param  $filters
+     *
      * @return array
      */
     protected function prepareUserLearnCondition($userId, $filters)

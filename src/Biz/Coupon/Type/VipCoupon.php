@@ -1,14 +1,11 @@
 <?php
 
-
 namespace Biz\Coupon\Type;
-
 
 class VipCoupon extends BaseCoupon
 {
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function canUseable($coupon, $target)
     {

@@ -141,6 +141,20 @@ abstract class BaseResource implements ResourceInterface
         return $next;
     }
 
+    protected function filterHtml($text)
+    {
+        preg_match_all('/\<img.*?src\s*=\s*[\'\"](.*?)[\'\"]/i', $text, $matches);
+        if (empty($matches)) {
+            return $text;
+        }
+
+        foreach ($matches[1] as $url) {
+            $text = str_replace($url, $this->getFileUrl($url), $text);
+        }
+
+        return $text;
+    }
+
     public function getFileUrl($path)
     {
         if (empty($path)) {
@@ -151,7 +165,7 @@ abstract class BaseResource implements ResourceInterface
         }
         $path = str_replace('public://', '', $path);
         $path = str_replace('files/', '', $path);
-        $path = $this->getHttpHost()."/files/{$path}";
+        $path = $this->getHttpHost().'/files/'.ltrim($path, '/');
 
         return $path;
     }

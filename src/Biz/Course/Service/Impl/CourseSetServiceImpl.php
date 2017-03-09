@@ -17,9 +17,6 @@ use Biz\Course\Service\ReviewService;
 use Biz\Course\Service\MaterialService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\CourseNoteService;
-use Biz\Course\Service\CourseDeleteService;
-use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
@@ -38,7 +35,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $id,
             array(
                 'recommended' => 1,
-                'recommendedSeq' => (int) $number,
+                'recommendedSeq' => (int)$number,
                 'recommendedTime' => time(),
             )
         );
@@ -426,6 +423,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $this->dispatchEvent('course-set.update', new Event($courseSet));
 
         return $courseSet;
+    }
+
+    public function updateCourseSetTeacherIds($id, $teacherIds)
+    {
+        $courseSet = $this->tryManageCourseSet($id);
+        $courseSet['teacherIds'] = $teacherIds;
+        $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $courseSet);
+        $this->dispatchEvent('course-set.update', new Event($courseSet));
     }
 
     public function changeCourseSetCover($id, $coverArray)

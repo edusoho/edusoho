@@ -53,6 +53,7 @@ class Determine implements TypeInterface
             'copyId',
             'target',
             'courseId',
+            'courseSetId',
             'lessonId',
             'subCount',
             'finishedTimes',

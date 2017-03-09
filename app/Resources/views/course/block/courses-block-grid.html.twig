@@ -12,7 +12,7 @@
     <li class="course-grid">
       <a href="{{ path('my_course_show', {id:course.id}) }}" class="grid-body">
         <div class="course-grid-img">
-          <img src="{{ filepath(courseSet.cover.large|default(null), 'courseSet.png') }}"  class="img-responsive thumb">
+          <img src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}"  class="img-responsive thumb">
 
           <div class="course-grid-mask">
             <span class="btn btn-warning btn-sm course-grid-btn-learn">
