@@ -184,3 +184,9 @@ $.validator.addMethod("positive_currency", function (value, element, params) {
 jQuery.validator.addMethod("max_year", function (value, element) {
   return this.optional(element) || value < 100000;
 }, "有效期最大值不能超过99,999天");
+
+$.validator.addMethod("feature",function (value, element, params) {
+    return value && (new Date(value).getTime()) > Date.now();
+  },
+  Translator.trans('购买截止时间需在当前时间之后')
+);

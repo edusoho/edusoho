@@ -1,16 +1,11 @@
-
-import { TabChange } from '../help';
-
 class Marketing {
   constructor() {
     this.init();
   }
 
   init() {
-    $('.js-task-price-setting').perfectScrollbar();
     let $form = $('#course-marketing-form');
     $('.js-task-price-setting').perfectScrollbar();
-    TabChange();
     let validator = $form.validate({
       onkeyup: false,
       rules: {
@@ -23,6 +18,9 @@ class Marketing {
           },
         },
         tryLookLength: {
+          required: function () {
+            return $("[name=tryLookable]:checked").val() == 1;
+          },
           digits: true,
           min: 1,
           max: 10
@@ -32,11 +30,8 @@ class Marketing {
         },
         buyExpiryTime: {
           required: function () {
-            console.log($('input[name="enableBuyExpiryTime"]:checked').val() == 1);
             return $('input[name="enableBuyExpiryTime"]:checked').val() == 1;
           },
-          date: true,
-          feature: true
         }
       },
       messages: {
@@ -47,13 +42,6 @@ class Marketing {
       }
     });
 
-    $.validator.addMethod(
-      "feature",
-      function (value, element, params) {
-        return value && (new Date(value).getTime()) > Date.now();
-      },
-      Translator.trans('购买截止时间需在当前时间之后')
-    );
 
     $('.js-task-price-setting').on('click', 'li', function (event) {
       let $li = $(this).toggleClass('open');
@@ -76,6 +64,7 @@ class Marketing {
     });
 
     $('input[name="enableBuyExpiryTime"]').on('change', function (event) {
+      console.log("11");
       if ($('input[name="enableBuyExpiryTime"]:checked').val() == 0) {
         $('#buyExpiryTime').addClass('hidden');
       } else {
@@ -96,7 +85,6 @@ class Marketing {
       console.log('tryLook : ', $('input[name="tryLookable"]:checked').val());
       if ($('input[name="tryLookable"]:checked').val() == 1) {
         $('.js-enable-try-look').removeClass('hidden');
-        $('#tryLookLength').val('1');
       } else {
         $('.js-enable-try-look').addClass('hidden');
       }
@@ -122,6 +110,7 @@ class Marketing {
     });
 
     $('#course-submit').click(function (evt) {
+      console.log('clicj');
       if (validator.form()) {
         $form.submit();
       }
