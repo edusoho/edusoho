@@ -3,6 +3,7 @@
 namespace Biz\Question\Event;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Service\ActivityService;
 use Biz\File\Service\UploadFileService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Question\Service\QuestionService;
@@ -50,13 +51,14 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
             ));
 
             if ($question['lessonId'] > 0) {
-                $activity = $this->getActivityDao()->getByCopyIdAndCourseId($question['lessonId'], $cc['courseId']);
+                $activity = $this->getActivityService()->getActivityByCopyIdAndCourseId($question['lessonId'], $cc['courseId']);
                 if (!empty($activity)) {
                     $cc['lessonId'] = $activity['id'];
                 }
             }
             $this->getQuestionService()->update($cc['id'], $cc);
             //file_used
+            $this->updateQuestionAttachments($cc, $question);
         }
     }
 
@@ -86,6 +88,29 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
             }
             $this->getQuestionService()->delete($cc['id']);
         }
+    }
+
+    protected function updateQuestionAttachments($copiedQuestion, $sourceQuestion)
+    {
+        $stems = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType('question.stem', $sourceQuestion['id'], 'attachment');
+        if (!empty($stems)) {
+            $fileIds = ArrayToolkit::column($stems, 'fileId');
+            $this->getUploadFileService()->createUseFiles($fileIds, $copiedQuestion['id'], 'question.stem', 'attachment');
+        }
+        $analysises = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType('question.analysis', $sourceQuestion['id'],
+            'attachment');
+        if (!empty($analysises)) {
+            $fileIds = ArrayToolkit::column($analysises, 'fileId');
+            $this->getUploadFileService()->createUseFiles($fileIds, $copiedQuestion['id'], 'question.analysis', 'attachment');
+        }
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 
     /**
