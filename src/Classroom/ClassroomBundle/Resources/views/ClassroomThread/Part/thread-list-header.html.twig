@@ -1,8 +1,8 @@
 <div class="nav-filter clearfix">
   
   {% if service.canAccess('thread.create', {targetType:'classroom', targetId:classroom.id}) %}
-      {% if member and member.deadline > 0 %}
-        {% if member.deadline > 'now'|date('U') %}
+      {% if member %}
+        {% if member.deadline == 0 or member.deadline > 'now'|date('U') %}
           <div class="btn-group">
             <button type="button" class="btn btn-default btn-sm dropdown-toggle
             " data-toggle="dropdown" aria-expanded="false">{{'发话题'|trans}} <span class="caret"></span></button>
