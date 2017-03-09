@@ -2,6 +2,8 @@
 
 namespace Biz\Search\Adapter;
 
+use Topxia\Service\Common\ServiceKernel;
+
 class SearchAdapterFactory
 {
     private static $cached = array();
@@ -15,8 +17,8 @@ class SearchAdapterFactory
             if (!file_exists(__DIR__."/{$type}SearchAdapter.php")) {
                 throw new \RuntimeException("{$class} not found", 1);
             }
-
-            self::$cached[$type] = new $class();
+            $biz = ServiceKernel::instance()->getBiz();
+            self::$cached[$type] = new $class($biz);
         }
 
         return self::$cached[$type];
