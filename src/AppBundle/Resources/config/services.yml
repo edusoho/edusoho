@@ -107,3 +107,7 @@ services:
     topxia.target_helper:
         class:          AppBundle\Util\TargetHelper
         arguments:      ['@service_container']
+
+    callback.resource_factory:
+        class: AppBundle\Controller\Callback\Resource\ResourceFactory
+        arguments:    ['@service_container']

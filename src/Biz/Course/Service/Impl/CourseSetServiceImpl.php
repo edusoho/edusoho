@@ -275,7 +275,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
 
-        return $this->findCourseSetsByIds($courseSetIds);
+        $sets = $this->findCourseSetsByIds($courseSetIds);
+
+        return $sets;
     }
 
     public function findCourseSetsByIds(array $ids)
@@ -560,9 +562,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     /**
      * 根据排序规则返回排序数组.
+     * <<<<<<< HEAD
      *
      * @param  string $order
      * @return array
+    =======
+     * >>>>>>> origin/feature/x8-api
      */
     protected function getOrderBys($order)
     {

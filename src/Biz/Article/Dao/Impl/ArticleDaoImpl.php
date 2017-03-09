@@ -111,6 +111,10 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
                 'publishedTime',
                 'sticky',
                 'hits',
+                'updatedTime',
+            ),
+            'serializes' => array(
+                'tagIds' => 'delimiter',
             ),
             'conditions' => array(
                 'status = :status',

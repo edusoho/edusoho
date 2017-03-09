@@ -3,10 +3,11 @@
 namespace Topxia\MobileBundleV2\Controller;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\User\CurrentUser;
-use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
+use Biz\Course\Service\CourseService;
+use Biz\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Topxia\Api\Util\TagUtil;
 
 class MobileBaseController extends BaseController
@@ -89,7 +90,7 @@ class MobileBaseController extends BaseController
         $user['currentIp'] = $request->getClientIp();
 
         $currentUser = $currentUser->fromArray($user);
-        $biz         = $this->getBiz();
+        $biz = $this->getBiz();
         $biz['user'] = $currentUser;
     }
 
@@ -176,7 +177,11 @@ class MobileBaseController extends BaseController
                 'title' => $user['title'],
                 'following' => $controller->getUserService()->findUserFollowingCount($user['id']),
                 'follower' => $controller->getUserService()->findUserFollowerCount($user['id']),
-                'avatar' => $this->container->get('web.twig.extension')->getFilePath($user['smallAvatar'], 'avatar.png', true),
+                'avatar' => $this->container->get('web.twig.extension')->getFilePath(
+                    $user['smallAvatar'],
+                    'avatar.png',
+                    true
+                ),
             );
         }
 
@@ -197,14 +202,19 @@ class MobileBaseController extends BaseController
 
         $self = $this;
 
-        return array_map(function ($review) use ($self, $users) {
-            $review['user'] = empty($users[$review['userId']]) ? null : $self->filterUser($users[$review['userId']]);
-            unset($review['userId']);
+        return array_map(
+            function ($review) use ($self, $users) {
+                $review['user'] = empty($users[$review['userId']]) ? null : $self->filterUser(
+                    $users[$review['userId']]
+                );
+                unset($review['userId']);
 
-            $review['createdTime'] = date('c', $review['createdTime']);
+                $review['createdTime'] = date('c', $review['createdTime']);
 
-            return $review;
-        }, $reviews);
+                return $review;
+            },
+            $reviews
+        );
     }
 
     public function filterCourse($course)
@@ -266,39 +276,54 @@ class MobileBaseController extends BaseController
 
         $coinSetting = $this->getCoinSetting();
 
+
         $self = $this;
         $container = $this->container;
 
-        $courseIds = ArrayToolkit::column($courses,'id');
+        $courseIds = ArrayToolkit::column($courses, 'id');
         $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
 
-        return array_map(function ($course, $courseSet) use ($self, $container, $teachers, $coinSetting) {
-            $course = $this->convertOldFields($course);
-            $course = $this->filledCourseByCourseSet($course, $courseSet);
-            $course['smallPicture']  = $container->get('web.twig.app_extension')->courseSetCover($courseSet, 'small');
-            $course['middlePicture'] = $container->get('web.twig.app_extension')->courseSetCover($courseSet, 'middle');
-            $course['largePicture']  = $container->get('web.twig.app_extension')->courseSetCover($courseSet, 'large');
-            $course['about']         = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
-            $course['createdTime']   = date("c", $course['createdTime']);
+        return array_map(
+            function ($course, $courseSet) use ($self, $container, $teachers, $coinSetting) {
+                $course = $this->convertOldFields($course);
+                $course = $this->filledCourseByCourseSet($course, $courseSet);
 
-            $course['teachers'] = array();
+                $course['smallPicture'] = $container->get('web.twig.app_extension')->courseSetCover(
+                    $courseSet,
+                    'small'
+                );
+                $course['middlePicture'] = $container->get('web.twig.app_extension')->courseSetCover(
+                    $courseSet,
+                    'middle'
+                );
+                $course['largePicture'] = $container->get('web.twig.app_extension')->courseSetCover(
+                    $courseSet,
+                    'large'
+                );
+                $course['about'] = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
+                $course['createdTime'] = date("c", $course['createdTime']);
 
-            foreach ($course['teacherIds'] as $teacherId) {
-                if (isset($teachers[$teacherId])) {
-                    $course['teachers'][] = $teachers[$teacherId];
+                $course['teachers'] = array();
+
+                foreach ($course['teacherIds'] as $teacherId) {
+                    if (isset($teachers[$teacherId])) {
+                        $course['teachers'][] = $teachers[$teacherId];
+                    }
                 }
-            }
 
-            unset($course['teacherIds']);
+                unset($course['teacherIds']);
 
-            $course['tags'] = TagUtil::buildTags('course-set', $courseSet['id']);
-            $course['tags'] = ArrayToolkit::column($course['tags'], 'name');
+                $course['tags'] = TagUtil::buildTags('course-set', $courseSet['id']);
+                $course['tags'] = ArrayToolkit::column($course['tags'], 'name');
 
-            $course["priceType"] = $coinSetting["priceType"];
-            $course['coinName']  = $coinSetting["name"];
+                $course['priceType'] = $coinSetting['priceType'];
+                $course['coinName'] = $coinSetting['name'];
 
-            return $course;
-        }, $courses, $courseSets);
+                return $course;
+            },
+            $courses,
+            $courseSets
+        );
     }
 
     private function convertOldFields($course)
@@ -306,33 +331,48 @@ class MobileBaseController extends BaseController
         $course['expiryDay'] = $course['expiryDays'];
         $course['lessonNum'] = $course['taskNum'];
         $course['userId'] = $course['creator'];
-        $course['tryLookTime']  = $course['tryLookLength'];
+        $course['tryLookTime'] = $course['tryLookLength'];
+
         return $course;
     }
 
     private function filledCourseByCourseSet($course, $courseSet)
     {
-        $copyKeys = array('tags', 'hitNum', 'orgCode', 'orgId',
-            'discount', 'categoryId', 'recommended', 'recommendedSeq', 'recommendedTime',
-            'subtitle', 'discountId'
+        $copyKeys = array(
+            'tags',
+            'hitNum',
+            'orgCode',
+            'orgId',
+            'discount',
+            'categoryId',
+            'recommended',
+            'recommendedSeq',
+            'recommendedTime',
+            'subtitle',
+            'discountId',
         );
         foreach ($copyKeys as $value) {
             $course[$value] = $courseSet[$value];
         }
-        if ($course['isDefault'] == 1 && $course['title'] =='默认教学计划' ) {
+        if ($course['isDefault'] == 1 && $course['title'] == '默认教学计划') {
             $course['title'] = $courseSet['title'];
         } else {
-            $course['title'] = $courseSet['title'] . '-' . $course['title'];
+            $course['title'] = $courseSet['title'].'-'.$course['title'];
         }
+
         return $course;
     }
 
     public function convertAbsoluteUrl($request, $html)
     {
         $baseUrl = $request->getSchemeAndHttpHost();
-        $html = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function ($matches) use ($baseUrl) {
-            return "src=\"{$baseUrl}/{$matches[1]}\"";
-        }, $html);
+        $html = preg_replace_callback(
+            '/src=[\'\"]\/(.*?)[\'\"]/',
+            function ($matches) use ($baseUrl) {
+                return "src=\"{$baseUrl}/{$matches[1]}\"";
+            },
+            $html
+        );
 
         return $html;
     }
@@ -343,9 +383,11 @@ class MobileBaseController extends BaseController
             return null;
         }
 
-        $users = $this->filterUsers(array(
-            $user,
-        ));
+        $users = $this->filterUsers(
+            array(
+                $user,
+            )
+        );
 
         return current($users);
     }
@@ -359,27 +401,30 @@ class MobileBaseController extends BaseController
         $self = $this;
         $container = $this->container;
 
-        $items = array_map(function ($item) use ($self, $container) {
-            $item['createdTime'] = date('c', $item['createdTime']);
+        $items = array_map(
+            function ($item) use ($self, $container) {
+                $item['createdTime'] = date('c', $item['createdTime']);
 
-            if (!empty($item['length']) && in_array($item['type'], array('audio', 'video'))) {
-                $item['length'] = $container->get('web.twig.extension')->durationFilter($item['length']);
-            } else {
-                $item['length'] = '';
-            }
+                if (!empty($item['length']) && in_array($item['type'], array('audio', 'video'))) {
+                    $item['length'] = $container->get('web.twig.extension')->durationFilter($item['length']);
+                } else {
+                    $item['length'] = '';
+                }
 
-            if (empty($item['content'])) {
-                $item['content'] = '';
-            }
+                if (empty($item['content'])) {
+                    $item['content'] = '';
+                }
 
-            $item['content'] = $self->convertAbsoluteUrl($container->get('request'), $item['content']);
+                $item['content'] = $self->convertAbsoluteUrl($container->get('request'), $item['content']);
 
-            if (isset($item['status']) && $item['status'] != 'published') {
-                return false;
-            }
+                if (isset($item['status']) && $item['status'] != 'published') {
+                    return false;
+                }
 
-            return $item;
-        }, $items);
+                return $item;
+            },
+            $items
+        );
 
         return array_filter($items);
     }
@@ -399,61 +444,76 @@ class MobileBaseController extends BaseController
 
         $controller = $this;
 
-        return array_map(function ($user) use ($container, $controller) {
-            $user['smallAvatar'] = $container->get('web.twig.extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
-            $user['mediumAvatar'] = $container->get('web.twig.extension')->getFilePath($user['mediumAvatar'], 'avatar.png', true);
-            $user['largeAvatar'] = $container->get('web.twig.extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
-            $user['createdTime'] = date('c', $user['createdTime']);
+        return array_map(
+            function ($user) use ($container, $controller) {
+                $user['smallAvatar'] = $container->get('web.twig.extension')->getFilePath(
+                    $user['smallAvatar'],
+                    'avatar.png',
+                    true
+                );
+                $user['mediumAvatar'] = $container->get('web.twig.extension')->getFilePath(
+                    $user['mediumAvatar'],
+                    'avatar.png',
+                    true
+                );
+                $user['largeAvatar'] = $container->get('web.twig.extension')->getFilePath(
+                    $user['largeAvatar'],
+                    'avatar-large.png',
+                    true
+                );
+                $user['createdTime'] = date('c', $user['createdTime']);
 
-            if (!empty($user['verifiedMobile'])) {
-                $user['verifiedMobile'] = substr_replace($user['verifiedMobile'], '****', 3, 4);
-            } else {
-                unset($user['verifiedMobile']);
-            }
-
-            if ($controller->isinstalledPlugin('Vip') && $controller->setting('vip.enabled')) {
-                $userVip = $controller->getVipService()->getMemberByUserId($user['id']);
-
-                if (!empty($userVip)) {
-                    $userVipLevel = $controller->getLevelService()->getLevel($userVip['levelId']);
-
-                    $user['vip']['levelId'] = $userVip['levelId'];
-                    $user['vip']['vipName'] = $userVipLevel['name'];
-                    $user['vip']['VipDeadLine'] = $userVip['deadline'];
+                if (!empty($user['verifiedMobile'])) {
+                    $user['verifiedMobile'] = substr_replace($user['verifiedMobile'], '****', 3, 4);
+                } else {
+                    unset($user['verifiedMobile']);
                 }
-            }
 
-            $userProfile = $controller->getUserService()->getUserProfile($user['id']);
-            $user['signature'] = $userProfile['signature'];
+                if ($controller->isinstalledPlugin('Vip') && $controller->setting('vip.enabled')) {
+                    $userVip = $controller->getVipService()->getMemberByUserId($user['id']);
 
-            if (isset($user['about'])) {
-                $user['about'] = $controller->convertAbsoluteUrl($controller->request, $userProfile['about']);
-            }
+                    if (!empty($userVip)) {
+                        $userVipLevel = $controller->getLevelService()->getLevel($userVip['levelId']);
 
-            $user['following'] = $controller->getUserService()->findUserFollowingCount($user['id']);
-            $user['follower'] = $controller->getUserService()->findUserFollowerCount($user['id']);
+                        $user['vip']['levelId'] = $userVip['levelId'];
+                        $user['vip']['vipName'] = $userVipLevel['name'];
+                        $user['vip']['VipDeadLine'] = $userVip['deadline'];
+                    }
+                }
 
-            $user['email'] = '****';
-            unset($user['password']);
-            unset($user['payPasswordSalt']);
-            unset($user['payPassword']);
-            unset($user['salt']);
-            unset($user['createdIp']);
-            unset($user['loginTime']);
-            unset($user['loginIp']);
-            unset($user['loginSessionId']);
-            unset($user['newMessageNum']);
-            unset($user['newNotificationNum']);
-            unset($user['promoted']);
-            unset($user['promotedTime']);
-            unset($user['approvalTime']);
-            unset($user['approvalStatus']);
-            unset($user['tags']);
-            unset($user['point']);
-            unset($user['coin']);
+                $userProfile = $controller->getUserService()->getUserProfile($user['id']);
+                $user['signature'] = $userProfile['signature'];
 
-            return $user;
-        }, $users);
+                if (isset($user['about'])) {
+                    $user['about'] = $controller->convertAbsoluteUrl($controller->request, $userProfile['about']);
+                }
+
+                $user['following'] = $controller->getUserService()->findUserFollowingCount($user['id']);
+                $user['follower'] = $controller->getUserService()->findUserFollowerCount($user['id']);
+
+                $user['email'] = '****';
+                unset($user['password']);
+                unset($user['payPasswordSalt']);
+                unset($user['payPassword']);
+                unset($user['salt']);
+                unset($user['createdIp']);
+                unset($user['loginTime']);
+                unset($user['loginIp']);
+                unset($user['loginSessionId']);
+                unset($user['newMessageNum']);
+                unset($user['newNotificationNum']);
+                unset($user['promoted']);
+                unset($user['promotedTime']);
+                unset($user['approvalTime']);
+                unset($user['approvalStatus']);
+                unset($user['tags']);
+                unset($user['point']);
+                unset($user['coin']);
+
+                return $user;
+            },
+            $users
+        );
     }
 
     public function filterLiveCourses($user, $start, $limit)
@@ -570,6 +630,9 @@ class MobileBaseController extends BaseController
         return $this->createService('Course:MaterialService');
     }
 
+    /**
+     * @return CourseService
+     */
     public function getCourseService()
     {
         return $this->createService('Course:CourseService');
@@ -638,6 +701,11 @@ class MobileBaseController extends BaseController
     public function getLevelService()
     {
         return $this->createService('VipPlugin:Vip:LevelService');
+    }
+
+    public function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 
     public function getTokenService()

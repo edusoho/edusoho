@@ -168,6 +168,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
             'orderbys' => array(
                 'id',
                 'createdTime',
+                'updatedTime',
                 'promotedTime',
                 'promoted',
                 'promotedSeq',
