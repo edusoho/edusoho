@@ -996,6 +996,31 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId);
     }
 
+    public function getCourseItems($courseId)
+    {
+        $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
+        $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
+
+        $items = array();
+
+        foreach ($tasks as $task) {
+            $task['itemType']              = 'lesson';
+            $items["lesson-{$task['id']}"] = $task;
+        }
+
+        foreach ($chapters as $chapter) {
+            $chapter['itemType']               = 'chapter';
+            $items["chapter-{$chapter['id']}"] = $chapter;
+        }
+
+        uasort($items, function ($item1, $item2) {
+            return $item1['seq'] > $item2['seq'];
+        }
+
+        );
+        return $items;
+    }
+
     protected function _prepareCourseOrderBy($sort)
     {
         if (is_array($sort)) {

@@ -233,26 +233,20 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     public function getCourseDownLessons()
     {
-        $token = $this->controller->getUserToken($this->request);
-        $user = $this->controller->getUser();
         $courseId = $this->getParam('courseId');
-
         $course = $this->controller->getCourseService()->getCourse($courseId);
         $lessons = $this->controller->getCourseService()->getCourseItems($courseId);
+
         $lessons = $this->controller->filterItems($lessons);
-        if ($user->isLogin()) {
-            $learnStatuses = $this->controller->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
-        } else {
-            $learnStatuses = null;
-        }
-        // $files = $this->getUploadFiles($courseId);
-        $fileIds = ArrayToolkit::column($lessons, 'mediaId');
-        $files = ArrayToolkit::index($this->getUploadFileService()->findFilesByIds($fileIds), 'id');
-        $files = array_map(function ($file) {
-            $file['convertParams'] = null; //过滤convertParams防止移动端报错
-            return $file;
-        }, $files);
-        $lessons = $this->filterLessons($lessons, $files);
+
+//        $files = $this->getUploadFiles($courseId);
+//        $fileIds = ArrayToolkit::column($lessons, 'mediaId');
+//        $files = ArrayToolkit::index($this->getUploadFileService()->findFilesByIds($fileIds), 'id');
+//        $files = array_map(function ($file) {
+//            $file['convertParams'] = null; //过滤convertParams防止移动端报错
+//            return $file;
+//        }, $files);
+//        $lessons = $this->filterLessons($lessons, $files);
 
         return array(
             'lessons' => array_values($lessons),
