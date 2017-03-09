@@ -43,6 +43,7 @@ abstract class BaseConvertor
             return '';
         }
         $path = $this->getHttpHost()."/assets/{$path}";
+
         return $path;
     }
 
@@ -54,9 +55,10 @@ abstract class BaseConvertor
     protected function getSchema()
     {
         $https = $_SERVER['HTTPS'];
-        if(!empty($https) && 'off' !== strtolower($https)) {
+        if (!empty($https) && 'off' !== strtolower($https)) {
             return 'https';
         }
+
         return 'http';
     }
 }

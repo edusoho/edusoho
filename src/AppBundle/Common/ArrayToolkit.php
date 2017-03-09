@@ -134,15 +134,15 @@ class ArrayToolkit
             }
 
             if (is_array($value)) {
-                $filtered[$key] = (array) $array[$key];
+                $filtered[$key] = (array)$array[$key];
             } elseif (is_int($value)) {
-                $filtered[$key] = (int) $array[$key];
+                $filtered[$key] = (int)$array[$key];
             } elseif (is_float($value)) {
-                $filtered[$key] = (float) $array[$key];
+                $filtered[$key] = (float)$array[$key];
             } elseif (is_bool($value)) {
-                $filtered[$key] = (bool) $array[$key];
+                $filtered[$key] = (bool)$array[$key];
             } else {
-                $filtered[$key] = (string) $array[$key];
+                $filtered[$key] = (string)$array[$key];
             }
 
             if (empty($filtered[$key])) {
@@ -191,7 +191,7 @@ class ArrayToolkit
 
         return false;
     }
-    
+
     /**
      * 二维数组合并值，返回去除重复值的一维数组
      * @param  [type] $doubleArrays [description]
@@ -211,6 +211,7 @@ class ArrayToolkit
                 $values[] = $value;
             }
         }
+
         return $values;
     }
 }

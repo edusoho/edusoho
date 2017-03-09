@@ -20,7 +20,7 @@ class Article extends BaseResource
 
         return $res;
     }
-    
+
     /**
      * @return Biz\System\Service\SettingService
      */
