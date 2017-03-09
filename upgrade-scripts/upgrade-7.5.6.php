@@ -12,7 +12,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function update($index = 0)
     {
-        var_dump(3333);exit();
         $this->getConnection()->beginTransaction();
         try {
             $result = $this->batchUpdate($index);
@@ -101,7 +100,6 @@ class EduSohoUpgrade extends AbstractUpdater
         $info = $api->get('/me');
         $searchOverview = $api->get("/me/search/overview");
         $status = $this->canOpenCloudSearch($searchOverview);
-        var_dump($status);exit();
         if ($status) {
             $this->dealSaaSCloudSearch($info, $searchOverview);
         }
@@ -112,10 +110,8 @@ class EduSohoUpgrade extends AbstractUpdater
     private function dealSaaSCloudSearch($info, $searchOverview)
     {
         $eduCloudType = array('medium', 'personal', 'basic', 'advanced', 'gold');
-
         if (in_array($info['level'], $eduCloudType) && !isset($searchOverview['isBuy'])) {
             $searchSetting = $this->getSettingService()->get('cloud_search', array());
-
             if ($searchSetting['status'] == 'closed') {
                 $this->cloudSearchClause();
             } elseif (empty($searchSetting['search_enabled'])) {
@@ -128,7 +124,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function cloudSearchClause()
     {
-        $callbackRouteUrl = $this->generateUrl('edu_cloud_search_callback');
+        $callbackRouteUrl = '/edu_cloud/search/callback';
         $this->getSearchService()->applySearchAccount($callbackRouteUrl);
     }
 
@@ -164,8 +160,9 @@ class EduSohoUpgrade extends AbstractUpdater
             $data['status'] = 'unbinded';
             return false;
         } else {
-            $currentHost = $request->server->get('HTTP_HOST');
-            if (!in_array($currentHost, explode(';', $userOverview['user']['licenseDomains']))) {
+            $site = $this->getSettingService()->get('site');
+            // $currentHost = $_SERVER['HTTP_HOST'];
+            if (!in_array($site['url'], explode(';', $userOverview['user']['licenseDomains']))) {
                 $data['status'] = 'binded_error';
                 return false;
             }
@@ -205,11 +202,6 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getSettingService()
     {
         return ServiceKernel::instance()->createService('System.SettingService');
-    }
-
-    public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
-    {
-        return $this->kernel->get('router')->generate($route, $parameters, $referenceType);
     }
 }
 
