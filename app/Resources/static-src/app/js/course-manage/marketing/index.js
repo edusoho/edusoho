@@ -34,13 +34,25 @@ class Marketing {
           required: function(){
             return $('input[name="enableBuyExpiryTime"]:checked').val() == 1;
           },
-          date: true
+          date: true,
+          feature: true
         }
       },
       messages: {
-        buyExpiryTime: '请选择有效的购买截止日期'
+        buyExpiryTime: {
+          required: '请选择有效的购买截止日期',
+          date: '请选择有效的购买截止日期'
+        }
       }
     });
+
+    $.validator.addMethod(
+      "feature",
+      function(value, element, params) {
+        return value && (new Date(value).getTime()) > Date.now();
+      },
+      Translator.trans('不能晚于当前时间')
+    );
 
     $('.js-task-price-setting').on('click', 'li', function (event) {
       let $li = $(this).toggleClass('open');
