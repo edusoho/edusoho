@@ -24,6 +24,8 @@
       <div class="col-sm-9 controls money-text">
       	<span class="control-text">
           {% if course.isFree %}
+            <strong class="money">{{ '免费'|trans }}</strong>
+          {% else %}
             {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
               <strong class="money">{{ course.price * setting('coin.cash_rate')}}</strong>
               <span class="text-muted">{{setting('coin.coin_name')}}</span>
@@ -31,10 +33,7 @@
               <strong class="money">{{ course.price }}</strong>
               <span class="text-muted">{{'元'|trans}}</span>
             {% endif %}
-          {% else %}
-            <strong class="money">{{ '免费'|trans }}</strong>
           {% endif %}
-          
       	</span>
       </div>
     </div>
