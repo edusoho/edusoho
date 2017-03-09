@@ -12,7 +12,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function update($index = 0)
     {
-        var_dump(3333);exit();
         $this->getConnection()->beginTransaction();
         try {
             $result = $this->batchUpdate($index);
@@ -61,6 +60,7 @@ class EduSohoUpgrade extends AbstractUpdater
             2 => 'cloudSearchEnable'
         );
         if ($index == 0) {
+            $this->updateScheme();
             return array(
                 'index' => $this->generateIndex(1, 1),
                 'message' => '正在升级数据...',
@@ -82,6 +82,27 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0
             );
         }
+    }
+
+    protected function updateScheme()
+    {
+        $connection = $this->getConnection();
+
+        $connection->exec("
+            ALTER TABLE `classroom` ADD `expiryMode` enum('date', 'days', 'none') NOT NULL DEFAULT 'none' COMMENT '有效期的模式'; 
+        ");
+
+        $connection->exec("
+            ALTER TABLE `classroom` ADD `expiryValue` int(10) NOT NULL DEFAULT '0' COMMENT '有效期'; 
+        ");
+
+        $connection->exec("
+            ALTER TABLE `classroom_member` ADD `deadline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '到期时间'; 
+        ");
+
+        $connection->exec("
+            ALTER TABLE `classroom_member` ADD `deadlineNotified` int(10) NOT NULL DEFAULT '0' COMMENT '有效期通知'; 
+        ");
     }
 
     protected function updateAlipayType()
