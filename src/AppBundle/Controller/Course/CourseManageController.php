@@ -222,6 +222,7 @@ class CourseManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $courseCount = $this->getCourseService()->countCourses(array('courseSetId' => $courseSetId));
 
         if ($courseSet['locked']) {
             return $this->redirectToRoute('course_set_manage_sync', array(
@@ -244,6 +245,7 @@ class CourseManageController extends BaseController
             'course' => $course,
             'items' => $courseItems,
             'taskPerDay' => $taskPerDay,
+            'courseCount' => $courseCount,
         ));
     }
 
