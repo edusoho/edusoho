@@ -28,19 +28,6 @@
                {{'解锁式学习'|trans}}<a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'根据既定顺序逐个解锁学习'|trans}}"></a>
                <p class="help-block" id="learnLockModeHelp" data-role="tab-content" >{{''|trans}}</p>
              {% endif %}
-            {#{% if course.learnMode|default('freeMode') == 'freeMode' %}
-            <label>
-              <input type="radio" id="learnFreeMode" name="learnMode" value="freeMode" checked data-role="tab" data-tab-content="#learnFreeModeHelp" >{{'自由模式'|trans}}
-            </label>
-            {% endif %}
-            {% if course.learnMode|default('freeMode') == 'lockMode' %}
-            <label>
-              <input type="radio" name="learnMode" value="lockMode" checked data-role="tab" data-tab-content="#learnLockModeHelp">
-              {{'解锁式学习'|trans}}
-            </label>
-            {% endif %}
-            {% if course.learnMode|default('freeMode') == 'lockMode' %} <p class="help-block" id="learnFreeModeHelp" data-role="tab-content">{{'根据计划预定的顺序学习'|trans}}</p>{% endif %}
-            {% if course.learnMode|default('freeMode') == 'freeMode' %}<p class="help-block" id="learnLockModeHelp" data-role="tab-content" >{{'学习过程自由安排'|trans}}</p>{% endif %}#}
           </div>
         </div>
         <div class="form-group">
