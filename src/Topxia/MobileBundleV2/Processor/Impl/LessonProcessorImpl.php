@@ -2,9 +2,9 @@
 
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
+use Biz\Util\CloudClientFactory;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\LessonProcessor;
@@ -87,7 +87,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                 'type' => 'course',
             ),
             array('createdTime', 'DESC'),
-            0, 1000
+            0,
+            1000
         );
         $files = $this->controller->getUploadFileService()->findFilesByIds(ArrayToolkit::column($lessonMaterials, 'fileId'));
 
@@ -177,7 +178,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                     'type' => 'course',
                 ),
                 array('createdTime', 'DESC'),
-                0, 1
+                0,
+                1
             );
 
             return array(
@@ -194,8 +196,19 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $user = $this->controller->getuserByToken($this->request);
         $courseId = $this->getParam('courseId');
 
-        if ($user->isLogin()) {
-            $learnStatuses = $this->controller->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
+        if ($user->isLogin() && !empty($courseId)) {
+            $taskResults = $this->controller->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
+            $learnStatuses = array();
+            foreach ($taskResults as $result) {
+                if ($result['status'] === 'finish') {
+                    $status = 'finished';
+                } elseif ($result['status'] === 'start') {
+                    $status = 'learning';
+                } else {
+                    continue;
+                }
+                $learnStatuses[$result['courseTaskId']] = $status;
+            }
         } else {
             $learnStatuses = array();
         }

@@ -15,19 +15,10 @@ class Articles extends BaseResource
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 20);
 
-        if (isset($conditions['cursor'])) {
-            $conditions['status'] = 'published';
-            $conditions['updatedTime_GE'] = $conditions['cursor'];
-            $articles = $this->getArticleService()->searchArticles($conditions, array('updatedTime' => 'ASC'), $start, $limit);
-            $articles = $this->assemblyArticles($articles);
-            $next = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $articles);
-            return $this->wrap($this->filter($articles), $next);
-        } else {
-            $total = $this->getArticleService()->searchArticlesCount($conditions);
-            $articles = $this->getArticleService()->searchArticles($conditions, array('publishedTime' => 'DESC'), $start, $limit);
-            $articles = $this->assemblyArticles($articles);
-            return $this->wrap($this->filter($articles), $total);
-        }
+        $total = $this->getArticleService()->searchArticlesCount($conditions);
+        $articles = $this->getArticleService()->searchArticles($conditions, array('publishedTime' => 'DESC'), $start, $limit);
+        $articles = $this->assemblyArticles($articles);
+        return $this->wrap($this->filter($articles), $total);
     }
 
     public function filter($res)

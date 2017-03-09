@@ -46,7 +46,7 @@ class ClassRoomPlayStatus extends BaseResource
 		);
 		$lessonStatusArray = $this->getCourseService()->searchLearns(
 			array("userId"=>$user['id']),
-			array('startTime', 'ASC'),
+			array('startTime'=> 'ASC'),
 			0,
 			$lessonStatusCount
 		);
