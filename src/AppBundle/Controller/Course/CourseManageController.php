@@ -567,6 +567,8 @@ class CourseManageController extends BaseController
         return $this->render('course-manage/orders.html.twig', array(
             'courseSet' => $courseSet,
             'course' => $course,
+            'courseSets' => array($courseSet['id'] => $courseSet),
+            'courses' => array($course['id'] => $course),
             'request' => $request,
             'orders' => $orders,
             'users' => $users,

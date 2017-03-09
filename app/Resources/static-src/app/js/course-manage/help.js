@@ -159,10 +159,10 @@ export const showSettings = () => {
     let $this = $(event.currentTarget).closest('.js-task-manage-item');
     $(".js-item-content").stop(true,true);
     if ($this.hasClass('active')) {
-      $this.removeClass('active').find('.js-settings-list').hide();
+      $this.removeClass('active').find('.js-settings-list').stop().slideUp(500);
     } else {
-      $list.find(".js-task-manage-item.active").removeClass('active').find('.js-settings-list').hide();
-      $this.addClass('active').find('.js-settings-list').slideDown(500);
+      $list.find(".js-task-manage-item.active").removeClass('active').find('.js-settings-list').stop().slideUp(500);
+      $this.addClass('active').find('.js-settings-list').stop().slideDown(1000);
     }
   });
 };
