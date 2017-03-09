@@ -29,10 +29,10 @@ class ApiAuth
 
         if ($method == 'keysign') {
             $this->setCurrentUser(array(
-                'id'        => 0,
-                'nickname'  => '游客',
+                'id' => 0,
+                'nickname' => '游客',
                 'currentIp' => $request->getClientIp(),
-                'roles'     => array()
+                'roles' => array(),
             ));
 
             $decoded = $this->decodeKeysign($token);
@@ -91,27 +91,27 @@ class ApiAuth
         $settings = $this->getSettingService()->get('storage', array());
 
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
-            throw new \RuntimeException("系统尚未配置AccessKey/SecretKey");
+            throw new \RuntimeException('系统尚未配置AccessKey/SecretKey');
         }
 
         if ($accessKey != $settings['cloud_access_key']) {
-            throw new \RuntimeException("AccessKey不正确！");
+            throw new \RuntimeException('AccessKey不正确！');
         }
 
         $expectedSign = $this->encodeBase64(hash_hmac('sha1', $policy, $settings['cloud_secret_key'], true));
 
         if ($sign != $expectedSign) {
-            throw new \RuntimeException("API Token 签名不正确！");
+            throw new \RuntimeException('API Token 签名不正确！');
         }
 
         $policy = json_decode($this->decodeBase64($policy), true);
 
         if (empty($policy)) {
-            throw new \RuntimeException("API Token 解析失败！");
+            throw new \RuntimeException('API Token 解析失败！');
         }
 
         if (time() > $policy['deadline']) {
-            throw new \RuntimeException(sprintf("API Token 已过期！(%s)", date('Y-m-d H:i:s')));
+            throw new \RuntimeException(sprintf('API Token 已过期！(%s)', date('Y-m-d H:i:s')));
         }
 
         return $policy;
@@ -122,10 +122,10 @@ class ApiAuth
         $settings = $this->getSettingService()->get('storage', array());
 
         $policy = array(
-            'method'   => $request->getMethod(),
-            'uri'      => $request->getRequestUri(),
-            'role'     => $role,
-            'deadline' => time() + $lifetime
+            'method' => $request->getMethod(),
+            'uri' => $request->getRequestUri(),
+            'role' => $role,
+            'deadline' => time() + $lifetime,
         );
 
         $encoded = $this->encodeBase64(json_encode($policy));
@@ -147,7 +147,7 @@ class ApiAuth
 
     private function encodeBase64($string)
     {
-        $find    = array('+', '/');
+        $find = array('+', '/');
         $replace = array('-', '_');
 
         return str_replace($find, $replace, base64_encode($string));
@@ -155,7 +155,7 @@ class ApiAuth
 
     private function decodeBase64($string)
     {
-        $find    = array('-', '_');
+        $find = array('-', '_');
         $replace = array('+', '/');
 
         return base64_decode(str_replace($find, $replace, $string));
@@ -167,10 +167,10 @@ class ApiAuth
 
         if (empty($user)) {
             $user = array(
-                'id'        => 0,
-                'nickname'  => '游客',
+                'id' => 0,
+                'nickname' => '游客',
                 'currentIp' => '',
-                'roles'     => array()
+                'roles' => array(),
             );
         }
 

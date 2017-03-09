@@ -19,6 +19,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
                 'sticky',
                 'createdTime',
                 'lastPostTime',
+                'updateTime',
                 'hitNum',
             ),
             'conditions' => array(

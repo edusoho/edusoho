@@ -17,7 +17,7 @@ class Members extends BaseResource
         $limit      = $request->query->get('limit', 10);
 
         $total   = $this->getClassroomService()->searchMemberCount($conditions);
-        $members = $this->getClassroomService()->searchMembers($conditions, array('createdTime', 'DESC'), $start, $limit);
+        $members = $this->getClassroomService()->searchMembers($conditions, array('createdTime'=> 'DESC'), $start, $limit);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
 
