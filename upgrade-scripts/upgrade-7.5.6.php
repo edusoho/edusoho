@@ -41,7 +41,6 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function batchUpdate()
     {
         $this->updateScheme();
-        $this->updateAlipayType();
         $this->enableCloudSearch();
     }
 
@@ -74,24 +73,14 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    protected function updateAlipayType()
-    {
-        $payment = $this->getSettingService()->get('payment', array());
-        if ($payment) {
-            $payment['alipay_type'] = 'direct';
-            $this->getSettingService()->set('payment', $payment);
-        }
-    }
-
     protected function enableCloudSearch()
     {
         $this->api = CloudAPIFactory::create('root');
         if ($this->isSaaSUser()) {
-            $canOpen = $this->canOpenCloudSearch();
-            if ($canOpen) {
-                $searchOverview = $this->$api->get("/me/search/overview");
-                $this->dealSaaSCloudSearch($searchOverview);
-            }
+            $this->initSearchSetting();
+
+            $searchOverview = $this->api->get("/me/search/overview");
+            $this->dealSaaSCloudSearch($searchOverview);
         }
     }
 
@@ -113,8 +102,6 @@ class EduSohoUpgrade extends AbstractUpdater
                 $this->cloudSearchClause();
             } elseif (empty($searchSetting['search_enabled'])) {
                 $this->cloudSearchOpen($searchSetting);
-            } else {
-                $this->cloudSearchClause();
             }
         }
     }
@@ -141,28 +128,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    private function canOpenCloudSearch()
-    {
-        try {
-            $userOverview = $this->api->get("/users/{$this->api->getAccessKey()}/overview");
-            $this->isSearchInited();
-        } catch (\RuntimeException $e) {
-        }
-
-        //判断云搜索状态
-        if (empty($userOverview['user']['licenseDomains'])) {
-            return false;
-        } else {
-            $site = $this->getSettingService()->get('site');
-            // $currentHost = $_SERVER['HTTP_HOST'];
-            if (!in_array($site['url'], explode(';', $userOverview['user']['licenseDomains']))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    protected function isSearchInited()
+    protected function initSearchSetting()
     {
         $searchSetting = $this->getSettingService()->get('cloud_search', array());
 
