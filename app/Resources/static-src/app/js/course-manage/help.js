@@ -157,6 +157,7 @@ export const showSettings = () => {
   $("#sortable-list").on('mouseenter', '.js-item-content', event => {
     let $list = $(event.delegateTarget);
     let $this = $(event.currentTarget).closest('.js-task-manage-item');
+    $(".js-item-content").stop(true,true);
     if ($this.hasClass('active')) {
       $this.removeClass('active').find('.js-settings-list').stop().slideUp(500);
     } else {
