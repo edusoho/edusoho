@@ -48,21 +48,29 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $connection = $this->getConnection();
 
-        $connection->exec("
-            ALTER TABLE `classroom` ADD `expiryMode` enum('date', 'days', 'none') NOT NULL DEFAULT 'none' COMMENT '有效期的模式'; 
-        ");
+        if (!$this->isFieldExist('classroom', 'expiryMode')) {
+            $connection->exec("
+                ALTER TABLE `classroom` ADD `expiryMode` enum('date', 'days', 'none') NOT NULL DEFAULT 'none' COMMENT '有效期的模式'; 
+            ");
+        }
 
-        $connection->exec("
-            ALTER TABLE `classroom` ADD `expiryValue` int(10) NOT NULL DEFAULT '0' COMMENT '有效期'; 
-        ");
+        if (!$this->isFieldExist('classroom', 'expiryValue')) {
+            $connection->exec("
+                ALTER TABLE `classroom` ADD `expiryValue` int(10) NOT NULL DEFAULT '0' COMMENT '有效期'; 
+            ");
+        }
 
-        $connection->exec("
-            ALTER TABLE `classroom_member` ADD `deadline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '到期时间'; 
-        ");
+        if (!$this->isFieldExist('classroom_member', 'deadline')) {
+            $connection->exec("
+                ALTER TABLE `classroom_member` ADD `deadline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '到期时间'; 
+            ");
+        }
 
-        $connection->exec("
-            ALTER TABLE `classroom_member` ADD `deadlineNotified` int(10) NOT NULL DEFAULT '0' COMMENT '有效期通知'; 
-        ");
+        if (!$this->isFieldExist('classroom_member', 'deadlineNotified')) {
+            $connection->exec("
+                ALTER TABLE `classroom_member` ADD `deadlineNotified` int(10) NOT NULL DEFAULT '0' COMMENT '有效期通知'; 
+            ");
+        }
     }
 
     protected function updateAlipayType()
@@ -180,6 +188,13 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getSettingService()->set('cloud_search', $data);
 
         return $data;
+    }
+
+    protected function isFieldExist($table, $filedName)
+    {
+        $sql = "DESCRIBE `{$table}` `{$filedName}`;";
+        $result = $this->getConnection()->fetchAssoc($sql);
+        return empty($result) ? false : true;
     }
 
     protected function getSearchService()
