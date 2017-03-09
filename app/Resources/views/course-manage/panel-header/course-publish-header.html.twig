@@ -21,7 +21,6 @@
         {{ '预览'|trans }}
       </a>
     {% endif %}
-    {#不为courseSet且长度大于 1 #}
     {% if menuType != 'courseSet' %}
       <a class="btn btn-default btn-sm pull-right ml5" href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">返回课程编辑</a>
     {% endif %}
