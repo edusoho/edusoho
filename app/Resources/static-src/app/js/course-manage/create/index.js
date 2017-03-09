@@ -2,7 +2,7 @@ class Creator {
   constructor() {
     this.init();
   }
-
+  
   init() {
     this.initDatePicker('#expiryStartDate');
     this.initDatePicker('#expiryEndDate');
@@ -80,7 +80,6 @@ class Creator {
     });
   }
 
-
   checkBoxChange() {
     $('input[name="expiryMode"]').on('change', function (event) {
       if ($('input[name="expiryMode"]:checked').val() == 'date') {
@@ -102,7 +101,6 @@ class Creator {
       }
     });
   }
-
 
   initDatePicker($id) {
     let $picker = $($id);

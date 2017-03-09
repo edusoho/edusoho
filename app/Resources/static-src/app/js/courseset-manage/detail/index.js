@@ -36,9 +36,9 @@ class detail {
   }
 
   submitForm() {
-    $('#courseset-submit').click(function (evt) {
+    $('#courseset-submit').click((event) => {
       this.publishAddMessage();
-      $(evt.currentTarget).button('loading');
+      $(event.currentTarget).button('loading');
       $('#courseset-detail-form').submit();
     });
   }
