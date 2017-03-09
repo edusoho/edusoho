@@ -158,4 +158,6 @@ interface CourseService
     public function getMinAndMaxPublishedCoursePriceByCourseSetId($CourseSetId);
 
     public function updateMaxRateByCourseSetId($courseSetId, $maxRate);
+
+    public function findCourseTasksAndChapters($courseId, $includeChapters);
 }
