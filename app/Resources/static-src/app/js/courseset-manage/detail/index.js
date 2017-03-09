@@ -12,7 +12,7 @@ class detail {
     this.initCkeditor();
     this.renderMultiGroupComponent('course-goals', 'goals');
     this.renderMultiGroupComponent('intended-students', 'audiences');
-    this.submitEvent();
+    this.submitForm();
   }
 
   initCkeditor() {
@@ -35,9 +35,9 @@ class detail {
     );
   }
 
-  submitEvent() {
+  submitForm() {
     $('#courseset-submit').click(function (evt) {
-      publishAddMessage();
+      this.publishAddMessage();
       $(evt.currentTarget).button('loading');
       $('#courseset-detail-form').submit();
     });

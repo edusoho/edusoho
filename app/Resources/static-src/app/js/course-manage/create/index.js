@@ -13,13 +13,13 @@ class Creator {
   initValidator() {
     let $form = $("#course-create-form");
     let validator = $form.validate({
-      onkeyup: false,
       groups: {
         date: 'expiryStartDate expiryEndDate'
       },
       rules: {
         title: {
-          required: true
+          required: true,
+          trim: true,
         },
         expiryDays: {
           required: '#expiryByDays:checked',
