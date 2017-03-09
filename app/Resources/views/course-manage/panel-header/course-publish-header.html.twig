@@ -21,7 +21,7 @@
         {{ '预览'|trans }}
       </a>
     {% endif %}
-    {% if menuType != 'courseSet' and courseCount > 1 %}
+    {% if menuType != 'courseSet' and course_count(course.courseSetId) > 1 %}
       <a class="btn btn-default btn-sm pull-right ml5" href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">返回课程编辑</a>
     {% endif %}
     {% if btnGroup|default() %}
