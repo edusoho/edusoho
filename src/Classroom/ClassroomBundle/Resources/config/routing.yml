@@ -272,3 +272,7 @@ classrom_course_lessons_list:
 classroom_member_deadline_reach:
     path: /classroom/{classroomId}/member/deadline/reach
     defaults: { _controller: ClassroomBundle:Classroom:deadlineReach }
+
+classroom_expiry_date_role:
+    path: /classroom_expiry_date_role
+    defaults: { _controller: ClassroomBundle:ClassroomManage:expiryDateRole }
