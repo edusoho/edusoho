@@ -51,7 +51,7 @@ class Marketing {
       function(value, element, params) {
         return value && (new Date(value).getTime()) > Date.now();
       },
-      Translator.trans('不能晚于当前时间')
+      Translator.trans('购买截止时间需在当前时间之后')
     );
 
     $('.js-task-price-setting').on('click', 'li', function (event) {
@@ -89,7 +89,7 @@ class Marketing {
       autoclose: true,
       endDate: new Date(Date.now() + 86400 * 365 * 100 * 1000)
     });
-    $('input[name="buyExpiryTime"]').datetimepicker('setStartDate', new Date());
+    $('input[name="buyExpiryTime"]').datetimepicker('setStartDate', new Date(Date.now() + 86400 * 1000));
 
     $('input[name="tryLookable"]').on('change', function (event) {
       console.log('tryLook : ', $('input[name="tryLookable"]:checked').val());
