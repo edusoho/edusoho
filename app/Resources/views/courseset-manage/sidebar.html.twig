@@ -5,6 +5,7 @@
     {% set menuType = 'courseSet' %}
   {% endif %}
   {% set coursesLength =  courses|length %}
+  
   {#只有一个教学计划#}
   <div class="sidenav locked">
     <ul class="list-group">
@@ -181,15 +182,6 @@
     {% endif %}
     </ul>
   </div>
-  {#不为courseSet且长度大于 1 #}
-  {% if menuType != 'courseSet' and  coursesLength > 1 %}
-    <div class="sidenav locked pt5 pb5">
-      <ul class="list-group">
-        <li class="list-group-item ">
-          <a class="pl10 " href="{{ path('course_set_manage_base', {id: courseSet.id}) }}"><i class="es-icon es-icon-chevronleft mr10"></i>返回课程编辑</a>
-        </li>
-      </ul>
-    </div>
-  {% endif %}
+ 
 
 {% endblock %}
