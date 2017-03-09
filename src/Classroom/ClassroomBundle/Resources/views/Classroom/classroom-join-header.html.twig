@@ -103,7 +103,13 @@
               {% if classroom.expiryMode == 'date'%}
                  <div  class="alert alert-warning">你的班级已过有效期，无法继续学习</div>
               {% elseif classroom.expiryMode == 'days' %}
-               <div class="alert alert-warning">你的班级已过有效期，无法继续学习，请<a href="{{ path('classroom_introductions', {id:classroom.id}) }}">重新购买</a></div>
+               <div class="alert alert-warning">你的班级已过有效期，无法继续学习，请<a href="{{ path('classroom_member_deadline_reach', {classroomId:classroom.id}) }}">
+                  {% if classroom.buyable == 1 %}
+                    {{ '重新购买'|trans }}
+                  {% else %}
+                    {{ '重新加入'|trans }}
+                  {% endif %}
+                </a></div>
               {% endif %}
             <div>
           {% else %}
