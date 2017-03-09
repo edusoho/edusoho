@@ -35,10 +35,10 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function batchUpdate($index)
     {
-        // $this->c2courseSetMigrate();
-        // $this->c2courseMigrate();
+        $this->c2courseSetMigrate();
+        $this->c2courseMigrate();
         $this->c2CourseLessonMigrate();
-        // $this->c2testpaperMigrate();
+        $this->c2testpaperMigrate();
         $this->c2QuestionMigrate();
         // $this->migrate();
     }
@@ -117,6 +117,7 @@ class EduSohoUpgrade extends AbstractUpdater
               ,`cover`
               ,`creator`
               ,`summary`
+              ,`teacherIds`
           ) SELECT
               `id`
               ,`title`
@@ -147,11 +148,15 @@ class EduSohoUpgrade extends AbstractUpdater
               ,concat('{\"large\":\"',largePicture,'\",\"middle\":\"',middlePicture,'\",\"small\":\"',smallPicture,'\"}') as cover
               ,`userId`
               ,`about`
+              ,`teacherIds`
           FROM `course` where `id` not in (select `id` from `c2_course_set`);";
 
         $result = $this->getConnection()->exec($sql);
 
         $sql = "UPDATE `c2_course_set` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.num  WHERE ce.id = cm.`courseId`;";
+        $result = $this->getConnection()->exec($sql);
+
+        $sql = "UPDATE `c2_course_set` cs, `course` c SET cs.minCoursePrice = c.price, cs.maxCoursePrice = c.price where cs.id = c.id";
         $result = $this->getConnection()->exec($sql);
     }
 
@@ -274,6 +279,7 @@ class EduSohoUpgrade extends AbstractUpdater
               ,`threadNum`
               ,`enableFinish`
               ,`learnMode`
+              ,`maxRate`
           ) SELECT
               `id`
               ,`title`
@@ -325,6 +331,7 @@ class EduSohoUpgrade extends AbstractUpdater
               ,0
               ,1
               ,'freeMode'
+              ,`maxRate`
           FROM `course` where `id` not in (select `id` from `c2_course`);";
         $result = $this->getConnection()->exec($sql);
 
@@ -334,10 +341,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = "UPDATE `c2_course` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.num  WHERE ce.id = cm.courseId;";
         $result = $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE `c2_course` c set `publishedTaskNum` = (select count(*) from course_lesson where courseId=c.id)";
-        $result = $this->getConnection()->exec($sql);
-
-        $sql = "UPDATE `c2_course_set` cs, `c2_course` c SET cs.minCoursePrice = c.price, cs.maxCoursePrice = c.price where cs.id = c.id";
+        $sql = "UPDATE `c2_course` c set `publishedTaskNum` = (select count(*) from course_lesson where courseId=c.id and status = 'published')";
         $result = $this->getConnection()->exec($sql);
     }
 
@@ -1608,7 +1612,7 @@ class EduSohoUpgrade extends AbstractUpdater
             FROM testpaper_result WHERE id NOT IN (SELECT id FROM c2_testpaper_result)";
         $this->getConnection()->exec($sql);
 
-        $sql = "SELECT * FROM c2_testpaper_result WHERE id NOT IN (SELECT id FROM c2_testpaper_result WHERE type = 'testpaper')";
+        $sql = "SELECT * FROM c2_testpaper_result WHERE id NOT IN (SELECT id FROM c2_testpaper_result WHERE type = 'testpaper') and type = 'testpaper'";
         $newTestpaperResults = $this->getConnection()->fetchAll($sql);
         foreach ($newTestpaperResults as $testpaperResult) {
             $targetArr = explode('/', $testpaperResult['target']);
@@ -1813,11 +1817,11 @@ class EduSohoUpgrade extends AbstractUpdater
                 id AS oldResultId FROM homework_result WHERE id NOT IN (SELECT oldResultId FROM c2_testpaper_result WHERE type = 'homework')";
         $this->exec($sql);
 
-        $sql = "UPDATE c2_testpaper_result AS tr,(SELECT id,oldTestId FROM c2_testpaper WHERE type ='homework') AS tmp, SET testId = tmp.id WHERE tr.type = 'homework' AND tmp.oldTestId = tr.testId";
+        $sql = "UPDATE c2_testpaper_result AS tr,(SELECT id,oldTestId FROM c2_testpaper WHERE type ='homework') AS tmp SET testId = tmp.id WHERE tr.type = 'homework' AND tmp.oldTestId = tr.testId";
         $this->exec($sql);
 
         //需要与刘洋洋那边做好后，最终确认 lesson->activityId
-        $sql = "UPDATE c2_testpaper_result AS tr,(SELECT id,mediaId FROM activity) AS tmp, SET lessonId = tmp.Id WHERE tr.type = 'homework' AND tmp.mediaId = tr.testId";
+        $sql = "UPDATE c2_testpaper_result AS tr,(SELECT id,mediaId FROM activity) AS tmp SET lessonId = tmp.Id WHERE tr.type = 'homework' AND tmp.mediaId = tr.testId";
         $this->exec($sql);
 
         $sql = "INSERT INTO c2_testpaper_item_result (
@@ -2089,6 +2093,12 @@ class EduSohoUpgrade extends AbstractUpdater
             );
         }
 
+        if (!$this->isFieldExist('question', 'courseSetId')) {
+            $this->exec("
+                ALTER TABLE `question` ADD COLUMN `courseSetId` INT(10) NOT NULL DEFAULT '0'  AFTER `target`
+            ");
+        }
+
         if (!$this->isFieldExist('question', 'lessonId')) {
             $this->exec(
                 "
@@ -2109,7 +2119,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 $lessonId = $lessonArr[1];
             }
 
-            $sql = "UPDATE question set courseId = {$courseArr[1]},lessonId={$lessonId} WHERE id = {$question['id']}";
+            $sql = "UPDATE question set courseId = {$courseArr[1]},courseSetId = {$courseArr[1]},lessonId={$lessonId} WHERE id = {$question['id']}";
             $this->exec($sql);
         }
 
@@ -2133,9 +2143,9 @@ class EduSohoUpgrade extends AbstractUpdater
         $favorites = $this->getConnection()->fetchAll($sql);
 
         foreach ($favorites as $favorite) {
-            $targetArr = explode('/', $favorite['target']);
+            $targetArr = explode('-', $favorite['target']);
 
-            $sql = "UPDATE question_favorite set targetId = {$targetArr[1]},targetType={$targetArr[0]} WHERE id = {$favorite['id']}";
+            $sql = "UPDATE question_favorite set targetId = {$targetArr[1]},targetType='".$targetArr[0]."' WHERE id = {$favorite['id']}";
             $this->exec($sql);
         }
     }
