@@ -13,12 +13,17 @@ include __DIR__.'/src/functions.php';
 
 $app = new Silex\Application();
 
-include __DIR__ . '/config/' . API_ENV . '.php';
+$app['biz'] = function (){
+    global $kernel;
+    return $kernel->getContainer()->get('biz');
+};
 
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/templates',
 ));
+
+include __DIR__ . '/config/' . API_ENV . '.php';
 
 $app->view(function (array $result, Request $request) use ($app) {
     // 兼容气球云搜索的接口

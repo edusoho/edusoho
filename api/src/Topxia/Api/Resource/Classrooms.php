@@ -35,7 +35,7 @@ class Classrooms extends BaseResource
 
         $conditions['status']   = 'published';
         $conditions['showable'] = 1;
-        $classrooms             = $this->getClassroomService()->searchClassrooms($conditions, array($orderBy, 'desc'), 0, $result['showCount']);
+        $classrooms             = $this->getClassroomService()->searchClassrooms($conditions, array($orderBy=> 'DESC'), 0, $result['showCount']);
 
         $total      = count($classrooms);
         $classrooms = $this->filter($classrooms);
