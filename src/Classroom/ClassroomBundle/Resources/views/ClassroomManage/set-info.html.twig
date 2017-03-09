@@ -106,8 +106,12 @@ classroomStatus: classroom.status
           </div>
           {#即有效期为N天，则只能学习N天，即有效期至yyyy-mm-dd，则只能学习至yyyy-mm-dd 即有效期为N天，则只能学习N天，#}
         </div>
+        <div class="col-md-offset-2 col-md-10 js-course-rule">
+          <p class="alert-warning"></p>
+          <a href="{{ path('classroom_expiry_date_rule') }}" target="_blank">查看有效期规则</a>
+        </div>
       </div>
-        
+
       <div class="form-group">
         <label class="col-md-2 control-label">{{'分类'|trans}}</label>
         <div class="col-md-8 controls">

@@ -1074,6 +1074,11 @@ class ClassroomManageController extends BaseController
         ));
     }
 
+    public function expiryDateRuleAction()
+    {
+        return $this->render('ClassroomBundle:ClassroomManage:rule.html.twig');
+    }
+
     private function getTagIdsFromRequest($request)
     {
         $tags = $request->request->get('tags');
