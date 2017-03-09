@@ -37,11 +37,11 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getSettingService()->set("crontab_next_executed_time", time());
     }
 
-    protected function batchUpdate($index)
+    protected function batchUpdate()
     {
         $this->updateScheme();
         $this->updateAlipayType();
-        $this->cloudSearchEnable();
+        $this->enableCloudSearch();
     }
 
     protected function updateScheme()
@@ -74,27 +74,37 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    protected function cloudSearchEnable()
+    protected function enableCloudSearch()
     {
         $api  = CloudAPIFactory::create('root');
-        $info = $api->get('/me');
-        $searchOverview = $api->get("/me/search/overview");
-        $status = $this->canOpenCloudSearch($searchOverview);
-        if ($status) {
-            $this->dealSaaSCloudSearch($info, $searchOverview);
+        if ($this->isSaaSUser($api)) {
+            $searchOverview = $api->get("/me/search/overview");
+            $canOpen = $this->canOpenCloudSearch($searchOverview);
+            if ($canOpen) {
+                $this->dealSaaSCloudSearch($searchOverview);
+            }
         }
     }
 
-    private function dealSaaSCloudSearch($info, $searchOverview)
+    private function isSaaSUser($api)
     {
+        $info = $api->get('/me');
         $eduCloudType = array('medium', 'personal', 'basic', 'advanced', 'gold');
-        if (in_array($info['level'], $eduCloudType) && !isset($searchOverview['isBuy'])) {
+        if (in_array($info['level'], $eduCloudType)) {
+            return true;
+        }
+        return false;
+    }
+
+    private function dealSaaSCloudSearch($searchOverview)
+    {
+        if (!isset($searchOverview['isBuy'])) {
             $searchSetting = $this->getSettingService()->get('cloud_search', array());
             if ($searchSetting['status'] == 'closed') {
                 $this->cloudSearchClause();
             } elseif (empty($searchSetting['search_enabled'])) {
                 $this->cloudSearchOpen($searchSetting);
-            }  else {
+            } else {
                 $this->cloudSearchClause();
             }
         }
