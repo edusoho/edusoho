@@ -72,6 +72,7 @@ $resources = array(
     'User/Password',
     'SmsCodes',
     'User/VerifiedMobile',
+    'CoursesLearnProgress',
     'MeFriends'
 );
 
