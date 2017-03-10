@@ -254,6 +254,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
 
         if (!empty($conditions['target'])) {
+            $conditions['lessonId'] = $conditions['target'];
             $conditions = $this->prepareCourseIdAndActvityId($conditions);
         } else {
             unset($conditions['target']);
