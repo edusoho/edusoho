@@ -2,6 +2,7 @@
 
 namespace Biz\Taxonomy\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Dao\TagDao;
@@ -9,14 +10,15 @@ use Biz\Taxonomy\Dao\TagGroupDao;
 use Biz\Taxonomy\Dao\TagGroupTagDao;
 use Biz\Taxonomy\Dao\TagOwnerDao;
 use Biz\Taxonomy\Service\TagService;
-use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
 class TagServiceImpl extends BaseService implements TagService
 {
     private $allowFields
         = array(
-            'name', 'scope', 'tagNum',
+            'name',
+            'scope',
+            'tagNum',
         );
 
     public function getTag($id)
@@ -36,7 +38,11 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function getTagOwnerRelationByTagIdAndOwner($tagId, $owner)
     {
-        return $this->getTagOwnerDao()->getTagOwnerRelationByTagIdAndOwnerTypeAndOwnerId($tagId, $owner['ownerType'], $owner['ownerId']);
+        return $this->getTagOwnerDao()->getTagOwnerRelationByTagIdAndOwnerTypeAndOwnerId(
+            $tagId,
+            $owner['ownerType'],
+            $owner['ownerId']
+        );
     }
 
     public function getTagByLikeName($name)
@@ -196,10 +202,12 @@ class TagServiceImpl extends BaseService implements TagService
         $tagGroup = $this->getTagGroupDao()->create($fields);
 
         foreach ($tagIds as $tagId) {
-            $this->getTagGroupTagDao()->create(array(
-                'tagId' => $tagId,
-                'groupId' => $tagGroup['id'],
-            ));
+            $this->getTagGroupTagDao()->create(
+                array(
+                    'tagId' => $tagId,
+                    'groupId' => $tagGroup['id'],
+                )
+            );
         }
 
         $this->getLogService()->info('tagGroup', 'create', "添加标签组{$tagGroup['name']}(#{$tagGroup['id']})");

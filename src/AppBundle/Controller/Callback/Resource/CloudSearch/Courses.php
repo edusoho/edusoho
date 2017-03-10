@@ -3,11 +3,11 @@
 namespace AppBundle\Controller\Callback\Resource\CloudSearch;
 
 use AppBundle\Common\ArrayToolkit;
-use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\Callback\Resource\BaseResource;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
- * 课程资源集合(对应course_set表)
+ * 课程资源集合(对应course_set表).
  */
 class Courses extends BaseResource
 {
@@ -22,7 +22,12 @@ class Courses extends BaseResource
         $conditions['status'] = 'published';
         $conditions['parentId'] = 0;
         $conditions['updatedTime_GE'] = $cursor;
-        $courses = $this->getCourseSetService()->searchCourseSets($conditions, array('updatedTime' => 'ASC'), $start, $limit);
+        $courses = $this->getCourseSetService()->searchCourseSets(
+            $conditions,
+            array('updatedTime' => 'ASC'),
+            $start,
+            $limit
+        );
         $courses = $this->build($courses);
         $next = $this->nextCursorPaging($cursor, $start, $limit, $courses);
 
@@ -38,10 +43,10 @@ class Courses extends BaseResource
     {
         $courses = $this->buildCategories($courses);
         $courses = $this->buildTags($courses);
-        
+
         return $courses;
     }
-    
+
     protected function buildCategories($courses)
     {
         $categoryIds = ArrayToolkit::column($courses, 'categoryId');
@@ -60,14 +65,14 @@ class Courses extends BaseResource
 
         return $courses;
     }
-    
+
     protected function buildTags($courses)
     {
         $tagIdGroups = ArrayToolkit::column($courses, 'tags');
         $tagIds = ArrayToolkit::mergeArraysValue($tagIdGroups);
 
         $tags = $this->getTagService()->findTagsByIds($tagIds);
-        
+
         foreach ($courses as &$course) {
             $courseTagIds = $course['tags'];
             $course['tags'] = array();
@@ -82,7 +87,7 @@ class Courses extends BaseResource
                 }
             }
         }
-        
+
         return $courses;
     }
 
