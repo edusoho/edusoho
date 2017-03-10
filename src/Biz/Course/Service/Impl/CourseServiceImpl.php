@@ -220,6 +220,16 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $course;
     }
 
+    public function updateCourseRecommendByCourseSetId($courseSetId, $fields)
+    {
+        $requiredKeys = array('recommended', 'recommendedSeq', 'recommendedTime');
+        $fields = ArrayToolkit::parts($fields, $requiredKeys);
+        if (!ArrayToolkit::requireds($fields, array('recommended', 'recommendedSeq', 'recommendedTime'))) {
+            throw $this->createInvalidArgumentException('Lack of required fields');
+        }
+        $this->getCourseDao()->updateCourseRecommendByCourseSetId($courseSetId, $fields);
+    }
+
     public function updateMaxRate($id, $maxRate)
     {
         $course = $this->getCourseDao()->update($id, array('maxRate' => $maxRate));

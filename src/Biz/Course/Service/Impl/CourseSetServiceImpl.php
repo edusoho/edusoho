@@ -34,35 +34,48 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if (!is_numeric($number)) {
             throw $this->createAccessDeniedException('recmendNum should be number!');
         }
-
+        $fields = array(
+            'recommended' => 1,
+            'recommendedSeq' => (int) $number,
+            'recommendedTime' => time(),
+        );
         $course = $this->getCourseSetDao()->update(
             $id,
-            array(
-                'recommended' => 1,
-                'recommendedSeq' => (int) $number,
-                'recommendedTime' => time(),
-            )
+            $fields
         );
 
         $this->getLogService()->info('course', 'recommend', "推荐课程《{$course['title']}》(#{$course['id']}),序号为{$number}");
-
+        $this->dispatchEvent(
+            'courseSet.recommend',
+            new Event(
+                $course,
+                $fields
+            )
+        );
         return $course;
     }
 
     public function cancelRecommendCourse($id)
     {
         $course = $this->tryManageCourseSet($id);
-
+        $fields = array(
+            'recommended' => 0,
+            'recommendedTime' => 0,
+            'recommendedSeq' => 0,
+        );
         $this->getCourseSetDao()->update(
             $id,
-            array(
-                'recommended' => 0,
-                'recommendedTime' => 0,
-                'recommendedSeq' => 0,
-            )
+            $fields
         );
 
         $this->getLogService()->info('course', 'cancel_recommend', "取消推荐课程《{$course['title']}》(#{$course['id']})");
+        $this->dispatchEvent(
+            'courseSet.recommend.cancel',
+            new Event(
+                $course,
+                $fields
+            )
+        );
     }
 
     public function favorite($id)

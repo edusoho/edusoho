@@ -107,6 +107,11 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         return $this->db()->update($this->table, $updateFields, array('courseSetId' => $courseSetId));
     }
 
+    public function updateCourseRecommendByCourseSetId($courseSetId, $fields)
+    {
+        return $this->db()->update($this->table, $fields, array('courseSetId' => $courseSetId));
+    }
+
     public function declares()
     {
         return array(
