@@ -16,8 +16,8 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
     {
         return array(
             'question.create' => 'onQuestionCreate',
-            'question.update' => 'onQuestionUpdate',
-            'question.delete' => 'onQuestionDelete',
+            'question.update' => array('onQuestionUpdate', 2),
+            'question.delete' => array('onQuestionDelete', 2),
 
             'course.delete' => 'onCourseDelete',
             //'course.lesson.create' => 'onCourseLessonCreate',

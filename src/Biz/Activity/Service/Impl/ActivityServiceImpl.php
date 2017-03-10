@@ -27,9 +27,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $activity;
     }
 
-    public function getActivityByCopyIdAndCourseId($copyId, $courseId)
+    public function getActivityByCopyIdAndCourseSetId($copyId, $courseSetId)
     {
-        return $this->getActivityDao()->getByCopyIdAndCourseId($copyId, $courseId);
+        return $this->getActivityDao()->getByCopyIdAndCourseSetId($copyId, $courseSetId);
     }
 
     public function findActivities($ids, $fetchMedia = false)
@@ -389,7 +389,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     /**
      * @param  $fields
-     *
      * @return array
      */
     public function getFileDataFromActivity($fields)
@@ -417,7 +416,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     /**
      * @param  $activity
-     *
      * @return mixed
      */
     public function fetchMedia($activity)

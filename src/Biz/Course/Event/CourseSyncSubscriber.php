@@ -2,7 +2,6 @@
 
 namespace Biz\Course\Event;
 
-use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseSetDao;
 use AppBundle\Common\ArrayToolkit;
@@ -11,6 +10,7 @@ use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseMaterialDao;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\Classroom\Service\ClassroomService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -336,6 +336,11 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         }
 
         return $target;
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getBiz()->service('Course:CourseService');
     }
 
     /**

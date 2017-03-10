@@ -8,7 +8,7 @@ interface ActivityService
 {
     public function getActivity($id, $fetchMedia = false);
 
-    public function getActivityByCopyIdAndCourseId($copyId, $courseId);
+    public function getActivityByCopyIdAndCourseSetId($copyId, $courseSetId);
 
     public function findActivities($ids, $fetchMedia = false);
 
@@ -27,8 +27,7 @@ interface ActivityService
     public function count($conditions);
 
     /**
-     * @param string $type 活动类型
-     *
+     * @param  string     $type 活动类型
      * @return Activity
      */
     public function getActivityConfig($type);
