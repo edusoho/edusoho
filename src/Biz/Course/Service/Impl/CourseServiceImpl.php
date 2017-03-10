@@ -228,6 +228,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $course;
     }
 
+    public function updateCategoryByCourseSetId($courseSetId, $categoryId)
+    {
+        $this->getCourseDao()->updateCategoryByCourseSetId($courseSetId, array('categoryId' => $categoryId));
+    }
+
     public function updateMaxRateByCourseSetId($courseSetId, $maxRate)
     {
         $course = $this->getCourseDao()->updateMaxRateByCourseSetId($courseSetId, array('updatedTime' => time(), 'maxRate' => $maxRate));
