@@ -57,9 +57,11 @@
     </div>
     <div class="panel-body">
     {% include 'course/tabs/tasks.html.twig' with {limitCount : 2} %}
+    {% if course.taskNum > 6 %}
     <div class="text-center pt10 border-top-gray-lighter" >
        <a href="{{path('course_show',{id: course.id, tab:'tasks'})}} " class="link-dark">查看全部  &gt;</a>  
     </div>
+    {% endif %}
     </div>
   </div>
 {% endif %}
