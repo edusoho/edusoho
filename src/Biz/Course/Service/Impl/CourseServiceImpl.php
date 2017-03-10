@@ -248,6 +248,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'tryLookLength',
             'watchLimit',
             'buyExpiryTime',
+            'showServices',
             'services',
             'approval',
         ));
