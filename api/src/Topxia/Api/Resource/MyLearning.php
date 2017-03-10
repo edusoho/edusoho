@@ -65,7 +65,7 @@ class MyLearning extends BaseResource
             $learningData[$key] = $course;
 
             $learningData[$key]['courseSet'] = $courseSets[$course['courseSetId']];
-            $learningData[$key]['lastLearnTime'] = empty($member['lastLearnTime']) ? 0 : date('c', $member['lastLearnTime']);
+            $learningData[$key]['lastViewTime'] = empty($member['lastLearnTime']) ? 0 : date('c', $member['lastLearnTime']);
             $learningData[$key]['joinedType'] = $member['joinedType'];
             if ('classroom' == $member['joinedType']) {
                 $learningData[$key]['classroomTitle'] = empty($classrooms[$member['classroomId']]) ? '' : $classrooms[$member['classroomId']]['title'];
