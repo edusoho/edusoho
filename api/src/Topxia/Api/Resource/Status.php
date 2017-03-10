@@ -4,8 +4,8 @@ namespace Topxia\Api\Resource;
 
 use Silex\Application;
 use AppBundle\Common\ArrayToolkit;
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Request;
 
 class Status extends BaseResource
 {
@@ -20,7 +20,12 @@ class Status extends BaseResource
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 10);
 
-        $statuses = $this->getStatusService()->searchStatuses(array('userId' => $member['userId'], 'courseId' => $courseId), array('createdTime'=> 'DESC'), $start, $limit);
+        $statuses = $this->getStatusService()->searchStatuses(
+            array('userId' => $member['userId'], 'courseId' => $courseId),
+            array('createdTime' => 'DESC'),
+            $start,
+            $limit
+        );
 
         return $this->_filterStatus($statuses);
     }

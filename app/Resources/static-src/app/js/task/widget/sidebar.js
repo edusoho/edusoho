@@ -98,7 +98,7 @@ export default class TaskSidebar extends Emitter {
 
   popupContent(time = 1) {
     let side_right = '0px';
-    let content_right = '379px';
+    let content_right = '395px';
 
     this.emit('popup', content_right, time);
     this.element.animate({

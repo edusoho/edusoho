@@ -6,19 +6,18 @@
 {% do script(['app/js/course-manage/index.js']) %}
 
 {% block main %}
-  <!-- 当前课程的教学计划列表 -->
-  <div class="panel panel-default panel-col lesson-manage-panel">
+  <div class="panel panel-default" role="courseset-manage-courses">
     <div class="panel-heading">
       {{ '教学计划管理'|trans }}
       <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#modal"
         data-url="{{ path('course_set_manage_course_create', {courseSetId: courseSet.id}) }}"><i
           class="es-icon es-icon-anonymous-iconfont"></i>{{ '创建教学计划'|trans }}</button>
     </div>
-
     <div class="panel-body">
       <table id="course-table" class="table table-striped">
       	<thead>
-      	  <th width="40%">{{'名称'|trans}}</th>
+      	  <th width="30%">{{'名称'|trans}}</th>
+          <th>{{'学习模式'|trans}}<a class="link-medium es-icon es-icon-help ml5" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="<ul class='pl20 ul-list-decimal'><li class='mb10'>自由式学习，学员自由安排学习过程</li><li>解锁式学习，学员根据既定顺序逐个解锁学习</li></ul>"></a></th>
           <th>{{'任务数'|trans}}</th>
           <th>{{'学员'|trans}}</th>
           <th>{{'价格（元）'|trans}}</th>
@@ -29,19 +28,23 @@
       		{% for course in courses %}
       		<tr>
       			<td>{{course.title}}</td>
+            <td>
+              {% if course.learnMode|default('freeMode') == 'freeMode' %}
+                自由式学习
+              {% else %}
+                解锁式学习
+              {% endif %}
+            </td>
       			<td>{{course.taskNum|default(0)}}</td>
       			<td>{{course.studentNum|default(0)}}</td>
       			<td>{{course.price}}{{'元'|trans}}
-
-			{{ slot('course.marketing.extension', {'course':course}) }}
-
-
-			<td>
+			          {{ slot('course.marketing.extension', {'course':course}) }}
+      			</td>
+			      <td>
              {% if course.status == 'published' %}
-              <span class="color-success">{{'已发布'|trans}}</span>
+                <span class="color-success">{{'已发布'|trans}}</span>
               {% elseif course.status=='closed'%}             
-              <span class="color-danger">{{'已关闭'|trans}}</span>
-
+                <span class="color-danger">{{'已关闭'|trans}}</span>
               {% else %}
                 <span class="text-muted">{{ '未发布'|trans }}</span>
               {% endif %}
@@ -99,6 +102,5 @@
       </table>
     </div>
   </div>
-
 {% endblock %}
 
