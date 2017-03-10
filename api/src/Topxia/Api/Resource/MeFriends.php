@@ -17,7 +17,7 @@ class MeFriends extends BaseResource
         $friends = $this->getUserService()->findFriends($user['id'], $start, $limit);
 
         $count = $this->getUserService()->findFriendCount($user['id']);
-        $friends = $this->multicallFilter('User', $friends);
+        $friends = filters($friends, 'user');
 
         return array(
             'data'  => $friends,
