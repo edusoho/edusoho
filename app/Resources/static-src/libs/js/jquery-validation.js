@@ -192,12 +192,13 @@ $.validator.addMethod("feature", function (value, element, params) {
   Translator.trans('购买截止时间需在当前时间之后')
 );
 $.validator.addMethod("next_day", function (value, element, params) {
-  var next = new Date();
-  next = +next + 1000 * 60 * 60 * 24;
-  next = new Date(next);
-
-  console.log(value && next < new Date(value));
-  return value && next < new Date(value);
+  let now = new Date();
+  let next = new Date(now + 86400 * 1000);
+  
+  console.log(next);
+  console.log( new Date(value));
+  console.log( next <= new Date(value));
+  return value && next <= new Date(value);
 },
   Translator.trans('开始时间应晚于当前时间')
 );

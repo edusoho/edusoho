@@ -1,5 +1,6 @@
 class Marketing {
   constructor() {
+    this.validator = null;
     this.init();
   }
 
@@ -36,9 +37,15 @@ class Marketing {
       language: "zh",
       minView: 2, //month
       autoclose: true,
-      endDate: new Date(Date.now() + 86400 * 365 * 100 * 1000)
-    });
+    }).on('hide', () => {
+      this.validator && this.validator.form();
+    })
+    this.updateDatetimepicker();
+  }
+
+  updateDatetimepicker() {
     $('input[name="buyExpiryTime"]').datetimepicker('setStartDate', new Date(Date.now() + 86400 * 1000));
+    $('input[name="buyExpiryTime"]').datetimepicker('setEndDate', new Date(Date.now() + 86400 * 365 * 100 * 1000));
   }
 
   checkBoxChange() {
@@ -56,11 +63,13 @@ class Marketing {
         $('.js-enable-try-look').addClass('hidden');
       }
     });
-    $('input[name="enableBuyExpiryTime"]').on('change', function (event) {
+    $('input[name="enableBuyExpiryTime"]').on('change', (event) => {
       if ($('input[name="enableBuyExpiryTime"]:checked').val() == 0) {
         $('#buyExpiryTime').addClass('hidden');
       } else {
+
         $('#buyExpiryTime').removeClass('hidden');
+        this.updateDatetimepicker();
       }
     });
   }
@@ -82,7 +91,7 @@ class Marketing {
   initValidator() {
     let $form = $('#course-marketing-form');
     $('.js-task-price-setting').perfectScrollbar();
-    let validator = $form.validate({
+    this.validator = $form.validate({
       rules: {
         originPrice: {
           required: function () {
@@ -107,7 +116,9 @@ class Marketing {
           required: function () {
             return $('input[name="enableBuyExpiryTime"]:checked').val() == 1;
           },
-          next_day:true,
+          next_day: function () {
+            return $('input[name="enableBuyExpiryTime"]:checked').val() == 1;
+          },
         }
       },
       messages: {
@@ -118,8 +129,7 @@ class Marketing {
       }
     });
     $('#course-submit').click((event) => {
-      validator.form()
-      if (validator.form()) {
+      if (this.validator && this.validator.form()) {
         $(event.currentTarget).button('loading');
         $form.submit();
       }
