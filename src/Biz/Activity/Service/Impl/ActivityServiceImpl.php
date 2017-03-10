@@ -389,6 +389,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     /**
      * @param  $fields
+     *
      * @return array
      */
     public function getFileDataFromActivity($fields)
@@ -416,6 +417,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     /**
      * @param  $activity
+     *
      * @return mixed
      */
     public function fetchMedia($activity)
