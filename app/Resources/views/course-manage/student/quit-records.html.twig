@@ -16,7 +16,6 @@
               {{ '发布计划'|trans }}
             </button>
           {% endif %}
-          <button class="btn btn-info btn-sm mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_set_manage_course_students_add', {courseSetId:courseSet.id, courseId: course.id}) }}"><i class="es-icon es-icon-anonymous-iconfont"></i> {{'添加学员'|trans}}</button>
           {% if course.status == 'published' %}
           {#  <a class="btn btn-info btn-sm mhs" data-toggle="modal" data-target="#modal" data-url="{{ path('importer_index', {type: 'classroom-member',classroomId:classroom.id}) }}"><i class="glyphicon glyphicon-import"></i> {{'批量导入'|trans}}</a> #}
           {% else %}
@@ -52,12 +51,16 @@
             <th>{{'退出日期'|trans}}</th>
             <th>{{'退款状态'|trans}}</th>
             <th>{{'退款金额'|trans}}
-              <span class="glyphicon glyphicon-question-sign text-muted" id="refund-coin-tips" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span>
+              <span class="gray-medium es-icon es-icon-help" id="refund-coin-tips" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span>
               <div id="refund-coin-tips-html" style="display:none;">
-                <div style="width:150px;">
-                  <span style="color:blue;">1.</span>{{'仅显示通过现金购买加入的学员退款记录'|trans}}<br><br>
-                  <span style="color:blue;">2.</span>{{'班级教学计划退款情况请在班级管理中查看'|trans}}<br>
-                </div>
+                <ul class="pl20">
+                  <li class="mt10 mb10">
+                    {{'仅显示通过现金购买加入的学员退款记录'|trans}}
+                  </li>
+                  <li>
+                    {{'班级教学计划退款情况请在班级管理中查看'|trans}}
+                  </li>
+                </ul>
               </div>
             </th>
           </tr>
