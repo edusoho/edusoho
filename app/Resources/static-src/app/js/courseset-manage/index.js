@@ -1,3 +1,3 @@
-import { publishCourse } from '../course-manage/help';
+import { publishCourse } from 'app/js/course-manage/help';
 publishCourse();
 
