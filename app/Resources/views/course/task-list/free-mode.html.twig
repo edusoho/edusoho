@@ -1,6 +1,6 @@
 <div class="course-detail-content">
   <ul class="task-list task-list-md task-list-hover">
-    {% set taskCount = 0 %}
+    {% set taskIndex = 0 %}
     {% for key, item in courseItems %}
       {% if item.type|default(null) == 'chapter' %}
         <li class="task-item bg-gray-lighter js-task-chapter"><i class="es-icon es-icon-menu left-menu"></i>
@@ -15,7 +15,7 @@
         </li>
       {% elseif  item.type|default(null)  == 'lesson' %}
         {% for task in item.tasks  %}
-          {% set taskCount = taskCount + 1 %}
+          {% set taskIndex = taskIndex +1 %}
           {% set task_lock =  false %}
           {% set file = files[task.activity.mediaId]|default(null) %}
           <li class="task-item task-content mouse-control">
