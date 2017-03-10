@@ -14,8 +14,8 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     {
         return array(
             'courseSet.maxRate.update' => 'onCourseSetMaxRateUpdate',
-            'courseSet.recommend' => 'onCourseSetRecommendUpdate',
-            'courseSet.recommend.cancel' => 'onCourseSetRecommendUpdate'
+            'courseSet.recommend' => 'onCourseSetRecommend',
+            'courseSet.recommend.cancel' => 'onCourseSetCancelRecommend'
         );
     }
 
@@ -28,13 +28,18 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
         return $this->getCourseService()->updateMaxRateByCourseSetId($courseSet['id'], $maxRate);
     }
 
-    public function onCourseSetRecommendUpdate(Event $event)
+    public function onCourseSetRecommend(Event $event)
     {
         $courseSet = $event->getSubject();
         $fields = $event->getArguments();
-        $this->getCourseService()->updateCourseRecommendByCourseSetId($courseSet['id'], $fields);
+        $this->getCourseService()->RecommendCourseByCourseSetId($courseSet['id'], $fields);
     }
 
+    public function onCourseSetCancelRecommend(Event $event)
+    {
+        $courseSet = $event->getSubject();
+        $this->getCourseService()->cancelRecommendCourseByCourseSetId($courseSet['id']);
+    }
     /**
      * @return CourseSetService
      */
