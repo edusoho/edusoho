@@ -3,9 +3,9 @@
 namespace Biz\Question\Event;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\Activity\Service\ActivityService;
 use Biz\File\Service\UploadFileService;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\Activity\Service\ActivityService;
 use Biz\Question\Service\QuestionService;
 use Biz\Course\Event\CourseSyncSubscriber;
 
@@ -26,12 +26,12 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
         if ($question['copyId'] > 0) {
             return;
         }
-        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($question['courseId'], 1);
+        $copiedCourses = $this->getCourseService()->findCoursesByParentIdAndLocked($question['courseId'], 1);
         if (empty($copiedCourses)) {
             return;
         }
-        $courseIds = ArrayToolkit::column($copiedCourses, 'id');
-        $copiedQuestions = $this->getQuestionService()->search(array('copyId' => $question['id'], 'courseIds' => $courseIds), array(), 0, PHP_INT_MAX);
+        $courseSetIds = ArrayToolkit::column($copiedCourses, 'courseSetId');
+        $copiedQuestions = $this->getQuestionService()->search(array('copyId' => $question['id'], 'courseSetIds' => $courseSetIds), array(), 0, PHP_INT_MAX);
         if (empty($copiedQuestions)) {
             return;
         }
@@ -51,7 +51,7 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
             ));
 
             if ($question['lessonId'] > 0) {
-                $activity = $this->getActivityService()->getActivityByCopyIdAndCourseId($question['lessonId'], $cc['courseId']);
+                $activity = $this->getActivityService()->getActivityByCopyIdAndCourseSetId($question['lessonId'], $cc['courseSetId']);
                 if (!empty($activity)) {
                     $cc['lessonId'] = $activity['id'];
                 }
@@ -68,12 +68,12 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
         if ($question['copyId'] > 0) {
             return;
         }
-        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($question['courseId'], 1);
+        $copiedCourses = $this->getCourseService()->findCoursesByParentIdAndLocked($question['courseId'], 1);
         if (empty($copiedCourses)) {
             return;
         }
-        $courseIds = ArrayToolkit::column($copiedCourses, 'id');
-        $copiedQuestions = $this->getQuestionService()->search(array('copyId' => $question['id'], 'courseIds' => $courseIds), array(), 0, PHP_INT_MAX);
+        $courseSetIds = ArrayToolkit::column($copiedCourses, 'courseSetId');
+        $copiedQuestions = $this->getQuestionService()->search(array('copyId' => $question['id'], 'courseSetIds' => $courseSetIds), array(), 0, PHP_INT_MAX);
         if (empty($copiedQuestions)) {
             return;
         }
@@ -97,8 +97,7 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
             $fileIds = ArrayToolkit::column($stems, 'fileId');
             $this->getUploadFileService()->createUseFiles($fileIds, $copiedQuestion['id'], 'question.stem', 'attachment');
         }
-        $analysises = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType('question.analysis', $sourceQuestion['id'],
-            'attachment');
+        $analysises = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType('question.analysis', $sourceQuestion['id'], 'attachment');
         if (!empty($analysises)) {
             $fileIds = ArrayToolkit::column($analysises, 'fileId');
             $this->getUploadFileService()->createUseFiles($fileIds, $copiedQuestion['id'], 'question.analysis', 'attachment');

@@ -5,8 +5,8 @@ namespace Biz\File\Service\Impl;
 use Biz\BaseService;
 use Biz\File\Dao\FileUsedDao;
 use Biz\File\Dao\UploadFileDao;
-use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\File\Dao\UploadFileTagDao;
 use Biz\System\Service\LogService;
 use Biz\File\Dao\UploadFileInitDao;
@@ -1070,7 +1070,14 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function createUseFiles($fileIds, $targetId, $targetType, $type)
     {
-        $fileIds = empty($fileIds) ? array() : explode(',', $fileIds);
+        if (empty($fileIds)) {
+            return;
+        }
+
+        if ($fileIds && is_string($fileIds)) {
+            $fileIds = explode(',', $fileIds);
+        }
+
         $newFileIds = $this->findCreatedFileIds($fileIds, $targetType, $targetId);
         if (empty($newFileIds)) {
             return false;
@@ -1264,9 +1271,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     /**
      * @param  $key
-     *
      * @throws \Codeages\Biz\Framework\Service\Exception\ServiceException
-     *
      * @return FileImplementor
      */
     protected function getFileImplementor($key)
