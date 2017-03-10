@@ -92,15 +92,6 @@
             {% endif %}
           </li>
         {% endif %}
-        {% if is_plugin_installed('vip') and course.vipLevelId != 0 %}
-          {% set level = data('VipLevel',{'id' : course.vipLevelId} ) %}
-          <li>
-            <a class="btn btn-default btn-xs  vip-btn" data-toggle="popover" data-placement="top" title="会员课程"
-               data-trigger="hover" data-container=".vip-btn" data-content="{{ level.name }}免费学"><i
-                  class="es-icon es-icon-crown color-warning"></i>
-            </a>
-          </li>
-        {% endif %}
         {% block course_member_exit %}{% endblock %}
       </ul>
     </div>
