@@ -34,6 +34,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if (!is_numeric($number)) {
             throw $this->createAccessDeniedException('recmendNum should be number!');
         }
+
         $course = $this->getCourseSetDao()->update(
             $id,
             array(
@@ -273,8 +274,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
+        $sets = $this->findCourseSetsByIds($courseSetIds);
 
-        return $this->findCourseSetsByIds($courseSetIds);
+        return $sets;
     }
 
     public function findCourseSetsByIds(array $ids)
@@ -315,6 +317,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 'title',
             )
         );
+
         $courseSet['status'] = 'draft';
         $courseSet['creator'] = $this->getCurrentUser()->getId();
         $created = $this->getCourseSetDao()->create($courseSet);
@@ -426,6 +429,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $this->dispatchEvent('course-set.update', new Event($courseSet));
 
         return $courseSet;
+    }
+
+    public function updateCourseSetTeacherIds($id, $teacherIds)
+    {
+        $courseSet = $this->tryManageCourseSet($id);
+        $courseSet['teacherIds'] = $teacherIds;
+        $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $courseSet);
+        $this->dispatchEvent('course-set.update', new Event($courseSet));
     }
 
     public function changeCourseSetCover($id, $coverArray)

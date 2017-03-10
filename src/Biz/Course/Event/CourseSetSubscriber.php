@@ -14,7 +14,6 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     {
         return array(
             'courseSet.maxRate.update' => 'onCourseSetMaxRateUpdate',
-            'classroom.course.delete' => 'onClassroomCourseDelete',
         );
     }
 
@@ -25,17 +24,6 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
         $maxRate = $subject['maxRate'];
 
         return $this->getCourseService()->updateMaxRateByCourseSetId($courseSet['id'], $maxRate);
-    }
-
-    public function onClassroomCourseDelete(Event $event)
-    {
-        $courseId = $event->getArgument('deleteCourseId');
-        $course = $this->getCourseService()->getCourse($courseId);
-        if (empty($course) || empty($course['parentId'])) {
-            return;
-        }
-
-        $this->getCourseSetService()->deleteCourseSet($course['courseSetId']);
     }
 
     /**

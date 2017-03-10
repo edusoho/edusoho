@@ -579,7 +579,7 @@ my_question_favorite:
 
 my_question_unfavorite:
     path: /my/question/unfavorite/{id}
-    defaults: { _controller: AppBundle:My/Question:unfavorite }
+    defaults: { _controller: AppBundle:My/Question:unFavorite }
 
 my_homework_check_list:
     path: /my/homework/check/{status}
