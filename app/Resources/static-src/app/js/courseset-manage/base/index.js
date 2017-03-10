@@ -5,21 +5,59 @@ class Base {
   }
 
   init() {
-    //init ui components
+    this.initValidator();
+    this.initSelect2();
+  }
+
+  initValidator() {
+    let $form = $('#courseset-form');
+    let validator = $form.validate({
+      rules: {
+        title: {
+          required: {
+            depends: function () {
+              $(this).val($.trim($(this).val()));
+              return true;
+            }
+          },
+          open_live_course_title: true//@TODO只有直播课程和直播公开课程需要此验证
+        },
+        subtitle: {
+          required: {
+            depends: function () {
+              $(this).val($.trim($(this).val()));
+              return false;
+            }
+          }
+        }
+      },
+      messages: {
+        title: "请输入有效的课程标题（直播公开课标题暂不支持<、>、\"、&、‘、’、”、“字符）"
+      }
+    });
+    $('#courseset-base-submit').click(event => {
+      if (validator.form()) {
+        $(event.currentTarget).button('loading');
+        $form.submit();
+      }
+    });
+  }
+
+  initSelect2() {
     $('#tags').select2({
       ajax: {
         url: '/tag/match_jsonp#',
         dataType: 'json',
         quietMillis: 100,
-        data: function(term, page) {
+        data: function (term, page) {
           return {
             q: term,
             page_limit: 10
           };
         },
-        results: function(data) {
-          var results = [];
-          $.each(data, function(index, item) {
+        results: function (data) {
+          let results = [];
+          $.each(data, function (index, item) {
             results.push({
               id: item.name,
               name: item.name
@@ -30,9 +68,9 @@ class Base {
           };
         }
       },
-      initSelection: function(element, callback) {
-        var data = [];
-        $(element.val().split(",")).each(function() {
+      initSelection: function (element, callback) {
+        let data = [];
+        $(element.val().split(",")).each(function () {
           data.push({
             id: this,
             name: this
@@ -40,10 +78,10 @@ class Base {
         });
         callback(data);
       },
-      formatSelection: function(item) {
+      formatSelection: function (item) {
         return item.name;
       },
-      formatResult: function(item) {
+      formatResult: function (item) {
         return item.name;
       },
       formatSearching: '搜索中...',
@@ -53,55 +91,12 @@ class Base {
       placeholder: Translator.trans('请输入标签'),
       width: 'off',
       multiple: true,
-      createSearchChoice: function() {
+      createSearchChoice: function () {
         return null;
       },
       maximumSelectionSize: 20
     });
-
-    let $form = $('#courseset-form');
-    let validator = $form.validate({
-      onkeyup: false,
-      rules: {
-        title: {
-          required: {
-            depends:function(){
-                $(this).val($.trim($(this).val()));
-                return true;
-            }
-          },
-          open_live_course_title: true
-        },
-        subtitle: {
-          required: {
-            depends:function(){
-                $(this).val($.trim($(this).val()));
-                return false;
-            }
-          }
-        }
-      },
-      messages: {
-        title: "请输入有效的课程标题（直播公开课标题暂不支持<、>、\"、&、‘、’、”、“字符）"
-      }
-    });
-
-    $.validator.addMethod("open_live_course_title", function(value, element, params) {
-      if ($('#courseSetType').val() === 'liveOpen' && !/^[^(<|>|'|"|&|‘|’|”|“)]*$/.test(value)) {
-        return false;
-      } else {
-        return true;
-      }
-    }, Translator.trans('直播公开课标题暂不支持<、>、\"、&、‘、’、”、“字符'));
-
-    $('#courseset-base-submit').click(event => {
-      if (validator.form()) {
-        $(event.currentTarget).button('loading');
-        $form.submit();
-      }
-    });
   }
-
 }
 
 new Base();

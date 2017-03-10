@@ -12,6 +12,9 @@
         <span class="label label-danger live-label mls">{{'已移除'|trans}}</span>
       {% endif %}
     {% endif %}
+    {% if courseSet.type == 'live' %}
+      <span class="label label-success live-label mls">直播</span>
+    {% endif %}
     <br>
     <span class="text-muted text-sm">{{'分类：'|trans}}{{ category.name|default('--') }}</span>
     {% if courseSet.recommended %}
