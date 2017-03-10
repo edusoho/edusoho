@@ -579,7 +579,7 @@ my_question_favorite:
 
 my_question_unfavorite:
     path: /my/question/unfavorite/{id}
-    defaults: { _controller: AppBundle:My/Question:unfavorite }
+    defaults: { _controller: AppBundle:My/Question:unFavorite }
 
 my_homework_check_list:
     path: /my/homework/check/{status}
@@ -1501,7 +1501,7 @@ live_open_lesson_time_check:
     path:  /open/course/{courseId}/manage/live/time/check
     defaults: { _controller: AppBundle:OpenCourseManage:lessonTimeCheck }
 
-live_open_es_live_replay_show: 
+live_open_es_live_replay_show:
     path:  /open/course/live/replay/{replayId}/show
     defaults: { _controller: AppBundle:LiveOpenCourse:playESLiveReplay }
 
@@ -2846,3 +2846,7 @@ course_task_question_marker_list:
 course_task_question_marker_search:
     path:  /course/{courseId}/task/{taskId}/question_marker/search
     defaults: { _controller: AppBundle:QuestionMarker:search }
+
+callback:
+    path:  /callback/{resource}
+    defaults: { _controller: AppBundle:Callback/Index:index }

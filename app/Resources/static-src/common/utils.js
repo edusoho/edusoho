@@ -25,9 +25,24 @@ const delHtmlTag = (str) => {
   return str.replace(/<[^>]+>/g, '').replace(/&nbsp;/ig, '');
 }
 
+const initTooltips = () => {
+  $('[data-toggle="tooltip"]').tooltip({
+    html: true,
+  });
+}
+
+const initPopover = () => {
+  $('[data-toggle="popover"]').popover({
+    html: true,
+  });
+}
+
 export {
   Browser,
   isMobileDevice,
   delHtmlTag,
+  initTooltips,
+  initPopover,
   isLogin
 };
+

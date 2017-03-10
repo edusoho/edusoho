@@ -24,7 +24,7 @@ class ChaosThreads extends BaseResource
             'updateTime_GE' => isset($cursors[0]) ? $cursors[0] : 0
         );
         $start         = isset($starts[0]) ? $starts[0] : 0;
-        $commonThreads = $this->getThreadService()->searchThreads($conditions, array(array('updateTime', 'ASC')), $start, $limit);
+        $commonThreads = $this->getThreadService()->searchThreads($conditions, array(array('updateTime'=> 'ASC')), $start, $limit);
         $commonThreads = $this->normalizeCommonThreads($commonThreads);
 
         $commonNext = $this->nextCursorPaging($conditions['updateTime_GE'], $start, $limit, $commonThreads);
@@ -36,7 +36,7 @@ class ChaosThreads extends BaseResource
             'updatedTime_GE' => isset($cursors[1]) ? $cursors[1] : 0
         );
         $start         = isset($starts[1]) ? $starts[1] : 0;
-        $courseThreads = $this->getCourseThreadService()->searchThreads($conditions, array(array('updatedTime', 'ASC')), $start, $limit);
+        $courseThreads = $this->getCourseThreadService()->searchThreads($conditions, array(array('updatedTime'=> 'ASC')), $start, $limit);
         $courseNext    = $this->nextCursorPaging($conditions['updatedTime_GE'], $start, $limit, $courseThreads);
         $threads       = array_merge($threads, $this->filterCourseThreads($courseThreads));
 
@@ -45,7 +45,7 @@ class ChaosThreads extends BaseResource
             'updatedTime_GE' => isset($cursors[2]) ? $cursors[2] : 0
         );
         $start        = isset($starts[2]) ? $starts[2] : 0;
-        $groupThreads = $this->getGroupThreadService()->searchThreads($conditions, array(array('updatedTime', 'ASC')), $start, $limit);
+        $groupThreads = $this->getGroupThreadService()->searchThreads($conditions, array(array('updatedTime'=> 'ASC')), $start, $limit);
         $groupNext    = $this->nextCursorPaging($conditions['updatedTime_GE'], $start, $limit, $groupThreads);
         $threads      = array_merge($threads, $this->filterGroupThreads($groupThreads));
 
@@ -196,7 +196,7 @@ class ChaosThreads extends BaseResource
             'userId' => $currentUser['id']
         );
 
-        $userCourses = $this->getCourseMemberService()->searchMembers(array('userId' => $currentUser['id']), array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+        $userCourses = $this->getCourseMemberService()->searchMembers(array('userId' => $currentUser['id']), array('createdTime'=> 'DESC'), 0, PHP_INT_MAX);
 
         if (!$userCourses) {
             return array();

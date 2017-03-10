@@ -75,13 +75,12 @@ $resources = array(
 );
 
 foreach ($resources as $res) {
-    $app["res.{$res}"] = function () use ($res) {
+    $app["res.{$res}"] = function ($app) use ($res) {
         $class    = "Topxia\\Api\\Resource";
         $segments = explode('/', $res);
         foreach ($segments as $seg) {
             $class .= "\\{$seg}";
         }
-
-        return new $class();
+        return new $class($app['biz']);
     };
 }
