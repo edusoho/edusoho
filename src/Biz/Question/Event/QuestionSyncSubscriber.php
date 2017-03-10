@@ -15,8 +15,8 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
     {
         return array(
             // 'question.create' => 'onQuestionCreate',
-            'question.update' => array('onQuestionUpdate', 1),
-            'question.delete' => array('onQuestionDelete', 1),
+            'question.update' => 'onQuestionUpdate',
+            'question.delete' => 'onQuestionDelete',
         );
     }
 

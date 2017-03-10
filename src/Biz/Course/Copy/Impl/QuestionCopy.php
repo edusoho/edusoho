@@ -3,12 +3,12 @@
 namespace Biz\Course\Copy\Impl;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Course\Copy\AbstractEntityCopy;
 use Biz\File\Service\UploadFileService;
+use Biz\Activity\Service\ActivityService;
 use Biz\Question\Service\QuestionService;
 use Biz\Testpaper\Service\TestpaperService;
+use Biz\Activity\Service\TestpaperActivityService;
 
 /**
  * Class QuestionCopy.
@@ -119,6 +119,7 @@ class QuestionCopy extends AbstractEntityCopy
 
         $newQuestion = ArrayToolkit::parts($question, $fields);
         $newQuestion['courseId'] = $newCourseSetId;
+        $newQuestion['courseSetId'] = $newCourseSetId;
         $newQuestion['lessonId'] = 0;
         $newQuestion['copyId'] = $isCopy ? $question['id'] : 0;
         $newQuestion['userId'] = $this->biz['user']['id'];
