@@ -189,6 +189,14 @@ interface CourseSetService
     public function cancelRecommendCourse($id);
 
     /**
+     * 根据查询条件随机取指定个数的课程
+     * @param $conditions
+     * @param int $num
+     * @return mixed
+     */
+    public function findRandomCourseSets($conditions, $num=3);
+
+    /**
      * 返回课程的营收额.
      *
      * @param array $ids

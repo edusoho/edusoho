@@ -65,6 +65,21 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $this->getLogService()->info('course', 'cancel_recommend', "取消推荐课程《{$course['title']}》(#{$course['id']})");
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function findRandomCourseSets($conditions, $num = 3)
+    {
+        $count = $this->countCourseSets($conditions);
+        $max   = $count - $num - 1;
+        if ($max < 0) {
+            $max = 0;
+        }
+        $offset = rand(0, $max);
+        return $this->searchCourseSets($conditions, 'latest', $offset, $num);
+    }
+
+
     public function favorite($id)
     {
         $courseSet = $this->getCourseSet($id);
