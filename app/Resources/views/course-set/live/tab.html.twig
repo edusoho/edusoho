@@ -20,7 +20,7 @@
 									{% if liveList.current|default(null) %}
 			              <div class="timeline">
 			               <span class="time-icon"><em></em></span>
-			               <span class="label label-success">{{'正在直播任务'|trans}}</span>
+			               <span class="label label-success">{{'正在直播'|trans}}</span>
 			              </div>
 			              <ul class="live-courses">
 			              	{% for list in liveList.current %}
@@ -40,7 +40,7 @@
 		              <div class="timeline">
 		                <span class="time-icon"><em></em></span>
 		                {% if date == 'today' %}
-		               		<span class="label label-info">{{'即将直播任务'|trans}}</span>
+		               		<span class="label label-info">{{'即将直播'|trans}}</span>
 		                {% endif %}
 		              </div>
 		              <ul class="live-courses">
