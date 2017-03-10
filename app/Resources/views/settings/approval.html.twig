@@ -2,7 +2,6 @@
 
 {% block title %}{{'实名认证'|trans}} - {{ parent() }}{% endblock %}
 {% set side_nav = 'approval' %}
-{#{% set script_controller = 'settings/approval' %}#}
 
 {% do script(['libs/jquery-validation.js', 'app/js/settings/approval/index.js']) %}
 
