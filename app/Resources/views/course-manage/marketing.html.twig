@@ -77,11 +77,10 @@
             </div>
           </div>
         {% endif %}
-
         <div class="form-group js-enable-try-look {% if course.tryLookable|default(0) == 0 %}hidden{% endif %}">
           <label class="col-sm-2 control-label" for="tryLookLength">{{'试看时长'|trans}}</label>
           <div class="col-sm-8 ">
-            <input class="form-control width-150 mrs" type="text" id="tryLookLength"  name="tryLookLength" value="{{course.tryLookLength|default(1)}}">分钟
+            <input class="form-control width-150 mrs" type="text" id="tryLookLength"  name="tryLookLength"   value="{% if course.tryLookLength|default(1) <= 0 %}1{% else %}{{course.tryLookLength|default(1)}}{% endif %}">分钟
           </div>
         </div>
         {% if setting('magic.lesson_watch_limit') %}

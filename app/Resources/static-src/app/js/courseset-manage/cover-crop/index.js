@@ -21,7 +21,7 @@ class CoverCrop {
 
     $("#upload-picture-btn").click(function(e) {
       e.stopPropagation();
-
+      $(event.currentTarget).button('loading');
       imageCrop.crop({
         imgs: {
           large: [480, 270],
