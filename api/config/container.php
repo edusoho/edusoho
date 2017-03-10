@@ -74,6 +74,8 @@ $resources = array(
     'User/VerifiedMobile',
     'MyLearning',
     'MeFriends',
+    'CoursesLearnProgress',
+    'MeFriends',
 );
 
 foreach ($resources as $res) {
