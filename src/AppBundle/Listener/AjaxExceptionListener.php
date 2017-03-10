@@ -47,7 +47,11 @@ class AjaxExceptionListener
 
         $error = array('name' => 'Error', 'message' => $exception->getMessage());
         if (!$this->container->get('kernel')->isDebug()) {
-            ServiceKernel::instance()->createService('System:LogService')->error('ajax', 'exception', $exception->getMessage());
+            $message = $exception->__toString();
+            if (strlen($message) > 1024) {
+                $message = substr($message, 1024);
+            }
+            ServiceKernel::instance()->createService('System:LogService')->error('ajax', 'exception', $message);
         } else {
             $this->getLogger()->error($exception->__toString());
         }
