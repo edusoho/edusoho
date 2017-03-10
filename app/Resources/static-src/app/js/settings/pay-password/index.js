@@ -20,9 +20,5 @@ $('#password-save-btn').on('click', (event) => {
     $this.button('loading');
     
     $('#settings-pay-password-form').submit();
-    
-    setTimeout(() => {
-      $this.button('reset');
-    },1000)
   }
 })
