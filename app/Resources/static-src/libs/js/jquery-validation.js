@@ -194,10 +194,6 @@ $.validator.addMethod("feature", function (value, element, params) {
 $.validator.addMethod("next_day", function (value, element, params) {
   let now = new Date();
   let next = new Date(now + 86400 * 1000);
-  
-  console.log(next);
-  console.log( new Date(value));
-  console.log( next <= new Date(value));
   return value && next <= new Date(value);
 },
   Translator.trans('开始时间应晚于当前时间')
