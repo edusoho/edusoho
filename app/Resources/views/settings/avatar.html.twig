@@ -2,8 +2,7 @@
 
 {% block title %}{{'头像设置'|trans}} - {{ parent() }}{% endblock %}
 {% set side_nav = 'avatar' %}
-{#{% set script_controller = 'settings/avatar' %}
-#}
+
 {% do script(['app/js/settings/avatar/index.js']) %}
 
 {% block main %}
