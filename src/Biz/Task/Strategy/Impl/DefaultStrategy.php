@@ -34,7 +34,11 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         $task = parent::updateTask($id, $fields);
 
         if ($task['mode'] == 'lesson') {
-            $this->getCourseService()->updateChapter($task['courseId'], $task['categoryId'], array('title' => $task['title']));
+            $this->getCourseService()->updateChapter(
+                $task['courseId'],
+                $task['categoryId'],
+                array('title' => $task['title'])
+            );
         }
 
         return $task;
@@ -49,7 +53,10 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             $this->biz['db']->beginTransaction();
             $allTasks = array();
             if ($task['mode'] == 'lesson') {
-                $allTasks = $this->getTaskDao()->findByCourseIdAndCategoryId($task['courseId'], $task['categoryId']); //courseId
+                $allTasks = $this->getTaskDao()->findByCourseIdAndCategoryId(
+                    $task['courseId'],
+                    $task['categoryId']
+                ); //courseId
             }
             foreach ($allTasks as $_task) {
                 $this->getTaskDao()->delete($_task['id']);
@@ -65,13 +72,20 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
     protected function validateTaskMode($field)
     {
-        if (empty($field['mode']) || !in_array($field['mode'], array('preparation', 'lesson', 'exercise', 'homework', 'extraClass'))) {
+        if (empty($field['mode']) || !in_array(
+                $field['mode'],
+                array('preparation', 'lesson', 'exercise', 'homework', 'extraClass')
+            )
+        ) {
             throw new InvalidArgumentException('task mode  Invalid');
         }
     }
 
     public function prepareCourseItems($courseId, $tasks, $limitNum)
     {
+        if ($limitNum) {
+            $tasks = array_slice($tasks, 0, $limitNum);
+        }
         $tasks = ArrayToolkit::group($tasks, 'categoryId');
 
         $items = array();
@@ -81,11 +95,14 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             $items["chapter-{$chapter['id']}"] = $chapter;
         }
 
-        uasort($items, function ($item1, $item2) {
-            return $item1['seq'] > $item2['seq'];
-        });
+        uasort(
+            $items,
+            function ($item1, $item2) {
+                return $item1['seq'] > $item2['seq'];
+            }
+        );
 
-        $taskCount = 0;
+        $taskCount = 1;
         foreach ($items as $key => $item) {
             if ($limitNum and $taskCount >= $limitNum) {
                 unset($items[$key]);
@@ -99,7 +116,6 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 $taskCount += count($tasks[$item['id']]);
             } else {
                 unset($items[$key]);
-                //throw new NotFoundException(json_encode($item));
             }
         }
 
@@ -169,9 +185,12 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             $parentChapters[$chapter['type']] = $chapter;
         }
 
-        uasort($lessonChapterTypes, function ($lesson1, $lesson2) {
-            return $lesson1['seq'] > $lesson2['seq'];
-        });
+        uasort(
+            $lessonChapterTypes,
+            function ($lesson1, $lesson2) {
+                return $lesson1['seq'] > $lesson2['seq'];
+            }
+        );
         $taskNumber = 1;
         foreach ($lessonChapterTypes as $key => $chapter) {
             $tasks = $this->getTaskService()->findTasksByChapterId($chapter['id']);
