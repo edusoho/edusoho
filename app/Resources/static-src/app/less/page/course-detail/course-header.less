@@ -167,7 +167,7 @@
 .course-freelearn-section {
   background-color: @bg-color;
   margin: 65px -20px 20px;
-  padding: 38px 15px;
+  padding: 33px 15px;
   @media (max-width: @screen-xs-max) {
     padding-bottom: 20px;
     margin-top: 20px;
@@ -181,10 +181,14 @@
     >li {
       float: left;
       width: 33.33%;
+      
+      &:first-child {
+        width: 33.33%;
+      }
     }
   }
   .course-progress{
-    top: -55px;
+    top: -50px;
     left: 75px;
     @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max){
       left: 15px;
@@ -224,7 +228,7 @@
   height: 160px;
   .border-radius(50%);
   background-color: #fff;
-  .box-shadow(0 0 18px 8px rgba(41,94,64,0.1));
+  .box-shadow(0 0 18px 2px rgba(41,94,64,0.1));
   @media (max-width: @screen-xs-max) {
     position: relative;
     margin: 0 auto;
