@@ -18,6 +18,10 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
 
         $classroom = $this->getClassroomService()->getClassroom($thread['targetId']);
 
+        if (empty($member)) {
+            return false;
+        }
+
         if(!empty($member['levelId']) 
             && empty($classroom['vipLevelId'])) {
             return false;
