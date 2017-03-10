@@ -20,6 +20,7 @@ class CoursesLearnProgress extends BaseResource
 
     public function filter($res)
     {
+        return $res;
     }
 
     /**
