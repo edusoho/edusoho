@@ -2,7 +2,6 @@
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\CloudPlatform\CloudAPIFactory;
 
 $api = $app['controllers_factory'];
 
@@ -115,8 +114,8 @@ $api->get('/coursethreads', function (Request $request) {
     $coursethreads = ServiceKernel::instance()->createService('Course:ThreadService')->searchThreads($conditions, 'created', $start, $limit);
 
     return array(
-        'data'  => $coursethreads,
-        'total' => $total
+        'data' => $coursethreads,
+        'total' => $total,
     );
 }
 
@@ -167,14 +166,14 @@ $api->get('/notifications', function (Request $request) {
 
     $notifications = ServiceKernel::instance()->createService('User:NotificationService')->searchNotifications(
         $conditions,
-        array('createdTime', 'DESC'),
+        array('createdTime' => 'DESC'),
         $start,
         $limit
     );
-    $count = ServiceKernel::instance()->createService('User:NotificationService')->searchNotificationCount($conditions);
+    $count = ServiceKernel::instance()->createService('User:NotificationService')->countNotifications($conditions);
     return array(
-        'data'  => filters($notifications, 'notification'),
-        'total' => $count
+        'data' => filters($notifications, 'notification'),
+        'total' => $count,
     );
 }
 
