@@ -31,7 +31,7 @@
               <input type="hidden" name="courseIds[]" value="{{course.id}}" />
               <span class="glyphicon glyphicon-resize-vertical sort-handle sort"></span>    
               <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
-                <img class="course-picture" src="{{ filepath(course.cover['middle']|default(null), 'course.png') }}" alt="{{ course.title }}">
+                <img class="course-picture" src="{{ filepath(course_cover(course, 'middle'), 'courseSet.png') }}" alt="{{ course.title }}">
               </a>
               <button class="close delete-btn pull-right mrl mts mll" data-role="item-delete" type="button" title="{{'删除'|trans}}" style="font-size:35px;" data-id="{{course.id}}" data-url="{{path('classroom_manage_course_remove', {id: classroom.id, courseId: course.id})}}">× </button>
                   <div class="course-body">
@@ -77,7 +77,7 @@
                       {% set lesson = course.lesson|default(null) %}
                       {% if lesson %}
                         <div class="live-course-lesson mbm">
-                          <span class="text-success fsm mrm">{{ lesson.startTime|date('m-d H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
+                          <span class="color-success fsm mrm">{{ lesson.startTime|date('m-d H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
                           <span class="text-muted fsm mrm">{{'第%number%任务'|trans({'%number%':lesson.number})}}</span>
                         </div>
                       {% endif %}

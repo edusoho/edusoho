@@ -1,6 +1,5 @@
 {% if setting('storage.upload_mode', 'local') == 'cloud'  %}
   
-  
   <div class="video-quality-switcher">
     <div>
       <label>{{'视频转码类型：'|trans}}</label>
@@ -26,6 +25,10 @@
       </div>
     </div>
   </div>
-  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-  <script>app.lazyLoad = function() { app.load('topxiawebbundle/controller/cloud-file/cloud-video-quality-switcher') };</script>
+  {% include 'seajs_loader_compatible.html.twig' with { topxiawebbundle: true } %}
+  <script>
+    app.lazyLoad = function() {
+      app.load('cloud-file/cloud-video-quality-switcher');
+    };
+  </script>
 {% endif %}

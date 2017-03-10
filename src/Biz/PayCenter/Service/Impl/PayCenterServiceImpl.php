@@ -18,9 +18,10 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
             return array();
         }
 
-        $options           = $this->getPaymentOptions($order['payment']);
+        $options = $this->getPaymentOptions($order['payment']);
         $closeTradeRequest = Payment::createCloseTradeRequest($order['payment'], $options);
         $closeTradeRequest->setParams($order);
+
         return $closeTradeRequest->closeTrade();
     }
 
@@ -30,6 +31,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
         if ($payData['status'] != 'success') {
             $this->getLogger('PayCenter')->info("订单号：{$payData['sn']} 的订单状态为：{$payData['status']}，不能进入支付成功流程");
+
             return array(false, array());
         }
 
@@ -39,25 +41,26 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
             $order = $this->getOrderService()->getOrderBySn($payData['sn'], true);
 
-            if ($order["status"] == "paid") {
+            if ($order['status'] == 'paid') {
                 $connection->rollback();
-                $this->getLogger('PayCenter')->info("订单号：{$order["sn"]} 的订单状态为已支付，不能进入支付成功流程");
+                $this->getLogger('PayCenter')->info("订单号：{$order['sn']} 的订单状态为已支付，不能进入支付成功流程");
+
                 return array(true, $order);
             }
 
-            if (in_array($order["status"], array('created', 'cancelled'))) {
+            if (in_array($order['status'], array('created', 'cancelled'))) {
                 $order['payment'] = $payData['payment'];
-                $outflow          = $this->proccessCashFlow($order);
-                $this->getLogger('PayCenter')->info("订单号：{$order["sn"]} 账单处理成功");
+                $outflow = $this->proccessCashFlow($order);
+                $this->getLogger('PayCenter')->info("订单号：{$order['sn']} 账单处理成功");
 
                 if ($outflow) {
-                    $this->getOrderService()->updateOrderCashSn($order["id"], $outflow["sn"]);
-                    $this->getLogger('PayCenter')->info("订单号：{$order["sn"]} 更新订单的支付流水号");
+                    $this->getOrderService()->updateOrderCashSn($order['id'], $outflow['sn']);
+                    $this->getLogger('PayCenter')->info("订单号：{$order['sn']} 更新订单的支付流水号");
                     list($success, $order) = $this->processOrder($payData, false);
                 } else {
-                    $order   = $this->getOrderService()->cancelOrder($order["id"], $this->getKernel()->trans('余额不足扣款不成功'));
+                    $order = $this->getOrderService()->cancelOrder($order['id'], $this->getKernel()->trans('余额不足扣款不成功'));
                     $success = false;
-                    $this->getLogger('PayCenter')->info("订单号：{$order["sn"]} 余额不足扣款不成功");
+                    $this->getLogger('PayCenter')->info("订单号：{$order['sn']} 余额不足扣款不成功");
                 }
             } else {
                 $success = false;
@@ -66,8 +69,8 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
             $connection->commit();
 
             if ($success) {
-                $this->dispatchEvent("order.pay.success",
-                    new Event($order, array('targetType' => $order["targetType"]))
+                $this->dispatchEvent('order.pay.success',
+                    new Event($order, array('targetType' => $order['targetType']))
                 );
             }
 
@@ -88,24 +91,25 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
                 $connection->beginTransaction();
             }
             list($success, $order) = $this->getOrderService()->payOrder($payData);
-            $this->getLogger('PayCenter')->info("订单号：{$payData["sn"]} 更改订单状态为已经支付");
+            $this->getLogger('PayCenter')->info("订单号：{$payData['sn']} 更改订单状态为已经支付");
 
-            if ($order["coupon"]) {
+            if ($order['coupon']) {
                 $this->useCoupon($order);
-                $this->getLogger('PayCenter')->info("订单号：{$order["sn"]} 标识优惠码为使用状态");
+                $this->getLogger('PayCenter')->info("订单号：{$order['sn']} 标识优惠码为使用状态");
             }
 
-            $processor = OrderProcessorFactory::create($order["targetType"]);
+            $processor = OrderProcessorFactory::create($order['targetType']);
 
             if ($order['status'] == 'paid' && $processor) {
                 $processor->doPaySuccess($success, $order);
-                $this->getLogger('PayCenter')->info("订单号：{$order["sn"]} 把下单者加入学习");
+                $this->getLogger('PayCenter')->info("订单号：{$order['sn']} 把下单者加入学习");
             }
 
             if ($lock) {
                 $connection->commit();
             }
-            $this->getLogger('PayCenter')->info("订单号：{$order["sn"]} 订单支付处理完毕");
+            $this->getLogger('PayCenter')->info("订单号：{$order['sn']} 订单支付处理完毕");
+
             return array($success, $order);
         } catch (\Exception $e) {
             if ($lock) {
@@ -139,9 +143,9 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
         }
 
         $options = array(
-            'key'    => $settings["{$payment}_key"],
+            'key' => $settings["{$payment}_key"],
             'secret' => $settings["{$payment}_secret"],
-            'type'   => $settings["{$payment}_type"]
+            'type' => $settings["{$payment}_type"],
         );
 
         return $options;
@@ -151,20 +155,20 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
     {
         // $couponApp = $this->getAppService()->findInstallApp("Coupon");
         // if (!empty($couponApp)) {
-        $this->getCouponService()->useCoupon($order["coupon"], $order);
+        $this->getCouponService()->useCoupon($order['coupon'], $order);
         // }
     }
 
     protected function proccessCashFlow($order)
     {
-        $coinSetting = $this->getSettingService()->get("coin");
+        $coinSetting = $this->getSettingService()->get('coin');
 
-        if (!empty($coinSetting) && array_key_exists("coin_enabled", $coinSetting) && $coinSetting["coin_enabled"] == 1) {
-            if ($order["amount"] == 0 && $order["coinAmount"] > 0) {
+        if (!empty($coinSetting) && array_key_exists('coin_enabled', $coinSetting) && $coinSetting['coin_enabled'] == 1) {
+            if ($order['amount'] == 0 && $order['coinAmount'] > 0) {
                 $outflow = $this->payAllByCoin($order);
             }
 
-            if ($order["amount"] > 0 && $order["coinAmount"] >= 0) {
+            if ($order['amount'] > 0 && $order['coinAmount'] >= 0) {
                 $outflow = $this->payByCoinAndRmb($order);
             }
         } else {
@@ -177,37 +181,38 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
     protected function payByRmb($order)
     {
         $inflow = array(
-            'userId'   => $order["userId"],
-            'amount'   => $order["amount"],
-            'name'     => $this->getKernel()->trans('入账'),
-            'orderSn'  => $order['sn'],
+            'userId' => $order['userId'],
+            'amount' => $order['amount'],
+            'name' => $this->getKernel()->trans('入账'),
+            'orderSn' => $order['sn'],
             'category' => 'inflow',
-            'note'     => '',
-            'payment'  => $order['payment']
+            'note' => '',
+            'payment' => $order['payment'],
         );
         $inflow = $this->getCashService()->inflowByRmb($inflow);
 
         $outflow = array(
-            'userId'   => $order["userId"],
-            'amount'   => $order["amount"],
-            'name'     => $order['title'],
-            'orderSn'  => $order['sn'],
+            'userId' => $order['userId'],
+            'amount' => $order['amount'],
+            'name' => $order['title'],
+            'orderSn' => $order['sn'],
             'category' => 'outflow',
-            'note'     => '',
-            'parentSn' => $inflow['sn']
+            'note' => '',
+            'parentSn' => $inflow['sn'],
         );
+
         return $this->getCashService()->outflowByRmb($outflow);
     }
 
     protected function payAllByCoin($order)
     {
         $cashFlow = array(
-            'userId'   => $order["userId"],
-            'amount'   => $order["coinAmount"],
-            'name'     => $order['title'],
-            'orderSn'  => $order['sn'],
+            'userId' => $order['userId'],
+            'amount' => $order['coinAmount'],
+            'name' => $order['title'],
+            'orderSn' => $order['sn'],
             'category' => 'outflow',
-            'note'     => ''
+            'note' => '',
         );
 
         return $this->getCashService()->outflowByCoin($cashFlow);
@@ -215,49 +220,49 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
     protected function payByCoinAndRmb($order)
     {
-        $userId = $order["userId"];
+        $userId = $order['userId'];
         $inflow = array(
-            'userId'   => $userId,
-            'amount'   => $order["amount"],
-            'name'     => $this->getKernel()->trans('入账'),
-            'orderSn'  => $order['sn'],
+            'userId' => $userId,
+            'amount' => $order['amount'],
+            'name' => $this->getKernel()->trans('入账'),
+            'orderSn' => $order['sn'],
             'category' => 'inflow',
-            'note'     => '',
-            'payment'  => $order['payment']
+            'note' => '',
+            'payment' => $order['payment'],
         );
 
         $rmbInFlow = $this->getCashService()->inflowByRmb($inflow);
 
         $rmbOutFlow = array(
-            'userId'   => $userId,
-            'amount'   => $order["amount"],
-            'name'     => $this->getKernel()->trans('出账'),
-            'orderSn'  => $order['sn'],
+            'userId' => $userId,
+            'amount' => $order['amount'],
+            'name' => $this->getKernel()->trans('出账'),
+            'orderSn' => $order['sn'],
             'category' => 'outflow',
-            'note'     => '',
-            'parentSn' => $rmbInFlow['sn']
+            'note' => '',
+            'parentSn' => $rmbInFlow['sn'],
         );
 
         $coinInFlow = $this->getCashService()->changeRmbToCoin($rmbOutFlow);
 
-        $totalPrice = $order["totalPrice"];
+        $totalPrice = $order['totalPrice'];
 
-        if ($order["couponDiscount"]) {
-            $totalPrice = $totalPrice - $order["couponDiscount"];
+        if ($order['couponDiscount']) {
+            $totalPrice = $totalPrice - $order['couponDiscount'];
         }
 
-        if ($order["priceType"] == "RMB") {
+        if ($order['priceType'] == 'RMB') {
             $totalPrice = $totalPrice * $order['coinRate'];
         }
 
         $outflow = array(
-            'userId'   => $userId,
-            'amount'   => $totalPrice,
-            'name'     => $order['title'],
-            'orderSn'  => $order['sn'],
+            'userId' => $userId,
+            'amount' => $totalPrice,
+            'name' => $order['title'],
+            'orderSn' => $order['sn'],
             'category' => 'outflow',
-            'note'     => '',
-            'parentSn' => $coinInFlow['sn']
+            'note' => '',
+            'parentSn' => $coinInFlow['sn'],
         );
 
         return $this->getCashService()->outflowByCoin($outflow);

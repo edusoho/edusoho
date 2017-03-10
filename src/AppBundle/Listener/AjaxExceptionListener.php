@@ -2,6 +2,8 @@
 
 namespace AppBundle\Listener;
 
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -10,6 +12,8 @@ use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 
 class AjaxExceptionListener
 {
+    private $logger;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -17,9 +21,9 @@ class AjaxExceptionListener
 
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-        $problem   = $this->container->get('Topxia.RepairProblem', ContainerInterface::NULL_ON_INVALID_REFERENCE);
+        $problem = $this->container->get('Topxia.RepairProblem', ContainerInterface::NULL_ON_INVALID_REFERENCE);
         $exception = $event->getException();
-        $request   = $event->getRequest();
+        $request = $event->getRequest();
 
         if (!$request->isXmlHttpRequest()) {
             return;
@@ -31,6 +35,7 @@ class AjaxExceptionListener
             $result = ob_get_contents();
             ob_end_clean();
             $event->setResponse(new JsonResponse(array('result' => $result)));
+
             return;
         }
 
@@ -42,7 +47,13 @@ class AjaxExceptionListener
 
         $error = array('name' => 'Error', 'message' => $exception->getMessage());
         if (!$this->container->get('kernel')->isDebug()) {
-            ServiceKernel::instance()->createService('System:LogService')->error('ajax', 'exception', $exception->getMessage());
+            $message = $exception->__toString();
+            if (strlen($message) > 1024) {
+                $message = substr($message, 1024);
+            }
+            ServiceKernel::instance()->createService('System:LogService')->error('ajax', 'exception', $message);
+        } else {
+            $this->getLogger()->error($exception->__toString());
         }
 
         if ($statusCode == 403) {
@@ -73,6 +84,18 @@ class AjaxExceptionListener
         }
 
         return $user;
+    }
+
+    protected function getLogger()
+    {
+        if ($this->logger) {
+            return $this->logger;
+        }
+
+        $this->logger = new Logger('AjaxExceptionListener');
+        $this->logger->pushHandler(new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir').'/dev.log', Logger::DEBUG));
+
+        return $this->logger;
     }
 
     protected function getServiceKernel()

@@ -27,7 +27,7 @@
 
                 <div>{% if type == 'weixinweb'%}{{'微信登录'|trans}}{% else %}{{ client.name }}{% endif %}</div>
                 {% if client.status|default(null) == 'bind' %}
-                  <div class="text-success">{{'已绑定'|trans}}</div>
+                  <div class="color-success">{{'已绑定'|trans}}</div>
                 {% else %}
                   <div class="text-muted">{{'未绑定'|trans}}</div>
                 {% endif %}

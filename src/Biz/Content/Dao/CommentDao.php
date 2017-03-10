@@ -8,7 +8,7 @@ interface CommentDao extends GeneralDaoInterface
 {
     public function findByObjectTypeAndObjectId($objectType, $objectId, $start, $limit);
 
-	public function findByObjectType($objectType, $start, $limit);
+    public function findByObjectType($objectType, $start, $limit);
 
-	public function countByObjectType($objectType);
+    public function countByObjectType($objectType);
 }

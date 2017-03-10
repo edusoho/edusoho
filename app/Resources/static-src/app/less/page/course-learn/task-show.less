@@ -3,7 +3,7 @@
   left: 0;
   top:0;
   width: 100%;
-  background-color: #111111;
+  background-color: #e5e5e5;
   height: 100%;
   padding-right: 360px;
   .dashboard-content {
@@ -24,7 +24,7 @@
       font-size: 16px;
       z-index: 1;
       .back-link {
-        color: @gray;
+        color: @gray-dark;
         padding-right: 20px;
         i {
           font-size: 22px;
@@ -37,11 +37,11 @@
     }
     .dashboard-footer {
       position: absolute;
-      bottom: -60px;
+      bottom: -70px;
       left: 0;
       right: 0;
-      height: 60px;
-      padding: 15px 0;
+      height: 70px;
+      padding: 18px 0;
       color:@gray;
       z-index: 1;
       text-align: right;
@@ -97,7 +97,7 @@
     bottom: 0;
     width: 360px;
     right: -360px;
-    background-color: #333333;
+    background-color: #f5f8fa;
   }
   .dashboard-toolbar {
     position: absolute;
@@ -117,7 +117,7 @@
         > a {
           padding:12px 15px;
           display: inline-block;
-          background-color: #333333;
+          background-color: #f5f8fa;
           color: @gray;
           text-align: center;
         }
@@ -134,11 +134,8 @@
   .dashboard-pane {
     overflow: hidden;
     height: 100%;
-    background-color: #333333;
   }
   .task-list-pane {
-    background-color: #333333;
-    // padding: 15px 17px;
     position: absolute;
     top: 0;
     bottom: 0;
@@ -146,16 +143,15 @@
     overflow-y: hidden;
     overflow-x: hidden;
     .task-list-pane-body {
-      padding: 15px 17px;
+      padding: 15px 0;
     }
   }
   .note-pane {
-    // padding: 20px 15px;
     height: 100%;
     overflow: hidden;
-    .task-note-plugin-form {
-      background-color: #333;
-    }
+    // .task-note-plugin-form {
+    //   background-color: #333;
+    // }
     .note-pane-body {
       padding: 20px 15px;
     }

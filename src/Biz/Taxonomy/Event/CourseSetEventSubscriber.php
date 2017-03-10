@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Taxonomy\Event;
-
 
 use Biz\Taxonomy\TagOwnerManager;
 use Codeages\Biz\Framework\Event\Event;
@@ -14,19 +12,18 @@ class CourseSetEventSubscriber extends EventSubscriber implements EventSubscribe
     public static function getSubscribedEvents()
     {
         return array(
-            'course-set.update' => 'onCourseSetUpdate'
+            'course-set.update' => 'onCourseSetUpdate',
         );
     }
 
     public function onCourseSetUpdate(Event $event)
     {
         $courseSet = $event->getSubject();
-        if(empty($courseSet['tags'])){
+        if (empty($courseSet['tags'])) {
             return;
         }
 
         $ownerManager = new TagOwnerManager('course-set', $courseSet['id'], $courseSet['tags'], $courseSet['creator']);
         $ownerManager->update();
     }
-
 }

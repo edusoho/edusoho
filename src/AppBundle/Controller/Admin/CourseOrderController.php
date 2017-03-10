@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -13,5 +14,4 @@ class CourseOrderController extends BaseController
             'layout' => 'admin/course-order/order.html.twig',
         ));
     }
-
 }

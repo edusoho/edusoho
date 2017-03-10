@@ -5,7 +5,7 @@
 
 {% set bodyClass = 'homepage' %}
 {% set siteNav = '/' %}
-{% set script_controller = 'index' %}
+{% do script(['libs/echo-js.js','app/js/index/index.js'])%}
 {% set _target_path = path('homepage') %}
 
 {% set currentTheme = current_theme() %}

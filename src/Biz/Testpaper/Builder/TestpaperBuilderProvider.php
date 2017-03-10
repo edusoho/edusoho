@@ -4,10 +4,6 @@ namespace Biz\Testpaper\Builder;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use Codeages\Biz\Framework\Context\Biz;
-use Biz\Testpaper\Builder\ExerciseBuilder;
-use Biz\Testpaper\Builder\HomeworkBuilder;
-use Biz\Testpaper\Builder\TestpaperBuilder;
 
 class TestpaperBuilderProvider implements ServiceProviderInterface
 {

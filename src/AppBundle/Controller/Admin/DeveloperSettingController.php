@@ -11,19 +11,19 @@ class DeveloperSettingController extends BaseController
     public function indexAction(Request $request)
     {
         $developerSetting = $this->getSettingService()->get('developer', array());
-        $storageSetting   = $this->getSettingService()->get('storage', array());
+        $storageSetting = $this->getSettingService()->get('storage', array());
 
         $default = array(
-            'debug'                  => '0',
-            'without_network'        => '0',
-            'cloud_api_server'       => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
-            'cloud_file_server'      => '',
-            'cloud_api_tui_server'   => empty($storageSetting['cloud_api_tui_server']) ? '' : $storageSetting['cloud_api_tui_server'],
+            'debug' => '0',
+            'without_network' => '0',
+            'cloud_api_server' => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
+            'cloud_file_server' => '',
+            'cloud_api_tui_server' => empty($storageSetting['cloud_api_tui_server']) ? '' : $storageSetting['cloud_api_tui_server'],
             'cloud_api_event_server' => empty($storageSetting['cloud_api_event_server']) ? '' : $storageSetting['cloud_api_event_server'],
-            'cloud_api_im_server'    => '',
-            'app_api_url'            => '',
-            'cloud_sdk_cdn'          => '',
-            'hls_encrypted'          => '1'
+            'cloud_api_im_server' => '',
+            'app_api_url' => '',
+            'cloud_sdk_cdn' => '',
+            'hls_encrypted' => '1',
         );
 
         $developerSetting = array_merge($default, $developerSetting);
@@ -31,10 +31,10 @@ class DeveloperSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $developerSetting = $request->request->all();
 
-            $storageSetting['cloud_api_server']       = $developerSetting['cloud_api_server'];
-            $storageSetting['cloud_api_tui_server']   = $developerSetting['cloud_api_tui_server'];
+            $storageSetting['cloud_api_server'] = $developerSetting['cloud_api_server'];
+            $storageSetting['cloud_api_tui_server'] = $developerSetting['cloud_api_tui_server'];
             $storageSetting['cloud_api_event_server'] = $developerSetting['cloud_api_event_server'];
-            $storageSetting['cloud_api_im_server']    = $developerSetting['cloud_api_im_server'];
+            $storageSetting['cloud_api_im_server'] = $developerSetting['cloud_api_im_server'];
             $this->getSettingService()->set('storage', $storageSetting);
             $this->getSettingService()->set('developer', $developerSetting);
 
@@ -46,14 +46,14 @@ class DeveloperSettingController extends BaseController
         }
 
         return $this->render('admin/developer-setting/index.html.twig', array(
-            'developerSetting' => $developerSetting
+            'developerSetting' => $developerSetting,
         ));
     }
 
     protected function dealServerConfigFile()
     {
         $serverConfigFile = $this->getParameter('kernel.root_dir').'/data/api_server.json';
-        $fileSystem       = new Filesystem();
+        $fileSystem = new Filesystem();
         $fileSystem->remove($serverConfigFile);
     }
 
@@ -61,21 +61,22 @@ class DeveloperSettingController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
-            $app  = $this->getAppservice()->getAppByCode($data['code']);
+            $app = $this->getAppservice()->getAppByCode($data['code']);
 
             if (empty($app)) {
                 throw $this->createNotFoundException();
             }
 
             $this->getAppservice()->updateAppVersion($app['id'], $data['version']);
+
             return $this->redirect($this->generateUrl('admin_app_upgrades'));
         }
 
         $appCount = $this->getAppservice()->findAppCount();
-        $apps     = $this->getAppservice()->findApps(0, $appCount);
+        $apps = $this->getAppservice()->findApps(0, $appCount);
 
         return $this->render('admin/developer-setting/version.html.twig', array(
-            'apps' => $apps
+            'apps' => $apps,
         ));
     }
 
@@ -98,14 +99,14 @@ class DeveloperSettingController extends BaseController
         $setting = JsonToolkit::prettyPrint(json_encode($setting));
 
         return $this->render('admin/developer-setting/magic.html.twig', array(
-            'setting' => $setting
+            'setting' => $setting,
         ));
     }
 
     public function redisAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
-            $redis            = $request->request->all();
+            $redis = $request->request->all();
             $redis['setting'] = json_decode($redis['setting'], true);
             $this->getSettingService()->set('redis', $redis);
 
@@ -133,15 +134,15 @@ class DeveloperSettingController extends BaseController
         }
 
         return $this->render('admin/developer-setting/redis.html.twig', array(
-            'redis' => $redis
+            'redis' => $redis,
         ));
     }
 
     public function syncUploadFileAction(Request $request)
     {
         $conditions = array(
-            'storage'  => 'cloud',
-            'globalId' => 0
+            'storage' => 'cloud',
+            'globalId' => 0,
         );
 
         if ($request->getMethod() == 'POST') {
@@ -152,7 +153,7 @@ class DeveloperSettingController extends BaseController
         $fileCount = $this->getUploadFileService()->searchFileCount($conditions);
 
         return $this->render('admin/developer-setting/cloud-file-sync.html.twig', array(
-            'fileCount' => $fileCount
+            'fileCount' => $fileCount,
         ));
     }
 

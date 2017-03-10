@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\CloudPlatform\Service;
 
 interface EduCloudService

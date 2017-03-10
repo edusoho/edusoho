@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Testpaper\Service;
 
 interface TestpaperService
@@ -26,9 +27,8 @@ interface TestpaperService
     public function closeTestpaper($id);
 
     /**
-     * testpaper_item
+     * testpaper_item.
      */
-
     public function getItem($id);
 
     public function createItem($fields);
@@ -49,25 +49,19 @@ interface TestpaperService
 
     public function searchItemCount($conditions);
 
-    /*
-     * testpaper_item_result
-     */
-
     public function createItemResult($fields);
 
     public function updateItemResult($itemResultId, $fields);
 
     public function findItemResultsByResultId($resultId);
 
-    /**
-     * testpaper_result
-     */
-
     public function getTestpaperResult($id);
 
-    public function getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId);
+    public function getUserUnfinishResult($testId, $courseId, $activityId, $type, $userId);
 
-    public function getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type);
+    public function getUserFinishedResult($testId, $courseId, $activityId, $type, $userId);
+
+    public function getUserLatelyResultByTestId($userId, $testId, $courseId, $activityId, $type);
 
     public function findPaperResultsStatusNumGroupByStatus($testId, $courseIds);
 
@@ -86,10 +80,7 @@ interface TestpaperService
     public function canBuildTestpaper($type, $options);
 
     /**
-     * 开始做试卷
-     *
-     * @param  [type] $id             [description]
-     * @return [type] [description]
+     * 开始做试卷.
      */
     public function startTestpaper($id, $fields);
 
@@ -110,5 +101,4 @@ interface TestpaperService
     public function canLookTestpaper($resultId);
 
     public function updateTestpaperItems($testpaperId, $items);
-
 }

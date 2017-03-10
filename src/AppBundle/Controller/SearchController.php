@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\CloudPlatform\Service\AppService;
@@ -28,25 +29,25 @@ class SearchController extends BaseController
 
         if (isset($cloud_search_setting['search_enabled']) && $cloud_search_setting['search_enabled'] && $cloud_search_setting['status'] == 'ok') {
             return $this->redirect($this->generateUrl('cloud_search', array(
-                'q' => $keywords
+                'q' => $keywords,
             )));
         }
 
         $vip = $this->getAppService()->findInstallApp('Vip');
 
-        $isShowVipSearch = $vip && version_compare($vip['version'], "1.0.7", ">=");
+        $isShowVipSearch = $vip && version_compare($vip['version'], '1.0.7', '>=');
 
-        $currentUserVipLevel = "";
-        $vipLevelIds         = "";
+        $currentUserVipLevel = '';
+        $vipLevelIds = '';
 
         if ($isShowVipSearch) {
-            $currentUserVip      = $this->getVipService()->getMemberByUserId($currentUser['id']);
+            $currentUserVip = $this->getVipService()->getMemberByUserId($currentUser['id']);
             $currentUserVipLevel = $this->getLevelService()->getLevel($currentUserVip['levelId']);
-            $vipLevels           = $this->getLevelService()->findAllLevelsLessThanSeq($currentUserVipLevel['seq']);
-            $vipLevelIds         = ArrayToolkit::column($vipLevels, "id");
+            $vipLevels = $this->getLevelService()->findAllLevelsLessThanSeq($currentUserVipLevel['seq']);
+            $vipLevelIds = ArrayToolkit::column($vipLevels, 'id');
         }
 
-        $parentId   = 0;
+        $parentId = 0;
         $categories = $this->getCategoryService()->findAllCategoriesByParentId($parentId);
 
         $categoryIds = array();
@@ -56,13 +57,13 @@ class SearchController extends BaseController
         }
 
         $categoryId = $request->query->get('categoryIds');
-        $filter     = $request->query->get('filter');
+        $filter = $request->query->get('filter');
 
         $conditions = array(
-            'status'     => 'published',
-            'title'      => $keywords,
+            'status' => 'published',
+            'title' => $keywords,
             'categoryId' => $categoryId,
-            'parentId'   => 0
+            'parentId' => 0,
         );
 
         if ($filter == 'vip') {
@@ -73,28 +74,27 @@ class SearchController extends BaseController
             $conditions['minCoursePrice'] = '0.00';
         }
 
-        $count     = $this->getCourseSetService()->countCourseSets($conditions);
+        $count = $this->getCourseSetService()->countCourseSets($conditions);
         $paginator = new Paginator(
             $this->get('request'),
-            $count
-            , 12
+            $count, 12
         );
         $courseSets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
-            array('updatedTime'=>'desc'),
+            array('updatedTime' => 'desc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
         return $this->render('search/index.html.twig', array(
-            'courseSets'             => $courseSets,
-            'paginator'           => $paginator,
-            'keywords'            => $keywords,
-            'isShowVipSearch'     => $isShowVipSearch,
+            'courseSets' => $courseSets,
+            'paginator' => $paginator,
+            'keywords' => $keywords,
+            'isShowVipSearch' => $isShowVipSearch,
             'currentUserVipLevel' => $currentUserVipLevel,
-            'categoryIds'         => $categoryIds,
-            'filter'              => $filter,
-            'count'               => $count
+            'categoryIds' => $categoryIds,
+            'filter' => $filter,
+            'count' => $count,
         ));
     }
 
@@ -109,21 +109,21 @@ class SearchController extends BaseController
 
         if (empty($keywords)) {
             return $this->render('search/cloud-search-failure.html.twig', array(
-                'keywords'     => $keywords,
-                'type'         => $type,
-                'errorMessage' => '在上方搜索框输入关键词进行搜索.'
+                'keywords' => $keywords,
+                'type' => $type,
+                'errorMessage' => '在上方搜索框输入关键词进行搜索.',
             ));
         }
         $conditions = array(
-            'type'  => $type,
+            'type' => $type,
             'words' => $keywords,
-            'page'  => $page
+            'page' => $page,
         );
 
         if ($type == 'teacher') {
-            $pageSize              = 9;
-            $conditions['type']    = 'user';
-            $conditions['num']     = $pageSize;
+            $pageSize = 9;
+            $conditions['type'] = 'user';
+            $conditions['num'] = $pageSize;
             $conditions['filters'] = json_encode(array('role' => 'teacher'));
         } elseif ($type == 'thread') {
             $conditions['filters'] = json_encode(array('targetType' => 'group'));
@@ -133,20 +133,20 @@ class SearchController extends BaseController
             list($resultSet, $counts) = $this->getSearchService()->cloudSearch($type, $conditions);
         } catch (\Exception $e) {
             return $this->render('search/cloud-search-failure.html.twig', array(
-                'keywords'     => $keywords,
-                'type'         => $type,
-                'errorMessage' => '搜索失败，请稍候再试.'
+                'keywords' => $keywords,
+                'type' => $type,
+                'errorMessage' => '搜索失败，请稍候再试.',
             ));
         }
 
         $paginator = new Paginator($this->get('request'), $counts, $pageSize);
 
         return $this->render('search/cloud-search.html.twig', array(
-            'keywords'  => $keywords,
-            'type'      => $type,
+            'keywords' => $keywords,
+            'type' => $type,
             'resultSet' => $resultSet,
-            'counts'    => $counts,
-            'paginator' => $paginator
+            'counts' => $counts,
+            'paginator' => $paginator,
         ));
     }
 
@@ -155,10 +155,11 @@ class SearchController extends BaseController
         $keyword = str_replace('<', '', $keyword);
         $keyword = str_replace('>', '', $keyword);
         $keyword = str_replace("'", '', $keyword);
-        $keyword = str_replace("\"", '', $keyword);
+        $keyword = str_replace('"', '', $keyword);
         $keyword = str_replace('=', '', $keyword);
         $keyword = str_replace('&', '', $keyword);
         $keyword = str_replace('/', '', $keyword);
+
         return $keyword;
     }
 

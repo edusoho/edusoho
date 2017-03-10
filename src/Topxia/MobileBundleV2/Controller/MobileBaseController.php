@@ -2,18 +2,18 @@
 
 namespace Topxia\MobileBundleV2\Controller;
 
-use AppBundle\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\User\CurrentUser;
-use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Controller\BaseController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Topxia\Api\Util\TagUtil;
+use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
+use AppBundle\Controller\BaseController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class MobileBaseController extends BaseController
 {
     const MOBILE_MODULE = 'mobile';
-    const TOKEN_TYPE    = 'mobile_login';
+    const TOKEN_TYPE = 'mobile_login';
 
     protected $result = array();
 
@@ -21,7 +21,7 @@ class MobileBaseController extends BaseController
     {
         $result = array(
             'mobileVersion' => 1,
-            'url'           => $request->getSchemeAndHttpHost()
+            'url' => $request->getSchemeAndHttpHost(),
         );
 
         return $this->createJson($request, $result);
@@ -35,10 +35,11 @@ class MobileBaseController extends BaseController
             return $this->createJsonP($request, $callback, $data);
         } else {
             $response = new JsonResponse($data);
-            $response->headers->set("Access-Control-Allow-Origin", "*");
-            $response->headers->set("Access-Control-Allow-Methods", "POST, GET");
-            $response->headers->set("Access-Control-Request-Headers", "token");
-            $response->headers->set("Access-Control-Max-Age", "30");
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            $response->headers->set('Access-Control-Allow-Methods', 'POST, GET');
+            $response->headers->set('Access-Control-Request-Headers', 'token');
+            $response->headers->set('Access-Control-Max-Age', '30');
+
             return $response;
         }
     }
@@ -47,18 +48,15 @@ class MobileBaseController extends BaseController
     {
         $response = new JsonResponse($data);
         $response->setCallback($callback);
+
         return $response;
     }
 
     protected function getParam($request, $name, $default = null)
     {
         $result = $request->request->get($name);
-        return $result ? $result : $default;
-    }
 
-    public function getUser()
-    {
-        return $this->getCurrentUser();
+        return $result ? $result : $default;
     }
 
     public function setting($name, $default = null)
@@ -73,7 +71,7 @@ class MobileBaseController extends BaseController
 
     public function getService($name)
     {
-        return $this->getServiceKernel()->createService($name);
+        return $this->createService($name);
     }
 
     public function isinstalledPlugin($name)
@@ -83,7 +81,7 @@ class MobileBaseController extends BaseController
 
     public function setCurrentUser($userId, $request)
     {
-        $user        = $this->getUserService()->getUser($userId);
+        $user = $this->getUserService()->getUser($userId);
         $currentUser = new CurrentUser();
 
         if (empty($user)) {
@@ -92,14 +90,14 @@ class MobileBaseController extends BaseController
         $user['currentIp'] = $request->getClientIp();
 
         $currentUser = $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $biz = $this->getBiz();
+        $biz['user'] = $currentUser;
     }
 
     public function getUserToken($request)
     {
         $token = $this->getToken($request);
         $token = $this->getUserService()->getToken(self::TOKEN_TYPE, $token);
-
         if ($token) {
             $this->setCurrentUser($token['userId'], $request);
         }
@@ -111,12 +109,12 @@ class MobileBaseController extends BaseController
     {
         $token = $request->headers->get('token', '');
 
-        if (empty($token) && $request->getMethod() == "GET") {
+        if (empty($token) && $request->getMethod() == 'GET') {
             $token = $request->query->get('token', '');
         }
 
         if (empty($token)) {
-            $token = $request->cookies->get("token");
+            $token = $request->cookies->get('token');
         }
 
         return $token;
@@ -158,6 +156,7 @@ class MobileBaseController extends BaseController
         }
 
         $users = $this->simplifyUsers(array($user));
+
         return current($users);
     }
 
@@ -173,12 +172,12 @@ class MobileBaseController extends BaseController
 
         foreach ($users as $key => $user) {
             $simplifyUsers[$key] = array(
-                'id'        => $user['id'],
-                'nickname'  => $user['nickname'],
-                'title'     => $user['title'],
+                'id' => $user['id'],
+                'nickname' => $user['nickname'],
+                'title' => $user['title'],
                 'following' => $controller->getUserService()->findUserFollowingCount($user['id']),
-                'follower'  => $controller->getUserService()->findUserFollowerCount($user['id']),
-                'avatar'    => $this->container->get('web.twig.extension')->getFilePath($user['smallAvatar'], 'avatar.png', true)
+                'follower' => $controller->getUserService()->findUserFollowerCount($user['id']),
+                'avatar' => $this->container->get('web.twig.extension')->getFilePath($user['smallAvatar'], 'avatar.png', true),
             );
         }
 
@@ -195,14 +194,16 @@ class MobileBaseController extends BaseController
         }
 
         $userIds = ArrayToolkit::column($reviews, 'userId');
-        $users   = $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->getUserService()->findUsersByIds($userIds);
 
         $self = $this;
+
         return array_map(function ($review) use ($self, $users) {
             $review['user'] = empty($users[$review['userId']]) ? null : $self->filterUser($users[$review['userId']]);
             unset($review['userId']);
 
             $review['createdTime'] = date('c', $review['createdTime']);
+
             return $review;
         }, $reviews);
     }
@@ -220,13 +221,13 @@ class MobileBaseController extends BaseController
 
     public function getCoinSetting()
     {
-        $coinSetting = $this->setting("coin");
+        $coinSetting = $this->setting('coin');
 
         if (empty($coinSetting)) {
             return null;
         }
 
-        $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
+        $coinEnabled = isset($coinSetting['coin_enabled']) && $coinSetting['coin_enabled'];
 
         if (empty($coinEnabled)) {
             return null;
@@ -234,14 +235,14 @@ class MobileBaseController extends BaseController
 
         $cashRate = 1;
 
-        if (isset($coinSetting["cash_rate"])) {
-            $cashRate = $coinSetting["cash_rate"];
+        if (isset($coinSetting['cash_rate'])) {
+            $cashRate = $coinSetting['cash_rate'];
         }
 
         $coin = array(
-            "cashRate"  => $cashRate,
-            "priceType" => isset($coinSetting["price_type"]) ? $coinSetting["price_type"] : "RMB",
-            "name"      => isset($coinSetting["coin_name"]) ? $coinSetting["coin_name"] : "虚拟币"
+            'cashRate' => $cashRate,
+            'priceType' => isset($coinSetting['price_type']) ? $coinSetting['price_type'] : 'RMB',
+            'name' => isset($coinSetting['coin_name']) ? $coinSetting['coin_name'] : '虚拟币',
         );
 
         return $coin;
@@ -265,14 +266,20 @@ class MobileBaseController extends BaseController
         $teachers = $this->simplifyUsers($teachers);
 
         $coinSetting = $this->getCoinSetting();
-        $self        = $this;
-        $container   = $this->container;
-        return array_map(function ($course) use ($self, $container, $teachers, $coinSetting) {
-            $course['smallPicture']  = $container->get('web.twig.extension')->getFurl($course['smallPicture'], 'course.png');
-            $course['middlePicture'] = $container->get('web.twig.extension')->getFurl($course['middlePicture'], 'course.png');
-            $course['largePicture']  = $container->get('web.twig.extension')->getFurl($course['largePicture'], 'course.png');
-            $course['about']         = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
-            $course['createdTime']   = date("c", $course['createdTime']);
+        $self = $this;
+        $container = $this->container;
+
+        $courseIds = ArrayToolkit::column($courses, 'id');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
+
+        return array_map(function ($course, $courseSet) use ($self, $container, $teachers, $coinSetting) {
+            $course = $this->convertOldFields($course);
+            $course = $this->filledCourseByCourseSet($course, $courseSet);
+            $course['smallPicture'] = $container->get('web.twig.extension')->getFurl($courseSet['cover']['small'], 'course.png');
+            $course['middlePicture'] = $container->get('web.twig.extension')->getFurl($courseSet['cover']['middle'], 'course.png');
+            $course['largePicture'] = $container->get('web.twig.extension')->getFurl($courseSet['cover']['large'], 'course.png');
+            $course['about'] = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
+            $course['createdTime'] = date("c", $course['createdTime']);
 
             $course['teachers'] = array();
 
@@ -283,20 +290,47 @@ class MobileBaseController extends BaseController
             }
 
             unset($course['teacherIds']);
-            
-            $course['tags'] = TagUtil::buildTags('course', $course['id']);
+
+            $course['tags'] = TagUtil::buildTags('course-set', $courseSet['id']);
             $course['tags'] = ArrayToolkit::column($course['tags'], 'name');
 
-            $course["priceType"] = $coinSetting["priceType"];
-            $course['coinName']  = $coinSetting["name"];
+            $course['priceType'] = $coinSetting['priceType'];
+            $course['coinName'] = $coinSetting['name'];
+
             return $course;
-        }, $courses);
+        }, $courses, $courseSets);
+    }
+
+    private function convertOldFields($course)
+    {
+        $course['expiryDay'] = $course['expiryDays'];
+        $course['lessonNum'] = $course['taskNum'];
+        $course['userId'] = $course['creator'];
+        $course['tryLookTime'] = $course['tryLookLength'];
+        return $course;
+    }
+
+    private function filledCourseByCourseSet($course, $courseSet)
+    {
+        $copyKeys = array('tags', 'hitNum', 'orgCode', 'orgId',
+            'discount', 'categoryId', 'recommended', 'recommendedSeq', 'recommendedTime',
+            'subtitle', 'discountId',
+        );
+        foreach ($copyKeys as $value) {
+            $course[$value] = $courseSet[$value];
+        }
+        if ($course['isDefault'] == 1 && $course['title'] == '默认教学计划') {
+            $course['title'] = $courseSet['title'];
+        } else {
+            $course['title'] = $courseSet['title'].'-'.$course['title'];
+        }
+        return $course;
     }
 
     public function convertAbsoluteUrl($request, $html)
     {
         $baseUrl = $request->getSchemeAndHttpHost();
-        $html    = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function ($matches) use ($baseUrl) {
+        $html = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function ($matches) use ($baseUrl) {
             return "src=\"{$baseUrl}/{$matches[1]}\"";
         }, $html);
 
@@ -310,7 +344,7 @@ class MobileBaseController extends BaseController
         }
 
         $users = $this->filterUsers(array(
-            $user
+            $user,
         ));
 
         return current($users);
@@ -322,7 +356,7 @@ class MobileBaseController extends BaseController
             return array();
         }
 
-        $self      = $this;
+        $self = $this;
         $container = $this->container;
 
         $items = array_map(function ($item) use ($self, $container) {
@@ -331,11 +365,11 @@ class MobileBaseController extends BaseController
             if (!empty($item['length']) && in_array($item['type'], array('audio', 'video'))) {
                 $item['length'] = $container->get('web.twig.extension')->durationFilter($item['length']);
             } else {
-                $item['length'] = "";
+                $item['length'] = '';
             }
 
             if (empty($item['content'])) {
-                $item['content'] = "";
+                $item['content'] = '';
             }
 
             $item['content'] = $self->convertAbsoluteUrl($container->get('request'), $item['content']);
@@ -364,11 +398,12 @@ class MobileBaseController extends BaseController
         $container = $this->container;
 
         $controller = $this;
+
         return array_map(function ($user) use ($container, $controller) {
-            $user['smallAvatar']  = $container->get('web.twig.extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
+            $user['smallAvatar'] = $container->get('web.twig.extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
             $user['mediumAvatar'] = $container->get('web.twig.extension')->getFilePath($user['mediumAvatar'], 'avatar.png', true);
-            $user['largeAvatar']  = $container->get('web.twig.extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
-            $user['createdTime']  = date('c', $user['createdTime']);
+            $user['largeAvatar'] = $container->get('web.twig.extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
+            $user['createdTime'] = date('c', $user['createdTime']);
 
             if (!empty($user['verifiedMobile'])) {
                 $user['verifiedMobile'] = substr_replace($user['verifiedMobile'], '****', 3, 4);
@@ -382,13 +417,13 @@ class MobileBaseController extends BaseController
                 if (!empty($userVip)) {
                     $userVipLevel = $controller->getLevelService()->getLevel($userVip['levelId']);
 
-                    $user['vip']['levelId']     = $userVip['levelId'];
-                    $user['vip']['vipName']     = $userVipLevel['name'];
+                    $user['vip']['levelId'] = $userVip['levelId'];
+                    $user['vip']['vipName'] = $userVipLevel['name'];
                     $user['vip']['VipDeadLine'] = $userVip['deadline'];
                 }
             }
 
-            $userProfile       = $controller->getUserService()->getUserProfile($user['id']);
+            $userProfile = $controller->getUserService()->getUserProfile($user['id']);
             $user['signature'] = $userProfile['signature'];
 
             if (isset($user['about'])) {
@@ -396,9 +431,9 @@ class MobileBaseController extends BaseController
             }
 
             $user['following'] = $controller->getUserService()->findUserFollowingCount($user['id']);
-            $user['follower']  = $controller->getUserService()->findUserFollowerCount($user['id']);
+            $user['follower'] = $controller->getUserService()->findUserFollowerCount($user['id']);
 
-            $user['email']          = "****";
+            $user['email'] = '****';
             unset($user['password']);
             unset($user['payPasswordSalt']);
             unset($user['payPassword']);
@@ -425,21 +460,21 @@ class MobileBaseController extends BaseController
     {
         $courses = $this->getCourseService()->findUserLearningCourses($user['id'], $start, $limit);
 
-        $tempCourses   = array();
+        $tempCourses = array();
         $tempCourseIds = array();
 
         foreach ($courses as $key => $course) {
-            if (!strcmp($course["type"], "live")) {
-                $tempCourses[$course["id"]] = $course;
-                $tempCourseIds[]            = $course["id"];
+            if (!strcmp($course['type'], 'live')) {
+                $tempCourses[$course['id']] = $course;
+                $tempCourseIds[] = $course['id'];
             }
         }
 
-        $tempLiveLessons   = array();
+        $tempLiveLessons = array();
         $tempCourseIdIndex = 0;
-        $tempLessons       = array();
+        $tempLessons = array();
 
-        for ($tempCourseIdIndex; $tempCourseIdIndex < sizeof($tempCourseIds); $tempCourseIdIndex++) {
+        for ($tempCourseIdIndex; $tempCourseIdIndex < sizeof($tempCourseIds); ++$tempCourseIdIndex) {
             $tempLiveLessons = $this->getCourseService()->getCourseLessons($tempCourseIds[$tempCourseIdIndex]);
 
             if (isset($tempLiveLessons)) {
@@ -447,7 +482,7 @@ class MobileBaseController extends BaseController
             }
         }
 
-        $nowTime     = time();
+        $nowTime = time();
         $liveLessons = array();
         $tempLiveLesson;
         $recentlyLiveLessonStartTime;
@@ -455,13 +490,13 @@ class MobileBaseController extends BaseController
 
         foreach ($tempCourses as $key => $value) {
             if (isset($liveLessons[$key])) {
-                $tempCourses[$key]["liveLessonTitle"] = $liveLessons[$key]["title"];
-                $tempCourses[$key]["liveStartTime"]   = date("c", $liveLessons[$key]["startTime"]);
-                $tempCourses[$key]["liveEndTime"]     = date("c", $liveLessons[$key]["endTime"]);
+                $tempCourses[$key]['liveLessonTitle'] = $liveLessons[$key]['title'];
+                $tempCourses[$key]['liveStartTime'] = date('c', $liveLessons[$key]['startTime']);
+                $tempCourses[$key]['liveEndTime'] = date('c', $liveLessons[$key]['endTime']);
             } else {
-                $tempCourses[$key]["liveLessonTitle"] = "";
-                $tempCourses[$key]["liveStartTime"]   = "";
-                $tempCourses[$key]["liveEndTime"]     = "";
+                $tempCourses[$key]['liveLessonTitle'] = '';
+                $tempCourses[$key]['liveStartTime'] = '';
+                $tempCourses[$key]['liveEndTime'] = '';
             }
 
             $tempCourses[$key]['tags'] = TagUtil::buildTags('course', $tempCourses[$key]['id']);
@@ -484,7 +519,7 @@ class MobileBaseController extends BaseController
     {
         $curl = curl_init();
 
-        curl_setopt($curl, CURLOPT_USERAGENT, "mobile request");
+        curl_setopt($curl, CURLOPT_USERAGENT, 'mobile request');
 
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
         curl_setopt($curl, CURLOPT_TIMEOUT, 20);
@@ -519,107 +554,137 @@ class MobileBaseController extends BaseController
         }
 
         $reviews = $this->filterReviews(array($review));
+
         return current($reviews);
     }
 
     public function createErrorResponse($request, $name, $message)
     {
         $error = array('error' => array('name' => $name, 'message' => $message));
+
         return $this->createJson($request, $error);
     }
 
     public function getMaterialService()
     {
-        return $this->getServiceKernel()->createService('Course:MaterialService');
+        return $this->createService('Course:MaterialService');
     }
 
+    /**
+     * @return CourseService
+     */
     public function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
+    }
+
+    public function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    public function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 
     public function getReviewService()
     {
-        return $this->getServiceKernel()->createService('Course:ReviewService');
+        return $this->createService('Course:ReviewService');
     }
 
     public function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
     public function getMemberDao()
     {
-        return $this->getServiceKernel()->createDao('Course:CourseMemberDao');
+        return $this->createDao('Course:CourseMemberDao');
     }
 
     public function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User:AuthService');
+        return $this->createService('User:AuthService');
     }
 
     public function getNotificationService()
     {
-        return ServiceKernel::instance()->createService('User:NotificationService');
+        return $this->createService('User:NotificationService');
     }
 
     public function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     public function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
+        return $this->createService('Taxonomy:CategoryService');
     }
 
     public function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     public function getLogService()
     {
-        return ServiceKernel::instance()->createService('System:LogService');
+        return $this->createService('System:LogService');
     }
 
     public function getVipService()
     {
-        return $this->getServiceKernel()->createService('VipPlugin:Vip:VipService');
+        return $this->createService('VipPlugin:Vip:VipService');
     }
 
     public function getLevelService()
     {
-        return $this->getServiceKernel()->createService('VipPlugin:Vip:LevelService');
+        return $this->createService('VipPlugin:Vip:LevelService');
+    }
+
+    public function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 
     public function getTokenService()
     {
-        return ServiceKernel::instance()->createService('User:TokenService');
+        return $this->createService('User:TokenService');
     }
 
     public function getCourseOrderService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseOrderService');
+        return $this->createService('Course:CourseOrderService');
     }
 
     public function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Course:ThreadService');
+        return $this->createService('Course:ThreadService');
     }
 
     public function getNoteService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseNoteService');
+        return $this->createService('Course:CourseNoteService');
     }
 
     public function getEduCloudService()
     {
-        return $this->getServiceKernel()->createService('EduCloud:EduCloudService');
+        return $this->createService('EduCloud:EduCloudService');
     }
 
     public function getMaterialLibService()
     {
-        return $this->getServiceKernel()->createService('MaterialLib:MaterialLibService');
+        return $this->createService('MaterialLib:MaterialLibService');
+    }
+
+    public function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
+    }
+
+    protected function getDiscountService()
+    {
+        return $this->createService('Discount:Discount.DiscountService');
     }
 }

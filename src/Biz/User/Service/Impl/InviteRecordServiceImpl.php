@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
@@ -15,10 +16,11 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
     public function createInviteRecord($inviteUserId, $invitedUserId)
     {
         $record = array(
-            'inviteUserId'  => $inviteUserId,
+            'inviteUserId' => $inviteUserId,
             'invitedUserId' => $invitedUserId,
-            'inviteTime'    => time()
+            'inviteTime' => time(),
         );
+
         return $this->getInviteRecordDao()->create($record);
     }
 
@@ -35,12 +37,14 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
     public function countRecords($conditions)
     {
         $conditions = $this->_prepareConditions($conditions);
+
         return $this->getInviteRecordDao()->count($conditions);
     }
 
     public function searchRecords($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->_prepareConditions($conditions);
+
         return $this->getInviteRecordDao()->search($conditions, $orderBy, $start, $limit);
     }
 
@@ -53,7 +57,6 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
 
             return !empty($value);
         }
-
         );
 
         if (array_key_exists('nickname', $conditions)) {

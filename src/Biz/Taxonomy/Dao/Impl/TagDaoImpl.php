@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: Simon
  * Date: 12/12/2016
- * Time: 18:09
+ * Time: 18:09.
  */
 
 namespace Biz\Taxonomy\Dao\Impl;
-
 
 use Biz\Taxonomy\Dao\TagDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
@@ -20,12 +19,12 @@ class TagDaoImpl extends GeneralDaoImpl implements TagDao
     {
         return array(
             'timestamps' => array('createdTime'),
-            'orderbys'   => array('createdTime'),
+            'orderbys' => array('createdTime'),
             'conditions' => array(
                 'name = :name',
                 'orgId = :orgId',
                 'orgCode = :orgCode',
-                'orgCode LIKE :likeOrgCode'
+                'orgCode LIKE :likeOrgCode',
             ),
         );
     }
@@ -36,7 +35,8 @@ class TagDaoImpl extends GeneralDaoImpl implements TagDao
             return array();
         }
         $marks = str_repeat('?,', count($ids) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table()} WHERE id IN ({$marks});";
+        $sql = "SELECT * FROM {$this->table()} WHERE id IN ({$marks});";
+
         return $this->db()->fetchAll($sql, $ids);
     }
 
@@ -47,7 +47,8 @@ class TagDaoImpl extends GeneralDaoImpl implements TagDao
         }
 
         $marks = str_repeat('?,', count($names) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table()} WHERE name IN ({$marks});";
+        $sql = "SELECT * FROM {$this->table()} WHERE name IN ({$marks});";
+
         return $this->db()->fetchAll($sql, $names);
     }
 
@@ -55,25 +56,29 @@ class TagDaoImpl extends GeneralDaoImpl implements TagDao
     {
         $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table()} ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
         return $this->db()->fetchAll($sql, array());
     }
 
     public function getByName($name)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE name = ? LIMIT 1";
+
         return $this->db()->fetchAssoc($sql, array($name));
     }
 
     public function getByLikeName($name)
     {
         $name = "%{$name}%";
-        $sql  = "SELECT * FROM {$this->table()} WHERE name LIKE ?";
+        $sql = "SELECT * FROM {$this->table()} WHERE name LIKE ?";
+
         return $this->db()->fetchAll($sql, array($name));
     }
 
     public function getAllCount()
     {
         $sql = "SELECT COUNT(*) FROM {$this->table()} ";
+
         return $this->db()->fetchColumn($sql, array());
     }
 

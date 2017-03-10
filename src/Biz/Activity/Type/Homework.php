@@ -53,14 +53,13 @@ class Homework extends Activity
 
     public function isFinished($activityId)
     {
-        $biz  = $this->getBiz();
+        $biz = $this->getBiz();
         $user = $biz['user'];
 
         $activity = $this->getActivityService()->getActivity($activityId);
         $homework = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
 
-        $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $activity['mediaId'], $activity['fromCourseSetId'], $activity['id'], 'homework');
-
+        $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $activity['mediaId'], $activity['fromCourseId'], $activity['id'], 'homework');
         if (!$result) {
             return false;
         }
@@ -80,7 +79,7 @@ class Homework extends Activity
     protected function filterFields($fields)
     {
         if (!ArrayToolkit::requireds($fields, array(
-            'finishCondition'
+            'finishCondition',
         ))
         ) {
             throw new InvalidArgumentException('homework fields is invalid');
@@ -93,7 +92,7 @@ class Homework extends Activity
             'passedCondition',
             'finishCondition',
             'fromCourseId',
-            'fromCourseSetId'
+            'fromCourseSetId',
         ));
 
         if (!empty($filterFields['finishCondition'])) {
@@ -101,9 +100,9 @@ class Homework extends Activity
         }
 
         $filterFields['courseSetId'] = empty($filterFields['fromCourseSetId']) ? 0 : $filterFields['fromCourseSetId'];
-        $filterFields['courseId']    = empty($filterFields['fromCourseId']) ? 0 : $filterFields['fromCourseId'];
-        $filterFields['lessonId']    = 0;
-        $filterFields['name']        = empty($filterFields['title']) ? '' : $filterFields['title'];
+        $filterFields['courseId'] = empty($filterFields['fromCourseId']) ? 0 : $filterFields['fromCourseId'];
+        $filterFields['lessonId'] = 0;
+        $filterFields['name'] = empty($filterFields['title']) ? '' : $filterFields['title'];
 
         return $filterFields;
     }
@@ -121,7 +120,7 @@ class Homework extends Activity
      */
     protected function getActivityLearnLogService()
     {
-        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     /**
@@ -129,6 +128,6 @@ class Homework extends Activity
      */
     protected function getActivityService()
     {
-        return $this->getBiz()->service("Activity:ActivityService");
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 }

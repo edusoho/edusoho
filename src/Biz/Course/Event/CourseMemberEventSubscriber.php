@@ -6,6 +6,7 @@ use Biz\Course\Dao\CourseDao;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Order\Service\OrderService;
+use Biz\User\Service\StatusService;
 use Biz\User\Service\MessageService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -22,13 +23,14 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     public static function getSubscribedEvents()
     {
         return array(
-            'course.join'           => 'onCourseJoin',
-            'course.quit'           => 'onMemberDelete',
+            'course.join' => 'onCourseJoin',
+            'course.quit' => 'onMemberDelete',
 
+            'classroom.course.join' => 'onClassroomCourseJoin',
             'classroom.course.copy' => 'onClassroomCourseCopy',
 
-            'course.task.delete'    => 'onTaskDelete',
-            'course.task.finish'    => 'onTaskFinish'
+            'course.task.delete' => 'onTaskDelete',
+            'course.task.finish' => 'onTaskFinish',
         );
     }
 
@@ -37,23 +39,29 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $this->countStudentMember($event);
         $this->countIncome($event);
         $this->sendWelcomeMsg($event);
+        $this->publishStatus($event, 'become_student');
+    }
+
+    public function onClassroomCourseJoin(Event $event)
+    {
+        $this->publishStatus($event, 'become_student');
     }
 
     public function onClassroomCourseCopy(Event $event)
     {
-        $course      = $event->getSubject();
+        $course = $event->getSubject();
         $classroomId = $event->getArgument('classroomId');
-        $members     = $this->getClassroomService()->findClassroomStudents($classroomId, 0, PHP_INT_MAX);
+        $members = $this->getClassroomService()->findClassroomStudents($classroomId, 0, PHP_INT_MAX);
         if (empty($members)) {
             return;
         }
         $memberIds = ArrayToolkit::column($members, 'userId');
         //add classroom students to course
         $existedMembers = $this->getCourseMemberService()->findCourseStudents($course['id'], 0, PHP_INT_MAX);
-        $diffMemberIds  = $memberIds;
+        $diffMemberIds = $memberIds;
         if (!empty($existedMembers)) {
             $existedMemberIds = ArrayToolkit::column($existedMembers, 'userId');
-            $diffMemberIds    = array_diff($memberIds, $existedMemberIds);
+            $diffMemberIds = array_diff($memberIds, $existedMemberIds);
         }
 
         if (empty($diffMemberIds)) {
@@ -88,7 +96,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $course = $event->getSubject();
         $userId = $event->getArgument('userId');
-        $user   = $this->getUserService()->getUser($userId);
+        $user = $this->getUserService()->getUser($userId);
 
         $setting = $this->getSettingService()->get('course', array());
 
@@ -97,6 +105,26 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
 
             $this->getMessageService()->sendMessage($course['teacherIds'][0], $user['id'], $message);
         }
+    }
+
+    private function publishStatus($event, $type)
+    {
+        $course = $event->getSubject();
+        $member = $event->getArgument('member');
+
+        $status = array(
+            'type' => $type,
+            'courseId' => $course['id'],
+            'objectType' => 'course',
+            'objectId' => $course['id'],
+            'private' => $course['status'] == 'published' ? 0 : 1,
+            'userId' => $member['userId'],
+            'properties' => array(
+                'course' => $this->simplifyCourse($course),
+            ),
+        );
+
+        $this->getStatusService()->publishStatus($status);
     }
 
     public function onMemberDelete(Event $event)
@@ -113,7 +141,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     public function onTaskFinish(Event $event)
     {
         $taskResult = $event->getSubject();
-        $user       = $event->getArgument('user');
+        $user = $event->getArgument('user');
         $this->updateMemberLearnedNum($taskResult['courseId'], $user['id']);
     }
 
@@ -126,11 +154,23 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
 
     protected function getWelcomeMessageBody($user, $course)
     {
-        $setting            = $this->getSettingService()->get('course', array());
-        $valuesToBeReplace  = array('{{nickname}}', '{{course}}');
-        $valuesToReplace    = array($user['nickname'], $course['title']);
+        $setting = $this->getSettingService()->get('course', array());
+        $valuesToBeReplace = array('{{nickname}}', '{{course}}');
+        $valuesToReplace = array($user['nickname'], $course['title']);
         $welcomeMessageBody = str_replace($valuesToBeReplace, $valuesToReplace, $setting['welcome_message_body']);
+
         return $welcomeMessageBody;
+    }
+
+    protected function simplifyCourse($course)
+    {
+        return array(
+            'id' => $course['id'],
+            'title' => $course['title'],
+            'type' => $course['type'],
+            'rating' => $course['rating'],
+            'price' => $course['price'],
+        );
     }
 
     /**
@@ -198,6 +238,14 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     }
 
     /**
+     * @return StatusService
+     */
+    protected function getStatusService()
+    {
+        return $this->getBiz()->service('User:StatusService');
+    }
+
+    /**
      * @return MemberService
      */
     protected function getCourseMemberService()
@@ -210,9 +258,9 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
 
         $conditions = array(
-            'status'   => 'finish',
+            'status' => 'finish',
             'courseId' => $courseId,
-            'userId'   => $userId
+            'userId' => $userId,
         );
         $learnedNum = $this->getTaskResultService()->countTaskResults($conditions);
 

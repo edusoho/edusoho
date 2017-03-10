@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\User\CurrentUser;
@@ -34,8 +35,8 @@ class EduCloudController extends BaseController
             }
 
             $targetSession = $request->getSession()->get($smsType);
-            $smsLastTime   = $targetSession['sms_last_time'];
-            $allowedTime   = 120;
+            $smsLastTime = $targetSession['sms_last_time'];
+            $allowedTime = 120;
 
             if (!$this->checkLastTime($smsLastTime, $currentTime, $allowedTime)) {
                 return $this->createJsonResponse(array('error' => '请等待120秒再申请', 'message' => "{$smsLastTime}|{$currentTime}"));
@@ -63,7 +64,7 @@ class EduCloudController extends BaseController
 
             if ($smsType == 'sms_forget_password') {
                 $description = '登录密码重置';
-                $targetUser  = $this->getUserService()->getUserByVerifiedMobile($request->request->get('to'));
+                $targetUser = $this->getUserService()->getUserByVerifiedMobile($request->request->get('to'));
 
                 if (empty($targetUser)) {
                     return $this->createJsonResponse(array('error' => '用户不存在'));
@@ -101,7 +102,7 @@ class EduCloudController extends BaseController
             }
 
             if ($smsType == 'system_remind') {
-                $to          = $request->request->get('to');
+                $to = $request->request->get('to');
                 $description = '直播公开课';
             }
 
@@ -112,13 +113,13 @@ class EduCloudController extends BaseController
             $smsCode = $this->generateSmsCode();
 
             try {
-                $api    = CloudAPIFactory::create('leaf');
+                $api = CloudAPIFactory::create('leaf');
                 $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array(
-                    'mobile'      => $to,
-                    'category'    => $smsType,
-                    'sendStyle'   => 'templateId',
+                    'mobile' => $to,
+                    'category' => $smsType,
+                    'sendStyle' => 'templateId',
                     'description' => $description,
-                    'verify'      => $smsCode
+                    'verify' => $smsCode,
                 ));
 
                 if (isset($result['error'])) {
@@ -126,12 +127,13 @@ class EduCloudController extends BaseController
                 }
             } catch (\Exception $e) {
                 $message = $e->getMessage();
+
                 return $this->createJsonResponse(array('error' => sprintf('发送失败, %s', $message)));
             }
 
-            $result['to']      = $to;
+            $result['to'] = $to;
             $result['smsCode'] = $smsCode;
-            $result['userId']  = $currentUser['id'];
+            $result['userId'] = $currentUser['id'];
 
             if ($currentUser['id'] != 0) {
                 $result['nickname'] = $currentUser['nickname'];
@@ -140,9 +142,9 @@ class EduCloudController extends BaseController
             $this->getLogService()->info('sms', $smsType, sprintf('userId:%s,对%s发送用于%s的验证短信%s', $currentUser['id'], $to, $smsType, $smsCode), $result);
 
             $request->getSession()->set($smsType, array(
-                'to'            => $to,
-                'sms_code'      => $smsCode,
-                'sms_last_time' => $currentTime
+                'to' => $to,
+                'sms_code' => $smsCode,
+                'sms_last_time' => $currentTime,
             ));
 
             return $this->createJsonResponse(array('ACK' => 'ok'));
@@ -178,7 +180,7 @@ class EduCloudController extends BaseController
     {
         $settings = $this->getSettingService()->get('storage', array());
 
-        $data         = $request->request->all();
+        $data = $request->request->all();
         $webAccessKey = empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'];
 
         if (!empty($data['accessKey']) && $data['accessKey'] == $webAccessKey && !empty($data['action'])) {
@@ -196,15 +198,15 @@ class EduCloudController extends BaseController
 
     public function smsCallBackAction(Request $request, $targetType, $targetId)
     {
-        $index      = $request->query->get('index');
-        $smsType    = $request->query->get('smsType');
+        $index = $request->query->get('index');
+        $smsType = $request->query->get('smsType');
         $originSign = rawurldecode($request->query->get('sign'));
 
         $url = $this->setting('site.url', '');
         $url = empty($url) ? $url : rtrim($url, ' \/');
         $url = empty($url) ? $this->generateUrl('edu_cloud_sms_send_callback', array('targetType' => $targetType, 'targetId' => $targetId), true) : $url.$this->generateUrl('edu_cloud_sms_send_callback', array('targetType' => $targetType, 'targetId' => $targetId));
         $url .= '?index='.$index.'&smsType='.$smsType;
-        $api  = CloudAPIFactory::create('leaf');
+        $api = CloudAPIFactory::create('leaf');
         $sign = $this->getSignEncoder()->encodePassword($url, $api->getAccessKey());
 
         if ($originSign != $sign) {
@@ -212,6 +214,7 @@ class EduCloudController extends BaseController
         }
 
         $processor = SmsProcessorFactory::create($targetType);
+
         return $this->createJsonResponse($processor->getSmsInfo($targetId, $index, $smsType));
     }
 
@@ -221,13 +224,13 @@ class EduCloudController extends BaseController
 
         $searchSetting = $this->getSettingService()->get('cloud_search');
 
-        $siteSetting        = $this->getSettingService()->get('site');
+        $siteSetting = $this->getSettingService()->get('site');
         $siteSetting['url'] = rtrim($siteSetting['url']);
         $siteSetting['url'] = rtrim($siteSetting['url'], '/');
 
         $url = $siteSetting['url'];
         $url .= $this->generateUrl('edu_cloud_search_callback');
-        $api  = CloudAPIFactory::create('root');
+        $api = CloudAPIFactory::create('root');
         $sign = $this->getSignEncoder()->encodePassword($url, $api->getAccessKey());
 
         if ($originSign != $sign) {
@@ -235,7 +238,7 @@ class EduCloudController extends BaseController
         }
 
         $searchSetting['search_enabled'] = 1;
-        $searchSetting['status']         = 'ok';
+        $searchSetting['status'] = 'ok';
 
         $this->getSettingService()->set('cloud_search', $searchSetting);
 
@@ -246,7 +249,7 @@ class EduCloudController extends BaseController
     {
         $code = rand(0, 9);
 
-        for ($i = 1; $i < $length; $i++) {
+        for ($i = 1; $i < $length; ++$i) {
             $code = $code.rand(0, 9);
         }
 

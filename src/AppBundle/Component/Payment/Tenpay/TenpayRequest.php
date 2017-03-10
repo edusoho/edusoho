@@ -1,10 +1,11 @@
 <?php
+
 namespace AppBundle\Component\Payment\Tenpay;
 
 use AppBundle\Component\Payment\Request;
 
-class TenpayRequest extends Request {
-
+class TenpayRequest extends Request
+{
     protected $paramMap = array(
         self::SIGN_TYPE => 'sign_type',
         self::VERSION => 'service_version',
@@ -32,29 +33,30 @@ class TenpayRequest extends Request {
         'input_charset' => 'utf-8',
     );
 
-    public function setParam($key, $value) {
+    public function setParam($key, $value)
+    {
         if ($key == self::AMOUNT) {
-            $value = $value *100;
+            $value = $value * 100;
         }
         parent::setParam($key, $value);
     }
 
-    public function signParams($params) {
+    public function signParams($params)
+    {
         ksort($params);
         $sign = '';
         foreach ($params as $key => $value) {
-            if (($key == 'sign') || ($value == "") || ($value === null)) {
+            if (($key == 'sign') || ($value == '') || ($value === null)) {
                 continue;
             }
-            $sign .= $key . '=' . $value . '&';
+            $sign .= $key.'='.$value.'&';
         }
-        $sign .= 'key=' . $this->options['secret'];
+        $sign .= 'key='.$this->options['secret'];
+
         return strtolower(md5($sign));
     }
 
     public function form()
     {
-        
     }
-
 }

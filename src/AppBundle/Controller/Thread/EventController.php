@@ -1,13 +1,12 @@
 <?php
+
 namespace AppBundle\Controller\Thread;
 
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 
-
 class EventController extends BaseController
 {
-
     public function showEventTitleAction(Request $request, $thread)
     {
         $user = $this->getCurrentUser();

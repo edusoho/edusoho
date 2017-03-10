@@ -63,7 +63,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
     protected function deleteMembers($course)
     {
         $memberCount = $this->getOpenCourseMemberDao()->count(array('courseId' => $course['id']));
-        $count       = 0;
+        $count = 0;
 
         if ($memberCount > 0) {
             $members = $this->getOpenCourseMemberDao()->search(array('courseId' => $course['id']), array('createdTime' => 'desc'), 0, 500);
@@ -83,7 +83,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
     protected function deleteRecommend($course)
     {
         $openCount = $this->getRecommendCourseDao()->count(array('openCourseId' => $course['id']));
-        $count     = 0;
+        $count = 0;
 
         if ($openCount > 0) {
             $openCourses = $this->getRecommendCourseDao()->search(array('openCourseId' => $course['id']), array('createdTime' => 'desc'), 0, 500);
@@ -105,14 +105,15 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
         $this->getOpenCourseDao()->deleteCourse($course['id']);
         $courseLog = "删除公开课《{$course['title']}》(#{$course['id']})";
         $this->getLogService()->info('open_course', 'delete_course', $courseLog);
+
         return 0;
     }
 
     protected function deleteMaterials($course)
     {
-        $conditions    = array('courseId' => $course['id'], 'type' => 'openCourse');
+        $conditions = array('courseId' => $course['id'], 'type' => 'openCourse');
         $materialCount = $this->getMaterialService()->countMaterials($conditions);
-        $count         = 0;
+        $count = 0;
 
         if ($materialCount > 0) {
             $materials = $this->getMaterialService()->searchMaterials($conditions, array('createdTime' => 'DESC'), 0, $materialCount);

@@ -13,9 +13,10 @@ class Flash extends Activity
     public function isFinished($activityId)
     {
         $activity = $this->getActivityService()->getActivity($activityId);
-        $flash    = $this->getFlashActivityDao()->get($activity['mediaId']);
+        $flash = $this->getFlashActivityDao()->get($activity['mediaId']);
         if ($flash['finishType'] == 'time') {
             $result = $this->getActivityLearnLogService()->sumMyLearnedTimeByActivityId($activityId);
+
             return $result >= $flash['finishDetail'];
         }
 
@@ -31,35 +32,37 @@ class Flash extends Activity
         $flash = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',
-            'finishDetail'
+            'finishDetail',
         ));
 
-        $biz                    = $this->getBiz();
+        $biz = $this->getBiz();
         $flash['createdUserId'] = $biz['user']['id'];
 
         $flash = $this->getFlashActivityDao()->create($flash);
+
         return $flash;
     }
 
     public function copy($activity, $config = array())
     {
-        $biz      = $this->getBiz();
-        $flash    = $this->getFlashActivityDao()->get($activity['mediaId']);
+        $biz = $this->getBiz();
+        $flash = $this->getFlashActivityDao()->get($activity['mediaId']);
         $newFlash = array(
-            'mediaId'       => $flash['mediaId'],
-            'finishType'    => $flash['finishType'],
-            'finishDetail'  => $flash['finishDetail'],
-            'createdUserId' => $biz['user']['id']
+            'mediaId' => $flash['mediaId'],
+            'finishType' => $flash['finishType'],
+            'finishDetail' => $flash['finishDetail'],
+            'createdUserId' => $biz['user']['id'],
         );
+
         return $this->getFlashActivityDao()->create($newFlash);
     }
 
     public function sync($sourceActivity, $activity)
     {
-        $sourceFlash           = $this->getFlashActivityDao()->get($sourceActivity['mediaId']);
-        $flash                 = $this->getFlashActivityDao()->get($activity['mediaId']);
-        $flash['mediaId']      = $sourceFlash['mediaId'];
-        $flash['finishType']   = $sourceFlash['finishType'];
+        $sourceFlash = $this->getFlashActivityDao()->get($sourceActivity['mediaId']);
+        $flash = $this->getFlashActivityDao()->get($activity['mediaId']);
+        $flash['mediaId'] = $sourceFlash['mediaId'];
+        $flash['finishType'] = $sourceFlash['finishType'];
         $flash['finishDetail'] = $sourceFlash['finishDetail'];
 
         return $this->getFlashActivityDao()->update($flash['id'], $flash);
@@ -70,7 +73,7 @@ class Flash extends Activity
         $updateFields = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',
-            'finishDetail'
+            'finishDetail',
         ));
 
         return $this->getFlashActivityDao()->update($targetId, $updateFields);
@@ -99,7 +102,7 @@ class Flash extends Activity
      */
     protected function getActivityLearnLogService()
     {
-        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     /**
@@ -107,6 +110,6 @@ class Flash extends Activity
      */
     protected function getActivityService()
     {
-        return $this->getBiz()->service("Activity:ActivityService");
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
@@ -24,26 +25,26 @@ class GenerateOrdersCommand extends BaseCommand
 
         $course = $this->getCourseService()->getCourse($courseId);
 
-        for ($i = 0; $i < $index; $i++) {
+        for ($i = 0; $i < $index; ++$i) {
             $user = $this->getUserService()->getUserByLoginField('test_'.$i);
 
             if (!empty($user)) {
                 $order = array(
-                    'userId'     => $user['id'],
-                    'title'      => $course['title'],
-                    'amount'     => $course['price'],
+                    'userId' => $user['id'],
+                    'title' => $course['title'],
+                    'amount' => $course['price'],
                     'targetType' => 'course',
-                    'targetId'   => $course['id'],
-                    'payment'    => 'none',
-                    'coinRate'   => 1,
-                    'priceType'  => 'RMB',
+                    'targetId' => $course['id'],
+                    'payment' => 'none',
+                    'coinRate' => 1,
+                    'priceType' => 'RMB',
                     'totalPrice' => $course['price'],
-                    'snPrefix'   => 'C'
+                    'snPrefix' => 'C',
                 );
 
                 $order = $this->createOrder($order);
                 $this->getOrderService()->updateOrder($order['id'], array(
-                    'payment' => 'wxpay'
+                    'payment' => 'wxpay',
                 ));
             }
         }
@@ -56,6 +57,7 @@ class GenerateOrdersCommand extends BaseCommand
         } catch (\Exception $e) {
             echo $e->getMessage();
             sleep(1);
+
             return $this->createOrder($order);
         }
     }

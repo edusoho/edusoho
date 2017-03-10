@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
@@ -16,7 +17,7 @@ class OrderController extends BaseController
 
     public function manageAction(Request $request, $targetType)
     {
-        $conditions               = $request->query->all();
+        $conditions = $request->query->all();
         $conditions['targetType'] = $targetType;
 
         if (isset($conditions['keywordType'])) {
@@ -25,7 +26,7 @@ class OrderController extends BaseController
 
         if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
             $conditions['startTime'] = strtotime($conditions['startDateTime']);
-            $conditions['endTime']   = strtotime($conditions['endDateTime']);
+            $conditions['endTime'] = strtotime($conditions['endDateTime']);
         }
 
         $paginator = new Paginator(
@@ -33,7 +34,7 @@ class OrderController extends BaseController
             $this->getOrderService()->countOrders($conditions),
             20
         );
-        $orders    = $this->getOrderService()->searchOrders(
+        $orders = $this->getOrderService()->searchOrders(
             $conditions,
             array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
@@ -49,33 +50,34 @@ class OrderController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
 
         foreach ($orders as $index => $expiredOrderToBeUpdated) {
-            if ((($expiredOrderToBeUpdated["createdTime"] + 48 * 60 * 60) < time()) && ($expiredOrderToBeUpdated["status"] == 'created')) {
+            if ((($expiredOrderToBeUpdated['createdTime'] + 48 * 60 * 60) < time()) && ($expiredOrderToBeUpdated['status'] == 'created')) {
                 $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
                 $orders[$index]['status'] = 'cancelled';
             }
         }
 
         return $this->render('admin/order/manage.html.twig', array(
-            'request'    => $request,
+            'request' => $request,
             'targetType' => $targetType,
-            'orders'     => $orders,
-            'courses'     => $courses,
+            'orders' => $orders,
+            'courses' => $courses,
             'courseSets' => $courseSets,
-            'users'      => $users,
-            'paginator'  => $paginator
+            'users' => $users,
+            'paginator' => $paginator,
         ));
     }
 
     public function detailAction(Request $request, $id)
     {
         return $this->forward('AppBundle:Order:detail', array(
-            'id' => $id
+            'id' => $id,
         ));
     }
 
     public function cancelRefundAction(Request $request, $id)
     {
         $this->getClassroomOrderService()->cancelRefundOrder($id);
+
         return $this->createJsonResponse(true);
     }
 
@@ -101,12 +103,13 @@ class OrderController extends BaseController
         }
 
         return $this->render('admin/course-order/refund-confirm-modal.html.twig', array(
-            'order' => $order
+            'order' => $order,
         ));
     }
 
     /**
-     *  导出订单
+     *  导出订单.
+     *
      * @param string $targetType classroom | course | vip
      */
     public function exportCsvAction(Request $request, $targetType)
@@ -119,16 +122,16 @@ class OrderController extends BaseController
         $conditions = $this->buildExportCondition($request, $targetType);
 
         $status = array(
-            'created'   => '未付款',
-            'paid'      => '已付款',
+            'created' => '未付款',
+            'paid' => '已付款',
             'refunding' => '退款中',
-            'refunded'  => '已退款',
-            'cancelled' => '已关闭'
+            'refunded' => '已退款',
+            'cancelled' => '已关闭',
         );
 
-        $payment        = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
-        $orderCount     = $this->getOrderService()->countOrders($conditions);
-        $orders         = $this->getOrderService()->searchOrders($conditions, array('createdTime' => 'DESC'), $start, $limit);
+        $payment = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
+        $orderCount = $this->getOrderService()->countOrders($conditions);
+        $orders = $this->getOrderService()->searchOrders($conditions, array('createdTime' => 'DESC'), $start, $limit);
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
@@ -157,12 +160,13 @@ class OrderController extends BaseController
         ++$loop;
 
         $enableRedirect = $loop * $limit < $orderCount; //当前已经读取的数据小于总数据,则继续跳转获取
-        $readTempDate   = $start;
-        $file           = $request->query->get('fileName', $this->genereateExportCsvFileName($targetType));
+        $readTempDate = $start;
+        $file = $request->query->get('fileName', $this->genereateExportCsvFileName($targetType));
 
         if ($enableRedirect) {
             $content = implode("\r\n", $results);
             file_put_contents($file, $content."\r\n", FILE_APPEND);
+
             return $this->redirect($this->generateUrl('admin_order_manage_export_csv', array('targetType' => $targetType, 'loop' => $loop, 'start' => $loop * $limit, 'fileName' => $file)));
         } elseif ($readTempDate) {
             $str .= file_get_contents($file);
@@ -170,8 +174,8 @@ class OrderController extends BaseController
         }
 
         $str .= implode("\r\n", $results);
-        $str      = chr(239).chr(187).chr(191).$str;
-        $filename = sprintf("%s-order-(%s).csv", $targetType, date('Y-n-d'));
+        $str = chr(239).chr(187).chr(191).$str;
+        $filename = sprintf('%s-order-(%s).csv', $targetType, date('Y-n-d'));
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');
@@ -188,18 +192,20 @@ class OrderController extends BaseController
 
         if (!empty($conditions['startTime']) && !empty($conditions['endTime'])) {
             $conditions['startTime'] = strtotime($conditions['startTime']);
-            $conditions['endTime']   = strtotime($conditions['endTime']);
+            $conditions['endTime'] = strtotime($conditions['endTime']);
         }
 
         $conditions['targetType'] = $targetType;
+
         return $conditions;
     }
 
     private function genereateExportCsvFileName($targetType)
     {
         $rootPath = $this->getParameter('topxia.upload.private_directory');
-        $user     = $this->getUser();
-        return $rootPath."/export_content".$targetType.$user['id'].time().".txt";
+        $user = $this->getUser();
+
+        return $rootPath.'/export_content'.$targetType.$user['id'].time().'.txt';
     }
 
     protected function sendAuditRefundNotification($order, $pass, $amount, $note)
@@ -221,10 +227,10 @@ class OrderController extends BaseController
         }
 
         $classroomUrl = $this->generateUrl('classroom_show', array('id' => $classroom['id']));
-        $variables    = array(
+        $variables = array(
             'classroom' => "<a href='{$classroomUrl}'>{$classroom['title']}</a>",
-            'amount'    => $amount,
-            'note'      => $note
+            'amount' => $amount,
+            'note' => $note,
         );
 
         $message = StringToolkit::template($message, $variables);
@@ -241,20 +247,20 @@ class OrderController extends BaseController
     private function generateVipExportData($orders, $status, $users, $profiles, $payment, $results)
     {
         foreach ($orders as $key => $order) {
-            $member = "";
-            $member .= $order['sn'].",";
-            $member .= $status[$order['status']].",";
-            $member .= $order['title'].",";
-            $member .= $users[$order['userId']]['nickname'].",";
-            $member .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename']."," : "-".",";
-            $member .= $order['amount'].",";
-            $member .= $payment[$order['payment']].",";
-            $member .= date('Y-n-d H:i:s', $order['createdTime']).",";
+            $member = '';
+            $member .= $order['sn'].',';
+            $member .= $status[$order['status']].',';
+            $member .= $order['title'].',';
+            $member .= $users[$order['userId']]['nickname'].',';
+            $member .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename'].',' : '-'.',';
+            $member .= $order['amount'].',';
+            $member .= $payment[$order['payment']].',';
+            $member .= date('Y-n-d H:i:s', $order['createdTime']).',';
 
             if ($order['paidTime'] != 0) {
-                $member .= date('Y-n-d H:i:s', $order['paidTime']).",";
+                $member .= date('Y-n-d H:i:s', $order['paidTime']).',';
             } else {
-                $member .= "-".",";
+                $member .= '-'.',';
             }
 
             $results[] = $member;
@@ -266,41 +272,41 @@ class OrderController extends BaseController
     private function generateExportData($orders, $status, $payment, $users, $profiles, $results)
     {
         foreach ($orders as $key => $order) {
-            $member = "";
-            $member .= $order['sn'].",";
-            $member .= $status[$order['status']].",";
-            $member .= $order['title'].",";
+            $member = '';
+            $member .= $order['sn'].',';
+            $member .= $status[$order['status']].',';
+            $member .= $order['title'].',';
 
-            $member .= $order['totalPrice'].",";
+            $member .= $order['totalPrice'].',';
 
             if (!empty($order['coupon'])) {
-                $member .= $order['coupon'].",";
+                $member .= $order['coupon'].',';
             } else {
-                $member .= "无".",";
+                $member .= '无'.',';
             }
 
-            $member .= $order['couponDiscount'].",";
-            $member .= $order['coinRate'] ? ($order['coinAmount'] / $order['coinRate'])."," : '0,';
-            $member .= $order['amount'].",";
+            $member .= $order['couponDiscount'].',';
+            $member .= $order['coinRate'] ? ($order['coinAmount'] / $order['coinRate']).',' : '0,';
+            $member .= $order['amount'].',';
 
             $orderPayment = empty($order['payment']) ? 'none' : $order['payment'];
-            $member .= $payment[$orderPayment].",";
+            $member .= $payment[$orderPayment].',';
 
-            $member .= $users[$order['userId']]['nickname'].",";
-            $member .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename']."," : "-".",";
+            $member .= $users[$order['userId']]['nickname'].',';
+            $member .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename'].',' : '-'.',';
 
             if (preg_match('/管理员添加/', $order['title'])) {
                 $member .= '管理员添加,';
             } else {
-                $member .= "-,";
+                $member .= '-,';
             }
 
-            $member .= date('Y-n-d H:i:s', $order['createdTime']).",";
+            $member .= date('Y-n-d H:i:s', $order['createdTime']).',';
 
             if ($order['paidTime'] != 0) {
                 $member .= date('Y-n-d H:i:s', $order['paidTime']);
             } else {
-                $member .= "-";
+                $member .= '-';
             }
 
             $results[] = $member;

@@ -2,9 +2,6 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use AppBundle\Extensions\DataTag\DataTag;
-use AppBundle\Common\ArrayToolkit;
-
 class SelectedTagGroupsDataTag extends CourseBaseDataTag implements DataTag
 {
     public function getData(array $arguments)

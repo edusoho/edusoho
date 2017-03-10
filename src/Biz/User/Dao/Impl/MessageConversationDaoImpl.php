@@ -17,10 +17,10 @@ class MessageConversationDaoImpl extends GeneralDaoImpl implements MessageConver
     public function declares()
     {
         return array(
-            'orderbys'   => array('latestMessageTime'),
+            'orderbys' => array('latestMessageTime'),
             'conditions' => array(
-                'toId = :toId'
-            )
+                'toId = :toId',
+            ),
         );
     }
 }

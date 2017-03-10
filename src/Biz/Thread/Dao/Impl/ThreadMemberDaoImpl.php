@@ -25,12 +25,12 @@ class ThreadMemberDaoImpl extends GeneralDaoImpl implements ThreadMemberDao
     {
         $declares['orderbys'] = array(
             'createdTime',
-            'updatedTime'
+            'updatedTime',
         );
 
         $declares['conditions'] = array(
             'userId = :userId',
-            'threadId = :threadId'
+            'threadId = :threadId',
         );
 
         return $declares;

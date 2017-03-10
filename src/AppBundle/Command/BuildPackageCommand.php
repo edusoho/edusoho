@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Symfony\Component\Filesystem\Filesystem;
@@ -24,12 +25,12 @@ class BuildPackageCommand extends BaseCommand
     {
         $output->writeln('<question>开始编制升级包</question>');
 
-        $name     = $input->getArgument('name');
-        $version  = $input->getArgument('version');
+        $name = $input->getArgument('name');
+        $version = $input->getArgument('version');
         $diffFile = $input->getArgument('diff_file');
 
         $this->filesystem = new Filesystem();
-        $this->output     = $output;
+        $this->output = $output;
         $packageDirectory = $this->createDirectory($name, $version);
 
         $this->generateFiles($diffFile, $packageDirectory, $output);
@@ -45,11 +46,11 @@ class BuildPackageCommand extends BaseCommand
 
     private function generateFiles($diffFile, $packageDirectory, $output)
     {
-        $file = @fopen($diffFile, "r");
+        $file = @fopen($diffFile, 'r');
 
         while (!feof($file)) {
             $line = fgets($file);
-            $op   = $line[0];
+            $op = $line[0];
 
             if (!in_array($line[0], array('M', 'A', 'D'))) {
                 echo "无法处理该文件：{$line}";
@@ -176,12 +177,12 @@ class BuildPackageCommand extends BaseCommand
     private function copyUpgradeScript($dir, $version, $output)
     {
         $output->writeln("\n\n");
-        $output->write("<info>拷贝升级脚本：</info>");
+        $output->write('<info>拷贝升级脚本：</info>');
 
         $path = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../').'/scripts/upgrade-'.$version.'.php';
 
         if (!file_exists($path)) {
-            $output->writeln("无升级脚本");
+            $output->writeln('无升级脚本');
         } else {
             $targetPath = realpath($dir).'/Upgrade.php';
             $output->writeln($path." -> {$targetPath}");
@@ -213,13 +214,14 @@ class BuildPackageCommand extends BaseCommand
     {
         $changeLogPath = $this->getContainer()->getParameter('kernel.root_dir').'/../CHANGELOG';
         if (!$this->filesystem->exists($changeLogPath)) {
-            $this->output->writeln("<error>CHANGELOG文件不存在,请确认CHANGELOG文件路径</error>");
+            $this->output->writeln('<error>CHANGELOG文件不存在,请确认CHANGELOG文件路径</error>');
+
             return false;
         }
 
-        $this->output->writeln("<info>输出changelog,请确认changelog是否正确</info>");
-        $file     = @fopen($this->getContainer()->getParameter('kernel.root_dir').'/../CHANGELOG', "r");
-        $print    = false;
+        $this->output->writeln('<info>输出changelog,请确认changelog是否正确</info>');
+        $file = @fopen($this->getContainer()->getParameter('kernel.root_dir').'/../CHANGELOG', 'r');
+        $print = false;
         $askPrint = false;
         while (!feof($file)) {
             $line = trim(fgets($file));
@@ -231,14 +233,14 @@ class BuildPackageCommand extends BaseCommand
                 $askPrint = true;
             }
 
-            if ($askPrint && preg_match("/\\d{4}(\\-|\\/|\\.)\\d{1,2}\\1\\d{1,2}/", "$line", $matches)) {
+            if ($askPrint && preg_match('/\\d{4}(\\-|\\/|\\.)\\d{1,2}\\1\\d{1,2}/', "$line", $matches)) {
                 $print = false;
             }
             if ($print) {
                 if (empty($line)) {
                     $this->output->writeln(sprintf("<comment>$line</comment>"));
                 } else {
-                    $this->output->writeln(sprintf("<comment>%s<br/></comment>", $line));
+                    $this->output->writeln(sprintf('<comment>%s<br/></comment>', $line));
                 }
             }
         }

@@ -1,6 +1,6 @@
 <?php
-namespace Biz\Content\Dao\Impl;
 
+namespace Biz\Content\Dao\Impl;
 
 use Biz\Content\Dao\ContentDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
@@ -16,21 +16,20 @@ class ContentDaoImpl extends GeneralDaoImpl implements ContentDao
                 'type = :type',
                 'status = :status',
                 'title LIKE :keywords',
-                'categoryId IN (:categoryIds)'
+                'categoryId IN (:categoryIds)',
             ),
             'orderbys' => array(
-                'createdTime'
-            )
+                'createdTime',
+            ),
         );
     }
 
     public function getByAlias($alias)
     {
         return $this->getByFields(array(
-            'alias' => $alias
+            'alias' => $alias,
         ));
     }
-
 
     protected function _createQueryBuilder($conditions)
     {
@@ -39,5 +38,5 @@ class ContentDaoImpl extends GeneralDaoImpl implements ContentDao
         }
 
         return parent::_createQueryBuilder($conditions);
-	}
+    }
 }

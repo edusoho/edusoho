@@ -25,10 +25,10 @@ class Determine implements TypeInterface
     public function judge($question, $answer)
     {
         $rightAnswer = array_pop($question['answer']);
-        $userAnswer  = array_pop($answer);
+        $userAnswer = array_pop($answer);
 
         $status = $userAnswer == $rightAnswer ? 'right' : 'wrong';
-        $score  = $userAnswer == $rightAnswer ? $question['score'] : 0;
+        $score = $userAnswer == $rightAnswer ? $question['score'] : 0;
 
         return array('status' => $status, 'score' => $score);
     }
@@ -53,13 +53,14 @@ class Determine implements TypeInterface
             'copyId',
             'target',
             'courseId',
+            'courseSetId',
             'lessonId',
             'subCount',
             'finishedTimes',
             'passedTimes',
             'userId',
             'updatedTime',
-            'createdTime'
+            'createdTime',
         ));
 
         return $fields;

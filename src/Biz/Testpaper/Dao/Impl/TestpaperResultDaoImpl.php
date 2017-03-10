@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Testpaper\Dao\Impl;
 
 use Biz\Testpaper\Dao\TestpaperResultDao;
@@ -8,16 +9,25 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
 {
     protected $table = 'testpaper_result';
 
-    public function getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId)
+    public function getUserUnfinishResult($testId, $courseId, $activityId, $type, $userId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE testId = ? AND courseId = ? AND lessonId = ? AND type = ? AND userId = ? AND status != 'finished' ORDER BY id DESC ";
-        return $this->db()->fetchAssoc($sql, array($testId, $courseId, $lessonId, $type, $userId)) ?: null;
+
+        return $this->db()->fetchAssoc($sql, array($testId, $courseId, $activityId, $type, $userId)) ?: null;
     }
 
-    public function getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type)
+    public function getUserFinishedResult($testId, $courseId, $activityId, $type, $userId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND testId = ? AND courseSetId = ? AND lessonId = ? AND type = ? ORDER BY id DESC ";
-        return $this->db()->fetchAssoc($sql, array($userId, $testId, $courseId, $lessonId, $type)) ?: null;
+        $sql = "SELECT * FROM {$this->table} WHERE testId = ? AND courseId = ? AND lessonId = ? AND type = ? AND userId = ? AND status = 'finished' ORDER BY id DESC ";
+
+        return $this->db()->fetchAssoc($sql, array($testId, $courseId, $activityId, $type, $userId)) ?: null;
+    }
+
+    public function getUserLatelyResultByTestId($userId, $testId, $courseId, $activityId, $type)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND testId = ? AND courseId = ? AND lessonId = ? AND type = ? ORDER BY id DESC ";
+
+        return $this->db()->fetchAssoc($sql, array($userId, $testId, $courseId, $activityId, $type)) ?: null;
     }
 
     public function findPaperResultsStatusNumGroupByStatus($testId, $courseIds)
@@ -28,6 +38,7 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
 
         $sql = "SELECT status,COUNT(id) AS num FROM {$this->table} WHERE testId=? AND courseId IN ($marks)  GROUP BY status";
+
         return $this->db()->fetchAll($sql, array_merge(array($testId), $courseIds)) ?: array();
     }
 
@@ -42,13 +53,14 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
     public function declares()
     {
         $declares['orderbys'] = array(
+            'id',
             'testId',
             'courseId',
             'lessonId',
             'beginTime',
             'endTime',
             'checkedTime',
-            'updateTime'
+            'updateTime',
         );
 
         $declares['conditions'] = array(
@@ -66,7 +78,7 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
             'status = :status',
             'courseId IN ( :courseIds)',
             'type = :type',
-            'type IN ( :types )'
+            'type IN ( :types )',
         );
 
         return $declares;

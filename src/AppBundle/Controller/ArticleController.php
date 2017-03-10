@@ -1,13 +1,14 @@
 <?php
+
 namespace AppBundle\Controller;
 
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use Biz\Article\Service\ArticleService;
 use Biz\Article\Service\CategoryService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Thread\Service\ThreadService;
-use AppBundle\Common\Paginator;
-use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 class ArticleController extends BaseController
@@ -15,9 +16,11 @@ class ArticleController extends BaseController
     public function indexAction(Request $request)
     {
         $categoryTree = $this->getCategoryService()->getCategoryTree();
-        $conditions   = $this->fillOrgCode(array(
-            'status' => 'published'
-        ));
+        $conditions = $this->fillOrgCode(
+            array(
+                'status' => 'published',
+            )
+        );
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -36,10 +39,12 @@ class ArticleController extends BaseController
 
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
-        $featuredConditions = $this->fillOrgCode(array(
-            'status'   => 'published',
-            'featured' => 1
-        ));
+        $featuredConditions = $this->fillOrgCode(
+            array(
+                'status' => 'published',
+                'featured' => 1,
+            )
+        );
 
         $featuredArticles = $this->getArticleService()->searchArticles(
             $featuredConditions,
@@ -54,10 +59,12 @@ class ArticleController extends BaseController
             $featuredCategories[$value['id']] = $this->getCategoryService()->getCategory($value['categoryId']);
         }
 
-        $promotedConditions = $this->fillOrgCode(array(
-            'status'   => 'published',
-            'promoted' => 1
-        ));
+        $promotedConditions = $this->fillOrgCode(
+            array(
+                'status' => 'published',
+                'promoted' => 1,
+            )
+        );
 
         $promotedArticles = $this->getArticleService()->searchArticles(
             $promotedConditions,
@@ -72,27 +79,34 @@ class ArticleController extends BaseController
             $promotedCategories[$value['id']] = $this->getCategoryService()->getCategory($value['categoryId']);
         }
 
-        return $this->render('article/index.html.twig', array(
-            'categoryTree'       => $categoryTree,
-            'latestArticles'     => $latestArticles,
-            'featuredArticles'   => $featuredArticles,
-            'featuredCategories' => $featuredCategories,
-            'promotedArticles'   => $promotedArticles,
-            'promotedCategories' => $promotedCategories,
-            'paginator'          => $paginator,
-            'categories'         => $categories
-        ));
+        return $this->render(
+            'article/index.html.twig',
+            array(
+                'categoryTree' => $categoryTree,
+                'latestArticles' => $latestArticles,
+                'featuredArticles' => $featuredArticles,
+                'featuredCategories' => $featuredCategories,
+                'promotedArticles' => $promotedArticles,
+                'promotedCategories' => $promotedCategories,
+                'paginator' => $paginator,
+                'categories' => $categories,
+            )
+        );
     }
 
     public function categoryNavAction(Request $request, $categoryCode)
     {
         list($rootCategories, $categories, $activeIds) = $this->getCategoryService()->makeNavCategories($categoryCode);
-        return $this->render('article/part/category.html.twig', array(
-            'rootCategories' => $rootCategories,
-            'categories'     => $categories,
-            'categoryCode'   => $categoryCode,
-            'activeIds'      => $activeIds
-        ));
+
+        return $this->render(
+            'article/part/category.html.twig',
+            array(
+                'rootCategories' => $rootCategories,
+                'categories' => $categories,
+                'categoryCode' => $categoryCode,
+                'activeIds' => $activeIds,
+            )
+        );
     }
 
     public function categoryAction(Request $request, $categoryCode)
@@ -104,9 +118,9 @@ class ArticleController extends BaseController
         }
 
         $conditions = array(
-            'categoryId'      => $category['id'],
+            'categoryId' => $category['id'],
             'includeChildren' => true,
-            'status'          => 'published'
+            'status' => 'published',
         );
 
         $paginator = new Paginator(
@@ -125,13 +139,17 @@ class ArticleController extends BaseController
         $categoryIds = ArrayToolkit::column($articles, 'categoryId');
 
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
-        return $this->render('article/list.html.twig', array(
-            'categoryCode' => $categoryCode,
-            'category'     => $category,
-            'articles'     => $articles,
-            'paginator'    => $paginator,
-            'categories'   => $categories
-        ));
+
+        return $this->render(
+            'article/list.html.twig',
+            array(
+                'categoryCode' => $categoryCode,
+                'category' => $category,
+                'articles' => $articles,
+                'paginator' => $paginator,
+                'categories' => $categories,
+            )
+        );
     }
 
     public function detailAction(Request $request, $id)
@@ -149,17 +167,17 @@ class ArticleController extends BaseController
         $this->getArticleService()->viewArticle($id);
 
         $conditions = array(
-            'status' => 'published'
+            'status' => 'published',
         );
 
         $createdTime = $article['createdTime'];
 
         $currentArticleId = $article['id'];
-        $articlePrevious  = $this->getArticleService()->getArticlePrevious($currentArticleId);
-        $articleNext      = $this->getArticleService()->getArticleNext($currentArticleId);
+        $articlePrevious = $this->getArticleService()->getArticlePrevious($currentArticleId);
+        $articleNext = $this->getArticleService()->getArticleNext($currentArticleId);
 
         $articleSetting = $this->getSettingService()->get('article', array());
-        $categoryTree   = $this->getCategoryService()->getCategoryTree();
+        $categoryTree = $this->getCategoryService()->getCategoryTree();
 
         $category = $this->getCategoryService()->getCategory($article['categoryId']);
 
@@ -167,19 +185,19 @@ class ArticleController extends BaseController
 
         $tagNames = ArrayToolkit::column($tags, 'name');
 
-        $seoKeyword = "";
+        $seoKeyword = '';
 
         if ($tags) {
             $seoKeyword = ArrayToolkit::column($tags, 'name');
-            $seoKeyword = implode(",", $seoKeyword);
+            $seoKeyword = implode(',', $seoKeyword);
         }
 
         $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($category['id']);
 
         $conditions = array(
-            'targetId'   => $id,
+            'targetId' => $id,
             'targetType' => 'article',
-            'parentId'   => 0
+            'parentId' => 0,
         );
 
         $paginator = new Paginator(
@@ -198,15 +216,15 @@ class ArticleController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
         $conditions = array(
-            'targetId'   => $id,
-            'targetType' => 'article'
+            'targetId' => $id,
+            'targetType' => 'article',
         );
 
         $count = $this->getThreadService()->searchPostsCount($conditions);
 
         $conditions = array(
-            'type'   => 'article',
-            'status' => 'published'
+            'type' => 'article',
+            'status' => 'published',
         );
 
         $sameTagArticles = $this->getArticleService()->findRelativeArticles($article['id']);
@@ -219,40 +237,43 @@ class ArticleController extends BaseController
 
         $articleBody = strip_tags($articleBody, '');
 
-        $articleBody = preg_replace("/ /", "", $articleBody);
+        $articleBody = preg_replace('/ /', '', $articleBody);
 
-        return $this->render('article/detail.html.twig', array(
-            'categoryTree'    => $categoryTree,
-            'articleSetting'  => $articleSetting,
-            'articlePrevious' => $articlePrevious,
-            'article'         => $article,
-            'articleNext'     => $articleNext,
-            'tags'            => $tags,
-            'seoKeyword'      => $seoKeyword,
-            'seoDesc'         => $articleBody,
-            'breadcrumbs'     => $breadcrumbs,
-            'categoryName'    => $category['name'],
-            'categoryCode'    => $category['code'],
-            'posts'           => $posts,
-            'users'           => $users,
-            'paginator'       => $paginator,
-            'service'         => $this->getThreadService(),
-            'count'           => $count,
-            'tagNames'        => $tagNames,
-            'sameTagArticles' => $sameTagArticles,
-            'userLike'        => $userLike,
-            'category'        => $category
-        ));
+        return $this->render(
+            'article/detail.html.twig',
+            array(
+                'categoryTree' => $categoryTree,
+                'articleSetting' => $articleSetting,
+                'articlePrevious' => $articlePrevious,
+                'article' => $article,
+                'articleNext' => $articleNext,
+                'tags' => $tags,
+                'seoKeyword' => $seoKeyword,
+                'seoDesc' => $articleBody,
+                'breadcrumbs' => $breadcrumbs,
+                'categoryName' => $category['name'],
+                'categoryCode' => $category['code'],
+                'posts' => $posts,
+                'users' => $users,
+                'paginator' => $paginator,
+                'service' => $this->getThreadService(),
+                'count' => $count,
+                'tagNames' => $tagNames,
+                'sameTagArticles' => $sameTagArticles,
+                'userLike' => $userLike,
+                'category' => $category,
+            )
+        );
     }
 
     public function postAction(Request $request, $id)
     {
-        if ($request->getMethod() == "POST") {
+        if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
 
-            $post['content']    = $fields['content'];
+            $post['content'] = $fields['content'];
             $post['targetType'] = 'article';
-            $post['targetId']   = $id;
+            $post['targetId'] = $id;
 
             $user = $this->getCurrentUser();
 
@@ -261,30 +282,40 @@ class ArticleController extends BaseController
             }
 
             $post = $this->getThreadService()->createPost($post);
-            return $this->render('thread/part/post-item.html.twig', array(
-                'post'         => $post,
-                'author'       => $user,
-                'service'      => $this->getThreadService(),
-                'postReplyUrl' => $this->generateUrl('article_post_reply', array('articleId' => $id, 'postId' => $post['id']))
-            ));
+
+            return $this->render(
+                'thread/part/post-item.html.twig',
+                array(
+                    'post' => $post,
+                    'author' => $user,
+                    'service' => $this->getThreadService(),
+                    'postReplyUrl' => $this->generateUrl(
+                        'article_post_reply',
+                        array('articleId' => $id, 'postId' => $post['id'])
+                    ),
+                )
+            );
         }
     }
 
     public function postReplyAction(Request $request, $articleId, $postId)
     {
-        $fields               = $request->request->all();
-        $fields['content']    = $this->autoParagraph($fields['content']);
-        $fields['targetId']   = $articleId;
+        $fields = $request->request->all();
+        $fields['content'] = $this->autoParagraph($fields['content']);
+        $fields['targetId'] = $articleId;
         $fields['targetType'] = 'article';
-        $fields['parentId']   = $postId;
+        $fields['parentId'] = $postId;
 
         $post = $this->getThreadService()->createPost($fields);
 
-        return $this->render('thread/subpost-item.html.twig', array(
-            'post'    => $post,
-            'author'  => $this->getCurrentUser(),
-            'service' => $this->getThreadService()
-        ));
+        return $this->render(
+            'thread/subpost-item.html.twig',
+            array(
+                'post' => $post,
+                'author' => $this->getCurrentUser(),
+                'service' => $this->getThreadService(),
+            )
+        );
     }
 
     public function postJumpAction(Request $request, $articleId, $postId)
@@ -302,31 +333,41 @@ class ArticleController extends BaseController
         }
 
         if (empty($post)) {
-            return $this->redirect($this->generateUrl("article_detail", array(
-                "id" => $articleId
-            )));
+            return $this->redirect(
+                $this->generateUrl(
+                    'article_detail',
+                    array(
+                        'id' => $articleId,
+                    )
+                )
+            );
         }
 
         $conditions = array(
-            'targetType'    => 'article',
-            'targetId'      => $article['id'],
-            'parentId'      => 0,
-            'greaterThanId' => $post['id']
+            'targetType' => 'article',
+            'targetId' => $article['id'],
+            'parentId' => 0,
+            'greaterThanId' => $post['id'],
         );
         $position = $this->getThreadService()->searchPostsCount($conditions);
 
         $page = ceil($position / 10);
 
-        return $this->redirect($this->generateUrl("article_detail", array(
-            'id'   => $articleId,
-            'page' => $page
-        ))."#post-{$post['id']}");
+        return $this->redirect(
+            $this->generateUrl(
+                'article_detail',
+                array(
+                    'id' => $articleId,
+                    'page' => $page,
+                )
+            )."#post-{$post['id']}"
+        );
     }
 
     public function subpostsAction(Request $request, $targetId, $postId, $less = false)
     {
         $conditions = array(
-            'parentId' => $postId
+            'parentId' => $postId,
         );
         $paginator = new Paginator(
             $request,
@@ -334,7 +375,9 @@ class ArticleController extends BaseController
             10
         );
 
-        $paginator->setBaseUrl($this->generateUrl('article_post_subposts', array('targetId' => $targetId, 'postId' => $postId)));
+        $paginator->setBaseUrl(
+            $this->generateUrl('article_post_subposts', array('targetId' => $targetId, 'postId' => $postId))
+        );
 
         $posts = $this->getThreadService()->searchPosts(
             $conditions,
@@ -345,44 +388,55 @@ class ArticleController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        return $this->render('thread/subposts.html.twig', array(
-            'parentId'  => $postId,
-            'targetId'  => $targetId,
-            'posts'     => $posts,
-            'users'     => $users,
-            'paginator' => $paginator,
-            'less'      => $less,
-            'service'   => $this->getThreadService()
-        ));
+        return $this->render(
+            'thread/subposts.html.twig',
+            array(
+                'parentId' => $postId,
+                'targetId' => $targetId,
+                'posts' => $posts,
+                'users' => $users,
+                'paginator' => $paginator,
+                'less' => $less,
+                'service' => $this->getThreadService(),
+            )
+        );
     }
 
     public function popularArticlesBlockAction()
     {
-        $conditions = $this->fillOrgCode(array(
-            'type'   => 'article',
-            'status' => 'published'
-        ));
+        $conditions = $this->fillOrgCode(
+            array(
+                'type' => 'article',
+                'status' => 'published',
+            )
+        );
 
         $articles = $this->getArticleService()->searchArticles($conditions, 'popular', 0, 6);
 
-        return $this->render('article/popular-articles-block.html.twig', array(
-            'articles' => $articles
-        ));
+        return $this->render(
+            'article/popular-articles-block.html.twig',
+            array(
+                'articles' => $articles,
+            )
+        );
     }
 
     public function recommendArticlesBlockAction()
     {
         $conditions = array(
-            'type'     => 'article',
-            'status'   => 'published',
-            'promoted' => 1
+            'type' => 'article',
+            'status' => 'published',
+            'promoted' => 1,
         );
 
         $articles = $this->getArticleService()->searchArticles($conditions, 'normal', 0, 6);
 
-        return $this->render('article/recommend-articles-block.html.twig', array(
-            'articles' => $articles
-        ));
+        return $this->render(
+            'article/recommend-articles-block.html.twig',
+            array(
+                'articles' => $articles,
+            )
+        );
     }
 
     public function tagAction(Request $request, $name)
@@ -393,11 +447,14 @@ class ArticleController extends BaseController
             throw $this->createAccessDeniedException('标签不存在!');
         }
 
-        $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType(array($tag['id']), 'article');
+        $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType(
+            array($tag['id']),
+            'article'
+        );
 
         $conditions = array(
-            'status'     => 'published',
-            'articleIds' => ArrayToolkit::column($tagOwnerRelations, 'ownerId')
+            'status' => 'published',
+            'articleIds' => ArrayToolkit::column($tagOwnerRelations, 'ownerId'),
         );
 
         $paginator = new Paginator(
@@ -417,21 +474,24 @@ class ArticleController extends BaseController
 
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
-        return $this->render('article/list-articles-by-tag.html.twig', array(
-            'articles'   => $articles,
-            'tag'        => $tag,
-            'categories' => $categories,
-            'paginator'  => $paginator
-        ));
+        return $this->render(
+            'article/list-articles-by-tag.html.twig',
+            array(
+                'articles' => $articles,
+                'tag' => $tag,
+                'categories' => $categories,
+                'paginator' => $paginator,
+            )
+        );
     }
 
     protected function autoParagraph($text)
     {
         if (trim($text) !== '') {
-            $text  = htmlspecialchars($text, ENT_NOQUOTES, 'UTF-8');
-            $text  = preg_replace("/\n\n+/", "\n\n", str_replace(array("\r\n", "\r"), "\n", $text));
+            $text = htmlspecialchars($text, ENT_NOQUOTES, 'UTF-8');
+            $text = preg_replace("/\n\n+/", "\n\n", str_replace(array("\r\n", "\r"), "\n", $text));
             $texts = preg_split('/\n\s*\n/', $text, -1, PREG_SPLIT_NO_EMPTY);
-            $text  = '';
+            $text = '';
 
             foreach ($texts as $txt) {
                 $text .= '<p>'.nl2br(trim($txt, "\n"))."</p>\n";

@@ -1,11 +1,14 @@
-//加入前
+//加入前头部
 .course-detail-section {
   position: relative;
-  line-height: 1;
   padding: 20px;
   .course-detail-top {
+    line-height: 1;
     .course-detail-heading {
       max-width: 60%;
+      @media(max-width:@screen-sm-max){
+        max-width: 100%;
+      }
     }
     .tags {
       float: left;
@@ -48,6 +51,14 @@
       position: relative;
       float: left;
       width: 480px;
+      @media(max-width:@screen-sm-max){
+       width: 100%;
+       float: none;
+       margin-bottom: 20px;
+       img {
+         width: 100%;
+       }
+      }
       .course-img-cover {
         position: absolute;
         display: block;
@@ -80,16 +91,19 @@
         color: #fff;
         padding:10px;
         .score {
-          float: right;
           i {
-            font-size: 14px;
+            color: #fff;
           }
-        }
+        } 
       }
     }
     .course-detail-info {
       padding-left: 60px;
       margin-left: 480px;
+      @media(max-width:@screen-sm-max){
+       margin: 0;
+       padding: 0;
+      }
       .course-detail-title {
         width: 70px;
       }
@@ -97,9 +111,22 @@
         padding-left: 60px;
         min-height: 167px;
         margin: 0px -20px 15px -60px;
+        @media(max-width:@screen-sm-max){
+          padding-left: 20px;
+          margin: 0px -20px 15px -20px;
+        }
         .course-detail-nav {
           position: relative;
           padding-left: 70px;
+          @media(max-width:370px){
+            padding-right: 20px;
+            .nav-pills >li {
+              width: 100%;
+              >a {
+                text-align: center;
+              }
+            }
+          }
           .course-detail-title {
             position: absolute;
             left: 0;

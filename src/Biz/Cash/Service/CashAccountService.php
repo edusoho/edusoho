@@ -1,17 +1,18 @@
 <?php
+
 namespace Biz\Cash\Service;
 
 interface CashAccountService
 {
-	public function createAccount($userId);
-    
+    public function createAccount($userId);
+
     public function getAccount($id);
 
-    public function getAccountByUserId($userId, $lock=false);
+    public function getAccountByUserId($userId, $lock = false);
 
     public function findAccountsByUserIds($userIds);
 
-	public function searchAccount($conditions, $orderBy, $start, $limit);
+    public function searchAccount($conditions, $orderBy, $start, $limit);
 
     public function searchAccountCount($conditions);
 
@@ -19,9 +20,9 @@ interface CashAccountService
 
     public function addChange($userId);
 
-    public function changeCoin($amount,$account,$userId);
+    public function changeCoin($amount, $account, $userId);
 
-    public function reward($amount,$name,$userId,$type=null);
+    public function reward($amount, $name, $userId, $type = null);
 
     public function waveCashField($id, $value);
 

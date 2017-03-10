@@ -185,13 +185,14 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      *  * lock_mode: The strategy for locking, see constants [default: LOCK_TRANSACTIONAL]
      *
      *
-     * @param  \PDO|string|null $pdoOrDsn A \PDO instance or DSN string or null
-     * @param  array $options An associative array of options
+     * @param \PDO|string|null $pdoOrDsn A \PDO instance or DSN string or null
+     * @param array            $options  An associative array of options
+     *
      * @throws \InvalidArgumentException When PDO error mode is not PDO::ERRMODE_EXCEPTION
      */
     public function __construct($pdoOrDsn = null, array $options = array(), TokenStorage $storage)
     {
-        $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ?  $_SERVER['HTTP_USER_AGENT'] : '';
+        $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
 
         if (strpos($userAgent, 'Baiduspider') > -1) {
             $this->createable = false;
@@ -202,22 +203,22 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
                 throw new \InvalidArgumentException(sprintf('"%s" requires PDO error mode attribute be set to throw Exceptions (i.e. $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION))', __CLASS__));
             }
 
-            $this->pdo    = $pdoOrDsn;
+            $this->pdo = $pdoOrDsn;
             $this->driver = $this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
         } else {
             $this->dsn = $pdoOrDsn;
         }
 
-        $this->table             = isset($options['db_table']) ? $options['db_table'] : $this->table;
-        $this->idCol             = isset($options['db_id_col']) ? $options['db_id_col'] : $this->idCol;
-        $this->userIdCol         = isset($options['db_user_id_col']) ? $options['db_user_id_col'] : $this->userIdCol;
-        $this->dataCol           = isset($options['db_data_col']) ? $options['db_data_col'] : $this->dataCol;
-        $this->lifetimeCol       = isset($options['db_lifetime_col']) ? $options['db_lifetime_col'] : $this->lifetimeCol;
-        $this->timeCol           = isset($options['db_time_col']) ? $options['db_time_col'] : $this->timeCol;
-        $this->username          = isset($options['db_username']) ? $options['db_username'] : $this->username;
-        $this->password          = isset($options['db_password']) ? $options['db_password'] : $this->password;
+        $this->table = isset($options['db_table']) ? $options['db_table'] : $this->table;
+        $this->idCol = isset($options['db_id_col']) ? $options['db_id_col'] : $this->idCol;
+        $this->userIdCol = isset($options['db_user_id_col']) ? $options['db_user_id_col'] : $this->userIdCol;
+        $this->dataCol = isset($options['db_data_col']) ? $options['db_data_col'] : $this->dataCol;
+        $this->lifetimeCol = isset($options['db_lifetime_col']) ? $options['db_lifetime_col'] : $this->lifetimeCol;
+        $this->timeCol = isset($options['db_time_col']) ? $options['db_time_col'] : $this->timeCol;
+        $this->username = isset($options['db_username']) ? $options['db_username'] : $this->username;
+        $this->password = isset($options['db_password']) ? $options['db_password'] : $this->password;
         $this->connectionOptions = isset($options['db_connection_options']) ? $options['db_connection_options'] : $this->connectionOptions;
-        $this->lockMode          = isset($options['lock_mode']) ? $options['lock_mode'] : $this->lockMode;
+        $this->lockMode = isset($options['lock_mode']) ? $options['lock_mode'] : $this->lockMode;
 
         $this->storage = $storage;
     }
@@ -295,6 +296,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
 
         $maxlifetime = self::MAX_LIFE_TIME;
         $this->gc($maxlifetime);
+
         return true;
     }
 
@@ -320,7 +322,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
         // We delay gc() to close() so that it is executed outside the transactional and blocking read-write process.
         // This way, pruning expired sessions does not block them from being started while the current session is used.
         $rootDirectory = $this->getSystemRootDirectory();
-        $path          = "$rootDirectory/app/data/session_gc_time.data";
+        $path = "$rootDirectory/app/data/session_gc_time.data";
 
         if (!file_exists($path)) {
             $lastGcTime = 0;
@@ -564,7 +566,8 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      * We need to make sure we do not return session data that is already considered garbage according
      * to the session.gc_maxlifetime setting because gc() is called after read() and only sometimes.
      *
-     * @param  string $sessionId Session ID
+     * @param string $sessionId Session ID
+     *
      * @return string The session data
      */
     private function doRead($sessionId)
@@ -575,7 +578,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
             $this->unlockStatements[] = $this->doAdvisoryLock($sessionId);
         }
 
-        $selectSql  = $this->getSelectSql();
+        $selectSql = $this->getSelectSql();
         $selectStmt = $this->pdo->prepare($selectSql);
         $selectStmt->bindParam(':id', $sessionId, \PDO::PARAM_STR);
         $selectStmt->execute();
@@ -635,9 +638,12 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      * @todo implement missing advisory locks
      *       - for oci using DBMS_LOCK.REQUEST
      *       - for sqlsrv using sp_getapplock with LockOwner = Session
-     * @param  string $sessionId Session ID
+     *
+     * @param string $sessionId Session ID
+     *
      * @throws \DomainException When an unsupported PDO driver is used
-     * @return \PDOStatement    The statement that needs to be executed later to release the lock
+     *
+     * @return \PDOStatement The statement that needs to be executed later to release the lock
      */
     private function doAdvisoryLock($sessionId)
     {
@@ -693,7 +699,8 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      * Return a locking or nonlocking SQL query to read session information.
      *
      * @throws \DomainException When an unsupported PDO driver is used
-     * @return string           The SQL string
+     *
+     * @return string The SQL string
      */
     private function getSelectSql()
     {

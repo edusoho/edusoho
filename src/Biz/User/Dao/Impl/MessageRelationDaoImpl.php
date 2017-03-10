@@ -12,7 +12,7 @@ class MessageRelationDaoImpl extends GeneralDaoImpl implements MessageRelationDa
     public function updateByConversationId($conversationId, array $fields)
     {
         return $this->db()->update($this->table, $fields, array(
-            'conversationId' => $conversationId
+            'conversationId' => $conversationId,
         ));
     }
 
@@ -39,8 +39,8 @@ class MessageRelationDaoImpl extends GeneralDaoImpl implements MessageRelationDa
     public function declares()
     {
         return array(
-            'orderbys'   => array('messageId'),
-            'conditions' => array('conversationId = :conversationId')
+            'orderbys' => array('messageId'),
+            'conditions' => array('conversationId = :conversationId'),
         );
     }
 }

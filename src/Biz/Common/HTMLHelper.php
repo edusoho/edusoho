@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Common;
-
 
 use Biz\Util\HTMLPurifierFactory;
 use Codeages\Biz\Framework\Context\Biz;
@@ -10,7 +8,7 @@ use Codeages\Biz\Framework\Context\Biz;
 class HTMLHelper
 {
     /**
-     * @var $biz Biz
+     * @var Biz
      */
     protected $biz;
 
@@ -19,17 +17,17 @@ class HTMLHelper
         $this->biz = $biz;
     }
 
-    public function purify($html, $trusted=false)
+    public function purify($html, $trusted = false)
     {
         if (empty($html)) {
             return '';
         }
 
         $config = array(
-            'cacheDir' => $this->biz['cache_directory'] . '/htmlpurifier'
+            'cacheDir' => $this->biz['cache_directory'].'/htmlpurifier',
         );
 
-        $factory  = new HTMLPurifierFactory($config);
+        $factory = new HTMLPurifierFactory($config);
         $purifier = $factory->create($trusted);
 
         return $purifier->purify($html);

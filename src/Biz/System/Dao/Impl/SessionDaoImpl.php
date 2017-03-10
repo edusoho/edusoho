@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class SessionDaoImpl extends GeneralDaoImpl implements SessionDao
 {
-    protected $table = "sessions";
+    protected $table = 'sessions';
 
     public function getByUserId($userId)
     {
@@ -22,18 +22,21 @@ class SessionDaoImpl extends GeneralDaoImpl implements SessionDao
     public function countOnline($retentionTime)
     {
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE `sess_time`  >= (unix_timestamp(now()) - ?);";
+
         return $this->db()->fetchColumn($sql, array($retentionTime)) ?: null;
     }
 
     public function countLogin($retentionTime)
     {
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE `sess_time` >= (unix_timestamp(now())-?) AND `sess_user_id` > 0";
+
         return $this->db()->fetchColumn($sql, array($retentionTime)) ?: null;
     }
 
     public function searchBySessionTime($sessionTime, $limit)
     {
         $sql = "SELECT * FROM {$this->table} WHERE `sess_time` < ? LIMIT {$limit};";
+
         return $this->db()->fetchAll($sql, array($sessionTime));
     }
 
@@ -44,7 +47,7 @@ class SessionDaoImpl extends GeneralDaoImpl implements SessionDao
         }
 
         $marks = str_repeat('?,', count($ids) - 1).'?';
-        $sql   = "DELETE FROM {$this->table} WHERE `sessi_id` in ( {$marks} );";
+        $sql = "DELETE FROM {$this->table} WHERE `sessi_id` in ( {$marks} );";
 
         return $this->db()->executeUpdate($sql, $ids);
     }

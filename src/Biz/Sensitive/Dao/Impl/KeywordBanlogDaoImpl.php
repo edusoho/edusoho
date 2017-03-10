@@ -16,14 +16,15 @@ class KeywordBanlogDaoImpl extends GeneralDaoImpl implements KeywordBanlogDao
         }
 
         $marks = str_repeat('?,', count($userIds) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE userId IN ({$marks}) ORDER BY id DESC LIMIT {$start}, {$limit};";
+        $sql = "SELECT * FROM {$this->table} WHERE userId IN ({$marks}) ORDER BY id DESC LIMIT {$start}, {$limit};";
+
         return $this->db()->fetchAll($sql, $userIds);
     }
 
     public function declares()
     {
         $declares['orderbys'] = array(
-            'createdTime', 'id'
+            'createdTime', 'id',
         );
 
         $declares['conditions'] = array(
@@ -31,7 +32,7 @@ class KeywordBanlogDaoImpl extends GeneralDaoImpl implements KeywordBanlogDao
             'userId = :userId',
             'state = :state',
             'keywordId = :keywordId',
-            'UPPER(keywordName) LIKE :keywordName'
+            'UPPER(keywordName) LIKE :keywordName',
         );
 
         return $declares;
@@ -47,6 +48,7 @@ class KeywordBanlogDaoImpl extends GeneralDaoImpl implements KeywordBanlogDao
             if (empty($v)) {
                 return false;
             }
+
             return true;
         });
         if (isset($conditions['keyword'])) {

@@ -3,8 +3,8 @@
 namespace Biz\Course\Copy\Impl;
 
 /**
- * Class CourseTestpaperCopy
- * @package Biz\Course\Copy\Impl
+ * Class CourseTestpaperCopy.
+ *
  * @deprecated
  * @see ActivityTestpaperCopy
  */
@@ -36,9 +36,9 @@ class CourseTestpaperCopy extends TestpaperCopy
                 continue;
             }
 
-            $newTestpaper                = $this->baseCopyTestpaper($testpaper, $isCopy);
+            $newTestpaper = $this->baseCopyTestpaper($testpaper, $isCopy);
             $newTestpaper['courseSetId'] = $newCourse['courseSetId'];
-            $newTestpaper['courseId']    = $newCourse['id'];
+            $newTestpaper['courseId'] = $newCourse['id'];
 
             $newTestpaper = $this->getTestpaperDao()->create($newTestpaper);
             $this->doCopyTestpaperItems($testpaper, $newTestpaper, $isCopy);

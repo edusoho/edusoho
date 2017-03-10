@@ -13,8 +13,8 @@ class OpenCourseDaoImpl extends GeneralDaoImpl implements OpenCourseDao
     {
         return array(
             'timestamps' => array(),
-            'serializes' => array('teacherIds' => 'delimiter'),
-            'orderbys'   => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum', 'seq'),
+            'serializes' => array('teacherIds' => 'delimiter', 'tags' => 'delimiter'),
+            'orderbys' => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum', 'seq'),
             'conditions' => array(
                 'updatedTime >= :updatedTime_GE',
                 'status = :status',
@@ -36,8 +36,8 @@ class OpenCourseDaoImpl extends GeneralDaoImpl implements OpenCourseDao
                 'id IN ( :courseIds )',
                 'id IN ( :openCourseIds )',
                 'recommended = :recommended',
-                'locked = :locked'
-            )
+                'locked = :locked',
+            ),
         );
     }
 

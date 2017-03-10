@@ -1,7 +1,7 @@
 import 'babel-polyfill';
 import 'jquery';
 import 'bootstrap';
-import 'swiper';
+import Swiper from 'swiper';
 // import 'placeholder';
 import 'es6-promise/auto';
 import 'libs/js/jquery-lavalamp';
@@ -16,12 +16,13 @@ import './vendor.less';
 // 等待确认可删除Cookie
 // var Cookie = require('cookie');  
 
-
 $('[data-toggle="popover"]').popover({
   html: true,
 });
 
-$('[data-toggle="tooltip"]').tooltip();
+$('[data-toggle="tooltip"]').tooltip({
+  html: true,
+});
 
 $(document).ajaxError(function (event, jqxhr, settings, exception) {
   if (jqxhr.responseText === 'LoginLimit') {

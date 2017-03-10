@@ -13,13 +13,14 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
     {
         return array(
             'serializes' => array(
-                'ats' => 'json'
+                'ats' => 'json',
             ),
-            'orderbys'   => array(
+            'orderbys' => array(
                 'sticky',
                 'createdTime',
                 'lastPostTime',
-                'hitNum'
+                'updateTime',
+                'hitNum',
             ),
             'conditions' => array(
                 'updateTime >= :updateTime_GE',
@@ -38,9 +39,8 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
                 'id NOT IN ( :excludeIds )',
                 'targetId IN (:targetIds)',
                 'startTime > :startTimeGreaterThan',
-                'content LIKE :content'
-            )
+                'content LIKE :content',
+            ),
         );
     }
-
 }

@@ -13,33 +13,36 @@ class CategoryDaoImpl extends GeneralDaoImpl implements CategoryDao
     {
         return array(
             'conditions' => array(
-                'parentId = :parentId'
-            )
+                'parentId = :parentId',
+            ),
         );
     }
 
     public function getByParentId($parentId)
     {
         return $this->getByFields(array(
-            'parentId' => $parentId
+            'parentId' => $parentId,
         ));
     }
 
     public function findByParentId($parentId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE parentId = ? order by weight";
+
         return $this->db()->fetchAll($sql, array($parentId)) ?: array();
     }
 
     public function findAllPublishedByParentId($parentId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE parentId = ? AND published = ? order by weight";
+
         return $this->db()->fetchAll($sql, array($parentId, 1)) ?: array();
     }
 
     public function findByCode($code)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE code = ? LIMIT 1";
+
         return $this->db()->fetchAssoc($sql, array($code)) ?: array();
     }
 
@@ -47,7 +50,7 @@ class CategoryDaoImpl extends GeneralDaoImpl implements CategoryDao
     {
         return $this->search(
             array(
-                'parentId' => $parentId
+                'parentId' => $parentId,
             ),
             $orderBy,
             $start,
@@ -58,6 +61,7 @@ class CategoryDaoImpl extends GeneralDaoImpl implements CategoryDao
     public function countByParentId($parentId)
     {
         $sql = "SELECT COUNT(*) FROM {$this->table()} WHERE  parentId = ?";
+
         return $this->db()->fetchColumn($sql, array($parentId));
     }
 
@@ -69,6 +73,7 @@ class CategoryDaoImpl extends GeneralDaoImpl implements CategoryDao
     public function findAll()
     {
         $sql = "SELECT * FROM {$this->table()} ORDER BY weight ASC";
+
         return $this->db()->fetchAll($sql) ?: array();
     }
 }

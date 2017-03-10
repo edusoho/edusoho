@@ -1,0 +1,15 @@
+{% extends 'activity/content-layout.html.twig' %}
+
+{% do script(['app/js/activity/video/index.js']) %}
+
+{% block body %}
+  {% if watchStatus.status == 'error' %}
+    <div class="iframe-parent-content pv20 ph20">
+      <div class="alert alert-danger">
+        <i class="es-icon es-icon-info"></i>
+        {#{{ watchStatus.watchLimitTime|duration_text }}#}
+        您的视频观看时长已达限制，无法继续观看！
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

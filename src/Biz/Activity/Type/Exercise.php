@@ -52,13 +52,13 @@ class Exercise extends Activity
 
     public function isFinished($activityId)
     {
-        $biz  = $this->getBiz();
+        $biz = $this->getBiz();
         $user = $biz['user'];
 
         $activity = $this->getActivityService()->getActivity($activityId);
         $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
 
-        $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $activity['mediaId'], $activity['fromCourseSetId'], $activity['id'], 'exercise');
+        $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $activity['mediaId'], $activity['fromCourseId'], $activity['id'], 'exercise');
 
         if (!$result) {
             return false;
@@ -86,13 +86,13 @@ class Exercise extends Activity
             'questionTypes',
             'finishCondition',
             'fromCourseId',
-            'fromCourseSetId'
+            'fromCourseSetId',
         ));
 
         $filterFields['courseSetId'] = empty($filterFields['fromCourseSetId']) ? 0 : $filterFields['fromCourseSetId'];
-        $filterFields['courseId']    = empty($filterFields['fromCourseId']) ? 0 : $filterFields['fromCourseId'];
-        $filterFields['lessonId']    = 0;
-        $filterFields['name']        = empty($filterFields['title']) ? '' : $filterFields['title'];
+        $filterFields['courseId'] = empty($filterFields['fromCourseId']) ? 0 : $filterFields['fromCourseId'];
+        $filterFields['lessonId'] = 0;
+        $filterFields['name'] = empty($filterFields['title']) ? '' : $filterFields['title'];
 
         return $filterFields;
     }
@@ -110,7 +110,7 @@ class Exercise extends Activity
      */
     protected function getActivityLearnLogService()
     {
-        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     /**
@@ -118,6 +118,6 @@ class Exercise extends Activity
      */
     protected function getActivityService()
     {
-        return $this->getBiz()->service("Activity:ActivityService");
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 }

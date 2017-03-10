@@ -1,7 +1,8 @@
 <?php
+
 namespace AppBundle\Component\MediaParser\Tests;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 use AppBundle\Component\MediaParser\ItemParser\QQVideoItemParser;
 
 class QQVideoItemParserTest extends BaseTestCase
@@ -39,7 +40,6 @@ class QQVideoItemParserTest extends BaseTestCase
         $this->assertArrayHasKey('name', $video);
         $this->assertArrayHasKey('page', $video);
         $this->assertArrayHasKey('files', $video);
-
     }
 
     private function createParser()

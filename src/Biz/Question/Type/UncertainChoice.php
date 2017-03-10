@@ -30,10 +30,11 @@ class UncertainChoice implements TypeInterface
 
         if (count(array_diff($answer, $question['answer'])) == 0) {
             $percentage = intval(count($answer) / count($question['answer']) * 100);
+
             return array(
-                'status'     => 'partRight',
+                'status' => 'partRight',
                 'percentage' => $percentage,
-                'score'      => $question['missScore']
+                'score' => $question['missScore'],
             );
         }
 
@@ -69,13 +70,14 @@ class UncertainChoice implements TypeInterface
             'copyId',
             'target',
             'courseId',
+            'courseSetId',
             'lessonId',
             'subCount',
             'finishedTimes',
             'passedTimes',
             'userId',
             'updatedTime',
-            'createdTime'
+            'createdTime',
         ));
 
         return $fields;

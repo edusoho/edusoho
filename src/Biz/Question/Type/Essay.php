@@ -47,13 +47,14 @@ class Essay implements TypeInterface
             'copyId',
             'target',
             'courseId',
+            'courseSetId',
             'lessonId',
             'subCount',
             'finishedTimes',
             'passedTimes',
             'userId',
             'updatedTime',
-            'createdTime'
+            'createdTime',
         ));
 
         return $fields;

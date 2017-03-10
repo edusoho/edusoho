@@ -29,7 +29,7 @@ class CoinController extends BaseController
             return $this->createMessageResponse('error', '用户未登录，请先登录！');
         }
 
-        $coinEnabled = $this->setting("coin.coin_enabled");
+        $coinEnabled = $this->setting('coin.coin_enabled');
 
         if (empty($coinEnabled) || $coinEnabled == 0) {
             return $this->createMessageResponse('error', '网校虚拟币未开启！');
@@ -43,7 +43,7 @@ class CoinController extends BaseController
             $this->getCashAccountService()->createAccount($user->id);
         }
 
-        $fields     = $request->query->all();
+        $fields = $request->query->all();
         $conditions = array();
 
         if (!empty($fields)) {
@@ -51,10 +51,10 @@ class CoinController extends BaseController
         }
 
         $conditions['cashType'] = 'Coin';
-        $conditions['userId']   = $user->id;
+        $conditions['userId'] = $user->id;
 
         $conditions['startTime'] = 0;
-        $conditions['endTime']   = time();
+        $conditions['endTime'] = time();
 
         switch ($request->get('lastHowManyMonths')) {
             case 'oneWeek':
@@ -88,21 +88,21 @@ class CoinController extends BaseController
         );
 
         $conditions['type'] = 'inflow';
-        $amountInflow       = $this->getCashService()->analysisAmount($conditions);
+        $amountInflow = $this->getCashService()->analysisAmount($conditions);
 
         $conditions['type'] = 'outflow';
-        $amountOutflow      = $this->getCashService()->analysisAmount($conditions);
+        $amountOutflow = $this->getCashService()->analysisAmount($conditions);
 
 // $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         // $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         return $this->render('coin/index.html.twig', array(
-            'account'       => $account,
-            'cashes'        => $cashes,
-            'paginator'     => $paginator,
+            'account' => $account,
+            'cashes' => $cashes,
+            'paginator' => $paginator,
             // 'amount'=>$amount,
-            'ChargeCoin'    => $chargeCoin,
-            'amountInflow'  => $amountInflow ?: 0,
-            'amountOutflow' => $amountOutflow ?: 0
+            'ChargeCoin' => $chargeCoin,
+            'amountInflow' => $amountInflow ?: 0,
+            'amountOutflow' => $amountOutflow ?: 0,
         ));
     }
 
@@ -111,12 +111,12 @@ class CoinController extends BaseController
         $user = $this->getCurrentUser();
 
         $conditions = array(
-            'userId' => $user['id']
+            'userId' => $user['id'],
         );
 
-        $conditions['cashType']  = 'RMB';
+        $conditions['cashType'] = 'RMB';
         $conditions['startTime'] = 0;
-        $conditions['endTime']   = time();
+        $conditions['endTime'] = time();
 
         switch ($request->get('lastHowManyMonths')) {
             case 'oneWeek':
@@ -149,25 +149,24 @@ class CoinController extends BaseController
             $paginator->getPerPageCount()
         );
         $conditions['type'] = 'inflow';
-        $amountInflow       = $this->getCashService()->analysisAmount($conditions);
+        $amountInflow = $this->getCashService()->analysisAmount($conditions);
 
         $conditions['type'] = 'outflow';
-        $amountOutflow      = $this->getCashService()->analysisAmount($conditions);
+        $amountOutflow = $this->getCashService()->analysisAmount($conditions);
 
         return $this->render('coin/cash_bill.html.twig', array(
-            'cashes'        => $cashes,
-            'paginator'     => $paginator,
-            'amountInflow'  => $amountInflow ?: 0,
-            'amountOutflow' => $amountOutflow ?: 0
-
+            'cashes' => $cashes,
+            'paginator' => $paginator,
+            'amountInflow' => $amountInflow ?: 0,
+            'amountOutflow' => $amountOutflow ?: 0,
         ));
     }
 
     public function inviteCodeAction(Request $request)
     {
-        $user         = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $inviteReward = array();
-        $promote      = array();
+        $promote = array();
 
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，请先登录！');
@@ -180,11 +179,11 @@ class CoinController extends BaseController
         }
 
         $invitedUserIds = $this->getUserService()->findUserIdsByInviteCode($user['inviteCode']);
-        $invitedUsers   = null;
+        $invitedUsers = null;
 
         if (!empty($invitedUserIds)) {
             $conditions = array('userIds' => $invitedUserIds);
-            $paginator  = new Paginator(
+            $paginator = new Paginator(
                 $request,
                 $this->getUserService()->searchUserCount($conditions),
                 20
@@ -192,17 +191,17 @@ class CoinController extends BaseController
 
             $invitedUsers = $this->getUserService()->searchUsers(
                 $conditions,
-                array('id'=>'DESC'),
+                array('id' => 'DESC'),
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
             $recordTime = $this->getInviteTime(ArrayToolkit::column($invitedUsers, 'id'));
 
-            for ($i = 0; $i < count($invitedUsers); $i++) {
+            for ($i = 0; $i < count($invitedUsers); ++$i) {
                 $invitedUsers[$i]['inviteTime'] = $recordTime[$i];
-                $record                         = $this->getInviteRecordService()->getRecordByInvitedUserId($invitedUsers[$i]['id']);
-                $card                           = $this->getCardService()->getCardByCardId($record['inviteUserCardId']);
-                $coupon                         = $this->getCouponService()->getCoupon($card['cardId']);
+                $record = $this->getInviteRecordService()->getRecordByInvitedUserId($invitedUsers[$i]['id']);
+                $card = $this->getCardService()->getCardByCardId($record['inviteUserCardId']);
+                $coupon = $this->getCouponService()->getCoupon($card['cardId']);
                 $invitedUsers[$i]['rewardRate'] = $coupon['rate'];
 
                 if ($record['inviteUserCardId']) {
@@ -219,54 +218,54 @@ class CoinController extends BaseController
 
         $record = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
 
-        $message       = null;
-        $site          = $this->getSettingService()->get('site', array());
+        $message = null;
+        $site = $this->getSettingService()->get('site', array());
         $inviteSetting = $this->getSettingService()->get('invite', array());
 
-        $urlContent  = $this->generateUrl('register', array(), true);
+        $urlContent = $this->generateUrl('register', array(), true);
         $registerUrl = $urlContent.'?inviteCode='.$user['inviteCode'];
 
         if ($inviteSetting['inviteInfomation_template']) {
             $variables = array(
-                'siteName'    => $site['name'],
-                'registerUrl' => $registerUrl
+                'siteName' => $site['name'],
+                'registerUrl' => $registerUrl,
             );
             $message = StringToolkit::template($inviteSetting['inviteInfomation_template'], $variables);
         }
 
         return $this->render('coin/invite-code.html.twig', array(
             'inviteInfomation_template' => $message,
-            'code'                      => $user['inviteCode'],
-            'record'                    => $record,
-            'inviteSetting'             => $inviteSetting,
-            'invitedUsers'              => $invitedUsers,
-            'inviteReward'              => $inviteReward,
-            'paginator'                 => $paginator
+            'code' => $user['inviteCode'],
+            'record' => $record,
+            'inviteSetting' => $inviteSetting,
+            'invitedUsers' => $invitedUsers,
+            'inviteReward' => $inviteReward,
+            'paginator' => $paginator,
         ));
     }
 
     public function promoteLinkAction(Request $request)
     {
-        $user          = $this->getCurrentUser();
-        $message       = null;
-        $site          = $this->getSettingService()->get('site', array());
+        $user = $this->getCurrentUser();
+        $message = null;
+        $site = $this->getSettingService()->get('site', array());
         $inviteSetting = $this->getSettingService()->get('invite', array());
 
-        $urlContent  = $this->generateUrl('register', array(), true);
+        $urlContent = $this->generateUrl('register', array(), true);
         $registerUrl = $urlContent.'?inviteCode='.$user['inviteCode'];
 
         if ($inviteSetting['inviteInfomation_template']) {
             $variables = array(
-                'siteName'    => $site['name'],
-                'registerUrl' => $registerUrl
+                'siteName' => $site['name'],
+                'registerUrl' => $registerUrl,
             );
             $message = StringToolkit::template($inviteSetting['inviteInfomation_template'], $variables);
         }
 
         return $this->render('coin/promote-link-modal.html.twig',
             array(
-                'code'                      => $user['inviteCode'],
-                'inviteInfomation_template' => $message
+                'code' => $user['inviteCode'],
+                'inviteInfomation_template' => $message,
             ));
     }
 
@@ -275,7 +274,7 @@ class CoinController extends BaseController
         $recordTime = array();
 
         foreach ($userIds as $key => $id) {
-            $record       = $this->getInviteRecordService()->getRecordByInvitedUserId($id);
+            $record = $this->getInviteRecordService()->getRecordByInvitedUserId($id);
             $recordTime[] = $record['inviteTime'];
         }
 
@@ -287,7 +286,7 @@ class CoinController extends BaseController
         $user = $this->getCurrentUser();
 
         if ($request->getMethod() == 'POST') {
-            $fields     = $request->request->all();
+            $fields = $request->request->all();
             $inviteCode = $fields['inviteCode'];
 
             $record = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
@@ -302,7 +301,7 @@ class CoinController extends BaseController
                         $response = array('success' => false, 'message' => '不能填写自己的邀请码');
                     } else {
                         $this->getInviteRecordService()->createInviteRecord($promoteUser['id'], $user['id']);
-                        $response     = array('success' => true);
+                        $response = array('success' => true);
                         $inviteCoupon = $this->getCouponService()->generateInviteCoupon($user['id'], 'register');
 
                         if (!empty($inviteCoupon)) {
@@ -329,7 +328,8 @@ class CoinController extends BaseController
         $record = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
 
         $response = $this->redirect($this->generateUrl('my_cards', array('cardType' => 'coupon', 'cardId' => $record['invitedUserCardId'])));
-        $response->headers->setCookie(new Cookie("modalOpened", '1'));
+        $response->headers->setCookie(new Cookie('modalOpened', '1'));
+
         return $response;
     }
 
@@ -344,8 +344,8 @@ class CoinController extends BaseController
         }
 
         return $this->render('coin/coin-content-show.html.twig', array(
-            'content'     => $content,
-            'coinSetting' => $coinSetting
+            'content' => $content,
+            'coinSetting' => $coinSetting,
         ));
     }
 
@@ -373,9 +373,9 @@ class CoinController extends BaseController
         }
 
         $ranges = array();
-        for ($i = 0; $i < count($coinRanges); $i++) {
+        for ($i = 0; $i < count($coinRanges); ++$i) {
             $consume = $coinRanges[$i][0];
-            $change  = $coinRanges[$i][1];
+            $change = $coinRanges[$i][1];
 
             foreach ($coinRanges as $key => $range) {
                 if ($change == $range[1] && $consume > $range[0]) {
@@ -388,7 +388,7 @@ class CoinController extends BaseController
 
         $ranges = ArrayToolkit::index($ranges, 1);
 
-        $send          = 0;
+        $send = 0;
         $bottomConsume = 0;
 
         foreach ($ranges as $key => $range) {
@@ -411,8 +411,8 @@ class CoinController extends BaseController
 
         if ($send > 0) {
             $data[] = array(
-                'send'       => sprintf('消费满%s元送%s', $ranges[$send][0], $ranges[$send][1]),
-                'sendAmount' => "{$ranges[$send][1]}");
+                'send' => sprintf('消费满%s元送%s', $ranges[$send][0], $ranges[$send][1]),
+                'sendAmount' => "{$ranges[$send][1]}", );
         }
 
         if ($canUseAmount >= $bottomConsume) {
@@ -424,14 +424,15 @@ class CoinController extends BaseController
 
     public function payAction(Request $request)
     {
-        $formData           = $request->request->all();
-        $user               = $this->getCurrentUser();
+        $formData = $request->request->all();
+        $user = $this->getCurrentUser();
         $formData['userId'] = $user['id'];
 
         $order = $this->getCashOrdersService()->addOrder($formData);
+
         return $this->redirect($this->generateUrl('pay_center_show', array(
-            'sn'         => $order['sn'],
-            'targetType' => $order['targetType']
+            'sn' => $order['sn'],
+            'targetType' => $order['targetType'],
         )));
     }
 

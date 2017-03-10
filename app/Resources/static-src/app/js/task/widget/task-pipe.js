@@ -21,7 +21,7 @@ export default class TaskPipe {
     this._initInterval();
   }
 
-  _registerChannel(){
+  _registerChannel() {
     postal.instanceId('task');
 
     postal.fedx.addFilter([
@@ -50,10 +50,10 @@ export default class TaskPipe {
   }
 
   _initInterval() {
-    window.onbeforeunload = () => {  
-      this._clearInterval(); 
+    window.onbeforeunload = () => {
+      this._clearInterval();
       this._flush();
-    } 
+    }
     this._clearInterval();
     let minute = 60 * 1000;
     this.intervalId = setInterval(() => this._flush(), minute);
@@ -75,9 +75,9 @@ export default class TaskPipe {
         this._publishResponse(response);
         this.eventDatas = {};
         this.lastTime = response.lastTime;
-        if(response.result.status) {
+        if (response.result.status) {
           let listners = this.eventMap.receives[response.result.status];
-          if(listners) {
+          if (listners) {
             for (var i = listners.length - 1; i >= 0; i--) {
               let listner = listners[i];
               listner(response);
@@ -95,7 +95,7 @@ export default class TaskPipe {
     postal.publish({
       channel: 'task-events',
       topic: '#',
-      data: { event: response.event, data: response.data }
+      data: {event: response.event, data: response.data}
     });
   }
 

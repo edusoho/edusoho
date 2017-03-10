@@ -7,21 +7,21 @@ use AppBundle\Component\MediaParser\ParseException;
 class QQVideoItemParser extends AbstractItemParser
 {
     private $patterns = array(
-        'p1'  => '/^http\:\/\/v\.qq\.com\/cover\//s',
-        'p2'  => '/^http\:\/\/v\.qq\.com\/boke\/page\//s',
-        'p3'  => '/^http\:\/\/v\.qq\.com\/page\//s',
-        'p4'  => '/^http\:\/\/v\.qq\.com\/x\/page\//s',
-        'p5'  => '/^http\:\/\/v\.qq\.com\/x\/cover\//s',
-        'p6'  => '/^https\:\/\/v\.qq\.com\/cover\//s',
-        'p7'  => '/^https\:\/\/v\.qq\.com\/boke\/page\//s',
-        'p8'  => '/^https\:\/\/v\.qq\.com\/page\//s',
-        'p9'  => '/^https\:\/\/v\.qq\.com\/x\/page\//s',
-        'p10' => '/^https\:\/\/v\.qq\.com\/x\/cover\//s'
+        'p1' => '/^http\:\/\/v\.qq\.com\/cover\//s',
+        'p2' => '/^http\:\/\/v\.qq\.com\/boke\/page\//s',
+        'p3' => '/^http\:\/\/v\.qq\.com\/page\//s',
+        'p4' => '/^http\:\/\/v\.qq\.com\/x\/page\//s',
+        'p5' => '/^http\:\/\/v\.qq\.com\/x\/cover\//s',
+        'p6' => '/^https\:\/\/v\.qq\.com\/cover\//s',
+        'p7' => '/^https\:\/\/v\.qq\.com\/boke\/page\//s',
+        'p8' => '/^https\:\/\/v\.qq\.com\/page\//s',
+        'p9' => '/^https\:\/\/v\.qq\.com\/x\/page\//s',
+        'p10' => '/^https\:\/\/v\.qq\.com\/x\/cover\//s',
     );
 
     public function parse($url)
     {
-        $matched  = preg_match('/vid=(\w+)/s', $url, $matches);
+        $matched = preg_match('/vid=(\w+)/s', $url, $matches);
         $response = array();
 
         if (!empty($matched)) {
@@ -46,7 +46,7 @@ class QQVideoItemParser extends AbstractItemParser
 
         if ($matched) {
             $responseInfo = $response ? $response : array();
-            $videoUrl     = 'http://sns.video.qq.com/tvideo/fcgi-bin/video?otype=json&vid='.$vid;
+            $videoUrl = 'http://sns.video.qq.com/tvideo/fcgi-bin/video?otype=json&vid='.$vid;
 
             $response = $this->fetchUrl($videoUrl);
 
@@ -74,9 +74,9 @@ class QQVideoItemParser extends AbstractItemParser
                 }
             }
 
-            $summary  = $video ? $video['desc'] : '';
+            $summary = $video ? $video['desc'] : '';
             $duration = $video ? $video['duration'] : '';
-            $pageUrl  = $video ? 'http://v.qq.com/cover/'.substr($video['cover'], 0, 1)."/{$video['cover']}.html?vid={$vid}" : $url;
+            $pageUrl = $video ? 'http://v.qq.com/cover/'.substr($video['cover'], 0, 1)."/{$video['cover']}.html?vid={$vid}" : $url;
 
             $item = $this->getItem($vid, $title, $summary, $duration, $pageUrl);
         } else {
@@ -93,20 +93,20 @@ class QQVideoItemParser extends AbstractItemParser
     protected function getItem($vid, $title, $summary, $duration, $pageUrl)
     {
         $item = array(
-            'type'     => 'video',
-            'source'   => 'qqvideo',
-            'uuid'     => 'qqvideo:'.$vid,
-            'name'     => $title,
-            'summary'  => $summary,
+            'type' => 'video',
+            'source' => 'qqvideo',
+            'uuid' => 'qqvideo:'.$vid,
+            'name' => $title,
+            'summary' => $summary,
             'duration' => $duration,
-            'page'     => $pageUrl,
+            'page' => $pageUrl,
             'pictures' => array(
-                array('url' => "http://shp.qpic.cn/qqvideo/0/{$vid}/400")
+                array('url' => "http://shp.qpic.cn/qqvideo/0/{$vid}/400"),
             ),
-            'files'    => array(
+            'files' => array(
                 array('type' => 'swf', 'url' => "http://static.video.qq.com/TPout.swf?vid={$vid}&auto=1"),
-                array('type' => 'mp4', 'url' => "http://video.store.qq.com/{$vid}.mp4")
-            )
+                array('type' => 'mp4', 'url' => "http://video.store.qq.com/{$vid}.mp4"),
+            ),
         );
 
         return $item;

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\Cash\Service\CashService;
@@ -13,6 +14,8 @@ use AppBundle\Common\NumberToolkit;
 use AppBundle\Common\JoinPointToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
+use VipPlugin\Biz\Vip\Service\LevelService;
+use VipPlugin\Biz\Vip\Service\VipService;
 
 class OrderController extends BaseController
 {
@@ -25,7 +28,7 @@ class OrderController extends BaseController
         }
 
         $targetType = $request->query->get('targetType');
-        $targetId   = $request->query->get('targetId');
+        $targetId = $request->query->get('targetId');
         $orderTypes = JoinPointToolkit::load('order');
         if (empty($targetType)
             || empty($targetId)
@@ -41,33 +44,27 @@ class OrderController extends BaseController
             return $this->createMessageResponse('error', $checkInfo['error']);
         }
 
-        $fields    = $request->query->all();
+        $fields = $request->query->all();
         $orderInfo = $processor->getOrderInfo($targetId, $fields);
 
-        if (((float)$orderInfo["totalPrice"]) == 0) {
-            $formData               = array();
-            $formData['userId']     = $currentUser["id"];
-            $formData["targetId"]   = $fields["targetId"];
-            $formData["targetType"] = $fields["targetType"];
-            $formData['amount']     = 0;
+        if (((float) $orderInfo['totalPrice']) == 0) {
+            $formData = array();
+            $formData['userId'] = $currentUser['id'];
+            $formData['targetId'] = $fields['targetId'];
+            $formData['targetType'] = $fields['targetType'];
+            $formData['amount'] = 0;
             $formData['totalPrice'] = 0;
-            $coinSetting            = $this->setting("coin");
-            $formData['priceType']  = empty($coinSetting["priceType"]) ? 'RMB' : $coinSetting["priceType"];
-            $formData['coinRate']   = empty($coinSetting["coinRate"]) ? 1 : $coinSetting["coinRate"];
+            $coinSetting = $this->setting('coin');
+            $formData['priceType'] = empty($coinSetting['priceType']) ? 'RMB' : $coinSetting['priceType'];
+            $formData['coinRate'] = empty($coinSetting['coinRate']) ? 1 : $coinSetting['coinRate'];
             $formData['coinAmount'] = 0;
-            $formData['payment']    = 'alipay';
-            $order                  = $processor->createOrder($formData, $fields);
+            $formData['payment'] = 'alipay';
+            $order = $processor->createOrder($formData, $fields);
 
             if ($order['status'] == 'paid') {
                 return $this->redirect($processor->callbackUrl($order, $this->container));
             }
         }
-
-        // $couponApp = $this->getAppService()->findInstallApp("Coupon");
-
-        // // if (isset($couponApp["version"]) && version_compare("1.0.5", $couponApp["version"], "<=")) {
-        // $orderInfo["showCoupon"] = true;
-        // // }
 
         $verifiedMobile = '';
 
@@ -76,14 +73,14 @@ class OrderController extends BaseController
         }
 
         $orderInfo['verifiedMobile'] = $verifiedMobile;
-        $orderInfo['hasPassword']    = strlen($currentUser['password']) > 0;
+        $orderInfo['hasPassword'] = strlen($currentUser['password']) > 0;
 
         return $this->render('order/order-create.html.twig', $orderInfo);
     }
 
     public function smsVerificationAction(Request $request)
     {
-        $currentUser    = $this->getCurrentUser();
+        $currentUser = $this->getCurrentUser();
         $verifiedMobile = '';
 
         if ((isset($currentUser['verifiedMobile'])) && (strlen($currentUser['verifiedMobile']) > 0)) {
@@ -91,7 +88,7 @@ class OrderController extends BaseController
         }
 
         return $this->render('order/order-sms-modal.html.twig', array(
-            'verifiedMobile' => $verifiedMobile
+            'verifiedMobile' => $verifiedMobile,
         ));
     }
 
@@ -104,7 +101,7 @@ class OrderController extends BaseController
         }
 
         if (isset($fields['coinPayAmount']) && $fields['coinPayAmount'] > 0) {
-            $scenario = "sms_user_pay";
+            $scenario = 'sms_user_pay';
 
             if ($this->setting('cloud_sms.sms_enabled') == '1' && $this->setting("cloud_sms.{$scenario}") == 'on') {
                 list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
@@ -121,43 +118,43 @@ class OrderController extends BaseController
             return $this->createMessageResponse('error', '用户未登录，创建订单失败。');
         }
 
-        if (!array_key_exists("targetId", $fields) || !array_key_exists("targetType", $fields)) {
+        if (!array_key_exists('targetId', $fields) || !array_key_exists('targetType', $fields)) {
             return $this->createMessageResponse('error', '订单中没有购买的内容，不能创建!');
         }
 
-        $targetType = $fields["targetType"];
-        $targetId   = $fields["targetId"];
+        $targetType = $fields['targetType'];
+        $targetId = $fields['targetId'];
 
-        $priceType   = "RMB";
-        $coinSetting = $this->setting("coin");
-        $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
+        $priceType = 'RMB';
+        $coinSetting = $this->setting('coin');
+        $coinEnabled = isset($coinSetting['coin_enabled']) && $coinSetting['coin_enabled'];
 
-        if ($coinEnabled && isset($coinSetting["price_type"])) {
-            $priceType = $coinSetting["price_type"];
+        if ($coinEnabled && isset($coinSetting['price_type'])) {
+            $priceType = $coinSetting['price_type'];
         }
 
         $cashRate = 1;
 
-        if ($coinEnabled && isset($coinSetting["cash_rate"])) {
-            $cashRate = $coinSetting["cash_rate"];
+        if ($coinEnabled && isset($coinSetting['cash_rate'])) {
+            $cashRate = $coinSetting['cash_rate'];
         }
 
         $processor = OrderProcessorFactory::create($targetType);
 
         try {
-            if (!isset($fields["couponCode"]) || (isset($fields["couponCode"]) && $fields["couponCode"] == '请输入优惠券')) {
-                $fields["couponCode"] = "";
+            if (!isset($fields['couponCode']) || (isset($fields['couponCode']) && $fields['couponCode'] == '请输入优惠券')) {
+                $fields['couponCode'] = '';
             } else {
-                $fields["couponCode"] = trim($fields["couponCode"]);
+                $fields['couponCode'] = trim($fields['couponCode']);
             }
 
             list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
 
-            $amount         = (string)((float)$amount);
-            $shouldPayMoney = (string)((float)$fields["shouldPayMoney"]);
+            $amount = (string) ((float) $amount);
+            $shouldPayMoney = (string) ((float) $fields['shouldPayMoney']);
             //价格比较
 
-            if (intval($totalPrice * 100) != intval($fields["totalPrice"] * 100)) {
+            if (intval($totalPrice * 100) != intval($fields['totalPrice'] * 100)) {
                 $this->createMessageResponse('error', '实际价格不匹配，不能创建订单!');
             }
 
@@ -170,39 +167,39 @@ class OrderController extends BaseController
             //虚拟币抵扣率比较
             $target = $processor->getTarget($targetId);
 
-            $maxRate   = $coinSetting['cash_model'] == "deduction" && isset($target["maxRate"]) ? $target["maxRate"] : 100;
+            $maxRate = $coinSetting['cash_model'] == 'deduction' && isset($target['maxRate']) ? $target['maxRate'] : 100;
             $priceCoin = $priceType == 'RMB' ? NumberToolkit::roundUp($totalPrice * $cashRate) : $totalPrice;
 
-            if ($coinEnabled && isset($fields['coinPayAmount']) && (intval((float)$fields['coinPayAmount'] * $maxRate) > intval($priceCoin * $maxRate))) {
+            if ($coinEnabled && isset($fields['coinPayAmount']) && (intval((float) $fields['coinPayAmount'] * $maxRate) > intval($priceCoin * $maxRate))) {
                 return $this->createMessageResponse('error', '虚拟币抵扣超出限定，不能创建订单!');
             }
 
-            if (isset($couponResult["useable"]) && $couponResult["useable"] == "yes") {
-                $coupon         = $fields["couponCode"];
-                $couponDiscount = $couponResult["decreaseAmount"];
+            if (isset($couponResult['useable']) && $couponResult['useable'] == 'yes') {
+                $coupon = $fields['couponCode'];
+                $couponDiscount = $couponResult['decreaseAmount'];
             }
 
             $orderFileds = array(
-                'priceType'      => $priceType,
-                'totalPrice'     => $totalPrice,
-                'amount'         => $amount,
-                'coinRate'       => $cashRate,
-                'coinAmount'     => empty($fields["coinPayAmount"]) ? 0 : $fields["coinPayAmount"],
-                'userId'         => $user["id"],
-                'payment'        => 'none',
-                'targetId'       => $targetId,
-                'coupon'         => empty($coupon) ? '' : $coupon,
-                'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount
+                'priceType' => $priceType,
+                'totalPrice' => $totalPrice,
+                'amount' => $amount,
+                'coinRate' => $cashRate,
+                'coinAmount' => empty($fields['coinPayAmount']) ? 0 : $fields['coinPayAmount'],
+                'userId' => $user['id'],
+                'payment' => 'none',
+                'targetId' => $targetId,
+                'coupon' => empty($coupon) ? '' : $coupon,
+                'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount,
             );
 
             $order = $processor->createOrder($orderFileds, $fields);
-            if ($order["status"] == "paid") {
+            if ($order['status'] == 'paid') {
                 return $this->redirect($processor->callbackUrl($order, $this->container));
             }
 
             return $this->redirect($this->generateUrl('pay_center_show', array(
-                'sn'         => $order['sn'],
-                'targetType' => $order['targetType']
+                'sn' => $order['sn'],
+                'targetType' => $order['targetType'],
             )));
         } catch (\Exception $e) {
             return $this->createMessageResponse('error', $e->getMessage());
@@ -221,10 +218,10 @@ class OrderController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'userId'));
 
         return $this->render('order/detail-modal.html.twig', array(
-            'order'     => $order,
-            'user'      => $user,
+            'order' => $order,
+            'user' => $user,
             'orderLogs' => $orderLogs,
-            'users'     => $users
+            'users' => $users,
         ));
     }
 
@@ -250,29 +247,29 @@ class OrderController extends BaseController
     protected function completeInfo($couponInfo, $code, $type)
     {
         $couponContents = array(
-            'all'       => '全站可用',
-            'vip'       => '全部会员',
-            'course'    => '全部课程',
-            'classroom' => '全部班级'
+            'all' => '全站可用',
+            'vip' => '全部会员',
+            'course' => '全部课程',
+            'classroom' => '全部班级',
         );
 
         $couponContent = '';
-        $target        = '';
+        $target = '';
 
-        $coupon     = $this->getCouponService()->getCouponByCode($code);
-        $couponId   = $coupon['targetId'];
+        $coupon = $this->getCouponService()->getCouponByCode($code);
+        $targetId = $coupon['targetId'];
         $couponType = $coupon['targetType'];
 
         if ($couponType == 'course') {
-            if ($couponId != 0) {
-                $course        = $this->getCourseService()->getCourse($couponId);
+            if ($targetId != 0) {
+                $course = $this->getCourseService()->getCourse($targetId);
                 $couponContent = '课程:'.$course['title'];
-                $url           = $this->generateUrl('course_show', array('id' => $couponId));
-                $target        = "<a href='{$url}' target='_blank'>{$couponContent}</a>";
+                $url = $this->generateUrl('course_show', array('id' => $targetId));
+                $target = "<a href='{$url}' target='_blank'>{$couponContent}</a>";
             } else {
                 $couponContent = '全部课程';
-                $url           = $this->generateUrl('course_set_explore');
-                $target        = "<a href='{$url}' target='_blank'>{$couponContent}</a>";
+                $url = $this->generateUrl('course_set_explore');
+                $target = "<a href='{$url}' target='_blank'>{$couponContent}</a>";
             }
 
             $couponInfo['message'] = "无法使用{$code}优惠券,该优惠券只能用于{$target}";
@@ -281,15 +278,15 @@ class OrderController extends BaseController
         }
 
         if ($couponType == 'classroom') {
-            if ($couponId != 0) {
-                $classroom     = $this->getClassroomService()->getClassroom($couponId);
+            if ($targetId != 0) {
+                $classroom = $this->getClassroomService()->getClassroom($targetId);
                 $couponContent = '班级:'.$classroom['title'];
-                $url           = $this->generateUrl('classroom_introductions', array('id' => $couponId));
-                $target        = "<a href='{$url}' target='_blank'>{$couponContent}</a>";
+                $url = $this->generateUrl('classroom_introductions', array('id' => $targetId));
+                $target = "<a href='{$url}' target='_blank'>{$couponContent}</a>";
             } else {
                 $couponContent = '全部班级';
-                $url           = $this->generateUrl('classroom_explore');
-                $target        = "<a href='{$url}' target='_blank'>{$couponContent}</a>";
+                $url = $this->generateUrl('classroom_explore');
+                $target = "<a href='{$url}' target='_blank'>{$couponContent}</a>";
             }
 
             $couponInfo['message'] = "无法使用{$code}优惠券,该优惠券只能用于《{$target}》";
@@ -298,14 +295,14 @@ class OrderController extends BaseController
         }
 
         if ($couponType == 'vip' && $this->isPluginInstalled('Vip')) {
-            if ($couponId != 0) {
-                $level         = $this->getLevelService()->getLevel($couponId);
+            if ($targetId != 0) {
+                $level = $this->getLevelService()->getLevel($targetId);
                 $couponContent = '会员:'.$level['name'];
             } else {
                 $couponContent = '全部VIP';
             }
 
-            $url    = $this->generateUrl('vip');
+            $url = $this->generateUrl('vip');
             $target = "<a href='{$url}' target='_blank'>{$couponContent}</a >";
 
             $couponInfo['message'] = "无法使用{$code}优惠券,该优惠券只能用于《{$target}》";
@@ -317,11 +314,11 @@ class OrderController extends BaseController
     }
 
     /**
-     * @return LevelServiceImpl
+     * @return LevelService
      */
     protected function getLevelService()
     {
-        return $this->getBiz()->service('Vip:Vip:LevelService');
+        return $this->getBiz()->service('VipPlugin:Vip:LevelService');
     }
 
     /**
@@ -361,7 +358,7 @@ class OrderController extends BaseController
      */
     protected function getVipService()
     {
-        return $this->getBiz()->service('Vip:Vip:VipService');
+        return $this->getBiz()->service('VipPlugin:Vip:VipService');
     }
 
     /**

@@ -1,11 +1,11 @@
 <?php
+
 namespace AppBundle\Controller\Thread;
 
 use AppBundle\Controller\BaseController;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\PHPExcelToolkit;
 use Symfony\Component\HttpFoundation\Request;
-
 
 class MemberController extends BaseController
 {
@@ -18,13 +18,13 @@ class MemberController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $data   = $request->request->all();
+            $data = $request->request->all();
             $member = array(
                 'threadId' => $threadId,
-                'userId'   => $user['id'],
+                'userId' => $user['id'],
                 'nickname' => $user['nickname'],
                 'truename' => $data['truename'],
-                'mobile'   => $data['mobile']
+                'mobile' => $data['mobile'],
             );
 
             $member = $this->getThreadService()->createMember($member);
@@ -32,11 +32,12 @@ class MemberController extends BaseController
             return $this->createJsonResponse(empty($member) ? false : true);
         }
 
-        $thread      = $this->getThreadService()->getThread($threadId);
+        $thread = $this->getThreadService()->getThread($threadId);
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
+
         return $this->render('thread/widget/user-info-modal.html.twig', array(
-            'thread'      => $thread,
-            'userProfile' => $userProfile
+            'thread' => $thread,
+            'userProfile' => $userProfile,
         ));
     }
 
@@ -55,17 +56,17 @@ class MemberController extends BaseController
 
     public function showMembersAction(Request $request, $thread)
     {
-        $members   = $this->_findPageMembers($request, $thread['id']);
+        $members = $this->_findPageMembers($request, $thread['id']);
         $myFriends = $this->_findMyJoindedFriends($members);
 
-        $conditions   = array('threadId' => $thread['id']);
+        $conditions = array('threadId' => $thread['id']);
         $membersCount = $this->getThreadService()->searchMemberCount($conditions);
 
         return $this->render('thread/event/user-grids.html.twig', array(
-            'members'      => $members,
-            'myFriends'    => $myFriends,
-            'threadId'     => $thread['id'],
-            'membersCount' => $membersCount
+            'members' => $members,
+            'myFriends' => $myFriends,
+            'threadId' => $thread['id'],
+            'membersCount' => $membersCount,
         ));
     }
 
@@ -74,7 +75,7 @@ class MemberController extends BaseController
         $members = $this->_findPageMembers($request, $threadId);
 
         return $this->render('thread/event/user-grids-li.html.twig', array(
-            'members' => $members
+            'members' => $members,
         ));
     }
 
@@ -96,10 +97,10 @@ class MemberController extends BaseController
             throw $this->createAccessDeniedException('无权限操作!');
         }
 
-        $filename   = $thread['title'] . '-成员.xls';
-        $members    = $this->_findMembersByThreadId($threadId);
+        $filename = $thread['title'].'-成员.xls';
+        $members = $this->_findMembersByThreadId($threadId);
         $execelInfo = $this->_makeInfo($user);
-        $objWriter  = PHPExcelToolkit::export($members, $execelInfo);
+        $objWriter = PHPExcelToolkit::export($members, $execelInfo);
         $this->_setHeader($filename);
         $objWriter->save('php://output');
     }
@@ -107,22 +108,23 @@ class MemberController extends BaseController
     protected function _makeInfo($user)
     {
         $title = array(
-            'nickname'    => '用户名',
-            'truename'    => '真实姓名',
-            'mobile'      => '手机号码',
-            'createdTime' => '报名时间'
+            'nickname' => '用户名',
+            'truename' => '真实姓名',
+            'mobile' => '手机号码',
+            'createdTime' => '报名时间',
         );
-        $info              = array();
-        $info['title']     = $title;
-        $info['creator']   = $user['nickname'];
+        $info = array();
+        $info['title'] = $title;
+        $info['creator'] = $user['nickname'];
         $info['sheetName'] = '成员';
+
         return $info;
     }
 
     protected function _findMembersByThreadId($threadId)
     {
         $conditions = array('threadId' => $threadId);
-        $members    = $this->getThreadService()->searchMembers(
+        $members = $this->getThreadService()->searchMembers(
             $conditions,
             array('createdTime' => 'DESC'),
             0, PHP_INT_MAX
@@ -133,7 +135,7 @@ class MemberController extends BaseController
 
     protected function _findPageMembers($request, $threadId)
     {
-        $page  = $request->query->get('page', 1);
+        $page = $request->query->get('page', 1);
         $start = (intval($page) - 1) * 16;
 
         $conditions = array('threadId' => $threadId);
@@ -146,7 +148,7 @@ class MemberController extends BaseController
         );
         $members = ArrayToolkit::index($members, 'userId');
         $userIds = ArrayToolkit::column($members, 'userId');
-        $users   = $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->getUserService()->findUsersByIds($userIds);
 
         foreach ($members as $key => $member) {
             if (!empty($users[$key])) {

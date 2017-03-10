@@ -1,10 +1,10 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\System\Service\LogService;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\TokenService;
-use Biz\User\Service\UserService;
 use AppBundle\Common\SmsToolkit;
 use Biz\Common\Mail\MailFactory;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,9 +43,10 @@ class PasswordResetController extends BaseController
 
                     if ($result == 'error_duplicate') {
                         $error = '请通过论坛找回密码';
-                        return $this->render("password-reset/index.html.twig", array(
-                            'form'  => $form->createView(),
-                            'error' => $error
+
+                        return $this->render('password-reset/index.html.twig', array(
+                            'form' => $form->createView(),
+                            'error' => $error,
                         ));
                     }
                 }
@@ -53,31 +54,32 @@ class PasswordResetController extends BaseController
                 if ($user) {
                     $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
                     try {
-                        $site        = $this->setting('site', array());
+                        $site = $this->setting('site', array());
                         $mailOptions = array(
-                            'to'       => $user['email'],
+                            'to' => $user['email'],
                             'template' => 'email_reset_password',
-                            'format'   => 'html',
-                            'params'   => array(
-                                'nickname'  => $user['nickname'],
+                            'format' => 'html',
+                            'params' => array(
+                                'nickname' => $user['nickname'],
                                 'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), true),
-                                'sitename'  => $site['name'],
-                                'siteurl'   => $site['url']
-                            )
+                                'sitename' => $site['name'],
+                                'siteurl' => $site['url'],
+                            ),
                         );
 
                         $mail = MailFactory::create($mailOptions);
                         $mail->send();
                     } catch (\Exception $e) {
                         $this->getLogService()->error('user', 'password-reset', '重设密码邮件发送失败:'.$e->getMessage());
+
                         return $this->createMessageResponse('error', '重设密码邮件发送失败，请联系管理员。');
                     }
 
                     $this->getLogService()->info('user', 'password-reset', "{$user['email']}向发送了找回密码邮件。");
 
                     return $this->render('TopxiaWebBundle:PasswordReset:sent.html.twig', array(
-                        'user'          => $user,
-                        'emailLoginUrl' => $this->getEmailLoginUrl($user['email'])
+                        'user' => $user,
+                        'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
                     ));
                 } else {
                     $error = '该邮箱地址没有注册过帐号';
@@ -85,9 +87,9 @@ class PasswordResetController extends BaseController
             }
         }
 
-        return $this->render("password-reset/index.html.twig", array(
-            'form'  => $form->createView(),
-            'error' => $error
+        return $this->render('password-reset/index.html.twig', array(
+            'form' => $form->createView(),
+            'error' => $error,
         ));
     }
 
@@ -119,15 +121,15 @@ class PasswordResetController extends BaseController
         }
 
         return $this->render('password-reset/update.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ));
     }
 
     public function changeRawPasswordAction(Request $request)
     {
-        $fields     = $request->query->all();
+        $fields = $request->query->all();
         $user_token = $this->getTokenService()->verifyToken('email_password_reset', $fields['token']);
-        $flag       = $this->getUserService()->changeRawPassword($user_token['data']['userId'], $user_token['data']['rawPassword']);
+        $flag = $this->getUserService()->changeRawPassword($user_token['data']['userId'], $user_token['data']['rawPassword']);
 
         if (!$flag) {
             return $this->render('password-reset/raw-error.html.twig');
@@ -154,7 +156,7 @@ class PasswordResetController extends BaseController
                 $request->request->set('token', $token);
 
                 return $this->redirect($this->generateUrl('password_reset_update', array(
-                    'token' => $token
+                    'token' => $token,
                 )));
             } else {
                 return $this->createMessageResponse('error', '手机短信验证错误，请重新找回');
@@ -181,7 +183,7 @@ class PasswordResetController extends BaseController
 
     public function checkMobileExistsAction(Request $request)
     {
-        $mobile                 = $request->query->get('value');
+        $mobile = $request->query->get('value');
         list($result, $message) = $this->getAuthService()->checkMobile($mobile);
 
         if ($result == 'success') {

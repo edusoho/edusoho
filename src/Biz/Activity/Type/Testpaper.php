@@ -37,14 +37,14 @@ class Testpaper extends Activity
         $ext = $this->get($activity['mediaId']);
 
         $newExt = array(
-            'mediaId'         => $config['testId'],
-            'doTimes'         => $ext['doTimes'],
-            'redoInterval'    => $ext['redoInterval'],
-            'limitedTime'     => $ext['limitedTime'],
-            'checkType'       => $ext['checkType'],
+            'mediaId' => $config['testId'],
+            'doTimes' => $ext['doTimes'],
+            'redoInterval' => $ext['redoInterval'],
+            'limitedTime' => $ext['limitedTime'],
+            'checkType' => $ext['checkType'],
             'finishCondition' => $ext['finishCondition'],
-            'requireCredit'   => $ext['requireCredit'],
-            'testMode'        => $ext['testMode']
+            'requireCredit' => $ext['requireCredit'],
+            'testMode' => $ext['testMode'],
         );
 
         return $this->create($newExt);
@@ -53,17 +53,17 @@ class Testpaper extends Activity
     public function sync($sourceActivity, $activity)
     {
         $sourceExt = $this->getTestpaperActivityService()->getActivity($sourceActivity['mediaId']);
-        $ext       = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+        $ext = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
         $testPaper = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId($sourceExt['mediaId'], $activity['fromCourseSetId']);
 
-        $ext['mediaId']         = $testPaper['id'];
-        $ext['redoInterval']    = $sourceExt['redoInterval'];
-        $ext['limitedTime']     = $sourceExt['limitedTime'];
-        $ext['checkType']       = $sourceExt['checkType'];
+        $ext['mediaId'] = $testPaper['id'];
+        $ext['redoInterval'] = $sourceExt['redoInterval'];
+        $ext['limitedTime'] = $sourceExt['limitedTime'];
+        $ext['checkType'] = $sourceExt['checkType'];
         $ext['finishCondition'] = $sourceExt['finishCondition'];
-        $ext['requireCredit']   = $sourceExt['requireCredit'];
-        $ext['testMode']        = $sourceExt['testMode'];
+        $ext['requireCredit'] = $sourceExt['requireCredit'];
+        $ext['testMode'] = $sourceExt['testMode'];
 
         return $this->getTestpaperActivityService()->updateActivity($ext['id'], $ext);
     }
@@ -93,13 +93,13 @@ class Testpaper extends Activity
 
     public function isFinished($activityId)
     {
-        $biz  = $this->getBiz();
+        $biz = $this->getBiz();
         $user = $biz['user'];
 
-        $activity          = $this->getActivityService()->getActivity($activityId);
+        $activity = $this->getActivityService()->getActivity($activityId);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
-        $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaperActivity['mediaId'], $activity['fromCourseSetId'], $activity['id'], 'testpaper');
+        $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaperActivity['mediaId'], $activity['fromCourseId'], $activity['id'], 'testpaper');
 
         if (!$result || empty($testpaperActivity['finishCondition'])) {
             return false;
@@ -133,7 +133,7 @@ class Testpaper extends Activity
             'finishCondition',
             'finishScore',
             'requireCredit',
-            'testMode'
+            'testMode',
         ));
 
         $finishCondition = array();
@@ -174,7 +174,7 @@ class Testpaper extends Activity
      */
     protected function getActivityLearnLogService()
     {
-        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     /**
@@ -182,7 +182,7 @@ class Testpaper extends Activity
      */
     protected function getActivityService()
     {
-        return $this->getBiz()->service("Activity:ActivityService");
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 
     /**

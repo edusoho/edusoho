@@ -205,7 +205,7 @@ class DoTestBase
     $.post(url,{data:values,usedTime:this.usedTime})
     .done((response) => {
       if (response.result) {
-        emitter.emit('finish');
+        emitter.emit('finish', {data: ''});
       }
 
       if (toUrl != '' || response.goto != '') {

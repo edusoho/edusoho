@@ -22,15 +22,15 @@ class PptConvertor extends BaseConvertor
             $metas = array();
 
             foreach (array_values($items) as $index => $item) {
-                $type         = $types[$index];
+                $type = $types[$index];
                 $metas[$type] = array(
                     'type' => $type,
-                    'cmd'  => $item['cmd'],
-                    'key'  => $item['key']
+                    'cmd' => $item['cmd'],
+                    'key' => $item['key'],
                 );
             }
 
-            if (isset($result['type']) && isset($result['type']) == "ppt") {
+            if (isset($result['type']) && isset($result['type']) == 'ppt') {
                 $metas['length'] = empty($result['length']) ? 0 : $result['length'];
 
                 $metas['imagePrefix'] = empty($result['imagePrefix']) ? '' : $result['imagePrefix'];
@@ -46,11 +46,11 @@ class PptConvertor extends BaseConvertor
 
             $result = $this->client->convertPPT($metas['pdf']['key'], $result['nextConvertCallbackUrl']);
 
-            $metas['length']      = empty($result['length']) ? 0 : $result['length'];
+            $metas['length'] = empty($result['length']) ? 0 : $result['length'];
             $metas['imagePrefix'] = empty($result['imagePrefix']) ? '' : $result['imagePrefix'];
 
-            $file['metas2']        = empty($file['metas2']) ? array() : $file['metas2'];
-            $file['metas2']        = array_merge($file['metas2'], $metas);
+            $file['metas2'] = empty($file['metas2']) ? array() : $file['metas2'];
+            $file['metas2'] = array_merge($file['metas2'], $metas);
             $file['convertStatus'] = 'doing';
         } else {
             $file['convertStatus'] = 'success';

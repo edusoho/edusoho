@@ -18,14 +18,14 @@ class NotificationDaoImpl extends GeneralDaoImpl implements NotificationDao
     {
         return array(
             'serializes' => array(
-                'content' => 'json'
+                'content' => 'json',
             ),
             'conditions' => array(
-                'userId = :userId'
+                'userId = :userId',
             ),
-            'orderbys'   => array(
-                'createdTime'
-            )
+            'orderbys' => array(
+                'createdTime',
+            ),
         );
     }
 }

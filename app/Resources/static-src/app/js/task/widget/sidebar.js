@@ -5,6 +5,7 @@ export default class TaskSidebar extends Emitter {
   constructor({element, url}) {
     super();
     this.url = url;
+    this.isManualOperation = true;
     this.element = $(element);
     this.init();
   }
@@ -16,6 +17,7 @@ export default class TaskSidebar extends Emitter {
         this.plugins = plugins;
         this.renderToolbar();
         this.renderPane();
+        this.element.hide().show();
         this.bindEvent();
       })
       .fail(error => {
@@ -49,6 +51,7 @@ export default class TaskSidebar extends Emitter {
       return html += `<div data-pane="${plugin.code}" class=" ${plugin.code}-pane js-sidebar-pane" ><div class="${plugin.code}-pane-body js-sidebar-pane-body"></div></div>`;
     }, '');
     this.element.append(html);
+    
   }
 
   bindEvent() {
@@ -72,7 +75,10 @@ export default class TaskSidebar extends Emitter {
           $paneBody.html(html);
           $pane.perfectScrollbar();
           $btn.data('loaded', true);
-          this.operationContent($btn);
+          if(this.isManualOperation){
+            this.operationContent($btn);
+          }
+          this.isManualOperation = true;
         });
     });
   }
@@ -92,7 +98,7 @@ export default class TaskSidebar extends Emitter {
 
   popupContent(time = 1) {
     let side_right = '0px';
-    let content_right = '379px';
+    let content_right = '395px';
 
     this.emit('popup', content_right, time);
     this.element.animate({
@@ -117,5 +123,6 @@ export default class TaskSidebar extends Emitter {
     this.element.find('#dashboard-toolbar-nav').children(`[data-plugin="${pluginCode}"]`)
       .data('loaded', false)
       .click();
+    this.isManualOperation = false;
   }
 }

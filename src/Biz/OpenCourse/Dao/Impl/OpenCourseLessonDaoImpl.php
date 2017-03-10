@@ -14,7 +14,7 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
         return array(
             'timestamps' => array(),
             'serializes' => array(),
-            'orderbys'   => array('createdTime', 'startTime', 'recommendedSeq', 'studentNum', 'hitNum', 'seq'),
+            'orderbys' => array('createdTime', 'startTime', 'recommendedSeq', 'studentNum', 'hitNum', 'seq'),
             'conditions' => array(
                 'id = :lessonId',
                 'id NOT IN (:lessonIdNotIn)',
@@ -34,8 +34,8 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
                 'createdTime >= :startTime',
                 'createdTime <= :endTime',
                 'copyId = :copyId',
-                'courseId IN ( :courseIds )'
-            )
+                'courseId IN ( :courseIds )',
+            ),
         );
     }
 
@@ -47,6 +47,7 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
     public function findByCourseId($courseId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? ORDER BY seq ASC";
+
         return $this->db()->fetchAll($sql, array($courseId));
     }
 
@@ -57,13 +58,13 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
 
     public function findTimeSlotOccupiedLessonsByCourseId($courseId, $startTime, $endTime, $excludeLessonId = 0)
     {
-        $addtionalCondition = ";";
+        $addtionalCondition = ';';
 
         $params = array($courseId, $startTime, $startTime, $startTime, $endTime);
 
         if (!empty($excludeLessonId)) {
-            $addtionalCondition = "and id != ? ;";
-            $params[]           = $excludeLessonId;
+            $addtionalCondition = 'and id != ? ;';
+            $params[] = $excludeLessonId;
         }
 
         $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND ((startTime  < ? AND endTime > ?) OR  (startTime between ? AND ?)) ".$addtionalCondition;
@@ -74,6 +75,7 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
     public function getLessonMaxSeqByCourseId($courseId)
     {
         $sql = "SELECT MAX(seq) FROM {$this->table()} WHERE  courseId = ?";
+
         return $this->db()->fetchColumn($sql, array($courseId));
     }
 
@@ -88,6 +90,7 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
         if (isset($conditions['notLearnedIds'])) {
             $builder->andWhere('id NOT IN ( :notLearnedIds)');
         }
+
         return $builder;
     }
 }

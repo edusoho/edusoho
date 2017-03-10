@@ -579,7 +579,7 @@ my_question_favorite:
 
 my_question_unfavorite:
     path: /my/question/unfavorite/{id}
-    defaults: { _controller: AppBundle:My/Question:unfavorite }
+    defaults: { _controller: AppBundle:My/Question:unFavorite }
 
 my_homework_check_list:
     path: /my/homework/check/{status}
@@ -1501,7 +1501,7 @@ live_open_lesson_time_check:
     path:  /open/course/{courseId}/manage/live/time/check
     defaults: { _controller: AppBundle:OpenCourseManage:lessonTimeCheck }
 
-live_open_es_live_replay_show: 
+live_open_es_live_replay_show:
     path:  /open/course/live/replay/{replayId}/show
     defaults: { _controller: AppBundle:LiveOpenCourse:playESLiveReplay }
 
@@ -1546,6 +1546,10 @@ course_activity_trigger:
     path: /course/{courseId}/activity/{activityId}/trigger
     defaults: { _controller: AppBundle:Activity/Activity:trigger }
     methods: [POST]
+
+course_acitvity_watch:
+    path:  /course/{courseId}/activity/{id}/watch
+    defaults: { _controller: AppBundle:Activity/Video:watch}
 
 course_activity_download:
     path: /course/{courseId}/activiy/{activityId}/download
@@ -2184,6 +2188,10 @@ course_set_manage_testpaper_questions:
 course_manage_testpaper_check:
   path: /course/{id}/manage/testpaper/{resultId}/check
   defaults: { _controller: AppBundle:Course/TestpaperManage:check }
+
+testpaper_check:
+  path: /testpaper/{resultId}/check
+  defaults: { _controller: AppBundle:Course/TestpaperManage:checkForword }
 
 course_manage_testpaper_check_list:
   path: /course/{id}/manage/testpaper/check
@@ -2838,3 +2846,7 @@ course_task_question_marker_list:
 course_task_question_marker_search:
     path:  /course/{courseId}/task/{taskId}/question_marker/search
     defaults: { _controller: AppBundle:QuestionMarker:search }
+
+callback:
+    path:  /callback/{resource}
+    defaults: { _controller: AppBundle:Callback/Index:index }

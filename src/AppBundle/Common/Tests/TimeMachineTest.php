@@ -2,7 +2,7 @@
 
 namespace AppBundle\Common\Tests;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 use AppBundle\Common\TimeMachine;
 
 class TimeMachineTest extends BaseTestCase
@@ -20,23 +20,22 @@ class TimeMachineTest extends BaseTestCase
     public function testInSameDay()
     {
         $timeMachine = $this->getTimeMachine();
-        $date2013122012717 =  1387512440;
-        $date20131220000 =  1387468800;
-        $this->assertTrue($timeMachine->inSameDay($date2013122012717,  $date20131220000));
+        $date2013122012717 = 1387512440;
+        $date20131220000 = 1387468800;
+        $this->assertTrue($timeMachine->inSameDay($date2013122012717, $date20131220000));
 
         $date20131219235959 = 1387468799;
-        $this->assertFalse($timeMachine->inSameDay($date20131220000,  $date20131219235959));
-
+        $this->assertFalse($timeMachine->inSameDay($date20131220000, $date20131219235959));
     }
 
     public function testGetDayTimeRange()
     {
-         $timeMachine = $this->getTimeMachine();
-         $range = $timeMachine->getDayTimeRange(1387512440);
+        $timeMachine = $this->getTimeMachine();
+        $range = $timeMachine->getDayTimeRange(1387512440);
 
-         $this->assertEquals(2, count($range));
-         $this->assertEquals(1387468800, $range[0]);
-         $this->assertEquals(1387555200, $range[1]);
+        $this->assertEquals(2, count($range));
+        $this->assertEquals(1387468800, $range[0]);
+        $this->assertEquals(1387555200, $range[1]);
     }
 
     public function testDiffDays()
@@ -53,7 +52,6 @@ class TimeMachineTest extends BaseTestCase
 
         $diff = $timeMachine->diffDays(1445582204, 1443628800);
         $this->assertEquals(22, $diff);
-
     }
 
     private function getTimeMachine()

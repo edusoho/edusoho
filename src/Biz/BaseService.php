@@ -20,6 +20,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 
     /**
      * @param  $alias
+     *
      * @return GeneralDaoInterface
      */
     protected function createDao($alias)
@@ -37,6 +38,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 
     /**
      * @param  $alias
+     *
      * @return BaseService
      */
     protected function createService($alias)
@@ -53,8 +55,9 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     }
 
     /**
-     * @param  string      $eventName
-     * @param  Event|mixed $subject
+     * @param string      $eventName
+     * @param Event|mixed $subject
+     *
      * @return Event
      */
     protected function dispatchEvent($eventName, $subject, $arguments = array())
@@ -92,7 +95,8 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     }
 
     /**
-     * @param  string                  $message
+     * @param string $message
+     *
      * @return AccessDeniedException
      */
     protected function createAccessDeniedException($message = '')
@@ -101,7 +105,8 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     }
 
     /**
-     * @param  string                     $message
+     * @param string $message
+     *
      * @return InvalidArgumentException
      */
     protected function createInvalidArgumentException($message = '')
@@ -110,7 +115,8 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     }
 
     /**
-     * @param  string              $message
+     * @param string $message
+     *
      * @return NotFoundException
      */
     protected function createNotFoundException($message = '')
@@ -119,7 +125,8 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     }
 
     /**
-     * @param  string             $message
+     * @param string $message
+     *
      * @return ServiceException
      */
     protected function createServiceException($message = '')
@@ -136,7 +143,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
                 if (empty($org)) {
                     throw $this->createNotFoundException('组织机构不存在,更新失败');
                 }
-                $fields['orgId']   = $org['id'];
+                $fields['orgId'] = $org['id'];
                 $fields['orgCode'] = $org['orgCode'];
             } else {
                 unset($fields['orgCode']);
@@ -144,6 +151,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         } else {
             unset($fields['orgCode']);
         }
+
         return $fields;
     }
 
@@ -154,10 +162,10 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         }
 
         $config = array(
-            'cacheDir' => ServiceKernel::instance()->getParameter('kernel.cache_dir').'/htmlpurifier'
+            'cacheDir' => ServiceKernel::instance()->getParameter('kernel.cache_dir').'/htmlpurifier',
         );
 
-        $factory  = new HTMLPurifierFactory($config);
+        $factory = new HTMLPurifierFactory($config);
         $purifier = $factory->create($trusted);
 
         return $purifier->purify($html);

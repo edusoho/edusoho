@@ -12,6 +12,7 @@ class ActivityDaoImpl extends GeneralDaoImpl implements ActivityDao
     public function findByCourseId($courseId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE fromCourseId = ?";
+
         return $this->db()->fetchAll($sql, array($courseId)) ?: array();
     }
 
@@ -31,10 +32,10 @@ class ActivityDaoImpl extends GeneralDaoImpl implements ActivityDao
             'fromCourseId = :fromCourseId',
             'mediaType = :mediaType',
             'fromCourseId IN (:courseIds)',
-            'mediaType IN (:mediaTypes)'
+            'mediaType IN (:mediaTypes)',
+            'mediaId = :mediaId',
         );
 
         return $declares;
     }
-
 }

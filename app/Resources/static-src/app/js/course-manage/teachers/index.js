@@ -2,6 +2,7 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import PersonaMultiInput from 'app/common/component/persona-multi-input';
 import sortList from 'common/sortable';
+import notify from 'common/notify';
 
 ReactDOM.render( 
 	<PersonaMultiInput 
@@ -13,3 +14,11 @@ ReactDOM.render(
 	/>,
   document.getElementById('course-teachers')
 );
+
+$('.js-btn-save').on('click', function(event){
+  if($("input[name=teachers]").val() !== '[]'){
+    $('#teachers-form').submit();
+  }else{
+    notify('warning', '教学计划至少需要一位教师！');
+  }
+});

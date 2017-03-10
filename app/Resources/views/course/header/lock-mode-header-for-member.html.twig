@@ -38,12 +38,13 @@
         <div class="swiper-container">
           <div class="swiper-wrapper ">
             {% for task in teams %}
+              {% set teamsLoop = loop.index %}
               {% set meta = activity_meta(task.activity.mediaType|default(null)) %}
               <div class="swiper-slide">
                 <ul class="task-list task-chart task-list-md task-list-hover clearfix">
                   {% for task in task %}
                     {% if task != " " %}
-                      {% set task_lock =  (course.learnMode  == 'lockMode')  and (  task.number != 1 and  task.lock  ) %}
+                      {% set task_lock =  (course.learnMode  == 'lockMode')  and ( not ( teamsLoop == 1 and loop.index ==1)  and  task.lock  ) %}
                       <li class="task-item task-content half mouse-control">
                         <i class="es-icon
                         {% if task_lock %}
@@ -57,22 +58,16 @@
                         {% endif %}
                         left-menu"></i>
                         {% if  task_lock is empty %}
-                          <a class="text-overflow title"
+                          <a class="title"
                              href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">
                             <span class="task-overflow ml5">{{ task.title }}</span>
                           </a>
                         {% else %}
-                          <span class="text-overflow title"><span
+                          <span class="title"><span
                                 class="task-overflow ml5">{{ task.title }}</span></span>
                         {% endif %}
-                        {% if  task_lock is empty %}
-                          <span class="right-menu mouse-enter">
-                            <a class="btn btn-primary btn-sm btn-learn"
-                               href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">继续学习</a>
-                          </span>
-                        {% endif %}
                         {% set meta =  activity_meta(task.activity.mediaType) %}
-                        <span class="mouse-leave es-icon es-icon {{ meta.icon }} right-menu task-type-icon "
+                        <span class="es-icon es-icon {{ meta.icon }} right-menu task-type-icon "
                               data-toggle="tooltip" data-placement="top" title=""
                               data-original-title="{{ meta.name }}任务"></span>
                       </li>
@@ -89,7 +84,7 @@
     <ul class="task-list task-list-md task-list-hover task-list-gray js-task-list-ul ">
       {% for task in toLearnTasks %}
         {% set meta = activity_meta(task.activity.mediaType|default(null)) %}
-        {% set task_lock =  (course.learnMode  == 'lockMode')  and (  task.number != 1 and  task.lock  ) %}
+        {% set task_lock =  (course.learnMode  == 'lockMode')  and ( loop.index !=1 and  task.lock  ) %}
         <li class="task-item task-content mouse-control">
           <i class="es-icon
           {% if task_lock %}
@@ -103,21 +98,18 @@
           {% endif %}
           left-menu"></i>
           {% if task_lock is empty %}
-            <a class="text-overflow title"
+            <a class="title"
                href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">{{ task.title }}</a>
           {% else %}
-            <span class="text-overflow title">{{ task.title }}</span>
+            <span class="title">{{ task.title }}</span>
           {% endif %}
-          <span class="right-menu mouse-leave">
-          {{ task.activity.length|activity_length_format }} <i class="es-icon es-icon {{ meta.icon|default('') }} mlm"
-          data-toggle="tooltip" data-placement="top" title="{{ meta.name|default(null) }}任务"></i>
+          <span class="right-menu">
+          {{ task.activity.length|activity_length_format }}
+            <i class="es-icon es-icon {{ meta.icon|default('') }} mlm"
+               data-toggle="tooltip" data-placement="top"
+               title="{{ meta.name|default(null) }}任务"></i>
         </span>
-          {% if  task_lock is empty %}
-            <span class="right-menu mouse-enter">
-              <a class="btn btn-primary btn-sm btn-learn"
-                 href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">继续学习</a>
-            </span>
-          {% endif %}
+
         </li>
       {% endfor %}
     </ul>

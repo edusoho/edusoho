@@ -3,25 +3,23 @@
 namespace AppBundle\Extensions\DataTag;
 
 use Topxia\Service\Common\ServiceKernel;
-use AppBundle\Extensions\DataTag\DataTag;
 use AppBundle\Common\ArrayToolkit;
 
-class LatestGroupThreadsDataTag extends BaseDataTag implements DataTag  
-{   
+class LatestGroupThreadsDataTag extends BaseDataTag implements DataTag
+{
     /**
-     * 获取小组最新话题
-     * 
+     * 获取小组最新话题.
+     *
      * 可传入的参数：
      *
      *   count 必需 话题数量，取值不能超过100
-     * 
-     * @param  array $arguments 参数
+     *
+     * @param array $arguments 参数
+     *
      * @return array 最热话题
      */
-
     public function getData(array $arguments)
     {
-
         $conditions = array(
             'status' => 'open',
         );
@@ -58,7 +56,7 @@ class LatestGroupThreadsDataTag extends BaseDataTag implements DataTag
         return ServiceKernel::instance()->createService('User:UserService');
     }
 
-    private function getGroupService() 
+    private function getGroupService()
     {
         return $this->getServiceKernel()->createService('Group:GroupService');
     }

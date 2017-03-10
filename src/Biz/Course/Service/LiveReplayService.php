@@ -3,22 +3,21 @@
 namespace Biz\Course\Service;
 
 /**
- * 直播回放, lessonId 在type为liveOpen情况下是直播公开课的课时ID, type为live情况下是课程的activity的ID
+ * 直播回放, lessonId 在type为liveOpen情况下是直播公开课的课时ID, type为live情况下是课程的activity的ID.
  *
  * Interface LiveReplayService
- * @package Biz\Course\Service
  */
 interface LiveReplayService
 {
-    const REPLAY_UNGENERATE_STATUS     = 'ungenerated';
-    const REPLAY_GENERATING_STATUS     = 'generating';
+    const REPLAY_UNGENERATE_STATUS = 'ungenerated';
+    const REPLAY_GENERATING_STATUS = 'generating';
     const REPLAY_VIDEO_GENERATE_STATUS = 'videoGenerated';
-    const REPLAY_GENERATE_STATUS       = 'generated';
+    const REPLAY_GENERATE_STATUS = 'generated';
 
     /**
      * @before getCourseLessonReplay
      *
-     * @param  integer $id
+     * @param int $id
      *
      * @return array
      */
@@ -27,8 +26,8 @@ interface LiveReplayService
     /**
      * @before getCourseLessonReplayByLessonId
      *
-     * @param  integer $lessonId
-     * @param  string  $lessonType
+     * @param int    $lessonId
+     * @param string $lessonType
      *
      * @return array
      */
@@ -37,7 +36,7 @@ interface LiveReplayService
     /**
      * @before addCourseLessonReplay
      *
-     * @param  array $replay
+     * @param array $replay
      *
      * @return array
      */
@@ -47,8 +46,8 @@ interface LiveReplayService
      * @before deleteLessonReplayByLessonId
      * @before deleteCourseLessonReplayByLessonId
      *
-     * @param  integer $lessonId
-     * @param  string  $lessonType
+     * @param int    $lessonId
+     * @param string $lessonType
      *
      * @return bool
      */
@@ -59,8 +58,8 @@ interface LiveReplayService
     /**
      * @before updateCourseLessonReplay
      *
-     * @param  integer $id
-     * @param  array   $fields
+     * @param int   $id
+     * @param array $fields
      *
      * @return replay
      */
@@ -69,9 +68,9 @@ interface LiveReplayService
     /**
      * @before updateCourseLessonReplayByLessonId
      *
-     * @param  integer $lessonId
-     * @param  array   $fields
-     * @param  string  $lessonType
+     * @param int    $lessonId
+     * @param array  $fields
+     * @param string $lessonType
      *
      * @return array
      */
@@ -80,19 +79,19 @@ interface LiveReplayService
     /**
      * @before searchCourseLessonReplayCount
      *
-     * @param  array $conditions
+     * @param array $conditions
      *
-     * @return integer
+     * @return int
      */
     public function searchCount($conditions);
 
     /**
-     * searchCourseLessonReplays
+     * searchCourseLessonReplays.
      *
-     * @param  array   $conditions
-     * @param  array   $orderBy
-     * @param  integer $start
-     * @param  integer $limit
+     * @param array $conditions
+     * @param array $orderBy
+     * @param int   $start
+     * @param int   $limit
      *
      * @return array[]
      */
@@ -105,5 +104,4 @@ interface LiveReplayService
     public function updateReplayShow($showReplayIds, $lessonId);
 
     public function generateReplay($liveId, $courseId, $lessonId, $liveProvider, $type);
-
 }

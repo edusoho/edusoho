@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Extension;
 
 interface ExtensionInterface

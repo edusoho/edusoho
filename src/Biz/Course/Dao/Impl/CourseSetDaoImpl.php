@@ -25,7 +25,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
             $title = '';
         }
         $title = '%'.$title.'%';
-        $sql   = "SELECT * FROM {$this->table} WHERE title LIKE ?";
+        $sql = "SELECT * FROM {$this->table} WHERE title LIKE ?";
 
         return $this->db()->fetchAll($sql, array($title));
     }
@@ -72,26 +72,27 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'createdTime >= :startTime',
                 'createdTime <= :endTime',
                 'minCoursePrice = :minCoursePrice',
-                'maxCoursePrice > :maxCoursePrice_GT'
+                'maxCoursePrice > :maxCoursePrice_GT',
             ),
             'serializes' => array(
-                'tags'      => 'delimiter',
-                'goals'     => 'delimiter',
+                'tags' => 'delimiter',
+                'goals' => 'delimiter',
                 'audiences' => 'delimiter',
-                'cover'     => 'json'
+                'teacherIds' => 'delimiter',
+                'cover' => 'json',
             ),
-            'orderbys'   => array(
+            'orderbys' => array(
                 'createdTime',
                 'updatedTime',
                 'recommendedSeq',
                 'hitNum',
                 'recommendedTime',
                 'rating',
-                'studentNum'
+                'studentNum',
             ),
             'timestamps' => array(
-                'createdTime', 'updatedTime'
-            )
+                'createdTime', 'updatedTime',
+            ),
         );
     }
 }

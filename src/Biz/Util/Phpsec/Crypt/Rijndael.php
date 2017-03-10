@@ -45,49 +45,44 @@
  * </code>
  *
  * @category  Crypt
- * @package   Rijndael
  *
  * @author    Jim Wigginton <terrafrost@php.net>
  * @copyright 2008 Jim Wigginton
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  *
- * @link      http://phpseclib.sourceforge.net
+ * @see      http://phpseclib.sourceforge.net
  */
 
 namespace Biz\Util\Phpsec\Crypt;
 
-use Biz\Util\Phpsec\Crypt\Base;
-
 /**
  * Pure-PHP implementation of Rijndael.
  *
- * @access  public
- * @package Rijndael
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
 class Rijndael extends Base
 {
     /**
-     * The default password key_size used by setPassword()
+     * The default password key_size used by setPassword().
      *
-     * @var Integer
-     * @access private
+     * @var int
+     *
      * @see \Biz\Util\Phpsec\Crypt\Base::password_key_size
      * @see \Biz\Util\Phpsec\Crypt\Base::setPassword()
      */
     public $password_key_size = 16;
 
     /**
-     * The mcrypt specific name of the cipher
+     * The mcrypt specific name of the cipher.
      *
      * Mcrypt is useable for 128/192/256-bit $block_size/$key_size. For 160/224 not.
      * \Biz\Util\Phpsec\Crypt\Rijndael determines automatically whether mcrypt is useable
      * or not for the current $block_size/$key_size.
      * In case of, $cipher_name_mcrypt will be set dynamically at run time accordingly.
      *
-     * @var String
-     * @access private
+     * @var string
+     *
      * @see \Biz\Util\Phpsec\Crypt\Base::cipher_name_mcrypt
      * @see \Biz\Util\Phpsec\Crypt\Base::engine
      * @see isValidEngine()
@@ -95,10 +90,10 @@ class Rijndael extends Base
     public $cipher_name_mcrypt = 'rijndael-128';
 
     /**
-     * The default salt used by setPassword()
+     * The default salt used by setPassword().
      *
-     * @var String
-     * @access private
+     * @var string
+     *
      * @see \Biz\Util\Phpsec\Crypt\Base::password_default_salt
      * @see \Biz\Util\Phpsec\Crypt\Base::setPassword()
      */
@@ -107,88 +102,89 @@ class Rijndael extends Base
     /**
      * Has the key length explicitly been set or should it be derived from the key, itself?
      *
-     * @var Boolean
-     * @access private
+     * @var bool
+     *
      * @see setKeyLength()
      */
     public $explicit_key_length = false;
 
     /**
-     * The Key Schedule
+     * The Key Schedule.
      *
-     * @var Array
-     * @access private
+     * @var array
+     *
      * @see _setup()
      */
     public $w;
 
     /**
-     * The Inverse Key Schedule
+     * The Inverse Key Schedule.
      *
-     * @var Array
-     * @access private
+     * @var array
+     *
      * @see _setup()
      */
     public $dw;
 
     /**
-     * The Block Length divided by 32
+     * The Block Length divided by 32.
      *
-     * @var Integer
-     * @access private
+     * @var int
+     *
      * @internal The max value is 256 / 32 = 8, the min value is 128 / 32 = 4.  Exists in conjunction with $block_size
      *    because the encryption / decryption / key schedule creation requires this number and not $block_size.  We could
      *    derive this from $block_size or vice versa, but that'd mean we'd have to do multiple shift operations, so in lieu
      *    of that, we'll just precompute it once.
+     *
      * @see setBlockLength()
      */
     public $Nb = 4;
 
     /**
-     * The Key Length
+     * The Key Length.
      *
-     * @var Integer
-     * @access private
+     * @var int
+     *
      * @internal The max value is 256 / 8 = 32, the min value is 128 / 8 = 16.  Exists in conjunction with $Nk
      *    because the encryption / decryption / key schedule creation requires this number and not $key_size.  We could
      *    derive this from $key_size or vice versa, but that'd mean we'd have to do multiple shift operations, so in lieu
      *    of that, we'll just precompute it once.
+     *
      * @see setKeyLength()
      */
     public $key_size = 16;
 
     /**
-     * The Key Length divided by 32
+     * The Key Length divided by 32.
      *
-     * @var Integer
-     * @access private
+     * @var int
+     *
      * @internal The max value is 256 / 32 = 8, the min value is 128 / 32 = 4
+     *
      * @see setKeyLength()
      */
     public $Nk = 4;
 
     /**
-     * The Number of Rounds
+     * The Number of Rounds.
      *
-     * @var Integer
-     * @access private
-     * @internal The max value is 14, the min value is 10.
+     * @var int
+     *
+     * @internal the max value is 14, the min value is 10
      */
     public $Nr;
 
     /**
-     * Shift offsets
+     * Shift offsets.
      *
-     * @var Array
-     * @access private
+     * @var array
      */
     public $c;
 
     /**
-     * Holds the last used key- and block_size information
+     * Holds the last used key- and block_size information.
      *
-     * @var Array
-     * @access private
+     * @var array
      */
     public $kl;
 
@@ -211,7 +207,6 @@ class Rijndael extends Base
      *
      * If not explictly set, \Biz\Util\Phpsec\Crypt\Base::MODE_CBC will be used.
      *
-     * @access public
      *
      *
      * Sets the key.
@@ -225,13 +220,12 @@ class Rijndael extends Base
      *
      * Note: 160/224-bit keys must explicitly set by setKeyLength(), otherwise they will be round/pad up to 192/256 bits.
      *
-     * @access public
      * @see \Biz\Util\Phpsec\Crypt\Base::Crypt_Base()
      * @see \Biz\Util\Phpsec\Crypt\Base:setKey()
      * @see setKeyLength()
      *
      * @param optional Integer $mode
-     * @param String   $key
+     * @param string           $key
      */
     public function setKey($key)
     {
@@ -260,7 +254,7 @@ class Rijndael extends Base
     }
 
     /**
-     * Sets the key length
+     * Sets the key length.
      *
      * Valid key lengths are 128, 160, 192, 224, and 256.  If the length is less than 128, it will be rounded up to
      * 128.  If the length is greater than 128 and invalid, it will be rounded down to the closest valid amount.
@@ -276,8 +270,7 @@ class Rijndael extends Base
      *             the mcrypt php extension, even if available.
      *             This results then in slower encryption.
      *
-     * @access public
-     * @param Integer $length
+     * @param int $length
      */
     public function setKeyLength($length)
     {
@@ -299,18 +292,17 @@ class Rijndael extends Base
         }
 
         $this->explicit_key_length = true;
-        $this->changed             = true;
+        $this->changed = true;
         $this->_setEngine();
     }
 
     /**
-     * Sets the block length
+     * Sets the block length.
      *
      * Valid block lengths are 128, 160, 192, 224, and 256.  If the length is less than 128, it will be rounded up to
      * 128.  If the length is greater than 128 and invalid, it will be rounded down to the closest valid amount.
      *
-     * @access public
-     * @param Integer $length
+     * @param int $length
      */
     public function setBlockLength($length)
     {
@@ -322,22 +314,22 @@ class Rijndael extends Base
             $length = 4;
         }
 
-        $this->Nb         = $length;
+        $this->Nb = $length;
         $this->block_size = $length << 2;
-        $this->changed    = true;
+        $this->changed = true;
         $this->_setEngine();
     }
 
     /**
-     * Test for engine validity
+     * Test for engine validity.
      *
      * This is mainly just a wrapper to set things up for \Biz\Util\Phpsec\Crypt\Base::isValidEngine()
      *
-     * @access public
      * @see \Biz\Util\Phpsec\Crypt\Base::Crypt_Base()
      *
-     * @param  Integer   $engine
-     * @return Boolean
+     * @param int $engine
+     *
+     * @return bool
      */
     public function isValidEngine($engine)
     {
@@ -349,7 +341,7 @@ class Rijndael extends Base
                 }
 
                 $this->cipher_name_openssl_ecb = 'aes-'.($this->key_size << 3).'-ecb';
-                $this->cipher_name_openssl     = 'aes-'.($this->key_size << 3).'-'.$this->_openssl_translate_mode();
+                $this->cipher_name_openssl = 'aes-'.($this->key_size << 3).'-'.$this->_openssl_translate_mode();
                 break;
             case self::ENGINE_MCRYPT:
                 $this->cipher_name_mcrypt = 'rijndael-'.($this->block_size << 3);
@@ -365,9 +357,8 @@ class Rijndael extends Base
     }
 
     /**
-     * Setup the \Biz\Util\Phpsec\Crypt\Base::ENGINE_MCRYPT $engine
+     * Setup the \Biz\Util\Phpsec\Crypt\Base::ENGINE_MCRYPT $engine.
      *
-     * @access private
      * @see \Biz\Util\Phpsec\Crypt\Base::_setupMcrypt()
      */
     public function _setupMcrypt()
@@ -377,11 +368,11 @@ class Rijndael extends Base
     }
 
     /**
-     * Encrypts a block
+     * Encrypts a block.
      *
-     * @access private
-     * @param  String   $in
-     * @return String
+     * @param string $in
+     *
+     * @return string
      */
     public function _encryptBlock($in)
     {
@@ -391,17 +382,17 @@ class Rijndael extends Base
             $tables = &$this->_getTables();
         }
 
-        $t0   = $tables[0];
-        $t1   = $tables[1];
-        $t2   = $tables[2];
-        $t3   = $tables[3];
+        $t0 = $tables[0];
+        $t1 = $tables[1];
+        $t2 = $tables[2];
+        $t3 = $tables[3];
         $sbox = $tables[4];
 
         $state = array();
         $words = unpack('N*', $in);
 
-        $c  = $this->c;
-        $w  = $this->w;
+        $c = $this->c;
+        $w = $this->w;
         $Nb = $this->Nb;
         $Nr = $this->Nr;
 
@@ -485,11 +476,11 @@ class Rijndael extends Base
     }
 
     /**
-     * Decrypts a block
+     * Decrypts a block.
      *
-     * @access private
-     * @param  String   $in
-     * @return String
+     * @param string $in
+     *
+     * @return string
      */
     public function _decryptBlock($in)
     {
@@ -499,16 +490,16 @@ class Rijndael extends Base
             $invtables = &$this->_getInvTables();
         }
 
-        $dt0   = $invtables[0];
-        $dt1   = $invtables[1];
-        $dt2   = $invtables[2];
-        $dt3   = $invtables[3];
+        $dt0 = $invtables[0];
+        $dt1 = $invtables[1];
+        $dt2 = $invtables[2];
+        $dt3 = $invtables[3];
         $isbox = $invtables[4];
 
         $state = array();
         $words = unpack('N*', $in);
 
-        $c  = $this->c;
+        $c = $this->c;
         $dw = $this->dw;
         $Nb = $this->Nb;
         $Nr = $this->Nr;
@@ -580,9 +571,8 @@ class Rijndael extends Base
     }
 
     /**
-     * Setup the key (expansion)
+     * Setup the key (expansion).
      *
-     * @access private
      * @see \Biz\Util\Phpsec\Crypt\Base::_setupKey()
      */
     public function _setupKey()
@@ -595,7 +585,7 @@ class Rijndael extends Base
             0x6C000000, 0xD8000000, 0xAB000000, 0x4D000000, 0x9A000000,
             0x2F000000, 0x5E000000, 0xBC000000, 0x63000000, 0xC6000000,
             0x97000000, 0x35000000, 0x6A000000, 0xD4000000, 0xB3000000,
-            0x7D000000, 0xFA000000, 0xEF000000, 0xC5000000, 0x91000000
+            0x7D000000, 0xFA000000, 0xEF000000, 0xC5000000, 0x91000000,
         );
 
         $this->key = str_pad(substr($this->key, 0, $this->key_size), $this->key_size, "\0");
@@ -633,7 +623,7 @@ class Rijndael extends Base
 
         $length = $this->Nb * ($this->Nr + 1);
 
-        for ($i = $this->Nk; $i < $length; $i++) {
+        for ($i = $this->Nk; $i < $length; ++$i) {
             $temp = $w[$i - 1];
 
             if ($i % $this->Nk == 0) {
@@ -658,7 +648,7 @@ class Rijndael extends Base
         //        2. Apply InvMixColumn to all Round Keys except the first and the last one."
         // also, see fips-197.pdf#page=27, "5.3.5 Equivalent Inverse Cipher"
         list($dt0, $dt1, $dt2, $dt3) = $this->_getInvTables();
-        $temp                        = $this->w                        = $this->dw                        = array();
+        $temp = $this->w = $this->dw = array();
 
         for ($i = $row = $col = 0; $i < $length; $i++, $col++) {
             if ($col == $this->Nb) {
@@ -669,19 +659,19 @@ class Rijndael extends Base
                     $j = 0;
 
                     while ($j < $this->Nb) {
-                        $dw       = $this->_subWord($this->w[$row][$j]);
+                        $dw = $this->_subWord($this->w[$row][$j]);
                         $temp[$j] = $dt0[$dw >> 24 & 0x000000FF] ^
                         $dt1[$dw >> 16 & 0x000000FF] ^
                         $dt2[$dw >> 8 & 0x000000FF] ^
                         $dt3[$dw & 0x000000FF];
-                        $j++;
+                        ++$j;
                     }
 
                     $this->dw[$row] = $temp;
                 }
 
                 $col = 0;
-                $row++;
+                ++$row;
             }
 
             $this->w[$row][$col] = $w[$i];
@@ -691,25 +681,24 @@ class Rijndael extends Base
 
         // Converting to 1-dim key arrays (both ascending)
         $this->dw = array_reverse($this->dw);
-        $w        = array_pop($this->w);
-        $dw       = array_pop($this->dw);
+        $w = array_pop($this->w);
+        $dw = array_pop($this->dw);
 
         foreach ($this->w as $r => $wr) {
             foreach ($wr as $c => $wc) {
-                $w[]  = $wc;
+                $w[] = $wc;
                 $dw[] = $this->dw[$r][$c];
             }
         }
 
-        $this->w  = $w;
+        $this->w = $w;
         $this->dw = $dw;
     }
 
     /**
-     * Performs S-Box substitutions
+     * Performs S-Box substitutions.
      *
-     * @access private
-     * @param Integer $word
+     * @param int $word
      */
     public function _subWord($word)
     {
@@ -726,14 +715,13 @@ class Rijndael extends Base
     }
 
     /**
-     * Provides the mixColumns and sboxes tables
+     * Provides the mixColumns and sboxes tables.
      *
-     * @access private
      * @see Crypt_Rijndael:_encryptBlock()
      * @see Crypt_Rijndael:_setupInlineCrypt()
      * @see Crypt_Rijndael:_subWord()
      *
-     * @return Array &$tables
+     * @return array &$tables
      */
     public function &_getTables()
     {
@@ -777,7 +765,7 @@ class Rijndael extends Base
                 0xE1E138D9, 0xF8F813EB, 0x9898B32B, 0x11113322, 0x6969BBD2, 0xD9D970A9, 0x8E8E8907, 0x9494A733,
                 0x9B9BB62D, 0x1E1E223C, 0x87879215, 0xE9E920C9, 0xCECE4987, 0x5555FFAA, 0x28287850, 0xDFDF7AA5,
                 0x8C8C8F03, 0xA1A1F859, 0x89898009, 0x0D0D171A, 0xBFBFDA65, 0xE6E631D7, 0x4242C684, 0x6868B8D0,
-                0x4141C382, 0x9999B029, 0x2D2D775A, 0x0F0F111E, 0xB0B0CB7B, 0x5454FCA8, 0xBBBBD66D, 0x16163A2C
+                0x4141C382, 0x9999B029, 0x2D2D775A, 0x0F0F111E, 0xB0B0CB7B, 0x5454FCA8, 0xBBBBD66D, 0x16163A2C,
             ));
 
             foreach ($t3 as $t3i) {
@@ -809,8 +797,8 @@ class Rijndael extends Base
                     0xBA, 0x78, 0x25, 0x2E, 0x1C, 0xA6, 0xB4, 0xC6, 0xE8, 0xDD, 0x74, 0x1F, 0x4B, 0xBD, 0x8B, 0x8A,
                     0x70, 0x3E, 0xB5, 0x66, 0x48, 0x03, 0xF6, 0x0E, 0x61, 0x35, 0x57, 0xB9, 0x86, 0xC1, 0x1D, 0x9E,
                     0xE1, 0xF8, 0x98, 0x11, 0x69, 0xD9, 0x8E, 0x94, 0x9B, 0x1E, 0x87, 0xE9, 0xCE, 0x55, 0x28, 0xDF,
-                    0x8C, 0xA1, 0x89, 0x0D, 0xBF, 0xE6, 0x42, 0x68, 0x41, 0x99, 0x2D, 0x0F, 0xB0, 0x54, 0xBB, 0x16
-                )
+                    0x8C, 0xA1, 0x89, 0x0D, 0xBF, 0xE6, 0x42, 0x68, 0x41, 0x99, 0x2D, 0x0F, 0xB0, 0x54, 0xBB, 0x16,
+                ),
             );
         }
 
@@ -818,14 +806,13 @@ class Rijndael extends Base
     }
 
     /**
-     * Provides the inverse mixColumns and inverse sboxes tables
+     * Provides the inverse mixColumns and inverse sboxes tables.
      *
-     * @access private
      * @see Crypt_Rijndael:_decryptBlock()
      * @see Crypt_Rijndael:_setupInlineCrypt()
      * @see Crypt_Rijndael:_setupKey()
      *
-     * @return Array &$tables
+     * @return array &$tables
      */
     public function &_getInvTables()
     {
@@ -864,14 +851,14 @@ class Rijndael extends Base
                 0xD7618C9A, 0xA10C7A37, 0xF8148E59, 0x133C89EB, 0xA927EECE, 0x61C935B7, 0x1CE5EDE1, 0x47B13C7A,
                 0xD2DF599C, 0xF2733F55, 0x14CE7918, 0xC737BF73, 0xF7CDEA53, 0xFDAA5B5F, 0x3D6F14DF, 0x44DB8678,
                 0xAFF381CA, 0x68C43EB9, 0x24342C38, 0xA3405FC2, 0x1DC37216, 0xE2250CBC, 0x3C498B28, 0x0D9541FF,
-                0xA8017139, 0x0CB3DE08, 0xB4E49CD8, 0x56C19064, 0xCB84617B, 0x32B670D5, 0x6C5C7448, 0xB85742D0
+                0xA8017139, 0x0CB3DE08, 0xB4E49CD8, 0x56C19064, 0xCB84617B, 0x32B670D5, 0x6C5C7448, 0xB85742D0,
             ));
 
             foreach ($dt3 as $dt3i) {
                 $dt0[] = (($dt3i << 24) & 0xFF000000) | (($dt3i >> 8) & 0x00FFFFFF);
                 $dt1[] = (($dt3i << 16) & 0xFFFF0000) | (($dt3i >> 16) & 0x0000FFFF);
                 $dt2[] = (($dt3i << 8) & 0xFFFFFF00) | (($dt3i >> 24) & 0x000000FF);
-            };
+            }
 
             $tables = array(
                 // The Precomputed inverse mixColumns tables dt0 - dt3
@@ -896,8 +883,8 @@ class Rijndael extends Base
                     0x1F, 0xDD, 0xA8, 0x33, 0x88, 0x07, 0xC7, 0x31, 0xB1, 0x12, 0x10, 0x59, 0x27, 0x80, 0xEC, 0x5F,
                     0x60, 0x51, 0x7F, 0xA9, 0x19, 0xB5, 0x4A, 0x0D, 0x2D, 0xE5, 0x7A, 0x9F, 0x93, 0xC9, 0x9C, 0xEF,
                     0xA0, 0xE0, 0x3B, 0x4D, 0xAE, 0x2A, 0xF5, 0xB0, 0xC8, 0xEB, 0xBB, 0x3C, 0x83, 0x53, 0x99, 0x61,
-                    0x17, 0x2B, 0x04, 0x7E, 0xBA, 0x77, 0xD6, 0x26, 0xE1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0C, 0x7D
-                )
+                    0x17, 0x2B, 0x04, 0x7E, 0xBA, 0x77, 0xD6, 0x26, 0xE1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0C, 0x7D,
+                ),
             );
         }
 
@@ -905,9 +892,8 @@ class Rijndael extends Base
     }
 
     /**
-     * Setup the performance-optimized function for de/encrypt()
+     * Setup the performance-optimized function for de/encrypt().
      *
-     * @access private
      * @see \Biz\Util\Phpsec\Crypt\Base::_setupInlineCrypt()
      */
     public function _setupInlineCrypt()
@@ -934,15 +920,15 @@ class Rijndael extends Base
             switch (true) {
                 case $gen_hi_opt_code:
                     // The hi-optimized $lambda_functions will use the key-words hardcoded for better performance.
-                    $w            = $this->w;
-                    $dw           = $this->dw;
+                    $w = $this->w;
+                    $dw = $this->dw;
                     $init_encrypt = '';
                     $init_decrypt = '';
                     break;
                 default:
 
                     for ($i = 0, $cw = count($this->w); $i < $cw; ++$i) {
-                        $w[]  = '$w['.$i.']';
+                        $w[] = '$w['.$i.']';
                         $dw[] = '$dw['.$i.']';
                     }
 
@@ -952,7 +938,7 @@ class Rijndael extends Base
 
             $Nr = $this->Nr;
             $Nb = $this->Nb;
-            $c  = $this->c;
+            $c = $this->c;
 
             // Generating encrypt code:
             $init_encrypt .= '
@@ -967,8 +953,8 @@ class Rijndael extends Base
                 $sbox = $tables[4];
             ';
 
-            $s  = 'e';
-            $e  = 's';
+            $s = 'e';
+            $e = 's';
             $wc = $Nb - 1;
 
             // Preround: addRoundKey
@@ -1031,8 +1017,8 @@ class Rijndael extends Base
                 $isbox = $invtables[4];
             ';
 
-            $s  = 'e';
-            $e  = 's';
+            $s = 'e';
+            $e = 's';
             $wc = $Nb - 1;
 
             // Preround: addRoundKey
@@ -1084,11 +1070,11 @@ class Rijndael extends Base
 
             $lambda_functions[$code_hash] = $this->_createInlineCryptFunction(
                 array(
-                    'init_crypt'    => '',
-                    'init_encrypt'  => $init_encrypt,
-                    'init_decrypt'  => $init_decrypt,
+                    'init_crypt' => '',
+                    'init_encrypt' => $init_encrypt,
+                    'init_decrypt' => $init_decrypt,
                     'encrypt_block' => $encrypt_block,
-                    'decrypt_block' => $decrypt_block
+                    'decrypt_block' => $decrypt_block,
                 )
             );
         }

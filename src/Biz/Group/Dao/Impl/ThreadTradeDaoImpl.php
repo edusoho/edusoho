@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Group\Dao\Impl;
 
 use Biz\Group\Dao\ThreadTradeDao;
@@ -22,13 +23,13 @@ class ThreadTradeDaoImpl extends GeneralDaoImpl implements ThreadTradeDao
     {
         return array(
             'serializes' => array(
-                'tagIds' => 'json'
+                'tagIds' => 'json',
             ),
             'conditions' => array(
                 'userId = :userId',
                 'threadId = :threadId',
-                'goodsId = :goodsId'
-            )
+                'goodsId = :goodsId',
+            ),
         );
     }
 }

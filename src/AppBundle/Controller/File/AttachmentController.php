@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\File;
 
 use AppBundle\Controller\BaseController;
@@ -10,7 +11,7 @@ class AttachmentController extends BaseController
 {
     public function uploadAction(Request $request)
     {
-        $query  = $request->query->all();
+        $query = $request->query->all();
         $parser = new UploaderToken();
         $params = $parser->parse($query['token']);
 
@@ -19,36 +20,37 @@ class AttachmentController extends BaseController
         }
 
         return $this->render('attachment/upload-modal.html.twig', array(
-            'token'      => $query['token'],
-            'idsClass'   => $query['idsClass'],
-            'listClass'  => $query['listClass'],
+            'token' => $query['token'],
+            'idsClass' => $query['idsClass'],
+            'listClass' => $query['listClass'],
             'targetType' => $params['targetType'],
-            'targetId'   => $params['targetId']
+            'targetId' => $params['targetId'],
         ));
     }
 
     public function formFieldsAction(Request $request, $targetType, $targetId)
     {
-        $targets     = explode(".", $targetType);
-        $type        = 'attachment';
+        $targets = explode('.', $targetType);
+        $type = 'attachment';
         $attachments = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type);
 
         return $this->render('attachment/form-fields.html.twig', array(
-            'target'      => array_shift($targets),
-            'targetType'  => $targetType,
-            'fileType'    => array_pop($targets),
-            'type'        => 'attachment',
-            'useType'     => $request->query->get('useType', false),
-            'showLabel'   => $request->query->get('showLabel', true),
-            'attachments' => $attachments
+            'target' => array_shift($targets),
+            'targetType' => $targetType,
+            'fileType' => array_pop($targets),
+            'type' => 'attachment',
+            'useType' => $request->query->get('useType', false),
+            'showLabel' => $request->query->get('showLabel', true),
+            'attachments' => $attachments,
         ));
     }
 
     public function listAction(Request $request, $targetType, $targetId)
     {
         $type = 'attachment';
+
         return $this->render('attachment/list.html.twig', array(
-            'attachments' => $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type)
+            'attachments' => $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type),
         ));
     }
 
@@ -61,20 +63,20 @@ class AttachmentController extends BaseController
         $previewType = $request->query->get('type', 'attachment');
         if ($previewType == 'attachment') {
             $attachment = $this->getUploadFileService()->getUseFile($id);
-            $file       = $this->getUploadFileService()->getFile($attachment['fileId']);
+            $file = $this->getUploadFileService()->getFile($attachment['fileId']);
         } else {
             $file = $this->getUploadFileService()->getFile($id);
         }
 
         if ($file['storage'] == 'cloud') {
             return $this->forward('AppBundle:Admin/CloudFile:preview', array(
-                'request'  => $request,
-                'globalId' => $file['globalId']
+                'request' => $request,
+                'globalId' => $file['globalId'],
             ));
         }
 
         return $this->render('material-lib/Web/preview.html.twig', array(
-            'file' => $file
+            'file' => $file,
         ));
     }
 
@@ -95,18 +97,20 @@ class AttachmentController extends BaseController
         }
 
         $file = $this->getUploadFileService()->getFile($attachment['fileId']);
+
         return $this->forward('AppBundle:UploadFile:download', array(
             'request' => $request,
-            'fileId'  => $file['id']
+            'fileId' => $file['id'],
         ));
     }
 
     public function fileShowAction(Request $request, $fileId)
     {
-        $file       = $this->getUploadFileService()->getFile($fileId);
+        $file = $this->getUploadFileService()->getFile($fileId);
         $attachment = array('file' => $file);
+
         return $this->render('attachment/file-item.html.twig', array(
-            'attachment' => $attachment
+            'attachment' => $attachment,
         ));
     }
 
@@ -122,6 +126,7 @@ class AttachmentController extends BaseController
                 throw $this->createAccessDeniedException('opteration forbiddened');
             }
         }
+
         return $this->createJsonResponse(array('msg' => 'ok'));
     }
 

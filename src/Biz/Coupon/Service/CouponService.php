@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Coupon\Service;
 
 interface CouponService
@@ -29,7 +30,7 @@ interface CouponService
      *   'message' => '', // no的时候才会有值
      *   'decreaseAmount' => 1.50,
      *   'afterAmount' => 5.00,
-     * )
+     * ).
      */
     public function deleteCouponsByBatch($batchId);
 

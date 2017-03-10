@@ -28,7 +28,7 @@
           {% else %}
             <a href="{{ path('course_set_show',{id: courseSet.id}) }}" title="{{ courseSet.title }}" target="_blank">
           {% endif %}
-            {{ lazy_img(filepath(courseSet.cover.middle|default(), 'course.png'), 'img-responsive', courseSet.title) }}
+            {{ lazy_img(filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png'), 'img-responsive', courseSet.title) }}
             {% if courseSet.recommended %}
               <span class="re-live"></span>
             {% endif %}

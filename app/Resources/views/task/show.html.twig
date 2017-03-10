@@ -20,9 +20,9 @@
     <div class="dashboard-content" id="dashboard-content">
       <div class="dashboard-header">
         <a class="back-link" href="{{ path('my_course_show',{id:course.id}) }}">
-          <i class="es-icon es-icon-chevronleft"></i>
+          <i class="es-icon es-icon-chevronleft"></i>返回课程
         </a>
-        任务：{{ task.title }}
+        任务{{ task.number }}：{{ task.title }}
       </div>
       <div class="dashboard-body">
         <iframe id="task-content-iframe" class="task-content-iframe"
@@ -44,12 +44,12 @@
             <i class="es-icon es-icon-help mrs text-md"></i>任务完成条件
           </a>
 
-          <span
-              class="btn text-sm js-learned-prompt color-primary {% if taskResult.status == 'finish' %}open{% endif %}"
+          <span class="btn text-sm js-learned-prompt color-primary {% if taskResult.status == 'finish' %}open{% endif %}"
               href="javascript:;"
               data-toggle="popover"
               data-trigger="hover"
               data-placement="top"
+              data-container=".js-learned-prompt"
               data-content='{% include "task/task-finished-prompt.html.twig" %}'
               data-url="{{ path('course_task_finished_prompt', {courseId: course.id, id: task.id}) }}">
               <i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>任务完成

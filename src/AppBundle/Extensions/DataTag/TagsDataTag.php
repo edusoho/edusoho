@@ -2,23 +2,20 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use AppBundle\Extensions\DataTag\DataTag;
-use AppBundle\Common\ArrayToolkit;
-
 class TagsDataTag extends CourseBaseDataTag implements DataTag
 {
     /**
-     * 获取所有标签
+     * 获取所有标签.
      *
      * 可传入的参数：
      *
      *   count : 标签数
      *   tagIds: 标签ids
      *
-     * @param  array $arguments 参数
+     * @param array $arguments 参数
+     *
      * @return array 标签
      */
-
     public function getData(array $arguments)
     {
         $tags = array();

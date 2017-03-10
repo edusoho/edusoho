@@ -1,15 +1,15 @@
-/**
- * Created by Simon on 08/11/2016.
- */
 import swfobject from 'es-swfobject';
 import EsMessenger from '../../../common/messenger';
-import ActivityEmitter from '../../activity/activity-emitter';
+import ActivityEmitter from '../activity-emitter';
+import 'store';
 
 class VideoPlay {
-  constructor() {
+  constructor(recorder) {
     this.player = {};
+    this.intervalId = null;
+    this.recorder = recorder;
     this.emitter = new ActivityEmitter();
-    
+
   }
 
   play() {
@@ -18,6 +18,17 @@ class VideoPlay {
     } else {
       this._playVideo();
     }
+    this.record();
+  }
+
+  record() {
+    this.intervalId = setInterval(() => {
+      this.recorder.addVideoPlayerCounter(this.emitter, this.player);
+    }, 1000);
+  }
+
+  getPlay() {
+    return this.player;
   }
 
   _playerSwf() {
@@ -56,14 +67,52 @@ class VideoPlay {
   }
 
   _onFinishLearnTask(msg) {
-    this.emitter.emit('finish', { data: msg }).then(() => {
-      console.log('vidoe.finish');
+    this.emitter.emit('finish', {data: msg}).then(() => {
+      clearInterval(this.intervalId)
     }).catch((error) => {
       console.error(error);
     });
   }
 
+}
+
+
+class VideoRecorder {
+  constructor(container) {
+    this.container = container;
+    this.interval = 120;
+  }
+
+  addVideoPlayerCounter(emitter, player) {
+    let $container = $(this.container);
+    let activityId = $container.data('id');
+    let playerCounter = store.get("activity_id_" + activityId + "_playing_counter");
+    if (!playerCounter) {
+      playerCounter = 0;
+    }
+    if (!(player && player.playing)) {
+      return false;
+    }
+    if (playerCounter >= this.interval) {
+      emitter.emit('watching', {watchTime: this.interval}).then(() => {
+        let url = $("#video-content").data('watchUrl');
+        $.post(url, function (response) {
+          if (response && response.status == 'error') {
+            window.location.reload();
+          }
+        })
+      }).catch((error) => {
+        console.error(error);
+      });
+      playerCounter = 0;
+    } else if (player.playing) {
+      playerCounter++;
+    }
+    store.set("activity_id_" + activityId + "_playing_counter", playerCounter);
+  }
 
 }
-let videoplay = new VideoPlay();
+
+let recorder = new VideoRecorder('#video-content');
+let videoplay = new VideoPlay(recorder);
 videoplay.play();

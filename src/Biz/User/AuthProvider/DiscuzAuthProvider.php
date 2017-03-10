@@ -1,9 +1,9 @@
 <?php
+
 namespace Biz\User\AuthProvider;
 
 use Biz\BaseService;
 use Biz\System\Service\SettingService;
-
 
 class DiscuzAuthProvider extends BaseService implements AuthProvider
 {
@@ -29,34 +29,39 @@ class DiscuzAuthProvider extends BaseService implements AuthProvider
     public function syncLogin($userId)
     {
         $this->initDiscuzApi();
+
         return uc_user_synlogin($userId);
     }
 
     public function syncLogout($userId)
     {
         $this->initDiscuzApi();
+
         return uc_user_synlogout();
     }
 
     public function changeNickname($userId, $newName)
     {
         $this->initDiscuzApi();
+
         return uc_user_renameuser($userId, $newName);
     }
 
     public function changeEmail($userId, $password, $newEmail)
     {
         $this->initDiscuzApi();
-        $user   = uc_get_user($userId, 1);
+        $user = uc_get_user($userId, 1);
         $result = uc_user_edit($user[1], null, null, $newEmail, 1);
+
         return $result == 1;
     }
 
     public function changePassword($userId, $oldPassword, $newPassword)
     {
         $this->initDiscuzApi();
-        $user   = uc_get_user($userId, 1);
+        $user = uc_get_user($userId, 1);
         $result = uc_user_edit($user[1], null, $newPassword, null, 1);
+
         return $result == 1;
     }
 
@@ -69,6 +74,7 @@ class DiscuzAuthProvider extends BaseService implements AuthProvider
         }
 
         $result = uc_user_checkname($username);
+
         return $this->convertApiResult($result);
     }
 
@@ -76,6 +82,7 @@ class DiscuzAuthProvider extends BaseService implements AuthProvider
     {
         $this->initDiscuzApi();
         $result = uc_user_checkemail($email);
+
         return $this->convertApiResult($result);
     }
 
@@ -89,6 +96,7 @@ class DiscuzAuthProvider extends BaseService implements AuthProvider
         $this->initDiscuzApi();
         try {
             uc_app_ls();
+
             return true;
         } catch (\Exception $e) {
             return false;
@@ -99,6 +107,7 @@ class DiscuzAuthProvider extends BaseService implements AuthProvider
     {
         $this->initDiscuzApi();
         $result = uc_user_login($userId, $password, 1);
+
         return $result[0] > 0;
     }
 
@@ -115,11 +124,11 @@ class DiscuzAuthProvider extends BaseService implements AuthProvider
         }
 
         return array(
-            'id'          => $result[0],
-            'nickname'    => $result[1],
-            'email'       => $result[3],
+            'id' => $result[0],
+            'nickname' => $result[1],
+            'email' => $result[3],
             'createdTime' => '',
-            'createdIp'   => ''
+            'createdIp' => '',
         );
     }
 
@@ -141,11 +150,11 @@ class DiscuzAuthProvider extends BaseService implements AuthProvider
         }
 
         return array(
-            'id'          => $result[0],
-            'nickname'    => $result[1],
-            'email'       => $result[3],
+            'id' => $result[0],
+            'nickname' => $result[1],
+            'email' => $result[3],
             'createdTime' => '',
-            'createdIp'   => ''
+            'createdIp' => '',
         );
     }
 
@@ -162,11 +171,11 @@ class DiscuzAuthProvider extends BaseService implements AuthProvider
         }
 
         return array(
-            'id'          => $result[0],
-            'nickname'    => $result[1],
-            'email'       => $result[3],
+            'id' => $result[0],
+            'nickname' => $result[1],
+            'email' => $result[3],
             'createdTime' => '',
-            'createdIp'   => ''
+            'createdIp' => '',
         );
     }
 
@@ -174,7 +183,7 @@ class DiscuzAuthProvider extends BaseService implements AuthProvider
     {
         $this->initDiscuzApi();
         if (uc_check_avatar($userId)) {
-            return UC_API."/avatar.php?uid=".$userId."&type=virtual&size=".$size;
+            return UC_API.'/avatar.php?uid='.$userId.'&type=virtual&size='.$size;
         } else {
             return null;
         }
@@ -187,14 +196,14 @@ class DiscuzAuthProvider extends BaseService implements AuthProvider
 
     public function initDiscuzApi()
     {
-        $setting      = $this->getSettingService()->get('user_partner');
+        $setting = $this->getSettingService()->get('user_partner');
         $discuzConfig = $setting['partner_config']['discuz'];
 
         foreach ($discuzConfig as $key => $value) {
             define(strtoupper($key), $value);
         }
 
-        require_once __DIR__ .'/../../../../vendor_user/uc_client/client.php';
+        require_once __DIR__.'/../../../../vendor_user/uc_client/client.php';
     }
 
     protected function convertApiResult($result)

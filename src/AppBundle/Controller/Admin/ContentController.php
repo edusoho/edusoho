@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use Biz\Content\Type\ContentTypeFactory;
@@ -8,7 +9,6 @@ use AppBundle\Common\ArrayToolkit;
 
 class ContentController extends BaseController
 {
-
     public function indexAction(Request $request)
     {
         $conditions = array_filter($request->query->all());
@@ -32,25 +32,23 @@ class ContentController extends BaseController
         $categoryIds = ArrayToolkit::column($contents, 'categoryId');
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
-        return $this->render('admin/content/index.html.twig',array(
-        	   'contents' => $contents,
+        return $this->render('admin/content/index.html.twig', array(
+               'contents' => $contents,
                 'users' => $users,
                 'categories' => $categories,
-        	   'paginator' => $paginator,
-    	));
+               'paginator' => $paginator,
+        ));
     }
 
     public function createAction(Request $request, $type)
     {
         $type = ContentTypeFactory::create($type);
         if ($request->getMethod() == 'POST') {
-
-
             $content = $request->request->all();
             $content['type'] = $type->getAlias();
 
             $file = $request->files->get('picture');
-            if(!empty($file)){
+            if (!empty($file)) {
                 $record = $this->getFileService()->uploadFile('default', $file);
                 $content['picture'] = $record['uri'];
             }
@@ -58,14 +56,15 @@ class ContentController extends BaseController
             $content = $this->filterEditorField($content);
 
             $content = $this->getContentService()->createContent($this->convertContent($content));
-            return $this->render('admin/content/content-tr.html.twig',array(
+
+            return $this->render('admin/content/content-tr.html.twig', array(
                 'content' => $content,
                 'category' => $this->getCategoryService()->getCategory($content['categoryId']),
                 'user' => $this->getUser(),
             ));
         }
 
-        return $this->render('admin/content/content-modal.html.twig',array(
+        return $this->render('admin/content/content-modal.html.twig', array(
             'type' => $type,
         ));
     }
@@ -77,11 +76,11 @@ class ContentController extends BaseController
         $record = array();
         if ($request->getMethod() == 'POST') {
             $file = $request->files->get('picture');
-            if(!empty($file)){
+            if (!empty($file)) {
                 $record = $this->getFileService()->uploadFile('default', $file);
             }
             $content = $request->request->all();
-            if(isset($record['uri'])){
+            if (isset($record['uri'])) {
                 $content['picture'] = $record['uri'];
             }
 
@@ -89,38 +88,39 @@ class ContentController extends BaseController
 
             $content = $this->getContentService()->updateContent($id, $this->convertContent($content));
 
-            return $this->render('admin/content/content-tr.html.twig',array(
+            return $this->render('admin/content/content-tr.html.twig', array(
                 'content' => $content,
                 'category' => $this->getCategoryService()->getCategory($content['categoryId']),
                 'user' => $this->getUser(),
             ));
         }
 
-        return $this->render('admin/content/content-modal.html.twig',array(
+        return $this->render('admin/content/content-modal.html.twig', array(
             'type' => $type,
             'content' => $content,
         ));
-
     }
 
     public function trashAction(Request $request, $id)
     {
         $this->getContentService()->trashContent($id);
+
         return $this->createJsonResponse(true);
     }
 
     public function deleteAction(Request $request, $id)
     {
         $this->getContentService()->deleteContent($id);
+
         return $this->createJsonResponse(true);
     }
 
     public function publishAction(Request $request, $id)
     {
         $this->getContentService()->publishContent($id);
+
         return $this->createJsonResponse(true);
     }
-
 
     public function aliasCheckAction(Request $request)
     {
@@ -145,7 +145,7 @@ class ContentController extends BaseController
 
     protected function filterEditorField($content)
     {
-        if($content['editor'] == 'richeditor'){
+        if ($content['editor'] == 'richeditor') {
             $content['body'] = $content['richeditor-body'];
         } elseif ($content['editor'] == 'none') {
             $content['body'] = $content['noneeditor-body'];
@@ -153,6 +153,7 @@ class ContentController extends BaseController
 
         unset($content['richeditor-body']);
         unset($content['noneeditor-body']);
+
         return $content;
     }
 
@@ -194,5 +195,4 @@ class ContentController extends BaseController
     {
         return $this->createService('Content:FileService');
     }
-
 }

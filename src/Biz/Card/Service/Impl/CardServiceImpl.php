@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Card\Service\Impl;
 
 use Biz\BaseService;
@@ -8,7 +9,6 @@ use Biz\Card\DetailProcessor\DetailProcessor;
 use Biz\Card\Service\CardService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
-
 
 class CardServiceImpl extends BaseService implements CardService
 {
@@ -51,6 +51,7 @@ class CardServiceImpl extends BaseService implements CardService
     public function searchCards($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->_prepareRecordConditions($conditions);
+
         return $this->getCardDao()->search($conditions, $orderBy, $start, $limit);
     }
 
@@ -66,19 +67,22 @@ class CardServiceImpl extends BaseService implements CardService
     public function findCardDetailByCardTypeAndCardId($cardType, $id)
     {
         $processor = $this->getDetailProcessor($cardType);
+
         return $processor->getDetailById($id);
     }
 
     public function findCardDetailsByCardTypeAndCardIds($cardType, $ids)
     {
-        $processor   = $this->getDetailProcessor($cardType);
+        $processor = $this->getDetailProcessor($cardType);
         $cardsDetail = $processor->getCardDetailsByCardIds($ids);
+
         return $cardsDetail;
     }
 
     public function findCardsByCardIds($cardIds)
     {
         $cards = $this->getCardDao()->findByCardIds($cardIds);
+
         return ArrayToolkit::index($cards, 'cardId');
     }
 
@@ -91,7 +95,6 @@ class CardServiceImpl extends BaseService implements CardService
 
             return ($a[$field] < $b[$field]) ? 1 : -1;
         }
-
         );
 
         return $array;
@@ -106,8 +109,8 @@ class CardServiceImpl extends BaseService implements CardService
 
             return ($a[$key] < $b[$key]) ? 1 : -1;
         }
-
         );
+
         return $array;
     }
 
@@ -117,12 +120,13 @@ class CardServiceImpl extends BaseService implements CardService
             if ($value == 0) {
                 return true;
             }
+
             return !empty($value);
         });
 
         if (array_key_exists('nickname', $conditions)) {
             if ($conditions['nickname']) {
-                $users                 = $this->getUserService()->searchUsers(array('nickname' => $conditions['nickname']), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
+                $users = $this->getUserService()->searchUsers(array('nickname' => $conditions['nickname']), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
                 $conditions['userIds'] = empty($users) ? -1 : ArrayToolkit::column($users, 'id');
             }
         }

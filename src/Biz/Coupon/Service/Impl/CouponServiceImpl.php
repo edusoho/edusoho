@@ -1,17 +1,17 @@
 <?php
+
 namespace Biz\Coupon\Service\Impl;
 
-
 use Biz\BaseService;
-use Biz\Card\Service\CardService;
 use Biz\Coupon\Dao\CouponDao;
+use Biz\User\Service\UserService;
+use Biz\Card\Service\CardService;
+use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\LogService;
 use Biz\Coupon\Service\CouponService;
 use Biz\Course\Service\CourseService;
-use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\NotificationService;
-use Biz\User\Service\UserService;
-use AppBundle\Common\ArrayToolkit;
 
 class CouponServiceImpl extends BaseService implements CouponService
 {
@@ -62,7 +62,6 @@ class CouponServiceImpl extends BaseService implements CouponService
     }
 
     public function generateInviteCoupon($userId, $mode) //user可能是邀请者*pay，也可能是被邀请者*register
-
     {
         $inviteSetting = $this->getSettingService()->get('invite', array());
 
@@ -73,52 +72,56 @@ class CouponServiceImpl extends BaseService implements CouponService
         switch ($mode) {
             case 'register':
                 $settingName = 'promoted_user_value';
-                $rewardName  = '注册';
+                $rewardName = '注册';
                 break;
 
             case 'pay':
                 $settingName = 'promote_user_value';
-                $rewardName  = '邀请';
+                $rewardName = '邀请';
                 break;
         }
 
         if (isset($inviteSetting['invite_code_setting'])
             && $inviteSetting['invite_code_setting'] == 1
-            && $inviteSetting[$settingName] > 0) {
-            $couponCode     = $this->generateRandomCode(10, 'inviteCoupon');
+            && $inviteSetting[$settingName] > 0
+        ) {
+            $couponCode = $this->generateRandomCode(10, 'inviteCoupon');
             $isCouponUnique = $this->isCouponUnique($couponCode);
 
             if ($isCouponUnique) {
                 $inviteSetting = $this->getSettingService()->get('invite', array());
-                $coupon        = array(
-                    'code'        => $couponCode,
-                    'type'        => 'minus',
-                    'status'      => 'receive',
-                    'rate'        => $inviteSetting[$settingName],
-                    'userId'      => $userId,
-                    'batchId'     => null,
-                    'deadline'    => strtotime(date('Y-m-d')) + $inviteSetting['deadline'] * 24 * 3600,
-                    'targetType'  => 'all',
-                    'targetId'    => 0,
-                    'createdTime' => time()
+                $coupon = array(
+                    'code' => $couponCode,
+                    'type' => 'minus',
+                    'status' => 'receive',
+                    'rate' => $inviteSetting[$settingName],
+                    'userId' => $userId,
+                    'batchId' => null,
+                    'deadline' => strtotime(date('Y-m-d')) + $inviteSetting['deadline'] * 24 * 3600,
+                    'targetType' => 'all',
+                    'targetId' => 0,
+                    'createdTime' => time(),
                 );
 
                 $coupon = $this->getCouponDao()->create($coupon);
 
-                $card = $this->getCardService()->addCard(array(
-                    'cardId'      => $coupon['id'],
-                    'cardType'    => 'coupon',
-                    'status'      => 'receive',
-                    'deadline'    => $coupon['deadline'],
-                    'useTime'     => 0,
-                    'userId'      => $coupon['userId'],
-                    'createdTime' => time()
-                ));
+                $card = $this->getCardService()->addCard(
+                    array(
+                        'cardId' => $coupon['id'],
+                        'cardType' => 'coupon',
+                        'status' => 'receive',
+                        'deadline' => $coupon['deadline'],
+                        'useTime' => 0,
+                        'userId' => $coupon['userId'],
+                        'createdTime' => time(),
+                    )
+                );
                 $message = array(
-                    'rewardName'  => $rewardName,
-                    'settingName' => $inviteSetting[$settingName]
+                    'rewardName' => $rewardName,
+                    'settingName' => $inviteSetting[$settingName],
                 );
                 $this->getNotificationService()->notify($userId, 'invite-reward', $message);
+
                 return $coupon;
             } else {
                 return $this->generateInviteCoupon($userId, $mode);
@@ -146,66 +149,56 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     public function checkCouponUseable($code, $targetType, $targetId, $amount)
     {
-        $coupon      = $this->getCouponByCode($code);
+        $coupon = $this->getCouponByCode($code);
         $currentUser = $this->getCurrentUser();
-        $course      = $this->getCourseService()->getCourse($targetId);
 
         if (empty($coupon)) {
             return array(
                 'useable' => 'no',
-                'message' => ''
+                'message' => '',
             );
         }
 
         if ($coupon['status'] != 'unused' && $coupon['status'] != 'receive') {
             return array(
                 'useable' => 'no',
-                'message' => sprintf('优惠券%s已经被使用', $code)
+                'message' => sprintf('优惠券%s已经被使用', $code),
             );
         }
 
         if ($coupon['userId'] != 0 && $coupon['userId'] != $currentUser['id']) {
             return array(
                 'useable' => 'no',
-                'message' => sprintf('优惠券%s已经被其他人领取', $code)
+                'message' => sprintf('优惠券%s已经被其他人领取', $code),
             );
         }
 
         if ($coupon['deadline'] + 86400 < time()) {
             return array(
                 'useable' => 'no',
-                'message' =>  sprintf('优惠券%s已过期',$code)
+                'message' => sprintf('优惠券%s已过期', $code),
             );
         }
 
         if ($targetType != $coupon['targetType'] && $coupon['targetType'] != 'all' && $coupon['targetType'] != 'fullDiscount') {
             return array(
                 'useable' => 'no',
-                'message' => ''
+                'message' => '',
             );
         }
 
-        if ($coupon['targetId'] != 0 && $course['courseSetId'] != $coupon['targetId']) {
+        if ($coupon['targetType'] == 'fullDiscount' and $amount < $coupon['fullDiscountPrice']) {
             return array(
                 'useable' => 'no',
-                'message' => ''
+                'message' => '',
             );
-        }
-
-        if ($coupon['targetType'] == 'fullDiscount') {
-            if ($amount < $coupon['fullDiscountPrice']) {
-                return array(
-                    'useable' => 'no',
-                    'message' => ''
-                );
-            }
         }
 
         if ($coupon['type'] == 'minus') {
-            $coin = $this->getSettingService()->get("coin");
+            $coin = $this->getSettingService()->get('coin');
 
-            if (isset($coin["coin_enabled"]) && isset($coin["price_type"]) && $coin["coin_enabled"] == 1 && $coin["price_type"] == "Coin") {
-                $discount = $coupon['rate'] * $coin["cash_rate"];
+            if (isset($coin['coin_enabled']) && isset($coin['price_type']) && $coin['coin_enabled'] == 1 && $coin['price_type'] == 'Coin') {
+                $discount = $coupon['rate'] * $coin['cash_rate'];
             } else {
                 $discount = $coupon['rate'];
             }
@@ -213,12 +206,32 @@ class CouponServiceImpl extends BaseService implements CouponService
             $afterAmount = $amount - $discount;
         }
 
+        $couponFactory = $this->biz['coupon_factory'];
+        $couponModel = $couponFactory($coupon['targetType']);
+        if ($coupon['targetId'] != 0 && !$couponModel->canUseable(
+            $coupon,
+            array('id' => $targetId, 'type' => $targetType)
+        )) {
+            return array(
+                'useable' => 'no',
+                'message' => '',
+            );
+        }
+
         if ($coupon['status'] == 'unused') {
-            $coupon = $this->getCouponDao()->update($coupon['id'], array(
-                'userId' => $currentUser['id'],
-                'status' => 'receive'
-            ));
-            $this->getLogService()->info('coupon', 'receive', "用户{$currentUser['nickname']}(#{$currentUser['id']})领取了优惠券 {$coupon['code']}", $coupon);
+            $coupon = $this->getCouponDao()->update(
+                $coupon['id'],
+                array(
+                    'userId' => $currentUser['id'],
+                    'status' => 'receive',
+                )
+            );
+            $this->getLogService()->info(
+                'coupon',
+                'receive',
+                "用户{$currentUser['nickname']}(#{$currentUser['id']})领取了优惠券 {$coupon['code']}",
+                $coupon
+            );
             if (empty($coupon)) {
                 return false;
             }
@@ -230,15 +243,15 @@ class CouponServiceImpl extends BaseService implements CouponService
 
         $afterAmount = $afterAmount < 0 ? 0.00 : $afterAmount;
 
-        $afterAmount    = number_format($afterAmount, 2, '.', '');
+        $afterAmount = number_format($afterAmount, 2, '.', '');
         $decreaseAmount = $amount - $afterAmount;
 
         return array(
-            'useable'        => 'yes',
-            'afterAmount'    => $afterAmount,
+            'useable' => 'yes',
+            'afterAmount' => $afterAmount,
             'decreaseAmount' => $decreaseAmount,
-            'type'           => $coupon['type'],
-            'rate'           => $coupon['rate']
+            'type' => $coupon['type'],
+            'rate' => $coupon['rate'],
         );
     }
 
@@ -250,7 +263,7 @@ class CouponServiceImpl extends BaseService implements CouponService
     public function useCoupon($code, $order)
     {
         $coupon = $this->getCouponDao()->getByCode($code, true);
-        $user   = $this->getUserService()->getUser($order['userId']);
+        $user = $this->getUserService()->getUser($order['userId']);
         if (empty($coupon)) {
             return null;
         }
@@ -259,15 +272,23 @@ class CouponServiceImpl extends BaseService implements CouponService
             return null;
         }
 
-        $coupon = $this->getCouponDao()->update($coupon['id'], array(
-            'status'     => 'used',
-            'targetType' => $order['targetType'],
-            'targetId'   => $order['targetId'],
-            'orderTime'  => time(),
-            'userId'     => $order['userId'],
-            'orderId'    => $order['id']
-        ));
-        $this->getLogService()->info('coupon', 'use', "用户{$user['nickname']}(#{$user['id']})使用了优惠券 {$coupon['code']}", $coupon);
+        $coupon = $this->getCouponDao()->update(
+            $coupon['id'],
+            array(
+                'status' => 'used',
+                'targetType' => $order['targetType'],
+                'targetId' => $order['targetId'],
+                'orderTime' => time(),
+                'userId' => $order['userId'],
+                'orderId' => $order['id'],
+            )
+        );
+        $this->getLogService()->info(
+            'coupon',
+            'use',
+            "用户{$user['nickname']}(#{$user['id']})使用了优惠券 {$coupon['code']}",
+            $coupon
+        );
         $this->dispatchEvent('coupon.use', $coupon);
 
         return $coupon;
@@ -275,9 +296,9 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     private function generateRandomCode($length, $prefix)
     {
-        $randomCode = "";
+        $randomCode = '';
 
-        for ($j = 0; $j < (int) $length; $j++) {
+        for ($j = 0; $j < (int) $length; ++$j) {
             $randomCode .= mt_rand(0, 9);
         }
 
