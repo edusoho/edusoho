@@ -10,7 +10,6 @@ use Biz\Course\Dao\CourseSetDao;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
-use Biz\Content\Service\FileService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
