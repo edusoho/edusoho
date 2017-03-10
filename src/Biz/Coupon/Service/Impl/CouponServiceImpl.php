@@ -3,15 +3,15 @@
 namespace Biz\Coupon\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Card\Service\CardService;
 use Biz\Coupon\Dao\CouponDao;
+use Biz\User\Service\UserService;
+use Biz\Card\Service\CardService;
+use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\LogService;
 use Biz\Coupon\Service\CouponService;
 use Biz\Course\Service\CourseService;
-use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\NotificationService;
-use Biz\User\Service\UserService;
-use AppBundle\Common\ArrayToolkit;
 
 class CouponServiceImpl extends BaseService implements CouponService
 {
@@ -83,7 +83,8 @@ class CouponServiceImpl extends BaseService implements CouponService
 
         if (isset($inviteSetting['invite_code_setting'])
             && $inviteSetting['invite_code_setting'] == 1
-            && $inviteSetting[$settingName] > 0) {
+            && $inviteSetting[$settingName] > 0
+        ) {
             $couponCode = $this->generateRandomCode(10, 'inviteCoupon');
             $isCouponUnique = $this->isCouponUnique($couponCode);
 
@@ -104,15 +105,17 @@ class CouponServiceImpl extends BaseService implements CouponService
 
                 $coupon = $this->getCouponDao()->create($coupon);
 
-                $card = $this->getCardService()->addCard(array(
-                    'cardId' => $coupon['id'],
-                    'cardType' => 'coupon',
-                    'status' => 'receive',
-                    'deadline' => $coupon['deadline'],
-                    'useTime' => 0,
-                    'userId' => $coupon['userId'],
-                    'createdTime' => time(),
-                ));
+                $card = $this->getCardService()->addCard(
+                    array(
+                        'cardId' => $coupon['id'],
+                        'cardType' => 'coupon',
+                        'status' => 'receive',
+                        'deadline' => $coupon['deadline'],
+                        'useTime' => 0,
+                        'userId' => $coupon['userId'],
+                        'createdTime' => time(),
+                    )
+                );
                 $message = array(
                     'rewardName' => $rewardName,
                     'settingName' => $inviteSetting[$settingName],
@@ -148,7 +151,6 @@ class CouponServiceImpl extends BaseService implements CouponService
     {
         $coupon = $this->getCouponByCode($code);
         $currentUser = $this->getCurrentUser();
-        $course = $this->getCourseService()->getCourse($targetId);
 
         if (empty($coupon)) {
             return array(
@@ -185,20 +187,11 @@ class CouponServiceImpl extends BaseService implements CouponService
             );
         }
 
-        if ($coupon['targetId'] != 0 && $course['courseSetId'] != $coupon['targetId']) {
+        if ($coupon['targetType'] == 'fullDiscount' and $amount < $coupon['fullDiscountPrice']) {
             return array(
                 'useable' => 'no',
                 'message' => '',
             );
-        }
-
-        if ($coupon['targetType'] == 'fullDiscount') {
-            if ($amount < $coupon['fullDiscountPrice']) {
-                return array(
-                    'useable' => 'no',
-                    'message' => '',
-                );
-            }
         }
 
         if ($coupon['type'] == 'minus') {
@@ -213,12 +206,32 @@ class CouponServiceImpl extends BaseService implements CouponService
             $afterAmount = $amount - $discount;
         }
 
+        $couponFactory = $this->biz['coupon_factory'];
+        $couponModel = $couponFactory($coupon['targetType']);
+        if ($coupon['targetId'] != 0 && !$couponModel->canUseable(
+            $coupon,
+            array('id' => $targetId, 'type' => $targetType)
+        )) {
+            return array(
+                'useable' => 'no',
+                'message' => '',
+            );
+        }
+
         if ($coupon['status'] == 'unused') {
-            $coupon = $this->getCouponDao()->update($coupon['id'], array(
-                'userId' => $currentUser['id'],
-                'status' => 'receive',
-            ));
-            $this->getLogService()->info('coupon', 'receive', "用户{$currentUser['nickname']}(#{$currentUser['id']})领取了优惠券 {$coupon['code']}", $coupon);
+            $coupon = $this->getCouponDao()->update(
+                $coupon['id'],
+                array(
+                    'userId' => $currentUser['id'],
+                    'status' => 'receive',
+                )
+            );
+            $this->getLogService()->info(
+                'coupon',
+                'receive',
+                "用户{$currentUser['nickname']}(#{$currentUser['id']})领取了优惠券 {$coupon['code']}",
+                $coupon
+            );
             if (empty($coupon)) {
                 return false;
             }
@@ -259,15 +272,23 @@ class CouponServiceImpl extends BaseService implements CouponService
             return null;
         }
 
-        $coupon = $this->getCouponDao()->update($coupon['id'], array(
-            'status' => 'used',
-            'targetType' => $order['targetType'],
-            'targetId' => $order['targetId'],
-            'orderTime' => time(),
-            'userId' => $order['userId'],
-            'orderId' => $order['id'],
-        ));
-        $this->getLogService()->info('coupon', 'use', "用户{$user['nickname']}(#{$user['id']})使用了优惠券 {$coupon['code']}", $coupon);
+        $coupon = $this->getCouponDao()->update(
+            $coupon['id'],
+            array(
+                'status' => 'used',
+                'targetType' => $order['targetType'],
+                'targetId' => $order['targetId'],
+                'orderTime' => time(),
+                'userId' => $order['userId'],
+                'orderId' => $order['id'],
+            )
+        );
+        $this->getLogService()->info(
+            'coupon',
+            'use',
+            "用户{$user['nickname']}(#{$user['id']})使用了优惠券 {$coupon['code']}",
+            $coupon
+        );
         $this->dispatchEvent('coupon.use', $coupon);
 
         return $coupon;

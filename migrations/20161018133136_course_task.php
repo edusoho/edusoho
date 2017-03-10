@@ -37,7 +37,7 @@ class CourseTask extends Migration
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;");
 
-        $connection->exec("ALTER TABLE `course_task` ADD    INDEX  `seq` (`seq`);");
+        $connection->exec('ALTER TABLE `course_task` ADD    INDEX  `seq` (`seq`);');
 
         $connection->exec("UPDATE course_task  SET `mediaSource` = 'self'  WHERE type = 'video';");
     }

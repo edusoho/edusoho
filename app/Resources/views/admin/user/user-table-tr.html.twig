@@ -22,9 +22,9 @@
  {% include 'org/parts/table-body-td.html.twig' with {orgCode: user.orgCode}%}
   <td>
     {% if user.verifiedMobile %}
-      {{ user.verifiedMobile }}<span class="color-success">({{'已绑定'|trans}})</span>
+      {{ user.verifiedMobile }}<span class="text-success">({{'已绑定'|trans}})</span>
     {% elseif profile.mobile %}
-      {{ profile.mobile }}<span class="color-danger">({{'未绑定'|trans}})</span>
+      {{ profile.mobile }}<span class="text-danger">({{'未绑定'|trans}})</span>
     {% else %}
        -- 
     {% endif %}

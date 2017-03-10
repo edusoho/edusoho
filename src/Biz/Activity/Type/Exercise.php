@@ -58,7 +58,7 @@ class Exercise extends Activity
         $activity = $this->getActivityService()->getActivity($activityId);
         $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
 
-        $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $activity['mediaId'], $activity['fromCourseSetId'], $activity['id'], 'exercise');
+        $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $activity['mediaId'], $activity['fromCourseId'], $activity['id'], 'exercise');
 
         if (!$result) {
             return false;

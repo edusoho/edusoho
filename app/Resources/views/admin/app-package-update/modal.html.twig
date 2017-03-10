@@ -28,9 +28,9 @@
       <td>
         {% if package.type == 'upgrade' %}
           <strong class="text-muted">{{ package.fromVersion }}</strong> -&gt; <strong
-            class="color-success">{{ package.toVersion }}</strong>
+            class="text-success">{{ package.toVersion }}</strong>
         {% else %}
-          <strong class="color-success">{{ package.toVersion }}</strong>
+          <strong class="text-success">{{ package.toVersion }}</strong>
         {% endif %}
       </td>
       <td>{% if package.backupDB == 1 %}{{ '是'|trans }}{% elseif package.backupDB == 0 %}{{ '否'|trans }}{% endif %}</td>
@@ -44,7 +44,7 @@
     <div class="progress progress-striped active">
       <div class="progress-bar progress-bar-success" style="width: 0%"></div>
     </div>
-    <div class="color-success progress-text"></div>
+    <div class="text-success progress-text"></div>
   </div>
 
   <script type="text/javascript"> app.load('app/package-update-modal'); </script>
@@ -65,7 +65,7 @@
       {% endif %}
   >{{ '开始'|trans }}{{ updateName }}</button>
 
-  <strong class="text color-danger" id="updating-hint" style="display:none;">{{ '正在安装，请不要关闭当前窗口...'|trans }}</strong>
+  <strong class="text text-danger" id="updating-hint" style="display:none;">{{ '正在安装，请不要关闭当前窗口...'|trans }}</strong>
 
   <button id="finish-update-btn" data-loading-text="{{ '正在完成安装/升级, 请稍等...'|trans }}" class="btn btn-primary"
           style="display:none">{{ '完成安装/升级'|trans }}</button>

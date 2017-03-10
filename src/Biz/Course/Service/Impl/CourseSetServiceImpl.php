@@ -2,22 +2,20 @@
 
 namespace Biz\Course\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Content\Service\FileService;
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Dao\FavoriteDao;
-use Biz\Course\Service\CourseDeleteService;
-use Biz\Course\Service\CourseNoteService;
+use Biz\Course\Dao\CourseSetDao;
+use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\LogService;
+use Biz\Content\Service\FileService;
+use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
-use Biz\System\Service\LogService;
-use Biz\Taxonomy\Service\TagService;
-use Biz\User\Service\UserService;
+use Biz\Course\Service\MaterialService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 
@@ -34,6 +32,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if (!is_numeric($number)) {
             throw $this->createAccessDeniedException('recmendNum should be number!');
         }
+
         $course = $this->getCourseSetDao()->update(
             $id,
             array(
@@ -273,8 +272,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
+        $sets = $this->findCourseSetsByIds($courseSetIds);
 
-        return $this->findCourseSetsByIds($courseSetIds);
+        return $sets;
     }
 
     public function findCourseSetsByIds(array $ids)
@@ -315,6 +315,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 'title',
             )
         );
+
         $courseSet['status'] = 'draft';
         $courseSet['creator'] = $this->getCurrentUser()->getId();
         $created = $this->getCourseSetDao()->create($courseSet);
@@ -426,6 +427,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $this->dispatchEvent('course-set.update', new Event($courseSet));
 
         return $courseSet;
+    }
+
+    public function updateCourseSetTeacherIds($id, $teacherIds)
+    {
+        $courseSet = $this->tryManageCourseSet($id);
+        $courseSet['teacherIds'] = $teacherIds;
+        $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $courseSet);
+        $this->dispatchEvent('course-set.update', new Event($courseSet));
     }
 
     public function changeCourseSetCover($id, $coverArray)

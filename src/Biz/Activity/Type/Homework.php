@@ -59,8 +59,7 @@ class Homework extends Activity
         $activity = $this->getActivityService()->getActivity($activityId);
         $homework = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
 
-        $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $activity['mediaId'], $activity['fromCourseSetId'], $activity['id'], 'homework');
-
+        $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $activity['mediaId'], $activity['fromCourseId'], $activity['id'], 'homework');
         if (!$result) {
             return false;
         }

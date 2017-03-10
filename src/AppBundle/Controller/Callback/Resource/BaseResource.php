@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 abstract class BaseResource implements ResourceInterface
 {
-
     protected $container;
 
     public function __construct(ContainerInterface $container)
@@ -28,8 +27,8 @@ abstract class BaseResource implements ResourceInterface
     protected function error($code, $message)
     {
         return array('error' => array(
-            'code'    => $code,
-            'message' => $message
+            'code' => $code,
+            'message' => $message,
         ));
     }
 
@@ -52,11 +51,12 @@ abstract class BaseResource implements ResourceInterface
         return $this->container->get('callback.resource_factory')->create($name)->filter($res);
     }
 
-    protected function multicallFilter($name, $res)
+    protected function multicallFilter($name, array $res)
     {
         foreach ($res as $key => $one) {
             $res[$key] = $this->callFilter($name, $one);
         }
+
         return $res;
     }
 
@@ -70,12 +70,23 @@ abstract class BaseResource implements ResourceInterface
         return $this->container->get('callback.resource_factory')->create($name)->simplify($res);
     }
 
-    protected function multicallSimplify($name, $res)
+    protected function multicallSimplify($name, array $res)
     {
         foreach ($res as $key => $one) {
             $res[$key] = $this->callSimplify($name, $one);
         }
+
         return $res;
+    }
+
+    protected function callBuild($name, array $res)
+    {
+        return $this->container->get('callback.resource_factory')->create($name)->build($res);
+    }
+
+    protected function singlecallBuild($name, $res)
+    {
+        return array_shift($this->callBuild($name, array($res)));
     }
 
     protected function checkRequiredFields($requestData, $requiredFields)
@@ -83,7 +94,7 @@ abstract class BaseResource implements ResourceInterface
         $requestFields = array_keys($requestData);
         foreach ($requiredFields as $field) {
             if (!in_array($field, $requestFields)) {
-                throw new \InvalidArgumentException(sprintf("missing param: %s", $field));
+                throw new \InvalidArgumentException(sprintf('missing param: %s', $field));
             }
         }
 
@@ -96,38 +107,52 @@ abstract class BaseResource implements ResourceInterface
         if (empty($end)) {
             return array(
                 'cursor' => $currentCursor + 1,
-                'start'  => 0,
-                'limit'  => $currentLimit,
-                'eof'    => true
+                'start' => 0,
+                'limit' => $currentLimit,
+                'eof' => true,
             );
         }
 
         if (count($currentRows) < $currentLimit) {
             return array(
                 'cursor' => $end['updatedTime'] + 1,
-                'start'  => 0,
-                'limit'  => $currentLimit,
-                'eof'    => true
+                'start' => 0,
+                'limit' => $currentLimit,
+                'eof' => true,
             );
         }
 
         if ($end['updatedTime'] != $currentCursor) {
             $next = array(
                 'cursor' => $end['updatedTime'],
-                'start'  => 0,
-                'limit'  => $currentLimit,
-                'eof'    => false
+                'start' => 0,
+                'limit' => $currentLimit,
+                'eof' => false,
             );
         } else {
             $next = array(
                 'cursor' => $currentCursor,
-                'start'  => $currentStart + $currentLimit,
-                'limit'  => $currentLimit,
-                'eof'    => false
+                'start' => $currentStart + $currentLimit,
+                'limit' => $currentLimit,
+                'eof' => false,
             );
         }
 
         return $next;
+    }
+
+    protected function filterHtml($text)
+    {
+        preg_match_all('/\<img.*?src\s*=\s*[\'\"](.*?)[\'\"]/i', $text, $matches);
+        if (empty($matches)) {
+            return $text;
+        }
+
+        foreach ($matches[1] as $url) {
+            $text = str_replace($url, $this->getFileUrl($url), $text);
+        }
+
+        return $text;
     }
 
     public function getFileUrl($path)
@@ -135,12 +160,12 @@ abstract class BaseResource implements ResourceInterface
         if (empty($path)) {
             return '';
         }
-        if (strpos($path, $this->getHttpHost()."://") !== false) {
+        if (strpos($path, $this->getHttpHost().'://') !== false) {
             return $path;
         }
         $path = str_replace('public://', '', $path);
         $path = str_replace('files/', '', $path);
-        $path = $this->getHttpHost()."/files/{$path}";
+        $path = $this->getHttpHost().'/files/'.ltrim($path, '/');
 
         return $path;
     }
@@ -148,6 +173,7 @@ abstract class BaseResource implements ResourceInterface
     protected function getHttpHost()
     {
         $schema = (!empty($_SERVER['HTTPS']) && 'off' !== strtolower($_SERVER['HTTPS'])) ? 'https' : 'http';
+
         return $schema."://{$_SERVER['HTTP_HOST']}";
     }
 
@@ -159,6 +185,7 @@ abstract class BaseResource implements ResourceInterface
     protected function getCurrentUser()
     {
         $biz = $this->getBiz();
+
         return isset($biz['user']) ? $biz['user'] : array();
     }
 

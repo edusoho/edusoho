@@ -16,13 +16,14 @@ class CourseFileChoose extends Chooser {
   _initEvent() {
     $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
     $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
+    $(this.container).on('click', '.js-course-browser-search', this._filterByFileName.bind(this))
     // $('.js-choose-trigger').on('click', this._open.bind(this))
   }
 
   _loadList() {
     let $containter = $('.course-file-browser');
     let url = $containter.data('url');
-    $.get(url, { 'type': $("input[name=type]").val() }, html => {
+    $.get(url, { 'type': $("input[name=type]").val() , 'keyword': $("input[name='searchFileName']").val()}, html => {
       $containter.html(html);
     });
   }
@@ -32,11 +33,18 @@ class CourseFileChoose extends Chooser {
     this._loadList();
   }
 
+_filterByFileName() {
+    $('input[name=searchFileName]').val($('.js-course-file-name').val());
+    this._loadList();
+}
 
   _onSelectFile(event) {
+    $('.file-browser-item').removeClass('active');
+    var $that = $(event.currentTarget).addClass('active');
     var $that = $(event.currentTarget);
     var file = $that.data();
     this._onChange(file);
+    
     // this._close();
   }
 

@@ -34,10 +34,11 @@ $.validator.setDefaults({
     console.log('submitSuccess');
   },
   submitHandler: function (form) {
-    //规定全局不要用submit默认提交；
+    console.log('submitHandler');
+    
+    //规定全局不要用 submit按钮（<input type=’submit’>）提交表单；
     let $form = $(form);
     let settings = this.settings;
-    console.log('submitHandler');
     $(settings.currentDom) ? $(settings.currentDom).button('loading') : '';
     if (settings.ajax) {
       $.post($form.attr('action'), $form.serializeArray(), (data) => {
@@ -178,5 +179,15 @@ $.validator.addMethod("currency", function (value, element, params) {
 }, jQuery.validator.format('请输入有效价格，最多两位小数，整数位不超个8位！'));
 
 $.validator.addMethod("positive_currency", function (value, element, params) {
-  return this.optional(element) || /^[1-9]{0,8}(\.\d{0,2})?$/.test(value);
+  return value > 0 && /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
 }, jQuery.validator.format('请输入大于0的有效价格，最多两位小数，整数位不超个8位！'));
+
+jQuery.validator.addMethod("max_year", function (value, element) {
+  return this.optional(element) || value < 100000;
+}, "有效期最大值不能超过99,999天");
+
+$.validator.addMethod("feature",function (value, element, params) {
+    return value && (new Date(value).getTime()) > Date.now();
+  },
+  Translator.trans('购买截止时间需在当前时间之后')
+);

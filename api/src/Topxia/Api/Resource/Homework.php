@@ -23,6 +23,11 @@ class Homework extends BaseResource
             return $this->error('404', '该作业不存在!');
         }
 
+        $canTakeCourse = $this->getCourseService()->canTakeCourse($homework['courseId']);
+        if (!$canTakeCourse) {
+            return $this->error('500', '无权限访问!');
+        }
+
         $course = $this->getCourseService()->getCourse($homework['courseId']);
         $homework['courseTitle'] = $course['title'];
         $homework['lessonTitle'] = $homework['name'];
@@ -55,6 +60,11 @@ class Homework extends BaseResource
 
         if (empty($homework)) {
             return $this->error('404', '作业不存在！');
+        }
+
+        $canTakeCourse = $this->getCourseService()->canTakeCourse($homework['courseId']);
+        if (!$canTakeCourse) {
+            return $this->error('500', '无权限访问!');
         }
 
         $canCheckHomework = $this->getTestpaperService()->canLookTestpaper($homeworkResult['id']);

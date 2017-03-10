@@ -86,7 +86,7 @@ class TaskController extends BaseController
         // 3. 视频课时非优酷等外链视频时提示购买
         $taskCanTryLook = $course['tryLookable'] && $task['type'] == 'video' && $task['mediaSource'] == 'self';
 
-        if (empty($task['isFree']) && !$taskCanTryLook) {
+        if (empty($course['isFree']) && empty($task['isFree']) && !$taskCanTryLook) {
             if (!$user->isLogin()) {
                 throw $this->createAccessDeniedException();
             }
@@ -131,7 +131,7 @@ class TaskController extends BaseController
 
     private function canPreviewTask($task, $course)
     {
-        if ($task['isFree']) {
+        if ($course['isFree'] || $task['isFree']) {
             return true;
         }
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
