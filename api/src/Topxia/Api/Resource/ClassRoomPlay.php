@@ -27,7 +27,7 @@ class ClassRoomPlay extends BaseResource
 		$searchLessonCount = $this->getCourseService()->searchLessonCount(array("courseIds"=>$courseIds));
 		$lessons = $this->getCourseService()->searchLessons(
 			array("courseIds"=>$courseIds), 
-			array('startTime', 'ASC'), 
+			array('startTime'=> 'ASC'), 
 			0, $searchLessonCount
 		);
 
