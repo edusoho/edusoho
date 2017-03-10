@@ -27,24 +27,26 @@
         </div>
 
         {{ slot('course.marketing.setting', {'course':course}) }}
-
-        <div class="form-group js-is-free {% if course.isFree|default(0) == 1 or courseSet.type == 'live' %} hidden {% endif %}">
-          <label class="col-sm-2 control-label">{{'设置免费学习任务'|trans}}</label>
-          <div class="col-sm-8">
-            <ul class="list-group mb0 pb0 task-price-setting-group js-task-price-setting"> 
-              {% for task in canFreeTasks %}             
-              <li class="list-group-item {% if freeTasks[task.id]|default(null) %} open {% endif %} {% if loop.index == canFreeTasks|length %} mb5 {% endif %}">
-                <input type="checkbox" class="mr10" name="freeTaskIds[]" value="{{ task.id }}" {% if freeTasks[task.id]|default(null) %}checked {% endif %}>
-                {% set meta = activity_meta(task.type) %}
-                <i class="{{ meta.icon }} color-gray" data-toggle="tooltip" data-placement="top" title="" data-container="body" data-original-title="{{ meta.name }}任务"></i>
-                <span class="inline-block vertical-middle text-overflow title">任务{{ loop.index }}：{{ task.title }} </span>
-                <span class="label label-warning pull-right price">免费</span>
-              </li>
-              {% endfor %}
-            </ul>
-            <div class="help-block ">免费任务仅支持图文、视频、音频、flash、文档、PPT </div>            
+        {% if courseSet.type != 'live' %}
+          <div class="form-group js-is-free {% if course.isFree|default(0) == 1 %} hidden {% endif %}">
+            <label class="col-sm-2 control-label">{{'设置免费学习任务'|trans}}</label>
+            <div class="col-sm-8">
+              <ul class="list-group mb0 pb0 task-price-setting-group js-task-price-setting">
+                {% for task in canFreeTasks %}
+                  <li class="list-group-item {% if freeTasks[task.id]|default(null) %} open {% endif %} {% if loop.index == canFreeTasks|length %} mb5 {% endif %}">
+                    <input type="checkbox" class="mr10" name="freeTaskIds[]" value="{{ task.id }}" {% if freeTasks[task.id]|default(null) %}checked {% endif %}>
+                    {% set meta = activity_meta(task.type) %}
+                    <i class="{{ meta.icon }} color-gray" data-toggle="tooltip" data-placement="top" title="" data-container="body" data-original-title="{{ meta.name }}任务"></i>
+                    <span class="inline-block vertical-middle text-overflow title">任务{{ loop.index }}：{{ task.title }} </span>
+                    <span class="label label-warning pull-right price">免费</span>
+                  </li>
+                {% endfor %}
+              </ul>
+              <div class="help-block ">免费任务仅支持图文、视频、音频、flash、文档、PPT </div>
+            </div>
           </div>
-        </div>
+        {% endif %}
+
         <div class="form-group">
           <label class="col-sm-2 control-label">设置购买截止日期</label>
           <div class="col-sm-8 radios">
