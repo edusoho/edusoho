@@ -75,7 +75,7 @@
           {% if course.expiryMode == 'days' %}
             <span class="gray-dark mrl">随到随学</span>
             <span
-                class="gray-dark">{% if course.expiryDays %} {{ course.expiryDays }}天 {% else %}不限 {% endif %}</span>
+                class="gray-dark">{% if course.expiryDays %} {{ course.expiryDays }}天 {% else %}不限时间{% endif %}</span>
           {% elseif course.expiryMode == 'date' %}
             <span class="gray-dark mrl">周期开班</span>
             <span class="gray-dark">{{ course.expiryStartDate|date('Y-m-d ') }}
