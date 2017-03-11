@@ -258,14 +258,14 @@ class CourseServiceImpl extends BaseService implements CourseService
             'showServices',
             'services',
             'approval',
-            'coinPrice'
+            'coinPrice',
         ));
 
         if (!ArrayToolkit::requireds($fields, array('isFree', 'buyable', 'tryLookable'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
 
-        if(isset($fields['originPrice'])){
+        if (isset($fields['originPrice'])) {
             list($fields['price'], $fields['coinPrice']) = $this->calculateCoursePrice($id, $fields['originPrice']);
         }
 
@@ -294,8 +294,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     /**
      * 计算教学计划价格和虚拟币价格
+     *
      * @param $id
      * @param int|float $originPrice 教学计划原价
+     *
      * @return array (number, number)
      */
     protected function calculateCoursePrice($id, $originPrice)
@@ -305,7 +307,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $coinPrice = $course['originCoinPrice'];
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
-        if(!empty($courseSet['discountId'])){
+        if (!empty($courseSet['discountId'])) {
             $price = $price * $courseSet['discount'] / 10;
             $coinPrice = $coinPrice * $courseSet['discount'] / 10;
         }
@@ -828,7 +830,8 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param  int     $userId
+     * @param int $userId
+     *
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -1384,6 +1387,7 @@ class CourseServiceImpl extends BaseService implements CourseService
      * 当默认值未设置时，合并默认值
      *
      * @param  $course
+     *
      * @return array
      */
     protected function mergeCourseDefaultAttribute($course)
@@ -1409,6 +1413,7 @@ class CourseServiceImpl extends BaseService implements CourseService
      *
      * @param  $userId
      * @param  $filters
+     *
      * @return array
      */
     protected function prepareUserLearnCondition($userId, $filters)

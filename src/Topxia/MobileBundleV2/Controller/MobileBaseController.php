@@ -279,7 +279,7 @@ class MobileBaseController extends BaseController
             $course['middlePicture'] = $container->get('web.twig.extension')->getFurl($courseSet['cover']['middle'], 'course.png');
             $course['largePicture'] = $container->get('web.twig.extension')->getFurl($courseSet['cover']['large'], 'course.png');
             $course['about'] = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
-            $course['createdTime'] = date("c", $course['createdTime']);
+            $course['createdTime'] = date('c', $course['createdTime']);
 
             $course['teachers'] = array();
 
@@ -307,6 +307,7 @@ class MobileBaseController extends BaseController
         $course['lessonNum'] = $course['taskNum'];
         $course['userId'] = $course['creator'];
         $course['tryLookTime'] = $course['tryLookLength'];
+
         return $course;
     }
 
@@ -324,6 +325,7 @@ class MobileBaseController extends BaseController
         } else {
             $course['title'] = $courseSet['title'].'-'.$course['title'];
         }
+
         return $course;
     }
 

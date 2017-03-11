@@ -34,7 +34,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
             $jobInstance = new $job['jobClass']();
 
-            if($jobInstance instanceof BizAware) {
+            if ($jobInstance instanceof BizAware) {
                 $jobInstance->setBiz($this->biz);
             }
 

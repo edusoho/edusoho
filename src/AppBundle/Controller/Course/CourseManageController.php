@@ -810,7 +810,7 @@ class CourseManageController extends BaseController
             $taskWatchTime = $taskLearnedNum == 0 ? 0 : intval($taskWatchTime / $taskLearnedNum);
 
             $tasks[$key]['LearnedNum'] = $taskLearnedNum;
-            $tasks[$key]['length'] = floor(intval($tasks[$key]['activity']['length'])/60);
+            $tasks[$key]['length'] = floor(intval($tasks[$key]['activity']['length']) / 60);
             $tasks[$key]['type'] = $tasks[$key]['activity']['mediaType'];
             $tasks[$key]['finishedNum'] = $finishedNum;
             $tasks[$key]['learnTime'] = $taskLearnTime;
