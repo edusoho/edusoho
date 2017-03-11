@@ -490,16 +490,15 @@ class CourseManageController extends BaseController
         $teachers = $this->getCourseService()->findTeachersByCourseId($courseId);
         $teacherIds = array();
 
-        $defaultSetting = $this->getSettingService()->get('default');
-
         if (!empty($teachers)) {
             foreach ($teachers as $teacher) {
-                $avator = $this->getUserAvator($teacher, $defaultSetting);
+                $avatar = $this->get('web.twig.app_extension')->userAvatar($teacher, 'small');
                 $teacherIds[] = array(
                     'id' => $teacher['userId'],
                     'isVisible' => $teacher['isVisible'],
                     'nickname' => $teacher['nickname'],
-                    'avatar' => $avator,
+
+                    'avatar' => $this->get('web.twig.extension')->getFilePath($avatar, 'avatar.png'),
                 );
             }
         }
@@ -517,6 +516,7 @@ class CourseManageController extends BaseController
     public function teachersMatchAction(Request $request, $courseSetId, $courseId)
     {
         $queryField = $request->query->get('q');
+
         $users = $this->getUserService()->searchUsers(
             array('nickname' => $queryField, 'roles' => 'ROLE_TEACHER'),
             array('createdTime' => 'DESC'),
@@ -527,10 +527,11 @@ class CourseManageController extends BaseController
         $teachers = array();
 
         foreach ($users as $user) {
+            $avatar = $this->get('web.twig.app_extension')->userAvatar($user, 'small');
             $teachers[] = array(
                 'id' => $user['id'],
                 'nickname' => $user['nickname'],
-                'avatar' => $this->getWebExtension()->getFilePath($user['smallAvatar'], 'avatar.png'),
+                'avatar' => $this->getWebExtension()->getFilePath($avatar, 'avatar.png'),
                 'isVisible' => 1,
             );
         }
@@ -864,21 +865,6 @@ class CourseManageController extends BaseController
                 'students' => $students,
             )
         );
-    }
-
-    /**
-     * @param $teacher
-     * @param $defaultSetting
-     *
-     * @return array
-     */
-    protected function getUserAvator($teacher, $defaultSetting)
-    {
-        $useDefaultSettingAvator = empty($teacher['smallAvatar']) && !empty($defaultSetting['defaultAvatar']);
-        $avatorImg = $useDefaultSettingAvator ? $defaultSetting['avatar.png'] : $teacher['smallAvatar'];
-        $avator = $this->get('web.twig.extension')->getFilePath($avatorImg, 'avatar.png');
-
-        return $avator;
     }
 
     private function _canRecord($liveId)

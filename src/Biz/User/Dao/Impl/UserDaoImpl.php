@@ -90,7 +90,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         return $this->db()->fetchColumn($sql, array($time));
     }
 
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
             if ($value == '0') {
@@ -103,10 +103,6 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
 
             return true;
         });
-
-        if (isset($conditions['roles'])) {
-            $conditions['roles'] = "%{$conditions['roles']}%";
-        }
 
         if (isset($conditions['role'])) {
             $conditions['role'] = "|{$conditions['role']}|";
@@ -125,9 +121,6 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
             if (isset($conditions['keywordUserType'])) {
                 $conditions['type'] = "%{$conditions['keywordUserType']}%";
                 unset($conditions['keywordUserType']);
-            }
-            if (isset($conditions['nickname'])) {
-                $conditions['nickname'] = "%{$conditions['nickname']}%";
             }
         }
 
@@ -158,8 +151,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
 
         $conditions['verifiedMobileNull'] = '';
 
-        $builder = parent::_createQueryBuilder($conditions);
-
+        $builder = parent::createQueryBuilder($conditions);
         if (array_key_exists('hasVerifiedMobile', $conditions)) {
             $builder = $builder->andWhere('verifiedMobile != :verifiedMobileNull');
         }
