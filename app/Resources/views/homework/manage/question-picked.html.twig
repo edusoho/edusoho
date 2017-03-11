@@ -1,6 +1,0 @@
-{% for question in questions %}
-  {% include 'homework/manage/question-picked-tr.html.twig' %}
-  {% for subQuestion in question.subs|default(null) if subQuestion %}
-    {% include 'homework/manage/question-picked-tr.html.twig' with {question:subQuestion} %}
-  {% endfor %}
-{% endfor %}
