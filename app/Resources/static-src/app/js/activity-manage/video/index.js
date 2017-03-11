@@ -1,137 +1,142 @@
 import FileChooser from '../../file-chooser/file-choose';
 import SubtitleDialog from './subtitle/dialog';
 
+class Video {
+  constructor() {
+    this.showChooseContent();
+    this.inItStep2form();
+    this.isInitStep3from();
+    this.autoValidatorLength();
+    this.initfileChooser();
+  }
 
-jQuery.validator.addMethod("unsigned_integer", function (value, element) {
-  return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
-}, "时长必须为非负整数");
+  showChooseContent() {
+    $('#iframe-content').on('click', '.js-choose-trigger', (event) => {
+      FileChooser.openUI();
+      $('[name="ext[mediaSource]"]').val(null);
+    });
+  }
 
-jQuery.validator.addMethod("second_range", function (value, element) {
-  return this.optional(element) || /^([0-9]|[012345][0-9]|59)$/.test(value);
-}, "秒数只能在0-59之间");
-
-jQuery.validator.addMethod("time_length", function (value, element) {
-  return parseInt($("#minute").val()) + parseInt($("#second").val()) > 0
-}, "时长不能等于0");
-
-$('#iframe-content').on('click', '.js-choose-trigger', (event) => {
-  FileChooser.openUI();
-  $('[name="ext[mediaSource]"]').val(null);
-});
-
-function _inItStep3from() {
-
-  var $step3_forom = $('#step3-form');
-  var validator = $step3_forom.data('validator');
-
-  $step3_forom.validate({
-    rules: {
-      'ext[finishDetail]': {
-        required: true,
-        unsigned_integer: true,
-        max: 300,
-        min: 1,
+  inItStep2form() {
+    var $step2_form = $('#step2-form');
+    var validator = $step2_form.data('validator');
+    $step2_form.validate({
+      groups: {
+        date: 'minute second'
+      },
+      rules: {
+        title: {
+          required: true,
+          maxlength: 50,
+          trim: true,
+        },
+        minute: 'required unsigned_integer',
+        second: 'required second_range',
+        'ext[mediaSource]': 'required',
+        'ext[finishDetail]': 'unsigned_integer'
+      },
+      messages: {
+        minute: {
+          required: '请输入时长',
+        },
+        second: {
+          required: '请输入时长',
+          second_range: '秒数只能在0-59之间',
+        },
+        'ext[mediaSource]': "请上传或选择%display%",
       }
-    },
-    messages: {
-      'ext[finishDetail]': {
-        required: '请输入时长',
-        max: '时长不能大于300分钟',
-        min: '时长不能小于1分钟'
+    });
+    $step2_form.data('validator', validator);
+  }
+
+  inItStep3from() {
+    var $step3_forom = $('#step3-form');
+    var validator = $step3_forom.data('validator');
+    $step3_forom.validate({
+      rules: {
+        'ext[finishDetail]': {
+          required: true,
+          positive_integer: true,
+          max: 300,
+          min: 1,
+        }
+      },
+      messages: {
+        'ext[finishDetail]': {
+          required: '请输入时长',
+        }
       }
+    });
+    $step3_forom.data('validator', validator);
+  }
+
+  autoValidatorLength() {
+    $(".js-length").blur(function () {
+      let validator = $("#step2-form").data('validator');
+      if (validator && validator.form()) {
+        const minute = parseInt($('#minute').val()) | 0;
+        const second = parseInt($('#second').val()) | 0;
+        $("#length").val(minute * 60 + second);
+      }
+    });
+  }
+
+  isInitStep3from() {
+    // 完成条件是观看时长的情况
+    if ($("#finish-condition").children('option:selected').val() === 'time') {
+      $('.viewLength').removeClass('hidden');
+      _inItStep3from();
     }
-  });
-  $step3_forom.data('validator', validator);
-}
-function _inItStep2form() {
-  var $step2_form = $('#step2-form');
-  var validator = $step2_form.data('validator');
-  $step2_form.validate({
-    groups: {
-      date: 'minute second'
-    },
-    rules: {
-      title: {
-        required: true,
-        maxlength: 50,
-        trim: true,
-      },
-      minute: 'required unsigned_integer time_length',
-      second: 'required second_range time_length',
-      'ext[mediaSource]': 'required',
-      'ext[finishDetail]': 'unsigned_integer'
-    },
-    messages: {
-      minute: {
-        required: '请输入时长',
-        time_length: '时长必须大于0'
-      },
-      second: {
-        required: '请输入时长',
-        second_range: '秒数只能在0-59之间',
-        time_length: '时长必须大于0'
-      },
-      'ext[mediaSource]': "请上传或选择%display%",
-      'ext[finishDetail]': 'dddd'
-    }
-  });
-  $step2_form.data('validator', validator);
-}
 
-_inItStep2form();
-
-
-$(".js-length").blur(function () {
-  let validator = $("#step2-form").data('validator');
-  if (validator && validator.form()) {
-    const minute = parseInt($('#minute').val()) | 0;
-    const second = parseInt($('#second').val()) | 0;
-    $("#length").val(minute * 60 + second);
-  }
-});
-
-const fileChooser = new FileChooser();
-//字幕组件
-const subtitleDialog = new SubtitleDialog('.js-subtitle-list');
-
-
-const onSelectFile = file => {
-  FileChooser.closeUI();
-  if (file.length && file.length > 0) {
-    let minute = parseInt(file.length / 60);
-    let second = Math.round(file.length % 60);
-    $("#minute").val(minute);
-    $("#second").val(second);
-    $("#length").val(minute * 60 + second);
+    $("#finish-condition").on('change', function (event) {
+      if (event.target.value == 'time') {
+        $('.viewLength').removeClass('hidden');
+        _inItStep3from();
+      } else {
+        $('.viewLength').addClass('hidden');
+        $('input[name="ext[finishDetail]"]').rules('remove')
+      }
+    })
   }
 
-  $('[name="ext[mediaSource]"]').val(file.source);
-  if (file.source == 'self') {
-    $("#ext_mediaId").val(file.id);
-    $("#ext_mediaUri").val('');
-  } else {
-    $("#ext_mediaUri").val(file.uri);
-    $("#ext_mediaId").val(0);
+  initfileChooser() {
+    const fileChooser = new FileChooser();
+    //字幕组件
+    const subtitleDialog = new SubtitleDialog('.js-subtitle-list');
+    const onSelectFile = file => {
+      FileChooser.closeUI();
+      if (file.length && file.length > 0) {
+        let minute = parseInt(file.length / 60);
+        let second = Math.round(file.length % 60);
+        $("#minute").val(minute);
+        $("#second").val(second);
+        $("#length").val(minute * 60 + second);
+      }
+      $('[name="ext[mediaSource]"]').val(file.source);
+      if (file.source == 'self') {
+        $("#ext_mediaId").val(file.id);
+        $("#ext_mediaUri").val('');
+      } else {
+        $("#ext_mediaUri").val(file.uri);
+        $("#ext_mediaId").val(0);
+      }
+      //渲染字幕
+      subtitleDialog.render(file);
+    };
+
+    fileChooser.on('select', onSelectFile);
   }
-
-  //渲染字幕
-  subtitleDialog.render(file);
-};
-
-// 完成条件是观看时长的情况
-if($("#finish-condition").children('option:selected').val() === 'time') {
-  $('.viewLength').removeClass('hidden');
-  _inItStep3from();
 }
 
-$("#finish-condition").on('change', function (event) {
-  if (event.target.value == 'time') {
-    $('.viewLength').removeClass('hidden');
-    _inItStep3from();
-  } else {
-    $('.viewLength').addClass('hidden');
-    $('input[name="ext[finishDetail]"]').rules('remove')
-  }
-})
+new Video();
 
-fileChooser.on('select', onSelectFile);
+
+
+
+
+
+
+
+
+
+

@@ -35,7 +35,6 @@ class Text {
       rules: {
         'finishDetail': {
           required: true,
-          digits: true,
           positive_integer:true,
           max: 300,
         },

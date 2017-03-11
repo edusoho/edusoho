@@ -116,6 +116,11 @@ $.extend($.validator.messages, {
   min: $.validator.format("请输入不小于 {0} 的数值")
 });
 
+
+$.validator.addMethod("DateAndTime", function (value, element, params) {
+  return this.optional(element) || /^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$/.test(value);
+}, jQuery.validator.format("请输入合格的日期格式"));
+
 $.validator.addMethod("trim", function (value, element, params) {
   return $.trim(value).length > 0;
 }, jQuery.validator.format("请输入%display%"));
@@ -167,8 +172,20 @@ $.validator.addMethod("visible_character", function (value, element, params) {
 }, jQuery.validator.format("请输入可见性字符"));
 
 $.validator.addMethod('positive_integer', function (value, element) {
-  return this.optional(element) || parseInt(value) > 0;
-}, jQuery.validator.format("请输入大于0数"));
+  return this.optional(element) ||  /^\+?[1-9][0-9]*$/.test(value);
+}, jQuery.validator.format("请输入正整数"));
+
+$.validator.addMethod('unsigned_integer', function (value, element) {
+  return this.optional(element) ||  /^\+?[0-9][0-9]*$/.test(value);
+}, jQuery.validator.format("请输入非负整数"));
+
+jQuery.validator.addMethod("second_range", function (value, element) {
+  return this.optional(element) || /^([0-9]|[012345][0-9]|59)$/.test(value);
+}, "请输入0-59之间的数字");
+
+// jQuery.validator.addMethod("unsigned_integer", function (value, element) {
+//   return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
+// }, "时长必须为非负整数");
 
 $.validator.addMethod("open_live_course_title", function (value, element, params) {
   return !params || /^[^(<|>|'|"|&|‘|’|”|“)]*$/.test(value);
