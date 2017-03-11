@@ -69,6 +69,7 @@ class CommonController extends BaseController
             $this->switchUser($request, $switchUser);
             $this->getBiz()->service('Crontab:CrontabService')->scheduleJobs();
             $this->switchUser($request, $currentUser);
+            return $this->createJsonResponse(true);
         } catch (\Exception $e) {
             $this->switchUser($request, $currentUser);
             throw $e;
