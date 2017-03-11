@@ -10,7 +10,6 @@ class LessonLiveTickets extends BaseResource
 {
     public function post(Application $app, Request $request, $id)
     {
-        //$lesson = $this->getCourseService()->getLesson($id);
         $task = $this->getTaskService()->getTask($id);
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         if ($task['type'] != 'live') {
