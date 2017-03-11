@@ -40,7 +40,7 @@
               <a class="unfollow-student-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowing %} style="display:none;"{% endif %}>{{'已关注'|trans}}</a>
           </li>
         {% endif %}
-        {% if app.user.isAdmin() or  app.user.isTeacher() and  isTeacherAuthManageStudent == 1 and course.expiryDay > 0 %}
+        {% if (app.user.isAdmin() or  app.user.isTeacher() and  isTeacherAuthManageStudent == 1 and course.expiryDay > 0) and (course.parentId == 0) %}
           <li><a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_expiryday', {courseId:course.id, userId:user.id})}}">{{'增加有效期'|trans}}</a></li>
         {% endif %}
 

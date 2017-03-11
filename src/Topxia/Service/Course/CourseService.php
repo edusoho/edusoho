@@ -316,6 +316,10 @@ interface CourseService
 
     public function updateMembers($conditions, $updateFields);
 
+    public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline);
+
+    public function updateMembersDeadlineByClassroomId($classroomId, $deadline);
+
     public function isMemberNonExpired($course, $member);
 
     public function findCourseStudents($courseId, $start, $limit);

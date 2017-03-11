@@ -32,6 +32,7 @@
       <ul class="dropdown-menu pull-right">
         <li><a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('classroom_manage_student_remark', {classroomId:classroom.id, userId:user.id})}}">{{'备注'|trans}}</a></li>
         <li><a class="student-remove" href="javascript:;" data-url="{{path('classroom_manage_student_remove', {classroomId:classroom.id, userId:user.id})}}" data-user="{{default.user_name|default('学员'|trans)}}">{{'移除'|trans}}</a></li>
+        <li><a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('classroom_manage_member_deadline', {classroomId:classroom.id, userId:user.id})}}">{{'修改有效期'|trans}}</a></li>
       </ul>
     </div>
   </td>
