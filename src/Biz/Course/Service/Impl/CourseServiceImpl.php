@@ -531,6 +531,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
     }
 
+    // Refactor: 该函数不属于CourseService
     public function countThreadsByCourseId($courseId)
     {
         return $this->getThreadDao()->count(
@@ -547,6 +548,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return empty($member) ? null : $member['role'];
     }
 
+    // Refactor: findTeachingCoursesByCourseSetId
     public function findUserTeachingCoursesByCourseSetId($courseSetId, $onlyPublished = true)
     {
         $user = $this->getCurrentUser();
@@ -731,6 +733,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return array();
     }
 
+    // Refactor: countLearningCourses
     public function countUserLearningCourses($userId, $filters = array())
     {
         $conditions = $this->prepareUserLearnCondition($userId, $filters);
@@ -738,6 +741,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->countLearningMembers($conditions);
     }
 
+    // Refactor: findLearningCourses
     public function findUserLearningCourses($userId, $start, $limit, $filters = array())
     {
         $conditions = $this->prepareUserLearnCondition($userId, $filters);
@@ -763,6 +767,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $sortedCourses;
     }
 
+    // Refactor: countLearnedCourses
     public function countUserLearnedCourses($userId, $filters = array())
     {
         $conditions = $this->prepareUserLearnCondition($userId, $filters);
@@ -770,6 +775,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->countLearnedMembers($conditions);
     }
 
+    // Refactor: findLearnedCourses
     public function findUserLearnedCourses($userId, $start, $limit, $filters = array())
     {
         $conditions = $this->prepareUserLearnCondition($userId, $filters);
@@ -794,6 +800,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $sortedCourses;
     }
 
+    // Refactor: countTeachingCourses
+    // 1、看是否应该改成：countTeachingCourseByUserId($userId, $onlyPublished = true)
+    // 2、若参数列表保持原有，则需要校验必填参数conditions中是否包含userId
     public function findUserTeachCourseCount($conditions, $onlyPublished = true)
     {
         $members = $this->getMemberDao()->findByUserIdAndRole($conditions['userId'], 'teacher');
@@ -812,6 +821,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->searchCourseCount($conditions);
     }
 
+    // Refactor: findTeachingCoursesByUserId
+    // 1、看是否应该改成：findTeachingCoursesByUserId($userId, $onlyPublished = true)
+    // 2、若参数列表保持原有，则需要校验必填参数conditions中是否包含userId
     public function findUserTeachCourses($conditions, $start, $limit, $onlyPublished = true)
     {
         $members = $this->getMemberDao()->findByUserIdAndRole($conditions['userId'], 'teacher');
@@ -848,11 +860,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courses;
     }
 
+    // Refactor: 该函数方法名和逻辑表达的意思不一致
     public function findUserLearnCourses($userId, $start, $limit)
     {
         return $this->getTaskService()->searchMembers(array('userId' => $userId), array(), $start, $limit);
     }
 
+    // Refactor: 该函数方法名和逻辑表达的意思不一致
     public function countUserLearnCourse($userId)
     {
         return $this->getMemberService()->countMembers(array('userId' => $userId));
@@ -937,6 +951,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return false;
     }
 
+    // Refactor: 函数命名
     public function analysisCourseDataByTime($startTime, $endTime)
     {
         return $this->getCourseDao()->analysisCourseDataByTime($startTime, $endTime);
@@ -1055,6 +1070,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->getMinPublishedCoursePriceByCourseSetId($courseSetId);
     }
 
+    // Refactor: 该函数是否和getMinPublishedCoursePriceByCourseSetId冲突
     public function getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId)
     {
         return $this->getCourseDao()->getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId);
