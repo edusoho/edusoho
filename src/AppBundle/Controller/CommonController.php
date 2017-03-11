@@ -62,7 +62,17 @@ class CommonController extends BaseController
 
     public function crontabAction(Request $request)
     {
-        $this->getBiz()->service('Crontab:CrontabService')->scheduleJobs();
+        $currentUser = $this->getCurrentUser();
+        try {
+            $switchUser = new CurrentUser();
+            $switchUser->fromArray($this->getUserService()->getUserByType('scheduler'));
+            $this->switchUser($request, $switchUser);
+            $this->getBiz()->service('Crontab:CrontabService')->scheduleJobs();
+            $this->switchUser($request, $currentUser);
+        } catch (\Exception $e) {
+            $this->switchUser($request, $currentUser);
+        }
+
         return $this->createJsonResponse(true);
     }
 
