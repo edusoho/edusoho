@@ -808,8 +808,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param int $userId
-     *
+     * @param  int     $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -1052,7 +1051,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $conditions = array(
             'courseIds' => $courseIds,
-            'userId' => $userId
+            'userId' => $userId,
         );
         $count = $this->getMemberService()->countMembers($conditions);
         $members = $this->getMemberService()->searchMembers(
@@ -1067,7 +1066,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $learnProgress[] = array(
                 'courseId' => $member['courseId'],
                 'totalLesson' => $courses[$member['courseId']]['taskNum'],
-                'learnedNum' => $member['learnedNum']
+                'learnedNum' => $member['learnedNum'],
             );
         }
 
@@ -1205,7 +1204,6 @@ class CourseServiceImpl extends BaseService implements CourseService
      * 当默认值未设置时，合并默认值
      *
      * @param  $course
-     *
      * @return array
      */
     protected function mergeCourseDefaultAttribute($course)
@@ -1231,7 +1229,6 @@ class CourseServiceImpl extends BaseService implements CourseService
      *
      * @param  $userId
      * @param  $filters
-     *
      * @return array
      */
     protected function prepareUserLearnCondition($userId, $filters)

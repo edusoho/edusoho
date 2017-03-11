@@ -100,8 +100,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
      *
      * @param  $courseSetIds
      * @param  $limit
-     *
-     * @return array <string, int|string>
+     * @return array           <string, int|string>
      */
     public function findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, $limit)
     {
@@ -127,7 +126,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     {
         $time = time();
         $sql
-              = "SELECT fromCourseSetId, max(startTime) as startTime
+        = "SELECT fromCourseSetId, max(startTime) as startTime
                  FROM {$this->table()}
                  WHERE endTime < {$time} AND status='published' AND type = 'live'
                  GROUP BY fromCourseSetId
@@ -211,6 +210,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'endTime > :endTime_GT',
                 'endTime < :endTime_LT',
                 'endTime <= :endTime_GE',
+                'categoryId = :categoryId',
             ),
         );
     }
