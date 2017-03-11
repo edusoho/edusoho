@@ -14,6 +14,11 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         return $this->getByFields(array('email' => $email));
     }
 
+    public function getUserByType($type)
+    {
+        return $this->getByFields(array('type' => $type));
+    }
+
     public function getByNickname($nickname)
     {
         return $this->getByFields(array('nickname' => $nickname));
