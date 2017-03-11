@@ -80,15 +80,16 @@ class CommonController extends BaseController
             'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
             'org' => array('id' => 1),
             'level' => 'SYSTEM',
-            'locale' => $request->getLocale()
+            'locale' => $request->getLocale(),
         ));
 
-        try{
+        try {
             $this->switchUser($request, $jobUser);
             $this->getBiz()->service('Crontab:CrontabService')->scheduleJobs();
             $this->switchUser($request, $triggerUser);
+
             return $this->createJsonResponse(true);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             $this->switchUser($request, $triggerUser);
             throw $exception;
         }
