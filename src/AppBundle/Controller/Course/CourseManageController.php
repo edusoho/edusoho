@@ -403,13 +403,15 @@ class CourseManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $teachers = $this->getCourseService()->findTeachersByCourseId($courseId);
         $teacherIds = array();
+
         if (!empty($teachers)) {
             foreach ($teachers as $teacher) {
+                $avatar = $this->get('web.twig.app_extension')->userAvatar($teacher, 'small');
                 $teacherIds[] = array(
                     'id' => $teacher['userId'],
                     'isVisible' => $teacher['isVisible'],
                     'nickname' => $teacher['nickname'],
-                    'avatar' => $this->get('web.twig.extension')->getFilePath($teacher['smallAvatar'], 'avatar.png'),
+                    'avatar' => $this->get('web.twig.extension')->getFilePath($avatar, 'avatar.png'),
                 );
             }
         }
@@ -424,6 +426,7 @@ class CourseManageController extends BaseController
     public function teachersMatchAction(Request $request, $courseSetId, $courseId)
     {
         $queryField = $request->query->get('q');
+
         $users = $this->getUserService()->searchUsers(
             array('nickname' => $queryField, 'roles' => 'ROLE_TEACHER'),
             array('createdTime' => 'DESC'),
@@ -434,10 +437,11 @@ class CourseManageController extends BaseController
         $teachers = array();
 
         foreach ($users as $user) {
+            $avatar = $this->get('web.twig.app_extension')->userAvatar($user, 'small');
             $teachers[] = array(
                 'id' => $user['id'],
                 'nickname' => $user['nickname'],
-                'avatar' => $this->getWebExtension()->getFilePath($user['smallAvatar'], 'avatar.png'),
+                'avatar' => $this->getWebExtension()->getFilePath($avatar, 'avatar.png'),
                 'isVisible' => 1,
             );
         }
