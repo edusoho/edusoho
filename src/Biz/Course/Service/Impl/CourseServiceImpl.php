@@ -250,14 +250,15 @@ class CourseServiceImpl extends BaseService implements CourseService
             'buyExpiryTime',
             'services',
             'approval',
+            'coinPrice'
         ));
-
-        $fields = $this->mergeCourseDefaultAttribute($fields);
-
-        $fields['price'] = $this->calculatePrice($id, $fields['originPrice']);
 
         if (!ArrayToolkit::requireds($fields, array('isFree', 'buyable', 'tryLookable'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
+        }
+
+        if(isset($fields['originPrice'])){
+            list($fields['price'], $fields['coinPrice']) = $this->calculateCoursePrice($id, $fields['originPrice']);
         }
 
         if ($fields['isFree'] == 1) {
@@ -283,9 +284,25 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $newCourse;
     }
 
-    protected function calculatePrice($id, $originPrice)
+    /**
+     * 计算教学计划价格和虚拟币价格
+     * @param $id
+     * @param int|float $originPrice 教学计划原价
+     * @return array (number, number)
+     */
+    protected function calculateCoursePrice($id, $originPrice)
     {
-        return $originPrice;
+        $course = $this->getCourse($id);
+        $price = $originPrice;
+        $coinPrice = $course['originCoinPrice'];
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
+        if(!empty($courseSet['discountId'])){
+            $price = $price * $courseSet['discount'] / 10;
+            $coinPrice = $coinPrice * $courseSet['discount'] / 10;
+        }
+
+        return array($price, $coinPrice);
     }
 
     public function updateCourseStatistics($id, $fields)

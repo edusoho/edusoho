@@ -6,10 +6,9 @@ language: php
 
 php:
   - '5.3'
-  - '5.4'
   - '5.5'
-  - '5.6'
   - '7.0'
+  - '7.1'
 
 env:
   - DB=mysql
@@ -17,6 +16,9 @@ env:
 before_script:
   - mysql -e 'CREATE DATABASE `biz-framework-test` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci'
   - composer install
+
+script: vendor/bin/phpunit
+
 cache:
   directories:
     - $HOME/.composer/cache

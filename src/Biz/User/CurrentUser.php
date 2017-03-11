@@ -157,6 +157,11 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         return empty($this->id) ? false : true;
     }
 
+    public function isSystemLevel()
+    {
+        return isset($this['level']) && $this->level === 'SYSTEM';
+    }
+
     public function isAdmin()
     {
         $permissions = $this->getPermissions();
