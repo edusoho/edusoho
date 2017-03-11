@@ -727,7 +727,7 @@ class UserServiceImpl extends BaseService implements UserService
         );
         foreach ($users as $user) {
             $existsUser = $this->getUserDao()->getUserByType($user['type']);
-            
+
             if (!empty($existsUser)) {
                 continue;
             }
@@ -752,7 +752,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function getUserByType($type)
     {
-        return $this->getUserDao()->getUserByType($user['type']);
+        return $this->getUserDao()->getUserByType($type);
     }
 
     public function register($registration, $type = 'default')
@@ -2057,8 +2057,6 @@ class UserSerialize
         if (empty($user)) {
             return null;
         }
-
-        $user['roles'] = empty($user['roles']) ? array() : explode('|', trim($user['roles'], '|'));
 
         $user = self::_userRolesSort($user);
 
