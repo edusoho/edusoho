@@ -129,8 +129,9 @@ class OpenCourseManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
             if (empty($data) || !isset($data['teachers'])) {
-                throw new InvalidArgumentException('Empty Data');
+                return $this->redirect($this->generateUrl('open_course_manage_teachers', array('id' => $id)));
             }
+
             $teachers = json_decode($data['teachers'], true);
 
             $this->getOpenCourseService()->setCourseTeachers($id, $teachers);

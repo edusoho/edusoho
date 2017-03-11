@@ -73,7 +73,7 @@ class CommonController extends BaseController
         $jobUser = new CurrentUser();
 
         $jobUser->fromArray(array(
-            'id' => 0,
+            'id' => 1,
             'email' => 'job@edusoho.com',
             'nickname' => '定时任务',
             'currentIp' => '127.0.0.1',
