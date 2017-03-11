@@ -1,5 +1,6 @@
 <div class="course-detail-content">
-	{% if not isMarketingPage %}
+  {#暂时去除方形状模块#}
+	{#{% if not isMarketingPage %}
 		<div class="clearfix mbl">
 			<div class="btn-group pull-right js-task-show-type" role="tablist">
 				<a class="btn btn-default active" data-list=".js-task-list-ul" data-type="list"> <i
@@ -10,7 +11,7 @@
 				</a>
 			</div>
 		</div>
-	{% endif %}
+	{% endif %}#}
 	<ul class="task-list task-list-md task-list-hover js-task-list-ul">
 		{% for key, item in courseItems %}
 			{% if item.itemType == 'chapter' and item.type == 'chapter' %}
@@ -116,7 +117,8 @@
 			{% endif %}
 		{% endfor %}
 	</ul>
-	<ul class="task-list task-chart task-list-md task-list-hover clearfix hidden js-task-chart-ul">
+  {#暂时去除方形状模块#}
+	{#<ul class="task-list task-chart task-list-md task-list-hover clearfix hidden js-task-chart-ul">
 		{% for key, item in courseItems %}
 			{% if  item.itemType == 'task' %}
 				{% set task = item %}
@@ -171,5 +173,5 @@
 				</li>
 			{% endif %}
 		{% endfor %}
-	</ul>
+	</ul>#}
 </div>
