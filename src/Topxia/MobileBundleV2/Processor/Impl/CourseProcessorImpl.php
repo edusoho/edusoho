@@ -774,8 +774,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $start = (int) $this->getParam('start', 0);
         $limit = (int) $this->getParam('limit', 10);
 
-        $total = $this->controller->getCourseService()->findUserFavoritedCourseCount($user['id']);
-        $courses = $this->controller->getCourseService()->findUserFavoritedCourses($user['id'], $start, $limit);
+        $total   = $this->controller->getCourseService()->findUserFavoritedCourseCountNotInClassroom($user['id']);
+        $courses = $this->controller->getCourseService()->findUserFavoritedCoursesNotInClassroom($user['id'], $start, $limit);
 
         return array(
             'start' => $start,
