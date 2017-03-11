@@ -624,7 +624,7 @@ EOD;
         $this->getCrontabService()->createJob(array(
             'name' => 'CancelOrderJob',
             'cycle' => 'everyhour',
-            'jobClass' => 'Topxia\\Service\\Order\\Job\\CancelOrderJob',
+            'jobClass' => 'Biz\\Order\\Job\\CancelOrderJob',
             'nextExcutedTime' => time(),
             'jobParams' => '{}',
             'createdTime' => time(),
@@ -633,7 +633,7 @@ EOD;
         $this->getCrontabService()->createJob(array(
             'name' => 'DeleteExpiredTokenJob',
             'cycle' => 'everyhour',
-            'jobClass' => 'Topxia\\Service\\User\\Job\\DeleteExpiredTokenJob',
+            'jobClass' => 'Biz\\User\\Job\\DeleteExpiredTokenJob',
             'jobParams' => '{}',
             'nextExcutedTime' => time(),
             'createdTime' => time(),
