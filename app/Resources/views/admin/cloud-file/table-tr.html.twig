@@ -1,0 +1,101 @@
+ {% import _self as forms %}
+  <tr>
+    <td>
+        <div class="materials-table-img">
+          <input class="batch-item" value="{{ cloudFile.no }}" type="checkbox" data-role="batch-item" data-file-id="{{ cloudFile.id }}" data-link-count="{{ cloudFile.usedCount }}" data-file-name="{{ cloudFile.filename }}" style="display:none;" />
+          <div class="mask">
+            {% if (cloudFile.type in ['video','document','ppt'] and cloudFile.processStatus == 'ok') or cloudFile.type in ['audio','flash','image'] %}
+              <a class="btn btn-info btn-xs" href="#modal" data-toggle="modal" data-url="{{ path('admin_cloud_file_preview', {globalId: cloudFile.no}) }}">{{ '资料预览'|trans }}</a>
+            {% endif %}
+            {% if cloudFile.processStatus == 'error' %}
+              {% if setting("developer.debug")|default(0) %}
+              <a class="js-reconvert-btn btn btn-warning btn-xs" data-url='{{ path('admin_cloud_file_reconvert', {globalId:cloudFile.no}) }}' data-loading-text="{{ '正在提交...'|trans }}">{{ '重新转码'|trans }}</a>
+              {% endif %}
+            {% endif %}
+            {% if (cloudFile.type == 'video' and cloudFile.processStatus == 'ok') %}
+              <div class="time">
+                {{ cloudFile.length|default(0)|date('i:s') }}
+              </div>
+            {% endif %}
+          </div>
+          <img src="{{ asset(cloudFile.thumbnail|default('assets/img/default/cloud_' ~ cloudFile.type ~ '.png')) }}">
+        </div>
+        <div class="materials-table-title">
+          <a class="heading"  href="#modal" data-toggle="modal" data-url="{{ path('admin_cloud_file_preview', {globalId: cloudFile.no})}}"  data-placement="top" title="{{ cloudFile.filename }}">{{ cloudFile.filename }}</a>
+          <span class="subtitle">
+            {% if createdUser %}
+                {{ createdUser.nickname }} {{ '上传'|trans }}
+            {% endif %}
+          </span>
+          {% if cloudFile.type in ['video', 'ppt', 'document'] %}
+            {% if cloudFile.processStatus == 'waiting' %}
+              <span class="label label-info">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
+            {% elseif cloudFile.processStatus == 'processing' %}
+              <span class="label label-info">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
+            {% elseif cloudFile.processStatus == 'error' %}
+              <span class="label label-danger">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
+            {% endif %}
+          {% endif %}
+          {% if  cloudFile.usedCount|default(0) == 0 %}
+          <span class="label label-default">{{ '未使用'|trans }}</span>
+          {% endif %}
+        </div>
+    </td>
+
+    <td class="text-center">
+      <div class="mbs">{{ dict_text('fileType', cloudFile.type) }}</div>
+      {% if cloudFile.mcStatus|default('no') == 'yes' %}
+        <div class="label label-info mtm">{{ '已生成MP4'|trans }}</div>
+      {% endif %}
+    </td>
+    <td class="text-center">
+      {{ cloudFile.fileSize|file_size }}
+    </td>
+    <td class="text-center">
+      <span style="display:block">{{ cloudFile.createdTime|date('Y-m-d H:i:s') }}</span>
+    </td>
+    {% if pageType  == 'attachment' %}
+      <td class="text-center">
+        <span style="display:block">{{ forms.showType(cloudFile.useType) }}</span>
+      </td>
+    {% endif %}
+    <td class="es-materillib-table text-center">
+      <div class="btn-group ">
+        {% if pageType  == 'attachment' %}
+          <a class="btn btn-default btn-sm" href="{{ path('admin_cloud_file_download', {globalId:cloudFile.no}) }}"  target="__blank"><span class="glyphicon glyphicon-download-alt"></span> {{ '下载'|trans }}</a>
+        {% else %}
+          <a class="btn btn-default btn-sm js-detail-btn " data-url="{{ path('admin_cloud_file_detail', {globalId:cloudFile.no}) }}">{{ '编辑'|trans }}</a>
+        {% endif %}
+
+        <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu pull-right">
+          <li>
+            {% if pageType  == 'file' %}
+              <a href="{{ path('admin_cloud_file_download', {globalId:cloudFile.no}) }}" target="__blank"><span class="glyphicon glyphicon-download-alt"></span>{{ '下载'|trans }}</a>
+            {% endif %}
+          </li>
+          <li>
+            <a class="js-delete-btn" href="javascript:" data-url="{{ path('admin_cloud_file_delete_modal_show') }}" data-id="{{ cloudFile.no }}"><span class="glyphicon glyphicon-trash"></span> {{ '删除'|trans }}</a>
+          </li>
+        </ul>
+      </div>
+    </td>
+  </tr>
+
+{% macro showType( useType) %}
+    {% if useType == "article" %}
+      {{ '资讯'|trans }}
+    {% elseif useType in ['course.thread','course.thread.post'] %}
+      {{ '课程讨论区'|trans }}
+    {% elseif  useType in ['classroom.thread','classroom.thread.post'] %}
+      {{ '班级话题'|trans }}
+    {% elseif useType in ['group.thread', 'group.thread.post'] %}
+      {{ '小组'|trans }}
+    {% elseif useType in ['question.stem', 'question.analysis'] %}
+      {{ '试题'|trans }}
+    {% else %}
+      {{ '--'|trans }}
+    {% endif %}
+{% endmacro %}

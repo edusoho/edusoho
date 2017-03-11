@@ -1,0 +1,14 @@
+{% set lessons = data('OpenCourseLessons',{'courseId':course.id}) %}
+{% for lesson in lessons if lesson %}
+	<li class="tab-live clearfix">
+	  <a href="{{ path('open_course_lesson_learn',{courseId:lesson.courseId,lessonId:lesson.id})}}"{#href="javascript:;" data-url="{{ path('open_course_lesson_show',{courseId:lesson.courseId,lessonId:lesson.id}) }}"#} 
+	  {% if currentLessonId %}
+	  	{% if currentLessonId|default(null) == lesson.id %}class="active"{% endif %}
+	  {% else %}
+			{% if loop.index == 1 %}class="active"{% endif %}
+	  {% endif %}
+	  >课时{{ loop.index }}：{{ lesson.title }}</a>
+	</li>
+{% else %}
+	<li class="tab-live clearfix"><div class="empty">暂无课时记录</div></li>
+{% endfor %}

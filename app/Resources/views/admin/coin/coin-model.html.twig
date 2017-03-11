@@ -1,0 +1,100 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_coin_settings' %}
+
+{% set script_controller = "coin/model" %}
+
+{% block main %}
+  <ul class="nav nav-pills mbl small">
+    <li>
+      <a href="{{path('admin_coin_settings')}}">虚拟币设置</a>
+    </li>
+    <li class="active">
+      <a href="{{path('admin_coin_model')}}">使用方式</a>
+    </li>
+  </ul>
+  {{ web_macro.flash_messages() }}
+  <form class="form-horizontal" method="post" id="coin-model-form">
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>{{'使用方式设置'|trans}}</label>
+      </div>
+      <div class="controls col-md-7">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default {% if coinSettings.cash_model|default('none') =="none" %}btn-primary{% endif %} model" data-modle="none">{{'不使用'|trans}}</button>
+          <button type="button" class="btn btn-default {% if coinSettings.cash_model|default('none') =="deduction" %}btn-primary{% endif %} model" data-modle="deduction">{{'用于抵扣'|trans}}</button>
+          <button type="button" class="btn btn-default {% if coinSettings.cash_model|default('none') =="currency" %}btn-primary{% endif %} model" data-modle="currency">{{'用于标价'|trans}}</button>
+        </div>
+        <input type="hidden" value="{{ coinSettings.cash_model|default('none') }}" name="cash_model" />
+      </div>
+    </div> 
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="cash_rate">{{'虚拟币汇率设置'|trans}}</label>
+      </div>
+      <div class="controls col-md-4">
+        <input  type="text" id="cash_rate" name="cash_rate" class="form-control" {% if coinSettings.cash_rate|default(1) %}value="{{coinSettings.cash_rate|default(1)}}" {% else %} value="1" {% endif %}>
+      </div>
+      <div class="controls  col-md-8 col-md-offset-3">
+        <div class="help-block">{{'在此设置1元可换取的虚拟币数量，'|trans}}<span class="text text-danger">
+        {{'建议汇率设置后不要进行改动'|trans}}
+        </span>
+        </div>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <div class="row form-group">
+      <div class="controls col-md-offset-3 col-md-8">
+        <button type="submit" class="btn btn-primary {% if coinSettings.cash_model|default('none') =="none" %}hidden{% endif %}" id="next"  >{{'下一步'|trans}}</button>
+        <button type="submit" class="btn btn-primary {% if coinSettings.cash_model|default('none') =="none" %}{% else %}hidden{% endif %}" id="save"  >{{'保存'|trans}}</button>
+      </div>
+    </div>
+  </form>
+  
+  <div class="alert alert-info none {% if coinSettings.cash_model|default('none') 
+  !="none" %}hidden{% endif %}">
+    <p><strong> 
+      1、{{ '暂无手动修改用户虚拟币余额的功能'|trans }}
+      <br>
+      2、充值虚拟币，需安装<a href="{{ path('admin_app_center') }}">学习卡</a>或<a href="{{ path('admin_app_center') }}">账户充值</a>插件
+      <br>
+    </strong></p>
+  </div>
+
+  <div class="alert alert-info deduction {% if coinSettings.cash_model|default('none') 
+  !="deduction" %}hidden{% endif %}">
+    <p><strong> 
+      1、{{ '暂无手动修改用户虚拟币余额的功能'|trans }}
+      <br>
+      2、充值虚拟币，需安装<a href="{{ path('admin_app_center') }}">学习卡</a>或<a href="{{ path('admin_app_center') }}">账户充值</a>插件
+      <br>
+      3、{{'虚拟币用于抵扣：网校以人民币作为支付货币，并可以使用虚拟币进行按比例抵扣(虚拟币类似于淘金币）'|trans}}
+      <br>
+      4、{{'使用方式一旦保存（使用方式和汇率），请勿随意改动'|trans}}
+      <br>
+      5、{{'使用方式的切换会使课程价格根据汇率变动'|trans}}
+      <br>
+      6、{{'如有参加促销活动的课程，修改价格都将有相应的折扣'|trans}}    
+    </strong></p>
+  </div>
+
+  <div class="alert alert-info currency {% if coinSettings.cash_model|default('none') !="currency" %}hidden{% endif %}">
+    <p><strong> 
+      1、{{ '暂无手动修改用户虚拟币余额的功能'|trans }}
+      <br>
+      2、充值虚拟币，需安装<a href="{{ path('admin_app_center') }}">学习卡</a>或<a href="{{ path('admin_app_center') }}">账户充值</a>插件
+      <br>
+      3、{{'虚拟币用于标价：网校以虚拟币作为支付货币，课程和会员以虚拟币标价和结算'|trans}}
+      <br>
+      4、{{'虚拟币用于标价后，移动端仍显示人民币价格（移动端暂不支持虚拟币支付）'|trans}}
+      <br>
+      5、{{'使用方式一旦保存（使用方式和汇率），请勿随意改动'|trans}}
+      <br>
+      6、{{'使用方式的切换会使课程价格会根据汇率变动'|trans}}
+      <br>
+      7、{{'如有参加促销活动的课程，修改价格都将有相应的折扣'|trans}}    
+    </strong></p>
+  </div>
+{% endblock %}

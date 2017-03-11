@@ -1,0 +1,6 @@
+{% set id=id|default(null) %}
+{% set class=class|default(null) %}
+<div {% if id %}id="{{ id }}" {% endif %}class="panel panel-default {% if class %}{{ class }}{% endif %}">
+  <div class="panel-heading">{% block heading %}{% endblock %}</div>
+  <div class="panel-body">{% block body %}{% endblock %}</div>
+</div>

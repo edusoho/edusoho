@@ -1,0 +1,11 @@
+{% extends 'task/plugin/base.html.twig' %}
+
+
+{% block content %}
+
+  {% if course.isDefault %}
+    {% include 'task/plugin/list/free-mode-list.html.twig' %}
+  {% else %}
+    {% include 'task/plugin/list/lock-mode-list.html.twig' %}
+  {% endif %}
+{% endblock %}

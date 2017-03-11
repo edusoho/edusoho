@@ -1,0 +1,27 @@
+<ul class="subfield-list five-subfield" >
+  <li>
+    <div class="title">{{ '本周现金收入'|trans }}</div>
+    <span class="number">{{ weekTotalPrice.cashTotalPrice }}</span>
+    <p>{{ '本月'|trans }}: {{ monthTotalPrice.cashTotalPrice }}</p>
+  </li>
+  <li>
+    <div class="title"><a class="link-primary">{{ '本周虚拟币收入'|trans }}</a></div>
+    <span class="number">{{ weekTotalPrice.coinTotalPrice }}</span>
+    <p>{{ '本月'|trans }}: {{ monthTotalPrice.coinTotalPrice }}</p>
+  </li>
+  <li>
+    <div class="title"><a class="link-primary">{{ '本周课程收入'|trans }}</a></div>
+    <span class="number">{{ weekTotalPrice.courseTotalPrice }}</span>
+    <p>{{ '本月'|trans }}: {{ monthTotalPrice.courseTotalPrice }}</p>
+  </li>
+  <li>
+    <div class="title"><a class="link-primary">{{ '本周班级收入'|trans }}</a></div>
+    <span class="number">{{ weekTotalPrice.classroomTotalPrice }}</span>
+    <p>{{ '本月'|trans }}: {{ monthTotalPrice.classroomTotalPrice }}</p>
+  </li>
+  <li>
+    <div class="title"><a class="link-primary">{{ '本周会员收入'|trans }}</a></div>
+    <span class="number">{{ weekTotalPrice.vipTotalPrice }}</span>
+    <p>{{ '本月'|trans }}: {{ monthTotalPrice.vipTotalPrice }}</p>
+  </li>
+</ul>

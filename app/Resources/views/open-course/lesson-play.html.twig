@@ -1,0 +1,29 @@
+{% if lesson|default(null) %}
+  <div class="watermarkEmbedded" ></div>
+  <div id="lesson-preview-iframe" class="lesson-content embed-responsive embed-responsive-16by9" style="display:none;"></div>
+  <div id="lesson-preview-player" class="lesson-content embed-responsive embed-responsive-16by9" style="display:none;"
+    data-balloon-player="1"
+    {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
+      data-watermark="{{ file_url(setting('storage.video_watermark_image'), null) }}"
+    {% endif %}
+    {% if setting('storage.video_fingerprint') and app.user %}
+      data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
+    {% endif %}
+  ></div>
+  <div id="lesson-preview-swf-player" class="lesson-content embed-responsive embed-responsive-16by9" style="display:none;height:100%;"></div>
+
+  <input type="hidden" id="firstLesson" data-url="{{ path('open_course_lesson_show',{courseId:lesson.courseId,lessonId:lesson.id}) }}">
+{% endif %}
+
+<div class="mask" {% if lesson %}style="display:none"{% endif %} id="media-error-dialog">
+  <div class="modal-dialog" style="width:230px;margin:22% auto;">
+    <div class="modal-content">
+
+      <div class="modal-body clearfix">
+        <i class="es-icon es-icon-info" style="font-size: 22px;"></i>
+        <span class="media-error">{% if not lesson %}视频编辑中，请稍后再试{% else %}该课时资源文件被删除{% endif %}</span>
+      </div>
+    </div>
+  </div>
+</div>
+

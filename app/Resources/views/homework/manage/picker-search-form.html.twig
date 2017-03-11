@@ -1,0 +1,28 @@
+<form id="question-search-form" class="form-inline well well-sm" action="{{ path('course_set_manage_homework_question_picker', {id:courseSet.id,targetType:targetType,replace:replace}) }}" novalidate>
+  <div class="form-group">
+    <select class="form-control" name="target" style="width:200px;height:32px;">
+      <option value="" {% if app.request.get('target','') == '' %}selected{% endif %}>{{'按课程'|trans}}</option>
+      {% for task in targetChoices %}
+        <option value="{{ task.id }}" {% if app.request.get('target','') == task.id %}selected{% endif %}>{{ task.title }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="form-group">
+    <select class="form-control" name="type">
+      <option value="">{{'--类型--'|trans}}</option>
+      {% for key,type in getQuestionTypes() %}
+        <option value="{{ key }}" {% if app.request.get('type','') == key %}selected{% endif %}>{{ type }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="form-group">
+    <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'关键词'|trans}}">
+  </div>
+
+  <input type="hidden" name="excludeIds" value="{{ conditions.excludeIds|default('')|join(',')|default(null) }}">
+
+  <button class="btn btn-primary btn-sm search-question-btn" data-role="search-btn">{{'搜索'|trans}}</button>
+
+</form>

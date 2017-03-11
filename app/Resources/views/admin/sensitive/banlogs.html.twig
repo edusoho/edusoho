@@ -1,0 +1,65 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_keyword_banlogs' %}
+
+{% block main %}
+	<form id="banlog-search-form" class="form-inline well well-sm" action="" method="get">
+    <div class="form-group">
+      <select class="form-control" name="state">
+        {{ select_options(dict('state'), app.request.query.get('state'), '所有类型'|trans) }}
+      </select>
+    </div>
+    <div class="form-group">
+      <select class="form-control" name="searchBanlog">
+        {{ select_options(dict('searchBanlog'), app.request.query.get('searchBanlog')) }}
+      </select>
+    </div>
+    <div class="form-group">
+      <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'搜索关键字'|trans}}">
+    </div>
+    <button class="btn btn-primary">{{'搜索'|trans}}</button>
+
+  </form>
+{% if banlogs %}	
+	<table class="table table-striped table-hover" id="keyword-table">
+	    <thead>
+		    <tr>
+		      <th width="5%">{{'编号'|trans}}</th>
+		      <th width="10%">{{'命中敏感词'|trans}}</th>
+		      <th width="10%">{{'类型'|trans}}</th>
+		      <th width="35%">{{'屏蔽文本'|trans}}</th>
+		      <th width="10%">{{'用户'|trans}}</th>
+		      <th width="10%">{{'屏蔽时间'|trans}}</th>
+			  <th width="20%">{{'IP地址'|trans}}</th>
+		    </tr>
+	    </thead>
+	    <tbody>
+	    	{% for banlog in banlogs %}
+					<tr id="banlog-table-tr-{{ banlog.id }}">
+					    <td>{{ banlog.id }}</td>
+
+					    <td style="word-wrap: break-word;word-break:break-all;">{{ banlog.keywordName }}</td>
+
+					    <td>
+					    	{% if banlog.state == 'banned' %}{{'禁用'|trans}}
+					    	{% elseif banlog.state == 'replaced' %}{{'屏蔽'|trans}}
+					    	{% endif %}
+					    </td>
+
+					    <td style="word-wrap: break-word;word-break:break-all;">{{ banlog.text|raw }}</td>
+					    
+					    <td>{% if banlog.userId %}{{ users[banlog.userId].nickname }} {% else %} - {% endif %}</td>
+
+					    <td>{{ banlog.createdTime|date('Y-n-d H:i:s') }}</td>
+							<td>{{ banlog.ip }}</td>
+					</tr>
+		   {% endfor %}
+		</tbody>
+	</table>
+{% else %}
+	  <div class="empty">{{'暂无屏蔽记录!'|trans}}</div>
+{% endif %}
+	 {{ web_macro.paginator(paginator) }}
+{% endblock %}
+
+

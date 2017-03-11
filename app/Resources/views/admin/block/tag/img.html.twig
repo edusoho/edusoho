@@ -1,0 +1,16 @@
+<div class="form-group">
+    <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][src]">{{'图片'|trans}}</label>
+    <div class="col-md-7 col-xs-7">
+      <input class="form-control" type="text" name="data[{{ code }}][{{ dataId }}][src]" id="data[{{ code }}][{{ dataId }}][src]" data-role="img-url" value="{{ data.src|default('') }}">
+    </div>
+    <div class="col-md-2 col-xs-2">
+      <div class="btn btn-default btn-sm img-upload webuploader-container" id="item-{{ code }}-uploadId-{{ dataId }}" data-url="{{ path('admin_block_picture_upload', {blockId:block.id, code:code}) }}">{{'上传'|trans}}</div>
+    </div>
+ </div>
+
+ <div class="form-group">
+    <label class="control-label col-md-3 col-xs-3">{{'打开新窗口'|trans}}</label>
+    <label class="checkbox-inline"><input type="radio" data-role="radio-yes" name="data[{{ code }}][{{ dataId }}][target]" value="_blank" {% if data.target|default('_self') == '_blank' %} checked="checked" {% endif %}> {{'是'|trans}}</label>
+    <label class="checkbox-inline"><input type="radio" data-role="radio-no" name="data[{{ code }}][{{ dataId }}][target]" value="_self" {% if data.target|default('_self') == '_self' %} checked="checked" {% endif %}> {{'否'|trans}}</label>
+ </div>
+

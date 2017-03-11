@@ -1,0 +1,39 @@
+<div class="table-responsive" id = "table-responsive">
+  <table class="table" style="table-layout:fixed;word-break:break-all">
+    <tr>
+      <th width="40%">{{'班级'|trans}}</th>
+      <th>{{'人民币价格'|trans}}</th>
+      <th>{{'最大可抵扣比率'|trans}}</th>
+      <th>{{'最大可抵扣金额'|trans}}</th>
+      <th>{{'最大可用'|trans}}{{ setting('coin.coin_name')|default('虚拟币'|trans) }}</th>
+    </tr>
+    {% if items %}
+      {% for item in items %}
+        <tr>
+          <td>
+            <div class="chearfix">
+              <img class="pull-left mrl" src="{{ filepath(item.smallPicture, 'classroom.png') }}" style="width:100px;"/>
+              <a class="pull-left" href="{{ path('classroom_show', {id:item.id}) }}" target="_blank" >{{item.title}}
+              </a>
+            </div>
+          </td>
+          <td>
+          <span id="rmb{{item.id}}" class="rmbPrice">{{item.price}}</span>
+          <td>
+            <input id="rate{{item.id}}" type="text" class="form-control rate" style="width:50px;display:inline-block" value="{{ item.maxRate }}" name="item-rate[{{item.id}}]" data-id="{{item.id}}"/> <label>%</label>
+          </td>
+          <td>
+            <span id="deRmb{{item.id}}">
+              {{ (item.maxRate * item.price / 100)|number_format(2,'.') }}
+            </span>
+          </td>
+          <td>
+            <span id="cash{{item.id}}">
+              {{ (item.maxRate / 100 * item.price * set.cash_rate)|number_format(2, '.') }}
+            </span>
+          </td>
+        </tr>
+      {% endfor %}
+    {% endif %}
+  </table>
+</div>

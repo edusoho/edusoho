@@ -1,0 +1,10 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_my_cloud_overview' %}
+{% set submenu = 'cloud-introduction' %}
+{% set script_controller = 'cloud/index' %}
+{% block main %}
+
+	{{ content|raw}}
+
+{% endblock %}

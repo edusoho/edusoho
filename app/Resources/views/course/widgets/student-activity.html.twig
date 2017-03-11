@@ -1,0 +1,7 @@
+{% if member|default(false)  %}
+  {% set learns = data('LatestStatuses', {count:5, mode:'simple', objectType: 'course', objectId: course.id}) %}
+{% else %}
+  {% set learns = data('LatestStatuses', {count:5, mode:'simple', objectType: 'courseSet', objectId: course.courseSetId }) %}
+{% endif %}
+
+{% include "status/status-block.html.twig" with {learns: learns} %}

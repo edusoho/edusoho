@@ -1,0 +1,31 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}本地文件同步云文件 - {{ parent() }}{% endblock %}
+
+{% set menu = 'admin_setting_message' %}
+
+{% block content %}
+<div class="page-header"><h1>本地文件同步云文件</h1></div>
+
+{{ web_macro.flash_messages() }}
+
+<div class="alert alert-info">
+  <i class="glyphicon glyphicon-info-sign"></i> 
+  未同步文件数：{{ fileCount }} 个
+  {% if not fileCount %}
+    ，无需同步
+  {% endif %}
+</div>
+
+{% if fileCount %}
+  <form class="form-horizontal" method="post" novalidate>
+    <div class="form-group">
+      <div class="controls col-md-12">
+        <button type="submit" class="btn btn-primary">同步云文件</button>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_classroom_setting' %}
+
+{% set script_controller='topxiaadminbundle/controller/classroom/set' %}
+
+{% block main %}
+
+  {{ web_macro.flash_messages() }}
+
+  <form class="form-horizontal" method="post" id="member-zone-form" novalidate>
+    
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label >{{'班级称谓设置'|trans}}</label>
+      </div>
+      <div class="controls col-md-4">
+        <input name="name" type="text" class="form-control" value="{{setting('classroom').name|default("")}}"/>
+        <div class="help-block">{{'用户所能看到的是这里设置的称谓'|trans}}</div>
+      </div>
+    </div>
+
+    <div class="alert alert-warning col-md-offset-2" role="alert">{{'请注意：以下设置涉及到班级的基本运作模式，请谨慎设置，且不要经常性变更！'|trans}}
+    </div>
+    
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label >{{'课程重合时抵扣购买'|trans}}</label>
+      </div>
+      <div class="controls col-md-7 radios">
+        {{ radios('discount_buy', {1:'是'|trans, 0:'否'|trans}, setting('classroom').discount_buy|default(1)) }}
+        <div class="help-block"><p>购买班级时，如果已经购买过其中的课程，支付金额中将会扣除该课程的当前价格。反之，支付金额不受影响，以班级原价购买。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label >{{'班级列表页默认排序'|trans}}</label>
+      </div>
+      <div class="controls col-md-7 radios">
+        {{ radios('explore_default_orderBy', {createdTime:'最新'|trans, studentNum:'最热'|trans,recommendedSeq:'推荐'|trans}, classroomSetting.explore_default_orderBy) }}
+        <p class="help-block"><a target="_blank" href="{{ path('classroom_explore') }}">班级列表页</a>地址：域名/classroom/explore,任何人都可在此页面查看网站所有已发布班级,如需设置网站首页班级排序，请到【站点设置】-【主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。</p>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label"></div>
+      <div class="controls col-md-8">
+        <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>  
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}
+

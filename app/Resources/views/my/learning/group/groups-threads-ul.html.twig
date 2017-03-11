@@ -1,0 +1,51 @@
+<ul class="media-list thread-list">
+  {% for thread in threads %}
+    {% set group = groups[thread.groupId]|default(null) %}
+    {% if users|default(null) %}
+    {% set user = users[thread.userId]|default(null) %}
+    {% endif %}
+    <li class="media">
+      <div class="media-left">
+        <span class="reply-num">
+         <strong>{% if thread.postNum %} {{thread.postNum}} {% else %} 0 {% endif %}</strong> {{'回复'|trans}}
+        </span>
+      </div>
+      <div class="media-body pts">
+        <div class="media-heading">
+         <a class="title gray-darker" href="{{ path('group_thread_show', {id:thread.groupId, threadId:thread.id}) }}">{{thread.title|sub_text(90)}}</a>
+          {% if thread.isStick %}
+            <span class="label label-primary">{{'置顶'|trans}}</span>
+          {% endif %}
+          {% if thread.isElite %}
+            <span class="label label-danger">{{'精华'|trans}}</span>
+          {% endif %}
+
+          {% if is_feature_enabled('group_reward') %}
+            {% if thread.type == 'reward' and thread.rewardCoin > 0 %}
+              <span class="label label-danger">{{'奖'|trans}}</span>
+            {% endif %}
+          {% endif %}
+        </div>
+
+        <div class="metas">
+          {{ web_macro.user_avatar(user, 'userImg', 'avatar-xxs') }}
+          {{ web_macro.user_link(user ,'pls') }}{{'发起了话题'|trans}}
+          <span class="divider">•</span>
+          {{thread.createdTime|smart_time}}
+          {% if group %}
+          <span class="divider">•</span>
+          <a class="gray-darker" href="{{path('group_show',{id:thread.groupId})}}" title="{{ group.title }}" >{{ group.title }}</a>
+          {% endif %}
+          {% if thread.lastPostTime %}
+            <span class="divider">•</span>
+            {{'最后回复'|trans}} {{ web_macro.user_link(lastPostMembers[thread.lastPostMemberId] , 'link-muted') }}
+            <span class="divider">•</span>
+            {{ thread.lastPostTime|smart_time}}
+          {% endif %}
+        </div>
+      </div>
+    </li>
+  {% else %}
+    <li class="empty">{{'暂无话题！'|trans}}</li>
+  {% endfor %}
+</ul>

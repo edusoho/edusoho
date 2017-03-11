@@ -1,0 +1,3 @@
+<li class="item-chapter {% if chapter.type == 'unit' %}item-chapter-unit{% endif %} clearfix" id="chapter-{{ chapter.id }}">
+	<div class="item-content">{{'第'|trans}} <span class="number">{{ chapter.number }}</span> {% if chapter.type == 'unit' %}{% if setting('default.part_name') %}{{setting('default.part_name')|default('节'|trans)}}{% else %}{{'节'|trans}}{% endif %}{% else %}{% if setting('default.chapter_name') %}{{setting('default.chapter_name')|default('章'|trans)}}{% else %}{{'章'|trans}}{% endif %}{% endif %}： {{ chapter.title }}</div>
+</li>

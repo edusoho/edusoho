@@ -1,0 +1,31 @@
+<fieldset>
+  <legend>连连支付</legend>
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>接口状态</label>
+    </div>
+    <div class="controls col-md-3 radios">
+      {{ radios('llpay_enabled', {1:'开启', 0:'关闭'}, payment.llpay_enabled) }}
+    </div>
+     <div class="controls col-md-4 radios">
+        <a href="http://www.edusoho.com/files/lianlianpay.zip">下载接口申请说明文档</a>
+      </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label for="llpay_key">商户账号</label>
+    </div>
+    <div class="controls col-md-8">
+      <input type="text" id="llpay_key" name="llpay_key" class="form-control" value="{{payment.llpay_key}}">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label for="llpay_secret">商户平台Key</label>
+    </div>
+    <div class="controls col-md-8">
+      <input type="text" id="llpay_secret" name="llpay_secret" class="form-control" value="{{payment.llpay_secret}}">
+    </div>
+  </div>
+</fieldset>

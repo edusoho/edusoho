@@ -1,0 +1,8 @@
+{% extends 'activity/content-layout.html.twig' %}
+{% do script(['libs/perfect-scrollbar.js']) %}
+
+{% block body %} 
+  <div class="iframe-parent-content iframe-parent-full" id="text-activity" data-finish-time="{{ text.finishDetail }}">
+    <div class="ph20 pv20">{{activity.content|raw}}</div>
+  </div>
+{% endblock %}

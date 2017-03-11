@@ -1,0 +1,27 @@
+{% for course in recommendCourses if course %}
+  {% set teacher = data('User',{userId:course.userId}) %}
+  {% if course.type == 'open' or course.type == 'liveOpen' %}
+    {% set showUrl = path('open_course_show',{courseId:course.id}) %}
+  {% else %}
+    {% set showUrl = path('course_show',{id:course.id}) %}
+  {% endif %}
+  <div class="open-course-recommend clearfix">
+    <div class="open-course-img">
+      <a href="{{ showUrl }}" target="_blank" title="{{ course.title }}">
+        <img class="img-responsive" src="{{ filepath(course.middlePicture|default(''), 'course.png') }}"
+             alt="{{ course.title }}">
+      </a>
+    </div>
+    <div class="open-course-content">
+      <div class="title">
+        <a href="{{ showUrl }}" title="{{ course.title }}">{{ course.title }}</a>
+      </div>
+      <div class="metas">
+        <span class="pull-right">{{ course.studentNum }}人在学习</span>
+        {{ teacher.nickname }}
+      </div>
+    </div>
+  </div>
+{% else %}
+  <div class="empty">暂无推荐记录</div>
+{% endfor %}

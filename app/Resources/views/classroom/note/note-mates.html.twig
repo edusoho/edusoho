@@ -1,0 +1,8 @@
+{% if lessons|default(null) %}
+  {% set lessonUrl = path('course_learn', {id:note.courseId}) ~ '#lesson/' ~ note.lessonId %}
+  · <a href="{{ lessonUrl }}" class="period" target="_blank">{{ lessons[note.lessonId].title }}</a>
+{% endif %}
+
+{% if courses|default(null) %}
+  · <a href="{{ path('course_show',{id:note.courseId}) }}" class="period" target="_blank">{{ courses[note.courseId].title }}</a>
+{% endif %}

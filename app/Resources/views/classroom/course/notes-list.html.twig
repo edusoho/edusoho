@@ -1,0 +1,11 @@
+{% extends 'classroom/content-layout.html.twig' %}
+
+{% set nav = 'note' %}
+{% block description %}{{ classroomDescription|default('')|plain_text(100) }}{% endblock %}
+{% block main %}
+  
+  {% include 'classroom/course/note-nav.html.twig' %}
+
+  {{ render(controller('AppBundle:Note:list', {request:app.request, courseIds:courseIds, filters:filters})) }}
+
+{% endblock %}

@@ -1,0 +1,82 @@
+{% if info.error|default(null) %}
+
+  <div class="form-group">
+    <div class="col-md-6 col-md-offset-3">
+      <div class="alert alert-danger key-error-alert">
+        {{ '授权码不正确，请重新设置！如您是商业用户，请联系EduSoho官方。'|trans|copyright_less }}
+      </div>
+    </div>
+  </div>
+
+{% else %}
+
+  {% if not info.licenseDomains|default(null) %}
+
+  <div class="form-group">
+    <label class="col-md-3 control-label">{{'授权域名'|trans}}</label>
+    <div class="col-md-6">
+      <p class="form-control-static">{{ app.request.server.get('HTTP_HOST') }} <span class="text-warning">({{'尚未授权'|trans}})</span></p>
+      <p class="help-block">{{'域名绑定后，才能在应用中心购买应用；域名一旦绑定后，就不可更改！'|trans}}</p>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-6 col-md-offset-3">
+      <button type="button" class="btn btn-sm btn-warning key-bind-btn" data-url="{{ path('admin_setting_cloud_key_bind') }}" data-loading-text="{{'正在绑定域名，请稍等...'|trans}}">{{'绑定授权域名'|trans}}</button>
+    </div>
+  </div>
+
+  {% else %}
+
+    <div class="form-group">
+      <label class="col-md-3 control-label">{{'授权信息'|trans}}</label>
+      <div class="col-md-6">
+        <p class="form-control-static">{{ info.levelName }}</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-3 control-label">{{'授权域名'|trans}}</label>
+      <div class="col-md-6">
+        <p class="form-control-static text-success">{% if info.licenseDomainCount|default(1) == 1 %}{{ info.licenseDomains }}{% else %}<span class="license-domain" data-toggle="tooltip" data-placement="bottom" title="{% for doman in info.licenseDomains|split(';') %}{{doman}}
+        {% endfor %}">{{info.licenseDomainCount}}个</span>{% endif %}</p>
+        {% if currentHost not in info.licenseDomains|split(';') %}
+          <div class="alert alert-danger">
+            {{'当前域名 %currentHost% 与授权域名不符，将会影响%EduSoho%系统功能的使用；请使用授权域名访问此系统。'|trans({'%currentHost%':currentHost,'%EduSoho%': 'EduSoho'|copyright_less})}}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+
+
+    {% if info.copyright and info.thirdCopyright != 2 and currentHost in info.licenseDomains|split(';')%}
+      <div class="form-group">
+        <label class="col-md-3 control-label">{{'版权名称'|trans}}</label>
+        <div class="col-md-6">
+          <input id="field-copyrightName" class="form-control" type="text" name="copyrightName" value="{{ setting('copyright.name', '') }}">
+          <p class="help-block">{{'填写版权名称后，网站前台页面底部将会显示“Powered By 你的版权名称”，为空则不显示版权信息。'|trans}}</p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-6 col-md-offset-3">
+          <button class="btn btn-primary save-copyright-btn" data-url="{{ path('admin_setting_cloud_key_copyright') }}" data-loading-text="{{'正在保存...'|trans}}">{{'保存版权名称'|trans}}</button>
+        </div>
+      </div>
+    {% else %}
+    <div class="form-group">
+        <label class="col-md-3 control-label">{{'版权信息'|trans}}</label>
+        <div class="col-md-6">
+          <p class="form-control-static">{{'未去除版权信息'|trans}}</p>
+        </div>
+      </div>
+    {% endif %}
+
+
+
+
+  {% endif %}
+
+{% endif %}
+

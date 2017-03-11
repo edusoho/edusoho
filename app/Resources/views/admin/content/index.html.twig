@@ -1,0 +1,55 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set script_controller = 'content/list' %}
+
+{% set menu = 'admin_content' %}
+{% set type = app.request.get('type') %}
+{% set typeName = dict('contentType')[type] %}
+
+{% block page_buttons %}  	
+	<button class="btn btn-success btn-sm pull-right" id="content-add-btn" type="button" data-target="#modal" data-toggle="modal" data-url="{{ path('admin_content_create', {type: type}) }}"> {{'添加'|trans}}{{ typeName }}</button>
+{% endblock %}
+
+{% block main %}
+
+<form class="well well-sm form-inline">
+	<div class="form-group">
+		<select class="form-control" name="status">
+		  {{ select_options(dict('contentStatus'), app.request.query.get('status'), '--所有状态--'|trans) }}
+		</select>
+	</div>
+	<div class="form-group">
+		<input class="form-control" name="keywords" type="text" placeholder="{{'关键词'|trans}}" value="{{ app.request.query.get('keywords') }}">
+	</div>
+		<input type="hidden" name="type" value="{{ type }}">
+	<button class="btn btn-primary" type="submit">{{'搜索'|trans}}</button>
+
+</form>
+
+<table class="table table-hover" id="content-table">
+	<thead>
+		<tr>
+			<th width="30%">{{'标题'|trans}}</th>
+			<th>{{'页面地址'|trans}}</th>
+			<th>{{'类型'|trans}}</th>
+			<th>{{'状态'|trans}}</th>
+			<th>{{'发布时间/人'|trans}}</th>
+			<th>{{'操作'|trans}}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% if contents %}
+			{% for content in contents %}
+			  {% set user = users[content.userId] %}
+			  {% set category = categories[content.categoryId]|default(null) %}
+			  {% include 'admin/content/content-tr.html.twig' %}
+			{% endfor %}
+		{% else %}
+			<tr><td colspan="20"><div class="empty">{{'暂无记录'|trans}}</div></td></tr>
+		{% endif %}
+	</tbody>
+</table>
+
+{{ admin_macro.paginator(paginator) }}
+
+{% endblock %}

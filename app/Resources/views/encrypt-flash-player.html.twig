@@ -1,0 +1,11 @@
+{% if type == "youku" %}
+    {# @todo fix_update_vendor #}
+    {# {% set videoUrl = url | youku_player_url %} #}
+{% else %}
+    {% set videoUrl = url %}
+{% endif %}
+
+{# @todo fix_update_vendor #}
+{# {% set videoUrl = videoUrl | simple_encrypt %} #}
+
+<div class="flash-palyer" data-url="{{ videoUrl }}">正在载入视频...</div>

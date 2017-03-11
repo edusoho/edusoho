@@ -1,0 +1,100 @@
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_logs_query' %}
+
+{% set script_controller = 'log/list' %}
+
+{% block main %}
+
+{{ web_macro.flash_messages() }}
+
+<form class="well well-sm form-inline">
+
+  <div class="form-group">
+    <select class="form-control" name="level">
+        {{ select_options(dict('logLevel'), app.request.query.get('level'), '--所有等级--'|trans) }}
+    </select>
+  </div>
+
+  <div class="form-group">
+    <input type="text" id="startDateTime" value="{{app.request.query.get('startDateTime')}}" name="startDateTime" class="form-control" placeholder="{{'起始时间'|trans}}" style="width:150px;">
+  </div>
+
+  <div class="form-group">
+    <input type="text" id="endDateTime" value="{{app.request.query.get('endDateTime')}}" name="endDateTime" class="form-control" placeholder="{{'结束时间'|trans}}" style="width:150px;">
+  </div>
+
+  <div class="form-group">
+    <select class="form-control" name="module" id="log-module">
+        <option value="0">{{'--所有模块--'|trans}}</option>
+        {% for key, value in moduleDicts %}
+              <option value="{{key}}"  {% if app.request.query.get('module') == key %}selected="{{key}}" {% endif %}>{{value}}</option>
+        {% endfor %}
+    </select>
+  </div>
+
+  <div class="form-group">
+    <select class="form-control" name="action" id="log-action" data-url="{{path('admin_logs_action_dicts')}}">
+       {% if actions|default(null) %}
+          <option value="0">{{'--所有操作--'|trans}}</option>
+          {% for key, value in actions %}
+                <option value="{{key}}" {% if app.request.query.get('action') == key %}selected="{{key}}" {% endif %}>{{value}}</option>
+          {% endfor %}
+        {% else %}
+          <option value="0">{{'--所有操作--'|trans}}</option>
+      {% endif %}
+    </select>
+  {#   <input type="text" id="action" name="action" value="{{app.request.query.get('action')}}" class="form-control" placeholder="操作名" style="width:100px;"> #}
+  </div>
+
+  <div class="form-group">
+    <input type="text" id="nickname" name="nickname" value="{{app.request.query.get('nickname')}}" class="form-control" placeholder="{{'用户名'|trans}}" style="width:120px;">
+  </div>
+
+  <button class="btn btn-primary">{{'搜索'|trans}}</button>
+
+</form>
+
+  <table class="table table-hover" id="log-table">
+    <tr>
+      <th width="15%">{{'用户'|trans}}</th>
+      <th width="55%">{{'操作'|trans}}</th>
+      <th width="10%">{{'日志等级'|trans}}</th>
+      <th width="20%">{{'时间/IP'|trans}}</th>
+    </tr>   
+    {% for log in logs %}
+      {% set user = users[log.userId]|default(null) %}
+      <tr>
+        <td>
+          {% if user %}
+            {{ admin_macro.user_link(user) }}
+          {% else %}
+            --
+          {% endif %}
+        <td>
+          <div style="word-break: break-all;word-wrap: break-word;">
+            {{ log.message }}
+            {% if log.data %}
+              <a href="javascript:;" class="text-sm text-warning show-data">{{'查看数据'|trans}}</a>
+              <a href="javascript:;" class="text-sm text-warning hide-data" style="display:none;">{{'隐藏数据'|trans}}</a>
+              <div class="data" style="display:none;">{{ log.data|json_encode }}</div>
+            {% endif %}
+          </div>
+          <span class="text-muted text-sm">{{ log.module }}.{{ log.action }}</span>
+        </td>
+        <td>{{ dict_macro.logLevel(log.level)}}</td>
+        <td>
+          <span class="">{{ log.createdTime|date("Y-m-d H:i:s") }}</span>
+          <br />
+          <a  class="text-muted text-sm" href="http://www.baidu.com/s?wd={{ log.ip }}" target="_blank">{{ log.ip }}</a>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td class="empty" colspan="20">{{'无日志记录'|trans}}</tr>
+    {% endfor %}
+  </table>
+
+  {{ admin_macro.paginator(paginator) }}
+
+{% endblock %}
