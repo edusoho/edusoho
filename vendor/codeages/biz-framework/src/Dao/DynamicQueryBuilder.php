@@ -101,9 +101,12 @@ class DynamicQueryBuilder extends QueryBuilder
 
     private function matchLikeCondition($where)
     {
-        preg_match('/\s+((PRE_|SUF_)?LIKE)\s+/i', $where, $matches);
+        $matched = preg_match('/\s+((PRE_|SUF_)?LIKE)\s+/i', $where, $matches);
+        if (!$matched) {
+            return false;
+        }
 
-        return $matches ? strtolower($matches[1]) : false;
+        return strtolower($matches[1]);
     }
 
     private function matchInCondition($where)
@@ -114,7 +117,7 @@ class DynamicQueryBuilder extends QueryBuilder
     private function getConditionName($where)
     {
         $matched = preg_match('/:([a-zA-z0-9_]+)/', $where, $matches);
-        if (empty($matched)) {
+        if (!$matched) {
             return false;
         }
 

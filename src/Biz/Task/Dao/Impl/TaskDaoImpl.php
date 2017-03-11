@@ -98,24 +98,16 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     /**
      * 统计当前时间以后每天的直播次数.
      *
-     * @param  $courseSetIds
      * @param  $limit
-     *
-     * @return array <string, int|string>
+     * @return array           <string, int|string>
      */
-    public function findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, $limit)
+    public function findFutureLiveDates($limit)
     {
-        if (empty($courseSetIds)) {
-            return array();
-        }
-
-        $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
-
         $time = time();
 
-        $sql = "SELECT count( id) as count, from_unixtime(startTime,'%Y-%m-%d') as date FROM `{$this->table()}` WHERE  `type`= 'live' AND status='published' AND fromCourseSetId IN ({$marks}) AND startTime >= {$time} group by date order by date ASC limit 0, {$limit}";
+        $sql = "SELECT count( id) as count, from_unixtime(startTime,'%Y-%m-%d') as date FROM `{$this->table()}` WHERE  `type`= 'live' AND status='published' AND startTime >= {$time} group by date order by date ASC limit 0, {$limit}";
 
-        return $this->db()->fetchAll($sql, $courseSetIds);
+        return $this->db()->fetchAll($sql);
     }
 
     /**
@@ -127,7 +119,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     {
         $time = time();
         $sql
-              = "SELECT fromCourseSetId, max(startTime) as startTime
+        = "SELECT fromCourseSetId, max(startTime) as startTime
                  FROM {$this->table()}
                  WHERE endTime < {$time} AND status='published' AND type = 'live'
                  GROUP BY fromCourseSetId
@@ -211,6 +203,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'endTime > :endTime_GT',
                 'endTime < :endTime_LT',
                 'endTime <= :endTime_GE',
+                'categoryId = :categoryId',
             ),
         );
     }

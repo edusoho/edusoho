@@ -1,8 +1,8 @@
-{% set minPrice = coursesPrice[course.id].minPrice|default(0)|currency %}
-{% set maxPrice = coursesPrice[course.id].maxPrice|default(0)|currency %}
+{% set minPrice = coursesPrice[courseSet.id].minPrice|default(0)|currency %}
+{% set maxPrice = coursesPrice[courseSet.id].maxPrice|default(0)|currency %}
 
 {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-  <span class="course-price course-price-{{course.id}}" style="display:inline">
+  <span class="course-price course-price-{{courseSet.id}}" style="display:inline">
     {% if minPrice == 0 and maxPrice == 0 %}
       {{'免费'|trans}}
     {% else %}
@@ -12,7 +12,7 @@
     {% endif %}
   </span>
 {% else %}
-  <span class="course-price course-price-{{course.id}}">
+  <span class="course-price course-price-{{courseSet.id}}">
     {% if minPrice == 0 and maxPrice == 0 %}
       {{'免费'|trans}}
     {% else %}

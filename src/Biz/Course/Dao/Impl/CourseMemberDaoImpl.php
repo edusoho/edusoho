@@ -133,7 +133,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
     public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
     {
-        $builder = $this->_createQueryBuilder($conditions)
+        $builder = $this->createQueryBuilder($conditions)
             ->select("{$groupBy}, COUNT(id) AS count")
             ->groupBy($groupBy)
             ->orderBy('count', 'DESC')
@@ -183,7 +183,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
     public function searchMemberIds($conditions, $orderBy, $start, $limit)
     {
-        $builder = $this->_createQueryBuilder($conditions);
+        $builder = $this->createQueryBuilder($conditions);
 
         if (isset($conditions['unique'])) {
             $builder->select('userId');

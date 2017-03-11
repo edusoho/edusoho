@@ -200,7 +200,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if ($course['status'] == 'published') {
             unset($fields['expiryMode']);
-            unset($fields['expiryDays']);
+            // unset($fields['expiryDays']);
             unset($fields['expiryStartDate']);
             unset($fields['expiryEndDate']);
         }
@@ -255,16 +255,18 @@ class CourseServiceImpl extends BaseService implements CourseService
             'tryLookLength',
             'watchLimit',
             'buyExpiryTime',
+            'showServices',
             'services',
             'approval',
+            'coinPrice'
         ));
-
-        $fields = $this->mergeCourseDefaultAttribute($fields);
-
-        $fields['price'] = $this->calculatePrice($id, $fields['originPrice']);
 
         if (!ArrayToolkit::requireds($fields, array('isFree', 'buyable', 'tryLookable'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
+        }
+
+        if(isset($fields['originPrice'])){
+            list($fields['price'], $fields['coinPrice']) = $this->calculateCoursePrice($id, $fields['originPrice']);
         }
 
         if ($fields['isFree'] == 1) {
@@ -290,9 +292,25 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $newCourse;
     }
 
-    protected function calculatePrice($id, $originPrice)
+    /**
+     * 计算教学计划价格和虚拟币价格
+     * @param $id
+     * @param int|float $originPrice 教学计划原价
+     * @return array (number, number)
+     */
+    protected function calculateCoursePrice($id, $originPrice)
     {
-        return $originPrice;
+        $course = $this->getCourse($id);
+        $price = $originPrice;
+        $coinPrice = $course['originCoinPrice'];
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
+        if(!empty($courseSet['discountId'])){
+            $price = $price * $courseSet['discount'] / 10;
+            $coinPrice = $coinPrice * $courseSet['discount'] / 10;
+        }
+
+        return array($price, $coinPrice);
     }
 
     public function updateCourseStatistics($id, $fields)
@@ -810,8 +828,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param int $userId
-     *
+     * @param  int     $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -1206,7 +1223,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $conditions = array(
             'courseIds' => $courseIds,
-            'userId' => $userId
+            'userId' => $userId,
         );
         $count = $this->getMemberService()->countMembers($conditions);
         $members = $this->getMemberService()->searchMembers(
@@ -1221,7 +1238,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $learnProgress[] = array(
                 'courseId' => $member['courseId'],
                 'totalLesson' => $courses[$member['courseId']]['taskNum'],
-                'learnedNum' => $member['learnedNum']
+                'learnedNum' => $member['learnedNum'],
             );
         }
 
@@ -1367,7 +1384,6 @@ class CourseServiceImpl extends BaseService implements CourseService
      * 当默认值未设置时，合并默认值
      *
      * @param  $course
-     *
      * @return array
      */
     protected function mergeCourseDefaultAttribute($course)
@@ -1393,7 +1409,6 @@ class CourseServiceImpl extends BaseService implements CourseService
      *
      * @param  $userId
      * @param  $filters
-     *
      * @return array
      */
     protected function prepareUserLearnCondition($userId, $filters)
