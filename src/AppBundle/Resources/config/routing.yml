@@ -2850,7 +2850,3 @@ course_task_question_marker_search:
 callback:
     path:  /callback/{resource}
     defaults: { _controller: AppBundle:Callback/Index:index }
-
-course_manage_students_defined_show:
-     path:  /course/{courseId}/manage/students/{userId}/defined_show
-     defaults: { _controller: AppBundle:Course/StudentManage:definedShow }
