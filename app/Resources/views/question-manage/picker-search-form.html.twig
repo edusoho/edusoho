@@ -3,7 +3,7 @@
     <select class="form-control" name="target" style="width:200px;height:32px;">
       <option value="">{{'按课程'|trans}}</option>
       {% for task in targetChoices %}
-        <option value="{{ task.id }}">{{ task.title }}</option>
+        <option value="{{ task.id }}" {% if app.request.query.get('target') == task.id %}selected{% endif %}>{{ task.title }}</option>
       {% endfor %}
     </select>
   </div>
