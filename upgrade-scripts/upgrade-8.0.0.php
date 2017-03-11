@@ -529,8 +529,6 @@ class EduSohoUpgrade extends AbstractUpdater
             );
 
             $this->getConnection()->insert('course_task', $task);
-
-            var_dump($this->getConnection()->lastInsertId());
         }
 
         $this->getConnection()->exec(
