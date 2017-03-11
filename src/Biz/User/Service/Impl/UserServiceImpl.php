@@ -726,7 +726,9 @@ class UserServiceImpl extends BaseService implements UserService
             )
         );
         foreach ($users as $user) {
-            if (!empty($this->getUserDao()->getUserByType($user['type']))) {
+            $existsUser = $this->getUserDao()->getUserByType($user['type']);
+            
+            if (!empty($existsUser)) {
                 continue;
             }
 
