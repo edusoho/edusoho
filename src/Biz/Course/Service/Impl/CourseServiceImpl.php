@@ -198,7 +198,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if ($course['status'] == 'published') {
             unset($fields['expiryMode']);
-            unset($fields['expiryDays']);
+            // unset($fields['expiryDays']);
             unset($fields['expiryStartDate']);
             unset($fields['expiryEndDate']);
         }
@@ -248,6 +248,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'tryLookLength',
             'watchLimit',
             'buyExpiryTime',
+            'showServices',
             'services',
             'approval',
         ));

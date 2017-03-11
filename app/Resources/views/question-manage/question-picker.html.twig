@@ -51,6 +51,7 @@
 {% endblock %}
 
 {% block footer %}
+    <span class="color-danger pull-left js-choice-notice" style="display:none;">请选择题目</span>
     <button type="button" class="btn btn-primary" type="button" class="btn btn-primary pull-right" data-role="batch-select-save" data-toggle="form-submit" data-target="#block-form" data-url="{{ path('course_set_manage_question_picked', {courseSetId:courseSet.id }) }}">确定</button>
 
     <button type="button" class="btn btn-link pull-right" data-dismiss="modal">关闭</button>
