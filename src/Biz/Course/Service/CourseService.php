@@ -51,7 +51,7 @@ interface CourseService
 
     public function closeCourse($id);
 
-    public function publishCourse($id);
+    public function publishCourse($id, $withTasks = false);
 
     /**
      * @param $courseId
@@ -160,4 +160,8 @@ interface CourseService
     public function updateMaxRateByCourseSetId($courseSetId, $maxRate);
 
     public function findCourseTasksAndChapters($courseId, $includeChapters);
+
+    public function updateCategoryByCourseSetId($courseSetId, $categoryId);
+
+    public function calculateLearnProgressByUserIdAndCourseIds($userId, array $courseIds);
 }

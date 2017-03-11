@@ -478,10 +478,10 @@ class CourseManageController extends BaseController
         }
     }
 
-    public function publishAction(Request $request, $courseSetId, $courseId)
+    public function publishAction($courseSetId, $courseId)
     {
         try {
-            $this->getCourseService()->publishCourse($courseId);
+            $this->getCourseService()->publishCourse($courseId, true);
 
             return $this->createJsonResponse(array('success' => true));
         } catch (\Exception $e) {
@@ -565,6 +565,8 @@ class CourseManageController extends BaseController
         return $this->render('course-manage/orders.html.twig', array(
             'courseSet' => $courseSet,
             'course' => $course,
+            'courseSets' => array($courseSet['id'] => $courseSet),
+            'courses' => array($course['id'] => $course),
             'request' => $request,
             'orders' => $orders,
             'users' => $users,
@@ -808,7 +810,7 @@ class CourseManageController extends BaseController
             $taskWatchTime = $taskLearnedNum == 0 ? 0 : intval($taskWatchTime / $taskLearnedNum);
 
             $tasks[$key]['LearnedNum'] = $taskLearnedNum;
-            $tasks[$key]['length'] = intval($tasks[$key]['activity']['length']);
+            $tasks[$key]['length'] = floor(intval($tasks[$key]['activity']['length'])/60);
             $tasks[$key]['type'] = $tasks[$key]['activity']['mediaType'];
             $tasks[$key]['finishedNum'] = $finishedNum;
             $tasks[$key]['learnTime'] = $taskLearnTime;

@@ -11,7 +11,7 @@ class Member extends BaseResource
     public function post(Application $app, Request $request)
     {
         $requiredFields = array('targetId', 'targetType');
-        $fields         = $this->checkRequiredFields($requiredFields, $request->request->all());
+        $fields = $this->checkRequiredFields($requiredFields, $request->request->all());
 
         $conversation = $this->getConversationService()->getConversationByTarget($fields['targetId'], $fields['targetType']);
 
@@ -30,7 +30,7 @@ class Member extends BaseResource
 
     protected function entryCourseConversation($courseId, $convNo)
     {
-        $user   = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
 
         if ($convNo) {
@@ -71,7 +71,7 @@ class Member extends BaseResource
 
     protected function entryClassroomConversation($classroomId, $convNo)
     {
-        $user      = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         if ($convNo) {
@@ -103,7 +103,7 @@ class Member extends BaseResource
             }
 
             $conversation = $this->getConversationService()->createConversation($classroom['title'], 'classroom', $classroom['id'], array($user));
-            $res          = array('convNo' => $conversation['no']);
+            $res = array('convNo' => $conversation['no']);
         }
 
         return $res;

@@ -33,7 +33,7 @@
          <button class="btn btn-fat btn-primary upload-picture-btn"
           data-url="{{path('course_set_manage_cover_crop', {id: courseSet.id})}}"
           data-goto-url="{{path('course_set_manage_cover',{id: courseSet.id})}}"
-          id="upload-picture-btn">{{'保存'|trans}}</button>
+          id="upload-picture-btn" data-loading-text="{{'正在保存...'|trans}}">{{'保存'|trans}}</button>
         {% endif %}
           <a href="javascript:;" class="go-back btn btn-link">{{'重新选择图片'|trans}}</a>
         </div>

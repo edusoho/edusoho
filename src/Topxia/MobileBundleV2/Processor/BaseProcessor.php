@@ -189,12 +189,12 @@ class BaseProcessor
 
     protected function getCourseOrderService()
     {
-        return $this->controller->getService('Course.CourseOrderService');
+        return $this->controller->getService('Course:CourseOrderService');
     }
 
     protected function getMobileDeviceService()
     {
-        return $this->controller->getService('Util.MobileDeviceService');
+        return $this->controller->getService('Util:MobileDeviceService');
     }
 
     protected function getArticleService()
@@ -204,17 +204,17 @@ class BaseProcessor
 
     protected function getOrderService()
     {
-        return $this->controller->getService('Order.OrderService');
+        return $this->controller->getService('Order:OrderService');
     }
 
     protected function getTagService()
     {
-        return $this->controller->getService('Taxonomy.TagService');
+        return $this->controller->getService('Taxonomy:TagService');
     }
 
     protected function getFileService()
     {
-        return $this->controller->getService('Content.FileService');
+        return $this->controller->getService('Content:FileService');
     }
 
     protected function getSettingService()
@@ -224,7 +224,7 @@ class BaseProcessor
 
     protected function getCourseService()
     {
-        return $this->controller->getService('Course.CourseService');
+        return $this->controller->getService('Course:CourseService');
     }
 
     protected function getCourseMemberService()
@@ -239,7 +239,7 @@ class BaseProcessor
 
     protected function getTestpaperService()
     {
-        return $this->controller->getService('Testpaper.TestpaperService');
+        return $this->controller->getService('Testpaper:TestpaperService');
     }
 
     protected function getAnnouncementService()
@@ -249,7 +249,7 @@ class BaseProcessor
 
     public function getEduCloudService()
     {
-        return $this->controller->getService('EduCloud.EduCloudService');
+        return $this->controller->getService('EduCloud:EduCloudService');
     }
 
     protected function getLogService()

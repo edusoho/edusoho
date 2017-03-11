@@ -2,126 +2,49 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Common\Paginator;
-use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Taxonomy\Service\TagService;
+use AppBundle\Common\Paginator;
 use Biz\Course\Service\CourseService;
-use Biz\System\Service\SettingService;
 use Biz\Course\Service\CourseSetService;
+use Biz\System\Service\SettingService;
+use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
+use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ExploreController extends BaseController
 {
+    const EMPTY_COURSE_SET_IDS = 0;
+
     public function courseSetsAction(Request $request, $category)
     {
         $conditions = $request->query->all();
 
-        $selectedTag = '';
-        $selectedTagGroupId = '';
-        $tags = array();
-        $categoryArray = array();
-        $levels = array();
-
-        if (!empty($conditions['tag'])) {
-            if (!empty($conditions['tag']['tags'])) {
-                $tags = $conditions['tag']['tags'];
-            }
-
-            if (!empty($conditions['tag']['selectedTag'])) {
-                $selectedTag = $conditions['tag']['selectedTag']['tag'];
-                $selectedTagGroupId = $conditions['tag']['selectedTag']['group'];
-            }
-        }
-
-        $flag = false;
-
-        foreach ($tags as $groupId => $tagId) {
-            if ($groupId == $selectedTagGroupId && $tagId != $selectedTag) {
-                $tags[$groupId] = $selectedTag;
-                $flag = true;
-                break;
-            }
-
-            if ($groupId == $selectedTagGroupId && $tagId == $selectedTag) {
-                unset($tags[$groupId]);
-                $flag = true;
-                break;
-            }
-        }
-
-        if (!$flag) {
-            $tags[$selectedTagGroupId] = $selectedTag;
-        }
-
-        $tags = array_filter($tags);
-
-        if (!empty($tags)) {
-            $conditions['tagIds'] = array_values($tags);
-            $conditions['tagIds'] = array_unique($conditions['tagIds']);
-            $conditions['tagIds'] = array_filter($conditions['tagIds']);
-            $conditions['tagIds'] = array_merge($conditions['tagIds']);
-
-            $tagIdsNum = count($conditions['tagIds']);
-
-            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($conditions['tagIds'], 'course-set');
-            $courseSetIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
-            $flag = array_count_values($courseSetIds);
-
-            $courseSetIds = array_unique($courseSetIds);
-
-            foreach ($courseSetIds as $key => $setId) {
-                if ($flag[$setId] != $tagIdsNum) {
-                    unset($courseSetIds[$key]);
-                }
-            }
-
-            if (empty($courseSetIds)) {
-                $conditions['ids'] = array(0);
-            } else {
-                $conditions['ids'] = $courseSetIds;
-            }
-
-            unset($conditions['tagIds']);
-        }
-
-        unset($conditions['tag']);
-
-        $subCategory = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
-        $thirdLevelCategory = empty($conditions['selectedthirdLevelCategory']) ? null : $conditions['selectedthirdLevelCategory'];
-
-        if (!empty($conditions['subCategory']) && empty($conditions['selectedthirdLevelCategory'])) {
-            $conditions['code'] = $subCategory;
-        } elseif (!empty($conditions['selectedthirdLevelCategory'])) {
-            $conditions['code'] = $thirdLevelCategory;
-        } else {
-            $conditions['code'] = $category;
-        }
-
-        if (!empty($conditions['code'])) {
-            $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
-
-            $conditions['categoryId'] = $categoryArray['id'];
-        }
-
-        $category = array(
-            'category' => $category,
-            'subCategory' => $subCategory,
-            'thirdLevelCategory' => $thirdLevelCategory,
-        );
-
-        unset($conditions['code']);
-
         if (!isset($conditions['filter'])) {
-            $conditions['filter'] = array(
+            $filter = array(
                 'type' => 'all',
                 'price' => 'all',
                 'currentLevelId' => 'all',
             );
+            $conditions['filter'] = $filter;
+        } else {
+            $filter = $conditions['filter'];
         }
 
-        $filter = $conditions['filter'];
+        list($conditions, $tags) = $this->mergeConditionsByTag($conditions);
+
+        list($conditions, $categoryArray, $category, $categoryArrayDescription, $categoryParent) = $this->mergeConditionsByCategory(
+            $conditions,
+            $category
+        );
+
+        list($conditions, $levels) = $this->mergeConditionsByVip($conditions, $filter['currentLevelId']);
+
+        unset($conditions['code']);
+
+        if (isset($conditions['ids']) && $conditions['ids'] === self::EMPTY_COURSE_SET_IDS) {
+            $conditions['ids'] = array(0);
+        }
 
         if ($filter['price'] == 'free') {
             $conditions['price'] = '0.00';
@@ -129,15 +52,6 @@ class ExploreController extends BaseController
 
         if ($filter['type'] == 'live') {
             $conditions['type'] = 'live';
-        }
-
-        if ($this->isPluginInstalled('Vip')) {
-            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), array(), 0, 100), 'id');
-
-            if ($filter['currentLevelId'] != 'all') {
-                $vipLevelIds = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($filter['currentLevelId']), 'id');
-                $conditions['vipLevelIds'] = array_merge(array($filter['currentLevelId']), $vipLevelIds);
-            }
         }
 
         unset($conditions['filter']);
@@ -211,6 +125,126 @@ class ExploreController extends BaseController
             }
         }
 
+        return $this->render(
+            'course-set/explore.html.twig',
+            array(
+                'courseSets' => $courseSets,
+                'category' => $category,
+                'filter' => $filter,
+                'orderBy' => $orderBy,
+                'paginator' => $paginator,
+                'consultDisplay' => true,
+                'categoryArray' => $categoryArray,
+                'categoryArrayDescription' => $categoryArrayDescription,
+                'categoryParent' => $categoryParent,
+                'levels' => $levels,
+                'tags' => $tags,
+            )
+        );
+    }
+
+    protected function mergeConditionsByTag($conditions)
+    {
+        $tags = array();
+        $selectedTag = '';
+        $selectedTagGroupId = '';
+
+        if (!empty($conditions['tag'])) {
+            if (!empty($conditions['tag']['tags'])) {
+                $tags = $conditions['tag']['tags'];
+            }
+
+            if (!empty($conditions['tag']['selectedTag'])) {
+                $selectedTag = $conditions['tag']['selectedTag']['tag'];
+                $selectedTagGroupId = $conditions['tag']['selectedTag']['group'];
+            }
+        }
+
+        $flag = false;
+
+        foreach ($tags as $groupId => $tagId) {
+            if ($groupId == $selectedTagGroupId && $tagId != $selectedTag) {
+                $tags[$groupId] = $selectedTag;
+                $flag = true;
+                break;
+            }
+
+            if ($groupId == $selectedTagGroupId && $tagId == $selectedTag) {
+                unset($tags[$groupId]);
+                $flag = true;
+                break;
+            }
+        }
+
+        if (!$flag) {
+            $tags[$selectedTagGroupId] = $selectedTag;
+        }
+
+        $tags = array_filter($tags);
+
+        if (!empty($tags)) {
+            $conditions['tagIds'] = array_values($tags);
+            $conditions['tagIds'] = array_unique($conditions['tagIds']);
+            $conditions['tagIds'] = array_filter($conditions['tagIds']);
+            $conditions['tagIds'] = array_merge($conditions['tagIds']);
+
+            $tagIdsNum = count($conditions['tagIds']);
+
+            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType(
+                $conditions['tagIds'],
+                'course-set'
+            );
+            $courseSetIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
+            $flag = array_count_values($courseSetIds);
+
+            $courseSetIds = array_unique($courseSetIds);
+
+            foreach ($courseSetIds as $key => $setId) {
+                if ($flag[$setId] != $tagIdsNum) {
+                    unset($courseSetIds[$key]);
+                }
+            }
+
+            if (empty($courseSetIds)) {
+                $conditions['ids'] = self::EMPTY_COURSE_SET_IDS;
+            } else {
+                $conditions['ids'] = $courseSetIds;
+            }
+
+            unset($conditions['tagIds']);
+        }
+
+        unset($conditions['tag']);
+
+        return array($conditions, $tags);
+    }
+
+    protected function mergeConditionsByCategory($conditions, $category)
+    {
+        $categoryArray = array();
+        $subCategory = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
+        $thirdLevelCategory = empty($conditions['selectedthirdLevelCategory']) ? null : $conditions['selectedthirdLevelCategory'];
+
+        if (!empty($conditions['subCategory']) && empty($conditions['selectedthirdLevelCategory'])) {
+            $conditions['code'] = $subCategory;
+        } elseif (!empty($conditions['selectedthirdLevelCategory'])) {
+            $conditions['code'] = $thirdLevelCategory;
+        } else {
+            $conditions['code'] = $category;
+        }
+
+        if (!empty($conditions['code'])) {
+            $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
+
+            $conditions['categoryId'] = $categoryArray['id'];
+        }
+
+        $category = array(
+            'category' => $category,
+            'subCategory' => $subCategory,
+            'thirdLevelCategory' => $thirdLevelCategory,
+        );
+
         if (!$categoryArray) {
             $categoryArrayDescription = array();
         } else {
@@ -230,19 +264,54 @@ class ExploreController extends BaseController
             }
         }
 
-        return $this->render('course-set/explore.html.twig', array(
-            'courseSets' => $courseSets,
-            'category' => $category,
-            'filter' => $filter,
-            'orderBy' => $orderBy,
-            'paginator' => $paginator,
-            'consultDisplay' => true,
-            'categoryArray' => $categoryArray,
-            'categoryArrayDescription' => $categoryArrayDescription,
-            'categoryParent' => $categoryParent,
-            'levels' => $levels,
-            'tags' => $tags,
-        ));
+        return array($conditions, $categoryArray, $category, $categoryArrayDescription, $categoryParent);
+    }
+
+    protected function mergeConditionsByVip($conditions, $currentLevelId)
+    {
+        if (!$this->isPluginInstalled('Vip')) {
+            return array($conditions, array());
+        }
+
+        $levels = ArrayToolkit::index(
+            $this->getLevelService()->searchLevels(array('enabled' => 1), array(), 0, 100),
+            'id'
+        );
+
+        if ($currentLevelId != 'all') {
+            $vipLevelIds = ArrayToolkit::column(
+                $this->getLevelService()->findPrevEnabledLevels($currentLevelId),
+                'id'
+            );
+            $vipLevelIds = array_merge(array($currentLevelId), $vipLevelIds);
+            $courses = $this->getCourseService()->searchCourses(
+                array(
+                    'vipLevelIds' => $vipLevelIds,
+                ),
+                'latest',
+                0,
+                PHP_INT_MAX
+            );
+
+            if (empty($courses)) {
+                $conditions['ids'] = self::EMPTY_COURSE_SET_IDS;
+            } else {
+                if (isset($conditions['ids']) && $conditions['ids'] === self::EMPTY_COURSE_SET_IDS) {
+                    $conditions['ids'] = self::EMPTY_COURSE_SET_IDS;
+                } else {
+                    if (isset($conditions['ids']) && $conditions['ids'] !== self::EMPTY_COURSE_SET_IDS) {
+                        // 当其他查询条件筛选出了课程ID集合后，会员课程的课程ID集合应该和其求并集
+                        $setIds = ArrayToolkit::column($courses, 'courseSetId');
+                        $setIds = array_intersect($setIds, $conditions['ids']);
+                        $conditions['ids'] = empty($setIds) ? self::EMPTY_COURSE_SET_IDS : $setIds;
+                    } else {
+                        $conditions['ids'] = ArrayToolkit::column($courses, 'courseSetId');
+                    }
+                }
+            }
+        }
+
+        return array($conditions, $levels);
     }
 
     public function classroomAction(Request $request, $category)
@@ -300,7 +369,10 @@ class ExploreController extends BaseController
 
             $tagIdsNum = count($conditions['tagIds']);
 
-            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($conditions['tagIds'], 'classroom');
+            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType(
+                $conditions['tagIds'],
+                'classroom'
+            );
             $classroomIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
             $flag = array_count_values($classroomIds);
 
@@ -363,10 +435,16 @@ class ExploreController extends BaseController
         $levels = array();
 
         if ($this->isPluginInstalled('Vip')) {
-            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), array(), 0, 100), 'id');
+            $levels = ArrayToolkit::index(
+                $this->getLevelService()->searchLevels(array('enabled' => 1), array(), 0, 100),
+                'id'
+            );
 
             if (!$filter['currentLevelId'] != 'all') {
-                $vipLevelIds = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($filter['currentLevelId']), 'id');
+                $vipLevelIds = ArrayToolkit::column(
+                    $this->getLevelService()->findPrevEnabledLevels($filter['currentLevelId']),
+                    'id'
+                );
                 $conditions['vipLevelIds'] = array_merge(array($filter['currentLevelId']), $vipLevelIds);
             }
         }
@@ -420,21 +498,24 @@ class ExploreController extends BaseController
             }
         }
 
-        return $this->render('classroom/explore.html.twig', array(
-            'paginator' => $paginator,
-            'classrooms' => $classrooms,
-            'path' => 'classroom_explore',
-            'category' => $category,
-            'subCategory' => $subCategory,
-            'categoryArray' => $categoryArray,
-            'categoryArrayDescription' => $categoryArrayDescription,
-            'categoryParent' => $categoryParent,
-            'filter' => $filter,
-            'levels' => $levels,
-            'orderBy' => $sort,
-            'tags' => $tags,
-            'group' => 'classroom',
-        ));
+        return $this->render(
+            'classroom/explore.html.twig',
+            array(
+                'paginator' => $paginator,
+                'classrooms' => $classrooms,
+                'path' => 'classroom_explore',
+                'category' => $category,
+                'subCategory' => $subCategory,
+                'categoryArray' => $categoryArray,
+                'categoryArrayDescription' => $categoryArrayDescription,
+                'categoryParent' => $categoryParent,
+                'filter' => $filter,
+                'levels' => $levels,
+                'orderBy' => $sort,
+                'tags' => $tags,
+                'group' => 'classroom',
+            )
+        );
     }
 
     protected function getTokenService()
