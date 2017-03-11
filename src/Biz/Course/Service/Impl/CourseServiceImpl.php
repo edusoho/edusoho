@@ -1052,11 +1052,14 @@ class CourseServiceImpl extends BaseService implements CourseService
             'liveProvider' => 0,
             'testMode' => 'normal',
             'testStartTime' => 0,
-            'summary' => $course['summary']
+            'summary' => $course['summary'],
+            'exerciseId' => 0,
+            'homeworkId' => 0
         );
         $transformKeys = array(
             'isFree' => 'free',
-            'createdUserId' => 'userId'
+            'createdUserId' => 'userId',
+            'categoryId' => 'chapterId',
         );
 
         $items = array();
@@ -1073,6 +1076,17 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $task[$value] = $task[$key];
             }
             $task = $this->filledTaskByActivity($task);
+            $task['learnedNum'] = $this->getTaskResultService()->countTaskResults(
+                array(
+                    'courseTaskId' => $task['id'],
+                    'status' => 'finish'
+                )
+            );
+            $task['memberNum'] = $this->getTaskResultService()->countTaskResults(
+                array(
+                    'courseTaskId' => $task['id'],
+                )
+            );
             $items[] = $task;
         }
 
@@ -1174,6 +1188,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 
     /**
