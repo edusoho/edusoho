@@ -1158,11 +1158,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courses;
     }
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserFavoritedCourseCountNotInClassroom($userId)
     {
         $courseFavorites = $this->getFavoriteDao()->findCourseFavoritesNotInClassroomByUserId($userId, 0, PHP_INT_MAX);
         $courseIds = ArrayToolkit::column($courseFavorites, 'courseId');
         $conditions = array('courseIds' => $courseIds);
+
         if (count($courseIds) == 0) {
             return 0;
         }
@@ -1170,11 +1174,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->searchCourseCount($conditions);
     }
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserFavoritedCoursesNotInClassroom($userId, $start, $limit)
     {
         $courseFavorites = $this->getFavoriteDao()->findCourseFavoritesNotInClassroomByUserId($userId, $start, $limit);
-
-        return $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($courseFavorites, 'courseId'));
+        $favoriteCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($courseFavorites, 'courseId'));
+        return $favoriteCourses;
     }
 
     protected function _prepareCourseOrderBy($sort)
@@ -1206,33 +1213,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         return $this->getCourseDao()->count($conditions);
     }
-
-    /*
-     * 2017/3/1 为移动端提供服务，其他慎用
-     */
-    public function findUserFavoritedCourseCountNotInClassroom($userId)
-    {
-        $courseFavorites = $this->getFavoriteDao()->findCourseFavoritesNotInClassroomByUserId($userId, 0, PHP_INT_MAX);
-        $courseIds = ArrayToolkit::column($courseFavorites, 'courseId');
-        $conditions = array('courseIds' => $courseIds);
-
-        if (count($courseIds) == 0) {
-            return 0;
-        }
-
-        return $this->searchCourseCount($conditions);
-    }
-
-    /*
-     * 2017/3/1 为移动端提供服务，其他慎用
-     */
-    public function findUserFavoritedCoursesNotInClassroom($userId, $start, $limit)
-    {
-        $courseFavorites = $this->getFavoriteDao()->findCourseFavoritesNotInClassroomByUserId($userId, $start, $limit);
-        $favoriteCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($courseFavorites, 'courseId'));
-        return $favoriteCourses;
-    }
-
 
     public function countCourses(array $conditions)
     {
@@ -1409,15 +1389,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->createService('Classroom:ClassroomService');
     }
-
-    /**
-     * @return FavoriteDaoImpl
-     */
-    protected function getFavoriteDao()
-    {
-        return $this->createDao('Course:FavoriteDao');
-    }
-
+    
     /**
      * 当默认值未设置时，合并默认值
      *
