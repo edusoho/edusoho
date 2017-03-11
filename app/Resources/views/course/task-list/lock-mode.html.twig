@@ -1,4 +1,5 @@
 <div class="course-detail-content">
+<<<<<<< HEAD
   {#暂时去掉块状显示#}
   {#{% if not isMarketingPage  %}
   <div class="clearfix mbl">
@@ -20,22 +21,46 @@
         </li>
       {% elseif item.itemType == 'chapter'  and item.type == 'unit' %}
         <li class="task-item color-gray bg-gray-lighter">
+=======
+	{% if not isMarketingPage %}
+		<div class="clearfix mbl">
+			<div class="btn-group pull-right js-task-show-type" role="tablist">
+				<a class="btn btn-default active" data-list=".js-task-list-ul" data-type="list"> <i
+							class="es-icon es-icon-menu"></i>
+				</a>
+				<a class="btn btn-default" data-list=".js-task-chart-ul" data-type="chart"> <i
+							class="es-icon es-icon-viewmodule"></i>
+				</a>
+			</div>
+		</div>
+	{% endif %}
+	<ul class="task-list task-list-md task-list-hover js-task-list-ul">
+		{% for key, item in courseItems %}
+			{% if item.itemType == 'chapter' and item.type == 'chapter' %}
+				<li class="task-item bg-gray-lighter js-task-chapter"><i class="es-icon es-icon-menu left-menu"></i>
+					<a href="javascript:void(0);" class="title gray-dark">第{{ item.number }}
+						章: {{ item.title }}</a>
+					<i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
+				</li>
+			{% elseif item.itemType == 'chapter'  and item.type == 'unit' %}
+				<li class="task-item color-gray bg-gray-lighter">
+>>>>>>> origin/feature/x8
           <span class="title">第{{ item.number }}
-            节: {{ item.title }}</span>
-        </li>
-      {% elseif  item.itemType == 'task'%}
-        {% set task = item %}
-        {% if  isMarketingPage or  member is empty %}
-          {% set task_lock = (course.learnMode  == 'lockMode') %}
-        {% else %}
-          {% set task_lock =  (course.learnMode  == 'lockMode')  and task.lock  %}
-        {% endif %}
-        {% set file = files[task.activity.mediaId]|default(null) %}
-        <li class="task-item task-content mouse-control">
-          <i class="es-icon
+	          节: {{ item.title }}</span>
+				</li>
+			{% elseif  item.itemType == 'task' %}
+				{% set task = item %}
+				{% if  isMarketingPage or  member is empty %}
+					{% set task_lock = (course.learnMode  == 'lockMode') %}
+				{% else %}
+					{% set task_lock =  (course.learnMode  == 'lockMode')  and task.lock %}
+				{% endif %}
+				{% set file = files[task.activity.mediaId]|default(null) %}
+				<li class="task-item task-content mouse-control">
+					<i class="es-icon
               {% if task_lock %}
               es-icon-lock
-              {% elseif  not task.result|default(null) %}
+              {% elseif  not task.result|default(null)  or (member is empty) %}
               es-icon-undone-check color-gray
               {% elseif task.result.status == 'start' %}
               es-icon-doing color-primary
@@ -43,57 +68,74 @@
               es-icon-iccheckcircleblack24px color-primary
               {% endif %}
               left-menu"></i>
-          {% if course.status=='published' and task.status == 'published' %}
-            {% if member %}
-              {% if task_lock is empty %}
-                <a class="title"
-                   href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
-                  {% include 'course/task-list/parts/list-li-title.html.twig' %}
-                </a>
-              {% else %}
-                {#未解锁#}
-                <span class="title">
+					{% if course.status=='published' and task.status == 'published' %}
+						{% if member %}
+							{% if task_lock is empty %}
+								<a class="title"
+								   href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
+									{% include 'course/task-list/parts/list-li-title.html.twig' %}
+								</a>
+							{% else %}
+								{#未解锁#}
+								<span class="title">
                   {% include 'course/task-list/parts/list-li-title.html.twig' %}
                 </span>
-              {% endif %}
-            {% else %}
-              {#not member#}
-              <a class="title" href="#modal" data-toggle="modal"
-                 data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}">
-                {% include 'course/task-list/parts/list-li-title.html.twig' %}
-              </a>
-              <span class="right-menu mouse-enter">
+							{% endif %}
+						{% else %}
+							{#not member#}
+							<a class="title" href="#modal" data-toggle="modal"
+							   data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}">
+								{% include 'course/task-list/parts/list-li-title.html.twig' %}
+							</a>
+							<span class="right-menu mouse-enter">
                 {% if not member %}
-                  {% if course.isFree or task.isFree %}
-                    <a class="btn btn-primary" href="#modal" data-toggle="modal"
-                      data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
-                      style="margin-top:-8px">免费学习</a>
-                  {% elseif course.tryLookable and task.type == 'video' and file.storage|default('') == 'cloud' %}
-                    <a class="btn btn-warning" href="#modal" data-toggle="modal"
-                      data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
-                      style="margin-top:-8px">免费试看</a>
-                  {% elseif not task.isFree %}
-                    <a class="btn btn-primary" href="#modal" data-toggle="modal"
-                      data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
-                      style="margin-top:-8px">立即购买</a>
-                  {% endif %}
+	                {% if  course.isFree %}
+		                {% if task.type in ['text','video','audio','flash','doc','ppt'] %}
+			                <a class="btn btn-primary" href="#modal" data-toggle="modal"
+			                   data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
+			                   style="margin-top:-8px">免费预览</a>
+			              {% else %}
+			                <a style="margin-top:-8px" class="btn btn-primary {% if previewAs|default() %}disabled{% endif %}"
+						                {% if is_buy_course_from_modal(course.id) %}
+					                href="#modal"
+					                data-toggle="modal"
+					                data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+				                {% else %}
+					                href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+				                {% endif %}>加入学习
+		               </a>
+		                {% endif %}
+	               {% elseif  task.isFree %}
+		                <a class="btn btn-primary" href="#modal" data-toggle="modal"
+		                   data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
+		                   style="margin-top:-8px">免费预览</a>
+	                {% elseif course.tryLookable and task.type == 'video' and file.storage|default('') == 'cloud' %}
+		                <a class="btn btn-warning" href="#modal" data-toggle="modal"
+		                   data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
+		                   style="margin-top:-8px">免费试看</a>
+	                {% elseif not task.isFree %}
+		                <a class="btn btn-primary" href="#modal" data-toggle="modal"
+		                   data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
+		                   style="margin-top:-8px">立即购买</a>
+	                {% endif %}
                 {% endif %}
               </span>
-            {% endif %}
-            <span class="right-menu color-gray {% if not member %} mouse-leave {% endif %}">
+						{% endif %}
+						<span class="right-menu color-gray {% if not member %} mouse-leave {% endif %}">
               {% set meta =  activity_meta(task.activity.mediaType) %}
-              {{ task.activity.length|default(0)|activity_length_format }}
-              <i class="es-icon es-icon {{ meta.icon }} ml20" data-toggle="tooltip" data-placement="top" title=""
-                data-original-title="{{ meta.name }}任务" data-container="body"></i>
+							{{ task.activity.length|default(0)|activity_length_format }}
+							<i class="es-icon es-icon {{ meta.icon }} ml20" data-toggle="tooltip" data-placement="top" title=""
+							   data-original-title="{{ meta.name }}任务" data-container="body"></i>
             </span>
-          {% else %}
-            {#not published#}
-            <span class="title">
+					{% else %}
+						{#not published#}
+						<span class="title">
               {% include 'course/task-list/parts/list-li-title.html.twig' %}
             </span>
-            <span class="right-menu">
+						<span class="right-menu">
               敬请期待
             </span>
+<<<<<<< HEAD
           {% endif %}
         </li>
       {% endif %}
@@ -112,6 +154,25 @@
         {% set file = files[task.activity.mediaId]|default(null) %}
         <li class="task-item task-content mouse-control">
           <i class="es-icon
+=======
+					{% endif %}
+				</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+	<ul class="task-list task-chart task-list-md task-list-hover clearfix hidden js-task-chart-ul">
+		{% for key, item in courseItems %}
+			{% if  item.itemType == 'task' %}
+				{% set task = item %}
+				{% if isMarketingPage or  member is empty %}
+					{% set task_lock = true %}
+				{% else %}
+					{% set task_lock =  (course.learnMode  == 'lockMode')  and task.lock %}
+				{% endif %}
+				{% set file = files[task.activity.mediaId]|default(null) %}
+				<li class="task-item task-content mouse-control">
+					<i class="es-icon
+>>>>>>> origin/feature/x8
               {% if task_lock %}
               es-icon-lock
               {% elseif  not task.result|default(null) %}
@@ -122,36 +183,46 @@
               es-icon-iccheckcircleblack24px color-primary
               {% endif %}
               left-menu">
-          </i>
-          {% if task.status == 'published'  %}
-            {% if member  %}
-              {% if task_lock is empty %}
-                <a class="title"
-                   href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
-                  {% include 'course/task-list/parts/list-li-title.html.twig' %}
-                </a>
-              {% else %}
-                <span class="title">
+					</i>
+					{% if task.status == 'published' %}
+						{% if member %}
+							{% if task_lock is empty %}
+								<a class="title"
+								   href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
+									{% include 'course/task-list/parts/list-li-title.html.twig' %}
+								</a>
+							{% else %}
+								<span class="title">
                   {% include 'course/task-list/parts/list-li-title.html.twig' %}
                 </span>
-              {% endif %}
-            {% else %}
-              <a class="title" href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}">
-                {% include 'course/task-list/parts/list-li-title.html.twig' %}
-              </a>
-            {% endif %}
-            {% set meta =  activity_meta(task.activity.mediaType) %}
-            <span class="es-icon es-icon {{ meta.icon }} right-menu task-type-icon" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ meta.name }}任务"></span>
-          {% else %}
-            <span class="title">
+							{% endif %}
+						{% else %}
+							<a class="title" href="#modal" data-toggle="modal"
+							   data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}">
+								{% include 'course/task-list/parts/list-li-title.html.twig' %}
+							</a>
+						{% endif %}
+						{% set meta =  activity_meta(task.activity.mediaType) %}
+						<span class="es-icon es-icon {{ meta.icon }} right-menu task-type-icon" data-toggle="tooltip"
+						      data-placement="top" title="" data-original-title="{{ meta.name }}任务"></span>
+					{% else %}
+						<span class="title">
               {% include 'course/task-list/parts/list-li-title.html.twig' %}
             </span>
-            <span class="right-menu">
+						<span class="right-menu">
                 敬请期待
               </span>
+<<<<<<< HEAD
           {% endif %}
         </li>
       {% endif %}
     {% endfor %}
   </ul>#}
+=======
+					{% endif %}
+				</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+>>>>>>> origin/feature/x8
 </div>
