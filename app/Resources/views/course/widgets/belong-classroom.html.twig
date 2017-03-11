@@ -1,4 +1,5 @@
-{% if classroom %}
+{% set classroom = data('Classroom', {courseId: course.id}) %}
+{% if classroom|default(null) %}
   <div class="panel panel-default belongs-class">
     <div class="panel-heading">
       <h3 class="panel-title"> <i class="es-icon es-icon-locallibrary"></i>

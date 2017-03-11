@@ -16,20 +16,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
-    /*
-     * 1. 当业务对象变更（create/update/delete）时，查找引用此对象的业务对象，所以其相关course处于locked状态，则同步
-     * 2. 采用dao操作，而非service，这样可以减少副作用
-     * 3. 涉及表：
-     *      course_set
-     *      course
-     *      course_chapter
-     *      course_task
-     *      activity(activit_config)
-     *      testpaper、testpaper_item、testpaper_activity
-     *      question、question_category、question_marker
-     *      course_material、upload_files（？）、upload_files_share（？）
-     */
-
     public static function getSubscribedEvents()
     {
         return array(

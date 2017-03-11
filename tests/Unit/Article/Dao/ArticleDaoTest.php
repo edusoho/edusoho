@@ -194,7 +194,7 @@ class ArticleDaoTest extends BaseDaoTestCase
         return array(
             'title' => 'varchar',    // 文章标题
             'categoryId' => 1,    // 栏目
-            'tagIds' => 'tinytext',    // tag标签
+            'tagIds' => array('1','2'),    // tag标签
             'source' => 'varchar',    // 来源
             'sourceUrl' => 'varchar',    // 来源URL
             'publishedTime' => 1,    // 发布时间

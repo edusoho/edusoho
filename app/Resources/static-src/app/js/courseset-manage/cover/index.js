@@ -12,7 +12,6 @@ class Cover {
       onUploadSuccess: function(file, response) {
         let url = $("#upload-picture-btn").data("gotoUrl");
         notify('success', Translator.trans('上传成功！'), 1);
-
         document.location.href = url;
       }
     });

@@ -1,15 +1,13 @@
 <?php
 
-
 namespace Biz\Coupon\Type;
-
 
 use Biz\Course\Service\CourseService;
 
 class CourseCoupon extends BaseCoupon
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function canUseable($coupon, $target)
     {

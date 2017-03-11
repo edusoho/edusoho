@@ -380,7 +380,7 @@ class CourseManageController extends BaseController
             if (empty($data) || !isset($data['teachers'])) {
                 throw new InvalidArgumentException('Empty Data');
             }
-            
+
             $teachers = json_decode($data['teachers'], true);
             if (empty($teachers)) {
                 throw new InvalidArgumentException('Empty Data');
@@ -478,10 +478,10 @@ class CourseManageController extends BaseController
         }
     }
 
-    public function publishAction(Request $request, $courseSetId, $courseId)
+    public function publishAction($courseSetId, $courseId)
     {
         try {
-            $this->getCourseService()->publishCourse($courseId);
+            $this->getCourseService()->publishCourse($courseId, true);
 
             return $this->createJsonResponse(array('success' => true));
         } catch (\Exception $e) {
@@ -497,10 +497,6 @@ class CourseManageController extends BaseController
         return $this->createJsonResponse(array('result' => true));
     }
 
-    /**
-     * @param  $tasks
-     * @return array
-     */
     public function prepareTaskActivityFiles($tasks)
     {
         $tasks = ArrayToolkit::index($tasks, 'id');
@@ -569,6 +565,8 @@ class CourseManageController extends BaseController
         return $this->render('course-manage/orders.html.twig', array(
             'courseSet' => $courseSet,
             'course' => $course,
+            'courseSets' => array($courseSet['id'] => $courseSet),
+            'courses' => array($course['id'] => $course),
             'request' => $request,
             'orders' => $orders,
             'users' => $users,

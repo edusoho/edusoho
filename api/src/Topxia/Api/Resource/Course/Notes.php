@@ -2,14 +2,13 @@
 
 namespace Topxia\Api\Resource\Course;
 
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseNoteService;
-use Biz\Task\Service\TaskService;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
-use Topxia\Api\Resource\BaseResource;
+use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
+use Topxia\Api\Resource\BaseResource;
+use Biz\Course\Service\CourseNoteService;
+use Symfony\Component\HttpFoundation\Request;
 
 class Notes extends BaseResource
 {
@@ -28,8 +27,8 @@ class Notes extends BaseResource
         $notes = $this->getCourseNoteService()->searchNotes(
             $conditions,
             array('createdTime' => 'DESC'),
-            isset($fields['start']) ? (int)$fields['start'] : 0,
-            isset($fields['limit']) ? (int)$fields['limit'] : 20
+            isset($fields['start']) ? (int) $fields['start'] : 0,
+            isset($fields['limit']) ? (int) $fields['limit'] : 20
         );
 
         return $this->wrap($this->filter($notes), $total);
@@ -37,26 +36,26 @@ class Notes extends BaseResource
 
     public function post(Application $app, Request $request, $courseId)
     {
-        $requiredFields = array('taskId', 'content');
-        $fields         = $this->checkRequiredFields($requiredFields, $request->request->all());
+        $requiredFields = array('lessonId', 'content');
+        $fields = $this->checkRequiredFields($requiredFields, $request->request->all());
 
-        $task = $this->getTaskService()->getTask($fields['taskId']);
+        $task = $this->getTaskService()->getTask($fields['lessonId']);
 
         if (empty($task)) {
-            throw new \Exception("ID为{$fields['taskId']}的任务不存在");
+            return $this->error('600001', '课时不存在');
         }
 
         $course = $this->getCourseService()->getCourse($task['courseId']);
 
         if (empty($course)) {
-            throw new NotFoundException(sprintf('course #%s not found', $task['courseId']));
+            return $this->error('600002', '课程不存在');
         }
 
         $note = array(
             'courseId' => $task['courseId'],
-            'taskId'   => $task['id'],
-            'status'   => !empty($fields['status']) ? 1 : 0,
-            'content'  => $fields['content']
+            'taskId' => $task['id'],
+            'status' => !empty($fields['status']) ? 1 : 0,
+            'content' => $fields['content'],
         );
 
         $note = $this->getCourseNoteService()->saveNote($note);

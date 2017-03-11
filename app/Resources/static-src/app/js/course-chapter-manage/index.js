@@ -1,4 +1,11 @@
 import notify from "common/notify";
+
+$('#chapter-title-field').on('keypress', function(e){
+  if((e.keyCode || e.which) === 13){
+    e.preventDefault();
+  }
+});
+
 let sortList = function ($list) {
   let data = $list.sortable("serialize").get();
 

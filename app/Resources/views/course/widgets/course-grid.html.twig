@@ -21,7 +21,7 @@
           <span class="tag-live"></span>
         </span>
       {% endif %}
-      {{ lazy_img(filepath(courseSet.cover.large|default(''), 'courseSet.png'), 'img-responsive', courseSet.title) }}
+      {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'img-responsive', courseSet.title) }}
     </a>
   </div>
   <div class="course-info">

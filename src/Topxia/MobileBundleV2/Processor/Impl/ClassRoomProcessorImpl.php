@@ -2,17 +2,17 @@
 
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
-use Biz\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\ClassRoomProcessor;
+use Biz\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
 
 class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 {
     public function after()
     {
-        if (!class_exists('Classroom\Service\Classroom\Impl\ClassroomServiceImpl')) {
+        if (!class_exists('Biz\Classroom\Service\Impl\ClassroomServiceImpl')) {
             $this->stopInvoke();
 
             return $this->createErrorResponse('no_classroom', '没有安装班级插件！');
@@ -151,10 +151,10 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         }
 
         return array(
-                'start' => $start,
-                'limit' => $limit,
-                'total' => $total,
-                'data' => $this->filterClassRooms($allClassrooms),
+            'start' => $start,
+            'limit' => $limit,
+            'total' => $total,
+            'data' => $this->filterClassRooms($allClassrooms),
         );
     }
 
@@ -178,10 +178,10 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $allClassrooms = array_values($classrooms);
 
         return array(
-                'start' => $start,
-                'limit' => $limit,
-                'total' => $total,
-                'data' => $this->filterClassRooms($allClassrooms),
+            'start' => $start,
+            'limit' => $limit,
+            'total' => $total,
+            'data' => $this->filterClassRooms($allClassrooms),
         );
     }
 
@@ -190,7 +190,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $member = $this->getClassroomService()->getClassroomMember($classRoomId, $user['id']);
 
         if (empty($member)) {
-            return  $this->createErrorResponse('error', '您不是班级的学员。');
+            return $this->createErrorResponse('error', '您不是班级的学员。');
         }
 
         if (!in_array($member['role'], array('auditor', 'student'))) {
@@ -216,7 +216,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $targetType = $this->getParam('targetType');
 
         if (!in_array($targetType, array('course', 'classroom'))) {
-            return  $this->createErrorResponse('error', '退出学习失败');
+            return $this->createErrorResponse('error', '退出学习失败');
         }
         $processor = OrderRefundProcessorFactory::create($targetType);
 
@@ -410,9 +410,14 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $userId) : null;
         $vipLevels = array();
         if ($this->controller->isinstalledPlugin('Vip') && $this->controller->setting('vip.enabled')) {
-            $vipLevels = $this->controller->getLevelService()->searchLevels(array(
+            $vipLevels = $this->controller->getLevelService()->searchLevels(
+                array(
                     'enabled' => 1,
-            ), 0, 100);
+                ),
+                null,
+                0,
+                100
+            );
         }
 
         $checkMemberLevelResult = null;
@@ -429,7 +434,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
             'member' => $member,
             'vip' => $checkMemberLevelResult,
             'vipLevels' => $vipLevels,
-            );
+        );
     }
 
     private function filterClassRoom($classroom, $isList = true)
@@ -514,17 +519,23 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         foreach ($courses as $key => $course) {
             $courseMember = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
 
-            $lessonNum = (float) $course['lessonNum'];
+            $lessonNum = (float) $course['taskNum'];
             $progress = $lessonNum == 0 ? 0 : (float) $courseMember['learnedNum'] / $lessonNum;
 
             $lastLesson = null;
             if ($user) {
-                $userLearnStatus = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
-                $lessonIds = array_keys($userLearnStatus ? $userLearnStatus : array());
-                $lastLesson = $this->getCourseService()->getLesson(end($lessonIds));
+                $userTasks = $this->getTaskResultService()->findUserTaskResultsByCourseId($course['id']);
+
+                if (!$userTasks) {
+                    break;
+                }
+
+                $latestTaskResult = end($userTasks);
+
+                $lastTask = $this->getTaskService()->getTask($latestTaskResult['courseTaskId']);
             }
             $progressArray[$course['id']] = array(
-                'lastLesson' => $this->filterLastLearnLesson($lastLesson),
+                'lastLesson' => $this->filterLastLearnLesson($lastTask),
                 'progress' => (int) ($progress * 100).'%',
                 'progressValue' => $progress,
             );
@@ -542,7 +553,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
             return $lastLesson;
         }
         foreach ($lastLesson as $key => $value) {
-            if (!in_array($key, array('id', 'title', 'courseId', 'itemType'))) {
+            if (!in_array($key, array('id', 'title', 'courseId', 'fromCourseSetId', 'activityId', 'itemType'))) {
                 unset($lastLesson[$key]);
             }
         }
@@ -593,11 +604,11 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $classrooms = $this->filterMyClassRoom($classrooms, $progresses);
 
         return array(
-                'start' => $start,
-                'total' => $total,
-                'limit' => $total,
-                'data' => array_values($classrooms),
-                );
+            'start' => $start,
+            'total' => $total,
+            'limit' => $total,
+            'data' => array_values($classrooms),
+        );
     }
 
     private function filterMyClassRoom($classrooms, $progresses)
@@ -641,10 +652,10 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $percent = intval($learnedCoursesCount / $coursesCount * 100).'%';
 
         return array(
-                'percent' => $percent,
-                'number' => $learnedCoursesCount,
-                'total' => $coursesCount,
-            );
+            'percent' => $percent,
+            'number' => $learnedCoursesCount,
+            'total' => $coursesCount,
+        );
     }
 
     public function getClassRooms()
@@ -671,10 +682,10 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $total = $this->getClassroomService()->searchClassroomsCount($conditions);
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
-                $conditions,
-                array($sort, 'desc'),
-                $start,
-                $limit
+            $conditions,
+            array($sort, 'desc'),
+            $start,
+            $limit
         );
 
         return array(
@@ -713,5 +724,15 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
     protected function getCourseMemberService()
     {
         return $this->controller->getService('Course:MemberService');
+    }
+
+    protected function getTaskResultService()
+    {
+        return $this->controller->getService('Task:TaskResultService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->controller->getService('Task:TaskService');
     }
 }

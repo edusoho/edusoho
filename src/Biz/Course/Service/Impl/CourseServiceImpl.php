@@ -228,6 +228,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $course;
     }
 
+    public function updateCategoryByCourseSetId($courseSetId, $categoryId)
+    {
+        $this->getCourseDao()->updateCategoryByCourseSetId($courseSetId, array('categoryId' => $categoryId));
+    }
+
     public function updateMaxRateByCourseSetId($courseSetId, $maxRate)
     {
         $course = $this->getCourseDao()->updateMaxRateByCourseSetId($courseSetId, array('updatedTime' => time(), 'maxRate' => $maxRate));
@@ -371,13 +376,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
     }
 
-    public function publishCourse($id)
+    public function publishCourse($id, $withTasks = false)
     {
         $this->tryManageCourse($id);
         $course = $this->getCourseDao()->update($id, array(
             'status' => 'published',
         ));
         $this->dispatchEvent('course.publish', $course);
+
+        $this->getTaskService()->publishTasksByCourseId($id);
     }
 
     protected function validateExpiryMode($course)

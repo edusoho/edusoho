@@ -51,10 +51,13 @@
   </section>
 
   <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">课程目录</h3>
+    <div class="panel-heading ">
+      <a href="{{path('course_show',{id: course.id, tab:'tasks'})}} " class="more"><i class="es-icon es-icon-morehoriz"></i></a>
+      <h3 class="panel-title">目录</h3>
     </div>
-    {% include 'course/tabs/tasks.html.twig' with {limitCount : 2} %}
+    <div class="panel-body">
+    {% include 'course/tabs/tasks.html.twig' %}
+    </div>
   </div>
 {% endif %}
 
