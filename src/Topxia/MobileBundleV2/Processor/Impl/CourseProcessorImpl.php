@@ -49,7 +49,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         $lessonNote = $this->controller->getNoteService()->getCourseNoteByUserIdAndTaskId($user['id'], $lessonId);
-        //$lessonNote = $this->controller->getNoteService()->getUserLessonNote($user['id'], $lessonId);
 
         if (empty($lessonNote)) {
             return null;
