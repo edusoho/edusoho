@@ -13,12 +13,28 @@ class Live {
     $.validator.addMethod(
       "after",
       function (value, element, params) {
-        var now = new Date();
-        return value && now < new Date(value);
+        var now = new Date().getTime();
+        console.log(value);
+        let valuedata   = new Date(value);
+
+        console.log(now);
+        console.log(valuedata);
+
+        console.log(valuedata> now);
+        
+        return value && new Date(value) > now;
       },
       Translator.trans('开始时间应晚于当前时间')
     );
   }
+
+  convertTimeToInt(time){
+		var result = null;
+		if(time != null && time != ""){
+    		result = parseInt(time.replace(/-/g,"").replace(/:/g,""),10);
+		}
+		return result;
+	}
 
   _initEditorContent() {
     var editor = CKEDITOR.replace('text-content-field', {
@@ -49,7 +65,7 @@ class Live {
         },
         startTime: {
           required: true,
-          date: true,
+          DateAndTime: true,
           after: true
         },
         length: {
