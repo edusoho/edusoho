@@ -741,6 +741,10 @@ class UserServiceImpl extends BaseService implements UserService
             $user = UserSerialize::unserialize(
                 $this->getUserDao()->create(UserSerialize::serialize($user))
             );
+
+            $profile = array();
+            $profile['id'] = $user['id'];
+            $this->getProfileDao()->create($profile);
         }
     }
 
