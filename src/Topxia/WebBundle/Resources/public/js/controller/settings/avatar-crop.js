@@ -1,9 +1,8 @@
-define(function(require, exports, module) {
+define(function (require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var ImageCrop = require('edusoho.imagecrop');
-
-    exports.run = function() {
-
+    var store = require('store');
+    exports.run = function () {
         var imageCrop = new ImageCrop({
             element: "#avatar-crop",
             group: "user",
@@ -11,14 +10,19 @@ define(function(require, exports, module) {
             cropedHeight: 200
         });
 
-        imageCrop.on("afterCrop", function(response){
+        imageCrop.on("afterCrop", function (response) {
             var url = $("#upload-avatar-btn").data("url");
-            $.post(url, {images: response}, function(){
-                document.location.href=$("#upload-avatar-btn").data("gotoUrl");
+            $.post(url, {images: response}, function () {
+                var courseGuestUrl = store.get('course-guest-page-url');
+                if (courseGuestUrl) {
+                    document.location.href = courseGuestUrl;
+                } else {
+                    document.location.href = $("#upload-avatar-btn").data("gotoUrl");
+                }
             });
         });
 
-        $("#upload-avatar-btn").click(function(e){
+        $("#upload-avatar-btn").click(function (e) {
             e.stopPropagation();
 
             imageCrop.crop({
@@ -31,9 +35,9 @@ define(function(require, exports, module) {
 
         })
 
-        $('.go-back').click(function(){
+        $('.go-back').click(function () {
             history.go(-1);
         });
     };
-  
+
 });
