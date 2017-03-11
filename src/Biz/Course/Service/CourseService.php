@@ -180,4 +180,8 @@ interface CourseService
     public function findUserFavoritedCourseCountNotInClassroom($userId);
 
     public function findUserFavoritedCoursesNotInClassroom($userId, $start, $limit);
+
+    public function updateCategoryByCourseSetId($courseSetId, $categoryId);
+
+    public function calculateLearnProgressByUserIdAndCourseIds($userId, array $courseIds);
 }

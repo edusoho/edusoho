@@ -72,7 +72,10 @@ $resources = array(
     'User/Password',
     'SmsCodes',
     'User/VerifiedMobile',
-    'MeFriends'
+    'MyLearning',
+    'MeFriends',
+    'CoursesLearnProgress',
+    'MeFriends',
 );
 
 foreach ($resources as $res) {
