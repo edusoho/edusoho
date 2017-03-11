@@ -717,6 +717,42 @@ class UserServiceImpl extends BaseService implements UserService
         }
     }
 
+    public function initSystemUsers()
+    {
+        $users = array(
+            array(
+                'type' => 'scheduler',
+                'roles' => array('ROLE_USER', 'ROLE_SUPER_ADMIN'),
+            )
+        );
+        foreach ($users as $user) {
+            if (!empty($this->getUserDao()->getUserByType($user['type']))) {
+                continue;
+            }
+
+            $user['nickname'] = $this->generateNickname($user).'(系统用户)';
+            $user['emailVerified'] = 1;
+            $user['orgId'] = 1;
+            $user['orgCode'] = '1.';
+            $user['password'] = $this->getRandomChar();
+            $user['email'] = $this->generateEmail($user);
+            $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+            $user['password'] = $this->getPasswordEncoder()->encodePassword($user['password'], $user['salt']);
+            $user = UserSerialize::unserialize(
+                $this->getUserDao()->create(UserSerialize::serialize($user))
+            );
+
+            $profile = array();
+            $profile['id'] = $user['id'];
+            $this->getProfileDao()->create($profile);
+        }
+    }
+
+    public function getUserByType($type)
+    {
+        return $this->getUserDao()->getUserByType($user['type']);
+    }
+
     public function register($registration, $type = 'default')
     {
         $this->validateNickname($registration['nickname']);

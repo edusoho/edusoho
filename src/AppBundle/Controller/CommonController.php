@@ -62,35 +62,15 @@ class CommonController extends BaseController
 
     public function crontabAction(Request $request)
     {
-        $setting = $this->getSettingService()->get('magic', array());
-        if (!empty($setting['disable_web_crontab'])) {
-            return $this->createJsonResponse(true);
-        }
-
-        $triggerUser = $this->getCurrentUser();
-
-        // 执行Job 应该是最高权限
-        $jobUser = new CurrentUser();
-
-        $jobUser->fromArray(array(
-            'id' => 1,
-            'email' => 'job@edusoho.com',
-            'nickname' => '定时任务',
-            'currentIp' => '127.0.0.1',
-            'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
-            'org' => array('id' => 1),
-            'level' => 'SYSTEM',
-            'locale' => $request->getLocale(),
-        ));
-
+        $currentUser = $this->getCurrentUser();
         try {
-            $this->switchUser($request, $jobUser);
+            $switchUser = new CurrentUser();
+            $switchUser->fromArray($this->getUserService()->getUserByType('scheduler'));
+            $this->switchUser($request, $switchUser);
             $this->getBiz()->service('Crontab:CrontabService')->scheduleJobs();
-            $this->switchUser($request, $triggerUser);
-
-            return $this->createJsonResponse(true);
-        } catch (\Exception $exception) {
-            $this->switchUser($request, $triggerUser);
+            $this->switchUser($request, $currentUser);
+        } catch (\Exception $e) {
+            $this->switchUser($request, $currentUser);
             throw $exception;
         }
     }

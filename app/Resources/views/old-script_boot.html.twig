@@ -8,10 +8,8 @@
   app.themeGlobalScript = '{{ theme_global_script() }}';
   app.jsPaths = {{ js_paths()|json_encode|raw }};
 
-  app.crontab = '{{ path('common_crontab') }}';
   {% set crontabNextExecutedTime = crontab_next_executed_time() %}
-  {% set disableWebCrontab = setting('magic.disable_web_crontab', 0) %}
-  {% if crontabNextExecutedTime > 0 and disableWebCrontab != 1 %}
+  {% if not setting('magic.disable_web_crontab', 0) and crontabNextExecutedTime > 0 %}
     {% if date(crontabNextExecutedTime|date('Y-m-d H:i:s')) < date() %}
       app.scheduleCrontab = '{{ path('common_crontab') }}';
     {% endif %}

@@ -50,9 +50,6 @@ class LoginSuccessHandler
         $sessionId = $request->getSession()->getId();
         $request->getSession()->set('loginIp', $request->getClientIp());
 
-        if($user->isSystemLevel()){
-            return;
-        }
 
         $this->getUserService()->markLoginInfo();
         $this->getUserService()->rememberLoginSessionId($user['id'], $sessionId);

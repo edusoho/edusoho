@@ -8,6 +8,7 @@ use Biz\Util\EdusohoLiveClient;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\LiveReplayService;
 
+// Refactor: 该类不应该在Course模块，应该在和LiveActivity放一块，或者另启一个模块LiveRoom
 class LiveReplayServiceImpl extends BaseService implements LiveReplayService
 {
     private $liveClient = null;

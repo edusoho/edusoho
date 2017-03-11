@@ -6,9 +6,8 @@
   app.theme = '{{ setting("theme.uri"|default("default")) }}';
   app.themeGlobalScript = '{{ theme_global_script() }}';
 
-  app.crontab = '{{ path('common_crontab') }}';
   {% set crontabNextExecutedTime = crontab_next_executed_time() %}
-  {% if crontabNextExecutedTime > 0  %}
+  {% if not setting('magic.disable_web_crontab', 0) and crontabNextExecutedTime > 0  %}
     {% if date(crontabNextExecutedTime|date('Y-m-d H:i:s')) < date() %}
       app.scheduleCrontab = '{{ path('common_crontab') }}';
     {% endif %}

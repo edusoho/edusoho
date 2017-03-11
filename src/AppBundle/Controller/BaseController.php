@@ -51,9 +51,7 @@ class BaseController extends Controller
         $this->container->get('security.token_storage')->setToken($token);
 
         $this->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, new InteractiveLoginEvent($request, $token));
-        if (!$user->isSystemLevel()) {
-            $this->getLogService()->info('user', 'login_success', '登录成功');
-        }
+        $this->getLogService()->info('user', 'login_success', '登录成功');
 
         return $user;
     }
