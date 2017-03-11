@@ -116,9 +116,9 @@ $.extend($.validator.messages, {
   min: $.validator.format("请输入不小于 {0} 的数值")
 });
 
-$.validator.addMethod("DateAndTime",function(value,element){
-let reg = /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}$/;
-return this.optional( element ) || reg.test(value);
+$.validator.addMethod("DateAndTime", function (value, element) {
+  let reg = /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}$/;
+  return this.optional(element) || reg.test(value);
 }, $.validator.format("请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm"));
 
 $.validator.addMethod("trim", function (value, element, params) {
@@ -172,11 +172,11 @@ $.validator.addMethod("visible_character", function (value, element, params) {
 }, jQuery.validator.format("请输入可见性字符"));
 
 $.validator.addMethod('positive_integer', function (value, element) {
-  return this.optional(element) ||  /^\+?[1-9][0-9]*$/.test(value);
+  return this.optional(element) || /^\+?[1-9][0-9]*$/.test(value);
 }, jQuery.validator.format("请输入正整数"));
 
 $.validator.addMethod('unsigned_integer', function (value, element) {
-  return this.optional(element) ||  /^\+?[0-9][0-9]*$/.test(value);
+  return this.optional(element) || /^\+?[0-9][0-9]*$/.test(value);
 }, jQuery.validator.format("请输入非负整数"));
 
 jQuery.validator.addMethod("second_range", function (value, element) {
@@ -208,10 +208,30 @@ $.validator.addMethod("feature", function (value, element, params) {
 },
   Translator.trans('购买截止时间需在当前时间之后')
 );
+
+// 不能晚于当前的一个日期
+
 $.validator.addMethod("next_day", function (value, element, params) {
   let now = new Date();
   let next = new Date(now + 86400 * 1000);
   return value && next <= new Date(value);
 },
   Translator.trans('开始时间应晚于当前时间')
+);
+
+$.validator.addMethod("before",function (value, element, params) {
+    return value && $(params).val() >= value;
+  },
+  Translator.trans('开始日期应早于结束日期')
+);
+
+$.validator.addMethod("after",function (value, element, params) {
+    if ($('input[name="expiryMode"]:checked').val() !== 'date') {
+      return true;
+    }
+    console.log($(params).val());
+    console.log(value);
+    return value && $(params).val() < value;
+  },
+  Translator.trans('结束日期应晚于开始日期')
 );
