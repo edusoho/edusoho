@@ -162,4 +162,10 @@ interface CourseService
     public function RecommendCourseByCourseSetId($courseSetId, $fields);
 
     public function cancelRecommendCourseByCourseSetId($courseSetId);
+
+    public function findCourseTasksAndChapters($courseId, $includeChapters);
+
+    public function updateCategoryByCourseSetId($courseSetId, $categoryId);
+
+    public function calculateLearnProgressByUserIdAndCourseIds($userId, array $courseIds);
 }

@@ -65,8 +65,8 @@
                 指定日期学习
                 <a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}"></a>
                 <div class="mbm mtm" id="expiry-date">
-                {{'开始日期'|trans}}<input class="form-control mls mrl" id="expiryStartDate" type="text" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" style="display:inline-block;width:150px" >
-                {{'结束日期'|trans}}<input class="form-control mls" type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}" style="display:inline-block;width:150px">
+                {{'开始日期'|trans}}<input class="form-control mls mrl" disabled id="expiryStartDate" type="text" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" style="display:inline-block;width:150px" >
+                {{'结束日期'|trans}}<input class="form-control mls" disabled type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}" style="display:inline-block;width:150px">
                 </div>
               {% endif %}
               <p class="help-block mtm">{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}</p>

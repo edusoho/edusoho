@@ -3,8 +3,8 @@
 namespace Biz\Course\Event;
 
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\Course\Service\CourseSetService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -15,7 +15,8 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
         return array(
             'courseSet.maxRate.update' => 'onCourseSetMaxRateUpdate',
             'courseSet.recommend' => 'onCourseSetRecommend',
-            'courseSet.recommend.cancel' => 'onCourseSetCancelRecommend'
+            'courseSet.recommend.cancel' => 'onCourseSetCancelRecommend',
+            'course-set.update' => 'onCourseSetUpdate',
         );
     }
 
@@ -40,6 +41,13 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
         $courseSet = $event->getSubject();
         $this->getCourseService()->cancelRecommendCourseByCourseSetId($courseSet['id']);
     }
+
+    public function onCourseSetUpdate(Event $event)
+    {
+        $courseSet = $event->getSubject();
+        $this->getCourseService()->updateCategoryByCourseSetId($courseSet['id'], $courseSet['categoryId']);
+    }
+
     /**
      * @return CourseSetService
      */

@@ -31,7 +31,7 @@
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu pull-right">
-        <li><a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_remark', {courseSetId: course.courseSetId, courseId:course.id, userId:user.id})}}">{{'备注'|trans}}</a></li>
+        <li><a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_defined_show', {courseSetId: course.courseSetId, courseId:course.id, userId:user.id})}}">{{'备注'|trans}}</a></li>
         {% if app.user.id != user.id %}
           <li>
             <a class="follow-student-btn" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowing %} style="display:none;"{% endif %}>{{'关注'|trans}}</a>

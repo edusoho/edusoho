@@ -2,24 +2,24 @@
 
 namespace Biz\Course\Service\Impl;
 
-use Biz\BaseService;
-use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\FavoriteDao;
-use Biz\Course\Dao\CourseSetDao;
-use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
-use Biz\System\Service\LogService;
+use Biz\BaseService;
 use Biz\Content\Service\FileService;
-use Biz\Taxonomy\Service\TagService;
+use Biz\Course\Copy\Impl\ClassroomCourseCopy;
+use Biz\Course\Dao\CourseDao;
+use Biz\Course\Dao\CourseSetDao;
+use Biz\Course\Dao\FavoriteDao;
+use Biz\Course\Service\CourseDeleteService;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
-use Biz\Course\Service\MaterialService;
+use Biz\System\Service\LogService;
+use Biz\Taxonomy\Service\TagService;
+use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
-use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\CourseNoteService;
-use Biz\Course\Service\CourseDeleteService;
-use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
@@ -28,6 +28,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->findCourseSetsByParentIdAndLocked($parentId, $locked);
     }
 
+    // Refactor: recommendCourseSet
     public function recommendCourse($id, $number)
     {
         $this->tryManageCourseSet($id);
@@ -55,6 +56,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $course;
     }
 
+    // Refactor: cancelRecommendCourseSet
     public function cancelRecommendCourse($id)
     {
         $course = $this->tryManageCourseSet($id);
@@ -77,6 +79,21 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             )
         );
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function findRandomCourseSets($conditions, $num = 3)
+    {
+        $count = $this->countCourseSets($conditions);
+        $max   = $count - $num - 1;
+        if ($max < 0) {
+            $max = 0;
+        }
+        $offset = rand(0, $max);
+        return $this->searchCourseSets($conditions, 'latest', $offset, $num);
+    }
+
 
     public function favorite($id)
     {
@@ -224,6 +241,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->count($conditions);
     }
 
+    // Refactor: countLearnCourseSets
     public function countUserLearnCourseSets($userId)
     {
         $courses = $this->getCourseService()->findLearnCoursesByUserId($userId);
@@ -232,6 +250,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return count($courseSets);
     }
 
+    // Refactor: searchLearnCourseSets
     public function searchUserLearnCourseSets($userId, $start, $limit)
     {
         $sets = $this->findLearnCourseSetsByUserId($userId);
@@ -255,6 +274,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
     }
 
+    // Refactor: countTeachingCourseSets
     public function countUserTeachingCourseSets($userId, array $conditions)
     {
         $members = $this->getCourseMemberService()->findTeacherMembersByUserId($userId);
@@ -269,6 +289,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->countCourseSets($conditions);
     }
 
+    // Refactor: searchTeachingCourseSets
     public function searchUserTeachingCourseSets($userId, array $conditions, $start, $limit)
     {
         $members = $this->getCourseMemberService()->findTeacherMembersByUserId($userId);
@@ -424,6 +445,32 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             }
         }
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function updateCourseSetMarketing($id, $fields)
+    {
+        $courseSet = $this->tryManageCourseSet($id);
+        $oldCourseSet = $courseSet;
+        $fields = ArrayToolkit::parts(
+            $fields,
+            array(
+                'discountId',
+                'discount'
+            )
+        );
+
+        $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $fields);
+
+        $this->dispatchEvent(
+            'course-set.marketing.update',
+            new Event($courseSet, array('oldCourseSet' => $oldCourseSet, 'newCourseSet' => $courseSet))
+        );
+
+        return $courseSet;
+    }
+
 
     public function updateCourseSetDetail($id, $fields)
     {
@@ -633,6 +680,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
     }
 
+    // Refactor: 函数意图不明显
     public function analysisCourseSetDataByTime($startTime, $endTime)
     {
         return $this->getCourseSetDao()->analysisCourseSetDataByTime($startTime, $endTime);
