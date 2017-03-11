@@ -1167,16 +1167,16 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $total = $this->controller->getCourseService()->countUserLearningCourses($userId);
         $courses = $this->controller->getCourseService()->findUserLearningCourses($userId, $start, $limit);
 
-        $count = $this->controller->getCourseService()->searchLearnCount(array(
+        $count = $this->controller->getTaskResultService()->countTaskResults(array(
+            'userId' => $userId
         ));
-        $learnStatusArray = $this->controller->getCourseService()->searchLearns(array(
+        $learnStatusArray = $this->controller->getTaskResultService()->searchTaskResults(array(
             'userId' => $userId,
         ), array(
-            'finishedTime',
-            'ASC',
+            'finishedTime' => 'ASC'
         ), 0, $count);
 
-        $lessons = $this->controller->getCourseService()->findLessonsByIds(ArrayToolkit::column($learnStatusArray, 'lessonId'));
+        $tasks = $this->controller->getTaskService()->findTasksByIds(ArrayToolkit::column($learnStatusArray, 'courseTaskId'));
 
         $tempCourse = array();
 
@@ -1184,11 +1184,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $tempCourse[$course['id']] = $course;
         }
 
-        foreach ($lessons as $key => $lesson) {
-            $courseId = $lesson['courseId'];
+        foreach ($tasks as $key => $task) {
+            $courseId = $task['courseId'];
 
             if (isset($tempCourse[$courseId])) {
-                $tempCourse[$courseId]['lastLessonTitle'] = $lesson['title'];
+                $tempCourse[$courseId]['lastLessonTitle'] = $task['title'];
             }
         }
 

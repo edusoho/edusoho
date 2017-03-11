@@ -244,25 +244,20 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     public function getCourseDownLessons()
     {
-        $token = $this->controller->getUserToken($this->request);
-        $user = $this->controller->getUser();
         $courseId = $this->getParam('courseId');
-
         $course = $this->controller->getCourseService()->getCourse($courseId);
-        $lessons = $this->controller->getCourseService()->getCourseItems($courseId);
+        $lessons = $this->controller->getCourseService()->findCourseTasksAndChapters($courseId, 1);
+
         $lessons = $this->controller->filterItems($lessons);
-        if ($user->isLogin()) {
-            $learnStatuses = $this->controller->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
-        } else {
-            $learnStatuses = null;
-        }
-        // $files = $this->getUploadFiles($courseId);
+
         $fileIds = ArrayToolkit::column($lessons, 'mediaId');
+
         $files = ArrayToolkit::index($this->getUploadFileService()->findFilesByIds($fileIds), 'id');
         $files = array_map(function ($file) {
             $file['convertParams'] = null; //过滤convertParams防止移动端报错
             return $file;
         }, $files);
+
         $lessons = $this->filterLessons($lessons, $files);
 
         return array(
@@ -728,7 +723,9 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             $lesson['content'] = '';
 
             if (isset($lesson['mediaId'])) {
-                $lesson['uploadFile'] = isset($files[$lesson['mediaId']]) ? $files[$lesson['mediaId']] : null;
+                $file = isset($files[$lesson['mediaId']]) ? $files[$lesson['mediaId']] : null;
+                $lesson['uploadFile'] = $file;
+                $lesson['mediaName'] = isset($file['filename']) ? $file['filename'] : '';
             }
 
             unset($lesson['tags']);
