@@ -48,15 +48,18 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('not_login', '您尚未登录，不能查看笔记！');
         }
 
-        $lessonNote = $this->controller->getNoteService()->getUserLessonNote($user['id'], $lessonId);
+        $lessonNote = $this->controller->getNoteService()->getCourseNoteByUserIdAndTaskId($user['id'], $lessonId);
+        //$lessonNote = $this->controller->getNoteService()->getUserLessonNote($user['id'], $lessonId);
 
         if (empty($lessonNote)) {
             return null;
         }
 
-        $lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
-        $lessonNote['lessonTitle'] = $lesson['title'];
-        $lessonNote['lessonNum'] = $lesson['number'];
+        $task = $this->getTaskService()->getTask($lessonId);
+        $lessonNote['lessonTitle'] = $task['title'];
+        $lessonNote['lessonNum'] = $task['number'];
+        $lessonNote['lessonId'] = $lessonId;
+
         $content = $this->controller->convertAbsoluteUrl($this->request, $lessonNote['content']);
         $content = $this->filterNote($content);
         $lessonNote['content'] = $content;
@@ -771,8 +774,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $start = (int) $this->getParam('start', 0);
         $limit = (int) $this->getParam('limit', 10);
 
-        $total = $this->controller->getCourseService()->findUserFavoritedCourseCount($user['id']);
-        $courses = $this->controller->getCourseService()->findUserFavoritedCourses($user['id'], $start, $limit);
+        $total   = $this->controller->getCourseService()->findUserFavoritedCourseCountNotInClassroom($user['id']);
+        $courses = $this->controller->getCourseService()->findUserFavoritedCoursesNotInClassroom($user['id'], $start, $limit);
 
         return array(
             'start' => $start,
@@ -1655,5 +1658,10 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     protected function getCourseSetService()
     {
         return $this->controller->getService('Course:CourseSetService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->controller->getService('Task:TaskService');
     }
 }
