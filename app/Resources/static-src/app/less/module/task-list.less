@@ -5,7 +5,12 @@
   .task-item {
     position: relative;
     background-color: transparent;
+    margin-bottom: 10px;
     &.task-content {
+      &:hover,
+      &.active{
+        background-color: #f3fee8;
+      }
       .title {
         color: @gray-dark;
       }
@@ -14,17 +19,17 @@
       display: block;
       word-wrap: break-word;
       word-break: break-all;
-      padding: 12px 70px 12px 30px;
+      padding: 12px 90px 12px 50px;
     }
     .left-menu {
       position: absolute;
-      left: 0;
+      left: 20px;
       top: 14px;
     }
     .right-menu {
       position: absolute;
       top:12px;
-      right: 0;
+      right: 20px;
     }
     .btn-learn {
       margin-top: -6px;
@@ -66,7 +71,7 @@
         &.task-content {
           .title,
           .left-menu{
-            color: @brand-primary
+            color: @brand-primary;
           }
         }
       }

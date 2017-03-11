@@ -18,7 +18,7 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
 
     public function sumRatingByParams($conditions)
     {
-        $builder = $this->_createQueryBuilder($conditions)
+        $builder = $this->createQueryBuilder($conditions)
             ->select('sum(rating)');
 
         return $builder->execute()->fetchColumn(0);

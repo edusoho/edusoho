@@ -71,9 +71,8 @@ class CommonController extends BaseController
             $this->switchUser($request, $currentUser);
         } catch (\Exception $e) {
             $this->switchUser($request, $currentUser);
+            throw $exception;
         }
-
-        return $this->createJsonResponse(true);
     }
 
     /**

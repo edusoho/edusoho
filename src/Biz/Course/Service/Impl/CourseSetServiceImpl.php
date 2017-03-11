@@ -2,24 +2,24 @@
 
 namespace Biz\Course\Service\Impl;
 
-use Biz\BaseService;
-use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\FavoriteDao;
-use Biz\Course\Dao\CourseSetDao;
-use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
-use Biz\System\Service\LogService;
+use Biz\BaseService;
 use Biz\Content\Service\FileService;
-use Biz\Taxonomy\Service\TagService;
+use Biz\Course\Copy\Impl\ClassroomCourseCopy;
+use Biz\Course\Dao\CourseDao;
+use Biz\Course\Dao\CourseSetDao;
+use Biz\Course\Dao\FavoriteDao;
+use Biz\Course\Service\CourseDeleteService;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
-use Biz\Course\Service\MaterialService;
+use Biz\System\Service\LogService;
+use Biz\Taxonomy\Service\TagService;
+use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
-use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\CourseNoteService;
-use Biz\Course\Service\CourseDeleteService;
-use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
@@ -40,7 +40,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $id,
             array(
                 'recommended' => 1,
-                'recommendedSeq' => (int) $number,
+                'recommendedSeq' => (int)$number,
                 'recommendedTime' => time(),
             )
         );
@@ -417,6 +417,32 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             }
         }
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function updateCourseSetMarketing($id, $fields)
+    {
+        $courseSet = $this->tryManageCourseSet($id);
+        $oldCourseSet = $courseSet;
+        $fields = ArrayToolkit::parts(
+            $fields,
+            array(
+                'discountId',
+                'discount'
+            )
+        );
+
+        $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $fields);
+
+        $this->dispatchEvent(
+            'course-set.marketing.update',
+            new Event($courseSet, array('oldCourseSet' => $oldCourseSet, 'newCourseSet' => $courseSet))
+        );
+
+        return $courseSet;
+    }
+
 
     public function updateCourseSetDetail($id, $fields)
     {
