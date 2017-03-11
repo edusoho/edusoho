@@ -116,10 +116,10 @@ $.extend($.validator.messages, {
   min: $.validator.format("请输入不小于 {0} 的数值")
 });
 
-
-$.validator.addMethod("DateAndTime", function (value, element, params) {
-  return this.optional(element) || /^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$/.test(value);
-}, jQuery.validator.format("请输入合格的日期格式"));
+$.validator.addMethod("DateAndTime",function(value,element){
+let reg = /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}$/;
+return this.optional( element ) || reg.test(value);
+}, $.validator.format("请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm"));
 
 $.validator.addMethod("trim", function (value, element, params) {
   return $.trim(value).length > 0;

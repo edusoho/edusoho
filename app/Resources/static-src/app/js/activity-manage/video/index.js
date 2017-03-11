@@ -85,13 +85,13 @@ class Video {
     // 完成条件是观看时长的情况
     if ($("#finish-condition").children('option:selected').val() === 'time') {
       $('.viewLength').removeClass('hidden');
-      _inItStep3from();
+      this.inItStep3from();
     }
 
     $("#finish-condition").on('change', function (event) {
       if (event.target.value == 'time') {
         $('.viewLength').removeClass('hidden');
-        _inItStep3from();
+        this.inItStep3from();
       } else {
         $('.viewLength').addClass('hidden');
         $('input[name="ext[finishDetail]"]').rules('remove')
