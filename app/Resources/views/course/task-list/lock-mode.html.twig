@@ -1,28 +1,6 @@
 <div class="course-detail-content">
-<<<<<<< HEAD
-  {#暂时去掉块状显示#}
-  {#{% if not isMarketingPage  %}
-  <div class="clearfix mbl">
-    <div class="btn-group pull-right js-task-show-type" role="tablist">
-      <a class="btn btn-default active" data-list=".js-task-list-ul" data-type="list"> <i class="es-icon es-icon-menu"></i>
-      </a>
-      <a class="btn btn-default" data-list=".js-task-chart-ul" data-type="chart"> <i class="es-icon es-icon-viewmodule"></i>
-      </a>
-    </div>
-  </div>
-  {% endif %}#}
-  <ul class="task-list task-list-md task-list-hover js-task-list-ul">
-    {% for key, item in courseItems %}
-      {% if item.itemType == 'chapter' and item.type == 'chapter' %}
-        <li class="task-item bg-gray-lighter js-task-chapter"><i class="es-icon es-icon-menu left-menu"></i>
-          <a href="javascript:void(0);" class="title gray-dark">第{{ item.number }}
-            章: {{ item.title }}</a>
-          <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
-        </li>
-      {% elseif item.itemType == 'chapter'  and item.type == 'unit' %}
-        <li class="task-item color-gray bg-gray-lighter">
-=======
-	{% if not isMarketingPage %}
+  {#暂时去除方形状模块#}
+	{#{% if not isMarketingPage %}
 		<div class="clearfix mbl">
 			<div class="btn-group pull-right js-task-show-type" role="tablist">
 				<a class="btn btn-default active" data-list=".js-task-list-ul" data-type="list"> <i
@@ -33,7 +11,7 @@
 				</a>
 			</div>
 		</div>
-	{% endif %}
+	{% endif %}#}
 	<ul class="task-list task-list-md task-list-hover js-task-list-ul">
 		{% for key, item in courseItems %}
 			{% if item.itemType == 'chapter' and item.type == 'chapter' %}
@@ -44,7 +22,6 @@
 				</li>
 			{% elseif item.itemType == 'chapter'  and item.type == 'unit' %}
 				<li class="task-item color-gray bg-gray-lighter">
->>>>>>> origin/feature/x8
           <span class="title">第{{ item.number }}
 	          节: {{ item.title }}</span>
 				</li>
@@ -135,32 +112,13 @@
 						<span class="right-menu">
               敬请期待
             </span>
-<<<<<<< HEAD
-          {% endif %}
-        </li>
-      {% endif %}
-    {% endfor %}
-  </ul>
-  {#暂时去掉块状显示#}
-  {#<ul class="task-list task-chart task-list-md task-list-hover clearfix hidden js-task-chart-ul">
-    {% for key, item in courseItems %}
-      {% if  item.itemType == 'task' %}
-        {% set task = item %}
-        {% if isMarketingPage or  member is empty %}
-          {% set task_lock = true %}
-        {% else %}
-          {% set task_lock =  (course.learnMode  == 'lockMode')  and task.lock %}
-        {% endif %}
-        {% set file = files[task.activity.mediaId]|default(null) %}
-        <li class="task-item task-content mouse-control">
-          <i class="es-icon
-=======
 					{% endif %}
 				</li>
 			{% endif %}
 		{% endfor %}
 	</ul>
-	<ul class="task-list task-chart task-list-md task-list-hover clearfix hidden js-task-chart-ul">
+  {#暂时去除方形状模块#}
+	{#<ul class="task-list task-chart task-list-md task-list-hover clearfix hidden js-task-chart-ul">
 		{% for key, item in courseItems %}
 			{% if  item.itemType == 'task' %}
 				{% set task = item %}
@@ -172,7 +130,6 @@
 				{% set file = files[task.activity.mediaId]|default(null) %}
 				<li class="task-item task-content mouse-control">
 					<i class="es-icon
->>>>>>> origin/feature/x8
               {% if task_lock %}
               es-icon-lock
               {% elseif  not task.result|default(null) %}
@@ -212,17 +169,9 @@
 						<span class="right-menu">
                 敬请期待
               </span>
-<<<<<<< HEAD
-          {% endif %}
-        </li>
-      {% endif %}
-    {% endfor %}
-  </ul>#}
-=======
 					{% endif %}
 				</li>
 			{% endif %}
 		{% endfor %}
-	</ul>
->>>>>>> origin/feature/x8
+	</ul>#}
 </div>
