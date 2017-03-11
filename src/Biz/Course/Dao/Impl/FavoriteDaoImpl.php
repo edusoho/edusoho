@@ -5,7 +5,6 @@ namespace Biz\Course\Dao\Impl;
 use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
-use Biz\Course\Dao\CourseDao;
 
 class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
 {
@@ -77,15 +76,5 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
     public function deleteByCourseId($courseId)
     {
         return $this->db()->delete($this->table(), array('courseId' => $courseId));
-    }
-
-    public function findCourseFavoritesNotInClassroomByUserId($userId, $start, $limit)
-    {
-        $sql = "SELECT f.* FROM {$this->table} f ";
-        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON f.userId = ?';
-        $sql .= "AND f.courseId = c.id AND c.parentId = 0 AND f.type = 'course'";
-        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-
-        return $this->db()->fetchAll($sql, array($userId));
     }
 }
