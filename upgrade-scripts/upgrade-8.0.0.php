@@ -230,6 +230,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $sql = "INSERT INTO `c2_course` (
               `id`
+              ,`courseSetId`
               ,`title`
               ,`status`
               ,`type`
@@ -282,6 +283,7 @@ class EduSohoUpgrade extends AbstractUpdater
               ,`maxRate`
           ) SELECT
               `id`
+              ,`id`
               ,`title`
               ,`status`
               ,`type`
@@ -379,15 +381,43 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $this->c2TagOwner();
 
+        $this->updateCourseChapter();
+
+    }
+
+
+    protected function updateCourseChapter()
+    {
+
+        $totalTasks = $this->getConnection()->fetchAll("SELECT* FROM `course_task`");
+
+        $totalTasks = \AppBundle\Common\ArrayToolkit::group($totalTasks, 'lessonId');
+
+        foreach ($totalTasks as $key => $tasks) {
+            if (count($tasks) < 2) {
+                continue;
+            }
+            foreach ($tasks as $task) {
+                if ($task['mode'] == 'lesson') {
+                    $categoryId = $task['categoryId'];
+                    continue;
+                }
+
+                $this->getConnection()->update(
+                    'course_task',
+                    array('categoryId' => $categoryId),
+                    array('id' => $task['id'])
+                );
+
+            }
+        }
+
     }
 
     protected function c2TagOwner()
     {
-
         $this->exec(
-            "
-        update `tag_owner` set `ownerType` = 'coruseSet' where `ownerType`='coruse';
-        "
+            "update `tag_owner` set `ownerType` = 'coruseSet' where `ownerType`='coruse';"
         );
     }
 
@@ -430,8 +460,15 @@ class EduSohoUpgrade extends AbstractUpdater
         //获取已经处理过的下载资料
         $downloadActivities = $this->getConnection()->fetchAll('select * from download_activity');
         $downloadActivities = \AppBundle\Common\ArrayToolkit::column($downloadActivities, 'lessonId');
+
+
         foreach ($downloadMaterials as $lessonId => $materials) {
 
+            if (in_array($lessonId, $downloadActivities)) {
+                continue;
+            }
+
+            //合并外链和本地资料
             array_filter(
                 $materials,
                 function (&$material) {
@@ -440,14 +477,13 @@ class EduSohoUpgrade extends AbstractUpdater
                     }
                 }
             );
-            if (in_array($lessonId, $downloadActivities)) {
-                continue;
-            }
+
 
             $fileCount = count($materials);
             $fileIds = \AppBundle\Common\ArrayToolkit::column($materials, 'fileId');
             $material = array_pop($materials);
 
+            //download_activity
             $download = array(
                 'mediaCount' => $fileCount,
                 'createdTime' => $material['createdTime'],
@@ -458,7 +494,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
             $this->getConnection()->insert('download_activity', $download);
             $downloadId = $this->getConnection()->lastInsertId();
-
+            //activity
             $activity = array(
                 'title' => '下载',
                 'mediaId' => $downloadId,
@@ -475,7 +511,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $activityId = $this->getConnection()->lastInsertId();
 
             $lesson = $this->getConnection()->fetchAssoc("SELECT * FROM `course_lesson` WHERE id = {$lessonId}  ");
-
+            //course_task
             $task = array(
                 'courseId' => $lesson['courseId'],
                 'seq' => $lesson['seq'],
@@ -489,9 +525,12 @@ class EduSohoUpgrade extends AbstractUpdater
                 'mode' => 'preparation',
                 'number' => $lesson['number'],
                 'type' => 'download',
+                'lessonId' => $lessonId,
             );
 
             $this->getConnection()->insert('course_task', $task);
+
+            var_dump($this->getConnection()->lastInsertId());
         }
 
         $this->getConnection()->exec(
@@ -540,6 +579,11 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isFieldExist('course_task', 'lessonId')) {
             $this->exec("alter table `course_task` add `lessonId` int(10) ;");
         }
+
+        if (!$this->isFieldExist('course_task', 'chapterId')) {
+            $this->exec("alter table `course_task` add `chapterId` int(10) ;");
+        }
+
 
         $this->getConnection()->exec(
             "
@@ -594,18 +638,28 @@ class EduSohoUpgrade extends AbstractUpdater
         );
 
 
-        $tasks = $this->getConnection()->fetchAll('select * from `course_task`');
+        $this->exec(
+            "alter table `course_chapter` modify `type` varchar(255) NOT NULL DEFAULT 'chapter' COMMENT '章节类型：chapter为章节，unit为单元，lesson为课时。';"
+        );
+
+
+        //处理重复的
+        $tasks = $this->getConnection()->fetchAll(
+            "select * from `course_task` where mode ='lesson' and chapterId IS  NULL;"
+        );
 
         foreach ($tasks as $task) {
             $chapter = array(
-                'courseId' => $task['fromCourseId'],
+                'courseId' => $task['courseId'],
                 'title' => $task['title'],
                 'type' => 'lesson',
             );
-            $chapter = $this->getConnection()->insert('course_chapter', $chapter);
+            $chapter = $this->getCourseService()->createChapter($chapter);
             $task['categoryId'] = $chapter['id'];
 
-            $this->getConnection()->update('course_task', array('categoryId' => $chapter['id']));
+            $fields = array('categoryId' => $chapter['id'], 'chapterId' => $chapter['id']);
+
+            $this->getConnection()->update('course_task', $fields, array('id' => $task['id']));
         }
     }
 
@@ -634,9 +688,10 @@ class EduSohoUpgrade extends AbstractUpdater
                 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
             "
             );
+        }
 
-            $this->getConnection()->exec(
-                "
+        $this->getConnection()->exec(
+            "
             insert into `activity`(
                 `id`,
                 `title` ,
@@ -669,18 +724,16 @@ class EduSohoUpgrade extends AbstractUpdater
                 `copyId`
             from `course_lesson` where `id` not in (select id from `activity`);
         "
-            );
+        );
 
-            //update activityId in table course_task
-            $this->getConnection()->exec(
-                "update `course_task`  ck set  `activityId` = (select `id` from  `activity` ay  where  ck.id = ay.id)
-            "
-            );
-            //courseSetId
-            $this->getConnection()->exec(
-                "update `activity` AS  `ct` set `ct`.fromCourseSetId   = (select `courseSetId` from `c2_course` AS `ce` where `ct`.fromCourseId = `ce`.id)"
-            );
-        }
+        //update activityId in table course_task
+        $this->getConnection()->exec(
+            "UPDATE `course_task` ck, activity ay SET ck.`activityId` = ay.`id` WHERE ay.id = ck.`id` AND  ck.`activityId` = 0;"
+        );
+        //courseSetId
+        $this->getConnection()->exec(
+            "UPDATE `activity` ay, `c2_course` ce SET ay.`fromCourseSetId` = ce.`courseSetId` WHERE  ay.`fromCourseId` = ce.`id` AND ay.`fromCourseSetId` = 0;"
+        );
     }
 
     protected function c2VideoActivity()
@@ -1188,7 +1241,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 `length` ,
                 `maxOnlineNum`,
                 `copyId`,
-                `exerciseId`
+                `exerciseId`,
+                `lessonId`
               ) 
             select
               `courseId`,
@@ -1208,7 +1262,8 @@ class EduSohoUpgrade extends AbstractUpdater
               `length`,
               `maxOnlineNum`,
               `copyId`,
-              `eexerciseId`
+              `eexerciseId`,
+              `id`
               FROM (SELECT  ee.id AS eexerciseId, ee.`copyId` AS ecopyId , ce.*  
                 FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid) lesson  
                     WHERE lesson.eexerciseId NOT IN (SELECT exerciseId FROM course_task WHERE exerciseId IS NOT NULL );
@@ -1313,7 +1368,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 `length` ,
                 `maxOnlineNum`,
                 `copyId`,
-                `homeworkId`
+                `homeworkId`,
+                `lessonId`
               ) 
             SELECT
               `courseId`,
@@ -1333,7 +1389,8 @@ class EduSohoUpgrade extends AbstractUpdater
               `length`,
               `maxOnlineNum`,
               `copyId`,
-              `hhomeworkId`
+              `hhomeworkId`,
+              `id`
               FROM (SELECT  ee.id AS hhomeworkId, ee.`copyId` AS ecopyId , ce.*  
                 FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonid) lesson  
                     WHERE lesson.hhomeworkId NOT IN (SELECT homeworkId FROM course_task WHERE homeworkId IS NOT NULL );
@@ -1471,7 +1528,7 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function testpaperUpgrade()
     {
         $sql = "SELECT * FROM testpaper WHERE id NOT IN (SELECT id FROM c2_testpaper WHERE type = 'testpaper')";
-        $testpapers = $this->getConnecfortion()->fetchAll($sql);
+        $testpapers = $this->getConnection()->fetchAll($sql);
         foreach ($testpapers as $testpaper) {
             $targetArr = explode('/', $testpaper['target']);
             $courseArr = explode('-', $targetArr[0]);
@@ -2094,9 +2151,11 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if (!$this->isFieldExist('question', 'courseSetId')) {
-            $this->exec("
+            $this->exec(
+                "
                 ALTER TABLE `question` ADD COLUMN `courseSetId` INT(10) NOT NULL DEFAULT '0'  AFTER `target`
-            ");
+            "
+            );
         }
 
         if (!$this->isFieldExist('question', 'lessonId')) {
@@ -2291,6 +2350,11 @@ class EduSohoUpgrade extends AbstractUpdater
     private function getSettingService()
     {
         return ServiceKernel::instance()->createService('System:SettingService');
+    }
+
+    protected function getCourseService()
+    {
+        return ServiceKernel::instance()->createService('Course:CourseService');
     }
 }
 
