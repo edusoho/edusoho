@@ -162,6 +162,9 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
     public function declares()
     {
         return array(
+            'serializes' => array(
+                'roles' => 'delimiter',
+            ),
             'orderbys' => array(
                 'id',
                 'createdTime',
