@@ -13,7 +13,20 @@ class Homework extends BaseResource
         $idType = $request->query->get('_idType');
         if ('lesson' == $idType) {
             $task = $this->getTaskService()->getTask($id);
-            $activity = $this->getActivityService()->getActivity($task['activityId']);
+
+            //只为兼容移动端学习引擎2.0以前的版本，之后需要修改
+            $conditions = array(
+                'categoryId' => $task['categoryId'],
+                'status' => 'published',
+                'type' => 'homework',
+            );
+            $homeworkTasks = $this->getTaskService()->searchTasks($conditions, null, 0, 1);
+            if (!$homeworkTasks) {
+                return $this->error('404', '该练习不存在!');
+            }
+            $homeworkTask = $homeworkTasks[0];
+
+            $activity = $this->getActivityService()->getActivity($homeworkTask['activityId']);
             $homework = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
         } else {
             $homework = $this->getTestpaperService()->getTestpaper($id);

@@ -126,9 +126,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         ));
 
         if (!isset($course['isFree'])) {
-            $course['isFree'] = 1;//默认免费
+            $course['isFree'] = 1; //默认免费
         }
-        
+
         $course = $this->validateExpiryMode($course);
 
         $course['status'] = 'draft';
@@ -1033,6 +1033,37 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function createCourseStrategy($course)
     {
         return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->biz);
+    }
+
+    public function calculateLearnProgressByUserIdAndCourseIds($userId, array $courseIds)
+    {
+        if (empty($userId) || empty($courseIds)) {
+            return array();
+        }
+        $courses = $this->findCoursesByIds($courseIds);
+
+        $conditions = array(
+            'courseIds' => $courseIds,
+            'userId' => $userId,
+        );
+        $count = $this->getMemberService()->countMembers($conditions);
+        $members = $this->getMemberService()->searchMembers(
+            $conditions,
+            array('id' => 'DESC'),
+            0,
+            $count
+        );
+
+        $learnProgress = array();
+        foreach ($members as $member) {
+            $learnProgress[] = array(
+                'courseId' => $member['courseId'],
+                'totalLesson' => $courses[$member['courseId']]['taskNum'],
+                'learnedNum' => $member['learnedNum'],
+            );
+        }
+
+        return $learnProgress;
     }
 
     protected function hasAdminRole()
