@@ -1,0 +1,50 @@
+{% set isAuditor = isAuditor|default(false) %}
+{% if setting("course.buy_fill_userinfo")|default(false) %}
+  {% if checkMemberLevelResult == 'ok' %}
+    <a  class="btn btn-primary btn-lg"  href="#modal" data-toggle="modal" data-url="{{ path('classroom_buy',{id:classroom.id}) }}" >{{'%memberLevel%，免费学'|trans({'%memberLevel%':classroomMemberLevel.name})}}</a>
+  {% else %}
+    {% if classroom.buyable == 1 %}
+      {% if not isAuditor %}
+        <a class="btn btn-link" href="{{ path('classroom_become_auditor',{id:classroom.id}) }}">{{'进去逛逛'|trans}}</a>
+      {% endif %}
+      <a class="btn btn-primary btn-lg" href="#modal" data-toggle="modal" data-url="{{ path('classroom_buy', {id:classroom.id}) }}">{{'加入购买'|trans}}</a>
+    {% else %}
+      <button type="button" style="pointer-events:auto" class="btn btn-default disabled btn-lg" data-toggle="tooltip" data-placement="top" title="{{'该%name%无法在线购买，若需帮助请联系客服'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}">{{'无法购买'|trans}}</button>
+    {% endif %}
+  {% endif %}
+{% else %}
+  {% if classroom.price > 0 and ( ( not canFreeJoin and classroom.vipLevelId == 0) or checkMemberLevelResult in ['not_member', 'not_login', 'member_expired', 'level_low']) %}
+    {% if classroom.buyable == 1 %}
+      {% if not isAuditor %}
+        <a class="btn btn-link" href="{{path('classroom_become_auditor',{id:classroom.id})}}">{{'进去逛逛'|trans}}</a>
+      {% endif %}
+      <a class="btn btn-primary btn-lg" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">{{'加入购买'|trans}}</a>
+    {% else %}
+      <button type="button" style="pointer-events:auto" class="btn btn-default disabled btn-lg" data-toggle="tooltip" data-placement="top" title="{{'该%name%无法在线购买，若需帮助请联系客服'|trans({'%name%':setting('classroom.name')|default('班级')})}}">{{'无法购买'|trans}}</button>
+    {% endif %}
+  {% elseif checkMemberLevelResult in ['not_member', 'member_expired'] %}
+    <a href="{{ path('vip_buy') }}"  class="btn btn-primary btn-lg" >{{'%memberLevel%，免费学'|trans({'%memberLevel%':classroomMemberLevel.name})}}</a>
+
+  {% elseif checkMemberLevelResult == 'level_low' %}
+    <a  class="btn btn-primary btn-lg"  href="{{ path('vip_upgrade', {level:classroomMemberLevel.id}) }}" >{{'%memberLevel%，免费学'|trans({'%memberLevel%':classroomMemberLevel.name})}}</a>
+
+  {% elseif checkMemberLevelResult == 'ok' %}
+    <a  class="btn btn-primary btn-lg"  href="{{ path('classroom_vip_buy', {id:classroom.id}) }}" >{{'%memberLevel%，免费学'|trans({'%memberLevel%':classroomMemberLevel.name})}}</a>
+
+  {% else %}
+    {% if classroom.buyable == 1 %}
+      <a  class="btn btn-primary btn-lg"  href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}"
+        {% if canFreeJoin and app.user and classroom.price > 0 %}
+        data-toggle="tooltip"
+        data-placement="top"
+        title="{{'您之前已购买了本%name%的所有收费课程，可免费学习！'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}"
+        {% endif %}
+      >{{'免费加入'|trans}}</a>
+    {% else %}
+    <button type="button" style="pointer-events:auto" class="btn btn-default disabled btn-lg" data-toggle="tooltip" data-placement="top" title="{{'该%name%无法在线购买，若需帮助请联系客服'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}">{{'无法购买'|trans}}</button>
+    {% endif %}
+  {% endif %}
+{% endif %}
+
+
+

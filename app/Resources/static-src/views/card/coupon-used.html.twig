@@ -1,0 +1,23 @@
+<div class="card-pack-item coupon-item useless">
+  {% if cardDetail.targetType == "course" %}
+    <p class="title">{{'此课程优惠券已使用'|trans}}</p>
+  {% endif %}
+  {% if cardDetail.targetType == "classroom" %}
+    <p class="title">{{'此班级优惠券已使用'|trans}}</p>
+  {% endif %}
+  {% if cardDetail.targetType == "vip" %}
+    <p class="title">{{'此会员优惠券已使用'|trans}}</p>
+  {% endif %}
+	{% if cardDetail.targetType == "all" %}
+			<p class="title">{{'此抵价优惠券已使用'|trans}}</p>
+	{% endif %}
+  <p class="price">
+    {% if cardDetail.type == "minus" %}￥{% endif %}<strong>{{ cardDetail.rate }}</strong>{% if cardDetail.type == "discount" %}{{'折'|trans}}{% endif %}
+  </p>
+  <p>{{'有效期截止：'|trans}}<span>{{'%deadline%年'|trans({'%deadline%': cardDetail.deadline|date('Y')})}}{{'%deadline%月'|trans({'%deadline%': cardDetail.deadline|date('n')}) }}{{'%deadline%日'|trans({'%deadline%': cardDetail.deadline|date('d')}) }}</span></p>
+  {% if cardDetail.targetType == 'fullDiscount' and cardDetail.fullDiscountPrice %}
+    <p>{{'使用条件：'|trans}}<span>{{'满%fullDiscountPrice%'|trans({'%fullDiscountPrice%': cardDetail.fullDiscountPrice|default('可用'|trans)})}}</span></p>
+  {% endif %}
+  <div class="stamp stamp-used"></div>
+</div>
+

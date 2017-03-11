@@ -1,0 +1,33 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_course_tag_manage' %}
+{% set script_controller = 'tag/list' %}
+{% block main %}
+
+<table id="tag-table" class="table table-striped">
+    <thead>
+        <th width="10%">ID</th>
+        <th width="30%">{{'名称'|trans}}</th>
+        <th width="30%">{{'所属标签组'|trans}}</th>
+        <th width="20%">{{'添加时间'|trans}}</th>
+        <th width="10%">{{'操作'|trans}}</th>
+    </thead>
+    
+    <tbody>
+      {% if tags %}
+        {% for tag in tags %}
+          {% include 'admin/tag/list-tr.html.twig' %}
+        {% endfor %}
+      {% else %}
+       <tr><td colspan="20"><div class="empty">{{'暂无标签记录'|trans}}</div></td></tr>
+      {% endif %}
+    </tbody>
+</table>
+
+{{ admin_macro.paginator(paginator) }}
+<div class="alert alert-info">
+  <p>1.标签可用于课程和资讯；</p>
+  <p>2.可<a target="_blank" href="{{ path('admin_course_set') }}">开启</a>根据标签在课程介绍页显示相关课程。</p>
+</div>
+
+{% endblock %}

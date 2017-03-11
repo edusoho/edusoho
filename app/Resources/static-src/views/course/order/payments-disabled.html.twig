@@ -1,0 +1,7 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{% if course.price > 0 %}{{'购买课程'|trans}}{% else %}{{'加入学习'|trans}}{% endif %}{% endblock %}
+	
+{% block body %}
+	<div class="alert alert-info">{{ setting('payment.disabled_message')|default('尚未开启支付模块，无法购买课程。'|trans)|raw }}</div>
+{% endblock %}

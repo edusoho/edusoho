@@ -1,0 +1,6 @@
+<p class="gray-darker mbs">满足以下条件:</p>
+{% if testpaperActivity.finishCondition.type == 'score' %}
+  考试分数通过{{ testpaperActivity.finishCondition.finishScore }}分
+{% else %}
+  提交试卷
+{% endif %}

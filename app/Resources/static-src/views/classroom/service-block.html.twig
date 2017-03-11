@@ -1,0 +1,32 @@
+{% do load_script('topxiawebbundle/controller/classroom/service-block') %}
+{% include 'seajs_loader_compatible.html.twig' with {'topxiawebbundle':true} %}
+
+<ul class="list-unstyled clearfix">
+  {# {% set defaultServices = dict('classroomService')|keys %}
+  {% for service in services %}
+    {% include 'classroom/part/service/' ~ service ~ '.html.twig' with {active:true} %}
+  {% endfor %}
+  
+  {% for service in defaultServices if service not in services %}
+    {% include 'classroom/part/service/' ~ service ~ '.html.twig' with {active:false} %}
+  {% endfor %} #}
+  {% set serviceTags = classroom_services(services|default([])) %}
+  {% for tag in serviceTags %}
+  	<li class="{% if tag.active %}active{% endif %}">
+	  <a 
+	  tabindex="0" 
+	  role="button" 
+	  data-container="body" 
+	  data-toggle="popover" 
+	  data-trigger="hover" 
+	  data-placement="top" 
+	  data-html="true" 
+	  title="{{ tag.full_name|trans }} {% if not tag.active %}<small class='text-muted'>({{'暂未提供'|trans}})</span>{% endif %}" 
+	  data-content="{{ tag.summary|trans}}">
+	  	{{ tag.short_name|trans }}
+	  </a>
+    </li>
+  {% endfor %}
+
+
+</ul>

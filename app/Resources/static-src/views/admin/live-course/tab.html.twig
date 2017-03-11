@@ -1,0 +1,5 @@
+<div class="btn-group">
+<a href=" {{ url('admin_live_course', {status: 'coming'}) }}" type="button" class="btn btn-default btn-sm {% if status == 'coming'%}btn-primary{% endif %}">{{'即将开始的'|trans}}</a>
+<a href="{{ url('admin_live_course', {status: 'underway'}) }}" type="button" class="btn btn-default btn-sm {% if status == 'underway'%}btn-primary{% endif %}">{{'当前进行中'|trans}}</a>
+<a href=" {{ url('admin_live_course', {status: 'end'}) }}" type="button" class="btn btn-default btn-sm {% if status == 'end'%}btn-primary{% endif %}">{{'已结束的'|trans}}</a>
+</div>

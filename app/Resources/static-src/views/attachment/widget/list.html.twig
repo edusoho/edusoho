@@ -1,0 +1,6 @@
+{% if attachments|default(null)%}
+	{% set attachments = attachments[targetType ~ targetId]|default(null) %}
+{% else %}
+	{% set attachments = data('AttachmentList',{targetType: targetType, targetId: targetId}) %}
+{% endif %}
+{% include 'attachment/list.html.twig' %}

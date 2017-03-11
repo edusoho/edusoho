@@ -1,0 +1,15 @@
+<div class="row form-group">
+	<div>
+    <div  class= "col-md-4" id="echats-pie" style="height: 300px; width: 400px;"></div>
+		<div  class= "col-md-6">
+			
+			{% include 'admin/open-course-analysis/parts/referer-detail-list.html.twig' with {showPaginator:0, showRefererName:1, refererloglist:refererlogsDetail} %}
+
+		</div>
+		<input id="data"  type="hidden" value="{% if refererlogDetailDatas %} {{refererlogDetailDatas}} {% endif %}">
+		<input id="dataName" type="hidden" value="{% if refererlogNames %} {{refererlogNames}} {% endif %}">
+	</div>
+</div> 
+
+
+  <script>app.load('open-course-analysis/detail-graph');</script>

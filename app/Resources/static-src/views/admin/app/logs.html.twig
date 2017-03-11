@@ -1,0 +1,61 @@
+{% extends 'admin/cloud-app-layout.html.twig' %}
+
+
+{% set script_controller = 'app/logs' %}
+
+{% set menu = 'admin_app_logs' %}
+
+{% block main %}
+  <style>
+    .table .popover {
+      max-width: 400px;
+    }
+  </style>
+
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>{{'应用名称'|trans}}</th>
+        <th>{{'类型'|trans}}</th>
+        <th>{{'操作人'|trans}}</th>
+        <th>{{'状态'|trans}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for log in logs %}
+        <tr>
+          <td>{{ log.name }}</td>
+          <td>
+            {% if log.type == 'install' %}
+              {{'安装'|trans}}
+              <br> <small class="text-muted">({{ log.toVersion }})</small>
+            {% else %}
+              升级
+              <br> <small class="text-muted">{{'版本：'|trans}} {{ log.fromVersion }} -&gt; {{ log.toVersion }}</small>
+            {% endif %}
+          </td>
+          <td>
+            {{ admin_macro.user_link(users[log.userId]) }}
+            <br>
+            <small class="text-muted">{{ log.createdTime|date('Y-m-d H:i:s') }}</small>
+          </td>
+          <td>
+            {% if log.status == 'ROLLBACK' %}
+              <strong class="text-danger">{{'需要回滚'|trans}}</strong>
+            {% elseif log.status == 'ERROR' %}
+              <strong class="text-warning">{{'更新失败'|trans}}</strong>
+            {% elseif log.status == 'SUCCESS' %}
+              <strong class="text-success">{{'更新成功'|trans}}</strong>
+            {% elseif log.status == 'RECOVERED' %}
+              <strong class="text-info">{{'已恢复'|trans}}</strong>
+            {% endif %}
+            {% if log.message %}
+              <a href="javascript:;" class="btn btn-sm btn-info log-message-btn" data-content="{{log.message}}">{{'详情'|trans}}</a>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {{ admin_macro.paginator(paginator) }}
+{% endblock %}

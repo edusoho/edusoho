@@ -1,0 +1,12 @@
+{% extends 'es-bar/layout.html.twig' %}
+{% block esBarTitle %}
+    {{'通知'|trans}}
+{% endblock %}
+
+{% block esBarBody %}
+  <ul class="bar-message">
+    {% block myMessage %}
+
+    {% endblock %}
+  </ul>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% set tabMenus = sub_permissions(menu|parent_permission.code|default(null)) %}
+{% if tabMenus|default(null) and tabMenus|length > 1 %}
+  <ul class="nav nav-tabs mbm">
+    {% for m in tabMenus %}
+
+      {% if not m.mode|default('') == 'capsules' %}
+        {% set path = permission_path(m) %}
+      {% else %}
+        {% set path = permission_path(first_child_permission(m)) %}
+      {% endif %}
+
+      <li {% if m.code == menu|default(null) %}class="active"{% endif %}>
+        <a
+            title="{{ m.name|trans }}"
+            class="{{ m.class|default('') }}"
+            href="{{ path }}"
+        >
+          {{ m.name|trans }}
+        </a>
+      </li>
+
+    {% endfor %}
+  </ul>
+{% endif %}
+

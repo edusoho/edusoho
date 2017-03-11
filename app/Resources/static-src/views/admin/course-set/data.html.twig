@@ -1,0 +1,73 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_course_set_data' %}
+
+{% set script_controller = 'course/data' %}
+
+{% block main %}
+  {% include 'admin/course/tab-data.html.twig' %}
+
+    <form id="message-search-form" class="form-inline well well-sm mtl" action="" method="get" novalidate>
+      {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+      
+      <div class="form-group">
+        <select style="width:150px;" class="form-control" name="categoryId">
+          {{ select_options(category_choices('course'), app.request.query.get('categoryId'), '课程分类'|trans) }}
+        </select>
+      </div>
+      <div class="form-group">
+        <input class="form-control" type="text" placeholder="{{'标题'|trans}}" name="title" value="{{ app.request.get('title') }}">
+      </div>
+      <div class="form-group">
+        <input class="form-control" type="text" placeholder="{{'创建者'|trans}}" name="creatorName" value="{{ app.request.get('creatorName') }}">
+      </div>
+      <button class="btn btn-primary">{{'搜索'|trans}}</button>
+    </form>
+    <div class="table-responsive">
+        <table class="table table-bordered" style="word-break:break-all;text-align:center;">
+          <tr class="active">
+            <td width="30%">{{'课程名'|trans}}</td>
+             {% if filter == 'classroom' %}
+            <td>{{'所在'|trans}}{{ setting("classroom.name")|default('班级'|trans) }}</td>
+             {% endif %}
+            <td>{{ '教学计划数量'|trans }}</td>
+            <td>{{ '任务数量'|trans }}</td>
+            <td>{{'%user_name%人数'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}</td>
+            <td>{{'完成课程人数'|trans}}</td>
+            <td>{{'课程学习时长(分)'|trans}}</td>
+            <td>{{'课程收入(元)'|trans}}</td>
+            <td>{{'操作'|trans}}</td>
+          </tr>
+          
+          {% if courseSets %}
+            {% for courseSet in courseSets %}
+            <tr>
+            <td><a data-toggle="modal" data-target="#modal" data-url="{{path('course_set_detail_data',{id:courseSet.id})}}" href="javascript:;">{{courseSet.title}}</a></td>
+            {% if filter == 'classroom' %}
+            <td>
+            {% set classroom = classrooms[courseSet.id]|default(null) %}
+            {% if classroom %}
+            <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
+            {% elseif not classroom %}
+            <span class="label label-danger live-label mls">{{'未引用'|trans}}</span> 
+            {% endif %}
+            </td>
+            {% endif %}
+            <td>{{courseSet.courseCount|default()}}</td>
+            <td>{{courseSet.taskCount|default()}}</td>
+            <td>{{courseSet.studentNum|default()}}</td>
+            <td>{{courseSet.isLearnedNum|default()}}</td>
+            <td>{{courseSet.learnedTime}}</td>
+            <td>{{courseSet.income|default()}}</td>
+            <td><a data-toggle="modal" data-target="#modal" data-url="{{path('admin_courses_data',{courseSetId:courseSet.id})}}" href="javascript:;">{{'查看任务'|trans}}</a></td>
+            </tr>
+            {% endfor %}
+          {% endif %}
+          
+         
+        </table>
+     {{ admin_macro.paginator(paginator) }}
+      </div>
+
+
+{% endblock %}

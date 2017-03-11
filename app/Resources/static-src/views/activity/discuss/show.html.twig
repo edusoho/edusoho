@@ -1,0 +1,10 @@
+{% extends "activity/content-layout.html.twig" %}
+
+{% block body %}
+	<div class="iframe-parent-content ph20 pv20">
+		讨论主题：
+    <div class="mt10 mb10">{{activity.content|raw}}</div>
+			{# 如果任务未完成： #}
+		<a class="mr5" href="{{path('course_thread_create', {courseId: activity.fromCourseId, type: 'discussion'})}}" target="_blank">前往课程讨论区</a>发表或回复话题吧
+	</div>
+{% endblock %}

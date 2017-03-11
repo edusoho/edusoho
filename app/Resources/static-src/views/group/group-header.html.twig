@@ -1,0 +1,36 @@
+{% set groupNav = groupNav|default(null) %}
+<ol class="breadcrumb breadcrumb-o" style="margin-top:-18px">
+  <li><a href="{{path('homepage')}}">{{ homepage.name|default('首页'|trans) }}</a></li>
+  <li><a href="{{path('group')}}">{{ group.name|default('小组频道'|trans) }}</a></li>
+  <li><a href="{{path('group_show',{id:groupinfo.id})}}">{{groupinfo.title}}</a></li>
+</ol>
+<div class="group-header" style="background:url({{filepath(groupinfo.backgroundLogo, 'background_group.jpg')}});background-repeat: no-repeat;background-size: 100% 100%;">
+  <div class="media">
+    <div class="media-left">
+      <a href="{{path('group_show',{id:groupinfo.id})}}">
+        <img src="{{filepath(groupinfo.logo, 'group.png')}}" alt="{{groupinfo.title}}" class="avatar-square-md" >
+      </a>
+    </div>
+    <div class="media-body">
+      <h2 class="media-heading">
+        {{groupinfo.title}}
+        {% if is_groupmember == 0 %}
+          <a id="add-btn" class="btn btn-success btn-sm mlm" href="{{path('group_join',{id:groupinfo.id})}}">{{'加入小组'|trans}}</a>
+        {% endif %}
+        {% if is_groupmember == 1 or is_groupmember == 3 %}
+          <a id="exit-btn" class="btn btn-default btn-sm mlm"  href="{{path('group_exit',{id:groupinfo.id})}}">{{'退出小组'|trans}}</a>
+        {% endif %}
+
+      </h2>
+      <div class="media-metas">
+
+        {{'%memberNum%个成员'|trans({'%memberNum%':groupinfo.memberNum})}}
+        <span class="mlm">{{'%threadNum%个话题'|trans({'%threadNum%':groupinfo.threadNum})}}</span>
+        <span class="fsn mlm">{{'创建时间：%createdTime%'|trans({'%createdTime%':groupinfo.createdTime|date('Y-m-d')})}}</span>
+
+      </div>
+    </div>
+  </div>
+  <div class="image-overlay image-overlay-o"></div>
+</div>
+

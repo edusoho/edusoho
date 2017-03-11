@@ -1,0 +1,52 @@
+{% set modal_class= "modal-lg" %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'%title%课程的数据'|trans({'%title%': '《' ~ courseSet.title ~ '》'})}}{% endblock %}
+{% block body %}
+  {% if courses|default()|length > 1 %}
+    <div class="clearfix mbl">
+      <select style="width:200px;" class="form-control pull-left" name="categoryId" tabindex="-1" id = "course-select">
+        {% for course in courses %}
+          <option value="{{course.id}}" {% if courseId == course.id  %} selected {% endif %} data-url="{{ path('course_set_detail_data',{id:courseSet.id,courseId:course.id}) }}">{{course.title}}</option> 
+        {% endfor %}
+      </select>
+    </div>
+  {% endif %}
+
+  <div class="table-responsive">
+    <table class="table table-bordered" style="word-break:break-all;text-align:center;">
+      <tr class="active">
+        <td>{{'用户名'|trans}}</td>
+        <td>{{'加入课程时间'|trans}}</td>
+        <td>{{'完成课程时间'|trans}}</td>
+        <td>{{'课程学习天数'|trans}}</td>
+        <td>{{'课程学习时长（分）'|trans}}</td>
+        <td>{{'提问数'|trans}}</td>
+        <td>{{'笔记数'|trans}}</td>
+      </tr>
+
+      {% if students %}
+        {% for student in students %}
+        <tr>
+        <td>{{student.nickname}}</td>
+        <td>{{student.createdTime|date('Y-m-d H:i:s')}}</td>
+        <td>{% if student.finishedTime|default(null) %}{{student.finishedTime|date('Y-m-d H:i:s')}}{% else %}----{% endif %}</td>
+        <td>{{student.fininshDay|default()}}</td>
+        <td>
+          {% if student.learnTime > 0 %}
+            {{(student.learnTime|default(0)/60)|round(0, 'floor')}}
+          {% else %}
+              ----
+          {% endif %}
+        </td>
+        <td>{{student.questionCount|default()}}</td>
+        <td>{{student.noteNum}}</td>
+        </tr>
+        {% endfor %}
+      {% endif %}
+    </table>
+    {{ web_macro.paginator(paginator) }}
+  </div>
+  
+  <script>app.load('course-set/data-detail.js');</script>
+{% endblock %}

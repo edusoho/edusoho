@@ -1,0 +1,19 @@
+{% extends 'course/header/header-layout.html.twig' %}
+
+{% block course_header_info %}
+  {% if member.locked|default("0") == "1" %}
+  <div class="alert alert-warning">
+    您的退款申请已提交，请等待管理员的处理。
+    <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('order_cancel_refund', {id:course.id, targetType:"course"}) }}">取消退款，继续学习！</button>
+  </div>
+  {% endif %}
+{% endblock %}
+
+{% block course_member_exit %}
+	{% if member.id|default(false) and member.role != 'teacher' and not course.parentId|default(0) %}
+		<li>
+		  <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal" data-url="{{ path('order_refund', {id: course.id, targetType:'course' }) }}" ><i class="es-icon es-icon-exit"></i>
+		  </a>
+		</li>
+	{% endif %}
+{% endblock %}

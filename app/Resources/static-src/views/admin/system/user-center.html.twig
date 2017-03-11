@@ -1,0 +1,169 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set script_controller = 'setting/user-center' %}
+
+{% set menu = 'admin_setting_user_center' %}
+
+
+
+{% block main %}
+  {% if setting.mode !='default' %}
+    <div class="page-header clearfix"><a href="{{ path('admin_setting_admin_sync') }}" class="pull-right btn btn-link">{{'管理员帐号同步'|trans}}</a>
+    </div>
+  {% endif %}
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" novalidate>
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label >{{'用户中心'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios mode-radios">
+      {{ radios('mode', {'default':'无'|trans, 'discuz':'Discuz (Ucenter)'}, setting.mode) }}
+      {% if setting('magic.uc_phpwind','0') %}
+      <label><input type="radio" name="mode" value="phpwind" {% if setting.mode == 'phpwind' %}checked{% endif %}> Phpwind</label>
+      {% endif %}
+      <div class="help-block">
+        {{'支持Discuz X2.5/X3.0/X3.1的用户中心'|trans}}
+      </div>
+    </div>
+  </div>
+  <div class="with-discuz" style="display:none;">
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>Ucenter{{'配置'|trans}}</label></div>
+      <div class="controls col-md-8">
+        <div class="help-block"><a href="http://www.qiqiuyu.com/course/125" target="_blank">{{'如何配置？'|trans}}</a></div>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_CONNECT</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_connect|default('') }}" placeholder="UC_CONNECT" name="discuzConfig[uc_connect]">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_DBHOST</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_dbhost|default('') }}" placeholder="UC_DBHOST" name="discuzConfig[uc_dbhost]">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_DBUSER</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_dbuser|default('') }}" placeholder="UC_DBUSER" name="discuzConfig[uc_dbuser]">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_DBPW</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="password" value="{{ discuzConfig.uc_dbpw|default('') }}" placeholder="UC_DBPW" name="discuzConfig[uc_dbpw]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_DBNAME</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_dbname|default('') }}" placeholder="UC_DBNAME" name="discuzConfig[uc_dbname]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_DBCHARSET</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_dbcharset|default('') }}" placeholder="UC_DBCHARSET" name="discuzConfig[uc_dbcharset]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_DBTABLEPRE</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_dbtablepre|default('') }}" placeholder="UC_DBTABLEPRE" name="discuzConfig[uc_dbtablepre]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_DBCONNECT</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_dbconnect|default('') }}" placeholder="UC_DBCONNECT" name="discuzConfig[uc_dbconnect]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_KEY</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_key|default('') }}" placeholder="UC_KEY" name="discuzConfig[uc_key]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_API</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_api|default('') }}" placeholder="UC_API" name="discuzConfig[uc_api]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_CHARSET</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_charset|default('') }}" placeholder="UC_CHARSET" name="discuzConfig[uc_charset]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_IP</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_ip|default('') }}" placeholder="UC_IP" name="discuzConfig[uc_ip]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_APPID</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_appid|default('') }}" placeholder="UC_APPID" name="discuzConfig[uc_appid]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_PPP</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_ppp|default('') }}" placeholder="UC_PPP" name="discuzConfig[uc_ppp]">
+      </div>
+    </div>
+  </div>
+  
+  {% if setting('magic.uc_phpwind','0') %}
+  <div class="row form-group with-phpwind" style="display:none;">
+    <div class="col-md-3 control-label"><label>{{'WindId配置'|trans}}</label></div>
+    <div class="controls col-md-8">
+      <textarea class="form-control" name="phpwind_config" rows="10">{{ phpwindConfig }}</textarea>
+      <div class="help-block">{{'如使用phpwind (WindID)的用户中心，请填写此项配置。'|trans}}<a href="http://demo.edusoho.com/course/125" target="_blank">{{'如何配置？'|trans}}</a></div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="form-group with-phpwind with-discuz">
+    <div class="col-md-3 control-label">
+      <label for="email_filter">{{'过滤邮箱地址清单'|trans}}</label>
+    </div>
+    <div class="controls col-md-8">
+      <textarea id="email_filter" name="email_filter" class="form-control" rows="5">{{setting.email_filter}}</textarea>
+      <div class="help-block">
+        <div>{{'每行输入一个邮箱地址。名单中的邮箱地址如果出现在第三方登录的过程中，则会给该用户随机生成一个邮箱'|trans}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8">
+      <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>
+    </div>
+  </div>
+
+  <div class="alert alert-info">
+    <p>1.若通讯失败，注册和登录将提示<strong class="user-center-copys-darken">输入不合法</strong>或通讯失败需管理员配置。</p>
+    <p>2.通讯成功，Discuz<strong class="user-center-copys-darken">所有注册用户</strong>，用户的用户名（需满足ES注册规则，否则无法同步）、密码、邮箱信息，无论通讯前还是通讯后注册都可以登录并同步到网站。</p>
+    <p>3.通讯成功，只有<strong class="user-center-copys-darken">通讯之后</strong>在ES注册的新用户，<strong class="user-center-copys-darken">才能</strong>登录并同步到Discuz，<strong class="user-center-copys-darken">通讯之前</strong>的注册用户，<strong class="user-center-copys-darken">不能</strong>登录和同步。</p>
+    <p>4.由于<strong class="user-center-copys-darken">密码加密机制</strong>不同，Discuz的注册用户，无法批量导入到网站；网站的注册用户，也无法批量导入到Discuz。</p>
+  </div>
+
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% endblock %}

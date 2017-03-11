@@ -1,0 +1,6 @@
+{% set consult = setting('consult') %}
+{% if consult.phone[0].name is not empty or consult.worktime is not empty or consult.email is not empty  %}
+  <li class="popover-btn bar-phone-btn" data-container=".bar-phone-btn" data-title="{{'电话客服'|trans}}" data-content-element="#bar-phone-content">
+    <a><i class="es-icon es-icon-phone"></i></a>
+  </li>
+{% endif %}

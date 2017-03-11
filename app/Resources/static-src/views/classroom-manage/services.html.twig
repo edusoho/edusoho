@@ -1,0 +1,59 @@
+{% extends 'classroom-manage/layout.html.twig' %}
+{% block title %}{{'服务设置'|trans}} - {{ parent() }}{% endblock %}
+{% set side_nav = 'service' %}
+{% do script(['app/js/classroom-manage/set-services/index.js']) %}
+
+{% block main %}
+<div class="panel panel-default" role="classroom-set-services">
+  <div class="panel-heading">{{'服务设置'|trans}}</div>
+  <div class="panel-body">
+    <form id="services-form" class="form-horizontal" method="post">
+      {{ web_macro.flash_messages() }}
+      <div class="form-group mb10">
+        <label class="col-sm-2 control-label">{{'承诺提供服务'|trans}}</label>
+        <div class="col-sm-8 form-control-static">
+          <a class="label label-md label-hover-primary js-service-item mr10 mb20 inline-block{% if 'event' in classroom.service %} label-primary {% else %} label-default {% endif %} " data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'不定期组织各种线上或线下的%name%活动，让学习更加生动有趣，同学关系更为紧密'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}"
+          >
+            {{setting("classroom.name")|default('班级'|trans)}}{{'活动'|trans}}
+            <input class="hidden" type="checkbox" name="service[]" value="event" {% if 'event' in classroom.service %} checked='checked'{% endif %}>
+          </a>
+          
+          <a class="label label-md label-hover-primary js-service-item mr10 mb20 inline-block {% if 'workAdvise' in classroom.service %} label-primary {% else %} label-default {% endif %} " data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'完成全部学习后，老师对您的学习成果和能力水平给出评估，并提供专业化的就业指导'|trans}}"
+          >
+            {{'就业指导'|trans}}
+            <input class="hidden" type="checkbox" name="service[]" value="workAdvise" {% if 'workAdvise' in classroom.service %} checked='checked'{% endif %}>
+          </a>
+          <a class="label label-md label-hover-primary js-service-item mr10 mb20 inline-block{% if 'liveAnswer' in classroom.service %} label-primary {% else %} label-default {% endif %} " data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'提供专属的一对一在线答疑，快速答疑解惑。'|trans}}"
+          >
+            {{'一对一在线答疑'|trans}}
+            <input class="hidden" type="checkbox" name="service[]" value="liveAnswer" {% if 'liveAnswer' in classroom.service %} checked='checked'{% endif %}>
+          </a>
+          <a class="label label-md label-hover-primary js-service-item mr10 mb20 inline-block{% if 'teacherAnswer' in classroom.service %} label-primary {% else %} label-default {% endif %} " data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'对于提问做到有问必答，帮您扫清学习过程中的种种障碍'|trans}}"
+          >
+            {{'提问必答'|trans}}
+            <input class="hidden" type="checkbox" name="service[]" value="teacherAnswer" {% if 'teacherAnswer' in classroom.service %} checked='checked'{% endif %}>
+          </a>
+          
+          <a class="label label-md label-hover-primary js-service-item mr10 mb20 inline-block {% if 'testpaperReview' in classroom.service %} label-primary {% else %} label-default {% endif %} " data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'24小时内批阅您提交的试卷，给予有针对性的点评'|trans}}"
+          >
+            {{'24小时阅卷点评'|trans}}
+            <input class="hidden" type="checkbox" name="service[]" value="testpaperReview" {% if 'testpaperReview' in classroom.service %} checked='checked'{% endif %}>
+          </a>
+          <a class="label label-md label-hover-primary js-service-item mr10 mb20 inline-block {% if 'homeworkReview' in classroom.service %} label-primary {% else %} label-default {% endif %} " data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'24小时内完成作业批阅，即时反馈并巩固您的学习效果'|trans}}"
+          >
+           {{'24小时作业批阅'|trans}}
+            <input class="hidden" type="checkbox" name="service[]" value="homeworkReview" {% if 'homeworkReview' in classroom.service %}checked='checked'{% endif %}>
+          </a>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-8 controls">
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+          <button class="btn btn-fat btn-primary" type="submit">{{'保存'|trans}}</button>
+        </div>
+      </div>
+      </div>  
+    </form>
+  </div>
+</div>
+{% endblock %}
