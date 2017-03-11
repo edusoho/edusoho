@@ -48,15 +48,18 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('not_login', '您尚未登录，不能查看笔记！');
         }
 
-        $lessonNote = $this->controller->getNoteService()->getUserLessonNote($user['id'], $lessonId);
+        $lessonNote = $this->controller->getNoteService()->getCourseNoteByUserIdAndTaskId($user['id'], $lessonId);
+        //$lessonNote = $this->controller->getNoteService()->getUserLessonNote($user['id'], $lessonId);
 
         if (empty($lessonNote)) {
             return null;
         }
 
-        $lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
-        $lessonNote['lessonTitle'] = $lesson['title'];
-        $lessonNote['lessonNum'] = $lesson['number'];
+        $task = $this->getTaskService()->getTask($lessonId);
+        $lessonNote['lessonTitle'] = $task['title'];
+        $lessonNote['lessonNum'] = $task['number'];
+        $lessonNote['lessonId'] = $lessonId;
+
         $content = $this->controller->convertAbsoluteUrl($this->request, $lessonNote['content']);
         $content = $this->filterNote($content);
         $lessonNote['content'] = $content;
@@ -771,8 +774,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $start = (int) $this->getParam('start', 0);
         $limit = (int) $this->getParam('limit', 10);
 
-        $total = $this->controller->getCourseService()->findUserFavoritedCourseCount($user['id']);
-        $courses = $this->controller->getCourseService()->findUserFavoritedCourses($user['id'], $start, $limit);
+        $total   = $this->controller->getCourseService()->findUserFavoritedCourseCountNotInClassroom($user['id']);
+        $courses = $this->controller->getCourseService()->findUserFavoritedCoursesNotInClassroom($user['id'], $start, $limit);
 
         return array(
             'start' => $start,
@@ -1013,7 +1016,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         if (empty($member)) {
-            $member = $this->controller->getCourseMemberService()->becomeStudentByClassroomJoined($courseId, $user["id"]);
+            $member = $this->controller->getCourseMemberService()->becomeStudentByClassroomJoined($courseId, $user['id']);
             if (empty($member)) {
                 $member = null;
             }
@@ -1164,16 +1167,16 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $total = $this->controller->getCourseService()->countUserLearningCourses($userId);
         $courses = $this->controller->getCourseService()->findUserLearningCourses($userId, $start, $limit);
 
-        $count = $this->controller->getCourseService()->searchLearnCount(array(
+        $count = $this->controller->getTaskResultService()->countTaskResults(array(
+            'userId' => $userId
         ));
-        $learnStatusArray = $this->controller->getCourseService()->searchLearns(array(
+        $learnStatusArray = $this->controller->getTaskResultService()->searchTaskResults(array(
             'userId' => $userId,
         ), array(
-            'finishedTime',
-            'ASC',
+            'finishedTime' => 'ASC'
         ), 0, $count);
 
-        $lessons = $this->controller->getCourseService()->findLessonsByIds(ArrayToolkit::column($learnStatusArray, 'lessonId'));
+        $tasks = $this->controller->getTaskService()->findTasksByIds(ArrayToolkit::column($learnStatusArray, 'courseTaskId'));
 
         $tempCourse = array();
 
@@ -1181,11 +1184,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $tempCourse[$course['id']] = $course;
         }
 
-        foreach ($lessons as $key => $lesson) {
-            $courseId = $lesson['courseId'];
+        foreach ($tasks as $key => $task) {
+            $courseId = $task['courseId'];
 
             if (isset($tempCourse[$courseId])) {
-                $tempCourse[$courseId]['lastLessonTitle'] = $lesson['title'];
+                $tempCourse[$courseId]['lastLessonTitle'] = $task['title'];
             }
         }
 
@@ -1480,7 +1483,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return array(
             'start' => $start + count($resultLiveCourses),
             'limit' => $limit,
-            'data' => $resultLiveCourses);
+            'data' => $resultLiveCourses, );
     }
 
     public function hitThread()
@@ -1516,7 +1519,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'start' => $start,
             'limit' => $limit,
             'total' => $total,
-            'data' => $this->controller->filterCourses($liveCourses));
+            'data' => $this->controller->filterCourses($liveCourses), );
 
         return $result;
     }
@@ -1655,5 +1658,10 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     protected function getCourseSetService()
     {
         return $this->controller->getService('Course:CourseSetService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->controller->getService('Task:TaskService');
     }
 }
