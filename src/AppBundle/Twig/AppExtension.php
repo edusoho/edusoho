@@ -203,7 +203,7 @@ class AppExtension extends \Twig_Extension
     {
         $avatar = !empty($user[$type.'Avatar']) ? $user[$type.'Avatar'] : null;
 
-        if(empty($avatar)){
+        if (empty($avatar)) {
             $setting = $this->getSettingService()->get('default');
             $avatar = !empty($setting['avatar.png']) ? $setting['avatar.png'] : null;
         }
