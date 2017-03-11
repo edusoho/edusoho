@@ -168,7 +168,7 @@ $.validator.addMethod("visible_character", function (value, element, params) {
 
 $.validator.addMethod('positive_integer', function (value, element) {
   return this.optional(element) || parseInt(value) > 0;
-}, jQuery.validator.format("请输入正整数"));
+}, jQuery.validator.format("请输入大于0数"));
 
 $.validator.addMethod("open_live_course_title", function (value, element, params) {
   return !params || /^[^(<|>|'|"|&|‘|’|”|“)]*$/.test(value);
