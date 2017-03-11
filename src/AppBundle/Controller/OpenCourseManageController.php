@@ -372,15 +372,15 @@ class OpenCourseManageController extends BaseController
         $recommendedCourses[$recommend['id']] = $this->getTypeCourseService($recommend['type'])->getCourse($recommend['recommendCourseId']);
         }*/
         $courseSetIds = ArrayToolkit::column($recommends, 'recommendCourseId');
-        $recommendedCourses = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        $commendedCourseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
 
         $coursesPrice = $this->_findCoursesPriceInterval($courseSetIds);
-        $users = $this->_getTeacherUsers($recommendedCourses);
+        $users = $this->_getTeacherUsers($commendedCourseSets);
 
         return $this->render(
             'open-course-manage/open-course-marketing.html.twig',
             array(
-                'courses' => $recommendedCourses,
+                'courseSets' => $commendedCourseSets,
                 'users' => $users,
                 'course' => $course,
                 'coursesPrice' => $coursesPrice,
