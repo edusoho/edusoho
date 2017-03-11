@@ -36,6 +36,7 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFunction('course_count', array($this, 'courseCount')),
             new \Twig_SimpleFunction('course_cover', array($this, 'courseCover')),
             new \Twig_SimpleFunction('course_set_cover', array($this, 'courseSetCover')),
+            new \Twig_SimpleFunction('user_avatar', array($this, 'userAvatar')),
         );
     }
 
@@ -196,6 +197,18 @@ class AppExtension extends \Twig_Extension
         }
 
         return $this->courseSetCover($courseSet, $type);
+    }
+
+    public function userAvatar($user, $type = 'middle')
+    {
+        $avatar = !empty($user[$type.'Avatar']) ? $user[$type.'Avatar'] : null;
+
+        if (empty($avatar)) {
+            $setting = $this->getSettingService()->get('default');
+            $avatar = !empty($setting['avatar.png']) ? $setting['avatar.png'] : null;
+        }
+
+        return $avatar;
     }
 
     public function courseSetCover($courseSet, $type = 'middle')
