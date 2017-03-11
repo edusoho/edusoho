@@ -26,6 +26,8 @@ interface ClassroomService
 
     public function addCoursesToClassroom($classroomId, $courseIds);
 
+    public function isClassroomOverDue($classroom);
+
     /**
      * 是否可参与班级的活动，只有正式学员、教师、网站管理员才能参与班级的活动，旁听生不能参与活动
      *
@@ -100,6 +102,8 @@ interface ClassroomService
 
     public function updateMember($id, $member);
 
+    public function updateMemberDeadlineByMemberId($memberId, $deadline);
+
     public function searchMemberCount($conditions);
 
     public function searchMembers($conditions, $orderBy, $start, $limit);
@@ -160,4 +164,6 @@ interface ClassroomService
     public function findUserJoinedClassroomIds($userId);
 
     public function updateLearndNumByClassroomIdAndUserId($classroomId, $userId);
+
+    public function findWillOverdueClassrooms();
 }

@@ -67,16 +67,33 @@
             <span>{{ member.deadline|date('Y-m-d H:i') }}</span>
           </p>
         {% else %}
-         <div class="alert alert-danger alert-dismissable">
-            {{'您购买的课程已到期，无法学习课时、提问等。如有疑问请联系老师，或点击'|trans}}
-              <a href="{{path('course_member_deadline_reach',{courseId:course.id})}}">
-              {% if course.price>0 %}
-              {{'重新购买'|trans}}
-              {% else %}
-              {{'重新加入'|trans}}
-              {% endif %}
-              </a>。
-          </div>
+          {% if course.parentId == 0 %}
+             <div class="alert alert-danger alert-dismissable">
+                {{'您购买的课程已到期，无法学习课时、提问等。如有疑问请联系老师，或点击'|trans}}
+                  <a href="{{path('course_member_deadline_reach',{courseId:course.id})}}">
+                  {% if course.price>0 %}
+                  {{'重新购买'|trans}}
+                  {% else %}
+                  {{'重新加入'|trans}}
+                  {% endif %}
+                  </a>。
+              </div>
+            {% else %}
+              {% set classroom = data('GetClassroomByCourseId', {courseId: course.id}) %}
+                {% if classroom %}
+                  {% if classroom.expiryMode == 'days' %}
+                    <div class="alert alert-warning">你的班级已过有效期，无法继续学习，请<a href="{{ path('classroom_member_deadline_reach', {classroomId:classroom.id}) }}">
+                      {% if classroom.buyable == 1 %}
+                        {{ '重新购买'|trans }}
+                      {% else %}
+                        {{ '重新加入'|trans }}
+                      {% endif %}
+                    </a></div>
+                  {% elseif classroom.expiryMode == 'date' %}
+                    <div class="alert alert-warning">{{ '你的班级已过有效期，无法继续学习'|trans }}</a></div>
+                  {% endif %}
+                {% endif %}
+            {% endif %}
         {% endif %}
       {% endif %}
 
