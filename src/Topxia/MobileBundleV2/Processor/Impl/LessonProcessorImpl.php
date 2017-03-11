@@ -153,12 +153,23 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $courseId = $this->getParam('courseId');
         $lessonId = $this->getParam('lessonId');
         $user = $this->controller->getuserByToken($this->request);
+        $task = $this->getTaskService()->getTask($lessonId);
 
         if (!$user->isLogin()) {
             return $this->createErrorResponse('not_login', '您尚未登录！');
         }
 
-        $this->controller->getCourseService()->finishLearnLesson($courseId, $lessonId);
+        try {
+            if ($this->canStartTask($task)) {
+                $this->getActivityService()->trigger($task['activityId'], 'start', array(
+                    'task' => $task,
+                ));
+            }
+
+            $this->getTaskService()->finishTaskResult($task['id']);
+        } catch (\Exception $e) {
+            return $this->createErrorResponse('404', $e->getMessage());
+        }
 
         return 'finished';
     }
@@ -170,21 +181,21 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $lessonId = $this->getParam('lessonId');
 
         if ($user->isLogin()) {
-            $learnStatus = $this->controller->getCourseService()->getUserLearnLessonStatus($user['id'], $courseId, $lessonId);
-            $lessonMaterials = $this->controller->getMaterialService()->searchMaterials(
-                array(
-                    'lessonId' => $lessonId,
-                    'source' => 'coursematerial',
-                    'type' => 'course',
-                ),
-                array('createdTime', 'DESC'),
-                0,
-                1
+            $learnStatus = $this->getTaskResultService()->getUserTaskResultByTaskId($lessonId);
+            if ($learnStatus) {
+                $learnStatus['lessonId'] = $lessonId;
+            }
+
+            $conditions = array(
+                'lessonId' => $lessonId,
+                'source' => 'courseactivity',
+                'type' => 'course',
             );
+            $lessonMaterialCount = $this->getMaterialService()->countMaterials($conditions);
 
             return array(
                 'learnStatus' => $learnStatus,
-                'hasMaterial' => empty($lessonMaterials) ? false : true,
+                'hasMaterial' => empty($lessonMaterialCount) ? false : true,
             );
         }
 
@@ -724,5 +735,33 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
             return $lesson;
         }, $lessons);
+    }
+
+    private function canStartTask($task)
+    {
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        $config = $this->getActivityService()->getActivityConfig($activity['mediaType']);
+
+        return $config->allowTaskAutoStart($activity);
+    }
+
+    protected function getActivityService()
+    {
+        return $this->controller->getService('Activity:ActivityService');
+    }
+
+    protected function getTaskResultService()
+    {
+        return $this->controller->getService('Task:TaskResultService');
+    }
+
+    protected function getMaterialService()
+    {
+        return $this->controller->getService('Course:MaterialService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->controller->getService('Task:TaskService');
     }
 }
