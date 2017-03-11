@@ -21,12 +21,12 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
 
     public function create($fields)
     {
-        $timestampField = $this->_getTimestampField('created');
+        $timestampField = $this->getTimestampField('created');
         if ($timestampField) {
             $fields[$timestampField] = time();
         }
 
-        $timestampField = $this->_getTimestampField('updated');
+        $timestampField = $this->getTimestampField('updated');
         if ($timestampField) {
             $fields[$timestampField] = time();
         }
@@ -41,7 +41,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
 
     public function update($id, array $fields)
     {
-        $timestampField = $this->_getTimestampField('updated');
+        $timestampField = $this->getTimestampField('updated');
         if ($timestampField) {
             $fields[$timestampField] = time();
         }
@@ -78,7 +78,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
 
     public function search($conditions, $orderbys, $start, $limit)
     {
-        $builder = $this->_createQueryBuilder($conditions)
+        $builder = $this->createQueryBuilder($conditions)
             ->select('*')
             ->setFirstResult($start)
             ->setMaxResults($limit);
@@ -93,12 +93,13 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
             }
             $builder->addOrderBy($field, $direction);
         }
+
         return $builder->execute()->fetchAll();
     }
 
     public function count($conditions)
     {
-        $builder = $this->_createQueryBuilder($conditions)
+        $builder = $this->createQueryBuilder($conditions)
             ->select('COUNT(*)');
 
         return intval($builder->execute()->fetchColumn(0));
@@ -151,7 +152,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         return $this->db()->fetchAll($sql, array_values($fields));
     }
 
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
             if ($value === '' || $value === null) {
@@ -160,7 +161,8 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
 
             return true;
         });
-        $builder = $this->_getQueryBuilder($conditions);
+
+        $builder = $this->getQueryBuilder($conditions);
         $builder->from($this->table(), $this->table());
 
         $declares = $this->declares();
@@ -173,12 +175,12 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         return $builder;
     }
 
-    protected function _getQueryBuilder($conditions)
+    protected function getQueryBuilder($conditions)
     {
         return new DynamicQueryBuilder($this->db(), $conditions);
     }
 
-    private function _getTimestampField($mode = null)
+    private function getTimestampField($mode = null)
     {
         if (empty($this->timestamps)) {
             return;

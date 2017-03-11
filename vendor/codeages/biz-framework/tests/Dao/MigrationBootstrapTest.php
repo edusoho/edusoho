@@ -1,10 +1,12 @@
 <?php
+namespace Tests;
 
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Dao\MigrationBootstrap;
 use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
+use PHPUnit\Framework\TestCase;
 
-class MigrationBootstrapTest extends \PHPUnit_Framework_TestCase
+class MigrationBootstrapTest extends TestCase
 {
     public function testBoot()
     {

@@ -63,7 +63,7 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
             unset($conditions['taskId']);
             $conditions['activityId'] = $activityId;
         }
-        $builder = $this->_createQueryBuilder($conditions)
+        $builder = $this->createQueryBuilder($conditions)
             ->select('sum(learnedTime)');
 
         return $builder->execute()->fetchColumn();

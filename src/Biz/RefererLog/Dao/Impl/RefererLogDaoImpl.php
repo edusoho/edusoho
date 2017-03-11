@@ -82,7 +82,7 @@ class RefererLogDaoImpl extends GeneralDaoImpl implements RefererLogDao
 
     protected function createQueryBuilder($conditions, $groupBy = null)
     {
-        $builder = parent::_createQueryBuilder($conditions);
+        $builder = parent::createQueryBuilder($conditions);
 
         if (!empty($groupBy)) {
             $builder->groupBy($groupBy);

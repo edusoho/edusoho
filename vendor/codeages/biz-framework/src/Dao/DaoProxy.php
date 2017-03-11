@@ -2,34 +2,30 @@
 
 namespace Codeages\Biz\Framework\Dao;
 
-class DaoProxy
+class DaoProxy implements DaoProxyInterface
 {
-    protected $container;
-
     protected $dao;
 
-    public function __construct($container, $dao)
+    protected $serializer;
+
+    public function __construct(DaoInterface $dao, SerializerInterface $serializer)
     {
-        $this->container = $container;
         $this->dao = $dao;
+        $this->serializer = $serializer;
     }
 
     public function __call($method, $arguments)
     {
         if (strpos($method, 'get') === 0) {
-            $row = $this->_callRealDao($method, $arguments);
+            $row = $this->callRealDao($method, $arguments);
 
-            return $this->_unserialize($row);
+            return $this->unserialize($row);
         }
 
-        if ((strpos($method, 'find') === 0) or (strpos($method, 'search') === 0)) {
-            $rows = $this->_callRealDao($method, $arguments);
+        if ((strpos($method, 'find') === 0) || (strpos($method, 'search') === 0)) {
+            $rows = $this->callRealDao($method, $arguments);
 
-            if (empty($rows)) {
-                return $rows;
-            }
-
-            return $this->_unserializes($rows);
+            return $this->unserializes($rows);
         }
 
         $declares = $this->dao->declares();
@@ -42,32 +38,32 @@ class DaoProxy
                 $arguments[0][$declares['timestamps'][1]] = time();
             }
 
-            $arguments[0] = $this->_serialize($arguments[0]);
-            $row = $this->_callRealDao($method, $arguments);
+            $arguments[0] = $this->serialize($arguments[0]);
+            $row = $this->callRealDao($method, $arguments);
 
-            return $this->_unserialize($row);
+            return $this->unserialize($row);
         }
 
         if (strpos($method, 'update') === 0) {
             if (isset($declares['timestamps'][1])) {
                 $arguments[1][$declares['timestamps'][1]] = time();
             }
-            $arguments[1] = $this->_serialize($arguments[1]);
+            $arguments[1] = $this->serialize($arguments[1]);
 
-            $row = $this->_callRealDao($method, $arguments);
+            $row = $this->callRealDao($method, $arguments);
 
-            return $this->_unserialize($row);
+            return $this->unserialize($row);
         }
 
-        return $this->_callRealDao($method, $arguments);
+        return $this->callRealDao($method, $arguments);
     }
 
-    private function _callRealDao($method, $arguments)
+    private function callRealDao($method, $arguments)
     {
         return call_user_func_array(array($this->dao, $method), $arguments);
     }
 
-    private function _unserialize(&$row)
+    private function unserialize(&$row)
     {
         if (empty($row)) {
             return $row;
@@ -80,23 +76,26 @@ class DaoProxy
             if (!isset($row[$key])) {
                 continue;
             }
-            $method = "_{$method}Unserialize";
-            $row[$key] = $this->$method($row[$key]);
+            $row[$key] = $this->serializer->unserialize($method, $row[$key]);
         }
 
         return $row;
     }
 
-    private function _unserializes(array &$rows)
+    private function unserializes(array &$rows)
     {
+        if (empty($rows)) {
+            return $rows;
+        }
+
         foreach ($rows as &$row) {
-            $this->_unserialize($row);
+            $this->unserialize($row);
         }
 
         return $rows;
     }
 
-    private function _serialize(&$row)
+    private function serialize(&$row)
     {
         $declares = $this->dao->declares();
         $serializes = empty($declares['serializes']) ? array() : $declares['serializes'];
@@ -105,56 +104,10 @@ class DaoProxy
             if (!isset($row[$key])) {
                 continue;
             }
-            $method = "_{$method}Serialize";
-            $row[$key] = $this->$method($row[$key]);
+
+            $row[$key] = $this->serializer->serialize($method, $row[$key]);
         }
 
         return $row;
-    }
-
-    private function _jsonSerialize($value)
-    {
-        if (empty($value)) {
-            return '';
-        }
-
-        return json_encode($value);
-    }
-
-    private function _jsonUnserialize($value)
-    {
-        if (empty($value)) {
-            return array();
-        }
-
-        return json_decode($value, true);
-    }
-
-    private function _delimiterSerialize($value)
-    {
-        if (empty($value)) {
-            return '';
-        }
-
-        return '|'.implode('|', $value).'|';
-    }
-
-    private function _delimiterUnserialize($value)
-    {
-        if (empty($value)) {
-            return array();
-        }
-
-        return explode('|', trim($value, '|'));
-    }
-
-    private function _phpSerialize($value)
-    {
-        return serialize($value);
-    }
-
-    private function _phpUnserialize($value)
-    {
-        return unserialize($value);
     }
 }

@@ -214,7 +214,7 @@ class LiveCourseSetController extends CourseBaseController
         $levels = array();
 
         if ($this->isPluginInstalled('Vip')) {
-            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), array(),0, 100), 'id');
+            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), array(), 0, 100), 'id');
         }
 
         return $this->render('course-set/live/all-list.html.twig', array(
