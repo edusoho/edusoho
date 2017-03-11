@@ -103,7 +103,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
             $conditions['title'] = '%'.$conditions['title'].'%';
         }
 
-        return parent::_createQueryBuilder($conditions);
+        return parent::createQueryBuilder($conditions);
     }
 
     public function sumOrderPriceByTargetAndStatuses($targetType, $targetId, array $statuses)

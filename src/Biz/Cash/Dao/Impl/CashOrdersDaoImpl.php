@@ -33,7 +33,7 @@ class CashOrdersDaoImpl extends GeneralDaoImpl implements CashOrdersDao
     public function analysisAmount($conditions)
     {
         return $this
-            ->_createQueryBuilder($conditions)
+            ->createQueryBuilder($conditions)
             ->select('sum(amount)')
             ->execute()
             ->fetchColumn(0);

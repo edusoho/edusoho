@@ -277,5 +277,18 @@ Error: listen EADDRINUSE 0.0.0.0:3030
 解决方法：该错误表明你已经开启了一个端口号为3030的服务，需要先把那个服务关掉
 
 
+4. 设备上没有剩余空间
+
+报错信息：
+
+```
+watch ...  ENOSPC
+```
+解决方法： 在控制台输入
+
+```
+echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+```
+
 
 
