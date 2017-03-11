@@ -13,7 +13,20 @@ class Exercise extends BaseResource
         $idType = $request->query->get('_idType');
         if ('lesson' == $idType) {
             $task = $this->getTaskService()->getTask($id);
-            $activity = $this->getActivityService()->getActivity($task['activityId']);
+
+            //只为兼容移动端学习引擎2.0以前的版本，之后需要修改
+            $conditions = array(
+                'categoryId' => $task['categoryId'],
+                'status' => 'published',
+                'type' => 'exercise',
+            );
+            $exerciseTasks = $this->getTaskService()->searchTasks($conditions, null, 0, 1);
+            if (!$exerciseTasks) {
+                return $this->error('404', '该练习不存在!');
+            }
+            $exerciseTask = $exerciseTasks[0];
+
+            $activity = $this->getActivityService()->getActivity($exerciseTask['activityId']);
             $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
         } else {
             $exercise = $this->getTestpaperService()->getTestpaper($id);

@@ -261,7 +261,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     {
         return array(
             'timestamps' => array('createdTime', 'updatedTime'),
-            'orderbys' => array('createdTime'),
+            'orderbys' => array('createdTime', 'lastLearnTime', 'id'),
             'conditions' => array(
                 'userId = :userId',
                 'courseId = :courseId',
@@ -277,6 +277,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'learnedNum >= :learnedNumGreaterThan',
                 'learnedNum < :learnedNumLessThan',
                 'deadline >= :deadlineGreaterThan',
+                'lastLearnTime >= :lastLearnTimeGreaterThan',
             ),
         );
     }
