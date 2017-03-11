@@ -35,8 +35,8 @@ let onConditionTimeType = () => {
     rules: {
       finishDetail: {
         required: true,
-        digits: true,
-        trim: true,
+        positive_integer:true,
+        max: 300,
       },
     },
     messages: {

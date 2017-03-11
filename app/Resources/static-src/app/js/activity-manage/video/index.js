@@ -4,7 +4,7 @@ import SubtitleDialog from './subtitle/dialog';
 class Video {
   constructor() {
     this.showChooseContent();
-    this.inItStep2form();
+    this.initStep2form();
     this.isInitStep3from();
     this.autoValidatorLength();
     this.initfileChooser();
@@ -17,7 +17,7 @@ class Video {
     });
   }
 
-  inItStep2form() {
+  initStep2form() {
     var $step2_form = $('#step2-form');
     var validator = $step2_form.data('validator');
     $step2_form.validate({
@@ -49,7 +49,7 @@ class Video {
     $step2_form.data('validator', validator);
   }
 
-  inItStep3from() {
+  initStep3from() {
     var $step3_forom = $('#step3-form');
     var validator = $step3_forom.data('validator');
     $step3_forom.validate({
@@ -85,13 +85,13 @@ class Video {
     // 完成条件是观看时长的情况
     if ($("#finish-condition").children('option:selected').val() === 'time') {
       $('.viewLength').removeClass('hidden');
-      this.inItStep3from();
+      this.initStep3from();
     }
 
-    $("#finish-condition").on('change', function (event) {
+    $("#finish-condition").on('change', (event)=>{
       if (event.target.value == 'time') {
         $('.viewLength').removeClass('hidden');
-        this.inItStep3from();
+        this.initStep3from();
       } else {
         $('.viewLength').addClass('hidden');
         $('input[name="ext[finishDetail]"]').rules('remove')
