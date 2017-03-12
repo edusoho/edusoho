@@ -274,3 +274,33 @@ $.validator.addMethod("next_day", function (value, element, params) {
   Translator.trans('开始时间应晚于当前时间')
 );
 
+$.validator.addMethod("chinese_alphanumeric", function (value, element, params) {
+  return this.optional(element) || /^([\u4E00-\uFA29]|[a-zA-Z0-9_.·])*$/i.test(value)
+}, jQuery.validator.format('支持中文字、英文字母、数字及_ . ·'));
+
+
+$.validator.addMethod("nickname", function (value, element, params) {
+
+  return  this.optional(element) || ! /^1\d{10}$/.test(value)
+}, jQuery.validator.format('不允许以1开头的11位纯数字'));
+
+
+$.validator.addMethod("nickname_remote", function (value, element, params) {
+  let isSuccess = 0;
+
+  let url = $(element).data('url') ? $(element).data('url') : null;
+
+  $.ajax({
+    url: url,
+    type: 'GET',
+    async: false,
+    data: {value: value},
+    dataType: 'json'
+  })
+  .success(function(response) {
+    isSuccess = response.success;
+  })
+
+  return this.optional(element) || isSuccess;
+
+}, jQuery.validator.format('该用户名已存在'))

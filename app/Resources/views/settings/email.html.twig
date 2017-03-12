@@ -2,8 +2,6 @@
 
 {% block title %}{{'邮箱设置'|trans}} - {{ parent() }}{% endblock %}
 
-{#{% set script_controller = 'settings/email' %}#}
-
 {% do script(['libs/jquery-validation.js','app/js/settings/email/index.js']) %}
 
 {% set side_nav = 'email' %}
