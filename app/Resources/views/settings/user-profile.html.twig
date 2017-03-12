@@ -1,6 +1,8 @@
 {#课程创建前需要用户完成一下字段#}
-{% do load_script('settings/user-profile')  %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+{#{% do load_script('settings/user-profile')  %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}#}
+
+{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js','app/js/settings/user-profile/index.js']) %}
 
 <div class="alert alert-info">
   <h5><strong>{{'请先完成以下设置，才能创建课程：'|trans}}</strong></h5>
@@ -28,7 +30,7 @@
     <label class="col-md-2 control-label" for="profile_avatar"><b>{{'用户头像'|trans}}</b></label>
     <div class="controls col-md-8 controls">
       <img src="{{ filepath(app.user.largeAvatar, 'avatar.png') }}">
-      <input id="profile_avatar" type="hidden"  value="{{ app.user.largeAvatar }}">
+      <input id="profile_avatar" name="profile_avatar" type="hidden"  value="{{ app.user.largeAvatar }}">
     </div>
   </div>
 
@@ -68,7 +70,7 @@
   </div>
   <div class="row">
     <div class="col-md-7 col-md-offset-2">
-      <button id="profile-save-btn" data-submiting-text="{{'正在保存'|trans}}" type="submit" class="btn btn-primary">{{'保存'|trans}}</button>
+      <button id="profile-save-btn" data-loading-text="{{'正在保存'|trans}}" type="button" class="btn btn-primary">{{'保存'|trans}}</button>
     </div>
   </div>
 

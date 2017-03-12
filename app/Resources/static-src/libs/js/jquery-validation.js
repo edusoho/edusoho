@@ -117,6 +117,20 @@ $.extend($.validator.messages, {
   min: $.validator.format("请输入不小于 {0} 的数值")
 });
 
+function strlen(str) {  
+  let len = 0;  
+  for (let i = 0; i < str.length; i++) {   
+    let chars = str.charCodeAt(i);   
+    //单字节加1   
+    if ((chars >= 0x0001 && chars <= 0x007e) || (0xff60 <= chars && chars <= 0xff9f)) {   
+      len ++;   
+    } else {   
+      len += 2;   
+    }   
+  }   
+  return len;  
+}
+
 $.validator.addMethod("trim", function (value, element, params) {
   return $.trim(value).length > 0;
 }, jQuery.validator.format("请输入%display%"));
@@ -226,6 +240,12 @@ $.validator.addMethod('passwordCheck', function(value, element) {
 $.validator.addMethod('chinese', function(value, element) {
   return this.optional(element) ||  /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3])*$/i.test(value);
 }, jQuery.validator.format('必须是中文字'));
+
+$.validator.addMethod('chinese_limit', function(value, element, params) {
+  let l = strlen(value);
+  console.log('params',params)
+  return this.optional(element) ||  l <= Number(params);
+}, jQuery.validator.format('长度必须小于等于 {0} 字符,一个中文为2个字符'));
 
 $.validator.addMethod('isImage', function(value, element) {
 
