@@ -10,8 +10,10 @@ let validator = $('#nickname-form').validate({
   }
 })
 
-$('#nickname-btn').on('click', () => {
+$('#nickname-btn').on('click', (event) => {
+  const $this = $(event.currentTarget);
   if (validator.form()) {
+    $this.button('loading');
     $('#nickname-form').submit();
   }
 })
