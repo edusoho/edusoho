@@ -22,16 +22,11 @@ class Courses extends BaseResource
         $conditions['status'] = 'published';
         $conditions['parentId'] = 0;
         $conditions['updatedTime_GE'] = $cursor;
-        $courses = $this->getCourseSetService()->searchCourseSets(
-            $conditions,
-            array('updatedTime' => 'ASC'),
-            $start,
-            $limit
-        );
-        $courses = $this->build($courses);
-        $next = $this->nextCursorPaging($cursor, $start, $limit, $courses);
+        $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, array('updatedTime' => 'ASC'), $start, $limit);
+        $courseSets = $this->build($courseSets);
+        $next = $this->nextCursorPaging($cursor, $start, $limit, $courseSets);
 
-        return $this->wrap($this->filter($courses), $next);
+        return $this->wrap($this->filter($courseSets), $next);
     }
 
     public function filter($res)
@@ -39,56 +34,76 @@ class Courses extends BaseResource
         return $this->multicallFilter('cloud_search_course', $res);
     }
 
-    public function build($courses)
+    public function build($courseSets)
     {
-        $courses = $this->buildCategories($courses);
-        $courses = $this->buildTags($courses);
+        $courseSets = $this->buildCategories($courseSets);
+        $courseSets = $this->buildTags($courseSets);
+        $courseSets = $this->buildCourses($courseSets);
 
-        return $courses;
+        return $courseSets;
     }
 
-    protected function buildCategories($courses)
+    protected function buildCategories($courseSets)
     {
-        $categoryIds = ArrayToolkit::column($courses, 'categoryId');
+        $categoryIds = ArrayToolkit::column($courseSets, 'categoryId');
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
-        foreach ($courses as &$course) {
-            if (isset($categories[$course['categoryId']])) {
-                $course['category'] = array(
-                    'id' => $categories[$course['categoryId']]['id'],
-                    'name' => $categories[$course['categoryId']]['name'],
+        foreach ($courseSets as &$courseSet) {
+            if (isset($categories[$courseSet['categoryId']])) {
+                $courseSet['category'] = array(
+                    'id' => $categories[$courseSet['categoryId']]['id'],
+                    'name' => $categories[$courseSet['categoryId']]['name'],
                 );
             } else {
-                $course['category'] = array();
+                $courseSet['category'] = array();
             }
         }
 
-        return $courses;
+        return $courseSets;
     }
 
-    protected function buildTags($courses)
+    protected function buildTags($courseSets)
     {
-        $tagIdGroups = ArrayToolkit::column($courses, 'tags');
+        $tagIdGroups = ArrayToolkit::column($courseSets, 'tags');
         $tagIds = ArrayToolkit::mergeArraysValue($tagIdGroups);
 
         $tags = $this->getTagService()->findTagsByIds($tagIds);
 
-        foreach ($courses as &$course) {
-            $courseTagIds = $course['tags'];
-            $course['tags'] = array();
-            if (!empty($courseTagIds)) {
-                foreach ($courseTagIds as $index => $courseTagId) {
-                    if (isset($tags[$courseTagId])) {
-                        $course['tags'][$index] = array(
-                            'id' => $tags[$courseTagId]['id'],
-                            'name' => $tags[$courseTagId]['name'],
+        foreach ($courseSets as &$courseSet) {
+            $courseSetTagIds = $courseSet['tags'];
+            $courseSet['tags'] = array();
+            if (!empty($courseSetTagIds)) {
+                foreach ($courseSetTagIds as $index => $courseSetTagId) {
+                    if (isset($tags[$courseSetTagId])) {
+                        $courseSet['tags'][$index] = array(
+                            'id' => $tags[$courseSetTagId]['id'],
+                            'name' => $tags[$courseSetTagId]['name'],
                         );
                     }
                 }
             }
         }
 
-        return $courses;
+        return $courseSets;
+    }
+
+    protected function buildCourses($courseSets)
+    {
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
+        $courses = ArrayToolkit::group($courses, 'courseSetId');
+
+        foreach ($courseSets as $index => $courseSet) {
+            $courseSets[$index]['course'] = $courses[$index];
+            $totalTaskNum = 0;
+            foreach ($courses[$index] as $course) {
+                $totalTaskNum += $course['taskNum'];
+            }
+            $courseSets[$index]['totalTaskNum'] = $totalTaskNum;
+        }
+
+        return $courseSets;
     }
 
     /**
@@ -97,6 +112,14 @@ class Courses extends BaseResource
     protected function getCourseSetService()
     {
         return $this->getBiz()->service('Course:CourseSetService');
+    }
+
+    /**
+     * @return Biz\Course\Service\CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->getBiz()->service('Course:CourseService');
     }
 
     /**
