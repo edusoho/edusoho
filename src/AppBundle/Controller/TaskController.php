@@ -2,14 +2,16 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Task\Service\TaskService;
-use Biz\User\Service\TokenService;
+use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskResultService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Activity\Service\ActivityService;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\TokenService;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException as ServiceAccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class TaskController extends BaseController
 {
@@ -17,7 +19,13 @@ class TaskController extends BaseController
     {
         $preview = $request->query->get('preview');
 
-        $task = $this->tryLearnTask($courseId, $id, (bool) $preview);
+        try {
+            $task = $this->tryLearnTask($courseId, $id, (bool)$preview);
+        } catch (AccessDeniedException $accessDeniedException) {
+            return $this->handleAccessDeniedException($accessDeniedException, $request, $id);
+        } catch (ServiceAccessDeniedException $deniedException) {
+            return $this->handleAccessDeniedException($deniedException, $request, $id);
+        }
 
         $user = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
@@ -28,26 +36,34 @@ class TaskController extends BaseController
         }
 
         if ($this->canStartTask($task)) {
-            $this->getActivityService()->trigger($task['activityId'], 'start', array(
-                'task' => $task,
-            ));
+            $this->getActivityService()->trigger(
+                $task['activityId'],
+                'start',
+                array(
+                    'task' => $task,
+                )
+            );
         }
 
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
         if (empty($taskResult)) {
             $taskResult = array('status' => 'none');
         }
+
         if ($taskResult['status'] == 'finish') {
             list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
         }
 
-        return $this->render('task/show.html.twig', array(
-            'course' => $course,
-            'task' => $task,
-            'taskResult' => $taskResult,
-            'nextTask' => empty($nextTask) ? array() : $nextTask,
-            'finishedRate' => empty($finishedRate) ? 0 : $finishedRate,
-        ));
+        return $this->render(
+            'task/show.html.twig',
+            array(
+                'course' => $course,
+                'task' => $task,
+                'taskResult' => $taskResult,
+                'nextTask' => empty($nextTask) ? array() : $nextTask,
+                'finishedRate' => empty($finishedRate) ? 0 : $finishedRate,
+            )
+        );
     }
 
     private function canStartTask($task)
@@ -86,7 +102,7 @@ class TaskController extends BaseController
         // 3. 视频课时非优酷等外链视频时提示购买
         $taskCanTryLook = $course['tryLookable'] && $task['type'] == 'video' && $task['mediaSource'] == 'self';
 
-        if (empty($task['isFree']) && !$taskCanTryLook) {
+        if (empty($course['isFree']) && empty($task['isFree']) && !$taskCanTryLook) {
             if (!$user->isLogin()) {
                 throw $this->createAccessDeniedException();
             }
@@ -94,7 +110,11 @@ class TaskController extends BaseController
                 return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course['id'])));
             }
 
-            return $this->forward('AppBundle:Course/CourseOrder:buy', array('id' => $courseId), array('preview' => true, 'lessonId' => $task['id']));
+            return $this->forward(
+                'AppBundle:Course/CourseOrder:buy',
+                array('id' => $courseId),
+                array('preview' => true, 'lessonId' => $task['id'])
+            );
         }
 
         //在可预览情况下查看网站设置是否可匿名预览
@@ -105,12 +125,15 @@ class TaskController extends BaseController
         }
 
         //TODO vip 插件改造 判断用户是否为VIP
-        return $this->render('task/preview.html.twig', array(
-            'course' => $course,
-            'task' => $task,
-            'user' => $user,
-            'vipStatus' => false,
-        ));
+        return $this->render(
+            'task/preview.html.twig',
+            array(
+                'course' => $course,
+                'task' => $task,
+                'user' => $user,
+                'vipStatus' => false,
+            )
+        );
     }
 
     public function contentPreviewAction($courseId, $id)
@@ -131,7 +154,7 @@ class TaskController extends BaseController
 
     private function canPreviewTask($task, $course)
     {
-        if ($task['isFree']) {
+        if ($course['isFree'] || $task['isFree']) {
             return true;
         }
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
@@ -157,15 +180,18 @@ class TaskController extends BaseController
             $appUrl = "{$host}/mapi_v2/mobile/main#/course/{$courseId}";
         }
 
-        $token = $this->getTokenService()->makeToken('qrcode', array(
-            'userId' => $user['id'],
-            'data' => array(
-                'url' => $this->generateUrl('course_task_show', array('courseId' => $courseId, 'id' => $id), true),
-                'appUrl' => $appUrl,
-            ),
-            'times' => 1,
-            'duration' => 3600,
-        ));
+        $token = $this->getTokenService()->makeToken(
+            'qrcode',
+            array(
+                'userId' => $user['id'],
+                'data' => array(
+                    'url' => $this->generateUrl('course_task_show', array('courseId' => $courseId, 'id' => $id), true),
+                    'appUrl' => $appUrl,
+                ),
+                'times' => 1,
+                'duration' => 3600,
+            )
+        );
         $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
         $response = array(
@@ -184,10 +210,13 @@ class TaskController extends BaseController
             return $this->render('task/inform.html.twig');
         }
 
-        return $this->forward('AppBundle:Activity/Activity:show', array(
-            'task' => $task,
-            'preview' => $preview,
-        ));
+        return $this->forward(
+            'AppBundle:Activity/Activity:show',
+            array(
+                'task' => $task,
+                'preview' => $preview,
+            )
+        );
     }
 
     public function taskPluginsAction(Request $request, $courseId, $taskId)
@@ -196,36 +225,47 @@ class TaskController extends BaseController
 
         $this->tryLearnTask($courseId, $taskId);
 
-        return $this->createJsonResponse(array(
+        return $this->createJsonResponse(
             array(
-                'code' => 'task-list',
-                'name' => '课程',
-                'icon' => 'es-icon-menu',
-                'url' => $this->generateUrl('course_task_show_plugin_task_list', array(
-                    'courseId' => $courseId,
-                    'taskId' => $taskId,
-                    'preview' => $preview,
-                )),
-            ),
-            array(
-                'code' => 'note',
-                'name' => '笔记',
-                'icon' => 'es-icon-edit',
-                'url' => $this->generateUrl('course_task_plugin_note', array(
-                    'courseId' => $courseId,
-                    'taskId' => $taskId,
-                )),
-            ),
-            array(
-                'code' => 'question',
-                'name' => '问答',
-                'icon' => 'es-icon-help',
-                'url' => $this->generateUrl('course_task_plugin_threads', array(
-                    'courseId' => $courseId,
-                    'taskId' => $taskId,
-                )),
-            ),
-        ));
+                array(
+                    'code' => 'task-list',
+                    'name' => '课程',
+                    'icon' => 'es-icon-menu',
+                    'url' => $this->generateUrl(
+                        'course_task_show_plugin_task_list',
+                        array(
+                            'courseId' => $courseId,
+                            'taskId' => $taskId,
+                            'preview' => $preview,
+                        )
+                    ),
+                ),
+                array(
+                    'code' => 'note',
+                    'name' => '笔记',
+                    'icon' => 'es-icon-edit',
+                    'url' => $this->generateUrl(
+                        'course_task_plugin_note',
+                        array(
+                            'courseId' => $courseId,
+                            'taskId' => $taskId,
+                        )
+                    ),
+                ),
+                array(
+                    'code' => 'question',
+                    'name' => '问答',
+                    'icon' => 'es-icon-help',
+                    'url' => $this->generateUrl(
+                        'course_task_plugin_threads',
+                        array(
+                            'courseId' => $courseId,
+                            'taskId' => $taskId,
+                        )
+                    ),
+                ),
+            )
+        );
     }
 
     public function triggerAction(Request $request, $courseId, $id)
@@ -237,12 +277,14 @@ class TaskController extends BaseController
         $data['taskId'] = $id;
         $result = $this->getTaskService()->trigger($id, $eventName, $data);
 
-        return $this->createJsonResponse(array(
-            'result' => $result,
-            'lastTime' => time(),
-            'event' => $eventName,
-            'data' => $data,
-        ));
+        return $this->createJsonResponse(
+            array(
+                'result' => $result,
+                'lastTime' => time(),
+                'event' => $eventName,
+                'data' => $data,
+            )
+        );
     }
 
     public function finishAction($courseId, $id)
@@ -262,13 +304,16 @@ class TaskController extends BaseController
 
         list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
 
-        return $this->render('task/finish-result.html.twig', array(
-            'result' => $result,
-            'task' => $task,
-            'nextTask' => $nextTask,
-            'course' => $course,
-            'finishedRate' => $finishedRate,
-        ));
+        return $this->render(
+            'task/finish-result.html.twig',
+            array(
+                'result' => $result,
+                'task' => $task,
+                'nextTask' => $nextTask,
+                'course' => $course,
+                'finishedRate' => $finishedRate,
+            )
+        );
     }
 
     public function taskFinishedPromptAction($courseId, $id)
@@ -279,13 +324,16 @@ class TaskController extends BaseController
 
         list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
 
-        return $this->render('task/task-finished-prompt.html.twig', array(
-            'result' => $result,
-            'task' => $task,
-            'nextTask' => $nextTask,
-            'course' => $course,
-            'finishedRate' => $finishedRate,
-        ));
+        return $this->render(
+            'task/task-finished-prompt.html.twig',
+            array(
+                'result' => $result,
+                'task' => $task,
+                'nextTask' => $nextTask,
+                'course' => $course,
+                'finishedRate' => $finishedRate,
+            )
+        );
     }
 
     public function finishConditionAction($task)
@@ -295,6 +343,28 @@ class TaskController extends BaseController
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         return $this->forward($action, array('activity' => $activity));
+    }
+
+    /**
+     * 没有权限进行任务的时候的处理逻辑，目前只有学员动态跳转过来的时候跳转到教学计划营销页
+     *
+     * @param \Exception $exception
+     * @param Request $request
+     * @param $taskId
+     * @throws \Exception
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function handleAccessDeniedException(\Exception $exception, Request $request, $taskId)
+    {
+        // 学员动态跳转到无权限任务进入到计划营销页
+        if ($request->query->get('from', '') === 'student_status') {
+            $task = $this->getTaskService()->getTask($taskId);
+            return $this->redirectToRoute('course_show', array(
+                'id' => $task['courseId']
+            ));
+        }
+
+        throw $exception;
     }
 
     protected function getNextTaskAndFinishedRate($task)
@@ -309,7 +379,9 @@ class TaskController extends BaseController
         );
         $finishedCount = $this->getTaskResultService()->countTaskResults($conditions);
 
-        $finishedRate = empty($course['publishedTaskNum']) ? 0 : intval($finishedCount / $course['publishedTaskNum'] * 100);
+        $finishedRate = empty($course['publishedTaskNum']) ? 0 : intval(
+            $finishedCount / $course['publishedTaskNum'] * 100
+        );
 
         return array($course, $nextTask, $finishedRate);
     }
@@ -326,7 +398,7 @@ class TaskController extends BaseController
             $task = $this->getTaskService()->tryTakeTask($taskId);
         }
         if (empty($task)) {
-            throw $this->createResourceNotFoundException('task', $taskId);
+            throw $this->createNotFoundException(sprintf('task not found #%d', $taskId));
         }
 
         if ($task['courseId'] != $courseId) {

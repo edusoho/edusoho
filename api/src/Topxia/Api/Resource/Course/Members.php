@@ -2,11 +2,11 @@
 
 namespace Topxia\Api\Resource\Course;
 
-use Topxia\Api\Resource\BaseResource;
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
+use Topxia\Api\Resource\BaseResource;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Request;
 
 class Members extends BaseResource
 {
@@ -16,8 +16,14 @@ class Members extends BaseResource
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 10);
 
-        $total = $this->getCourseService()->searchMemberCount($conditions);
-        $members = $this->getCourseMemberService()->searchMembers($conditions, array('createdTime'=> 'DESC'), $start, $limit);
+        //需要区分教师吗？8.0以前版本没有
+        $total = $this->getCourseMemberService()->countMembers($conditions);
+        $members = $this->getCourseMemberService()->searchMembers(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            $start,
+            $limit
+        );
         $members = $this->assemblyMembers($members);
         return $this->wrap($this->filter($members), $total);
     }

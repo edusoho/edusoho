@@ -42,7 +42,7 @@
               es-icon-iccheckcircleblack24px color-primary
               {% endif %}
               left-menu"></i>
-          {% if task.status == 'published' %}
+          {% if course.status=='published' and task.status == 'published' %}
             {% if member %}
               {% if task_lock is empty %}
                 <a class="title"
@@ -63,7 +63,7 @@
               </a>
               <span class="right-menu mouse-enter">
                 {% if not member %}
-                  {% if  task.isFree %}
+                  {% if course.isFree or task.isFree %}
                     <a class="btn btn-primary" href="#modal" data-toggle="modal"
                       data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
                       style="margin-top:-8px">免费学习</a>
@@ -71,7 +71,7 @@
                     <a class="btn btn-warning" href="#modal" data-toggle="modal"
                       data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
                       style="margin-top:-8px">免费试看</a>
-                  {% elseif  not task.isFree %}
+                  {% elseif not task.isFree %}
                     <a class="btn btn-primary" href="#modal" data-toggle="modal"
                       data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
                       style="margin-top:-8px">立即购买</a>

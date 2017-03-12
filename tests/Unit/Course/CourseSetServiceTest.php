@@ -116,4 +116,9 @@ class CourseSetServiceTest extends BaseTestCase
     {
         return $this->createService('Course:CourseService');
     }
+
+    protected function getDiscountService()
+    {
+        return $this->createService('DiscountPlugin:Discount:DiscountService');
+    }
 }

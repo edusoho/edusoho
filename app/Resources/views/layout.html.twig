@@ -49,8 +49,18 @@
 
   {% block head_scripts %}{% endblock %}
 
-</head>
-<body class="es-main-green {% if bodyClass|default('') %}{{ bodyClass }}{% endif %}">
+  {% set currentTheme = current_theme() %}
+  {% if isEditColor|default(0) %}
+    {% set maincolor = currentTheme.config.maincolor|default(currentTheme.config.color|default('default')) %}
+    {% set navigationcolor = currentTheme.config.navigationcolor|default('default') %}
+  {% else %}
+    {% set maincolor = currentTheme.confirmConfig.maincolor|default(currentTheme.confirmConfig.color|default('default')) %}
+    {% set navigationcolor = currentTheme.confirmConfig.navigationcolor|default('default') %}
+  {% endif %}
+  
+</head> 
+<body class="{{ 'es-main-' ~ maincolor }} {{ 'es-nav-' ~ navigationcolor }} {% if bodyClass|default('') %}{{ bodyClass }}{% endif %}">
+
 
 <!--[if lt IE 9]>
 <script src="{{ asset('static-dist/libs/fix-ie.js') }}"></script>

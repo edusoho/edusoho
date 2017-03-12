@@ -41,7 +41,7 @@
                   {{ web_macro.user_avatar(user, 'pull-left', 'avatar-sm') }}
                 </a>
                 <a target="_blank" href="/user/{{student.userId}}">{{ user.nickname }}</a>
-                
+
                 {% if student.remark %}
                   <span class="text-muted text-sm" title="{{student.remark}}">({{ student.remark|plain_text(16) }})</span>
                 {% endif %}
@@ -58,7 +58,7 @@
                 {% if app.user.isAdmin() %}
                 <a class="mrm" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_show', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">{{'查看资料'|trans}}</a>
                 {% elseif setting("course.buy_fill_userinfo") %}
-                   <a class="mrm" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_students_defined_show', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">{{'查看资料'|trans}}</a>
+                   <a class="mrm" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_defined_show', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">{{'查看资料'|trans}}</a>
                 {% endif %}
                 <div class="btn-group">
                   <a href="#" class="mrm dropdown-toggle" data-toggle="dropdown">

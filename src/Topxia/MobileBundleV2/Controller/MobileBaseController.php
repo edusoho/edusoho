@@ -648,6 +648,11 @@ class MobileBaseController extends BaseController
         return $this->createService('Task:TaskResultService');
     }
 
+    public function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
     public function getTokenService()
     {
         return $this->createService('User:TokenService');

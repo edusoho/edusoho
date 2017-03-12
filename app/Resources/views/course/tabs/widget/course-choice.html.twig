@@ -1,5 +1,5 @@
 {% if courseSet.type != 'live' %}
-  <ul class="nav nav-pills hidden-xs mb20" role="tablist">
+  <ul class="nav nav-pills nav-pills-sm hidden-xs mb20" role="tablist">
     {% if member %}
       {% set route = 'my_course_show' %}
     {% else %}
@@ -12,7 +12,7 @@
 
     {% for selectCourse in courses %}
       <li role="presentation" {% if selectCourse.id == selectedCourseId %}class="active"{% endif %}>
-        <a href="{{ path(route, {id: course.id, selectedCourse: selectCourse.id, tab: tab}) }}#{{ tab }}">{{ selectCourse.title }}</a>
+        <a href="{{ path(route, {id: course.id, selectedCourse: selectCourse.id, tab: tab}) }}#{{ tab }}">{{ selectCourse.title|sub_text(12) }}</a>
       </li>
     {% endfor %}
   </ul>

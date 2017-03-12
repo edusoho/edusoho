@@ -16,6 +16,11 @@ class HomeworkResult extends BaseResource
 
         $homework = $this->getTestpaperService()->getTestpaper($homeworkId);
 
+        $canTakeCourse = $this->getCourseService()->canTakeCourse($homework['courseId']);
+        if (!$canTakeCourse) {
+            return $this->error('500', '无权限访问!');
+        }
+
         $conditions = array(
             'mediaId' => $homework['id'],
             'mediaType' => 'homework',
@@ -31,7 +36,7 @@ class HomeworkResult extends BaseResource
         $lessonId = $activities[0]['id'];
         $result = $this->getTestpaperService()->startTestpaper($homework['id'], array('lessonId' => $lessonId, 'courseId' => $homework['courseId']));
 
-        $this->getTestpaperService()->finishTest($result['id'], $formData);
+        $this->getTestpaperService()->finishTest($result['id'], $answers);
 
         return array(
             'id' => $result['id'],
@@ -47,6 +52,11 @@ class HomeworkResult extends BaseResource
         $homework = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
         if (empty($homework)) {
             return $this->error('404', '该作业不存在!');
+        }
+
+        $canTakeCourse = $this->getCourseService()->canTakeCourse($homework['courseId']);
+        if (!$canTakeCourse) {
+            return $this->error('500', '无权限访问!');
         }
 
         $conditions = array(

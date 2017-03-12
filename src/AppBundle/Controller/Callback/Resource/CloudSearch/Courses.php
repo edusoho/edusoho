@@ -3,8 +3,8 @@
 namespace AppBundle\Controller\Callback\Resource\CloudSearch;
 
 use AppBundle\Common\ArrayToolkit;
-use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\Callback\Resource\BaseResource;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * 课程资源集合(对应course_set表).

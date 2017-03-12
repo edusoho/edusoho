@@ -2,6 +2,7 @@
 
 namespace AppBundle\Twig;
 
+use Biz\Course\Service\CourseService;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use Biz\Course\Service\CourseSetService;
@@ -32,8 +33,10 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFunction('services', array($this, 'buildServiceTags')),
             new \Twig_SimpleFunction('classroom_services', array($this, 'buildClassroomServiceTags')),
             new \Twig_SimpleFunction('count', array($this, 'count')),
+            new \Twig_SimpleFunction('course_count', array($this, 'courseCount')),
             new \Twig_SimpleFunction('course_cover', array($this, 'courseCover')),
             new \Twig_SimpleFunction('course_set_cover', array($this, 'courseSetCover')),
+            new \Twig_SimpleFunction('user_avatar', array($this, 'userAvatar')),
         );
     }
 
@@ -177,6 +180,11 @@ class AppExtension extends \Twig_Extension
         return $this->sortTags($tags);
     }
 
+    public function courseCount($courseSetId)
+    {
+        return $this->getCourseService()->countCourses(array('courseSetId' => $courseSetId));
+    }
+
     public function courseCover($course, $type = 'middle')
     {
         $courseSet = null;
@@ -191,6 +199,18 @@ class AppExtension extends \Twig_Extension
         return $this->courseSetCover($courseSet, $type);
     }
 
+    public function userAvatar($user, $type = 'middle')
+    {
+        $avatar = !empty($user[$type.'Avatar']) ? $user[$type.'Avatar'] : null;
+
+        if (empty($avatar)) {
+            $setting = $this->getSettingService()->get('default');
+            $avatar = !empty($setting['avatar.png']) ? $setting['avatar.png'] : null;
+        }
+
+        return $avatar;
+    }
+
     public function courseSetCover($courseSet, $type = 'middle')
     {
         $coverPath = null;
@@ -203,7 +223,7 @@ class AppExtension extends \Twig_Extension
 
         if (empty($coverPath)) {
             $settings = $this->getSettingService()->get('default');
-            $coverPath = $settings['course.png'] ? $settings['course.png'] : null;
+            $coverPath = !empty($settings['course.png']) ? $settings['course.png'] : null;
         }
 
         return $coverPath;
@@ -241,6 +261,14 @@ class AppExtension extends \Twig_Extension
     protected function getCourseSetService()
     {
         return $this->biz->service('Course:CourseSetService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->biz->service('Course:CourseService');
     }
 
     /**

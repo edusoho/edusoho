@@ -3,8 +3,8 @@
 namespace Biz\Course\Event;
 
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\Course\Service\CourseSetService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -14,7 +14,7 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     {
         return array(
             'courseSet.maxRate.update' => 'onCourseSetMaxRateUpdate',
-            'classroom.course.delete' => 'onClassroomCourseDelete',
+            'course-set.update' => 'onCourseSetUpdate',
         );
     }
 
@@ -27,15 +27,10 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
         return $this->getCourseService()->updateMaxRateByCourseSetId($courseSet['id'], $maxRate);
     }
 
-    public function onClassroomCourseDelete(Event $event)
+    public function onCourseSetUpdate(Event $event)
     {
-        $courseId = $event->getArgument('deleteCourseId');
-        $course = $this->getCourseService()->getCourse($courseId);
-        if (empty($course) || empty($course['parentId'])) {
-            return;
-        }
-
-        $this->getCourseSetService()->deleteCourseSet($course['courseSetId']);
+        $courseSet = $event->getSubject();
+        $this->getCourseService()->updateCategoryByCourseSetId($courseSet['id'], $courseSet['categoryId']);
     }
 
     /**

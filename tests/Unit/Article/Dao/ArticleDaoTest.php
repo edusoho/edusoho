@@ -192,26 +192,26 @@ class ArticleDaoTest extends BaseDaoTestCase
     protected function getDefaultMockFields()
     {
         return array(
-            'title' => 'varchar',    // 文章标题
-            'categoryId' => 1,    // 栏目
-            'tagIds' => 'tinytext',    // tag标签
-            'source' => 'varchar',    // 来源
-            'sourceUrl' => 'varchar',    // 来源URL
-            'publishedTime' => 1,    // 发布时间
-            'body' => 'text',    // 正文
-            'thumb' => 'varchar',    // 缩略图
-            'originalThumb' => 'varchar',    // 缩略图原图
-            'picture' => 'varchar',    // 文章头图，文章编辑／添加时，自动取正文的第１张图
-            'status' => 'published',    // 状态
-            'hits' => 1,    // 点击量
-            'featured' => 1,    // 是否头条
-            'promoted' => 1,    // 推荐
-            'sticky' => 1,    // 是否置顶
-            'postNum' => 1,    // 回复数
-            'upsNum' => 1,    // 点赞数
-            'userId' => 1,    // 文章发布人的ID
-            'orgId' => 1,    // 组织机构ID
-            'orgCode' => 'varchar',    // 组织机构内部编码
+            'title' => 'varchar', // 文章标题
+            'categoryId' => 1, // 栏目
+            'tagIds' => array('1', '2'), // tag标签
+            'source' => 'varchar', // 来源
+            'sourceUrl' => 'varchar', // 来源URL
+            'publishedTime' => 1, // 发布时间
+            'body' => 'text', // 正文
+            'thumb' => 'varchar', // 缩略图
+            'originalThumb' => 'varchar', // 缩略图原图
+            'picture' => 'varchar', // 文章头图，文章编辑／添加时，自动取正文的第１张图
+            'status' => 'published', // 状态
+            'hits' => 1, // 点击量
+            'featured' => 1, // 是否头条
+            'promoted' => 1, // 推荐
+            'sticky' => 1, // 是否置顶
+            'postNum' => 1, // 回复数
+            'upsNum' => 1, // 点赞数
+            'userId' => 1, // 文章发布人的ID
+            'orgId' => 1, // 组织机构ID
+            'orgCode' => 'varchar', // 组织机构内部编码
         );
     }
 }
