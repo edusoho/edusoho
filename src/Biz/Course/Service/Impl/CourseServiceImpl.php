@@ -1151,12 +1151,13 @@ class CourseServiceImpl extends BaseService implements CourseService
             );
             $items[] = $task;
         }
-
         $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
-        $number = 0;
+
+        $unitNumber = 0;
+        $chapterNumber = 0;
         foreach ($chapters as $chapter) {
             $chapter['itemType'] = 'chapter';
-            $chapter['number'] = ++$number;
+            $chapter['number'] = ($chapter['type'] == 'unit') ? ++$unitNumber : ++$chapterNumber;
             $items[] = $chapter;
         }
         uasort(
