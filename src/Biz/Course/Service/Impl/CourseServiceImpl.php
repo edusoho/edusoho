@@ -1130,7 +1130,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             }
             $task = array_merge($task, $defaultTask);
             $task['itemType'] = 'lesson';
-            $task['number'] = ++ $number;
+            $task['number'] = ++$number;
             if ($task['type'] == 'doc') {
                 $task['type'] = 'document';
             }
@@ -1156,9 +1156,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         $number = 0;
         foreach ($chapters as $chapter) {
             $chapter['itemType'] = 'chapter';
-            $chapter['number'] = ++ $number;
+            $chapter['number'] = ++$number;
             $items[] = $chapter;
-
         }
         uasort(
             $items,
