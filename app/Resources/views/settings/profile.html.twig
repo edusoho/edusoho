@@ -2,7 +2,7 @@
 
 {% block title %}{{'基础信息'|trans}} - {{ parent() }}{% endblock %}
 
-{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js', 'libs/jquery-validation.js','app/js/settings/profile/index.js']) %}
+{% set script_controller = 'settings/profile' %}
 {% set side_nav = 'profile' %}
 
 {% block main %}
@@ -21,7 +21,7 @@
 					<div class="form-group">
 					<label class="col-md-2 control-label" >{{'用户名'|trans}}</label>
 						<div class="col-md-7 controls">
-						<div class="form-control-static">
+						<div class="control-text">
 							{{app.user.nickname}} {% if setting('user_partner.nickname_enabled') %} <a href="{{ path('setting_nickname') }}">{{'修改'|trans}}</a> {% endif %}</div>
 						</div>
 					</div>
@@ -42,10 +42,10 @@
 						<label class="col-md-2 control-label">{{'性别'|trans}}</label>
 						<div class="col-md-7 controls radios">
 							<div id="profile_gender">
-								<input type="radio" id="profile_gender_0" name="profile[gender]" value="male" {% if profile.gender == 'male' %}checked="checked"{% endif %}>
-								<label for="profile_gender_0">{{'男'|trans}}</label>
-								<input type="radio" id="profile_gender_1" name="profile[gender]" value="female" {% if profile.gender == 'female' %}checked="checked"{% endif %}>
-								<label for="profile_gender_1">{{'女'|trans}}</label>
+								<input type="radio" id="profile_gender_0" name="profile[gender]" required="required" value="male" {% if profile.gender == 'male' %}checked="checked"{% endif %}>
+								<label for="profile_gender_0" class="required">{{'男'|trans}}</label>
+								<input type="radio" id="profile_gender_1" name="profile[gender]" required="required" value="female" {% if profile.gender == 'female' %}checked="checked"{% endif %}>
+								<label for="profile_gender_1" class="required">{{'女'|trans}}</label>
 							</div>
 						</div>
 					</div>

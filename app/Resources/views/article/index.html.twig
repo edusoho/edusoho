@@ -1,10 +1,9 @@
-{% extends 'layout.html.twig' %}
+{% extends 'old-layout.html.twig' %}
 
 {% block title %}{{ article.name|default('资讯频道'|trans) }} - {{ parent() }}{% endblock %}
 
 {% set bodyClass = 'artcile-list-page' %}
-{#{% set script_controller = 'article/list.js' %}#}
-{% do script(['app/js/article/list/index.js']) %}
+{% set script_controller = 'article/list.js' %}
 
 {% block content %}
 

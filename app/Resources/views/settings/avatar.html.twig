@@ -2,8 +2,7 @@
 
 {% block title %}{{'头像设置'|trans}} - {{ parent() }}{% endblock %}
 {% set side_nav = 'avatar' %}
-
-{% do script(['app/js/settings/avatar/index.js']) %}
+{% set script_controller = 'settings/avatar' %}
 
 {% block main %}
   {% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
