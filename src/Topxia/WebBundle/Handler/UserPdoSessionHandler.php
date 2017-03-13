@@ -135,7 +135,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
     /**
      * @var int The strategy for locking, see constants
      */
-    private $lockMode = self::LOCK_ADVISORY;
+    private $lockMode = self::LOCK_NONE;
 
     /**
      * It's an array to support multiple reads before closing which is manual, non-standard usage.

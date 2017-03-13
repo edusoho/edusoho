@@ -869,7 +869,7 @@ class EduCloudController extends BaseController
 
             $userOverview = $api->get("/users/{$api->getAccessKey()}/overview");
             $searchOverview = $api->get("/me/search/overview");
-            $data = $this->isSearchInited($api, $cloud_search_setting);
+            $data = $this->initCloudSearch($api, $cloud_search_setting);
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud/Search:without-enable.html.twig', array(
                 'data' => array('status' => 'unlink')
@@ -923,18 +923,10 @@ class EduCloudController extends BaseController
 
     public function searchOpenAction()
     {
-        $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
-        if ($cloud_search_settting['status'] == 'ok' || $cloud_search_settting['status'] == 'waiting') {
-            $this->getSettingService()->set('cloud_search', array(
-                'search_enabled' => 1,
-                'status'         => $cloud_search_settting['status'],
-                'type'           => array(
-                    'course'     => 1,
-                    'teacher'    => 1,
-                    'thread'     => 1, 
-                    'article'    => 1
-                )
-            ));
+        $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
+        if ($cloud_search_setting['status'] == 'ok' || $cloud_search_setting['status'] == 'waiting') {
+            $cloud_search_setting['search_enabled'] = 1;
+            $this->getSettingService()->set('cloud_search', $cloud_search_setting);
         }
 
         return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
@@ -942,12 +934,9 @@ class EduCloudController extends BaseController
 
     public function searchCloseAction()
     {
-        $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
-
-        $this->getSettingService()->set('cloud_search', array(
-            'search_enabled' => 0,
-            'status'         => $cloud_search_settting['status']
-        ));
+        $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
+        $cloud_search_setting['search_enabled'] = 0;
+        $this->getSettingService()->set('cloud_search', $cloud_search_setting);
 
         return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
     }
@@ -1365,7 +1354,7 @@ class EduCloudController extends BaseController
         }
     }
 
-    protected function isSearchInited($api, $data)
+    protected function initCloudSearch($api, $data)
     {
         if (!$data) {
             $data = array(
@@ -1383,6 +1372,14 @@ class EduCloudController extends BaseController
                     'status'         => 'ok'
                 );
             }
+        }
+        if (empty($data['type'])) {
+            $data['type'] = array(
+                'course'     => 1,
+                'teacher'    => 1,
+                'thread'     => 1, 
+                'article'    => 1
+            );
         }
         $this->getSettingService()->set('cloud_search', $data);
 
