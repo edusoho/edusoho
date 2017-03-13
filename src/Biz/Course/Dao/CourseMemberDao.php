@@ -97,4 +97,20 @@ interface CourseMemberDao extends GeneralDaoInterface
     public function countActivitiesByCourseIdAndUserId($courseId, $userId);
 
     public function countPostsByCourseIdAndUserId($courseId, $userId);
+
+    public function countMemberNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned);
+
+    public function countMemberNotInClassroomByUserIdAndRoleAndIsLearned($userId, $role, $isLearned);
+
+    public function countMemberNotInClassroomByUserIdAndRole($userId, $role, $onlyPublished = true);
+
+    public function findMembersNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned, $start, $limit);
+
+    public function findMembersNotInClassroomByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit);
+
+    public function countMemberByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned);
+
+    public function countMemberByUserIdAndRoleAndIsLearned($userId, $role, $isLearned);
+
+    public function findMembersNotInClassroomByUserIdAndRoleAndType($userId, $role, $type, $start, $limit, $onlyPublished = true);
 }

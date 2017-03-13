@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use Biz\System\Service\SettingService;
 use Biz\User\CurrentUser;
-use Biz\User\Service\TokenService;
-use Biz\User\Service\UserService;
 use Endroid\QrCode\QrCode;
+use Biz\User\Service\UserService;
+use Biz\User\Service\TokenService;
+use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -62,35 +62,18 @@ class CommonController extends BaseController
 
     public function crontabAction(Request $request)
     {
-        $setting = $this->getSettingService()->get('magic', array());
-        if (!empty($setting['disable_web_crontab'])) {
-            return $this->createJsonResponse(true);
-        }
-
-        $triggerUser = $this->getCurrentUser();
-
-        // 执行Job 应该是最高权限
-        $jobUser = new CurrentUser();
-
-        $jobUser->fromArray(array(
-            'id' => 1,
-            'email' => 'job@edusoho.com',
-            'nickname' => '定时任务',
-            'currentIp' => '127.0.0.1',
-            'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
-            'org' => array('id' => 1),
-            'level' => 'SYSTEM',
-            'locale' => $request->getLocale()
-        ));
-
-        try{
-            $this->switchUser($request, $jobUser);
+        $currentUser = $this->getCurrentUser();
+        try {
+            $switchUser = new CurrentUser();
+            $switchUser->fromArray($this->getUserService()->getUserByType('scheduler'));
+            $this->switchUser($request, $switchUser);
             $this->getBiz()->service('Crontab:CrontabService')->scheduleJobs();
-            $this->switchUser($request, $triggerUser);
+            $this->switchUser($request, $currentUser);
+
             return $this->createJsonResponse(true);
-        }catch (\Exception $exception){
-            $this->switchUser($request, $triggerUser);
-            throw $exception;
+        } catch (\Exception $e) {
+            $this->switchUser($request, $currentUser);
+            throw $e;
         }
     }
 

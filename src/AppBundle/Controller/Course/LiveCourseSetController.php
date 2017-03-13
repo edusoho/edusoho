@@ -289,7 +289,10 @@ class LiveCourseSetController extends CourseBaseController
         $replayLiveCourseSetIds = $this->getTaskService()->findPastLivedCourseSetIds();
 
         unset($conditions['ids']);
-        $conditions['excludeIds'] = $allFutureLiveCourseSetIds;
+
+        if (!empty($allFutureLiveCourseSetIds)) {
+            $conditions['excludeIds'] = $allFutureLiveCourseSetIds;
+        }
 
         $replayLiveCourses = $this->getCourseSetService()->searchCourseSets($conditions, array('createdTime' => 'DESC'), $start, $limit);
 

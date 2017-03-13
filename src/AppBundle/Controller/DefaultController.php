@@ -7,6 +7,7 @@ use Biz\CloudPlatform\Service\AppService;
 use Biz\Content\Service\BlockService;
 use Biz\Content\Service\NavigationService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Theme\Service\ThemeService;
@@ -91,10 +92,14 @@ class DefaultController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($reviews, 'courseId'));
 
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds(ArrayToolkit::column($courses, 'courseSetId'));
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+
         return $this->render('default/latest-reviews-block.html.twig', array(
             'reviews' => $reviews,
             'users' => $users,
             'courses' => $courses,
+            'courseSets' => $courseSets,
         ));
     }
 
@@ -292,6 +297,14 @@ class DefaultController extends BaseController
     protected function getThemeService()
     {
         return $this->getBiz()->service('Theme:ThemeService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->getBiz()->service('Course:CourseSetService');
     }
 
     protected function getCourseMemberService()

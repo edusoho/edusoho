@@ -8,6 +8,8 @@ interface UserDao extends GeneralDaoInterface
 {
     public function getByEmail($email);
 
+    public function getUserByType($type);
+
     public function getByNickname($nickname);
 
     public function countByMobileNotEmpty();

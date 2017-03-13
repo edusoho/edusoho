@@ -2,24 +2,24 @@
 
 namespace Biz\Course\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
-use Biz\Content\Service\FileService;
-use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Dao\FavoriteDao;
-use Biz\Course\Service\CourseDeleteService;
-use Biz\Course\Service\CourseNoteService;
+use Biz\Course\Dao\CourseSetDao;
+use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\LogService;
+use Biz\Content\Service\FileService;
+use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
-use Biz\System\Service\LogService;
-use Biz\Taxonomy\Service\TagService;
-use Biz\User\Service\UserService;
+use Biz\Course\Service\MaterialService;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\CourseNoteService;
+use Biz\Course\Service\CourseDeleteService;
+use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
@@ -28,41 +28,71 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->findCourseSetsByParentIdAndLocked($parentId, $locked);
     }
 
+    // Refactor: recommendCourseSet
     public function recommendCourse($id, $number)
     {
         $this->tryManageCourseSet($id);
         if (!is_numeric($number)) {
             throw $this->createAccessDeniedException('recmendNum should be number!');
         }
-
+        $fields = array(
+            'recommended' => 1,
+            'recommendedSeq' => (int) $number,
+            'recommendedTime' => time(),
+        );
         $course = $this->getCourseSetDao()->update(
             $id,
-            array(
-                'recommended' => 1,
-                'recommendedSeq' => (int)$number,
-                'recommendedTime' => time(),
-            )
+            $fields
         );
 
         $this->getLogService()->info('course', 'recommend', "推荐课程《{$course['title']}》(#{$course['id']}),序号为{$number}");
-
+        $this->dispatchEvent(
+            'courseSet.recommend',
+            new Event(
+                $course,
+                $fields
+            )
+        );
         return $course;
     }
 
+    // Refactor: cancelRecommendCourseSet
     public function cancelRecommendCourse($id)
     {
         $course = $this->tryManageCourseSet($id);
-
+        $fields = array(
+            'recommended' => 0,
+            'recommendedTime' => 0,
+            'recommendedSeq' => 0,
+        );
         $this->getCourseSetDao()->update(
             $id,
-            array(
-                'recommended' => 0,
-                'recommendedTime' => 0,
-                'recommendedSeq' => 0,
-            )
+            $fields
         );
 
         $this->getLogService()->info('course', 'cancel_recommend', "取消推荐课程《{$course['title']}》(#{$course['id']})");
+        $this->dispatchEvent(
+            'courseSet.recommend.cancel',
+            new Event(
+                $course,
+                $fields
+            )
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findRandomCourseSets($conditions, $num = 3)
+    {
+        $count = $this->countCourseSets($conditions);
+        $max = $count - $num - 1;
+        if ($max < 0) {
+            $max = 0;
+        }
+        $offset = rand(0, $max);
+
+        return $this->searchCourseSets($conditions, 'latest', $offset, $num);
     }
 
     public function favorite($id)
@@ -211,6 +241,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->count($conditions);
     }
 
+    // Refactor: countLearnCourseSets
     public function countUserLearnCourseSets($userId)
     {
         $courses = $this->getCourseService()->findLearnCoursesByUserId($userId);
@@ -219,6 +250,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return count($courseSets);
     }
 
+    // Refactor: searchLearnCourseSets
     public function searchUserLearnCourseSets($userId, $start, $limit)
     {
         $sets = $this->findLearnCourseSetsByUserId($userId);
@@ -242,6 +274,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
     }
 
+    // Refactor: countTeachingCourseSets
     public function countUserTeachingCourseSets($userId, array $conditions)
     {
         $members = $this->getCourseMemberService()->findTeacherMembersByUserId($userId);
@@ -256,6 +289,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->countCourseSets($conditions);
     }
 
+    // Refactor: searchTeachingCourseSets
     public function searchUserTeachingCourseSets($userId, array $conditions, $start, $limit)
     {
         $members = $this->getCourseMemberService()->findTeacherMembersByUserId($userId);
@@ -413,7 +447,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function updateCourseSetMarketing($id, $fields)
     {
@@ -423,7 +457,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $fields,
             array(
                 'discountId',
-                'discount'
+                'discount',
             )
         );
 
@@ -436,7 +470,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         return $courseSet;
     }
-
 
     public function updateCourseSetDetail($id, $fields)
     {
@@ -646,6 +679,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
     }
 
+    // Refactor: 函数意图不明显
     public function analysisCourseSetDataByTime($startTime, $endTime)
     {
         return $this->getCourseSetDao()->analysisCourseSetDataByTime($startTime, $endTime);

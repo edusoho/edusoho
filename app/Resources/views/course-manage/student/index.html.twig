@@ -4,7 +4,7 @@
 {% set side_nav = 'students' %}
 
 {% block main %}
-  <div class="panel panel-default">
+  <div class="panel panel-default" role="course-manage-student-index">
     {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav,btnGroup:1} %}
 
     <div class="panel-body">
