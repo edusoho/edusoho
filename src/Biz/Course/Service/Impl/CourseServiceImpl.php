@@ -1153,11 +1153,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
         $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
 
-        $unitNumber = 0;
-        $chapterNumber = 0;
+        $chapterNumber = array(
+            'unit' => 0,
+            'lesson' => 0,
+            'chapter' => 0
+        );
+
         foreach ($chapters as $chapter) {
             $chapter['itemType'] = 'chapter';
-            $chapter['number'] = ($chapter['type'] == 'unit') ? ++$unitNumber : ++$chapterNumber;
+            $chapter['number'] = ++$chapterNumber[$chapter['type']];
             $items[] = $chapter;
         }
         uasort(
