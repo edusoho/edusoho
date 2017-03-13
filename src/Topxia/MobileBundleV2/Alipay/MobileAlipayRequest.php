@@ -2,8 +2,6 @@
 
 namespace Topxia\MobileBundleV2\Alipay;
 
-
-
 class MobileAlipayRequest
 {
     public $requestData;

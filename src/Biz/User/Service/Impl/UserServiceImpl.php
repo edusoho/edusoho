@@ -723,7 +723,7 @@ class UserServiceImpl extends BaseService implements UserService
             array(
                 'type' => 'scheduler',
                 'roles' => array('ROLE_USER', 'ROLE_SUPER_ADMIN'),
-            )
+            ),
         );
         foreach ($users as $user) {
             $existsUser = $this->getUserDao()->getUserByType($user['type']);
@@ -811,9 +811,8 @@ class UserServiceImpl extends BaseService implements UserService
             $user['orgId'] = $registration['orgId'];
             $user['orgCode'] = $registration['orgCode'];
         }
-        $user = UserSerialize::unserialize(
-            $this->getUserDao()->create(UserSerialize::serialize($user))
-        );
+        $user = $this->getUserDao()->create($user);
+
         if (!empty($registration['invite_code'])) {
             $inviteUser = $this->getUserDao()->getByInviteCode($registration['invite_code']);
         }
@@ -1086,7 +1085,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createInvalidArgumentException('Invalid Roles');
         }
 
-        $user = $this->getUserDao()->update($id, UserSerialize::serialize(array('roles' => $roles)));
+        $user = $this->getUserDao()->update($id, array('roles' => $roles));
 
         $this->dispatchEvent('user.role.change', new Event(UserSerialize::unserialize($user)));
         $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：".implode(',', $roles));
