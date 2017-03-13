@@ -105,7 +105,7 @@ class CrontabServiceTest extends BaseTestCase
         $this->getCrontabService()->setNextExcutedTime($expectedTime);
         $nextExcutedTime = $this->getCrontabService()->getNextExcutedTime();
 
-        $this->assertEquals(time(), $nextExcutedTime);
+        $this->assertEquals($expectedTime, $nextExcutedTime);
     }
 
     public function testFindJobByTargetTypeAndTargetId()
