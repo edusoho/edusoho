@@ -44,7 +44,7 @@ abstract class AbstractEntityCopy extends BizAware
         if (!empty($this->children)) {
             foreach ($this->children as $child) {
                 /**
-                 * @var $cls AbstractEntityCopy
+                 * @var AbstractEntityCopy
                  */
                 $cls = new $child['clz']($this->biz, $this->node);
                 $cls->copy($source, $config);
@@ -60,6 +60,7 @@ abstract class AbstractEntityCopy extends BizAware
      * @param array $config 配置信息
      *
      * @throws \Exception
+     *
      * @return mixed
      */
     public function copy($source, $config = array())

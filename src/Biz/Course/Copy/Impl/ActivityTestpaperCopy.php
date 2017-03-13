@@ -39,10 +39,10 @@ class ActivityTestpaperCopy extends TestpaperCopy
             return null;
         }
 
-        if($activity['fromCourseSetId'] === $newCourseSetId){
+        if ($activity['fromCourseSetId'] === $newCourseSetId) {
             // 同课程下复制 不需要创建新的试卷
             $existed = $this->getTestpaperService()->getTestpaper($testpaperId);
-        } else{
+        } else {
             $existed = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId($testpaperId, $newCourseSetId);
         }
 
