@@ -32,7 +32,7 @@ class JobDaoImpl extends GeneralDaoImpl implements JobDao
         if (!empty($conditions['nextExcutedEndTime'])) {
             $conditions['nextExcutedEndTime'] = strtotime($conditions['nextExcutedEndTime']);
         }
-        
+
         $builder = parent::createQueryBuilder($conditions);
         return $builder;
     }
