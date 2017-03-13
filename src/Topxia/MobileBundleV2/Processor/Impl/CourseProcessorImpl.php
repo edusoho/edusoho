@@ -732,6 +732,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return $result;
     }
 
+
     protected function getFavoriteCourseByCourseType($courseType)
     {
         $user = $this->controller->getUserByToken($this->request);
@@ -753,6 +754,29 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $start,
             $limit
         );
+
+        return array(
+            "start" => $start,
+            "limit" => $limit,
+            "total" => $total,
+            "data"  => $this->controller->filterCourses($courses)
+        );
+    }
+
+
+    public function getFavoriteCourse()
+    {
+        $user = $this->controller->getUserByToken($this->request);
+
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
+        }
+
+        $start = (int) $this->getParam("start", 0);
+        $limit = (int) $this->getParam("limit", 10);
+
+        $total   = $this->controller->getCourseService()->findUserFavoritedCourseCountNotInClassroom($user['id']);
+        $courses = $this->controller->getCourseService()->findUserFavoritedCoursesNotInClassroom($user['id'], $start, $limit);
 
         return array(
             "start" => $start,
