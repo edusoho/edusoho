@@ -203,7 +203,6 @@ jQuery.validator.addMethod("max_year", function (value, element) {
   return this.optional(element) || value < 100000;
 }, "有效期最大值不能超过99,999天");
 
-//日期比较，不进行时间比较
 $.validator.addMethod("before_date", function (value, element, params) {
   let date = new Date(value);
   let afterDate = new Date($(params).val());
@@ -211,7 +210,7 @@ $.validator.addMethod("before_date", function (value, element, params) {
 },
   Translator.trans('开始日期应早于结束日期')
 );
-//日期比较，不进行时间比较
+
 $.validator.addMethod("after_date", function (value, element, params) {
   let date = new Date(value);
   let afterDate = new Date($(params).val());
@@ -219,6 +218,14 @@ $.validator.addMethod("after_date", function (value, element, params) {
 },
   Translator.trans('开始日期应早于结束日期')
 );
+
+$.validator.addMethod("after_now", function (value, element, params) {
+  let afterDate = new Date(value);
+  return !value || afterDate >=new Date();
+},
+  Translator.trans('开始时间应晚于当前时间')
+);
+
 //日期比较，不进行时间比较
 $.validator.addMethod("after_now_date", function (value, element, params) {
   let now = new Date();
@@ -228,6 +235,8 @@ $.validator.addMethod("after_now_date", function (value, element, params) {
 },
   Translator.trans('开始日期应晚于当前日期')
 );
+
+
 
 //检查将废除
 $.validator.addMethod("before", function (value, element, params) {
