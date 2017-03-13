@@ -467,10 +467,8 @@ class CourseManageController extends BaseController
             $this->getCourseMemberService()->setCourseTeachers($courseId, $teachers);
 
             return $this->redirectToRoute(
-                $this->generateUrl(
-                    'course_set_manage_course_teachers',
-                    array('courseSetId' => $courseSetId, 'courseId' => $courseId)
-                )
+                'course_set_manage_course_teachers',
+                array('courseSetId' => $courseSetId, 'courseId' => $courseId)
             );
         }
 
@@ -620,8 +618,8 @@ class CourseManageController extends BaseController
 
         $courseSetting = $this->setting('course');
 
-        if (!$this->getCurrentUser()->isAdmin(
-            ) && (empty($courseSetting['teacher_search_order']) || $courseSetting['teacher_search_order'] != 1)
+        if (!$this->getCurrentUser()->isAdmin()
+            && (empty($courseSetting['teacher_search_order']) || $courseSetting['teacher_search_order'] != 1)
         ) {
             throw $this->createAccessDeniedException('查询订单已关闭，请联系管理员');
         }

@@ -10,6 +10,7 @@ function _u($uri)
  */
 $app->mount(_u('/users'), include dirname(__DIR__).'/src/users.php');
 $app->mount(_u('/me'), include dirname(__DIR__).'/src/me.php');
+$app->mount(_u('/courses'), include dirname(__DIR__).'/src/courses.php');
 $app->mount(_u('/announcements'), include dirname(__DIR__).'/src/announcements.php');
 $app->mount(_u('/coursethreads'), include dirname(__DIR__).'/src/coursethreads.php');
 $app->mount(_u('/mobileschools'), include dirname(__DIR__).'/src/mobileschools.php');
@@ -122,9 +123,7 @@ $app->get(_u('/setting/{settingName}'), 'res.Setting:get');
 $app->post(_u('/emails'), 'res.Emails:post');
 $app->post(_u('/sms_codes'), 'res.SmsCodes:post');
 
+$app->get(_u('/me/friends'), 'res.MeFriends:get');
 $app->get(_u('/courses/{id}'), 'res.Course:get');
-
-
-
-
-
+$app->get(_u('/my/learning'), 'res.MyLearning:get');
+$app->get(_u('/courses_learn_progress'), 'res.CoursesLearnProgress:get');

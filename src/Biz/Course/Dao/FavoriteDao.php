@@ -15,4 +15,6 @@ interface FavoriteDao extends GeneralDaoInterface
     public function countByUserId($userId);
 
     public function deleteByCourseId($courseId);
+
+    public function findCourseFavoritesNotInClassroomByUserId($userId, $start, $limit);
 }

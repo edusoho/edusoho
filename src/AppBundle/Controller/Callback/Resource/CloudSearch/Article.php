@@ -3,22 +3,26 @@
 namespace AppBundle\Controller\Callback\Resource\CloudSearch;
 
 use AppBundle\Controller\Callback\Resource\BaseResource;
+use AppBundle\Common\ArrayToolkit;
 
 class Article extends BaseResource
 {
     public function filter($res)
     {
-        $res['thumb'] = $this->getFileUrl($res['thumb']);
-        $res['originalThumb'] = $this->getFileUrl($res['originalThumb']);
-        $res['picture'] = $this->getFileUrl($res['picture']);
-        $res['body'] = $this->filterHtml($res['body']);
-        $res['createdTime'] = date('c', $res['createdTime']);
-        $res['updatedTime'] = date('c', $res['updatedTime']);
+        $filteredRes = array();
 
-        $site = $this->getSettingService()->get('site', array());
-        $res['source'] = isset($site['name']) ? $site['name'] : '';
+        $filteredRes['id'] = $res['id'];
+        $filteredRes['title'] = $res['title'];
+        $filteredRes['content'] = $this->filterHtml($res['body']);
+        $filteredRes['tags'] = ArrayToolkit::column($res['tags'], 'name');
+        $filteredRes['category'] = isset($res['category']['name']) ? $res['category']['name'] : '';
+        $filteredRes['hitNum'] = $res['hits'];
+        $filteredRes['postNum'] = $res['postNum'];
+        $filteredRes['upsNum'] = $res['upsNum'];
+        $filteredRes['createdTime'] = date('c', $res['createdTime']);
+        $filteredRes['updatedTime'] = date('c', $res['updatedTime']);
 
-        return $res;
+        return $filteredRes;
     }
 
     /**

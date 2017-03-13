@@ -66,7 +66,12 @@ class Exercise {
         messages: {
           required:"请填写标题",
           range: "题目来源",
-          itemCount: "请输入题目个数，最多不超过9999个",
+          itemCount: {
+            required: '请填写题目个数',
+            positiveInteger: '请输入正整数',
+            min: '题目个数无效',
+            max: '题目个数过大'
+          },
           difficulty: "请选择难易程度",
           'questionTypes[]': {
             required:"请选择题型",
