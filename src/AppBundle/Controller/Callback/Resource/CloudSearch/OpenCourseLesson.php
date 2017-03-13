@@ -15,6 +15,10 @@ class OpenCourseLesson extends BaseResource
         $lesson['startTime'] = empty($lesson['startTime']) ? '' : date('c', $lesson['startTime']);
         $lesson['endTime'] = empty($lesson['endTime']) ? '' : date('c', $lesson['endTime']);
 
+        $lesson['free'] = '0';
+        $lesson['learnedNum'] = '0';
+        $lesson['viewedNum'] = '0';
+
         unset($lesson['free']);
         unset($lesson['quizNum']);
         unset($lesson['learnedNum']);

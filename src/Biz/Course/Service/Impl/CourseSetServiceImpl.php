@@ -8,6 +8,9 @@ use Biz\Content\Service\FileService;
 use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseSetDao;
+use Biz\User\Service\UserService;
+use Biz\System\Service\LogService;
+use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Service\CourseDeleteService;
 use Biz\Course\Service\CourseNoteService;
@@ -16,9 +19,6 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
-use Biz\System\Service\LogService;
-use Biz\Taxonomy\Service\TagService;
-use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
@@ -447,7 +447,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function updateCourseSetMarketing($id, $fields)
     {
@@ -457,7 +457,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $fields,
             array(
                 'discountId',
-                'discount'
+                'discount',
             )
         );
 
@@ -470,7 +470,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         return $courseSet;
     }
-
 
     public function updateCourseSetDetail($id, $fields)
     {

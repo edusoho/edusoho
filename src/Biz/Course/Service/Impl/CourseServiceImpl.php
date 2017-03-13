@@ -5,6 +5,7 @@ namespace Biz\Course\Service\Impl;
 use Biz\Activity\Service\Impl\ActivityServiceImpl;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
+use Biz\Course\Dao\Impl\CourseMemberDaoImpl;
 use Biz\Course\Dao\ThreadDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Task\Service\TaskService;
@@ -1196,6 +1197,165 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $task;
     }
 
+    public function findUserLearningCourseCountNotInClassroom($userId, $filters = array())
+    {
+        if (isset($filters['type'])) {
+            return $this->getMemberDao()->countMemberNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters['type'], 0);
+        }
+
+        return $this->getMemberDao()->countMemberNotInClassroomByUserIdAndRoleAndIsLearned($userId, 'student', 0);
+    }
+
+    public function findUserLearningCoursesNotInClassroom($userId, $start, $limit, $filters = array())
+    {
+        if (isset($filters['type'])) {
+            $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters['type'], '0', $start, $limit);
+        } else {
+            $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRoleAndIsLearned($userId, 'student', 0, $start, $limit);
+        }
+
+        $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+
+        $sortedCourses = array();
+
+        foreach ($members as $member) {
+            if (empty($courses[$member['courseId']])) {
+                continue;
+            }
+
+            $course = $courses[$member['courseId']];
+            $course['memberIsLearned'] = 0;
+            $course['memberLearnedNum'] = $member['learnedNum'];
+            $sortedCourses[] = $course;
+        }
+
+        return $sortedCourses;
+    }
+
+    public function findUserLeanedCourseCount($userId, $filters = array())
+    {
+        if (isset($filters['type'])) {
+            return $this->getMemberDao()->countMemberByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters['type'], 1);
+        }
+
+        return $this->getMemberDao()->countMemberByUserIdAndRoleAndIsLearned($userId, 'student', 1);
+    }
+
+    public function findUserLearnedCoursesNotInClassroom($userId, $start, $limit, $filters = array())
+    {
+        if (isset($filters['type'])) {
+            $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters['type'], 1, $start, $limit);
+        } else {
+            $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRoleAndIsLearned($userId, 'student', 1, $start, $limit);
+        }
+
+        $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+
+        $sortedCourses = array();
+
+        foreach ($members as $member) {
+            if (empty($courses[$member['courseId']])) {
+                continue;
+            }
+
+            $course = $courses[$member['courseId']];
+            $course['memberIsLearned'] = 1;
+            $course['memberLearnedNum'] = $member['learnedNum'];
+            $sortedCourses[] = $course;
+        }
+
+        return $sortedCourses;
+    }
+
+    public function findUserLearnCourseCountNotInClassroom($userId, $onlyPublished = true)
+    {
+        return $this->getMemberDao()->countMemberNotInClassroomByUserIdAndRole($userId, 'student', $onlyPublished);
+    }
+
+    public function findUserLearnCoursesNotInClassroom($userId, $start, $limit, $onlyPublished = true)
+    {
+        $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole($userId, 'student', $start, $limit, $onlyPublished);
+
+        $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+
+        return $courses;
+    }
+
+    public function findUserLearnCoursesNotInClassroomWithType($userId, $type, $start, $limit, $onlyPublished = true)
+    {
+        $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRoleAndType($userId, 'student', $type, $start, $limit, $onlyPublished);
+
+        $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+
+        return $courses;
+    }
+
+    public function findUserTeachCourseCountNotInClassroom($conditions, $onlyPublished = true)
+    {
+        $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole($conditions['userId'], 'teacher', 0, PHP_INT_MAX, $onlyPublished);
+        unset($conditions['userId']);
+
+        $courseIds = ArrayToolkit::column($members, 'courseId');
+        $conditions['courseIds'] = $courseIds;
+
+        if (count($courseIds) == 0) {
+            return 0;
+        }
+
+        if ($onlyPublished) {
+            $conditions['status'] = 'published';
+        }
+
+        return $this->searchCourseCount($conditions);
+    }
+
+    public function findUserTeachCoursesNotInClassroom($conditions, $start, $limit, $onlyPublished = true)
+    {
+        $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole($conditions['userId'], 'teacher', $start, $limit, $onlyPublished);
+        unset($conditions['userId']);
+
+        $courseIds = ArrayToolkit::column($members, 'courseId');
+        $conditions['courseIds'] = $courseIds;
+
+        if (count($courseIds) == 0) {
+            return array();
+        }
+
+        if ($onlyPublished) {
+            $conditions['status'] = 'published';
+        }
+
+        $courses = $this->searchCourses($conditions, 'latest', 0, PHP_INT_MAX);
+
+        return $courses;
+    }
+
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findUserFavoritedCourseCountNotInClassroom($userId)
+    {
+        $courseFavorites = $this->getFavoriteDao()->findCourseFavoritesNotInClassroomByUserId($userId, 0, PHP_INT_MAX);
+        $courseIds = ArrayToolkit::column($courseFavorites, 'courseId');
+        $conditions = array('courseIds' => $courseIds);
+
+        if (count($courseIds) == 0) {
+            return 0;
+        }
+
+        return $this->searchCourseCount($conditions);
+    }
+
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findUserFavoritedCoursesNotInClassroom($userId, $start, $limit)
+    {
+        $courseFavorites = $this->getFavoriteDao()->findCourseFavoritesNotInClassroomByUserId($userId, $start, $limit);
+        $favoriteCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($courseFavorites, 'courseId'));
+        return $favoriteCourses;
+    }
+
     protected function _prepareCourseOrderBy($sort)
     {
         if (is_array($sort)) {
@@ -1225,33 +1385,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         return $this->getCourseDao()->count($conditions);
     }
-
-    /*
-     * 2017/3/1 为移动端提供服务，其他慎用
-     */
-    public function findUserFavoritedCourseCountNotInClassroom($userId)
-    {
-        $courseFavorites = $this->getFavoriteDao()->findCourseFavoritesNotInClassroomByUserId($userId, 0, PHP_INT_MAX);
-        $courseIds = ArrayToolkit::column($courseFavorites, 'courseId');
-        $conditions = array('courseIds' => $courseIds);
-
-        if (count($courseIds) == 0) {
-            return 0;
-        }
-
-        return $this->searchCourseCount($conditions);
-    }
-
-    /*
-     * 2017/3/1 为移动端提供服务，其他慎用
-     */
-    public function findUserFavoritedCoursesNotInClassroom($userId, $start, $limit)
-    {
-        $courseFavorites = $this->getFavoriteDao()->findCourseFavoritesNotInClassroomByUserId($userId, $start, $limit);
-        $favoriteCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($courseFavorites, 'courseId'));
-        return $favoriteCourses;
-    }
-
 
     public function countCourses(array $conditions)
     {
@@ -1444,7 +1577,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->createService('Classroom:ClassroomService');
     }
-
+    
     /**
      * 当默认值未设置时，合并默认值
      *

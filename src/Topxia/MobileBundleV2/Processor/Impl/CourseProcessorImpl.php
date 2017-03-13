@@ -49,7 +49,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         $lessonNote = $this->controller->getNoteService()->getCourseNoteByUserIdAndTaskId($user['id'], $lessonId);
-        //$lessonNote = $this->controller->getNoteService()->getUserLessonNote($user['id'], $lessonId);
 
         if (empty($lessonNote)) {
             return null;
@@ -1016,7 +1015,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         if (empty($member)) {
-            $member = $this->controller->getCourseMemberService()->becomeStudentByClassroomJoined($courseId, $user["id"]);
+            $member = $this->controller->getCourseMemberService()->becomeStudentByClassroomJoined($courseId, $user['id']);
             if (empty($member)) {
                 $member = null;
             }
@@ -1483,7 +1482,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return array(
             'start' => $start + count($resultLiveCourses),
             'limit' => $limit,
-            'data' => $resultLiveCourses);
+            'data' => $resultLiveCourses, );
     }
 
     public function hitThread()
@@ -1519,7 +1518,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'start' => $start,
             'limit' => $limit,
             'total' => $total,
-            'data' => $this->controller->filterCourses($liveCourses));
+            'data' => $this->controller->filterCourses($liveCourses), );
 
         return $result;
     }

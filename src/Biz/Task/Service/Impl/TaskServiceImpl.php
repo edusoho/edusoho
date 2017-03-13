@@ -541,7 +541,7 @@ class TaskServiceImpl extends BaseService implements TaskService
      */
     public function findCurrentLiveTasks()
     {
-       $condition = array(
+        $condition = array(
             'startTime_LE' => time(),
             'endTime_GT' => time(),
             'type' => 'live',

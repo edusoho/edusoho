@@ -126,7 +126,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
                 'services' => 'delimiter',
                 'teacherIds' => 'delimiter',
             ),
-            'orderbys'   => array(
+            'orderbys' => array(
                 'hitNum',
                 'recommendedTime',
                 'rating',
