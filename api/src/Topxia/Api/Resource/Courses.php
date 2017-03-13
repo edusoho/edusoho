@@ -23,83 +23,75 @@ class Courses extends BaseResource
 
     public function discoveryColumn(Application $app, Request $request)
     {
-        $defaultQuery = array(
-            'orderType' => '',
-            'type' => '',
-            'showCount' => '',
-        );
+        $conditions =  $request->query->all();
+        list($orderBy, $count) = $this->getOrderByAndCountByConditions($conditions);
+        $conditions = $this->filterConditions($conditions);
 
-        $result = array_merge($defaultQuery, $request->query->all());
-
-        if (!empty($result['categoryId'])) {
-            $conditions['categoryId'] = $result['categoryId'];
-        }
-
-        if ($result['orderType'] == 'hot') {
-            $orderBy = 'hitNum';
-        } elseif ($result['orderType'] == 'recommend') {
-            $orderBy = 'recommendedSeq';
-            $conditions['recommended'] = 1;
-        } else {
-            $orderBy = 'createdTime';
-        }
-
-        if ($result['type'] == 'live') {
-            $conditions['type'] = 'live';
-        } else {
-            $conditions['type'] = 'normal';
-        }
-        if (empty($result['showCount'])) {
-            $result['showCount'] = 6;
-        }
-
-        $conditions['status'] = 'published';
-        $conditions['parentId'] = 0;
-
-
-        $sets = $this->getCourseSetService()->searchCourseSets(
+        $total = $this->getCourseService()->searchCourseCount($conditions);
+        $courses = $this->getCourseService()->searchCourses(
             $conditions,
             $orderBy,
             0,
-            PHP_INT_MAX
+            $count
         );
 
-        $setIds = ArrayToolkit::column($sets, 'id');
-
-        if (empty($setIds)) {
-            return $this->wrap(array(), min($result['showCount'], 0));
-        } else {
-            $courseConditions = array(
-                'courseSetIds' => $setIds,
-            );
-
-            $total = $this->getCourseService()->searchCourseCount($courseConditions);
-            $courses = $this->getCourseService()->searchCourses(
-                $courseConditions,
-                array('createdTime' => 'DESC'),
-                0,
-                $result['showCount']
-            );
-            $courses = $this->filter($courses);
-            foreach ($courses as $key => $value) {
-                $courses[$key]['createdTime'] = strval(strtotime($value['createdTime']));
-                $courses[$key]['updatedTime'] = strval(strtotime($value['updatedTime']));
-                $userIds = $courses[$key]['teacherIds'];
-                $courses[$key]['teachers'] = $this->getUserService()->findUsersByIds($userIds);
-                $courses[$key]['teachers'] = array_values($this->multicallFilter('User', $courses[$key]['teachers']));
-            }
-
-            $this->_sortCoursesOrderBySetIds($setIds, $courses);
-
-            return $this->wrap($courses, min($result['showCount'], $total));
+        $courses = $this->filter($courses);
+        foreach ($courses as $key => $value) {
+            $courses[$key]['createdTime'] = strval(strtotime($value['createdTime']));
+            $courses[$key]['updatedTime'] = strval(strtotime($value['updatedTime']));
+            $userIds                      = $courses[$key]['teacherIds'];
+            $courses[$key]['teachers']    = $this->getUserService()->findUsersByIds($userIds);
+            $courses[$key]['teachers']    = array_values($this->multicallFilter('User', $courses[$key]['teachers']));
         }
+
+        return $this->wrap($courses, min($count, $total));
+    }
+
+    protected function getOrderByAndCountByConditions($conditions)
+    {
+        $count = empty($conditions['showCount']) ? 6 : $conditions['showCount'];
+        $orderBy = array(
+            'hot' =>  array(
+                'hitNum' => 'DESC'
+             ),
+            'recommend' => array(
+                'recommendedSeq' => 'ASC',
+                'recommendedTime' => 'DESC',
+            )
+        );
+
+        if (in_array($conditions['orderType'], $orderBy)) {
+            $orderBy = $orderBy[$conditions['orderType']];
+        } else {
+            $orderBy = array('createdTime' => 'DESC');
+        }
+        return array($orderBy, $count);
+    }
+
+    protected function filterConditions($conditions)
+    {
+        $conditions['status'] = 'published';
+        $conditions['parentId'] = 0;
+        if ($conditions['type'] != 'live') {
+            $conditions['type'] = 'normal';
+        }
+        if ($conditions['orderType'] == 'recommend') {
+            $conditions['recommended'] = 1;
+        }
+        $conditions = ArrayToolkit::parts($conditions, array(
+            'categoryId',
+            'type',
+            'parentId',
+            'status',
+            'recommended'
+        ));
+        return $conditions;
     }
 
     public function filter($courses)
     {
         $courseIds = ArrayToolkit::column($courses, 'id');
         $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
-        $courseSets = ArrayToolkit::index($courseSets, 'id');
         foreach ($courses as &$course) {
             $course['courseSet'] = $courseSets[$course['courseSetId']];
         }
@@ -128,47 +120,6 @@ class Courses extends BaseResource
         }
 
         return $courses;
-    }
-
-    /**
-     * 根据课程ID集合的顺序和教学计划所对应的课程, 排序教学计划, 注意请确保课程ID集合是已经排序好
-     * @param $setIds
-     * @param $courses
-     */
-    protected function _sortCoursesOrderBySetIds($setIds, &$courses)
-    {
-        if (empty($setIds)) {
-            return;
-        }
-
-        /**
-         * 翻转setId集合 如
-         *  key 为序号， value 是 setId
-         * [
-         *   0 => 3,
-         *   1 => 4,
-         * ]
-         * 会转换为
-         * [
-         *   3 => 0,
-         *   4 => 1,
-         * ]
-         */
-        $orderedSetIds = array_flip($setIds);
-        // 教学计划根据翻转后的setId集合来获得排序序号，然后根据序号来排序
-        usort(
-            $courses,
-            function ($a, $b) use ($orderedSetIds) {
-                $aSetSeq = $orderedSetIds[$a['courseSetId']];
-                $bSetSeq = $orderedSetIds[$b['courseSetId']];
-
-                if ($aSetSeq === $bSetSeq) {
-                    return 0;
-                }
-
-                return ($a < $b) ? 1 : -1;  // 降序
-            }
-        );
     }
 
     protected function getCourseService()
