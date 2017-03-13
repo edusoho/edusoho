@@ -696,7 +696,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $isCourseStudent = $this->isCourseStudent($courseId, $userId);
         $classroom = $this->getClassroomService()->getClassroomByCourseId($courseId);
 
-        if ($classroom['classroomId']) {
+        if ($classroom['id']) {
             $member = $this->getClassroomService()->getClassroomMember($classroom['classroomId'], $userId);
 
             if (!$isCourseStudent

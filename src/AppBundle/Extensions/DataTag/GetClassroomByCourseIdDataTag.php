@@ -18,7 +18,7 @@ class GetClassroomByCourseIdDataTag extends BaseDataTag implements DataTag
     {
         $classroom = $this->getClassroomService()->getClassroomByCourseId($arguments['courseId']);
         if ($classroom) {
-            $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+            $classroom = $this->getClassroomService()->getClassroom($classroom['id']);
         }
 
         return $classroom;

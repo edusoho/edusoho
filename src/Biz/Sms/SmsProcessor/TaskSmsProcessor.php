@@ -32,7 +32,7 @@ class TaskSmsProcessor extends BaseSmsProcessor
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
             if ($classroom) {
-                $count = $this->getClassroomService()->searchMemberCount(array('classroomId' => $classroom['classroomId']));
+                $count = $this->getClassroomService()->searchMemberCount(array('classroomId' => $classroom['id']));
             }
         } else {
             $count = $this->getCourseMemberService()->countMembers(array('courseId' => $course['id']));
@@ -96,7 +96,7 @@ class TaskSmsProcessor extends BaseSmsProcessor
             $classroom = $this->getClassroomService()->getClassroomByCourseId($task['courseId']);
 
             if ($classroom) {
-                $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['classroomId']), array('createdTime' => 'Desc'), $index, 1000);
+                $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['id']), array('createdTime' => 'Desc'), $index, 1000);
             }
         } else {
             $students = $this->getCourseMemberService()->searchMembers(array('courseId' => $task['courseId']), array('createdTime' => 'Desc'), $index, 1000);
