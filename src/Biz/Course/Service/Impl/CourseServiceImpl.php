@@ -1097,7 +1097,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     //移动端接口使用
-    public function findCourseTasksAndChapters($courseId, $includeChapters)
+    public function findCourseTasksAndChapters($courseId)
     {
         $course = $this->getCourse($courseId);
         $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
@@ -1123,12 +1123,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
 
         $items = array();
+        $number = 0;
         foreach ($tasks as $task) {
             if ($this->isUselessTask($task)) {
                 continue;
             }
             $task = array_merge($task, $defaultTask);
             $task['itemType'] = 'lesson';
+            $task['number'] = ++ $number;
             if ($task['type'] == 'doc') {
                 $task['type'] = 'document';
             }
@@ -1150,12 +1152,13 @@ class CourseServiceImpl extends BaseService implements CourseService
             $items[] = $task;
         }
 
-        if ($includeChapters) {
-            $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
-            foreach ($chapters as $chapter) {
-                $chapter['itemType'] = 'chapter';
-                $items[] = $chapter;
-            }
+        $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
+        $number = 0;
+        foreach ($chapters as $chapter) {
+            $chapter['itemType'] = 'chapter';
+            $chapter['number'] = ++ $number;
+            $items[] = $chapter;
+
         }
         uasort(
             $items,

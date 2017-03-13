@@ -185,7 +185,7 @@ interface CourseService
 
     public function findUserFavoritedCoursesNotInClassroom($userId, $start, $limit);
 
-    public function findCourseTasksAndChapters($courseId, $includeChapters);
+    public function findCourseTasksAndChapters($courseId);
 
     public function updateCategoryByCourseSetId($courseSetId, $categoryId);
 
