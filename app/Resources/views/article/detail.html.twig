@@ -1,4 +1,4 @@
-{% extends 'old-layout.html.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% block title %}{{ article.title }} - {% if category.seoTitle|default() %}{{ category.seoTitle }}{% else %}{{ category.name|default() }}{% endif %} - {{ parent() }}{% endblock %}
 
@@ -6,11 +6,13 @@
 
 {% block description %}{{ seoDesc|plain_text(100) }}{% endblock %}
 
-{% set bodyClass = 'artcile-detail-page' %}
+{% set bodyClass = 'article-detail-page' %}
+
+{% do script(['libs/jquery-validation.js','libs/es-ckeditor/ckeditor.js','app/js/article/detail/index.js']) %}
 
 {% block content %}
 
-  {% do load_script('article/detail') %}
+  {#{% do load_script('article/detail') %}#}
 {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 
   <div class="article-detail row" id="detail-content">
