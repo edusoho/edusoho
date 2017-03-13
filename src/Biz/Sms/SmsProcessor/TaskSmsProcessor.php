@@ -89,7 +89,7 @@ class TaskSmsProcessor extends BaseSmsProcessor
         $shortUrl = SmsToolkit::getShortLink($originUrl);
         $url = empty($shortUrl) ? $originUrl : $shortUrl;
 
-        $courseSet = $this->getCourseService()->getCourse($task['courseId']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($task['fromCourseSetId']);
 
         $students = array();
         if ($courseSet['parentId']) {
