@@ -39,7 +39,13 @@ class ActivityTestpaperCopy extends TestpaperCopy
             return null;
         }
 
-        $existed = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId($testpaperId, $newCourseSetId);
+        if($activity['fromCourseSetId'] === $newCourseSetId){
+            // 同课程下复制 不需要创建新的试卷
+            $existed = $this->getTestpaperService()->getTestpaper($testpaperId);
+        } else{
+            $existed = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId($testpaperId, $newCourseSetId);
+        }
+
         if (!empty($existed)) {
             return $existed; //已复制过，不要重复复制
         }

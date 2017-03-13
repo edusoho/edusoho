@@ -2,26 +2,22 @@
 
 namespace Biz\Course\Copy;
 
+use Codeages\Biz\Framework\Context\BizAware;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Codeages\Biz\Framework\Context\Biz;
-use Topxia\Service\Common\ServiceKernel;
 
-abstract class AbstractEntityCopy
+abstract class AbstractEntityCopy extends BizAware
 {
     private $logger;
-    /**
-     * @var Biz
-     */
-    protected $biz;
 
     protected $children;
 
     protected $node;
 
-    public function __construct($biz, $node)
+    public function __construct(Biz $biz, $node)
     {
-        $this->biz = $biz;
+        $this->setBiz($biz);
         $this->node = $node;
         $chain = call_user_func($this->biz['course_copy.chains'], $node);
         if (!empty($chain) && !empty($chain['children'])) {
@@ -37,7 +33,6 @@ abstract class AbstractEntityCopy
      * 2. 不需要考虑子实体的复制.
      *
      * @param mixed $source 要copy的对象
-     * @param mixed $parent
      * @param array $config
      *
      * @return mixed
@@ -46,9 +41,11 @@ abstract class AbstractEntityCopy
 
     protected function childrenCopy($source, $config = array())
     {
-        $children = $this->children;
-        if (!empty($children)) {
-            foreach ($children as $key => $child) {
+        if (!empty($this->children)) {
+            foreach ($this->children as $child) {
+                /**
+                 * @var $cls AbstractEntityCopy
+                 */
                 $cls = new $child['clz']($this->biz, $this->node);
                 $cls->copy($source, $config);
             }
@@ -62,37 +59,15 @@ abstract class AbstractEntityCopy
      * @param mixed $parent copy链中已创建的直接父类对象
      * @param array $config 配置信息
      *
+     * @throws \Exception
      * @return mixed
      */
     public function copy($source, $config = array())
     {
-        //php 5.3 貌似不支持在函数里调用外部protected方法
-        // $that = $this;
-        // return $this->doTransaction(function () use ($that, $source, $config) {
-        //     $result = $that->_copy($source, $config);
-        //     return $result;
-        // });
-
         try {
             $this->biz['db']->beginTransaction();
 
             $result = $this->_copy($source, $config);
-
-            $this->biz['db']->commit();
-
-            return $result;
-        } catch (\Exception $e) {
-            $this->biz['db']->rollback();
-            throw $e;
-        }
-    }
-
-    protected function doTransaction($callback)
-    {
-        try {
-            $this->biz['db']->beginTransaction();
-
-            $result = $callback();
 
             $this->biz['db']->commit();
 
@@ -126,7 +101,7 @@ abstract class AbstractEntityCopy
         }
 
         $this->logger = new Logger($name);
-        $this->logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/service.log', Logger::DEBUG));
+        $this->logger->pushHandler(new StreamHandler($this->biz['log_directory'].'/service.log', Logger::DEBUG));
 
         return $this->logger;
     }
