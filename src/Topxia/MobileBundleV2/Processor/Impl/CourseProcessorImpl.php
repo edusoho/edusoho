@@ -773,7 +773,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $start = (int) $this->getParam('start', 0);
         $limit = (int) $this->getParam('limit', 10);
 
-        $total   = $this->controller->getCourseService()->findUserFavoritedCourseCountNotInClassroom($user['id']);
+        $total = $this->controller->getCourseService()->findUserFavoritedCourseCountNotInClassroom($user['id']);
         $courses = $this->controller->getCourseService()->findUserFavoritedCoursesNotInClassroom($user['id'], $start, $limit);
 
         return array(
@@ -985,6 +985,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $user = $this->controller->getUserByToken($this->request);
         $courseId = $this->getParam('courseId');
         $course = $this->controller->getCourseService()->getCourse($courseId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         if (empty($course)) {
             return $this->createErrorResponse('not_found', '课程不存在');
@@ -1020,13 +1021,19 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 $member = null;
             }
         }
-        $userFavorited = $user->isLogin() ? $this->controller->getCourseService()->hasFavoritedCourse($courseId) : false;
+        $hasFavoritedCourse = $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']);
+        $userFavorited = $user->isLogin() ? $hasFavoritedCourse : false;
         $vipLevels = array();
 
         if ($this->controller->isinstalledPlugin('Vip') && $this->controller->setting('vip.enabled')) {
-            $vipLevels = $this->controller->getLevelService()->searchLevels(array(
-                'enabled' => 1,
-            ), 0, 100);
+            $vipLevels = $this->getVipLevelService()->searchLevels(
+                array(
+                    'enabled' => 1,
+                ),
+                null,
+                0,
+                100
+            );
         }
 
         $course['source'] = $this->setCourseTarget($course['id']);
@@ -1036,7 +1043,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'userFavorited' => $userFavorited,
             'member' => $this->checkMemberStatus($member),
             'vipLevels' => $vipLevels,
-            'discount' => $this->getCourseDiscount($course['discountId']),
+            'discount' => $this->getCourseDiscount($courseSet['discountId']),
         );
     }
 
@@ -1167,12 +1174,12 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $courses = $this->controller->getCourseService()->findUserLearningCourses($userId, $start, $limit);
 
         $count = $this->controller->getTaskResultService()->countTaskResults(array(
-            'userId' => $userId
+            'userId' => $userId,
         ));
         $learnStatusArray = $this->controller->getTaskResultService()->searchTaskResults(array(
             'userId' => $userId,
         ), array(
-            'finishedTime' => 'ASC'
+            'finishedTime' => 'ASC',
         ), 0, $count);
 
         $tasks = $this->controller->getTaskService()->findTasksByIds(ArrayToolkit::column($learnStatusArray, 'courseTaskId'));
@@ -1434,7 +1441,10 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $limit = (int) $this->getParam('limit', 10);
 
         $courses = $this->controller->getCourseService()->findUserLearningCourses(
-            $user['id'], $start, 1000, array('type' => 'live')
+            $user['id'],
+            $start,
+            1000,
+            array('type' => 'live')
         );
         $courseIds = ArrayToolkit::column($courses, 'id');
 
@@ -1662,5 +1672,15 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     protected function getTaskService()
     {
         return $this->controller->getService('Task:TaskService');
+    }
+
+    protected function getVipLevelService()
+    {
+        return $this->controller->getService('VipPlugin:Vip:LevelService');
+    }
+
+    protected function getDiscountService()
+    {
+        return $this->controller->getService('DiscountPlugin:Discount:DiscountService');
     }
 }
