@@ -46,12 +46,11 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
         $this->getCourseSetService()->updateCourseSetStatistics($note['courseSetId'], array('noteNum'));
         $this->getCourseMemberService()->refreshMemberNoteNumber($note['courseId'], $note['userId']);
 
-
         $preStatus = $event->getArgument('preStatus');
 
         $classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
 
-        if(empty($classroom)){
+        if (empty($classroom)) {
             return;
         }
 

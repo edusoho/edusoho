@@ -31,7 +31,7 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     {
         $courseSet = $event->getSubject();
 
-        if(empty($courseSet['categoryId'])){
+        if (empty($courseSet['categoryId'])) {
             return;
         }
 
