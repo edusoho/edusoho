@@ -30,6 +30,11 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     public function onCourseSetUpdate(Event $event)
     {
         $courseSet = $event->getSubject();
+
+        if(empty($courseSet['categoryId'])){
+            return;
+        }
+
         $this->getCourseService()->updateCategoryByCourseSetId($courseSet['id'], $courseSet['categoryId']);
     }
 
