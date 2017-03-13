@@ -233,6 +233,8 @@ class PlayerController extends BaseController
 
     protected function getPlayUrl($id, $context)
     {
+        $ssl = $request->isSecure() ? true : false;
+
         $file = $this->getUploadFileService()->getFile($id);
 
         if (empty($file)) {
@@ -272,7 +274,7 @@ class PlayerController extends BaseController
                 }
 
                 if ($key) {
-                    $result = $this->getMaterialLibService()->player($file['globalId']);
+                    $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
                 }
             }
 
