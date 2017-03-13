@@ -491,7 +491,7 @@ class WebExtension extends \Twig_Extension
                     continue;
                 }
 
-                if ($plugin['protocol'] == 3) {
+                if (isset($plugin['protocol']) && $plugin['protocol'] == 3) {
                     $newPluginNames[] = $plugin['code'].'plugin';
                 } else {
                     $names[] = $plugin['code'];
