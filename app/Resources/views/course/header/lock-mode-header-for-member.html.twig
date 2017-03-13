@@ -32,7 +32,8 @@
   <div class="col-sm-6 ">
     {% if toLearnTasks %}
       {% set teams = toLearnTasks|batch(2 , " ") %}
-      <div class="orderlearn-poster js-task-chart-ul hidden">
+      {#暂时去掉块状显示#}
+      {#<div class="orderlearn-poster  hidden">
         <a class="arrow-left link-medium es-icon es-icon-chevronleft" href="javascript:;"></a>
         <a class="arrow-right link-medium es-icon es-icon-chevronright" href="javascript:;"></a>
         <div class="swiper-container">
@@ -79,7 +80,7 @@
           </div>
         </div>
         <div class="swiper-pager"></div>
-      </div>
+      </div>#}
     {% endif %}
     <ul class="task-list task-list-md task-list-hover task-list-gray js-task-list-ul ">
       {% for task in toLearnTasks %}

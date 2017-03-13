@@ -4,12 +4,13 @@
     "type": "library",
     "license": "MIT",
     "autoload": {
-        "psr-4": { 
+        "psr-4": {
             "Codeages\\Biz\\Framework\\": "src/"
         }
     },
     "autoload-dev": {
-        "psr-4": { 
+        "psr-4": {
+            "Tests\\": "tests/",
             "TestProject\\": "tests/TestProject/src/"
         }
     },
@@ -20,5 +21,8 @@
         "davedevelopment/phpmig": "^1.2.0",
         "psr/log": "^1.0.0",
         "symfony/event-dispatcher": "^2.8.9"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
     }
 }

@@ -26,12 +26,12 @@
       {% if course.price == '0.00' %}
         <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn"
             {% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') %}
-              href="#modal"
+              href="#login-modal"
               data-toggle="modal"
               data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
             {% else %}
+              href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
             {% endif %}
-           href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
 
         >
           {% if user.id|default(null) %}
@@ -43,12 +43,12 @@
       {% else %}
         <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn"
             {% if (setting("course.buy_fill_userinfo")|default(false) or vipStatus|default(null) == 'ok' or (course.approval and app.user and app.user.approvalStatus != 'approved')) %}
-              href="javascript:;"
+              href="#login-modal"
+              data-toggle="modal"
               data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
             {% else %}
-
+              href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
             {% endif %}
-           href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
         >
           {% if user.id|default(null) %}
             {% if vipStatus|default(null) == 'ok' %}

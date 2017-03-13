@@ -17,10 +17,12 @@
     <div class="col-sm-2 control-label">
       <label for="condition-select">{{ '完成条件'|trans }}</label>
     </div>
-    <div class="col-sm-4">
-      <select class="form-control" id="condition-select" name="finishType">
+    <div class="col-sm-4 form-control-static">
+      观看时长
+      <input type="hidden" id="condition-select" name="finishType">
+      {#<select class="form-control" id="condition-select" name="finishType">
         <option value="time" {% if text.finishType|default('end') == 'time' %}selected{% endif %}>观看时长</option>
-      </select>
+      </select>#}
     </div>
   </div>
   <div class=" form-group" id="condition-group">
