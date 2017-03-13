@@ -68,7 +68,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function findRandomCourseSets($conditions, $num = 3)
     {
@@ -78,6 +78,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $max = 0;
         }
         $offset = rand(0, $max);
+
         return $this->searchCourseSets($conditions, 'latest', $offset, $num);
     }
 
