@@ -27,7 +27,7 @@
 				</li>
 			{% elseif  item.itemType == 'task' %}
 				{% set task = item %}
-				{% if  isMarketingPage or  member is empty %}
+				{% if member is empty %}
 					{% set task_lock = (course.learnMode  == 'lockMode') %}
 				{% else %}
 					{% set task_lock =  (course.learnMode  == 'lockMode')  and task.lock %}
