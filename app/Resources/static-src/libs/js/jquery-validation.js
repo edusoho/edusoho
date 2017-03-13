@@ -210,28 +210,55 @@ $.validator.addMethod("feature", function (value, element, params) {
 );
 
 // 不能晚于当前的一个日期
+// $.validator.addMethod("next_day", function (value, element, params) {
+//   let now = new Date();
+//   let next = new Date(now);
+//   next.setDate(now.getDate() + 1);
+//   let bool = dateTostring(next);
+//   function dateTostring(date) {
+//     var str = date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
+//     return new Date(str) <= new Date(value);
+//   }
+//   return value && bool;
+// },
+//   Translator.trans('开始时间应晚于当前时间')
+// );
 
-$.validator.addMethod("next_day", function (value, element, params) {
-  let now = new Date();
-  let next = new Date(now + 86400 * 1000);
-  return value && next <= new Date(value);
+$.validator.addMethod("before_date", function (value, element, params) {
+  let date = new Date(value);
+  let afterDate = new Date($(params).val());
+  return !value || afterDate >= date;
 },
-  Translator.trans('开始时间应晚于当前时间')
-);
-
-$.validator.addMethod("before",function (value, element, params) {
-    return value && $(params).val() >= value;
-  },
   Translator.trans('开始日期应早于结束日期')
 );
 
-$.validator.addMethod("after",function (value, element, params) {
-    if ($('input[name="expiryMode"]:checked').val() !== 'date') {
-      return true;
-    }
-    console.log($(params).val());
-    console.log(value);
-    return value && $(params).val() < value;
-  },
+$.validator.addMethod("after_date", function (value, element, params) {
+  let date = new Date(value);
+  let afterDate = new Date($(params).val());
+  return !value || afterDate <= date;
+},
+  Translator.trans('开始日期应早于结束日期')
+);
+
+$.validator.addMethod("after_now_date", function (value, element, params) {
+  let now = new Date();
+  let afterDate = new Date(value);
+  let str = now.getFullYear() + "/" + (now.getMonth() + 1) + "/" + now.getDate();
+  return !value || afterDate >= new Date(str);
+},
+  Translator.trans('开始日期应晚于当前日期')
+);
+
+//检查将废除
+$.validator.addMethod("before", function (value, element, params) {
+  return value && $(params).val() >= value;
+},
+  Translator.trans('开始日期应早于结束日期')
+);
+//检查将废除
+$.validator.addMethod("after", function (value, element, params) {
+  
+  return value && $(params).val() < value;
+},
   Translator.trans('结束日期应晚于开始日期')
 );
