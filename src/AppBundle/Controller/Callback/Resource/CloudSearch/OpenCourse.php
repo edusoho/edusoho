@@ -3,23 +3,30 @@
 namespace AppBundle\Controller\Callback\Resource\CloudSearch;
 
 use AppBundle\Controller\Callback\Resource\BaseResource;
+use AppBundle\Common\ArrayToolkit;
 
 class OpenCourse extends BaseResource
 {
     public function filter($res)
     {
-        $res['createdTime'] = date('c', $res['createdTime']);
-        $res['updatedTime'] = date('c', $res['updatedTime']);
+        $filteredRes = array();
+        $filteredRes['id'] = $res['id'];
+        $filteredRes['title'] = $res['title'];
+        $filteredRes['subtitle'] = $res['subtitle'];
+        $filteredRes['type'] = 'public_'.$res['type'];
+        $filteredRes['lessonNum'] = $res['lessonNum'];
+        $filteredRes['studentNum'] = $res['studentNum'];
+        $filteredRes['hitNum'] = $res['hitNum'];
+        $filteredRes['likeNum'] = $res['likeNum'];
+        $filteredRes['postNum'] = $res['postNum'];
+        $filteredRes['tags'] = ArrayToolkit::column($res['tags'], 'name');
+        $filteredRes['category'] = isset($res['category']['name']) ? $res['category']['name'] : '';
+        $filteredRes['about'] = $res['about'];
+        $filteredRes['picture'] = isset($res['largePicture']) ? $this->getFileUrl($res['largePicture']) : '';
+        $filteredRes['createdTime'] = date('c', $res['createdTime']);
+        $filteredRes['updatedTime'] = date('c', $res['updatedTime']);
 
-        $default = $this->getSettingService()->get('default', array());
-        foreach (array('smallPicture', 'middlePicture', 'largePicture') as $key) {
-            if (empty($res[$key])) {
-                $res[$key] = !isset($defaultSetting['course.png']) ? '' : $defaultSetting['course.png'];
-            }
-            $res[$key] = $this->getFileUrl($res[$key]);
-        }
-
-        return $res;
+        return $filteredRes;
     }
 
     /**

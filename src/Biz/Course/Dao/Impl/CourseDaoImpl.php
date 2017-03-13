@@ -107,6 +107,11 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         return $this->db()->update($this->table, $updateFields, array('courseSetId' => $courseSetId));
     }
 
+    public function updateCategoryByCourseSetId($courseSetId, $fields)
+    {
+        return $this->db()->update($this->table, $fields, array('courseSetId' => $courseSetId));
+    }
+
     public function declares()
     {
         return array(
@@ -116,7 +121,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
                 'services' => 'delimiter',
                 'teacherIds' => 'delimiter',
             ),
-            'orderbys'   => array(
+            'orderbys' => array(
                 'hitNum',
                 'recommendedTime',
                 'rating',
