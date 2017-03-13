@@ -159,6 +159,10 @@ interface CourseService
 
     public function updateMaxRateByCourseSetId($courseSetId, $maxRate);
 
+    public function RecommendCourseByCourseSetId($courseSetId, $fields);
+
+    public function cancelRecommendCourseByCourseSetId($courseSetId);
+
     public function findUserLearningCourseCountNotInClassroom($userId, $filters = array());
 
     public function findUserLearningCoursesNotInClassroom($userId, $start, $limit, $filters = array());

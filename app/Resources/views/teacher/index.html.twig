@@ -1,4 +1,4 @@
-{% extends 'old-layout.html.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% import 'macro.html.twig' as web_macro %}
 {% block title %}{{'师资介绍'|trans}} - {{ parent() }}{% endblock %}
@@ -8,6 +8,8 @@
 
 {% set bodyClass = 'teacherpage bg-blank' %}
 {% do load_script('teacher/explore') %}
+
+{% do script(['app/js/teacher/index.js']) %}
 
 {% block top_content %}
   <div class="es-banner">

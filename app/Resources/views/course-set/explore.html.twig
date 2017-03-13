@@ -1,8 +1,11 @@
-{% extends 'old-layout.html.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% set bodyClass = 'course-list-page ' %}
 {% set siteNav = 'course/explore' %}
-{% set script_controller = 'course/explore' %}
+
+{#{% set script_controller = 'course/explore' %}#}
+
+{% do script(['libs/echo-js.js','app/js/course/explore/index.js']) %}
 
 {% block keywords %}{% if categoryArray %}{{categoryArray.name}}{% if categoryParent %}{{ ','}}{{ categoryParent.name|default('') }}{% endif %}{% else %}{{ '全部' }}{% endif %}{% endblock %}
   {% block description %}{{ categoryArrayDescription|default('')|plain_text(100) }}{% endblock %}
