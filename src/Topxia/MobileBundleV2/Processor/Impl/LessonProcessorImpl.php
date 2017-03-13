@@ -246,7 +246,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
     {
         $courseId = $this->getParam('courseId');
         $course = $this->controller->getCourseService()->getCourse($courseId);
-        $lessons = $this->controller->getCourseService()->findCourseTasksAndChapters($courseId, 1);
+        $lessons = $this->controller->getCourseService()->findCourseTasksAndChapters($courseId);
 
         $lessons = $this->controller->filterItems($lessons);
 
@@ -271,7 +271,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $user = $this->controller->getUser();
         $courseId = $this->getParam('courseId');
 
-        $lessons = $this->controller->getCourseService()->findCourseItems($courseId);
+        $lessons = $this->controller->getCourseService()->findCourseTasksAndChapters($courseId);
         $lessons = $this->controller->filterItems($lessons);
 
         if ($user->isLogin()) {
@@ -719,7 +719,6 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
     private function filterLessons($lessons, $files)
     {
         return array_map(function ($lesson) use ($files) {
-            $lesson = call_user_func_array('array_merge', $lesson['tasks']);
             $lesson['content'] = "";
 
             if (isset($lesson['mediaId'])) {
