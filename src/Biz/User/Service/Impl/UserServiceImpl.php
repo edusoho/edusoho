@@ -717,6 +717,44 @@ class UserServiceImpl extends BaseService implements UserService
         }
     }
 
+    public function initSystemUsers()
+    {
+        $users = array(
+            array(
+                'type' => 'scheduler',
+                'roles' => array('ROLE_USER', 'ROLE_SUPER_ADMIN'),
+            ),
+        );
+        foreach ($users as $user) {
+            $existsUser = $this->getUserDao()->getUserByType($user['type']);
+
+            if (!empty($existsUser)) {
+                continue;
+            }
+
+            $user['nickname'] = $this->generateNickname($user).'(系统用户)';
+            $user['emailVerified'] = 1;
+            $user['orgId'] = 1;
+            $user['orgCode'] = '1.';
+            $user['password'] = $this->getRandomChar();
+            $user['email'] = $this->generateEmail($user);
+            $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+            $user['password'] = $this->getPasswordEncoder()->encodePassword($user['password'], $user['salt']);
+            $user = UserSerialize::unserialize(
+                $this->getUserDao()->create(UserSerialize::serialize($user))
+            );
+
+            $profile = array();
+            $profile['id'] = $user['id'];
+            $this->getProfileDao()->create($profile);
+        }
+    }
+
+    public function getUserByType($type)
+    {
+        return $this->getUserDao()->getUserByType($type);
+    }
+
     public function register($registration, $type = 'default')
     {
         $this->validateNickname($registration['nickname']);
@@ -773,9 +811,8 @@ class UserServiceImpl extends BaseService implements UserService
             $user['orgId'] = $registration['orgId'];
             $user['orgCode'] = $registration['orgCode'];
         }
-        $user = UserSerialize::unserialize(
-            $this->getUserDao()->create(UserSerialize::serialize($user))
-        );
+        $user = $this->getUserDao()->create($user);
+
         if (!empty($registration['invite_code'])) {
             $inviteUser = $this->getUserDao()->getByInviteCode($registration['invite_code']);
         }
@@ -1048,7 +1085,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createInvalidArgumentException('Invalid Roles');
         }
 
-        $user = $this->getUserDao()->update($id, UserSerialize::serialize(array('roles' => $roles)));
+        $user = $this->getUserDao()->update($id, array('roles' => $roles));
 
         $this->dispatchEvent('user.role.change', new Event(UserSerialize::unserialize($user)));
         $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：".implode(',', $roles));
@@ -2019,8 +2056,6 @@ class UserSerialize
         if (empty($user)) {
             return null;
         }
-
-        $user['roles'] = empty($user['roles']) ? array() : explode('|', trim($user['roles'], '|'));
 
         $user = self::_userRolesSort($user);
 

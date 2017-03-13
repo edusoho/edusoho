@@ -6,7 +6,7 @@ import Swiper from 'swiper';
 let orderLearnSwiper = null;
 
 chapterAnimate();
-initTaskLearnChart();
+// initTaskLearnChart();暂时去掉块状
 triggerMemberExpired();
 
 if ($('.js-attachment-list').length > 0) {

@@ -1,10 +1,12 @@
 <?php
+namespace Tests;
 
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\UnitTests\UnitTestsBootstrap;
 use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
+use PHPUnit\Framework\TestCase;
 
-class UnitTestsBootstrapTest extends \PHPUnit_Framework_TestCase
+class UnitTestsBootstrapTest extends TestCase
 {
     public function testBoot()
     {

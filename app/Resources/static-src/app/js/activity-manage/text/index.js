@@ -14,7 +14,6 @@ class Text {
     var $step2_form = $("#step2-form");
     var validator = $step2_form.data('validator');
     validator = $step2_form.validate({
-      onkeyup: false,
       rules: {
         title: {
           required: true,
@@ -33,11 +32,10 @@ class Text {
     var $step3_form = $("#step3-form");
     var validator = $step3_form.data('validator');
     validator = $step3_form.validate({
-      onkeyup: false,
       rules: {
         'finishDetail': {
           required: true,
-          digits: true,
+          positive_integer:true,
           max: 300,
         },
       },

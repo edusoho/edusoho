@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use Biz\System\Service\SettingService;
 use Biz\User\CurrentUser;
-use Biz\User\Service\TokenService;
-use Biz\User\Service\UserService;
 use Endroid\QrCode\QrCode;
+use Biz\User\Service\UserService;
+use Biz\User\Service\TokenService;
+use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -62,13 +62,19 @@ class CommonController extends BaseController
 
     public function crontabAction(Request $request)
     {
-        $setting = $this->getSettingService()->get('magic', array());
-
-        if (empty($setting['disable_web_crontab'])) {
+        $currentUser = $this->getCurrentUser();
+        try {
+            $switchUser = new CurrentUser();
+            $switchUser->fromArray($this->getUserService()->getUserByType('scheduler'));
+            $this->switchUser($request, $switchUser);
             $this->getBiz()->service('Crontab:CrontabService')->scheduleJobs();
-        }
+            $this->switchUser($request, $currentUser);
 
-        return $this->createJsonResponse(true);
+            return $this->createJsonResponse(true);
+        } catch (\Exception $e) {
+            $this->switchUser($request, $currentUser);
+            throw $e;
+        }
     }
 
     /**

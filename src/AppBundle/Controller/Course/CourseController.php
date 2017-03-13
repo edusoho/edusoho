@@ -334,6 +334,7 @@ class CourseController extends CourseBaseController
                 if (array_search($t1['id'], $teacherIds) < array_search($t2['id'], $teacherIds)) {
                     return -1;
                 }
+
                 return 1;
             });
         }

@@ -34,9 +34,4 @@ class TagGroupDaoImpl extends GeneralDaoImpl implements TagGroupDao
     {
         return $this->findInField('id', $ids);
     }
-
-    public function findTagGroupByName($name)
-    {
-        return $this->getByFields(array('name' => $name));
-    }
 }

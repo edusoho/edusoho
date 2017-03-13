@@ -355,11 +355,11 @@ class UserServiceTest extends BaseTestCase
     {
         $user1 = $this->createUser('user1');
         $user2 = $this->createUser('user2');
-        $foundUserCount = $this->getUserService()->countUsers(array('keywordType' => 'nickname', 'keyword' => 'user1'));
+        $foundUserCount = $this->getUserService()->countUsers(array('nickname' => 'user1'));
         $this->assertEquals(1, $foundUserCount);
-        $foundUserCount = $this->getUserService()->countUsers(array('keywordType' => 'roles', 'keyword' => '|ROLE_USER|'));
+        $foundUserCount = $this->getUserService()->countUsers(array('roles' => '|ROLE_USER|'));
         $this->assertEquals(3, $foundUserCount);
-        $foundUserCount = $this->getUserService()->countUsers(array('keywordType' => 'email', 'keyword' => 'user1@user1.com'));
+        $foundUserCount = $this->getUserService()->countUsers(array('email' => 'user1@user1.com'));
         $this->assertEquals(1, $foundUserCount);
     }
 
@@ -368,17 +368,17 @@ class UserServiceTest extends BaseTestCase
         $user1 = $this->createUser('user1');
         $user2 = $this->createUser('user2');
 
-        $foundUserCount = $this->getUserService()->countUsers(array('keywordType' => 'nickname', 'keyword' => 'not_exist_nickname'));
+        $foundUserCount = $this->getUserService()->countUsers(array('nickname' => 'not_exist_nickname'));
         $this->assertEquals(0, $foundUserCount);
 
         $currentUser = $this->getCurrentUser();
         $this->getUserService()->changeUserRoles($currentUser['id'], array('ROLE_USER'));
-        $foundUserCount = $this->getUserService()->countUsers(array('keywordType' => 'roles', 'keyword' => '|ROLE_ADMIN|'));
+        $foundUserCount = $this->getUserService()->countUsers(array('roles' => '|ROLE_ADMIN|'));
         $this->assertEquals(0, $foundUserCount);
 
-        $foundUserCount = $this->getUserService()->countUsers(array('keywordType' => 'email', 'keyword' => 'not_exist_email@user.com'));
+        $foundUserCount = $this->getUserService()->countUsers(array('email' => 'not_exist_email@user.com'));
         $this->assertEquals(0, $foundUserCount);
-        $foundUserCount = $this->getUserService()->countUsers(array('keywordType' => 'loginIp', 'keyword' => '192.168.0.1'));
+        $foundUserCount = $this->getUserService()->countUsers(array('loginIp' => '192.168.0.1'));
         $this->assertEquals(0, $foundUserCount);
     }
 

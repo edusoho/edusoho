@@ -4,10 +4,11 @@ namespace Biz\Crontab\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Crontab\Dao\JobDao;
-use Biz\System\Service\LogService;
 use Symfony\Component\Yaml\Yaml;
-use Biz\Crontab\Service\CrontabService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\LogService;
+use Biz\Crontab\Service\CrontabService;
+use Codeages\Biz\Framework\Context\BizAware;
 
 class CrontabServiceImpl extends BaseService implements CrontabService
 {
@@ -32,6 +33,11 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             $job = $this->getJob($id, true);
 
             $jobInstance = new $job['jobClass']();
+
+            if ($jobInstance instanceof BizAware) {
+                $jobInstance->setBiz($this->biz);
+            }
+
             if (!empty($job['targetType'])) {
                 $job['jobParams']['targetType'] = $job['targetType'];
             }
@@ -43,7 +49,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             $jobInstance->execute($job['jobParams']);
         } catch (\Exception $e) {
             $message = $e->getMessage();
-            // $this->getJobDao()->updateJob($job['id'], array('executing' => 0));
+            $this->updateJob($job['id'], array('executing' => 0));
             $this->getLogService()->error('crontab', 'execute', "执行任务(#{$job['id']})失败: {$message}", $job);
         }
 

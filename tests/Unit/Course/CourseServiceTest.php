@@ -65,9 +65,10 @@ class CourseServiceTest extends BaseTestCase
 
     public function testUpdateCourseMarketing()
     {
+        $courseSet = $this->createNewCourseSet();
         $course = array(
             'title' => '第一个教学计划',
-            'courseSetId' => 1,
+            'courseSetId' => $courseSet['id'],
             'learnMode' => 'lockMode',
             'expiryMode' => 'days',
             'expiryDays' => 0,
@@ -215,6 +216,42 @@ class CourseServiceTest extends BaseTestCase
         // $this->assertCount(1, $result);
     }
 
+    protected function createNewCourseSet()
+    {
+        $courseSetFields = array(
+            'title' => '新课程开始！',
+            'type'  => 'normal'
+        );
+        $courseSet = $this->getCourseSetService()->createCourseSet($courseSetFields);
+
+        $this->assertNotEmpty($courseSet);
+
+        return $courseSet;
+    }
+
+    protected function createNewCourse($courseSetId)
+    {
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds(array($courseSetId));
+
+        if (empty($courses)) {
+            $courseFields = array(
+                'title'       => '第一个教学计划',
+                'courseSetId' => 1,
+                'learnMode'   => 'lockMode',
+                'expiryMode'  => 'days',
+                'expiryDays'  => 0
+            );
+
+            $course = $this->getCourseService()->createCourse($courseFields);
+        } else {
+            $course = $courses[0];
+        }
+
+        $this->assertNotEmpty($course);
+
+        return $course;
+    }
+
     private function createNormalUser()
     {
         $user = array();
@@ -234,6 +271,11 @@ class CourseServiceTest extends BaseTestCase
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     /**
