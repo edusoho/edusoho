@@ -53,6 +53,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 $fields
             )
         );
+
         return $course;
     }
 
