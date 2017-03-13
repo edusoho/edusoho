@@ -45,15 +45,15 @@
       <span class="mrl">{{'消费：'|trans}}<strong class="outflow-num">{{outflow|default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
     </p>
     <div class="table-responsive">
-      <table class="table table-striped">
+      <table class="table table-striped" style="word-wrap: break-word;
+word-break: break-all;">
         <tr>
-          <th>{{'流水号'|trans}}</th>
-          <th>{{'名称'|trans}}</th>
+          <th width="15%">{{'流水号'|trans}}</th>
+          <th width="30%">{{'名称'|trans}}</th>
           <th>{{'用户'|trans}}</th>
-          <th>{{'成交时间'|trans}}</th>
+          <th >{{'成交时间'|trans}}</th>
           <th class="text-right" style="padding-right: 50px;">{{'收支'|trans}}</th>
         </tr>
-
        {% for cash in cashes %}
        <tr>
             <td>{{cash.sn}}</td>

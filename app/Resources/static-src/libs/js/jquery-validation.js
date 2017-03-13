@@ -34,10 +34,11 @@ $.validator.setDefaults({
     console.log('submitSuccess');
   },
   submitHandler: function (form) {
-    //规定全局不要用submit默认提交；
+    console.log('submitHandler');
+
+    //规定全局不要用 submit按钮（<input type=’submit’>）提交表单；
     let $form = $(form);
     let settings = this.settings;
-    console.log('submitHandler');
     $(settings.currentDom) ? $(settings.currentDom).button('loading') : '';
     if (settings.ajax) {
       $.post($form.attr('action'), $form.serializeArray(), (data) => {
@@ -115,6 +116,11 @@ $.extend($.validator.messages, {
   min: $.validator.format("请输入不小于 {0} 的数值")
 });
 
+$.validator.addMethod("DateAndTime", function (value, element) {
+  let reg = /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}$/;
+  return this.optional(element) || reg.test(value);
+}, $.validator.format("请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm"));
+
 $.validator.addMethod("trim", function (value, element, params) {
   return $.trim(value).length > 0;
 }, jQuery.validator.format("请输入%display%"));
@@ -166,8 +172,20 @@ $.validator.addMethod("visible_character", function (value, element, params) {
 }, jQuery.validator.format("请输入可见性字符"));
 
 $.validator.addMethod('positive_integer', function (value, element) {
-  return this.optional(element) || parseInt(value) > 0;
+  return this.optional(element) || /^\+?[1-9][0-9]*$/.test(value);
 }, jQuery.validator.format("请输入正整数"));
+
+$.validator.addMethod('unsigned_integer', function (value, element) {
+  return this.optional(element) || /^\+?[0-9][0-9]*$/.test(value);
+}, jQuery.validator.format("请输入非负整数"));
+
+jQuery.validator.addMethod("second_range", function (value, element) {
+  return this.optional(element) || /^([0-9]|[012345][0-9]|59)$/.test(value);
+}, "请输入0-59之间的数字");
+
+// jQuery.validator.addMethod("unsigned_integer", function (value, element) {
+//   return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
+// }, "时长必须为非负整数");
 
 $.validator.addMethod("open_live_course_title", function (value, element, params) {
   return !params || /^[^(<|>|'|"|&|‘|’|”|“)]*$/.test(value);
@@ -178,5 +196,42 @@ $.validator.addMethod("currency", function (value, element, params) {
 }, jQuery.validator.format('请输入有效价格，最多两位小数，整数位不超个8位！'));
 
 $.validator.addMethod("positive_currency", function (value, element, params) {
-  return /^[1-9]{0,8}(\.\d{0,2})?$/.test(value);
+  return value > 0 && /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
 }, jQuery.validator.format('请输入大于0的有效价格，最多两位小数，整数位不超个8位！'));
+
+jQuery.validator.addMethod("max_year", function (value, element) {
+  return this.optional(element) || value < 100000;
+}, "有效期最大值不能超过99,999天");
+
+$.validator.addMethod("feature", function (value, element, params) {
+  return value && (new Date(value).getTime()) > Date.now();
+},
+  Translator.trans('购买截止时间需在当前时间之后')
+);
+
+// 不能晚于当前的一个日期
+
+$.validator.addMethod("next_day", function (value, element, params) {
+  let now = new Date();
+  let next = new Date(now + 86400 * 1000);
+  return value && next <= new Date(value);
+},
+  Translator.trans('开始时间应晚于当前时间')
+);
+
+$.validator.addMethod("before",function (value, element, params) {
+    return value && $(params).val() >= value;
+  },
+  Translator.trans('开始日期应早于结束日期')
+);
+
+$.validator.addMethod("after",function (value, element, params) {
+    if ($('input[name="expiryMode"]:checked').val() !== 'date') {
+      return true;
+    }
+    console.log($(params).val());
+    console.log(value);
+    return value && $(params).val() < value;
+  },
+  Translator.trans('结束日期应晚于开始日期')
+);

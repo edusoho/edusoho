@@ -4,7 +4,7 @@
 {% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','libs/bootstrap-datetimepicker.js','app/js/course-manage/info/index.js']) %}
 
 {% block main %}
-  <div class="panel panel-default">
+  <div class="panel panel-default" role="course-manage-info">
     {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
     <div class="panel-body">
       <form class="form-horizontal" role="form" id="course-info-form" action="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
@@ -21,20 +21,13 @@
         </div>
         <div class="form-group">
           <label for="" class="col-sm-2 control-label">{{'学习模式'|trans}}</label>
-          <div class="col-sm-8 radios"> 
-            {% if course.learnMode|default('freeMode') == 'freeMode' %}
-            <label>
-              <input type="radio" id="learnFreeMode" name="learnMode" value="freeMode" checked data-role="tab" data-tab-content="#learnFreeModeHelp" >{{'自由模式'|trans}}
-            </label>
-            {% endif %}
-            {% if course.learnMode|default('freeMode') == 'lockMode' %}
-            <label>
-              <input type="radio" name="learnMode" value="lockMode" checked data-role="tab" data-tab-content="#learnLockModeHelp">
-              {{'解锁式学习'|trans}}
-            </label>
-            {% endif %}
-            {% if course.learnMode|default('freeMode') == 'lockMode' %} <p class="help-block" id="learnFreeModeHelp" data-role="tab-content">{{'根据计划预定的顺序学习'|trans}}</p>{% endif %}
-            {% if course.learnMode|default('freeMode') == 'freeMode' %}<p class="help-block" id="learnLockModeHelp" data-role="tab-content" >{{'学习过程自由安排'|trans}}</p>{% endif %}
+          <div class="col-sm-8 form-control-static"> 
+             {% if course.learnMode|default('freeMode') == 'freeMode' %}
+               {{'自由式学习'|trans}}<a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'学习过程自由安排'|trans}}"></a>
+             {% else %}
+               {{'解锁式学习'|trans}}<a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'根据既定顺序逐个解锁学习'|trans}}"></a>
+               <p class="help-block" id="learnLockModeHelp" data-role="tab-content" >{{''|trans}}</p>
+             {% endif %}
           </div>
         </div>
         <div class="form-group">
@@ -44,24 +37,42 @@
           </div>
         </div>
         <div class="form-group">
-        <label class="col-sm-2 control-label">{{'学习有效期模式'|trans}}</label>
-        <div class="col-sm-8 radios">
-            {{ radios('expiryMode', { 'days': '随到随学'|trans, 'date': '指定日期学习'|trans }, course.expiryMode|default('days'), course.status|default('draft') == 'published'? 'disabled': '') }}
-            <div class="mbm mtm {% if course.expiryMode|default('days') == 'date' %}hidden{% endif %}" id="expiry-days">
-              {{'学习有效期'|trans}}<input class="form-control mhs" type="text" id="expiryDays" name="expiryDays" style="display:inline-block;width:150px" value="{{course.expiryDays|default('0')}}" {% if course.status|default('draft') == 'published' %}disabled{% endif %}>{{'天'|trans}}
-              <span class="color-gray mll">{{'设置为0天则无限制'|trans}}</span>
+          <label class="col-sm-2 control-label">{{'学习有效期模式'|trans}}</label>
+          {% if course.status|default('draft') != 'published' %}
+            <div class="col-sm-8 radios">
+                {{ radios('expiryMode', { 'days': '随到随学'|trans, 'date': '指定日期学习'|trans }, course.expiryMode|default('days'), course.status|default('draft') == 'published'? 'disabled': '') }}
+                <div class="mbm mtm {% if course.expiryMode|default('days') == 'date' %}hidden{% endif %}" id="expiry-days">
+                  {{'学习有效期'|trans}}<input class="form-control mhs" type="text" id="expiryDays" name="expiryDays" style="display:inline-block;width:150px" value="{{course.expiryDays|default('0')}}">{{'天'|trans}}
+                  <a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'设置为0天则无限制'|trans}}"></a>
+                </div>
+                <div class="mbm mtm {% if course.expiryMode|default('days') == 'days' %}hidden{% endif %}" id="expiry-date">
+                  {{'开始日期'|trans}}<input class="form-control mls mrl" id="expiryStartDate" type="text" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" style="display:inline-block;width:150px" 
+                  >
+                  {{'结束日期'|trans}}<input class="form-control mls" type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}" style="display:inline-block;width:150px">
+                </div>
+                <p class="help-block mtm mbm">{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}</p>
+                <div class="color-warning">{{'课程首次发布后“学习有效期方式”将不能再修改'|trans}}</div>
             </div>
-            <div class="mbm mtm {% if course.expiryMode|default('days') == 'days' %}hidden{% endif %}" id="expiry-date">
-              {{'开始日期'|trans}}<input class="form-control mls mrl" id="expiryStartDate" type="text" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" style="display:inline-block;width:150px" 
-              {% if course.status|default('draft') == 'published' %}disabled{% endif %}>
-            {{'结束日期'|trans}}<input class="form-control mls" type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}" style="display:inline-block;width:150px"
-              {% if course.status|default('draft') == 'published' %}disabled{% endif %}>
+          {% else %}
+            <div class="col-sm-8 form-control-static">
+              {% if course.expiryMode|default('days') != 'date' %}
+                随到随学
+                <div class="mbm mtm" id="expiry-days">
+                  {{'学习有效期'|trans}}<input class="form-control mhs" type="text" id="expiryDays" name="expiryDays" style="display:inline-block;width:150px" value="{{course.expiryDays|default('0')}}" >{{'天'|trans}}
+                  <a class="es-icon es-icon-info ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'设置为0天则无限制'|trans}}"></a>
+                </div>
+              {% else %}
+                指定日期学习
+                <a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}"></a>
+                <div class="mbm mtm" id="expiry-date">
+                {{'开始日期'|trans}}<input class="form-control mls mrl" disabled id="expiryStartDate" type="text" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" style="display:inline-block;width:150px" >
+                {{'结束日期'|trans}}<input class="form-control mls" disabled type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}" style="display:inline-block;width:150px">
+                </div>
+              {% endif %}
+              <p class="help-block mtm">{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}</p>
             </div>
-            <p class="help-block mtm mbm">{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}</p>
-            <div class="color-warning">{{'课程首次发布后“学习有效期方式”将不能再修改'|trans}}</div>
+          {% endif %}
         </div>
-        </div>
-
         {% if courseSet.type == 'live' %}
           <div class="form-group">
             <label class="col-md-2 control-label" for="maxStudentNum-field">课程人数</label>

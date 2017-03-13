@@ -28,9 +28,14 @@ class SearchController extends BaseController
         $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
 
         if (isset($cloud_search_setting['search_enabled']) && $cloud_search_setting['search_enabled'] && $cloud_search_setting['status'] == 'ok') {
-            return $this->redirect($this->generateUrl('cloud_search', array(
-                'q' => $keywords,
-            )));
+            return $this->redirect(
+                $this->generateUrl(
+                    'cloud_search',
+                    array(
+                        'q' => $keywords,
+                    )
+                )
+            );
         }
 
         $vip = $this->getAppService()->findInstallApp('Vip');
@@ -86,16 +91,19 @@ class SearchController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('search/index.html.twig', array(
-            'courseSets' => $courseSets,
-            'paginator' => $paginator,
-            'keywords' => $keywords,
-            'isShowVipSearch' => $isShowVipSearch,
-            'currentUserVipLevel' => $currentUserVipLevel,
-            'categoryIds' => $categoryIds,
-            'filter' => $filter,
-            'count' => $count,
-        ));
+        return $this->render(
+            'search/index.html.twig',
+            array(
+                'courseSets' => $courseSets,
+                'paginator' => $paginator,
+                'keywords' => $keywords,
+                'isShowVipSearch' => $isShowVipSearch,
+                'currentUserVipLevel' => $currentUserVipLevel,
+                'categoryIds' => $categoryIds,
+                'filter' => $filter,
+                'count' => $count,
+            )
+        );
     }
 
     public function cloudSearchAction(Request $request)
@@ -108,11 +116,14 @@ class SearchController extends BaseController
         $page = $request->query->get('page', '1');
 
         if (empty($keywords)) {
-            return $this->render('search/cloud-search-failure.html.twig', array(
-                'keywords' => $keywords,
-                'type' => $type,
-                'errorMessage' => '在上方搜索框输入关键词进行搜索.',
-            ));
+            return $this->render(
+                'search/cloud-search-failure.html.twig',
+                array(
+                    'keywords' => $keywords,
+                    'type' => $type,
+                    'errorMessage' => '在上方搜索框输入关键词进行搜索.',
+                )
+            );
         }
         $conditions = array(
             'type' => $type,
@@ -132,22 +143,28 @@ class SearchController extends BaseController
         try {
             list($resultSet, $counts) = $this->getSearchService()->cloudSearch($type, $conditions);
         } catch (\Exception $e) {
-            return $this->render('search/cloud-search-failure.html.twig', array(
-                'keywords' => $keywords,
-                'type' => $type,
-                'errorMessage' => '搜索失败，请稍候再试.',
-            ));
+            return $this->render(
+                'search/cloud-search-failure.html.twig',
+                array(
+                    'keywords' => $keywords,
+                    'type' => $type,
+                    'errorMessage' => '搜索失败，请稍候再试.',
+                )
+            );
         }
 
         $paginator = new Paginator($this->get('request'), $counts, $pageSize);
 
-        return $this->render('search/cloud-search.html.twig', array(
-            'keywords' => $keywords,
-            'type' => $type,
-            'resultSet' => $resultSet,
-            'counts' => $counts,
-            'paginator' => $paginator,
-        ));
+        return $this->render(
+            'search/cloud-search.html.twig',
+            array(
+                'keywords' => $keywords,
+                'type' => $type,
+                'resultSet' => $resultSet,
+                'counts' => $counts,
+                'paginator' => $paginator,
+            )
+        );
     }
 
     private function filterKeyWord($keyword)

@@ -1,4 +1,5 @@
-import { questionSubjectiveRemask } from '../question-subjective'
+import { questionSubjectiveRemask } from '../question-subjective';
+
 export default class QuestionPicker {
   constructor($questionPickerBody, $questionAppendForm) {
     this.$questionPickerBody = $questionPickerBody;
@@ -31,7 +32,6 @@ export default class QuestionPicker {
     let $this = $(event.currentTarget);
     let $form = $this.closest('form');
     $.get($form.attr('action'), $form.serialize(), html => {
-      console.log(html);
       this.$questionPickerModal.html(html);
     });
   }
@@ -52,7 +52,6 @@ export default class QuestionPicker {
         this.$questionAppendForm.find('tr[data-id="'+replace+'"]').replaceWith(html);
         this.$questionAppendForm.find('tr[data-parent-id="'+replace+'"]').remove();
       } else {
-        console.log( this.$questionAppendForm.length);
         this.$questionAppendForm.find('tbody:visible').append(html).removeClass('hide');
       }
       this._refreshSeqs();
@@ -69,6 +68,12 @@ export default class QuestionPicker {
     let $target = $(event.currentTarget);
     let questionIds = [];
     let url = $target.data('url');
+
+
+    if (this.$questionPickerBody.find('[data-role="batch-item"]:checked').length == 0 ) {
+      $('.js-choice-notice',window.parent.document).show();
+      return;
+    }
 
     this.$questionPickerBody.find('[data-role="batch-item"]:checked').each(function(index,item){
       let questionId = $(this).data('questionId');

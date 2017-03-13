@@ -16,15 +16,19 @@ class CourseSearchAdapter extends AbstractSearchAdapter
 
         if (!empty($user['id'])) {
             $courseIds = ArrayToolkit::column($courses, 'courseId');
-            $learningCourse = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($user['id'], $courseIds);
-            $learningCourseIds = ArrayToolkit::column($learningCourse, 'courseId');
+            $plans = $this->getCourseService()->findCoursesByCourseSetIds($courseIds);
+            $planIds = ArrayToolkit::column($plans, 'id');
+            $tasks = $this->getCourseTaskService()->findTasksByCourseIds($planIds);
+            $tasks = ArrayToolkit::group($tasks, 'fromCourseSetId');
+            $learningCourse = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($user['id'], $planIds);
+            $learningCourseIds = ArrayToolkit::column($learningCourse, 'courseSetId');
         }
 
         foreach ($courses as $index => $course) {
             if ($this->isOpenCourse($course)) {
                 $course = $this->adaptOpenCourse($course);
             } else {
-                $course = $this->adaptCourse($course, $learningCourseIds);
+                $course = $this->adaptCourse($course, $learningCourseIds, $tasks);
             }
 
             array_push($adaptResult, $course);
@@ -33,17 +37,20 @@ class CourseSearchAdapter extends AbstractSearchAdapter
         return $adaptResult;
     }
 
-    protected function adaptCourse($course, $learningCourseIds)
+    protected function adaptCourse($course, $learningCourseIds, $tasks)
     {
-        $courseLocal = $this->getCourseService()->getCourse($course['courseId']);
+        //兼容老的模式，CourseSet映射到云搜索的Course资源，task映射到云搜索的lesson资源
+        $courseLocal = $this->getCourseSetService()->getCourseSet($course['courseId']);
 
         if (!empty($courseLocal)) {
             $course['rating'] = $courseLocal['rating'];
             $course['ratingNum'] = $courseLocal['ratingNum'];
             $course['studentNum'] = $courseLocal['studentNum'];
-            $course['middlePicture'] = $courseLocal['middlePicture'];
+            $course['middlePicture'] = isset($courseLocal['cover']['middle']) ? $courseLocal['cover']['middle'] : '';
             $course['learning'] = in_array($course['courseId'], $learningCourseIds);
             $course['id'] = $courseLocal['id'];
+            $course['about'] = $courseLocal['summary'];
+            $course['lessons'] = isset($tasks[$course['courseId']]) ? $tasks[$course['courseId']] : array();
         } else {
             $course['rating'] = 0;
             $course['ratingNum'] = 0;
@@ -51,6 +58,7 @@ class CourseSearchAdapter extends AbstractSearchAdapter
             $course['middlePicture'] = '';
             $course['learning'] = false;
             $course['id'] = $course['courseId'];
+            $course['about'] = '';
         }
 
         return $course;
@@ -84,6 +92,22 @@ class CourseSearchAdapter extends AbstractSearchAdapter
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return \Biz\Course\Service\CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return \Biz\Task\Service\TaskService
+     */
+    protected function getCourseTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 
     protected function getOpenCourseService()

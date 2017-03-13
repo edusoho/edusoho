@@ -282,7 +282,7 @@ class MobileBaseController extends BaseController
 
         $courseIds = ArrayToolkit::column($courses, 'id');
         $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
-
+        
         return array_map(
             function ($course, $courseSet) use ($self, $container, $teachers, $coinSetting) {
                 $course = $this->convertOldFields($course);
@@ -706,6 +706,11 @@ class MobileBaseController extends BaseController
     public function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');
+    }
+
+    public function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 
     public function getTokenService()

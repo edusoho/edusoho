@@ -46,13 +46,11 @@ class LoginSuccessHandler
         // do some other magic here
         $user = $event->getAuthenticationToken()->getUser();
 
-        // ...
-        $this->getUserService()->markLoginInfo();
-
         $request = $event->getRequest();
         $sessionId = $request->getSession()->getId();
         $request->getSession()->set('loginIp', $request->getClientIp());
 
+        $this->getUserService()->markLoginInfo();
         $this->getUserService()->rememberLoginSessionId($user['id'], $sessionId);
         $this->getUserService()->markLoginSuccess($user['id'], $request->getClientIp());
     }

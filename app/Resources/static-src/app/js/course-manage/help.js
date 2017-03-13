@@ -154,14 +154,11 @@ export const unpublishTask = () => {
 };
 
 export const showSettings = () => {
-  $("#sortable-list").on('mouseenter', '.js-item-content', event => {
-    let $list = $(event.delegateTarget);
-    let $this = $(event.currentTarget).closest('.js-task-manage-item');
-    if ($this.hasClass('active')) {
-      $this.removeClass('active').find('.js-settings-list').slideUp(500);
-    } else {
-      $list.find(".js-task-manage-item.active").removeClass('active').find('.js-settings-list').slideUp(500);
-      $this.addClass('active').find('.js-settings-list').slideDown(1000);
+  $("#sortable-list").on('mouseenter', '.js-task-manage-item', (event) => {
+    let $this = $(event.currentTarget);
+    $this.siblings(".js-task-manage-item.active").removeClass('active').find('.js-settings-list').hide();
+    if (!$this.hasClass('active')) {
+      $this.addClass('active').find('.js-settings-list').stop().slideDown(500);
     }
   });
 };

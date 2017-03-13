@@ -2,8 +2,8 @@
 
 namespace Topxia\MobileBundleV2\Processor;
 
-use Topxia\MobileBundleV2\Controller\MobileBaseController;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
 class BaseProcessor
 {
@@ -49,7 +49,7 @@ class BaseProcessor
         return array_map(function ($user) use ($container) {
             foreach ($user as $key => $value) {
                 if (!in_array($key, array(
-                    'id', 'email', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'nickname', 'roles', 'locked', 'about', 'title', ))
+                    'id', 'email', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'nickname', 'roles', 'locked', 'about', 'title'))
                 ) {
                     unset($user[$key]);
                 }
@@ -75,7 +75,10 @@ class BaseProcessor
 
     protected function log($action, $message, $data)
     {
-        $this->controller->getLogService()->info(MobileBaseController::MOBILE_MODULE, $action, $message,
+        $this->controller->getLogService()->info(
+            MobileBaseController::MOBILE_MODULE,
+            $action,
+            $message,
             $data
         );
     }
@@ -189,12 +192,12 @@ class BaseProcessor
 
     protected function getCourseOrderService()
     {
-        return $this->controller->getService('Course.CourseOrderService');
+        return $this->controller->getService('Course:CourseOrderService');
     }
 
     protected function getMobileDeviceService()
     {
-        return $this->controller->getService('Util.MobileDeviceService');
+        return $this->controller->getService('Util:MobileDeviceService');
     }
 
     protected function getArticleService()
@@ -204,17 +207,17 @@ class BaseProcessor
 
     protected function getOrderService()
     {
-        return $this->controller->getService('Order.OrderService');
+        return $this->controller->getService('Order:OrderService');
     }
 
     protected function getTagService()
     {
-        return $this->controller->getService('Taxonomy.TagService');
+        return $this->controller->getService('Taxonomy:TagService');
     }
 
     protected function getFileService()
     {
-        return $this->controller->getService('Content.FileService');
+        return $this->controller->getService('Content:FileService');
     }
 
     protected function getSettingService()
@@ -224,7 +227,7 @@ class BaseProcessor
 
     protected function getCourseService()
     {
-        return $this->controller->getService('Course.CourseService');
+        return $this->controller->getService('Course:CourseService');
     }
 
     protected function getCourseMemberService()
@@ -234,12 +237,12 @@ class BaseProcessor
 
     protected function getPayCenterService()
     {
-        return $this->controller->getService('PayCenter.PayCenterService');
+        return $this->controller->getService('PayCenter:PayCenterService');
     }
 
     protected function getTestpaperService()
     {
-        return $this->controller->getService('Testpaper.TestpaperService');
+        return $this->controller->getService('Testpaper:TestpaperService');
     }
 
     protected function getAnnouncementService()
@@ -249,7 +252,7 @@ class BaseProcessor
 
     public function getEduCloudService()
     {
-        return $this->controller->getService('EduCloud.EduCloudService');
+        return $this->controller->getService('EduCloud:EduCloudService');
     }
 
     protected function getLogService()

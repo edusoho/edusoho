@@ -53,15 +53,17 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('not_login', '您尚未登录，不能查看笔记！');
         }
 
-        $lessonNote = $this->controller->getNoteService()->getUserLessonNote($user['id'], $lessonId);
+        $lessonNote = $this->controller->getNoteService()->getCourseNoteByUserIdAndTaskId($user['id'], $lessonId);
 
         if (empty($lessonNote)) {
             return null;
         }
 
-        $lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
-        $lessonNote['lessonTitle'] = $lesson['title'];
-        $lessonNote['lessonNum'] = $lesson['number'];
+        $task = $this->getTaskService()->getTask($lessonId);
+        $lessonNote['lessonTitle'] = $task['title'];
+        $lessonNote['lessonNum'] = $task['number'];
+        $lessonNote['lessonId'] = $lessonId;
+
         $content = $this->controller->convertAbsoluteUrl($this->request, $lessonNote['content']);
         $content = $this->filterNote($content);
         $lessonNote['content'] = $content;
@@ -882,8 +884,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $start = (int)$this->getParam('start', 0);
         $limit = (int)$this->getParam('limit', 10);
 
-        $total = $this->controller->getCourseService()->findUserFavoritedCourseCount($user['id']);
-        $courses = $this->controller->getCourseService()->findUserFavoritedCourses($user['id'], $start, $limit);
+        $total = $this->controller->getCourseService()->findUserFavoritedCourseCountNotInClassroom($user['id']);
+        $courses = $this->controller->getCourseService()->findUserFavoritedCoursesNotInClassroom($user['id'], $start, $limit);
 
         return array(
             'start' => $start,
@@ -945,9 +947,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('not_login', '您尚未登录，不能收藏课程！');
         }
 
-        if (!$this->controller->getCourseService()->hasFavoritedCourse($courseId)) {
-            $this->controller->getCourseService()->favoriteCourse($courseId);
-        }
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        $this->getCourseSetService()->favorite($course['courseSetId']);
 
         return true;
     }
@@ -1103,6 +1105,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $user = $this->controller->getUserByToken($this->request);
         $courseId = $this->getParam('courseId');
         $course = $this->controller->getCourseService()->getCourse($courseId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         if (empty($course)) {
             return $this->createErrorResponse('not_found', '课程不存在');
@@ -1168,7 +1171,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'userFavorited' => $userFavorited,
             'member' => $this->checkMemberStatus($member),
             'vipLevels' => $vipLevels,
-            'discount' => $this->getCourseDiscount($course['discountId']),
+            'discount' => $this->getCourseDiscount($courseSet['discountId']),
         );
     }
 
@@ -1248,38 +1251,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $start = (int)$this->getParam('start', 0);
         $limit = (int)$this->getParam('limit', 10);
 
-        $total = $this->controller->getCourseService()->searchCourseCount($conditions);
-
+        $total = $this->controller->getCourseService()->countCourses($conditions);
         $sort = $this->getParam('sort', 'createdTimeByDesc');
-
-        if ($sort == 'recommendedSeq') {
-            $conditions['recommended'] = 1;
-            $recommendCount = $this->getCourseService()->searchCourseCount($conditions);
-
-            //先按推荐顺序展示推荐，再追加非推荐
-            $courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
-
-            if (($start + $limit) > $recommendCount) {
-                $conditions['recommended'] = 0;
-                if ($start < $recommendCount) {
-                    //需要用非推荐课程补全limit
-                    $fixedStart = 0;
-                    $fixedLimit = $limit - ($recommendCount - $start);
-                } else {
-                    $fixedStart = $start - $recommendCount;
-                    $fixedLimit = $limit;
-                }
-                $UnRecommendCourses = $this->controller->getCourseService()->searchCourses(
-                    $conditions,
-                    'createdTime',
-                    $fixedStart,
-                    $fixedLimit
-                );
-                $courses = array_merge($courses, $UnRecommendCourses);
-            }
-        } else {
-            $courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
-        }
+        $courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
 
         $result = array(
             'start' => $start,
@@ -1327,24 +1301,16 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $total = $this->controller->getCourseService()->countUserLearningCourses($userId);
         $courses = $this->controller->getCourseService()->findUserLearningCourses($userId, $start, $limit);
 
-        $count = $this->controller->getCourseService()->searchLearnCount(
-            array()
-        );
-        $learnStatusArray = $this->controller->getCourseService()->searchLearns(
-            array(
-                'userId' => $userId,
-            ),
-            array(
-                'finishedTime',
-                'ASC',
-            ),
-            0,
-            $count
-        );
+        $count = $this->controller->getTaskResultService()->countTaskResults(array(
+            'userId' => $userId,
+        ));
+        $learnStatusArray = $this->controller->getTaskResultService()->searchTaskResults(array(
+            'userId' => $userId,
+        ), array(
+            'finishedTime' => 'ASC',
+        ), 0, $count);
 
-        $lessons = $this->controller->getCourseService()->findLessonsByIds(
-            ArrayToolkit::column($learnStatusArray, 'lessonId')
-        );
+        $tasks = $this->controller->getTaskService()->findTasksByIds(ArrayToolkit::column($learnStatusArray, 'courseTaskId'));
 
         $tempCourse = array();
 
@@ -1352,11 +1318,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $tempCourse[$course['id']] = $course;
         }
 
-        foreach ($lessons as $key => $lesson) {
-            $courseId = $lesson['courseId'];
+        foreach ($tasks as $key => $task) {
+            $courseId = $task['courseId'];
 
             if (isset($tempCourse[$courseId])) {
-                $tempCourse[$courseId]['lastLessonTitle'] = $lesson['title'];
+                $tempCourse[$courseId]['lastLessonTitle'] = $task['title'];
             }
         }
 
@@ -1665,8 +1631,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return array(
             'start' => $start + count($resultLiveCourses),
             'limit' => $limit,
-            'data' => $resultLiveCourses,
-        );
+            'data' => $resultLiveCourses, );
     }
 
     public function hitThread()
@@ -1705,8 +1670,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'start' => $start,
             'limit' => $limit,
             'total' => $total,
-            'data' => $this->controller->filterCourses($liveCourses),
-        );
+            'data' => $this->controller->filterCourses($liveCourses), );
 
         return $result;
     }
@@ -1868,5 +1832,30 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         return true;
+    }
+
+    protected function getCourseService()
+    {
+        return $this->controller->getService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->controller->getService('Course:CourseSetService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->controller->getService('Task:TaskService');
+    }
+
+    protected function getVipLevelService()
+    {
+        return $this->controller->getService('VipPlugin:Vip:LevelService');
+    }
+
+    protected function getDiscountService()
+    {
+        return $this->controller->getService('DiscountPlugin:Discount:DiscountService');
     }
 }
