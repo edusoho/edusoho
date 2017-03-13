@@ -46,13 +46,13 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
         $this->getCourseSetService()->updateCourseSetStatistics($note['courseSetId'], array('noteNum'));
         $this->getCourseMemberService()->refreshMemberNoteNumber($note['courseId'], $note['userId']);
 
-        $preStatus = $event->getArgument('preStatus');
-
         $classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
 
         if (empty($classroom)) {
             return;
         }
+
+        $preStatus = $event->getArgument('preStatus');
 
         if ($note['status'] === CourseNoteService::PUBLIC_STATUS && $preStatus === CourseNoteService::PRIVATE_STATUS) {
             $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', +1);
@@ -66,6 +66,7 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
     public function onCourseNoteDelete(Event $event)
     {
         $note = $event->getSubject();
+
         $classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
 
         if (!empty($classroom)) {

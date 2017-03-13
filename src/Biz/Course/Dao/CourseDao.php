@@ -30,5 +30,7 @@ interface CourseDao extends GeneralDaoInterface
 
     public function updateMaxRateByCourseSetId($courseSetId, $updateFields);
 
+    public function updateCourseRecommendByCourseSetId($courseSetId, $fields);
+
     public function updateCategoryByCourseSetId($courseSetId, $categoryId);
 }
