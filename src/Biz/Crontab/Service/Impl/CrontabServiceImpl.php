@@ -4,11 +4,11 @@ namespace Biz\Crontab\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Crontab\Dao\JobDao;
-use Biz\System\Service\LogService;
-use Codeages\Biz\Framework\Context\BizAware;
 use Symfony\Component\Yaml\Yaml;
-use Biz\Crontab\Service\CrontabService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\LogService;
+use Biz\Crontab\Service\CrontabService;
+use Codeages\Biz\Framework\Context\BizAware;
 
 class CrontabServiceImpl extends BaseService implements CrontabService
 {
@@ -167,7 +167,6 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
     public function scheduleJobs()
     {
-        
         $conditions = array(
             'executing' => 0,
             'nextExcutedTime' => time(),

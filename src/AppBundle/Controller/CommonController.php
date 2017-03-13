@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use Biz\System\Service\SettingService;
 use Biz\User\CurrentUser;
-use Biz\User\Service\TokenService;
-use Biz\User\Service\UserService;
 use Endroid\QrCode\QrCode;
+use Biz\User\Service\UserService;
+use Biz\User\Service\TokenService;
+use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

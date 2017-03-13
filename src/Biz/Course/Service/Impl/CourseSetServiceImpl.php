@@ -2,24 +2,24 @@
 
 namespace Biz\Course\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
-use Biz\Content\Service\FileService;
-use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 use Biz\Course\Dao\CourseDao;
+use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
+use Biz\Content\Service\FileService;
 use Biz\Taxonomy\Service\TagService;
-use Biz\Course\Dao\FavoriteDao;
-use Biz\Course\Service\CourseDeleteService;
-use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
+use Biz\Course\Service\MaterialService;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\CourseNoteService;
+use Biz\Course\Service\CourseDeleteService;
+use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
@@ -73,14 +73,13 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function findRandomCourseSets($conditions, $num = 3)
     {
         $count = $this->countCourseSets($conditions);
-        $max   = $count - $num - 1;
+        $max = $count - $num - 1;
         if ($max < 0) {
             $max = 0;
         }
         $offset = rand(0, $max);
         return $this->searchCourseSets($conditions, 'latest', $offset, $num);
     }
-
 
     public function favorite($id)
     {
