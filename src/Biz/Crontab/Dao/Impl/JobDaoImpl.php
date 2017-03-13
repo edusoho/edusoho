@@ -34,6 +34,7 @@ class JobDaoImpl extends GeneralDaoImpl implements JobDao
         }
 
         $builder = parent::createQueryBuilder($conditions);
+
         return $builder;
     }
 
