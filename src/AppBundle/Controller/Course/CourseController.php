@@ -28,7 +28,8 @@ class CourseController extends CourseBaseController
             $files = $this->findFiles($course['id']);
         }
 
-        return $this->render('course/tabs/summary.html.twig',
+        return $this->render(
+            'course/tabs/summary.html.twig',
             array(
                 'course' => $course,
                 'member' => $member,
@@ -325,7 +326,18 @@ class CourseController extends CourseBaseController
 
     public function teachersAction($course)
     {
-        $teachers = $this->getUserService()->findUsersByIds($course['teacherIds']);
+        $teacherIds = $course['teacherIds'];
+        $teachers = $this->getUserService()->findUsersByIds($teacherIds);
+        if (!empty($teachers)) {
+            //确保教师按照中台教师管理设置的顺序展示
+            usort($teachers, function ($t1, $t2) use ($teacherIds) {
+                if (array_search($t1['id'], $teacherIds) < array_search($t2['id'], $teacherIds)) {
+                    return -1;
+                }
+
+                return 1;
+            });
+        }
 
         return $this->render(
             'course/widgets/teachers.html.twig',

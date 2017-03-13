@@ -87,7 +87,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
         foreach ($appsInstalled as $key => $value) {
             foreach ($value as $valueKey => $v) {
                 if (!in_array($valueKey, array(
-                    'id', 'version', 'type'))) {
+                    'id', 'version', 'type', ))) {
                     unset($value[$valueKey]);
                 }
 
@@ -282,7 +282,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
         $result = array(
             'start' => 0,
             'limit' => 3,
-            'data' => $this->controller->filterCourses($sortedCourses));
+            'data' => $this->controller->filterCourses($sortedCourses), );
 
         return $result;
     }
@@ -356,7 +356,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
             'start' => $start,
             'limit' => $limit,
             'total' => $total,
-            'data' => $this->controller->filterCourses($courses));
+            'data' => $this->controller->filterCourses($courses), );
 
         return $result;
     }
@@ -413,9 +413,9 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
                 );
             }
             $banner[] = array(
-                "url" => $baseUrl.'/'.$bannerIndex,
-                "action" => $action,
-                "params" => $bannerParams,
+                'url' => $baseUrl.'/'.$bannerIndex,
+                'action' => $action,
+                'params' => $bannerParams,
             );
         }
 

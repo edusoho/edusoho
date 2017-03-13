@@ -244,6 +244,11 @@ class ManageController extends BaseController
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
         $questionIds = $request->query->get('questionIds', array(0));
+
+        if (!$questions) {
+            return $this->createJsonResponse(array('result' => 'error', 'message' => '请先选择题目'));
+        }
+
         $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
         foreach ($questions as &$question) {

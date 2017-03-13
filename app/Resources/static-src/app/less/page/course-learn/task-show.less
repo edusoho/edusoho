@@ -9,11 +9,11 @@
   .dashboard-content {
     position: absolute;
     left: 26px;
-    right: 26px;
+    right: 35px;
     top:0;
     padding-top: 54px;
-    bottom: 70px;
-    .dashboard-header{
+    bottom: 60px;
+    .dashboard-header {
       position: absolute;
       top:0;
       left: 0;
@@ -26,6 +26,8 @@
       .back-link {
         color: @gray-dark;
         padding-right: 20px;
+        border-right: 1px solid @gray-medium;
+        margin-right: 20px;
         i {
           font-size: 22px;
           line-height: 1;
@@ -112,18 +114,18 @@
       list-style: none;
       padding: 0;
       margin: 0;
-      >li {
+      > li {
         margin-bottom: 10px;
-        >a {
+        > a {
           padding:12px 15px;
           display: inline-block;
           background-color: #f5f8fa;
-          color: @gray;
+          color: @gray-dark;
           text-align: center;
         }
         &.active,
         &:hover {
-          >a {
+          > a {
             background-color: @brand-primary;
             color: #fff;
           }
@@ -153,7 +155,7 @@
     //   background-color: #333;
     // }
     .note-pane-body {
-      padding: 20px 15px;
+      padding: 15px;
     }
   }
   .question-pane {
@@ -162,7 +164,7 @@
     // background-color: #272727;
     .task-question-plugin-form {
       margin-bottom: 0;
-      padding: 6px;
+      padding: 15px;
       // background-color: #333;
     }
     .media-list {
@@ -170,7 +172,7 @@
       // background-color: #272727;
       .media {
         // background-color: #272727;
-        border-bottom: 1px solid #3d3d3d;
+        border-bottom: 1px solid @border-color;
       }
     }
   }

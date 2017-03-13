@@ -33,7 +33,7 @@
           {% elseif courseFavorite.type == 'openCourse' %}
             {% set course = data('OpenCourse',{courseId:courseFavorite.courseId})|default(null) %}
             {% if course %}
-              {% include 'TopxiaWebBundle:OpenCourse/Widget:my-open-course-grid.html.twig' %}
+              {% include 'open-course/widget/my-open-course-grid.html.twig' %}
             {% endif %}
 
           {% endif %}

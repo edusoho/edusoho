@@ -9,8 +9,8 @@ class TagGroupDaoTest extends BaseDaoTestCase
     public function testFindTagGroupByName()
     {
         $this->getDao()->create($this->getDefaultMockFields());
-        $existTagGroup = $this->getDao()->findTagGroupByName('default');
-        $noExistTagGroup = $this->getDao()->findTagGroupByName('lala');
+        $existTagGroup = $this->getDao()->getByName('default');
+        $noExistTagGroup = $this->getDao()->getByName('lala');
         $this->assertNotNull($existTagGroup);
         $this->assertNull($noExistTagGroup);
     }
