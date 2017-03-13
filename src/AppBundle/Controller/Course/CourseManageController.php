@@ -341,7 +341,7 @@ class CourseManageController extends BaseController
                 $data['audiences'] = json_decode($data['audiences'], true);
             }
             $this->getCourseService()->updateCourse($courseId, $data);
-
+            $this->setFlashMessage('success', '更新计划设置成功');
             return $this->redirect(
                 $this->generateUrl(
                     'course_set_manage_course_info',
@@ -409,7 +409,7 @@ class CourseManageController extends BaseController
             }
 
             $this->getCourseService()->updateCourseMarketing($courseId, $data);
-
+            $this->setFlashMessage('success', '更新营销设置成功');
             return $this->redirect(
                 $this->generateUrl(
                     'course_set_manage_course_marketing',
@@ -465,7 +465,7 @@ class CourseManageController extends BaseController
             }
 
             $this->getCourseMemberService()->setCourseTeachers($courseId, $teachers);
-
+            $this->setFlashMessage('success', '更新教师设置成功');
             return $this->redirectToRoute(
                 'course_set_manage_course_teachers',
                 array('courseSetId' => $courseSetId, 'courseId' => $courseId)
