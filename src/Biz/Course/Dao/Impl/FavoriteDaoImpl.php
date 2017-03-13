@@ -66,6 +66,32 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
         return $this->db()->fetchAll($sql, array($userId));
     }
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType, $start, $limit)
+    {
+        $sql = "SELECT f.* FROM {$this->table} f ";
+        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON f.userId = ? AND c.type = ?';
+        $sql .= "AND f.courseId = c.id AND c.parentId = 0 AND f.type = 'course'";
+        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
+        return $this->db()->fetchAll($sql, array($userId, $courseType));
+    }
+
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function countUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType)
+    {
+        $sql = "SELECT count(c.id) FROM {$this->table} f ";
+        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON f.userId = ? AND c.type = ?';
+        $sql .= "AND f.courseId = c.id AND c.parentId = 0 AND f.type = 'course'";
+        $sql .= " ORDER BY createdTime DESC";
+
+        return $this->db()->fetchAll($sql, array($userId, $courseType));
+    }
+
     public function countByUserId($userId)
     {
         return $this->count(array(

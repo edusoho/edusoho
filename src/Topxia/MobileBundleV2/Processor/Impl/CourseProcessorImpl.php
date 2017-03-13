@@ -716,53 +716,23 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
     public function getFavoriteLiveCourse()
     {
-        $result = $this->getFavoriteCourse();
+        $result  = $this->getFavoriteCourseByCourseType('live');
         if (isset($result['error'])) {
             return $result;
         }
-        $courses = $result['data'];
-
-        $liveCourses = array();
-
-        for ($i = 0; $i < count($courses); ++$i) {
-            $course = $courses[$i];
-
-            if ($course['type'] == 'live') {
-                $liveCourses[] = $course;
-            }
-        }
-
-        $result['data'] = $liveCourses;
-        $result['total'] = count($liveCourses);
-
         return $result;
     }
 
     public function getFavoriteNormalCourse()
     {
-        $result = $this->getFavoriteCourse();
+        $result = $this->getFavoriteCourseByCourseType('normal');
         if (isset($result['error'])) {
             return $result;
         }
-        $courses = $result['data'];
-
-        $normalCourses = array();
-
-        for ($i = 0; $i < count($courses); ++$i) {
-            $course = $courses[$i];
-
-            if ($course['type'] == 'normal') {
-                $normalCourses[] = $course;
-            }
-        }
-
-        $result['data'] = array_values($normalCourses);
-        $result['total'] = count($normalCourses);
-
         return $result;
     }
 
-    public function getFavoriteCourse()
+    protected function getFavoriteCourseByCourseType($courseType)
     {
         $user = $this->controller->getUserByToken($this->request);
 
@@ -770,17 +740,25 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
         }
 
-        $start = (int) $this->getParam('start', 0);
-        $limit = (int) $this->getParam('limit', 10);
+        $start = (int) $this->getParam("start", 0);
+        $limit = (int) $this->getParam("limit", 10);
 
-        $total = $this->controller->getCourseService()->findUserFavoritedCourseCountNotInClassroom($user['id']);
-        $courses = $this->controller->getCourseService()->findUserFavoritedCoursesNotInClassroom($user['id'], $start, $limit);
+        $total   = $this->controller->getCourseService()->countUserFavoriteCourseNotInClassroomWithCourseType(
+            $user['id'],
+            $courseType
+        );
+        $courses = $this->controller->getCourseService()->findUserFavoriteCoursesNotInClassroomWithCourseType(
+            $user['id'],
+            $courseType,
+            $start,
+            $limit
+        );
 
         return array(
-            'start' => $start,
-            'limit' => $limit,
-            'total' => $total,
-            'data' => $this->controller->filterCourses($courses),
+            "start" => $start,
+            "limit" => $limit,
+            "total" => $total,
+            "data"  => $this->controller->filterCourses($courses)
         );
     }
 
