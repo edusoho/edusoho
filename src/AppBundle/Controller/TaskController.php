@@ -20,7 +20,7 @@ class TaskController extends BaseController
         $preview = $request->query->get('preview');
 
         try {
-            $task = $this->tryLearnTask($courseId, $id, (bool)$preview);
+            $task = $this->tryLearnTask($courseId, $id, (bool) $preview);
         } catch (AccessDeniedException $accessDeniedException) {
             return $this->handleAccessDeniedException($accessDeniedException, $request, $id);
         } catch (ServiceAccessDeniedException $deniedException) {
@@ -30,6 +30,10 @@ class TaskController extends BaseController
         $user = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
+
+        if ($member['locked']) {
+            return $this->redirectToRoute('my_course_show', array('id' => $courseId));
+        }
 
         if ($member && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {
             return $this->redirect($this->generateUrl('my_course_show', array('id' => $courseId)));
@@ -346,12 +350,14 @@ class TaskController extends BaseController
     }
 
     /**
-     * 没有权限进行任务的时候的处理逻辑，目前只有学员动态跳转过来的时候跳转到教学计划营销页
+     * 没有权限进行任务的时候的处理逻辑，目前只有学员动态跳转过来的时候跳转到教学计划营销页.
      *
      * @param \Exception $exception
-     * @param Request $request
+     * @param Request    $request
      * @param $taskId
+     *
      * @throws \Exception
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function handleAccessDeniedException(\Exception $exception, Request $request, $taskId)
@@ -359,9 +365,13 @@ class TaskController extends BaseController
         // 学员动态跳转到无权限任务进入到计划营销页
         if ($request->query->get('from', '') === 'student_status') {
             $task = $this->getTaskService()->getTask($taskId);
-            return $this->redirectToRoute('course_show', array(
-                'id' => $task['courseId']
-            ));
+
+            return $this->redirectToRoute(
+                'course_show',
+                array(
+                    'id' => $task['courseId'],
+                )
+            );
         }
 
         throw $exception;
