@@ -116,9 +116,7 @@ class Marketing {
           required: function () {
             return $('input[name="enableBuyExpiryTime"]:checked').val() == 1;
           },
-          next_day: function () {
-            return $('input[name="enableBuyExpiryTime"]:checked').val() == 1;
-          },
+          after_now_date:true,
         }
       },
       messages: {
