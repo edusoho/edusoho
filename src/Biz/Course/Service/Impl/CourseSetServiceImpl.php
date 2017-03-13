@@ -168,7 +168,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('Unauthorized');
+            throw $this->createAccessDeniedException('user not login');
         }
 
         $courseSet = $this->getCourseSetDao()->get($id);
@@ -178,7 +178,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         if (!$this->hasCourseSetManageRole($id)) {
-            throw $this->createAccessDeniedException('Unauthorized');
+            throw $this->createAccessDeniedException('can not access');
         }
 
         return $courseSet;
