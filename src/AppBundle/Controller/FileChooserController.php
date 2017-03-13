@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MaterialService;
 use Biz\File\Service\UploadFileService;
 use Biz\User\Service\UserService;
@@ -22,7 +23,7 @@ class FileChooserController extends BaseController
         $currentUser = $this->getUser();
 
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权访问此页面'));
+            throw $this->createAccessDeniedException('Permission denied, you can not access this page!');
         }
         $conditions = $request->query->all();
         $conditions = $this->filterMaterialConditions($conditions, $currentUser);
@@ -56,7 +57,7 @@ class FileChooserController extends BaseController
         $user = $this->getUser();
 
         if (!$user->isTeacher() && !$user->isAdmin()) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权访问此页面'));
+            throw $this->createAccessDeniedException('Permission denied, you can not access this page!');
         }
 
         $mySharingContacts = $this->getUploadFileService()->findMySharingContacts($user['id']);
@@ -69,7 +70,7 @@ class FileChooserController extends BaseController
         $currentUser = $this->getUser();
 
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权访问此页面');
+            throw $this->createAccessDeniedException('Permission denied, you can not access this page!');
         }
 
         $query = $request->query->all();
@@ -134,9 +135,10 @@ class FileChooserController extends BaseController
     protected function findCourseMaterials($request, $courseId)
     {
         $query = $request->query->all();
+        $course = $this->getCourseService()->getCourse($courseId);
         $conditions = array(
             'type' => empty($query['courseType']) ? null : $query['courseType'],
-            'courseId' => $courseId,
+            'courseSetId' => $course['courseSetId'],
         );
 
         //FIXME 同一个courseId下文件可能存在重复，所以需考虑去重，但没法直接根据groupbyFileId去重（sql_mode）
@@ -175,8 +177,11 @@ class FileChooserController extends BaseController
         return $this->createService('Course:MaterialService');
     }
 
-    protected function getServiceKernel()
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
     {
-        return ServiceKernel::instance();
+        return $this->createService('Course:CourseService');
     }
 }

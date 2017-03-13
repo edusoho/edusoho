@@ -42,7 +42,6 @@ class courseInfo {
   initValidator() {
     let $form = $('#course-info-form');
     let validator = $form.validate({
-      onkeyup: false,
       currentDom: '#course-submit',
       groups: {
         date: 'expiryStartDate expiryEndDate'
@@ -62,19 +61,26 @@ class courseInfo {
           positive_integer: true
         },
         expiryDays: {
-          required: '#expiryByDays:checked',
+          required: () => {
+            return $('input[name="expiryMode"]:checked').val() != 'date';
+          },
           digits: true,
           max_year: true
         },
         expiryStartDate: {
-          required: '#expiryByDate:checked',
+          required: () => {
+            return $('input[name="expiryMode"]:checked').val() == 'date';
+          },
           date: true,
-          before: '#expiryEndDate'
+          after_now_date: true,
+          before_date: '#expiryEndDate'
         },
         expiryEndDate: {
-          required: '#expiryByDate:checked',
+          required: () => {
+            return $('input[name="expiryMode"]:checked').val() == 'date';
+          },
           date: true,
-          after: '#expiryStartDate'
+          after_date: '#expiryStartDate'
         }
       },
       messages: {
