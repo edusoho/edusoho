@@ -76,7 +76,6 @@ define(function(require, exports, module) {
                 $('#content').find('ul').eq(index).show().siblings().hide();
             });
         },
-
         isEsVedio:function(){
             if($('#lesson-preview-player').html() == ""){
                 $('.embed-responsive-16by9').addClass('masks')
