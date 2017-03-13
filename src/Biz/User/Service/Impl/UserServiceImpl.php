@@ -723,7 +723,7 @@ class UserServiceImpl extends BaseService implements UserService
             array(
                 'type' => 'scheduler',
                 'roles' => array('ROLE_USER', 'ROLE_SUPER_ADMIN'),
-            )
+            ),
         );
         foreach ($users as $user) {
             $existsUser = $this->getUserDao()->getUserByType($user['type']);
