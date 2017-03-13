@@ -1,4 +1,4 @@
-{% extends 'layout.html.twig' %}
+{% extends 'old-layout.html.twig' %}
 
 {% block title %}{% if pageNav == 'teach' %}{{'在教课程'|trans}} - {% elseif pageNav == 'learn' %}{{'在学课程'|trans}} - {% elseif pageNav == 'favorited' %}{{'收藏的课程'|trans}} - {% elseif pageNav == 'group' %}{{'加入的小组'|trans}} - {% elseif pageNav == 'friend' %}{{'关注/粉丝'|trans}} - {% else %}{{''}}{% endif %}{{'%nickname%的个人主页'|trans({'%nickname%':setting('user.nickname')})}} - {{ parent() }}{% endblock %}
 {% block keywords %}{{ user.title }}{% endblock %}
@@ -6,8 +6,7 @@
 {% set bodyClass = 'userpage bg-blank' %}
 {% set pageNav = pageNav|default(null) %}
 
-{#{% set script_controller = 'user/user' %}#}
-{% do script(['libs/echo-js.js','libs/jquery-blurr.js','app/js/user/index.js']) %}
+{% set script_controller = 'user/user' %}
 
 {% block top_content %}
   {{ render(controller('AppBundle:User:headerBlock', {user:user})) }}

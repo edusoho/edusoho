@@ -1,10 +1,8 @@
-{% extends 'layout.html.twig' %}
+{% extends 'old-layout.html.twig' %}
 
 {% block title %}{{'搜索：'|trans}}{% if keywords %}{{ keywords }}{% else %}{{'全部课程'|trans}}{% endif %} - {{ parent() }}{% endblock %}
 {% set bodyClass = 'bg-blank' %}
-{#{% do load_script('search/search') %}#}
-
-{% do script(['libs/echo-js.js','app/js/search/index.js']) %}
+{% do load_script('search/search') %}
 
 {% block top_content %}
   <div class="course-banner es-banner">

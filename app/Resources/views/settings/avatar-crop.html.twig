@@ -3,8 +3,7 @@
 {% block title %}{{'头像图片'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'avatar' %}
-{% do script(['app/js/settings/avatar-crop/index.js']) %}
-
+{% set script_controller = 'settings/avatar-crop' %}
 {% block main %}
 
 <div class="panel panel-default panel-col">
@@ -31,7 +30,7 @@
           data-url="{{path('settings_avatar_crop')}}"
           data-goto-url="{% if goto %}{{ goto }}{% else %}{{path('settings_avatar')}}{% endif %}"
           >{{'保存'|trans}}</a>
-          <a href="javascript:;" class="js-go-back btn btn-link" data-goto-url="{% if goto %}{{ goto }}{% else %}{{path('settings_avatar')}}{% endif %}">{{'重新选择图片'|trans}}</a>
+          <a href="javascript:;" class="go-back btn btn-link">{{'重新选择图片'|trans}}</a>
         </div>
       </div>
 
