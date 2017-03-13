@@ -255,7 +255,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         ));
 
         if (!ArrayToolkit::requireds($fields, array('isFree', 'buyable', 'tryLookable'))) {
-            var_dump($fields);
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
 
