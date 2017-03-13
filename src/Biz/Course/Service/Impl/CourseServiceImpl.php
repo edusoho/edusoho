@@ -2,10 +2,8 @@
 
 namespace Biz\Course\Service\Impl;
 
-use Biz\Activity\Service\Impl\ActivityServiceImpl;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\Impl\CourseMemberDaoImpl;
 use Biz\Course\Dao\ThreadDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Task\Service\TaskService;
@@ -25,6 +23,7 @@ use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseDeleteService;
+use Biz\Activity\Service\Impl\ActivityServiceImpl;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -310,7 +309,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     /**
      * 计算教学计划价格和虚拟币价格
      *
-     * @param $id
+     * @param  $id
      * @param int|float $originPrice 教学计划原价
      *
      * @return array (number, number)
@@ -1333,6 +1332,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $courseFavorites = $this->getFavoriteDao()->findCourseFavoritesNotInClassroomByUserId($userId, $start, $limit);
         $favoriteCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($courseFavorites, 'courseId'));
+
         return $favoriteCourses;
     }
 
@@ -1557,7 +1557,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->createService('Classroom:ClassroomService');
     }
-    
+
     /**
      * 当默认值未设置时，合并默认值
      *
