@@ -21,7 +21,7 @@
 					<div class="form-group">
 					<label class="col-md-2 control-label" >{{'用户名'|trans}}</label>
 						<div class="col-md-7 controls">
-						<div class="control-text" style="padding-top: 6px">
+						<div class="form-control-static">
 							{{app.user.nickname}} {% if setting('user_partner.nickname_enabled') %} <a href="{{ path('setting_nickname') }}">{{'修改'|trans}}</a> {% endif %}</div>
 						</div>
 					</div>
