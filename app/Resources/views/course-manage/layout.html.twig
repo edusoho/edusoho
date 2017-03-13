@@ -7,12 +7,7 @@ do script(['app/js/course-manage/index.js']) %}
     {% if courseSet.type != 'live' %}
       <div class="panel-heading">
         {{ course.title }}
-        {% if course.status == 'published' %}
-          {#<button class="btn btn-link btn-sm pull-right js-close-course" 
-            data-url="{{ path('course_set_manage_course_close', {courseSetId: courseSet.id, courseId: course.id}) }}">
-            {{ '关闭计划'|trans }}
-          </button>#}
-        {% else %}
+        {% if course.status != 'published' %}
           <button class="btn btn-success btn-sm pull-right js-publish-course" 
             data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">
             {{ '发布计划'|trans }}
