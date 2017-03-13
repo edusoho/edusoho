@@ -24,6 +24,21 @@ class JobDaoImpl extends GeneralDaoImpl implements JobDao
         return $this->findByFields(array('name' => $jobName, 'targetType' => $targetType, 'targetId' => $targetId));
     }
 
+    protected function createQueryBuilder($conditions)
+    {
+        if (!empty($conditions['nextExcutedStartTime'])) {
+            $conditions['nextExcutedStartTime'] = strtotime($conditions['nextExcutedStartTime']);
+        }
+        if (!empty($conditions['nextExcutedEndTime'])) {
+            $conditions['nextExcutedEndTime'] = strtotime($conditions['nextExcutedEndTime']);
+        }
+
+        $conditions['name'] = empty($conditions['name']) ? '' : '%'.$conditions['name'].'%';
+
+        $builder = parent::createQueryBuilder($conditions);
+        return $builder;
+    }
+
     public function declares()
     {
         return array(

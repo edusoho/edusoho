@@ -104,7 +104,6 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
     public function searchJobs($conditions, $sort, $start, $limit)
     {
-        $conditions = $this->prepareSearchConditions($conditions);
         switch ($sort) {
             case 'created':
                 $sort = array('createdTime' => 'DESC');
@@ -126,8 +125,6 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
     public function searchJobsCount($conditions)
     {
-        $conditions = $this->prepareSearchConditions($conditions);
-
         return $this->getJobDao()->count($conditions);
     }
 
@@ -238,29 +235,6 @@ class CrontabServiceImpl extends BaseService implements CrontabService
     public function updateJob($id, $fields)
     {
         return $this->getJobDao()->update($id, $fields);
-    }
-
-    protected function prepareSearchConditions($conditions)
-    {
-        if (!empty($conditions['nextExcutedStartTime']) && !empty($conditions['nextExcutedEndTime'])) {
-            $conditions['nextExcutedStartTime'] = strtotime($conditions['nextExcutedStartTime']);
-            $conditions['nextExcutedEndTime'] = strtotime($conditions['nextExcutedEndTime']);
-        } else {
-            unset($conditions['nextExcutedStartTime']);
-            unset($conditions['nextExcutedEndTime']);
-        }
-
-        if (empty($conditions['cycle'])) {
-            unset($conditions['cycle']);
-        }
-
-        if (empty($conditions['name'])) {
-            unset($conditions['name']);
-        } else {
-            $conditions['name'] = '%'.$conditions['name'].'%';
-        }
-
-        return $conditions;
     }
 
     /**
