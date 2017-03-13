@@ -33,7 +33,6 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
     {
         $userId = $arguments['userId'];
 
-
         $members = $this->getClassroomService()->searchMembers(
             array(
                 'userId' => $userId,
@@ -48,7 +47,6 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
         $classroomIds = ArrayToolkit::column($members, 'classroomId');
 
         if (empty($classroomIds)) {
-
             return array();
         }
 
@@ -115,7 +113,7 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
 
             $classroom['tasks'] = $notLearnedTasks;
             $classroom['learnedTaskNum'] = count($finishTaskIds);
-            $classroom['allTaskNum'] = $this->getTotalTaskCount($courses);;
+            $classroom['allTaskNum'] = $this->getTotalTaskCount($courses);
         }
 
         return $sortedClassrooms;
@@ -154,6 +152,7 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
      * @param $classroomIds
      * @param $members
      * @param $sortedClassrooms
+     *
      * @return array
      */
     private function getSortedClassrooms($classroomIds, $members, $sortedClassrooms)
@@ -172,6 +171,7 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
 
     /**
      * @param $taskGroupStatus
+     *
      * @return array
      */
     private function getFinishTaskIds($taskGroupStatus)
@@ -184,6 +184,7 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
 
     /**
      * @param $taskGroupStatus
+     *
      * @return array
      */
     private function getLearningTaskIds($taskGroupStatus)
@@ -196,6 +197,7 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
 
     /**
      * @param $courses
+     *
      * @return int
      */
     private function getTotalTaskCount($courses)
