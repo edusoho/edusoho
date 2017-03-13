@@ -108,6 +108,6 @@ class CourseMaterialDaoImpl extends GeneralDaoImpl implements CourseMaterialDao
             $conditions['titleLike'] = "%{$conditions['titleLike']}%";
         }
 
-        return parent::_createQueryBuilder($conditions);
+        return parent::createQueryBuilder($conditions);
     }
 }

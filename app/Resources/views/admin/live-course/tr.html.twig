@@ -4,7 +4,7 @@
     <a href="{{ lessonUrl }}" target="_blank">{{ liveTask.title }}</a>
     <div class="mts">
       {% if courseSet %}
-        <a class="color-success text-sm" href="{{ path('course_set_show', {id:courseSet.id}) }}" target="_blank">{{ courseSet.title }}</a>
+        <a class="text-success text-sm" href="{{ path('course_set_show', {id:courseSet.id}) }}" target="_blank">{{ courseSet.title }}</a>
       {% else %}
         <span class="text-muted text-sm">{{'课程已删除'|trans}}</span>
       {% endif %}

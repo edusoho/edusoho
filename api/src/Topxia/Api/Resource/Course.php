@@ -12,6 +12,8 @@ class Course extends BaseResource
     public function get(Application $app, Request $request, $id)
     {
         $course = $this->getCourseService()->getCourse($id);
+        $course['courseSet'] = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
         return $this->filter($course);
     }
 
@@ -34,16 +36,16 @@ class Course extends BaseResource
 
     private function filledCourseByCourseSet($course)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $courseSet = $course['courseSet'];
         $copyKeys = array('tags', 'hitNum', 'orgCode', 'orgId',
             'discount', 'categoryId', 'recommended', 'recommendedSeq', 'recommendedTime',
             'subtitle', 'discountId', 'smallPicture', 'middlePicture', 'largePicture'
         );
         if (!empty($courseSet['cover'])) {
             $courseSetImg = array(
-                'smallPicture' => $courseSet['cover']['small'],
-                'middlePicture' => $courseSet['cover']['middle'],
-                'largePicture' => $courseSet['cover']['large']
+                'smallPicture' => $this->getFileUrl($courseSet['cover']['small']),
+                'middlePicture' => $this->getFileUrl($courseSet['cover']['middle']),
+                'largePicture' => $this->getFileUrl($courseSet['cover']['large'])
             );
             $courseSet = array_merge($courseSet, $courseSetImg);
         };
@@ -61,6 +63,7 @@ class Course extends BaseResource
             $course['title'] = $courseSet['title'] . '-' . $course['title'];
         }
 
+        unset($course['courseSet']);
         return $course;
     }
 

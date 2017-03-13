@@ -28,7 +28,7 @@ class CourseSetServiceTest extends BaseTestCase
         $expected = $this->getCourseSetService()->createCourseSet($courseSet);
         $res = $this->getCourseSetService()->findCourseSetsLikeTitle('开始');
 
-        $this->assertEquals(array($expected), $res);
+        $this->assertEquals($expected['title'], $res[0]['title']);
     }
 
     public function testUpdate()
@@ -115,5 +115,10 @@ class CourseSetServiceTest extends BaseTestCase
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getDiscountService()
+    {
+        return $this->createService('DiscountPlugin:Discount:DiscountService');
     }
 }

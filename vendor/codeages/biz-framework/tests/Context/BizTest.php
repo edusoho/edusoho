@@ -1,11 +1,13 @@
 <?php
+namespace Tests;
 
 use Codeages\Biz\Framework\Context\Biz;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Codeages\Biz\Framework\Provider\MonologServiceProvider;
+use PHPUnit\Framework\TestCase;
 
-class BizTest extends \PHPUnit_Framework_TestCase
+class BizTest extends TestCase
 {
     public function testConstruct()
     {

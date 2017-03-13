@@ -38,13 +38,6 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
     }
 
-    public function clearSubtitle($id)
-    {
-        $sql = "UPDATE {$this->table} SET subtitle = '' WHERE id = ?";
-
-        return $this->db()->executeUpdate($sql, array($id));
-    }
-
     protected function _createQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
@@ -78,6 +71,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'parentId > :parentId_GT',
                 'createdTime >= :startTime',
                 'createdTime <= :endTime',
+                'discountId = :discountId',
                 'minCoursePrice = :minCoursePrice',
                 'maxCoursePrice > :maxCoursePrice_GT',
             ),
@@ -85,6 +79,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'tags' => 'delimiter',
                 'goals' => 'delimiter',
                 'audiences' => 'delimiter',
+                'teacherIds' => 'delimiter',
                 'cover' => 'json',
             ),
             'orderbys' => array(

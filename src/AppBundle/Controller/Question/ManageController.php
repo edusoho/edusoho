@@ -25,7 +25,7 @@ class ManageController extends BaseController
 
         $conditions = $request->query->all();
 
-        $conditions['courseId'] = $courseSet['id'];
+        $conditions['courseSetId'] = $courseSet['id'];
         $conditions['parentId'] = empty($conditions['parentId']) ? 0 : $conditions['parentId'];
 
         $parentQuestion = array();
@@ -71,6 +71,7 @@ class ManageController extends BaseController
             $data = $request->request->all();
 
             $data['courseId'] = $courseSet['id'];
+            $data['courseSetId'] = $courseSet['id'];
 
             $question = $this->getQuestionService()->create($data);
 
@@ -189,7 +190,7 @@ class ManageController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
         $conditions = $request->request->all();
-        $conditions['courseId'] = $courseSet['id'];
+        $conditions['courseSetId'] = $courseSet['id'];
 
         if (!empty($conditions['types'])) {
             $conditions['types'] = explode(',', $conditions['types']);
@@ -212,7 +213,7 @@ class ManageController extends BaseController
         $conditions = $request->query->all();
 
         $conditions['parentId'] = 0;
-        $conditions['courseId'] = $courseSet['id'];
+        $conditions['courseSetId'] = $courseSet['id'];
 
         $paginator = new Paginator(
             $request,
@@ -243,6 +244,11 @@ class ManageController extends BaseController
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
         $questionIds = $request->query->get('questionIds', array(0));
+
+        if (!$questions) {
+            return $this->createJsonResponse(array('result' => 'error', 'message' => '请先选择题目'));
+        }
+
         $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
         foreach ($questions as &$question) {

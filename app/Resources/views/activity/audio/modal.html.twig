@@ -30,10 +30,12 @@
     <div class="col-sm-2 control-label">
       <label>{{ '完成条件'|trans }}</label>
     </div>
-    <div class="col-sm-4">
-      <select id="finish-condition" name="condition" class="form-control">
+    <div class="col-sm-4 form-control-static">
+      听完音频
+      <input type="hidden" id="finish-condition" name="condition">
+      {#<select id="finish-condition" name="condition" class="form-control">
         <option value="">听完音频</option>
-      </select>
+      </select>#}
     </div>
   </div>
 {% endblock %}

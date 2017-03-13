@@ -3,12 +3,9 @@
 namespace Topxia\MobileBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Controller\BaseController;
-use AppBundle\Common\ArrayToolkit;
 
 class CourseReviewController extends MobileController
 {
-
     public function getAction(Request $request, $courseId, $reviewId)
     {
         $review = $this->getReviewService()->getReview($reviewId);
@@ -27,7 +24,7 @@ class CourseReviewController extends MobileController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能评价课程！");
+            return $this->createErrorResponse($request, 'not_login', '您尚未登录，不能评价课程！');
         }
 
         $course = $this->getCourseService()->getCourse($courseId);
@@ -43,7 +40,7 @@ class CourseReviewController extends MobileController
         $review['courseId'] = $course['id'];
         $review['userId'] = $user['id'];
         $review['rating'] = $request->get('rating', 0);
-        $review['content'] = $request->get('content','');
+        $review['content'] = $request->get('content', '');
 
         $review = $this->getReviewService()->saveReview($review);
         $review = $this->filterReview($review);
@@ -64,6 +61,7 @@ class CourseReviewController extends MobileController
         $result['limit'] = (int) $request->query->get('limit', 10);
         $reviews = $this->getReviewService()->findCourseReviews($courseId, 0, 100);
         $result['data'] = $this->filterReviews($reviews);
+
         return $this->createJson($request, $result);
     }
 
@@ -76,5 +74,4 @@ class CourseReviewController extends MobileController
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
     }
-
 }

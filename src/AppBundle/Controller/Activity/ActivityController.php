@@ -32,6 +32,12 @@ class ActivityController extends BaseController
         }
         $actionConfig = $this->getActivityActionConfig($activity['mediaType']);
 
+        if (empty($actionConfig['preview'])) {
+            return $this->render('activity/no-preview.html.twig', array(
+                'task' => $task,
+            ));
+        }
+
         return $this->forward($actionConfig['preview'], array(
             'task' => $task,
         ));

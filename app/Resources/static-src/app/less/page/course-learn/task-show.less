@@ -3,17 +3,17 @@
   left: 0;
   top:0;
   width: 100%;
-  background-color: #111111;
+  background-color: #e5e5e5;
   height: 100%;
   padding-right: 360px;
   .dashboard-content {
     position: absolute;
     left: 26px;
-    right: 26px;
+    right: 35px;
     top:0;
     padding-top: 54px;
     bottom: 60px;
-    .dashboard-header{
+    .dashboard-header {
       position: absolute;
       top:0;
       left: 0;
@@ -24,8 +24,10 @@
       font-size: 16px;
       z-index: 1;
       .back-link {
-        color: @gray;
+        color: @gray-dark;
         padding-right: 20px;
+        border-right: 1px solid @gray-medium;
+        margin-right: 20px;
         i {
           font-size: 22px;
           line-height: 1;
@@ -37,11 +39,11 @@
     }
     .dashboard-footer {
       position: absolute;
-      bottom: -60px;
+      bottom: -70px;
       left: 0;
       right: 0;
-      height: 60px;
-      padding: 15px 0;
+      height: 70px;
+      padding: 18px 0;
       color:@gray;
       z-index: 1;
       text-align: right;
@@ -97,7 +99,7 @@
     bottom: 0;
     width: 360px;
     right: -360px;
-    background-color: #333333;
+    background-color: #f5f8fa;
   }
   .dashboard-toolbar {
     position: absolute;
@@ -112,18 +114,18 @@
       list-style: none;
       padding: 0;
       margin: 0;
-      >li {
+      > li {
         margin-bottom: 10px;
-        >a {
+        > a {
           padding:12px 15px;
           display: inline-block;
-          background-color: #333333;
-          color: @gray;
+          background-color: #f5f8fa;
+          color: @gray-dark;
           text-align: center;
         }
         &.active,
         &:hover {
-          >a {
+          > a {
             background-color: @brand-primary;
             color: #fff;
           }
@@ -134,11 +136,8 @@
   .dashboard-pane {
     overflow: hidden;
     height: 100%;
-    background-color: #333333;
   }
   .task-list-pane {
-    background-color: #333333;
-    // padding: 15px 17px;
     position: absolute;
     top: 0;
     bottom: 0;
@@ -146,18 +145,17 @@
     overflow-y: hidden;
     overflow-x: hidden;
     .task-list-pane-body {
-      padding: 15px 17px;
+      padding: 15px 0;
     }
   }
   .note-pane {
-    // padding: 20px 15px;
     height: 100%;
     overflow: hidden;
-    .task-note-plugin-form {
-      background-color: #333;
-    }
+    // .task-note-plugin-form {
+    //   background-color: #333;
+    // }
     .note-pane-body {
-      padding: 20px 15px;
+      padding: 15px;
     }
   }
   .question-pane {
@@ -166,7 +164,7 @@
     // background-color: #272727;
     .task-question-plugin-form {
       margin-bottom: 0;
-      padding: 6px;
+      padding: 15px;
       // background-color: #333;
     }
     .media-list {
@@ -174,7 +172,7 @@
       // background-color: #272727;
       .media {
         // background-color: #272727;
-        border-bottom: 1px solid #3d3d3d;
+        border-bottom: 1px solid @border-color;
       }
     }
   }

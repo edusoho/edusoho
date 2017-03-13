@@ -1,0 +1,19 @@
+root = true
+
+[*]
+indent_style = space
+end_of_line = lf
+
+[*.{html,twig,less,css,js,jsx}]
+charset = utf-8
+indent_size = 2
+
+[*.php]
+charset = utf-8
+indent_size = 4
+
+[Makefile]
+indent_style = tab
+
+[{package.json,.gitlab-ci.yml}]
+indent_size = 2

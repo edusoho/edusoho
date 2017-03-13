@@ -4,8 +4,8 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Testpaper\Service\TestpaperService;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 
 class HomeworkManageController extends BaseController
@@ -16,7 +16,7 @@ class HomeworkManageController extends BaseController
 
         $conditions = $request->query->all();
 
-        $conditions['courseId'] = $courseSet['id'];
+        $conditions['courseSetId'] = $courseSet['id'];
         $conditions['parentId'] = 0;
 
         $paginator = new Paginator(
@@ -48,6 +48,11 @@ class HomeworkManageController extends BaseController
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
         $questionIds = $request->query->get('questionIds', array(0));
+
+        if (!$questionIds) {
+            return $this->createJsonResponse(array('result' => 'error', 'message' => '请先选择题目'));
+        }
+
         $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
         foreach ($questions as &$question) {

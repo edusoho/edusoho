@@ -108,7 +108,7 @@
                 <button name="sms-open" class="btn btn-primary">{{'启用云短信'|trans}}</button>
               {% elseif smsStatus.sms_enabled|default('0') == '1' and smsStatus.sms_school_name|default(null) != "" and  smsStatus.status != 'error' %}
                 <div name="status">
-                  <span class="color-success">{{'已启用'|trans}}</span>
+                  <span class="text-success">{{'已启用'|trans}}</span>
                   <button class="btn btn-default btn-sm mlm" name="sms-close">
                     <span class="text-muted">{{'关闭'|trans}}</span>
                   </button>

@@ -2,6 +2,8 @@
 
 namespace AppBundle\Twig;
 
+use Biz\Course\Service\CourseService;
+use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use Biz\Course\Service\CourseSetService;
 
@@ -21,7 +23,7 @@ class AppExtension extends \Twig_Extension
     {
         return array(
             new \Twig_SimpleFilter('currency', array($this, 'currency')),
-            new \Twig_SimpleFilter('json_encode_utf8', array($this, 'json_encode_utf8')),
+            new \Twig_SimpleFilter('json_encode_utf8', array($this, 'jsonEncodeUtf8')),
         );
     }
 
@@ -31,7 +33,10 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFunction('services', array($this, 'buildServiceTags')),
             new \Twig_SimpleFunction('classroom_services', array($this, 'buildClassroomServiceTags')),
             new \Twig_SimpleFunction('count', array($this, 'count')),
+            new \Twig_SimpleFunction('course_count', array($this, 'courseCount')),
             new \Twig_SimpleFunction('course_cover', array($this, 'courseCover')),
+            new \Twig_SimpleFunction('course_set_cover', array($this, 'courseSetCover')),
+            new \Twig_SimpleFunction('user_avatar', array($this, 'userAvatar')),
         );
     }
 
@@ -57,7 +62,7 @@ class AppExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function json_encode_utf8($arr)
+    public function jsonEncodeUtf8($arr)
     {
         if (empty($arr)) {
             return '[]';
@@ -175,22 +180,53 @@ class AppExtension extends \Twig_Extension
         return $this->sortTags($tags);
     }
 
+    public function courseCount($courseSetId)
+    {
+        return $this->getCourseService()->countCourses(array('courseSetId' => $courseSetId));
+    }
+
     public function courseCover($course, $type = 'middle')
     {
-        if (empty($course)) {
-            return null;
-        }
-        if (!empty($course['courseSet'])) {
-            $courseSet = $course['courseSet'];
-        } else {
-            $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        }
-        $cover = $courseSet['cover'];
-        if (empty($cover) || empty($cover[$type])) {
-            return null;
+        $courseSet = null;
+        if (!empty($course)) {
+            if (!empty($course['courseSet'])) {
+                $courseSet = $course['courseSet'];
+            } else {
+                $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+            }
         }
 
-        return $cover[$type];
+        return $this->courseSetCover($courseSet, $type);
+    }
+
+    public function userAvatar($user, $type = 'middle')
+    {
+        $avatar = !empty($user[$type.'Avatar']) ? $user[$type.'Avatar'] : null;
+
+        if (empty($avatar)) {
+            $setting = $this->getSettingService()->get('default');
+            $avatar = !empty($setting['avatar.png']) ? $setting['avatar.png'] : null;
+        }
+
+        return $avatar;
+    }
+
+    public function courseSetCover($courseSet, $type = 'middle')
+    {
+        $coverPath = null;
+        if (!empty($courseSet)) {
+            $cover = $courseSet['cover'];
+            if (!empty($cover) && !empty($cover[$type])) {
+                $coverPath = $cover[$type];
+            }
+        }
+
+        if (empty($coverPath)) {
+            $settings = $this->getSettingService()->get('default');
+            $coverPath = !empty($settings['course.png']) ? $settings['course.png'] : null;
+        }
+
+        return $coverPath;
     }
 
     protected function sortTags($tags)
@@ -225,5 +261,21 @@ class AppExtension extends \Twig_Extension
     protected function getCourseSetService()
     {
         return $this->biz->service('Course:CourseSetService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->biz->service('Course:CourseService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 }

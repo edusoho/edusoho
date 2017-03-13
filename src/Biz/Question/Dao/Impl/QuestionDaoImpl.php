@@ -21,7 +21,7 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
 
     public function findQuestionsByCourseSetId($courseSetId)
     {
-        return $this->findInField('courseId', array($courseSetId));
+        return $this->findInField('courseSetId', array($courseSetId));
     }
 
     public function deleteSubQuestions($parentId)
@@ -31,7 +31,7 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
 
     public function getQuestionCountGroupByTypes($conditions)
     {
-        $builder = $this->_createQueryBuilder($conditions)
+        $builder = $this->createQueryBuilder($conditions)
             ->select('count(id) as questionNum, type');
 
         $builder->addGroupBy('type');
@@ -57,6 +57,8 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
             'id NOT IN ( :excludeIds )',
             'courseId = :courseId',
             'courseId IN (:courseIds)',
+            'courseSetId = :courseSetId',
+            'courseSetId IN (:courseSetIds)',
             'lessonId = :lessonId',
             'lessonId >= :lessonIdGT',
             'lessonId <= :lessonIdLT',

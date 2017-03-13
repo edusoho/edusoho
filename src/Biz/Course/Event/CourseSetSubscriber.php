@@ -3,8 +3,8 @@
 namespace Biz\Course\Event;
 
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\Course\Service\CourseSetService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -14,7 +14,9 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     {
         return array(
             'courseSet.maxRate.update' => 'onCourseSetMaxRateUpdate',
-            'classroom.course.delete' => 'onClassroomCourseDelete',
+            'courseSet.recommend' => 'onCourseSetRecommend',
+            'courseSet.recommend.cancel' => 'onCourseSetCancelRecommend',
+            'course-set.update' => 'onCourseSetUpdate',
         );
     }
 
@@ -27,15 +29,23 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
         return $this->getCourseService()->updateMaxRateByCourseSetId($courseSet['id'], $maxRate);
     }
 
-    public function onClassroomCourseDelete(Event $event)
+    public function onCourseSetRecommend(Event $event)
     {
-        $courseId = $event->getArgument('deleteCourseId');
-        $course = $this->getCourseService()->getCourse($courseId);
-        if (empty($course) || empty($course['parentId'])) {
-            return;
-        }
+        $courseSet = $event->getSubject();
+        $fields = $event->getArguments();
+        $this->getCourseService()->RecommendCourseByCourseSetId($courseSet['id'], $fields);
+    }
 
-        $this->getCourseSetService()->deleteCourseSet($course['courseSetId']);
+    public function onCourseSetCancelRecommend(Event $event)
+    {
+        $courseSet = $event->getSubject();
+        $this->getCourseService()->cancelRecommendCourseByCourseSetId($courseSet['id']);
+    }
+
+    public function onCourseSetUpdate(Event $event)
+    {
+        $courseSet = $event->getSubject();
+        $this->getCourseService()->updateCategoryByCourseSetId($courseSet['id'], $courseSet['categoryId']);
     }
 
     /**

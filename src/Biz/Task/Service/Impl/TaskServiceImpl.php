@@ -144,6 +144,19 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $task;
     }
 
+    public function publishTasksByCourseId($courseId)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+        $tasks = $this->findTasksByCourseId($courseId);
+        if (!empty($tasks)) {
+            foreach ($tasks as $task) {
+                if ($task['status'] !== 'published') {
+                    $this->publishTask($task['id']);
+                }
+            }
+        }
+    }
+
     public function unpublishTask($id)
     {
         $task = $this->getTask($id);
@@ -239,10 +252,12 @@ class TaskServiceImpl extends BaseService implements TaskService
         $activities = $this->getActivityService()->findActivities($activityIds, true);
         $activities = ArrayToolkit::index($activities, 'id');
 
-        array_walk($tasks, function (&$task) use ($activities) {
-            $activity = $activities[$task['activityId']];
-            $task['activity'] = $activity;
-        }
+        array_walk(
+            $tasks,
+            function (&$task) use ($activities) {
+                $activity = $activities[$task['activityId']];
+                $task['activity'] = $activity;
+            }
         );
 
         return $tasks;
@@ -265,7 +280,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             }
             $task = $this->setTaskLockStatus($tasks, $task);
             //设置第一个发布的任务为解锁的
-            if ($task['status'] == 'published' && empty($isLock)) {
+            if ($task['status'] == 'published' && !$isLock) {
                 $task['lock'] = false;
                 $isLock = true;
             }
@@ -486,14 +501,13 @@ class TaskServiceImpl extends BaseService implements TaskService
     /**
      * 统计当前时间以后每天的直播次数.
      *
-     * @param  $courseSetIds
      * @param  $limit
      *
      * @return array <string, int|string>
      */
-    public function findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, $limit)
+    public function findFutureLiveDates($limit = 4)
     {
-        return $this->getTaskDao()->findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, $limit);
+        return $this->getTaskDao()->findFutureLiveDates($limit);
     }
 
     public function findPublishedLivingTasksByCourseSetId($courseSetId)
@@ -527,31 +541,14 @@ class TaskServiceImpl extends BaseService implements TaskService
      */
     public function findCurrentLiveTasks()
     {
-        $setConditions = array(
-            'type' => 'live',
-            'status' => 'published',
-            'parentId' => 0,
-            'locked' => 0,
-        );
-
-        $courseSets = $this->getCourseSetService()->searchCourseSets(
-            $setConditions,
-            array('createdTime' => 'DESC'),
-            0,
-            $this->getCourseSetService()->countCourseSets($setConditions)
-        );
-
-        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
-
-        $taskConditions = array(
-            'startTime_LT' => time(),
+        $condition = array(
+            'startTime_LE' => time(),
             'endTime_GT' => time(),
             'type' => 'live',
-            'fromCourseSetIds' => ArrayToolkit::column($courseSetIds, 'id'),
             'status' => 'published',
         );
 
-        return $this->searchTasks($taskConditions, array('startTime' => 'ASC'), 0, $this->countTasks($taskConditions));
+        return $this->searchTasks($condition, array('startTime' => 'ASC'), 0, $this->countTasks($condition));
     }
 
     /**
@@ -561,31 +558,14 @@ class TaskServiceImpl extends BaseService implements TaskService
      */
     public function findFutureLiveTasks()
     {
-        $setConditions = array(
-            'type' => 'live',
-            'status' => 'published',
-            'parentId' => 0,
-            'locked' => 0,
-        );
-
-        $courseSets = $this->getCourseSetService()->searchCourseSets(
-            $setConditions,
-            array('createdTime' => 'DESC'),
-            0,
-            $this->getCourseSetService()->countCourseSets($setConditions)
-        );
-
-        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
-
-        $taskConditions = array(
+        $condition = array(
             'startTime_GT' => time(),
             'endTime_LT' => strtotime(date('Y-m-d').' 23:59:59'),
             'type' => 'live',
-            'fromCourseSetIds' => $courseSetIds,
             'status' => 'published',
         );
 
-        return $this->searchTasks($taskConditions, array('startTime' => 'ASC'), 0, $this->countTasks($taskConditions));
+        return $this->searchTasks($condition, array('startTime' => 'ASC'), 0, $this->countTasks($condition));
     }
 
     /**

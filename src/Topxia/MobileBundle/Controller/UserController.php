@@ -4,17 +4,16 @@ namespace Topxia\MobileBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
-use AppBundle\Controller\BaseController;
 use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\ArrayToolkit;
 
 class UserController extends MobileController
 {
-
     public function userAction(Request $request, $id)
     {
         $user = $this->getUserService()->getUser($id);
         $user = $this->filterUser($user);
+
         return $this->createJson($request, $user);
     }
 
@@ -39,22 +38,24 @@ class UserController extends MobileController
             'user' => $this->filterUser($user),
         );
 
-        $this->getLogService()->info(MobileController::MOBILE_MODULE, "user_login", "用户登录",  array(
-            "username" => $username)
+        $this->getLogService()->info(MobileController::MOBILE_MODULE, 'user_login', '用户登录', array(
+            'username' => $username, )
         );
+
         return $this->createJson($request, $result);
     }
 
     public function logoutAction(Request $request)
     {
         $token = $request->query->get('token', '');
-        if (! empty($token)) {
+        if (!empty($token)) {
             $userToken = $this->getUserToken($request);
-            $this->getLogService()->info(MobileController::MOBILE_MODULE, "user_logout", "用户退出",  array(
-                "userToken" => $userToken)
+            $this->getLogService()->info(MobileController::MOBILE_MODULE, 'user_logout', '用户退出', array(
+                'userToken' => $userToken, )
             );
         }
         $this->getUserService()->deleteToken(self::TOKEN_TYPE, $token);
+
         return $this->createJson($request, true);
     }
 
@@ -66,7 +67,7 @@ class UserController extends MobileController
         }
 
         $token = $this->getUserToken($request);
-        if (empty($token) ||  $token['type'] != self::TOKEN_TYPE) {
+        if (empty($token) || $token['type'] != self::TOKEN_TYPE) {
             $token = null;
         }
 
@@ -81,16 +82,15 @@ class UserController extends MobileController
         $result = array(
             'token' => empty($token) ? '' : $token['token'],
             'user' => empty($user) ? null : $this->filterUser($user),
-            'site' => $this->getSiteInfo($request)
+            'site' => $this->getSiteInfo($request),
         );
-        
-        $this->getLogService()->info(MobileController::MOBILE_MODULE, "user_login", "用户二维码登录",  array(
-            "userToken" => $token)
+
+        $this->getLogService()->info(MobileController::MOBILE_MODULE, 'user_login', '用户二维码登录', array(
+            'userToken' => $token, )
         );
 
         return $this->createJson($request, $result);
     }
-
 
     public function loginWithSiteAction(Request $request)
     {
@@ -101,9 +101,8 @@ class UserController extends MobileController
 
         $site = $this->getSettingService()->get('site', array());
         $result = array(
-            'site' => $this->getSiteInfo($request)
+            'site' => $this->getSiteInfo($request),
         );
-
 
         return $this->createJson($request, $result);
     }
@@ -122,31 +121,32 @@ class UserController extends MobileController
 
         foreach ($notifications as &$notification) {
             $notification['createdTime'] = date('c', $notification['createdTime']);
-            $notification["message"] = $this->coverNotifyContent($notification);
+            $notification['message'] = $this->coverNotifyContent($notification);
             unset($notification);
         }
 
         return $this->createJson($request, $notifications);
     }
 
-     private function coverNotifyContent($notification)
+    private function coverNotifyContent($notification)
     {
-        $message = "";
+        $message = '';
         $type = $notification['type'];
         switch ($type) {
             case 'thread-post':
-                $message = "您的问题" . $notification["content"]["threadTitle"] . " 有了" . $notification["content"]["postUserNickname"]  . "新回复";
+                $message = '您的问题'.$notification['content']['threadTitle'].' 有了'.$notification['content']['postUserNickname'].'新回复';
                 break;
             case 'thread':
-                $message = $notification["content"]["threadUserNickname"] . " 课程 " .  $notification["content"]["courseTitle"] . "发表了问题 " . $notification["content"]["threadTitle"] ;
+                $message = $notification['content']['threadUserNickname'].' 课程 '.$notification['content']['courseTitle'].'发表了问题 '.$notification['content']['threadTitle'];
                 break;
             case 'cloud-file-converted':
-                $message = "您上传到云视频的视频文件" . $notification["content"]["filename"] . "已完成视频格式转换!" ;
+                $message = '您上传到云视频的视频文件'.$notification['content']['filename'].'已完成视频格式转换!';
                 break;
             case 'default':
-                $message = $notification["content"]["message"] ;
+                $message = $notification['content']['message'];
                 break;
         }
+
         return $message;
     }
 
@@ -188,13 +188,14 @@ class UserController extends MobileController
 
         $token = $this->createToken($user, $request);
 
-        return $this->createJson($request, array (
+        return $this->createJson($request, array(
             'user' => $this->filterUser($user),
-            'token' => $token
+            'token' => $token,
         ));
     }
 
-    private function loadUserByUsername ($request, $username) {
+    private function loadUserByUsername($request, $username)
+    {
         if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
             $user = $this->getUserService()->getUserByEmail($username);
         } else {
@@ -228,7 +229,7 @@ class UserController extends MobileController
 
         $container = $this->container;
 
-        return array_map(function($user) use ($container) {
+        return array_map(function ($user) use ($container) {
             $user['smallAvatar'] = $container->get('web.twig.extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
             $user['mediumAvatar'] = $container->get('web.twig.extension')->getFilePath($user['mediumAvatar'], 'avatar.png', true);
             $user['largeAvatar'] = $container->get('web.twig.extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
@@ -261,60 +262,59 @@ class UserController extends MobileController
         $mobile = $this->getSettingService()->get('mobile', array());
 
         return $this->createJson($request, array(
-            'about' => $this->convertAbsoluteUrl($request, $mobile['about']), 
+            'about' => $this->convertAbsoluteUrl($request, $mobile['about']),
         ));
     }
 
     public function convertAbsoluteUrl($request, $html)
     {
         $baseUrl = $request->getSchemeAndHttpHost();
-        $html = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function($matches) use ($baseUrl) {
+        $html = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function ($matches) use ($baseUrl) {
             return "src=\"{$baseUrl}/{$matches[1]}\"";
         }, $html);
 
         return $html;
-
     }
 
     public function fillUserInfoAction()
     {
         $auth = $this->getSettingService()->get('auth');
         $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
-        $userFields = ArrayToolkit::index($userFields,'fieldName');
+        $userFields = ArrayToolkit::index($userFields, 'fieldName');
         $userInfo = $this->getUserService()->getUserProfile($user['id']);
 
         return $this->render('TopxiaWebBundle:User:fill-userinfo-fields.html.twig', array(
             'userFields' => $userFields,
         ));
     }
-    
+
     private function getSiteInfo($request)
     {
         $site = $this->getSettingService()->get('site', array());
         $mobile = $this->getSettingService()->get('mobile', array());
 
         if (!empty($mobile['logo'])) {
-            $logo = $request->getSchemeAndHttpHost() . '/' . $mobile['logo'];
+            $logo = $request->getSchemeAndHttpHost().'/'.$mobile['logo'];
         } else {
             $logo = '';
         }
 
         $splashs = array();
-        for($i=1; $i < 5; $i++) {
-            if (!empty($mobile['splash'. $i])) {
-                $splashs[] = $request->getSchemeAndHttpHost() . '/' . $mobile['splash'. $i];
+        for ($i = 1; $i < 5; ++$i) {
+            if (!empty($mobile['splash'.$i])) {
+                $splashs[] = $request->getSchemeAndHttpHost().'/'.$mobile['splash'.$i];
             }
         }
 
         return array(
             'name' => $site['name'],
-            'url' => $request->getSchemeAndHttpHost() . '/mapi_v1',
-            'host'=> $request->getSchemeAndHttpHost(),
+            'url' => $request->getSchemeAndHttpHost().'/mapi_v1',
+            'host' => $request->getSchemeAndHttpHost(),
             'logo' => $logo,
             'splashs' => $splashs,
             'apiVersionRange' => array(
-                "min" => "1.0.0",
-                "max" => "1.1.0"
+                'min' => '1.0.0',
+                'max' => '1.1.0',
             ),
         );
     }
@@ -333,5 +333,4 @@ class UserController extends MobileController
     {
         return ServiceKernel::instance()->createService('System:SettingService');
     }
-
 }

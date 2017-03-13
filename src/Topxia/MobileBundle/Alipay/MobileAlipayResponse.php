@@ -1,14 +1,13 @@
 <?php
+
 namespace Topxia\MobileBundle\Alipay;
 
 use AppBundle\Component\Payment\Response;
 
 class MobileAlipayResponse extends Response
 {
-
     public function getPayData()
     {
-
         $params = $this->params;
 
         $data = array();
@@ -29,5 +28,4 @@ class MobileAlipayResponse extends Response
 
         return $data;
     }
-
 }

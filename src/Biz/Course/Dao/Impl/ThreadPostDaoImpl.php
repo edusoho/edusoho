@@ -56,7 +56,7 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
             $conditions['content'] = "%{$conditions['content']}%";
         }
 
-        return parent::_createQueryBuilder($conditions);
+        return parent::createQueryBuilder($conditions);
     }
 
     public function declares()

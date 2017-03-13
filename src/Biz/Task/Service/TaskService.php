@@ -20,6 +20,8 @@ interface TaskService
 
     public function publishTask($id);
 
+    public function publishTasksByCourseId($courseId);
+
     public function unpublishTask($id);
 
     public function deleteTask($id);
@@ -127,12 +129,11 @@ interface TaskService
     /**
      * 统计当前时间以后每天的直播次数.
      *
-     * @param  $courseSetIds
      * @param  $limit
      *
      * @return array <string, int|string>
      */
-    public function findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, $limit);
+    public function findFutureLiveDates($limit = 4);
 
     /**
      * 返回当前正在直播的直播任务

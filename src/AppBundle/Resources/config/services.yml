@@ -18,6 +18,11 @@ services:
     biz.service_provider.collector:
         class: Biz\ServiceProviderCollector
 
+    coupon_service_provider:
+        class: Biz\Coupon\CouponServiceProvider
+        tags:
+            - { name: extension }
+
     web.twig.question_type_extension:
         class: AppBundle\Twig\QuestionTypeExtension
         arguments:    ['@service_container', '@biz']
@@ -102,3 +107,7 @@ services:
     topxia.target_helper:
         class:          AppBundle\Util\TargetHelper
         arguments:      ['@service_container']
+
+    callback.resource_factory:
+        class: AppBundle\Controller\Callback\Resource\ResourceFactory
+        arguments:    ['@service_container']

@@ -140,14 +140,14 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function searchMembers($conditions, $orderBy, $start, $limit)
     {
-        $conditions = $this->_prepareConditions($conditions);
+        $conditions = $this->prepareConditions($conditions);
 
         return $this->getMemberDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function countMembers($conditions)
     {
-        $conditions = $this->_prepareConditions($conditions);
+        $conditions = $this->prepareConditions($conditions);
 
         return $this->getMemberDao()->count($conditions);
     }
@@ -201,7 +201,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function searchMemberIds($conditions, $sort, $start, $limit)
     {
-        $conditions = $this->_prepareConditions($conditions);
+        $conditions = $this->prepareConditions($conditions);
 
         if (is_array($sort)) {
             $orderBy = $sort;
@@ -639,12 +639,15 @@ class MemberServiceImpl extends BaseService implements MemberService
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
+        $deadline = 0;
         if (!empty($info['deadline'])) {
             $deadline = $info['deadline'];
-        } else {
-            $deadline = $course['expiryMode'] == 'days' ? strtotime(
-                '+'.$course['expiryDays'].' days'
-            ) : $course['expiryEndDate'];
+        } elseif ($course['expiryMode'] == 'days') {
+            if (!empty($course['expiryDays'])) {
+                $deadline = strtotime('+'.$course['expiryDays'].' days');
+            }
+        } elseif (!empty($course['expiryEndDate'])) {
+            $deadline = $course['expiryEndDate'];
         }
 
         $fields = array(
@@ -672,6 +675,8 @@ class MemberServiceImpl extends BaseService implements MemberService
         );
         $this->getCourseDao()->update($courseId, $fields);
 
+        $this->dispatchEvent('classroom.course.join', new Event($course, array('member' => $member)));
+
         return $member;
     }
 
@@ -694,7 +699,9 @@ class MemberServiceImpl extends BaseService implements MemberService
         if ($classroom['classroomId']) {
             $member = $this->getClassroomService()->getClassroomMember($classroom['classroomId'], $userId);
 
-            if (!$isCourseStudent && !empty($member) && array_intersect(
+            if (!$isCourseStudent
+                && !empty($member)
+                && array_intersect(
                     $member['role'],
                     array('student', 'teacher', 'headTeacher', 'assistant')
                 )
@@ -709,7 +716,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         return array();
     }
 
-    protected function _prepareConditions($conditions)
+    protected function prepareConditions($conditions)
     {
         if (isset($conditions['date'])) {
             $dates = array(

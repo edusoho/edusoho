@@ -20,9 +20,9 @@
     <div class="dashboard-content" id="dashboard-content">
       <div class="dashboard-header">
         <a class="back-link" href="{{ path('my_course_show',{id:course.id}) }}">
-          <i class="es-icon es-icon-chevronleft"></i>
+          <i class="es-icon es-icon-chevronleft"></i>返回课程
         </a>
-        任务：{{ task.title }}
+        任务{{ task.number }}：{{ task.title }}
       </div>
       <div class="dashboard-body">
         <iframe id="task-content-iframe" class="task-content-iframe"

@@ -11,7 +11,7 @@
 
       <div class="row safety-setting" style="margin-top:10px;">
         <div class="col-xs-2 tar">
-          <span class="glyphicon glyphicon-info-sign {% if progressScore > 67 %}color-success{% elseif progressScore > 34 %}text-warning{% else %}text-danger{% endif %}" style="font-size:20px;"></span>
+          <span class="glyphicon glyphicon-info-sign {% if progressScore > 67 %}color-success{% elseif progressScore > 34 %}text-warning{% else %}color-danger{% endif %}" style="font-size:20px;"></span>
         </div>
       <div class="col-sm-6 col-xs-5">
         <div class="progress mbs">
@@ -24,7 +24,7 @@
         {% elseif progressScore > 34 %}
         <span class="text-warning" style="display:block;">{{'安全等级：中'|trans}}</span>
         {% else %}
-          <span class="text-danger" style="display:block;">{{'安全等级：低'|trans}}</span>
+          <span class="color-danger" style="display:block;">{{'安全等级：低'|trans}}</span>
         {% endif %}
       </div>
     </div>
@@ -36,7 +36,7 @@
         {% if hasLoginPassword %}
           color-success
         {% else %}
-          text-danger
+          color-danger
         {% endif %}
       " style="font-size:20px">
         {% if hasLoginPassword %}
@@ -59,7 +59,7 @@
         {% if hasPayPassword %}
           color-success
         {% else %}
-          text-danger
+          color-danger
         {% endif %}
       " style="font-size:20px">
         {% if hasPayPassword %}
@@ -87,7 +87,7 @@
         {% if hasFindPayPasswordQuestion %}
           color-success
         {% else %}
-          text-danger
+          color-danger
         {% endif %} "
         style="font-size:20px">
 
@@ -120,7 +120,7 @@
           {% if hasVerifiedMobile %}
             color-success
           {% else %}
-            text-danger
+            color-danger
           {% endif %} "
           style="font-size:20px">
 

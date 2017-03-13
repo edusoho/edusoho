@@ -2,14 +2,25 @@
 
 namespace AppBundle\Controller\Course;
 
-use Biz\System\Service\SettingService;
-use Biz\Task\Service\TaskService;
-use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
+use Biz\Task\Service\TaskService;
+use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\SettingService;
+use Symfony\Component\HttpFoundation\Request;
 
 class LiveCourseSetController extends CourseBaseController
 {
+    public function courseSetsBlockAction($courseSets, $view = 'list', $mode = 'default')
+    {
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
+
+        return $this->forward('AppBundle:Course/LiveCourseSet:coursesBlock', array(
+            'courses' => $courses,
+            'view' => $view,
+            'mode' => $mode,
+        ));
+    }
+
     public function coursesBlockAction($courses, $view = 'list', $mode = 'default')
     {
         $userIds = array();
@@ -49,7 +60,8 @@ class LiveCourseSetController extends CourseBaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getTaskService()->countTasks($recentTasksCondition), 30
+            $this->getTaskService()->countTasks($recentTasksCondition),
+            30
         );
 
         $recentTasks = $this->getTaskService()->searchTasks(
@@ -118,16 +130,7 @@ class LiveCourseSetController extends CourseBaseController
 
     public function liveTabAction()
     {
-        $courseSets = $this->getCourseSetService()->searchCourseSets(array(
-            'type' => 'live',
-            'status' => 'published',
-            'parentId' => 0,
-            'locked' => 0,
-        ), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
-
-        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
-
-        $taskDates = $this->getTaskService()->findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, 4);
+        $taskDates = $this->getTaskService()->findFutureLiveDates();
         $currentLiveTasks = $this->getTaskService()->findCurrentLiveTasks();
         $futureLiveLessons = $this->getTaskService()->findFutureLiveTasks();
 
@@ -138,14 +141,13 @@ class LiveCourseSetController extends CourseBaseController
         $today = date('Y-m-d');
 
         foreach ($taskDates as $key => &$value) {
-            if ($today == $value['date'] || count($liveTabs) >= 4) {
+            if ($today == $value['date']) {
                 continue;
             } else {
                 $dayTasks = $futureLiveLessons = $this->getTaskService()->searchTasks(array(
-                    'startTimeGreaterThan' => strtotime($value['date']),
-                    'endTimeLessThan' => strtotime($value['date'].' 23:59:59'),
+                    'startTime_GE' => strtotime($value['date']),
+                    'endTime_LT' => strtotime($value['date'].' 23:59:59'),
                     'type' => 'live',
-                    'fromCourseSetIds' => $courseSetIds,
                     'status' => 'published',
                 ), array('startTime' => 'ASC'), 0, PHP_INT_MAX);
 
@@ -212,7 +214,7 @@ class LiveCourseSetController extends CourseBaseController
         $levels = array();
 
         if ($this->isPluginInstalled('Vip')) {
-            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100), 'id');
+            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), array(), 0, 100), 'id');
         }
 
         return $this->render('course-set/live/all-list.html.twig', array(
@@ -287,7 +289,10 @@ class LiveCourseSetController extends CourseBaseController
         $replayLiveCourseSetIds = $this->getTaskService()->findPastLivedCourseSetIds();
 
         unset($conditions['ids']);
-        $conditions['excludeIds'] = $allFutureLiveCourseSetIds;
+
+        if (!empty($allFutureLiveCourseSetIds)) {
+            $conditions['excludeIds'] = $allFutureLiveCourseSetIds;
+        }
 
         $replayLiveCourses = $this->getCourseSetService()->searchCourseSets($conditions, array('createdTime' => 'DESC'), $start, $limit);
 

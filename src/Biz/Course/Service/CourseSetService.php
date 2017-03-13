@@ -122,6 +122,18 @@ interface CourseSetService
 
     public function updateCourseSetDetail($id, $fields);
 
+    /**
+     * 更新课程营销设置.
+     *
+     * @param  $id
+     * @param  $fields
+     *
+     * @return mixed
+     */
+    public function updateCourseSetMarketing($id, $fields);
+
+    public function updateCourseSetTeacherIds($id, $teacherIds);
+
     public function changeCourseSetCover($id, $fields);
 
     public function deleteCourseSet($id);
@@ -185,6 +197,16 @@ interface CourseSetService
     public function recommendCourse($id, $number);
 
     public function cancelRecommendCourse($id);
+
+    /**
+     * 根据查询条件随机取指定个数的课程.
+     *
+     * @param  $conditions
+     * @param int $num
+     *
+     * @return mixed
+     */
+    public function findRandomCourseSets($conditions, $num = 3);
 
     /**
      * 返回课程的营收额.
