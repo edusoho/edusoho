@@ -14,6 +14,8 @@ interface UserService
 
     public function getUserByNickname($nickname);
 
+    public function getUserByType($type);
+
     public function updateUserUpdatedTime($id);
 
     //根据用户名/邮箱/手机号精确查找用户

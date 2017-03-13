@@ -35,7 +35,6 @@
         </thead>
         <tbody>
         {% for courseSet in courseSets %}
-          {% set course = courseSet.courses|first %}
           <tr>
             <td>
               <a class="pull-left mrm" href="{{ path('course_set_show', {id: courseSet.id}) }}">
@@ -71,7 +70,7 @@
             </td>
             {% else %}
             <td>{{ courseSet.studentNum }}</td>
-            <td>{{ courseSet.courses|first.price|default(0) }}</td>
+            <td>{{ courseSet.minCoursePrice|default(0) }}</td>
             {% endif %}
 
             <td> {{ dict_macro.courseStatus( courseSet.status) }}</td>
