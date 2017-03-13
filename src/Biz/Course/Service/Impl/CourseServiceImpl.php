@@ -1156,7 +1156,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $chapterNumber = array(
             'unit' => 0,
             'lesson' => 0,
-            'chapter' => 0
+            'chapter' => 0,
         );
 
         foreach ($chapters as $chapter) {
