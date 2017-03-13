@@ -204,7 +204,8 @@ class ChaosThreads extends BaseResource
 
         $conditions['courseIds'] = ArrayToolkit::column($userCourses, 'courseId');
 
-        $total = $this->getCourseThreadService()->searchThreadCount($conditions);
+        $total = $this->getCourseThreadService()->countThreads($conditions);
+
         $start = $start == -1 ? rand(0, $total - 1) : $start;
 
         $courseThreads = $this->getCourseThreadService()->searchThreads($conditions, 'createdNotStick', $start, $limit);
@@ -215,21 +216,25 @@ class ChaosThreads extends BaseResource
 
         $courseIds = ArrayToolkit::column($courseThreads, "courseId");
         $courses   = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
+
+        foreach ($courses as $key => $course) {
+            $courses[$key]['courseSet'] = $courseSets[$course['courseSetId']];
+        }
+
+        $courses = $this->multicallFilter('Course', $courses);
 
         foreach ($courseThreads as $key => $thread) {
             if (isset($courses[$thread['courseId']])) {
                 $thread                  = ArrayToolkit::rename($thread, array('private' => 'isPrivate'));
+                $thread['lessonId'] = $thread['taskId'];
                 $course                  = $courses[$thread['courseId']];
-                $course['smallPicture']  = $this->getFileUrl($course['smallPicture']);
-                $course['middlePicture'] = $this->getFileUrl($course['middlePicture']);
-                $course['largePicture']  = $this->getFileUrl($course['largePicture']);
                 $thread['course']        = $this->filterCourse($course);
                 $courseThreads[$key]     = $thread;
             } else {
                 unset($courseThreads[$key]);
             }
         }
-
         return $courseThreads;
     }
 
@@ -250,26 +255,31 @@ class ChaosThreads extends BaseResource
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Thread:ThreadService');
+        return $this->createService('Thread:ThreadService');
     }
 
     protected function getCourseThreadService()
     {
-        return $this->getServiceKernel()->createService('Course:ThreadService');
+        return $this->createService('Course:ThreadService');
     }
 
     protected function getGroupThreadService()
     {
-        return $this->getServiceKernel()->createService('Group:ThreadService');
+        return $this->createService('Group:ThreadService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course:MemberService');
+        return $this->createService('Course:MemberService');
     }
 }
