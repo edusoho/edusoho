@@ -290,7 +290,7 @@ class LiveCourseSetController extends CourseBaseController
 
         unset($conditions['ids']);
 
-        if(!empty($allFutureLiveCourseSetIds)){
+        if (!empty($allFutureLiveCourseSetIds)) {
             $conditions['excludeIds'] = $allFutureLiveCourseSetIds;
         }
 
