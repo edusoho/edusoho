@@ -11,7 +11,8 @@
       {% include 'file-chooser/file-choose.html.twig' with {
       mediaType: 'flash',
       fileType:'flash',
-      file: flash.media|default(null)
+      file: flash.media|default(null),
+      placeholder: 'Flash'
       } %}
       <input type="hidden" value="{{ flash.mediaId|default(null) }}" name="mediaId" id="mediaId"/>
     </div>
