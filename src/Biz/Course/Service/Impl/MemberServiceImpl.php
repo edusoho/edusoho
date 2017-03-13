@@ -53,9 +53,10 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $orderTitle = "购买课程《{$courseSet['title']}》- {$course['title']}";
-
+        $orderPayment = 'none';
         if (isset($data['isAdminAdded']) && $data['isAdminAdded'] == 1) {
             $orderTitle = $orderTitle.'(管理员添加)';
+            $orderPayment = 'outside';
         }
 
         if (empty($data['price'])) {
@@ -70,6 +71,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'amount' => $data['price'],
             'totalPrice' => $course['price'],
             'snPrefix' => OrderService::SNPREFIX_C,
+            'payment' => $orderPayment,
         );
 
         $order = $this->getOrderService()->createSystemOrder($systemOrder);

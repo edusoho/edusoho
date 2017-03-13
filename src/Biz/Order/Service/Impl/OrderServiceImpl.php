@@ -163,8 +163,6 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw new InvalidArgumentException('Invalid arguments when create order');
         }
 
-        $order['payment'] = 'none';
-
         $newOrder = $this->createOrder($order);
 
         $this->payOrder(array(
