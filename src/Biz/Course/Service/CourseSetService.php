@@ -123,10 +123,11 @@ interface CourseSetService
     public function updateCourseSetDetail($id, $fields);
 
     /**
-     * 更新课程营销设置
+     * 更新课程营销设置.
      *
      * @param $id
      * @param $fields
+     *
      * @return mixed
      */
     public function updateCourseSetMarketing($id, $fields);

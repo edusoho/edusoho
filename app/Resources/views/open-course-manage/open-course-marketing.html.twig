@@ -51,41 +51,36 @@
         <div class="col-md-12 controls">
           <ul class="course-list-group sortable-list course-wide-list courses-selected" id="course-list-group" data-role="list" >
 
-            {% for recommendId,course in courses %}
+            {% for recommendId, courseSet in courseSets %}
+              {% set showUrl = path('course_set_show',{id: courseSet.id}) %}
 
-              {% if course.type == 'normal' or course.type == 'live' %}
-                {% set showUrl = path('course_set_show',{id:course.id}) %}
-              {% else %}
-                {% set showUrl = path('open_course_show',{courseId:course.id}) %}
-              {% endif %}
-
-              <li class="course-item item-{{course.id}} clearfix" data-role="item" >
+              <li class="course-item item-{{courseSet.id}} clearfix" data-role="item" >
                 <input type="hidden" name="recommendIds[]" value="{{ recommendId }}" />
                 
                 <span class="glyphicon glyphicon-resize-vertical sort-handle sort"></span>
                 <a class="course-picture-link" href="{{ showUrl }}" target="_blank">
-                  <img class="course-picture" src="{{ filepath(course_cover(course, 'middle'), 'courseSet.png') }}" alt="{{ course.title }}">
+                  <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}" alt="{{ courseSet.title }}">
                 </a>
 
-                <button class="close delete-btn pull-right mrl mts mll" data-role="item-delete" type="button" title="删除" style="font-size:35px;" data-cancel-url="{{ path('open_course_manage_recommend_course_delete', {id:openCourse.id, recommendId: recommendId}) }}" data-recommend-id="{{ recommendId }}" data-id="{{course.id}}">× </button>
+                <button class="close delete-btn pull-right mrl mts mll" data-role="item-delete" type="button" title="删除" style="font-size:35px;" data-cancel-url="{{ path('open_course_manage_recommend_course_delete', {id:openCourse.id, recommendId: recommendId}) }}" data-recommend-id="{{ recommendId }}" data-id="{{courseSet.id}}">× </button>
 
                 <div class="course-body">
                   <div style="float:right;" class="text-muted mrm mls">
                     {% include 'open-course-manage/course-set-price-interval.html.twig' %}
                   </div>
 
-                  <h4 class="course-title"><a href="{{ showUrl }}" target="_blank">{{ course.title }}</a>
-                  {% if course.type == 'normal' or course.type == 'live' %}
-                    {% if course.serializeMode=='serialize' %}
+                  <h4 class="course-title"><a href="{{ showUrl }}" target="_blank">{{ courseSet.title }}</a>
+                  {% if courseSet.type == 'normal' or courseSet.type == 'live' %}
+                    {% if courseSet.serializeMode=='serialize' %}
                       <span class="label label-success ">更新中</span>
-                    {% elseif course.serializeMode=='finished' %}
+                    {% elseif courseSet.serializeMode=='finished' %}
                       <span class="label label-warning ">已完结</span>
                     {% endif %}
                   {% endif %}
 
-                  {% if course.type == 'live' %}
-                    {% set lesson = course['lesson']|default(null) %}
-                    {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+                  {% if courseSet.type == 'live' %}
+                    {% set task = courseSet['task']|default(null) %}
+                    {% if task and "now"|date("U") >= task.startTime and "now"|date("U") <= task.endTime %}
                       <span class="label label-warning">正在直播中</span>
                     {% else %}
                       <span class="label label-success">直播</span>
@@ -93,12 +88,12 @@
                   {% endif %}
                   </h4>
 
-                  {% if course.type == 'live' %}
-                    {% set lesson = course.lesson|default(null) %}
-                    {% if lesson %}
+                  {% if courseSet.type == 'live' %}
+                    {% set task = courseSet.task|default(null) %}
+                    {% if task %}
                       <div class="live-course-lesson mbm">
-                        <span class="color-success fsm mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
-                        <span class="text-muted fsm mrm">第{{ lesson.number }}课时</span>
+                        <span class="color-success fsm mrm">{{ task.startTime|date('n月j日 H:i') }} ~ {{ task.endTime|date('H:i') }}</span>
+                        <span class="text-muted fsm mrm">第{{ task.number }}任务</span>
                       </div>
                     {% endif %}
                   {% else %}
@@ -106,7 +101,7 @@
                   {% endif %}
 
                   <div class="course-footer clearfix">
-                    {% set teacher = users[course.creator|first]|default(null) %}
+                    {% set teacher = users[courseSet.creator|first]|default(null) %}
                     {% if teacher %}
                       <div class="teacher">
                         <a href="{{ path('user_show', {id:teacher.id}) }}" target="_blank"><img src="{{ filepath(teacher.smallAvatar, 'avatar.png') }}" class="teacher-avatar"></a>
@@ -118,7 +113,7 @@
                     <div class="course-metas">  
 
                       {% if setting('course.show_student_num_enabled', '1') == 1  %}
-                        <span class="text-muted text-sm">{{ course.studentNum }}{{setting('default.user_name', '学员')}}</span>
+                        <span class="text-muted text-sm">{{ courseSet.studentNum }}{{setting('default.user_name', '学员')}}</span>
                         {#<span class="divider"></span>#}
                       {% endif %}  
 
@@ -150,7 +145,7 @@
         </div>  
       </div>
 
-      {% if courses %}
+      {% if courseSets %}
         <div class="form-group">
           <div class="col-md-offset-9 col-md-3 controls">
             <button type="submit" class="btn btn-fat btn-primary pull-right">保存修改</button>

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Callback\Resource\CloudSearch;
 
 use AppBundle\Controller\Callback\Resource\BaseResource;
+use AppBundle\Common\ArrayToolkit;
 
 /**
  * 单个课程资源(对应course_set表).
@@ -11,18 +12,29 @@ class Course extends BaseResource
 {
     public function filter($res)
     {
-        $res['createdTime'] = date('c', $res['createdTime']);
-        $res['updatedTime'] = date('c', $res['updatedTime']);
-
         $defaultSetting = $this->getSettingService()->get('default', array());
-        foreach (array('smallPicture', 'middlePicture', 'largePicture') as $key) {
-            if (empty($res[$key])) {
-                $res[$key] = !isset($defaultSetting['course.png']) ? '' : $defaultSetting['course.png'];
-            }
-            $res[$key] = $this->getFileUrl($res[$key]);
-        }
+        $defaultPicture = isset($defaultSetting['course.png']) ? $this->getFileUrl($defaultSetting['course.png']) : '';
 
-        return $res;
+        $filteredRes = array();
+        $filteredRes['id'] = $res['id'];
+        $filteredRes['title'] = $res['title'];
+        $filteredRes['subtitle'] = $res['subtitle'];
+        $filteredRes['type'] = $res['type'];
+        $filteredRes['price'] = $res['minCoursePrice'];
+        $filteredRes['lessonNum'] = $res['totalTaskNum'];
+        $filteredRes['rating'] = $res['rating'];
+        $filteredRes['ratingNum'] = $res['ratingNum'];
+        $filteredRes['tags'] = ArrayToolkit::column($res['tags'], 'name');
+        $filteredRes['category'] = isset($res['category']['name']) ? $res['category']['name'] : '';
+        $filteredRes['about'] = $this->filterHtml($res['summary']);
+        $filteredRes['goals'] = $res['goals'];
+        $filteredRes['picture'] = isset($res['largePicture']) ? $this->getFileUrl($res['largePicture']) : $defaultPicture;
+        $filteredRes['audiences'] = $res['audiences'];
+        $filteredRes['hitNum'] = $res['hitNum'];
+        $filteredRes['createdTime'] = date('c', $res['createdTime']);
+        $filteredRes['updatedTime'] = date('c', $res['updatedTime']);
+
+        return $filteredRes;
     }
 
      /**

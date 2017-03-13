@@ -30,6 +30,6 @@ class ArticleSearchAdapter extends AbstractSearchAdapter
 
     protected function getArticleService()
     {
-        return $this->getKernel()->createService('Article:ArticleService');
+        return $this->createService('Article:ArticleService');
     }
 }

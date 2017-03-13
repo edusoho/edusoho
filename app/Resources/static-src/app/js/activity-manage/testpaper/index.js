@@ -35,10 +35,7 @@ class Testpaper {
       return this.optional( element ) || /^[1-9]\d*$/.test(value);
     }, $.validator.format("必须为正整数"));
 
-    $.validator.addMethod("DateAndTime",function(value,element){  
-      let reg = /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}$/;
-      return this.optional( element ) || reg.test(value);
-    }, $.validator.format("请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm"));
+    
   }
 
   initStepForm2() {
