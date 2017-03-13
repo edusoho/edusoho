@@ -158,4 +158,32 @@ interface CourseService
     public function getMinAndMaxPublishedCoursePriceByCourseSetId($CourseSetId);
 
     public function updateMaxRateByCourseSetId($courseSetId, $maxRate);
+
+    public function findUserLearningCourseCountNotInClassroom($userId, $filters = array());
+
+    public function findUserLearningCoursesNotInClassroom($userId, $start, $limit, $filters = array());
+
+    public function findUserLeanedCourseCount($userId, $filters = array());
+
+    public function findUserLearnedCoursesNotInClassroom($userId, $start, $limit, $filters = array());
+
+    public function findUserLearnCourseCountNotInClassroom($userId, $onlyPublished = true);
+
+    public function findUserLearnCoursesNotInClassroom($userId, $start, $limit, $onlyPublished = true);
+
+    public function findUserLearnCoursesNotInClassroomWithType($userId, $type, $start, $limit, $onlyPublished = true);
+
+    public function findUserTeachCourseCountNotInClassroom($conditions, $onlyPublished = true);
+
+    public function findUserTeachCoursesNotInClassroom($conditions, $start, $limit, $onlyPublished = true);
+
+    public function findUserFavoritedCourseCountNotInClassroom($userId);
+
+    public function findUserFavoritedCoursesNotInClassroom($userId, $start, $limit);
+
+    public function findCourseTasksAndChapters($courseId, $includeChapters);
+
+    public function updateCategoryByCourseSetId($courseSetId, $categoryId);
+
+    public function calculateLearnProgressByUserIdAndCourseIds($userId, array $courseIds);
 }

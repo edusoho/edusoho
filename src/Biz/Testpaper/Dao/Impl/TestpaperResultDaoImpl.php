@@ -44,7 +44,7 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
 
     public function sumScoreByParames($conditions)
     {
-        $builder = $this->_createQueryBuilder($conditions)
+        $builder = $this->createQueryBuilder($conditions)
             ->select('sum(score)');
 
         return $builder->execute()->fetchColumn(0);

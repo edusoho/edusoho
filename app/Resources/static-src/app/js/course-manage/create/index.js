@@ -2,12 +2,10 @@ class Creator {
   constructor() {
     this.init();
   }
-  
+
   init() {
-    this.initDatePicker('#expiryStartDate');
-    this.initDatePicker('#expiryEndDate');
-    this.checkBoxChange();
     this.initValidator();
+    this.checkBoxChange();
   }
 
   initValidator() {
@@ -27,12 +25,16 @@ class Creator {
           max_year: true
         },
         expiryStartDate: {
-          required: '#expiryByDate:checked',
+          required: () => {
+            return $('input[name="expiryMode"]:checked').val() !== 'date';
+          },
           date: true,
           before: '#expiryEndDate'
         },
         expiryEndDate: {
-          required: '#expiryByDate:checked',
+          required: () => {
+            return $('input[name="expiryMode"]:checked').val() !== 'date';
+          },
           date: true,
           after: '#expiryStartDate'
         }
@@ -50,34 +52,15 @@ class Creator {
       }
     });
 
-    $.validator.addMethod(
-      "before",
-      function (value, element, params) {
-        if ($('input[name="expiryMode"]:checked').val() !== 'date') {
-          return true;
-        }
-        return value && $(params).val() >= value;
-      },
-      Translator.trans('开始日期应早于结束日期')
-    );
-
-    $.validator.addMethod(
-      "after",
-      function (value, element, params) {
-        if ($('input[name="expiryMode"]:checked').val() !== 'date') {
-          return true;
-        }
-        return value && $(params).val() <= value;
-      },
-      Translator.trans('结束日期应晚于开始日期')
-    );
-
     $('#course-submit').click(function (evt) {
       if (validator.form()) {
         $(evt.currentTarget).button('loading');
         $form.submit();
       }
     });
+
+    this.initDatePicker('#expiryStartDate',validator);
+    this.initDatePicker('#expiryEndDate',validator);
   }
 
   checkBoxChange() {
@@ -102,7 +85,7 @@ class Creator {
     });
   }
 
-  initDatePicker($id) {
+  initDatePicker($id,validator) {
     let $picker = $($id);
     $picker.datetimepicker({
       format: 'yyyy-mm-dd',
@@ -110,7 +93,9 @@ class Creator {
       minView: 2, //month
       autoclose: true,
       endDate: new Date(Date.now() + 86400 * 365 * 100 * 1000)
-    });
+    }).on('hide', () => {
+      validator.form();
+    })
     $picker.datetimepicker('setStartDate', new Date());
   }
 }

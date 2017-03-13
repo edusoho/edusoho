@@ -3,8 +3,9 @@
 namespace Biz\Media\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Media\Service\MediaService;
 use Biz\Util\CloudClientFactory;
+use Biz\Media\Service\MediaService;
+use Topxia\Service\Common\ServiceKernel;
 
 class MediaServiceImpl extends BaseService implements MediaService
 {
@@ -19,13 +20,13 @@ class MediaServiceImpl extends BaseService implements MediaService
         );
 
         $options = array_merge($defaultOptions, $options);
-        $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
+        $file = $this->getCloudFileService()->getByGlobalId($globalId);
         if (empty($file)) {
-            throw $this->createNotFoundException($this->trans('无效文件'));
+            throw $this->createNotFoundException('File not found');
         }
 
         if ($file['type'] != 'video') {
-            throw $this->createServiceException($this->trans('非视频文件'));
+            throw $this->createServiceException('File type error');
         }
 
         $factory = new CloudClientFactory();
@@ -66,26 +67,26 @@ class MediaServiceImpl extends BaseService implements MediaService
 
     private function getHttpHost()
     {
-        return $this->getKernel()->getEnvVariable('schemeAndHost');
+        return ServiceKernel::instance()->getEnvVariable('schemeAndHost');
     }
 
     public function getMaterialService()
     {
-        return $this->getBiz()->service('Course:MaterialService');
+        return $this->createService('Course:MaterialService');
     }
 
     protected function getUploadFileService()
     {
-        return $this->getBiz()->service('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
     protected function getCloudFileService()
     {
-        return $this->getBiz()->service('CloudFile:CloudFileService');
+        return $this->createService('CloudFile:CloudFileService');
     }
 
     protected function getTokenService()
     {
-        return $this->getBiz()->service('User:TokenService');
+        return $this->createService('User:TokenService');
     }
 }

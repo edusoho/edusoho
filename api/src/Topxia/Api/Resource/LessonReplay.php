@@ -3,33 +3,33 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
 use Biz\CloudPlatform\CloudAPIFactory;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class LessonReplay extends BaseResource
 {
     public function get(Application $app, Request $request, $id)
     {
-        $lesson = $this->getCourseService()->getLesson($id);
+        $task = $this->getTaskService()->getTask($id);
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
 
-        if (!$lesson) {
+        if (!$task) {
             return $this->error('500', '课时不存在！');
         }
 
-        if ($lesson['replayStatus'] == 'videoGenerated') {
-            return json_decode($this->sendRequest('GET', $this->getHttpHost().$app['url_generator']->generate('get_lesson', array('id' => $lesson['id'])), array(sprintf('X-Auth-Token: %s', $request->headers->get('X-Auth-Token')))), true);
+        if ($activity['ext']['replayStatus'] == 'videoGenerated') {
+            return json_decode($this->sendRequest('GET', $this->getHttpHost().$app['url_generator']->generate('get_lesson', array('id' => $task['id'])), array(sprintf('X-Auth-Token: %s', $request->headers->get('X-Auth-Token')))), true);
         }
 
         $device = $request->query->get('device');
-        $replaysLesson = $this->getCourseService()->getCourseLessonReplayByLessonId($id);
+        $replays = $this->getLiveReplayService()->findReplayByLessonId($task['activityId']);
 
-        if (!$replaysLesson) {
+        if (!$replays) {
             return $this->error('500', '课时回放不存在！');
         }
 
         $visableReplays = array();
-        foreach ($replaysLesson as $replay) {
+        foreach ($replays as $replay) {
             if ($replay['hidden'] == 0) {
                 $visableReplays[] = $replay;
             }
@@ -40,28 +40,27 @@ class LessonReplay extends BaseResource
             'url' => '',
             'extra' => array(
                 'provider' => '',
-                'lessonId' => $lesson['id'],
+                'lessonId' => $activity['id'],
 
             ),
-            'device' => $device
+            'device' => $device,
         );
         try {
             // play es replay
-            if ($lesson['liveProvider'] == 5) {
+            if ($activity['ext']['liveProvider'] == 5) {
                 //获取globalid
                 $globalId = $visableReplays[0]['globalId'];
                 $options = array(
                     'fromApi' => true,
                     'times' => 2,
                     'line' => $request->query->get('line', ''),
-                    'format' => $request->query->get('format', '')
+                    'format' => $request->query->get('format', ''),
                 );
                 $response['url'] = $this->getMediaService()->getVideoPlayUrl($globalId, $options);
                 $response['extra']['provider'] = 'longinus';
             } else {
-                $response = CloudAPIFactory::create('root')->get("/lives/{$lesson['mediaId']}/replay", array('replayId' => $visableReplays[0]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device));
+                $response = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", array('replayId' => $visableReplays[0]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device));
             }
-            
         } catch (Exception $e) {
             return $this->error('503', '获取回放失败！');
         }
@@ -84,6 +83,21 @@ class LessonReplay extends BaseResource
         return $this->getServiceKernel()->createService('Media:MediaService');
     }
 
+    protected function getTaskService()
+    {
+        return $this->getServiceKernel()->createService('Task:TaskService');
+    }
+
+    protected function getActivityService()
+    {
+        return $this->getServiceKernel()->createService('Activity:ActivityService');
+    }
+
+    protected function getLiveReplayService()
+    {
+        return $this->getServiceKernel()->createService('Course:LiveReplayService');
+    }
+
     protected function sendRequest($method, $url, $headers = array(), $params = array())
     {
         $curl = curl_init();
@@ -95,7 +109,7 @@ class LessonReplay extends BaseResource
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_HEADER, 0);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    
+
         if (strtoupper($method) == 'POST') {
             curl_setopt($curl, CURLOPT_POST, 1);
             $params = http_build_query($params);

@@ -131,6 +131,11 @@ function strlen(str) {
   return len;  
 }
 
+$.validator.addMethod("DateAndTime", function (value, element) {
+  let reg = /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}$/;
+  return this.optional(element) || reg.test(value);
+}, $.validator.format("请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm"));
+
 $.validator.addMethod("trim", function (value, element, params) {
   return $.trim(value).length > 0;
 }, jQuery.validator.format("请输入%display%"));
@@ -182,7 +187,7 @@ $.validator.addMethod("visible_character", function (value, element, params) {
 }, jQuery.validator.format("请输入可见性字符"));
 
 $.validator.addMethod('positive_integer', function (value, element) {
-  return this.optional(element) || parseInt(value) > 0;
+  return this.optional(element) || /^\+?[1-9][0-9]*$/.test(value);
 }, jQuery.validator.format("请输入正整数"));
 
 $.validator.addMethod('float', function (value, element) {
@@ -192,6 +197,18 @@ $.validator.addMethod('float', function (value, element) {
 $.validator.addMethod('date', function (value, element) {
   return this.optional(element) || /^\d{4}\-[01]?\d\-[0-3]?\d$|^[01]\d\/[0-3]\d\/\d{4}$|^\d{4}年[01]?\d月[0-3]?\d[日号]$/.test(value);
 }, jQuery.validator.format("请输入正确的日期"));
+
+$.validator.addMethod('unsigned_integer', function (value, element) {
+  return this.optional(element) || /^\+?[0-9][0-9]*$/.test(value);
+}, jQuery.validator.format("请输入非负整数"));
+
+jQuery.validator.addMethod("second_range", function (value, element) {
+  return this.optional(element) || /^([0-9]|[012345][0-9]|59)$/.test(value);
+}, "请输入0-59之间的数字");
+
+// jQuery.validator.addMethod("unsigned_integer", function (value, element) {
+//   return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
+// }, "时长必须为非负整数");
 
 $.validator.addMethod("open_live_course_title", function (value, element, params) {
   return !params || /^[^(<|>|'|"|&|‘|’|”|“)]*$/.test(value);
@@ -304,7 +321,6 @@ $.validator.addMethod("nickname", function (value, element, params) {
   return  this.optional(element) || ! /^1\d{10}$/.test(value)
 }, jQuery.validator.format('不允许以1开头的11位纯数字'));
 
-
 $.validator.addMethod("nickname_remote", function (value, element, params) {
   let isSuccess = 0;
 
@@ -324,3 +340,20 @@ $.validator.addMethod("nickname_remote", function (value, element, params) {
   return this.optional(element) || isSuccess;
 
 }, jQuery.validator.format('该用户名已存在'))
+
+$.validator.addMethod("before",function (value, element, params) {
+    return value && $(params).val() >= value;
+  },
+  Translator.trans('开始日期应早于结束日期')
+);
+
+$.validator.addMethod("after",function (value, element, params) {
+    if ($('input[name="expiryMode"]:checked').val() !== 'date') {
+      return true;
+    }
+    console.log($(params).val());
+    console.log(value);
+    return value && $(params).val() < value;
+  },
+  Translator.trans('结束日期应晚于开始日期')
+);

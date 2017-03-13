@@ -29,6 +29,7 @@ $("body").on('click', '.js-course-filter', function () {
       text = $btn.find("a").text();
     }
     $('.course-filter .visible-xs .btn').html(text + " " + '<span class="caret"></span>');
-    Lazyload.init();
+    // Lazyload.init();
+    echo.init();
   })
 });
