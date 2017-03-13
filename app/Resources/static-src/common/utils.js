@@ -10,16 +10,15 @@ let s;
           (s = userAgent.match(/version\/([\d.]+).*safari/)) ? Browser.safari = s[1] : 0;
 /* eslint-enable */
 
-Browser.ie10 = /MSIE\s+10.0/i.test(navigator.userAgent)
-                && (() => {"use strict";return this === undefined;})();
-Browser.ie11 = (/Trident\/7\./).test(navigator.userAgent);
-Browser.edge = /Edge\/13./i.test(navigator.userAgent);
+if (Browser.ie) console.log('IE: ' + Browser.ie);
+if (Browser.firefox) console.log('Firefox: ' + Browser.firefox);
+if (Browser.chrome) console.log('Chrome: ' + Browser.chrome);
+if (Browser.opera) console.log('Opera: ' + Browser.opera);
+if (Browser.safari) console.log('Safari: ' + Browser.safari);
 
 const isMobileDevice = () => {
   return navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i);
 };
-
-const isLogin = (() => { return $("meta[name='is-login']").attr("content") == 1 })();
 
 const delHtmlTag = (str) => {
   return str.replace(/<[^>]+>/g, '').replace(/&nbsp;/ig, '');
@@ -37,12 +36,10 @@ const initPopover = () => {
   });
 }
 
+
 export {
   Browser,
   isMobileDevice,
   delHtmlTag,
   initTooltips,
-  initPopover,
-  isLogin
 };
-

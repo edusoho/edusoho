@@ -34,14 +34,14 @@ let sortList = function ($list) {
 
 $('#course-chapter-btn').on('click', function() {
   let $this = $(this);
-  let _this = this;
   let $form = $('#course-chapter-form');
+
   let validator = $form.validate({
     rules: {
       title: 'required'
     },
     ajax: true,
-    currentDom: _this,
+    currentDom: $this,
     submitSuccess: function(html) {
       $this.closest('.modal').modal('hide');
 
