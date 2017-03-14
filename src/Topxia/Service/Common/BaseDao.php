@@ -286,7 +286,7 @@ abstract class BaseDao
 
         FieldsChecker::checkFieldNames(array($orderBy[0]));
 
-        if (!in_array($orderBy[0], $allowedOrderByFields)) {
+        if (!empty($allowedOrderByFields)  && !in_array($orderBy[0], $allowedOrderByFields)) {
             throw new \RuntimeException($this->getKernel()->trans('不允许对%orderBy%字段进行排序', array('%orderBy%' => $orderBy[0])), 1);
         }
 
