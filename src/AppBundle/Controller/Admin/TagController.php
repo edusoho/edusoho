@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
 
 class TagController extends BaseController
@@ -12,7 +13,12 @@ class TagController extends BaseController
     {
         $total = $this->getTagService()->searchTagCount($conditions = array());
         $paginator = new Paginator($request, $total, 20);
-        $tags = $this->getTagService()->searchTags($conditions = array(), $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $tags = $this->getTagService()->searchTags(
+            $conditions = array(),
+            array('createdTime' => 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         foreach ($tags as &$tag) {
             $tagGroups = $this->getTagService()->findTagGroupsByTagId($tag['id']);
@@ -25,10 +31,13 @@ class TagController extends BaseController
             }
         }
 
-        return $this->render('admin/tag/index.html.twig', array(
-            'tags' => $tags,
-            'paginator' => $paginator,
-        ));
+        return $this->render(
+            'admin/tag/index.html.twig',
+            array(
+                'tags' => $tags,
+                'paginator' => $paginator,
+            )
+        );
     }
 
     public function createAction(Request $request)
@@ -38,15 +47,21 @@ class TagController extends BaseController
 
             $tagRelation = $this->getTagService()->findTagRelationsByTagIds(array($tag['id']));
 
-            return $this->render('admin/tag/list-tr.html.twig', array(
-                'tag' => $tag,
-                'tagRelations' => $tagRelation,
-            ));
+            return $this->render(
+                'admin/tag/list-tr.html.twig',
+                array(
+                    'tag' => $tag,
+                    'tagRelations' => $tagRelation,
+                )
+            );
         }
 
-        return $this->render('admin/tag/tag-modal.html.twig', array(
-            'tag' => array('id' => 0, 'name' => ''),
-        ));
+        return $this->render(
+            'admin/tag/tag-modal.html.twig',
+            array(
+                'tag' => array('id' => 0, 'name' => ''),
+            )
+        );
     }
 
     public function updateAction(Request $request, $id)
@@ -60,14 +75,20 @@ class TagController extends BaseController
         if ('POST' == $request->getMethod()) {
             $tag = $this->getTagService()->updateTag($id, $request->request->all());
 
-            return $this->render('admin/tag/list-tr.html.twig', array(
-                'tag' => $tag,
-            ));
+            return $this->render(
+                'admin/tag/list-tr.html.twig',
+                array(
+                    'tag' => $tag,
+                )
+            );
         }
 
-        return $this->render('admin/tag/tag-modal.html.twig', array(
-            'tag' => $tag,
-        ));
+        return $this->render(
+            'admin/tag/tag-modal.html.twig',
+            array(
+                'tag' => $tag,
+            )
+        );
     }
 
     public function deleteAction(Request $request, $id)
@@ -93,6 +114,9 @@ class TagController extends BaseController
         return $this->createJsonResponse($response);
     }
 
+    /**
+     * @return TagService
+     */
     protected function getTagService()
     {
         return $this->createService('Taxonomy:TagService');
