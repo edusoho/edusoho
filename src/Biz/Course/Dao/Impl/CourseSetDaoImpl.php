@@ -38,22 +38,6 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
     }
 
-    protected function _createQueryBuilder($conditions)
-    {
-        $conditions = array_filter($conditions, function ($value) {
-            if ($value == 0) {
-                return true;
-            }
-            if (empty($value)) {
-                return false;
-            }
-
-            return true;
-        });
-
-        return parent::_createQueryBuilder($conditions);
-    }
-
     public function declares()
     {
         return array(
