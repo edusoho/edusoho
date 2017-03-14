@@ -4,9 +4,7 @@ define(function(require, exports, module){
 
 	exports.run = function(){
 		$("#nextExcutedStartTime,#nextExcutedEndTime").datetimepicker({
-			// autoclose: true,
-      format: 'yyyy-mm-dd',
-      minView: 'month'
+			autoclose: true
 		});	
 
 		$("#log-table").on('click', '.show-data', function(){

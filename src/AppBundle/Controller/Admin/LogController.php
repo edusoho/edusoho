@@ -10,19 +10,7 @@ class LogController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $fields = $request->query->all();
-        $conditions = array(
-            'startDateTime' => '',
-            'endDateTime' => '',
-            'nickname' => '',
-            'level' => '',
-            'action' => '',
-            'module' => '',
-        );
-
-        if (!empty($fields)) {
-            $conditions = array_merge($conditions, $fields);
-        }
+        $conditions = $request->query->all();
 
         $paginator = new Paginator(
             $request,
@@ -36,6 +24,7 @@ class LogController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
         $moduleDicts = $this->getLogService()->getLogModuleDicts();
