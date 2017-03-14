@@ -11,27 +11,20 @@ class OrgDaoImpl extends GeneralDaoImpl implements OrgDao
 
     public function declares()
     {
-        $declares['conditions'] = array(
-            'id = :id',
-            'parentId = :parentId',
-            'depth = :depth',
-        );
+        return array(
+            'timestamps' => array('createdTime', 'updateTime'),
+            'serializes' => array(),
+            'orderbys' => array(
+                'createdTime',
+                'updatedTime',
+            ),
+            'conditions' => array(
+                'id = :id',
+                'parentId = :parentId',
+                'depth = :depth',
+            ),
 
-        $declares['timestamps'] = array(
-            'createdTime',
         );
-
-        $declares['orderbys'] = array(
-            'createdTime',
-            'updatedTime',
-        );
-
-        $declares['timestamps'] = array(
-            'createdTime',
-            'updateTime',
-        );
-
-        return $declares;
     }
 
     public function deleteByPrefixOrgCode($orgCode)
