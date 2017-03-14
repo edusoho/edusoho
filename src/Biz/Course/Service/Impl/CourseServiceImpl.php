@@ -1366,6 +1366,31 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $favoriteCourses;
     }
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType, $start, $limit)
+    {
+        $favorites = $this->getFavoriteDao()->findUserFavoriteCoursesNotInClassroomWithCourseType(
+            $userId,
+            $courseType,
+            $start,
+            $limit
+        );
+        return $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($favorites, 'courseId'));
+    }
+
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function countUserFavoriteCourseNotInClassroomWithCourseType($userId, $courseType)
+    {
+        return $this->getFavoriteDao()->countUserFavoriteCoursesNotInClassroomWithCourseType(
+            $userId,
+            $courseType
+        );
+    }
+
     protected function _prepareCourseOrderBy($sort)
     {
         if (is_array($sort)) {
