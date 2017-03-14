@@ -1077,38 +1077,38 @@ class EduCloudController extends BaseController
 
     public function consultSettingAction(Request $request)
     {
-        $cloud_consult = $this->getSettingService()->get('cloud_consult', array());
+        $cloudConsult = $this->getSettingService()->get('cloud_consult', array());
+        $defaultSetting = $this->consultDefaultSetting();
+        $cloudConsult = $this->validateConsult(array_merge($defaultSetting, $cloudConsult));
 
-        $defaultSetting = array(
-            'cloud_consult_setting_enabled' => 0,
-            'cloud_consult_enabled' => 0,
-            'cloud_consult_landing_url' => '',
-            'cloud_consult_js' => ''
-        );
+        if ($cloudConsult['cloud_consult_enabled'] == 0) {
 
-        $cloud_consult = $this->validateConsult(array_merge($defaultSetting, $cloud_consult));
+            return $this->render('TopxiaAdminBundle:EduCloud/Consult:without-enable.html.twig', array(
+                'cloud_consult' => $cloudConsult
+            ));
+        }
 
         if ($request->getMethod() == 'POST') {
 
-            $request_cloud_consult = $request->request->all();
-            $cloud_consult['cloud_consult_setting_enabled'] = $request_cloud_consult['cloud_consult_setting_enabled'];
+            $requestCloudConsult = $request->request->all();
+            $cloudConsult['cloud_consult_setting_enabled'] = $requestCloudConsult['cloud_consult_setting_enabled'];
 
-            $this->getSettingService()->set('cloud_consult', $cloud_consult);
+            $this->getSettingService()->set('cloud_consult', $cloudConsult);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('云客服设置已保存！'));
         }
 
-        if ($cloud_consult['cloud_consult_setting_enabled'] == 0) {
+        if ($cloudConsult['cloud_consult_setting_enabled'] == 0) {
             return $this->render('TopxiaAdminBundle:EduCloud/Consult:without-enable.html.twig', array(
-                'cloud_consult' => $cloud_consult
+                'cloud_consult' => $cloudConsult
             ));
         }
 
         return $this->render('TopxiaAdminBundle:EduCloud/Consult:setting.html.twig', array(
-            'cloud_consult'=> $cloud_consult
+            'cloud_consult'=> $cloudConsult
         ));
     }
 
-    protected function validateConsult($cloud_consult)
+    private function validateConsult($cloudConsult)
     {
         try {
             $api         = CloudAPIFactory::create('root');
@@ -1130,15 +1130,21 @@ class EduCloudController extends BaseController
             $default['cloud_consult_js'] = $jsResource;
         }
 
-        $cloud_consult = array_merge($cloud_consult, $default);
+        $cloudConsult = array_merge($cloudConsult, $default);
 
-        if ($cloud_consult['cloud_consult_enabled'] == 0) {
-            return $this->render('TopxiaAdminBundle:EduCloud/Consult:without-enable.html.twig', array(
-                'cloud_consult' => $cloud_consult
-            ));
-        }
+        return $cloudConsult;
+    }
 
-        return $cloud_consult;
+    private function consultDefaultSetting()
+    {
+        $defaultSetting = array(
+            'cloud_consult_setting_enabled' => 0,
+            'cloud_consult_enabled' => 0,
+            'cloud_consult_landing_url' => '',
+            'cloud_consult_js' => ''
+        );
+
+        return $defaultSetting;
     }
 
     protected function dateFormat($time)
