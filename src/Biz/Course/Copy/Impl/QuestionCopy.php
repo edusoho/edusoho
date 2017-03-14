@@ -146,7 +146,7 @@ class QuestionCopy extends AbstractEntityCopy
         $newQuestion['lessonId'] = 0;
         $newQuestion['copyId'] = $isCopy ? $question['id'] : 0;
         $newQuestion['userId'] = $this->biz['user']['id'];
-        $newQuestion['target'] = 'course-'. $newCourse['id'];
+        $newQuestion['target'] = 'course-'.$newCourse['id'];
 
         return $newQuestion;
     }

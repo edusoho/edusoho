@@ -19,6 +19,7 @@ class ActivityTestpaperCopy extends TestpaperCopy
         if ($source['fromCourseSetId'] === $config['newCourseSetId']) {
             return null;
         }
+
         return $this->doCopyTestpaper($source, $config['newCourseSetId'], $config['newCourseId'], $config['isCopy']);
     }
 

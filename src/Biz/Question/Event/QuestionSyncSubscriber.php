@@ -59,7 +59,6 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
         }
     }
 
-
     public function onQuestionUpdate(Event $event)
     {
         $question = $event->getSubject();
@@ -160,7 +159,7 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
     private function findLockedCourseSetIds($courseSetId)
     {
         $copiedCourseSets = $this->getCourseSetDao()->findCourseSetsByParentIdAndLocked($courseSetId, 1);
-        if(empty($copiedCourseSets)){
+        if (empty($copiedCourseSets)) {
             return null;
         }
 
@@ -170,11 +169,12 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
     private function findLockedCourseSetsWithCourses($courseSetId)
     {
         $copiedCourseSets = $this->getCourseSetDao()->findCourseSetsByParentIdAndLocked($courseSetId, 1);
-        if(empty($copiedCourseSets)){
+        if (empty($copiedCourseSets)) {
             return null;
         }
         $courseSetIds = ArrayToolkit::column($copiedCourseSets, 'id');
         $copiedCourses = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
+
         return ArrayToolkit::index($copiedCourses, 'courseSetId');
     }
 
