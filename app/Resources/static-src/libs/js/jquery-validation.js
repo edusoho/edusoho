@@ -221,7 +221,6 @@ $.validator.addMethod("after_date", function (value, element, params) {
 
 $.validator.addMethod("after_now", function (value, element, params) {
   let afterDate =  new Date(value.replace(/-/g, '/'));
-  alert(afterDate);
   return !value || afterDate >=new Date();
 },
   Translator.trans('开始时间应晚于当前时间')

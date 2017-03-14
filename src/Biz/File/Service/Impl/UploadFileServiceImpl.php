@@ -5,8 +5,8 @@ namespace Biz\File\Service\Impl;
 use Biz\BaseService;
 use Biz\File\Dao\FileUsedDao;
 use Biz\File\Dao\UploadFileDao;
-use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\File\Dao\UploadFileTagDao;
 use Biz\System\Service\LogService;
 use Biz\File\Dao\UploadFileInitDao;
@@ -1070,7 +1070,14 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function createUseFiles($fileIds, $targetId, $targetType, $type)
     {
-        $fileIds = empty($fileIds) ? array() : explode(',', $fileIds);
+        if (empty($fileIds)) {
+            return;
+        }
+
+        if ($fileIds && is_string($fileIds)) {
+            $fileIds = explode(',', $fileIds);
+        }
+
         $newFileIds = $this->findCreatedFileIds($fileIds, $targetType, $targetId);
         if (empty($newFileIds)) {
             return false;
@@ -1135,6 +1142,13 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function deleteUseFile($id)
     {
         $attachment = $this->getFileUsedDao()->get($id);
+        $fileRefs = $this->getFileUsedDao()->count(array('fileId' => $attachment['fileId']));
+        //如果附件多处被引用，则仅在删除最后的引用时删除附件
+        if (count($fileRefs) > 1) {
+            $this->getFileUsedDao()->delete($id);
+
+            return;
+        }
         $file = $this->getFile($attachment['fileId']);
 
         if (empty($file)) {
@@ -1144,7 +1158,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $fireWall = $this->getFireWallFactory()->create($attachment['targetType']);
 
         if (!$fireWall->canAccess($attachment)) {
-            $this->createAccessDeniedException('您无全删除该附件');
+            $this->createAccessDeniedException('您无权删除该附件');
         }
 
         $this->beginTransaction();
