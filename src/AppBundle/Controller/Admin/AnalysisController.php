@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\DateToolkit;
 use AppBundle\Common\Paginator;
+use Biz\Course\Service\CourseSetService;
 use Biz\Order\Service\OrderService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -149,9 +150,9 @@ class AnalysisController extends BaseController
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
-        $count = $this->getCourseSetService()->countCourseSets($timeRange);
-
-        $timeRange['parentId'] = 0;
+        $courseSetConditions = $timeRange;
+        $courseSetConditions['parentId'] = 0;
+        $count = $this->getCourseSetService()->countCourseSets($courseSetConditions);
         $paginator = new Paginator(
             $request,
             $count,
@@ -159,8 +160,8 @@ class AnalysisController extends BaseController
         );
 
         $courseSetSumDetail = $this->getCourseSetService()->searchCourseSets(
-            $timeRange,
-            '',
+            $courseSetConditions,
+            'latest',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -1625,6 +1626,9 @@ class AnalysisController extends BaseController
         return $this->createService('System:LogService');
     }
 
+    /**
+     * @return CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
