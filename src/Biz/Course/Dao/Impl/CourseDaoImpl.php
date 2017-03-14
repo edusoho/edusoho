@@ -177,7 +177,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         );
     }
 
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {
             $conditions['titleLike'] = "%{$conditions['title']}%";
@@ -196,7 +196,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
             $conditions['likeOrgCode'] .= '%';
         }
 
-        $builder = parent::_createQueryBuilder($conditions);
+        $builder = parent::createQueryBuilder($conditions);
 
         if (isset($conditions['types'])) {
             $builder->andWhere('type IN ( :types )');

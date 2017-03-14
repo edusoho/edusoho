@@ -43,9 +43,9 @@ class OrderRefundDaoImpl extends GeneralDaoImpl implements OrderRefundDao
         return $this->db()->fetchAll($sql, array($userId)) ?: array();
     }
 
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
-        $builder = parent::_createQueryBuilder($conditions);
+        $builder = parent::createQueryBuilder($conditions);
 
         if (isset($conditions['targetIds'])) {
             $builder->andWhere('targetId IN ( :targetIds )');
