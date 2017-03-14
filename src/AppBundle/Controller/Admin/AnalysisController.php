@@ -1601,13 +1601,13 @@ class AnalysisController extends BaseController
     {
         return array(
             'startTime' => date('Y-m-d', $timeRange['startTime']),
-            'endTime' => date('Y-m-d', $timeRange['endTime'] - 24 * 3600 + 1),
+            'endTime' => date('Y-m-d', $timeRange['endTime']),
             'currentMonthStart' => date('Y-m-d', strtotime(date('Y-m', time()))),
-            'currentMonthEnd' => date('Y-m-d', strtotime(date('Y-m-d', time()))),
+            'currentMonthEnd' => date('Y-m-d', time()),
             'lastMonthStart' => date('Y-m-d', strtotime(date('Y-m', strtotime('-1 month')))),
-            'lastMonthEnd' => date('Y-m-d', strtotime(date('Y-m', time() - 24 * 3600 + 1))),
+            'lastMonthEnd' => date('Y-m-d', strtotime(date('Y-m', time())) - 24 * 3600),
             'lastThreeMonthsStart' => date('Y-m-d', strtotime(date('Y-m', strtotime('-2 month')))),
-            'lastThreeMonthsEnd' => date('Y-m-d', strtotime(date('Y-m-d', time()))),
+            'lastThreeMonthsEnd' => date('Y-m-d', time()),
             'analysisDateType' => $condition['analysisDateType'],
         );
     }
