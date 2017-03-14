@@ -25,14 +25,13 @@
       <label for="condition-select">{{ '完成条件'|trans }}</label>
     </div>
     <div class="col-xs-4 form-control-static">
-      观看时长
       <input type="hidden" id="condition-select" name="finishType">
-      {#<select class="form-control" id="condition-select" name="finishType">
-        <option value="time" {% if flash.finishType|default('click') == 'time' %}selected{% endif %}>观看时长</option>
-      </select>#}
+      <select class="form-control" id="condition-select" name="finishType">
+        <option value="time" selected>观看时长</option>
+      </select>
     </div>
   </div>
-  <div class=" form-group {% if flash.finishType|default('click') != 'time' %}hidden{% endif %}" id="condition-group">
+  <div class="form-group" id="condition-group">
     <div class="col-sm-2 control-label">
       <label for="condition-detail">{{ '至少观看'|trans }}</label>
     </div>

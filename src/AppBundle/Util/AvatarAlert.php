@@ -9,10 +9,10 @@ class AvatarAlert
     public static function alertJoinCourse($user)
     {
         $setting = self::getSettingService()->get('user_partner');
-
         if (empty($setting['avatar_alert'])) {
             return false;
         }
+
 
         if ($setting['avatar_alert'] == 'open' && $user['mediumAvatar'] == '') {
             return true;

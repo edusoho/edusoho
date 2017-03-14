@@ -1,13 +1,13 @@
 {% extends 'my/layout.html.twig' %}
 
-{% block title %}{{'我的直播课表'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'我的直播'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-learning-live' %}
 
 {% block main %}
 
   <div class="panel panel-default panel-col">
-    <div class="panel-heading">{{'我的直播课表'|trans}}</span></div>
+    <div class="panel-heading">{{'我的直播'|trans}}</span></div>
     <div class="panel-body">
       {% if courseSets %}
         <ul class="course-wide-list live-course-list">

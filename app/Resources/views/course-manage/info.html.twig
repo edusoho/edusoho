@@ -7,6 +7,7 @@
   <div class="panel panel-default" role="course-manage-info">
     {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
     <div class="panel-body">
+      {{ web_macro.flash_messages() }}
       <form class="form-horizontal" role="form" id="course-info-form" action="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
         <div class="form-group">
           <div class="col-sm-2 control-label">
