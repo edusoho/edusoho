@@ -3,8 +3,8 @@
 namespace Tests\Unit\OpenCourseRecommendedServiceTest;
 
 use Biz\BaseTestCase;
-use Biz\OpenCourse\Service\OpenCourseRecommendedService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\OpenCourse\Service\OpenCourseRecommendedService;
 
 class OpenCourseRecommendedServiceTest extends BaseTestCase
 {
@@ -124,7 +124,7 @@ class OpenCourseRecommendedServiceTest extends BaseTestCase
             'expiryMode' => 'days',
             'learnMode' => 'freeMode',
         );
-        $createCourse = $this->getCourseService()->createCourse($course);
+        $createCourse = $this->getCourseSetService()->createCourseSet($course);
 
         return $createCourse;
     }
@@ -157,5 +157,10 @@ class OpenCourseRecommendedServiceTest extends BaseTestCase
     protected function getCourseService()
     {
         return self::$biz->service('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return self::$biz->service('Course:CourseSetService');
     }
 }
