@@ -152,7 +152,7 @@ class courseInfo {
       language: "zh",
       minView: 2, //month
       autoclose: true,
-      endDate: new Date(Date.now() + 86400 * 365 * 100 * 1000)
+      endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)
     });
     $picker.datetimepicker('setStartDate', new Date());
   }
