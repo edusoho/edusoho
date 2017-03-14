@@ -1158,7 +1158,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $fireWall = $this->getFireWallFactory()->create($attachment['targetType']);
 
         if (!$fireWall->canAccess($attachment)) {
-            $this->createAccessDeniedException('您无全删除该附件');
+            $this->createAccessDeniedException('您无权删除该附件');
         }
 
         $this->beginTransaction();
