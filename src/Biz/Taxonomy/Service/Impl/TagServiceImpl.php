@@ -332,7 +332,7 @@ class TagServiceImpl extends BaseService implements TagService
             throw $this->createServiceException($this->getKernel()->trans('标签名不能为空，添加失败！'));
         }
 
-        $tag['name'] = (string)$tag['name'];
+        $tag['name'] = (string) $tag['name'];
 
         $exclude = $relatedTag ? $relatedTag['name'] : null;
 

@@ -15,7 +15,7 @@ class TagController extends BaseController
         $paginator = new Paginator($request, $total, 20);
         $tags = $this->getTagService()->searchTags(
             $conditions = array(),
-            array('createdTime'=>'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
