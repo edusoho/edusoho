@@ -5,6 +5,7 @@ namespace Biz\Course\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\CloudPlatform\Service\AppService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Service\CourseNoteService;
@@ -264,6 +265,12 @@ class MemberServiceImpl extends BaseService implements MemberService
      */
     protected function isVipMemberNonExpired($course, $member)
     {
+        $vipApp = $this->getAppService()->getAppByCode('vip');
+
+        if (empty($vipApp)) {
+            return false;
+        }
+        
         $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']);
 
         return $status === 'ok';
@@ -991,6 +998,14 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return AppService
+     */
+    protected function getAppService()
+    {
+        return $this->createService('CloudPlatform:AppService');
     }
 
     /**

@@ -82,7 +82,6 @@ class CourseController extends CourseBaseController
                 'member' => $member,
             )
         );
-        
     }
 
     public function deadlineReachAction($id)
