@@ -35,7 +35,7 @@ interface TagService
 
     public function getAllTagCount();
 
-    public function searchTags($conditions, $start, $limit);
+    public function searchTags($conditions, $sort, $start, $limit);
 
     public function searchTagCount($conditions);
 

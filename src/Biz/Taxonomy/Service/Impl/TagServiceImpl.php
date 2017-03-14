@@ -102,11 +102,11 @@ class TagServiceImpl extends BaseService implements TagService
         return $this->getTagOwnerDao()->findByTagIdsAndOwnerType($tagIds, $ownerType);
     }
 
-    public function searchTags($conditions, $start, $limit)
+    public function searchTags($conditions, $sort, $start, $limit)
     {
         $conditions = $this->_prepareConditions($conditions);
 
-        return $this->getTagDao()->search($conditions, array(), $start, $limit);
+        return $this->getTagDao()->search($conditions, $sort, $start, $limit);
     }
 
     public function searchTagCount($conditions)
@@ -332,7 +332,7 @@ class TagServiceImpl extends BaseService implements TagService
             throw $this->createServiceException($this->getKernel()->trans('标签名不能为空，添加失败！'));
         }
 
-        $tag['name'] = (string) $tag['name'];
+        $tag['name'] = (string)$tag['name'];
 
         $exclude = $relatedTag ? $relatedTag['name'] : null;
 
