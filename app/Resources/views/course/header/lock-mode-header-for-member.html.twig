@@ -61,11 +61,11 @@
                         {% if  task_lock is empty %}
                           <a class="title"
                              href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">
-                            <span class="task-overflow ml5">{{ task.title }}</span>
+                            <span class="ml5">{{ task.title }}</span>
                           </a>
                         {% else %}
                           <span class="title"><span
-                                class="task-overflow ml5">{{ task.title }}</span></span>
+                                class="ml5">{{ task.title }}</span></span>
                         {% endif %}
                         {% set meta =  activity_meta(task.activity.mediaType) %}
                         <span class="es-icon es-icon {{ meta.icon }} right-menu task-type-icon "
