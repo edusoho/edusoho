@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\DateToolkit;
 use AppBundle\Common\Paginator;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Order\Service\OrderService;
 use Biz\Task\Service\TaskResultService;
@@ -223,9 +224,11 @@ class AnalysisController extends BaseController
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
-        $count = $this->getCourseService()->countCourses($timeRange);
+        $courseConditions = $timeRange;
+        $courseConditions['parentId'] = 0;
 
-        $timeRange['parentId'] = 0;
+        $count = $this->getCourseService()->countCourses($courseConditions);
+
         $paginator = new Paginator(
             $request,
             $count,
@@ -233,13 +236,11 @@ class AnalysisController extends BaseController
         );
 
         $courseSumDetail = $this->getCourseService()->searchCourses(
-            $timeRange,
-            '',
+            $courseConditions,
+            'latest',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
-        $courseSetSumData = '';
 
         if ($tab == 'trend') {
             $courseData = $this->getCourseService()->analysisCourseDataByTime(
@@ -277,6 +278,7 @@ class AnalysisController extends BaseController
                 'users' => $users,
                 'courseSumStartDate' => $courseSumStartDate,
                 'dataInfo' => $dataInfo,
+                'count' => count($courseSumDetail),
             )
         );
     }
@@ -1634,6 +1636,9 @@ class AnalysisController extends BaseController
         return $this->createService('Course:CourseSetService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
