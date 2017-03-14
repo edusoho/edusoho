@@ -2,11 +2,11 @@
 {% block title %}{{ paper.name }} - {{ parent() }}{% endblock %}
 
 {% if isIframeBody|default(1) %}
-  {% set bodyClass = 'task-testpaper-body-iframe js-task-testpaper-body-iframe' %}
+  {% set bodyClass = 'task-testpaper-body-iframe js-task-testpaper-body js-task-testpaper-body-iframe' %}
   {% set testpaperCardClass = 'js-testpaper-card affix mt20' %}
   {% set testpaperBodyClass = "mt20" %}
 {% else %}
-  {% set bodyClass = 'js-task-testpaper-body-iframe' %}
+  {% set bodyClass = 'js-task-testpaper-body' %}
   {% set containerClass = 'mt20' %}
   {% set testpaperCardClass = 'js-testpaper-card' %}
 {% endif %}

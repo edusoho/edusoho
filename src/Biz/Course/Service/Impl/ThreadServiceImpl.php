@@ -413,7 +413,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             unset($conditions['keyword']);
         }
 
-        if (isset($conditions['author'])) {
+        if (!empty($conditions['author'])) {
             $author = $this->getUserService()->getUserByNickname($conditions['author']);
             $conditions['userId'] = $author ? $author['id'] : -1;
         }

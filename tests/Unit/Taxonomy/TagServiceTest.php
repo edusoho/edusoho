@@ -380,7 +380,7 @@ class TagServiceTest extends BaseTestCase
         $tagA = $this->getTagService()->addTag($tagA);
         $tagB = $this->getTagService()->addTag($tagB);
 
-        $this->assertEquals(2, count($this->getTagService()->searchTags(array(), 0, 2)));
+        $this->assertEquals(2, count($this->getTagService()->searchTags(array(), array(), 0, 2)));
     }
 
     public function testSearchTagCount()
