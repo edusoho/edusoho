@@ -28,7 +28,7 @@ class CourseController extends BaseController
         $conditions = array(
             'status' => 'published',
             'parentId' => 0,
-            'excludeIds' => array(),
+            'excludeIds' => $excludeIds,
         );
         $user = $this->getCurrentUser();
         if (!$user->isAdmin() && !$user->isSuperAdmin()) {
