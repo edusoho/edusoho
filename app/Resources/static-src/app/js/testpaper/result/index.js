@@ -14,7 +14,7 @@ class ShowResult extends DoTestBase {
   }
 }
 
-new ShowResult($('.js-task-testpaper-body-iframe'));
+new ShowResult($('.js-task-testpaper-body'));
 
 $('.js-testpaper-redo-timer').timer({
   countdown:true,
