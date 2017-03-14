@@ -275,24 +275,21 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function analysisCourseDataByTime($startTime, $endTime)
     {
-        $this->filterStartLimit($startTime, $endTime);
-        $sql = "SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTable()}` WHERE  `createdTime`>={$startTime} AND `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+        $sql = "SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTable()}` WHERE  `createdTime`>= ? AND `createdTime`<= ? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
 
-        return $this->getConnection()->fetchAll($sql);
+        return $this->getConnection()->fetchAll($sql, array($startTime, $endTime));
     }
 
     public function findCoursesCountByLessThanCreatedTime($endTime)
     {
-        $endTime = (int) $endTime;
-        $sql = "SELECT count(id) as count FROM `{$this->getTable()}` WHERE `createdTime`<={$endTime} ";
+        $sql = "SELECT count(id) as count FROM `{$this->getTable()}` WHERE `createdTime`<= ? ";
 
-        return $this->getConnection()->fetchColumn($sql);
+        return $this->getConnection()->fetchColumn($sql, array($endTime));
     }
 
     public function analysisCourseSumByTime($endTime)
     {
-        $endTime = (int) $endTime;
-        $sql = "SELECT date , max(a.Count) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date,( SELECT count(id) as count FROM  `{$this->getTable()}`   i   WHERE   i.createdTime<=o.createdTime and i.parentId = 0)  as Count from `{$this->getTable()}`  o  where o.createdTime<={$endTime} order by 1,2) as a group by date ";
-        return $this->getConnection()->fetchAll($sql);
+        $sql = "SELECT date , max(a.Count) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date,( SELECT count(id) as count FROM  `{$this->getTable()}`   i   WHERE   i.createdTime<=o.createdTime and i.parentId = 0)  as Count from `{$this->getTable()}`  o  where o.createdTime<= ? order by 1,2) as a group by date ";
+        return $this->getConnection()->fetchAll($sql, array($endTime));
     }
 }
