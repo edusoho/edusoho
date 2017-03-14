@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Component\Payment\Request;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Common\ServiceEvent;
@@ -128,6 +129,18 @@ abstract class BaseController extends Controller
         return new JsonResponse($data);
     }
 
+    private function isSelfHost($request, $url)
+    {
+        if (empty($url)) {
+            return true;
+        }
+
+        $host = $request->getHost();
+        preg_match("/^(http[s]:\/\/)?([^\/]+)/i", $url, $matches);
+        $ulrHost = empty($matches[2]) ? '' : $matches[2];
+        return $host == $ulrHost;
+    }
+
     protected function getTargetPath($request)
     {
         if ($request->query->get('goto')) {
@@ -136,6 +149,9 @@ abstract class BaseController extends Controller
             $targetPath = $request->getSession()->get('_target_path');
         } else {
             $targetPath = $request->headers->get('Referer');
+            if ($this->isSelfHost($request, $targetPath) === false) {
+                $targetPath = '';
+            }
         }
 
         if ($targetPath == $this->generateUrl('login', array(), true)) {

@@ -685,6 +685,31 @@ class CourseServiceTest extends BaseTestCase
         $counter             = array();
         $createCourse        = $this->getCourseService()->createCourse($course);
         $updateCourseCounter = $this->getCourseService()->updateCourseCounter($createCourse['id'], $counter);
+
+    }
+
+    public function testUpdateMembersDeadlineByClassroomId()
+    {
+        $course       = array(
+            'title' => 'test course 1'
+        );
+        $textClassroom = array(
+            'title' => 'test'
+        );
+
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $this->getCourseService()->publishCourse($createCourse['id']);
+
+        $user  = $this->getCurrentUser();
+
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
+        $this->getClassroomService()->becomeStudent($classroom['id'], $user['id']);
+
+        $result = $this->getCourseService()->updateMembersDeadlineByClassroomId($classroom['id'], '1488433547');
+
+        $this->assertEquals(1, count($result));
     }
 
     public function testChangeCoursePicture()
@@ -3497,7 +3522,6 @@ class CourseServiceTest extends BaseTestCase
         $itemIds[] = 'lesson-99999';
         $this->getCourseService()->sortCourseItems($course['id'], $itemIds);
     }
-
     /**
      * @expectedException Topxia\Service\Common\ServiceException
      */

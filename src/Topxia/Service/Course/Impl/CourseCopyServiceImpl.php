@@ -123,6 +123,10 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
         $map = array();
 
+        $questionIds = ArrayToolkit::column($questions,'id');
+        $allSubQuestions = $this->getQuestionDao()->findQuestionsByParentIds($questionIds);
+        $allSubQuestions = ArrayToolkit::group($allSubQuestions,'parentId');
+
         foreach ($questions as $question) {
             $oldQuestionId = $question['id'];
             $fields        = ArrayToolkit::parts($question, array('type', 'stem', 'score', 'answer', 'analysis', 'metas', 'categoryId', 'difficulty', 'parentId', 'subCount', 'userId', 'copyId'));
@@ -143,7 +147,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             $map[$oldQuestionId] = $question;
 
             if ($question['subCount'] > 0) {
-                $subQuestions = $this->getQuestionDao()->findQuestionsByParentId($oldQuestionId);
+                $subQuestions = $allSubQuestions[$oldQuestionId];
 
                 foreach ($subQuestions as $subQuestion) {
                     $fields                = ArrayToolkit::parts($subQuestion, array('type', 'stem', 'score', 'answer', 'analysis', 'metas', 'categoryId', 'difficulty', 'subCount', 'userId'));
@@ -188,8 +192,8 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             $fields['copyId'] = $lesson['id'];
             $copiedLesson     = $this->getLessonDao()->addLesson($fields);
 
-            if (array_key_exists('type', $lesson) && $lesson['type'] == 'live' && $lesson['status'] == 'published') {
-                $this->createJob($lesson);
+            if (array_key_exists('type', $copiedLesson) && $copiedLesson['type'] == 'live' && $copiedLesson['status'] == 'published') {
+                $this->createJob($copiedLesson);
             }
 
             $map[$lesson['id']] = $copiedLesson;

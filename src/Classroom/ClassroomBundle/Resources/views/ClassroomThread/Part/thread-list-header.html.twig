@@ -1,16 +1,26 @@
 <div class="nav-filter clearfix">
   
   {% if service.canAccess('thread.create', {targetType:'classroom', targetId:classroom.id}) %}
-    <div class="btn-group">
-      <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{'发话题'|trans}} <span class="caret"></span></button>
-      <ul class="dropdown-menu" role="menu">
-        <li><a href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'discussion'}) }}">{{'发话题'|trans}}</a></li>
-        <li><a href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'question'}) }}">{{'提问题'|trans}}</a></li>
-        {% if service.canAccess('thread.event.create', {targetType:'classroom', targetId:classroom.id}) %}
-          <li><a href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'event'}) }}">{{'建活动'|trans}}</a></li> 
-        {% endif %}
-      </ul>
-    </div>
+    {% if member %}
+      {% if member.deadline == 0 or member.deadline > 'now'|date('U') %}
+        <div class="btn-group">
+          <button type="button" class="btn btn-default btn-sm dropdown-toggle
+          " data-toggle="dropdown" aria-expanded="false">{{'发话题'|trans}} <span class="caret"></span></button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'discussion'}) }}">{{'发话题'|trans}}</a></li>
+            <li><a href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'question'}) }}">{{'提问题'|trans}}</a></li>
+            {% if service.canAccess('thread.event.create', {targetType:'classroom', targetId:classroom.id}) %}
+              <li><a href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'event'}) }}">{{'建活动'|trans}}</a></li> 
+            {% endif %}
+          </ul>
+        </div>
+      {% else %}
+        <div class="btn-group">
+          <button type="button" class="btn btn-default btn-sm disabled" data-toggle="tooltip" data-placement="bottom" title="{{'当前班级已过有效期'|trans}}">{{'发话题'|trans}}
+          </button>
+        </div>
+      {% endif %}
+    {% endif %}
   {% endif %}
 
   <ul class="nav nav-pills nav-pills-sm">

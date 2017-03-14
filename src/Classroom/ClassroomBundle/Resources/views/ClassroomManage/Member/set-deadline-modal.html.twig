@@ -1,0 +1,55 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}{{'修改学员有效期'|trans}}{% endblock %}
+{% block body %}
+
+<form id="expiryday-set-form" class="form-horizontal" method="post" action="{{ path('classroom_manage_member_deadline', { classroomId:classroom.id, userId:user.id }) }}">
+  {% if classroom.status == 'published' %}
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="classroom-title">{{'班级标题'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <div style="margin-top: 7px;">
+          {{ classroom.title }}
+          </div>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="student-nickname">{{ setting('default.user_name')|default('学员'|trans) }}{{'用户名'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <div style="margin-top: 7px;">
+          {{ user.nickname|default() }}
+          </div>
+        </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="set-more-expiryday">{{'有效期'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="student_deadline" name="deadline" required="required" {% if member.deadline %}value="{{ member.deadline|date('Y-m-d') }}"{% endif %}class="form-control width-input width-input-large">
+        <div class="help-block">
+        {{ '设置该值后，%user_name%只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)}) }}
+        </div>
+      </div>
+    </div>
+    <input type="hidden" name="memberId" value="{{ user.id }}">
+  {% else %}
+    <div class="empty">{{dict_text('classroomStatus', classroom.status)}}{{'班级不能修改'|trans}}{{ setting('default.user_name')|default('学员'|trans) }}{{'有效期，请班级发布后再增加。'|trans}}</div>
+  {% endif %}
+</form>
+
+{% endblock %}
+
+{% block footer %}
+  <button type="submit" id="student-save" data-loading-text="正在保存..."class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#expiryday-set-form">{{'保存'|trans}}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
+<script>app.load('classroombundle/controller/classroom/student/expiry-date')</script>
+{% endblock %}

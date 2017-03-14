@@ -37,7 +37,12 @@ class CourseLessonController extends BaseController
         $context['lessonId'] = $lessonId;
 
         if ($isPreview && !empty($course['tryLookable'])) {
-            $context['watchTimeLimit'] = $course['tryLookTime'] * 60;
+           if($lesson['length'] < $course['tryLookTime'] * 60 ){
+                $context['watchTimeLimit'] = $lesson['length']-1;
+           }else{
+                $context['watchTimeLimit'] = $course['tryLookTime'] * 60;
+           }
+           
             return $this->forward('TopxiaWebBundle:Player:show', array(
                 'id'      => $lesson["mediaId"],
                 'context' => $context
@@ -55,6 +60,36 @@ class CourseLessonController extends BaseController
         ));
     }
 
+    private function isEnablePreview($course, $lesson)
+    {
+        if ($lesson['free']) {
+            return true;
+        }
+
+        if ($lesson['type'] == 'video' && $course['tryLookable']) {
+            return true;
+        }
+
+        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
+            $courseVip = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
+
+            if ($courseVip) {
+                $user = $this->getCurrentUser();
+                $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseVip['id']);
+                if (('ok' == $vipStatus) || ('level_low'  && $course['buyable'])) {
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        }
+
+        if (empty($course['buyable'])) {
+            return false;
+        }
+        return true;
+    }
+
     public function previewAction(Request $request, $courseId, $lessonId = 0)
     {
         $course = $this->getCourseService()->getCourse($courseId);
@@ -69,17 +104,18 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        $user = $this->getCurrentUser();
+
 //开启限制加入
 
-        if (empty($lesson['free']) && empty($course['buyable']) && empty($course['tryLookable'])) {
+        if (!$this->isEnablePreview($course, $lesson)) {
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
         }
+
 
         if (!empty($course['status']) && $course['status'] == 'closed') {
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
         }
-
-        $user = $this->getCurrentUser();
 
 //课时不免费并且不满足1.有时间限制设置2.课时为视频课时3.视频课时非优酷等外链视频时提示购买
 

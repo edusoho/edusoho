@@ -24,7 +24,7 @@ class SmsServiceImpl extends BaseService implements SmsService
     public function smsSend($smsType, $userIds, $description, $parameters = array())
     {
         if (!$this->isOpen($smsType)) {
-            throw new \RuntimeException($this->getKernel()->trans('云短信相关设置未开启!'));
+            throw new \RuntimeException($this->getKernel()->trans('短信服务未开启，请联系网校管理员。'));
         }
 
         //这里不考虑去重，只考虑unlock
@@ -50,7 +50,7 @@ class SmsServiceImpl extends BaseService implements SmsService
         }
 
         if (!$this->isOpen($smsType)) {
-            throw new \RuntimeException($this->getKernel()->trans('云短信相关设置未开启!'));
+            throw new \RuntimeException($this->getKernel()->trans('短信服务未开启，请联系网校管理员。'));
         }
 
         $allowedTime   = 120;

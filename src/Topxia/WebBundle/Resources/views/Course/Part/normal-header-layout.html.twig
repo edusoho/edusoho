@@ -1,9 +1,11 @@
+{% set mobile = is_show_mobile_page() %}
+
 <section class="course-detail-header {{ layoutClass|default('') }}">
   <div class="container">
 
     {% block before_content %}{% endblock %}
 
-    <div class="es-section clearfix">
+    <div class="es-section clearfix {% if mobile %} es-mobile-section {% endif %}">
       {% block content %}{% endblock %}
 
       {% if member.role|default('') == 'teacher' or has_permission('admin_course_content_manage') %}
