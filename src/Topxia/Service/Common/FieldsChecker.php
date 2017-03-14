@@ -3,7 +3,7 @@ namespace Topxia\Service\Common;
 
 class FieldsChecker
 {
-	public static function checkFieldName($names)
+	public static function checkFieldNames($names)
     {
     	foreach ($names as $name) {
 	        if (!ctype_alnum(str_replace('_', '', $name))) {
