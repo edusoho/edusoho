@@ -46,6 +46,7 @@ class SessionDaoImpl extends BaseDao implements SessionDao
 
     public function findSessionsBySessionTime($sessionTime, $limit)
     {
+        $limit = (int) $limit;
         $sql = "SELECT * FROM {$this->table} WHERE `sess_time` < ? LIMIT {$limit};";
         return $this->getConnection()->fetchAll($sql, array($sessionTime));
     }
