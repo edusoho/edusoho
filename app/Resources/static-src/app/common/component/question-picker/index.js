@@ -52,7 +52,12 @@ export default class QuestionPicker {
         this.$questionAppendForm.find('tr[data-id="'+replace+'"]').replaceWith(html);
         this.$questionAppendForm.find('tr[data-parent-id="'+replace+'"]').remove();
       } else {
-        this.$questionAppendForm.find('tbody:visible').append(html).removeClass('hide');
+        let $tbody = this.$questionAppendForm.find('tbody:visible');
+         //fix Firefox
+        if($tbody.length <= 0  ) {
+          $tbody = this.$questionAppendForm.find('tbody');
+        }
+        $tbody.append(html).removeClass('hide');
       }
       this._refreshSeqs();
       questionSubjectiveRemask(this.$questionAppendForm);

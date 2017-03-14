@@ -245,7 +245,7 @@ class ManageController extends BaseController
 
         $questionIds = $request->query->get('questionIds', array(0));
 
-        if (!$questions) {
+        if (!$questionIds) {
             return $this->createJsonResponse(array('result' => 'error', 'message' => '请先选择题目'));
         }
 
