@@ -95,7 +95,7 @@ class CourseController extends CourseBaseController
     public function headerAction(Request $request, $course)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
 
         $user = $this->getCurrentUser();
         $member = $user->isLogin() ? $this->getMemberService()->getCourseMember(

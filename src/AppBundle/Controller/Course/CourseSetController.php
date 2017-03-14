@@ -18,7 +18,8 @@ class CourseSetController extends BaseController
     {
         $course = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($id);
         $previewAs = $request->query->get('previewAs');
-        if (!empty($previewAs)) {
+        //如果计划都尚未发布，则获取第一个创建的
+        if (empty($course)) {
             $course = $this->getCourseService()->getFirstCourseByCourseSetId($id);
         }
         if (empty($course)) {
