@@ -1082,10 +1082,7 @@ class EduCloudController extends BaseController
         $cloudConsult = $this->processConsult(array_merge($defaultSetting, $cloudConsult));
 
         if ($cloudConsult['cloud_consult_enabled'] == 0) {
-
-            return $this->render('TopxiaAdminBundle:EduCloud/Consult:without-enable.html.twig', array(
-                'cloud_consult' => $cloudConsult
-            ));
+            $this->renderConsultWithoutEnable($cloudConsult);
         }
 
         if ($request->getMethod() == 'POST') {
@@ -1098,9 +1095,7 @@ class EduCloudController extends BaseController
         }
 
         if ($cloudConsult['cloud_consult_setting_enabled'] == 0) {
-            return $this->render('TopxiaAdminBundle:EduCloud/Consult:without-enable.html.twig', array(
-                'cloud_consult' => $cloudConsult
-            ));
+            $this->renderConsultWithoutEnable($cloudConsult);
         }
 
         return $this->render('TopxiaAdminBundle:EduCloud/Consult:setting.html.twig', array(
@@ -1145,6 +1140,13 @@ class EduCloudController extends BaseController
         );
 
         return $defaultSetting;
+    }
+
+    private function renderConsultWithoutEnable($cloudConsult)
+    {
+        return $this->render('TopxiaAdminBundle:EduCloud/Consult:without-enable.html.twig', array(
+            'cloud_consult' => $cloudConsult
+        ));
     }
 
     protected function dateFormat($time)
