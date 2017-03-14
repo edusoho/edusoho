@@ -1079,7 +1079,7 @@ class EduCloudController extends BaseController
     {
         $cloudConsult = $this->getSettingService()->get('cloud_consult', array());
         $defaultSetting = $this->consultDefaultSetting();
-        $cloudConsult = $this->validateConsult(array_merge($defaultSetting, $cloudConsult));
+        $cloudConsult = $this->processConsult(array_merge($defaultSetting, $cloudConsult));
 
         if ($cloudConsult['cloud_consult_enabled'] == 0) {
 
@@ -1108,7 +1108,7 @@ class EduCloudController extends BaseController
         ));
     }
 
-    private function validateConsult($cloudConsult)
+    private function processConsult($cloudConsult)
     {
         try {
             $api         = CloudAPIFactory::create('root');
