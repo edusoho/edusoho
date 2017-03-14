@@ -40,7 +40,7 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
 
         $questionMap = array();
         foreach ($questions as $question) {
-            $newQuestion = $this->filterFields($newCourse['courseSetId'], $question, $isCopy);
+            $newQuestion = $this->filterFields($newCourse, $question, $isCopy);
 
             $newQuestion['parentId'] = $question['parentId'] > 0 ? $questionMap[$question['parentId']][0] : 0;
 

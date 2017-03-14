@@ -16,7 +16,7 @@ class ActivityTestpaperCopy extends TestpaperCopy
     protected function _copy($source, $config = array())
     {
         // 同课程下复制 不需要创建新的试卷
-        if ($activity['fromCourseSetId'] === $config['newCourseSetId']) {
+        if ($source['fromCourseSetId'] === $config['newCourseSetId']) {
             return null;
         }
         return $this->doCopyTestpaper($source, $config['newCourseSetId'], $config['newCourseId'], $config['isCopy']);
