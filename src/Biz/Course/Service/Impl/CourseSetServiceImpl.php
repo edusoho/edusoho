@@ -364,7 +364,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $defaultCourse = $this->generateDefaultCourse($created);
 
         $this->getCourseService()->createCourse($defaultCourse);
-
+        $this->getLogService()->info('course', 'create_course_set', sprintf("创建课程《%s》(#%s)", $created['title'] ,$created['id']));
         return $created;
     }
 

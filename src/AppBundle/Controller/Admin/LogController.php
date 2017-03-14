@@ -25,10 +25,11 @@ class LogController extends BaseController
             $paginator->getPerPageCount()
         );
 
-
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
         $moduleDicts = $this->getLogService()->getLogModuleDicts();
-        $actions = $this->getLogService()->findLogActionDictsyModule($conditions['module']);
+
+        $module = isset($conditions['module']) ? $conditions['module'] : '' ;
+        $actions = $this->getLogService()->findLogActionDictsyModule($module);
 
         return $this->render('admin/system/log/logs.html.twig', array(
             'logs' => $logs,
