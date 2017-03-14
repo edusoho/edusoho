@@ -3,6 +3,6 @@
 	    {% set org = data('Org',{orgCode: orgCode}) %}
 	    {{ org.name|default('--')}}
 	    <br>
-	    <span class="text-muted text-sm">编码：{{ org.code }}</span>
+	    <span class="color-gray text-sm">编码：{{ org.code }}</span>
 	</td>
 {% endif %}

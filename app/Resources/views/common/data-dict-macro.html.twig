@@ -1,6 +1,6 @@
 {% macro courseStatus(status) %}
     {% if status == 'draft' %}
-        <span class="text-muted">{{ '未发布'|trans }}</span>
+        <span class="color-gray">{{ '未发布'|trans }}</span>
     {% elseif  status == 'published' %}
         <span class="color-success">{{ '已发布'|trans }}</span>
     {% elseif status == 'closed' %}
@@ -32,7 +32,7 @@
     {% elseif status == 'refunded' %}
         <span class="color-danger">{{ '已退款'|trans }}</span>
     {% elseif status == 'cancelled' %}
-        <span class="text-muted">{{ '已关闭'|trans }}</span>
+        <span class="color-gray">{{ '已关闭'|trans }}</span>
     {% endif %}
 {% endmacro %}
 
@@ -44,7 +44,7 @@
     {% elseif status == 'failed' %}
         <span class="color-danger">{{ '退款失败'|trans }}</span>
     {% elseif status == 'cancelled' %}
-        <span class="text-muted">{{ '已取消'|trans }}</span>
+        <span class="color-gray">{{ '已取消'|trans }}</span>
     {% endif %}
 {% endmacro %}
 
@@ -62,7 +62,7 @@
     {% if status == 'published' %}
         <span class="color-success">{{ '已发布'|trans }}</span>
     {% elseif status == 'unpublished' %}
-        <span class="text-muted">{{ '未发布'|trans }}</span>
+        <span class="color-gray">{{ '未发布'|trans }}</span>
     {% elseif status == 'trash' %}
         <span class="text-warning">{{ '回收站'|trans }}</span>
     {% endif %}
@@ -72,7 +72,7 @@
     {% if status == 'published' %}
         <span class="color-success">{{ '已发布'|trans }}</span>
     {% elseif status == 'unpublished' %}
-        <span class="text-muted">{{ '未发布'|trans }}</span>
+        <span class="color-gray">{{ '未发布'|trans }}</span>
     {% elseif status == 'trash' %}
         <span class="text-warning">{{ '回收站'|trans }}</span>
     {% endif %}
@@ -80,20 +80,20 @@
 
 {% macro discountStatus(status) %}
     {% if status == 'unstart' %}
-        <span class="text-muted">{{ '未开始'|trans }}</span>
+        <span class="color-gray">{{ '未开始'|trans }}</span>
     {% elseif status == 'running' %}
         <span class="color-success">{{ '进行中'|trans }}</span>
     {% elseif status == 'finished' %}
-        <span class="text-muted">{{ '已结束'|trans }}</span>
+        <span class="color-gray">{{ '已结束'|trans }}</span>
     {% endif %}
 {% endmacro %}
 
 {% macro  video_quality(option) %}
      {% if option == 'low' %}
-       {{'流畅'|trans}} <span class="text-muted">({{'适合PPT讲解'|trans}})</span>
+       {{'流畅'|trans}} <span class="color-gray">({{'适合PPT讲解'|trans}})</span>
     {% elseif option == 'normal' %}
-      {{'标准'|trans}} <span class="text-muted">({{'适合屏幕录制、摄像头拍摄'|trans}})</span>
+      {{'标准'|trans}} <span class="color-gray">({{'适合屏幕录制、摄像头拍摄'|trans}})</span>
     {% elseif option == 'high' %}
-      {{'精细'|trans}} <span class="text-muted">({{'适合动态电影'|trans}})</span>
+      {{'精细'|trans}} <span class="color-gray">({{'适合动态电影'|trans}})</span>
     {% endif %}
 {% endmacro %}

@@ -55,7 +55,7 @@
             {% if task %}
               <span class="live-course-lesson metas">
                 <span class="color-success mrm">{{ task.startTime|date('n月j日 H:i'|trans) }} ~ {{ task.endTime|date('H:i') }}</span>
-                <span class="text-muted mrm">{{'第%number%任务'|trans({'%number%': task.number})}}</span>
+                <span class="color-gray mrm">{{'第%number%任务'|trans({'%number%': task.number})}}</span>
               </span>
             {% endif %}
           {% endif %}
@@ -108,7 +108,7 @@
         {% if mode in ['learn'] %}
           {% if course.classroomCount > 0 %}
             {% set classroom = course.classroom %}
-            <img class="classroomPicture" src="{{ filepath(classroom.smallPicture, 'classroom.png') }}"> <span class="text-muted">{{classroom.title}}
+            <img class="classroomPicture" src="{{ filepath(classroom.smallPicture, 'classroom.png') }}"> <span class="color-gray">{{classroom.title}}
             {% if course.classroomCount > 1 %}
               {{'等'|trans}}
             {% endif %}</span>
