@@ -123,6 +123,11 @@ class MemberServiceImpl extends BaseService implements MemberService
         $result = $this->getMemberDao()->delete($member['id']);
 
         $course = $this->getCourseService()->getCourse($courseId);
+        $this->getLogService()->info(
+            'course',
+            'remove_student',
+            "教学计划《{$course['title']}》(#{$course['id']})，删除学员{$user['nickname']}(#{$user['id']})"
+        );
         $this->dispatchEvent('course.quit', $course, array('userId' => $userId, 'member' => $member));
 
         if ($this->getCurrentUser()->isAdmin()) {

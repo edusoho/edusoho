@@ -44,6 +44,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException('can not get task result because user not login');
         }
+        $this->getLogService()->info('course', 'delete_taskLearn', "删除任务学习记录, taskId:(#{$taskId})");
 
         return $this->getTaskResultDao()->deleteByTaskIdAndUserId($taskId, $user['id']);
     }
@@ -260,5 +261,13 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 }

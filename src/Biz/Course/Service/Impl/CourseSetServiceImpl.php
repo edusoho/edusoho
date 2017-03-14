@@ -153,6 +153,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         $this->getFavoriteDao()->delete($favorite['id']);
+        $this->getLogService()->info('course', 'delete_favorite', "删除收藏(#{$id})", $favorite);
 
         return true;
     }
@@ -527,6 +528,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if (!empty($subCourseSets)) {
             throw $this->createAccessDeniedException('该课程在班级下引用，请先删除引用课程！');
         }
+        $this->getLogService()->info('course', 'delete', "删除课程《{$courseSet['title']}》(#{$courseSet['id']})");
 
         return $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
     }
@@ -599,6 +601,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $courseSet = $this->tryManageCourseSet($id);
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
+        $this->getLogService()->info('course', 'publish', "发布课程《{$courseSet['title']}》(#{$courseSet['id']})");
         $this->dispatchEvent('course-set.publish', new Event($courseSet));
     }
 
@@ -609,6 +612,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             throw $this->createAccessDeniedException('CourseSet has not bean published');
         }
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'closed'));
+        $this->getLogService()->info('course', 'close', "关闭课程《{$courseSet['title']}》(#{$courseSet['id']})");
         $this->dispatchEvent('course-set.closed', new Event($courseSet));
     }
 
