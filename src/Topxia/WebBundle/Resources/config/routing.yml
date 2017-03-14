@@ -1815,9 +1815,11 @@ group_show:
 group_join:
     path:  /group/{id}/join
     defaults: { _controller: TopxiaWebBundle:Group:groupJoin }
+    methods: [POST]
 group_exit:
     path:  /group/{id}/exit
     defaults: { _controller: TopxiaWebBundle:Group:groupExit }
+    methods: [POST]
 group_member:
     path:  /group/member/{id}
     defaults: { _controller: TopxiaWebBundle:Group:groupMember }
