@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\DateToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Order\Service\OrderService;
+use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Service\ViewLogService;
 use Symfony\Component\HttpFoundation\Request;
@@ -599,9 +600,10 @@ class AnalysisController extends BaseController
         $exitLessonData = '';
 
         if ($tab == 'trend') {
-            $exitLessonData = $this->getOrderService()->analysisExitCourseDataByTimeAndStatus(
+            $exitLessonData = $this->getOrderService()->analysisCourseOrderDataByTimeAndStatus(
                 $timeRange['startTime'],
-                $timeRange['endTime']
+                $timeRange['endTime'],
+                'paid'
             );
 
             $data = $this->fillAnalysisData($condition, $exitLessonData);
@@ -694,7 +696,7 @@ class AnalysisController extends BaseController
                 $timeRange['startTime'],
                 $timeRange['endTime']
             );
-            $count = count($paidCourseData);
+            $count = count($paidCourseDetail);
             $data = $this->fillAnalysisData($condition, $paidCourseData);
         }
 
@@ -754,8 +756,8 @@ class AnalysisController extends BaseController
                 array(
                     'paidStartTime' => $timeRange['startTime'],
                     'paidEndTime' => $timeRange['endTime'],
-                    'statusPaid' => 'paid',
-                    'statusCreated' => 'created',
+                    'status' => 'paid',
+                    'amount' => '0.00',
                     'targetType' => 'classroom',
                 )
             ),
@@ -816,6 +818,7 @@ class AnalysisController extends BaseController
                 'users' => $users,
                 'paidClassroomStartDate' => $paidClassroomStartDate,
                 'dataInfo' => $dataInfo,
+                'count' => count($paidClassroomDetail),
             )
         );
     }
@@ -829,22 +832,24 @@ class AnalysisController extends BaseController
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
+        $detailConditions = array(
+            'finishedTime_GE' => $timeRange['startTime'],
+            'finishedTime_LT' => $timeRange['endTime'],
+            'status' => 'finish',
+        );
+
         $paginator = new Paginator(
             $request,
-            $this->getTaskResultService()->countTaskResults(
-                array('startTime' => $timeRange['startTime'], 'endTime' => $timeRange['endTime'], 'status' => 'finish')
-            ),
+            $this->getTaskResultService()->countTaskResults($detailConditions),
             20
         );
 
         $completedTaskDetail = $this->getTaskResultService()->searchTaskResults(
-            array('startTime' => $timeRange['startTime'], 'endTime' => $timeRange['endTime'], 'status' => 'finish'),
+            $detailConditions,
             array('finishedTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
-        $completedTaskData = '';
 
         if ($tab == 'trend') {
             $completedTaskData = $this->getTaskResultService()->analysisCompletedTaskDataByTime(
@@ -1646,6 +1651,9 @@ class AnalysisController extends BaseController
         return $this->createService('Task:TaskService');
     }
 
+    /**
+     * @return TaskResultService
+     */
     protected function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');
