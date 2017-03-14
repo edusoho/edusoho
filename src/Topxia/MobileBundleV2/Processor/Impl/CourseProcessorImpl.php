@@ -18,8 +18,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
     public function getCourseNotices()
     {
-        $start = (int)$this->getParam('start', 0);
-        $limit = (int)$this->getParam('limit', 10);
+        $start = (int) $this->getParam('start', 0);
+        $limit = (int) $this->getParam('limit', 10);
         $courseId = $this->getParam('courseId');
 
         if (empty($courseId)) {
@@ -274,7 +274,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $review = array();
         $review['courseId'] = $course['id'];
         $review['userId'] = $user['id'];
-        $review['rating'] = (float)$this->getParam('rating', 0);
+        $review['rating'] = (float) $this->getParam('rating', 0);
         $review['content'] = $this->getParam('content', '');
 
         $review = $this->controller->getReviewService()->saveReview($review);
@@ -292,8 +292,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         $type = $this->getParam('type', 'question');
-        $start = (int)$this->getParam('start', 0);
-        $limit = (int)$this->getParam('limit', 10);
+        $start = (int) $this->getParam('start', 0);
+        $limit = (int) $this->getParam('limit', 10);
 
         $learningCourseTotal = $this->controller->getCourseService()->countUserLearningCourses($user['id']);
         $learningCourses = $this->controller->getCourseService()->findUserLearningCourses(
@@ -406,8 +406,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             );
         }
 
-        $start = (int)$this->getParam('start', 0);
-        $limit = (int)$this->getParam('limit', 10);
+        $start = (int) $this->getParam('start', 0);
+        $limit = (int) $this->getParam('limit', 10);
         $total = $this->controller->getThreadService()->searchThreadCount($conditions);
 
         $threads = $this->controller->getThreadService()->searchThreads($conditions, 'postedNotStick', $start, $limit);
@@ -712,8 +712,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     {
         $courseId = $this->getParam('courseId', 0);
         $threadId = $this->getParam('threadId', 0);
-        $start = (int)$this->getParam('start', 0);
-        $limit = (int)$this->getParam('limit', 10);
+        $start = (int) $this->getParam('start', 0);
+        $limit = (int) $this->getParam('limit', 10);
 
         $user = $this->controller->getUserByToken($this->request);
 
@@ -827,50 +827,52 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
     public function getFavoriteLiveCourse()
     {
-        $result = $this->getFavoriteCourse();
+        $result = $this->getFavoriteCourseByCourseType('live');
         if (isset($result['error'])) {
             return $result;
         }
-        $courses = $result['data'];
-
-        $liveCourses = array();
-
-        for ($i = 0; $i < count($courses); ++$i) {
-            $course = $courses[$i];
-
-            if ($course['type'] == 'live') {
-                $liveCourses[] = $course;
-            }
-        }
-
-        $result['data'] = $liveCourses;
-        $result['total'] = count($liveCourses);
 
         return $result;
     }
 
     public function getFavoriteNormalCourse()
     {
-        $result = $this->getFavoriteCourse();
+        $result = $this->getFavoriteCourseByCourseType('normal');
         if (isset($result['error'])) {
             return $result;
         }
-        $courses = $result['data'];
-
-        $normalCourses = array();
-
-        for ($i = 0; $i < count($courses); ++$i) {
-            $course = $courses[$i];
-
-            if ($course['type'] == 'normal') {
-                $normalCourses[] = $course;
-            }
-        }
-
-        $result['data'] = array_values($normalCourses);
-        $result['total'] = count($normalCourses);
 
         return $result;
+    }
+
+    protected function getFavoriteCourseByCourseType($courseType)
+    {
+        $user = $this->controller->getUserByToken($this->request);
+
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
+        }
+
+        $start = (int) $this->getParam('start', 0);
+        $limit = (int) $this->getParam('limit', 10);
+
+        $total = $this->controller->getCourseService()->countUserFavoriteCourseNotInClassroomWithCourseType(
+            $user['id'],
+            $courseType
+        );
+        $courses = $this->controller->getCourseService()->findUserFavoriteCoursesNotInClassroomWithCourseType(
+            $user['id'],
+            $courseType,
+            $start,
+            $limit
+        );
+
+        return array(
+            'start' => $start,
+            'limit' => $limit,
+            'total' => $total,
+            'data' => $this->controller->filterCourses($courses),
+        );
     }
 
     public function getFavoriteCourse()
@@ -881,8 +883,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
         }
 
-        $start = (int)$this->getParam('start', 0);
-        $limit = (int)$this->getParam('limit', 10);
+        $start = (int) $this->getParam('start', 0);
+        $limit = (int) $this->getParam('limit', 10);
 
         $total = $this->controller->getCourseService()->findUserFavoritedCourseCountNotInClassroom($user['id']);
         $courses = $this->controller->getCourseService()->findUserFavoritedCoursesNotInClassroom($user['id'], $start, $limit);
@@ -924,8 +926,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     {
         $courseId = $this->getParam('courseId');
 
-        $start = (int)$this->getParam('start', 0);
-        $limit = (int)$this->getParam('limit', 10);
+        $start = (int) $this->getParam('start', 0);
+        $limit = (int) $this->getParam('limit', 10);
         $total = $this->controller->getReviewService()->getCourseReviewCount($courseId);
         $reviews = $this->controller->getReviewService()->findCourseReviews($courseId, $start, $limit);
         $reviews = $this->controller->filterReviews($reviews);
@@ -1141,7 +1143,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         if (empty($member)) {
             $member = $this->controller->getCourseMemberService()->becomeStudentByClassroomJoined(
                 $courseId,
-                $user["id"]
+                $user['id']
             );
             if (empty($member)) {
                 $member = null;
@@ -1208,7 +1210,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $search = $this->getParam('search', '');
         $tagId = $this->getParam('tagId', '');
         $type = $this->getParam('type', 'normal');
-        $categoryId = (int)$this->getParam('categoryId', 0);
+        $categoryId = (int) $this->getParam('categoryId', 0);
 
         if ($categoryId != 0) {
             $conditions['categoryId'] = $categoryId;
@@ -1227,7 +1229,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
     public function getCourses()
     {
-        $categoryId = (int)$this->getParam('categoryId', 0);
+        $categoryId = (int) $this->getParam('categoryId', 0);
         $conditions = array();
 
         if ($categoryId != 0) {
@@ -1248,8 +1250,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $conditions['type'] = $type;
         }
 
-        $start = (int)$this->getParam('start', 0);
-        $limit = (int)$this->getParam('limit', 10);
+        $start = (int) $this->getParam('start', 0);
+        $limit = (int) $this->getParam('limit', 10);
 
         $total = $this->controller->getCourseService()->countCourses($conditions);
         $sort = $this->getParam('sort', 'createdTimeByDesc');
@@ -1273,8 +1275,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('not_login', '您尚未登录！');
         }
 
-        $start = (int)$this->getParam('start', 0);
-        $limit = (int)$this->getParam('limit', 10);
+        $start = (int) $this->getParam('start', 0);
+        $limit = (int) $this->getParam('limit', 10);
         $total = $this->controller->getCourseService()->countUserLearnedCourses($user['id']);
         $courses = $this->controller->getCourseService()->findUserLearnedCourses($user['id'], $start, $limit);
 
@@ -1296,8 +1298,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('userId', 'userId参数错误');
         }
 
-        $start = (int)$this->getParam('start', 0);
-        $limit = (int)$this->getParam('limit', 10);
+        $start = (int) $this->getParam('start', 0);
+        $limit = (int) $this->getParam('limit', 10);
         $total = $this->controller->getCourseService()->countUserLearningCourses($userId);
         $courses = $this->controller->getCourseService()->findUserLearningCourses($userId, $start, $limit);
 
@@ -1371,8 +1373,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('not_login', '您尚未登录！');
         }
 
-        $start = (int)$this->getParam('start', 0);
-        $limit = (int)$this->getParam('limit', 10);
+        $start = (int) $this->getParam('start', 0);
+        $limit = (int) $this->getParam('limit', 10);
         $type = $this->getParam('type', '');
 
         $filter = array();
@@ -1576,8 +1578,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('not_login', '您尚未登录！');
         }
 
-        $start = (int)$this->getParam('start', 0);
-        $limit = (int)$this->getParam('limit', 10);
+        $start = (int) $this->getParam('start', 0);
+        $limit = (int) $this->getParam('limit', 10);
 
         $courses = $this->controller->getCourseService()->findUserLearningCourses(
             $user['id'],
