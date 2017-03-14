@@ -23,7 +23,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
 
         $testpaperPattern = $this->getTestpaperService()->getTestpaperPattern($testpaper['pattern']);
 
-        $testpaper['metas']['courseId'] = $testpaper['courseSetId'];
+        $testpaper['metas']['courseSetId'] = $testpaper['courseSetId'];
 
         $result = $testpaperPattern->getTestpaperQuestions($testpaper, $testpaper['metas']);
 
@@ -227,7 +227,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
         if (!empty($options['ranges'])) {
             $conditions['lessonIds'] = $options['ranges'];
         }
-        $conditions['courseId'] = $options['courseId'];
+        $conditions['courseSetId'] = $options['courseSetId'];
         $conditions['parentId'] = 0;
 
         $total = $this->getQuestionService()->searchCount($conditions);
