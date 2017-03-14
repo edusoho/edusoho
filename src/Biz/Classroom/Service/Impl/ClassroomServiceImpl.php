@@ -501,7 +501,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return empty($classroomCourse) ? false : true;
     }
 
-    public function setClassroomCourses($classroomId, array $courseIds)
+    protected function setClassroomCourses($classroomId, array $courseIds)
     {
         $courses = $this->findCoursesByClassroomId($classroomId);
         $existCourseIds = ArrayToolkit::column($courses, 'id');
@@ -518,7 +518,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         foreach ($courseIds as $courseId) {
             $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $courseId);
-            $this->getCourseSetService()->unlockCourseSet($courseId);
+            $course = $this->getCourseService()->getCourse($courseId);
+            $this->getCourseSetService()->unlockCourseSet($course['courseSetId']);
             $this->dispatchEvent(
                 'classroom.course.delete',
                 new Event($classroom, array('deleteCourseId' => $courseId))
