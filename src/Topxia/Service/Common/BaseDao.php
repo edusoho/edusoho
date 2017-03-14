@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\Service\Common;
 
+use Topxia\Service\Common\FieldsChecker;
+
 abstract class BaseDao
 {
     protected $connection;
@@ -253,9 +255,11 @@ abstract class BaseDao
         return $builder;
     }
 
-    protected function validateOrderBy(array $orderBy, $allowedOrderByFields)
+    protected function validateOrderBy(array $orderBy, $allowedOrderByFields = array())
     {
         $keys = array_keys($orderBy);
+
+        FieldsChecker::checkFieldNames($keys);
 
         foreach ($orderBy as $field => $order) {
             if (!in_array($field, $allowedOrderByFields)) {
@@ -273,11 +277,14 @@ abstract class BaseDao
         return ServiceKernel::instance();
     }
 
-    protected function checkOrderBy(array $orderBy, array $allowedOrderByFields)
+    protected function checkOrderBy(array $orderBy, array $allowedOrderByFields = array())
     {
+
         if (empty($orderBy[0]) || empty($orderBy[1])) {
             throw new \RuntimeException($this->getKernel()->trans('orderBy参数不正确'));
         }
+
+        FieldsChecker::checkFieldNames(array($orderBy[0]));
 
         if (!in_array($orderBy[0], $allowedOrderByFields)) {
             throw new \RuntimeException($this->getKernel()->trans('不允许对%orderBy%字段进行排序', array('%orderBy%' => $orderBy[0])), 1);
