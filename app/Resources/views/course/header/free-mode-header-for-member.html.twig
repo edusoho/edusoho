@@ -43,7 +43,7 @@
     </div>
     <div class="col-sm-2 hidden-xs">
       {% for toLearnTask in toLearnTasks %}
-        <a class="btn btn-primary btn-lg hidden-sm mts"
+        <a class="btn btn-primary btn-lg hidden-sm mt5"
            href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">继续学习</a>
         <a class="btn btn-primary btn-block visible-sm"
            href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">继续学习</a>
@@ -51,7 +51,7 @@
     </div>
     <div class="col-sm-2 visible-xs text-center">
       {% for toLearnTask in toLearnTasks %}
-        <a class="btn btn-primary btn-lg"
+        <a class="btn btn-primary btn-lg mt20"
            href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">继续学习</a>
       {% endfor %}
     </div>

@@ -112,7 +112,7 @@
               <td>
                 {{ orderLog.message | plain_text(50) }}
                 <br>
-                <span class="text-muted text-sm">{{ orderLog.type }}</span>
+                <span class="color-gray text-sm">{{ orderLog.type }}</span>
               </td>
               <td>
                 {% if logUser %}
@@ -125,7 +125,7 @@
               <td>
                 {{ orderLog.createdTime|date('Y-n-d H:i')}}
                 <br>
-                <span class="text-muted text-sm">{{ orderLog.ip}}</span>
+                <span class="color-gray text-sm">{{ orderLog.ip}}</span>
               </td>
             </tr>
           {% endfor %}

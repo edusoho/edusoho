@@ -43,11 +43,11 @@
                 <a target="_blank" href="/user/{{student.userId}}">{{ user.nickname }}</a>
 
                 {% if student.remark %}
-                  <span class="text-muted text-sm" title="{{student.remark}}">({{ student.remark|plain_text(16) }})</span>
+                  <span class="color-gray text-sm" title="{{student.remark}}">({{ student.remark|plain_text(16) }})</span>
                 {% endif %}
-                <div class="text-muted text-sm">{{'加入时间：%createdTime%'|trans({'%createdTime%': student.createdTime|date('Y-n-d H:i') })}}</div>
+                <div class="color-gray text-sm">{{'加入时间：%createdTime%'|trans({'%createdTime%': student.createdTime|date('Y-n-d H:i') })}}</div>
                 {% if course.expiryDays > 0 and student.deadline > 0 %}
-                  <div class="text-muted text-sm">{{'有效期至：%deadline%'|trans({'%deadline%': student.deadline|date('Y-n-d H:i') })}} ({{ student.deadline|remain_time }})</div>
+                  <div class="color-gray text-sm">{{'有效期至：%deadline%'|trans({'%deadline%': student.deadline|date('Y-n-d H:i') })}} ({{ student.deadline|remain_time }})</div>
                 {% endif %}
               </td>
               <td>

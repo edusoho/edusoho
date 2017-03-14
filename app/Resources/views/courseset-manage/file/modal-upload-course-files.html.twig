@@ -57,12 +57,12 @@
     {% if storageSetting.upload_mode == 'cloud' %}
     <div class="quality-switcher">
       <div class="quality-switcher-bar">
-        {{'视频转码类型'|trans}}<span class="text-muted quality-switcher-name"></span> <a href="javascript:;" class="edit-btn text-info"><span class="glyphicon glyphicon-cog"></span> {{'设置'|trans}}</a>
+        {{'视频转码类型'|trans}}<span class="color-gray quality-switcher-name"></span> <a href="javascript:;" class="edit-btn text-info"><span class="glyphicon glyphicon-cog"></span> {{'设置'|trans}}</a>
       </div>
       <div class="quality-switcher-control">
         <div class="video-quality radios">
           {{'画质：'|trans}}
-        {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>'|trans, 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>'|trans, 'high': '精细 <span class="text-muted">(适合动态电影)</span>'|trans}, storageSetting.video_quality|default('low')) }}
+        {{ radios('video_quality', {'low':'流畅 <span class="color-gray">(适合PPT讲解)</span>'|trans, 'normal':'标准 <span class="color-gray">(适合屏幕录制、摄像头拍摄)</span>'|trans, 'high': '精细 <span class="color-gray">(适合动态电影)</span>'|trans}, storageSetting.video_quality|default('low')) }}
         
         </div>
 
