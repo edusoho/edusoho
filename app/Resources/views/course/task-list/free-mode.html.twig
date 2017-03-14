@@ -32,13 +32,13 @@
               left-menu"></i>
 
 						{% if course.status=='published' and task.status == 'published' %}
-							<a class="title"
+              <a class="title"
 							{% if member %}
 								href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}"
 							{% else %}
-								href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
-									{% endif %}>
-								{% include 'course/task-list/parts/list-li-title.html.twig' %}
+								href="javascript:;"
+							{% endif %}>
+							{% include 'course/task-list/parts/list-li-title.html.twig' %}
 							</a>
 							<span class="right-menu color-gray {% if not member %} mouse-leave {% endif %}">
                 {{ task.activity.length|default(0)|activity_length_format }}

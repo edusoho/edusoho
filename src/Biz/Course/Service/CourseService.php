@@ -31,8 +31,7 @@ interface CourseService
     /**
      * 复制教学计划.
      *
-     * @param array $fields
-     *
+     * @param  array   $fields
      * @return mixed
      */
     public function copyCourse($fields);
@@ -54,9 +53,8 @@ interface CourseService
     public function publishCourse($id, $withTasks = false);
 
     /**
-     * @param $courseId
-     * @param int $limitNum 限制取几条任务，默认不限制
-     *
+     * @param  $courseId
+     * @param  int         $limitNum 限制取几条任务，默认不限制
      * @return mixed
      */
     public function findCourseItems($courseId, $limitNum = 0);
@@ -84,26 +82,22 @@ interface CourseService
     /**
      * 获取用户在教的教学计划.
      *
-     * @param int  $courseSetId
-     * @param bool $onlyPublished
-     *
+     * @param  int                     $courseSetId
+     * @param  bool                    $onlyPublished
      * @throws AccessDeniedException
-     *
      * @return mixed
      */
     public function findUserTeachingCoursesByCourseSetId($courseSetId, $onlyPublished = true);
 
     /**
-     * @param int  $userId
-     * @param bool $onlyPublished 是否只需要发布后的教学计划
-     *
+     * @param  int       $userId
+     * @param  bool      $onlyPublished 是否只需要发布后的教学计划
      * @return array[]
      */
     public function findTeachingCoursesByUserId($userId, $onlyPublished = true);
 
     /**
-     * @param int $userId
-     *
+     * @param  int       $userId
      * @return array[]
      */
     public function findLearnCoursesByUserId($userId);
@@ -113,8 +107,7 @@ interface CourseService
     public function findUserTeachCourses($conditions, $start, $limit, $onlyPublished = true);
 
     /**
-     * @param array $ids
-     *
+     * @param  array     $ids
      * @return array[]
      */
     public function findPublicCoursesByIds(array $ids);
@@ -124,11 +117,10 @@ interface CourseService
     /**
      * filter 支持 type classroomId locked ...
      *
-     * @param $userId
-     * @param $start
-     * @param $limit
-     * @param array $filters
-     *
+     * @param  $userId
+     * @param  $start
+     * @param  $limit
+     * @param  array     $filters
      * @return mixed
      */
     public function findUserLearningCourses($userId, $start, $limit, $filters = array());
@@ -159,7 +151,7 @@ interface CourseService
 
     public function updateMaxRateByCourseSetId($courseSetId, $maxRate);
 
-    public function RecommendCourseByCourseSetId($courseSetId, $fields);
+    public function recommendCourseByCourseSetId($courseSetId, $fields);
 
     public function cancelRecommendCourseByCourseSetId($courseSetId);
 
@@ -190,4 +182,6 @@ interface CourseService
     public function updateCategoryByCourseSetId($courseSetId, $categoryId);
 
     public function calculateLearnProgressByUserIdAndCourseIds($userId, array $courseIds);
+
+    public function findUserManageCoursesByCourseSetId($userId, $courseSetId);
 }

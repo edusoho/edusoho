@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDao
 {
-    protected $table = 'testpaper_result';
+    protected $table = 'c2_testpaper_result';
 
     public function getUserUnfinishResult($testId, $courseId, $activityId, $type, $userId)
     {
