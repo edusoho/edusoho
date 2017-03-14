@@ -185,11 +185,11 @@ interface CourseService
 
     public function findUserFavoritedCoursesNotInClassroom($userId, $start, $limit);
 
-    public function findCourseTasksAndChapters($courseId, $includeChapters);
+    public function findCourseTasksAndChapters($courseId);
 
     public function updateCategoryByCourseSetId($courseSetId, $categoryId);
 
     public function calculateLearnProgressByUserIdAndCourseIds($userId, array $courseIds);
 
-    public function  convertTasks($tasks, $course);
+    public function convertTasks($tasks, $course);
 }

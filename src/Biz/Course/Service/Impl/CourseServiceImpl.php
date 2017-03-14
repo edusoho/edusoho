@@ -1097,19 +1097,17 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     //移动端接口使用
-    public function findCourseTasksAndChapters($courseId, $includeChapters)
+    public function findCourseTasksAndChapters($courseId)
     {
         $course = $this->getCourse($courseId);
         $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
 
         $items = $this->convertTasks($tasks, $course);
 
-        if ($includeChapters) {
-            $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
-            foreach ($chapters as $chapter) {
-                $chapter['itemType'] = 'chapter';
-                $items[] = $chapter;
-            }
+        $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
+        foreach ($chapters as $chapter) {
+            $chapter['itemType'] = 'chapter';
+            $items[] = $chapter;
         }
         uasort(
             $items,
@@ -1122,12 +1120,12 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     //移动端接口使用　task 转成lesson
-    public function  convertTasks($tasks, $course)
+    public function convertTasks($tasks, $course)
     {
         if (empty($tasks)) {
             return array();
         }
-        $lessons = array();
+
         $defaultTask = array(
             'giveCredit' => 0,
             'requireCredit' => 0,
@@ -1148,12 +1146,17 @@ class CourseServiceImpl extends BaseService implements CourseService
             'categoryId' => 'chapterId',
         );
 
+        $items = array();
+        $lessons = array();
+        $number = 0;
+
         foreach ($tasks as $task) {
             if ($this->isUselessTask($task)) {
                 continue;
             }
             $task = array_merge($task, $defaultTask);
             $task['itemType'] = 'lesson';
+            $task['number'] = ++$number;
             if ($task['type'] == 'doc') {
                 $task['type'] = 'document';
             }
@@ -1174,6 +1177,27 @@ class CourseServiceImpl extends BaseService implements CourseService
             );
             $lessons[] = $task;
         }
+
+        $chapters = $this->getChapterDao()->findChaptersByCourseId($course['id']);
+
+        $chapterNumber = array(
+            'unit' => 0,
+            'lesson' => 0,
+            'chapter' => 0,
+        );
+
+        foreach ($chapters as $chapter) {
+            $chapter['itemType'] = 'chapter';
+            $chapter['number'] = ++$chapterNumber[$chapter['type']];
+            $items[] = $chapter;
+        }
+        uasort(
+            $items,
+            function ($item1, $item2) {
+                return $item1['seq'] > $item2['seq'];
+            }
+        );
+
         return $lessons;
     }
 
@@ -1377,6 +1401,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $start,
             $limit
         );
+
         return $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($favorites, 'courseId'));
     }
 
