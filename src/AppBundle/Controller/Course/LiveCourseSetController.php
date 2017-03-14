@@ -276,16 +276,15 @@ class LiveCourseSetController extends CourseBaseController
     {
         $preLevelIds = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($vipLevelId), 'id');
 
-        if (!empty($vipLevelId)) {
-            $preLevelIds = array_merge($preLevelIds, array($vipLevelId));
-        } else {
-            $preLevelIds = array_merge($preLevelIds, array(0));
-        }
         $vipCourseConditions = array(
             'status' => 'published',
             'parentId' => 0,
-            'vipLevelIds' => $preLevelIds,
         );
+
+        if (!empty($vipLevelId)) {
+            $preLevelIds = array_merge($preLevelIds, array($vipLevelId));
+            $vipCourseConditions['vipLevelIds'] = $preLevelIds;
+        }
 
         $vipCourses = $this->getCourseService()->searchCourses(
             $vipCourseConditions,
@@ -298,11 +297,11 @@ class LiveCourseSetController extends CourseBaseController
         return $vipCourseSetIds;
     }
 
-    private function _findFutureLiveCourseSets($vipCourseSetIds, $categoryId)
+    private function _findFutureLiveCourseSets($courseSetIds, $categoryId)
     {
         $futureLiveTasks = $this->getTaskService()->findFutureLiveTasks();
         $futureCourseSetIds = ArrayToolkit::column($futureLiveTasks, 'fromCourseSetId');
-        $futureLiveCourseSetIds = array_intersect($futureCourseSetIds, $vipCourseSetIds);
+        $futureLiveCourseSetIds = array_intersect($futureCourseSetIds, $courseSetIds);
         if (empty($futureLiveCourseSetIds)) {
             $futureLiveCourseSetIds = array(-1);
         }
