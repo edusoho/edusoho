@@ -423,7 +423,7 @@ class AnalysisController extends BaseController
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
-        $taskDetailConditions =  array(
+        $taskDetailConditions = array(
             'createdTime_GE' => $timeRange['startTime'],
             'createdTime_LE' => $timeRange['endTime'],
         );
@@ -443,7 +443,6 @@ class AnalysisController extends BaseController
 
         if ($tab == 'trend') {
             $taskData = $this->getTaskService()->analysisTaskDataByTime($timeRange['startTime'], $timeRange['endTime']);
-
             $data = $this->fillAnalysisData($condition, $taskData);
         }
 
@@ -484,6 +483,7 @@ class AnalysisController extends BaseController
                 'users' => $users,
                 'taskStartDate' => $taskStartDate,
                 'dataInfo' => $dataInfo,
+                'count' => count($taskDetail),
             )
         );
     }
