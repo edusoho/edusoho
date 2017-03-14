@@ -353,7 +353,7 @@ class LiveCourseSetController extends CourseBaseController
             $start,
             $limit
         );
-        
+
         return $replayLiveCourseSets;
     }
 
