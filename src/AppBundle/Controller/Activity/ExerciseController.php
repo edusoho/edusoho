@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller\Activity;
 
-use Biz\Course\Service\CourseService;
-use Biz\Question\Service\QuestionService;
-use Biz\Testpaper\Service\TestpaperService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
+use Biz\Question\Service\QuestionService;
+use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ExerciseController extends BaseController implements ActivityActionInterface
@@ -25,7 +25,7 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
 
         $activity = $this->getActivityService()->getActivity($activity['id']);
         $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
-        $exerciseResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $exercise['id'], $activity['fromCourseSetId'], $activity['id'], $activity['mediaType']);
+        $exerciseResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $exercise['id'], $activity['fromCourseId'], $activity['id'], $activity['mediaType']);
 
         if (!$exerciseResult || ($exerciseResult['status'] == 'doing' && !$exerciseResult['updateTime'])) {
             return $this->render('activity/exercise/show.html.twig', array(
