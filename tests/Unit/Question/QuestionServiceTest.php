@@ -106,7 +106,7 @@ class QuestionServiceTest extends BaseTestCase
 
         $conditions = array(
             'type' => 'single_choice',
-            'courseId' => 1,
+            'courseSetId' => 1,
         );
 
         $questions = $this->getQuestionService()->search($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
@@ -125,7 +125,7 @@ class QuestionServiceTest extends BaseTestCase
 
         $conditions = array(
             'types' => array('single_choice', 'determine', 'fill'),
-            'courseId' => 1,
+            'courseSetId' => 1,
         );
 
         $count = $this->getQuestionService()->searchCount($conditions);
@@ -171,7 +171,7 @@ class QuestionServiceTest extends BaseTestCase
         $question4 = $this->createMaterialQuestion();
 
         $conditions = array(
-            'courseId' => 1,
+            'courseSetId' => 1,
         );
 
         $result = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);

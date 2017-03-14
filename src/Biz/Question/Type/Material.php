@@ -29,7 +29,7 @@ class Material implements TypeInterface
 
     public function filter($fields)
     {
-        if (!empty($fields['target']) && $fields['target'] > 0) {
+        if (isset($fields['target'])) {
             $fields['lessonId'] = $fields['target'];
             unset($fields['target']);
         }

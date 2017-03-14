@@ -233,7 +233,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $course;
     }
 
-    public function RecommendCourseByCourseSetId($courseSetId, $fields)
+    public function recommendCourseByCourseSetId($courseSetId, $fields)
     {
         $requiredKeys = array('recommended', 'recommendedSeq', 'recommendedTime');
         $fields = ArrayToolkit::parts($fields, $requiredKeys);
@@ -330,9 +330,8 @@ class CourseServiceImpl extends BaseService implements CourseService
      * 计算教学计划价格和虚拟币价格
      *
      * @param  $id
-     * @param int|float $originPrice 教学计划原价
-     *
-     * @return array (number, number)
+     * @param  int|float $originPrice 教学计划原价
+     * @return array     (number, number)
      */
     protected function calculateCoursePrice($id, $originPrice)
     {
@@ -893,8 +892,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param int $userId
-     *
+     * @param  int     $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -975,6 +973,22 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function analysisCourseDataByTime($startTime, $endTime)
     {
         return $this->getCourseDao()->analysisCourseDataByTime($startTime, $endTime);
+    }
+
+    public function findUserManageCoursesByCourseSetId($userId, $courseSetId)
+    {
+        $user = $this->getUserService()->getUser($userId);
+
+        $isSuperAdmin = in_array('ROLE_SUPER_ADMIN|', $user['roles']);
+        $isAdmin = in_array('ROLE_ADMIN', $user['roles']);
+
+        if ($isSuperAdmin || $isAdmin) {
+            $courses = $this->findCoursesByCourseSetId($courseSetId);
+        } elseif (in_array('ROLE_TEACHER', $user['roles'])) {
+            $courses = $this->findUserTeachingCoursesByCourseSetId($courseSetId, false);
+        }
+
+        return $courses ? ArrayToolkit::index($courses, 'id') : array();
     }
 
     protected function fillMembersWithUserInfo($members)
@@ -1582,7 +1596,6 @@ class CourseServiceImpl extends BaseService implements CourseService
      * 当默认值未设置时，合并默认值
      *
      * @param  $course
-     *
      * @return array
      */
     protected function mergeCourseDefaultAttribute($course)
@@ -1608,7 +1621,6 @@ class CourseServiceImpl extends BaseService implements CourseService
      *
      * @param  $userId
      * @param  $filters
-     *
      * @return array
      */
     protected function prepareUserLearnCondition($userId, $filters)
