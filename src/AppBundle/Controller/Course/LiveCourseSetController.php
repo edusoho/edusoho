@@ -278,6 +278,8 @@ class LiveCourseSetController extends CourseBaseController
 
         if (!empty($vipLevelId)) {
             $preLevelIds = array_merge($preLevelIds, array($vipLevelId));
+        } else {
+            $preLevelIds = array_merge($preLevelIds, array(0));
         }
         $vipCourseConditions = array(
             'status' => 'published',
