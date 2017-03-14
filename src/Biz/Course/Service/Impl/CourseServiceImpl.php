@@ -1102,6 +1102,32 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->getCourse($courseId);
         $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
 
+        $items = $this->convertTasks($tasks, $course);
+
+        if ($includeChapters) {
+            $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
+            foreach ($chapters as $chapter) {
+                $chapter['itemType'] = 'chapter';
+                $items[] = $chapter;
+            }
+        }
+        uasort(
+            $items,
+            function ($item1, $item2) {
+                return $item1['seq'] > $item2['seq'];
+            }
+        );
+
+        return $items;
+    }
+
+    //移动端接口使用　task 转成lesson
+    public function  convertTasks($tasks, $course)
+    {
+        if (empty($tasks)) {
+            return array();
+        }
+        $lessons = array();
         $defaultTask = array(
             'giveCredit' => 0,
             'requireCredit' => 0,
@@ -1122,7 +1148,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'categoryId' => 'chapterId',
         );
 
-        $items = array();
         foreach ($tasks as $task) {
             if ($this->isUselessTask($task)) {
                 continue;
@@ -1147,24 +1172,9 @@ class CourseServiceImpl extends BaseService implements CourseService
                     'courseTaskId' => $task['id'],
                 )
             );
-            $items[] = $task;
+            $lessons[] = $task;
         }
-
-        if ($includeChapters) {
-            $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
-            foreach ($chapters as $chapter) {
-                $chapter['itemType'] = 'chapter';
-                $items[] = $chapter;
-            }
-        }
-        uasort(
-            $items,
-            function ($item1, $item2) {
-                return $item1['seq'] > $item2['seq'];
-            }
-        );
-
-        return $items;
+        return $lessons;
     }
 
     private function isUselessTask($task)
