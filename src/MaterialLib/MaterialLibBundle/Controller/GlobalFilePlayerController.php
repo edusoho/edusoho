@@ -26,7 +26,7 @@ class GlobalFilePlayerController extends BaseController
                 'file' => $file
             ));
         } elseif ($file["type"] == 'audio') {
-            return $this->audioPlayer($file);
+            return $this->audioPlayer($file, $ssl);
         } elseif ($file["type"] == 'document') {
             return $this->render('MaterialLibBundle:Player:document-player.html.twig', array(
                 'file' => $file
@@ -70,10 +70,8 @@ class GlobalFilePlayerController extends BaseController
         return $this->createJsonResponse($file);
     }
 
-    public function audioPlayer($file)
+    public function audioPlayer($file, $ssl)
     {
-        $ssl = $request->isSecure() ? true : false;
-
         $result = $this->getMaterialLibService()->player($file['no'], $ssl);
         return $this->render('MaterialLibBundle:Player:global-video-player.html.twig', array(
             'file'             => $file,
