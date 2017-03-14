@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Common;
 
+use Topxia\Service\Common\FieldsChecker;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Codeages\Biz\Framework\Dao\Connection;
 
@@ -12,6 +13,48 @@ class DynamicQueryBuilder extends QueryBuilder
     {
         parent::__construct($connection);
         $this->conditions = $conditions;
+    }
+
+    public function groupBy($groupBy)
+    {
+        FieldsChecker::checkFieldNames(array($groupBy));
+        return parent::groupBy($groupBy);
+    }
+
+    public function addGroupBy($groupBy)
+    {
+        FieldsChecker::checkFieldNames(array($groupBy));
+        return parent::addGroupBy($groupBy);
+    }
+
+    public function setFirstResult($start)
+    {
+        $start = (int) $start;
+        return parent::setFirstResult($start);
+    }
+
+    public function setMaxResults($limit)
+    {
+        $limit = (int) $limit;
+        return parent::setMaxResults($limit);
+    }
+
+    public function addOrderBy($field, $orderBy = null)
+    {
+        FieldsChecker::checkFieldNames(array($field));
+        if (!in_array(strtoupper(trim($orderBy)), array('DESC', 'ASC', ''))) {
+            throw new \InvalidArgumentException('Field name is invalid.');
+        }
+        return parent::addOrderBy($field, $orderBy);
+    }
+
+    public function orderBy($field, $orderBy = null)
+    {
+        FieldsChecker::checkFieldNames(array($field));
+        if (!in_array(strtoupper(trim($orderBy)), array('DESC', 'ASC', ''))) {
+            throw new \InvalidArgumentException('Field name is invalid.');
+        }
+        return parent::orderBy($field, $orderBy);
     }
 
     public function where($where)
