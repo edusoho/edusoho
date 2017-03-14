@@ -139,7 +139,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
     public function analysisPaidCourseOrderDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>=? AND `createdTime`<=? AND `status`='paid' AND targetType='course'  AND `amount`>0 GROUP BY date ORDER BY date ASC ";
+        $sql = "SELECT count(id) as count, from_unixtime(paidTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`paidTime`>= ? AND `paidTime`< ? AND `status`='paid' AND targetType='course' GROUP BY date ORDER BY date ASC ";
 
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
     }

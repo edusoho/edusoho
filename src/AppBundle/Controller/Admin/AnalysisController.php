@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\DateToolkit;
 use AppBundle\Common\Paginator;
+use Biz\Order\Service\OrderService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Service\ViewLogService;
 use Symfony\Component\HttpFoundation\Request;
@@ -513,6 +514,7 @@ class AnalysisController extends BaseController
                 'paidStartTime' => $timeRange['startTime'],
                 'paidEndTime' => $timeRange['endTime'],
                 'status' => 'paid',
+                'targetType' => 'course',
             ),
             'latest',
             $paginator->getOffsetCount(),
@@ -522,12 +524,10 @@ class AnalysisController extends BaseController
         $joinLessonData = '';
 
         if ($tab == 'trend') {
-            $joinLessonData = $this->getOrderService()->analysisCourseOrderDataByTimeAndStatus(
+            $joinLessonData = $this->getOrderService()->analysisPaidCourseOrderDataByTime(
                 $timeRange['startTime'],
-                $timeRange['endTime'],
-                'paid'
+                $timeRange['endTime']
             );
-
             $data = $this->fillAnalysisData($condition, $joinLessonData);
         }
 
@@ -551,6 +551,7 @@ class AnalysisController extends BaseController
             'admin/operation-analysis/join-lesson.html.twig',
             array(
                 'JoinLessonDetail' => $joinLessonDetail,
+                'count' => count($joinLessonDetail),
                 'paginator' => $paginator,
                 'tab' => $tab,
                 'data' => $data,
@@ -1655,6 +1656,9 @@ class AnalysisController extends BaseController
         return $this->createService('Taxonomy:CategoryService');
     }
 
+    /**
+     * @return OrderService
+     */
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
