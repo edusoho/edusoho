@@ -8,7 +8,6 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MaterialService;
 use Biz\File\Service\UploadFileService;
 use Biz\User\Service\UserService;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Component\MediaParser\ParserProxy;
 
