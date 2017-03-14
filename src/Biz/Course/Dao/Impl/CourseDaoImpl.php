@@ -92,7 +92,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         $conditions = array(
             'startTime' => $startTime,
             'endTime' => $endTime,
-            'parentId' => 0
+            'parentId' => 0,
         );
 
         $builder = $this->createQueryBuilder($conditions)
