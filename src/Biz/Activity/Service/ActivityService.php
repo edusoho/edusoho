@@ -8,6 +8,8 @@ interface ActivityService
 {
     public function getActivity($id, $fetchMedia = false);
 
+    public function getActivityByCopyIdAndCourseSetId($copyId, $courseSetId);
+
     public function findActivities($ids, $fetchMedia = false);
 
     public function findActivitiesByCourseIdAndType($courseId, $type, $fetchMedia = false);
