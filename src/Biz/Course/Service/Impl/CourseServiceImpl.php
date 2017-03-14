@@ -1102,6 +1102,30 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->getCourse($courseId);
         $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
 
+        $items = $this->convertTasks($tasks, $course);
+
+        $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
+        foreach ($chapters as $chapter) {
+            $chapter['itemType'] = 'chapter';
+            $items[] = $chapter;
+        }
+        uasort(
+            $items,
+            function ($item1, $item2) {
+                return $item1['seq'] > $item2['seq'];
+            }
+        );
+
+        return $items;
+    }
+
+    //移动端接口使用　task 转成lesson
+    public function  convertTasks($tasks, $course)
+    {
+        if (empty($tasks)) {
+            return array();
+        }
+
         $defaultTask = array(
             'giveCredit' => 0,
             'requireCredit' => 0,
@@ -1123,7 +1147,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
 
         $items = array();
+        $lessons = array();
         $number = 0;
+
         foreach ($tasks as $task) {
             if ($this->isUselessTask($task)) {
                 continue;
@@ -1149,9 +1175,10 @@ class CourseServiceImpl extends BaseService implements CourseService
                     'courseTaskId' => $task['id'],
                 )
             );
-            $items[] = $task;
+            $lessons[] = $task;
         }
-        $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
+
+        $chapters = $this->getChapterDao()->findChaptersByCourseId($course['id']);
 
         $chapterNumber = array(
             'unit' => 0,
@@ -1171,7 +1198,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             }
         );
 
-        return $items;
+        return $lessons;
     }
 
     private function isUselessTask($task)
@@ -1361,6 +1388,31 @@ class CourseServiceImpl extends BaseService implements CourseService
         $favoriteCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($courseFavorites, 'courseId'));
 
         return $favoriteCourses;
+    }
+
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType, $start, $limit)
+    {
+        $favorites = $this->getFavoriteDao()->findUserFavoriteCoursesNotInClassroomWithCourseType(
+            $userId,
+            $courseType,
+            $start,
+            $limit
+        );
+        return $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($favorites, 'courseId'));
+    }
+
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function countUserFavoriteCourseNotInClassroomWithCourseType($userId, $courseType)
+    {
+        return $this->getFavoriteDao()->countUserFavoriteCoursesNotInClassroomWithCourseType(
+            $userId,
+            $courseType
+        );
     }
 
     protected function _prepareCourseOrderBy($sort)

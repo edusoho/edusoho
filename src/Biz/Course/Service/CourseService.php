@@ -190,4 +190,6 @@ interface CourseService
     public function updateCategoryByCourseSetId($courseSetId, $categoryId);
 
     public function calculateLearnProgressByUserIdAndCourseIds($userId, array $courseIds);
+
+    public function  convertTasks($tasks, $course);
 }
