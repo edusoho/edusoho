@@ -1,3 +1,5 @@
+import SelectLinkage from 'app/js/question-manage/widget/select-linkage.js';
+
 class Exercise {
 	constructor($form) {
 		this.$element = $form;
@@ -118,3 +120,4 @@ class Exercise {
 }
 
 new Exercise($('#step2-form'));
+new SelectLinkage($('[name="range[courseId]"]'),$('[name="range[lessonId]"]'));

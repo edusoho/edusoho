@@ -10,11 +10,7 @@
       {{ question.stem |fill_question_stem_text| plain_text(40) }}
     </a>
     <div>
-      {% if question.lessonId|default(0) > 0 %}
-        <small class="text-muted">{{'从属于%simple_name%'|trans({'%simple_name%': courseTasks[question.lessonId].title })}}</small>
-      {% else %}
-        <small class="text-muted">{{'从属于 本课程'|trans}}</small>
-      {% endif %}
+      {% include 'question-manage/part/belong.html.twig' with {question:question,courses:courses,courseTasks:courseTasks} %}
 
       {% if question.type == 'material' and not question.subCount %}
         <span class="label label-danger">{{'未完成'|trans}}</span>

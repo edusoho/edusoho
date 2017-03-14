@@ -17,7 +17,7 @@ class DetermineQuestionController extends BaseController
     {
         $user = $this->getUser();
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $courseTasks = $this->getCourseTaskService()->findUserTeachCoursesTasksByCourseSetId($user['id'], $courseSet['id']);
+
         $question = $this->getQuestionService()->get($questionId);
 
         $parentQuestion = array();
@@ -25,12 +25,16 @@ class DetermineQuestionController extends BaseController
             $parentQuestion = $this->getQuestionService()->get($question['parentId']);
         }
 
+        $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSetId);
+        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($question['courseId']);
+
         return $this->render('question-manage/determine-form.html.twig', array(
             'courseSet' => $courseSet,
             'question' => $question,
             'parentQuestion' => $parentQuestion,
             'type' => $question['type'],
             'courseTasks' => $courseTasks,
+            'courses' => $manageCourses,
         ));
     }
 
@@ -38,7 +42,7 @@ class DetermineQuestionController extends BaseController
     {
         $user = $this->getUser();
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $courseTasks = $this->getCourseTaskService()->findUserTeachCoursesTasksByCourseSetId($user['id'], $courseSet['id']);
+        $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSetId);
 
         $parentId = $request->query->get('parentId', 0);
         $parentQuestion = $this->getQuestionService()->get($parentId);
@@ -46,8 +50,8 @@ class DetermineQuestionController extends BaseController
         return $this->render('question-manage/determine-form.html.twig', array(
             'courseSet' => $courseSet,
             'parentQuestion' => $parentQuestion,
-            'courseTasks' => $courseTasks,
             'type' => $type,
+            'courses' => $manageCourses,
         ));
     }
 
@@ -59,6 +63,11 @@ class DetermineQuestionController extends BaseController
     protected function getCourseTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 
     protected function getCourseSetService()

@@ -52,7 +52,7 @@ class Choice implements TypeInterface
 
     protected function commonFilter($fields)
     {
-        if (!empty($fields['target']) && $fields['target'] > 0) {
+        if (isset($fields['target'])) {
             $fields['lessonId'] = $fields['target'];
             unset($fields['target']);
         }

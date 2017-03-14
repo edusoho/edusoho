@@ -17,7 +17,6 @@ class MaterialQuestionController extends BaseController
     {
         $user = $this->getUser();
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $courseTasks = $this->getCourseTaskService()->findUserTeachCoursesTasksByCourseSetId($user['id'], $courseSet['id']);
         $question = $this->getQuestionService()->get($questionId);
 
         $parentQuestion = array();
@@ -25,12 +24,16 @@ class MaterialQuestionController extends BaseController
             $parentQuestion = $this->getQuestionService()->get($question['parentId']);
         }
 
+        $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSetId);
+        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($question['courseId']);
+
         return $this->render('question-manage/material-form.html.twig', array(
             'courseSet' => $courseSet,
             'question' => $question,
             'parentQuestion' => $parentQuestion,
             'type' => $question['type'],
             'courseTasks' => $courseTasks,
+            'courses' => $manageCourses,
         ));
     }
 
@@ -38,13 +41,13 @@ class MaterialQuestionController extends BaseController
     {
         $user = $this->getUser();
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $courseTasks = $this->getCourseTaskService()->findUserTeachCoursesTasksByCourseSetId($user['id'], $courseSet['id']);
+        $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSetId);
 
         return $this->render('question-manage/material-form.html.twig', array(
             'courseSet' => $courseSet,
             'parentQuestion' => array(),
-            'courseTasks' => $courseTasks,
             'type' => $type,
+            'courses' => $manageCourses,
         ));
     }
 
@@ -56,6 +59,11 @@ class MaterialQuestionController extends BaseController
     protected function getCourseTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 
     protected function getCourseSetService()

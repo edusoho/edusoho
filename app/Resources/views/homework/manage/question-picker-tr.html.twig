@@ -11,13 +11,7 @@
       <small class="text-muted">({{ question.subCount}}{{'子题'|trans}})</small>
     {% endif %}
     <br>
-    <small class="text-muted">{{'从属'|trans}}：
-      {% if question.lessonId %}
-        {{ targetChoices[question.lessonId].title|default('--') }}
-      {% else %}
-        {{ '本课程'|trans }}
-      {% endif %}
-    </small>
+    {% include 'question-manage/part/belong.html.twig' with {question:question,courses:courses,courseTasks:courseTasks} %}
   </td>
   <td>{{ questionTypesDict[question.type] }}</td>
   <td>

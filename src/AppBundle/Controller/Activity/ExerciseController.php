@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller\Activity;
 
-use Biz\Course\Service\CourseService;
-use Biz\Question\Service\QuestionService;
-use Biz\Testpaper\Service\TestpaperService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
+use Biz\Question\Service\QuestionService;
+use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ExerciseController extends BaseController implements ActivityActionInterface
@@ -70,15 +70,24 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
 
         $activity = array_merge($activity, $exercise);
 
-        $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes(array('courseId' => $course['courseSetId']));
+        $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes(array('courseSetId' => $course['courseSetId']));
         $questionNums = ArrayToolkit::index($questionNums, 'type');
 
-        $questionNums['material']['questionNum'] = $this->getQuestionService()->searchCount(array('type' => 'material', 'subCount' => 0, 'courseId' => $course['courseSetId']));
+        $questionNums['material']['questionNum'] = $this->getQuestionService()->searchCount(array('type' => 'material', 'subCount' => 0, 'courseSetId' => $course['courseSetId']));
+
+        $user = $this->getUser();
+        $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $course['courseSetId']);
+
+        $range = $this->parseRange($activity);
+        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($range['courseId']);
 
         return $this->render('activity/exercise/modal.html.twig', array(
             'questionNums' => $questionNums,
             'activity' => $activity,
             'courseSetId' => $activity['courseSetId'],
+            'courses' => $manageCourses,
+            'courseTasks' => $courseTasks,
+            'range' => $range,
         ));
     }
 
@@ -86,15 +95,19 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
-        $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes(array('courseId' => $course['courseSetId']));
+        $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes(array('courseSetId' => $course['courseSetId']));
         $questionNums = ArrayToolkit::index($questionNums, 'type');
 
-        $questionNums['material']['questionNum'] = $this->getQuestionService()->searchCount(array('type' => 'material', 'subCount' => 0, 'courseId' => $course['courseSetId']));
+        $questionNums['material']['questionNum'] = $this->getQuestionService()->searchCount(array('type' => 'material', 'subCount' => 0, 'courseSetId' => $course['courseSetId']));
+
+        $user = $this->getUser();
+        $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $course['courseSetId']);
 
         return $this->render('activity/exercise/modal.html.twig', array(
             'courseId' => $courseId,
             'questionNums' => $questionNums,
             'courseSetId' => $course['courseSetId'],
+            'courses' => $manageCourses,
         ));
     }
 
@@ -124,12 +137,55 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
         return $testpapers;
     }
 
+    protected function parseRange($activity)
+    {
+        $rangeDefault = array('courseId' => 0);
+        $range = empty($activity['metas']['range']) ? $rangeDefault : $activity['metas']['range'];
+
+        if (is_array($range)) {
+            return $range;
+        } elseif ($range == 'course') {
+            return $rangeDefault;
+        } elseif ($range == 'lesson') {
+            //兼容老数据
+            $conditions = array(
+                'activityId' => $activity['id'],
+                'type' => 'exercise',
+                'courseId' => $activity['fromCourseId'],
+            );
+            $task = $this->getCourseTaskService()->searchTasks($conditions, null, 0, 1);
+
+            if (!$task) {
+                return $rangeDefault;
+            }
+
+            $conditions = array(
+                'categoryId' => $task['categoryId'],
+                'mode' => 'lesson',
+            );
+            $lessonTask = $this->getCourseTaskService()->searchTasks($conditions, null, 0, 1);
+
+            if ($lessonTask) {
+                return array('courseId' => $lessonTask['courseId'], 'lessonId' => $lessonTask['id']);
+            }
+
+            return $rangeDefault;
+        }
+
+        return $targetDefault;
+    }
+
     /**
      * @return ActivityService
      */
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
+    }
+
+    protected function getCourseTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 
     /**
