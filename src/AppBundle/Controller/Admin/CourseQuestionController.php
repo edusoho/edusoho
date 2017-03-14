@@ -4,6 +4,8 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\ThreadService;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseQuestionController extends BaseController
@@ -22,7 +24,6 @@ class CourseQuestionController extends BaseController
         if ($postStatus == 'unPosted') {
             $conditions['postNum'] = 0;
         }
-
         $paginator = new Paginator(
             $request,
             $this->getThreadService()->countThreads($conditions),
@@ -69,6 +70,9 @@ class CourseQuestionController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    /**
+     * @return ThreadService
+     */
     protected function getThreadService()
     {
         return $this->createService('Course:ThreadService');
@@ -79,6 +83,9 @@ class CourseQuestionController extends BaseController
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');

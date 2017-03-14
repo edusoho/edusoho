@@ -14,6 +14,7 @@ class Base {
     let validator = $form.validate({
       rules: {
         title: {
+          maxlength: 100,
           required: {
             depends: function () {
               $(this).val($.trim($(this).val()));
@@ -32,7 +33,9 @@ class Base {
         }
       },
       messages: {
-        title: "请输入有效的课程标题（直播公开课标题暂不支持<、>、\"、&、‘、’、”、“字符）"
+        title: {
+          required: "请输入有效的课程标题（直播公开课标题暂不支持<、>、\"、&、‘、’、”、“字符）"
+        }
       }
     });
     $('#courseset-base-submit').click(event => {

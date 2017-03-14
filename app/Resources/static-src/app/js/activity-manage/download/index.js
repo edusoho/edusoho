@@ -53,6 +53,7 @@ $('#step2-form').on('click', '.js-add-file-list', function () {
 })
 
 function addFile(addToList) {
+  $('.js-success-redmine').hide();
   if (isEmpty($("#media").val()) && $("#step2-form").data('validator') && $("#step2-form").data('validator').valid() && $("#link").val().length > 0) {
     if (!addToList) {
       $("#verifyLink").val($("#link").val());
@@ -74,7 +75,11 @@ function addFile(addToList) {
   let items = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
 
   if (!isEmpty(items) && items[media.id]) {
-    notify('danger', '选择重复');
+    $('.js-danger-redmine').text(Translator.trans('该文件已添加，请重新选择')).show();
+    setTimeout(function () {
+      $('.js-danger-redmine').slideUp();
+    }, 3000);
+    $('.js-current-file').text('');
     $("#media").val(null);
     media = null;
     return;
@@ -85,13 +90,16 @@ function addFile(addToList) {
   }
 
   if (addToList && isEmpty(media)) {
-    notify('danger', '请先选择资料');
+    $('.js-danger-redmine').text(Translator.trans('请上传或选择要添加的资料')).show();
+    $('.js-current-file').text('');
+    setTimeout(function () {
+      $('.js-danger-redmine').slideUp();
+    }, 3000);
     return;
   }
 
 
-  $('.js-current-file').text('无');
-
+  $('.js-current-file').text('');
   media.summary = $("#file-summary").val();
   items[media.id] = media;
   $("#materials").val(JSON.stringify(items));
@@ -121,7 +129,11 @@ function addFile(addToList) {
   $("#material-list").append(item_tpl);
   $('[data-toggle="tooltip"]').tooltip();
   $('.file-browser-item').removeClass('active');
-  notify('success', Translator.trans('添加成功，可继续选择资料添加或点击下一步！'));
+  $('.js-danger-redmine').hide();
+  $('.js-success-redmine').text(Translator.trans('添加成功，可继续选择资料添加或点击下一步！')).show();
+  setTimeout(function () {
+    $('.js-success-redmine').slideUp();
+  }, 3000);
   if ($('.jq-validate-error:visible').length > 0) {
     $("#step2-form").data('validator').form();
   }

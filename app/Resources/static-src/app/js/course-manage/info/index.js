@@ -34,9 +34,12 @@ class courseInfo {
 
   renderMultiGroupComponent(elementId, name) {
     let datas = $('#' + elementId).data('init-value');
-    ReactDOM.render(<MultiInput dataSource={datas} outputDataElement={name} />,
+    ReactDOM.render( < MultiInput
+    dataSource = {datas}
+    outputDataElement = {name} / >,
       document.getElementById(elementId)
-    );
+  )
+    ;
   }
 
   initValidator() {
@@ -48,6 +51,7 @@ class courseInfo {
       },
       rules: {
         title: {
+          maxlength: 100,
           required: {
             depends: function () {
               $(this).val($.trim($(this).val()));
@@ -84,7 +88,9 @@ class courseInfo {
         }
       },
       messages: {
-        title: Translator.trans('请输入教学计划课程标题'),
+        title: {
+          require: Translator.trans('请输入教学计划课程标题')
+        },
         maxStudentNum: {
           required: Translator.trans('请输入课程人数')
         },
@@ -173,7 +179,7 @@ jQuery.validator.addMethod("max_year", function (value, element) {
 jQuery.validator.addMethod("live_capacity", function (value, element) {
   const maxCapacity = parseInt($(element).data('liveCapacity'));
   if (value > maxCapacity) {
-    const message = Translator.trans('网校可支持最多%capacity%人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。', { capacity: maxCapacity });
+    const message = Translator.trans('网校可支持最多%capacity%人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。', {capacity: maxCapacity});
     $(element).parent().siblings('.js-course-rule').find('p').html(message);
   } else {
     $(element).parent().siblings('.js-course-rule').find('p').html('');
