@@ -156,8 +156,7 @@ class CourseSetController extends BaseController
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($id);
-        $parentId = $courseSet['parentId'];
-        $subCourses = $this->getCourseSetService()->findCourseSetsByParentIdAndLocked($parentId, 1);
+        $subCourses = $this->getCourseSetService()->findCourseSetsByParentIdAndLocked($id, 1);
         if (!empty($subCourses)) {
             return $this->createJsonResponse(array('code' => 2, 'message' => '请先删除班级课程'));
         }
