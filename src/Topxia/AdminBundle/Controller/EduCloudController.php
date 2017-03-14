@@ -1106,13 +1106,19 @@ class EduCloudController extends BaseController
     private function processConsult($cloudConsult)
     {
         try {
-            $api         = CloudAPIFactory::create('root');
-            $loginStatus = $api->post("/robot/login_url");
-            $jsResource    = $api->post("/robot/install");
+            list($loginStatus, $jsResource) = $this->connectCloudConsult();
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud/Consult:consult-error.html.twig', array());
         }
 
+        $defaultConsult = $this->processDefaultConsult($loginStatus, $jsResource);
+        $cloudConsult = array_merge($cloudConsult, $defaultConsult);
+
+        return $cloudConsult;
+    }
+
+    private function processDefaultConsult($loginStatus, $jsResource)
+    {
         if ((isset($loginStatus['code']) && $loginStatus['code']== '10000') || (isset($jsResource['code']) && $jsResource['code']== '10000')) {
             $default['cloud_consult_enabled'] = 0;
             $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您还未购买,请联系客服人员:4008041114！'));
@@ -1125,9 +1131,7 @@ class EduCloudController extends BaseController
             $default['cloud_consult_js'] = $jsResource;
         }
 
-        $cloudConsult = array_merge($cloudConsult, $default);
-
-        return $cloudConsult;
+        return $default;
     }
 
     private function consultDefaultSetting()
@@ -1147,6 +1151,18 @@ class EduCloudController extends BaseController
         return $this->render('TopxiaAdminBundle:EduCloud/Consult:without-enable.html.twig', array(
             'cloud_consult' => $cloudConsult
         ));
+    }
+
+    private function connectCloudConsult()
+    {
+        $api         = CloudAPIFactory::create('root');
+        $loginStatus = $api->post("/robot/login_url");
+        $jsResource    = $api->post("/robot/install");
+
+        return array(
+            $loginStatus,
+            $jsResource
+        );
     }
 
     protected function dateFormat($time)
