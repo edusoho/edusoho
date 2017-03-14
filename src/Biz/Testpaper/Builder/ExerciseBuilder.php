@@ -76,7 +76,7 @@ class ExerciseBuilder implements TestpaperBuilderInterface
             }
 
             if (!empty($exercise['metas']['range']['lessonId'])) {
-                $conditions['lessonId'] = $exercise['metas']['range']['courseId'];
+                $conditions['lessonId'] = $exercise['metas']['range']['lessonId'];
             }
 
             $count = $this->getQuestionService()->searchCount($conditions);

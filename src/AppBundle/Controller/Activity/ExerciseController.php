@@ -16,7 +16,7 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
     {
         if ($preview) {
             return $this->forward('AppBundle:Activity/Exercise:preview', array(
-                'id' => $activity,
+                'id' => $activity['id'],
                 'courseId' => $activity['fromCourseId'],
             ));
         }
