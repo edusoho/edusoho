@@ -8,6 +8,7 @@
     {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav,btnGroup:1} %}
 
     <div class="panel-body">
+      {{ web_macro.flash_messages() }}
       <ul class="nav nav-pills mbl">
         <li class="active">
           <a href="javascript:;">{{ '正式学员'|trans }}</a>

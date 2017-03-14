@@ -52,12 +52,16 @@ class CourseController extends CourseBaseController
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
         }
 
+        $user = $this->getCurrentUser();
+        $isCourseTeacher = $this->getMemberService()->isCourseTeacher($id, $user['id']);
+
         return $this->render(
             'course/course-show.html.twig',
             array(
                 'tab' => $tab,
                 'course' => $course,
                 'classroom' => $classroom,
+                'isCourseTeacher' => $isCourseTeacher,
             )
         );
     }

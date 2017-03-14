@@ -16,18 +16,22 @@ class Marketing {
     $('.js-service-item').click(function (event) {
       let $item = $(event.currentTarget);
       let $values = $('#course_services').val();
+      let values;
       if (!$values) {
         values = [];
+      } else {
+        values = JSON.parse($values);
       }
-      $values = JSON.parse($values);
+
       if ($item.hasClass('label-primary')) {
         $item.removeClass('label-primary').addClass('label-default');
-        $values.splice($values.indexOf($item.text()), 1);
+        values.splice($values.indexOf($item.text()), 1);
       } else {
         $item.removeClass('label-default').addClass('label-primary');
-        $values.push($item.text());
+        values.push($item.text());
       }
-      $('#course_services').val(JSON.stringify($values));
+
+      $('#course_services').val(JSON.stringify(values));
     });
   }
 

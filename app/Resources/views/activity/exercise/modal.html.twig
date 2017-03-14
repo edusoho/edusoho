@@ -17,7 +17,7 @@
     <div class="form-group">
       <label class="col-sm-2 control-label">{{'题目来源'|trans}}</label>
       <div class="col-sm-10 controls radios">
-        {{ radios('range', {'lesson':'当前课时的题目'|trans, 'course':'整个课程的题目'|trans}, activity.metas['range']|default('course') ) }}
+        {{ radios('range', {'lesson':'当前任务的题目'|trans, 'course':'整个课程的题目'|trans}, activity.metas['range']|default('course') ) }}
       </div>
     </div>
 
