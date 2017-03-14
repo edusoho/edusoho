@@ -55,7 +55,7 @@
             （<span class="color-gray text-sm">共{% if questionNum %}{{ questionNum.questionNum }}{% else %}0{% endif %}题</span>）
           </label>
         {% endfor %}
-        <input type="hidden" name="checkQuestion" value="false" data-check-url="{{ path('course_set_manage_question_check',{id:courseSetId}) }}" />
+        <input type="hidden" name="checkQuestion" value="false" data-check-url="{{ path('course_manage_exercise_check',{courseId:courseId}) }}" />
         <p class="help-block mtl">{{'提示：练习为随机出题，只需填写题目个数和选择题型范围即可。'|trans}}</p>
       </div>
     </div>
@@ -72,6 +72,7 @@
         {{ select_options({'submit':'提交练习'|trans}, activity.finishCondition['type']|default('score')) }}
       </select>
       <input type="hidden" name="mediaType" value="exercise" />
+      <input type="hidden" name="courseSetId" value="{{courseSetId}}" />
     </div>
   </div>
   

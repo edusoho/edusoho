@@ -182,6 +182,10 @@ class ExerciseBuilder implements TestpaperBuilderInterface
     {
         $conditions = array();
 
+        if (!empty($options['range']) && !is_array($options['range'])) {
+            $options['range'] = (array) json_decode($options['range']);
+        }
+
         if (!empty($options['range']) && $options['range'] != 'course') {
             $conditions['lessonIds'] = $options['range'];
         }
@@ -198,9 +202,14 @@ class ExerciseBuilder implements TestpaperBuilderInterface
             $conditions['types'] = $options['questionTypes'];
         }
 
+        if (!empty($options['types'])) {
+            $conditions['types'] = explode(',', $options['types']);
+        }
+
         if (!empty($options['difficulty'])) {
             $conditions['difficulty'] = $options['difficulty'];
         }
+
         $conditions['courseSetId'] = $options['courseSetId'];
         $conditions['parentId'] = 0;
 

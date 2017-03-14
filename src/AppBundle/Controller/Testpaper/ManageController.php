@@ -261,7 +261,6 @@ class ManageController extends BaseController
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
         $data = $request->request->all();
-        //$data['ranges'] = empty($data['ranges']) ? array() : explode(',', $data['ranges']);
         $data['courseSetId'] = $courseSet['id'];
 
         $result = $this->getTestpaperService()->canBuildTestpaper($type, $data);

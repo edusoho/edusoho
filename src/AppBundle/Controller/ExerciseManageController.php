@@ -8,7 +8,7 @@ class ExerciseManageController extends BaseController
 {
     public function buildCheckAction(Request $request, $courseId, $lessonId)
     {
-        $course = $this->getCourseService()->tryManageCourse($course['id']);
+        $course = $this->getCourseService()->tryManageCourse($courseId);
 
         $fields = $request->request->all();
 
@@ -17,7 +17,11 @@ class ExerciseManageController extends BaseController
 
         $result = $this->getTestpaperService()->canBuildTestpaper('exercise', $fields);
 
-        return $this->createJsonResponse($result);
+        $status = false;
+        if ($result['status'] == 'yes') {
+            $status = true;
+        }
+        return $this->createJsonResponse($status);
     }
 
     protected function getTestpaperService()

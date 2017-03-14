@@ -16,8 +16,8 @@ class Exercise {
   }
 
   _inItStep2form() {
-    var  $step2_form = $("#step2-form");
-    var validator = $step2_form.validate({
+    let $step2_form = $("#step2-form");
+    let validator = $step2_form.validate({
         onkeyup: false,
         rules: {
           title: {
@@ -49,7 +49,15 @@ class Exercise {
                   return $('[name="itemCount"]').val();    
                 },
                 range: function() {
-                  return $('[name="range"]:checked').val();
+                  let range = {}
+                  let courseId = $('[name="range[courseId]"]').val();
+                  range.courseId = courseId;
+                  if ($('[name="range[lessonId]"]').length > 0) {
+                    let lessonId = $('[name="range[lessonId]"]').val();
+                    range.lessonId = lessonId;
+                  }
+                  
+                  return JSON.stringify(range);
                 },
                 difficulty: function() {
                   return $('[name="difficulty"]').val();

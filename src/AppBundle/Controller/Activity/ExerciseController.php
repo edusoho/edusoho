@@ -84,10 +84,11 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
         return $this->render('activity/exercise/modal.html.twig', array(
             'questionNums' => $questionNums,
             'activity' => $activity,
-            'courseSetId' => $activity['courseSetId'],
+            'courseSetId' => $course['courseSetId'],
             'courses' => $manageCourses,
             'courseTasks' => $courseTasks,
             'range' => $range,
+            'courseId' => $course['id'],
         ));
     }
 
