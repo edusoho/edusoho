@@ -53,10 +53,6 @@ class DynamicQueryBuilder extends QueryBuilder
             throw new DaoException('IN search parameter must be an Array type');
         }
 
-        if (empty($this->conditions[$conditionName])) {
-            return parent::andWhere('1 = 0');
-        }
-
         $marks = array();
         foreach (array_values($this->conditions[$conditionName]) as $index => $value) {
             $marks[] = ":{$conditionName}_{$index}";
