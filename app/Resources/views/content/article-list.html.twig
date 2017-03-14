@@ -28,10 +28,10 @@
               <div class="media-body">
                 <h4 class="media-heading"><a href="{{ path('content_article_show', {alias:content.alias|default(content.id)}) }}">{{ content.title }}</a></h4>
                 {{ content.body|plain_text(120) }}
-                <div class="text-muted">
-                  <span class="text-muted">{{'发布于'|trans}} {{ content.publishedTime|date('Y-n-d') }}</span>
+                <div class="color-gray">
+                  <span class="color-gray">{{'发布于'|trans}} {{ content.publishedTime|date('Y-n-d') }}</span>
                   {% if contentCategory %}
-                    <span>, {{'属于'|trans}} <a href="#" class="text-muted">{{ contentCategory.name }}</a> {{'分类'|trans}}</span>
+                    <span>, {{'属于'|trans}} <a href="#" class="color-gray">{{ contentCategory.name }}</a> {{'分类'|trans}}</span>
                   {% endif %}
                 </div>
               </div>

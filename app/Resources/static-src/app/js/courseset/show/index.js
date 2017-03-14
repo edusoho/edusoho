@@ -6,21 +6,22 @@ import Swiper from 'swiper';
 let orderLearnSwiper = null;
 
 chapterAnimate();
-// initTaskLearnChart();暂时去掉块状
+initTaskLearnChart();
 triggerMemberExpired();
 
 if ($('.js-attachment-list').length > 0) {
     new AttachmentActions($('.js-attachment-list'));
 }
 
-$('.js-task-show-type').on('click', 'a', function() {
-    let $this = $(this).addClass('active');
-    $($this.data('list')).removeClass('hidden');
-    $($this.siblings('a').removeClass('active').data('list')).addClass('hidden');
-    if($this.data('type') == 'chart'&& !orderLearnSwiper) {
-      initSwiper();
-    }
-})
+// 暂时去掉块状
+// $('.js-task-show-type').on('click', 'a', function() {
+//     let $this = $(this).addClass('active');
+//     $($this.data('list')).removeClass('hidden');
+//     $($this.siblings('a').removeClass('active').data('list')).addClass('hidden');
+//     if($this.data('type') == 'chart'&& !orderLearnSwiper) {
+//       initSwiper();
+//     }
+// })
 
 function initTaskLearnChart() {
     $('#freeprogress').easyPieChart({
@@ -73,20 +74,21 @@ function triggerMemberExpired() {
     }
 }
 
-function initSwiper() {
-  orderLearnSwiper = new Swiper('.swiper-container',{
-    pagination: '.swiper-pager',
-    loop:true,
-    grabCursor: true,
-    paginationClickable: true
-  })
-  $('.arrow-left').on('click', function(e){
-    e.preventDefault()
-    orderLearnSwiper.swipePrev();
-  })
-  $('.arrow-right').on('click', function(e){
-    e.preventDefault()
-    orderLearnSwiper.swipeNext();
-  })
-}
+// 暂时去掉块状
+// function initSwiper() {
+//   orderLearnSwiper = new Swiper('.swiper-container',{
+//     pagination: '.swiper-pager',
+//     loop:true,
+//     grabCursor: true,
+//     paginationClickable: true
+//   })
+//   $('.arrow-left').on('click', function(e){
+//     e.preventDefault()
+//     orderLearnSwiper.swipePrev();
+//   })
+//   $('.arrow-right').on('click', function(e){
+//     e.preventDefault()
+//     orderLearnSwiper.swipeNext();
+//   })
+// }
 

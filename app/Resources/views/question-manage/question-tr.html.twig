@@ -11,9 +11,9 @@
     </a>
     <div>
       {% if question.lessonId|default(0) > 0 %}
-        <small class="text-muted">{{'从属于%simple_name%'|trans({'%simple_name%': courseTasks[question.lessonId].title })}}</small>
+        <small class="color-gray">{{'从属于%simple_name%'|trans({'%simple_name%': courseTasks[question.lessonId].title })}}</small>
       {% else %}
-        <small class="text-muted">{{'从属于 本课程'|trans}}</small>
+        <small class="color-gray">{{'从属于 本课程'|trans}}</small>
       {% endif %}
 
       {% if question.type == 'material' and not question.subCount %}
@@ -25,13 +25,13 @@
   <td>
     {{ questionTypesDict[question.type] }}
     {% if question.type == 'material'%}
-      <br><small class="text-muted">({{ question.subCount }}{{'子题'|trans}})</small>
+      <br><small class="color-gray">({{ question.subCount }}{{'子题'|trans}})</small>
     {% endif %}
   </td>
   <td>
     {{ macro.user_link(users[question.userId]) }}
     <br />
-    <span class="text-muted text-sm">{{question.updatedTime | date('Y-n-d H:i:s')}}</span>
+    <span class="color-gray text-sm">{{question.updatedTime | date('Y-n-d H:i:s')}}</span>
   </td>
   <td>
     <div class="btn-group">

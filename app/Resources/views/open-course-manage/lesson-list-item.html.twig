@@ -37,11 +37,11 @@
     {{ lesson.title }}
 
     {% if lesson.type in ['video', 'audio'] %}
-      <span class="text-muted">{{ lesson.length|duration }}</span>
+      <span class="color-gray">{{ lesson.length|duration }}</span>
     {% endif %}
 
     {% if lesson.type in ['live'] %}
-      <span class="text-muted">{{ lesson.startTime|date_format }}</span>
+      <span class="color-gray">{{ lesson.startTime|date_format }}</span>
     {% endif %}
 
     <span data-role="mediaStatus"></span>

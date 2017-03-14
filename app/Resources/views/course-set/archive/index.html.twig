@@ -18,12 +18,12 @@
                 {{ courseSet.title }}
               </a>
             </h4>
-            <div class="fsn text-muted">
+            <div class="fsn color-gray">
               {% if teacher %}
                 {{'教师：'|trans}} <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
               {% endif %}
               {% if tags %}
-                <span class="text-muted">{{'标签：'|trans}}</span>
+                <span class="color-gray">{{'标签：'|trans}}</span>
                 {% for tag in tags %}
                   <a href="{{ path('tag_show', {name:tag.name}) }}" class="mrs">{{ tag.name }}</a>
                 {% endfor %}

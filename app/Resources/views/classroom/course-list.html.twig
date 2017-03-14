@@ -3,7 +3,7 @@
     {{ render(controller('AppBundle:Classroom/Classroom:dashboard',{classroom:classroom, nav:nav, member:member})) }}
     {% if courses is empty %}
       <ul class="media-list">
-        <li class="mvl tac text-muted">{{'暂无课程内容'|trans}}</li>
+        <li class="mvl tac color-gray">{{'暂无课程内容'|trans}}</li>
       </ul>
     {% else %}
       <div class="class-content">
