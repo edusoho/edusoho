@@ -18,7 +18,7 @@ class ThreadGoodsDaoImpl extends GeneralDaoImpl implements ThreadGoodsDao
 
     public function sumGoodsCoins($conditions)
     {
-        $builder = $this->_createQueryBuilder($conditions)
+        $builder = $this->createQueryBuilder($conditions)
             ->select('sum(coin)');
 
         return $builder->execute()->fetchColumn(0);
