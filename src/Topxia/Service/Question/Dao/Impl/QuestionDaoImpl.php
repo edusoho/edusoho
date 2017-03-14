@@ -51,6 +51,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    //@todo: sql
     public function findQuestionsByCopyIdAndLockedTarget($copyId, $lockedTarget)
     {
         $sql = "SELECT * FROM {$this->table} WHERE copyId = ? AND target IN {$lockedTarget}";
@@ -64,6 +65,8 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             return array();
         }
 
+        $this->filterStartLimit($start, $limit);
+
         $sql       = "SELECT * FROM {$this->table} WHERE `parentId` = 0 AND type in ({$types})  LIMIT {$start},{$limit}";
         $questions = $this->getConnection()->fetchAll($sql, array($types));
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
@@ -75,6 +78,8 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         if (empty($types)) {
             return array();
         }
+
+        $this->filterStartLimit($start, $limit);
 
         $sql       = "SELECT * FROM {$this->table} WHERE (`parentId` = 0) AND (`type` in ({$types})) and ( not( `type` = 'material' and `subCount` = 0 )) LIMIT {$start},{$limit} ";
         $questions = $this->getConnection()->fetchAll($sql, array($types));
@@ -93,6 +98,8 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         } elseif ($questionSource == 'lesson') {
             $target = 'course-'.$courseId.'/lesson-'.$lessonId;
         }
+
+        $this->filterStartLimit($start, $limit);
 
         $sql = "SELECT * FROM {$this->table} WHERE (`parentId` = 0) and  (`type` in ($types)) and ( not( `type` = 'material' and `subCount` = 0 )) and (`target` like '{$target}/%' OR `target` = '{$target}') LIMIT {$start},{$limit} ";
 

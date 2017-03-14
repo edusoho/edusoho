@@ -29,8 +29,8 @@ class QuestionMarkerDaoImpl extends BaseDao implements QuestionMarkerDao
 
     public function merge($sourceMarkerId, $targetMarkerId, $maxSeq)
     {
-        $sql = "UPDATE {$this->table} SET seq = seq + {$maxSeq}, markerId = {$targetMarkerId} WHERE markerId = ? ";
-        return $this->getConnection()->executeQuery($sql, array($sourceMarkerId));
+        $sql = "UPDATE {$this->table} SET seq = seq + ?, markerId = ? WHERE markerId = ? ";
+        return $this->getConnection()->executeQuery($sql, array($maxSeq, $targetMarkerId, $sourceMarkerId));
     }
 
     public function findQuestionMarkersByIds($ids)

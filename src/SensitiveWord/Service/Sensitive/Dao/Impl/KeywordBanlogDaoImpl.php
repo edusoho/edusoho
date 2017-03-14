@@ -41,6 +41,8 @@ class KeywordBanlogDaoImpl extends BaseDao implements KeywordBanlogDao
             return array();
         }
 
+        $this->filterStartLimit($start, $limit);
+
         $marks = str_repeat('?,', count($userIds) - 1).'?';
         $sql   = "SELECT * FROM {$this->table} WHERE userId IN ({$marks}) ORDER BY id DESC LIMIT {$start}, {$limit};";
         return $this->getConnection()->fetchAll($sql, $userIds);
