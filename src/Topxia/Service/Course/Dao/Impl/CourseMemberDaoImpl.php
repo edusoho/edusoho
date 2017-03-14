@@ -328,8 +328,8 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 
     protected function findStudentsByCourseId($courseId, $start, $limit)
     {
-        $this->filterStartLimit($start, $limit)
         $that = $this;
+        $this->filterStartLimit($start, $limit)
 
         $versionKey = "{$this->table}:version:courseId:{$courseId}";
         $version    = $this->getCacheVersion($versionKey);
