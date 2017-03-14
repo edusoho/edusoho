@@ -62,6 +62,10 @@ class CashFlowDaoImpl extends BaseDao implements CashFlowDao
 
     public function findUserIdsByFlows($type,$createdTime, $orderBy, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
+        if (!in_array($orderBy, array('DESC', 'ASC'))) {
+            throw $this->createDaoException('orderBy error');
+        }
         $sql="SELECT  userId,sum(amount) as amounts FROM `cash_flow` where ".($type ? "`type`=? AND " : "" )." createdTime >= ? group by userId  order by amounts {$orderBy} limit {$start},{$limit} ";
         
         return $this->getConnection()->fetchAll($sql,$type ? array($type,$createdTime) : array($createdTime) ) ? : array() ;
