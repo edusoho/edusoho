@@ -196,7 +196,7 @@
     }
     @media (max-width: @screen-xs-max) {
      left: 0;
-     top: -20px;
+     top: -10px;
     }
   }
 }
@@ -205,6 +205,9 @@
 .course-orderlearn-section {
   min-height: 230px;
   padding-top: 40px;
+  @media (max-width: @screen-xs-max) {
+    padding-top: 20px;
+  }
   .progress-info {
     list-style: none;
     margin-left: 190px;
@@ -233,6 +236,7 @@
   @media (max-width: @screen-xs-max) {
     position: relative;
     margin: 0 auto;
+    left: 0;
   }
   .cricle-progress {
     position: absolute;

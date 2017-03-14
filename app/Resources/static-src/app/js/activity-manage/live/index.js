@@ -6,27 +6,7 @@ class Live {
     this.validator2 = null;
   }
   _init() {
-    this._extendValidator();
     this.initStep2Form();
-  }
-
-  _extendValidator() {
-    $.validator.addMethod(
-      "after",
-      function (value, element, params) {
-        var now = new Date().getTime();
-        console.log(value);
-        let valuedata = new Date(value);
-
-        console.log(now);
-        console.log(valuedata);
-
-        console.log(valuedata > now);
-
-        return value && new Date(value) > now;
-      },
-      Translator.trans('开始时间应晚于当前时间')
-    );
   }
 
   initStep2Form() {
@@ -42,6 +22,7 @@ class Live {
         startTime: {
           required: true,
           DateAndTime: true,
+          after_now: true,
         },
         length: {
           required: true,

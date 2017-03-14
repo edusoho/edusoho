@@ -50,7 +50,7 @@ class CourseSetController extends BaseController
         $paginator = new Paginator($this->get('request'), $count, 20);
         $courseSets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
-            array(),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -265,7 +265,7 @@ class CourseSetController extends BaseController
 
         $courseSets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
-            array('recommendedSeq' => 'desc'),
+            array('recommendedSeq' => 'asc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

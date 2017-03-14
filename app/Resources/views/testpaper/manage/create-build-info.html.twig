@@ -33,7 +33,7 @@
           <option value="{{ range.id }}">{{ range.title }}</option>
         {% endfor %}
       </select>
-      <span class="text-muted mrs">{{'到'|trans}}</span>
+      <span class="color-gray mrs">{{'到'|trans}}</span>
       <select class="form-control width-input width-input-large" id="testpaper-range-end" name="ranges[end]">
         <option value="">请选择</option>
         {% for range in ranges if range %}

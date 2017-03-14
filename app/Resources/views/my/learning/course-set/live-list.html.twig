@@ -1,13 +1,13 @@
 {% extends 'my/layout.html.twig' %}
 
-{% block title %}{{'我的直播课表'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'我的直播'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-learning-live' %}
 
 {% block main %}
 
   <div class="panel panel-default panel-col">
-    <div class="panel-heading">{{'我的直播课表'|trans}}</span></div>
+    <div class="panel-heading">{{'我的直播'|trans}}</span></div>
     <div class="panel-body">
       {% if courseSets %}
         <ul class="course-wide-list live-course-list">
@@ -28,7 +28,7 @@
                 <div class="course-about ellipsis">{{ courseSet.subtitle }}</div>
                 <div class="live-course-lesson mtm">
                   <span class="color-success fsl mrl">{{ task.startTime|date('n月j日 H:i') }} ~ {{ task.endTime|date('H:i') }}</span>
-                  <span class="text-muted fsl mrl">{{'第%number%课时'|trans({'%number%': task.number})}}</span>
+                  <span class="color-gray fsl mrl">{{'第%number%课时'|trans({'%number%': task.number})}}</span>
                 </div>
               </div>
             </li>

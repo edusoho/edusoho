@@ -30,7 +30,7 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
         // @TODO 班级功能改造完后完善
         /*if ($classroom && $note['status']) {
-            $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', +1);
+            $this->getClassroomService()->waveClassroom($classroom['id'], 'noteNum', +1);
         }*/
 
         $this->getCourseMemberService()->refreshMemberNoteNumber($note['courseId'], $note['userId']);
@@ -48,11 +48,11 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
         // @TODO 班级功能改造完后完善
         //$classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
         /*if ($classroom && $note['status'] && !$preStatus) {
-            $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', +1);
+            $this->getClassroomService()->waveClassroom($classroom['id'], 'noteNum', +1);
         }
 
         if ($classroom && !$note['status'] && $preStatus) {
-            $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', -1);
+            $this->getClassroomService()->waveClassroom($classroom['id'], 'noteNum', -1);
         }*/
     }
 
@@ -61,7 +61,7 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
         $note = $event->getSubject();
         /*$classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
         if ($classroom) {
-            $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', -1);
+            $this->getClassroomService()->waveClassroom($classroom['id'], 'noteNum', -1);
         }*/
 
         $this->getCourseService()->updateCourseStatistics($note['courseId'], array('noteNum'));

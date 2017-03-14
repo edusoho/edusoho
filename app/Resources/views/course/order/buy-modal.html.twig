@@ -15,7 +15,7 @@
     <div class="form-group">
       <div class="col-sm-3 control-label">{{'课程名称'|trans}}</div>
       <div class="col-sm-9 form-control-static ">
-      	<span class="control-text text-muted">《{{ courseSet.title }}》 - {{ course.title }} </span>
+      	<span class="control-text color-gray">《{{ courseSet.title }}》 - {{ course.title }} </span>
       </div>
     </div>
 
@@ -28,10 +28,10 @@
           {% else %}
             {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
               <strong class="money">{{ course.price * setting('coin.cash_rate')}}</strong>
-              <span class="text-muted">{{setting('coin.coin_name')}}</span>
+              <span class="color-gray">{{setting('coin.coin_name')}}</span>
             {% else %}
               <strong class="money">{{ course.price }}</strong>
-              <span class="text-muted">{{'元'|trans}}</span>
+              <span class="color-gray">{{'元'|trans}}</span>
             {% endif %}
           {% endif %}
       	</span>

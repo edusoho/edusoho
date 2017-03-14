@@ -179,13 +179,13 @@ $.validator.addMethod('unsigned_integer', function (value, element) {
   return this.optional(element) || /^\+?[0-9][0-9]*$/.test(value);
 }, jQuery.validator.format("请输入非负整数"));
 
-jQuery.validator.addMethod("second_range", function (value, element) {
-  return this.optional(element) || /^([0-9]|[012345][0-9]|59)$/.test(value);
-}, "请输入0-59之间的数字");
-
 // jQuery.validator.addMethod("unsigned_integer", function (value, element) {
 //   return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
 // }, "时长必须为非负整数");
+
+jQuery.validator.addMethod("second_range", function (value, element) {
+  return this.optional(element) || /^([0-9]|[012345][0-9]|59)$/.test(value);
+}, "请输入0-59之间的数字");
 
 $.validator.addMethod("open_live_course_title", function (value, element, params) {
   return !params || /^[^(<|>|'|"|&|‘|’|”|“)]*$/.test(value);
@@ -203,35 +203,57 @@ jQuery.validator.addMethod("max_year", function (value, element) {
   return this.optional(element) || value < 100000;
 }, "有效期最大值不能超过99,999天");
 
-$.validator.addMethod("feature", function (value, element, params) {
-  return value && (new Date(value).getTime()) > Date.now();
+$.validator.addMethod("before_date", function (value, element, params) {
+  let date = new Date(value);
+  let afterDate = new Date($(params).val());
+  return !value || !$(params).val() || afterDate >= date;
 },
-  Translator.trans('购买截止时间需在当前时间之后')
+  Translator.trans('开始日期应早于结束日期')
 );
 
-// 不能晚于当前的一个日期
+$.validator.addMethod("after_date", function (value, element, params) {
+  let date = new Date(value);
+  let afterDate = new Date($(params).val());
+  return !value || !$(params).val() || afterDate <= date;
+},
+  Translator.trans('开始日期应早于结束日期')
+);
 
-$.validator.addMethod("next_day", function (value, element, params) {
-  let now = new Date();
-  let next = new Date(now + 86400 * 1000);
-  return value && next <= new Date(value);
+$.validator.addMethod("after_now", function (value, element, params) {
+  let afterDate = new Date(value);
+  return !value || afterDate >=new Date();
 },
   Translator.trans('开始时间应晚于当前时间')
 );
 
-$.validator.addMethod("before",function (value, element, params) {
-    return value && $(params).val() >= value;
-  },
-  Translator.trans('开始日期应早于结束日期')
+//日期比较，不进行时间比较
+$.validator.addMethod("after_now_date", function (value, element, params) {
+  let now = new Date();
+  let afterDate = new Date(value);
+  let str = now.getFullYear() + "/" + (now.getMonth() + 1) + "/" + now.getDate();
+  return !value || afterDate >= new Date(str);
+},
+  Translator.trans('开始日期应晚于当前日期')
 );
 
-$.validator.addMethod("after",function (value, element, params) {
-    if ($('input[name="expiryMode"]:checked').val() !== 'date') {
-      return true;
-    }
-    console.log($(params).val());
-    console.log(value);
-    return value && $(params).val() < value;
-  },
+
+
+//检查将废除
+$.validator.addMethod("before", function (value, element, params) {
+  return value && $(params).val() >= value;
+},
+  Translator.trans('开始日期应早于结束日期')
+);
+//检查将废除
+$.validator.addMethod("after", function (value, element, params) {
+  
+  return value && $(params).val() < value;
+},
   Translator.trans('结束日期应晚于开始日期')
+);
+//检查将废除
+$.validator.addMethod("feature", function (value, element, params) {
+  return value && (new Date(value).getTime()) > Date.now();
+},
+  Translator.trans('购买截止时间需在当前时间之后')
 );

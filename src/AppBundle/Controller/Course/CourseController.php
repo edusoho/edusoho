@@ -52,12 +52,16 @@ class CourseController extends CourseBaseController
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
         }
 
+        $user = $this->getCurrentUser();
+        $isCourseTeacher = $this->getMemberService()->isCourseTeacher($id, $user['id']);
+
         return $this->render(
             'course/course-show.html.twig',
             array(
                 'tab' => $tab,
                 'course' => $course,
                 'classroom' => $classroom,
+                'isCourseTeacher' => $isCourseTeacher,
             )
         );
     }
@@ -91,7 +95,7 @@ class CourseController extends CourseBaseController
     public function headerAction(Request $request, $course)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
 
         $user = $this->getCurrentUser();
         $member = $user->isLogin() ? $this->getMemberService()->getCourseMember(
@@ -185,14 +189,8 @@ class CourseController extends CourseBaseController
             'courseSetId' => $courseSet['id'],
         );
 
-        if (!empty($member)) {
-            $conditions['courseId'] = $course['id'];
-            $selectedCourseId = $conditions['courseId'];
-        } else {
-            $selectedCourseId = 0;
-        }
-
-        if ($request->query->has('selectedCourse') && $selectedCourseId = $request->query->get('selectedCourse')) {
+        $selectedCourseId = $request->query->get('selectedCourse', 0);
+        if ($selectedCourseId) {
             $conditions['courseId'] = $selectedCourseId;
         }
 
@@ -211,7 +209,11 @@ class CourseController extends CourseBaseController
 
         $userReview = array();
         if (!empty($member)) {
-            $userReview = $this->getReviewService()->getUserCourseReview($member['userId'], $course['id']);
+            if ($selectedCourseId > 0) {
+                $userReview = $this->getReviewService()->getUserCourseReview($member['userId'], $selectedCourseId);
+            } else {
+                $userReview = $this->getReviewService()->getUserCourseReview($member['userId'], $course['id']);
+            }
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));

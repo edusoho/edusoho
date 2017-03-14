@@ -21,7 +21,7 @@
 	  data-trigger="hover" 
 	  data-placement="top" 
 	  data-html="true" 
-	  title="{{ tag.full_name|trans }} {% if not tag.active %}<small class='text-muted'>({{'暂未提供'|trans}})</span>{% endif %}" 
+	  title="{{ tag.full_name|trans }} {% if not tag.active %}<small class='color-gray'>({{'暂未提供'|trans}})</span>{% endif %}" 
 	  data-content="{{ tag.summary|trans}}">
 	  	{{ tag.short_name|trans }}
 	  </a>

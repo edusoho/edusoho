@@ -1,9 +1,4 @@
 .course-list {
-  // &.no-shadow {
-  //   .course-item {
-  //     .box-shadow(none); 
-  //   }
-  // }
   &.no-margin {
     .course-item {
       margin-bottom: 0; 
@@ -14,7 +9,6 @@
     z-index: 1;
     margin-bottom: 30px;
     .border-radius;
-    // .es-box-shadow;
     border: 1px solid @border-color;
     background-color: #fff;
     @media (min-width: @screen-md-min) {
@@ -109,9 +103,7 @@
     .metas {
       position: relative;
       padding: 10px;
-      // border-top: 1px solid #f1f1f1;
       color: @gray-medium;
-      // a { color: @gray-medium; }
       @media (max-width: @screen-xs-max) {
         padding: 5px;
       }
@@ -121,13 +113,20 @@
       .course-price-widget {
         float: right;
       }
+     
       .price {
+        //不能用color-dange代替...便于主题重写
         color: @brand-danger;
         font-size: 14px;
         margin-right: 0;
       }
       .free {
-        color: #238312;
+        //不能用color-dange代替...便于主题重写
+        color: @brand-success;
+      }
+      .discount {
+        //不能用color-dange代替...便于主题重写
+        color: @brand-warning;
       }
       .comment {
         margin-left: 10px;
@@ -174,7 +173,3 @@
     }
   }
 }
-
-// .lt-ie9 .course-list .course-item {
-//   border: 1px solid @gray-light;
-// }

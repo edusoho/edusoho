@@ -6,7 +6,7 @@
     <input {% if question.parentId != 0 %} class="hidden" {% endif %} class="notMoveHandle" type="checkbox" value="{{question.id}}" data-role="batch-item" >
     <input type="hidden" name="questionIds[]" value="{{ question.id }}">
   </td>
-  <td class="seq">{% if question.subCount > 0 %}<span class="text-muted">~</span>{% else %}{{ question.seq|default(' ') }}{% endif %}</td>
+  <td class="seq">{% if question.subCount > 0 %}<span class="color-gray">~</span>{% else %}{{ question.seq|default(' ') }}{% endif %}</td>
   <td>
     {% if question.includeImg|default('') %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
     {{question['stem']|plain_text(40) }}

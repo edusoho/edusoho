@@ -49,22 +49,22 @@
             <td>
               <div class="short-long-text">
                 <div class="short-text">
-                  {{ review.content|plain_text(60) }} <span class="text-muted trigger">({{'展开'|trans}})</span>
+                  {{ review.content|plain_text(60) }} <span class="color-gray trigger">({{'展开'|trans}})</span>
                 </div>
-                <div class="long-text">{{ review.content|nl2br }} <span class="text-muted trigger">({{'收起'|trans}})</span></div>
+                <div class="long-text">{{ review.content|nl2br }} <span class="color-gray trigger">({{'收起'|trans}})</span></div>
               </div>
               <div class="mts">
                 {% if classroom %}
                   <a class="color-success text-sm" href="{{ path('classroom_show', {id:review.classroomId}) }}" target="_blank">{{ classrooms[review.classroomId].title }}</a>
                 {% else %}
-                  <span class="text-muted text-sm">{{'%classroomName%已删除'|trans({'%classroomName%':setting('classroom.name')|default('班级'|trans)})}}</span>
+                  <span class="color-gray text-sm">{{'%classroomName%已删除'|trans({'%classroomName%':setting('classroom.name')|default('班级'|trans)})}}</span>
                 {% endif %}
               </div>
             </td>
             <td>{{ review.rating }}{{'星'|trans}}</td>
             <td>
               {{ admin_macro.user_link(author) }}<br>
-              <span class="text-muted">{{review.createdTime|date('Y-n-d H:i')}}</span>
+              <span class="color-gray">{{review.createdTime|date('Y-n-d H:i')}}</span>
             </td>
             <td>
               <button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{'评价'|trans}}" data-url="{{ path('admin_classroom_review_delete', {id:review.id}) }}">{{'删除'|trans}}</button>

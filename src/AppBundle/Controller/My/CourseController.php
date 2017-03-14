@@ -144,6 +144,7 @@ class CourseController extends CourseBaseController
         return $this->render('course/course-show.html.twig', array(
             'tab' => $tab,
             'member' => $member,
+            'isCourseTeacher' => $member['role'] == 'teacher',
             'course' => $course,
             'classroom' => $classroom,
         ));
