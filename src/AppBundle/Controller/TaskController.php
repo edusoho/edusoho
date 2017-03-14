@@ -29,6 +29,7 @@ class TaskController extends BaseController
 
         $user = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
+
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
 
         if ($member && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {

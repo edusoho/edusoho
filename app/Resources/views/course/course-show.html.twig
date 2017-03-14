@@ -79,7 +79,7 @@
   </div>
 
   {% block member_expired %}
-    {% if  member|default(null) and member.deadline  and member.deadline < date().timestamp %}
+    {% if is_member_expired(course|default(null), member|default(null)) %}
       <div class="member-expire">
         <a href="#modal" data-toggle="modal" data-url="{{ path('course_member_expired', {id:course.id}) }}"></a>
       </div>
