@@ -189,8 +189,8 @@ class CourseController extends CourseBaseController
             'courseSetId' => $courseSet['id'],
         );
 
-        $selectedCourseId = $request->query->get('selectedCourse', 0);
-        if ($selectedCourseId) {
+        $selectedCourseId = $request->query->get('selectedCourse', $course['id']);
+        if ($selectedCourseId > 0) {
             $conditions['courseId'] = $selectedCourseId;
         }
 
