@@ -364,7 +364,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $defaultCourse = $this->generateDefaultCourse($created);
 
         $this->getCourseService()->createCourse($defaultCourse);
-        $this->getLogService()->info('course', 'create_course_set', sprintf("创建课程《%s》(#%s)", $created['title'] ,$created['id']));
+        $this->getLogService()->info('course', 'create', sprintf("创建课程《%s》(#%s)", $created['title'] ,$created['id']));
         return $created;
     }
 
@@ -429,6 +429,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $fields);
 
+        $this->getLogService()->info('course', 'update', "修改课程《{$courseSet['title']}》(#{$courseSet['id']})");
         $this->dispatchEvent('course-set.update', new Event($courseSet));
 
         return $courseSet;
@@ -512,6 +513,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('cover' => $covers));
+
+        $this->getLogService()->info('course', 'update_picture', "更新课程《{$courseSet['title']}》(#{$courseSet['id']})图片", $covers);
         $this->dispatchEvent('course-set.update', new Event($courseSet));
 
         return $courseSet;
