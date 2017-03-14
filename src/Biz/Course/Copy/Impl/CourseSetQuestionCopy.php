@@ -5,24 +5,17 @@ namespace Biz\Course\Copy\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Copy\AbstractEntityCopy;
 use Biz\File\Service\UploadFileService;
-use Biz\Activity\Service\ActivityService;
 use Biz\Question\Service\QuestionService;
 use Biz\Testpaper\Service\TestpaperService;
-use Biz\Activity\Service\TestpaperActivityService;
 
-/**
- * Class QuestionCopy.
- *
- * @deprecated
- * @see TestpaperCopy
- */
-class QuestionCopy extends AbstractEntityCopy
+class CourseSetQuestionCopy extends AbstractEntityCopy
 {
     /**
      * 复制链说明：
-     * Question
-     * - Question attachment 问题附件.
-     *
+     * CourseSet
+     * - Question
+     *   - Attachment 问题附件.
+     * 由于exercise类型任务的题目列表是使用时自动创建的，因此需要把题目事先复制过去
      * @param $biz
      */
     public function __construct($biz, $node)
@@ -42,35 +35,12 @@ class QuestionCopy extends AbstractEntityCopy
      * */
     protected function doCopyQuestions($newCourse, $sourceCourse, $isCopy)
     {
-        $courseId = $sourceCourse['id'];
-        $newCourseSetId = $newCourse['courseSetId'];
-        $testpapers = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'testpaper');
-        $others = $this->getActivityService()->search(
-            array('fromCourseId' => $courseId, 'mediaTypes' => array('homework', 'exercise')),
-            array(),
-            0,
-            PHP_INT_MAX
-        );
-
-        $testpaperExt = $this->getTestpaperActivityService()->findActivitiesByIds(ArrayToolkit::column($testpapers, 'mediaId'));
-
-        $testpaperIds = array_merge(ArrayToolkit::column($testpaperExt, 'mediaId'), ArrayToolkit::column($others, 'mediaId'));
-        if (empty($testpaperIds)) {
-            return array();
-        }
-
-        $testpaperItems = $this->getTestpaperService()->findItemsByTestIds($testpaperIds);
-        $questionIds = ArrayToolkit::column($testpaperItems, 'questionId');
-        if (empty($questionIds)) {
-            return array();
-        }
-
-        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+        $questions = $this->getQuestionService()->findQuestionsByCourseSetId($sourceCourse['courseSetId']);
         $questions = $this->questionSort($questions);
 
         $questionMap = array();
         foreach ($questions as $question) {
-            $newQuestion = $this->filterFields($newCourse, $question, $isCopy);
+            $newQuestion = $this->filterFields($newCourse['courseSetId'], $question, $isCopy);
 
             $newQuestion['parentId'] = $question['parentId'] > 0 ? $questionMap[$question['parentId']][0] : 0;
 
@@ -92,7 +62,12 @@ class QuestionCopy extends AbstractEntityCopy
         );
         if (!empty($stems)) {
             $fileIds = ArrayToolkit::column($stems, 'fileId');
-            $this->getUploadFileService()->createUseFiles($fileIds, $newQuestion['id'], 'question.stem', 'attachment');
+            $this->getUploadFileService()->createUseFiles(
+                $fileIds,
+                $newQuestion['id'],
+                'question.stem',
+                'attachment'
+            );
         }
         $analysises = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType(
             'question.analysis',
@@ -143,6 +118,7 @@ class QuestionCopy extends AbstractEntityCopy
             $newQuestion['courseId'] = 0;
         }
         $newQuestion['courseSetId'] = $newCourse['courseSetId'];
+        //lessonId怎么从旧的taskId赋值为新的taskId
         $newQuestion['lessonId'] = 0;
         $newQuestion['copyId'] = $isCopy ? $question['id'] : 0;
         $newQuestion['userId'] = $this->biz['user']['id'];
@@ -157,22 +133,6 @@ class QuestionCopy extends AbstractEntityCopy
     protected function getTestpaperService()
     {
         return $this->biz->service('Testpaper:TestpaperService');
-    }
-
-    /**
-     * @return TestpaperActivityService
-     */
-    protected function getTestpaperActivityService()
-    {
-        return $this->biz->service('Activity:TestpaperActivityService');
-    }
-
-    /**
-     * @return ActivityService
-     */
-    protected function getActivityService()
-    {
-        return $this->biz->service('Activity:ActivityService');
     }
 
     /**
