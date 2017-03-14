@@ -172,7 +172,7 @@ $.validator.addMethod("visible_character", function (value, element, params) {
 }, jQuery.validator.format("请输入可见性字符"));
 
 $.validator.addMethod('positive_integer', function (value, element) {
-  return this.optional(element) || /^\+?[1-9][0-9]*$/.test(value);
+  return !value || /^\+?[1-9][0-9]*$/.test(value);
 }, jQuery.validator.format("请输入正整数"));
 
 $.validator.addMethod('unsigned_integer', function (value, element) {

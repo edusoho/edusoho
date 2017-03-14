@@ -80,7 +80,7 @@
 {% endblock %}
 
 {% block activity_finish %}
-  <div class="form-group">
+  {#<div class="form-group">
     <div class="col-sm-2 control-label">
       <label for="condition-select">{{ '考评方式'|trans }}</label>
     </div>
@@ -89,7 +89,7 @@
         {{ select_options({'score':'分数'|trans}, activity.checkType|default('score')) }}
       </select>
     </div>
-  </div>
+  </div>#}
   <div class="form-group">
     <div class="col-sm-2 control-label">
       <label for="condition-select">{{ '完成条件'|trans }}</label>
