@@ -191,5 +191,5 @@ interface CourseService
 
     public function calculateLearnProgressByUserIdAndCourseIds($userId, array $courseIds);
 
-    public function  convertTasks($tasks, $course);
+    public function convertTasks($tasks, $course);
 }

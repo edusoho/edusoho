@@ -1120,7 +1120,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     //移动端接口使用　task 转成lesson
-    public function  convertTasks($tasks, $course)
+    public function convertTasks($tasks, $course)
     {
         if (empty($tasks)) {
             return array();
@@ -1401,6 +1401,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $start,
             $limit
         );
+
         return $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($favorites, 'courseId'));
     }
 
