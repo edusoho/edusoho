@@ -101,9 +101,9 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
 
         $this->filterStartLimit($start, $limit);
 
-        $sql = "SELECT * FROM {$this->table} WHERE (`parentId` = 0) and  (`type` in ($types)) and ( not( `type` = 'material' and `subCount` = 0 )) and (`target` like '{$target}/%' OR `target` = '{$target}') LIMIT {$start},{$limit} ";
+        $sql = "SELECT * FROM {$this->table} WHERE (`parentId` = 0) and  (`type` in ($types)) and ( not( `type` = 'material' and `subCount` = 0 )) and (`target` like ? OR `target` = ?) LIMIT {$start},{$limit} ";
 
-        $questions = $this->getConnection()->fetchAll($sql, array());
+        $questions = $this->getConnection()->fetchAll($sql, array("{$target}/%", "{$target}"));
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
@@ -123,8 +123,8 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             $target = 'course-'.$courseId.'/lesson-'.$lessonId;
         }
 
-        $sql = "SELECT count(*) FROM {$this->table} WHERE  (`parentId` = 0) and (`type` in ({$types})) and (`target` like '{$target}/%' OR `target` = '{$target}')";
-        return $this->getConnection()->fetchColumn($sql, array());
+        $sql = "SELECT count(*) FROM {$this->table} WHERE  (`parentId` = 0) and (`type` in ({$types})) and (`target` like ? OR `target` = ?)";
+        return $this->getConnection()->fetchColumn($sql, array("{$target}/%", "{$target}"));
     }
 
     public function findQuestionsByParentIds(array $ids)
