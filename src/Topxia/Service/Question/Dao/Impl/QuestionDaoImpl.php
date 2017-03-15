@@ -94,13 +94,8 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
-    public function findQuestionsByTypesAndSourceAndExcludeUnvalidatedMaterial(array $types, $start, $limit, $questionSource, $courseId, $lessonId)
+    public function findQuestionsByTypesAndSourceAndExcludeUnvalidatedMaterial($types, $start, $limit, $questionSource, $courseId, $lessonId)
     {
-        if (empty($types)) {
-            return array();
-        }
-
-        $marks     = str_repeat('?,', count($types) - 1).'?';
 
         if ($questionSource == 'course') {
             $target = 'course-'.$courseId;
@@ -110,9 +105,9 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
 
         $this->filterStartLimit($start, $limit);
 
-        $sql = "SELECT * FROM {$this->table} WHERE (`parentId` = 0) and  (`type` in ($marks)) and ( not( `type` = 'material' and `subCount` = 0 )) and (`target` like ? OR `target` = ?) LIMIT {$start},{$limit} ";
+        $sql = "SELECT * FROM {$this->table} WHERE (`parentId` = 0) and  (`type` in ($types)) and ( not( `type` = 'material' and `subCount` = 0 )) and (`target` like ? OR `target` = ?) LIMIT {$start},{$limit} ";
 
-        $questions = $this->getConnection()->fetchAll($sql, array_merge($types, array("{$target}/%", "{$target}")));
+        $questions = $this->getConnection()->fetchAll($sql, array("{$target}/%", "{$target}"));
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
