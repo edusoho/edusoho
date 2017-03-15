@@ -29,11 +29,11 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $start = (int) $this->getParam('start', 0);
         $limit = (int) $this->getParam('limit', 10);
 
-        $conditions['title'] = $this->getParam('title');
+        $conditions['titleLike'] = $this->getParam('title');
         $total = $this->getClassroomService()->searchClassroomsCount($conditions);
         $classrooms = $this->getClassroomService()->searchClassrooms(
             $conditions,
-            array('recommendedSeq', 'desc'),
+            array('recommendedSeq' => 'desc'),
             $start,
             $limit
         );
@@ -138,7 +138,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $total = $this->getClassroomService()->searchClassroomsCount($conditions);
         $classrooms = $this->getClassroomService()->searchClassrooms(
             $conditions,
-            array('recommendedSeq', 'desc'),
+            array('recommendedSeq' => 'desc'),
             $start,
             $limit
         );
@@ -171,7 +171,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $total = $this->getClassroomService()->searchClassroomsCount($conditions);
         $classrooms = $this->getClassroomService()->searchClassrooms(
             $conditions,
-            array('createdTime', 'desc'),
+            array('createdTime' => 'desc'),
             $start,
             $limit
         );
@@ -573,12 +573,12 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $progresses = array();
         $classrooms = array();
 
-        $studentClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'student', 'userId' => $user->id), array('createdTime', 'desc'), 0, PHP_INT_MAX);
-        $auditorClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'auditor', 'userId' => $user->id), array('createdTime', 'desc'), 0, PHP_INT_MAX);
+        $studentClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'student', 'userId' => $user->id), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
+        $auditorClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'auditor', 'userId' => $user->id), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
 
         $total = 0;
-        $total += $this->getClassroomService()->searchMemberCount(array('role' => 'student', 'userId' => $user->id), array('createdTime', 'desc'), 0, PHP_INT_MAX);
-        $total += $this->getClassroomService()->searchMemberCount(array('role' => 'auditor', 'userId' => $user->id), array('createdTime', 'desc'), 0, PHP_INT_MAX);
+        $total += $this->getClassroomService()->searchMemberCount(array('role' => 'student', 'userId' => $user->id), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
+        $total += $this->getClassroomService()->searchMemberCount(array('role' => 'auditor', 'userId' => $user->id), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
 
         $classrooms = array_merge($studentClassrooms, $auditorClassrooms);
 
@@ -683,7 +683,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
             $conditions,
-            array($sort, 'desc'),
+            array($sort => 'desc'),
             $start,
             $limit
         );

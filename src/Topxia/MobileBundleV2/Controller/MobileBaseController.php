@@ -276,54 +276,51 @@ class MobileBaseController extends BaseController
 
         $coinSetting = $this->getCoinSetting();
 
-
         $self = $this;
         $container = $this->container;
 
         $courseIds = ArrayToolkit::column($courses, 'id');
         $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
-        
-        return array_map(
-            function ($course, $courseSet) use ($self, $container, $teachers, $coinSetting) {
-                $course = $this->convertOldFields($course);
-                $course = $this->filledCourseByCourseSet($course, $courseSet);
 
-                $course['smallPicture'] = $container->get('web.twig.app_extension')->courseSetCover(
-                    $courseSet,
-                    'small'
-                );
-                $course['middlePicture'] = $container->get('web.twig.app_extension')->courseSetCover(
-                    $courseSet,
-                    'middle'
-                );
-                $course['largePicture'] = $container->get('web.twig.app_extension')->courseSetCover(
-                    $courseSet,
-                    'large'
-                );
-                $course['about'] = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
-                $course['createdTime'] = date("c", $course['createdTime']);
+        foreach ($courses as &$course) {
+            $courseSet = $courseSets[$course['courseSetId']];
 
-                $course['teachers'] = array();
+            $course = $this->convertOldFields($course);
+            $course = $this->filledCourseByCourseSet($course, $courseSet);
 
-                foreach ($course['teacherIds'] as $teacherId) {
-                    if (isset($teachers[$teacherId])) {
-                        $course['teachers'][] = $teachers[$teacherId];
-                    }
+            $course['smallPicture'] = $container->get('web.twig.app_extension')->courseSetCover(
+                $courseSet,
+                'small'
+            );
+            $course['middlePicture'] = $container->get('web.twig.app_extension')->courseSetCover(
+                $courseSet,
+                'middle'
+            );
+            $course['largePicture'] = $container->get('web.twig.app_extension')->courseSetCover(
+                $courseSet,
+                'large'
+            );
+            $course['about'] = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
+            $course['createdTime'] = date('c', $course['createdTime']);
+
+            $course['teachers'] = array();
+
+            foreach ($course['teacherIds'] as $teacherId) {
+                if (isset($teachers[$teacherId])) {
+                    $course['teachers'][] = $teachers[$teacherId];
                 }
+            }
 
-                unset($course['teacherIds']);
+            unset($course['teacherIds']);
 
-                $course['tags'] = TagUtil::buildTags('course-set', $courseSet['id']);
-                $course['tags'] = ArrayToolkit::column($course['tags'], 'name');
+            $course['tags'] = TagUtil::buildTags('course-set', $courseSet['id']);
+            $course['tags'] = ArrayToolkit::column($course['tags'], 'name');
 
-                $course['priceType'] = $coinSetting['priceType'];
-                $course['coinName'] = $coinSetting['name'];
+            $course['priceType'] = $coinSetting['priceType'];
+            $course['coinName'] = $coinSetting['name'];
+        }
 
-                return $course;
-            },
-            $courses,
-            $courseSets
-        );
+        return $courses;
     }
 
     private function convertOldFields($course)

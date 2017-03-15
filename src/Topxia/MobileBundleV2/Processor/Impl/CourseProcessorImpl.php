@@ -1218,9 +1218,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $conditions['title'] = $search;
 
-        if (empty($tagId)) {
-            $conditions['title'] = $search;
-        } else {
+        if (!empty($tagId)) {
             $conditions['tagId'] = $tagId;
         }
 
@@ -1252,7 +1250,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $start = (int) $this->getParam('start', 0);
         $limit = (int) $this->getParam('limit', 10);
-
         $total = $this->controller->getCourseService()->countCourses($conditions);
         $sort = $this->getParam('sort', 'createdTimeByDesc');
         $courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
