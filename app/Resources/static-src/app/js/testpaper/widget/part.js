@@ -2,14 +2,15 @@ import 'app/common/watermark';
 import { Browser } from 'common/utils';
 
 export const initScrollbar = ()=> {
-	let $taskTestpaperBodyIframe = $('.js-task-testpaper-body-iframe');
+	// let $taskTestpaperBodyIframe = $('.js-task-testpaper-body-iframe');
 	let $paneCard = $('.js-panel-card');
-	if (Browser.ie  || Browser.firefox) {
-		$taskTestpaperBodyIframe.css('overflow-y','auto')
-	} else {
-		$taskTestpaperBodyIframe.perfectScrollbar();
-		$taskTestpaperBodyIframe.perfectScrollbar('update'); 
-	}
+  // $taskTestpaperBodyIframe.css('overflow-y','auto');
+	// if (Browser.ie  || Browser.firefox) {
+	// 	$taskTestpaperBodyIframe.css('overflow-y','auto')
+	// } else {
+	// 	$taskTestpaperBodyIframe.perfectScrollbar();
+	// 	$taskTestpaperBodyIframe.perfectScrollbar('update'); 
+	// }
   $paneCard.perfectScrollbar();
 	$paneCard.perfectScrollbar('update');
 }
@@ -37,15 +38,17 @@ export const testpaperCardLocation = () => {
 			$btn.addClass('doing').siblings('.doing').removeClass('doing');
 		}
     let $current = $($btn.data('anchor'));
-		let $testpaperBodyIframe = $('.js-task-testpaper-body-iframe');
+		// let $testpaperBodyIframe = $('.js-task-testpaper-body-iframe');
 		//iframe中的滚动事件
-		if($testpaperBodyIframe.length>0) {
-			$(".js-task-testpaper-body-iframe").scrollTop($current.offset().top);
-			$(".js-task-testpaper-body-iframe").perfectScrollbar('update');
-		}
-		else {
-			$("body").scrollTop($current.offset().top);
-		}
+    $("body").scrollTop($current.offset().top);
+
+		// if($testpaperBodyIframe.length>0) {
+		// 	$(".js-task-testpaper-body-iframe").scrollTop($current.offset().top);
+		// 	$(".js-task-testpaper-body-iframe").perfectScrollbar('update');
+		// }
+		// else {
+		// 	$("body").scrollTop($current.offset().top);
+		// }
 	})
 }
 
