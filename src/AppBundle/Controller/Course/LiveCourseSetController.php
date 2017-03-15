@@ -256,13 +256,18 @@ class LiveCourseSetController extends CourseBaseController
         $ret = array();
         foreach ($liveCourseSetIds as $key => $courseSetId) {
             $ret[$courseSetId] = $liveCourseSets[$courseSetId];
+            $ret[$courseSetId]['course'] = $courses[$courseSetId];
             $tasks = $this->getTaskService()->searchTasks(
                 array('fromCourseSetId' => $courseSetId),
                 array('startTime' => 'ASC'),
                 0,
                 1
             );
-            $ret[$courseSetId]['course'] = $courses[$courseSetId];
+
+            if(empty($tasks)){
+                continue;
+            }
+
             $ret[$courseSetId]['liveStartTime'] = $tasks[0]['startTime'];
             $ret[$courseSetId]['liveEndTime'] = $tasks[0]['endTime'];
             $ret[$courseSetId]['taskId'] = $tasks[0]['id'];
