@@ -99,8 +99,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
      * 统计当前时间以后每天的直播次数.
      *
      * @param  $limit
-     *
-     * @return array <string, int|string>
+     * @return array    <string, int|string>
      */
     public function findFutureLiveDates($limit)
     {
@@ -206,6 +205,9 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'endTime < :endTime_LT',
                 'endTime <= :endTime_GE',
                 'categoryId = :categoryId',
+                'activityId = :activityId',
+                'categoryId = :categoryId',
+                'mode = :mode',
             ),
         );
     }

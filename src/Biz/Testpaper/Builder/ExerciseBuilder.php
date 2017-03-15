@@ -58,15 +58,25 @@ class ExerciseBuilder implements TestpaperBuilderInterface
         } else {
             $conditions = array(
                 'types' => $exercise['metas']['questionTypes'],
-                'courseId' => $exercise['courseSetId'],
+                'courseSetId' => $exercise['courseSetId'],
                 'parentId' => 0,
             );
             if (!empty($exercise['metas']['difficulty'])) {
                 $conditions['difficulty'] = $exercise['metas']['difficulty'];
             }
 
+            //兼容course1.0 start
             if (!empty($exercise['metas']['range']) && $exercise['metas']['range'] == 'lesson') {
                 $conditions['lessonId'] = $exercise['lessonId'];
+            }
+            //兼容course1.0 end
+
+            if (!empty($exercise['metas']['range']['courseId'])) {
+                $conditions['courseId'] = $exercise['metas']['range']['courseId'];
+            }
+
+            if (!empty($exercise['metas']['range']['lessonId'])) {
+                $conditions['lessonId'] = $exercise['metas']['range']['lessonId'];
             }
 
             $count = $this->getQuestionService()->searchCount($conditions);
@@ -172,18 +182,35 @@ class ExerciseBuilder implements TestpaperBuilderInterface
     {
         $conditions = array();
 
+        if (!empty($options['range']) && !is_array($options['range'])) {
+            $options['range'] = (array) json_decode($options['range']);
+        }
+
         if (!empty($options['range']) && $options['range'] != 'course') {
             $conditions['lessonIds'] = $options['range'];
+        }
+
+        if (!empty($options['range']['courseId'])) {
+            $conditions['courseId'] = $options['range']['courseId'];
+        }
+
+        if (!empty($options['range']['lessonId'])) {
+            $conditions['lessonId'] = $options['range']['lessonId'];
         }
 
         if (!empty($options['questionTypes'])) {
             $conditions['types'] = $options['questionTypes'];
         }
 
+        if (!empty($options['types'])) {
+            $conditions['types'] = explode(',', $options['types']);
+        }
+
         if (!empty($options['difficulty'])) {
             $conditions['difficulty'] = $options['difficulty'];
         }
-        $conditions['courseId'] = $options['courseId'];
+
+        $conditions['courseSetId'] = $options['courseSetId'];
         $conditions['parentId'] = 0;
 
         $total = $this->getQuestionService()->searchCount($conditions);
