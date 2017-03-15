@@ -540,6 +540,7 @@ class AnalysisController extends BaseController
             $data = $this->fillAnalysisData($condition, $joinLessonData);
             $count = array_reduce($joinLessonData, function ($count, $joinLessonData) {
                 $count += $joinLessonData['count'];
+
                 return $count;
             }, 0);
         }
