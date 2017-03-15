@@ -53,13 +53,13 @@
 
         <!--营销页显示-->
         {% if marketingPage %}
-        <li id="unfavorite-btn" data-url="{{ path('course_set_unfavorite', {id: course.courseSetId }) }}"
+        <li class="js-unfavorite-btn" id="unfavorite-btn" data-url="{{ path('course_set_unfavorite', {id: course.courseSetId }) }}"
             {% if not isUserFavorite %}style="display: none" {% endif %}>
           <a class="btn btn-default btn-xs" href="javascript:;" data-toggle="tooltip" data-placement="top" title="已收藏"
              data-trigger="hover"> <i class="es-icon es-icon-bookmark color-primary"></i>
           </a>
         </li>
-        <li id="favorite-btn" data-url="{{ path('course_set_favorite', {id: course.courseSetId }) }}"
+        <li class="js-favorite-btn" id="favorite-btn" data-url="{{ path('course_set_favorite', {id: course.courseSetId }) }}"
             {% if isUserFavorite %}style="display: none"{% endif %}>
           <a class="btn btn-default btn-xs" href="javascript:;" data-toggle="tooltip" data-placement="top" title="收藏"
              data-trigger="hover"> <i class="es-icon es-icon-bookmarkoutline"></i>
