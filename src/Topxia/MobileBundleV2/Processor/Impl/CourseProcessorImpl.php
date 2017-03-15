@@ -1108,7 +1108,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $courseId = $this->getParam('courseId');
         $course = $this->controller->getCourseService()->getCourse($courseId);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-
         if (empty($course)) {
             return $this->createErrorResponse('not_found', '课程不存在');
         }
@@ -1149,9 +1148,10 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 $member = null;
             }
         }
-
-        $userFavorited = $user->isLogin() ? $this->controller->getCourseService()->hasFavoritedCourse(
-            $courseId
+        $userFavorited = $user->isLogin() ? $this->controller->getCourseService()->findUserFavoritedCoursesNotInClassroom(
+            $user['id'],
+            0,
+            PHP_INT_MAX
         ) : false;
         $vipLevels = array();
 

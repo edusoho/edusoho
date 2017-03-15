@@ -225,7 +225,7 @@ class MobileBaseController extends BaseController
 
         $courses = $this->filterCourses(array($course));
 
-        return current($courses);
+        return end($courses);
     }
 
     public function getCoinSetting()
@@ -281,7 +281,6 @@ class MobileBaseController extends BaseController
 
         $courseIds = ArrayToolkit::column($courses, 'id');
         $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
-
         foreach ($courses as &$course) {
             $courseSet = $courseSets[$course['courseSetId']];
 
