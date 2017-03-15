@@ -3,6 +3,7 @@ namespace Topxia\Service\RefererLog\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
 use Topxia\Service\RefererLog\Dao\RefererLogDao;
+use Topxia\Service\Common\FieldChecker;
 
 class RefererLogDaoImpl extends BaseDao implements RefererLogDao
 {
@@ -91,6 +92,8 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
 
     public function countDistinctLogsByField($conditions, $field)
     {
+        FieldChecker::checkFieldName($field);
+
         $builder = $this->createQueryBuilder($conditions)
             ->select("COUNT(DISTINCT {$field})");
         return $builder->execute()->fetchColumn(0);
