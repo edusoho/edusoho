@@ -2,19 +2,20 @@
 
 namespace AppBundle\Controller\Course;
 
-use AppBundle\Common\Paginator;
-use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
-use Biz\User\Service\TokenService;
-use Biz\Order\Service\OrderService;
-use Biz\Course\Service\ReviewService;
-use Biz\Course\Service\MaterialService;
-use Biz\File\Service\UploadFileService;
-use Biz\Task\Service\TaskResultService;
+use AppBundle\Common\Paginator;
 use Biz\Activity\Service\ActivityService;
-use Biz\Course\Service\CourseNoteService;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseNoteService;
+use Biz\Course\Service\MaterialService;
+use Biz\Course\Service\ReviewService;
+use Biz\File\Service\UploadFileService;
+use Biz\Order\Service\OrderService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\TokenService;
 use Symfony\Component\HttpFoundation\Request;
+use VipPlugin\Biz\Vip\Service\VipService;
 
 class CourseController extends CourseBaseController
 {
@@ -69,14 +70,18 @@ class CourseController extends CourseBaseController
     public function memberExpiredAction($id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-        if ($member && !$this->getMemberService()->isMemberNonExpired($course, $member)) {
-            return $this->render(
-                'course/member/expired.html.twig',
-                array(
-                    'course' => $course,
-                )
-            );
+
+        if ($this->getMemberService()->isMemberNonExpired($course, $member)) {
+            return $this->createJsonResponse(true);
         }
+
+        return $this->render(
+            'course/member/expired.html.twig',
+            array(
+                'course' => $course,
+                'member' => $member,
+            )
+        );
     }
 
     public function deadlineReachAction($id)
@@ -333,13 +338,16 @@ class CourseController extends CourseBaseController
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);
         if (!empty($teachers)) {
             //确保教师按照中台教师管理设置的顺序展示
-            usort($teachers, function ($t1, $t2) use ($teacherIds) {
-                if (array_search($t1['id'], $teacherIds) < array_search($t2['id'], $teacherIds)) {
-                    return -1;
-                }
+            usort(
+                $teachers,
+                function ($t1, $t2) use ($teacherIds) {
+                    if (array_search($t1['id'], $teacherIds) < array_search($t2['id'], $teacherIds)) {
+                        return -1;
+                    }
 
-                return 1;
-            });
+                    return 1;
+                }
+            );
         }
 
         return $this->render(
@@ -392,11 +400,14 @@ class CourseController extends CourseBaseController
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
-        return $this->render('course/widgets/course-order.html.twig', array(
-            'order' => $order,
-            'course' => $course,
-            'courseSet' => $courseSet,
-        ));
+        return $this->render(
+            'course/widgets/course-order.html.twig',
+            array(
+                'order' => $order,
+                'course' => $course,
+                'courseSet' => $courseSet,
+            )
+        );
     }
 
     public function qrcodeAction(Request $request, $id)
@@ -455,6 +466,14 @@ class CourseController extends CourseBaseController
     protected function getCourseNoteService()
     {
         return $this->createService('Course:CourseNoteService');
+    }
+
+    /**
+     * @return VipService
+     */
+    protected function getVipService()
+    {
+        return $this->createService('VipPlugin:Vip:VipService');
     }
 
     /**
