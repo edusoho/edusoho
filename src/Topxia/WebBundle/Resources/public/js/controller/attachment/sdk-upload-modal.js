@@ -1,7 +1,7 @@
 define(function (require, exports, module) {
 
   require('new-uploader');
-  const $uploader = $('#uploader-container');
+  var $uploader = $('#uploader-container');
 
   let uploader = new UploaderSDK({
     id: $uploader.attr('id'),
@@ -22,9 +22,9 @@ define(function (require, exports, module) {
       $("#length").val(minute * 60 + second);
     }
 
-    const $metas = $('[data-role="metas"]');
-    const $ids = $('.' + $metas.data('idsClass'));
-    const $list = $('.' + $metas.data('listClass'));
+    var $metas = $('[data-role="metas"]');
+    var $ids = $('.' + $metas.data('idsClass'));
+    var $list = $('.' + $metas.data('listClass'));
 
     $.get('/attachment/file/' + file.id + '/show', function (html) {
       $list.append(html);
