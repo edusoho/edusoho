@@ -112,7 +112,6 @@ class CourseController extends CourseBaseController
 
             //计划进度
             $planProgressProgress = empty($taskCount) ? 0 : round($planStudyTaskCount / $taskCount, 2) * 100;
-
         }
 
         $isUserFavorite = false;
