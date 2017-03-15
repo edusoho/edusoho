@@ -46,8 +46,9 @@
               {% endif %}
               left-menu"></i>
 					{% if course.status=='published' and task.status == 'published' %}
-						{% if member %}
-							{% if task_lock is empty %}
+						
+            {% if member %}
+              {% if not task_lock %}
 								<a class="title"
 								   href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
 									{% include 'course/task-list/parts/list-li-title.html.twig' %}
@@ -58,16 +59,22 @@
                   {% include 'course/task-list/parts/list-li-title.html.twig' %}
                 </span>
 							{% endif %}
+
 						{% else %}
 							{#not member#}
-							<a class="title" href="#modal" data-toggle="modal"
+							{# <a class="title" href="#modal" data-toggle="modal"
 							   data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}">
 								{% include 'course/task-list/parts/list-li-title.html.twig' %}
-							</a>
+							</a> #}
+              <span class="title">
+                {% include 'course/task-list/parts/list-li-title.html.twig' %}
+              </span>
 							<span class="right-menu mouse-enter">
-                {% if not member and course.parentId|default(0) == 0 %}
-	                {% if  course.isFree %}
-		                {% if task.type in ['text','video','audio','flash','doc','ppt'] %}
+                {# {% if not member %} #}
+
+	                {% if course.isFree %}
+		                
+                    {% if task.type in ['text','video','audio','flash','doc','ppt'] %}
 			                <a class="btn btn-primary" href="#modal" data-toggle="modal"
 			                   data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
 			                   style="margin-top:-8px">免费预览</a>
@@ -80,9 +87,10 @@
 				                {% else %}
 					                href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
 				                {% endif %}>加入学习
-		               </a>
+		                  </a>
 		                {% endif %}
-	               {% elseif  task.isFree %}
+
+	                {% elseif  task.isFree %}
 		                <a class="btn btn-primary" href="#modal" data-toggle="modal"
 		                   data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
 		                   style="margin-top:-8px">免费预览</a>
@@ -90,12 +98,13 @@
 		                <a class="btn btn-warning" href="#modal" data-toggle="modal"
 		                   data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
 		                   style="margin-top:-8px">免费试看</a>
-	                {% elseif not task.isFree %}
+	                {% elseif (not task.isFree) and course.parentId|default(0) == 0 %}
 		                <a class="btn btn-primary" href="#modal" data-toggle="modal"
 		                   data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
 		                   style="margin-top:-8px">立即购买</a>
 	                {% endif %}
-                {% endif %}
+
+                {# {% endif %} #}
               </span>
 						{% endif %}
 						<span class="right-menu color-gray {% if not member %} mouse-leave {% endif %}">
