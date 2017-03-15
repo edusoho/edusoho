@@ -59,6 +59,7 @@ custom_web:
 custom_admin:
     resource: "@CustomAdminBundle/Resources/config/custom_admin_routing.yml"
     prefix:   /admin
+    
 
 _plugins:
     resource: routing_plugins.yml
