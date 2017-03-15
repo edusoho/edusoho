@@ -76,7 +76,7 @@ class CourseMaterialDaoImpl extends GeneralDaoImpl implements CourseMaterialDao
 
     public function searchDistinctFileIds($conditions, $orderBys, $start, $limit)
     {
-        $builder = $this->_createQueryBuilder($conditions)
+        $builder = $this->createQueryBuilder($conditions)
             ->select('fileId, max(createdTime) AS `createdTime`')
             ->groupBy('fileId')
             ->setFirstResult($start)
@@ -91,13 +91,13 @@ class CourseMaterialDaoImpl extends GeneralDaoImpl implements CourseMaterialDao
 
     public function countGroupByFileId($conditions)
     {
-        $builder = $this->_createQueryBuilder($conditions)
+        $builder = $this->createQueryBuilder($conditions)
             ->select('COUNT(DISTINCT(fileId))');
 
         return $builder->execute()->fetchColumn(0);
     }
 
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {
             $conditions['titleLike'] = "%{$conditions['title']}%";

@@ -14,13 +14,13 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
         return $this->findInField('id', $ids);
     }
 
-    public function _createQueryBuilder($conditions)
+    public function createQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {
             $conditions['title'] = '%'.$conditions['title'].'%';
         }
 
-        return parent::_createQueryBuilder($conditions);
+        return parent::createQueryBuilder($conditions);
     }
 
     public function declares()

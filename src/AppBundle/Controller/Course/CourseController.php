@@ -225,6 +225,7 @@ class CourseController extends CourseBaseController
                 'courseSet' => $courseSet,
                 'selectedCourseId' => $selectedCourseId,
                 'courses' => $courses,
+                'courseMap' => ArrayToolkit::index($courses, 'id'),
                 'course' => $course,
                 'reviews' => $reviews,
                 'userReview' => $userReview,

@@ -32,26 +32,18 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
 
     public function analysisCourseSetDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM {$this->table} WHERE createdTime >= ? AND createdTime <= ?
-            group by from_unixtime(createdTime,'%Y-%m-%d') order by date ASC";
+        $conditions = array(
+            'startTime' => $startTime,
+            'endTime' => $endTime,
+            'parentId' => 0
+        );
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("COUNT(id) as count, from_unixtime(createdTime, '%Y-%m-%d') as date")
+            ->from($this->table, $this->table)
+            ->groupBy("from_unixtime(createdTime,'%Y-%m-%d')")
+            ->addOrderBy('DATE', 'ASC');
 
-        return $this->db()->fetchAll($sql, array($startTime, $endTime));
-    }
-
-    protected function _createQueryBuilder($conditions)
-    {
-        $conditions = array_filter($conditions, function ($value) {
-            if ($value == 0) {
-                return true;
-            }
-            if (empty($value)) {
-                return false;
-            }
-
-            return true;
-        });
-
-        return parent::_createQueryBuilder($conditions);
+        return $builder->execute()->fetchAll();
     }
 
     public function declares()

@@ -936,10 +936,9 @@ class CourseManageController extends BaseController
 
             $finishedNum = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($value['id'], 'finish');
 
-            $taskLearnTime = $this->getActivityLearnLogService()->sumLearnTime(array('taskId' => $value['id']));
+            $taskLearnTime = $this->getTaskResultService()->getLearnedTimeByCourseIdGroupByCourseTaskId($value['id']);
             $taskLearnTime = $taskLearnedNum == 0 ? 0 : intval($taskLearnTime / $taskLearnedNum);
-
-            $taskWatchTime = $this->getActivityLearnLogService()->sumLearnTime(array('taskId' => $value['id']));
+            $taskWatchTime = $this->getTaskResultService()->getWatchTimeByCourseIdGroupByCourseTaskId($value['id']);
             $taskWatchTime = $taskLearnedNum == 0 ? 0 : intval($taskWatchTime / $taskLearnedNum);
 
             $tasks[$key]['LearnedNum'] = $taskLearnedNum;

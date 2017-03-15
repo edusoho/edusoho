@@ -79,13 +79,13 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
         return $this->db()->fetchColumn($sql, array($courseId));
     }
 
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {
             $conditions['titleLike'] = "%{$conditions['title']}%";
             unset($conditions['title']);
         }
-        $builder = parent::_createQueryBuilder($conditions);
+        $builder = parent::createQueryBuilder($conditions);
 
         if (isset($conditions['notLearnedIds'])) {
             $builder->andWhere('id NOT IN ( :notLearnedIds)');
