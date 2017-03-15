@@ -35,7 +35,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
         $conditions = array(
             'startTime' => $startTime,
             'endTime' => $endTime,
-            'parentId' => 0
+            'parentId' => 0,
         );
         $builder = $this->createQueryBuilder($conditions)
             ->select("COUNT(id) as count, from_unixtime(createdTime, '%Y-%m-%d') as date")
