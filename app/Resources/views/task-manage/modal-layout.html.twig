@@ -27,30 +27,7 @@
         设置完成条件
       </li>
     </ul>
-    <div id="task-create-type" class="hidden" data-editor-mode="{{ mode }}"
-        {% if mode == 'edit' %}
-      data-editor-type="{{ currentType }}"
-      data-editor-step2-url="{{ path('course_manage_task_fields', {courseId: course.id, mode: 'edit', id: task.id}) }}"
-      data-save-url="{{ path('course_manage_task_update', {courseId: course.id, id: task.id }) }}"
-    {% elseif mode == 'create' %}
-      data-save-url="{{ path('course_manage_task_create', {courseId: course.id}) }}"
-        {% endif %}>
-      <form class="form-horizontal" id="step1-form">
-        <ul class="form-group task-create-type-list ">
-          {% block task_item %}{% endblock %}
-          <li class="col-xs-12">
-            <label for="mediaType" class="hidden">分类</label>
-            <input name="mediaType" id="mediaType" class="type-hidden">
-            <input class="js-hidden-data" type="hidden" name="mode" value="{{ taskMode|default('') }}">
-            <input class="js-hidden-data" type="hidden" name="categoryId" value="{{ categoryId|default(null) }}">
-            <input class="js-hidden-data" type="hidden" name="chapterId" value="{{ chapterId|default(null) }}">
-            <input class="js-hidden-data" type="hidden" name="fromCourseId" value='{{ course.id }}'>
-            <input class="js-hidden-data" type="hidden" name="courseSetType" id="courseSetType" value="{{ courseSet.type }}">
-            <input type="hidden" id="courseExpiryMode" value="{{ course.expiryMode }}">
-          </li>
-        </ul>
-      </form>
-    </div>
+    {% block task_create_type %}{% endblock %}
     <div id="task-create-content" class="task-create-content hidden"></div>
   </div>
 {% endblock %}
