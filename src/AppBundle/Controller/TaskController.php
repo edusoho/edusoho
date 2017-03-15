@@ -2,11 +2,9 @@
 
 namespace AppBundle\Controller;
 
-
-
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -18,8 +16,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class TaskController extends BaseController
 {
     public function showAction(Request $request, $courseId, $id)
-
-
     {
         $preview = $request->query->get('preview');
 
@@ -33,6 +29,7 @@ class TaskController extends BaseController
 
         $user = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
+
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
 
         if ($member && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {

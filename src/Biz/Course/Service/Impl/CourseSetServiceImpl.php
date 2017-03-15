@@ -411,6 +411,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 'middlePicture',
                 'largePicture',
                 'teacherIds',
+                'orgCode',
             )
         );
 
