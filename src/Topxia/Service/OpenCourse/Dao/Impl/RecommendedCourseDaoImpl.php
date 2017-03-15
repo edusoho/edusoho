@@ -115,7 +115,8 @@ class RecommendedCourseDaoImpl extends BaseDao implements RecommendedCourseDao
         }
         
         $randomSeed = (int) rand(0, $max);
-        $num = (int) $num;
+        
+        $this->filterStartLimit($randomSeed, $num);
 
         $that       = $this;
         return $this->fetchCached("openCourseId:{$courseId}:randomSeed:{$randomSeed}:num:$num", $courseId, $randomSeed, $num, function ($courseId, $randomSeed, $num) use ($that) {
