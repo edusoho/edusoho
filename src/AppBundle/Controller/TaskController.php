@@ -21,7 +21,7 @@ class TaskController extends BaseController
 
         $user = $this->getUser();
         if (!$user->isLogin()) {
-            return $this->redirect($this->generateUrl('course_show', array('id' => $courseId)));
+            return $this->redirect($this->generateUrl('login'));
         }
 
         try {
@@ -358,12 +358,10 @@ class TaskController extends BaseController
     /**
      * 没有权限进行任务的时候的处理逻辑，目前只有学员动态跳转过来的时候跳转到教学计划营销页.
      *
-     * @param \Exception $exception
-     * @param Request    $request
+     * @param  \Exception                                   $exception
+     * @param  Request                                      $request
      * @param  $taskId
-     *
      * @throws \Exception
-     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function handleAccessDeniedException(\Exception $exception, Request $request, $taskId)
