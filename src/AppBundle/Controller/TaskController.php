@@ -78,7 +78,6 @@ class TaskController extends BaseController
         );
     }
 
-   
     private function canStartTask($task)
     {
         $activity = $this->getActivityService()->getActivity($task['activityId']);
@@ -434,7 +433,7 @@ class TaskController extends BaseController
         return $task;
     }
 
-     private function freshTaskLearnStat(Request $request, $taskId)
+    private function freshTaskLearnStat(Request $request, $taskId)
     {
         $key = 'task.'.$taskId;
         $session = $request->getSession();
