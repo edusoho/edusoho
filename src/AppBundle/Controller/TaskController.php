@@ -41,6 +41,10 @@ class TaskController extends BaseController
             return $this->redirectToRoute('my_course_show', array('id' => $courseId));
         }
 
+        if ($course['expiryMode'] == 'date' && $course['expiryStartDate'] >= time()) {
+            return $this->redirectToRoute('course_show', array('id' => $courseId));
+        }
+
         if ($member && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {
             return $this->redirect($this->generateUrl('my_course_show', array('id' => $courseId)));
         }
@@ -63,6 +67,8 @@ class TaskController extends BaseController
         if ($taskResult['status'] == 'finish') {
             list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
         }
+
+        $this->freshTaskLearnStat($request, $task['id']);
 
         return $this->render(
             'task/show.html.twig',
@@ -280,12 +286,19 @@ class TaskController extends BaseController
 
     public function triggerAction(Request $request, $courseId, $id)
     {
-        $this->getCourseService()->tryTakeCourse($courseId);
-
         $eventName = 'doing';
         $data = $request->request->get('data', array());
         $data['taskId'] = $id;
-        $result = $this->getTaskService()->trigger($id, $eventName, $data);
+
+        $this->getCourseService()->tryTakeCourse($courseId);
+
+        if ($this->validTaskLearnStat($request, $id)) {
+            $result = $this->getTaskService()->trigger($id, $eventName, $data);
+            $data['valid'] = 1;
+        } else {
+            $result = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
+            $data['valid'] = 0;
+        }
 
         return $this->createJsonResponse(
             array(
@@ -360,7 +373,7 @@ class TaskController extends BaseController
      *
      * @param \Exception $exception
      * @param Request    $request
-     * @param  $taskId
+     * @param $taskId
      *
      * @throws \Exception
      *
@@ -422,6 +435,42 @@ class TaskController extends BaseController
         }
 
         return $task;
+    }
+
+    private function freshTaskLearnStat(Request $request, $taskId)
+    {
+        $key = 'task.'.$taskId;
+        $session = $request->getSession();
+        $taskStore = $session->get($key, array());
+        $taskStore['start'] = time();
+        $taskStore['lastTriggerTime'] = 0;
+
+        $session->set($key, $taskStore);
+    }
+
+    private function validTaskLearnStat(Request $request, $taskId)
+    {
+        $key = 'task.'.$taskId;
+        $session = $request->getSession($key);
+        $taskStore = $session->get($key);
+
+        if (!empty($taskStore)) {
+            $now = time();
+            //任务连续学习超过5小时则不再统计时长
+            if ($now - $taskStore['start'] > 60 * 60 * 5) {
+                return false;
+            }
+            //任务每分钟只允许触发一次，这里用55秒作为标准判断，以应对网络延迟
+            if ($now - $taskStore['lastTriggerTime'] < 55) {
+                return false;
+            }
+            $taskStore['lastTriggerTime'] = $now;
+            $session->set($key, $taskStore);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
