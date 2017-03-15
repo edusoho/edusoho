@@ -1082,7 +1082,7 @@ class EduCloudController extends BaseController
         $cloudConsult = $this->processConsult(array_merge($defaultSetting, $cloudConsult));
 
         if ($cloudConsult['cloud_consult_enabled'] == 0) {
-            $this->renderConsultWithoutEnable($cloudConsult);
+            return $this->renderConsultWithoutEnable($cloudConsult);
         }
 
         if ($request->getMethod() == 'POST') {
