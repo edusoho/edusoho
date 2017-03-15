@@ -2,26 +2,27 @@
 
 namespace AppBundle\Controller;
 
-
-
-use Biz\Activity\Service\ActivityService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;;
-use Biz\Course\Service\MemberService;
-use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\TokenService;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException as ServiceAccessDeniedException;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException as ServiceAccessDeniedException;
 
 class TaskController extends BaseController
 {
     public function showAction(Request $request, $courseId, $id)
-
-
     {
         $preview = $request->query->get('preview');
+
+        $user = $this->getUser();
+        if (!$user->isLogin()) {
+            return $this->redirect($this->generateUrl('course_show', array('id' => $courseId)));
+        }
 
         try {
             $task = $this->tryLearnTask($courseId, $id, (bool) $preview);
@@ -352,12 +353,10 @@ class TaskController extends BaseController
     /**
      * 没有权限进行任务的时候的处理逻辑，目前只有学员动态跳转过来的时候跳转到教学计划营销页.
      *
-     * @param \Exception $exception
-     * @param Request    $request
-     * @param $taskId
-     *
+     * @param  \Exception                                   $exception
+     * @param  Request                                      $request
+     * @param  $taskId
      * @throws \Exception
-     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function handleAccessDeniedException(\Exception $exception, Request $request, $taskId)
