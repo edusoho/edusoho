@@ -32,7 +32,7 @@
               left-menu"></i>
 
 						{% if course.status=='published' and task.status == 'published' %}
-							
+
               {% if member %}
                 <a class="title"
   								href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}"
@@ -40,7 +40,7 @@
                 </a>
               {% else %}
 							  {% include 'course/task-list/parts/list-li-title.html.twig' %}
-              {% endif %}>
+              {% endif %}
 
 							<span class="right-menu color-gray {% if not member %} mouse-leave {% endif %}">
                 {{ task.activity.length|default(0)|activity_length_format }}
@@ -53,7 +53,7 @@
               {% if not member %}
 
 	              {% if course.isFree %}
-		              
+
                   {{ task.type }}
 		              {% if task.type in ['text','video','audio','flash','doc','ppt'] %}
 			              <a class="btn btn-primary" href="#modal" data-toggle="modal"
@@ -84,7 +84,7 @@
 		                 data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
 		                 style="margin-top:-8px">立即购买</a>
 	              {% endif %}
-                
+
               {% endif %}
               </span>
 						{% else %}
