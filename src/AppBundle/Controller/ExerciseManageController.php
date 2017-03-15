@@ -21,6 +21,7 @@ class ExerciseManageController extends BaseController
         if ($result['status'] == 'yes') {
             $status = true;
         }
+
         return $this->createJsonResponse($status);
     }
 

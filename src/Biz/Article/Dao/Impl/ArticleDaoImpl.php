@@ -70,7 +70,7 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
         ));
     }
 
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions);
 
@@ -100,7 +100,7 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
             unset($conditions['orgCode']);
         }
 
-        return parent::_createQueryBuilder($conditions);
+        return parent::createQueryBuilder($conditions);
     }
 
     public function declares()

@@ -156,7 +156,7 @@ class TestpaperCopy extends AbstractEntityCopy
         );
 
         $newQuestion = ArrayToolkit::parts($question, $fields);
-        $newQuestion['courseId'] = $newCourseSetId;
+        $newQuestion['courseSetId'] = $newCourseSetId;
         $newQuestion['lessonId'] = 0;
         $newQuestion['copyId'] = $isCopy ? $question['id'] : 0;
         $newQuestion['userId'] = $this->biz['user']['id'];
