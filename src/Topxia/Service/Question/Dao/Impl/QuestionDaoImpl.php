@@ -96,6 +96,9 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
 
     public function findQuestionsByTypesAndSourceAndExcludeUnvalidatedMaterial($types, $start, $limit, $questionSource, $courseId, $lessonId)
     {
+        if (empty($types)) {
+            return array();
+        }
 
         if ($questionSource == 'course') {
             $target = 'course-'.$courseId;
