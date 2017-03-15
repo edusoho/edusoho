@@ -57,7 +57,7 @@ define(function(require, exports, module) {
             },
             yAxis: [
                 {
-                    name: '课时',
+                    name: '任务',
                     type: 'category',
                     axisLabel: {
                         margin: 15

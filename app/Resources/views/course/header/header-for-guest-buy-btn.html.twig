@@ -9,10 +9,10 @@
     {{ slot('course.buy-btn.extension', {'course': course}) }}
   {% else %}
     {% if course.status != 'published' %}
-      课程还未发布<br>不允许加入和购买
+      课程还未发布，不允许加入和购买
     {% else %}
       {% if course.buyExpiryTime and course.buyExpiryTime < 'now'|date('U') %}
-        超过购买截止日期<br>不允许加入和购买
+        超过购买截止日期，不允许加入和购买
       {% else %}
         {% if course.buyable|default(true) %}
           <a class="btn btn-primary btn-lg {% if previewAs|default() %}disabled{% endif %}"

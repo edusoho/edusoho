@@ -1,7 +1,7 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 {% block title %}{{'提示'|trans}}{% endblock %}
 {% block body %}
-	<span class="text-muted">
+	<span class="color-gray">
 		{% if course.buyable|default(true) == false %} 
 			{{'抱歉，该课程为限制课程，请联系客服。'|trans}}
 		{% else %} 

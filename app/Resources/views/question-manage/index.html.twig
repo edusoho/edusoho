@@ -65,7 +65,7 @@
         <thead>
         <tr>
           <th><input type="checkbox"  autocomplete="off"  data-role="batch-select"></th>
-          <th width="50%">{{'题干'|trans}}</th>
+          <th width="45%">{{'题干'|trans}}</th>
           <th width="15%">{{'类型'|trans}}</th>
           <th>{{'最后更新'|trans}}</th>
           <th width="15%">{{'操作'|trans}}</th>
@@ -84,7 +84,7 @@
       <div>
         <label class="checkbox-inline"><input type="checkbox"  autocomplete="off" data-role="batch-select"> {{'全选'|trans}}</label>
         <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="{{'题目'|trans}}" data-url="{{ path('course_set_manage_question_deletes',{courseSetId:courseSet.id}) }}" data-loading-text="正在删除...">{{'删除'|trans}}</button>
-        <span class="pull-right text-muted">{{'共%getItemCount()%题'|trans({'%getItemCount()%': paginator.getItemCount() })}}</span>
+        <span class="pull-right color-gray">{{'共%getItemCount()%题'|trans({'%getItemCount()%': paginator.getItemCount() })}}</span>
       </div>
       <nav class="text-center">
         {{ web_macro.paginator(paginator) }}

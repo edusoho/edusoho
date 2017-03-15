@@ -246,7 +246,7 @@ class HomeworkBuilder implements TestpaperBuilderInterface
         $conditions = array();
         $options['ranges'] = array_filter($options['ranges']);
 
-        $conditions['courseId'] = $options['courseId'];
+        $conditions['courseSetId'] = $options['courseSetId'];
 
         if (!empty($options['ranges'])) {
             $conditions['lessonIds'] = $options['ranges'];

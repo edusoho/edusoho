@@ -233,7 +233,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $course;
     }
 
-    public function RecommendCourseByCourseSetId($courseSetId, $fields)
+    public function recommendCourseByCourseSetId($courseSetId, $fields)
     {
         $requiredKeys = array('recommended', 'recommendedSeq', 'recommendedTime');
         $fields = ArrayToolkit::parts($fields, $requiredKeys);
@@ -975,6 +975,22 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function analysisCourseDataByTime($startTime, $endTime)
     {
         return $this->getCourseDao()->analysisCourseDataByTime($startTime, $endTime);
+    }
+
+    public function findUserManageCoursesByCourseSetId($userId, $courseSetId)
+    {
+        $user = $this->getUserService()->getUser($userId);
+
+        $isSuperAdmin = in_array('ROLE_SUPER_ADMIN|', $user['roles']);
+        $isAdmin = in_array('ROLE_ADMIN', $user['roles']);
+
+        if ($isSuperAdmin || $isAdmin) {
+            $courses = $this->findCoursesByCourseSetId($courseSetId);
+        } elseif (in_array('ROLE_TEACHER', $user['roles'])) {
+            $courses = $this->findUserTeachingCoursesByCourseSetId($courseSetId, false);
+        }
+
+        return $courses ? ArrayToolkit::index($courses, 'id') : array();
     }
 
     protected function fillMembersWithUserInfo($members)

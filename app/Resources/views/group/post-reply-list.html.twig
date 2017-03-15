@@ -12,7 +12,7 @@
               <span class="mhm">{{post.createdTime|smart_time}}</span>
             </div>
             <div class="content">{{post.content|raw}}</div>
-            <div class="text-muted text-normal pull-right">
+            <div class="color-gray text-normal pull-right">
               <a href="javascript:" class="li-reply" postId="{{postMain.id}}" postName="{{users[post.userId].nickname}}" data-from-user-id= "{{ users[post.userId].id }}"> {{'回复'|trans}}</a>
             </div>
           </div>
@@ -24,11 +24,11 @@
       <div class="lookOver-{{postMain.id}}">
 
 
-        <span class="text-muted ">{{'还有%postReplyCount%条回复'|trans({'%postReplyCount%':postReplyCount[post.id]-5})}}，</span><a href="javascript:" postId="{{postMain.id}}" class="lookOver">{{'点击查看'|trans}}</a>
+        <span class="color-gray ">{{'还有%postReplyCount%条回复'|trans({'%postReplyCount%':postReplyCount[post.id]-5})}}，</span><a href="javascript:" postId="{{postMain.id}}" class="lookOver">{{'点击查看'|trans}}</a>
 
       </div>
       {% endif %}
-      <span class="text-muted">&nbsp;</sapn>
+      <span class="color-gray">&nbsp;</sapn>
     </div>
     </ul>
 

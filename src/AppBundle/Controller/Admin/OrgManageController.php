@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\TreeToolkit;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Org\Service\OrgService;
 use Symfony\Component\HttpFoundation\Request;
 
 class OrgManageController extends BaseController
@@ -18,10 +19,13 @@ class OrgManageController extends BaseController
         $userIds = ArrayToolkit::column($orgs, 'createdUserId');
         $createdUsers = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('admin/org-manage/index.html.twig', array(
-            'orgs' => $treeOrgs,
-            'createdUsers' => $createdUsers,
-        ));
+        return $this->render(
+            'admin/org-manage/index.html.twig',
+            array(
+                'orgs' => $treeOrgs,
+                'createdUsers' => $createdUsers,
+            )
+        );
     }
 
     public function createAction(Request $request)
@@ -36,7 +40,7 @@ class OrgManageController extends BaseController
         $parentId = $request->query->get('parentId', 0);
         $org = array('parentId' => $parentId);
 
-        return $this->render('org-manage/modal.html.twig', array('org' => $org));
+        return $this->render('admin/org-manage/modal.html.twig', array('org' => $org));
     }
 
     public function updateAction(Request $request, $id)
@@ -50,9 +54,12 @@ class OrgManageController extends BaseController
 
         $org = $this->getOrgService()->getOrg($id);
 
-        return $this->render('org-manage/modal.html.twig', array(
-            'org' => $org,
-        ));
+        return $this->render(
+            'admin/org-manage/modal.html.twig',
+            array(
+                'org' => $org,
+            )
+        );
     }
 
     public function deleteAction(Request $request, $id)
@@ -127,7 +134,7 @@ class OrgManageController extends BaseController
     }
 
     /**
-     * @return OrgServiceImpl
+     * @return OrgService
      */
     protected function getOrgService()
     {

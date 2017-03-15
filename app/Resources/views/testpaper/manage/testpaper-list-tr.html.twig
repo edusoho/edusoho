@@ -10,9 +10,9 @@
     {% if testpaper.status == 'closed' %}{{'已关闭'|trans}}{% endif %}
   </td>
   <td>
-    {{'%itemCount%题'|trans({'%itemCount%': testpaper.itemCount})}} <span class="text-muted">/</span> {{'%score%分'|trans({'%score%': testpaper.score})}}
+    {{'%itemCount%题'|trans({'%itemCount%': testpaper.itemCount})}} <span class="color-gray">/</span> {{'%score%分'|trans({'%score%': testpaper.score})}}
     {% if testpaper.passedCondition[0]|default(0) > 0 %}
-      <div class="text-muted"><small>{{'及格%passedCondition%分'|trans({'%passedCondition%': testpaper.passedCondition[0]|default(0) })}}</small></div>
+      <div class="color-gray"><small>{{'及格%passedCondition%分'|trans({'%passedCondition%': testpaper.passedCondition[0]|default(0) })}}</small></div>
     {% endif %}
   </td>
   <td>
@@ -21,7 +21,7 @@
   <td>
     {{ macro.user_link(user) }}
     <br />
-    <span class="text-muted text-sm">{{testpaper.updatedTime | date('Y-n-d H:i:s')}}</span>
+    <span class="color-gray text-sm">{{testpaper.updatedTime | date('Y-n-d H:i:s')}}</span>
   </td>
   <td>
     <div class="btn-group">

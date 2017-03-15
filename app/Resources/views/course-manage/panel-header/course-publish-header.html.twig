@@ -10,7 +10,7 @@
 {% if courseSet.type != 'live' %}
   <div class="panel-heading">
     {{ side_navs[code]|trans }}
-    
+
     {% if course.status != 'published' %}
       <button class="btn btn-success btn-sm pull-right js-publish-course ml5"
         data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">

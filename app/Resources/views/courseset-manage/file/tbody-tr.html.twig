@@ -13,7 +13,7 @@
   <td>
     <a class="link-dark" href="{{ fileShowUrl }}" target="_blank" rel="tooltip" title data-original-title="{{ uploadFile.filename }}"  >
       {% if uploadFile.storage == 'cloud' %}
-        <i class="glyphicon glyphicon-cloud text-muted" title="{{'云文件'|trans}}"></i>
+        <i class="glyphicon glyphicon-cloud color-gray" title="{{'云文件'|trans}}"></i>
       {% endif %}
       {{ uploadFile.filename|sub_text(30) }}
     </a>
@@ -54,7 +54,7 @@
   <td>
     <span class="text-sm">{{ web_macro.user_link(users[uploadFile.updatedUserId]|default(null)) }}</span>
     <br>
-    <span class="text-muted text-sm">
+    <span class="color-gray text-sm">
       {% if not uploadFile.updatedTime %}
         {{ uploadFile.createdTime|date('Y-n-d H:i')}}
       {% else %}

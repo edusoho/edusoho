@@ -50,7 +50,18 @@ class ManageController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));
 
-        $courseTasks = $this->getQuestionRanges($courseSet['id']);
+        $taskIds = ArrayToolkit::column($questions, 'lessonId');
+        $courseTasks = $this->getCourseTaskService()->findTasksByIds($taskIds);
+        $courseTasks = ArrayToolkit::index($courseTasks, 'id');
+
+        $courseIds = ArrayToolkit::column($questions, 'courseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
+        $user = $this->getUser();
+        $searchCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSet['id']);
+
+        $showTasks = $this->getCourseTaskService()->findTasksByCourseId($request->query->get('courseId', 0));
+        $showTasks = ArrayToolkit::index($showTasks, 'id');
 
         return $this->render('question-manage/index.html.twig', array(
             'courseSet' => $courseSet,
@@ -60,6 +71,9 @@ class ManageController extends BaseController
             'parentQuestion' => $parentQuestion,
             'conditions' => $conditions,
             'courseTasks' => $courseTasks,
+            'courses' => $courses,
+            'searchCourses' => $searchCourses,
+            'showTasks' => $showTasks,
         ));
     }
 
@@ -70,7 +84,6 @@ class ManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
 
-            $data['courseId'] = $courseSet['id'];
             $data['courseSetId'] = $courseSet['id'];
 
             $question = $this->getQuestionService()->create($data);
@@ -228,14 +241,18 @@ class ManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $user = $this->getUser();
+        $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSet['id']);
+
         return $this->render('question-manage/question-picker.html.twig', array(
             'courseSet' => $courseSet,
             'questions' => $questions,
             'replace' => empty($conditions['replace']) ? '' : $conditions['replace'],
             'paginator' => $paginator,
-            'targetChoices' => $this->getQuestionRanges($courseSet['id']),
+            'courseTasks' => $this->getQuestionRanges($request->query->get('courseId', 0)),
             'conditions' => $conditions,
             'targetType' => $request->query->get('targetType', 'testpaper'),
+            'courses' => $manageCourses,
         ));
     }
 
@@ -243,9 +260,9 @@ class ManageController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
-        $questionIds = $request->query->get('questionIds', array(0));
+        $questionIds = $request->request->get('questionIds', array(0));
 
-        if (!$questions) {
+        if (!$questionIds) {
             return $this->createJsonResponse(array('result' => 'error', 'message' => '请先选择题目'));
         }
 
@@ -257,12 +274,34 @@ class ManageController extends BaseController
             }
         }
 
+        $user = $this->getUser();
+        $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSet['id']);
+        $taskIds = ArrayToolkit::column($questions, 'lessonId');
+        $courseTasks = $this->getCourseTaskService()->findTasksByIds($taskIds);
+        $courseTasks = ArrayToolkit::index($courseTasks, 'id');
+
         return $this->render('question-manage/question-picked.html.twig', array(
             'courseSet' => $courseSet,
             'questions' => $questions,
             'type' => $question['type'],
-            'target' => $request->query->get('target', 'testpaper'),
+            'targetType' => $request->query->get('targetType', 'testpaper'),
+            'courseTasks' => $courseTasks,
+            'courses' => $manageCourses,
         ));
+    }
+
+    public function showTasksAction(Request $request, $courseSetId)
+    {
+        $courseId = $request->request->get('courseId', 0);
+        if (empty($courseId)) {
+            return $this->createJsonResponse(array());
+        }
+
+        $this->getCourseService()->tryManageCourse($courseId);
+
+        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseId);
+
+        return $this->createJsonResponse($courseTasks);
     }
 
     protected function getQuestionConfig()
@@ -270,12 +309,13 @@ class ManageController extends BaseController
         return $this->get('extension.default')->getQuestionTypes();
     }
 
-    protected function getQuestionRanges($courseSetId)
+    protected function getQuestionRanges($courseId)
     {
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
-        $courseIds = ArrayToolkit::column($courses, 'id');
+        if (empty($courseId)) {
+            return array();
+        }
 
-        $courseTasks = $this->getCourseTaskService()->findTasksByCourseIds($courseIds);
+        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseId);
 
         return ArrayToolkit::index($courseTasks, 'id');
     }

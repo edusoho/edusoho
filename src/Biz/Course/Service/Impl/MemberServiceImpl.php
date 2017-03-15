@@ -5,6 +5,7 @@ namespace Biz\Course\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\CloudPlatform\Service\AppService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Service\CourseNoteService;
@@ -19,7 +20,7 @@ use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
-use Vip\Service\Vip\VipService;
+use VipPlugin\Biz\Vip\Service\VipService;
 
 /**
  * Class MemberServiceImpl
@@ -53,9 +54,10 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $orderTitle = "购买课程《{$courseSet['title']}》- {$course['title']}";
-
+        $orderPayment = '';
         if (isset($data['isAdminAdded']) && $data['isAdminAdded'] == 1) {
             $orderTitle = $orderTitle.'(管理员添加)';
+            $orderPayment = 'outside';
         }
 
         if (empty($data['price'])) {
@@ -70,6 +72,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'amount' => $data['price'],
             'totalPrice' => $course['price'],
             'snPrefix' => OrderService::SNPREFIX_C,
+            'payment' => $orderPayment,
         );
 
         $order = $this->getOrderService()->createSystemOrder($systemOrder);
@@ -235,15 +238,42 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException('course, member参数不能为空');
         }
 
+        $vipNonExpired = true;
+        if (!empty($member['levelId'])) {
+            // 会员加入的情况下
+            $vipNonExpired = $this->isVipMemberNonExpired($course, $member);
+        }
+
         if ($member['deadline'] == 0) {
-            return true;
+            return $vipNonExpired;
         }
 
         if ($member['deadline'] > time()) {
-            return true;
+            return $vipNonExpired;
         }
 
-        return false;
+        return !$vipNonExpired;
+    }
+
+    /**
+     * 会员到期后、会员被取消后、课程会员等级被提高均为过期
+     *
+     * @param $course
+     * @param $member
+     *
+     * @return bool 会员加入的学员是否已到期
+     */
+    protected function isVipMemberNonExpired($course, $member)
+    {
+        $vipApp = $this->getAppService()->getAppByCode('vip');
+
+        if (empty($vipApp)) {
+            return false;
+        }
+
+        $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']);
+
+        return $status === 'ok';
     }
 
     public function findCourseStudents($courseId, $start, $limit)
@@ -968,6 +998,14 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return AppService
+     */
+    protected function getAppService()
+    {
+        return $this->createService('CloudPlatform:AppService');
     }
 
     /**

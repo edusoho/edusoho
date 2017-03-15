@@ -3,6 +3,7 @@
   <td>
     <strong>{{ admin_macro.user_link(user) }}</strong>
   </td>
+  {% include 'org/parts/table-body-td.html.twig' with {orgCode: user.orgCode}%}
   <td>
     {% set emailArr = user.email|split('@') %}
     {% if emailArr[1] != 'edusoho.net' %}
@@ -11,7 +12,6 @@
       {{'暂无'|trans}}
     {% endif %}
   </td>
-  {% include 'org/parts/table-body-td.html.twig' with {orgCode: user.orgCode}%}
   <td>
     <span class="text-sm">{{ logRecord.createdTime|date('Y-n-d H:i:s') }}</span>
     <br>

@@ -16,7 +16,7 @@
 		{% endif %}
 
 		任务 <span class="number">{{ task.number }}</span>： {{ task.title }}
-    <span class="text-muted">{{ task.startTime|date_format }}</span>
+    <span class="color-gray">{{ task.startTime|date_format }}</span>
 
 		{% if task.status == 'unpublished' %}
 		  <span class="text-warning">({{'未发布'|trans}})</span>
