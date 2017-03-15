@@ -47,6 +47,8 @@
             <div class="help-block" style="display:none;"></div>
           </div>
         </div>
+        {% include 'org/org-tree-select.html.twig' with {orgCode : courseSet.orgCode, inputClass: 'width-input width-input-large'} %}
+
         <div class="form-group">
           <label class="col-md-2 control-label">{{ '连载状态'|trans }}</label>
           <div class="col-md-8 radios">
