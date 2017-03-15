@@ -395,11 +395,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($course['status'] == 'published') {
             throw $this->createAccessDeniedException('Deleting published Course is not allowed');
         }
-        $subCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($id, 1);
+        $subCourses = $this->findCoursesByParentIdAndLocked($id, 1);
         if (!empty($subCourses)) {
-            throw $this->createAccessDeniedException('至少需要保留一个教学计划，作为教学内容');
+            throw $this->createAccessDeniedException('该教学计划被班级引用，请先移除班级计划');
         }
-        $courseCount = $this->getCourseDao()->count(array('courseSetId' => $course['courseSetId']));
+        $courseCount = $this->countCourses(array('courseSetId' => $course['courseSetId']));
         if ($courseCount <= 1) {
             throw $this->createAccessDeniedException('课程下至少需保留一个教学计划');
         }
