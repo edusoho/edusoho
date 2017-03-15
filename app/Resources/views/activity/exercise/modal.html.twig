@@ -67,8 +67,9 @@
     <div class="col-sm-2 control-label">
       <label for="condition-select">{{ '完成条件'|trans }}</label>
     </div>
-    <div class="col-xs-4 controls">
-      <select class="form-control" id="condition-select" name="finishCondition">
+    <div class="col-xs-4 form-control-static">
+      提交练习
+      <select class="form-control hidden" id="condition-select" name="finishCondition">
         {{ select_options({'submit':'提交练习'|trans}, activity.finishCondition['type']|default('score')) }}
       </select>
       <input type="hidden" name="mediaType" value="exercise" />
