@@ -239,6 +239,7 @@ class AppExtension extends \Twig_Extension
                 if ($price > 0) {
                     $cashRate = $this->getSettingService()->get('coin.cash_rate');
                     $coinName = $this->getSettingService()->get('coin.coin_name');
+
                     return '价格：'.($price * $cashRate).$coinName;
                 } else {
                     return '免费';
