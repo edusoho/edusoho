@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\Common;
 
-use Topxia\Service\Common\FieldsChecker;
+use Topxia\Service\Common\FieldChecker;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Codeages\Biz\Framework\Dao\Connection;
 
@@ -17,13 +17,13 @@ class DynamicQueryBuilder extends QueryBuilder
 
     public function groupBy($groupBy)
     {
-        FieldsChecker::checkFieldNames(array($groupBy));
+        FieldChecker::checkFieldName($groupBy);
         return parent::groupBy($groupBy);
     }
 
     public function addGroupBy($groupBy)
     {
-        FieldsChecker::checkFieldNames(array($groupBy));
+        FieldChecker::checkFieldName($groupBy);
         return parent::addGroupBy($groupBy);
     }
 
@@ -41,7 +41,7 @@ class DynamicQueryBuilder extends QueryBuilder
 
     public function addOrderBy($field, $orderBy = null)
     {
-        FieldsChecker::checkFieldNames(array($field));
+        FieldChecker::checkFieldName($field);
         if (!in_array(strtoupper(trim($orderBy)), array('DESC', 'ASC', ''))) {
             throw new \InvalidArgumentException('Field name is invalid.');
         }
@@ -50,7 +50,7 @@ class DynamicQueryBuilder extends QueryBuilder
 
     public function orderBy($field, $orderBy = null)
     {
-        FieldsChecker::checkFieldNames(array($field));
+        FieldChecker::checkFieldName($field);
         if (!in_array(strtoupper(trim($orderBy)), array('DESC', 'ASC', ''))) {
             throw new \InvalidArgumentException('Field name is invalid.');
         }
