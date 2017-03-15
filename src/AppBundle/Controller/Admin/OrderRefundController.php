@@ -26,7 +26,6 @@ class OrderRefundController extends BaseController
                         'users' => array(),
                         'orders' => array(),
                         'paginator' => new Paginator($request, 0, 20),
-                        'layout' => $processor->getRefundLayout(),
                         'targetType' => $targetType,
                     )
                 );
@@ -54,7 +53,6 @@ class OrderRefundController extends BaseController
             'users' => $users,
             'orders' => $orders,
             'paginator' => $paginator,
-            'layout' => $processor->getRefundLayout(),
             'targetType' => $targetType,
         ));
     }
