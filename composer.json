@@ -31,7 +31,7 @@
 		"doctrine/common": "~2.4.3",
 		"doctrine/doctrine-bundle": "~1.6.4",
 		"endroid/qrcode" : "~1.7.4",
-		"ezyang/htmlpurifier" : "~4.8.0",
+		"ezyang/htmlpurifier" : "^4.9",
 		"gregwar/captcha":"~1.1.1",
 		"imagine/imagine" : "~0.6.3",
 		"phpoffice/phpexcel" : "~1.8.1",
