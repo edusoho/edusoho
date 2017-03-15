@@ -37,6 +37,7 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFunction('course_cover', array($this, 'courseCover')),
             new \Twig_SimpleFunction('course_set_cover', array($this, 'courseSetCover')),
             new \Twig_SimpleFunction('user_avatar', array($this, 'userAvatar')),
+            new \Twig_SimpleFunction('course_price', array($this, 'coursePrice')),
         );
     }
 
@@ -227,6 +228,28 @@ class AppExtension extends \Twig_Extension
         }
 
         return $coverPath;
+    }
+
+    public function coursePrice($course)
+    {
+        $price = $course['price'];
+        $coinEnabled = $this->getSettingService()->get('coin.coin_enabled');
+        if ($coinEnabled) {
+            if ($this->getSettingService()->get('coin.price_type') == 'Coin') {
+                if ($price > 0) {
+                    $cashRate = $this->getSettingService()->get('coin.cash_rate');
+                    $coinName = $this->getSettingService()->get('coin.coin_name');
+                    return '价格：'.($price * $cashRate).$coinName;
+                } else {
+                    return '免费';
+                }
+            }
+        }
+        if ($price > 0) {
+            return "价格：{$price}元";
+        } else {
+            return '免费';
+        }
     }
 
     protected function sortTags($tags)
