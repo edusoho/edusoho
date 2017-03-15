@@ -51,4 +51,4 @@ let type = $('[data-role="question-form"]').find('[name="type"]').val();
 
 QuestionCreator.getCreator(type, $form);
 
-new SelectLinkage($('[data-role="courseId"]'),$('[data-role="target"]'));
+new SelectLinkage($('[data-role="courseId"]'),$('[data-role="lessonId"]'));
