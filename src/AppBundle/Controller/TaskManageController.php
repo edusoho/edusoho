@@ -29,14 +29,17 @@ class TaskManageController extends BaseController
         }
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
-        return $this->render('task-manage/modal.html.twig', array(
-            'mode' => 'create',
-            'course' => $course,
-            'courseSet' => $courseSet,
-            'categoryId' => $categoryId,
-            'chapterId' => $chapterId,
-            'taskMode' => $taskMode,
-        ));
+        return $this->render(
+            'task-manage/modal.html.twig',
+            array(
+                'mode' => 'create',
+                'course' => $course,
+                'courseSet' => $courseSet,
+                'categoryId' => $categoryId,
+                'chapterId' => $chapterId,
+                'taskMode' => $taskMode,
+            )
+        );
     }
 
     private function prepareRenderTask($course, $task)
@@ -88,12 +91,15 @@ class TaskManageController extends BaseController
             return $this->createJsonResponse(array('error' => 'bad token'));
         }
 
-        return $this->render('course-manage/batch-create/batch-create-modal.html.twig', array(
-            'token' => $token,
-            'targetType' => $params['targetType'],
-            'courseId' => $courseId,
-            'mode' => $mode,
-        ));
+        return $this->render(
+            'course-manage/batch-create/batch-create-modal.html.twig',
+            array(
+                'token' => $token,
+                'targetType' => $params['targetType'],
+                'courseId' => $courseId,
+                'mode' => $mode,
+            )
+        );
     }
 
     private function createTaskByFileAndCourse($file, $course)
@@ -133,23 +139,30 @@ class TaskManageController extends BaseController
         $task = $this->getTaskService()->createTask($this->parseTimeFields($task));
 
         if ($course['isDefault'] && isset($task['mode']) && $task['mode'] != 'lesson') {
-            return $this->createJsonResponse(array(
-                'append' => false,
-                'html' => '',
-            ));
+            return $this->createJsonResponse(
+                array(
+                    'append' => false,
+                    'html' => '',
+                )
+            );
         }
 
         $task = $this->prepareRenderTask($course, $task);
 
-        $html = $this->renderView($this->getTaskItemTemplate($course), array(
-            'course' => $course,
-            'task' => $task,
-        ));
+        $html = $this->renderView(
+            $this->getTaskItemTemplate($course),
+            array(
+                'course' => $course,
+                'task' => $task,
+            )
+        );
 
-        return $this->createJsonResponse(array(
-            'append' => true,
-            'html' => $html,
-        ));
+        return $this->createJsonResponse(
+            array(
+                'append' => true,
+                'html' => $html,
+            )
+        );
     }
 
     public function updateAction(Request $request, $courseId, $id)
@@ -171,14 +184,17 @@ class TaskManageController extends BaseController
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
-        return $this->render('task-manage/modal.html.twig', array(
-            'mode' => 'edit',
-            'currentType' => $activity['mediaType'],
-            'course' => $course,
-            'courseSet' => $courseSet,
-            'task' => $task,
-            'taskMode' => $taskMode,
-        ));
+        return $this->render(
+            'task-manage/modal.html.twig',
+            array(
+                'mode' => 'edit',
+                'currentType' => $activity['mediaType'],
+                'course' => $course,
+                'courseSet' => $courseSet,
+                'task' => $task,
+                'taskMode' => $taskMode,
+            )
+        );
     }
 
     public function publishAction(Request $request, $courseId, $id)
@@ -204,24 +220,29 @@ class TaskManageController extends BaseController
         if ($mode === 'create') {
             $type = $request->query->get('type');
 
-            return $this->forward('AppBundle:Activity/Activity:create', array(
-                'courseId' => $courseId,
-                'type' => $type,
-            ));
+            return $this->forward(
+                'AppBundle:Activity/Activity:create',
+                array(
+                    'courseId' => $courseId,
+                    'type' => $type,
+                )
+            );
         } else {
             $id = $request->query->get('id');
             $task = $this->getTaskService()->getTask($id);
 
-            return $this->forward('AppBundle:Activity/Activity:update', array(
-                'id' => $task['activityId'],
-                'courseId' => $courseId,
-            ));
+            return $this->forward(
+                'AppBundle:Activity/Activity:update',
+                array(
+                    'id' => $task['activityId'],
+                    'courseId' => $courseId,
+                )
+            );
         }
     }
 
     public function deleteAction(Request $request, $courseId, $taskId)
     {
-        $course = $this->tryManageCourse($courseId);
         $task = $this->getTaskService()->getTask($taskId);
         if ($task['courseId'] != $courseId) {
             throw new InvalidArgumentException('任务不在课程中');

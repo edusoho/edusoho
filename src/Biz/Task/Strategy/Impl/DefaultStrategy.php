@@ -56,7 +56,9 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 $allTasks = $this->getTaskDao()->findByCourseIdAndCategoryId(
                     $task['courseId'],
                     $task['categoryId']
-                ); //courseId
+                );
+            } else {
+                array_push($allTasks, $task);
             }
             foreach ($allTasks as $_task) {
                 $this->getTaskDao()->delete($_task['id']);
