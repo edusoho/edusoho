@@ -60,7 +60,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         $marks     = str_repeat('?,', count($lockedTargets) - 1).'?';
 
         $sql = "SELECT * FROM {$this->table} WHERE copyId = ? AND target IN ({$marks})";
-        return $this->getConnection()->fetchAll($sql, $lockedTargets);
+        return $this->getConnection()->fetchAll($sql, array_merge(array($copyId), $lockedTargets));
     }
 
     //@todo:sql 未用到
