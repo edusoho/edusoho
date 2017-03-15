@@ -105,7 +105,6 @@ class Show {
       }
       textTracks[0]['default'] = true;
     }
-
     return textTracks;
   }
 
