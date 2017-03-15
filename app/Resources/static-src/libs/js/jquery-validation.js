@@ -108,8 +108,8 @@ $.extend($.validator.messages, {
   creditcard: "请输入有效的信用卡号码",
   equalTo: "你的输入不相同",
   extension: "请输入有效的后缀",
-  maxlength: $.validator.format("最多可以输入 {0} 个字符"),
-  minlength: $.validator.format("最少要输入 {0} 个字符"),
+  maxlength: $.validator.format("最多只能输入 {0} 个字符"),
+  minlength: $.validator.format("最少需要输入 {0} 个字符"),
   rangelength: $.validator.format("请输入长度在 {0} 到 {1} 之间的字符串"),
   range: $.validator.format("请输入范围在 {0} 到 {1} 之间的数值"),
   max: $.validator.format("请输入不大于 {0} 的数值"),
@@ -193,11 +193,11 @@ $.validator.addMethod("open_live_course_title", function (value, element, params
 
 $.validator.addMethod("currency", function (value, element, params) {
   return this.optional(element) || /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
-}, jQuery.validator.format('请输入有效价格，最多两位小数，整数位不超个8位！'));
+}, jQuery.validator.format('请输入有效价格，最多两位小数，整数位不超过8位！'));
 
 $.validator.addMethod("positive_currency", function (value, element, params) {
   return value > 0 && /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
-}, jQuery.validator.format('请输入大于0的有效价格，最多两位小数，整数位不超个8位！'));
+}, jQuery.validator.format('请输入大于0的有效价格，最多两位小数，整数位不超过8位！'));
 
 jQuery.validator.addMethod("max_year", function (value, element) {
   return this.optional(element) || value < 100000;
@@ -220,7 +220,7 @@ $.validator.addMethod("after_date", function (value, element, params) {
 );
 
 $.validator.addMethod("after_now", function (value, element, params) {
-  let afterDate =  new Date(value.replace(/-/g, '/'));
+  let afterDate =  new Date(value.replace(/-/g, '/'));//fix sf;
   return !value || afterDate >=new Date();
 },
   Translator.trans('开始时间应晚于当前时间')
@@ -235,8 +235,6 @@ $.validator.addMethod("after_now_date", function (value, element, params) {
 },
   Translator.trans('开始日期应晚于当前日期')
 );
-
-
 
 //检查将废除
 $.validator.addMethod("before", function (value, element, params) {
