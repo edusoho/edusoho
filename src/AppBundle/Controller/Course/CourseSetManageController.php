@@ -307,6 +307,7 @@ class CourseSetManageController extends BaseController
             if (empty($publishedCourses)) {
                 throw $this->createAccessDeniedException('发布课程时请确保课程下至少有一个已发布的教学计划');
             }
+
             $this->getCourseSetService()->publishCourseSet($id);
 
             return $this->createJsonResponse(array('success' => true));

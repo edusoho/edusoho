@@ -18,7 +18,7 @@ export default class TaskUi {
       window.setTimeout(() => {
         this.learnedPrompt.popover('hide');
       }, 2000);
-      
+
     }, 2000);
   }
 

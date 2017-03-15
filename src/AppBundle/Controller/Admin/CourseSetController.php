@@ -205,9 +205,26 @@ class CourseSetController extends BaseController
 
     public function publishAction(Request $request, $id)
     {
-        $this->getCourseSetService()->publishCourseSet($id);
+        $courseSet = $this->getCourseSetService()->getCourseSet($id);
 
-        return $this->renderCourseTr($id, $request);
+        if ($courseSet['type'] == 'live') {
+            $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+
+            if (empty($course['maxStudentNum'])) {
+                return $this->createJsonResponse(array(
+                    'success' => false,
+                    'message' => '直播课程发布前需要在计划设置中设置课程人数',
+                ));
+            }
+        }
+
+        $this->getCourseSetService()->publishCourseSet($id);
+        $html = $this->renderCourseTr($id, $request)->getContent();
+
+        return $this->createJsonResponse(array(
+            'success' => true,
+            'message' => $html,
+        ));
     }
 
     public function recommendAction(Request $request, $id)
