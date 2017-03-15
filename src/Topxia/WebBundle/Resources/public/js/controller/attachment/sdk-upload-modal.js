@@ -3,7 +3,7 @@ define(function (require, exports, module) {
   require('new-uploader');
   var $uploader = $('#uploader-container');
 
-  let uploader = new UploaderSDK({
+  var uploader = new UploaderSDK({
     id: $uploader.attr('id'),
     initUrl: $uploader.data('initUrl'),
     finishUrl: $uploader.data('finishUrl'),
@@ -13,10 +13,10 @@ define(function (require, exports, module) {
     ui: 'single'
   });
 
-  uploader.on('file.finish', (file) => {
+  uploader.on('file.finish',function (file)  {
     if (file.length && file.length > 0) {
-      let minute = parseInt(file.length / 60);
-      let second = Math.round(file.length % 60);
+      var minute = parseInt(file.length / 60);
+      var second = Math.round(file.length % 60);
       $("#minute").val(minute);
       $("#second").val(second);
       $("#length").val(minute * 60 + second);
@@ -35,7 +35,7 @@ define(function (require, exports, module) {
   });
 
   //只执行一次
-  $('#attachment-modal').one('hide.bs.modal', (event) => {
+  $('#attachment-modal').one('hide.bs.modal', function() {
     uploader.destroy();
     uploader = null;
   });
