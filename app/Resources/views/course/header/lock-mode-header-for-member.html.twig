@@ -109,16 +109,16 @@
             <i class="es-icon es-icon {{ meta.icon|default('') }} mlm"
                data-toggle="tooltip" data-placement="top"
                title="{{ meta.name|default(null) }}任务"></i>
-        </span>
-
+          </span>
         </li>
       {% endfor %}
     </ul>
     <div class="visible-xs text-center mt20 pt10">
-      {# @TODO 手机端继续学习的按钮的链接 #}
-      <a class="btn btn-lg btn-primary">
-      继续学习
-      </a>
+       {% for task in toLearnTasks  %}
+        {%  if loop.index == 1 %}
+          <a class="btn btn-lg btn-primary" href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">继续学习</a>
+        {% endif %}
+      {% endfor %}
     </div>
   </div>
 </section>
