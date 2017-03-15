@@ -12,7 +12,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     public function getCourse($id)
     {
         $that = $this;
-
         return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
             return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
@@ -53,6 +52,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             return array();
         }
 
+        $this->filterStartLimit($start, $limit);
         $marks = str_repeat('?,', count($ids) - 1).'?';
         $sql   = "SELECT * FROM {$this->getTable()} WHERE id IN ({$marks}) LIMIT {$start}, {$limit};";
         return $this->getConnection()->fetchAll($sql, $ids);
@@ -73,6 +73,9 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         if (empty($courseIds)) {
             return array();
         }
+
+        $this->filterStartLimit($start, $limit);
+        $this->checkOrderBy($orderBy);
 
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
         $sql = "SELECT * FROM {$this->getTable()} WHERE parentId = 0 AND status = '{$status}' AND id in ({$marks})ORDER BY {$orderBy[0]} {$orderBy[1]} LIMIT {$start}, {$limit}";
@@ -271,21 +274,21 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function analysisCourseDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTable()}` WHERE  `createdTime`>={$startTime} AND `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+        $sql = "SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTable()}` WHERE  `createdTime`>= ? AND `createdTime`<= ? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
 
-        return $this->getConnection()->fetchAll($sql);
+        return $this->getConnection()->fetchAll($sql, array($startTime, $endTime));
     }
 
     public function findCoursesCountByLessThanCreatedTime($endTime)
     {
-        $sql = "SELECT count(id) as count FROM `{$this->getTable()}` WHERE `createdTime`<={$endTime} ";
+        $sql = "SELECT count(id) as count FROM `{$this->getTable()}` WHERE `createdTime`<= ? ";
 
-        return $this->getConnection()->fetchColumn($sql);
+        return $this->getConnection()->fetchColumn($sql, array($endTime));
     }
 
     public function analysisCourseSumByTime($endTime)
     {
-        $sql = "SELECT date , max(a.Count) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date,( SELECT count(id) as count FROM  `{$this->getTable()}`   i   WHERE   i.createdTime<=o.createdTime and i.parentId = 0)  as Count from `{$this->getTable()}`  o  where o.createdTime<={$endTime} order by 1,2) as a group by date ";
-        return $this->getConnection()->fetchAll($sql);
+        $sql = "SELECT date , max(a.Count) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date,( SELECT count(id) as count FROM  `{$this->getTable()}`   i   WHERE   i.createdTime<=o.createdTime and i.parentId = 0)  as Count from `{$this->getTable()}`  o  where o.createdTime<= ? order by 1,2) as a group by date ";
+        return $this->getConnection()->fetchAll($sql, array($endTime));
     }
 }

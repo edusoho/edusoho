@@ -59,7 +59,7 @@ class TagGroupTagDaoImpl extends BaseDao implements TagGroupTagDao
 
     public function update($groupId, $fields)
     {
-        $this->getConnection->update($this->table, $fieleds, array('groupId' => $groupId));
+        $this->getConnection->update($this->table, $fields, array('groupId' => $groupId));
         $this->clearCached();
         return $this->get($groupId);
     }

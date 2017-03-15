@@ -102,7 +102,7 @@ class TaskDaoImpl extends BaseDao implements TaskDao
                         ->andWhere('taskStartTime < :taskStartTimeLessThan')
                         ->andWhere('taskEndTime >= :taskEndTimeGreaterThan')
                         ->andWhere('taskEndTime <= :taskEndTimeLessThan')
-                        ->andWhere('intervalDate > intervalDateGreaterThan')
+                        ->andWhere('intervalDate > :intervalDateGreaterThan')
                         ->andWhere('batchId IN ( :batchIds )');
 
         return $builder;
