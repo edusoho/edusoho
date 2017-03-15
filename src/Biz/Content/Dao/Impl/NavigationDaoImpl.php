@@ -70,7 +70,7 @@ class NavigationDaoImpl extends GeneralDaoImpl implements NavigationDao
         );
     }
 
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         if (empty($conditions['orgId'])) {
             unset($conditions['orgId']);
@@ -80,6 +80,6 @@ class NavigationDaoImpl extends GeneralDaoImpl implements NavigationDao
             unset($conditions['orgCode']);
         }
 
-        return parent::_createQueryBuilder($conditions);
+        return parent::createQueryBuilder($conditions);
     }
 }

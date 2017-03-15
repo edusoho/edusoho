@@ -149,7 +149,7 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
         return $this->db()->executeQuery($sql, array($userId))->fetchAll(\PDO::FETCH_COLUMN);
     }
 
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         if (isset($conditions['role'])) {
             $conditions['role'] = "%{$conditions['role']}%";
@@ -171,6 +171,6 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
             $conditions['roles'][] = $roles;
         }
 
-        return parent::_createQueryBuilder($conditions);
+        return parent::createQueryBuilder($conditions);
     }
 }

@@ -2,11 +2,9 @@
 
 namespace AppBundle\Controller;
 
-
-
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -18,8 +16,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class TaskController extends BaseController
 {
     public function showAction(Request $request, $courseId, $id)
-
-
     {
         $preview = $request->query->get('preview');
 
@@ -33,7 +29,12 @@ class TaskController extends BaseController
 
         $user = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
+
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
+
+        if ($member['locked']) {
+            return $this->redirectToRoute('my_course_show', array('id' => $courseId));
+        }
 
         if ($member && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {
             return $this->redirect($this->generateUrl('my_course_show', array('id' => $courseId)));
@@ -366,9 +367,12 @@ class TaskController extends BaseController
         if ($request->query->get('from', '') === 'student_status') {
             $task = $this->getTaskService()->getTask($taskId);
 
-            return $this->redirectToRoute('course_show', array(
-                'id' => $task['courseId'],
-            ));
+            return $this->redirectToRoute(
+                'course_show',
+                array(
+                    'id' => $task['courseId'],
+                )
+            );
         }
 
         throw $exception;

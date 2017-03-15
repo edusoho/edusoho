@@ -149,7 +149,7 @@ class UploadFileDaoImpl extends GeneralDaoImpl implements UploadFileDao
         );
     }
 
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         $conditions['status'] = 'ok';
 
@@ -163,6 +163,6 @@ class UploadFileDaoImpl extends GeneralDaoImpl implements UploadFileDao
             unset($conditions['useType']);
         }
 
-        return parent::_createQueryBuilder($conditions);
+        return parent::createQueryBuilder($conditions);
     }
 }

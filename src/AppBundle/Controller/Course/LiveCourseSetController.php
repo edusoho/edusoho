@@ -203,7 +203,6 @@ class LiveCourseSetController extends CourseBaseController
         $vipCategoryId = $request->query->get('vipCategoryId', '');
         $currentPage = $request->query->get('page', 1);
 
-
         $vipCourseSetIds = $this->_findVipCourseSetIds($vipCategoryId);
         $futureLiveCourseSets = $this->_findFutureLiveCourseSets($vipCourseSetIds, $categoryId);
 
@@ -257,13 +256,18 @@ class LiveCourseSetController extends CourseBaseController
         $ret = array();
         foreach ($liveCourseSetIds as $key => $courseSetId) {
             $ret[$courseSetId] = $liveCourseSets[$courseSetId];
+            $ret[$courseSetId]['course'] = $courses[$courseSetId];
             $tasks = $this->getTaskService()->searchTasks(
                 array('fromCourseSetId' => $courseSetId),
                 array('startTime' => 'ASC'),
                 0,
                 1
             );
-            $ret[$courseSetId]['course'] = $courses[$courseSetId];
+
+            if (empty($tasks)) {
+                continue;
+            }
+
             $ret[$courseSetId]['liveStartTime'] = $tasks[0]['startTime'];
             $ret[$courseSetId]['liveEndTime'] = $tasks[0]['endTime'];
             $ret[$courseSetId]['taskId'] = $tasks[0]['id'];
@@ -356,7 +360,6 @@ class LiveCourseSetController extends CourseBaseController
 
         return $replayLiveCourseSets;
     }
-
 
     private function _findPublishedLiveCourseSetIds()
     {

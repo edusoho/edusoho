@@ -31,12 +31,12 @@ class ContentDaoImpl extends GeneralDaoImpl implements ContentDao
         ));
     }
 
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         if (isset($conditions['keywords'])) {
             $conditions['keywords'] = "%{$conditions['keywords']}%";
         }
 
-        return parent::_createQueryBuilder($conditions);
+        return parent::createQueryBuilder($conditions);
     }
 }
