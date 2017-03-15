@@ -41,6 +41,8 @@ class LiveController extends BaseController implements ActivityActionInterface
         $summary = $activity['remark'];
         unset($activity['remark']);
 
+        $this->freshTaskLearnStat($request, $activity['id']);
+
         return $this->render('activity/live/show.html.twig', array(
             'activity' => $activity,
             'summary' => $summary,
@@ -127,7 +129,7 @@ class LiveController extends BaseController implements ActivityActionInterface
         ));
     }
 
-    public function triggerAction($courseId, $activityId)
+    public function triggerAction(Request $request, $courseId, $activityId)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
 
@@ -144,15 +146,17 @@ class LiveController extends BaseController implements ActivityActionInterface
             return $this->createJsonResponse(array('success' => true, 'status' => 'live_end'));
         }
 
-        //当前业务逻辑：看过即视为完成
-        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
-        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
-        //如果尚未开始则标记为开始
-        if (empty($taskResult)) {
-            $this->getActivityService()->trigger($activityId, 'start', array('task' => $task));
-        } elseif ($taskResult['status'] == 'start') {
-            $this->getActivityService()->trigger($activityId, 'finish', array('taskId' => $task['id']));
-            $this->getTaskService()->finishTaskResult($task['id']);
+        if($this->validTaskLearnStat($request, $activity['id'])){
+            //当前业务逻辑：看过即视为完成
+            $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+            $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+            //如果尚未开始则标记为开始
+            if (empty($taskResult)) {
+                $this->getActivityService()->trigger($activityId, 'start', array('task' => $task));
+            } elseif ($taskResult['status'] == 'start') {
+                $this->getActivityService()->trigger($activityId, 'finish', array('taskId' => $task['id']));
+                $this->getTaskService()->finishTaskResult($task['id']);
+            }
         }
 
         return $this->createJsonResponse(array('success' => true, 'status' => 'on_live'));
@@ -161,6 +165,42 @@ class LiveController extends BaseController implements ActivityActionInterface
     public function finishConditionAction($activity)
     {
         return $this->render('activity/live/finish-condition.html.twig', array());
+    }
+
+    private function freshTaskLearnStat(Request $request, $activityId)
+    {
+        $key = 'activity.'.$activityId;
+        $session = $request->getSession();
+        $taskStore = $session->get($key, array());
+        $taskStore['start'] = time();
+        $taskStore['lastTriggerTime'] = 0;
+
+        $session->set($key, $taskStore);
+    }
+
+    private function validTaskLearnStat(Request $request, $activityId)
+    {
+        $key = 'activity.'.$activityId;
+        $session = $request->getSession($key);
+        $taskStore = $session->get($key);
+
+        if (!empty($taskStore)) {
+            $now = time();
+            //任务连续学习超过5小时则不再统计时长
+            if ($now - $taskStore['start'] > 60 * 60 * 5) {
+                return false;
+            }
+            //任务每分钟只允许触发一次，这里用55秒作为标准判断，以应对网络延迟
+            if ($now - $taskStore['lastTriggerTime'] < 55) {
+                return false;
+            }
+            $taskStore['lastTriggerTime'] = $now;
+            $session->set($key, $taskStore);
+
+            return true;
+        }
+
+        return false;
     }
 
     protected function _getLiveVideoReplay($activity, $ssl = false)

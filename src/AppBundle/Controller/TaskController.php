@@ -64,7 +64,7 @@ class TaskController extends BaseController
             list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
         }
 
-        $this->freshTaskLearnStat($request, $task);
+        $this->freshTaskLearnStat($request, $task['id']);
 
         return $this->render(
             'task/show.html.twig',
@@ -78,41 +78,7 @@ class TaskController extends BaseController
         );
     }
 
-    private function freshTaskLearnStat(Request $request, $task)
-    {
-        $key = 'task.'.$task['id'];
-        $session = $request->getSession();
-        $taskStore = $session->get($key, array());
-        $taskStore['start'] = time();
-        $taskStore['lastTriggerTime'] = 0;
-
-        $session->set($key, $taskStore);
-    }
-
-    private function validTaskLearnStat(Request $request, $taskId)
-    {
-        $key = 'task.'.$taskId;
-        $session = $request->getSession($key);
-        $taskStore = $session->get($key);
-        
-        if (!empty($taskStore)) {
-            $now = time();
-            //任务连续学习超过5小时则不再统计时长
-            if ($now - $taskStore['start'] > 60 * 60 * 5) {
-                return false;
-            }
-            //任务每分钟只允许触发一次，这里用55秒作为标准判断，以应对网络延迟
-            if ($now - $taskStore['lastTriggerTime'] < 55) {
-                return false;
-            }
-            $taskStore['lastTriggerTime'] = $now;
-            $session->set($key, $taskStore);
-            return true;
-        }
-
-        return false;
-    }
-
+   
     private function canStartTask($task)
     {
         $activity = $this->getActivityService()->getActivity($task['activityId']);
@@ -466,6 +432,42 @@ class TaskController extends BaseController
         }
 
         return $task;
+    }
+
+     private function freshTaskLearnStat(Request $request, $taskId)
+    {
+        $key = 'task.'.$taskId;
+        $session = $request->getSession();
+        $taskStore = $session->get($key, array());
+        $taskStore['start'] = time();
+        $taskStore['lastTriggerTime'] = 0;
+
+        $session->set($key, $taskStore);
+    }
+
+    private function validTaskLearnStat(Request $request, $taskId)
+    {
+        $key = 'task.'.$taskId;
+        $session = $request->getSession($key);
+        $taskStore = $session->get($key);
+
+        if (!empty($taskStore)) {
+            $now = time();
+            //任务连续学习超过5小时则不再统计时长
+            if ($now - $taskStore['start'] > 60 * 60 * 5) {
+                return false;
+            }
+            //任务每分钟只允许触发一次，这里用55秒作为标准判断，以应对网络延迟
+            if ($now - $taskStore['lastTriggerTime'] < 55) {
+                return false;
+            }
+            $taskStore['lastTriggerTime'] = $now;
+            $session->set($key, $taskStore);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
