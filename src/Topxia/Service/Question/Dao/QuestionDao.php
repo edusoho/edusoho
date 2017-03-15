@@ -22,7 +22,7 @@ interface QuestionDao
 
     public function findQuestionsCountbyTypes(array $types);
 
-    public function findQuestionsCountbyTypesAndSource(array $types,$questionSource,$courseId,$lessonId);
+    public function findQuestionsCountbyTypesAndSource($types,$questionSource,$courseId,$lessonId);
 
     public function searchQuestions($conditions, $sort, $start, $limit);
 

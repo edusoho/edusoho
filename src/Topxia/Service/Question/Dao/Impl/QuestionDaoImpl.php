@@ -129,22 +129,18 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->getConnection()->fetchColumn($sql, $types);
     }
 
-    public function findQuestionsCountbyTypesAndSource(array $types, $questionSource, $courseId, $lessonId)
-    {
-        if (empty($types)) {
-            return array();
-        }
 
+    //todo: fix
+    public function findQuestionsCountbyTypesAndSource($types, $questionSource, $courseId, $lessonId)
+    {
         if ($questionSource == 'course') {
             $target = 'course-'.$courseId;
         } elseif ($questionSource == 'lesson') {
             $target = 'course-'.$courseId.'/lesson-'.$lessonId;
         }
 
-        $marks     = str_repeat('?,', count($types) - 1).'?';
-
-        $sql = "SELECT count(*) FROM {$this->table} WHERE  (`parentId` = 0) and (`type` in ({$marks})) and (`target` like ? OR `target` = ?)";
-        return $this->getConnection()->fetchColumn($sql, array_merge($types, array("{$target}/%", "{$target}")));
+        $sql = "SELECT count(*) FROM {$this->table} WHERE  (`parentId` = 0) and (`type` in ({$types})) and (`target` like ? OR `target` = ?)";
+        return $this->getConnection()->fetchColumn($sql, array("{$target}/%", "{$target}"));
     }
 
     public function findQuestionsByParentIds(array $ids)
