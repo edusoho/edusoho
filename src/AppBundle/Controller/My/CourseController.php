@@ -136,6 +136,9 @@ class CourseController extends CourseBaseController
             )));
         }
 
+        if ($course['expiryMode'] == 'date' && $course['expiryStartDate'] >= time()) {
+            return $this->redirectToRoute('course_show', array('id' => $course['id']));
+        }
         $classroom = array();
         if ($course['parentId'] > 0) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
@@ -144,6 +147,7 @@ class CourseController extends CourseBaseController
         return $this->render('course/course-show.html.twig', array(
             'tab' => $tab,
             'member' => $member,
+            'isCourseTeacher' => $member['role'] == 'teacher',
             'course' => $course,
             'classroom' => $classroom,
         ));

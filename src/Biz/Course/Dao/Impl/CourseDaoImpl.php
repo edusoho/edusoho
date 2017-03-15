@@ -89,10 +89,18 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
 
     public function analysisCourseDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM {$this->table} WHERE createdTime >= ? AND createdTime <= ?
-            group by from_unixtime(createdTime,'%Y-%m-%d') order by date ASC";
+        $conditions = array(
+            'startTime' => $startTime,
+            'endTime' => $endTime,
+            'parentId' => 0,
+        );
 
-        return $this->db()->fetchAll($sql, array($startTime, $endTime));
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date")
+            ->groupBy("from_unixtime(createdTime,'%Y-%m-%d')")
+            ->addOrderBy('date', 'asc');
+
+        return $builder->execute()->fetchAll();
     }
 
     public function getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId)
@@ -158,8 +166,6 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
                 'rating > :ratingGreaterThan',
                 'vipLevelId >= :vipLevelIdGreaterThan',
                 'vipLevelId = :vipLevelId',
-                'createdTime >= :startTime',
-                'createdTime <= :endTime',
                 'categoryId = :categoryId',
                 'smallPicture = :smallPicture',
                 'categoryId IN ( :categoryIds )',
@@ -177,7 +183,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         );
     }
 
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {
             $conditions['titleLike'] = "%{$conditions['title']}%";
@@ -196,7 +202,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
             $conditions['likeOrgCode'] .= '%';
         }
 
-        $builder = parent::_createQueryBuilder($conditions);
+        $builder = parent::createQueryBuilder($conditions);
 
         if (isset($conditions['types'])) {
             $builder->andWhere('type IN ( :types )');

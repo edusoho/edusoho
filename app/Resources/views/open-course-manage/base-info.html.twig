@@ -16,9 +16,8 @@
 <div class="panel panel-default panel-col">
   <div class="panel-heading">{{'基本信息'|trans}}</div>
   <div class="panel-body">
+    {{ web_macro.flash_messages() }}
     <form class="form-horizontal" id="course-form" method="post">
-
-      {{ web_macro.flash_messages() }}
 
       <div class="form-group">
         <label class="col-md-2 control-label">{{'标题'|trans}}</label>

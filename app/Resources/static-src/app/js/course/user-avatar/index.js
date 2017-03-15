@@ -1,5 +1,5 @@
 import 'store';
-$(".js-course-avatar a").on('click', function () {
-    store.set('course-guest-page-url', window.location.href);
+$(".js-course-avatar").on('click', function () {
+    store.set('COURSE-GUEST-PAGE-URL', window.location.href);
     this.href = $(this).data('url')
 });

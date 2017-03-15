@@ -54,7 +54,7 @@ interface CourseService
     public function publishCourse($id, $withTasks = false);
 
     /**
-     * @param $courseId
+     * @param  $courseId
      * @param int $limitNum 限制取几条任务，默认不限制
      *
      * @return mixed
@@ -124,9 +124,9 @@ interface CourseService
     /**
      * filter 支持 type classroomId locked ...
      *
-     * @param $userId
-     * @param $start
-     * @param $limit
+     * @param  $userId
+     * @param  $start
+     * @param  $limit
      * @param array $filters
      *
      * @return mixed
@@ -159,7 +159,7 @@ interface CourseService
 
     public function updateMaxRateByCourseSetId($courseSetId, $maxRate);
 
-    public function RecommendCourseByCourseSetId($courseSetId, $fields);
+    public function recommendCourseByCourseSetId($courseSetId, $fields);
 
     public function cancelRecommendCourseByCourseSetId($courseSetId);
 
@@ -190,4 +190,6 @@ interface CourseService
     public function updateCategoryByCourseSetId($courseSetId, $categoryId);
 
     public function calculateLearnProgressByUserIdAndCourseIds($userId, array $courseIds);
+
+    public function findUserManageCoursesByCourseSetId($userId, $courseSetId);
 }

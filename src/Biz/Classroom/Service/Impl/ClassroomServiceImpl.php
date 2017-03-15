@@ -192,9 +192,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $classroom = $this->fillOrgId($classroom);
+        $userId = $this->getCurrentUser()->getId();
+        $classroom['creator'] = $userId;
+        $classroom['teacherIds'] = array($userId);
 
         $classroom = $this->getClassroomDao()->create($classroom);
+        $this->becomeTeacher($classroom['id'], $userId);
+
         $this->dispatchEvent('classroom.create', $classroom);
+
         $this->getLogService()->info('classroom', 'create', "创建班级《{$classroom['title']}》(#{$classroom['id']})");
 
         return $classroom;
@@ -217,9 +223,17 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $newCourseIds = array();
 
                 foreach ($courses as $key => $course) {
-                    $newCourse = $this->getCourseSetService()->copyCourseSet($classroomId, $course['courseSetId'], $course['id']);
+                    $newCourse = $this->getCourseSetService()->copyCourseSet(
+                        $classroomId,
+                        $course['courseSetId'],
+                        $course['id']
+                    );
                     $newCourseIds[] = $newCourse['id'];
-                    $this->getLogService()->info('classroom', 'add_course', "班级《{$classroom['title']}》(#{$classroom['id']})添加了课程《{$newCourse['title']}》(#{$newCourse['id']})");
+                    $this->getLogService()->info(
+                        'classroom',
+                        'add_course',
+                        "班级《{$classroom['title']}》(#{$classroom['id']})添加了课程《{$newCourse['title']}》(#{$newCourse['id']})"
+                    );
                 }
 
                 $this->setClassroomCourses($classroomId, $newCourseIds);
@@ -258,7 +272,42 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
         }
 
-        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'orgCode', 'orgId'));
+        $fields = ArrayToolkit::parts(
+            $fields,
+            array(
+                'rating',
+                'ratingNum',
+                'categoryId',
+                'title',
+                'status',
+                'about',
+                'description',
+                'price',
+                'vipLevelId',
+                'smallPicture',
+                'middlePicture',
+                'largePicture',
+                'headTeacherId',
+                'teacherIds',
+                'assistantIds',
+                'hitNum',
+                'auditorNum',
+                'studentNum',
+                'courseNum',
+                'lessonNum',
+                'threadNum',
+                'postNum',
+                'income',
+                'createdTime',
+                'private',
+                'service',
+                'maxRate',
+                'buyable',
+                'showable',
+                'orgCode',
+                'orgId',
+            )
+        );
 
         if (empty($fields)) {
             throw $this->createInvalidArgumentException('参数不正确，更新失败！');
@@ -269,7 +318,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->getClassroomDao()->update($id, $fields);
 
         if (isset($tagIds)) {
-            $this->dispatchEvent('classroom.update', new Event(array('userId' => $user['id'], 'classroomId' => $id, 'tagIds' => $tagIds)));
+            $this->dispatchEvent(
+                'classroom.update',
+                new Event(array('userId' => $user['id'], 'classroomId' => $id, 'tagIds' => $tagIds))
+            );
         } else {
             $this->dispatchEvent('classroom.update', new Event(array('userId' => $user['id'], 'classroomId' => $id)));
         }
@@ -330,10 +382,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      */
     public function updateClassroomTeachers($id)
     {
+        $classroom = $this->getClassroom($id);
         $courses = $this->findActiveCoursesByClassroomId($id);
 
         $oldTeacherIds = $this->findTeachers($id);
-        $newTeacherIds = array();
+        $newTeacherIds = array($classroom['creator']);
 
         foreach ($courses as $key => $value) {
             $teachers = $this->getCourseMemberService()->findCourseTeachers($value['id']);
@@ -419,7 +472,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $this->deleteNotUsedPictures($classroom);
 
-        $this->getLogService()->info('classroom', 'update_picture', "更新课程《{$classroom['title']}》(#{$classroom['id']})图片", $fields);
+        $this->getLogService()->info(
+            'classroom',
+            'update_picture',
+            "更新课程《{$classroom['title']}》(#{$classroom['id']})图片",
+            $fields
+        );
 
         return $this->updateClassroom($id, $fields);
     }
@@ -433,11 +491,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         );
 
         $self = $this;
-        array_map(function ($oldPicture) use ($self) {
-            if (!empty($oldPicture)) {
-                $self->getFileService()->deleteFileByUri($oldPicture);
-            }
-        }, $oldPictures);
+        array_map(
+            function ($oldPicture) use ($self) {
+                if (!empty($oldPicture)) {
+                    $self->getFileService()->deleteFileByUri($oldPicture);
+                }
+            },
+            $oldPictures
+        );
     }
 
     public function isCourseInClassroom($courseId, $classroomId)
@@ -447,7 +508,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return empty($classroomCourse) ? false : true;
     }
 
-    public function setClassroomCourses($classroomId, array $courseIds)
+    protected function setClassroomCourses($classroomId, array $courseIds)
     {
         $courses = $this->findCoursesByClassroomId($classroomId);
         $existCourseIds = ArrayToolkit::column($courses, 'id');
@@ -461,9 +522,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function deleteClassroomCourses($classroomId, array $courseIds)
     {
         $classroom = $this->getClassroom($classroomId);
+
         foreach ($courseIds as $courseId) {
             $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $courseId);
-
+            $course = $this->getCourseService()->getCourse($courseId);
+            $this->getCourseSetService()->unlockCourseSet($course['courseSetId']);
             $this->dispatchEvent(
                 'classroom.course.delete',
                 new Event($classroom, array('deleteCourseId' => $courseId))
@@ -544,7 +607,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->updateStudentNumAndAuditorNum($classroomId);
         $user = $this->getUserService()->getUser($member['userId']);
 
-        $this->getLogService()->info('classroom', 'remove_student', "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员{$user['nickname']}(#{$user['id']})");
+        $this->getLogService()->info(
+            'classroom',
+            'remove_student',
+            "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员{$user['nickname']}(#{$user['id']})"
+        );
         $this->dispatchEvent(
             'classroom.quit',
             new Event($classroom, array('userId' => $member['userId'], 'member' => $member))
@@ -712,7 +779,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
                     $course = $this->getCourseService()->getCourse($courseId);
                     $this->getClassroomDao()->wave(array($classroomId), array('noteNum' => "-{$course['noteNum']}"));
-                    $this->getLogService()->info('classroom', 'delete_course', "班级《{$classroom['title']}》(#{$classroom['id']})删除了课程《{$course['title']}》(#{$course['id']})");
+                    $this->getLogService()->info(
+                        'classroom',
+                        'delete_course',
+                        "班级《{$classroom['title']}》(#{$classroom['id']})删除了课程《{$course['title']}》(#{$course['id']})"
+                    );
                 }
             }
 
@@ -1005,13 +1076,16 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function _prepareClassroomConditions($conditions)
     {
-        $conditions = array_filter($conditions, function ($value) {
-            if ($value === 0 || !empty($value)) {
-                return true;
-            } else {
-                return false;
+        $conditions = array_filter(
+            $conditions,
+            function ($value) {
+                if ($value === 0 || !empty($value)) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
-        });
+        );
 
         if (isset($conditions['nickname'])) {
             $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
@@ -1389,13 +1463,20 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createAccessDeniedException('推荐班级序号只能为数字！');
         }
 
-        $classroom = $this->getClassroomDao()->update($id, array(
-            'recommended' => 1,
-            'recommendedSeq' => (int) $number,
-            'recommendedTime' => time(),
-        ));
+        $classroom = $this->getClassroomDao()->update(
+            $id,
+            array(
+                'recommended' => 1,
+                'recommendedSeq' => (int) $number,
+                'recommendedTime' => time(),
+            )
+        );
 
-        $this->getLogService()->info('classroom', 'recommend', "推荐班级《{$classroom['title']}》(#{$classroom['id']}),序号为{$number}");
+        $this->getLogService()->info(
+            'classroom',
+            'recommend',
+            "推荐班级《{$classroom['title']}》(#{$classroom['id']}),序号为{$number}"
+        );
 
         return $classroom;
     }
@@ -1404,13 +1485,20 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $this->tryAdminClassroom($id);
 
-        $classroom = $this->getClassroomDao()->update($id, array(
-            'recommended' => 0,
-            'recommendedTime' => 0,
-            'recommendedSeq' => 100,
-        ));
+        $classroom = $this->getClassroomDao()->update(
+            $id,
+            array(
+                'recommended' => 0,
+                'recommendedTime' => 0,
+                'recommendedSeq' => 100,
+            )
+        );
 
-        $this->getLogService()->info('classroom', 'cancel_recommend', "取消推荐班级《{$classroom['title']}》(#{$classroom['id']})");
+        $this->getLogService()->info(
+            'classroom',
+            'cancel_recommend',
+            "取消推荐班级《{$classroom['title']}》(#{$classroom['id']})"
+        );
 
         return $classroom;
     }

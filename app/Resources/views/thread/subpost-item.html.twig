@@ -9,7 +9,7 @@
       {% include 'thread/post-manage-menu.html.twig' %}
       <a href="{{ path('user_show', {id:author.id}) }}">{{ author.nickname }}</a>
       <span class="bullet">•</span>
-      <span class="text-muted">{{post.createdTime|smart_time}} </span>
+      <span class="color-gray">{{post.createdTime|smart_time}} </span>
     </div>
     <div class="editor-text">{{ post.content|at(post.ats)|raw }}</div>
     {% include 'thread/post-interaction.html.twig' %}

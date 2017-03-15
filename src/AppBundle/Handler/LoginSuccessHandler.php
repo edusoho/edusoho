@@ -2,6 +2,7 @@
 
 namespace AppBundle\Handler;
 
+use Biz\Role\Util\PermissionBuilder;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Topxia\Service\Common\ServiceKernel;
 use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
@@ -45,6 +46,7 @@ class LoginSuccessHandler
 
         // do some other magic here
         $user = $event->getAuthenticationToken()->getUser();
+        $user->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($user->getRoles()));
 
         $request = $event->getRequest();
         $sessionId = $request->getSession()->getId();

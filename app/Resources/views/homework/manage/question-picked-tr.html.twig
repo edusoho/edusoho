@@ -6,18 +6,15 @@
     <input {% if question.parentId != 0 %} class="hidden" {% endif %} class="notMoveHandle" type="checkbox" value="{{question.id}}" data-role="batch-item" >
     <input type="hidden" name="questionIds[]" value="{{ question.id }}">
   </td>
-  <td class="seq">{% if question.subCount > 0 %}<span class="text-muted">~</span>{% else %}{{ question.seq|default(' ') }}{% endif %}</td>
+  <td class="seq">{% if question.subCount > 0 %}<span class="color-gray">~</span>{% else %}{{ question.seq|default(' ') }}{% endif %}</td>
   <td>
     {% if question.includeImg|default('') %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
     {{question['stem']|plain_text(40) }}
-    <div class="text-muted text-sm">
-      {{'从属：'|trans}}
-      {% if question.lessonId %}
-        {{ targetChoices[question.lessonId].title|default('--') }}
-      {% else %}
-        {{ '本课程'|trans }}
-      {% endif %}
+    
+    <div>
+      {% include 'question-manage/part/belong.html.twig' with {question:question,courses:courses,courseTasks:courseTasks} %}
     </div>
+    
   </td>
   <td>{{ questionTypesDict[question.type]|default('--') }}</td>
   <td>{{ dict_text('difficulty', question.difficulty)}}</td>

@@ -1,9 +1,9 @@
 {% extends 'activity/content-layout.html.twig' %}
 
-{% do script(['app/js/activity/download/index.js']) %}
+{% do script(['libs/perfect-scrollbar.js','app/js/activity/download/index.js']) %}
 
 {% block body %}
-  <div class="iframe-parent-content">
+  <div class="iframe-parent-content iframe-parent-full" id="download-activity">
     <ul class="download-activity-list">
       {% for material in materials %}
         <li>

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\My;
 
 use AppBundle\Common\Paginator;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\SettingService;
@@ -27,10 +28,13 @@ class CourseSetController extends CourseBaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('my/learning/course-set/favorite.html.twig', array(
-            'courseFavorites' => $courseFavorites,
-            'paginator' => $paginator,
-        ));
+        return $this->render(
+            'my/learning/course-set/favorite.html.twig',
+            array(
+                'courseFavorites' => $courseFavorites,
+                'paginator' => $paginator,
+            )
+        );
     }
 
     public function teachingAction(Request $request, $filter = 'normal')
@@ -46,8 +50,8 @@ class CourseSetController extends CourseBaseController
         );
 
         if ($filter == 'classroom') {
-            $conditions['type'] = 'normal';
             $conditions['parentId_GT'] = 0;
+            unset($conditions['type']);
         } elseif ($filter == 'normal') {
             $conditions['parentId'] = 0;
         }
@@ -66,17 +70,22 @@ class CourseSetController extends CourseBaseController
         );
 
         $service = $this->getCourseService();
-        $courseSets = array_map(function ($set) use ($user, $service) {
-            $set['canManage'] = $set['creator'] == $user['id'];
-            $set['courses'] = $service->findUserTeachingCoursesByCourseSetId($set['id'], false);
+        $courseSets = array_map(
+            function ($set) use ($user, $service) {
+                $set['canManage'] = $set['creator'] == $user['id'];
+                $set['courses'] = $service->findUserTeachingCoursesByCourseSetId($set['id'], false);
 
-            return $set;
-        }, $courseSets);
+                return $set;
+            },
+            $courseSets
+        );
 
         $classrooms = array();
 
         if ($filter == 'classroom') {
-            $classrooms = $this->getClassroomService()->findClassroomsByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
+            $classrooms = $this->getClassroomService()->findClassroomsByCourseSetIds(
+                ArrayToolkit::column($courseSets, 'id')
+            );
             $classrooms = ArrayToolkit::index($classrooms, 'courseSetId');
 
             foreach ($classrooms as &$classroom) {
@@ -85,12 +94,15 @@ class CourseSetController extends CourseBaseController
             }
         }
 
-        return $this->render('my/teaching/course-sets.html.twig', array(
-            'courseSets' => $courseSets,
-            'classrooms' => $classrooms,
-            'paginator' => $paginator,
-            'filter' => $filter,
-        ));
+        return $this->render(
+            'my/teaching/course-sets.html.twig',
+            array(
+                'courseSets' => $courseSets,
+                'classrooms' => $classrooms,
+                'paginator' => $paginator,
+                'filter' => $filter,
+            )
+        );
     }
 
     public function livesAction(Request $request)
@@ -105,6 +117,7 @@ class CourseSetController extends CourseBaseController
         $conditions = array(
             'status' => 'published',
             'startTime_GE' => time(),
+            'parentId' => 0,
             'courseIds' => $courseIds,
             'type' => 'live',
         );
@@ -137,11 +150,14 @@ class CourseSetController extends CourseBaseController
 
         $default = $this->getSettingService()->get('default', array());
 
-        return $this->render('my/learning/course-set/live-list.html.twig', array(
-            'courseSets' => $newCourseSets,
-            'paginator' => $paginator,
-            'default' => $default,
-        ));
+        return $this->render(
+            'my/learning/course-set/live-list.html.twig',
+            array(
+                'courseSets' => $newCourseSets,
+                'paginator' => $paginator,
+                'default' => $default,
+            )
+        );
     }
 
     /**
@@ -160,6 +176,9 @@ class CourseSetController extends CourseBaseController
         return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');

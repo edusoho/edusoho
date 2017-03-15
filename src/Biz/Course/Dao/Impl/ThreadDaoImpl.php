@@ -14,7 +14,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
         return $this->db()->delete($this->table(), array('courseId' => $courseId));
     }
 
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {
             $conditions['title'] = "%{$conditions['title']}%";
@@ -24,7 +24,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
             $conditions['content'] = "%{$conditions['content']}%";
         }
 
-        return parent::_createQueryBuilder($conditions);
+        return parent::createQueryBuilder($conditions);
     }
 
     public function declares()

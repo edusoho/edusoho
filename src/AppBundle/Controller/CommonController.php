@@ -32,7 +32,6 @@ class CommonController extends BaseController
     public function parseQrcodeAction(Request $request, $token)
     {
         $token = $this->getTokenService()->verifyToken('qrcode', $token);
-
         if (empty($token) || !isset($token['data']['url'])) {
             $content = $this->renderView('default/message.html.twig', array(
                 'type' => 'error',

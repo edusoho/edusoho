@@ -65,7 +65,7 @@
                 <button class="close delete-btn pull-right mrl mts mll" data-role="item-delete" type="button" title="删除" style="font-size:35px;" data-cancel-url="{{ path('open_course_manage_recommend_course_delete', {id:openCourse.id, recommendId: recommendId}) }}" data-recommend-id="{{ recommendId }}" data-id="{{courseSet.id}}">× </button>
 
                 <div class="course-body">
-                  <div style="float:right;" class="text-muted mrm mls">
+                  <div style="float:right;" class="color-gray mrm mls">
                     {% include 'open-course-manage/course-set-price-interval.html.twig' %}
                   </div>
 
@@ -93,7 +93,7 @@
                     {% if task %}
                       <div class="live-course-lesson mbm">
                         <span class="color-success fsm mrm">{{ task.startTime|date('n月j日 H:i') }} ~ {{ task.endTime|date('H:i') }}</span>
-                        <span class="text-muted fsm mrm">第{{ task.number }}任务</span>
+                        <span class="color-gray fsm mrm">第{{ task.number }}任务</span>
                       </div>
                     {% endif %}
                   {% else %}
@@ -113,17 +113,17 @@
                     <div class="course-metas">  
 
                       {% if setting('course.show_student_num_enabled', '1') == 1  %}
-                        <span class="text-muted text-sm">{{ courseSet.studentNum }}{{setting('default.user_name', '学员')}}</span>
+                        <span class="color-gray text-sm">{{ courseSet.studentNum }}{{setting('default.user_name', '学员')}}</span>
                         {#<span class="divider"></span>#}
                       {% endif %}  
 
-                      {#<span class="text-muted text-sm">
+                      {#<span class="color-gray text-sm">
                           {{course.lessonNum}}个任务
                       </span>#}
                       {#{% if course.type == 'normal' or course.type == 'live' %}
                         <span class="divider"></span>
                        
-                        <span class="text-muted text-sm">
+                        <span class="color-gray text-sm">
                           有效期:
                           {% if course.expiryDay %}
                             {{course.expiryDay}}天

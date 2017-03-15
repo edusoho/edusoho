@@ -1,9 +1,10 @@
-const $unfavorite = $('#unfavorite-btn');
-const $favorite = $('#favorite-btn');
+const $unfavorite = $('.js-unfavorite-btn');
+const $favorite = $('.js-favorite-btn');
 
 const bindOperation = ($needHideBtn, $needShowBtn) => {
   $needHideBtn.click(() => {
     const url = $needHideBtn.data('url');
+    console.log(url);
     if (!url) {
       return;
     }

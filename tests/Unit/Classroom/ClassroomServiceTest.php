@@ -117,15 +117,14 @@ class ClassroomServiceTest extends BaseTestCase
         );
 
         $course1 = $this->createCourse('Test Course 1');
-        $course2 = $this->createCourse('Test Course 2');
 
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
-        $this->getClassroomService()->setClassroomCourses($classroom['id'], array($course1['id']));
-
-        $result = $this->getClassroomService()->getClassroomCourse($classroom['id'], $course1['id']);
-        $this->assertEquals($course1['id'], $result['courseId']);
+        $copyCourses = $this->getClassroomService()->addCoursesToClassroom($classroom['id'], array($course1['id']));
+        $copyCourse = current($copyCourses);
+        $result = $this->getClassroomService()->getClassroomCourse($classroom['id'], $copyCourse['id']);
+        $this->assertEquals($copyCourse['id'], $result['courseId']);
     }
 
     public function testFindActiveCoursesByClassroomId()
@@ -143,12 +142,12 @@ class ClassroomServiceTest extends BaseTestCase
         $courseSet = $this->mockCourseSet();
         $courseSet = $this->getCourseSetService()->createCourseSet($courseSet);
 
-        $this->getClassroomService()->setClassroomCourses($classroom['id'], array($course1['id'], $course2['id']));
+        $copyCourses = $this->getClassroomService()->addCoursesToClassroom($classroom['id'], array($course1['id'], $course2['id']));
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
 
         $this->assertEquals(2, count($courses));
 
-        $this->getClassroomService()->deleteClassroomCourses($classroom['id'], array($course2['id']));
+        $this->getClassroomService()->deleteClassroomCourses($classroom['id'], array($copyCourses[1]['id']));
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
         $this->assertEquals(1, count($courses));
 
@@ -164,7 +163,7 @@ class ClassroomServiceTest extends BaseTestCase
         $course = $this->createCourse('Test Course 1');
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
 
-        $this->getClassroomService()->setClassroomCourses($classroom['id'], array($course['id']));
+        $this->getClassroomService()->addCoursesToClassroom($classroom['id'], array($course['id']));
 
         $classroomId = $this->getClassroomService()->findClassroomIdsByCourseId(1);
 
@@ -180,7 +179,7 @@ class ClassroomServiceTest extends BaseTestCase
         $course2 = $this->createCourse('Test Course 2');
         $classroom1 = $this->getClassroomService()->addClassroom($textClassroom1);
 
-        $this->getClassroomService()->setClassroomCourses($classroom1['id'], array($course1['id']));
+        $this->getClassroomService()->addCoursesToClassroom($classroom1['id'], array($course1['id']));
 
         $textClassroom2 = array(
             'title' => 'test11123',
@@ -188,7 +187,7 @@ class ClassroomServiceTest extends BaseTestCase
 
         $classroom2 = $this->getClassroomService()->addClassroom($textClassroom2);
 
-        $this->getClassroomService()->setClassroomCourses($classroom2['id'], array($course2['id']));
+        $this->getClassroomService()->addCoursesToClassroom($classroom2['id'], array($course2['id']));
 
         $classroom = $this->getClassroomService()->updateClassroom(1, $textClassroom1);
 
@@ -203,7 +202,7 @@ class ClassroomServiceTest extends BaseTestCase
         $course = $this->createCourse('Test Course');
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
 
-        $this->getClassroomService()->setClassroomCourses($classroom['id'], array($course['id']));
+        $this->getClassroomService()->addCoursesToClassroom($classroom['id'], array($course['id']));
         $result = $this->getClassroomService()->getClassroomByCourseId($course['id']);
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
@@ -368,43 +367,14 @@ class ClassroomServiceTest extends BaseTestCase
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
-        $this->getClassroomService()->setClassroomCourses($classroom['id'], array($course['id']));
-
-        $enabled = $this->getClassroomService()->isCourseInClassroom($course['id'], $classroom['id']);
+        $copyCourses = $this->getClassroomService()->addCoursesToClassroom($classroom['id'], array($course['id']));
+        $copyCourse = current($copyCourses);
+        $enabled = $this->getClassroomService()->isCourseInClassroom($copyCourse['id'], $classroom['id']);
         $this->assertEquals(true, $enabled);
 
-        $this->getClassroomService()->deleteClassroomCourses($classroom['id'], array($course['id']));
+        $this->getClassroomService()->deleteClassroomCourses($classroom['id'], array($copyCourse['id']));
 
-        $enabled = $this->getClassroomService()->isCourseInClassroom($course['id'], $classroom['id']);
-        $this->assertEquals(false, $enabled);
-    }
-
-    public function testSetClassroomCourses()
-    {
-        $textClassroom = array(
-            'title' => 'test12321',
-        );
-
-        $course1 = $this->createCourse('Test Course 1');
-        $course2 = $this->createCourse('Test Course 2');
-
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
-        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
-
-        $this->getClassroomService()->setClassroomCourses($classroom['id'], array($course1['id'], $course2['id']));
-
-        $enabled = $this->getClassroomService()->isCourseInClassroom($course1['id'], $classroom['id']);
-
-        $this->assertEquals(true, $enabled);
-
-        $enabled = $this->getClassroomService()->isCourseInClassroom(9999, $classroom['id']);
-
-        $this->assertEquals(false, $enabled);
-
-        $this->getClassroomService()->deleteClassroomCourses($classroom['id'], array($course1['id'], $course2['id']));
-
-        $enabled = $this->getClassroomService()->isCourseInClassroom($course1['id'], $classroom['id']);
-
+        $enabled = $this->getClassroomService()->isCourseInClassroom($copyCourse['id'], $classroom['id']);
         $this->assertEquals(false, $enabled);
     }
 
@@ -422,15 +392,16 @@ class ClassroomServiceTest extends BaseTestCase
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
-        $this->getClassroomService()->setClassroomCourses($classroom['id'], array($course['id']));
+        $copyCourses = $this->getClassroomService()->addCoursesToClassroom($classroom['id'], array($course['id']));
+        $copyCourse = current($copyCourses);
 
-        $enabled = $this->getClassroomService()->isCourseInClassroom($course['id'], $classroom['id']);
+        $enabled = $this->getClassroomService()->isCourseInClassroom($copyCourse['id'], $classroom['id']);
 
         $this->assertEquals(true, $enabled);
 
-        $this->getClassroomService()->deleteClassroomCourses($classroom['id'], array($course['id']));
+        $this->getClassroomService()->deleteClassroomCourses($classroom['id'], array($copyCourse['id']));
 
-        $enabled = $this->getClassroomService()->isCourseInClassroom($course['id'], $classroom['id']);
+        $enabled = $this->getClassroomService()->isCourseInClassroom($copyCourse['id'], $classroom['id']);
 
         $this->assertEquals(false, $enabled);
     }
@@ -525,7 +496,7 @@ class ClassroomServiceTest extends BaseTestCase
         $course1 = $this->createCourse('Test Course 1');
         $this->getCourseMemberService()->setCourseTeachers($course1['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher2['id'], 'isVisible' => 1)));
         $courseIds = array($course1['id']);
-        $this->getClassroomService()->setClassroomCourses($classroom['id'], $courseIds);
+        $this->getClassroomService()->addCoursesToClassroom($classroom['id'], $courseIds);
 
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $member1 = $this->getClassroomService()->becomeStudent($classroom['id'], $teacher1['id']);
@@ -1129,7 +1100,7 @@ class ClassroomServiceTest extends BaseTestCase
         $this->createCourse('Test Course 1');
         $this->createCourse('Test Course 2');
 
-        $this->getClassroomService()->setClassroomCourses($classroom['id'], array(1, 2));
+        $this->getClassroomService()->addCoursesToClassroom($classroom['id'], array(1, 2));
 
         $courses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
 
@@ -1163,6 +1134,9 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertEquals(count($assitantIds), 4);
     }
 
+    /**
+     @group current
+     */
     public function testAddCoursesToClassroom()
     {
         $teacher1 = $this->createTeacher('1');
@@ -1202,11 +1176,11 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getClassroomService()->addHeadTeacher($classroom['id'], $teacher1['id']);
         $this->getClassroomService()->addCoursesToClassroom($classroom['id'], $courseIds);
         $teachers = $this->getClassroomService()->findTeachers($classroom['id']);
-        $this->assertEquals(count($teachers), 4);
+        $this->assertEquals(count($teachers), 5); // classroom.creator也是classroom的teacher
         $courseIds = array($course3['id']);
         $this->getClassroomService()->addCoursesToClassroom($classroom['id'], $courseIds);
         $teachers = $this->getClassroomService()->findTeachers($classroom['id']);
-        $this->assertEquals(count($teachers), 6);
+        $this->assertEquals(count($teachers), 7);
     }
 
     public function testUpdateClassroomCourses()
@@ -1251,13 +1225,13 @@ class ClassroomServiceTest extends BaseTestCase
 
         $teachers = $this->getClassroomService()->findTeachers($classroom['id']);
 
-        $this->assertEquals(count($teachers), 6);
+        $this->assertEquals(count($teachers), 7);
 
         $courseIds = array($courses[2]['id']);
 
         $this->getClassroomService()->updateClassroomCourses($classroom['id'], $courseIds);
         $teachers = $this->getClassroomService()->findTeachers($classroom['id']);
-        $this->assertEquals(count($teachers), 3);
+        $this->assertEquals(count($teachers), 4);
     }
 
     public function testCanCreateThreadEvent()

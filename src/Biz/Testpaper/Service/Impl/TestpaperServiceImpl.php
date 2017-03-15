@@ -462,7 +462,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             }
 
             if (!empty($userAnswer['answer'])) {
-                $checkedFields['status'] = $checkedFields['score'] == $item['score'] ? 'right' : 'wrong';
+                if ($paperResult['type'] == 'homework') {
+                    $checkedFields['status'] = 'right';
+                } else {
+                    $checkedFields['status'] = $checkedFields['score'] == $item['score'] ? 'right' : 'wrong';
+                }
             }
 
             $this->updateItemResult($userAnswer['id'], $checkedFields);

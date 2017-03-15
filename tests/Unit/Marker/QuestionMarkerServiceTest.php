@@ -21,6 +21,7 @@ class QuestionMarkerServiceTest extends BaseTestCase
             'submission' => 'submit',
             'parentId' => 0,
             'copyId' => 1,
+            'courseSetId' => 1,
         );
         $fields = array(
             'second' => 30,
@@ -52,6 +53,7 @@ class QuestionMarkerServiceTest extends BaseTestCase
             'submission' => 'submit',
             'parentId' => 0,
             'copyId' => 1,
+            'courseSetId' => 1,
         );
         $question1 = array(
             'type' => 'single_choice',
@@ -66,6 +68,7 @@ class QuestionMarkerServiceTest extends BaseTestCase
             'submission' => 'submit',
             'parentId' => 0,
             'copyId' => 1,
+            'courseSetId' => 1,
         );
         $question = $this->getQuestionService()->create($question);
         $question1 = $this->getQuestionService()->create($question1);
@@ -97,6 +100,7 @@ class QuestionMarkerServiceTest extends BaseTestCase
             'submission' => 'submit',
             'parentId' => 0,
             'copyId' => 1,
+            'courseSetId' => 1,
         );
         $question1 = array(
             'type' => 'single_choice',
@@ -111,6 +115,7 @@ class QuestionMarkerServiceTest extends BaseTestCase
             'submission' => 'submit',
             'parentId' => 0,
             'copyId' => 1,
+            'courseSetId' => 1,
         );
         $question = $this->getQuestionService()->create($question);
         $question1 = $this->getQuestionService()->create($question1);
@@ -141,6 +146,7 @@ class QuestionMarkerServiceTest extends BaseTestCase
             'submission' => 'submit',
             'parentId' => 0,
             'copyId' => 1,
+            'courseSetId' => 1,
         );
         $question1 = array(
             'type' => 'single_choice',
@@ -155,6 +161,7 @@ class QuestionMarkerServiceTest extends BaseTestCase
             'submission' => 'submit',
             'parentId' => 0,
             'copyId' => 1,
+            'courseSetId' => 1,
         );
         $question = $this->getQuestionService()->create($question);
         $question1 = $this->getQuestionService()->create($question1);
@@ -185,6 +192,7 @@ class QuestionMarkerServiceTest extends BaseTestCase
             'submission' => 'submit',
             'parentId' => 0,
             'copyId' => 1,
+            'courseSetId' => 1,
         );
         $question1 = array(
             'type' => 'single_choice',
@@ -199,6 +207,7 @@ class QuestionMarkerServiceTest extends BaseTestCase
             'submission' => 'submit',
             'parentId' => 1,
             'copyId' => 1,
+            'courseSetId' => 1,
         );
         $question = $this->getQuestionService()->create($question);
         $question1 = $this->getQuestionService()->create($question1);
@@ -232,6 +241,7 @@ class QuestionMarkerServiceTest extends BaseTestCase
             'submission' => 'submit',
             'parentId' => 0,
             'copyId' => 1,
+            'courseSetId' => 1,
         );
         $question = $this->getQuestionService()->create($question);
         $fields = array(
@@ -266,6 +276,7 @@ class QuestionMarkerServiceTest extends BaseTestCase
             'submission' => 'submit',
             'parentId' => 0,
             'copyId' => 1,
+            'courseSetId' => 1,
         );
         $question = $this->getQuestionService()->create($question);
         $fields = array(
@@ -297,6 +308,7 @@ class QuestionMarkerServiceTest extends BaseTestCase
             'submission' => 'submit',
             'parentId' => 0,
             'copyId' => 1,
+            'courseSetId' => 1,
         );
         $question1 = array(
             'type' => 'single_choice',
@@ -311,6 +323,7 @@ class QuestionMarkerServiceTest extends BaseTestCase
             'submission' => 'submit',
             'parentId' => 1,
             'copyId' => 1,
+            'courseSetId' => 1,
         );
         $question = $this->getQuestionService()->create($question);
         $question1 = $this->getQuestionService()->create($question1);
@@ -345,6 +358,7 @@ class QuestionMarkerServiceTest extends BaseTestCase
             'submission' => 'submit',
             'parentId' => 0,
             'copyId' => 1,
+            'courseSetId' => 1,
         );
         $question1 = array(
             'type' => 'single_choice',
@@ -359,6 +373,7 @@ class QuestionMarkerServiceTest extends BaseTestCase
             'submission' => 'submit',
             'parentId' => 1,
             'copyId' => 1,
+            'courseSetId' => 1,
         );
         $question2 = array(
             'type' => 'single_choice',
@@ -373,6 +388,7 @@ class QuestionMarkerServiceTest extends BaseTestCase
             'submission' => 'submit',
             'parentId' => 1,
             'copyId' => 1,
+            'courseSetId' => 1,
         );
         $question = $this->getQuestionService()->create($question);
         $question1 = $this->getQuestionService()->create($question1);

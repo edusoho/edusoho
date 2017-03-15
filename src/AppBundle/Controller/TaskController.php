@@ -2,16 +2,16 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Activity\Service\ActivityService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\MemberService;
-use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\TokenService;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException as ServiceAccessDeniedException;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException as ServiceAccessDeniedException;
 
 class TaskController extends BaseController
 {
@@ -19,8 +19,13 @@ class TaskController extends BaseController
     {
         $preview = $request->query->get('preview');
 
+        $user = $this->getUser();
+        if (!$user->isLogin()) {
+            return $this->redirect($this->generateUrl('login'));
+        }
+
         try {
-            $task = $this->tryLearnTask($courseId, $id, (bool)$preview);
+            $task = $this->tryLearnTask($courseId, $id, (bool) $preview);
         } catch (AccessDeniedException $accessDeniedException) {
             return $this->handleAccessDeniedException($accessDeniedException, $request, $id);
         } catch (ServiceAccessDeniedException $deniedException) {
@@ -29,7 +34,16 @@ class TaskController extends BaseController
 
         $user = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
+
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
+
+        if ($member['locked']) {
+            return $this->redirectToRoute('my_course_show', array('id' => $courseId));
+        }
+
+        if ($course['expiryMode'] == 'date' && $course['expiryStartDate'] >= time()) {
+            return $this->redirectToRoute('course_show', array('id' => $courseId));
+        }
 
         if ($member && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {
             return $this->redirect($this->generateUrl('my_course_show', array('id' => $courseId)));
@@ -53,6 +67,8 @@ class TaskController extends BaseController
         if ($taskResult['status'] == 'finish') {
             list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
         }
+
+        $this->freshTaskLearnStat($request, $task['id']);
 
         return $this->render(
             'task/show.html.twig',
@@ -270,12 +286,19 @@ class TaskController extends BaseController
 
     public function triggerAction(Request $request, $courseId, $id)
     {
-        $this->getCourseService()->tryTakeCourse($courseId);
-
         $eventName = 'doing';
         $data = $request->request->get('data', array());
         $data['taskId'] = $id;
-        $result = $this->getTaskService()->trigger($id, $eventName, $data);
+
+        $this->getCourseService()->tryTakeCourse($courseId);
+
+        if ($this->validTaskLearnStat($request, $id)) {
+            $result = $this->getTaskService()->trigger($id, $eventName, $data);
+            $data['valid'] = 1;
+        } else {
+            $result = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
+            $data['valid'] = 0;
+        }
 
         return $this->createJsonResponse(
             array(
@@ -346,12 +369,14 @@ class TaskController extends BaseController
     }
 
     /**
-     * 没有权限进行任务的时候的处理逻辑，目前只有学员动态跳转过来的时候跳转到教学计划营销页
+     * 没有权限进行任务的时候的处理逻辑，目前只有学员动态跳转过来的时候跳转到教学计划营销页.
      *
      * @param \Exception $exception
-     * @param Request $request
+     * @param Request    $request
      * @param $taskId
+     *
      * @throws \Exception
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function handleAccessDeniedException(\Exception $exception, Request $request, $taskId)
@@ -359,9 +384,13 @@ class TaskController extends BaseController
         // 学员动态跳转到无权限任务进入到计划营销页
         if ($request->query->get('from', '') === 'student_status') {
             $task = $this->getTaskService()->getTask($taskId);
-            return $this->redirectToRoute('course_show', array(
-                'id' => $task['courseId']
-            ));
+
+            return $this->redirectToRoute(
+                'course_show',
+                array(
+                    'id' => $task['courseId'],
+                )
+            );
         }
 
         throw $exception;
@@ -406,6 +435,42 @@ class TaskController extends BaseController
         }
 
         return $task;
+    }
+
+    private function freshTaskLearnStat(Request $request, $taskId)
+    {
+        $key = 'task.'.$taskId;
+        $session = $request->getSession();
+        $taskStore = $session->get($key, array());
+        $taskStore['start'] = time();
+        $taskStore['lastTriggerTime'] = 0;
+
+        $session->set($key, $taskStore);
+    }
+
+    private function validTaskLearnStat(Request $request, $taskId)
+    {
+        $key = 'task.'.$taskId;
+        $session = $request->getSession($key);
+        $taskStore = $session->get($key);
+
+        if (!empty($taskStore)) {
+            $now = time();
+            //任务连续学习超过5小时则不再统计时长
+            if ($now - $taskStore['start'] > 60 * 60 * 5) {
+                return false;
+            }
+            //任务每分钟只允许触发一次，这里用55秒作为标准判断，以应对网络延迟
+            if ($now - $taskStore['lastTriggerTime'] < 55) {
+                return false;
+            }
+            $taskStore['lastTriggerTime'] = $now;
+            $session->set($key, $taskStore);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

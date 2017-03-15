@@ -199,12 +199,16 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'seq > :seq_GT',
                 'seq < :seq_LT',
                 'startTime >= :startTime_GE',
+                'createdTime >= :createdTime_GE',
                 'startTime > :startTime_GT',
                 'startTime <= :startTime_LE',
                 'endTime > :endTime_GT',
                 'endTime < :endTime_LT',
                 'endTime <= :endTime_GE',
                 'categoryId = :categoryId',
+                'activityId = :activityId',
+                'categoryId = :categoryId',
+                'mode = :mode',
             ),
         );
     }

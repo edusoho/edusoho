@@ -6,6 +6,8 @@ interface TaskService
 {
     const LEARN_TIME_STEP = 2;
 
+    const WATCH_TIME_STEP = 120;
+
     public function getTask($id);
 
     public function getCourseTask($courseId, $id);

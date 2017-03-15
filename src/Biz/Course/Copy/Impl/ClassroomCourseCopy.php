@@ -106,7 +106,12 @@ class ClassroomCourseCopy extends CourseCopy
 
     private function doCopyMaterial($courseSet, $newCourseSet)
     {
-        $materials = $this->getMaterialDao()->search(array('courseSetId' => $courseSet['id'], 'source' => 'coursematerial'), array(), 0, PHP_INT_MAX);
+        $materials = $this->getMaterialDao()->search(
+            array('courseSetId' => $courseSet['id'], 'source' => 'coursematerial'),
+            array(),
+            0,
+            PHP_INT_MAX
+        );
         if (empty($materials)) {
             return;
         }
@@ -148,7 +153,12 @@ class ClassroomCourseCopy extends CourseCopy
 
     protected function doCopyTeachersToClassroom($oldCourse, $classroomId)
     {
-        $existTeachers = $this->getClassroomMemberDao()->findByClassroomIdAndRole($classroomId, 'teacher', 0, PHP_INT_MAX);
+        $existTeachers = $this->getClassroomMemberDao()->findByClassroomIdAndRole(
+            $classroomId,
+            'teacher',
+            0,
+            PHP_INT_MAX
+        );
         if (empty($existTeachers)) {
             $existTeachers = array();
         } else {
@@ -172,7 +182,7 @@ class ClassroomCourseCopy extends CourseCopy
 
     protected function doCopyQuestion($course, $newCourse)
     {
-        $questionCopy = new QuestionCopy($this->biz, 'question');
+        $questionCopy = new CourseSetQuestionCopy($this->biz, 'question');
         $questionCopy->copy($course, array('newCourse' => $newCourse, 'isCopy' => true));
     }
 

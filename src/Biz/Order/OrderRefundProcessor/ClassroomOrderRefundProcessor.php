@@ -6,16 +6,6 @@ use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomOrderRefundProcessor implements OrderRefundProcessor
 {
-    public function getLayout()
-    {
-        return 'ClassroomBundle:ClassroomAdmin:layout.html.twig';
-    }
-
-    public function getRefundLayout()
-    {
-        return 'ClassroomBundle:ClassroomAdmin:refund.layout.html.twig';
-    }
-
     public function findByLikeTitle($title)
     {
         $conditions = array(

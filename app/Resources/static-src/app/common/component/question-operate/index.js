@@ -65,7 +65,15 @@ export default class QuestionOperate {
 
   batchDelete(event) {
     if (this.$form.find('[data-role="batch-item"]:checked').length == 0) {
-      notify('danger', '请选择题目');
+      let $redmine = this.$form.find('.js-help-redmine');
+      if($redmine) {
+        $redmine.text('请选择题目').show();;
+        setTimeout(function() {
+          $redmine.slideUp();
+        }, 3000);
+      }else {
+       notify('danger', '请选择题目');
+      }
     }
     let self = this;
 

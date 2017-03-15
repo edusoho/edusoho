@@ -39,12 +39,12 @@
                 {% if "student" in members[classroom.id].role %}
 
                 <div class="pull-right">
-                <span class="text-muted">{{'已学了%day%天'|trans({'%day%':classroom.day})}}</span><br>
+                <span class="color-gray">{{'已学了%day%天'|trans({'%day%':classroom.day})}}</span><br>
                 <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-info btn-sm mts">{{'继续学习'|trans}}</a>
                 </div>
                 {% else %}
                 <div class="pull-right">
-                <span class="text-muted">{{'旁听生'|trans}}</span><br>
+                <span class="color-gray">{{'旁听生'|trans}}</span><br>
                 <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-info btn-sm mts">{{'进入%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</a>
                 </div>
                 {% endif %}
@@ -59,7 +59,7 @@
                   </div>
                 </div>
                 <div class="col-md-2">
-                  <span class="text-muted mls">{{'共%Count%课'|trans({'%Count%':classroom.coursesCount})}}
+                  <span class="color-gray mls">{{'共%Count%课'|trans({'%Count%':classroom.coursesCount})}}
                   </span>
                 </div>
                 {% endif %}

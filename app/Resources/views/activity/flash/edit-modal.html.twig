@@ -11,7 +11,8 @@
       {% include 'file-chooser/file-choose.html.twig' with {
       mediaType: 'flash',
       fileType:'flash',
-      file: flash.media|default(null)
+      file: flash.media|default(null),
+      placeholder: 'Flash'
       } %}
       <input type="hidden" value="{{ flash.mediaId|default(null) }}" name="mediaId" id="mediaId"/>
     </div>
@@ -28,16 +29,16 @@
       观看时长
       <input type="hidden" id="condition-select" name="finishType">
       {#<select class="form-control" id="condition-select" name="finishType">
-        <option value="time" {% if flash.finishType|default('click') == 'time' %}selected{% endif %}>观看时长</option>
+        <option value="time" selected>观看时长</option>
       </select>#}
     </div>
   </div>
-  <div class=" form-group {% if flash.finishType|default('click') != 'time' %}hidden{% endif %}" id="condition-group">
+  <div class="form-group" id="condition-group">
     <div class="col-sm-2 control-label">
       <label for="condition-detail">{{ '至少观看'|trans }}</label>
     </div>
     <div class="col-xs-4 controls">
-      <input id="condition-detail" class="form-control" type="text" name="finishDetail"
+      <input id="finishDetail" class="form-control" type="text" name="finishDetail"
              value="{{ flash.finishDetail|default(1) }}">
     </div>
 

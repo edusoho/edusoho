@@ -17,7 +17,7 @@
     <div class="form-group">
       <div class="col-sm-3 control-label">{{'%name%名称'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</div>
       <div class="col-sm-9 controls">
-      	<span class="control-text text-muted">《{{ classroom.title }}》</span>
+      	<span class="control-text color-gray">《{{ classroom.title }}》</span>
       </div>
     </div>
 
@@ -31,10 +31,10 @@
           {% else %}
             {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
               <strong class="money">{{classroom.price * setting('coin.cash_rate') }}</strong>
-              <span class="text-muted">{{setting('coin.coin_name')}}</span>
+              <span class="color-gray">{{setting('coin.coin_name')}}</span>
             {% else %}
               <strong class="money">{{ classroom.price }}</strong>
-        		  <span class="text-muted">{{'元'|trans}}</span>
+        		  <span class="color-gray">{{'元'|trans}}</span>
             {% endif %}
           {% endif %}
       	</span>
@@ -67,7 +67,7 @@
   {% if billable and classroom.price > 0 %}
     {% if payments %}
       {% if member and (member.role == 'student' or member.role == 'teacher') %}
-        <span class="text-muted">{{'预览模式无法支付%role%'|trans({'%role%':member.role})}}</span>
+        <span class="color-gray">{{'预览模式无法支付%role%'|trans({'%role%':member.role})}}</span>
         <button class="btn btn-primary" disabled="disabled">{{'去支付'|trans}}</button> 
       {% else %}
         {% if vipStatus == 'ok'%}
@@ -82,7 +82,7 @@
     {% endif %}
   {% else %}
     {% if member and (member.role == 'student' or member.role == 'teacher') %}
-      <span class="text-muted">{{'预览模式无法加入学习%role%'|trans({'%role%':member.role})}}</span>
+      <span class="color-gray">{{'预览模式无法加入学习%role%'|trans({'%role%':member.role})}}</span>
       <button class="btn btn-primary" disabled="disabled">{{'加入学习'|trans}}</button> 
     {% else %}  
       {% if not avatarAlert|default(null) and  classroom.showable and classroom.status != 'closed' %}

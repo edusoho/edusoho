@@ -6,10 +6,16 @@
   </div>
 
   <div class="form-group">
-    <select class="form-control" name="target" style="width:200px;">
-      <option value="0" {% if not app.request.query.get('target') %}selected{% endif %}>{{'本课程'|trans}}</option>
-      {% for courseTask in courseTasks if courseTask%}
-        <option value="{{ courseTask.id }}" {% if app.request.query.get('target') == courseTask.id%}selected{% endif %}>{{ courseTask.title}}</option>
+    <select class="form-control width-150" name="courseId" data-url="{{ path('course_set_manage_show_tasks',{courseSetId:courseSet.id})}}">
+      <option value="0" {% if not app.request.get('courseId',0) %}selected{% endif %}>{{'按课程'|trans}}</option>
+      {% for selectCourse in searchCourses if selectCourse %}
+        <option value="{{ selectCourse.id }}" {% if app.request.get('courseId','') == selectCourse.id %}selected{% endif %}>{{ selectCourse.title }}</option>
+      {% endfor %}
+    </select>
+    <select class="form-control width-150" {% if not showTasks|default(null) %}style="display:none;"{% endif %} name="lessonId">
+      <option value="0" {% if not app.request.get('lessonId',0) %}selected{% endif %}>{{'请选择'|trans}}</option>
+      {% for task in showTasks|default([]) if task %}
+        <option value="{{ task.id }}" {% if app.request.get('lessonId','') == task.id %}selected{% endif %}>{{ task.title }}</option>
       {% endfor %}
     </select>
   </div>

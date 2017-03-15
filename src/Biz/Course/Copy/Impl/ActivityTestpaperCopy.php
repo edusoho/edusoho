@@ -15,6 +15,11 @@ class ActivityTestpaperCopy extends TestpaperCopy
      * */
     protected function _copy($source, $config = array())
     {
+        // 同课程下复制 不需要创建新的试卷
+        if ($source['fromCourseSetId'] === $config['newCourseSetId']) {
+            return null;
+        }
+
         return $this->doCopyTestpaper($source, $config['newCourseSetId'], $config['newCourseId'], $config['isCopy']);
     }
 
@@ -40,6 +45,7 @@ class ActivityTestpaperCopy extends TestpaperCopy
         }
 
         $existed = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId($testpaperId, $newCourseSetId);
+
         if (!empty($existed)) {
             return $existed; //已复制过，不要重复复制
         }
