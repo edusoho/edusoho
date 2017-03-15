@@ -25,7 +25,7 @@ class TaskController extends BaseController
         }
 
         try {
-            $task = $this->tryLearnTask($courseId, $id, (bool) $preview);
+            $task = $this->tryLearnTask($courseId, $id, (bool)$preview);
         } catch (AccessDeniedException $accessDeniedException) {
             return $this->handleAccessDeniedException($accessDeniedException, $request, $id);
         } catch (ServiceAccessDeniedException $deniedException) {
@@ -363,8 +363,8 @@ class TaskController extends BaseController
      * 没有权限进行任务的时候的处理逻辑，目前只有学员动态跳转过来的时候跳转到教学计划营销页.
      *
      * @param \Exception $exception
-     * @param Request    $request
-     * @param  $taskId
+     * @param Request $request
+     * @param $taskId
      *
      * @throws \Exception
      *
