@@ -247,7 +247,7 @@ abstract class BaseDao
     protected function addOrderBy($builder, $orderBy)
     {
         foreach ($orderBy as $column => $order) {
-            if (in_array($column, array('createdTime', 'ups')) && in_array(strtoupper($order), array('DESC', 'ASC'))) {
+            if (in_array($column, array('createdTime', 'ups')) && in_array($order, array('DESC', 'ASC'))) {
                 $builder->addOrderBy($column, $order);
             }
         }
