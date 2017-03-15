@@ -205,7 +205,7 @@ class QuestionMarkerController extends BaseController
         $answer = $data['answer'];
         if (in_array($data['type'], array('choice', 'single_choice'))) {
             foreach ($answer as &$answerItem) {
-                $answerItem = (string)(ord($answerItem) - 65);
+                $answerItem = (string) (ord($answerItem) - 65);
             }
         } elseif ($data['type'] == 'determine') {
             foreach ($answer as &$answerItem) {
@@ -288,7 +288,6 @@ class QuestionMarkerController extends BaseController
 
     protected function getPaginatorAndQuestion($request, $conditions, $course, $task)
     {
-
         $conditions = $this->processTarget($conditions);
 
         if (!empty($conditions['keyword'])) {
@@ -425,6 +424,7 @@ class QuestionMarkerController extends BaseController
 
     /**
      * @param $conditions
+     *
      * @return mixed
      */
     protected function processTarget($conditions)
