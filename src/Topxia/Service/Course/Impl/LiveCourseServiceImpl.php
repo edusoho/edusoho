@@ -151,7 +151,8 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
                 'replayId'    => $replay['id'],
                 'userId'      => $this->getCurrentUser()->id,
                 'createdTime' => time(),
-                'type'        => $course['type']
+                'type'        => $course['type'],
+                'globalId'    => empty($replay['resourceNo']) ? "" : $replay['resourceNo']
             );
 
             $courseLessonReplay = $this->getCourseService('live')->addCourseLessonReplay($fields);
