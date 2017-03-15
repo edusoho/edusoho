@@ -270,7 +270,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         if (empty($vipApp)) {
             return false;
         }
-        
+
         $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']);
 
         return $status === 'ok';
@@ -427,7 +427,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException('教学计划学员不存在，备注失败!');
         }
 
-        $fields = array('remark' => empty($remark) ? '' : (string)$remark);
+        $fields = array('remark' => empty($remark) ? '' : (string) $remark);
 
         return $this->getMemberDao()->update($member['id'], $fields);
     }
@@ -819,7 +819,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $this->getMemberDao()->update(
             $member['id'],
             array(
-                'noteNum' => (int)$number,
+                'noteNum' => (int) $number,
                 'noteLastUpdateTime' => time(),
             )
         );
