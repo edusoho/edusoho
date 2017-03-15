@@ -36,6 +36,10 @@ class TaskController extends BaseController
             return $this->redirectToRoute('my_course_show', array('id' => $courseId));
         }
 
+        if ($course['expiryMode'] == 'date' && $course['expiryStartDate'] >= time()) {
+            return $this->redirectToRoute('course_show', array('id' => $courseId));
+        }
+
         if ($member && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {
             return $this->redirect($this->generateUrl('my_course_show', array('id' => $courseId)));
         }
