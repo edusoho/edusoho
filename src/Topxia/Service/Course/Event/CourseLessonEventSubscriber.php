@@ -57,13 +57,11 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
                 $argument['copyId'] = $lesson['id'];
 
                 if (array_key_exists('type', $argument) && $argument['type'] == 'testpaper') {
-                    $lockedTarget = '';
-
+                    $lockedTargets = array();
                     foreach ($courseIds as $courseId) {
-                        $lockedTarget .= "'course-".$courseId."',";
+                        $lockedTargets[] = "course-{$courseId}";
                     }
-                    $lockedTarget = "(".trim($lockedTarget, ',').")";
-                    $testpaperTargets = ArrayToolkit::index($this->getTestpaperService()->findTestpapersByCopyIdAndLockedTarget($argument['mediaId'], $lockedTarget), 'target');
+                    $testpaperTargets = ArrayToolkit::index($this->getTestpaperService()->findTestpapersByCopyIdAndLockedTarget($argument['mediaId'], $lockedTargets), 'target');
                 }
 
                 foreach ($courseIds as $key => $courseId) {

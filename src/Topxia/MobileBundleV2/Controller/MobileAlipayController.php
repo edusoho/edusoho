@@ -56,38 +56,49 @@ class MobileAlipayController extends MobileBaseController
     //支付校验
     protected function doPayNotify(Request $request, $name)
     {
-        $requestParams = array();
-
-        if ($request->getMethod() == "GET") {
-            $requestParams              = $request->query->all();
-            $order                      = $this->getOrderService()->getOrderBySn($requestParams['out_trade_no']);
-            $requestParams['total_fee'] = $order['amount'];
-        } else {
-            $doc           = simplexml_load_string($_POST['notify_data']);
-            $doc           = (array) $doc;
-            $requestParams = array();
-
-            if (!empty($doc['out_trade_no'])) {
-                //商户订单号
-                $requestParams['out_trade_no'] = $doc['out_trade_no'];
-                //支付宝交易号
-                $requestParams['trade_no'] = $doc['trade_no'];
-                //交易状态
-                $requestParams['trade_status'] = $doc['trade_status'];
-                $requestParams['total_fee']    = $doc['total_fee'];
-                $requestParams['gmt_payment']  = $doc['gmt_payment'];
-            }
+        $response = $this->forward('TopxiaWebBundle:PayCenter:payNotify', array(
+            'request' => $request,
+            'name' => $name
+        ));
+        
+        if($response->getContent() == 'success') {
+            return 'success';
         }
 
-        $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $requestParams);
-        $payData = $this->createPaymentResponse($requestParams);
+        return "fail";
 
-        try {
-            list($success, $order) = $this->getPayCenterService()->pay($payData);
-            return "success";
-        } catch (\Exception $e) {
-            return "fail";
-        }
+        // $requestParams = array();
+
+        // if ($request->getMethod() == "GET") {
+        //     $requestParams              = $request->query->all();
+        //     $order                      = $this->getOrderService()->getOrderBySn($requestParams['out_trade_no']);
+        //     $requestParams['total_fee'] = $order['amount'];
+        // } else {
+        //     $doc           = simplexml_load_string($_POST['notify_data']);
+        //     $doc           = (array) $doc;
+        //     $requestParams = array();
+
+        //     if (!empty($doc['out_trade_no'])) {
+        //         //商户订单号
+        //         $requestParams['out_trade_no'] = $doc['out_trade_no'];
+        //         //支付宝交易号
+        //         $requestParams['trade_no'] = $doc['trade_no'];
+        //         //交易状态
+        //         $requestParams['trade_status'] = $doc['trade_status'];
+        //         $requestParams['total_fee']    = $doc['total_fee'];
+        //         $requestParams['gmt_payment']  = $doc['gmt_payment'];
+        //     }
+        // }
+
+        // $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $requestParams);
+        // $payData = $this->createPaymentResponse($requestParams);
+
+        // try {
+        //     list($success, $order) = $this->getPayCenterService()->pay($payData);
+        //     return "success";
+        // } catch (\Exception $e) {
+        //     return "fail";
+        // }
     }
 
     private function createPaymentResponse($params)

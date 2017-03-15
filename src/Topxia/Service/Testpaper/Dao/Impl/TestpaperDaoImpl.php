@@ -86,11 +86,16 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
         return $this->createSerializer()->unserialize($results, $this->serializeFields);
     }
 
-
-    public function findTestpapersByCopyIdAndLockedTarget($copyId, $lockedTarget)
+    public function findTestpapersByCopyIdAndLockedTarget($copyId, array $lockedTargets)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE copyId = ?  AND target IN {$lockedTarget}";
-        return $this->getConnection()->fetchAll($sql,array($copyId));
+        if (empty($lockedTargets)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($lockedTargets) - 1) . '?';
+
+        $sql = "SELECT * FROM {$this->table} WHERE copyId = ? AND target IN ({$marks})";
+        return $this->getConnection()->fetchAll($sql, array_merge(array($copyId), $lockedTargets));
     }
 
     protected function _createSearchQueryBuilder($conditions)

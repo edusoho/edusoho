@@ -910,6 +910,16 @@ class UserServiceImpl extends BaseService implements UserService
             $fields['about'] = $this->purifyHtml($fields['about']);
         }
 
+        if (!empty($fields['site']) && !SimpleValidator::site($fields['site'])) {
+            throw new UnexpectedValueException('个人空间不正确，更新用户失败');
+        }
+        if (!empty($fields['weibo']) && !SimpleValidator::site($fields['weibo'])) {
+            throw new UnexpectedValueException('微博地址不正确，更新用户失败');
+        }
+        if (!empty($fields['blog']) && !SimpleValidator::site($fields['blog'])) {
+            throw new UnexpectedValueException('地址不正确，更新用户失败');
+        }
+
         if (empty($fields['isWeiboPublic'])) {
             $fields['isWeiboPublic'] = 0;
         } else {

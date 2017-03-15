@@ -974,9 +974,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return false;
     }
 
-    public function findTestpapersByCopyIdAndLockedTarget($copyId, $lockedTarget)
+    public function findTestpapersByCopyIdAndLockedTarget($copyId, array $lockedTargets)
     {
-        return $this->getTestpaperDao()->findTestpapersByCopyIdAndLockedTarget($copyId, $lockedTarget);
+        return $this->getTestpaperDao()->findTestpapersByCopyIdAndLockedTarget($copyId, $lockedTargets);
     }
 
     public function findTeacherTestpapersByTeacherId($teacherId)

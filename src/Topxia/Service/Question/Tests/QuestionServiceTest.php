@@ -259,7 +259,7 @@ class QuestionServiceTest extends BaseTestCase
 
         $question = $this->getQuestionService()->createQuestion($question);
         $this->assertEquals('question.',$question['stem']);
-        $question = $this->getQuestionService()->findQuestionsByCopyIdAndLockedTarget(1,"('course-1')");
+        $question = $this->getQuestionService()->findQuestionsByCopyIdAndLockedTarget(1, array("course-1"));
         $this->assertEquals('question.',$question[0]['stem']);
     }
 

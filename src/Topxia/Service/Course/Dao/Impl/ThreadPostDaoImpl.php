@@ -22,6 +22,8 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
     public function findPostsByThreadId($threadId, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
+        
+        $this->checkOrderBy($orderBy);
         $orderBy = join(' ', $orderBy);
         $sql     = "SELECT * FROM {$this->table} WHERE threadId = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($threadId)) ?: array();
