@@ -36,10 +36,13 @@ class CourseController extends CourseBaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('my/learning/course/learning.html.twig', array(
-            'courses' => $courses,
-            'paginator' => $paginator,
-        ));
+        return $this->render(
+            'my/learning/course/learning.html.twig',
+            array(
+                'courses' => $courses,
+                'paginator' => $paginator,
+            )
+        );
     }
 
     public function learnedAction()
@@ -60,17 +63,23 @@ class CourseController extends CourseBaseController
         $userIds = array();
         foreach ($courses as $key => $course) {
             $userIds = array_merge($userIds, $course['teacherIds']);
-            $learnTime = $this->getTaskResultService()->sumLearnTimeByCourseIdAndUserId($course['id'], $currentUser['id']);
+            $learnTime = $this->getTaskResultService()->sumLearnTimeByCourseIdAndUserId(
+                $course['id'],
+                $currentUser['id']
+            );
 
             $courses[$key]['learnTime'] = intval($learnTime / 60).'小时'.($learnTime % 60).'分钟';
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('my/learning/course/learned.html.twig', array(
-            'courses' => $courses,
-            'users' => $users,
-            'paginator' => $paginator,
-        ));
+        return $this->render(
+            'my/learning/course/learned.html.twig',
+            array(
+                'courses' => $courses,
+                'users' => $users,
+                'paginator' => $paginator,
+            )
+        );
     }
 
     public function headerForMemberAction($course, $member)
@@ -84,10 +93,13 @@ class CourseController extends CourseBaseController
         $user = $this->getUser();
         if ($taskCount && empty($member['previewAs'])) {
             //学习记录
-            $taskResultCount = $this->getTaskResultService()->countTaskResults(array('courseId' => $course['id'], 'status' => 'finish', 'userId' => $user['id']));
+            $taskResultCount = $this->getTaskResultService()->countTaskResults(
+                array('courseId' => $course['id'], 'status' => 'finish', 'userId' => $user['id'])
+            );
 
             //学习进度
             $progress = empty($taskCount) ? 0 : round($taskResultCount / $taskCount, 2) * 100;
+            $progress = $progress > 100 ? 100 : $progress;
 
             //待学习任务
             $toLearnTasks = $this->getTaskService()->findToLearnTasksByCourseId($course['id']);
@@ -100,6 +112,7 @@ class CourseController extends CourseBaseController
 
             //计划进度
             $planProgressProgress = empty($taskCount) ? 0 : round($planStudyTaskCount / $taskCount, 2) * 100;
+
         }
 
         $isUserFavorite = false;
@@ -107,21 +120,24 @@ class CourseController extends CourseBaseController
             $isUserFavorite = $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']);
         }
 
-        return $this->render('course/header/header-for-member.html.twig', array(
-            'courseSet' => $courseSet,
-            'courses' => $courses,
-            'course' => $course,
-            'member' => $member,
-            'progress' => $progress,
-            'taskCount' => $taskCount,
-            'taskResultCount' => $taskResultCount,
-            'toLearnTasks' => $toLearnTasks,
-            'taskPerDay' => $taskPerDay,
-            'planStudyTaskCount' => $planStudyTaskCount,
-            'planProgressProgress' => $planProgressProgress,
-            'isUserFavorite' => $isUserFavorite,
-            'marketingPage' => 0,
-        ));
+        return $this->render(
+            'course/header/header-for-member.html.twig',
+            array(
+                'courseSet' => $courseSet,
+                'courses' => $courses,
+                'course' => $course,
+                'member' => $member,
+                'progress' => $progress,
+                'taskCount' => $taskCount,
+                'taskResultCount' => $taskResultCount,
+                'toLearnTasks' => $toLearnTasks,
+                'taskPerDay' => $taskPerDay,
+                'planStudyTaskCount' => $planStudyTaskCount,
+                'planProgressProgress' => $planProgressProgress,
+                'isUserFavorite' => $isUserFavorite,
+                'marketingPage' => 0,
+            )
+        );
     }
 
     public function showAction(Request $request, $id, $tab = 'tasks')
@@ -130,10 +146,15 @@ class CourseController extends CourseBaseController
         $member = $this->getCourseMember($request, $course);
 
         if (empty($member)) {
-            return $this->redirect($this->generateUrl('course_show', array(
-                'id' => $id,
-                'tab' => $tab,
-            )));
+            return $this->redirect(
+                $this->generateUrl(
+                    'course_show',
+                    array(
+                        'id' => $id,
+                        'tab' => $tab,
+                    )
+                )
+            );
         }
 
         $classroom = array();
@@ -141,13 +162,16 @@ class CourseController extends CourseBaseController
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
         }
 
-        return $this->render('course/course-show.html.twig', array(
-            'tab' => $tab,
-            'member' => $member,
-            'isCourseTeacher' => $member['role'] == 'teacher',
-            'course' => $course,
-            'classroom' => $classroom,
-        ));
+        return $this->render(
+            'course/course-show.html.twig',
+            array(
+                'tab' => $tab,
+                'member' => $member,
+                'isCourseTeacher' => $member['role'] == 'teacher',
+                'course' => $course,
+                'classroom' => $classroom,
+            )
+        );
     }
 
     /**
