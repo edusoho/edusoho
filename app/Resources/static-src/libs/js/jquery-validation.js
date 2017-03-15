@@ -197,7 +197,7 @@ $.validator.addMethod("currency", function (value, element, params) {
 
 $.validator.addMethod("positive_currency", function (value, element, params) {
   return value > 0 && /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
-}, jQuery.validator.format('请输入大于0的有效价格，最多两位小数，整数位不超个8位！'));
+}, jQuery.validator.format('请输入大于0的有效价格，最多两位小数，整数位不超过8位！'));
 
 jQuery.validator.addMethod("max_year", function (value, element) {
   return this.optional(element) || value < 100000;
