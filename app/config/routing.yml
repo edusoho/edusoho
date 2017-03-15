@@ -1,4 +1,4 @@
-bazinga_jstranslation:
+tbazinga_jstranslation:
     resource: "@BazingaJsTranslationBundle/Resources/config/routing/routing.yml"
 
 topxia_mobile:
