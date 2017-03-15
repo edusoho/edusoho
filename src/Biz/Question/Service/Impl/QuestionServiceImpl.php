@@ -38,9 +38,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $fields['courseId'] = $parentQuestion['courseId'];
             $fields['lessonId'] = $parentQuestion['lessonId'];
         }
-
-        $fields['target'] = !empty($fields['courseId']) ? 'course-'.$fields['courseId'] : '';
-        $fields['target'] .= !empty($fields['lessonId']) ? '/lessonId-'.$fields['lessonId'] : '';
+        $fields['target'] = empty($fields['courseSetId']) ? '' : 'course-'.$fields['courseSetId'];
 
         $question = $this->getQuestionDao()->create($fields);
 
@@ -263,6 +261,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             unset($conditions['excludeIds']);
         } else {
             $conditions['excludeIds'] = explode(',', $conditions['excludeIds']);
+        }
+
+        if (empty($conditions['lessonId'])) {
+            unset($conditions['lessonId']);
         }
 
         return $conditions;
