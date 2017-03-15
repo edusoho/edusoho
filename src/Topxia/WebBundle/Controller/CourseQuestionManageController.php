@@ -1,8 +1,6 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Assetic\Exception\Exception;
-use Topxia\Common\Exception\RuntimeException;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Question\QuestionService;
@@ -134,8 +132,7 @@ class CourseQuestionManageController extends BaseController
     public function updateAction(Request $request, $courseId, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-        $question = $this->getQuestionService()->getQuestion($id);
-        $this->checkTargetMatch($question['target'], $courseId);
+        $question = $this->tryGetQuestion($courseId, $id);
 
         if ($request->getMethod() == 'POST') {
             $question   = $request->request->all();
@@ -167,9 +164,8 @@ class CourseQuestionManageController extends BaseController
 
     public function deleteAction(Request $request, $courseId, $id)
     {
-        $course   = $this->getCourseService()->tryManageCourse($courseId);
-        $question = $this->getQuestionService()->getQuestion($id);
-        $this->checkTargetMatch($question['target'], $courseId);
+        $this->getCourseService()->tryManageCourse($courseId);
+        $this->tryGetQuestion($courseId, $id);
         $this->getQuestionService()->deleteQuestion($id);
 
         return $this->createJsonResponse(true);
@@ -182,8 +178,7 @@ class CourseQuestionManageController extends BaseController
         $ids = $request->request->get('ids');
 
         foreach ($ids ?: array() as $id) {
-            $question = $this->getQuestionService()->getQuestion($id);
-            $this->checkTargetMatch($question['target'], $courseId);
+            $this->tryGetQuestion($courseId, $id);
             $this->getQuestionService()->deleteQuestion($id);
         }
 
@@ -199,8 +194,7 @@ class CourseQuestionManageController extends BaseController
 
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
-        $question = $this->getQuestionService()->getQuestion($id);
-        $this->checkTargetMatch($question['target'], $courseId);
+        $question = $this->tryGetQuestion($courseId, $id);
 
         if (empty($question)) {
             throw $this->createNotFoundException($this->getServiceKernel()->trans('题目不存在！'));
@@ -306,12 +300,21 @@ class CourseQuestionManageController extends BaseController
         ));
     }
 
-    protected function checkTargetMatch($target, $courseId)
+    protected function tryGetQuestion($courseId, $questionId)
     {
-        $targetCourse = explode('/', $target)[0];
-        if ($targetCourse != 'course-' . $courseId) {
-            throw new RuntimeException($this->trans('题目不属于该课程'));
+        $question = $this->getQuestionService()->getQuestion($questionId);
+
+        if (empty($question)) {
+            throw $this->createNotFoundException();
         }
+
+        $targetCourse = explode('/', $question['target'])[0];
+
+        if ($targetCourse != 'course-' . $courseId) {
+            throw $this->createNotFoundException($this->trans('题目不属于该课程'));
+        }
+
+        return $question;
 
     }
 
