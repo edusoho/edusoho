@@ -2,8 +2,8 @@
 
 namespace Biz\Activity\Type;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Activity\Service\ActivityLearnLogService;
@@ -87,9 +87,9 @@ class Exercise extends Activity
             'finishCondition',
             'fromCourseId',
             'fromCourseSetId',
+            'courseSetId',
         ));
 
-        $filterFields['courseSetId'] = empty($filterFields['fromCourseSetId']) ? 0 : $filterFields['fromCourseSetId'];
         $filterFields['courseId'] = empty($filterFields['fromCourseId']) ? 0 : $filterFields['fromCourseId'];
         $filterFields['lessonId'] = 0;
         $filterFields['name'] = empty($filterFields['title']) ? '' : $filterFields['title'];

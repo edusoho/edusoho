@@ -21,7 +21,7 @@
               </a>
               <div class="course-body">
                 {% if members[classroom.id].role == "headTeacher"  or is_granted('ROLE_ADMIN') %}
-                  <div style="float:right;" class="text-muted mrm mls">
+                  <div style="float:right;" class="color-gray mrm mls">
                   <span class="glyphicon glyphicon-cog"></span> <a href="{{path('classroom_manage',{id:classroom.id})}}">{{'管理%classroom.name%'|trans({'%classroom.name%':setting('classroom.name')|default('班级'|trans)})}}</a>
                   </div>
                 {% endif %}
@@ -33,7 +33,7 @@
                 {% endif %}
                 </h4>
 
-                <span class="text-muted">{{'共%coursesCount%课'|trans({'%coursesCount%':classroom.coursesCount})}}
+                <span class="color-gray">{{'共%coursesCount%课'|trans({'%coursesCount%':classroom.coursesCount})}}
                 <i class="fa fa-users mll" ></i> {{classroom.studentNum + classroom.auditorNum}}</span>
                 <div class="course-footer clearfix mtl">
                   <strong class="mrl">{{'今日新增'|trans}}</strong>

@@ -17,7 +17,18 @@
     <div class="form-group">
       <label class="col-sm-2 control-label">{{'题目来源'|trans}}</label>
       <div class="col-sm-10 controls radios">
-        {{ radios('range', {'lesson':'当前课时的题目'|trans, 'course':'整个课程的题目'|trans}, activity.metas['range']|default('course') ) }}
+        <select class="form-control width-150" name="range[courseId]" data-url="{{ path('course_set_manage_show_tasks',{courseSetId:courseSetId})}}">
+          <option value="0" {% if not range.courseId|default(0) %}selected{% endif %}>{{'按课程'|trans}}</option>
+          {% for manageCourse in courses if manageCourse %}
+            <option value="{{ manageCourse.id }}" {% if range.courseId|default(0) == manageCourse.id %}selected{% endif %}>{{ manageCourse.title }}</option>
+          {% endfor %}
+        </select>
+        <select class="form-control width-150" {% if not courseTasks|default(null) %}style="display:none;"{% endif %} name="range[lessonId]">
+          <option value="0" {% if not range.lessonId|default(0) %}selected{% endif %}>{{'请选择'|trans}}</option>
+          {% for task in courseTasks|default([]) if task %}
+            <option value="{{ task.id }}" {% if range.lessonId|default(0) == task.id %}selected{% endif %}>{{ task.title }}</option>
+          {% endfor %}
+        </select>
       </div>
     </div>
 
@@ -44,7 +55,7 @@
             （<span class="color-gray text-sm">共{% if questionNum %}{{ questionNum.questionNum }}{% else %}0{% endif %}题</span>）
           </label>
         {% endfor %}
-        <input type="hidden" name="checkQuestion" value="false" data-check-url="{{ path('course_set_manage_question_check',{id:courseSetId}) }}" />
+        <input type="hidden" name="checkQuestion" value="false" data-check-url="{{ path('course_manage_exercise_check',{courseId:courseId}) }}" />
         <p class="help-block mtl">{{'提示：练习为随机出题，只需填写题目个数和选择题型范围即可。'|trans}}</p>
       </div>
     </div>
@@ -56,11 +67,13 @@
     <div class="col-sm-2 control-label">
       <label for="condition-select">{{ '完成条件'|trans }}</label>
     </div>
-    <div class="col-xs-4 controls">
-      <select class="form-control" id="condition-select" name="finishCondition">
+    <div class="col-xs-4 form-control-static">
+      提交练习
+      <select class="form-control hidden" id="condition-select" name="finishCondition">
         {{ select_options({'submit':'提交练习'|trans}, activity.finishCondition['type']|default('score')) }}
       </select>
       <input type="hidden" name="mediaType" value="exercise" />
+      <input type="hidden" name="courseSetId" value="{{courseSetId}}" />
     </div>
   </div>
   

@@ -20,34 +20,37 @@ class Creator {
           trim: true,
         },
         expiryDays: {
-          required: '#expiryByDays:checked',
+          required: () => {
+            return $('input[name="expiryMode"]:checked').val() == 'date';
+          },
           digits: true,
           max_year: true
         },
         expiryStartDate: {
           required: () => {
-            return $('input[name="expiryMode"]:checked').val() !== 'date';
+            return $('input[name="expiryMode"]:checked').val() == 'date';
           },
           date: true,
-          before: '#expiryEndDate'
+          after_now_date: true,
+          before_date: '#expiryEndDate'
         },
         expiryEndDate: {
           required: () => {
-            return $('input[name="expiryMode"]:checked').val() !== 'date';
+            return $('input[name="expiryMode"]:checked').val() == 'date';
           },
           date: true,
-          after: '#expiryStartDate'
+          after_date: '#expiryStartDate'
         }
       },
       messages: {
         title: Translator.trans('请输入教学计划课程标题'),
         expiryStartDate: {
           required: Translator.trans('请输入开始日期'),
-          before: Translator.trans('开始日期应早于结束日期')
+          before_date: Translator.trans('开始日期应早于结束日期')
         },
         expiryEndDate: {
           required: Translator.trans('请输入结束日期'),
-          after: Translator.trans('结束日期应晚于开始日期')
+          after_date: Translator.trans('结束日期应晚于开始日期')
         }
       }
     });
@@ -92,7 +95,7 @@ class Creator {
       language: "zh",
       minView: 2, //month
       autoclose: true,
-      endDate: new Date(Date.now() + 86400 * 365 * 100 * 1000)
+      endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)
     }).on('hide', () => {
       validator.form();
     })

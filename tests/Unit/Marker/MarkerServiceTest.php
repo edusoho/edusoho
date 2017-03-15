@@ -19,6 +19,7 @@ class MarkerServiceTest extends BaseTestCase
             'answer' => array(1),
             'choices' => array(1, 2, 3, 4),
             'target' => 'course-1',
+            'courseSetId' => 1,
         );
 
         $this->getQuestionService()->create($arguments);
@@ -42,6 +43,7 @@ class MarkerServiceTest extends BaseTestCase
             'answer' => array(1),
             'choices' => array(1, 2, 3, 4),
             'target' => 'course-1',
+            'courseSetId' => 1,
         );
 
         $this->getQuestionService()->create($arguments);
@@ -66,6 +68,7 @@ class MarkerServiceTest extends BaseTestCase
             'answer' => array(1),
             'choices' => array(1, 2, 3, 4),
             'target' => 'course-1',
+            'courseSetId' => 1,
         );
 
         $this->getQuestionService()->create($arguments);
@@ -91,6 +94,7 @@ class MarkerServiceTest extends BaseTestCase
             'answer' => array(1),
             'choices' => array(1, 2, 3, 4),
             'target' => 'course-1',
+            'courseSetId' => 1,
         );
 
         $this->getQuestionService()->create($arguments);
@@ -119,6 +123,7 @@ class MarkerServiceTest extends BaseTestCase
             'answer' => array(1),
             'choices' => array(1, 2, 3, 4),
             'target' => 'course-1',
+            'courseSetId' => 1,
         );
 
         $this->getQuestionService()->create($arguments);
@@ -149,6 +154,7 @@ class MarkerServiceTest extends BaseTestCase
             'answer' => array(1),
             'choices' => array(1, 2, 3, 4),
             'target' => 'course-1',
+            'courseSetId' => 1,
         );
 
         $this->getQuestionService()->create($arguments);

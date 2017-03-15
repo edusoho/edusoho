@@ -134,17 +134,10 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
 
     public function recommendedCoursesSort($recommendCourses)
     {
-        $courses = array();
+        $courseIds = ArrayToolkit::column($recommendCourses, 'recommendCourseId');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseIds);
 
-        foreach ($recommendCourses as $key => $course) {
-            $course = $this->getTypeCourseService($course['type'])->getCourse($course['recommendCourseId']);
-
-            if ($course) {
-                $courses[$course['id']] = $course;
-            }
-        }
-
-        return $courses;
+        return empty($courseSets) ? array() : $courseSets;
     }
 
     public function findRandomRecommendCourses($courseId, $num = 3)
@@ -167,6 +160,11 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
     protected function getOpenCourseService()
     {
         return $this->createService('OpenCourse:OpenCourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     /**

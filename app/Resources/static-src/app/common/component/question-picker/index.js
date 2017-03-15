@@ -43,16 +43,22 @@ export default class QuestionPicker {
     let questionIds = [];
     questionIds.push(questionId);
     
-    this.pickItemGet($target.data('url'),questionIds,replace);
+    this.pickItemPost($target.data('url'),questionIds,replace);
   }
 
-  pickItemGet(url, questionIds, replace=null) {
-    $.get(url, {questionIds:questionIds}, html=> {
+  pickItemPost(url, questionIds, replace=null) {
+    
+    $.post(url, {questionIds:questionIds}, html=> {
       if (replace) {
         this.$questionAppendForm.find('tr[data-id="'+replace+'"]').replaceWith(html);
         this.$questionAppendForm.find('tr[data-parent-id="'+replace+'"]').remove();
       } else {
-        this.$questionAppendForm.find('tbody:visible').append(html).removeClass('hide');
+        let $tbody = this.$questionAppendForm.find('tbody:visible');
+         //fix Firefox
+        if($tbody.length <= 0  ) {
+          $tbody = this.$questionAppendForm.find('tbody');
+        }
+        $tbody.append(html).removeClass('hide');
       }
       this._refreshSeqs();
       questionSubjectiveRemask(this.$questionAppendForm);
@@ -80,7 +86,7 @@ export default class QuestionPicker {
       questionIds.push(questionId);
     })
 
-    this.pickItemGet(url, questionIds,null);
+    this.pickItemPost(url, questionIds,null);
   }
 
   _refreshSeqs() {

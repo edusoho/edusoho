@@ -36,7 +36,7 @@
                 {% endif %}
 
               </div>
-              <div class="text-muted text-normal">
+              <div class="color-gray text-normal">
                 {% if classroom %}
                   <span>{{'发表于%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}<a href="{{ path('classroom_show', {id:classroom.id}) }}" class="link-muted">{{ classroom.title }}</a></span>
                 {% else %}

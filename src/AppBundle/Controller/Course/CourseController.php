@@ -2,19 +2,20 @@
 
 namespace AppBundle\Controller\Course;
 
-use AppBundle\Common\Paginator;
-use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
-use Biz\User\Service\TokenService;
-use Biz\Order\Service\OrderService;
-use Biz\Course\Service\ReviewService;
-use Biz\Course\Service\MaterialService;
-use Biz\File\Service\UploadFileService;
-use Biz\Task\Service\TaskResultService;
+use AppBundle\Common\Paginator;
 use Biz\Activity\Service\ActivityService;
-use Biz\Course\Service\CourseNoteService;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseNoteService;
+use Biz\Course\Service\MaterialService;
+use Biz\Course\Service\ReviewService;
+use Biz\File\Service\UploadFileService;
+use Biz\Order\Service\OrderService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\TokenService;
 use Symfony\Component\HttpFoundation\Request;
+use VipPlugin\Biz\Vip\Service\VipService;
 
 class CourseController extends CourseBaseController
 {
@@ -52,12 +53,16 @@ class CourseController extends CourseBaseController
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
         }
 
+        $user = $this->getCurrentUser();
+        $isCourseTeacher = $this->getMemberService()->isCourseTeacher($id, $user['id']);
+
         return $this->render(
             'course/course-show.html.twig',
             array(
                 'tab' => $tab,
                 'course' => $course,
                 'classroom' => $classroom,
+                'isCourseTeacher' => $isCourseTeacher,
             )
         );
     }
@@ -65,14 +70,18 @@ class CourseController extends CourseBaseController
     public function memberExpiredAction($id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-        if ($member && !$this->getMemberService()->isMemberNonExpired($course, $member)) {
-            return $this->render(
-                'course/member/expired.html.twig',
-                array(
-                    'course' => $course,
-                )
-            );
+
+        if ($this->getMemberService()->isMemberNonExpired($course, $member)) {
+            return $this->createJsonResponse(true);
         }
+
+        return $this->render(
+            'course/member/expired.html.twig',
+            array(
+                'course' => $course,
+                'member' => $member,
+            )
+        );
     }
 
     public function deadlineReachAction($id)
@@ -91,7 +100,7 @@ class CourseController extends CourseBaseController
     public function headerAction(Request $request, $course)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
 
         $user = $this->getCurrentUser();
         $member = $user->isLogin() ? $this->getMemberService()->getCourseMember(
@@ -185,14 +194,8 @@ class CourseController extends CourseBaseController
             'courseSetId' => $courseSet['id'],
         );
 
-        if (!empty($member)) {
-            $conditions['courseId'] = $course['id'];
-            $selectedCourseId = $conditions['courseId'];
-        } else {
-            $selectedCourseId = 0;
-        }
-
-        if ($request->query->has('selectedCourse') && $selectedCourseId = $request->query->get('selectedCourse')) {
+        $selectedCourseId = $request->query->get('selectedCourse', $course['id']);
+        if ($selectedCourseId > 0) {
             $conditions['courseId'] = $selectedCourseId;
         }
 
@@ -210,8 +213,16 @@ class CourseController extends CourseBaseController
         );
 
         $userReview = array();
+        $user = $this->getCurrentUser();
+        if (empty($member) && $user->isLogin()) {
+            $member = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
+        }
         if (!empty($member)) {
-            $userReview = $this->getReviewService()->getUserCourseReview($member['userId'], $course['id']);
+            if ($selectedCourseId > 0) {
+                $userReview = $this->getReviewService()->getUserCourseReview($member['userId'], $selectedCourseId);
+            } else {
+                $userReview = $this->getReviewService()->getUserCourseReview($member['userId'], $course['id']);
+            }
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
@@ -223,6 +234,7 @@ class CourseController extends CourseBaseController
                 'courseSet' => $courseSet,
                 'selectedCourseId' => $selectedCourseId,
                 'courses' => $courses,
+                'courseMap' => ArrayToolkit::index($courses, 'id'),
                 'course' => $course,
                 'reviews' => $reviews,
                 'userReview' => $userReview,
@@ -330,13 +342,16 @@ class CourseController extends CourseBaseController
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);
         if (!empty($teachers)) {
             //确保教师按照中台教师管理设置的顺序展示
-            usort($teachers, function ($t1, $t2) use ($teacherIds) {
-                if (array_search($t1['id'], $teacherIds) < array_search($t2['id'], $teacherIds)) {
-                    return -1;
-                }
+            usort(
+                $teachers,
+                function ($t1, $t2) use ($teacherIds) {
+                    if (array_search($t1['id'], $teacherIds) < array_search($t2['id'], $teacherIds)) {
+                        return -1;
+                    }
 
-                return 1;
-            });
+                    return 1;
+                }
+            );
         }
 
         return $this->render(
@@ -389,11 +404,14 @@ class CourseController extends CourseBaseController
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
-        return $this->render('course/widgets/course-order.html.twig', array(
-            'order' => $order,
-            'course' => $course,
-            'courseSet' => $courseSet,
-        ));
+        return $this->render(
+            'course/widgets/course-order.html.twig',
+            array(
+                'order' => $order,
+                'course' => $course,
+                'courseSet' => $courseSet,
+            )
+        );
     }
 
     public function qrcodeAction(Request $request, $id)
@@ -452,6 +470,14 @@ class CourseController extends CourseBaseController
     protected function getCourseNoteService()
     {
         return $this->createService('Course:CourseNoteService');
+    }
+
+    /**
+     * @return VipService
+     */
+    protected function getVipService()
+    {
+        return $this->createService('VipPlugin:Vip:VipService');
     }
 
     /**

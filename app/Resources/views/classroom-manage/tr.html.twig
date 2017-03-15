@@ -4,9 +4,9 @@
     {{ web_macro.user_avatar(user, 'pull-left', 'avatar-sm') }}
     <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
     {% if student.remark %}
-      <span class="text-muted text-sm" title="{{student.remark}}">({{ student.remark|plain_text(16) }})</span>
+      <span class="color-gray text-sm" title="{{student.remark}}">({{ student.remark|plain_text(16) }})</span>
     {% endif %}
-    <div class="text-muted text-sm">{{'加入时间'|trans}}：{{ student.createdTime|date('Y-n-d H:i') }}</div>
+    <div class="color-gray text-sm">{{'加入时间'|trans}}：{{ student.createdTime|date('Y-n-d H:i') }}</div>
   </td>
   {#<td style="vertical-align: middle;">
     {% if role == 'student' %}

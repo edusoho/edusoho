@@ -10,7 +10,6 @@ export const initScrollbar = ()=> {
 		$taskTestpaperBodyIframe.perfectScrollbar();
 		$taskTestpaperBodyIframe.perfectScrollbar('update'); 
 	}
-
   $paneCard.perfectScrollbar();
 	$paneCard.perfectScrollbar('update');
 }

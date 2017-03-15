@@ -1,14 +1,14 @@
 {% for course in recommendCourses if course %}
-  {% set teacher = data('User',{userId:course.userId}) %}
+  {% set teacher = data('User',{userId:course.creator}) %}
   {% if course.type == 'open' or course.type == 'liveOpen' %}
     {% set showUrl = path('open_course_show',{courseId:course.id}) %}
   {% else %}
-    {% set showUrl = path('course_show',{id:course.id}) %}
+    {% set showUrl = path('course_set_show',{id:course.id}) %}
   {% endif %}
   <div class="open-course-recommend clearfix">
     <div class="open-course-img">
       <a href="{{ showUrl }}" target="_blank" title="{{ course.title }}">
-        <img class="img-responsive" src="{{ filepath(course.middlePicture|default(''), 'course.png') }}"
+        <img class="img-responsive" src="{{ filepath(course.cover.middle|default(''), 'course.png') }}"
              alt="{{ course.title }}">
       </a>
     </div>

@@ -1,3 +1,5 @@
+import SelectLinkage from 'app/js/question-manage/widget/select-linkage.js';
+
 class Exercise {
 	constructor($form) {
 		this.$element = $form;
@@ -14,8 +16,8 @@ class Exercise {
   }
 
   _inItStep2form() {
-    var  $step2_form = $("#step2-form");
-    var validator = $step2_form.validate({
+    let $step2_form = $("#step2-form");
+    let validator = $step2_form.validate({
         onkeyup: false,
         rules: {
           title: {
@@ -47,7 +49,15 @@ class Exercise {
                   return $('[name="itemCount"]').val();    
                 },
                 range: function() {
-                  return $('[name="range"]:checked').val();
+                  let range = {}
+                  let courseId = $('[name="range[courseId]"]').val();
+                  range.courseId = courseId;
+                  if ($('[name="range[lessonId]"]').length > 0) {
+                    let lessonId = $('[name="range[lessonId]"]').val();
+                    range.lessonId = lessonId;
+                  }
+                  
+                  return JSON.stringify(range);
                 },
                 difficulty: function() {
                   return $('[name="difficulty"]').val();
@@ -66,7 +76,12 @@ class Exercise {
         messages: {
           required:"请填写标题",
           range: "题目来源",
-          itemCount: "请输入题目个数，最多不超过9999个",
+          itemCount: {
+            required: '请填写题目个数',
+            positiveInteger: '请输入正整数',
+            min: '题目个数无效',
+            max: '题目个数过大'
+          },
           difficulty: "请选择难易程度",
           'questionTypes[]': {
             required:"请选择题型",
@@ -118,3 +133,4 @@ class Exercise {
 }
 
 new Exercise($('#step2-form'));
+new SelectLinkage($('[name="range[courseId]"]'),$('[name="range[lessonId]"]'));

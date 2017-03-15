@@ -33,6 +33,13 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $fields['updatedTime'] = time();
         $fields = $questionConfig->filter($fields);
 
+        if (!empty($fields['parentId'])) {
+            $parentQuestion = $this->get($fields['parentId']);
+            $fields['courseId'] = $parentQuestion['courseId'];
+            $fields['lessonId'] = $parentQuestion['lessonId'];
+        }
+        $fields['target'] = empty($fields['courseSetId']) ? '' : 'course-'.$fields['courseSetId'];
+
         $question = $this->getQuestionDao()->create($fields);
 
         if ($question['parentId'] > 0) {
@@ -59,6 +66,12 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
         $fields['updatedTime'] = time();
         $fields = $questionConfig->filter($fields);
+
+        if (!empty($question['parentId'])) {
+            $parentQuestion = $this->get($fields['parentId']);
+            $fields['courseId'] = $parentQuestion['courseId'];
+            $fields['lessonId'] = $parentQuestion['lessonId'];
+        }
 
         $question = $this->getQuestionDao()->update($id, $fields);
 
@@ -264,6 +277,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             unset($conditions['excludeIds']);
         } else {
             $conditions['excludeIds'] = explode(',', $conditions['excludeIds']);
+        }
+
+        if (empty($conditions['lessonId'])) {
+            unset($conditions['lessonId']);
         }
 
         return $conditions;

@@ -27,6 +27,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $activity;
     }
 
+    public function getActivityByCopyIdAndCourseSetId($copyId, $courseSetId)
+    {
+        return $this->getActivityDao()->getByCopyIdAndCourseSetId($copyId, $courseSetId);
+    }
+
     public function findActivities($ids, $fetchMedia = false)
     {
         $activities = $this->getActivityDao()->findByIds($ids);

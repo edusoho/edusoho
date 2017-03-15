@@ -17,12 +17,9 @@
         <th width="10%">{{'购买者'|trans}}</th>
       {% endif %}
       <th>{{'支付方式'|trans}}
-      <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-pay-way-popover"></span>
-        <div class="popover-content hidden"  style="width:100px;">
-          <div class="popover-item">
-            <div class="content">{{'站外支付为该笔订单是通过导入或者手动添加的方式产生的，故为站外支付'|trans}}</div>
-          </div>
-        </div></th>
+      <span data-toggle="popover" data-trigger="hover" data-placement="bottom" data-container="body" data-content="
+       <div>站外支付为该笔订单是通过导入或者手动添加的方式产生的，故为站外支付</div>" class="glyphicon glyphicon-question-sign color-gray text-sm js-pay-way-popover"></span>
+      </th>
       <th style="min-width:100px">{{'操作'|trans}}</th>
     </tr>
   </thead>
@@ -41,10 +38,10 @@
               <strong>{{order.title}}</strong>
             {% endif %}
             <br>
-            <span class="text-muted text-sm">{{'订单号：%sn%'|trans({'%sn%':order.sn})}}</span>
+            <span class="color-gray text-sm">{{'订单号：%sn%'|trans({'%sn%':order.sn})}}</span>
             {% if order.targetType == 'course' %}
               <br>
-              <span class="text-muted text-sm">
+              <span class="color-gray text-sm">
                 {% if courses[order.targetId]|default(false) and courseSets[courses[order.targetId].courseSetId]|default(false) %}
                   {% set courseSet = courseSets[courses[order.targetId].courseSetId] %}
                   {{'所属课程:'|trans}}<a href="{{ path('course_set_show', {id:courseSet.id}) }}">{{ courseSet.title }}</a>
@@ -54,7 +51,7 @@
               </span>
             {% endif %}
           </td>
-          <td><span class="text-muted text-sm">{{ order.createdTime|date('Y-n-d H:i:s') }}</span></td>
+          <td><span class="color-gray text-sm">{{ order.createdTime|date('Y-n-d H:i:s') }}</span></td>
           <td>{{ dict_macro.orderStatus(order.status) }}</td>
           <td><span class="money-text">{{order.amount}}</span></td>
           {% if mode in ['admin', 'course'] %}
@@ -66,7 +63,7 @@
             {% if order.paidTime > 0 %}
               {{ dict_text('payment', order.payment)|default('--') }}
               <br>
-              <span class="text-muted text-sm">{{ order.paidTime |date('Y-n-d H:i:s') }}</span>
+              <span class="color-gray text-sm">{{ order.paidTime |date('Y-n-d H:i:s') }}</span>
             {% else %}
               --
             {% endif %}

@@ -16,18 +16,22 @@ class Marketing {
     $('.js-service-item').click(function (event) {
       let $item = $(event.currentTarget);
       let $values = $('#course_services').val();
+      let values;
       if (!$values) {
         values = [];
+      } else {
+        values = JSON.parse($values);
       }
-      $values = JSON.parse($values);
+
       if ($item.hasClass('label-primary')) {
         $item.removeClass('label-primary').addClass('label-default');
-        $values.splice($values.indexOf($item.text()), 1);
+        values.splice($values.indexOf($item.text()), 1);
       } else {
         $item.removeClass('label-default').addClass('label-primary');
-        $values.push($item.text());
+        values.push($item.text());
       }
-      $('#course_services').val(JSON.stringify($values));
+
+      $('#course_services').val(JSON.stringify(values));
     });
   }
 
@@ -45,7 +49,7 @@ class Marketing {
 
   updateDatetimepicker() {
     $('input[name="buyExpiryTime"]').datetimepicker('setStartDate', new Date(Date.now() + 86400 * 1000));
-    $('input[name="buyExpiryTime"]').datetimepicker('setEndDate', new Date(Date.now() + 86400 * 365 * 100 * 1000));
+    $('input[name="buyExpiryTime"]').datetimepicker('setEndDate', new Date(Date.now() + 86400 * 365 * 10 * 1000));
   }
 
   checkBoxChange() {
@@ -116,9 +120,7 @@ class Marketing {
           required: function () {
             return $('input[name="enableBuyExpiryTime"]:checked').val() == 1;
           },
-          next_day: function () {
-            return $('input[name="enableBuyExpiryTime"]:checked').val() == 1;
-          },
+          after_now_date:true,
         }
       },
       messages: {

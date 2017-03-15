@@ -31,41 +31,47 @@
               {% endif %}
               left-menu"></i>
 
-						{% if task.status == 'published' %}
-							<a class="title"
-									{% if member %}
-								href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}"
-							{% else %}
-								href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
-									{% endif %}>
-								{% include 'course/task-list/parts/list-li-title.html.twig' %}
-							</a>
+						{% if course.status=='published' and task.status == 'published' %}
+
+              {% if member %}
+                <a class="title"
+  								href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}"
+                  {% include 'course/task-list/parts/list-li-title.html.twig' %}
+                </a>
+              {% else %}
+							  {% include 'course/task-list/parts/list-li-title.html.twig' %}
+              {% endif %}
+
 							<span class="right-menu color-gray {% if not member %} mouse-leave {% endif %}">
                 {{ task.activity.length|default(0)|activity_length_format }}
 								{% set meta = activity_meta(task.activity.mediaType) %}
 								<i class="{{ meta.icon }} color-gray ml10" data-toggle="tooltip" data-placement="top" title=""
 								   data-original-title="{{ meta.name }}任务" data-container="body"></i>
               </span>
+
 							<span class="right-menu mouse-enter">
               {% if not member %}
-	              {% if  course.isFree %}
-		              {{  task.type }}
+
+	              {% if course.isFree %}
+
+                  {{ task.type }}
 		              {% if task.type in ['text','video','audio','flash','doc','ppt'] %}
 			              <a class="btn btn-primary" href="#modal" data-toggle="modal"
 			                 data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
 			                 style="margin-top:-8px">预览</a>
 		              {% else %}
-			              <a style="margin-top:-8px" class="btn btn-primary {% if previewAs|default() %}disabled{% endif %}"
-			              {% if is_buy_course_from_modal(course.id) %}
-				              href="#modal"
-				              data-toggle="modal"
-				              data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
-			              {% else %}
-				              href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
-			              {% endif %}>加入学习
-		               </a>
+  			            <a style="margin-top:-8px" class="btn btn-primary {% if previewAs|default() %}disabled{% endif %}"
+  			              {% if is_buy_course_from_modal(course.id) %}
+  				              href="#modal"
+  				              data-toggle="modal"
+  				              data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+  			              {% else %}
+  				              href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+  			              {% endif %}>加入学习
+		                </a>
 		              {% endif %}
-	              {% elseif  task.isFree %}
+
+	              {% elseif task.isFree %}
 		              <a class="btn btn-primary" href="#modal" data-toggle="modal"
 		                 data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
 		                 style="margin-top:-8px">预览</a>
@@ -73,11 +79,12 @@
 		              <a class="btn btn-warning" href="#modal" data-toggle="modal"
 		                 data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
 		                 style="margin-top:-8px">试看</a>
-	              {% elseif not task.isFree %}
+	              {% elseif (not task.isFree) and course.parentId|default(0) == 0 %}
 		              <a class="btn btn-primary" href="#modal" data-toggle="modal"
 		                 data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
 		                 style="margin-top:-8px">立即购买</a>
 	              {% endif %}
+
               {% endif %}
               </span>
 						{% else %}

@@ -341,6 +341,7 @@ class CourseManageController extends BaseController
                 $data['audiences'] = json_decode($data['audiences'], true);
             }
             $this->getCourseService()->updateCourse($courseId, $data);
+            $this->setFlashMessage('success', '更新计划设置成功');
 
             return $this->redirect(
                 $this->generateUrl(
@@ -409,6 +410,7 @@ class CourseManageController extends BaseController
             }
 
             $this->getCourseService()->updateCourseMarketing($courseId, $data);
+            $this->setFlashMessage('success', '更新营销设置成功');
 
             return $this->redirect(
                 $this->generateUrl(
@@ -465,12 +467,11 @@ class CourseManageController extends BaseController
             }
 
             $this->getCourseMemberService()->setCourseTeachers($courseId, $teachers);
+            $this->setFlashMessage('success', '更新教师设置成功');
 
             return $this->redirectToRoute(
-                $this->generateUrl(
-                    'course_set_manage_course_teachers',
-                    array('courseSetId' => $courseSetId, 'courseId' => $courseId)
-                )
+                'course_set_manage_course_teachers',
+                array('courseSetId' => $courseSetId, 'courseId' => $courseId)
             );
         }
 
@@ -620,8 +621,8 @@ class CourseManageController extends BaseController
 
         $courseSetting = $this->setting('course');
 
-        if (!$this->getCurrentUser()->isAdmin(
-            ) && (empty($courseSetting['teacher_search_order']) || $courseSetting['teacher_search_order'] != 1)
+        if (!$this->getCurrentUser()->isAdmin()
+            && (empty($courseSetting['teacher_search_order']) || $courseSetting['teacher_search_order'] != 1)
         ) {
             throw $this->createAccessDeniedException('查询订单已关闭，请联系管理员');
         }
@@ -935,10 +936,9 @@ class CourseManageController extends BaseController
 
             $finishedNum = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($value['id'], 'finish');
 
-            $taskLearnTime = $this->getActivityLearnLogService()->sumLearnTime(array('taskId' => $value['id']));
+            $taskLearnTime = $this->getTaskResultService()->getLearnedTimeByCourseIdGroupByCourseTaskId($value['id']);
             $taskLearnTime = $taskLearnedNum == 0 ? 0 : intval($taskLearnTime / $taskLearnedNum);
-
-            $taskWatchTime = $this->getActivityLearnLogService()->sumLearnTime(array('taskId' => $value['id']));
+            $taskWatchTime = $this->getTaskResultService()->getWatchTimeByCourseIdGroupByCourseTaskId($value['id']);
             $taskWatchTime = $taskLearnedNum == 0 ? 0 : intval($taskWatchTime / $taskLearnedNum);
 
             $tasks[$key]['LearnedNum'] = $taskLearnedNum;

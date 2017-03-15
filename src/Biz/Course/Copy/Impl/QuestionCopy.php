@@ -4,6 +4,11 @@ namespace Biz\Course\Copy\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Copy\AbstractEntityCopy;
+use Biz\File\Service\UploadFileService;
+use Biz\Activity\Service\ActivityService;
+use Biz\Question\Service\QuestionService;
+use Biz\Testpaper\Service\TestpaperService;
+use Biz\Activity\Service\TestpaperActivityService;
 
 /**
  * Class QuestionCopy.
@@ -29,16 +34,23 @@ class QuestionCopy extends AbstractEntityCopy
     {
         $newCourse = $config['newCourse'];
 
-        return $this->doCopyQuestions($newCourse['courseSetId'], $source['id'], $config['isCopy']);
+        return $this->doCopyQuestions($newCourse, $source, $config['isCopy']);
     }
 
     /*
      * $ids = question ids
      * */
-    protected function doCopyQuestions($newCourseSetId, $courseId, $isCopy)
+    protected function doCopyQuestions($newCourse, $sourceCourse, $isCopy)
     {
+        $courseId = $sourceCourse['id'];
+        $newCourseSetId = $newCourse['courseSetId'];
         $testpapers = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'testpaper');
-        $others = $this->getActivityService()->search(array('fromCourseId' => $courseId, 'mediaTypes' => array('homework', 'exercise')), array(), 0, PHP_INT_MAX);
+        $others = $this->getActivityService()->search(
+            array('fromCourseId' => $courseId, 'mediaTypes' => array('homework', 'exercise')),
+            array(),
+            0,
+            PHP_INT_MAX
+        );
 
         $testpaperExt = $this->getTestpaperActivityService()->findActivitiesByIds(ArrayToolkit::column($testpapers, 'mediaId'));
 
@@ -58,16 +70,44 @@ class QuestionCopy extends AbstractEntityCopy
 
         $questionMap = array();
         foreach ($questions as $question) {
-            $newQuestion = $this->filterFields($newCourseSetId, $question, $isCopy);
+            $newQuestion = $this->filterFields($newCourse, $question, $isCopy);
 
             $newQuestion['parentId'] = $question['parentId'] > 0 ? $questionMap[$question['parentId']][0] : 0;
 
             $newQuestion = $this->getQuestionService()->create($newQuestion);
+            $this->copyAttachments($newQuestion, $question);
 
             $questionMap[$question['id']] = array($newQuestion['id'], $newQuestion['parentId']);
         }
 
         return $questionMap;
+    }
+
+    private function copyAttachments($newQuestion, $sourceQuestion)
+    {
+        $stems = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType(
+            'question.stem',
+            $sourceQuestion['id'],
+            'attachment'
+        );
+        if (!empty($stems)) {
+            $fileIds = ArrayToolkit::column($stems, 'fileId');
+            $this->getUploadFileService()->createUseFiles($fileIds, $newQuestion['id'], 'question.stem', 'attachment');
+        }
+        $analysises = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType(
+            'question.analysis',
+            $sourceQuestion['id'],
+            'attachment'
+        );
+        if (!empty($analysises)) {
+            $fileIds = ArrayToolkit::column($analysises, 'fileId');
+            $this->getUploadFileService()->createUseFiles(
+                $fileIds,
+                $newQuestion['id'],
+                'question.analysis',
+                'attachment'
+            );
+        }
     }
 
     private function questionSort($questions)
@@ -83,7 +123,7 @@ class QuestionCopy extends AbstractEntityCopy
         return $questions;
     }
 
-    private function filterFields($newCourseSetId, $question, $isCopy)
+    private function filterFields($newCourse, $question, $isCopy)
     {
         $fields = array(
             'type',
@@ -97,32 +137,57 @@ class QuestionCopy extends AbstractEntityCopy
         );
 
         $newQuestion = ArrayToolkit::parts($question, $fields);
-        $newQuestion['courseId'] = $newCourseSetId;
+        if ($question['courseId'] > 0) {
+            $newQuestion['courseId'] = $newCourse['id'];
+        } else {
+            $newQuestion['courseId'] = 0;
+        }
+        $newQuestion['courseSetId'] = $newCourse['courseSetId'];
         $newQuestion['lessonId'] = 0;
         $newQuestion['copyId'] = $isCopy ? $question['id'] : 0;
         $newQuestion['userId'] = $this->biz['user']['id'];
-        $newQuestion['target'] = 'course-'.$newCourseSetId;
+        $newQuestion['target'] = 'course-'.$newCourse['id'];
 
         return $newQuestion;
     }
 
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->biz->service('Testpaper:TestpaperService');
     }
 
+    /**
+     * @return TestpaperActivityService
+     */
     protected function getTestpaperActivityService()
     {
         return $this->biz->service('Activity:TestpaperActivityService');
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->biz->service('Activity:ActivityService');
     }
 
+    /**
+     * @return QuestionService
+     */
     protected function getQuestionService()
     {
         return $this->biz->service('Question:QuestionService');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->biz->service('File:UploadFileService');
     }
 }

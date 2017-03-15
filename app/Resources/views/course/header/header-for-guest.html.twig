@@ -22,13 +22,13 @@
   <div class="course-detail-bottom">
     <div class="course-detail-img">
       <img class="img-responsive"
-           src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}"
-           alt="{{ course.title }} ">
+        src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}"
+        alt="{{ course.title }} ">
       <div class="image-overlay"></div>
       {% if previewTask|default(null) %}
         <a href="#modal" data-toggle="modal"
-           data-url="{{ path('course_task_preview',{courseId:course.id, id:previewTask.id}) }}"
-           class="course-img-cover">
+          data-url="{{ path('course_task_preview',{courseId:course.id, id:previewTask.id}) }}"
+          class="course-img-cover">
           <i class="es-icon es-icon-playcircleoutline"></i>
         </a>
       {% endif %}
@@ -63,7 +63,7 @@
               {% set current_course = course %}
               {% for course in  courses %}
                 <li class="mb10 mr10 {% if current_course.id == course.id %} active {% endif %}">
-                  <a href="{{ path('course_show',{id: course.id, previewAs: previewAs}) }}" title="{{ course.title}}">{{ course.title|sub_text(10) }}</a>
+                  <a href="{{ path('course_show',{id: course.id, previewAs: previewAs}) }}" title="{{ course.title }}">{{ course.title|sub_text(10) }}</a>
                 </li>
               {% endfor %}
             </ul>
@@ -75,7 +75,7 @@
           {% if course.expiryMode == 'days' %}
             <span class="gray-dark mrl">随到随学</span>
             <span
-                class="gray-dark">{% if course.expiryDays %} {{ course.expiryDays }}天 {% else %}不限时间{% endif %}</span>
+              class="gray-dark">{% if course.expiryDays %} {{ course.expiryDays }}天 {% else %}不限时间{% endif %}</span>
           {% elseif course.expiryMode == 'date' %}
             <span class="gray-dark mrl">周期开班</span>
             <span class="gray-dark">{{ course.expiryStartDate|date('Y-m-d ') }}
@@ -89,15 +89,15 @@
           {% set serviceTags = services(course.services|default([])) %}
           {% for tag in serviceTags %}
             <span class="lump-sm color-lump {% if tag.active %}bg-primary{% endif %} mr5" data-container="body"
-                  data-trigger="hover" data-placement="top"
-                  data-toggle="popover"
-                  title="{{ tag.full_name }}{% if not tag.active %}<span class='text-12 color-gray'>(暂未提供)</span>{% endif %}"
-                  data-content="{{ tag.summary }}">
+              data-trigger="hover" data-placement="top"
+              data-toggle="popover"
+              title="{{ tag.full_name }}{% if not tag.active %}<span class='text-12 color-gray'>(暂未提供)</span>{% endif %}"
+              data-content="{{ tag.summary }}">
                 {{ tag.short_name }}
             </span>
           {% endfor %}
         {% endif %}
-        
+
       </div>
       <div class="text-right">
         {% if member|default(false) %}
