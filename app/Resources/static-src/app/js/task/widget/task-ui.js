@@ -13,6 +13,12 @@ export default class TaskUi {
     window.setTimeout(() => {
       this.learningPrompt.removeClass('moveup');
       this.learnedPrompt.addClass('moveup');
+      this.learnedPrompt.popover('show');
+
+      window.setTimeout(() => {
+        this.learnedPrompt.popover('hide');
+      }, 2000);
+      
     }, 2000);
   }
 
