@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Assetic\Exception\Exception;
+use Topxia\Common\Exception\RuntimeException;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Question\QuestionService;
@@ -132,6 +134,8 @@ class CourseQuestionManageController extends BaseController
     public function updateAction(Request $request, $courseId, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
+        $question = $this->getQuestionService()->getQuestion($id);
+        $this->checkTargetMatch($question['target'], $courseId);
 
         if ($request->getMethod() == 'POST') {
             $question   = $request->request->all();
@@ -145,8 +149,6 @@ class CourseQuestionManageController extends BaseController
 
             return $this->redirect($request->query->get('goto', $this->generateUrl('course_manage_question', array('courseId' => $courseId, 'parentId' => $question['parentId']))));
         }
-
-        $question = $this->getQuestionService()->getQuestion($id);
 
         if ($question['parentId'] > 0) {
             $parentQuestion = $this->getQuestionService()->getQuestion($question['parentId']);
@@ -167,6 +169,7 @@ class CourseQuestionManageController extends BaseController
     {
         $course   = $this->getCourseService()->tryManageCourse($courseId);
         $question = $this->getQuestionService()->getQuestion($id);
+        $this->checkTargetMatch($question['target'], $courseId);
         $this->getQuestionService()->deleteQuestion($id);
 
         return $this->createJsonResponse(true);
@@ -179,6 +182,8 @@ class CourseQuestionManageController extends BaseController
         $ids = $request->request->get('ids');
 
         foreach ($ids ?: array() as $id) {
+            $question = $this->getQuestionService()->getQuestion($id);
+            $this->checkTargetMatch($question['target'], $courseId);
             $this->getQuestionService()->deleteQuestion($id);
         }
 
@@ -195,6 +200,7 @@ class CourseQuestionManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
         $question = $this->getQuestionService()->getQuestion($id);
+        $this->checkTargetMatch($question['target'], $courseId);
 
         if (empty($question)) {
             throw $this->createNotFoundException($this->getServiceKernel()->trans('题目不存在！'));
@@ -298,6 +304,15 @@ class CourseQuestionManageController extends BaseController
             'request' => $request,
             'fileId'  => $fileId
         ));
+    }
+
+    protected function checkTargetMatch($target, $courseId)
+    {
+        $targetCourse = explode('/', $target)[0];
+        if ($targetCourse != 'course-' . $courseId) {
+            throw new RuntimeException($this->trans('题目不属于该课程'));
+        }
+
     }
 
     protected function getCourseService()
