@@ -10,7 +10,7 @@
           <label for="title" class="control-label-required">{{ '标题名称'|trans }}</label>
           </div>
           <div class="col-sm-10">
-            <input id="title" class="form-control" type="text" name="title" value={{ activity.title|default('') }} >
+            <input id="title" class="form-control" type="text" name="title" value="{{ activity.title|default('') }}" >
           </div>
         </div>
         {% block activity_content %}
