@@ -148,7 +148,7 @@ class MyOrderController extends BaseController
         $order = $this->getOrderService()->getOrder($id);
 
         if ($currentUser['id'] != $order['userId']) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('普通用户不能查看别人的订单'));
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('该订单不属于当前登录用户'));
         }
 
         return $order;
