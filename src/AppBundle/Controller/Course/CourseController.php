@@ -213,6 +213,10 @@ class CourseController extends CourseBaseController
         );
 
         $userReview = array();
+        $user = $this->getCurrentUser();
+        if (empty($member) && $user->isLogin()) {
+            $member = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
+        }
         if (!empty($member)) {
             if ($selectedCourseId > 0) {
                 $userReview = $this->getReviewService()->getUserCourseReview($member['userId'], $selectedCourseId);
