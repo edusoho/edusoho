@@ -7,3 +7,5 @@ $(".download-activity-list").on('click', 'a', function () {
   emitter.emit('finish', {fileId: $(this).data('fileId')});
 })
 
+$('#download-activity').perfectScrollbar();
+$('#download-activity').perfectScrollbar('update'); 

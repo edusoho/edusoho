@@ -14,12 +14,13 @@
     </li>
     <li>
       <div class="title">{{ '完课率'|trans }}
-      <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm finisher-lesson-popover" style="z-index: 100"></span>
-      <div class="popover-content hidden">
-        <div class="popover-item">
-          <div class="content">{{ '学完整个教学计划的人数 ÷ 该教学计划学员总数'|trans }}</div>
-          </div>
-        </div>
+        <span class="link-medium es-icon es-icon-help ml5"
+              data-container="body"
+              data-toggle="popover"
+              data-trigger="hover"
+              data-placement="top"
+              data-content="学完整个教学计划的人数 ÷ 该教学计划学员总数">
+        </span>
       </div>
       <span class="number js-finished-rate">{{ summary.finishedRate }}%</span>
     </li>
@@ -40,13 +41,13 @@
     </li>
   </ul>
 
-  <div id="course-dashboard-container" style="height:400px;" 
-    data-days="{{ days|json_encode }}" 
-    data-student-num="{{ studentNum|json_encode }}" 
-    data-finished-num="{{ finishedNum|json_encode }}" 
-    data-finished-rate="{{ finishedRate|json_encode }}" 
-    data-note-num="{{ noteNum|json_encode }}" 
-    data-ask-num="{{ askNum|json_encode }}" 
-    data-discussion-num="{{ discussionNum|json_encode }}">
+  <div id="course-dashboard-container" style="height:400px;"
+       data-days="{{ days|json_encode }}"
+       data-student-num="{{ studentNum|json_encode }}"
+       data-finished-num="{{ finishedNum|json_encode }}"
+       data-finished-rate="{{ finishedRate|json_encode }}"
+       data-note-num="{{ noteNum|json_encode }}"
+       data-ask-num="{{ askNum|json_encode }}"
+       data-discussion-num="{{ discussionNum|json_encode }}">
   </div>
 {% endblock %}

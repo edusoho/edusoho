@@ -35,12 +35,12 @@ class BlockTemplateDaoImpl extends GeneralDaoImpl implements BlockTemplateDao
         ));
     }
 
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {
             $conditions['title'] = "%{$conditions['title']}%";
         }
 
-        return parent::_createQueryBuilder($conditions);
+        return parent::createQueryBuilder($conditions);
     }
 }

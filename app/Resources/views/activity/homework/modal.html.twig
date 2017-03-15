@@ -16,7 +16,7 @@
       <div class="form-group">
         <div class="col-sm-2 control-label"><label for="homework-about-field" class="control-label-required">选择题目</label></div>
         <div class="col-sm-8">
-          <a id="picker_homework_items" data-url="{{ path('course_set_manage_homework_question_picker',{id:courseSetId,target:'homework'}) }}" class="btn btn-info btn-sm" data-role="pick-item"　><i class="es-icon es-icon-anonymous-iconfont"></i>
+          <a id="picker_homework_items" data-url="{{ path('course_set_manage_homework_question_picker',{id:courseSetId,targetType:'homework'}) }}" class="btn btn-info btn-sm" data-role="pick-item"　><i class="es-icon es-icon-anonymous-iconfont"></i>
           选择题目
           </a>
           <input type="hidden" name="questionLength" value="{% if questions|default(null) %} questionItems.lenght {% endif %}">
@@ -49,6 +49,7 @@
         <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
         <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete-btn"  data-name="题目">删除</button>
       </div>
+      <span class="color-danger js-help-redmine"></span>
     {% endif %}
 
     <div class="form-group">

@@ -11,7 +11,8 @@
       {% include 'file-chooser/file-choose.html.twig' with {
       mediaType: 'ppt',
       fileType:'ppt',
-      file: ppt.media|default(null)
+      file: ppt.media|default(null),
+      placeholder: 'PPT'
       } %}
       <input type="hidden" value="{{ ppt.mediaId|default(null) }}" name="mediaId" id="mediaId"/>
       <div id="file-choose-type" class="hidden" data-type="ppt"></div>

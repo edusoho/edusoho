@@ -20,11 +20,10 @@
 
   <div class="panel-body  es-live-all">
     {% for courseSet in liveCourseSets if courseSet %}
-
       <div class="media">
         <div class="media-left">
           {% if ("now"|date("U") >= courseSet.liveStartTime and "now"|date("U") <= courseSet.liveEndTime) %}
-            <a href="{{ path('course_task_show', {courseId: courseSet.course.id, id:courseSet.taskId}) }}" title="{{ course.title }}" target="_blank">
+            <a href="{{ path('course_task_show', {courseId: courseSet.course.id, id:courseSet.taskId}) }}" title="{{ courseSet.title }}" target="_blank">
           {% else %}
             <a href="{{ path('course_set_show',{id: courseSet.id}) }}" title="{{ courseSet.title }}" target="_blank">
           {% endif %}
@@ -37,7 +36,7 @@
             {% elseif "now"|date("U") < courseSet.liveStartTime and courseSet.liveStartTime|date('Y-m-d') == "now"|date('Y-m-d') %}
               <span class="re-report">{{'即将直播'|trans}} {{ courseSet.liveStartTime|date('m-d H:i')}}</span>
             {% elseif "now"|date("U") < courseSet.liveStartTime and courseSet.liveStartTime|date('Y-m-d') != "now"|date('Y-m-d') %}
-              <span class="re-report">{{'直播预告'|trans}} {{ course.liveStartTime|date('m-d H:i')}}</span>
+              <span class="re-report">{{'直播预告'|trans}} {{ courseSet.liveStartTime|date('m-d H:i')}}</span>
             {% endif %}
           </a>
         </div>

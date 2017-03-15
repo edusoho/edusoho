@@ -4,7 +4,6 @@
 <span class="course-price-widget">
 
   {% if courseSet.discountId %}
-
     {% if 'full' in shows or 'price' in shows %}
       {% if priceType == 'coin' %}
         <span class="price">{{ courseSet.minCoursePrice * setting('coin.cash_rate')}} {{setting('coin.coin_name', '虚拟币'|trans)}}</span>
@@ -21,29 +20,24 @@
           {{'%discount%折'|trans({'%discount%': courseSet.discount|round(2, 'common') })}}
         {% endif %}
       </span>
-
     {% endif %}
-
+    
   {% else %}
-
     {% if 'full' in shows or 'price' in shows %}
-      <span class="price">
-        {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-          {% if courseSet.minCoursePrice > 0 %} 
-          	{{ courseSet.minCoursePrice * setting('coin.cash_rate')}}
-          	{{setting('coin.coin_name', '虚拟币'|trans)}} 
-          {% else %} 
-          	<span class="color-success">{{'免费'|trans}}</span> 
-          {% endif  %}
-        {% else %}
-          {% if courseSet.minCoursePrice > 0 %}
-          	{{'%price%元'|trans({'%price%': courseSet.minCoursePrice})}}
-          {% else %} 
-          	<span class="color-success">{{'免费'|trans}}</span> 
-          {% endif %} 
-        {% endif %}
-      </span>
+      {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+        {% if courseSet.minCoursePrice > 0 %} 
+          <span class="price">{{ courseSet.minCoursePrice * setting('coin.cash_rate')}}
+          {{setting('coin.coin_name', '虚拟币'|trans)}}</span>
+        {% else %} 
+          <span class="free">{{'免费'|trans}}</span> 
+        {% endif  %}
+      {% else %}
+        {% if courseSet.minCoursePrice > 0 %}
+          <span class="price">{{'%price%元'|trans({'%price%': courseSet.minCoursePrice})}}</span>
+        {% else %} 
+          <span class="free">{{'免费'|trans}}</span> 
+        {% endif %} 
+      {% endif %}
     {% endif %}
-
   {% endif %}
 </span>

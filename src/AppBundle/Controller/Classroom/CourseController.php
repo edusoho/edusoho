@@ -22,11 +22,16 @@ class CourseController extends BaseController
         $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
 
         $excludeIds = ArrayToolkit::column($activeCourses, 'parentCourseSetId');
+
         $conditions = array(
             'status' => 'published',
             'parentId' => 0,
             'excludeIds' => $excludeIds,
         );
+
+        if (empty($excludeIds)) {
+            unset($conditions['excludeIds']);
+        }
 
         $user = $this->getCurrentUser();
         if (!$user->isAdmin() && !$user->isSuperAdmin()) {

@@ -38,10 +38,10 @@
               <strong>{{order.title}}</strong>
             {% endif %}
             <br>
-            <span class="text-muted text-sm">{{'订单号：%sn%'|trans({'%sn%':order.sn})}}</span>
+            <span class="color-gray text-sm">{{'订单号：%sn%'|trans({'%sn%':order.sn})}}</span>
             {% if order.targetType == 'course' %}
               <br>
-              <span class="text-muted text-sm">
+              <span class="color-gray text-sm">
                 {% if courses[order.targetId]|default(false) and courseSets[courses[order.targetId].courseSetId]|default(false) %}
                   {% set courseSet = courseSets[courses[order.targetId].courseSetId] %}
                   {{'所属课程:'|trans}}<a href="{{ path('course_set_show', {id:courseSet.id}) }}">{{ courseSet.title }}</a>
@@ -51,7 +51,7 @@
               </span>
             {% endif %}
           </td>
-          <td><span class="text-muted text-sm">{{ order.createdTime|date('Y-n-d H:i:s') }}</span></td>
+          <td><span class="color-gray text-sm">{{ order.createdTime|date('Y-n-d H:i:s') }}</span></td>
           <td>{{ dict_macro.orderStatus(order.status) }}</td>
           <td><span class="money-text">{{order.amount}}</span></td>
           {% if mode in ['admin', 'course'] %}
@@ -63,7 +63,7 @@
             {% if order.paidTime > 0 %}
               {{ dict_text('payment', order.payment)|default('--') }}
               <br>
-              <span class="text-muted text-sm">{{ order.paidTime |date('Y-n-d H:i:s') }}</span>
+              <span class="color-gray text-sm">{{ order.paidTime |date('Y-n-d H:i:s') }}</span>
             {% else %}
               --
             {% endif %}

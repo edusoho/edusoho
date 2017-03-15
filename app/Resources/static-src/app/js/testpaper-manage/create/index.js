@@ -1,5 +1,6 @@
 import sortList from 'common/sortable';
 import { delHtmlTag } from 'common/utils';
+import SelectLinkage from 'app/js/question-manage/widget/select-linkage.js';
 
 class TestpaperForm {
   constructor($form) {
@@ -191,13 +192,24 @@ class TestpaperForm {
   _submit(event) {
     let $target = $(event.currentTarget);
     let status = this.validator.form();
+    
     if (status) {
-      $target.button('loading').addClass('disabled');
-      this.$form.submit();
+      $.post($target.data('checkUrl'),this.$form.serialize(),result => {
+        if (result.status == 'no') {
+          $('.js-build-check').html('该范围内题目数量不足');
+        } else {
+          $('.js-build-check').html('');
+          
+          $target.button('loading').addClass('disabled');
+          this.$form.submit();
+        }
+      })
+
     }
   }
 }
 
 new TestpaperForm($('#testpaper-form'));
+new SelectLinkage($('[name="ranges[courseId]"]'),$('[name="ranges[lessonId]"]'));
 
 
