@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class TestpaperItemDaoImpl extends GeneralDaoImpl implements TestpaperItemDao
 {
-    protected $table = 'testpaper_item';
+    protected $table = 'c2_testpaper_item';
 
     public function getItemsCountByTestId($testId)
     {

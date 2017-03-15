@@ -33,7 +33,7 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     {
         $courseSet = $event->getSubject();
         $fields = $event->getArguments();
-        $this->getCourseService()->RecommendCourseByCourseSetId($courseSet['id'], $fields);
+        $this->getCourseService()->recommendCourseByCourseSetId($courseSet['id'], $fields);
     }
 
     public function onCourseSetCancelRecommend(Event $event)

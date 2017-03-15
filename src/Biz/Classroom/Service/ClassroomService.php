@@ -101,8 +101,6 @@ interface ClassroomService
 
     public function isCourseInClassroom($courseId, $classroomId);
 
-    public function setClassroomCourses($classroomId, array $courseIds);
-
     public function deleteClassroomCourses($classroomId, array $courseIds);
 
     public function isClassroomStudent($classroomId, $studentId);

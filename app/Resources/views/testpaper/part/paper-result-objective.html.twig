@@ -10,7 +10,7 @@
         {% endif %}
         <small>{{'分'|trans}}</small>
       </div>
-      <small class="text-muted">{{'总分%score%分'|trans({'%score%':paper.score})}}</small>
+      <small class="color-gray">{{'总分%score%分'|trans({'%score%':paper.score})}}</small>
     </div>
   </div>
   <div class="media-body">
@@ -19,7 +19,7 @@
         <thead>
           <th></th>
           {% for type in questionTypes|default([]) if accuracy[type]|default(null) %}
-            <th>{{ questionTypesDict[type] }} <small class="text-muted">({{ accuracy[type].all }}{{'道'|trans}})</small></th>
+            <th>{{ questionTypesDict[type] }} <small class="color-gray">({{ accuracy[type].all }}{{'道'|trans}})</small></th>
           {% endfor %}
         </thead>
         <tbody>
@@ -70,11 +70,11 @@
             {% for type in questionTypes|default([]) if accuracy[type]|default(null) %}
               {% if type == 'essay' %}
                 {% if paperResult.status == 'finished' %}
-                  <td><span class="text-muted">{{ accuracy[type].noAnswer }} <small>{{'道'|trans}}</small></span></td>
+                  <td><span class="color-gray">{{ accuracy[type].noAnswer }} <small>{{'道'|trans}}</small></span></td>
                 {% endif %}
               {% else %}
                 {% if paperResult.status == 'finished' or not accuracy[type].hasEssay|default(false) %}
-                  <td><span class="text-muted">{{ accuracy[type].noAnswer }} <small>{{'道'|trans}}</small></span></td>
+                  <td><span class="color-gray">{{ accuracy[type].noAnswer }} <small>{{'道'|trans}}</small></span></td>
                 {% endif %}
               {% endif %}
             {% endfor %}

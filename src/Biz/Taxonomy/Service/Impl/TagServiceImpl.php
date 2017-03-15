@@ -102,11 +102,11 @@ class TagServiceImpl extends BaseService implements TagService
         return $this->getTagOwnerDao()->findByTagIdsAndOwnerType($tagIds, $ownerType);
     }
 
-    public function searchTags($conditions, $start, $limit)
+    public function searchTags($conditions, $sort, $start, $limit)
     {
         $conditions = $this->_prepareConditions($conditions);
 
-        return $this->getTagDao()->search($conditions, array(), $start, $limit);
+        return $this->getTagDao()->search($conditions, $sort, $start, $limit);
     }
 
     public function searchTagCount($conditions)

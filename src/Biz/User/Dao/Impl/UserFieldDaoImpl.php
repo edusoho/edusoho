@@ -28,13 +28,13 @@ class UserFieldDaoImpl extends GeneralDaoImpl implements UserFieldDao
         return $this->db()->fetchAll($sql) ?: array();
     }
 
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         if (isset($conditions['fieldName'])) {
             $conditions['fieldName'] = '%'.$conditions['fieldName'].'%';
         }
 
-        return parent::_createQueryBuilder($conditions);
+        return parent::createQueryBuilder($conditions);
     }
 
     public function declares()

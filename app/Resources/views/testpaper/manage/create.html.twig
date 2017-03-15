@@ -32,7 +32,7 @@
       
       <div class="form-group mbm">
         <div class="col-md-8 col-md-offset-2 controls">
-          <button id="testpaper-create-btn" data-loading-text="{{'正在提交'|trans}}" type="button" class="btn btn-primary" data-role="submit">{{'保存，下一步'|trans}}</button>
+          <button id="testpaper-create-btn" data-loading-text="{{'正在提交'|trans}}" type="button" class="btn btn-primary" data-role="submit" data-check-url="{{ path('course_set_manage_testpaper_build_check',{courseSetId:courseSet.id,type:'testpaper'})}}">{{'保存，下一步'|trans}}</button>
           <a href="{{ path('course_set_manage_testpaper',{id:courseSet.id}) }}" class="btn btn-link  ">{{'返回'|trans}}</a>
         </div>
       </div>

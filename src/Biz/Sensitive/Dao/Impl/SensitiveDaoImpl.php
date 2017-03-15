@@ -41,7 +41,7 @@ class SensitiveDaoImpl extends GeneralDaoImpl implements SensitiveDao
         return $declares;
     }
 
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function ($v) {
             if ($v === 0) {
@@ -64,6 +64,6 @@ class SensitiveDaoImpl extends GeneralDaoImpl implements SensitiveDao
             }
         }
 
-        return parent::_createQueryBuilder($conditions);
+        return parent::createQueryBuilder($conditions);
     }
 }

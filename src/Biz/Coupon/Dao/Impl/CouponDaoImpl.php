@@ -66,7 +66,7 @@ class CouponDaoImpl extends GeneralDaoImpl implements CouponDao
         return $this->db()->delete($this->table, array('batchId' => $id));
     }
 
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         $tmpConditions = array();
 
@@ -101,6 +101,6 @@ class CouponDaoImpl extends GeneralDaoImpl implements CouponDao
             $conditions['useEndDateTime'] = strtotime($conditions['useEndDateTime'].'+1 day');
         }
 
-        return parent::_createQueryBuilder($conditions);
+        return parent::createQueryBuilder($conditions);
     }
 }

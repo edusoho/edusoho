@@ -18,7 +18,7 @@
 		课时 <span class="number">{{ lesson.number }}</span>： {{ lesson.title }}
 
 		{% if lesson.type in ['live','liveOpen'] %}
-		  <span class="text-muted">{{ lesson.startTime|date_format }}</span>
+		  <span class="color-gray">{{ lesson.startTime|date_format }}</span>
 		{% endif %}
 
 		{% if lesson.status == 'unpublished' %}

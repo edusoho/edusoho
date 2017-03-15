@@ -522,7 +522,7 @@ class TestpaperServiceTest extends BaseTestCase
             'name' => 'testpaper',
             'description' => 'testpaper description',
             'mode' => 'rand',
-            'ranges' => array('course'),
+            'ranges' => array('courseId' => 0),
             'counts' => array('choice' => 2, 'fill' => 2, 'determine' => 1),
             'scores' => array('choice' => 2, 'fill' => 2, 'determine' => 2),
             'missScores' => array('choice' => 1, 'uncertain_choice' => 1),
@@ -579,11 +579,11 @@ class TestpaperServiceTest extends BaseTestCase
 
         $options1 = array(
             'mode' => 'range',
-            'ranges' => array('course'),
+            'ranges' => array('courseId' => 0),
             'counts' => array('choice' => 2, 'fill' => 2, 'determine' => 1),
             'scores' => array('choice' => 2, 'fill' => 2, 'determine' => 2),
             'missScores' => array('choice' => 1, 'uncertain_choice' => 1),
-            'courseId' => 1,
+            'courseSetId' => 1,
         );
         $result = $this->getTestpaperService()->canBuildTestpaper('testpaper', $options1);
 
@@ -594,7 +594,7 @@ class TestpaperServiceTest extends BaseTestCase
             'questionTypes' => array('choice', 'fill', 'determine', 'essay'),
             'difficulty' => 'normal',
             'range' => 'course',
-            'courseId' => 1,
+            'courseSetId' => 1,
         );
         $result = $this->getTestpaperService()->canBuildTestpaper('exercise', $options2);
         $this->assertEquals('yes', $result['status']);
@@ -625,7 +625,7 @@ class TestpaperServiceTest extends BaseTestCase
             'name' => 'testpaper',
             'description' => 'testpaper description',
             'mode' => 'range',
-            'ranges' => array('course'),
+            'ranges' => array('courseId' => 0),
             'counts' => array('choice' => 2, 'fill' => 2, 'determine' => 1),
             'scores' => array('choice' => 2, 'fill' => 2, 'determine' => 2),
             'missScores' => array('choice' => 1, 'uncertain_choice' => 1),
@@ -664,7 +664,7 @@ class TestpaperServiceTest extends BaseTestCase
             'name' => 'testpaper',
             'description' => 'testpaper description',
             'mode' => 'range',
-            'ranges' => array('course'),
+            'ranges' => array('courseId' => 0),
             'counts' => array('choice' => 2, 'fill' => 2, 'determine' => 1),
             'scores' => array('choice' => 2, 'fill' => 2, 'determine' => 2),
             'missScores' => array('choice' => 1, 'uncertain_choice' => 1),
@@ -719,7 +719,7 @@ class TestpaperServiceTest extends BaseTestCase
             'name' => 'testpaper',
             'description' => 'testpaper description',
             'mode' => 'range',
-            'ranges' => array('course'),
+            'ranges' => array('courseId' => 0),
             'counts' => array('choice' => 2, 'fill' => 2, 'determine' => 1),
             'scores' => array('choice' => 2, 'fill' => 2, 'determine' => 2),
             'missScores' => array('choice' => 1, 'uncertain_choice' => 1),
@@ -760,7 +760,7 @@ class TestpaperServiceTest extends BaseTestCase
             'name' => 'testpaper',
             'description' => 'testpaper description',
             'mode' => 'range',
-            'ranges' => array('course'),
+            'ranges' => array('courseId' => 0),
             'counts' => array('choice' => 2, 'fill' => 2, 'essay' => 1),
             'scores' => array('choice' => 2, 'fill' => 2, 'essay' => 2),
             'missScores' => array('choice' => 1, 'uncertain_choice' => 1),
@@ -814,7 +814,7 @@ class TestpaperServiceTest extends BaseTestCase
             'name' => 'testpaper',
             'description' => 'testpaper description',
             'mode' => 'range',
-            'ranges' => array('course'),
+            'ranges' => array('courseId' => 0),
             'counts' => array('choice' => 2, 'fill' => 2),
             'scores' => array('choice' => 2, 'fill' => 2),
             'missScores' => array('choice' => 1, 'uncertain_choice' => 1),
@@ -850,7 +850,7 @@ class TestpaperServiceTest extends BaseTestCase
             'name' => 'testpaper',
             'description' => 'testpaper description',
             'mode' => 'range',
-            'ranges' => array('course'),
+            'ranges' => array('courseId' => 0),
             'counts' => array('choice' => 2, 'fill' => 2),
             'scores' => array('choice' => 2, 'fill' => 2),
             'missScores' => array('choice' => 1, 'uncertain_choice' => 1),
@@ -903,7 +903,7 @@ class TestpaperServiceTest extends BaseTestCase
             'name' => 'testpaper',
             'description' => 'testpaper description',
             'mode' => 'range',
-            'ranges' => array('course'),
+            'ranges' => array('courseId' => 0),
             'counts' => array('choice' => 1, 'fill' => 1),
             'scores' => array('choice' => 2, 'fill' => 2),
             'missScores' => array('choice' => 1, 'uncertain_choice' => 1),
@@ -935,7 +935,7 @@ class TestpaperServiceTest extends BaseTestCase
             'courseId' => 0,
             'pattern' => 'questionType',
             'metas' => array(
-                'ranges' => array('course'),
+                'ranges' => array('courseId' => 0),
             ),
             'type' => 'testpaper',
         );
@@ -971,7 +971,7 @@ class TestpaperServiceTest extends BaseTestCase
             'metas' => array(
                 'questionTypes' => array('choice', 'single_choice', 'fill', 'determine'),
                 'difficulty' => 'normal',
-                'range' => 'course',
+                'range' => array('courseId' => 0),
             ),
             'type' => 'exercise',
             'status' => 'open',
@@ -1096,7 +1096,7 @@ class TestpaperServiceTest extends BaseTestCase
                     'question -> choice 4',
                 ),
                 'answer' => array(1, 2),
-                'courseId' => $courseId,
+                'courseSetId' => $courseId,
                 'target' => 'course/'.$courseId,
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
             );
@@ -1115,7 +1115,7 @@ class TestpaperServiceTest extends BaseTestCase
                 'type' => 'fill',
                 'stem' => 'fill question [[aaa]].',
                 'target' => 'course/'.$courseId,
-                'courseId' => $courseId,
+                'courseSetId' => $courseId,
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
             );
 
@@ -1133,7 +1133,7 @@ class TestpaperServiceTest extends BaseTestCase
                 'type' => 'determine',
                 'stem' => 'determine question.',
                 'target' => 'course/'.$courseId,
-                'courseId' => $courseId,
+                'courseSetId' => $courseId,
                 'answer' => array(0),
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
             );
@@ -1152,7 +1152,7 @@ class TestpaperServiceTest extends BaseTestCase
                 'type' => 'essay',
                 'stem' => 'essay question.',
                 'target' => 'course/'.$courseId,
-                'courseId' => $courseId,
+                'courseSetId' => $courseId,
                 'answer' => array('xxx'),
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
             );
@@ -1171,7 +1171,7 @@ class TestpaperServiceTest extends BaseTestCase
                 'type' => 'material',
                 'stem' => 'material question.',
                 'target' => 'course/'.$courseId,
-                'courseId' => $courseId,
+                'courseSetId' => $courseId,
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
             );
 

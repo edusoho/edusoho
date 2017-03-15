@@ -54,12 +54,12 @@ class ClassroomReviewDaoImpl extends GeneralDaoImpl implements ClassroomReviewDa
         return $this->getByFields(array('userId' => $userId, 'classroomId' => $classroomId, 'parentId' => 0));
     }
 
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         if (isset($conditions['content'])) {
             $conditions['content'] = "%{$conditions['content']}%";
         }
 
-        return parent::_createQueryBuilder($conditions);
+        return parent::createQueryBuilder($conditions);
     }
 }

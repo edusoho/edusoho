@@ -2,13 +2,13 @@
 
 namespace AppBundle\Controller\Activity;
 
-use Biz\Course\Service\CourseService;
-use Biz\Question\Service\QuestionService;
-use Biz\Testpaper\Service\TestpaperService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Activity\Service\ActivityService;
+use Biz\Question\Service\QuestionService;
+use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 
 class HomeworkController extends BaseController implements ActivityActionInterface
@@ -26,7 +26,7 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
 
         $activity = $this->getActivityService()->getActivity($activity['id']);
         $homework = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
-        $homeworkResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $homework['id'], $activity['fromCourseSetId'], $activity['id'], $activity['mediaType']);
+        $homeworkResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $homework['id'], $activity['fromCourseId'], $activity['id'], $activity['mediaType']);
 
         if (!$homeworkResult || ($homeworkResult['status'] == 'doing' && !$homeworkResult['updateTime'])) {
             return $this->render('activity/homework/show.html.twig', array(

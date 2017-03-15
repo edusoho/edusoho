@@ -206,7 +206,7 @@ jQuery.validator.addMethod("max_year", function (value, element) {
 $.validator.addMethod("before_date", function (value, element, params) {
   let date = new Date(value);
   let afterDate = new Date($(params).val());
-  return !value || afterDate >= date;
+  return !value || !$(params).val() || afterDate >= date;
 },
   Translator.trans('开始日期应早于结束日期')
 );
@@ -214,13 +214,13 @@ $.validator.addMethod("before_date", function (value, element, params) {
 $.validator.addMethod("after_date", function (value, element, params) {
   let date = new Date(value);
   let afterDate = new Date($(params).val());
-  return !value || afterDate <= date;
+  return !value || !$(params).val() || afterDate <= date;
 },
   Translator.trans('开始日期应早于结束日期')
 );
 
 $.validator.addMethod("after_now", function (value, element, params) {
-  let afterDate = new Date(value);
+  let afterDate =  new Date(value.replace(/-/g, '/'));
   return !value || afterDate >=new Date();
 },
   Translator.trans('开始时间应晚于当前时间')

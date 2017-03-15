@@ -71,7 +71,7 @@ class UserProfileDaoImpl extends GeneralDaoImpl implements UserProfileDao
         return $this->db()->fetchAll($sql);
     }
 
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         if (isset($conditions['mobile'])) {
             $conditions['mobile'] = "%{$conditions['mobile']}%";
@@ -89,7 +89,7 @@ class UserProfileDaoImpl extends GeneralDaoImpl implements UserProfileDao
             $conditions['idcard'] = "%{$conditions['keyword']}%";
         }
 
-        return parent::_createQueryBuilder($conditions);
+        return parent::createQueryBuilder($conditions);
     }
 
     public function declares()

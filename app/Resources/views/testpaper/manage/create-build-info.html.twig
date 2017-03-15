@@ -24,9 +24,8 @@
 
 <div class="form-group">
   <div class="col-md-2 control-label"><label for="testpaper-range-field">{{'出题范围'|trans}}</label></div>
-  <div class="col-md-8 controls radios">
-    {{ radios('range', {'course':'整个课程'|trans, 'lesson':'按任务范围'|trans}, 'course') }}
-    {#<input type="hidden" name="ranges" value="">#}
+  <div class="col-md-8 controls">
+    {#{{ radios('range', {'course':'整个课程'|trans, 'lesson':'按任务范围'|trans}, 'course') }}
     <div class="hidden mtm" id="testpaper-range-selects">
       <select class="form-control width-input width-input-large" id="testpaper-range-start" name="ranges[start]" >
         <option value="">请选择</option>
@@ -34,14 +33,26 @@
           <option value="{{ range.id }}">{{ range.title }}</option>
         {% endfor %}
       </select>
-      <span class="text-muted mrs">{{'到'|trans}}</span>
+      <span class="color-gray mrs">{{'到'|trans}}</span>
       <select class="form-control width-input width-input-large" id="testpaper-range-end" name="ranges[end]">
         <option value="">请选择</option>
         {% for range in ranges if range %}
           <option value="{{ range.id }}">{{ range.title }}</option>
         {% endfor %}
       </select>
-    </div>
+    </div>#}
+    <select class="form-control width-150" name="ranges[courseId]" data-url="{{ path('course_set_manage_show_tasks',{courseSetId:courseSet.id})}}">
+      <option value="0" {% if not range.courseId|default(0) %}selected{% endif %}>{{'按课程'|trans}}</option>
+      {% for course in courses if course %}
+        <option value="{{ course.id }}" {% if range.courseId|default(0) == course.id %}selected{% endif %}>{{ course.title }}</option>
+      {% endfor %}
+    </select>
+    <select class="form-control width-150" {% if not showTasks|default(null) %}style="display:none;"{% endif %} name="ranges[lessonId]">
+      <option value="0" {% if not range.lessonId|default(0) %}selected{% endif %}>{{'请选择'|trans}}</option>
+      {% for task in showTasks|default([]) if task %}
+        <option value="{{ task.id }}" {% if range.lessonId|default(0) == task.id %}selected{% endif %}>{{ task.title }}</option>
+      {% endfor %}
+    </select>
   </div>
 </div>
 
@@ -67,8 +78,9 @@
       </li>
     {% endfor %}
     <input type="hidden" name="questioncount">
+    <span class="help-block color-danger js-build-check"></span>
   </ul>
-
+  
 </div>
 
 <input type="hidden" name="percentages[simple]">

@@ -31,7 +31,7 @@
         {% if lesson %}
           <span class="live-course-lesson metas">
             <span class="color-success mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
-            <span class="text-muted mrm">第{{ lesson.number }}课时</span>
+            <span class="color-gray mrm">第{{ lesson.number }}课时</span>
           </span>
         {% endif %}
       {% endif %}
@@ -50,7 +50,7 @@
           <div class="mbm">
           {% if course.classroomCount > 0 %}
             {% set classroom = course.classroom %}
-            <img class="classroomPicture" src="{{ filepath(classroom.smallPicture, 'classroom.png') }}"> <span class="text-muted">{{classroom.title}}
+            <img class="classroomPicture" src="{{ filepath(classroom.smallPicture, 'classroom.png') }}"> <span class="color-gray">{{classroom.title}}
             {% if course.classroomCount > 1 %}
             {{'等'|trans}}
             {% endif %}</span>
