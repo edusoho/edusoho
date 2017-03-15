@@ -7,7 +7,7 @@
     {% endif %}
 
     <li role="presentation" {% if 0 == selectedCourseId %}class="active"{% endif %}>
-      <a href="{{ path(route, {id: course.id, tab: tab, selectedCourse: 0 }) }}#{{ tab }}">全部教学计划</a>
+      <a href="{{ path(route, {id: course.id, tab: tab, selectedCourse: 0 }) }}#{{ tab }}">全部</a>
     </li>
 
     {% for selectCourse in courses %}
