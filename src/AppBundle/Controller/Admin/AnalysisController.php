@@ -509,25 +509,21 @@ class AnalysisController extends BaseController
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
+        $detailConditions = array(
+            'paidStartTime' => $timeRange['startTime'],
+            'paidEndTime' => $timeRange['endTime'],
+            'status' => 'paid',
+            'targetType' => 'course',
+        );
+        $count = $this->getOrderService()->countOrders($detailConditions);
         $paginator = new Paginator(
             $request,
-            $this->getOrderService()->countOrders(
-                array(
-                    'paidStartTime' => $timeRange['startTime'],
-                    'paidEndTime' => $timeRange['endTime'],
-                    'status' => 'paid',
-                )
-            ),
+            $count,
             20
         );
 
         $joinLessonDetail = $this->getOrderService()->searchOrders(
-            array(
-                'paidStartTime' => $timeRange['startTime'],
-                'paidEndTime' => $timeRange['endTime'],
-                'status' => 'paid',
-                'targetType' => 'course',
-            ),
+            $detailConditions,
             'latest',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -536,11 +532,16 @@ class AnalysisController extends BaseController
         $joinLessonData = '';
 
         if ($tab == 'trend') {
-            $joinLessonData = $this->getOrderService()->analysisPaidCourseOrderDataByTime(
+            $joinLessonData = $this->getOrderService()->analysisCourseOrderDataByTimeAndStatus(
                 $timeRange['startTime'],
-                $timeRange['endTime']
+                $timeRange['endTime'],
+                'paid'
             );
             $data = $this->fillAnalysisData($condition, $joinLessonData);
+            $count = array_reduce($joinLessonData, function ($count, $joinLessonData) {
+                $count += $joinLessonData['count'];
+                return $count;
+            }, 0);
         }
 
         $courseIds = ArrayToolkit::column($joinLessonDetail, 'targetId');
@@ -563,7 +564,7 @@ class AnalysisController extends BaseController
             'admin/operation-analysis/join-lesson.html.twig',
             array(
                 'JoinLessonDetail' => $joinLessonDetail,
-                'count' => count($joinLessonDetail),
+                'count' => $count,
                 'paginator' => $paginator,
                 'tab' => $tab,
                 'data' => $data,
