@@ -2194,7 +2194,7 @@ admin_org_checkcode:
 
 admin_org_checkname:
     path: /org/checkname
-    defaults: { _controller:AppBundle:Admin/OrgManage:checkName }
+    defaults: { _controller: AppBundle:Admin/OrgManage:checkName }
 
 admin_org_sort:
     path:  /org/sort
