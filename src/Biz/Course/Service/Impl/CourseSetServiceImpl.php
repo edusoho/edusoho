@@ -596,6 +596,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function publishCourseSet($id)
     {
         $courseSet = $this->tryManageCourseSet($id);
+        $publishedCourses = $this->getCourseService()->findPublishedCoursesByCourseSetId($id);
+
+        if (empty($publishedCourses)) {
+            throw $this->createAccessDeniedException('发布课程时请确保课程下至少有一个已发布的教学计划');
+        }
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
         $this->dispatchEvent('course-set.publish', new Event($courseSet));
     }
