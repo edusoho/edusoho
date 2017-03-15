@@ -11,7 +11,7 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
 
     public function searchByGroup($conditions, $orderBys, $start, $limit, $groupBy = '')
     {
-        $builder = $this->_createQueryBuilder($conditions)
+        $builder = $this->createQueryBuilder($conditions)
             ->select('*');
 
         foreach ($orderBys ?: array() as $field => $direction) {
@@ -28,7 +28,7 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
     public function countByGroup($conditions, $groupBy = '')
     {
         $index = empty($groupBy) ? '' : $groupBy.',';
-        $builder = $this->_createQueryBuilder($conditions)
+        $builder = $this->createQueryBuilder($conditions)
             ->select("{$index} COUNT(id) AS count");
 
         if (!empty($groupBy)) {
@@ -50,7 +50,7 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
         return $this->db()->delete($this->table(), array('courseId' => $courseId));
     }
 
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         if (isset($conditions['content'])) {
             $conditions['content'] = "%{$conditions['content']}%";

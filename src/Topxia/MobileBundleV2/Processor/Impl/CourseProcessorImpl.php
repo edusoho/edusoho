@@ -773,7 +773,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $start = (int) $this->getParam('start', 0);
         $limit = (int) $this->getParam('limit', 10);
 
-        $total   = $this->controller->getCourseService()->findUserFavoritedCourseCountNotInClassroom($user['id']);
+        $total = $this->controller->getCourseService()->findUserFavoritedCourseCountNotInClassroom($user['id']);
         $courses = $this->controller->getCourseService()->findUserFavoritedCoursesNotInClassroom($user['id'], $start, $limit);
 
         return array(
@@ -1167,12 +1167,12 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $courses = $this->controller->getCourseService()->findUserLearningCourses($userId, $start, $limit);
 
         $count = $this->controller->getTaskResultService()->countTaskResults(array(
-            'userId' => $userId
+            'userId' => $userId,
         ));
         $learnStatusArray = $this->controller->getTaskResultService()->searchTaskResults(array(
             'userId' => $userId,
         ), array(
-            'finishedTime' => 'ASC'
+            'finishedTime' => 'ASC',
         ), 0, $count);
 
         $tasks = $this->controller->getTaskService()->findTasksByIds(ArrayToolkit::column($learnStatusArray, 'courseTaskId'));

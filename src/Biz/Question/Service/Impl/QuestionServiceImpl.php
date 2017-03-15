@@ -38,7 +38,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $fields['courseId'] = $parentQuestion['courseId'];
             $fields['lessonId'] = $parentQuestion['lessonId'];
         }
-        $fields['target'] = 'course-'.$fields['courseSetId'];
+        $fields['target'] = empty($fields['courseSetId']) ? '' : 'course-'.$fields['courseSetId'];
 
         $question = $this->getQuestionDao()->create($fields);
 

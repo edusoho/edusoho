@@ -3,6 +3,7 @@
 namespace AppBundle\Twig;
 
 use AppBundle\Util\AvatarAlert;
+use Biz\Course\Service\MemberService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -35,7 +36,17 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('course_show_metas', array($this, 'getCourseShowMetas')),
             new \Twig_SimpleFunction('is_buy_course_from_modal', array($this, 'isBuyCourseFromModal')),
             new \Twig_SimpleFunction('buy_course_need_approve', array($this, 'isUserApproval')),
+            new \Twig_SimpleFunction('is_member_expired', array($this, 'isMemberExpired')),
         );
+    }
+
+    public function isMemberExpired($course, $member)
+    {
+        if (empty($course) || empty($member)) {
+            return false;
+        }
+
+        return !$this->getMemberService()->isMemberNonExpired($course, $member);
     }
 
     public function getCourseShowMetas($mode = 'guest')
@@ -90,6 +101,14 @@ class CourseExtension extends \Twig_Extension
     protected function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getMemberService()
+    {
+        return $this->biz->service('Course:MemberService');
     }
 
     public function getName()
