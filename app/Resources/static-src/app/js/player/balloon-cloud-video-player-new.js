@@ -14,7 +14,7 @@ class BalloonCloudVideoPlayer extends Emitter {
     let element = this.options.element;
     // todo delete, to move into the cloud player
     if (!swfobject.hasFlashPlayerVersion('11') && !/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) {
-      $(element).css({ 'background-color': '#313131', 'position': 'relative' });
+      $(element).css({'background-color': '#313131', 'position': 'relative'});
       $(element).html('<p style="color:#fff; position: absolute; top: 49%; left:0; right:0">您的浏览器未装Flash播放器或版本太低，请先安装或升级Flash播放器。请点击<a target="_blank" href="http://www.adobe.com/go/getflashplayer">这里</a>安装最新版本</p>');
       return;
     }
@@ -24,7 +24,7 @@ class BalloonCloudVideoPlayer extends Emitter {
     let extConfig = {};
 
     //字幕
-    if (self.options.textTrack) {
+    if (self.options.textTrack.length) {
       extConfig = Object.assign(extConfig, {
         textTrack: self.options.textTrack
       });
@@ -98,28 +98,28 @@ class BalloonCloudVideoPlayer extends Emitter {
     })
     var player = new VideoPlayerSDK(extConfig);
 
-    player.on('ready', function(e) {
+    player.on('ready', function (e) {
       self.emit("ready", e);
     });
 
-    player.on("timeupdate", function(e) {
+    player.on("timeupdate", function (e) {
       //    player.__events get all the event;
       self.emit("timechange", e);
     });
 
-    player.on("ended", function(e) {
+    player.on("ended", function (e) {
       self.emit("ended", e);
     });
 
-    player.on("playing", function(e) {
+    player.on("playing", function (e) {
       self.emit("playing", e);
     });
 
-    player.on("paused", function(e) {
+    player.on("paused", function (e) {
       self.emit("paused", e);
     });
 
-    player.on("answered", function(e) {
+    player.on("answered", function (e) {
       var data = e.data;
       data['answer'] = data.result.choosed;
       data['type'] = self.convertQuestionType(data.type, 'cloud');
