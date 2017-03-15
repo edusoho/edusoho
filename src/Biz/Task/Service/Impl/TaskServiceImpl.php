@@ -213,6 +213,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         $result = $this->createCourseStrategy($task['courseId'])->deleteTask($task);
+
         $this->dispatchEvent('course.task.delete', new Event($task, array('user' => $this->getCurrentUser())));
 
         return $result;
