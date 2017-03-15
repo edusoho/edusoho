@@ -61,10 +61,8 @@ define(function(require, exports, module) {
     //点击ES直播回放
     onClickReplay: function() {
         $('.js-play-es-live').on('click', function() {
-            replayUrl = $(this).data('url');
+            var replayUrl = $(this).data('url');
             var html = '<iframe src=\'' + replayUrl + '\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
-            $('.open-course-views').hide();
-            $('.open-course-views').show();
             $('.open-course-views').html(html);
         })
     },
