@@ -153,6 +153,7 @@ class AnalysisController extends BaseController
 
         $courseSetConditions = $timeRange;
         $courseSetConditions['parentId'] = 0;
+
         $count = $this->getCourseSetService()->countCourseSets($courseSetConditions);
         $paginator = new Paginator(
             $request,
@@ -361,8 +362,10 @@ class AnalysisController extends BaseController
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
+        $courseSetconditions = $timeRange;
+        $courseSetConditions['parentId'] = 0;
 
-        $count = $this->getCourseSetService()->countCourseSets($timeRange);
+        $count = $this->getCourseSetService()->countCourseSets($courseSetConditions);
 
         $paginator = new Paginator(
             $request,
@@ -371,8 +374,8 @@ class AnalysisController extends BaseController
         );
 
         $courseSetDetail = $this->getCourseSetService()->searchCourseSets(
-            $timeRange,
-            '',
+            $courseSetConditions,
+            'latest',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -430,7 +433,7 @@ class AnalysisController extends BaseController
 
         $taskDetailConditions = array(
             'createdTime_GE' => $timeRange['startTime'],
-            'createdTime_LE' => $timeRange['endTime'],
+            'createdTime_LT' => $timeRange['endTime'],
         );
 
         $paginator = new Paginator(
@@ -445,10 +448,14 @@ class AnalysisController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
+        $count = count($taskDetail);
         if ($tab == 'trend') {
             $taskData = $this->getTaskService()->analysisTaskDataByTime($timeRange['startTime'], $timeRange['endTime']);
             $data = $this->fillAnalysisData($condition, $taskData);
+            $count = array_reduce($taskData, function($count, $data) {
+                $count += $data['count'];
+                return $count;
+            }, 0);
         }
 
         $courseIds = ArrayToolkit::column($taskDetail, 'courseId');
@@ -488,7 +495,7 @@ class AnalysisController extends BaseController
                 'users' => $users,
                 'taskStartDate' => $taskStartDate,
                 'dataInfo' => $dataInfo,
-                'count' => count($taskDetail),
+                'count' => $count,
             )
         );
     }
