@@ -22,7 +22,7 @@
     {% for courseSet in liveCourseSets if courseSet %}
       <div class="media">
         <div class="media-left">
-          {% if ("now"|date("U") >= courseSet.liveStartTime and "now"|date("U") <= courseSet.liveEndTime) %}
+          {% if ("now"|date("U") >= courseSet.liveStartTime|default(0) and "now"|date("U") <= courseSet.liveEndTime|default(0)) %}
             <a href="{{ path('course_task_show', {courseId: courseSet.course.id, id:courseSet.taskId}) }}" title="{{ courseSet.title }}" target="_blank">
           {% else %}
             <a href="{{ path('course_set_show',{id: courseSet.id}) }}" title="{{ courseSet.title }}" target="_blank">
@@ -31,18 +31,18 @@
             {% if courseSet.recommended %}
               <span class="re-live"></span>
             {% endif %}
-            {% if "now"|date("U") >= courseSet.liveStartTime and "now"|date("U") <= courseSet.liveEndTime %}
+            {% if "now"|date("U") >= courseSet.liveStartTime|default(0) and "now"|date("U") <= courseSet.liveEndTime|default(0) %}
               <span class="re-report">{{'正在直播 今天'|trans}} {{ courseSet.liveStartTime|date('H:i')}}</span>
-            {% elseif "now"|date("U") < courseSet.liveStartTime and courseSet.liveStartTime|date('Y-m-d') == "now"|date('Y-m-d') %}
+            {% elseif "now"|date("U") < courseSet.liveStartTime|default(0) and courseSet.liveStartTime|default(0)|date('Y-m-d') == "now"|date('Y-m-d') %}
               <span class="re-report">{{'即将直播'|trans}} {{ courseSet.liveStartTime|date('m-d H:i')}}</span>
-            {% elseif "now"|date("U") < courseSet.liveStartTime and courseSet.liveStartTime|date('Y-m-d') != "now"|date('Y-m-d') %}
-              <span class="re-report">{{'直播预告'|trans}} {{ courseSet.liveStartTime|date('m-d H:i')}}</span>
+            {% elseif "now"|date("U") < courseSet.liveStartTime|default(0) and courseSet.liveStartTime|default(0)|date('Y-m-d') != "now"|date('Y-m-d') %}
+              <span class="re-report">{{'直播预告'|trans}} {{ courseSet.liveStartTime|default(0)|date('m-d H:i')}}</span>
             {% endif %}
           </a>
         </div>
         <div class="media-body">
           <div class="title mbm">
-            {% if ("now"|date("U") >= courseSet.liveStartTime and "now"|date("U") <= courseSet.liveEndTime) %}
+            {% if ("now"|date("U") >= courseSet.liveStartTime|default(0) and "now"|date("U") <= courseSet.liveEndTime|default(0)) %}
               <a href="{{ path('course_task_show', {courseId: courseSet.course.id, id:courseSet.taskId}) }}" class="gray-darker" title="{{ courseSet.title }}" target="_blank">
                 {{ courseSet.title }}
               </a>
@@ -69,7 +69,7 @@
             {% set course = courseSet.course %}
             {% include 'course/widgets/price.html.twig' with {shows:'price'} %}
 
-            {% if ("now"|date("U") >= courseSet.liveStartTime and "now"|date("U") <= courseSet.liveEndTime) %}
+            {% if ("now"|date("U") >= courseSet.liveStartTime|default(0) and "now"|date("U") <= courseSet.liveEndTime|default(0)) %}
               <a href="{{ path('course_task_show', {courseId: courseSet.course.id, id:courseSet.taskId}) }}" class="btn btn-warning" target="_blank">
                 {{'进入直播'|trans}}
               </a>

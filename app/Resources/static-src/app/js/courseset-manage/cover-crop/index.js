@@ -19,8 +19,8 @@ class CoverCrop {
       });
     };
 
-    $("#upload-picture-btn").click(function(e) {
-      e.stopPropagation();
+    $("#upload-picture-btn").click(function(event) {
+      event.stopPropagation();
       $(event.currentTarget).button('loading');
       imageCrop.crop({
         imgs: {

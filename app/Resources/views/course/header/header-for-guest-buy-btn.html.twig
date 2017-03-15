@@ -8,7 +8,7 @@
   {% if not slot('course.buy-btn.extension', {'course': course})|trim is empty %}
     {{ slot('course.buy-btn.extension', {'course': course}) }}
   {% else %}
-    {% if course.status != 'published' %}
+    {% if course.status != 'published' or courseSet.status != 'published' %}
       课程还未发布，不允许加入和购买
     {% else %}
       {% if course.buyExpiryTime and course.buyExpiryTime < 'now'|date('U') %}
