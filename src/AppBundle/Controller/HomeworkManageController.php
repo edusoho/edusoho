@@ -150,6 +150,7 @@ class HomeworkManageController extends BaseController
         }
 
         $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseId);
+
         return ArrayToolkit::index($courseTasks, 'id');
     }
 

@@ -203,7 +203,6 @@ class LiveCourseSetController extends CourseBaseController
         $vipCategoryId = $request->query->get('vipCategoryId', '');
         $currentPage = $request->query->get('page', 1);
 
-
         $vipCourseSetIds = $this->_findVipCourseSetIds($vipCategoryId);
         $futureLiveCourseSets = $this->_findFutureLiveCourseSets($vipCourseSetIds, $categoryId);
 
@@ -356,7 +355,6 @@ class LiveCourseSetController extends CourseBaseController
 
         return $replayLiveCourseSets;
     }
-
 
     private function _findPublishedLiveCourseSetIds()
     {
