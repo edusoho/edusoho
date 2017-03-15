@@ -364,7 +364,7 @@ class TaskController extends BaseController
      *
      * @param \Exception $exception
      * @param Request    $request
-     * @param  $taskId
+     * @param $taskId
      *
      * @throws \Exception
      *
