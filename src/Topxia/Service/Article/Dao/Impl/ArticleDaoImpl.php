@@ -140,10 +140,9 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
             throw \InvalidArgumentException(sprintf($this->getKernel()->trans('%field%字段不允许增减，只有%fields%才被允许增减', array('%field%' =>$field, '%fields%' => implode(',', $fields) ))));
         }
 
-        $currentTime = time();
-        $sql         = "UPDATE {$this->table} SET {$field} = {$field} + ?, updatedTime = {$currentTime} WHERE id = ? LIMIT 1";
+        $sql         = "UPDATE {$this->table} SET {$field} = {$field} + ?, updatedTime = ? WHERE id = ? LIMIT 1";
 
-        return $this->getConnection()->executeQuery($sql, array($diff, $id));
+        return $this->getConnection()->executeQuery($sql, array($diff, time(), $id));
     }
 
     public function updateArticle($id, $article)

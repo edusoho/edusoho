@@ -35,8 +35,9 @@ class TagOwnerDaoImpl extends BaseDao implements TagOwnerDao
 
         $marks = str_repeat('?,', count($ownerIds) - 1).'?';
 
-        $sql = "SELECT * FROM {$this->table} WHERE ownerType = '{$ownerType}' and ownerId IN ({$marks});";
-        return $this->getConnection()->fetchAll($sql, $ownerIds) ?: array();
+        $sql = "SELECT * FROM {$this->table} WHERE ownerType = ? and ownerId IN ({$marks});";
+        
+        return $this->getConnection()->fetchAll($sql, array_merge(array($ownerType), $ownerIds)) ? : array();
     }
 
     public function findByTagIdsAndOwnerType($tagIds, $ownerType)
@@ -47,9 +48,9 @@ class TagOwnerDaoImpl extends BaseDao implements TagOwnerDao
 
         $marks = str_repeat('?,', count($tagIds) - 1).'?';
 
-        $sql   = "SELECT * FROM {$this->table} WHERE tagId IN ({$marks}) AND ownerType = '{$ownerType}';";
+        $sql   = "SELECT * FROM {$this->table} WHERE tagId IN ({$marks}) AND ownerType = ?;";
 
-        return $this->getConnection()->fetchAll($sql, $tagIds);
+        return $this->getConnection()->fetchAll($sql, array_merge($tagIds, array($ownerType)));
     }
 
     public function add($fields)

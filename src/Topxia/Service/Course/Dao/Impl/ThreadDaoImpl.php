@@ -22,6 +22,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
     public function findLatestThreadsByType($type, $start, $limit)
     {
+        $this->filterStartLimit($start,$limit);
         $that = $this;
 
         return $this->fetchCached("type:{$type}:start:{$start}:limit:{$limit}", $type, $start, $limit, function ($type, $start, $limit) use ($that) {
@@ -33,6 +34,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
     public function findEliteThreadsByType($type, $status, $start, $limit)
     {
+        $this->filterStartLimit($start,$limit);
         $that = $this;
 
         return $this->fetchCached("type:{$type}:status:{$status}:start:{$start}:limit:{$limit}", $type, $status, $start, $limit, function ($type, $status, $start, $limit) use ($that) {
@@ -56,6 +58,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
     public function findThreadsByCourseId($courseId, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
+        $this->checkOrderBy($orderBy);
         // @todo: fixed me.
         $orderBy = implode(' ', $orderBy);
         $sql     = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
@@ -66,6 +69,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
     public function findThreadsByCourseIdAndType($courseId, $type, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
+        $this->checkOrderBy($orderBy);
         // @todo: fixed me.
         $orderBy = implode(' ', $orderBy);
         $sql     = "SELECT * FROM {$this->table} WHERE courseId = ? AND type = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";

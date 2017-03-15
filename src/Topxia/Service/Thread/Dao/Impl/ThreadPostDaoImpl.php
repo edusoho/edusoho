@@ -20,10 +20,10 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
         return $post ? $this->createSerializer()->unserialize($post, $this->serializeFields) : null;
     }
 
-    //@todo: sql.
     public function findPostsByThreadId($threadId, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
+        $this->checkOrderBy($orderBy);
         $orderBy = join(' ', $orderBy);
         $sql     = "SELECT * FROM {$this->table} WHERE threadId = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
         $posts   = $this->getConnection()->fetchAll($sql, array($threadId)) ?: array();

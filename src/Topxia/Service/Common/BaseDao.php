@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\Service\Common;
 
+use Topxia\Service\Common\FieldChecker;
+
 abstract class BaseDao
 {
     protected $connection;
@@ -253,11 +255,12 @@ abstract class BaseDao
         return $builder;
     }
 
-    protected function validateOrderBy(array $orderBy, $allowedOrderByFields)
+    protected function validateOrderBy(array $orderBy, $allowedOrderByFields = array())
     {
         $keys = array_keys($orderBy);
 
         foreach ($orderBy as $field => $order) {
+            FieldChecker::checkFieldName($field);
             if (!in_array($field, $allowedOrderByFields)) {
                 throw new \RuntimeException($this->getKernel()->trans('不允许对%field%字段进行排序', array('%field%' => $field)), 1);
             }
@@ -273,18 +276,29 @@ abstract class BaseDao
         return ServiceKernel::instance();
     }
 
-    protected function checkOrderBy(array $orderBy, array $allowedOrderByFields)
+    protected function checkOrderBy(array $orderBy, array $allowedOrderByFields = array())
     {
-        if (empty($orderBy[0]) || empty($orderBy[1])) {
+        if (empty($orderBy)) {
             throw new \RuntimeException($this->getKernel()->trans('orderBy参数不正确'));
         }
 
-        if (!in_array($orderBy[0], $allowedOrderByFields)) {
-            throw new \RuntimeException($this->getKernel()->trans('不允许对%orderBy%字段进行排序', array('%orderBy%' => $orderBy[0])), 1);
-        }
+        for ($i = 0; $i < count($orderBy); $i = $i + 2) {
+            if (empty($orderBy[$i]) || empty($orderBy[$i + 1])) {
+                throw new \RuntimeException($this->getKernel()->trans('orderBy参数不正确'));
+            }
 
-        if (!in_array(strtoupper($orderBy[1]), array('ASC', 'DESC'))) {
-            throw new \RuntimeException($this->getKernel()->trans('orderBy排序方式错误'), 1);
+            $field = $orderBy[$i];
+            $seq = $orderBy[$i + 1];
+
+            FieldChecker::checkFieldName($field);
+
+            if (!empty($allowedOrderByFields)  && !in_array($field, $allowedOrderByFields)) {
+                throw new \RuntimeException($this->getKernel()->trans('不允许对%orderBy%字段进行排序', array('%orderBy%' => $field)), 1);
+            }
+
+            if (!in_array(strtoupper($seq), array('ASC', 'DESC'))) {
+                throw new \RuntimeException($this->getKernel()->trans('orderBy排序方式错误'), 1);
+            }
         }
 
         return $orderBy;

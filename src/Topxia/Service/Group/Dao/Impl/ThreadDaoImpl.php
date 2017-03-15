@@ -59,9 +59,8 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
             throw \InvalidArgumentException(sprintf($this->getKernel()->trans('%s字段不允许增减，只有%s才被允许增减'), $field, implode(',', $fields)));
         }
 
-        $currentTime = time();
-        $sql         = "UPDATE {$this->table} SET {$field} = {$field} + ?, updatedTime = {$currentTime} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->executeQuery($sql, array($diff, $id));
+        $sql         = "UPDATE {$this->table} SET {$field} = {$field} + ?, updatedTime = ? WHERE id = ? LIMIT 1";
+        return $this->getConnection()->executeQuery($sql, array($diff, time(), $id));
     }
 
     public function updateThread($id, $fields)

@@ -1,27 +1,27 @@
-mapi_course_pay:
-    path:  /courses/{courseId}/pay
-    defaults: { _controller: TopxiaMobileBundle:MobileOrder:payCourse }
+# mapi_course_pay:
+#     path:  /courses/{courseId}/pay
+#     defaults: { _controller: TopxiaMobileBundle:MobileOrder:payCourse }
 
-mapi_course_refund:
-    path:  /courses/{courseId}/refund
-    defaults: { _controller: TopxiaMobileBundle:MobileOrder:refundCourse }
+# mapi_course_refund:
+#     path:  /courses/{courseId}/refund
+#     defaults: { _controller: TopxiaMobileBundle:MobileOrder:refundCourse }
 
-mapi_order_submit_pay_request:
-    path:  /order/{id}/submit_pay_request
-    defaults: { _controller: TopxiaMobileBundle:MobileOrder:submitPayRequest }
+# mapi_order_submit_pay_request:
+#     path:  /order/{id}/submit_pay_request
+#     defaults: { _controller: TopxiaMobileBundle:MobileOrder:submitPayRequest }
 
 
-topxia_mobile_alipay_notify:
-    path:  /{name}/alipay_notify
-    defaults: { _controller: TopxiaMobileBundle:MobileAlipay:payNotify }
+# topxia_mobile_alipay_notify:
+#     path:  /{name}/alipay_notify
+#     defaults: { _controller: TopxiaMobileBundle:MobileAlipay:payNotify }
 
-topxia_mobile_alipay_pay:
-    path:  /alipay_pay
-    defaults: { _controller: TopxiaMobileBundle:MobileAlipay:pay }
+# topxia_mobile_alipay_pay:
+#     path:  /alipay_pay
+#     defaults: { _controller: TopxiaMobileBundle:MobileAlipay:pay }
 
-topxia_mobile_alipay_callback:
-    path:  /{name}/alipay_callback
-    defaults: { _controller: TopxiaMobileBundle:MobileAlipay:payCallBack }
+# topxia_mobile_alipay_callback:
+#     path:  /{name}/alipay_callback
+#     defaults: { _controller: TopxiaMobileBundle:MobileAlipay:payCallBack }
 
 topxia_mobile_qrcode:
     path:  /qrcode
