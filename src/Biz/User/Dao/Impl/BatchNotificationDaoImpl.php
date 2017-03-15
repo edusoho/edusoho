@@ -48,7 +48,7 @@ class BatchNotificationDaoImpl extends GeneralDaoImpl implements BatchNotificati
                 'id = :id',
                 'published = :published',
                 'createdTime = :createdTime',
-                'sendedTime <= :sendedTime_LE'
+                'sendedTime <= :sendedTime_LE',
             ),
             'orderbys' => array('createdTime'),
         );

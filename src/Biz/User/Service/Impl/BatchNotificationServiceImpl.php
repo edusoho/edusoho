@@ -70,7 +70,7 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
     {
         $conditions = array(
             'userId' => $userId,
-            'type' => 'global'
+            'type' => 'global',
         );
 
         $notifications = $this->getNotificationService()->searchNotifications(
@@ -87,7 +87,7 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
                 'excludeIds' => $batchIds,
                 'type' => 'global',
                 'published' => 1,
-                'sendedTime_LE' => time()
+                'sendedTime_LE' => time(),
             ),
             array(),
             0,
