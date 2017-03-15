@@ -192,9 +192,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $classroom = $this->fillOrgId($classroom);
+        $userId = $this->getCurrentUser()->getId();
+        $classroom['creator'] = $userId;
+        $classroom['teacherIds'] = array($userId);
 
         $classroom = $this->getClassroomDao()->create($classroom);
+        $this->becomeTeacher($classroom['id'], $userId);
+
         $this->dispatchEvent('classroom.create', $classroom);
+
         $this->getLogService()->info('classroom', 'create', "创建班级《{$classroom['title']}》(#{$classroom['id']})");
 
         return $classroom;
@@ -376,10 +382,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      */
     public function updateClassroomTeachers($id)
     {
+        $classroom = $this->getClassroom($id);
         $courses = $this->findActiveCoursesByClassroomId($id);
 
         $oldTeacherIds = $this->findTeachers($id);
-        $newTeacherIds = array();
+        $newTeacherIds = array($classroom['creator']);
 
         foreach ($courses as $key => $value) {
             $teachers = $this->getCourseMemberService()->findCourseTeachers($value['id']);
