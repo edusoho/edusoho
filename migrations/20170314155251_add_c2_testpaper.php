@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class AddC2Testpaper extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -101,7 +101,7 @@ class AddC2Testpaper extends Migration
 
         //以下仅供cours2.0开发使用
         if ($this->isFieldExist('testpaper', 'courseSetId')) {
-            $biz['db']->exec("
+            $biz['db']->exec('
                 INSERT INTO c2_testpaper (
                     id,
                     name,
@@ -145,9 +145,9 @@ class AddC2Testpaper extends Migration
                     type,
                     courseSetId FROM testpaper
                     WHERE id NOT IN (SELECT `id` FROM `c2_testpaper`);
-            ");
+            ');
 
-            $biz['db']->exec("
+            $biz['db']->exec('
                 INSERT INTO c2_testpaper_item (
                     id,
                     testId,
@@ -169,9 +169,9 @@ class AddC2Testpaper extends Migration
                     missScore,
                     copyId FROM testpaper_item
                 WHERE id NOT IN (SELECT `id` FROM `c2_testpaper_item`)
-            ");
+            ');
 
-            $biz['db']->exec("
+            $biz['db']->exec('
                 INSERT INTO c2_testpaper_result(
                     id,
                     paperName,
@@ -223,9 +223,9 @@ class AddC2Testpaper extends Migration
                     type,
                     courseSetId
                 FROM testpaper_result WHERE id NOT IN (SELECT id FROM c2_testpaper_result)
-            ");
+            ');
 
-            $biz['db']->exec("
+            $biz['db']->exec('
                 INSERT INTO c2_testpaper_item_result (
                     id,
                     itemId,
@@ -251,12 +251,12 @@ class AddC2Testpaper extends Migration
                     teacherSay,
                     pId
                 FROM testpaper_item_result WHERE id NOT IN (SELECT id FROM c2_testpaper_item_result)
-            ");
+            ');
         }
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
@@ -272,6 +272,7 @@ class AddC2Testpaper extends Migration
         $biz = $this->getContainer();
         $sql = "DESCRIBE `{$table}` `{$filedName}`;";
         $result = $biz['db']->fetchAssoc($sql);
+
         return empty($result) ? false : true;
     }
 }
