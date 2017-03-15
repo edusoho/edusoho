@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class ClassroomAddCreator extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -13,17 +13,16 @@ class ClassroomAddCreator extends Migration
         $biz['db']->exec("
             ALTER TABLE classroom ADD COLUMN `creator` int(10) NOT NULL DEFAULT 0 COMMENT '班级创建者';
         ");
-
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("
+        $biz['db']->exec('
             ALTER TABLE classroom DROP COLUMN `creator`;
-        ");
+        ');
     }
 }
