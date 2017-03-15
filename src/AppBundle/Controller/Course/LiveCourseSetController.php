@@ -264,7 +264,7 @@ class LiveCourseSetController extends CourseBaseController
                 1
             );
 
-            if(empty($tasks)){
+            if (empty($tasks)) {
                 continue;
             }
 
