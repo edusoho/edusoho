@@ -2,22 +2,27 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Activity\Service\ActivityService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\MemberService;
-use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\TokenService;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException as ServiceAccessDeniedException;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException as ServiceAccessDeniedException;
 
 class TaskController extends BaseController
 {
     public function showAction(Request $request, $courseId, $id)
     {
         $preview = $request->query->get('preview');
+
+        $user = $this->getUser();
+        if (!$user->isLogin()) {
+            return $this->redirect($this->generateUrl('course_show', array('id' => $courseId)));
+        }
 
         try {
             $task = $this->tryLearnTask($courseId, $id, (bool) $preview);
@@ -355,7 +360,7 @@ class TaskController extends BaseController
      *
      * @param \Exception $exception
      * @param Request    $request
-     * @param $taskId
+     * @param  $taskId
      *
      * @throws \Exception
      *
