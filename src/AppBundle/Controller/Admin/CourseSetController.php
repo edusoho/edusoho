@@ -162,7 +162,7 @@ class CourseSetController extends BaseController
 
         $courseSet = $this->getCourseSetService()->getCourseSet($id);
         $subCourses = $this->getCourseSetService()->findCourseSetsByParentIdAndLocked($id, 1);
-        if (!empty($subCourses) || ($courseSet['parentId'] && $courseSet['locked']==1)) {
+        if (!empty($subCourses) || ($courseSet['parentId'] && $courseSet['locked'] == 1)) {
             // 1.当课程是普通课程时，它的副本班级课程存在于班级中，要先删除副本，才能删除此课程。
             // 2.如果是班级课程，要先从班级中移除。
             return $this->createJsonResponse(array('code' => 2, 'message' => '请先删除班级课程'));
@@ -630,6 +630,7 @@ class CourseSetController extends BaseController
             0,
             PHP_INT_MAX
         );
+
         return $levels;
     }
 
