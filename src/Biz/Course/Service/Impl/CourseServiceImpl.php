@@ -298,7 +298,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
-
         $requireFields = array('isFree', 'buyable');
         $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
         if ($courseSet['type'] == 'normal') {
@@ -1708,6 +1707,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     /**
      * @param $id
      * @param $fields
+     *
      * @return mixed
      */
     private function processFields($id, $fields, $courseSet)
