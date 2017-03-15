@@ -31,7 +31,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
     {
         parent::__construct($environment, $debug);
         date_default_timezone_set('Asia/Shanghai');
-        $this->extensionManger            = ExtensionManager::init($this);
+        $this->extensionManger = ExtensionManager::init($this);
         $this->pluginConfigurationManager = new PluginConfigurationManager($this->getRootDir());
     }
 
@@ -79,7 +79,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),
             new OAuth2\ServerBundle\OAuth2ServerBundle(),
             new Codeages\PluginBundle\CodeagesPluginBundle(),
-            new AppBundle\AppBundle()
+            new AppBundle\AppBundle(),
         );
 
         $bundles = array_merge($bundles, $this->pluginConfigurationManager->getInstalledPluginBundles());
@@ -115,15 +115,16 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
     public function setRequest(Request $request)
     {
         $this->request = $request;
+
         return $this;
     }
 
     protected function initializeBiz()
     {
-        $biz                            = $this->getContainer()->get('biz');
+        $biz = $this->getContainer()->get('biz');
         $biz['migration.directories'][] = dirname(__DIR__).'/migrations';
         $biz['env'] = array(
-            'base_url' => $this->request->getSchemeAndHttpHost() . $this->request->getBasePath()
+            'base_url' => $this->request->getSchemeAndHttpHost().$this->request->getBasePath(),
         );
         $biz->register(new DoctrineServiceProvider());
         $biz->register(new MonologServiceProvider());
@@ -142,28 +143,33 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
     {
         if (!$this->isServiceKernelInit) {
             $container = $this->getContainer();
-            $biz       = $container->get('biz');
+            $biz = $container->get('biz');
 
             $serviceKernel = ServiceKernel::create($this->getEnvironment(), $this->isDebug());
 
             $currentUser = new CurrentUser();
-            $currentUser->fromArray(array(
-                'id'        => 0,
-                'nickname'  => '游客',
-                'email'  => 'test@qq.com',
-                'currentIp' => $this->request->getClientIp() ? : '127.0.0.1',
-                'roles'     => array()
-            ));
+            $currentUser->fromArray(
+                array(
+                    'id' => 0,
+                    'nickname' => '游客',
+                    'email' => 'test.edusoho.com',
+                    'currentIp' => $this->request->getClientIp() ?: '127.0.0.1',
+                    'roles' => array(),
+                )
+            );
 
             $biz['user'] = $currentUser;
             $serviceKernel
                 ->setBiz($biz)
                 ->setCurrentUser($currentUser)
-                ->setEnvVariable(array(
-                    'host'          => $this->request->getHttpHost(),
-                    'schemeAndHost' => $this->request->getSchemeAndHttpHost(),
-                    'basePath'      => $this->request->getBasePath(),
-                    'baseUrl'       => $this->request->getSchemeAndHttpHost().$this->request->getBasePath()))
+                ->setEnvVariable(
+                    array(
+                        'host' => $this->request->getHttpHost(),
+                        'schemeAndHost' => $this->request->getSchemeAndHttpHost(),
+                        'basePath' => $this->request->getBasePath(),
+                        'baseUrl' => $this->request->getSchemeAndHttpHost().$this->request->getBasePath(),
+                    )
+                )
                 ->setTranslatorEnabled(true)
                 ->setTranslator($container->get('translator'))
                 ->setParameterBag($container->getParameterBag())
@@ -177,6 +183,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
     {
         $theme = $this->pluginConfigurationManager->getActiveThemeName();
         $theme = empty($theme) ? '' : ucfirst(str_replace('-', '_', $theme));
+
         return $this->rootDir.'/cache/'.$this->environment.'/'.$theme;
     }
 }

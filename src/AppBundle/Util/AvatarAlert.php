@@ -13,7 +13,6 @@ class AvatarAlert
             return false;
         }
 
-
         if ($setting['avatar_alert'] == 'open' && $user['mediumAvatar'] == '') {
             return true;
         }
