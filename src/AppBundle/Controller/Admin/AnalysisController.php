@@ -452,8 +452,9 @@ class AnalysisController extends BaseController
         if ($tab == 'trend') {
             $taskData = $this->getTaskService()->analysisTaskDataByTime($timeRange['startTime'], $timeRange['endTime']);
             $data = $this->fillAnalysisData($condition, $taskData);
-            $count = array_reduce($taskData, function($count, $data) {
+            $count = array_reduce($taskData, function ($count, $data) {
                 $count += $data['count'];
+
                 return $count;
             }, 0);
         }
