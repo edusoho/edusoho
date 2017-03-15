@@ -151,6 +151,9 @@ class ManageController extends BaseController
             throw $this->createResourceNotFoundException('testpaperResult', $resultId);
         }
         //还需要是否是教师的权限判断
+        if (!$this->getTestpaperService()->canLookTestpaper($result['id'])) {
+            return $this->createMessageResponse('error', 'access denied');
+        }
 
         $testpaper = $this->getTestpaperService()->getTestpaper($result['testId']);
         if (!$testpaper) {

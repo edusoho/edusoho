@@ -2,6 +2,7 @@
 
 namespace Biz\Testpaper\Event;
 
+use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -54,6 +55,14 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
 
         $biz = $this->getBiz();
         $user = $biz['user'];
+
+        $itemResults = $this->getTestpaperService()->findItemResultsByResultId($paperResult['id']);
+        $itemResults = ArrayToolkit::group($itemResults, 'status');
+
+        if (!empty($itemResults['right'])) {
+            $rightItemCount = count($itemResults['right']);
+            $this->getTestpaperService()->updateTestpaperResult($paperResult['id'], array('rightItemCount' => $rightItemCount));
+        }
 
         if (!in_array($paperResult['type'], array('testpaper', 'homework'))) {
             return;

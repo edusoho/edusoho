@@ -21,7 +21,7 @@ class TaskController extends BaseController
 
         $user = $this->getUser();
         if (!$user->isLogin()) {
-            return $this->redirect($this->generateUrl('course_show', array('id' => $courseId)));
+            return $this->redirect($this->generateUrl('login'));
         }
 
         try {
