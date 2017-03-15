@@ -53,7 +53,7 @@ class OpenCourseController extends BaseController
             $conditions['courseIds'] = array(-1);
             $members = $this->getOpenCourseService()->searchMembers(
                 array('userId' => $user['id'], 'role' => 'teacher'),
-                array('createdTime', 'ASC'),
+                array('createdTime' => 'ASC'),
                 0,
                 999
             );
