@@ -77,8 +77,17 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $this->filterStartLimit($start, $limit);
         $this->checkOrderBy($orderBy);
 
+        $orderSql = '';
+        for ($i = 0; $i < count($orderBy); $i = $i + 2) {
+            $orderSql = "{$orderBy[$i]} {$orderBy[$i + 1]}";
+        }
+
+        if (!empty($orderSql)) {
+            $orderSql = "ORDER BY {$orderSql}";
+        }
+
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
-        $sql = "SELECT * FROM {$this->getTable()} WHERE parentId = 0 AND status = '{$status}' AND id in ({$marks})ORDER BY {$orderBy[0]} {$orderBy[1]} LIMIT {$start}, {$limit}";
+        $sql = "SELECT * FROM {$this->getTable()} WHERE parentId = 0 AND status = '{$status}' AND id in ({$marks}) {$orderSql} LIMIT {$start}, {$limit}";
 
         return $this->getConnection()->fetchAll($sql, $courseIds);
     }
