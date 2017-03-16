@@ -128,6 +128,7 @@ class CourseController extends CourseBaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $courses = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
 
+        $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($courseSet['categoryId']);
         $user = $this->getCurrentUser();
         $member = $user->isLogin() ? $this->getMemberService()->getCourseMember(
             $course['id'],
@@ -159,6 +160,7 @@ class CourseController extends CourseBaseController
                 'previewTask' => empty($previewTasks) ? null : array_shift($previewTasks),
                 'previewAs' => $previewAs,
                 'marketingPage' => 1,
+                'breadcrumbs' => $breadcrumbs,
             )
         );
     }
@@ -480,6 +482,14 @@ class CourseController extends CourseBaseController
         $this->getMemberService()->removeStudent($course['id'], $user['id']);
 
         return $this->createJsonResponse(true);
+    }
+
+    /**
+     * @return CategoryService
+     */
+    protected function getCategoryService()
+    {
+        return $this->createService('Taxonomy:CategoryService');
     }
 
     /**
