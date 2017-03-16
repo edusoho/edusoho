@@ -2,7 +2,6 @@
 
 namespace Biz\Question\Type;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\UnexpectedValueException;
 
 class Fill extends BaseQuestion implements TypeInterface

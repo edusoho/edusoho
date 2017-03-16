@@ -33,7 +33,7 @@ class CacheDaoImpl extends GeneralDaoImpl implements CacheDao
     public function deleteByName($name)
     {
         return $this->db()->delete($this->table, array(
-            'name' => $name
+            'name' => $name,
         ));
     }
 

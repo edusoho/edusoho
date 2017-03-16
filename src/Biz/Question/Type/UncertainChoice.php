@@ -2,8 +2,6 @@
 
 namespace Biz\Question\Type;
 
-use AppBundle\Common\ArrayToolkit;
-
 class UncertainChoice extends BaseQuestion implements TypeInterface
 {
     public function create($fields)

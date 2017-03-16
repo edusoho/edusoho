@@ -2,8 +2,6 @@
 
 namespace Biz\Question\Type;
 
-use AppBundle\Common\ArrayToolkit;
-
 class SingleChoice extends BaseQuestion implements TypeInterface
 {
     public function create($fields)
