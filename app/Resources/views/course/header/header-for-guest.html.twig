@@ -65,7 +65,7 @@
             <span class="gray-dark">
               {% if course.expiryDays %}
                 {{ course.expiryDays }}天
-              {% else %}不限时间{% endif %}
+              {% endif %}
             </span>
           {% elseif course.expiryMode == 'date' %}
             <span class="gray-dark mrl">周期开班</span>
