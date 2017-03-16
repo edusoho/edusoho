@@ -7,7 +7,13 @@
     <li>
       <a href="{{ path('homepage') }}">首页</a>
     </li>
-    <li class="active">{{ courseSet.title }} </li>
+    
+    {% if page_type|default('guest') == 'member' %}
+      <li><a href="{{ path('course_set_show',{id:courseSet.id}) }}">{{ courseSet.title }} </a></li>
+      <li class="active">{{ course.title }} </li>
+    {% else %}
+      <li class="active">{{ courseSet.title }} </li>
+    {% endif %}
   </ol>
 
   {% block course_header_info %}{% endblock %}

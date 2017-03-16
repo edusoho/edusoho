@@ -74,3 +74,4 @@ chunk-manifest.json
 .chokidar-watch-add.log
 project.sublime-workspace
 .php_cs.cache
+deployment-config.json

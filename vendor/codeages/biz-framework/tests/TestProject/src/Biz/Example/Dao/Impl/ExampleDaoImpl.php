@@ -23,7 +23,7 @@ class ExampleDaoImpl extends GeneralDaoImpl implements ExampleDao
     {
         return array(
             'timestamps' => array('created_time', 'updated_time'),
-            'serializes' => array('ids1' => 'json', 'ids2' => 'delimiter'),
+            'serializes' => array('ids1' => 'json', 'ids2' => 'delimiter', 'null_value' => 'json'),
             'orderbys' => array('name', 'created_time'),
             'conditions' => array(
                 'name = :name',

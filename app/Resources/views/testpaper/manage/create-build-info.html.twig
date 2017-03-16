@@ -41,13 +41,13 @@
         {% endfor %}
       </select>
     </div>#}
-    <select class="form-control width-150" name="ranges[courseId]" data-url="{{ path('course_set_manage_show_tasks',{courseSetId:courseSet.id})}}">
+    <select class="form-control width-150" name="ranges[courseId]" data-url="{{ path('course_set_manage_show_tasks',{courseSetId:courseSet.id})}}" data-check-num-url="{{ path('course_set_manage_question_check_num',{courseSetId:courseSet.id}) }}">
       <option value="0" {% if not range.courseId|default(0) %}selected{% endif %}>{{'按课程'|trans}}</option>
       {% for course in courses if course %}
         <option value="{{ course.id }}" {% if range.courseId|default(0) == course.id %}selected{% endif %}>{{ course.title }}</option>
       {% endfor %}
     </select>
-    <select class="form-control width-150" {% if not showTasks|default(null) %}style="display:none;"{% endif %} name="ranges[lessonId]">
+    <select class="form-control width-150" {% if not showTasks|default(null) %}style="display:none;"{% endif %} name="ranges[lessonId]" data-check-num-url="{{ path('course_set_manage_question_check_num',{courseSetId:courseSet.id}) }}">
       <option value="0" {% if not range.lessonId|default(0) %}selected{% endif %}>{{'请选择'|trans}}</option>
       {% for task in showTasks|default([]) if task %}
         <option value="{{ task.id }}" {% if range.lessonId|default(0) == task.id %}selected{% endif %}>{{ task.title }}</option>
