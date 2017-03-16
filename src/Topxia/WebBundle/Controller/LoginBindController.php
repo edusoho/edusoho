@@ -24,7 +24,17 @@ class LoginBindController extends BaseController
 
         $inviteCode  = $request->query->get('inviteCode', null);
         $client      = $this->createOAuthClient($type);
-        $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
+
+        $token = $this->getTokenService()->makeToken('login.bind', array(
+            'data'     => array(
+                'type' => $type,
+                'sessionId' => $request->getSession()->getId(),
+            ),
+            'times'    => 1,
+            'duration' => 3600
+        ));
+
+        $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type, 'token' => $token['token']), true);
 
         if ($inviteCode) {
             $callbackUrl = $callbackUrl.'?inviteCode='.$inviteCode;
@@ -44,6 +54,8 @@ class LoginBindController extends BaseController
     {
         $code        = $request->query->get('code');
         $inviteCode  = $request->query->get('inviteCode');
+
+        $this->validateToken($request, $type);
 
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
         $token       = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
@@ -72,6 +84,24 @@ class LoginBindController extends BaseController
             }
         } else {
             return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type, 'inviteCode' => $inviteCode)));
+        }
+    }
+
+    protected function validateToken($request, $type)
+    {
+        $token        = $request->query->get('token', '');
+        if (empty($token)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $token    = $this->getTokenService()->verifyToken('login.bind', $token);
+        $tokenData = $token['data'];
+        if ($tokenData['type'] != $type) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if ($tokenData['sessionId'] != $request->getSession()->getId()) {
+            throw $this->createAccessDeniedException();
         }
     }
 
@@ -452,6 +482,11 @@ class LoginBindController extends BaseController
         $client = OAuthClientFactory::create($type, $config);
 
         return $client;
+    }
+
+    protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
     }
 
     protected function getSensitiveService()

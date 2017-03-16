@@ -18,11 +18,11 @@ interface QuestionDao
 
     public function findQuestionsByTypesAndExcludeUnvalidatedMaterial(array $types, $start, $limit);
     
-    public function findQuestionsByTypesAndSourceAndExcludeUnvalidatedMaterial(array $types, $start, $limit, $questionSource, $courseId, $lessonId);
+    public function findQuestionsByTypesAndSourceAndExcludeUnvalidatedMaterial($types, $start, $limit, $questionSource, $courseId, $lessonId);
 
     public function findQuestionsCountbyTypes(array $types);
 
-    public function findQuestionsCountbyTypesAndSource(array $types,$questionSource,$courseId,$lessonId);
+    public function findQuestionsCountbyTypesAndSource($types,$questionSource,$courseId,$lessonId);
 
     public function searchQuestions($conditions, $sort, $start, $limit);
 

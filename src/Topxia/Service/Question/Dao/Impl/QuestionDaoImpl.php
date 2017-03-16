@@ -94,13 +94,12 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
-    public function findQuestionsByTypesAndSourceAndExcludeUnvalidatedMaterial(array $types, $start, $limit, $questionSource, $courseId, $lessonId)
+    //todo: fix
+    public function findQuestionsByTypesAndSourceAndExcludeUnvalidatedMaterial($types, $start, $limit, $questionSource, $courseId, $lessonId)
     {
         if (empty($types)) {
             return array();
         }
-
-        $marks     = str_repeat('?,', count($types) - 1).'?';
 
         if ($questionSource == 'course') {
             $target = 'course-'.$courseId;
@@ -110,9 +109,9 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
 
         $this->filterStartLimit($start, $limit);
 
-        $sql = "SELECT * FROM {$this->table} WHERE (`parentId` = 0) and  (`type` in ($marks)) and ( not( `type` = 'material' and `subCount` = 0 )) and (`target` like ? OR `target` = ?) LIMIT {$start},{$limit} ";
+        $sql = "SELECT * FROM {$this->table} WHERE (`parentId` = 0) and  (`type` in ($types)) and ( not( `type` = 'material' and `subCount` = 0 )) and (`target` like ? OR `target` = ?) LIMIT {$start},{$limit} ";
 
-        $questions = $this->getConnection()->fetchAll($sql, array_merge($types, array("{$target}/%", "{$target}")));
+        $questions = $this->getConnection()->fetchAll($sql, array("{$target}/%", "{$target}"));
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
@@ -129,22 +128,18 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->getConnection()->fetchColumn($sql, $types);
     }
 
-    public function findQuestionsCountbyTypesAndSource(array $types, $questionSource, $courseId, $lessonId)
-    {
-        if (empty($types)) {
-            return array();
-        }
 
+    //todo: fix
+    public function findQuestionsCountbyTypesAndSource($types, $questionSource, $courseId, $lessonId)
+    {
         if ($questionSource == 'course') {
             $target = 'course-'.$courseId;
         } elseif ($questionSource == 'lesson') {
             $target = 'course-'.$courseId.'/lesson-'.$lessonId;
         }
 
-        $marks     = str_repeat('?,', count($types) - 1).'?';
-
-        $sql = "SELECT count(*) FROM {$this->table} WHERE  (`parentId` = 0) and (`type` in ({$marks})) and (`target` like ? OR `target` = ?)";
-        return $this->getConnection()->fetchColumn($sql, array_merge($types, array("{$target}/%", "{$target}")));
+        $sql = "SELECT count(*) FROM {$this->table} WHERE  (`parentId` = 0) and (`type` in ({$types})) and (`target` like ? OR `target` = ?)";
+        return $this->getConnection()->fetchColumn($sql, array("{$target}/%", "{$target}"));
     }
 
     public function findQuestionsByParentIds(array $ids)
