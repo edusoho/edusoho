@@ -2,9 +2,7 @@
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\ArrayToolkit;
-use Silex\Application;
-use Topxia\Service\Util\EdusohoTuiClient;
+use Biz\Util\EdusohoTuiClient;
 
 $api = $app['controllers_factory'];
 
@@ -23,8 +21,9 @@ $api = $app['controllers_factory'];
 
 $api->get('/about', function () {
     $mobile = ServiceKernel::instance()->createService('System:SettingService')->get('mobile', array());
+
     return array(
-        'about' => isset($mobile['about']) ? $mobile['about'] : ''
+        'about' => isset($mobile['about']) ? $mobile['about'] : '',
     );
 });
 
@@ -47,9 +46,9 @@ $api->get('/token', function () {
     if (isset($token['error'])) {
         throw new Exception($token['error']);
     }
+
     return $token;
 });
-
 
 /*
 ## 获取手机网校公告列表
@@ -77,10 +76,10 @@ $api->get('/announcements', function (Request $request) {
         $start,
         $limit
     );
-    
+
     return array(
-        'data' => filters($announcements,'announcement'),
-        'total' => $count
+        'data' => filters($announcements, 'announcement'),
+        'total' => $count,
     );
 });
 
