@@ -6,6 +6,8 @@ use AppBundle\Common\Paginator;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Order\Service\OrderService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -80,6 +82,18 @@ class OrderController extends BaseController
         if ($conditions['targetType'] != 'course') {
             return $conditions;
         }
+        if (isset($conditions['courseSetTitle'])) {
+            $conditions['title'] = $conditions['courseSetTitle'];
+        }
+
+        if (!empty($conditions['courseSetId'])) {
+            $courses = $this->getCourseService()->findCoursesByCourseSetId($conditions['courseSetId']);
+            $courseIds = ArrayToolkit::column($courses, 'courseSetId');
+            $conditions['targetIds'] = empty($courseIds) ? array(-1) : $courseIds;
+            unset($conditions['targetId']);
+        }
+
+        return $conditions;
     }
 
     public function detailAction(Request $request, $id)
@@ -349,11 +363,17 @@ class OrderController extends BaseController
         return $this->createService('User:UserFieldService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return \Biz\Course\Service\CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
