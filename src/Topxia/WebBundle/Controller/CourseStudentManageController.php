@@ -301,6 +301,9 @@ class CourseStudentManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $user   = $this->getUserService()->getUser($userId);
         $member = $this->getCourseService()->getCourseMember($courseId, $userId);
+        if (empty($member)) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans("学员#{$userId}不属于课程{#courseId}"));
+        }
 
         if ('POST' == $request->getMethod()) {
             $data   = $request->request->all();
@@ -386,6 +389,12 @@ class CourseStudentManageController extends BaseController
 
     public function definedShowAction(Request $request, $courseId, $userId)
     {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $member = $this->getCourseService()->getCourseMember($courseId, $userId);
+        if (empty($member)) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans("学员#{$userId}不属于课程{#courseId}"));
+        }
+
         $profile = $this->getUserService()->getUserProfile($userId);
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();

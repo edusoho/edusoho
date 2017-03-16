@@ -452,6 +452,12 @@ class CourseController extends CourseBaseController
 
     public function addMemberExpiryDaysAction(Request $request, $courseId, $userId)
     {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $member = $this->getCourseService()->getCourseMember($courseId, $userId);
+        if (empty($member)) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans("学员#{$userId}不在课程{#courseId}下"));
+        }
+
         $user   = $this->getUserService()->getUser($userId);
         $course = $this->getCourseService()->getCourse($courseId);
 
