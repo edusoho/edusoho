@@ -98,16 +98,6 @@ class CourseReviewController extends CourseBaseController
 
     public function deleteAction(Request $request, $reviewId)
     {
-        $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('not login');
-        }
-
-        $review = $this->getReviewService()->getReview($reviewId);
-        if ($review['userId'] != $user['id']) {
-            throw $this->createAccessDeniedException('review is not exsits.');
-        }
-
         $this->getReviewService()->deleteReview($reviewId);
         return $this->createJsonResponse(true);
     }
