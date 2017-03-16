@@ -2,11 +2,12 @@
 
 namespace Biz\Activity\Type;
 
-use Biz\Activity\Dao\TextActivityDao;
-use Biz\Activity\Service\ActivityService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
+use Biz\Activity\Dao\TextActivityDao;
 use Biz\Activity\Service\ActivityLearnLogService;
+use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseDraftService;
 
 class Text extends Activity
 {
@@ -52,6 +53,8 @@ class Text extends Activity
 
         $biz = $this->getBiz();
         $text['createdUserId'] = $biz['user']['id'];
+        $this->getCourseDraftService()->deleteCourseDrafts($activity['fromCourseId'], $activity['id'],
+            $biz['user']['id']);
 
         return $this->getTextActivityDao()->update($targetId, $text);
     }
@@ -81,6 +84,8 @@ class Text extends Activity
         $biz = $this->getBiz();
         $text['createdUserId'] = $biz['user']['id'];
 
+        $this->getCourseDraftService()->deleteCourseDrafts($fields['fromCourseId'], 0, $biz['user']['id']);
+
         return $this->getTextActivityDao()->create($text);
     }
 
@@ -106,5 +111,13 @@ class Text extends Activity
     protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return CourseDraftService
+     */
+    protected function getCourseDraftService()
+    {
+        return $this->getBiz()->service('Course:CourseDraftService');
     }
 }
