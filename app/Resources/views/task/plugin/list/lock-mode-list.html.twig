@@ -1,9 +1,10 @@
 <ul class="task-list task-show">
   {% for key, item in courseItems %}
     {% if item.itemType == 'chapter' and item.type == 'chapter' %}
-      <li class="task-item">
+      <li class="task-item js-task-chapter">
         <i class="es-icon es-icon-viewlist left-menu">
         </i><span class="title">第{{ item.number }}章: {{ item.title }}</span>
+        <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
       </li>
     {% elseif item.itemType == 'chapter'  and item.type == 'unit' %}
       <li class="task-item">
