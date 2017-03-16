@@ -31,7 +31,7 @@ class Users extends BaseResource
             $next = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $users);
             return $this->wrap($this->filter($users), $next);
         } else {
-            $users = $this->getUserService()->searchUsers($conditions, array('createdTime', 'DESC'), $start, $limit);
+            $users = $this->getUserService()->searchUsers($conditions, array('createdTime' => 'DESC'), $start, $limit);
             $total = $this->getUserService()->searchUserCount($conditions);
             return $this->wrap($this->filter($users), $total);
         }
