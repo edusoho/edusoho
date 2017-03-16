@@ -1091,8 +1091,8 @@ class EduCloudController extends BaseController
             return $this->render('TopxiaAdminBundle:EduCloud/Consult:consult-error.html.twig', array());
         }
 
-        $defaultConsult = $this->processDefaultConsult($loginStatus, $jsResource);
-        $cloudConsult = array_merge($cloudConsult, $defaultConsult);
+        $processCloudConsult = $this->processCloudConsult($loginStatus, $jsResource);
+        $cloudConsult = array_merge($cloudConsult, $processCloudConsult);
 
 
         if ($cloudConsult['cloud_consult_enabled'] == 0) {
@@ -1109,7 +1109,7 @@ class EduCloudController extends BaseController
         }
 
         if ($cloudConsult['cloud_consult_setting_enabled'] == 0) {
-            $this->renderConsultWithoutEnable($cloudConsult);
+            return $this->renderConsultWithoutEnable($cloudConsult);
         }
 
         return $this->render('TopxiaAdminBundle:EduCloud/Consult:setting.html.twig', array(
@@ -1117,21 +1117,21 @@ class EduCloudController extends BaseController
         ));
     }
 
-    private function processDefaultConsult($loginStatus, $jsResource)
+    private function processCloudConsult($loginStatus, $jsResource)
     {
         if ((isset($loginStatus['code']) && $loginStatus['code']== '10000') || (isset($jsResource['code']) && $jsResource['code']== '10000')) {
-            $default['cloud_consult_enabled'] = 0;
+            $cloudConsult['cloud_consult_enabled'] = 0;
             $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您还未购买,请联系客服人员:4008041114！'));
         } else if ((isset($loginStatus['code']) && $loginStatus['code']== '10001') || (isset($jsResource['code']) && $jsResource['code']== '10001')) {
-            $default['cloud_consult_enabled'] = 0;
+            $cloudConsult['cloud_consult_enabled'] = 0;
             $this->setFlashMessage('danger', $this->getServiceKernel()->trans('账号已过期,请联系客服人员:4008041114！'));
         } else {
-            $default['cloud_consult_enabled'] = 1;
-            $default['cloud_consult_landing_url'] = $loginStatus;
-            $default['cloud_consult_js'] = $jsResource;
+            $cloudConsult['cloud_consult_enabled'] = 1;
+            $cloudConsult['cloud_consult_landing_url'] = $loginStatus;
+            $cloudConsult['cloud_consult_js'] = $jsResource;
         }
 
-        return $default;
+        return $cloudConsult;
     }
 
     private function consultDefaultSetting()
