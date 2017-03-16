@@ -73,14 +73,15 @@ class CategoryController extends BaseController
         $thirdCategories = array();
 
         $parentCategory = $this->getCategoryService()->getCategoryByCode($category['subCategory']);
-
+        if (empty($parentCategory)) {
+            return array();
+        }
         return $this->getCategoryService()->findAllCategoriesByParentId($parentCategory['id']);
     }
 
     public function treeNavAction(Request $request, $category, $tags, $path, $filter = array('price' => 'all', 'type' => 'all', 'currentLevelId' => 'all'), $orderBy = 'latest', $group = 'course')
     {
         $categories = $this->makeCategories($group);
-
         $tagGroups = $this->makeTags();
 
         $subCategories = $this->makeSubCategories($category);
