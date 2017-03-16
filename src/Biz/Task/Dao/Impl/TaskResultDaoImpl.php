@@ -129,7 +129,6 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
                 'finishedTime >= :finishedTime_GE',
                 'finishedTime <= :finishedTime_LE',
                 'finishedTime < :finishedTime_LT',
-                'courseId IN ( :courseIds)',
             ),
         );
     }
