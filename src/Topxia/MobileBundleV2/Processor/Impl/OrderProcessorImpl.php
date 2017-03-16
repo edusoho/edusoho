@@ -4,9 +4,9 @@ namespace Topxia\MobileBundleV2\Processor\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
+use Biz\Order\OrderProcessor\OrderProcessorFactory;
 use Topxia\MobileBundleV2\Processor\OrderProcessor;
 use Topxia\MobileBundleV2\Alipay\MobileAlipayConfig;
-use Biz\Order\OrderProcessor\OrderProcessorFactory;
 
 class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 {
@@ -93,10 +93,12 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                 return $this->createErrorResponse('course_close', '课程已关闭');
             }
 
+            $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
             $payOrderInfo = array(
                 'title' => $course['title'],
                 'price' => $course['price'],
-                'picture' => $this->coverPic($course['middlePicture'], 'course-large.png'),
+                'picture' => $this->coverPic($courseSet['cover']['middle'], 'course-large.png'),
             );
         } elseif ('classroom' == $targetType) {
             $classroom = $this->getClassroomService()->getClassRoom($targetId);
@@ -168,7 +170,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
         foreach ($userProfile as $key => $value) {
             if (!in_array($key, array(
-                'truename', 'id', 'mobile', 'qq', 'weixin', ))) {
+                'truename', 'id', 'mobile', 'qq', 'weixin'))) {
                 unset($userProfile[$key]);
             }
         }
@@ -246,7 +248,8 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             return $this->createErrorResponse('error', '充值验证失败');
         }
 
-        if ($data['status'] == 21007) { //sandbox receipt
+        if ($data['status'] == 21007) {
+            //sandbox receipt
             return $this->requestReceiptData($userId, $amount, $receipt, true);
         }
 
@@ -896,5 +899,10 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
     private function getLevelService()
     {
         return $this->controller->getService('VipPlugin:Vip:LevelService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->controller->getService('Course:CourseSetService');
     }
 }

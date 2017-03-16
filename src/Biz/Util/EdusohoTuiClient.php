@@ -2,10 +2,9 @@
 
 namespace Biz\Util;
 
-use Biz\BaseService;
 use Biz\CloudPlatform\CloudAPIFactory;
 
-class EdusohoTuiClient extends BaseService
+class EdusohoTuiClient
 {
     public function getToken()
     {
@@ -55,7 +54,7 @@ class EdusohoTuiClient extends BaseService
     {
         $result = CloudAPIFactory::create('tui')->post('/tui/message/bulletin/send', array(
             'esBulletinId' => $announcement['id'],
-            'title' => $this->getKernel()->trans('网校公告'),
+            'title' => '网校公告',
             'content' => $announcement['content'],
         ));
 

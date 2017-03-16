@@ -280,43 +280,35 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $oldCourse = $this->tryManageCourse($id);
 
-        $fields = ArrayToolkit::parts($fields, array(
-            'isFree',
-            'originPrice',
-            'vipLevelId',
-            'buyable',
-            'tryLookable',
-            'tryLookLength',
-            'watchLimit',
-            'buyExpiryTime',
-            'showServices',
-            'services',
-            'approval',
-            'coinPrice',
-        ));
+        $fields = ArrayToolkit::parts(
+            $fields,
+            array(
+                'isFree',
+                'originPrice',
+                'vipLevelId',
+                'buyable',
+                'tryLookable',
+                'tryLookLength',
+                'watchLimit',
+                'buyExpiryTime',
+                'showServices',
+                'services',
+                'approval',
+                'coinPrice',
+            )
+        );
 
-        if (!ArrayToolkit::requireds($fields, array('isFree', 'buyable', 'tryLookable'))) {
+        $requireFields = array('isFree', 'buyable');
+        $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
+        if ($courseSet['type'] == 'normal') {
+            array_push($requireFields, 'tryLookable');
+        }
+
+        if (!ArrayToolkit::requireds($fields, $requireFields)) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
 
-        if (isset($fields['originPrice'])) {
-            list($fields['price'], $fields['coinPrice']) = $this->calculateCoursePrice($id, $fields['originPrice']);
-        }
-
-        if ($fields['isFree'] == 1) {
-            $fields['price'] = 0;
-            $fields['vipLevelId'] = 0;
-        }
-
-        if ($fields['tryLookable'] == 0) {
-            $fields['tryLookLength'] = 0;
-        }
-
-        if (!empty($fields['buyExpiryTime'])) {
-            $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime']);
-        } else {
-            $fields['buyExpiryTime'] = 0;
-        }
+        $fields = $this->processFields($id, $fields, $courseSet);
 
         $newCourse = $this->getCourseDao()->update($id, $fields);
 
@@ -1114,10 +1106,34 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     //移动端接口使用
-    public function findCourseTasksAndChapters($courseId, $includeChapters)
+    public function findCourseTasksAndChapters($courseId)
     {
         $course = $this->getCourse($courseId);
         $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
+
+        $items = $this->convertTasks($tasks, $course);
+
+        $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
+        foreach ($chapters as $chapter) {
+            $chapter['itemType'] = 'chapter';
+            $items[] = $chapter;
+        }
+        uasort(
+            $items,
+            function ($item1, $item2) {
+                return $item1['seq'] > $item2['seq'];
+            }
+        );
+
+        return $items;
+    }
+
+    //移动端接口使用　task 转成lesson
+    public function convertTasks($tasks, $course)
+    {
+        if (empty($tasks)) {
+            return array();
+        }
 
         $defaultTask = array(
             'giveCredit' => 0,
@@ -1140,12 +1156,16 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
 
         $items = array();
+        $lessons = array();
+        $number = 0;
+
         foreach ($tasks as $task) {
             if ($this->isUselessTask($task)) {
                 continue;
             }
             $task = array_merge($task, $defaultTask);
             $task['itemType'] = 'lesson';
+            $task['number'] = ++$number;
             if ($task['type'] == 'doc') {
                 $task['type'] = 'document';
             }
@@ -1164,15 +1184,21 @@ class CourseServiceImpl extends BaseService implements CourseService
                     'courseTaskId' => $task['id'],
                 )
             );
-            $items[] = $task;
+            $lessons[] = $task;
         }
 
-        if ($includeChapters) {
-            $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
-            foreach ($chapters as $chapter) {
-                $chapter['itemType'] = 'chapter';
-                $items[] = $chapter;
-            }
+        $chapters = $this->getChapterDao()->findChaptersByCourseId($course['id']);
+
+        $chapterNumber = array(
+            'unit' => 0,
+            'lesson' => 0,
+            'chapter' => 0,
+        );
+
+        foreach ($chapters as $chapter) {
+            $chapter['itemType'] = 'chapter';
+            $chapter['number'] = ++$chapterNumber[$chapter['type']];
+            $items[] = $chapter;
         }
         uasort(
             $items,
@@ -1181,7 +1207,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             }
         );
 
-        return $items;
+        return $lessons;
     }
 
     private function isUselessTask($task)
@@ -1216,7 +1242,12 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findUserLearningCourseCountNotInClassroom($userId, $filters = array())
     {
         if (isset($filters['type'])) {
-            return $this->getMemberDao()->countMemberNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters['type'], 0);
+            return $this->getMemberDao()->countMemberNotInClassroomByUserIdAndCourseTypeAndIsLearned(
+                $userId,
+                'student',
+                $filters['type'],
+                0
+            );
         }
 
         return $this->getMemberDao()->countMemberNotInClassroomByUserIdAndRoleAndIsLearned($userId, 'student', 0);
@@ -1225,9 +1256,22 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findUserLearningCoursesNotInClassroom($userId, $start, $limit, $filters = array())
     {
         if (isset($filters['type'])) {
-            $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters['type'], '0', $start, $limit);
+            $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndCourseTypeAndIsLearned(
+                $userId,
+                'student',
+                $filters['type'],
+                '0',
+                $start,
+                $limit
+            );
         } else {
-            $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRoleAndIsLearned($userId, 'student', 0, $start, $limit);
+            $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRoleAndIsLearned(
+                $userId,
+                'student',
+                0,
+                $start,
+                $limit
+            );
         }
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
@@ -1251,7 +1295,12 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findUserLeanedCourseCount($userId, $filters = array())
     {
         if (isset($filters['type'])) {
-            return $this->getMemberDao()->countMemberByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters['type'], 1);
+            return $this->getMemberDao()->countMemberByUserIdAndCourseTypeAndIsLearned(
+                $userId,
+                'student',
+                $filters['type'],
+                1
+            );
         }
 
         return $this->getMemberDao()->countMemberByUserIdAndRoleAndIsLearned($userId, 'student', 1);
@@ -1260,9 +1309,22 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findUserLearnedCoursesNotInClassroom($userId, $start, $limit, $filters = array())
     {
         if (isset($filters['type'])) {
-            $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters['type'], 1, $start, $limit);
+            $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndCourseTypeAndIsLearned(
+                $userId,
+                'student',
+                $filters['type'],
+                1,
+                $start,
+                $limit
+            );
         } else {
-            $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRoleAndIsLearned($userId, 'student', 1, $start, $limit);
+            $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRoleAndIsLearned(
+                $userId,
+                'student',
+                1,
+                $start,
+                $limit
+            );
         }
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
@@ -1290,7 +1352,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findUserLearnCoursesNotInClassroom($userId, $start, $limit, $onlyPublished = true)
     {
-        $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole($userId, 'student', $start, $limit, $onlyPublished);
+        $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole(
+            $userId,
+            'student',
+            $start,
+            $limit,
+            $onlyPublished
+        );
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
 
@@ -1299,7 +1367,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findUserLearnCoursesNotInClassroomWithType($userId, $type, $start, $limit, $onlyPublished = true)
     {
-        $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRoleAndType($userId, 'student', $type, $start, $limit, $onlyPublished);
+        $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRoleAndType(
+            $userId,
+            'student',
+            $type,
+            $start,
+            $limit,
+            $onlyPublished
+        );
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
 
@@ -1308,7 +1383,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findUserTeachCourseCountNotInClassroom($conditions, $onlyPublished = true)
     {
-        $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole($conditions['userId'], 'teacher', 0, PHP_INT_MAX, $onlyPublished);
+        $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole(
+            $conditions['userId'],
+            'teacher',
+            0,
+            PHP_INT_MAX,
+            $onlyPublished
+        );
         unset($conditions['userId']);
 
         $courseIds = ArrayToolkit::column($members, 'courseId');
@@ -1327,7 +1408,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findUserTeachCoursesNotInClassroom($conditions, $start, $limit, $onlyPublished = true)
     {
-        $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole($conditions['userId'], 'teacher', $start, $limit, $onlyPublished);
+        $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole(
+            $conditions['userId'],
+            'teacher',
+            $start,
+            $limit,
+            $onlyPublished
+        );
         unset($conditions['userId']);
 
         $courseIds = ArrayToolkit::column($members, 'courseId');
@@ -1371,6 +1458,32 @@ class CourseServiceImpl extends BaseService implements CourseService
         $favoriteCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($courseFavorites, 'courseId'));
 
         return $favoriteCourses;
+    }
+
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType, $start, $limit)
+    {
+        $favorites = $this->getFavoriteDao()->findUserFavoriteCoursesNotInClassroomWithCourseType(
+            $userId,
+            $courseType,
+            $start,
+            $limit
+        );
+
+        return $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($favorites, 'courseId'));
+    }
+
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function countUserFavoriteCourseNotInClassroomWithCourseType($userId, $courseType)
+    {
+        return $this->getFavoriteDao()->countUserFavoriteCoursesNotInClassroomWithCourseType(
+            $userId,
+            $courseType
+        );
     }
 
     protected function _prepareCourseOrderBy($sort)
@@ -1604,13 +1717,16 @@ class CourseServiceImpl extends BaseService implements CourseService
      */
     protected function mergeCourseDefaultAttribute($course)
     {
-        $course = array_filter($course, function ($value) {
-            if ($value === '' || $value === null) {
-                return false;
-            }
+        $course = array_filter(
+            $course,
+            function ($value) {
+                if ($value === '' || $value === null) {
+                    return false;
+                }
 
-            return true;
-        });
+                return true;
+            }
+        );
 
         $default = array(
             'tryLookable' => 0,
@@ -1647,5 +1763,37 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $conditions;
+    }
+
+    /**
+     * @param $id
+     * @param $fields
+     *
+     * @return mixed
+     */
+    private function processFields($id, $fields, $courseSet)
+    {
+        if (isset($fields['originPrice'])) {
+            list($fields['price'], $fields['coinPrice']) = $this->calculateCoursePrice($id, $fields['originPrice']);
+        }
+
+        if ($fields['isFree'] == 1) {
+            $fields['price'] = 0;
+            $fields['vipLevelId'] = 0;
+        }
+
+        if ($courseSet['type'] == 'normal' && $fields['tryLookable'] == 0) {
+            $fields['tryLookLength'] = 0;
+        }
+
+        if (!empty($fields['buyExpiryTime'])) {
+            $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime']);
+
+            return $fields;
+        } else {
+            $fields['buyExpiryTime'] = 0;
+
+            return $fields;
+        }
     }
 }

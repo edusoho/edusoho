@@ -29,6 +29,9 @@
                       {% endif %}
                   >
                     {{ tab.name }}
+                    {% if key == 'tasks' and categoryTag|default(null) %}
+                      <span class="badge badge-primary">{{categoryTag}}</span>
+                    {% endif %}
                     {% if tab.number|default(false) %}
                       {% if member|default(false) %}
                         <small>({{ course[tab.number]|default(0) }})</small>
