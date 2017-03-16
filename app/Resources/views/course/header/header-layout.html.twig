@@ -4,10 +4,11 @@
 <!-- 3、加入后：任务式学习 -->
 <div class="container">
   <ol class="breadcrumb breadcrumb-o">
-    <li>
-      <a href="{{ path('homepage') }}">首页</a>
-    </li>
-    <li class="active">{{ courseSet.title }} </li>
+    <li><a href="{{ path('homepage') }}">{{'首页'|trans}}</a></li>
+    {% for breadcrumb in breadcrumbs %}
+      <li><a href="{{ path('classroom_explore',{'category':breadcrumb.code}) }}">{{ breadcrumb.name }}</a></li>
+    {% endfor %}
+    <li class="active">{{ courseSet.title }}</li>
   </ol>
 
   {% block course_header_info %}{% endblock %}
