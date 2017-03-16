@@ -93,6 +93,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
             }
             $builder->addOrderBy($field, $direction);
         }
+
         return $builder->execute()->fetchAll();
     }
 
@@ -125,7 +126,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
 
         $sql = "SELECT * FROM {$this->table()} WHERE ".implode(' AND ', $placeholders);
 
-        return $this->db()->fetchAssoc($sql, array_values($fields)) ?: null;
+        return $this->db()->fetchAssoc($sql, array_values($fields)) ?: array();
     }
 
     protected function findInField($field, $values)
@@ -157,6 +158,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
             if ($value === '' || $value === null) {
                 return false;
             }
+
             if (is_array($value) && empty($value)) {
                 return false;
             }
