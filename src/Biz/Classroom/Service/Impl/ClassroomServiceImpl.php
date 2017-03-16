@@ -523,14 +523,23 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $classroom = $this->getClassroom($classroomId);
 
-        foreach ($courseIds as $courseId) {
-            $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $courseId);
-            $course = $this->getCourseService()->getCourse($courseId);
-            $this->getCourseSetService()->unlockCourseSet($course['courseSetId']);
-            $this->dispatchEvent(
-                'classroom.course.delete',
-                new Event($classroom, array('deleteCourseId' => $courseId))
-            );
+        try {
+            $this->beginTransaction();
+
+            foreach ($courseIds as $courseId) {
+                $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $courseId);
+                $course = $this->getCourseService()->getCourse($courseId);
+                $this->getCourseSetService()->unlockCourseSet($course['courseSetId']);
+                $this->dispatchEvent(
+                    'classroom.course.delete',
+                    new Event($classroom, array('deleteCourseId' => $courseId))
+                );
+            }
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
         }
     }
 
