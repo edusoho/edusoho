@@ -322,8 +322,9 @@ class CourseServiceImpl extends BaseService implements CourseService
      * 计算教学计划价格和虚拟币价格
      *
      * @param  $id
-     * @param  int|float $originPrice 教学计划原价
-     * @return array     (number, number)
+     * @param int|float $originPrice 教学计划原价
+     *
+     * @return array (number, number)
      */
     protected function calculateCoursePrice($id, $originPrice)
     {
@@ -884,7 +885,8 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param  int     $userId
+     * @param int $userId
+     *
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -1710,6 +1712,7 @@ class CourseServiceImpl extends BaseService implements CourseService
      * 当默认值未设置时，合并默认值
      *
      * @param  $course
+     *
      * @return array
      */
     protected function mergeCourseDefaultAttribute($course)
@@ -1738,6 +1741,7 @@ class CourseServiceImpl extends BaseService implements CourseService
      *
      * @param  $userId
      * @param  $filters
+     *
      * @return array
      */
     protected function prepareUserLearnCondition($userId, $filters)
