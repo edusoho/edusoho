@@ -134,3 +134,34 @@ class Exercise {
 
 new Exercise($('#step2-form'));
 new SelectLinkage($('[name="range[courseId]"]'),$('[name="range[lessonId]"]'));
+
+$('[name="range[courseId]"]').change(function(){
+  let url = $(this).data('checkNumUrl');
+  checkQuestionNum(url);
+})
+
+$('[name="range[lessonId]"]').change(function(){
+  let url = $(this).data('checkNumUrl');
+  checkQuestionNum(url);
+})
+
+$('[name="difficulty"]').change(function(){
+  let url = $(this).data('checkNumUrl');
+  checkQuestionNum(url);
+})
+
+function checkQuestionNum(url) {
+  let courseId = $('[name="range[courseId]"]').val();
+  let lessonId = $('[name="range[lessonId]"]').val();
+  let difficulty = $('[name="difficulty"]').val();
+
+  $.post(url,{courseId:courseId, lessonId:lessonId, difficulty:difficulty},function(data){
+    $('[role="questionNum"]').text(0);
+    $('input[type="checkbox"]').attr({'disabled':true,'checked':false});
+
+    $.each(data,function(i,n){
+      $("[type='"+i+"']").text(n.questionNum);
+      $("[type='"+i+"']").closest('.js-question-type').find('input[type="checkbox"]').attr('disabled',false);
+    });
+  })
+}

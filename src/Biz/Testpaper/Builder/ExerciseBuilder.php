@@ -186,8 +186,8 @@ class ExerciseBuilder implements TestpaperBuilderInterface
             $options['range'] = (array) json_decode($options['range']);
         }
 
-        if (!empty($options['range']) && $options['range'] != 'course') {
-            $conditions['lessonIds'] = $options['range'];
+        if (!empty($options['range']) && $options['range'] == 'lesson') {
+            $conditions['lessonId'] = $options['range'];
         }
 
         if (!empty($options['range']['courseId'])) {
