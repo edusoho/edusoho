@@ -4,7 +4,6 @@ namespace Biz\Notification\Event;
 
 use Topxia\Api\Util\MobileSchoolUtil;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 use Codeages\PluginBundle\Event\EventSubscriber;
 
 class PushMessageEventSubscriber extends EventSubscriber

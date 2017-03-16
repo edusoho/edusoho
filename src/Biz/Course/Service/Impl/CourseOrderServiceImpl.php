@@ -57,7 +57,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $order = array();
 
             $order['userId'] = $user['id'];
-            $order['title'] = sprintf("购买课程《%s%》- %s", $courseSet['title'], $course['title']);
+            $order['title'] = sprintf('购买课程《%s%》- %s', $courseSet['title'], $course['title']);
             $order['targetType'] = 'course';
             $order['targetId'] = $course['id'];
             if (!empty($course['discountId'])) {
@@ -171,7 +171,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
                 $this->getNotificationService()->notify($refund['userId'], 'default', $message);
             }
 
-            $adminmessage = sprintf("用户%s申请退款<a href=\"%s\">%s</a>教学计划，请审核。", $user['nickname'], $courseUrl, $course['title']);
+            $adminmessage = sprintf('用户%s申请退款<a href="%s">%s</a>教学计划，请审核。', $user['nickname'], $courseUrl, $course['title']);
             $adminCount = $this->getUserService()->searchUserCount(array('roles' => 'ADMIN'));
             $admins = $this->getUserService()->searchUsers(array('roles' => 'ADMIN'), array('id' => 'DESC'), 0, $adminCount);
             foreach ($admins as $key => $admin) {

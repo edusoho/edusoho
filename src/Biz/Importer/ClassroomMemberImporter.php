@@ -59,7 +59,7 @@ class ClassroomMemberImporter extends Importer
 
                 $order = $this->getOrderService()->createOrder(array(
                     'userId' => $user['id'],
-                    'title' => sprintf("购买班级《%s》(管理员添加)", $targetObject['title']),
+                    'title' => sprintf('购买班级《%s》(管理员添加)', $targetObject['title']),
                     'targetType' => 'classroom',
                     'targetId' => $targetObject['id'],
                     'amount' => empty($orderData['amount']) ? 0 : $orderData['amount'],
@@ -170,7 +170,7 @@ class ClassroomMemberImporter extends Importer
                 $repeatRowInfo .= '重复行：'.'</br>';
 
                 foreach ($row as $value) {
-                    $repeatRowInfo .= sprintf("第%s行 ", $value);
+                    $repeatRowInfo .= sprintf('第%s行 ', $value);
                 }
 
                 $repeatRowInfo .= '</br>';
@@ -204,7 +204,7 @@ class ClassroomMemberImporter extends Importer
             $emptyData = array_count_values($userData);
 
             if (isset($emptyData['']) && count($userData) == $emptyData['']) {
-                $checkInfo[] = sprintf("第%s行为空行，已跳过", $row);
+                $checkInfo[] = sprintf('第%s行为空行，已跳过', $row);
                 continue;
             }
 
@@ -286,7 +286,7 @@ class ClassroomMemberImporter extends Importer
         }
 
         if (!$user) {
-            $errorInfo = sprintf("第 %s行的信息有误，用户数据不存在，请检查", $row);
+            $errorInfo = sprintf('第 %s行的信息有误，用户数据不存在，请检查', $row);
         }
 
         return $errorInfo;
@@ -329,12 +329,12 @@ class ClassroomMemberImporter extends Importer
 
         foreach ($repeatArrayCount as $key => $value) {
             if ($value > 1 && !empty($key)) {
-                $repeatRow .= sprintf("第%s列重复:", $nickNameCol + 1).'<br>';
+                $repeatRow .= sprintf('第%s列重复:', $nickNameCol + 1).'<br>';
 
                 for ($i = 1; $i <= $value; ++$i) {
                     $row = array_search($key, $array) + 3;
 
-                    $repeatRow .= sprintf("第%s行    %s", $row, $key).'<br>';
+                    $repeatRow .= sprintf('第%s行    %s', $row, $key).'<br>';
 
                     unset($array[$row - 3]);
                 }

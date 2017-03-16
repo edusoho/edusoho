@@ -45,7 +45,7 @@ class VipImporter extends Importer
                 $this->getVipService()->becomeMember($user['id'], $viplevel['id'], $userData['viplevelTime'], 'month', $orderId = 0); //升级会员加入订单
             }
 
-            $message = sprintf("您已被管理员添加为%s会员", $userData['viplevelName']);
+            $message = sprintf('您已被管理员添加为%s会员', $userData['viplevelName']);
             $this->getNotificationService()->notify($user['id'], 'default', $message);
         }
 

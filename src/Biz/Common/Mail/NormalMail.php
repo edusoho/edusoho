@@ -66,7 +66,7 @@ class NormalMail extends Mail
     private function on_effect_email_reset_password()
     {
         return array(
-            'title' => sprintf("重置您的%s帐号密码", $this->setting('site.name')),
+            'title' => sprintf('重置您的%s帐号密码', $this->setting('site.name')),
             'body' => $this->renderBody('effect-reset.txt.twig'),
         );
     }
@@ -74,7 +74,7 @@ class NormalMail extends Mail
     private function on_email_reset_password()
     {
         return array(
-            'title' => sprintf("重设%s在%s的密码",$this->params['nickname'] ,$this->setting('site.name', 'EDUSOHO')),
+            'title' => sprintf('重设%s在%s的密码', $this->params['nickname'], $this->setting('site.name', 'EDUSOHO')),
             'body' => $this->renderBody('reset.txt.twig'),
         );
     }
@@ -82,7 +82,7 @@ class NormalMail extends Mail
     private function on_email_system_self_test()
     {
         return array(
-            'title' => sprintf("【%s】系统自检邮件", $this->params['sitename']),
+            'title' => sprintf('【%s】系统自检邮件', $this->params['sitename']),
             'body' => '系统邮件发送检测测试，请不要回复此邮件！',
         );
     }
@@ -106,7 +106,7 @@ class NormalMail extends Mail
     private function on_email_reset_email()
     {
         return array(
-            'title' => sprintf("重设%s在%s的电子邮箱",$this->params['nickname'] ,$this->setting('site.name', 'EDUSOHO')),
+            'title' => sprintf('重设%s在%s的电子邮箱', $this->params['nickname'], $this->setting('site.name', 'EDUSOHO')),
             'body' => $this->renderBody('email-change.txt.twig'),
         );
     }
@@ -114,7 +114,7 @@ class NormalMail extends Mail
     private function on_email_verify_email()
     {
         return array(
-            'title' => sprintf("验证%s在%s的电子邮箱",$this->params['nickname'] ,$this->setting('site.name', 'EDUSOHO')),
+            'title' => sprintf('验证%s在%s的电子邮箱', $this->params['nickname'], $this->setting('site.name', 'EDUSOHO')),
             'body' => $this->renderBody('email-verify.txt.twig'),
         );
     }
