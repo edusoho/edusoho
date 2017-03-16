@@ -30,7 +30,6 @@ class HTMLPurifierFactory
             $config->set('Output.FlashCompat', true);
             $config->set('HTML.FlashAllowFullScreen', true);
             $config->set('Filter.ExtractStyleBlocks', true);
-            $config->set('Filter.ExtractStyleBlocks.TidyImpl', false);
         }
 
         $config->set('HTML.TargetBlank', true);

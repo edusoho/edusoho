@@ -3,29 +3,21 @@
 namespace Topxia\Service\Util\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
-use Topxia\Service\Util\HTMLPurifierFactory;
+use Topxia\Service\Util\HTMLPurifier;
 
 class SystemUtilTest extends BaseTestCase
 {
 
     public function test1()
     {
-        $purifier = $this->createPurifier(true);
+        $purifier = new HTMLPurifier(array(
+            'cacheDir' => '/tmp/html',
+        ));
 
-        $html1 = file_get_contents(__DIR__.'/test1.html');
-        $html1 = $purifier->purify($html1);
+        $html = $purifier->purify(file_get_contents(__DIR__.'/test1.html'), true);
 
-        var_dump($html1);
+        var_dump($html);
+        // var_dump($html1);
 
-    }
-
-    private function createPurifier($trusted = false)
-    {
-        $config = array(
-            'cacheDir' => $this->getServiceKernel()->getParameter('kernel.cache_dir').'/htmlpurifier'
-        );
-
-        $factory  = new HTMLPurifierFactory($config);
-        return $factory->create($trusted);
     }
 }
