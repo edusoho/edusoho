@@ -272,6 +272,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             unset($conditions['lessonId']);
         }
 
+        if (empty($conditions['courseId'])) {
+            unset($conditions['courseId']);
+        }
+
         return $conditions;
     }
 

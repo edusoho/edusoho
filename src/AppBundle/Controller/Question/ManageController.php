@@ -312,10 +312,6 @@ class ManageController extends BaseController
         $conditions['courseSetId'] = $courseSetId;
         $conditions['parentId'] = 0;
 
-        if (empty($conditions['courseId'])) {
-            unset($conditions['courseId']);
-        }
-
         $typesNum = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
         $typesNum = ArrayToolkit::index($typesNum, 'type');
 
