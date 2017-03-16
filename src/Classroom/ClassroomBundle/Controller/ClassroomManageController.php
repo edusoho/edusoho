@@ -274,10 +274,7 @@ class ClassroomManageController extends BaseController
     public function remarkAction(Request $request, $classroomId, $userId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
-
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
-        $user      = $this->getUserService()->getUser($userId);
-        $member    = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
 
         if ('POST' == $request->getMethod()) {
             $data   = $request->request->all();
@@ -285,6 +282,9 @@ class ClassroomManageController extends BaseController
 
             return $this->createStudentTrResponse($classroom, $member);
         }
+
+        $member    = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
+        $user      = $this->getUserService()->getUser($userId);
 
         return $this->render('ClassroomBundle:ClassroomManage:remark-modal.html.twig', array(
             'member'    => $member,
@@ -295,8 +295,6 @@ class ClassroomManageController extends BaseController
 
     private function createStudentTrResponse($classroom, $student)
     {
-        $this->getClassroomService()->tryManageClassroom($classroom["id"]);
-
         $user     = $this->getUserService()->getUser($student['userId']);
         $progress = $this->calculateUserLearnProgress($classroom, $student);
 
