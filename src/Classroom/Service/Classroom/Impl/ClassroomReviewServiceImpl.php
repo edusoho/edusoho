@@ -72,6 +72,8 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
             throw $this->createServiceException($this->getKernel()->trans('参数不正确，评价数太大'));
         }
 
+        $this->getClassroomService()->tryTakeClassroom($fields['classroomId']);
+
         $classroom = $this->getClassroomDao()->getClassroom($fields['classroomId']);
 
         $userId = $this->getCurrentUser()->id;

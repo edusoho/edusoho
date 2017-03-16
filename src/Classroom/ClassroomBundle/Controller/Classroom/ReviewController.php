@@ -85,8 +85,6 @@ class ReviewController extends BaseController
         $user   = $this->getCurrentUser();
         $fields = $request->request->all();
 
-        $this->getClassroomService()->tryTakeClassroom($id);
-
         $fields['userId']      = $user['id'];
         $fields['classroomId'] = $id;
         $this->getClassroomReviewService()->saveReview($fields);
