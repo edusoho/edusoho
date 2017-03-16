@@ -19,6 +19,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
                 'sn = :sn',
                 'targetType = :targetType',
                 'targetId = :targetId',
+                'targetId IN ( :targetIds)',
                 'userId = :userId',
                 'amount > :amount',
                 'totalPrice >= totalPrice',
