@@ -79,7 +79,6 @@
               {% endif %}
             </td>
             <td>
-              {# TODO mediaSource ? #}
               {% if task.mediaSource|default('') != 'self' and task.type == 'video' %}
                 {{ '无'|trans }}
               {% elseif task.type =='audio' or task.type =='video' %}
