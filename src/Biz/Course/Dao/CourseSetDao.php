@@ -6,6 +6,8 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface CourseSetDao extends GeneralDaoInterface
 {
+    const TABLENAME = 'c2_course_set';
+
     public function findByIds(array $ids);
 
     public function findLikeTitle($title);

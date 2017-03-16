@@ -147,6 +147,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
             'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
                 'courseSetId = :courseSetId',
+                'courseSetId IN (:courseSetIds)',
                 'updatedTime >= :updatedTime_GE',
                 'status = :status',
                 'type = :type',
@@ -186,7 +187,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
     protected function createQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {
-            $conditions['titleLike'] = "%{$conditions['title']}%";
+            $conditions['titleLike'] = "{$conditions['title']}";
             unset($conditions['title']);
         }
 

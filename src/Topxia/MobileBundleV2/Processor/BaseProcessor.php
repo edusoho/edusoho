@@ -2,8 +2,8 @@
 
 namespace Topxia\MobileBundleV2\Processor;
 
-use Topxia\MobileBundleV2\Controller\MobileBaseController;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
 class BaseProcessor
 {
@@ -49,7 +49,7 @@ class BaseProcessor
         return array_map(function ($user) use ($container) {
             foreach ($user as $key => $value) {
                 if (!in_array($key, array(
-                    'id', 'email', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'nickname', 'roles', 'locked', 'about', 'title', ))
+                    'id', 'email', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'nickname', 'roles', 'locked', 'about', 'title'))
                 ) {
                     unset($user[$key]);
                 }
@@ -75,7 +75,10 @@ class BaseProcessor
 
     protected function log($action, $message, $data)
     {
-        $this->controller->getLogService()->info(MobileBaseController::MOBILE_MODULE, $action, $message,
+        $this->controller->getLogService()->info(
+            MobileBaseController::MOBILE_MODULE,
+            $action,
+            $message,
             $data
         );
     }
@@ -234,7 +237,7 @@ class BaseProcessor
 
     protected function getPayCenterService()
     {
-        return $this->controller->getService('PayCenter.PayCenterService');
+        return $this->controller->getService('PayCenter:PayCenterService');
     }
 
     protected function getTestpaperService()
