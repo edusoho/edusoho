@@ -80,6 +80,10 @@ class ReviewServiceImpl extends BaseService implements ReviewService
             throw $this->createServiceException($this->getKernel()->trans('参数不正确，评价失败！'));
         }
 
+        if ($fields['rating'] > 5) {
+            throw $this->createServiceException($this->getKernel()->trans('参数不正确，评价数太大'));
+        }
+
         list($course, $member) = $this->getCourseService()->tryTakeCourse($fields['courseId']);
 
         $userId = $this->getCurrentUser()->id;
