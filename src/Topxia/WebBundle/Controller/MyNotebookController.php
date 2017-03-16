@@ -37,7 +37,8 @@ class MyNotebookController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        $course  = $this->getCourseService()->getCourse($courseId);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+
         $lessons = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId), 'id');
         $notes   = $this->getNoteService()->findUserCourseNotes($user['id'], $course['id']);
 
