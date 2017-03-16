@@ -84,7 +84,6 @@ class Text extends Activity
         $biz = $this->getBiz();
         $text['createdUserId'] = $biz['user']['id'];
 
-
         $this->getCourseDraftService()->deleteCourseDrafts($fields['fromCourseId'], 0, $biz['user']['id']);
 
         return $this->getTextActivityDao()->create($text);

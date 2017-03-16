@@ -53,11 +53,12 @@ class TextController extends BaseController implements ActivityActionInterface
         $activity = $this->getActivityService()->getActivity($id);
         $text = $this->getActivityService()->getActivityConfig('text')->get($activity['mediaId']);
         $draft = $this->getCourseDraftService()->getCourseDraftByCourseIdAndActivityIdAndUserId($courseId, $activity['id'], $user->id);
+
         return $this->render('activity/text/modal.html.twig', array(
             'activity' => $activity,
             'text' => $text,
             'courseId' => $courseId,
-            'draft' => $draft
+            'draft' => $draft,
         ));
     }
 
@@ -98,9 +99,10 @@ class TextController extends BaseController implements ActivityActionInterface
     {
         $user = $this->getCurrentUser();
         $draft = $this->getCourseDraftService()->getCourseDraftByCourseIdAndActivityIdAndUserId($courseId, 0, $user->id);
+
         return $this->render('activity/text/modal.html.twig', array(
             'courseId' => $courseId,
-            'draft' => $draft
+            'draft' => $draft,
         ));
     }
 
