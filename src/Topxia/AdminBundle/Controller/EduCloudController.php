@@ -1083,7 +1083,17 @@ class EduCloudController extends BaseController
 
         $cloudConsult = $this->getSettingService()->get('cloud_consult', array());
         $defaultSetting = $this->consultDefaultSetting();
-        $cloudConsult = $this->processConsult(array_merge($defaultSetting, $cloudConsult));
+        $cloudConsult = array_merge($defaultSetting, $cloudConsult);
+
+        try {
+            list($loginStatus, $jsResource) = $this->connectCloudConsult();
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud/Consult:consult-error.html.twig', array());
+        }
+
+        $defaultConsult = $this->processDefaultConsult($loginStatus, $jsResource);
+        $cloudConsult = array_merge($cloudConsult, $defaultConsult);
+
 
         if ($cloudConsult['cloud_consult_enabled'] == 0) {
             return $this->renderConsultWithoutEnable($cloudConsult);
@@ -1105,20 +1115,6 @@ class EduCloudController extends BaseController
         return $this->render('TopxiaAdminBundle:EduCloud/Consult:setting.html.twig', array(
             'cloud_consult'=> $cloudConsult
         ));
-    }
-
-    private function processConsult($cloudConsult)
-    {
-        try {
-            list($loginStatus, $jsResource) = $this->connectCloudConsult();
-        } catch (\RuntimeException $e) {
-            return $this->render('TopxiaAdminBundle:EduCloud/Consult:consult-error.html.twig', array());
-        }
-
-        $defaultConsult = $this->processDefaultConsult($loginStatus, $jsResource);
-        $cloudConsult = array_merge($cloudConsult, $defaultConsult);
-
-        return $cloudConsult;
     }
 
     private function processDefaultConsult($loginStatus, $jsResource)
