@@ -61,10 +61,36 @@ class CourseController extends CourseBaseController
             array(
                 'tab' => $tab,
                 'course' => $course,
+                'categoryTag' => $this->calculateCategoryTag($course),
                 'classroom' => $classroom,
                 'isCourseTeacher' => $isCourseTeacher,
             )
         );
+    }
+
+    private function calculateCategoryTag($course)
+    {
+        if ($course['isFree']) {
+            return null;
+        }
+        $tasks = $this->getTaskService()->findTasksByCourseId($course['id']);
+        if (empty($tasks)) {
+            return null;
+        }
+        $tag = null;
+        foreach ($tasks as $task) {
+            if ($task['type'] == 'video' && $course['tryLookable']) {
+                $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+                if ($activity['ext']['mediaSource'] == 'cloud') {
+                    return '试看';
+                }
+            }
+            if ($task['isFree']) {
+                $tag = '免费';
+            }
+        }
+
+        return $tag;
     }
 
     public function memberExpiredAction($id)

@@ -21,7 +21,7 @@ class AttachmentController extends BaseController
         }
 
         $template = 'attachment/upload-modal.html.twig';
-        if($useSeajs){
+        if ($useSeajs) {
             $template = 'attachment/seajs-upload-modal.html.twig';
         }
 
