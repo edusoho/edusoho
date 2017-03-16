@@ -5,7 +5,6 @@ namespace Biz\Order\OrderProcessor;
 use Exception;
 use AppBundle\Common\ArrayToolKit;
 use AppBundle\Common\NumberToolkit;
-use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 {
@@ -17,23 +16,23 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
     public function preCheck($targetId, $userId)
     {
         if ($this->getClassroomService()->isClassroomStudent($targetId, $userId)) {
-            return array('error' => $this->getKernel()->trans('已经是班级的学员了!'));
+            return array('error' => '已经是班级的学员了!');
         }
 
         $classroom = $this->getClassroomService()->getClassroom($targetId);
 
         if (!$classroom['buyable']) {
-            return array('error' => $this->getKernel()->trans('该班级不可购买，如有需要，请联系客服'));
+            return array('error' => '该班级不可购买，如有需要，请联系客服');
         }
 
         if ($classroom['status'] != 'published') {
-            return array('error' => $this->getKernel()->trans('不能加入未发布班级!'));
+            return array('error' => '不能加入未发布班级!');
         }
 
         if (!$classroom['buyable']) {
             $classroomSetting = $this->getSettingService()->get('classroom');
 
-            return array('error' => $this->getKernel()->trans('该%name%不可购买，如有需要，请联系客服', array('%name%' => $classroomSetting['name'])));
+            return array('error' => sprintf('该%s不可购买，如有需要，请联系客服', $classroomSetting['name']));
         }
 
         return array();
@@ -44,7 +43,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $classroom = $this->getClassroomService()->getClassroom($targetId);
 
         if (empty($classroom)) {
-            throw new Exception($this->getKernel()->trans('找不到要购买的班级!'));
+            throw new Exception('找不到要购买的班级!');
         }
 
         $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
@@ -177,7 +176,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
 
         if (empty($courses) || count($courses) == 0) {
-            throw new Exception($this->getKernel()->trans('班级中还未设置课程，请联系管理员!'));
+            throw new Exception('班级中还未设置课程，请联系管理员!');
         }
 
         $courseIds = $courses = ArrayToolkit::column($courses, 'parentId');
@@ -406,10 +405,5 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
     protected function getCourseMemberService()
     {
         return $this->getBiz()->service('Course:MemberService');
-    }
-
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
     }
 }

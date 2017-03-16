@@ -14,7 +14,6 @@ use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
@@ -106,19 +105,19 @@ class TaskSmsProcessor extends BaseSmsProcessor
         $to = $this->getUsersMobile($studentIds);
 
         $task['title'] = StringToolkit::cutter($task['title'], 20, 15, 4);
-        $parameters['lesson_title'] = $this->getKernel()->trans('学习任务：').'《'.$task['title'].'》';
+        $parameters['lesson_title'] = '学习任务：《'.$task['title'].'》';
 
         if ($task['type'] == 'live') {
             $parameters['startTime'] = date('Y-m-d H:i:s', $task['startTime']);
         }
 
         $courseSet['title'] = StringToolkit::cutter($courseSet['title'], 20, 15, 4);
-        $parameters['course_title'] = $this->getKernel()->trans('课程：').'《'.$courseSet['title'].'》';
+        $parameters['course_title'] = '课程：《'.$courseSet['title'].'》';
 
         if ($smsType == 'sms_normal_lesson_publish' || $smsType == 'sms_live_lesson_publish') {
-            $description = $parameters['course_title'].' '.$parameters['lesson_title'].$this->getKernel()->trans('已发布');
+            $description = $parameters['course_title'].' '.$parameters['lesson_title'].'已发布';
         } else {
-            $description = $parameters['course_title'].' '.$parameters['lesson_title'].$this->getKernel()->trans('预告');
+            $description = $parameters['course_title'].' '.$parameters['lesson_title'].'预告';
         }
 
         $parameters['url'] = $url.' ';
@@ -200,11 +199,6 @@ class TaskSmsProcessor extends BaseSmsProcessor
     protected function getTaskService()
     {
         return $this->getBiz()->service('Task:TaskService');
-    }
-
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
     }
 
     /**
