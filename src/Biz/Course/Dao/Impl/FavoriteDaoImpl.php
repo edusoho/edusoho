@@ -14,7 +14,7 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
     {
         return array(
             'timestamps' => array('createdTime'),
-            'orderbys' => array('replayId', 'createdTime'),
+            'orderbys' => array('replayId', 'createdTime', 'id'),
             'conditions' => array(
                 'courseId = :courseId',
                 'userId = :userId',
