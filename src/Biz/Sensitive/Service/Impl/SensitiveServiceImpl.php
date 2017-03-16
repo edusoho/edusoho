@@ -311,7 +311,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
 
     protected function getKeywordFilter()
     {
-        $filter = $this->getKernel()->getParameter('keyword.filter');
+        $filter = ServiceKernel::instance()->getParameter('keyword.filter');
 
         return new $filter();
     }
