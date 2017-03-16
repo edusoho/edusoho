@@ -54,6 +54,8 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
         $questions = $this->getTestpaperService()->showTestpaperItems($exercise['id']);
         $attachments = $this->getTestpaperService()->findAttachments($exercise['id']);
 
+        $exercise['itemCount'] = $this->getActureQuestionNum($questions);
+
         return $this->render('activity/exercise/preview.html.twig', array(
             'paper' => $exercise,
             'questions' => $questions,
@@ -174,6 +176,20 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
         }
 
         return $targetDefault;
+    }
+
+    protected function getActureQuestionNum($questions)
+    {
+        $count = 0;
+        array_map(function ($question) use (&$count) {
+            if ($question['type'] == 'material') {
+                $count += count($question['subs']);
+            } else {
+                $count += 1;
+            }
+        }, $questions);
+
+        return $count;
     }
 
     /**
