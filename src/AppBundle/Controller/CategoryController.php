@@ -76,6 +76,7 @@ class CategoryController extends BaseController
         if (empty($parentCategory)) {
             return array();
         }
+
         return $this->getCategoryService()->findAllCategoriesByParentId($parentCategory['id']);
     }
 
