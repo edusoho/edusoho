@@ -9,18 +9,18 @@
       {% endif %}
     {% endif %}
     {% if not planMember|default(null) %}
-      <li role="presentation" class="{% if nav == 'course' %}active{% endif %}"><a href="{{ path('classroom_courses', {classroomId:classroom.id}) }}">{{'课程'|trans}} <small class="color-gray">{% if classroom.courseNum != 0 %}( {{classroom.courseNum}} ){% endif %}</small></a></li>
+      <li role="presentation" class="{% if nav == 'course' %}active{% endif %}"><a href="{{ path('classroom_courses', {classroomId:classroom.id}) }}">{{'课程'|trans}} <small class="color-gray">({{classroom.courseNum}})</small></a></li>
     {% endif %}
 
     {% if is_plugin_installed('ClassroomPlan') %}
       {{ render(controller('ClassroomPlanBundle:ClassroomPlan:planNav',{classroomId:classroom.id, nav:nav})) }}
     {% endif %}
   {% if  classroom.showable or ( not classroom.showable and member) %}
-    <li role="presentation" class="{% if nav == 'review' %}active{% endif %}"><a href="{{ path('classroom_reviews', {id:classroom.id}) }}">{{'评价'|trans}} <small class="color-gray">{% if classroom.ratingNum != 0 %}( {{classroom.ratingNum}} ){% endif %}</small></a></li>
+    <li role="presentation" class="{% if nav == 'review' %}active{% endif %}"><a href="{{ path('classroom_reviews', {id:classroom.id}) }}">{{'评价'|trans}} <small class="color-gray">({{classroom.ratingNum }})</small></a></li>
 
-    <li role="presentation" class="{% if nav == 'thread' %}active{% endif %}"><a href="{{ path('classroom_threads', {classroomId:classroom.id}) }}">{{'话题'|trans}} <small class="color-gray">{% if classroom.threadNum != 0 %}( {{classroom.threadNum}} ){% endif %}</small></a></li>
+    <li role="presentation" class="{% if nav == 'thread' %}active{% endif %}"><a href="{{ path('classroom_threads', {classroomId:classroom.id}) }}">{{'话题'|trans}} <small class="color-gray">({{classroom.threadNum}})</small></a></li>
 
-    <li role="presentation" class="{% if nav == 'note' %}active{% endif %}"><a  href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}) }}">{{'笔记'|trans}} <small class="color-gray">{% if classroom.noteNum != 0 %}( {{ classroom.noteNum }} ){% endif %}</small></a></li>
+    <li role="presentation" class="{% if nav == 'note' %}active{% endif %}"><a  href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}) }}">{{'笔记'|trans}} <small class="color-gray">({{ classroom.noteNum }})</small></a></li>
   {% endif %}
 
     <li role="presentation" class="{% if nav == 'teachers' %}active{% endif %}"><a href="{{ path('classroom_teachers', {classroomId:classroom.id}) }}">{{'师资'|trans}}</a></li>

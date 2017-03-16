@@ -5,6 +5,9 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Order\Service\OrderService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,11 +21,13 @@ class OrderController extends BaseController
     public function manageAction(Request $request, $targetType)
     {
         $conditions = $request->query->all();
+
         $conditions['targetType'] = $targetType;
 
         if (isset($conditions['keywordType'])) {
             $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
         }
+        $conditions = $this->prepareConditions($conditions);
 
         if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
             $conditions['startTime'] = strtotime($conditions['startDateTime']);
@@ -50,28 +55,55 @@ class OrderController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
 
         foreach ($orders as $index => $expiredOrderToBeUpdated) {
-            if ((($expiredOrderToBeUpdated['createdTime'] + 48 * 60 * 60) < time()) && ($expiredOrderToBeUpdated['status'] == 'created')) {
+            if ((($expiredOrderToBeUpdated['createdTime'] + 48 * 60 * 60) < time(
+                    )) && ($expiredOrderToBeUpdated['status'] == 'created')
+            ) {
                 $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
                 $orders[$index]['status'] = 'cancelled';
             }
         }
 
-        return $this->render('admin/order/manage.html.twig', array(
-            'request' => $request,
-            'targetType' => $targetType,
-            'orders' => $orders,
-            'courses' => $courses,
-            'courseSets' => $courseSets,
-            'users' => $users,
-            'paginator' => $paginator,
-        ));
+        return $this->render(
+            'admin/order/manage.html.twig',
+            array(
+                'request' => $request,
+                'targetType' => $targetType,
+                'orders' => $orders,
+                'courses' => $courses,
+                'courseSets' => $courseSets,
+                'users' => $users,
+                'paginator' => $paginator,
+            )
+        );
+    }
+
+    protected function prepareConditions($conditions)
+    {
+        if ($conditions['targetType'] != 'course') {
+            return $conditions;
+        }
+        if (isset($conditions['courseSetTitle'])) {
+            $conditions['title'] = $conditions['courseSetTitle'];
+        }
+
+        if (!empty($conditions['courseSetId'])) {
+            $courses = $this->getCourseService()->findCoursesByCourseSetId($conditions['courseSetId']);
+            $courseIds = ArrayToolkit::column($courses, 'courseSetId');
+            $conditions['targetIds'] = empty($courseIds) ? array(-1) : $courseIds;
+            unset($conditions['targetId']);
+        }
+
+        return $conditions;
     }
 
     public function detailAction(Request $request, $id)
     {
-        return $this->forward('AppBundle:Order:detail', array(
-            'id' => $id,
-        ));
+        return $this->forward(
+            'AppBundle:Order:detail',
+            array(
+                'id' => $id,
+            )
+        );
     }
 
     public function cancelRefundAction(Request $request, $id)
@@ -102,9 +134,12 @@ class OrderController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        return $this->render('admin/course-order/refund-confirm-modal.html.twig', array(
-            'order' => $order,
-        ));
+        return $this->render(
+            'admin/course-order/refund-confirm-modal.html.twig',
+            array(
+                'order' => $order,
+            )
+        );
     }
 
     /**
@@ -167,7 +202,12 @@ class OrderController extends BaseController
             $content = implode("\r\n", $results);
             file_put_contents($file, $content."\r\n", FILE_APPEND);
 
-            return $this->redirect($this->generateUrl('admin_order_manage_export_csv', array('targetType' => $targetType, 'loop' => $loop, 'start' => $loop * $limit, 'fileName' => $file)));
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_order_manage_export_csv',
+                    array('targetType' => $targetType, 'loop' => $loop, 'start' => $loop * $limit, 'fileName' => $file)
+                )
+            );
         } elseif ($readTempDate) {
             $str .= file_get_contents($file);
             FileToolkit::remove($file);
@@ -239,6 +279,9 @@ class OrderController extends BaseController
         return true;
     }
 
+    /**
+     * @return OrderService
+     */
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
@@ -320,11 +363,17 @@ class OrderController extends BaseController
         return $this->createService('User:UserFieldService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return \Biz\Course\Service\CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');

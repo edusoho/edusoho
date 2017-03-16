@@ -22,40 +22,42 @@ define(function (require, exports, module) {
       });
     });
 
-    $table.on('click', '.publish-course', function () {
-      var studentNum = $(this).closest('tr').next().val();
-      if (!confirm(Translator.trans('您确认要发布此课程吗？'))) return false;
-      $.post($(this).data('url'))
-        .done(function (response) {
-          if(response.success){
-            var $tr = $(response.message);
-            $table.find('#' + $tr.attr('id')).replaceWith(response.message);
-            Notify.success(Translator.trans('课程发布成功！'));
-          }else {
-            Notify.danger(response.message);
-          }
-        });
-    });
+		$table.on('click', '.publish-course', function() {
+			var studentNum = $(this).closest('tr').next().val();
+			if (!confirm(Translator.trans('您确认要发布此课程吗？'))) return false;
+			$.post($(this).data('url'), function(response) {
+				if (response['message']) {
+					Notify.danger(response['message']);
+				} else {
+					var $tr = $(response);
+					$table.find('#' + $tr.attr('id')).replaceWith(response);
+					Notify.success(Translator.trans('课程发布成功！'));
+				}
+			}).error(function(e) {
+				var res = e.responseJSON.error.message || '未知错误';
+                Notify.danger(res);
+			})
+		});
 
-    $table.on('click', '.delete-course', function () {
-      var chapter_name = $(this).data('chapter');
-      var part_name = $(this).data('part');
-      var user_name = $(this).data('user');
-      var $this = $(this);
-      if (!confirm(Translator.trans('删除课程，将删除课程的章节、课时、学员等信息。真的要删除该课程吗？')))
-        return;
-      var $tr = $this.parents('tr');
-      $.post($this.data('url'), function (data) {
-        if (data.code > 0) {
-          Notify.danger(data.message);
-        } else if (data.code == 0) {
-          $tr.remove();
-          Notify.success(data.message);
-        } else {
-          $('.modal').modal('show').html(data);
-        }
-      });
-    });
+		$table.on('click', '.delete-course', function() {
+			var chapter_name = $(this).data('chapter');
+			var part_name = $(this).data('part');
+			var user_name = $(this).data('user');
+			var $this = $(this);
+			if (!confirm(Translator.trans('删除课程，将删除课程的章节、课时、学员等信息。真的要删除该课程吗？')))
+					return;
+			var $tr = $this.parents('tr');
+			$.post($this.data('url'), function(data) {
+				if (data.code > 0) {
+					Notify.danger(data.message);
+				} else if (data.code == 0) {
+					$tr.remove();
+					Notify.success(data.message);
+				} else {
+					$('#modal').modal('show').html(data);
+				}
+			});
+		});
 
     $table.find('.copy-course[data-type="live"]').tooltip();
 

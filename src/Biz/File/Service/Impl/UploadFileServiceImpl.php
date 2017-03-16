@@ -626,7 +626,12 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $result = $this->getFileImplementor($file['storage'])->deleteFile($file);
 
-        if (isset($result['success']) && $result['success']) {
+        //XXX
+        //1. 可能由于异常或脏数据、事务回滚导致资源不存在的情况，对edusoho来说，不应影响本地文件记录的删除
+        //2. 云API没有针对上述错误提供错误码，因此根据返回的错误信息进行判断，以后应当优化
+        if ((isset($result['success']) && $result['success'])
+          || (!empty($result['error']) && $result['error'] == '资源不存在，或已删除！')
+        ) {
             $result = $this->getUploadFileDao()->delete($id);
         }
 

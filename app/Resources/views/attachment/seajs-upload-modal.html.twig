@@ -1,10 +1,8 @@
-{% extends 'bootstrap-modal-layout.html.twig' %}
-
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 {% set modal_class = 'modal-lg' %}
-
 {% block title %}上传文件{% endblock %}
 
-{% do script(['//service-cdn.qiqiuyun.net/js-sdk/uploader/sdk-v1.js', 'app/js/attachment/index.js']) %}
+ {#{% do load_script('topxiawebbundle/controller/attachment/sdk-upload-modal') %}#}
 
 {% block body %}
 
@@ -57,5 +55,6 @@
 {% endblock %}
 {% block footer %}
   <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+  <script>app.load('topxiawebbundle/controller/attachment/sdk-upload-modal')</script>
 {% endblock %}
 

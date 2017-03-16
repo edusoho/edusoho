@@ -28,7 +28,7 @@ class User extends BaseResource
             }
         }
 
-        $returnRes['roles'] = in_array('ROLE_TEACHER', $returnRes['roles']) ? array('teacher') : array('student');
+        $returnRes['roles'] = in_array('ROLE_TEACHER', $res['roles']) ? array('teacher') : array('student');
 
         $returnRes['avatar'] = isset($returnRes['largeAvatar']) ? $this->getFileUrl($returnRes['largeAvatar']) : '';
         unset($returnRes['largeAvatar']);
