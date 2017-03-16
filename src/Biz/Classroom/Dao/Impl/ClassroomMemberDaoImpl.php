@@ -144,9 +144,9 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
 
     public function findByUserId($userId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ?";
-
-        return $this->db()->executeQuery($sql, array($userId))->fetchAll(\PDO::FETCH_COLUMN);
+        return $this->findByFields(array(
+            'userId' => $userId,
+        ));
     }
 
     protected function createQueryBuilder($conditions)
