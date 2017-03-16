@@ -200,6 +200,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function getQuestionCountGroupByTypes($conditions)
     {
         $conditions = $this->filterQuestionFields($conditions);
+
         return $this->getQuestionDao()->getQuestionCountGroupByTypes($conditions);
     }
 
