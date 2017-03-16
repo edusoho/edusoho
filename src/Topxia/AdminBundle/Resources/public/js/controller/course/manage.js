@@ -54,7 +54,7 @@ define(function(require, exports, module) {
 					$tr.remove();
 					Notify.success(data.message);
 				} else {
-					$('.modal').modal('show').html(data);
+					$('#modal').modal('show').html(data);
 				}
 			});
 		});

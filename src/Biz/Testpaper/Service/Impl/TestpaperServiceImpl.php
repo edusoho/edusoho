@@ -60,7 +60,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         $testpaper = $this->getTestpaper($id);
         if (!$testpaper) {
-            throw $this->createServiceException("Testpaper #{$id} is not found, update testpaper failure.");
+            throw $this->createServiceException("Testpaper #{$id} is not found, delete testpaper failure.");
         }
 
         $result = $this->getTestpaperDao()->delete($testpaper['id']);

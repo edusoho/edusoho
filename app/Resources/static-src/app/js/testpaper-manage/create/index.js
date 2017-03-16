@@ -212,4 +212,27 @@ class TestpaperForm {
 new TestpaperForm($('#testpaper-form'));
 new SelectLinkage($('[name="ranges[courseId]"]'),$('[name="ranges[lessonId]"]'));
 
+$('[name="ranges[courseId]"]').change(function(){
+  let url = $(this).data('checkNumUrl');
+  checkQuestionNum(url);
+})
+
+$('[name="ranges[lessonId]"]').change(function(){
+  let url = $(this).data('checkNumUrl');
+  checkQuestionNum(url);
+})
+
+function checkQuestionNum(url) {
+  let courseId = $('[name="ranges[courseId]"]').val();
+  let lessonId = $('[name="ranges[lessonId]"]').val();
+
+  $.post(url,{courseId:courseId, lessonId:lessonId},function(data){
+    $('[role="questionNum"]').text(0);
+
+    $.each(data,function(i,n){
+      $("[type='"+i+"']").text(n.questionNum);
+    });
+  })
+}
+
 

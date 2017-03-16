@@ -2144,6 +2144,11 @@ course_set_manage_show_tasks:
   defaults: { _controller: AppBundle:Question/Manage:showTasks }
   methods: [POST]
 
+course_set_manage_question_check_num:
+  path: /course_set/{courseSetId}/manage/question/check/num
+  defaults: { _controller: AppBundle:Question/Manage:showQuestionTypesNum }
+  methods: [POST]
+
 #testpaper
 course_set_manage_testpaper:
   path: /course_set/{id}/manage/testpaper
