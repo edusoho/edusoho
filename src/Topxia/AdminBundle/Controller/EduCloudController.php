@@ -1077,6 +1077,10 @@ class EduCloudController extends BaseController
 
     public function consultSettingAction(Request $request)
     {
+        if (!($this->isHiddenCloud())) {
+            return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
+        }
+
         $cloudConsult = $this->getSettingService()->get('cloud_consult', array());
         $defaultSetting = $this->consultDefaultSetting();
         $cloudConsult = $this->processConsult(array_merge($defaultSetting, $cloudConsult));
