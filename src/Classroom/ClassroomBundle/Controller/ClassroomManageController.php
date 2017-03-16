@@ -276,8 +276,12 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($classroomId);
 
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
-        $user      = $this->getUserService()->getUser($userId);
         $member    = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
+        if (empty($member)) {
+            throw $this->createAccessDeniedException('member is not exsits.');
+        }
+
+        $user      = $this->getUserService()->getUser($userId);
 
         if ('POST' == $request->getMethod()) {
             $data   = $request->request->all();
@@ -295,8 +299,6 @@ class ClassroomManageController extends BaseController
 
     private function createStudentTrResponse($classroom, $student)
     {
-        $this->getClassroomService()->tryManageClassroom($classroom["id"]);
-
         $user     = $this->getUserService()->getUser($student['userId']);
         $progress = $this->calculateUserLearnProgress($classroom, $student);
 

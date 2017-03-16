@@ -85,6 +85,8 @@ class ReviewController extends BaseController
         $user   = $this->getCurrentUser();
         $fields = $request->request->all();
 
+        $this->getClassroomService()->tryTakeClassroom($id);
+
         $fields['userId']      = $user['id'];
         $fields['classroomId'] = $id;
         $this->getClassroomReviewService()->saveReview($fields);
@@ -122,6 +124,16 @@ class ReviewController extends BaseController
 
     public function deleteAction(Request $request, $reviewId)
     {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('not login');
+        }
+
+        $review = $this->getClassroomReviewService()->getReview($reviewId);
+        if ($review['userId'] != $user['id']) {
+            throw $this->createAccessDeniedException('review is not exsits.');
+        }
+
         $this->getClassroomReviewService()->deleteReview($reviewId);
         return $this->createJsonResponse(true);
     }
