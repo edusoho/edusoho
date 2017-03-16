@@ -86,10 +86,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 throw $this->createServiceException($this->getKernel()->trans('缺少必要字段！'));
             }
 
-            $filtedFields['name']          = $fields['name'];
+            $filtedFields['name']          = $this->purifyHtml($fields['name']);
             $filtedFields['target']        = $fields['target'];
             $filtedFields['pattern']       = $fields['pattern'];
-            $filtedFields['description']   = empty($fields['description']) ? '' : $fields['description'];
+            $filtedFields['description']   = empty($fields['description']) ? '' : $this->purifyHtml($fields['description']);
             $filtedFields['limitedTime']   = empty($fields['limitedTime']) ? 0 : (int) $fields['limitedTime'];
             $filtedFields['metas']         = empty($fields['metas']) ? array() : $fields['metas'];
             $filtedFields['status']        = 'draft';
@@ -101,11 +101,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             }
         } else {
             if (array_key_exists('name', $fields)) {
-                $filtedFields['name'] = empty($fields['name']) ? '' : $fields['name'];
+                $filtedFields['name'] = empty($fields['name']) ? '' : $this->purifyHtml($fields['name']);
             }
 
             if (array_key_exists('description', $fields)) {
-                $filtedFields['description'] = empty($fields['description']) ? '' : $fields['description'];
+                $filtedFields['description'] = empty($fields['description']) ? '' : $this->purifyHtml($fields['description']);
             }
 
             if (array_key_exists('limitedTime', $fields)) {

@@ -25,7 +25,7 @@ class HTMLPurifier
         $styles = $purifier->context->get('StyleBlocks');
         if ($styles) {
             $html = implode("\n", array(
-                '<style>',
+                '<style type="text/css">',
                 implode("\n", $styles),
                 '</style>',
                 $html
