@@ -274,14 +274,7 @@ class ClassroomManageController extends BaseController
     public function remarkAction(Request $request, $classroomId, $userId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
-
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
-        $member    = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
-        if (empty($member)) {
-            throw $this->createAccessDeniedException('member is not exsits.');
-        }
-
-        $user      = $this->getUserService()->getUser($userId);
 
         if ('POST' == $request->getMethod()) {
             $data   = $request->request->all();
@@ -289,6 +282,9 @@ class ClassroomManageController extends BaseController
 
             return $this->createStudentTrResponse($classroom, $member);
         }
+
+        $member    = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
+        $user      = $this->getUserService()->getUser($userId);
 
         return $this->render('ClassroomBundle:ClassroomManage:remark-modal.html.twig', array(
             'member'    => $member,

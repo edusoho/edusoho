@@ -59,8 +59,6 @@ class CourseReviewController extends CourseBaseController
     {
         $user = $this->getCurrentUser();
 
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-
         $fields             = $request->request->all();
         $fields['userId']   = $user['id'];
         $fields['courseId'] = $id;
