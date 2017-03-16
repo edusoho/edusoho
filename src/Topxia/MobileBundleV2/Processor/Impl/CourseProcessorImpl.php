@@ -1584,19 +1584,21 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             1000,
             array('type' => 'live')
         );
+
         $courseIds = ArrayToolkit::column($courses, 'id');
 
         $conditions = array(
             'status' => 'published',
-            'startTimeGreaterThan' => time(),
+            'startTime_GE' => time(),
             'courseIds' => $courseIds,
+            'type' => 'live',
         );
 
-        $count = $this->controller->getCourseService()->searchLessonCount($conditions);
+        $count = $this->getTaskService()->countTasks($conditions);
 
-        $lessons = $this->controller->getCourseService()->searchLessons(
+        $lessons = $this->getTaskService()->searchTasks(
             $conditions,
-            array('startTime', 'ASC'),
+            array('startTime' => 'ASC'),
             $start,
             $limit
         );
@@ -1630,7 +1632,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return array(
             'start' => $start + count($resultLiveCourses),
             'limit' => $limit,
-            'data' => $resultLiveCourses, );
+            'data' => $resultLiveCourses);
     }
 
     public function hitThread()
@@ -1669,7 +1671,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'start' => $start,
             'limit' => $limit,
             'total' => $total,
-            'data' => $this->controller->filterCourses($liveCourses), );
+            'data' => $this->controller->filterCourses($liveCourses));
 
         return $result;
     }
