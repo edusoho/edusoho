@@ -30,7 +30,7 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
                 'createdTime >= :startTimeGreaterThan',
                 'createdTime >= :createdTime_GE',
                 'createdTime < :startTimeLessThan',
-                'updatedTime >= :updatedTime_GE'
+                'updatedTime >= :updatedTime_GE',
             ),
         );
     }

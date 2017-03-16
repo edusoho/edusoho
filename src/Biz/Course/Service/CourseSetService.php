@@ -179,8 +179,8 @@ interface CourseSetService
     /**
      * @param array $conditions
      * @param array $orderBys
-     * @param int $start
-     * @param int $limit
+     * @param int   $start
+     * @param int   $limit
      *
      * @return array[]
      */
