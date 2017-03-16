@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "42e45bbb396bb1d5dadf2c7a5ed31dde",
+    "content-hash": "b6849e135cc54993ad6f83a1df0d25ac",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -203,6 +203,39 @@
                 "oauth2"
             ],
             "time": "2015-09-18T18:05:10+00:00"
+        },
+        {
+            "name": "cerdic/css-tidy",
+            "version": "v1.5.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Cerdic/CSSTidy.git",
+                "reference": "b0c1bda3be5a35da44ba1ac28cc61c67d2ada465"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/Cerdic/CSSTidy/b0c1bda3be5a35da44ba1ac28cc61c67d2ada465.zip",
+                "reference": "b0c1bda3be5a35da44ba1ac28cc61c67d2ada465",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "."
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "Cédric MORIN",
+                    "email": "changeme@mailinator.com"
+                }
+            ],
+            "description": "CSSTidy is a CSS minifier",
+            "time": "2015-11-28T21:47:43+00:00"
         },
         {
             "name": "codeages/biz-framework",

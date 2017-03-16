@@ -460,7 +460,15 @@ class ComposerStaticInita9081f4c3a072b5bb824f60da08fba6f
         'RecursiveCallbackFilterIterator' => __DIR__ . '/..' . '/symfony/polyfill-php54/Resources/stubs/RecursiveCallbackFilterIterator.php',
         'SessionHandlerInterface' => __DIR__ . '/..' . '/symfony/polyfill-php54/Resources/stubs/SessionHandlerInterface.php',
         'SqlFormatter' => __DIR__ . '/..' . '/jdorn/sql-formatter/lib/SqlFormatter.php',
+        'Text_Diff_Renderer_parallel' => __DIR__ . '/..' . '/cerdic/css-tidy/testing/unit-tests/class.Text_Diff_Renderer_parallel.php',
         'TypeError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/TypeError.php',
+        'csstidy' => __DIR__ . '/..' . '/cerdic/css-tidy/class.csstidy.php',
+        'csstidy_csst' => __DIR__ . '/..' . '/cerdic/css-tidy/testing/unit-tests/class.csstidy_csst.php',
+        'csstidy_harness' => __DIR__ . '/..' . '/cerdic/css-tidy/testing/unit-tests/class.csstidy_harness.php',
+        'csstidy_optimise' => __DIR__ . '/..' . '/cerdic/css-tidy/class.csstidy_optimise.php',
+        'csstidy_print' => __DIR__ . '/..' . '/cerdic/css-tidy/class.csstidy_print.php',
+        'csstidy_reporter' => __DIR__ . '/..' . '/cerdic/css-tidy/testing/unit-tests/class.csstidy_reporter.php',
+        'csstidy_test_csst' => __DIR__ . '/..' . '/cerdic/css-tidy/testing/unit-tests/test.csst.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

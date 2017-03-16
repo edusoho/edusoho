@@ -3615,5 +3615,40 @@
         "keywords": [
             "html"
         ]
+    },
+    {
+        "name": "cerdic/css-tidy",
+        "version": "v1.5.5",
+        "version_normalized": "1.5.5.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Cerdic/CSSTidy.git",
+            "reference": "b0c1bda3be5a35da44ba1ac28cc61c67d2ada465"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/Cerdic/CSSTidy/b0c1bda3be5a35da44ba1ac28cc61c67d2ada465.zip",
+            "reference": "b0c1bda3be5a35da44ba1ac28cc61c67d2ada465",
+            "shasum": ""
+        },
+        "time": "2015-11-28T21:47:43+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "."
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL-2.1"
+        ],
+        "authors": [
+            {
+                "name": "Cédric MORIN",
+                "email": "changeme@mailinator.com"
+            }
+        ],
+        "description": "CSSTidy is a CSS minifier"
     }
 ]
