@@ -12,6 +12,7 @@ class AttachmentController extends BaseController
     public function uploadAction(Request $request)
     {
         $query = $request->query->all();
+        $useSeajs = $request->query->get('useSeajs', false);
         $parser = new UploaderToken();
         $params = $parser->parse($query['token']);
 
@@ -19,7 +20,12 @@ class AttachmentController extends BaseController
             return $this->createJsonResponse(array('error' => '上传授权码不正确，请重试！'));
         }
 
-        return $this->render('attachment/upload-modal.html.twig', array(
+        $template = 'attachment/upload-modal.html.twig';
+        if ($useSeajs) {
+            $template = 'attachment/seajs-upload-modal.html.twig';
+        }
+
+        return $this->render($template, array(
             'token' => $query['token'],
             'idsClass' => $query['idsClass'],
             'listClass' => $query['listClass'],
@@ -41,6 +47,7 @@ class AttachmentController extends BaseController
             'type' => 'attachment',
             'useType' => $request->query->get('useType', false),
             'showLabel' => $request->query->get('showLabel', true),
+            'useSeajs' => $request->query->get('useSeajs', false),
             'attachments' => $attachments,
         ));
     }

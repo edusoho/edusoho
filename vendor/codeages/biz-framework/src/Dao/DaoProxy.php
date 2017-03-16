@@ -73,10 +73,9 @@ class DaoProxy implements DaoProxyInterface
         $serializes = empty($declares['serializes']) ? array() : $declares['serializes'];
 
         foreach ($serializes as $key => $method) {
-            if (!isset($row[$key])) {
-                continue;
+            if (array_key_exists($key, $row)) {
+                $row[$key] = $this->serializer->unserialize($method, $row[$key]);
             }
-            $row[$key] = $this->serializer->unserialize($method, $row[$key]);
         }
 
         return $row;
@@ -101,11 +100,9 @@ class DaoProxy implements DaoProxyInterface
         $serializes = empty($declares['serializes']) ? array() : $declares['serializes'];
 
         foreach ($serializes as $key => $method) {
-            if (!isset($row[$key])) {
-                continue;
+            if (array_key_exists($key, $row)) {
+                $row[$key] = $this->serializer->serialize($method, $row[$key]);
             }
-
-            $row[$key] = $this->serializer->serialize($method, $row[$key]);
         }
 
         return $row;

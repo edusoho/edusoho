@@ -45,15 +45,14 @@
     <thead>
     <tr>
       <th>{{'编号'|trans}}</th>
-      <th width="25%">{{'名称'|trans}}</th>
+      <th width="20%">{{'名称'|trans}}</th>
       <th>{{'价格'|trans}}</th>
       {% include 'org/parts/table-thead-tr.html.twig' %}
       <th width="">{{'连载状态'|trans}}</th>
       {% if filter == 'classroom' %}
         <th>{{'所在'|trans}}{{ setting("classroom.name")|default('班级'|trans) }}</th>
       {% else %}
-        <th>{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{ '学员'|trans }}{% endif %}
-          数
+        <th>{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{ '学员'|trans }}{% endif %}数
         </th>
 
       {% endif %}
@@ -61,7 +60,11 @@
       {% if filter == 'course' %}
         <th>{{'收入(元)'|trans}}</th>
       {% endif %}
-      
+
+      {% if filter == 'vip' %}
+        <th>{{ '会员等级'|trans }}</th>
+      {% endif %}
+
       <th>{{'状态'|trans}}</th>
       <th>{{'创建者'|trans}}</th>
       <th>{{'操作'|trans}}</th>

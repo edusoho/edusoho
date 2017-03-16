@@ -2046,8 +2046,6 @@ class UserSerialize
 {
     public static function serialize(array $user)
     {
-        $user['roles'] = empty($user['roles']) ? '' : '|'.implode('|', $user['roles']).'|';
-
         return $user;
     }
 

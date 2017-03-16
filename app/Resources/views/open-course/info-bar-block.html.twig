@@ -24,7 +24,7 @@
     <div class="operation-list">
       <div class="operation-img  operation-share es-share top">
         <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="es-icon es-icon-share"></i></a>
-        {% include 'common/share-dropdown.html.twig' with {type:'open_course'} %}
+        {% include 'common/share-dropdown.html.twig' with { type:'open_course', 'useSeajs': true } %}
       </div>
       {{ '分享'|trans }}
     </div>

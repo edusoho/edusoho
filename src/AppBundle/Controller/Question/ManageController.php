@@ -304,6 +304,20 @@ class ManageController extends BaseController
         return $this->createJsonResponse($courseTasks);
     }
 
+    public function showQuestionTypesNumAction(Request $request, $courseSetId)
+    {
+        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+
+        $conditions = $request->request->all();
+        $conditions['courseSetId'] = $courseSetId;
+        $conditions['parentId'] = 0;
+
+        $typesNum = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
+        $typesNum = ArrayToolkit::index($typesNum, 'type');
+
+        return $this->createJsonResponse($typesNum);
+    }
+
     protected function getQuestionConfig()
     {
         return $this->get('extension.default')->getQuestionTypes();

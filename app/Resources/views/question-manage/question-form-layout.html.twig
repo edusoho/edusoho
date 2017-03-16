@@ -42,13 +42,13 @@
                   <option value="{{ course.id }}" {% if question.courseId|default(0) == course.id %}selected{% endif %}>{{ course.title }}</option>
                 {% endfor %}
               </select>
-              <select class="form-control width-150" {% if not question.id|default(0) > 0 or not question.courseId|default(0) %}style="display:none;"{% endif %} name="target" data-role="target">
+              <select class="form-control width-150" {% if not question.id|default(0) > 0 or not question.courseId|default(0) %}style="display:none;"{% endif %} name="lessonId" data-role="lessonId">
                 <option value="0" {% if not question.lessonId|default(0) %}selected{% endif %}>{{'请选择'|trans}}</option>
                 {% for task in courseTasks|default([]) if task %}
                   <option value="{{ task.id }}" {% if question.lessonId|default(0) == task.id %}selected{% endif %}>{{ task.title }}</option>
                 {% endfor %}
               </select>
-              <div class="help-block">{{'可以针对本课程或者某个课时出题'|trans}}</div>
+              <div class="help-block">{{'可以导入本课程、某个计划或者某个任务的题目'|trans}}</div>
             </div>
           </div>
         {% endif %}

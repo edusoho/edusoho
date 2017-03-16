@@ -33,13 +33,33 @@ class LiveCourseController extends BaseController
             if ($taskConditions['keywordType'] == 'taskTitle') {
                 $taskConditions['titleLike'] = $taskConditions['keyword'];
             }
+            unset($taskConditions['keywordType']);
+            unset($taskConditions['keyword']);
         }
 
         $courseConditions = $this->fillOrgCode($courseConditions);
+
         $courseSets = $this->getCourseSetService()->searchCourseSets($courseConditions, array(), 0, 10000);
         $courseSetIds = ArrayToolkit::column($courseSets, 'id');
         $taskConditions['fromCourseSetIds'] = $courseSetIds;
 
+        if (empty($courseSets)) {
+            return $this->render(
+                'admin/live-course/index.html.twig',
+                array(
+                    'status' => $status,
+                    'liveTasks' => array(),
+                    'courseSets' => ArrayToolkit::index($courseSets, 'id'),
+                    'paginator' => new Paginator(
+                        $request,
+                        0,
+                        20
+                    ),
+                    'default' => $default,
+                    'eduCloudStatus' => $eduCloudStatus,
+                )
+            );
+        }
         $taskConditions['type'] = 'live';
         $taskConditions['status'] = 'published';
 
@@ -49,6 +69,7 @@ class LiveCourseController extends BaseController
             $this->getTaskService()->countTasks($taskConditions),
             20
         );
+
         $liveTasks = $this->getTaskService()->searchTasks(
             $taskConditions,
             $orderBy,
@@ -58,14 +79,17 @@ class LiveCourseController extends BaseController
 
         $this->migrate($courseSets, $liveTasks);
 
-        return $this->render('admin/live-course/index.html.twig', array(
-            'status' => $status,
-            'liveTasks' => $liveTasks,
-            'courseSets' => ArrayToolkit::index($courseSets, 'id'),
-            'paginator' => $paginator,
-            'default' => $default,
-            'eduCloudStatus' => $eduCloudStatus,
-        ));
+        return $this->render(
+            'admin/live-course/index.html.twig',
+            array(
+                'status' => $status,
+                'liveTasks' => $liveTasks,
+                'courseSets' => ArrayToolkit::index($courseSets, 'id'),
+                'paginator' => $paginator,
+                'default' => $default,
+                'eduCloudStatus' => $eduCloudStatus,
+            )
+        );
     }
 
     public function getMaxOnlineAction(Request $request)

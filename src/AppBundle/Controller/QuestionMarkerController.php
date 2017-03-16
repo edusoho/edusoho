@@ -38,7 +38,10 @@ class QuestionMarkerController extends BaseController
                 if (!empty($questionMetas['choices'])) {
                     foreach ($questionMetas['choices'] as $choiceIndex => $choice) {
                         $result[$index]['options'][$choiceIndex]['option_key'] = chr(65 + $choiceIndex);
-                        $result[$index]['options'][$choiceIndex]['option_val'] = self::convertAbsoluteUrl($baseUrl, $choice);
+                        $result[$index]['options'][$choiceIndex]['option_val'] = self::convertAbsoluteUrl(
+                            $baseUrl,
+                            $choice
+                        );
                     }
                 }
             }
@@ -100,11 +103,14 @@ class QuestionMarkerController extends BaseController
         $type = in_array($question['type'], array('single_choice', 'uncertain_choice')) ? 'choice' : $question['type'];
         $questionPreview = true;
 
-        return $this->render('marker/question-preview/preview-modal.html.twig', array(
-            'item' => $item,
-            'type' => $type,
-            'questionPreview' => $questionPreview,
-        ));
+        return $this->render(
+            'marker/question-preview/preview-modal.html.twig',
+            array(
+                'item' => $item,
+                'type' => $type,
+                'questionPreview' => $questionPreview,
+            )
+        );
     }
 
     public function sortQuestionAction(Request $request, $markerId)
@@ -179,7 +185,11 @@ class QuestionMarkerController extends BaseController
             $marker = $this->getMarkerService()->getMarker($data['markerId']);
 
             if (!empty($marker)) {
-                $questionmarker = $this->getQuestionMarkerService()->addQuestionMarker($data['questionId'], $marker['id'], $data['seq']);
+                $questionmarker = $this->getQuestionMarkerService()->addQuestionMarker(
+                    $data['questionId'],
+                    $marker['id'],
+                    $data['seq']
+                );
 
                 return $this->createJsonResponse($questionmarker);
             } else {
@@ -204,7 +214,13 @@ class QuestionMarkerController extends BaseController
         }
 
         $user = $this->getCurrentUser();
-        $questionMarkerResult = $this->getQuestionMarkerResultService()->finishCurrentQuestion($markerId, $user['id'], $questionMarkerId, $answer, $data['type']);
+        $questionMarkerResult = $this->getQuestionMarkerResultService()->finishCurrentQuestion(
+            $markerId,
+            $user['id'],
+            $questionMarkerId,
+            $answer,
+            $data['type']
+        );
 
         $data = array(
             'markerId' => $markerId,
@@ -224,12 +240,15 @@ class QuestionMarkerController extends BaseController
             $task = $video = array();
         }
 
-        return $this->render('marker/question.html.twig', array(
-            'course' => $course,
-            'task' => $task,
-            'video' => $video,
-            'targetChoices' => $this->getQuestionTargetChoices($course),
-        ));
+        return $this->render(
+            'marker/question.html.twig',
+            array(
+                'course' => $course,
+                'task' => $task,
+                'video' => $video,
+                'targetChoices' => $this->getQuestionTargetChoices($course),
+            )
+        );
     }
 
     public function searchAction(Request $request, $courseId, $taskId)
@@ -242,23 +261,26 @@ class QuestionMarkerController extends BaseController
 
         list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $conditions, $course, $task);
 
-        return $this->render('marker/question-tr.html.twig', array(
-            'course' => $course,
-            'task' => $task,
-            'paginator' => $paginator,
-            'questions' => $questions,
-            'targetChoices' => $this->getQuestionTargetChoices($course),
-        ));
+        return $this->render(
+            'marker/question-tr.html.twig',
+            array(
+                'course' => $course,
+                'task' => $task,
+                'paginator' => $paginator,
+                'questions' => $questions,
+                'targetChoices' => $this->getQuestionTargetChoices($course),
+            )
+        );
     }
 
     protected function getQuestionTargetChoices($course)
     {
         $tasks = $this->getTaskService()->findTasksByCourseId($course['id']);
 
-        $choices = array("course-{$course['id']}" => '本课程');
+        $choices = array("courseSet-{$course['courseSetId']}" => '本课程', "course-{$course['id']}" => '本计划');
 
         foreach ($tasks as $task) {
-            $choices["course-{$course['id']}/task-{$task['id']}"] = "课时{$task['number']}：{$task['title']}";
+            $choices["{$course['id']}/{$task['id']}"] = "任务{$task['number']}：{$task['title']}";
         }
 
         return $choices;
@@ -266,10 +288,7 @@ class QuestionMarkerController extends BaseController
 
     protected function getPaginatorAndQuestion($request, $conditions, $course, $task)
     {
-        if (!isset($conditions['target']) || empty($conditions['target'])) {
-            unset($conditions['target']);
-            $conditions['targetPrefix'] = "course-{$course['id']}";
-        }
+        $conditions = $this->processTarget($conditions);
 
         if (!empty($conditions['keyword'])) {
             $conditions['stem'] = $conditions['keyword'];
@@ -299,7 +318,10 @@ class QuestionMarkerController extends BaseController
         $file = $video['ext']['file'];
 
         $markerIds = ArrayToolkit::column($this->getMarkerService()->findMarkersByMediaId($file['id']), 'id');
-        $questionMarkerIds = ArrayToolkit::column($this->getQuestionMarkerService()->findQuestionMarkersByMarkerIds($markerIds), 'questionId');
+        $questionMarkerIds = ArrayToolkit::column(
+            $this->getQuestionMarkerService()->findQuestionMarkersByMarkerIds($markerIds),
+            'questionId'
+        );
 
         foreach ($questions as $key => $question) {
             $questions[$key]['exist'] = in_array($question['id'], $questionMarkerIds) ? true : false;
@@ -325,9 +347,13 @@ class QuestionMarkerController extends BaseController
 
     protected function convertAbsoluteUrl($baseUrl, $html)
     {
-        $html = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function ($matches) use ($baseUrl) {
-            return "src=\"{$baseUrl}/{$matches[1]}\"";
-        }, $html);
+        $html = preg_replace_callback(
+            '/src=[\'\"]\/(.*?)[\'\"]/',
+            function ($matches) use ($baseUrl) {
+                return "src=\"{$baseUrl}/{$matches[1]}\"";
+            },
+            $html
+        );
 
         return $html;
     }
@@ -394,5 +420,36 @@ class QuestionMarkerController extends BaseController
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
+    }
+
+    /**
+     * @param $conditions
+     *
+     * @return mixed
+     */
+    protected function processTarget($conditions)
+    {
+        $target = $conditions['target'];
+        if (strpos($target, '-') !== false) {
+            $targets = explode('-', $target);
+            //本课程
+
+            if ($targets[0] == 'courseSet') {
+                $conditions['courseSetId'] = $targets[1];
+                $conditions['courseId'] = 0;
+            }
+            //本计划
+            if ($targets[0] == 'course') {
+                $conditions['courseId'] = $targets[1];
+            }
+        } else {
+            //计划下的任务
+            $targets = explode('/', $target);
+            $conditions['courseId'] = $targets[0];
+            $conditions['lessonId'] = $targets[1];
+        }
+        unset($conditions['target']);
+
+        return $conditions;
     }
 }
