@@ -317,6 +317,11 @@ class MobileBaseController extends BaseController
 
             $course['priceType'] = $coinSetting['priceType'];
             $course['coinName'] = $coinSetting['name'];
+
+            $course['goals'] = empty($course['goals']) ? array() : $course['goals'];
+            $course['audiences'] = empty($course['audiences']) ? array() : $course['audiences'];
+            $course['services'] = empty($course['services']) ? array() : $course['services'];
+            $course['teacherIds'] = empty($course['teacherIds']) ? array() : $course['teacherIds'];
         }
 
         return $courses;
@@ -484,8 +489,8 @@ class MobileBaseController extends BaseController
                     $user['about'] = $controller->convertAbsoluteUrl($controller->request, $userProfile['about']);
                 }
 
-                $user['following'] = $controller->getUserService()->findUserFollowingCount($user['id']);
-                $user['follower'] = $controller->getUserService()->findUserFollowerCount($user['id']);
+                $user['following'] = (string) $controller->getUserService()->findUserFollowingCount($user['id']);
+                $user['follower'] = (string) $controller->getUserService()->findUserFollowerCount($user['id']);
 
                 $user['email'] = '****';
                 unset($user['password']);
