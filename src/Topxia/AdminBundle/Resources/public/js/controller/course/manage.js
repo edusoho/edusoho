@@ -33,7 +33,10 @@ define(function(require, exports, module) {
 					$table.find('#' + $tr.attr('id')).replaceWith(response);
 					Notify.success(Translator.trans('课程发布成功！'));
 				}
-			});
+			}).error(function(e) {
+				var res = e.responseJSON.error.message || '未知错误';
+                Notify.danger(res);
+			})
 		});
 
 		$table.on('click', '.delete-course', function() {

@@ -981,9 +981,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $user = $this->getUserService()->getUser($userId);
 
-        $isSuperAdmin = in_array('ROLE_SUPER_ADMIN|', $user['roles']);
+        $isSuperAdmin = in_array('ROLE_SUPER_ADMIN', $user['roles']);
         $isAdmin = in_array('ROLE_ADMIN', $user['roles']);
 
+        $courses = array();
         if ($isSuperAdmin || $isAdmin) {
             $courses = $this->findCoursesByCourseSetId($courseSetId);
         } elseif (in_array('ROLE_TEACHER', $user['roles'])) {
