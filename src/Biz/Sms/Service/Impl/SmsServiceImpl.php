@@ -145,7 +145,7 @@ class SmsServiceImpl extends BaseService implements SmsService
         }
 
         $this->getLogService()->info(
-            'sms', $smsType, sprintf('userId:%s,对%s发送用于%s的验证短信%s', $currentUser['id'], $to, $smsType, $smsCode)), $result);
+            'sms', $smsType, sprintf('userId:%s,对%s发送用于%s的验证短信%s', $currentUser['id'], $to, $smsType, $smsCode), $result);
 
         return array(
             'to' => $to,

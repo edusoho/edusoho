@@ -41,7 +41,7 @@ class CourseDraftServiceImpl extends BaseService implements CourseDraftService
         $draft = $this->findCourseDraft($courseId, $lessonId, $userId);
 
         if (empty($draft)) {
-            throw $this->createServiceException($this->getKernel()->trans('草稿不存在，更新失败！'));
+            throw $this->createServiceException('草稿不存在，更新失败！');
         }
 
         $fields = $this->_filterDraftFields($fields);
