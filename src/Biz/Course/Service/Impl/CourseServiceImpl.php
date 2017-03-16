@@ -615,7 +615,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             return false;
         }
 
-        if ($user->hasPermission('admin_course_set')) {
+        if ($user->hasPermission('admin_course_manage')) {
             return true;
         }
 
