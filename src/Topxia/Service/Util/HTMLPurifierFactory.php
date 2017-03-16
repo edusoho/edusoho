@@ -18,22 +18,12 @@ class HTMLPurifierFactory
         
         $config = \HTMLPurifier_Config::createDefault();
         
-        // $config->set('Cache.SerializerPath', $this->config['cacheDir']);
-        $config->set('Attr.EnableID', true);
+        $config->set('Cache.SerializerPath', $this->config['cacheDir']);
         $config->set('CSS.AllowTricky', true);
         if ($trusted) {
-            // $config->set('HTML.Trusted', true);
-            // $config->set('CSS.Trusted', true);
-            $config->set('HTML.SafeObject', true);
             $config->set('HTML.SafeIframe', true);
             $config->set('URI.SafeIframeRegexp', '%^(https?:)?//(.*?)%'); 
-            $config->set('Output.FlashCompat', true);
-            $config->set('HTML.FlashAllowFullScreen', true);
-            $config->set('Filter.ExtractStyleBlocks', true);
         }
-
-        $config->set('HTML.TargetBlank', true);
-
         $def = $config->getHTMLDefinition(true);
         $def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');
 
