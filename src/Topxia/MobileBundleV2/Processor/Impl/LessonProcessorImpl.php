@@ -718,7 +718,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     private function filterLessons($lessons, $files)
     {
-        return array_map(function ($lesson) use ($files) {
+        $self = $this;
+        return array_map(function ($lesson) use ($files, $self) {
             $lesson['content'] = "";
 
             if (isset($lesson['mediaId'])) {
@@ -728,8 +729,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             }
 
             unset($lesson['tags']);
-
-            return $lesson;
+            return $self->controller->filterTask($lesson);
         }, $lessons);
     }
 
@@ -738,11 +738,11 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $taskResults = $this->controller->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
         $learnStatuses = array();
         foreach ($taskResults as $result) {
-            if($result['status'] === 'finish'){
+            if ($result['status'] === 'finish') {
                 $status = 'finished';
-            }else if($result['status'] === 'start'){
+            } elseif ($result['status'] === 'start') {
                 $status = 'learning';
-            }else{
+            } else {
                 continue;
             }
             $learnStatuses[$result['courseTaskId']] = $status;
