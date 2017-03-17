@@ -75,6 +75,7 @@
   <div class="settings-list js-settings-list clearfix">
     <div class="settings-item {% if tasks.preparation|default(null) %} active {% endif %}">
       <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
+        data-help="popover" data-placement="top" data-trigger="hover" data-content="{{'学员可通过看视频、阅读资料等预习任务，导入学习。'|trans}}" 
         {% if not tasks.preparation|default(null) %}
         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'preparation', categoryId: chapter.id}) }}">
         {% else %}
@@ -87,7 +88,7 @@
     </div>
     <div class="settings-item js-settings-item active">
       <a href="javascript:;" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal"
-      data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId, type:'lesson'}) }}">
+        data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId, type:'lesson'}) }}">
         <i class="es-icon es-icon-book mrm"></i>
         任务学习
       </a>
@@ -95,6 +96,7 @@
     </div>
     <div class="settings-item {% if tasks.exercise|default(null) %} active {% endif %}">
       <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
+        data-help="popover" data-placement="top" data-trigger="hover" data-content="{{'练习的设置包括做题在内的多种形式。'|trans}}" 
         {% if not tasks.exercise|default(null) %}
         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'exercise', categoryId: chapter.id}) }}">
         {% else %}
@@ -107,6 +109,7 @@
     </div>
     <div class="settings-item {% if tasks.homework|default(null) %} active {% endif %}">
       <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
+        data-help="popover" data-placement="top" data-trigger="hover" data-content="{{'作业的设置包括做题在内的多种形式。'|trans}}" 
         {% if not tasks.homework|default(null) %}
         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'homework', categoryId: chapter.id}) }}">
         {% else %}
@@ -119,6 +122,7 @@
     </div>
     <div class="settings-item {% if tasks.extraClass|default(null) %} active {% endif %}">
       <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
+        data-help="popover" data-placement="top" data-trigger="hover" data-content="{{'学员可通过课外阅读、课外作业等，扩展学习。'|trans}}" 
         {% if not  tasks.extraClass|default(null) %}
         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'extraClass', categoryId: chapter.id}) }}">
         {% else %}
