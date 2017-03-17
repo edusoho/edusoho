@@ -146,7 +146,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function findFriendCount($userId)
     {
-        return $this->getFriendDao()->count(array('fromId' => $userId));
+        return $this->getFriendDao()->count(array('fromId' => $userId, 'pair' => 1));
     }
 
     public function getSimpleUser($id)
@@ -1491,7 +1491,12 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function findFriends($userId, $start, $limit)
     {
-        $friends = $this->getFriendDao()->searchByUserId($userId, $start, $limit);
+        $friends = $this->getFriendDao()->search(
+            array('fromId' => $userId, 'pair' => 1),
+            null,
+            $start,
+            $limit
+        );
         $ids = ArrayToolkit::column($friends, 'toId');
 
         return $this->findUsersByIds($ids);
@@ -1531,7 +1536,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createAccessDeniedException('You have Followed User#{$toId}.');
         }
 
-        $isFollowed = $this->isFollowed($fromId, $toId);
+        $isFollowed = $this->isFollowed($toId, $fromId);
         $pair = $isFollowed ? 1 : 0;
         $friend = $this->getFriendDao()->create(array(
             'fromId' => $fromId,
