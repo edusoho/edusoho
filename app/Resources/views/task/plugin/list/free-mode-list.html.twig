@@ -1,9 +1,11 @@
 <ul class="task-list task-show">
+  {% set taskIndex = 0 %}
   {% for key, item in courseItems %}
     {% if item.type == 'chapter' %}
-      <li class="task-item">
+      <li class="task-item js-task-chapter">
         <i class="es-icon es-icon-viewlist left-menu"></i><span class="title">第{{ item.number }}
           章: {{ item.title }}</span>
+          <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
       </li>
     {% elseif item.type == 'unit' %}
       <li class="task-item">
@@ -11,6 +13,7 @@
       </li>
     {% elseif  item.type == 'lesson' %}
       {% for task in item.tasks %}
+        {% set taskIndex = taskIndex +1%}
         {% set task_lock =  (course.learnMode  == 'lockMode')  and (task.lock  and   task.number != 1) %}
         <li class="task-item task-content {% if task.activityId == activity.id %} active {% endif %} mouse-control">
           <i class="es-icon
@@ -28,12 +31,12 @@
           {% if not task_lock  and   task.status == 'published' %}
             <a class="title"
                href="{{ path('course_task_show', {id:task.id,courseId:task.courseId}) }}">
-              {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}任务{{ task.number }}: {{ task.title }}
+              {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}任务{{ taskIndex }}: {{ task.title }}
             </a>
           {% else %}
             <div class="title"
                  data-url="{{ path('course_task_show', {id:task.id,courseId:task.courseId}) }}">
-              {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}任务{{ task.number }}: {{ task.title }}
+              {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}任务{{ taskIndex}}: {{ task.title }}
             </div>
           {% endif %}
 
@@ -59,7 +62,3 @@
   {% endfor %}
 
 </ul>
-
-
-
-

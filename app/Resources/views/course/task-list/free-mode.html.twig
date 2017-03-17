@@ -51,8 +51,6 @@
               {% if not member %}
 
 	              {% if course.isFree %}
-
-                  {{ task.type }}
 		              {% if task.type in ['text','video','audio','flash','doc','ppt'] %}
 			              <a class="btn btn-primary" href="#modal" data-toggle="modal"
 			                 data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"

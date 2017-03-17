@@ -2,24 +2,24 @@
 
 namespace Biz\Course\Service\Impl;
 
-use Biz\BaseService;
-use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\FavoriteDao;
-use Biz\Course\Dao\CourseSetDao;
-use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
-use Biz\System\Service\LogService;
+use Biz\BaseService;
 use Biz\Content\Service\FileService;
-use Biz\Taxonomy\Service\TagService;
+use Biz\Course\Copy\Impl\ClassroomCourseCopy;
+use Biz\Course\Dao\CourseDao;
+use Biz\Course\Dao\CourseSetDao;
+use Biz\Course\Dao\FavoriteDao;
+use Biz\Course\Service\CourseDeleteService;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
-use Biz\Course\Service\MaterialService;
+use Biz\System\Service\LogService;
+use Biz\Taxonomy\Service\TagService;
+use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
-use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\CourseNoteService;
-use Biz\Course\Service\CourseDeleteService;
-use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
@@ -309,6 +309,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
+
         $sets = $this->findCourseSetsByIds($courseSetIds);
 
         return $sets;
@@ -596,6 +597,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function publishCourseSet($id)
     {
         $courseSet = $this->tryManageCourseSet($id);
+        $publishedCourses = $this->getCourseService()->findPublishedCoursesByCourseSetId($id);
+
+        if (empty($publishedCourses)) {
+            throw $this->createAccessDeniedException('发布课程时请确保课程下至少有一个已发布的教学计划');
+        }
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
         $this->dispatchEvent('course-set.publish', new Event($courseSet));
     }
@@ -620,8 +626,17 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getFavoriteDao()->searchByUserId($userId, $start, $limit);
     }
 
+    public function searchFavorites(array $conditions, array $orderBys, $start, $limit)
+    {
+        return $this->getFavoriteDao()->search($conditions, $orderBys, $start, $limit);
+    }
+
     /**
      * 根据排序规则返回排序数组.
+     *
+     * @param string $order
+     *
+     * @return array
      */
     protected function getOrderBys($order)
     {

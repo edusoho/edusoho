@@ -206,16 +206,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.2.3",
+            "version": "v0.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "d293659ad564989c55112fa23cb62ab647fefed8"
+                "reference": "8dd51d3e160ff8d137bed599873aef88ffe0a638"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/d293659ad564989c55112fa23cb62ab647fefed8",
-                "reference": "d293659ad564989c55112fa23cb62ab647fefed8",
+                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/8dd51d3e160ff8d137bed599873aef88ffe0a638",
+                "reference": "8dd51d3e160ff8d137bed599873aef88ffe0a638",
                 "shasum": ""
             },
             "require": {
@@ -240,7 +240,7 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2017-03-08T05:58:34+00:00"
+            "time": "2017-03-17T04:46:10+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",

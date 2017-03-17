@@ -117,6 +117,7 @@ class TaskManageController extends BaseController
         );
         if ($file['type'] == 'document') {
             $task['type'] = 'doc';
+            $task['finishDetail'] = 1;
             $task['mediaType'] = 'doc';
         }
 

@@ -1,18 +1,16 @@
 {% if course.buyable|default(true) == false and not is_plugin_installed('Vip') %}
   {{ '该课程为限制课程'|trans }}<br>{{ '请联系客服'|trans }}
 {% else %}
-
-  {{ slot('course.purchase.extension', {'course':course}) }}
-
-  {# 插件重写课程购买按钮 #}
-  {% if not slot('course.buy-btn.extension', {'course': course})|trim is empty %}
-    {{ slot('course.buy-btn.extension', {'course': course}) }}
+  {% if course.status != 'published' or courseSet.status != 'published' %}
+    课程还未发布，不允许加入和购买
   {% else %}
-    {% if course.status != 'published' or courseSet.status != 'published' %}
-      课程还未发布，不允许加入和购买
+    {% if course.buyExpiryTime and course.buyExpiryTime < 'now'|date('U') %}
+      超过购买截止日期，不允许加入和购买
     {% else %}
-      {% if course.buyExpiryTime and course.buyExpiryTime < 'now'|date('U') %}
-        超过购买截止日期，不允许加入和购买
+      {{ slot('course.purchase.extension', {'course':course}) }}
+      {# 插件重写课程购买按钮 #}
+      {% if not slot('course.buy-btn.extension', {'course': course})|trim is empty %}
+        {{ slot('course.buy-btn.extension', {'course': course}) }}
       {% else %}
         {% if course.buyable|default(true) %}
           <a class="btn btn-primary btn-lg {% if previewAs|default() %}disabled{% endif %}"
@@ -32,7 +30,9 @@
           </a>
         {% endif %}
       {% endif %}
+
     {% endif %}
-  {% endif%}
+  {% endif %}
+
 
 {% endif %}

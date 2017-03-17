@@ -37,7 +37,7 @@
         </div>
       </td>
       <td>
-        {% if courseSet.courses|length == 1 %}
+        {% if courseSet.courses|default(null)|length == 1 %}
           {% for course in courseSet.courses %}
             {{course.title}}
           {% endfor %}

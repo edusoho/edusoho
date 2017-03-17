@@ -317,7 +317,7 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
             return $target;
         }
         foreach ($fields as $field) {
-            if (!empty($source[$field])) {
+            if (isset($source[$field])) {
                 $target[$field] = $source[$field];
             }
         }

@@ -3,11 +3,26 @@
 
 {% block activity_content %}
   <div class="form-group">
+
     <div class="col-sm-2 control-label">
       <label for="text-content-field" class="control-label-required">{{ '内容'|trans }}</label>
     </div>
     <div class="col-sm-10">
-      <textarea class="form-control type-hidden js-text" id="text-content-field" name="content"data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" >{{ activity.content|default('') }}</textarea>
+      {% if draft %}
+        <a id="see-draft-btn" class="btn js-continue-edit" data-content="{{ draft.content }}">
+          <small>
+            您有一段自动保存内容，继续编辑请点击
+          </small>
+        </a>
+      {% endif %}
+      <textarea class="form-control type-hidden js-text" id="text-content-field" name="content"
+        data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
+        data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}"
+        data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
+        data-save-draft-url="{{ path('course_text_activity_auto_save', {courseId: courseId, activityId: activity.id|default(0)}) }}"
+      >
+        {{ activity.content|default('') }}
+      </textarea>
     </div>
   </div>
 {% endblock %}

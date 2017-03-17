@@ -47,7 +47,7 @@ class GenerateNotificationHandler
             if (array_key_exists('deadlineNotify', $vipSetting) && $vipSetting['deadlineNotify'] == 1) {
                 $vip = $this->getVipService()->getMemberByUserId($user['id']);
                 $currentTime = time();
-                if ($vip['deadlineNotified'] != 1 && $currentTime < $vip['deadline'] && ($currentTime + $vipSetting['daysOfNotifyBeforeDeadline'] * 24 * 60 * 60) > $vip['deadline']) {
+                if (!empty($vip) && $vip['deadlineNotified'] != 1 && $currentTime < $vip['deadline'] && ($currentTime + $vipSetting['daysOfNotifyBeforeDeadline'] * 24 * 60 * 60) > $vip['deadline']) {
                     $message = array('endtime' => date('Y-m-d', $vip['deadline']));
 
                     $this->getNotificationService()->notify($user['id'], 'vip-deadline',

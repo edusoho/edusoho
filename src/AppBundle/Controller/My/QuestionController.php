@@ -101,13 +101,14 @@ class QuestionController extends BaseController
     {
         $user = $this->getUser();
 
-        $myFavorite = $this->getQuestionService()->getUserFavoriteByQuestionId($user['id'], $question['id']);
+        $userFavorites = $this->getQuestionService()->findUserFavoriteQuestions($user['id']);
+        $userFavorites = ArrayToolkit::index($userFavorites, 'questionId');
 
-        if (!$myFavorite) {
+        if (empty($userFavorites[$id])) {
             throw new AccessDeniedException('Question preview access denied');
         }
 
-        $question = $this->getQuestionService()->getQuestion($id);
+        $question = $this->getQuestionService()->get($id);
 
         if (empty($question)) {
             throw new NotFoundException('Question not found');

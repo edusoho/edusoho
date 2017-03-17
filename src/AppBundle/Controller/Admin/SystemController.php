@@ -2,10 +2,10 @@
 
 namespace AppBundle\Controller\Admin;
 
-use Biz\User\AuthProvider\DiscuzAuthProvider;
+use Biz\Common\Mail\MailFactory;
 use AppBundle\Common\StringToolkit;
 use Symfony\Component\Finder\Finder;
-use Biz\Common\Mail\MailFactory;
+use Biz\User\AuthProvider\DiscuzAuthProvider;
 use Symfony\Component\HttpFoundation\Response;
 
 class SystemController extends BaseController
@@ -30,7 +30,7 @@ class SystemController extends BaseController
         $setting = $this->getSettingService()->get('user_partner', array());
 
         if (!empty($setting['mode']) && $setting['mode'] == 'discuz') {
-            $discuzProvider = new DiscuzAuthProvider();
+            $discuzProvider = new DiscuzAuthProvider($this->getBiz());
 
             if ($discuzProvider->checkConnect()) {
                 return $this->createJsonResponse(array('status' => true, 'message' => '通信成功'));

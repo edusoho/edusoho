@@ -12,7 +12,11 @@ class Lesson extends BaseResource
 {
     public function get(Application $app, Request $request, $id)
     {
-        $lesson = $this->getCourseService()->getLesson($id);
+
+        $task = $this->getTaskService()->getTask($id);
+        $lesson = $this->getCourseService()->convertTasks(array($task));
+        $lesson = array_shift($lesson);
+
         if (empty($lesson)) {
             return $this->error('not_courseId', "ID为#{$id}的课时不存在");
         }
@@ -23,6 +27,7 @@ class Lesson extends BaseResource
         }
 
         $currentUser = $this->getCurrentUser();
+
         if (!$currentUser->isLogin()) {
             $courseSetting = $this->getSettingService()->get('course');
             if (empty($courseSetting['allowAnonymousPreview']) || !$lesson['free']) {
@@ -34,7 +39,7 @@ class Lesson extends BaseResource
                     return $this->error('not_student', "你不是该课程学员，请加入学习");
                 }
             } else {
-                $this->getCourseService()->startLearnLesson($lesson['courseId'], $id);
+                $this->getTaskService()->startTask($lesson['id']);
             }
         }
 
@@ -298,34 +303,39 @@ class Lesson extends BaseResource
         return $lesson;
     }
 
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File:UploadFileService');
+        return $this->instance()->createService('File:UploadFileService');
     }
 
     protected function getTestpaperService()
     {
-        return $this->getServiceKernel()->createService('Testpaper:TestpaperService');
+        return $this->createService('Testpaper:TestpaperService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->createService('User:TokenService');
+        return $this->createService('User:TokenService');
     }
 
     protected function getCourseMemberService()
     {
-        return ServiceKernel::instance()->createService('Course:MemberService');
+        return $this->createService('Course:MemberService');
     }
 
     protected function getMaterialLibService()

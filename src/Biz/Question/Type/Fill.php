@@ -2,10 +2,9 @@
 
 namespace Biz\Question\Type;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\UnexpectedValueException;
 
-class Fill implements TypeInterface
+class Fill extends BaseQuestion implements TypeInterface
 {
     public function create($fields)
     {
@@ -61,9 +60,9 @@ class Fill implements TypeInterface
         }
     }
 
-    public function filter($fields)
+    public function filter(array $fields)
     {
-        $fields = $this->commonFilter($fields);
+        $fields = parent::filter($fields);
 
         preg_match_all("/\[\[(.+?)\]\]/", $fields['stem'], $answer, PREG_PATTERN_ORDER);
         if (empty($answer[1])) {
@@ -78,39 +77,6 @@ class Fill implements TypeInterface
             }
             $fields['answer'][] = $value;
         }
-
-        return $fields;
-    }
-
-    protected function commonFilter($fields)
-    {
-        if (isset($fields['target'])) {
-            $fields['lessonId'] = $fields['target'];
-            unset($fields['target']);
-        }
-        $fields = ArrayToolkit::parts($fields, array(
-            'type',
-            'stem',
-            'difficulty',
-            'userId',
-            'answer',
-            'analysis',
-            'metas',
-            'score',
-            'categoryId',
-            'parentId',
-            'copyId',
-            'target',
-            'courseId',
-            'courseSetId',
-            'lessonId',
-            'subCount',
-            'finishedTimes',
-            'passedTimes',
-            'userId',
-            'updatedTime',
-            'createdTime',
-        ));
 
         return $fields;
     }

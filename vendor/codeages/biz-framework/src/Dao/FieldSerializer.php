@@ -5,7 +5,7 @@ namespace Codeages\Biz\Framework\Dao;
 class FieldSerializer implements SerializerInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function serialize($name, $value)
     {
@@ -33,7 +33,7 @@ class FieldSerializer implements SerializerInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function unserialize($name, $value)
     {

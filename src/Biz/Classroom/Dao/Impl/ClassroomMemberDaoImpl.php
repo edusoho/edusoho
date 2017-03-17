@@ -19,7 +19,7 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
                 'teacherIds' => 'json',
                 'service' => 'json',
             ),
-            'orderbys' => array('name', 'createdTime'),
+            'orderbys' => array('name', 'createdTime', 'updatedTime', 'id'),
             'conditions' => array(
                 'userId = :userId',
                 'classroomId = :classroomId',
@@ -30,6 +30,7 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
                 'createdTime >= :startTimeGreaterThan',
                 'createdTime >= :createdTime_GE',
                 'createdTime < :startTimeLessThan',
+                'updatedTime >= :updatedTime_GE',
             ),
         );
     }
@@ -144,9 +145,9 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
 
     public function findByUserId($userId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ?";
-
-        return $this->db()->executeQuery($sql, array($userId))->fetchAll(\PDO::FETCH_COLUMN);
+        return $this->findByFields(array(
+            'userId' => $userId,
+        ));
     }
 
     protected function createQueryBuilder($conditions)

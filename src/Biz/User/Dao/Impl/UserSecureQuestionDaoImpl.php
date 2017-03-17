@@ -11,9 +11,9 @@ class UserSecureQuestionDaoImpl extends GeneralDaoImpl implements UserSecureQues
 
     public function findByUserId($userId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? ORDER BY createdTime ASC ";
-
-        return $this->db()->fetchAll($sql, array($userId)) ?: null;
+        return $this->findByFields(array(
+            'userId' => $userId,
+        ));
     }
 
     public function declares()

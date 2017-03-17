@@ -156,6 +156,9 @@ class CourseController extends CourseBaseController
             );
         }
 
+        if ($course['expiryMode'] == 'date' && $course['expiryStartDate'] >= time()) {
+            return $this->redirectToRoute('course_show', array('id' => $course['id']));
+        }
         $classroom = array();
         if ($course['parentId'] > 0) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);

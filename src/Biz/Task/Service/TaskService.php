@@ -4,7 +4,7 @@ namespace Biz\Task\Service;
 
 interface TaskService
 {
-    const LEARN_TIME_STEP = 2;
+    const LEARN_TIME_STEP = 60;
 
     const WATCH_TIME_STEP = 120;
 

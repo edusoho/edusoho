@@ -6,11 +6,11 @@ interface CourseDraftService
 {
     public function getCourseDraft($id);
 
-    public function findCourseDraft($courseId, $lessonId, $userId);
+    public function getCourseDraftByCourseIdAndActivityIdAndUserId($courseId, $activityId, $userId);
 
     public function createCourseDraft($draft);
 
-    public function updateCourseDraft($courseId, $lessonId, $userId, $fields);
+    public function updateCourseDraft($id, $fields);
 
-    public function deleteCourseDrafts($courseId, $lessonId, $userId);
+    public function deleteCourseDrafts($courseId, $activityId, $userId);
 }
