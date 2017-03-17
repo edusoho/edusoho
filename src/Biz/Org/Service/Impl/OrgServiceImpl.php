@@ -207,7 +207,7 @@ class OrgServiceImpl extends BaseService implements OrgService
         $conditions = array('likeOrgCode' => $org['orgCode']);
         foreach ($modules as $module => $service) {
             $dispay = OrgBatchUpdateFactory::getDispayModuleName($module);
-            $modalesDatas[$dispay] = $this->createService($service)->searchCount($conditions);
+            $modalesDatas[$dispay] = $this->createService($service['service'])->searchCount($conditions);
         }
 
         return array_filter($modalesDatas);

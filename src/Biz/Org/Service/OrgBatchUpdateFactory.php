@@ -30,10 +30,6 @@ class OrgBatchUpdateFactory
                 'protocol' => 'biz',
                 'service' => 'Course:CourseSetService',
             ),
-            'course' => array(
-                'protocol' => 'biz',
-                'service' => 'Course:CourseService',
-            ),
             'classroom' => array(
                 'protocol' => 'biz',
                 'service' => 'Classroom:ClassroomService',
@@ -53,7 +49,7 @@ class OrgBatchUpdateFactory
     {
         $modules = array(
             'user' => '用户',
-            'course' => '课程',
+            'courseSet' => '课程',
             'classroom' => '班级',
             'article' => '咨询',
             'announcement' => '网站公告',

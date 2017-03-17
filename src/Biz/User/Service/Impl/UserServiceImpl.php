@@ -45,7 +45,7 @@ class UserServiceImpl extends BaseService implements UserService
         return !$user ? null : UserSerialize::unserialize($user);
     }
 
-    public function searchUserCount(array $conditions)
+    public function countUsers(array $conditions)
     {
         return $this->getUserDao()->count($conditions);
     }
@@ -208,7 +208,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function countUserHasMobile($needVerified = false)
     {
         if ($needVerified) {
-            $count = $this->searchUserCount(array(
+            $count = $this->countUsers(array(
                 'locked' => 0,
                 'hasVerifiedMobile' => true,
             ));
@@ -1808,7 +1808,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if ($needVerified) {
             $conditions['hasVerifiedMobile'] = true;
-            $count = $this->searchUserCount($conditions);
+            $count = $this->countUsers($conditions);
             $users = $this->searchUsers($conditions, array('createdTime' => 'ASC'), 0, $count);
             $mobiles = ArrayToolkit::column($users, 'verifiedMobile');
 
