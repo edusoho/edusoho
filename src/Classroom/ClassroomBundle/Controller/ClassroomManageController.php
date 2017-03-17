@@ -300,6 +300,7 @@ class ClassroomManageController extends BaseController
     public function remarkAction(Request $request, $classroomId, $userId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
+        $user      = $this->getUserService()->getUser($userId);
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         if ('POST' == $request->getMethod()) {
@@ -310,7 +311,6 @@ class ClassroomManageController extends BaseController
         }
 
         $member    = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
-        $user      = $this->getUserService()->getUser($userId);
 
         return $this->render('ClassroomBundle:ClassroomManage:remark-modal.html.twig', array(
             'member'    => $member,
