@@ -2,7 +2,9 @@
 
 namespace Biz\Course\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Course\Dao\CourseDraftDao;
 use Biz\Course\Service\CourseDraftService;
 
 class CourseDraftServiceImpl extends BaseService implements CourseDraftService
@@ -12,12 +14,12 @@ class CourseDraftServiceImpl extends BaseService implements CourseDraftService
         return $this->getCourseDraftDao()->get($id);
     }
 
-    public function findCourseDraft($courseId, $lessonId, $userId)
+    public function getCourseDraftByCourseIdAndActivityIdAndUserId($courseId, $activityId, $userId)
     {
-        $draft = $this->getCourseDraftDao()->findCourseDraft($courseId, $lessonId, $userId);
+        $draft = $this->getCourseDraftDao()->getByCourseIdAndActivityIdAndUserId($courseId, $activityId, $userId);
 
         if (empty($draft) || ($draft['userId'] != $userId)) {
-            return null;
+            return array();
         }
 
         return $draft;
@@ -27,33 +29,32 @@ class CourseDraftServiceImpl extends BaseService implements CourseDraftService
     {
         $draft = ArrayToolkit::parts(
             $draft,
-            array('userId', 'title', 'courseId', 'summary', 'content', 'lessonId', 'createdTime')
+            array('userId', 'title', 'courseId', 'summary', 'content', 'activityId', 'createdTime')
         );
         $draft['userId'] = $this->getCurrentUser()->id;
         $draft['createdTime'] = time();
-        $draft = $this->getCourseDraftDao()->create($draft);
 
-        return $draft;
+        return $this->getCourseDraftDao()->create($draft);
     }
 
-    public function updateCourseDraft($courseId, $lessonId, $userId, $fields)
+    public function updateCourseDraft($id, $fields)
     {
-        $draft = $this->findCourseDraft($courseId, $lessonId, $userId);
+        $draft = $this->getCourseDraft($id);
 
         if (empty($draft)) {
-            throw $this->createServiceException($this->getKernel()->trans('草稿不存在，更新失败！'));
+            throw $this->createNotFoundException('草稿不存在，更新失败！');
         }
 
         $fields = $this->_filterDraftFields($fields);
 
         $this->getLogService()->info('course', 'update_draft', "更新草稿《{$draft['title']}》(#{$draft['id']})的信息", $fields);
 
-        return $this->getCourseDraftDao()->update($courseId, $lessonId, $userId, $fields);
+        return $this->getCourseDraftDao()->update($id, $fields);
     }
 
-    public function deleteCourseDrafts($courseId, $lessonId, $userId)
+    public function deleteCourseDrafts($courseId, $activityId, $userId)
     {
-        return $this->getCourseDraftDao()->deleteCourseDrafts($courseId, $lessonId, $userId);
+        return $this->getCourseDraftDao()->deleteCourseDrafts($courseId, $activityId, $userId);
     }
 
     protected function _filterDraftFields($fields)
@@ -71,6 +72,9 @@ class CourseDraftServiceImpl extends BaseService implements CourseDraftService
         return $fields;
     }
 
+    /**
+     * @return CourseDraftDao
+     */
     protected function getCourseDraftDao()
     {
         return $this->createDao('Course:CourseDraftDao');

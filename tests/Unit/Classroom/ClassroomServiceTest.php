@@ -1134,6 +1134,9 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertEquals(count($assitantIds), 4);
     }
 
+    /**
+     @group current
+     */
     public function testAddCoursesToClassroom()
     {
         $teacher1 = $this->createTeacher('1');
@@ -1173,11 +1176,11 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getClassroomService()->addHeadTeacher($classroom['id'], $teacher1['id']);
         $this->getClassroomService()->addCoursesToClassroom($classroom['id'], $courseIds);
         $teachers = $this->getClassroomService()->findTeachers($classroom['id']);
-        $this->assertEquals(count($teachers), 4);
+        $this->assertEquals(count($teachers), 5); // classroom.creator也是classroom的teacher
         $courseIds = array($course3['id']);
         $this->getClassroomService()->addCoursesToClassroom($classroom['id'], $courseIds);
         $teachers = $this->getClassroomService()->findTeachers($classroom['id']);
-        $this->assertEquals(count($teachers), 6);
+        $this->assertEquals(count($teachers), 7);
     }
 
     public function testUpdateClassroomCourses()
@@ -1222,13 +1225,13 @@ class ClassroomServiceTest extends BaseTestCase
 
         $teachers = $this->getClassroomService()->findTeachers($classroom['id']);
 
-        $this->assertEquals(count($teachers), 6);
+        $this->assertEquals(count($teachers), 7);
 
         $courseIds = array($courses[2]['id']);
 
         $this->getClassroomService()->updateClassroomCourses($classroom['id'], $courseIds);
         $teachers = $this->getClassroomService()->findTeachers($classroom['id']);
-        $this->assertEquals(count($teachers), 3);
+        $this->assertEquals(count($teachers), 4);
     }
 
     public function testCanCreateThreadEvent()

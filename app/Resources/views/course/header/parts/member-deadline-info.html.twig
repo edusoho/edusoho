@@ -3,7 +3,8 @@
         {% if course.expiryMode == 'days' %}
               共<span class="mls color-warning"> {{ course.expiryDays }}天</span>
         {% else %}
-            {{ course.expiryStartDate|date('Y-m-d') }} ~ {{ course.expiryEndDate|date('Y-m-d') }}
+            {#{{ course.expiryStartDate|date('Y-m-d') }} ~ #}
+            {{ course.expiryEndDate|date('Y-m-d') }}
         {% endif %}
     {% else %}
         {{ member.deadline|date('Y-m-d') }}

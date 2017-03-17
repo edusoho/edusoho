@@ -17,6 +17,9 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class BaseController extends Controller
 {
+    /**
+     * @return CurrentUser
+     */
     protected function getCurrentUser()
     {
         return $this->getUser();
@@ -27,6 +30,9 @@ class BaseController extends Controller
         return $this->get('biz');
     }
 
+    /**
+     * @return CurrentUser
+     */
     public function getUser()
     {
         $biz = $this->getBiz();

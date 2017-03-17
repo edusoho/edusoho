@@ -1,5 +1,5 @@
-// import Emitter from 'es6-event-emitter';
 import Emitter from "component-emitter";
+import { chapterAnimate } from 'app/common/widget/chapter-animate';
 
 export default class TaskSidebar extends Emitter {
   constructor({element, url}) {
@@ -78,6 +78,7 @@ export default class TaskSidebar extends Emitter {
           if(this.isManualOperation){
             this.operationContent($btn);
           }
+          chapterAnimate();
           this.isManualOperation = true;
         });
     });

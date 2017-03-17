@@ -597,6 +597,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function publishCourseSet($id)
     {
         $courseSet = $this->tryManageCourseSet($id);
+        $publishedCourses = $this->getCourseService()->findPublishedCoursesByCourseSetId($id);
+
+        if (empty($publishedCourses)) {
+            throw $this->createAccessDeniedException('发布课程时请确保课程下至少有一个已发布的教学计划');
+        }
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
         $this->dispatchEvent('course-set.publish', new Event($courseSet));
     }
@@ -621,10 +626,16 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getFavoriteDao()->searchByUserId($userId, $start, $limit);
     }
 
+    public function searchFavorites(array $conditions, array $orderBys, $start, $limit)
+    {
+        return $this->getFavoriteDao()->search($conditions, $orderBys, $start, $limit);
+    }
+
     /**
      * 根据排序规则返回排序数组.
      *
-     * @param  string $order
+     * @param string $order
+     *
      * @return array
      */
     protected function getOrderBys($order)

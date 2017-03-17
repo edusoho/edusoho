@@ -152,6 +152,7 @@
 
   {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
   <div id="modal" class="modal" ></div>
+  <div id="attachment-modal" class="modal" ></div>
   {% if setting('copyright.thirdCopyright') != 1 %}
     <div class="fixed-bar">
       <a href="{{path('admin_feedback')}}"  target='_blank' class="icon-question-text feedback">

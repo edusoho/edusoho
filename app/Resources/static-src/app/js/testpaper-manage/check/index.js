@@ -156,6 +156,7 @@ class CheckTest
     let teacherSay = this.$dialog.find('textarea').val();
     let passedStatus = this.$dialog.find('[name="passedStatus"]:checked').val();
 
+    $target.button('loading');
     $.post($target.data('postUrl'), {result:this.checkContent,teacherSay:teacherSay,passedStatus:passedStatus}, function(response) {
       window.location.href = $target.data('goto');
     })

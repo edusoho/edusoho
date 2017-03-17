@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\Exception\ResourceNotFoundException;
 
 class HomeworkController extends BaseController
 {
@@ -12,7 +11,7 @@ class HomeworkController extends BaseController
     {
         $homework = $this->getTestpaperService()->getTestpaper($homeworkId);
         if (empty($homework)) {
-            throw new ResourceNotFoundException('homework', $homeworkId);
+            return $this->createMessageResponse('info', 'homework not found');
         }
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($homework['courseId']);
@@ -34,14 +33,14 @@ class HomeworkController extends BaseController
     {
         $result = $this->getTestpaperService()->getTestpaperResult($resultId);
         if (!$result) {
-            throw new ResourceNotFoundException('homeworkResult', $resultId);
+            return $this->createMessageResponse('info', 'homework result not found');
         }
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($result['courseId']);
 
         $homework = $this->getTestpaperService()->getTestpaper($result['testId']);
         if (!$homework) {
-            throw new ResourceNotFoundException('homework', $result['testId']);
+            return $this->createMessageResponse('info', 'homework not found');
         }
 
         $questions = $this->getTestpaperService()->showTestpaperItems($homework['id'], $result['id']);
@@ -76,7 +75,7 @@ class HomeworkController extends BaseController
         $canLookHomework = $this->getTestpaperService()->canLookTestpaper($homeworkResult['id']);
 
         if (!$canLookHomework) {
-            throw new AccessDeniedException($this->getServiceKernel()->trans('无权查看作业！'));
+            return $this->createMessageResponse('info', '无权查看作业！');
         }
 
         $builder = $this->getTestpaperService()->getTestpaperBuilder($homework['type']);

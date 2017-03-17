@@ -19,7 +19,7 @@
     </div>
   </div>
 
-  <div class="row" id="chooser-upload-panel">
+  <div id="chooser-upload-panel">
     {% set targetType = targetType|default('attachment') %}
     {% set token = uploader_token(targetType, targetId, 'private') %}
     {% set fileSize = fileSize|default(500) %}
@@ -32,20 +32,18 @@
            data-file-single-size-limit="{{ single_file_size == 0  ? 2048 * 1024 * 1024 : single_file_size * 1024 * 1024 }}">
       </div>
       <div class="uploader-bottom">
-        <div class="row">
-          <ul>
-            <li>支持PPT/PPTX,DOC/DOCX,XLS/XLSX、MP3/MP4/FLV、PDF、RAR格式的文件上传，单个文件大小不能超过
-              <strong>
-                {% if fileSize > 1024 %}
-                  {{ fileSize / 1024 }}GB
-                {% else %}
-                  {{ fileSize }}MB
-                {% endif %}
-              </strong>。
-            </li>
-            <li>支持断点续传（仅在Chrome、IE9及以上等支持HTML5的浏览器中可用）。</li>
-          </ul>
-        </div>
+        <ul>
+          <li>支持PPT/PPTX,DOC/DOCX,XLS/XLSX、MP3/MP4/FLV、PDF、RAR格式的文件上传，单个文件大小不能超过
+            <strong>
+              {% if fileSize > 1024 %}
+                {{ fileSize / 1024 }}GB
+              {% else %}
+                {{ fileSize }}MB
+              {% endif %}
+            </strong>。
+          </li>
+          <li>支持断点续传（仅在Chrome、IE9及以上等支持HTML5的浏览器中可用）。</li>
+        </ul>
       </div>
     </div>
     <input type="hidden" data-role="metas" data-ids-class="{{ idsClass }}" data-list-class="{{ listClass }}"

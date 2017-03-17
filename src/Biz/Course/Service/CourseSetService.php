@@ -177,6 +177,16 @@ interface CourseSetService
     public function searchUserFavorites($userId, $start, $limit);
 
     /**
+     * @param array $conditions
+     * @param array $orderBys
+     * @param int   $start
+     * @param int   $limit
+     *
+     * @return array[]
+     */
+    public function searchFavorites(array $conditions, array $orderBys, $start, $limit);
+
+    /**
      * 更新课程统计属性.
      *
      * 如: 学员数、笔记数、评价数量

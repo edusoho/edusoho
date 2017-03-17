@@ -658,8 +658,8 @@ class CourseManageController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
 
         foreach ($orders as $index => $expiredOrderToBeUpdated) {
-            if ((($expiredOrderToBeUpdated['createdTime'] + 48 * 60 * 60) < time(
-                    )) && ($expiredOrderToBeUpdated['status'] == 'created')
+            if ((($expiredOrderToBeUpdated['createdTime'] + 48 * 60 * 60) < time())
+            && ($expiredOrderToBeUpdated['status'] == 'created')
             ) {
                 $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
                 $orders[$index]['status'] = 'cancelled';
@@ -840,8 +840,8 @@ class CourseManageController extends BaseController
             $students[$key]['nickname'] = $user['nickname'];
             $students[$key]['startTime'] = $result['createdTime'];
             $students[$key]['finishedTime'] = $result['finishedTime'];
-            $students[$key]['learnTime'] = ceil($result['time'] / 60);
-            $students[$key]['watchTime'] = ceil($result['time'] / 60);
+            $students[$key]['learnTime'] = round($result['time'] / 60);
+            $students[$key]['watchTime'] = round($result['time'] / 60);
 
             if ($activity['mediaType'] == 'testpaper') {
                 $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
@@ -937,12 +937,12 @@ class CourseManageController extends BaseController
             $finishedNum = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($value['id'], 'finish');
 
             $taskLearnTime = $this->getTaskResultService()->getLearnedTimeByCourseIdGroupByCourseTaskId($value['id']);
-            $taskLearnTime = $taskLearnedNum == 0 ? 0 : intval($taskLearnTime / $taskLearnedNum);
+            $taskLearnTime = $taskLearnedNum == 0 ? 0 : round($taskLearnTime / $taskLearnedNum / 60);
             $taskWatchTime = $this->getTaskResultService()->getWatchTimeByCourseIdGroupByCourseTaskId($value['id']);
-            $taskWatchTime = $taskLearnedNum == 0 ? 0 : intval($taskWatchTime / $taskLearnedNum);
+            $taskWatchTime = $taskLearnedNum == 0 ? 0 : round($taskWatchTime / $taskLearnedNum / 60);
 
             $tasks[$key]['LearnedNum'] = $taskLearnedNum;
-            $tasks[$key]['length'] = floor(intval($tasks[$key]['activity']['length']) / 60);
+            $tasks[$key]['length'] = round(intval($tasks[$key]['activity']['length']) / 60);
             $tasks[$key]['type'] = $tasks[$key]['activity']['mediaType'];
             $tasks[$key]['finishedNum'] = $finishedNum;
             $tasks[$key]['learnTime'] = $taskLearnTime;

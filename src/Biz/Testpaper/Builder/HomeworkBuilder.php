@@ -200,6 +200,8 @@ class HomeworkBuilder implements TestpaperBuilderInterface
             $homeworkItems[] = $this->getTestpaperService()->createItem($items);
         }
 
+        $this->getTestpaperService()->updateTestpaper($homeworkId, array('itemCount' => $index));
+
         return $homeworkItems;
     }
 
