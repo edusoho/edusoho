@@ -25,22 +25,27 @@ class OrgBatchUpdateFactory
             'user' => array(
                 'protocol' => 'biz',
                 'service' => 'User:UserService',
+                'method' => 'countUsers',
             ),
             'courseSet' => array(
                 'protocol' => 'biz',
                 'service' => 'Course:CourseSetService',
+                'method' => 'countCourseSets',
             ),
             'classroom' => array(
                 'protocol' => 'biz',
                 'service' => 'Classroom:ClassroomService',
+                'method' => 'countClassrooms',
             ),
             'article' => array(
                 'protocol' => 'biz',
                 'service' => 'Article:ArticleService',
+                'method' => 'countUsers',
             ),
             'announcement' => array(
                 'protocol' => 'biz',
                 'service' => 'Announcement:AnnouncementService',
+                'method' => 'countUsers',
             ),
         );
     }
