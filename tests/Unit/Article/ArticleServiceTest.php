@@ -101,14 +101,14 @@ class ArticleServiceTest extends BaseTestCase
         $this->assertEquals('2', count($result));
     }
 
-    public function testsearchArticlesCount()
+    public function testcountArticles()
     {
         $newArticle = $this->createArticle();
         $newarticle2 = $this->createArticlesencond();
         $conditions = array(
             'status' => 'published',
         );
-        $result = $this->getArticleService()->searchArticlesCount($conditions, 'published', 0, 20);
+        $result = $this->getArticleService()->countArticles($conditions, 'published', 0, 20);
         $this->assertEquals('2', $result);
     }
 

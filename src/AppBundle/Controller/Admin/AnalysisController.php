@@ -38,7 +38,7 @@ class AnalysisController extends BaseController
         $timeRange = $this->getTimeRange($condition);
         $paginator = new Paginator(
             $request,
-            $this->getUserService()->searchUserCount($timeRange),
+            $this->getUserService()->countUsers($timeRange),
             20
         );
 
@@ -111,7 +111,7 @@ class AnalysisController extends BaseController
         } else {
             $paginator = new Paginator(
                 $request,
-                $this->getUserService()->searchUserCount($timeRange),
+                $this->getUserService()->countUsers($timeRange),
                 20
             );
 

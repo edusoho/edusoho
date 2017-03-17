@@ -91,7 +91,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         return $this->getArticleDao()->search($conditions, $orderBys, $start, $limit);
     }
 
-    public function searchArticlesCount($conditions)
+    public function countArticles($conditions)
     {
         $conditions = $this->prepareSearchConditions($conditions);
 

@@ -32,7 +32,7 @@ class UserApprovalController extends BaseController
             $profiles = $this->getUserService()->searchApprovals($conditions, array('id' => 'DESC'), 0, $userCount);
             $userApprovingId = ArrayToolkit::column($profiles, 'userId');
         } else {
-            $userCount = $this->getUserService()->searchUserCount($conditions);
+            $userCount = $this->getUserService()->countUsers($conditions);
             $profiles = $this->getUserService()->searchUsers($conditions, array('id' => 'DESC'), 0, $userCount);
             $userApprovingId = ArrayToolkit::column($profiles, 'id');
         }
