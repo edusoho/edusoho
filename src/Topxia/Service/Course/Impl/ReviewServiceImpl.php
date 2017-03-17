@@ -80,6 +80,10 @@ class ReviewServiceImpl extends BaseService implements ReviewService
             throw $this->createServiceException($this->getKernel()->trans('参数不正确，评价失败！'));
         }
 
+        if ($fields['rating'] > 5) {
+            throw $this->createServiceException($this->getKernel()->trans('参数不正确，评价数太大'));
+        }
+
         list($course, $member) = $this->getCourseService()->tryTakeCourse($fields['courseId']);
 
         $userId = $this->getCurrentUser()->id;
@@ -126,10 +130,19 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
     public function deleteReview($id)
     {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('not login');
+        }
+
         $review = $this->getReview($id);
 
         if (empty($review)) {
-            throw $this->createServiceException($this->getKernel()->trans('评价(#%id%)不存在，删除失败！', array('%id%' => $id)));
+            throw $this->createAccessDeniedException($this->getKernel()->trans('评价(#%id%)不存在，删除失败！', array('%id%' => $id)));
+        }
+
+        if (!$user->isAdmin() && $review['userId'] != $user['id']) {
+            throw $this->createAccessDeniedException('review is not exsits.');
         }
 
         $this->getReviewDao()->deleteReview($id);
