@@ -308,14 +308,14 @@ class CourseQuestionManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $targetCourse = explode('/', $question['target'])[0];
+        $targetCourse = explode('/', $question['target']);
+        $targetCourse = $targetCourse[0];
 
         if ($targetCourse != 'course-' . $courseId) {
             throw $this->createNotFoundException($this->trans('题目不属于该课程'));
         }
 
         return $question;
-
     }
 
     protected function getCourseService()
