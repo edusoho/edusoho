@@ -5,7 +5,7 @@
 <div class="container">
   <ol class="breadcrumb breadcrumb-o">
     <li><a href="{{ path('homepage') }}">{{'首页'|trans}}</a></li>
-    {% for breadcrumb in breadcrumbs %}
+    {% for breadcrumb in breadcrumbs|default() %}
       <li><a href="{{ path('course_set_explore',{'category':breadcrumb.code}) }}">{{ breadcrumb.name }}</a></li>
     {% endfor %}
     {% if page_type|default('guest') == 'member' %}
