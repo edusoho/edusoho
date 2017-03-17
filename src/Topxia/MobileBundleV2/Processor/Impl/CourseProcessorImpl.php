@@ -2,12 +2,12 @@
 
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Util\EdusohoLiveClient;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\CourseProcessor;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 {
@@ -1170,7 +1170,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         return array(
             'course' => $this->controller->filterCourse($course),
-            'userFavorited' => $userFavorited,
+            'userFavorited' => $userFavorited ? true : false,
             'member' => $this->checkMemberStatus($member),
             'vipLevels' => $vipLevels,
             'discount' => $this->getCourseDiscount($courseSet['discountId']),
