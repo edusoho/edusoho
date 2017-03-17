@@ -1209,6 +1209,7 @@ class ClassroomManageController extends BaseController
             $finishedTaskCount = $this->getTaskResultService()->countTaskResults(array(
                 'courseId' => $course['id'],
                 'userId' => $member['userId'],
+                'status' => 'finish',
             ));
             if ($finishedTaskCount >= $taskCount) {
                 ++$learnedCoursesCount;

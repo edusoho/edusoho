@@ -377,7 +377,7 @@ class AuthServiceImpl extends BaseService implements AuthService
 
             $class = substr(__NAMESPACE__, 0, -13).'\\AuthProvider\\'.ucfirst($partner).'AuthProvider';
 
-            $this->partner = new $class();
+            $this->partner = new $class($this->biz);
         }
 
         return $this->partner;

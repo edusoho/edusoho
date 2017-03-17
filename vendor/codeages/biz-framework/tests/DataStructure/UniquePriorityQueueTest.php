@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests;
 
 use Codeages\Biz\Framework\DataStructure\UniquePriorityQueue;
