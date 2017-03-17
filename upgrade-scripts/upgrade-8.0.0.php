@@ -35,12 +35,25 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function batchUpdate($index)
     {
+        $this->logger('info', '开始迁移c2_course_set');
         $this->c2courseSetMigrate();
+        $this->logger('info', '迁移c2_course_set成功');
+
+        $this->logger('info', '开始迁移c2_course');
         $this->c2courseMigrate();
+        $this->logger('info', '迁移c2_course成功');
+
         $this->c2CourseLessonMigrate();
+
+        $this->logger('info', '开始迁移test_paper');
         $this->c2testpaperMigrate();
+
+        $this->logger('info', '开始迁移 question');
         $this->c2QuestionMigrate();
-        // $this->migrate();
+
+        $this->logger('info', '开始迁移 other');
+        $this->migrate();
+        $this->logger('info', '迁移完成');
     }
 
     protected function c2courseSetMigrate()
@@ -354,33 +367,55 @@ class EduSohoUpgrade extends AbstractUpdater
      */
     protected function c2CourseLessonMigrate()
     {
+        $this->logger('info', '开始迁移course_task');
         $this->c2CourseTaskMigrate();
-        $this->c2Activity();
+        $this->logger('info', '迁移course_task完成');
 
+        $this->logger('info', '开始迁移activity');
+        $this->c2Activity();
+        $this->logger('info', '迁移activity完成');
+
+        $this->logger('info', '开始迁移video_activtiy');
         $this->c2VideoActivity();
+
+        $this->logger('info', '开始迁移text_activtiy');
         $this->c2TextActivity();
+
+        $this->logger('info', '开始迁移audio_activtiy');
         $this->c2AudioActivity();
+
+        $this->logger('info', '开始迁移flash_activtiy');
         $this->c2FlashActivity();
+
+        $this->logger('info', '开始迁移ppt_activtiy');
         $this->c2PPtActivity();
+
+        $this->logger('info', '开始迁移doc_activtiy');
         $this->c2DocActivity();
         // $this->c2TestPaperActivity();
 
+        $this->logger('info', '开始迁移course_task_view');
         $this->c2CourseTaskView();
 
+        $this->logger('info', '开始迁移course_task_result');
         $this->c2CourseTaskResult();
 
         //练习
+        $this->logger('info', '开始迁移exercise');
         $this->c2Exercise();
 
         //作业
+        $this->logger('info', '开始迁移homework');
         $this->c2Homework();
 
         //course_material
-
+        $this->logger('info', '开始迁移 course_material');
         $this->c2CourseMaterial();
 
+        $this->logger('info', '开始迁移 tag_owner');
         $this->c2TagOwner();
 
+        $this->logger('info', '开始迁移 course_chapter');
         $this->updateCourseChapter();
 
     }
@@ -1194,7 +1229,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `eexerciseId`,
                 'exercise',
                 `summary`,
-                `length`,
+                CASE WHEN `length` is null THEN 0  ELSE `length` END AS `length`,
                 `courseId`,
                 `userId`,
                 `startTime`,
@@ -1257,7 +1292,7 @@ class EduSohoUpgrade extends AbstractUpdater
               'exercise',
               `number`,
               'exercise',
-              `length`,
+              CASE WHEN `length` is null THEN 0  ELSE `length` END AS `length`,
               `maxOnlineNum`,
               `copyId`,
               `eexerciseId`,
@@ -1290,7 +1325,7 @@ class EduSohoUpgrade extends AbstractUpdater
      */
     protected function c2Homework()
     {
-        if (!$this->isFieldExist('activity', 'exerciseId')) {
+        if (!$this->isFieldExist('activity', 'homeworkId')) {
             $this->exec("alter table `activity` add `homeworkId` int(10) ;");
             $this->exec("alter table `course_task` add `homeworkId` int(10) ;");
         }
@@ -1321,7 +1356,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `hhomeworkId`,
                 'homework',
                 `summary`,
-                `length`,
+                case when `length` is null then 0 else `length` end,
                 `courseId`,
                 `userId`,
                 `startTime`,
@@ -1384,7 +1419,7 @@ class EduSohoUpgrade extends AbstractUpdater
               'homework',
               `number`,
               'homework',
-              `length`,
+              CASE WHEN `length` is null THEN 0  ELSE `length` END AS `length`,
               `maxOnlineNum`,
               `copyId`,
               `hhomeworkId`,
@@ -2299,6 +2334,31 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->exec(
             "UPDATE crontab_job SET targetType = 'task' WHERE targetType = 'lesson' AND name = 'SmsSendOneHourJob';"
         );
+
+
+        $result = $this->getUserByType();
+
+        if (empty($result)) {
+            $this->exec("
+                INSERT INTO `user` (`email`, `verifiedMobile`, `password`, `salt`, `payPassword`, `payPasswordSalt`, `locale`, `uri`, `nickname`, `title`, `tags`, `type`, `point`, `coin`, `smallAvatar`, `mediumAvatar`, `largeAvatar`, `emailVerified`, `setup`, `roles`, `promoted`, `promotedSeq`, `promotedTime`, `locked`, `lockDeadline`, `consecutivePasswordErrorTimes`, `lastPasswordFailTime`, `loginTime`, `loginIp`, `loginSessionId`, `approvalTime`, `approvalStatus`, `newMessageNum`, `newNotificationNum`, `createdIp`, `createdTime`, `updatedTime`, `inviteCode`, `orgId`, `orgCode`, `registeredWay`) VALUES
+    ('user_tfo2ex19h@edusoho.net', '', '3DMYb8GyEXk32ruFzw4lxy2elz6/aoPtA5X8vCTWezg=', 'qunt972ow5c48k4wc8k0ss448os0oko', '', '', NULL, '', 'user70rbkm(系统用户)', '', '', 'scheduler', 0, 0, '', '', '', 1, 1, '|ROLE_USER|ROLE_SUPER_ADMIN|', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 'unapprove', 0, 0, '', 1489204100, 1489204100, NULL, 1, '1.', '');
+            ");
+
+            $result = $this->getUserByType();
+
+            $sql = "INSERT INTO `user_profile` (`id`, `truename`, `idcard`, `gender`, `iam`, `birthday`, `city`, `mobile`, `qq`, `signature`, `about`, `company`, `job`, `school`, `class`, `weibo`, `weixin`, `isQQPublic`, `isWeixinPublic`, `isWeiboPublic`, `site`, `intField1`, `intField2`, `intField3`, `intField4`, `intField5`, `dateField1`, `dateField2`, `dateField3`, `dateField4`, `dateField5`, `floatField1`, `floatField2`, `floatField3`, `floatField4`, `floatField5`, `varcharField1`, `varcharField2`, `varcharField3`, `varcharField4`, `varcharField5`, `varcharField6`, `varcharField7`, `varcharField8`, `varcharField9`, `varcharField10`, `textField1`, `textField2`, `textField3`, `textField4`, `textField5`, `textField6`, `textField7`, `textField8`, `textField9`, `textField10`) VALUES
+    ({$result['id']}, '', '', 'secret', '', NULL, '', '', '', NULL, NULL, '', '', '', '', '', '', 0, 0, 0, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);";
+
+            $this->exec($sql);
+        }
+    }
+
+    private function getUserByType()
+    {
+        $sql = "select * from user where type='scheduler' limit 1;";
+        $result = $this->getConnection()->fetchAssoc($sql);
+
+        return $result;
     }
 
     /**
@@ -2353,6 +2413,17 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getCourseService()
     {
         return ServiceKernel::instance()->createService('Course:CourseService');
+    }
+
+    protected function logger($level, $message)
+    {
+        $data = date("Y-m-d H:i:s").' ['.$level.'] 6.17.9 '.$message.PHP_EOL;
+        file_put_contents($this->getLoggerFile(), $data, FILE_APPEND);
+    }
+
+    protected function getLoggerFile()
+    {
+        return ServiceKernel::instance()->getParameter('kernel.root_dir')."/../app/logs/upgrade.log";
     }
 }
 
