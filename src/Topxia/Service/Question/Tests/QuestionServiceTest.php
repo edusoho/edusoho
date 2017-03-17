@@ -254,7 +254,6 @@ class QuestionServiceTest extends BaseTestCase
             "type"=>"choice",
             "parentId"=>0,
             'copyId'=>1,
-            "answer"=>"2"
         );
 
         $question = $this->getQuestionService()->createQuestion($question);
@@ -280,7 +279,6 @@ class QuestionServiceTest extends BaseTestCase
             "type"=>"choice",
             "parentId"=>0,
             'copyId'=>1,
-            "answer"=>"2"
         );
         $question1 = array(
             'type' => 'single_choice',
@@ -297,7 +295,6 @@ class QuestionServiceTest extends BaseTestCase
             "type"=>"choice",
             "parentId"=>1,
             'copyId'=>1,
-            "answer"=>"2"
         );
         $question = $this->getQuestionService()->createQuestion($question);
         $question = $this->getQuestionService()->createQuestion($question1);
@@ -323,7 +320,6 @@ class QuestionServiceTest extends BaseTestCase
             "type"=>"choice",
             "parentId"=>0,
             'copyId'=>1,
-            "answer"=>"2"
         );
         $question1 = array(
             'type' => 'single_choice',
@@ -340,7 +336,6 @@ class QuestionServiceTest extends BaseTestCase
             "type"=>"choice",
             "parentId"=>1,
             'copyId'=>1,
-            "answer"=>"2"
         );
         $question = $this->getQuestionService()->createQuestion($question);
         $question = $this->getQuestionService()->createQuestion($question1);

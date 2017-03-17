@@ -87,5 +87,13 @@ return array(
     'RecursiveCallbackFilterIterator' => $vendorDir . '/symfony/polyfill-php54/Resources/stubs/RecursiveCallbackFilterIterator.php',
     'SessionHandlerInterface' => $vendorDir . '/symfony/polyfill-php54/Resources/stubs/SessionHandlerInterface.php',
     'SqlFormatter' => $vendorDir . '/jdorn/sql-formatter/lib/SqlFormatter.php',
+    'Text_Diff_Renderer_parallel' => $vendorDir . '/cerdic/css-tidy/testing/unit-tests/class.Text_Diff_Renderer_parallel.php',
     'TypeError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/TypeError.php',
+    'csstidy' => $vendorDir . '/cerdic/css-tidy/class.csstidy.php',
+    'csstidy_csst' => $vendorDir . '/cerdic/css-tidy/testing/unit-tests/class.csstidy_csst.php',
+    'csstidy_harness' => $vendorDir . '/cerdic/css-tidy/testing/unit-tests/class.csstidy_harness.php',
+    'csstidy_optimise' => $vendorDir . '/cerdic/css-tidy/class.csstidy_optimise.php',
+    'csstidy_print' => $vendorDir . '/cerdic/css-tidy/class.csstidy_print.php',
+    'csstidy_reporter' => $vendorDir . '/cerdic/css-tidy/testing/unit-tests/class.csstidy_reporter.php',
+    'csstidy_test_csst' => $vendorDir . '/cerdic/css-tidy/testing/unit-tests/test.csst.php',
 );

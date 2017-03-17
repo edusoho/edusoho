@@ -765,6 +765,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             'orgId'          => ''
         ));
 
+        if (isset($fields['about'])) {
+            $fields['about'] = $this->purifyHtml($fields['about'], true);
+        }
+
         return $fields;
     }
 
@@ -1303,13 +1307,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->fillLessonMediaFields($lesson);
 
-//课程内容的过滤 @todo
-
-// if(isset($lesson['content'])){
-
-//     $lesson['content'] = $this->purifyHtml($lesson['content']);
-
-// }
+        if(isset($lesson['content'])){
+            $lesson['content'] = $this->purifyHtml($lesson['content'], true);
+        }
 
         if (isset($lesson['title'])) {
             $lesson['title'] = $this->purifyHtml($lesson['title']);
@@ -1505,6 +1505,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             'testStartTime' => 0,
             'replayStatus'  => 'ungenerated'
         ));
+
+        if(isset($fields['content'])){
+            $fields['content'] = $this->purifyHtml($fields['content'], true);
+        }
 
         if (isset($fields['title'])) {
             $fields['title'] = $this->purifyHtml($fields['title']);

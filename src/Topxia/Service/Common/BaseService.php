@@ -6,7 +6,7 @@ use Topxia\Service\Common\Lock;
 use Monolog\Handler\StreamHandler;
 use Topxia\Service\Common\ServiceException;
 use Topxia\Service\Common\NotFoundException;
-use Topxia\Service\Util\HTMLPurifierFactory;
+use Topxia\Service\Util\HTMLPurifier;
 use Topxia\Service\Common\AccessDeniedException;
 
 abstract class BaseService
@@ -62,13 +62,13 @@ abstract class BaseService
         }
 
         $config = array(
-            'cacheDir' => $this->getKernel()->getParameter('kernel.cache_dir').'/htmlpurifier'
+            'cacheDir' => $this->getKernel()->getParameter('kernel.cache_dir').'/htmlpurifier',
+            'safeIframeDomains' => $this->setting('security.safe_iframe_domains', array()),
         );
 
-        $factory  = new HTMLPurifierFactory($config);
-        $purifier = $factory->create($trusted);
+        $purifier = new HTMLPurifier($config);
 
-        return $purifier->purify($html);
+        return $purifier->purify($html, $trusted);
     }
 
     /**

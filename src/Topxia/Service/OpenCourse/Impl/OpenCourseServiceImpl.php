@@ -900,6 +900,10 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             }
         }
 
+        if (isset($fields['about'])) {
+            $fields['about'] = $this->purifyHtml($fields['about'], true);
+        }
+
         return $fields;
     }
 

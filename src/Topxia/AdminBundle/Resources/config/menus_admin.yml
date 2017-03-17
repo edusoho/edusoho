@@ -694,6 +694,9 @@ admin:
                         admin_setting_share:
                             name: 分享
                             disable: true
+                        admin_setting_security:
+                            name: 安全
+                            disable: true
                 admin_setting_user:
                     name: 用户设置
                     children:

@@ -96,7 +96,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
                 'userId'      => $fields['userId'],
                 'classroomId' => $fields['classroomId'],
                 'rating'      => $fields['rating'],
-                'content'     => empty($fields['content']) ? '' : $fields['content'],
+                'content'     => empty($fields['content']) ? '' : $this->purifyHtml($fields['content']),
                 'title'       => empty($fields['title']) ? '' : $fields['title'],
                 'parentId'    => $fields['parentId'],
                 'createdTime' => time(),
@@ -107,7 +107,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
             $review = $this->getClassroomReviewDao()->updateReview($review['id'], array(
                 'rating'      => $fields['rating'],
                 'title'       => empty($fields['title']) ? '' : $fields['title'],
-                'content'     => empty($fields['content']) ? '' : $fields['content'],
+                'content'     => empty($fields['content']) ? '' : $this->purifyHtml($fields['content']),
                 'updatedTime' => time(),
                 'meta'        => array()
             ));
