@@ -162,7 +162,6 @@ class ClassroomReviewServiceTest extends BaseTestCase
      */
     public function testSaveReviewWithoutUserId()
     {
-
         $classroom = array(
             'title' => 'test',
         );
@@ -190,7 +189,6 @@ class ClassroomReviewServiceTest extends BaseTestCase
      */
     public function testSaveReviewWithNotExistClassroom()
     {
-
         $user1 = $this->createStudentUser();
 
         $classroom = array(
