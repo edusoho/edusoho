@@ -61,10 +61,7 @@ class CourseMemberImporter extends Importer
                 $order = $this->getOrderService()->createOrder(
                     array(
                         'userId' => $user['id'],
-                        'title' => $this->getServiceKernel()->trans(
-                            '购买课程《%courseSetTitle%》-%courseTitle%(管理员添加)',
-                            array('%courseSetTitle%' => $courseSet['title'], '%courseTitle%' => $course['title'])
-                        ),
+                        'title' => sprintf('购买课程《%s》-%s(管理员添加)', $courseSet['title'], $course['title']),
                         'targetType' => 'course',
                         'targetId' => $course['id'],
                         'totalPrice' => $course['price'],
