@@ -50,6 +50,10 @@ class EduSohoUpgrade extends AbstractUpdater
             }
         }
     }
+     protected function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System.SettingService');
+    }
 }
 
 abstract class AbstractUpdater
