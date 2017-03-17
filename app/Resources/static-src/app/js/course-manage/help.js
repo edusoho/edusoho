@@ -23,6 +23,7 @@ export const sortablelist = (list) => {
         $item.find('.number').text(chapterNum);
       }
     });
+    $list.trigger('finished');
   });
 }
 
@@ -169,3 +170,10 @@ export const TabChange = () => {
     $($this.data('tab-content')).removeClass("hidden").siblings('[data-role="tab-content"]').addClass('hidden');
   });
 };
+
+export const updateTaskNum = (container) => {
+  let $container = $(container);
+  $container.on('finished',function(){
+    $('#task-num').text($(container + '> li').length);
+  })
+}
