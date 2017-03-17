@@ -76,7 +76,7 @@ class AuthServiceImpl extends BaseService implements AuthService
             case 'middle':
                 $condition = array(
                     'startTime' => time() - 24 * 3600,
-                    'createdIp' => $ip);
+                    'createdIp' => $ip, );
                 $registerCount = $this->getUserService()->searchUserCount($condition);
 
                 if ($registerCount > 30) {
@@ -87,7 +87,7 @@ class AuthServiceImpl extends BaseService implements AuthService
             case 'high':
                 $condition = array(
                     'startTime' => time() - 24 * 3600,
-                    'createdIp' => $ip);
+                    'createdIp' => $ip, );
                 $registerCount = $this->getUserService()->searchUserCount($condition);
 
                 if ($registerCount > 10) {
@@ -96,7 +96,7 @@ class AuthServiceImpl extends BaseService implements AuthService
 
                 $registerCount = $this->getUserService()->searchUserCount(array(
                     'startTime' => time() - 3600,
-                    'createdIp' => $ip));
+                    'createdIp' => $ip, ));
 
                 if ($registerCount >= 1) {
                     return false;
