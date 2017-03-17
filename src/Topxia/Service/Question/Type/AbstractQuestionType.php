@@ -50,11 +50,6 @@ abstract class AbstractQuestionType extends BaseService
 
         $filtered['target'] = empty($fields['target']) ? '' : $fields['target'];
 
-        foreach($filtered['answer'] as &$answer) {
-            $answer = $this->purifyHtml($answer);
-            unset($answer);
-        }
-
         return $filtered;
     }
 }
