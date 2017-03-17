@@ -22,7 +22,6 @@ use Symfony\Bridge\Doctrine\Logger\DbalLogger;
  */
 class DoctrineServiceProvider implements ServiceProviderInterface
 {
-
     /**
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
