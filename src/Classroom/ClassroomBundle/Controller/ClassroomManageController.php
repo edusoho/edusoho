@@ -142,6 +142,32 @@ class ClassroomManageController extends BaseController
         ));
     }
 
+    public function studentShowAction(Request $request, $classroomId, $userId)
+    {
+        if (!$this->getCurrentUser()->isAdmin()) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权查看学员详细信息！'));
+        }
+
+        return $this->forward('TopxiaWebBundle:Student:definedShow', array(
+            'request' => $request, 
+            'userId' => $userId
+        ));
+    }
+
+    public function definedShowAction(Request $request, $classroomId, $userId)
+    {
+        $course = $this->getClassroomService()->tryManageClassroom($classroomId);
+        $member = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
+        if (empty($member)) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans("学员#{$userId}不属于班级{#classroomId}"));
+        }
+
+        return $this->forward('TopxiaWebBundle:Student:definedShow', array(
+            'request' => $request, 
+            'userId' => $userId
+        ));
+    }
+
     public function setClassroomMemberDeadlineAction(Request $request, $classroomId, $userId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);

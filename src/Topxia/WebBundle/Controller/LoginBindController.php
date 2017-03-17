@@ -37,7 +37,7 @@ class LoginBindController extends BaseController
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type, 'token' => $token['token']), true);
 
         if ($inviteCode) {
-            $callbackUrl = $callbackUrl.'?inviteCode='.$inviteCode;
+            $callbackUrl = $callbackUrl.'&inviteCode='.$inviteCode;
         }
 
         $url = $client->getAuthorizeUrl($callbackUrl);
@@ -54,10 +54,11 @@ class LoginBindController extends BaseController
     {
         $code        = $request->query->get('code');
         $inviteCode  = $request->query->get('inviteCode');
+        $token  = $request->query->get('token', '');
 
         $this->validateToken($request, $type);
 
-        $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
+        $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type, 'token' => $token), true);
         $token       = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
 
         $bind        = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
