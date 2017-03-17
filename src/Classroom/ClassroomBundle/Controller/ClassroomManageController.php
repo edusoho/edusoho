@@ -148,7 +148,7 @@ class ClassroomManageController extends BaseController
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权查看学员详细信息！'));
         }
 
-        return $this->forward('TopxiaWebBundle:Student:definedShow', array(
+        return $this->forward('TopxiaWebBundle:Student:show', array(
             'request' => $request, 
             'userId' => $userId
         ));
