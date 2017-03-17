@@ -422,12 +422,27 @@ class MobileBaseController extends BaseController
                     return false;
                 }
 
-                return $item;
+                return $self->filterTask($item);
             },
             $items
         );
 
         return array_filter($items);
+    }
+
+    public function filterTask($task)
+    {
+        array_walk($task, function ($value, $key) use (&$task) {
+            if (is_numeric($value)) {
+                $task[$key] = (string) $value;
+            } elseif (is_null($value)) {
+                $task[$key] = '';
+            } else {
+                $task[$key] = $value;
+            }
+        });
+
+        return $task;
     }
 
     public function coverPath($path, $coverPath)
