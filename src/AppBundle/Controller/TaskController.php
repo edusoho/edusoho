@@ -408,11 +408,20 @@ class TaskController extends BaseController
         );
         $finishedCount = $this->getTaskResultService()->countTaskResults($conditions);
 
-        $finishedRate = empty($course['publishedTaskNum']) ? 0 : intval(
-            $finishedCount / $course['publishedTaskNum'] * 100
-        );
+        $finishedRate = $this->calcuteProgress($finishedCount, $course);
 
         return array($course, $nextTask, $finishedRate);
+    }
+
+    protected function calcuteProgress($finishedCount, $course)
+    {
+        $progress = 0;
+        if (empty($course['publishedTaskNum'])) {
+            return $progress;
+        }
+        $progress = intval($finishedCount / $course['publishedTaskNum'] * 100);
+
+        return $progress > 100 ? 100 : $progress;
     }
 
     protected function tryLearnTask($courseId, $taskId, $preview = false)
