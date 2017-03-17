@@ -4,6 +4,7 @@ import { chooserUiOpen, chooserUiClose, showChooserType } from '../widget/choose
 class Flash {
   constructor() {
     this.$mediaId = $('[name="mediaId"]');
+    this.validator2 = null;
     this.init();
   }
   init() {
@@ -15,7 +16,7 @@ class Flash {
 
   initStep2Form() {
     let $form = $('#step2-form');
-    let validator = $form.validate({
+    this.validator2 = $form.validate({
       rules: {
         title: {
           required: true,
@@ -31,7 +32,7 @@ class Flash {
       }
     });
 
-    $form.data('validator', validator);
+    $form.data('validator', this.validator2);
   }
 
   initStep3Form() {
@@ -61,6 +62,9 @@ class Flash {
     fileChooser.on('select', (file) => {
       chooserUiClose();
       this.$mediaId.val(file.id);
+      if(this.validator2) {
+        this.validator2.form();
+      }
     });
   }
 }
