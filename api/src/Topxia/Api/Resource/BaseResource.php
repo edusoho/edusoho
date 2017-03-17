@@ -2,9 +2,9 @@
 
 namespace Topxia\Api\Resource;
 
-use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Service\Common\ServiceKernel;
 
 abstract class BaseResource
@@ -105,8 +105,8 @@ abstract class BaseResource
     protected function error($code, $message)
     {
         return array('error' => array(
-            'code'    => $code,
-            'message' => $message
+            'code' => $code,
+            'message' => $message,
         ));
     }
 
@@ -133,11 +133,11 @@ abstract class BaseResource
     {
         $simple = array();
 
-        $simple['id']       = $user['id'];
+        $simple['id'] = $user['id'];
         $simple['nickname'] = $user['nickname'];
-        $simple['title']    = $user['title'];
-        $simple['roles']    = $user['roles'];
-        $simple['avatar']   = $this->getFileUrl($user['smallAvatar']);
+        $simple['title'] = $user['title'];
+        $simple['roles'] = $user['roles'];
+        $simple['avatar'] = $this->getFileUrl($user['smallAvatar']);
 
         return $simple;
     }
@@ -188,7 +188,7 @@ abstract class BaseResource
     protected function getSchema()
     {
         $https = $_SERVER['HTTPS'];
-        if(!empty($https) && 'off' !== strtolower($https)) {
+        if (!empty($https) && 'off' !== strtolower($https)) {
             return 'https';
         }
         return 'http';
@@ -248,7 +248,7 @@ abstract class BaseResource
         }
 
         $this->logger = new Logger($name);
-        $this->logger->pushHandler(new StreamHandler($this->biz['kernel.logs_dir'].'/service.log', Logger::DEBUG));
+        $this->logger->pushHandler(new StreamHandler($this->biz['log_directory'].'/service.log', Logger::DEBUG));
 
         return $this->logger;
     }
