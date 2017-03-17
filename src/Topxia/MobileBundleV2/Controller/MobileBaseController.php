@@ -2,13 +2,13 @@
 
 namespace Topxia\MobileBundleV2\Controller;
 
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Controller\BaseController;
-use Biz\Course\Service\CourseService;
 use Biz\User\CurrentUser;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Api\Util\TagUtil;
+use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
+use AppBundle\Controller\BaseController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class MobileBaseController extends BaseController
 {
@@ -175,8 +175,8 @@ class MobileBaseController extends BaseController
                 'id' => $user['id'],
                 'nickname' => $user['nickname'],
                 'title' => $user['title'],
-                'following' => $controller->getUserService()->findUserFollowingCount($user['id']),
-                'follower' => $controller->getUserService()->findUserFollowerCount($user['id']),
+                'following' => (string) $controller->getUserService()->findUserFollowingCount($user['id']),
+                'follower' => (string) $controller->getUserService()->findUserFollowerCount($user['id']),
                 'avatar' => $this->container->get('web.twig.extension')->getFilePath(
                     $user['smallAvatar'],
                     'avatar.png',
