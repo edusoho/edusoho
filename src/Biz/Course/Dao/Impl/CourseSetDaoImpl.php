@@ -82,6 +82,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'recommendedTime',
                 'rating',
                 'studentNum',
+                'id',
             ),
             'timestamps' => array(
                 'createdTime', 'updatedTime',

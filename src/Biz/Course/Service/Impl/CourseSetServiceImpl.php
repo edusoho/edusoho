@@ -626,6 +626,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getFavoriteDao()->searchByUserId($userId, $start, $limit);
     }
 
+    public function searchFavorites(array $conditions, array $orderBys, $start, $limit)
+    {
+        return $this->getFavoriteDao()->search($conditions, $orderBys, $start, $limit);
+    }
+
     /**
      * 根据排序规则返回排序数组.
      *

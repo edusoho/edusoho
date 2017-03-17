@@ -126,7 +126,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
 
         $sql = "SELECT * FROM {$this->table()} WHERE ".implode(' AND ', $placeholders);
 
-        return $this->db()->fetchAssoc($sql, array_values($fields)) ?: array();
+        return $this->db()->fetchAssoc($sql, array_values($fields)) ?: null;
     }
 
     protected function findInField($field, $values)

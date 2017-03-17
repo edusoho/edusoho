@@ -143,7 +143,9 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         $categoryIds = array();
 
         foreach ($courseSets as &$set) {
-            $userIds = array_merge($userIds, $set['teacherIds']);
+            if (!empty($set['teacherIds'])) {
+                $userIds = array_merge($userIds, $set['teacherIds']);
+            }
             $categoryIds[] = $set['categoryId'];
         }
 

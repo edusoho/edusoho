@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v0.2.6 
+
+  * 修复`getByFields`返回array
+  * 序列化引用问题
+
 ## v0.2.5
 
   * 修复`unserialize`方法未反序列化null值的情况。

@@ -47,13 +47,13 @@ class CourseSetController extends CourseBaseController
 
         $conditions = array(
             'type' => $filter,
+            'parentId' => 0,
         );
 
         if ($filter == 'classroom') {
             $conditions['parentId_GT'] = 0;
             unset($conditions['type']);
-        } elseif ($filter == 'normal') {
-            $conditions['parentId'] = 0;
+            unset($conditions['parentId']);
         }
 
         $paginator = new Paginator(
