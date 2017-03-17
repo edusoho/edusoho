@@ -66,6 +66,6 @@ class OrgDaoImpl extends GeneralDaoImpl implements OrgDao
 
     public function findByNameAndParentId($name, $parentId)
     {
-        return $this->getByFields(array('name' => $name, 'parentId' => $parentId));
+        return $this->findByFields(array('name' => $name, 'parentId' => $parentId));
     }
 }
