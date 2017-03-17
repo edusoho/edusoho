@@ -6,10 +6,13 @@ import {
   showSettings,
   deleteTask,
   publishTask,
-  unpublishTask
+  unpublishTask,
+  updateTaskNum
 } from './help';
 
-taskSortable('#sortable-list');
+let sortableList = '#sortable-list';
+taskSortable(sortableList);
+updateTaskNum(sortableList);
 courseFunctionRemask();
 closeCourse();
 deleteCourse(store);
