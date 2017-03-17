@@ -2,21 +2,11 @@
 
 use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\Yaml\Yaml;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
     public function update()
     {
-        $this->getConnection()->beginTransaction();
-        try {
-            $this->updateScheme();
-            $this->getConnection()->commit();
-        } catch (\Exception $e) {
-            $this->getConnection()->rollback();
-            throw $e;
-        }
-
         try {
             $dir = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."../web/install");
             $filesystem = new Filesystem();
@@ -27,21 +17,16 @@ class EduSohoUpgrade extends AbstractUpdater
         } catch (\Exception $e) {
         }
 
-//        try {
+        try {
             $this->fixCustomRouting();
-            $this->fixRoutingYml();
-//        } catch (\Exception $e) {
-//        }
+        } catch (\Exception $e) {
+        }
 
         $developerSetting = $this->getSettingService()->get('developer', array());
         $developerSetting['debug'] = 0;
 
         ServiceKernel::instance()->createService('System.SettingService')->set('developer', $developerSetting);
         ServiceKernel::instance()->createService('System.SettingService')->set("crontab_next_executed_time", time());
-    }
-
-    private function updateScheme()
-    {
     }
 
     private function fixCustomRouting()
@@ -55,7 +40,6 @@ class EduSohoUpgrade extends AbstractUpdater
             if (!$fileSystem->exists($adminRoutingYml)) {
                 $fileSystem->copy($originAdminRoutingYml, $adminRoutingYml);
             }
-            $fileSystem->remove($originAdminRoutingYml);
         }
 
         $originWebRoutingYml = $customDir."/WebBundle/Resources/config/routing.yml";
@@ -64,64 +48,7 @@ class EduSohoUpgrade extends AbstractUpdater
             if (!$fileSystem->exists($webRoutingYml)) {
                 $fileSystem->copy($originWebRoutingYml, $webRoutingYml);
             }
-            $fileSystem->remove($originWebRoutingYml);
         }
-    }
-
-    private function fixRoutingYml()
-    {
-        $routingYml = ServiceKernel::instance()->getParameter('kernel.root_dir')."/config/routing.yml";
-        if (file_exists($routingYml)) {
-            $contents = Yaml::parse($routingYml);
-            if (!empty($contents['custom_web']['resource'])) {
-                if ($contents['custom_web']['resource'] == "@CustomWebBundle/Resources/config/routing.yml") {
-                    $contents['custom_web']['resource'] = "@CustomWebBundle/Resources/config/custom_routing.yml";
-                }
-
-                if ($contents['custom_admin']['resource'] == "@CustomAdminBundle/Resources/config/admin_routing.yml") {
-                    $contents['custom_admin']['resource'] = "@CustomAdminBundle/Resources/config/custom_admin_routing.yml";
-                }
-
-                file_put_contents($routingYml, Yaml::dump($contents, 100));
-            }
-        }
-    }
-
-    protected function isFieldExist($table, $filedName)
-    {
-        $sql = "DESCRIBE `{$table}` `{$filedName}`;";
-        $result = $this->getConnection()->fetchAssoc($sql);
-        return empty($result) ? false : true;
-    }
-
-    protected function isTableExist($table)
-    {
-        $sql = "SHOW TABLES LIKE '{$table}'";
-        $result = $this->getConnection()->fetchAssoc($sql);
-        return empty($result) ? false : true;
-    }
-
-    protected function isIndexExist($table, $filedName, $indexName)
-    {
-        $sql    = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
-        $result = $this->getConnection()->fetchAssoc($sql);
-        return empty($result) ? false : true;
-    }
-
-
-    protected function isCrontabJobExist($code)
-    {
-        $sql = "select * from crontab_job where name='{$code}'";
-        $result = $this->getConnection()->fetchAssoc($sql);
-
-        return empty($result) ? false : true;
-    }
-
-
-
-    private function getSettingService()
-    {
-        return ServiceKernel::instance()->createService('System.SettingService');
     }
 }
 
