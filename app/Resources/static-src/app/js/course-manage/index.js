@@ -9,6 +9,8 @@ import {
   unpublishTask
 } from './help';
 
+$('[data-help="popover"]').popover();
+
 taskSortable('#sortable-list');
 courseFunctionRemask();
 closeCourse();
