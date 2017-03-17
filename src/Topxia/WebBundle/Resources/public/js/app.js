@@ -66,17 +66,6 @@ define(function (require, exports, module) {
     }
   });
 
-  if ($('html').hasClass('lt-ie8')) {
-    var message = '<div class="alert alert-warning" style="margin-bottom:0;text-align:center;">';
-    message += Translator.trans('由于您的浏览器版本太低，将无法正常使用本站点，请使用最新的');
-    message += '<a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie" target="_blank">' + Translator.trans('IE浏览器') + '</a>、';
-    message += '<a href="http://www.baidu.com/s?wd=%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8" target="_blank">' + Translator.trans('谷歌浏览器') + '</a>' + '<strong>' + '(' + Translator.trans('推荐') + ')' + '</strong>、';
-    message += '<a href="http://firefox.com.cn/download/" target="_blank">' + Translator.trans('Firefox浏览器') + '</a>' + '，' + Translator.trans('访问本站。');
-    message += '</div>';
-
-    $('body').prepend(message);
-  }
-
   $(document).ajaxSend(function (a, b, c) {
     if (c.type == 'POST') {
       b.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
