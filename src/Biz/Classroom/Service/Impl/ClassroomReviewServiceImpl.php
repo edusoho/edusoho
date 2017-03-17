@@ -41,7 +41,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
         $classroom = $this->getClassroomDao()->get($classroomId);
 
         if (empty($classroom)) {
-            throw $this->createServiceException('Classroom is not Exist!');
+            throw $this->createNotFoundException('Classroom is not Exist!');
         }
 
         return $this->getClassroomReviewDao()->getByUserIdAndClassroomId($userId, $classroomId);
@@ -69,19 +69,19 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
     public function saveReview($fields)
     {
         if (!ArrayToolkit::requireds($fields, array('classroomId', 'userId', 'rating'))) {
-            throw $this->createServiceException('参数不正确，评价失败！');
+            throw $this->createInvalidArgumentException('参数不正确，评价失败！');
         }
 
         $classroom = $this->getClassroomDao()->get($fields['classroomId']);
 
         if (empty($classroom)) {
-            throw $this->createServiceException("班级(#{$fields['classroomId']})不存在，评价失败！");
+            throw $this->createNotFoundException("班级(#{$fields['classroomId']})不存在，评价失败！");
         }
 
         $user = $this->getUserService()->getUser($fields['userId']);
 
         if (empty($user)) {
-            throw $this->createServiceException("用户(#{$fields['userId']})不存在,评价失败!");
+            throw $this->createNotFoundException("用户(#{$fields['userId']})不存在,评价失败!");
         }
 
         $review = $this->getClassroomReviewDao()->getByUserIdAndClassroomId($user['id'], $classroom['id']);
@@ -129,7 +129,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
         $review = $this->getReview($id);
 
         if (empty($review)) {
-            throw $this->createServiceException("评价(#{$id})不存在，删除失败！");
+            throw $this->createNotFoundException("评价(#{$id})不存在，删除失败！");
         }
 
         $this->getClassroomReviewDao()->delete($id);
