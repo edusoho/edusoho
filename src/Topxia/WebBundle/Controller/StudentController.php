@@ -90,4 +90,14 @@ class StudentController extends BaseController
             'userinfoFields' => $userinfoFields
         ));
     }
+
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
 }

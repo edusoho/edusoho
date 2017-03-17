@@ -154,7 +154,7 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function definedShowAction(Request $request, $classroomId, $userId)
+    public function studentDefinedShowAction(Request $request, $classroomId, $userId)
     {
         $course = $this->getClassroomService()->tryManageClassroom($classroomId);
         $member = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
