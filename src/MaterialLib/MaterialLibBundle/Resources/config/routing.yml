@@ -99,9 +99,9 @@ material_batch_tag_show:
     path: /materials/batch/tag/show
     defaults: { _controller: MaterialLibBundle:MaterialLib:batchTagShow }
 
-global_file_player:
-   path:  /global_file/{globalId}/player
-   defaults: { _controller: MaterialLibBundle:GlobalFilePlayer:player }
+# global_file_player:
+#    path:  /global_file/{globalId}/player
+#    defaults: { _controller: MaterialLibBundle:GlobalFilePlayer:player }
 
 global_file_hls_playlist:
     path:  /global_file/{globalId}/playlist/{token}.m3u8

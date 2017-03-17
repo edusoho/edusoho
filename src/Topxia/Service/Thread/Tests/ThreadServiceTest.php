@@ -410,7 +410,7 @@ class ThreadServiceTest extends BaseTestCase
             'originalThumb' => '123',
             'categoryId'    => '1',
             'source'        => 'source',
-            'sourceUrl'     => ' ',
+            'sourceUrl'     => '',
             'status'        => 'published',
             'userId'        => $user['id'],
             'publishedTime' => 'now',

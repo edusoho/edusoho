@@ -31,7 +31,7 @@ abstract class AbstractQuestionType extends BaseService
         $filtered['difficulty'] = empty($fields['difficulty']) ? 'simple': $fields['difficulty'];
         $filtered['userId'] = $this->getCurrentUser()->id;
         $filtered['answer'] = empty($fields['answer']) ? array() : $fields['answer'];
-        $filtered['analysis'] = empty($fields['analysis']) ? '': $fields['analysis'];
+        $filtered['analysis'] = empty($fields['analysis']) ? '': $this->purifyHtml($fields['analysis']);
         $filtered['metas'] = empty($fields['metas']) ? array() : $fields['metas'];
         $filtered['score'] = empty($fields['score'])? 0 : $fields['score'];
         $filtered['categoryId'] = empty($fields['categoryId']) ? 0 : (int) $fields['categoryId'];
