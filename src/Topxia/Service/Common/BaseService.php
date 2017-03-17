@@ -76,7 +76,7 @@ abstract class BaseService
      */
     protected function createServiceException($message = 'Service Exception', $code = 0)
     {
-        return new ServiceException($message, $code);
+        throw new ServiceException($message, $code);
     }
 
     /**
@@ -84,7 +84,7 @@ abstract class BaseService
      */
     protected function createAccessDeniedException($message = 'Access Denied', $code = 0)
     {
-        return new AccessDeniedException($message, null, $code);
+        throw new AccessDeniedException($message, null, $code);
     }
 
     /**
@@ -92,7 +92,7 @@ abstract class BaseService
      */
     protected function createNotFoundException($message = 'Not Found', $code = 0)
     {
-        return new NotFoundException($message, $code);
+        throw new NotFoundException($message, $code);
     }
 
     protected function fillOrgId($fields)
