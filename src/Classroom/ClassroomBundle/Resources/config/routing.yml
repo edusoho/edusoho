@@ -36,7 +36,7 @@ classroom_manage_students_defined_show:
     defaults: { _controller: ClassroomBundle:ClassroomManage:studentDefinedShow }
 
 classroom_manage_students_show:
-    path:  /classroom/{classroomId}/manage/students/{userId}/defined_show
+    path:  /classroom/{classroomId}/manage/students/{userId}/show
     defaults: { _controller: ClassroomBundle:ClassroomManage:studentShow }
 
 classroom_manage_aduitor:
