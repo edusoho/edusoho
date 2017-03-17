@@ -166,17 +166,17 @@ class StudentManageController extends BaseController
 
         $condition = array(
             'targetType' => 'course',
-            'targetId'   => $courseId,
-            'userId'     => $userId,
-            'status'     => 'paid'
+            'targetId' => $courseId,
+            'userId' => $userId,
+            'status' => 'paid',
         );
         $orders = $this->getOrderService()->searchOrders($condition, array('createdTime' => 'DESC'), 0, 1);
-        if  (!empty($orders)) {
+        if (!empty($orders)) {
             $order = array_shift($orders);
             $reason = array(
-                'type'     => 'other',
-                'note'     => '"'.$user['nickname'].'"'.' 手动移除',
-                'operator' => $user['id']
+                'type' => 'other',
+                'note' => '"'.$user['nickname'].'"'.' 手动移除',
+                'operator' => $user['id'],
             );
             $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
         }
