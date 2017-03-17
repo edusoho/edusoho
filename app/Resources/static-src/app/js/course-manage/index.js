@@ -6,12 +6,15 @@ import {
   showSettings,
   deleteTask,
   publishTask,
-  unpublishTask
+  unpublishTask,
+  updateTaskNum
 } from './help';
 
 $('[data-help="popover"]').popover();
+let sortableList = '#sortable-list';
+taskSortable(sortableList);
+updateTaskNum(sortableList);
 
-taskSortable('#sortable-list');
 courseFunctionRemask();
 closeCourse();
 deleteCourse(store);
