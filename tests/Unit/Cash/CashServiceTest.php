@@ -160,9 +160,20 @@ class CashServiceTest extends BaseTestCase
         );
         $user = $this->getUserService()->register($userInfo);
         $account = $this->getCashAccountService()->createAccount($user['id']);
-        $this->getCashAccountService()->waveCashField($account['id'], '10000');
-
         $this->setSettingcoin();
+
+        $inflow = array(
+            'userId' => $user['id'],
+            'amount' => 10000,
+            'name' => '入账',
+            'orderSn' => 'V73263188923084',
+            'category' => 'inflow',
+            'note' => '',
+            'payment' => 'alipay',
+        );
+
+        $inflow = $this->getCashService()->inflowByRmb($inflow);
+
 
         $rmbOutFlow = array(
             'userId' => $user['id'],
@@ -174,6 +185,7 @@ class CashServiceTest extends BaseTestCase
             'orderSn' => 'V73263188923084',
             'payment' => 'alipay',
             'category' => 'guess',
+            'parentSn' => $inflow['sn'],
             'createdTime' => time(),
         );
 

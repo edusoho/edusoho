@@ -108,7 +108,7 @@ class BlockServiceImpl extends BaseService implements BlockService
         $result = $this->getBlockDao()->getByCodeAndOrgId($code, $user->getSelectOrgId());
         if (empty($result)) {
             $blockTemplate = $this->getBlockTemplateByCode($code);
-            $blockTemplate['blockTemplateId'] = $blockTemplate['id'];
+            $blockTemplate['blockTemplateId'] = !empty($blockTemplate) ? $blockTemplate['id'] : 0;
             $blockTemplate['blockId'] = 0;
 
             return $blockTemplate;
