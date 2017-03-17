@@ -273,6 +273,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             }
         }
 
+        if (isset($fields['about'])) {
+            $fields['about'] = $this->purifyHtml($fields['about'], true);
+        }
+
         return $fields;
     }
 

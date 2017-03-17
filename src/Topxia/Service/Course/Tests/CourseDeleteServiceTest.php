@@ -107,7 +107,6 @@ class CourseDeleteServiceTest extends BaseTestCase
             "type"       => "choice",
             "parentId"   => 0,
             'copyId'     => 1,
-            "answer"     => "2"
         );
         $question = $this->getQuestionService()->createQuestion($question);
 

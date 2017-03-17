@@ -142,6 +142,32 @@ class ClassroomManageController extends BaseController
         ));
     }
 
+    public function studentShowAction(Request $request, $classroomId, $userId)
+    {
+        if (!$this->getCurrentUser()->isAdmin()) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权查看学员详细信息！'));
+        }
+
+        return $this->forward('TopxiaWebBundle:Student:show', array(
+            'request' => $request, 
+            'userId' => $userId
+        ));
+    }
+
+    public function studentDefinedShowAction(Request $request, $classroomId, $userId)
+    {
+        $course = $this->getClassroomService()->tryManageClassroom($classroomId);
+        $member = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
+        if (empty($member)) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans("学员#{$userId}不属于班级{#classroomId}"));
+        }
+
+        return $this->forward('TopxiaWebBundle:Student:definedShow', array(
+            'request' => $request, 
+            'userId' => $userId
+        ));
+    }
+
     public function setClassroomMemberDeadlineAction(Request $request, $classroomId, $userId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
@@ -274,10 +300,8 @@ class ClassroomManageController extends BaseController
     public function remarkAction(Request $request, $classroomId, $userId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
-
-        $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $user      = $this->getUserService()->getUser($userId);
-        $member    = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         if ('POST' == $request->getMethod()) {
             $data   = $request->request->all();
@@ -285,6 +309,8 @@ class ClassroomManageController extends BaseController
 
             return $this->createStudentTrResponse($classroom, $member);
         }
+
+        $member    = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
 
         return $this->render('ClassroomBundle:ClassroomManage:remark-modal.html.twig', array(
             'member'    => $member,
@@ -295,8 +321,6 @@ class ClassroomManageController extends BaseController
 
     private function createStudentTrResponse($classroom, $student)
     {
-        $this->getClassroomService()->tryManageClassroom($classroom["id"]);
-
         $user     = $this->getUserService()->getUser($student['userId']);
         $progress = $this->calculateUserLearnProgress($classroom, $student);
 
