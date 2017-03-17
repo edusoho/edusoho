@@ -47,6 +47,10 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function countUsers(array $conditions)
     {
+        if (isset($conditions['nickname'])) {
+            $conditions['nickname'] = strtoupper($conditions['nickname']);
+        }
+
         return $this->getUserDao()->count($conditions);
     }
 
@@ -265,15 +269,6 @@ class UserServiceImpl extends BaseService implements UserService
         $userProfiles = $this->getProfileDao()->findByIds($ids);
 
         return ArrayToolkit::index($userProfiles, 'id');
-    }
-
-    public function countUsers(array $conditions)
-    {
-        if (isset($conditions['nickname'])) {
-            $conditions['nickname'] = strtoupper($conditions['nickname']);
-        }
-
-        return $this->getUserDao()->count($conditions);
     }
 
     public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit)
