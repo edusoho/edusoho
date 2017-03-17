@@ -199,7 +199,7 @@ abstract class BaseController extends Controller
 
     public function createAccessDeniedException($message = 'Access Denied', \Exception $previous = null)
     {
-        return new AccessDeniedException($message, 403, $previous);
+        throw new AccessDeniedException($message, 403, $previous);
     }
 
     protected function agentInWhiteList($userAgent)
