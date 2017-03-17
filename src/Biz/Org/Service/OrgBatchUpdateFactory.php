@@ -40,12 +40,12 @@ class OrgBatchUpdateFactory
             'article' => array(
                 'protocol' => 'biz',
                 'service' => 'Article:ArticleService',
-                'method' => 'countUsers',
+                'method' => 'countArticles',
             ),
             'announcement' => array(
                 'protocol' => 'biz',
                 'service' => 'Announcement:AnnouncementService',
-                'method' => 'countUsers',
+                'method' => 'countAnnouncements',
             ),
         );
     }

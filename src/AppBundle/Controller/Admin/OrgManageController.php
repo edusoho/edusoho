@@ -66,7 +66,6 @@ class OrgManageController extends BaseController
     {
         $relatedDatas = $this->getOrgService()->findRelatedModuleDatas($id);
 
-        var_dump($relatedDatas);
         if (empty($relatedDatas)) {
             $this->getOrgService()->deleteOrg($id);
 
