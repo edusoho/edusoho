@@ -145,6 +145,16 @@ class EduCloudController extends BaseController
 
     public function smsCheckAction(Request $request, $type)
     {
+        $userId = $this->getCurrentUser()->getId();
+
+        $biz     = $this->getServiceKernel()->getBiz();
+        $factory = $biz['ratelimiter.factory'];
+        $limiter = $factory('user_'.$type, 5, 600);
+        $remain = $limiter->check($userId);
+        if( $remain == 0 ){
+            return $this->createJsonResponse(array('success'=>false,'message' => $this->trans('错误次数太多，请10分钟之后再试')));
+        }
+
         $targetSession = $request->getSession()->get($type);
 
         if (strlen($request->query->get('value')) == 0 || strlen($targetSession['sms_code']) == 0) {
