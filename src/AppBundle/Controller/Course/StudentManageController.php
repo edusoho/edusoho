@@ -161,6 +161,25 @@ class StudentManageController extends BaseController
 
     public function removeCourseStudentAction($courseSetId, $courseId, $userId)
     {
+        $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $user = $this->getCurrentUser();
+
+        $condition = array(
+            'targetType' => 'course',
+            'targetId'   => $courseId,
+            'userId'     => $userId,
+            'status'     => 'paid'
+        );
+        $orders = $this->getOrderService()->searchOrders($condition, array('createdTime' => 'DESC'), 0, 1);
+        if  (!empty($orders)) {
+            $order = array_shift($orders);
+            $reason = array(
+                'type'     => 'other',
+                'note'     => '"'.$user['nickname'].'"'.' 手动移除',
+                'operator' => $user['id']
+            );
+            $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
+        }
         $this->getCourseMemberService()->removeCourseStudent($courseId, $userId);
 
         return $this->createJsonResponse(array('success' => true));
