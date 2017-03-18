@@ -33,27 +33,75 @@ class EduSohoUpgrade extends AbstractUpdater
         ServiceKernel::instance()->createService('System:SettingService')->set("crontab_next_executed_time", time());
     }
 
-    protected function batchUpdate($index)
+    protected function getStep($index)
     {
-        $this->logger('info', '开始迁移c2_course_set');
-        $this->c2courseSetMigrate();
-        $this->logger('info', '迁移c2_course_set成功');
+      $steps = array(
+        'c2courseSetMigrate',
+        'c2courseMigrate',
+        'c2CourseTaskMigrate',
+        'c2Activity',
+        'c2VideoActivity',
+        'c2TextActivity',
+        'c2AudioActivity',
+        'c2FlashActivity',
+        'c2PPtActivity',
+        'c2DocActivity',
+        'c2CourseTaskView',
+        'c2CourseTaskResult',
+        'c2Exercise',
+        'c2Homework',
+        'c2CourseMaterial',
+        'c2TagOwner',
+        'updateCourseChapter',
+        'c2testpaperMigrate',
+        'c2QuestionMigrate',
+        'migrate',
+      );
 
-        $this->logger('info', '开始迁移c2_course');
-        $this->c2courseMigrate();
-        $this->logger('info', '迁移c2_course成功');
+      return $steps[$index];
+    }
 
-        $this->c2CourseLessonMigrate();
+    protected function getIndexAndPage($index)
+    {
+      return explode('-', $index);
+    }
 
-        $this->logger('info', '开始迁移test_paper');
-        $this->c2testpaperMigrate();
+    protected function setIndexAndPage($index, $page)
+    {
+      return "{$index}-{$page}";
+    }
 
-        $this->logger('info', '开始迁移 question');
-        $this->c2QuestionMigrate();
+    protected function batchUpdate($index)
+    { 
+        $indexAndPage = $this->getIndexAndPage($index);
+        $index = $indexAndPage[0];
+        $page = 0;
+        if (!empty($indexAndPage[1])) {
+            $page = $indexAndPage[1];
+        }
 
-        $this->logger('info', '开始迁移 other');
-        $this->migrate();
-        $this->logger('info', '迁移完成');
+        $method = $this->getStep($index);
+        if (empty($method)) {
+          return;
+        }
+
+        $this->logger('info', "开始迁移 {$method}");
+        $nextPage = $this->$method($page);
+        $this->logger('info', "迁移 {$method} 成功");
+
+        if (!empty($nextPage)) {
+            return array(
+                'index' => $this->setIndexAndPage($index, $nextPage),
+                'message' => '正在升级数据...',
+                'progress' => 0
+            );
+        }
+
+        return array(
+            'index' => $this->setIndexAndPage($index+1, 0),
+            'message' => '正在升级数据...',
+            'progress' => 0
+        );
     }
 
     protected function c2courseSetMigrate()
@@ -359,67 +407,6 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = "UPDATE `c2_course` c set `publishedTaskNum` = (select count(*) from course_lesson where courseId=c.id and status = 'published')";
         $result = $this->getConnection()->exec($sql);
     }
-
-    /**
-     * 课时数据升级 包含了 task, activity, activityExt
-     *
-     * 为了保证数据准确性，扩展表中添加了lessonId
-     */
-    protected function c2CourseLessonMigrate()
-    {
-        $this->logger('info', '开始迁移course_task');
-        $this->c2CourseTaskMigrate();
-        $this->logger('info', '迁移course_task完成');
-
-        $this->logger('info', '开始迁移activity');
-        $this->c2Activity();
-        $this->logger('info', '迁移activity完成');
-
-        $this->logger('info', '开始迁移video_activtiy');
-        $this->c2VideoActivity();
-
-        $this->logger('info', '开始迁移text_activtiy');
-        $this->c2TextActivity();
-
-        $this->logger('info', '开始迁移audio_activtiy');
-        $this->c2AudioActivity();
-
-        $this->logger('info', '开始迁移flash_activtiy');
-        $this->c2FlashActivity();
-
-        $this->logger('info', '开始迁移ppt_activtiy');
-        $this->c2PPtActivity();
-
-        $this->logger('info', '开始迁移doc_activtiy');
-        $this->c2DocActivity();
-        // $this->c2TestPaperActivity();
-
-        $this->logger('info', '开始迁移course_task_view');
-        $this->c2CourseTaskView();
-
-        $this->logger('info', '开始迁移course_task_result');
-        $this->c2CourseTaskResult();
-
-        //练习
-        $this->logger('info', '开始迁移exercise');
-        $this->c2Exercise();
-
-        //作业
-        $this->logger('info', '开始迁移homework');
-        $this->c2Homework();
-
-        //course_material
-        $this->logger('info', '开始迁移 course_material');
-        $this->c2CourseMaterial();
-
-        $this->logger('info', '开始迁移 tag_owner');
-        $this->c2TagOwner();
-
-        $this->logger('info', '开始迁移 course_chapter');
-        $this->updateCourseChapter();
-
-    }
-
 
     protected function updateCourseChapter()
     {
