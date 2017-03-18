@@ -28,6 +28,7 @@ class MobileAlipayController extends MobileController
             try {
                 $status = $this->doPayNotify($request, $name);
             } catch (\Exception $e) {
+                file_put_contents('/var/www/test.mob.edusoho.cn/a.log', $e->getMessage(), FILE_APPEND);
                 error_log($e->getMessage(), 0);
             }
         } else {
