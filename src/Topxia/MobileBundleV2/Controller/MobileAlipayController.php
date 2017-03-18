@@ -8,8 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Alipay\AlipayNotify;
 use Topxia\MobileBundleV2\Alipay\MobileAlipayConfig;
 use Topxia\MobileBundleV2\Alipay\MobileAlipayRequest;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
 
 class MobileAlipayController extends MobileBaseController
 {
@@ -26,8 +24,6 @@ class MobileAlipayController extends MobileBaseController
         $this->getLogService()->info('notify', 'create', "paynotify action");
         $alipayNotify  = new AlipayNotify(MobileAlipayConfig::getAlipayConfig("edusoho"));
         $verify_result = $alipayNotify->verifyNotify();
-        $this->getLogger('Mobile2PayNotify')->info('verify_result: ');
-        $this->getLogger('Mobile2PayNotify')->info('verify_result: '.$verify_result);
 
         $status = "fail";
 
@@ -35,32 +31,17 @@ class MobileAlipayController extends MobileBaseController
             //验证成功
             try {
                 $status = $this->doPayNotify($request, $name);
-                $this->getLogger('Mobile2PayNotify')->info('status1: '.$status);
             } catch (\Exception $e) {
-                $this->getLogger('Mobile2PayNotify')->info('error: '.$e->getMessage());
                 error_log($e->getMessage(), 0);
             }
         } else {
             //验证失败
             $status = "fail";
-            $this->getLogger('Mobile2PayNotify')->info('status2: '.$status);
             $this->getLogService()->info('notify', 'check_fail', "paynotify action");
         }
 
 
         return new Response($status);
-    }
-
-    protected function getLogger($name)
-    {
-        if ($this->logger) {
-            return $this->logger;
-        }
-
-        $this->logger = new Logger($name);
-        $this->logger->pushHandler(new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir').'/service.log', Logger::DEBUG));
-
-        return $this->logger;
     }
 
     public function payMerchantAction(Request $request)
@@ -70,7 +51,6 @@ class MobileAlipayController extends MobileBaseController
 
     public function payCallBackAction(Request $request, $name)
     {
-        $this->getLogger('Mobile2PayCallBack')->info('call_back');
         $status   = $this->doPayNotify($request, $name);
         $callback = "<script type='text/javascript'>window.location='objc://alipayCallback?".$status."';</script>";
         return new Response($callback);
@@ -79,51 +59,51 @@ class MobileAlipayController extends MobileBaseController
     //支付校验
     protected function doPayNotify(Request $request, $name)
     {
-        $response = $this->forward('TopxiaWebBundle:PayCenter:payNotify', array(
-            'request' => $request,
-            'name' => $name
-        ));
+        // $response = $this->forward('TopxiaWebBundle:PayCenter:payNotify', array(
+        //     'request' => $request,
+        //     'name' => $name
+        // ));
         
-        $this->getLogger('Mobile2PayNotify')->info('response code '.$response->getStatusCode());
+        // $this->getLogger('Mobile2DoPayNotify')->info('response code '.$response->getStatusCode());
 
-        if($response->getContent() == 'success') {
-            return 'success';
+        // if($response->getContent() == 'success') {
+        //     return 'success';
+        // }
+
+        // return "fail";
+
+        $requestParams = array();
+
+        if ($request->getMethod() == "GET") {
+            $requestParams              = $request->query->all();
+            $order                      = $this->getOrderService()->getOrderBySn($requestParams['out_trade_no']);
+            $requestParams['total_fee'] = $order['amount'];
+        } else {
+            $doc           = simplexml_load_string($_POST['notify_data']);
+            $doc           = (array) $doc;
+            $requestParams = array();
+
+            if (!empty($doc['out_trade_no'])) {
+                //商户订单号
+                $requestParams['out_trade_no'] = $doc['out_trade_no'];
+                //支付宝交易号
+                $requestParams['trade_no'] = $doc['trade_no'];
+                //交易状态
+                $requestParams['trade_status'] = $doc['trade_status'];
+                $requestParams['total_fee']    = $doc['total_fee'];
+                $requestParams['gmt_payment']  = $doc['gmt_payment'];
+            }
         }
 
-        return "fail";
+        $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $requestParams);
+        $payData = $this->createPaymentResponse($requestParams);
 
-        // $requestParams = array();
-
-        // if ($request->getMethod() == "GET") {
-        //     $requestParams              = $request->query->all();
-        //     $order                      = $this->getOrderService()->getOrderBySn($requestParams['out_trade_no']);
-        //     $requestParams['total_fee'] = $order['amount'];
-        // } else {
-        //     $doc           = simplexml_load_string($_POST['notify_data']);
-        //     $doc           = (array) $doc;
-        //     $requestParams = array();
-
-        //     if (!empty($doc['out_trade_no'])) {
-        //         //商户订单号
-        //         $requestParams['out_trade_no'] = $doc['out_trade_no'];
-        //         //支付宝交易号
-        //         $requestParams['trade_no'] = $doc['trade_no'];
-        //         //交易状态
-        //         $requestParams['trade_status'] = $doc['trade_status'];
-        //         $requestParams['total_fee']    = $doc['total_fee'];
-        //         $requestParams['gmt_payment']  = $doc['gmt_payment'];
-        //     }
-        // }
-
-        // $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $requestParams);
-        // $payData = $this->createPaymentResponse($requestParams);
-
-        // try {
-        //     list($success, $order) = $this->getPayCenterService()->pay($payData);
-        //     return "success";
-        // } catch (\Exception $e) {
-        //     return "fail";
-        // }
+        try {
+            list($success, $order) = $this->getPayCenterService()->pay($payData);
+            return "success";
+        } catch (\Exception $e) {
+            return "fail";
+        }
     }
 
     private function createPaymentResponse($params)
