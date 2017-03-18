@@ -13,6 +13,8 @@ use Monolog\Handler\StreamHandler;
 
 class MobileAlipayController extends MobileBaseController
 {
+    private $logger;
+
     public function payAction(Request $request)
     {
         $alipayRequest = new MobileAlipayRequest($request);
