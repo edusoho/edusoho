@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Alipay\AlipayNotify;
 use Topxia\MobileBundleV2\Alipay\MobileAlipayConfig;
 use Topxia\MobileBundleV2\Alipay\MobileAlipayRequest;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 class MobileAlipayController extends MobileBaseController
 {
@@ -22,7 +24,8 @@ class MobileAlipayController extends MobileBaseController
         $this->getLogService()->info('notify', 'create', "paynotify action");
         $alipayNotify  = new AlipayNotify(MobileAlipayConfig::getAlipayConfig("edusoho"));
         $verify_result = $alipayNotify->verifyNotify();
-        file_put_contents('/var/www/test.mob.edusoho.cn/a.log', $verify_result, FILE_APPEND);
+        $this->getLogger('Mobile2PayNotify')->info('verify_result: ');
+        $this->getLogger('Mobile2PayNotify')->info('verify_result: '.$verify_result);
 
         $status = "fail";
 
@@ -30,20 +33,32 @@ class MobileAlipayController extends MobileBaseController
             //验证成功
             try {
                 $status = $this->doPayNotify($request, $name);
-                file_put_contents('/var/www/test.mob.edusoho.cn/a.log', 'status1: '. $status, FILE_APPEND);
+                $this->getLogger('Mobile2PayNotify')->info('status1: '.$status);
             } catch (\Exception $e) {
-                file_put_contents('/var/www/test.mob.edusoho.cn/a.log', 'error: '.$e->getMessage(), FILE_APPEND);
+                $this->getLogger('Mobile2PayNotify')->info('error: '.$e->getMessage());
                 error_log($e->getMessage(), 0);
             }
         } else {
             //验证失败
             $status = "fail";
-            file_put_contents('/var/www/test.mob.edusoho.cn/a.log', 'status2: '. $status, FILE_APPEND);
+            $this->getLogger('Mobile2PayNotify')->info('status2: '.$status);
             $this->getLogService()->info('notify', 'check_fail', "paynotify action");
         }
 
 
         return new Response($status);
+    }
+
+    protected function getLogger($name)
+    {
+        if ($this->logger) {
+            return $this->logger;
+        }
+
+        $this->logger = new Logger($name);
+        $this->logger->pushHandler(new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir').'/service.log', Logger::DEBUG));
+
+        return $this->logger;
     }
 
     public function payMerchantAction(Request $request)
@@ -53,7 +68,7 @@ class MobileAlipayController extends MobileBaseController
 
     public function payCallBackAction(Request $request, $name)
     {
-        file_put_contents('/var/www/test.mob.edusoho.cn/a.log', 'payCallBack: ', FILE_APPEND);
+        $this->getLogger('Mobile2PayCallBack')->info('call_back');
         $status   = $this->doPayNotify($request, $name);
         $callback = "<script type='text/javascript'>window.location='objc://alipayCallback?".$status."';</script>";
         return new Response($callback);
@@ -67,6 +82,8 @@ class MobileAlipayController extends MobileBaseController
             'name' => $name
         ));
         
+        $this->getLogger('Mobile2PayNotify')->info('response code '.$response->getStatusCode());
+
         if($response->getContent() == 'success') {
             return 'success';
         }
