@@ -29,15 +29,18 @@ class MobileAlipayController extends MobileBaseController
             //验证成功
             try {
                 $status = $this->doPayNotify($request, $name);
+                file_put_contents('/var/www/test.mob.edusoho.cn/a.log', 'status1: '. $status, FILE_APPEND);
             } catch (\Exception $e) {
-                file_put_contents('/var/www/test.mob.edusoho.cn/a.log', $e->getMessage(), FILE_APPEND);
+                file_put_contents('/var/www/test.mob.edusoho.cn/a.log', 'error: '.$e->getMessage(), FILE_APPEND);
                 error_log($e->getMessage(), 0);
             }
         } else {
             //验证失败
             $status = "fail";
+            file_put_contents('/var/www/test.mob.edusoho.cn/a.log', 'status2: '. $status, FILE_APPEND);
             $this->getLogService()->info('notify', 'check_fail', "paynotify action");
         }
+
 
         return new Response($status);
     }
@@ -49,6 +52,7 @@ class MobileAlipayController extends MobileBaseController
 
     public function payCallBackAction(Request $request, $name)
     {
+        file_put_contents('/var/www/test.mob.edusoho.cn/a.log', 'payCallBack: ', FILE_APPEND);
         $status   = $this->doPayNotify($request, $name);
         $callback = "<script type='text/javascript'>window.location='objc://alipayCallback?".$status."';</script>";
         return new Response($callback);
