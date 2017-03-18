@@ -22,6 +22,7 @@ class MobileAlipayController extends MobileBaseController
         $this->getLogService()->info('notify', 'create', "paynotify action");
         $alipayNotify  = new AlipayNotify(MobileAlipayConfig::getAlipayConfig("edusoho"));
         $verify_result = $alipayNotify->verifyNotify();
+        file_put_contents('/var/www/test.mob.edusoho.cn/a.log', $verify_result, FILE_APPEND);
 
         $status = "fail";
 
