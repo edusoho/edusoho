@@ -51,7 +51,7 @@ class MobileAlipayController extends MobileBaseController
 
     public function payCallBackAction(Request $request, $name)
     {
-        $status   = $this->doPayNotify($request, $name);
+        $status   = "success";
         $callback = "<script type='text/javascript'>window.location='objc://alipayCallback?".$status."';</script>";
         return new Response($callback);
     }
