@@ -1110,11 +1110,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->getCourse($courseId);
         $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
-
         $items = $this->convertTasks($tasks, $course);
 
         $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
+
         foreach ($chapters as $chapter) {
+            if ($chapter['type'] == 'lesson') {
+                continue;
+            }
             $chapter['itemType'] = 'chapter';
             $items[] = $chapter;
         }
