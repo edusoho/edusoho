@@ -1,6 +1,10 @@
 # 用户通用字段
 user.fields.login_password: 登录密码
 user.fields.pay_password: 支付密码
+user.fileds.microblog: 微博
+user.fileds.wechat: 微信
+user.fileds.qq: QQ
+
 
 # 表单通用
 form.modify: 修改
@@ -31,5 +35,18 @@ user.settings.security.security_questions: 安全问题
 user.settings.security.security_questions_description: 通过设置并且验证安全问题，保护帐号密码安全
 user.settings.security.mobile_bind: 手机绑定
 user.settings.security.mobile_bind_description: 增加账户登录、购买课程时的安全性，同时还可以找回登录密码，支付密码。
+# 个人设置模块-基础信息模块
+user.setting.basic_info_realname: 真实姓名
+user.setting.basic_info_company: 公司
+user.setting.basic_info_occupation: 职业
+user.setting.basic_info_rank: 头衔
+user.setting.basic_info_personal_signature: 个人签名
+user.setting.basic_info_personal_space: 个人空间
+# 个人设置模块-实名认证
+user.setting.certification_photo_require: 照片要求
+user.setting.certification_photo_require_description: 证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。图片格式支持jpg、gif、png，每张图片文件大小不能超过2M
+user.setting.idcard_ront_photo: 正面照片
+user.setting.idcard_opposite_photo: 反面照片
+
 
 
