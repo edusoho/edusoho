@@ -35,7 +35,7 @@
     <div class="form-group">
       <div class="col-sm-2 control-label"><label>{{'难度'|trans}}</label></div>
       <div class="col-sm-10 controls">
-        <select id="course_categoryId" class="form-control width-input width-input-large" name="difficulty">
+        <select id="course_categoryId" class="form-control width-input width-input-large" name="difficulty"  data-url="{{ path('course_set_manage_show_tasks',{courseSetId:courseSetId})}}" data-check-num-url="{{ path('course_set_manage_question_check_num',{courseSetId:courseSetId}) }}">
           {{ select_options(dict('difficulty'), activity.metas.difficulty|default('0'),{'0':'不限'|trans}) }}
         </select>
       </div>

@@ -127,7 +127,7 @@ class UserController extends BaseController
 
             $paginator = new Paginator(
                 $this->get('request'),
-                $this->getClassroomService()->searchClassroomsCount($conditions),
+                $this->getClassroomService()->countClassrooms($conditions),
                 20
             );
 
@@ -193,7 +193,7 @@ class UserController extends BaseController
 
             $paginator = new Paginator(
                 $this->get('request'),
-                $this->getClassroomService()->searchClassroomsCount($conditions),
+                $this->getClassroomService()->countClassrooms($conditions),
                 20
             );
 

@@ -301,7 +301,6 @@ class CourseSetManageController extends BaseController
 
                 $this->getCourseService()->publishCourse($course['id']);
             }
-
             $this->getCourseSetService()->publishCourseSet($id);
 
             return $this->createJsonResponse(array('success' => true));

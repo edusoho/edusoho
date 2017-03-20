@@ -51,7 +51,7 @@
           </select>
         {% else %}
           <select class="form-control js-course-select width-150" id="course-select-{{courseSet.id}}" style="width:80%;display: inline-block;">
-            {% if courseSet.courses %}
+            {% if courseSet.courses|default(null) %}
               {% for course in courseSet.courses %}
                   {{course.title}}
                   <option value="{{course.id}}" 

@@ -322,9 +322,8 @@ class CourseServiceImpl extends BaseService implements CourseService
      * 计算教学计划价格和虚拟币价格
      *
      * @param  $id
-     * @param int|float $originPrice 教学计划原价
-     *
-     * @return array (number, number)
+     * @param  int|float $originPrice 教学计划原价
+     * @return array     (number, number)
      */
     protected function calculateCoursePrice($id, $originPrice)
     {
@@ -885,8 +884,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param int $userId
-     *
+     * @param  int     $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -1187,7 +1185,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                     'courseTaskId' => $task['id'],
                 )
             );
-            $lessons[] = $task;
+            $lessons[] = $this->filterTask($task);
         }
 
         $chapters = $this->getChapterDao()->findChaptersByCourseId($course['id']);
@@ -1211,6 +1209,22 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
 
         return $lessons;
+    }
+
+    //移动端 数字转字符
+    protected function filterTask($task)
+    {
+        array_walk($task, function ($value, $key) use (&$task) {
+            if (is_numeric($value)) {
+                $task[$key] = (string) $value;
+            } elseif (is_null($value)) {
+                $task[$key] = '';
+            } else {
+                $task[$key] = $value;
+            }
+        });
+
+        return $task;
     }
 
     private function isUselessTask($task)
@@ -1524,6 +1538,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->count($conditions);
     }
 
+    public function countCoursesGroupByCourseSetIds($courseSetIds)
+    {
+        return $this->getCourseDao()->countGroupByCourseSetIds($courseSetIds);
+    }
+
     protected function createCourseStrategy($course)
     {
         return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->biz);
@@ -1715,7 +1734,6 @@ class CourseServiceImpl extends BaseService implements CourseService
      * 当默认值未设置时，合并默认值
      *
      * @param  $course
-     *
      * @return array
      */
     protected function mergeCourseDefaultAttribute($course)
@@ -1744,7 +1762,6 @@ class CourseServiceImpl extends BaseService implements CourseService
      *
      * @param  $userId
      * @param  $filters
-     *
      * @return array
      */
     protected function prepareUserLearnCondition($userId, $filters)
@@ -1769,9 +1786,8 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param $id
-     * @param $fields
-     *
+     * @param  $id
+     * @param  $fields
      * @return mixed
      */
     private function processFields($id, $fields, $courseSet)

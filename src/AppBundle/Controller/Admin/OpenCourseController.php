@@ -118,7 +118,6 @@ class OpenCourseController extends BaseController
     public function recommendListAction(Request $request)
     {
         $conditions = $request->query->all();
-        $conditions['status'] = 'published';
         $conditions['recommended'] = 1;
 
         $paginator = new Paginator(

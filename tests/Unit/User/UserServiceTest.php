@@ -351,7 +351,7 @@ class UserServiceTest extends BaseTestCase
     /**
      * @group tmp
      */
-    public function testSearchUserCount()
+    public function testcountUsers()
     {
         $user1 = $this->createUser('user1');
         $user2 = $this->createUser('user2');

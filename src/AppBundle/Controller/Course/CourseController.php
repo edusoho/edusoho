@@ -29,6 +29,8 @@ class CourseController extends CourseBaseController
             $files = $this->findFiles($course['id']);
         }
 
+        $course['courseNum'] = $this->getCourseNumInCourseSet($course['courseSetId']);
+
         return $this->render(
             'course/tabs/summary.html.twig',
             array(
@@ -645,5 +647,15 @@ class CourseController extends CourseBaseController
         }
 
         return $tab;
+    }
+
+    protected function getCourseNumInCourseSet($courseSetId)
+    {
+        $courseNums = $this->getCourseService()->countCoursesGroupByCourseSetIds(array($courseSetId));
+        if (!empty($courseNums)) {
+            return $courseNums[0]['courseNum'];
+        }
+
+        return 1;
     }
 }

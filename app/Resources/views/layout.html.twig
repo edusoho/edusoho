@@ -61,9 +61,9 @@
 </head>
 <body class="{{ 'es-main-' ~ maincolor }} {{ 'es-nav-' ~ navigationcolor }} {% if bodyClass|default('') %}{{ bodyClass }}{% endif %}">
 
-
 <!--[if lt IE 9]>
-<script src="{{ asset('static-dist/libs/fix-ie.js') }}"></script>
+  <script src="{{ asset('static-dist/libs/fix-ie.js') }}"></script>
+  {% include 'default/ie8-alert.html.twig' %}
 <![endif]-->
 
 {% block body %}

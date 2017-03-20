@@ -174,7 +174,6 @@ class CashServiceTest extends BaseTestCase
 
         $inflow = $this->getCashService()->inflowByRmb($inflow);
 
-
         $rmbOutFlow = array(
             'userId' => $user['id'],
             'type' => 'outflow',
