@@ -65,7 +65,7 @@ class Marketing {
 
     $('input[name="deadlineType"]').on('change', function (event) {
       console.log($('input[name="deadlineType"]:checked').val());
-      if ($('input[name="deadlineType"]:checked').val() == 'date') {
+      if ($('input[name="deadlineType"]:checked').val() == 'end_date') {
          $('#deadlineType-date').removeClass('hidden');
          $('#deadlineType-days').addClass('hidden');
       } else {

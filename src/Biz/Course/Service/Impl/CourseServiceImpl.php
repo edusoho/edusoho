@@ -4,8 +4,10 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
+use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\ThreadDao;
 use Biz\Course\Dao\CourseSetDao;
+use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
@@ -189,43 +191,40 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function updateCourse($id, $fields)
     {
-        $course = $this->tryManageCourse($id);
+        $this->tryManageCourse($id);
+
+        if (!ArrayToolkit::requireds($fields, array('title', 'courseSetId'))) {
+            throw $this->createInvalidArgumentException('Lack of required fields');
+        }
+
         $fields = ArrayToolkit::parts(
             $fields,
             array(
                 'title',
                 'courseSetId',
                 // 'learnMode', //一旦创建，学习模式不允许变更
-                'expiryMode',
-                'expiryDays',
-                'expiryStartDate',
-                'expiryEndDate',
+//              'expiryMode',
+//              'expiryDays',
+//              'expiryStartDate',
+//              'expiryEndDate',
                 'summary',
                 'goals',
                 'audiences',
                 'enableFinish',
                 'serializeMode',
                 'maxStudentNum',
+                'locked',
             )
         );
 
-        if ($course['status'] == 'published') {
-            unset($fields['expiryMode']);
-            // unset($fields['expiryDays']);
-            unset($fields['expiryStartDate']);
-            unset($fields['expiryEndDate']);
-        }
+        // $existCourse = $this->getCourse($id);
+        // if (isset($existCourse['status']) && $existCourse['status'] === 'published') {
 
-        $existCourse = $this->getCourse($id);
-        if (isset($existCourse['status']) && $existCourse['status'] === 'published') {
-            if (!ArrayToolkit::requireds($course, array('title', 'courseSetId'))) {
-                throw $this->createInvalidArgumentException('Lack of required fields');
-            }
-        } elseif (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode'))) {
-            throw $this->createInvalidArgumentException('Lack of required fields');
-        } else {
-            $fields = $this->validateExpiryMode($fields);
-        }
+        // } elseif (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode'))) {
+        //     throw $this->createInvalidArgumentException('Lack of required fields');
+        // } else {
+        //     $fields = $this->validateExpiryMode($fields);
+        // }
 
         $course = $this->getCourseDao()->update($id, $fields);
         $this->dispatchEvent('course.update', new Event($course));
@@ -295,8 +294,19 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'services',
                 'approval',
                 'coinPrice',
+                'expiryMode', //days、end_date、date、forever
+                'expiryDays',
+                'expiryStartDate',
+                'expiryEndDate',
             )
         );
+
+        if ($oldCourse['status'] == 'published') {
+            unset($fields['expiryMode']);
+            // unset($fields['expiryDays']);
+            unset($fields['expiryStartDate']);
+            unset($fields['expiryEndDate']);
+        }
 
         $requireFields = array('isFree', 'buyable');
         $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
@@ -307,6 +317,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!ArrayToolkit::requireds($fields, $requireFields)) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
+
+        $fields = $this->validateExpiryMode($fields);
 
         $fields = $this->processFields($id, $fields, $courseSet);
 
@@ -447,9 +459,22 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($course['expiryMode'])) {
             return $course;
         }
+        //enum: [days,end_date,date,forever]
         if ($course['expiryMode'] === 'days') {
             $course['expiryStartDate'] = null;
             $course['expiryEndDate'] = null;
+
+            if (empty($course['expiryDays'])) {
+                throw $this->createInvalidArgumentException('Param Invalid: expiryDays');
+            }
+        } elseif ($course['expiryMode'] == 'end_date') {
+            $course['expiryStartDate'] = null;
+            $course['expiryDays'] = 0;
+
+            if (empty($course['expiryEndDate']) || strtotime($course['expiryEndDate']) <= time()) {
+                throw $this->createInvalidArgumentException('Param Invalid: expiryEndDate');
+            }
+            $course['expiryEndDate'] = strtotime($course['expiryEndDate']);
         } elseif ($course['expiryMode'] === 'date') {
             $course['expiryDays'] = 0;
             if (isset($course['expiryStartDate'])) {
