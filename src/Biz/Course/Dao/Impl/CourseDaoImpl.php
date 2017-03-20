@@ -81,7 +81,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
             return array();
         }
         $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
-        
+
         $sql = "SELECT count(id) as 'courseNum', courseSetId FROM {$this->table} WHERE courseSetId IN ({$marks}) GROUP BY courseSetId";
 
         return $this->db()->fetchAll($sql, $courseSetIds) ?: null;

@@ -70,7 +70,7 @@ class CourseController extends BaseController
         }
 
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
-        
+
         $currentUser = $this->getCurrentUser();
         $courseMembers = array();
         $teachers = array();
