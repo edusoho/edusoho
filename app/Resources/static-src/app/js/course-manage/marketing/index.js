@@ -63,6 +63,27 @@ class Marketing {
       }
     });
 
+    $('input[name="deadlineType"]').on('change', function (event) {
+      console.log($('input[name="deadlineType"]:checked').val());
+      if ($('input[name="deadlineType"]:checked').val() == 'date') {
+         $('#deadlineType-date').removeClass('hidden');
+         $('#deadlineType-days').addClass('hidden');
+      } else {
+        $('#deadlineType-date').addClass('hidden');
+         $('#deadlineType-days').removeClass('hidden');
+      }
+    });
+
+    $('input[name="expiryMode"]').on('change', function (event) {
+      if ($('input[name="expiryMode"]:checked').val() == 'date') {
+        $('#expiry-days').removeClass('hidden').addClass('hidden');
+        $('#expiry-date').removeClass('hidden');
+      } else if($('input[name="expiryMode"]:checked').val() == 'days') {
+        $('#expiry-date').removeClass('hidden').addClass('hidden');
+        $('#expiry-days').removeClass('hidden');
+      }
+    });
+
     $('input[name="isFree"]').on('change', function (event) {
       if ($('input[name="isFree"]:checked').val() == 0) {
         $('.js-is-free').removeClass('hidden');

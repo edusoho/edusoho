@@ -79,30 +79,34 @@
           <div class="piece-header">学习规则</div>
           <div class="form-group">
             <label class="col-sm-2 control-label">
-              {{'学习有效期模式'|trans}}
+              {{'学习有效期'|trans}}
               <a class="es-icon es-icon-help link-gray text-normal" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" 
               data-content="{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}">
               </a>
             </label>
-            {% if course.status|default('draft') == 'draft' %}
-              <div class="col-sm-8 radios">
-                  {{ radios('expiryMode', { 'days': '随到随学'|trans, 'date': '固定周期'|trans,'foever':'永久有效' }, course.expiryMode|default('days'), course.status|default('draft') == 'published'? 'disabled': '') }}
-                  
-                  <div class="mb20 mt20 {% if course.expiryMode|default('days') == 'date' %}hidden{% endif %}" id="expiry-days">
+            {#{% if course.status|default('draft') == 'draft' %}#}
+            <div class="col-sm-8 radios">
+                {{ radios('expiryMode', { 'days': '随到随学'|trans, 'date': '固定周期'|trans,'foever':'永久有效' }, course.expiryMode|default('days'), course.status|default('draft') == 'published'? 'disabled': '') }}
+                <div class="mb20 mt20 {% if course.expiryMode|default('days') == 'date' %}hidden{% endif %}" id="expiry-days">
+                  {{ radios('deadlineType', { 'date': '按截止日期'|trans, 'days': '按有效天数'|trans})}}
+                  <div class="mb20 mt20" id="deadlineType-date">
+                    <input class="form-control width-150 mr10" />{{'在此日期前，学员可进行学习。'|trans}}
+                  </div>
+                  <div class="mb20 mt20 hidden" id="deadlineType-days">
                     {{'学习有效期'|trans}}
-                    <input class="form-control mhs" type="text" id="expiryDays" name="expiryDays" style="display:inline-block;width:150px" value="{{course.expiryDays|default('0')}}">
+                    <input class="form-control mhs width-150" type="text" id="expiryDeadline" name="expiryDeadline"  value="">
                     {{'天'|trans}}
-                    <a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'设置为0天则无限制'|trans}}"></a>
                   </div>
-                  <div class="mb20 mt20 {% if course.expiryMode|default('days') == 'days' %}hidden{% endif %}" id="expiry-date">
-                    {{'开始日期'|trans}}
-                    <input class="form-control mls mrl" id="expiryStartDate" type="text" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" style="display:inline-block;width:150px">
-                    {{'结束日期'|trans}}
-                    <input class="form-control mls" type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}" style="display:inline-block;width:150px">
-                  </div>
-                  <div class="color-warning">{{'课程首次发布后“学习有效期方式”将不能再修改'|trans}}</div>
-              </div>
-            {% else %}
+                </div>
+                <div class="mb20 mt20 {% if course.expiryMode|default('days') == 'days' %}hidden{% endif %}" id="expiry-date">
+                  {{'开始日期'|trans}}
+                  <input class="form-control mls mrl" id="expiryStartDate" type="text" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" style="display:inline-block;width:150px">
+                  {{'结束日期'|trans}}
+                  <input class="form-control mls" type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}" style="display:inline-block;width:150px">
+                </div>
+                <div class="color-warning">{{'课程首次发布后“学习有效期方式”将不能再修改'|trans}}</div>
+            </div>
+            {#{% else %}
               <div class="col-sm-8 form-control-static">
                 {% if course.expiryMode|default('days') != 'date' %}
                   随到随学
@@ -122,7 +126,7 @@
                 {% endif %}
                 <p class="help-block mt20">{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}</p>
               </div>
-            {% endif %}
+            {% endif %}#}
           </div>
           {% if setting('magic.lesson_watch_limit') %}
             <div class="form-group">
