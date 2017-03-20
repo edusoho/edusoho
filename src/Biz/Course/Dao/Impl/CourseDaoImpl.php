@@ -123,6 +123,10 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
     public function updateCategoryByCourseSetId($courseSetId, $fields)
     {
         return $this->db()->update($this->table, $fields, array('courseSetId' => $courseSetId));
+
+        return $this->getByFields(array(
+            'courseSetId' => $courseSetId,
+        ));
     }
 
     public function declares()
@@ -147,6 +151,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
             'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
                 'courseSetId = :courseSetId',
+                'courseSetId IN (:courseSetIds)',
                 'updatedTime >= :updatedTime_GE',
                 'status = :status',
                 'type = :type',
@@ -186,7 +191,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
     protected function createQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {
-            $conditions['titleLike'] = "%{$conditions['title']}%";
+            $conditions['titleLike'] = "{$conditions['title']}";
             unset($conditions['title']);
         }
 

@@ -5,6 +5,7 @@ namespace Biz\Course\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\CloudPlatform\Service\AppService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Service\CourseNoteService;
@@ -19,7 +20,7 @@ use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
-use Vip\Service\Vip\VipService;
+use VipPlugin\Biz\Vip\Service\VipService;
 
 /**
  * Class MemberServiceImpl
@@ -123,11 +124,13 @@ class MemberServiceImpl extends BaseService implements MemberService
         $result = $this->getMemberDao()->delete($member['id']);
 
         $course = $this->getCourseService()->getCourse($courseId);
+
         $this->getLogService()->info(
             'course',
             'remove_student',
-            "教学计划《{$course['title']}》(#{$course['id']})，删除学员{$user['nickname']}(#{$user['id']})"
+            "教学计划《{$course['title']}》(#{$course['id']})，移除学员{$user['nickname']}(#{$user['id']})"
         );
+
         $this->dispatchEvent('course.quit', $course, array('userId' => $userId, 'member' => $member));
 
         if ($this->getCurrentUser()->isAdmin()) {
@@ -242,15 +245,42 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException('course, member参数不能为空');
         }
 
+        $vipNonExpired = true;
+        if (!empty($member['levelId'])) {
+            // 会员加入的情况下
+            $vipNonExpired = $this->isVipMemberNonExpired($course, $member);
+        }
+
         if ($member['deadline'] == 0) {
-            return true;
+            return $vipNonExpired;
         }
 
         if ($member['deadline'] > time()) {
-            return true;
+            return $vipNonExpired;
         }
 
-        return false;
+        return !$vipNonExpired;
+    }
+
+    /**
+     * 会员到期后、会员被取消后、课程会员等级被提高均为过期
+     *
+     * @param $course
+     * @param $member
+     *
+     * @return bool 会员加入的学员是否已到期
+     */
+    protected function isVipMemberNonExpired($course, $member)
+    {
+        $vipApp = $this->getAppService()->getAppByCode('vip');
+
+        if (empty($vipApp)) {
+            return false;
+        }
+
+        $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']);
+
+        return $status === 'ok';
     }
 
     public function findCourseStudents($courseId, $start, $limit)
@@ -703,16 +733,10 @@ class MemberServiceImpl extends BaseService implements MemberService
         $isCourseStudent = $this->isCourseStudent($courseId, $userId);
         $classroom = $this->getClassroomService()->getClassroomByCourseId($courseId);
 
-        if ($classroom['id']) {
+        if (!empty($classroom)) {
             $member = $this->getClassroomService()->getClassroomMember($classroom['classroomId'], $userId);
 
-            if (!$isCourseStudent
-                && !empty($member)
-                && array_intersect(
-                    $member['role'],
-                    array('student', 'teacher', 'headTeacher', 'assistant')
-                )
-            ) {
+            if (!$isCourseStudent && !empty($member) && array_intersect($member['role'], array('student', 'teacher', 'headTeacher', 'assistant'))) {
                 $info = ArrayToolkit::parts($member, array('levelId'));
                 $member = $this->createMemberByClassroomJoined($courseId, $userId, $member['classroomId'], $info);
 
@@ -975,6 +999,14 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return AppService
+     */
+    protected function getAppService()
+    {
+        return $this->createService('CloudPlatform:AppService');
     }
 
     /**

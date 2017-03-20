@@ -4,7 +4,7 @@
 
 {% if member|default(false) %}
   <div class="clearfix">
-    <button class="btn btn-primary btn-sm pull-right js-show-review-form" {% if not userReview %}style="display:none;"{% endif %}>{{'重新评价'|trans}}</button>
+     <button class="btn btn-primary btn-sm pull-right js-show-review-form" {% if not userReview or (hideRereview|default(false)) %}style="display:none;"{% endif %}>{{'重新评价'|trans}}</button>
   </div>
 
   {% include 'review/widget/review-form.html.twig' with {userReview:userReview,reviewSaveUrl:reviewSaveUrl|default(null)} %}

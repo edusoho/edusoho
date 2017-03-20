@@ -1,4 +1,5 @@
-import { initEditor } from '../editor'
+import {initEditor} from "../editor";
+import "store";
 
 class Text {
   constructor(props) {
@@ -8,11 +9,19 @@ class Text {
   _init() {
     this._inItStep2form();
     this._inItStep3form();
+    this._lanuchAutoSave();
+
+    $('.js-continue-edit').on('click', (event) => {
+      const $btn = $(event.currentTarget);
+      const content = $btn.data('content');
+      this.editor.setData(content);
+      $btn.remove();
+    });
   }
 
   _inItStep2form() {
-    var $step2_form = $("#step2-form");
-    var validator = $step2_form.data('validator');
+    const $step2_form = $('#step2-form');
+    let validator = $step2_form.data('validator');
     validator = $step2_form.validate({
       rules: {
         title: {
@@ -21,21 +30,48 @@ class Text {
           trim: true,
         },
         content: {
-          required:true,
-        }
+          required: true,
+        },
       },
     });
-    initEditor($('[name="content"]'),validator);
+    const $content = $('[name="content"]');
+    this.editor = initEditor($content, validator);
+    this._contentCache = $content.val();
+  }
+
+  _lanuchAutoSave() {
+    const $title = $('#modal .modal-title', parent.document);
+    this._originTitle = $title.text();
+    setInterval(() => {
+      this._saveDraft();
+    }, 5000);
+  }
+
+  _saveDraft() {
+    const content = this.editor.getData();
+    const needSave = content !== this._contentCache;
+    if (!needSave) {
+      return;
+    }
+    const $content = $('[name="content"]');
+    $.post($content.data('saveDraftUrl'), {content: content})
+      .done(() => {
+        const date = new Date(); //日期对象
+        const $title = $('#modal .modal-title', parent.document);
+        const now = `${date.getHours() + Translator.trans('时')}${date.getMinutes() + Translator.trans('分')}${date.getSeconds() + Translator.trans('秒')}`;
+        $title.text(this._originTitle + Translator.trans('(草稿已于%createdTime%保存)', {createdTime: now}));
+        this._contentCache = content;
+      });
   }
 
   _inItStep3form() {
-    var $step3_form = $("#step3-form");
-    var validator = $step3_form.data('validator');
+    const $step3_form = $('#step3-form');
+    let validator = $step3_form.data('validator');
     validator = $step3_form.validate({
       rules: {
-        'finishDetail': {
+        finishDetail: {
           required: true,
-          positive_integer:true,
+          positive_integer: true,
           max: 300,
         },
       },
@@ -43,7 +79,7 @@ class Text {
         finishDetail: {
           required: '请输入至少观看多少分钟',
         },
-      }
+      },
     });
   }
 }

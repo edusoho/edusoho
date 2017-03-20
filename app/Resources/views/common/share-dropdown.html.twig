@@ -1,3 +1,7 @@
+{% if useSeajs|default(false) == true %}
+  {% do load_script('common/share-dropdown.js') %}
+{% endif %}
+
 {% do script(['app/js/share/index.js']) %}
 
 {% if type == 'courseSet' %}

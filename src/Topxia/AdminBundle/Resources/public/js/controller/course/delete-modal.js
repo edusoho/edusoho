@@ -14,8 +14,8 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
+                $('.js-delete-btn').button('loading');
                 $.post($form.attr('action'), $form.serialize(), function(response) {
-                    console.log('response: ', response);
                     if(response.success){
                         $.post($('#delete-btn').data('url'), function(resp){
                             if(resp.code == 0){

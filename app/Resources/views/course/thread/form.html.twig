@@ -6,12 +6,12 @@
 
 {% do load_script('course/thread-form') %}
 
-{% set nav = 'thread' %}
+{% set nav = 'threads' %}
 
 {% block detail_content %}
 
 <ul class="breadcrumb">
-  <li><a href="{{ path('my_course_show', {id:course.id, tab: 'threads'}) }}">{{'讨论区'|trans}}</a></li>
+  <li><a href="{{ path('my_course_show', {id:course.id, tab: 'threads'}) }}">{{'话题'|trans}}</a></li>
   {% if thread %}
     <li><a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" title="{{ thread.title }}">{{ thread.title|plain_text(10) }}</a></li>
     <li class="active">{% if type == 'question' %}{{'编辑问题'|trans}}{% else %}{{'编辑话题'|trans}}{% endif %}</li>

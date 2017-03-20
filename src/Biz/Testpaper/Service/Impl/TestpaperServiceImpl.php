@@ -60,7 +60,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         $testpaper = $this->getTestpaper($id);
         if (!$testpaper) {
-            throw $this->createServiceException("Testpaper #{$id} is not found, update testpaper failure.");
+            throw $this->createServiceException("Testpaper #{$id} is not found, delete testpaper failure.");
         }
 
         $result = $this->getTestpaperDao()->delete($testpaper['id']);
@@ -462,7 +462,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             }
 
             if (!empty($userAnswer['answer'])) {
-                $checkedFields['status'] = $checkedFields['score'] == $item['score'] ? 'right' : 'wrong';
+                if ($paperResult['type'] == 'homework') {
+                    $checkedFields['status'] = 'right';
+                } else {
+                    $checkedFields['status'] = $checkedFields['score'] == $item['score'] ? 'right' : 'wrong';
+                }
             }
 
             $this->updateItemResult($userAnswer['id'], $checkedFields);

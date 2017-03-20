@@ -6,19 +6,9 @@ use Topxia\Service\Common\ServiceKernel;
 
 class CourseOrderRefundProcessor implements OrderRefundProcessor
 {
-    public function getLayout()
-    {
-        return 'TopxiaAdminBundle:Course:layout.html.twig';
-    }
-
     public function removeStudent($targetId, $userId)
     {
         $this->getCourseMemberService()->removeStudent($targetId, $userId);
-    }
-
-    public function getRefundLayout()
-    {
-        return 'TopxiaAdminBundle:Course:refund.layout.html.twig';
     }
 
     public function findByLikeTitle($title)

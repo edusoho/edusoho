@@ -34,22 +34,32 @@
         <div class="form-group">
           <label for="" class="col-sm-2 control-label">{{'学习完成规则'|trans}}</label>
           <div class="col-sm-8 radios"> 
-            {{ radios('enableFinish', { '0': '必须满足任务完成的条件才算学完'|trans, '1': '学员可以自己点击“学过了”按钮以示学完'|trans }, course.enableFinish|default('0')) }}
+            <label>
+              <input type="radio" name="enableFinish" value="0" {% if course.enableFinish|default('0') == 0 %}checked{% endif %}> 由任务完成条件决定
+              <a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'必须达到完成条件，任务才算完成'|trans}}"></a>
+            </label>
+            <label>
+              <input type="radio" name="enableFinish" value="1" {% if course.enableFinish|default('0') == 1 %}checked{% endif %}> 学员自己决定
+              <a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'学员点击“学过了”按钮，任务即为完成'|trans}}"></a>
+            </label>
           </div>
         </div>
         <div class="form-group">
           <label class="col-sm-2 control-label">{{'学习有效期模式'|trans}}</label>
-          {% if course.status|default('draft') != 'published' %}
+          {% if course.status|default('draft') == 'draft' %}
             <div class="col-sm-8 radios">
                 {{ radios('expiryMode', { 'days': '随到随学'|trans, 'date': '指定日期学习'|trans }, course.expiryMode|default('days'), course.status|default('draft') == 'published'? 'disabled': '') }}
                 <div class="mbm mtm {% if course.expiryMode|default('days') == 'date' %}hidden{% endif %}" id="expiry-days">
-                  {{'学习有效期'|trans}}<input class="form-control mhs" type="text" id="expiryDays" name="expiryDays" style="display:inline-block;width:150px" value="{{course.expiryDays|default('0')}}">{{'天'|trans}}
+                  {{'学习有效期'|trans}}
+                  <input class="form-control mhs" type="text" id="expiryDays" name="expiryDays" style="display:inline-block;width:150px" value="{{course.expiryDays|default('0')}}">
+                  {{'天'|trans}}
                   <a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'设置为0天则无限制'|trans}}"></a>
                 </div>
                 <div class="mbm mtm {% if course.expiryMode|default('days') == 'days' %}hidden{% endif %}" id="expiry-date">
-                  {{'开始日期'|trans}}<input class="form-control mls mrl" id="expiryStartDate" type="text" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" style="display:inline-block;width:150px" 
-                  >
-                  {{'结束日期'|trans}}<input class="form-control mls" type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}" style="display:inline-block;width:150px">
+                  {{'开始日期'|trans}}
+                  <input class="form-control mls mrl" id="expiryStartDate" type="text" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" style="display:inline-block;width:150px">
+                  {{'结束日期'|trans}}
+                  <input class="form-control mls" type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}" style="display:inline-block;width:150px">
                 </div>
                 <p class="help-block mtm mbm">{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}</p>
                 <div class="color-warning">{{'课程首次发布后“学习有效期方式”将不能再修改'|trans}}</div>
@@ -66,8 +76,10 @@
                 指定日期学习
                 <a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}"></a>
                 <div class="mbm mtm" id="expiry-date">
-                {{'开始日期'|trans}}<input class="form-control mls mrl" disabled id="expiryStartDate" type="text" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" style="display:inline-block;width:150px" >
-                {{'结束日期'|trans}}<input class="form-control mls" disabled type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}" style="display:inline-block;width:150px">
+                {{'开始日期'|trans}}
+                <input class="form-control mls mrl" disabled id="expiryStartDate" type="text" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" style="display:inline-block;width:150px" >
+                {{'结束日期'|trans}}
+                <input class="form-control mls" disabled type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}" style="display:inline-block;width:150px">
                 </div>
               {% endif %}
               <p class="help-block mtm">{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}</p>

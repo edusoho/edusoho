@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Codeages\Biz\Framework\Context;
-
 
 trait BizAwareTrait
 {

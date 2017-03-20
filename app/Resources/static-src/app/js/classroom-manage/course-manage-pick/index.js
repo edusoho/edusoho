@@ -72,6 +72,9 @@ $('.js-course-select').on('change', function () {
       break;
     }
   }
+  
+  var price = $(this).find(':selected').data('price');
+  $('.js-price-' + sid).html(price);
 });
 
 $('.courses-list').on('click', ".course-item-cbx", function () {

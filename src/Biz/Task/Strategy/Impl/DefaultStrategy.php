@@ -56,7 +56,9 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 $allTasks = $this->getTaskDao()->findByCourseIdAndCategoryId(
                     $task['courseId'],
                     $task['categoryId']
-                ); //courseId
+                );
+            } else {
+                array_push($allTasks, $task);
             }
             foreach ($allTasks as $_task) {
                 $this->getTaskDao()->delete($_task['id']);
@@ -256,7 +258,9 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         }
 
         $task = parent::createTask($task);
-        $this->getTaskService()->publishTask($task['id']);
+        if ($lessonTask['status'] == 'published') {
+            $this->getTaskService()->publishTask($task['id']);
+        }
 
         return $this->getTaskService()->getTask($task['id']);
     }

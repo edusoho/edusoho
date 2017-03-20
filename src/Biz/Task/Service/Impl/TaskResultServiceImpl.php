@@ -83,7 +83,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
 
     public function waveWatchTime($id, $watchTime)
     {
-        $maxAllowWatchTime = 200;
+        $maxAllowWatchTime = 200 * 60;
         if ($watchTime <= $maxAllowWatchTime) {
             $this->getTaskResultDao()->wave(array($id), array(
                 'watchTime' => $watchTime,

@@ -70,6 +70,10 @@ class CourseSetController extends BaseController
                 $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
             }
         }
+        $courseSetLevels = array();
+        if ($filter == 'vip') {
+            $courseSetLevels = $this->findVipCourseSetLevels($courseSetIds);
+        }
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseSets, 'categoryId'));
 
@@ -99,6 +103,7 @@ class CourseSetController extends BaseController
                 'publishedCourseSetsNum' => $publishedCourseSetsNum,
                 'closedCourseSetsNum' => $closedCourseSetsNum,
                 'unPublishedCourseSetsNum' => $unPublishedCourseSetsNum,
+                'courseSetlevels' => $courseSetLevels,
             )
         );
     }
@@ -156,8 +161,12 @@ class CourseSetController extends BaseController
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($id);
+        $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($id);
+        if (!empty($classroomRef)) {
+            return $this->createJsonResponse(array('code' => 2, 'message' => '请先从班级管理将本课程移除'));
+        }
         $subCourses = $this->getCourseSetService()->findCourseSetsByParentIdAndLocked($id, 1);
-        if (!empty($subCourses)) {
+        if (!empty($subCourses) || ($courseSet['parentId'] && $courseSet['locked'] == 1)) {
             return $this->createJsonResponse(array('code' => 2, 'message' => '请先删除班级课程'));
         }
         try {
@@ -611,6 +620,20 @@ class CourseSetController extends BaseController
                 'paginator' => $paginator,
             )
         );
+    }
+
+    private function findVipCourseSetLevels($courseSetIds)
+    {
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
+        $levelIds = ArrayToolkit::column($courses, 'vipLevelId');
+        $levels = $this->getVipLevelService()->searchLevels(
+            array('ids' => $levelIds),
+            array('seq' => 'ASC'),
+            0,
+            PHP_INT_MAX
+        );
+
+        return $levels;
     }
 
     /**

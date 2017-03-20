@@ -19,18 +19,15 @@ class CourseController extends BaseController
     public function pickAction($classroomId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
-        $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
-
-        $excludeIds = ArrayToolkit::column($activeCourses, 'parentCourseSetId');
 
         $conditions = array(
             'status' => 'published',
             'parentId' => 0,
-            'excludeIds' => $excludeIds,
         );
 
-        if (empty($excludeIds)) {
-            unset($conditions['excludeIds']);
+        $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
+        if (!empty($activeCourses)) {
+            $conditions['excludeIds'] = ArrayToolkit::column($activeCourses, 'parentCourseSetId');
         }
 
         $user = $this->getCurrentUser();
@@ -52,12 +49,15 @@ class CourseController extends BaseController
 
         $users = $this->getUsers($courseSets);
 
-        return $this->render('classroom-manage/course/course-pick-modal.html.twig', array(
-            'users' => $users,
-            'courseSets' => $courseSets,
-            'classroomId' => $classroomId,
-            'paginator' => $paginator,
-        ));
+        return $this->render(
+            'classroom-manage/course/course-pick-modal.html.twig',
+            array(
+                'users' => $users,
+                'courseSets' => $courseSets,
+                'classroomId' => $classroomId,
+                'paginator' => $paginator,
+            )
+        );
     }
 
     public function listAction(Request $request, $classroomId)
@@ -75,10 +75,18 @@ class CourseController extends BaseController
         $teachers = array();
 
         foreach ($courses as &$course) {
-            $courseMembers[$course['id']] = $this->getCourseMemberService()->getCourseMember($course['id'], $currentUser['id']);
+            $courseMembers[$course['id']] = $this->getCourseMemberService()->getCourseMember(
+                $course['id'],
+                $currentUser['id']
+            );
 
-            $course['teachers'] = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
+            $course['teachers'] = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds(
+                $course['teacherIds']
+            );
             $teachers[$course['id']] = $course['teachers'];
+            if ($course['isFree']) {
+                $course['originPrice'] = '0.00';
+            }
         }
 
         $user = $this->getCurrentUser();
@@ -87,7 +95,13 @@ class CourseController extends BaseController
         if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
             $classroomName = $this->setting('classroom.name', '班级');
 
-            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomName}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse(
+                'info',
+                "非常抱歉，您无权限访问该{$classroomName}，如有需要请联系客服",
+                '',
+                3,
+                $this->generateUrl('homepage')
+            );
         }
 
         $canManageClassroom = $this->getClassroomService()->canManageClassroom($classroomId);
@@ -111,16 +125,19 @@ class CourseController extends BaseController
             $classroomDescription = preg_replace('/ /', '', $classroomDescription);
         }
 
-        return $this->render('classroom/course/list.html.twig', array(
-            'classroom' => $classroom,
-            'member' => $member,
-            'teachers' => $teachers,
-            'courses' => $courses,
-            'courseMembers' => $courseMembers,
-            'layout' => $layout,
-            'classroomDescription' => $classroomDescription,
-            'isCourseMember' => $isCourseMember,
-        ));
+        return $this->render(
+            'classroom/course/list.html.twig',
+            array(
+                'classroom' => $classroom,
+                'member' => $member,
+                'teachers' => $teachers,
+                'courses' => $courses,
+                'courseMembers' => $courseMembers,
+                'layout' => $layout,
+                'classroomDescription' => $classroomDescription,
+                'isCourseMember' => $isCourseMember,
+            )
+        );
     }
 
     public function searchAction(Request $request, $classroomId)
@@ -156,13 +173,16 @@ class CourseController extends BaseController
 
         $users = $this->getUsers($courseSets);
 
-        return $this->render('course/course-select-list.html.twig', array(
-            'users' => $users,
-            'courseSets' => $courseSets,
-            'paginator' => $paginator,
-            'classroomId' => $classroomId,
-            'type' => 'ajax_pagination',
-        ));
+        return $this->render(
+            'course/course-select-list.html.twig',
+            array(
+                'users' => $users,
+                'courseSets' => $courseSets,
+                'paginator' => $paginator,
+                'classroomId' => $classroomId,
+                'type' => 'ajax_pagination',
+            )
+        );
     }
 
     protected function getUsers($courseSets)

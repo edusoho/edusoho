@@ -51,7 +51,10 @@ class TestpaperController extends BaseController
             return $this->redirect($this->generateUrl('testpaper_result_show', array('resultId' => $testpaperResult['id'])));
         }
 
-        //$canLookTestpaper = $this->getTestpaperService()->canLookTestpaper($testpaperResult['id']);
+        $canLookTestpaper = $this->getTestpaperService()->canLookTestpaper($testpaperResult['id']);
+        if (!$canLookTestpaper) {
+            return $this->createMessageResponse('info', 'access denied');
+        }
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
 
@@ -101,11 +104,10 @@ class TestpaperController extends BaseController
             return $this->redirect($this->generateUrl('testpaper_show', array('resultId' => $testpaperResult['id'])));
         }
 
-        /*$canLookTestpaper = $this->getTestpaperService()->canLookTestpaper($testpaperResult['id']);
-
+        $canLookTestpaper = $this->getTestpaperService()->canLookTestpaper($testpaperResult['id']);
         if (!$canLookTestpaper) {
-        throw new AccessDeniedException($this->getServiceKernel()->trans('无权查看试卷！'));
-        }*/
+            return $this->createMessageResponse('info', 'access denied');
+        }
 
         $builder = $this->getTestpaperService()->getTestpaperBuilder($testpaper['type']);
         $questions = $builder->showTestItems($testpaper['id'], $testpaperResult['id']);
@@ -316,6 +318,11 @@ class TestpaperController extends BaseController
         $user = $this->getUser();
 
         $activity = $this->getActivityService()->getActivity($activityId);
+
+        $canTakeCourse = $this->getCourseService()->canTakeCourse($activity['fromCourseId']);
+        if (!$canTakeCourse) {
+            return array('result' => false, 'message' => $this->getServiceKernel()->trans('access denied!'));
+        }
 
         $result = array('result' => true, 'message' => '');
         if (!$activity) {

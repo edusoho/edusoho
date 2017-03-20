@@ -23,6 +23,7 @@
       color:@gray;
       font-size: 16px;
       z-index: 1;
+      overflow: hidden;
       .back-link {
         color: @gray-dark;
         padding-right: 20px;
@@ -100,15 +101,14 @@
     width: 360px;
     right: -360px;
     background-color: #f5f8fa;
+    .box-shadow(-1px 0 5px rgba(0,0,0,0.1));
   }
   .dashboard-toolbar {
     position: absolute;
-    top:0;
+    top:50%;
     left: -58px;
-    height: 100%;
-    display: table;
+    margin-top: -112.5px;
     .dashboard-toolbar-nav {
-      display: table-cell;
       margin-bottom: 0;
       vertical-align: middle;
       list-style: none;
@@ -122,6 +122,7 @@
           background-color: #f5f8fa;
           color: @gray-dark;
           text-align: center;
+          .box-shadow(-1px 0 10px rgba(0,0,0,0.1));
         }
         &.active,
         &:hover {

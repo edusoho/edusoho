@@ -1555,6 +1555,11 @@ course_activity_download:
     path: /course/{courseId}/activiy/{activityId}/download
     defaults: { _controller: AppBundle:Activity/Download:downloadFile }
 
+course_text_activity_auto_save:
+    path: /course/{courseId}/activity/{activityId}/text/auto_save
+    defaults: { _controller: AppBundle:Activity/Text:autoSave }
+    methods: [POST]
+
 #task
 course_task_show:
     path:  /course/{courseId}/task/{id}/show
@@ -2142,6 +2147,11 @@ course_set_manage_question_check:
 course_set_manage_show_tasks:
   path: /course_set/{courseSetId}/manage/show/tasks
   defaults: { _controller: AppBundle:Question/Manage:showTasks }
+  methods: [POST]
+
+course_set_manage_question_check_num:
+  path: /course_set/{courseSetId}/manage/question/check/num
+  defaults: { _controller: AppBundle:Question/Manage:showQuestionTypesNum }
   methods: [POST]
 
 #testpaper

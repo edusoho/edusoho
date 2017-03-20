@@ -7,7 +7,7 @@
     <span class="gray-darker mrm vertical-middle inline-block"><b class="text-24">免费</b></span>
 {% else %}
     {% if coinSetting.coin_enabled|default(false) and coinSetting.price_type == 'Coin' %}
-        <span class="gray-darker mrm">¥<b class="text-24">{{ course.price * coinSetting.cash_rate }} {{ coinSetting.coin_name|default('虚拟币'|trans) }}</b></span>
+        <span class="gray-darker mrm"><b class="text-24">{{ course.price * coinSetting.cash_rate }} {{ coinSetting.coin_name|default('虚拟币'|trans) }}</b></span>
     {% else %}
         <span class="gray-darker mrm">¥<b class="text-24">{{ course.price }}</b></span>
         {% if course.price < course.originPrice %}

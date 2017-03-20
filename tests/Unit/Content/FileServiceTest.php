@@ -17,6 +17,13 @@ class FileServiceTest extends BaseTestCase
     {
         $sourceFile = __DIR__.'/Fixtures/test.gif';
         $testFile = __DIR__.'/Fixtures/test_test.gif';
+
+        $this->getFileService()->addFileGroup(array(
+            'name' => '临时目录',
+            'code' => 'tmp',
+            'public' => 1,
+        ));
+
         copy($sourceFile, $testFile);
         $file = new UploadedFile(
             $testFile,
@@ -27,7 +34,7 @@ class FileServiceTest extends BaseTestCase
             true
         );
 
-        $fileRecord = $this->getUploadFileService()->uploadFile('tmp', $file);
+        $fileRecord = $this->getFileService()->uploadFile('tmp', $file);
         $this->assertTrue(file_exists($fileRecord['file']->getRealPath()));
         unlink($fileRecord['file']->getRealPath());
     }
@@ -35,7 +42,7 @@ class FileServiceTest extends BaseTestCase
     /**
      * @return FileService
      */
-    protected function getUploadFileService()
+    protected function getFileService()
     {
         return $this->createService('Content:FileService');
     }
