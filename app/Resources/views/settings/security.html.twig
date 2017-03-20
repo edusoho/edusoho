@@ -1,11 +1,11 @@
 {% extends 'settings/layout.html.twig' %}
-{% block title %}{{'安全设置'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'user.settings.security_menu'|trans}} - {{ parent() }}{% endblock %}
 {# {% set script_controller = 'settings/security' %}  #}
 {% set side_nav = 'security' %}
 
 {% block main %}
  {% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
-    {% block heading %}{{'安全设置'|trans}}{% endblock %}
+    {% block heading %}{{'user.settings.security.page_title'|trans}}{% endblock %}
     {% block body %}
     {{ web_macro.flash_messages() }}
 
@@ -20,11 +20,11 @@
       </div>
       <div class="col-sm-4 col-xs-5">
         {% if progressScore > 67 %}
-          <span class="color-success" style="display:block;">{{'安全等级：高'|trans}}</span>
+          <span class="color-success" style="display:block;">{{'user.settings.security.high_level'|trans}}</span>
         {% elseif progressScore > 34 %}
-        <span class="text-warning" style="display:block;">{{'安全等级：中'|trans}}</span>
+        <span class="text-warning" style="display:block;">{{'user.settings.security.middle_level'|trans}}</span>
         {% else %}
-          <span class="color-danger" style="display:block;">{{'安全等级：低'|trans}}</span>
+          <span class="color-danger" style="display:block;">{{'user.settings.security.low_level'|trans}}</span>
         {% endif %}
       </div>
     </div>
@@ -46,11 +46,11 @@
         {% endif %}
       </div>
 
-      <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'登录密码'|trans}}</span>
+      <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'user.settings.security.login_password'|trans}}</span>
 
-      <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'登录网校时需要输入的密码'|trans}}</span>
+      <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'user.settings.security.login_password_description'|trans}}</span>
 
-      <a href="{{ path('settings_password') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >{{'修改'|trans}}</a>
+      <a href="{{ path('settings_password') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >{{'user.settings.security.modify_login_password_btn'|trans}}</a>
     </div>
     <hr>
 
@@ -69,14 +69,14 @@
         {% endif %}
       </div>
 
-      <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'支付密码'|trans}}</span>
+      <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'user.settings.security.pay_password'|trans}}</span>
 
-      <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'在网校进行消费行为时需要输入的密码'|trans}}</span>
+      <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'user.settings.security.pay_password_description'|trans}}</span>
 
       {% if hasPayPassword %}
-        <a href="{{ path('settings_reset_pay_password') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >{{'重置'|trans}}</a>
+        <a href="{{ path('settings_reset_pay_password') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >{{'user.settings.security.pay_password_reset_btn'|trans}}</a>
       {% else %}
-        <a href="{{ path('settings_pay_password') }}" class="col-xs-offset-1  btn btn-primary" style="margin-top: -3px;" >{{'设置'|trans}}</a>
+        <a href="{{ path('settings_pay_password') }}" class="col-xs-offset-1  btn btn-primary" style="margin-top: -3px;" >{{'user.settings.security.pay_password_set_btn'|trans}}</a>
       {% endif %}
 
     </div>
@@ -98,15 +98,15 @@
         {% endif %}
       </div>
 
-      <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'安全问题'|trans}}</span>
+      <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'user.settings.security.security_questions'|trans}}</span>
 
-      <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'通过设置并且验证安全问题，保护帐号密码安全。'|trans}}</span>
+      <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'user.settings.security.security_questions_description'|trans}}</span>
 
       <a href="{{ path('settings_security_questions') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >
       {% if hasFindPayPasswordQuestion %}
-        {{'查看'|trans}}
+        {{'user.settings.security.security_questions_view_btn'|trans}}
       {% else %}
-        {{'设置'|trans}}
+        {{'user.settings.security.security_questions_set_btn'|trans}}
       {% endif %}
 
       </a>
@@ -131,15 +131,15 @@
           {% endif %}
         </div>
 
-        <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'手机绑定'|trans}}</span>
+        <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'user.settings.security.mobile_bind'|trans}}</span>
 
-        <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'增加账户登录、购买课程时的安全性，同时还可以找回登录密码，支付密码。'|trans}}</span>
+        <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'user.settings.security.mobile_bind_description'|trans}}</span>
 
         <a href="{{ path('settings_bind_mobile') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >
         {% if hasVerifiedMobile %}
-          {{'修改'|trans}}
+          {{'user.settings.security.mobile_modify_btn'|trans}}
         {% else %}
-          {{'绑定'|trans}}
+          {{'user.settings.security.mobile_bind_btn'|trans}}
         {% endif %}
         </a>
       </div>

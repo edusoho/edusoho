@@ -1,1 +1,20 @@
-Bad credentials.: 用户名或密码错误
+user.settings.security_menu: 安全设置
+user.settings.security.page_title: 安全设置
+user.settings.security.high_level: 安全等级：高
+user.settings.security.middle_level: 安全等级：中
+user.settings.security.low_level: 安全等级：低
+user.settings.security.login_password: 登录密码
+user.settings.security.login_password_description: 登录网校时需要输入的密码
+user.settings.security.modify_login_password_btn: 修改
+user.settings.security.pay_password: 支付密码
+user.settings.security.pay_password_description: 在网校进行消费行为时需要输入的密码
+user.settings.security.pay_password_set_btn: 设置
+user.settings.security.pay_password_reset_btn: 重置
+user.settings.security.security_questions: 安全问题
+user.settings.security.security_questions_description: 通过设置并且验证安全问题，保护帐号密码安全
+user.settings.security.security_questions_view_btn: 查看
+user.settings.security.security_questions_set_btn: 设置
+user.settings.security.mobile_bind: 手机绑定
+user.settings.security.mobile_bind_description: 增加账户登录、购买课程时的安全性，同时还可以找回登录密码，支付密码。
+user.settings.security.mobile_bind_btn: 绑定
+user.settings.security.mobile_modify_btn: 修改
