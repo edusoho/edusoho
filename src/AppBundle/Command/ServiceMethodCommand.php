@@ -25,7 +25,6 @@ class ServiceMethodCommand extends BaseCommand
         $folder = $input->getArgument('folder');
 
         $this->loadAllService();
-        // var_dump($this->results);
         $this->scandir($folder, $output);
     }
 
@@ -114,8 +113,6 @@ class ServiceMethodCommand extends BaseCommand
             preg_match_all($partten, $line, $matchs, PREG_SET_ORDER);
             if (!empty($matchs) && $fileName == '/Users/fengni/edusoho/www/edusoho/src/AppBundle/Controller/Admin/AnalysisController.php') {
                 foreach ($matchs as $key => $value) {
-                    var_dump($matchs);
-
                     $service = $value[1];
 
                     $serviceMap = array(

@@ -1,32 +1,32 @@
-define(function(require, exports, module) {
-	var Notify = require('common/bootstrap-notify');
-    require('../widget/category-select').run('course');
+define(function (require, exports, module) {
+  var Notify = require('common/bootstrap-notify');
+  require('../widget/category-select').run('course');
 
-	exports.run = function(options) {
-		var $table = $('#course-table');
-		$table.on('click', '.cancel-recommend-course', function() {
-			$.post($(this).data('url'), function(html) {
-				var $tr = $(html);
-				$table.find('#' + $tr.attr('id')).replaceWith(html);
-				Notify.success(Translator.trans('课程推荐已取消！'));
-			});
-		});
+  exports.run = function (options) {
+    var $table = $('#course-table');
+    $table.on('click', '.cancel-recommend-course', function () {
+      $.post($(this).data('url'), function (html) {
+        var $tr = $(html);
+        $table.find('#' + $tr.attr('id')).replaceWith(html);
+        Notify.success(Translator.trans('课程推荐已取消！'));
+      });
+    });
 
-		$table.on('click', '.close-course', function() {
-			var user_name = $(this).data('user');
-			if (!confirm(Translator.trans('您确认要关闭此课程吗？课程关闭后，仍然还在有效期内的学员将可以继续学习。'))) return false;
-			$.post($(this).data('url'), function(html) {
-				var $tr = $(html);
-				$table.find('#' + $tr.attr('id')).replaceWith(html);
-				Notify.success(Translator.trans('课程关闭成功！'));
-			});
-		});
+    $table.on('click', '.close-course', function () {
+      var user_name = $(this).data('user');
+      if (!confirm(Translator.trans('您确认要关闭此课程吗？课程关闭后，仍然还在有效期内的学员将可以继续学习。'))) return false;
+      $.post($(this).data('url'), function (html) {
+        var $tr = $(html);
+        $table.find('#' + $tr.attr('id')).replaceWith(html);
+        Notify.success(Translator.trans('课程关闭成功！'));
+      });
+    });
 
 		$table.on('click', '.publish-course', function() {
 			var studentNum = $(this).closest('tr').next().val();
 			if (!confirm(Translator.trans('您确认要发布此课程吗？'))) return false;
 			$.post($(this).data('url'), function(response) {
-				if (response['message']) {
+				if (!response['success']) {
 					Notify.danger(response['message']);
 				} else {
 					var $tr = $(response);
@@ -59,70 +59,70 @@ define(function(require, exports, module) {
 			});
 		});
 
-		$table.find('.copy-course[data-type="live"]').tooltip();
+    $table.find('.copy-course[data-type="live"]').tooltip();
 
-		$table.on('click', '.copy-course[data-type="live"]', function(e) {
-			e.stopPropagation();
-		});
+    $table.on('click', '.copy-course[data-type="live"]', function (e) {
+      e.stopPropagation();
+    });
 
-		if($('#course_tags').length>0){
-			$('#course_tags').select2({
-	            ajax: {
-	                url: app.arguments.tagMatchUrl + '#',
-	                dataType: 'json',
-	                quietMillis: 100,
-	                data: function(term, page) {
-	                    return {
-	                        q: term,
-	                        page_limit: 10
-	                    };
-	                },
-	                results: function(data) {
+    if ($('#course_tags').length > 0) {
+      $('#course_tags').select2({
+        ajax: {
+          url: app.arguments.tagMatchUrl + '#',
+          dataType: 'json',
+          quietMillis: 100,
+          data: function (term, page) {
+            return {
+              q: term,
+              page_limit: 10
+            };
+          },
+          results: function (data) {
 
-	                    var results = [];
+            var results = [];
 
-	                    $.each(data, function(index, item) {
+            $.each(data, function (index, item) {
 
-	                        results.push({
-	                            id: item.name,
-	                            name: item.name
-	                        });
-	                    });
+              results.push({
+                id: item.name,
+                name: item.name
+              });
+            });
 
-	                    return {
-	                        results: results
-	                    };
+            return {
+              results: results
+            };
 
-	                }
-	            },
-	            initSelection: function(element, callback) {
-	                var data = [];
-	                $(element.val().split(",")).each(function() {
-	                    data.push({
-	                        id: this,
-	                        name: this
-	                    });
-	                });
-	                callback(data);
-	            },
-	            formatSelection: function(item) {
-	                return item.name;
-	            },
-	            formatResult: function(item) {
-	                return item.name;
-	            },
-	            width: 'off',
-	            multiple: true,
-	            maximumSelectionSize: 20,
-	            placeholder: Translator.trans('请输入标签'),
-	            width: '162px',
-	            multiple: true,
-	            createSearchChoice: function() {
-	                return null;
-	            },
-	            maximumSelectionSize: 20
-	        });
-		}
-	};
+          }
+        },
+        initSelection: function (element, callback) {
+          var data = [];
+          $(element.val().split(",")).each(function () {
+            data.push({
+              id: this,
+              name: this
+            });
+          });
+          callback(data);
+        },
+        formatSelection: function (item) {
+          return item.name;
+        },
+        formatResult: function (item) {
+          return item.name;
+        },
+        width: 'off',
+        multiple: true,
+        maximumSelectionSize: 20,
+        placeholder: Translator.trans('请输入标签'),
+        width: '162px',
+        multiple: true,
+        createSearchChoice: function () {
+          return null;
+        },
+        maximumSelectionSize: 20
+      });
+    }
+  };
 
 });

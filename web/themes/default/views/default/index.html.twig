@@ -305,7 +305,8 @@
   <ul class="course-wide-list clearfix">
     {% for courseSet in courseSets %}
       {% set course = data('PublishedCourseByCourseSet', { courseSetId: courseSet.id }) %}
-      <li class="course-item clearfix">
+      {% if course %}
+        <li class="course-item clearfix">
         <a class="course-picture-link" href="{{ path('course_show', {id:courseSet.id}) }}">
           {{ lazy_img(filepath(courseSet.cover.large|default(''), 'course.png'), 'course-picture', '') }}
           {% if courseSet.serializeMode=='serialize' %}
@@ -367,6 +368,7 @@
           </div>
         </div>
       </li>
+      {% endif %}
     {% endfor %}
   </ul>
 {% endmacro %}

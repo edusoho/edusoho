@@ -32,7 +32,7 @@ class Users extends BaseResource
             return $this->wrap($this->filter($users), $next);
         } else {
             $users = $this->getUserService()->searchUsers($conditions, array('createdTime' => 'DESC'), $start, $limit);
-            $total = $this->getUserService()->searchUserCount($conditions);
+            $total = $this->getUserService()->countUsers($conditions);
             return $this->wrap($this->filter($users), $total);
         }
     }
@@ -62,7 +62,7 @@ class Users extends BaseResource
                     $condition = array(
                         'startTime' => time() - 24 * 3600,
                         'createdIp' => $ip);
-                    $registerCount = $this->getUserService()->searchUserCount($condition);
+                    $registerCount = $this->getUserService()->countUsers($condition);
 
                     if ($registerCount > 30) {
                         goto failure;
@@ -74,13 +74,13 @@ class Users extends BaseResource
                     $condition = array(
                         'startTime' => time() - 24 * 3600,
                         'createdIp' => $ip);
-                    $registerCount = $this->getUserService()->searchUserCount($condition);
+                    $registerCount = $this->getUserService()->countUsers($condition);
 
                     if ($registerCount > 10) {
                         goto failure;
                     }
 
-                    $registerCount = $this->getUserService()->searchUserCount(array(
+                    $registerCount = $this->getUserService()->countUsers(array(
                         'startTime' => time() - 3600,
                         'createdIp' => $ip));
 

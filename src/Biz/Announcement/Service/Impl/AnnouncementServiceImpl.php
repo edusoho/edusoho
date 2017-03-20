@@ -25,14 +25,9 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
         return ArrayToolkit::index($announcements, 'id');
     }
 
-    public function searchAnnouncementsCount($conditions)
+    public function countAnnouncements($conditions)
     {
         return $this->getAnnouncementDao()->count($conditions);
-    }
-
-    public function searchCount($conditions)
-    {
-        return $this->searchAnnouncementsCount($conditions);
     }
 
     public function createAnnouncement($announcement)

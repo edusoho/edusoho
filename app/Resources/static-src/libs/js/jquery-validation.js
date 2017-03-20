@@ -255,3 +255,7 @@ $.validator.addMethod("feature", function (value, element, params) {
 },
   Translator.trans('购买截止时间需在当前时间之后')
 );
+
+// jQuery.validator.addMethod("url", function (value, element) {
+//   return this.optional(element) || /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/.test(value);
+// }, "URL的格式不正确");

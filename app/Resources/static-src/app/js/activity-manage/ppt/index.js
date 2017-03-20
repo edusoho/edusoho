@@ -45,6 +45,7 @@ class PPT {
           },
           positive_integer: true,
           max: 300,
+          min: 1,
         },
       },
       messages: {

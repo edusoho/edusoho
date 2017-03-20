@@ -41,7 +41,6 @@
     {% for path in css() %}
       <link href="{{ asset('build/' ~ path) }}" rel="stylesheet" />
     {% endfor %}
-
   {% endblock %}#}
 
   {% block stylesheets %}
@@ -66,6 +65,12 @@
 {#<body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>#}
 
 {% block body %}
+
+  <!--[if lt IE 9]>
+    <script src="{{ asset('static-dist/libs/fix-ie.js') }}"></script>
+    {% include 'default/ie8-alert.html.twig' %}
+  <![endif]-->
+
   <div class="es-wrap">
 
     {% block header %}
