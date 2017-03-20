@@ -17,6 +17,7 @@ custom_web:
 custom_admin:
     resource: "@CustomAdminBundle/Resources/config/custom_admin_routing.yml"
     prefix:   /admin
+    
 
 app:
     resource: "@AppBundle/Resources/config/routing.yml"

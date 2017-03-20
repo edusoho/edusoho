@@ -1,5 +1,4 @@
 <?php
-
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
 use AppBundle\Common\ArrayToolkit;
@@ -193,7 +192,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
             return $this->createErrorResponse('error', '您不是班级的学员。');
         }
 
-        if (!in_array($member['role'], array('auditor', 'student'))) {
+        if (!array_intersect($member['role'], array('auditor', 'student'))) {
             return $this->createErrorResponse('error', '您不是班级的学员。');
         }
 
@@ -406,7 +405,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         $user = $this->controller->getUserByToken($this->request);
-        $userId = empty($user) ? 0 : $user['id'];
+        $userId = empty($user) ? 0 : $user["id"];
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $userId) : null;
         $vipLevels = array();
         if ($this->controller->isinstalledPlugin('Vip') && $this->controller->setting('vip.enabled')) {

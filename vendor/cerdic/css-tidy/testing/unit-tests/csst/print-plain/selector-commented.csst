@@ -1,0 +1,18 @@
+--TEST--
+Test comments in selector
+--CSS--
+/* ici */
+.cartouche,
+/*.liste h2,*/
+.liste-items {
+    padding: 30px;
+}
+--PRINT--
+.cartouche,/*.liste h2,*/
+.liste-items {
+padding:30px
+}
+--SETTINGS--
+template='default'
+sort_properties=false
+sort_selectors=false

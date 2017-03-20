@@ -333,7 +333,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/rate-limiter/zipball/5ae42fa6ef75c0b807fb68fbfc2073b9f0813120",
+                "url": "https://packagist.phpcomposer.com/files/codeages/rate-limiter/5ae42fa6ef75c0b807fb68fbfc2073b9f0813120.zip",
                 "reference": "5ae42fa6ef75c0b807fb68fbfc2073b9f0813120",
                 "shasum": ""
             },
@@ -375,7 +375,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/rest-api-client/zipball/660aafdec2287a82bf208e17407ae62c0172e21c",
+                "url": "https://packagist.phpcomposer.com/files/codeages/rest-api-client/660aafdec2287a82bf208e17407ae62c0172e21c.zip",
                 "reference": "660aafdec2287a82bf208e17407ae62c0172e21c",
                 "shasum": ""
             },
@@ -1241,7 +1241,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/endroid/EndroidQrCodeBundle/zipball/691ba76fc4c22e31a79ffa75647630212432b6b2",
+                "url": "https://packagist.phpcomposer.com/files/endroid/EndroidQrCodeBundle/691ba76fc4c22e31a79ffa75647630212432b6b2.zip",
                 "reference": "691ba76fc4c22e31a79ffa75647630212432b6b2",
                 "shasum": ""
             },
@@ -1292,20 +1292,23 @@
         },
         {
             "name": "ezyang/htmlpurifier",
-            "version": "v4.8.0",
+            "version": "v4.9.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "d0c392f77d2f2a3dcf7fcb79e2a1e2b8804e75b2"
+                "reference": "6d50e5282afdfdfc3e0ff6d192aff56c5629b3d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/d0c392f77d2f2a3dcf7fcb79e2a1e2b8804e75b2",
-                "reference": "d0c392f77d2f2a3dcf7fcb79e2a1e2b8804e75b2",
+                "url": "https://files.phpcomposer.com/files/ezyang/htmlpurifier/6d50e5282afdfdfc3e0ff6d192aff56c5629b3d4.zip",
+                "reference": "6d50e5282afdfdfc3e0ff6d192aff56c5629b3d4",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2"
+            },
+            "require-dev": {
+                "simpletest/simpletest": "^1.1"
             },
             "type": "library",
             "autoload": {
@@ -1800,7 +1803,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/c0125896dbb151380ab47e96c621741e79623beb",
+                "url": "https://packagist.phpcomposer.com/files/paragonie/random_compat/c0125896dbb151380ab47e96c621741e79623beb.zip",
                 "reference": "c0125896dbb151380ab47e96c621741e79623beb",
                 "shasum": ""
             },
@@ -3190,7 +3193,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/willdurand/BazingaJsTranslationBundle/zipball/2d449d345ec0f83f9479358c1d37111d0cf3df9a",
+                "url": "https://packagist.phpcomposer.com/files/willdurand/BazingaJsTranslationBundle/2d449d345ec0f83f9479358c1d37111d0cf3df9a.zip",
                 "reference": "2d449d345ec0f83f9479358c1d37111d0cf3df9a",
                 "shasum": ""
             },

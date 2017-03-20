@@ -1,0 +1,28 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_setting_security' %}
+
+{% block main %}
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post">
+  <fieldset>
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+        <label >{{'IFrame白名单域名'|trans}}</label>
+      </div>
+      <div class="controls col-md-10">
+        <textarea name="safe_iframe_domains" rows="8" class="form-control">{{ security.safe_iframe_domains|join("\n") }}</textarea>
+        <div class="help-block">{{'在课程简介、课时内容等区域允许添加iframe代码，以引入第三方网站的组件。为保障网校安全，只允许白名单域名范围内的iframe网址。一行一个域名，请不要添加http://前缀。'|trans}}</div>
+    </div>
+    <div class="col-md-2 control-label"></div>
+      <div class="controls col-md-10">
+        <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </div>
+    </div>
+  </fieldset>
+</form>
+
+{% endblock %}
