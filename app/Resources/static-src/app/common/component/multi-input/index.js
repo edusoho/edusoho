@@ -57,8 +57,12 @@ export default class MultiInput extends Component {
       removeItem: this.removeItem,
       sortItem: this.sortItem,
       addItem: this.addItem,
-      searchable: this.searchable,
-      addable: this.addable,
+      addable: this.props.addable,
+      searchable: this.props.searchable,
+      sortable: this.props.sortable,
+      listClassName:this.props.listClassName,
+      inputName: this.props.inputName,
+      dataSourceUi: this.state.dataSourceUi,
     }
   }
 
@@ -100,14 +104,13 @@ export default class MultiInput extends Component {
   }
 
   render() {
-    const { searchable, addable, outputDataElement} = this.props;
     let list = this.getList();
     let outputSets = this.getOutputSets();
     return (
       <div className="multi-group">
         {list}
-        {this.props.showAddBtnGroup && <InputGroup searchable={searchable} addable={addable} />}
-        <input type='hidden' name={outputDataElement} value={JSON.stringify(outputSets)} />
+        {this.props.showAddBtnGroup && <InputGroup/>}
+        <input type='hidden' name={this.props.outputDataElement} value={JSON.stringify(outputSets)} />
       </div>
     );
   }
@@ -149,11 +152,15 @@ MultiInput.childContextTypes = {
   removeItem: React.PropTypes.func,
   sortItem: React.PropTypes.func,
   addItem: React.PropTypes.func,
-  searchable: React.PropTypes.shape({
+  addable: React.PropTypes.bool,
+  searchable:  React.PropTypes.shape({
     enable: React.PropTypes.bool,
     url: React.PropTypes.string,
   }),
-  addable: React.propTypes.bool,
+  sortable: React.PropTypes.bool,
+  listClassName:React.PropTypes.string,
+  inputName: React.PropTypes.string,
+  dataSourceUi: React.PropTypes.array.isRequired,
 };
 
 

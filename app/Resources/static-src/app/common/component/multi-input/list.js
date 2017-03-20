@@ -39,16 +39,14 @@ export default class List extends Component {
     this.$item = $(this.listId).children().clone();
   }
 
-
-
   render() {
-    const { dataSourceUi, sortable, inputName } = this.props;
+    const { dataSourceUi, sortable, inputName,listClassName } = this.context;
     let name = '';
     if (dataSourceUi.length > 0) {
       name = 'list-group';
     }
     return (
-      <ul id={this.listId} className={`multi-list sortable-list ${name} ${this.props.listClassName}`} >
+      <ul id={this.listId} className={`multi-list sortable-list ${name} ${listClassName}`} >
         {
           dataSourceUi.map((item, i) => {
             return (
@@ -71,4 +69,8 @@ export default class List extends Component {
 List.contextTypes = {
   removeItem: React.PropTypes.func,
   sortItem: React.PropTypes.func,
+  sortable: React.PropTypes.bool,
+  listClassName:React.PropTypes.string,
+  inputName: React.PropTypes.string,
+  dataSourceUi: React.PropTypes.array.isRequired,
 };
