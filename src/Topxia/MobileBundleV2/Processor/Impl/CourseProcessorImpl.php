@@ -979,12 +979,14 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('not_login', '您尚未登录，不能收藏课程！');
         }
 
-        if (!$this->controller->getCourseService()->hasFavoritedCourse($courseId)) {
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        if (!$this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId'])) {
             return $this->createErrorResponse('runtime_error', '您尚未收藏课程，不能取消收藏！');
         }
 
         try {
-            $this->controller->getCourseService()->unfavoriteCourse($courseId);
+            $this->controller->getCourseSetService()->unfavorite($course['courseSetId']);
         } catch (ServiceException $e) {
             return $this->createErrorResponse('runtime_error', $e->getMessage());
         }
