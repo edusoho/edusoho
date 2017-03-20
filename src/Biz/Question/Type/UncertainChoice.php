@@ -39,7 +39,7 @@ class UncertainChoice extends BaseQuestion implements TypeInterface
         return array('status' => 'wrong', 'score' => 0);
     }
 
-    public function filter($fields)
+    public function filter(array $fields)
     {
         if (!empty($fields['choices'])) {
             $fields['metas'] = array('choices' => $fields['choices']);
