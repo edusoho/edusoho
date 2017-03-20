@@ -53,6 +53,16 @@ class Marketing {
   }
 
   checkBoxChange() {
+    $('input[name="buyable"]').on('change', function (event) {
+      if ($('input[name="buyable"]:checked').val() == 0) {
+         $('.js-course-add-close-show').removeClass('hidden');
+         $('.js-course-add-open-show').addClass('hidden');
+      } else {
+        $('.js-course-add-close-show').addClass('hidden');
+         $('.js-course-add-open-show').removeClass('hidden');
+      }
+    });
+
     $('input[name="isFree"]').on('change', function (event) {
       if ($('input[name="isFree"]:checked').val() == 0) {
         $('.js-is-free').removeClass('hidden');
