@@ -41,7 +41,7 @@
           
           {% if setting('login_bind', []).enabled|default(false) %}
             <li class="list-group-item {% if side_nav == 'binds' %}active{% endif %}" >
-              <a href="{{ path('settings_binds') }}"><i class="glyphicon glyphicon-circle-arrow-right"></i> {{'user.settings.third_part_menu'|trans}}</a>
+              <a href="{{ path('settings_binds') }}"><i class="glyphicon glyphicon-circle-arrow-right"></i> {{'user.settings.oauth_menu'|trans}}</a>
             </li>
           {% endif %}
 
