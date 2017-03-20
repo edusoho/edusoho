@@ -37,7 +37,7 @@ window.seajsBoot = function() {
   app.debug = {% if app.debug %} true {% else %} false {% endif %};
   app.jsPaths = {{ js_paths()|json_encode|raw }};
 
-  var CKEDITOR_BASEPATH = app.basePath + '/assets/libs/ckeditor/4.6.7/';
+  window.CKEDITOR_BASEPATH = app.basePath + '/assets/libs/ckeditor/4.6.7/';
 
   app.arguments = {};
   {% if script_controller is defined %}
