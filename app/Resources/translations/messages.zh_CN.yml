@@ -11,8 +11,14 @@ form.bind: 绑定
 
 # 个人设置模块
 user.settings: 个人设置
-user.settings.menu_header: 个人设置
+user.settings.menu_heading: 个人设置
+user.settings.basic_info_menu: 基础信息
+user.settings.avatar_menu: 头像设置
+user.settings.certification_menu: 实名认证
 user.settings.security_menu: 安全设置
+user.settings.email_menu: 邮箱设置
+user.settings.teachers_qualification_menu: 教师资格申请
+user.settings.third_part_menu: 第三方登录
 
 # 个人设置模块-安全设置
 user.settings.security.page_title: 安全设置
