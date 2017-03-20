@@ -626,6 +626,7 @@ class TestpaperServiceTest extends BaseTestCase
             'description' => 'testpaper description',
             'mode' => 'range',
             'ranges' => array('courseId' => 0),
+            'passedScore' => 60,
             'counts' => array('choice' => 2, 'fill' => 2, 'determine' => 1),
             'scores' => array('choice' => 2, 'fill' => 2, 'determine' => 2),
             'missScores' => array('choice' => 1, 'uncertain_choice' => 1),
@@ -725,6 +726,7 @@ class TestpaperServiceTest extends BaseTestCase
             'missScores' => array('choice' => 1, 'uncertain_choice' => 1),
             'courseSetId' => 1,
             'courseId' => 0,
+            'passedScore' => 60,
             'pattern' => 'questionType',
             'type' => 'testpaper',
         );
@@ -766,6 +768,7 @@ class TestpaperServiceTest extends BaseTestCase
             'missScores' => array('choice' => 1, 'uncertain_choice' => 1),
             'courseSetId' => 1,
             'courseId' => 0,
+            'passedScore' => 60,
             'pattern' => 'questionType',
             'type' => 'testpaper',
         );
@@ -855,6 +858,7 @@ class TestpaperServiceTest extends BaseTestCase
             'scores' => array('choice' => 2, 'fill' => 2),
             'missScores' => array('choice' => 1, 'uncertain_choice' => 1),
             'courseSetId' => 1,
+            'passedScore' => 60,
             'courseId' => 0,
             'pattern' => 'questionType',
             'type' => 'testpaper',

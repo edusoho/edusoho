@@ -29,6 +29,7 @@
       </div>
       <div class="col-md-10">
         <select data-role="tree-select" name="orgCode" class="form-control tree-select {{inputClass}}">
+          <option value={{ currentOrgTree.0.orgCode }}>{{ currentOrgTree.0.name }}</option>
           {% for org in currentOrgTree %}
             <option value={{ org.orgCode }} {% if org.orgCode == currentOrgCode  %}selected{% endif %}>{% for i in 1..(org.depth-1) if org.depth > 1 %}　{% endfor %}{{ org.name }}</option>
           {% endfor %}

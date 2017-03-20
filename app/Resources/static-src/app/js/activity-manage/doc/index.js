@@ -45,7 +45,9 @@ class Document {
         },
         finishDetail: {
           required: true,
-          digits: true
+          positive_integer: true,
+          max: 300,
+          min: 1,
         },
       },
       messages: {

@@ -48,11 +48,12 @@
       <td>{{ courseSet.studentNum }}</td>
     {% endif %}
     {% if filter == 'vip' %}
-      {% set length = courseSetlevels|length %}
+      {% set levels = courseSet['levels'] %}
+      {% set length = levels|length %}
       {% if length == 0 %}
         <td>该会员等级已删除</td>
       {% else %}
-        <td>{{ courseSetlevels[0].name }}
+        <td>{{ levels|first.name }}
           {% if length > 1 %}
             <br>
             <span class="text-muted text-sm">等{{ length }}个会员等级</span>

@@ -224,12 +224,15 @@ class Editor {
 
   _validator(step) {
     let validator = null;
+
     if (step === 1) {
       validator = $("#step1-form").data('validator');
     } else if (this.loaded) {
       var $from = this.$iframe_body.find("#step" + step + "-form");
       validator = this.iframe_jQuery.data($from[0], 'validator');
     }
+
+    console.log(validator);
 
     if (validator && !validator.form()) {
       return false;

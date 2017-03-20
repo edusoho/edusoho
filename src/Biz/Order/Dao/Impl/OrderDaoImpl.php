@@ -14,7 +14,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         return array(
             'timestamps' => array('createdTime', 'updatedTime'),
             'serializes' => array('data' => 'json'),
-            'orderbys' => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum'),
+            'orderbys' => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum', 'updatedTime', 'id'),
             'conditions' => array(
                 'sn = :sn',
                 'targetType = :targetType',

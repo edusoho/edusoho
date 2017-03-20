@@ -21,4 +21,6 @@ export const initEditor = ($item, validator) => {
       validator.form();
     }
   });
-}
+
+  return editor;
+};

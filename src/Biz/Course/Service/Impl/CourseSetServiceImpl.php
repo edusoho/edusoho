@@ -4,6 +4,7 @@ namespace Biz\Course\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Content\Service\FileService;
 use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 use Biz\Course\Dao\CourseDao;
@@ -599,10 +600,17 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courseSet = $this->tryManageCourseSet($id);
         $publishedCourses = $this->getCourseService()->findPublishedCoursesByCourseSetId($id);
 
-        if (empty($publishedCourses)) {
+        $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
+
+        if (empty($publishedCourses) && empty($classroomRef)) {
             throw $this->createAccessDeniedException('发布课程时请确保课程下至少有一个已发布的教学计划');
         }
+
+        if (!empty($classroomRef)) {
+            $this->getCourseService()->publishCourse($classroomRef['courseId']);
+        }
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
+        
         $this->dispatchEvent('course-set.publish', new Event($courseSet));
     }
 
@@ -612,7 +620,13 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if ($courseSet['status'] != 'published') {
             throw $this->createAccessDeniedException('CourseSet has not bean published');
         }
+        
+        $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
+        if (!empty($classroomRef)) {
+            $this->getCourseService()->closeCourse($classroomRef['courseId']);
+        }
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'closed'));
+        
         $this->dispatchEvent('course-set.closed', new Event($courseSet));
     }
 
@@ -624,6 +638,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function searchUserFavorites($userId, $start, $limit)
     {
         return $this->getFavoriteDao()->searchByUserId($userId, $start, $limit);
+    }
+
+    public function searchFavorites(array $conditions, array $orderBys, $start, $limit)
+    {
+        return $this->getFavoriteDao()->search($conditions, $orderBys, $start, $limit);
     }
 
     /**
@@ -866,6 +885,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getCourseDeleteService()
     {
         return $this->createService('Course:CourseDeleteService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 
     protected function generateDefaultCourse($created)
