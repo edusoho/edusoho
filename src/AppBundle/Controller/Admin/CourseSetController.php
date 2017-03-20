@@ -70,9 +70,9 @@ class CourseSetController extends BaseController
                 $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
             }
         }
-        $courseSetLevels = array();
+
         if ($filter == 'vip') {
-            $courseSetLevels = $this->findVipCourseSetLevels($courseSetIds);
+            $courseSets = $this->_fillVipCourseSetLevels($courseSets);
         }
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseSets, 'categoryId'));
@@ -103,7 +103,6 @@ class CourseSetController extends BaseController
                 'publishedCourseSetsNum' => $publishedCourseSetsNum,
                 'closedCourseSetsNum' => $closedCourseSetsNum,
                 'unPublishedCourseSetsNum' => $unPublishedCourseSetsNum,
-                'courseSetlevels' => $courseSetLevels,
             )
         );
     }
@@ -622,18 +621,22 @@ class CourseSetController extends BaseController
         );
     }
 
-    private function findVipCourseSetLevels($courseSetIds)
+    private function _fillVipCourseSetLevels($courseSets)
     {
-        $courses = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
-        $levelIds = ArrayToolkit::column($courses, 'vipLevelId');
-        $levels = $this->getVipLevelService()->searchLevels(
-            array('ids' => $levelIds),
-            array('seq' => 'ASC'),
-            0,
-            PHP_INT_MAX
-        );
+        foreach ($courseSets as &$courseSet) {
+            $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+            $levelIds = ArrayToolkit::column($courses, 'vipLevelId');
+            $levelIds = array_unique($levelIds);
+            $levels = $this->getVipLevelService()->searchLevels(
+                array('ids' => $levelIds),
+                array('seq' => 'ASC'),
+                0,
+                PHP_INT_MAX
+            );
+            $courseSet['levels'] = $levels;
+        }
 
-        return $levels;
+        return $courseSets;
     }
 
     /**
