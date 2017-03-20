@@ -9,8 +9,11 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $this->getConnection()->beginTransaction();
         try {
-            $this->batchUpdate($index);
+            $result = $this->batchUpdate($index);
             $this->getConnection()->commit();
+            if (!empty($result)) {
+                return $result;
+            }
         } catch (\Exception $e) {
             $this->getConnection()->rollback();
             throw $e;
@@ -56,6 +59,7 @@ class EduSohoUpgrade extends AbstractUpdater
         'c2testpaperMigrate',
         'c2QuestionMigrate',
         'migrate',
+        ''
       );
 
       return $steps[$index];
@@ -63,6 +67,10 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function getIndexAndPage($index)
     {
+      if($index == 0) {
+        return array(0,0);
+      }
+
       return explode('-', $index);
     }
 
