@@ -21,7 +21,7 @@
       <div class="form-group">
         <input class="form-control" type="text" placeholder="{{'关键词'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
       </div>
-      
+
       <span class="divider"></span>
 
       <div class="form-group">
@@ -51,7 +51,7 @@
       </thead>
       <tbody class="tbody">
         {% for question in questions %}
-        
+
           {% set author = users[question.userId]|default(null) %}
           {% set courseSet = courseSets[question.courseSetId]|default(null) %}
           {% set course = courses[question.courseId]|default(null) %}
@@ -65,7 +65,7 @@
                 <div class="short-text text-sm text-muted">{{ question.content|plain_text(60) }} <span class="trigger">({{'展开'|trans}})</span></div>
                 <div class="long-text">{{ question.content|raw }} <span class="trigger">({{'收起'|trans}})</span></div>
               </div>
-              
+
               <div class="text-sm mts">
                 {% if courseSet %}
                   <a href="{{ path('course_show', {id:course.id}) }}" class="text-success" target="_blank">{{ courseSet.title }}</a>
@@ -78,7 +78,7 @@
 
                 {% if task %}
                   <span class="text-muted mhs">&raquo;</span>
-                  <a class="text-success"  href="{{ path('course_task_show', {courseId:question.courseId, id:task.id}) }}" target="_blank">{{'课时'|trans}}{{task.number}}：{{ task.title }}</a>
+                  <a class="text-success"  href="{{ path('course_task_show', {courseId:question.courseId, id:task.id}) }}" target="_blank">{{'任务'|trans}}{{task.number}}：{{ task.title }}</a>
                 {% endif %}
               </div>
             </td>
@@ -112,6 +112,6 @@
         <button class="btn btn-default btn-sm mlm" data-role="batch-delete" data-name="{{'问答'|trans}}" data-url="{{ path('admin_thread_batch_delete') }}">{{'删除'|trans}}</button>
     </div>
   </div>
-    
+
   {{ admin_macro.paginator(paginator) }}
 {% endblock %}

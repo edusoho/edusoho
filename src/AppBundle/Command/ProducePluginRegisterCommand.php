@@ -59,7 +59,6 @@ class ProducePluginRegisterCommand extends BaseCommand
         $output->writeln('  <info>[Ok]</info>');
 
         $output->write('  - register plugin to app.');
-        // var_dump($metas);exit();
         $this->updateAppForPackageUpdate($metas);
 
         $output->write('  - Create plugin installed record.');

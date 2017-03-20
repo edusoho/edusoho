@@ -60,7 +60,7 @@ interface ClassroomService
 
     public function searchClassrooms($conditions, $orderBy, $start, $limit);
 
-    public function searchClassroomsCount($condtions);
+    public function countClassrooms($condtions);
 
     public function addClassroom($classroom);
 
@@ -176,4 +176,6 @@ interface ClassroomService
     public function countCoursesByClassroomId($classroomId);
 
     public function countMobileFilledMembersByClassroomId($classroomId, $locked = 0);
+
+    public function countCourseTasksByClassroomId($classroomId);
 }

@@ -2,14 +2,14 @@
 
 namespace Biz\Activity\Service\Impl;
 
-use Biz\BaseService;
-use Biz\Util\EdusohoLiveClient;
-use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
-use Biz\System\Service\SettingService;
-use Topxia\Service\Common\ServiceKernel;
-use Biz\Course\Service\LiveReplayService;
 use Biz\Activity\Service\LiveActivityService;
+use Biz\BaseService;
+use Biz\Course\Service\LiveReplayService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\UserService;
+use Biz\Util\EdusohoLiveClient;
+use Topxia\Service\Common\ServiceKernel;
 
 class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 {
@@ -23,15 +23,17 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     public function createLiveActivity($activity, $ignoreValidation = false)
     {
         if (!$ignoreValidation && (empty($activity['startTime'])
-            || $activity['startTime'] <= time()
-            || empty($activity['length'])
-            || $activity['length'] <= 0)) {
+                || $activity['startTime'] <= time()
+                || empty($activity['length'])
+                || $activity['length'] <= 0)
+        ) {
             throw $this->createInvalidArgumentException('参数有误');
         }
 
         //创建直播室
         if (empty($activity['startTime'])
-            || $activity['startTime'] <= time()) {
+            || $activity['startTime'] <= time()
+        ) {
             //此时不创建直播教室
             $live = array(
                 'id' => 0,
@@ -99,8 +101,9 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         if (!empty($live['fileId'])) {
             $live['mediaId'] = $live['fileId'];
             $live['replayStatus'] = LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS;
-            unset($live['fileId']);
         }
+
+        unset($live['fileId']);
 
         if (!empty($live)) {
             $liveActivity = $this->getLiveActivityDao()->update($id, $live);

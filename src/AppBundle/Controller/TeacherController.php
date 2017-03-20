@@ -17,10 +17,10 @@ class TeacherController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getUserService()->searchUserCount($conditions),
+            $this->getUserService()->countUsers($conditions),
             20
         );
-        $teachersCount = $this->getUserService()->searchUserCount($conditions);
+        $teachersCount = $this->getUserService()->countUsers($conditions);
         $teachers = $this->getUserService()->searchUsers(
             $conditions,
             array(

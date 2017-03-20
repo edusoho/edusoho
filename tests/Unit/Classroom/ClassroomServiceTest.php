@@ -89,7 +89,7 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertEquals(0, $result);
     }
 
-    public function testSearchClassroomsCount()
+    public function testcountClassrooms()
     {
         $textClassroom1 = array(
             'title' => 'test1',
@@ -107,7 +107,7 @@ class ClassroomServiceTest extends BaseTestCase
         $classroom3 = $this->getClassroomService()->addClassroom($textClassroom3);
         $this->getClassroomService()->updateClassroom($classroom3['id'], $textClassroom3);
         $conditions = array('status' => 'draft', 'showable' => 1, 'buyable' => 1);
-        $result = $this->getClassroomService()->searchClassroomsCount($conditions);
+        $result = $this->getClassroomService()->countClassrooms($conditions);
         $this->assertEquals(3, $result);
     }
 

@@ -16,7 +16,7 @@ class TeacherAppController extends MobileBaseController
 
         // $paginator = new Paginator(
         //     $this->get('request'),
-        //     $this->getUserService()->searchUserCount($conditions),
+        //     $this->getUserService()->countUsers($conditions),
         //     20
         // );
 

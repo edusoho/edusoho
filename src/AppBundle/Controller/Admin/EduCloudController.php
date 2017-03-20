@@ -465,7 +465,7 @@ class EduCloudController extends BaseController
         try {
             $api = CloudAPIFactory::create('root');
 
-            if ($request->getMethod() == 'POST') {
+            if ($request->isMethod('POST')) {
                 $this->handleSmsSetting($request, $api);
                 $this->setFlashMessage('success', '云短信设置已保存！');
             }
@@ -1564,7 +1564,7 @@ class EduCloudController extends BaseController
             return $this->render('admin/edu-cloud/live/trial.html.twig');
         }
 
-        if (!($this->isHiddenCloud())) {
+        if (!$this->isHiddenCloud()) {
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
@@ -1572,7 +1572,7 @@ class EduCloudController extends BaseController
         $client = new EdusohoLiveClient();
         $capacity = $client->getCapacity();
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->isMethod('POST')) {
             try {
                 $api = CloudAPIFactory::create('root');
                 $overview = $api->get('/me/live/overview');

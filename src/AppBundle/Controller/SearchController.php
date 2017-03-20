@@ -47,9 +47,11 @@ class SearchController extends BaseController
 
         if ($isShowVipSearch) {
             $currentUserVip = $this->getVipService()->getMemberByUserId($currentUser['id']);
-            $currentUserVipLevel = $this->getLevelService()->getLevel($currentUserVip['levelId']);
-            $vipLevels = $this->getLevelService()->findAllLevelsLessThanSeq($currentUserVipLevel['seq']);
-            $vipLevelIds = ArrayToolkit::column($vipLevels, 'id');
+            if (!empty($currentUserVip) && isset($currentUserVip['levelId'])) {
+                $currentUserVipLevel = $this->getLevelService()->getLevel($currentUserVip['levelId']);
+                $vipLevels = $this->getLevelService()->findAllLevelsLessThanSeq($currentUserVipLevel['seq']);
+                $vipLevelIds = ArrayToolkit::column($vipLevels, 'id');
+            }
         }
 
         $parentId = 0;
