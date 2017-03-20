@@ -90,7 +90,10 @@ class Marketing {
           required: () => {
             return $('input[name="expiryMode"]:checked').val() === 'days' && $('input[name="deadlineType"]:checked').val() === 'days' ;
           },
-          max_year: true
+          positive_integer: () => {
+            return $('input[name="expiryMode"]:checked').val() === 'days' && $('input[name="deadlineType"]:checked').val() === 'days' ;
+          },
+          max_year: true,
         },
         expiryStartDate: {
           required: () => {
