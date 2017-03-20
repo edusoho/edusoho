@@ -13,9 +13,9 @@ export default class InputGroup extends Component {
       resultful: false,
       searchResult: [],
     }
-    this.searchable = this.props.searchable.enable;
-    this.addable = this.props.addable;
-    this.searchableUrl = this.props.searchable.url;
+    this.searchable = this.context.searchable.enable;
+    this.searchableUrl = this.context.searchable.url;
+    this.addable = this.context.addable;
     this.subscribeMessage();
   }
 
@@ -81,12 +81,6 @@ export default class InputGroup extends Component {
     })
   }
 
-  blurAdd() {
-    if (this.props.blurIsAdd) {
-      console.log('ok');
-    }
-  }
-
   render() {
     return (
       <div className="input-group">
@@ -100,4 +94,9 @@ export default class InputGroup extends Component {
 
 InputGroup.contextTypes = {
   addItem: React.PropTypes.func,
+  searchable: React.PropTypes.shape({
+    enable: React.PropTypes.bool,
+    url: React.PropTypes.string,
+  }),
+  addable: React.propTypes.bool,
 };
