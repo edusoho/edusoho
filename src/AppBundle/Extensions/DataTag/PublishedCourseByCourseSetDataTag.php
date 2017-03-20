@@ -11,6 +11,7 @@ class PublishedCourseByCourseSetDataTag extends CourseBaseDataTag implements Dat
      *   courseSetId 必需 课程ID
      *
      * @param array $arguments 参数
+     *
      * @throws \InvalidArgumentException
      *
      * @return array 计划
