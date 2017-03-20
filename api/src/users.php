@@ -35,7 +35,7 @@ datalist
 $api->get('/pages', function (Request $request) {
     $start = $request->query->get('start', 0);
     $limit = $request->query->get('limit', 10);
-    $count = ServiceKernel::instance()->createService('User:UserService')->searchUserCount(array());
+    $count = ServiceKernel::instance()->createService('User:UserService')->countUsers(array());
     $users = ServiceKernel::instance()->createService('User:UserService')->searchUsers(array(), array('createdTime', 'DESC'), $start, $limit);
     return array(
         'data'  => filters($users, 'user'),

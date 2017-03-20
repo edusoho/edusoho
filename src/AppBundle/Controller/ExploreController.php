@@ -468,7 +468,7 @@ class ExploreController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getClassroomService()->searchClassroomsCount($conditions),
+            $this->getClassroomService()->countClassrooms($conditions),
             9
         );
 
