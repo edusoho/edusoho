@@ -17,6 +17,11 @@ class ChoiceQuestionType extends AbstractQuestionType
             $fields['type'] = 'uncertain_choice';
         }
 
+        foreach($fields['choices'] as &$choice) {
+            $choice = $this->purifyHtml($choice);
+            unset($choice);
+        }
+
         $fields['metas'] = array('choices' => $fields['choices']);
         return $this->commonFilter($fields, $mode);
     }

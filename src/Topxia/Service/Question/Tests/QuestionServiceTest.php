@@ -254,12 +254,11 @@ class QuestionServiceTest extends BaseTestCase
             "type"=>"choice",
             "parentId"=>0,
             'copyId'=>1,
-            "answer"=>"2"
         );
 
         $question = $this->getQuestionService()->createQuestion($question);
         $this->assertEquals('question.',$question['stem']);
-        $question = $this->getQuestionService()->findQuestionsByCopyIdAndLockedTarget(1,"('course-1')");
+        $question = $this->getQuestionService()->findQuestionsByCopyIdAndLockedTarget(1, array("course-1"));
         $this->assertEquals('question.',$question[0]['stem']);
     }
 
@@ -280,7 +279,6 @@ class QuestionServiceTest extends BaseTestCase
             "type"=>"choice",
             "parentId"=>0,
             'copyId'=>1,
-            "answer"=>"2"
         );
         $question1 = array(
             'type' => 'single_choice',
@@ -297,7 +295,6 @@ class QuestionServiceTest extends BaseTestCase
             "type"=>"choice",
             "parentId"=>1,
             'copyId'=>1,
-            "answer"=>"2"
         );
         $question = $this->getQuestionService()->createQuestion($question);
         $question = $this->getQuestionService()->createQuestion($question1);
@@ -323,7 +320,6 @@ class QuestionServiceTest extends BaseTestCase
             "type"=>"choice",
             "parentId"=>0,
             'copyId'=>1,
-            "answer"=>"2"
         );
         $question1 = array(
             'type' => 'single_choice',
@@ -340,7 +336,6 @@ class QuestionServiceTest extends BaseTestCase
             "type"=>"choice",
             "parentId"=>1,
             'copyId'=>1,
-            "answer"=>"2"
         );
         $question = $this->getQuestionService()->createQuestion($question);
         $question = $this->getQuestionService()->createQuestion($question1);

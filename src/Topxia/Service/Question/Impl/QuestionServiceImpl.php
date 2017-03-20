@@ -36,6 +36,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function findQuestionsByCopyIdAndLockedTarget($copyId, $lockedTarget)
     {
+        if(empty($lockedTarget)) {
+            return array();
+        }
+
         return $this->getQuestionDao()->findQuestionsByCopyIdAndLockedTarget($copyId,$lockedTarget);
     }
 

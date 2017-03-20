@@ -20,8 +20,8 @@ class ComposerStaticInita9081f4c3a072b5bb824f60da08fba6f
         '6a47392539ca2329373e0d33e1dba053' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/bootstrap.php',
         '32dcc8afd4335739640db7d200c1971d' => __DIR__ . '/..' . '/symfony/polyfill-apcu/bootstrap.php',
         'ce89ac35a6c330c55f4710717db9ff78' => __DIR__ . '/..' . '/kriswallsmith/assetic/src/functions.php',
-        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         '2a404a48a0596622a2af787408f2be5e' => __DIR__ . '/..' . '/xxtea/xxtea/xxtea.php',
+        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         '1aa6994384dc421cb384ab1d1a3c3b61' => __DIR__ . '/../..' . '/app/AppKernel.php',
     );
 
@@ -460,7 +460,15 @@ class ComposerStaticInita9081f4c3a072b5bb824f60da08fba6f
         'RecursiveCallbackFilterIterator' => __DIR__ . '/..' . '/symfony/polyfill-php54/Resources/stubs/RecursiveCallbackFilterIterator.php',
         'SessionHandlerInterface' => __DIR__ . '/..' . '/symfony/polyfill-php54/Resources/stubs/SessionHandlerInterface.php',
         'SqlFormatter' => __DIR__ . '/..' . '/jdorn/sql-formatter/lib/SqlFormatter.php',
+        'Text_Diff_Renderer_parallel' => __DIR__ . '/..' . '/cerdic/css-tidy/testing/unit-tests/class.Text_Diff_Renderer_parallel.php',
         'TypeError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/TypeError.php',
+        'csstidy' => __DIR__ . '/..' . '/cerdic/css-tidy/class.csstidy.php',
+        'csstidy_csst' => __DIR__ . '/..' . '/cerdic/css-tidy/testing/unit-tests/class.csstidy_csst.php',
+        'csstidy_harness' => __DIR__ . '/..' . '/cerdic/css-tidy/testing/unit-tests/class.csstidy_harness.php',
+        'csstidy_optimise' => __DIR__ . '/..' . '/cerdic/css-tidy/class.csstidy_optimise.php',
+        'csstidy_print' => __DIR__ . '/..' . '/cerdic/css-tidy/class.csstidy_print.php',
+        'csstidy_reporter' => __DIR__ . '/..' . '/cerdic/css-tidy/testing/unit-tests/class.csstidy_reporter.php',
+        'csstidy_test_csst' => __DIR__ . '/..' . '/cerdic/css-tidy/testing/unit-tests/test.csst.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
