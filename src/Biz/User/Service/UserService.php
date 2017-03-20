@@ -39,7 +39,7 @@ interface UserService
 
     public function searchUsers(array $conditions, array $orderBy, $start, $limit);
 
-    public function searchUserCount(array $conditions);
+    public function countUsers(array $conditions);
 
     public function setEmailVerified($userId);
 

@@ -26,7 +26,7 @@ class ArticleController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getArticleService()->searchArticlesCount($conditions),
+            $this->getArticleService()->countArticles($conditions),
             20
         );
 

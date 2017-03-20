@@ -277,7 +277,7 @@ class MessageServiceImpl extends BaseService implements MessageService
             $conditions['fromIds'] = array(-1);
 
             $userConditions = array('nickname' => trim($conditions['nickname']));
-            $userCount = $this->getUserService()->searchUserCount($userConditions);
+            $userCount = $this->getUserService()->countUsers($userConditions);
             if ($userCount) {
                 $users = $this->getUserService()->searchUsers($userConditions, array('createdTime' => 'DESC'), 0, $userCount);
                 $conditions['fromIds'] = ArrayToolkit::column($users, 'id');
