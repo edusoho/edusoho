@@ -45,9 +45,9 @@
       </div>
       <div class=" course-detail-gray">
         {% if courseSet.type != 'live' %}
-          <div class="course-detail-content mb10">
-            <span class="course-detail-title inline-block vertical-middle mb10">教学计划</span>
-            <ul class="nav nav-pills nav-pills-sm nav-pills-transparent inline-block vertical-middle">
+          <div class="course-detail-content">
+            <span class="course-detail-title vertical-middle mb10">教学计划</span>
+            <ul class="nav nav-pills nav-pills-sm nav-pills-transparent course-detail-nav">
               {% set current_course = course %}
               {% for course in  courses %}
                 <li class="mb10 mr10 {% if current_course.id == course.id %} active {% endif %}">
@@ -59,7 +59,7 @@
         {% endif %}
 
         <div class="mbl">
-          <span class="course-detail-title inline-block">学习方式</span>
+          <span class="course-detail-title ">学习方式</span>
           {% if course.expiryMode == 'days' %}
             <span class="gray-dark mrl">随到随学</span>
             <span class="gray-dark">
@@ -76,7 +76,7 @@
         </div>
 
         {% if course.showServices | default(1) %}
-          <span class="course-detail-title inline-block">承诺服务</span>
+          <span class="course-detail-title">承诺服务</span>
           {% set serviceTags = services(course.services|default([])) %}
           {% for tag in serviceTags %}
             <span

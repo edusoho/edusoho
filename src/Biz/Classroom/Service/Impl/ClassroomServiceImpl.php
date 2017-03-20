@@ -55,9 +55,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $courseSetIds = ArrayToolkit::column($classroomCourses, 'courseSetId');
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
         $courseSets = ArrayToolkit::index($courseSets, 'id');
+        $courseNums = $this->getCourseService()->countCoursesGroupByCourseSetIds($courseSetIds);
+        $courseNums = ArrayToolkit::index($courseNums, 'courseSetId');
 
         foreach ($courses as &$course) {
             $course['courseSet'] = $courseSets[$course['courseSetId']];
+            $course['courseNum'] = $courseNums[$course['courseSetId']]['courseNum'];
             $course['parentCourseSetId'] = $course['courseSet']['parentId'];
         }
 
@@ -95,7 +98,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomDao()->search($conditions, $orderBy, $start, $limit);
     }
 
-    public function searchClassroomsCount($conditions)
+    public function countClassrooms($conditions)
     {
         $conditions = $this->_prepareClassroomConditions($conditions);
         $count = $this->getClassroomDao()->count($conditions);

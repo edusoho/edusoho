@@ -32,5 +32,9 @@ interface CourseDao extends GeneralDaoInterface
 
     public function updateCourseRecommendByCourseSetId($courseSetId, $fields);
 
-    public function updateCategoryByCourseSetId($courseSetId, $categoryId);
+    public function updateCategoryByCourseSetId($courseSetId, $fields);
+
+    public function countCreatedCoursesLessThanEndTimeByGroupDate($endTime);
+
+    public function countGroupByCourseSetIds($courseSetIds);
 }

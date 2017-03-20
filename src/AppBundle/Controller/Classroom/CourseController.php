@@ -19,18 +19,15 @@ class CourseController extends BaseController
     public function pickAction($classroomId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
-        $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
-
-        $excludeIds = ArrayToolkit::column($activeCourses, 'parentCourseSetId');
 
         $conditions = array(
             'status' => 'published',
             'parentId' => 0,
-            'excludeIds' => $excludeIds,
         );
 
-        if (empty($excludeIds)) {
-            unset($conditions['excludeIds']);
+        $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
+        if (!empty($activeCourses)) {
+            $conditions['excludeIds'] = ArrayToolkit::column($activeCourses, 'parentCourseSetId');
         }
 
         $user = $this->getCurrentUser();
@@ -73,6 +70,7 @@ class CourseController extends BaseController
         }
 
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
+
         $currentUser = $this->getCurrentUser();
         $courseMembers = array();
         $teachers = array();
