@@ -397,7 +397,10 @@ class CourseManageController extends BaseController
             if (empty($data['enableBuyExpiryTime'])) {
                 unset($data['buyExpiryTime']);
             }
-            var_dump($data['deadlineType']);
+
+            if ($data['expiryMode'] != 'days') {
+                unset($data['deadlineType']);
+            }
             if (!empty($data['deadlineType'])) {
                 if ($data['deadlineType'] == 'end_date') {
                     $data['expiryMode'] = 'end_date';
@@ -451,18 +454,17 @@ class CourseManageController extends BaseController
         $canFreeTaskCount = $this->getTaskService()->countTasks($conditions);
         $canFreeTasks = $this->getTaskService()->searchTasks($conditions, array('seq' => 'ASC'), 0, $canFreeTaskCount);
 
-        //convert data
+        //prepare form data
         if ($course['expiryMode'] == 'end_date') {
             $course['deadlineType'] = 'end_date';
             $course['expiryMode'] = 'days';
-            $course['expiryEndDate'] = date('Y-m-d', $course['expiryEndDate']);
         }
 
         return $this->render(
             'course-manage/marketing.html.twig',
             array(
                 'courseSet' => $courseSet,
-                'course' => $course,
+                'course' => $this->formatCourseDate($course),
                 'canFreeTasks' => $canFreeTasks,
                 'freeTasks' => $freeTasks,
             )
@@ -1009,10 +1011,10 @@ class CourseManageController extends BaseController
 
     protected function formatCourseDate($course)
     {
-        if (isset($course['expiryStartDate'])) {
+        if (!empty($course['expiryStartDate'])) {
             $course['expiryStartDate'] = date('Y-m-d', $course['expiryStartDate']);
         }
-        if (isset($course['expiryEndDate'])) {
+        if (!empty($course['expiryEndDate'])) {
             $course['expiryEndDate'] = date('Y-m-d', $course['expiryEndDate']);
         }
 

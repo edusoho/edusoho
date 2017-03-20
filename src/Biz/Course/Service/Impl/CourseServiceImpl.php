@@ -492,6 +492,10 @@ class CourseServiceImpl extends BaseService implements CourseService
                     'Value of Params expiryEndDate must later than expiryStartDate'
                 );
             }
+        } elseif ($course['expiryMode'] == 'forever') {
+            $course['expiryStartDate'] = null;
+            $course['expiryEndDate'] = null;
+            $course['expiryDays'] = 0;
         } else {
             throw $this->createInvalidArgumentException('Param Invalid: expiryMode');
         }
