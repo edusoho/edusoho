@@ -46,11 +46,11 @@
         {% endif %}
       </div>
 
-      <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'user.settings.security.login_password'|trans}}</span>
+      <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'user.fields.login_password'|trans}}</span>
 
       <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'user.settings.security.login_password_description'|trans}}</span>
 
-      <a href="{{ path('settings_password') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >{{'user.settings.security.modify_login_password_btn'|trans}}</a>
+      <a href="{{ path('settings_password') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >{{'form.modify'|trans}}</a>
     </div>
     <hr>
 
@@ -69,14 +69,14 @@
         {% endif %}
       </div>
 
-      <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'user.settings.security.pay_password'|trans}}</span>
+      <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'user.fields.pay_password'|trans}}</span>
 
       <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'user.settings.security.pay_password_description'|trans}}</span>
 
       {% if hasPayPassword %}
-        <a href="{{ path('settings_reset_pay_password') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >{{'user.settings.security.pay_password_reset_btn'|trans}}</a>
+        <a href="{{ path('settings_reset_pay_password') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >{{'form.reset'|trans}}</a>
       {% else %}
-        <a href="{{ path('settings_pay_password') }}" class="col-xs-offset-1  btn btn-primary" style="margin-top: -3px;" >{{'user.settings.security.pay_password_set_btn'|trans}}</a>
+        <a href="{{ path('settings_pay_password') }}" class="col-xs-offset-1  btn btn-primary" style="margin-top: -3px;" >{{'form.set'|trans}}</a>
       {% endif %}
 
     </div>
@@ -104,9 +104,9 @@
 
       <a href="{{ path('settings_security_questions') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >
       {% if hasFindPayPasswordQuestion %}
-        {{'user.settings.security.security_questions_view_btn'|trans}}
+        {{'form.view'|trans}}
       {% else %}
-        {{'user.settings.security.security_questions_set_btn'|trans}}
+        {{'form.set'|trans}}
       {% endif %}
 
       </a>
@@ -137,9 +137,9 @@
 
         <a href="{{ path('settings_bind_mobile') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >
         {% if hasVerifiedMobile %}
-          {{'user.settings.security.mobile_modify_btn'|trans}}
+          {{'form.modify'|trans}}
         {% else %}
-          {{'user.settings.security.mobile_bind_btn'|trans}}
+          {{'form.bind'|trans}}
         {% endif %}
         </a>
       </div>

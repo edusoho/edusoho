@@ -1,6 +1,6 @@
 {% extends 'old-layout.html.twig' %}
 
-{% block title %}{{'个人设置'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'user.settings'|trans}} - {{ parent() }}{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -8,7 +8,7 @@
     {% block side %}
       <div class="sidenav">
         <ul class="list-group">
-          <li class="list-group-heading">{{'个人设置'|trans}}</li>
+          <li class="list-group-heading">{{'user.settings.menu_header'|trans}}</li>
           {% set side_nav = side_nav|default(null) %}
 
           <li class="list-group-item {% if side_nav == 'profile' %}active{% endif %}">
@@ -21,7 +21,7 @@
            <a href="{{ path('setting_approval_submit') }}"><i class="glyphicon glyphicon-registration-mark"></i> {{'实名认证'|trans}}</a>
           </li>
           <li class="list-group-item {% if side_nav == 'security' %}active{% endif %}">
-            <a href="{{ path('settings_security') }}"><i class="glyphicon glyphicon-lock"></i> {{'安全设置'|trans}}</a>
+            <a href="{{ path('settings_security') }}"><i class="glyphicon glyphicon-lock"></i> {{'user.settings.security_menu'|trans}}</a>
           </li>
 
 
