@@ -2,33 +2,32 @@
 
 namespace Topxia\Api\Resource;
 
+use Silex\Application;
 use AppBundle\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 use Biz\Course\Service\Impl\CourseServiceImpl;
 use Biz\Course\Service\Impl\CourseSetServiceImpl;
-use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
 
 class MeCourses extends BaseResource
 {
     public function get(Application $app, Request $request)
     {
         $conditions = $request->query->all();
-        $start      = $request->query->get('start', 0);
-        $limit      = $request->query->get('limit', 10);
-        $type       = $request->query->get('type', '');
-        $relation   = $request->query->get('relation', '');
-        $user       = getCurrentUser();
+        $start = $request->query->get('start', 0);
+        $limit = $request->query->get('limit', 10);
+        $type = $request->query->get('type', '');
+        $relation = $request->query->get('relation', '');
+        $user = getCurrentUser();
         if ($relation == 'learning') {
-            $total   = $this->getCourseService()->findUserLearningCourseCountNotInClassroom($user['id'], $conditions);
+            $total = $this->getCourseService()->findUserLearningCourseCountNotInClassroom($user['id'], $conditions);
             $courses = $this->getCourseService()->findUserLearningCoursesNotInClassroom(
                 $user['id'],
                 $start,
                 $limit,
                 empty($type) ? array() : array('type' => $type)
             );
-
         } elseif ($relation == 'learned') {
-            $total   = $this->getCourseService()->findUserLeanedCourseCount($user['id'], $conditions);
+            $total = $this->getCourseService()->findUserLeanedCourseCount($user['id'], $conditions);
             $courses = $this->getCourseService()->findUserLearnedCoursesNotInClassroom(
                 $user['id'],
                 $start,
@@ -36,14 +35,13 @@ class MeCourses extends BaseResource
                 empty($type) ? array() : array('type' => $type)
             );
         } elseif ($relation == 'learn') {
-            $total              = $this->getCourseService()->findUserLearnCourseCountNotInClassroom($user['id'], true);
+            $total = $this->getCourseService()->findUserLearnCourseCountNotInClassroom($user['id'], true);
             if (empty($type)) {
                 $coursesAfterColumn = $this->getCourseService()->findUserLearnCoursesNotInClassroom(
                     $user['id'],
                     $start,
                     $limit
                 );
-
             } else {
                 $coursesAfterColumn = $this->getCourseService()->findUserLearnCoursesNotInClassroomWithType(
                     $user['id'],
@@ -54,7 +52,7 @@ class MeCourses extends BaseResource
             }
             $courses = array_values($coursesAfterColumn);
         } elseif ($relation == 'teaching') {
-            $total   = $this->getCourseService()->findUserTeachCourseCountNotInClassroom(array('userId' => $user['id']), false);
+            $total = $this->getCourseService()->findUserTeachCourseCountNotInClassroom(array('userId' => $user['id']), false);
             $courses = $this->getCourseService()->findUserTeachCoursesNotInClassroom(
                 array('userId' => $user['id']),
                 $start,
@@ -62,7 +60,7 @@ class MeCourses extends BaseResource
                 false
             );
         } elseif ($relation == 'favorited') {
-            $total   = $this->getCourseService()->findUserFavoritedCourseCountNotInClassroom($user['id']);
+            $total = $this->getCourseService()->findUserFavoritedCourseCountNotInClassroom($user['id']);
             $courses = $this->getCourseService()->findUserFavoritedCoursesNotInClassroom(
                 $user['id'],
                 $start,
@@ -85,11 +83,12 @@ class MeCourses extends BaseResource
     {
         $courses = array();
         $courseIds = ArrayToolkit::column($res, 'id');
+
         $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
         foreach ($res as $key => $one) {
-            $course['courseSet'] = $courseSets[$one['courseSetId']];
-            $course           = $this->callFilter($name, $one);
-            $courseConv       = $this->getConversationService()->getConversationByTarget($course['id'], 'course');
+            $one['courseSet'] = $courseSets[$one['courseSetId']];
+            $course = $this->callFilter($name, $one);
+            $courseConv = $this->getConversationService()->getConversationByTarget($course['id'], 'course');
             $course['convNo'] = $courseConv ? $courseConv['no'] : '';
             if ($course['parentId'] > 0) {
                 continue;
