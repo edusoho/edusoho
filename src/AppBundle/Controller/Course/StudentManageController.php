@@ -533,7 +533,8 @@ class StudentManageController extends BaseController
 
         $processes = array();
         foreach ($userFinishedTasks as $task) {
-            $processes[$task['userId']] = sprintf('%d', $task['taskCount'] / $taskCount * 100.0);
+            $progress = sprintf('%d', $task['taskCount'] / $taskCount * 100.0);
+            $processes[$task['userId']] = $progress > 100 ? 100 : $progress;
         }
 
         return $processes;
