@@ -3,8 +3,8 @@
 namespace Topxia\Api\Resource\Course;
 
 use Silex\Application;
+use Biz\Util\CloudClientFactory;
 use Topxia\Api\Resource\BaseResource;
-use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 class Lesson extends BaseResource
