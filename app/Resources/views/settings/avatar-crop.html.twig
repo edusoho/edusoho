@@ -1,6 +1,6 @@
 {% extends 'settings/layout.html.twig' %}
 
-{% block title %}{{'头像图片'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'user.settings.crop'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'avatar' %}
 {% set script_controller = 'settings/avatar-crop' %}
@@ -8,7 +8,7 @@
 
 <div class="panel panel-default panel-col">
   <div class="panel-heading">
-    {{'头像设置'|trans}}
+    {{'user.settings.avatar.page_title'|trans}}
   </div>
 
   <div class="panel-body">
@@ -19,7 +19,7 @@
           <img class="img-responsive" src="{{ filepath(pictureUrl) }}"
           id="avatar-crop"
           width="{{scaledSize.width}}" height="{{scaledSize.height}}" data-natural-width="{{ naturalSize.width }}" data-natural-height="{{ naturalSize.height }}" />
-          <div class="help-block">{{'提示：请选择图片裁剪区域。'|trans}}</div>
+          <div class="help-block">{{'user.setting.avatar.crop.hint'|trans}}</div>
         </div>
       </div>
 
@@ -29,8 +29,8 @@
           id="upload-avatar-btn"
           data-url="{{path('settings_avatar_crop')}}"
           data-goto-url="{% if goto %}{{ goto }}{% else %}{{path('settings_avatar')}}{% endif %}"
-          >{{'保存'|trans}}</a>
-          <a href="javascript:;" class="go-back btn btn-link">{{'重新选择图片'|trans}}</a>
+          >{{'form.save'|trans}}</a>
+          <a href="javascript:;" class="go-back btn btn-link">{{'user.setting.avatar.select_new_avatar'|trans}}</a>
         </div>
       </div>
 

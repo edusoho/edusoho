@@ -79,6 +79,7 @@ user.setting.certification.approve_fail_description: 实名认证审核尚未通
 
 # 个人设置模块-头像设置
 user.settings.avatar: 头像设置
+user.settings.avatar.crop: 头像图片
 user.settings.avatar.page_title: 头像设置
 user.settings.avatar.current_avatar: 当前头像
 user.settings.avatar.partner_avatar: 论坛头像
@@ -87,5 +88,7 @@ user.setting.avatar.upload_size: 2M
 user.settings.avatar.upload_submit_btn: 上传新头像
 user.settings.avatar.using_current_avatar: 使用该头像
 user.setting.avatar.alter_description: 请设置自定义头像。
+user.setting.avatar.crop.hint: 提示：请选择图片裁剪区域。
+user.setting.avatar.select_new_avatar: 重新选择图片
 
 
