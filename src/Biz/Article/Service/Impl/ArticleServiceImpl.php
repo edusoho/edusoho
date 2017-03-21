@@ -2,6 +2,7 @@
 
 namespace Biz\Article\Service\Impl;
 
+use AppBundle\Common\SimpleValidator;
 use Biz\BaseService;
 use Biz\Article\Dao\ArticleDao;
 use AppBundle\Common\ArrayToolkit;
@@ -419,40 +420,44 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
     protected function filterArticleFields($fields, $mode = 'update')
     {
-        $article = array();
-        $user = $this->getCurrentUser();
-        $match = preg_match('/<\s*img.+?src\s*=\s*[\"|\'](.*?)[\"|\']/i', $fields['body'], $matches);
-        $article['picture'] = $match ? $matches[1] : '';
+        $article            = array();
+        $user               = $this->getCurrentUser();
+        $match              = preg_match('/<\s*img.+?src\s*=\s*[\"|\'](.*?)[\"|\']/i', $fields['body'], $matches);
+        $article['picture'] = $match ? $matches[1] : "";
 
-        $article['thumb'] = $fields['thumb'];
+        $article['thumb']         = $fields['thumb'];
         $article['originalThumb'] = $fields['originalThumb'];
-        $article['title'] = $fields['title'];
-        $article['body'] = $fields['body'];
-        $article['featured'] = empty($fields['featured']) ? 0 : 1;
-        $article['promoted'] = empty($fields['promoted']) ? 0 : 1;
-        $article['sticky'] = empty($fields['sticky']) ? 0 : 1;
+        $article['title']         = $this->purifyHtml($fields['title']);
+        $article['body']          = $this->purifyHtml($fields['body'], true);
+        $article['featured']      = empty($fields['featured']) ? 0 : 1;
+        $article['promoted']      = empty($fields['promoted']) ? 0 : 1;
+        $article['sticky']        = empty($fields['sticky']) ? 0 : 1;
 
-        $article['categoryId'] = $fields['categoryId'];
-        $article['source'] = $fields['source'];
-        $article['sourceUrl'] = $fields['sourceUrl'];
+        $article['categoryId']    = $fields['categoryId'];
+        $article['source']        = $this->purifyHtml($fields['source']);
+        $article['sourceUrl']     = empty($fields['sourceUrl']) ? '' : $fields['sourceUrl'];
         $article['publishedTime'] = strtotime($fields['publishedTime']);
-        $article['updatedTime'] = time();
+        $article['updatedTime']   = time();
+
+        if (!empty($article['sourceUrl']) && !SimpleValidator::site($article['sourceUrl'])) {
+            throw $this->createInvalidArgumentException('来源地址不正确！');
+        }
 
         $fields = $this->fillOrgId($fields);
         if (isset($fields['orgId'])) {
             $article['orgCode'] = $fields['orgCode'];
-            $article['orgId'] = $fields['orgId'];
+            $article['orgId']   = $fields['orgId'];
         }
         if (!empty($fields['tags']) && !is_array($fields['tags'])) {
-            $fields['tags'] = explode(',', $fields['tags']);
+            $fields['tags']    = explode(",", $fields['tags']);
             $article['tagIds'] = ArrayToolkit::column($this->getTagService()->findTagsByNames($fields['tags']), 'id');
         } else {
             $article['tagIds'] = array();
         }
 
         if ($mode == 'add') {
-            $article['status'] = 'published';
-            $article['userId'] = $user['id'];
+            $article['status']      = 'published';
+            $article['userId']      = $user->id;
             $article['createdTime'] = time();
         }
 

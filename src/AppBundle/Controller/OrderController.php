@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biz\Cash\Service\CashAccountService;
 use Biz\Cash\Service\CashService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\Service\AppService;
@@ -118,6 +119,10 @@ class OrderController extends BaseController
             return $this->createMessageResponse('error', '用户未登录，创建订单失败。');
         }
 
+        if (isset($fields['coinPayAmount']) && !$this->canUseCoinPay($fields['coinPayAmount'], $user['id'])) {
+            return $this->createMessageResponse('error', '当前使用的账户金额大于账户余额。');
+        }
+
         if (!array_key_exists('targetId', $fields) || !array_key_exists('targetType', $fields)) {
             return $this->createMessageResponse('error', '订单中没有购买的内容，不能创建!');
         }
@@ -142,7 +147,7 @@ class OrderController extends BaseController
         $processor = OrderProcessorFactory::create($targetType);
 
         try {
-            if (!isset($fields['couponCode']) || (isset($fields['couponCode']) && $fields['couponCode'] == '请输入优惠券')) {
+            if (!isset($fields['couponCode']) || $fields['couponCode'] === '请输入优惠券') {
                 $fields['couponCode'] = '';
             } else {
                 $fields['couponCode'] = trim($fields['couponCode']);
@@ -154,13 +159,13 @@ class OrderController extends BaseController
             $shouldPayMoney = (string) ((float) $fields['shouldPayMoney']);
             //价格比较
 
-            if (intval($totalPrice * 100) != intval($fields['totalPrice'] * 100)) {
+            if ((int)($totalPrice * 100) !== (int)($fields['totalPrice'] * 100)) {
                 $this->createMessageResponse('error', '实际价格不匹配，不能创建订单!');
             }
 
             //价格比较
 
-            if (intval($amount * 100) != intval($shouldPayMoney * 100)) {
+            if ((int)($amount * 100) !== (int)($shouldPayMoney * 100)) {
                 return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
             }
 
@@ -170,7 +175,7 @@ class OrderController extends BaseController
             $maxRate = $coinSetting['cash_model'] == 'deduction' && isset($target['maxRate']) ? $target['maxRate'] : 100;
             $priceCoin = $priceType == 'RMB' ? NumberToolkit::roundUp($totalPrice * $cashRate) : $totalPrice;
 
-            if ($coinEnabled && isset($fields['coinPayAmount']) && (intval((float) $fields['coinPayAmount'] * $maxRate) > intval($priceCoin * $maxRate))) {
+            if ($coinEnabled && isset($fields['coinPayAmount']) && ((int)((float) $fields['coinPayAmount'] * $maxRate) > (int)($priceCoin * $maxRate))) {
                 return $this->createMessageResponse('error', '虚拟币抵扣超出限定，不能创建订单!');
             }
 
@@ -242,6 +247,13 @@ class OrderController extends BaseController
 
             return $this->createJsonResponse($couponInfo);
         }
+    }
+
+    protected function canUseCoinPay($coinPayAmount, $userId)
+    {
+        $cashAccount = $this->getCashAccountService()->getAccountByUserId($userId, true);
+
+        return !($coinPayAmount > $cashAccount['cash']);
     }
 
     protected function completeInfo($couponInfo, $code, $type)
@@ -375,5 +387,13 @@ class OrderController extends BaseController
     private function getClassroomService()
     {
         return $this->getBiz()->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return CashAccountService
+     */
+    protected function getCashAccountService()
+    {
+        return $this->createService('Cash:CashAccountService');
     }
 }

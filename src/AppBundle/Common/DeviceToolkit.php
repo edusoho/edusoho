@@ -1,6 +1,6 @@
-<?php 
+<?php
 
-namespace Topxia\Common;
+namespace AppBundle\Common;
 
 class DeviceToolkit
 {

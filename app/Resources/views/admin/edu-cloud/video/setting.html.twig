@@ -265,6 +265,15 @@
 
     <div class="row form-group">
       <div class="col-md-3 control-label">
+        <label for="video_auto_play">云视频自动播放：</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('video_auto_play', {'true':'开启', 'false':'关闭'}, storageSetting.video_auto_play|default(0) ) }}
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
         <label>{{ '云视频片头'|trans }}</label>
       </div>
 

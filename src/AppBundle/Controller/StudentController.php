@@ -1,25 +1,21 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\ExportHelp;
-use Topxia\Common\SimpleValidator;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\UserFieldService;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\User\Impl\NotificationServiceImpl;
 
 class StudentController extends BaseController
 {
-	public function showAction(Request $request, $userId)
+    public function showAction(Request $request, $userId)
     {
-        $user             = $this->getUserService()->getUser($userId);
-        $profile          = $this->getUserService()->getUserProfile($userId);
+        $user = $this->getUserService()->getUser($userId);
+        $profile = $this->getUserService()->getUserProfile($userId);
         $profile['title'] = $user['title'];
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
-        for ($i = 0; $i < count($userFields); $i++) {
+        for ($i = 0, $iMax = count($userFields); $i < $iMax; $i++) {
             if (strstr($userFields[$i]['fieldName'], "textField")) {
                 $userFields[$i]['type'] = "text";
             }
@@ -41,10 +37,10 @@ class StudentController extends BaseController
             }
         }
 
-        return $this->render('TopxiaWebBundle:Student:show-modal.html.twig', array(
-            'user'       => $user,
-            'profile'    => $profile,
-            'userFields' => $userFields
+        return $this->render('student/show-modal.html.twig', array(
+            'user' => $user,
+            'profile' => $profile,
+            'userFields' => $userFields,
         ));
     }
 
@@ -54,7 +50,7 @@ class StudentController extends BaseController
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
-        for ($i = 0; $i < count($userFields); $i++) {
+        for ($i = 0, $iMax = count($userFields); $i < $iMax; $i++) {
             if (strstr($userFields[$i]['fieldName'], "textField")) {
                 $userFields[$i]['type'] = "text";
             }
@@ -84,20 +80,26 @@ class StudentController extends BaseController
             $userinfoFields = $course['userinfoFields'];
         }
 
-        return $this->render('TopxiaWebBundle:Student:defined-show-modal.html.twig', array(
-            'profile'        => $profile,
-            'userFields'     => $userFields,
-            'userinfoFields' => $userinfoFields
+        return $this->render('student/defined-show-modal.html.twig', array(
+            'profile' => $profile,
+            'userFields' => $userFields,
+            'userinfoFields' => $userinfoFields,
         ));
     }
 
+    /**
+     * @return UserFieldService
+     */
     protected function getUserFieldService()
     {
-        return $this->getServiceKernel()->createService('User.UserFieldService');
+        return $this->createService('User:UserFieldService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return $this->createService('System:SettingService');
     }
 }

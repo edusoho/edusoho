@@ -10,6 +10,7 @@ use Biz\CloudPlatform\CloudAPIFactory;
 
 class MobileController extends BaseController
 {
+
     public function mobileAction(Request $request)
     {
         $operationMobile = $this->getSettingService()->get('operation_mobile', array());

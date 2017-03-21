@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Biz\Classroom\Service\ClassroomService;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Content\Service\BlockService;
 use Biz\Content\Service\NavigationService;
@@ -26,9 +27,36 @@ class DefaultController extends BaseController
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
         }
 
+        // 判断是否是定制用户
+        // @TODO 需改进 不然每次进首页都会请求云平台， 请求异常情况下也未作处理
+        $result = CloudAPIFactory::create('leaf')->get('/me');
+        $custom = $this->isCustom($result);
+
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
 
-        return $this->render('default/index.html.twig', array('friendlyLinks' => $friendlyLinks));
+        return $this->render('default/index.html.twig', array('friendlyLinks' => $friendlyLinks, 'custom' => $custom));
+    }
+
+    public function appDownloadAction()
+    {
+        $result = CloudAPIFactory::create('leaf')->get('/me');
+        $custom = $this->isCustom($result);
+
+        if ($custom) {
+            return $this->createMessageResponse('warning', '非法请求');
+        }
+
+        $mobileCode = (empty($result["mobileCode"]) ? 'edusohov3' : $result["mobileCode"]);
+
+        if ($this->getWebExtension()->isMicroMessenger()) {
+            $url ="http://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.kuozhi";
+        } else {
+            $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', 'code' => $mobileCode), true);
+        }
+
+        return $this->render('mobile/app-download.html.twig', array(
+            'url' => $url
+        ));
     }
 
     public function userlearningAction()
@@ -220,6 +248,11 @@ class DefaultController extends BaseController
         }
 
         return $this->redirect($targetPath);
+    }
+
+    private function isCustom($result)
+    {
+        return isset($result['hasMobile']) ? $result['hasMobile'] : 0;
     }
 
     /**

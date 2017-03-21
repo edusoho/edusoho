@@ -1,7 +1,7 @@
 {% extends 'old-layout.html.twig' %}
 
-{% set bodyClass = 'bg-blank' %}
-
+{% set bodyClass = 'bg-blank open-course-list' %}
+{% set mobile = is_show_mobile_page() %}
 {% set siteNav = 'open/course/explore' %}
 {% set script_controller = 'open-course/open-course-explore' %}
 
@@ -14,15 +14,17 @@
       </div>
       <div class="more">
         <a class="btn btn-primary btn-lg" href="{{ path('course_set_explore') }}">
-          {{'查看课程'|trans}}
+          {{ '查看课程'|trans }}
         </a>
         <a class="btn btn-primary btn-lg" href="{{ path('classroom_explore') }}">
-          {{'查看班级'|trans}}
+          {{ '查看班级'|trans }}
         </a>
       </div>
     </div>
-    </div>
   </div>
+  {% if mobile %}
+    {% include 'course-set/search-mobile.html.twig'%}
+  {% endif %}
 {% endblock %}
 {% block content %}
   <div class="open-course-list">
@@ -33,7 +35,7 @@
           <div class="course-item">
             <div class="course-img">
               <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank"
-                 target="{{ course.title }}">
+                target="{{ course.title }}">
                 {% if course.type == 'liveOpen' %}
                   <span class="tags">
             <span class="tag-live"></span>
@@ -54,7 +56,7 @@
             <div class="course-info clearfix">
               <div class="title">
                 <a class="link-dark" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank"
-                   title="{{ course.title }}">
+                  title="{{ course.title }}">
                   {{ course.title }}
                 </a>
               </div>
@@ -70,6 +72,12 @@
         <div class="empty">{{ '暂无公开课'|trans }}</div>
       {% endfor %}
     </div>
-    {{ web_macro.paginator(paginator) }}
+    {% if not mobile %}
+      {{ web_macro.paginator(paginator) }}
+    {% endif %}
   </div>
+{% endblock %}
+
+{% block bottom %}
+  {% include 'mobile/footer-tool-bar.html.twig' with { mobile_tool_bar: 'course' } %}
 {% endblock %}

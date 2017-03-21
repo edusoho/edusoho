@@ -2,8 +2,8 @@
 
 namespace Biz\User\Dao\Impl;
 
-use Biz\User\Dao\TokenDao;
 use Biz\Common\FieldSerializer;
+use Biz\User\Dao\TokenDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class TokenDaoImpl extends GeneralDaoImpl implements TokenDao
@@ -56,10 +56,10 @@ class TokenDaoImpl extends GeneralDaoImpl implements TokenDao
 
     public function deleteTopsByExpiredTime($expiredTime, $limit)
     {
+        $limit = (int)$limit;
         $sql = "DELETE FROM {$this->table} WHERE expiredTime < ? LIMIT {$limit} ";
-        $result = $this->db()->executeQuery($sql, array($expiredTime));
 
-        return $result;
+        return $this->db()->executeQuery($sql, array($expiredTime));
     }
 
     public function declares()

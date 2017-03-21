@@ -483,18 +483,33 @@ class GroupController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+            return $this->createJsonResponse(array(
+                'status' => 'error',
+                'message' => '你好像忘了登录哦？'
+            ));
+        }
+
+        $isMember = $this->getGroupService()->isMember($id, $user['id']);
+
+        if ($isMember) {
+            return $this->createJsonResponse(array(
+                'status' => 'error',
+                'message' => '您已加入小组！'
+            ));
         }
 
         try {
             $this->getGroupService()->joinGroup($user, $id);
         } catch (\Exception $e) {
-            $this->setFlashMessage('danger', $e->getMessage());
+            return $this->createJsonResponse(array(
+                'status' => 'error',
+                'message' => '加入小组失败!'
+            ));
         }
 
-        return $this->redirect($this->generateUrl('group_show', array(
-            'id' => $id,
-        )));
+        return $this->createJsonResponse(array(
+            'status' => 'success'
+        ));
     }
 
     public function groupExitAction($id)
@@ -502,9 +517,9 @@ class GroupController extends BaseController
         $user = $this->getCurrentUser();
         $this->getGroupService()->exitGroup($user, $id);
 
-        return $this->redirect($this->generateUrl('group_show', array(
-            'id' => $id,
-        )));
+        return $this->createJsonResponse(array(
+            'status' => 'success'
+        ));
     }
 
     public function groupEditAction(Request $request, $id)

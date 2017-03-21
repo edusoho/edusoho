@@ -124,4 +124,8 @@ interface MemberService
     public function countPostsByCourseIdAndUserId($courseId, $userId);
 
     public function addMemberExpiryDays($courseId, $userId, $day);
+
+    public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline);
+
+    public function updateMembersDeadlineByClassroomId($classroomId, $deadline);
 }

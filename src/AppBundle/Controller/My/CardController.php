@@ -181,9 +181,4 @@ class CardController extends BaseController
     {
         return $this->getBiz()->service('Card:CardService');
     }
-
-    private function getWebExtension()
-    {
-        return $this->container->get('web.twig.extension');
-    }
 }

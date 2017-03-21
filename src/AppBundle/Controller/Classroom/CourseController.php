@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Classroom;
 
+use AppBundle\Common\ClassroomToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Taxonomy\Service\TagService;
@@ -207,30 +208,43 @@ class CourseController extends BaseController
         return $users;
     }
 
+    /**
+     * @param string $previewAs
+     * @param array $member
+     * @param array $classroom
+     * @return array
+     */
     private function previewAsMember($previewAs, $member, $classroom)
     {
         $user = $this->getCurrentUser();
 
-        if (in_array($previewAs, array('guest', 'auditor', 'member'))) {
-            if ($previewAs == 'guest') {
+        if (in_array($previewAs, array('guest', 'auditor', 'member'), true)) {
+
+            if ($previewAs === 'guest') {
                 return array();
             }
 
+            $deadline = ClassroomToolkit::buildMemberDeadline(array(
+                'expiryMode'  => $classroom['expiryMode'],
+                'expiryValue' => $classroom['expiryValue']
+            ));
+
             $member = array(
-                'id' => 0,
+                'id'          => 0,
                 'classroomId' => $classroom['id'],
-                'userId' => $user['id'],
-                'orderId' => 0,
-                'levelId' => 0,
-                'noteNum' => 0,
-                'threadNum' => 0,
-                'remark' => '',
-                'role' => array('auditor'),
-                'locked' => 0,
+                'userId'      => $user['id'],
+                'orderId'     => 0,
+                'levelId'     => 0,
+                'noteNum'     => 0,
+                'threadNum'   => 0,
+                'remark'      => '',
+                'role'        => array('auditor'),
+                'locked'      => 0,
                 'createdTime' => 0,
+                'deadline'    => $deadline
             );
 
-            if ($previewAs == 'member') {
+            if ($previewAs === 'member') {
                 $member['role'] = array('member');
             }
         }

@@ -37,10 +37,9 @@ class MobileController extends BaseController
         return $this->render('mobile/index.html.twig', array(
             'host' => $request->getHttpHost(),
             'mobileCode' => $mobileCode,
-            'mobile' => $mobile,
+            'mobileSetting' => $mobile,
         ));
     }
-
     public function downloadQrcodeAction(Request $request)
     {
         $code = $request->get('code');

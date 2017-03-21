@@ -1,7 +1,6 @@
 <?php
-namespace Topxia\Common;
+namespace AppBundle\Common;
 
-use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomToolkit
 {
@@ -15,15 +14,10 @@ class ClassroomToolkit
 
         if ($expiryDate['expiryMode'] == 'date') {
             if ($deadline < time()) {
-                throw new \Exception(self::getKernel()->trans('有效期的设置时间小于当前时间！'));
+                throw new \Exception('有效期的设置时间小于当前时间！');
             }
         }
 
         return $deadline;
-    }
-
-    protected static function getKernel()
-    {
-        return ServiceKernel::instance();
     }
 }

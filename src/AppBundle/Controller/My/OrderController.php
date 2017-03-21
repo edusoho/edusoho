@@ -88,10 +88,8 @@ class OrderController extends BaseController
     public function detailAction(Request $request, $id)
     {
         $currentUser = $this->getCurrentUser();
-        $order = $this->getOrderService()->getOrder($id);
-        if ($currentUser['id'] != $order['userId']) {
-            throw $this->createAccessDeniedException('普通用户不能查看别人的订单');
-        }
+        $order = $this->tryManageOrder($id);
+
         $user = $this->getUserService()->getUser($order['userId']);
 
         $orderLogs = $this->getOrderService()->findOrderLogs($order['id']);
@@ -99,10 +97,10 @@ class OrderController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'userId'));
 
         return $this->render('my-order/detail-modal.html.twig', array(
-            'order' => $order,
-            'user' => $user,
-            'orderLogs' => $orderLogs,
-            'users' => $users,
+            'order'=>$order,
+            'user'=>$user,
+            'orderLogs'=>$orderLogs,
+            'users' => $users
         ));
     }
 
@@ -133,18 +131,30 @@ class OrderController extends BaseController
 
     public function cancelRefundAction(Request $request, $id)
     {
-        $order = $this->getOrderService()->getOrder($id);
+        $order = $this->tryManageOrder($id);
         $processor = OrderRefundProcessorFactory::create($order['targetType']);
         $processor->cancelRefundOrder($id);
-
         return $this->createJsonResponse(true);
     }
 
     public function cancelAction(Request $request, $id)
     {
-        $order = $this->getOrderService()->cancelOrder($id, '取消订单');
+        $this->tryManageOrder($id);
+        $order = $this->getOrderService()->cancelOrder($id, $this->getServiceKernel()->trans('取消订单'));
 
         return $this->createJsonResponse(true);
+    }
+
+    protected function tryManageOrder($id)
+    {
+        $currentUser = $this->getCurrentUser();
+        $order = $this->getOrderService()->getOrder($id);
+
+        if ($currentUser['id'] != $order['userId']) {
+            throw $this->createAccessDeniedException('该订单不属于当前登录用户');
+        }
+
+        return $order;
     }
 
     /**

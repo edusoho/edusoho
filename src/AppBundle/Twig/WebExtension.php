@@ -2,20 +2,21 @@
 
 namespace AppBundle\Twig;
 
-use Codeages\Biz\Framework\Context\Biz;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\NumberToolkit;
-use AppBundle\Util\CdnUrl;
 use AppBundle\Common\ConvertIpToolkit;
+use AppBundle\Common\DeviceToolkit;
 use AppBundle\Common\ExtensionManager;
-use AppBundle\Util\UploadToken;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\NumberToolkit;
 use AppBundle\Common\PluginVersionToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Component\ShareSdk\WeixinShare;
 use AppBundle\Util\CategoryBuilder;
+use AppBundle\Util\CdnUrl;
+use AppBundle\Util\UploadToken;
 use Biz\Util\HTMLPurifierFactory;
+use Codeages\Biz\Framework\Context\Biz;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Topxia\Service\Common\ServiceKernel;
 
 class WebExtension extends \Twig_Extension
 {
@@ -134,7 +135,40 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('tag_equal', array($this, 'tag_equal')),
             new \Twig_SimpleFunction('array_index', array($this, 'arrayIndex')),
             new \Twig_SimpleFunction('cdn', array($this, 'getCdn')),
+            new \Twig_SimpleFunction('is_show_mobile_page', array($this, 'isShowMobilePage')),
+            new \Twig_SimpleFunction('is_ES_copyright', array($this, 'isESCopyright')),
         );
+    }
+
+    public function isShowMobilePage()
+    {
+        $wapSetting = $this->getSetting('wap', array());
+        if (empty($wapSetting['enabled'])) {
+            return false;
+        }
+
+        $pcVersion = $this->container->get('request')->cookies->get("PCVersion", 0);
+        if ($pcVersion) {
+            return false;
+        }
+        return DeviceToolkit::isMobileClient();
+    }
+
+    public function isESCopyright()
+    {
+        $copyright = $this->getSetting('copyright');
+        $request = $this->container->get('request');
+        $host = $request->getHttpHost();
+        if ($copyright) {
+            $result = !(
+                isset($copyright['owned']) && isset($copyright['thirdCopyright']) && $copyright['thirdCopyright'] != 2 && isset($copyright['licenseDomains']) && in_array($host, explode(';', $copyright['licenseDomains']))
+                || (isset($copyright['thirdCopyright']) && $copyright['thirdCopyright'] == 2)
+            );
+
+            return $result;
+        }
+
+        return true;
     }
 
     public function tag_equal($tags, $target_tagId, $target_tagGroupId)
@@ -205,7 +239,7 @@ class WebExtension extends \Twig_Extension
     public function weixinConfig()
     {
         $weixinmob_enabled = $this->getSetting('login_bind.weixinmob_enabled');
-        if (!(bool) $weixinmob_enabled) {
+        if (!(bool)$weixinmob_enabled) {
             return null;
         }
         $jsApiTicket = $this->createService('User:TokenService')->getTokenByType('jsapi.ticket');
@@ -260,7 +294,7 @@ class WebExtension extends \Twig_Extension
     {
         $network = $this->getSetting('developer.without_network', $default = false);
 
-        return (bool) $network;
+        return (bool)$network;
     }
 
     public function getUserVipLevel($userId)
@@ -353,7 +387,7 @@ class WebExtension extends \Twig_Extension
     {
         $text = trim($text);
 
-        $length = (int) $length;
+        $length = (int)$length;
 
         if (($length > 0) && (mb_strlen($text) > $length)) {
             $text = mb_substr($text, $start, $length, 'UTF-8');
@@ -523,7 +557,8 @@ class WebExtension extends \Twig_Extension
 
         foreach ($keys as $key) {
             if (!isset($value[$key])) {
-                throw new \InvalidArgumentException(sprintf('Key `%s` is not in context with %s', $key, implode(array_keys($context), ', ')));
+                throw new \InvalidArgumentException(sprintf('Key `%s` is not in context with %s', $key,
+                    implode(array_keys($context), ', ')));
             }
 
             $value = $value[$key];
@@ -726,7 +761,7 @@ class WebExtension extends \Twig_Extension
 
     public function navigationUrlFilter($url)
     {
-        $url = (string) $url;
+        $url = (string)$url;
 
         if (strpos($url, '://')) {
             return $url;
@@ -745,7 +780,7 @@ class WebExtension extends \Twig_Extension
      *                            D -> 区全称,     d -> 区简称.
      *
      * @param [type] $districeId [description]
-     * @param string $format     格式，默认格式'P C D'
+     * @param string $format 格式，默认格式'P C D'
      *
      * @return [type] [description]
      */
@@ -990,8 +1025,10 @@ class WebExtension extends \Twig_Extension
         if (empty($path)) {
             $defaultSetting = $this->getSetting('default', array());
 
-            if ((($defaultKey == 'course.png' && array_key_exists('defaultCoursePicture', $defaultSetting) && $defaultSetting['defaultCoursePicture'] == 1)
-                    || ($defaultKey == 'avatar.png' && array_key_exists('defaultAvatar', $defaultSetting) && $defaultSetting['defaultAvatar'] == 1))
+            if ((($defaultKey == 'course.png' && array_key_exists('defaultCoursePicture',
+                            $defaultSetting) && $defaultSetting['defaultCoursePicture'] == 1)
+                    || ($defaultKey == 'avatar.png' && array_key_exists('defaultAvatar',
+                            $defaultSetting) && $defaultSetting['defaultAvatar'] == 1))
                 && (array_key_exists($defaultKey, $defaultSetting)
                     && $defaultSetting[$defaultKey])
             ) {
@@ -1087,7 +1124,7 @@ class WebExtension extends \Twig_Extension
         $text = str_replace('&nbsp;', ' ', $text);
         $text = trim($text);
 
-        $length = (int) $length;
+        $length = (int)$length;
 
         if (($length > 0) && (mb_strlen($text) > $length)) {
             $text = mb_substr($text, 0, $length, 'UTF-8');
@@ -1105,7 +1142,7 @@ class WebExtension extends \Twig_Extension
         $text = str_replace('&nbsp;', ' ', $text);
         $text = trim($text);
 
-        $length = (int) $length;
+        $length = (int)$length;
 
         if (($length > 0) && (mb_strlen($text, 'utf-8') > $length)) {
             $text = mb_substr($text, 0, $length, 'UTF-8');
@@ -1176,8 +1213,8 @@ class WebExtension extends \Twig_Extension
     {
         $text = number_format($text, 1, '.', '');
 
-        if (intval($text) == $text) {
-            return (string) intval($text);
+        if ((int)$text == $text) {
+            return (string)(int)$text;
         }
 
         return $text;
@@ -1338,14 +1375,12 @@ class WebExtension extends \Twig_Extension
             return '100%';
         }
 
-        return intval($number / $total * 100).'%';
+        return (int)($number / $total * 100).'%';
     }
 
     public function arrayMerge($text, $content)
     {
-        $array = array_merge($text, $content);
-
-        return $array;
+        return array_merge($text, $content);
     }
 
     public function getSetPrice($price)
@@ -1374,11 +1409,6 @@ class WebExtension extends \Twig_Extension
         }
 
         return $max;
-    }
-
-    public function getName()
-    {
-        return 'topxia_web_twig';
     }
 
     public function isTrial()

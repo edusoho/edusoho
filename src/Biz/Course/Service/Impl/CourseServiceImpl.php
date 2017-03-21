@@ -129,6 +129,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
+        if (isset($fields['about'])) {
+            $fields['about'] = $this->purifyHtml($fields['about'], true);
+        }
+
         if (!isset($course['isFree'])) {
             $course['isFree'] = 1; //默认免费
         }

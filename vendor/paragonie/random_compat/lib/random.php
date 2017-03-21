@@ -176,7 +176,16 @@ if (PHP_VERSION_ID < 70000) {
          * throw new Exception
          */
         if (!is_callable('random_bytes')) {
-            require_once $RandomCompatDIR.'/random_bytes_symfony.php';
+            /**
+             * We don't have any more options, so let's throw an exception right now
+             * and hope the developer won't let it fail silently.
+             */
+            function random_bytes($length)
+            {
+                throw new Exception(
+                    'There is no suitable CSPRNG installed on your system'
+                );
+            }
         }
     }
 

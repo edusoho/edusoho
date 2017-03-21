@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Biz\Sensitive\Service\SensitiveService;
 use Biz\User\CurrentUser;
 use Biz\User\Service\AuthService;
+use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,12 +27,22 @@ class LoginBindController extends BaseController
             }
         }
 
-        $inviteCode = $request->query->get('inviteCode', null);
-        $client = $this->createOAuthClient($type);
-        $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
+        $inviteCode  = $request->query->get('inviteCode', null);
+        $client      = $this->createOAuthClient($type);
+
+        $token = $this->getTokenService()->makeToken('login.bind', array(
+            'data'     => array(
+                'type' => $type,
+                'sessionId' => $request->getSession()->getId(),
+            ),
+            'times'    => 1,
+            'duration' => 3600
+        ));
+
+        $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type, 'token' => $token['token']), true);
 
         if ($inviteCode) {
-            $callbackUrl = $callbackUrl.'?inviteCode='.$inviteCode;
+            $callbackUrl = $callbackUrl.'&inviteCode='.$inviteCode;
         }
 
         $url = $client->getAuthorizeUrl($callbackUrl);
@@ -46,13 +57,16 @@ class LoginBindController extends BaseController
 
     public function callbackAction(Request $request, $type)
     {
-        $code = $request->query->get('code');
-        $inviteCode = $request->query->get('inviteCode');
+        $code        = $request->query->get('code');
+        $inviteCode  = $request->query->get('inviteCode');
+        $token  = $request->query->get('token', '');
 
-        $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
-        $token = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
+        $this->validateToken($request, $type);
 
-        $bind = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
+        $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type, 'token' => $token), true);
+        $token       = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
+
+        $bind        = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
 
         $request->getSession()->set('oauth_token', $token);
 
@@ -60,15 +74,12 @@ class LoginBindController extends BaseController
             $user = $this->getUserService()->getUser($bind['toId']);
 
             if (empty($user)) {
-                $this->setFlashMessage('danger', $this->trans('绑定的用户不存在，请重新绑定。'));
+                $this->setFlashMessage('danger', '绑定的用户不存在，请重新绑定。');
 
                 return $this->redirect($this->generateUrl('register'));
             }
 
-            $currentUser = new CurrentUser();
-            $currentUser->fromArray($user);
-            $currentUser['currentIp'] = $request->getClientIp();
-            $this->switchUser($request, $currentUser);
+            $this->authenticateUser($user);
 
             if ($this->getAuthService()->hasPartnerAuth()) {
                 return $this->redirect($this->generateUrl('partner_login', array('goto' => $this->getTargetPath($request))));
@@ -121,6 +132,24 @@ class LoginBindController extends BaseController
             'name' => $name,
             'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth(),
         ));
+    }
+
+    protected function validateToken($request, $type)
+    {
+        $token        = $request->query->get('token', '');
+        if (empty($token)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $token    = $this->getTokenService()->verifyToken('login.bind', $token);
+        $tokenData = $token['data'];
+        if ($tokenData['type'] != $type) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if ($tokenData['sessionId'] != $request->getSession()->getId()) {
+            throw $this->createAccessDeniedException();
+        }
     }
 
     public function newAction(Request $request, $type)
@@ -494,5 +523,13 @@ class LoginBindController extends BaseController
     protected function getAuthService()
     {
         return $this->getBiz()->service('User:AuthService');
+    }
+
+    /**
+     * @return TokenService
+     */
+    protected function getTokenService()
+    {
+        return $this->createService('User:TokenService');
     }
 }

@@ -891,6 +891,16 @@ class MemberServiceImpl extends BaseService implements MemberService
         );
     }
 
+    public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline)
+    {
+        return $this->getMemberDao()->updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline);
+    }
+
+    public function updateMembersDeadlineByClassroomId($classroomId, $deadline)
+    {
+        return $this->getMemberDao()->updateMembersDeadlineByClassroomId($classroomId, $deadline);
+    }
+
     /**
      * @return CourseMemberDao
      */

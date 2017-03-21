@@ -126,46 +126,23 @@ class UserSettingController extends BaseController
 
     public function loginConnectAction(Request $request)
     {
-        $loginConnect = $this->getSettingService()->get('login_bind', array());
-
-        $default = array(
-            'login_limit' => 0,
-            'enabled' => 0,
-            'verify_code' => '',
-            'captcha_enabled' => 0,
-            'temporary_lock_enabled' => 0,
-            'temporary_lock_allowed_times' => 5,
-            'ip_temporary_lock_allowed_times' => 20,
-            'temporary_lock_minutes' => 20,
-        );
-
         $clients = OAuthClientFactory::clients();
-
-        foreach ($clients as $type => $client) {
-            $default["{$type}_enabled"] = 0;
-            $default["{$type}_key"] = '';
-            $default["{$type}_secret"] = '';
-            $default["{$type}_set_fill_account"] = 0;
-            if ($type == 'weixinmob') {
-                $default['weixinmob_mp_secret'] = '';
-            }
-        }
-
+        $default = $this->getDefaultLoginConnect($clients);
+        $loginConnect = $this->getSettingService()->get('login_bind', array());
         $loginConnect = array_merge($default, $loginConnect);
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->isMethod('POST')) {
             $loginConnect = $request->request->all();
             $loginConnect = ArrayToolkit::trim($loginConnect);
-
+            $loginConnect = $this->decideEnabledLoginConnect($loginConnect);
             $this->getSettingService()->set('login_bind', $loginConnect);
-            $this->getLogService()->info('system', 'update_settings', '更新登录设置', $loginConnect);
-            $this->setFlashMessage('success', '登录设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', "更新登录设置", $loginConnect);
             $this->updateWeixinMpFile($loginConnect['weixinmob_mp_secret']);
         }
 
         return $this->render('admin/system/login-connect.html.twig', array(
             'loginConnect' => $loginConnect,
-            'clients' => $clients,
+            'clients'      => $clients
         ));
     }
 
@@ -202,7 +179,7 @@ class UserSettingController extends BaseController
                 $phpwindConfig = $data['phpwind_config'];
                 $configDirectory = $this->getParameter('kernel.root_dir').'/config/';
                 $phpwindConfigPath = $configDirectory.'windid_client_config.php';
-                if (!file_exists($phpwindConfigPath) || !is_writeable($phpwindConfigPath)) {
+                if (!file_exists($phpwindConfigPath) || !is_writable($phpwindConfigPath)) {
                     $this->setFlashMessage('danger', "配置文件{$phpwindConfigPath}不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。");
                     goto response;
                 }
@@ -457,6 +434,64 @@ class UserSettingController extends BaseController
         $this->getSettingService()->set('course', $courseSetting);
 
         return true;
+    }
+
+    private function getDefaultLoginConnect($clients)
+    {
+        $default = array(
+            'login_limit'                     => 0,
+            'enabled'                         => 0,
+            'verify_code'                     => '',
+            'captcha_enabled'                 => 0,
+            'temporary_lock_enabled'          => 0,
+            'temporary_lock_allowed_times'    => 5,
+            'ip_temporary_lock_allowed_times' => 20,
+            'temporary_lock_minutes'          => 20
+        );
+
+        foreach ($clients as $type => $client) {
+            $default["{$type}_enabled"]          = 0;
+            $default["{$type}_key"]              = '';
+            $default["{$type}_secret"]           = '';
+            $default["{$type}_set_fill_account"] = 0;
+            if ($type == 'weixinmob') {
+                $default['weixinmob_mp_secret'] = '';
+            }
+        }
+
+        return $default;
+    }
+
+    private function decideEnabledLoginConnect($loginConnect)
+    {
+        if ($loginConnect['enabled'] == 0) {
+            $loginConnect['weibo_enabled']   = 0;
+            $loginConnect['qq_enabled']    = 0;
+            $loginConnect['renren_enabled']   = 0;
+            $loginConnect['weixinweb_enabled'] = 0;
+            $loginConnect['weixinmob_enabled']    = 0;
+        }
+        //新增第三方登陆方式，加入下列列表计算，以便判断是否关闭第三方登陆功能
+        $loginConnects = ArrayToolkit::parts($loginConnect, array('weibo_enabled', 'qq_enabled', 'renren_enabled', 'weixinweb_enabled', 'weixinmob_enabled'));
+        $sum      = 0;
+        foreach ($loginConnects as $value) {
+            $sum += $value;
+        }
+
+        if ($sum < 1) {
+            if ($loginConnect['enabled'] == 1) {
+                $this->setFlashMessage('danger', '请至少开启一种您需要的第三方登录方式！');
+            }
+            if ($loginConnect['enabled'] == 0) {
+                $this->setFlashMessage('success', '登录设置已保存！');
+            }
+            $loginConnect['enabled'] = 0;
+        } else {
+            $loginConnect['enabled'] = 1;
+            $this->setFlashMessage('success', '登录设置已保存！');
+        }
+
+        return $loginConnect;
     }
 
     protected function getCourseService()

@@ -157,18 +157,8 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 
     protected function purifyHtml($html, $trusted = false)
     {
-        if (empty($html)) {
-            return '';
-        }
-
-        $config = array(
-            'cacheDir' => ServiceKernel::instance()->getParameter('kernel.cache_dir').'/htmlpurifier',
-        );
-
-        $factory = new HTMLPurifierFactory($config);
-        $purifier = $factory->create($trusted);
-
-        return $purifier->purify($html);
+        $htmlHelper = $this->biz['html_helper'];
+        return $htmlHelper->purify($html);
     }
 
     protected function getLock()

@@ -33,9 +33,18 @@ class CashFlowDaoImpl extends GeneralDaoImpl implements CashFlowDao
 
     public function findUserIdsByFlows($type, $createdTime, $orderBy, $start, $limit)
     {
-        $sql = 'SELECT  userId,sum(amount) as amounts FROM `cash_flow` where '.($type ? '`type`=? AND ' : '')." createdTime >= ? group by userId  order by amounts {$orderBy} limit {$start},{$limit} ";
+        $conditions = array(
+            'type' => $type,
+            'startTime' => $createdTime
+        );
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('userId, sum(amount) as amounts')
+            ->groupBy('userId')
+            ->addOrderBy('amounts', $orderBy)
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
 
-        return $this->db()->fetchAll($sql, $type ? array($type, $createdTime) : array($createdTime)) ?: array();
+        return $builder->execute()->fetchAll();
     }
 
     public function countByTypeAndGTECreatedTime($type, $createdTime)

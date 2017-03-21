@@ -69,12 +69,4 @@ class UtilityController extends BaseController
     {
         return $this->createService('Classroom:ClassroomService');
     }
-
-    /**
-     * @return WebExtension
-     */
-    private function getWebExtension()
-    {
-        return $this->container->get('web.twig.extension');
-    }
 }

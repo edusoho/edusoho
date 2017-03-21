@@ -46,12 +46,13 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
 
     public function onClassroomUpdate(Event $event)
     {
-        $fields = $event->getSubject();
-        $userId = $fields['userId'];
-        $classroomId = $fields['classroomId'];
+        $arguments   = $event->getSubject();
+        $userId      = $arguments['userId'];
+        $classroom   = $arguments['classroom'];
+        $fields      = $arguments['fields'];
 
         if (isset($fields['tagIds'])) {
-            $tagOwnerManager = new TagOwnerManager('classroom', $classroomId, $fields['tagIds'], $userId);
+            $tagOwnerManager = new TagOwnerManager('classroom', $classroom['id'], $fields['tagIds'], $userId);
             $tagOwnerManager->update();
         }
     }
