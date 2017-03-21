@@ -2,18 +2,16 @@
 
 namespace ApiBundle\Security;
 
-use Biz\Role\Util\PermissionBuilder;
-use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
 class ApiAuth
 {
-    private $whilelist;
+    private $whiteList;
 
-    public function __construct($whilelist)
+    public function __construct($whiteList)
     {
-        $this->whilelist = $whilelist;
+        $this->whiteList = $whiteList;
     }
 
     public function auth(Request $request)
@@ -31,7 +29,7 @@ class ApiAuth
             $this->decodeKeysign($token);
             return array('allowed_without_user' => true);
         } else {
-            $whiteList = isset($this->whilelist[$request->getMethod()]) ? $this->whilelist[$request->getMethod()] : array();
+            $whiteList = isset($this->whiteList[$request->getMethod()]) ? $this->whiteList[$request->getMethod()] : array();
 
             $path = rtrim($request->getPathInfo(), '/');
 
@@ -149,21 +147,4 @@ class ApiAuth
         return base64_decode(str_replace($find, $replace, $string));
     }
 
-    private function setCurrentUser($user)
-    {
-        $currentUser = new CurrentUser();
-
-        if (empty($user)) {
-            $user = array(
-                'id' => 0,
-                'nickname' => '游客',
-                'currentIp' => '',
-                'roles' => array(),
-            );
-        }
-
-        $currentUser->fromArray($user);
-        $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
-        ServiceKernel::instance()->setCurrentUser($currentUser);
-    }
 }
