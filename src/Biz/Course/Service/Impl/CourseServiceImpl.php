@@ -301,9 +301,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
-        if ($oldCourse['status'] == 'published') {
+        if ($oldCourse['status'] == 'published' || $oldCourse['status'] == 'closed') {
             unset($fields['expiryMode']);
-            // unset($fields['expiryDays']);
+            unset($fields['expiryDays']);
             unset($fields['expiryStartDate']);
             unset($fields['expiryEndDate']);
         }
