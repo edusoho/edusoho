@@ -1519,6 +1519,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->count($conditions);
     }
 
+    public function countCoursesGroupByCourseSetIds($courseSetIds)
+    {
+        return $this->getCourseDao()->countGroupByCourseSetIds($courseSetIds);
+    }
+
     protected function createCourseStrategy($course)
     {
         return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->biz);

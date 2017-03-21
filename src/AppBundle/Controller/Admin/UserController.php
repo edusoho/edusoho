@@ -25,7 +25,7 @@ class UserController extends BaseController
         $conditions = array_merge($conditions, $fields);
         $conditions = $this->fillOrgCode($conditions);
 
-        $userCount = $this->getUserService()->searchUserCount($conditions);
+        $userCount = $this->getUserService()->countUsers($conditions);
         $paginator = new Paginator(
             $this->get('request'),
             $userCount,
@@ -57,7 +57,7 @@ class UserController extends BaseController
                 $conditions['userIds'] = array_merge(ArrayToolkit::column($users, 'userId'), $userIds);
             }
 
-            $userCount = $this->getUserService()->searchUserCount($conditions);
+            $userCount = $this->getUserService()->countUsers($conditions);
             $paginator = new Paginator(
                 $this->get('request'),
                 $userCount,
