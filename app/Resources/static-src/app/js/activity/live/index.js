@@ -46,24 +46,22 @@ class LiveShow {
       let minutes = Math.floor(modulo / 60);
       let seconds = modulo % 60;
       let $replayGuid = Translator.trans('老师们：');
-      $replayGuid += "<br>";
 
       if (activityData.ext.liveProvider == 1) {
-        $replayGuid += "&nbsp;&nbsp;&nbsp;&nbsp;" + Translator.trans('录制直播课程时，需在直播课程间点击');
+        $replayGuid += Translator.trans('录制直播课程时，需在直播课程间点击');
         $replayGuid += "<span style='color:red'>" + Translator.trans('录制面板') + "</span>";
         $replayGuid += Translator.trans('，录制完成后点击');
         $replayGuid += "<span style='color:red'>" + Translator.trans('暂停') + "</span>";
         $replayGuid += Translator.trans('结束录播，录播结束后在');
         $replayGuid += "<span style='color:red'>" + Translator.trans('录播管理') + "</span>";
         $replayGuid += Translator.trans('界面生成回放。');
-        $replayGuid += "<br>";
       } else {
-        $replayGuid += "&nbsp;&nbsp;&nbsp;&nbsp;";
         $replayGuid += Translator.trans('直播平台') + "<span style='color:red'>" + Translator.trans('下课后') + "</span>" + Translator.trans('且') + "<span style='color:red'>" + Translator.trans('直播时间') + "</span>" + Translator.trans('结束后，在课时管理的');
         $replayGuid += "<span style='color:red'>" + Translator.trans('录播管理') + "</span>";
         $replayGuid += Translator.trans('点击生成回放。');
-        $replayGuid += "<br>";
       }
+
+      $replayGuid = `<p>${$replayGuid }</p>`;
 
       let $countDown = that._getCountDown(days, hours, minutes, seconds);
 
@@ -74,9 +72,9 @@ class LiveShow {
           }) + "</p>";
         if (activityData.isTeacher) {
           $countDown = $replayGuid + $countDown;
-          $countDown = "<p>" + $countDown + "&nbsp;<a class='btn btn-primary js-start-live' href='javascript:;' onclick='liveShow.entryLiveRoom()'>" + Translator.trans('进入直播教室') + "</a><br><br></p>";
+          $countDown = "<p>" + $countDown + "<a class='btn btn-primary js-start-live' href='javascript:;' onclick='liveShow.entryLiveRoom()'>" + Translator.trans('进入直播教室') + "</a><br><br></p>";
         } else {
-          $countDown = "<p>" + $countDown + "&nbsp;<a class='btn btn-primary js-start-live' href='javascript:;' onclick='liveShow.entryLiveRoom()'>" + Translator.trans('进入直播教室') + "</a><br><br></p>";
+          $countDown = "<p>" + $countDown + "<a class='btn btn-primary js-start-live' href='javascript:;' onclick='liveShow.entryLiveRoom()'>" + Translator.trans('进入直播教室') + "</a><br><br></p>";
         }
       }
       ;
@@ -94,7 +92,7 @@ class LiveShow {
 
       if (endLeftSeconds <= 0) {
 
-        $liveNotice = "<p style='margin: 10px 0 0 10px; font-weight: bold; font-size: 1.5em;'>" + Translator.trans('直播已经结束') + "</p>";
+        $liveNotice = "<p class='color-danger'>" + Translator.trans('直播已经结束') + "</p>";
         $countDown = "";
 
         if (activityData.replays && activityData.replays.length > 0) {
@@ -104,7 +102,7 @@ class LiveShow {
         }
       }
 
-      let $content = $liveNotice + '<div style="padding:15px 15px 15px 30px; border-bottom:1px dashed #ccc; height: auto;">' + summary + '</div>' + '<br>' + $countDown;
+      let $content = $liveNotice + '<p class="mt10">' + summary + '</p>' + $countDown;
       $("#lesson-live-content").find('.lesson-content-text-body').html($content);
 
       intervalSecond++;
@@ -137,12 +135,12 @@ class LiveShow {
   }
 
   _getCountDown(days, hours, minutes, seconds) {
-    let content = Translator.trans('还剩: ');
-    content += days ? "<strong class='text-info'>" + days + "</strong>" + Translator.trans('天') : "";
-    content += hours ? "<strong class='text-info'>" + hours + "</strong>" + Translator.trans('小时') : "";
-    content += minutes ? "<strong class='text-info'>" + minutes + "</strong>" + Translator.trans('分钟') : "";
-    content += seconds ? "<strong class='text-info'>" + seconds + "</strong>" + Translator.trans('秒') : "";
-
+    let content = '';
+    content += days ?  days + Translator.trans(' 天 ') : "";
+    content += hours ?  hours + Translator.trans(' 小时 ') : "";
+    content += minutes ?  minutes + Translator.trans(' 分钟 ') : "";
+    content += seconds ?  seconds + Translator.trans(' 秒 ') : "";
+    content = `<p>${Translator.trans('倒计时：')}<span class="color-warning">${content}</span></p>`;
     return content;
   }
 }

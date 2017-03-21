@@ -542,7 +542,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         if ($course['expiryMode'] == 'days' && $course['expiryDays'] > 0) {
             $endTime = strtotime(date('Y-m-d', time())); //从第二天零点开始计算
             $deadline = $course['expiryDays'] * 24 * 60 * 60 + $endTime;
-        } elseif ($course['expiryMode'] == 'date') {
+        } elseif ($course['expiryMode'] == 'date' || $course['expiryMode'] == 'end_date') {
             $deadline = $course['expiryEndDate'];
         }
 

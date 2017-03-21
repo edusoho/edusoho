@@ -196,4 +196,6 @@ interface CourseService
     public function convertTasks($tasks, $course);
 
     public function findUserManageCoursesByCourseSetId($userId, $courseSetId);
+
+    public function unlockCourse($courseId);
 }

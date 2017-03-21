@@ -1,4 +1,7 @@
 import QuestionTypeBuilder from '../../testpaper/widget/question-type-builder';
+import {
+  testpaperCardFixed,
+} from 'app/js/testpaper/widget/part';
 
 $.validator.addMethod("score",function(value,element){ 
   let isFloat = /^\d+(\.\d)?$/.test(value);
@@ -26,6 +29,7 @@ class CheckTest
     this._initEvent();
     this._init();
     this._initValidate();
+    testpaperCardFixed();
   }
 
   _initEvent() {
