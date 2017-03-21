@@ -17,7 +17,7 @@ class DefaultController extends BaseController
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
         }
         $isCustomApp = $this->setting('isCustomApp',false);
-        $custom = false;
+        $custom = $isCustomApp;
         if( $isCustomApp === false ){
             //判断是否是定制用户
             $result = CloudAPIFactory::create('leaf')->get('/me');
