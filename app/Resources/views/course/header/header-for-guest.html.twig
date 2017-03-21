@@ -79,19 +79,27 @@
 
         <div class="mb15">
           <span class="course-detail-title ">学习方式</span>
-          {% if course.expiryMode == 'days' %}
+          {% if course.expiryMode == 'days'  %}
             <span class="gray-dark mrl">随到随学</span>
             <span class="gray-dark">
               {% if course.expiryDays %}
-                {{ course.expiryDays }}天
+                共 {{ course.expiryDays }} 天
               {% endif %}
+            </span>
+          {% elseif course.expiryMode == 'end_date' %}
+            <span class="gray-dark mrl">随到随学</span>
+            <span class="gray-dark">
+              {{ course.expiryEndDate|date('Y-m-d ') }}
             </span>
           {% elseif course.expiryMode == 'date' %}
             <span class="gray-dark mrl">周期开班</span>
             <span class="gray-dark">{{ course.expiryStartDate|date('Y-m-d ') }}
               ~
               {{ course.expiryEndDate|date('Y-m-d ') }}</span>
+          {% elseif course.expiryMode == 'forever' %}
+            <span class="gray-dark mrl">永久有效</span>
           {% endif %}
+          
         </div>
 
         {% if course.showServices | default(1) %}
