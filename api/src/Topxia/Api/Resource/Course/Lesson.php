@@ -30,12 +30,12 @@ class Lesson extends BaseResource
         if (!$currentUser->isLogin()) {
             $courseSetting = $this->getSettingService()->get('course');
             if (empty($courseSetting['allowAnonymousPreview']) || !$lesson['free']) {
-                return $this->error('not_login', "您尚未登录，不能查看该课时");
+                return $this->error('not_login', '您尚未登录，不能查看该课时');
             }
         } else {
             if (!$this->getCourseMemberService()->isCourseMember($lesson['courseId'], $currentUser['id'])) {
                 if (!$lesson['free']) {
-                    return $this->error('not_student', "你不是该课程学员，请加入学习");
+                    return $this->error('not_student', '你不是该课程学员，请加入学习');
                 }
             } else {
                 $this->getTaskService()->startTask($lesson['id']);
@@ -55,6 +55,7 @@ class Lesson extends BaseResource
     {
         $lesson['createdTime'] = date('c', $lesson['createdTime']);
         $lesson['updatedTime'] = date('c', $lesson['updatedTime']);
+
         return $lesson;
     }
 
@@ -81,7 +82,7 @@ class Lesson extends BaseResource
         $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
         if (empty($file)) {
-            return $this->error('not_ppt', "文件不存在");
+            return $this->error('not_ppt', '文件不存在');
         }
 
         if ($file['convertStatus'] == 'error') {
@@ -105,7 +106,7 @@ class Lesson extends BaseResource
     {
         $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
         if (empty($file)) {
-            return $this->error('not_document', "文件不存在");
+            return $this->error('not_document', '文件不存在');
         }
 
         if ($file['convertStatus'] == 'error') {
@@ -231,7 +232,7 @@ class Lesson extends BaseResource
 
                         if ($key) {
                             $url = $client->generateFileUrl($key, 3600);
-                            $lesson['mediaUri'] = isset($url["url"]) ? $url['url'] : "";
+                            $lesson['mediaUri'] = isset($url['url']) ? $url['url'] : '';
                         } else {
                             $lesson['mediaUri'] = '';
                         }
@@ -274,10 +275,11 @@ class Lesson extends BaseResource
 
     protected function getHeadLeaderInfo()
     {
-        $storage = $this->getSettingService()->get("storage");
+        $storage = $this->getSettingService()->get('storage');
 
-        if (!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]) {
+        if (!empty($storage) && array_key_exists('video_header', $storage) && $storage['video_header']) {
             $file = $this->getUploadFileService()->getFileByTargetType('headLeader');
+
             return $file;
         }
 
@@ -306,6 +308,7 @@ class Lesson extends BaseResource
         $lesson['userId'] = $res['userId'];
         $lesson['createdTime'] = $res['createdTime'];
         $lesson['updatedTime'] = $res['updatedTime'];
+
         return $lesson;
     }
 
@@ -321,7 +324,7 @@ class Lesson extends BaseResource
 
     protected function getUploadFileService()
     {
-        return $this->instance()->createService('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
     protected function getTestpaperService()
