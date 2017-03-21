@@ -14,7 +14,16 @@ class Article extends BaseResource
         $filteredRes['id'] = $res['id'];
         $filteredRes['title'] = $res['title'];
         $filteredRes['content'] = $this->filterHtml($res['body']);
-        $filteredRes['tags'] = empty($res['tags']) ? array() : ArrayToolkit::column($res['tags'], 'name');
+
+        if (empty($res['tagIds'])) {
+            $filteredRes['tagIds'] = array();
+            $filteredRes['tags'] = array();
+        } else {
+            $filteredRes['tagIds'] = $res['tagIds'];
+            $tags = $this->getTagService()->findTagsByIds($res['tagIds']);
+            $filteredRes['tags'] = ArrayToolkit::column($tags, 'name');
+        }
+
         $filteredRes['category'] = isset($res['category']['name']) ? $res['category']['name'] : '';
         $filteredRes['hitNum'] = $res['hits'];
         $filteredRes['postNum'] = $res['postNum'];
@@ -31,5 +40,13 @@ class Article extends BaseResource
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
+    }
+
+    /**
+     * @return Biz\Taxonomy\Service\TagService
+     */
+    protected function getTagService()
+    {
+        return $this->getBiz()->service('Taxonomy:TagService');
     }
 }
