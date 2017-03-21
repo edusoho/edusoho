@@ -1,6 +1,6 @@
 {% extends 'settings/layout.html.twig' %}
 
-{% block title %}{{'邮箱设置'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'user.settings.email'|trans}} - {{ parent() }}{% endblock %}
 
 {% set script_controller = 'settings/email' %}
 
@@ -8,7 +8,7 @@
 
 {% block main %}
   {% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
-    {% block heading %}{{'邮箱设置'|trans}}{% endblock %}
+    {% block heading %}{{'user.settings.email.page_title'|trans}}{% endblock %}
     {% block body %}
     {% if mailer.enabled == 1 or cloudEmail.status|default(null) == 'enable' %}
       <form id="setting-email-form" class="form-horizontal" method="post" >
@@ -63,7 +63,7 @@
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
     {% else %}
-      <div class="alert alert-danger">{{'管理员尚未设置邮件服务器，不能更改邮箱地址。'|trans}}</div>
+      <div class="alert alert-danger">{{'user.settings.email.warning'|trans}}</div>
     {% endif %}
     {% endblock %}
   {% endembed %}
