@@ -97,6 +97,7 @@ class Video extends Activity
     public function get($id)
     {
         $videoActivity = $this->getVideoActivityDao()->get($id);
+        // Todo 临时容错处理
         try {
             $videoActivity['file'] = $this->getUploadFileService()->getFullFile($videoActivity['mediaId']);
         } catch (CloudAPIIOException $e) {
