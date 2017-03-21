@@ -10,7 +10,7 @@
 const settings = {
   imglimit: 1024,
   fontlimit: 1024,
-  // openModule: ['lib','app','admin','plugin','copy','theme'], 
+  // openModule: ['app','admin','plugin','copy','theme'], 
 };
 
 export default settings;

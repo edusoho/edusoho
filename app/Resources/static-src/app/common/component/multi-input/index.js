@@ -8,7 +8,6 @@ function initItem(dataSourceUi, value) {
   let item = {
     itemId: getRandomString(),
     label: value,
-    seq: dataSourceUi.length + 1,
     outputValue: value
   };
   dataSourceUi.push(item);
@@ -18,20 +17,18 @@ function removeItem(dataSourceUi, itemId) {
   for (let i = 0; i < dataSourceUi.length; i++) {
     if (dataSourceUi[i].itemId == itemId) {
       dataSourceUi.splice(i, 1);
-      i--;
-    } else {
-      dataSourceUi[i].seq = i + 1;
-    }
+      break;
+    } 
   }
 }
 
-function updateItemSeq(data, datas) {
+function updateItemSeq(sortDatas, dataSourceUi) {
   let temps = [];
-  for (let i = 0; i < data.length; i++) {
-    for (let j = 0; j < datas.length; j++) {
-      if (data[i] == datas[j].itemId) {
-        datas[j].seq = i + 1;
-        temps.push(datas[j]);
+  for (let i = 0; i < sortDatas.length; i++) {
+    for (let j = 0; j < dataSourceUi.length; j++) {
+      if (sortDatas[i] == dataSourceUi[j].itemId) {
+        temps.push(dataSourceUi[j]);
+        break;
       }
     }
   }
@@ -50,6 +47,8 @@ export default class MultiInput extends Component {
     this.props.dataSource.map((item, index) => {
       initItem(this.state.dataSourceUi, item);
     })
+
+    console.log({'initItem after':this.state.dataSourceUi})
   }
 
   getChildContext() {

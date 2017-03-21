@@ -52,19 +52,21 @@ export default class InputGroup extends Component {
       resultful: false,
     });
 
-    if (this.context.searchable.enable && value.length > 0 && this.state.searched) {
-      setTimeout(() => {
-        send(this.context.searchable.url + value, searchResult => {
-          if (this.state.itemName.length > 0) {
-            console.log({ 'searchResult': searchResult });
-            this.setState({
-              searchResult: searchResult,
-              resultful: true,
-            });
-          }
-        });
-      }, 100)
+    if (!this.context.searchable.enable || value.length < 0 || !this.state.searched) {
+      return;
     }
+
+    setTimeout(() => {
+      send(this.context.searchable.url + value, searchResult => {
+        if (this.state.itemName.length > 0) {
+          console.log({ 'searchResult': searchResult });
+          this.setState({
+            searchResult: searchResult,
+            resultful: true,
+          });
+        }
+      });
+    }, 100)
   }
 
   handleAdd() {

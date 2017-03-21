@@ -13,7 +13,7 @@ export default class List extends Component {
   componentDidMount() {
     let sortId = `#${this.listId}`;
     this.$list = $(sortId);
-    if (this.props.sortable) {
+    if (this.context.sortable) {
       sortList({
         element: sortId,
         itemSelector: "li",
