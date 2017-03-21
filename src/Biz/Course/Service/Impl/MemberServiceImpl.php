@@ -2,25 +2,25 @@
 
 namespace Biz\Course\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\CloudPlatform\Service\AppService;
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\CourseMemberDao;
-use Biz\Course\Service\CourseNoteService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\MemberService;
-use Biz\Order\Service\OrderService;
+use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
+use Biz\Course\Dao\CourseMemberDao;
+use Biz\Order\Service\OrderService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
+use Codeages\Biz\Framework\Event\Event;
+use Biz\Course\Service\CourseSetService;
+use Biz\CloudPlatform\Service\AppService;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\NotificationService;
-use Biz\User\Service\UserService;
-use Codeages\Biz\Framework\Event\Event;
 use VipPlugin\Biz\Vip\Service\VipService;
+use Biz\Classroom\Service\ClassroomService;
 
 /**
  * Class MemberServiceImpl
@@ -259,10 +259,9 @@ class MemberServiceImpl extends BaseService implements MemberService
     /**
      * 会员到期后、会员被取消后、课程会员等级被提高均为过期
      *
-     * @param $course
-     * @param $member
-     *
-     * @return bool 会员加入的学员是否已到期
+     * @param  $course
+     * @param  $member
+     * @return bool      会员加入的学员是否已到期
      */
     protected function isVipMemberNonExpired($course, $member)
     {
@@ -728,7 +727,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $classroom = $this->getClassroomService()->getClassroomByCourseId($courseId);
 
         if (!empty($classroom)) {
-            $member = $this->getClassroomService()->getClassroomMember($classroom['classroomId'], $userId);
+            $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $userId);
 
             if (!$isCourseStudent && !empty($member) && array_intersect($member['role'], array('student', 'teacher', 'headTeacher', 'assistant'))) {
                 $info = ArrayToolkit::parts($member, array('levelId'));
@@ -830,7 +829,6 @@ class MemberServiceImpl extends BaseService implements MemberService
     /**
      * @param  $userId
      * @param  $courseSetId
-     *
      * @return array
      */
     public function findTeacherMembersByUserIdAndCourseSetId($userId, $courseSetId)
@@ -839,8 +837,7 @@ class MemberServiceImpl extends BaseService implements MemberService
     }
 
     /**
-     * @param int $userId
-     *
+     * @param  int     $userId
      * @return mixed
      */
     public function findStudentMemberByUserId($userId)
