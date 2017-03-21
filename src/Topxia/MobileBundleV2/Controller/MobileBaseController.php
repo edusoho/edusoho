@@ -287,18 +287,9 @@ class MobileBaseController extends BaseController
             $course = $this->convertOldFields($course);
             $course = $this->filledCourseByCourseSet($course, $courseSet);
 
-            $course['smallPicture'] = $container->get('web.twig.app_extension')->courseSetCover(
-                $courseSet,
-                'small'
-            );
-            $course['middlePicture'] = $container->get('web.twig.app_extension')->courseSetCover(
-                $courseSet,
-                'middle'
-            );
-            $course['largePicture'] = $container->get('web.twig.app_extension')->courseSetCover(
-                $courseSet,
-                'large'
-            );
+            $course['smallPicture'] = $container->get('web.twig.extension')->getFurl($courseSet['cover']['small'], 'course.png');
+            $course['middlePicture'] = $container->get('web.twig.extension')->getFurl($courseSet['cover']['middle'], 'course.png');
+            $course['largePicture'] = $container->get('web.twig.extension')->getFurl($courseSet['cover']['large'], 'course.png');
             $course['about'] = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
             $course['createdTime'] = date('c', $course['createdTime']);
 
