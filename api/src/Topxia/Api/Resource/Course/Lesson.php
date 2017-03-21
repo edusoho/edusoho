@@ -17,7 +17,7 @@ class Lesson extends BaseResource
             return $this->error('not_courseId', "ID为#{$id}的课时不存在");
         }
 
-        $lesson = $this->getCourseService()->convertTasks(array($task));
+        $lesson = $this->getCourseService()->convertTasks(array($task), array());
         $lesson = array_shift($lesson);
 
         //直播回放
