@@ -2,33 +2,27 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 
 class MyLearning extends BaseResource
 {
     public function get(Application $app, Request $request)
     {
         $user = $this->getCurrentUser();
-        $beginTime = strtotime("-6 months");
 
-        $conditions = array(
-            'lastLearnTimeGreaterThan' => $beginTime,
-            'userId'          => $user['id']
-        );
-
-        $membersCount = $this->getMemberService()->countMembers($conditions);
-        $members = $this->getMemberService()->searchMembers(
-            $conditions,
-            array('lastLearnTime' => 'DESC', 'id' => 'DESC'),
+        $count = $this->getCourseService()->countUserLearningCourses($user['id']);
+        $courses = $this->getCourseService()->findUserLearningCourses(
+            $user['id'],
             0,
-            $membersCount
+            $count
         );
+        $courses = ArrayToolkit::index($courses, 'id');
 
-        $learningData = $this->buildLearningData($members);
+        $learningData = $this->buildLearningData($courses);
         $learningData = $this->filter($learningData);
 
-        return  $this->wrap($learningData, count($learningData));
+        return $this->wrap($learningData, count($learningData));
     }
 
     public function filter($learningData)
@@ -40,16 +34,22 @@ class MyLearning extends BaseResource
         return $learningData;
     }
 
-    protected function buildLearningData($members)
+    protected function buildLearningData($courses)
     {
         $learningData = array();
+        $user = $this->getCurrentUser();
 
-        if (empty($members)) {
+        if (empty($courses)) {
             return $learningData;
         }
 
-        $courseIds = ArrayToolkit::column($members, 'courseId');
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courseIds = ArrayToolkit::column($courses, 'id');
+        $conditions = array(
+            'courseIds' => $courseIds,
+            'userId' => $user['id'],
+        );
+        $members = $this->getMemberService()->searchMembers($conditions, null, 0, 1000);
+
         $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
 
         $groupMembers = ArrayToolkit::group($members, 'joinedType');
@@ -104,6 +104,6 @@ class MyLearning extends BaseResource
 
     protected function getClassroomService()
     {
-        return $this->createService('Classroom:Classroom:ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 }
