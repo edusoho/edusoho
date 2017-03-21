@@ -16,16 +16,15 @@ class DefaultController extends BaseController
         if (!empty($user['id'])) {
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
         }
-        $isCustomApp = $this->setting('isCustomApp',false);
-        $custom = $isCustomApp;
-        if( $isCustomApp === false ){
+        $custom = $this->setting('isCustomApp',false);
+        if( $custom === false ){
             //判断是否是定制用户
             $result = CloudAPIFactory::create('leaf')->get('/me');
             $custom = $this->isCustom($result);
 
             $this->getSettingService()->set('isCustomApp',$custom);
         }
-        
+        $custom = $this->setting('isCustomApp');
 
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
 
