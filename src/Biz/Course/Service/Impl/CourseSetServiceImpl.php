@@ -610,7 +610,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $this->getCourseService()->publishCourse($classroomRef['courseId']);
         }
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
-        
+
         $this->dispatchEvent('course-set.publish', new Event($courseSet));
     }
 
@@ -620,13 +620,13 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if ($courseSet['status'] != 'published') {
             throw $this->createAccessDeniedException('CourseSet has not bean published');
         }
-        
+
         $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
         if (!empty($classroomRef)) {
             $this->getCourseService()->closeCourse($classroomRef['courseId']);
         }
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'closed'));
-        
+
         $this->dispatchEvent('course-set.closed', new Event($courseSet));
     }
 
@@ -900,8 +900,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $defaultCourse = array(
             'courseSetId' => $created['id'],
             'title' => '默认教学计划',
-            'expiryMode' => 'days',
-            'expiryDays' => 0,
+            'expiryMode' => 'forever',
             'learnMode' => 'freeMode',
             'isDefault' => 1,
             'isFree' => 1,

@@ -173,8 +173,7 @@ class MarkerServiceTest extends BaseTestCase
             'title' => 'test-create-course',
             'courseSetId' => 1,
             'learnMode' => 'freeMode',
-            'expiryMode' => 'days',
-            'expiryDays' => '0',
+            'expiryMode' => 'forever',
             'expiryStartDate' => '',
             'expiryEndDate' => '',
         );
