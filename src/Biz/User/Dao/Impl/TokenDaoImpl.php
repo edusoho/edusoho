@@ -43,7 +43,7 @@ class TokenDaoImpl extends GeneralDaoImpl implements TokenDao
     {
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? and type = ?";
 
-        return $this->db()->fetchAll($sql, array($userId, $type)) ?: null;
+        return $this->db()->fetchAll($sql, array($userId, $type));
     }
 
     public function getByType($type)
