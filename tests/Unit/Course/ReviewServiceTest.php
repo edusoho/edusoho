@@ -167,8 +167,7 @@ class ReviewServiceTest extends BaseTestCase
             'title' => '第一个教学计划',
             'courseSetId' => 1,
             'learnMode' => 'lockMode',
-            'expiryMode' => 'days',
-            'expiryDays' => 0,
+            'expiryMode' => 'forever',
         );
 
         return $this->getCourseService()->createCourse($course);
@@ -180,8 +179,7 @@ class ReviewServiceTest extends BaseTestCase
             'title' => '第二个教学计划',
             'courseSetId' => 1,
             'learnMode' => 'lockMode',
-            'expiryMode' => 'days',
-            'expiryDays' => 0,
+            'expiryMode' => 'forever',
         );
 
         return $this->getCourseService()->createCourse($course);

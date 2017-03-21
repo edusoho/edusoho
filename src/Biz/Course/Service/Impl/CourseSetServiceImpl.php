@@ -901,7 +901,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'courseSetId' => $created['id'],
             'title' => '默认教学计划',
             'expiryMode' => 'forever',
-            'expiryDays' => 0,
             'learnMode' => 'freeMode',
             'isDefault' => 1,
             'isFree' => 1,

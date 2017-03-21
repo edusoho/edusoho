@@ -1496,6 +1496,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
     }
 
+    public function unlockCourse($courseId)
+    {
+        $course = $this->getCourseDao()->update($courseId, array('locked' => 0));
+
+        $this->dispatchEvent('course.update', new Event($course));
+
+        return $course;
+    }
+
     protected function _prepareCourseOrderBy($sort)
     {
         if (is_array($sort)) {

@@ -248,8 +248,7 @@ class ClassroomOrderProcessorTest extends BaseTestCase
             'title' => 'test-create-course',
             'courseSetId' => $courseSet['id'],
             'learnMode' => 'freeMode',
-            'expiryMode' => 'days',
-            'expiryDays' => '0',
+            'expiryMode' => 'forever',
             'expiryStartDate' => '',
             'expiryEndDate' => '',
         );

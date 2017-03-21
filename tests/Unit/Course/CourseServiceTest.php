@@ -10,14 +10,14 @@ use Biz\Course\Service\MemberService;
 
 class CourseServiceTest extends BaseTestCase
 {
+    /** @group current */
     public function testFindCoursesByCourseSetId()
     {
         $course = array(
             'title' => '第一个教学计划',
             'courseSetId' => 1,
             'learnMode' => 'lockMode',
-            'expiryMode' => 'days',
-            'expiryDays' => 0,
+            'expiryMode' => 'forever',
         );
 
         $result = $this->getCourseService()->createCourse($course);
@@ -32,8 +32,7 @@ class CourseServiceTest extends BaseTestCase
             'title' => '第一个教学计划',
             'courseSetId' => 1,
             'learnMode' => 'lockMode',
-            'expiryMode' => 'days',
-            'expiryDays' => 0,
+            'expiryMode' => 'forever',
         );
 
         $result = $this->getCourseService()->createCourse($course);
@@ -49,8 +48,7 @@ class CourseServiceTest extends BaseTestCase
             'title' => '第一个教学计划',
             'courseSetId' => 1,
             'learnMode' => 'lockMode',
-            'expiryMode' => 'days',
-            'expiryDays' => 0,
+            'expiryMode' => 'forever',
         );
 
         $result = $this->getCourseService()->createCourse($course);
@@ -70,8 +68,7 @@ class CourseServiceTest extends BaseTestCase
             'title' => '第一个教学计划',
             'courseSetId' => $courseSet['id'],
             'learnMode' => 'lockMode',
-            'expiryMode' => 'days',
-            'expiryDays' => 0,
+            'expiryMode' => 'forever',
         );
 
         $result = $this->getCourseService()->createCourse($course);
@@ -101,8 +98,7 @@ class CourseServiceTest extends BaseTestCase
             'title' => '第一个教学计划',
             'courseSetId' => 1,
             'learnMode' => 'lockMode',
-            'expiryMode' => 'days',
-            'expiryDays' => 0,
+            'expiryMode' => 'forever',
         );
 
         $this->getCourseService()->createCourse($course);
@@ -119,8 +115,7 @@ class CourseServiceTest extends BaseTestCase
             'title' => '第一个教学计划',
             'courseSetId' => 1,
             'learnMode' => 'lockMode',
-            'expiryMode' => 'days',
-            'expiryDays' => 0,
+            'expiryMode' => 'forever',
         );
 
         $result = $this->getCourseService()->createCourse($course);
@@ -138,8 +133,7 @@ class CourseServiceTest extends BaseTestCase
             'title' => '第一个教学计划',
             'courseSetId' => 1,
             'learnMode' => 'lockMode',
-            'expiryMode' => 'days',
-            'expiryDays' => 0,
+            'expiryMode' => 'forever',
         );
 
         $result = $this->getCourseService()->createCourse($course);
@@ -150,21 +144,18 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals($published['status'], 'published');
     }
 
-    /**
-     * @group current
-     */
     public function testFindLearnedCoursesByCourseIdAndUserId()
     {
         $course1 = array(
             'title' => 'test course 1',
             'courseSetId' => 1,
-            'expiryMode' => 'days',
+            'expiryMode' => 'forever',
             'learnMode' => 'lockMode',
         );
         $course2 = array(
             'title' => 'test course 2',
             'courseSetId' => 1,
-            'expiryMode' => 'days',
+            'expiryMode' => 'forever',
             'learnMode' => 'lockMode',
         );
         $createCourse1 = $this->getCourseService()->createCourse($course1);
@@ -238,8 +229,7 @@ class CourseServiceTest extends BaseTestCase
                 'title'       => '第一个教学计划',
                 'courseSetId' => 1,
                 'learnMode'   => 'lockMode',
-                'expiryMode'  => 'days',
-                'expiryDays'  => 0
+                'expiryMode' => 'forever',
             );
 
             $course = $this->getCourseService()->createCourse($courseFields);
