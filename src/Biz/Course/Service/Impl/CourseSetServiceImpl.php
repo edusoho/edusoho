@@ -613,7 +613,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 $this->getCourseService()->publishCourse($classroomRef['courseId']);
             }
             $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
-           
+
             $this->commit();
 
             $this->dispatchEvent('course-set.publish', new Event($courseSet));
@@ -631,7 +631,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
-        
+
         try {
             $this->beginTransaction();
 
@@ -639,7 +639,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 $this->getCourseService()->closeCourse($classroomRef['courseId']);
             }
             $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'closed'));
-           
+
             $this->commit();
 
             $this->dispatchEvent('course-set.closed', new Event($courseSet));
