@@ -36,10 +36,6 @@ class DefaultController extends BaseController
         $result = CloudAPIFactory::create('leaf')->get('/me');
         $custom = $this->isCustom($result);
 
-        if ($custom) {
-            return $this->createMessageResponse('warning', '非法请求');
-        }
-
         $mobileCode = (empty($result["mobileCode"]) ? 'edusohov3' : $result["mobileCode"]);
 
         if ($this->getWebExtension()->isMicroMessenger()) {
