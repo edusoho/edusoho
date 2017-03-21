@@ -90,11 +90,24 @@ user.settings.security.password_reset.second_tab: 手机号码
 user.settings.security.password_reset.success: 重设密码成功
 user.settings.security.password_reset.success.page_title: 重设密码成功
 user.settings.security.password_reset.success.hint: 新密码设置成功，请重新登录。
+
+user.settings.security.pay_password_set: 设置支付密码
+user.settings.security.pay_password_set.password_forget: 忘记支付密码？
 user.settings.security.pay_password_set.page_title: 安全设置
 user.settings.security.pay_password_set.first_bread_crumbs: 安全设置
 user.settings.security.pay_password_set.second_bread_crumbs: 设置支付密码
 user.settings.security.pay_password_set.new_pay_password: 新支付密码
+user.settings.security.pay_password_set.old_pay_password: 旧的支付密码
 user.settings.security.pay_password_set.confirm_pay_password: 确认支付密码
+user.settings.security.pay_password_find.page_title: 安全设置
+user.settings.security.pay_password_find.first_bread_crumbs: 安全设置
+user.settings.security.pay_password_find.second_bread_crumbs: 找回支付密码
+user.settings.security.pay_password_find.first_tab: 通过安全问题找回
+user.settings.security.pay_password_find.first_tab.question_answer: 安全问题答案
+user.settings.security.pay_password_find.second_tab: 通过手机找回
+user.settings.security.pay_password_find.second_tab.mobile_change: 修改手机号？
+
+
 user.settings.security.questions.answer: 答案
 user.settings.security.questions.page_title: 安全设置
 user.settings.security.questions.first_question: 安全问题1
