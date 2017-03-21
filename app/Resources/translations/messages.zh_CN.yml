@@ -4,6 +4,14 @@ user.fields.pay_password: 支付密码
 user.fileds.microblog: 微博
 user.fileds.wechat: 微信
 user.fileds.qq: QQ
+user.fields.username_label: 用户名
+user.fields.truename_label: 姓名
+user.fields.gender_label: 性别
+user.fields.gender.male: 男
+user.fields.gender.female: 女
+user.fields.idcard_label: 身份证号
+user.fields.mobile_label: 手机号码
+user.fields.company_label: 公司
 
 
 # 表单通用
@@ -24,6 +32,8 @@ user.settings.email_menu: 邮箱设置
 user.settings.teachers_qualification_menu: 教师资格申请
 user.settings.third_part_menu: 第三方登录
 
+
+
 # 个人设置模块-安全设置
 user.settings.security.page_title: 安全设置
 user.settings.security.high_level: 安全等级：高
@@ -35,18 +45,26 @@ user.settings.security.security_questions: 安全问题
 user.settings.security.security_questions_description: 通过设置并且验证安全问题，保护帐号密码安全
 user.settings.security.mobile_bind: 手机绑定
 user.settings.security.mobile_bind_description: 增加账户登录、购买课程时的安全性，同时还可以找回登录密码，支付密码。
-# 个人设置模块-基础信息模块
+
+# 个人设置模块-基础信息
 user.setting.basic_info_realname: 真实姓名
-user.setting.basic_info_company: 公司
 user.setting.basic_info_occupation: 职业
 user.setting.basic_info_rank: 头衔
+user.settings.basic.page_title: 基础信息
 user.setting.basic_info_personal_signature: 个人签名
 user.setting.basic_info_personal_space: 个人空间
+
 # 个人设置模块-实名认证
 user.setting.certification_photo_require: 照片要求
 user.setting.certification_photo_require_description: 证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。图片格式支持jpg、gif、png，每张图片文件大小不能超过2M
 user.setting.idcard_ront_photo: 正面照片
 user.setting.idcard_opposite_photo: 反面照片
+
+# 个人设置模块-头像设置
+user.settings.avatar.page_title: 头像设置
+user.settings.avatar.current_avatar: 当前头像
+user.settings.avatar.upload_hint: 你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过2M。
+user.settings.avatar.upload_submit_btn: 上传新头像
 
 
 
