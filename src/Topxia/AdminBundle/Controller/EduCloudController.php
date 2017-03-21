@@ -1363,6 +1363,10 @@ class EduCloudController extends BaseController
             );
         }
 
+        if (empty($data['status'])) {
+            $data['status'] = 'closed';
+        }
+
         if ($data['status'] == 'waiting') {
             $search_account = $api->get("/me/search_account");
 
