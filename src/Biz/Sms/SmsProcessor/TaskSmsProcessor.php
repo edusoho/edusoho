@@ -49,7 +49,7 @@ class TaskSmsProcessor extends BaseSmsProcessor
         $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], ' \/');
 
         $urls = array();
-        for ($i = 0; $i <= (int)($count / 1000); ++$i) {
+        for ($i = 0; $i <= (int) ($count / 1000); ++$i) {
             if (empty($url)) {
                 $urls[$i] = $router->generate(
                     'edu_cloud_sms_send_callback',

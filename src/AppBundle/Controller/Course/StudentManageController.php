@@ -269,7 +269,7 @@ class StudentManageController extends BaseController
 
         return $this->forward('AppBundle:Student:show', array(
             'request' => $request,
-            'userId' => $userId
+            'userId' => $userId,
         ));
     }
 
@@ -283,7 +283,7 @@ class StudentManageController extends BaseController
 
         return $this->forward('AppBundle:Student:definedShow', array(
             'request' => $request,
-            'userId' => $userId
+            'userId' => $userId,
         ));
     }
 

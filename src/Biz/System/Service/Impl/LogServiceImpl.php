@@ -151,6 +151,7 @@ class LogServiceImpl extends BaseService implements LogService
         if (empty($conditions['level']) || !in_array($conditions['level'], array('info', 'warning', 'error'))) {
             unset($conditions['level']);
         }
+
         return $conditions;
     }
 

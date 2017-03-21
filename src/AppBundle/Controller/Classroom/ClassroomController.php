@@ -187,23 +187,23 @@ class ClassroomController extends BaseController
             }
 
             $deadline = ClassroomToolkit::buildMemberDeadline(array(
-                'expiryMode'  => $classroom['expiryMode'],
-                'expiryValue' => $classroom['expiryValue']
+                'expiryMode' => $classroom['expiryMode'],
+                'expiryValue' => $classroom['expiryValue'],
             ));
 
             $member = array(
-                'id'          => 0,
+                'id' => 0,
                 'classroomId' => $classroom['id'],
-                'userId'      => $user['id'],
-                'orderId'     => 0,
-                'levelId'     => 0,
-                'noteNum'     => 0,
-                'threadNum'   => 0,
-                'remark'      => '',
-                'role'        => array('auditor'),
-                'locked'      => 0,
+                'userId' => $user['id'],
+                'orderId' => 0,
+                'levelId' => 0,
+                'noteNum' => 0,
+                'threadNum' => 0,
+                'remark' => '',
+                'role' => array('auditor'),
+                'locked' => 0,
                 'createdTime' => 0,
-                'deadline'    => $deadline
+                'deadline' => $deadline,
             );
 
             if ($previewAs == 'member') {
@@ -345,7 +345,6 @@ class ClassroomController extends BaseController
 
         return $this->redirect($this->generateUrl('classroom_introductions', array('id' => $classroomId)));
     }
-
 
     public function latestMembersBlockAction($classroom, $count = 20)
     {

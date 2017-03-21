@@ -1,4 +1,5 @@
 <?php
+
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
 use AppBundle\Common\ArrayToolkit;
@@ -405,7 +406,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         $user = $this->controller->getUserByToken($this->request);
-        $userId = empty($user) ? 0 : $user["id"];
+        $userId = empty($user) ? 0 : $user['id'];
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $userId) : null;
         $vipLevels = array();
         if ($this->controller->isinstalledPlugin('Vip') && $this->controller->setting('vip.enabled')) {

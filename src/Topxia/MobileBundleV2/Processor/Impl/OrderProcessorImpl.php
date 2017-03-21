@@ -57,7 +57,8 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
         $receipt = $this->getParam('receipt-data');
         $amount = $this->getParam('amount', 0);
-        $transactionId  = $this->getParam("transaction_id", false);
+        $transactionId = $this->getParam('transaction_id', false);
+
         return $this->requestReceiptData($user['id'], $amount, $receipt, $transactionId, false);
     }
 
@@ -170,7 +171,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
         foreach ($userProfile as $key => $value) {
             if (!in_array($key, array(
-                'truename', 'id', 'mobile', 'qq', 'weixin'))) {
+                'truename', 'id', 'mobile', 'qq', 'weixin', ))) {
                 unset($userProfile[$key]);
             }
         }
@@ -259,7 +260,6 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
         if ($data['status'] == 0) {
             if (isset($data['receipt']) && !empty($data['receipt']['in_app'])) {
-
                 $inApp = false;
 
                 if ($transactionId) {

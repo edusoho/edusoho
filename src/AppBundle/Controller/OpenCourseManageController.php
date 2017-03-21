@@ -425,6 +425,7 @@ class OpenCourseManageController extends BaseController
     {
         $teachers = ArrayToolkit::column($courses, 'teacherIds');
         $userIds = call_user_func_array('array_merge', $teachers);
+
         return $this->getUserService()->findUsersByIds($userIds);
     }
 
@@ -529,9 +530,9 @@ class OpenCourseManageController extends BaseController
                 'users' => $users,
                 'courseSets' => $courseSets,
                 'filter' => $filter,
-                'courseId'  => $id,
+                'courseId' => $id,
                 'title' => $key,
-                'paginator' => $paginator
+                'paginator' => $paginator,
             )
         );
     }

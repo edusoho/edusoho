@@ -35,7 +35,7 @@ class CashFlowDaoImpl extends GeneralDaoImpl implements CashFlowDao
     {
         $conditions = array(
             'type' => $type,
-            'startTime' => $createdTime
+            'startTime' => $createdTime,
         );
         $builder = $this->createQueryBuilder($conditions)
             ->select('userId, sum(amount) as amounts')

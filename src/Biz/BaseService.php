@@ -4,7 +4,6 @@ namespace Biz;
 
 use Monolog\Logger;
 use Biz\User\CurrentUser;
-use Biz\Util\HTMLPurifierFactory;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
@@ -158,6 +157,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     protected function purifyHtml($html, $trusted = false)
     {
         $htmlHelper = $this->biz['html_helper'];
+
         return $htmlHelper->purify($html);
     }
 

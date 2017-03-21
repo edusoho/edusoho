@@ -10,6 +10,7 @@ class OrderProcessorFactory
 {
     /**
      * @param $type
+     *
      * @throws InvalidArgumentException
      *
      * @return OrderProcessor

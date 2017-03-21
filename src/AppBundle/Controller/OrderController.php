@@ -159,13 +159,13 @@ class OrderController extends BaseController
             $shouldPayMoney = (string) ((float) $fields['shouldPayMoney']);
             //价格比较
 
-            if ((int)($totalPrice * 100) !== (int)($fields['totalPrice'] * 100)) {
+            if ((int) ($totalPrice * 100) !== (int) ($fields['totalPrice'] * 100)) {
                 $this->createMessageResponse('error', '实际价格不匹配，不能创建订单!');
             }
 
             //价格比较
 
-            if ((int)($amount * 100) !== (int)($shouldPayMoney * 100)) {
+            if ((int) ($amount * 100) !== (int) ($shouldPayMoney * 100)) {
                 return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
             }
 
@@ -175,7 +175,7 @@ class OrderController extends BaseController
             $maxRate = $coinSetting['cash_model'] == 'deduction' && isset($target['maxRate']) ? $target['maxRate'] : 100;
             $priceCoin = $priceType == 'RMB' ? NumberToolkit::roundUp($totalPrice * $cashRate) : $totalPrice;
 
-            if ($coinEnabled && isset($fields['coinPayAmount']) && ((int)((float) $fields['coinPayAmount'] * $maxRate) > (int)($priceCoin * $maxRate))) {
+            if ($coinEnabled && isset($fields['coinPayAmount']) && ((int) ((float) $fields['coinPayAmount'] * $maxRate) > (int) ($priceCoin * $maxRate))) {
                 return $this->createMessageResponse('error', '虚拟币抵扣超出限定，不能创建订单!');
             }
 

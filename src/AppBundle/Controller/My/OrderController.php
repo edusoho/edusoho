@@ -97,10 +97,10 @@ class OrderController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'userId'));
 
         return $this->render('my-order/detail-modal.html.twig', array(
-            'order'=>$order,
-            'user'=>$user,
-            'orderLogs'=>$orderLogs,
-            'users' => $users
+            'order' => $order,
+            'user' => $user,
+            'orderLogs' => $orderLogs,
+            'users' => $users,
         ));
     }
 
@@ -134,6 +134,7 @@ class OrderController extends BaseController
         $order = $this->tryManageOrder($id);
         $processor = OrderRefundProcessorFactory::create($order['targetType']);
         $processor->cancelRefundOrder($id);
+
         return $this->createJsonResponse(true);
     }
 

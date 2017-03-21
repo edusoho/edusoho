@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\System\Service\SettingService;
@@ -15,25 +16,25 @@ class StudentController extends BaseController
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
-        for ($i = 0, $iMax = count($userFields); $i < $iMax; $i++) {
-            if (strstr($userFields[$i]['fieldName'], "textField")) {
-                $userFields[$i]['type'] = "text";
+        for ($i = 0, $iMax = count($userFields); $i < $iMax; ++$i) {
+            if (strstr($userFields[$i]['fieldName'], 'textField')) {
+                $userFields[$i]['type'] = 'text';
             }
 
-            if (strstr($userFields[$i]['fieldName'], "varcharField")) {
-                $userFields[$i]['type'] = "varchar";
+            if (strstr($userFields[$i]['fieldName'], 'varcharField')) {
+                $userFields[$i]['type'] = 'varchar';
             }
 
-            if (strstr($userFields[$i]['fieldName'], "intField")) {
-                $userFields[$i]['type'] = "int";
+            if (strstr($userFields[$i]['fieldName'], 'intField')) {
+                $userFields[$i]['type'] = 'int';
             }
 
-            if (strstr($userFields[$i]['fieldName'], "floatField")) {
-                $userFields[$i]['type'] = "float";
+            if (strstr($userFields[$i]['fieldName'], 'floatField')) {
+                $userFields[$i]['type'] = 'float';
             }
 
-            if (strstr($userFields[$i]['fieldName'], "dateField")) {
-                $userFields[$i]['type'] = "date";
+            if (strstr($userFields[$i]['fieldName'], 'dateField')) {
+                $userFields[$i]['type'] = 'date';
             }
         }
 
@@ -50,25 +51,25 @@ class StudentController extends BaseController
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
-        for ($i = 0, $iMax = count($userFields); $i < $iMax; $i++) {
-            if (strstr($userFields[$i]['fieldName'], "textField")) {
-                $userFields[$i]['type'] = "text";
+        for ($i = 0, $iMax = count($userFields); $i < $iMax; ++$i) {
+            if (strstr($userFields[$i]['fieldName'], 'textField')) {
+                $userFields[$i]['type'] = 'text';
             }
 
-            if (strstr($userFields[$i]['fieldName'], "varcharField")) {
-                $userFields[$i]['type'] = "varchar";
+            if (strstr($userFields[$i]['fieldName'], 'varcharField')) {
+                $userFields[$i]['type'] = 'varchar';
             }
 
-            if (strstr($userFields[$i]['fieldName'], "intField")) {
-                $userFields[$i]['type'] = "int";
+            if (strstr($userFields[$i]['fieldName'], 'intField')) {
+                $userFields[$i]['type'] = 'int';
             }
 
-            if (strstr($userFields[$i]['fieldName'], "floatField")) {
-                $userFields[$i]['type'] = "float";
+            if (strstr($userFields[$i]['fieldName'], 'floatField')) {
+                $userFields[$i]['type'] = 'float';
             }
 
-            if (strstr($userFields[$i]['fieldName'], "dateField")) {
-                $userFields[$i]['type'] = "date";
+            if (strstr($userFields[$i]['fieldName'], 'dateField')) {
+                $userFields[$i]['type'] = 'date';
             }
         }
 

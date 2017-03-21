@@ -304,7 +304,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
                 if ($courseTryLookAble && !$lessonFree) {
                     $tryLookTime = $course['tryLookTime'];
-                    $options     = array('watchTimeLimit' => $tryLookTime * 60);
+                    $options = array('watchTimeLimit' => $tryLookTime * 60);
                     $lessons[$key] = $this->getVideoLesson($lesson, $options);
                 }
             }
@@ -544,13 +544,13 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                             }
 
                             $token = $this->getTokenService()->makeToken('hls.playlist', array(
-                                'data'     => $this->makeTokenData(array(
-                                    'id'      => $file['id'],
+                                'data' => $this->makeTokenData(array(
+                                    'id' => $file['id'],
                                     'fromApi' => true,
-                                    'options' => $options
+                                    'options' => $options,
                                 )),
-                                'times'    => 2,
-                                'duration' => 3600
+                                'times' => 2,
+                                'duration' => 3600,
                             ));
 
                             $url = array(
@@ -563,7 +563,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                             );
                         } else {
                             $factory = new CloudClientFactory();
-                            $client  = $factory->createClient();
+                            $client = $factory->createClient();
                             $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                         }
 
@@ -767,7 +767,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
     private function filterLessons($lessons, $files)
     {
         return array_map(function ($lesson) use ($files) {
-            $lesson['content'] = "";
+            $lesson['content'] = '';
 
             if (isset($lesson['mediaId'])) {
                 $file = isset($files[$lesson['mediaId']]) ? $files[$lesson['mediaId']] : null;
@@ -786,11 +786,11 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $taskResults = $this->controller->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
         $learnStatuses = array();
         foreach ($taskResults as $result) {
-            if($result['status'] === 'finish'){
+            if ($result['status'] === 'finish') {
                 $status = 'finished';
-            }else if($result['status'] === 'start'){
+            } elseif ($result['status'] === 'start') {
                 $status = 'learning';
-            }else{
+            } else {
                 continue;
             }
             $learnStatuses[$result['courseTaskId']] = $status;

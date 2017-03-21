@@ -284,6 +284,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
             $conditions['startTime'] = 0;
         }
         $sql = "SELECT count(*) FROM {$this->table} WHERE `createdTime`>=? AND `createdTime`< ? AND `userId` = ? AND (not(`payment` in ('none','coin'))) AND `status` = 'paid' ";
+
         return $this->db()->fetchColumn($sql, array(
             $conditions['startTime'],
             $conditions['endTime'],

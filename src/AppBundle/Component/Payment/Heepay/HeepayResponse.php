@@ -3,7 +3,6 @@
 namespace AppBundle\Component\Payment\Heepay;
 
 use AppBundle\Component\Payment\Response;
-use Topxia\Service\Common\ServiceKernel;
 
 class HeepayResponse extends Response
 {

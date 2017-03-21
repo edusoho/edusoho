@@ -5,7 +5,6 @@ namespace AppBundle\Controller\Classroom;
 use AppBundle\Common\ClassroomToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ExportHelp;
-use AppBundle\Twig\WebExtension;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Order\Service\OrderService;
@@ -675,7 +674,7 @@ class ClassroomManageController extends BaseController
 
         return $this->forward('AppBundle:Student:show', array(
             'request' => $request,
-            'userId' => $userId
+            'userId' => $userId,
         ));
     }
 
@@ -689,7 +688,7 @@ class ClassroomManageController extends BaseController
 
         return $this->forward('AppBundle:Student:definedShow', array(
             'request' => $request,
-            'userId' => $userId
+            'userId' => $userId,
         ));
     }
 
@@ -707,24 +706,24 @@ class ClassroomManageController extends BaseController
             }
 
             $deadline = ClassroomToolkit::buildMemberDeadline(array(
-                'expiryMode'  => 'date',
-                'expiryValue' => strtotime($fields['deadline'].' 23:59:59')
+                'expiryMode' => 'date',
+                'expiryValue' => strtotime($fields['deadline'].' 23:59:59'),
             ));
 
             $this->getClassroomService()->updateMemberDeadlineByMemberId($member['id'], array(
-                'deadline' => $deadline
+                'deadline' => $deadline,
             ));
 
             return $this->createJsonResponse(true);
         }
 
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
-        $user      = $this->getUserService()->getUser($userId);
+        $user = $this->getUserService()->getUser($userId);
 
         return $this->render('classroom-manage/member/set-deadline-modal.html.twig', array(
             'classroom' => $classroom,
-            'user'      => $user,
-            'member'    => $member
+            'user' => $user,
+            'member' => $member,
         ));
     }
 
@@ -881,12 +880,12 @@ class ClassroomManageController extends BaseController
 
         $tags = $this->getTagService()->findTagsByOwner(array(
             'ownerType' => 'classroom',
-            'ownerId'   => $id
+            'ownerId' => $id,
         ));
 
-        return $this->render("classroom-manage/set-info.html.twig", array(
+        return $this->render('classroom-manage/set-info.html.twig', array(
             'classroom' => $classroom,
-            'tags'      => ArrayToolkit::column($tags, 'name')
+            'tags' => ArrayToolkit::column($tags, 'name'),
         ));
     }
 

@@ -301,7 +301,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             ));
 
             $this->updateMembersDeadlineByClassroomId($id, $deadline);
-
         }
         if (!empty($tagIds)) {
             $arguments['tagIds'] = $tagIds;
@@ -414,9 +413,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $member = $this->getClassroomMemberDao()->update($memberId, $deadline);
 
         $this->dispatchEvent('classroom.member.deadline.update', new Event(array(
-            'userId'      => $member['userId'],
-            'deadline'    => $deadline['deadline'],
-            'classroomId' => $member['classroomId']
+            'userId' => $member['userId'],
+            'deadline' => $deadline['deadline'],
+            'classroomId' => $member['classroomId'],
         )));
 
         return $this->getClassroomMemberDao()->update($memberId, $deadline);
@@ -436,7 +435,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroomIds = ArrayToolkit::column($members, 'classroomId');
         $classrooms = $this->findClassroomsByIds($classroomIds);
 
-        $shouldNotifyClassrooms       = array();
+        $shouldNotifyClassrooms = array();
         $shouldNotifyClassroomMembers = array();
 
         $currentTime = time();
@@ -445,14 +444,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $member = $members[$classroom['id']];
 
             if ($classroom['expiryValue'] > 0 && $currentTime < $member['deadline'] && (10 * 24 * 60 * 60 + $currentTime) > $member['deadline']) {
-                $shouldNotifyClassrooms[]       = $classroom;
+                $shouldNotifyClassrooms[] = $classroom;
                 $shouldNotifyClassroomMembers[] = $member;
             }
         }
 
         return array($shouldNotifyClassrooms, $shouldNotifyClassroomMembers);
     }
-
 
     public function batchUpdateOrg($classroomIds, $orgCode)
     {
@@ -720,7 +718,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createServiceException('学员不存在，备注失败!');
         }
 
-        $fields = array('remark' => empty($remark) ? '' : (string)$remark);
+        $fields = array('remark' => empty($remark) ? '' : (string) $remark);
 
         return $this->getClassroomMemberDao()->update($member['id'], $fields);
     }
@@ -1623,7 +1621,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $id,
             array(
                 'recommended' => 1,
-                'recommendedSeq' => (int)$number,
+                'recommendedSeq' => (int) $number,
                 'recommendedTime' => time(),
             )
         );

@@ -1,4 +1,5 @@
 <?php
+
 namespace Topxia\Service\Util;
 
 use Topxia\Service\Common\ServiceException;
@@ -28,7 +29,7 @@ class HTMLPurifier
                 '<style type="text/css">',
                 implode("\n", $styles),
                 '</style>',
-                $html
+                $html,
             ));
         }
 
@@ -66,13 +67,13 @@ class HTMLPurifier
         return  new \HTMLPurifier($config);
     }
 
-    private function warmUp ($cacheDir)
+    private function warmUp($cacheDir)
     {
-        if (! is_dir($cacheDir)) {
+        if (!is_dir($cacheDir)) {
             mkdir($cacheDir, 0777, true);
         }
-        
-        if (! is_writeable($cacheDir)) {
+
+        if (!is_writeable($cacheDir)) {
             chmod($cacheDir, 0777);
         }
     }
@@ -82,7 +83,7 @@ class HTMLPurifier
         if (empty($this->config['safeIframeDomains']) || !is_array($this->config['safeIframeDomains'])) {
             return null;
         }
+
         return '%^https?://('.implode('|', $this->config['safeIframeDomains']).')%';
     }
-
 }

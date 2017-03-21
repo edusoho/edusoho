@@ -443,13 +443,14 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
                 unset($result[$key]);
             }
 
-            foreach ($result[$key] as $k => $v){
-                if (empty($v)){
+            foreach ($result[$key] as $k => $v) {
+                if (empty($v)) {
                     unset($result[$key][$k]);
                 }
             }
             sort($result[$key]);
         }
+
         return $result;
     }
 

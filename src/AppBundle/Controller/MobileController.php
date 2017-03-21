@@ -40,6 +40,7 @@ class MobileController extends BaseController
             'mobileSetting' => $mobile,
         ));
     }
+
     public function downloadQrcodeAction(Request $request)
     {
         $code = $request->get('code');

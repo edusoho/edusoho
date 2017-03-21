@@ -28,7 +28,7 @@ class CategoryDaoImpl extends GeneralDaoImpl implements CategoryDao
     public function findByParentId($parentId)
     {
         return $this->findByFields(array(
-            'parentId' => $parentId
+            'parentId' => $parentId,
         ));
     }
 

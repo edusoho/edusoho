@@ -1,6 +1,6 @@
 <?php
-namespace AppBundle\Common;
 
+namespace AppBundle\Common;
 
 class ClassroomToolkit
 {

@@ -39,7 +39,6 @@ class MobileAlipayController extends MobileBaseController
             $this->getLogService()->info('notify', 'check_fail', 'paynotify action');
         }
 
-
         return new Response($status);
     }
 
@@ -50,8 +49,9 @@ class MobileAlipayController extends MobileBaseController
 
     public function payCallBackAction(Request $request, $name)
     {
-        $status   = 'success';
+        $status = 'success';
         $callback = "<script type='text/javascript'>window.location='objc://alipayCallback?".$status."';</script>";
+
         return new Response($callback);
     }
 

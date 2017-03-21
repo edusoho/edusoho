@@ -971,7 +971,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->createService('System:LogService');
     }
 
-
     /**
      * @return CourseSetService
      */

@@ -27,16 +27,16 @@ class LoginBindController extends BaseController
             }
         }
 
-        $inviteCode  = $request->query->get('inviteCode', null);
-        $client      = $this->createOAuthClient($type);
+        $inviteCode = $request->query->get('inviteCode', null);
+        $client = $this->createOAuthClient($type);
 
         $token = $this->getTokenService()->makeToken('login.bind', array(
-            'data'     => array(
+            'data' => array(
                 'type' => $type,
                 'sessionId' => $request->getSession()->getId(),
             ),
-            'times'    => 1,
-            'duration' => 3600
+            'times' => 1,
+            'duration' => 3600,
         ));
 
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type, 'token' => $token['token']), true);
@@ -57,16 +57,16 @@ class LoginBindController extends BaseController
 
     public function callbackAction(Request $request, $type)
     {
-        $code        = $request->query->get('code');
-        $inviteCode  = $request->query->get('inviteCode');
-        $token  = $request->query->get('token', '');
+        $code = $request->query->get('code');
+        $inviteCode = $request->query->get('inviteCode');
+        $token = $request->query->get('token', '');
 
         $this->validateToken($request, $type);
 
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type, 'token' => $token), true);
-        $token       = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
+        $token = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
 
-        $bind        = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
+        $bind = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
 
         $request->getSession()->set('oauth_token', $token);
 
@@ -136,12 +136,12 @@ class LoginBindController extends BaseController
 
     protected function validateToken($request, $type)
     {
-        $token        = $request->query->get('token', '');
+        $token = $request->query->get('token', '');
         if (empty($token)) {
             throw $this->createAccessDeniedException();
         }
 
-        $token    = $this->getTokenService()->verifyToken('login.bind', $token);
+        $token = $this->getTokenService()->verifyToken('login.bind', $token);
         $tokenData = $token['data'];
         if ($tokenData['type'] != $type) {
             throw $this->createAccessDeniedException();

@@ -56,7 +56,7 @@ class TokenDaoImpl extends GeneralDaoImpl implements TokenDao
 
     public function deleteTopsByExpiredTime($expiredTime, $limit)
     {
-        $limit = (int)$limit;
+        $limit = (int) $limit;
         $sql = "DELETE FROM {$this->table} WHERE expiredTime < ? LIMIT {$limit} ";
 
         return $this->db()->executeQuery($sql, array($expiredTime));

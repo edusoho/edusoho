@@ -19,6 +19,7 @@ class QuestionMarkerDaoImpl extends GeneralDaoImpl implements QuestionMarkerDao
     public function merge($sourceMarkerId, $targetMarkerId, $maxSeq)
     {
         $sql = "UPDATE {$this->table} SET seq = seq + ?, markerId = ? WHERE markerId = ? ";
+
         return $this->db()->executeQuery($sql, array($maxSeq, $targetMarkerId, $sourceMarkerId));
     }
 

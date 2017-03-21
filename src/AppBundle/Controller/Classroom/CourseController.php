@@ -210,8 +210,9 @@ class CourseController extends BaseController
 
     /**
      * @param string $previewAs
-     * @param array $member
-     * @param array $classroom
+     * @param array  $member
+     * @param array  $classroom
+     *
      * @return array
      */
     private function previewAsMember($previewAs, $member, $classroom)
@@ -219,29 +220,28 @@ class CourseController extends BaseController
         $user = $this->getCurrentUser();
 
         if (in_array($previewAs, array('guest', 'auditor', 'member'), true)) {
-
             if ($previewAs === 'guest') {
                 return array();
             }
 
             $deadline = ClassroomToolkit::buildMemberDeadline(array(
-                'expiryMode'  => $classroom['expiryMode'],
-                'expiryValue' => $classroom['expiryValue']
+                'expiryMode' => $classroom['expiryMode'],
+                'expiryValue' => $classroom['expiryValue'],
             ));
 
             $member = array(
-                'id'          => 0,
+                'id' => 0,
                 'classroomId' => $classroom['id'],
-                'userId'      => $user['id'],
-                'orderId'     => 0,
-                'levelId'     => 0,
-                'noteNum'     => 0,
-                'threadNum'   => 0,
-                'remark'      => '',
-                'role'        => array('auditor'),
-                'locked'      => 0,
+                'userId' => $user['id'],
+                'orderId' => 0,
+                'levelId' => 0,
+                'noteNum' => 0,
+                'threadNum' => 0,
+                'remark' => '',
+                'role' => array('auditor'),
+                'locked' => 0,
                 'createdTime' => 0,
-                'deadline'    => $deadline
+                'deadline' => $deadline,
             );
 
             if ($previewAs === 'member') {

@@ -24,7 +24,7 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
         }
 
         $marks = str_repeat('?,', count($classroomIds) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE userId = ? AND classroomId IN ({$marks});";
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND classroomId IN ({$marks});";
 
         return $this->db()->fetchAll($sql, array_merge(array($userId), $classroomIds)) ?: array();
     }
@@ -35,7 +35,6 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
             array('userId' => $userId)
         );
     }
-
 
     public function declares()
     {

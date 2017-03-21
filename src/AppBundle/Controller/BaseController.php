@@ -290,6 +290,7 @@ class BaseController extends Controller
         $host = $request->getHost();
         preg_match("/^(http[s]:\/\/)?([^\/]+)/i", $url, $matches);
         $ulrHost = empty($matches[2]) ? '' : $matches[2];
+
         return $host === $ulrHost;
     }
 

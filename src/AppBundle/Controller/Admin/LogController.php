@@ -28,7 +28,7 @@ class LogController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
         $moduleDicts = $this->getLogService()->getLogModuleDicts();
 
-        $module = isset($conditions['module']) ? $conditions['module'] : '' ;
+        $module = isset($conditions['module']) ? $conditions['module'] : '';
         $actions = $this->getLogService()->findLogActionDictsyModule($module);
 
         return $this->render('admin/system/log/logs.html.twig', array(

@@ -97,23 +97,23 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
         $fields['parentId'] = empty($fields['parentId']) ? 0 : $fields['parentId'];
         if (empty($review) || ($review && $fields['parentId'] > 0)) {
             $review = $this->getClassroomReviewDao()->create(array(
-                'userId'      => $fields['userId'],
+                'userId' => $fields['userId'],
                 'classroomId' => $fields['classroomId'],
-                'rating'      => $fields['rating'],
-                'content'     => empty($fields['content']) ? '' : $this->purifyHtml($fields['content']),
-                'title'       => empty($fields['title']) ? '' : $fields['title'],
-                'parentId'    => $fields['parentId'],
+                'rating' => $fields['rating'],
+                'content' => empty($fields['content']) ? '' : $this->purifyHtml($fields['content']),
+                'title' => empty($fields['title']) ? '' : $fields['title'],
+                'parentId' => $fields['parentId'],
                 'createdTime' => time(),
-                'meta'        => array()
+                'meta' => array(),
             ));
             $this->dispatchEvent('classReview.add', new Event($review));
         } else {
             $review = $this->getClassroomReviewDao()->update($review['id'], array(
-                'rating'      => $fields['rating'],
-                'title'       => empty($fields['title']) ? '' : $fields['title'],
-                'content'     => empty($fields['content']) ? '' : $this->purifyHtml($fields['content']),
+                'rating' => $fields['rating'],
+                'title' => empty($fields['title']) ? '' : $fields['title'],
+                'content' => empty($fields['content']) ? '' : $this->purifyHtml($fields['content']),
                 'updatedTime' => time(),
-                'meta'        => array()
+                'meta' => array(),
             ));
         }
 

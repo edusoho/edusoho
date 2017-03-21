@@ -485,7 +485,7 @@ class GroupController extends BaseController
         if (!$user->isLogin()) {
             return $this->createJsonResponse(array(
                 'status' => 'error',
-                'message' => '你好像忘了登录哦？'
+                'message' => '你好像忘了登录哦？',
             ));
         }
 
@@ -494,7 +494,7 @@ class GroupController extends BaseController
         if ($isMember) {
             return $this->createJsonResponse(array(
                 'status' => 'error',
-                'message' => '您已加入小组！'
+                'message' => '您已加入小组！',
             ));
         }
 
@@ -503,12 +503,12 @@ class GroupController extends BaseController
         } catch (\Exception $e) {
             return $this->createJsonResponse(array(
                 'status' => 'error',
-                'message' => '加入小组失败!'
+                'message' => '加入小组失败!',
             ));
         }
 
         return $this->createJsonResponse(array(
-            'status' => 'success'
+            'status' => 'success',
         ));
     }
 
@@ -518,7 +518,7 @@ class GroupController extends BaseController
         $this->getGroupService()->exitGroup($user, $id);
 
         return $this->createJsonResponse(array(
-            'status' => 'success'
+            'status' => 'success',
         ));
     }
 

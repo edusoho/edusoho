@@ -49,9 +49,8 @@ class TagOwnerDaoImpl extends GeneralDaoImpl implements TagOwnerDao
         $marks = str_repeat('?,', count($ownerIds) - 1).'?';
         $sql = "SELECT * FROM {$this->table} WHERE ownerType = ? and ownerId IN ({$marks});";
 
-        return $this->db()->fetchAll($sql, array_merge(array($ownerType), $ownerIds)) ? : array();
+        return $this->db()->fetchAll($sql, array_merge(array($ownerType), $ownerIds)) ?: array();
     }
-
 
     public function updateByOwnerTypeAndOwnerId($ownerType, $ownerId, $fields)
     {

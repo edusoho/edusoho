@@ -43,9 +43,7 @@ class Choice extends BaseQuestion implements TypeInterface
 
     public function filter(array $fields)
     {
-
         if (!empty($fields['choices'])) {
-
             foreach ($fields['choices'] as &$choice) {
                 $choice = $this->biz['html_helper']->purify($choice);
                 unset($choice);

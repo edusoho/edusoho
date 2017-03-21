@@ -92,10 +92,10 @@ class ClassroomThreadController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $thread = $this->getThreadService()->getThread($threadId);
 
-        $user   = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $canManage = $this->canManageThread($user, $classroomId, $thread);
 
-        if (!$canManage){
+        if (!$canManage) {
             return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
 
@@ -154,7 +154,6 @@ class ClassroomThreadController extends BaseController
 
     private function canManageThread($user, $classroomId, $thread)
     {
-
         if ($user->isAdmin()) {
             return true;
         }
@@ -163,8 +162,7 @@ class ClassroomThreadController extends BaseController
             return true;
         }
 
-        if ($this->getClassroomService()->canTakeClassroom($classroomId, true) && $thread['userId'] == $user['id'])
-        {
+        if ($this->getClassroomService()->canTakeClassroom($classroomId, true) && $thread['userId'] == $user['id']) {
             return true;
         }
 

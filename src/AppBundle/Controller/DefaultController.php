@@ -46,16 +46,16 @@ class DefaultController extends BaseController
             return $this->createMessageResponse('warning', '非法请求');
         }
 
-        $mobileCode = (empty($result["mobileCode"]) ? 'edusohov3' : $result["mobileCode"]);
+        $mobileCode = (empty($result['mobileCode']) ? 'edusohov3' : $result['mobileCode']);
 
         if ($this->getWebExtension()->isMicroMessenger()) {
-            $url ="http://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.kuozhi";
+            $url = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.kuozhi';
         } else {
             $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', 'code' => $mobileCode), true);
         }
 
         return $this->render('mobile/app-download.html.twig', array(
-            'url' => $url
+            'url' => $url,
         ));
     }
 

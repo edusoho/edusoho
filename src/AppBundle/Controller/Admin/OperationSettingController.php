@@ -10,13 +10,13 @@ class OperationSettingController extends BaseController
     public function wapSetAction(Request $request)
     {
         $defaultWapSetting = array(
-            'enabled' => 1
+            'enabled' => 1,
         );
 
         if ($request->isMethod('POST')) {
             $wapSetting = $request->request->all();
             $wapSetting = ArrayToolkit::parts($wapSetting, array(
-                'enabled'
+                'enabled',
             ));
 
             $wapSetting = array_merge($defaultWapSetting, $wapSetting);
@@ -27,8 +27,9 @@ class OperationSettingController extends BaseController
 
         $wapSetting = $this->setting('wap', array());
         $wapSetting = array_merge($defaultWapSetting, $wapSetting);
+
         return $this->render('admin/wap/set.html.twig', array(
-            'wapSetting' => $wapSetting
+            'wapSetting' => $wapSetting,
         ));
     }
 

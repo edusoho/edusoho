@@ -37,7 +37,6 @@ class BaseQuestion extends BizAware
             $fields['analysis'] = $this->biz['html_helper']->purify($fields['analysis']);
         }
 
-
         return $fields;
     }
 }

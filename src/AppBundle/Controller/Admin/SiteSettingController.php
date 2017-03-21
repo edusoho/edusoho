@@ -18,7 +18,7 @@ class SiteSettingController extends BaseController
         if ($request->isMethod('POST')) {
             $security = $request->request->all();
 
-            $security['safe_iframe_domains'] = trim(str_replace(array("\r\n", "\n", "\r"), " ", $security['safe_iframe_domains']));
+            $security['safe_iframe_domains'] = trim(str_replace(array("\r\n", "\n", "\r"), ' ', $security['safe_iframe_domains']));
             $security['safe_iframe_domains'] = array_filter(explode(' ', $security['safe_iframe_domains']));
 
             $this->getSettingService()->set('security', $security);
@@ -30,7 +30,6 @@ class SiteSettingController extends BaseController
             'security' => $security,
         ));
     }
-
 
     public function siteAction(Request $request)
     {

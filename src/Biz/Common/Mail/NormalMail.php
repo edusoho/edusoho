@@ -2,8 +2,6 @@
 
 namespace Biz\Common\Mail;
 
-use Topxia\Service\Common\ServiceKernel;
-
 class NormalMail extends Mail
 {
     /**

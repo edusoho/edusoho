@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Course\Event;
 
 use Biz\Classroom\Service\ClassroomService;

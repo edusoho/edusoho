@@ -44,14 +44,16 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
     public function findThreadsByCourseId($courseId, $orderBy, $start, $limit)
     {
         $orderBy = implode(' ', $orderBy);
-        $sql     = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
+
         return $this->db()->fetchAll($sql, array($courseId)) ?: array();
     }
 
     public function findThreadsByCourseIdAndType($courseId, $type, $orderBy, $start, $limit)
     {
         $orderBy = implode(' ', $orderBy);
-        $sql     = "SELECT * FROM {$this->table} WHERE courseId = ? AND type = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND type = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
+
         return $this->db()->fetchAll($sql, array($courseId, $type)) ?: array();
     }
 

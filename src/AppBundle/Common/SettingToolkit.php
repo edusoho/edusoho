@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Common;
 
 use Topxia\Service\Common\ServiceKernel;

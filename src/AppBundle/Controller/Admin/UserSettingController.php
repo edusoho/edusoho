@@ -136,13 +136,13 @@ class UserSettingController extends BaseController
             $loginConnect = ArrayToolkit::trim($loginConnect);
             $loginConnect = $this->decideEnabledLoginConnect($loginConnect);
             $this->getSettingService()->set('login_bind', $loginConnect);
-            $this->getLogService()->info('system', 'update_settings', "更新登录设置", $loginConnect);
+            $this->getLogService()->info('system', 'update_settings', '更新登录设置', $loginConnect);
             $this->updateWeixinMpFile($loginConnect['weixinmob_mp_secret']);
         }
 
         return $this->render('admin/system/login-connect.html.twig', array(
             'loginConnect' => $loginConnect,
-            'clients'      => $clients
+            'clients' => $clients,
         ));
     }
 
@@ -439,20 +439,20 @@ class UserSettingController extends BaseController
     private function getDefaultLoginConnect($clients)
     {
         $default = array(
-            'login_limit'                     => 0,
-            'enabled'                         => 0,
-            'verify_code'                     => '',
-            'captcha_enabled'                 => 0,
-            'temporary_lock_enabled'          => 0,
-            'temporary_lock_allowed_times'    => 5,
+            'login_limit' => 0,
+            'enabled' => 0,
+            'verify_code' => '',
+            'captcha_enabled' => 0,
+            'temporary_lock_enabled' => 0,
+            'temporary_lock_allowed_times' => 5,
             'ip_temporary_lock_allowed_times' => 20,
-            'temporary_lock_minutes'          => 20
+            'temporary_lock_minutes' => 20,
         );
 
         foreach ($clients as $type => $client) {
-            $default["{$type}_enabled"]          = 0;
-            $default["{$type}_key"]              = '';
-            $default["{$type}_secret"]           = '';
+            $default["{$type}_enabled"] = 0;
+            $default["{$type}_key"] = '';
+            $default["{$type}_secret"] = '';
             $default["{$type}_set_fill_account"] = 0;
             if ($type == 'weixinmob') {
                 $default['weixinmob_mp_secret'] = '';
@@ -465,15 +465,15 @@ class UserSettingController extends BaseController
     private function decideEnabledLoginConnect($loginConnect)
     {
         if ($loginConnect['enabled'] == 0) {
-            $loginConnect['weibo_enabled']   = 0;
-            $loginConnect['qq_enabled']    = 0;
-            $loginConnect['renren_enabled']   = 0;
+            $loginConnect['weibo_enabled'] = 0;
+            $loginConnect['qq_enabled'] = 0;
+            $loginConnect['renren_enabled'] = 0;
             $loginConnect['weixinweb_enabled'] = 0;
-            $loginConnect['weixinmob_enabled']    = 0;
+            $loginConnect['weixinmob_enabled'] = 0;
         }
         //新增第三方登陆方式，加入下列列表计算，以便判断是否关闭第三方登陆功能
         $loginConnects = ArrayToolkit::parts($loginConnect, array('weibo_enabled', 'qq_enabled', 'renren_enabled', 'weixinweb_enabled', 'weixinmob_enabled'));
-        $sum      = 0;
+        $sum = 0;
         foreach ($loginConnects as $value) {
             $sum += $value;
         }
