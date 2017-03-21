@@ -7,6 +7,7 @@ use Biz\Activity\Dao\VideoActivityDao;
 use Biz\File\Service\UploadFileService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\ActivityLearnLogService;
+use Biz\CloudPlatform\Client\CloudAPIIOException;
 
 class Video extends Activity
 {
@@ -96,7 +97,12 @@ class Video extends Activity
     public function get($id)
     {
         $videoActivity = $this->getVideoActivityDao()->get($id);
-        $videoActivity['file'] = $this->getUploadFileService()->getFullFile($videoActivity['mediaId']);
+        // Todo 临时容错处理
+        try {
+            $videoActivity['file'] = $this->getUploadFileService()->getFullFile($videoActivity['mediaId']);
+        } catch (CloudAPIIOException $e) {
+            return array();
+        }
 
         return $videoActivity;
     }
