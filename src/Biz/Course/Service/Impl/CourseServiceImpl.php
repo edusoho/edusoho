@@ -202,11 +202,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             array(
                 'title',
                 'courseSetId',
-                // 'learnMode', //一旦创建，学习模式不允许变更
-//              'expiryMode',
-//              'expiryDays',
-//              'expiryStartDate',
-//              'expiryEndDate',
                 'summary',
                 'goals',
                 'audiences',
@@ -216,15 +211,6 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'locked',
             )
         );
-
-        // $existCourse = $this->getCourse($id);
-        // if (isset($existCourse['status']) && $existCourse['status'] === 'published') {
-
-        // } elseif (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode'))) {
-        //     throw $this->createInvalidArgumentException('Lack of required fields');
-        // } else {
-        //     $fields = $this->validateExpiryMode($fields);
-        // }
 
         $course = $this->getCourseDao()->update($id, $fields);
         $this->dispatchEvent('course.update', new Event($course));
@@ -301,9 +287,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
-        if ($oldCourse['status'] == 'published') {
+        if ($oldCourse['status'] == 'published' || $oldCourse['status'] == 'closed') {
             unset($fields['expiryMode']);
-            // unset($fields['expiryDays']);
+            unset($fields['expiryDays']);
             unset($fields['expiryStartDate']);
             unset($fields['expiryEndDate']);
         }
@@ -647,11 +633,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($user->hasPermission('admin_course_manage')) {
             return true;
         }
-
-        //TODO 未实现
-        //        if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
-        //            return true;
-        //        }
 
         $member = $this->getMemberDao()->getByCourseIdAndUserId($course['id'], $user['id']);
 
@@ -1513,6 +1494,15 @@ class CourseServiceImpl extends BaseService implements CourseService
             $userId,
             $courseType
         );
+    }
+
+    public function unlockCourse($courseId)
+    {
+        $course = $this->getCourseDao()->update($courseId, array('locked' => 0));
+
+        $this->dispatchEvent('course.update', new Event($course));
+
+        return $course;
     }
 
     protected function _prepareCourseOrderBy($sort)

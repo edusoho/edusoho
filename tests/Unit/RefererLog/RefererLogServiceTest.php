@@ -198,7 +198,7 @@ class RefererLogServiceTest extends BaseTestCase
             'title' => 'online test course 1',
             'type' => 'normal',
             'courseSetId' => '1',
-            'expiryMode' => 'days',
+            'expiryMode' => 'forever',
             'learnMode' => 'freeMode',
         );
 

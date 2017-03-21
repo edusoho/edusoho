@@ -398,7 +398,7 @@ class CourseManageController extends BaseController
                 unset($data['buyExpiryTime']);
             }
 
-            if ($data['expiryMode'] != 'days') {
+            if (empty($data['expiryMode']) || $data['expiryMode'] != 'days') {
                 unset($data['deadlineType']);
             }
             if (!empty($data['deadlineType'])) {
