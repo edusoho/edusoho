@@ -847,11 +847,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('error', $e->getMessage());
         }
 
-        $message = array('userId' => $user['id'],
-            'userName' => $user['nickname'],
-            'opration' => 'follow');
-        $this->controller->getNotificationService()->notify($toId, 'user-follow', $message);
-
         return $result;
     }
 

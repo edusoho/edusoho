@@ -1540,6 +1540,11 @@ class UserServiceImpl extends BaseService implements UserService
             'pair' => $pair,
         ));
         $this->getFriendDao()->updateByFromIdAndToId($fromId, $toId, array('pair' => $pair));
+
+        if ($isFollowed) {
+            $this->getFriendDao()->updateByFromIdAndToId($toId, $fromId, array('pair' => $pair));
+        }
+
         $this->dispatchEvent('user.follow', new Event($friend));
 
         return $friend;
@@ -1667,14 +1672,17 @@ class UserServiceImpl extends BaseService implements UserService
 
         $lastestApproval = $this->getUserApprovalDao()->getLastestByUserIdAndStatus($user['id'], 'approving');
 
-        $this->getProfileDao()->update($userId, array(
-            'truename' => $lastestApproval['truename'],
-            'idcard' => $lastestApproval['idcard'],
-        )
+        $this->getProfileDao()->update(
+            $userId,
+            array(
+                'truename' => $lastestApproval['truename'],
+                'idcard' => $lastestApproval['idcard'],
+            )
         );
 
         $currentUser = $this->getCurrentUser();
-        $this->getUserApprovalDao()->update($lastestApproval['id'],
+        $this->getUserApprovalDao()->update(
+            $lastestApproval['id'],
             array(
                 'userId' => $user['id'],
                 'note' => $note,
@@ -1709,7 +1717,8 @@ class UserServiceImpl extends BaseService implements UserService
 
         $lastestApproval = $this->getUserApprovalDao()->getLastestByUserIdAndStatus($user['id'], 'approved');
         $currentUser = $this->getCurrentUser();
-        $this->getUserApprovalDao()->update($lastestApproval['id'],
+        $this->getUserApprovalDao()->update(
+            $lastestApproval['id'],
             array(
                 'userId' => $user['id'],
                 'note' => $note,
