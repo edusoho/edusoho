@@ -21,6 +21,7 @@ form.btn.set: 设置
 form.btn.reset: 重置
 form.btn.view: 查看
 form.btn.bind: 绑定
+form.btn.cancelbind: 取消绑定
 form.btn.submit: 提交
 form.btn.login: 登录
 form.btn.save: 保存
@@ -28,6 +29,7 @@ form.btn.reset_password: 重设密码
 form.btn.save.submiting_text: 正在保存...
 form.btn.submit.submiting_text: 正在提交...
 form.hasbind: 已绑定
+form.notbind: 未绑定
 form.gotobind: 前去绑定
 form.notbindmobile: 还没绑定手机号码，
 form.public: 公开
@@ -44,7 +46,7 @@ user.settings.certification_menu: 实名认证
 user.settings.security_menu: 安全设置
 user.settings.email_menu: 邮箱设置
 user.settings.teachers_qualification_menu: 教师资格申请
-user.settings.third_part_menu: 第三方登录
+user.settings.oauth_menu: 第三方登录
 
 # 个人设置模块-安全设置
 user.settings.security.sms_code: 短信验证码
@@ -174,6 +176,10 @@ user.settings.email.new_email: 新登录邮箱
 user.settings.email.password: 网站登录密码
 user.settings.email.verify_password_warning: 设置新的登录邮箱，需要校验当前的网站登录密码
 
+# 个人设置模块-第三方登录
+user.settings.oauth: 第三方登陆
+user.settings.oauth.page_title: 第三方登陆
+user.settings.oauth.weixin: 微信登录
 
 
 

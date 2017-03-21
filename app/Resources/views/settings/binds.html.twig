@@ -1,6 +1,6 @@
 {% extends 'settings/layout.html.twig' %}
 
-{% block title %} {{'第三方登录'|trans}} - {{ parent() }}{% endblock %}
+{% block title %} {{'user.settings.oauth'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'binds' %}
 
@@ -8,7 +8,7 @@
 
 {% block main %}
   {% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
-    {% block heading %}{{'第三方登录'|trans}}{% endblock %}
+    {% block heading %}{{'user.settings.oauth.page_title'|trans}}{% endblock %}
     {% block body %}
       {{ web_macro.flash_messages() }}
        <ul class="media-list">
@@ -20,16 +20,16 @@
               {% endif %}
               <div class="media-body">
                 {% if client.status|default(null) == 'bind' %}
-                  <a href="{{ path('settings_binds_unbind', {'type':type}) }}" class="unbind btn btn-default pull-right">{{'取消绑定'|trans}}</a>
+                  <a href="{{ path('settings_binds_unbind', {'type':type}) }}" class="unbind btn btn-default pull-right">{{'form.btn.cancelbind'|trans}}</a>
                 {% else %}
-                  <a href="{{ path('settings_binds_bind', {'type':type}) }}" class="bind btn btn-primary pull-right">{{'绑定'|trans}}</a>
+                  <a href="{{ path('settings_binds_bind', {'type':type}) }}" class="bind btn btn-primary pull-right">{{'form.btn.bind'|trans}}</a>
                 {% endif %}
 
-                <div>{% if type == 'weixinweb'%}{{'微信登录'|trans}}{% else %}{{ client.name }}{% endif %}</div>
+                <div>{% if type == 'weixinweb'%}{{'user.settings.oauth.weixin'|trans}}{% else %}{{ client.name }}{% endif %}</div>
                 {% if client.status|default(null) == 'bind' %}
-                  <div class="color-success">{{'已绑定'|trans}}</div>
+                  <div class="color-success">{{'form.hasbind'|trans}}</div>
                 {% else %}
-                  <div class="color-gray">{{'未绑定'|trans}}</div>
+                  <div class="color-gray">{{'form.notbind'|trans}}</div>
                 {% endif %}
 
               </div>
