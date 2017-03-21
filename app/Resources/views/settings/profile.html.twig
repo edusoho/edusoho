@@ -1,6 +1,6 @@
 {% extends 'settings/layout.html.twig' %}
 
-{% block title %}{{'基础信息'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'user.setting.basic_info'|trans}} - {{ parent() }}{% endblock %}
 
 {% set script_controller = 'settings/profile' %}
 {% set side_nav = 'profile' %}
@@ -8,26 +8,26 @@
 {% block main %}
 
 	{% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
-		{% block heading %}{{'user.settings.basic.page_title'|trans}}{% endblock %}
+		{% block heading %}{{'user.settings.basic_info.page_title'|trans}}{% endblock %}
 		{% block body %}
 
 			{% if fromCourse %}
-			<div class="alert alert-info">{{'设置头衔、自我介绍并保存后，即可开始创建课程。'|trans}}</div>
+			<div class="alert alert-info">{{'user.setting.basic_info.alter_description'|trans}}</div>
 			{% endif %}
 
 			<form id="user-profile-form" class="form-horizontal" method="post">
 				{{ web_macro.flash_messages() }}
 
 					<div class="form-group">
-					<label class="col-md-2 control-label" >{{'用户名'|trans}}</label>
+					<label class="col-md-2 control-label" >{{'user.fields.username_label'|trans}}</label>
 						<div class="col-md-7 controls">
 						<div class="control-text">
-							{{app.user.nickname}} {% if setting('user_partner.nickname_enabled') %} <a href="{{ path('setting_nickname') }}">{{'修改'|trans}}</a> {% endif %}</div>
+							{{app.user.nickname}} {% if setting('user_partner.nickname_enabled') %} <a href="{{ path('setting_nickname') }}">{{'form.btn.modify'|trans}}</a> {% endif %}</div>
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="profile_truename">{{'真实姓名'|trans}}</label>
+						<label class="col-md-2 control-label" for="profile_truename">{{'user.fileds.realname'|trans}}</label>
 						{% if profile.truename and (app.user.approvalStatus == 'approved' or app.user.approvalStatus == 'approving') %}
               <div class="control-text">{{ profile.truename }}</div>
             {% else %}
@@ -39,19 +39,19 @@
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label">{{'性别'|trans}}</label>
+						<label class="col-md-2 control-label">{{'user.fields.gender_label'|trans}}</label>
 						<div class="col-md-7 controls radios">
 							<div id="profile_gender">
 								<input type="radio" id="profile_gender_0" name="profile[gender]" required="required" value="male" {% if profile.gender == 'male' %}checked="checked"{% endif %}>
-								<label for="profile_gender_0" class="required">{{'男'|trans}}</label>
+								<label for="profile_gender_0" class="required">{{'user.fields.gender.male'|trans}}</label>
 								<input type="radio" id="profile_gender_1" name="profile[gender]" required="required" value="female" {% if profile.gender == 'female' %}checked="checked"{% endif %}>
-								<label for="profile_gender_1" class="required">{{'女'|trans}}</label>
+								<label for="profile_gender_1" class="required">{{'user.fields.gender.female'|trans}}</label>
 							</div>
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="profile_idcard">{{'身份证号码'|trans}}</label>
+						<label class="col-md-2 control-label" for="profile_idcard">{{'user.fields.idcard_label'|trans}}</label>
 						{% if profile.idcard and (app.user.approvalStatus == 'approved' or app.user.approvalStatus == 'approving') %}
               <div class="col-md-7 controls">
                 <div class="control-text">{{ blur_idcard_number(profile.idcard) }}</div>
@@ -66,17 +66,17 @@
 
 					{% if (user.verifiedMobile|length) > 0 %}
 						<div class="form-group">
-							<label for="profile_mobile" class="col-md-2 control-label">{{'手机号码'|trans}}</label>
+							<label for="profile_mobile" class="col-md-2 control-label">{{'user.fields.mobile_label'|trans}}</label>
 							<div class="col-md-7 controls">
 								<div class="control-text">
 									{{ blur_phone_number(user.verifiedMobile|default('')) }}
-									<small class="color-success">({{'已绑定'|trans}})</small>
+									<small class="color-success">({{'form.hasbind'|trans}})</small>
 								</div>
 							</div>
 						</div>
 					{% else %}
 						<div class="form-group">
-							<label for="profile_mobile" class="col-md-2 control-label">{{'手机号码'|trans}}</label>
+							<label for="profile_mobile" class="col-md-2 control-label">{{'user.fields.mobile_label'|trans}}</label>
 							<div class="col-md-7 controls">
 								<input type="text" id="profile_mobile" name="profile[mobile]" class="form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile.mobile|default('') }}">
 
@@ -87,7 +87,7 @@
 							<div class="help-block">
 								<label class="col-md-2 control-label"></label>
 								<p class="text-warning">
-								{{'还没绑定手机号码，'|trans}}<strong><a href="{{path('settings_bind_mobile')}}">{{'前去绑定'|trans}}</a>{{'。'|trans}}
+								{{'form.notbindmobile'|trans}}<strong><a href="{{path('settings_bind_mobile')}}">{{'form.gotobind'|trans}}</a>{{'。'|trans}}
 								</strong>
 								</p>
 							</div>
@@ -95,7 +95,7 @@
 					{% endif %}
 
 					<div class="form-group form-forIam-group form-notStudent-group">
-						<label class="col-md-2 control-label">{{'公司'|trans}}</label>
+						<label class="col-md-2 control-label">{{'user.fields.company_label'|trans}}</label>
 						<div class="col-md-7 controls">
 							<input type="text" id="profile_company" name="profile[company]" class="form-control" value="{{ profile.company|default('') }}">
 							<div class="help-block" style="display:none;"></div>
@@ -103,7 +103,7 @@
 					</div>
 
 					<div class="form-group form-forIam-group form-notStudent-group">
-						<label class="col-md-2 control-label">{{'职业'|trans}}</label>
+						<label class="col-md-2 control-label">{{'user.setting.basic_info.occupation'|trans}}</label>
 						<div class="col-md-7 controls">
 							<input type="text" id="profile_job" name="profile[job]" class="form-control" value="{{ profile.job|default('') }}">
 							<div class="help-block" style="display:none;"></div>
@@ -111,7 +111,7 @@
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label">{{'头衔'|trans}}</label>
+						<label class="col-md-2 control-label">{{'user.setting.basic_info.rank'|trans}}</label>
 						<div class="col-md-7 controls">
 							<input type="text" id="profile_title" name="profile[title]" class="form-control" value="{{ profile.title|default('') }}">
 							<div class="help-block" style="display:none;"></div>
@@ -119,7 +119,7 @@
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label">{{'个人签名'|trans}}</label>
+						<label class="col-md-2 control-label">{{'user.setting.basic_info.personal_signature'|trans}}</label>
 						<div class="col-md-7 controls">
 							<textarea type="text" rows="4" maxlength="80" id="profile_signature" name="profile[signature]" class="form-control">{{ profile.signature|default('') }}</textarea>
 							<div class="help-block" style="display:none;"></div>
@@ -127,14 +127,14 @@
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label">{{'自我介绍'|trans}}</label>
+						<label class="col-md-2 control-label">{{'user.setting.basic_info.self_introduction'|trans}}</label>
 						<div class="col-md-7 controls">
 							<textarea name="profile[about]" rows="10" id="profile_about" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('user')}) }}">{{ profile.about|default('') }}</textarea>
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label">{{'个人空间'|trans}}</label>
+						<label class="col-md-2 control-label">{{'user.setting.basic_info.personal_space'|trans}}</label>
 						<div class="col-md-7 controls">
 							<input type="text" id="profile_site" name="profile[site]" class="form-control" data-widget-cid="widget-4" data-explain="" value="{{ profile.site|default('') }}">
 							<div class="help-block" style="display:none;"></div>
@@ -143,31 +143,31 @@
 
 					<div class="form-group">
 						<div class="col-md-2 control-label">
-							<label for="weibo">{{'微博'|trans}}</label>
+							<label for="weibo">{{'user.fileds.microblog'|trans}}</label>
 						</div>
 						<div class="col-md-7 controls">
 							<input type="text" id="weibo" name="profile[weibo]" class="form-control" data-widget-cid="widget-3" data-explain="" value="{{ profile.weibo|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
-						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isWeiboPublic]" {% if profile.isWeiboPublic %}checked="checked" {% endif %}/>{{'公开'|trans}}</div>
+						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isWeiboPublic]" {% if profile.isWeiboPublic %}checked="checked" {% endif %}/>{{'form.public'|trans}}</div>
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label">{{'微信'|trans}}</label>
+						<label class="col-md-2 control-label">{{'user.fileds.wechat'|trans}}</label>
 						<div class="col-md-7 controls">
 							<input type="text" id="profile_weixin" name="profile[weixin]" class="form-control" value="{{ profile.weixin|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
-						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isWeixinPublic]" {% if profile.isWeixinPublic %}checked="checked" {% endif %}/>{{'公开'|trans}}</div>
+						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isWeixinPublic]" {% if profile.isWeixinPublic %}checked="checked" {% endif %}/>{{'form.public'|trans}}</div>
 					</div>
 
 					<div class="form-group">
-						<label for="profile_qq" class="col-md-2 control-label">QQ</label>
+						<label for="profile_qq" class="col-md-2 control-label">{{'user.fileds.qq'|trans}}</label>
 						<div class="col-md-7 controls">
 							<input type="text" id="profile_qq" name="profile[qq]" class="form-control" data-widget-cid="widget-2" data-explain="" value="{{ profile.qq|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
-						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isQQPublic]" {% if profile.isQQPublic %}checked="checked"{% endif %}/>{{'公开'|trans}}</div>
+						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isQQPublic]" {% if profile.isQQPublic %}checked="checked"{% endif %}/>{{'form.public'|trans}}</div>
 					</div>
 
 
@@ -187,7 +187,7 @@
 					<div class="form-group">
 						<label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
 						<div class="col-md-7 controls">
-							<input type="text" id="{{field.fieldName}}" placeholder="{{'最大值为9位整数'|trans}}" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control"  value="{{ profile[field.fieldName]|default('') }}">
+							<input type="text" id="{{field.fieldName}}" placeholder="{{'form.placeholder.max_int'|trans}}" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control"  value="{{ profile[field.fieldName]|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
 					</div>
@@ -195,7 +195,7 @@
 					<div class="form-group">
 						<label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
 						<div class="col-md-7 controls">
-							<input type="text" id="{{field.fieldName}}" placeholder="{{'保留到2位小数'|trans}}" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control"  value="{{ profile[field.fieldName]|default('') }}">
+							<input type="text" id="{{field.fieldName}}" placeholder="{{'form.placeholer.save_two_decimal'|trans}}" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control"  value="{{ profile[field.fieldName]|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
 					</div>
@@ -221,7 +221,7 @@
 
 					<div class="row">
 						<div class="col-md-7 col-md-offset-2">
-							<button id="profile-save-btn" data-submiting-text="{{'正在保存'|trans}}" type="submit" class="btn btn-primary">{{'保存'|trans}}</button>
+							<button id="profile-save-btn" data-submiting-text="{{'form.btn.save.submiting_text'|trans}}" type="submit" class="btn btn-primary">{{'form.btn.save'|trans}}</button>
 						</div>
 					</div>
 

@@ -12,6 +12,7 @@ user.fields.gender.female: 女
 user.fields.idcard_label: 身份证号
 user.fields.mobile_label: 手机号码
 user.fields.company_label: 公司
+user.fileds.realname: 真实姓名
 
 
 # 表单通用
@@ -22,9 +23,17 @@ form.btn.view: 查看
 form.btn.bind: 绑定
 form.btn.submit: 提交
 form.btn.login: 登录
+form.btn.save: 保存
 form.btn.reset_password: 重设密码
 form.btn.save.submiting_text: 正在保存...
 form.btn.submit.submiting_text: 正在提交...
+form.hasbind: 已绑定
+form.gotobind: 前去绑定
+form.notbindmobile: 还没绑定手机号码，
+form.public: 公开
+form.placeholder.max_int: 最大值为9位整数
+form.placeholer.save_two_decimal: 保留到2位小数
+form.hassubmit: 已提交
 
 # 个人设置模块
 user.settings: 个人设置
@@ -104,24 +113,40 @@ user.settings.security.mobile_bind.first_bread_crumbs: 安全设置
 user.settings.security.mobile_bind.second_bread_crumbs: 手机号码绑定
 
 # 个人设置模块-基础信息
-user.setting.basic_info_realname: 真实姓名
-user.setting.basic_info_occupation: 职业
-user.setting.basic_info_rank: 头衔
-user.settings.basic.page_title: 基础信息
-user.setting.basic_info_personal_signature: 个人签名
-user.setting.basic_info_personal_space: 个人空间
+user.setting.basic_info: 基础信息
+user.settings.basic_info.page_title: 基础信息
+user.setting.basic_info.occupation: 职业
+user.setting.basic_info.rank: 头衔
+user.setting.basic_info.personal_signature: 个人签名
+user.setting.basic_info.personal_space: 个人空间
+user.setting.basic_info.self_introduction: 自我介绍
+user.setting.basic_info.alter_description: 设置头衔、自我介绍并保存后，即可开始创建课程
 
 # 个人设置模块-实名认证
+user.settings.certification: 实名认证
+user.settings.certification.page_title: 实名认证
 user.setting.certification_photo_require: 照片要求
 user.setting.certification_photo_require_description: 证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。图片格式支持jpg、gif、png，每张图片文件大小不能超过2M
-user.setting.idcard_ront_photo: 正面照片
-user.setting.idcard_opposite_photo: 反面照片
+user.setting.certification.idcard_ront_photo: 正面照片
+user.setting.certification.idcard_opposite_photo: 反面照片
+user.setting.certification.approving_description: 正在实名认证中，管理员会尽快答复您。
+user.setting.certification.approved_description: 恭喜您，已通过实名认证！
+user.setting.certification.unapprove_description: 您尚未实名认证
+user.setting.certification.approve_fail_description: 实名认证审核尚未通过，请参照通知中的信息，修改后重新认证。
 
 # 个人设置模块-头像设置
+user.settings.avatar: 头像设置
+user.settings.avatar.crop: 头像图片
 user.settings.avatar.page_title: 头像设置
 user.settings.avatar.current_avatar: 当前头像
-user.settings.avatar.upload_hint: 你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过2M。
+user.settings.avatar.partner_avatar: 论坛头像
+user.settings.avatar.upload_hint: 你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过
+user.setting.avatar.upload_size: 2M
 user.settings.avatar.upload_submit_btn: 上传新头像
+user.settings.avatar.using_current_avatar: 使用该头像
+user.setting.avatar.alter_description: 请设置自定义头像。
+user.setting.avatar.crop.hint: 提示：请选择图片裁剪区域。
+user.setting.avatar.select_new_avatar: 重新选择图片
 
 # 个人设置模块-邮箱设置
 user.settings.email: 邮箱设置
