@@ -141,11 +141,6 @@ class HeepayResponse extends Response
         return $param;
     }
 
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
-    }
-
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
