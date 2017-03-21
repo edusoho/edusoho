@@ -38,6 +38,7 @@
       			<td>{{course.taskNum|default(0)}}</td>
       			<td>{{course.studentNum|default(0)}}</td>
       			<td>{{course.price}}{{'元'|trans}}
+                <br>
 			          {{ slot('course.marketing.extension', {'course':course}) }}
       			</td>
 			      <td>
