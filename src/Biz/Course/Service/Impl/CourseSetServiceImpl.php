@@ -606,12 +606,21 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             throw $this->createAccessDeniedException('发布课程时请确保课程下至少有一个已发布的教学计划');
         }
 
-        if (!empty($classroomRef)) {
-            $this->getCourseService()->publishCourse($classroomRef['courseId']);
-        }
-        $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
+        try {
+            $this->beginTransaction();
 
-        $this->dispatchEvent('course-set.publish', new Event($courseSet));
+            if (!empty($classroomRef)) {
+                $this->getCourseService()->publishCourse($classroomRef['courseId']);
+            }
+            $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
+           
+            $this->commit();
+
+            $this->dispatchEvent('course-set.publish', new Event($courseSet));
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
+        }
     }
 
     public function closeCourseSet($id)
@@ -622,12 +631,22 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
-        if (!empty($classroomRef)) {
-            $this->getCourseService()->closeCourse($classroomRef['courseId']);
-        }
-        $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'closed'));
+        
+        try {
+            $this->beginTransaction();
 
-        $this->dispatchEvent('course-set.closed', new Event($courseSet));
+            if (!empty($classroomRef)) {
+                $this->getCourseService()->closeCourse($classroomRef['courseId']);
+            }
+            $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'closed'));
+           
+            $this->commit();
+
+            $this->dispatchEvent('course-set.closed', new Event($courseSet));
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
+        }
     }
 
     public function countUserFavorites($userId)
