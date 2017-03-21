@@ -211,7 +211,7 @@ class CourseServiceTest extends BaseTestCase
     {
         $courseSetFields = array(
             'title' => '新课程开始！',
-            'type'  => 'normal'
+            'type' => 'normal',
         );
         $courseSet = $this->getCourseSetService()->createCourseSet($courseSetFields);
 
@@ -226,9 +226,9 @@ class CourseServiceTest extends BaseTestCase
 
         if (empty($courses)) {
             $courseFields = array(
-                'title'       => '第一个教学计划',
+                'title' => '第一个教学计划',
                 'courseSetId' => 1,
-                'learnMode'   => 'lockMode',
+                'learnMode' => 'lockMode',
                 'expiryMode' => 'forever',
             );
 
