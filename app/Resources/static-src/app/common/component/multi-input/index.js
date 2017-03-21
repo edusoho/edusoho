@@ -99,8 +99,7 @@ export default class MultiInput extends Component {
   }
 
   getList() {
-    const { sortable, listClassName, inputName } = this.props;
-    return (<List sortable={sortable} inputName={inputName} listClassName={listClassName} dataSourceUi={this.state.dataSourceUi}></List>);
+    return (<List></List>);
   }
 
   render() {

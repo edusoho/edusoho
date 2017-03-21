@@ -78,14 +78,10 @@ export default class InputGroup extends Component {
     })
   }
 
-  blurAdd() {
-    
-  }
-
   render() {
     return (
       <div className="input-group">
-        <input className="form-control" value={this.state.itemName} onChange={event => this.handleNameChange(event)} onFocus={event => this.onFocus(event)} onBlur={event => this.blurAdd(event)} />
+        <input className="form-control" value={this.state.itemName} onChange={event => this.handleNameChange(event)} onFocus={event => this.onFocus(event)} />
         {this.context.searchable.enable && this.state.resultful && <Options searchResult={this.state.searchResult} selectChange={(event, name) => this.selectChange(event, name)} resultful={this.state.resultful} />}
         {this.context.addable && <span className="input-group-btn"><a className="btn btn-default" onClick={() => this.handleAdd()}>添加</a></span>}
       </div>
