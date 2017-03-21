@@ -16,27 +16,32 @@ class DefaultController extends BaseController
         if (!empty($user['id'])) {
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
         }
-        $custom = $this->setting('isCustomApp',false);
-        if( $custom === false ){
-            //判断是否是定制用户
-            $result = CloudAPIFactory::create('leaf')->get('/me');
-            $custom = $this->isCustom($result);
 
-            $this->getSettingService()->set('isCustomApp',$custom);
-        }
-        $custom = $this->setting('isCustomApp');
+        $meCount = $this->getMeCount();
+        $custom = $this->isCustom($meCount);
 
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
 
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array('friendlyLinks' => $friendlyLinks, 'custom' => $custom));
     }
 
+    private function getMeCount()
+    {
+        $meCount = $this->setting('meCount',false);
+        if( $meCount === false ){
+            //判断是否是定制用户
+            $result = CloudAPIFactory::create('leaf')->get('/me');
+            $this->getSettingService()->set('meCount',$result);
+        }
+        $meCount = $this->setting('meCount');
+        return $meCount;
+    }
+
     public function appDownloadAction()
     {
-        $result = CloudAPIFactory::create('leaf')->get('/me');
-        $custom = $this->isCustom($result);
+        $meCount = $this->getMeCount();
 
-        $mobileCode = (empty($result["mobileCode"]) ? 'edusohov3' : $result["mobileCode"]);
+        $mobileCode = (empty($meCount["mobileCode"]) ? 'edusohov3' : $meCount["mobileCode"]);
 
         if ($this->getWebExtension()->isMicroMessenger()) {
             $url ="http://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.kuozhi";
