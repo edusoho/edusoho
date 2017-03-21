@@ -1160,6 +1160,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         $lessons = array();
         $number = 0;
 
+        $activityIds = ArrayToolkit::column($tasks, 'activityId');
+        $activities = $this->getActivityService()->findActivities($activityIds);
+        $activities = ArrayToolkit::index($activities, 'id');
+
         foreach ($tasks as $task) {
             if ($this->isUselessTask($task)) {
                 continue;
@@ -1185,6 +1189,9 @@ class CourseServiceImpl extends BaseService implements CourseService
                     'courseTaskId' => $task['id'],
                 )
             );
+
+            $activity = $activities[$task['activityId']];
+            $task['content'] = $activity['content'];
             $lessons[] = $this->filterTask($task);
         }
 

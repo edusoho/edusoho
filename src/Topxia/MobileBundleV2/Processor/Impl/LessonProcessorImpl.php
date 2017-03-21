@@ -321,13 +321,16 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $courseId = $this->getParam('courseId');
         $lessonId = $this->getParam('lessonId');
 
-        if (empty($courseId)) {
+        $course = $this->getCourseService()->getCourse($courseId);
+        if (empty($course)) {
             return $this->createErrorResponse('not_courseId', '课程信息不存在！');
         }
 
         $user = $this->controller->getUserByToken($this->request);
-        $lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
-
+        $lesson = $this->getTaskService()->getTask($lessonId);
+        $lessons = $this->getCourseService()->convertTasks(array($lesson), $course);
+        $lesson = $lessons[0];
+        print_r($lesson);exit;
         if (empty($lesson)) {
             return $this->createErrorResponse('not_courseId', '课时信息不存在！');
         }
@@ -335,7 +338,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         if ($lesson['free'] == 1) {
             if ($user->isLogin()) {
                 if ($this->controller->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
-                    $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
+                    $this->getTaskService()->startTask($lesson['id']);
                 }
             }
 
@@ -347,7 +350,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         }
 
         if ($this->controller->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
-            $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
+            $this->getTaskService()->startTask($lesson['id']);
         }
 
         $member = $this->controller->getCourseMemberService()->getCourseMember($courseId, $user['id']);
@@ -433,7 +436,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                 return $this->getVideoLesson($lesson);
             case 'testpaper':
                 return $this->getTestpaperLesson($lesson);
-            case 'document':
+            case 'doc':
                 return $this->getDocumentLesson($lesson);
             default:
                 $lesson['content'] = $this->wrapContent($lesson['content']);
