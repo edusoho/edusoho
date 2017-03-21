@@ -16,6 +16,31 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface
     private $container;
     private $biz;
 
+    private $whiteList = array(
+        'GET'  => array(
+            '/^\/api\/users\/\d+$/',
+            '/^\/api\/mobileschools\/.+$/',
+            '/^\/api\/classrooms\/\w+\/members$/',
+            '/^\/api\/discovery_columns$/',
+            '/^\/api\/courses\/discovery\/columns$/',
+            '/^\/api\/classrooms\/discovery\/columns$/',
+            '/^\/api\/lessons$/',
+            '/^\/api\/lessons\/\d+$/',
+            '/^\/api\/classroom_play\/\d+$/',
+            '/^\/api\/course\/\d+\/lessons$/',
+            '/^\/api\/setting\/\w+$/',
+            '/^\/api\/courses\/\w+\/members$/'
+        ),
+        'POST' => array(
+            '/^\/api\/users$/',
+            '/^\/api\/users\/login$/',
+            '/^\/api\/users\/bind_login$/',
+            '/^\/api\/sms_codes$/',
+            '/^\/api\/users\/password$/',
+            '/^\/api\/emails$/'
+        )
+    );
+
     public function __construct($container, $biz)
     {
         $this->container = $container;
@@ -24,22 +49,13 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface
 
     public function createToken(Request $request, $providerKey)
     {
-        // look for an apikey query parameter
-        $apiKey = $request->query->get('apikey');
+        $auth = new ApiAuth($this->whiteList);
 
-        // or if you want to use an "apikey" header, then do something like this:
-        // $apiKey = $request->headers->get('apikey');
-
-        if (!$apiKey) {
-            throw new BadCredentialsException();
-
-            // or to just skip api key authentication
-            // return null;
-        }
+        $apiToken = $auth->auth($request);
 
         return new PreAuthenticatedToken(
             'anon.',
-            $apiKey,
+            $apiToken,
             $providerKey
         );
     }
@@ -51,31 +67,22 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface
 
     public function authenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey)
     {
-        if (!$userProvider instanceof ApiKeyUserProvider) {
+        if (!$userProvider instanceof TokenUserProvider) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    'The user provider must be an instance of ApiKeyUserProvider (%s was given).',
+                    'The user provider must be an instance of TokenUserProvider (%s was given).',
                     get_class($userProvider)
                 )
             );
         }
 
-        $apiKey = $token->getCredentials();
-        $username = $userProvider->getUsernameForApiKey($apiKey);
+        $apiToken = $token->getCredentials();
 
-        if (!$username) {
-            // CAUTION: this message will be returned to the client
-            // (so don't put any un-trusted messages / error strings here)
-            throw new CustomUserMessageAuthenticationException(
-                sprintf('API Key "%s" does not exist.', $apiKey)
-            );
-        }
-
-        $user = $userProvider->loadUserByUsername($username);
+        $user = $userProvider->loadUserByUsername($apiToken);
 
         return new PreAuthenticatedToken(
             $user,
-            $apiKey,
+            $apiToken,
             $providerKey,
             $user->getRoles()
         );

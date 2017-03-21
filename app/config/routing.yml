@@ -1,7 +1,7 @@
 api:
     resource: "@ApiBundle/Controller/"
     type:     annotation
-    prefix:   /api/v1
+    prefix:   /api
 
 tbazinga_jstranslation:
     resource: "@BazingaJsTranslationBundle/Resources/config/routing/routing.yml"

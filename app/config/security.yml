@@ -42,7 +42,6 @@ security:
             security: false
 
         api:
-            security: false
             pattern: ^/api
             stateless: true
             simple_preauth:
@@ -81,6 +80,6 @@ security:
         - { path: ^/admin/upgrade, role: ROLE_BACKEND }
         - { path: ^/admin/optimize, role: ROLE_BACKEND }
         - { path: ^/admin, role: ROLE_BACKEND }
-       # - { path: ^/api, role: API_USER }
+        - { path: ^/api, role: API_USER }
         - { path: /.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
         #- { path: ^/_internal, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }
