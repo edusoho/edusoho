@@ -124,7 +124,13 @@ class MemberServiceImpl extends BaseService implements MemberService
         $result = $this->getMemberDao()->delete($member['id']);
 
         $course = $this->getCourseService()->getCourse($courseId);
-        $this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，移除学员({$user['nickname']})(#{$userId})");
+
+        $this->getLogService()->info(
+            'course',
+            'remove_student',
+            "教学计划《{$course['title']}》(#{$course['id']})，移除学员{$user['nickname']}(#{$user['id']})"
+        );
+
         $this->dispatchEvent('course.quit', $course, array('userId' => $userId, 'member' => $member));
 
         if ($this->getCurrentUser()->isAdmin()) {
@@ -536,7 +542,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         if ($course['expiryMode'] == 'days' && $course['expiryDays'] > 0) {
             $endTime = strtotime(date('Y-m-d', time())); //从第二天零点开始计算
             $deadline = $course['expiryDays'] * 24 * 60 * 60 + $endTime;
-        } elseif ($course['expiryMode'] == 'date') {
+        } elseif ($course['expiryMode'] == 'date' || $course['expiryMode'] == 'end_date') {
             $deadline = $course['expiryEndDate'];
         }
 

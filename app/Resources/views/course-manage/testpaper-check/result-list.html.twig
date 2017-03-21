@@ -21,9 +21,9 @@
           {{ '发布计划'|trans }}
         </button>
       {% endif %}
-      {% if course_count(course.courseSetId) > 1 %}
+      {#{% if course_count(course.courseSetId) > 1 %}
         <a class="btn btn-default btn-sm pull-right ml5" href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">返回课程编辑</a>
-      {% endif %}
+      {% endif %}#}
     </div>
     <div class="panel-body">
       {% if isTeacher is defined and not isTeacher %}

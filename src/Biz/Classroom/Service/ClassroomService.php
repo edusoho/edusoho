@@ -177,6 +177,7 @@ interface ClassroomService
 
     public function countMobileFilledMembersByClassroomId($classroomId, $locked = 0);
 
+
     public function isClassroomOverDue($classroom);
 
     public function updateMemberDeadlineByMemberId($memberId, $deadline);
@@ -184,4 +185,7 @@ interface ClassroomService
     public function updateMembersDeadlineByClassroomId($classroomId, $deadline);
 
     public function findWillOverdueClassrooms();
+
+    public function countCourseTasksByClassroomId($classroomId);
+
 }

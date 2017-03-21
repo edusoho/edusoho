@@ -44,7 +44,8 @@
             </label>
           </div>
         </div>
-        <div class="form-group">
+        {#移动到营销设置#}
+        {#<div class="form-group">
           <label class="col-sm-2 control-label">{{'学习有效期模式'|trans}}</label>
           {% if course.status|default('draft') == 'draft' %}
             <div class="col-sm-8 radios">
@@ -85,7 +86,7 @@
               <p class="help-block mtm">{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}</p>
             </div>
           {% endif %}
-        </div>
+        </div>#}
         {% if courseSet.type == 'live' %}
           <div class="form-group">
             <label class="col-md-2 control-label" for="maxStudentNum-field">课程人数</label>

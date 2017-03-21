@@ -126,9 +126,9 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
         $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
         foreach ($copiedTasks as $ct) {
-            if ($published) {
+            if ($published && $ct['status'] !== 'published') {
                 $this->getTaskService()->publishTask($ct['id']);
-            } else {
+            } elseif (!$published && $ct['status'] === 'published') {
                 $this->getTaskService()->unpublishTask($ct['id']);
             }
         }
