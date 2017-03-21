@@ -19,7 +19,7 @@ class Article extends BaseResource
             $filteredRes['tagIds'] = array();
             $filteredRes['tags'] = array();
         } else {
-            $filteredRes['tagIds'] =  $res['tagIds'];
+            $filteredRes['tagIds'] = $res['tagIds'];
             $tags = $this->getTagService()->findTagsByIds($res['tagIds']);
             $filteredRes['tags'] = ArrayToolkit::column($tags, 'name');
         }
