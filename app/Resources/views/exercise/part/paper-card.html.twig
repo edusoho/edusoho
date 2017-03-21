@@ -1,4 +1,4 @@
-<div class="testpaper-card affix">
+<div class="testpaper-card {{testpaperCardClass|default('')}}">
   {% if paperResult.status|default(null) == 'finished' %}
     <div class="mbl">
       <a class="btn btn-primary btn-block btn-lg border-radius-none" href="{{ path('exercise_start_do',{lessonId:paperResult.lessonId|default(0),exerciseId:paperResult.testId|default(0)}) }}">{{'再做%itemCount%题'|trans({'%itemCount%':paper.itemCount })}}</a>

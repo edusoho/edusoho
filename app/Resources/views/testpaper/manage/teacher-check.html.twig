@@ -17,7 +17,7 @@
 
 {% block paper_sidebar %}
 
-  <div class="testpaper-card" data-spy="affix" data-offset-top="200">
+  <div class="testpaper-card {{testpaperCardClass|default('')}}" data-spy="affix" data-offset-top="200">
     <div class="panel panel-default">
       <div class="panel-body">
         {% for type in questionTypes|default([]) if questions[type] is defined %}

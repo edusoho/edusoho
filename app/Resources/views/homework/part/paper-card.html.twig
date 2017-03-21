@@ -1,4 +1,4 @@
-<div class="testpaper-card {% if action|default('') is empty %}affix{% endif %}">
+<div class="testpaper-card {{testpaperCardClass|default('')}}">
   {% if paperResult.status|default(null) == 'finished' and (app.user.id|default(0) == paperResult.userId ) %}
     <div class="mbl">
       <a href="{% if action|default('') is not empty and task|default(null) %}{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}{% else %}{{ path('homework_start_do',{lessonId:paperResult.lessonId,homeworkId:paperResult.testId}) }}{% endif %}" class="btn btn-primary btn-block btn-lg  border-radius-none">再次尝试</a>

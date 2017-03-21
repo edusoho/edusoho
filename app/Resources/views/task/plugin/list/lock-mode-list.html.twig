@@ -44,7 +44,7 @@
           <span class="right-menu mouse-leave">{{ task.activity.length|activity_length_format }}
             <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} ml5"></i>
           </span>
-          <span class="right-menu mouse-enter color-primary">任务未解锁</span>
+          <span class="right-menu mouse-enter color-warning">任务未解锁</span>
         {% else %}
           <span class="right-menu">{{ task.activity.length|activity_length_format }}
             <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} ml5" data-toggle="tooltip"
