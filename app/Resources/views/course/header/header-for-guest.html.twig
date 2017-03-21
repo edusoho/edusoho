@@ -40,10 +40,29 @@
       </div>
     </div>
     <div class="course-detail-info text-12 color-gray">
-      <div class="mb20">
+
+      {#确认下判断是否有误#}
+      {% set haveActivity =  false %}
+      {% if course.price > 0 and course.price < course.originPrice  %} 
+        {% set haveActivity =  true %}
+      {% endif %}
+
+      <div class="{% if haveActivity %} mb10  {% else %} mb15 {% endif %}">
         {% include 'course/header/header-for-price.html.twig' %}
       </div>
-      <div class=" course-detail-gray">
+
+      {% if haveActivity  %} 
+        <div class="mb15">
+          <span class="course-detail-title">活动</span>
+          <span class="text-12 color-warning">
+            <b class="">{{"双十二的名称"|sub_text(10)}}</b>
+            <i class="es-icon es-icon-accesstime text-14 ml20 mr10"></i>
+            <span id="discount-endtime-countdown" data-remaintime="351470">
+            </span>
+          <span>
+        </div>
+      {% endif %}
+      <div class="course-detail-gray {% if not haveActivity %} not-activity {% endif %}">
         {% if courseSet.type != 'live' %}
           <div class="course-detail-content">
             <span class="course-detail-title vertical-middle mb10">教学计划</span>
@@ -58,21 +77,29 @@
           </div>
         {% endif %}
 
-        <div class="mbl">
+        <div class="mb15">
           <span class="course-detail-title ">学习方式</span>
-          {% if course.expiryMode == 'days' %}
+          {% if course.expiryMode == 'days'  %}
             <span class="gray-dark mrl">随到随学</span>
             <span class="gray-dark">
               {% if course.expiryDays %}
-                {{ course.expiryDays }}天
+                共 {{ course.expiryDays }} 天
               {% endif %}
+            </span>
+          {% elseif course.expiryMode == 'end_date' %}
+            <span class="gray-dark mrl">随到随学</span>
+            <span class="gray-dark">
+              {{ course.expiryEndDate|date('Y-m-d ') }}
             </span>
           {% elseif course.expiryMode == 'date' %}
             <span class="gray-dark mrl">周期开班</span>
             <span class="gray-dark">{{ course.expiryStartDate|date('Y-m-d ') }}
               ~
               {{ course.expiryEndDate|date('Y-m-d ') }}</span>
+          {% elseif course.expiryMode == 'forever' %}
+            <span class="gray-dark mrl">永久有效</span>
           {% endif %}
+          
         </div>
 
         {% if course.showServices | default(1) %}

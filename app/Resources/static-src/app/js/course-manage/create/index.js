@@ -4,6 +4,9 @@ class Creator {
   }
 
   init() {
+    $('[data-toggle="popover"]').popover({
+      html: true,
+    });
     this.initValidator();
     this.checkBoxChange();
   }
@@ -19,16 +22,24 @@ class Creator {
           required: true,
           trim: true,
         },
+        deadline: {
+          required: () => {
+            return $('input[name="expiryMode"]:checked').val() === 'days' && $('input[name="deadlineType"]:checked').val() === 'end_date' ;
+          },
+          after_now_date: true,
+        },
         expiryDays: {
           required: () => {
-            return $('input[name="expiryMode"]:checked').val() == 'date';
+            return $('input[name="expiryMode"]:checked').val() === 'days' && $('input[name="deadlineType"]:checked').val() === 'days' ;
           },
-          digits: true,
-          max_year: true
+          positive_integer: () => {
+            return $('input[name="expiryMode"]:checked').val() === 'days' && $('input[name="deadlineType"]:checked').val() === 'days' ;
+          },
+          max_year: true,
         },
         expiryStartDate: {
           required: () => {
-            return $('input[name="expiryMode"]:checked').val() == 'date';
+            return $('input[name="expiryMode"]:checked').val() === 'date';
           },
           date: true,
           after_now_date: true,
@@ -36,7 +47,7 @@ class Creator {
         },
         expiryEndDate: {
           required: () => {
-            return $('input[name="expiryMode"]:checked').val() == 'date';
+            return $('input[name="expiryMode"]:checked').val() === 'date';
           },
           date: true,
           after_date: '#expiryStartDate'
@@ -44,13 +55,17 @@ class Creator {
       },
       messages: {
         title: Translator.trans('请输入教学计划课程标题'),
+        expiryDays: {
+          required: '请输入有效期天数'
+        },
+        deadline: {
+          required: '请输入截至日期'
+        },
         expiryStartDate: {
-          required: Translator.trans('请输入开始日期'),
-          before_date: Translator.trans('开始日期应早于结束日期')
+          required: '请输入开始日期'
         },
         expiryEndDate: {
-          required: Translator.trans('请输入结束日期'),
-          after_date: Translator.trans('结束日期应晚于开始日期')
+          required: '请输入结束日期'
         }
       }
     });
@@ -64,16 +79,30 @@ class Creator {
 
     this.initDatePicker('#expiryStartDate',validator);
     this.initDatePicker('#expiryEndDate',validator);
+    this.initDatePicker('#deadline',validator);
   }
 
   checkBoxChange() {
+    $('input[name="deadlineType"]').on('change', function (event) {
+      if ($('input[name="deadlineType"]:checked').val() == 'end_date') {
+         $('#deadlineType-date').removeClass('hidden');
+         $('#deadlineType-days').addClass('hidden');
+      } else {
+        $('#deadlineType-date').addClass('hidden');
+         $('#deadlineType-days').removeClass('hidden');
+      }
+    });
+
     $('input[name="expiryMode"]').on('change', function (event) {
       if ($('input[name="expiryMode"]:checked').val() == 'date') {
         $('#expiry-days').removeClass('hidden').addClass('hidden');
         $('#expiry-date').removeClass('hidden');
-      } else {
+      } else if($('input[name="expiryMode"]:checked').val() == 'days') {
         $('#expiry-date').removeClass('hidden').addClass('hidden');
         $('#expiry-days').removeClass('hidden');
+      } else  {
+        $('#expiry-date').removeClass('hidden').addClass('hidden');
+        $('#expiry-days').removeClass('hidden').addClass('hidden');
       }
     });
 

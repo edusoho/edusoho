@@ -398,6 +398,18 @@ class CourseManageController extends BaseController
                 unset($data['buyExpiryTime']);
             }
 
+            if ($data['expiryMode'] != 'days') {
+                unset($data['deadlineType']);
+            }
+            if (!empty($data['deadlineType'])) {
+                if ($data['deadlineType'] == 'end_date') {
+                    $data['expiryMode'] = 'end_date';
+                    $data['expiryEndDate'] = $data['deadline'];
+                } else {
+                    $data['expiryMode'] = 'days';
+                }
+            }
+
             if (!empty($data['services'])) {
                 $data['services'] = json_decode($data['services'], true);
             }
@@ -442,11 +454,17 @@ class CourseManageController extends BaseController
         $canFreeTaskCount = $this->getTaskService()->countTasks($conditions);
         $canFreeTasks = $this->getTaskService()->searchTasks($conditions, array('seq' => 'ASC'), 0, $canFreeTaskCount);
 
+        //prepare form data
+        if ($course['expiryMode'] == 'end_date') {
+            $course['deadlineType'] = 'end_date';
+            $course['expiryMode'] = 'days';
+        }
+
         return $this->render(
             'course-manage/marketing.html.twig',
             array(
                 'courseSet' => $courseSet,
-                'course' => $course,
+                'course' => $this->formatCourseDate($course),
                 'canFreeTasks' => $canFreeTasks,
                 'freeTasks' => $freeTasks,
             )
@@ -993,10 +1011,10 @@ class CourseManageController extends BaseController
 
     protected function formatCourseDate($course)
     {
-        if (isset($course['expiryStartDate'])) {
+        if (!empty($course['expiryStartDate'])) {
             $course['expiryStartDate'] = date('Y-m-d', $course['expiryStartDate']);
         }
-        if (isset($course['expiryEndDate'])) {
+        if (!empty($course['expiryEndDate'])) {
             $course['expiryEndDate'] = date('Y-m-d', $course['expiryEndDate']);
         }
 
