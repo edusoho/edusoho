@@ -283,7 +283,6 @@ class ManageController extends BaseController
         return $this->render('question-manage/question-picked.html.twig', array(
             'courseSet' => $courseSet,
             'questions' => $questions,
-            'type' => $question['type'],
             'targetType' => $request->query->get('targetType', 'testpaper'),
             'courseTasks' => $courseTasks,
             'courses' => $manageCourses,
