@@ -28,6 +28,10 @@ class GenerateNotificationHandler
     {
         $user = ServiceKernel::instance()->getCurrentUser();
 
+        if (!$user->isLogin()) {
+            return;
+        }
+
         list($courses, $courseMembers) = $this->getCourseMemberService()->findWillOverdueCourses();
         $courseMembers = ArrayToolkit::index($courseMembers, 'courseId');
 

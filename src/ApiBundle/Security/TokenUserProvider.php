@@ -58,12 +58,13 @@ class TokenUserProvider implements UserProviderInterface
             $user = array(
                 'id' => 0,
                 'nickname' => '游客',
-                'email' => ' '
+                'email' => 'fakeUser',
+                'locale' => 'zh_CN'
             );
         }
 
         $user['currentIp'] = $this->getCurrentIp();
-        $user['roles'][] = 'ROLE_API';
+        $user['roles'][] = 'API_USER';
         $currentUser->fromArray($user);
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
         $biz = $this->container->get('biz');
