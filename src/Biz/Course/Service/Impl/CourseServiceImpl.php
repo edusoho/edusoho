@@ -457,10 +457,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             $course['expiryStartDate'] = null;
             $course['expiryDays'] = 0;
 
-            if (empty($course['expiryEndDate']) || strtotime($course['expiryEndDate']) <= time()) {
+            if (empty($course['expiryEndDate']) || strtotime($course['expiryEndDate'].' 23:59:59') <= time()) {
                 throw $this->createInvalidArgumentException('Param Invalid: expiryEndDate');
             }
-            $course['expiryEndDate'] = strtotime($course['expiryEndDate']);
+            $course['expiryEndDate'] = strtotime($course['expiryEndDate'].' 23:59:59');
         } elseif ($course['expiryMode'] === 'date') {
             $course['expiryDays'] = 0;
             if (isset($course['expiryStartDate'])) {
@@ -468,7 +468,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             } else {
                 throw $this->createInvalidArgumentException('Param Required: expiryStartDate');
             }
-            if (isset($course['expiryEndDate'])) {
+            if (!empty($course['expiryEndDate']) && strtotime($course['expiryEndDate'].' 23:59:59') > time()) {
                 $course['expiryEndDate'] = strtotime($course['expiryEndDate'].' 23:59:59');
             } else {
                 throw $this->createInvalidArgumentException('Param Required: expiryEndDate');
