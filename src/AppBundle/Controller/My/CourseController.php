@@ -87,6 +87,7 @@ class CourseController extends CourseBaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
 
+        $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($courseSet['categoryId']);
         $taskCount = $this->getTaskService()->countTasks(array('courseId' => $course['id'], 'status' => 'published'));
         $progress = $taskResultCount = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
 
@@ -135,6 +136,7 @@ class CourseController extends CourseBaseController
                 'planProgressProgress' => $planProgressProgress,
                 'isUserFavorite' => $isUserFavorite,
                 'marketingPage' => 0,
+                'breadcrumbs' => $breadcrumbs,
             )
         );
     }
@@ -240,5 +242,13 @@ class CourseController extends CourseBaseController
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return CategoryService
+     */
+    private function getCategoryService()
+    {
+        return $this->createService('Taxonomy:CategoryService');
     }
 }
