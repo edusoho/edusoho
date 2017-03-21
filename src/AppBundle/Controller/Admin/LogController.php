@@ -10,19 +10,7 @@ class LogController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $fields = $request->query->all();
-        $conditions = array(
-            'startDateTime' => '',
-            'endDateTime' => '',
-            'nickname' => '',
-            'level' => '',
-            'action' => '',
-            'module' => '',
-        );
-
-        if (!empty($fields)) {
-            $conditions = array_merge($conditions, $fields);
-        }
+        $conditions = $request->query->all();
 
         $paginator = new Paginator(
             $request,
@@ -39,7 +27,9 @@ class LogController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
         $moduleDicts = $this->getLogService()->getLogModuleDicts();
-        $actions = $this->getLogService()->findLogActionDictsyModule($conditions['module']);
+
+        $module = isset($conditions['module']) ? $conditions['module'] : '' ;
+        $actions = $this->getLogService()->findLogActionDictsyModule($module);
 
         return $this->render('admin/system/log/logs.html.twig', array(
             'logs' => $logs,

@@ -154,9 +154,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                     ),
                 )
             );
-
             $this->commit();
-
             $this->dispatchEvent('course.create', new Event($created));
 
             return $created;
@@ -738,7 +736,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $tasks = $this->getTaskService()->findTasksByChapterId($deletedChapter['id']);
-
+        $this->getLogService()->info('course', 'delete_chapter', "删除章节(#{$chapterId})", $deletedChapter);
         foreach ($tasks as $task) {
             $this->getTaskService()->updateSeq($task['id'], array('categoryId' => $prevChapter['id']));
         }
@@ -1730,6 +1728,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 
     /**
