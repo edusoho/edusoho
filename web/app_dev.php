@@ -20,12 +20,6 @@ if (isset($_SERVER['HTTP_CLIENT_IP'])
     }
 }
 
-if ((strpos($_SERVER['REQUEST_URI'], '/api') === 0) || (strpos($_SERVER['REQUEST_URI'], '/app_dev.php/api') === 0)) {
-    define('API_ENV', 'dev');
-    include __DIR__.'/../api/index.php';
-    exit();
-}
-
 fix_gpc_magic();
 
 $loader = require_once __DIR__.'/../app/autoload.php';

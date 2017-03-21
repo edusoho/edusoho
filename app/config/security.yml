@@ -31,6 +31,8 @@ security:
     providers:
         custom_provider:
             id: topxia.user_provider
+        api_token_user_provider:
+            id: api_token_user_provider
 
     role_hierarchy: "%role_hierarchy%"
 
@@ -38,6 +40,14 @@ security:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
+        api:
+            security: false
+            pattern: ^/api
+            stateless: true
+            simple_preauth:
+                authenticator: api_token_authenticator
+            provider: api_token_user_provider
 
         main:
             pattern:    /.*
@@ -71,5 +81,6 @@ security:
         - { path: ^/admin/upgrade, role: ROLE_BACKEND }
         - { path: ^/admin/optimize, role: ROLE_BACKEND }
         - { path: ^/admin, role: ROLE_BACKEND }
+       # - { path: ^/api, role: API_USER }
         - { path: /.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
         #- { path: ^/_internal, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }

@@ -8,6 +8,7 @@ imports:
     - { resource: service_listener.yml }
     - { resource: theme_jianmo_parameters.yml }
     - { resource: "@AppBundle/Resources/config/services.yml" }
+    - { resource: "@ApiBundle/Resources/config/services.yml" }
 
 framework:
     # esi:             ~

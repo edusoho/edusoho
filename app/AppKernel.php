@@ -80,6 +80,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new OAuth2\ServerBundle\OAuth2ServerBundle(),
             new Codeages\PluginBundle\CodeagesPluginBundle(),
             new AppBundle\AppBundle(),
+            new ApiBundle\ApiBundle(),
         );
 
         $bundles = array_merge($bundles, $this->pluginConfigurationManager->getInstalledPluginBundles());

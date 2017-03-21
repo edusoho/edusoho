@@ -1,0 +1,8 @@
+services:
+    api_token_user_provider:
+        class: ApiBundle\Security\TokenUserProvider
+
+    api_token_authenticator:
+        class:  ApiBundle\Security\TokenAuthenticator
+        arguments: ['@service_container', '@biz']
+        public: false
