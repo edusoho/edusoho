@@ -51,24 +51,13 @@
             <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete-btn"  data-name="题目">删除</button>
           </div>
           <span class="color-danger js-help-redmine"></span>
+          <p class="js-subjective-remask" data-type="homework">
+          </p>
+          <p class="help-block color-warning">{{'提示：保存后题目将不能再添加或移除。'|trans}}</p>
         </div>
       </div>
-      
-
-      
     {% endif %}
-
-    <div class="form-group">
-      <div class="col-sm-10 controls">
-        <p class="js-subjective-remask" data-type="homework">
-        </p>
-        <p class="help-block color-warning">{{'提示：保存后题目将不能再添加或移除。'|trans}}</p>
-      </div>
-      <div class="col-xs-4 controls"></div> 
-    </div>
-    
   </form>
-
 {% endblock %}
 
 {% block activity_finish %}
