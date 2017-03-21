@@ -52,6 +52,7 @@ class TaskShow extends Emitter {
   }
 
   _receiveFinish(response) {
+    console.log(response);
     if ($('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
       $.get($(".js-learned-prompt").data('url'), html => {
         $(".js-learned-prompt").attr('data-content', html);
