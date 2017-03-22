@@ -4,10 +4,9 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\ThreadDao;
+use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
-use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
@@ -19,6 +18,7 @@ use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Course\Service\MaterialService;
+use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\CourseNoteService;
@@ -128,6 +128,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'isDefault',
                 'isFree',
                 'serializeMode',
+                'type',
             )
         );
 
@@ -322,9 +323,8 @@ class CourseServiceImpl extends BaseService implements CourseService
      * 计算教学计划价格和虚拟币价格
      *
      * @param  $id
-     * @param int|float $originPrice 教学计划原价
-     *
-     * @return array (number, number)
+     * @param  int|float $originPrice 教学计划原价
+     * @return array     (number, number)
      */
     protected function calculateCoursePrice($id, $originPrice)
     {
@@ -897,8 +897,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param int $userId
-     *
+     * @param  int     $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -1746,7 +1745,6 @@ class CourseServiceImpl extends BaseService implements CourseService
      * 当默认值未设置时，合并默认值
      *
      * @param  $course
-     *
      * @return array
      */
     protected function mergeCourseDefaultAttribute($course)
@@ -1775,7 +1773,6 @@ class CourseServiceImpl extends BaseService implements CourseService
      *
      * @param  $userId
      * @param  $filters
-     *
      * @return array
      */
     protected function prepareUserLearnCondition($userId, $filters)
@@ -1800,9 +1797,8 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param $id
-     * @param $fields
-     *
+     * @param  $id
+     * @param  $fields
      * @return mixed
      */
     private function processFields($id, $fields, $courseSet)
