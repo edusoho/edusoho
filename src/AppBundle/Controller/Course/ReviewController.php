@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Controller\BaseController;
+use Biz\Course\Service\CourseService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ReviewController extends BaseController
@@ -13,6 +14,7 @@ class ReviewController extends BaseController
 
         $fields = $request->request->all();
         $fields['courseId'] = $id;
+        $fields['userId'] = $this->getCurrentUser()->getId();
         $this->getReviewService()->saveReview($fields);
 
         return $this->createJsonResponse(true);
@@ -54,6 +56,9 @@ class ReviewController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');

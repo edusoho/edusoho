@@ -201,11 +201,6 @@ class QuickpayResponse extends Response
         return $encrypted;
     }
 
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
-    }
-
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order:OrderService');

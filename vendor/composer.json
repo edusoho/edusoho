@@ -1,0 +1,5 @@
+{
+    "require": {
+        "cerdic/css-tidy": "^1.5"
+    }
+}

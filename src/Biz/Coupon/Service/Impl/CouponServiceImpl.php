@@ -155,7 +155,7 @@ class CouponServiceImpl extends BaseService implements CouponService
         if (empty($coupon)) {
             return array(
                 'useable' => 'no',
-                'message' => '',
+                'message' => '该优惠券不存在',
             );
         }
 
@@ -169,7 +169,7 @@ class CouponServiceImpl extends BaseService implements CouponService
         if ($coupon['userId'] != 0 && $coupon['userId'] != $currentUser['id']) {
             return array(
                 'useable' => 'no',
-                'message' => sprintf('优惠券%s已经被其他人领取', $code),
+                'message' => sprintf('优惠券%s已经被其他人领取使用', $code),
             );
         }
 

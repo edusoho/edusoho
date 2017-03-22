@@ -37,7 +37,7 @@ class MobileController extends BaseController
         return $this->render('mobile/index.html.twig', array(
             'host' => $request->getHttpHost(),
             'mobileCode' => $mobileCode,
-            'mobile' => $mobile,
+            'mobileSetting' => $mobile,
         ));
     }
 

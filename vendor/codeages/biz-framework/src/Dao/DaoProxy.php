@@ -51,7 +51,7 @@ class DaoProxy implements DaoProxyInterface
     private function _update($method, $arguments)
     {
         $declares = $this->dao->declares();
-        if (isset($declares['timestamps'][1])) {
+        if (is_array($arguments[1]) && isset($declares['timestamps'][1])) {
             $arguments[1][$declares['timestamps'][1]] = time();
         }
 

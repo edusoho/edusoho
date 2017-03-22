@@ -12,7 +12,7 @@
 
   {{ render(controller('AppBundle:My/User:avatarAlert')) }}
 
-  <div class="row row-3-9">
+  <div class="row row-3-9 my-layout">
     <div class="col-md-3">
       <div class="sidenav">
         {% if is_plugin_installed('Point') %}
@@ -105,5 +105,7 @@
     </div>
     <div class="col-md-9">{% block main %}{% endblock %}</div>
   </div>
+
+  {% block main_mobile %}{% endblock %}
 
 {% endblock %}

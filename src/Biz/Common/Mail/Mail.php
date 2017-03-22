@@ -2,7 +2,8 @@
 
 namespace Biz\Common\Mail;
 
-use Biz\System\Service\SettingService;
+use AppBundle\Common\SettingToolkit;
+use Topxia\Service\Common\Mail\TemplateToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
 abstract class Mail
@@ -21,11 +22,24 @@ abstract class Mail
 
     public function __get($name)
     {
+        if ('options' === $name) {
+            return $this->options;
+        }
+
         if (!array_key_exists($name, $this->options)) {
             return null;
         }
 
         return $this->options[$name];
+    }
+
+    public function __isset($name)
+    {
+        if ('options' === $name) {
+            return $this->options !== null;
+        }
+
+        return isset($this->options[$name]);
     }
 
     public function __unset($name)
@@ -35,48 +49,17 @@ abstract class Mail
         return $this;
     }
 
+    protected function parseTemplate($options)
+    {
+        return TemplateToolkit::parseTemplate($options);
+    }
+
     protected function setting($name, $default = '')
     {
-        $names = explode('.', $name);
-
-        $name = array_shift($names);
-
-        if (empty($name)) {
-            return $default;
-        }
-
-        $value = $this->getSettingService()->get($name, $default);
-
-        if (!isset($value)) {
-            return $default;
-        }
-
-        if (empty($names)) {
-            return $value;
-        }
-
-        $result = $value;
-
-        foreach ($names as $name) {
-            if (!isset($result[$name])) {
-                return $default;
-            }
-
-            $result = $result[$name];
-        }
-
-        return $result;
+        return SettingToolkit::getSetting($name, $default);
     }
 
     abstract public function send();
-
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return ServiceKernel::instance()->createService('System:SettingService');
-    }
 
     protected function getKernel()
     {

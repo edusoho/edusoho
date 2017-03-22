@@ -2,11 +2,10 @@
 
 namespace AppBundle\Controller\Classroom;
 
+use AppBundle\Common\ClassroomToolkit;
 use AppBundle\Common\Paginator;
-use Vip\Service\Vip\VipService;
 use Biz\Sign\Service\SignService;
 use Biz\User\Service\AuthService;
-use Vip\Service\Vip\LevelService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\TokenService;
 use Biz\Order\Service\OrderService;
@@ -184,8 +183,13 @@ class ClassroomController extends BaseController
 
         if (in_array($previewAs, array('guest', 'auditor', 'member'))) {
             if ($previewAs == 'guest') {
-                return array();
+                return;
             }
+
+            $deadline = ClassroomToolkit::buildMemberDeadline(array(
+                'expiryMode' => $classroom['expiryMode'],
+                'expiryValue' => $classroom['expiryValue'],
+            ));
 
             $member = array(
                 'id' => 0,
@@ -199,6 +203,7 @@ class ClassroomController extends BaseController
                 'role' => array('auditor'),
                 'locked' => 0,
                 'createdTime' => 0,
+                'deadline' => $deadline,
             );
 
             if ($previewAs == 'member') {
@@ -326,6 +331,19 @@ class ClassroomController extends BaseController
         }
 
         return new Response();
+    }
+
+    public function deadlineReachAction(Request $request, $classroomId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('不允许未登录访问');
+        }
+
+        $this->getClassroomService()->exitClassroom($classroomId, $user['id']);
+
+        return $this->redirect($this->generateUrl('classroom_introductions', array('id' => $classroomId)));
     }
 
     public function latestMembersBlockAction($classroom, $count = 20)
@@ -460,6 +478,10 @@ class ClassroomController extends BaseController
 
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
+        }
+
+        if ($this->getClassroomService()->isClassroomOverDue($id)) {
+            throw $this->createAccessDeniedException('班级已过期');
         }
 
         $this->getClassroomService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));

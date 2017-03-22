@@ -1858,4 +1858,12 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     {
         return $this->controller->getService('DiscountPlugin:Discount:DiscountService');
     }
+
+    protected function updateMemberLastViewTime($member)
+    {
+        if (!empty($member)) {
+            $fields['lastViewTime'] = time();
+            $this->controller->getCourseMemberService()->updateCourseMember($member['id'], $fields);
+        }
+    }
 }

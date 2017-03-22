@@ -9,6 +9,33 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
 {
     protected $table = 'classroom_member';
 
+    public function updateMembersDeadlineByClassroomId($classroomId, $deadline)
+    {
+        $sql = "UPDATE {$this->table} SET deadline = ? WHERE classroomId = ? AND role LIKE '%|student|%'";
+        $this->db()->executeUpdate($sql, array($deadline, $classroomId));
+
+        return $this->findByClassroomIdAndRole($classroomId, 'student', 0, PHP_INT_MAX);
+    }
+
+    public function findMembersByUserIdAndClassroomIds($userId, array $classroomIds)
+    {
+        if (empty($classroomIds)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($classroomIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND classroomId IN ({$marks});";
+
+        return $this->db()->fetchAll($sql, array_merge(array($userId), $classroomIds)) ?: array();
+    }
+
+    public function findMembersByUserId($userId)
+    {
+        return $this->findByFields(
+            array('userId' => $userId)
+        );
+    }
+
     public function declares()
     {
         return array(

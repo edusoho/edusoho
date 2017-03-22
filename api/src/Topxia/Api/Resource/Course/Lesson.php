@@ -4,6 +4,7 @@ namespace Topxia\Api\Resource\Course;
 
 use Silex\Application;
 use Biz\Util\CloudClientFactory;
+use AppBundle\Common\SettingToolkit;
 use Topxia\Api\Resource\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -45,10 +46,24 @@ class Lesson extends BaseResource
         if ($line = $request->query->get('line')) {
             $lesson['hlsLine'] = $line;
         }
+        $hls_encryption = $request->query->get('hls_encryption');
+        $enable_hls_encryption_plus = SettingToolkit::getSetting('storage.enable_hls_encryption_plus');
+
+        if (!empty($hls_encryption) && $enable_hls_encryption_plus) {
+            $lesson['hlsEncryption'] = true;
+        }
 
         $ssl = $request->isSecure() ? true : false;
 
-        return $this->filter($this->convertLessonContent($lesson, $ssl));
+        $lesson = $this->filter($this->convertLessonContent($lesson, $ssl));
+
+        $hasRemainTime = $this->hasRemainTime($lesson);
+        if ($hasRemainTime) {
+            $remainTime = $this->getRemainTime($currentUser, $lesson);
+            $lesson['remainTime'] = $remainTime;
+        }
+
+        return $lesson;
     }
 
     public function filter($lesson)
@@ -65,7 +80,7 @@ class Lesson extends BaseResource
             case 'ppt':
                 return $this->getPPTLesson($lesson, $ssl);
             case 'audio':
-                return $this->getVideoLesson($lesson, $ssl);
+                return $this->getAudioLesson($lesson, $ssl);
             case 'video':
                 return $this->getVideoLesson($lesson);
             case 'testpaper':
@@ -123,6 +138,19 @@ class Lesson extends BaseResource
             'previewUrl' => ($ssl ? 'https://' : 'http://').'service-cdn.qiqiuyun.net/js-sdk/document-player/v7/viewer.html#'.$result['pdf'],
             'resource' => $result['pdf'],
         );
+
+        return $lesson;
+    }
+
+    protected function getAudioLesson($lesson, $ssl = false)
+    {
+        $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
+        if (empty($file)) {
+            return $this->error('not_audio', "文件不存在");
+        }
+
+        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+        $lesson['mediaUri'] = $result['url'];
 
         return $lesson;
     }
@@ -315,6 +343,33 @@ class Lesson extends BaseResource
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    protected function hasRemainTime($task)
+    {
+        if ('video' != $task['type']) {
+            return false;
+        }
+
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+        if (empty($course['watchLimit'])) {
+            return false;
+        }
+
+        $isLimit = SettingToolkit::getSetting('magic.lesson_watch_limit');
+        if (!$isLimit) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function getRemainTime($user, $lesson)
+    {
+        $lessonLearn = $this->getCourseService()->getLearnByUserIdAndLessonId($user['id'], $lesson['id']);
+        $course = $this->getCourseService()->getCourse($lesson['courseId']);
+        $remainTime = ($course['watchLimit'] * $lesson['length']) - $lessonLearn['watchTime'];
+        return $remainTime;
     }
 
     protected function getCourseService()

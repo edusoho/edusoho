@@ -1173,11 +1173,6 @@ class SettingsController extends BaseController
         return $this->getBiz()->service('System:LogService');
     }
 
-    private function getWebExtension()
-    {
-        return $this->container->get('web.twig.extension');
-    }
-
     protected function downloadImg($url)
     {
         $currentUser = $this->getCurrentUser();

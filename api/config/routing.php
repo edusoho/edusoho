@@ -127,3 +127,4 @@ $app->get(_u('/me/friends'), 'res.MeFriends:get');
 $app->get(_u('/courses/{id}'), 'res.Course:get');
 $app->get(_u('/my/learning'), 'res.MyLearning:get');
 $app->get(_u('/courses_learn_progress'), 'res.CoursesLearnProgress:get');
+$app->post(_u('/lesson/watch_time'), 'res.LessonWatchTime:post');

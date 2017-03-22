@@ -2,30 +2,30 @@
 
 namespace AppBundle\Extension;
 
-use Pimple\Container;
-use Biz\Activity\Type\Doc;
-use Biz\Activity\Type\Ppt;
-use Biz\Activity\Type\Live;
-use Biz\Activity\Type\Text;
-use Biz\Question\Type\Fill;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Type\Audio;
-use Biz\Activity\Type\Flash;
-use Biz\Activity\Type\Video;
-use Biz\Question\Type\Essay;
-use Biz\Question\Type\Choice;
 use Biz\Activity\Type\Discuss;
+use Biz\Activity\Type\Doc;
 use Biz\Activity\Type\Download;
 use Biz\Activity\Type\Exercise;
+use Biz\Activity\Type\Flash;
 use Biz\Activity\Type\Homework;
-use Biz\Question\Type\Material;
+use Biz\Activity\Type\Live;
+use Biz\Activity\Type\Ppt;
 use Biz\Activity\Type\Testpaper;
+use Biz\Activity\Type\Text;
+use Biz\Activity\Type\Video;
+use Biz\Question\Type\Choice;
 use Biz\Question\Type\Determine;
-use AppBundle\Common\ArrayToolkit;
+use Biz\Question\Type\Essay;
+use Biz\Question\Type\Fill;
+use Biz\Question\Type\Material;
 use Biz\Question\Type\SingleChoice;
-use Pimple\ServiceProviderInterface;
 use Biz\Question\Type\UncertainChoice;
-use Codeages\Biz\Framework\Context\Biz;
 use Biz\Testpaper\Pattern\QuestionTypePattern;
+use Codeages\Biz\Framework\Context\Biz;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
 
 class DefaultExtension extends Extension implements ServiceProviderInterface
 {
@@ -560,26 +560,47 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
 
     protected function registerQuestionTypes($container)
     {
-        $container['question_type.choice'] = function () {
-            return new Choice();
+        $container['question_type.choice'] = function ($biz) {
+            $obj = new Choice();
+            $obj->setBiz($biz);
+
+            return $obj;
         };
-        $container['question_type.single_choice'] = function () {
-            return new SingleChoice();
+        $container['question_type.single_choice'] = function ($biz) {
+            $obj = new SingleChoice();
+            $obj->setBiz($biz);
+
+            return $obj;
         };
-        $container['question_type.uncertain_choice'] = function () {
-            return new UncertainChoice();
+        $container['question_type.uncertain_choice'] = function ($biz) {
+            $obj = new UncertainChoice();
+            $obj->setBiz($biz);
+
+            return $obj;
         };
-        $container['question_type.determine'] = function () {
-            return new Determine();
+        $container['question_type.determine'] = function ($biz) {
+            $obj = new Determine();
+            $obj->setBiz($biz);
+
+            return $obj;
         };
-        $container['question_type.essay'] = function () {
-            return new Essay();
+        $container['question_type.essay'] = function ($biz) {
+            $obj = new Essay();
+            $obj->setBiz($biz);
+
+            return $obj;
         };
-        $container['question_type.fill'] = function () {
-            return new Fill();
+        $container['question_type.fill'] = function ($biz) {
+            $obj = new Fill();
+            $obj->setBiz($biz);
+
+            return $obj;
         };
-        $container['question_type.material'] = function () {
-            return new Material();
+        $container['question_type.material'] = function ($biz) {
+            $obj = new Material();
+            $obj->setBiz($biz);
+
+            return $obj;
         };
 
         $container['testpaper_pattern.questionType'] = function ($container) {

@@ -1,24 +1,34 @@
 {% extends 'old-layout.html.twig' %}
 
-{% block title %}{{'搜索：'|trans}}{% if keywords %}{{ keywords }}{% else %}{{'全部课程'|trans}}{% endif %} - {{ parent() }}{% endblock %}
+{% block title %}{{ '搜索：'|trans }}{% if keywords %}{{ keywords }}{% else %}{{ '全部课程'|trans }}{% endif %} - {{ parent() }}{% endblock %}
 
 {% do load_script('search/cloud-search') %}
 
 {% block top_content %}
-  <div class="search-banner">
-    <div class="container">
-      <form class="input-group search-input-group" id="search-input-group" action="{{path('search')}}" method="get">
+  {% cache 'cloud-search/top/banner' 600 %}
+  <section class="search-banner es-live-poster swiper-container">
+    {% set banner = block_show('cloud_search_banner') %}
+    {% if  banner %}
+      {{ block_show('cloud_search_banner') }}
+    {% else %}
+      <div class="swiper-slide swiper-hidden"
+        style="background: #ffffff url({{ asset('/assets/img/placeholder/banner_search.jpg') }}) no-repeat; background-size: cover;">
+      </div>
+    {% endif %}
+    <div class="cloud-search-box">
+      <form class="input-group search-input-group" id="search-input-group" action="{{ path('search') }}" method="get">
         <div class="input-wrap">
-          <input type="text" name="q" class="form-control" placeholder="{{'可搜索课程、教师、话题、资讯'|trans}}" value="{{keywords}}">
+          <input type="text" name="q" class="form-control" placeholder="请输入搜索内容" value="{{ keywords }}">
           <i class="js-btn-clear es-icon es-icon-close01"></i>
         </div>
         <span class="input-group-btn">
-          <button class="btn btn-primary" type="submit">{{'搜索'|trans}}</button>
-        </span>
-        <input type="hidden" name="type" value="{{type|default('')}}" >
+            <button class="btn btn-primary" type="submit">{{ '搜索'|trans }}</button>
+          </span>
+        <input type="hidden" name="type" value="{{ type|default('') }}">
       </form>
     </div>
-  </div>
+  </section>
+  {% endcache %}
 {% endblock %}
 
 {% block content %}
@@ -26,15 +36,17 @@
     <div class="col-md-8">
       <div class="es-section">
         <ul class="nav nav-tabs" id="search-nav-tabs" role="tablist">
-          <li {% if type == 'course' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'course'}) }}" data-type="course" >{{'课程'|trans}}</a></li>
-          <li {% if type == 'teacher' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'teacher'}) }}" data-type="teacher" >{{'教师'|trans}}</a></li>
-          <li {% if type == 'thread' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'thread'}) }}" data-type="thread" >{{'小组话题'|trans}}</a></li>
-          <li {% if type == 'article' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'article'}) }}" data-type="article" >{{'资讯'|trans}}</a></li>
+          {% for index,useable in setting('cloud_search.type') %}
+            {% if useable %}
+              <li {% if type == index and useable == 1 %}class="active" {% endif %}><a href="{{ path('cloud_search',{q : keywords,type : index}) }}"
+                  data-type="{{ type }}">{{ dict('searchResultType')[index]|trans }}</a></li>
+            {% endif %}
+          {% endfor %}
         </ul>
         <div class="search-result" id="search-result">
-        {% if type %}
-          {% include 'search/search-' ~ type|lower ~ '.html.twig' %}
-        {% endif %}
+          {% if type %}
+            {% include 'search/search-' ~ type|lower ~ '.html.twig' %}
+          {% endif %}
         </div>
         <nav class="text-center">
           {{ web_macro.paginator(paginator) }}
@@ -42,18 +54,18 @@
       </div>
     </div>
     <div class="col-md-4">
-        {% if type %}
-          {% include 'search/search-hot-' ~ type|lower ~ '.html.twig' %}
-        {% else %}
+      {% if type %}
+        {% include 'search/search-hot-' ~ type|lower ~ '.html.twig' %}
+      {% else %}
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">{{'常用关键词'|trans}}</h3>
+            <h3 class="panel-title">{{ '常用关键词'|trans }}</h3>
           </div>
           <div class="panel-body">
 
           </div>
         </div>
-        {% endif %}
+      {% endif %}
     </div>
   </div>
 
