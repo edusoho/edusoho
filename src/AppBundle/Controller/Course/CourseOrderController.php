@@ -72,7 +72,7 @@ class CourseOrderController extends BaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         return $this->render(
-            'course/order/default-buy-modal.html.twig',
+            'course/order/buy-modal.html.twig',
             array(
                 'course' => $course,
                 'courseSet' => $courseSet,
@@ -82,9 +82,8 @@ class CourseOrderController extends BaseController
         );
     }
 
-    public function modifyUserInfoAction(Request $request)
+    public function modifyUserInfoAction($id)
     {
-        $formData = $request->request->all();
 
         $user = $this->getCurrentUser();
 
@@ -92,77 +91,17 @@ class CourseOrderController extends BaseController
             return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户未登录，不能购买。'));
         }
 
-        $course = $this->getCourseService()->getCourse($formData['targetId']);
+        $course = $this->getCourseService()->getCourse($id);
 
         if (empty($course)) {
             return $this->createMessageResponse('error', $this->getServiceKernel()->trans('课程不存在，不能购买。'));
-        }
-
-        $userInfo = ArrayToolkit::parts(
-            $formData,
-            array(
-                'truename',
-                'mobile',
-                'qq',
-                'company',
-                'weixin',
-                'weibo',
-                'idcard',
-                'gender',
-                'job',
-                'intField1',
-                'intField2',
-                'intField3',
-                'intField4',
-                'intField5',
-                'floatField1',
-                'floatField2',
-                'floatField3',
-                'floatField4',
-                'floatField5',
-                'dateField1',
-                'dateField2',
-                'dateField3',
-                'dateField4',
-                'dateField5',
-                'varcharField1',
-                'varcharField2',
-                'varcharField3',
-                'varcharField4',
-                'varcharField5',
-                'varcharField10',
-                'varcharField6',
-                'varcharField7',
-                'varcharField8',
-                'varcharField9',
-                'textField1',
-                'textField2',
-                'textField3',
-                'textField4',
-                'textField5',
-                'textField6',
-                'textField7',
-                'textField8',
-                'textField9',
-                'textField10',
-            )
-        );
-
-        $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
-        if (isset($formData['email']) && !empty($formData['email'])) {
-            $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
-            $this->authenticateUser($this->getUserService()->getUser($user['id']));
-
-            if (!$user['setup']) {
-                $this->getUserService()->setupAccount($user['id']);
-            }
         }
 
         return $this->redirect(
             $this->generateUrl(
                 'order_show',
                 array(
-                    'targetId' => $formData['targetId'],
+                    'targetId' => $id,
                     'targetType' => 'course',
                 )
             )

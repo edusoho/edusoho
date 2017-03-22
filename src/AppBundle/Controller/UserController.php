@@ -476,68 +476,9 @@ class UserController extends BaseController
     public function fillInfoWhenBuyAction(Request $request)
     {
         $user = $this->getCurrentUser();
-        $vipStatus =  $request->get('vipStatus');
-        $formData = $this->confirmFormData($request);
-        $userInfo = $this->saveUserInfo($request, $user);
-        $target = $formData['target'];
+        $this->saveUserInfo($request, $user);
 
-        if ($vipStatus) {
-            if ($target == 'course') {
-                return $this->forward(
-                    'VipPlugin:VipBuy:joinCourse',
-                    array('courseId' => $formData['targetId'])
-                );
-            } else {
-                return $this->forward(
-                    'VipPlugin:VipBuy:joinClassroom',
-                    array('classroomId' => $formData['targetId'])
-                );
-            }
-
-        }
-
-        if ($target == 'course') {
-            return $this->forward(
-                'AppBundle:Course/CourseOrder:modifyUserInfo',
-                array('request' => $request)
-            );
-        } else if ($target == 'classroom') {
-            return $this->forward(
-                'AppBundle:Classroom/Classroom:modifyUserInfo',
-                array('request' => $request)
-            );
-        }
-    }
-
-    protected function confirmFormData($request)
-    {
-        $formData = $request->request->all();
-        $user = $this->getCurrentUser();
-        $target = $formData['target'];
-
-        if (empty($user)) {
-            return $this->createMessageResponse('error', '用户未登录，不能购买。');
-        }
-
-        if ($target == 'classroom') {
-            $classroom = $this->getClassroomService()->getClassroom($formData['targetId']);
-
-            if (empty($classroom)) {
-                return $this->createMessageResponse('error', "{$classroom['title']}不存在，不能购买。");
-            }
-
-            $formData['targetLevelId'] = $classroom['vipLevelId'];
-        } else {
-            $course = $this->getCourseService()->getCourse($formData['targetId']);
-
-            if (empty($course)) {
-                return $this->createMessageResponse('error', "{$course['title']}不存在，不能购买。");
-            }
-
-            $formData['targetLevelId'] = $course['vipLevelId'];
-        }
-
-        return $formData;
+        return $this->redirect($request->get('targetUrl'));
     }
 
     protected function saveUserInfo($request, $user)

@@ -5,13 +5,17 @@
   {% set billable = true %}
 {% endif %}
 
+{% if is_plugin_installed('Vip') %}
+  {% set vipStatus = data('VipStatus', {'userId': user.id, 'levelId': course.vipLevelId})%}
+{% endif %}
+
 {% block title %}{% if billable %}{{'购买%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}{% else %}{{'加入学习'|trans}}{% endif %}{% endblock %}
 {% block body %}
 
   {% if billable %}
     <div class="alert alert-info">{{'注意：请在30分钟内完成支付，否则订单将会过期失效'|trans}}</div>
   {% endif %}
-  <form id="classroom-buy-form" class="form-horizontal" method="post" 
+  <form id="classroom-buy-form" class="form-horizontal" method="post"
   action="{{ path('order_fill_user_info',{id: user.id}) }}"
   >
     <div class="form-group">
@@ -53,14 +57,18 @@
         <div class="alert alert-info">{{'此%name%为免费%classroomName%，无需购买，可直接加入学习。'|trans({'%name%':setting('classroom.name')|default('班级'|trans),'%classroomName%':setting('classroom.name')|default('班级'|trans)})}}</div>
       {% endif %}
     {% endif %}
-    <input type="hidden" name="target" value='classroom' />
-    <input type="hidden" name="vipStatus" value="{{ vipStatus }}" />
-    <input type="hidden" name="targetId" value="{{ classroom.id }}" />
-    <input type="hidden" name="payment" value="alipay" />
+    <input type="hidden" name="targetUrl" value=
+    {% if vipStatus|default(0) %}
+      {{ path('join_classroom_by_vip',{'classroomId': classroom.id}) }}
+    {% else %}
+      {{ path('classroom_buy_modify_user_info',{'id': course.id}) }}
+    {% endif %}
+    />
+      <input type="hidden" name="payment" value="alipay" />
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
     {% include 'user/fill-userinfo-fields-block.html.twig' with {isBuyFillUserinfo:courseSetting.buy_fill_userinfo, userinfoFieldsSetting:courseSetting.userinfoFields, userFields:userFields, user:user, showNavTip:1} %}
-  
+
   </form>
 {% endblock %}
 
@@ -70,7 +78,7 @@
     {% if payments %}
       {% if member and (member.role == 'student' or member.role == 'teacher') %}
         <span class="color-gray">{{'预览模式无法支付%role%'|trans({'%role%':member.role})}}</span>
-        <button class="btn btn-primary" disabled="disabled">{{'去支付'|trans}}</button> 
+        <button class="btn btn-primary" disabled="disabled">{{'去支付'|trans}}</button>
       {% else %}
         {% if vipStatus == 'ok'%}
           <button id="join-course-btn" class="btn btn-primary" data-loading-text="{{'正在加入...'|trans}}" type="submit" data-toggle="form-submit" data-target="#classroom-buy-form">{{'加入学习'|trans}}</button>
@@ -85,8 +93,8 @@
   {% else %}
     {% if member and (member.role == 'student' or member.role == 'teacher') %}
       <span class="color-gray">{{'预览模式无法加入学习%role%'|trans({'%role%':member.role})}}</span>
-      <button class="btn btn-primary" disabled="disabled">{{'加入学习'|trans}}</button> 
-    {% else %}  
+      <button class="btn btn-primary" disabled="disabled">{{'加入学习'|trans}}</button>
+    {% else %}
       {% if not avatarAlert|default(null) and  classroom.showable and classroom.status != 'closed' %}
         <button id="join-course-btn" class="btn btn-primary" data-loading-text="{{'正在加入...'|trans}}" type="submit" data-toggle="form-submit" data-target="#classroom-buy-form">{{'加入学习'|trans}}</button>
       {% endif %}
