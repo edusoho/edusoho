@@ -24,7 +24,7 @@ class CourseSetTest extends BaseTestCase
           )
         );
 
-        $this->mockBiz('Course:CourseSet',array(
+        $this->mockBiz('Course:CourseSetService',array(
             array('functionName' => 'searchCourseSets', 'runTimes' => 1, 'returnValue' => $fakeCourseSets)
         ));
 

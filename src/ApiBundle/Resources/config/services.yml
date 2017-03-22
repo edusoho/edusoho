@@ -5,5 +5,11 @@ services:
 
     api_token_authenticator:
         class:  ApiBundle\Security\TokenAuthenticator
-        arguments: ['@service_container', '@biz']
+        arguments: ['@service_container']
         public: false
+
+    api_exception_listener:
+        class: ApiBundle\EventListener\ExceptionListener
+        arguments: ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, priority: 1024 }

@@ -16,7 +16,7 @@ class CourseSet extends Resource
             $conditions['status'] = 'published';
         }
 
-        $results = $this->createService('Course:CourseSet')->searchCourseSets($courseSetId, array(), 0, 1);
+        $results = $this->createService('Course:CourseSetService')->searchCourseSets($conditions, array(), 0, 1);
 
         if (empty($results)) {
             throw new ResourceNotFoundException('课程不存在或者无权限访问', 9);

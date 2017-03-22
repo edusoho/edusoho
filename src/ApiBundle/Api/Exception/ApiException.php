@@ -6,6 +6,8 @@ class ApiException extends \Exception
 {
     const HTTP_CODE = 500;
 
+    const CODE = 6;
+
     const TYPE = 'INTERNAL_SERVER_ERROR';
 
     public function __construct($message = 'INTERNAL_SERVER_ERROR', $code = 6, \Exception $previous = null)

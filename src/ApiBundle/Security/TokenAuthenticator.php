@@ -14,11 +14,11 @@ use Symfony\Component\Security\Http\Authentication\SimplePreAuthenticatorInterfa
 class TokenAuthenticator implements SimplePreAuthenticatorInterface
 {
     private $container;
-    private $biz;
 
     private $whiteList = array(
         'GET'  => array(
             '/^\/api\/users\/\d+$/',
+            '/^\/api\/course_sets\/\d+$/',
             '/^\/api\/mobileschools\/.+$/',
             '/^\/api\/classrooms\/\w+\/members$/',
             '/^\/api\/discovery_columns$/',
@@ -41,10 +41,9 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface
         )
     );
 
-    public function __construct($container, $biz)
+    public function __construct($container)
     {
         $this->container = $container;
-        $this->biz = $biz;
     }
 
     public function createToken(Request $request, $providerKey)
