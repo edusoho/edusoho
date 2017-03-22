@@ -32,6 +32,9 @@ class CourseManageController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
+
+            $data = $this->prepareExpiryMode($data);
+
             $this->getCourseService()->createCourse($data);
 
             return $this->redirect(
@@ -325,6 +328,27 @@ class CourseManageController extends BaseController
         return round($finishedTaskPerDay, 0);
     }
 
+    public function prepareExpiryMode($data)
+    {
+        if (empty($data['expiryMode']) || $data['expiryMode'] != 'days') {
+            unset($data['deadlineType']);
+        }
+        if (!empty($data['deadlineType'])) {
+            if ($data['deadlineType'] == 'end_date') {
+                $data['expiryMode'] = 'end_date';
+                $data['expiryEndDate'] = $data['deadline'];
+
+                return $data;
+            } else {
+                $data['expiryMode'] = 'days';
+
+                return $data;
+            }
+        }
+
+        return $data;
+    }
+
     protected function createCourseStrategy($course)
     {
         return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->get('biz'));
@@ -398,17 +422,7 @@ class CourseManageController extends BaseController
                 unset($data['buyExpiryTime']);
             }
 
-            if (empty($data['expiryMode']) || $data['expiryMode'] != 'days') {
-                unset($data['deadlineType']);
-            }
-            if (!empty($data['deadlineType'])) {
-                if ($data['deadlineType'] == 'end_date') {
-                    $data['expiryMode'] = 'end_date';
-                    $data['expiryEndDate'] = $data['deadline'];
-                } else {
-                    $data['expiryMode'] = 'days';
-                }
-            }
+            $data = $this->prepareExpiryMode($data);
 
             if (!empty($data['services'])) {
                 $data['services'] = json_decode($data['services'], true);
@@ -706,8 +720,8 @@ class CourseManageController extends BaseController
 
         $courseSetting = $this->setting('course');
 
-        if (!$this->getCurrentUser()->isAdmin(
-            ) && (empty($courseSetting['teacher_search_order']) || $courseSetting['teacher_search_order'] != 1)
+        if (!$this->getCurrentUser()->isAdmin()
+           && (empty($courseSetting['teacher_search_order']) || $courseSetting['teacher_search_order'] != 1)
         ) {
             throw $this->createAccessDeniedException('查询订单已关闭，请联系管理员');
         }
