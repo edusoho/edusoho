@@ -322,9 +322,8 @@ class CourseServiceImpl extends BaseService implements CourseService
      * 计算教学计划价格和虚拟币价格
      *
      * @param  $id
-     * @param int|float $originPrice 教学计划原价
-     *
-     * @return array (number, number)
+     * @param  int|float $originPrice 教学计划原价
+     * @return array     (number, number)
      */
     protected function calculateCoursePrice($id, $originPrice)
     {
@@ -885,8 +884,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param int $userId
-     *
+     * @param  int     $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -1151,6 +1149,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'summary' => $course['summary'],
             'exerciseId' => 0,
             'homeworkId' => 0,
+            'mediaUri' => '',
+            'mediaSource' => '',
         );
         $transformKeys = array(
             'isFree' => 'free',
@@ -1258,8 +1258,12 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         $task['mediaId'] = isset($activity['ext']['mediaId']) ? $activity['ext']['mediaId'] : 0;
+
         if ($task['type'] == 'video') {
+            $task['mediaSource'] = $activity['ext']['mediaSource'];
             $task['mediaUri'] = $activity['ext']['mediaUri'];
+        } elseif ($task['type'] == 'audio') {
+            $task['mediaSource'] = 'self';
         }
 
         return $task;
@@ -1743,7 +1747,6 @@ class CourseServiceImpl extends BaseService implements CourseService
      * 当默认值未设置时，合并默认值
      *
      * @param  $course
-     *
      * @return array
      */
     protected function mergeCourseDefaultAttribute($course)
@@ -1772,7 +1775,6 @@ class CourseServiceImpl extends BaseService implements CourseService
      *
      * @param  $userId
      * @param  $filters
-     *
      * @return array
      */
     protected function prepareUserLearnCondition($userId, $filters)
@@ -1799,7 +1801,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     /**
      * @param  $id
      * @param  $fields
-     *
      * @return mixed
      */
     private function processFields($id, $fields, $courseSet)

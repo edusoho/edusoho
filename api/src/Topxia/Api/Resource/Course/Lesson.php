@@ -17,7 +17,8 @@ class Lesson extends BaseResource
             return $this->error('not_courseId', "ID为#{$id}的课时不存在");
         }
 
-        $lesson = $this->getCourseService()->convertTasks(array($task), array());
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+        $lesson = $this->getCourseService()->convertTasks(array($task), $course);
         $lesson = array_shift($lesson);
 
         //直播回放
@@ -70,7 +71,7 @@ class Lesson extends BaseResource
                 return $this->getVideoLesson($lesson);
             case 'testpaper':
                 return $this->getTestpaperLesson($lesson);
-            case 'document':
+            case 'doc':
                 return $this->getDocumentLesson($lesson);
             default:
                 return $this->getTextLesson($lesson);
@@ -148,7 +149,7 @@ class Lesson extends BaseResource
             'resultId' => empty($testResult) ? 0 : $testResult['id'],
         );
 
-        return $this->getCourseService()->convertTasks(array($lesson), $course);
+        return $lesson;
     }
 
     private function getTextLesson($lesson)
