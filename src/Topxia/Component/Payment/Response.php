@@ -48,7 +48,7 @@ abstract class Response
 
     abstract public function getPayData();
 
-    public function getServiceKernel()
+    protected function getServiceKernel()
     {
         return ServiceKernel::instance();
     }
