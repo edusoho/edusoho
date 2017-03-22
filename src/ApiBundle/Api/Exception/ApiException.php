@@ -17,11 +17,11 @@ class ApiException extends \Exception
 
     public function getHttpCode()
     {
-        return self::HTTP_CODE;
+        return static::HTTP_CODE;
     }
 
     public function getType()
     {
-        return self::TYPE;
+        return static::TYPE;
     }
 }

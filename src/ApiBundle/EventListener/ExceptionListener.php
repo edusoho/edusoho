@@ -3,9 +3,6 @@
 namespace ApiBundle\EventListener;
 
 use ApiBundle\Api\Exception\ApiException;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
@@ -13,8 +10,6 @@ use Symfony\Component\Debug\Exception\FlattenException;
 
 class ExceptionListener
 {
-    private $logger;
-
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -25,7 +20,7 @@ class ExceptionListener
         $exception = $event->getException();
 
         $error = array();
-        if (!$exception instanceof ApiException) {
+        if ($exception instanceof ApiException) {
             $error['code'] = $exception->getCode();
             $error['type'] = $exception->getType();
             $httpCode = $exception->getHttpCode();
@@ -76,7 +71,7 @@ class ExceptionListener
                 $error['previous'][] = $previous;
             }
         }
-
+        
         $response = new JsonResponse(array('error' => $error), $httpCode);
         $event->setResponse($response);
         $event->stopPropagation();
@@ -86,10 +81,5 @@ class ExceptionListener
     {
         $env = $this->container->get( 'kernel' )->getEnvironment();
         return $env == 'dev';
-    }
-
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
     }
 }
