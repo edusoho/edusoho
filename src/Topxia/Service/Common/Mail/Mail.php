@@ -53,10 +53,8 @@ abstract class Mail
     {
         $biz = $this->getKernel()->getBiz();
 
-        $template = $this->parseTemplate($this->options);
-
         $factory = $biz['ratelimiter.factory'];
-        $limiter = $factory('email_'.$template['template'], 5, 1800);
+        $limiter = $factory('email_'.$this->options['template'], 5, 1800);
         $remain = $limiter->check($this->to);
         if ($remain == 0) {
             throw new AccessDeniedException($this->getKernel()->trans('操作过于频繁，请30分钟之后再试'));
