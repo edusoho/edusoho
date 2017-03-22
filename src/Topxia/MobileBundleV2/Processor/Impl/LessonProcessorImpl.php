@@ -470,7 +470,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                 return $this->getVideoLesson($lesson);
             case 'testpaper':
                 return $this->getTestpaperLesson($lesson);
-            case 'doc':
+            case 'document':
                 return $this->getDocumentLesson($lesson);
             default:
                 $lesson['content'] = $this->wrapContent($lesson['content']);
@@ -769,8 +769,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     private function filterLessons($lessons, $files)
     {
-        $self = $this;
-        return array_map(function ($lesson) use ($files, $self) {
+        return array_map(function ($lesson) use ($files) {
             $lesson['content'] = "";
             $lesson['uploadFile'] = array();
 
@@ -781,7 +780,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             }
 
             unset($lesson['tags']);
-            return $self->controller->filterTask($lesson);
+            return $lesson;
         }, $lessons);
     }
 
