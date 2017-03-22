@@ -456,37 +456,8 @@ class UserController extends BaseController
         $goto = $this->getTargetPath($request);
 
         if ($request->getMethod() == 'POST') {
-            $formData = $request->request->all();
 
-            $userInfo = ArrayToolkit::parts($formData, array(
-                'truename',
-                'mobile',
-                'qq',
-                'company',
-                'weixin',
-                'weibo',
-                'idcard',
-                'gender',
-                'job',
-                'intField1', 'intField2', 'intField3', 'intField4', 'intField5',
-                'floatField1', 'floatField2', 'floatField3', 'floatField4', 'floatField5',
-                'dateField1', 'dateField2', 'dateField3', 'dateField4', 'dateField5',
-                'varcharField1', 'varcharField2', 'varcharField3', 'varcharField4', 'varcharField5', 'varcharField10', 'varcharField6', 'varcharField7', 'varcharField8', 'varcharField9',
-                'textField1', 'textField2', 'textField3', 'textField4', 'textField5', 'textField6', 'textField7', 'textField8', 'textField9', 'textField10',
-            ));
-
-            if (isset($formData['email']) && !empty($formData['email'])) {
-                $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
-
-                $currentUser = new CurrentUser();
-                $currentUser->fromArray($this->getUserService()->getUser($user['id']));
-                $this->switchUser($request, $currentUser);
-                if (!$user['setup']) {
-                    $this->getUserService()->setupAccount($user['id']);
-                }
-            }
-
-            $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
+            $userInfo = $this->saveUserInfo($request, $user);
 
             return $this->redirect($goto);
         }
@@ -500,6 +471,110 @@ class UserController extends BaseController
             'user' => $userInfo,
             'goto' => $goto,
         ));
+    }
+
+    public function fillInfoWhenBuyAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        $vipStatus =  $request->get('vipStatus');
+        $formData = $this->confirmFormData($request);
+        $userInfo = $this->saveUserInfo($request, $user);
+        $target = $formData['target'];
+
+        if ($vipStatus) {
+            if ($target == 'course') {
+                return $this->forward(
+                    'VipPlugin:VipBuy:joinCourse',
+                    array('courseId' => $formData['targetId'])
+                );
+            } else {
+                return $this->forward(
+                    'VipPlugin:VipBuy:joinClassroom',
+                    array('classroomId' => $formData['targetId'])
+                );
+            }
+
+        }
+
+        if ($target == 'course') {
+            return $this->forward(
+                'AppBundle:Course/CourseOrder:modifyUserInfo',
+                array('request' => $request)
+            );
+        } else if ($target == 'classroom') {
+            return $this->forward(
+                'AppBundle:Classroom/Classroom:modifyUserInfo',
+                array('request' => $request)
+            );
+        }
+    }
+
+    protected function confirmFormData($request)
+    {
+        $formData = $request->request->all();
+        $user = $this->getCurrentUser();
+        $target = $formData['target'];
+
+        if (empty($user)) {
+            return $this->createMessageResponse('error', '用户未登录，不能购买。');
+        }
+
+        if ($target == 'classroom') {
+            $classroom = $this->getClassroomService()->getClassroom($formData['targetId']);
+
+            if (empty($classroom)) {
+                return $this->createMessageResponse('error', "{$classroom['title']}不存在，不能购买。");
+            }
+
+            $formData['targetLevelId'] = $classroom['vipLevelId'];
+        } else {
+            $course = $this->getCourseService()->getCourse($formData['targetId']);
+
+            if (empty($course)) {
+                return $this->createMessageResponse('error', "{$course['title']}不存在，不能购买。");
+            }
+
+            $formData['targetLevelId'] = $course['vipLevelId'];
+        }
+
+        return $formData;
+    }
+
+    protected function saveUserInfo($request, $user)
+    {
+        $formData = $request->request->all();
+
+        $userInfo = ArrayToolkit::parts($formData, array(
+            'truename',
+            'mobile',
+            'qq',
+            'company',
+            'weixin',
+            'weibo',
+            'idcard',
+            'gender',
+            'job',
+            'intField1', 'intField2', 'intField3', 'intField4', 'intField5',
+            'floatField1', 'floatField2', 'floatField3', 'floatField4', 'floatField5',
+            'dateField1', 'dateField2', 'dateField3', 'dateField4', 'dateField5',
+            'varcharField1', 'varcharField2', 'varcharField3', 'varcharField4', 'varcharField5', 'varcharField10', 'varcharField6', 'varcharField7', 'varcharField8', 'varcharField9',
+            'textField1', 'textField2', 'textField3', 'textField4', 'textField5', 'textField6', 'textField7', 'textField8', 'textField9', 'textField10',
+        ));
+
+        if (isset($formData['email']) && !empty($formData['email'])) {
+            $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
+
+            $currentUser = new CurrentUser();
+            $currentUser->fromArray($this->getUserService()->getUser($user['id']));
+            $this->switchUser($request, $currentUser);
+            if (!$user['setup']) {
+                $this->getUserService()->setupAccount($user['id']);
+            }
+        }
+
+        $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
+
+        return $userInfo;
     }
 
     protected function tryGetUser($id)

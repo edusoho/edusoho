@@ -1,0 +1,10 @@
+{% if is_plugin_installed('Vip') %}
+  {% set vipStatus = data('VipStatus', {'userId': user.id, 'levelId': classroom.vipLevelId})%}
+  {% if vipStatus %}
+    {% include 'classroom/vip-buy-modal.html.twig' %}
+  {% else %}
+    {% include 'classroom/buy-modal.html.twig' %}
+  {% endif %}
+{% else %}
+  {% include 'classroom/buy-modal.html.twig' %}
+{% endif %}

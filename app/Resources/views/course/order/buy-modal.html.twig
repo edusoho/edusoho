@@ -10,7 +10,7 @@
 
 {% block body %}
   <form id="course-buy-form" class="form-horizontal" method="post"
-  action="{{ path('course_buy_modify_user_info') }}"
+  action="{{ path('order_fill_user_info',{id: user.id}) }}"
   >
     <div class="form-group">
       <div class="col-sm-3 control-label">{{'课程名称'|trans}}</div>
@@ -23,6 +23,7 @@
       <div class="col-sm-3 control-label">{{'价格'|trans}}</div>
       <div class="col-sm-9 controls money-text">
       	<span class="control-text">
+          {% block price %}
           {% if course.isFree %}
             <strong class="money">{{ '免费'|trans }}</strong>
           {% else %}
@@ -34,10 +35,12 @@
               <span class="color-gray">{{'元'|trans}}</span>
             {% endif %}
           {% endif %}
+          {% endblock %}
       	</span>
       </div>
     </div>
-
+    <input type="hidden" name="vipStatus" value={{ vipStatus }} />
+    <input type="hidden" name="target" value="course" />
     <input type="hidden" name="targetId" value="{{ course.id }}" />
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
@@ -50,11 +53,13 @@
 
 {% block footer %}
   <button id="course-pay" class="btn btn-primary" type="submit" data-loading-text="{{'正在创建订单'|trans}}..." data-toggle="form-submit" data-target="#course-buy-form">
-  {% if course.isFree %}
-    {{'免费加入'|trans}}
-  {% else%}
-    {{'去支付'|trans}}
-  {% endif %}
+    {% block footerTitle %}
+      {% if course.isFree %}
+        {{'免费加入'|trans}}
+      {% else%}
+        {{'去支付'|trans}}
+      {% endif %}
+    {% endblock %}
   </button>
   {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>

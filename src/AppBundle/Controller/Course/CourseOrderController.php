@@ -72,7 +72,7 @@ class CourseOrderController extends BaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         return $this->render(
-            'course/order/buy-modal.html.twig',
+            'course/order/default-buy-modal.html.twig',
             array(
                 'course' => $course,
                 'courseSet' => $courseSet,

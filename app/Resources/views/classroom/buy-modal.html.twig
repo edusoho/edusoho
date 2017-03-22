@@ -12,7 +12,7 @@
     <div class="alert alert-info">{{'注意：请在30分钟内完成支付，否则订单将会过期失效'|trans}}</div>
   {% endif %}
   <form id="classroom-buy-form" class="form-horizontal" method="post" 
-  action="{{ path('classroom_buy_modify_user_info') }}"
+  action="{{ path('order_fill_user_info',{id: user.id}) }}"
   >
     <div class="form-group">
       <div class="col-sm-3 control-label">{{'%name%名称'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</div>
@@ -52,7 +52,9 @@
       {% else %}
         <div class="alert alert-info">{{'此%name%为免费%classroomName%，无需购买，可直接加入学习。'|trans({'%name%':setting('classroom.name')|default('班级'|trans),'%classroomName%':setting('classroom.name')|default('班级'|trans)})}}</div>
       {% endif %}
-    {% endif %}     
+    {% endif %}
+    <input type="hidden" name="target" value='classroom' />
+    <input type="hidden" name="vipStatus" value="{{ vipStatus }}" />
     <input type="hidden" name="targetId" value="{{ classroom.id }}" />
     <input type="hidden" name="payment" value="alipay" />
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

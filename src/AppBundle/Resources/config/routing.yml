@@ -623,6 +623,11 @@ user_show:
     path:  /user/{id}
     defaults: { _controller: AppBundle:User:show }
 
+order_fill_user_info:
+    path: /user/{id}/saveinfo
+    defaults: { _controller: AppBundle:User:fillInfoWhenBuy }
+    methods: [POST]
+
 my_page_show:
     path:  /my/page/show
     defaults: { _controller: AppBundle:User:pageShow }
