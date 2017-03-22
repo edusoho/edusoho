@@ -325,20 +325,19 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, array($userId, $role, $type));
     }
 
-    public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline)
+    public function updateByClassroomIdAndUserId($classroomId, $userId, array $fields)
     {
-        $sql = "UPDATE {$this->table} SET deadline = ? WHERE classroomId = ? AND userId = ?";
-        $this->db()->executeUpdate($sql, array($deadline, $classroomId, $userId));
+        return $this->update(array(
+            'classroomId' => $classroomId,
+            'userId' => $userId,
+        ), $fields);
     }
 
-    public function updateMembersDeadlineByClassroomId($classroomId, $deadline)
+    public function updateByClassroomId($classroomId, array $fields)
     {
-        $sql = "UPDATE {$this->table} SET deadline = ? WHERE classroomId = ?";
-        $this->db()->executeUpdate($sql, array($deadline, $classroomId));
-
-        return $this->findByFields(array(
+        return $this->update(array(
             'classroomId' => $classroomId,
-        ));
+        ), $fields);
     }
 
     protected function _buildJoinQueryBuilder($conditions, $joinConnections = '')
