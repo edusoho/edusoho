@@ -93,7 +93,7 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
     public function searchCourseFavorites($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $orderBy = $this->checkOrderBy($orderBy, array('createdTime'));
+        $orderBy = $this->checkOrderBy($orderBy, array('createdTime','id'));
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
             ->setFirstResult($start)
