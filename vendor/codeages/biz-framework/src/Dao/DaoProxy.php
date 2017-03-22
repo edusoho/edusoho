@@ -18,54 +18,61 @@ class DaoProxy implements DaoProxyInterface
     {
         $daoMethod = null;
         if (strpos($method, 'get') === 0) {
-            $daoMethod = '_get';
+            $daoMethod = 'get';
         }
 
         if ((strpos($method, 'find') === 0) || (strpos($method, 'search') === 0)) {
-            $daoMethod = '_find';
+            $daoMethod = 'find';
         }
 
         if (strpos($method, 'create') === 0) {
-            $daoMethod = '_create';
+            $daoMethod = 'create';
         }
 
         if (strpos($method, 'update') === 0) {
-            $daoMethod = '_update';
+            $daoMethod = 'update';
         }
 
         if (null !== $daoMethod) {
             return $this->$daoMethod($method, $arguments);
         }
 
-        return $this->_callRealDao($method, $arguments);
+        return $this->callRealDao($method, $arguments);
     }
 
-    private function _get($method, $arguments)
+    private function get($method, $arguments)
     {
-        $row = $this->_callRealDao($method, $arguments);
+        $row = $this->callRealDao($method, $arguments);
         $this->unserialize($row);
 
         return $row;
     }
 
-    private function _update($method, $arguments)
+    private function update($method, $arguments)
     {
         $declares = $this->dao->declares();
-        if (is_array($arguments[1]) && isset($declares['timestamps'][1])) {
-            $arguments[1][$declares['timestamps'][1]] = time();
+
+        end($arguments);
+        $lastKey = key($arguments);
+        reset($arguments);
+
+        if (!is_array($arguments[$lastKey])) {
+            throw new DaoException('update method arguments last element must be array type');
         }
 
-        if (is_array($arguments[1])) {
-            $this->serialize($arguments[1]);
+        if (isset($declares['timestamps'][1])) {
+            $arguments[$lastKey][$declares['timestamps'][1]] = time();
         }
 
-        $row = $this->_callRealDao($method, $arguments);
+        $this->serialize($arguments[$lastKey]);
+
+        $row = $this->callRealDao($method, $arguments);
         $this->unserialize($row);
 
         return $row;
     }
 
-    private function _create($method, $arguments)
+    private function create($method, $arguments)
     {
         $declares = $this->dao->declares();
         if (isset($declares['timestamps'][0])) {
@@ -77,21 +84,21 @@ class DaoProxy implements DaoProxyInterface
         }
 
         $this->serialize($arguments[0]);
-        $row = $this->_callRealDao($method, $arguments);
+        $row = $this->callRealDao($method, $arguments);
         $this->unserialize($row);
 
         return $row;
     }
 
-    private function _find($method, $arguments)
+    private function find($method, $arguments)
     {
-        $rows = $this->_callRealDao($method, $arguments);
+        $rows = $this->callRealDao($method, $arguments);
         $this->unserializes($rows);
 
         return $rows;
     }
 
-    private function _callRealDao($method, $arguments)
+    private function callRealDao($method, $arguments)
     {
         return call_user_func_array(array($this->dao, $method), $arguments);
     }

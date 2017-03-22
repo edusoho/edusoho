@@ -23,7 +23,7 @@ class CardDaoImpl extends GeneralDaoImpl implements CardDao
         ));
     }
 
-    public function updateByCardIdAndCardType($fields, $cardId, $cardType)
+    public function updateByCardIdAndCardType($cardId, $cardType, $fields)
     {
         $this->db()->update($this->table, $fields, array('cardId' => $cardId, 'cardType' => $cardType));
 

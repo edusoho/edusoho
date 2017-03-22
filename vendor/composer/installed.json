@@ -3273,46 +3273,6 @@
         ]
     },
     {
-        "name": "codeages/biz-framework",
-        "version": "v0.2.6",
-        "version_normalized": "0.2.6.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "8dd51d3e160ff8d137bed599873aef88ffe0a638"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/8dd51d3e160ff8d137bed599873aef88ffe0a638",
-            "reference": "8dd51d3e160ff8d137bed599873aef88ffe0a638",
-            "shasum": ""
-        },
-        "require": {
-            "davedevelopment/phpmig": "^1.2.0",
-            "doctrine/dbal": "^2.4.5",
-            "php": "^5.3.3 || ^7.0",
-            "pimple/pimple": "^3.0.2",
-            "psr/log": "^1.0.0",
-            "symfony/event-dispatcher": "^2.8.9"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
-        },
-        "time": "2017-03-17T04:46:10+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\Biz\\Framework\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "A service layer framework."
-    },
-    {
         "name": "codeages/biz-rate-limiter",
         "version": "v0.1.3",
         "version_normalized": "0.1.3.0",
@@ -3707,5 +3667,45 @@
             "selenium",
             "webdriver"
         ]
+    },
+    {
+        "name": "codeages/biz-framework",
+        "version": "v0.2.7",
+        "version_normalized": "0.2.7.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/biz-framework.git",
+            "reference": "fc5a484ac20c8dcfea783e1e87b6e304fa3531a4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/fc5a484ac20c8dcfea783e1e87b6e304fa3531a4",
+            "reference": "fc5a484ac20c8dcfea783e1e87b6e304fa3531a4",
+            "shasum": ""
+        },
+        "require": {
+            "davedevelopment/phpmig": "^1.2.0",
+            "doctrine/dbal": "^2.4.5",
+            "php": "^5.3.3 || ^7.0",
+            "pimple/pimple": "^3.0.2",
+            "psr/log": "^1.0.0",
+            "symfony/event-dispatcher": "^2.8.9"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
+        },
+        "time": "2017-03-22T08:44:51+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Biz\\Framework\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "A service layer framework."
     }
 ]

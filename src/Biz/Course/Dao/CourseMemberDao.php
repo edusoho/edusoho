@@ -114,7 +114,7 @@ interface CourseMemberDao extends GeneralDaoInterface
 
     public function findMembersNotInClassroomByUserIdAndRoleAndType($userId, $role, $type, $start, $limit, $onlyPublished = true);
 
-    public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline);
+    public function updateByClassroomIdAndUserId($classroomId, $userId, array $fields);
 
-    public function updateMembersDeadlineByClassroomId($classroomId, $deadline);
+    public function updateByClassroomId($classroomId, array $fields);
 }
