@@ -44,8 +44,9 @@
               <span class="js-course-add-close-show {% if course.buyable|default(1) == 1 %} hidden {% endif %} ">仅作展示用</span>
             </div>
           </div>
+          {{ slot('course.marketing.setting', {'course':course}) }}
+          
           <div class="js-course-add-open-show {% if course.buyable|default(1) == 0 %} hidden {% endif %}">
-            {{ slot('course.marketing.setting', {'course':course}) }}
             <div class="form-group ">
               <div class="col-sm-2 control-label">
                 <label class="control-label-required">{{'加入截止日期'|trans}}</label>
