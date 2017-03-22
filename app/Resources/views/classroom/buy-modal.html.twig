@@ -6,7 +6,7 @@
 {% endif %}
 
 {% if is_plugin_installed('Vip') %}
-  {% set vipStatus = data('VipStatus', {'userId': user.id, 'levelId': course.vipLevelId})%}
+  {% set vipStatus = data('VipStatus', {'userId': user.id, 'levelId': classroom.vipLevelId})%}
 {% endif %}
 
 {% block title %}{% if billable %}{{'购买%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}{% else %}{{'加入学习'|trans}}{% endif %}{% endblock %}
@@ -16,7 +16,7 @@
     <div class="alert alert-info">{{'注意：请在30分钟内完成支付，否则订单将会过期失效'|trans}}</div>
   {% endif %}
   <form id="classroom-buy-form" class="form-horizontal" method="post"
-  action="{{ path('order_fill_user_info',{id: user.id}) }}"
+  action="{{ path('fill_user_info',{id: user.id}) }}"
   >
     <div class="form-group">
       <div class="col-sm-3 control-label">{{'%name%名称'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</div>
@@ -30,7 +30,7 @@
       <div class="col-sm-3 control-label">{{'价格'|trans}}</div>
       <div class="col-sm-9 controls money-text">
       	<span class="form-control-static">
-          {% if vipStatus == 'ok' %}
+          {% if vipStatus|default(0) %}
             {{'会员免费'|trans}}
           {% else %}
             {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
@@ -61,7 +61,7 @@
     {% if vipStatus|default(0) %}
       {{ path('join_classroom_by_vip',{'classroomId': classroom.id}) }}
     {% else %}
-      {{ path('classroom_buy_modify_user_info',{'id': course.id}) }}
+      {{ path('classroom_buy_modify_user_info',{'id': classroom.id}) }}
     {% endif %}
     />
       <input type="hidden" name="payment" value="alipay" />
@@ -80,13 +80,13 @@
         <span class="color-gray">{{'预览模式无法支付%role%'|trans({'%role%':member.role})}}</span>
         <button class="btn btn-primary" disabled="disabled">{{'去支付'|trans}}</button>
       {% else %}
-        {% if vipStatus == 'ok'%}
+        {% if vipStatus|default(0) %}
           <button id="join-course-btn" class="btn btn-primary" data-loading-text="{{'正在加入...'|trans}}" type="submit" data-toggle="form-submit" data-target="#classroom-buy-form">{{'加入学习'|trans}}</button>
         {% else %}
           <button id="course-pay" class="btn btn-primary" type="submit" data-loading-text="{{'正在创建订单...'|trans}}" data-toggle="form-submit" data-target="#classroom-buy-form">{{'去支付'|trans}}</button>
         {% endif %}
       {% endif %}
-    {% elseif not payments and vipStatus == 'ok' %}
+    {% elseif not payments and vipStatus|default(0) %}
      <button {% if classroom.status != 'published'%} disabled="disabled" {% endif %}
      id="join-course-btn" class="btn btn-primary" data-loading-text="{{'正在加入...'|trans}}" type="submit" data-toggle="form-submit" data-target="#classroom-buy-form">{{'加入学习'|trans}}</button>
     {% endif %}

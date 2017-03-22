@@ -26,8 +26,7 @@
       <div class="col-sm-3 control-label">{{'价格'|trans}}</div>
       <div class="col-sm-9 controls money-text">
       	<span class="form-control-static">
-          {% block price %}
-          {% if course.isFree %}
+          {% if course.isFree or vipStatus|default(0) %}
             <strong class="money">{{ '免费'|trans }}</strong>
           {% else %}
             {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
@@ -38,7 +37,6 @@
               <span class="color-gray">{{'元'|trans}}</span>
             {% endif %}
           {% endif %}
-          {% endblock %}
       	</span>
       </div>
     </div>
@@ -60,13 +58,11 @@
 
 {% block footer %}
   <button id="course-pay" class="btn btn-primary" type="submit" data-loading-text="{{'正在创建订单'|trans}}..." data-toggle="form-submit" data-target="#course-buy-form">
-    {% block footerTitle %}
       {% if course.isFree or vipStatus|default(0) %}
         {{'免费加入'|trans}}
       {% else%}
         {{'去支付'|trans}}
       {% endif %}
-    {% endblock %}
   </button>
   {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>
