@@ -86,7 +86,7 @@ class Lesson extends BaseResource
                 return $this->getVideoLesson($lesson);
             case 'testpaper':
                 return $this->getTestpaperLesson($lesson);
-            case 'doc':
+            case 'document':
                 return $this->getDocumentLesson($lesson);
             default:
                 return $this->getTextLesson($lesson);
