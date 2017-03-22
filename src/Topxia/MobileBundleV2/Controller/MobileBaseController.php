@@ -324,11 +324,16 @@ class MobileBaseController extends BaseController
 
     private function convertOldFields($course)
     {
-        $course['expiryDay'] = $course['expiryDays'];
-        $course['lessonNum'] = $course['taskNum'];
-        $course['userId'] = $course['creator'];
-        $course['tryLookTime'] = $course['tryLookLength'];
-
+        $convertKeys = array(
+            'expiryDays' => 'expiryDay',
+            'taskNum' => 'lessonNum',
+            'creator' => 'userId',
+            'tryLookLength' => 'tryLookTime',
+            'summary' => 'about'
+        );
+        foreach ($convertKeys as $key => $value) {
+            $course[$value] = $course[$key];
+        }
         return $course;
     }
 
