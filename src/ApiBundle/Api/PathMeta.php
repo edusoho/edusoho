@@ -3,6 +3,7 @@
 namespace ApiBundle\Api;
 
 use ApiBundle\Api\Exception\BadRequestException;
+use ApiBundle\Api\Resource\Resource;
 
 class PathMeta
 {
@@ -13,14 +14,14 @@ class PathMeta
     private $slugs = array();
 
     private $singleMap = array(
-        'GET' => 'get',
-        'POST' => 'update',
-        'DELETE' => 'remove'
+        'GET' => Resource::METHOD_GET,
+        'POST' => Resource::METHOD_UPDATE,
+        'DELETE' => Resource::METHOD_REMOVE
     );
 
     private $listMap = array(
-        'GET' => 'search',
-        'POST' => 'add'
+        'GET' => Resource::METHOD_SEARCH,
+        'POST' => Resource::METHOD_ADD
     );
 
     public function getQualifiedResName()

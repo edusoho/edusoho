@@ -23,7 +23,8 @@ abstract class Resource
 
     const METHOD_SEARCH = 'search';
     const METHOD_GET = 'get';
-    const METHOD_CREATE = 'create';
+    const METHOD_ADD = 'add';
+    const METHOD_REMOVE = 'remove';
     const METHOD_UPDATE = 'update';
 
     public function __construct(Biz $biz)
@@ -154,6 +155,17 @@ abstract class Resource
         $path = $this->getHttpHost()."/files/{$path}";
 
         return $path;
+    }
+
+    public function supportMethods()
+    {
+        return array(
+            static::METHOD_ADD,
+            static::METHOD_GET,
+            static::METHOD_SEARCH,
+            static::METHOD_UPDATE,
+            static::METHOD_REMOVE
+        );
     }
 
     protected function getAssetUrl($path)

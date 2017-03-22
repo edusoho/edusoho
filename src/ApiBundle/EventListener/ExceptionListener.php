@@ -71,7 +71,7 @@ class ExceptionListener
                 $error['previous'][] = $previous;
             }
         }
-        
+
         $response = new JsonResponse(array('error' => $error), $httpCode);
         $event->setResponse($response);
         $event->stopPropagation();

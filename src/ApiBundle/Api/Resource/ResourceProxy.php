@@ -2,19 +2,9 @@
 
 namespace ApiBundle\Api\Resource;
 
-use ApiBundle\Api\PathMeta;
-use Codeages\Biz\Framework\Context\Biz;
-
 class ResourceProxy
 {
     private $resource;
-
-    private $proxyMethods = array(
-        Resource::METHOD_CREATE,
-        Resource::METHOD_GET,
-        Resource::METHOD_SEARCH,
-        Resource::METHOD_UPDATE
-    );
 
     public function __construct(Resource $resource)
     {
@@ -24,7 +14,7 @@ class ResourceProxy
     public function __call($method, $arguments)
     {
         $result = call_user_func_array(array($this->resource, $method), $arguments);
-        if (in_array($method, $this->proxyMethods) && $this->resource->getFilter()) {
+        if (in_array($method, $this->resource->supportMethods()) && $this->resource->getFilter()) {
             $this->filterResult($method, $result);
         }
 

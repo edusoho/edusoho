@@ -3,6 +3,8 @@
 namespace Tests\Unit\ApiBundle\Api;
 
 use ApiBundle\Api\PathParser;
+use ApiBundle\Api\Resource\CourseSet\CourseSet;
+use ApiBundle\Api\Resource\Resource;
 use ApiBundle\Api\Resource\ResourceManager;
 use ApiBundle\Api\ResourceKernel;
 use Codeages\Biz\Framework\Context\Biz;
@@ -10,65 +12,44 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ResourceKernelTest extends \PHPUnit_Framework_TestCase
 {
-    public function testHandleWithAdd()
+    public function testHandle()
     {
-        $kernel = new ResourceKernel(
-            new PathParser(),
-            new ResourceManager(new Biz())
-        );
-
-        $fakeCourse = array(
+        $fakeResource = array(
             'id' => 1,
             'title' => 'fake course'
         );
-        $request = Request::create('http://test.com/courses', 'POST', $fakeCourse);
-        $result = $kernel->handle($request);
+        $resourceStub = $this->mockResource($fakeResource);
+        $resManagerStub = $this->mockResManager($resourceStub);
 
-        $this->assertEquals($fakeCourse, $result);
-    }
-
-    public function testHandleWithUpdate()
-    {
         $kernel = new ResourceKernel(
             new PathParser(),
-            new ResourceManager(new Biz())
+            $resManagerStub
         );
 
-        $fakeCourse = array(
-            'id' => 2,
-            'title' => 'fake course 2222'
-        );
-        $request = Request::create('http://test.com/courses/2', 'POST', $fakeCourse);
+        $request = Request::create('http://test.com/resources', 'POST', $fakeResource);
         $result = $kernel->handle($request);
 
-        $this->assertEquals($fakeCourse, $result);
+        $this->assertEquals($fakeResource, $result);
     }
 
-    public function testHandleWithSearch()
+    private function mockResource($fakeResource)
     {
-        $kernel = new ResourceKernel(
-            new PathParser(),
-            new ResourceManager(new Biz())
-        );
+        $stub = $this->createMock(CourseSet::class);
 
-
-        $request = Request::create('http://test.com/courses', 'GET');
-        $result = $kernel->handle($request);
-
-        $this->assertCount(2, $result);
+        // 配置桩件。
+        $stub->method('add')
+            ->willReturn($fakeResource);
+        return $stub;
     }
 
-    public function testHandleWithDelete()
+    private function mockResManager($resourceStub)
     {
-        $kernel = new ResourceKernel(
-            new PathParser(),
-            new ResourceManager(new Biz())
-        );
+        $stub = $this->createMock(ResourceManager::class);
 
+        // 配置桩件。
+        $stub->method('create')
+            ->willReturn($resourceStub);
 
-        $request = Request::create('http://test.com/courses/2', 'DELETE');
-        $result = $kernel->handle($request);
-
-        $this->assertTrue($result);
+        return $stub;
     }
 }

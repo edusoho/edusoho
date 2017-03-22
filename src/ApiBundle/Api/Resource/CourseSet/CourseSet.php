@@ -24,4 +24,9 @@ class CourseSet extends Resource
 
         return $results[0];
     }
+
+    public function add()
+    {
+
+    }
 }
