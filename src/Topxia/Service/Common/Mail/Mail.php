@@ -53,7 +53,7 @@ abstract class Mail
     {
         $biz = $this->getKernel()->getBiz();
 
-        $template = $this->parseTemplate($options);
+        $template = $this->parseTemplate($this->options);
 
         $factory = $biz['ratelimiter.factory'];
         $limiter = $factory('email_'.$template['template'], 5, 1800);
