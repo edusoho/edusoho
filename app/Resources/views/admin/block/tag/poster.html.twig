@@ -1,6 +1,7 @@
 {% set first = 1 %}
 {% for dataId,data in  block.data[code]|default(null) %}
   <div role="tabpanel" class="tab-pane {% if first == 1 %}active{% endif %}" id="poster-{{ dataId }}">
+    {% if block.code != 'cloud_search_banner' %}
     <div class="form-group">
       <label class="col-sm-2 control-label">{{'是否开启'|trans}}</label>
       <label class="checkbox-inline">
@@ -11,6 +12,9 @@
       </label>
       <input class="status-value" type="hidden" name="data[{{ code }}][{{ dataId }}][status]" value="{{ data.status }}">
     </div>
+    {% else %}
+    <input type="hidden" name="data[{{ code }}][{{ dataId }}][status]" value="{{ data.status|default() }}">
+    {% endif %}
     <div class="form-group">
       <label class="col-sm-2 control-label">{{'布局模式'|trans}}</label>
       <label class="checkbox-inline">
@@ -49,6 +53,9 @@
               {{'[ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：300px'|trans}}<br>
               {{'[ 平铺居中 ] 图片推荐尺寸 宽：1920px，高：450px'|trans}}<br>
               {{'建议所有海报 [ 布局模式 ] 、 [ 海报尺寸 ] 保持一致。'|trans}}
+            {% elseif block.code == 'cloud_search_banner' %}
+              {{'[ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：200px'|trans}}<br>
+              {{'[ 平铺居中 ] 图片推荐尺寸 宽：1440px，高：200px'|trans}}<br>
             {% else %}
               {{'[ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：450px'|trans}}<br>
               {{'[ 平铺居中 ] 图片推荐尺寸 宽：1920px，高：600px'|trans}}<br>
@@ -71,6 +78,7 @@
                  placeholder="{{ data.background }}" value="{{ data.background }}">
         </div>
       </div>
+      {% if block.code != 'cloud_search_banner' %}
       <div class="form-group">
         <label class="col-sm-2 control-label">
           {{'海报链接地址'|trans}}
@@ -81,6 +89,7 @@
                  id="data[{{ code }}][{{ dataId }}][href]" placeholder="{{ app.request.getScheme() }}://" value="{{ data.href }}">
         </div>
       </div>
+      {% endif %}
     </div>
     <div class="edit-mode-html" {% if data.mode == 'img' %}style="display: none;"{% endif %}>
       <div class="form-group">

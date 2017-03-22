@@ -585,11 +585,6 @@ class DefaultController extends BaseController
         return $this->createService('Cash:CashService');
     }
 
-    private function getWebExtension()
-    {
-        return $this->container->get('web.twig.extension');
-    }
-
     protected function getUpgradeNoticeService()
     {
         return $this->createService('User:UpgradeNoticeService');

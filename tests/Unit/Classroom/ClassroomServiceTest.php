@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Classroom;
 
+use AppBundle\Common\ClassroomToolkit;
 use Biz\BaseTestCase;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
@@ -12,6 +13,51 @@ use Biz\User\Service\UserService;
 
 class ClassroomServiceTest extends BaseTestCase
 {
+    public function testUpdateMemberDeadlineByMemberId()
+    {
+        $user          = $this->getCurrentUser();
+        $textClassroom = array(
+            'title' => 'test066'
+        );
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
+
+        $student = $this->getClassroomService()->becomeStudent($classroom['id'], $user['id']);
+
+        $time = time();
+        $deadline = ClassroomToolkit::buildMemberDeadline(array(
+            'expiryMode' => 'date',
+            'expiryValue' => $time
+        ));
+        $student = $this->getClassroomService()->updateMemberDeadlineByMemberId($student['id'], array(
+            'deadline' => $deadline
+        ));
+        $this->assertEquals($time, $student['deadline']);
+    }
+
+    public function testUpdateMembersDeadlineByClassroomId()
+    {
+        $textClassroom = array(
+            'title' => 'test066'
+        );
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
+        $user = $this->createStudent();
+
+        $this->getClassroomService()->becomeStudent($classroom['id'], $user['id']);
+        $time = time();
+        $deadline = ClassroomToolkit::buildMemberDeadline(array(
+            'expiryMode' => 'date',
+            'expiryValue' => $time
+        ));
+
+        $student = $this->getClassroomService()->updateMembersDeadlineByClassroomId($classroom['id'], $deadline);
+
+        $this->assertEquals(1, count($student));
+    }
+
     public function testAddClassroom()
     {
         $textClassroom = array(
@@ -1322,8 +1368,7 @@ class ClassroomServiceTest extends BaseTestCase
             'title' => $title,
             'courseSetId' => 1,
             'learnMode' => 'freeMode',
-            'expiryMode' => 'days',
-            'expiryDays' => 0,
+            'expiryMode' => 'forever',
         );
     }
 

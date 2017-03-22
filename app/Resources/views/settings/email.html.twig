@@ -17,7 +17,7 @@
         <div class="form-group">
           <div class="col-md-2 control-label"><label>{{'当前登录邮箱'|trans}}</label></div>
           <div class="col-md-8 controls">
-            <span class="control-text">
+            <span class="form-control-static">
               {% set emailArr = app.user.email|split('@') %}
               {% if emailArr[1] != 'edusoho.net' %}
                 {{ app.user.email }}

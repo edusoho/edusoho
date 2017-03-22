@@ -245,7 +245,7 @@ class TaskController extends BaseController
             array(
                 array(
                     'code' => 'task-list',
-                    'name' => '课程',
+                    'name' => '目录',
                     'icon' => 'es-icon-menu',
                     'url' => $this->generateUrl(
                         'course_task_show_plugin_task_list',

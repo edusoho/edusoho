@@ -53,15 +53,6 @@ class CourseCopy extends AbstractEntityCopy
             //todo 如果learnMode改变了，则任务列表需按照新的learnMode构建
             $new['learnMode'] = $config['learnMode'];
         }
-        if (!empty($config['expiryMode'])) {
-            $new['expiryMode'] = $config['expiryMode'];
-            if ($config['expiryMode'] == 'days') {
-                $new['expiryDays'] = $config['expiryDays'];
-            } else {
-                $new['expiryStartDate'] = $config['expiryStartDate'];
-                $new['expiryEndDate'] = $config['expiryEndDate'];
-            }
-        }
 
         $new = $this->getCourseDao()->create($new);
         $this->doCopyCourseMember($source, $new);

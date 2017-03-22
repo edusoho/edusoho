@@ -20,6 +20,7 @@ const config = {
     "iframe-resizer":['libs/js/iframe-resizer.js'],
     "iframe-resizer-contentWindow":['libs/js/iframe-resizer-contentWindow.js'],
     'jquery-timer':['libs/js/jquery-timer.js'],
+    'jquery-countdown':['libs/js/jquery-countdown.js'],
     'jquery-cycle2': ['jquery-cycle2'],
     'excanvas-compiled':['libs/js/excanvas-compiled.js'],
     'echo-js': ['echo-js'],

@@ -38,6 +38,7 @@ class Ppt extends Activity
 
         if ($ppt['finishType'] == 'time') {
             $result = $this->getActivityLearnLogService()->sumMyLearnedTimeByActivityId($activityId);
+            $result /= 60;
 
             return !empty($result) && $result >= $ppt['finishDetail'];
         }

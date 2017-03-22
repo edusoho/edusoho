@@ -98,6 +98,7 @@ class ReviewServiceTest extends BaseTestCase
             'courseId' => $course['id'],
             'rating' => 3,
             'parentId' => 0,
+            'userId' => $this->getCurrentUser()->getId(),
             'content' => 'review content',
             'courseSetId' => 1,
             'createdTime' => time(),
@@ -137,7 +138,7 @@ class ReviewServiceTest extends BaseTestCase
     public function testCountRatingByCourseSetId()
     {
         $course1 = $this->createCourse();
-        $course2 = $this->createCourse1();
+        $course2 = $this->createCourse1($course1['courseSetId']);
 
         $review1 = $this->createReview($course1['id']);
         $review2 = $this->createReview($course2['id']);
@@ -155,6 +156,7 @@ class ReviewServiceTest extends BaseTestCase
             'rating' => 3,
             'parentId' => 0,
             'content' => 'review content',
+            'userId' => $this->getCurrentUser()->getId(),
             'createdTime' => time(),
         );
 
@@ -163,25 +165,29 @@ class ReviewServiceTest extends BaseTestCase
 
     protected function createCourse()
     {
+        $courseSetFields = array(
+            'title' => '新课程开始！',
+            'type' => 'normal',
+        );
+        $courseSet = $this->getCourseSetService()->createCourseSet($courseSetFields);
+
         $course = array(
             'title' => '第一个教学计划',
-            'courseSetId' => 1,
+            'courseSetId' => $courseSet['id'],
             'learnMode' => 'lockMode',
-            'expiryMode' => 'days',
-            'expiryDays' => 0,
+            'expiryMode' => 'forever',
         );
 
         return $this->getCourseService()->createCourse($course);
     }
 
-    protected function createCourse1()
+    protected function createCourse1($courseSetId=1)
     {
         $course = array(
             'title' => '第二个教学计划',
-            'courseSetId' => 1,
+            'courseSetId' => $courseSetId,
             'learnMode' => 'lockMode',
-            'expiryMode' => 'days',
-            'expiryDays' => 0,
+            'expiryMode' => 'forever',
         );
 
         return $this->getCourseService()->createCourse($course);
@@ -195,5 +201,10 @@ class ReviewServiceTest extends BaseTestCase
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 }

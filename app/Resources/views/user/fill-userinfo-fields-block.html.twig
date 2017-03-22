@@ -12,11 +12,11 @@
           <label class="col-sm-3 control-label" for="truename">{{ defaultFields.truename }}</label>
           <div class="col-sm-6 controls">
             {% if app.user.approvalStatus == 'approved' and user.truename %}
-              <div class="control-text">{{ user.truename }}
+              <div class="form-control-static">{{ user.truename }}
                 <small class="color-success">({{ '已认证'|trans }})</small>
               </div>
             {% elseif app.user.approvalStatus == 'approving' and user.truename %}
-              <div class="control-text">{{ user.truename }}
+              <div class="form-control-static">{{ user.truename }}
                 <small class="text-warning">({{ '实名认证中'|trans }})</small>
               </div>
             {% else %}
@@ -32,7 +32,7 @@
           <div class="col-sm-6 controls">
             {% set emailArr = app.user.email|split('@') %}
             {% if emailArr[1] != 'edusoho.net' %}
-              <div class="control-text">{{ app.user.email }}</div>
+              <div class="form-control-static">{{ app.user.email }}</div>
             {% else %}
               <input class="form-control" id="email" type="text" name="email" value=""
                      data-url="{{ path('register_email_check') }}"/>
@@ -46,7 +46,7 @@
           <label class="col-sm-3 control-label" for="mobile">{{ defaultFields.mobile }}</label>
           <div class="col-sm-6 controls">
             {% if app.user.verifiedMobile|default('') %}
-              <div class="control-text">{{ blur_phone_number(app.user.verifiedMobile) }}
+              <div class="form-control-static">{{ blur_phone_number(app.user.verifiedMobile) }}
                 <small class="color-success">({{ '已绑定'|trans }})</small>
               </div>
             {% else %}
@@ -89,11 +89,11 @@
           <label class="col-sm-3 control-label required" for="idcard">{{ defaultFields.idcard }}</label>
           <div class="col-sm-6 controls">
             {% if app.user.approvalStatus == 'approved' and user.idcard %}
-              <div class="control-text">{{ blur_idcard_number(user.idcard) }}
+              <div class="form-control-static">{{ blur_idcard_number(user.idcard) }}
                 <small class="color-success">({{ '已认证'|trans }})</small>
               </div>
             {% elseif app.user.approvalStatus == 'approving' and user.idcard %}
-              <div class="control-text">{{ blur_idcard_number(user.idcard) }}
+              <div class="form-control-static">{{ blur_idcard_number(user.idcard) }}
                 <small class="text-warning">({{ '实名认证中'|trans }})</small>
               </div>
             {% else %}

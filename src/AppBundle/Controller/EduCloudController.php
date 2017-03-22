@@ -15,9 +15,9 @@ class EduCloudController extends BaseController
 {
     public function smsSendAction(Request $request)
     {
-        if ($request->getMethod() == 'POST') {
+        if ($request->isMethod('POST')) {
             if ($this->setting('cloud_sms.sms_enabled') != '1') {
-                return $this->createJsonResponse(array('error' => '短信服务被管理员关闭了'));
+                return $this->createJsonResponse(array('error' => '短信服务未开启，请联系网校管理员'));
             }
 
             $currentUser = $this->getCurrentUser();
