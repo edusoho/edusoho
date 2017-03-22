@@ -55,7 +55,7 @@ class ClassroomServiceTest extends BaseTestCase
 
         $student = $this->getClassroomService()->updateMembersDeadlineByClassroomId($classroom['id'], $deadline);
 
-        $this->assertEquals(1, count($student));
+        $this->assertCount(1, $student);
     }
 
     public function testAddClassroom()

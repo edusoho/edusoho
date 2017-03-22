@@ -24,7 +24,7 @@ class CourseServiceTest extends BaseTestCase
         $course = array(
             'title' => 'test course 1',
             'courseSetId' => $courseSet['id'],
-            'expiryMode' => 'days',
+            'expiryMode' => 'forever',
             'learnMode' => 'freeMode',
         );
 
@@ -266,12 +266,8 @@ class CourseServiceTest extends BaseTestCase
                 'title' => '第一个教学计划',
                 'courseSetId' => 1,
                 'learnMode' => 'lockMode',
-<<<<<<< HEAD
-                'expiryMode' => 'days',
                 'expiryDays' => 0,
-=======
                 'expiryMode' => 'forever',
->>>>>>> feature/x8
             );
 
             $course = $this->getCourseService()->createCourse($courseFields);
