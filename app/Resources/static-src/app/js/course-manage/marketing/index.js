@@ -113,8 +113,8 @@ class Marketing {
       },
       messages: {
         buyExpiryTime: {
-          required: '请选择有效的购买截止日期',
-          date: '请选择有效的购买截止日期'
+          required: '请选择有效的加入截止日期',
+          date: '请选择有效的加入截止日期'
         },
         expiryDays: {
           required: '请输入有效期天数'
