@@ -158,20 +158,15 @@
           <i class="es-icon es-icon-setting"></i>
         </a>
       {% endif %}
-      {% if classroom_permit(classroom.id, 'Take', true) and not isclassroomteacher|default(false) and not member.locked %}
-        {% if 'headTeacher' not in member.role %}  
+      {% if ('student' in member.role or 'auditor' in member.role ) and not member.locked  %}
           <a type="button" 
-            {% if  'student' in member.role and member.orderId > 0 %}
               class="btn btn-default setting hidden-xs hidden-sm"
               href="#modal" 
               data-toggle="modal" 
-              data-url="{{path('order_refund', {id:classroom.id, targetType:'classroom'})}}"
-            {% endif %}
-            >
-            <i class="es-icon es-icon-exit"></i>
+              data-url="{{path('order_refund', {id:classroom.id, targetType:'classroom'})}}">
           </a>
+            <i class="es-icon es-icon-exit"></i>
         {% endif %}
-      {% endif %}
       </div>
     </div>
   </div>
