@@ -1,3 +1,9 @@
+#状态
+none: 无
+
+#币种，货币面额
+RMB.yuan: 元
+
 # 用户通用字段
 user.fields.login_password: 登录密码
 user.fields.pay_password: 支付密码
@@ -14,6 +20,50 @@ user.fields.mobile_label: 手机号码
 user.fields.company_label: 公司
 user.fileds.realname: 真实姓名
 
+#财务通用
+finance.income: 收入
+finance.expense: 支出
+finance.income_expense: 收支
+finance.virtual_coin: 虚拟币
+finance.balance: 账户余额
+
+#插件
+plugin.charge_coin.recharge: 充&nbsp;值
+plugin.money_card: 学习卡
+plugin.money_card.use: 使用学习卡
+plugin.coupon: 优惠码
+plugin.coupon.code: 优惠码
+plugin.coupon.amount: 优惠金额
+
+#订单通用
+order.name: 订单名称
+order.createdTime: 创建时间
+order.pay_time: 付款时间
+order.status: 订单状态
+order.status.created: 未完成
+order.status.paid: 已付款
+order.status.cancel: 已关闭
+order.status.refunding: 申请退款
+order.status.refunded: 退款成功
+order.real_pay: 实付(元)
+order.buyers: 购买者
+order.id: 订单号
+order.merchant_order_id: 商户订单号
+order.sn: 流水号
+order.price: 订单价格
+order.turnover_time: 成交时间
+order.bank_code: 银行编号
+order.payment_pattern: 支付方式
+order.payment_pattern.virtual_coin: %coin_name%支付
+order.payment_pattern.school: 网校支付
+order.payment_pattern.balance: 余额支付
+order.payment_pattern.alipay: 支付宝
+order.payment_pattern.wxpay: 微信支付
+order.payment_pattern.heepay: 网银支付
+order.payment_pattern.quickpay: 快捷支付
+order.payment_pattern.llpay: 连连支付
+order.payment_pattern.cash: 现金支付
+order.payment_pattern.other: 其他支付
 
 # 表单通用
 form.btn.modify: 修改
@@ -25,6 +75,8 @@ form.btn.cancelbind: 取消绑定
 form.btn.submit: 提交
 form.btn.login: 登录
 form.btn.save: 保存
+form.btn.detail: 详情
+form.btn.close: 关闭
 form.btn.reset_password: 重设密码
 form.btn.save.submiting_text: 正在保存...
 form.btn.submit.submiting_text: 正在提交...
@@ -181,5 +233,79 @@ user.settings.oauth: 第三方登陆
 user.settings.oauth.page_title: 第三方登陆
 user.settings.oauth.weixin: 微信登录
 
+# 账户中心模块
+user.account_center: 账户中心
+user.account_center.menu_heading: 账户中心
+user.account_center.account_menu: 我的账户
+user.account_center.order_menu: 我的订单
+user.account_center.cards_menu: 我的卡包
+user.account_center.vip_history: 会员记录
+user.account_center.all_records: 全部记录
+user.account_center.last_one_week: 最近一周
+user.account_center.last_two_week: 最近两周
+user.account_center.last_one_month: 最近一个月
+user.account_center.last_two_month: 最近两个月
+user.account_center.last_three_month: 最近三个月
 
+# 账户中心模块-我的账户
+user.account_center.account.empty: 暂无记录
+user.account_center.account.virtual_coin_introductions: %coin_name%说明
+user.account_center.account.virtual_coin_image: 虚拟币图片
+user.account_center.account.first_tab: 我的%coin_name%
+user.account_center.account.first_tab.inflow: 充值记录
+user.account_center.account.first_tab.outflow: 消费记录
+user.account_center.account.first_tab.recharge: 学习卡充值
+user.account_center.account.second_tab: 我的现金账单
+user.account_center.account.third_tab: 我的邀请码
+user.account_center.account.third_tab.my_invite_code: 我的邀请码
+user.account_center.account.third_tab.invite: 邀请好友
+user.account_center.account.third_tab.invite.modal_title: 分享邀请链接
+user.account_center.account.third_tab.invite.copy_btn: 复制到剪贴板
+user.account_center.account.third_tab.other_invite_code: TA的邀请码
+user.account_center.account.third_tab.other_invite_code.modal_title: 填写TA的邀请码
+user.account_center.account.third_tab.other_invite_code.invite_code: TA的邀请码 
+user.account_center.account.third_tab.other_invite_code.input_placeholder: 邀请码
+user.account_center.account.third_tab.other_invite_code.hint_one: 填写TA的邀请码，当您第一次消费后，TA会获得邀请奖励。
+user.account_center.account.third_tab.other_invite_code.hint_two: 填写TA的邀请码，TA会获得邀请奖励。
+user.account_center.account.third_tab.first_part: 给TA分享您的邀请码或者邀请链接
+user.account_center.account.third_tab.second_part: ，TA注册后将获得%promoted_user_value%元优惠券
+user.account_center.account.third_tab.third_part: TA在消费后您将获得%promote_user_value%元优惠券
+user.account_center.account.third_tab.fourth_part: 同时您将获得%promote_user_value%元优惠券
+user.account_center.account.third_tab.invitees: 邀请对象
+user.account_center.account.third_tab.invite_time: 邀请时间
+user.account_center.account.third_tab.invite_rewords: 邀请奖励
+user.account_center.account.third_tab.get_invite_rewords_time: 奖励获取时间
+user.account_center.account.third_tab.empty: 暂无邀请用户
+user.account_center.account.third_tab.close: 邀请码功能已关闭
 
+# 账户中心模块-我的订单
+user.account_center.orders: 我的订单
+user.account_center.orders.page_title: 我的订单
+user.account_center.orders.all_orders: 全部订单
+user.account_center.orders.created_status: 代付款
+user.account_center.orders.paid_status: 已付款
+user.account_center.orders.operation: 操作
+user.account_center.orders.order_id: 订单号：%sn%
+user.account_center.orders.target_course: 所属课程
+user.account_center.orders.target_course_deleted: 该课程已被删除
+user.account_center.orders.cancel_refund: 取消退款
+user.account_center.orders.go_pay: 去支付
+user.account_center.orders.cancel_order: 取消订单
+user.account_center.orders.empty: 暂无订单记录
+user.account_center.orders.detail.modal_title: 订单详情
+user.account_center.orders.detail.special_operations: 特殊操作
+user.account_center.orders.detail.log_info: 日志信息
+user.account_center.orders.detail.operator: 操作人
+user.account_center.orders.detail.log_createdTime: 创建时间
+user.account_center.orders.detail.empty: 暂无交易日志
+
+# 账户中心模块-我的卡包
+user.account_center.cards: 我的卡包
+user.account_center.cards.page_title: 我的卡包
+user.account_center.cards.all: 全部
+user.account_center.cards.useable: 未使用
+user.account_center.cards.used: 已使用
+user.account_center.cards.outdate: 已过期
+user.account_center.cards.invalid: 已作废
+user.account_center.cards.no_qualified_hint: 没有搜索到符合条件的 
+user.account_center.cards.monycard_not_install_hint: 网站没有开启%coin_name%功能,学习卡功能暂时没法使用

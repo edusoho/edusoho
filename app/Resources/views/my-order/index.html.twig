@@ -6,23 +6,23 @@
 
 {% block main_body %}
   <ul class="nav nav-pills" role="tablist">
-    <li role="presentation" {% if app.request.query.get('status')=='' %}class="active"{% endif %}><a href="{{path('my_orders',{status:''})}}">{{'全部订单'|trans}}</a></li>
-    <li role="presentation" {% if app.request.query.get('status')=='created' %}class="active"{% endif %}><a href="{{path('my_orders',{status:'created'})}}">{{'待付款'|trans}}<span class="badge">{{waitToBePaidCount}}</span></a></li>
-    <li role="presentation" {% if app.request.query.get('status')=='paid' %}class="active"{% endif %}><a href="{{path('my_orders',{status:'paid'})}}">{{'已付款'|trans}}</a></li>
+    <li role="presentation" {% if app.request.query.get('status')=='' %}class="active"{% endif %}><a href="{{path('my_orders',{status:''})}}">{{'user.account_center.orders.all_orders'|trans}}</a></li>
+    <li role="presentation" {% if app.request.query.get('status')=='created' %}class="active"{% endif %}><a href="{{path('my_orders',{status:'created'})}}">{{'user.account_center.orders.created_status'|trans}}<span class="badge">{{waitToBePaidCount}}</span></a></li>
+    <li role="presentation" {% if app.request.query.get('status')=='paid' %}class="active"{% endif %}><a href="{{path('my_orders',{status:'paid'})}}">{{'user.account_center.orders.paid_status'|trans}}</a></li>
   </ul>
   <br>
   <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <input type="hidden" name="status" value="{{app.request.query.get('status')}}">
     <div class="form-group">
       <select class="form-control" name="lastHowManyMonths"  onchange="submit();" >
-        {% set options = {'oneWeek':'最近一周'|trans,'twoWeeks':'最近两周'|trans,'oneMonth':'最近一个月'|trans,'twoMonths':'最近两个月'|trans,'threeMonths':'最近三个月'|trans,'':'全部记录'|trans} %}
+        {% set options = {'oneWeek':'user.account_center.last_one_week'|trans,'twoWeeks':'user.account_center.last_two_week'|trans,'oneMonth':'user.account_center.last_one_month'|trans,'twoMonths':'user.account_center.last_two_month'|trans,'threeMonths':'user.account_center.last_three_month'|trans,'':'user.account_center.all_records'|trans} %}
         {{ select_options(options, request.get('lastHowManyMonths')) }}
       </select>
     </div>
     <div class="form-group">
       <select class="form-control" name="payWays"  onchange="submit();" >
 
-        {% set options = {'alipay':'支付宝'|trans,'wxpay':'微信支付'|trans,'heepay':'网银支付'|trans,'quickpay':'快捷支付'|trans,'llpay':'连连支付'|trans,'none':'其他支付'|trans,'':'支付方式'|trans} %}
+        {% set options = {'alipay':'order.payment_pattern.alipay'|trans,'wxpay':'order.payment_pattern.wxpay'|trans,'heepay':'order.payment_pattern.heepay'|trans,'quickpay':'order.payment_pattern.quickpay'|trans,'llpay':'order.payment_pattern.llpay'|trans,'none':'order.payment_pattern.other'|trans,'':'order.payment_pattern'|trans} %}
         {{ select_options(options, request.get('payWays')) }}
       </select>
     </div>

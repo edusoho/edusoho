@@ -1,5 +1,5 @@
 {% extends 'coin/layout.html.twig' %}
-{% block title %}{{'我的邀请码'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'user.account_center.account.third_tab'|trans}} - {{ parent() }}{% endblock %}
 
 
 
@@ -23,14 +23,14 @@
   {% include 'coin/bill-bar.html.twig' %}
   {% if setting('invite.invite_code_setting') == 1 %}
     <p class="clearfix">
-      <span class="label label-primary label-md mrl">{{'我的邀请码'|trans}}</span><span class="mrl text-xlg">{{code}}</span>
+      <span class="label label-primary label-md mrl">{{'user.account_center.account.third_tab.my_invite_code'|trans}}</span><span class="mrl text-xlg">{{code}}</span>
      
       {% if record == null %}
      
-      <a  class="btn btn-primary btn-sm pull-right mlm" href="#modal" data-toggle="modal" id="writeInvite" data-url="{{ path('write_invitecode')}}">{{'TA的邀请码'|trans}}</a>   
+      <a  class="btn btn-primary btn-sm pull-right mlm" href="#modal" data-toggle="modal" id="writeInvite" data-url="{{ path('write_invitecode')}}">{{'user.account_center.account.third_tab.other_invite_code'|trans}}</a>   
       {% endif %}
      
-      <a  class="btn btn-primary btn-sm pull-right" href="#modal" data-toggle="modal" data-url="{{ path('invite_promote_link')}}">{{'邀请好友'|trans}}</a>
+      <a  class="btn btn-primary btn-sm pull-right" href="#modal" data-toggle="modal" data-url="{{ path('invite_promote_link')}}">{{'user.account_center.account.third_tab.invite'|trans}}</a>
     </p>
     {#
     <div class="clearfix">
@@ -54,18 +54,18 @@
 
     <br>
     <div class="alert alert-warning">
-    {{'给TA分享您的邀请码或者邀请链接'|trans}}
+    {{'user.account_center.account.third_tab.first_part'|trans}}
     {% if setting('invite')|default(false) %}
       {% if setting('invite.promoted_user_value')|default(false)  %}
-        {{'，TA注册后将获得%promoted_user_value%元优惠券'|trans({'%promoted_user_value%':inviteSetting.promoted_user_value})}}
+        {{'user.account_center.account.third_tab.second_part'|trans({'%promoted_user_value%':inviteSetting.promoted_user_value})}}
       {% endif %}
 
       {% if setting('invite.promote_user_value')|default(false) %}
         ，
         {% if setting('invite.get_coupon_setting')|default(false) %}
-            {{'TA在消费后您将获得%promote_user_value%元优惠券'|trans({'%promote_user_value%':inviteSetting.promote_user_value})}}
+            {{'user.account_center.account.third_tab.third_part'|trans({'%promote_user_value%':inviteSetting.promote_user_value})}}
         {% else %}
-            {{'同时您将获得%promote_user_value%元优惠券'|trans({'%promote_user_value%':inviteSetting.promote_user_value})}}
+            {{'user.account_center.account.third_tab.fourth_part'|trans({'%promote_user_value%':inviteSetting.promote_user_value})}}
         {% endif %}
       {% endif %}
     {{'。'|trans}}
@@ -77,10 +77,10 @@
 <table class="table table-striped table-hover" id="course-table" style="word-break:break-all;">
   <thead>
     <tr>
-      <th>{{'邀请对象'|trans}}</th>
-      <th>{{'邀请时间'|trans}}</th>
-      <th>{{'邀请奖励'|trans}}</th>
-      <th>{{'奖励获取时间'|trans}}</th>
+      <th>{{'user.account_center.account.third_tab.invitees'|trans}}</th>
+      <th>{{'user.account_center.account.third_tab.invite_time'|trans}}</th>
+      <th>{{'user.account_center.account.third_tab.invite_rewords'|trans}}</th>
+      <th>{{'user.account_center.account.third_tab.get_invite_rewords_time'|trans}}</th>
     </tr>
   </thead>
   <tbody>
@@ -92,7 +92,7 @@
         <td>{{user.inviteRewardTime|default('-')}}</td>
       </tr>
       {% else %}
-        <tr><td colspan="20"><div class="empty">{{'暂无邀请用户'|trans}}</div></td></tr>
+        <tr><td colspan="20"><div class="empty">{{'user.account_center.account.third_tab.empty'|trans}}</div></td></tr>
       {% endfor %}
   </tbody>
 </table>
@@ -101,7 +101,7 @@
 
   {% else %}
   <div class="well" style="text-align:center;">
-    {{'邀请码功能已关闭'|trans}}
+    {{'user.account_center.account.third_tab.close'|trans}}
   </div>
   {% endif %}
   </div>
