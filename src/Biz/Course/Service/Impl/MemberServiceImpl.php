@@ -261,7 +261,8 @@ class MemberServiceImpl extends BaseService implements MemberService
      *
      * @param  $course
      * @param  $member
-     * @return bool      会员加入的学员是否已到期
+     *
+     * @return bool 会员加入的学员是否已到期
      */
     protected function isVipMemberNonExpired($course, $member)
     {
@@ -829,6 +830,7 @@ class MemberServiceImpl extends BaseService implements MemberService
     /**
      * @param  $userId
      * @param  $courseSetId
+     *
      * @return array
      */
     public function findTeacherMembersByUserIdAndCourseSetId($userId, $courseSetId)
@@ -837,7 +839,8 @@ class MemberServiceImpl extends BaseService implements MemberService
     }
 
     /**
-     * @param  int     $userId
+     * @param int $userId
+     *
      * @return mixed
      */
     public function findStudentMemberByUserId($userId)
