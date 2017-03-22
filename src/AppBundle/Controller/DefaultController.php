@@ -27,10 +27,7 @@ class DefaultController extends BaseController
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
         }
 
-        // 判断是否是定制用户
-        // @TODO 需改进 不然每次进首页都会请求云平台， 请求异常情况下也未作处理
-        $result = CloudAPIFactory::create('leaf')->get('/me');
-        $custom = $this->isCustom($result);
+        $custom = $this->isCustom();
 
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
 
@@ -39,14 +36,8 @@ class DefaultController extends BaseController
 
     public function appDownloadAction()
     {
-        $result = CloudAPIFactory::create('leaf')->get('/me');
-        $custom = $this->isCustom($result);
-
-        if ($custom) {
-            return $this->createMessageResponse('warning', '非法请求');
-        }
-
-        $mobileCode = (empty($result['mobileCode']) ? 'edusohov3' : $result['mobileCode']);
+        $meCount = $this->getMeCount();
+        $mobileCode = (empty($meCount['mobileCode']) ? 'edusohov3' : $meCount['mobileCode']);
 
         if ($this->getWebExtension()->isMicroMessenger()) {
             $url = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.kuozhi';
@@ -171,7 +162,7 @@ class DefaultController extends BaseController
 
     public function jumpAction(Request $request)
     {
-        $courseId = intval($request->query->get('id'));
+        $courseId = (int)($request->query->get('id'));
 
         if ($this->getCourseMemberService()->isCourseTeacher($courseId, $this->getCurrentUser()->id)) {
             $url = $this->generateUrl('live_course_manage_replay', array('id' => $courseId));
@@ -225,7 +216,7 @@ class DefaultController extends BaseController
             return array('percent' => '0%', 'number' => 0, 'total' => 0);
         }
 
-        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100).'%';
+        $percent = (int)($member['learnedNum'] / $course['lessonNum'] * 100).'%';
 
         return array(
             'percent' => $percent,
@@ -250,8 +241,21 @@ class DefaultController extends BaseController
         return $this->redirect($targetPath);
     }
 
-    private function isCustom($result)
+    private function getMeCount()
     {
+        $meCount = $this->setting('meCount',false);
+        if( $meCount === false ){
+            //判断是否是定制用户
+            $result = CloudAPIFactory::create('leaf')->get('/me');
+            $this->getSettingService()->set('meCount',$result);
+        }
+        $meCount = $this->setting('meCount');
+        return $meCount;
+    }
+
+    private function isCustom()
+    {
+        $result = $this->getMeCount();
         return isset($result['hasMobile']) ? $result['hasMobile'] : 0;
     }
 
