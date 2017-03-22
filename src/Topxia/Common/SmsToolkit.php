@@ -9,7 +9,7 @@ class SmsToolkit
     public static function smsCheck($request, $scenario)
     {
         $mobile = $request->request->get('mobile');
-        $ratelimiterResult =  self::smsCheckRatelimiter($mobile,$scenario);
+        $ratelimiterResult =  self::smsCheckRatelimiter($request,$scenario);
         if($ratelimiterResult && $ratelimiterResult['success'] === false ){
             return array(false,null,null);
         }
@@ -20,17 +20,34 @@ class SmsToolkit
         return array($result, $sessionField, $requestField);
     }
 
-    public static function smsCheckRatelimiter($mobile, $type)
+    public static function smsCheckRatelimiter($request, $type)
     {
         $kernel = ServiceKernel::instance();
-        $biz = $kernel->getBiz();
-
-        $factory = $biz['ratelimiter.factory'];
-        $limiter = $factory('mobile_'.$type, 5, 1800);
-        $remain = $limiter->check($mobile);
-        if( $remain == 0 ){
-            return array('success'=>false,'message' => $kernel->trans('错误次数太多，请30分钟之后再试'));
+        $smsSession = $request->getSession()->get($type);
+        if(!isset($smsSession['sms_remain'])){
+            $smsSession['sms_remain'] = 5;
         }
+        $remain = $smsSession['sms_remain'];
+        if( $remain == 0 ){
+            self::clearSmsSession($request, $type);
+            return array('success'=>false,'message' => $kernel->trans('错误次数已经超过最大次数，请重新获取'));
+        }else{
+            $remain --;
+            self::updateSmsSessionRemain($request,$type,$remain);
+        }
+
+    }
+
+    public static function updateSmsSessionRemain($request, $type,$remain)
+    {
+        $smsSmsSession = $request->getSession()->get($type);
+        $request->getSession()->set($type, array(
+            'to'            => $smsSmsSession['to'],
+            'sms_code'      => $smsSmsSession['sms_code'],
+            'sms_last_time' => $smsSmsSession['sms_last_time'],
+            'sms_type'      => $type,
+            'sms_remain'    => $remain
+        ));
     }
 
     private static function paramForSmsCheck($request, $scenario)
