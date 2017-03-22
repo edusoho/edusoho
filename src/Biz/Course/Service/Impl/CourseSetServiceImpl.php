@@ -2,25 +2,25 @@
 
 namespace Biz\Course\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\Content\Service\FileService;
-use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Dao\FavoriteDao;
-use Biz\Course\Service\CourseDeleteService;
-use Biz\Course\Service\CourseNoteService;
+use Biz\Course\Dao\CourseSetDao;
+use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\LogService;
+use Biz\Content\Service\FileService;
+use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
-use Biz\System\Service\LogService;
-use Biz\Taxonomy\Service\TagService;
-use Biz\User\Service\UserService;
+use Biz\Course\Service\MaterialService;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\CourseNoteService;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseDeleteService;
+use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
@@ -610,7 +610,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $this->getCourseService()->publishCourse($classroomRef['courseId']);
         }
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
-        
+
         $this->dispatchEvent('course-set.publish', new Event($courseSet));
     }
 
@@ -620,13 +620,13 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if ($courseSet['status'] != 'published') {
             throw $this->createAccessDeniedException('CourseSet has not bean published');
         }
-        
+
         $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
         if (!empty($classroomRef)) {
             $this->getCourseService()->closeCourse($classroomRef['courseId']);
         }
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'closed'));
-        
+
         $this->dispatchEvent('course-set.closed', new Event($courseSet));
     }
 
@@ -648,8 +648,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     /**
      * 根据排序规则返回排序数组.
      *
-     * @param string $order
-     *
+     * @param  string  $order
      * @return array
      */
     protected function getOrderBys($order)
@@ -907,6 +906,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'isFree' => 1,
             'serializeMode' => $created['serializeMode'],
             'status' => 'draft',
+            'type' => $created['type'],
         );
 
         return $defaultCourse;
