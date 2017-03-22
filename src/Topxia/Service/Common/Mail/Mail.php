@@ -59,7 +59,7 @@ abstract class Mail
         $limiter = $factory('email_'.$template['template'], 5, 1800);
         $remain = $limiter->check($this->to);
         if ($remain == 0) {
-            throw new AccessDeniedException($this->getKernel()->trans('错误次数太多，请30分钟之后再试'));
+            throw new AccessDeniedException($this->getKernel()->trans('操作过于频繁，请30分钟之后再试'));
         }
     }
 
