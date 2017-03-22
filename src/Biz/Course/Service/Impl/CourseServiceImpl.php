@@ -4,10 +4,9 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\ThreadDao;
+use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
-use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
@@ -19,6 +18,7 @@ use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Course\Service\MaterialService;
+use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\CourseNoteService;
@@ -128,6 +128,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'isDefault',
                 'isFree',
                 'serializeMode',
+                'type',
             )
         );
 
