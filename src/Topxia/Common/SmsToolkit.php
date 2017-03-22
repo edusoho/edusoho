@@ -32,7 +32,7 @@ class SmsToolkit
             self::clearSmsSession($request, $type);
             return array('success'=>false,'message' => $kernel->trans('错误次数已经超过最大次数，请重新获取'));
         }else{
-            $remain --;
+            $remain = int($remain) - 1;
             self::updateSmsSessionRemain($request,$type,$remain);
         }
 
