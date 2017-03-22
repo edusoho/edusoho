@@ -154,7 +154,7 @@ class CourseController extends CourseBaseController
             $user['id'],
             $course['courseSetId']
         ) : false;
-        $previewAs = $request->query->get('previewAs', false);
+        $previewAs = $request->query->get('previewAs', null);
         $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
         $previewTasks = $this->getTaskService()->searchTasks(

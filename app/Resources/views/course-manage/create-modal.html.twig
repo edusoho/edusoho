@@ -77,11 +77,10 @@
               </a>
             </label>
             <div class="col-sm-8 radios">
-                {% set coursePublished = course.status|default('draft') == 'published' or course.status|default('draft') == 'closed'  %}
                 {{ 
                   radios('expiryMode', 
                     { 'days': '随到随学'|trans, 'date': '固定周期'|trans,'forever':'永久有效' }, 
-                    course.expiryMode|default('days'), coursePublished ? 'disabled' : ''
+                    course.expiryMode|default('days')
                   ) 
                 }}
                 {#随到随学#}
@@ -90,16 +89,16 @@
                     radios(
                       'deadlineType', 
                       { 'end_date': '按截止日期'|trans, 'days': '按有效天数'|trans},
-                      course.deadlineType|default('days'),  coursePublished ? 'disabled' : ''
+                      course.deadlineType|default('days')
                     )
                   }}
                   <div class="mb20 mt20 {% if course.deadlineType|default('days') != 'end_date' %}hidden{% endif %}" id="deadlineType-date">
                     <input class="form-control width-150 mr10" id="deadline" name="deadline"  
-                    value="{{course.expiryEndDate|default(null)}}" {% if coursePublished %} disabled  {% endif %}>{{'在此日期前，学员可进行学习。'|trans}}
+                    value="{{course.expiryEndDate|default(null)|date_format('Y-m-d')}}">{{'在此日期前，学员可进行学习。'|trans}}
                   </div>
                   <div class="mb20 mt20 {% if course.deadlineType|default('days') != 'days' %}hidden{% endif %}" id="deadlineType-days">
                     <input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays"  
-                    value="{{course.expiryDays|default(1)}}" {% if coursePublished %} disabled  {% endif %}>
+                    value="{{course.expiryDays|default(1)}}">
                     {{'从加入当天起，在几天内可进行学习。'|trans}}
                   </div>
                 </div>
@@ -107,10 +106,10 @@
                 <div class="mb20 mt20 {% if course.expiryMode|default('days') in ['days', 'forever'] %}hidden{% endif %}" id="expiry-date">
                   {{'开始日期'|trans}}
                   <input class="form-control mh10 width-150 " id="expiryStartDate" type="text" name="expiryStartDate" 
-                  value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" {% if coursePublished %} disabled  {% endif %}>
+                  value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}">
                   {{'结束日期'|trans}}
                   <input class="form-control ml5 width-150 " type="text" id="expiryEndDate" name="expiryEndDate" 
-                  value="{{course.expiryEndDate|default('')}}"  {% if coursePublished %} disabled  {% endif %} >
+                  value="{{course.expiryEndDate|default('')|date_format('Y-m-d')}}">
                 </div>
                 <div class="color-warning">{{'教学计划首次发布后“学习有效期”不能再修改'|trans}}</div>
             </div>

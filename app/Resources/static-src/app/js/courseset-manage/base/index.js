@@ -88,16 +88,13 @@ class Base {
         return item.name;
       },
       formatSearching: '搜索中...',
-      width: 'off',
       multiple: true,
       maximumSelectionSize: 20,
       placeholder: Translator.trans('请输入标签'),
       width: 'off',
-      multiple: true,
       createSearchChoice: function () {
         return null;
-      },
-      maximumSelectionSize: 20
+      }
     });
   }
 }

@@ -5,7 +5,9 @@
     课程还未发布，不允许加入和购买
   {% else %}
     {% if course.buyExpiryTime and course.buyExpiryTime < 'now'|date('U') %}
-      超过购买截止日期，不允许加入和购买
+      超过加入截止日期，不允许加入和购买
+    {% elseif (course.expiryMode in ['end_date', 'date'] and course.expiryEndDate < 'now'|date('U')) %}
+      超过学习截止日期，不允许加入和购买
     {% else %}
       {{ slot('course.purchase.extension', {'course':course}) }}
       {# 插件重写课程购买按钮 #}
