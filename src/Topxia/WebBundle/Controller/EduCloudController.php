@@ -149,7 +149,7 @@ class EduCloudController extends BaseController
         $targetSession = $request->getSession()->get($type);
         $targetMobile =  $targetSession['to'] ? $targetSession['to'] : '';
 
-        $ratelimiterResult =  SmsToolkit::smsCheckRatelimiter($targetMobile,$type);
+        $ratelimiterResult =  SmsToolkit::smsCheckRatelimiter($request,$type);
         if($ratelimiterResult && $ratelimiterResult['success'] === false ){
             return $this->createJsonResponse($ratelimiterResult);
         }
