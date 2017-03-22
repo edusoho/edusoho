@@ -12,7 +12,7 @@
             永久有效
           {% elseif course.expiryMode in ['end_date', 'date'] %}
             {{ course.expiryEndDate|date('Y-m-d') }}
-            剩余 {{ member.expiryDays|time_diff }} 天
+            剩余 {{ course.expiryEndDate|time_diff }} 天
           {% endif %}{# 不必考虑expiryMode=days的情况，此时member.deadline必定>0 #}
         {% else %}
           {{ member.deadline|date('Y-m-d') }}
