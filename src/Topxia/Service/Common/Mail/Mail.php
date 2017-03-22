@@ -3,6 +3,7 @@ namespace Topxia\Service\Common\Mail;
 
 use Topxia\Common\SettingToolkit;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\Exception\AccessDeniedException;
 
 abstract class Mail
 {
@@ -42,7 +43,27 @@ abstract class Mail
         return SettingToolkit::getSetting($name, $default);
     }
 
-    public abstract function send();
+    public function send()
+    {
+        $this->mailCheckRatelimiter();
+        return $this->doSend();
+    }
+
+    protected function mailCheckRatelimiter()
+    {
+        $biz = $this->getKernel()->getBiz();
+
+        $template = $this->parseTemplate($options);
+
+        $factory = $biz['ratelimiter.factory'];
+        $limiter = $factory('email_'.$template['template'], 5, 1800);
+        $remain = $limiter->check($this->to);
+        if ($remain == 0) {
+            throw new AccessDeniedException($this->getKernel()->trans('操作过于频繁，请30分钟之后再试'));
+        }
+    }
+
+    public abstract function doSend();
 
     protected function parseTemplate($options)
     {

@@ -2,15 +2,35 @@
 namespace Topxia\Common;
 
 use Topxia\Common\CurlToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
 class SmsToolkit
 {
     public static function smsCheck($request, $scenario)
     {
+        $mobile = $request->request->get('mobile');
+        $ratelimiterResult =  self::smsCheckRatelimiter($mobile,$scenario);
+        if($ratelimiterResult && $ratelimiterResult['success'] === false ){
+            return array(false,null,null);
+        }
+
         list($sessionField, $requestField) = self::paramForSmsCheck($request, $scenario);
         $result                            = self::checkSms($sessionField, $requestField, $scenario);
         self::clearSmsSession($request, $scenario);
         return array($result, $sessionField, $requestField);
+    }
+
+    public static function smsCheckRatelimiter($mobile, $type)
+    {
+        $kernel = ServiceKernel::instance();
+        $biz = $kernel->getBiz();
+
+        $factory = $biz['ratelimiter.factory'];
+        $limiter = $factory('mobile_'.$type, 5, 1800);
+        $remain = $limiter->check($mobile);
+        if( $remain == 0 ){
+            return array('success'=>false,'message' => $kernel->trans('错误次数太多，请30分钟之后再试'));
+        }
     }
 
     private static function paramForSmsCheck($request, $scenario)
