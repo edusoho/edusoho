@@ -200,6 +200,14 @@ class Marketing {
         this.updateDatetimepicker();
       }
     });
+
+    $('input[name="showServices"]').on('change', (event) => {
+      if($('input[name="showServices"]:checked').val() == 1){
+        $('.js-services').removeClass('hidden');
+      }else{
+        $('.js-services').addClass('hidden');
+      }
+    });
   }
 
   taskPriceSetting() {
