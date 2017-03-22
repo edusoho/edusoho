@@ -16,9 +16,24 @@ abstract class Resource
      */
     private $biz;
 
+    /**
+     * @var Filter
+     */
+    private $filter = null;
+
+    const METHOD_SEARCH = 'search';
+    const METHOD_GET = 'get';
+    const METHOD_CREATE = 'create';
+    const METHOD_UPDATE = 'update';
+
     public function __construct(Biz $biz)
     {
         $this->biz = $biz;
+
+        $filterClass = $filterClass = get_class($this).'Filter';
+        if (class_exists($filterClass)) {
+            $this->filter = new $filterClass($biz);
+        }
     }
 
     /**
@@ -29,44 +44,14 @@ abstract class Resource
         return $this->biz;
     }
 
-    abstract public function filter($res);
-
     final protected function createService($service)
     {
         return $this->getBiz()->service($service);
     }
 
-    protected function callFilter($name, $res)
+    public function getFilter()
     {
-        global $app;
-        return $app["res.{$name}"]->filter($res);
-    }
-
-    protected function multicallFilter($name, $res)
-    {
-        foreach ($res as $key => $one) {
-            $res[$key] = $this->callFilter($name, $one);
-        }
-        return $res;
-    }
-
-    protected function simplify($res)
-    {
-        return $res;
-    }
-
-    protected function callSimplify($name, $res)
-    {
-        global $app;
-        return $app["res.{$name}"]->simplify($res);
-    }
-
-    protected function multicallSimplify($name, $res)
-    {
-        foreach ($res as $key => $one) {
-            $res[$key] = $this->callSimplify($name, $one);
-        }
-        return $res;
+        return $this->filter;
     }
 
     /**

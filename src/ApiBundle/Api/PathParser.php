@@ -22,17 +22,15 @@ class PathParser
 
         $pathExplode = explode('/', ltrim($pathInfo, ApiBundle::API_PREFIX));
 
-        $lastResName = '';
         foreach ($pathExplode as $part) {
             if ($part == '') {
                 continue;
             }
 
             if (is_numeric($part)) {
-                $pathMeta->addSlug($lastResName, $part);
+                $pathMeta->addSlug($part);
             } else {
-                $lastResName = rtrim($part, 's');
-                $pathMeta->addResName($lastResName);
+                $pathMeta->addResName($part);
             }
 
         }

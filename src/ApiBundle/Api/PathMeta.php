@@ -29,9 +29,9 @@ class PathMeta
             throw new BadRequestException('URL is not supported');
         }
 
-        $QualifiedResName = ucfirst($this->resNames[0]).'\\';
+        $QualifiedResName = $this->convert($this->resNames[0]).'\\';
         foreach ($this->resNames as $resName) {
-            $QualifiedResName .= ucfirst($resName);
+            $QualifiedResName .= $this->convert($resName);
         }
 
         return $QualifiedResName;
@@ -56,13 +56,24 @@ class PathMeta
         $this->resNames[] = $resName;
     }
 
-    public function addSlug($key, $slug)
+    public function addSlug($slug)
     {
-        $this->slugs[$key] = $slug;
+        $this->slugs[] = $slug;
     }
 
     public function setHttpMethod($httpMethod)
     {
         $this->httpMethod = strtoupper($httpMethod);
+    }
+
+    private function convert($string)
+    {
+        $result = '';
+        $words = explode('_', $string);
+        foreach ($words as $word) {
+            $result .= ucfirst(rtrim($word, 's'));
+        }
+
+        return $result;
     }
 }

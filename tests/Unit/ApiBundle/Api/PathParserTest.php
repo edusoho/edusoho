@@ -14,7 +14,7 @@ class PathParserTest extends \PHPUnit_Framework_TestCase
         $pathMeta = $parser->parse($request);
 
         $this->assertEquals('Course\\Course', $pathMeta->getQualifiedResName());
-        $this->assertEquals(array('courseId' => 1), $pathMeta->getSlugs());
+        $this->assertEquals(array(1), $pathMeta->getSlugs());
         $this->assertEquals('get', $pathMeta->getResMethod());
     }
 
@@ -25,7 +25,7 @@ class PathParserTest extends \PHPUnit_Framework_TestCase
         $pathMeta = $parser->parse($request);
 
         $this->assertEquals('Course\\CourseUser', $pathMeta->getQualifiedResName());
-        $this->assertEquals(array('courseId' => 1, 'userId' => 2), $pathMeta->getSlugs());
+        $this->assertEquals(array(1, 2), $pathMeta->getSlugs());
         $this->assertEquals('update', $pathMeta->getResMethod());
     }
 
@@ -36,7 +36,7 @@ class PathParserTest extends \PHPUnit_Framework_TestCase
         $pathMeta = $parser->parse($request);
 
         $this->assertEquals('Course\\CourseThreadPost', $pathMeta->getQualifiedResName());
-        $this->assertEquals(array('courseId' => 1, 'threadId' => 2, 'postId' => 3), $pathMeta->getSlugs());
+        $this->assertEquals(array(1, 2, 3), $pathMeta->getSlugs());
         $this->assertEquals('remove', $pathMeta->getResMethod());
     }
 

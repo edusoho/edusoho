@@ -18,6 +18,6 @@ class ResourceManager
     {
         $qualifiedResName = $meta->getQualifiedResName();
         $className = __NAMESPACE__ .'\\'.$qualifiedResName;
-        return new $className($this->biz);
+        return new ResourceProxy(new $className($this->biz));
     }
 }
