@@ -2385,6 +2385,10 @@ class EduSohoUpgrade extends AbstractUpdater
 
             $this->exec($sql);
         }
+
+        if ($this->isFieldExist('course_draft', 'lessonId')) {
+          $this->exec("ALTER TABLE course_draft CHANGE lessonId activityId INT(10) unsigned NOT NULL COMMENT '教学活动ID';");
+        }
     }
 
     private function getUserByType()
