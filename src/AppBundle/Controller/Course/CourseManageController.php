@@ -71,7 +71,7 @@ class CourseManageController extends BaseController
             $course['deadlineType'] = 'end_date';
             $course['expiryMode'] = 'days';
         }
-        
+
         return $this->render(
             'course-manage/create-modal.html.twig',
             array(
