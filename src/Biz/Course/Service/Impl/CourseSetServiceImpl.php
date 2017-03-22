@@ -353,6 +353,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             array(
                 'type',
                 'title',
+                'orgCode',
             )
         );
 

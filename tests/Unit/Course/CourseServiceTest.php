@@ -22,8 +22,7 @@ class CourseServiceTest extends BaseTestCase
         $course = array(
             'title' => 'test course 1',
             'courseSetId' => $courseSet['id'],
-            'expiryMode' => 'days',
-            'expiryDays' => '2',
+            'expiryMode' => 'forever',
             'learnMode' => 'freeMode',
         );
 
