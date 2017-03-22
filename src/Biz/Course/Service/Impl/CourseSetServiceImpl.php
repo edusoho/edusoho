@@ -629,6 +629,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             throw $exception;
         }
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
+
         $this->getLogService()->info('course', 'publish', "发布课程《{$courseSet['title']}》(#{$courseSet['id']})");
 
         $this->dispatchEvent('course-set.publish', new Event($courseSet));
@@ -659,6 +660,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             throw $exception;
         }
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'closed'));
+
         $this->getLogService()->info('course', 'close', "关闭课程《{$courseSet['title']}》(#{$courseSet['id']})");
 
         $this->dispatchEvent('course-set.closed', new Event($courseSet));

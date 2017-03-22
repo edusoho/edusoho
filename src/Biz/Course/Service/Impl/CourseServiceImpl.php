@@ -1162,6 +1162,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'summary' => $course['summary'],
             'exerciseId' => 0,
             'homeworkId' => 0,
+            'mediaUri' => '',
+            'mediaSource' => '',
         );
         $transformKeys = array(
             'isFree' => 'free',
@@ -1269,8 +1271,12 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         $task['mediaId'] = isset($activity['ext']['mediaId']) ? $activity['ext']['mediaId'] : 0;
+
         if ($task['type'] == 'video') {
+            $task['mediaSource'] = $activity['ext']['mediaSource'];
             $task['mediaUri'] = $activity['ext']['mediaUri'];
+        } elseif ($task['type'] == 'audio') {
+            $task['mediaSource'] = 'self';
         }
 
         return $task;
