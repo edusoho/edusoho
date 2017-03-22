@@ -162,13 +162,10 @@
         {% if 'headTeacher' not in member.role %}  
           <a type="button" 
             {% if  'student' in member.role and member.orderId > 0 %}
-            class="btn btn-default setting hidden-xs hidden-sm"
-            href="#modal" 
-            data-toggle="modal" 
-            data-url="{{path('order_refund', {id:classroom.id, targetType:'classroom'})}}"
-            {% else %}
-            class="btn btn-default setting hidden-xs hidden-sm"
-            href="{{path('classroom_exit', {id:classroom.id})}}" id ="quit" 
+              class="btn btn-default setting hidden-xs hidden-sm"
+              href="#modal" 
+              data-toggle="modal" 
+              data-url="{{path('order_refund', {id:classroom.id, targetType:'classroom'})}}"
             {% endif %}
             >
             <i class="es-icon es-icon-exit"></i>
