@@ -144,7 +144,9 @@ class OrgServiceTest extends BaseTestCase
         $createCourseSet = array(
             'title' => 'online test course 1',
             'orgCode' => $org['orgCode'],
-            'courseSetId' => 1, 'learnMode' => 'freeMode', 'expiryMode' => 'days',
+            'courseSetId' => 1,
+            'learnMode' => 'freeMode',
+            'expiryMode' => 'forever',
             'type' => 'normal',
         );
         $createCourseSet = $this->getCourseSetService()->createCourseSet($createCourseSet);
@@ -173,7 +175,9 @@ class OrgServiceTest extends BaseTestCase
             'title' => 'online test course 1',
             'type' => 'normal',
             'orgCode' => $org['orgCode'],
-            'courseSetId' => 1, 'learnMode' => 'freeMode', 'expiryMode' => 'days',
+            'courseSetId' => 1,
+            'learnMode' => 'freeMode',
+            'expiryMode' => 'forever',
         );
         $createCourseSet = $this->getCourseSetService()->createCourseSet($course);
 

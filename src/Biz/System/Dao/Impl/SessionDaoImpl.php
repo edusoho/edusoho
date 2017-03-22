@@ -35,6 +35,7 @@ class SessionDaoImpl extends GeneralDaoImpl implements SessionDao
 
     public function searchBySessionTime($sessionTime, $limit)
     {
+        $limit = (int) $limit;
         $sql = "SELECT * FROM {$this->table} WHERE `sess_time` < ? LIMIT {$limit};";
 
         return $this->db()->fetchAll($sql, array($sessionTime));

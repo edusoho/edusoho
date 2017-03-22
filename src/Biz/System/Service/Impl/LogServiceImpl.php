@@ -141,12 +141,11 @@ class LogServiceImpl extends BaseService implements LogService
             unset($conditions['nickname']);
         }
 
-        if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
+        if (!empty($conditions['startDateTime'])) {
             $conditions['startDateTime'] = strtotime($conditions['startDateTime']);
+        }
+        if (!empty($conditions['endDateTime'])) {
             $conditions['endDateTime'] = strtotime($conditions['endDateTime']);
-        } else {
-            unset($conditions['startDateTime']);
-            unset($conditions['endDateTime']);
         }
 
         if (empty($conditions['level']) || !in_array($conditions['level'], array('info', 'warning', 'error'))) {

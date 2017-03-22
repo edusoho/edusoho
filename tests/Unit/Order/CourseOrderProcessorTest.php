@@ -59,8 +59,7 @@ class CourseOrderProcessorTest extends BaseTestCase
             'title' => 'course',
             'courseSetId' => 1,
             'learnMode' => 'freeMode',
-            'expiryMode' => 'days',
-            'expiryDays' => '0',
+            'expiryMode' => 'forever',
             'expiryStartDate' => '',
             'expiryEndDate' => '',
         );

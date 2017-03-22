@@ -2,20 +2,21 @@
 
 namespace AppBundle\Twig;
 
-use Codeages\Biz\Framework\Context\Biz;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\NumberToolkit;
-use AppBundle\Util\CdnUrl;
 use AppBundle\Common\ConvertIpToolkit;
+use AppBundle\Common\DeviceToolkit;
 use AppBundle\Common\ExtensionManager;
-use AppBundle\Util\UploadToken;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\NumberToolkit;
 use AppBundle\Common\PluginVersionToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Component\ShareSdk\WeixinShare;
 use AppBundle\Util\CategoryBuilder;
+use AppBundle\Util\CdnUrl;
+use AppBundle\Util\UploadToken;
 use Biz\Util\HTMLPurifierFactory;
+use Codeages\Biz\Framework\Context\Biz;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Topxia\Service\Common\ServiceKernel;
 
 class WebExtension extends \Twig_Extension
 {
@@ -134,7 +135,41 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('tag_equal', array($this, 'tag_equal')),
             new \Twig_SimpleFunction('array_index', array($this, 'arrayIndex')),
             new \Twig_SimpleFunction('cdn', array($this, 'getCdn')),
+            new \Twig_SimpleFunction('is_show_mobile_page', array($this, 'isShowMobilePage')),
+            new \Twig_SimpleFunction('is_ES_copyright', array($this, 'isESCopyright')),
         );
+    }
+
+    public function isShowMobilePage()
+    {
+        $wapSetting = $this->getSetting('wap', array());
+        if (empty($wapSetting['enabled'])) {
+            return false;
+        }
+
+        $pcVersion = $this->container->get('request')->cookies->get('PCVersion', 0);
+        if ($pcVersion) {
+            return false;
+        }
+
+        return DeviceToolkit::isMobileClient();
+    }
+
+    public function isESCopyright()
+    {
+        $copyright = $this->getSetting('copyright');
+        $request = $this->container->get('request');
+        $host = $request->getHttpHost();
+        if ($copyright) {
+            $result = !(
+                isset($copyright['owned']) && isset($copyright['thirdCopyright']) && $copyright['thirdCopyright'] != 2 && isset($copyright['licenseDomains']) && in_array($host, explode(';', $copyright['licenseDomains']))
+                || (isset($copyright['thirdCopyright']) && $copyright['thirdCopyright'] == 2)
+            );
+
+            return $result;
+        }
+
+        return true;
     }
 
     public function tag_equal($tags, $target_tagId, $target_tagGroupId)
@@ -523,7 +558,8 @@ class WebExtension extends \Twig_Extension
 
         foreach ($keys as $key) {
             if (!isset($value[$key])) {
-                throw new \InvalidArgumentException(sprintf('Key `%s` is not in context with %s', $key, implode(array_keys($context), ', ')));
+                throw new \InvalidArgumentException(sprintf('Key `%s` is not in context with %s', $key,
+                    implode(array_keys($context), ', ')));
             }
 
             $value = $value[$key];
@@ -990,8 +1026,10 @@ class WebExtension extends \Twig_Extension
         if (empty($path)) {
             $defaultSetting = $this->getSetting('default', array());
 
-            if ((($defaultKey == 'course.png' && array_key_exists('defaultCoursePicture', $defaultSetting) && $defaultSetting['defaultCoursePicture'] == 1)
-                    || ($defaultKey == 'avatar.png' && array_key_exists('defaultAvatar', $defaultSetting) && $defaultSetting['defaultAvatar'] == 1))
+            if ((($defaultKey == 'course.png' && array_key_exists('defaultCoursePicture',
+                            $defaultSetting) && $defaultSetting['defaultCoursePicture'] == 1)
+                    || ($defaultKey == 'avatar.png' && array_key_exists('defaultAvatar',
+                            $defaultSetting) && $defaultSetting['defaultAvatar'] == 1))
                 && (array_key_exists($defaultKey, $defaultSetting)
                     && $defaultSetting[$defaultKey])
             ) {
@@ -1176,8 +1214,8 @@ class WebExtension extends \Twig_Extension
     {
         $text = number_format($text, 1, '.', '');
 
-        if (intval($text) == $text) {
-            return (string) intval($text);
+        if ((int) $text == $text) {
+            return (string) (int) $text;
         }
 
         return $text;
@@ -1338,14 +1376,12 @@ class WebExtension extends \Twig_Extension
             return '100%';
         }
 
-        return intval($number / $total * 100).'%';
+        return (int) ($number / $total * 100).'%';
     }
 
     public function arrayMerge($text, $content)
     {
-        $array = array_merge($text, $content);
-
-        return $array;
+        return array_merge($text, $content);
     }
 
     public function getSetPrice($price)
@@ -1374,11 +1410,6 @@ class WebExtension extends \Twig_Extension
         }
 
         return $max;
-    }
-
-    public function getName()
-    {
-        return 'topxia_web_twig';
     }
 
     public function isTrial()

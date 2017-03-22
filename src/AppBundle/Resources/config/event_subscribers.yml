@@ -11,6 +11,12 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
+    course_classroom_course_expiry_date_event_subscriber:
+        class: Biz\Course\Event\ClassroomCourseExpiryDateEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
     card_event_subscriber:
         class: Biz\Card\Event\EventSubscriber
         arguments: ['@biz']

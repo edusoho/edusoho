@@ -32,6 +32,9 @@ class CourseManageController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
+
+            $data = $this->prepareExpiryMode($data);
+
             $this->getCourseService()->createCourse($data);
 
             return $this->redirect(
@@ -325,6 +328,27 @@ class CourseManageController extends BaseController
         return round($finishedTaskPerDay, 0);
     }
 
+    public function prepareExpiryMode($data)
+    {
+        if (empty($data['expiryMode']) || $data['expiryMode'] != 'days') {
+            unset($data['deadlineType']);
+        }
+        if (!empty($data['deadlineType'])) {
+            if ($data['deadlineType'] == 'end_date') {
+                $data['expiryMode'] = 'end_date';
+                $data['expiryEndDate'] = $data['deadline'];
+
+                return $data;
+            } else {
+                $data['expiryMode'] = 'days';
+
+                return $data;
+            }
+        }
+
+        return $data;
+    }
+
     protected function createCourseStrategy($course)
     {
         return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->get('biz'));
@@ -398,6 +422,8 @@ class CourseManageController extends BaseController
                 unset($data['buyExpiryTime']);
             }
 
+            $data = $this->prepareExpiryMode($data);
+
             if (!empty($data['services'])) {
                 $data['services'] = json_decode($data['services'], true);
             }
@@ -442,11 +468,17 @@ class CourseManageController extends BaseController
         $canFreeTaskCount = $this->getTaskService()->countTasks($conditions);
         $canFreeTasks = $this->getTaskService()->searchTasks($conditions, array('seq' => 'ASC'), 0, $canFreeTaskCount);
 
+        //prepare form data
+        if ($course['expiryMode'] == 'end_date') {
+            $course['deadlineType'] = 'end_date';
+            $course['expiryMode'] = 'days';
+        }
+
         return $this->render(
             'course-manage/marketing.html.twig',
             array(
                 'courseSet' => $courseSet,
-                'course' => $course,
+                'course' => $this->formatCourseDate($course),
                 'canFreeTasks' => $canFreeTasks,
                 'freeTasks' => $freeTasks,
             )
@@ -688,8 +720,8 @@ class CourseManageController extends BaseController
 
         $courseSetting = $this->setting('course');
 
-        if (!$this->getCurrentUser()->isAdmin(
-            ) && (empty($courseSetting['teacher_search_order']) || $courseSetting['teacher_search_order'] != 1)
+        if (!$this->getCurrentUser()->isAdmin()
+           && (empty($courseSetting['teacher_search_order']) || $courseSetting['teacher_search_order'] != 1)
         ) {
             throw $this->createAccessDeniedException('查询订单已关闭，请联系管理员');
         }
@@ -993,10 +1025,10 @@ class CourseManageController extends BaseController
 
     protected function formatCourseDate($course)
     {
-        if (isset($course['expiryStartDate'])) {
+        if (!empty($course['expiryStartDate'])) {
             $course['expiryStartDate'] = date('Y-m-d', $course['expiryStartDate']);
         }
-        if (isset($course['expiryEndDate'])) {
+        if (!empty($course['expiryEndDate'])) {
             $course['expiryEndDate'] = date('Y-m-d', $course['expiryEndDate']);
         }
 

@@ -222,17 +222,19 @@ class LiveController extends BaseController implements ActivityActionInterface
 
     protected function _getLiveReplays($activity, $ssl = false)
     {
-        if ($activity['ext']['replayStatus'] == LiveReplayService::REPLAY_GENERATE_STATUS) {
+        if ($activity['ext']['replayStatus'] === LiveReplayService::REPLAY_GENERATE_STATUS) {
             $replays = $this->getLiveReplayService()->findReplayByLessonId($activity['id']);
 
             $service = $this->getLiveReplayService();
+            $fileService = $this->getUploadFileService();
             $self = $this;
-            $replays = array_map(function ($replay) use ($service, $activity, $ssl, $self) {
+            $replays = array_map(function ($replay) use ($service, $activity, $ssl, $self, $fileService) {
                 $result = $service->entryReplay($replay['id'], $activity['ext']['liveId'], $activity['ext']['liveProvider'], $ssl);
 
                 if (!empty($result) && !empty($result['resourceNo'])) {
                     // ES Live
-                    $replay['url'] = $self->generateUrl('global_file_player', array('globalId' => $replay['globalId']));
+                    $file = $fileService->getFileByGlobalId($replay['globalId']);
+                    $replay['url'] = $self->generateUrl('material_lib_file_player', array('fileId' => $file['id']));
                 } elseif (!empty($result['url'])) {
                     // Other Live
                     $replay['url'] = $result['url'];

@@ -73,8 +73,8 @@ $resources = array(
     'SmsCodes',
     'User/VerifiedMobile',
     'MyLearning',
-    'MeFriends',
     'CoursesLearnProgress',
+    'LessonWatchTime',
     'MeFriends',
 );
 

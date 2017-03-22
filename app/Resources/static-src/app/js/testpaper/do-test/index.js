@@ -1,11 +1,11 @@
-import DoTestBase from '../widget/do-test-base';
+import DoTestBase from 'app/js/testpaper/widget/do-test-base';
 import {
   initScrollbar,
   testpaperCardFixed,
   testpaperCardLocation,
   initWatermark,
   onlyShowError
-} from '../widget/part';
+} from 'app/js/testpaper/widget/part';
 
 
 

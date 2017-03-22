@@ -357,53 +357,58 @@ class ArticleServiceTest extends BaseTestCase
 
     protected function createArticle()
     {
-        $category = $this->createCategory();
-
-        $fields = array(
+        $fileds = array(
             'publishedTime' => 'now',
             'title' => 'test article',
             'type' => 'article',
             'body' => '正午时分',
             'thumb' => 'thumb',
             'originalThumb' => 'originalThumb',
-            'categoryId' => $category['id'],
+            'categoryId' => '1',
             'source' => 'http://www.edusoho.com',
             'sourceUrl' => 'http://www.edusoho.com',
             'tags' => 'default',
         );
 
-        return $this->getArticleService()->createArticle($fields);
+        $category = $this->getCategoryService()->getCategory(1);
+        if (empty($category)) {
+            $this->createCategory();
+        }
+
+        return $this->getArticleService()->createArticle($fileds);
     }
 
     protected function createCategory()
     {
         $category = array(
-            'name' => 'test article '.random_int(0, 10000),
-            'code' => 'ta'.random_int(0, 10000),
+            'name' => '文章',
+            'code' => 'article',
             'parentId' => 0,
         );
-
-        return $this->getCategoryService()->createCategory($category);
+        $this->getCategoryService()->createCategory($category);
     }
 
     protected function createArticlesencond()
     {
-        $category = $this->createCategory();
-
-        $fields = array(
+        $fileds = array(
             'publishedTime' => 'now',
             'title' => 'test article2',
             'type' => 'article2',
             'body' => '正午时分2',
             'thumb' => 'thumb2',
             'originalThumb' => 'originalThumb2',
-            'categoryId' => $category['id'],
+            'categoryId' => '1',
             'source' => 'http://try6.edusoho.cn',
             'sourceUrl' => 'http://try6.edusoho.cn',
             'tags' => 'default',
         );
 
-        return $this->getArticleService()->createArticle($fields);
+        $category = $this->getCategoryService()->getCategory(1);
+        if (empty($category)) {
+            $this->createCategory();
+        }
+
+        return $this->getArticleService()->createArticle($fileds);
     }
 
     protected function createUser($user)

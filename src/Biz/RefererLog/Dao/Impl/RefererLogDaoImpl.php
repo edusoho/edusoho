@@ -45,7 +45,7 @@ class RefererLogDaoImpl extends GeneralDaoImpl implements RefererLogDao
             $sql .= 'and createdTime <= ?';
             $parameters[] = $endTime;
         }
-
+        // @TODO SQL Inject
         $sql .= "GROUP BY targetId) AS b ON a.targetId = b.targetId ORDER BY {$orderBy[0]} {$orderBy[1]},targetId DESC LIMIT {$start}, {$limit}";
 
         return $this->db()->fetchAll($sql, $parameters);
@@ -74,6 +74,7 @@ class RefererLogDaoImpl extends GeneralDaoImpl implements RefererLogDao
 
     public function countDistinctLogsByField($conditions, $field)
     {
+        // @TODO SQL Inject
         $builder = $this->createQueryBuilder($conditions)
             ->select("COUNT(DISTINCT {$field})");
 

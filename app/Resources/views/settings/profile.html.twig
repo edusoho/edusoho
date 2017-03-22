@@ -21,7 +21,7 @@
 					<div class="form-group">
 					<label class="col-md-2 control-label" >{{'用户名'|trans}}</label>
 						<div class="col-md-7 controls">
-						<div class="control-text">
+						<div class="form-control-static">
 							{{app.user.nickname}} {% if setting('user_partner.nickname_enabled') %} <a href="{{ path('setting_nickname') }}">{{'修改'|trans}}</a> {% endif %}</div>
 						</div>
 					</div>
@@ -29,7 +29,7 @@
 					<div class="form-group">
 						<label class="col-md-2 control-label" for="profile_truename">{{'真实姓名'|trans}}</label>
 						{% if profile.truename and (app.user.approvalStatus == 'approved' or app.user.approvalStatus == 'approving') %}
-              <div class="control-text">{{ profile.truename }}</div>
+              <div class="form-control-static">{{ profile.truename }}</div>
             {% else %}
             	<div class="col-md-7 controls radios">
               	<input type="text" id="profile_truename" name="profile[truename]" class="form-control" data-widget-cid="widget-1" data-explain="" value="{{ profile.truename|default('') }}">
@@ -54,7 +54,7 @@
 						<label class="col-md-2 control-label" for="profile_idcard">{{'身份证号码'|trans}}</label>
 						{% if profile.idcard and (app.user.approvalStatus == 'approved' or app.user.approvalStatus == 'approving') %}
               <div class="col-md-7 controls">
-                <div class="control-text">{{ blur_idcard_number(profile.idcard) }}</div>
+                <div class="form-control-static">{{ blur_idcard_number(profile.idcard) }}</div>
               </div>
             {% else %}
               <div class="col-md-7 controls radios">
@@ -68,7 +68,7 @@
 						<div class="form-group">
 							<label for="profile_mobile" class="col-md-2 control-label">{{'手机号码'|trans}}</label>
 							<div class="col-md-7 controls">
-								<div class="control-text">
+								<div class="form-control-static">
 									{{ blur_phone_number(user.verifiedMobile|default('')) }}
 									<small class="color-success">({{'已绑定'|trans}})</small>
 								</div>

@@ -1,6 +1,6 @@
 <div class="panel panel-default hot-article">
   <div class="panel-heading">
-    <h3 class="panel-title"><i class="es-icon es-icon-whatshot"></i>{{'热门资讯'|trans}}</h3>
+    <h3 class="panel-title"><i class="es-icon es-icon-whatshot"></i>{{'热门%article_name%'|trans({'%article_name%': setting('article.name')|default('资讯'|trans)})}}
   </div>
   <div class="panel-body">
     {% if articles %}

@@ -154,6 +154,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         $this->getFavoriteDao()->delete($favorite['id']);
+        $this->getLogService()->info('course', 'delete_favorite', "删除收藏(#{$id})", $favorite);
 
         return true;
     }
@@ -366,6 +367,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $defaultCourse = $this->generateDefaultCourse($created);
 
         $this->getCourseService()->createCourse($defaultCourse);
+        $this->getLogService()->info('course', 'create', sprintf('创建课程《%s》(#%s)', $created['title'], $created['id']));
 
         return $created;
     }
@@ -432,6 +434,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $fields);
 
+        $this->getLogService()->info('course', 'update', "修改课程《{$courseSet['title']}》(#{$courseSet['id']})");
         $this->dispatchEvent('course-set.update', new Event($courseSet));
 
         return $courseSet;
@@ -515,6 +518,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('cover' => $covers));
+
+        $this->getLogService()->info('course', 'update_picture', "更新课程《{$courseSet['title']}》(#{$courseSet['id']})图片", $covers);
         $this->dispatchEvent('course-set.update', new Event($courseSet));
 
         return $courseSet;
@@ -527,6 +532,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if (!empty($subCourseSets)) {
             throw $this->createAccessDeniedException('该课程在班级下引用，请先删除引用课程！');
         }
+        $this->getLogService()->info('course', 'delete', "删除课程《{$courseSet['title']}》(#{$courseSet['id']})");
 
         return $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
     }
@@ -606,10 +612,24 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             throw $this->createAccessDeniedException('发布课程时请确保课程下至少有一个已发布的教学计划');
         }
 
-        if (!empty($classroomRef)) {
-            $this->getCourseService()->publishCourse($classroomRef['courseId']);
+        try {
+            $this->beginTransaction();
+
+            if (!empty($classroomRef)) {
+                $this->getCourseService()->publishCourse($classroomRef['courseId']);
+            }
+            $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
+
+            $this->commit();
+
+            $this->dispatchEvent('course-set.publish', new Event($courseSet));
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
         }
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
+
+        $this->getLogService()->info('course', 'publish', "发布课程《{$courseSet['title']}》(#{$courseSet['id']})");
 
         $this->dispatchEvent('course-set.publish', new Event($courseSet));
     }
@@ -622,10 +642,25 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
-        if (!empty($classroomRef)) {
-            $this->getCourseService()->closeCourse($classroomRef['courseId']);
+
+        try {
+            $this->beginTransaction();
+
+            if (!empty($classroomRef)) {
+                $this->getCourseService()->closeCourse($classroomRef['courseId']);
+            }
+            $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'closed'));
+
+            $this->commit();
+
+            $this->dispatchEvent('course-set.closed', new Event($courseSet));
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
         }
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'closed'));
+
+        $this->getLogService()->info('course', 'close', "关闭课程《{$courseSet['title']}》(#{$courseSet['id']})");
 
         $this->dispatchEvent('course-set.closed', new Event($courseSet));
     }
@@ -899,8 +934,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $defaultCourse = array(
             'courseSetId' => $created['id'],
             'title' => '默认教学计划',
-            'expiryMode' => 'days',
-            'expiryDays' => 0,
+            'expiryMode' => 'forever',
             'learnMode' => 'freeMode',
             'isDefault' => 1,
             'isFree' => 1,
