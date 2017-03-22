@@ -1182,7 +1182,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $activities = ArrayToolkit::index($activities, 'id');
 
         foreach ($tasks as $task) {
-            if ($this->isUselessTask($task)) {
+            if ($this->isUselessTask($task, $course['type'])) {
                 continue;
             }
             $task = array_merge($task, $defaultTask);
@@ -1251,7 +1251,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $task;
     }
 
-    private function isUselessTask($task)
+    private function isUselessTask($task, $courseType)
     {
         $lessonTypes = array(
             'testpaper',
@@ -1262,6 +1262,11 @@ class CourseServiceImpl extends BaseService implements CourseService
             'ppt',
             'doc',
         );
+
+        if ($courseType == 'live') {
+            $lessonTypes = array('live', 'testpaper');
+        }
+
         if (!in_array($task['type'], $lessonTypes)) {
             return true;
         }
