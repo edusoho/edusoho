@@ -181,7 +181,7 @@ class ReviewServiceTest extends BaseTestCase
         return $this->getCourseService()->createCourse($course);
     }
 
-    protected function createCourse1($courseSetId=1)
+    protected function createCourse1($courseSetId = 1)
     {
         $course = array(
             'title' => '第二个教学计划',
