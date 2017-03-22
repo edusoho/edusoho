@@ -49,6 +49,7 @@ class EduSohoUpgrade extends AbstractUpdater
         'c2FlashActivity',
         'c2PPtActivity',
         'c2DocActivity',
+        'c2LiveActivity',
         'c2CourseTaskView',
         'c2CourseTaskResult',
         'c2Exercise',
@@ -63,6 +64,44 @@ class EduSohoUpgrade extends AbstractUpdater
       );
 
       return $steps[$index];
+    }
+
+    protected function c2LiveActivity()
+    {
+        if (!$this->isTableExist('live_activity')) {
+            $sql = "CREATE TABLE `live_activity` (
+              `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+              `liveId` int(11) NOT NULL COMMENT '直播间ID',
+              `liveProvider` int(11) NOT NULL COMMENT '直播供应商',
+              `replayStatus` enum('ungenerated','generating','generated','videoGenerated') NOT NULL DEFAULT 'ungenerated' COMMENT '回放状态',
+              `mediaId` INT(11) UNSIGNED DEFAULT 0 COMMENT '视频文件ID',
+              `roomCreated` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '直播教室是否已创建',
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+            $this->getConnection()->exec($sql);
+
+            $sql = "INSERT INTO `live_activity` (
+              `id`
+              ,`liveId`
+              ,`liveProvider`
+              ,`replayStatus`
+              ,`mediaId`
+            ) SELECT
+                `id`
+                ,`mediaId`
+                ,`liveProvider`
+                ,`replayStatus`
+                , 0
+            FROM `course_lesson` where `id` not in (select `id` from `live_activity`);";
+
+            $result = $this->getConnection()->exec($sql);
+        }
+
+        $sql = 'UPDATE `live_activity` SET roomCreated = 1 WHERE liveId > 0;';
+        $this->getConnection()->exec($sql);
+
+        $sql = "UPDATE live_activity la, (SELECT globalId,lessonId FROM course_lesson_replay where globalId<>'' and globalId is not null) clr set la.mediaId = clr.lessonId WHERE la.id = clr.lessonId";
     }
 
     protected function getIndexAndPage($index)
