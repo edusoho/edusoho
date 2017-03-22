@@ -2,18 +2,18 @@
 
 namespace AppBundle\Handler;
 
-use Biz\Classroom\Service\ClassroomService;
-use Biz\CloudPlatform\Service\AppService;
+use Biz\User\CurrentUser;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
-use Biz\User\CurrentUser;
-use Biz\User\Service\NotificationService;
 use Codeages\Biz\Framework\Context\Biz;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
-use AppBundle\Common\ArrayToolkit;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Biz\CloudPlatform\Service\AppService;
+use Biz\User\Service\NotificationService;
 use VipPlugin\Biz\Vip\Service\VipService;
+use Biz\Classroom\Service\ClassroomService;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 class GenerateNotificationHandler
 {
@@ -58,7 +58,7 @@ class GenerateNotificationHandler
             $message = array(
                 'courseId' => $course['id'],
                 'courseTitle' => $course['title'],
-                'endtime' => date('Y-m-d', $courseMembers[$course['id']]['deadline']), );
+                'endtime' => date('Y-m-d', $courseMembers[$course['id']]['deadline']));
             $this->getNotificationService()->notify($user['id'], 'course-deadline', $message);
             $courseMemberId = $courseMembers[$course['id']]['id'];
             $this->getCourseMemberService()->updateMember($courseMemberId, array('deadlineNotified' => 1));
@@ -87,7 +87,7 @@ class GenerateNotificationHandler
         $vipApp = $this->getAppService()->findInstallApp('Vip');
         if (!empty($vipApp) && version_compare($vipApp['version'], '1.0.5', '>=')) {
             $vipSetting = $this->getSettingService()->get('vip', array());
-            if ($vipSetting['deadlineNotify'] == 1 && array_key_exists('deadlineNotify', $vipSetting)) {
+            if (array_key_exists('deadlineNotify', $vipSetting) && $vipSetting['deadlineNotify'] == 1) {
                 $vip = $this->getVipService()->getMemberByUserId($user['id']);
                 $currentTime = time();
                 if ($vip['deadlineNotified'] != 1 && $currentTime < $vip['deadline']
