@@ -268,7 +268,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     public function getCourseLessons()
     {
-        $user = $this->controller->getUser();
+        $user = $this->controller->getuserByToken($this->request);
         $courseId = $this->getParam('courseId');
 
         $lessons = $this->controller->getCourseService()->findCourseTasksAndChapters($courseId);
@@ -355,12 +355,15 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $courseId = $this->getParam('courseId');
         $lessonId = $this->getParam('lessonId');
 
-        if (empty($courseId)) {
+        $course = $this->getCourseService()->getCourse($courseId);
+        if (empty($course)) {
             return $this->createErrorResponse('not_courseId', '课程信息不存在！');
         }
 
         $user = $this->controller->getUserByToken($this->request);
-        $lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $lesson = $this->getTaskService()->getTask($lessonId);
+        $lessons = $this->getCourseService()->convertTasks(array($lesson), $course);
+        $lesson = $lessons[0];
 
         if (empty($lesson)) {
             return $this->createErrorResponse('not_courseId', '课时信息不存在！');
@@ -369,7 +372,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         if ($lesson['free'] == 1) {
             if ($user->isLogin()) {
                 if ($this->controller->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
-                    $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
+                    $this->getTaskService()->startTask($lesson['id']);
                 }
             }
 
@@ -381,7 +384,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         }
 
         if ($this->controller->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
-            $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
+            $this->getTaskService()->startTask($lesson['id']);
         }
 
         $member = $this->controller->getCourseMemberService()->getCourseMember($courseId, $user['id']);
@@ -429,7 +432,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             return $this->createErrorResponse('error', '试卷已删除，请联系管理员。!');
         }
 
-        $items = $this->getTestpaperService()->getTestpaperItems($id);
+        $items = $this->getTestpaperService()->showTestpaperItems($id);
 
         return array(
             'testpaper' => $testpaper,
@@ -441,15 +444,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
     {
         $itemArray = array();
 
-        foreach ($items as $key => $item) {
-            $type = $item['questionType'];
-
-            if (isset($itemArray[$type])) {
-                $count = $itemArray[$type];
-                $itemArray[$type] = $count + 1;
-            } else {
-                $itemArray[$type] = 1;
-            }
+        foreach ($items as $questionType => $item) {
+            $itemArray[$questionType] = count($item);
         }
 
         return $itemArray;
@@ -767,7 +763,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
     private function filterLessons($lessons, $files)
     {
         return array_map(function ($lesson) use ($files) {
-            $lesson['content'] = '';
+            $lesson['content'] = "";
+            $lesson['uploadFile'] = array();
 
             if (isset($lesson['mediaId'])) {
                 $file = isset($files[$lesson['mediaId']]) ? $files[$lesson['mediaId']] : null;
@@ -776,7 +773,6 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             }
 
             unset($lesson['tags']);
-
             return $lesson;
         }, $lessons);
     }

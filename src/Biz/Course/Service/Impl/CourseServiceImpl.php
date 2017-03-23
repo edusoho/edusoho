@@ -1124,11 +1124,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->getCourse($courseId);
         $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
-
         $items = $this->convertTasks($tasks, $course);
 
         $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
+
         foreach ($chapters as $chapter) {
+            if ($chapter['type'] == 'lesson') {
+                continue;
+            }
             $chapter['itemType'] = 'chapter';
             $items[] = $chapter;
         }
@@ -1162,7 +1165,15 @@ class CourseServiceImpl extends BaseService implements CourseService
             'summary' => $course['summary'],
             'exerciseId' => 0,
             'homeworkId' => 0,
+            'mediaUri' => '',
+            'mediaSource' => '',
         );
+
+        if (empty($course['summary'])) {
+            $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+            $defaultTask['summary'] = $courseSet['summary'];
+        }
+
         $transformKeys = array(
             'isFree' => 'free',
             'createdUserId' => 'userId',
@@ -1173,8 +1184,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         $lessons = array();
         $number = 0;
 
+        $activityIds = ArrayToolkit::column($tasks, 'activityId');
+        $activities = $this->getActivityService()->findActivities($activityIds);
+        $activities = ArrayToolkit::index($activities, 'id');
+
         foreach ($tasks as $task) {
-            if ($this->isUselessTask($task)) {
+            if ($this->isUselessTask($task, $course['type'])) {
                 continue;
             }
             $task = array_merge($task, $defaultTask);
@@ -1198,7 +1213,10 @@ class CourseServiceImpl extends BaseService implements CourseService
                     'courseTaskId' => $task['id'],
                 )
             );
-            $lessons[] = $task;
+
+            $activity = $activities[$task['activityId']];
+            $task['content'] = $activity['content'];
+            $lessons[] = $this->filterTask($task);
         }
 
         $chapters = $this->getChapterDao()->findChaptersByCourseId($course['id']);
@@ -1224,7 +1242,23 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $lessons;
     }
 
-    private function isUselessTask($task)
+    //移动端 数字转字符
+    protected function filterTask($task)
+    {
+        array_walk($task, function ($value, $key) use (&$task) {
+            if (is_numeric($value)) {
+                $task[$key] = (string) $value;
+            } elseif (is_null($value)) {
+                $task[$key] = '';
+            } else {
+                $task[$key] = $value;
+            }
+        });
+
+        return $task;
+    }
+
+    private function isUselessTask($task, $courseType)
     {
         $lessonTypes = array(
             'testpaper',
@@ -1235,6 +1269,11 @@ class CourseServiceImpl extends BaseService implements CourseService
             'ppt',
             'doc',
         );
+
+        if ($courseType == 'live') {
+            $lessonTypes = array('live', 'testpaper');
+        }
+
         if (!in_array($task['type'], $lessonTypes)) {
             return true;
         }
@@ -1246,8 +1285,15 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         $task['mediaId'] = isset($activity['ext']['mediaId']) ? $activity['ext']['mediaId'] : 0;
+
         if ($task['type'] == 'video') {
+            $task['mediaSource'] = $activity['ext']['mediaSource'];
             $task['mediaUri'] = $activity['ext']['mediaUri'];
+        } elseif ($task['type'] == 'audio') {
+            $task['mediaSource'] = 'self';
+        } elseif ($task['type'] == 'live') {
+            $task['liveProvider'] = $activity['ext']['liveProvider'];
+            $task['replayStatus'] = $activity['ext']['replayStatus'];
         }
 
         return $task;
@@ -1479,14 +1525,15 @@ class CourseServiceImpl extends BaseService implements CourseService
      */
     public function findUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType, $start, $limit)
     {
-        $favorites = $this->getFavoriteDao()->findUserFavoriteCoursesNotInClassroomWithCourseType(
+        $coursesIds = $this->getFavoriteDao()->findUserFavoriteCoursesNotInClassroomWithCourseType(
             $userId,
             $courseType,
             $start,
             $limit
         );
 
-        return $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($favorites, 'courseId'));
+        $courses = $this->findCoursesByIds(ArrayToolkit::column($coursesIds, 'id'));
+        return $courses;
     }
 
     /*
@@ -1547,6 +1594,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function countCoursesGroupByCourseSetIds($courseSetIds)
     {
         return $this->getCourseDao()->countGroupByCourseSetIds($courseSetIds);
+    }
+
+    public function getFavoritedCourseByUserIdAndCourseSetId($userId, $courseSetId)
+    {
+        return $this->getFavoriteDao()->getByUserIdAndCourseSetId($userId, $courseSetId);
     }
 
     protected function createCourseStrategy($course)
