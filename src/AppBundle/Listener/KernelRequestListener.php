@@ -2,6 +2,7 @@
 
 namespace AppBundle\Listener;
 
+use ApiBundle\ApiBundle;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -57,7 +58,7 @@ class KernelRequestListener
 
             $whiteList = $this->container->hasParameter('route_white_list') ? $this->container->getParameter('route_white_list') : array();
 
-            if (in_array($request->getPathInfo(), $whiteList)) {
+            if (in_array($request->getPathInfo(), $whiteList) || strpos($request->getPathInfo(), ApiBundle::API_PREFIX) == 0) {
                 return;
             }
 

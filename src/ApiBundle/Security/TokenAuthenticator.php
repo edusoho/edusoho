@@ -15,32 +15,6 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface
 {
     private $container;
 
-    private $whiteList = array(
-        'GET'  => array(
-            '/^\/api\/users\/\d+$/',
-            '/^\/api\/course_sets\/\d+$/',
-            '/^\/api\/mobileschools\/.+$/',
-            '/^\/api\/classrooms\/\w+\/members$/',
-            '/^\/api\/discovery_columns$/',
-            '/^\/api\/courses\/discovery\/columns$/',
-            '/^\/api\/classrooms\/discovery\/columns$/',
-            '/^\/api\/lessons$/',
-            '/^\/api\/lessons\/\d+$/',
-            '/^\/api\/classroom_play\/\d+$/',
-            '/^\/api\/course\/\d+\/lessons$/',
-            '/^\/api\/setting\/\w+$/',
-            '/^\/api\/courses\/\w+\/members$/'
-        ),
-        'POST' => array(
-            '/^\/api\/users$/',
-            '/^\/api\/users\/login$/',
-            '/^\/api\/users\/bind_login$/',
-            '/^\/api\/sms_codes$/',
-            '/^\/api\/users\/password$/',
-            '/^\/api\/emails$/'
-        )
-    );
-
     public function __construct($container)
     {
         $this->container = $container;
@@ -48,7 +22,7 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface
 
     public function createToken(Request $request, $providerKey)
     {
-        $auth = new ApiAuth($this->whiteList);
+        $auth = new ApiAuth();
 
         $apiToken = $auth->auth($request);
 

@@ -7,12 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ApiAuth
 {
-    private $whiteList;
-
-    public function __construct($whiteList)
-    {
-        $this->whiteList = $whiteList;
-    }
 
     public function auth(Request $request)
     {
@@ -29,20 +23,8 @@ class ApiAuth
             $this->decodeKeysign($token);
             return array('allowed_without_user' => true);
         } else {
-            $whiteList = isset($this->whiteList[$request->getMethod()]) ? $this->whiteList[$request->getMethod()] : array();
 
-            $path = rtrim($request->getPathInfo(), '/');
-
-            $inWhiteList = 0;
-
-            foreach ($whiteList as $pattern) {
-                if (preg_match($pattern, $path)) {
-                    $inWhiteList = 1;
-                    break;
-                }
-            }
-
-            if ($inWhiteList) {
+            if (FireWall::isInWhiteList($request)) {
                 return array('allowed_without_user' => true);
             }
 
@@ -52,7 +34,7 @@ class ApiAuth
 
             $token = $this->getUserService()->getToken('mobile_login', $token);
 
-            if (!$inWhiteList && empty($token['userId'])) {
+            if (empty($token['userId'])) {
                 throw new \RuntimeException('API Token不正确！');
             }
         }
