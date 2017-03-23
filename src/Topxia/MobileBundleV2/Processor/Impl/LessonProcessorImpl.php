@@ -432,7 +432,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             return $this->createErrorResponse('error', '试卷已删除，请联系管理员。!');
         }
 
-        $items = $this->getTestpaperService()->getTestpaperItems($id);
+        $items = $this->getTestpaperService()->showTestpaperItems($id);
 
         return array(
             'testpaper' => $testpaper,
@@ -444,15 +444,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
     {
         $itemArray = array();
 
-        foreach ($items as $key => $item) {
-            $type = $item['questionType'];
-
-            if (isset($itemArray[$type])) {
-                $count = $itemArray[$type];
-                $itemArray[$type] = $count + 1;
-            } else {
-                $itemArray[$type] = 1;
-            }
+        foreach ($items as $questionType => $item) {
+            $itemArray[$questionType] = count($item);
         }
 
         return $itemArray;
