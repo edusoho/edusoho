@@ -2,7 +2,7 @@
 <li class="task-manage-item js-task-manage-item drag clearfix " id="task-{{ task.id }}">
   <div class="item-line"></div>
   <div class="item-content  js-item-content text-overflow">
-    <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mrm"></i>
+    <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mrm" data-role="task"></i>
     {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}
     任务<span class="number">{{ task.number }}</span>： {{ task.title|sub_text(30) }}
     {% if task.status != 'published' %}<span class="color-warning">(未发布)</span> {% endif %}
