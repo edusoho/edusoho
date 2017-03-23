@@ -25,7 +25,7 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface
         $auth = new ApiAuth();
 
         $apiToken = $auth->auth($request);
-
+        
         return new PreAuthenticatedToken(
             'anon.',
             $apiToken,

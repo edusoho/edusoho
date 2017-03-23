@@ -40,6 +40,11 @@ class RedisSessionHandler implements \SessionHandlerInterface
     private $storage;
 
     /**
+     * @var bool Whether session to create ,default is true
+     */
+    private $createable = true;
+
+    /**
      * RedisSessionHandler constructor.
      * List of available options:
      *  prefix: The prefix to use for the redis keys in order to avoid collision
@@ -62,6 +67,10 @@ class RedisSessionHandler implements \SessionHandlerInterface
         $this->prefix = isset($options['prefix']) ? $options['prefix'] : 'session';
 
         $this->storage = $storage;
+
+        if ($this->isUnCreatable()) {
+            $this->createable = false;
+        }
     }
 
     /**
@@ -93,6 +102,10 @@ class RedisSessionHandler implements \SessionHandlerInterface
      */
     public function write($sessionId, $data)
     {
+        if (!$this->createable) {
+            return false;
+        }
+
         $time = time();
         if ($this->getCurrentUserId() > 0) {
             $this->redis->zAdd($this->prefix.':logined', $time, $sessionId);
@@ -141,5 +154,12 @@ class RedisSessionHandler implements \SessionHandlerInterface
         }
 
         return $userId;
+    }
+
+    private function isUnCreatable()
+    {
+        $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+        $token = $this->storage->getToken();
+        return strpos($userAgent, 'Baiduspider') > -1 || ($token instanceof PreAuthenticatedToken && $token->getProviderKey() == 'api');
     }
 }

@@ -29,6 +29,10 @@ class FireWall
         }
 
         return false;
+    }
 
+    public static function isApiPath(Request $request)
+    {
+        return strpos(ApiBundle::API_PREFIX, $request->getPathInfo()) !== false;
     }
 }
