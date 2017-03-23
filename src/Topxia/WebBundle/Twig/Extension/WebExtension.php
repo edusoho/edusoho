@@ -1261,7 +1261,7 @@ class WebExtension extends \Twig_Extension
             return $default;
         }
 
-        $value = ServiceKernel::instance()->createService('System.SettingService')->get($name,$default);
+        $value = ServiceKernel::instance()->createService('System.SettingService')->get($name);
 
         if (!isset($value)) {
             return $default;
