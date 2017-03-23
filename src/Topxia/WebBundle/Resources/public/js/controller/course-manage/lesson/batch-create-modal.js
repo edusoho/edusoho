@@ -84,7 +84,6 @@ define(function(require, exports, module) {
                 },
                 complete: function (response) {
                     if (isLast) {
-                        //$('#modal').modal('hide');
                         window.location.reload();
                     }
                 }
