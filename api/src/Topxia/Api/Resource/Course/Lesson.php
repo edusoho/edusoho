@@ -320,10 +320,11 @@ class Lesson extends BaseResource
         $lesson = array();
         $lesson['id'] = $res['id'];
         $lesson['courseId'] = $res['courseId'];
-        $lesson['chapterId'] = $res['chapterId'];
+        $lesson['courseSetId'] = $res['fromCourseSetId'];
+        $lesson['chapterId'] = $res['categoryId'];
         $lesson['number'] = $res['number'];
         $lesson['seq'] = $res['seq'];
-        $lesson['free'] = $res['free'];
+        $lesson['free'] = $res['isFree'];
         $lesson['title'] = $res['title'];
         $lesson['summary'] = $res['summary'];
         $lesson['type'] = $res['type'];
