@@ -5,18 +5,18 @@ namespace TestProject\Biz\Example\Dao\Impl;
 use TestProject\Biz\Example\Dao\ExampleDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class ExampleDaoImpl extends GeneralDaoImpl implements ExampleDao
+class Example3DaoImpl extends GeneralDaoImpl implements ExampleDao
 {
-    protected $table = 'example';
+    protected $table = 'example3';
 
     public function findByName($name, $start, $limit)
     {
         return $this->search(array('name' => $name), array('created' => 'DESC'), $start, $limit);
     }
 
-    public function findByNameAndId($name, $ids1)
+    public function findByNameAndId($name, $id)
     {
-        return $this->findByFields(array('name' => $name, 'ids1' => $ids1));
+        return $this->findByFields(array('name' => $name, 'id' => $id));
     }
 
     public function findByIds(array $ids, array $orderBys, $start, $limit)
@@ -40,6 +40,7 @@ class ExampleDaoImpl extends GeneralDaoImpl implements ExampleDao
                 'id iN (:ids)',
                 'ids1 = :ids1'
             ),
+            'cache'      => 'table'
         );
     }
 }
