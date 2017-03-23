@@ -45,7 +45,7 @@ abstract class Resource
         return $this->biz;
     }
 
-    final protected function createService($service)
+    final protected function service($service)
     {
         return $this->getBiz()->service($service);
     }

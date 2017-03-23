@@ -4,6 +4,9 @@ namespace Biz\User\Service;
 
 interface TokenService
 {
+    const MOBILE_MODULE = 'mobile';
+
+    const TYPE_MOBILE_LOGIN = 'mobile_login';
     /**
      * 生成一个一次性的Token.
      *

@@ -20,6 +20,7 @@ class ExceptionListener
         $exception = $event->getException();
 
         $error = array();
+        $error['message'] = $exception->getMessage();
         if ($exception instanceof ApiException) {
             $error['code'] = $exception->getCode();
             $error['type'] = $exception->getType();
@@ -28,12 +29,6 @@ class ExceptionListener
             $error['code'] = ApiException::CODE;
             $error['type'] = ApiException::TYPE;
             $httpCode = ApiException::HTTP_CODE;
-        }
-
-        $request = $event->getRequest();
-
-        if ($request->query->get('__debug__') || $this->isDebug()) {
-            $error['message'] = $exception->getMessage();
         }
 
         if ($this->isDebug()) {
