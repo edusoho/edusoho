@@ -14,7 +14,7 @@
     </div>
     <div class="controls col-md-8 radios">
  {#     {{ radios('alipay_type', {'direct':'立即到账接口', 'escow': '担保交易接口', 'dualfun':'标准双接口' }, payment.alipay_type)}}#}
-      <label><input type="radio" name="alipay_type" value="direct" {% if payment.alipay_type == 'direct' %}checked="checked"{% endif %} > 立即到账接口</label>
+      <label><input type="radio" name="alipay_type" value="direct" {% if payment.alipay_type == 'direct' %}checked="checked"{% endif %} > 电脑网站支付</label>
       <label><input type="radio" name="alipay_type" value="escow" {% if payment.alipay_type == 'escow' %}checked="checked"  {% else %} disabled{% endif %} > 担保交易接口</label>
       <label><input type="radio" name="alipay_type" value="dualfun" {% if payment.alipay_type == 'dualfun' %}checked="checked" {% else %} disabled{% endif %} > 标准双接口</label>
       <div class="help-block">
