@@ -46,7 +46,7 @@ class MicroyanConsultServiceImpl extends BaseService implements ConsultService
             $cloudConsult['cloud_consult_is_buy'] = 0;
         } else {
             $cloudConsult['cloud_consult_is_buy'] = 1;
-            $cloudConsult['cloud_consult_landing_url'] = $account;
+            $cloudConsult['cloud_consult_login_url'] = $account;
             $cloudConsult['cloud_consult_js'] = $jsResource;
         }
 
