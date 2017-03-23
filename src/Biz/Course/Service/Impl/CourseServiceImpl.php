@@ -1278,7 +1278,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         $task['mediaId'] = isset($activity['ext']['mediaId']) ? $activity['ext']['mediaId'] : 0;
-        
+
         if ($task['type'] == 'video') {
             $task['mediaSource'] = $activity['ext']['mediaSource'];
             $task['mediaUri'] = $activity['ext']['mediaUri'];
@@ -1286,7 +1286,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $task['mediaSource'] = 'self';
         } elseif ($task['type'] == 'live') {
             $task['liveProvider'] = $activity['ext']['liveProvider'];
-            $task['replayStatus '] = $activity['ext']['replayStatus '];
+            $task['replayStatus'] = $activity['ext']['replayStatus'];
         }
 
         return $task;
