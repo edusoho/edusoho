@@ -9,7 +9,8 @@ class SmsToolkit
     public static function smsCheck($request, $scenario)
     {
         $mobile = $request->request->get('mobile');
-        $ratelimiterResult =  self::smsCheckRatelimiter($request,$scenario);
+        $postSmsCode = $request->request->get('sms_code');
+        $ratelimiterResult =  self::smsCheckRatelimiter($request,$scenario,$postSmsCode);
         if($ratelimiterResult && $ratelimiterResult['success'] === false ){
             return array(false,null,null);
         }
@@ -20,20 +21,25 @@ class SmsToolkit
         return array($result, $sessionField, $requestField);
     }
 
-    public static function smsCheckRatelimiter($request, $type)
+    public static function smsCheckRatelimiter($request, $type, $smsCode)
     {
         $kernel = ServiceKernel::instance();
+
         $smsSession = $request->getSession()->get($type);
+        $smsSessionCode = $smsSession['sms_code'];
+
         if(!isset($smsSession['sms_remain'])){
             $smsSession['sms_remain'] = 5;
         }
         $remain = $smsSession['sms_remain'];
-        if( $remain == 0 ){
-            self::clearSmsSession($request, $type);
-            return array('success'=>false,'message' => $kernel->trans('错误次数已经超过最大次数，请重新获取'));
-        }else{
+
+        if($smsSessionCode != $smsCode){
             $remain = (int)$remain - 1;
             self::updateSmsSessionRemain($request,$type,$remain);
+        }
+        if($remain == 0 ){
+            self::clearSmsSession($request, $type);
+            return array('success'=>false,'message' => $kernel->trans('错误次数已经超过最大次数，请重新获取'));
         }
 
     }
