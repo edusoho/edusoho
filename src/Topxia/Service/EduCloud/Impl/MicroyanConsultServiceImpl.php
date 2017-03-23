@@ -8,16 +8,9 @@ use Topxia\Service\Common\BaseService;
 
 class MicroyanConsultServiceImpl extends BaseService implements ConsultService
 {
-    public function connectCloud()
-    {
-        $api = CloudAPIFactory::create('root');
-
-        return $api;
-    }
-
     public function getAccount()
     {
-        $api = $this->connectCloud();
+        $api = CloudAPIFactory::create('root');
         $account = $api->post("/robot/login_url");
 
         return $account;
@@ -25,7 +18,7 @@ class MicroyanConsultServiceImpl extends BaseService implements ConsultService
 
     public function getJsResource()
     {
-        $api = $this->connectCloud();
+        $api = CloudAPIFactory::create('root');
         $jsResource  = $api->post("/robot/install");
 
         return $jsResource;
@@ -48,7 +41,7 @@ class MicroyanConsultServiceImpl extends BaseService implements ConsultService
             $cloudConsult['cloud_consult_is_buy'] = 0;
         } else if ((isset($account['code']) && $account['code']== '10001') || (isset($jsResource['code']) && $jsResource['code']== '10001')) {
             $cloudConsult['cloud_consult_is_buy'] = 0;
-            $cloudConsult['message'] = '账号已过期,请联系客服人员:4008041114！';
+            $cloudConsult['error'] = '账号已过期,请联系客服人员:4008041114！';
         } else if(isset($account['error']) || isset($jsResource['error'])) {
             $cloudConsult['cloud_consult_is_buy'] = 0;
         } else {

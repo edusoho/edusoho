@@ -1091,6 +1091,10 @@ class EduCloudController extends BaseController
 
         $cloudConsult = $this->getConsultService()->buildCloudConsult($account, $jsResource);
 
+        if (isset($cloudConsult['error'])) {
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans($cloudConsult['message']));
+        }
+
         if ($cloudConsult['cloud_consult_is_buy'] == 0) {
             return $this->renderConsultWithoutEnable($cloudConsult);
         }
@@ -1106,10 +1110,6 @@ class EduCloudController extends BaseController
 
         if ($cloudConsult['cloud_consult_setting_enabled'] == 0) {
             return $this->renderConsultWithoutEnable($cloudConsult);
-        }
-
-        if (isset($cloudConsult['message'])) {
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans($cloudConsult['message']));
         }
 
         return $this->render('TopxiaAdminBundle:EduCloud/Consult:setting.html.twig', array(
