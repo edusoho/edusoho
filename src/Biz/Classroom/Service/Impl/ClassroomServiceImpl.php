@@ -22,6 +22,7 @@ use Biz\Taxonomy\Service\TagService;
 use Biz\User\Service\StatusService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
+use VipPlugin\Biz\Vip\Service\VipService;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
 {

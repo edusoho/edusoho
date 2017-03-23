@@ -1,4 +1,7 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% if is_plugin_installed('Vip') %}
+  {% set vipStatus = data('VipStatus', {'userId': user.id, 'levelId': course.vipLevelId})%}
+{% endif %}
 
 {% block title %}
   {% if course.isFree %}
@@ -10,7 +13,7 @@
 
 {% block body %}
   <form id="course-buy-form" class="form-horizontal" method="post"
-  action="{{ path('course_buy_modify_user_info') }}"
+  action="{{ path('user_info_fill',{id: user.id}) }}"
   >
     <div class="form-group">
       <div class="col-sm-3 control-label">{{'课程名称'|trans}}</div>
@@ -23,7 +26,7 @@
       <div class="col-sm-3 control-label">{{'价格'|trans}}</div>
       <div class="col-sm-9 controls money-text">
       	<span class="form-control-static">
-          {% if course.isFree %}
+          {% if course.isFree or vipStatus|default(0) %}
             <strong class="money">{{ '免费'|trans }}</strong>
           {% else %}
             {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
@@ -37,8 +40,13 @@
       	</span>
       </div>
     </div>
-
-    <input type="hidden" name="targetId" value="{{ course.id }}" />
+    <input type="hidden" name="targetUrl" value=
+      {% if vipStatus|default(0) %}
+        {{ path('vip_course_join',{'courseId': course.id}) }}
+      {% else %}
+        {{ path('order_show',{'targetId': course.id,'targetType': 'course'}) }}
+      {% endif %}
+    />
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
     {% set isBuyFillUserinfo = setting('course.buy_fill_userinfo')|default(false) %}
@@ -50,11 +58,11 @@
 
 {% block footer %}
   <button id="course-pay" class="btn btn-primary" type="submit" data-loading-text="{{'正在创建订单'|trans}}..." data-toggle="form-submit" data-target="#course-buy-form">
-  {% if course.isFree %}
-    {{'免费加入'|trans}}
-  {% else%}
-    {{'去支付'|trans}}
-  {% endif %}
+      {% if course.isFree or vipStatus|default(0) %}
+        {{'免费加入'|trans}}
+      {% else%}
+        {{'去支付'|trans}}
+      {% endif %}
   </button>
   {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>

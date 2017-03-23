@@ -67,6 +67,7 @@ class CourseController extends CourseBaseController
         );
 
         $userIds = array();
+
         foreach ($courses as $key => $course) {
             $userIds = array_merge($userIds, $course['teacherIds']);
             $learnTime = $this->getTaskResultService()->sumLearnTimeByCourseIdAndUserId(
@@ -74,7 +75,7 @@ class CourseController extends CourseBaseController
                 $currentUser['id']
             );
 
-            $courses[$key]['learnTime'] = intval($learnTime / 60).'小时'.($learnTime % 60).'分钟';
+            $courses[$key]['learnTime'] = (int) ($learnTime / 60).'小时'.($learnTime % 60).'分钟';
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 
