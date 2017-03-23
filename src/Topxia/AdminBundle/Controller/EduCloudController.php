@@ -1105,7 +1105,7 @@ class EduCloudController extends BaseController
             $cloudConsult['cloud_consult_setting_enabled'] = $requestCloudConsult['cloud_consult_setting_enabled'];
 
             $this->getSettingService()->set('cloud_consult', $cloudConsult);
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('云客服设置已保存！'));
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('云问答设置已保存！'));
         }
 
         if ($cloudConsult['cloud_consult_setting_enabled'] == 0) {
