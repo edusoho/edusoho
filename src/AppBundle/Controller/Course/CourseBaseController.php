@@ -43,6 +43,7 @@ abstract class CourseBaseController extends BaseController
     {
         list($course, $member) = $this->buildCourseLayoutData($request, $courseId);
         $response = null;
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         $user = $this->getCurrentUser();
 
@@ -51,7 +52,7 @@ abstract class CourseBaseController extends BaseController
         }
 
         if (!$this->getCourseService()->canTakeCourse($course)) {
-            $response = $this->createMessageResponse('info', '您还不是课程《'.$course['title'].'》的学员，请先购买或加入学习。', null, 3000, $this->generateUrl('course_show', array('id' => $courseId)));
+            $response = $this->createMessageResponse('info', '您还不是课程《'.$courseSet['title'].'》的学员，请先购买或加入学习。', null, 3000, $this->generateUrl('course_show', array('id' => $courseId)));
         }
 
         return array($course, $member, $response);
