@@ -1151,6 +1151,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             }
         }
 
+        $this->updateMemberLastViewTime($member);
         $userFavorited = $user->isLogin() ? $this->controller->getCourseService()->getFavoritedCourseByUserIdAndCourseSetId($user['id'], $course['courseSetId']) : false;
         $vipLevels = array();
 
@@ -1867,6 +1868,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return $this->controller->getService('Course:CourseSetService');
     }
 
+    protected function getCourseMemberService()
+    {
+        return $this->controller->getService('Course:MemberService');
+    }
+
     protected function getTaskService()
     {
         return $this->controller->getService('Task:TaskService');
@@ -1886,7 +1892,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     {
         if (!empty($member)) {
             $fields['lastViewTime'] = time();
-            $this->controller->getCourseMemberService()->updateCourseMember($member['id'], $fields);
+            $this->controller->getCourseMemberService()->updateMember($member['id'], $fields);
         }
     }
 }
