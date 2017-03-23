@@ -11,7 +11,8 @@ define(function(require, exports, module) {
             initUrl: $el.data('initUrl'),
             finishUrl: $el.data('finishUrl'),
             uploadAuthUrl: $el.data('uploadAuthUrl'),
-            fileSingleSizeLimit: 1024 * 1024 * 1024 * 2   //2G
+            accept: $el.data('accept'),
+            fileSingleSizeLimit: 1024 * 1024 * 1024 * 2,   //2G
         });
 
         var uploader = esuploader.uploader;
