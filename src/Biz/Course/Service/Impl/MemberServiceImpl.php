@@ -434,7 +434,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException('教学计划学员不存在，备注失败!');
         }
 
-        $fields = array('remark' => empty($remark) ? '' : (string) $remark);
+        $fields = array('remark' => empty($remark) ? '' : (string)$remark);
 
         return $this->getMemberDao()->update($member['id'], $fields);
     }
@@ -736,7 +736,9 @@ class MemberServiceImpl extends BaseService implements MemberService
         if (!empty($classroom)) {
             $member = $this->getClassroomService()->getClassroomMember($classroom['classroomId'], $userId);
 
-            if (!$isCourseStudent && !empty($member) && array_intersect($member['role'], array('student', 'teacher', 'headTeacher', 'assistant'))) {
+            if (!$isCourseStudent && !empty($member) && array_intersect($member['role'],
+                    array('student', 'teacher', 'headTeacher', 'assistant'))
+            ) {
                 $info = ArrayToolkit::parts($member, array('levelId'));
                 $member = $this->createMemberByClassroomJoined($courseId, $userId, $member['classroomId'], $info);
 
@@ -820,7 +822,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $this->getMemberDao()->update(
             $member['id'],
             array(
-                'noteNum' => (int) $number,
+                'noteNum' => (int)$number,
                 'noteLastUpdateTime' => time(),
             )
         );
@@ -899,12 +901,14 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline)
     {
-        return $this->getMemberDao()->updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline);
+        return $this->getMemberDao()->updateByClassroomIdAndUserId($classroomId, $userId, array(
+            'deadline' => $deadline,
+        ));
     }
 
     public function updateMembersDeadlineByClassroomId($classroomId, $deadline)
     {
-        return $this->getMemberDao()->updateMembersDeadlineByClassroomId($classroomId, $deadline);
+        return $this->getMemberDao()->updateByClassroomId($classroomId, array('deadline' => $deadline));
     }
 
     /**

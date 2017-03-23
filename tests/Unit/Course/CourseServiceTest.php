@@ -272,6 +272,7 @@ class CourseServiceTest extends BaseTestCase
                 'title' => '第一个教学计划',
                 'courseSetId' => 1,
                 'learnMode' => 'lockMode',
+                'expiryDays' => 0,
                 'expiryMode' => 'forever',
             );
 
