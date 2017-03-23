@@ -1167,6 +1167,12 @@ class CourseServiceImpl extends BaseService implements CourseService
             'mediaUri' => '',
             'mediaSource' => '',
         );
+
+        if (empty($course['summary'])) {
+            $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+            $defaultTask['summary'] = $courseSet['summary'];
+        }
+
         $transformKeys = array(
             'isFree' => 'free',
             'createdUserId' => 'userId',
