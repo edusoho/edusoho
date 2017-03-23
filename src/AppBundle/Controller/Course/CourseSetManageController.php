@@ -138,6 +138,8 @@ class CourseSetManageController extends BaseController
     //基础信息
     public function baseAction(Request $request, $id)
     {
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $this->getCourseSetService()->updateCourseSet($id, $data);
@@ -146,7 +148,6 @@ class CourseSetManageController extends BaseController
             return $this->redirect($this->generateUrl('course_set_manage_base', array('id' => $id)));
         }
 
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
         if ($courseSet['locked']) {
             return $this->redirectToRoute(
                 'course_set_manage_sync',

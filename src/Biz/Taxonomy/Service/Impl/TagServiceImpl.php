@@ -47,7 +47,7 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function getTagByLikeName($name)
     {
-        return $this->getTagDao()->getByLikeName($name);
+        return $this->getTagDao()->findByLikeName($name);
     }
 
     public function findAllTags($start, $limit)
