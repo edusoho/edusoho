@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Security;
 
+use Biz\User\Service\TokenService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -11,11 +12,6 @@ class ApiAuth
     public function auth(Request $request)
     {
         $token = $request->headers->get('X-Auth-Token');
-
-        if (empty($token)) {
-            // 兼容老的协议，即将去除
-            $token = $request->headers->get('Auth-Token', '');
-        }
 
         $method = strtolower($request->headers->get('X-Auth-Method'));
 
@@ -32,7 +28,7 @@ class ApiAuth
                 throw new \RuntimeException('API Token不存在！');
             }
 
-            $token = $this->getUserService()->getToken('mobile_login', $token);
+            $token = $this->getUserService()->getToken(TokenService::TYPE_MOBILE_LOGIN, $token);
 
             if (empty($token['userId'])) {
                 throw new \RuntimeException('API Token不正确！');
