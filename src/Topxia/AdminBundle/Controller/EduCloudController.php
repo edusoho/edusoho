@@ -1092,7 +1092,7 @@ class EduCloudController extends BaseController
         $cloudConsult = $this->getConsultService()->buildCloudConsult($account, $jsResource);
 
         if (isset($cloudConsult['error'])) {
-            $this->setFlashMessage('danger', $this->getServiceKernel()->trans($cloudConsult['message']));
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans($cloudConsult['error']));
         }
 
         if ($cloudConsult['cloud_consult_is_buy'] == 0) {
