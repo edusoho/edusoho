@@ -1524,14 +1524,15 @@ class CourseServiceImpl extends BaseService implements CourseService
      */
     public function findUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType, $start, $limit)
     {
-        $favorites = $this->getFavoriteDao()->findUserFavoriteCoursesNotInClassroomWithCourseType(
+        $coursesIds = $this->getFavoriteDao()->findUserFavoriteCoursesNotInClassroomWithCourseType(
             $userId,
             $courseType,
             $start,
             $limit
         );
 
-        return $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($favorites, 'courseId'));
+        $courses = $this->findCoursesByIds(ArrayToolkit::column($coursesIds, 'id'));
+        return $courses;
     }
 
     /*
