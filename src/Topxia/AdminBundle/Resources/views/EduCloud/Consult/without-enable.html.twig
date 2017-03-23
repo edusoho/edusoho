@@ -10,7 +10,7 @@
       <i class="es-icon es-icon-infooutline text-primary"></i>
       <div class="text-md mbl">尚未启用云问答</div>
       <form  role="form" method="post" action="">
-        <button type="submit" class="btn btn-primary btn-lg notice-btn" {% if not cloud_consult.cloud_consult_enabled %}disabled="disabled"{% endif %}  name="cloud_consult_setting_enabled"
+        <button type="submit" class="btn btn-primary btn-lg notice-btn" {% if not cloud_consult.cloud_consult_is_buy %}disabled="disabled"{% endif %}  name="cloud_consult_setting_enabled"
                 value="1">立即启用</button>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>

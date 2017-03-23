@@ -14,20 +14,20 @@
         <div class="form-group">
           <label>
             <input type="radio" name="cloud_consult_setting_enabled"
-                   value="1" {% if cloud_consult.cloud_consult_enabled and cloud_consult.cloud_consult_setting_enabled %} checked {% endif %} {% if not cloud_consult.cloud_consult_enabled %} disabled{% endif %}> 开启
+                   value="1" {% if cloud_consult.cloud_consult_is_buy and cloud_consult.cloud_consult_setting_enabled %} checked {% endif %} {% if not cloud_consult.cloud_consult_is_buy %} disabled{% endif %}> 开启
           </label>
           <label>
             <input type="radio" name="cloud_consult_setting_enabled"
-                   value="0" {% if not cloud_consult.cloud_consult_enabled or not cloud_consult.cloud_consult_setting_enabled %} checked {% endif %} {% if not cloud_consult.cloud_consult_enabled %} disabled{% endif %}> 关闭
+                   value="0" {% if not cloud_consult.cloud_consult_is_buy or not cloud_consult.cloud_consult_setting_enabled %} checked {% endif %} {% if not cloud_consult.cloud_consult_is_buy %} disabled{% endif %}> 关闭
           </label>
         </div>
         <div class="help-block">
-          {% if cloud_consult.cloud_consult_landing_url | default('')%}
-            <a href=" {{ cloud_consult.cloud_consult_landing_url }} " target="_blank" class="btn btn-success">管理问答库</a>
+          {% if cloud_consult.cloud_consult_login_url | default('')%}
+            <a href=" {{ cloud_consult.cloud_consult_login_url }} " target="_blank" class="btn btn-success">管理问答库</a>
             <br>
           {% endif %}
         </div>
-        {% if  cloud_consult.cloud_consult_enabled %}
+        {% if  cloud_consult.cloud_consult_is_buy %}
           <div class="text-md mbl color-gray">
             智能在线咨询服务，可以自动回答学员的常见问题
             <br>
@@ -44,7 +44,7 @@
     </div>
     <div class="row form-group">
       <div class="controls col-md-offset-3 col-md-8">
-          <button type="submit" class="btn btn-primary"{% if not cloud_consult.cloud_consult_enabled %} disabled="disabled" {% endif %}>提交</button>
+          <button type="submit" class="btn btn-primary"{% if not cloud_consult.cloud_consult_is_buy %} disabled="disabled" {% endif %}>提交</button>
       </div>
     </div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

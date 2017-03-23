@@ -1081,21 +1081,17 @@ class EduCloudController extends BaseController
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
-        $cloudConsult = $this->getSettingService()->get('cloud_consult', array());
-        $defaultSetting = $this->getConsultDefaultSetting();
-        $cloudConsult = array_merge($defaultSetting, $cloudConsult);
-
         try {
-            list($loginStatus, $jsResource) = $this->connectCloudConsult();
+            $account = $this->getConsultService()->getAccount();
+            $jsResource = $this->getServiceKernel()->getJsResource();
+
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud/Consult:consult-error.html.twig', array());
         }
 
-        $processCloudConsult = $this->processCloudConsult($loginStatus, $jsResource);
-        $cloudConsult = array_merge($cloudConsult, $processCloudConsult);
+        $cloudConsult = $this->getConsultService()->buildCloudConsult($account, $jsResource);
 
-
-        if ($cloudConsult['cloud_consult_enabled'] == 0) {
+        if ($cloudConsult['cloud_consult_is_buy'] == 0) {
             return $this->renderConsultWithoutEnable($cloudConsult);
         }
 
@@ -1117,53 +1113,11 @@ class EduCloudController extends BaseController
         ));
     }
 
-    private function processCloudConsult($loginStatus, $jsResource)
-    {
-        if ((isset($loginStatus['code']) && $loginStatus['code']== '10000') || (isset($jsResource['code']) && $jsResource['code']== '10000')) {
-            $cloudConsult['cloud_consult_enabled'] = 0;
-        } else if ((isset($loginStatus['code']) && $loginStatus['code']== '10001') || (isset($jsResource['code']) && $jsResource['code']== '10001')) {
-            $cloudConsult['cloud_consult_enabled'] = 0;
-            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('账号已过期,请联系客服人员:4008041114！'));
-        } else if(isset($loginStatus['error']) || isset($jsResource['error'])) {
-            $cloudConsult['cloud_consult_enabled'] = 0;
-        } else {
-            $cloudConsult['cloud_consult_enabled'] = 1;
-            $cloudConsult['cloud_consult_landing_url'] = $loginStatus;
-            $cloudConsult['cloud_consult_js'] = $jsResource;
-        }
-
-        return $cloudConsult;
-    }
-
-    private function getConsultDefaultSetting()
-    {
-        $defaultSetting = array(
-            'cloud_consult_setting_enabled' => 0,
-            'cloud_consult_enabled' => 0,
-            'cloud_consult_landing_url' => '',
-            'cloud_consult_js' => ''
-        );
-
-        return $defaultSetting;
-    }
-
     private function renderConsultWithoutEnable($cloudConsult)
     {
         return $this->render('TopxiaAdminBundle:EduCloud/Consult:without-enable.html.twig', array(
             'cloud_consult' => $cloudConsult
         ));
-    }
-
-    private function connectCloudConsult()
-    {
-        $api         = CloudAPIFactory::create('root');
-        $loginStatus = $api->post("/robot/login_url");
-        $jsResource  = $api->post("/robot/install");
-
-        return array(
-            $loginStatus,
-            $jsResource
-        );
     }
 
     protected function dateFormat($time)
@@ -1554,6 +1508,11 @@ class EduCloudController extends BaseController
     protected function getEduCloudService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.EduCloudService');
+    }
+
+    protected function getConsultService()
+    {
+        return $this->getServiceKernel()->createService('EduCloud.ConsultService');
     }
 
     protected function getAppService()

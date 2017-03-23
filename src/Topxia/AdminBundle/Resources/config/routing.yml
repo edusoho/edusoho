@@ -2074,7 +2074,7 @@ admin_cloud_attachment:
     permissions: [admin_cloud_attachment_manage]
 
 admin_cloud_consult_setting:
-    path: /cloud/setting/consult
+    path: /cloud/consult/setting
     defaults: { _controller: TopxiaAdminBundle:EduCloud:consultSetting }
 
 # 添加云直播
