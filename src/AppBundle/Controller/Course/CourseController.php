@@ -13,6 +13,7 @@ use Biz\File\Service\UploadFileService;
 use Biz\Order\Service\OrderService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
+use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\TokenService;
 use Symfony\Component\HttpFoundation\Request;
 use VipPlugin\Biz\Vip\Service\VipService;
