@@ -362,7 +362,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if ($sort == 'best') {
             $orderBy = array('score', 'DESC');
         } elseif ($sort == 'elite') {
-            $orderBy = array('createdTime', 'DESC', ',isElite', 'ASC');
+            $orderBy = array('createdTime', 'DESC', 'isElite', 'ASC');
         } else {
             $orderBy = array('createdTime', 'ASC');
         }
