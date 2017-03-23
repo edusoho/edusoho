@@ -789,7 +789,7 @@ class ClassroomController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getThreadService()->countThreads($conditions),
+            $this->getThreadService()->searchThreadCount($conditions),
             20
         );
         $threads = $this->getThreadService()->searchThreads(
