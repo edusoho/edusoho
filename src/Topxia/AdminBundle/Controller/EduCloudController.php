@@ -1075,6 +1075,55 @@ class EduCloudController extends BaseController
         return $this->createJsonResponse(false);
     }
 
+    public function consultSettingAction(Request $request)
+    {
+        if (!($this->isHiddenCloud())) {
+            return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
+        }
+
+        try {
+            $account = $this->getConsultService()->getAccount();
+            $jsResource = $this->getConsultService()->getJsResource();
+
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud/Consult:consult-error.html.twig', array());
+        }
+
+        $cloudConsult = $this->getConsultService()->buildCloudConsult($account, $jsResource);
+
+        if (isset($cloudConsult['error'])) {
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans($cloudConsult['error']));
+        }
+
+        if ($cloudConsult['cloud_consult_is_buy'] == 0) {
+            return $this->renderConsultWithoutEnable($cloudConsult);
+        }
+
+        if ($request->getMethod() == 'POST') {
+
+            $data = $request->request->all();
+            $cloudConsult['cloud_consult_setting_enabled'] = $data['cloud_consult_setting_enabled'];
+
+            $this->getSettingService()->set('cloud_consult', $cloudConsult);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('云问答设置已保存！'));
+        }
+
+        if ($cloudConsult['cloud_consult_setting_enabled'] == 0) {
+            return $this->renderConsultWithoutEnable($cloudConsult);
+        }
+
+        return $this->render('TopxiaAdminBundle:EduCloud/Consult:setting.html.twig', array(
+            'cloud_consult'=> $cloudConsult
+        ));
+    }
+
+    private function renderConsultWithoutEnable($cloudConsult)
+    {
+        return $this->render('TopxiaAdminBundle:EduCloud/Consult:without-enable.html.twig', array(
+            'cloud_consult' => $cloudConsult
+        ));
+    }
+
     protected function dateFormat($time)
     {
         return strtotime(substr($time, 0, 4).'-'.substr($time, 4, 2));
@@ -1463,6 +1512,11 @@ class EduCloudController extends BaseController
     protected function getEduCloudService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.EduCloudService');
+    }
+
+    protected function getConsultService()
+    {
+        return $this->getServiceKernel()->createService('EduCloud.MicroyanConsultService');
     }
 
     protected function getAppService()
