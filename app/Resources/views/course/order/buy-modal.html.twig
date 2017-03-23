@@ -13,7 +13,7 @@
 
 {% block body %}
   <form id="course-buy-form" class="form-horizontal" method="post"
-  action="{{ path('fill_user_info',{id: user.id}) }}"
+  action="{{ path('user_info_fill',{id: user.id}) }}"
   >
     <div class="form-group">
       <div class="col-sm-3 control-label">{{'课程名称'|trans}}</div>
@@ -42,9 +42,9 @@
     </div>
     <input type="hidden" name="targetUrl" value=
       {% if vipStatus|default(0) %}
-        {{ path('join_course_by_vip',{'courseId': course.id}) }}
+        {{ path('vip_course_join',{'courseId': course.id}) }}
       {% else %}
-        {{ path('course_buy_modify_user_info',{'id': course.id}) }}
+        {{ path('order_show',{'targetId': course.id,'targetType': 'course'}) }}
       {% endif %}
     />
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

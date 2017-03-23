@@ -627,42 +627,6 @@ class ClassroomController extends BaseController
         ));
     }
 
-    public function modifyUserInfoAction($id)
-    {
-        $user = $this->getCurrentUser();
-
-        if (empty($user)) {
-            return $this->createMessageResponse('error', '用户未登录，不能购买。');
-        }
-
-        $classroom = $this->getClassroomService()->getClassroom($id);
-
-        if (empty($classroom)) {
-            return $this->createMessageResponse('error', "{$classroom['title']}不存在，不能购买。");
-        }
-
-        $coinSetting = $this->setting('coin');
-
-        if ($classroom['price'] == 0) {
-            $formData['amount'] = 0;
-            $formData['totalPrice'] = 0;
-            $formData['priceType'] = empty($coinSetting['priceType']) ? 'RMB' : $coinSetting['priceType'];
-            $formData['coinRate'] = empty($coinSetting['coinRate']) ? 1 : $coinSetting['coinRate'];
-            $formData['coinAmount'] = 0;
-
-            $order = $this->getClassroomOrderService()->createOrder($formData);
-
-            if ($order['status'] == 'paid') {
-                return $this->redirect($this->generateUrl('classroom_show', array('id' => $order['targetId'])));
-            }
-        }
-
-        return $this->redirect($this->generateUrl('order_show', array(
-            'targetId' => $id,
-            'targetType' => 'classroom',
-        )));
-    }
-
     public function qrcodeAction(Request $request, $id)
     {
         $user = $this->getCurrentUser();

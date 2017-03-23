@@ -82,32 +82,6 @@ class CourseOrderController extends BaseController
         );
     }
 
-    public function modifyUserInfoAction($id)
-    {
-
-        $user = $this->getCurrentUser();
-
-        if (empty($user)) {
-            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户未登录，不能购买。'));
-        }
-
-        $course = $this->getCourseService()->getCourse($id);
-
-        if (empty($course)) {
-            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('课程不存在，不能购买。'));
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'order_show',
-                array(
-                    'targetId' => $id,
-                    'targetType' => 'course',
-                )
-            )
-        );
-    }
-
     public function orderDetailAction(Request $request, $id)
     {
         $order = $this->getOrderService()->getOrder($id);

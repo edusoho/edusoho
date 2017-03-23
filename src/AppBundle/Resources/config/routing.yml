@@ -623,7 +623,7 @@ user_show:
     path:  /user/{id}
     defaults: { _controller: AppBundle:User:show }
 
-fill_user_info:
+user_info_fill:
     path: /user/{id}/saveinfo
     defaults: { _controller: AppBundle:User:fillInfoWhenBuy }
     methods: [POST]
@@ -2538,10 +2538,6 @@ classroom_buy:
     path: /classroom/{id}/buy
     defaults: { _controller: AppBundle:Classroom/Classroom:buy }
 
-classroom_buy_modify_user_info:
-    path: /classroom/{id}/modify_user_info
-    defaults: { _controller: AppBundle:Classroom/Classroom:modifyUserInfo }
-
 classroom_sign:
     path:  classroom/sign/{classroomId}
     defaults: { _controller: AppBundle:Classroom/Classroom:sign }
@@ -2810,10 +2806,6 @@ course_member_deadline_reach:
 course_buy:
     path: /course/{id}/buy
     defaults: { _controller: AppBundle:Course/CourseOrder:buy }
-
-course_buy_modify_user_info:
-    path: /course/{id}/modify_user_info
-    defaults: { _controller: AppBundle:Course/CourseOrder:modifyUserInfo }
 
 course_order_repay:
     path:  /course/order/repay

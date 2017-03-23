@@ -16,7 +16,7 @@
     <div class="alert alert-info">{{'注意：请在30分钟内完成支付，否则订单将会过期失效'|trans}}</div>
   {% endif %}
   <form id="classroom-buy-form" class="form-horizontal" method="post"
-  action="{{ path('fill_user_info',{id: user.id}) }}"
+  action="{{ path('user_info_fill',{id: user.id}) }}"
   >
     <div class="form-group">
       <div class="col-sm-3 control-label">{{'%name%名称'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</div>
@@ -59,9 +59,9 @@
     {% endif %}
     <input type="hidden" name="targetUrl" value=
     {% if vipStatus|default(0) %}
-      {{ path('join_classroom_by_vip',{'classroomId': classroom.id}) }}
+      {{ path('vip_classroom_join',{'classroomId': classroom.id}) }}
     {% else %}
-      {{ path('classroom_buy_modify_user_info',{'id': classroom.id}) }}
+      {{ path('order_show',{'targetId': classroom.id,'targetType': 'classroom'}) }}
     {% endif %}
     />
       <input type="hidden" name="payment" value="alipay" />
