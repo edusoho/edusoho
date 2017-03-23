@@ -5,6 +5,7 @@ namespace ApiBundle;
 use ApiBundle\Api\PathParser;
 use ApiBundle\Api\Resource\ResourceManager;
 use ApiBundle\Api\ResourceKernel;
+use ApiBundle\Api\Util\UserAssociateUtil;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class ApiBundle extends Bundle
@@ -25,6 +26,10 @@ class ApiBundle extends Bundle
 
         $biz['api.resource.kernel'] = function($biz) {
             return new ResourceKernel($biz['api.path.parser'], $biz['api.resource.manager']);
+        };
+
+        $biz['api.util.userAssoc'] = function($biz) {
+            return new UserAssociateUtil($biz);
         };
     }
 }

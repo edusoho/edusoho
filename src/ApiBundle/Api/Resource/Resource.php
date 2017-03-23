@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource;
 
+use ApiBundle\Api\Util\UserAssociateUtil;
 use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -166,6 +167,15 @@ abstract class Resource
             static::METHOD_UPDATE,
             static::METHOD_REMOVE
         );
+    }
+
+    /**
+     * @return UserAssociateUtil
+     */
+    public function getUAUtil()
+    {
+        $biz = $this->getBiz();
+        return $biz['api.util.userAssoc'];
     }
 
     protected function getAssetUrl($path)

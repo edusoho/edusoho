@@ -22,11 +22,15 @@ class CourseSet extends Resource
             throw new ResourceNotFoundException('课程不存在或者无权限访问', 9);
         }
 
-        return $results[0];
+        $courseSet = $results[0];
+        $this->getUAUtil()->single($courseSet, array('creator'));
+
+        return $courseSet;
     }
 
     public function add()
     {
 
     }
+
 }
