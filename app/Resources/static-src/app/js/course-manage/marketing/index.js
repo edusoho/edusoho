@@ -139,7 +139,7 @@ class Marketing {
   }
 
   updateDatetimepicker() {
-    $('input[name="buyExpiryTime"]').datetimepicker('setStartDate', new Date(Date.now() + 86400 * 1000));
+    $('input[name="buyExpiryTime"]').datetimepicker('setStartDate', new Date(Date.now()));
     $('input[name="buyExpiryTime"]').datetimepicker('setEndDate', new Date(Date.now() + 86400 * 365 * 10 * 1000));
   }
 
