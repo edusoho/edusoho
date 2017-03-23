@@ -130,7 +130,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $task = $this->getTask($id);
 
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
-            throw $this->createAccessDeniedException("can not publish task #{$id}.");
+            throw $this->createAccessDeniedExcpubeption("can not publish task #{$id}.");
         }
 
         if ($task['status'] == 'published') {
@@ -152,6 +152,10 @@ class TaskServiceImpl extends BaseService implements TaskService
         if (!empty($tasks)) {
             foreach ($tasks as $task) {
                 if ($task['status'] !== 'published') {
+                    //mode存在且不等于lesson的任务会随着mode=lesson的任务发布，这里不应重复发布
+                    if (!empty($task['mode']) && $task['mode'] !== 'lesson') {
+                        continue;
+                    }
                     $this->publishTask($task['id']);
                 }
             }
