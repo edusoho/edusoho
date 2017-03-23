@@ -1150,8 +1150,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 $member = null;
             }
         }
-        $userFavorited = $user->isLogin() ? $this->controller->getCourseService()->findUserFavoritedCourseCountNotInClassroom($user['id']) : false;
 
+        $userFavorited = $user->isLogin() ? $this->controller->getCourseService()->getFavoritedCourseByUserIdAndCourseSetId($user['id'], $course['courseSetId']) : false;
         $vipLevels = array();
 
         if ($this->controller->isinstalledPlugin('Vip') && $this->controller->setting('vip.enabled')) {

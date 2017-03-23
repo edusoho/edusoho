@@ -736,7 +736,9 @@ class MemberServiceImpl extends BaseService implements MemberService
         if (!empty($classroom)) {
             $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $userId);
 
-            if (!$isCourseStudent && !empty($member) && array_intersect($member['role'], array('student', 'teacher', 'headTeacher', 'assistant'))) {
+            if (!$isCourseStudent && !empty($member) && array_intersect($member['role'],
+                    array('student', 'teacher', 'headTeacher', 'assistant'))
+            ) {
                 $info = ArrayToolkit::parts($member, array('levelId'));
                 $member = $this->createMemberByClassroomJoined($courseId, $userId, $member['classroomId'], $info);
 
@@ -899,12 +901,14 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline)
     {
-        return $this->getMemberDao()->updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline);
+        return $this->getMemberDao()->updateByClassroomIdAndUserId($classroomId, $userId, array(
+            'deadline' => $deadline,
+        ));
     }
 
     public function updateMembersDeadlineByClassroomId($classroomId, $deadline)
     {
-        return $this->getMemberDao()->updateMembersDeadlineByClassroomId($classroomId, $deadline);
+        return $this->getMemberDao()->updateByClassroomId($classroomId, array('deadline' => $deadline));
     }
 
     /**

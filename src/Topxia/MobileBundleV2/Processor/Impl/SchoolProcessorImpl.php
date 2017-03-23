@@ -421,11 +421,6 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
                     'params' => $bannerParams,
                 );
             }
-            $banner[] = array(
-                'url' => $baseUrl.'/'.$bannerIndex,
-                'action' => $action,
-                'params' => $bannerParams,
-            );
         }
 
         return $banner;

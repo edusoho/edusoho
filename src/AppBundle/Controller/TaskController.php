@@ -2,16 +2,16 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Task\Service\TaskService;
-use Biz\User\Service\TokenService;
+use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskResultService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Activity\Service\ActivityService;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\TokenService;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException as ServiceAccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException as ServiceAccessDeniedException;
 
 class TaskController extends BaseController
 {
@@ -381,19 +381,16 @@ class TaskController extends BaseController
      */
     protected function handleAccessDeniedException(\Exception $exception, Request $request, $taskId)
     {
-        // 学员动态跳转到无权限任务进入到计划营销页
-        if ($request->query->get('from', '') === 'student_status') {
-            $task = $this->getTaskService()->getTask($taskId);
+        $task = $this->getTaskService()->getTask($taskId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($task['fromCourseSetId']);
 
-            return $this->redirectToRoute(
-                'course_show',
+        return $this->createMessageResponse('info', "您还不是课程《{$courseSet['title']}》的学员，请先购买或加入学习。", '提示消息', 3,
+            $this->generateUrl('course_show',
                 array(
                     'id' => $task['courseId'],
                 )
-            );
-        }
-
-        throw $exception;
+            )
+        );
     }
 
     protected function getNextTaskAndFinishedRate($task)

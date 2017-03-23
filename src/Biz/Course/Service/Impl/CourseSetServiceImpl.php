@@ -605,16 +605,27 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function publishCourseSet($id)
     {
         $courseSet = $this->tryManageCourseSet($id);
+
+        if (empty($courseSet)) {
+            throw $this->createNotFoundException('course set not found');
+        }
+
         $publishedCourses = $this->getCourseService()->findPublishedCoursesByCourseSetId($id);
 
         $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
-
-        if (empty($publishedCourses) && empty($classroomRef)) {
-            throw $this->createAccessDeniedException('发布课程时请确保课程下至少有一个已发布的教学计划');
-        }
+        $this->beginTransaction();
 
         try {
-            $this->beginTransaction();
+            if (empty($publishedCourses) && $courseSet['type'] === 'live') {
+                // 直播课程隐藏了教学计划，所以发布直播课程的时候自动发布教学计划
+                $course = $this->getCourseService()->getFirstCourseByCourseSetId($courseSet['id']);
+                $this->getCourseService()->publishCourse($course['id']);
+                $publishedCourses = $this->getCourseService()->findPublishedCoursesByCourseSetId($id);
+            }
+
+            if (empty($publishedCourses) && empty($classroomRef)) {
+                throw $this->createAccessDeniedException('发布课程时请确保课程下至少有一个已发布的教学计划');
+            }
 
             if (!empty($classroomRef)) {
                 $this->getCourseService()->publishCourse($classroomRef['courseId']);
@@ -624,15 +635,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $this->commit();
 
             $this->dispatchEvent('course-set.publish', new Event($courseSet));
+            $this->getLogService()->info('course', 'publish', "发布课程《{$courseSet['title']}》(#{$courseSet['id']})");
         } catch (\Exception $exception) {
             $this->rollback();
             throw $exception;
         }
-        $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
-
-        $this->getLogService()->info('course', 'publish', "发布课程《{$courseSet['title']}》(#{$courseSet['id']})");
-
-        $this->dispatchEvent('course-set.publish', new Event($courseSet));
     }
 
     public function closeCourseSet($id)

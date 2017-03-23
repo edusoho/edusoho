@@ -234,6 +234,7 @@ class LiveController extends BaseController implements ActivityActionInterface
                 if (!empty($result) && !empty($result['resourceNo'])) {
                     // ES Live
                     $file = $fileService->getFileByGlobalId($replay['globalId']);
+
                     $replay['url'] = $self->generateUrl('material_lib_file_player', array('fileId' => $file['id']));
                 } elseif (!empty($result['url'])) {
                     // Other Live
