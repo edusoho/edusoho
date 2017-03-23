@@ -46,7 +46,7 @@
     <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
   <![endif]-->
 </head>
-<body>
+<body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
   <div class="navbar navbar-inverse navbar-fixed-top">
   {% if cloudSmsInfo %}
     <div class="alert alert-danger es-admin-alert" role="alert"><div class="text-center"><strong>您好，ES云短信发送机制升级优化，网站目前短信剩余{{cloudSmsInfo.remainCount|default(0)}}条，为保证继续使用，请开通教育云，点击 <a href="http://open.edusoho.com/cloud/access" target="_blank"> 立即开通</a></strong></div></div>
