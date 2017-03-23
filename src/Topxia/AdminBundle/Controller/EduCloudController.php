@@ -1082,7 +1082,7 @@ class EduCloudController extends BaseController
         }
 
         $cloudConsult = $this->getSettingService()->get('cloud_consult', array());
-        $defaultSetting = $this->consultDefaultSetting();
+        $defaultSetting = $this->getConsultDefaultSetting();
         $cloudConsult = array_merge($defaultSetting, $cloudConsult);
 
         try {
@@ -1135,7 +1135,7 @@ class EduCloudController extends BaseController
         return $cloudConsult;
     }
 
-    private function consultDefaultSetting()
+    private function getConsultDefaultSetting()
     {
         $defaultSetting = array(
             'cloud_consult_setting_enabled' => 0,
@@ -1158,7 +1158,7 @@ class EduCloudController extends BaseController
     {
         $api         = CloudAPIFactory::create('root');
         $loginStatus = $api->post("/robot/login_url");
-        $jsResource    = $api->post("/robot/install");
+        $jsResource  = $api->post("/robot/install");
 
         return array(
             $loginStatus,
