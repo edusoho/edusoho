@@ -1121,7 +1121,6 @@ class EduCloudController extends BaseController
     {
         if ((isset($loginStatus['code']) && $loginStatus['code']== '10000') || (isset($jsResource['code']) && $jsResource['code']== '10000')) {
             $cloudConsult['cloud_consult_enabled'] = 0;
-            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您还未购买,请联系客服人员:4008041114！'));
         } else if ((isset($loginStatus['code']) && $loginStatus['code']== '10001') || (isset($jsResource['code']) && $jsResource['code']== '10001')) {
             $cloudConsult['cloud_consult_enabled'] = 0;
             $this->setFlashMessage('danger', $this->getServiceKernel()->trans('账号已过期,请联系客服人员:4008041114！'));
