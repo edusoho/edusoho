@@ -14,7 +14,7 @@
                 value="1">立即启用</button>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
-      {% if not cloud_consult.cloud_consult_enabled %}
+      {% if not cloud_consult.cloud_consult_is_buy %}
         <div class="text-md mbl consult-text">
           <div class="color-danger">尚未购买云问答服务，不能启用
             <a href="http://124.160.104.74:9091/show/cloud/robotQA" class="text-primary" target="_blank">了解详情</a>

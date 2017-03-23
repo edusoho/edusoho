@@ -1083,7 +1083,7 @@ class EduCloudController extends BaseController
 
         try {
             $account = $this->getConsultService()->getAccount();
-            $jsResource = $this->getServiceKernel()->getJsResource();
+            $jsResource = $this->getConsultService()->getJsResource();
 
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud/Consult:consult-error.html.twig', array());
@@ -1516,7 +1516,7 @@ class EduCloudController extends BaseController
 
     protected function getConsultService()
     {
-        return $this->getServiceKernel()->createService('EduCloud.ConsultService');
+        return $this->getServiceKernel()->createService('EduCloud.MicroyanConsultService');
     }
 
     protected function getAppService()

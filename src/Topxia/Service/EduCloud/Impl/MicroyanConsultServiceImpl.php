@@ -55,6 +55,6 @@ class MicroyanConsultServiceImpl extends BaseService implements ConsultService
 
     public function getSettingService()
     {
-        $this->createService('System.SettingService');
+        return $this->createService('System.SettingService');
     }
 }
