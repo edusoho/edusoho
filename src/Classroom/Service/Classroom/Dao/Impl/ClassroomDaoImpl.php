@@ -35,7 +35,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         }
 
         $this->filterStartLimit($start, $limit);
-        $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'recommendedSeq', 'studentNum','updatedTime'));
+        $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'recommendedSeq', 'studentNum','updatedTime','id'));
         $builder = $this->_createClassroomSearchBuilder($conditions)
             ->select('*')
             ->setFirstResult($start)
@@ -165,11 +165,11 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         }
 
         $currentTime = time();
-        $sql = "UPDATE {$this->table} SET {$field} = {$field} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
+        $sql = "UPDATE {$this->table} SET {$field} = {$field} + ?, updatedTime = ? WHERE id = ? LIMIT 1";
 
         $this->clearCached();
 
-        return $this->getConnection()->executeQuery($sql, array($diff, $id));
+        return $this->getConnection()->executeQuery($sql, array($diff, time(), $id));
     }
 
     public function deleteClassroom($id)

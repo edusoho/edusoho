@@ -29,7 +29,7 @@ class BlockDaoImpl extends BaseDao implements BlockDao
 
     public function getBlockByTemplateIdAndOrgId($blockTemplateId,$orgId=0)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE blockTemplateId = '{$blockTemplateId}' AND orgId =  '{$orgId}' ";
+        $sql = "SELECT * FROM {$this->table} WHERE blockTemplateId = ? AND orgId = ?";
         $block = $this->getConnection()->fetchAssoc($sql, array($blockTemplateId,$orgId));
 
         return $block ? $this->createSerializer()->unserialize($block, $this->serializeFields) : null;
@@ -37,7 +37,7 @@ class BlockDaoImpl extends BaseDao implements BlockDao
 
     public function getBlockByTemplateId($blockTemplateId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE blockTemplateId = '{$blockTemplateId}'";
+        $sql = "SELECT * FROM {$this->table} WHERE blockTemplateId = ?";
         $block = $this->getConnection()->fetchAssoc($sql, array($blockTemplateId));
 
         return $block ? $this->createSerializer()->unserialize($block, $this->serializeFields) : null;
@@ -80,7 +80,7 @@ class BlockDaoImpl extends BaseDao implements BlockDao
     {
         $that = $this;
         return $this->fetchCached("code:{$code}", $code, function ($code) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE code = '{$code}'";
+            $sql = "SELECT * FROM {$that->getTable()} WHERE code = ?";
             $block = $that->getConnection()->fetchAssoc($sql, array($code));
             return $block ? $that->createSerializer()->unserialize($block, $that->serializeFields) : null;
         });
@@ -90,7 +90,7 @@ class BlockDaoImpl extends BaseDao implements BlockDao
     {
         $that = $this;
         return $this->fetchCached("code:{$code}:orgId:{$orgId}", $code, $orgId, function ($code, $orgId) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE code = '{$code}' AND orgId =  '{$orgId}' ";
+            $sql = "SELECT * FROM {$that->getTable()} WHERE code = ? AND orgId = ? ";
             $block = $that->getConnection()->fetchAssoc($sql, array($code,$orgId));
             return $block ? $that->createSerializer()->unserialize($block, $that->serializeFields) : null;
         });

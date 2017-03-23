@@ -126,8 +126,7 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
 
     public function findDistinctMobileProfiles($start, $limit)
     {
-        $start = (int) $start;
-        $limit = (int) $limit;
+        $this->filterStartLimit($start, $limit);
 
         $sql = "SELECT * FROM {$this->table} WHERE `mobile` <> '' GROUP BY `mobile` ORDER BY `id` ASC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql);

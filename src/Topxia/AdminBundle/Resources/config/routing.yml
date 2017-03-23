@@ -812,6 +812,10 @@ admin_setting_share:
     path:  /setting/share
     defaults: { _controller: TopxiaAdminBundle:SiteSetting:share }
 
+admin_setting_security:
+    path:  /setting/security
+    defaults: { _controller: TopxiaAdminBundle:SiteSetting:security }
+
 admin_setting_default_avatar_crop:
     path:  /setting/default/avatar/crop
     defaults: { _controller: TopxiaAdminBundle:SystemDefaultSetting:defaultAvatarCrop }

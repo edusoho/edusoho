@@ -109,9 +109,9 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         }
 
         $marks = str_repeat('?,', count($classroomIds) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE userId = {$userId} AND classroomId IN ({$marks});";
+        $sql   = "SELECT * FROM {$this->table} WHERE userId = ? AND classroomId IN ({$marks});";
 
-        return $this->getConnection()->fetchAll($sql, $classroomIds) ?: array();
+        return $this->getConnection()->fetchAll($sql, array_merge(array($userId), $classroomIds)) ?: array();
     }
 
     public function searchMemberCount($conditions)

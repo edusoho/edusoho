@@ -12,15 +12,15 @@ interface QuestionDao
 
     public function findQuestionsByParentIds(array $ids);
 
-    public function findQuestionsByCopyIdAndLockedTarget($copyId,$lockedTarget);
+    public function findQuestionsByCopyIdAndLockedTarget($copyId, array $lockedTargets);
 
-    public function findQuestionsbyTypes($types, $start, $limit);
+    public function findQuestionsbyTypes(array $types, $start, $limit);
 
-    public function findQuestionsByTypesAndExcludeUnvalidatedMaterial($types, $start, $limit);
+    public function findQuestionsByTypesAndExcludeUnvalidatedMaterial(array $types, $start, $limit);
     
     public function findQuestionsByTypesAndSourceAndExcludeUnvalidatedMaterial($types, $start, $limit, $questionSource, $courseId, $lessonId);
 
-    public function findQuestionsCountbyTypes($types);
+    public function findQuestionsCountbyTypes(array $types);
 
     public function findQuestionsCountbyTypesAndSource($types,$questionSource,$courseId,$lessonId);
 
