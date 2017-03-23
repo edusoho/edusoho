@@ -107,7 +107,7 @@ class CourseManageController extends BaseController
         );
 
         foreach ($liveTasks as $key => $task) {
-            $task['isEnd'] = intval(time() - $task['endTime']) > 0;
+            $task['isEnd'] = (int) (time() - $task['endTime']) > 0;
             $task['file'] = $this->_getLiveReplayMedia($task);
             $liveTasks[$key] = $task;
         }
