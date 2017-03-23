@@ -73,6 +73,7 @@ class TaskManageController extends BaseController
             $file = $this->getUploadFileService()->getFile($fileId);
 
             if (!in_array($file['type'], array('document', 'video', 'audio', 'ppt', 'flash'))) {
+                return $this->createJsonResponse(array('error' => '不支持的文件类型'));
                 throw $this->createAccessDeniedException('不支持的文件类型');
             }
 
