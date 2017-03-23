@@ -11,15 +11,21 @@ class MyLearning extends BaseResource
     {
         $user = $this->getCurrentUser();
 
-        $count = $this->getCourseService()->countUserLearningCourses($user['id']);
-        $courses = $this->getCourseService()->findUserLearningCourses(
-            $user['id'],
-            0,
-            $count
+        $beginTime = strtotime("-6 months");
+        $conditions = array(
+            'lastViewTime_GE' => $beginTime,
+            'userId' => $user['id'],
         );
-        $courses = ArrayToolkit::index($courses, 'id');
 
-        $learningData = $this->buildLearningData($courses);
+        $membersCount = $this->getMemberService()->countMembers($conditions);
+        $members = $this->getMemberService()->searchMembers(
+            $conditions,
+            array('lastViewTime' => 'DESC', 'id' => 'DESC'),
+            0,
+            $membersCount
+        );
+
+        $learningData = $this->buildLearningData($members);
         $learningData = $this->filter($learningData);
 
         return $this->wrap($learningData, count($learningData));
@@ -34,21 +40,16 @@ class MyLearning extends BaseResource
         return $learningData;
     }
 
-    protected function buildLearningData($courses)
+    protected function buildLearningData($members)
     {
         $learningData = array();
-        $user = $this->getCurrentUser();
 
-        if (empty($courses)) {
+        if (empty($members)) {
             return $learningData;
         }
 
-        $courseIds = ArrayToolkit::column($courses, 'id');
-        $conditions = array(
-            'courseIds' => $courseIds,
-            'userId' => $user['id'],
-        );
-        $members = $this->getMemberService()->searchMembers($conditions, null, 0, 1000);
+        $courseIds = ArrayToolkit::column($members, 'courseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
 
