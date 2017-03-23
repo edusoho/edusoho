@@ -20,7 +20,6 @@ $twig   = new Twig_Environment($loader, array(
 ));
 
 $twig->addGlobal('edusho_version', \Topxia\System::VERSION);
-
 $step         = intval(empty($_GET['step']) ? 0 : $_GET['step']);
 $init_data    = intval(empty($_GET['init_data']) ? 0 : $_GET['init_data']);
 $functionName = 'install_step' . $step;
@@ -117,13 +116,17 @@ function install_step1($init_data = 0)
     if ($safemode == 'On') {
         $pass = false;
     }
-
+    $result = _checkWebRoot();
+    if (!$result) {
+        $pass = false;
+    }
     echo $twig->render('step-1.html.twig', array(
         'step'     => 1,
         'env'      => $env,
         'paths'    => $checkedPaths,
         'safemode' => $safemode,
-        'pass'     => $pass
+        'pass'     => $pass,
+        'root'   => $result,
     ));
 }
 
@@ -548,4 +551,14 @@ function _initKey()
     $settingService->set('storage', $settings);
 
     return $keys;
+}
+
+function _checkWebRoot()
+{
+    $host = $_SERVER["HTTP_REFERER"];
+    $hostArray = explode('/',$host);
+    if (in_array('web', $hostArray)) {
+        return false;
+    }
+    return true;
 }
