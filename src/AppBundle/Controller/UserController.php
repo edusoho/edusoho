@@ -456,37 +456,7 @@ class UserController extends BaseController
         $goto = $this->getTargetPath($request);
 
         if ($request->getMethod() == 'POST') {
-            $formData = $request->request->all();
-
-            $userInfo = ArrayToolkit::parts($formData, array(
-                'truename',
-                'mobile',
-                'qq',
-                'company',
-                'weixin',
-                'weibo',
-                'idcard',
-                'gender',
-                'job',
-                'intField1', 'intField2', 'intField3', 'intField4', 'intField5',
-                'floatField1', 'floatField2', 'floatField3', 'floatField4', 'floatField5',
-                'dateField1', 'dateField2', 'dateField3', 'dateField4', 'dateField5',
-                'varcharField1', 'varcharField2', 'varcharField3', 'varcharField4', 'varcharField5', 'varcharField10', 'varcharField6', 'varcharField7', 'varcharField8', 'varcharField9',
-                'textField1', 'textField2', 'textField3', 'textField4', 'textField5', 'textField6', 'textField7', 'textField8', 'textField9', 'textField10',
-            ));
-
-            if (isset($formData['email']) && !empty($formData['email'])) {
-                $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
-
-                $currentUser = new CurrentUser();
-                $currentUser->fromArray($this->getUserService()->getUser($user['id']));
-                $this->switchUser($request, $currentUser);
-                if (!$user['setup']) {
-                    $this->getUserService()->setupAccount($user['id']);
-                }
-            }
-
-            $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
+            $userInfo = $this->saveUserInfo($request, $user);
 
             return $this->redirect($goto);
         }
@@ -500,6 +470,55 @@ class UserController extends BaseController
             'user' => $userInfo,
             'goto' => $goto,
         ));
+    }
+
+    public function fillInfoWhenBuyAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('error', '请先登录！');
+        }
+
+        $this->saveUserInfo($request, $user);
+
+        return $this->redirect($request->get('targetUrl'));
+    }
+
+    protected function saveUserInfo($request, $user)
+    {
+        $formData = $request->request->all();
+
+        $userInfo = ArrayToolkit::parts($formData, array(
+            'truename',
+            'mobile',
+            'qq',
+            'company',
+            'weixin',
+            'weibo',
+            'idcard',
+            'gender',
+            'job',
+            'intField1', 'intField2', 'intField3', 'intField4', 'intField5',
+            'floatField1', 'floatField2', 'floatField3', 'floatField4', 'floatField5',
+            'dateField1', 'dateField2', 'dateField3', 'dateField4', 'dateField5',
+            'varcharField1', 'varcharField2', 'varcharField3', 'varcharField4', 'varcharField5', 'varcharField10', 'varcharField6', 'varcharField7', 'varcharField8', 'varcharField9',
+            'textField1', 'textField2', 'textField3', 'textField4', 'textField5', 'textField6', 'textField7', 'textField8', 'textField9', 'textField10',
+        ));
+
+        if (isset($formData['email']) && !empty($formData['email'])) {
+            $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
+
+            $currentUser = new CurrentUser();
+            $currentUser->fromArray($this->getUserService()->getUser($user['id']));
+            $this->switchUser($request, $currentUser);
+            if (!$user['setup']) {
+                $this->getUserService()->setupAccount($user['id']);
+            }
+        }
+
+        $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
+
+        return $userInfo;
     }
 
     protected function tryGetUser($id)

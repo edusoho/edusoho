@@ -212,6 +212,8 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'createdTime <= :createdTime_LE',
                 'startTime > :startTime_GT',
                 'startTime <= :startTime_LE',
+                'updatedTime >= :updatedTime_GE',
+                'updatedTime <= :updatedTime_LE',
                 'endTime > :endTime_GT',
                 'endTime < :endTime_LT',
                 'endTime <= :endTime_GE',
