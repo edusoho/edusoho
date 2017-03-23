@@ -20,7 +20,7 @@ class HTMLHelper
 
     public function purify($html, $trusted = false)
     {
-        if (empty($html)) {
+        if (!isset($html)) {
             return '';
         }
 
