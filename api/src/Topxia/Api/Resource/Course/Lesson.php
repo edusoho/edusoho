@@ -5,6 +5,7 @@ namespace Topxia\Api\Resource\Course;
 use Silex\Application;
 use Topxia\Api\Resource\BaseResource;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\SettingToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -46,10 +47,24 @@ class Lesson extends BaseResource
         if ($line = $request->query->get('line')) {
             $lesson['hlsLine'] = $line;
         }
+        $hls_encryption = $request->query->get('hls_encryption');
+        $enable_hls_encryption_plus = SettingToolkit::getSetting('storage.enable_hls_encryption_plus');
+
+        if (!empty($hls_encryption) && $enable_hls_encryption_plus) {
+             $lesson['hlsEncryption'] = true;
+         }
 
         $ssl = $request->isSecure() ? true : false;
 
-        return $this->filter($this->convertLessonContent($lesson, $ssl));
+        $lesson = $this->filter($this->convertLessonContent($lesson, $ssl));
+
+        $hasRemainTime = $this->hasRemainTime($lesson);
+        if ($hasRemainTime) {
+            $remainTime = $this->getRemainTime($currentUser, $lesson);
+            $lesson['remainTime'] = $remainTime;
+        }
+
+        return $lesson;
     }
 
     public function filter($lesson)
@@ -65,7 +80,7 @@ class Lesson extends BaseResource
             case 'ppt':
                 return $this->getPPTLesson($lesson, $ssl);
             case 'audio':
-                return $this->getVideoLesson($lesson, $ssl);
+                return $this->getAudioLesson($lesson, $ssl);
             case 'video':
                 return $this->getVideoLesson($lesson);
             case 'testpaper':
@@ -92,7 +107,7 @@ class Lesson extends BaseResource
         if ($file['convertStatus'] != 'success') {
             return $this->error('not_ppt', 'PPT文档还在转换中，还不能查看，请稍等');
         }
-        
+
         $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
         $lesson['content'] = array(
@@ -123,6 +138,19 @@ class Lesson extends BaseResource
             'previewUrl' => ($ssl ? 'https://' : 'http://') . 'service-cdn.qiqiuyun.net/js-sdk/document-player/v7/viewer.html#'.$result['pdf'],
             'resource'   => $result['pdf'],
         );
+
+        return $lesson;
+    }
+
+    protected function getAudioLesson($lesson, $ssl = false)
+    {
+        $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
+        if (empty($file)) {
+            return $this->error('not_audio', "文件不存在");
+        }
+
+        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+        $lesson['mediaUri'] = $result['url'];
 
         return $lesson;
     }
@@ -158,7 +186,7 @@ class Lesson extends BaseResource
     protected function getVideoLesson($lesson)
     {
         $line = empty($lesson['hlsLine']) ? '' : $lesson['hlsLine'];
-
+        $hlsEncryption = ( !empty($lesson['hlsEncryption']) && true === $lesson['hlsEncryption'] );
         $mediaId     = $lesson['mediaId'];
         $mediaSource = $lesson['mediaSource'];
         $mediaUri    = $lesson['mediaUri'];
@@ -182,7 +210,7 @@ class Lesson extends BaseResource
                                 $token = $this->getTokenService()->makeToken('hls.playlist', array(
                                     'data'     => array(
                                         'id'      => $headLeaderInfo['id'],
-                                        'fromApi' => true
+                                        'fromApi' =>  !$hlsEncryption
                                     ),
                                     'times'    => 2,
                                     'duration' => 3600
@@ -198,7 +226,7 @@ class Lesson extends BaseResource
                             $token = $this->getTokenService()->makeToken('hls.playlist', array(
                                 'data'     => array(
                                     'id'      => $file['id'],
-                                    'fromApi' => true
+                                    'fromApi' => !$hlsEncryption
                                 ),
                                 'times'    => 2,
                                 'duration' => 3600
@@ -288,7 +316,7 @@ class Lesson extends BaseResource
         $lesson['seq'] = $res['seq'];
         $lesson['free'] = $res['free'];
         $lesson['title'] = $res['title'];
-        $lesson['summary'] = $res['summary']; 
+        $lesson['summary'] = $res['summary'];
         $lesson['type'] = $res['type'];
         $lesson['content'] = $res['content'];
         $lesson['mediaId'] = $res['mediaId'];
@@ -300,12 +328,41 @@ class Lesson extends BaseResource
         $lesson['userId'] = $res['userId'];
         $lesson['createdTime'] = $res['createdTime'];
         $lesson['updatedTime'] = $res['updatedTime'];
+        $lesson['startTime'] = $res['startTime'];
+        $lesson['endTime'] = $res['endTime'];
         return $lesson;
     }
 
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    protected function hasRemainTime($task)
+    {
+        if ('video' != $task['type']) {
+            return false;
+        }
+
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+        if (empty($course['watchLimit'])) {
+            return false;
+        }
+
+        $isLimit = SettingToolkit::getSetting('magic.lesson_watch_limit');
+        if (!$isLimit) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function getRemainTime($user, $lesson)
+    {
+        $lessonLearn = $this->getCourseService()->getLearnByUserIdAndLessonId($user['id'], $lesson['id']);
+        $course = $this->getCourseService()->getCourse($lesson['courseId']);
+        $remainTime = ($course['watchLimit'] * $lesson['length']) - $lessonLearn['watchTime'];
+        return $remainTime;
     }
 
     protected function getCourseService()
@@ -315,7 +372,7 @@ class Lesson extends BaseResource
 
     protected function getUploadFileService()
     {
-        return $this->instance()->createService('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
     protected function getTestpaperService()

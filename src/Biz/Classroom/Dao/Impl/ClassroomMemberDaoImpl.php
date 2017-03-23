@@ -9,6 +9,35 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
 {
     protected $table = 'classroom_member';
 
+    public function updateByClassroomIdAndRole($classroomId, $role, array $fields)
+    {
+        $conditions = array(
+            'classroomId' => $classroomId,
+            'role' => $role,
+        );
+
+        return $this->update($conditions, $fields);
+    }
+
+    public function findMembersByUserIdAndClassroomIds($userId, array $classroomIds)
+    {
+        if (empty($classroomIds)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($classroomIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND classroomId IN ({$marks});";
+
+        return $this->db()->fetchAll($sql, array_merge(array($userId), $classroomIds)) ?: array();
+    }
+
+    public function findMembersByUserId($userId)
+    {
+        return $this->findByFields(
+            array('userId' => $userId)
+        );
+    }
+
     public function declares()
     {
         return array(
@@ -152,10 +181,6 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
 
     protected function createQueryBuilder($conditions)
     {
-        if (isset($conditions['role'])) {
-            $conditions['role'] = "%{$conditions['role']}%";
-        }
-
         if (isset($conditions['roles'])) {
             $roles = '';
 

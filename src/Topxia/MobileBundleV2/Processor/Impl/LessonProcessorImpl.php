@@ -289,6 +289,40 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         );
     }
 
+    private function makeTryLookVideoUrl($lessons, $courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        foreach ($lessons as $key => $lesson) {
+            if ($lesson['type'] == 'video') {
+                $lessonFree = $this->isLessonFree($lesson);
+                $courseTryLookAble = $this->isCourseTryLookAble($course);
+
+                if ($lessonFree) {
+                    $lessons[$key] = $this->getVideoLesson($lesson);
+                }
+
+                if ($courseTryLookAble && !$lessonFree) {
+                    $tryLookTime = $course['tryLookTime'];
+                    $options = array('watchTimeLimit' => $tryLookTime * 60);
+                    $lessons[$key] = $this->getVideoLesson($lesson, $options);
+                }
+            }
+        }
+
+        return $lessons;
+    }
+
+    private function isCourseTryLookAble($course)
+    {
+        return empty($course['tryLookable']) ? false : true;
+    }
+
+    private function isLessonFree($lesson)
+    {
+        return empty($lesson['free']) ? false : true;
+    }
+
     private function getUploadFiles($courseId)
     {
         $conditions = array(
@@ -442,7 +476,18 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         return $lesson;
     }
 
-    private function getVideoLesson($lesson)
+    protected function makeTokenData($fields)
+    {
+        $options = array();
+        if (!empty($fields['options'])) {
+            $options = $fields['options'];
+            unset($fields['options']);
+        }
+
+        return array_merge($fields, $options);
+    }
+
+    private function getVideoLesson($lesson, $options = null)
     {
         $token = $this->controller->getUserToken($this->request);
         $mediaId = $lesson['mediaId'];
@@ -499,10 +544,11 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                             }
 
                             $token = $this->getTokenService()->makeToken('hls.playlist', array(
-                                'data' => array(
+                                'data' => $this->makeTokenData(array(
                                     'id' => $file['id'],
                                     'fromApi' => true,
-                                ),
+                                    'options' => $options,
+                                )),
                                 'times' => 2,
                                 'duration' => 3600,
                             ));
@@ -516,6 +562,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                                 ), true),
                             );
                         } else {
+                            $factory = new CloudClientFactory();
+                            $client = $factory->createClient();
                             $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                         }
 
@@ -719,7 +767,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
     private function filterLessons($lessons, $files)
     {
         return array_map(function ($lesson) use ($files) {
-            $lesson['content'] = "";
+            $lesson['content'] = '';
 
             if (isset($lesson['mediaId'])) {
                 $file = isset($files[$lesson['mediaId']]) ? $files[$lesson['mediaId']] : null;
@@ -738,11 +786,11 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $taskResults = $this->controller->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
         $learnStatuses = array();
         foreach ($taskResults as $result) {
-            if($result['status'] === 'finish'){
+            if ($result['status'] === 'finish') {
                 $status = 'finished';
-            }else if($result['status'] === 'start'){
+            } elseif ($result['status'] === 'start') {
                 $status = 'learning';
-            }else{
+            } else {
                 continue;
             }
             $learnStatuses[$result['courseTaskId']] = $status;

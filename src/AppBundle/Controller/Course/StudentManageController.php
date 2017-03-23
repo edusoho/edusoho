@@ -161,6 +161,25 @@ class StudentManageController extends BaseController
 
     public function removeCourseStudentAction($courseSetId, $courseId, $userId)
     {
+        $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $user = $this->getCurrentUser();
+
+        $condition = array(
+            'targetType' => 'course',
+            'targetId' => $courseId,
+            'userId' => $userId,
+            'status' => 'paid',
+        );
+        $orders = $this->getOrderService()->searchOrders($condition, array('createdTime' => 'DESC'), 0, 1);
+        if (!empty($orders)) {
+            $order = array_shift($orders);
+            $reason = array(
+                'type' => 'other',
+                'note' => '"'.$user['nickname'].'"'.' 手动移除',
+                'operator' => $user['id'],
+            );
+            $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
+        }
         $this->getCourseMemberService()->removeCourseStudent($courseId, $userId);
 
         return $this->createJsonResponse(array('success' => true));
@@ -171,7 +190,12 @@ class StudentManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $user = $this->getUserService()->getUser($userId);
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
-        if ('POST' == $request->getMethod()) {
+
+        if (empty($member)) {
+            throw $this->createAccessDeniedException(sprintf('学员#%s不属于教学计划#%s', $userId, $courseId));
+        }
+
+        if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $member = $this->getCourseMemberService()->remarkStudent($course['id'], $user['id'], $data['remark']);
 
@@ -237,86 +261,30 @@ class StudentManageController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function showAction($courseSetId, $courseId, $userId)
+    public function showAction(Request $request, $courseSetId, $courseId, $userId)
     {
         if (!$this->getCurrentUser()->isAdmin()) {
             throw $this->createAccessDeniedException('您无权查看学员详细信息！');
         }
 
-        $user = $this->getUserService()->getUser($userId);
-        $profile = $this->getUserService()->getUserProfile($userId);
-        $profile['title'] = $user['title'];
-
-        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
-
-        for ($i = 0; $i < count($userFields); ++$i) {
-            if (strstr($userFields[$i]['fieldName'], 'textField')) {
-                $userFields[$i]['type'] = 'text';
-            } elseif (strstr($userFields[$i]['fieldName'], 'varcharField')) {
-                $userFields[$i]['type'] = 'varchar';
-            } elseif (strstr($userFields[$i]['fieldName'], 'intField')) {
-                $userFields[$i]['type'] = 'int';
-            } elseif (strstr($userFields[$i]['fieldName'], 'floatField')) {
-                $userFields[$i]['type'] = 'float';
-            } elseif (strstr($userFields[$i]['fieldName'], 'dateField')) {
-                $userFields[$i]['type'] = 'date';
-            }
-        }
-
-        return $this->render(
-            'course-manage/student/show-modal.html.twig',
-            array(
-                'user' => $user,
-                'profile' => $profile,
-                'userFields' => $userFields,
-            )
-        );
+        return $this->forward('AppBundle:Student:show', array(
+            'request' => $request,
+            'userId' => $userId,
+        ));
     }
 
-    public function definedShowAction($courseId, $userId)
+    public function definedShowAction(Request $request, $courseId, $userId)
     {
-        $profile = $this->getUserService()->getUserProfile($userId);
-
-        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
-
-        for ($i = 0; $i < count($userFields); ++$i) {
-            if (strstr($userFields[$i]['fieldName'], 'textField')) {
-                $userFields[$i]['type'] = 'text';
-            }
-
-            if (strstr($userFields[$i]['fieldName'], 'varcharField')) {
-                $userFields[$i]['type'] = 'varchar';
-            }
-
-            if (strstr($userFields[$i]['fieldName'], 'intField')) {
-                $userFields[$i]['type'] = 'int';
-            }
-
-            if (strstr($userFields[$i]['fieldName'], 'floatField')) {
-                $userFields[$i]['type'] = 'float';
-            }
-
-            if (strstr($userFields[$i]['fieldName'], 'dateField')) {
-                $userFields[$i]['type'] = 'date';
-            }
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $member = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
+        if (empty($member)) {
+            throw $this->createAccessDeniedException(sprintf('学员#%s不属于教学计划#%s', $userId, $courseId));
         }
 
-        $course = $this->getSettingService()->get('course', array());
-
-        $userinfoFields = array();
-
-        if (isset($course['userinfoFields'])) {
-            $userinfoFields = $course['userinfoFields'];
-        }
-
-        return $this->render(
-            'course-manage/student/defined-show-modal.html.twig',
-            array(
-                'profile' => $profile,
-                'userFields' => $userFields,
-                'userinfoFields' => $userinfoFields,
-            )
-        );
+        return $this->forward('AppBundle:Student:definedShow', array(
+            'request' => $request,
+            'userId' => $userId,
+        ));
     }
 
     public function studyProcessAction($courseSetId, $courseId, $userId)
@@ -514,7 +482,8 @@ class StudentManageController extends BaseController
 
         $processes = array();
         foreach ($userFinishedTasks as $task) {
-            $processes[$task['userId']] = sprintf('%d', $task['taskCount'] / $taskCount * 100.0);
+            $progress = sprintf('%d', $task['taskCount'] / $taskCount * 100.0);
+            $processes[$task['userId']] = $progress > 100 ? 100 : $progress;
         }
 
         return $processes;

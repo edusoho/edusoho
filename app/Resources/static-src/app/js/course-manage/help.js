@@ -23,6 +23,7 @@ export const sortablelist = (list) => {
         $item.find('.number').text(chapterNum);
       }
     });
+    $list.trigger('finished');
   });
 }
 
@@ -131,8 +132,12 @@ export const publishTask = () => {
   $('body').on('click', '.publish-item', (event) => {
     $.post($(event.target).data('url'), function (data) {
       if (data.success) {
+        var parentLi = $(event.target).closest('.task-manage-item');
         notify('success', '发布成功');
-        location.reload();
+        $(parentLi).find('.publish-item').addClass('hidden')
+        $(parentLi).find('.delete-item').addClass('hidden')
+        $(parentLi).find('.unpublish-item').removeClass('hidden')
+        $(parentLi).find('.publish-status').addClass('hidden')
       } else {
         notify('danger', '发布失败：' + data.message);
       }
@@ -144,8 +149,12 @@ export const unpublishTask = () => {
   $('body').on('click', '.unpublish-item', (event) => {
     $.post($(event.target).data('url'), function (data) {
       if (data.success) {
+        var parentLi = $(event.target).closest('.task-manage-item');
         notify('success', '取消发布成功');
-        location.reload();
+        $(parentLi).find('.publish-item').removeClass('hidden')
+        $(parentLi).find('.delete-item').removeClass('hidden')
+        $(parentLi).find('.unpublish-item').addClass('hidden')
+        $(parentLi).find('.publish-status').removeClass('hidden')
       } else {
         notify('danger', '取消发布失败：' + data.message);
       }
@@ -169,3 +178,10 @@ export const TabChange = () => {
     $($this.data('tab-content')).removeClass("hidden").siblings('[data-role="tab-content"]').addClass('hidden');
   });
 };
+
+export const updateTaskNum = (container) => {
+  let $container = $(container);
+  $container.on('finished',function(){
+    $('#task-num').text($(container).find('i[data-role="task"]').length);
+  })
+}

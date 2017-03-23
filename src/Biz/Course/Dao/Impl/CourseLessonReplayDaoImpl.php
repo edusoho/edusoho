@@ -55,7 +55,7 @@ class CourseLessonReplayDaoImpl extends GeneralDaoImpl implements CourseLessonRe
         return $this->db()->fetchAll($sql, array($courseId, $lessonId, $lessonType));
     }
 
-    public function updateByLessonId($lessonId, $fields, $lessonType = 'live')
+    public function updateByLessonId($lessonId, $lessonType = 'live', $fields)
     {
         return $this->db()->update($this->table, $fields, array('lessonId' => $lessonId, 'type' => $lessonType));
     }

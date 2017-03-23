@@ -13,6 +13,7 @@ use Biz\File\Service\UploadFileService;
 use Biz\Order\Service\OrderService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
+use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\TokenService;
 use Symfony\Component\HttpFoundation\Request;
 use VipPlugin\Biz\Vip\Service\VipService;
@@ -29,6 +30,8 @@ class CourseController extends CourseBaseController
             $files = $this->findFiles($course['id']);
         }
 
+        $course['courseNum'] = $this->getCourseNumInCourseSet($course['courseSetId']);
+
         return $this->render(
             'course/tabs/summary.html.twig',
             array(
@@ -44,10 +47,24 @@ class CourseController extends CourseBaseController
     public function showAction($id, $tab = 'summary')
     {
         $tab = $this->prepareTab($tab);
+
         $course = $this->getCourseService()->getCourse($id);
         if (empty($course)) {
             throw $this->createNotFoundException('该教学计划不存在！');
         }
+
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        if (empty($courseSet)) {
+            throw $this->createNotFoundException('该教学计划所属课程不存在！');
+        }
+
+        if ($this->isPluginInstalled('Discount')) {
+            $discount = $this->getDiscountService()->getDiscount($courseSet['discountId']);
+            if (!empty($discount)) {
+                $course['discount'] = $discount;
+            }
+        }
+
         $classroom = array();
         if ($course['parentId'] > 0) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
@@ -138,7 +155,7 @@ class CourseController extends CourseBaseController
             $user['id'],
             $course['courseSetId']
         ) : false;
-        $previewAs = $request->query->get('previewAs', false);
+        $previewAs = $request->query->get('previewAs', null);
         $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
         $previewTasks = $this->getTaskService()->searchTasks(
@@ -516,6 +533,11 @@ class CourseController extends CourseBaseController
         return $this->createService('VipPlugin:Vip:VipService');
     }
 
+    protected function getDiscountService()
+    {
+        return $this->createService('DiscountPlugin:Discount:DiscountService');
+    }
+
     /**
      * @return TaskService
      */
@@ -645,5 +667,15 @@ class CourseController extends CourseBaseController
         }
 
         return $tab;
+    }
+
+    protected function getCourseNumInCourseSet($courseSetId)
+    {
+        $courseNums = $this->getCourseService()->countCoursesGroupByCourseSetIds(array($courseSetId));
+        if (!empty($courseNums)) {
+            return $courseNums[0]['courseNum'];
+        }
+
+        return 1;
     }
 }

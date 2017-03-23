@@ -13,14 +13,14 @@ class MyLearning extends BaseResource
         $beginTime = strtotime("-6 months");
 
         $conditions = array(
-            'lastLearnTimeGreaterThan' => $beginTime,
+            'lastViewTime_GE' => $beginTime,
             'userId'          => $user['id']
         );
 
         $membersCount = $this->getMemberService()->countMembers($conditions);
         $members = $this->getMemberService()->searchMembers(
             $conditions,
-            array('lastLearnTime' => 'DESC', 'id' => 'DESC'),
+            array('lastViewTime' => 'DESC', 'id' => 'DESC'),
             0,
             $membersCount
         );
@@ -65,7 +65,7 @@ class MyLearning extends BaseResource
             $learningData[$key] = $course;
 
             $learningData[$key]['courseSet'] = $courseSets[$course['courseSetId']];
-            $learningData[$key]['lastViewTime'] = empty($member['lastLearnTime']) ? 0 : date('c', $member['lastLearnTime']);
+            $learningData[$key]['lastViewTime'] = empty($member['lastViewTime']) ? 0 : date('c', $member['lastViewTime']);
             $learningData[$key]['joinedType'] = $member['joinedType'];
             if ('classroom' == $member['joinedType']) {
                 $learningData[$key]['classroomTitle'] = empty($classrooms[$member['classroomId']]) ? '' : $classrooms[$member['classroomId']]['title'];

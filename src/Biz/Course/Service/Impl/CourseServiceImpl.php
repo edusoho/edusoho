@@ -5,6 +5,7 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\ThreadDao;
+use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
@@ -17,6 +18,7 @@ use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Course\Service\MaterialService;
+use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\CourseNoteService;
@@ -126,8 +128,13 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'isDefault',
                 'isFree',
                 'serializeMode',
+                'type',
             )
         );
+
+        if (isset($fields['about'])) {
+            $fields['about'] = $this->purifyHtml($fields['about'], true);
+        }
 
         if (!isset($course['isFree'])) {
             $course['isFree'] = 1; //默认免费
@@ -152,9 +159,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                     ),
                 )
             );
-
             $this->commit();
-
             $this->dispatchEvent('course.create', new Event($created));
 
             return $created;
@@ -180,6 +185,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'isDefault',
             )
         );
+
         $fields = $this->validateExpiryMode($fields);
 
         $entityCopy = new CourseCopy($this->biz);
@@ -189,43 +195,26 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function updateCourse($id, $fields)
     {
-        $course = $this->tryManageCourse($id);
+        $this->tryManageCourse($id);
+
+        if (!ArrayToolkit::requireds($fields, array('title', 'courseSetId'))) {
+            throw $this->createInvalidArgumentException('Lack of required fields');
+        }
+
         $fields = ArrayToolkit::parts(
             $fields,
             array(
                 'title',
                 'courseSetId',
-                // 'learnMode', //一旦创建，学习模式不允许变更
-                'expiryMode',
-                'expiryDays',
-                'expiryStartDate',
-                'expiryEndDate',
                 'summary',
                 'goals',
                 'audiences',
                 'enableFinish',
                 'serializeMode',
                 'maxStudentNum',
+                'locked',
             )
         );
-
-        if ($course['status'] == 'published') {
-            unset($fields['expiryMode']);
-            // unset($fields['expiryDays']);
-            unset($fields['expiryStartDate']);
-            unset($fields['expiryEndDate']);
-        }
-
-        $existCourse = $this->getCourse($id);
-        if (isset($existCourse['status']) && $existCourse['status'] === 'published') {
-            if (!ArrayToolkit::requireds($course, array('title', 'courseSetId'))) {
-                throw $this->createInvalidArgumentException('Lack of required fields');
-            }
-        } elseif (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode'))) {
-            throw $this->createInvalidArgumentException('Lack of required fields');
-        } else {
-            $fields = $this->validateExpiryMode($fields);
-        }
 
         $course = $this->getCourseDao()->update($id, $fields);
         $this->dispatchEvent('course.update', new Event($course));
@@ -295,8 +284,19 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'services',
                 'approval',
                 'coinPrice',
+                'expiryMode', //days、end_date、date、forever
+                'expiryDays',
+                'expiryStartDate',
+                'expiryEndDate',
             )
         );
+
+        if ($oldCourse['status'] == 'published' || $oldCourse['status'] == 'closed') {
+            unset($fields['expiryMode']);
+            unset($fields['expiryDays']);
+            unset($fields['expiryStartDate']);
+            unset($fields['expiryEndDate']);
+        }
 
         $requireFields = array('isFree', 'buyable');
         $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
@@ -307,6 +307,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!ArrayToolkit::requireds($fields, $requireFields)) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
+
+        $fields = $this->validateExpiryMode($fields);
 
         $fields = $this->processFields($id, $fields, $courseSet);
 
@@ -447,9 +449,22 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($course['expiryMode'])) {
             return $course;
         }
+        //enum: [days,end_date,date,forever]
         if ($course['expiryMode'] === 'days') {
             $course['expiryStartDate'] = null;
             $course['expiryEndDate'] = null;
+
+            if (empty($course['expiryDays'])) {
+                throw $this->createInvalidArgumentException('Param Invalid: expiryDays');
+            }
+        } elseif ($course['expiryMode'] == 'end_date') {
+            $course['expiryStartDate'] = null;
+            $course['expiryDays'] = 0;
+
+            if (empty($course['expiryEndDate']) || strtotime($course['expiryEndDate'].' 23:59:59') <= time()) {
+                throw $this->createInvalidArgumentException('Param Invalid: expiryEndDate');
+            }
+            $course['expiryEndDate'] = strtotime($course['expiryEndDate'].' 23:59:59');
         } elseif ($course['expiryMode'] === 'date') {
             $course['expiryDays'] = 0;
             if (isset($course['expiryStartDate'])) {
@@ -457,7 +472,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             } else {
                 throw $this->createInvalidArgumentException('Param Required: expiryStartDate');
             }
-            if (isset($course['expiryEndDate'])) {
+            if (!empty($course['expiryEndDate']) && strtotime($course['expiryEndDate'].' 23:59:59') > time()) {
                 $course['expiryEndDate'] = strtotime($course['expiryEndDate'].' 23:59:59');
             } else {
                 throw $this->createInvalidArgumentException('Param Required: expiryEndDate');
@@ -467,6 +482,10 @@ class CourseServiceImpl extends BaseService implements CourseService
                     'Value of Params expiryEndDate must later than expiryStartDate'
                 );
             }
+        } elseif ($course['expiryMode'] == 'forever') {
+            $course['expiryStartDate'] = null;
+            $course['expiryEndDate'] = null;
+            $course['expiryDays'] = 0;
         } else {
             throw $this->createInvalidArgumentException('Param Invalid: expiryMode');
         }
@@ -619,11 +638,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             return true;
         }
 
-        //TODO 未实现
-        //        if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
-        //            return true;
-        //        }
-
         $member = $this->getMemberDao()->getByCourseIdAndUserId($course['id'], $user['id']);
 
         if ($member && in_array($member['role'], array('teacher', 'student'))) {
@@ -728,7 +742,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $tasks = $this->getTaskService()->findTasksByChapterId($deletedChapter['id']);
-
+        $this->getLogService()->info('course', 'delete_chapter', "删除章节(#{$chapterId})", $deletedChapter);
         foreach ($tasks as $task) {
             $this->getTaskService()->updateSeq($task['id'], array('categoryId' => $prevChapter['id']));
         }
@@ -1486,6 +1500,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
     }
 
+    public function unlockCourse($courseId)
+    {
+        $course = $this->getCourseDao()->update($courseId, array('locked' => 0));
+
+        $this->dispatchEvent('course.update', new Event($course));
+
+        return $course;
+    }
+
     protected function _prepareCourseOrderBy($sort)
     {
         if (is_array($sort)) {
@@ -1519,6 +1542,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function countCourses(array $conditions)
     {
         return $this->getCourseDao()->count($conditions);
+    }
+
+    public function countCoursesGroupByCourseSetIds($courseSetIds)
+    {
+        return $this->getCourseDao()->countGroupByCourseSetIds($courseSetIds);
     }
 
     protected function createCourseStrategy($course)
@@ -1709,6 +1737,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
+    }
+
+    /**
      * 当默认值未设置时，合并默认值
      *
      * @param  $course
@@ -1766,8 +1802,8 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param $id
-     * @param $fields
+     * @param  $id
+     * @param  $fields
      *
      * @return mixed
      */

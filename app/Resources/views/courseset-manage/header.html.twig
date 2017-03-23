@@ -38,12 +38,16 @@
   </div>
 
   <div class="toolbar hidden-xs">
+    {% if course.courseSetId|default(null) and course_count(course.courseSetId)|default(0) > 1 %}
+        <a class="btn btn-default btn-sm " href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">返回课程编辑</a>
+    {% endif %}
+
     {% if courseSet.status == 'published' %}
       <div class="btn-group">
         <a class="btn btn-default btn-sm" href="{{basepath}}">{{'返回课程主页'|trans}}</a>
       </div>
     {% endif %}
-
+    
     {% if courseSet.status != 'published' %}
       <div class="btn-group">
         <a class="btn btn-default btn-sm" target="_blank" href="{{ path('course_set_show', {id: courseSet.id, 'previewAs':'guest'}) }}">{{'预览'|trans}}</a>

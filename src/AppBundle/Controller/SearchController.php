@@ -2,17 +2,17 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\ThreadService;
 use Biz\Search\Service\SearchService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\CategoryService;
-use AppBundle\Common\Paginator;
-use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Vip\Service\Vip\LevelService;
-use Vip\Service\Vip\VipService;
+use VipPlugin\Biz\Vip\Service\LevelService;
+use VipPlugin\Biz\Vip\Service\VipService;
 
 class SearchController extends BaseController
 {
@@ -33,6 +33,7 @@ class SearchController extends BaseController
                     'cloud_search',
                     array(
                         'q' => $keywords,
+                        'type' => $request->query->get('type'),
                     )
                 )
             );
@@ -47,9 +48,11 @@ class SearchController extends BaseController
 
         if ($isShowVipSearch) {
             $currentUserVip = $this->getVipService()->getMemberByUserId($currentUser['id']);
-            $currentUserVipLevel = $this->getLevelService()->getLevel($currentUserVip['levelId']);
-            $vipLevels = $this->getLevelService()->findAllLevelsLessThanSeq($currentUserVipLevel['seq']);
-            $vipLevelIds = ArrayToolkit::column($vipLevels, 'id');
+            if (!empty($currentUserVip) && isset($currentUserVip['levelId'])) {
+                $currentUserVipLevel = $this->getLevelService()->getLevel($currentUserVip['levelId']);
+                $vipLevels = $this->getLevelService()->findAllLevelsLessThanSeq($currentUserVipLevel['seq']);
+                $vipLevelIds = ArrayToolkit::column($vipLevels, 'id');
+            }
         }
 
         $parentId = 0;
@@ -115,6 +118,10 @@ class SearchController extends BaseController
         $type = $request->query->get('type', 'course');
         $page = $request->query->get('page', '1');
 
+        if (!$this->isTypeUseable($type)) {
+            return $this->render('TwigBundle:Exception:error403.html.twig');
+        }
+
         if (empty($keywords)) {
             return $this->render(
                 'search/cloud-search-failure.html.twig',
@@ -165,6 +172,23 @@ class SearchController extends BaseController
                 'paginator' => $paginator,
             )
         );
+    }
+
+    protected function isTypeUseable($type)
+    {
+        $cloudSearchSetting = $this->getSettingService()->get('cloud_search');
+
+        $cloudSearchType = empty($cloudSearchSetting['type']) ? array() : $cloudSearchSetting['type'];
+
+        if (!array_key_exists($type, $cloudSearchType)) {
+            return false;
+        }
+
+        if ($cloudSearchType[$type] == 1) {
+            return true;
+        }
+
+        return false;
     }
 
     private function filterKeyWord($keyword)

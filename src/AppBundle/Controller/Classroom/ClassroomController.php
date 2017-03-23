@@ -2,11 +2,10 @@
 
 namespace AppBundle\Controller\Classroom;
 
+use AppBundle\Common\ClassroomToolkit;
 use AppBundle\Common\Paginator;
-use Vip\Service\Vip\VipService;
 use Biz\Sign\Service\SignService;
 use Biz\User\Service\AuthService;
-use Vip\Service\Vip\LevelService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\TokenService;
 use Biz\Order\Service\OrderService;
@@ -184,8 +183,13 @@ class ClassroomController extends BaseController
 
         if (in_array($previewAs, array('guest', 'auditor', 'member'))) {
             if ($previewAs == 'guest') {
-                return array();
+                return;
             }
+
+            $deadline = ClassroomToolkit::buildMemberDeadline(array(
+                'expiryMode' => $classroom['expiryMode'],
+                'expiryValue' => $classroom['expiryValue'],
+            ));
 
             $member = array(
                 'id' => 0,
@@ -199,6 +203,7 @@ class ClassroomController extends BaseController
                 'role' => array('auditor'),
                 'locked' => 0,
                 'createdTime' => 0,
+                'deadline' => $deadline,
             );
 
             if ($previewAs == 'member') {
@@ -326,6 +331,19 @@ class ClassroomController extends BaseController
         }
 
         return new Response();
+    }
+
+    public function deadlineReachAction(Request $request, $classroomId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('不允许未登录访问');
+        }
+
+        $this->getClassroomService()->exitClassroom($classroomId, $user['id']);
+
+        return $this->redirect($this->generateUrl('classroom_introductions', array('id' => $classroomId)));
     }
 
     public function latestMembersBlockAction($classroom, $count = 20)
@@ -462,6 +480,10 @@ class ClassroomController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
+        if ($this->getClassroomService()->isClassroomOverDue($id)) {
+            throw $this->createAccessDeniedException('班级已过期');
+        }
+
         $this->getClassroomService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));
 
         return $this->redirect($this->generateUrl('classroom_show', array('id' => $id)));
@@ -591,17 +613,6 @@ class ClassroomController extends BaseController
 
         $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
-        //判断用户是否为VIP
-        $vipStatus = $classroomVip = null;
-
-        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
-            $classroomVip = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
-
-            if ($classroomVip) {
-                $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroomVip['id']);
-            }
-        }
-
         return $this->render('classroom/buy-modal.html.twig', array(
             'classroom' => $classroom,
             'payments' => $this->getEnabledPayments(),
@@ -613,85 +624,7 @@ class ClassroomController extends BaseController
             'userFields' => $userFields,
             'account' => $account,
             'amount' => $amount,
-            'vipStatus' => $vipStatus,
         ));
-    }
-
-    public function modifyUserInfoAction(Request $request)
-    {
-        $formData = $request->request->all();
-
-        $user = $this->getCurrentUser();
-
-        if (empty($user)) {
-            return $this->createMessageResponse('error', '用户未登录，不能购买。');
-        }
-
-        $classroom = $this->getClassroomService()->getClassroom($formData['targetId']);
-
-        if (empty($classroom)) {
-            return $this->createMessageResponse('error', "{$classroom['title']}不存在，不能购买。");
-        }
-
-        $userInfo = ArrayToolkit::parts($formData, array(
-            'truename',
-            'mobile',
-            'qq',
-            'company',
-            'weixin',
-            'weibo',
-            'idcard',
-            'gender',
-            'job',
-            'intField1', 'intField2', 'intField3', 'intField4', 'intField5',
-            'floatField1', 'floatField2', 'floatField3', 'floatField4', 'floatField5',
-            'dateField1', 'dateField2', 'dateField3', 'dateField4', 'dateField5',
-            'varcharField1', 'varcharField2', 'varcharField3', 'varcharField4', 'varcharField5', 'varcharField10', 'varcharField6', 'varcharField7', 'varcharField8', 'varcharField9',
-            'textField1', 'textField2', 'textField3', 'textField4', 'textField5', 'textField6', 'textField7', 'textField8', 'textField9', 'textField10',
-        ));
-
-        $this->getUserService()->updateUserProfile($user['id'], $userInfo);
-
-        if (isset($formData['email']) && !empty($formData['email'])) {
-            $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
-            $this->authenticateUser($this->getUserService()->getUser($user['id']));
-
-            if (!$user['setup']) {
-                $this->getUserService()->setupAccount($user['id']);
-            }
-        }
-
-        $coinSetting = $this->setting('coin');
-
-        //判断用户是否为VIP
-        if ($this->isPluginInstalled('Vip')
-            && $this->setting('vip.enabled')
-            && !empty($classroom['vipLevelId'])
-            && $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) == 'ok') {
-            return $this->forward('AppBundle:Classroom/Classroom:becomeStudent', array(
-                'request' => $request,
-                'id' => $classroom['id'],
-            ));
-        }
-
-        if ($classroom['price'] == 0) {
-            $formData['amount'] = 0;
-            $formData['totalPrice'] = 0;
-            $formData['priceType'] = empty($coinSetting['priceType']) ? 'RMB' : $coinSetting['priceType'];
-            $formData['coinRate'] = empty($coinSetting['coinRate']) ? 1 : $coinSetting['coinRate'];
-            $formData['coinAmount'] = 0;
-
-            $order = $this->getClassroomOrderService()->createOrder($formData);
-
-            if ($order['status'] == 'paid') {
-                return $this->redirect($this->generateUrl('classroom_show', array('id' => $order['targetId'])));
-            }
-        }
-
-        return $this->redirect($this->generateUrl('order_show', array(
-            'targetId' => $formData['targetId'],
-            'targetType' => 'classroom',
-        )));
     }
 
     public function qrcodeAction(Request $request, $id)
@@ -856,7 +789,7 @@ class ClassroomController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getThreadService()->countThreads($conditions),
+            $this->getThreadService()->searchThreadCount($conditions),
             20
         );
         $threads = $this->getThreadService()->searchThreads(

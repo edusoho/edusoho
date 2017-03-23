@@ -9,6 +9,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CloudController extends BaseController
 {
+    public function buyAction(Request $request, $type)
+    {
+        $params = array('type' => $type);
+
+        return $this->redirectUrl('edu_cloud_buy', $params);
+    }
+
     public function billAction(Request $request)
     {
         $factory = new CloudClientFactory();
@@ -100,13 +107,6 @@ class CloudController extends BaseController
     public function videoAccountAction(Request $request)
     {
         return $this->redirectUrl('bill_video_detail');
-    }
-
-    public function buyAction(Request $request, $type)
-    {
-        $params = array('type' => $type);
-
-        return $this->redirectUrl('edu_cloud_buy_custom', $params);
     }
 
     public function videoDetailAction()

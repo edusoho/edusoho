@@ -2,18 +2,19 @@
 
 namespace AppBundle\Controller\Admin;
 
-use Biz\CloudPlatform\Service\AppService;
-use Imagine\Image\Box;
-use Imagine\Gd\Imagine;
-use AppBundle\Common\Paginator;
-use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Util\EdusohoLiveClient;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\Paginator;
+use Biz\CloudPlatform\Client\AbstractCloudAPI;
+use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\IMAPIFactory;
 use Biz\CloudPlatform\KeyApplier;
+use Biz\CloudPlatform\Service\AppService;
+use Biz\Util\EdusohoLiveClient;
+use Imagine\Gd\Imagine;
+use Imagine\Image\Box;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Biz\CloudPlatform\IMAPIFactory;
-use Biz\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class EduCloudController extends BaseController
@@ -32,7 +33,7 @@ class EduCloudController extends BaseController
 
                 $result = $api->post("/sms/{$api->getAccessKey()}/applyResult");
 
-                if (isset($result['apply']) && isset($result['apply']['status'])) {
+                if (isset($result['apply']['status'])) {
                     $smsStatus['status'] = $result['apply']['status'];
                     $smsStatus['message'] = $result['apply']['message'];
                 } elseif (isset($result['error'])) {
@@ -66,7 +67,7 @@ class EduCloudController extends BaseController
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
-        if ($this->getWebExtension()->isTrial() || !isset($info['accessCloud']) || $info['accessCloud'] == 0) {
+        if (!isset($info['accessCloud']) || $this->getWebExtension()->isTrial() || $info['accessCloud'] == 0) {
             $trialHtml = $this->getCloudCenterExperiencePage();
 
             return $this->render('admin/edu-cloud/cloud.html.twig', array(
@@ -251,6 +252,7 @@ class EduCloudController extends BaseController
             'video_fingerprint' => 0,
             'video_fingerprint_time' => 0.5,
             'video_header' => null,
+            'video_auto_play' => 'true',
         );
 
         if ($request->getMethod() == 'POST') {
@@ -378,7 +380,8 @@ class EduCloudController extends BaseController
         $smsStatus = $this->handleUserSmsSetting($dataUserPosted);
 
         if (empty($cloudInfo['accessCloud'])) {
-            return $this->createMessageResponse('info', '对不起，请先接入教育云！', '', 3, $this->generateUrl('admin_my_cloud_overview'));
+            return $this->createMessageResponse('info', '对不起，请先接入教育云！', '', 3,
+                $this->generateUrl('admin_my_cloud_overview'));
         }
 
         //启动
@@ -465,7 +468,7 @@ class EduCloudController extends BaseController
         try {
             $api = CloudAPIFactory::create('root');
 
-            if ($request->getMethod() == 'POST') {
+            if ($request->isMethod('POST')) {
                 $this->handleSmsSetting($request, $api);
                 $this->setFlashMessage('success', '云短信设置已保存！');
             }
@@ -486,11 +489,13 @@ class EduCloudController extends BaseController
     {
         if (empty($smsInfo)) {
             $smsSignUrl = $this->generateUrl('admin_cloud_sms_sign');
-            $this->setFlashMessage('danger', "尚未开通云短信,不能发送短信, <a href='{$smsSignUrl}' class='plm' target='_blank'>去设置</a>");
+            $this->setFlashMessage('danger',
+                "尚未开通云短信,不能发送短信, <a href='{$smsSignUrl}' class='plm' target='_blank'>去设置</a>");
         } else {
             if (empty($smsInfo['name']) && empty($smsInfo['isExistSmsSign'])) {
                 $smsSignUrl = $this->generateUrl('admin_cloud_sms_sign');
-                $this->setFlashMessage('danger', "尚未设置短信签名,不能发送短信, <a href='{$smsSignUrl}' class='plm' target='_blank'>去设置</a>");
+                $this->setFlashMessage('danger',
+                    "尚未设置短信签名,不能发送短信, <a href='{$smsSignUrl}' class='plm' target='_blank'>去设置</a>");
             }
             if (empty($smsInfo['name']) && !empty($smsInfo['isExistSmsSign']) && $smsInfo['usedSmsSign'] == null) {
                 $this->setFlashMessage('danger', '短信签名正在审核中,不能发送短信。');
@@ -588,12 +593,12 @@ class EduCloudController extends BaseController
             return $this->render('admin/edu-cloud/email/trial.html.twig');
         }
 
-        if (!($this->isHiddenCloud())) {
+        if (!$this->isHiddenCloud()) {
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
         $emailSettings = $this->getSettingService()->get('cloud_email_crm', array());
-        if ((isset($emailSettings['status']) && $emailSettings['status'] == 'disable') || !isset($emailSettings['status'])) {
+        if (!isset($emailSettings['status']) || (isset($emailSettings['status']) && $emailSettings['status'] == 'disable')) {
             return $this->redirect($this->generateUrl('admin_edu_cloud_email'));
         }
 
@@ -606,10 +611,10 @@ class EduCloudController extends BaseController
         }
         try {
             $api = CloudAPIFactory::create('root');
-            $overview = $api->get('/me/email/overview');
+            $account = $api->get('/me/email_account');
 
             return $this->render('admin/edu-cloud/email/setting.html.twig', array(
-                'account' => $overview['account'],
+                'account' => $account,
             ));
         } catch (\RuntimeException $e) {
             return $this->render('admin/edu-cloud/email-error.html.twig', array());
@@ -835,6 +840,7 @@ class EduCloudController extends BaseController
         }
 
         render:
+
         return $this->render('admin/edu-cloud/key-update.html.twig', array());
     }
 
@@ -887,17 +893,17 @@ class EduCloudController extends BaseController
             return $this->render('admin/edu-cloud/search/trial.html.twig');
         }
 
-        if (!($this->isHiddenCloud())) {
+        if (!$this->isHiddenCloud()) {
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
-        $cloudSearchSetting = $this->getSettingService()->get('cloud_search', array());
+        $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
         try {
             $api = CloudAPIFactory::create('root');
 
             $userOverview = $api->get("/users/{$api->getAccessKey()}/overview");
             $searchOverview = $api->get('/me/search/overview');
-            $data = $this->isSearchInited($api, $cloudSearchSetting);
+            $data = $this->initCloudSearch($api, $cloud_search_setting);
         } catch (\RuntimeException $e) {
             return $this->render('admin/edu-cloud/search/without-enable.html.twig', array(
                 'data' => array('status' => 'unlink'),
@@ -909,11 +915,11 @@ class EduCloudController extends BaseController
             $data['status'] = 'unbinded';
         } else {
             $currentHost = $request->server->get('HTTP_HOST');
-            if (!in_array($currentHost, explode(';', $userOverview['user']['licenseDomains']))) {
+            if (!in_array($currentHost, explode(';', $userOverview['user']['licenseDomains']), true)) {
                 $data['status'] = 'binded_error';
             }
         }
-        if ($data['search_enabled'] == 1 && ($data['status'] == 'ok' || $data['status'] == 'waiting') && !isset($searchOverview['isBuy'])) {
+        if (!isset($searchOverview['isBuy']) && $data['search_enabled'] == 1 && ($data['status'] == 'ok' || $data['status'] == 'waiting')) {
             $chartData = $this->dealChartData($searchOverview['data']);
 
             return $this->render('admin/edu-cloud/search/overview.html.twig', array(
@@ -954,12 +960,10 @@ class EduCloudController extends BaseController
 
     public function searchOpenAction()
     {
-        $cloudSearchSettting = $this->getSettingService()->get('cloud_search', array());
-        if ($cloudSearchSettting['status'] == 'ok' || $cloudSearchSettting['status'] == 'waiting') {
-            $this->getSettingService()->set('cloud_search', array(
-                'search_enabled' => 1,
-                'status' => $cloudSearchSettting['status'],
-            ));
+        $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
+        if ($cloud_search_setting['status'] == 'ok' || $cloud_search_setting['status'] == 'waiting') {
+            $cloud_search_setting['search_enabled'] = 1;
+            $this->getSettingService()->set('cloud_search', $cloud_search_setting);
         }
 
         return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
@@ -967,14 +971,30 @@ class EduCloudController extends BaseController
 
     public function searchCloseAction()
     {
-        $cloudSearchSettting = $this->getSettingService()->get('cloud_search', array());
-
-        $this->getSettingService()->set('cloud_search', array(
-            'search_enabled' => 0,
-            'status' => $cloudSearchSettting['status'],
-        ));
+        $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
+        $cloud_search_setting['search_enabled'] = 0;
+        $this->getSettingService()->set('cloud_search', $cloud_search_setting);
 
         return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
+    }
+
+    public function setSearchResultTypeAction(Request $request)
+    {
+        $newSetting = $request->query->all();
+
+        $cloud_search_setting = $this->getSettingService()->get('cloud_search');
+
+        $differentSetting = array_diff_assoc($cloud_search_setting['type'], $newSetting);
+        foreach ($cloud_search_setting['type'] as $key => &$type) {
+            $type = 1;
+            if ((string) $key !== 'course' && array_key_exists($key, $differentSetting)) {
+                $type = 0;
+            }
+        }
+
+        $this->getSettingService()->set('cloud_search', $cloud_search_setting);
+
+        return $this->redirect($this->generateUrl('admin_edu_cloud_setting_search'));
     }
 
     public function keyApplyAction(Request $request)
@@ -1089,6 +1109,42 @@ class EduCloudController extends BaseController
         }
 
         return $this->createJsonResponse(false);
+    }
+
+    protected function initCloudSearch(AbstractCloudAPI $api, $data)
+    {
+        if (!$data) {
+            $data = array(
+                'search_enabled' => 0,
+                'status' => 'closed', //'closed':未开启；'waiting':'索引中';'ok':'索引完成'
+            );
+        }
+
+        if (empty($data['status'])) {
+            $data['status'] = 'closed';
+        }
+
+        if ($data['status'] == 'waiting') {
+            $search_account = $api->get('/me/search_account');
+
+            if ($search_account['isInit'] == 'yes') {
+                $data = array(
+                    'search_enabled' => $data['search_enabled'],
+                    'status' => 'ok',
+                );
+            }
+        }
+        if (empty($data['type'])) {
+            $data['type'] = array(
+                'course' => 1,
+                'teacher' => 1,
+                'thread' => 1,
+                'article' => 1,
+            );
+        }
+        $this->getSettingService()->set('cloud_search', $data);
+
+        return $data;
     }
 
     protected function dateFormat($time)
@@ -1216,7 +1272,8 @@ class EduCloudController extends BaseController
 
             if (isset($status['error']) && $status['error']['code'] == 101) {
                 $site = $this->getSettingService()->get('site', array());
-                $result = $api->post('/email_accounts', array('sender' => isset($site['name']) ? $site['name'] : '我的网校'));
+                $result = $api->post('/email_accounts',
+                    array('sender' => isset($site['name']) ? $site['name'] : '我的网校'));
 
                 if (isset($result['status']) && $result['status'] == 'enable') {
                     $emailStatus['status'] = 'enable';
@@ -1409,7 +1466,9 @@ class EduCloudController extends BaseController
 
         try {
             $imUsedInfo = $api->get('/me/receive_count_period', array(
-                'startTime' => $startTime, 'endTime' => $endTime, ));
+                'startTime' => $startTime,
+                'endTime' => $endTime,
+            ));
 
             if (isset($imUsedInfo['error'])) {
                 return array();
@@ -1496,11 +1555,6 @@ class EduCloudController extends BaseController
         return $this->createService('File:UploadFileService');
     }
 
-    private function getWebExtension()
-    {
-        return $this->container->get('web.twig.extension');
-    }
-
     protected function getSignEncoder()
     {
         return new MessageDigestPasswordEncoder('sha256');
@@ -1564,7 +1618,7 @@ class EduCloudController extends BaseController
             return $this->render('admin/edu-cloud/live/trial.html.twig');
         }
 
-        if (!($this->isHiddenCloud())) {
+        if (!$this->isHiddenCloud()) {
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
@@ -1572,7 +1626,7 @@ class EduCloudController extends BaseController
         $client = new EdusohoLiveClient();
         $capacity = $client->getCapacity();
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->isMethod('POST')) {
             try {
                 $api = CloudAPIFactory::create('root');
                 $overview = $api->get('/me/live/overview');
@@ -1595,8 +1649,12 @@ class EduCloudController extends BaseController
             return $this->redirect($this->generateUrl('admin_cloud_edulive_overview'));
         }
 
+        if (empty($liveCourseSetting['live_course_enabled'])) {
+            return $this->redirect($this->generateUrl('admin_cloud_edulive_overview'));
+        }
+
         $liveEnabled = $liveCourseSetting['live_course_enabled'];
-        if ((isset($liveEnabled) && $liveEnabled == 0) || !isset($liveEnabled)) {
+        if (null === $liveEnabled || $liveEnabled === 0) {
             return $this->redirect($this->generateUrl('admin_cloud_edulive_overview'));
         }
         try {

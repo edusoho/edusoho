@@ -1,0 +1,23 @@
+--TEST--
+Test @media aspect-ratio directive
+--CSS--
+@media (max-width: 767px) {
+	h1{
+			font-size: 2em;
+	}
+	h2{font-size: 1.5em;}
+}
+--PRINT--
+@media (max-width: 767px) {
+	h1
+	{
+		font-size:2em
+	}
+
+	h2
+	{
+		font-size:1.5em
+	}
+}
+--SETTINGS--
+template='low'

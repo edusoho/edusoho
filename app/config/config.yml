@@ -10,6 +10,7 @@ imports:
     - { resource: "@AppBundle/Resources/config/services.yml" }
     - { resource: "@ApiBundle/Resources/config/services.yml" }
 
+
 framework:
     # esi:             ~
     translator:      { fallback: "%locale%", logging: false }
@@ -29,7 +30,7 @@ framework:
     fragments:       ~
     http_method_override: true
     assets:
-        version: '7.4.0'
+        version: '7.5.10'
 
 # Twig Configuration
 twig:

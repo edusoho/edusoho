@@ -171,7 +171,10 @@ $.validator.addMethod("visible_character", function (value, element, params) {
   return this.optional(element) || $.trim(value).length > 0;
 }, jQuery.validator.format("请输入可见性字符"));
 
-$.validator.addMethod('positive_integer', function (value, element) {
+$.validator.addMethod('positive_integer', function (value, element,params=true) {
+  if(!params) {
+    return true;
+  }
   return !value || /^\+?[1-9][0-9]*$/.test(value);
 }, jQuery.validator.format("请输入正整数"));
 
@@ -255,3 +258,7 @@ $.validator.addMethod("feature", function (value, element, params) {
 },
   Translator.trans('购买截止时间需在当前时间之后')
 );
+
+// jQuery.validator.addMethod("url", function (value, element) {
+//   return this.optional(element) || /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/.test(value);
+// }, "URL的格式不正确");

@@ -82,7 +82,7 @@ class CardDaoTest extends BaseDaoTestCase
         $expected[] = $this->mockDataObject();
         $expected[] = $this->mockDataObject(array('userId' => 1));
         $fields = array('userId' => 1);
-        $res = $this->getDao()->updateByCardIdAndCardType($fields, '1', 'a');
+        $res = $this->getDao()->updateByCardIdAndCardType('1', 'a', $fields);
         $this->assertArrayEquals($expected[1], $res, $this->getCompareKeys());
     }
 

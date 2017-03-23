@@ -1,10 +1,14 @@
 define(function(require, exports, module) {
 	exports.run = function() {
 		var ua = window.navigator.userAgent.toLowerCase(); 
-		var inviteCode = $("#invite_code").val();
-		var url = '/login';
 		if(ua.match(/MicroMessenger/i) == 'micromessenger'){ 
-			window.location.href = url + '?inviteCode='+inviteCode;
+			var url = '/login';
+			var inviteCode = $("#invite_code");
+			if(inviteCode.length > 0){
+				url = url + '?inviteCode='+inviteCode.val();
+			}
+
+			window.location.href = url;
 		} else {
 			return false;
 		}

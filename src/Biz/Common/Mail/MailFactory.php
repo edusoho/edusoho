@@ -15,7 +15,7 @@ class MailFactory
     {
         $setting = ServiceKernel::instance()->createService('System:SettingService');
 
-        $cloudConfig = $setting->get('cloud_email', array());
+        $cloudConfig = $setting->get('cloud_email_crm', array());
 
         if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
             $mail = new CloudMail($mailOptions);

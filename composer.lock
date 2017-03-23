@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a7265abb7f43db32426340d8ea1a074d",
+    "content-hash": "bdbf8945406657507dbfecf933a40e24",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -205,17 +205,50 @@
             "time": "2015-09-18T18:05:10+00:00"
         },
         {
-            "name": "codeages/biz-framework",
-            "version": "v0.2.5",
+            "name": "cerdic/css-tidy",
+            "version": "v1.5.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "24c7d202963e29b31fb59272b69e023e9edafc6a"
+                "url": "https://github.com/Cerdic/CSSTidy.git",
+                "reference": "b0c1bda3be5a35da44ba1ac28cc61c67d2ada465"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/24c7d202963e29b31fb59272b69e023e9edafc6a",
-                "reference": "24c7d202963e29b31fb59272b69e023e9edafc6a",
+                "url": "https://api.github.com/repos/Cerdic/CSSTidy/zipball/b0c1bda3be5a35da44ba1ac28cc61c67d2ada465",
+                "reference": "b0c1bda3be5a35da44ba1ac28cc61c67d2ada465",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "."
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "Cédric MORIN",
+                    "email": "changeme@mailinator.com"
+                }
+            ],
+            "description": "CSSTidy is a CSS minifier",
+            "time": "2015-11-28T21:47:43+00:00"
+        },
+        {
+            "name": "codeages/biz-framework",
+            "version": "v0.2.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/codeages/biz-framework.git",
+                "reference": "fc5a484ac20c8dcfea783e1e87b6e304fa3531a4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/fc5a484ac20c8dcfea783e1e87b6e304fa3531a4",
+                "reference": "fc5a484ac20c8dcfea783e1e87b6e304fa3531a4",
                 "shasum": ""
             },
             "require": {
@@ -240,7 +273,7 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2017-03-16T07:42:58+00:00"
+            "time": "2017-03-22T08:44:51+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -1292,20 +1325,23 @@
         },
         {
             "name": "ezyang/htmlpurifier",
-            "version": "v4.8.0",
+            "version": "v4.9.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "d0c392f77d2f2a3dcf7fcb79e2a1e2b8804e75b2"
+                "reference": "6d50e5282afdfdfc3e0ff6d192aff56c5629b3d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/d0c392f77d2f2a3dcf7fcb79e2a1e2b8804e75b2",
-                "reference": "d0c392f77d2f2a3dcf7fcb79e2a1e2b8804e75b2",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/6d50e5282afdfdfc3e0ff6d192aff56c5629b3d4",
+                "reference": "6d50e5282afdfdfc3e0ff6d192aff56c5629b3d4",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2"
+            },
+            "require-dev": {
+                "simpletest/simpletest": "^1.1"
             },
             "type": "library",
             "autoload": {
@@ -1332,7 +1368,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2016-07-16T12:58:58+00:00"
+            "time": "2017-03-13T06:30:53+00:00"
         },
         {
             "name": "flexihash/flexihash",

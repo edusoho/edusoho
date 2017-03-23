@@ -2,11 +2,10 @@
 
 namespace AppBundle\Controller\Classroom;
 
+use AppBundle\Common\ClassroomToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ExportHelp;
-use AppBundle\Twig\WebExtension;
 use Biz\Task\Service\TaskService;
-use Vip\Service\Vip\LevelService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Order\Service\OrderService;
 use Biz\Content\Service\FileService;
@@ -329,7 +328,7 @@ class ClassroomManageController extends BaseController
         $user = $this->getUserService()->getUser($userId);
         $member = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
 
-        if ('POST' == $request->getMethod()) {
+        if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $member = $this->getClassroomService()->remarkStudent($classroom['id'], $user['id'], $data['remark']);
 
@@ -667,6 +666,67 @@ class ClassroomManageController extends BaseController
         );
     }
 
+    public function studentShowAction(Request $request, $classroomId, $userId)
+    {
+        if (!$this->getCurrentUser()->isAdmin()) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权查看学员详细信息！'));
+        }
+
+        return $this->forward('AppBundle:Student:show', array(
+            'request' => $request,
+            'userId' => $userId,
+        ));
+    }
+
+    public function studentDefinedShowAction(Request $request, $classroomId, $userId)
+    {
+        $classroom = $this->getClassroomService()->tryManageClassroom($classroomId);
+        $member = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
+        if (empty($member)) {
+            throw $this->createAccessDeniedException("学员#{$userId}不属于班级{#$classroomId}");
+        }
+
+        return $this->forward('AppBundle:Student:definedShow', array(
+            'request' => $request,
+            'userId' => $userId,
+        ));
+    }
+
+    public function setClassroomMemberDeadlineAction(Request $request, $classroomId, $userId)
+    {
+        $this->getClassroomService()->tryManageClassroom($classroomId);
+
+        $member = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
+
+        if ($request->isMethod('POST')) {
+            $fields = $request->request->all();
+
+            if (empty($fields['deadline'])) {
+                throw $this->createNotFoundException('缺少相关参数');
+            }
+
+            $deadline = ClassroomToolkit::buildMemberDeadline(array(
+                'expiryMode' => 'date',
+                'expiryValue' => strtotime($fields['deadline'].' 23:59:59'),
+            ));
+
+            $this->getClassroomService()->updateMemberDeadlineByMemberId($member['id'], array(
+                'deadline' => $deadline,
+            ));
+
+            return $this->createJsonResponse(true);
+        }
+
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        $user = $this->getUserService()->getUser($userId);
+
+        return $this->render('classroom-manage/member/set-deadline-modal.html.twig', array(
+            'classroom' => $classroom,
+            'user' => $user,
+            'member' => $member,
+        ));
+    }
+
     public function teachersAction(Request $request, $id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
@@ -804,29 +864,29 @@ class ClassroomManageController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->isMethod('POST')) {
             $class = $request->request->all();
+
             $class['tagIds'] = $this->getTagIdsFromRequest($request);
+
+            if ($class['expiryMode'] == 'date') {
+                $class['expiryValue'] = strtotime($class['expiryValue'].' 23:59:59');
+            }
 
             $classroom = $this->getClassroomService()->updateClassroom($id, $class);
 
             $this->setFlashMessage('success', '基本信息设置成功！');
         }
 
-        $tags = $this->getTagService()->findTagsByOwner(
-            array(
-                'ownerType' => 'classroom',
-                'ownerId' => $id,
-            )
-        );
+        $tags = $this->getTagService()->findTagsByOwner(array(
+            'ownerType' => 'classroom',
+            'ownerId' => $id,
+        ));
 
-        return $this->render(
-            'classroom-manage/set-info.html.twig',
-            array(
-                'classroom' => $classroom,
-                'tags' => ArrayToolkit::column($tags, 'name'),
-            )
-        );
+        return $this->render('classroom-manage/set-info.html.twig', array(
+            'classroom' => $classroom,
+            'tags' => ArrayToolkit::column($tags, 'name'),
+        ));
     }
 
     public function setPriceAction(Request $request, $id)
@@ -865,6 +925,11 @@ class ClassroomManageController extends BaseController
                 'classroom' => $classroom,
             )
         );
+    }
+
+    public function expiryDateRuleAction()
+    {
+        return $this->render('classroom-manage/rule.html.twig');
     }
 
     public function setPictureAction($id)
@@ -1353,14 +1418,6 @@ class ClassroomManageController extends BaseController
     protected function getTagService()
     {
         return $this->createService('Taxonomy:TagService');
-    }
-
-    /**
-     * @return WebExtension
-     */
-    private function getWebExtension()
-    {
-        return $this->container->get('web.twig.extension');
     }
 
     /**

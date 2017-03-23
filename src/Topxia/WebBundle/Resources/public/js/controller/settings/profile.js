@@ -74,7 +74,7 @@
 
         validator.addItem({
             element: '[name="profile[mobile]"]',
-            rule: 'mobile'
+            rule: 'phone'
         });
 
         validator.addItem({

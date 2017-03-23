@@ -53,13 +53,25 @@ class CourseCopy extends AbstractEntityCopy
             //todo 如果learnMode改变了，则任务列表需按照新的learnMode构建
             $new['learnMode'] = $config['learnMode'];
         }
+
         if (!empty($config['expiryMode'])) {
             $new['expiryMode'] = $config['expiryMode'];
             if ($config['expiryMode'] == 'days') {
                 $new['expiryDays'] = $config['expiryDays'];
-            } else {
+                $new['expiryStartDate'] = null;
+                $new['expiryEndDate'] = null;
+            } elseif ($config['expiryMode'] == 'end_date') {
+                $course['expiryStartDate'] = null;
+                $course['expiryDays'] = 0;
+                $new['expiryEndDate'] = $config['expiryEndDate'];
+            } elseif ($config['expiryMode'] == 'date') {
+                $course['expiryDays'] = 0;
                 $new['expiryStartDate'] = $config['expiryStartDate'];
                 $new['expiryEndDate'] = $config['expiryEndDate'];
+            } else {//forever
+                $course['expiryStartDate'] = null;
+                $course['expiryDays'] = 0;
+                $new['expiryEndDate'] = 0;
             }
         }
 

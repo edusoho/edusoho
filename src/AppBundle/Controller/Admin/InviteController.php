@@ -14,7 +14,7 @@ class InviteController extends BaseController
         $conditions = ArrayToolkit::parts($conditions, array('nickname'));
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getUserService()->searchUserCount($conditions),
+            $this->getUserService()->countUsers($conditions),
             20
         );
 

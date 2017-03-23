@@ -623,6 +623,11 @@ user_show:
     path:  /user/{id}
     defaults: { _controller: AppBundle:User:show }
 
+user_info_fill:
+    path: /user/{id}/saveinfo
+    defaults: { _controller: AppBundle:User:fillInfoWhenBuy }
+    methods: [POST]
+
 my_page_show:
     path:  /my/page/show
     defaults: { _controller: AppBundle:User:pageShow }
@@ -877,12 +882,17 @@ group_add:
 group_show:
     path:  /group/{id}
     defaults: { _controller: AppBundle:Group:groupIndex }
+
 group_join:
     path:  /group/{id}/join
     defaults: { _controller: AppBundle:Group:groupJoin }
+    methods: [POST]
+
 group_exit:
     path:  /group/{id}/exit
     defaults: { _controller: AppBundle:Group:groupExit }
+    methods: [POST]
+
 group_member:
     path:  /group/member/{id}
     defaults: { _controller: AppBundle:Group:groupMember }
@@ -2468,6 +2478,26 @@ classroom_manage_homework_check:
   path: /classroom/{id}/manage/homework/{resultId}/check
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:homeworkCheck }
 
+classroom_manage_students_defined_show:
+    path:  /classroom/{classroomId}/manage/students/{userId}/defined_show
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:studentDefinedShow }
+
+classroom_manage_students_show:
+    path:  /classroom/{classroomId}/manage/students/{userId}/show
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:studentShow }
+
+classroom_manage_member_deadline:
+    path: /classroom/{classroomId}/manage/member/{userId}/deadline
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:setClassroomMemberDeadline }
+
+classroom_member_deadline_reach:
+    path: /classroom/{classroomId}/member/deadline/reach
+    defaults: { _controller: AppBundle:Classroom/Classroom:deadlineReach }
+
+classroom_expiry_date_rule:
+    path: /classroom_expiry_date_rule
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:expiryDateRule }
+
 classroom_explore:
     path:  /classroom/explore/{category}
     defaults: { _controller: AppBundle:Explore:classroom, category:'' }
@@ -2507,10 +2537,6 @@ classroom_introductions:
 classroom_buy:
     path: /classroom/{id}/buy
     defaults: { _controller: AppBundle:Classroom/Classroom:buy }
-
-classroom_buy_modify_user_info:
-    path: /classroom/buy/modify_user_info
-    defaults: { _controller: AppBundle:Classroom/Classroom:modifyUserInfo }
 
 classroom_sign:
     path:  classroom/sign/{classroomId}
@@ -2672,6 +2698,14 @@ material_reconvert:
   path:  /material/lib/{globalId}/reconvert
   defaults: { _controller: AppBundle:MaterialLib/MaterialLib:reconvert }
 
+app_download:
+    path: /app/download
+    defaults: { _controller: AppBundle:Default:appDownload }
+
+announcement_global_show:
+    path:  /announcement/{id}/opreate/global/show
+    defaults: { _controller: AppBundle:Announcement:globalShow }
+
 material_thumbnail_generate:
   path:  /material/lib/{globalId}/thumbnail/generate
   defaults: { _controller: AppBundle:MaterialLib/MaterialLib:generateThumbnail }
@@ -2712,9 +2746,10 @@ material_batch_tag_show:
   path: /materials/batch/tag/show
   defaults: { _controller: AppBundle:MaterialLib/MaterialLib:batchTagShow }
 
-global_file_player:
-  path:  /global_file/{globalId}/player
-  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:player }
+# remove it, use material_lib_file_player
+#global_file_player:
+#  path:  /global_file/{globalId}/player
+#  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:player }
 
 global_file_hls_playlist:
   path:  /global_file/{globalId}/playlist/{token}.m3u8
@@ -2771,10 +2806,6 @@ course_member_deadline_reach:
 course_buy:
     path: /course/{id}/buy
     defaults: { _controller: AppBundle:Course/CourseOrder:buy }
-
-course_buy_modify_user_info:
-    path: /course/buy/modify_user_info
-    defaults: { _controller: AppBundle:Course/CourseOrder:modifyUserInfo }
 
 course_order_repay:
     path:  /course/order/repay

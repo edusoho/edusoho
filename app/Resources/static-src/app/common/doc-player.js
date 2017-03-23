@@ -91,4 +91,90 @@ class DocPlayer {
   }
 }
 
+var DocumentPlayer = Widget.extend({
+        attrs: {
+            swfFileUrl:'',
+            pdfFileUrl:'',
+            swfPlayerUrl:'../../bundles/topxiaweb/js/controller/swf/edusohoViewer.swf',
+            swfPlayerWidth:'100%',
+            swfPlayerheight:'100%',
+            watermark: ''
+        },
+
+        events: {
+        },
+
+        setup: function() {
+            var self = this;
+            docPlayer = $(this.element).attr("id");
+            self.init(this.element);
+        },
+
+        init: function ($thiz) {
+
+            if (this.isSupportHtml5() && !this.isIE9()) {
+                this.initPDFJSViewer($thiz);
+            }else{
+                this.initSwfViewer($thiz);
+            }
+
+        },
+        isIE9: function(){
+            return navigator.appVersion.indexOf("MSIE 9.")!=-1;
+        },
+        isSupportHtml5: function(){
+
+            return $.support.leadingWhitespace;
+
+        },
+
+        initPDFJSViewer: function($thiz) {
+            self=this;
+            $("html").attr('dir','ltr');
+            var jsPath = __URL_PROTOCOL + '://service-cdn.qiqiuyun.net/js-sdk/document-player/v7/viewer.html#'+self.attrs.pdfFileUrl.value;
+            if(app.lessonCopyEnabled==0){
+                jsPath = jsPath+'#false';
+            }
+
+            $('#viewerIframe').attr('src', jsPath);
+
+            if (this.get('watermark')) {
+                this.element.WaterMark(this.get('watermark'));
+            }
+        },
+
+        initSwfViewer: function($thiz){
+
+            $thiz.html('<div id="website"><p align="center" class="style1">'+Translator.trans('您还没有安装flash播放器 请点击')+'<a href="http://www.adobe.com/go/getflashplayer">'+Translator.trans('这里')+'</a>'+Translator.trans('安装')+'</p></div>');
+            var flashvars = {
+              doc_url: escape(this.attrs.swfFileUrl.value) 
+            };
+            var params = {
+                //menu: "false",
+                bgcolor: '#efefef',
+                allowFullScreen: 'true',
+                wmode:'window',
+                allowNetworking:'all',
+                allowscriptaccess:'always',
+                wmode: 'transparent',
+                autoPlay:false
+              };
+            var attributes = {
+                id: 'website'
+            };
+
+            swfobject.embedSWF(
+                this.get('swfPlayerUrl'),
+                'website',
+                this.get('swfPlayerWidth'),  this.get('swfPlayerheight') , "9.0.45", null, flashvars, params, attributes
+            );
+
+            if (this.get('watermark')) {
+                this.element.WaterMark(this.get('watermark'));
+            }
+
+        }
+
+    });
+
 export default DocPlayer;

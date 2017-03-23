@@ -11,7 +11,8 @@ define(function(require, exports, module) {
             initUrl: $el.data('initUrl'),
             finishUrl: $el.data('finishUrl'),
             uploadAuthUrl: $el.data('uploadAuthUrl'),
-            fileSingleSizeLimit: 1024 * 1024 * 1024 * 2   //2G
+            accept: $el.data('accept'),
+            fileSingleSizeLimit: 1024 * 1024 * 1024 * 2,   //2G
         });
 
         var uploader = esuploader.uploader;
@@ -24,14 +25,10 @@ define(function(require, exports, module) {
             };
             esuploader.set('process', params);
         });
-
-        esuploader.on('file.uploaded', function(file, data, response){
+ 
+        esuploader.on('file.uploaded', function(file, data, response){  
             var file = {cFile:file, resFile:response};
             files.push(file);
-        });
-
-        $el.parents('.modal').on('hidden.bs.modal', function(){
-            window.location.reload();
         });
 
         uploader.on('uploadError', function(file){
@@ -73,20 +70,25 @@ define(function(require, exports, module) {
             var $statusCol = $('#'+file.cFile.id).find('.file-status');
             $.ajax({
                 type: 'post',
-                async: false,
                 url: $('.js-batch-create-lesson-btn').data('url'),
+                async: false,
                 data: {fileId:file.resFile.id},
-                success: function(resp) {
-                    $statusCol.addClass('text-success').html(Translator.trans('创建任务成功'));
+                success: function(response) {
+                    if (response && response.error) {
+                        Notify.danger(Translator.trans('创建任务失败,' + response.error, 3));
+                    } else {
+                        Notify.success(Translator.trans('创建任务成功'));
+                    }
                 },
-                error: function(resp) {
-                    $statusCol.addClass('text-danger').html(Translator.trans('创建任务失败'));
+                error: function(response) {
+                    Notify.danger(Translator.trans('创建任务失败'));
+                },
+                complete: function (response) {
+                    if (isLast) {
+                        window.location.reload();
+                    }
                 }
             });
-
-            if (isLast) {
-                $('#modal').modal('hide');
-            }
         }
     };
 

@@ -1,4 +1,5 @@
 {% if courseSet.type != 'live' %}
+  {% if courses|length > 1%}
   <ul class="nav nav-pills nav-pills-sm hidden-xs mb20" role="tablist">
     {% if member %}
       {% set route = 'my_course_show' %}
@@ -6,14 +7,15 @@
       {% set route = 'course_show' %}
     {% endif %}
 
-    <li role="presentation" {% if 0 == selectedCourseId %}class="active"{% endif %}>
-      <a href="{{ path(route, {id: course.id, tab: tab, selectedCourse: 0 }) }}#{{ tab }}">全部</a>
-    </li>
-
-    {% for selectCourse in courses %}
-      <li role="presentation" {% if selectCourse.id == selectedCourseId %}class="active"{% endif %}>
-        <a href="{{ path(route, {id: course.id, selectedCourse: selectCourse.id, tab: tab}) }}#{{ tab }}">{{ selectCourse.title|sub_text(12) }}</a>
+      <li role="presentation" {% if 0 == selectedCourseId %}class="active"{% endif %}>
+        <a href="{{ path(route, {id: course.id, tab: tab, selectedCourse: 0 }) }}#{{ tab }}">全部</a>
       </li>
-    {% endfor %}
+
+      {% for selectCourse in courses %}
+        <li role="presentation" {% if selectCourse.id == selectedCourseId %}class="active"{% endif %}>
+          <a href="{{ path(route, {id: course.id, selectedCourse: selectCourse.id, tab: tab}) }}#{{ tab }}">{{ selectCourse.title|sub_text(12) }}</a>
+        </li>
+      {% endfor %}
   </ul>
+  {% endif %}
 {% endif %}

@@ -45,8 +45,12 @@ class UserServiceImpl extends BaseService implements UserService
         return !$user ? null : UserSerialize::unserialize($user);
     }
 
-    public function searchUserCount(array $conditions)
+    public function countUsers(array $conditions)
     {
+        if (isset($conditions['nickname'])) {
+            $conditions['nickname'] = strtoupper($conditions['nickname']);
+        }
+
         return $this->getUserDao()->count($conditions);
     }
 
@@ -208,7 +212,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function countUserHasMobile($needVerified = false)
     {
         if ($needVerified) {
-            $count = $this->searchUserCount(array(
+            $count = $this->countUsers(array(
                 'locked' => 0,
                 'hasVerifiedMobile' => true,
             ));
@@ -265,15 +269,6 @@ class UserServiceImpl extends BaseService implements UserService
         $userProfiles = $this->getProfileDao()->findByIds($ids);
 
         return ArrayToolkit::index($userProfiles, 'id');
-    }
-
-    public function countUsers(array $conditions)
-    {
-        if (isset($conditions['nickname'])) {
-            $conditions['nickname'] = strtoupper($conditions['nickname']);
-        }
-
-        return $this->getUserDao()->count($conditions);
     }
 
     public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit)
@@ -909,7 +904,7 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $this->beginTransaction();
         try {
-            for ($i = 0; $i < count($users); ++$i) {
+            for ($i = 0, $iMax = count($users); $i < $iMax; ++$i) {
                 $member = $this->getUserDao()->getByEmail($users[$i]['email']);
                 $member = UserSerialize::unserialize($member);
                 $this->changePassword($member['id'], $users[$i]['password']);
@@ -943,7 +938,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUser($id);
 
         if (empty($user)) {
-            throw $this->createNotFoundException("User#{$id} Not Found");
+            throw $this->createNotFoundException('user not found');
         }
 
         $fields = ArrayToolkit::filter($fields, array(
@@ -1033,7 +1028,17 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if (!empty($fields['about'])) {
-            $fields['about'] = $this->biz['html_helper']->purify($fields['about']);
+            $fields['about'] = $this->purifyHtml($fields['about']);
+        }
+
+        if (!empty($fields['site']) && !SimpleValidator::site($fields['site'])) {
+            throw $this->createInvalidArgumentException('个人空间不正确，更新用户失败');
+        }
+        if (!empty($fields['weibo']) && !SimpleValidator::site($fields['weibo'])) {
+            throw $this->createInvalidArgumentException('微博地址不正确，更新用户失败');
+        }
+        if (!empty($fields['blog']) && !SimpleValidator::site($fields['blog'])) {
+            throw $this->createInvalidArgumentException('地址不正确，更新用户失败');
         }
 
         if (empty($fields['isWeiboPublic'])) {
@@ -1100,7 +1105,7 @@ class UserServiceImpl extends BaseService implements UserService
         $token['userId'] = $userId ? (int) $userId : 0;
         $token['token'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $token['data'] = serialize($data);
-        $token['times'] = empty($args['times']) ? 0 : intval($args['times']);
+        $token['times'] = empty($args['times']) ? 0 : (int) ($args['times']);
         $token['expiredTime'] = $expiredTime ? (int) $expiredTime : 0;
         $token['createdTime'] = time();
         $token = $this->getUserTokenDao()->create($token);
@@ -1808,7 +1813,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if ($needVerified) {
             $conditions['hasVerifiedMobile'] = true;
-            $count = $this->searchUserCount($conditions);
+            $count = $this->countUsers($conditions);
             $users = $this->searchUsers($conditions, array('createdTime' => 'ASC'), 0, $count);
             $mobiles = ArrayToolkit::column($users, 'verifiedMobile');
 

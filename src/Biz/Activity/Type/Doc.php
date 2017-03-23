@@ -79,13 +79,11 @@ class Doc extends Activity
     {
         $activity = $this->getActivityService()->getActivity($activityId);
         $doc = $this->getDocActivityDao()->get($activity['mediaId']);
-        if ($doc['finishType'] == 'time') {
-            $result = $this->getActivityLearnLogService()->sumMyLearnedTimeByActivityId($activityId);
 
-            return $result >= $doc['finishDetail'];
-        }
+        $result = $this->getActivityLearnLogService()->sumMyLearnedTimeByActivityId($activityId);
+        $result /= 60;
 
-        return false;
+        return !empty($result) && $result >= $doc['finishDetail'];
     }
 
     public function update($targetId, &$fields, $activity)
