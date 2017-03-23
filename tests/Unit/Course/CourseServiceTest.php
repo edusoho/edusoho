@@ -12,10 +12,8 @@ use Biz\User\Service\UserService;
 
 class CourseServiceTest extends BaseTestCase
 {
-
     public function testUpdateMembersDeadlineByClassroomId()
     {
-
         $textClassroom = array(
             'title' => 'test',
         );
