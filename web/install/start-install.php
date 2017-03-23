@@ -117,7 +117,7 @@ function install_step1($init_data = 0)
         $pass = false;
     }
     $result = _checkWebRoot();
-    if (!$result) {
+    if ($result === false) {
         $pass = false;
     }
     echo $twig->render('step-1.html.twig', array(
