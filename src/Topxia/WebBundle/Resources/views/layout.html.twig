@@ -85,7 +85,7 @@
 
   {% block floatConsult %}
     {% set cloud_consult = setting('cloud_consult', '') %}
-    {% if cloud_consult and cloud_consult.cloud_consult_setting_enabled |default('') and cloud_consult.cloud_consult_enabled |default('') and cloud_consult.cloud_consult_js |default('') %}
+    {% if cloud_consult and cloud_consult.cloud_consult_setting_enabled |default(0) and cloud_consult.cloud_consult_enabled |default(0) and cloud_consult.cloud_consult_js |default('') %}
       {{ cloud_consult.cloud_consult_js | raw }}
     {% endif %}
 
