@@ -420,13 +420,17 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             )
         );
 
-        if (!empty($fields['tags'])) {
-            $fields['tags'] = explode(',', $fields['tags']);
-            $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
-            $fields['tags'] = ArrayToolkit::column($fields['tags'], 'id');
+        if ($fields['tags'] !== null) {
+            $tags = explode(',', $fields['tags']);
+            $tags = $this->getTagService()->findTagsByNames($tags);
+            $tagIds = ArrayToolkit::column($tags, 'id');
         }
 
-        $fields = array_filter($fields);
+        $fields = $this->filterFields($fields);
+
+        if (null !== $tagIds) {
+            $fields['tags'] = $tagIds;
+        }
 
         $this->updateCourseSerializeMode($courseSet, $fields);
         if (empty($fields['subtitle'])) {
@@ -952,5 +956,20 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
 
         return $defaultCourse;
+    }
+
+    protected function filterFields($fields)
+    {
+        return array_filter($fields, function ($value) {
+            if ($value === '' || $value === null) {
+                return false;
+            }
+
+            if (is_array($value) && empty($value)) {
+                return false;
+            }
+
+            return true;
+        });
     }
 }
