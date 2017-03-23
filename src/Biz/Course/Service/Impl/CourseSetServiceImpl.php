@@ -534,7 +534,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
         $this->getLogService()->info('course', 'delete', "删除课程《{$courseSet['title']}》(#{$courseSet['id']})");
 
-        return $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
+        $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
+
+        $this->dispatchEvent('course-set.delete', new Event($courseSet));
     }
 
     public function findTeachingCourseSetsByUserId($userId, $onlyPublished = true)
