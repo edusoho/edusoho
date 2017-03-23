@@ -161,7 +161,6 @@ class DefaultController extends BaseController
             'course.live_course_enabled'  => '',
             'cloud_sms.sms_enabled'       => '',
             'cloud_search.search_enabled' => '',
-            'cloud_consult.cloud_consult_setting_enabled' => 0,
             'storage.upload_mode'         => 'cloud'
         );
 
