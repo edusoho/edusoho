@@ -57,7 +57,7 @@ class Course extends BaseResource
         $course['tags'] = TagUtil::buildTags('course-set', $courseSet['id']);
         $course['tags'] = ArrayToolkit::column($course['tags'], 'name');
 
-        if ($course['isDefault'] == 1 && $course['title']) {
+        if ($course['isDefault'] == 1 && $course['title'] == '默认教学计划') {
             $course['title'] = $courseSet['title'];
         } else {
             $course['title'] = $courseSet['title'] . '-' . $course['title'];
