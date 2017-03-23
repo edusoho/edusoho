@@ -774,7 +774,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             $lesson['uploadFile'] = array();
 
             if (isset($lesson['mediaId'])) {
-                $file = isset($files[$lesson['mediaId']]) ? $files[$lesson['mediaId']] : array();
+                $file = isset($files[$lesson['mediaId']]) ? $files[$lesson['mediaId']] : null;
                 $lesson['uploadFile'] = $file;
                 $lesson['mediaName'] = isset($file['filename']) ? $file['filename'] : '';
             }
