@@ -2073,6 +2073,10 @@ admin_cloud_attachment:
     defaults: { _controller: TopxiaAdminBundle:CloudAttachment:index }
     permissions: [admin_cloud_attachment_manage]
 
+# admin_cloud_consult_setting:
+#     path: /cloud/consult/setting
+#     defaults: { _controller: TopxiaAdminBundle:EduCloud:consultSetting }
+
 # 添加云直播
 admin_cloud_edulive_overview:
     path:  /cloud/edulive/overview

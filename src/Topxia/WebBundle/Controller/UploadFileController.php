@@ -38,6 +38,8 @@ class UploadFileController extends BaseController
 
     public function downloadAction(Request $request, $fileId)
     {
+        $ssl = $request->isSecure() ? true : false;
+
         $file = $this->getUploadFileService()->getFile($fileId);
 
         if (empty($file)) {
@@ -47,15 +49,15 @@ class UploadFileController extends BaseController
         $this->getServiceKernel()->createService("System.LogService")->info('upload_file', 'download', "文件Id #{$fileId}");
 
         if ($file['storage'] == 'cloud') {
-            return $this->downloadCloudFile($file);
+            return $this->downloadCloudFile($file, $ssl);
         } else {
             return $this->downloadLocalFile($request, $file);
         }
     }
 
-    protected function downloadCloudFile($file)
+    protected function downloadCloudFile($file, $ssl)
     {
-        $file = $this->getUploadFileService()->getDownloadMetas($file['id']);
+        $file = $this->getUploadFileService()->getDownloadMetas($file['id'], $ssl);
         return $this->redirect($file['url']);
     }
 

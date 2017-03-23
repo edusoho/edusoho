@@ -10,7 +10,7 @@ class CloudMail extends Mail
      * @sendedSn: 发送批次号(默认不传，crm传入发送的批次号)
      * @return bool
      */
-    public function send()
+    public function doSend()
     {
         $cloudConfig = $this->setting('cloud_email_crm', array());
 

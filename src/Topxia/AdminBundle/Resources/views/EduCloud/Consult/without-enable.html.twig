@@ -1,0 +1,37 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_cloud_consult_setting' %}
+{% set bodyClass = 'cloud-consult' %}
+{% block tabs %}{% endblock %}
+{% block main %}
+  {{ web_macro.flash_messages() }}
+  <div class="panel panel-default notice-panel">
+    <div class="panel-body">
+      <i class="es-icon es-icon-infooutline text-primary"></i>
+      <div class="text-md mbl">尚未启用云问答</div>
+      <form  role="form" method="post" action="">
+        <button type="submit" class="btn btn-primary btn-lg notice-btn" {% if not cloud_consult.cloud_consult_is_buy %}disabled="disabled"{% endif %}  name="cloud_consult_setting_enabled"
+                value="1">立即启用</button>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+      {% if not cloud_consult.cloud_consult_is_buy %}
+        <div class="text-md mbl consult-text">
+          <div class="color-danger">尚未购买云问答服务，不能启用
+            <a href="http://124.160.104.74:9091/show/cloud/robotQA" class="text-primary" target="_blank">了解详情</a>
+          <div class="color-gray">
+            <br>
+            智能在线咨询服务，可以自动回答学员的常见问题
+            <br>
+            即问即答，无需等待
+            <br>
+            整体提升客服效率80%，有效节省客户运营成本
+            <br>
+            24小时全天在线，365天全年无休
+            <br>
+            自动记录客户咨询数据，科学算法分析，挖掘优质客户
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

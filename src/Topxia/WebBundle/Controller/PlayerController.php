@@ -12,6 +12,8 @@ class PlayerController extends BaseController
 {
     public function showAction(Request $request, $id, $context = array())
     {
+        $ssl = $request->isSecure() ? true : false;
+
         // todo delete try catche
         try {
             $file = $this->getUploadFileService()->getFullFile($id);
@@ -67,7 +69,7 @@ class PlayerController extends BaseController
                 $player = "audio-player";
             }
 
-            $url = isset($mp4Url) ? $mp4Url : $this->getPlayUrl($id, $context);
+            $url = isset($mp4Url) ? $mp4Url : $this->getPlayUrl($id, $context, $ssl);
         } catch (\Exception $e) {
             return $this->createMessageResponse('error', $e->getMessage());
         }
@@ -231,7 +233,7 @@ class PlayerController extends BaseController
         return new Response($file['metas']['levels'][$token['data']['level']]['hlsKey']);
     }
 
-    protected function getPlayUrl($id, $context)
+    protected function getPlayUrl($id, $context, $ssl)
     {
         $file = $this->getUploadFileService()->getFile($id);
 
@@ -272,7 +274,7 @@ class PlayerController extends BaseController
                 }
 
                 if ($key) {
-                    $result = $this->getMaterialLibService()->player($file['globalId']);
+                    $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
                 }
             }
 

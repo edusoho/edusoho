@@ -27,8 +27,8 @@ class DefaultController extends BaseController
 
     private function getMeCount()
     {
-        $meCount = $this->setting('meCount',false);
-        if( $meCount === false ){
+        $meCount = $this->setting('meCount',array());
+        if( empty($meCount) ){
             //判断是否是定制用户
             $result = CloudAPIFactory::create('leaf')->get('/me');
             $this->getSettingService()->set('meCount',$result);
