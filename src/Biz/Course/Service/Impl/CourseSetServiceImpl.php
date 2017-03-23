@@ -671,6 +671,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             throw $exception;
         }
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'closed'));
+
         $this->getLogService()->info('course', 'close', "关闭课程《{$courseSet['title']}》(#{$courseSet['id']})");
 
         $this->dispatchEvent('course-set.closed', new Event($courseSet));
@@ -694,8 +695,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     /**
      * 根据排序规则返回排序数组.
      *
-     * @param string $order
-     *
+     * @param  string  $order
      * @return array
      */
     protected function getOrderBys($order)

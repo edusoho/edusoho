@@ -4,6 +4,7 @@ namespace Biz\Course\Dao\Impl;
 
 use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
+use Biz\Course\Dao\CourseDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
@@ -71,9 +72,9 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
      */
     public function findUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType, $start, $limit)
     {
-        $sql = "SELECT f.* FROM {$this->table} f ";
+        $sql = "select id from " . CourseDao::TABLENAME . " where courseSetId in (SELECT c.id FROM {$this->table} f ";
         $sql .= ' JOIN  '.CourseSetDao::TABLENAME.' AS c ON f.userId = ? AND c.type = ?';
-        $sql .= "AND f.courseSetId = c.id AND c.parentId = 0 AND f.type = 'course'";
+        $sql .= "AND f.courseSetId = c.id AND c.parentId = 0 AND f.type = 'course')";
         $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
         return $this->db()->fetchAll($sql, array($userId, $courseType));
@@ -84,9 +85,9 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
      */
     public function countUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType)
     {
-        $sql = "SELECT count(c.id) FROM {$this->table} f ";
+        $sql = "select count(*) from " . CourseDao::TABLENAME . " where courseSetId in (SELECT (c.id) FROM {$this->table} f ";
         $sql .= ' JOIN  '.CourseSetDao::TABLENAME.' AS c ON f.userId = ? AND c.type = ?';
-        $sql .= "AND f.courseSetId = c.id AND c.parentId = 0 AND f.type = 'course'";
+        $sql .= "AND f.courseSetId = c.id AND c.parentId = 0 AND f.type = 'course')";
 
         return $this->db()->fetchColumn($sql, array($userId, $courseType));
     }

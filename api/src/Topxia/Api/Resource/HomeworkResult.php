@@ -139,6 +139,11 @@ class HomeworkResult extends BaseResource
         return $this->getServiceKernel()->createService('Task:TaskService');
     }
 
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
     protected function getActivityService()
     {
         return $this->getServiceKernel()->createService('Activity:ActivityService');

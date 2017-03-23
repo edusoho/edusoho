@@ -75,7 +75,7 @@ class MeChatroomes extends BaseResource
             if ($course['isDefault']) {
                 $title = $set['title'];
             } else {
-                $title = $set.'-'.$course['title'];
+                $title = $set['title'] . '-' . $course['title'];
             }
             $filePath = is_null($set['cover']) ? '' : ArrayToolkit::get($set['cover'], 'small', '');
             $chatrooms[] = array(

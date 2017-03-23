@@ -8,6 +8,7 @@ use Biz\Content\Service\FileService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\OpenCourse\Service\OpenCourseService;
+use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -122,6 +123,12 @@ class CourseSetManageController extends BaseController
             $curCourse = current($courses);
         }
 
+        $tasks = $this->getTaskService()->findTasksByCourseId($curCourse['id']);
+
+        $hasLiveTasks = ArrayToolkit::some($tasks, function ($task) {
+            return $task['type'] === 'live';
+        });
+
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
 
         return $this->render(
@@ -131,6 +138,7 @@ class CourseSetManageController extends BaseController
                 'curCourse' => $curCourse,
                 'courses' => $courses,
                 'side_nav' => $sideNav,
+                'hasLiveTasks' => $hasLiveTasks,
             )
         );
     }
@@ -443,6 +451,14 @@ class CourseSetManageController extends BaseController
     protected function getFileService()
     {
         return $this->createService('Content:FileService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 
     /**
