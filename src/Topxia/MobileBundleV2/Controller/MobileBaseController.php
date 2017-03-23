@@ -329,7 +329,7 @@ class MobileBaseController extends BaseController
             'taskNum' => 'lessonNum',
             'creator' => 'userId',
             'tryLookLength' => 'tryLookTime',
-            'summary' => 'about'
+            'summary' => 'about',
         );
         foreach ($convertKeys as $key => $value) {
             $course[$value] = $course[$key];
@@ -525,6 +525,24 @@ class MobileBaseController extends BaseController
                 unset($user['tags']);
                 unset($user['point']);
                 unset($user['coin']);
+                unset($user['idcard']);
+                unset($user['mobile']);
+                unset($user['verifiedMobile']);
+                unset($user['orgCode']);
+                unset($user['orgId']);
+                unset($user['registeredWay']);
+                unset($user['inviteCode']);
+                unset($user['createdTime']);
+                unset($user['lockDeadline']);
+                unset($user['roles']);
+                unset($user['updatedTime']);
+                unset($user['truename']);
+                unset($user['gender']);
+                unset($user['emailVerified']);
+                unset($user['setup']);
+                unset($user['lastPasswordFailTime']);
+                unset($user['consecutivePasswordErrorTimes']);
+                unset($user['birthday']);
 
                 return $user;
             },
