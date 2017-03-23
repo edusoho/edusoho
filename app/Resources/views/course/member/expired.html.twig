@@ -20,6 +20,7 @@
 {% endblock %}
 
 {% set hide_footer = course.expiryMode == 'date' %}
+
 {% block footer %}
   <a href="{{ path('course_member_deadline_reach',{id: course.id}) }}" class="btn btn-primary">
     {{'退出并重新加入'|trans }}

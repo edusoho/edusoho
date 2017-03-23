@@ -20,7 +20,7 @@ interface TagDao extends GeneralDaoInterface
 
     public function getByName($name);
 
-    public function getByLikeName($name);
+    public function findByLikeName($name);
 
     public function getAllCount();
 }
