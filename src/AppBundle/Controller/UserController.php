@@ -476,6 +476,10 @@ class UserController extends BaseController
     public function fillInfoWhenBuyAction(Request $request)
     {
         $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('error', '请先登录！');
+        }
+
         $this->saveUserInfo($request, $user);
 
         return $this->redirect($request->get('targetUrl'));
