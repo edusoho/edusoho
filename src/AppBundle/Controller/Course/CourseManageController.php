@@ -56,6 +56,9 @@ class CourseManageController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
+
+            $data = $this->prepareExpiryMode($data);
+
             $this->getCourseService()->copyCourse($data);
 
             return $this->redirect(
@@ -107,7 +110,7 @@ class CourseManageController extends BaseController
         );
 
         foreach ($liveTasks as $key => $task) {
-            $task['isEnd'] = intval(time() - $task['endTime']) > 0;
+            $task['isEnd'] = (int) (time() - $task['endTime']) > 0;
             $task['file'] = $this->_getLiveReplayMedia($task);
             $liveTasks[$key] = $task;
         }

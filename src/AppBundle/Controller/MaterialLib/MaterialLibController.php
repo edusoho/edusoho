@@ -166,7 +166,7 @@ class MaterialLibController extends BaseController
         $file = $this->getUploadFileService()->tryAccessFile($fileId);
 
         if ($file['storage'] == 'cloud') {
-            return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array(
+            return $this->forward('AppBundle:MaterialLib/GlobalFilePlayer:player', array(
                 'request' => $request,
                 'globalId' => $file['globalId'],
             ));

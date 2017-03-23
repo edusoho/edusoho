@@ -292,7 +292,7 @@ class PayCenterController extends BaseController
 
     public function payErrorAction(Request $request)
     {
-        return $this->createMessageResponse('error', $this->trans('由于余额不足，支付失败，订单已被取消。'));
+        return $this->createMessageResponse('error', '由于余额不足，支付失败，订单已被取消。');
     }
 
     public function payNotifyAction(Request $request, $name)

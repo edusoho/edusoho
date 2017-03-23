@@ -456,7 +456,6 @@ class UserController extends BaseController
         $goto = $this->getTargetPath($request);
 
         if ($request->getMethod() == 'POST') {
-
             $userInfo = $this->saveUserInfo($request, $user);
 
             return $this->redirect($goto);
