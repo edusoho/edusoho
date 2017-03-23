@@ -45,14 +45,14 @@ class MicroyanConsultServiceImpl extends BaseService implements ConsultService
         $cloudConsult = array_merge($defaultSetting, $cloudConsult);
 
         if ((isset($account['code']) && $account['code']== '10000') || (isset($jsResource['code']) && $jsResource['code']== '10000')) {
-            $cloudConsult['cloud_consult_enabled'] = 0;
+            $cloudConsult['cloud_consult_is_buy'] = 0;
         } else if ((isset($account['code']) && $account['code']== '10001') || (isset($jsResource['code']) && $jsResource['code']== '10001')) {
-            $cloudConsult['cloud_consult_enabled'] = 0;
+            $cloudConsult['cloud_consult_is_buy'] = 0;
             $cloudConsult['message'] = '账号已过期,请联系客服人员:4008041114！';
         } else if(isset($account['error']) || isset($jsResource['error'])) {
-            $cloudConsult['cloud_consult_enabled'] = 0;
+            $cloudConsult['cloud_consult_is_buy'] = 0;
         } else {
-            $cloudConsult['cloud_consult_enabled'] = 1;
+            $cloudConsult['cloud_consult_is_buy'] = 1;
             $cloudConsult['cloud_consult_landing_url'] = $account;
             $cloudConsult['cloud_consult_js'] = $jsResource;
         }

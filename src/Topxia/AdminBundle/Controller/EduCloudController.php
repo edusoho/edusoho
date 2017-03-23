@@ -1097,8 +1097,8 @@ class EduCloudController extends BaseController
 
         if ($request->getMethod() == 'POST') {
 
-            $requestCloudConsult = $request->request->all();
-            $cloudConsult['cloud_consult_setting_enabled'] = $requestCloudConsult['cloud_consult_setting_enabled'];
+            $data = $request->request->all();
+            $cloudConsult['cloud_consult_setting_enabled'] = $data['cloud_consult_setting_enabled'];
 
             $this->getSettingService()->set('cloud_consult', $cloudConsult);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('云问答设置已保存！'));
@@ -1106,6 +1106,10 @@ class EduCloudController extends BaseController
 
         if ($cloudConsult['cloud_consult_setting_enabled'] == 0) {
             return $this->renderConsultWithoutEnable($cloudConsult);
+        }
+
+        if (isset($cloudConsult['message'])) {
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans($cloudConsult['message']));
         }
 
         return $this->render('TopxiaAdminBundle:EduCloud/Consult:setting.html.twig', array(
