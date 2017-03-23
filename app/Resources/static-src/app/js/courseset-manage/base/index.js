@@ -10,22 +10,22 @@ class Base {
   }
 
   initValidator() {
-    let $form = $('#courseset-form');
-    let validator = $form.validate({
+    const $form = $('#courseset-form');
+    const validator = $form.validate({
       rules: {
         title: {
           maxlength: 100,
           required: {
-            depends: function () {
+            depends () {
               $(this).val($.trim($(this).val()));
               return true;
             }
           },
-          open_live_course_title: true//@TODO只有直播课程和直播公开课程需要此验证
+          open_live_course_title: true// @TODO只有直播课程和直播公开课程需要此验证
         },
         subtitle: {
           required: {
-            depends: function () {
+            depends () {
               $(this).val($.trim($(this).val()));
               return false;
             }
@@ -34,11 +34,11 @@ class Base {
       },
       messages: {
         title: {
-          required: "请输入有效的课程标题（直播公开课标题暂不支持<、>、\"、&、‘、’、”、“字符）"
+          required: '请输入有效的课程标题（直播公开课标题暂不支持<、>、"、&、‘、’、”、“字符）'
         }
       }
     });
-    $('#courseset-base-submit').click(event => {
+    $('#courseset-base-submit').click((event) => {
       if (validator.form()) {
         $(event.currentTarget).button('loading');
         $form.submit();
@@ -47,33 +47,30 @@ class Base {
   }
 
   initSelect2() {
-    $('#tags').select2({
+    const $tags = $('#tags');
+    $tags.select2({
       ajax: {
-        url: '/tag/match_jsonp#',
+        url: $tags.data('url'),
         dataType: 'json',
-        quietMillis: 100,
-        data: function (term, page) {
+        quietMillis: 500,
+        data (term, page) {
           return {
             q: term,
             page_limit: 10
           };
         },
-        results: function (data) {
-          let results = [];
-          $.each(data, function (index, item) {
-            results.push({
-              id: item.name,
-              name: item.name
-            });
-          });
+        results (data) {
+          console.log(data);
           return {
-            results: results
+            results: data.map((item) => {
+              return { id: item.name, name: item.name };
+            })
           };
         }
       },
-      initSelection: function (element, callback) {
-        let data = [];
-        $(element.val().split(",")).each(function () {
+      initSelection (element, callback) {
+        const data = [];
+        $(element.val().split(',')).each(function () {
           data.push({
             id: this,
             name: this
@@ -81,23 +78,20 @@ class Base {
         });
         callback(data);
       },
-      formatSelection: function (item) {
+      formatSelection (item) {
         return item.name;
       },
-      formatResult: function (item) {
+      formatResult (item) {
         return item.name;
       },
       formatSearching: '搜索中...',
-      width: 'off',
       multiple: true,
       maximumSelectionSize: 20,
       placeholder: Translator.trans('请输入标签'),
       width: 'off',
-      multiple: true,
-      createSearchChoice: function () {
+      createSearchChoice () {
         return null;
-      },
-      maximumSelectionSize: 20
+      }
     });
   }
 }

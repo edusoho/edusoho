@@ -3,12 +3,12 @@
 namespace Tests\Unit\Course;
 
 use Biz\BaseTestCase;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\MemberService;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Classroom\Service\ClassroomService;
 
 class CourseServiceTest extends BaseTestCase
 {
@@ -22,7 +22,7 @@ class CourseServiceTest extends BaseTestCase
         $course = array(
             'title' => 'test course 1',
             'courseSetId' => $courseSet['id'],
-            'expiryMode' => 'days',
+            'expiryMode' => 'forever',
             'learnMode' => 'freeMode',
         );
 
@@ -43,7 +43,9 @@ class CourseServiceTest extends BaseTestCase
         $this->assertCount(1, $result);
     }
 
-    /** @group current */
+    /**
+     * @group current
+     */
     public function testFindCoursesByCourseSetId()
     {
         $course = array(
@@ -225,10 +227,16 @@ class CourseServiceTest extends BaseTestCase
 
         $user = $this->createNormalUser();
 
-        $this->getMemberService()->becomeStudentAndCreateOrder($user['id'], $createCourse1['id'],
-            array('remark' => '1111', 'price' => 0));
-        $this->getMemberService()->becomeStudentAndCreateOrder($user['id'], $createCourse2['id'],
-            array('remark' => '2222', 'price' => 0));
+        $this->getMemberService()->becomeStudentAndCreateOrder(
+            $user['id'],
+            $createCourse1['id'],
+            array('remark' => '1111', 'price' => 0)
+        );
+        $this->getMemberService()->becomeStudentAndCreateOrder(
+            $user['id'],
+            $createCourse2['id'],
+            array('remark' => '2222', 'price' => 0)
+        );
 
         $this->getCourseService()->tryTakeCourse($createCourse1['id']);
         $this->getCourseService()->tryTakeCourse($createCourse2['id']);
@@ -264,6 +272,7 @@ class CourseServiceTest extends BaseTestCase
                 'title' => '第一个教学计划',
                 'courseSetId' => 1,
                 'learnMode' => 'lockMode',
+                'expiryDays' => 0,
                 'expiryMode' => 'forever',
             );
 

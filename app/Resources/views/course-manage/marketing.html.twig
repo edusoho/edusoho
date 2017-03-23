@@ -57,7 +57,8 @@
             </div>
             <div class="form-group {% if course.buyExpiryTime == 0 %}hidden{% endif %} " id="buyExpiryTime">
               <div class="col-sm-8 col-sm-offset-2">
-                <input type="text" class="form-control width-input width-input-large" name="buyExpiryTime" value="{% if course.buyExpiryTime > 0 %}{{course.buyExpiryTime|date_format('Y-m-d')}}{% endif %}">
+                <input type="text" class="form-control width-150 mr10" name="buyExpiryTime" value="{% if course.buyExpiryTime > 0 %}{{course.buyExpiryTime|date_format('Y-m-d')}}{% endif %}">
+                在此日期前，学员可加入。
               </div>
             </div>
             {#缺少学员数限制#}
@@ -213,7 +214,7 @@
               {{ radios('showServices', {'1': '是'|trans,'0': '否'|trans}, course.showServices|default(1)) }}
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group js-services {% if course.showServices|default(1) == 0 %}hidden{% endif %}">
             <label class="col-sm-2 control-label">{{'承诺提供服务'|trans}}</label>
             <div class="col-sm-8 form-control-static">
               {% set serviceTags = services(course.services | default([])) %}

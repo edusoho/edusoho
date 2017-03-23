@@ -19,6 +19,13 @@ class ExampleDaoImpl extends GeneralDaoImpl implements ExampleDao
         return $this->findByFields(array('name' => $name, 'ids1' => $ids1));
     }
 
+    public function findByIds(array $ids, array $orderBys, $start, $limit)
+    {
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql = "SELECT * FROM {$this->table()} WHERE id IN ({$marks})";
+        return $this->db()->fetchAll($this->sql($sql, $orderBys, $start, $limit), $ids) ?: array();
+    }
+
     public function declares()
     {
         return array(

@@ -9,12 +9,14 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
 {
     protected $table = 'classroom_member';
 
-    public function updateMembersDeadlineByClassroomId($classroomId, $deadline)
+    public function updateByClassroomIdAndRole($classroomId, $role, array $fields)
     {
-        $sql = "UPDATE {$this->table} SET deadline = ? WHERE classroomId = ? AND role LIKE '%|student|%'";
-        $this->db()->executeUpdate($sql, array($deadline, $classroomId));
+        $conditions = array(
+            'classroomId' => $classroomId,
+            'role' => $role,
+        );
 
-        return $this->findByClassroomIdAndRole($classroomId, 'student', 0, PHP_INT_MAX);
+        return $this->update($conditions, $fields);
     }
 
     public function findMembersByUserIdAndClassroomIds($userId, array $classroomIds)
@@ -179,10 +181,6 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
 
     protected function createQueryBuilder($conditions)
     {
-        if (isset($conditions['role'])) {
-            $conditions['role'] = "%{$conditions['role']}%";
-        }
-
         if (isset($conditions['roles'])) {
             $roles = '';
 

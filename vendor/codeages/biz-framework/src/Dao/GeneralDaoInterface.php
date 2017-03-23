@@ -12,7 +12,7 @@ interface GeneralDaoInterface extends DaoInterface
 
     public function get($id, $lock = false);
 
-    public function search($conditions, $orderbys, $start, $limit);
+    public function search($conditions, $orderBys, $start, $limit);
 
     public function count($conditions);
 

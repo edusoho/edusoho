@@ -83,7 +83,7 @@
         {% else %}
           data-url="{{ path('course_manage_task_update', {id:tasks.preparation.id,courseId:tasks.preparation.courseId, type:'preparation', categoryId: chapter.id}) }}">
         {% endif %}
-        <i class="es-icon es-icon-yulan mrm"></i>
+        <i class="es-icon es-icon-yulan mrm" {% if tasks.preparation.id|default(null) %}data-role="task"{% endif %}></i>
         预习
       </a>
       <i class="es-icon es-icon-angledoubleright after"></i>
@@ -91,7 +91,7 @@
     <div class="settings-item js-settings-item active">
       <a href="javascript:;" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal"
         data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId, type:'lesson'}) }}">
-        <i class="es-icon es-icon-book mrm"></i>
+        <i class="es-icon es-icon-book mrm" data-role="task"></i>
         任务学习
       </a>
       <i class="es-icon es-icon-angledoubleright after"></i>
@@ -104,7 +104,7 @@
         {% else %}
           data-url="{{ path('course_manage_task_update', {id:tasks.exercise.id,courseId:tasks.exercise.courseId, type:'exercise', categoryId: chapter.id}) }}">
         {% endif %}
-        <i class="es-icon es-icon-exam mrm"></i>
+        <i class="es-icon es-icon-exam mrm" {% if tasks.exercise.id|default(null) %}data-role="task"{% endif %}></i>
         练习
       </a>
       <i class="es-icon es-icon-angledoubleright after"></i>
@@ -117,7 +117,7 @@
         {% else %}
           data-url="{{ path('course_manage_task_update', {id:tasks.homework.id,courseId:tasks.homework.courseId, type:'homework', categoryId: chapter.id}) }}">
         {% endif %}
-        <i class="es-icon es-icon-mylibrarybooks mrm"></i>
+        <i class="es-icon es-icon-mylibrarybooks mrm" {% if tasks.homework.id|default(null) %}data-role="task"{% endif %}></i>
         作业
       </a>
       <i class="es-icon es-icon-angledoubleright after"></i>
@@ -130,7 +130,7 @@
         {% else %}
           data-url="{{ path('course_manage_task_update', {id:tasks.extraClass.id,courseId:tasks.extraClass.courseId, type:'extraClass', categoryId: chapter.id}) }}">
         {% endif %}
-        <i class="es-icon es-icon-sun mrm"></i>
+        <i class="es-icon es-icon-sun mrm" {% if tasks.extraClass.id|default(null) %}data-role="task"{% endif %}></i>
         课外
       </a>
     </div>

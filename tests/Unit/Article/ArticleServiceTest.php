@@ -359,15 +359,15 @@ class ArticleServiceTest extends BaseTestCase
     {
         $fileds = array(
             'publishedTime' => 'now',
-            'title'         => 'test article',
-            'type'          => 'article',
-            'body'          => '正午时分',
-            'thumb'         => 'thumb',
+            'title' => 'test article',
+            'type' => 'article',
+            'body' => '正午时分',
+            'thumb' => 'thumb',
             'originalThumb' => 'originalThumb',
-            'categoryId'    => '1',
-            'source'        => 'http://www.edusoho.com',
-            'sourceUrl'     => 'http://www.edusoho.com',
-            'tags'          => 'default',
+            'categoryId' => '1',
+            'source' => 'http://www.edusoho.com',
+            'sourceUrl' => 'http://www.edusoho.com',
+            'tags' => 'default',
         );
 
         $category = $this->getCategoryService()->getCategory(1);
@@ -383,7 +383,7 @@ class ArticleServiceTest extends BaseTestCase
         $category = array(
             'name' => '文章',
             'code' => 'article',
-            'parentId' => 0
+            'parentId' => 0,
         );
         $this->getCategoryService()->createCategory($category);
     }
@@ -392,22 +392,21 @@ class ArticleServiceTest extends BaseTestCase
     {
         $fileds = array(
             'publishedTime' => 'now',
-            'title'         => 'test article2',
-            'type'          => 'article2',
-            'body'          => '正午时分2',
-            'thumb'         => 'thumb2',
+            'title' => 'test article2',
+            'type' => 'article2',
+            'body' => '正午时分2',
+            'thumb' => 'thumb2',
             'originalThumb' => 'originalThumb2',
-            'categoryId'    => '1',
-            'source'        => 'http://try6.edusoho.cn',
-            'sourceUrl'     => 'http://try6.edusoho.cn',
-            'tags'          => 'default'
+            'categoryId' => '1',
+            'source' => 'http://try6.edusoho.cn',
+            'sourceUrl' => 'http://try6.edusoho.cn',
+            'tags' => 'default',
         );
 
         $category = $this->getCategoryService()->getCategory(1);
         if (empty($category)) {
             $this->createCategory();
         }
-
 
         return $this->getArticleService()->createArticle($fileds);
     }
