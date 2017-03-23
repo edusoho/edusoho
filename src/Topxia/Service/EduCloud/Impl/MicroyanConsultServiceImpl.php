@@ -35,8 +35,6 @@ class MicroyanConsultServiceImpl extends BaseService implements ConsultService
             'cloud_consult_js' => ''
         );
 
-        $cloudConsult = array_merge($defaultSetting, $cloudConsult);
-
         if ((isset($account['code']) && $account['code']== '10000') || (isset($jsResource['code']) && $jsResource['code']== '10000')) {
             $cloudConsult['cloud_consult_is_buy'] = 0;
         } else if ((isset($account['code']) && $account['code']== '10001') || (isset($jsResource['code']) && $jsResource['code']== '10001')) {
@@ -49,6 +47,8 @@ class MicroyanConsultServiceImpl extends BaseService implements ConsultService
             $cloudConsult['cloud_consult_login_url'] = $account;
             $cloudConsult['cloud_consult_js'] = $jsResource;
         }
+
+        $cloudConsult = array_merge($defaultSetting, $cloudConsult);
 
         return $cloudConsult;
     }
