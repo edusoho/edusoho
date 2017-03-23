@@ -56,6 +56,9 @@ class CourseManageController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
+            
+            $data = $this->prepareExpiryMode($data);
+
             $this->getCourseService()->copyCourse($data);
 
             return $this->redirect(
