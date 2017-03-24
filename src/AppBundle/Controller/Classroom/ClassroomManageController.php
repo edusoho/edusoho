@@ -1064,10 +1064,6 @@ class ClassroomManageController extends BaseController
 
     public function publishAction($id)
     {
-        $this->getClassroomService()->tryManageClassroom($id);
-
-        // $classroom = $this->getClassroomService()->getClassroom($id);
-
         $this->getClassroomService()->publishClassroom($id);
 
         return new Response('success');
@@ -1099,10 +1095,6 @@ class ClassroomManageController extends BaseController
 
     public function closeAction($id)
     {
-        $this->getClassroomService()->tryManageClassroom($id);
-
-        // $classroom = $this->getClassroomService()->getClassroom($id);
-
         $this->getClassroomService()->closeClassroom($id);
 
         return new Response('success');

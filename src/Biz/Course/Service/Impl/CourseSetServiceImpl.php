@@ -336,16 +336,16 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function createCourseSet($courseSet)
     {
+        if (!$this->hasCourseSetManageRole()) {
+            throw $this->createAccessDeniedException('You have no access to Course Set Management');
+        }
+        
         if (!ArrayToolkit::requireds($courseSet, array('title', 'type'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
 
         if (!in_array($courseSet['type'], array('normal', 'live', 'liveOpen', 'open'))) {
             throw $this->createInvalidArgumentException('Invalid Param: type');
-        }
-
-        if (!$this->hasCourseSetManageRole()) {
-            throw $this->createAccessDeniedException('You have no access to Course Set Management');
         }
 
         $courseSet = ArrayToolkit::parts(
