@@ -52,4 +52,20 @@
   </div>
 </form>
 {% endif %}
+  <form class="form-horizontal" role="form" action="{{ path('admin_edu_cloud_search_result_type') }}">
+    <div class="form-group">
+      <label for="" class="col-sm-3 control-label" style="padding-top:12px;">{{'所需类型：'|trans}}</label>
+      <div class="controls col-md-9 radios">
+          {% for type,useable in setting('cloud_search.type') %}
+            <label>
+              <input type="checkbox" {% if type == 'course'%}disabled{% endif %} name="{{ type }}" value="{{ useable }}" {% if useable %}checked="checked"{% endif %}>{{ dict('searchResultType')[type] }}
+            </label>
+          {% endfor %}
+        <div class="color-gray ptm">{{ '*勾选所需类型后，学员搜索时可以查看对应类型搜索结果，可以根据网校实际业务情况进行配置。'|trans}}</div>
+      </div>
+    </div>
+    <div class="controls col-md-offset-3 col-md-8">
+      <button type="submit" class="btn btn-primary">{{'保存'|trans}}</button>
+    </div>
+  </form>
 {% endblock %}
