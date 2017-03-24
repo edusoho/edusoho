@@ -60,7 +60,6 @@ class Articles extends BaseResource
 
         foreach ($articles as &$article) {
             $articleTagIds = $article['tagIds'];
-            $article['tagIds'] = array();
             if (!empty($articleTagIds)) {
                 foreach ($articleTagIds as $index => $articleTagId) {
                     if (isset($tags[$articleTagId])) {

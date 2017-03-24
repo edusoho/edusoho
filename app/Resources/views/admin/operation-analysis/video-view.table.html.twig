@@ -2,7 +2,7 @@
           <thead>
             <tr>
               <th>{{'用户名'|trans}}</th>
-              <th>{{'课时'|trans}}</th>
+              <th>{{'任务'|trans}}</th>
               <th>{{'观看时间'|trans}}</th>
               <th>{{'视频类型'|trans}}</th>
             </tr>
@@ -20,7 +20,7 @@
                   {% else %}
                   <tr class="danger">
                     <td>{{ users[val.userId].nickname }}</td>
-                    <td>({{'此课时已删除'|trans}})</td>
+                    <td>({{'此任务已删除'|trans}})</td>
                     <td>{{val.createdTime|date_format}}</td>
                     <td>{{dict_text('videoStorageType',val.fileStorage)}}</td>
                   </tr>
@@ -28,5 +28,5 @@
               {% endfor %}
             {% endif %}
           </tbody>
-      </table>    
+      </table>
       {{ admin_macro.paginator(paginator) }}

@@ -1,9 +1,11 @@
 <?php
+
 namespace Tests;
 
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
 use PHPUnit\Framework\TestCase;
+use TestProject\Biz\Example\Dao\ExampleDao;
 
 class GeneralDaoImplTest extends TestCase
 {
@@ -41,6 +43,7 @@ class GeneralDaoImplTest extends TestCase
               `counter2` int(10) unsigned NOT NULL DEFAULT 0,
               `ids1` varchar(32) NOT NULL DEFAULT '',
               `ids2` varchar(32) NOT NULL DEFAULT '',
+              `null_value` VARCHAR(32) DEFAULT NULL,
               `created_time` int(10) unsigned NOT NULL DEFAULT 0,
               `updated_time` int(10) unsigned NOT NULL DEFAULT 0,
               PRIMARY KEY (`id`)
@@ -188,7 +191,7 @@ class GeneralDaoImplTest extends TestCase
 
         $results = $dao->search(array('ids' => array()), array('created_time' => 'desc'), 0, 100);
 
-        $this->assertCount(0, $results);
+        $this->assertCount(4, $results);
     }
 
     /**
@@ -234,5 +237,110 @@ class GeneralDaoImplTest extends TestCase
         });
 
         $this->assertEquals(1, $result);
+    }
+
+    public function testNullValueUnserializer()
+    {
+        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+
+        $row = $dao->create(array('name' => 'test1'));
+
+        $result = $dao->get($row['id']);
+
+        $this->assertInternalType('array', $result['null_value']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Dao\DaoException
+     */
+    public function testOrderBysInject()
+    {
+        /**
+         * @var ExampleDao $dao
+         */
+        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+
+        $row = $dao->create(array('name' => 'test1'));
+
+        $dao->findByIds(array(1), array('; SELECT * FROM example'), 0, 10);
+
+        $dao->findByIds(array(1), array('id' => '; SELECT * FROM example'));
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Dao\DaoException
+     */
+    public function testStartInject()
+    {
+        /**
+         * @var ExampleDao $dao
+         */
+        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+
+        $row = $dao->create(array('name' => 'test1'));
+
+        $dao->findByIds(array(1), array('created_time' => 'desc'), '; SELECT * FROM example', 10);
+        $dao->findByIds(array(1), array('created_time' => 'desc'), 0, "; UPDATE example SET name = 'inject' WHERE id = 1");
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Dao\DaoException
+     */
+    public function testLimitInject()
+    {
+        /**
+         * @var ExampleDao $dao
+         */
+        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+
+        $row = $dao->create(array('name' => 'test1'));
+        $dao->findByIds(array(1), array('created_time' => 'desc'), 0, "; UPDATE example SET name = 'inject' WHERE id = 1");
+    }
+
+    public function testNonInject()
+    {
+        /**
+         * @var ExampleDao $dao
+         */
+        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+
+        $row = $dao->create(array('name' => 'test1'));
+        $result = $dao->findByIds(array(1), array('created_time' => 'desc'), '0', '2');
+
+        $this->assertCount(1, $result);
+        $row = $dao->create(array('name' => 'test2'));
+        $result = $dao->findByIds(array(1, 2), array('created_time' => 'desc'), '0', 1);
+        $this->assertCount(1, $result);
+
+        $result = $dao->findByIds(array(1, 2), array('created_time' => 'desc'), '0', 10);
+        $this->assertCount(2, $result);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Dao\DaoException
+     */
+    public function testOnlySetStart()
+    {
+        /**
+         * @var ExampleDao $dao
+         */
+        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+
+        $row = $dao->create(array('name' => 'test1'));
+        $result = $dao->findByIds(array(1, 2), array('created_time' => 'desc'), '0', null);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Dao\DaoException
+     */
+    public function testOnlySetLimit()
+    {
+        /**
+         * @var ExampleDao $dao
+         */
+        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+
+        $row = $dao->create(array('name' => 'test1'));
+        $result = $dao->findByIds(array(1, 2), array('created_time' => 'desc'), null, 10);
     }
 }

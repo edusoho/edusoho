@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Classroom;
 
+use AppBundle\Common\ClassroomToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Taxonomy\Service\TagService;
@@ -19,18 +20,15 @@ class CourseController extends BaseController
     public function pickAction($classroomId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
-        $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
-
-        $excludeIds = ArrayToolkit::column($activeCourses, 'parentCourseSetId');
 
         $conditions = array(
             'status' => 'published',
             'parentId' => 0,
-            'excludeIds' => $excludeIds,
         );
 
-        if (empty($excludeIds)) {
-            unset($conditions['excludeIds']);
+        $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
+        if (!empty($activeCourses)) {
+            $conditions['excludeIds'] = ArrayToolkit::column($activeCourses, 'parentCourseSetId');
         }
 
         $user = $this->getCurrentUser();
@@ -73,6 +71,7 @@ class CourseController extends BaseController
         }
 
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
+
         $currentUser = $this->getCurrentUser();
         $courseMembers = array();
         $teachers = array();
@@ -209,14 +208,26 @@ class CourseController extends BaseController
         return $users;
     }
 
+    /**
+     * @param string $previewAs
+     * @param array  $member
+     * @param array  $classroom
+     *
+     * @return array
+     */
     private function previewAsMember($previewAs, $member, $classroom)
     {
         $user = $this->getCurrentUser();
 
-        if (in_array($previewAs, array('guest', 'auditor', 'member'))) {
-            if ($previewAs == 'guest') {
+        if (in_array($previewAs, array('guest', 'auditor', 'member'), true)) {
+            if ($previewAs === 'guest') {
                 return array();
             }
+
+            $deadline = ClassroomToolkit::buildMemberDeadline(array(
+                'expiryMode' => $classroom['expiryMode'],
+                'expiryValue' => $classroom['expiryValue'],
+            ));
 
             $member = array(
                 'id' => 0,
@@ -230,9 +241,10 @@ class CourseController extends BaseController
                 'role' => array('auditor'),
                 'locked' => 0,
                 'createdTime' => 0,
+                'deadline' => $deadline,
             );
 
-            if ($previewAs == 'member') {
+            if ($previewAs === 'member') {
                 $member['role'] = array('member');
             }
         }

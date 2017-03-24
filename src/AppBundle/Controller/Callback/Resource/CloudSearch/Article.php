@@ -14,7 +14,7 @@ class Article extends BaseResource
         $filteredRes['id'] = $res['id'];
         $filteredRes['title'] = $res['title'];
         $filteredRes['content'] = $this->filterHtml($res['body']);
-        $filteredRes['tags'] = ArrayToolkit::column($res['tags'], 'name');
+        $filteredRes['tags'] = empty($res['tags']) ? array() : ArrayToolkit::column($res['tags'], 'name');
         $filteredRes['category'] = isset($res['category']['name']) ? $res['category']['name'] : '';
         $filteredRes['hitNum'] = $res['hits'];
         $filteredRes['postNum'] = $res['postNum'];

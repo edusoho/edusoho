@@ -6,9 +6,9 @@
 
 {% block main %}
   <div class="panel panel-default">
-    {% if courseSet.type != 'live' %}
       <div class="panel-heading">
-        {{ course.title }}<span class="mh5">／</span>{{'学员管理'|trans}}
+        {{'学员管理'|trans}}
+        {% if courseSet.type != 'live' %}
         <div class="pull-right">
           {% if course.status != 'published' %}
             <button class="btn btn-success btn-sm js-publish-course" 
@@ -23,8 +23,8 @@
           {% endif %}
           {# <a class="btn btn-info btn-sm mhs" href="{{ path('classroom_manage_student_export_csv', {id:classroom.id,role:role}) }}"><i class="glyphicon glyphicon-export"></i> {{'导出学员'|trans}}</a> #}
       </div>
+      {% endif %}
       </div>
-    {% endif %}
     <div class="panel-body">
       <ul class="nav nav-pills mbl">
         <li class="">

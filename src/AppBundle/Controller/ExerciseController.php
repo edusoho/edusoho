@@ -48,6 +48,8 @@ class ExerciseController extends BaseController
 
         $activity = $this->getActivityService()->getActivity($result['lessonId']);
 
+        $exercise['itemCount'] = $this->getActureQuestionNum($questions);
+
         return $this->render('exercise/do.html.twig', array(
             'paper' => $exercise,
             'questions' => $questions,
@@ -86,6 +88,8 @@ class ExerciseController extends BaseController
 
         $attachments = $this->getTestpaperService()->findAttachments($exercise['id']);
 
+        $exercise['itemCount'] = $this->getActureQuestionNum($questions);
+
         return $this->render('exercise/do.html.twig', array(
             'questions' => $questions,
             'paper' => $exercise,
@@ -113,6 +117,20 @@ class ExerciseController extends BaseController
 
             return $this->createJsonResponse(array('result' => true, 'message' => '', 'goto' => $goto));
         }
+    }
+
+    protected function getActureQuestionNum($questions)
+    {
+        $count = 0;
+        array_map(function ($question) use (&$count) {
+            if ($question['type'] == 'material') {
+                $count += count($question['subs']);
+            } else {
+                $count += 1;
+            }
+        }, $questions);
+
+        return $count;
     }
 
     protected function getTestpaperService()

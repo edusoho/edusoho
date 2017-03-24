@@ -2,10 +2,12 @@
 
 namespace Biz\Course\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Course\Dao\ReviewDao;
-use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\ReviewService;
+use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
 
 class ReviewServiceImpl extends BaseService implements ReviewService
@@ -102,8 +104,12 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
     public function saveReview($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('courseId', 'rating'), true)) {
-            throw $this->createInvalidArgumentException('invalid argument');
+        if (!ArrayToolkit::requireds($fields, array('courseId', 'userId', 'rating'), true)) {
+            throw $this->createInvalidArgumentException('参数不正确，评价失败！');
+        }
+
+        if ($fields['rating'] > 5) {
+            throw $this->createInvalidArgumentException('参数不正确，评价数太大');
         }
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($fields['courseId']);
@@ -112,9 +118,9 @@ class ReviewServiceImpl extends BaseService implements ReviewService
             throw $this->createNotFoundException("course(#{$fields['courseId']}) not found");
         }
 
-        $user = $this->getCurrentUser();
+        $user = $this->getUserService()->getUser($fields['userId']);
 
-        if (!$user->isLogin()) {
+        if (empty($user)) {
             throw $this->createAccessDeniedException();
         }
         $taskCount = $this->getTaskService()->countTasks(array('courseId' => $course['id'], 'status' => 'published'));
@@ -127,21 +133,21 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
         if (empty($review) || ($review && $fields['parentId'] > 0)) {
             $review = $this->getReviewDao()->create(array(
-                'userId' => $user['id'],
+                'userId' => $fields['userId'],
                 'courseId' => $fields['courseId'],
                 'courseSetId' => $course['courseSetId'],
                 'rating' => $fields['rating'],
                 'private' => $course['status'] == 'published' ? 0 : 1,
                 'parentId' => $fields['parentId'],
-                'content' => empty($fields['content']) ? '' : $fields['content'],
+                'content' => !isset($fields['content']) ? '' : $this->purifyHtml($fields['content']),
+                'createdTime' => time(),
                 'meta' => $meta,
             ));
-
             $this->dispatchEvent('course.review.add', new Event($review));
         } else {
             $review = $this->getReviewDao()->update($review['id'], array(
                 'rating' => $fields['rating'],
-                'content' => empty($fields['content']) ? '' : $fields['content'],
+                'content' => !isset($fields['content']) ? '' : $this->purifyHtml($fields['content']),
                 'updatedTime' => time(),
                 'meta' => $meta,
             ));
@@ -154,21 +160,26 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
     public function deleteReview($id)
     {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('not login');
+        }
+
         $review = $this->getReview($id);
 
         if (empty($review)) {
             throw $this->createNotFoundException("course review(#{$id}) not found");
         }
 
-        $this->getCourseService()->tryManageCourse($review['courseId']);
+        if (!$user->isAdmin() && $review['userId'] != $user['id']) {
+            throw $this->createAccessDeniedException('无权限删除评价');
+        }
 
-        $result = $this->getReviewDao()->delete($id);
+        $this->getReviewDao()->delete($id);
 
         $this->dispatchEvent('course.review.delete', new Event($review));
 
         $this->getLogService()->info('course', 'delete_review', "删除评价#{$id}");
-
-        return $result;
     }
 
     /**
@@ -236,11 +247,17 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         return $this->createDao('Course:ReviewDao');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
         return $this->createService('User:UserService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');

@@ -9,6 +9,35 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
 {
     protected $table = 'classroom_member';
 
+    public function updateByClassroomIdAndRole($classroomId, $role, array $fields)
+    {
+        $conditions = array(
+            'classroomId' => $classroomId,
+            'role' => $role,
+        );
+
+        return $this->update($conditions, $fields);
+    }
+
+    public function findMembersByUserIdAndClassroomIds($userId, array $classroomIds)
+    {
+        if (empty($classroomIds)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($classroomIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND classroomId IN ({$marks});";
+
+        return $this->db()->fetchAll($sql, array_merge(array($userId), $classroomIds)) ?: array();
+    }
+
+    public function findMembersByUserId($userId)
+    {
+        return $this->findByFields(
+            array('userId' => $userId)
+        );
+    }
+
     public function declares()
     {
         return array(
@@ -19,7 +48,7 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
                 'teacherIds' => 'json',
                 'service' => 'json',
             ),
-            'orderbys' => array('name', 'createdTime'),
+            'orderbys' => array('name', 'createdTime', 'updatedTime', 'id'),
             'conditions' => array(
                 'userId = :userId',
                 'classroomId = :classroomId',
@@ -30,6 +59,7 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
                 'createdTime >= :startTimeGreaterThan',
                 'createdTime >= :createdTime_GE',
                 'createdTime < :startTimeLessThan',
+                'updatedTime >= :updatedTime_GE',
             ),
         );
     }
@@ -144,17 +174,13 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
 
     public function findByUserId($userId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ?";
-
-        return $this->db()->executeQuery($sql, array($userId))->fetchAll(\PDO::FETCH_COLUMN);
+        return $this->findByFields(array(
+            'userId' => $userId,
+        ));
     }
 
     protected function createQueryBuilder($conditions)
     {
-        if (isset($conditions['role'])) {
-            $conditions['role'] = "%{$conditions['role']}%";
-        }
-
         if (isset($conditions['roles'])) {
             $roles = '';
 

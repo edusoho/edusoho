@@ -66,6 +66,9 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'discountId = :discountId',
                 'minCoursePrice = :minCoursePrice',
                 'maxCoursePrice > :maxCoursePrice_GT',
+                'updatedTime >= updatedTime_GE',
+                'updatedTime <= updatedTime_LE',
+                'minCoursePrice = :price',
             ),
             'serializes' => array(
                 'tags' => 'delimiter',
@@ -82,6 +85,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'recommendedTime',
                 'rating',
                 'studentNum',
+                'id',
             ),
             'timestamps' => array(
                 'createdTime', 'updatedTime',

@@ -133,7 +133,7 @@
         {% if articles %}
           <div class="es-box news">
             <div class="es-box-heading">
-              <h2>{{ '最新资讯'|trans }}</h2>
+              <h2>{{'最新%article_name%'|trans({'%article_name%': setting('article.name')|default('资讯'|trans)})}}</h2>
               <a class="pull-right" href="{{ path('article_show') }}">{{ '更多'|trans }}&gt;</a>
             </div>
             <div class="es-box-body">
@@ -305,7 +305,8 @@
   <ul class="course-wide-list clearfix">
     {% for courseSet in courseSets %}
       {% set course = data('PublishedCourseByCourseSet', { courseSetId: courseSet.id }) %}
-      <li class="course-item clearfix">
+      {% if course %}
+        <li class="course-item clearfix">
         <a class="course-picture-link" href="{{ path('course_show', {id:courseSet.id}) }}">
           {{ lazy_img(filepath(courseSet.cover.large|default(''), 'course.png'), 'course-picture', '') }}
           {% if courseSet.serializeMode=='serialize' %}
@@ -367,6 +368,7 @@
           </div>
         </div>
       </li>
+      {% endif %}
     {% endfor %}
   </ul>
 {% endmacro %}

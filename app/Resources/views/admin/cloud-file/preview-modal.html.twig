@@ -16,7 +16,7 @@
     {% else %}
       <div id="material-preview-player"
           style="height:500px;overflow:hidden;"
-          data-url="{{path('global_file_player', {globalId: file.no})}}"
+          data-url="{{path('material_lib_file_player', {fileId: file.id})}}"
       ></div>
     {% endif %}
   {% else %}

@@ -91,17 +91,17 @@ class ClassroomThreadController extends BaseController
         $classroomSetting = $this->getSettingService()->get('classroom');
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $thread = $this->getThreadService()->getThread($threadId);
-        $user = $this->getCurrentUser();
 
-        if (!($user->isAdmin()
-            || $this->getClassroomService()->canManageClassroom($classroomId)
-            || ($this->getClassroomService()->canTakeClassroom($classroomId, true) && $thread['userId'] != $user['id']))) {
+        $user = $this->getCurrentUser();
+        $canManage = $this->canManageThread($user, $classroomId, $thread);
+
+        if (!$canManage) {
             return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
 
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->isMethod('POST')) {
             return $this->forward('AppBundle:Thread:update', array('request' => $request, 'target' => array('type' => 'classroom', 'id' => $classroom['id']), 'thread' => $thread));
         }
 
@@ -150,6 +150,23 @@ class ClassroomThreadController extends BaseController
             'filter' => $filter,
             'canLook' => $canLook,
         ));
+    }
+
+    private function canManageThread($user, $classroomId, $thread)
+    {
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        if ($this->getClassroomService()->canManageClassroom($classroomId)) {
+            return true;
+        }
+
+        if ($this->getClassroomService()->canTakeClassroom($classroomId, true) && $thread['userId'] == $user['id']) {
+            return true;
+        }
+
+        return false;
     }
 
     private function getThreadSearchFilters($request)

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Twig\WebExtension;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
@@ -17,6 +18,9 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class BaseController extends Controller
 {
+    /**
+     * @return CurrentUser
+     */
     protected function getCurrentUser()
     {
         return $this->getUser();
@@ -27,6 +31,9 @@ class BaseController extends Controller
         return $this->get('biz');
     }
 
+    /**
+     * @return CurrentUser
+     */
     public function getUser()
     {
         $biz = $this->getBiz();
@@ -155,6 +162,9 @@ class BaseController extends Controller
             $targetPath = $request->getSession()->get('_target_path');
         } else {
             $targetPath = $request->headers->get('Referer');
+            if ($this->isSelfHost($request, $targetPath) === false) {
+                $targetPath = '';
+            }
         }
 
         if ($targetPath == $this->generateUrl('login', array(), true)) {
@@ -269,6 +279,27 @@ class BaseController extends Controller
     protected function createResourceNotFoundException($resourceType, $resourceId, $message = '')
     {
         return new ResourceNotFoundException($resourceType, $resourceId, $message);
+    }
+
+    private function isSelfHost(Request $request, $url)
+    {
+        if (empty($url)) {
+            return true;
+        }
+
+        $host = $request->getHost();
+        preg_match("/^(http[s]:\/\/)?([^\/]+)/i", $url, $matches);
+        $ulrHost = empty($matches[2]) ? '' : $matches[2];
+
+        return $host === $ulrHost;
+    }
+
+    /**
+     * @return WebExtension
+     */
+    protected function getWebExtension()
+    {
+        return $this->get('web.twig.extension');
     }
 
     protected function createService($alias)

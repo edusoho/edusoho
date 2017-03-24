@@ -1,13 +1,32 @@
 {#<li class="mll">#}
     {% if member.role == 'teacher' %}
         {% if course.expiryMode == 'days' %}
-              共<span class="mls color-warning"> {{ course.expiryDays }}天</span>
+              共{{ course.expiryDays }}天
         {% else %}
             {#{{ course.expiryStartDate|date('Y-m-d') }} ~ #}
             {{ course.expiryEndDate|date('Y-m-d') }}
         {% endif %}
     {% else %}
-        {{ member.deadline|date('Y-m-d') }}
-          <span class="mls color-warning">剩余 {{ member.deadline|time_diff }} 天</span>
+        {% if member.deadline <= 0 %}
+          {% if course.expiryMode == 'forever' %}
+            永久有效
+          {% elseif course.expiryMode in ['end_date', 'date'] %}
+            {{ course.expiryEndDate|date('Y-m-d') }}
+            {% set lastDays = course.expiryEndDate|time_diff %}
+            {% if lastDays > 0 %}
+              剩余 {{ lastDays }} 天
+            {% else %}
+              <span class="color-danger">已到期</span>
+            {% endif %}
+          {% endif %}{# 不必考虑expiryMode=days的情况，此时member.deadline必定>0 #}
+        {% else %}
+          {{ member.deadline|date('Y-m-d') }}
+          {% set lastDays = member.deadline|time_diff %}
+          {% if lastDays > 0 %}
+            剩余 {{ lastDays }} 天
+          {% else %}
+            <span class="color-danger">已到期</span>
+          {% endif %}
+        {% endif %}
     {% endif %}
 {#</li>#}

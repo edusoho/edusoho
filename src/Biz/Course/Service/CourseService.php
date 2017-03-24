@@ -155,6 +155,8 @@ interface CourseService
 
     public function countCourses(array $conditions);
 
+    public function countCoursesGroupByCourseSetIds($courseSetIds);
+
     public function getMinAndMaxPublishedCoursePriceByCourseSetId($CourseSetId);
 
     public function updateMaxRateByCourseSetId($courseSetId, $maxRate);
@@ -194,4 +196,8 @@ interface CourseService
     public function convertTasks($tasks, $course);
 
     public function findUserManageCoursesByCourseSetId($userId, $courseSetId);
+
+    public function unlockCourse($courseId);
+
+    public function getFavoritedCourseByUserIdAndCourseSetId($userId, $courseSetId);
 }

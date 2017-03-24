@@ -91,7 +91,9 @@ class CategoryProcessorImpl extends BaseProcessor implements CategoryProcessor
 
     public function getCategorieTree()
     {
-        $group = $this->controller->getCategoryService()->getGroupByCode('course');
+        $type = $this->getParam('type', 'course');
+
+        $group = $this->controller->getCategoryService()->getGroupByCode($type);
         if (empty($group)) {
             return array();
         }

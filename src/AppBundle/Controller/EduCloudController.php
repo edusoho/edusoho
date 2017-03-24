@@ -15,9 +15,9 @@ class EduCloudController extends BaseController
 {
     public function smsSendAction(Request $request)
     {
-        if ($request->getMethod() == 'POST') {
+        if ($request->isMethod('POST')) {
             if ($this->setting('cloud_sms.sms_enabled') != '1') {
-                return $this->createJsonResponse(array('error' => '短信服务被管理员关闭了'));
+                return $this->createJsonResponse(array('error' => '短信服务未开启，请联系网校管理员'));
             }
 
             $currentUser = $this->getCurrentUser();
@@ -234,7 +234,7 @@ class EduCloudController extends BaseController
         $sign = $this->getSignEncoder()->encodePassword($url, $api->getAccessKey());
 
         if ($originSign != $sign) {
-            return $this->createJsonResponse(array('error' => $this->trans('sign不正确')));
+            return $this->createJsonResponse(array('error' => 'sign不正确'));
         }
 
         $searchSetting['search_enabled'] = 1;

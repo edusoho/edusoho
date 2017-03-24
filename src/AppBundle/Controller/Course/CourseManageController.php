@@ -32,6 +32,9 @@ class CourseManageController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
+
+            $data = $this->prepareExpiryMode($data);
+
             $this->getCourseService()->createCourse($data);
 
             return $this->redirect(
@@ -53,6 +56,9 @@ class CourseManageController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
+
+            $data = $this->prepareExpiryMode($data);
+
             $this->getCourseService()->copyCourse($data);
 
             return $this->redirect(
@@ -63,6 +69,11 @@ class CourseManageController extends BaseController
         $courseId = $request->query->get('courseId');
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+
+        if ($course['expiryMode'] == 'end_date') {
+            $course['deadlineType'] = 'end_date';
+            $course['expiryMode'] = 'days';
+        }
 
         return $this->render(
             'course-manage/create-modal.html.twig',
@@ -99,7 +110,7 @@ class CourseManageController extends BaseController
         );
 
         foreach ($liveTasks as $key => $task) {
-            $task['isEnd'] = intval(time() - $task['endTime']) > 0;
+            $task['isEnd'] = (int) (time() - $task['endTime']) > 0;
             $task['file'] = $this->_getLiveReplayMedia($task);
             $liveTasks[$key] = $task;
         }
@@ -325,6 +336,27 @@ class CourseManageController extends BaseController
         return round($finishedTaskPerDay, 0);
     }
 
+    public function prepareExpiryMode($data)
+    {
+        if (empty($data['expiryMode']) || $data['expiryMode'] != 'days') {
+            unset($data['deadlineType']);
+        }
+        if (!empty($data['deadlineType'])) {
+            if ($data['deadlineType'] == 'end_date') {
+                $data['expiryMode'] = 'end_date';
+                $data['expiryEndDate'] = $data['deadline'];
+
+                return $data;
+            } else {
+                $data['expiryMode'] = 'days';
+
+                return $data;
+            }
+        }
+
+        return $data;
+    }
+
     protected function createCourseStrategy($course)
     {
         return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->get('biz'));
@@ -398,6 +430,8 @@ class CourseManageController extends BaseController
                 unset($data['buyExpiryTime']);
             }
 
+            $data = $this->prepareExpiryMode($data);
+
             if (!empty($data['services'])) {
                 $data['services'] = json_decode($data['services'], true);
             }
@@ -442,11 +476,17 @@ class CourseManageController extends BaseController
         $canFreeTaskCount = $this->getTaskService()->countTasks($conditions);
         $canFreeTasks = $this->getTaskService()->searchTasks($conditions, array('seq' => 'ASC'), 0, $canFreeTaskCount);
 
+        //prepare form data
+        if ($course['expiryMode'] == 'end_date') {
+            $course['deadlineType'] = 'end_date';
+            $course['expiryMode'] = 'days';
+        }
+
         return $this->render(
             'course-manage/marketing.html.twig',
             array(
                 'courseSet' => $courseSet,
-                'course' => $course,
+                'course' => $this->formatCourseDate($course),
                 'canFreeTasks' => $canFreeTasks,
                 'freeTasks' => $freeTasks,
             )
@@ -658,8 +698,8 @@ class CourseManageController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
 
         foreach ($orders as $index => $expiredOrderToBeUpdated) {
-            if ((($expiredOrderToBeUpdated['createdTime'] + 48 * 60 * 60) < time(
-                    )) && ($expiredOrderToBeUpdated['status'] == 'created')
+            if ((($expiredOrderToBeUpdated['createdTime'] + 48 * 60 * 60) < time())
+            && ($expiredOrderToBeUpdated['status'] == 'created')
             ) {
                 $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
                 $orders[$index]['status'] = 'cancelled';
@@ -688,8 +728,8 @@ class CourseManageController extends BaseController
 
         $courseSetting = $this->setting('course');
 
-        if (!$this->getCurrentUser()->isAdmin(
-            ) && (empty($courseSetting['teacher_search_order']) || $courseSetting['teacher_search_order'] != 1)
+        if (!$this->getCurrentUser()->isAdmin()
+           && (empty($courseSetting['teacher_search_order']) || $courseSetting['teacher_search_order'] != 1)
         ) {
             throw $this->createAccessDeniedException('查询订单已关闭，请联系管理员');
         }
@@ -840,8 +880,8 @@ class CourseManageController extends BaseController
             $students[$key]['nickname'] = $user['nickname'];
             $students[$key]['startTime'] = $result['createdTime'];
             $students[$key]['finishedTime'] = $result['finishedTime'];
-            $students[$key]['learnTime'] = ceil($result['time'] / 60);
-            $students[$key]['watchTime'] = ceil($result['time'] / 60);
+            $students[$key]['learnTime'] = round($result['time'] / 60);
+            $students[$key]['watchTime'] = round($result['time'] / 60);
 
             if ($activity['mediaType'] == 'testpaper') {
                 $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
@@ -937,12 +977,12 @@ class CourseManageController extends BaseController
             $finishedNum = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($value['id'], 'finish');
 
             $taskLearnTime = $this->getTaskResultService()->getLearnedTimeByCourseIdGroupByCourseTaskId($value['id']);
-            $taskLearnTime = $taskLearnedNum == 0 ? 0 : intval($taskLearnTime / $taskLearnedNum);
+            $taskLearnTime = $taskLearnedNum == 0 ? 0 : round($taskLearnTime / $taskLearnedNum / 60);
             $taskWatchTime = $this->getTaskResultService()->getWatchTimeByCourseIdGroupByCourseTaskId($value['id']);
-            $taskWatchTime = $taskLearnedNum == 0 ? 0 : intval($taskWatchTime / $taskLearnedNum);
+            $taskWatchTime = $taskLearnedNum == 0 ? 0 : round($taskWatchTime / $taskLearnedNum / 60);
 
             $tasks[$key]['LearnedNum'] = $taskLearnedNum;
-            $tasks[$key]['length'] = floor(intval($tasks[$key]['activity']['length']) / 60);
+            $tasks[$key]['length'] = round(intval($tasks[$key]['activity']['length']) / 60);
             $tasks[$key]['type'] = $tasks[$key]['activity']['mediaType'];
             $tasks[$key]['finishedNum'] = $finishedNum;
             $tasks[$key]['learnTime'] = $taskLearnTime;
@@ -993,10 +1033,10 @@ class CourseManageController extends BaseController
 
     protected function formatCourseDate($course)
     {
-        if (isset($course['expiryStartDate'])) {
+        if (!empty($course['expiryStartDate'])) {
             $course['expiryStartDate'] = date('Y-m-d', $course['expiryStartDate']);
         }
-        if (isset($course['expiryEndDate'])) {
+        if (!empty($course['expiryEndDate'])) {
             $course['expiryEndDate'] = date('Y-m-d', $course['expiryEndDate']);
         }
 

@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## v0.2.7
+
+  * 增加 `sql` 方法用以防止拼接SQL时候造成的SQL注入问题
+  * `update` 方法第一个参数支持 `id` 或 `conditions`
+
+## v0.2.6 
+
+  * 修复`getByFields`返回array
+  * 序列化引用问题
+
+## v0.2.5
+
+  * 修复`unserialize`方法未反序列化null值的情况。
+
+## v0.2.4
+
+  * 修复`getByFields`方法,返回NULL的情况。
+
 ## v0.2.3
 
   * 修复单元测试 PHPUnit\Framework\TestCase Not Found

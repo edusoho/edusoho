@@ -2,8 +2,8 @@
 
 namespace Biz\Order\Dao\Impl;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 use Biz\Order\Dao\OrderDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 {
@@ -14,11 +14,12 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         return array(
             'timestamps' => array('createdTime', 'updatedTime'),
             'serializes' => array('data' => 'json'),
-            'orderbys' => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum'),
+            'orderbys' => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum', 'updatedTime', 'id'),
             'conditions' => array(
                 'sn = :sn',
                 'targetType = :targetType',
                 'targetId = :targetId',
+                'targetId IN ( :targetIds)',
                 'userId = :userId',
                 'amount > :amount',
                 'totalPrice >= totalPrice',
@@ -260,5 +261,34 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
             ->groupBy('date');
 
         return $builder->execute()->fetchAll(0) ?: array();
+    }
+
+    public function searchBill($conditions, $orderBy, $start, $limit)
+    {
+        if (!isset($conditions['startTime'])) {
+            $conditions['startTime'] = 0;
+        }
+        // @TODO SQL Inject
+        $sql = "SELECT * FROM {$this->table} WHERE `createdTime`>= ? AND `createdTime`< ? AND `userId` = ? AND (not(`payment` in ('none','coin'))) AND `status` = 'paid' ORDER BY {$orderBy[0]} {$orderBy[1]}  LIMIT {$start}, {$limit}";
+
+        return $this->db()->fetchAll($sql, array(
+            $conditions['startTime'],
+            $conditions['endTime'],
+            $conditions['userId'],
+        ));
+    }
+
+    public function countUserBill($conditions)
+    {
+        if (!isset($conditions['startTime'])) {
+            $conditions['startTime'] = 0;
+        }
+        $sql = "SELECT count(*) FROM {$this->table} WHERE `createdTime`>=? AND `createdTime`< ? AND `userId` = ? AND (not(`payment` in ('none','coin'))) AND `status` = 'paid' ";
+
+        return $this->db()->fetchColumn($sql, array(
+            $conditions['startTime'],
+            $conditions['endTime'],
+            $conditions['userId'],
+        ));
     }
 }

@@ -186,6 +186,7 @@ class Editor {
     this._rendStepIframe(this.step);
     this._rendButton(this.step);
     if (this.step == 2 && !this.loaded) {
+      console.log({'loading':new Date().toLocaleTimeString()});
       this._initIframe();
     }
   }
@@ -202,7 +203,7 @@ class Editor {
       this._rendButton(2);
       this.$iframe_body.find("#step2-form").data('validator', validator);
       this.$iframe_body.find("#step3-form").data('validator', validator);
-
+      console.log({'loaded':new Date().toLocaleTimeString()});
     };
     this.$frame.load(loadAnimation(loadiframe, this.$task_manage_content));
   }
@@ -224,12 +225,15 @@ class Editor {
 
   _validator(step) {
     let validator = null;
+
     if (step === 1) {
       validator = $("#step1-form").data('validator');
     } else if (this.loaded) {
       var $from = this.$iframe_body.find("#step" + step + "-form");
       validator = this.iframe_jQuery.data($from[0], 'validator');
     }
+
+    console.log(validator);
 
     if (validator && !validator.form()) {
       return false;

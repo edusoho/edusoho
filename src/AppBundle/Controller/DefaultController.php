@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Biz\Classroom\Service\ClassroomService;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Content\Service\BlockService;
 use Biz\Content\Service\NavigationService;
@@ -26,9 +27,27 @@ class DefaultController extends BaseController
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
         }
 
+        $custom = $this->isCustom();
+
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
 
-        return $this->render('default/index.html.twig', array('friendlyLinks' => $friendlyLinks));
+        return $this->render('default/index.html.twig', array('friendlyLinks' => $friendlyLinks, 'custom' => $custom));
+    }
+
+    public function appDownloadAction()
+    {
+        $meCount = $this->getMeCount();
+        $mobileCode = (empty($meCount['mobileCode']) ? 'edusohov3' : $meCount['mobileCode']);
+
+        if ($this->getWebExtension()->isMicroMessenger()) {
+            $url = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.kuozhi';
+        } else {
+            $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', 'code' => $mobileCode), true);
+        }
+
+        return $this->render('mobile/app-download.html.twig', array(
+            'url' => $url,
+        ));
     }
 
     public function userlearningAction()
@@ -143,7 +162,7 @@ class DefaultController extends BaseController
 
     public function jumpAction(Request $request)
     {
-        $courseId = intval($request->query->get('id'));
+        $courseId = (int) ($request->query->get('id'));
 
         if ($this->getCourseMemberService()->isCourseTeacher($courseId, $this->getCurrentUser()->id)) {
             $url = $this->generateUrl('live_course_manage_replay', array('id' => $courseId));
@@ -197,7 +216,7 @@ class DefaultController extends BaseController
             return array('percent' => '0%', 'number' => 0, 'total' => 0);
         }
 
-        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100).'%';
+        $percent = (int) ($member['learnedNum'] / $course['lessonNum'] * 100).'%';
 
         return array(
             'percent' => $percent,
@@ -220,6 +239,26 @@ class DefaultController extends BaseController
         }
 
         return $this->redirect($targetPath);
+    }
+
+    private function getMeCount()
+    {
+        $meCount = $this->setting('meCount', false);
+        if ($meCount === false) {
+            //判断是否是定制用户
+            $result = CloudAPIFactory::create('leaf')->get('/me');
+            $this->getSettingService()->set('meCount', $result);
+        }
+        $meCount = $this->setting('meCount');
+
+        return $meCount;
+    }
+
+    private function isCustom()
+    {
+        $result = $this->getMeCount();
+
+        return isset($result['hasMobile']) ? $result['hasMobile'] : 0;
     }
 
     /**

@@ -1,5 +1,5 @@
-// import Emitter from 'es6-event-emitter';
 import Emitter from "component-emitter";
+import { chapterAnimate } from 'app/common/widget/chapter-animate';
 
 export default class TaskSidebar extends Emitter {
   constructor({element, url}) {
@@ -65,8 +65,11 @@ export default class TaskSidebar extends Emitter {
         return;
       }
 
+      if(this.isManualOperation){
+          this.operationContent($btn);
+      }
+  
       if ($btn.data('loaded')) {
-        this.operationContent($btn);
         return;
       }
 
@@ -75,9 +78,7 @@ export default class TaskSidebar extends Emitter {
           $paneBody.html(html);
           $pane.perfectScrollbar();
           $btn.data('loaded', true);
-          if(this.isManualOperation){
-            this.operationContent($btn);
-          }
+          chapterAnimate();
           this.isManualOperation = true;
         });
     });

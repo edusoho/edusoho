@@ -2,13 +2,14 @@
 
 namespace AppBundle\Controller\My;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
+use AppBundle\Controller\Course\CourseBaseController;
 use Biz\Classroom\Service\ClassroomService;
-use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Controller\Course\CourseBaseController;
 
 class CourseController extends CourseBaseController
 {
@@ -36,11 +37,16 @@ class CourseController extends CourseBaseController
             $paginator->getPerPageCount()
         );
 
+        $setIds = ArrayToolkit::column($courses, 'courseSetId');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($setIds);
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+
         return $this->render(
             'my/learning/course/learning.html.twig',
             array(
                 'courses' => $courses,
                 'paginator' => $paginator,
+                'courseSets' => $courseSets,
             )
         );
     }
@@ -61,6 +67,7 @@ class CourseController extends CourseBaseController
         );
 
         $userIds = array();
+
         foreach ($courses as $key => $course) {
             $userIds = array_merge($userIds, $course['teacherIds']);
             $learnTime = $this->getTaskResultService()->sumLearnTimeByCourseIdAndUserId(
@@ -68,7 +75,7 @@ class CourseController extends CourseBaseController
                 $currentUser['id']
             );
 
-            $courses[$key]['learnTime'] = intval($learnTime / 60).'小时'.($learnTime % 60).'分钟';
+            $courses[$key]['learnTime'] = (int) ($learnTime / 60).'小时'.($learnTime % 60).'分钟';
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 
@@ -87,6 +94,7 @@ class CourseController extends CourseBaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
 
+        $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($courseSet['categoryId']);
         $taskCount = $this->getTaskService()->countTasks(array('courseId' => $course['id'], 'status' => 'published'));
         $progress = $taskResultCount = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
 
@@ -135,6 +143,7 @@ class CourseController extends CourseBaseController
                 'planProgressProgress' => $planProgressProgress,
                 'isUserFavorite' => $isUserFavorite,
                 'marketingPage' => 0,
+                'breadcrumbs' => $breadcrumbs,
             )
         );
     }
@@ -240,5 +249,13 @@ class CourseController extends CourseBaseController
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return CategoryService
+     */
+    private function getCategoryService()
+    {
+        return $this->createService('Taxonomy:CategoryService');
     }
 }

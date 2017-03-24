@@ -2,25 +2,25 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 
 class MyLearning extends BaseResource
 {
     public function get(Application $app, Request $request)
     {
         $user = $this->getCurrentUser();
-        $beginTime = strtotime("-6 months");
 
+        $beginTime = strtotime("-6 months");
         $conditions = array(
-            'lastLearnTimeGreaterThan' => $beginTime,
-            'userId'          => $user['id']
+            'lastViewTime_GE' => $beginTime,
+            'userId' => $user['id'],
         );
 
         $membersCount = $this->getMemberService()->countMembers($conditions);
         $members = $this->getMemberService()->searchMembers(
             $conditions,
-            array('lastLearnTime' => 'DESC', 'id' => 'DESC'),
+            array('lastViewTime' => 'DESC', 'id' => 'DESC'),
             0,
             $membersCount
         );
@@ -28,7 +28,7 @@ class MyLearning extends BaseResource
         $learningData = $this->buildLearningData($members);
         $learningData = $this->filter($learningData);
 
-        return  $this->wrap($learningData, count($learningData));
+        return $this->wrap($learningData, count($learningData));
     }
 
     public function filter($learningData)
@@ -50,6 +50,7 @@ class MyLearning extends BaseResource
 
         $courseIds = ArrayToolkit::column($members, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
         $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
 
         $groupMembers = ArrayToolkit::group($members, 'joinedType');
@@ -65,7 +66,7 @@ class MyLearning extends BaseResource
             $learningData[$key] = $course;
 
             $learningData[$key]['courseSet'] = $courseSets[$course['courseSetId']];
-            $learningData[$key]['lastViewTime'] = empty($member['lastLearnTime']) ? 0 : date('c', $member['lastLearnTime']);
+            $learningData[$key]['lastViewTime'] = empty($member['lastViewTime']) ? 0 : date('c', $member['lastViewTime']);
             $learningData[$key]['joinedType'] = $member['joinedType'];
             if ('classroom' == $member['joinedType']) {
                 $learningData[$key]['classroomTitle'] = empty($classrooms[$member['classroomId']]) ? '' : $classrooms[$member['classroomId']]['title'];
@@ -104,6 +105,6 @@ class MyLearning extends BaseResource
 
     protected function getClassroomService()
     {
-        return $this->createService('Classroom:Classroom:ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 }

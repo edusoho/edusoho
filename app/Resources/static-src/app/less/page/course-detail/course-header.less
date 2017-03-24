@@ -1,11 +1,15 @@
 //加入前头部
 .course-detail-section {
   position: relative;
-  padding: 20px;
+  padding: 15px ;
   .course-detail-top {
-    line-height: 1;
     .course-detail-heading {
       max-width: 60%;
+      vertical-align: top;
+      display: inline-block;
+      color:@gray-darker;
+      font-size: 24px;
+      // vertical-top inline-block gray-darker text-24
       @media(max-width:@screen-sm-max){
         max-width: 100%;
       }
@@ -49,7 +53,7 @@
   .course-operation-responsive {
     background-color: @bg-color;
     padding: 20px 20px;
-    margin: 0 -20px 12px;
+    margin: 0 -15px 12px;
     >ul {
       margin: 0;
       padding: 0;
@@ -139,38 +143,44 @@
        padding: 0;
       }
       .course-detail-title {
-        width: 70px;
+        width: 80px;
+        display: inline-block;
       }
       .course-detail-gray {
         padding-left: 60px;
-        min-height: 167px;
-        margin: 0px -20px 15px -60px;
+        margin: 0px -15px 15px -60px;
         padding-top: 20px;
         padding-bottom: 20px;
         background-color: @bg-color;
         @media(max-width:@screen-sm-max){
-          padding-left: 20px;
+          padding-left: 15px;
           min-height: auto;
-          margin: 0px -20px 15px -20px;
+          margin: 0px -15px 15px -15px;
           padding-top: 0;
           background-color: transparent;
         }
-        .course-detail-nav {
+        &.not-activity {
+          min-height: 158px;
+        }
+        .course-detail-content {
           position: relative;
-          padding-left: 70px;
+          padding-left: 80px;
           @media(max-width:370px){
             padding-right: 20px;
-            .nav-pills >li {
+            .course-detail-nav >li {
               width: 100%;
               >a {
                 text-align: center;
               }
             }
           }
+          .course-detail-nav {
+            display: inline-block;
+          }
           .course-detail-title {
             position: absolute;
             left: 0;
-            top: 8px;
+            top: 6px;
           }
         }
       }
@@ -208,7 +218,7 @@
 // 自由式学习头部
 .course-freelearn-section {
   background-color: @bg-color;
-  margin: 65px -20px 20px;
+  margin: 65px -15px 20px;
   padding: 33px 15px;
   @media (max-width: @screen-xs-max) {
     padding-bottom: 20px;

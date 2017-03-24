@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Classroom;
 
-use AppBundle\Twig\WebExtension;
 use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,13 +67,5 @@ class UtilityController extends BaseController
     private function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
-    }
-
-    /**
-     * @return WebExtension
-     */
-    private function getWebExtension()
-    {
-        return $this->container->get('web.twig.extension');
     }
 }

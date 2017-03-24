@@ -34,6 +34,14 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             //delete course_material
             $this->getMaterialDao()->deleteByCourseSetId($courseSetId, 'course');
 
+            //delete courses
+            $courses = $this->getCourseDao()->findByCourseSetIds(array($courseSetId));
+            if (!empty($courses)) {
+                foreach ($courses as $course) {
+                    $this->deleteCourse($course['id']);
+                }
+            }
+
             //delete testpaper
             $testpapers = $this->getTestpaperService()->searchTestpapers(array('courseSetId' => $courseSetId), array(), 0, PHP_INT_MAX);
             if (!empty($testpapers)) {
@@ -46,14 +54,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             if (!empty($questions)) {
                 foreach ($questions as $question) {
                     $this->getQuestionService()->delete($question['id']);
-                }
-            }
-
-            //delete courses
-            $courses = $this->getCourseDao()->findByCourseSetIds(array($courseSetId));
-            if (!empty($courses)) {
-                foreach ($courses as $course) {
-                    $this->deleteCourse($course['id']);
                 }
             }
 
@@ -120,10 +120,14 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
                 foreach ($announcements as $announcement) {
                     $this->getAnnouncementService()->deleteAnnouncement($announcement['id']);
                 }
+                $announcementLog = "删除课程(#{$courseId})的公告";
+                $this->getLogService()->info('course', 'delete_announcement', $announcementLog);
             }
 
             //delete status
             $this->getStatusService()->deleteStatusesByCourseId($courseId);
+            $statusLog = "删除课程(#{$courseId})的动态";
+            $this->getLogService()->info('course', 'delete_status', $statusLog);
 
             //delete conversation
             $this->getConversationService()->deleteConversationByTargetIdAndTargetType($courseId, 'course');
@@ -277,5 +281,13 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function getConversationService()
     {
         return $this->createService('IM:ConversationService');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 }

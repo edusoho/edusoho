@@ -258,7 +258,9 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         }
 
         $task = parent::createTask($task);
-        $this->getTaskService()->publishTask($task['id']);
+        if ($lessonTask['status'] == 'published') {
+            $this->getTaskService()->publishTask($task['id']);
+        }
 
         return $this->getTaskService()->getTask($task['id']);
     }

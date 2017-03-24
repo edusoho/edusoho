@@ -6,7 +6,7 @@ interface AnnouncementService
 {
     public function searchAnnouncements($conditions, $sort, $start, $limit);
 
-    public function searchAnnouncementsCount($conditions);
+    public function countAnnouncements($conditions);
 
     public function getAnnouncement($id);
 

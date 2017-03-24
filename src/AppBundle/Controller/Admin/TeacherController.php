@@ -14,7 +14,7 @@ class TeacherController extends BaseController
         $conditions['roles'] = 'ROLE_TEACHER';
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getUserService()->searchUserCount($conditions),
+            $this->getUserService()->countUsers($conditions),
             20
         );
 
@@ -69,7 +69,7 @@ class TeacherController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getUserService()->searchUserCount($conditions),
+            $this->getUserService()->countUsers($conditions),
             20
         );
 

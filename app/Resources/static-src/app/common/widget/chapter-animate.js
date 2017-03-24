@@ -1,5 +1,6 @@
 export let chapterAnimate = ()=> {
   $(".js-task-chapter").click(function(){
+    console.log('click');
     $(this).nextUntil(".js-task-chapter").animate({height: 'toggle', opacity: 'toggle'}, "normal");
     let $icon = $(this).children('.js-remove-icon');
     if ($icon.hasClass('es-icon-remove')) {

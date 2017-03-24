@@ -8,7 +8,7 @@
 {% block course_header_qrcode %}{% endblock %}
 
 {% block course_header_subtitle %}
-  <p class="text-overflow  mb10 mt10 pb10">{{ courseSet.subtitle }}</p>
+  <p class="text-overflow  pt5">{{ courseSet.subtitle }}</p>
 {% endblock %}
 
 {% block course_header_people_num %}{% endblock %}
@@ -40,14 +40,34 @@
       </div>
     </div>
     <div class="course-detail-info text-12 color-gray">
-      <div class="mb20">
+
+      {#确认下判断是否有误#}
+      {% if course.price > 0 and course.price < course.originPrice  %} 
+        {% set onDiscount =  true %}
+      {% else %}
+        {% set onDiscount =  false %}
+      {% endif %}
+
+      <div class="{% if onDiscount %} mb10  {% else %} mb15 {% endif %}">
         {% include 'course/header/header-for-price.html.twig' %}
       </div>
-      <div class=" course-detail-gray">
+
+      {% if onDiscount  %} 
+        <div class="mb15">
+          <span class="course-detail-title">活动</span>
+          <span class="text-12 color-warning">
+            <b class="">{{ course.discount.name|sub_text(10) }}</b>
+            <i class="es-icon es-icon-accesstime text-14 ml20 mr10"></i>
+            <span id="discount-endtime-countdown" data-remaintime={{ course.discount.endTime - timestamp() }}>
+            </span>
+          <span>
+        </div>
+      {% endif %}
+      <div class="course-detail-gray {% if not onDiscount %} not-activity {% endif %}">
         {% if courseSet.type != 'live' %}
-          <div class="course-detail-content mb10">
-            <span class="course-detail-title inline-block vertical-middle mb10">教学计划</span>
-            <ul class="nav nav-pills nav-pills-sm nav-pills-transparent inline-block vertical-middle">
+          <div class="course-detail-content">
+            <span class="course-detail-title vertical-middle mb10">教学计划</span>
+            <ul class="nav nav-pills nav-pills-sm nav-pills-transparent course-detail-nav">
               {% set current_course = course %}
               {% for course in  courses %}
                 <li class="mb10 mr10 {% if current_course.id == course.id %} active {% endif %}">
@@ -58,25 +78,39 @@
           </div>
         {% endif %}
 
-        <div class="mbl">
-          <span class="course-detail-title inline-block">学习方式</span>
-          {% if course.expiryMode == 'days' %}
+        <div class="mb15">
+          <span class="course-detail-title ">学习方式</span>
+          {% if course.expiryMode == 'days'  %}
             <span class="gray-dark mrl">随到随学</span>
             <span class="gray-dark">
               {% if course.expiryDays %}
-                {{ course.expiryDays }}天
-              {% else %}不限时间{% endif %}
+                共 {{ course.expiryDays }} 天
+              {% endif %}
+            </span>
+          {% elseif course.expiryMode == 'end_date' %}
+            <span class="gray-dark mrl">随到随学</span>
+            <span class="gray-dark">
+              {{ course.expiryEndDate|date('Y-m-d ') }}
             </span>
           {% elseif course.expiryMode == 'date' %}
             <span class="gray-dark mrl">周期开班</span>
             <span class="gray-dark">{{ course.expiryStartDate|date('Y-m-d ') }}
               ~
               {{ course.expiryEndDate|date('Y-m-d ') }}</span>
+          {% elseif course.expiryMode == 'forever' %}
+            <span class="gray-dark mrl">永久有效</span>
           {% endif %}
         </div>
 
+        {% if course.buyable != 0  and course.buyExpiryTime != 0 %}
+        <div class="mb15">
+          <span class="course-detail-title ">购买截至日期</span>
+          <span class="gray-dark mrl">{{ course.buyExpiryTime|date('Y-m-d ') }} 23:59</span>
+        </div>
+        {% endif %}
+
         {% if course.showServices | default(1) %}
-          <span class="course-detail-title inline-block">承诺服务</span>
+          <span class="course-detail-title">承诺服务</span>
           {% set serviceTags = services(course.services|default([])) %}
           {% for tag in serviceTags %}
             <span

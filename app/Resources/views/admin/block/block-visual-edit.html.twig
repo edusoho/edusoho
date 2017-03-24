@@ -33,7 +33,7 @@
   {% if app.debug %}
     <a class="btn btn-default btn-sm pull-right" href="{{ path('admin_block_visual_view_data', {blockTemplateId:block.blockTemplateId}) }}" target="_blank">{{'查看JSON配置'|trans}}</a>
   {% endif %}
-  {% if block.code != 'jianmo:home_top_banner' and block.code != 'live_top_banner' %}
+  {% if block.code != 'jianmo:home_top_banner' and block.code != 'live_top_banner' and block.code != 'open_course_top_banner' and block.code != 'cloud_search_banner' %}
   <!-- <div class="col-md-6"> -->
     <div>
       <h4>{{ block.title }}</h4>

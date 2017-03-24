@@ -38,6 +38,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $fields['courseId'] = $parentQuestion['courseId'];
             $fields['lessonId'] = $parentQuestion['lessonId'];
         }
+
         $fields['target'] = empty($fields['courseSetId']) ? '' : 'course-'.$fields['courseSetId'];
 
         $question = $this->getQuestionDao()->create($fields);
@@ -199,6 +200,8 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function getQuestionCountGroupByTypes($conditions)
     {
+        $conditions = $this->filterQuestionFields($conditions);
+
         return $this->getQuestionDao()->getQuestionCountGroupByTypes($conditions);
     }
 
@@ -252,6 +255,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $conditions['lessonId'] = 0;
         }
 
+        if (empty($conditions['difficulty'])) {
+            unset($conditions['difficulty']);
+        }
+
         if (!empty($conditions['keyword'])) {
             $conditions['stem'] = '%'.trim($conditions['keyword']).'%';
             unset($conditions['keyword']);
@@ -265,6 +272,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
         if (empty($conditions['lessonId'])) {
             unset($conditions['lessonId']);
+        }
+
+        if (empty($conditions['courseId'])) {
+            unset($conditions['courseId']);
         }
 
         return $conditions;

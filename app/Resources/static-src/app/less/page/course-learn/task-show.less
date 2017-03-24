@@ -12,7 +12,7 @@
     right: 35px;
     top:0;
     padding-top: 54px;
-    bottom: 60px;
+    bottom: 70px;
     .dashboard-header {
       position: absolute;
       top:0;
@@ -100,8 +100,8 @@
     bottom: 0;
     width: 360px;
     right: -360px;
-    background-color: #f5f8fa;
-    .box-shadow(-10px 0 27px rgba(0,0,0,0.1));
+    background-color: #fff;
+    .box-shadow(-1px 0 5px rgba(0,0,0,0.1));
   }
   .dashboard-toolbar {
     position: absolute;
@@ -119,9 +119,10 @@
         > a {
           padding:12px 15px;
           display: inline-block;
-          background-color: #f5f8fa;
+          background-color: #fff;
           color: @gray-dark;
           text-align: center;
+          .box-shadow(-1px 0 10px rgba(0,0,0,0.1));
         }
         &.active,
         &:hover {
@@ -177,6 +178,14 @@
     }
   }
 }
+
+.screen-full {
+  position: fixed;
+  left: 0;
+  top:0;
+  z-index: 999;
+}
+
 
 @-webkit-keyframes moveUp {
   0% {

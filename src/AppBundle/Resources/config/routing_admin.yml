@@ -2,6 +2,14 @@ admin:
     path:  /
     defaults: { _controller: AppBundle:Admin/Default:index }
 
+admin_discovery_column_category_tree:
+    path: /discovery_column/category/tree
+    defaults: { _controller: AppBundle:Admin/DiscoveryColumn:categoryTree }
+
+admin_setting_security:
+    path:  /setting/security
+    defaults: { _controller: AppBundle:Admin/SiteSetting:security }
+
 admin_notice_modal:
     path:  /notice/modal
     defaults: { _controller: AppBundle:Admin/Default:notice }
@@ -1060,8 +1068,16 @@ admin_cloud_show:
     defaults: { _controller: AppBundle:Admin/Cloud:cloudShow , type: 'video'}
 
 admin_cloud_email_buy:
-    path:  /cloud/{type}/buy/show
+    path:  /cloud/{type}/buy/custom
     defaults: { _controller: AppBundle:Admin/Cloud:emailBuy }
+
+admin_edu_cloud_search_result_type:
+    path: /setting/edu_cloud/search_result/type
+    defaults: { _controller: AppBundle:Admin/EduCloud:setSearchResultType }
+
+admin_wap_set:
+    path: /setting/wap
+    defaults: { _controller: AppBundle:Admin/OperationSetting:wapSet }
 
 admin_cloud_sms_sign:
     path:  /cloud/sms/sign

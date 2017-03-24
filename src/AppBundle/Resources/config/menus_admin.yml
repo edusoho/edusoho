@@ -742,6 +742,15 @@ admin:
                             name: 即时聊天设置
                             router_name: admin_app_im
                             disable: true
+                admin_cloud_file_manage:
+                    name: 云资源
+                    visable: (cloudStatus())
+                    parent: admin_app
+                    after: admin_app_center_show
+                    children:
+                        admin_cloud_file:
+                            name: 云资源
+                            disable: true
                 admin_setting_cloud_attachment:
                     name: 云附件设置
                     visable: (cloudStatus())
@@ -833,6 +842,9 @@ admin:
                         admin_setting_share:
                             name: 分享
                             disable: true
+                        admin_setting_security:
+                            name: 安全
+                            disable: true
                 admin_setting_user:
                     name: 用户设置
                     children:
@@ -910,6 +922,9 @@ admin:
                             disable: true
                         admin_invite_set:
                             name: '邀请注册设置'
+                            disable: true
+                        admin_wap_set:
+                            name: 手机微网校
                             disable: true
                 admin_setting_finance:
                     name: 账务设置

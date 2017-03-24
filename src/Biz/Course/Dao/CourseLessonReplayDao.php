@@ -26,7 +26,7 @@ interface CourseLessonReplayDao extends GeneralDaoInterface
 
     public function getByCourseIdAndLessonId($courseId, $lessonId, $lessonType);
 
-    public function updateByLessonId($lessonId, $fields, $lessonType);
+    public function updateByLessonId($lessonId, $lessonType, $fields);
 
     public function findByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live');
 }

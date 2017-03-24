@@ -2,12 +2,12 @@
 
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Util\EdusohoLiveClient;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\CourseProcessor;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 {
@@ -785,8 +785,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $course = $this->controller->getCourseService()->getCourse($thread['courseId']);
         $user = $this->controller->getUserService()->getUser($thread['userId']);
 
-        $user['following'] = $this->controller->getUserService()->findUserFollowingCount($user['id']);
-        $user['follower'] = $this->controller->getUserService()->findUserFollowerCount($user['id']);
+        $user['following'] = (string) $this->controller->getUserService()->findUserFollowingCount($user['id']);
+        $user['follower'] = (string) $this->controller->getUserService()->findUserFollowerCount($user['id']);
         $result = $this->filterThread($thread, $course, $user);
         $result['content'] = $this->filterSpace(
             $this->controller->convertAbsoluteUrl($this->request, $result['content'])
@@ -979,12 +979,14 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('not_login', '您尚未登录，不能收藏课程！');
         }
 
-        if (!$this->controller->getCourseService()->hasFavoritedCourse($courseId)) {
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        if (!$this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId'])) {
             return $this->createErrorResponse('runtime_error', '您尚未收藏课程，不能取消收藏！');
         }
 
         try {
-            $this->controller->getCourseService()->unfavoriteCourse($courseId);
+            $this->controller->getCourseSetService()->unfavorite($course['courseSetId']);
         } catch (ServiceException $e) {
             return $this->createErrorResponse('runtime_error', $e->getMessage());
         }
@@ -1148,11 +1150,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 $member = null;
             }
         }
-        $userFavorited = $user->isLogin() ? $this->controller->getCourseService()->findUserFavoritedCoursesNotInClassroom(
-            $user['id'],
-            0,
-            PHP_INT_MAX
-        ) : false;
+
+        $this->updateMemberLastViewTime($member);
+        $userFavorited = $user->isLogin() ? $this->controller->getCourseService()->getFavoritedCourseByUserIdAndCourseSetId($user['id'], $course['courseSetId']) : false;
         $vipLevels = array();
 
         if ($this->controller->isinstalledPlugin('Vip') && $this->controller->setting('vip.enabled')) {
@@ -1170,7 +1170,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         return array(
             'course' => $this->controller->filterCourse($course),
-            'userFavorited' => $userFavorited,
+            'userFavorited' => $userFavorited ? true : false,
             'member' => $this->checkMemberStatus($member),
             'vipLevels' => $vipLevels,
             'discount' => $this->getCourseDiscount($courseSet['discountId']),
@@ -1251,8 +1251,31 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $start = (int) $this->getParam('start', 0);
         $limit = (int) $this->getParam('limit', 10);
         $total = $this->controller->getCourseService()->countCourses($conditions);
-        $sort = $this->getParam('sort', 'createdTimeByDesc');
-        $courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
+        $sort = $this->getParam('sort', array('createdTime' => 'desc'));
+
+        if ($sort == 'recommendedSeq') {
+            $conditions['recommended'] = 1;
+            $recommendCount = $this->getCourseService()->countCourses($conditions);
+
+            //先按推荐顺序展示推荐，再追加非推荐
+            $courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
+
+            if (($start + $limit) > $recommendCount) {
+                $conditions['recommended'] = 0;
+                if ($start < $recommendCount) {
+                    //需要用非推荐课程补全limit
+                    $fixedStart = 0;
+                    $fixedLimit = $limit - ($recommendCount - $start);
+                } else {
+                    $fixedStart = $start - $recommendCount;
+                    $fixedLimit = $limit;
+                }
+                $UnRecommendCourses = $this->controller->getCourseService()->searchCourses($conditions, array('createdTime' => 'desc'), $fixedStart, $fixedLimit);
+                $courses = array_merge($courses, $UnRecommendCourses);
+            }
+        } else {
+            $courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
+        }
 
         $result = array(
             'start' => $start,
@@ -1584,19 +1607,21 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             1000,
             array('type' => 'live')
         );
+
         $courseIds = ArrayToolkit::column($courses, 'id');
 
         $conditions = array(
             'status' => 'published',
-            'startTimeGreaterThan' => time(),
+            'startTime_GE' => time(),
             'courseIds' => $courseIds,
+            'type' => 'live',
         );
 
-        $count = $this->controller->getCourseService()->searchLessonCount($conditions);
+        $count = $this->getTaskService()->countTasks($conditions);
 
-        $lessons = $this->controller->getCourseService()->searchLessons(
+        $lessons = $this->getTaskService()->searchTasks(
             $conditions,
-            array('startTime', 'ASC'),
+            array('startTime' => 'ASC'),
             $start,
             $limit
         );
@@ -1630,7 +1655,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return array(
             'start' => $start + count($resultLiveCourses),
             'limit' => $limit,
-            'data' => $resultLiveCourses, );
+            'data' => $resultLiveCourses);
     }
 
     public function hitThread()
@@ -1669,7 +1694,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'start' => $start,
             'limit' => $limit,
             'total' => $total,
-            'data' => $this->controller->filterCourses($liveCourses), );
+            'data' => $this->controller->filterCourses($liveCourses));
 
         return $result;
     }
@@ -1843,6 +1868,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return $this->controller->getService('Course:CourseSetService');
     }
 
+    protected function getCourseMemberService()
+    {
+        return $this->controller->getService('Course:MemberService');
+    }
+
     protected function getTaskService()
     {
         return $this->controller->getService('Task:TaskService');
@@ -1856,5 +1886,13 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     protected function getDiscountService()
     {
         return $this->controller->getService('DiscountPlugin:Discount:DiscountService');
+    }
+
+    protected function updateMemberLastViewTime($member)
+    {
+        if (!empty($member)) {
+            $fields['lastViewTime'] = time();
+            $this->controller->getCourseMemberService()->updateMember($member['id'], $fields);
+        }
     }
 }

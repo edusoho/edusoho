@@ -4,7 +4,6 @@ namespace Biz;
 
 use Monolog\Logger;
 use Biz\User\CurrentUser;
-use Biz\Util\HTMLPurifierFactory;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
@@ -157,18 +156,9 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 
     protected function purifyHtml($html, $trusted = false)
     {
-        if (empty($html)) {
-            return '';
-        }
+        $htmlHelper = $this->biz['html_helper'];
 
-        $config = array(
-            'cacheDir' => ServiceKernel::instance()->getParameter('kernel.cache_dir').'/htmlpurifier',
-        );
-
-        $factory = new HTMLPurifierFactory($config);
-        $purifier = $factory->create($trusted);
-
-        return $purifier->purify($html);
+        return $htmlHelper->purify($html);
     }
 
     protected function getLock()

@@ -30,7 +30,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $limit = (int) $this->getParam('limit', 10);
 
         $conditions['titleLike'] = $this->getParam('title');
-        $total = $this->getClassroomService()->searchClassroomsCount($conditions);
+        $total = $this->getClassroomService()->countClassrooms($conditions);
         $classrooms = $this->getClassroomService()->searchClassrooms(
             $conditions,
             array('recommendedSeq' => 'desc'),
@@ -135,7 +135,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $start = (int) $this->getParam('start', 0);
         $limit = (int) $this->getParam('limit', 10);
 
-        $total = $this->getClassroomService()->searchClassroomsCount($conditions);
+        $total = $this->getClassroomService()->countClassrooms($conditions);
         $classrooms = $this->getClassroomService()->searchClassrooms(
             $conditions,
             array('recommendedSeq' => 'desc'),
@@ -168,7 +168,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $start = (int) $this->getParam('start', 0);
         $limit = (int) $this->getParam('limit', 10);
 
-        $total = $this->getClassroomService()->searchClassroomsCount($conditions);
+        $total = $this->getClassroomService()->countClassrooms($conditions);
         $classrooms = $this->getClassroomService()->searchClassrooms(
             $conditions,
             array('createdTime' => 'desc'),
@@ -193,7 +193,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
             return $this->createErrorResponse('error', '您不是班级的学员。');
         }
 
-        if (!in_array($member['role'], array('auditor', 'student'))) {
+        if (!array_intersect($member['role'], array('auditor', 'student'))) {
             return $this->createErrorResponse('error', '您不是班级的学员。');
         }
 
@@ -515,15 +515,15 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
         $progressArray = array();
         $user = $this->controller->getUserByToken($this->request);
+        if ($user->isLogin()) {
+            foreach ($courses as $key => $course) {
+                $courseMember = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
 
-        foreach ($courses as $key => $course) {
-            $courseMember = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
+                $lessonNum = (float) $course['taskNum'];
+                $progress = $lessonNum == 0 ? 0 : (float) $courseMember['learnedNum'] / $lessonNum;
 
-            $lessonNum = (float) $course['taskNum'];
-            $progress = $lessonNum == 0 ? 0 : (float) $courseMember['learnedNum'] / $lessonNum;
+                $lastLesson = null;
 
-            $lastLesson = null;
-            if ($user) {
                 $userTasks = $this->getTaskResultService()->findUserTaskResultsByCourseId($course['id']);
 
                 if (!$userTasks) {
@@ -533,12 +533,13 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
                 $latestTaskResult = end($userTasks);
 
                 $lastTask = $this->getTaskService()->getTask($latestTaskResult['courseTaskId']);
+
+                $progressArray[$course['id']] = array(
+                    'lastLesson' => $this->filterLastLearnLesson($lastTask),
+                    'progress' => (int) ($progress * 100).'%',
+                    'progressValue' => $progress,
+                );
             }
-            $progressArray[$course['id']] = array(
-                'lastLesson' => $this->filterLastLearnLesson($lastTask),
-                'progress' => (int) ($progress * 100).'%',
-                'progressValue' => $progress,
-            );
         }
 
         return array(
@@ -679,7 +680,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         }
 
         $conditions['recommended'] = ($sort == 'recommendedSeq') ? 1 : null;
-        $total = $this->getClassroomService()->searchClassroomsCount($conditions);
+        $total = $this->getClassroomService()->countClassrooms($conditions);
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
             $conditions,

@@ -8,7 +8,6 @@ use Biz\Taxonomy\Service\TagService;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 class TagController extends BaseController
 {
@@ -89,7 +88,7 @@ class TagController extends BaseController
             $data[] = array('id' => $tag['id'], 'name' => $tag['name']);
         }
 
-        return new JsonResponse($data);
+        return $this->createJsonResponse($data);
     }
 
     /**
