@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Token;
 use ApiBundle\Api\Exception\BannedCredentialException;
 use ApiBundle\Api\Exception\InvalidArgumentException;
 use ApiBundle\Api\Resource\Resource;
+use ApiBundle\Api\Util\BrowserDetectionUtil;
 use AppBundle\Common\EncryptionToolkit;
 use Biz\User\Service\TokenService;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,14 +51,21 @@ class Token extends Resource
 
     private function getDevice(Request $request)
     {
+
         $userAgent = $request->headers->get('User-Agent');
-        preg_match("/iPhone|Android|iPad|iPod|webOS/", $userAgent, $matches);
+        preg_match("/(alcatel|amoi|android|avantgo|blackberry|benq|cell|cricket|docomo|elaine|htc|
+                    iemobile|iphone|ipad|ipaq|ipod|j2me|java|midp|mini|mmp|mobi|motorola|nec-|nokia|palm|panasonic|
+                    philips|phone|playbook|sagem|sharp|sie-|silk|smartphone|sony|symbian|t-mobile|telus|up\.browser|
+                    up\.link|vodafone|wap|webos|wireless|xda|xoom|zte)/i", $userAgent, $matches);
 
         if ($matches) {
             return current($matches);
+        } else {
+            $bdu = new BrowserDetectionUtil($userAgent);
+            $bdu->detect();
+            $browser = $bdu->getBrowser();
+            return $browser ? : TokenService::DEVICE_UNKNOWN;
         }
-
-        return TokenService::DEVICE_UNKNOWN;
     }
 
     private function getTokenService()
