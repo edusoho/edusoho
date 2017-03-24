@@ -51,11 +51,6 @@ class BaseController extends Controller
      */
     protected function switchUser(Request $request, CurrentUser $user)
     {
-
-        if(!$user->isLogin()){
-            throw $this->createAccessDeniedException();
-        }
-
         $user['currentIp'] = $request->getClientIp();
         $biz = $this->getBiz();
         $biz['user'] = $user;
