@@ -234,7 +234,7 @@ class EduCloudController extends BaseController
         $sign = $this->getSignEncoder()->encodePassword($url, $api->getAccessKey());
 
         if ($originSign != $sign) {
-            return $this->createJsonResponse(array('error' => $this->trans('sign不正确')));
+            return $this->createJsonResponse(array('error' => 'sign不正确'));
         }
 
         $searchSetting['search_enabled'] = 1;

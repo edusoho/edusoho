@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Course;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Util\AvatarAlert;
 use Biz\Course\Service\CourseSetService;
 use Symfony\Component\HttpFoundation\Request;

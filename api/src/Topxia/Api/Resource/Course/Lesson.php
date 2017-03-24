@@ -194,7 +194,7 @@ class Lesson extends BaseResource
     protected function getVideoLesson($lesson)
     {
         $line = empty($lesson['hlsLine']) ? '' : $lesson['hlsLine'];
-
+        $hlsEncryption = (!empty($lesson['hlsEncryption']) && true === $lesson['hlsEncryption']);
         $mediaId = $lesson['mediaId'];
         $mediaSource = $lesson['mediaSource'];
         $mediaUri = $lesson['mediaUri'];
@@ -218,7 +218,7 @@ class Lesson extends BaseResource
                                 $token = $this->getTokenService()->makeToken('hls.playlist', array(
                                     'data' => array(
                                         'id' => $headLeaderInfo['id'],
-                                        'fromApi' => true,
+                                        'fromApi' => !$hlsEncryption,
                                     ),
                                     'times' => 2,
                                     'duration' => 3600,
@@ -234,7 +234,7 @@ class Lesson extends BaseResource
                             $token = $this->getTokenService()->makeToken('hls.playlist', array(
                                 'data' => array(
                                     'id' => $file['id'],
-                                    'fromApi' => true,
+                                    'fromApi' => !$hlsEncryption,
                                 ),
                                 'times' => 2,
                                 'duration' => 3600,

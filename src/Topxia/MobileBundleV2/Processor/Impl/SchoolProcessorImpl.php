@@ -63,7 +63,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
             return $this->createMessageResponse('vip_closed', '会员专区已关闭');
         }
 
-        $levels = $this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100);
+        $levels = $this->getLevelService()->searchLevels(array('enabled' => 1), array(), 0, 100);
 
         $levels = array_map(function ($level) {
             $level['picture'] = sprintf('/assets/img/default/vip_%d.png', $level['id']);

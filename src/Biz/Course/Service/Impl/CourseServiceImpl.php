@@ -185,6 +185,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'isDefault',
             )
         );
+
         $fields = $this->validateExpiryMode($fields);
 
         $entityCopy = new CourseCopy($this->biz);

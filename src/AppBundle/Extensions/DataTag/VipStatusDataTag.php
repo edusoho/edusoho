@@ -13,16 +13,15 @@ class VipStatusDataTag extends CourseBaseDataTag implements DataTag
      *
      * @param array $arguments 参数
      *
-     *
      * @return bool vipStatus
      */
     public function getData(array $arguments)
     {
         $result = $this->getVipService()->checkUserInMemberLevel($arguments['userId'], $arguments['levelId']);
-        if ($result == 'ok')
-        {
+        if ($result == 'ok') {
             return 1;
         }
+
         return 0;
     }
 

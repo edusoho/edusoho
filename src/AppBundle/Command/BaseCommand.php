@@ -17,7 +17,7 @@ abstract class BaseCommand extends ContainerAwareCommand
     {
         $serviceKernel = ServiceKernel::create('dev', false);
         $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
-        $serviceKernel->setBiz($this->getContainer()->get('biz'));
+        $serviceKernel->setBiz($this->getBiz());
 
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
@@ -27,6 +27,18 @@ abstract class BaseCommand extends ContainerAwareCommand
             'roles' => array(),
         ));
         $serviceKernel->setCurrentUser($currentUser);
+    }
+
+    protected function getBiz()
+    {
+        return $this->getContainer()->get('biz');
+    }
+
+    protected function createService($alias)
+    {
+        $biz = $this->getBiz();
+
+        return $biz->service($alias);
     }
 
     protected function trans($message, $arguments = array(), $domain = null, $locale = null)

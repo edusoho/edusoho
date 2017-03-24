@@ -2,10 +2,11 @@
 <li class="task-manage-item js-task-manage-item drag clearfix " id="task-{{ task.id }}">
   <div class="item-line"></div>
   <div class="item-content  js-item-content text-overflow">
-    <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mrm"></i>
+    <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mrm" data-role="task"></i>
     {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}
     任务<span class="number">{{ task.number }}</span>： {{ task.title|sub_text(30) }}
-    {% if task.status != 'published' %}<span class="color-warning">(未发布)</span> {% endif %}
+    <span class="color-warning publish-status {% if task.status == 'published' %}
+      hidden {% endif %}">(未发布)</span>
 
     {% if file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}
       <span class="label label-danger ml5">转码失败</span>
@@ -53,28 +54,30 @@
           {% endif %}
         {% endif %}
 
-        {% if task.status|default('create') != 'published' %}
+        {% if task.status|default('create') == 'published' %}
+          {% set status = 1 %}
+        {% else %}
+          {% set status = 0 %}
+        {% endif %}
           <li>
-            <a class='publish-item' href="javascript:;" data-type="task"
+            <a class='publish-item {% if status == 1 %}hidden{% endif %}' href="javascript:;" data-type="task"
               data-url="{{ path('course_manage_task_publish', {id:task.id,courseId:task.courseId}) }}">
               <i class="es-icon es-icon--check-circle mrs"></i>发布
             </a>
           </li>
           <li>
-            <a class='delete-item' href="javascript:;" data-type="task"
+            <a class='delete-item {% if status == 1 %}hidden{% endif %}' href="javascript:;" data-type="task"
               data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}">
               <i class="es-icon es-icon-delete mrs"></i>
               删除
             </a>
           </li>
-        {% else %}
           <li>
-            <a class='unpublish-item' href="javascript:;" data-type="task"
+            <a class='unpublish-item {% if status != 1 %}hidden{% endif %}' href="javascript:;" data-type="task"
               data-url="{{ path('course_manage_task_unpublish', {id:task.id,courseId:task.courseId}) }}">
               <i class="es-icon es-icon-close01 mrm"></i>取消发布
             </a>
           </li>
-        {% endif %}
       </ul>
     </span>
   </div>

@@ -1,4 +1,4 @@
-import 'select2';
+import 'common/select2';
 class Base {
   constructor() {
     this.init();
@@ -6,7 +6,8 @@ class Base {
 
   init() {
     this.initValidator();
-    this.initSelect2();
+    this.initTags();
+    this.initOrg();
   }
 
   initValidator() {
@@ -46,7 +47,7 @@ class Base {
     });
   }
 
-  initSelect2() {
+  initTags() {
     const $tags = $('#tags');
     $tags.select2({
       ajax: {
@@ -84,7 +85,9 @@ class Base {
       formatResult (item) {
         return item.name;
       },
-      formatSearching: '搜索中...',
+      formatSearching: function() {
+        return Translator.trans('搜索中...');
+      },
       multiple: true,
       maximumSelectionSize: 20,
       placeholder: Translator.trans('请输入标签'),
@@ -93,6 +96,15 @@ class Base {
         return null;
       }
     });
+  }
+
+  initOrg() {
+     $('[data-role="tree-select"], [name="categoryId"]').select2({
+        treeview: true,
+        dropdownAutoWidth: true,
+        treeviewInitState: 'collapsed',
+        placeholderOption: 'first'
+      });
   }
 }
 
