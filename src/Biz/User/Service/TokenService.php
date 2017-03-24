@@ -6,7 +6,12 @@ interface TokenService
 {
     const MOBILE_MODULE = 'mobile';
 
-    const TYPE_MOBILE_LOGIN = 'mobile_login';
+    const TYPE_API_AUTH = 'api_auth';
+
+    const DEVICE_UNKNOWN = 'unknown';
+
+    public function makeApiAuthToken(array $args);
+
     /**
      * 生成一个一次性的Token.
      *

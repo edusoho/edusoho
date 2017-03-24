@@ -7,17 +7,27 @@ use Biz\User\Service\TokenService;
 
 class TokenServiceImpl extends BaseService implements TokenService
 {
+    public function makeApiAuthToken(array $args)
+    {
+        $token = $this->generateToken(TokenService::TYPE_API_AUTH, $args);
+        $token['expiredTime'] = time() + 3600 * 24 * 30;
+        $existTokens = $this->getTokenDao()->findByUserIdAndTypeAndDevice(
+            $token['userId'],
+            TokenService::TYPE_API_AUTH,
+            $token['device']
+        );
+
+        //同一设备的token要被删掉
+        foreach ($existTokens as $existToken) {
+            $this->getTokenDao()->delete($existToken['id']);
+        }
+
+        return $this->getTokenDao()->create($token);
+    }
+
     public function makeToken($type, array $args = array())
     {
-        $token = array();
-        $token['type'] = $type;
-        $token['token'] = $this->_makeTokenValue(32);
-        $token['data'] = !isset($args['data']) ? '' : $args['data'];
-        $token['times'] = empty($args['times']) ? 0 : intval($args['times']);
-        $token['remainedTimes'] = $token['times'];
-        $token['userId'] = empty($args['userId']) ? 0 : $args['userId'];
-        $token['expiredTime'] = empty($args['duration']) ? 0 : time() + $args['duration'];
-        $token['createdTime'] = time();
+        $token = $this->generateToken($type, $args);
 
         return $this->getTokenDao()->create($token);
     }
@@ -107,6 +117,23 @@ class TokenServiceImpl extends BaseService implements TokenService
 
         return $value;
     }
+
+    private function generateToken($type, $args)
+    {
+        $token = array();
+        $token['type'] = $type;
+        $token['device'] = empty($args['device']) ? TokenService::DEVICE_UNKNOWN : $args['device'];
+        $token['token'] = $this->_makeTokenValue(32);
+        $token['data'] = !isset($args['data']) ? '' : $args['data'];
+        $token['times'] = empty($args['times']) ? 0 : intval($args['times']);
+        $token['remainedTimes'] = $token['times'];
+        $token['userId'] = empty($args['userId']) ? 0 : $args['userId'];
+        $token['expiredTime'] = empty($args['duration']) ? 0 : time() + $args['duration'];
+        $token['createdTime'] = time();
+
+        return $token;
+    }
+
 
     protected function getTokenDao()
     {

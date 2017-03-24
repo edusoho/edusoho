@@ -28,7 +28,7 @@ class ApiAuth
                 throw new \RuntimeException('API Token不存在！');
             }
 
-            $token = $this->getUserService()->getToken(TokenService::TYPE_MOBILE_LOGIN, $token);
+            $token = $this->getUserService()->getToken(TokenService::TYPE_API_AUTH, $token);
 
             if (empty($token['userId'])) {
                 throw new \RuntimeException('API Token不正确！');

@@ -35,12 +35,34 @@ class Token extends Resource
             throw new BannedCredentialException('用户已锁定，请联系网校管理员');
         }
 
-        $token = $this->getUserService()->makeToken(TokenService::TYPE_MOBILE_LOGIN, $user['id'], time() + 3600 * 24 * 30);
+        $args = array(
+            'userId' => $user['id'],
+            'device' => $this->getDevice($request)
+        );
+
+        $token = $this->getTokenService()->makeApiAuthToken($args);
 
         return array(
-            'token' => $token,
+            'token' => $token['token'],
             'userId' => $user['id']
         );
+    }
+
+    private function getDevice(Request $request)
+    {
+        $userAgent = $request->headers->get('User-Agent');
+        preg_match("/iPhone|Android|iPad|iPod|webOS/", $userAgent, $matches);
+
+        if ($matches) {
+            return current($matches);
+        }
+
+        return TokenService::DEVICE_UNKNOWN;
+    }
+
+    private function getTokenService()
+    {
+        return $this->service('User:TokenService');
     }
 
     private function getUserService()
