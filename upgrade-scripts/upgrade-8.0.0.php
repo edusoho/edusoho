@@ -591,7 +591,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 'createdUserId' => $lesson['userId'],
                 'createdTime' => $lesson['createdTime'],
                 'updatedTime' => $lesson['updatedTime'],
-                'mode' => 'preparation',
+                'mode' => 'extraClass',
                 'number' => $lesson['number'],
                 'type' => 'download',
                 'lessonId' => $lessonId,
