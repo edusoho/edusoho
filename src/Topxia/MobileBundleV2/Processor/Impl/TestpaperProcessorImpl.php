@@ -2,9 +2,9 @@
 
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\TestpaperProcessor;
-use AppBundle\Common\ArrayToolkit;
 
 class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 {
@@ -13,20 +13,32 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         $testId = $this->getParam('testId');
         $targetType = $this->getParam('targetType');
         $targetId = $this->getParam('targetId');
-        $user = $this->controller->getUserByToken($this->request);
 
+        $user = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
             return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testId);
-
-        $targets = $this->controller->get('topxia.target_helper')->getTargets(array($testpaper['target']));
-        if ($targets[$testpaper['target']]['type'] != 'course') {
-            return $this->createErrorResponse('error', '试卷只能属于课程');
+        $task = $this->getTaskService()->getTask($targetId);
+        if (!$task) {
+            return $this->createErrorResponse('error', '试卷所属课时不存在！');
         }
 
-        $course = $this->getCourseService()->getCourse($targets[$testpaper['target']]['id']);
+        $testpaper = $this->getTestpaperService()->getTestpaper($testId);
+
+        if (empty($testpaper)) {
+            return $this->createErrorResponse('error', '试卷不存在！或已删除!');
+        }
+
+        if ($testpaper['status'] == 'draft') {
+            return $this->createErrorResponse('error', '该试卷未发布，如有疑问请联系老师！!');
+        }
+
+        if ($testpaper['status'] == 'closed') {
+            return $this->createErrorResponse('error', '该试卷已关闭，如有疑问请联系老师！!');
+        }
+
+        $course = $this->getCourseService()->getCourse($task['courseId']);
 
         if (empty($course)) {
             return $this->createErrorResponse('error', '试卷所属课程不存在！');
@@ -36,27 +48,31 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
             return $this->createErrorResponse('error', '不是试卷所属课程老师或学生');
         }
 
-        if (empty($testpaper)) {
-            return $this->createErrorResponse('error', '试卷不存在！或已删除!');
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+
+        $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaper['id'], $activity['fromCourseSetId'], $activity['id'], $testpaper['type']);
+
+        if ($testpaperActivity['doTimes'] && $testpaperResult && $testpaperResult['status'] == 'finished') {
+            return $this->createErrorResponse('error', '该试卷只能考一次，不能再考！');
+        } elseif ($testpaperActivity['redoInterval']) {
+            $nextDoTime = $testpaperResult['checkedTime'] + $testpaperActivity['redoInterval'] * 3600;
+            if ($nextDoTime > time()) {
+                return array('result' => false, 'message' => $this->getServiceKernel()->trans('教师设置了重考间隔，请在'.date('Y-m-d H:i:s', $nextDoTime).'之后再考！'));
+                return $this->createErrorResponse('error', '教师设置了重考间隔，请在'.date('Y-m-d H:i:s', $nextDoTime).'之后再考！');
+            }
         }
 
-        $userId = $user['id'];
-        $testResult = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId($testId, $userId, array('doing', 'paused'));
-
-        if ($testpaper['status'] == 'draft') {
-            return $this->createErrorResponse('error', '该试卷未发布，如有疑问请联系老师！!');
-        }
-        if ($testpaper['status'] == 'closed') {
-            return $this->createErrorResponse('error', '该试卷已关闭，如有疑问请联系老师！!');
+        if (!$testpaperResult || ($testpaperResult && $testpaperResult['status'] == 'finished')) {
+            $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], array('lessonId' => $activity['id'], 'courseId' => $activity['fromCourseId'], 'limitedTime' => $testpaperActivity['limitedTime']));
         }
 
-        $testResult = $this->getTestpaperService()->startTestpaper($testId, array('type' => $targetType, 'id' => $targetId));
-
+        $items = $this->showTestpaperItems($testpaper['id'], $testpaperResult['id']);
         return array(
-                        'testpaperResult' => $testResult,
-                                'testpaper' => $testpaper,
-                                'items' => $this->getTestpaperItem($testResult),
-                                );
+            'testpaperResult' => $testpaperResult,
+            'testpaper' => $testpaper,
+            'items' => $this->coverTestpaperItems($items, 1),
+        );
     }
 
     public function favoriteQuestion()
@@ -66,16 +82,29 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
             return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
         }
 
-        $id = $this->getParam('id');
+        $id = $this->getParam('id'); // => questionId
         $action = $this->getParam('action');
         $targetType = $this->getParam('targetType');
         $targetId = $this->getParam('targetId');
         $target = $targetType.'-'.$targetId;
 
         if ($action == 'favorite') {
-            $this->getQuestionService()->favoriteQuestion($id, $target, $user['id']);
+            $favorite = array(
+                'questionId' => $id,
+                'targetId' => $targetId,
+                'targetType' => $targetType,
+            );
+            $this->getQuestionService()->createFavoriteQuestion($favorite);
         } else {
-            $this->getQuestionService()->unFavoriteQuestion($id, $target, $user['id']);
+            $conditions = array(
+                'questionId' => $id,
+                'targetId' => $targetId,
+                'targetType' => $targetType,
+            );
+            $userFavorits = $this->getQuestionService()->searchFavoriteQuestions($conditions, $null, 0, 1);
+            if ($userFavorits) {
+                $this->getQuestionService()->deleteFavoriteQuestion($userFavorits[0]['id']);
+            }
         }
 
         return true;
@@ -90,10 +119,13 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 
         $start = (int) $this->getParam('start', 0);
         $limit = (int) $this->getParam('limit', 10);
-        $total = $this->getTestpaperService()->findTestpaperResultsCountByUserId($user['id']);
 
-        $testpaperResults = $this->getTestpaperService()->findTestpaperResultsByUserId(
-            $user['id'],
+        $conditions = array('userId' => $user['id']);
+        $total = $this->getTestpaperService()->searchTestpaperResultsCount($conditions);
+
+        $testpaperResults = $this->getTestpaperService()->searchTestpaperResults(
+            $conditions,
+            array('beginTime' => 'desc'),
             $start,
             $limit
         );
@@ -194,53 +226,31 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 
     public function finishTestpaper()
     {
+        $user = $this->controller->getUserByToken($this->request);
         $id = $this->getParam('id');
+
+        if (!$user->isLogin()) {
+            return false;
+        }
+
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
 
         if (!empty($testpaperResult) && !in_array($testpaperResult['status'], array('doing', 'paused'))) {
             return true;
         }
 
+        if ($user['id'] != $testpaperResult['userId']) {
+            return false;
+        }
+
         $data = $this->request->request->all();
-        $answers = array_key_exists('data', $data) ? $data['data'] : array();
+        $answers = empty($data) ? $data['data'] : array();
         $usedTime = $data['usedTime'];
-        $user = $this->controller->getUserByToken($this->request);
 
-                //提交变化的答案
-                $results = $this->getTestpaperService()->submitTestpaperAnswer($id, $answers);
+        //提交变化的答案
+        //$results = $this->getTestpaperService()->submitTestpaperAnswer($id, $answers);
 
-                //完成试卷，计算得分
-                $testResults = $this->getTestpaperService()->makeTestpaperResultFinish($id);
-
-        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
-
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
-                //试卷信息记录
-                $this->getTestpaperService()->finishTest($id, $user['id'], $usedTime);
-
-        $targets = $this->controller->get('topxia.target_helper')->getTargets(array($testpaper['target']));
-
-        $course = $this->controller->getCourseService()->getCourse($targets[$testpaper['target']]['id']);
-
-        if ($this->getTestpaperService()->isExistsEssay($testResults)) {
-            $userUrl = $this->controller->generateUrl('user_show', array('id' => $user['id']), true);
-            $teacherCheckUrl = $this->controller->generateUrl('course_manage_test_teacher_check', array('id' => $testpaperResult['id']), true);
-
-            foreach ($course['teacherIds'] as $receiverId) {
-                $result = $this->getNotificationService()->notify($receiverId, 'default', "【试卷已完成】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚完成了 {$testpaperResult['paperName']} ，<a href='{$teacherCheckUrl}' target='_blank'>请点击批阅</a>");
-            }
-        }
-
-                // @todo refactor. , wellming
-                $targets = $this->controller->get('topxia.target_helper')->getTargets(array($testpaperResult['target']));
-
-        if ($targets[$testpaperResult['target']]['type'] == 'lesson' && !empty($targets[$testpaperResult['target']]['id'])) {
-            $lessons = $this->controller->getCourseService()->findLessonsByIds(array($targets[$testpaperResult['target']]['id']));
-            if (!empty($lessons[$targets[$testpaperResult['target']]['id']])) {
-                $lesson = $lessons[$targets[$testpaperResult['target']]['id']];
-                $this->controller->getCourseService()->finishLearnLesson($lesson['courseId'], $lesson['id']);
-            }
-        }
+        $this->getTestpaperService()->finishTest($testpaperResult['id'], $data);
 
         return true;
     }
@@ -260,34 +270,33 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
 
-        $result = $this->getTestpaperService()->showTestpaper($id);
-        $items = $result['formatItems'];
-
+        $items = $this->showTestpaperItems($testpaper['id'], $testpaperResult['id']);
         return array(
-                        'testpaperResult' => $testpaperResult,
-                                'testpaper' => $testpaper,
-                                'items' => $this->getTestpaperItem($testpaperResult),
-                                );
+            'testpaperResult' => $testResult,
+            'testpaper' => $testpaper,
+            'items' => $this->coverTestpaperItems($items, 1),
+        );
     }
 
     public function doTestpaper()
     {
         $testId = $this->getParam('testId');
-        $targetType = $this->getParam('targetType');
-        $targetId = $this->getParam('targetId');
+        $targetType = $this->getParam('targetType'); // => lesson
+        $targetId = $this->getParam('targetId'); // => lessonId
+
         $user = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
             return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testId);
-
-        $targets = $this->controller->get('topxia.target_helper')->getTargets(array($testpaper['target']));
-        if ($targets[$testpaper['target']]['type'] != 'course') {
-            return $this->createErrorResponse('error', '试卷只能属于课程');
+        $task = $this->getTaskService()->getTask($targetId);
+        if (!$task) {
+            return $this->createErrorResponse('error', '试卷所属课时不存在！');
         }
 
-        $course = $this->getCourseService()->getCourse($targets[$testpaper['target']]['id']);
+        $testpaper = $this->getTestpaperService()->getTestpaper($testId);
+
+        $course = $this->getCourseService()->getCourse($task['courseId']);
 
         if (empty($course)) {
             return $this->createErrorResponse('error', '试卷所属课程不存在！');
@@ -301,7 +310,12 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
             return $this->createErrorResponse('error', '试卷不存在！或已删除!');
         }
 
-        $testpaperResult = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($testId, $user['id']);
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+
+        $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaperActivity['mediaId'], $activity['fromCourseId'], $activity['id'], $activity['mediaType']);
+
+        $items = $this->showTestpaperItems($testpaper['id']);
 
         if (empty($testpaperResult)) {
             if ($testpaper['status'] == 'draft') {
@@ -311,20 +325,20 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
                 return $this->createErrorResponse('error', '该试卷已关闭，如有疑问请联系老师！!');
             }
 
-            $testpaperResult = $this->getTestpaperService()->startTestpaper($testId, array('type' => $targetType, 'id' => $targetId));
+            $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], array('lessonId' => $activity['id'], 'courseId' => $activity['fromCourseId'], 'limitedTime' => $testpaperActivity['limitedTime']));
 
             return array(
-                        'testpaperResult' => $testpaperResult,
-                                'testpaper' => $testpaper,
-                                'items' => $this->getTestpaperItem($testpaperResult),
-                                );
+                'testpaperResult' => $testpaperResult,
+                'testpaper' => $testpaper,
+                'items' => $this->coverTestpaperItems($items, 1),
+            );
         }
         if (in_array($testpaperResult['status'], array('doing', 'paused'))) {
             return array(
-                        'testpaperResult' => $testpaperResult,
-                                'testpaper' => $testpaper,
-                                'items' => $this->getTestpaperItem($testpaperResult),
-                                );
+                'testpaperResult' => $testpaperResult,
+                'testpaper' => $testpaper,
+                'items' => $this->coverTestpaperItems($items, 1),
+            );
         } else {
             return $this->createErrorResponse('error', '试卷正在批阅！不能重新考试!');
         }
@@ -334,48 +348,55 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
     {
         $answerShowMode = $this->controller->setting('questions.testpaper_answers_show_mode', 'submitted');
 
-            // 不显示题目
-            if ($answerShowMode == 'hide') {
-                return $this->createErrorResponse('error', '网校已关闭交卷后答案解析的显示!');
-            }
+        // 不显示题目
+        if ($answerShowMode == 'hide') {
+            return $this->createErrorResponse('error', '网校已关闭交卷后答案解析的显示!');
+        }
 
         $id = $this->getParam('id');
         $user = $this->controller->getUserByToken($this->request);
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
-        if (!$testpaperResult) {
+        if (!$testpaperResult || $testpaperResult['userId'] != $user['id']) {
             return $this->createErrorResponse('error', '不可以访问其他学生的试卷哦!');
         }
 
-            //客观题自动批阅完后先显示答案解析
-            if ($answerShowMode == 'reviewed' && $testpaperResult['status'] != 'finished') {
-                return $this->createErrorResponse('error', '试卷正在批阅，需要批阅完后才能显示答案解析!');
-            }
+        //客观题自动批阅完后先显示答案解析
+        if ($answerShowMode == 'reviewed' && $testpaperResult['status'] != 'finished') {
+            return $this->createErrorResponse('error', '试卷正在批阅，需要批阅完后才能显示答案解析!');
+        }
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
 
-        $targets = $this->controller->get('topxia.target_helper')->getTargets(array($testpaper['target']));
+        //$targets = $this->controller->get('topxia.target_helper')->getTargets(array($testpaper['target']));
+
+        $activity = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
         if ($testpaperResult['userId'] != $user['id']) {
-            $course = $this->controller->getCourseService()->tryManageCourse($targets[$testpaper['target']]['id']);
+            $course = $this->controller->getCourseService()->tryManageCourse($testpaperResult['courseId']);
         }
 
         if (empty($course) && $testpaperResult['userId'] != $user['id']) {
             return $this->createErrorResponse('error', '不可以访问其他学生的试卷哦!');
         }
 
-        $result = $this->getTestpaperService()->showTestpaper($id, true);
-        $items = $result['formatItems'];
-        $accuracy = $result['accuracy'];
+        //$result = $this->getTestpaperService()->showTestpaper($id, true);
+        //$items = $result['formatItems'];
+        //$accuracy = $result['accuracy'];
 
-        $favorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($testpaperResult['userId']);
+        $accuracy = $this->getTestpaperService()->makeAccuracy($testpaperResult['id']);
+
+        $favorites = $this->getQuestionService()->findUserFavoriteQuestions($user['id']);
+
+        $items = $this->showTestpaperItems($testpaper['id'], $testpaperResult['id']);
 
         return array(
-                'testpaper' => $testpaper,
-                'items' => $this->filterResultItems($items, true),
-                'accuracy' => $accuracy,
-                'paperResult' => $testpaperResult,
-        'favorites' => ArrayToolkit::column($favorites, 'questionId'),
-                );
+            'testpaper' => $testpaper,
+            'items' => $this->coverTestpaperItems($items, 1),
+            'accuracy' => $accuracy,
+            'paperResult' => $testpaperResult,
+            'favorites' => ArrayToolkit::column($favorites, 'questionId'),
+        );
     }
 
     private function filterResultItems($items, $isShowTestResult)
@@ -495,5 +516,84 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         }
 
         return $itemValue;
+    }
+
+    //做过渡使用,移动端course2.0发布后请使用testpaperService中的接口showTestpaperItems
+    protected function showTestpaperItems($testId, $resultId = 0)
+    {
+        $items = $this->getTestpaperService()->findItemsByTestId($testId);
+        $questionIds = ArrayToolkit::column($items, 'questionId');
+
+        $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
+        $questions = ArrayToolkit::index($questions, 'id');
+
+        $questions = $this->completeQuestion($items, $questions);
+
+        $itemResults = array();
+        if ($resultId) {
+            $itemResults = $this->getTestpaperService()->findItemResultsByResultId($resultId);
+            $itemResults = ArrayToolkit::index($itemResults, 'questionId');
+        }
+
+        $formatItems = array();
+        foreach ($items as $questionId => $item) {
+            if (array_key_exists($questionId, $itemResults)) {
+                $questions[$questionId]['testResult'] = $itemResults[$questionId];
+            }
+
+            $items[$questionId]['question'] = $questions[$questionId];
+
+            if ($item['parentId'] != 0) {
+                if (!array_key_exists('items', $items[$item['parentId']])) {
+                    $items[$item['parentId']]['items'] = array();
+                }
+
+                $items[$item['parentId']]['items'][$questionId] = $items[$questionId];
+                $formatItems['material'][$item['parentId']]['items'][$item['seq']] = $items[$questionId];
+                unset($items[$questionId]);
+            } else {
+                $formatItems[$item['questionType']][$item['questionId']] = $items[$questionId];
+            }
+        }
+
+        return $formatItems;
+    }
+
+    protected function completeQuestion($items, $questions)
+    {
+        foreach ($items as $item) {
+            if (!in_array($item['questionId'], ArrayToolkit::column($questions, 'id'))) {
+                $questions[$item['questionId']] = array(
+                    'id' => $item['questionId'],
+                    'isDeleted' => true,
+                    'stem' => $this->getKernel()->trans('此题已删除'),
+                    'score' => 0,
+                    'answer' => '',
+                    'type' => $item['questionType'],
+                );
+            }
+        }
+
+        return $questions;
+    }
+
+    protected function getTaskService()
+    {
+        return $this->controller->getService('Task:TaskService');
+    }
+
+    protected function getActivityService()
+    {
+        return $this->controller->getService('Activity:ActivityService');
+    }
+
+    protected function getTestpaperActivityService()
+    {
+        return $this->controller->getService('Activity:TestpaperActivityService');
+    }
+
+    protected function getQuestionService()
+    {
+        return $this->controller->getService('Question:QuestionService');
     }
 }

@@ -50,7 +50,7 @@
   </div>
 
   {{ render(controller('AppBundle:File/Attachment:formFields', {targetType: 'course.thread.post', targetId: post.id|default(0)}, {'showLabel':false})) }}
-
+  
   <div class="form-group">
     <div class="controls clearfix">
       {{ form_rest(form) }}

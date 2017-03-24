@@ -162,7 +162,7 @@ class DefaultController extends BaseController
 
     public function jumpAction(Request $request)
     {
-        $courseId = (int)($request->query->get('id'));
+        $courseId = (int) ($request->query->get('id'));
 
         if ($this->getCourseMemberService()->isCourseTeacher($courseId, $this->getCurrentUser()->id)) {
             $url = $this->generateUrl('live_course_manage_replay', array('id' => $courseId));
@@ -216,7 +216,7 @@ class DefaultController extends BaseController
             return array('percent' => '0%', 'number' => 0, 'total' => 0);
         }
 
-        $percent = (int)($member['learnedNum'] / $course['lessonNum'] * 100).'%';
+        $percent = (int) ($member['learnedNum'] / $course['lessonNum'] * 100).'%';
 
         return array(
             'percent' => $percent,

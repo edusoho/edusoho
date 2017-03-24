@@ -139,7 +139,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
                 'rating' => $fields['rating'],
                 'private' => $course['status'] == 'published' ? 0 : 1,
                 'parentId' => $fields['parentId'],
-                'content' => empty($fields['content']) ? '' : $this->purifyHtml($fields['content']),
+                'content' => !isset($fields['content']) ? '' : $this->purifyHtml($fields['content']),
                 'createdTime' => time(),
                 'meta' => $meta,
             ));
@@ -147,7 +147,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         } else {
             $review = $this->getReviewDao()->update($review['id'], array(
                 'rating' => $fields['rating'],
-                'content' => empty($fields['content']) ? '' : $this->purifyHtml($fields['content']),
+                'content' => !isset($fields['content']) ? '' : $this->purifyHtml($fields['content']),
                 'updatedTime' => time(),
                 'meta' => $meta,
             ));

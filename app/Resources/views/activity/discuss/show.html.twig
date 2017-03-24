@@ -4,6 +4,6 @@
 	<div class="iframe-parent-content ph20 pv20">
 		<h2 class="mt0">讨论主题</h2>
     <div class="mt20 mb20 color-darker">{{activity.content|raw}}</div>
-		<a class="btn btn-primary mr10" href="{{path('course_thread_create', {courseId: activity.fromCourseId, type: 'discussion'})}}" target="_blank">前往课程话题区</a>发表或回复话题吧
+		<a class="btn btn-primary mr10" href="{{path('course_thread_create', {courseId: activity.fromCourseId, type: 'discussion'})}}" target="_blank">前往课程讨论区</a>发表或回复话题吧
 	</div>
 {% endblock %}

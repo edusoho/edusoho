@@ -3,9 +3,9 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Request;
 
 class Users extends BaseResource
 {
@@ -27,15 +27,14 @@ class Users extends BaseResource
 
         if (isset($conditions['cursor'])) {
             $conditions['updatedTime_GE'] = $conditions['cursor'];
-            $users = $this->getUserService()->searchUsers($conditions, array('updatedTime'=> 'ASC'), $start, $limit);
+            $users = $this->getUserService()->searchUsers($conditions, array('updatedTime' => 'ASC'), $start, $limit);
             $next = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $users);
             return $this->wrap($this->filter($users), $next);
         } else {
-            $users = $this->getUserService()->searchUsers($conditions, array('createdTime','DESC'), $start, $limit);
+            $users = $this->getUserService()->searchUsers($conditions, array('createdTime' => 'DESC'), $start, $limit);
             $total = $this->getUserService()->countUsers($conditions);
             return $this->wrap($this->filter($users), $total);
         }
-
     }
 
     public function post(Application $app, Request $request)
@@ -133,12 +132,12 @@ class Users extends BaseResource
      */
     private function matchUsers($q)
     {
-        $mobileProfiles = $this->getUserService()->searchUserProfiles(array('mobile' => $q), array('id'=> 'DESC'), 0, 5);
-        $qqProfiles = $this->getUserService()->searchUserProfiles(array('qq' => $q), array('id'=> 'DESC'), 0, 5);
+        $mobileProfiles = $this->getUserService()->searchUserProfiles(array('mobile' => $q), array('id' => 'DESC'), 0, 5);
+        $qqProfiles = $this->getUserService()->searchUserProfiles(array('qq' => $q), array('id' => 'DESC'), 0, 5);
 
         $mobileList = $this->getUserService()->findUsersByIds(ArrayToolkit::column($mobileProfiles, 'id'));
         $qqList = $this->getUserService()->findUsersByIds(ArrayToolkit::column($qqProfiles, 'id'));
-        $nicknameList = $this->getUserService()->searchUsers(array('nickname' => $q), array('LENGTH(nickname)'=> 'ASC'), 0, 5);
+        $nicknameList = $this->getUserService()->searchUsers(array('nickname' => $q), array('id' => 'ASC'), 0, 5);
 
         return array(
             'mobile' => filters($mobileList, 'user'),

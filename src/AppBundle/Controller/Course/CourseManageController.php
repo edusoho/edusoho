@@ -56,6 +56,9 @@ class CourseManageController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
+
+            $data = $this->prepareExpiryMode($data);
+
             $this->getCourseService()->copyCourse($data);
 
             return $this->redirect(
@@ -107,7 +110,7 @@ class CourseManageController extends BaseController
         );
 
         foreach ($liveTasks as $key => $task) {
-            $task['isEnd'] = intval(time() - $task['endTime']) > 0;
+            $task['isEnd'] = (int) (time() - $task['endTime']) > 0;
             $task['file'] = $this->_getLiveReplayMedia($task);
             $liveTasks[$key] = $task;
         }
@@ -399,6 +402,28 @@ class CourseManageController extends BaseController
             array(
                 'courseSet' => $courseSet,
                 'course' => $this->formatCourseDate($course),
+            )
+        );
+    }
+
+    public function headerAction($courseSet, $course)
+    {
+        $teachers = $this->getCourseMemberService()->searchMembers(
+            array('courseId' => $course['id'], 'role' => 'teacher', 'isVisible' => 1),
+            array('seq' => 'asc'),
+            0,
+            PHP_INT_MAX
+        );
+
+        $course['teacherIds'] = ArrayToolkit::column($teachers, 'userId');
+        $users = $this->getUserService()->findUsersByIds($course['teacherIds']);
+
+        return $this->render(
+            'course-manage/header.html.twig',
+            array(
+                'courseSet' => $courseSet,
+                'course' => $course,
+                'users' => $users,
             )
         );
     }

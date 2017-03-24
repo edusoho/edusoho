@@ -420,13 +420,17 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             )
         );
 
-        if (!empty($fields['tags'])) {
-            $fields['tags'] = explode(',', $fields['tags']);
-            $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
-            $fields['tags'] = ArrayToolkit::column($fields['tags'], 'id');
+        if ($fields['tags'] !== null) {
+            $tags = explode(',', $fields['tags']);
+            $tags = $this->getTagService()->findTagsByNames($tags);
+            $tagIds = ArrayToolkit::column($tags, 'id');
         }
 
-        $fields = array_filter($fields);
+        $fields = $this->filterFields($fields);
+
+        if (null !== $tagIds) {
+            $fields['tags'] = $tagIds;
+        }
 
         $this->updateCourseSerializeMode($courseSet, $fields);
         if (empty($fields['subtitle'])) {
@@ -605,39 +609,52 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function publishCourseSet($id)
     {
         $courseSet = $this->tryManageCourseSet($id);
+
+        if (empty($courseSet)) {
+            throw $this->createNotFoundException('course set not found');
+        }
+
         $publishedCourses = $this->getCourseService()->findPublishedCoursesByCourseSetId($id);
 
         $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
-
-        if (empty($publishedCourses) && empty($classroomRef)) {
-            throw $this->createAccessDeniedException('发布课程时请确保课程下至少有一个已发布的教学计划');
-        }
+        $this->beginTransaction();
 
         try {
-            $this->beginTransaction();
-
-            if (!empty($classroomRef)) {
-                $this->getCourseService()->publishCourse($classroomRef['courseId']);
+            if (empty($publishedCourses) && $courseSet['type'] === 'live') {
+                // 直播课程隐藏了教学计划，所以发布直播课程的时候自动发布教学计划
+                $course = $this->getCourseService()->getFirstCourseByCourseSetId($courseSet['id']);
+                $this->getCourseService()->publishCourse($course['id']);
+                $publishedCourses = $this->getCourseService()->findPublishedCoursesByCourseSetId($id);
             }
+
+            if (empty($publishedCourses)) {
+                $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+                if (!empty($classroomRef)) {
+                    $this->getCourseService()->publishCourse($classroomRef['courseId']);
+                } elseif (count($courses) === 1) {
+                    //如果课程下仅有一个教学计划且未发布，则级联发布该教学计划
+                    $this->getCourseService()->publishCourse($courses[0]['id']);
+                } else {
+                    throw $this->createAccessDeniedException('发布课程时请确保课程下至少有一个已发布的教学计划');
+                }
+            }
+
             $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
 
             $this->commit();
 
             $this->dispatchEvent('course-set.publish', new Event($courseSet));
+            $this->getLogService()->info('course', 'publish', "发布课程《{$courseSet['title']}》(#{$courseSet['id']})");
         } catch (\Exception $exception) {
             $this->rollback();
             throw $exception;
         }
-        $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
-        $this->getLogService()->info('course', 'publish', "发布课程《{$courseSet['title']}》(#{$courseSet['id']})");
-
-        $this->dispatchEvent('course-set.publish', new Event($courseSet));
     }
 
     public function closeCourseSet($id)
     {
         $courseSet = $this->tryManageCourseSet($id);
-        if ($courseSet['status'] != 'published') {
+        if ($courseSet['status'] !== 'published') {
             throw $this->createAccessDeniedException('CourseSet has not bean published');
         }
 
@@ -659,6 +676,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             throw $exception;
         }
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'closed'));
+
         $this->getLogService()->info('course', 'close', "关闭课程《{$courseSet['title']}》(#{$courseSet['id']})");
 
         $this->dispatchEvent('course-set.closed', new Event($courseSet));
@@ -944,5 +962,20 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
 
         return $defaultCourse;
+    }
+
+    protected function filterFields($fields)
+    {
+        return array_filter($fields, function ($value) {
+            if ($value === '' || $value === null) {
+                return false;
+            }
+
+            if (is_array($value) && empty($value)) {
+                return false;
+            }
+
+            return true;
+        });
     }
 }

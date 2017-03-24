@@ -2,9 +2,9 @@
 
 namespace Topxia\Api\Resource;
 
-use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Service\Common\ServiceKernel;
 
 abstract class BaseResource
@@ -105,8 +105,8 @@ abstract class BaseResource
     protected function error($code, $message)
     {
         return array('error' => array(
-            'code'    => $code,
-            'message' => $message
+            'code' => $code,
+            'message' => $message,
         ));
     }
 
@@ -133,13 +133,53 @@ abstract class BaseResource
     {
         $simple = array();
 
-        $simple['id']       = $user['id'];
+        $simple['id'] = $user['id'];
         $simple['nickname'] = $user['nickname'];
-        $simple['title']    = $user['title'];
-        $simple['roles']    = $user['roles'];
-        $simple['avatar']   = $this->getFileUrl($user['smallAvatar']);
+        $simple['title'] = $user['title'];
+        $simple['roles'] = $user['roles'];
+        $simple['avatar'] = $this->getFileUrl($user['smallAvatar']);
 
         return $simple;
+    }
+
+    protected function nextCursorPaging($currentCursor, $currentStart, $currentLimit, $currentRows)
+    {
+        $end = end($currentRows);
+        if (empty($end)) {
+            return array(
+                'cursor' => $currentCursor + 1,
+                'start' => 0,
+                'limit' => $currentLimit,
+                'eof' => true,
+            );
+        }
+
+        if (count($currentRows) < $currentLimit) {
+            return array(
+                'cursor' => $end['updatedTime'] + 1,
+                'start' => 0,
+                'limit' => $currentLimit,
+                'eof' => true,
+            );
+        }
+
+        if ($end['updatedTime'] != $currentCursor) {
+            $next = array(
+                'cursor' => $end['updatedTime'],
+                'start' => 0,
+                'limit' => $currentLimit,
+                'eof' => false,
+            );
+        } else {
+            $next = array(
+                'cursor' => $currentCursor,
+                'start' => $currentStart + $currentLimit,
+                'limit' => $currentLimit,
+                'eof' => false,
+            );
+        }
+
+        return $next;
     }
 
     protected function filterHtml($text)
@@ -191,7 +231,7 @@ abstract class BaseResource
     protected function getSchema()
     {
         $https = $_SERVER['HTTPS'];
-        if(!empty($https) && 'off' !== strtolower($https)) {
+        if (!empty($https) && 'off' !== strtolower($https)) {
             return 'https';
         }
         return 'http';
@@ -251,7 +291,7 @@ abstract class BaseResource
         }
 
         $this->logger = new Logger($name);
-        $this->logger->pushHandler(new StreamHandler($this->biz['kernel.logs_dir'].'/service.log', Logger::DEBUG));
+        $this->logger->pushHandler(new StreamHandler($this->biz['log_directory'].'/service.log', Logger::DEBUG));
 
         return $this->logger;
     }

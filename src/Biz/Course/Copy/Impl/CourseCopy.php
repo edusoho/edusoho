@@ -54,6 +54,27 @@ class CourseCopy extends AbstractEntityCopy
             $new['learnMode'] = $config['learnMode'];
         }
 
+        if (!empty($config['expiryMode'])) {
+            $new['expiryMode'] = $config['expiryMode'];
+            if ($config['expiryMode'] == 'days') {
+                $new['expiryDays'] = $config['expiryDays'];
+                $new['expiryStartDate'] = null;
+                $new['expiryEndDate'] = null;
+            } elseif ($config['expiryMode'] == 'end_date') {
+                $course['expiryStartDate'] = null;
+                $course['expiryDays'] = 0;
+                $new['expiryEndDate'] = $config['expiryEndDate'];
+            } elseif ($config['expiryMode'] == 'date') {
+                $course['expiryDays'] = 0;
+                $new['expiryStartDate'] = $config['expiryStartDate'];
+                $new['expiryEndDate'] = $config['expiryEndDate'];
+            } else {//forever
+                $course['expiryStartDate'] = null;
+                $course['expiryDays'] = 0;
+                $new['expiryEndDate'] = 0;
+            }
+        }
+
         $new = $this->getCourseDao()->create($new);
         $this->doCopyCourseMember($source, $new);
         $this->childrenCopy($source, array('newCourse' => $new, 'modeChange' => $modeChange, 'isCopy' => false));

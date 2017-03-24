@@ -12,13 +12,13 @@ class CourseThread extends BaseResource
     {
         $courseThread = $this->getCourseThreadService()->getThread($courseId, $threadId);
 
-        $user                 = $this->getUserService()->getUser($courseThread['userId']);
+        $user = $this->getUserService()->getUser($courseThread['userId']);
         $courseThread['user'] = $this->simpleUser($user);
 
-        $course                          = $this->getCourseService()->getCourse($courseThread['courseId']);
-        $courseThread['course']['id']    = $course['id'];
-        $courseThread['course']['title'] = $course['title'];
-
+        $course = $this->getCourseService()->getCourse($courseThread['courseId']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $course['courseSet'] = $courseSet;
+        $courseThread['course'] = $this->callFilter('Course', $course);
         return $this->filter($courseThread);
     }
 
@@ -63,5 +63,10 @@ class CourseThread extends BaseResource
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 }
