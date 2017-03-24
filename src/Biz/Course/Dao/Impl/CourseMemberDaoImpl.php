@@ -152,6 +152,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
      * @param  $userId
      * @param  $courseSetId
      * @param  $role
+     *
      * @return array
      */
     public function findByUserIdAndCourseSetIdAndRole($userId, $courseSetId, $role)
@@ -376,6 +377,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'id',
                 'updatedTime',
                 'lastViewTime',
+                'seq',
             ),
             'conditions' => array(
                 'userId = :userId',
@@ -383,6 +385,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'isLearned = :isLearned',
                 'joinedType = :joinedType',
                 'role = :role',
+                'isVisible = :isVisible',
                 'classroomId = :classroomId',
                 'noteNum > :noteNumGreaterThan',
                 'createdTime >= :startTimeGreaterThan',
@@ -401,6 +404,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     /**
      * @param  $conditions
      * @param  $sql
+     *
      * @return array
      */
     protected function applySqlParams($conditions, $sql)
