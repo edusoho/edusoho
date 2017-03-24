@@ -36,7 +36,11 @@ class HomeworkResult extends BaseResource
         $lessonId = $activities[0]['id'];
         $result = $this->getTestpaperService()->startTestpaper($homework['id'], array('lessonId' => $lessonId, 'courseId' => $homework['courseId']));
 
-        $this->getTestpaperService()->finishTest($result['id'], $answers);
+        try {
+            $this->getTestpaperService()->finishTest($result['id'], $answers);
+        } catch (\Exception $e) {
+            return $this->error('500', $e->getMessage());
+        }
 
         return array(
             'id' => $result['id'],
