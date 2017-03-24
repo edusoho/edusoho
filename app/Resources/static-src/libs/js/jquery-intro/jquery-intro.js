@@ -4,19 +4,23 @@
  *
  * Copyright (C) 2016 Afshin Mehrabani (@afshinmeh)
  */
-import './jquery-intro.css';
+// import './jquery-intro.css';
 (function (root, factory) {
-  if (typeof exports === 'object') {
-    // CommonJS
-    factory(exports);
-  } else if (typeof define === 'function' && define.amd) {
-    // AMD. Register as an anonymous module.
-    define(['exports'], factory);
-  } else {
-    // Browser globals
-    factory(root);
-  }
-} (this, function (exports) {
+  // if (typeof exports === 'object') {
+
+  //   console.log(exports);
+  //   // CommonJS
+  //   factory(exports);
+  // } else if (typeof define === 'function' && define.amd) {
+  //   // AMD. Register as an anonymous module.
+  //   define(['exports'], factory);
+  // } else {
+  //   // Browser globals
+  //   factory(root);
+  // }
+
+   factory(root);
+} (this, function () {
   //Default config/variables
   var VERSION = '2.3.0';
 
@@ -99,10 +103,13 @@ import './jquery-intro.css';
         var currentItem = _cloneObject(this._options.steps[i]);
         //set the step
         currentItem.step = introItems.length + 1;
+
+        console.log(currentItem.element);
         //use querySelector function only when developer used CSS selector
         if (typeof(currentItem.element) === 'string') {
           //grab the element with given selector from the page
           currentItem.element = document.querySelector(currentItem.element);
+          console.log(currentItem.element );
         }
 
         //intro without element
@@ -119,6 +126,8 @@ import './jquery-intro.css';
           currentItem.element  = floatingElementQuery;
           currentItem.position = 'floating';
         }
+
+        console.log(currentItem.element );
 
         if (currentItem.element != null) {
           introItems.push(currentItem);
@@ -1773,6 +1782,6 @@ import './jquery-intro.css';
     }
   };
 
-  exports.introJs = introJs;
+  window.introJs = introJs;
   return introJs;
 }));

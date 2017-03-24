@@ -1,3 +1,5 @@
 import { publishCourse } from 'app/js/course-manage/help';
-publishCourse();
+import Intro from './intro';
 
+publishCourse();
+new Intro();

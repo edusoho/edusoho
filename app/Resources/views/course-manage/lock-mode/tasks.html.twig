@@ -10,7 +10,7 @@
       <div class="task-list-header clearfix">
         任务总数：<span class="color-warning space" id="task-num">{{ taskNum }}</span>  {% if taskPerDay|default(false) %}日均约需完成：<span class="color-warning">{{ taskPerDay }}</span> 个任务{% endif %}
         <div class="pull-right">
-          <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}">
+          <button class="btn btn-info btn-sm" id="step-3" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}">
             <i class="es-icon es-icon-anonymous-iconfont"></i>
             任务
           </button>
