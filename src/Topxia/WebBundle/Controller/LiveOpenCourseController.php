@@ -42,7 +42,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
 
     protected function canTakeOpenCourseRelay($openCourse, $replay)
     {
-        if ($openCourse['status'] = 'published' && $openCourse['id'] == $replay['courseId'] && $openCourse['type'] == $replay['type']) {
+        if ($openCourse['status'] == 'published' && $openCourse['id'] == $replay['courseId'] && $openCourse['type'] == $replay['type']) {
             return true;
         } else {
             return false;
