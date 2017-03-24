@@ -1,4 +1,4 @@
-{% extends 'courseset-manage/layout.html.twig' %}
+{% extends 'course-manage/layout.html.twig' %}
 {% block title %}{{'计划任务'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% do script(['libs/jquery-sortable.js','app/js/course-manage/index.js']) %}
 {% set side_nav = 'tasks' %}
