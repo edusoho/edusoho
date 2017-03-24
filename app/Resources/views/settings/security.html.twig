@@ -5,7 +5,7 @@
 
 {% block main %}
  {% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
-    {% block heading %}{{'user.settings.security.page_title'|trans}}{% endblock %}
+    {% block heading %}{{'user.settings.security.content_title'|trans}}{% endblock %}
     {% block body %}
     {{ web_macro.flash_messages() }}
 

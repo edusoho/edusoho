@@ -7,16 +7,16 @@
 <div class="row row-6">
   <div class="col-md-6 col-md-offset-3 ptl">
     <div class="panel panel-default panel-page">
-      <div class="panel-heading"><h2>{{'user.settings.security.password_reset.page_title'|trans}}</h2></div>
+      <div class="panel-heading"><h2>{{'user.settings.security.password_reset.content_title'|trans}}</h2></div>
 
         <ul class="nav nav-tabs mbl js-find-password">
           <li class="active js-find-by-email">
-            <a style="cursor: pointer;">{{'user.settings.security.password_reset.first_tab.email'|trans}}
+            <a style="cursor: pointer;">{{'user.settings.security.password_reset.email'|trans}}
             </a>
           </li>
           {# {% if (setting('cloud_sms.sms_enabled')|default('')) == '1' %} #}
             <li class="js-find-by-mobile">
-              <a style="cursor: pointer;">{{'user.settings.security.password_reset.second_tab'|trans}}
+              <a style="cursor: pointer;">{{'user.settings.security.password_reset.mobile'|trans}}
               </a>
             </li>
           {#{% endif %}#}
@@ -26,17 +26,17 @@
 
       <form id="password-reset-form" class="form-vertical" method="post">
         <div class="form-group">
-          {{ form_label(form.email, 'user.settings.security.password_reset.first_tab.email'|trans, {label_attr:{class:'control-label'}}) }}
+          {{ form_label(form.email, 'user.settings.security.password_reset.email'|trans, {label_attr:{class:'control-label'}}) }}
           <div class="controls">
             {{ form_widget(form.email, {attr:{class:'form-control'}}) }}
-            <p class="help-block">{{'user.settings.security.password_reset.first_tab.email_hint'|trans({'%name%': setting('site.name')})}}</p>
+            <p class="help-block">{{'user.settings.security.password_reset.email.step_one.email_hint'|trans({'%name%': setting('site.name')})}}</p>
           </div>
         </div>
 
         <div class="form-group">
           <div class="controls">
             {{ form_rest(form) }}
-            <button type="submit" class="btn btn-primary" data-loading-text="{{'user.settings.security.password_reset.first_tab.send_email_submiting_text'|trans}}...">{{'form.btn.reset_password'|trans}}</button>
+            <button type="submit" class="btn btn-primary" data-loading-text="{{'user.settings.security.password_reset.email.step_one.send_email_submiting'|trans}}...">{{'form.btn.reset_password'|trans}}</button>
           </div>
         </div>
 
@@ -82,7 +82,7 @@
 
         <div class="form-group">
           <div class="controls">
-            <button type="submit" class="btn btn-primary" data-loading-text="{{'form.btn.submit.submiting_text'|trans}}">{{'form.btn.reset_password'|trans}}</button>
+            <button type="submit" class="btn btn-primary" data-loading-text="{{'form.btn.submit.submiting'|trans}}">{{'form.btn.reset_password'|trans}}</button>
           </div>
         </div>
 

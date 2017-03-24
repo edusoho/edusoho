@@ -40,7 +40,7 @@
       </tr>
       <tr> <th width="25%">{{'plugin.coupon.code'|trans}}</th>
         <td width="75%">
-          {% if order.coupon %}{{ order.coupon }}{% else %}{{'none'|trans}}{% endif %}
+          {% if order.coupon %}{{ order.coupon }}{% else %}{{'user.account_center.orders.detail.none'|trans}}{% endif %}
         </td>
       </tr>
       <tr> <th width="25%">{{'plugin.coupon.amount'|trans}}</th>
@@ -65,7 +65,7 @@
       {% endif %}
       <tr> <th width="25%">{{'order.payment_pattern.cash'|trans}}</th>
         <td width="75%">
-          <span class="money-text">{{ order.amount }}</span> {{'RMB.yuan'|trans}}
+          <span class="money-text">{{ order.amount }}</span> {{'currency.RMB'|trans}}
         </td>
       </tr>
       <tr> <th width="25%">{{'order.payment_pattern'|trans}}</th>
@@ -76,7 +76,7 @@
       </tr>
       <tr> <th width="25%">{{'order.bank_code'|trans}}</th>
            <td width="75%">
-            {% if order.bank == null %} {{'none'|trans}}
+            {% if order.bank == null %} {{'user.account_center.orders.detail.none'|trans}}
             {% else %} {{ order.bank }}
             {% endif %}
            </td>

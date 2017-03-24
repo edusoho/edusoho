@@ -1,6 +1,6 @@
 {% extends 'coin/layout.html.twig' %}
 
-{% block title %}{{'user.account_center.account.first_tab'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'user.account_center.account.my_virtual_coin'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-bill' %}
 
@@ -18,8 +18,8 @@
 
     {#<button class="btn btn-primary">搜索</button>#}
      <div class="control-label pull-right" style="padding-top: 8px;">
-      {{'finance.income'|trans}}<span style="color:#1bb974;">{{ amountInflow }}</span>&nbsp;{{'RMB.yuan'|trans}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      {{'finance.expense'|trans}}<span style="color:#ff7b0e;">{{ amountOutflow }}</span>&nbsp;{{'RMB.yuan'|trans}}
+      {{'finance.income'|trans}}<span style="color:#1bb974;">{{ amountInflow }}</span>&nbsp;{{'currency.RMB'|trans}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      {{'finance.expense'|trans}}<span style="color:#ff7b0e;">{{ amountOutflow }}</span>&nbsp;{{'currency.RMB'|trans}}
       </div>
   </form>
   <br>
@@ -29,7 +29,7 @@
         <tr>
           <th><span class="text-sm">{{'order.sn'|trans}}</span></th>
           <th><span class="text-sm">{{'order.name'|trans}}</span></th>
-          <th><span class="text-sm">{{'order.turnover_time'|trans}}</span></th>
+          <th><span class="text-sm">{{'order.paid_time'|trans}}</span></th>
           <th class="text-right" style="padding-right: 60px;"><span class="text-sm">{{'finance.income_expense'|trans}}</span></th>
           <th><span class="text-sm">{{'order.payment_pattern'|trans}}</span></th>
         </tr>

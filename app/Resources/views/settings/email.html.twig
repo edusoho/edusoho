@@ -8,7 +8,7 @@
 
 {% block main %}
   {% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
-    {% block heading %}{{'user.settings.email.page_title'|trans}}{% endblock %}
+    {% block heading %}{{'user.settings.email.content_title'|trans}}{% endblock %}
     {% block body %}
     {% if mailer.enabled == 1 or cloudEmail.status|default(null) == 'enable' %}
       <form id="setting-email-form" class="form-horizontal" method="post" >
@@ -56,7 +56,7 @@
           <div class="col-md-2 control-label"></div>
           <div class="col-md-8 controls">
             {{ form_rest(form) }}
-            <button id="email-save-btn" data-submiting-text="{{'form.btn.submit.submiting_text'|trans}}" type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+            <button id="email-save-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
           </div>
         </div>
 

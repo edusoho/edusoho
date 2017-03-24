@@ -1,8 +1,5 @@
-#状态
-none: 无
-
 #币种，货币面额
-RMB.yuan: 元
+currency.RMB: 元
 
 # 用户通用字段
 user.fields.login_password: 登录密码
@@ -17,6 +14,8 @@ user.fields.gender.male: 男
 user.fields.gender.female: 女
 user.fields.idcard_label: 身份证号
 user.fields.mobile_label: 手机号码
+user.fields.mobile_label.bind: 已绑定
+user.fields.mobile_label.no_bind: 未绑定
 user.fields.company_label: 公司
 user.fileds.realname: 真实姓名
 
@@ -51,7 +50,7 @@ order.id: 订单号
 order.merchant_order_id: 商户订单号
 order.sn: 流水号
 order.price: 订单价格
-order.turnover_time: 成交时间
+order.paid_time: 成交时间
 order.bank_code: 银行编号
 order.payment_pattern: 支付方式
 order.payment_pattern.virtual_coin: %coin_name%支付
@@ -71,23 +70,19 @@ form.btn.set: 设置
 form.btn.reset: 重置
 form.btn.view: 查看
 form.btn.bind: 绑定
-form.btn.cancelbind: 取消绑定
+form.btn.bind_cancel: 取消绑定
 form.btn.submit: 提交
 form.btn.login: 登录
 form.btn.save: 保存
 form.btn.detail: 详情
 form.btn.close: 关闭
+form.btn.submit_disabled: 已提交
 form.btn.reset_password: 重设密码
-form.btn.save.submiting_text: 正在保存...
-form.btn.submit.submiting_text: 正在提交...
-form.hasbind: 已绑定
-form.notbind: 未绑定
-form.gotobind: 前去绑定
-form.notbindmobile: 还没绑定手机号码，
-form.public: 公开
+form.btn.save.submiting: 正在保存...
+form.btn.submit.submiting: 正在提交...
+form.checkbox.public: 公开
 form.placeholder.max_int: 最大值为9位整数
 form.placeholer.save_two_decimal: 保留到2位小数
-form.hassubmit: 已提交
 
 # 个人设置模块
 user.settings: 个人设置
@@ -100,6 +95,10 @@ user.settings.email_menu: 邮箱设置
 user.settings.teachers_qualification_menu: 教师资格申请
 user.settings.oauth_menu: 第三方登录
 
+# 个人设置模块-基础信息
+user.settings.profile.no_bind_mobile_hint: 还没绑定手机号码，
+user.settings.profile.go_bind_mobile_btn: 前去绑定
+
 # 个人设置模块-安全设置
 user.settings.security.sms_code: 短信验证码
 user.settings.security.sms_code_hint: 输入短信验证码
@@ -107,7 +106,7 @@ user.settings.security.get_sms_code_btn: 获取短信验证码
 user.settings.security.mobile: 手机号码
 user.settings.security.bind_mobile: 已绑定手机号
 user.settings.security.login_password: 您的登录密码
-user.settings.security.page_title: 安全设置
+user.settings.security.content_title: 安全设置
 user.settings.security.high_level: 安全等级：高
 user.settings.security.middle_level: 安全等级：中
 user.settings.security.low_level: 安全等级：低
@@ -118,9 +117,8 @@ user.settings.security.questions_description: 通过设置并且验证安全问�
 user.settings.security.mobile_bind: 手机绑定
 user.settings.security.mobile_bind_description: 增加账户登录、购买课程时的安全性，同时还可以找回登录密码，支付密码。
 user.settings.security.password_modify: 密码修改
-user.settings.security.password_modify.page_title: 安全设置
-user.settings.security.password_modify.first_bread_crumbs: 安全设置
-user.settings.security.password_modify.second_bread_crumbs: 登录密码修改
+user.settings.security.password_modify.content_title: 安全设置
+user.settings.security.password_modify.bread_crumbs: 登录密码修改
 user.settings.security.password_modify.current_password: 当前密码
 user.settings.security.password_modify.new_password: 新密码
 user.settings.security.password_modify.confirm_password: 确认密码
@@ -130,94 +128,86 @@ user.settings.security.no_password.line_two_hint: 为了帐号的安全，请通
 user.settings.security.no_password.go_reset_password_btn: 现在就去重设密码！
 
 user.settings.security.password_reset: 重设密码
-user.settings.security.password_reset.page_title: 重设密码
-user.settings.security.password_reset.first_tab: 邮箱地址
-user.settings.security.password_reset.first_tab.email: 邮箱地址
-user.settings.security.password_reset.first_tab.email_hint: 请输入你在%name%注册时填写的邮箱地址
-user.settings.security.password_reset.first_tab.send_email_submiting_text: 正在发送重设密码邮件
-user.settings.security.password_reset.first_tab.email.page_title: 重设密码
-user.settings.security.password_reset.first_tab.email.goto: 请到
-user.settings.security.password_reset.first_tab.email.hint: 查阅来自%site.name%的邮件, 从邮件重设你的密码。
-user.settings.security.password_reset.first_tab.email.check_email_btn: 登录邮箱查收邮件
-user.settings.security.password_reset.second_tab: 手机号码
-
+user.settings.security.password_reset.content_title: 重设密码
+user.settings.security.password_reset.email: 邮箱地址
+user.settings.security.password_reset.email.step_one.email_hint: 请输入你在%name%注册时填写的邮箱地址
+user.settings.security.password_reset.email.step_one.send_email_submiting: 正在发送重设密码邮件
+user.settings.security.password_reset.email.step_two.content_title: 重设密码
+user.settings.security.password_reset.email.step_two.goto: 请到
+user.settings.security.password_reset.email.step_two.email_hint: 查阅来自%site.name%的邮件, 从邮件重设你的密码。
+user.settings.security.password_reset.email.step_two.check_email_btn: 登录邮箱查收邮件
+user.settings.security.password_reset.mobile: 手机号码
 user.settings.security.password_reset.success: 重设密码成功
-user.settings.security.password_reset.success.page_title: 重设密码成功
+user.settings.security.password_reset.success.content_title: 重设密码成功
 user.settings.security.password_reset.success.hint: 新密码设置成功，请重新登录。
 
 user.settings.security.pay_password_set: 设置支付密码
 user.settings.security.pay_password_set.password_forget: 忘记支付密码？
-user.settings.security.pay_password_set.page_title: 安全设置
-user.settings.security.pay_password_set.first_bread_crumbs: 安全设置
-user.settings.security.pay_password_set.second_bread_crumbs: 设置支付密码
+user.settings.security.pay_password_set.content_title: 安全设置
+user.settings.security.pay_password_set.bread_crumbs: 设置支付密码
 user.settings.security.pay_password_set.new_pay_password: 新支付密码
 user.settings.security.pay_password_set.old_pay_password: 旧的支付密码
 user.settings.security.pay_password_set.confirm_pay_password: 确认支付密码
-user.settings.security.pay_password_find.page_title: 安全设置
-user.settings.security.pay_password_find.first_bread_crumbs: 安全设置
-user.settings.security.pay_password_find.second_bread_crumbs: 找回支付密码
-user.settings.security.pay_password_find.first_tab: 通过安全问题找回
-user.settings.security.pay_password_find.first_tab.question_answer: 安全问题答案
-user.settings.security.pay_password_find.second_tab: 通过手机找回
-user.settings.security.pay_password_find.second_tab.mobile_change: 修改手机号？
-
+user.settings.security.pay_password_find.content_title: 安全设置
+user.settings.security.pay_password_find.bread_crumbs: 找回支付密码
+user.settings.security.pay_password_find.by_question: 通过安全问题找回
+user.settings.security.pay_password_find.by_question.answer: 安全问题答案
+user.settings.security.pay_password_find.by_mobile: 通过手机找回
+user.settings.security.pay_password_find.by_mobile.change: 修改手机号？
 
 user.settings.security.questions.answer: 答案
-user.settings.security.questions.page_title: 安全设置
+user.settings.security.questions.content_title: 安全设置
 user.settings.security.questions.first_question: 安全问题1
 user.settings.security.questions.second_question: 安全问题2
 user.settings.security.questions.third_question: 安全问题3
 user.settings.security.questions.setting.warning: 安全问题一经设置，不可再次修改。
-user.settings.security.questions.setting.first_bread_crumbs: 安全设置
-user.settings.security.questions.setting.second_bread_crumbs: 设置安全问题
+user.settings.security.questions.setting.bread_crumbs: 设置安全问题
 user.settings.security.questions.setting.first_question_answer: 安全问题1答案
 user.settings.security.questions.setting.second_question_answer: 安全问题2答案
 user.settings.security.questions.setting.third_question_answer: 安全问题3答案
-user.settings.security.questions.check.first_bread_crumbs: 安全设置
-user.settings.security.questions.check.second_bread_crumbs: 查看安全问题
-user.settings.security.mobile_bind.page_title: 绑定手机
-user.settings.security.mobile_bind.first_bread_crumbs: 安全设置
-user.settings.security.mobile_bind.second_bread_crumbs: 手机号码绑定
+user.settings.security.questions.check.bread_crumbs: 查看安全问题
+user.settings.security.mobile_bind.content_title: 绑定手机
+user.settings.security.mobile_bind.bread_crumbs: 手机号码绑定
 
 # 个人设置模块-基础信息
-user.setting.basic_info: 基础信息
-user.settings.basic_info.page_title: 基础信息
-user.setting.basic_info.occupation: 职业
-user.setting.basic_info.rank: 头衔
-user.setting.basic_info.personal_signature: 个人签名
-user.setting.basic_info.personal_space: 个人空间
-user.setting.basic_info.self_introduction: 自我介绍
-user.setting.basic_info.alter_description: 设置头衔、自我介绍并保存后，即可开始创建课程
+user.settings.basic_info: 基础信息
+user.settings.basic_info.content_title: 基础信息
+user.settings.basic_info.occupation: 职业
+user.settings.basic_info.rank: 头衔
+user.settings.basic_info.personal_signature: 个人签名
+user.settings.basic_info.personal_space: 个人空间
+user.settings.basic_info.self_introduction: 自我介绍
+user.settings.basic_info.alter_description: 设置头衔、自我介绍并保存后，即可开始创建课程
 
 # 个人设置模块-实名认证
 user.settings.certification: 实名认证
-user.settings.certification.page_title: 实名认证
-user.setting.certification_photo_require: 照片要求
-user.setting.certification_photo_require_description: 证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。图片格式支持jpg、gif、png，每张图片文件大小不能超过2M
-user.setting.certification.idcard_ront_photo: 正面照片
-user.setting.certification.idcard_opposite_photo: 反面照片
-user.setting.certification.approving_description: 正在实名认证中，管理员会尽快答复您。
-user.setting.certification.approved_description: 恭喜您，已通过实名认证！
-user.setting.certification.unapprove_description: 您尚未实名认证
-user.setting.certification.approve_fail_description: 实名认证审核尚未通过，请参照通知中的信息，修改后重新认证。
+user.settings.certification.content_title: 实名认证
+user.settings.certification.photo_require: 照片要求
+user.settings.certification.photo_require_description: 证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。图片格式支持jpg、gif、png，每张图片文件大小不能超过2M
+user.settings.certification.idcard_ront_photo: 正面照片
+user.settings.certification.idcard_opposite_photo: 反面照片
+user.settings.certification.approving_description: 正在实名认证中，管理员会尽快答复您。
+user.settings.certification.approved_description: 恭喜您，已通过实名认证！
+user.settings.certification.unapprove_description: 您尚未实名认证
+user.settings.certification.approve_fail_description: 实名认证审核尚未通过，请参照通知中的信息，修改后重新认证。
 
 # 个人设置模块-头像设置
 user.settings.avatar: 头像设置
 user.settings.avatar.crop: 头像图片
-user.settings.avatar.page_title: 头像设置
+user.settings.avatar.content_title: 头像设置
 user.settings.avatar.current_avatar: 当前头像
 user.settings.avatar.partner_avatar: 论坛头像
 user.settings.avatar.upload_hint: 你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过
-user.setting.avatar.upload_size: 2M
+user.settings.avatar.upload_size: 2M
 user.settings.avatar.upload_submit_btn: 上传新头像
 user.settings.avatar.using_current_avatar: 使用该头像
-user.setting.avatar.alter_description: 请设置自定义头像。
-user.setting.avatar.crop.hint: 提示：请选择图片裁剪区域。
-user.setting.avatar.select_new_avatar: 重新选择图片
+user.settings.avatar.alter_description: 请设置自定义头像。
+user.settings.avatar.crop_hint: 提示：请选择图片裁剪区域。
+user.settings.avatar.reselect: 重新选择图片
 
 # 个人设置模块-邮箱设置
 user.settings.email: 邮箱设置
-user.settings.email.page_title: 邮箱设置
+user.settings.email.content_title: 邮箱设置
 user.settings.email.no_change_email_warning: 管理员尚未设置邮件服务器，不能更改邮箱地址。
 user.settings.email.current_email: 当前登录邮箱
 user.settings.email.verified: 已验证
@@ -230,7 +220,7 @@ user.settings.email.verify_password_warning: 设置新的登录邮箱，需要�
 
 # 个人设置模块-第三方登录
 user.settings.oauth: 第三方登陆
-user.settings.oauth.page_title: 第三方登陆
+user.settings.oauth.content_title: 第三方登陆
 user.settings.oauth.weixin: 微信登录
 
 # 账户中心模块
@@ -251,36 +241,35 @@ user.account_center.last_three_month: 最近三个月
 user.account_center.account.empty: 暂无记录
 user.account_center.account.virtual_coin_introductions: %coin_name%说明
 user.account_center.account.virtual_coin_image: 虚拟币图片
-user.account_center.account.first_tab: 我的%coin_name%
-user.account_center.account.first_tab.inflow: 充值记录
-user.account_center.account.first_tab.outflow: 消费记录
-user.account_center.account.first_tab.recharge: 学习卡充值
-user.account_center.account.second_tab: 我的现金账单
-user.account_center.account.third_tab: 我的邀请码
-user.account_center.account.third_tab.my_invite_code: 我的邀请码
-user.account_center.account.third_tab.invite: 邀请好友
-user.account_center.account.third_tab.invite.modal_title: 分享邀请链接
-user.account_center.account.third_tab.invite.copy_btn: 复制到剪贴板
-user.account_center.account.third_tab.other_invite_code: TA的邀请码
-user.account_center.account.third_tab.other_invite_code.modal_title: 填写TA的邀请码
-user.account_center.account.third_tab.other_invite_code.invite_code: TA的邀请码 
-user.account_center.account.third_tab.other_invite_code.input_placeholder: 邀请码
-user.account_center.account.third_tab.other_invite_code.hint_one: 填写TA的邀请码，当您第一次消费后，TA会获得邀请奖励。
-user.account_center.account.third_tab.other_invite_code.hint_two: 填写TA的邀请码，TA会获得邀请奖励。
-user.account_center.account.third_tab.first_part: 给TA分享您的邀请码或者邀请链接
-user.account_center.account.third_tab.second_part: ，TA注册后将获得%promoted_user_value%元优惠券
-user.account_center.account.third_tab.third_part: TA在消费后您将获得%promote_user_value%元优惠券
-user.account_center.account.third_tab.fourth_part: 同时您将获得%promote_user_value%元优惠券
-user.account_center.account.third_tab.invitees: 邀请对象
-user.account_center.account.third_tab.invite_time: 邀请时间
-user.account_center.account.third_tab.invite_rewords: 邀请奖励
-user.account_center.account.third_tab.get_invite_rewords_time: 奖励获取时间
-user.account_center.account.third_tab.empty: 暂无邀请用户
-user.account_center.account.third_tab.close: 邀请码功能已关闭
+user.account_center.account.my_virtual_coin: 我的%coin_name%
+user.account_center.account.my_virtual_coin.inflow: 充值记录
+user.account_center.account.my_virtual_coin.outflow: 消费记录
+user.account_center.account.my_virtual_coin.recharge: 学习卡充值
+user.account_center.account.my_bill: 我的现金账单
+user.account_center.account.my_invite_code: 我的邀请码
+user.account_center.account.my_invite_code.invite: 邀请好友
+user.account_center.account.my_invite_code.invite.modal_title: 分享邀请链接
+user.account_center.account.my_invite_code.invite.copy_btn: 复制到剪贴板
+user.account_center.account.my_invite_code.other_invite_code: TA的邀请码
+user.account_center.account.my_invite_code.other_invite_code.modal_title: 填写TA的邀请码
+user.account_center.account.my_invite_code.other_invite_code.invite_code: TA的邀请码 
+user.account_center.account.my_invite_code.other_invite_code.input_placeholder: 邀请码
+user.account_center.account.my_invite_code.other_invite_code.hint_one: 填写TA的邀请码，当您第一次消费后，TA会获得邀请奖励。
+user.account_center.account.my_invite_code.other_invite_code.hint_two: 填写TA的邀请码，TA会获得邀请奖励。
+user.account_center.account.my_invite_code.first_part: 给TA分享您的邀请码或者邀请链接
+user.account_center.account.my_invite_code.second_part: ，TA注册后将获得%promoted_user_value%元优惠券
+user.account_center.account.my_invite_code.third_part: TA在消费后您将获得%promote_user_value%元优惠券
+user.account_center.account.my_invite_code.fourth_part: 同时您将获得%promote_user_value%元优惠券
+user.account_center.account.my_invite_code.invitees: 邀请对象
+user.account_center.account.my_invite_code.invite_time: 邀请时间
+user.account_center.account.my_invite_code.invite_rewords: 邀请奖励
+user.account_center.account.my_invite_code.get_invite_rewords_time: 奖励获取时间
+user.account_center.account.my_invite_code.empty: 暂无邀请用户
+user.account_center.account.my_invite_code.close: 邀请码功能已关闭
 
 # 账户中心模块-我的订单
 user.account_center.orders: 我的订单
-user.account_center.orders.page_title: 我的订单
+user.account_center.orders.content_title: 我的订单
 user.account_center.orders.all_orders: 全部订单
 user.account_center.orders.created_status: 代付款
 user.account_center.orders.paid_status: 已付款
@@ -292,6 +281,7 @@ user.account_center.orders.cancel_refund: 取消退款
 user.account_center.orders.go_pay: 去支付
 user.account_center.orders.cancel_order: 取消订单
 user.account_center.orders.empty: 暂无订单记录
+user.account_center.orders.detail.none: 无
 user.account_center.orders.detail.modal_title: 订单详情
 user.account_center.orders.detail.special_operations: 特殊操作
 user.account_center.orders.detail.log_info: 日志信息
@@ -301,11 +291,12 @@ user.account_center.orders.detail.empty: 暂无交易日志
 
 # 账户中心模块-我的卡包
 user.account_center.cards: 我的卡包
-user.account_center.cards.page_title: 我的卡包
+user.account_center.cards.content_title: 我的卡包
 user.account_center.cards.all: 全部
 user.account_center.cards.useable: 未使用
 user.account_center.cards.used: 已使用
 user.account_center.cards.outdate: 已过期
 user.account_center.cards.invalid: 已作废
 user.account_center.cards.no_qualified_hint: 没有搜索到符合条件的 
-user.account_center.cards.monycard_not_install_hint: 网站没有开启%coin_name%功能,学习卡功能暂时没法使用
+user.account_center.cards.moneycard_not_install_hint: 网站没有开启%coin_name%功能,学习卡功能暂时没法使用
+

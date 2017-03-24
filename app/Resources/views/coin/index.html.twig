@@ -35,8 +35,8 @@
     <hr>
     <ul class="nav nav-pills" role="tablist">
       <li role="presentation" {% if app.request.query.get('type') != "inflow" and app.request.query.get('type') != "outflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:''})}}">{{'user.account_center.all_records'|trans}}</a></li>
-      <li role="presentation" {% if app.request.query.get('type') == "inflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:'inflow'})}}">{{'user.account_center.account.first_tab.inflow'|trans}}</a></li>
-      <li role="presentation" {% if app.request.query.get('type') == "outflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:'outflow'})}}">{{'user.account_center.account.first_tab.outflow'|trans}}</a></li>
+      <li role="presentation" {% if app.request.query.get('type') == "inflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:'inflow'})}}">{{'user.account_center.account.my_virtual_coin.inflow'|trans}}</a></li>
+      <li role="presentation" {% if app.request.query.get('type') == "outflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:'outflow'})}}">{{'user.account_center.account.my_virtual_coin.outflow'|trans}}</a></li>
     </ul>
     <br>
     <form id="user-search-form" class="form-inline well well-sm clearfix" action="" method="get" novalidate>
@@ -65,7 +65,7 @@
         <tr>
           <th><span class="text-sm">{{'order.sn'|trans}}</span></th>
           <th><span class="text-sm">{{'order.name'|trans}}</span></th>
-          <th><span class="text-sm">{{'order.turnover_time'|trans}}</span></th>
+          <th><span class="text-sm">{{'order.paid_time'|trans}}</span></th>
           <th class="text-right" style="padding-right: 60px;"><span class="text-sm">{{'finance.income_expense'|trans}}</span></th>
           <th><span class="text-sm">{{'order.payment_pattern'|trans}}</span></th>
         </tr>
@@ -90,7 +90,7 @@
             <td>
               <span class="text-sm">
                 {% if cash.cashType == "Coin" and cash.category == "inflow" %}
-                {{'user.account_center.account.first_tab.recharge'|trans}}
+                {{'user.account_center.account.my_virtual_coin.recharge'|trans}}
                 {% elseif cash.cashType == "Coin" and cash.category == "change" %}
                   {{ dict_text('payment', cash.payment) }}
                 {% elseif cash.category == "moneyCardRecharge" %}

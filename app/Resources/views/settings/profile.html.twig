@@ -1,6 +1,6 @@
 {% extends 'settings/layout.html.twig' %}
 
-{% block title %}{{'user.setting.basic_info'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'user.settings.basic_info'|trans}} - {{ parent() }}{% endblock %}
 
 {% set script_controller = 'settings/profile' %}
 {% set side_nav = 'profile' %}
@@ -8,11 +8,11 @@
 {% block main %}
 
 	{% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
-		{% block heading %}{{'user.settings.basic_info.page_title'|trans}}{% endblock %}
+		{% block heading %}{{'user.settings.basic_info.content_title'|trans}}{% endblock %}
 		{% block body %}
 
 			{% if fromCourse %}
-			<div class="alert alert-info">{{'user.setting.basic_info.alter_description'|trans}}</div>
+			<div class="alert alert-info">{{'user.settings.basic_info.alter_description'|trans}}</div>
 			{% endif %}
 
 			<form id="user-profile-form" class="form-horizontal" method="post">
@@ -70,7 +70,7 @@
 							<div class="col-md-7 controls">
 								<div class="control-text">
 									{{ blur_phone_number(user.verifiedMobile|default('')) }}
-									<small class="color-success">({{'form.hasbind'|trans}})</small>
+									<small class="color-success">({{'user.fields.mobile_label.bind'|trans}})</small>
 								</div>
 							</div>
 						</div>
@@ -87,7 +87,7 @@
 							<div class="help-block">
 								<label class="col-md-2 control-label"></label>
 								<p class="text-warning">
-								{{'form.notbindmobile'|trans}}<strong><a href="{{path('settings_bind_mobile')}}">{{'form.gotobind'|trans}}</a>{{'。'|trans}}
+								{{'user.settings.profile.no_bind_mobile_hint'|trans}}<strong><a href="{{path('settings_bind_mobile')}}">{{'user.settings.profile.go_bind_mobile_btn'|trans}}</a>{{'。'|trans}}
 								</strong>
 								</p>
 							</div>
@@ -103,7 +103,7 @@
 					</div>
 
 					<div class="form-group form-forIam-group form-notStudent-group">
-						<label class="col-md-2 control-label">{{'user.setting.basic_info.occupation'|trans}}</label>
+						<label class="col-md-2 control-label">{{'user.settings.basic_info.occupation'|trans}}</label>
 						<div class="col-md-7 controls">
 							<input type="text" id="profile_job" name="profile[job]" class="form-control" value="{{ profile.job|default('') }}">
 							<div class="help-block" style="display:none;"></div>
@@ -111,7 +111,7 @@
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label">{{'user.setting.basic_info.rank'|trans}}</label>
+						<label class="col-md-2 control-label">{{'user.settings.basic_info.rank'|trans}}</label>
 						<div class="col-md-7 controls">
 							<input type="text" id="profile_title" name="profile[title]" class="form-control" value="{{ profile.title|default('') }}">
 							<div class="help-block" style="display:none;"></div>
@@ -119,7 +119,7 @@
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label">{{'user.setting.basic_info.personal_signature'|trans}}</label>
+						<label class="col-md-2 control-label">{{'user.settings.basic_info.personal_signature'|trans}}</label>
 						<div class="col-md-7 controls">
 							<textarea type="text" rows="4" maxlength="80" id="profile_signature" name="profile[signature]" class="form-control">{{ profile.signature|default('') }}</textarea>
 							<div class="help-block" style="display:none;"></div>
@@ -127,14 +127,14 @@
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label">{{'user.setting.basic_info.self_introduction'|trans}}</label>
+						<label class="col-md-2 control-label">{{'user.settings.basic_info.self_introduction'|trans}}</label>
 						<div class="col-md-7 controls">
 							<textarea name="profile[about]" rows="10" id="profile_about" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('user')}) }}">{{ profile.about|default('') }}</textarea>
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label">{{'user.setting.basic_info.personal_space'|trans}}</label>
+						<label class="col-md-2 control-label">{{'user.settings.basic_info.personal_space'|trans}}</label>
 						<div class="col-md-7 controls">
 							<input type="text" id="profile_site" name="profile[site]" class="form-control" data-widget-cid="widget-4" data-explain="" value="{{ profile.site|default('') }}">
 							<div class="help-block" style="display:none;"></div>
@@ -149,7 +149,7 @@
 							<input type="text" id="weibo" name="profile[weibo]" class="form-control" data-widget-cid="widget-3" data-explain="" value="{{ profile.weibo|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
-						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isWeiboPublic]" {% if profile.isWeiboPublic %}checked="checked" {% endif %}/>{{'form.public'|trans}}</div>
+						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isWeiboPublic]" {% if profile.isWeiboPublic %}checked="checked" {% endif %}/>{{'form.checkbox.public'|trans}}</div>
 					</div>
 
 					<div class="form-group">
@@ -158,7 +158,7 @@
 							<input type="text" id="profile_weixin" name="profile[weixin]" class="form-control" value="{{ profile.weixin|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
-						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isWeixinPublic]" {% if profile.isWeixinPublic %}checked="checked" {% endif %}/>{{'form.public'|trans}}</div>
+						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isWeixinPublic]" {% if profile.isWeixinPublic %}checked="checked" {% endif %}/>{{'form.checkbox.public'|trans}}</div>
 					</div>
 
 					<div class="form-group">
@@ -167,7 +167,7 @@
 							<input type="text" id="profile_qq" name="profile[qq]" class="form-control" data-widget-cid="widget-2" data-explain="" value="{{ profile.qq|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
-						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isQQPublic]" {% if profile.isQQPublic %}checked="checked"{% endif %}/>{{'form.public'|trans}}</div>
+						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isQQPublic]" {% if profile.isQQPublic %}checked="checked"{% endif %}/>{{'form.checkbox.public'|trans}}</div>
 					</div>
 
 
@@ -221,7 +221,7 @@
 
 					<div class="row">
 						<div class="col-md-7 col-md-offset-2">
-							<button id="profile-save-btn" data-submiting-text="{{'form.btn.save.submiting_text'|trans}}" type="submit" class="btn btn-primary">{{'form.btn.save'|trans}}</button>
+							<button id="profile-save-btn" data-submiting-text="{{'form.btn.save.submiting'|trans}}" type="submit" class="btn btn-primary">{{'form.btn.save'|trans}}</button>
 						</div>
 					</div>
 
