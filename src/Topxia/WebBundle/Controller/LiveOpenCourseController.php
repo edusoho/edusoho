@@ -31,10 +31,22 @@ class LiveOpenCourseController extends BaseOpenCourseController
 
     public function playESLiveReplayAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
     {
-        $this->getOpenCourseService()->getCourse($courseId);
+        $openCourse = $this->getOpenCourseService()->getCourse($courseId);
         $replay = $this->getCourseService()->getCourseLessonReplay($courseLessonReplayId);
 
-        return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array('globalId' => $replay['globalId']));
+        if ($this->canTakeOpenCourseRelay($openCourse, $replay)) {
+            return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array('globalId' => $replay['globalId']));
+        }
+
+    }
+
+    protected function canTakeOpenCourseRelay($openCourse, $replay)
+    {
+        if ($openCourse['status'] == 'published' && $openCourse['id'] == $replay['courseId'] && $openCourse['type'] == $replay['type']) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     protected function getMillisecond()
