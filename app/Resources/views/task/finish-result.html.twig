@@ -14,7 +14,13 @@
     <div class="progress progress-radius progress-md content-progress">
       <div class="progress-bar progress-bar-left progress-bar-success "  role="progressbar" aria-valuenow="{{finishedRate}}" aria-valuemin="0" aria-valuemax="100" style="width:{{finishedRate}}%;min-width: 15%;">{{finishedRate}}%</div>
     </div>
-    <span class="color-success">已完成了整个课程的{{finishedRate}}%，加油吧！</span>
+    <span class="color-success">
+      {% if finishedRate == 100 %}
+      已学完整个课程，给你点赞！
+      {% else %}
+      已完成了整个课程的{{finishedRate}}%，加油吧！
+      {% endif %}
+    </span>
   </div>
 {% endblock %}
 
