@@ -6,7 +6,9 @@
 {% do script(['libs/jquery-intro.js','app/js/courseset-manage/index.js']) %}
 
 {% block content %}
-{{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), manage: true})) }}
+{% block course_header %}
+  {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), manage: true})) }}
+{% endblock %}
 
 <div class="row">
   <div class="col-md-3">
