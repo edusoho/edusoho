@@ -1,27 +1,24 @@
 <?php
 
-namespace Topxia\Service\EduCloud\Impl;
+namespace Biz\EduCloud\Service\Impl;
 
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
-use Topxia\Service\EduCloud\ConsultService;
-use Topxia\Service\Common\BaseService;
+use Biz\BaseService;
+use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\EduCloud\Service\ConsultService;
+use Biz\System\Service\SettingService;
 
 class MicroyanConsultServiceImpl extends BaseService implements ConsultService
 {
     public function getAccount()
     {
         $api = CloudAPIFactory::create('root');
-        $account = $api->post("/robot/login_url");
-
-        return $account;
+        return $api->post("/robot/login_url");
     }
 
     public function getJsResource()
     {
         $api = CloudAPIFactory::create('root');
-        $jsResource  = $api->post("/robot/install");
-
-        return $jsResource;
+        return $api->post("/robot/install");
     }
 
     public function buildCloudConsult($account, $jsResource)
@@ -59,8 +56,11 @@ class MicroyanConsultServiceImpl extends BaseService implements ConsultService
         return $cloudConsult;
     }
 
+    /**
+     * @return SettingService
+     */
     public function getSettingService()
     {
-        return $this->createService('System.SettingService');
+        return $this->createService('System:SettingService');
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\EduCloud;
+namespace Biz\EduCloud\Service;
 
 interface ConsultService
 {

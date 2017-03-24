@@ -47,7 +47,7 @@
     <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
   <![endif]-->
 </head>
-<body>
+<body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>>
   <!--[if lt IE 9]>
     {% include 'default/ie8-alert.html.twig' %}
   <![endif]-->
