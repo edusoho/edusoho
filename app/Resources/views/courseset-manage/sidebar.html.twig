@@ -6,8 +6,6 @@
   {% endif %}
   {% set coursesLength =  courses|length %}
 
-  {% set courseMenu = (menuType == 'courseSet' and coursesLength == 2)   %}
-
   {#只有一个教学计划#}
   <div class="sidenav locked">
     <ul class="list-group">
@@ -82,9 +80,8 @@
         </li>
         {{ slot('course_set.menu.extension', {'courseSet':courseSet,'sideNav':side_nav}) }}
       {% endif %}
-
       {#不为courseSet 或者 长度小于 1 #}
-      {% if curCourse and (menuType != 'courseSet' or coursesLength <= 2 ) %}
+      {% if curCourse and (menuType != 'courseSet' or coursesLength <= 1 ) %}
         {% if coursesLength > 1 %}
           <li class="list-group-heading">
             {{ curCourse.title }}
@@ -92,6 +89,7 @@
         {% else %}
           <hr class="mv5 mh10 bg-border-color"/>
         {% endif %}
+
         <li class="list-group-item {% if side_nav == 'tasks' %}active{% endif %}" id="step-1">
           {% if courseSet.locked %}
             <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'tasks'}) }}">
@@ -176,7 +174,7 @@
         {% endif %}
       {% endif %}
       {# 不是直播，不是编辑下得课程，课程编辑或者#}
-      {% if courseSet.type != 'live' and courseSet.parentId|default(0) <= 0  and (menuType == 'courseSet' or coursesLength <= 2 ) %}
+      {% if courseSet.type != 'live' and courseSet.parentId|default(0) <= 0  and (menuType == 'courseSet' or coursesLength <= 1 ) %}
         <hr class="mv5 mh10 bg-border-color"/>
         <li class="list-group-item {% if side_nav == 'plan' %}active{% endif %}">
           <a href="{{ path('course_set_manage_courses', {courseSetId: courseSet.id}) }}">
