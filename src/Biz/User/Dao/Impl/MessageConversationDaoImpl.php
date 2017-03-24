@@ -21,6 +21,7 @@ class MessageConversationDaoImpl extends GeneralDaoImpl implements MessageConver
             'conditions' => array(
                 'toId = :toId',
             ),
+            'cache' => 'table'
         );
     }
 }

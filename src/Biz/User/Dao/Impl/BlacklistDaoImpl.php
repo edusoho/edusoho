@@ -30,6 +30,7 @@ class BlacklistDaoImpl extends GeneralDaoImpl implements BlacklistDao
     public function declares()
     {
         return array(
+            'cache' => 'table'
         );
     }
 }
