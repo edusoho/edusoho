@@ -11,7 +11,7 @@
   <div class="panel-heading">
     {{ side_navs[code]|trans }}
 
-    {% if course.status != 'published' %}
+   {#  {% if course.status != 'published' %}
       <button class="btn btn-success btn-sm pull-right js-publish-course ml5"
         data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">
         {{ '发布计划'|trans }}
@@ -20,7 +20,7 @@
         href="{{ path('my_course_show', {id: course.id, 'previewAs':'member'} ) }}">
         {{ '预览'|trans }}
       </a>
-    {% endif %}
+    {% endif %} #}
     {#{% if menuType != 'courseSet' and course_count(course.courseSetId) > 1 %}
       <a class="btn btn-default btn-sm pull-right ml5" href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">返回课程编辑</a>
     {% endif %}#}
