@@ -336,6 +336,10 @@ live_classroom_es_replay_play_url:
     path: /course/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/play_es_live_replay
     defaults: { _controller: TopxiaWebBundle:LiveCourse:playESLiveReplay }
 
+live_open_classroom_es_replay_play_url:
+    path: /open/course/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/play_es_live_replay
+    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:playESLiveReplay }
+
 live_classroom_replay_url:
     path: /course/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/get_replay_url
     defaults: { _controller: TopxiaWebBundle:LiveCourse:getReplayUrl }
