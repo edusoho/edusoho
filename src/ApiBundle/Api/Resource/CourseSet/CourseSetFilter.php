@@ -3,6 +3,7 @@
 namespace ApiBundle\Api\Resource\CourseSet;
 
 use ApiBundle\Api\Resource\Filter;
+use ApiBundle\Api\Resource\User\UserFilter;
 use AppBundle\Common\ArrayToolkit;
 
 class CourseSetFilter extends Filter
@@ -21,5 +22,7 @@ class CourseSetFilter extends Filter
         $data['recommendedTime'] = date('c', $data['recommendedTime']);
         $data['createdTime'] = date('c', $data['createdTime']);
         $data['updatedTime'] = date('c', $data['updatedTime']);
+        $userFilter = new UserFilter();
+        $userFilter->filter($data['creator']);
     }
 }

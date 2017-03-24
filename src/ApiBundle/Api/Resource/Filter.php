@@ -2,17 +2,8 @@
 
 namespace ApiBundle\Api\Resource;
 
-use Codeages\Biz\Framework\Context\Biz;
-
 abstract class Filter
 {
-    private $biz;
-
-    public function __construct(Biz $biz)
-    {
-        $this->biz = $biz;
-    }
-
     abstract function filter(&$data);
 
     public function filters(&$dataSet)

@@ -34,7 +34,7 @@ abstract class Resource
 
         $filterClass = $filterClass = get_class($this).'Filter';
         if (class_exists($filterClass)) {
-            $this->filter = new $filterClass($biz);
+            $this->filter = new $filterClass();
         }
     }
 
