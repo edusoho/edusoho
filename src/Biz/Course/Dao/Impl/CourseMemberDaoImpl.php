@@ -376,6 +376,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'id',
                 'updatedTime',
                 'lastViewTime',
+                'seq',
             ),
             'conditions' => array(
                 'userId = :userId',
@@ -383,6 +384,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'isLearned = :isLearned',
                 'joinedType = :joinedType',
                 'role = :role',
+                'isVisible = :isVisible',
                 'classroomId = :classroomId',
                 'noteNum > :noteNumGreaterThan',
                 'createdTime >= :startTimeGreaterThan',
