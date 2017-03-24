@@ -4,12 +4,12 @@ namespace ApiBundle\Api\Resource\Token;
 
 use ApiBundle\Api\Exception\BannedCredentialException;
 use ApiBundle\Api\Exception\InvalidArgumentException;
+use ApiBundle\Api\Exception\ResourceNotFoundException;
 use ApiBundle\Api\Resource\Resource;
 use ApiBundle\Api\Util\BrowserDetectionUtil;
 use AppBundle\Common\EncryptionToolkit;
 use Biz\User\Service\TokenService;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class Token extends Resource
 {
@@ -23,6 +23,23 @@ class Token extends Resource
             $password = EncryptionToolkit::XXTEADecrypt(base64_decode($password), $request->getHost());
         }
 
+        $user = $this->checkParams($username, $password);
+
+        $args = array(
+            'userId' => $user['id'],
+            'device' => $this->getDevice($request)
+        );
+
+        $token = $this->getTokenService()->makeApiAuthToken($args);
+
+        return array(
+            'token' => $token['token'],
+            'userId' => $user['id']
+        );
+    }
+
+    private function checkParams($username, $password)
+    {
         $user = $this->getUserService()->getUserByLoginField($username);
         if (empty($user)) {
             throw new ResourceNotFoundException('用户帐号不存在');
@@ -36,17 +53,7 @@ class Token extends Resource
             throw new BannedCredentialException('用户已锁定，请联系网校管理员');
         }
 
-        $args = array(
-            'userId' => $user['id'],
-            'device' => $this->getDevice($request)
-        );
-
-        $token = $this->getTokenService()->makeApiAuthToken($args);
-
-        return array(
-            'token' => $token['token'],
-            'userId' => $user['id']
-        );
+        return $user;
     }
 
     private function getDevice(Request $request)

@@ -33,6 +33,6 @@ class FireWall
 
     public static function isApiPath(Request $request)
     {
-        return strpos(ApiBundle::API_PREFIX, $request->getPathInfo()) !== false;
+        return strpos($request->getPathInfo(), ApiBundle::API_PREFIX) !== false;
     }
 }
