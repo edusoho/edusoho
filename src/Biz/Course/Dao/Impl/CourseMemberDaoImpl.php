@@ -152,6 +152,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
      * @param  $userId
      * @param  $courseSetId
      * @param  $role
+     *
      * @return array
      */
     public function findByUserIdAndCourseSetIdAndRole($userId, $courseSetId, $role)
@@ -403,6 +404,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     /**
      * @param  $conditions
      * @param  $sql
+     *
      * @return array
      */
     protected function applySqlParams($conditions, $sql)
