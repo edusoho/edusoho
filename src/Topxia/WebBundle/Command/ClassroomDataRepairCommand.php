@@ -15,15 +15,23 @@ class ClassroomDataRepairCommand extends BaseCommand
 {
     protected function configure()
     {
-        $this->setName('util:classroom:Repair');
+        $this->setName('util:classroom:Repair')
+            ->addArgument('sourceCourseId', InputArgument::OPTIONAL, '修复班级课程');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('<info>更新异常课时...</info>');
         $this->initServiceKernel();
-        //拿到需要处理的课程（原课程id，复制出来的课程Id）
-        $classroomCourse = $this->getClassroomCourse();
+        $sourceCourseId = $input->getArgument('sourceCourseId');
+
+        if ($sourceCourseId) {
+            $classroomCourse = $this->getClassroomCourseBySourceId($sourceCourseId);
+        } else {
+            //拿到需要处理的课程（原课程id，复制出来的课程Id）
+            $classroomCourse = $this->findClassroomCourse();
+        }
+        
         $sourceCourseIds = ArrayToolkit::column($classroomCourse,'parentId');
         $uniquenessCourseIds = array();
         foreach ($sourceCourseIds as $key => $value) {
@@ -79,11 +87,18 @@ class ClassroomDataRepairCommand extends BaseCommand
         }
     }
 
-    private function getClassroomCourse()
+    private function findClassroomCourse()
     {
         $sql = "select id ,parentId from course where parentId > 0 ";
-        $resutl = $this->getConnectionDb()->fetchAll($sql);
-        return $resutl;
+        $result = $this->getConnectionDb()->fetchAll($sql);
+        return $result;
+    }
+
+    private function getClassroomCourseBySourceId($sourceCourseId)
+    {
+        $sql = "select id ,parentId from course where parentId = ? ";
+        $result = $this->getConnectionDb()->fetchAll($sql, array($sourceCourseId));
+        return $result;
     }
 
     protected function initServiceKernel()
