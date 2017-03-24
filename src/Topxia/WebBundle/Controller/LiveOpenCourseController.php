@@ -37,7 +37,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         if ($this->canTakeOpenCourseRelay($openCourse, $replay)) {
             return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array('globalId' => $replay['globalId']));
         } else {
-            return $this->createMessageResponse('warning', '非法请求');
+            return $this->createAccessDeniedException();
         }
 
     }
