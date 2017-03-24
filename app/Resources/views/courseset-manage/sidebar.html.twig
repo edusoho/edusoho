@@ -5,9 +5,12 @@
     {% set menuType = 'courseSet' %}
   {% endif %}
   {% set coursesLength =  courses|length %}
+  {% set courseListIntroCookie = app.request.cookies.get('COURSE_LIST_INTRO_COOKIE')|default(null)  %}
+  {% set isShowCourseMenu  = (curCourse and (menuType != 'courseSet' or coursesLength <= 1  or courseListIntroCookie)) %}
+  {% set isShowCourseList =  ( courseSet.type != 'live' and courseSet.parentId|default(0) <= 0  and (menuType == 'courseSet' or coursesLength <= 1 or courseListIntroCookie|default(null) )) %}
 
   {#只有一个教学计划#}
-  <div class="sidenav locked">
+  <div class="sidenav locked js-sidenav">
     <ul class="list-group">
       {#为courseSet 或者 长度小于 1 #}
       {% if menuType == 'courseSet' or coursesLength <= 1 %}
@@ -81,15 +84,15 @@
         {{ slot('course_set.menu.extension', {'courseSet':courseSet,'sideNav':side_nav}) }}
       {% endif %}
       {#不为courseSet 或者 长度小于 1 #}
-      {% if curCourse and (menuType != 'courseSet' or coursesLength <= 1 ) %}
-        {% if coursesLength > 1 %}
+      {% if isShowCourseMenu %}
+      <div class="js-sidenav-course-menu ">
+        {% if coursesLength > 1 and not courseListIntroCookie %}
           <li class="list-group-heading">
             {{ curCourse.title }}
           </li>
         {% else %}
           <hr class="mv5 mh10 bg-border-color"/>
         {% endif %}
-
         <li class="list-group-item {% if side_nav == 'tasks' %}active{% endif %}" id="step-1">
           {% if courseSet.locked %}
             <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'tasks'}) }}">
@@ -172,15 +175,18 @@
             </a>
           </li>
         {% endif %}
+      </div>
       {% endif %}
       {# 不是直播，不是编辑下得课程，课程编辑或者#}
-      {% if courseSet.type != 'live' and courseSet.parentId|default(0) <= 0  and (menuType == 'courseSet' or coursesLength <= 1 ) %}
-        <hr class="mv5 mh10 bg-border-color"/>
-        <li class="list-group-item {% if side_nav == 'plan' %}active{% endif %}">
-          <a href="{{ path('course_set_manage_courses', {courseSetId: courseSet.id}) }}">
-            {{ '教学计划管理'|trans }}
-          </a>
-        </li>
+      {% if isShowCourseList %}
+        <div class="js-sidenav-course-list">
+          <hr class="mv5 mh10 bg-border-color"/>
+          <li class="list-group-item {% if side_nav == 'plan' %}active{% endif %}">
+            <a href="{{ path('course_set_manage_courses', {courseSetId: courseSet.id}) }}">
+              {{ '教学计划管理'|trans }}
+            </a>
+          </li>
+        </div>
       {% endif %}
     </ul>
   </div>

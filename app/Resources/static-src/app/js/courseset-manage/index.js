@@ -1,6 +1,14 @@
-import { publishCourse } from 'app/js/course-manage/help';
+import { publishCourse,showSettings } from 'app/js/course-manage/help';
 import Intro from './intro';
 
 publishCourse();
-const intro = new Intro();
-intro.init();
+showSettings();
+console.log($('.js-task-manage-item:first'));
+$('.js-task-manage-item:first').trigger('mouseenter');
+
+setTimeout(function() {
+  let intro = new Intro();
+  intro.introType();
+}, 500);
+
+

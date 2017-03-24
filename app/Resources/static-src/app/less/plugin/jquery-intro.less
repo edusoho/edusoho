@@ -494,3 +494,68 @@ tr.introjs-showElement > th {
     opacity: 0.0;
  }
 }
+
+.introjs-arrow {
+  display: none!important;
+}
+
+.introjs-tooltip {
+  padding: 20px;
+  position: relative;
+  min-height: 80px;
+  color: @gray-darker;
+}
+.introjs-tooltiptext {
+  margin-bottom: 20px;
+}
+
+.introjs-skipbutton {
+  background: transparent;
+  border: none;
+  position: absolute;
+  right: -9px;
+  top: -14px;
+  color: @gray;
+  font-size: 16px;
+  &:hover,
+  &:focus {
+    .box-shadow(none);
+    background-image: none;
+    outline: none;
+  }
+}
+
+.introjs-nextbutton {
+  background-color: @brand-primary;
+  border-color: @brand-primary;
+  background-image: none;
+  padding: 5px 10px;
+  color: #fff;
+  text-shadow: none;
+  // .es-transition(all,0);
+  margin-left: 13px;
+  &:hover,
+  &:focus {
+    border-color: @brand-primary;
+    background-color: @brand-primary-darker;
+    color:#fff;
+    .box-shadow(none);
+    background-image: none;
+    outline: none;
+  }
+}
+
+.introjs-prevbutton {
+  padding: 5px 10px;
+  background-color: transparent;
+  border-color: transparent;
+  background-image: none;
+  &:hover,
+  &:focus {
+    background-color: transparent;
+    border-color: transparent;
+    .box-shadow(none);
+    background-image: none;
+    outline: none;
+  }
+}

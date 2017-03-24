@@ -1,6 +1,9 @@
+import Intro from 'app/js/courseset-manage/intro';
+
 class Creator {
   constructor() {
     this.init();
+    // this.isInitIntro();
   }
 
   init() {
@@ -70,8 +73,9 @@ class Creator {
       }
     });
 
-    $('#course-submit').click(function (evt) {
+    $('#course-submit').click( (evt)=> {
       if (validator.form()) {
+        this.isInitIntro();
         $(evt.currentTarget).button('loading');
         $form.submit();
       }
@@ -80,6 +84,16 @@ class Creator {
     this.initDatePicker('#expiryStartDate',validator);
     this.initDatePicker('#expiryEndDate',validator);
     this.initDatePicker('#deadline',validator);
+  }
+
+  isInitIntro() {
+    let listLength = $('#courses-list-table').find('tbody tr').length;
+    if(listLength == 1) {
+      console.log(listLength);
+      let intro = new Intro();
+      intro.isSetCourseListCookies();
+    }
+   
   }
 
   checkBoxChange() {

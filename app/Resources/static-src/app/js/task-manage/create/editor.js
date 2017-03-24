@@ -163,7 +163,7 @@ class Editor {
         let intro = new Intro();
         intro.initTaskDetailIntro('.js-settings-list');
       }
-    }, 1000);
+    }, 500);
   }
 
   showDefaultSetting($item = null) {

@@ -1,3 +1,2 @@
-let listLength = $('#courses-list-table').find('tbody tr').length;
+// import Intro from 'app/js/courseset-manage/intro';
 
-console.log(listLength);

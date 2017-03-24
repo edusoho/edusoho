@@ -6,19 +6,25 @@
 {% do script(['libs/jquery-intro.js','app/js/courseset-manage/index.js']) %}
 
 {% block content %}
-{% block course_header %}
-  {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), manage: true})) }}
-{% endblock %}
-
-<div class="row">
-  <div class="col-md-3">
-    {{ render(controller('AppBundle:Course/CourseSetManage:sidebar', {courseSetId:courseSet.id, curCourse: course|default(null), sideNav: side_nav|default(null)})) }}
+  {% block course_header %}
+    {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), manage: true})) }}
+  {% endblock %}
+  <div class="intro-fixed-group js-intro-btn-group hidden">
+    <span type="button" class="intro-btn" data-container=".intro-btn" 
+    data-toggle="popover" data-trigger="hover" data-placement="left" 
+    data-content="<div class='text-center'><p><a class='btn btn-primary js-reset-intro'>查看引导</a></p><a class='btn btn-info'>完整教程</a></div>">
+    改版引导
+    </span>
   </div>
-  <div class="col-md-9">
-    {% block main %}{% endblock %}
+  <div class="row">
+    <div class="col-md-3">
+      {{ render(controller('AppBundle:Course/CourseSetManage:sidebar', {courseSetId:courseSet.id, curCourse: course|default(null), sideNav: side_nav|default(null)})) }}
+    </div>
+    <div class="col-md-9">
+      {% block main %}{% endblock %}
+    </div>
   </div>
-</div>
-{% endblock %}
+  {% endblock %}
 
 {% block bottom %}
   <div class="modal fade course-function-modal" id="course-function-modal">
