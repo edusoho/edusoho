@@ -252,14 +252,14 @@ class CourseSetManageController extends BaseController
 
     public function coverCropAction(Request $request, $id)
     {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
-
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
             $this->getCourseSetService()->changeCourseSetCover($courseSet['id'], json_decode($data['images'], true));
 
             return $this->redirect($this->generateUrl('course_set_manage_cover', array('id' => $courseSet['id'])));
         }
+
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
         if ($courseSet['locked']) {
             return $this->redirectToRoute(

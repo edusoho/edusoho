@@ -42,7 +42,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     public function createCourse($course)
     {
         $this->tryCreateCourse();
-        
+
         if (!ArrayToolkit::requireds($course, array('title'))) {
             throw $this->createServiceException('缺少必要字段，创建课程失败！');
         }
