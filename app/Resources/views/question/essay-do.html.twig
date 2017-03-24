@@ -36,13 +36,13 @@
 			  {% if paperResult.status == 'finished' %}
 			  	<div class="testpaper-question-result-score mtl">
 			  		{% if showScore|default(1) %}
-			  			<div class="testpaper-question-result-title">{{'得分：'|trans}}<strong>{{'%testResult.score% 分'|trans({'%testResult.score%': question.testResult.score})}}</strong></div>
+			  			<div class="testpaper-question-result-title">{{'得分：'|trans}}<strong>{{'%testResult.score% 分'|trans({'%testResult.score%': question.testResult.score|default(0)})}}</strong></div>
 			  		{% endif %}
 			  	</div>
-			  	{% if question.testResult.teacherSay != '' %}
+			  	{% if question.testResult.teacherSay|default('') != '' %}
 			  		<div class="testpaper-question-teacherSay mtl">
 							<div class="testpaper-question-result-title">{{'评语：'|trans}}</div>
-							<div>{{ question.testResult.teacherSay|bbCode2Html|raw }}</div>
+							<div>{{ question.testResult.teacherSay|default('')|bbCode2Html|raw }}</div>
 						</div>
 					{% endif %}
 			  {% else %}
@@ -66,7 +66,7 @@
 		  <div class="testpaper-question-essay-inputs">
 		  	<textarea class="form-control essay-input-short" rows="1" style="overflow:hidden;line-height:20px;">{% if question.testResult.answer[0]|default(null) %}{{ question.testResult.answer[0]|bbCode2Html|raw }}{% endif %}</textarea>
 
-				<textarea id="question-input-long-{{ question.id }}" class="form-control essay-input-long" data-type="essay" name="{{ question.id }}" style="display:none;" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{% if question.testResult.answer[0]|default(null) %}{{ question.testResult.answer[0]|bbCode2Html|raw }}{% endif %}</textarea>
+				<textarea id="question-input-long-{{ question.id }}" class="form-control essay-input-long" data-type="essay" name="{{ question.id }}" style="display:none;" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{% if question.testResult.answer[0]|default(null) %}{{ question.testResult.answer[0]|default(null)|bbCode2Html|raw }}{% endif %}</textarea>
 
 				<a class="btn btn-link btn-muted btn-sm essay-input-btn" style="display:none"><span class="glyphicon glyphicon-chevron-up color-gray"></span> {{'收起'|trans}}</a>
 		  </div>
