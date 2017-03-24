@@ -1,6 +1,7 @@
 import loadAnimation from 'common/load-animation'
 import 'jquery-sortable';
-import notify from "common/notify";
+import notify from 'common/notify';
+import Intro from 'app/js/courseset-manage/intro';
 import { sortablelist } from "app/js/course-manage/help";
 
 
@@ -142,6 +143,7 @@ class Editor {
           $("#sortable-list").append($item);
         }
         this.showDefaultSetting($item);
+        this.initIntro();
         sortablelist('#sortable-list');
       })
       .fail((response) => {
@@ -153,6 +155,15 @@ class Editor {
         notify('warning', '保存出错: ' + msg);
         $("#course-tasks-submit").attr('disabled', null);
       });
+  }
+
+  initIntro() {
+    setTimeout(function() {
+      if($('.js-settings-list').length === 1) {
+        let intro = new Intro();
+        intro.initTaskDetailIntro('.js-settings-list');
+      }
+    }, 1000);
   }
 
   showDefaultSetting($item = null) {

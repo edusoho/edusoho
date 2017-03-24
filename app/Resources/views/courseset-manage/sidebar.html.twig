@@ -87,8 +87,9 @@
             {{ curCourse.title }}
           </li>
         {% else %}
-          <hr class=""/>
+          <hr class="mv5 mh10 bg-border-color"/>
         {% endif %}
+
         <li class="list-group-item {% if side_nav == 'tasks' %}active{% endif %}" id="step-1">
           {% if courseSet.locked %}
             <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'tasks'}) }}">

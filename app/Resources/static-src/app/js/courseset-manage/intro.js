@@ -2,12 +2,9 @@ import 'store';
 const COURSE_All_INTRO = 'COURSE_All_INTRO';
 const COURSE_BASE_INTRO = 'COURSE_BASE_INTRO'; 
 const COURSE_TASK_INTRO = 'COURSE_TASK_INTRO';
+const COURSE_TASK_DETAIL_INTRO = 'COURSE_TASK_DETAIL_INTRO';
 
 export default class Intro {
-  constructor() {
-    this.init();
-  }
-
   init() {
     if(this.isTaskCreatePage()) {
       this.initTaskCreatePageIntro();
@@ -44,6 +41,13 @@ export default class Intro {
     if (!store.get(COURSE_TASK_INTRO)) {
       store.set(COURSE_TASK_INTRO, true);
       this.introStart(this.initTaskSteps());
+    }
+  }
+
+  initTaskDetailIntro(element){
+    if (!store.get(COURSE_TASK_DETAIL_INTRO)) {
+      store.set(COURSE_TASK_DETAIL_INTRO);
+      this.introStart(this.initTaskDetailSteps(element));
     }
   }
 
@@ -100,6 +104,17 @@ export default class Intro {
         element: '#step-3',
         intro: "您可以在这里选择各种不同的教学手段，然后上传文件/设置内容/设置学习完成条件。!",
       }
+    ];
+  }
+
+  initTaskDetailSteps(element) {
+    return [
+      { 
+        element: element,
+        intro: `在设计学习任务时，
+        您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，
+        每个环节都可以通过各种教学手段来实现。!`,
+      },
     ];
   }
 }
