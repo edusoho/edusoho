@@ -25,7 +25,18 @@ class TableCacheStrategy extends CacheStrategy
             if (!empty($keys)) {
                 $keys = "{$keys}:";
             }
-            $keys = $keys.$value.':'.$args[$key];
+
+            if (empty($args[$key])) {
+                $keys = $keys.$value.':null';
+                continue;
+            }
+
+            $values = $args[$key];
+            if (is_array($values)) {
+                $values = implode(',', $args[$key]);
+            }
+
+            $keys = $keys.$value.':'.$values;
         }
 
         return "{$table}:{$this->getVersionByNamespace($dao, $table)}:{$keys}";
