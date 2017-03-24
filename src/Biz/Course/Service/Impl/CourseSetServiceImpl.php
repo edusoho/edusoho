@@ -619,7 +619,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
 
         $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
-        
+
         $this->beginTransaction();
         try {
             // 直播课程隐藏了教学计划，所以发布直播课程的时候自动发布教学计划
