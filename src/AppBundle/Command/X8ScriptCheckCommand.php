@@ -208,5 +208,59 @@ class X8ScriptCheckCommand extends BaseCommand
         } else {
             $output->writeln('<error> task、activity汇总校验 数据验证不通过.</error>');
         }
+
+        // testpaper_result校验
+        $c1 = $connection->fetchColumn("select count(*) from testpaper_result;");
+        $c2 = $connection->fetchColumn("select count(*) from c2_testpaper_result where type='testpaper';");
+        if ($c1 == $c2) {
+            $output->writeln('<info> testpaper_result校验 数据验证通过.</info>');
+        } else {
+            $output->writeln('<error> testpaper_result校验 数据验证不通过.</error>');
+        }
+
+        // testpaper_item_result校验
+        $c1 = $connection->fetchColumn("select count(*) from testpaper_item_result;");
+        $c2 = $connection->fetchColumn("select count(*) from c2_testpaper_item_result where type='testpaper';");
+        if ($c1 == $c2) {
+            $output->writeln('<info> testpaper_item_result校验 数据验证通过.</info>');
+        } else {
+            $output->writeln('<error> testpaper_item_result校验 数据验证不通过.</error>');
+        }
+
+        // homework_result校验
+        $c1 = $connection->fetchColumn("select count(*) from homework_result;");
+        $c2 = $connection->fetchColumn("select count(*) from c2_testpaper_result where type='homework';");
+        if ($c1 == $c2) {
+            $output->writeln('<info> homework_result校验 数据验证通过.</info>');
+        } else {
+            $output->writeln('<error> homework_result校验 数据验证不通过.</error>');
+        }
+
+        // homework_item_result校验
+        $c1 = $connection->fetchColumn("select count(*) from homework_item_result;");
+        $c2 = $connection->fetchColumn("select count(*) from c2_testpaper_item_result where type='homework';");
+        if ($c1 == $c2) {
+            $output->writeln('<info> homework_item_result校验 数据验证通过.</info>');
+        } else {
+            $output->writeln('<error> homework_item_result校验 数据验证不通过.</error>');
+        }
+
+        // exercise_result校验
+        $c1 = $connection->fetchColumn("select count(*) from exercise_result;");
+        $c2 = $connection->fetchColumn("select count(*) from c2_testpaper_result where type='exercise';");
+        if ($c1 == $c2) {
+            $output->writeln('<info> exercise_result校验 数据验证通过.</info>');
+        } else {
+            $output->writeln('<error> exercise_result校验 数据验证不通过.</error>');
+        }
+
+        // exercise_item_result校验
+        $c1 = $connection->fetchColumn("select count(*) from exercise_item_result;");
+        $c2 = $connection->fetchColumn("select count(*) from c2_testpaper_item_result where type='exercise';");
+        if ($c1 == $c2) {
+            $output->writeln('<info> exercise_item_result校验 数据验证通过.</info>');
+        } else {
+            $output->writeln('<error> exercise_item_result校验 数据验证不通过.</error>');
+        }
     }
 }
