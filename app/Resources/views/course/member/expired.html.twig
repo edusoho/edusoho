@@ -1,6 +1,6 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{{ '课程已到期'|trans }}{% endblock %}
+{% block title %}{{ '提示'|trans }}{% endblock %}
 {% block body %}
   <div class="alert">
     {% set message = slot('course.expired.message', {
