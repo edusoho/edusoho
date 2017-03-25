@@ -233,14 +233,6 @@ uploadfile_browsers:
     path:  /uploadfile/browsers
     defaults: { _controller: AppBundle:UploadFile:browsers }
 
-uploadfile_cloud_callback:
-    path:  /uploadfile/cloud_callback
-    defaults: { _controller: AppBundle:UploadFile:cloudCallback }
-
-uploadfile_cloud_get_media_info:
-    path:  /uploadfile/get_media_info/{type}
-    defaults: { _controller: AppBundle:UploadFile:getMediaInfo }
-
 hls_playlist:
     path: /hls/{id}/playlist/{token}.m3u8
     defaults: { _controller: AppBundle:HLS:playlist}

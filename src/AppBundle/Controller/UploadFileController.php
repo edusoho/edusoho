@@ -189,14 +189,6 @@ class UploadFileController extends BaseController
         return new Response($convertParams['hlsKey']);
     }
 
-    public function getMediaInfoAction(Request $request, $type)
-    {
-        $key = $request->query->get('key');
-        $info = $this->getUploadFileService()->getMediaInfo($key, $type);
-
-        return $this->createJsonResponse($info['format']['duration']);
-    }
-
     protected function createFilesJsonResponse($files, $paginator = null)
     {
         foreach ($files as &$file) {
