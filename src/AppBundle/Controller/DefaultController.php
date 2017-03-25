@@ -243,21 +243,19 @@ class DefaultController extends BaseController
 
     private function getMeCount()
     {
-        $meCount = $this->setting('meCount', false);
-        if ($meCount === false) {
+        $meCount = $this->setting('meCount',false);
+        if( $meCount === false ){
             //判断是否是定制用户
             $result = CloudAPIFactory::create('leaf')->get('/me');
-            $this->getSettingService()->set('meCount', $result);
+            $this->getSettingService()->set('meCount',$result);
         }
         $meCount = $this->setting('meCount');
-
         return $meCount;
     }
 
     private function isCustom()
     {
         $result = $this->getMeCount();
-
         return isset($result['hasMobile']) ? $result['hasMobile'] : 0;
     }
 

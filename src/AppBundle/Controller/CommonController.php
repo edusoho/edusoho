@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biz\Role\Util\PermissionBuilder;
 use Biz\User\CurrentUser;
 use Endroid\QrCode\QrCode;
 use Biz\User\Service\UserService;
@@ -9,6 +10,7 @@ use Biz\User\Service\TokenService;
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class CommonController extends BaseController
 {
@@ -71,7 +73,8 @@ class CommonController extends BaseController
 
             return $this->createJsonResponse(true);
         } catch (\Exception $e) {
-            $this->switchUser($request, $currentUser);
+            $token = new UsernamePasswordToken($currentUser, null, 'main', $currentUser['roles']);
+            $this->container->get('security.token_storage')->setToken($token);
             throw $e;
         }
     }

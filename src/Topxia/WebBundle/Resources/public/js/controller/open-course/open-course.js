@@ -8,6 +8,7 @@ define(function(require, exports, module) {
             main.onClickfavorite();
             main.onClickHeader();
             main.removeMask();
+            main.onClickReplay();
         },
         onClickThumb: function() {
             $('.js-like-num').on('click', function() {
@@ -57,7 +58,15 @@ define(function(require, exports, module) {
                 })
             })
         },
-        onClickHeader: function() {
+    //点击ES直播回放
+    onClickReplay: function() {
+        $('.js-play-es-live').on('click', function() {
+            var replayUrl = $(this).data('url');
+            var html = '<iframe src=\'' + replayUrl + '\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
+            $('.open-course-views').html(html);
+        })
+    },
+    onClickHeader: function() {
             $('.tab-header').on('click', function() {
                 var $this = $(this);
                 var index = $this.index();

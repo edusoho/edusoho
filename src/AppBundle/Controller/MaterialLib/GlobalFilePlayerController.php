@@ -2,8 +2,10 @@
 
 namespace AppBundle\Controller\MaterialLib;
 
+use Biz\CloudFile\Service\CloudFileService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use AppBundle\Controller\BaseController;
+use Biz\MaterialLib\Service\MaterialLibService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,8 +22,10 @@ class GlobalFilePlayerController extends BaseController
         if ($file['type'] == 'video') {
             return $this->videoPlayer($file, $request);
         } elseif ($file['type'] == 'audio') {
-            return $this->audioPlayer($file);
+            return $this->audioPlayer($file, $request);
         } elseif (in_array($file['type'], array('ppt', 'document', 'image', 'flash'))) {
+            $ssl = $request->isSecure() ? true : false;
+            $file = $this->getMaterialLibService()->player($globalId, $ssl);
             return $this->render("material-lib/player/{$file['type']}-player.html.twig", array(
                 'file' => $file,
             ));
@@ -50,19 +54,20 @@ class GlobalFilePlayerController extends BaseController
         return $this->createJsonResponse($file);
     }
 
-    public function audioPlayer($file)
+    public function audioPlayer($file, Request $request)
     {
-        $result = $this->getMaterialLibService()->player($file['no']);
+        $ssl = $request->isSecure() ? true : false;
+        $result = $this->getMaterialLibService()->player($file['no'], $ssl);
 
         return $this->render('material-lib/player/global-video-player.html.twig', array(
             'file' => $file,
             'url' => $result['url'],
             'player' => 'audio-player',
-            'agentInWhiteList' => $this->agentInWhiteList($this->getRequest()->headers->get('user-agent')),
+            'agentInWhiteList' => $this->agentInWhiteList($request->headers->get('user-agent')),
         ));
     }
 
-    protected function videoPlayer($file, $request)
+    protected function videoPlayer($file, Request $request)
     {
         $url = $this->getPlayUrl($file);
 
@@ -268,6 +273,9 @@ class GlobalFilePlayerController extends BaseController
         return $token;
     }
 
+    /**
+     * @return CloudFileService
+     */
     protected function getCloudFileService()
     {
         return $this->createService('CloudFile:CloudFileService');
@@ -278,6 +286,9 @@ class GlobalFilePlayerController extends BaseController
         return $this->createService('User:TokenService');
     }
 
+    /**
+     * @return MaterialLibService
+     */
     protected function getMaterialLibService()
     {
         return $this->createService('MaterialLib:MaterialLibService');
