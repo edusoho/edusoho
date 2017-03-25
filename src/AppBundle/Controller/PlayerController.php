@@ -17,6 +17,8 @@ class PlayerController extends BaseController
 {
     public function showAction(Request $request, $id, $context = array())
     {
+        $ssl = $request->isSecure() ? true : false;
+
         $file = $this->getUploadFileService()->getFullFile($id);
         if (empty($file)) {
             throw $this->createNotFoundException('file not found');
@@ -41,7 +43,7 @@ class PlayerController extends BaseController
             if (!empty($file['convertParams']['hasVideoWatermark'])) {
                 $file['videoWatermarkEmbedded'] = 1;
             }
-            $ssl = $request->isSecure() ? true : false;
+
             $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
             if (isset($result['subtitles'])) {
