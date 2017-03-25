@@ -1,6 +1,6 @@
 {
   "watch": [
-    "app/Resources/webpack",
+    "webpack.config.js",
     ".chokidar-watch-add.log"
   ]
 }

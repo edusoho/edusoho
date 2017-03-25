@@ -1,5 +1,4 @@
-// webpack配置文件
-const config = {
+const options = {
   output: {
     path: 'web/static-dist/',       // 用于生产环境下的输出目录
     publicPath: '/static-dist/',    // 用于开发环境下的输出目录
@@ -100,5 +99,10 @@ const config = {
     }
   ]
 }
+
+import webpackDev from 'es-webpack-engine';
+import webpackBuild from 'es-webpack-engine/dist/build';
+
+let config = (process.env.NODE_ENV === 'development') ? webpackDev(options) : webpackBuild(options)
 
 export default config;
