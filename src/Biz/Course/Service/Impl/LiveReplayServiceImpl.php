@@ -2,11 +2,11 @@
 
 namespace Biz\Course\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
-use Biz\Util\EdusohoLiveClient;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\LiveReplayService;
+use Biz\Util\EdusohoLiveClient;
 
 // Refactor: 该类不应该在Course模块，应该在和LiveActivity放一块，或者另启一个模块LiveRoom
 class LiveReplayServiceImpl extends BaseService implements LiveReplayService
@@ -156,7 +156,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
                 'lessonId' => $lessonId,
                 'title' => $replay['subject'],
                 'replayId' => $replay['id'],
-                'globalId' => !empty($replay['resourceNo']) ? $replay['resourceNo'] : 0,
+                'globalId' => empty($replay['resourceNo']) ? '' : $replay['resourceNo'],
                 'type' => $type,
             );
 
