@@ -3,11 +3,9 @@
 namespace Biz\File\Service\Impl;
 
 use Biz\BaseService;
-use Biz\File\Convertor\BaseConvertor;
 use Biz\File\Dao\UploadFileDao;
 use Biz\File\Service\FileImplementor;
 use Biz\System\Service\SettingService;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\FileToolkit;

@@ -97,7 +97,7 @@ class CourseLessonReplayDaoTest extends BaseDaoTestCase
         $tmp['lessonId'] = '1';
         $expected[] = $tmp;
 
-        $this->getDao()->updateByLessonId(2, 'live',array('lessonId' => 1));
+        $this->getDao()->updateByLessonId(2, 'live', array('lessonId' => 1));
 
         $res = array();
         $res[] = $this->getDao()->findByLessonId(1);

@@ -785,14 +785,6 @@ cloud_set_server:
     path: /cloud/set-server
     defaults: {_controller: AppBundle:Cloud:setServer }
 
-cloud_oldkeys:
-    path: /cloud/oldkeys
-    defaults: {_controller: AppBundle:Cloud:oldkeys }
-
-cloud_reconvert_old_file:
-    path: /cloud/reconvert_old_file
-    defaults: {_controller: AppBundle:Cloud:reconvertOldFile }
-
 cloud_video_fingerprint:
     path: /cloud/video_fingerprint
     defaults: {_controller: AppBundle:Cloud:videoFingerprint }
