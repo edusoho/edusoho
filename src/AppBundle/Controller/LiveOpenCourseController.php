@@ -218,12 +218,12 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $ssl = $request->isSecure() ? true : false;
 
         $course = $this->getOpenCourseService()->getCourse($courseId);
-        $lesson = $this->getOpenCourseService()->getCourseLesson($course['id'], $lesson['id']);
+        $lesson = $this->getOpenCourseService()->getCourseLesson($course['id'], $lessonId);
 
         $result = $this->getLiveReplayService()->entryReplay($replayId, $lesson['mediaId'], $lesson['liveProvider'], $ssl);
 
         if (!empty($result) && !empty($result['resourceNo'])) {
-            $result['url'] = $this->generateUrl('live_open_es_live_replay_show', array('replayId' => $replayId));
+            $result['url'] = $this->generateUrl('live_open_es_live_replay_show', array('replayId' => $replayId, 'courseId' => $course['id']));
         }
 
         return $this->createJsonResponse(array(
@@ -235,8 +235,9 @@ class LiveOpenCourseController extends BaseOpenCourseController
     /**
      * [playESLiveReplayAction 播放ES直播回放].
      */
-    public function playESLiveReplayAction(Request $request, $replayId)
+    public function playESLiveReplayAction(Request $request, $courseId, $replayId)
     {
+        $this->getCourseService()->tryTakeCourse($courseId);
         $replay = $this->getLiveReplayService()->getReplay($replayId);
 
         return $this->forward('AppBundle:MaterialLib/GlobalFilePlayer:player', array('globalId' => $replay['globalId']));

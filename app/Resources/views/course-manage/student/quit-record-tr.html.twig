@@ -2,7 +2,7 @@
 <tr >
   <td class="media" style="vertical-align: middle;">
     {{ web_macro.user_avatar(refund['user'], 'pull-left', 'avatar-sm') }}
-    <a target="_blank" href="{{ path('user_show', {id:refund['user'].id}) }}">{{ refund['user'].nickname }}</a>
+    <a class="link-primary" target="_blank" href="{{ path('user_show', {id:refund['user'].id}) }}">{{ refund['user'].nickname }}</a>
     <div class="color-gray text-sm">{{'加入课程时间：'|trans}}{{ refund['order'].createdTime|date('Y-n-d H:i') }}</div>
     
   </td>

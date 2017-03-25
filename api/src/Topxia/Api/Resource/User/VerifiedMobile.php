@@ -1,25 +1,27 @@
-<?php 
+<?php
 
 namespace Topxia\Api\Resource\User;
 
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\ArrayToolkit;
 use Topxia\Api\Util\SmsUtil;
 use Topxia\Api\Resource\BaseResource;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Request;
 
 class VerifiedMobile extends BaseResource
 {
     public function post(Application $app, Request $request)
     {
-        $mobile   = $request->request->get('mobile');
-        $smsCode  = $request->request->get('sms_code');
+        $mobile = $request->request->get('mobile');
+        $smsCode = $request->request->get('sms_code');
         $smsToken = $request->request->get('sms_token');
 
         if (empty($mobile)) {
             return $this->error('500', '手机号为空');
         }
+
+        $this->limiterCheck($mobile);
+
         if (empty($smsCode)) {
             return $this->error('500', '短信验证码为空，请输入');
         }
@@ -53,7 +55,21 @@ class VerifiedMobile extends BaseResource
     {
         return $res;
     }
-    
+
+    protected function limiterCheck($mobile)
+    {
+        $biz = $this->getBiz();
+
+        $factory = $biz['ratelimiter.factory'];
+        $limiter = $factory('api_mobile_verified', 5, 1800);
+        $remain = $limiter->check($mobile);
+        if ($remain == 0) {
+            return $this->error('500', '操作过于频繁，请30分钟之后再试');
+        }
+
+        return true;
+    }
+
     protected function getTokenService()
     {
         return ServiceKernel::instance()->createService('User:TokenService');

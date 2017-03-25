@@ -1512,7 +1512,7 @@ live_open_lesson_time_check:
     defaults: { _controller: AppBundle:OpenCourseManage:lessonTimeCheck }
 
 live_open_es_live_replay_show:
-    path:  /open/course/live/replay/{replayId}/show
+    path:  /open/course/{courseId}/live/replay/{replayId}/show
     defaults: { _controller: AppBundle:LiveOpenCourse:playESLiveReplay }
 
 open_course_member_sms:
