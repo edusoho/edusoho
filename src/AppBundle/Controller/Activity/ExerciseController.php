@@ -42,9 +42,9 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
         ));
     }
 
-    public function previewAction(Request $request, $id, $courseId)
+    public function previewAction(Request $request, $task)
     {
-        $activity = $this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
         $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
 
         if (!$exercise) {
@@ -114,7 +114,7 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
         ));
     }
 
-    public function finishConditionAction($activity)
+    public function finishConditionAction(Request $request, $activity)
     {
         $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
 

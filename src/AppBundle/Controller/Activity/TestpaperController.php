@@ -43,9 +43,9 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         ));
     }
 
-    public function previewAction(Request $request, $id, $courseId)
+    public function previewAction(Request $request, $task)
     {
-        $activity = $this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
 
@@ -110,7 +110,7 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         ));
     }
 
-    public function finishConditionAction($activity)
+    public function finishConditionAction(Request $request, $activity)
     {
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 

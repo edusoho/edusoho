@@ -289,18 +289,6 @@ class TaskManageController extends BaseController
     }
 
     /**
-     * @param  $type
-     *
-     * @return mixed
-     */
-    protected function getActivityActionConfig($type)
-    {
-        $config = $this->getActivityConfig();
-
-        return $config[$type]['actions'];
-    }
-
-    /**
      * @param  $course
      *
      * @return BaseStrategy|CourseStrategy

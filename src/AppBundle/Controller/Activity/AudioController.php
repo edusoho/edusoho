@@ -47,7 +47,7 @@ class AudioController extends BaseController implements ActivityActionInterface
         ));
     }
 
-    public function finishConditionAction($activity)
+    public function finishConditionAction(Request $request, $activity)
     {
         return $this->render('activity/audio/finish-condition.html.twig', array());
     }
@@ -55,8 +55,8 @@ class AudioController extends BaseController implements ActivityActionInterface
     protected function fillMinuteAndSecond($activity)
     {
         if (!empty($activity['length'])) {
-            $activity['minute'] = intval($activity['length'] / 60);
-            $activity['second'] = intval($activity['length'] % 60);
+            $activity['minute'] = (int) ($activity['length'] / 60);
+            $activity['second'] = (int) ($activity['length'] % 60);
         }
 
         return $activity;
