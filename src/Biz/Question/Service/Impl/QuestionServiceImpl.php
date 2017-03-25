@@ -22,6 +22,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $user = $this->getCurrentuser();
         $fields['userId'] = $user['id'];
 
+        if (isset($fields['content'])) {
+            $fields['content'] = $this->purifyHtml($fields['content'], true);
+        }
+
         $questionConfig = $this->getQuestionConfig($fields['type']);
         $media = $questionConfig->create($fields);
 
@@ -66,6 +70,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
 
         $fields['updatedTime'] = time();
+
+        if (isset($fields['content'])) {
+            $fields['content'] = $this->purifyHtml($fields['content'], true);
+        }
+
         $fields = $questionConfig->filter($fields);
 
         if (!empty($question['parentId'])) {

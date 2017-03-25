@@ -3,23 +3,20 @@
 namespace AppBundle\Controller\Activity;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseService;
 use Biz\Question\Service\QuestionService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class HomeworkController extends BaseController implements ActivityActionInterface
 {
     public function showAction(Request $request, $activity, $preview = 0)
     {
         if ($preview) {
-            return $this->forward('AppBundle:Activity/Homework:preview', array(
-                'id' => $activity['id'],
-                'courseId' => $activity['fromCourseId'],
-            ));
+            return $this->previewHomework($activity['id'], $activity['fromCourseId']);
         }
 
         $user = $this->getUser();
@@ -49,7 +46,13 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
 
     public function previewAction(Request $request, $task)
     {
-        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        return $this->previewHomework($task['activityId'], $task['courseId']);
+    }
+
+    protected function previewHomework($id, $courseId)
+    {
+        $activity = $this->getActivityService()->getActivity($id);
+
         $homework = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
 
         if (!$homework) {
