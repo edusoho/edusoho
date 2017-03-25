@@ -42,6 +42,7 @@ class EduSohoUpgrade extends AbstractUpdater
         'c2courseSetMigrate',
         'c2courseMigrate',
         'c2CourseTaskMigrate',
+
         'c2Activity',
         'c2VideoActivity',
         'c2TextActivity',
@@ -62,6 +63,10 @@ class EduSohoUpgrade extends AbstractUpdater
         'migrate',
         ''
       );
+
+      if (empty($steps[$index])) {
+         return '';
+      }
 
       return $steps[$index];
     }
@@ -93,7 +98,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 ,`liveProvider`
                 ,`replayStatus`
                 , 0
-            FROM `course_lesson` where `id` not in (select `id` from `live_activity`);";
+            FROM `course_lesson` where type='live' and `id` not in (select `id` from `live_activity`);";
 
             $result = $this->getConnection()->exec($sql);
         }
@@ -700,30 +705,53 @@ class EduSohoUpgrade extends AbstractUpdater
         "
         );
 
-        $this->getConnection()->exec(
-            "UPDATE `course_task` ck , `c2_course` ce SET ck.`fromCourseSetId` = ce.`courseSetId` WHERE ck.`courseId` =  ce.id AND ck.`fromCourseSetId` >0 ;"
+        $this->exec(
+            "alter table `course_chapter` modify `type` varchar(255) NOT NULL DEFAULT 'chapter' COMMENT '章节类型：chapter为章节，unit为单元，lesson为课时。';"
         );
-
 
         $this->exec(
             "alter table `course_chapter` modify `type` varchar(255) NOT NULL DEFAULT 'chapter' COMMENT '章节类型：chapter为章节，unit为单元，lesson为课时。';"
         );
 
+        if (!$this->isFieldExist('course_chapter', 'fromLessonId')) {
+            $this->exec("alter table `course_chapter` add `fromLessonId` int(10) default 0;");
+        }
 
-        //处理重复的
+        $sql = "insert into course_chapter (
+          courseId,
+          type,
+          parentId,
+          number,
+          seq,
+          title,
+          createdTime,
+          copyId,
+          fromLessonId
+        ) select 
+          courseId,
+          'lesson',
+          chapterId,
+          number,
+          seq,
+          title,
+          createdTime,
+          0,
+          id
+        from course_lesson where id not in (select fromLessonId from course_chapter where fromLessonId is not null and fromLessonId > 0 );";
+
+        $this->exec($sql);
+
         $tasks = $this->getConnection()->fetchAll(
-            "select * from `course_task` where mode ='lesson' and chapterId IS  NULL;"
+            "select * from `course_task` where mode = 'lesson' and chapterId IS  NULL;"
         );
-
         foreach ($tasks as $task) {
-            $chapter = array(
-                'courseId' => $task['courseId'],
-                'title' => $task['title'],
-                'type' => 'lesson',
-            );
-            $chapter = $this->getCourseService()->createChapter($chapter);
-            $task['categoryId'] = $chapter['id'];
+            $sql = 'select * from course_chapter where fromLessonId = ?';
+            $chapter = $this->getConnection()->fetchAssoc($sql, array($task['lessonId']));
+            if (empty($chapter)) {
+                continue;
+            }
 
+            $task['categoryId'] = $chapter['id'];
             $fields = array('categoryId' => $chapter['id'], 'chapterId' => $chapter['id']);
 
             $this->getConnection()->update('course_task', $fields, array('id' => $task['id']));
@@ -2193,7 +2221,7 @@ class EduSohoUpgrade extends AbstractUpdater
             LEFT JOIN
             course_lesson_extend AS cle
             ON cl.id=cle.id
-            WHERE cl.type='testpaper' AND cl.mediaId > 0 AND cl.id NOT IN (SELECT id FROM testpaper_activity)";
+            WHERE cl.type='testpaper' AND cl.id NOT IN (SELECT id FROM testpaper_activity)";
         $this->getConnection()->exec($sql);
 
         $sql = "UPDATE testpaper_activity AS ta,(SELECT id,limitedTime,oldTestId FROM c2_testpaper) AS tmp SET ta.mediaId = tmp.id, ta.limitedTime = tmp.limitedTime WHERE tmp.oldTestId = ta.mediaId";
@@ -2451,6 +2479,11 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getCourseService()
     {
         return ServiceKernel::instance()->createService('Course:CourseService');
+    }
+
+    protected function getCourseChapterDao()
+    {
+        return ServiceKernel::instance()->getBiz()->dao('Course:CourseChapterDao'); 
     }
 
     protected function logger($level, $message)
