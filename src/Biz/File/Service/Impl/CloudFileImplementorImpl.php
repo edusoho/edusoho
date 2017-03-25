@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\FileToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
-use Biz\Util\CloudClientFactory;
 
 class CloudFileImplementorImpl extends BaseService implements FileImplementor
 {
@@ -447,16 +446,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         }
 
         return json_decode($metas, true);
-    }
-
-    protected function getCloudClient()
-    {
-        if (empty($this->cloudClient)) {
-            $factory = new CloudClientFactory();
-            $this->cloudClient = $factory->createClient();
-        }
-
-        return $this->cloudClient;
     }
 
     protected function proccessConvertStatus($file)

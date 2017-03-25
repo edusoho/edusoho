@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Util\CloudClientFactory;
 use Biz\User\Service\TokenService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\File\Service\UploadFileService;
