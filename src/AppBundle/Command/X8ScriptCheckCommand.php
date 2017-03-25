@@ -23,9 +23,9 @@ class X8ScriptCheckCommand extends BaseCommand
         $c2 = $connection->fetchColumn("select count(*) from c2_course;");
         $c3 = $connection->fetchColumn("select count(*) from c2_course_set;");
         if ($c1 == $c2 && $c2 == $c3) {
-            $output->writeln('<info>课程数据验证通过.</info>');
+            $output->writeln('<info> 课程 数据验证通过.</info>');
         } else {
-            $output->writeln('<error>课程数据验证不通过.</error>');
+            $output->writeln('<error> 课程 数据验证不通过.</error>');
         }
 
         // 试卷
