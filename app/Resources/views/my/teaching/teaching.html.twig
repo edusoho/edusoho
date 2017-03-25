@@ -38,13 +38,13 @@
           {% set course = courseSet.courses|first %}
           <tr>
             <td>
-              <a class="pull-left mrm" href="{{ path('course_set_show', {id: courseSet.id}) }}">
+              <a class="pull-left mrm link-primary" href="{{ path('course_set_show', {id: courseSet.id}) }}">
                 <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}"
                      alt="{{ courseSet.title }}" width="100">
               </a>
 
               <div class="mlm">
-                <a href="{{ path('course_set_show', {id: courseSet.id}) }}">{{ courseSet.title }}</a>
+                <a class="link-primary" href="{{ path('course_set_show', {id: courseSet.id}) }}">{{ courseSet.title }}</a>
 
                 {% if courseSet.type == 'live' %}
                   <span class="label label-success live-label">{{ '直播'|trans }}</span>
@@ -74,11 +74,11 @@
             <td> {{ dict_macro.courseStatus( courseSet.status) }}</td>
             <td>
               <div class="btn-group">
-                <a class="mr10" target="_blank" href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id }) }}">
+                <a class="mr10 link-primary" target="_blank" href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id }) }}">
                   {{ '管理'|trans }}
                 </a>
                 {% if courseSet.canManage|default(false) %}
-                  <a href="#" type="button" class="dropdown-toggle" data-toggle="dropdown">
+                  <a href="#" type="button" class="link-primary dropdown-toggle ml10" data-toggle="dropdown">
                     更多
                     <i class="es-icon es-icon-arrowdropdown"></i>
                   </a>
