@@ -11,10 +11,7 @@ class TestpaperController extends BaseController implements ActivityActionInterf
     public function showAction(Request $request, $activity, $preview = 0)
     {
         if ($preview) {
-            return $this->forward('AppBundle:Activity/Testpaper:preview', array(
-                'id' => $activity['id'],
-                'courseId' => $activity['fromCourseId'],
-            ));
+            return $this->previewTestpaper($activity['id'], $activity['fromCourseId']);
         }
 
         $user = $this->getUser();
@@ -45,7 +42,12 @@ class TestpaperController extends BaseController implements ActivityActionInterf
 
     public function previewAction(Request $request, $task)
     {
-        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        return $this->previewTestpaper($task['activityId'], $task['courseId']);
+    }
+
+    public function previewTestpaper($id, $courseId)
+    {
+        $activity = $this->getActivityService()->getActivity($id);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
 
