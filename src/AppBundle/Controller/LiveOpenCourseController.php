@@ -218,7 +218,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $ssl = $request->isSecure() ? true : false;
 
         $course = $this->getOpenCourseService()->getCourse($courseId);
-        $lesson = $this->getOpenCourseService()->getCourseLesson($course['id'], $lesson['id']);
+        $lesson = $this->getOpenCourseService()->getCourseLesson($course['id'], $lessonId);
 
         $result = $this->getLiveReplayService()->entryReplay($replayId, $lesson['mediaId'], $lesson['liveProvider'], $ssl);
 
