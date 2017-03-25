@@ -79,6 +79,7 @@ common_qrcode:
 common_crontab:
     path:  /common/crontab
     defaults: { _controller: AppBundle:Common:crontab }
+    methods: [POST]
 
 user_terms:
     path:  /userterms

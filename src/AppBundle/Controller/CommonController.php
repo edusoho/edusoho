@@ -9,7 +9,6 @@ use Biz\User\Service\TokenService;
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class CommonController extends BaseController
 {
@@ -63,6 +62,7 @@ class CommonController extends BaseController
     public function crontabAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
+        $currentUserToken = $this->container->get('security.token_storage')->getToken();
         try {
             $switchUser = new CurrentUser();
             $switchUser->fromArray($this->getUserService()->getUserByType('scheduler'));
@@ -72,9 +72,9 @@ class CommonController extends BaseController
 
             return $this->createJsonResponse(true);
         } catch (\Exception $e) {
-            $token = new UsernamePasswordToken($currentUser, null, 'main', $currentUser['roles']);
-            $this->container->get('security.token_storage')->setToken($token);
-            throw $e;
+            $this->container->get('security.token_storage')->setToken($currentUserToken);
+
+            return $this->createJsonResponse(false);
         }
     }
 
