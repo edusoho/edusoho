@@ -13,7 +13,6 @@ use AppBundle\Component\ShareSdk\WeixinShare;
 use AppBundle\Util\CategoryBuilder;
 use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
-use Biz\Util\HTMLPurifierFactory;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
@@ -1272,14 +1271,9 @@ class WebExtension extends \Twig_Extension
             return '';
         }
 
-        $config = array(
-            'cacheDir' => ServiceKernel::instance()->getParameter('kernel.cache_dir').'/htmlpurifier',
-        );
+        $biz = $this->container->get('biz');
 
-        $factory = new HTMLPurifierFactory($config);
-        $purifier = $factory->create($trusted);
-
-        return $purifier->purify($html);
+        return $biz['html_helper']->purify($html, $trusted);
     }
 
     public function atFilter($text, $ats = array())

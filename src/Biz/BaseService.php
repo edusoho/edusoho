@@ -158,7 +158,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     {
         $htmlHelper = $this->biz['html_helper'];
 
-        return $htmlHelper->purify($html);
+        return $htmlHelper->purify($html, $trusted);
     }
 
     protected function getLock()
