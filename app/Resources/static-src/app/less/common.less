@@ -15,24 +15,9 @@
   border-radius: 0!important;
 }
 
-// .view-toggle {
-//   >.view-hide {
-//     display: none;
-//   }
-//   >.view-show {
-//    display: inline;
-//   }
-//   &.active{
-//     >.view-show {
-//       display: none;
-//     }
-//     >.view-hide {
-//       display: inline;
-//     }
-//   }
-// }
-
-
+.es-icon {
+  line-height: 1;
+}
 
 //before 2.0
 body { 
@@ -105,19 +90,6 @@ html.nav-active body {
   z-index: 1;
 }
 
-
-
-.inline-block {
-  display: inline-block;
-}
-
-.vertical-middle {
-  vertical-align: middle;
-}
-
-
-
-
 // 富文本编辑器
 .cke_chrome {
   .border-radius();
@@ -125,21 +97,31 @@ html.nav-active body {
   .box-shadow(none) !important;
 }
 
+// 富文本编辑器样式统一处理
+.editor-text {
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}
+
 .webuploader-element-invisible {
   position: absolute !important;
   clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
   clip: rect(1px,1px,1px,1px);
 }
+
+
 //a链接颜色变化
-a {
-  cursor: pointer;
-  color: @brand-primary;
-  .es-transition;
-  &:hover {
-    color: @brand-primary-darker;
-    .es-transition;
-  }
-}
+// a {
+//   cursor: pointer;
+//   color: @brand-primary;
+//   .es-transition;
+//   &:hover {
+//     color: @brand-primary-darker;
+//     .es-transition;
+//   }
+// }
 
 //上传文件
 // input[type=file] {
