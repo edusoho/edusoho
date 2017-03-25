@@ -63,6 +63,7 @@ abstract class Mail
     public function send()
     {
         $this->mailCheckRatelimiter();
+
         return $this->doSend();
     }
 

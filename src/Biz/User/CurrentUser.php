@@ -160,6 +160,7 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
     public function isAdmin()
     {
         $permissions = $this->getPermissions();
+
         return !empty($permissions) && array_key_exists('admin', $permissions);
     }
 
