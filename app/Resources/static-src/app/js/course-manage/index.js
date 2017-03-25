@@ -7,7 +7,8 @@ import {
   deleteTask,
   publishTask,
   unpublishTask,
-  updateTaskNum
+  updateTaskNum,
+  TaskListHeaderFixed
 } from './help';
 
 $('[data-help="popover"]').popover();
@@ -20,6 +21,7 @@ deleteTask();
 publishTask();
 unpublishTask();
 showSettings();
+TaskListHeaderFixed();
 // @TODO拆分，这个js被几个页面引用了有的页面根本不用js
 
 

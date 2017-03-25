@@ -131,6 +131,9 @@
     &:hover,
     &.active {
       background: #f3f3f3;
+      .item-default-header  {
+        border-color: @gray-medium;
+      }
       .item-actions {
         visibility: visible;;
       }
@@ -181,10 +184,12 @@
       text-decoration: none;
     }
   }
+  .item-default-header {
+    border-bottom: 1px solid transparent;
+  }
   .settings-list {
     padding: 0;
-    margin: 42px 0 0;
-    border-top: 1px solid @gray-medium;
+    // border-top: 1px solid @gray-medium;
     display: none;
     list-style: none;
     background-color: #f3f3f3;

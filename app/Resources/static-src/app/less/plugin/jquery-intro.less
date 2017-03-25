@@ -506,17 +506,30 @@ tr.introjs-showElement > th {
   color: @gray-darker;
 }
 .introjs-tooltiptext {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  .title {
+    font-size: 16px;
+    margin-bottom: 20px;
+    font-weight: bolder;
+  }
+}
+
+.introjs-button {
+  font-size: 14px;
 }
 
 .introjs-skipbutton {
   background: transparent;
   border: none;
   position: absolute;
-  right: -9px;
-  top: -14px;
+  right: 0;
+  top:9px;
   color: @gray;
-  font-size: 16px;
+  i {
+    font-size: 14px;
+    color: @gray;
+  }
   &:hover,
   &:focus {
     .box-shadow(none);
@@ -534,6 +547,7 @@ tr.introjs-showElement > th {
   text-shadow: none;
   // .es-transition(all,0);
   margin-left: 13px;
+  .border-radius(4px);
   &:hover,
   &:focus {
     border-color: @brand-primary;

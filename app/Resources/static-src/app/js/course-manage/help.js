@@ -176,3 +176,19 @@ export const updateTaskNum = (container) => {
     $('#task-num').text($(container).find('i[data-role="task"]').length);
   })
 }
+
+export const TaskListHeaderFixed = () => {
+  let $header = $('.js-task-list-header');
+  if(!$header.length){
+    return;
+  }
+  let headerTop = $header.offset().top;
+	$(window).scroll(function(event) {
+			if ($(window).scrollTop() >= headerTop) {
+				$header.addClass('fixed')
+			} else {
+				$header.removeClass('fixed');
+			}
+	});
+}
+
