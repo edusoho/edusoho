@@ -52,7 +52,7 @@ class HomeworkResult extends BaseResource
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTask($lessonId);
 
-        if ($task['mode'] == 'lesson') {
+        if ($task['type'] != 'homework') {
             $conditions = array(
                 'categoryId' => $task['categoryId'],
                 'type' => 'homework',
