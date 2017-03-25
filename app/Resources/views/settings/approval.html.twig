@@ -30,7 +30,7 @@
                                     <div class="alert alert-success" role="alert">{{'恭喜您，已通过实名认证！'|trans}}
                                     </div>
                                 {% elseif  app.user.approvalStatus == 'unapprove' %}
-                                    <div class="alert alert-warning" role="alert">{{'您尚未实名认证'|trans}}
+                                    <div class="alert alert-warning" role="alert">{{'您尚未实名认证。'|trans}}
                                     </div>
                                 {% elseif app.user.approvalStatus == 'approve_fail' %}
                                     <p class="color-danger" >

@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Service\Common\Mail;
+namespace Biz\Common\Mail;
 
 use AppBundle\Common\SettingToolkit;
 use Topxia\Service\Common\ServiceKernel;
