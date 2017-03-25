@@ -1292,6 +1292,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         } elseif ($task['type'] == 'audio') {
             $task['mediaSource'] = 'self';
         } elseif ($task['type'] == 'live') {
+            if ($activity['ext']['replayStatus'] == 'videoGenerated') {
+                $task['mediaSource'] = 'self';
+            }
+
             $task['liveProvider'] = $activity['ext']['liveProvider'];
             $task['replayStatus'] = $activity['ext']['replayStatus'];
         }
@@ -1533,6 +1537,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($coursesIds, 'id'));
+
         return $courses;
     }
 
