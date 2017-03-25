@@ -13,10 +13,12 @@ if ($('.js-attachment-list').length > 0) {
 }
 
 function initTaskLearnChart() {
+  let colorPrimary = $('.color-primary').css('color');
+  let colorWarning = $('.color-warning').css('color');
   $('#freeprogress').easyPieChart({
     easing: 'easeOutBounce',
     trackColor: '#ebebeb',
-    barColor: '#46c37b',
+    barColor: colorPrimary,
     scaleColor: false,
     lineWidth: 14,
     size: 145,
@@ -33,7 +35,7 @@ function initTaskLearnChart() {
   $('#orderprogress-plan').easyPieChart({
     easing: 'easeOutBounce',
     trackColor: '#ebebeb',
-    barColor: '#fd890c',
+    barColor: colorWarning,
     scaleColor: false,
     lineWidth: 14,
     size: 145,
@@ -44,7 +46,7 @@ function initTaskLearnChart() {
   $('#orderprogress').easyPieChart({
     easing: 'easeOutBounce',
     trackColor: bg,
-    barColor: '#46c37b',
+    barColor: colorPrimary,
     scaleColor: false,
     lineWidth: 14,
     size: 145,
