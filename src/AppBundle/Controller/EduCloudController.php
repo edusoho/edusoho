@@ -157,15 +157,15 @@ class EduCloudController extends BaseController
     public function smsCheckAction(Request $request, $type)
     {
         $targetSession = $request->getSession()->get($type);
-        $targetMobile =  $targetSession['to'] ? $targetSession['to'] : '';
+        $targetMobile = $targetSession['to'] ? $targetSession['to'] : '';
         $postSmsCode = $request->query->get('value', '');
 
-        $ratelimiterResult =  SmsToolkit::smsCheckRatelimiter($request,$type,$postSmsCode);
-        if($ratelimiterResult && $ratelimiterResult['success'] === false ){
+        $ratelimiterResult = SmsToolkit::smsCheckRatelimiter($request, $type, $postSmsCode);
+        if ($ratelimiterResult && $ratelimiterResult['success'] === false) {
             return $this->createJsonResponse($ratelimiterResult);
         }
 
-        if ((string)$postSmsCode === '' || (string)$targetSession['sms_code'] === '') {
+        if ((string) $postSmsCode === '' || (string) $targetSession['sms_code'] === '') {
             $response = array('success' => false, 'message' => '验证码错误');
         }
 
@@ -177,7 +177,7 @@ class EduCloudController extends BaseController
 
         $response = array(
             'success' => false,
-            'message' => '验证码错误'
+            'message' => '验证码错误',
         );
 
         if ($targetSession['sms_code'] == $request->query->get('value')) {
