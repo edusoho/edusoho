@@ -152,8 +152,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     public function onCourseUpdate(Event $event)
     {
-        $context = $event->getSubject();
-        $course = $context['course'];
+        $course = $event->getSubject();
         $this->pushCloud('course.update', $this->convertCourse($course));
     }
 
