@@ -26,6 +26,7 @@ class GlobalFilePlayerController extends BaseController
         } elseif (in_array($file['type'], array('ppt', 'document', 'image', 'flash'))) {
             $ssl = $request->isSecure() ? true : false;
             $file = $this->getMaterialLibService()->player($globalId, $ssl);
+
             return $this->render("material-lib/player/{$file['type']}-player.html.twig", array(
                 'file' => $file,
             ));

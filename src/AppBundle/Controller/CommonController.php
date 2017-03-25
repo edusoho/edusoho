@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Role\Util\PermissionBuilder;
 use Biz\User\CurrentUser;
 use Endroid\QrCode\QrCode;
 use Biz\User\Service\UserService;

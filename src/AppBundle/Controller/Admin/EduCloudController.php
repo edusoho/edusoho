@@ -1698,7 +1698,6 @@ class EduCloudController extends BaseController
         try {
             $account = $this->getConsultService()->getAccount();
             $jsResource = $this->getConsultService()->getJsResource();
-
         } catch (\RuntimeException $e) {
             return $this->render('admin/edu-cloud/consult/consult-error.html.twig', array());
         }
@@ -1714,7 +1713,6 @@ class EduCloudController extends BaseController
         }
 
         if ($request->isMethod('POST')) {
-
             $data = $request->request->all();
             $cloudConsult['cloud_consult_setting_enabled'] = $data['cloud_consult_setting_enabled'];
 
@@ -1727,14 +1725,14 @@ class EduCloudController extends BaseController
         }
 
         return $this->render('admin/edu-cloud/consult/setting.html.twig', array(
-            'cloud_consult'=> $cloudConsult
+            'cloud_consult' => $cloudConsult,
         ));
     }
 
     private function renderConsultWithoutEnable($cloudConsult)
     {
         return $this->render('admin/edu-cloud/consult/without-enable.html.twig', array(
-            'cloud_consult' => $cloudConsult
+            'cloud_consult' => $cloudConsult,
         ));
     }
 
@@ -1742,5 +1740,4 @@ class EduCloudController extends BaseController
     {
         return $this->createService('EduCloud:MicroyanConsultService');
     }
-
 }
