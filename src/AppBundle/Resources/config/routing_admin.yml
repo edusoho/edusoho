@@ -1006,11 +1006,6 @@ admin_cloud_access:
     defaults: { _controller: AppBundle:Admin/Cloud:access }
     permissions: [admin_my_cloud_overview]
 
-admin_cloud_bill:
-    path:  /cloud/bill
-    defaults: { _controller: AppBundle:Admin/Cloud:bill }
-    permissions: [admin_my_cloud_overview]
-
 admin_cloud_recharge:
     path:  /cloud/recharge
     defaults: { _controller: AppBundle:Admin/Cloud:recharge }
