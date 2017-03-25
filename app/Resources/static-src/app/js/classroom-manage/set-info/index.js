@@ -2,8 +2,6 @@ import notify from 'common/notify';
 import 'common/select2';
 import 'app/js/classroom-manage/classroom-create';
 
-
-
 initEditor();
 const validator = initValidator();
 toggleExpiryValue($("[name=expiryMode]:checked").val());
