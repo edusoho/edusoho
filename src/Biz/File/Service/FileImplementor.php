@@ -41,8 +41,6 @@ interface FileImplementor
 
     public function makeUploadParams($params);
 
-    public function reconvertFile($file, $convertCallback, $pipeline = null);
-
     public function getMediaInfo($key, $mediaType);
 
     //FileImplementor2
@@ -63,8 +61,6 @@ interface FileImplementor
     public function finishedUpload($file, $params);
 
     public function search($conditions);
-
-    public function synData($conditions);
 
     public function download($globalId);
 }

@@ -30,5 +30,4 @@ interface MaterialLibService
 
     public function player($globalId, $ssl = false);
 
-    public function synData();
 }

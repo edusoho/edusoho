@@ -138,25 +138,6 @@ class DeveloperSettingController extends BaseController
         ));
     }
 
-    public function syncUploadFileAction(Request $request)
-    {
-        $conditions = array(
-            'storage' => 'cloud',
-            'globalId' => 0,
-        );
-
-        if ($request->getMethod() == 'POST') {
-            $syncCount = $this->getCloudFileService()->synData($conditions);
-            $this->setFlashMessage('success', '同步成功！共同步'.$syncCount.'个文件');
-        }
-
-        $fileCount = $this->getUploadFileService()->searchFileCount($conditions);
-
-        return $this->render('admin/developer-setting/cloud-file-sync.html.twig', array(
-            'fileCount' => $fileCount,
-        ));
-    }
-
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');

@@ -191,10 +191,6 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         return $this->getUploadFileDao()->search($conditions, array('createdTime' => 'DESC'), $start, $limit);
     }
 
-    public function synData($conditions)
-    {
-    }
-
     public function getFileByGlobalId($globalId)
     {
     }
@@ -210,7 +206,8 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
             'fileupload',
             $params['userId'],
             strtotime('+ 2 hours'),
-            $params);
+            $params
+        );
 
         return $uploadParams;
     }
