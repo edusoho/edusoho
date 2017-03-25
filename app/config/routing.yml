@@ -1,10 +1,6 @@
 tbazinga_jstranslation:
     resource: "@BazingaJsTranslationBundle/Resources/config/routing/routing.yml"
 
-topxia_mobile:
-    resource: "@TopxiaMobileBundle/Resources/config/routing.yml"
-    prefix:   /mapi_v1
-
 topxia_mobile_v2:
     resource: "@TopxiaMobileBundleV2/Resources/config/routing.yml"
     prefix:   /mapi_v2
