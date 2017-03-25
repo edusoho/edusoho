@@ -19,7 +19,7 @@
   </div>
 {% endblock %}
 
-{% set hide_footer = course.expiryMode == 'date' %}
+{% set hide_footer = course.expiryMode != 'days' %}
 
 {% block footer %}
   <a href="{{ path('course_member_deadline_reach',{id: course.id}) }}" class="btn btn-primary">
