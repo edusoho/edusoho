@@ -1934,10 +1934,10 @@ admin_edu_cloud_email:
     defaults: { _controller: AppBundle:Admin/EduCloud:emailOverview }
     permissions: [admin_edu_cloud_email_overview]
 
-#admin_edu_cloud_email_setting:
-#    path: /edu_cloud/email/setting
-#    defaults: { _controller: AppBundle:Admin/EduCloud:emailSetting }
-#    permissions: [admin_edu_cloud_email_overview]
+admin_edu_cloud_email_setting:
+   path: /edu_cloud/email/setting
+   defaults: { _controller: AppBundle:Admin/EduCloud:emailSetting }
+   permissions: [admin_edu_cloud_email_overview]
 
 admin_edu_cloud_email_switch:
     path: /edu_cloud/email/switch

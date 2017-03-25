@@ -52,14 +52,16 @@ class BaseController extends Controller
     protected function switchUser(Request $request, CurrentUser $user)
     {
         $user['currentIp'] = $request->getClientIp();
-        $biz = $this->getBiz();
-        $biz['user'] = $user;
+
         $token = new UsernamePasswordToken($user, null, 'main', $user['roles']);
         $this->container->get('security.token_storage')->setToken($token);
 
+        $biz = $this->getBiz();
+        $biz['user'] = $user;
+
         $this->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, new InteractiveLoginEvent($request, $token));
 
-        $this->getLogService()->info('user', 'login_success', '登录成功');
+        $this->getLogService()->info('user', 'user_switch_success', '用户切换登录成功');
 
         return $user;
     }

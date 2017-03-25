@@ -17,6 +17,10 @@ class LessonReplay extends BaseResource
             return $this->error('500', '课时不存在！');
         }
 
+        if (!$this->getCourseService()->canTakeCourse($task['courseId'])) {
+            return array('message' => 'Access Denied');
+        }
+
         if ($activity['ext']['replayStatus'] == 'videoGenerated') {
             return json_decode($this->sendRequest('GET', $this->getHttpHost().$app['url_generator']->generate('get_lesson', array('id' => $task['id'])), array(sprintf('X-Auth-Token: %s', $request->headers->get('X-Auth-Token')))), true);
         }

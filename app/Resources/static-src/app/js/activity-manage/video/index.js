@@ -8,6 +8,17 @@ class Video {
     this.isInitStep3from();
     this.autoValidatorLength();
     this.initfileChooser();
+    this.hideSubtitleWidget();
+  }
+
+  hideSubtitleWidget() {
+    var subtitleWidget = $('#video-subtitle-form-group');
+    $('[role="presentation"] a[href!="#import-video-panel"]').click(function () {
+      subtitleWidget.show();
+    });
+    $('a[href="#import-video-panel"]').click(function () {
+      subtitleWidget.hide();
+    });
   }
 
   showChooseContent() {

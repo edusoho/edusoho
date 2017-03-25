@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\SmsToolkit;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;
@@ -156,21 +157,32 @@ class EduCloudController extends BaseController
     public function smsCheckAction(Request $request, $type)
     {
         $targetSession = $request->getSession()->get($type);
+        $targetMobile = $targetSession['to'] ? $targetSession['to'] : '';
+        $postSmsCode = $request->query->get('value', '');
 
-        if (strlen($request->query->get('value')) == 0 || strlen($targetSession['sms_code']) == 0) {
+        $ratelimiterResult = SmsToolkit::smsCheckRatelimiter($request, $type, $postSmsCode);
+        if ($ratelimiterResult && $ratelimiterResult['success'] === false) {
+            return $this->createJsonResponse($ratelimiterResult);
+        }
+
+        if ((string) $postSmsCode === '' || (string) $targetSession['sms_code'] === '') {
             $response = array('success' => false, 'message' => '验证码错误');
         }
 
-        $mobile = $request->query->get('mobile') ? $request->query->get('mobile') : '';
+        $mobile = $request->query->get('mobile', '');
 
         if ($mobile != '' && !empty($targetSession['to']) && $mobile != $targetSession['to']) {
             return $this->createJsonResponse(array('success' => false, 'message' => '验证码和手机号码不匹配'));
         }
 
+        $response = array(
+            'success' => false,
+            'message' => '验证码错误',
+        );
+
         if ($targetSession['sms_code'] == $request->query->get('value')) {
-            $response = array('success' => true, 'message' => '验证码正确');
-        } else {
-            $response = array('success' => false, 'message' => '验证码错误');
+            $response['success'] = true;
+            $response['message'] = '验证码正确';
         }
 
         return $this->createJsonResponse($response);

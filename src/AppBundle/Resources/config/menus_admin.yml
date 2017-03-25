@@ -742,6 +742,15 @@ admin:
                             name: 即时聊天设置
                             router_name: admin_app_im
                             disable: true
+                admin_cloud_file_manage:
+                    name: 云资源
+                    visable: (cloudStatus())
+                    parent: admin_app
+                    after: admin_app_center_show
+                    children:
+                        admin_cloud_file:
+                            name: 云资源
+                            disable: true
                 admin_setting_cloud_attachment:
                     name: 云附件设置
                     visable: (cloudStatus())
@@ -780,6 +789,14 @@ admin:
                         admin_cloud_attachment:
                             name: 云附件
                             disable: true
+                # admin_cloud_consult:
+                    # name: 云问答
+                    # router_name: admin_cloud_consult_setting
+                    # visable: (cloudStatus())
+                    # children:
+                    #     admin_cloud_consult_setting:
+                    #     name: 设置
+                    #     disable: true
                 admin_setting_cloud:
                     name: 授权信息
                     children:
