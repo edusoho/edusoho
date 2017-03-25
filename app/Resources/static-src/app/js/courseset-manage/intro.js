@@ -13,7 +13,7 @@ export default class Intro {
     $('body').on('click', '.js-reset-intro', () => {
       this.isRestintroType();
     })
-    this.isRestintroType();
+    // this.isRestintroType();
   }
   
   resetButtonRender(show = false) {
