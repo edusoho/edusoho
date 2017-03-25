@@ -39,8 +39,6 @@ twig:
         "%kernel.root_dir%/../web/themes": theme
         "%kernel.root_dir%/../plugins": plugins
         "%kernel.root_dir%/../" : root
-    globals:
-        disabled_features: "%disabled_features%"
 
 # Swiftmailer Configuration
 # swiftmailer:

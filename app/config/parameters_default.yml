@@ -6,8 +6,6 @@ parameters:
         ROLE_ADMIN:       [ROLE_TEACHER, ROLE_BACKEND]
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
-    disabled_features: []
-
     keyword.filter: Biz\Common\EsKeywordFilter
 
     route_white_list:
