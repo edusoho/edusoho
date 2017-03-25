@@ -240,9 +240,7 @@ class PlayerController extends BaseController
 
                     return $this->generateUrl('hls_playlist', $params, true);
                 } else {
-                    $factory = new CloudClientFactory();
-                    $client = $factory->createClient();
-                    $result = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
+                    throw new \RuntimeException('当前视频格式不能被播放！');
                 }
             } else {
                 if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
