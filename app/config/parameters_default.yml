@@ -12,27 +12,6 @@ parameters:
         password: required
         repassword: required
     disabled_features: []
-    cloud_convertor:
-        HLSVideo:
-            video:
-                low: [240k, 440k, 640k]
-                normal: [440k, 640k, 1000k]
-                high: [640k, 1000k, 1500k]
-            audio:
-                low: [32k, 48k, 64k]
-                normal: [48k, 64k, 96k]
-                high: [64k, 96k, 128k]
-            segtime: 10
-        HLSAudio:
-            low: 64k
-            normal: 96k
-            high: 128k
-        audio:
-            shd: mp3
-        ppt:
-            density: 150
-            quality: 80
-            resize: 1200
 
     cdn_path: http://cdn.staticfile.org
 
