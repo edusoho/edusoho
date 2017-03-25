@@ -1996,7 +1996,7 @@ class EduSohoUpgrade extends AbstractUpdater
             teacherSay,
             id AS oldItemResultId,
             'homework'
-            FROM homework_item_result WHERE id NOT IN (SELECT oldItemResultId FROM c2_testpaper_item_result)";
+            FROM homework_item_result WHERE id NOT IN (SELECT oldItemResultId FROM c2_testpaper_item_result where type = 'homework')";
         $this->getConnection()->exec($sql);
 
         $sql = "UPDATE c2_testpaper_item_result AS rt,(SELECT id,oldTestId FROM c2_testpaper WHERE type = 'homework') AS tmp SET rt.testId = tmp.id WHERE rt.type = 'homework' AND rt.testId = tmp.oldTestId;";
@@ -2055,7 +2055,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 metas,
                 copyId,
                 type,
-                courseSetId
+                courseSetId,
+                oldTestId
             ) VALUES (
                 '',
                 '',
@@ -2075,7 +2076,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 '".$metas."',
                 {$exercise['copyId']},
                 'exercise',
-                {$courseSetId}
+                {$courseSetId},
+                {$exercise['id']}
             )";
 
             $this->getConnection()->exec($insertSql);
@@ -2105,7 +2107,8 @@ class EduSohoUpgrade extends AbstractUpdater
                     parentId,
                     score,
                     missScore,
-                    oldItemId
+                    oldItemId,
+                    type
                 ) values (
                     {$exerciseNew['id']},
                     {$item['seq']},
@@ -2114,7 +2117,8 @@ class EduSohoUpgrade extends AbstractUpdater
                     {$item['parentId']},
                     {$item['score']},
                     {$item['missScore']},
-                    {$item['id']}
+                    {$item['id']},
+                    'exercise'
                 )";
                 $this->getConnection()->exec($sql);
             }
