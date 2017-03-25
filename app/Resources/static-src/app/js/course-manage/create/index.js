@@ -60,6 +60,7 @@ class Creator {
       } else if ($('input[name="expiryMode"]:checked').val() == 'days') {
         $('#expiry-date').removeClass('hidden').addClass('hidden');
         $('#expiry-days').removeClass('hidden');
+        $('input[name="deadlineType"][value="days"]').prop('checked', true);
       } else {
         $('#expiry-date').removeClass('hidden').addClass('hidden');
         $('#expiry-days').removeClass('hidden').addClass('hidden');
@@ -98,7 +99,7 @@ class Creator {
     let $expiryStartDate = $('[name="expiryStartDate"]');
     let $expiryEndDate = $('[name="expiryEndDate"]');
     let expiryMode = $('[name="expiryMode"]:checked').val();
-    console.log(expiryMode);
+    
     this.elementRemoveRules($deadline);
     this.elementRemoveRules($expiryDays);
     this.elementRemoveRules($expiryStartDate);
