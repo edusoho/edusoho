@@ -10,50 +10,50 @@ class ChaosThreads extends BaseResource
 {
     public function get(Application $app, Request $request)
     {
-        $threads    = array();
+        $threads = array();
         $conditions = $request->query->all();
 
         $cursors = isset($conditions['cursor']) ? explode(',', $conditions['cursor']) : array(0, 0, 0);
-        $starts  = isset($conditions['start']) ? explode(',', $conditions['start']) : array(0, 0, 0);
+        $starts = isset($conditions['start']) ? explode(',', $conditions['start']) : array(0, 0, 0);
 
         $limit = $request->query->get('limit', 20);
 
         // thread表的话题
         $conditions = array(
-            'status'        => 'open',
-            'updateTime_GE' => isset($cursors[0]) ? $cursors[0] : 0
+            'status' => 'open',
+            'updateTime_GE' => isset($cursors[0]) ? $cursors[0] : 0,
         );
-        $start         = isset($starts[0]) ? $starts[0] : 0;
-        $commonThreads = $this->getThreadService()->searchThreads($conditions, array(array('updateTime'=> 'ASC')), $start, $limit);
+        $start = isset($starts[0]) ? $starts[0] : 0;
+        $commonThreads = $this->getThreadService()->searchThreads($conditions, array('updateTime' => 'ASC'), $start, $limit);
         $commonThreads = $this->normalizeCommonThreads($commonThreads);
 
         $commonNext = $this->nextCursorPaging($conditions['updateTime_GE'], $start, $limit, $commonThreads);
-        $threads    = array_merge($threads, $this->filterCommonThreads($commonThreads));
+        $threads = array_merge($threads, $this->filterCommonThreads($commonThreads));
 
         // course_thread表的话题
         $conditions = array(
-            'private'        => 0,
-            'updatedTime_GE' => isset($cursors[1]) ? $cursors[1] : 0
+            'private' => 0,
+            'updatedTime_GE' => isset($cursors[1]) ? $cursors[1] : 0,
         );
-        $start         = isset($starts[1]) ? $starts[1] : 0;
-        $courseThreads = $this->getCourseThreadService()->searchThreads($conditions, array(array('updatedTime'=> 'ASC')), $start, $limit);
-        $courseNext    = $this->nextCursorPaging($conditions['updatedTime_GE'], $start, $limit, $courseThreads);
-        $threads       = array_merge($threads, $this->filterCourseThreads($courseThreads));
+        $start = isset($starts[1]) ? $starts[1] : 0;
+        $courseThreads = $this->getCourseThreadService()->searchThreads($conditions, array('updatedTime' => 'ASC'), $start, $limit);
+        $courseNext = $this->nextCursorPaging($conditions['updatedTime_GE'], $start, $limit, $courseThreads);
+        $threads = array_merge($threads, $this->filterCourseThreads($courseThreads));
 
         // group_thread表的话题
         $conditions = array(
-            'updatedTime_GE' => isset($cursors[2]) ? $cursors[2] : 0
+            'updatedTime_GE' => isset($cursors[2]) ? $cursors[2] : 0,
         );
-        $start        = isset($starts[2]) ? $starts[2] : 0;
-        $groupThreads = $this->getGroupThreadService()->searchThreads($conditions, array(array('updatedTime'=> 'ASC')), $start, $limit);
-        $groupNext    = $this->nextCursorPaging($conditions['updatedTime_GE'], $start, $limit, $groupThreads);
-        $threads      = array_merge($threads, $this->filterGroupThreads($groupThreads));
+        $start = isset($starts[2]) ? $starts[2] : 0;
+        $groupThreads = $this->getGroupThreadService()->searchThreads($conditions, array('updatedTime' => 'ASC'), $start, $limit);
+        $groupNext = $this->nextCursorPaging($conditions['updatedTime_GE'], $start, $limit, $groupThreads);
+        $threads = array_merge($threads, $this->filterGroupThreads($groupThreads));
 
         $next = array(
             'cursor' => implode(',', array($commonNext['cursor'], $courseNext['cursor'], $groupNext['cursor'])),
-            'start'  => implode(',', array($commonNext['start'], $courseNext['start'], $groupNext['start'])),
-            'limit'  => $limit,
-            'eof'    => ($commonNext['eof'] && $courseNext['eof'] && $groupNext['eof']) ? true : false
+            'start' => implode(',', array($commonNext['start'], $courseNext['start'], $groupNext['start'])),
+            'limit' => $limit,
+            'eof' => ($commonNext['eof'] && $courseNext['eof'] && $groupNext['eof']) ? true : false,
         );
 
         return $this->wrap($this->filter($threads), $next);
@@ -82,6 +82,10 @@ class ChaosThreads extends BaseResource
                     return array('message' => '缺少必填字段');
                 }
 
+                if (!$this->getCourseService()->canTakeCourse($fields['courseId'])) {
+                    return array('message' => '没有发布话题权限');
+                }
+
                 $fields = ArrayToolkit::parts($fields, array('title', 'content', 'courseId', 'type', 'lessonId'));
                 $thread = $this->getCourseThreadService()->createThread($fields);
                 break;
@@ -94,8 +98,8 @@ class ChaosThreads extends BaseResource
                 }
 
                 $fields['userId'] = $currentUser['id'];
-                $fields           = ArrayToolkit::parts($fields, array('title', 'content', 'groupId', 'userId'));
-                $thread           = $this->getGroupThreadService()->addThread($fields);
+                $fields = ArrayToolkit::parts($fields, array('title', 'content', 'groupId', 'userId'));
+                $thread = $this->getGroupThreadService()->addThread($fields);
                 break;
 
             default:
@@ -117,16 +121,16 @@ class ChaosThreads extends BaseResource
 
         foreach ($groupThreads as $thread) {
             $threads[] = array(
-                'id'          => $thread['id'],
-                'title'       => $thread['title'],
-                'content'     => $thread['content'],
-                'postNum'     => $thread['postNum'],
-                'hitNum'      => $thread['hitNum'],
-                'userId'      => $thread['userId'],
-                'targetId'    => $thread['groupId'],
-                'targetType'  => 'group',
+                'id' => $thread['id'],
+                'title' => $thread['title'],
+                'content' => $thread['content'],
+                'postNum' => $thread['postNum'],
+                'hitNum' => $thread['hitNum'],
+                'userId' => $thread['userId'],
+                'targetId' => $thread['groupId'],
+                'targetType' => 'group',
                 'createdTime' => date('c', $thread['createdTime']),
-                'updatedTime' => date('c', $thread['updatedTime'])
+                'updatedTime' => date('c', $thread['updatedTime']),
             );
         }
 
@@ -139,16 +143,16 @@ class ChaosThreads extends BaseResource
 
         foreach ($courseThreads as $thread) {
             $threads[] = array(
-                'id'          => $thread['id'],
-                'title'       => $thread['title'],
-                'content'     => $thread['content'],
-                'postNum'     => $thread['postNum'],
-                'hitNum'      => $thread['hitNum'],
-                'userId'      => $thread['userId'],
-                'targetId'    => $thread['courseId'],
-                'targetType'  => 'course',
+                'id' => $thread['id'],
+                'title' => $thread['title'],
+                'content' => $thread['content'],
+                'postNum' => $thread['postNum'],
+                'hitNum' => $thread['hitNum'],
+                'userId' => $thread['userId'],
+                'targetId' => $thread['courseId'],
+                'targetType' => 'course',
                 'createdTime' => date('c', $thread['createdTime']),
-                'updatedTime' => date('c', $thread['updatedTime'])
+                'updatedTime' => date('c', $thread['updatedTime']),
             );
         }
 
@@ -171,16 +175,16 @@ class ChaosThreads extends BaseResource
 
         foreach ($commonThreads as $thread) {
             $threads[] = array(
-                'id'          => $thread['id'],
-                'title'       => $thread['title'],
-                'content'     => $thread['content'],
-                'postNum'     => $thread['postNum'],
-                'hitNum'      => $thread['hitNum'],
-                'userId'      => $thread['userId'],
-                'targetId'    => $thread['targetId'],
-                'targetType'  => $thread['targetType'],
+                'id' => $thread['id'],
+                'title' => $thread['title'],
+                'content' => $thread['content'],
+                'postNum' => $thread['postNum'],
+                'hitNum' => $thread['hitNum'],
+                'userId' => $thread['userId'],
+                'targetId' => $thread['targetId'],
+                'targetType' => $thread['targetType'],
                 'createdTime' => date('c', $thread['createdTime']),
-                'updatedTime' => date('c', $thread['updatedTime'])
+                'updatedTime' => date('c', $thread['updatedTime']),
             );
         }
 
@@ -190,13 +194,13 @@ class ChaosThreads extends BaseResource
     public function getThreads(Application $app, Request $request)
     {
         $currentUser = $this->getCurrentUser();
-        $start       = $request->query->get('start', 0);
-        $limit       = $request->query->get('limit', 10);
-        $conditions  = array(
-            'userId' => $currentUser['id']
+        $start = $request->query->get('start', 0);
+        $limit = $request->query->get('limit', 10);
+        $conditions = array(
+            'userId' => $currentUser['id'],
         );
 
-        $userCourses = $this->getCourseMemberService()->searchMembers(array('userId' => $currentUser['id']), array('createdTime'=> 'DESC'), 0, PHP_INT_MAX);
+        $userCourses = $this->getCourseMemberService()->searchMembers(array('userId' => $currentUser['id']), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
 
         if (!$userCourses) {
             return array();
@@ -215,7 +219,7 @@ class ChaosThreads extends BaseResource
         }
 
         $courseIds = ArrayToolkit::column($courseThreads, "courseId");
-        $courses   = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
 
         foreach ($courses as $key => $course) {
@@ -226,11 +230,11 @@ class ChaosThreads extends BaseResource
 
         foreach ($courseThreads as $key => $thread) {
             if (isset($courses[$thread['courseId']])) {
-                $thread                  = ArrayToolkit::rename($thread, array('private' => 'isPrivate'));
+                $thread = ArrayToolkit::rename($thread, array('private' => 'isPrivate'));
                 $thread['lessonId'] = $thread['taskId'];
-                $course                  = $courses[$thread['courseId']];
-                $thread['course']        = $this->filterCourse($course);
-                $courseThreads[$key]     = $thread;
+                $course = $courses[$thread['courseId']];
+                $thread['course'] = $this->filterCourse($course);
+                $courseThreads[$key] = $thread;
             } else {
                 unset($courseThreads[$key]);
             }
@@ -248,7 +252,7 @@ class ChaosThreads extends BaseResource
             'smallPicture',
             'middlePicture',
             'largePicture',
-            'createdTime'
+            'createdTime',
         );
         return ArrayToolkit::parts($course, $keys);
     }
