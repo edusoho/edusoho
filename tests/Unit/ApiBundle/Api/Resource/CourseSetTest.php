@@ -3,12 +3,14 @@
 namespace Tests\Unit\ApiBundle\Api\Resource;
 
 use ApiBundle\Api\PathParser;
+use ApiBundle\Api\Resource\CourseSet\CourseSet;
 use ApiBundle\Api\Resource\ResourceManager;
 use ApiBundle\Api\ResourceKernel;
+use ApiBundle\ApiTestCase;
 use Biz\BaseTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-class CourseSetTest extends BaseTestCase
+class CourseSetTest extends ApiTestCase
 {
     public function testGet()
     {
@@ -29,15 +31,9 @@ class CourseSetTest extends BaseTestCase
             array('functionName' => 'searchCourseSets', 'runTimes' => 1, 'returnValue' => $fakeCourseSets)
         ));
 
-        $kernel = new ResourceKernel(
-            new PathParser(),
-            new ResourceManager($this->getBiz())
-        );
-        $resp = $kernel->handle(Request::create('http://test.com/course_sets/1', 'GET'));
+        $res = new CourseSet($this->getBiz());
+        $resp = $res->get(Request::create(''), 1);
 
-        $this->assertArrayHasKey('creator', $resp);
-        $this->assertTrue(is_array($resp['creator']));
-        $this->assertArrayHasKey('recommendedTime', $resp);
-        $this->assertEquals(date('c', $createdTime), $resp['createdTime']);
+        $this->assertEquals($fakeCourseSets[0], $resp);
     }
 }
