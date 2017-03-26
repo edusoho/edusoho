@@ -31,7 +31,7 @@ class CacheServiceProvider implements ServiceProviderInterface
             'maxLifeTime' => 86400,
             'default' => array(
                 "host"           => "127.0.0.1",
-                "port"           => 6379,
+                "port"           => 6378,
                 "timeout"        => 1,
                 "reserved"       => null,
                 "retry_interval" => 100

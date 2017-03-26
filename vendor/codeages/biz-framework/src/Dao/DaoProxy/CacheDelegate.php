@@ -15,7 +15,7 @@ class CacheDelegate
     public function parseDao($dao)
     {
         $daoClass = get_class($dao);
-        if(empty($this->daoStrategyMap[$daoClass])) {
+        if (empty($this->daoStrategyMap[$daoClass])) {
             $strategy = $this->getCacheStrategy($dao);
             $strategy->parseDao($dao);
             $this->daoStrategyMap[$daoClass] = $strategy;

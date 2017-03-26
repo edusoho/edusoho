@@ -6,6 +6,7 @@ class DaoProxy
 {
     protected $container;
     protected $dao;
+    protected $cache = array();
 
     public function __construct($container)
     {
@@ -28,12 +29,24 @@ class DaoProxy
         }
     }
 
+    protected function clearMemoryCache()
+    {
+        $this->cache = array();
+    }
+
     protected function getDaoProxyMethod($method)
     {
-        $prefix = $this->getPrefix($method, array('get', 'find', 'create', 'update', 'delete', 'search'));
+        $prefix = $this->getPrefix($method, array('get', 'find', 'create', 'update', 'delete', 'search', 'wave'));
         if ($prefix) {
             return "_{$prefix}";
         }
+    }
+
+    protected function _wave($method, $arguments)
+    {
+        $result = $this->_callRealDao($method, $arguments);
+        $this->clearMemoryCache();
+        return $result;
     }
 
     protected function getPrefix($str, $prefixs)
@@ -59,7 +72,7 @@ class DaoProxy
         $arguments[1] = $this->_serialize($arguments[1]);
 
         $row = $this->_callRealDao($method, $arguments);
-
+        $this->clearMemoryCache();
         return $this->_unserialize($row);
     }
 
@@ -76,25 +89,54 @@ class DaoProxy
 
         $arguments[0] = $this->_serialize($arguments[0]);
         $row          = $this->_callRealDao($method, $arguments);
-
+        $this->clearMemoryCache();
         return $this->_unserialize($row);
     }
 
     protected function _delete($method, $arguments)
     {
-        return $this->_callRealDao($method, $arguments);
+        $result = $this->_callRealDao($method, $arguments);
+        $this->clearMemoryCache();
+        return $result;
     }
 
     protected function _get($method, $arguments)
     {
+        $key = $this->getMemoryCacheKey($method, $arguments);
+        if (isset($this->cache[$key])) {
+            return $this->cache[$key];
+        }
+
         $row = $this->_callRealDao($method, $arguments);
-        return $this->_unserialize($row);
+        $row = $this->_unserialize($row);
+        $this->cache[$key] = $row;
+        return $row;
+    }
+
+    protected function getMemoryCacheKey($method, $arguments)
+    {
+        if (empty($arguments)) {
+            return $method;
+        }
+
+        if (is_array($arguments)) {
+            return $method.':'.json_encode($arguments);
+        }
+
+        return $method.':'.$arguments;
     }
 
     protected function _find($method, $arguments)
     {
+        $key = $this->getMemoryCacheKey($method, $arguments);
+        if (isset($this->cache[$key])) {
+            return $this->cache[$key];
+        }
+
         $rows = $this->_callRealDao($method, $arguments);
-        return $this->_unserializes($rows);
+        $rows = $this->_unserializes($rows);
+        $this->cache[$key] = $rows;
+        return $rows;
     }
 
     protected function _search($method, $arguments)

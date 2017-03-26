@@ -3670,17 +3670,17 @@
     },
     {
         "name": "codeages/biz-framework",
-        "version": "v0.2.8",
-        "version_normalized": "0.2.8.0",
+        "version": "v0.2.9",
+        "version_normalized": "0.2.9.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "2eee5e2d64ebcd2a29cfe8b8b547b113387e577b"
+            "reference": "d00a4bf2094d217a014c1e92b7d760551c5d3512"
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/biz-framework/2eee5e2d64ebcd2a29cfe8b8b547b113387e577b.zip",
-            "reference": "2eee5e2d64ebcd2a29cfe8b8b547b113387e577b",
+            "url": "https://files.phpcomposer.com/files/codeages/biz-framework/d00a4bf2094d217a014c1e92b7d760551c5d3512.zip",
+            "reference": "d00a4bf2094d217a014c1e92b7d760551c5d3512",
             "shasum": ""
         },
         "require": {
@@ -3694,7 +3694,7 @@
         "require-dev": {
             "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
         },
-        "time": "2017-03-23T16:20:57+00:00",
+        "time": "2017-03-26T15:56:35+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
