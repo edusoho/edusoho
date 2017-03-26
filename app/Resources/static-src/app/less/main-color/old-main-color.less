@@ -1,32 +1,25 @@
-@import '../component/badge-main-color.less';
-@import '../component/breadcrumb-main-color.less';
-@import '../component/btn-main-color.less';
-@import '../component/color-lump-main-color.less';
-
-@import '../component/dropdown-menu-main-color.less';
-
-
-@import '../module/es-filter-main-color.less';
+// 暂时决定启用这种匹配方式，不易维护容易出错,新的方式虽然会让文件增加，但更易于维护
 
 .main-color(@brand-primary) {
-  .badge-main-color(@brand-primary);
-  .breadcrumb-main-color(@brand-primary);
-  .btn-main-color(@brand-primary);
-  .color-lump-main-color(@brand-primary);
-  .dropdown-menu-main-color(@brand-primary);
-  
-
-
-  .es-filter-main-color(@brand-primary); 
-
-
-
-
+  .btn-primary {
+    background: @brand-primary;
+    border-color: darken(@brand-primary,10%);
+    &:hover {
+      background: darken(@brand-primary, 8%);
+      border-color: darken(@brand-primary, 10%);
+    }
+  }
   .alert-notice {
     color: @brand-primary;
   }
- 
- 
+  .badge-primary {
+    background-color: @brand-primary;
+  }
+  .breadcrumb {
+    &:hover {
+      color: @brand-primary;
+    }
+  }
   .color-lump {
     &.lump-card {
       &.done {
@@ -343,32 +336,31 @@
       }
     }
   }
-  .es-filter-main-color(@brand-primary);
-  // .es-filter {
-  //   > li > a {
-  //     &:hover {
-  //       color: @brand-primary;
-  //     }
-  //     &.active {
-  //       background-color: @brand-primary;
-  //     }
-  //   }
-  //   .btn-group.open .dropdown-toggle {
-  //     color: @brand-primary;
-  //   }
-  //   .filter {
-  //     .btn {
-  //       &:hover {
-  //         color: @brand-primary;
-  //       }
-  //     }
-  //     label {
-  //       &:hover {
-  //         color: @brand-primary;
-  //       }
-  //     }
-  //   }
-  // }
+  .es-filter {
+    > li > a {
+      &:hover {
+        color: @brand-primary;
+      }
+      &.active {
+        background-color: @brand-primary;
+      }
+    }
+    .btn-group.open .dropdown-toggle {
+      color: @brand-primary;
+    }
+    .filter {
+      .btn {
+        &:hover {
+          color: @brand-primary;
+        }
+      }
+      label {
+        &:hover {
+          color: @brand-primary;
+        }
+      }
+    }
+  }
   .nav-filter {
     .nav-pills {
       li {
