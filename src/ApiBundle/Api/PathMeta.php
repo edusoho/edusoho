@@ -24,18 +24,17 @@ class PathMeta
         'POST' => Resource::METHOD_ADD
     );
 
-    public function getQualifiedResName()
+    public function getResourceClassName()
     {
         if (empty($this->resNames) || empty($this->resNames[0])) {
             throw new BadRequestException('URL is not supported');
         }
 
-        $QualifiedResName = $this->convert($this->resNames[0]).'\\';
-        foreach ($this->resNames as $resName) {
-            $QualifiedResName .= $this->convert($resName);
+        if ($this->resNames[0] == 'plugins') {
+            return $this->getPluginResClass();
+        } else {
+            return $this->getNormalResClass();
         }
-
-        return $QualifiedResName;
     }
 
     public function getResMethod()
@@ -65,6 +64,31 @@ class PathMeta
     public function setHttpMethod($httpMethod)
     {
         $this->httpMethod = strtoupper($httpMethod);
+    }
+
+    private function getNormalResClass()
+    {
+        $qualifiedResName = $this->convert($this->resNames[0]).'\\';
+        foreach ($this->resNames as $resName) {
+            $qualifiedResName .= $this->convert($resName);
+        }
+
+        return 'ApiBundle\\Api\\Resource\\'.$qualifiedResName;
+    }
+
+    private function getPluginResClass()
+    {
+        $resClassName = $this->convert($this->slugs[0]).'Plugin\\Api\\Resource\\';
+        //去除/plugins/{pluginName}这部分url
+        array_splice($this->slugs, 0, 1);
+        array_splice($this->resNames, 0, 1);
+
+        $resClassName .= $this->convert($this->resNames[0]).'\\';
+        foreach ($this->resNames as $resName) {
+            $resClassName .= $this->convert($resName);
+        }
+
+        return $resClassName;
     }
 
     private function convert($string)

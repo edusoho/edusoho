@@ -20,19 +20,21 @@ class PathParser
     private function parsePathInfo($pathMeta, $pathInfo)
     {
 
-        $pathExplode = explode('/', ltrim($pathInfo, ApiBundle::API_PREFIX));
-
+        $pathExplode = explode('/', str_replace(ApiBundle::API_PREFIX, '', $pathInfo));
+        //默认第一个是资源名称
+        $nextIsResName = 1;
         foreach ($pathExplode as $part) {
             if ($part == '') {
                 continue;
             }
 
-            if (is_numeric($part)) {
-                $pathMeta->addSlug($part);
-            } else {
+            if ($nextIsResName) {
                 $pathMeta->addResName($part);
+                $nextIsResName = 0;
+            } else {
+                $pathMeta->addSlug($part);
+                $nextIsResName = 1;
             }
-
         }
     }
 }

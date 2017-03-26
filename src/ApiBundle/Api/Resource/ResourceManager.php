@@ -16,8 +16,7 @@ class ResourceManager
 
     public function create(PathMeta $meta)
     {
-        $qualifiedResName = $meta->getQualifiedResName();
-        $className = __NAMESPACE__ .'\\'.$qualifiedResName;
+        $className = $meta->getResourceClassName();
         return new ResourceProxy(new $className($this->biz));
     }
 }
