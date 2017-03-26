@@ -13,6 +13,10 @@ abstract class Filter
             foreach ($dataSet['data'] as &$data) {
                 $this->filter($data);
             }
+        } else {
+            foreach($dataSet as &$data) {
+                $this->filter($data);
+            }
         }
     }
 }

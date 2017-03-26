@@ -18,6 +18,7 @@ class CourseSetTest extends BaseTestCase
               'id' => 1,
               'title' => 'fakeCourseSet',
               'fakeField' => 'blablabla...',
+              'creator' => $this->getCurrentUser()->id,
               'createdTime' => $createdTime,
               'recommendedTime' => $createdTime,
               'updatedTime' => $createdTime
@@ -34,13 +35,9 @@ class CourseSetTest extends BaseTestCase
         );
         $resp = $kernel->handle(Request::create('http://test.com/course_sets/1', 'GET'));
 
-        $expectedCourseSet = array(
-            'id' => 1,
-            'title' => 'fakeCourseSet',
-            'createdTime' => date('c', $createdTime),
-            'updatedTime' => date('c', $createdTime),
-            'recommendedTime' => date('c', $createdTime)
-        );
-        $this->assertEquals($expectedCourseSet, $resp);
+        $this->assertArrayHasKey('creator', $resp);
+        $this->assertTrue(is_array($resp['creator']));
+        $this->assertArrayHasKey('recommendedTime', $resp);
+        $this->assertEquals(date('c', $createdTime), $resp['createdTime']);
     }
 }

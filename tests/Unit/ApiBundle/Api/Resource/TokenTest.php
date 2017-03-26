@@ -8,7 +8,7 @@ use ApiBundle\Api\ResourceKernel;
 use Biz\BaseTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-class CourseSetTest extends BaseTestCase
+class TokenTest extends BaseTestCase
 {
     /**
      * @expectedException ApiBundle\Api\Exception\ResourceNotFoundException
