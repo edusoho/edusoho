@@ -1,8 +1,7 @@
 <?php
 
-namespace Tests\Unit\ApiBundle\Api\Resource;
+namespace Tests\Unit\ApiBundle\Api\Resource\Course;
 
-use ApiBundle\Api\Resource\Course\Course;
 use ApiBundle\Api\Resource\Course\CourseMember;
 use ApiBundle\ApiTestCase;
 use Symfony\Component\HttpFoundation\Request;
