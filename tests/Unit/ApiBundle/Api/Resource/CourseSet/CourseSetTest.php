@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\ApiBundle\Api\Resource;
+namespace Tests\Unit\ApiBundle\Api\Resource\CourseSet;
 
 use ApiBundle\Api\Resource\CourseSet\CourseSet;
 use ApiBundle\ApiTestCase;

@@ -27,7 +27,10 @@ abstract class Resource
     const METHOD_ADD = 'add';
     const METHOD_REMOVE = 'remove';
     const METHOD_UPDATE = 'update';
-
+    
+    const DEFAULT_PAGING_LIMIT = 10;
+    const DEFAULT_PAGING_OFFSET = 0;
+    
     public function __construct(Biz $biz)
     {
         $this->biz = $biz;
@@ -176,6 +179,18 @@ abstract class Resource
     {
         $biz = $this->getBiz();
         return $biz['api.util.userAssoc'];
+    }
+    
+    protected function makePagingObject($objects, $total, $offset, $limit)
+    {
+        return array(
+            'data' => $objects,
+            'paging' => array(
+                'total' => $total,
+                'offset' => $offset,
+                'limit' => $limit
+            )
+        );
     }
 
     protected function getAssetUrl($path)
