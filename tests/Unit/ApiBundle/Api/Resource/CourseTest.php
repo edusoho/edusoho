@@ -2,11 +2,7 @@
 
 namespace Tests\Unit\ApiBundle\Api\Resource;
 
-use ApiBundle\Api\Exception\ResourceNotFoundException;
-use ApiBundle\Api\PathParser;
 use ApiBundle\Api\Resource\Course\Course;
-use ApiBundle\Api\Resource\ResourceManager;
-use ApiBundle\Api\ResourceKernel;
 use ApiBundle\ApiTestCase;
 use Symfony\Component\HttpFoundation\Request;
 

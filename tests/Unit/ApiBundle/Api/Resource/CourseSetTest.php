@@ -2,12 +2,8 @@
 
 namespace Tests\Unit\ApiBundle\Api\Resource;
 
-use ApiBundle\Api\PathParser;
 use ApiBundle\Api\Resource\CourseSet\CourseSet;
-use ApiBundle\Api\Resource\ResourceManager;
-use ApiBundle\Api\ResourceKernel;
 use ApiBundle\ApiTestCase;
-use Biz\BaseTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseSetTest extends ApiTestCase
