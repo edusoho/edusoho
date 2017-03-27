@@ -146,7 +146,7 @@ class UploadFileDaoImpl extends GeneralDaoImpl implements UploadFileDao
                 'createdTime',
                 'id',
             ),
-            'cache' => 'table'
+            'cache' => 'table',
         );
     }
 

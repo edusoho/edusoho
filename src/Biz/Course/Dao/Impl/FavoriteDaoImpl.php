@@ -25,7 +25,7 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
                 'courseSetId IN ( :courseSetIds )',
                 'courseId NOT IN ( :excludeCourseIds )',
             ),
-            'cache' => 'table'
+            'cache' => 'table',
         );
     }
 

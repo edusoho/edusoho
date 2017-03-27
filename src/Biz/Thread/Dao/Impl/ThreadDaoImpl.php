@@ -41,7 +41,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
                 'startTime > :startTimeGreaterThan',
                 'content LIKE :content',
             ),
-            'cache' => 'table'
+            'cache' => 'table',
         );
     }
 }

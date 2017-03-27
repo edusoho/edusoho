@@ -17,7 +17,7 @@ class SubtitleDaoImpl extends GeneralDaoImpl implements SubtitleDao
     public function declares()
     {
         return array(
-            'cache' => 'table'
+            'cache' => 'table',
         );
     }
 }

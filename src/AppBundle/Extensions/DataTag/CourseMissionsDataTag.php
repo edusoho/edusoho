@@ -6,6 +6,10 @@ use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 
+/**
+ * @deprecated
+ * @see StudyCenterMissionsDataTag
+ */
 class CourseMissionsDataTag extends BaseDataTag implements DataTag
 {
     /**
