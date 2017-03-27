@@ -29,14 +29,18 @@
             <input type="hidden" name="courseSetId" value="{{courseSet.id}}">
             <input type="hidden" name="serializeMode" value="{{courseSet.serializeMode}}">
             <input type="hidden" name="copyCourseId" value="{{course.id|default(0)}}">
-            <input type="text" id="title" name="title" class="form-control col-sm-9" placeholder="">
+            <input type="text" id="title" name="title" class="form-control" placeholder="">
           </div>
         </div>        
         <div class="form-group">
           <label for="learnMode" class="col-sm-2 control-label">
             {{'学习模式'|trans}}
-            <a class="es-icon es-icon-help ml5 link-gray text-normal" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" 
-            data-content="<ul class='pl20'><li class='mb10'>{{'自由式学习：学员自由安排学习过程'|trans}}</li><li>{{'解锁式学习：学员根据既定顺序逐个解锁学习'|trans}}</li></ul>"></a>
+            <a class="es-icon es-icon-help ml5 link-gray text-normal" data-trigger="hover" 
+              data-toggle="popover" data-container="body" data-placement="top" 
+              data-content="<ul class='pl10 ul-list-none'>
+              <li class='mb10'>{{'<b>自由式学习</b>：学员自由安排学习过程'|trans}}</li>
+              <li>{{'<b>解锁式学习</b>：学员根据既定顺序逐个解锁学习'|trans}}</li></ul>">
+            </a>
           </label>
           <div class="col-sm-8 radios">
             {{ radios('learnMode', { 'freeMode': '自由式学习'|trans, 'lockMode': '解锁式学习'|trans }, course.learnMode|default('freeMode')) }}
@@ -48,9 +52,9 @@
             <label class="col-sm-2 control-label">
               {{'学习有效期'|trans}}
               <a class="es-icon es-icon-help ml5 link-gray text-normal" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" 
-                data-content="<ul class='pl20'>
-                  <li class='mb10'>{{'随到随学：有效期从学员加入的当天开始算起'|trans}}</li>
-                  <li class='mb10'>{{'固定周期：有固定的学习开始日期和结束日期'|trans}}</li>
+                data-content="<ul class='pl10 ul-list-none'>
+                  <li class='mb10'>{{'<b>随到随学：</b>有效期从学员加入的当天开始算起'|trans}}</li>
+                  <li class='mb10'>{{'<b>固定周期：</b>有固定的学习开始日期和结束日期'|trans}}</li>
                   <li>{{'过期后无法继续学习，系统会在到期前10天提醒学员。'|trans}}</li>
                 </ul>">
               </a>

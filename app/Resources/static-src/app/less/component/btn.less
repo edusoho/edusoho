@@ -50,7 +50,6 @@ a.btn.disabled, fieldset[disabled] a.btn {
   &:hover, 
   &:focus,
   &.focus {
-    color: @brand-primary;
     text-decoration: none;
   }
 }
@@ -95,15 +94,15 @@ a.btn.disabled, fieldset[disabled] a.btn {
 }
 
 .btn-primary {
-  border-color: darken(@brand-primary,10%);
-  background-color: @brand-primary;
+  // border-color: darken(@brand-primary,10%);
+  // background-color: @brand-primary;
   color: #fff;
   &:hover,
   &:focus,
   &.focus,
   &.active {
     color: #fff;
-    background-color: @brand-primary-darker;
+    // background-color: @brand-primary-darker;
   }
 }
 
@@ -116,7 +115,8 @@ a.btn.disabled, fieldset[disabled] a.btn {
   &.focus,
   &.active {
     color: #fff;
-    background-color: @brand-success-darker;
+    background-color: darken(@brand-primary,10%);
+    // background-color: @brand-success-darker;
   }
 }
 
@@ -129,7 +129,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
   &.focus,
   &.active {
     color: #fff;
-    background-color: @brand-info-darker;
+    background-color:darken(@brand-info,10%);
   }
 }
 
@@ -142,7 +142,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
   &.focus,
   &.active {
     color: #fff;
-    background-color: @brand-warning-darker;
+    background-color:darken(@brand-warning,10%);
   }
 }
 
@@ -155,7 +155,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
   &.focus,
   &.active {
     color: #fff;
-    background-color: @brand-danger-darker;
+    background-color:darken( @brand-danger,10%);
   }
 }
 
@@ -261,8 +261,8 @@ a.btn.disabled, fieldset[disabled] a.btn {
 
 .btn-transparent {
   position: relative;
-  border-color: @brand-primary;
-  color: @brand-primary;
+  // border-color: @brand-primary;
+  // color: @brand-primary;
   background-color: transparent;
   &:after {
     content: '';
@@ -271,7 +271,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
     top:0;
     height: 100%;
     width: 0;
-    background-color: @brand-primary;
+    // background-color: @brand-primary;
     .es-transition;
   }
   &:hover,
