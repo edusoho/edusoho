@@ -23,7 +23,7 @@ class Lesson2VideoActivityMigrate extends AbstractMigrate
             $this->exec("alter table `video_activity` add `migrateLessonId` int(10) ;");
         }
 
-        $countSql = 'SELECT count(*) from `course_lesson` WHERE `id` NOT IN (SELECT migrateLessonId FROM `video_activity`)';
+        $countSql = "SELECT count(*) from `course_lesson` WHERE type ='video' and `id` NOT IN (SELECT migrateLessonId FROM `video_activity`)";
         $count = $this->getConnection()->fetchColumn($countSql);
         $start = $this->getStart($page);
         if ($count == 0 && $count < $start) {

@@ -1,6 +1,6 @@
 <?php
 
-class VideoActivityRelaActivity extends AbstractMigrate
+class ActivityRelaVideoAcitivity extends AbstractMigrate
 {
     public function update($page)
     {

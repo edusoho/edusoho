@@ -42,12 +42,13 @@ class EduSohoUpgrade extends AbstractUpdater
         // 'c2CourseTaskMigrate',
         // 'c2Activity',
         // 'c2VideoActivity',
-        'c2TextActivity',
-        'c2AudioActivity',
-        'c2FlashActivity',
-        'c2PPtActivity',
-        'c2DocActivity',
-        'c2LiveActivity',
+        // 'c2TextActivity',
+        // 'c2AudioActivity',
+        // 'c2FlashActivity',
+        // 'c2PPtActivity',
+        // 'c2DocActivity',
+        // 'c2LiveActivity',
+
         'c2CourseTaskView',
         'c2CourseTaskResult',
         'c2ActivityLearnLog', // ?
@@ -64,11 +65,34 @@ class EduSohoUpgrade extends AbstractUpdater
       $steps = array(
         'CourseSetMigrate',
         'CourseMigrate',
+        
         'Lesson2CourseTaskMigrate',
         'Lesson2CourseChapterMigrate',
         'CourseTaskRelaCourseChapter',
+        
         'Lesson2ActivityMigrate',
         'ActivityRelaCourseTask',
+
+        'Lesson2VideoActivityMigrate',
+        'ActivityRelaVideoActivity',
+
+        'Lesson2TextActivityMigrate',
+        'ActivityRelaTextActivity',
+
+        'Lesson2AudioActivityMigrate',
+        'ActivityRelaAudioActivity',
+
+        'Lesson2FlashActivityMigrate',
+        'ActivityRelaFlashActivity',
+
+        'Lesson2PptActivityMigrate',
+        'ActivityRelaPptActivity',
+
+        'Lesson2DocActivityMigrate',
+        'ActivityRelaDocActivity',
+
+        'Lesson2LiveActivityMigrate',
+        'ActivityRelaLiveActivity',
         // TODO
         'AfterAllCourseTaskMigrate'
       );
