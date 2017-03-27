@@ -38,11 +38,8 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function getStep($index)
     {
-      $steps = array(
-        'c2courseSetMigrate',
-        'c2courseMigrate',
+      $oldSsteps = array(
         'c2CourseTaskMigrate',
-
         'c2Activity',
         'c2VideoActivity',
         'c2TextActivity',
@@ -53,7 +50,7 @@ class EduSohoUpgrade extends AbstractUpdater
         'c2LiveActivity',
         'c2CourseTaskView',
         'c2CourseTaskResult',
-        'c2ActivityLearnLog',
+        'c2ActivityLearnLog', // ?
         'c2Exercise',
         'c2Homework',
         'c2CourseMaterial',
@@ -62,10 +59,15 @@ class EduSohoUpgrade extends AbstractUpdater
         'c2testpaperMigrate',
         'c2QuestionMigrate',
         'migrate',
-        ''
       );
 
-      if (empty($steps[$index])) {
+      $steps = array(
+        'CourseSetMigrate',
+        'CourseMigrate',
+        'AfterAllCourseTaskMigrate'
+      );
+
+      if ($index > count($steps)-1) {
          return '';
       }
 
@@ -107,7 +109,8 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = 'UPDATE `live_activity` SET roomCreated = 1 WHERE liveId > 0;';
         $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE live_activity la, (SELECT globalId,lessonId FROM course_lesson_replay where globalId<>'' and globalId is not null) clr set la.mediaId = clr.lessonId WHERE la.id = clr.lessonId";
+        $sql = "UPDATE live_activity la, (SELECT globalId, lessonId FROM course_lesson_replay where globalId<>'' and globalId is not null) clr set la.mediaId = clr.lessonId WHERE la.id = clr.lessonId";
+        $this->getConnection()->exec($sql);
     }
 
     protected function getIndexAndPage($index)
@@ -138,8 +141,13 @@ class EduSohoUpgrade extends AbstractUpdater
           return;
         }
 
+        require_once '8.0.0/AbstractMigrate.php';
+        $file = "8.0.0/{$method}.php";
+        require_once $file;
+        $migrate = new $method($this->kernel);
+        
         $this->logger('info', "开始迁移 {$method}");
-        $nextPage = $this->$method($page);
+        $nextPage = $migrate->update($page);
         $this->logger('info', "迁移 {$method} 成功");
 
         if (!empty($nextPage)) {
@@ -451,20 +459,18 @@ class EduSohoUpgrade extends AbstractUpdater
           FROM `course` where `id` not in (select `id` from `c2_course`);";
         $result = $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE `c2_course` AS `c` SET `c`.`courseSetId` =  `c`.`id`";
-        $result = $this->getConnection()->exec($sql);
-
+        // refactor: 直接course_set取
         $sql = "UPDATE `c2_course` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.num  WHERE ce.id = cm.courseId;";
         $result = $this->getConnection()->exec($sql);
 
+        // refactor: 这条语句不该在这个步骤中执行，应该在迁移完course_task后执行
         $sql = "UPDATE `c2_course` c set `publishedTaskNum` = (select count(*) from course_lesson where courseId=c.id and status = 'published')";
         $result = $this->getConnection()->exec($sql);
     }
 
     protected function updateCourseChapter()
     {
-
-        $totalTasks = $this->getConnection()->fetchAll("SELECT* FROM `course_task`");
+        $totalTasks = $this->getConnection()->fetchAll("SELECT * FROM `course_task`");
 
         $totalTasks = \AppBundle\Common\ArrayToolkit::group($totalTasks, 'lessonId');
 
@@ -486,13 +492,12 @@ class EduSohoUpgrade extends AbstractUpdater
 
             }
         }
-
     }
 
     protected function c2TagOwner()
     {
         $this->exec(
-            "update `tag_owner` set `ownerType` = 'coruseSet' where `ownerType`='coruse';"
+            "update `tag_owner` set `ownerType` = 'courseSet' where `ownerType`='course';"
         );
     }
 
@@ -601,14 +606,11 @@ class EduSohoUpgrade extends AbstractUpdater
                 'number' => $lesson['number'],
                 'type' => 'download',
                 'lessonId' => $lessonId,
+                'fromCourseSetId' => $lesson['courseId']
             );
 
             $this->getConnection()->insert('course_task', $task);
         }
-
-        $this->getConnection()->exec(
-            "UPDATE `course_task` ck , `c2_course` ce SET ck.`fromCourseSetId` = ce.`courseSetId` WHERE ck.`courseId` =  ce.id AND ck.`fromCourseSetId` >0 ;"
-        );
     }
 
     /**
@@ -710,10 +712,6 @@ class EduSohoUpgrade extends AbstractUpdater
             "alter table `course_chapter` modify `type` varchar(255) NOT NULL DEFAULT 'chapter' COMMENT '章节类型：chapter为章节，unit为单元，lesson为课时。';"
         );
 
-        $this->exec(
-            "alter table `course_chapter` modify `type` varchar(255) NOT NULL DEFAULT 'chapter' COMMENT '章节类型：chapter为章节，unit为单元，lesson为课时。';"
-        );
-
         if (!$this->isFieldExist('course_chapter', 'fromLessonId')) {
             $this->exec("alter table `course_chapter` add `fromLessonId` int(10) default 0;");
         }
@@ -797,6 +795,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `content`,
                 `length`,
                 `fromCourseId`,
+                `fromCourseSetId`,
                 `fromUserId`,
                 `startTime`,
                 `endTime`,
@@ -812,6 +811,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `content`,
                 CASE WHEN `length` is null THEN 0  ELSE `length` END AS `length`,
                 `courseId`,
+                `courseId`,
                 `userId`,
                 `startTime`,
                 `endTime`,
@@ -826,10 +826,6 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getConnection()->exec(
             "UPDATE `course_task` ck, activity ay SET ck.`activityId` = ay.`id` WHERE ay.id = ck.`id` AND  ck.`activityId` = 0;"
         );
-        //courseSetId
-        $this->getConnection()->exec(
-            "UPDATE `activity` ay, `c2_course` ce SET ay.`fromCourseSetId` = ce.`courseSetId` WHERE  ay.`fromCourseId` = ce.`id` AND ay.`fromCourseSetId` = 0;"
-        );
     }
 
     protected function c2VideoActivity()
@@ -840,12 +836,12 @@ class EduSohoUpgrade extends AbstractUpdater
                 CREATE TABLE `video_activity` (
                   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
                   `mediaSource` varchar(32) NOT NULL DEFAULT '' COMMENT '媒体文件来源(self:本站上传,youku:优酷)',
-                  `mediaId` int(10) NOT NULL DEFAULT '0' COMMENT '媒体文件ID',
+                  `mediaId` int(10) NOT NULL DEFAULT 0 COMMENT '媒体文件ID',
                   `mediaUri` text COMMENT '媒体文件资UR',
-                  `finishType` varchar(60) DEFAULT NULL COMMENT '完成类型',
-                  `finishDetail` text COMMENT '完成条件',
-                  PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='视频活动扩展表';
+                  `finishType` varchar(60) NOT NULL COMMENT '完成类型',
+                  `finishDetail` text NOT NULL COMMENT '完成条件',
+                   PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='视频活动扩展表';
             "
             );
         }
@@ -1178,7 +1174,7 @@ class EduSohoUpgrade extends AbstractUpdater
             )
             SELECT
                 `id`,
-                0,
+                `courseId`,
                 `courseId`,
                 `lessonId`,
                 `fileId`,
@@ -1189,10 +1185,6 @@ class EduSohoUpgrade extends AbstractUpdater
                 `createdTime`
             FROM `course_lesson_view` WHERE id NOT IN (SELECT id FROM `course_task_view`);
         "
-        );
-
-        $this->exec(
-            "UPDATE `course_task_view` AS cw , `c2_course` c SET cw.`courseSetId` = c.`courseSetId` WHERE cw.`courseId` = c.id ;"
         );
     }
 
@@ -1304,6 +1296,9 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         if (!$this->isFieldExist('activity', 'exerciseId')) {
             $this->exec("alter table `activity` add `exerciseId` int(10) ;");
+        }
+
+        if (!$this->isFieldExist('course_task', 'exerciseId')) {
             $this->exec("alter table `course_task` add `exerciseId` int(10) ;");
         }
 
@@ -1319,6 +1314,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `content`,
                 `length`,
                 `fromCourseId`,
+                `fromCourseSetId`,
                 `fromUserId`,
                 `startTime`,
                 `endTime`,
@@ -1335,6 +1331,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `summary`,
                 CASE WHEN `length` is null THEN 0  ELSE `length` END AS `length`,
                 `courseId`,
+                `courseId`,
                 `userId`,
                 `startTime`,
                 `endTime`,
@@ -1348,20 +1345,12 @@ class EduSohoUpgrade extends AbstractUpdater
                     "
         );
 
-        //update fromCourseSetId
-        $this->exec(
-            "
-            UPDATE activity  AS a ,  `c2_course` AS c  SET a.`fromCourseSetId` = c.`courseSetId` 
-            WHERE  a.`mediaType` ='exercise' and a.`fromCourseSetId` = 0  AND a.`fromCourseId` = c.id;
-        "
-        );
-
-
         $this->exec(
             "
             insert into course_task
               (
                 `courseId`,
+                `fromCourseSetId`,
                 `categoryId`,
                 `seq`,
                 `title`,
@@ -1382,6 +1371,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `lessonId`
               ) 
             select
+              `courseId`,
               `courseId`,
               `chapterId`,
               `seq`,
@@ -1407,14 +1397,6 @@ class EduSohoUpgrade extends AbstractUpdater
             "
         );
 
-
-        $this->exec(
-            "
-            UPDATE course_task  AS a ,  `c2_course` c  SET a.`fromCourseSetId` = c.`courseSetId` 
-            WHERE  a.`type` ='exercise' and a.`fromCourseSetId` = 0  AND a.`courseId` = c.id;
-        "
-        );
-
         $this->exec(
             "UPDATE `course_task` AS ck, activity AS a SET ck.`activityId` = a.`id` 
           WHERE a.`exerciseId` = ck.`exerciseId` AND  ck.type = 'exercise' AND  ck.`activityId` = 0
@@ -1431,6 +1413,9 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         if (!$this->isFieldExist('activity', 'homeworkId')) {
             $this->exec("alter table `activity` add `homeworkId` int(10) ;");
+        }
+
+        if (!$this->isFieldExist('course_task', 'homeworkId')) {
             $this->exec("alter table `course_task` add `homeworkId` int(10) ;");
         }
 
@@ -1446,6 +1431,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `content`,
                 `length`,
                 `fromCourseId`,
+                `fromCourseSetId`,
                 `fromUserId`,
                 `startTime`,
                 `endTime`,
@@ -1462,6 +1448,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `summary`,
                 case when `length` is null then 0 else `length` end,
                 `courseId`,
+                `courseId`,
                 `userId`,
                 `startTime`,
                 `endTime`,
@@ -1475,20 +1462,12 @@ class EduSohoUpgrade extends AbstractUpdater
                     "
         );
 
-        //update fromCourseSetId
-        $this->exec(
-            "
-            UPDATE activity  AS a ,  `c2_course` AS c  SET a.`fromCourseSetId` = c.`courseSetId` 
-            WHERE  a.`mediaType` ='homework' and a.`fromCourseSetId` = 0  AND a.`fromCourseId` = c.id;
-        "
-        );
-
-
         $this->exec(
             "
             INSERT INTO course_task
               (
                 `courseId`,
+                `fromCourseSetId`,
                 `categoryId`,
                 `seq`,
                 `title`,
@@ -1509,6 +1488,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `lessonId`
               ) 
             SELECT
+              `courseId`,
               `courseId`,
               `chapterId`,
               `seq`,
@@ -1533,14 +1513,6 @@ class EduSohoUpgrade extends AbstractUpdater
                     WHERE lesson.hhomeworkId NOT IN (SELECT homeworkId FROM course_task WHERE homeworkId IS NOT NULL );
                     WHERE lesson.eexerciseId NOT IN (SELECT exerciseId FROM course_task WHERE exerciseId IS NOT NULL );
             "
-        );
-
-
-        $this->exec(
-            "
-            UPDATE course_task  AS a ,  `c2_course` c  SET a.`courseId` = c.`courseSetId` 
-            WHERE  a.`type` ='homework' and a.`fromCourseSetId` = 0  AND a.`courseId` = c.id;
-        "
         );
 
         $this->exec(
@@ -2392,12 +2364,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
         if ($this->isFieldExist('course_favorite', 'courseId')) {
             $this->exec("ALTER TABLE course_favorite MODIFY courseId INT(10) unsigned NOT NULL COMMENT '教学计划ID';");
-        }
-
-        if ($this->isFieldExist('course_favorite', 'courseSetId')) {
-            $this->exec(
-                "ALTER TABLE `course_favorite` CHANGE `courseSetId` `courseSetId` INT(10) NOT NULL DEFAULT '0' COMMENT '课程ID';"
-            );
         }
 
         if (!$this->isFieldExist('course_material', 'courseSetId')) {
