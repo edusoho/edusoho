@@ -58,7 +58,7 @@ define(function(require, exports, module) {
                 })
             })
         },
-    //点击ES直播回放
+    //点击ES直播公开课回放
     onClickReplay: function() {
         $('.js-play-es-live').on('click', function() {
             var replayUrl = $(this).data('url');
