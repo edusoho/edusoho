@@ -33,14 +33,21 @@ class MediaServiceImpl extends BaseService implements MediaService
         $client = $factory->createClient();
         if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
             if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                $token = $this->getTokenService()->makeToken('hls.playlist', array(
+                $tokenFields = array(
                     'data' => array(
                         'id' => $file['id'],
                         'fromApi' => $options['fromApi'],
                     ),
                     'times' => $options['times'],
                     'duration' => $options['duration'],
-                ));
+                );
+
+                if (!empty($options['replayId'])) {
+                    $tokenFields['data']['replayId'] = $options['replayId'];
+                    $tokenFields['data']['type'] = $options['type'];
+                }
+
+                $token = $this->getTokenService()->makeToken('hls.playlist', $tokenFields);
 
                 $url = $this->getHttpHost()."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?hideBeginning=1&format={$options['format']}&line=".$options['line'];
             } else {
