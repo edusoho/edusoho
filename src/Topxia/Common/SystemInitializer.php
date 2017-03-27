@@ -58,6 +58,7 @@ class SystemInitializer
         $this->_initRefundSetting();
         $this->_initSiteSetting();
         $this->_initStorageSetting();
+        $this->initWapSetting();
     }
 
     protected function _initDictionary()
@@ -275,6 +276,18 @@ class SystemInitializer
 
         $this->getSettingService()->set('storage', $default);
 
+        $this->output->writeln(' ...<info>成功</info>');
+    }
+
+    private function initWapSetting()
+    {
+        $this->output->write('  初始化手机微网校设置');
+
+        $default = array(
+            'enabled' => 1
+        );
+
+        $this->getSettingService()->set('wap', $default);
         $this->output->writeln(' ...<info>成功</info>');
     }
 
