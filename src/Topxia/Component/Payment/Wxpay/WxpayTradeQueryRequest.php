@@ -60,7 +60,7 @@ class WxpayTradeQueryRequest extends Request
         }
 
         $sign = substr($sign, 0, -1);
-        $sign .= '&key='.$this->options['key'];
+        $sign .= '&key='.$this->options['secret'];
 
         return md5($sign);
     }

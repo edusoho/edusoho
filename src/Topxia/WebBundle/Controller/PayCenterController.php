@@ -560,7 +560,6 @@ class PayCenterController extends BaseController
             $options = array(
                 'appid'            => $settings["{$payment}_appid"],
                 'account'          => $settings["{$payment}_account"],
-                'key'              => $settings["{$payment}_secret"],
                 'secret'           => $settings["{$payment}_secret"],
                 'isMicroMessenger' => $this->getWebExtension()->isMicroMessenger()
             );
