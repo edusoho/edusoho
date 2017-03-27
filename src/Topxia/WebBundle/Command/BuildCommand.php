@@ -205,6 +205,9 @@ class BuildCommand extends BaseCommand
         $this->filesystem->touch("{$this->distDirectory}/app/config/routing_plugins.yml");
         $this->filesystem->remove("{$this->distDirectory}/app/config/parameters.yml");
 
+        $this->filesystem->remove("{$this->distDirectory}/app/config/plugin.php");
+        $this->filesystem->touch("{$this->distDirectory}/app/config/plugin.php");
+
         $this->filesystem->copy("{$this->distDirectory}/app/config/parameters.yml.dist", "{$this->distDirectory}/app/config/parameters.yml");
         $this->filesystem->chmod("{$this->distDirectory}/app/config/parameters.yml", 0777);
 
@@ -261,6 +264,7 @@ class BuildCommand extends BaseCommand
         $this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/ResetPasswordCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/ResetPasswordCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/Fixtures/PluginAppUpgradeTemplate.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/Fixtures/PluginAppUpgradeTemplate.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/InitWebsiteCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/InitWebsiteCommand.php");
+        $this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/CrontabCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/CrontabCommand.php");
         $finder = new Finder();
         $finder->directories()->in("{$this->distDirectory}/src/");
 
