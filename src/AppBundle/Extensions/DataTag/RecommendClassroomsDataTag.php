@@ -46,17 +46,10 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
             $classrooms = array_merge($classrooms, $classroomTemp);
         }
 
-        $users = array();
-
         foreach ($classrooms as &$classroom) {
-            if (empty($classroom['teacherIds'])) {
-                $classroomTeacherIds = array();
-            } else {
-                $classroomTeacherIds = $classroom['teacherIds'];
-            }
-
-            $users = $this->getUserService()->findUsersByIds($classroomTeacherIds);
-            $classroom['users'] = $users;
+            $teacherIds = $this->getClassroomService()->findTeachers($classroom['id']);
+            $teachers = $this->getUserService()->findUsersByIds($teacherIds);
+            $classroom['users'] = $teachers;
         }
 
         return $classrooms;

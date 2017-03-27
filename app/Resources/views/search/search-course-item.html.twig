@@ -45,7 +45,7 @@
             <i class="es-icon es-icon-arrowdropleft"></i>
             {% set course_show_url = path('course_show', {id : task.courseId}) %}
             <a class="link-dark" href="{{ course_show_url }}" target="_blank">
-              {{ '课时'|trans }} {{ task.number }}: {{ task.title|raw }}
+              {{ '课时'|trans }} {{ task.number }}: {{ task.title }}
             </a>
           </li>
         {% endfor %}

@@ -1,27 +1,29 @@
-<?php 
+<?php
 
 namespace Topxia\Api\Resource\User;
 
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\EncryptionToolkit;
+use Topxia\Api\Util\SmsUtil;
 use AppBundle\Common\SimpleValidator;
 use Topxia\Api\Resource\BaseResource;
-use Topxia\Api\Util\SmsUtil;
+use AppBundle\Common\EncryptionToolkit;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Request;
 
 class Password extends BaseResource
 {
     public function post(Application $app, Request $request)
     {
         $password = $request->request->get('password');
-        $smsCode  = $request->request->get('sms_code');
+        $smsCode = $request->request->get('sms_code');
         $smsToken = $request->request->get('verified_token');
-        $type     = $request->request->get('type');
+        $type = $request->request->get('type');
 
         if (!in_array($type, array('sms', 'email'))) {
             return $this->error('500', '不存在此type对应的业务场景');
         }
+
+        $this->limiterCheck($type, $smsToken);
 
         if (empty($smsCode)) {
             return $this->error('500', '短信验证码为空，请输入');
@@ -43,25 +45,25 @@ class Password extends BaseResource
         if ($type == 'sms') {
             $smsUtil = new SmsUtil();
             $result = $smsUtil->verifySmsCode('sms_change_password', $smsCode, $smsToken);
-            
+
             if ($result !== true) {
                 if ($result == 'sms_code_expired') {
-                     return $this->error('sms_code_expired', '验证码已过期');
+                    return $this->error('sms_code_expired', '验证码已过期');
                 } else {
                     return $this->error('500', '验证码错误');
                 }
             }
 
             $token = $this->getTokenService()->verifyToken('sms_change_password', $smsToken);
-            
+
             $user = $this->getCurrentUser();
 
             if ($user->isLogin()) {
                 $this->getUserService()->changeMobile($user['id'], $token['data']['mobile']);
             } else {
-                 $user  = $this->getUserService()->getUserByVerifiedMobile($token['data']['mobile']);
+                $user = $this->getUserService()->getUserByVerifiedMobile($token['data']['mobile']);
             }
-           
+
             $this->getUserService()->changePassword($user['id'], $password);
             $this->getTokenService()->destoryToken($token);
 
@@ -72,6 +74,20 @@ class Password extends BaseResource
     public function filter($res)
     {
         return $res;
+    }
+
+    protected function limiterCheck($type, $token)
+    {
+        $biz = $this->getBiz();
+
+        $factory = $biz['ratelimiter.factory'];
+        $limiter = $factory('api_change_'.$type, 5, 1800);
+        $remain = $limiter->check($token);
+        if ($remain == 0) {
+            return $this->error('500', '操作过于频繁，请30分钟之后再试');
+        }
+
+        return true;
     }
 
     protected function getTokenService()

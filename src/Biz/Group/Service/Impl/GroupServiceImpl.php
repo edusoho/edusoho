@@ -44,7 +44,7 @@ class GroupServiceImpl extends BaseService implements GroupService
     public function updateGroup($id, $fields)
     {
         if (isset($fields['about'])) {
-            $fields['about'] = $this->biz['html_helper']->purify($fields['about']);
+            $fields['about'] = $this->purifyHtml($fields['about']);
         }
 
         return $this->getGroupDao()->update($id, $fields);
@@ -63,7 +63,7 @@ class GroupServiceImpl extends BaseService implements GroupService
         $title = trim($group['title']);
 
         if (isset($group['about'])) {
-            $group['about'] = $this->biz['html_helper']->purify($group['about']);
+            $group['about'] = $this->purifyHtml($group['about']);
         }
         $group['ownerId'] = $user['id'];
         $group['memberNum'] = 1;

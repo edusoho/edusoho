@@ -16,6 +16,10 @@ class CourseThreads extends BaseResource
         $sort = $request->query->get('sort', 'posted');
         $simplify = $request->query->get('simplify', 0);
 
+        if (!$this->getCourseService()->canTakeCourse($courseId)) {
+            return $this->error('403', '无权限查看');
+        }
+
         $conditions = array(
             'courseId' => $courseId,
         );
@@ -48,6 +52,11 @@ class CourseThreads extends BaseResource
     protected function simplify($res)
     {
         return $this->multicallSimplify('CourseThread', $res);
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getCourseThreadService()

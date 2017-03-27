@@ -1,13 +1,13 @@
 <tr>
   <td>
-    <a href="{% if status == 'reviewing' %}{{ path('course_manage_testpaper_check', {id:paperResult.courseId,resultId:paperResult.id}) }}{% elseif status == 'finished' %}{{ path('testpaper_result_show', {resultId:paperResult.id,source:source|default('course'),targetId:targetId|default(0)}) }}{% endif %}" target="_blank">{{ testpaper.name|plain_text(60) }}</a>
+    <a class="link-primary" href="{% if status == 'reviewing' %}{{ path('course_manage_testpaper_check', {id:paperResult.courseId,resultId:paperResult.id}) }}{% elseif status == 'finished' %}{{ path('testpaper_result_show', {resultId:paperResult.id,source:source|default('course'),targetId:targetId|default(0)}) }}{% endif %}" target="_blank">{{ testpaper.name|plain_text(60) }}</a>
     <br>
     <small class="color-gray">
       {% if courseSet|default(null) %}
-        {{ '来自课程'|trans }}<a href="{{ path('course_set_show',{id:courseSet.id}) }}">《{{courseSet.title|default('')}}》</a> •
+        {{ '来自课程'|trans }}<a class="color-primary" href="{{ path('course_set_show',{id:courseSet.id}) }}">《{{courseSet.title|default('')}}》</a> •
       {% endif %}
       {% if course|default(null) %}
-        {{ '计划'|trans }}<a href="{{ path('course_show',{id:course.id}) }}">《{{ course.title|default('') }}》</a>
+        {{ '计划'|trans }}<a class="color-primary" href="{{ path('course_show',{id:course.id}) }}">《{{ course.title|default('') }}》</a>
       {% endif %}
     </small>
     <small class="color-gray mhs">•</small>
@@ -19,7 +19,7 @@
   </td>
   <td width="30%" class="vertical-middle">
     {% if status == 'reviewing' and (not isTeacher is defined or isTeacher) %}
-      <a href="{{ path('course_manage_testpaper_check', {id:paperResult.courseId,resultId:paperResult.id,source:source|default('course'),targetId:targetId|default(0)}) }}" target="_blank">{{'批阅'|trans}}</a>
+      <a class="link-primary" href="{{ path('course_manage_testpaper_check', {id:paperResult.courseId,resultId:paperResult.id,source:source|default('course'),targetId:targetId|default(0)}) }}" target="_blank">{{'批阅'|trans}}</a>
     {% endif %}
 
     {% if status == 'finished' %}

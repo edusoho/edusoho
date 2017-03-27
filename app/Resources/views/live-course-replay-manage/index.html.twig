@@ -1,9 +1,4 @@
-{% if course.type == 'liveOpen' %}
-	{% set layout = 'open-course-manage/layout.html.twig' %}
-{% else %}
-	{% set layout = 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
-{% endif %}
-{% extends layout %}
+{% extends 'open-course-manage/layout.html.twig' %}
 
 {% block title %}{{'录播管理'|trans}} - {{ parent() }}{% endblock %}
 
