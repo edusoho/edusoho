@@ -61,25 +61,23 @@
 <h1><small>{{'谨慎操作区域'|trans}}</small></h1>
 <hr/>
 
-{% if 'upgrade' not in disabled_features %}
-	<div class="panel panel-default">
-	  <div class="panel-heading ">
-	    <h3 class="panel-title text-warning">{{'清空系统备份数据'|trans}}</h3>
-	  </div>
-	  <div class="panel-body">
-	   	<p class="text-warning">
-	       {{'慎重：请确保当前系统已经升级成功。当系统升级过程中发生意外，备份的系统文件和数据库可用于恢复。'|trans}}
-	    </p>   	
-	    <p>
-	       {{'清空系统升级过程中备份的系统文件和备数据库。通过清空系统备份数据，可以让系统释放出更多的磁盘空间'|trans}}
-	    <p/>
-	    <p >
-	  		<button id="removeBackup" class="btn btn-warning fr" data-url="{{ url('admin_optimize_remove_backup') }}">{{ '清空系统备份数据'|trans }}</button>
-	  	</p>
-	  </div>
-	</div>
+<div class="panel panel-default">
+  <div class="panel-heading ">
+    <h3 class="panel-title text-warning">{{'清空系统备份数据'|trans}}</h3>
+  </div>
+  <div class="panel-body">
+   	<p class="text-warning">
+       {{'慎重：请确保当前系统已经升级成功。当系统升级过程中发生意外，备份的系统文件和数据库可用于恢复。'|trans}}
+    </p>   	
+    <p>
+       {{'清空系统升级过程中备份的系统文件和备数据库。通过清空系统备份数据，可以让系统释放出更多的磁盘空间'|trans}}
+    <p/>
+    <p >
+  		<button id="removeBackup" class="btn btn-warning fr" data-url="{{ url('admin_optimize_remove_backup') }}">{{ '清空系统备份数据'|trans }}</button>
+  	</p>
+  </div>
+</div>
 
-{% endif %}
 
 <div class="panel panel-default">
   <div class="panel-heading">
