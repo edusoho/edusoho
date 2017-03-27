@@ -93,8 +93,11 @@ class EduSohoUpgrade extends AbstractUpdater
 
         'Lesson2LiveActivityMigrate',
         'ActivityRelaLiveActivity',
-        // TODO
-        'AfterAllCourseTaskMigrate'
+        // next
+
+
+        'AfterAllCourseTaskMigrate',
+        'OtherMigrate'
       );
 
       if ($index > count($steps)-1) {
@@ -2442,9 +2445,6 @@ class EduSohoUpgrade extends AbstractUpdater
             "UPDATE `block_template` SET templateName = 'block/cloud-search-banner.template.html.twig' WHERE code = 'cloud_search_banner';"
         );
 
-        if ($this->isTableExist('live_activity')) {
-            $this->exec("UPDATE `live_activity` SET roomCreated = 1 WHERE liveId > 0;");
-        }
         $this->exec(
             "UPDATE crontab_job SET targetType = 'task' WHERE targetType = 'lesson' AND name = 'SmsSendOneDayJob';"
         );
