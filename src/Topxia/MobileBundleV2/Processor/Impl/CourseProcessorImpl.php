@@ -866,12 +866,12 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $start,
             $limit
         );
-
+        $courses = $this->controller->filterCourses($courses);
         return array(
             'start' => $start,
             'limit' => $limit,
             'total' => $total,
-            'data' => $this->controller->filterCourses($courses),
+            'data' => array_values($courses),
         );
     }
 
