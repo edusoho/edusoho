@@ -2873,3 +2873,8 @@ course_task_question_marker_search:
 callback:
     path:  /callback/{resource}
     defaults: { _controller: AppBundle:Callback/Index:index }
+
+mobile_qrcode:
+    path:  /mobil/qrcode
+    defaults: { _controller: AppBundle:Common:mobileQrcode }
+
