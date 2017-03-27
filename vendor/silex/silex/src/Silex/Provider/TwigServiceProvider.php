@@ -13,7 +13,6 @@ namespace Silex\Provider;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use Silex\Provider\Twig\RuntimeLoader;
 use Symfony\Bridge\Twig\AppVariable;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Bridge\Twig\Extension\DumpExtension;
@@ -25,7 +24,6 @@ use Symfony\Bridge\Twig\Extension\HttpFoundationExtension;
 use Symfony\Bridge\Twig\Extension\HttpKernelExtension;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Bridge\Twig\Form\TwigRenderer;
-use Symfony\Bridge\Twig\Extension\HttpKernelRuntime;
 
 /**
  * Twig integration for Silex.
@@ -40,6 +38,19 @@ class TwigServiceProvider implements ServiceProviderInterface
         $app['twig.form.templates'] = array('form_div_layout.html.twig');
         $app['twig.path'] = array();
         $app['twig.templates'] = array();
+
+        $app['twig.app_variable'] = function ($app) {
+            $var = new AppVariable();
+            if (isset($app['security.token_storage'])) {
+                $var->setTokenStorage($app['security.token_storage']);
+            }
+            if (isset($app['request_stack'])) {
+                $var->setRequestStack($app['request_stack']);
+            }
+            $var->setDebug($app['debug']);
+
+            return $var;
+        };
 
         $app['twig'] = function ($app) {
             $app['twig.options'] = array_replace(
@@ -60,19 +71,6 @@ class TwigServiceProvider implements ServiceProviderInterface
             }
 
             if (class_exists('Symfony\Bridge\Twig\Extension\RoutingExtension')) {
-                $app['twig.app_variable'] = function ($app) {
-                    $var = new AppVariable();
-                    if (isset($app['security.token_storage'])) {
-                        $var->setTokenStorage($app['security.token_storage']);
-                    }
-                    if (isset($app['request_stack'])) {
-                        $var->setRequestStack($app['request_stack']);
-                    }
-                    $var->setDebug($app['debug']);
-
-                    return $var;
-                };
-
                 $twig->addGlobal('global', $app['twig.app_variable']);
 
                 if (isset($app['request_stack'])) {
@@ -99,8 +97,8 @@ class TwigServiceProvider implements ServiceProviderInterface
                 }
 
                 if (isset($app['form.factory'])) {
-                    $app['twig.form.engine'] = function ($app) use ($twig) {
-                        return new TwigRendererEngine($app['twig.form.templates'], $twig);
+                    $app['twig.form.engine'] = function ($app) {
+                        return new TwigRendererEngine($app['twig.form.templates']);
                     };
 
                     $app['twig.form.renderer'] = function ($app) {
@@ -119,10 +117,6 @@ class TwigServiceProvider implements ServiceProviderInterface
 
                 if (isset($app['var_dumper.cloner'])) {
                     $twig->addExtension(new DumpExtension($app['var_dumper.cloner']));
-                }
-
-                if (class_exists(HttpKernelRuntime::class)) {
-                    $twig->addRuntimeLoader($app['twig.runtime_loader']);
                 }
             }
 
@@ -147,20 +141,5 @@ class TwigServiceProvider implements ServiceProviderInterface
         $app['twig.environment_factory'] = $app->protect(function ($app) {
             return new \Twig_Environment($app['twig.loader'], $app['twig.options']);
         });
-
-        $app['twig.runtime.httpkernel'] = function ($app) {
-            return new HttpKernelRuntime($app['fragment.handler']);
-        };
-
-        $app['twig.runtimes'] = function ($app) {
-            return array(
-                HttpKernelRuntime::class => 'twig.runtime.httpkernel',
-                TwigRenderer::class => 'twig.form.renderer',
-            );
-        };
-
-        $app['twig.runtime_loader'] = function ($app) {
-            return new RuntimeLoader($app, $app['twig.runtimes']);
-        };
     }
 }

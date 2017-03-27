@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "6fd74fe7fcf07110c55e8e6013b675bb",
+    "content-hash": "e5af279d362968d167259211b6be6e19",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -2199,16 +2199,16 @@
         },
         {
             "name": "silex/silex",
-            "version": "v2.0.4",
+            "version": "v2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silexphp/Silex.git",
-                "reference": "49ca08d853731d1635374e5019c8696cfd53c161"
+                "reference": "fd0852ebfa0a4cf1e17d746bb81962ec69bbb6d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silexphp/Silex/zipball/49ca08d853731d1635374e5019c8696cfd53c161",
-                "reference": "49ca08d853731d1635374e5019c8696cfd53c161",
+                "url": "https://files.phpcomposer.com/files/silexphp/Silex/fd0852ebfa0a4cf1e17d746bb81962ec69bbb6d1.zip",
+                "reference": "fd0852ebfa0a4cf1e17d746bb81962ec69bbb6d1",
                 "shasum": ""
             },
             "require": {
@@ -2248,7 +2248,7 @@
                 "symfony/twig-bridge": "~2.8|^3.0",
                 "symfony/validator": "~2.8|^3.0",
                 "symfony/var-dumper": "~2.8|^3.0",
-                "twig/twig": "~1.27|~2.0"
+                "twig/twig": "~1.8|~2.0"
             },
             "type": "library",
             "extra": {
@@ -2280,7 +2280,7 @@
             "keywords": [
                 "microframework"
             ],
-            "time": "2016-11-06T18:09:06+00:00"
+            "time": "2016-08-22T17:50:21+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
