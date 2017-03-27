@@ -17,13 +17,13 @@ class CoalescingDirectoryResourceTest extends \PHPUnit_Framework_TestCase
 {
     public function testFiltering()
     {
-        $dir1 = $this->getMock('Assetic\\Factory\\Resource\\IteratorResourceInterface');
-        $file1a = $this->getMock('Assetic\\Factory\\Resource\\ResourceInterface');
-        $file1b = $this->getMock('Assetic\\Factory\\Resource\\ResourceInterface');
+        $dir1 = $this->getMockBuilder('Assetic\\Factory\\Resource\\IteratorResourceInterface')->getMock();
+        $file1a = $this->getMockBuilder('Assetic\\Factory\\Resource\\ResourceInterface')->getMock();
+        $file1b = $this->getMockBuilder('Assetic\\Factory\\Resource\\ResourceInterface')->getMock();
 
-        $dir2 = $this->getMock('Assetic\\Factory\\Resource\\IteratorResourceInterface');
-        $file2a = $this->getMock('Assetic\\Factory\\Resource\\ResourceInterface');
-        $file2c = $this->getMock('Assetic\\Factory\\Resource\\ResourceInterface');
+        $dir2 = $this->getMockBuilder('Assetic\\Factory\\Resource\\IteratorResourceInterface')->getMock();
+        $file2a = $this->getMockBuilder('Assetic\\Factory\\Resource\\ResourceInterface')->getMock();
+        $file2c = $this->getMockBuilder('Assetic\\Factory\\Resource\\ResourceInterface')->getMock();
 
         $dir1->expects($this->any())
             ->method('getIterator')

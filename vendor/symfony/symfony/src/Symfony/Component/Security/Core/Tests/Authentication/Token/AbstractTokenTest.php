@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Security\Core\Tests\Authentication\Token;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\Role\SwitchUserRole;
@@ -57,7 +58,8 @@ class ConcreteToken extends AbstractToken
     }
 }
 
-class AbstractTokenTest extends \PHPUnit_Framework_TestCase
+/** @noinspection PhpUndefinedClassInspection */
+class AbstractTokenTest extends TestCase
 {
     public function testGetUsername()
     {
@@ -68,7 +70,7 @@ class AbstractTokenTest extends \PHPUnit_Framework_TestCase
         $token->setUser(new TestUser('fabien'));
         $this->assertEquals('fabien', $token->getUsername());
 
-        $user = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
+        $user = $this->getMockBuilder('Symfony\Component\Security\Core\User\UserInterface')->getMock();
         $user->expects($this->once())->method('getUsername')->will($this->returnValue('fabien'));
         $token->setUser($user);
         $this->assertEquals('fabien', $token->getUsername());
@@ -78,7 +80,7 @@ class AbstractTokenTest extends \PHPUnit_Framework_TestCase
     {
         $token = $this->getToken(array('ROLE_FOO'));
 
-        $user = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
+        $user = $this->getMockBuilder('Symfony\Component\Security\Core\User\UserInterface')->getMock();
         $user->expects($this->once())->method('eraseCredentials');
         $token->setUser($user);
 
@@ -168,8 +170,8 @@ class AbstractTokenTest extends \PHPUnit_Framework_TestCase
 
     public function getUsers()
     {
-        $user = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
-        $advancedUser = $this->getMock('Symfony\Component\Security\Core\User\AdvancedUserInterface');
+        $user = $this->getMockBuilder('Symfony\Component\Security\Core\User\UserInterface')->getMock();
+        $advancedUser = $this->getMockBuilder('Symfony\Component\Security\Core\User\AdvancedUserInterface')->getMock();
 
         return array(
             array($advancedUser),
@@ -197,8 +199,8 @@ class AbstractTokenTest extends \PHPUnit_Framework_TestCase
 
     public function getUserChanges()
     {
-        $user = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
-        $advancedUser = $this->getMock('Symfony\Component\Security\Core\User\AdvancedUserInterface');
+        $user = $this->getMockBuilder('Symfony\Component\Security\Core\User\UserInterface')->getMock();
+        $advancedUser = $this->getMockBuilder('Symfony\Component\Security\Core\User\AdvancedUserInterface')->getMock();
 
         return array(
             array(

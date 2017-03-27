@@ -11,6 +11,7 @@
 
 namespace Sensio\Bundle\GeneratorBundle\Manipulator;
 
+use Sensio\Bundle\GeneratorBundle\Generator\Generator;
 use Sensio\Bundle\GeneratorBundle\Model\Bundle;
 use Symfony\Component\Yaml\Yaml;
 
@@ -69,7 +70,7 @@ class ConfigurationManipulator extends Manipulator
 
         $newContents = substr($currentContents, 0, $targetLinebreakPosition)."\n".$code.substr($currentContents, $targetLinebreakPosition);
 
-        if (false === file_put_contents($this->file, $newContents)) {
+        if (false === Generator::dump($this->file, $newContents)) {
             throw new \RuntimeException(sprintf('Could not write file %s ', $this->file));
         }
     }

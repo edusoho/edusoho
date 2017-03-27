@@ -11,6 +11,7 @@
 
 namespace Symfony\Bundle\FrameworkBundle\Tests\DependencyInjection\Compiler;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\FormPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -20,7 +21,7 @@ use Symfony\Component\Form\AbstractType;
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-class FormPassTest extends \PHPUnit_Framework_TestCase
+class FormPassTest extends TestCase
 {
     public function testDoNothingIfFormExtensionNotLoaded()
     {
@@ -226,7 +227,12 @@ class FormPassTest extends \PHPUnit_Framework_TestCase
         $container->setDefinition('form.extension', $extDefinition);
         $container->register($id, 'stdClass')->setPublic(false)->addTag($tagName);
 
-        $this->setExpectedException('\InvalidArgumentException', $expectedExceptionMessage);
+        if (method_exists($this, 'expectException')) {
+            $this->expectException('InvalidArgumentException');
+            $this->expectExceptionMessage($expectedExceptionMessage);
+        } else {
+            $this->setExpectedException('InvalidArgumentException', $expectedExceptionMessage);
+        }
 
         $container->compile();
     }

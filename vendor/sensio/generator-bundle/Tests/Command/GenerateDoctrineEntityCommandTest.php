@@ -32,7 +32,8 @@ class GenerateDoctrineEntityCommandTest extends GenerateCommandTest
             ->willReturn(new EntityGeneratorResult('', '', ''))
         ;
 
-        $tester = new CommandTester($this->getCommand($generator, $input));
+        $tester = new CommandTester($command = $this->getCommand($generator));
+        $this->setInputs($tester, $command, $input);
         $tester->execute($options);
     }
 
@@ -71,7 +72,7 @@ class GenerateDoctrineEntityCommandTest extends GenerateCommandTest
             ->will($this->returnValue(false))
         ;
 
-        $tester = new CommandTester($this->getCommand($generator, ''));
+        $tester = new CommandTester($this->getCommand($generator));
         $tester->execute($options, array('interactive' => false));
     }
 
@@ -88,11 +89,11 @@ class GenerateDoctrineEntityCommandTest extends GenerateCommandTest
         );
     }
 
-    protected function getCommand($generator, $input)
+    protected function getCommand($generator)
     {
         $command = new GenerateDoctrineEntityCommand();
         $command->setContainer($this->getContainer());
-        $command->setHelperSet($this->getHelperSet($input));
+        $command->setHelperSet($this->getHelperSet());
         $command->setGenerator($generator);
 
         return $command;
