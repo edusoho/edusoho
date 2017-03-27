@@ -48,7 +48,7 @@
                       <div class="class-metas">
                       <span class="class-teacher">
                         {% if teachers %}
-                          <i class="fa fa-user"></i>
+                          <i class="es-icon es-icon-people"></i>
                           {% for teacher in teachers %}
                           {% if loop.index <= 1 %}
                             <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
@@ -56,7 +56,7 @@
                         {% endfor %}
                         {% endif %}
                       </span>
-                        <span class="class-student hidden-md"><i class="fa fa-users"></i>{{ classroom.studentNum + classroom.auditorNum }}</span>
+                        <span class="class-student hidden-md"><i class="es-icon es-icon-people"></i>{{ classroom.studentNum + classroom.auditorNum }}</span>
                         <span class="class-price">
                           {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                             {% if classroom.price > 0 %}

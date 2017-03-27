@@ -4,8 +4,8 @@ namespace Biz\Course\Dao\Impl;
 
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseMemberDao;
-use Codeages\Biz\Framework\Dao\DynamicQueryBuilder;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\DynamicQueryBuilder;
 
 class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 {
@@ -371,13 +371,21 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     {
         return array(
             'timestamps' => array('createdTime', 'updatedTime'),
-            'orderbys' => array('createdTime', 'lastLearnTime', 'id', 'updatedTime'),
+            'orderbys' => array(
+                'createdTime',
+                'lastLearnTime',
+                'id',
+                'updatedTime',
+                'lastViewTime',
+                'seq',
+            ),
             'conditions' => array(
                 'userId = :userId',
                 'courseId = :courseId',
                 'isLearned = :isLearned',
                 'joinedType = :joinedType',
                 'role = :role',
+                'isVisible = :isVisible',
                 'classroomId = :classroomId',
                 'noteNum > :noteNumGreaterThan',
                 'createdTime >= :startTimeGreaterThan',
@@ -394,8 +402,8 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     }
 
     /**
-     * @param $conditions
-     * @param $sql
+     * @param  $conditions
+     * @param  $sql
      *
      * @return array
      */

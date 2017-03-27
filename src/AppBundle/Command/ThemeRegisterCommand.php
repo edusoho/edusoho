@@ -4,7 +4,6 @@ namespace AppBundle\Command;
 
 use AppBundle\Common\BlockToolkit;
 use Biz\Util\PluginUtil;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -63,7 +62,7 @@ class ThemeRegisterCommand extends BaseCommand
                 throw new \RuntimeException("插件脚本{$installFile}中，不存在InstallScript类。");
             }
 
-            $installer = new \InstallScript(ServiceKernel::instance());
+            $installer = new \InstallScript($this->getContainer()->get('biz'));
             $installer->setInstallMode('command');
             $installer->execute();
         }
@@ -101,11 +100,11 @@ class ThemeRegisterCommand extends BaseCommand
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     protected function getBlockService()
     {
-        return $this->getServiceKernel()->createService('Content:BlockService');
+        return $this->createService('Content:BlockService');
     }
 }

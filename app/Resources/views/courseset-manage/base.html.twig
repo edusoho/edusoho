@@ -6,7 +6,7 @@
 {% set side_nav = 'base' %}
 
 {% block main %}
-	<div class="panel panel-default">
+	<div class="panel panel-default" role="courseset-manage-base">
     <div class="panel-heading">{{ '基本信息'|trans }}</div>
     <div class="panel-body">
       <form class="form-horizontal" id="courseset-form" action="{{path('course_set_manage_base', {id: courseSet.id})}}" method="post">
@@ -49,7 +49,7 @@
             <div class="help-block" style="display:none;"></div>
           </div>
         </div>
-        {% include 'org/org-tree-select.html.twig' with {orgCode : courseSet.orgCode, inputClass: 'width-input width-input-large'} %}
+        {% include 'org/org-tree-select.html.twig' with {orgCode : courseSet.orgCode, inputClass: 'width-input width-input-large',notLoadJs:true } %}
 
         <div class="form-group">
           <label class="col-md-2 control-label">{{ '连载状态'|trans }}</label>

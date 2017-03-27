@@ -12,7 +12,7 @@ class CloudMail extends Mail
      *
      * @return bool
      */
-    public function send()
+    public function doSend()
     {
         $cloudConfig = $this->setting('cloud_email_crm', array());
 

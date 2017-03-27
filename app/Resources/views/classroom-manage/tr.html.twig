@@ -24,14 +24,14 @@
   <td style="vertical-align: middle;">
     <div class="btn-group">
       {% if app.user.id != user.id %}
-        <a class="mr10" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">{{'发私信'|trans}}</a>
+        <a class="mr10 link-primary" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">{{'发私信'|trans}}</a>
       {% endif %}
       {% if app.user.isAdmin() %}
-        <a class="mr10" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_show', {courseSetId: 0, courseId:classroom.id, userId:user.id})}}">{{'查看资料'|trans}}</a>
+        <a class="mr10 link-primary" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_show', {courseSetId: 0, courseId:classroom.id, userId:user.id})}}">{{'查看资料'|trans}}</a>
       {% elseif setting("course.buy_fill_userinfo") %}
-        <a class="mr10" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_defined_show', {courseSetId: 0, courseId:classroom.id, userId:user.id}) }}">{{'查看资料'|trans}}</a>
+        <a class="mr10 link-primary" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_defined_show', {courseSetId: 0, courseId:classroom.id, userId:user.id}) }}">{{'查看资料'|trans}}</a>
       {% endif %}
-      <a href="#" type="button" class=" dropdown-toggle" data-toggle="dropdown">{{'管理'|trans}}
+      <a  class=" dropdown-toggle link-primary" href="javascript:;" type="button" data-toggle="dropdown">{{'管理'|trans}}
         <span class="caret ml5"></span>
       </a>
       <ul class="dropdown-menu pull-right">

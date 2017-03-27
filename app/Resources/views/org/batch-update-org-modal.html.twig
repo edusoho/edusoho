@@ -1,6 +1,4 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
-
-
 {% set modalSize = 'large' %}
 
 {% block title %}{{ '设置组织机构'|trans }}{% endblock %}
@@ -10,13 +8,10 @@
     line-height: 36px;
   }
 </style>
-  <form id="batch-setting-org-form" class="form-horizontal" method="post"
-        action="{{ path('admin_batch_update_org',{module: module}) }}">
-
-    {% include 'org/org-tree-select.html.twig' with {colmd:7} %}
+  <form id="batch-setting-org-form" class="form-horizontal" method="post" action="{{ path('admin_batch_update_org',{module: module}) }}">
+    {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'modal',seajsLoade:true} %}
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     <input type="hidden" name="ids" id="batch-ids">
-
     <input type="hidden" id="module" value="{{ module }}">
     <input type="hidden" id="appUserId" value="{{ app.user.id }}">
   </form>

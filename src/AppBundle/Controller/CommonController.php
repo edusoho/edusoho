@@ -62,6 +62,7 @@ class CommonController extends BaseController
     public function crontabAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
+        $currentUserToken = $this->container->get('security.token_storage')->getToken();
         try {
             $switchUser = new CurrentUser();
             $switchUser->fromArray($this->getUserService()->getUserByType('scheduler'));
@@ -71,8 +72,9 @@ class CommonController extends BaseController
 
             return $this->createJsonResponse(true);
         } catch (\Exception $e) {
-            $this->switchUser($request, $currentUser);
-            throw $e;
+            $this->container->get('security.token_storage')->setToken($currentUserToken);
+
+            return $this->createJsonResponse(false);
         }
     }
 

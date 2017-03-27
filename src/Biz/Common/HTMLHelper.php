@@ -38,9 +38,24 @@ class HTMLHelper
         );
 
         $factory = new HTMLPurifierFactory($config);
-        $purifier = $factory->create($trusted);
+        $purifier = $factory->create($config);
 
-        return $purifier->purify($html);
+        $html = $purifier->purify($html);
+        if (!$trusted) {
+            return $html;
+        }
+
+        $styles = $purifier->context->get('StyleBlocks');
+        if ($styles) {
+            $html = implode("\n", array(
+                '<style type="text/css">',
+                implode("\n", $styles),
+                '</style>',
+                $html,
+            ));
+        }
+
+        return $html;
     }
 
     /**

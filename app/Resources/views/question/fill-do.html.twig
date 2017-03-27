@@ -26,12 +26,12 @@
 		    	{% endfor %}
 		    </ul>
 
-		    {% if question.testResult.status == "right" %}
+		    {% if question.testResult.status|default('noAnswer') == "right" %}
 			    <p class="color-success">{{'回答正确。'|trans}}</p>
-			  {% elseif question.testResult.status == "partRight" %}
+			  {% elseif question.testResult.status|default('noAnswer') == "partRight" %}
 			    <p class="text-warning">{{'回答部分正确。'|trans}}
 				    {% if showScore|default(1) %}
-							{{'本题得分：%testResult.score%分。'|trans({'%testResult.score%': question.testResult.score})}}
+							{{'本题得分：%testResult.score%分。'|trans({'%testResult.score%': question.testResult.score|default(0)})}}
 				    {% endif %}
 			    </p>
 			  {% else %}

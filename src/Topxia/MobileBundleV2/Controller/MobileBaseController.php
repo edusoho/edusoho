@@ -2,13 +2,13 @@
 
 namespace Topxia\MobileBundleV2\Controller;
 
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Controller\BaseController;
-use Biz\Course\Service\CourseService;
 use Biz\User\CurrentUser;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Api\Util\TagUtil;
+use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
+use AppBundle\Controller\BaseController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class MobileBaseController extends BaseController
 {
@@ -175,8 +175,8 @@ class MobileBaseController extends BaseController
                 'id' => $user['id'],
                 'nickname' => $user['nickname'],
                 'title' => $user['title'],
-                'following' => $controller->getUserService()->findUserFollowingCount($user['id']),
-                'follower' => $controller->getUserService()->findUserFollowerCount($user['id']),
+                'following' => (string) $controller->getUserService()->findUserFollowingCount($user['id']),
+                'follower' => (string) $controller->getUserService()->findUserFollowerCount($user['id']),
                 'avatar' => $this->container->get('web.twig.extension')->getFilePath(
                     $user['smallAvatar'],
                     'avatar.png',
@@ -287,18 +287,13 @@ class MobileBaseController extends BaseController
             $course = $this->convertOldFields($course);
             $course = $this->filledCourseByCourseSet($course, $courseSet);
 
-            $course['smallPicture'] = $container->get('web.twig.app_extension')->courseSetCover(
-                $courseSet,
-                'small'
-            );
-            $course['middlePicture'] = $container->get('web.twig.app_extension')->courseSetCover(
-                $courseSet,
-                'middle'
-            );
-            $course['largePicture'] = $container->get('web.twig.app_extension')->courseSetCover(
-                $courseSet,
-                'large'
-            );
+            $small = empty($courseSet['cover']['small']) ? '' : $courseSet['cover']['small'];
+            $middle = empty($courseSet['cover']['middle']) ? '' : $courseSet['cover']['middle'];
+            $large = empty($courseSet['cover']['large']) ? '' : $courseSet['cover']['large'];
+
+            $course['smallPicture'] = $container->get('web.twig.extension')->getFurl($small, 'course.png');
+            $course['middlePicture'] = $container->get('web.twig.extension')->getFurl($middle, 'course.png');
+            $course['largePicture'] = $container->get('web.twig.extension')->getFurl($large, 'course.png');
             $course['about'] = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
             $course['createdTime'] = date('c', $course['createdTime']);
 
@@ -317,6 +312,11 @@ class MobileBaseController extends BaseController
 
             $course['priceType'] = $coinSetting['priceType'];
             $course['coinName'] = $coinSetting['name'];
+
+            $course['goals'] = empty($course['goals']) ? array() : $course['goals'];
+            $course['audiences'] = empty($course['audiences']) ? array() : $course['audiences'];
+            $course['services'] = empty($course['services']) ? array() : $course['services'];
+            $course['teacherIds'] = empty($course['teacherIds']) ? array() : $course['teacherIds'];
         }
 
         return $courses;
@@ -329,7 +329,7 @@ class MobileBaseController extends BaseController
             'taskNum' => 'lessonNum',
             'creator' => 'userId',
             'tryLookLength' => 'tryLookTime',
-            'summary' => 'about'
+            'summary' => 'about',
         );
         foreach ($convertKeys as $key => $value) {
             $course[$value] = $course[$key];
@@ -422,12 +422,27 @@ class MobileBaseController extends BaseController
                     return false;
                 }
 
-                return $item;
+                return $self->filterTask($item);
             },
             $items
         );
 
         return array_filter($items);
+    }
+
+    public function filterTask($task)
+    {
+        array_walk($task, function ($value, $key) use (&$task) {
+            if (is_numeric($value)) {
+                $task[$key] = (string) $value;
+            } elseif (is_null($value)) {
+                $task[$key] = '';
+            } else {
+                $task[$key] = $value;
+            }
+        });
+
+        return $task;
     }
 
     public function coverPath($path, $coverPath)
@@ -489,8 +504,8 @@ class MobileBaseController extends BaseController
                     $user['about'] = $controller->convertAbsoluteUrl($controller->request, $userProfile['about']);
                 }
 
-                $user['following'] = $controller->getUserService()->findUserFollowingCount($user['id']);
-                $user['follower'] = $controller->getUserService()->findUserFollowerCount($user['id']);
+                $user['following'] = (string) $controller->getUserService()->findUserFollowingCount($user['id']);
+                $user['follower'] = (string) $controller->getUserService()->findUserFollowerCount($user['id']);
 
                 $user['email'] = '****';
                 unset($user['password']);
@@ -510,6 +525,24 @@ class MobileBaseController extends BaseController
                 unset($user['tags']);
                 unset($user['point']);
                 unset($user['coin']);
+                unset($user['idcard']);
+                unset($user['mobile']);
+                unset($user['verifiedMobile']);
+                unset($user['orgCode']);
+                unset($user['orgId']);
+                unset($user['registeredWay']);
+                unset($user['inviteCode']);
+                unset($user['createdTime']);
+                unset($user['lockDeadline']);
+                unset($user['roles']);
+                unset($user['updatedTime']);
+                unset($user['truename']);
+                unset($user['gender']);
+                unset($user['emailVerified']);
+                unset($user['setup']);
+                unset($user['lastPasswordFailTime']);
+                unset($user['consecutivePasswordErrorTimes']);
+                unset($user['birthday']);
 
                 return $user;
             },

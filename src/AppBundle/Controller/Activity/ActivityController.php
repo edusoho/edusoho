@@ -16,9 +16,9 @@ class ActivityController extends BaseController
         if (empty($activity)) {
             throw $this->createNotFoundException('activity not found');
         }
-        $actionConfig = $this->getActivityActionConfig($activity['mediaType']);
+        $actionConfig = $this->getActivityConfig($activity['mediaType']);
 
-        return $this->forward($actionConfig['show'], array(
+        return $this->forward($actionConfig['controller'].':show', array(
             'activity' => $activity,
             'preview' => $preview,
         ));
@@ -30,15 +30,9 @@ class ActivityController extends BaseController
         if (empty($activity)) {
             throw $this->createNotFoundException('activity not found');
         }
-        $actionConfig = $this->getActivityActionConfig($activity['mediaType']);
+        $actionConfig = $this->getActivityConfig($activity['mediaType']);
 
-        if (empty($actionConfig['preview'])) {
-            return $this->render('activity/no-preview.html.twig', array(
-                'task' => $task,
-            ));
-        }
-
-        return $this->forward($actionConfig['preview'], array(
+        return $this->forward($actionConfig['controller'].':preview', array(
             'task' => $task,
         ));
     }
@@ -46,9 +40,9 @@ class ActivityController extends BaseController
     public function updateAction($id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
-        $actionConfig = $this->getActivityActionConfig($activity['mediaType']);
+        $actionConfig = $this->getActivityConfig($activity['mediaType']);
 
-        return $this->forward($actionConfig['edit'], array(
+        return $this->forward($actionConfig['controller'].':edit', array(
             'id' => $activity['id'],
             'courseId' => $courseId,
         ));
@@ -56,9 +50,9 @@ class ActivityController extends BaseController
 
     public function createAction($type, $courseId)
     {
-        $actionConfig = $this->getActivityActionConfig($type);
+        $actionConfig = $this->getActivityConfig($type);
 
-        return $this->forward($actionConfig['create'], array(
+        return $this->forward($actionConfig['controller'].':create', array(
             'courseId' => $courseId,
         ));
     }
@@ -89,16 +83,11 @@ class ActivityController extends BaseController
         ));
     }
 
-    protected function getActivityConfig()
+    protected function getActivityConfig($type)
     {
-        return $this->get('extension.default')->getActivities();
-    }
+        $config = $this->get('extension.default')->getActivities();
 
-    protected function getActivityActionConfig($type)
-    {
-        $config = $this->getActivityConfig();
-
-        return $config[$type]['actions'];
+        return $config[$type];
     }
 
     /**

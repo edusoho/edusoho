@@ -53,7 +53,7 @@
   .course-operation-responsive {
     background-color: @bg-color;
     padding: 20px 20px;
-    margin: 0 -15px 12px;
+    margin: 0 -10px 12px;
     >ul {
       margin: 0;
       padding: 0;
@@ -161,6 +161,9 @@
         }
         &.not-activity {
           min-height: 158px;
+          @media(max-width:@screen-sm-max){
+            min-height: auto;
+          }
         }
         .course-detail-content {
           position: relative;
@@ -182,6 +185,12 @@
             left: 0;
             top: 6px;
           }
+        }
+      }
+      .pirce-num {
+        font-size: 24px;
+        @media (max-width: @screen-xs-max) {
+          font-size: 14px;
         }
       }
       .original-price {
