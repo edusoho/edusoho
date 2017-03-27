@@ -195,11 +195,21 @@ abstract class BaseResource
         return $text;
     }
 
-    public function getFileUrl($path)
+    public function getFileUrl($path, $defaultKey = '')
     {
         if (empty($path)) {
-            return '';
+            if (empty($defaultKey)) {
+                return '';
+            }
+
+            $defaultSetting = $this->getSettingService()->get('default', array());
+            if (($defaultKey == 'course.png' && !empty($defaultSetting['defaultCoursePicture'])) || $defaultKey == 'avatar.png' && !empty($defaultSetting['defaultAvatar']) && empty($defaultSetting[$defaultKey])) {
+                $path = $defaultSetting[$defaultKey];
+            } else {
+                return $this->getHttpHost().'/assets/img/default/'.$defaultKey;
+            }
         }
+
         if (strpos($path, $this->getHttpHost()."://") !== false) {
             return $path;
         }
@@ -294,5 +304,10 @@ abstract class BaseResource
         $this->logger->pushHandler(new StreamHandler($this->biz['log_directory'].'/service.log', Logger::DEBUG));
 
         return $this->logger;
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }

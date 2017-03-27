@@ -3,6 +3,7 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
+use AppBundle\Common\SettingToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -55,10 +56,12 @@ class LessonReplay extends BaseResource
                 //获取globalid
                 $globalId = $visableReplays[0]['globalId'];
                 $options = array(
-                    'fromApi' => true,
+                    'fromApi' => !$this->isSetEncryption(),
                     'times' => 2,
                     'line' => $request->query->get('line', ''),
                     'format' => $request->query->get('format', ''),
+                    'type' => 'apiLessonReplay',
+                    'replayId' => $visableReplays[0]['id'],
                 );
                 $response['url'] = $this->getMediaService()->getVideoPlayUrl($globalId, $options);
                 $response['extra']['provider'] = 'longinus';
@@ -75,6 +78,17 @@ class LessonReplay extends BaseResource
     public function filter($res)
     {
         return $res;
+    }
+
+    protected function isSetEncryption()
+    {
+        $enable_hls_encryption_plus = SettingToolkit::getSetting('storage.enable_hls_encryption_plus');
+
+        if ($enable_hls_encryption_plus) {
+            return true;
+        }
+
+        return false;
     }
 
     protected function getCourseService()

@@ -75,6 +75,7 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
                 'isElite = :isElite',
                 'content LIKE :content',
             ),
+            'cache' => 'table'
         );
     }
 }

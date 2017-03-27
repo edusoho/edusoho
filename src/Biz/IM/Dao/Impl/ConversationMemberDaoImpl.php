@@ -46,6 +46,7 @@ class ConversationMemberDaoImpl extends GeneralDaoImpl implements ConversationMe
                 'userId = :userId',
                 'convNo = :convNo',
             ),
+            'cache' => 'table'
         );
     }
 }

@@ -103,41 +103,6 @@ class DeveloperSettingController extends BaseController
         ));
     }
 
-    public function redisAction(Request $request)
-    {
-        if ($request->getMethod() == 'POST') {
-            $redis = $request->request->all();
-            $redis['setting'] = json_decode($redis['setting'], true);
-            $this->getSettingService()->set('redis', $redis);
-
-            $redisConfigFile = $this->container->getParameter('kernel.root_dir').'/data/redis.php';
-
-            if ($redis['opened'] == '1') {
-                $config = "<?php \nreturn ".var_export($redis['setting'], true).';';
-                file_put_contents($redisConfigFile, $config);
-            }
-
-            if ($redis['opened'] == '0') {
-                file_exists($redisConfigFile) && unlink($redisConfigFile);
-            }
-
-            $this->getLogService()->info('system', 'update_redis', '更新redis设置', $redis);
-            $this->setFlashMessage('success', '设置已保存！');
-        }
-
-        $redis = $this->getSettingService()->get('redis', array());
-
-        if (isset($redis['setting']) && !empty($redis['setting'])) {
-            $redis['setting'] = JsonToolkit::prettyPrint(json_encode($redis['setting']));
-        } else {
-            $redis['setting'] = '{}';
-        }
-
-        return $this->render('admin/developer-setting/redis.html.twig', array(
-            'redis' => $redis,
-        ));
-    }
-
     public function syncUploadFileAction(Request $request)
     {
         $conditions = array(

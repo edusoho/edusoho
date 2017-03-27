@@ -197,6 +197,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
                 'orgCode = :orgCode',
                 'orgCode LIKE :likeOrgCode',
             ),
+            'cache' => 'table'
         );
     }
 
