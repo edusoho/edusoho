@@ -102,7 +102,8 @@ class CommonController extends BaseController
         $img = $qrCode->get('png');
 
         $headers = array('Content-Type' => 'image/png',
-            'Content-Disposition' => 'inline; filename="image.png"');
+            'Content-Disposition' => 'inline; filename="image.png"', );
+
         return new Response($img, 200, $headers);
     }
 
