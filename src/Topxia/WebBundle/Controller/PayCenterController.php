@@ -540,7 +540,7 @@ class PayCenterController extends BaseController
             throw new \RuntimeException($this->trans('支付模块(%payment%)未开启，请先开启。', array('%payment%' => $payment)));
         }
 
-        if (empty($settings["{$payment}_key"]) || empty($settings["{$payment}_secret"])) {
+        if (empty($settings["{$payment}_appid"]) || empty($settings["{$payment}_secret"])) {
             throw new \RuntimeException($this->trans('支付模块(%payment%)参数未设置，请先设置。', array('%payment%' => $payment)));
         }
 
