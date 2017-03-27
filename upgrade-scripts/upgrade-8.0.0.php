@@ -344,6 +344,9 @@ class EduSohoUpgrade extends AbstractUpdater
                   `createdTime` INT(10) UNSIGNED NOT NULL COMMENT '课程创建时间',
                   `updatedTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间',
                   `creator` int(11) DEFAULT NULL,
+                  `recommended` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否为推荐课程',
+                  `recommendedSeq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐序号',
+                  `recommendedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间',
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
@@ -403,6 +406,9 @@ class EduSohoUpgrade extends AbstractUpdater
               ,`enableFinish`
               ,`learnMode`
               ,`maxRate`
+              ,`recommended`
+              ,`recommendedSeq`
+              ,`recommendedTime`
           ) SELECT
               `id`
               ,`id`
@@ -456,6 +462,9 @@ class EduSohoUpgrade extends AbstractUpdater
               ,1
               ,'freeMode'
               ,`maxRate`
+              ,`recommended`
+              ,`recommendedSeq`
+              ,`recommendedTime`
           FROM `course` where `id` not in (select `id` from `c2_course`);";
         $result = $this->getConnection()->exec($sql);
 
@@ -2397,6 +2406,10 @@ class EduSohoUpgrade extends AbstractUpdater
         );
         $this->exec(
             "UPDATE block_template SET templateName = 'block/open-course-top-banner.template.html.twig' WHERE code = 'open_course_top_banner';"
+        );
+
+        $this->exec(
+            "UPDATE `block_template` SET templateName = 'block/cloud-search-banner.template.html.twig' WHERE code = 'cloud_search_banner';"
         );
 
         if ($this->isTableExist('live_activity')) {
