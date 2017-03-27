@@ -864,7 +864,7 @@ class PushMessageEventSubscriber extends EventSubscriber
                 'name' => 'LiveCourseStartNotifyJob',
                 'cycle' => 'once',
                 'nextExcutedTime' => $lesson['startTime'] - 10 * 60,
-                'jobClass' => 'Topxia\\Service\\Course\\Job\\LiveLessonStartNotifyJob',
+                'jobClass' => 'Biz\\Notification\\Job\\LiveLessonStartNotifyJob',
                 'jobParams' => '',
                 'targetType' => 'live_lesson',
                 'targetId' => $lesson['id'],
