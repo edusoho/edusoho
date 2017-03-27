@@ -8,6 +8,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DiscussController extends BaseController implements ActivityActionInterface
 {
+    public function previewAction(Request $request, $task)
+    {
+        return $this->render('activity/no-preview.html.twig');
+    }
+
     public function showAction(Request $request, $activity)
     {
         return $this->render('activity/discuss/show.html.twig', array(
@@ -31,7 +36,7 @@ class DiscussController extends BaseController implements ActivityActionInterfac
         ));
     }
 
-    public function finishConditionAction($activity)
+    public function finishConditionAction(Request $request, $activity)
     {
         return $this->render('activity/discuss/finish-condition.html.twig', array());
     }

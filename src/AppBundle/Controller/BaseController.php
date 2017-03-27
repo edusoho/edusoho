@@ -151,6 +151,14 @@ class BaseController extends Controller
         return false;
     }
 
+    protected function purifyHtml($html, $trusted = false)
+    {
+        $biz = $this->getBiz();
+        $htmlHelper = $biz['html_helper'];
+
+        return $htmlHelper->purify($html, $trusted);
+    }
+
     protected function isPluginInstalled($pluginName)
     {
         return $this->get('kernel')->getPluginConfigurationManager()->isPluginInstalled($pluginName);

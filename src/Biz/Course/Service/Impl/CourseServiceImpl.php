@@ -216,6 +216,14 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
+        if (isset($fields['about'])) {
+            $fields['about'] = $this->purifyHtml($fields['about'], true);
+        }
+
+        if (isset($fields['summary'])) {
+            $fields['summary'] = $this->purifyHtml($fields['summary'], true);
+        }
+
         $course = $this->getCourseDao()->update($id, $fields);
         $this->dispatchEvent('course.update', new Event($course));
 
@@ -1640,6 +1648,44 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $learnProgress;
+    }
+
+    public function buildCourseExpiryDataFromClassroom($expiryMode, $expiryValue)
+    {
+        $fields = array();
+        if ($expiryMode === 'none') {
+            $fields = array(
+                'expiryMode' => 'forever',
+                'expiryDays' => 0,
+                'expiryStartDate' => null,
+                'expiryEndDate' => null,
+            );
+        } elseif ($expiryMode === 'days') {
+            if ($expiryValue == 0) {
+                $fields = array(
+                    'expiryMode' => 'forever',
+                    'expiryDays' => 0,
+                    'expiryStartDate' => null,
+                    'expiryEndDate' => null,
+                );
+            } else {
+                $fields = array(
+                    'expiryMode' => 'days',
+                    'expiryDays' => $expiryValue,
+                    'expiryStartDate' => null,
+                    'expiryEndDate' => null,
+                );
+            }
+        } elseif ($expiryMode === 'date') {
+            $fields = array(
+                'expiryMode' => 'end_date',
+                'expiryDays' => 0,
+                'expiryStartDate' => null,
+                'expiryEndDate' => $expiryValue,
+            );
+        }
+
+        return $fields;
     }
 
     protected function hasAdminRole()

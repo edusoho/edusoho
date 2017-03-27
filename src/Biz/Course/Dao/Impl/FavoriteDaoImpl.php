@@ -73,7 +73,7 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
      */
     public function findUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType, $start, $limit)
     {
-        $sql = "select id from " . CourseDao::TABLENAME . " where courseSetId in (SELECT c.id FROM {$this->table} f ";
+        $sql = 'select id from '.CourseDao::TABLENAME." where courseSetId in (SELECT c.id FROM {$this->table} f ";
         $sql .= ' JOIN  '.CourseSetDao::TABLENAME.' AS c ON f.userId = ? AND c.type = ?';
         $sql .= "AND f.courseSetId = c.id AND c.parentId = 0 AND f.type = 'course')";
         $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
@@ -86,7 +86,7 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
      */
     public function countUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType)
     {
-        $sql = "select count(*) from " . CourseDao::TABLENAME . " where courseSetId in (SELECT (c.id) FROM {$this->table} f ";
+        $sql = 'select count(*) from '.CourseDao::TABLENAME." where courseSetId in (SELECT (c.id) FROM {$this->table} f ";
         $sql .= ' JOIN  '.CourseSetDao::TABLENAME.' AS c ON f.userId = ? AND c.type = ?';
         $sql .= "AND f.courseSetId = c.id AND c.parentId = 0 AND f.type = 'course')";
 

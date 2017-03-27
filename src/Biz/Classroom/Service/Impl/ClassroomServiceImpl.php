@@ -288,6 +288,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createServiceException('已发布的班级不允许修改班级原先的有效期模式');
         }
 
+        if (isset($fields['description'])) {
+            $fields['description'] = $this->purifyHtml($fields['description'], true);
+        }
+
+        if (isset($fields['about'])) {
+            $fields['about'] = $this->purifyHtml($fields['about'], true);
+        }
+
         $fields = $this->fillOrgId($fields);
         $classroom = $this->getClassroomDao()->update($id, $fields);
 
