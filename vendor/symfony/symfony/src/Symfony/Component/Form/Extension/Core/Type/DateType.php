@@ -56,11 +56,11 @@ class DateType extends AbstractType
             throw new InvalidOptionsException('The "format" option must be one of the IntlDateFormatter constants (FULL, LONG, MEDIUM, SHORT) or a string representing a custom format.');
         }
 
-        if (null !== $pattern && (false === strpos($pattern, 'y') || false === strpos($pattern, 'M') || false === strpos($pattern, 'd'))) {
-            throw new InvalidOptionsException(sprintf('The "format" option should contain the letters "y", "M" and "d". Its current value is "%s".', $pattern));
-        }
-
         if ('single_text' === $options['widget']) {
+            if (null !== $pattern && false === strpos($pattern, 'y') && false === strpos($pattern, 'M') && false === strpos($pattern, 'd')) {
+                throw new InvalidOptionsException(sprintf('The "format" option should contain the letters "y", "M" or "d". Its current value is "%s".', $pattern));
+            }
+
             $builder->addViewTransformer(new DateTimeToLocalizedStringTransformer(
                 $options['model_timezone'],
                 $options['view_timezone'],
@@ -70,6 +70,10 @@ class DateType extends AbstractType
                 $pattern
             ));
         } else {
+            if (null !== $pattern && (false === strpos($pattern, 'y') || false === strpos($pattern, 'M') || false === strpos($pattern, 'd'))) {
+                throw new InvalidOptionsException(sprintf('The "format" option should contain the letters "y", "M" and "d". Its current value is "%s".', $pattern));
+            }
+
             $yearOptions = $monthOptions = $dayOptions = array(
                 'error_bubbling' => true,
             );
@@ -191,7 +195,7 @@ class DateType extends AbstractType
         };
 
         $placeholderNormalizer = function (Options $options, $placeholder) use ($placeholderDefault) {
-            if (!is_object($options['empty_value']) || !$options['empty_value'] instanceof \Exception) {
+            if (ChoiceType::DEPRECATED_EMPTY_VALUE !== $options['empty_value']) {
                 @trigger_error('The form option "empty_value" is deprecated since version 2.6 and will be removed in 3.0. Use "placeholder" instead.', E_USER_DEPRECATED);
 
                 $placeholder = $options['empty_value'];
@@ -221,7 +225,7 @@ class DateType extends AbstractType
                     array('year' => $default, 'month' => $default, 'day' => $default),
                     $choiceTranslationDomain
                 );
-            };
+            }
 
             return array(
                 'year' => $choiceTranslationDomain,
@@ -243,7 +247,7 @@ class DateType extends AbstractType
             'format' => $format,
             'model_timezone' => null,
             'view_timezone' => null,
-            'empty_value' => new \Exception(), // deprecated
+            'empty_value' => ChoiceType::DEPRECATED_EMPTY_VALUE,
             'placeholder' => $placeholder,
             'html5' => true,
             // Don't modify \DateTime classes by reference, we treat

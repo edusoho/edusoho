@@ -37,7 +37,7 @@ class CloudAppDaoImpl extends GeneralDaoImpl implements CloudAppDao
             'orderbys' => array(
                 'installedTime',
             ),
-            'cache' => 'table'
+            'cache' => 'table',
         );
     }
 }

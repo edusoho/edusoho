@@ -5,12 +5,12 @@ use Phpmig\Migration\Migration;
 class ClassroomExpiryDate extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
         $biz = $this->getContainer();
-        $db  = $biz['db'];
+        $db = $biz['db'];
         $db->exec("
             ALTER TABLE `classroom` ADD `expiryMode` enum('date', 'days', 'none') NOT NULL DEFAULT 'none' COMMENT '有效期的模式'; 
         ");
@@ -21,18 +21,17 @@ class ClassroomExpiryDate extends Migration
         $db->exec("
             ALTER TABLE `classroom_member` ADD `deadline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '到期时间'; 
         ");
-
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
         $biz = $this->getContainer();
-        $db  = $biz['db'];
-        $db->exec("ALTER TABLE `classroom` DROP COLUMN `expiryDay`");
-        $db->exec("ALTER TABLE `classroom` DROP COLUMN `expiryValue`");
-        $db->exec("ALTER TABLE `classroom_member` DROP COLUMN `deadline`");
+        $db = $biz['db'];
+        $db->exec('ALTER TABLE `classroom` DROP COLUMN `expiryDay`');
+        $db->exec('ALTER TABLE `classroom` DROP COLUMN `expiryValue`');
+        $db->exec('ALTER TABLE `classroom_member` DROP COLUMN `deadline`');
     }
 }

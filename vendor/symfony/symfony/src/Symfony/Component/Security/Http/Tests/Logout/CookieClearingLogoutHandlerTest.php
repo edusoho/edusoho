@@ -11,18 +11,19 @@
 
 namespace Symfony\Component\Security\Http\Tests\Logout;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Logout\CookieClearingLogoutHandler;
 
-class CookieClearingLogoutHandlerTest extends \PHPUnit_Framework_TestCase
+class CookieClearingLogoutHandlerTest extends TestCase
 {
     public function testLogout()
     {
         $request = new Request();
         $response = new Response();
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')->getMock();
 
         $handler = new CookieClearingLogoutHandler(array('foo' => array('path' => '/foo', 'domain' => 'foo.foo'), 'foo2' => array('path' => null, 'domain' => null)));
 

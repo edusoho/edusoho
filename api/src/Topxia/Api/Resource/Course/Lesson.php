@@ -19,8 +19,8 @@ class Lesson extends BaseResource
         }
 
         $course = $this->getCourseService()->getCourse($task['courseId']);
-        if (!$this->getCourseService()->canTakeCourse($course['id'])) {
-            return $this->error('403', '无权限查看');
+        if ($task['isFree'] == 0 && !$this->getCourseService()->canTakeCourse($course['id'])) {
+            return $this->error('403', '不是学员或老师,无权限查看');
         }
 
         $lesson = $this->getCourseService()->convertTasks(array($task), $course);

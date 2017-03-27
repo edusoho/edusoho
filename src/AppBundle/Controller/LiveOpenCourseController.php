@@ -40,7 +40,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
     {
         list($t1, $t2) = explode(' ', microtime());
 
-        return (float) sprintf('%.0f', ((float) ($t1) + (float) ($t2)) * 1000);
+        return (float) sprintf('%.0f', ((float)($t1) + (float)($t2)) * 1000);
     }
 
     protected function getRandomNickname(Request $request, $courseId, $lessonId)
@@ -113,7 +113,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
 
         $client = new EdusohoLiveClient();
         $lesson = $this->getOpenCourseService()->getLesson($lessonId);
-        $lesson['isEnd'] = (int) (time() - $lesson['endTime']) > 0;
+        $lesson['isEnd'] = (int)(time() - $lesson['endTime']) > 0;
         $lesson['canRecord'] = $client->isAvailableRecord($lesson['mediaId']);
 
         return $this->render('live-course-replay-manage/list-item.html.twig', array(
@@ -182,7 +182,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
 
         $client = new EdusohoLiveClient();
         foreach ($lessons as $key => $lesson) {
-            $lesson['isEnd'] = (int) (time() - $lesson['endTime']) > 0;
+            $lesson['isEnd'] = (int)(time() - $lesson['endTime']) > 0;
             $lesson['canRecord'] = !($lesson['replayStatus'] == 'videoGenerated') && $client->isAvailableRecord($lesson['mediaId']);
             $lesson['file'] = $this->getLiveReplayMedia($lesson);
             $lessons["lesson-{$lesson['id']}"] = $lesson;

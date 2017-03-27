@@ -132,7 +132,7 @@ class FunctionalExtensionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException Twig_Error_Runtime
-     * @expectedExceptionMessage An exception has been thrown during the rendering of a template ("No strategy key found in value.") in "ics_no_key.twig" at line 1.
+     * @expectedExceptionMessage An exception has been thrown during the rendering of a template ("No strategy key found in value.")
      */
     public function testIndexedChainingStrategyNeedsKey()
     {

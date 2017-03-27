@@ -12,7 +12,7 @@ class CategoryGroupDaoImpl extends GeneralDaoImpl implements CategoryGroupDao
     public function declares()
     {
         return array(
-            'cache' => 'table'
+            'cache' => 'table',
         );
     }
 
