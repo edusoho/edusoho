@@ -8,22 +8,36 @@
 npm install es-webpack-engine --save-dev
 ```
 
-### webpack配置文件说明
+### webpack配置文件说明(webpack.config.js)
 
-```
-目录：/app/Resources/webpack/
+```js
+const options = {
+    output: {
+        path: 'web/static-dist/',       // 用于生产环境下的输出目录
+        publicPath: '/static-dist/',    // 用于开发环境下的输出目录
+    },
+    libs: { // 共用的依赖
+        "vendor": ['libs/vendor.js'], //可以是一个js文件,
+        "html5shiv": ['html5shiv'],
+        "fix-ie": ['console-polyfill', 'respond-js'], //也可以是一个npm依赖包
+        "jquery-insertAtCaret": ['libs/js/jquery-insertAtCaret.js'],
+    },
+    noParseDeps: [ //不需要解析的依赖，加快编译速度
+        'jquery/dist/jquery.js',
+        'bootstrap/dist/js/bootstrap.js',
+    },
+    onlyCopys: [ //纯拷贝文件到输出的libs目录下
+    {
+      name: 'es-ckeditor',
+      ignore: [
+        '**/samples/**',
+        '**/lang/!(zh-cn.js)',
+        '**/kityformula/libs/**',
+      ]
+    }]
+};
 
-> 本项目中的打包资源配置文件:
-settings.js 
-
-> 开发模式优化配置文件
-webpack.config.js
-
-> 开发环境下的入口文件 --- 不推荐修改
-webpack.dev.js
-
-> 生产环境下的入口文件 --- 不推荐修改
-webpack.js
+export default options;
 ```
 
 ### 依赖安装
@@ -41,11 +55,14 @@ cnpm install
 ### nginx添加配置项
 为了开发环境下，可以访问到webpack打包的资源
 ```
+set $webpack_server http://127.0.0.1:3030;
+
+location @webpack {
+    proxy_pass $webpack_server;
+}
+
 location ~ ^/static-dist {
-  if (-f $document_root/static-dist/dev.lock)
-  {
-    rewrite ^(.*)$ http://127.0.0.1:3030$1 last;
-  }
+    try_files $uri @webpack;
 }
 
 其中3030可修改，static-dist为webpack.config.js文件中config.output.publicPath的值
@@ -54,9 +71,11 @@ location ~ ^/static-dist {
 ### 开发模式
 
 ```
-npm start
-npm start port:3038 #改变端口
-openModule=lib,app,admin,plugin,copy npm start #可以选择监听哪几个模块
+npm run dev
+npm start 
+npm start port:3000 //  修改端口
+npm start openModule:lib,app,admin,plugin,copy,theme,custom // 修改开启编译的模块
+npm start devtool:source-map // 修改编译模式
 ```
 
 ```
