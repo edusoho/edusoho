@@ -13,9 +13,7 @@
 @import '../../libs/less/variable.less';
 
 // 临时文件，存放老的样式，随时会删除
-@import "temp.less";
-
-@import "old-common.less";
+@import "temp/index.less";
 
 // 共通
 @import "common.less";
@@ -23,7 +21,7 @@
 @import "footer.less";
 
 // 常用class
-@import "mixins.less";
+@import "mixins/index.less";
 
 // 插件
 @import "plugin/scrollbar.less";       //滚动条
@@ -34,7 +32,7 @@
 @import "plugin/sortable.less";        //拖动排序
 @import "plugin/homework.less";        //作业练习
 @import "plugin/autocomplete.less";    //自动补全
-@import "class-plan.less";             //学习计划
+// @import "class-plan.less";             //学习计划
 @import "plugin/slider.less";
 @import "plugin/swiper.less"; 
 @import "plugin/ckeditor.less"; 
@@ -108,14 +106,12 @@
 
 // 页面---------------------------------------------------------------//
 @import "page/index.less";                //首页
-@import "page/article.less";              //资讯
-@import "page/article-detail.less";       //资讯详情页
-@import "page/course-detail.less";        //课程页
-@import "page/course-list.less";          //课程选课页
-@import "page/course-manage.less";        //课程管理
-@import "page/class-detail.less";         //班级详情页
-@import "page/class-list.less";           //班级列表页
-@import "page/class-manage.less";         //班级管理页
+
+@import "page/article/index.less";        //资讯
+// @import "page/course-detail.less";        //课程页
+
+@import "page/class/index.less";          //班级
+
 @import "page/lesson.less";               //课时播放页
 @import "page/search.less";               //班级列表页
 @import "page/teacher.less";              //教师列表页
@@ -143,13 +139,13 @@
 
 @import "page/live-course.less";             //直播页面            
 @import "page/open-course.less";             //公开课页面            
-@import "page/create-course.less";           //创建课程页            
+// @import "page/create-course.less";           //创建课程页            
 @import "page/material.less";         
 @import "page/media-preview.less";         
 
 @import "page/course-manage/index.less";      //课程管理
 @import "page/course-learn/index.less";       //课程学习
-@import "page/course-detail/index.less";       //课程学习
+@import "page/course-detail/index.less";      //课程详情
 
 //移动端
 @import "mobile/course.less";       
@@ -157,8 +153,6 @@
 @import "mobile/footer-tool-bar.less";  
 @import "mobile/app-download.less";  
 @import "mobile/search-mobile.less";  
-
-
 
 @import "./main-color/index.less";                       // 添加配色方案
 
