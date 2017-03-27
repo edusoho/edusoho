@@ -23,7 +23,7 @@ class OrgDaoImpl extends GeneralDaoImpl implements OrgDao
                 'parentId = :parentId',
                 'depth = :depth',
             ),
-            'cache' => 'table'
+            'cache' => 'table',
         );
     }
 

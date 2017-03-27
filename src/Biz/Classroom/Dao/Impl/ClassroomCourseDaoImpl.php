@@ -18,7 +18,7 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
                 'courseId = :courseId',
                 'disabled = :disabled',
             ),
-            'cache' => 'table'
+            'cache' => 'table',
         );
     }
 
