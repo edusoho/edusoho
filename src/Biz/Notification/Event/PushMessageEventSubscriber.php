@@ -197,10 +197,10 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     protected function convertCourse($course)
     {
-        $course['smallPicture'] = isset($course['cover']) ? $this->getFileUrl($course['cover']['small']) : '';
-        $course['middlePicture'] = isset($course['cover']) ? $this->getFileUrl($course['cover']['middle']) : '';
-        $course['largePicture'] = isset($course['cover']) ? $this->getFileUrl($course['cover']['large']) : '';
-        $course['about'] = $this->convertHtml($course['summary']);
+        $course['smallPicture'] = isset($course['cover']['small']) ? $this->getFileUrl($course['cover']['small']) : '';
+        $course['middlePicture'] = isset($course['cover']['middle']) ? $this->getFileUrl($course['cover']['middle']) : '';
+        $course['largePicture'] = isset($course['cover']['large']) ? $this->getFileUrl($course['cover']['large']) : '';
+        $course['about'] = isset($course['summary']) ? $this->convertHtml($course['summary']) : '';
 
         return $course;
     }
@@ -234,9 +234,8 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     public function onCourseLessonUpdate(Event $event)
     {
-        $context = $event->getSubject();
-        $argument = $context['argument'];
-        $lesson = $context['lesson'];
+        $lesson = $event->getSubject();
+        $argument = $event->getArguments();
         $mobileSetting = $this->getSettingService()->get('mobile');
 
         if ($lesson['type'] == 'live' && isset($argument['startTime']) && $argument['startTime'] != $lesson['fields']['startTime'] && (!isset($mobileSetting['enable']) || $mobileSetting['enable'])) {
@@ -495,7 +494,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         if (strpos($eventName, 'course') === 0) {
             $thread['targetType'] = 'course';
             $thread['targetId'] = $thread['courseId'];
-            $thread['relationId'] = $thread['lessonId'];
+            $thread['relationId'] = $thread['taskId'];
         } elseif (strpos($eventName, 'group') === 0) {
             $thread['targetType'] = 'group';
             $thread['targetId'] = $thread['groupId'];

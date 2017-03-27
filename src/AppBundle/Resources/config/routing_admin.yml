@@ -934,10 +934,6 @@ admin_setting_cdn:
     path:  /setting/cdn
     defaults: { _controller: AppBundle:Admin/CdnSetting:index }
 
-admin_setting_redis:
-    path:  /setting/developer/redis
-    defaults: { _controller: AppBundle:Admin/DeveloperSetting:redis }
-
 admin_optimize:
     path:  /setting/optimize
     defaults: { _controller: AppBundle:Admin/Optimize:index }

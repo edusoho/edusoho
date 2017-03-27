@@ -36,6 +36,7 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
                 'copyId = :copyId',
                 'courseId IN ( :courseIds )',
             ),
+            'cache' => 'table'
         );
     }
 
