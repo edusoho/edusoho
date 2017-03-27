@@ -10,7 +10,7 @@
   {% set isShowCourseList =  ( courseSet.type != 'live' and courseSet.parentId|default(0) <= 0  and (menuType == 'courseSet' or coursesLength <= 1 or courseListIntroCookie|default(null) )) %}
 
   {#只有一个教学计划#}
-  <div class="sidenav locked js-sidenav">
+  <div class="sidenav locked js-sidenav" data-course-length="{{coursesLength}}">
     <ul class="list-group">
       {#为courseSet 或者 长度小于 1 #}
       {% if menuType == 'courseSet' or coursesLength <= 1 %}

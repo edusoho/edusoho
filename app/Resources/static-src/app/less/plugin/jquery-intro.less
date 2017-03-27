@@ -573,3 +573,25 @@ tr.introjs-showElement > th {
     outline: none;
   }
 }
+
+.transparent-intro {
+  .introjs-skipbutton {
+    display: none;
+  }
+  .introjs-overlay {
+    .opacity( 0  )!important;
+  }
+  .introjs-helperLayer {
+    .opacity(0);
+  }
+  .introjs-tooltip{
+    .box-shadow(none);  
+    padding: 0;
+    min-height: auto;
+    background: transparent;
+    .btn-content {
+      margin-left: 54px;
+      
+    }
+  }
+}

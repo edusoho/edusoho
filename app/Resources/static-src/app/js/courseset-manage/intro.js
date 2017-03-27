@@ -10,10 +10,18 @@ const COURSE_LIST_INTRO_COOKIE = 'COURSE_LIST_INTRO_COOKIE';
 export default class Intro {
   constructor() {
     showSettings();
-    $('body').on('click', '.js-reset-intro', () => {
+    this.intro = null;
+    $('body').on('click', '.js-reset-intro', (event) => {
+      event.stopPropagation();
+      $('body').removeClass('transparent-intro');
+      this.intro.exit();
       this.isRestintroType();
+      $('.js-intro-btn-group').removeClass('transparent');
     })
-    // this.isRestintroType();
+    $('.js-intro-btn-group').click(()=>{
+      this.showResetStep();
+      $('.js-intro-btn-group').addClass('transparent');
+    });
   }
   
   resetButtonRender(show = false) {
@@ -34,17 +42,12 @@ export default class Intro {
   }
 
   isRestintroType() {
-    if (this.isTaskCreatePage()) {
-      store.remove(COURSE_TASK_INTRO);
-      this.initTaskCreatePageIntro();
-      return;
+    if (this.isTaskCreatePage()) { 
+      $('.js-task-manage-item:first').trigger('mouseenter');
+      this.introStart(this.initAllSteps());
+      return ;
     }
-    if (!this.isCourseListPage()) {
-      store.remove(COURSE_BASE_INTRO);
-      this.initNotTaskCreatePageIntro();
-    }
-    store.remove(COURSE_LIST_INTRO);
-    this.initCourseListPageIntro();
+    this.introStart(this.initNotTaskPageSteps());
   }
 
   isCourseListPage() {
@@ -61,8 +64,8 @@ export default class Intro {
   }
 
   introStart(steps) {
-    let intro = introJs();
-    intro.setOptions({
+    this.intro = introJs();
+    this.intro.setOptions({
       steps: steps,
       skipLabel: '<i class="es-icon es-icon-close01"></i>',
       nextLabel: '继续了解',
@@ -73,7 +76,9 @@ export default class Intro {
       // positionPrecedence:['left', 'right', 'bottom', 'top'],
       showStepNumbers: false,
     });
-    intro.start();
+    this.intro.start().onexit(function(){
+      $('body').removeClass('transparent-intro');
+    });
   }
 
   initTaskCreatePageIntro() {
@@ -97,7 +102,6 @@ export default class Intro {
 
   initNotTaskCreatePageIntro() {
     if (!store.get(COURSE_BASE_INTRO)) {
-      console.log('ok');
       store.set(COURSE_BASE_INTRO, true);
       this.introStart(this.initNotTaskPageSteps());
     }
@@ -105,14 +109,14 @@ export default class Intro {
 
   isSetCourseListCookies() {
     if (!store.get(COURSE_LIST_INTRO)) {
-      console.log('ok');
       Cookies.set(COURSE_LIST_INTRO_COOKIE, true);
     }
   }
 
   initCourseListPageIntro() {
     let listLength = $('#courses-list-table').find('tbody tr').length;
-    if (!(listLength === 2) || store.get(COURSE_LIST_INTRO)) {
+    
+    if (!(listLength === 2) || store.get(COURSE_LIST_INTRO)|| !Cookies.get(COURSE_LIST_INTRO_COOKIE)) {
       return;
     }
     new Promise((resolve, reject) => {
@@ -140,6 +144,16 @@ export default class Intro {
       this.introStart(this.initCourseListSteps(element));
       Cookies.remove(COURSE_LIST_INTRO_COOKIE);
     }
+  }
+
+  showResetStep() {
+    console.log('showResetStep');
+    let introBtnClassName = '';
+    if($('.js-sidenav').data('course-length') >   1 ) {
+      introBtnClassName  = 'hidden'
+    }
+    $('body').addClass('transparent-intro');
+    this.introStart(this.initResetStep(introBtnClassName));
   }
 
   initAllSteps() {
@@ -211,6 +225,7 @@ export default class Intro {
         intro: `<p class="title">任务环节</p>
         在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，
         每个环节都可以通过各种教学手段来实现。!`,
+        position: 'bottom',
       })
     }
 
@@ -224,6 +239,7 @@ export default class Intro {
         intro: `<p class="title">任务环节</p>
         在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，
         每个环节都可以通过各种教学手段来实现。!`,
+        position: 'bottom',
       },
     ];
   }
@@ -236,6 +252,16 @@ export default class Intro {
           <p class="title">多个教学计划</p>
           恭喜你创建了多个教学计划！左侧的功能菜单会有所简化，
           只会显示课程公共的相关设置。`,
+      }
+    ];
+  }
+  initResetStep(introBtnClassName='') {
+    return [
+      {
+        element: '.js-intro-btn-group',
+        intro: `<div class="btn-content"><p><a class='btn btn-success js-reset-intro ${introBtnClassName}'>查看引导</a></p>
+        <a class='btn btn-info'>完整教程</a><div>`,
+        position:'top'
       }
     ];
   }
