@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Activity;
 
+use AppBundle\Controller\LiveroomController;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -237,10 +238,13 @@ class LiveController extends BaseController implements ActivityActionInterface
                 $result = $service->entryReplay($replay['id'], $activity['ext']['liveId'], $activity['ext']['liveProvider'], $ssl);
 
                 if (!empty($result) && !empty($result['resourceNo'])) {
-                    // ES Live
-                    $file = $fileService->getFileByGlobalId($replay['globalId']);
 
-                    $replay['url'] = $self->generateUrl('material_lib_file_player', array('fileId' => $file['id']));
+                    $replay['url'] = $self->generateUrl('es_live_room_replay_show', array(
+                        'targetType' => LiveroomController::LIVE_COURSE_TYPE,
+                        'targetId' => $activity['fromCourseId'],
+                        'replayId' => $replay['id'],
+                        'lessonId' => $activity['id'],
+                    ));
                 } elseif (!empty($result['url'])) {
                     // Other Live
                     $replay['url'] = $result['url'];
