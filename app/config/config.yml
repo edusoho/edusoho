@@ -95,20 +95,14 @@ services:
         class:     AppBundle\Handler\UserPdoSessionHandler
         arguments: ['@session.handler.pdo.connection', '%session.handler.pdo.options%', '@security.token_storage']
 
-    session.handler.redis.factory:
-        class: Biz\Common\Redis\RedisFactory
-        factory: 'Biz\Common\Redis\RedisFactory:instance'
-        arguments: ['@service_container']
-
     session.handler.redis:
         class:     AppBundle\Handler\RedisSessionHandler
-        arguments: ['@session.handler.redis.factory', '@security.token_storage']
+        arguments: ['@biz', '@security.token_storage']
 
     session.handler.factory:
         class: SessionHandlerInterface
         factory: ['Biz\Common\SessionHandlerFactory', getSessionHandler]
-        arguments:
-            - "@service_container"
+        arguments: ['@biz', '@service_container']
 
     topxia.twig.file_cache:
         class: Biz\Common\FilesystemCache

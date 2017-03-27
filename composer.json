@@ -44,9 +44,10 @@
 		"codeages/rest-api-client": "^0.1.3",
 		"xxtea/xxtea": "^1.0",
 		"codeages/biz-rate-limiter": "^0.1.3",
-		"codeages/biz-framework": "^0.2.0",
+		"codeages/biz-framework": "^0.2.10",
 		"codeages/plugin-bundle": "^0.1.7",
-		"cerdic/css-tidy": "^1.5"
+		"cerdic/css-tidy": "^1.5",
+		"phpunit/phpunit": "^4.8"
 	},
 	"require-dev": {
 	    "sensio/generator-bundle": "~3.0",
