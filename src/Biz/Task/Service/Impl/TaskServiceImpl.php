@@ -54,6 +54,10 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         $this->beginTransaction();
         try {
+            if (isset($fields['content'])) {
+                $fields['content'] = $this->purifyHtml($fields['content'], true);
+            }
+
             $fields = $this->createActivity($fields);
             $strategy = $this->createCourseStrategy($fields['courseId']);
             $task = $strategy->createTask($fields);

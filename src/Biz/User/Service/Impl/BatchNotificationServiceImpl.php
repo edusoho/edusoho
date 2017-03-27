@@ -20,6 +20,7 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
         $user = $this->getCurrentUser();
         $fields['fromId'] = $user['id'];
 
+        $fields['title'] = $this->purifyHtml($fields['title']);
         $fields['targetId'] = empty($fields['targetId']) ? 0 : $fields['targetId'];
         $fields['type'] = empty($fields['type']) ? 'text' : $fields['type'];
         $fields['published'] = empty($fields['published']) ? 0 : $fields['published'];
