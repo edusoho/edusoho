@@ -21,8 +21,10 @@ class ActivityTestpaperCopy extends TestpaperCopy
         if ($source['fromCourseSetId'] === $config['newCourseSetId']) {
             if ($source['mediaType'] == 'testpaper') {
                 $activity = $this->getTestpaperActivityService()->getActivity($source['mediaId']);
+
                 return $this->getTestpaperService()->getTestpaper($activity['mediaId']);
             }
+
             return $this->getTestpaperService()->getTestpaper($source['mediaId']);
         }
 
