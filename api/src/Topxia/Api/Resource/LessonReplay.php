@@ -63,7 +63,7 @@ class LessonReplay extends BaseResource
                     'type' => 'apiLessonReplay',
                     'replayId' => $visableReplays[0]['id'],
                 );
-                $response['url'] = $this->getMediaService()->getVideoPlayUrl($globalId, $options);
+                $response['url'] = $this->getEsLiveReplayUrl($globalId, $options);
                 $response['extra']['provider'] = 'longinus';
             } else {
                 $response = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", array('replayId' => $visableReplays[0]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device));
@@ -91,6 +91,47 @@ class LessonReplay extends BaseResource
         return false;
     }
 
+    protected function getEsLiveReplayUrl($globalId, $options)
+    {
+        $file = $this->getCloudFileService()->getByGlobalId($globalId);
+        if (empty($file)) {
+            throw new \RuntimeException('获取回放失败！');
+        }
+
+        if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
+            if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
+                $tokenFields = array(
+                    'data' => array(
+                        'id' => $file['id'],
+                        'fromApi' => $options['fromApi'],
+                        'type' => $options['type'],
+                        'replayId' => $options['replayId'],
+                    ),
+                    'times' => $options['times'],
+                    'duration' => $options['duration'],
+                );
+
+                $token = $this->getTokenService()->makeToken('hls.playlist', $tokenFields);
+
+                return $this->getHttpHost()."/hls/0/playlist/{$token['token']}.m3u8?hideBeginning=1&format={$options['format']}&line=".$options['line'];
+            } else {
+                throw new \RuntimeException('当前视频格式不能被播放！');
+            }
+        } else {
+            if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
+                $key = $file['metas']['hd']['key'];
+            } else {
+                $key = $file['hashId'];
+            }
+
+            if ($key) {
+                $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+            }
+        }
+
+        return isset($result['url']) ? $result['url'] : '';
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
@@ -114,6 +155,16 @@ class LessonReplay extends BaseResource
     protected function getLiveReplayService()
     {
         return $this->getServiceKernel()->createService('Course:LiveReplayService');
+    }
+
+    protected function getCloudFileService()
+    {
+        return $this->getServiceKernel()->createService('CloudFile:CloudFileService');
+    }
+
+    protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User:TokenService');
     }
 
     protected function sendRequest($method, $url, $headers = array(), $params = array())
