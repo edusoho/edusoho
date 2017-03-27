@@ -41,7 +41,7 @@ class TaskController extends BaseController
             return $this->redirectToRoute('my_course_show', array('id' => $courseId));
         }
 
-        if (!$this->getCourseService()->hasCourseManagerRole($course['id']) && $this->isCourseExpired($course)) {
+        if ($this->isCourseExpired($course) && !$this->getCourseService()->hasCourseManagerRole($course['id'])) {
             return $this->redirectToRoute('course_show', array('id' => $courseId));
         }
 
