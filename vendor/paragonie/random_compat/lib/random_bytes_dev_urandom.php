@@ -5,7 +5,7 @@
  * 
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 - 2017 Paragon Initiative Enterprises
+ * Copyright (c) 2015 - 2016 Paragon Initiative Enterprises
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -104,50 +104,33 @@ if (!is_callable('random_bytes')) {
          * page load.
          */
         if (!empty($fp)) {
-            /**
-             * @var int
-             */
             $remaining = $bytes;
-
-            /**
-             * @var string|bool
-             */
             $buf = '';
 
             /**
              * We use fread() in a loop to protect against partial reads
              */
             do {
-                /**
-                 * @var string|bool
-                 */
                 $read = fread($fp, $remaining);
-                if (!is_string($read)) {
-                    if ($read === false) {
-                        /**
-                         * We cannot safely read from the file. Exit the
-                         * do-while loop and trigger the exception condition
-                         *
-                         * @var string|bool
-                         */
-                        $buf = false;
-                        break;
-                    }
+                if ($read === false) {
+                    /**
+                     * We cannot safely read from the file. Exit the
+                     * do-while loop and trigger the exception condition
+                     */
+                    $buf = false;
+                    break;
                 }
                 /**
                  * Decrease the number of bytes returned from remaining
                  */
                 $remaining -= RandomCompat_strlen($read);
-                /**
-                 * @var string|bool
-                 */
-                $buf = $buf . $read;
+                $buf .= $read;
             } while ($remaining > 0);
 
             /**
              * Is our result valid?
              */
-            if (is_string($buf)) {
+            if ($buf !== false) {
                 if (RandomCompat_strlen($buf) === $bytes) {
                     /**
                      * Return our random entropy buffer here:
