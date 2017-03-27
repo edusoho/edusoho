@@ -12,7 +12,6 @@
 namespace Monolog\Formatter;
 
 use Exception;
-use Throwable;
 
 /**
  * Encodes whatever record data is passed to it as json
@@ -153,7 +152,7 @@ class JsonFormatter extends NormalizerFormatter
             return $normalized;
         }
 
-        if ($data instanceof Exception || $data instanceof Throwable) {
+        if ($data instanceof Exception) {
             return $this->normalizeException($data);
         }
 
@@ -171,7 +170,7 @@ class JsonFormatter extends NormalizerFormatter
     protected function normalizeException($e)
     {
         // TODO 2.0 only check for Throwable
-        if (!$e instanceof Exception && !$e instanceof Throwable) {
+        if (!$e instanceof Exception && !$e instanceof \Throwable) {
             throw new \InvalidArgumentException('Exception/Throwable expected, got '.gettype($e).' / '.get_class($e));
         }
 

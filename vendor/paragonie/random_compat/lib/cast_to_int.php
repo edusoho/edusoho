@@ -5,7 +5,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 - 2017 Paragon Initiative Enterprises
+ * Copyright (c) 2015 - 2016 Paragon Initiative Enterprises
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -40,15 +40,13 @@ if (!is_callable('RandomCompat_intval')) {
      * @param int|float $number    The number we want to convert to an int
      * @param boolean   $fail_open Set to true to not throw an exception
      * 
-     * @return float|int
+     * @return int (or float if $fail_open)
      *
      * @throws TypeError
      */
     function RandomCompat_intval($number, $fail_open = false)
     {
-        if (is_int($number) || is_float($number)) {
-            $number += 0;
-        } elseif (is_numeric($number)) {
+        if (is_numeric($number)) {
             $number += 0;
         }
 
@@ -62,13 +60,12 @@ if (!is_callable('RandomCompat_intval')) {
             $number = (int) $number;
         }
 
-        if (is_int($number)) {
-            return (int) $number;
-        } elseif (!$fail_open) {
-            throw new TypeError(
-                'Expected an integer.'
-            );
+        if (is_int($number) || $fail_open) {
+            return $number;
         }
-        return $number;
+
+        throw new TypeError(
+            'Expected an integer.'
+        );
     }
 }
