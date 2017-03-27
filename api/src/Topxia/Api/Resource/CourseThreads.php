@@ -15,11 +15,6 @@ class CourseThreads extends BaseResource
         $limit = $request->query->get('limit', 10);
         $sort = $request->query->get('sort', 'posted');
         $simplify = $request->query->get('simplify', 0);
-
-        if (!$this->getCourseService()->canTakeCourse($courseId)) {
-            return $this->error('403', '无权限查看');
-        }
-
         $conditions = array(
             'courseId' => $courseId,
         );
