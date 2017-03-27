@@ -6,6 +6,7 @@ use Topxia\Api\Util\MobileSchoolUtil;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\PluginBundle\Event\EventSubscriber;
+use Biz\CloudPlatform\IMAPIFactory;
 
 class PushMessageEventSubscriber extends EventSubscriber
 {
@@ -863,7 +864,7 @@ class PushMessageEventSubscriber extends EventSubscriber
                 'name' => 'LiveCourseStartNotifyJob',
                 'cycle' => 'once',
                 'nextExcutedTime' => $lesson['startTime'] - 10 * 60,
-                'jobClass' => 'Topxia\\Service\\Course\\Job\\LiveLessonStartNotifyJob',
+                'jobClass' => 'Biz\\Notification\\Job\\LiveLessonStartNotifyJob',
                 'jobParams' => '',
                 'targetType' => 'live_lesson',
                 'targetId' => $lesson['id'],
