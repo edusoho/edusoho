@@ -35,7 +35,7 @@
       }
       &.doing {
         background-color: @brand-primary;
-        border: 1px solid @brand-primary-darker;
+        border: 1px solid darken(@brand-primary,10%);
         color: #fff;
       }
     }
@@ -275,7 +275,7 @@
   .link-primary {
     color: @brand-primary !important;
     &:hover {
-      color: @brand-primary-darker !important;
+      color: darken(@brand-primary,10%) !important;
     }
   }
   .loader-inner > span {
