@@ -4,21 +4,6 @@ namespace AppBundle\Controller\Admin;
 
 class BaseController extends \AppBundle\Controller\BaseController
 {
-    protected function getDisabledFeatures()
-    {
-        if (!$this->container->hasParameter('disabled_features')) {
-            return array();
-        }
-
-        $disableds = $this->container->getParameter('disabled_features');
-
-        if (!is_array($disableds) || empty($disableds)) {
-            return array();
-        }
-
-        return $disableds;
-    }
-
     /**
      * condtions 中添加 likeOrgCode.
      *

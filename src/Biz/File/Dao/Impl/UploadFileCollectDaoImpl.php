@@ -40,6 +40,8 @@ class UploadFileCollectDaoImpl extends GeneralDaoImpl implements UploadFileColle
 
     public function declares()
     {
-        return array();
+        return array(
+            'cache' => 'table',
+        );
     }
 }

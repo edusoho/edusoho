@@ -11,12 +11,13 @@
 
 namespace Symfony\Component\Finder\Tests\Shell;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Shell\Command;
 
 /**
  * @group legacy
  */
-class CommandTest extends \PHPUnit_Framework_TestCase
+class CommandTest extends TestCase
 {
     public function testCreate()
     {
@@ -105,7 +106,7 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $cmd = Command::create()->add('--force');
 
         $cmd->ins('label');
-        $this->setExpectedException('RuntimeException');
+        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('RuntimeException');
         $cmd->ins('label');
     }
 
@@ -121,7 +122,7 @@ class CommandTest extends \PHPUnit_Framework_TestCase
     {
         $cmd = Command::create();
 
-        $this->setExpectedException('RuntimeException');
+        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('RuntimeException');
         $cmd->end();
     }
 
@@ -129,7 +130,7 @@ class CommandTest extends \PHPUnit_Framework_TestCase
     {
         $cmd = Command::create();
 
-        $this->setExpectedException('RuntimeException');
+        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('RuntimeException');
         $cmd->get('invalid');
     }
 

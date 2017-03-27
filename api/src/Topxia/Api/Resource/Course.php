@@ -42,14 +42,16 @@ class Course extends BaseResource
             'discount', 'categoryId', 'recommended', 'recommendedSeq', 'recommendedTime',
             'subtitle', 'discountId', 'smallPicture', 'middlePicture', 'largePicture',
         );
-        if (!empty($courseSet['cover'])) {
-            $courseSetImg = array(
-                'smallPicture' => $this->getFileUrl($courseSet['cover']['small']),
-                'middlePicture' => $this->getFileUrl($courseSet['cover']['middle']),
-                'largePicture' => $this->getFileUrl($courseSet['cover']['large']),
-            );
-            $courseSet = array_merge($courseSet, $courseSetImg);
-        };
+
+        $smallPicture = empty($courseSet['cover']['small']) ? '' : $courseSet['cover']['small'];
+        $middlePicture = empty($courseSet['cover']['middle']) ? '' : $courseSet['cover']['middle'];
+        $largePicture = empty($courseSet['cover']['large']) ? '' : $courseSet['cover']['large'];
+        $courseSetImg = array(
+            'smallPicture' => $this->getFileUrl($smallPicture, 'course.png'),
+            'middlePicture' => $this->getFileUrl($middlePicture, 'course.png'),
+            'largePicture' => $this->getFileUrl($largePicture, 'course.png'),
+        );
+        $courseSet = array_merge($courseSet, $courseSetImg);
 
         foreach ($copyKeys as $value) {
             $course[$value] = isset($courseSet[$value]) ? $courseSet[$value] : '';

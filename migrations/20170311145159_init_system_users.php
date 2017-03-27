@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class InitSystemUsers extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -34,10 +34,9 @@ class InitSystemUsers extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
-
     }
 }

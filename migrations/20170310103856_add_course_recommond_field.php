@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class AddCourseRecommondField extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -16,7 +16,7 @@ class AddCourseRecommondField extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {

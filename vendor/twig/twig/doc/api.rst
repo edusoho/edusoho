@@ -43,10 +43,18 @@ templates from a database or other resources.
     the evaluated templates. For such a need, you can use any available PHP
     cache library.
 
-To load a template from this environment you just have to call the
-``loadTemplate()`` method which then returns a ``Twig_Template`` instance::
+Rendering Templates
+-------------------
 
-    $template = $twig->loadTemplate('index.html');
+To load a template from a Twig environment, call the ``load()`` method which
+returns a ``Twig_TemplateWrapper`` instance::
+
+    $template = $twig->load('index.html');
+
+.. note::
+
+    Before Twig 1.28, you should use ``loadTemplate()`` instead which returns a
+    ``Twig_Template`` instance.
 
 To render the template with some variables, call the ``render()`` method::
 
@@ -59,6 +67,14 @@ To render the template with some variables, call the ``render()`` method::
 You can also load and render the template in one fell swoop::
 
     echo $twig->render('index.html', array('the' => 'variables', 'go' => 'here'));
+
+.. versionadded:: 1.28
+    The possibility to render blocks from the API was added in Twig 1.28.
+
+If a template defines blocks, they can be rendered individually via the
+``renderBlock()`` call::
+
+    echo $template->renderBlock('block_name', array('the' => 'variables', 'go' => 'here'));
 
 .. _environment_options:
 
@@ -115,14 +131,14 @@ The following options are available:
   ``false`` to disable).
 
   As of Twig 1.9, you can set the escaping strategy to use (``css``, ``url``,
-  ``html_attr``, or a PHP callback that takes the template "filename" and must
+  ``html_attr``, or a PHP callback that takes the template name and must
   return the escaping strategy to use -- the callback cannot be a function name
   to avoid collision with built-in escaping strategies).
 
-  As of Twig 1.17, the ``filename`` escaping strategy determines the escaping
-  strategy to use for a template based on the template filename extension (this
-  strategy does not incur any overhead at runtime as auto-escaping is done at
-  compilation time.)
+  As of Twig 1.17, the ``filename`` escaping strategy (renamed to ``name`` as
+  of Twig 1.27) determines the escaping strategy to use for a template based on
+  the template filename extension (this strategy does not incur any overhead at
+  runtime as auto-escaping is done at compilation time.)
 
 * ``optimizations`` *integer*
 
@@ -155,6 +171,9 @@ Here is a list of the built-in loaders Twig provides:
 
 .. versionadded:: 1.10
     The ``prependPath()`` and support for namespaces were added in Twig 1.10.
+
+.. versionadded:: 1.27
+    Relative paths support was added in Twig 1.27.
 
 ``Twig_Loader_Filesystem`` loads templates from the file system. This loader
 can find templates in folders on the file system and is the preferred way to
@@ -189,6 +208,18 @@ Namespaced templates can be accessed via the special
 ``@namespace_name/template_path`` notation::
 
     $twig->render('@admin/index.html', array());
+
+``Twig_Loader_Filesystem`` support absolute and relative paths. Using relative
+paths is preferred as it makes the cache keys independent of the project root
+directory (for instance, it allows warming the cache from a build server where
+the directory might be different from the one used on production servers)::
+
+    $loader = new Twig_Loader_Filesystem('templates', getcwd().'/..');
+
+.. note::
+
+    When not passing the root path as a second argument, Twig uses ``getcwd()``
+    for relative paths.
 
 ``Twig_Loader_Array``
 .....................
@@ -256,6 +287,8 @@ All loaders implement the ``Twig_LoaderInterface``::
          * @param  string $name string The name of the template to load
          *
          * @return string The template source code
+         *
+         * @deprecated since 1.27 (to be removed in 2.0), implement Twig_SourceContextLoaderInterface
          */
         function getSource($name);
 
@@ -279,6 +312,11 @@ All loaders implement the ``Twig_LoaderInterface``::
 
 The ``isFresh()`` method must return ``true`` if the current cached template
 is still fresh, given the last modification time, or ``false`` otherwise.
+
+.. note::
+
+    As of Twig 1.27, you should also implement
+    ``Twig_SourceContextLoaderInterface`` to avoid deprecation notices.
 
 .. tip::
 

@@ -46,7 +46,7 @@ class AsseticTokenParser extends BaseAsseticTokenParser
             // check the bundle
             $templateRef = null;
             try {
-                $templateRef = $this->templateNameParser->parse($this->parser->getStream()->getFilename());
+                $templateRef = $this->templateNameParser->parse($this->parser->getStream()->getSourceContext()->getName());
             } catch (\RuntimeException $e) {
                 // this happens when the filename isn't a Bundle:* url
                 // and it contains ".."
