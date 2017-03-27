@@ -54,7 +54,7 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
                 'parentId = :parentId',
                 'private = :private',
             ),
-            'cache' => 'table'
+            'cache' => 'table',
         );
     }
 }

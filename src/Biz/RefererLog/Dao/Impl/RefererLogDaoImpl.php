@@ -25,7 +25,7 @@ class RefererLogDaoImpl extends GeneralDaoImpl implements RefererLogDao
                 'ip = :ip',
                 'createdTime <= :endTime',
             ),
-            'cache' => 'table'
+            'cache' => 'table',
         );
     }
 

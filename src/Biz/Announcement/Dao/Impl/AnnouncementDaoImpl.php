@@ -34,7 +34,7 @@ class AnnouncementDaoImpl extends GeneralDaoImpl implements AnnouncementDao
                 'copyId = :copyId',
                 'userId =:userId',
             ),
-            'cache' => 'table'
+            'cache' => 'table',
         );
     }
 

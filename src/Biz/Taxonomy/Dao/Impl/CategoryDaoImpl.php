@@ -18,7 +18,7 @@ class CategoryDaoImpl extends GeneralDaoImpl implements CategoryDao
     public function declares()
     {
         return array(
-            'cache' => 'table'
+            'cache' => 'table',
         );
     }
 

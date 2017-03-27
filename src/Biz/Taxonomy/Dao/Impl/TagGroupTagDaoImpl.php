@@ -12,7 +12,7 @@ class TagGroupTagDaoImpl extends GeneralDaoImpl implements TagGroupTagDao
     public function declares()
     {
         return array(
-            'cache' => 'table'
+            'cache' => 'table',
         );
     }
 
