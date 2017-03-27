@@ -56,7 +56,7 @@
       {% elseif lesson.replayStatus == 'generated' %}
         {% for replay in lesson.replays if replay %}
           {% if lesson.liveProvider == 5 %}
-            <a class="btn btn-info btn-lg mask-btn js-play-es-live" data-url="{{ path('live_classroom_es_replay_play_url',{courseId:lesson.courseId,lessonId:lesson.id,courseLessonReplayId:replay.id}) }}" target="_blank">{{'查看回放'|trans}}</a>
+            <a class="btn btn-info btn-lg mask-btn js-play-es-live" data-url="{{ path('live_open_classroom_es_replay_play_url',{courseId:lesson.courseId,lessonId:lesson.id,courseLessonReplayId:replay.id}) }}" target="_blank">{{'查看回放'|trans}}</a>
           {% else %}
             <a class="btn btn-info btn-lg mask-btn" href="{{ path('live_open_course_live_replay_entry',{courseId:lesson.courseId,lessonId:lesson.id,replayId:replay.id, refererUrl:refererUrl}) }}" target="_blank">{{'查看回放'|trans}}</a>
           {% endif %}

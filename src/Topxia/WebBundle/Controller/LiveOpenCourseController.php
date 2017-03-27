@@ -29,6 +29,28 @@ class LiveOpenCourseController extends BaseOpenCourseController
         return $this->forward('TopxiaWebBundle:Liveroom:_entry', array('id' => $lesson['mediaId']), $params);
     }
 
+    public function playESLiveReplayAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
+    {
+        $openCourse = $this->getOpenCourseService()->getCourse($courseId);
+        $replay = $this->getCourseService()->getCourseLessonReplay($courseLessonReplayId);
+
+        if ($this->canTakeOpenCourseRelay($openCourse, $replay)) {
+            return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array('globalId' => $replay['globalId']));
+        } else {
+            return $this->createAccessDeniedException();
+        }
+
+    }
+
+    protected function canTakeOpenCourseRelay($openCourse, $replay)
+    {
+        if ($openCourse['status'] == 'published' && $openCourse['id'] == $replay['courseId'] && $openCourse['type'] == $replay['type']) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     protected function getMillisecond()
     {
         list($t1, $t2) = explode(' ', microtime());
