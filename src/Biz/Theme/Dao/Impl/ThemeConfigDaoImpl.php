@@ -29,7 +29,7 @@ class ThemeConfigDaoImpl extends GeneralDaoImpl implements ThemeConfigDao
                 'allConfig' => 'json',
                 'confirmConfig' => 'json',
             ),
-            'cache' => 'table'
+            'cache' => 'table',
         );
 
         return $declares;
