@@ -9,12 +9,17 @@
   {% block course_header %}
     {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), manage: true})) }}
   {% endblock %}
-  <div class="intro-fixed-group js-intro-btn-group ">
+  {#<div class="intro-fixed-group js-intro-btn-group ">
     <span type="button" class="intro-btn" data-container=".intro-btn" 
     data-trigger="click" data-placement="left" 
     data-content="<div class='text-center'><p><a class='btn btn-success js-reset-intro '>查看引导</a></p><a class='btn btn-info'>完整教程</a></div>">
     改版引导
     </span>
+  </div>#}
+  <div class="intro-fixed-group js-intro-btn-group ">
+    <a type="button" class="intro-btn" href="http://www.qiqiuyu.com/" target="_blank">
+    编辑帮助
+    </a>
   </div>
   <div class="row">
     <div class="col-md-3">

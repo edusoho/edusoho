@@ -11,24 +11,19 @@ export default class Intro {
   constructor() {
     showSettings();
     this.intro = null;
-    $('body').on('click', '.js-reset-intro', (event) => {
-      event.stopPropagation();
-      $('body').removeClass('transparent-intro');
-      this.intro.exit();
-      this.isRestintroType();
-      $('.js-intro-btn-group').removeClass('transparent');
-    })
-    $('.js-intro-btn-group').click(()=>{
-      this.showResetStep();
-      $('.js-intro-btn-group').addClass('transparent');
-    });
+    // $('body').on('click', '.js-reset-intro', (event) => {
+    //   event.stopPropagation();
+    //   $('body').removeClass('transparent-intro');
+    //   this.intro.exit();
+    //   this.isRestintroType();
+    //   $('.js-intro-btn-group').removeClass('transparent');
+    // })
+    // $('.js-intro-btn-group').click(()=>{
+    //   this.showResetStep();
+    //   $('.js-intro-btn-group').addClass('transparent');
+    // });
   }
   
-  resetButtonRender(show = false) {
-    let $btn = $('.js-intro-btn-group');
-    show ? $btn.removeClass('hidden') : $btn.addClass('hidden');
-  }
-
   introType() {
     if (this.isTaskCreatePage()) {
       this.initTaskCreatePageIntro();
@@ -75,8 +70,11 @@ export default class Intro {
       tooltipPosition: 'auto',
       // positionPrecedence:['left', 'right', 'bottom', 'top'],
       showStepNumbers: false,
+       exitOnEsc: false,
+      exitOnOverlayClick: false,
     });
     this.intro.start().onexit(function(){
+      $('.js-intro-btn-group').removeClass('transparent');
       $('body').removeClass('transparent-intro');
     });
   }
@@ -119,6 +117,7 @@ export default class Intro {
     if (!(listLength === 2) || store.get(COURSE_LIST_INTRO)|| !Cookies.get(COURSE_LIST_INTRO_COOKIE)) {
       return;
     }
+    Cookies.remove(COURSE_LIST_INTRO_COOKIE);
     new Promise((resolve, reject) => {
       setTimeout(function () {
         let $courseMenu = $('.js-sidenav-course-menu');
@@ -142,19 +141,17 @@ export default class Intro {
     if (!store.get(COURSE_LIST_INTRO)) {
       store.set(COURSE_LIST_INTRO, true);
       this.introStart(this.initCourseListSteps(element));
-      Cookies.remove(COURSE_LIST_INTRO_COOKIE);
     }
   }
 
-  showResetStep() {
-    console.log('showResetStep');
-    let introBtnClassName = '';
-    if($('.js-sidenav').data('course-length') >   1 ) {
-      introBtnClassName  = 'hidden'
-    }
-    $('body').addClass('transparent-intro');
-    this.introStart(this.initResetStep(introBtnClassName));
-  }
+  // showResetStep() {
+  //   let introBtnClassName = '';
+  //   if($('.js-sidenav').data('course-length') >   1 ) {
+  //     introBtnClassName  = 'hidden'
+  //   }
+  //   $('body').addClass('transparent-intro');
+  //   this.introStart(this.initResetStep(introBtnClassName));
+  // }
 
   initAllSteps() {
     let arry = [
