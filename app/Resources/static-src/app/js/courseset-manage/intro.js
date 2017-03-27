@@ -128,12 +128,12 @@ export default class Intro {
         $('.js-sidenav-course-menu').slideUp(function () {
           resolve();
         });
-      }, 500);
+      }, 100);
     }).then(() => {
       setTimeout(() => {
         this.initCourseListIntro('.js-sidenav');
         console.log('initCourseListIntro');
-      }, 500);
+      }, 100);
     });
   }
 
