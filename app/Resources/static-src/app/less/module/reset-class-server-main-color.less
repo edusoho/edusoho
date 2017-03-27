@@ -1,0 +1,12 @@
+// 编译报错，加了 reset前缀
+.reset-class-server-main-color(@brand-primary) {
+  .class-serve {
+    > ul {
+      > li {
+        &.active {
+          background-color: @brand-primary;
+        }
+      }
+    }
+  }
+}
