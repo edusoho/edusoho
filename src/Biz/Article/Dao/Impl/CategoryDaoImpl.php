@@ -15,6 +15,7 @@ class CategoryDaoImpl extends GeneralDaoImpl implements CategoryDao
             'conditions' => array(
                 'parentId = :parentId',
             ),
+            'cache' => 'table'
         );
     }
 

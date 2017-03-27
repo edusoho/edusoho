@@ -12,10 +12,12 @@ class PushNotificationOneHourJob implements Job
         $targetType = $params['targetType'];
         $targetId = $params['targetId'];
         if ($targetType == 'lesson') {
-            $lesson = $this->getCourseService()->getLesson($targetId);
+            $lesson = $this->getTaskService()->getTask($targetId);
             $course = $this->getCourseService()->getCourse($lesson['courseId']);
+            $courseSet = $this->getCourseSetService()->getCourseSet($lesson['fromCourseSetId']);
 
             $lesson['course'] = $course;
+            $lesson['courseSet'] = $courseSet;
             $this->pushCloud('lesson.live_notify', $lesson);
         }
     }
@@ -37,9 +39,19 @@ class PushNotificationOneHourJob implements Job
         return $path;
     }
 
-    protected function getCourseService()
+    private function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course:CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    private function getCourseSetService()
+    {
+        return $this->getServiceKernel()->createService('Course:CourseSetService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->getServiceKernel()->createService('Task:TaskService');
     }
 
     protected function getCloudDataService()

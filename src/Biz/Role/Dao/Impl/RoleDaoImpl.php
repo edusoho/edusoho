@@ -28,6 +28,8 @@ class RoleDaoImpl extends GeneralDaoImpl implements RoleDao
             'updatedTime',
         );
 
+        $declares['cache'] = 'table';
+
         return $declares;
     }
 

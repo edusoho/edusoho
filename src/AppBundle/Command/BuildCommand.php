@@ -79,7 +79,7 @@ class BuildCommand extends BaseCommand
         $this->input = $input;
         $this->output = $output;
 
-        $this->rootDirectory = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
+        $this->rootDirectory = dirname($this->getContainer()->getParameter('kernel.root_dir').'/../');
         $this->buildDirectory = $this->rootDirectory.'/build';
 
         $this->filesystem = new Filesystem();
@@ -206,6 +206,9 @@ class BuildCommand extends BaseCommand
         $this->filesystem->touch("{$this->distDirectory}/app/config/routing_plugins.yml");
         $this->filesystem->remove("{$this->distDirectory}/app/config/parameters.yml");
 
+        $this->filesystem->remove("{$this->distDirectory}/app/config/plugin.php");
+        $this->filesystem->touch("{$this->distDirectory}/app/config/plugin.php");
+
         $this->filesystem->copy("{$this->distDirectory}/app/config/parameters.yml.dist", "{$this->distDirectory}/app/config/parameters.yml");
         $this->filesystem->chmod("{$this->distDirectory}/app/config/parameters.yml", 0777);
 
@@ -235,32 +238,31 @@ class BuildCommand extends BaseCommand
         $this->output->writeln('build src/ .');
         $this->filesystem->mirror("{$this->rootDirectory}/src", "{$this->distDirectory}/src");
 
-        $this->filesystem->remove("{$this->distDirectory}/src/Topxia/AdminBundle/Resources/public");
-        $this->filesystem->remove("{$this->distDirectory}/src/Topxia/WebBundle/Resources/public");
+        $this->filesystem->remove("{$this->distDirectory}/src/AppBundle/Resources/public");
+
         $this->filesystem->remove("{$this->distDirectory}/src/Topxia/MobileBundle/Resources/public");
         $this->filesystem->remove("{$this->distDirectory}/src/Custom/AdminBundle/Resources/public");
         $this->filesystem->remove("{$this->distDirectory}/src/Custom/WebBundle/Resources/public");
-        $this->filesystem->remove("{$this->distDirectory}/src/Classroom/ClassroomBundle/Resources/public");
-        $this->filesystem->remove("{$this->distDirectory}/src/MaterialLib/MaterialLibBundle/Resources/public");
-        $this->filesystem->remove("{$this->distDirectory}/src/Org/OrgBundle/Resources/public");
-        $this->filesystem->remove("{$this->distDirectory}/src/SensitiveWord/SensitiveWordBundle/Resources/public");
 
-        $this->filesystem->remove("{$this->distDirectory}/src/Topxia/WebBundle/Command");
-        $this->filesystem->mkdir("{$this->distDirectory}/src/Topxia/WebBundle/Command");
+        $this->filesystem->remove("{$this->distDirectory}/src/AppBundle/Command");
+        $this->filesystem->mkdir("{$this->distDirectory}/src/AppBundle/Command");
 
-        $this->filesystem->mirror("{$this->rootDirectory}/src/Topxia/WebBundle/Command/plugins-tpl", "{$this->distDirectory}/src/Topxia/WebBundle/Command/plugins-tpl");
-        $this->filesystem->mirror("{$this->rootDirectory}/src/Topxia/WebBundle/Command/Templates", "{$this->distDirectory}/src/Topxia/WebBundle/Command/Templates");
+        $this->filesystem->mirror("{$this->rootDirectory}/src/AppBundle/Command/plugins-tpl", "{$this->distDirectory}/src/AppBundle/Command/plugins-tpl");
+        $this->filesystem->mirror("{$this->rootDirectory}/src/AppBundle/Command/Templates", "{$this->distDirectory}/src/AppBundle/Command/Templates");
 
-        $this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/BaseCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/BaseCommand.php");
-        $this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/BuildPluginAppCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/BuildPluginAppCommand.php");
-        $this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/BuildThemeAppCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/BuildThemeAppCommand.php");
-        $this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/OldPluginRegisterCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/OldPluginRegisterCommand.php");
-        $this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/OldPluginCreateCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/OldPluginCreateCommand.php");
-        $this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/OldPluginRefreshCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/OldPluginRefreshCommand.php");
-        $this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/ThemeRegisterCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/ThemeRegisterCommand.php");
-        $this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/ResetPasswordCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/ResetPasswordCommand.php");
-        $this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/Fixtures/PluginAppUpgradeTemplate.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/Fixtures/PluginAppUpgradeTemplate.php");
-        $this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/InitWebsiteCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/InitWebsiteCommand.php");
+        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/BaseCommand.php", "{$this->distDirectory}/src/AppBundle/Command/BaseCommand.php");
+        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/BuildPluginAppCommand.php", "{$this->distDirectory}/src/AppBundle/Command/BuildPluginAppCommand.php");
+        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/BuildThemeAppCommand.php", "{$this->distDirectory}/src/AppBundle/Command/BuildThemeAppCommand.php");
+        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/OldPluginRegisterCommand.php", "{$this->distDirectory}/src/AppBundle/Command/OldPluginRegisterCommand.php");
+        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/OldPluginCreateCommand.php", "{$this->distDirectory}/src/AppBundle/Command/OldPluginCreateCommand.php");
+        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/OldPluginRefreshCommand.php", "{$this->distDirectory}/src/AppBundle/Command/OldPluginRefreshCommand.php");
+        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/ThemeRegisterCommand.php", "{$this->distDirectory}/src/AppBundle/Command/ThemeRegisterCommand.php");
+        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/ResetPasswordCommand.php", "{$this->distDirectory}/src/AppBundle/Command/ResetPasswordCommand.php");
+        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/Fixtures/PluginAppUpgradeTemplate.php", "{$this->distDirectory}/src/AppBundle/Command/Fixtures/PluginAppUpgradeTemplate.php");
+        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/InitWebsiteCommand.php", "{$this->distDirectory}/src/AppBundle/Command/InitWebsiteCommand.php");
+
+        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/CrontabCommand.php", "{$this->distDirectory}/src/AppBundle/Command/CrontabCommand.php");
+
         $finder = new Finder();
         $finder->directories()->in("{$this->distDirectory}/src/");
 
@@ -347,7 +349,7 @@ class BuildCommand extends BaseCommand
     {
         $this->output->writeln('build default blocks .');
 
-        $themeDir = realpath(__DIR__.'/../../../../web/themes/');
+        $themeDir = dirname(__DIR__.'/../../../../web/themes/');
         BlockToolkit::init("{$themeDir}/block.json", $this->getContainer());
         BlockToolkit::init("{$themeDir}/default/block.json", $this->getContainer());
         BlockToolkit::init("{$themeDir}/autumn/block.json", $this->getContainer());

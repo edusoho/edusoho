@@ -8,6 +8,8 @@ interface CourseService
 {
     public function getCourse($id);
 
+    public function hasCourseManagerRole($courseId = 0);
+
     public function findCoursesByIds($ids);
 
     public function findCoursesByCourseSetIds(array $setIds);
