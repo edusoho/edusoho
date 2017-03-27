@@ -181,7 +181,7 @@ class Swift_Mime_MimePartTest extends Swift_Mime_AbstractMimeEntityTest
             'Content-Type' => $cType, )),
             $this->_createEncoder(), $this->_createCache()
             );
-        $this->assertSame(false, $part->getDelSp());
+        $this->assertFalse($part->getDelSp());
     }
 
     public function testDelSpIsSetInHeader()
@@ -217,8 +217,6 @@ class Swift_Mime_MimePartTest extends Swift_Mime_AbstractMimeEntityTest
             ->setDelSp(true)
             );
     }
-
-    // -- Private helpers
 
     //abstract
     protected function _createEntity($headers, $encoder, $cache)

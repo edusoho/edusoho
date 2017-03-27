@@ -73,6 +73,7 @@ class LiveroomController extends BaseController
 
     protected function canTakeCourseReplay($courseId, $activityId, $replayId)
     {
+
         if (!$this->getCourseService()->canTakeCourse($courseId)) {
             return false;
         }

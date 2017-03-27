@@ -1,3 +1,20 @@
+2.8.1 / 2016-11-22
+==================
+
+* Updated the Twig integration to stop using APIs deprecated in Twig 1.27
+
+2.8.0 / 2015-12-28
+==================
+
+### New features
+
+* Added CleanCSS filter config
+
+### Bug fixes
+
+* Use the RequestStack to get the Request instead of the service
+* Fixed support for Symfony 3 resources
+
 2.7.1 / 2015-11-17
 ==================
 

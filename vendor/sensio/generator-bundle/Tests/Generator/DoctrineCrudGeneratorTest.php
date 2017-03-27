@@ -211,7 +211,7 @@ class DoctrineCrudGeneratorTest extends GeneratorTest
             '\'post\' => $post,',
             '\'posts\' => $posts,',
         );
-        if (method_exists('Symfony\Compoennt\Form\AbstractType', 'getBlockPrefix')) {
+        if (method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')) {
             // Symfony >= 2.8
             $strings[] = '$form = $this->createForm(\'Foo\BarBundle\Form\Blog\PostType\', $post);';
             $strings[] = '$editForm = $this->createForm(\'Foo\BarBundle\Form\Blog\PostType\', $post);';

@@ -77,7 +77,7 @@ Third party providers
 
 Some service providers are developed by the community. Those third-party
 providers are listed on `Silex' repository wiki
-<https://github.com/silexphp/Silex/wiki/Third-Party-ServiceProviders>`_.
+<https://github.com/silexphp/Silex/wiki/Third-Party-ServiceProviders-for-Silex-2.x>`_.
 
 You are encouraged to share yours.
 
@@ -131,6 +131,7 @@ Here is an example of such a provider::
     use Silex\Application;
     use Silex\Api\BootableProviderInterface;
     use Silex\Api\EventListenerProviderInterface;
+    use Symfony\Component\EventDispatcher\EventDispatcherInterface;
     use Symfony\Component\HttpKernel\KernelEvents;
     use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 

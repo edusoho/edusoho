@@ -11,6 +11,7 @@
 
 namespace Symfony\Bundle\TwigBundle\DependencyInjection\Compiler;
 
+use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -22,10 +23,29 @@ class ExtensionPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
+        if (!class_exists('Symfony\Component\Asset\Packages')) {
+            $container->removeDefinition('twig.extension.assets');
+        }
+
+        if (!class_exists('Symfony\Component\ExpressionLanguage\Expression')) {
+            $container->removeDefinition('twig.extension.expression');
+        }
+
+        if (!interface_exists('Symfony\Component\Routing\Generator\UrlGeneratorInterface')) {
+            $container->removeDefinition('twig.extension.routing');
+        }
+        if (!interface_exists('Symfony\Component\Translation\TranslatorInterface')) {
+            $container->removeDefinition('twig.extension.trans');
+        }
+
+        if (!class_exists('Symfony\Component\Yaml\Yaml')) {
+            $container->removeDefinition('twig.extension.yaml');
+        }
+
         if ($container->has('form.extension')) {
             $container->getDefinition('twig.extension.form')->addTag('twig.extension');
             $reflClass = new \ReflectionClass('Symfony\Bridge\Twig\Extension\FormExtension');
-            $container->getDefinition('twig.loader.filesystem')->addMethodCall('addPath', array(dirname(dirname($reflClass->getFileName())).'/Resources/views/Form'));
+            $container->getDefinition('twig.loader.native_filesystem')->addMethodCall('addPath', array(dirname(dirname($reflClass->getFileName())).'/Resources/views/Form'));
         }
 
         if ($container->has('fragment.handler')) {
@@ -68,12 +88,14 @@ class ExtensionPass implements CompilerPassInterface
             $container->getDefinition('twig.extension.debug')->addTag('twig.extension');
         }
 
-        if (!$container->has('templating')) {
-            $loader = $container->getDefinition('twig.loader.native_filesystem');
-            $loader->addTag('twig.loader');
-            $loader->setMethodCalls($container->getDefinition('twig.loader.filesystem')->getMethodCalls());
+        $twigLoader = $container->getDefinition('twig.loader.native_filesystem');
+        if ($container->has('templating')) {
+            $loader = $container->getDefinition('twig.loader.filesystem');
+            $loader->setMethodCalls(array_merge($twigLoader->getMethodCalls(), $loader->getMethodCalls()));
 
-            $container->setDefinition('twig.loader.filesystem', $loader);
+            $twigLoader->clearTag('twig.loader');
+        } else {
+            $container->setAlias('twig.loader.filesystem', new Alias('twig.loader.native_filesystem', false));
         }
 
         if ($container->has('assets.packages')) {

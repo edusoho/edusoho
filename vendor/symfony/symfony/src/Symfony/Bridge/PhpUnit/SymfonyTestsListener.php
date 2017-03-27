@@ -13,6 +13,10 @@ namespace Symfony\Bridge\PhpUnit;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 
+if (!class_exists('PHPUnit_Framework_BaseTestListener')) {
+    return;
+}
+
 /**
  * Collects and replays skipped tests.
  *
@@ -62,6 +66,12 @@ class SymfonyTestsListener extends \PHPUnit_Framework_BaseTestListener
         if (0 < $this->state) {
             file_put_contents($this->skippedFile, '<?php return '.var_export($this->isSkipped, true).';');
         }
+    }
+
+    public function globalListenerDisabled()
+    {
+        self::$globallyEnabled = false;
+        $this->state = -1;
     }
 
     public function startTestSuite(\PHPUnit_Framework_TestSuite $suite)
@@ -134,7 +144,7 @@ class SymfonyTestsListener extends \PHPUnit_Framework_BaseTestListener
     public function startTest(\PHPUnit_Framework_Test $test)
     {
         if (-2 < $this->state && $test instanceof \PHPUnit_Framework_TestCase) {
-            $groups = \PHPUnit_Util_Test::getGroups(get_class($test), $test->getName());
+            $groups = \PHPUnit_Util_Test::getGroups(get_class($test), $test->getName(false));
 
             if (in_array('time-sensitive', $groups, true)) {
                 ClockMock::register(get_class($test));
@@ -146,7 +156,7 @@ class SymfonyTestsListener extends \PHPUnit_Framework_BaseTestListener
     public function endTest(\PHPUnit_Framework_Test $test, $time)
     {
         if (-2 < $this->state && $test instanceof \PHPUnit_Framework_TestCase) {
-            $groups = \PHPUnit_Util_Test::getGroups(get_class($test), $test->getName());
+            $groups = \PHPUnit_Util_Test::getGroups(get_class($test), $test->getName(false));
 
             if (in_array('time-sensitive', $groups, true)) {
                 ClockMock::withClockMock(false);

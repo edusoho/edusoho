@@ -26,16 +26,16 @@ class AssetFactoryTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Assetic is not available.');
         }
 
-        $this->kernel = $this->getMock('Symfony\\Component\\HttpKernel\\KernelInterface');
-        $this->container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
-        $this->parameterBag = $this->getMock('Symfony\\Component\\DependencyInjection\\ParameterBag\\ParameterBagInterface');
+        $this->kernel = $this->getMockBuilder('Symfony\\Component\\HttpKernel\\KernelInterface')->getMock();
+        $this->container = $this->getMockBuilder('Symfony\\Component\\DependencyInjection\\ContainerInterface')->getMock();
+        $this->parameterBag = $this->getMockBuilder('Symfony\\Component\\DependencyInjection\\ParameterBag\\ParameterBagInterface')->getMock();
         $this->factory = new AssetFactory($this->kernel, $this->container, $this->parameterBag, '/path/to/web');
     }
 
     public function testBundleNotation()
     {
         $input = '@MyBundle/Resources/css/main.css';
-        $bundle = $this->getMock('Symfony\\Component\\HttpKernel\\Bundle\\BundleInterface');
+        $bundle = $this->getMockBuilder('Symfony\\Component\\HttpKernel\\Bundle\\BundleInterface')->getMock();
 
         $this->parameterBag->expects($this->once())
             ->method('resolveValue')
@@ -64,7 +64,7 @@ class AssetFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testBundleGlobNotation($input)
     {
-        $bundle = $this->getMock('Symfony\\Component\\HttpKernel\\Bundle\\BundleInterface');
+        $bundle = $this->getMockBuilder('Symfony\\Component\\HttpKernel\\Bundle\\BundleInterface')->getMock();
 
         $this->parameterBag->expects($this->once())
             ->method('resolveValue')
