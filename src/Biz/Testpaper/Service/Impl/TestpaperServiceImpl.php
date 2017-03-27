@@ -333,7 +333,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         $total = array();
 
-        if (empty($testpaper['type'] == 'homework')) {
+        if ($testpaper['type'] == 'homework') {
             return $total;
         }
 
