@@ -2,12 +2,12 @@
 
 namespace Topxia\Api\Resource;
 
-use AppBundle\Common\ArrayToolkit;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\MemberService;
 use Silex\Application;
+use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
 
 class MeChatroomes extends BaseResource
@@ -42,7 +42,7 @@ class MeChatroomes extends BaseResource
                 'type' => 'classroom',
                 'id' => $classroom['id'],
                 'title' => $classroom['title'],
-                'picture' => $this->getFileUrl($classroom['smallPicture']),
+                'picture' => $this->getFileUrl($classroom['smallPicture'], 'classroom.png'),
             );
         }
 
@@ -75,14 +75,14 @@ class MeChatroomes extends BaseResource
             if ($course['isDefault']) {
                 $title = $set['title'];
             } else {
-                $title = $set['title'] . '-' . $course['title'];
+                $title = $set['title'].'-'.$course['title'];
             }
             $filePath = is_null($set['cover']) ? '' : ArrayToolkit::get($set['cover'], 'small', '');
             $chatrooms[] = array(
                 'type' => 'course',
                 'id' => $course['id'],
                 'title' => $title,
-                'picture' => $this->getFileUrl($filePath),
+                'picture' => $this->getFileUrl($filePath, 'classroom.png'),
             );
         }
 
