@@ -61,6 +61,7 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
                 'createdTime < :startTimeLessThan',
                 'updatedTime >= :updatedTime_GE',
             ),
+            'cache' => 'table'
         );
     }
 

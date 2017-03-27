@@ -39,8 +39,6 @@ twig:
         "%kernel.root_dir%/../web/themes": theme
         "%kernel.root_dir%/../plugins": plugins
         "%kernel.root_dir%/../" : root
-    globals:
-        disabled_features: "%disabled_features%"
 
 # Swiftmailer Configuration
 # swiftmailer:
@@ -64,7 +62,6 @@ parameters:
          db_user_id_col: sess_user_id
 
     topxia.disk.local_directory: "%kernel.root_dir%/data/udisk"
-    topxia.disk.cloud_video_fop: "avthumb/mp4/r/30/vb/512k/vcodec/libx264/ar/22050/ab/64k/acodec/libfaac"
     topxia.disk.upgrade_dir: "%kernel.root_dir%/data/upgrade"
     topxia.disk.update_dir: "%kernel.root_dir%/data/upgrade"
     topxia.disk.backup_dir: "%kernel.root_dir%/data/backup"
@@ -95,20 +92,14 @@ services:
         class:     AppBundle\Handler\UserPdoSessionHandler
         arguments: ['@session.handler.pdo.connection', '%session.handler.pdo.options%', '@security.token_storage']
 
-    session.handler.redis.factory:
-        class: Biz\Common\Redis\RedisFactory
-        factory: 'Biz\Common\Redis\RedisFactory:instance'
-        arguments: ['@service_container']
-
     session.handler.redis:
         class:     AppBundle\Handler\RedisSessionHandler
-        arguments: ['@session.handler.redis.factory', '@security.token_storage']
+        arguments: ['@biz', '@security.token_storage']
 
     session.handler.factory:
         class: SessionHandlerInterface
         factory: ['Biz\Common\SessionHandlerFactory', getSessionHandler]
-        arguments:
-            - "@service_container"
+        arguments: ['@biz', '@service_container']
 
     topxia.twig.file_cache:
         class: Biz\Common\FilesystemCache

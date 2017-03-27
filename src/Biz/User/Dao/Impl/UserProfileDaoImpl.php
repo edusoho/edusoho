@@ -106,6 +106,7 @@ class UserProfileDaoImpl extends GeneralDaoImpl implements UserProfileDao
                 'mobile <> :mobileNotEqual',
                 'qq LIKE :qq',
             ),
+            'cache' => 'table'
         );
     }
 }

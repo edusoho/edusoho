@@ -24,6 +24,7 @@ class RecommendedCourseDaoImpl extends GeneralDaoImpl implements RecommendedCour
                 'createdTime >= :startTimeGreaterThan',
                 'createdTime < :startTimeLessThan',
             ),
+            'cache' => 'table'
         );
     }
 

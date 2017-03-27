@@ -11,7 +11,9 @@ class TagGroupTagDaoImpl extends GeneralDaoImpl implements TagGroupTagDao
 
     public function declares()
     {
-        // TODO: Implement declares() method.
+        return array(
+            'cache' => 'table'
+        );
     }
 
     public function findTagRelationsByTagIds($tagIds)

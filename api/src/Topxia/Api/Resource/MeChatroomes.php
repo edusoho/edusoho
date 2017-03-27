@@ -82,7 +82,7 @@ class MeChatroomes extends BaseResource
                 'type' => 'course',
                 'id' => $course['id'],
                 'title' => $title,
-                'picture' => $this->getFileUrl($filePath, 'classroom.png'),
+                'picture' => $this->getFileUrl($filePath, 'course.png'),
             );
         }
 
