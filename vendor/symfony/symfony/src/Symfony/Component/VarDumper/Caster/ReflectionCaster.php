@@ -76,7 +76,20 @@ class ReflectionCaster
 
     public static function castGenerator(\Generator $c, array $a, Stub $stub, $isNested)
     {
-        return class_exists('ReflectionGenerator', false) ? self::castReflectionGenerator(new \ReflectionGenerator($c), $a, $stub, $isNested) : $a;
+        if (!class_exists('ReflectionGenerator', false)) {
+            return $a;
+        }
+
+        // Cannot create ReflectionGenerator based on a terminated Generator
+        try {
+            $reflectionGenerator = new \ReflectionGenerator($c);
+        } catch (\Exception $e) {
+            $a[Caster::PREFIX_VIRTUAL.'closed'] = true;
+
+            return $a;
+        }
+
+        return self::castReflectionGenerator($reflectionGenerator, $a, $stub, $isNested);
     }
 
     public static function castType(\ReflectionType $c, array $a, Stub $stub, $isNested)
@@ -84,7 +97,7 @@ class ReflectionCaster
         $prefix = Caster::PREFIX_VIRTUAL;
 
         $a += array(
-            $prefix.'name' => method_exists('ReflectionType', 'getName') ? $c->getName() : $c->__toString(),
+            $prefix.'name' => $c instanceof \ReflectionNamedType ? $c->getName() : $c->__toString(),
             $prefix.'allowsNull' => $c->allowsNull(),
             $prefix.'isBuiltin' => $c->isBuiltin(),
         );
@@ -99,30 +112,32 @@ class ReflectionCaster
         if ($c->getThis()) {
             $a[$prefix.'this'] = new CutStub($c->getThis());
         }
-        $x = $c->getFunction();
+        $function = $c->getFunction();
         $frame = array(
-            'class' => isset($x->class) ? $x->class : null,
-            'type' => isset($x->class) ? ($x->isStatic() ? '::' : '->') : null,
-            'function' => $x->name,
+            'class' => isset($function->class) ? $function->class : null,
+            'type' => isset($function->class) ? ($function->isStatic() ? '::' : '->') : null,
+            'function' => $function->name,
             'file' => $c->getExecutingFile(),
             'line' => $c->getExecutingLine(),
         );
         if ($trace = $c->getTrace(DEBUG_BACKTRACE_IGNORE_ARGS)) {
-            $x = new \ReflectionGenerator($c->getExecutingGenerator());
+            $function = new \ReflectionGenerator($c->getExecutingGenerator());
             array_unshift($trace, array(
                 'function' => 'yield',
-                'file' => $x->getExecutingFile(),
-                'line' => $x->getExecutingLine() - 1,
+                'file' => $function->getExecutingFile(),
+                'line' => $function->getExecutingLine() - 1,
             ));
             $trace[] = $frame;
             $a[$prefix.'trace'] = new TraceStub($trace, false, 0, -1, -1);
         } else {
-            $x = new FrameStub($frame, false, true);
-            $x = ExceptionCaster::castFrameStub($x, array(), $x, true);
+            $function = new FrameStub($frame, false, true);
+            $function = ExceptionCaster::castFrameStub($function, array(), $function, true);
             $a[$prefix.'executing'] = new EnumStub(array(
-                $frame['class'].$frame['type'].$frame['function'].'()' => $x[$prefix.'src'],
+                $frame['class'].$frame['type'].$frame['function'].'()' => $function[$prefix.'src'],
             ));
         }
+
+        $a[Caster::PREFIX_VIRTUAL.'closed'] = false;
 
         return $a;
     }
@@ -168,7 +183,9 @@ class ReflectionCaster
         ));
 
         if (isset($a[$prefix.'returnType'])) {
-            $a[$prefix.'returnType'] = method_exists('ReflectionType', 'getName') ? $a[$prefix.'returnType']->getName() : $a[$prefix.'returnType']->__toString();
+            $v = $a[$prefix.'returnType'];
+            $v = $v instanceof \ReflectionNamedType ? $v->getName() : $v->__toString();
+            $a[$prefix.'returnType'] = $a[$prefix.'returnType']->allowsNull() ? '?'.$v : $v;
         }
         if (isset($a[$prefix.'this'])) {
             $a[$prefix.'this'] = new CutStub($a[$prefix.'this']);
@@ -176,11 +193,11 @@ class ReflectionCaster
 
         foreach ($c->getParameters() as $v) {
             $k = '$'.$v->name;
-            if ($v->isPassedByReference()) {
-                $k = '&'.$k;
-            }
             if (method_exists($v, 'isVariadic') && $v->isVariadic()) {
                 $k = '...'.$k;
+            }
+            if ($v->isPassedByReference()) {
+                $k = '&'.$k;
             }
             $a[$prefix.'parameters'][$k] = $v;
         }
@@ -227,21 +244,12 @@ class ReflectionCaster
             'allowsNull' => 'allowsNull',
         ));
 
-        try {
-            if (method_exists($c, 'hasType')) {
-                if ($c->hasType()) {
-                    $a[$prefix.'typeHint'] = method_exists('ReflectionType', 'getName') ? $c->getType()->getName() : $c->getType()->__toString();
-                }
-            } else {
-                $v = explode(' ', $c->__toString(), 6);
-                if (isset($v[5]) && 0 === strspn($v[4], '.&$')) {
-                    $a[$prefix.'typeHint'] = $v[4];
-                }
+        if (method_exists($c, 'getType')) {
+            if ($v = $c->getType()) {
+                $a[$prefix.'typeHint'] = $v instanceof \ReflectionNamedType ? $v->getName() : $v->__toString();
             }
-        } catch (\ReflectionException $e) {
-            if (preg_match('/^Class ([^ ]++) does not exist$/', $e->getMessage(), $m)) {
-                $a[$prefix.'typeHint'] = $m[1];
-            }
+        } elseif (preg_match('/^(?:[^ ]++ ){4}([a-zA-Z_\x7F-\xFF][^ ]++)/', $c, $v)) {
+            $a[$prefix.'typeHint'] = $v[1];
         }
         if (!isset($a[$prefix.'typeHint'])) {
             unset($a[$prefix.'allowsNull']);
@@ -256,7 +264,7 @@ class ReflectionCaster
                 unset($a[$prefix.'allowsNull']);
             }
         } catch (\ReflectionException $e) {
-            if (isset($a[$prefix.'typeHint']) && $c->allowsNull() && !method_exists('ReflectionType', 'getName')) {
+            if (isset($a[$prefix.'typeHint']) && $c->allowsNull() && !class_exists('ReflectionNamedType', false)) {
                 $a[$prefix.'default'] = null;
                 unset($a[$prefix.'allowsNull']);
             }

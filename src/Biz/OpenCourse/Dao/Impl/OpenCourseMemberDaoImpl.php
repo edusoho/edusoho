@@ -27,7 +27,7 @@ class OpenCourseMemberDaoImpl extends GeneralDaoImpl implements OpenCourseMember
                 'userId IN (:userIds)',
                 'mobile = :mobile',
             ),
-            'cache' => 'table'
+            'cache' => 'table',
         );
     }
 

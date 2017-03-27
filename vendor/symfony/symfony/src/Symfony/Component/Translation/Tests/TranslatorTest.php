@@ -11,12 +11,13 @@
 
 namespace Symfony\Component\Translation\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\MessageSelector;
 use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\MessageCatalogue;
 
-class TranslatorTest extends \PHPUnit_Framework_TestCase
+class TranslatorTest extends TestCase
 {
     /**
      * @dataProvider      getInvalidLocalesTests
@@ -271,6 +272,16 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
         $translator->addResource('array', array('foo' => 'foofoo'), 'en');
 
         $translator->trans('foo');
+    }
+
+    public function testNestedFallbackCatalogueWhenUsingMultipleLocales()
+    {
+        $translator = new Translator('fr');
+        $translator->setFallbackLocales(array('ru', 'en'));
+
+        $translator->getCatalogue('fr');
+
+        $this->assertNotNull($translator->getCatalogue('ru')->getFallbackCatalogue());
     }
 
     public function testFallbackCatalogueResources()

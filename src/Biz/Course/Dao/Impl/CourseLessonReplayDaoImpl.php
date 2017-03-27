@@ -21,7 +21,7 @@ class CourseLessonReplayDaoImpl extends GeneralDaoImpl implements CourseLessonRe
                 'copyId = :copyId',
                 'type = :type',
             ),
-            'cache' => 'table'
+            'cache' => 'table',
         );
     }
 

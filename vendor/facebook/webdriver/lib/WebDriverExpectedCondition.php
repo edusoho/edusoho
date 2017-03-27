@@ -34,17 +34,17 @@ class WebDriverExpectedCondition
      */
     private $apply;
 
+    protected function __construct(callable $apply)
+    {
+        $this->apply = $apply;
+    }
+
     /**
      * @return callable A callable function to be executed by WebDriverWait
      */
     public function getApply()
     {
         return $this->apply;
-    }
-
-    protected function __construct(callable $apply)
-    {
-        $this->apply = $apply;
     }
 
     /**
@@ -72,7 +72,7 @@ class WebDriverExpectedCondition
     {
         return new static(
             function (WebDriver $driver) use ($title) {
-                return strpos($driver->getTitle(), $title) !== false;
+                return mb_strpos($driver->getTitle(), $title) !== false;
             }
         );
     }
@@ -118,7 +118,7 @@ class WebDriverExpectedCondition
     {
         return new static(
             function (WebDriver $driver) use ($url) {
-                return strpos($driver->getCurrentURL(), $url) !== false;
+                return mb_strpos($driver->getCurrentURL(), $url) !== false;
             }
         );
     }
@@ -240,7 +240,7 @@ class WebDriverExpectedCondition
                 try {
                     $element_text = $driver->findElement($by)->getText();
 
-                    return strpos($element_text, $text) !== false;
+                    return mb_strpos($element_text, $text) !== false;
                 } catch (StaleElementReferenceException $e) {
                     return null;
                 }
@@ -292,18 +292,32 @@ class WebDriverExpectedCondition
     /**
      * An expectation for checking if the given text is present in the specified elements value attribute.
      *
+     * @codeCoverageIgnore
+     * @deprecated Use WebDriverExpectedCondition::elementValueContains() instead
      * @param WebDriverBy $by The locator used to find the element.
      * @param string $text The text to be presented in the element value.
      * @return WebDriverExpectedCondition<bool> Condition returns whether the text is present in value attribute.
      */
     public static function textToBePresentInElementValue(WebDriverBy $by, $text)
     {
+        return self::elementValueContains($by, $text);
+    }
+
+    /**
+     * An expectation for checking if the given text is present in the specified elements value attribute.
+     *
+     * @param WebDriverBy $by The locator used to find the element.
+     * @param string $text The text to be presented in the element value.
+     * @return WebDriverExpectedCondition<bool> Condition returns whether the text is present in value attribute.
+     */
+    public static function elementValueContains(WebDriverBy $by, $text)
+    {
         return new static(
             function (WebDriver $driver) use ($by, $text) {
                 try {
                     $element_text = $driver->findElement($by)->getAttribute('value');
 
-                    return strpos($element_text, $text) !== false;
+                    return mb_strpos($element_text, $text) !== false;
                 } catch (StaleElementReferenceException $e) {
                     return null;
                 }

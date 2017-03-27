@@ -1,6 +1,8 @@
 # php-webdriver – Selenium WebDriver bindings for PHP
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/facebook/webdriver.svg?style=flat-square)](https://packagist.org/packages/facebook/webdriver)
+[![Travis Build](https://img.shields.io/travis/facebook/php-webdriver/community.svg?style=flat-square)](https://travis-ci.org/facebook/php-webdriver)
+[![Sauce Test Status](https://saucelabs.com/buildstatus/php-webdriver)](https://saucelabs.com/u/php-webdriver)
 [![Total Downloads](https://img.shields.io/packagist/dt/facebook/webdriver.svg?style=flat-square)](https://packagist.org/packages/facebook/webdriver)
 [![License](https://img.shields.io/packagist/l/facebook/webdriver.svg?style=flat-square)](https://packagist.org/packages/facebook/webdriver)
 
@@ -17,7 +19,7 @@ The concepts of this library are very similar to the "official" Java, .NET, Pyth
 **This is new version of PHP client, rewritten from scratch starting 2013.**
 Using the old version? Check out [Adam Goucher's fork](https://github.com/Element-34/php-webdriver) of it.
 
-Looking for API documentation of php-webdriver? See http://facebook.github.io/php-webdriver/
+Looking for API documentation of php-webdriver? See [https://facebook.github.io/php-webdriver/](https://facebook.github.io/php-webdriver/latest/)
 
 Any complaint, question, idea? You can post it on the user group https://www.facebook.com/groups/phpwebdriver/.
 
@@ -77,9 +79,18 @@ For latest changes see [CHANGELOG.md](CHANGELOG.md) file.
 
 ## More information
 
-Check out the Selenium docs and wiki at http://docs.seleniumhq.org/docs/ and https://code.google.com/p/selenium/wiki
+Some how-tos are provided right here in [our GitHub wiki](https://github.com/facebook/php-webdriver/wiki).
 
-Learn how to integrate it with PHPUnit [Blogpost](http://codeception.com/11-12-2013/working-with-phpunit-and-selenium-webdriver.html) | [Demo Project](https://github.com/DavertMik/php-webdriver-demo)
+You may also want to check out the Selenium [docs](http://docs.seleniumhq.org/docs/) and [wiki](https://github.com/SeleniumHQ/selenium/wiki).
+
+## Testing framework integration
+
+To take advantage of automatized testing you will most probably want to integrate php-webdriver to your testing framework.
+There are some project already providing this:
+
+- [Steward](https://github.com/lmc-eu/steward) integrates php-webdriver directly to [PHPUnit](https://phpunit.de/), also providers parallelization.
+- [Codeception](http://codeception.com) testing framework provides BDD-layer on top of php-webdriver in its [WebDriver module](http://codeception.com/docs/modules/WebDriver).
+- You can also check out this [blogpost](http://codeception.com/11-12-2013/working-with-phpunit-and-selenium-webdriver.html) + [demo project](https://github.com/DavertMik/php-webdriver-demo), describing simple [PHPUnit](https://phpunit.de/) integration.
 
 ## Support
 

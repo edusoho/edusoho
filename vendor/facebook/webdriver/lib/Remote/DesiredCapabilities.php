@@ -123,6 +123,8 @@ class DesiredCapabilities implements WebDriverCapabilities
     }
 
     /**
+     * @todo Remove in next major release (BC)
+     * @deprecated All browsers are always JS enabled except HtmlUnit and it's not meaningful to disable JS execution.
      * @return bool Whether javascript is enabled.
      */
     public function isJavascriptEnabled()
@@ -136,7 +138,7 @@ class DesiredCapabilities implements WebDriverCapabilities
      * @param bool $enabled
      * @throws Exception
      * @return DesiredCapabilities
-     * @see https://code.google.com/p/selenium/wiki/DesiredCapabilities#Read-write_capabilities
+     * @see https://github.com/SeleniumHQ/selenium/wiki/DesiredCapabilities#read-write-capabilities
      */
     public function setJavascriptEnabled($enabled)
     {
@@ -144,7 +146,7 @@ class DesiredCapabilities implements WebDriverCapabilities
         if ($browser && $browser !== WebDriverBrowserType::HTMLUNIT) {
             throw new Exception(
                 'isJavascriptEnable() is a htmlunit-only option. ' .
-                'See https://code.google.com/p/selenium/wiki/DesiredCapabilities#Read-write_capabilities.'
+                'See https://github.com/SeleniumHQ/selenium/wiki/DesiredCapabilities#read-write-capabilities.'
             );
         }
 
@@ -173,30 +175,6 @@ class DesiredCapabilities implements WebDriverCapabilities
         }
 
         return $this->capabilities;
-    }
-
-    /**
-     * @param string $key
-     * @param mixed $value
-     * @return DesiredCapabilities
-     */
-    private function set($key, $value)
-    {
-        $this->capabilities[$key] = $value;
-
-        return $this;
-    }
-
-    /**
-     * @param string $key
-     * @param mixed $default
-     * @return mixed
-     */
-    private function get($key, $default = null)
-    {
-        return isset($this->capabilities[$key])
-            ? $this->capabilities[$key]
-            : $default;
     }
 
     /**
@@ -338,5 +316,29 @@ class DesiredCapabilities implements WebDriverCapabilities
             WebDriverCapabilityType::BROWSER_NAME => WebDriverBrowserType::PHANTOMJS,
             WebDriverCapabilityType::PLATFORM => WebDriverPlatform::ANY,
         ]);
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     * @return DesiredCapabilities
+     */
+    private function set($key, $value)
+    {
+        $this->capabilities[$key] = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
+     */
+    private function get($key, $default = null)
+    {
+        return isset($this->capabilities[$key])
+            ? $this->capabilities[$key]
+            : $default;
     }
 }

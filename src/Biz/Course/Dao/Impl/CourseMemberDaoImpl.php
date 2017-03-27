@@ -374,6 +374,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
             'orderbys' => array(
                 'createdTime',
                 'lastLearnTime',
+                'classroomId',
                 'id',
                 'updatedTime',
                 'lastViewTime',
@@ -398,7 +399,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'lastViewTime >= lastViewTime_GE',
                 'lastLearnTime >= :lastLearnTimeGreaterThan',
             ),
-            'cache' => 'table'
+            'cache' => 'table',
         );
     }
 
