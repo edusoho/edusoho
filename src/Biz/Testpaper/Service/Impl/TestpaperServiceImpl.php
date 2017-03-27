@@ -333,6 +333,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         $total = array();
 
+        if (empty($testpaper['type'] == 'homework')) {
+            return $total;
+        }
+
         foreach ($testpaper['metas']['counts'] as $type => $count) {
             $total[$type]['score'] = empty($items[$type]) ? 0 : array_sum(ArrayToolkit::column($items[$type], 'score'));
             $total[$type]['number'] = empty($items[$type]) ? 0 : count($items[$type]);
