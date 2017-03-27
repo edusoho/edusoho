@@ -200,7 +200,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $course['smallPicture'] = isset($course['cover']['small']) ? $this->getFileUrl($course['cover']['small']) : '';
         $course['middlePicture'] = isset($course['cover']['middle']) ? $this->getFileUrl($course['cover']['middle']) : '';
         $course['largePicture'] = isset($course['cover']['large']) ? $this->getFileUrl($course['cover']['large']) : '';
-        $course['about'] = $this->convertHtml($course['summary']);
+        $course['about'] = isset($course['summary']) ? $this->convertHtml($course['summary']) : '';
 
         return $course;
     }
@@ -494,7 +494,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         if (strpos($eventName, 'course') === 0) {
             $thread['targetType'] = 'course';
             $thread['targetId'] = $thread['courseId'];
-            $thread['relationId'] = $thread['lessonId'];
+            $thread['relationId'] = $thread['taskId'];
         } elseif (strpos($eventName, 'group') === 0) {
             $thread['targetType'] = 'group';
             $thread['targetId'] = $thread['groupId'];
