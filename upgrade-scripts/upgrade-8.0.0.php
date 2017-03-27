@@ -39,7 +39,6 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getStep($index)
     {
       $oldSteps = array(
-        'c2CourseTaskMigrate',
         'c2Activity',
         'c2VideoActivity',
         'c2TextActivity',
@@ -64,6 +63,10 @@ class EduSohoUpgrade extends AbstractUpdater
       $steps = array(
         'CourseSetMigrate',
         'CourseMigrate',
+        'Lesson2CourseTaskMigrate',
+        'Lesson2CourseChapterMigrate',
+        'CourseTaskRelaCourseChapter',
+        // TODO
         'AfterAllCourseTaskMigrate'
       );
 
@@ -541,7 +544,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         //查找有复习资料的记录
         $downloadMaterials = $this->getConnection()->fetchAll(
-            " SELECT *  FROM course_material WHERE source ='coursematerial' AND lessonid >0"
+            "SELECT *  FROM course_material WHERE source ='coursematerial' AND lessonid >0"
         );
 
         $downloadMaterials = \AppBundle\Common\ArrayToolkit::group($downloadMaterials, 'lessonId');
