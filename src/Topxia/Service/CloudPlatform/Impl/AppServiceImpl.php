@@ -243,8 +243,8 @@ class AppServiceImpl extends BaseService implements AppService
             $errors[] = $this->getKernel()->trans('src目录无写权限');
         }
 
-        if (!is_writeable("{$rootDirectory}/vendor2")) {
-            $errors[] = $this->getKernel()->trans('vendor2目录无写权限');
+        if (!is_writeable("{$rootDirectory}/vendor")) {
+            $errors[] = $this->getKernel()->trans('vendor目录无写权限');
         }
 
         if (!is_writeable("{$rootDirectory}/plugins")) {
@@ -290,9 +290,8 @@ class AppServiceImpl extends BaseService implements AppService
         try {
             $package = $this->getCenterPackageInfo($packageId);
             // $errors  = $this->checkPluginDepend($package);
-
             if (!version_compare(System::VERSION, $package['edusohoMinVersion'], '>=')) {
-                $errors[] = $this->trans('EduSoho版本需大于等于%packageEdusohoMinVersion%，您的版本为%systemVersion%，请先升级EduSoho', array('%packageEdusohoMinVersion%' => $package['edusohoMinVersion'], '%systemVersion%' => System::VERSION));
+                $errors[] = $this->getKernel()->trans('EduSoho版本需大于等于%packageEdusohoMinVersion%，您的版本为%systemVersion%，请先升级EduSoho', array('%packageEdusohoMinVersion%' => $package['edusohoMinVersion'], '%systemVersion%' => System::VERSION));
             }
         } catch (\Exception $e) {
             $errors[] = $e->getMessage();
@@ -654,6 +653,11 @@ class AppServiceImpl extends BaseService implements AppService
         return $result;
     }
 
+    public function getAppStatusByCode($code)
+    {
+     return $this->createAppClient()->getAppStatusByCode($code);
+    }
+
     protected function _replaceFileForPackageUpdate($package, $packageDir)
     {
         $filesystem = new Filesystem();
@@ -665,12 +669,19 @@ class AppServiceImpl extends BaseService implements AppService
 
     protected function _execScriptForPackageUpdate($package, $packageDir, $type, $index = 0)
     {
+        $protocol = $this->tryGetProtocolFromFile($packageDir);
+
         if (!file_exists($packageDir . '/Upgrade.php')) {
             return;
         }
 
         include_once $packageDir . '/Upgrade.php';
-        $upgrade = new \EduSohoUpgrade($this->getKernel());
+
+        if ($protocol == 3) {
+            $upgrade = new \EduSohoUpgrade($this->getKernel()->getBiz());
+        } else {
+            $upgrade = new \EduSohoUpgrade($this->getKernel());
+        }
 
         if (method_exists($upgrade, 'setUpgradeType')) {
             $upgrade->setUpgradeType($type, $package['toVersion']);
@@ -761,6 +772,17 @@ class AppServiceImpl extends BaseService implements AppService
         return realpath($this->getKernel()->getParameter('kernel.root_dir') . '/../' . 'plugins');
     }
 
+    private function tryGetProtocolFromFile($packageDir)
+    {
+        $protocol = 2;
+        $pluginJsonFile = $packageDir . '/plugin.json';
+        if(file_exists($pluginJsonFile)){
+            $meta = json_decode(file_get_contents($pluginJsonFile), true);
+            $protocol = !empty($meta['protocol']) ? intval($meta['protocol']) : 2;
+        }
+        return $protocol ;
+    }
+
     protected function getSystemRootDirectory()
     {
         return dirname($this->getKernel()->getParameter('kernel.root_dir'));
@@ -818,6 +840,8 @@ class AppServiceImpl extends BaseService implements AppService
             $newApp['type'] = 'theme';
         } else {
             $newApp['type'] = 'plugin';
+            $protocol = $this->tryGetProtocolFromFile($packageDir);
+            $newApp['protocol'] = $protocol;
         }
 
         $app = $this->getAppDao()->getAppByCode($package['product']['code']);

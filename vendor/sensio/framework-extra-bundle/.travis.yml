@@ -1,0 +1,33 @@
+language: php
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
+  - hhvm
+
+matrix:
+  include:
+    - php: 5.3
+      env: deps=low
+  fast_finish: true
+
+env:
+  global:
+    - deps=no
+
+before_install:
+  - travis_retry composer self-update
+
+install:
+  - if [[ "$TRAVIS_PHP_VERSION" != "5.3" ]] && [[ "$TRAVIS_PHP_VERSION" != "5.4" ]]; then composer require --no-update symfony/psr-http-message-bridge zendframework/zend-diactoros; fi;
+  - if [ "$deps" = "no" ]; then composer --prefer-source install; fi;
+  - if [ "$deps" = "low" ]; then composer --prefer-source --prefer-lowest --prefer-stable update; fi;

@@ -1,0 +1,20 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_edu_cloud_sms_overview' %}
+{% block tabs %}{% endblock %}
+{% block main %}
+<div class="panel panel-default notice-panel">
+  <div class="panel-body">
+    {{ web_macro.flash_messages() }}
+    <i class="es-icon es-icon-infooutline text-primary"></i>
+    <div class="text-md mbl">尚未启用云短信</div>
+    {% if overview.isBuy == false %}
+      <div class="color-gray notice-desc">尚未购买云短信，不能启用，<a href="{{path('admin_cloud_buy', {type:'sms'})}}" target="_blank">立即购买</a> 或 <a href="{{path('admin_cloud_show', {type:'sms'})}}" target="_blank">了解详情</a>。</div>
+    {% endif %}
+    <form class="form-horizontal" role="form" method="post" action="{{ path('admin_edu_cloud_sms_status') }}">
+      <button type="submit" class="btn btn-primary btn-lg notice-btn" {% if overview.isBuy == false %}disabled="disabled"{% endif %} name="sms-open">立即启用</button>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  </div>
+</div>
+{% endblock %}

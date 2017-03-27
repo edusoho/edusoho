@@ -1,21 +1,26 @@
 <?php
 namespace Topxia\WebBundle\Twig\Extension;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\NumberToolkit;
+use Topxia\WebBundle\Util\CdnUrl;
 use Topxia\Common\ConvertIpToolkit;
 use Topxia\Common\ExtensionManager;
-use Topxia\Common\PluginVersionToolkit;
-use Topxia\Service\CloudPlatform\Impl\AppServiceImpl;
 use Topxia\WebBundle\Util\UploadToken;
+use Topxia\Common\PluginVersionToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Component\ShareSdk\WeixinShare;
 use Topxia\WebBundle\Util\CategoryBuilder;
 use Topxia\Service\Util\HTMLPurifierFactory;
+use Topxia\Common\DeviceToolkit;
 
 class WebExtension extends \Twig_Extension
 {
+    /**
+     * @var ContainerInterface
+     */
     protected $container;
 
     protected $pageScripts;
@@ -57,7 +62,8 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('space2nbsp', array($this, 'spaceToNbsp')),
             new \Twig_SimpleFilter('number_to_human', array($this, 'numberFilter')),
             new \Twig_SimpleFilter('array_column', array($this, 'arrayColumn')),
-            new \Twig_SimpleFilter('rename_locale', array($this, 'renameLocale'))
+            new \Twig_SimpleFilter('rename_locale', array($this, 'renameLocale')),
+            new \Twig_SimpleFilter('cdn', array($this, 'cdn'))
         );
     }
 
@@ -72,7 +78,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('default_path', array($this, 'getDefaultPath')),
             // file_url 即将废弃，不要再使用
             new \Twig_SimpleFunction('file_url', array($this, 'getFileUrl')),
-
+            // system_default_path，即将废弃，不要再使用
             new \Twig_SimpleFunction('system_default_path', array($this, 'getSystemDefaultPath')),
             new \Twig_SimpleFunction('fileurl', array($this, 'getFurl')),
             new \Twig_SimpleFunction('filepath', array($this, 'getFpath')),
@@ -82,9 +88,6 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('set_price', array($this, 'getSetPrice')),
             new \Twig_SimpleFunction('percent', array($this, 'calculatePercent')),
             new \Twig_SimpleFunction('category_choices', array($this, 'getCategoryChoices')),
-            new \Twig_SimpleFunction('dict', array($this, 'getDict')),
-            // dict_text 已经废弃，不要再使用,请使用macro方式
-            new \Twig_SimpleFunction('dict_text', array($this, 'getDictText'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('upload_max_filesize', array($this, 'getUploadMaxFilesize')),
             new \Twig_SimpleFunction('js_paths', array($this, 'getJsPaths')),
             new \Twig_SimpleFunction('is_plugin_installed', array($this, 'isPluginInstalled')),
@@ -120,8 +123,34 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('route_exsit', array($this, 'routeExists')),
             new \Twig_SimpleFunction('is_micro_messenger', array($this, 'isMicroMessenger')),
             new \Twig_SimpleFunction('wx_js_sdk_config', array($this, 'weixinConfig')),
-            new \Twig_SimpleFunction('plugin_update_notify', array($this, 'pluginUpdateNotify'))
+            new \Twig_SimpleFunction('plugin_update_notify', array($this, 'pluginUpdateNotify')),
+            new \Twig_SimpleFunction('tag_equal', array($this, 'tag_equal')),
+            new \Twig_SimpleFunction('is_show_mobile_page', array($this, 'isShowMobilePage')),
+            new \Twig_SimpleFunction('cdn', array($this, 'getCdn')),
+            new \Twig_SimpleFunction('can_try_look', array($this, 'canTryLook')),
+            new \Twig_SimpleFunction('is_ES_copyright', array($this, 'isESCopyright'))
         );
+    }
+    public function isESCopyright()
+    {
+        $copyright = $this->getSetting('copyright');
+        $request    = $this->container->get('request');
+        $host          = $request->getHttpHost();
+        if ($copyright) {
+            $result = !( isset($copyright['owned']) && isset($copyright['thirdCopyright']) && $copyright['thirdCopyright'] != 2 && isset($copyright['licenseDomains'])  && in_array($host,  explode(';', $copyright['licenseDomains'])) || (isset($copyright['thirdCopyright']) && $copyright['thirdCopyright'] == 2) );
+            return $result;
+        }
+        return true;
+    }
+    public function tag_equal($tags, $target_tagId, $target_tagGroupId)
+    {
+        foreach ($tags as $groupId => $tagId) {
+            if ($groupId == $target_tagGroupId && $tagId == $target_tagId) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function pluginUpdateNotify()
@@ -129,21 +158,47 @@ class WebExtension extends \Twig_Extension
         $count = $this->getAppService()->findAppCount();
         $apps  = $this->getAppService()->findApps(0, $count);
 
-        $notifies = array_reduce($apps, function ($notifies, $app){
-
-            if($app['type'] === 'plugin' && !PluginVersionToolkit::dependencyVersion($app['code'], $app['version'])){
+        $notifies = array_reduce($apps, function ($notifies, $app) {
+            if ($app['type'] === 'plugin' && !PluginVersionToolkit::dependencyVersion($app['code'], $app['version'])) {
                 $notifies[] = $app['name'];
             }
 
             return $notifies;
         }, array());
 
-        return implode('、',$notifies);
+        return implode('、', $notifies);
     }
 
     public function getAdminRoles()
     {
         return ServiceKernel::instance()->createService('Permission:Role.RoleService')->searchRoles(array(), 'created', 0, 1000);
+    }
+
+    public function getCdn($type='default')
+    {
+        $cdn    = new CdnUrl();
+        $cdnUrl = $cdn->get($type);
+        return $cdnUrl;
+    }
+
+    public function cdn($content)
+    {
+        $cdn    = new CdnUrl();
+        $cdnUrl = $cdn->get('content');
+
+        if ($cdnUrl) {
+            $publicUrlPath = $this->container->getParameter('topxia.upload.public_url_path');
+            preg_match_all('/<img[^>]*src=[\'"]?([^>\'"\s]*)[\'"]?[^>]*>/i', $content, $imgs);
+            if ($imgs) {
+                foreach ($imgs[1] as $img) {
+                    if (strpos($img, $publicUrlPath) === 0) {
+                        $content = str_replace('"'.$img, '"'.$cdnUrl.$img, $content);
+                    }
+                }
+            }
+        }
+
+        return $content;
     }
 
     public function weixinConfig()
@@ -332,6 +387,11 @@ class WebExtension extends \Twig_Extension
         return ServiceKernel::instance()->createService('User.UserService');
     }
 
+    private function getCourseService()
+    {
+        return ServiceKernel::instance()->createService('Course.CourseService');
+    }
+
     public function getAccount($userId)
     {
         return ServiceKernel::instance()->createService('Cash.CashAccountService')->getAccountByUserId($userId);
@@ -388,21 +448,7 @@ class WebExtension extends \Twig_Extension
 
     public function isPluginInstalled($name)
     {
-        $plugins = $this->container->get('kernel')->getPlugins();
-
-        foreach ($plugins as $plugin) {
-            if (is_array($plugin)) {
-                if (strtolower($name) == strtolower($plugin['code'])) {
-                    return true;
-                }
-            } else {
-                if (strtolower($name) == strtolower($plugin)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return $this->container->get('kernel')->getPluginConfigurationManager()->isPluginInstalled($name);
     }
 
     public function getPluginVersion($name)
@@ -425,11 +471,19 @@ class WebExtension extends \Twig_Extension
 
     public function getJsPaths()
     {
-        $basePath = $this->container->get('request')->getBasePath();
+        
+        $cdnUrl = new CdnUrl();
+        $basePath = $cdnUrl->get();
+
+        if(empty($basePath)) {
+            $basePath = $this->container->get('request')->getBasePath();
+        }
+
         $theme    = $this->getSetting('theme.uri', 'default');
 
         $plugins = $this->container->get('kernel')->getPlugins();
         $names   = array();
+        $newPluginNames = array();
 
         foreach ($plugins as $plugin) {
             if (is_array($plugin)) {
@@ -437,7 +491,12 @@ class WebExtension extends \Twig_Extension
                     continue;
                 }
 
-                $names[] = $plugin['code'];
+                if (isset($plugin['protocol']) && $plugin['protocol'] == 3) {
+                    $newPluginNames[] = $plugin['code'].'plugin';
+                } else {
+                    $names[] = $plugin['code'];
+                }
+
             } else {
                 $names[] = $plugin;
             }
@@ -461,6 +520,11 @@ class WebExtension extends \Twig_Extension
         foreach ($names as $name) {
             $name                   = strtolower($name);
             $paths["{$name}bundle"] = "{$basePath}/bundles/{$name}/js";
+        }
+
+        foreach ($newPluginNames as $newPluginName) {
+            $newPluginName = strtolower($newPluginName);
+            $paths["{$newPluginName}"] = "{$basePath}/bundles/{$newPluginName}/js";
         }
 
         // $paths['balloon-video-player'] = 'http://player-cdn.edusoho.net/balloon-video-player';
@@ -813,9 +877,9 @@ class WebExtension extends \Twig_Extension
         return $this->parseUri($uri, $absolute);
     }
 
-    private function parseUri($uri, $absolute = false)
+    private function parseUri($uri, $absolute = false, $package = 'content')
     {
-        if (strpos($uri, "http://") !== false) {
+        if (strpos($uri, "http://") !== false || strpos($uri, "https://") !== false) {
             return $uri;
         }
 
@@ -832,12 +896,9 @@ class WebExtension extends \Twig_Extension
         } else {
             $url = $uri;
         }
-
         $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /').'/'.$url;
-        $url = ltrim($url, ' /');
-        $url = $assets->getUrl($url);
 
-        return $this->addHost($url, $absolute);
+        return $this->addHost($url, $absolute, $package);
     }
 
     public function getSystemDefaultPath($defaultKey, $absolute = false)
@@ -908,17 +969,17 @@ class WebExtension extends \Twig_Extension
         return $url;
     }
 
-    public function getFurl($path, $defaultKey = false)
+    public function getFurl($path, $defaultKey = false, $package = 'content')
     {
-        return $this->getPublicFilePath($path, $defaultKey, true);
+        return $this->getPublicFilePath($path, $defaultKey, true, $package);
     }
 
-    public function getFpath($path, $defaultKey = false)
+    public function getFpath($path, $defaultKey = false, $package = 'content')
     {
-        return $this->getPublicFilePath($path, $defaultKey, false);
+        return $this->getPublicFilePath($path, $defaultKey, false, $package);
     }
 
-    private function getPublicFilePath($path, $defaultKey = false, $absolute = false)
+    private function getPublicFilePath($path, $defaultKey = false, $absolute = false, $package = 'content')
     {
         $assets = $this->container->get('templating.helper.assets');
 
@@ -931,20 +992,19 @@ class WebExtension extends \Twig_Extension
                     && $defaultSetting[$defaultKey])
             ) {
                 $path = $defaultSetting[$defaultKey];
-                return $this->parseUri($path, $absolute);
+                return $this->parseUri($path, $absolute, $package);
             } else {
-                $path = $assets->getUrl('assets/img/default/'.$defaultKey);
-                return $this->addHost($path, $absolute);
+                return $this->addHost('/assets/img/default/'.$defaultKey, $absolute, $package);
             }
         }
 
-        return $this->parseUri($path, $absolute);
+        return $this->parseUri($path, $absolute, $package);
     }
 
-    private function addHost($path, $absolute)
+    private function addHost($path, $absolute, $package = 'content')
     {
-        $cdn    = ServiceKernel::instance()->createService('System.SettingService')->get('cdn', array());
-        $cdnUrl = (empty($cdn['enabled'])) ? '' : rtrim($cdn['url'], " \/");
+        $cdn    = new CdnUrl();
+        $cdnUrl = $cdn->get($package);
 
         if ($cdnUrl) {
             $path = $cdnUrl.$path;
@@ -1240,11 +1300,8 @@ class WebExtension extends \Twig_Extension
             if ($order['coinAmount'] > 0 && $order['amount'] == 0) {
                 $default = '余额支付';
             } else {
-                if ($order['amount'] == 0) {
-                    $default = "无";
-                } else {
-                    $default = $this->getDictText('payment', $order['payment']);
-                }
+                $dictExtension = $this->container->get('codeages_plugin.dict_twig_extension');
+                $default = $dictExtension->getDictText('payment', $order['payment']);
             }
         }
 
@@ -1286,28 +1343,15 @@ class WebExtension extends \Twig_Extension
         return NumberToolkit::roundUp($price);
     }
 
+    public function canTryLook($courseId, $type)
+    {
+        return $this->getCourseService()->canTryLook($courseId, $type);
+    }
+
     public function getCategoryChoices($groupName, $indent = '　')
     {
         $builder = new CategoryBuilder();
         return $builder->buildChoices($groupName, $indent);
-    }
-
-    public function getDict($type)
-    {
-        $dict = ExtensionManager::instance()->getDataDict($type);
-
-        return ServiceKernel::instance()->transArray($dict);
-    }
-
-    public function getDictText($type, $key)
-    {
-        $dict = $this->getDict($type);
-
-        if (empty($dict) || !isset($dict[$key])) {
-            return '';
-        }
-
-        return $dict[$key];
     }
 
     public function getNextExecutedTime()
@@ -1364,9 +1408,6 @@ class WebExtension extends \Twig_Extension
         return ServiceKernel::instance();
     }
 
-    /**
-     * @return AppServiceImpl
-     */
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
@@ -1382,6 +1423,20 @@ class WebExtension extends \Twig_Extension
     public function arrayColumn($array, $column)
     {
         return ArrayToolkit::column($array, $column);
+    }
+
+    public function isShowMobilePage()
+    {
+        $wapSetting = $this->getSetting('wap', array());
+        if (empty($wapSetting['enabled'])) {
+            return false;
+        }
+
+        $pcVersion = $this->container->get('request')->cookies->get("PCVersion", 0);
+        if ($pcVersion) {
+            return false;
+        }
+        return DeviceToolkit::isMobileClient();
     }
 
     public function mb_trim($string, $charlist = '\\\\s', $ltrim = true, $rtrim = true)

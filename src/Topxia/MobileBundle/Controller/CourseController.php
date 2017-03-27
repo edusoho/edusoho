@@ -185,7 +185,7 @@ class CourseController extends MobileController
                         }
 
                         if ($key) {
-                            $url              = $client->generateFileUrl($client->getBucket(), $key, 3600);
+                            $url              = $client->generateFileUrl($key, 3600);
                             $json['mediaUri'] = $url['url'];
                         } else {
                             $json['mediaUri'] = '';
@@ -457,10 +457,10 @@ class CourseController extends MobileController
         $self      = $this;
         $container = $this->container;
         return array_map(function ($course) use ($self, $container, $teachers) {
-            $course['smallPicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['smallPicture'], 'course-large.png', true);
+            $course['smallPicture']  = $container->get('topxia.twig.web_extension')->getFilePath($course['smallPicture'], 'course-large.png', true);
             $course['middlePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['middlePicture'], 'course-large.png', true);
-            $course['largePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['largePicture'], 'course-large.png', true);
-            $course['about'] = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
+            $course['largePicture']  = $container->get('topxia.twig.web_extension')->getFilePath($course['largePicture'], 'course-large.png', true);
+            $course['about']         = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
 
             $course['teachers'] = array();
 

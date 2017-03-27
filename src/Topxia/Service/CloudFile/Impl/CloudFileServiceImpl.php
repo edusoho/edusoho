@@ -64,6 +64,11 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
             unset($conditions['keywords']);
         }
 
+        if (!empty($conditions['resourceType'])) {
+            $conditions['resType'] = $conditions['resourceType'];
+            unset($conditions['resourceType']);
+        }
+
         $globalIds = array();
 
         for ($i = 0; $i < count($noArray); $i++) {
@@ -220,9 +225,9 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         return $this->getCloudFileImplementor()->getFileByGlobalId($globalId);
     }
 
-    public function player($globalId)
+    public function player($globalId, $ssl = false)
     {
-        return $this->getCloudFileImplementor()->player($globalId);
+        return $this->getCloudFileImplementor()->player($globalId, $ssl);
     }
 
     public function download($globalId)

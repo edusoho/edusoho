@@ -8,7 +8,7 @@ interface CloudFileService
 
     public function getByGlobalId($globalId);
 
-    public function player($globalId);
+    public function player($globalId, $ssl = false);
 
     public function edit($globalId, $fields);
 

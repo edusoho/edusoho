@@ -21,6 +21,12 @@ class UploadFileInitDaoImpl extends BaseDao implements UploadFileInitDao
         return $this->getConnection()->fetchAssoc($sql, array($globalId)) ?: null;
     }
 
+    public function getFileByHashId($hash)
+    {
+        $sql = "SELECT * FROM {$this->getTable()} WHERE hashId = ?";
+        return $this->getConnection()->fetchAssoc($sql, array($hash)) ?: null;
+    }
+
     public function addFile(array $file)
     {
         $file['createdTime'] = time();

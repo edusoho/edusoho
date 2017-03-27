@@ -8,6 +8,9 @@
 
 {% block course_main %}
 
+	{% set goto = path('course_review_list',{id:course.id}) %}
+	{% set canAccess = (member and 'teacher' in member.role) or 'ROLE_SUPER_ADMIN' in app.user.roles|default('') or 'ROLE_ADMIN' in app.user.roles|default('') %}
+	
   {% include 'TopxiaWebBundle:Review:Widget/list.html.twig' %}
 
 {% endblock %}

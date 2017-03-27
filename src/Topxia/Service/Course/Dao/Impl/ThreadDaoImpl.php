@@ -11,35 +11,54 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
     public function getThread($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        $that = $this;
 
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        });
     }
 
     public function findLatestThreadsByType($type, $start, $limit)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE type = ? ORDER BY createdTime DESC";
+        $this->filterStartLimit($start,$limit);
+        $that = $this;
 
-        return $this->getConnection()->fetchAll($sql, array($type)) ?: array();
+        return $this->fetchCached("type:{$type}:start:{$start}:limit:{$limit}", $type, $start, $limit, function ($type, $start, $limit) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE type = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
+            return $that->getConnection()->fetchAll($sql, array($type)) ?: array();
+        });
     }
 
     public function findEliteThreadsByType($type, $status, $start, $limit)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE type = ? AND isElite = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $this->filterStartLimit($start,$limit);
+        $that = $this;
 
-        return $this->getConnection()->fetchAll($sql, array($type, $status)) ?: array();
+        return $this->fetchCached("type:{$type}:status:{$status}:start:{$start}:limit:{$limit}", $type, $status, $start, $limit, function ($type, $status, $start, $limit) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE type = ? AND isElite = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
+            return $that->getConnection()->fetchAll($sql, array($type, $status)) ?: array();
+        });
     }
 
     public function findThreadsByUserIdAndType($userId, $type)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND type = ? ORDER BY createdTime DESC";
+        $that = $this;
 
-        return $this->getConnection()->fetchAll($sql, array($userId, $type));
+        return $this->fetchCached("userId:{$userId}:type:{$type}", $userId, $type, function ($userId, $type) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE userId = ? AND type = ? ORDER BY createdTime DESC";
+
+            return $that->getConnection()->fetchAll($sql, array($userId, $type));
+        });
     }
 
     public function findThreadsByCourseId($courseId, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
+        $this->checkOrderBy($orderBy);
         // @todo: fixed me.
         $orderBy = implode(' ', $orderBy);
         $sql     = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
@@ -50,6 +69,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
     public function findThreadsByCourseIdAndType($courseId, $type, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
+        $this->checkOrderBy($orderBy);
         // @todo: fixed me.
         $orderBy = implode(' ', $orderBy);
         $sql     = "SELECT * FROM {$this->table} WHERE courseId = ? AND type = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
@@ -68,7 +88,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         foreach ($orderBys as $orderBy) {
             $builder->addOrderBy($orderBy[0], $orderBy[1]);
         }
-
+        $builder->getSQL();
         return $builder->execute()->fetchAll() ?: array();
     }
 
@@ -105,9 +125,13 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
     public function findThreadsCountByCourseId($courseId)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE courseId = ? ";
+        $that = $this;
 
-        return $this->getConnection()->fetchColumn($sql, array($courseId));
+        return $this->fetchCached("courseId:{$courseId}", $courseId, function ($courseId) use ($that) {
+            $sql = "SELECT COUNT(*) FROM {$that->getTable()} WHERE courseId = ? ";
+
+            return $that->getConnection()->fetchColumn($sql, array($courseId));
+        });
     }
 
     protected function createThreadSearchQueryBuilder($conditions)
@@ -135,7 +159,11 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
             ->andWhere('title LIKE :title')
             ->andWhere('content LIKE :content')
             ->andWhere('courseId IN (:courseIds)')
-            ->andWhere('private = :private');
+            ->andWhere('private = :private')
+            ->andWhere('createdTime >= :startTimeGreaterThan')
+            ->andWhere('createdTime < :startTimeLessThan')
+            ->andWhere('createdTime >= :startCreatedTime')
+            ->andWhere('createdTime < :endCreatedTime');
 
         return $builder;
     }
@@ -146,7 +174,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         $fields['updatedTime'] = $fields['createdTime'];
 
         $affected = $this->getConnection()->insert($this->table, $fields);
-
+        $this->clearCached();
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course thread error.');
         }
@@ -158,13 +186,15 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
     {
         $fields['updatedTime'] = time();
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
-
+        $this->clearCached();
         return $this->getThread($id);
     }
 
     public function deleteThread($id)
     {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
+        $this->clearCached();
+        return $result;
     }
 
     public function waveThread($id, $field, $diff)
@@ -178,6 +208,8 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         $currentTime = time();
         $sql         = "UPDATE {$this->table} SET {$field} = {$field} + ?, updatedTime = {$currentTime} WHERE id = ? LIMIT 1";
 
-        return $this->getConnection()->executeQuery($sql, array($diff, $id));
+        $result = $this->getConnection()->executeQuery($sql, array($diff, $id));
+        $this->clearCached();
+        return $result;
     }
 }

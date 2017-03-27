@@ -3,6 +3,7 @@
 namespace Topxia\Service\Course\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
+use Topxia\Service\Course\Dao\CourseDao;
 use Topxia\Service\Course\Dao\FavoriteDao;
 
 class FavoriteDaoImpl extends BaseDao implements FavoriteDao
@@ -29,6 +30,34 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
         $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND type = 'course' ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($userId)) ?: array();
+    }
+
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findCourseFavoritesNotInClassroomByUserId($userId, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT f.* FROM {$this->table} f ";
+        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON f.userId = ?';
+        $sql .= "AND f.courseId = c.id AND c.parentId = 0 AND f.type = 'course'";
+        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
+        return $this->getConnection()->fetchAll($sql, array($userId));
+    }
+
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT f.* FROM {$this->table} f ";
+        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON f.userId = ? AND c.type = ?';
+        $sql .= "AND f.courseId = c.id AND c.parentId = 0 AND f.type = 'course'";
+        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
+        return $this->getConnection()->fetchAll($sql, array($userId, $courseType));
     }
 
     public function getFavoriteCourseCountByUserId($userId)
@@ -64,12 +93,15 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
     public function searchCourseFavorites($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $orderBy = $this->checkOrderBy($orderBy, array('createdTime'));
+        $orderBy = $this->checkOrderBy($orderBy, array('createdTime','id'));
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
+
+        for ($i = 0; $i < count($orderBy); $i = $i + 2) {
+            $builder->addOrderBy($orderBy[$i], $orderBy[$i + 1]);
+        };
         return $builder->execute()->fetchAll() ?: array();
     }
 
@@ -79,7 +111,9 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
             ->from($this->table, 'course_favorite')
             ->andWhere('courseId = :courseId')
             ->andWhere('userId = :userId')
-            ->andWhere('type = :type');
+            ->andWhere('type = :type')
+            ->andWhere('createdTime >= :createdTime_GE')
+            ->andWhere('courseId NOT IN ( :excludeCourseIds )');
         return $builder;
     }
 }

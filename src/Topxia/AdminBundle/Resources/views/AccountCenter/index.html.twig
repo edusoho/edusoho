@@ -1,0 +1,88 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% block title %}{{ '账务中心'|trans }}{% endblock %}
+
+{% set menu = 'admin_account_center' %}
+{% set script_controller = 'account-center/index' %}
+
+{% block main %}
+  {{ render(controller('TopxiaAdminBundle:Default:validateDomain')) }}
+  <div class="panel panel-default">
+    <div class="panel-heading clearfix">
+      <h3 class="panel-title">
+        {{ '本周数据'|trans }} 
+        {{ '收入单位'|trans }}
+        ：
+        {{ '元'|trans }} 
+    <div class="panel-body" id="site-overview-table" data-url="{{path('admin_account_analysis')}}">
+      <div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>
+    </div>
+  </div>
+  <div class="panel panel-default panel-420">
+    <div class="panel-heading">
+      <div class="pull-right">
+        <span class="mrl text-sm js-data-switch-time">{{ dates.monthDate|date('Y-m-d') }}~{{ 'now'|date('Y-m-d') }} </span>
+        <div class="btn-group btn-group-xs">
+          <button type="button" class="btn btn-primary js-finance-switch-button"
+                  data-time="{{ dates.monthDate|date('Y-m-d') }}~{{ 'now'|date('Y-m-d') }}"
+                  data-url="{{ path('admin_account_statistic', {period: 'month'}) }}">本月
+          </button>
+           <button type="button" class="btn btn-default js-finance-switch-button"
+                  data-time="{{ dates.seasonDate|date('Y-m-d') }}~{{ 'now'|date('Y-m-d') }}"
+                  data-url="{{ path('admin_account_statistic', {period: 'quarter'}) }}">本季
+          </button>
+           <button type="button" class="btn btn-default js-finance-switch-button"
+                  data-time="{{ dates.yearDate|date('Y-m-d') }}~{{ 'now'|date('Y-m-d') }}"
+                  data-url="{{ path('admin_account_statistic', {period: 'year'}) }}">本年
+          </button>
+        </div>
+      </div>
+      <h3 class="panel-title">{{ '财务统计'|trans }}
+      </h3>
+    </div>
+    <div class="panel-body js-statistic-areas" id="finance-count-statistic"
+         data-url="{{ path('admin_account_statistic', {period: 'month'}) }}" style="height:320px;">
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default panel-420">
+        <div class="panel-heading">
+          <div class="text-center">
+            <div class="btn-group btn-group-xs clearfix">
+              <button type="button" class="btn btn-primary js-pay-switch-button"
+                      data-url="{{path('admin_payment_rank',{type:'cash'})}}">{{ '本月用户现金消费top10'|trans }}</button>
+              <button type="button" class="btn btn-default  js-pay-switch-button"
+                      data-url="{{path('admin_payment_rank',{type:'coin'})}}">{{ '本月用户虚拟币消费top10'|trans }}</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body js-statistic-areas" id="user-pay-list"
+             data-url="{{path('admin_payment_rank',{type:'cash'})}}">  
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-default panel-420">
+        <div class="panel-heading">
+          <div class="text-center">
+            <div class="btn-group btn-group-xs clearfix">
+              <button type="button" class="btn btn-primary js-product-switch-button"
+                data-url="{{path('admin_account_rank',{type:'all'})}}">{{ '本月top10'|trans }}</button>
+              <button type="button" class="btn btn-default  js-product-switch-button"
+                data-url="{{path('admin_account_rank',{type:'Course'})}}">{{ '课程top10'|trans }}</button>
+              <button type="button" class="btn btn-default  js-product-switch-button"
+                data-url="{{path('admin_account_rank',{type:'Classroom'})}}">{{ '班级top10'|trans }}</button>
+              <button type="button" class="btn btn-default  js-product-switch-button"
+                data-url="{{path('admin_account_rank',{type:'Vip'})}}">{{ '会员top10'|trans }}</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body js-statistic-areas" id="product-consume-list"
+             data-url="{{path('admin_account_rank',{type:'all'})}}">
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -9,7 +9,9 @@ define(function(require, exports, module) {
         var videoHtml = $('#lesson-video-content');
 
         var userId = videoHtml.data("userId");
+        var userName = videoHtml.data("userName");
         var fileId = videoHtml.data("fileId");
+        var fileGlobalId = videoHtml.data("fileGlobalId");
 
         var courseId = videoHtml.data("courseId");
         var lessonId = videoHtml.data("lessonId");
@@ -21,6 +23,7 @@ define(function(require, exports, module) {
         var videoHeaderLength = videoHtml.data('videoHeaderLength');
         var enablePlaybackRates = videoHtml.data('enablePlaybackRates');
         var watermark = videoHtml.data('watermark');
+        var accesskey = videoHtml.data('accessKey');
         var fingerprint = videoHtml.data('fingerprint');
         var fingerprintSrc = videoHtml.data('fingerprintSrc');
         var fingerprintTime = videoHtml.data('fingerprintTime');
@@ -31,12 +34,34 @@ define(function(require, exports, module) {
         var disableVolumeButton = videoHtml.data('disableVolumeButton');
         var disablePlaybackButton = videoHtml.data('disablePlaybackButton');
         var disableResolutionSwitcher = videoHtml.data('disableResolutionSwitcher');
+        var subtitlesData = videoHtml.data('subtitles');
+        var autoplay = videoHtml.data('autoplay');
+        var subtitles = [];
+        if (subtitlesData) {
+            for (var i in subtitlesData) {
+                var item = {
+                    label: subtitlesData[i].name,
+                    src: subtitlesData[i].url,
+                    'default': ("default" in subtitlesData[i]) ? subtitlesData[i]['default'] : false
+                }
+                subtitles.push(item);
+            }
+        }
+
+        // set first item to default if no default
+        for (var i in subtitles) {
+            if (subtitles[i]['default']) {
+                return;
+            }
+            subtitles[0]['default'] = true;
+        }
+
         var html = "";
         if(fileType == 'video'){
             if (playerType == 'local-video-player'){
                 html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>';
             } else {
-                html += '<div id="lesson-player" style="width: 100%;height: 100%;"></div>';
+                html += '<div id="lesson-player" style="width: 100%;height: 100%;background: black;"></div>';
             }
         }else if(fileType == 'audio'){
             videoHtml.parent().css({"margin-top":"-25px","top":"50%"});
@@ -68,7 +93,15 @@ define(function(require, exports, module) {
                     disablePlaybackButton: disablePlaybackButton,
                     disableResolutionSwitcher: disableResolutionSwitcher
                 },
-                videoHeaderLength: videoHeaderLength
+                statsInfo: {
+                    accesskey : accesskey,
+                    globalId : fileGlobalId,
+                    userId : userId,
+                    userName : userName
+                },
+                videoHeaderLength: videoHeaderLength || 0,
+                textTrack: subtitles,
+                autoplay: autoplay
             }
         );
 
@@ -78,15 +111,22 @@ define(function(require, exports, module) {
             type: 'child'
         });
 
+        messenger.on('setCurrentTime', function(data) {
+            player.setCurrentTime(data.time);
+        });
+
+
         //为了不把播放器对象暴露到其他js中，所以把设置操作message过来
-        messenger.on('setPlayerPause', function() {
+        messenger.on('setPlayerPause', function(data) {
+            console.log(data);
             player.pause();
         });
 
         messenger.on('setPlayerPlay', function() {
             player.play();
         });
-        
+
+
         player.on("ready", function(){
             messenger.sendToParent("ready", {pause: true});
             if (playerType == 'local-video-player') {
@@ -185,5 +225,4 @@ define(function(require, exports, module) {
             Store.set("durations", durationTmpArray);
         }
     };
-
 });

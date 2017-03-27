@@ -6,19 +6,22 @@
 
   {% if favoriteQuestions %}
     <table class="table table-striped table-hover">
-    	<tbody>
-    		{% for favoriteQuestion in favoriteQuestions %}
-    			{% set paper = testpapers[targets[favoriteQuestion.target].id] %}
-    			{% set question = questions[favoriteQuestion.questionId] %}
+      <tbody>
+      {% for favoriteQuestion in favoriteQuestions %}
 
-    				{% include 'TopxiaWebBundle:MyQuiz:my-favorite-question-tr.html.twig' %}
+        {% if targets[favoriteQuestion.target] %}
+          {% set paper = testpapers[targets[favoriteQuestion.target].id] %}
+        {% endif %}
+        {% set question = questions[favoriteQuestion.questionId] %}
 
-    		{% endfor %}
-    	</tbody>
+        {% include 'TopxiaWebBundle:MyQuiz:my-favorite-question-tr.html.twig' %}
+
+      {% endfor %}
+      </tbody>
     </table>
   {% else %}
     <div class="empty">{{'还没有收藏的题目'|trans}}</div>
   {% endif %}
 
-{{ web_macro.paginator(paginator) }}
+  {{ web_macro.paginator(paginator) }}
 {% endblock %}

@@ -3,6 +3,7 @@
 namespace Topxia\Service\System\Impl;
 
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\System\Dao\Impl\SessionDaoImpl;
 use Topxia\Service\System\StatisticsService;
 
 class StatisticsServiceImpl extends BaseService implements StatisticsService
@@ -10,8 +11,9 @@ class StatisticsServiceImpl extends BaseService implements StatisticsService
     public function getOnlineCount($retentionTime)
     {
         if ($this->isRedisOpened()) {
-            $onlines = $this->getRedis()->keys("session:online:*");
-            return count($onlines);
+            $currentTime = time();
+            $start       = $currentTime - 15 * 60;
+            return $this->getRedis()->zCount("session:online", $start, $currentTime);
         } else {
             return $this->getSessionDao()->getOnlineCount($retentionTime);
         }
@@ -20,8 +22,9 @@ class StatisticsServiceImpl extends BaseService implements StatisticsService
     public function getloginCount($retentionTime)
     {
         if ($this->isRedisOpened()) {
-            $logins = $this->getRedis()->keys("session:logined:*");
-            return count($logins);
+            $currentTime = time();
+            $start       = $currentTime - 15 * 60;
+            return $this->getRedis()->zCount("session:logined", $start, $currentTime);
         } else {
             return $this->getSessionDao()->getLoginCount($retentionTime);
         }
@@ -29,15 +32,18 @@ class StatisticsServiceImpl extends BaseService implements StatisticsService
 
     protected function isRedisOpened()
     {
-        $redisSetting = $this->getSettingService()->get('redis', array());
+        $redisPath = $this->getKernel()->getParameter('kernel.root_dir').'/data/redis.php';
 
-        if (empty($redisSetting['opened']) || $redisSetting['opened'] == 0) {
-            return false;
+        if (file_exists($redisPath)) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 
+    /**
+     * @return SessionDaoImpl
+     */
     protected function getSessionDao()
     {
         return $this->createDao('System.SessionDao');

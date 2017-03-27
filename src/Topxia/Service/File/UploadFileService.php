@@ -17,7 +17,7 @@ interface UploadFileService
 
     public function update($fileId, $fields);
 
-    public function getDownloadMetas($id);
+    public function getDownloadMetas($id, $ssl = false);
 
     public function getUploadAuth($params);
 
@@ -25,7 +25,7 @@ interface UploadFileService
 
     public function finishedUpload($params);
 
-    public function moveFile($targetType, $targetId, $originalFile = null, $data);
+    public function moveFile($targetType, $targetId, $originalFile = null, $data = array());
 
     public function setFileProcessed($params);
 
@@ -42,6 +42,11 @@ interface UploadFileService
     public function findCollectionsByUserId($userId);
 
     public function syncFile($file);
+
+    /**
+     * [syncToLocaFromCloud 同步云文件到本地，比如气球云的直播回放，在本地生成云资源]
+     */
+    public function syncToLocalFromCloud($cloudFile);
 
     public function getFileByHashId($hashId);
 

@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Topxia\Service\User\CurrentUser;
 use Symfony\Component\ClassLoader\ApcClassLoader;
@@ -26,19 +27,18 @@ class CopyInstallFilesCommand extends BaseCommand
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		$output->writeln('<info>copy-install-files开始</info>');
+
+        $rootDir = $this->getContainer()->getParameter('kernel.root_dir') . DIRECTORY_SEPARATOR . '../';
+
 		$version = $input->getArgument('version');
-		
-		$command = "rm -rf build/edusoho-{$version}.tar.gz";
-		$output->writeln("<info>{$command}</info>");
-		exec($command);
+		$fileSystem = new Filesystem();
 
-		$command = "cp -r installFiles/data/* build/edusoho/.";
-		$output->writeln("<info>{$command}</info>");
-		exec($command);
+        $fileSystem->remove("{$rootDir}/build/edusoho-{$version}.tar.gz");
 
-		$command = "cd build \n tar -czf edusoho-{$version}.tar.gz edusoho/";
-		$output->writeln("<info>{$command}</info>");
-		exec($command);
+        $fileSystem->mirror("{$rootDir}/installFiles/data", "{$rootDir}/build/edusoho/.", null, array(
+            'override' => true
+        ));
+		$output->writeln("<info>copy installFiles/data/* to build/edusoho</info>");
 
 		$output->writeln('<info>copy-install-files结束</info>');
 	}

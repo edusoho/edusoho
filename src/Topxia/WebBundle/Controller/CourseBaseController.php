@@ -13,7 +13,7 @@ abstract class CourseBaseController extends BaseController
 
         $previewAs = $request->query->get('previewAs');
         $user      = $this->getCurrentUser();
-        $member    = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
+        $member    = $user['id'] ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
 
         $member = $this->previewAsMember($previewAs, $member, $course);
 
@@ -47,7 +47,7 @@ abstract class CourseBaseController extends BaseController
         }
 
         if (in_array($as, array('member', 'guest'))) {
-            if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
                 $member = array(
                     'id'          => 0,
                     'courseId'    => $course['id'],
@@ -81,8 +81,21 @@ abstract class CourseBaseController extends BaseController
         return $member;
     }
 
+    protected function getTagsByOwnerId($ownerId)
+    {
+        return $this->getTagService()->findTagsByOwner(array(
+            'ownerType' => 'course',
+            'ownerId'   => $ownerId
+        ));
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 }

@@ -42,11 +42,15 @@ define(function(require, exports, module) {
     }
 
     $(document).ajaxError(function(event, jqxhr, settings, exception) {
+        if (jqxhr.responseText === 'LoginLimit') {
+            location.href = '/login';
+        }
         var json = jQuery.parseJSON(jqxhr.responseText);
         error = json.error;
         if (!error) {
             return;
         }
+
         if (error.name == 'Unlogin') {
             var ua = navigator.userAgent.toLowerCase();
             if (ua.match(/MicroMessenger/i) == "micromessenger" && $('meta[name=is-open]').attr('content') != 0) {
@@ -115,9 +119,10 @@ define(function(require, exports, module) {
     }
 
    	if(!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)){
-	    $("li.nav-hover").mouseenter(function(event) {
+
+	    $("body").on("mouseenter","li.nav-hover",function(event){
 	        $(this).addClass("open");
-	    }).mouseleave(function(event) {
+	    }).on("mouseleave","li.nav-hover",function(event) {
 	        $(this).removeClass("open");
 	    });
 

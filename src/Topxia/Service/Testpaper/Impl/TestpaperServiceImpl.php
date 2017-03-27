@@ -86,10 +86,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 throw $this->createServiceException($this->getKernel()->trans('缺少必要字段！'));
             }
 
-            $filtedFields['name']          = $fields['name'];
+            $filtedFields['name']          = $this->purifyHtml($fields['name']);
             $filtedFields['target']        = $fields['target'];
             $filtedFields['pattern']       = $fields['pattern'];
-            $filtedFields['description']   = empty($fields['description']) ? '' : $fields['description'];
+            $filtedFields['description']   = empty($fields['description']) ? '' : $this->purifyHtml($fields['description']);
             $filtedFields['limitedTime']   = empty($fields['limitedTime']) ? 0 : (int) $fields['limitedTime'];
             $filtedFields['metas']         = empty($fields['metas']) ? array() : $fields['metas'];
             $filtedFields['status']        = 'draft';
@@ -101,11 +101,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             }
         } else {
             if (array_key_exists('name', $fields)) {
-                $filtedFields['name'] = empty($fields['name']) ? '' : $fields['name'];
+                $filtedFields['name'] = empty($fields['name']) ? '' : $this->purifyHtml($fields['name']);
             }
 
             if (array_key_exists('description', $fields)) {
-                $filtedFields['description'] = empty($fields['description']) ? '' : $fields['description'];
+                $filtedFields['description'] = empty($fields['description']) ? '' : $this->purifyHtml($fields['description']);
             }
 
             if (array_key_exists('limitedTime', $fields)) {
@@ -337,7 +337,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         foreach ($items as $questionId => $item) {
             $items[$questionId]['question'] = $questions[$questionId];
-
             if ($item['parentId'] != 0) {
                 if (!array_key_exists('items', $items[$item['parentId']])) {
                     $items[$item['parentId']]['items'] = array();
@@ -350,7 +349,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 $formatItems[$item['questionType']][$item['questionId']] = $items[$questionId];
             }
         }
-
+        
         ksort($formatItems);
         return $formatItems;
         // 'questionIds' => $items = ArrayToolkit::column($items, 'questionId')
@@ -659,10 +658,14 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $userAnswers = ArrayToolkit::index($userAnswers, 'questionId');
 
         foreach ($field as $key => $value) {
+            if (is_numeric($key) && is_numeric($value)) {
+                unset($field[$key]);
+                continue;
+            }
             $keys = explode('_', $key);
 
             if (!is_numeric($keys[1])) {
-                throw $this->createServiceException($this->getKernel()->trans('得分必须为数字！'));
+                throw $this->createServiceException($this->getKernel()->trans('问题id必须为数字！'));
             }
 
             $testResults[$keys[1]][$keys[0]] = $value;
@@ -773,7 +776,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function getTestpaperItems($testpaperId)
     {
-        return $this->getTestpaperItemDao()->findItemsByTestpaperId($testpaperId);
+        $testpaperItems = $this->getTestpaperItemDao()->findItemsByTestpaperId($testpaperId);
+        return ArrayToolkit::index($testpaperItems, 'questionId');
     }
 
     public function updateTestpaperItems($testpaperId, $items)
@@ -970,9 +974,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return false;
     }
 
-    public function findTestpapersByCopyIdAndLockedTarget($copyId, $lockedTarget)
+    public function findTestpapersByCopyIdAndLockedTarget($copyId, array $lockedTargets)
     {
-        return $this->getTestpaperDao()->findTestpapersByCopyIdAndLockedTarget($copyId, $lockedTarget);
+        return $this->getTestpaperDao()->findTestpapersByCopyIdAndLockedTarget($copyId, $lockedTargets);
     }
 
     public function findTeacherTestpapersByTeacherId($teacherId)

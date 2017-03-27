@@ -1,11 +1,11 @@
 <?php
 namespace Permission\PermissionBundle\Controller;
 
+use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
 use Permission\Common\PermissionBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\AdminBundle\Controller\BaseController;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Paginator;
 
 class RoleController extends BaseController
 {
@@ -50,12 +50,12 @@ class RoleController extends BaseController
         if ('POST' == $request->getMethod()) {
             $params         = $request->request->all();
             $params['data'] = json_decode($params['data'], true);
-            $role           = $this->getRoleService()->createRole($params);
+            $this->getRoleService()->createRole($params);
             return $this->createJsonResponse(true);
         }
 
         $tree = PermissionBuilder::instance()->getOriginPermissionTree();
-        $res = $tree->toArray();
+        $res  = $tree->toArray();
         return $this->render('PermissionBundle:Role:role-modal.html.twig', array(
             'menus' => json_encode($res['children']),
             'model' => 'create'
@@ -94,8 +94,6 @@ class RoleController extends BaseController
 
     public function deleteAction(Request $request, $id)
     {
-        $role = $this->getRoleService()->getRole($id);
-
         $this->getRoleService()->deleteRole($id);
         return $this->createJsonResponse(array('result' => true));
     }
@@ -103,8 +101,7 @@ class RoleController extends BaseController
     public function showAction(Request $request, $id)
     {
         $role = $this->getRoleService()->getRole($id);
-        $tree  = PermissionBuilder::instance()->getOriginPermissionTree();
-
+        $tree = PermissionBuilder::instance()->getOriginPermissionTree();
 
         $tree->each(function (&$tree) use ($role) {
             if (in_array($tree->data['code'], $role['data'])) {

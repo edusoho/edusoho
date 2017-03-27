@@ -46,7 +46,7 @@ class CommentServiceImpl extends BaseService implements CommentService
 			throw $this->createAccessDeniedException($this->getKernel()->trans('无权限删除评论！'));
 		}
 
-		if ($comment['userId'] != $user['id'] && ! $this->getContainer()->get('security.context')->isGranted('ROLE_ADMIN')) {
+		if ($comment['userId'] != $user['id'] && ! $this->getContainer()->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
 			throw $this->createAccessDeniedException($this->getKernel()->trans('无权限删除评论！'));
 		}
 

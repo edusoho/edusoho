@@ -27,7 +27,7 @@ class KernelControllerListener
         $currentUser = ServiceKernel::instance()->getCurrentUser();
         $requestPath = $request->getPathInfo();
 
-        foreach ($this->paths as $key => $path) {
+        foreach ($this->paths as $path) {
             $needJudgePermission = preg_match($path, $requestPath);
 
             if ($needJudgePermission

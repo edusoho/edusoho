@@ -15,7 +15,7 @@
         </div>
         <div class="piece-body p-lg clearfix">
           {% if course.about %}
-            {{ course.about|raw }}
+            {{ course.about|cdn|raw }}
           {% else %}
             <div class="text-muted">{{'暂无课程简介'|trans}}</div>
           {% endif %}

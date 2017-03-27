@@ -48,6 +48,8 @@ interface OrderService
 
     public function searchRefundCount($conditions);
 
+    public function findRefundByOrderId($orderId);
+
     /**
      * 申请退款
      * $expectedAmount, 0代表无需退款，NULL代表退款额度未知
@@ -93,4 +95,8 @@ interface OrderService
     public function createPayRecord($id, array $payDate);
 
     public function createOrderLog($orderId, $type, $message = '', array $data = array());
+
+    public function analysisPaidOrderGroupByTargetType($startTime, $groupBy);
+
+    public function analysisOrderDate($conditions);
 }

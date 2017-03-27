@@ -8,7 +8,7 @@ define(function(require, exports, module) {
 
 	var Notify = require('common/bootstrap-notify');
 
-	$('[data-toggle="tooltip"]').tooltip();
+	$('[data-toggle="tooltip"]').tooltip({html: true});
 	exports.load = function(name) {
 		if (window.app.jsPaths[name.split('/', 1)[0]] == undefined) {
 			name = window.app.basePath + '/bundles/topxiaadmin/js/controller/' + name;

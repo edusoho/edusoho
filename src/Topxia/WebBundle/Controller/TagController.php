@@ -13,6 +13,17 @@ class TagController extends BaseController
      * 
      * @return JSONM Response
      */
+    public function allAction()
+    {
+        $data = array();
+
+        $tags = $this->getTagService()->findAllTags(0, 100);
+        foreach ($tags as $tag) {
+            $data[] = array('id' => $tag['id'],  'name' => $tag['name'] );
+        }
+        return $this->createJsonmResponse($data);
+    }
+
     public function indexAction()
     {   
         $tags = $this->getTagService()->findAllTags(0, 100);
@@ -29,10 +40,18 @@ class TagController extends BaseController
         $tag = $this->getTagService()->getTagByName($name);
 
         if($tag) {  
+            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType(array($tag['id']), 'course');
+
+            $courseIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
+
+            if (empty($courseIds)) {
+                $courseIds = array(0);
+            }
+
             $conditions = array(
-                'status' => 'published',
-                'tagId' => $tag['id'],
-                'parentId' => 0
+                'status'    => 'published',
+                'courseIds' => $courseIds,
+                'parentId'  => 0
             );
 
             $paginator = new Paginator(
@@ -53,17 +72,6 @@ class TagController extends BaseController
             'courses'=>$courses,
             'paginator' => $paginator,
         ));
-    }
-
-    public function allAction()
-    {
-        $data = array();
-
-        $tags = $this->getTagService()->findAllTags(0, 100);
-        foreach ($tags as $tag) {
-            $data[] = array('id' => $tag['id'],  'name' => $tag['name'] );
-        }
-        return $this->createJsonmResponse($data);
     }
 
     public function matchAction(Request $request)

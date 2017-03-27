@@ -99,7 +99,8 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
     public function findCategoriesByParentId($parentId, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE parentId = ? ORDER BY {$orderBy} DESC LIMIT {$start}, {$limit}";
+        $this->checkOrderBy(array($orderBy, 'DESC'));
+        $sql = "SELECT * FROM {$this->table} WHERE parentId = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($parentId)) ?: array();
     }
 
@@ -115,15 +116,17 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
         );
     }
 
-    public function findCategoriesByIds(array $ids)
+    public function findCategoriesByIds($ids)
     {
+        $ids = array_filter(array_unique($ids));
+
         if (empty($ids)) {
             return array();
         }
 
         $marks = str_repeat('?,', count($ids) - 1).'?';
         $sql   = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
-        return $this->getConnection()->fetchAll($sql, $ids) ?: array();
+        return $this->getConnection()->fetchAll($sql, array_values($ids)) ?: array();
     }
 
     public function findAllCategories()

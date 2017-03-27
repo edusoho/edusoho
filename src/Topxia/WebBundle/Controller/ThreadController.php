@@ -145,6 +145,7 @@ class ThreadController extends BaseController
 
     public function updateAction(Request $request, $target, $thread)
     {
+
         if ($request->getMethod() == 'POST') {
             try {
                 $user = $this->getCurrentUser();

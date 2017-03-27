@@ -20,26 +20,23 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
 
             if ($classroom) {
-                $count = $this->getClassroomService()->searchMemberCount(array('classroomId' => $classroom['classroomId']));
+                $count = $this->getClassroomService()->searchMemberCount(array('classroomId' => $classroom['classroomId'], 'role' => 'student'));
             }
         } else {
             $count = $this->getCourseService()->searchMemberCount(array('courseId' => $course['id']));
         }
 
-        global $kernel;
-        $container          = $kernel->getContainer();
-        $siteSetting        = $this->getSettingService()->get('site');
-        $siteSetting['url'] = rtrim($siteSetting['url']);
-        $siteSetting['url'] = rtrim($siteSetting['url'], '/');
-        $hostName           = $siteSetting['url'];
         $api                = CloudAPIFactory::create('root');
 
+        global $kernel;
+        $router = $kernel->getContainer()->get('router');
+        $site = $this->getSettingService()->get('site');
+        $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], ' \/');
         for ($i = 0; $i <= intval($count / 1000); $i++) {
-            $urls[$i] = $hostName;
-            $urls[$i] .= $container->get('router')->generate('edu_cloud_sms_send_callback', array('targetType' => 'lesson', 'targetId' => $targetId));
+            $urls[$i] = empty($url) ? $router->generate('edu_cloud_sms_send_callback', array('targetType' => 'lesson', 'targetId' => $targetId), true) : $url.$router->generate('edu_cloud_sms_send_callback', array('targetType' => 'lesson', 'targetId' => $targetId));
             $urls[$i] .= '?index='.($i * 1000);
             $urls[$i] .= '&smsType='.$smsType;
-            $sign = $this->getSignEncoder()->encodeSign($urls[$i], $api->getAccessKey());
+            $sign = $this->getSignEncoder()->encodePassword($urls[$i], $api->getAccessKey());
             $sign = rawurlencode($sign);
             $urls[$i] .= '&sign='.$sign;
         }
@@ -49,23 +46,19 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
 
     public function getSmsInfo($targetId, $index, $smsType)
     {
-        global $kernel;
-        $siteSetting        = $this->getSettingService()->get('site');
-        $siteSetting['url'] = rtrim($siteSetting['url']);
-        $siteSetting['url'] = rtrim($siteSetting['url'], '/');
-        $hostName           = $siteSetting['url'];
         $lesson             = $this->getCourseService()->getLesson($targetId);
-
         if (empty($lesson)) {
             throw new \RuntimeException($this->getKernel()->trans('课时不存在'));
         }
 
-        $originUrl = $hostName;
-        $originUrl .= $kernel->getContainer()->get('router')->generate('course_learn', array('id' => $lesson['courseId']));
+        global $kernel;
+        $site = $this->getSettingService()->get('site');
+        $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], ' \/');
+        $originUrl = empty($url) ? $kernel->getContainer()->get('router')->generate('course_learn', array('id' => $lesson['courseId']), true) : $url.$kernel->getContainer()->get('router')->generate('course_learn', array('id' => $lesson['courseId']));
         $originUrl .= '#lesson/'.$lesson['id'];
 
         $shortUrl = SmsToolkit::getShortLink($originUrl);
-        $url      = empty($shortUrl) ? $hostName.$kernel->getContainer()->get('router')->generate('course_show', array('id' => $lesson['courseId'])) : $shortUrl;
+        $url      = empty($shortUrl) ? $originUrl : $shortUrl;
 
         $course = $this->getCourseService()->getCourse($lesson['courseId']);
         $to     = '';
@@ -74,7 +67,7 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
 
             if ($classroom) {
-                $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['classroomId']), array('createdTime', 'Desc'), $index, 1000);
+                $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['classroomId'], 'role' => 'student'), array('createdTime', 'Desc'), $index, 1000);
             }
         } else {
             $students = $this->getCourseService()->searchMembers(array('courseId' => $course['id']), array('createdTime', 'Desc'), $index, 1000);
@@ -101,7 +94,14 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
 
         $parameters['url'] = $url.' ';
 
-        return array('mobile' => $to, 'category' => $smsType, 'description' => $description, 'parameters' => $parameters);
+        $this->getLogService()->info('sms', $smsType, $description, array($to));
+
+        return array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'parameters' => $parameters);
+    }
+
+    protected function getLogService()
+    {
+        return ServiceKernel::instance()->createService('System.LogService');
     }
 
     protected function getUserService()

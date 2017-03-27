@@ -12,10 +12,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'course.lesson.create'                => array('onCourseLessonCreate', 0),
-            'course.lesson.delete'                => array('onCourseLessonDelete', 0),
+            'course.lesson.create'                => 'onCourseLessonCreate',
+            'course.lesson.delete'                => 'onCourseLessonDelete',
             'course.lesson.update'                => 'onCourseLessonUpdate',
-            'course.lesson.generate.replay'       => 'onCourseLessonGenerateReplay',
             'course.lesson.publish'               => 'onCourseLessonPublish',
             'course.lesson.unpublish'             => 'onCourseLessonUnpublish',
             'course.lesson_start'                 => 'onLessonStart',
@@ -26,7 +25,11 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             'chapter.create'                      => 'onChapterCreate',
             'chapter.delete'                      => 'onChapterDelete',
             'chapter.update'                      => 'onChapterUpdate',
-            'course.lesson.generate.video.replay' => 'onLiveLessonGenerateVideo'
+
+            'course.lesson.generate.video.replay' => 'onLiveLessonGenerateVideo',
+            'course.lesson.replay.create'         => 'onLiveLessonReplayCreate',
+            'course.lesson.replay.update'         => 'onLiveLessonReplayUpdate',
+            'course.lesson.review.delete'         => 'onLiveLessonReplayDelete'
         );
     }
 
@@ -35,41 +38,46 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $context  = $event->getSubject();
         $argument = $context['argument'];
         $lesson   = $context['lesson'];
+        try {
+            $this->getConnection()->beginTransaction();
 
-        $this->createRealTimeTestCrontab($lesson);
+            $this->createRealTimeTestCrontab($lesson);
 
-        $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($lesson['courseId']);
+            $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($lesson['courseId']);
 
-        foreach ($classroomIds as $classroomId) {
-            $classroom = $this->getClassroomService()->getClassroom($classroomId);
-            $lessonNum = $classroom['lessonNum'] + 1;
-            $this->getClassroomService()->updateClassroom($classroomId, array('lessonNum' => $lessonNum));
-        }
-
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'], 1), 'id');
-
-        if ($courseIds) {
-            $argument['copyId'] = $lesson['id'];
-
-            if (array_key_exists('type', $argument) && $argument['type'] == 'testpaper') {
-                $lockedTarget = '';
-
-                foreach ($courseIds as $courseId) {
-                    $lockedTarget .= "'course-".$courseId."',";
-                }
-
-                $lockedTarget = "(".trim($lockedTarget, ',').")";
-                $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpapersByCopyIdAndLockedTarget($argument['mediaId'], $lockedTarget), 'id');
+            foreach ($classroomIds as $classroomId) {
+                $classroom = $this->getClassroomService()->getClassroom($classroomId);
+                $lessonNum = $classroom['lessonNum'] + 1;
+                $this->getClassroomService()->updateClassroom($classroomId, array('lessonNum' => $lessonNum));
             }
 
-            foreach ($courseIds as $key => $courseId) {
+            $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'], 1), 'id');
+
+            if ($courseIds) {
+                $argument['copyId'] = $lesson['id'];
+
                 if (array_key_exists('type', $argument) && $argument['type'] == 'testpaper') {
-                    $argument['mediaId'] = $testpaperIds[$key];
+                    $lockedTargets = array();
+                    foreach ($courseIds as $courseId) {
+                        $lockedTargets[] = "course-{$courseId}";
+                    }
+                    $testpaperTargets = ArrayToolkit::index($this->getTestpaperService()->findTestpapersByCopyIdAndLockedTarget($argument['mediaId'], $lockedTargets), 'target');
                 }
 
-                $argument['courseId'] = $courseId;
-                $this->getCourseService()->createLesson($argument);
+                foreach ($courseIds as $key => $courseId) {
+                    if (array_key_exists('type', $argument) && $argument['type'] == 'testpaper') {
+                        $target = 'course-'.$courseId;
+                        $argument['mediaId'] = $testpaperTargets[$target]['id'];
+                    }
+
+                    $argument['courseId'] = $courseId;
+                    $this->getCourseService()->createLesson($argument);
+                }
             }
+            $this->getConnection()->commit();
+        } catch (\Exception $e) {
+            $this->getConnection()->rollBack();
+            throw $e;
         }
     }
 
@@ -78,49 +86,33 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $context  = $event->getSubject();
         $lesson   = $context["lesson"];
         $courseId = $context["courseId"];
+        try {
+            $this->getConnection()->beginTransaction();
+            $this->deleteRealTimeTestCrontab($lesson);
 
-        $this->deleteRealTimeTestCrontab($lesson);
+            $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($courseId);
 
-        $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($courseId);
-
-        foreach ($classroomIds as $key => $value) {
-            $classroom = $this->getClassroomService()->getClassroom($value);
-            $lessonNum = $classroom['lessonNum'] - 1;
-            $this->getClassroomService()->updateClassroom($value, array("lessonNum" => $lessonNum));
-        }
-
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1), 'id');
-
-        if ($courseIds) {
-            $lesson    = $context["lesson"];
-            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lesson['id'], $courseIds), 'id');
-
-            foreach ($lessonIds as $key => $lessonId) {
-                $this->getCourseService()->deleteLesson($courseIds[$key], $lessonId);
+            foreach ($classroomIds as $key => $value) {
+                $classroom = $this->getClassroomService()->getClassroom($value);
+                $lessonNum = $classroom['lessonNum'] - 1;
+                $this->getClassroomService()->updateClassroom($value, array("lessonNum" => $lessonNum));
             }
-        }
-    }
 
-    public function onCourseLessonGenerateReplay(ServiceEvent $event)
-    {
-        $context       = $event->getSubject();
-        $courseIds     = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($context['courseId'], 1), 'id');
-        $lessonReplays = $this->getCourseService()->getCourseLessonReplayByLessonId($context['lessonId']);
+            $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1), 'id');
 
-        if ($courseIds) {
-            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($context['lessonId'], $courseIds), 'id');
+            if ($courseIds) {
+                $lesson    = $context["lesson"];
+                $lessons = ArrayToolkit::index($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lesson['id'], $courseIds), 'courseId');
 
-            foreach ($courseIds as $key => $courseId) {
-                if ($lessonReplays) {
-                    foreach ($lessonReplays as $lessonReplay) {
-                        unset($lessonReplay['id']);
-                        $lessonReplay['courseId']    = $courseId;
-                        $lessonReplay['lessonId']    = $lessonIds[$key];
-                        $lessonReplay['createdTime'] = time();
-                        $this->getCourseService()->addCourseLessonReplay($lessonReplay);
-                    }
+                foreach ($lessons as $courseId => $lesson) {
+                    $this->getCourseService()->deleteLesson($courseId, $lesson['id']);
                 }
             }
+            $this->getConnection()->commit();
+
+        } catch (\Exception $e) {
+            $this->getConnection()->rollBack();
+            throw $e;
         }
     }
 
@@ -133,15 +125,22 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         if (!empty($lesson) && $lesson['type'] == 'testpaper') {
             unset($argument['mediaId']);
         }
+        try {
+            $this->getConnection()->beginTransaction();
+            $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'], 1), 'id');
 
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'], 1), 'id');
+            if ($courseIds) {
+                $lessons = ArrayToolkit::index($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lesson['id'], $courseIds), 'courseId');
 
-        if ($courseIds) {
-            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lesson['id'], $courseIds), 'id');
-
-            foreach ($courseIds as $key => $courseId) {
-                $this->getCourseService()->updateLesson($courseId, $lessonIds[$key], $argument);
+                foreach ($lessons as $courseId => $lesson) {
+                    $this->getCourseService()->updateLesson($courseId, $lesson['id'], $argument);
+                }
             }
+            $this->getConnection()->commit();
+            
+        } catch (\Exception $e) {
+            $this->getConnection()->rollBack();
+            throw $e;
         }
     }
 
@@ -150,14 +149,22 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $lesson    = $event->getSubject();
         $courseId  = $lesson["courseId"];
         $lessonId  = $lesson["id"];
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1), 'id');
+        try {
+            $this->getConnection()->beginTransaction();
+            $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1), 'id');
 
-        if ($courseIds) {
-            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lessonId, $courseIds), 'id');
+            if ($courseIds) {
+                $lessons = ArrayToolkit::index($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lessonId, $courseIds), 'courseId');
 
-            foreach ($courseIds as $key => $courseId) {
-                $this->getCourseService()->publishLesson($courseId, $lessonIds[$key]);
+                foreach ($lessons as $courseId => $lesson) {
+                    $this->getCourseService()->publishLesson($courseId, $lesson['id']);
+                }
             }
+            $this->getConnection()->commit();
+            
+        } catch (\Exception $e) {
+            $this->getConnection()->rollBack();
+            throw $e;
         }
     }
 
@@ -166,14 +173,22 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $lesson    = $event->getSubject();
         $courseId  = $lesson["courseId"];
         $lessonId  = $lesson["id"];
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1), 'id');
+        try {
+            $this->getConnection()->beginTransaction();
+            $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1), 'id');
 
-        if ($courseIds) {
-            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lessonId, $courseIds), 'id');
+            if ($courseIds) {
+                $lessons = ArrayToolkit::index($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lessonId, $courseIds), 'courseId');
 
-            foreach ($courseIds as $key => $courseId) {
-                $this->getCourseService()->unpublishLesson($courseId, $lessonIds[$key]);
+                foreach ($lessons as $courseId => $lesson) {
+                    $this->getCourseService()->unpublishLesson($courseId, $lesson['id']);
+                }
             }
+            $this->getConnection()->commit();
+            
+        } catch (\Exception $e) {
+            $this->getConnection()->rollBack();
+            throw $e;
         }
     }
 
@@ -355,6 +370,116 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         }
     }
 
+    public function onLiveLessonReplayCreate(ServiceEvent $event)
+    {
+        $context = $event->getSubject();
+        $replay  = $context['replay'];
+
+        $this->dealESReplay($replay);
+
+        if ($replay['copyId'] > 0 || $replay['type'] == 'liveOpen') {
+            return false;
+        }
+
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($replay['courseId'], 1), 'id');
+        if (!$courseIds) {
+            return false;
+        }
+
+        $lessons = $this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($replay['lessonId'], $courseIds);
+
+        foreach ($lessons as $lesson) {
+            $copyReplay                = $replay;
+            $copyReplay['courseId']    = $lesson['courseId'];
+            $copyReplay['lessonId']    = $lesson['id'];
+            $copyReplay['copyId']      = $replay['id'];
+            $copyReplay['createdTime'] = time();
+            unset($copyReplay['id']);
+            $this->getCourseService()->addCourseLessonReplay($copyReplay);
+
+            $this->getCourseService()->updateLesson($lesson['courseId'], $lesson['id'], array('replayStatus' => 'generated'));
+        }
+
+        return true;
+    }
+
+    public function onLiveLessonReplayUpdate(ServiceEvent $event)
+    {
+        $context = $event->getSubject();
+        $replay  = $context['replay'];
+
+        if ($replay['copyId'] > 0 || $replay['type'] == 'liveOpen') {
+            return false;
+        }
+
+        $copyReplays = $this->getCourseService()->searchCourseLessonReplays(
+            array('copyId' => $replay['id']),
+            array('createdTime', 'DESC'),
+            0, PHP_INT_MAX
+        );
+
+        if (!$copyReplays) {
+            return false;
+        }
+
+        $fields = array(
+            'title'  => $replay['title'],
+            'hidden' => $replay['hidden']
+        );
+
+        foreach ($copyReplays as $copyReplay) {
+            $this->getCourseService()->updateCourseLessonReplay($copyReplay['id'], $fields);
+        }
+
+        return true;
+    }
+
+    public function onLiveLessonReplayDelete(ServiceEvent $event)
+    {
+        $context  = $event->getSubject();
+        $lessonId = $context['lessonId'];
+
+        $lesson = $this->getCourseService()->getLesson($lessonId);
+        if (!$lesson || $lesson['copyId'] > 0) {
+            return false;
+        }
+
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'], 1), 'id');
+        if (!$courseIds) {
+            return false;
+        }
+
+        $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lesson['id'], $courseIds), 'id');
+        if (!$lessonIds) {
+            return false;
+        }
+
+        foreach ($lessonIds as $lessonId) {
+            $this->getCourseService()->deleteLessonReplayByLessonId($lessonId);
+        }
+
+        return true;
+    }
+
+    protected function dealESReplay($replay)
+    {
+        $lessonId = $replay['lessonId'];
+        $lesson = $this->getCourseService()->getLesson($lessonId);
+        if ($lesson['liveProvider'] == 5) {
+            $globalId = $replay['globalId'];
+            $cloudFile = $this->getCloudFileService()->getByGlobalId($globalId);
+            $currentUser = $this->getCurrentUser();
+            $cloudFile['status'] = 'ok';
+            $cloudFile['targetId'] = $replay['id'];
+            $cloudFile['targetType'] = 'repaly';
+            $cloudFile['convertHash'] = $cloudFile['hashId'];
+            $cloudFile['etag'] = $cloudFile['hashId'];
+            $cloudFile['createdUserId'] = $currentUser['id'];
+            $cloudFile['updatedUserId'] = $currentUser['id'];
+            $this->getUploadFileService()->syncToLocalFromCloud($cloudFile);
+        }
+    }
+
     protected function simplifyCousrse($course)
     {
         return array(
@@ -466,6 +591,11 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         return false;
     }
 
+    protected function getCurrentUser()
+    {
+        return ServiceKernel::instance()->getCurrentUser();
+    }
+
     protected function getStatusService()
     {
         return ServiceKernel::instance()->createService('User.StatusService');
@@ -491,6 +621,11 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         return ServiceKernel::instance()->createService('File.UploadFileService');
     }
 
+    protected function getCloudFileService()
+    {
+        return ServiceKernel::instance()->createService('CloudFile.CloudFileService');
+    }
+
     protected function getCrontabJobService()
     {
         return ServiceKernel::instance()->createService('Crontab.CrontabService');
@@ -499,5 +634,10 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     protected function getMaterialService()
     {
         return ServiceKernel::instance()->createService('Course.MaterialService');
+    }
+
+    protected function getConnection()
+    {
+        return ServiceKernel::instance()->getConnection();
     }
 }

@@ -247,8 +247,7 @@
             <div class="alert alert-info">
               <ul>
                 {% if storageSetting.upload_mode == 'cloud' %}
-                  <li>{{ '支持'|trans|raw }}<strong>mp4, avi, flv, wmv, mov,
-                      m4v</strong>{{ '格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。'|trans|raw }}</li>
+                  <li>{{ '支持'|trans|raw }}<strong>mp4, avi, flv, wmv, mov, m4v, mpg</strong>{{ '格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。'|trans|raw }}</li>
                   <li>{{ '支持'|trans|raw }}<strong>{{ '断点续传'|trans|raw }}</strong>{{ '（仅支持HTML5浏览器）。'|trans|raw }}</li>
                   <li>{{ '视频将上传到'|trans|raw }}
                     <strong>{{ '云视频服务器'|trans|raw }}</strong>{{ '，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。'|trans|raw }}
@@ -272,7 +271,7 @@
         </div>
         <div class="tab-pane" id="video-chooser-disk-pane">
           <div id="file-browser-video" data-role="file-browser"
-               data-base-url="{{ path('uploadfile_browser', {type:'video'}) }}"
+               data-base-url="{{ path('uploadfile_browser', {type:'video', source:'upload'}) }}"
                data-default-url="{{ path('uploadfile_browser', {type:'video', source:'upload'}) }}"
                data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
                data-empty="{{ '暂无视频文件，请先上传。'|trans }}">
@@ -507,7 +506,7 @@
 
             <div class="alert alert-info">
               <ul>
-                <li>{{ '支持'|trans }}<strong>{{ 'pdf,doc,docx'|trans }}</strong>{{ '格式的文档上传，且文件大小不能超过'|trans }}
+                <li>{{ '支持'|trans }}<strong>pdf,doc,docx,xls,xlsx</strong>{{ '格式的文档上传，且文件大小不能超过'|trans }}
                   <strong>{{ '100 MB'|trans }}</strong>。
                 </li>
                 <li>{{ '文档将上传到'|trans }}<strong>{{ '云服务器'|trans }}</strong></li>

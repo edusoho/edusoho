@@ -67,6 +67,10 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         );
 
         $count       = $this->searchNavigationCount($conditions);
+        if($count==0){
+            return array();
+        }
+
         $navigations = $this->searchNavigations(
             $conditions,
             array('sequence', 'ASC'),

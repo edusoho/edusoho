@@ -9,9 +9,10 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 {
     protected $table = 'orders';
 
-    private $serializeFields = array(
-        'data' => 'json'
-    );
+    private $serializeFields
+        = array(
+            'data' => 'json'
+        );
 
     public function getOrder($id)
     {
@@ -68,6 +69,8 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 
     public function addOrder($order)
     {
+        $order['createdTime'] = time();
+        $order['updatedTime'] = $order['createdTime'];        
         $order    = $this->createSerializer()->serialize($order, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $order);
 
@@ -80,6 +83,7 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 
     public function updateOrder($id, $fields)
     {
+        $fields['updatedTime'] = time();
         $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getOrder($id);
@@ -90,9 +94,12 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
                         ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
                         ->setFirstResult($start)
                         ->setMaxResults($limit);
+        for ($i = 0; $i < count($orderBy); $i = $i + 2) {
+            $builder->addOrderBy($orderBy[$i], $orderBy[$i + 1]);
+        };
+
         $orders = $builder->execute()->fetchAll() ?: array();
         return $this->createSerializer()->unserializes($orders, $this->serializeFields);
     }
@@ -103,8 +110,15 @@ class OrderDaoImpl extends BaseDao implements OrderDao
             $conditions['startTime'] = 0;
         }
 
-        $sql = "SELECT * FROM {$this->table} WHERE `createdTime`>={$conditions['startTime']} AND `createdTime`<{$conditions['endTime']} AND `userId` = {$conditions['userId']} AND (not(`payment` in ('none','coin'))) AND `status` = 'paid' ORDER BY {$orderBy[0]} {$orderBy[1]}  LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array());
+        $this->filterStartLimit($start, $limit);
+        $this->checkOrderBy($orderBy);
+
+        $sql = "SELECT * FROM {$this->table} WHERE `createdTime`>= ? AND `createdTime`< ? AND `userId` = ? AND (not(`payment` in ('none','coin'))) AND `status` = 'paid' ORDER BY {$orderBy[0]} {$orderBy[1]}  LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array(
+            $conditions['startTime'],
+            $conditions['endTime'],
+            $conditions['userId'],
+        ));
     }
 
     public function countUserBillNum($conditions)
@@ -113,14 +127,18 @@ class OrderDaoImpl extends BaseDao implements OrderDao
             $conditions['startTime'] = 0;
         }
 
-        $sql = "SELECT count(*) FROM {$this->table} WHERE `createdTime`>={$conditions['startTime']} AND `createdTime`<{$conditions['endTime']} AND `userId` = {$conditions['userId']} AND (not(`payment` in ('none','coin'))) AND `status` = 'paid' ";
-        return $this->getConnection()->fetchColumn($sql, array());
+        $sql = "SELECT count(*) FROM {$this->table} WHERE `createdTime`>=? AND `createdTime`< ? AND `userId` = ? AND (not(`payment` in ('none','coin'))) AND `status` = 'paid' ";
+        return $this->getConnection()->fetchColumn($sql, array(
+            $conditions['startTime'],
+            $conditions['endTime'],
+            $conditions['userId'],
+        ));
     }
 
     public function searchOrderCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('COUNT(id)');
+            ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
@@ -143,25 +161,32 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         }
 
         return $this->createDynamicQueryBuilder($conditions)
-                    ->from($this->table, 'course_order')
-                    ->andWhere('sn = :sn')
-                    ->andWhere('targetType = :targetType')
-                    ->andWhere('targetId = :targetId')
-                    ->andWhere('userId = :userId')
-                    ->andWhere('amount > :amount')
-                    ->andWhere('totalPrice >= totalPrice')
-                    ->andWhere('coinAmount > :coinAmount')
-                    ->andWhere('status = :status')
-                    ->andWhere('status <> :statusPaid')
-                    ->andWhere('status <> :statusCreated')
-                    ->andWhere('payment = :payment')
-                    ->andWhere('createdTime >= :createdTimeGreaterThan')
-                    ->andWhere('paidTime >= :paidStartTime')
-                    ->andWhere('paidTime < :paidEndTime')
-                    ->andWhere('createdTime >= :startTime')
-                    ->andWhere('createdTime < :endTime')
-                    ->andWhere('createdTime < :createdTime_LT')
-                    ->andWhere('title LIKE :title');
+            ->from($this->table, 'course_order')
+            ->andWhere('sn = :sn')
+            ->andWhere('targetType = :targetType')
+            ->andWhere('targetId = :targetId')
+            ->andWhere('userId = :userId')
+            ->andWhere('amount > :amount')
+            ->andWhere('totalPrice >= totalPrice')
+            ->andWhere('totalPrice > :totalPriceGreaterThan')
+            ->andWhere('coinAmount > :coinAmount')
+            ->andWhere('status = :status')
+            ->andWhere('status <> :statusPaid')
+            ->andWhere('status <> :statusCreated')
+            ->andWhere('payment = :payment')
+            ->andWhere('payment <> :cashPayment')
+            ->andWhere('createdTime >= :createdTimeGreaterThan')
+            ->andWhere('paidTime >= :paidStartTime')
+            ->andWhere('paidTime < :paidEndTime')
+            ->andWhere('createdTime >= :startTime')
+            ->andWhere('createdTime < :endTime')
+            ->andWhere('createdTime < :createdTime_LT')
+            ->andWhere('title LIKE :title')
+            ->andWhere('targetType IN ( :targetTypes)')
+            ->andWhere('updatedTime >= :updatedTime_GE ')
+			->andWhere('userId IN ( :userIds)')
+			->andWhere('status IN ( :includeStatus)')
+			->andWhere('totalPrice > :totalPrice_GT');
     }
 
     public function sumOrderPriceByTargetAndStatuses($targetType, $targetId, array $statuses)
@@ -208,52 +233,100 @@ class OrderDaoImpl extends BaseDao implements OrderDao
     public function analysisAmount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('sum(amount)');
+            ->select('sum(amount)');
         return $builder->execute()->fetchColumn(0);
     }
 
     public function analysisCoinAmount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('sum(coinAmount)');
+            ->select('sum(coinAmount)');
         return $builder->execute()->fetchColumn(0);
     }
 
     public function analysisTotalPrice($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('sum(totalPrice)');
+            ->select('sum(totalPrice)');
         return $builder->execute()->fetchColumn(0);
     }
 
     public function analysisAmountDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT sum(amount) as count, from_unixtime(paidTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`paidTime`>= ?  AND `paidTime`<= ? AND `status`='paid'  group by from_unixtime(`paidTime`,'%Y-%m-%d') order by date ASC ";
+        $sql = "SELECT sum(amount) as count, from_unixtime(paidTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE `paidTime`>= ?  AND `paidTime`<= ? AND `status`='paid'  group by from_unixtime(`paidTime`,'%Y-%m-%d') order by date ASC ";
         return $this->getConnection()->fetchAll($sql, array($startTime, $endTime));
     }
 
     public function analysisCourseAmountDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT sum(amount) as count, from_unixtime(paidTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`paidTime`>={$startTime} AND `paidTime`<={$endTime} AND `status`='paid' AND targetType='course'   group by from_unixtime(`paidTime`,'%Y-%m-%d') order by date ASC ";
-        return $this->getConnection()->fetchAll($sql);
+        $sql = "SELECT sum(amount) as count, from_unixtime(paidTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE `paidTime`>= ? AND `paidTime`<= ? AND `status`='paid' AND targetType='course'   group by from_unixtime(`paidTime`,'%Y-%m-%d') order by date ASC ";
+        return $this->getConnection()->fetchAll($sql, array($startTime, $endTime));
     }
 
     public function analysisClassroomAmountDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT sum(amount) as count, from_unixtime(paidTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`paidTime`>={$startTime} AND `paidTime`<={$endTime} AND `status`='paid' AND targetType='classroom'   group by from_unixtime(`paidTime`,'%Y-%m-%d') order by date ASC ";
-        return $this->getConnection()->fetchAll($sql);
+        $sql = "SELECT sum(amount) as count, from_unixtime(paidTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE `paidTime`>= ? AND `paidTime`<= ? AND `status`='paid' AND targetType='classroom'   group by from_unixtime(`paidTime`,'%Y-%m-%d') order by date ASC ";
+        return $this->getConnection()->fetchAll($sql, array($startTime, $endTime));
     }
 
     public function analysisVipAmountDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT sum(amount) as count, from_unixtime(paidTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`paidTime`>={$startTime} AND `paidTime`<={$endTime} AND `status`='paid' AND targetType='vip'   group by from_unixtime(`paidTime`,'%Y-%m-%d') order by date ASC ";
-        return $this->getConnection()->fetchAll($sql);
+        $sql = "SELECT sum(amount) as count, from_unixtime(paidTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE `paidTime`>= ? AND `paidTime`<= ? AND `status`='paid' AND targetType='vip'   group by from_unixtime(`paidTime`,'%Y-%m-%d') order by date ASC ";
+        return $this->getConnection()->fetchAll($sql, array($startTime, $endTime));
+    }
+
+    public function analysisAmountsDataByTime($conditions, $orderBy, $start, $limit)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select("from_unixtime(paidTime,'%Y-%m-%d') date, sum(amount) as count")
+            ->groupBy("from_unixtime(`paidTime`,'%Y-%m-%d')")
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll(0) ?: array();
+    }
+
+    public function analysisAmountsDataByTitle($conditions, $orderBy, $start, $limit)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('sum(amount) as count, userId, title, targetType, targetId')
+            ->groupBy('title')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll(0) ?: array();
+    }
+
+    public function analysisAmountsDataByUserId($conditions, $orderBy, $start, $limit)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('sum(amount) as count, userId, title, targetType, targetId')
+            ->groupBy('userId')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll(0) ?: array();
     }
 
     public function analysisExitCourseOrderDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>={$startTime} AND `createdTime`<={$endTime} AND `status`<>'paid' AND `status`<>'created' AND targetType='course' group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>= ? AND `createdTime`<= ? AND `status`<>'paid' AND `status`<>'created' AND targetType='course' group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
 
-        return $this->getConnection()->fetchAll($sql);
+        return $this->getConnection()->fetchAll($sql, array($startTime, $endTime));
     }
+
+    public function analysisPaidOrderGroupByTargetType($startTime, $groupBy)
+    {
+        $sql = "SELECT targetType , count(targetType) as value FROM orders WHERE STATUS = 'paid' and `totalPrice` >0 and `paidTime`>= ? GROUP BY targetType";
+        return $this->getConnection()->fetchAll($sql, array($startTime));
+    }
+
+    public function analysisOrderDate($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select("count(id) as count ,from_unixtime(paidTime,'%Y-%m-%d') date")
+            ->groupBy('date');
+        return $builder->execute()->fetchAll(0) ?: array();
+    }
+
 }

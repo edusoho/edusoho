@@ -18,7 +18,7 @@ class FieldSerializer
 
             $fields[$key] = $this->getSerializeAlgorithm($algorithm)->serialize($fields[$key]);
         }
-
+        
         return $fields;
     }
 
@@ -106,7 +106,6 @@ class SawSerializeAlgorithm implements SerializeAlgorithm
 
     public function unserialize($value)
     {
-
         return explode('|', trim($value, '|'));
     }
 }

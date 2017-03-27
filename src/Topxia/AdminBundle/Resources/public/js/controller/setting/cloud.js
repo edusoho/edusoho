@@ -1,4 +1,5 @@
 define(function(require, exports, module) {
+    require('echarts');
 
     var Notify = require('common/bootstrap-notify');
     var Uploader = require('upload');
@@ -7,6 +8,8 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
 
     exports.run = function() {
+
+        $("[data-toggle='popover']").popover();
 
         var $form = $("#cloud-setting-form");
         var uploader = new Uploader({
@@ -57,7 +60,6 @@ define(function(require, exports, module) {
                 Notify.success(Translator.trans('上传云视频内嵌水印成功！'));
             }
         });
-
         $("#cloud-video-embed-watermark-remove").on('click', function(){
             if (!confirm(Translator.trans('确认要删除云视频水印吗？'))) return false;
             var $btn = $(this);
@@ -131,14 +133,12 @@ define(function(require, exports, module) {
             }
         });
 
-        if ($('input[name="video_fingerprint"]:checked').val() == 1){
-            validator.addItem({
-                element: '[name="video_fingerprint_time"]',
-                required: true,
-                rule: 'decimal min{min:0.1} max{max:100}',
-                display:'云视频指纹显示时间'
-            });
-        }
+        validator.addItem({
+            element: '[name="video_fingerprint_time"]',
+            required: true,
+            rule: 'decimal min{min:0.1} max{max:100}',
+            display:'云视频指纹显示时间'
+        });
 
         $('input[name="video_fingerprint"]').change(function(){
             if($(this).val() == 1) {
@@ -152,7 +152,8 @@ define(function(require, exports, module) {
                 validator.removeItem('[name="video_fingerprint_time"]');
             }
         })
-        
+
+
     }
 
 })

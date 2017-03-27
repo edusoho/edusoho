@@ -60,7 +60,7 @@ define(function(require, exports, module) {
                  if($parent.length){
                   var add = 0;
                    $parent.nextAll().each(function(){
-                     if($(this).hasClass('item-chapter  clearfix')){
+                     if($(this).hasClass('js-chapter')){
                         $(this).before(html);
                         add = 1;
                         return false;

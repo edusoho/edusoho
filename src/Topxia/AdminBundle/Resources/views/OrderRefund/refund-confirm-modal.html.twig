@@ -34,7 +34,9 @@
     </div>
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-
+    <div class="alert alert-info text-center">
+      <strong>系统没有自动退款功能，此处仅是退款申请记录，审核通过的退款申请，需要网校线下退款。</strong>
+    </div>
   </form>
 {% endblock %}
 

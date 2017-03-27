@@ -1,5 +1,3 @@
-{% if not role|default(null) == 'teacher' %}
-
 <div class="testpaper-question testpaper-question-fill {% if setting('magic.testpaper_watermark') %}testpaper-watermark{% endif %}" data-watermark-url="{{ path('cloud_testpaper_watermark') }}" id="question{{ item.question.id }}">
 	<div class="testpaper-question-body">
 	  {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-question-stem.html.twig' %}
@@ -53,4 +51,3 @@
 	{% endif %}
 </div>
 
-{% endif %}

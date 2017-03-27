@@ -6,6 +6,7 @@ use Topxia\Common\StringToolkit;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Topxia\Service\Taxonomy\TagOwnerManager;
 
 class CourseEventSubscriber implements EventSubscriberInterface
 {
@@ -26,7 +27,8 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'user.role.change'       => 'onRoleChange',
             'announcement.create'    => 'onAnnouncementCreate',
             'announcement.update'    => 'onAnnouncementUpdate',
-            'announcement.delete'    => 'onAnnouncementDelete'
+            'announcement.delete'    => 'onAnnouncementDelete',
+            'courseReview.add'       => 'onCourseReviewCreate'
         );
     }
 
@@ -194,12 +196,21 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
         $argument  = $context['argument'];
         $course    = $context['course'];
+        $userId    = $context['userId'];
+
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
 
         if ($courseIds && $argument) {
             foreach ($courseIds as $key => $courseId) {
+                unset($argument['expiryMode']);
+                unset($argument['expiryDay']);
                 $this->getCourseService()->updateCourse($courseIds[$key], $argument);
             }
+        }
+
+        if (isset($context['tagIds'])) {
+            $tagOwnerManager = new TagOwnerManager('course', $course['id'], $context['tagIds'], $userId);
+            $tagOwnerManager->update();
         }
     }
 
@@ -333,6 +344,30 @@ class CourseEventSubscriber implements EventSubscriberInterface
         return true;
     }
 
+    public function onCourseReviewCreate(ServiceEvent $event)
+    {
+        $review = $event->getSubject();
+
+        if ($review['parentId'] > 0) {
+            $course = $this->getCourseService()->getCourse($review['courseId']);
+
+            $parentReview = $this->getReviewService()->getReview($review['parentId']);
+
+            if (!$parentReview) {
+                return false;
+            }
+
+            $message = array(
+                'title'      => $course['title'],
+                'targetId'   => $review['courseId'],
+                'targetType' => 'course',
+                'userId'     => $review['userId']
+            );
+            $this->getNotifiactionService()->notify($parentReview['userId'], 'comment-post',
+                $message);
+        }
+    }
+
     protected function simplifyCousrse($course)
     {
         return array(
@@ -385,5 +420,15 @@ class CourseEventSubscriber implements EventSubscriberInterface
     protected function getAnnouncementService()
     {
         return ServiceKernel::instance()->createService('Announcement.AnnouncementService');
+    }
+
+    protected function getReviewService()
+    {
+        return ServiceKernel::instance()->createService('Course.ReviewService');
+    }
+
+    protected function getNotifiactionService()
+    {
+        return ServiceKernel::instance()->createService('User.NotificationService');
     }
 }

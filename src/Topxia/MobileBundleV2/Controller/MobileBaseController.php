@@ -7,6 +7,7 @@ use Topxia\Service\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Topxia\Api\Util\TagUtil;
 
 class MobileBaseController extends BaseController
 {
@@ -266,9 +267,9 @@ class MobileBaseController extends BaseController
         $self        = $this;
         $container   = $this->container;
         return array_map(function ($course) use ($self, $container, $teachers, $coinSetting) {
-            $course['smallPicture']  = $container->get('topxia.twig.web_extension')->getFurl($course['smallPicture'], 'course.png', true);
-            $course['middlePicture'] = $container->get('topxia.twig.web_extension')->getFurl($course['middlePicture'], 'course.png', true);
-            $course['largePicture']  = $container->get('topxia.twig.web_extension')->getFurl($course['largePicture'], 'course.png', true);
+            $course['smallPicture']  = $container->get('topxia.twig.web_extension')->getFurl($course['smallPicture'], 'course.png');
+            $course['middlePicture'] = $container->get('topxia.twig.web_extension')->getFurl($course['middlePicture'], 'course.png');
+            $course['largePicture']  = $container->get('topxia.twig.web_extension')->getFurl($course['largePicture'], 'course.png');
             $course['about']         = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
             $course['createdTime']   = date("c", $course['createdTime']);
 
@@ -281,6 +282,10 @@ class MobileBaseController extends BaseController
             }
 
             unset($course['teacherIds']);
+            
+            $course['tags'] = TagUtil::buildTags('course', $course['id']);
+            $course['tags'] = ArrayToolkit::column($course['tags'], 'name');
+
             $course["priceType"] = $coinSetting["priceType"];
             $course['coinName']  = $coinSetting["name"];
             return $course;
@@ -364,9 +369,22 @@ class MobileBaseController extends BaseController
             $user['largeAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
             $user['createdTime']  = date('c', $user['createdTime']);
 
+            if (!empty($user['verifiedMobile'])) {
+                $user['verifiedMobile'] = substr_replace($user['verifiedMobile'], '****', 3, 4);
+            } else {
+                unset($user['verifiedMobile']);
+            }
+
             if ($controller->isinstalledPlugin('Vip') && $controller->setting('vip.enabled')) {
-                $vip         = $controller->getVipService()->getMemberByUserId($user['id']);
-                $user["vip"] = $vip;
+                $userVip = $controller->getVipService()->getMemberByUserId($user['id']);
+
+                if (!empty($userVip)) {
+                    $userVipLevel = $controller->getLevelService()->getLevel($userVip['levelId']);
+
+                    $user['vip']['levelId']     = $userVip['levelId'];
+                    $user['vip']['vipName']     = $userVipLevel['name'];
+                    $user['vip']['VipDeadLine'] = $userVip['deadline'];
+                }
             }
 
             $userProfile       = $controller->getUserService()->getUserProfile($user['id']);
@@ -380,8 +398,6 @@ class MobileBaseController extends BaseController
             $user['follower']  = $controller->getUserService()->findUserFollowerCount($user['id']);
 
             $user['email']          = "****";
-            $user['mobile']         = "****";
-            $user['verifiedMobile'] = "****";
             unset($user['password']);
             unset($user['payPasswordSalt']);
             unset($user['payPassword']);
@@ -446,6 +462,9 @@ class MobileBaseController extends BaseController
                 $tempCourses[$key]["liveStartTime"]   = "";
                 $tempCourses[$key]["liveEndTime"]     = "";
             }
+
+            $tempCourses[$key]['tags'] = TagUtil::buildTags('course', $tempCourses[$key]['id']);
+            $tempCourses[$key]['tags'] = ArrayToolkit::column($tempCourses[$key]['tags'], 'name');
         }
 
         return $tempCourses;

@@ -1,0 +1,33 @@
+language: php
+
+env:
+  global:
+    - COVERALLS=0
+    - PHPCS=0
+
+matrix:
+    include:
+        - php: 5.4
+        - php: 5.5
+        - php: 5.6
+          env: COVERALLS=1 PHPCS=1
+        - php: 7
+        - php: hhvm
+
+    allow_failures:
+        - php: hhvm
+    fast_finish: true
+
+before_script:
+  - composer install --no-interaction --prefer-source --dev
+
+script:
+  - sh -c "if [ '$COVERALLS' = '1' ]; then ./vendor/bin/phpunit --coverage-clover clover.xml ; else ./vendor/bin/phpunit ; fi"
+  - sh -c "if [ '$PHPCS' = '1' ]; then vendor/bin/phpcs -p --extensions=php --standard=./phpcs.xml ./src ./tests ; fi"
+
+after_script:
+  - sh -c "if [ '$COVERALLS' = '1' ]; then vendor/bin/coveralls ; fi"
+
+notifications:
+    on_success: never
+    on_failure: always

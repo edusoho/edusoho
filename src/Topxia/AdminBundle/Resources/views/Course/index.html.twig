@@ -40,6 +40,13 @@
       {% include 'TopxiaAdminBundle:Widget:tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: '课程说明Tooltip'|trans|raw, placement: 'left'} %}
     </form>
   </div>
+  
+  <p class="text-muted">
+    <span class="mrl">{{'课程：'|trans}}<strong class="inflow-num">{{ searchCoursesNum }}</strong> {{ '个'|trans }}</span>
+    <span class="mrl">{{'已发布：'|trans}}<strong class="inflow-num">{{ publishedCoursesNum }}</strong> {{ '个'|trans }}</span>
+    <span class="mrl">{{'已关闭：'|trans}}<strong class="outflow-num">{{ closedCoursesNum }}</strong> {{ '个'|trans }}</span>
+    <span class="mrl">{{'未发布：'|trans}}<strong class="outflow-num">{{ unPublishedCoursesNum }}</strong> {{ '个'|trans }}</span>
+  </p>
 
   <table class="table table-striped table-hover" id="course-table" style="word-break:break-all;">
     <thead>

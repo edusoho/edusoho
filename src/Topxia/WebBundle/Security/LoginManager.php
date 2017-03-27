@@ -41,7 +41,7 @@ class LoginManager
             $rememberMeServices->loginSuccess($this->container->get('request'), $response, $token);
         }
 
-        $this->container->get('security.context')->setToken($token);
+        $this->container->get('security.token_storage')->setToken($token);
 
         $this->container->get('event_dispatcher')->dispatch(
             SecurityEvents::INTERACTIVE_LOGIN,

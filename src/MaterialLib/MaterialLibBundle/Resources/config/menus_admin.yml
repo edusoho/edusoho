@@ -1,6 +1,7 @@
 
 admin_cloud_file_manage:
     name: 云资源
+    visable: (cloudStatus())
     parent: admin_app
     after: admin_app_center_show
     children:

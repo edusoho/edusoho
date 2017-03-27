@@ -74,8 +74,8 @@ class CoinController extends BaseController
 
         $image = $rawImage->copy();
         $image->resize(new Box($size, $size));
-        $filePath  = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$size}*{$size}.{$pathinfo['extension']}";
-        $imageName = "{$pathinfo['filename']}_{$size}*{$size}.{$pathinfo['extension']}";
+        $filePath  = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$size}-{$size}.{$pathinfo['extension']}";
+        $imageName = "{$pathinfo['filename']}_{$size}-{$size}.{$pathinfo['extension']}";
         $image     = $image->save($filePath, array('quality' => 100));
 
         $coin = $this->getSettingService()->get('coin', array());
@@ -626,7 +626,7 @@ class CoinController extends BaseController
      */
     public function exportCsvAction(Request $request, $cashType)
     {
-        $payment    = $this->get('topxia.twig.web_extension')->getDict('payment');
+        $payment    = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
         $conditions = $request->query->all();
 
         if (!empty($conditions) && $cashType == 'Coin') {

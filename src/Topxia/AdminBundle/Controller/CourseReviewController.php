@@ -1,28 +1,27 @@
 <?php
 namespace Topxia\AdminBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 
-class CourseReviewController extends BaseController {
-
-    public function indexAction (Request $request)
-    {   
+class CourseReviewController extends BaseController
+{
+    public function indexAction(Request $request)
+    {
         $conditions = $request->query->all();
 
-        if (!empty($conditions['courseTitle'])){
-            
-            $courses = $this->getCourseService()->findCoursesByLikeTitle(trim($conditions['courseTitle']));
+        if (!empty($conditions['courseTitle'])) {
+            $courses                 = $this->getCourseService()->findCoursesByLikeTitle(trim($conditions['courseTitle']));
             $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
-            if (count($conditions['courseIds']) == 0){
+            if (count($conditions['courseIds']) == 0) {
                 return $this->render('TopxiaAdminBundle:CourseReview:index.html.twig', array(
-                'reviews' => array(),
-                'users'=>array(),
-                'courses'=>array(),
-                'paginator' => new Paginator($request,0,20)
+                    'reviews'   => array(),
+                    'users'     => array(),
+                    'courses'   => array(),
+                    'paginator' => new Paginator($request, 0, 20)
                 ));
-            }                 
+            }
         }
 
         $paginator = new Paginator(
@@ -31,22 +30,24 @@ class CourseReviewController extends BaseController {
             20
         );
 
+        $conditions['parentId'] = 0;
+
         $reviews = $this->getReviewService()->searchReviews(
             $conditions,
             'latest',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
-        ); 
+        );
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
+        $users   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($reviews, 'courseId'));
 
-        return $this->render('TopxiaAdminBundle:CourseReview:index.html.twig',array(
-            'reviews' => $reviews,
-            'users'=>$users,
-            'courses'=>$courses,
-            'paginator' => $paginator,
-            ));
+        return $this->render('TopxiaAdminBundle:CourseReview:index.html.twig', array(
+            'reviews'   => $reviews,
+            'users'     => $users,
+            'courses'   => $courses,
+            'paginator' => $paginator
+        ));
     }
 
     public function deleteAction(Request $request, $id)
@@ -54,7 +55,6 @@ class CourseReviewController extends BaseController {
         $this->getReviewService()->deleteReview($id);
         return $this->createJsonResponse(true);
     }
-
 
     public function batchDeleteAction(Request $request)
     {
@@ -79,6 +79,4 @@ class CourseReviewController extends BaseController {
     {
         return $this->getServiceKernel()->createService('Course.ReviewService');
     }
-
-
 }

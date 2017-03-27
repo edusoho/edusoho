@@ -9,22 +9,19 @@ class ClassroomThreadController extends BaseController
 {
     public function listAction(Request $request, $classroomId)
     {
-        $classroomSetting = $this->getSettingService()->get('classroom');
-
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
+        $canLook = $this->getClassroomService()->canLookClassroom($classroom['id']);
+        if (!$canLook) {
+            $classroomName = $this->setting('classroom.name', '班级');
+            return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomName)), '', 3, $this->generateUrl('homepage'));
+        }
+
         $user = $this->getCurrentUser();
+        $member = $user->isLogin() ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
-        $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $layout = ($member && $member['locked'] == '0') ? 'ClassroomBundle:Classroom:join-layout.html.twig' : 'ClassroomBundle:Classroom:layout.html.twig';
 
-        if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
-            return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));
-        }
-
-        $layout = 'ClassroomBundle:Classroom:layout.html.twig';
-        if ($member && $member['locked'] == '0') {
-            $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
-        }
         if (!$classroom) {
             $classroomDescription = array();
         } else {
@@ -32,10 +29,11 @@ class ClassroomThreadController extends BaseController
             $classroomDescription = strip_tags($classroomDescription, '');
             $classroomDescription = preg_replace("/ /", "", $classroomDescription);
         }
+
         return $this->render('ClassroomBundle:ClassroomThread:list.html.twig', array(
             'classroom'            => $classroom,
             'filters'              => $this->getThreadSearchFilters($request),
-            'canLook'              => $this->getClassroomService()->canLookClassroom($classroom['id']),
+            'canLook'              => $canLook,
             'service'              => $this->getThreadService(),
             'layout'               => $layout,
             'member'               => $member,
@@ -67,7 +65,7 @@ class ClassroomThreadController extends BaseController
             return $this->forward('TopxiaWebBundle:Thread:create', array('request' => $request, 'target' => array('type' => 'classroom', 'id' => $classroom['id'])));
         }
 
-        $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
 
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
         if ($member && !$member['locked']) {
@@ -85,18 +83,16 @@ class ClassroomThreadController extends BaseController
     public function updateAction(Request $request, $classroomId, $threadId)
     {
         $classroomSetting = $this->getSettingService()->get('classroom');
-
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        $thread = $this->getThreadService()->getThread($threadId);
+        $user   = $this->getCurrentUser();
+        $canManage = $this->canManageThread($user, $classroomId, $thread);
 
-        if (!$this->getClassroomService()->canLookClassroom($classroomId)) {
+        if (!$canManage){
             return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));
         }
 
-        $thread = $this->getThreadService()->getThread($threadId);
-
-        $user   = $this->getCurrentUser();
-        $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-
+        $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
         if ($member && !$member['locked']) {
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
@@ -128,8 +124,9 @@ class ClassroomThreadController extends BaseController
             $filter = array('adopted' => $adopted);
         }
 
-        $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-        if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
+        $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $canLook = $this->getClassroomService()->canLookClassroom($classroom['id']);
+        if (!$canLook) {
             return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));
         }
         if (empty($thread)) {
@@ -148,8 +145,27 @@ class ClassroomThreadController extends BaseController
             'member'    => $member,
             'layout'    => $layout,
             'filter'    => $filter,
-            'canLook'   => $this->getClassroomService()->canLookClassroom($classroom['id'])
+            'canLook'   => $canLook
         ));
+    }
+
+    private function canManageThread($user, $classroomId, $thread)
+    {
+
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        if ($this->getClassroomService()->canManageClassroom($classroomId)) {
+            return true;
+        }
+
+        if (($this->getClassroomService()->canTakeClassroom($classroomId, true) && $thread['userId'] == $user['id']))
+        {
+          return true;
+        }
+
+        return false;
     }
 
     private function getThreadSearchFilters($request)

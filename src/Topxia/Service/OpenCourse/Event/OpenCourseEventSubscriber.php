@@ -5,12 +5,15 @@ use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Service\OpenCourse\Impl\OpenCourseServiceImpl;
+use Topxia\Service\Taxonomy\TagOwnerManager;
 
 class OpenCourseEventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return array(
+            'open.course.update'        => 'onCourseUpdate',
+            'open.course.delete'        => 'onCourseDelete',
             'open.course.lesson.create' => 'onLessonCreate',
             'open.course.lesson.delete' => 'onLessonDelete',
             'open.course.member.create' => 'onMemberCreate',
@@ -18,6 +21,26 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
             'course.material.update'    => 'onMaterialUpdate',
             'course.material.delete'    => 'onMaterialDelete'
         );
+    }
+
+    public function onCourseDelete(ServiceEvent $event)
+    {
+        $course = $event->getSubject();
+
+        $tagOwnerManager = new TagOwnerManager('openCourse', $course['id']);
+        $tagOwnerManager->delete();
+    }
+
+    public function onCourseUpdate(ServiceEvent $event)
+    {
+        $fields = $event->getSubject();
+
+        $course      = $fields['course'];
+        $tagIds      = $fields['tagIds'];
+        $userId      = $fields['userId'];
+
+        $tagOwnerManager = new TagOwnerManager('openCourse', $course['id'], $tagIds, $userId);
+        $tagOwnerManager->update();
     }
 
     public function onLessonCreate(ServiceEvent $event)

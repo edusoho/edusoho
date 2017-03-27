@@ -1,0 +1,411 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_edu_cloud_setting_sms' %} 
+{% set script_controller = 'educloud/sms-setting' %}
+{% block page_flash_message %}
+  {{ web_macro.flash_messages() }}
+{% endblock %}
+{% block page_title %}
+  {% if setting('cloud_status.locked') == true %}
+    <div class="alert alert-warning" role="alert">{{'您的教育云服务已被锁定，请联系客服人员：'|trans}}4008041114。</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% elseif smsInfo.status == 'stoped' %}
+    <div class="alert alert-warning" role="alert">{{'
+    您的云短信服务已被暂停，不能使用，请联系客服人员：'|trans}}4008041114。</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% else %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
+{% block main %}
+  {% if smsInfo.usedSmsSign.name is defined and smsInfo.usedSmsSign.status == 'success'  %}
+    {% set sms_sign_school_name = smsInfo.usedSmsSign.name %}
+  {% else %}
+    {% set sms_sign_school_name = smsInfo.name | default('') %}
+  {% endif %}
+<div class="page-heading">
+  云短信开关
+</div>
+<form class="form-horizontal" method="post" action="{{ path('admin_edu_cloud_sms_status') }}">
+  <div class="form-group">
+    <label for="" class="col-sm-3 control-label">启用云短信：</label>
+    <div class="controls col-md-9 radios">
+      <div>
+        <span class="text-success">{{'已启用'|trans}}</span>
+          <button class="btn btn-default btn-sm mlm" name="sms-close">
+            <span class="text-muted">{{'关闭'|trans}}</span>
+          </button>
+      </div>
+      <div class="help-block">
+        教学资讯，极速送达，尽在掌握。<a href="{{ path('admin_cloud_show',{'type': 'sms'}) }}" target="_blank">点击这里</a>了解详情。
+      </div>
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+<div class="page-heading">
+  基本设置
+</div>
+<form class="form-horizontal" role="form">
+  <div class="form-group">
+    <label for="" class="col-sm-3 control-label">短信签名：</label>
+    <div class="controls col-md-9 radios">
+      {{ sms_sign_school_name }}
+      <a href="{{ path('admin_cloud_sms_sign') }}" class="plm" target="_blank">去设置</a>
+      <div class="help-block">
+        签名显示在短信内容的最前面，显示这条短信来自哪家公司/产品/网站。
+      </div>
+    </div>
+  </div>
+</form>
+<div class="page-heading">
+  预警设置
+</div>
+<form class="form-horizontal" role="form">
+  <div class="form-group">
+    <label for="" class="col-sm-3 control-label">单日短信发送阈值：</label>
+    <div class="controls col-md-9 radios">
+      {% if isBinded.smsThreshold is defined and isBinded.smsThreshold != 0 %}
+        {{ isBinded.smsThreshold }}
+      {% else %}
+        {{ '未设置'| trans }}
+      {% endif %}
+      <a href="{{path('admin_cloud_sms_setting')}}" target="_blank" class="plm">去设置</a>
+      <div class="help-block">
+        单日短信发送量超过此阈值时，发送通知。
+      </div>
+    </div>
+  </div>
+</form>
+{% if smsInfo.name | default('') %}
+  <div class="page-heading">
+    模板设置
+  </div>
+  <form class="form-horizontal" method="post" id="sms-form" novalidate="">
+  <div class="table-responsive sms-table mtl">
+    <table class="table table-striped table-hover table-bordered ">
+      <thead>
+        <tr>
+          <th>短信类型</th>
+          <th width="12%">应用场景</th>
+          <th width="40%">内容示例</th>
+          <th>发送对象</th>
+          <th>发送方式</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>验证类</td>
+          <td>手机绑定</td>
+          <td>
+            【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+            {{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}</td>
+          <td>单个用户</td>
+          <td>自动单发</td>
+          <td><input type="hidden" name="sms_bind" value="on">默认开启</td>
+        </tr>
+        <tr>
+          <td>验证类</td>
+          <td>登录密码重置</td>
+          <td>
+            【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+            {{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}
+          </td>
+          <td>单个用户</td>
+          <td>自动单发</td>
+          <td><input type="hidden" name="sms_forget_password" value="on">默认开启</td>
+        </tr>
+        <tr>
+          <td>验证类</td>
+          <td>支付密码重置</td>
+          <td>
+            【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+            {{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}</td>
+          <td>单个用户</td>
+          <td>自动单发</td>
+          <td><input type="hidden" name="sms_forget_pay_password" value="on">默认开启</td>
+        </tr>
+        <tr>
+          <td>验证类</td>
+          <td>使用网站余额支付</td>
+          <td>
+            【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+            {{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}
+          </td>
+          <td>单个用户</td>
+          <td>自动单发</td>
+          <td>
+            <label>
+              <input type="radio" name="sms_user_pay" value="on"
+                {% if (setting('cloud_sms.sms_user_pay')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ '开启'|trans }}
+            </label>
+            <label>
+              <input type="radio" name="sms_user_pay" value="off"
+                {% if (setting('cloud_sms.sms_user_pay')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ '关闭'|trans }}
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>通知类</td>
+          <td>新班级发布</td>
+          <td>
+            【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+            {{ '同学们，%classrommName%：《班级名称》现已开始报名！链接地址'|trans({'%classrommName%': setting('classroom.name')|default('班级'|trans)}) }}
+          </td>
+          <td>所有用户</td>
+          <td>手动群发</td>
+          <td>
+            <label>
+              <input type="radio" name="sms_classroom_publish" value="on"
+                {% if (setting('cloud_sms.sms_classroom_publish')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ '开启'|trans }}
+            </label>
+            <label>
+              <input type="radio" name="sms_classroom_publish" value="off"
+                {% if (setting('cloud_sms.sms_classroom_publish')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ '关闭'|trans }}
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>通知类</td>
+          <td>新课程发布</td>
+          <td>
+            【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+            {{ '同学们，课程：《课程名称》现已开始报名！链接地址' }}
+          </td>
+          <td>所有用户</td>
+          <td>手动群发</td>
+          <td>
+            <label>
+              <input type="radio" name="sms_course_publish" value="on"
+                {% if (setting('cloud_sms.sms_course_publish')|default('off')) == 'on' %}
+                checked="checked"{% endif %}> {{ '开启'|trans }}
+            </label>
+            <label>
+              <input type="radio" name="sms_course_publish" value="off"
+                {% if (setting('cloud_sms.sms_course_publish')|default('off')) != 'on' %}
+                checked="checked"{% endif %}> {{ '关闭'|trans }}
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>通知类</td>
+          <td>新课时发布通知（普通课程）</td>
+          <td>
+            【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+            {{ '您的课程：《课程名称》－课时：《课时名》已发布！链接地址'}}
+          </td>
+          <td>课程用户</td>
+          <td>自动群发</td>
+          <td>
+            <label>
+              <input type="radio" name="sms_normal_lesson_publish" value="on"
+              {% if (setting('cloud_sms.sms_normal_lesson_publish')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ '开启'|trans }}
+            </label>
+            <label>
+              <input type="radio" name="sms_normal_lesson_publish" value="off"
+              {% if (setting('cloud_sms.sms_normal_lesson_publish')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ '关闭'|trans }}
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>通知类</td>
+          <td>新课时发布通知（直播）</td>
+          <td>
+            【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+            {{ '课程：《课程名》－课时：《课时名》将在［开播时间］开播！链接地址' }}
+          </td>
+          <td>课程用户</td>
+          <td>自动群发</td>
+          <td>
+            <label>
+              <input type="radio" name="sms_live_lesson_publish" value="on"
+              {% if (setting('cloud_sms.sms_live_lesson_publish')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ '开启'|trans }}
+            </label>
+            <label>
+              <input type="radio" name="sms_live_lesson_publish" value="off"
+              {% if (setting('cloud_sms.sms_live_lesson_publish')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ '关闭'|trans }}
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>通知类</td>
+          <td>直播开播前通知（提前1天）</td>
+          <td>
+            【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+            {{ '课程：《课程名》－课时：《课时名》将在［开播时间］开播！链接地址' }}
+          </td>
+          <td>课程用户</td>
+          <td>自动群发</td>
+          <td>
+            <label>
+              <input type="radio" name="sms_live_play_one_day" value="on"
+              {% if (setting('cloud_sms.sms_live_play_one_day')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ '开启'|trans }}
+            </label>
+            <label>
+              <input type="radio" name="sms_live_play_one_day" value="off"
+              {% if (setting('cloud_sms.sms_live_play_one_day')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ '关闭'|trans }}
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>通知类</td>
+          <td>直播开播前通知（提前1小时）</td>
+          <td>
+            【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+            {{ '课程：《课程名》－课时：《课时名》将在［开播时间］开播!链接地址' }}
+          </td>
+          <td>课程用户</td>
+          <td>自动群发</td>
+          <td>
+            <label>
+              <input type="radio" name="sms_live_play_one_hour" value="on"
+                {% if (setting('cloud_sms.sms_live_play_one_hour')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ '开启'|trans }}
+            </label>
+            <label>
+              <input type="radio" name="sms_live_play_one_hour" value="off"
+                {% if (setting('cloud_sms.sms_live_play_one_hour')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ '关闭'|trans }}
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>通知类</td>
+          <td>作业完成批阅</td>
+          <td>
+            【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+            {{ '您的课程：《课程名》-作业：《课时名》的作业已被老师批阅，快来看看吧!' }}
+          </td>
+          <td>单个用户</td>
+          <td>自动单发</td>
+          <td>
+            {% if (is_plugin_installed('Homework')) %}
+              <label>
+                <input type="radio" name="sms_homework_check" value="on"
+                  {% if (setting('cloud_sms.sms_homework_check')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ '开启'|trans }}
+              </label>
+              <label>
+                <input type="radio" name="sms_homework_check" value="off"
+                  {% if (setting('cloud_sms.sms_homework_check')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ '关闭'|trans }}
+              </label>
+            {% else %}
+              {{ '请先安装作业插件！'|trans }}
+            {% endif %}
+          </td>
+        </tr>
+        <tr>
+          <td>通知类</td>
+          <td>试卷完成批阅</td>
+          <td>
+            【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+            {{ '您的课程：《课程名》-试卷：《课时名》的试卷已被老师批阅，快来看看吧!'  }}
+          </td>
+          <td>单个用户</td>
+          <td>自动单发</td>
+          <td>
+            <label>
+              <input type="radio" name="sms_testpaper_check" value="on"
+                {% if (setting('cloud_sms.sms_testpaper_check')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ '开启'|trans }}
+            </label>
+            <label>
+              <input type="radio" name="sms_testpaper_check" value="off"
+                {% if (setting('cloud_sms.sms_testpaper_check')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ '关闭'|trans }}
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>回执类</td>
+          <td>课程购买回执</td>
+          <td>
+            【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+            {{ '你已成功购买课程《课程名称》，支付［订单金额］。' }}
+          </td>
+          <td>单个用户</td>
+          <td>自动单发</td>
+          <td rowspan="4" style="vertical-align:middle;">
+            <label>
+              <input type="radio" name="sms_order_pay_success" value="on"
+                {% if (setting('cloud_sms.sms_order_pay_success')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ '开启'|trans }}
+            </label>
+            <label>
+              <input type="radio" name="sms_order_pay_success" value="off"
+                {% if (setting('cloud_sms.sms_order_pay_success')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ '关闭'|trans }}
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>回执类</td>
+          <td>班级购买回执</td>
+          <td>
+            【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+            {{ '你已成功购买班级《班级名称》，支付［订单金额］。' }}
+          </td>
+          <td>单个用户</td>
+          <td>自动单发</td>
+        </tr>
+        <tr>
+          <td>回执类</td>
+          <td>会员购买回执</td>
+          <td>
+            【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+            {{ '你已成功购买《会员名称》，支付［订单金额］。' }}
+          </td>
+          <td>单个用户</td>
+          <td>自动单发</td>
+        </tr>
+        <tr>
+          <td>回执类</td>
+          <td>虚拟币充值回执</td>
+          <td>
+            【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+            {{ '你已成功购买《虚拟币面值》《单位》，支付［订单金额］。' }}
+          </td>
+          <td>单个用户</td>
+          <td>自动单发</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <input type="hidden" name="register-mode" value="{{ setting('auth.register_mode') }}">
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  <input type="hidden" name="strategy_overwrite" value="true">
+  <div class="form-group">
+    <div class="controls col-md-offset-10">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+  </form>
+{% endif %}
+{% endblock %}

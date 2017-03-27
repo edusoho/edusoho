@@ -132,26 +132,6 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals(count($randomCourses), 5);
     }
 
-    public function testFindCoursesByTagIdsAndStatus()
-    {
-        $tags = array(
-            'name' => 'tags1',
-            'name' => 'tags2',
-            'name' => 'tags3'
-        );
-        $this->getTagService()->addTag($tags);
-        $course = array(
-            'title' => 'online test course 1',
-            'tags'  => array('1', '2')
-        );
-        $this->getCourseService()->createCourse($course);
-
-        $conditions = array('tagIds' => array('1'), 'status' => 'draft');
-        $result     = $this->getCourseService()->searchCourses($conditions, 'createdTime', 0, 1);
-        $this->assertNotEmpty($result);
-        $this->assertEquals($result[0]['title'], $course['title']);
-    }
-
     public function testFindNormalCoursesByAnyTagIdsAndStatus()
     {
         $tags = array(
@@ -162,9 +142,9 @@ class CourseServiceTest extends BaseTestCase
         $this->getTagService()->addTag($tags);
         $course = array(
             'title' => 'online test course 1',
-            'tags'  => array('1', '2')
         );
-        $this->getCourseService()->createCourse($course);
+        $course = $this->getCourseService()->createCourse($course);
+        $this->getCourseService()->updateCourse($course['id'], array('tagIds' => array(1)));
         $result = $this->getCourseService()->findNormalCoursesByAnyTagIdsAndStatus(array('1'), 'draft', array('Rating', 'DESC'), 0, 1);
         $this->assertNotEmpty($result);
         $this->assertEquals($result[1]['title'], $course['title']);
@@ -705,6 +685,31 @@ class CourseServiceTest extends BaseTestCase
         $counter             = array();
         $createCourse        = $this->getCourseService()->createCourse($course);
         $updateCourseCounter = $this->getCourseService()->updateCourseCounter($createCourse['id'], $counter);
+
+    }
+
+    public function testUpdateMembersDeadlineByClassroomId()
+    {
+        $course       = array(
+            'title' => 'test course 1'
+        );
+        $textClassroom = array(
+            'title' => 'test'
+        );
+
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $this->getCourseService()->publishCourse($createCourse['id']);
+
+        $user  = $this->getCurrentUser();
+
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
+        $this->getClassroomService()->becomeStudent($classroom['id'], $user['id']);
+
+        $result = $this->getCourseService()->updateMembersDeadlineByClassroomId($classroom['id'], '1488433547');
+
+        $this->assertEquals(1, count($result));
     }
 
     public function testChangeCoursePicture()
@@ -1326,6 +1331,52 @@ class CourseServiceTest extends BaseTestCase
         $createdLesson = $this->getCourseService()->createLesson($lesson);
     }
 
+    public function testCreateLessonByFileId()
+    {
+        $course = array(
+            'title' => 'online test course 1'
+        );
+        $course = $this->getCourseService()->createCourse($course);
+
+        $fakeFile = array(
+            'id' => 1,
+            'filename' => 'fake video',
+            'type' => 'video',
+            'length' => 100,
+            'fileSize' => 1024
+        );
+        $this->mock('File.UploadFileService', array(
+            array('functionName' => 'getFile', 'runTimes' => 2, 'returnValue' => $fakeFile),
+            array('functionName' => 'waveUploadFile', 'runTimes' => 1, 'returnValue' => array())
+        ));
+
+        $lesson = $this->getCourseService()->createLessonByFileId($course['id'], $fakeFile['id']);
+
+        $this->assertEquals($fakeFile['id'], $lesson['mediaId']);
+        $this->assertEquals($fakeFile['filename'], $lesson['title']);
+        $this->assertEquals($fakeFile['length'], $lesson['length']);
+    }
+    /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */
+    public function testCreateLessonByFileIdWithFileNotExist()
+    {
+        $course = array(
+            'title' => 'online test course 1'
+        );
+        $course = $this->getCourseService()->createCourse($course);
+
+        $fakeFile = array(
+            'id' => 996,
+            'filename' => 'fake video',
+            'type' => 'video',
+            'length' => 100,
+            'fileSize' => 1024
+        );
+
+        $this->getCourseService()->createLessonByFileId($course['id'], $fakeFile['id']);
+    }
+
     public function testGetCourseDraft()
     {
         $user        = $this->createUser();
@@ -1732,7 +1783,7 @@ class CourseServiceTest extends BaseTestCase
             'title'     => 'test' + rand(),
             'summary'   => '',
             'type'      => 'live',
-            'startTime' => '',
+            'startTime' => time() + 900,
             'length'    => ''
         );
         $start               = strtotime(date("Y-m-d", time()));
@@ -3471,7 +3522,6 @@ class CourseServiceTest extends BaseTestCase
         $itemIds[] = 'lesson-99999';
         $this->getCourseService()->sortCourseItems($course['id'], $itemIds);
     }
-
     /**
      * @expectedException Topxia\Service\Common\ServiceException
      */

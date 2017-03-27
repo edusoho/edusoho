@@ -1,6 +1,7 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% block title %}{{'登录'|trans}} - {{ parent() }}{% endblock %}
+{% set bodyClass = 'login' %}
 {% set script_controller = 'auth/login' %}
 {% block content %}
 {% if app.request.cookies.get('modalOpened') == 1 %}
@@ -63,4 +64,8 @@
   </div>
 </div>
 
+{% endblock %}
+
+{% block bottom %}
+  {% include 'TopxiaWebBundle:Default:Mobile/footer-tool-bar.html.twig' with { mobile_tool_bar: 'login' } %}
 {% endblock %}

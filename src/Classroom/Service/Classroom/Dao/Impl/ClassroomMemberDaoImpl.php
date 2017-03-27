@@ -27,6 +27,8 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
 
     public function addMember($member)
     {
+        $member['createdTime'] = time();
+        $member['updatedTime'] = $member['createdTime'];
         $affected = $this->getConnection()->insert($this->table, $member);
         $this->clearCached();
 
@@ -63,9 +65,17 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
 
     public function updateMember($id, $member)
     {
+        $member['updatedTime'] = time();
         $this->getConnection()->update($this->table, $member, array('id' => $id));
         $this->clearCached();
         return $this->getMember($id);
+    }
+
+    public function updateMembersDeadlineByClassroomId($id, $deadline)
+    {
+        $sql = "UPDATE {$this->table} SET deadline = ? WHERE classroomId = ? AND role LIKE '%|student|%'";
+
+        return $this->getConnection()->executeUpdate($sql, array($deadline, $id));
     }
 
     public function findAssistants($classroomId)
@@ -99,9 +109,9 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         }
 
         $marks = str_repeat('?,', count($classroomIds) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE userId = {$userId} AND classroomId IN ({$marks});";
+        $sql   = "SELECT * FROM {$this->table} WHERE userId = ? AND classroomId IN ({$marks});";
 
-        return $this->getConnection()->fetchAll($sql, $classroomIds) ?: array();
+        return $this->getConnection()->fetchAll($sql, array_merge(array($userId), $classroomIds)) ?: array();
     }
 
     public function searchMemberCount($conditions)
@@ -112,14 +122,18 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function searchMembers($conditions, $orderBy, $start, $limit)
+    public function searchMembers($conditions, $orderBys, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
+
+        for ($i = 0; $i < count($orderBys); $i = $i + 2) {
+            $builder->addOrderBy($orderBys[$i], $orderBys[$i + 1]);
+        };
+
         return $builder->execute()->fetchAll() ?: array();
     }
 
@@ -193,6 +207,18 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         return $this->getConnection()->executeQuery($sql, array($classroomId))->fetchAll(\PDO::FETCH_COLUMN);
     }
 
+    public function findUserJoinedClassroomIds($userId)
+    {
+        $sql = "SELECT classroomId FROM {$this->table} WHERE userId = ?";
+        return $this->getConnection()->fetchAll($sql, array($userId));
+    }
+
+    public function findMembersByUserId($userId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ?";
+        return $this->getConnection()->fetchAll($sql, array($userId));
+    }
+
     private function _createSearchQueryBuilder($conditions)
     {
         if (isset($conditions['role'])) {
@@ -225,7 +251,8 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
             ->andWhere('userId IN ( :userIds)')
             ->andWhere('createdTime >= :startTimeGreaterThan')
             ->andWhere('createdTime >= :createdTime_GE')
-            ->andWhere('createdTime < :startTimeLessThan');
+            ->andWhere('createdTime < :startTimeLessThan')
+            ->andWhere('updatedTime >= :updatedTime_GE');
 
         return $builder;
     }

@@ -1,0 +1,9 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+
+<div class="modal-dialog mark-questions-modal">
+  <div class="modal-content">
+    {% include 'TopxiaWebBundle:Marker/QuestionPreview:' ~ type ~ '.html.twig' %}
+    <script>app.load('quiz-question/preview');</script>
+  </div>
+</div>

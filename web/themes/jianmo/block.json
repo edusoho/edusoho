@@ -14,7 +14,7 @@
                     {
                         "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
                         "alt" : "海报1",
-                        "layout" : "tile",
+                        "layout" : "limitWide",
                         "background" : "#3ec768",
                         "href" : "",
                         "html" : "",
@@ -24,7 +24,7 @@
                     {
                         "src" : "\/themes\/jianmo\/img\/banner_app.jpg",
                         "alt" : "海报2",
-                        "layout" : "tile",
+                        "layout" : "limitWide",
                         "background" : "#0984f7",
                         "href" : "",
                         "html" : "",
@@ -34,7 +34,7 @@
                     {
                         "src" : "\/themes\/jianmo\/img\/banner_eweek.jpg",
                         "alt" : "海报3",
-                        "layout" : "tile",
+                        "layout" : "limitWide",
                         "background" : "#3b4250",
                         "href" : "",
                         "html" : "",
@@ -44,7 +44,7 @@
                     {
                         "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
                         "alt" : "海报4",
-                        "layout" : "tile",
+                        "layout" : "limitWide",
                         "background" : "#3ec768",
                         "href" : "",
                         "html" : "",
@@ -54,7 +54,7 @@
                     {
                         "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
                         "alt" : "海报5",
-                        "layout" : "tile",
+                        "layout" : "limitWide",
                         "background" : "#3ec768",
                         "href" : "",
                         "html" : "",
@@ -64,7 +64,7 @@
                     {
                         "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
                         "alt" : "海报6",
-                        "layout" : "tile",
+                        "layout" : "limitWide",
                         "background" : "#3ec768",
                         "href" : "",
                         "html" : "",
@@ -74,7 +74,7 @@
                     {
                         "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
                         "alt" : "海报7",
-                        "layout" : "tile",
+                        "layout" : "limitWide",
                         "background" : "#3ec768",
                         "href" : "",
                         "html" : "",
@@ -84,7 +84,7 @@
                     {
                         "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
                         "alt" : "海报8",
-                        "layout" : "tile",
+                        "layout" : "limitWide",
                         "background" : "#3ec768",
                         "href" : "",
                         "html" : "",

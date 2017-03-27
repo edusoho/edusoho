@@ -19,8 +19,8 @@ abstract class BaseException extends HttpException
         parent::__construct($statusCode, $messageString, $previous, $headers, $code);
     }
 
-    private function trans($text)
+    private function trans($message, $arguments = array())
     {
-        return ServiceKernel::instance()->trans($text);
+        return ServiceKernel::instance()->trans($message, $arguments);
     }
 }

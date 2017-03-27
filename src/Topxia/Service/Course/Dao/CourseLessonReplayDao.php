@@ -26,4 +26,6 @@ interface CourseLessonReplayDao
 
     public function updateCourseLessonReplayByLessonId($lessonId, $fields, $lessonType);
 
+    public function findReplaysByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live');
+
 }

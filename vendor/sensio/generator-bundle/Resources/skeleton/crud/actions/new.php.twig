@@ -1,0 +1,47 @@
+
+    /**
+{% block phpdoc_method_header %}
+     * Creates a new {{ entity_singularized }} entity.
+{% endblock phpdoc_method_header %}
+     *
+{% block phpdoc_method_annotations %}
+{% if 'annotation' == format %}
+     * @Route("/new", name="{{ route_name_prefix }}_new")
+     * @Method({"GET", "POST"})
+{% endif %}
+{% endblock phpdoc_method_annotations %}
+     */
+{% block method_definition %}
+    public function newAction(Request $request)
+{% endblock method_definition %}
+    {
+{% block method_body %}
+        ${{ entity_singularized }} = new {{ entity_singularized|capitalize }}();
+        {% if use_form_type_instance -%}
+            $form = $this->createForm(new {{ entity_singularized|capitalize }}Type(), ${{ entity_singularized }});
+        {% else -%}
+            $form = $this->createForm('{{ namespace }}\Form\{{ entity }}Type', ${{ entity_singularized }});
+        {% endif -%}
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist(${{ entity_singularized }});
+            $em->flush(${{ entity_singularized }});
+
+            {% if 'show' in actions -%}
+                return $this->redirectToRoute('{{ route_name_prefix }}_show', array('id' => ${{ entity_singularized }}->getId()));
+            {%- else -%}
+                return $this->redirectToRoute('{{ route_name_prefix }}_index'));
+            {%- endif %}
+
+        }
+{% endblock method_body %}
+
+{% block method_return %}
+        return $this->render('{{ entity|lower|replace({'\\': '/'}) }}/new.html.twig', array(
+            '{{ entity_singularized }}' => ${{ entity_singularized }},
+            'form' => $form->createView(),
+        ));
+{% endblock method_return %}
+    }

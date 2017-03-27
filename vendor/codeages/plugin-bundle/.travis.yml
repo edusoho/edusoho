@@ -1,0 +1,47 @@
+language: php
+
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
+branches:
+  only:
+    - master
+
+matrix:
+  fast_finish: true
+  include:
+    - php: 5.3
+      env: SYMFONY_VERSION='2.8.*'
+    - php: 5.4
+      env: SYMFONY_VERSION='2.8.*'
+    - php: 5.5
+      env: SYMFONY_VERSION='2.8.*'
+    - php: 5.5
+      env: SYMFONY_VERSION='3.1.*'
+    - php: 5.6
+      env: SYMFONY_VERSION='2.8.*'
+    - php: 5.6
+      env: SYMFONY_VERSION='3.1.*'      
+    - php: 7.0
+      env: SYMFONY_VERSION='2.8.*'
+    - php: 7.0
+      env: SYMFONY_VERSION='3.1.*'
+
+before_install:
+  - if [[ "$TRAVIS_PHP_VERSION" != "5.6" ]]; then phpenv config-rm xdebug.ini; fi
+  - composer self-update
+  - if [ "$SYMFONY_VERSION" != "" ]; then composer require --dev --no-update symfony/symfony=$SYMFONY_VERSION; fi
+
+install: composer update --prefer-dist
+
+script: if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then phpunit --coverage-clover=coverage.clover; else phpunit; fi

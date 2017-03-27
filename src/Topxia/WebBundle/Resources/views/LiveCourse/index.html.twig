@@ -5,24 +5,29 @@
 {% set script_controller = 'live-course/index' %}
 
   {% block top_content %}
-    {% if paginator.currentPage == 1 %}
-        <section class="es-live-poster swiper-container">
-          <div class="swiper-wrapper">
-            {{ block_show('live_top_banner') }}
-          </div> 
-          <div class="swiper-pager"></div> 
-        </section>
-    {% endif  %}
+    {% cache 'live/top/banner' 600 %}
+      {% if paginator.currentPage == 1 %}
+          <section class="es-live-poster swiper-container">
+            <div class="swiper-wrapper">
+              {{ block_show('live_top_banner') }}
+            </div>
+            <div class="swiper-pager"></div>
+          </section>
+      {% endif  %}
+    {% endcache %}
   {% endblock %}
   {% block live_main %}
+  {% cache 'live/liveTab' 600 %}
+    {{ render(controller('TopxiaWebBundle:LiveCourse:liveTab')) }}
+  {% endcache %}
 
-  {{ render(controller('TopxiaWebBundle:LiveCourse:liveTab')) }}
+  {% cache 'live/recommend/course/list' 600 %}
+    {% include 'TopxiaWebBundle:LiveCourse:recommend-course-list.html.twig' %}
+  {% endcache %}
 
-  {% include 'TopxiaWebBundle:LiveCourse:recommend-course-list.html.twig' %}
-
-
-  {{ render(controller('TopxiaWebBundle:LiveCourse:replayList')) }}
-  
+  {% cache 'live/recommend/course/replay/list' 600 %}
+    {{ render(controller('TopxiaWebBundle:LiveCourse:replayList')) }}
+  {% endcache %}
   {% endblock %}
 
   {% block live_side %}

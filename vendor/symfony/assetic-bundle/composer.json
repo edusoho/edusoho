@@ -1,0 +1,48 @@
+{
+    "name": "symfony/assetic-bundle",
+    "description": "Integrates Assetic into Symfony2",
+    "keywords": ["assets", "compression", "minification"],
+    "homepage": "https://github.com/symfony/AsseticBundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kris Wallsmith",
+            "email": "kris.wallsmith@gmail.com",
+            "homepage": "http://kriswallsmith.net/"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "symfony/framework-bundle": "~2.3|~3.0",
+        "symfony/dependency-injection": "~2.3|~3.0",
+        "symfony/console": "~2.3|~3.0",
+        "symfony/yaml": "~2.3|~3.0",
+        "kriswallsmith/assetic": "~1.3"
+    },
+    "require-dev": {
+        "patchwork/jsqueeze": "~1.0",
+        "kriswallsmith/spork": "~0.3",
+        "symfony/twig-bundle": "~2.3|~3.0",
+        "symfony/class-loader": "~2.3|~3.0",
+        "symfony/dom-crawler": "~2.3|~3.0",
+        "symfony/css-selector": "~2.3|~3.0",
+        "symfony/phpunit-bridge": "~2.7|~3.0"
+    },
+    "conflict": {
+        "twig/twig": "<1.20",
+        "kriswallsmith/spork": "<=0.2"
+    },
+    "suggest": {
+        "symfony/twig-bundle": "to use the Twig integration",
+        "kriswallsmith/spork": "to be able to dump assets in parallel"
+    },
+    "autoload": {
+        "psr-4": { "Symfony\\Bundle\\AsseticBundle\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.7-dev"
+        }
+    }
+}

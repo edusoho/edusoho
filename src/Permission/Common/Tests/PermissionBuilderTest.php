@@ -2,20 +2,19 @@
 namespace Permission\Common\Tests;
 
 use Symfony\Component\Yaml\Yaml;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Common\BaseTestCase;
 use Permission\Common\PermissionBuilder;
 
 class PermissionBuilderTest extends BaseTestCase
 {
-	public function testgetPermissionByCode()
+    public function testgetPermissionByCode()
     {
-    	$user = $this->getCurrentUser();
-    	$permissions = $this->loadPermissions($user->toArray());
-    	$user->setPermissions($permissions);
+        $user        = $this->getCurrentUser();
+        $permissions = $this->loadPermissions($user->toArray());
+        $user->setPermissions($permissions);
 
-    	$permissionBuilder = new PermissionBuilder();
-    	$menu = $permissionBuilder->getPermissionByCode('admin_user_show');
+        $permissionBuilder = PermissionBuilder::instance();
+        $permissionBuilder->getPermissionByCode('admin_user_show');
     }
 
     protected function loadPermissions($user)
@@ -24,21 +23,21 @@ class PermissionBuilderTest extends BaseTestCase
             return $user;
         }
 
-        $permissionBuilder = new PermissionBuilder();
-        $configs = $permissionBuilder->getPermissionConfig();
+        $permissionBuilder = PermissionBuilder::instance();
+        $configs           = $permissionBuilder->getPermissionConfig();
 
         $res = array();
         foreach ($configs as $key => $config) {
-            if(!file_exists($config)) {
+            if (!file_exists($config)) {
                 continue;
             }
             $menus = Yaml::parse(file_get_contents($config));
-            if(empty($menus)) {
+            if (empty($menus)) {
                 continue;
             }
 
             $menus = $this->getMenusFromConfig($menus);
-            $res = array_merge($res, $menus);
+            $res   = array_merge($res, $menus);
         }
 
         if (in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
@@ -71,17 +70,17 @@ class PermissionBuilderTest extends BaseTestCase
         $menus = array();
 
         foreach ($parents as $key => $value) {
-	        if(isset($parents[$key]['children'])) {
-	        	$childrenMenu = $parents[$key]['children'];
-	        	unset($parents[$key]['children']);
+            if (isset($parents[$key]['children'])) {
+                $childrenMenu = $parents[$key]['children'];
+                unset($parents[$key]['children']);
 
-		        foreach ($childrenMenu as $childKey => $childValue) {
-		        	$childValue["parent"] = $key;
-		            $menus = array_merge($menus, $this->getMenusFromConfig(array($childKey => $childValue)));
-		        }
-	        }
+                foreach ($childrenMenu as $childKey => $childValue) {
+                    $childValue["parent"] = $key;
+                    $menus                = array_merge($menus, $this->getMenusFromConfig(array($childKey => $childValue)));
+                }
+            }
 
-	       	$menus[$key] = $value;
+            $menus[$key] = $value;
         }
 
         return $menus;

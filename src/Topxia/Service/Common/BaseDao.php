@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\Service\Common;
 
+use Topxia\Service\Common\FieldChecker;
+
 abstract class BaseDao
 {
     protected $connection;
@@ -31,6 +33,34 @@ abstract class BaseDao
         return $this->getConnection()->executeUpdate($sql, $params);
     }
 
+    protected function waveCache()
+    {
+        $args     = func_get_args();
+        $callback = array_pop($args);
+        $key      = $this->table.':'.array_shift($args);
+        $redis    = $this->getRedis();
+
+        if ($redis) {
+            $currentTime = time();
+            $data        = $redis->get($key);
+
+            if ($data) {
+                if ($currentTime - $data['syncTime'] > 600) {
+                    $args[2] += $data['increment'];
+                    call_user_func_array($callback, $args);
+                    $redis->setex($key, 30 * 60 * 60, array('increment' => 0, 'syncTime' => $currentTime));
+                } else {
+                    $data['increment'] += $args[2];
+                    $redis->setex($key, 30 * 60 * 60, array('increment' => $data['increment'], 'syncTime' => $data['syncTime']));
+                }
+            } else {
+                $redis->setex($key, 30 * 60 * 60, array('increment' => $args[2], 'syncTime' => $currentTime));
+            }
+        } else {
+            call_user_func_array($callback, $args);
+        }
+    }
+
     public function getTable()
     {
         if ($this->table) {
@@ -51,6 +81,12 @@ abstract class BaseDao
     public function setConnection($connection)
     {
         $this->connection = $connection;
+        return $this;
+    }
+
+    public function setConnectionFactory($connectionFactory)
+    {
+        $this->connectionFactory = $connectionFactory;
     }
 
     public function getRedis()
@@ -68,7 +104,7 @@ abstract class BaseDao
         $args     = func_get_args();
         $callback = array_pop($args);
 
-        $key = "{$this->table}:v{$this->getTableVersion()}:".array_shift($args);
+        $key = $this->getPrefixKey().':'.array_shift($args);
 
         if (isset($this->dataCached[$key])) {
             return $this->dataCached[$key];
@@ -78,23 +114,30 @@ abstract class BaseDao
 
         if ($redis) {
             $data = $redis->get($key);
-
-            if ($data) {
+            if ($data !== false) {
                 $this->dataCached[$key] = $data;
                 return $data;
             }
         }
+        if ($this->isRunByCommand()){
+            return call_user_func_array($callback, $args);
+        }else{
+            $this->dataCached[$key] = call_user_func_array($callback, $args);
 
-        $this->dataCached[$key] = call_user_func_array($callback, $args);
-
-        if ($redis) {
-            $redis->setex($key, 2 * 60 * 60, $this->dataCached[$key]);
+            if ($redis) {
+                $redis->setex($key, 2 * 60 * 60, $this->dataCached[$key]);
+            }
+            return $this->dataCached[$key];
         }
-
-        return $this->dataCached[$key];
+        
     }
 
-    protected function getTableVersion()
+    private function  isRunByCommand()
+    {
+       return  getenv('IS_RUN_BY_COMMAND') && getenv('IS_RUN_BY_COMMAND') === 'true';
+    }
+
+    protected function getCacheVersion($key)
     {
         $redis = $this->getRedis();
 
@@ -104,32 +147,72 @@ abstract class BaseDao
 
         $version = 0;
 
-        if (isset($this->dataCached['version'])) {
-            $version = $this->dataCached['version'];
+        if (isset($this->dataCached[$key])) {
+            $version = $this->dataCached[$key];
         }
 
         if ($version == 0) {
-            $version = $redis->get("{$this->table}:version");
+            $version = $redis->get($key);
 
             if (!$version) {
                 $version = 1;
-                $redis->incrBy("{$this->table}:version", $version);
+                $redis->incrBy($key, $version);
             }
 
-            $this->dataCached["version"] = $version;
+            $this->dataCached[$key] = $version;
         }
 
         return $version;
     }
 
+    protected function incrVersions($keys)
+    {
+        $redis = $this->getRedis();
+
+        if ($redis) {
+            foreach ($keys as $key) {
+                $redis->incr($key);
+                unset($this->dataCached[$key]);
+            }
+        } else {
+            unset($this->dataCached);
+        }
+    }
+
+    protected function getTableVersion()
+    {
+        $key = "{$this->table}:version";
+        return $this->getCacheVersion($key);
+    }
+
     protected function clearCached()
     {
+        $key = "{$this->table}:version";
+        $this->incrVersions(array($key));
         $this->dataCached = array();
+    }
+
+    protected function deleteCache($keys)
+    {
+        if (empty($keys)) {
+            return;
+        }
+
+        $deleteKeys = array();
+        foreach ($keys as $key => $value) {
+            $deleteKeys[] = $this->getPrefixKey().':'.$value;
+        }
 
         $redis = $this->getRedis();
 
         if ($redis) {
-            $redis->incr("{$this->table}:version");
+            foreach ($deleteKeys as $key) {
+                $redis->delete($key);
+            }
+        }
+
+        foreach ($deleteKeys as $key) {
+            unset($this->dataCached[$key]);
         }
     }
 
@@ -172,11 +255,12 @@ abstract class BaseDao
         return $builder;
     }
 
-    protected function validateOrderBy(array $orderBy, $allowedOrderByFields)
+    protected function validateOrderBy(array $orderBy, $allowedOrderByFields = array())
     {
         $keys = array_keys($orderBy);
 
         foreach ($orderBy as $field => $order) {
+            FieldChecker::checkFieldName($field);
             if (!in_array($field, $allowedOrderByFields)) {
                 throw new \RuntimeException($this->getKernel()->trans('不允许对%field%字段进行排序', array('%field%' => $field)), 1);
             }
@@ -192,21 +276,37 @@ abstract class BaseDao
         return ServiceKernel::instance();
     }
 
-    protected function checkOrderBy(array $orderBy, array $allowedOrderByFields)
+    protected function checkOrderBy(array $orderBy, array $allowedOrderByFields = array())
     {
-        if (empty($orderBy[0]) || empty($orderBy[1])) {
+        if (empty($orderBy)) {
             throw new \RuntimeException($this->getKernel()->trans('orderBy参数不正确'));
         }
 
-        if (!in_array($orderBy[0], $allowedOrderByFields)) {
-            throw new \RuntimeException($this->getKernel()->trans('不允许对%orderBy%字段进行排序', array('%orderBy%' => $orderBy[0])), 1);
-        }
+        for ($i = 0; $i < count($orderBy); $i = $i + 2) {
+            if (empty($orderBy[$i]) || empty($orderBy[$i + 1])) {
+                throw new \RuntimeException($this->getKernel()->trans('orderBy参数不正确'));
+            }
 
-        if (!in_array(strtoupper($orderBy[1]), array('ASC', 'DESC'))) {
-            throw new \RuntimeException($this->getKernel()->trans('orderBy排序方式错误'), 1);
+            $field = $orderBy[$i];
+            $seq = $orderBy[$i + 1];
+
+            FieldChecker::checkFieldName($field);
+
+            if (!empty($allowedOrderByFields)  && !in_array($field, $allowedOrderByFields)) {
+                throw new \RuntimeException($this->getKernel()->trans('不允许对%orderBy%字段进行排序', array('%orderBy%' => $field)), 1);
+            }
+
+            if (!in_array(strtoupper($seq), array('ASC', 'DESC'))) {
+                throw new \RuntimeException($this->getKernel()->trans('orderBy排序方式错误'), 1);
+            }
         }
 
         return $orderBy;
+    }
+
+    protected function getPrefixKey()
+    {
+        return "{$this->table}:v{$this->getTableVersion()}";
     }
 
     protected function hasEmptyInCondition($conditions, $fields)
@@ -217,5 +317,37 @@ abstract class BaseDao
             }
         }
         return false;
+    }
+
+    protected function generateKeyWhenSearch($conditions, $orderBy, $start, $limit)
+    {
+        $version = $this->getCacheVersion("{$this->table}:search");
+        $keys = 'search:'.$version;
+
+        if(!empty($conditions)) {
+            ksort($conditions);
+            foreach ($conditions as $key => $value) {
+                if(is_array($value)) {
+                    $keys .= ":{$key}:".implode('-', $value);
+                } else {
+                    $keys .= ":{$key}:{$value}";
+                }
+            }
+        }
+        return "{$keys}:{$orderBy[0]}:{$orderBy[1]}:start:{$start}:limit:{$limit}";
+    }
+
+    protected function generateKeyWhenCount($conditions)
+    {
+        $version = $this->getCacheVersion("{$this->table}:search");
+        $keys = "count:{$version}";
+        foreach ($conditions as $key => $value) {
+            if(is_array($value)) {
+                $keys .= ":{$key}:".implode('-', $value);
+            } else {
+                $keys .= ":{$key}:{$value}";
+            }
+        }
+        return $keys;
     }
 }

@@ -16,6 +16,14 @@
 
     {% if canModifyPrice %}
       <form class="form-horizontal" id="price-form" method="post" action="{{path('course_manage_price',{id:course.id})}}" data-cashrate="{{setting('coin.cash_rate', 1)}}">
+        <div class="form-group">
+          <label class="col-md-2 control-label">{{ '课程购买'|trans }}</label>
+          <div class="col-md-8 controls radios">
+            {{ radios('buyable', {'1':'开启'|trans, '0':'关闭'|trans}, course.buyable|default(1) ) }}
+            <div class="help-block">{{ '关闭课程后普通学员将无法在线购买加入，只能通过后台导入学员。'|trans }}</div>
+            <div class="help-block">{{ '会员免费学课程不受影响。'|trans }}</div>
+          </div>
+        </div>
         {% if currency == 'coin' %}
           <div class="form-group">
             <label class="col-md-2 control-label">{{'%coin_name%价格'|trans({'%coin_name%':setting('coin.coin_name')})}}</label>
@@ -44,9 +52,28 @@
                   {{'折后价'|trans}}：<strong><span class="course-discount-price" data-discount="{{ course.discount }}">{{ course.price }}</span> {{'元'|trans}}</strong>。
                 </div>
               {% endif %}
+              {% if course.type == 'normal' %}
+                <div>
+                   <a href="{{path('content_course_rule')}}" target="_blank">【查看课程细则】</a>
+                </div>
+              {% endif %}
+
             </div>
           </div>
         {% endif %}
+
+        <div class="form-group">
+          <label class="col-md-2 control-label">{{ '购买截止日期'|trans }}</label>
+          <div class="col-md-8 controls radios">
+            {{ radios('enableBuyExpiryTime', {1:'是'|trans, 0:'否'|trans}, course.buyExpiryTime|default(0) > 0) }}
+          </div>
+        </div>
+
+        <div class="form-group {% if not course.buyExpiryTime %}hide{% endif %}" id="buyExpiryTime">
+          <div class="col-md-8 controls col-md-offset-2">
+            <input type="text" class="form-control width-input width-input-large" name="buyExpiryTime" {% if course.buyExpiryTime %} value="{{ course.buyExpiryTime|date('Y-m-d') }}" {% endif %}>
+          </div>
+        </div>
 
         {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
           <div class="form-group">
@@ -60,12 +87,12 @@
           </div>
         {% endif %}
 
-        {% if setting('storage.upload_mode') == 'cloud' %}
+        {% if setting('storage.upload_mode') == 'cloud' and course.type == 'normal' %}
         <div class="form-group">
             <label class="col-md-2 control-label">{{'开启视频试看'|trans}}</label>
             <div class="col-md-8 controls radios">
               {{ radios('tryLookable', {1:'是'|trans, 0:'否'|trans}, course.tryLookable|default(0)) }}
-              <div class="help-block">{{'视频试看功能仅云视频支持'|trans}}</div>
+              <div class="help-block">{{'开启后，此课程的所有'|trans}}<a href="http://open.edusoho.com/show/cloud/video">云视频</a>{{'课时都支持试看。'|trans}}</div>
             </div>
         </div>
 
@@ -93,7 +120,6 @@
     {% else %}
       <div class="alert alert-danger">{{'抱歉，您无权设置课程价格，如有需要请联系网站管理员！'|trans}}</div>
     {% endif %}
-
   </div>
 </div>
 {% endblock %}

@@ -7,7 +7,9 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\ExtensionManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\Common\ServiceEvent;
 use Topxia\WebBundle\Controller\BaseController;
+use Topxia\Common\ClassroomToolkit;
 
 class ClassroomController extends BaseController
 {
@@ -20,97 +22,6 @@ class ClassroomController extends BaseController
             'classroom'          => $classroom,
             'nav'                => $nav,
             'member'             => $member
-        ));
-    }
-
-    public function exploreAction(Request $request, $category)
-    {
-        $conditions             = $request->query->all();
-        $conditions['status']   = 'published';
-        $conditions['showable'] = 1;
-
-        $categoryArray = array();
-
-        if (!empty($category)) {
-            $categoryArray             = $this->getCategoryService()->getCategoryByCode($category);
-            $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
-            $categoryIds               = array_merge($childrenIds, array($categoryArray['id']));
-            $conditions['categoryIds'] = $categoryIds;
-        }
-
-        if (!isset($conditions['filter'])) {
-            $conditions['filter'] = array(
-                'price'          => 'all',
-                'currentLevelId' => 'all'
-            );
-        }
-
-        $filter = $conditions['filter'];
-
-        if ($filter['price'] == 'free') {
-            $conditions['price'] = '0.00';
-        }
-
-        unset($conditions['filter']);
-        $levels = array();
-
-        if ($this->isPluginInstalled('Vip')) {
-            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100), 'id');
-
-            if (!$filter['currentLevelId'] != 'all') {
-                $vipLevelIds               = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($filter['currentLevelId']), 'id');
-                $conditions['vipLevelIds'] = array_merge(array($filter['currentLevelId']), $vipLevelIds);
-            }
-        }
-
-        $orderBy = !isset($conditions['orderBy']) ? 'createdTime' : $conditions['orderBy'];
-        unset($conditions['orderBy']);
-
-        $conditions['recommended'] = ($orderBy == 'recommendedSeq') ? 1 : null;
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getClassroomService()->searchClassroomsCount($conditions),
-            9
-        );
-
-        $classrooms = $this->getClassroomService()->searchClassrooms(
-            $conditions,
-            array($orderBy, 'desc'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        if (!$categoryArray) {
-            $categoryArrayDescription = array();
-        } else {
-            $categoryArrayDescription = $categoryArray['description'];
-            $categoryArrayDescription = strip_tags($categoryArrayDescription, '');
-            $categoryArrayDescription = preg_replace("/ /", "", $categoryArrayDescription);
-            $categoryArrayDescription = substr($categoryArrayDescription, 0, 100);
-        }
-
-        if (!$categoryArray) {
-            $categoryParent = '';
-        } else {
-            if (!$categoryArray['parentId']) {
-                $categoryParent = '';
-            } else {
-                $categoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
-            }
-        }
-
-        return $this->render("ClassroomBundle:Classroom:explore.html.twig", array(
-            'paginator'                => $paginator,
-            'classrooms'               => $classrooms,
-            'path'                     => 'classroom_explore',
-            'category'                 => $category,
-            'categoryArray'            => $categoryArray,
-            'categoryArrayDescription' => $categoryArrayDescription,
-            'categoryParent'           => $categoryParent,
-            'filter'                   => $filter,
-            'levels'                   => $levels,
-            'orderBy'                  => $orderBy
         ));
     }
 
@@ -188,7 +99,7 @@ class ClassroomController extends BaseController
 
         $checkMemberLevelResult = $classroomMemberLevel = null;
 
-        if ($this->setting('vip.enabled')) {
+        if ($user['id'] && $this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
             $classroomMemberLevel = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
 
             if ($classroomMemberLevel) {
@@ -196,7 +107,6 @@ class ClassroomController extends BaseController
             }
         }
 
-        $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if ($previewAs) {
             if (!$this->getClassroomService()->canManageClassroom($classroomId)) {
@@ -204,7 +114,6 @@ class ClassroomController extends BaseController
             }
         }
 
-        $member    = $this->previewAsMember($previewAs, $member, $classroom);
         $lessonNum = 0;
         $coinPrice = 0;
         $price     = 0;
@@ -221,13 +130,14 @@ class ClassroomController extends BaseController
         $canFreeJoin = $this->canFreeJoin($classroom, $courses, $user, $classroom);
         $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($classroom['categoryId']);
 
-        if (!empty($member['role'])) {
-            $isclassroomteacher = in_array('teacher', $member['role']) || in_array('headTeacher', $member['role']) ? true : false;
-        } else {
-            $isclassroomteacher = false;
-        }
 
+        $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $member    = $this->previewAsMember($previewAs, $member, $classroom);
+        
         if ($member) {
+            $isclassroomteacher = in_array('teacher', $member['role']) || in_array('headTeacher', $member['role']) ? true : false;
+            $vipChecked = $this->isPluginInstalled('Vip') && $this->setting('vip.enabled') && $member['levelId']>0 ? $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) : 'ok';
+
             return $this->render("ClassroomBundle:Classroom:classroom-join-header.html.twig", array(
                 'classroom'              => $classroom,
                 'courses'                => $courses,
@@ -240,7 +150,8 @@ class ClassroomController extends BaseController
                 'coursesNum'             => $coursesNum,
                 'canFreeJoin'            => $canFreeJoin,
                 'breadcrumbs'            => $breadcrumbs,
-                'isclassroomteacher'     => $isclassroomteacher
+                'isclassroomteacher'     => $isclassroomteacher,
+                'vipChecked'             => $vipChecked
             ));
         }
 
@@ -273,7 +184,7 @@ class ClassroomController extends BaseController
 
         $user = $this->getCurrentUser();
 
-        $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if ($request->query->get('previewAs')) {
             if ($this->getClassroomService()->canManageClassroom($id)) {
@@ -319,6 +230,11 @@ class ClassroomController extends BaseController
                 return;
             }
 
+            $deadline = ClassroomToolkit::buildMemberDeadline(array(
+                'expiryMode'  => $classroom['expiryMode'],
+                'expiryValue' => $classroom['expiryValue']
+            ));
+
             $member = array(
                 'id'          => 0,
                 'classroomId' => $classroom['id'],
@@ -330,7 +246,8 @@ class ClassroomController extends BaseController
                 'remark'      => '',
                 'role'        => array('auditor'),
                 'locked'      => 0,
-                'createdTime' => 0
+                'createdTime' => 0,
+                'deadline'    => $deadline
             );
 
             if ($previewAs == 'member') {
@@ -341,12 +258,25 @@ class ClassroomController extends BaseController
         return $member;
     }
 
+    public function deadlineReachAction(Request $request, $classroomId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException($this->trans('不允许未登录访问'));
+        }
+
+        $this->getClassroomService()->exitClassroom($classroomId, $user['id']);
+
+        return $this->redirect($this->generateUrl('classroom_introductions', array('id' => $classroomId)));
+    }
+
     public function introductionAction(Request $request, $id)
     {
         $classroom    = $this->getClassroomService()->getClassroom($id);
         $introduction = $classroom['about'];
         $user         = $this->getCurrentUser();
-        $member       = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $member       = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%title%，如有需要请联系客服',array('%title%'=>$classroom['title'])), '', 3, $this->generateUrl('homepage'));
@@ -366,6 +296,9 @@ class ClassroomController extends BaseController
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
         }
 
+        $this->dispatchEvent('classroom.view',
+            new ServiceEvent($classroom, array('userId' =>$user['id']))
+        );
         return $this->render("ClassroomBundle:Classroom:introduction.html.twig", array(
             'introduction'         => $introduction,
             'layout'               => $layout,
@@ -417,7 +350,7 @@ class ClassroomController extends BaseController
 
         $checkMemberLevelResult = $classroomMemberLevel = null;
 
-        if ($this->setting('vip.enabled')) {
+        if ($this->setting('vip.enabled') && $user['id']) {
             $classroomMemberLevel = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
 
             if ($classroomMemberLevel) {
@@ -425,7 +358,7 @@ class ClassroomController extends BaseController
             }
         }
 
-        $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if ($previewAs) {
             if (!$this->getClassroomService()->canManageClassroom($classroomId)) {
@@ -596,6 +529,10 @@ class ClassroomController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
+        if ($this->getClassroomService()->isClassroomOverDue($id)) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('班级已过期'));
+        }
+
         $this->getClassroomService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));
 
         return $this->redirect($this->generateUrl('classroom_show', array('id' => $id)));
@@ -702,7 +639,7 @@ class ClassroomController extends BaseController
 
         $previewAs = $request->query->get('previewAs');
 
-        $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
         $member = $this->previewAsMember($previewAs, $member, $classroom);
 
         $courseSetting = $this->getSettingService()->get('course', array());
@@ -798,27 +735,22 @@ class ClassroomController extends BaseController
         $coinSetting = $this->setting("coin");
 
         //判断用户是否为VIP
-        $vipStatus = $classroomVip = null;
-
-        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
-            $classroomVip = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
-
-            if ($classroomVip) {
-                $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']);
-
-                if ($vipStatus == 'ok') {
-                    $formData['becomeUseMember'] = true;
-                }
-            }
+        if ($this->isPluginInstalled('Vip') 
+            && $this->setting('vip.enabled') 
+            && !empty($classroom['vipLevelId'])
+            && $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) == 'ok') {
+            return $this->forward("ClassroomBundle:Classroom:becomeStudent", array(
+                'request' => $request, 
+                'id' => $classroom['id']
+            ));
         }
 
-        if ($classroom['price'] == 0 || $vipStatus == 'ok') {
+        if ($classroom['price'] == 0) {
             $formData['amount']     = 0;
             $formData['totalPrice'] = 0;
             $formData['priceType']  = empty($coinSetting["priceType"]) ? 'RMB' : $coinSetting["priceType"];
             $formData['coinRate']   = empty($coinSetting["coinRate"]) ? 1 : $coinSetting["coinRate"];
             $formData['coinAmount'] = 0;
-            $formData['vipStatus']  = 'ok';
 
             $order = $this->getClassroomOrderService()->createOrder($formData);
 
@@ -1077,7 +1009,7 @@ class ClassroomController extends BaseController
             return $enableds;
         }
 
-        $payment  = $this->get('topxia.twig.web_extension')->getDict('payment');
+        $payment  = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
         $payNames = array_keys($payment);
         foreach ($payNames as $payName) {
             if (!empty($setting[$payName.'_enabled'])) {

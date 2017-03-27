@@ -108,12 +108,15 @@ define(function(require, exports, module) {
                 $form.find('textarea').val(text).trigger('focus');
 
             } else {
-                if ($container.hasClass('hide')) {
-                    $container.removeClass('hide');
-                } else {
-                    $container.addClass('hide');
-                }
+                $container.toggleClass('hide');
             }
+            
+            if ($btn.html() == Translator.trans('回复')) {
+                $btn.html(Translator.trans('收起'));
+            } else {
+                $btn.html(Translator.trans('回复'));
+            }
+            
             this._initSubpostForm($form);
         },
 
@@ -161,6 +164,11 @@ define(function(require, exports, module) {
 
                     var $btn = this.$('[type=submit]').button('loading');
                     $.post($form.attr('action'), $form.serialize(), function(response) {
+                        
+                        if (response.error) {
+                            Notify.danger(response.error);
+                            return;
+                        }
                         $btn.button('reset');
                         $form.parents('.thread-subpost-container').find('.thread-subpost-list').append(response);
                         $form.find('textarea').val('');

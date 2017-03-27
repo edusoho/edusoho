@@ -66,10 +66,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             $uploadFile['convertHash']   = "ch-{$uploadFile['hashId']}";
             $uploadFile['convertStatus'] = 'none';
             $uploadFile['convertParams'] = '';
-        } elseif ('document' == FileToolkit::getFileTypeByExtension($uploadFile['ext'])) {
-            $uploadFile['convertHash']   = "{$fileInfo['convertHash']}";
-            $uploadFile['convertStatus'] = 'none';
-            $uploadFile['convertParams'] = $fileInfo['convertParams'];
         } else {
             $uploadFile['convertHash']   = "{$fileInfo['convertHash']}";
             $uploadFile['convertStatus'] = 'none';
@@ -353,10 +349,14 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $this->getCloudClient()->getMediaInfo($key, $mediaType);
     }
 
-    public function player($globalId)
+    public function player($globalId, $ssl = false)
     {
         $api    = CloudAPIFactory::create('leaf');
-        $player = $api->get("/resources/{$globalId}/player");
+        $params = array();
+        if ($ssl) {
+            $params['protocol'] = 'https';
+        }
+        $player = $api->get("/resources/{$globalId}/player", $params);
         return $player;
     }
 
@@ -415,6 +415,10 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         );
         if ($file['targetType'] == 'attachment') {
             $params['type'] = $file['targetType'];
+        }
+
+        if ($file['targetType'] == 'subtitle') {
+            $params['type'] = 'sub';
         }
         if (isset($file['directives'])) {
             $params['directives'] = $file['directives'];
@@ -491,10 +495,15 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $download;
     }
 
-    public function getDownloadFile($file)
+    public function getDownloadFile($file, $ssl = false)
     {
+        $params = array();
+        if ($ssl) {
+            $params['protocol'] = 'https';
+        }
+
         $api              = CloudAPIFactory::create('leaf');
-        $download         = $api->get("/resources/{$file['globalId']}/download");
+        $download         = $api->get("/resources/{$file['globalId']}/download", $params);
         $download['type'] = 'url';
         return $download;
     }
@@ -614,7 +623,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         }
 
         unset($cloudFile['id']);
-
+        $localFile['fileSize'] = $cloudFile['size'];
         $file = array_merge($localFile, $cloudFile);
         $file = $this->proccessConvertStatus($file);
         $file = $this->proccessConvertParamsAndMetas($file);

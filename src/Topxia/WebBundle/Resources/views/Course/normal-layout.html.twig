@@ -1,9 +1,11 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
+{% set mobile = is_show_mobile_page() %}
 {% block title %}{{ course.title }} - {{ parent() }}{% endblock %}
 
 {% block keywords %}
-  {% include 'TopxiaWebBundle:Course:keywords.html.twig' with {course: course} %}
+  {% set tags = data('Tags', {tagIds: tags|default('')}) %}
+  {% for tag in tags %}{{tag.name}}{% if not loop.last%},{% endif %}{% else %}{{ parent() }}{% endfor %}
 {% endblock %}
 
 {% block description %}{{ course.about|purify_and_trim_html|default('')|plain_text(100) }}{% endblock %}
@@ -12,7 +14,9 @@
 {% set script_arguments = {course_uri: path('course_show', {id:course.id})} %}
 
 {% block top_content %}
-  {{ render(controller('TopxiaWebBundle:Part/Course:header',{course: course, member: member})) }}
+  {% cache 'course/' ~ course.id ~ '/user/' ~ member.userId|default(0) ~ '/header' 600 %}
+    {{ render(controller('TopxiaWebBundle:Part/Course:header',{course: course, member: member})) }}
+  {% endcache %}
 {% endblock %}
 
 {% block content %}
@@ -26,7 +30,11 @@
       {% include 'TopxiaWebBundle:Announcement:announcement-block.html.twig' with {targetId:course.id,targetType:'course'} %}
 
       <section class="es-section">
-        {% include 'TopxiaWebBundle:Course:Part/normal-nav.html.twig' %}
+
+        {% cache 'course/' ~ course.id ~ '/user/' ~ app.user.id|default(0) ~ '/normal-nav' 600 %}
+          {% include 'TopxiaWebBundle:Course:Part/normal-nav.html.twig' %}
+        {% endcache %}
+
         {% block course_main %}{% endblock %}
       </section>
       {% block dashboard_relatedCoursesBlock %}
@@ -39,19 +47,28 @@
     <div class="col-lg-3 col-md-4  course-sidebar">
       {% block course_sidebar %}
         {% if member|default(null) %}
-          {{ render(controller('TopxiaWebBundle:Part/Course:belongClassrooms',{course: course})) }}
+          {% cache 'course/' ~ course.id ~ '/sidebar/belongClassrooms/for/member' 600 %}
+            {{ render(controller('TopxiaWebBundle:Part/Course:belongClassrooms',{course: course})) }}
+          {% endcache %}
         {% endif %}
+
         {% if course.parentId == 0 %}
-          {{ render(controller('TopxiaWebBundle:Part/Course:recommendClassrooms',{course: course})) }}
+          {% cache 'course/' ~ course.id ~ '/not/classroom/course/sidebar/recommendClassrooms' 600 %}
+            {{ render(controller('TopxiaWebBundle:Part/Course:recommendClassrooms',{course: course})) }}
+          {% endcache %}
         {% endif %}
 
-        {{ render(controller('TopxiaWebBundle:Part/Course:teachers',{course: course})) }}
-
-        {% cache 'course/' ~ course.id ~ '/sidebar/students' 600 %}
-        {{ render(controller('TopxiaWebBundle:Part/Course:students',{course: course})) }}
+        {% cache 'course/' ~ course.id ~ '/sidebar/teachers' 600 %}
+          {{ render(controller('TopxiaWebBundle:Part/Course:teachers',{course: course})) }}
         {% endcache %}
 
-        {% include 'TopxiaWebBundle:Course:Part/normal-sidebar-statuses.html.twig' %}
+        {% cache 'course/' ~ course.id ~ '/sidebar/students' 600 %}
+          {{ render(controller('TopxiaWebBundle:Part/Course:students',{course: course})) }}
+        {% endcache %}
+        
+        {% cache 'course/' ~ course.id ~ '/sidebar/statuses' 600 %}
+          {% include 'TopxiaWebBundle:Course:Part/normal-sidebar-statuses.html.twig' %}
+        {% endcache %}
 
       {% endblock %}
     </div>
@@ -67,5 +84,11 @@
   'link': app.request.uri,
   'imgUrl': fileurl(course.largePicture,'course.png'),
   } %}
+
+  {% if mobile %}
+    {% include 'TopxiaWebBundle:Course:Mobile/course-bottom.html.twig' %}
+  {% endif %}
+
+  {% include 'TopxiaWebBundle:Common:consult-supplier.html.twig' %}
 
 {% endblock %}

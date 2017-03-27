@@ -67,6 +67,15 @@
 
   <div class="form-group">
     <div class="col-md-3 control-label">
+      <label>{{ 'IMAPI地址'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_api_im_server" value="{{ developerSetting.cloud_api_im_server|default('http://imapi.edusoho.net/v1/') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
       <label>{{ '气球云SDK的CDN地址'|trans }}</label>
     </div>
     <div class="controls col-md-8 radios">
@@ -110,6 +119,7 @@
       {{'「调试」：关闭'|trans}}<br>
       {{'「应用中心API地址」：空'|trans}}<br>
       {{'「云服务API地址」：'|trans}}　http://api.edusoho.net {{'或 空'|trans}}<br>
+      {{'「IMAPI地址」：'|trans}}　http://imapi.edusoho.net/v1/ {{'或 空'|trans}}<br>
       {{'「HLS加密视频」：　开启'|trans}}
     </li>
   </ul>

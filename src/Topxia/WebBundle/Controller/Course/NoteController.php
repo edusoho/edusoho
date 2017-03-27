@@ -52,11 +52,13 @@ class NoteController extends CourseBaseController
             }
         }
         $lessons = $this->getCourseService()->getCourseLessons($courseId);
+
         return $this->render('TopxiaWebBundle:Course\Note:course-notes-list.html.twig', array(
             'course'  => $course,
             'member'  => $member,
             'filters' => $this->getNoteSearchFilters($request),
-            'lessons' => $lessons
+            'lessons' => $lessons,
+            'tags'    => ArrayToolkit::column($this->getTagsByOwnerId($courseId), 'id')
         ));
     }
 

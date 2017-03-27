@@ -11,6 +11,8 @@ class GlobalFilePlayerController extends BaseController
 {
     public function playerAction(Request $request, $globalId)
     {
+        $ssl = $request->isSecure() ? true : false;
+
         $file = $this->getCloudFileService()->getByGlobalId($globalId);
 
         if (empty($file)) {
@@ -24,7 +26,7 @@ class GlobalFilePlayerController extends BaseController
                 'file' => $file
             ));
         } elseif ($file["type"] == 'audio') {
-            return $this->audioPlayer($file);
+            return $this->audioPlayer($file, $ssl);
         } elseif ($file["type"] == 'document') {
             return $this->render('MaterialLibBundle:Player:document-player.html.twig', array(
                 'file' => $file
@@ -35,7 +37,7 @@ class GlobalFilePlayerController extends BaseController
                 'file' => $file
             ));
         } elseif ($file["type"] == 'flash') {
-            $file = $this->getMaterialLibService()->player($globalId);
+            $file = $this->getMaterialLibService()->player($globalId, $ssl);
             return $this->render('MaterialLibBundle:Player:flash-player.html.twig', array(
                 'file' => $file
             ));
@@ -44,7 +46,9 @@ class GlobalFilePlayerController extends BaseController
 
     public function pptAction(Request $request, $globalId)
     {
-        $file = $this->getMaterialLibService()->player($globalId);
+        $ssl = $request->isSecure() ? true : false;
+
+        $file = $this->getMaterialLibService()->player($globalId, $ssl);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -55,7 +59,9 @@ class GlobalFilePlayerController extends BaseController
 
     public function documentAction(Request $request, $globalId)
     {
-        $file = $this->getMaterialLibService()->player($globalId);
+        $ssl = $request->isSecure() ? true : false;
+
+        $file = $this->getMaterialLibService()->player($globalId, $ssl);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -64,9 +70,9 @@ class GlobalFilePlayerController extends BaseController
         return $this->createJsonResponse($file);
     }
 
-    public function audioPlayer($file)
+    public function audioPlayer($file, $ssl)
     {
-        $result = $this->getMaterialLibService()->player($file['no']);
+        $result = $this->getMaterialLibService()->player($file['no'], $ssl);
         return $this->render('MaterialLibBundle:Player:global-video-player.html.twig', array(
             'file'             => $file,
             'url'              => $result['url'],

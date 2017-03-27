@@ -6,6 +6,7 @@ use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Sms\SmsProcessor\SmsProcessorFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Topxia\Common\SmsToolkit;
 
 class EduCloudController extends BaseController
 {
@@ -13,7 +14,7 @@ class EduCloudController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             if ($this->setting('cloud_sms.sms_enabled') != '1') {
-                return $this->createJsonResponse(array('error' => $this->trans('短信服务被管理员关闭了')));
+                return $this->createJsonResponse(array('error' => $this->trans('短信服务未开启，请联系网校管理员')));
             }
 
             $currentUser = $this->getCurrentUser();
@@ -110,7 +111,7 @@ class EduCloudController extends BaseController
 
             try {
                 $api    = CloudAPIFactory::create('leaf');
-                $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array('mobile' => $to, 'category' => $smsType, 'description' => $description, 'verify' => $smsCode));
+                $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'verify' => $smsCode));
 
                 if (isset($result['error'])) {
                     return $this->createJsonResponse(array('error' => $this->trans('发送失败, %resulterror%', array('%resulterror%' => $result['error']))));
@@ -146,6 +147,13 @@ class EduCloudController extends BaseController
     public function smsCheckAction(Request $request, $type)
     {
         $targetSession = $request->getSession()->get($type);
+        $targetMobile =  $targetSession['to'] ? $targetSession['to'] : '';
+        $postSmsCode = $request->query->get('value');
+
+        $ratelimiterResult =  SmsToolkit::smsCheckRatelimiter($request,$type,$postSmsCode);
+        if($ratelimiterResult && $ratelimiterResult['success'] === false ){
+            return $this->createJsonResponse($ratelimiterResult);
+        }
 
         if (strlen($request->query->get('value')) == 0 || strlen($targetSession['sms_code']) == 0) {
             $response = array('success' => false, 'message' => $this->trans('验证码错误'));
@@ -192,14 +200,12 @@ class EduCloudController extends BaseController
         $smsType    = $request->query->get('smsType');
         $originSign = rawurldecode($request->query->get('sign'));
 
-        $siteSetting        = $this->getSettingService()->get('site');
-        $siteSetting['url'] = rtrim($siteSetting['url']);
-        $siteSetting['url'] = rtrim($siteSetting['url'], '/');
-        $url                = $siteSetting['url'];
-        $url .= $this->generateUrl('edu_cloud_sms_send_callback', array('targetType' => $targetType, 'targetId' => $targetId));
+        $url = $this->setting('site.url','');
+        $url = empty($url) ? $url : rtrim($url, ' \/');
+        $url = empty($url) ? $this->generateUrl('edu_cloud_sms_send_callback', array('targetType' => $targetType, 'targetId' => $targetId), true) : $url.$this->generateUrl('edu_cloud_sms_send_callback', array('targetType' => $targetType, 'targetId' => $targetId));
         $url .= '?index='.$index.'&smsType='.$smsType;
         $api  = CloudAPIFactory::create('leaf');
-        $sign = $this->getSignEncoder()->encodeSign($url, $api->getAccessKey());
+        $sign = $this->getSignEncoder()->encodePassword($url, $api->getAccessKey());
 
         if ($originSign != $sign) {
             return $this->createJsonResponse(array('error' => $this->trans('sign不正确')));
@@ -222,7 +228,7 @@ class EduCloudController extends BaseController
         $url = $siteSetting['url'];
         $url .= $this->generateUrl('edu_cloud_search_callback');
         $api  = CloudAPIFactory::create('root');
-        $sign = $this->getSignEncoder()->encodeSign($url, $api->getAccessKey());
+        $sign = $this->getSignEncoder()->encodePassword($url, $api->getAccessKey());
 
         if ($originSign != $sign) {
             return $this->createJsonResponse(array('error' => $this->trans('sign不正确')));

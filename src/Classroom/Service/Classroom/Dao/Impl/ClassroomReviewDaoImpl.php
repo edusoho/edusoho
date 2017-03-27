@@ -6,30 +6,31 @@ use Classroom\Service\Classroom\Dao\ClassroomReviewDao;
 
 class ClassroomReviewDaoImpl extends BaseDao implements ClassroomReviewDao
 {
-
     protected $table = 'classroom_review';
 
-    private $serializeFields = array(
-        'tagIds' => 'json',
+    public $serializeFields = array(
+        'meta' => 'json'
     );
 
     public function getReview($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
 
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        $review = $this->getConnection()->fetchAssoc($sql, array($id));
+
+        return $review ? $this->createSerializer()->unserialize($review, $this->serializeFields) : null;
     }
 
     public function getReviewRatingSumByClassroomId($classroomId)
     {
-        $sql = "SELECT sum(rating) FROM {$this->table} WHERE classroomId = ?";
+        $sql = "SELECT sum(rating) FROM {$this->table} WHERE classroomId = ? AND parentId = 0";
 
         return $this->getConnection()->fetchColumn($sql, array($classroomId));
     }
 
     public function getReviewCountByClassroomId($classroomId)
     {
-        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE classroomId = ?";
+        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE classroomId = ? AND parentId = 0";
 
         return $this->getConnection()->fetchColumn($sql, array($classroomId));
     }
@@ -44,26 +45,30 @@ class ClassroomReviewDaoImpl extends BaseDao implements ClassroomReviewDao
             ->setMaxResults($limit)
             ->addOrderBy($orderBy[0], $orderBy[1]);
 
-        return $builder->execute()->fetchAll() ?: array();
+        $reviews = $builder->execute()->fetchAll();
+        return $reviews ? $this->createSerializer()->unserializes($reviews, $this->serializeFields) : array();
     }
 
     public function searchReviewCount($conditions)
     {
         $builder = $this->_createSearchBuilder($conditions)
-                         ->select('count(id)');
+            ->select('count(id)');
 
         return $builder->execute()->fetchColumn(0);
     }
 
     public function getReviewByUserIdAndClassroomId($userId, $classroomId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND userId = ? LIMIT 1;";
+        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND userId = ? AND parentId = 0 LIMIT 1;";
 
-        return $this->getConnection()->fetchAssoc($sql, array($classroomId, $userId)) ?: null;
+        $review = $this->getConnection()->fetchAssoc($sql, array($classroomId, $userId)) ?: null;
+
+        return $review ? $this->createSerializer()->unserialize($review, $this->serializeFields) : null;
     }
 
     public function addReview($review)
     {
+        $review   = $this->createSerializer()->serialize($review, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $review);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert review error.');
@@ -74,6 +79,7 @@ class ClassroomReviewDaoImpl extends BaseDao implements ClassroomReviewDao
 
     public function updateReview($id, $fields)
     {
+        $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
 
         return $this->getReview($id);
@@ -97,6 +103,7 @@ class ClassroomReviewDaoImpl extends BaseDao implements ClassroomReviewDao
             ->andWhere('classroomId = :classroomId')
             ->andWhere('rating = :rating')
             ->andWhere('content LIKE :content')
+            ->andWhere('parentId = :parentId')
             ->andWhere('classroomId IN (:classroomIds)');
 
         return $builder;

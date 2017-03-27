@@ -1,6 +1,13 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set menu = 'admin_course_data' %}
+{% set script_controller = 'course/lesson-export' %}
+
+{% block page_buttons %}
+<div class="pull-right">
+  <a class="btn btn-primary btn-sm lesson-export" data-prepare-url="{{ path('admin_course_lesson_data_export_prepare', {courseId:course.id, start:'0'}) }}" data-export-url="{{ path('admin_course_lesson_data_export', {courseId:course.id}) }}" href="javascript:;">导出课时数据</a>
+</div>
+{% endblock %}
 
 {% block main %}
     <div class="table-responsive">

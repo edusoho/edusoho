@@ -17,4 +17,6 @@ interface UserProfileDao
     public function searchProfiles($conditions, $orderBy, $start, $limit);
 
     public function searchProfileCount($conditions);
+    
+    public function findDistinctMobileProfiles($start, $limit);
 }

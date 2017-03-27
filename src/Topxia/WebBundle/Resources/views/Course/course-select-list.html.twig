@@ -99,3 +99,9 @@
   <div class="empty">{{'找不到相关课程！'|trans}}</div>
   {% endif %}
 </ul>
+
+{% if type|default('') == 'ajax_pagination' %}
+{{ web_macro.ajax_paginator(paginator) }}
+{% else %}
+{{ web_macro.paginator(paginator) }}
+{% endif %}

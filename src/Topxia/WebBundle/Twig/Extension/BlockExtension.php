@@ -34,13 +34,16 @@ class BlockExtension extends \Twig_Extension
         }
 
         $env = $this->container->getParameter('kernel.environment');
+
         if ($env == 'prod') {
-            return $block['content'];
+            $content = isset($block['content']) ? $block['content'] : '';
+        } else {
+            $content = BlockToolkit::render($block, $this->container);
         }
 
-        // 从data渲染生成html然后返回
+        $content = $this->container->get('topxia.twig.web_extension')->cdn($content);
 
-        return BlockToolkit::render($block, $this->container);
+        return $content;
     }
 
     public function getName()

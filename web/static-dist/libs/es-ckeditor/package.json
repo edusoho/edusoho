@@ -1,0 +1,81 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "es-ckeditor@1.0.1",
+        "scope": null,
+        "escapedName": "es-ckeditor",
+        "name": "es-ckeditor",
+        "rawSpec": "1.0.1",
+        "spec": "1.0.1",
+        "type": "version"
+      },
+      "/var/www/edusoho_dev"
+    ]
+  ],
+  "_from": "es-ckeditor@1.1.3",
+  "_id": "es-ckeditor@1.0.1",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/es-ckeditor",
+  "_nodeVersion": "5.12.0",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/es-ckeditor-1.0.1.tgz_1480581015241_0.1417688017245382"
+  },
+  "_npmUser": {
+    "name": "codeages",
+    "email": "topxia-dev@outlook.com"
+  },
+  "_npmVersion": "3.10.3",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "es-ckeditor@1.0.1",
+    "scope": null,
+    "escapedName": "es-ckeditor",
+    "name": "es-ckeditor",
+    "rawSpec": "1.0.1",
+    "spec": "1.0.1",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "http://registry.npm.taobao.org/es-ckeditor/download/es-ckeditor-1.1.3.tgz",
+  "_shasum": "aa205b3b3bf3a12d7aa23a0f23d85a5d2508f21f",
+  "_shrinkwrap": null,
+  "_spec": "es-ckeditor@1.0.1",
+  "_where": "/var/www/edusoho_dev",
+  "author": {
+    "name": "codeages"
+  },
+  "dependencies": {},
+  "description": "CKEditor-based implementation  and  add some plugins, For example kityformula etc.",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "aa205b3b3bf3a12d7aa23a0f23d85a5d2508f21f",
+    "tarball": "https://registry.npmjs.org/es-ckeditor/-/es-ckeditor-1.0.1.tgz"
+  },
+  "keywords": [
+    "ckeditor",
+    "kityformula",
+    "editor",
+    "wysiwyg"
+  ],
+  "license": "MIT",
+  "main": "ckeditor.js",
+  "maintainers": [
+    {
+      "name": "codeages",
+      "email": "topxia-dev@outlook.com"
+    }
+  ],
+  "name": "es-ckeditor",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.1.3"
+}

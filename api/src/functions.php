@@ -1,8 +1,9 @@
 <?php
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
-use Topxia\Service\Common\NotFoundException;
-use Topxia\Service\Common\AccessDeniedException;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+
 
 function filter($data, $type)
 {

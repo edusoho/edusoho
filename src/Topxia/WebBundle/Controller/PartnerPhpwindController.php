@@ -111,7 +111,7 @@ class PartnerPhpwindController extends BaseController
 
     protected function doSynLogout($request, $args)
     {
-        $this->get('security.context')->setToken(null);
+        $this->get('security.token_storage')->setToken(null);
         $this->get('request')->getSession()->invalidate();
         return true;
     }

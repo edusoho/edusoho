@@ -25,6 +25,10 @@ admin_classroom_delete:
     defaults: { _controller: ClassroomBundle:ClassroomAdmin:deleteClassroom }
     methods: [POST]
 
+admin_classroom_category:
+    pattern: /classroom/category
+    defaults: { _controller: ClassroomBundle:Classroom/Category:index }
+
 admin_classroom_order:
     path:     /classroom/order
     defaults: { _controller: ClassroomBundle:ClassroomOrderAdmin:manage }

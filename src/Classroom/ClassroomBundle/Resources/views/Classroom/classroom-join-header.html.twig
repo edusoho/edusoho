@@ -1,12 +1,8 @@
 {% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
+{% set memberDeadline = member.deadline|default(0) %}
 <section class="class-header after {% if 'auditor' in member.role %} auditor{% endif %}">
   <div class="container">
-    {% if member.locked|default("0") == "1" %}
-      <div class="alert alert-warning">
-        您的退款申请已提交，请等待管理员的处理。
-        <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('order_cancel_refund', {id:classroom.id, targetType:"classroom"}) }}">取消退款，继续学习！</button>
-      </div>
-    {% endif %}
+
     <ol class="breadcrumb breadcrumb-o">
       <li><a href="{{ path('homepage') }}">{{'首页'|trans}}</a></li>
       {% for breadcrumb in breadcrumbs %}
@@ -14,6 +10,33 @@
       {% endfor %}
       <li class="active">{{ classroom.title }}</li>
     </ol>
+    
+    {% if member.locked|default("0") == "1" %}
+      <div class="alert alert-warning">
+        您的退款申请已提交，请等待管理员的处理。
+        <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('order_cancel_refund', {id:classroom.id, targetType:"classroom"}) }}">取消退款，继续学习！</button>
+      </div>
+    {% endif %}
+
+    {% if vipChecked|default('ok') != 'ok' %}
+      <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {% if vipChecked == 'not_member' %}
+          {{'您已经不是会员，不能学习此' ~ setting("classroom.name")|default("班级") ~ '！'|trans}}
+          {% if classroom.price > 0 %}
+            {{'请重新'|trans}}<a class="alert-link" href="{{ path('vip') }}" target="_blank">{{'开通会员'|trans}}</a>
+          {% else %}
+            <a class="alert-link js-exit" href="javascript:;" data-url="{{ path('classroom_exit', { id:classroom.id }) }}" data-go="{{ path('classroom_show', { id:classroom.id }) }}">{{'退出'|trans}}</a>
+          {% endif %}！
+        {% elseif vipChecked == 'member_expired' %}
+          {{'您的会员已过期，不能学习此' ~ setting("classroom.name")|default("班级") ~ '，请先'|trans}}<a class="alert-link" href="{{ path('vip_renew') }}" target="_blank">{{'续费'|trans}}</a>{{'。'|trans}}
+        {% elseif vipChecked == 'level_low' %}
+          {{'会员等级不够，不能学习此' ~ setting("classroom.name")|default("班级") ~ '。请先'|trans}}<a class="alert-link" href="{{ path('vip_upgrade') }}" target="_blank">{{'升级会员'|trans}}</a>{{'。'|trans}}
+        {% else %}
+          {{'该' ~ setting("classroom.name")|default("班级") ~ '已不支持会员免费学，'|trans}}<a class="alert-link js-exit" href="javascript:;" data-url="{{ path('classroom_exit', { id:classroom.id }) }}" data-go="{{ path('classroom_show', { id:classroom.id }) }}">{{'退出'|trans}}</a>
+        {% endif %}
+      </div>
+    {% endif %}
 
     <div class="class-header-mian">
       <div class="class-bg-layer"></div>
@@ -57,7 +80,16 @@
                   {% endif %}</span>
               </div>
             {% endif %}
+            <div class="hidden-sm fsn">
+              {% if classroom.expiryMode != 'none' %}
+                {% if 'student' in member.role or 'member' in member.role %}
+                  <span class="mrm">班级有效期</span>
+                  <span>{{ memberDeadline|date('Y-n-d') }}</span>
+                {% endif %}
+              {% endif %}
+            </div>
           </div>
+          
           <div class="class-serve hidden-sm hidden-xs">
             <div class="serve-frame">
               {{'承诺服务'|trans}}
@@ -66,27 +98,43 @@
           </div>
         </div>
         <div class="class-operation">
-          <ul class='class-data clearfix {% if classroomMemberLevel and 'auditor' in member.role %}hidden-sm{% else %}two-col{% endif %}'>
-            <li>
-              <p><i class="es-icon es-icon-person"></i></p>
-              <p>{{'学员'|trans}}({{classroom.studentNum + classroom.auditorNum }})</p>
-            </li>
-            <li>
-              <span class="es-share top">
-                <a class="dropdown-toggle" href="" data-toggle="dropdown"  aria-labelledby="dropdownMenu1">
-                  <p><i class="es-icon es-icon-share"></i></p>
-                  <p>{{'分享'|trans}}</p>
-                </a>
-                {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'classroom'} %} 
-              </span>
-            </li>
-            {% if 'auditor' in member.role and classroomMemberLevel and  classroom.showable %}
-              <li class="hidden-xs color-warning icon-vip" title="会员{{setting("classroom.name")|default("班级")}}" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' with {courseVip:classroomMemberLevel,userVipStatus:checkMemberLevelResult} %}" data-original-title="会员{{setting("classroom.name")|default("班级")}}">
-                <i class="es-icon es-icon-crown"></i><br>
-                {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:checkMemberLevelResult, level: classroomMemberLevel} %}
+          {% if (memberDeadline != 0 and date(memberDeadline) < date()) and ('student' in member.role or 'member' in member.role) %}
+            <div class="class-deadline">
+              {% if classroom.expiryMode == 'date'%}
+                 <div  class="alert alert-warning">你的班级已过有效期，无法继续学习</div>
+              {% elseif classroom.expiryMode == 'days' %}
+               <div class="alert alert-warning">你的班级已过有效期，无法继续学习，请<a href="{{ path('classroom_member_deadline_reach', {classroomId:classroom.id}) }}">
+                  {% if classroom.buyable == 1 %}
+                    {{ '重新购买'|trans }}
+                  {% else %}
+                    {{ '重新加入'|trans }}
+                  {% endif %}
+                </a></div>
+              {% endif %}
+            <div>
+          {% else %}
+            <ul class='class-data clearfix {% if classroomMemberLevel and 'auditor' in member.role %}hidden-sm{% else %}two-col{% endif %}'>
+              <li>
+                <p><i class="es-icon es-icon-person"></i></p>
+                <p>{{'学员'|trans}}({{classroom.studentNum + classroom.auditorNum }})</p>
               </li>
-            {% endif %}
-          </ul>
+              <li>
+                <span class="es-share top">
+                  <a class="dropdown-toggle" href="" data-toggle="dropdown"  aria-labelledby="dropdownMenu1">
+                    <p><i class="es-icon es-icon-share"></i></p>
+                    <p>{{'分享'|trans}}</p>
+                  </a>
+                  {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'classroom'} %} 
+                </span>
+              </li>
+              {% if 'auditor' in member.role and classroomMemberLevel and  classroom.showable %}
+                <li class="hidden-xs color-warning icon-vip" title="会员{{setting("classroom.name")|default("班级")}}" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' with {courseVip:classroomMemberLevel,userVipStatus:checkMemberLevelResult} %}" data-original-title="会员{{setting("classroom.name")|default("班级")}}">
+                  <i class="es-icon es-icon-crown"></i><br>
+                  {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:checkMemberLevelResult, level: classroomMemberLevel} %}
+                </li>
+              {% endif %}
+            </ul>
+          {% endif %}
           {% if 'auditor' in member.role %}
             <div class="class-auditor hidden-sm">
               {{'您现在是'|trans}}<span class="color-warning">{{'旁听生'|trans}}</span>{{'，不能完整学习'|trans}}<i class="es-icon es-icon-help color-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{'旁听生只能参与话题讨论，正式学员可以完整地学习所有内容，享受所有教学服务'|trans}}"></i><br>
@@ -131,6 +179,8 @@
     </div>
   </div>
 </section>
+
+{% do load_script('classroombundle/controller/classroom/join-header') %}
 
 {% if is_plugin_installed('ClassroomPlan') %}
   {{ render(controller('ClassroomPlanBundle:ClassroomPlan:joinPlanBlock',{classroomId:classroom.id})) }}

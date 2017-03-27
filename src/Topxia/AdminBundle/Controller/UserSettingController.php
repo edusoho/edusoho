@@ -126,8 +126,28 @@ class UserSettingController extends BaseController
 
     public function loginConnectAction(Request $request)
     {
+        $clients = OAuthClientFactory::clients();
+        $default = $this->getDefaultLoginConnect($clients);
         $loginConnect = $this->getSettingService()->get('login_bind', array());
+        $loginConnect = array_merge($default, $loginConnect);
 
+        if ($request->getMethod() == 'POST') {
+            $loginConnect = $request->request->all();
+            $loginConnect = ArrayToolkit::trim($loginConnect);
+            $loginConnect = $this->decideEnabledLoginConnect($loginConnect);
+            $this->getSettingService()->set('login_bind', $loginConnect);
+            $this->getLogService()->info('system', 'update_settings', "更新登录设置", $loginConnect);
+            $this->updateWeixinMpFile($loginConnect['weixinmob_mp_secret']);
+        }
+
+        return $this->render('TopxiaAdminBundle:System:login-connect.html.twig', array(
+            'loginConnect' => $loginConnect,
+            'clients'      => $clients
+        ));
+    }
+
+    private function getDefaultLoginConnect($clients)
+    {
         $default = array(
             'login_limit'                     => 0,
             'enabled'                         => 0,
@@ -139,30 +159,49 @@ class UserSettingController extends BaseController
             'temporary_lock_minutes'          => 20
         );
 
-        $clients = OAuthClientFactory::clients();
-
         foreach ($clients as $type => $client) {
             $default["{$type}_enabled"]          = 0;
             $default["{$type}_key"]              = '';
             $default["{$type}_secret"]           = '';
             $default["{$type}_set_fill_account"] = 0;
+            if ($type == 'weixinmob') {
+                $default['weixinmob_mp_secret'] = '';
+            }
         }
 
-        $loginConnect = array_merge($default, $loginConnect);
+        return $default;
+    }
 
-        if ($request->getMethod() == 'POST') {
-            $loginConnect = $request->request->all();
-            $loginConnect = ArrayToolkit::trim($loginConnect);
+    private function decideEnabledLoginConnect($loginConnect)
+    {
+        if ($loginConnect['enabled'] == 0) {
+            $loginConnect['weibo_enabled']   = 0;
+            $loginConnect['qq_enabled']    = 0;
+            $loginConnect['renren_enabled']   = 0;
+            $loginConnect['weixinweb_enabled'] = 0;
+            $loginConnect['weixinmob_enabled']    = 0;
+        }
+        //新增第三方登陆方式，加入下列列表计算，以便判断是否关闭第三方登陆功能
+        $loginConnects = ArrayToolkit::parts($loginConnect, array('weibo_enabled', 'qq_enabled', 'renren_enabled', 'weixinweb_enabled', 'weixinmob_enabled'));
+        $sum      = 0;
+        foreach ($loginConnects as $value) {
+            $sum += $value;
+        }
 
-            $this->getSettingService()->set('login_bind', $loginConnect);
-            $this->getLogService()->info('system', 'update_settings', "更新登录设置", $loginConnect);
+        if ($sum < 1) {
+            if ($loginConnect['enabled'] == 1) {
+                $this->setFlashMessage('danger', $this->trans('请至少开启一种您需要的第三方登录方式！'));
+            }
+            if ($loginConnect['enabled'] == 0) {
+                $this->setFlashMessage('success', $this->trans('登录设置已保存！'));
+            }
+            $loginConnect['enabled'] = 0;
+        } else {
+            $loginConnect['enabled'] = 1;
             $this->setFlashMessage('success', $this->trans('登录设置已保存！'));
         }
 
-        return $this->render('TopxiaAdminBundle:System:login-connect.html.twig', array(
-            'loginConnect' => $loginConnect,
-            'clients'      => $clients
-        ));
+        return $loginConnect;
     }
 
     public function userCenterAction(Request $request)
@@ -173,14 +212,17 @@ class UserSettingController extends BaseController
             'mode'             => 'default',
             'nickname_enabled' => 0,
             'avatar_alert'     => 'none',
-            'email_filter'     => ''
+            'email_filter'     => '',
+            'partner_config'   => array(
+                'discuz'  => array(),
+                'phpwind' => array(
+                    'conf'     => array(),
+                    'database' => array()
+                )
+            )
         );
 
         $setting = array_merge($default, $setting);
-
-        $configDirectory   = $this->getServiceKernel()->getParameter('kernel.root_dir').'/config/';
-        $discuzConfigPath  = $configDirectory.'uc_client_config.php';
-        $phpwindConfigPath = $configDirectory.'windid_client_config.php';
 
         if ($request->getMethod() == 'POST') {
             $data                    = $request->request->all();
@@ -188,18 +230,13 @@ class UserSettingController extends BaseController
             $setting['mode']         = $data['mode'];
             $setting['email_filter'] = $data['email_filter'];
 
-            $this->getSettingService()->set('user_partner', $setting);
+            $setting['partner_config']['discuz'] = $data['discuzConfig'];
 
-            $discuzConfig  = $data['discuz_config'];
-            $phpwindConfig = $data['phpwind_config'];
-
-            if ($setting['mode'] == 'discuz') {
-                if (!file_exists($discuzConfigPath) || !is_writeable($discuzConfigPath)) {
-                    $this->setFlashMessage('danger', $this->trans('配置文件%discuzConfigPath%不可写，请打开此文件，复制Ucenter配置的内容，覆盖原文件的配置。', array('%discuzConfigPath%' => $discuzConfigPath)));
-                    goto response;
-                }
-                file_put_contents($discuzConfigPath, $discuzConfig);
-            } elseif ($setting['mode'] == 'phpwind') {
+            if($setting['mode'] == 'phpwind') {
+                $setting['partner_config']['phpwind'] = $data['phpwind_config'];
+                $phpwindConfig = $data['phpwind_config'];
+                $configDirectory   = $this->getServiceKernel()->getParameter('kernel.root_dir').'/config/';
+                $phpwindConfigPath = $configDirectory.'windid_client_config.php';
                 if (!file_exists($phpwindConfigPath) || !is_writeable($phpwindConfigPath)) {
                     $this->setFlashMessage('danger', $this->trans('配置文件%phpwindConfigPath%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。', array('%phpwindConfigPath%' => $phpwindConfigPath)));
                     goto response;
@@ -208,23 +245,16 @@ class UserSettingController extends BaseController
                 file_put_contents($phpwindConfigPath, $phpwindConfig);
             }
 
+            $this->getSettingService()->set('user_partner', $setting);
             $this->getLogService()->info('system', 'setting_userCenter', "用户中心设置", $setting);
             $this->setFlashMessage('success', $this->trans('用户中心设置已保存！'));
-        }
 
-        if (file_exists($discuzConfigPath)) {
-            $discuzConfig = file_get_contents($discuzConfigPath);
-        } else {
-            $discuzConfig = '';
-        }
-
-        if (file_exists($phpwindConfigPath)) {
-            $phpwindConfig = file_get_contents($phpwindConfigPath);
-        } else {
-            $phpwindConfig = '';
         }
 
         response:
+        $discuzConfig = $setting['partner_config']['discuz'];
+        $phpwindConfig  = empty($setting['partner_config']['phpwind'])? '' : $setting['partner_config']['phpwind'];
+
         return $this->render('TopxiaAdminBundle:System:user-center.html.twig', array(
             'setting'       => $setting,
             'discuzConfig'  => $discuzConfig,
@@ -267,7 +297,7 @@ class UserSettingController extends BaseController
         $courseSetting = $this->getSettingService()->get('course', array());
         $auth          = $this->getSettingService()->get('auth', array());
 
-        $commomFields     = $this->get('topxia.twig.web_extension')->getDict('userInfoFields');
+        $commomFields     = $this->get('codeages_plugin.dict_twig_extension')->getDict('userInfoFields');
         $commomFieldsKeys = array_keys($commomFields);
 
         if (isset($auth['registerFieldNameArray'])) {
@@ -402,6 +432,15 @@ class UserSettingController extends BaseController
         }
 
         return $this->redirect($this->generateUrl('admin_setting_user_fields'));
+    }
+
+    protected function updateWeixinMpFile($val)
+    {
+        $dir = realpath(__DIR__.'/../../../../web/');
+        array_map('unlink', glob($dir.'/MP_verify_*.txt'));
+        if (!empty($val)) {
+            file_put_contents($dir.'/MP_verify_'.$val.'.txt', $val);
+        }
     }
 
     protected function getUserDefaultSet()

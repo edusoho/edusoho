@@ -699,7 +699,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
     public function getFavoriteLiveCourse()
     {
-        $result  = $this->getFavoriteCourse();
+        $result  = $this->getFavoriteCourseByCourseType('live');
         if (isset($result['error'])) {
             return $result;
         }
@@ -722,7 +722,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
     public function getFavoriteNormalCourse()
     {
-        $result = $this->getFavoriteCourse();
+        $result = $this->getFavoriteCourseByCourseType('normal');
         if (isset($result['error'])) {
             return $result;
         }
@@ -743,6 +743,36 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return $result;
     }
 
+    protected function getFavoriteCourseByCourseType($courseType)
+    {
+        $user = $this->controller->getUserByToken($this->request);
+
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
+        }
+
+        $start = (int) $this->getParam("start", 0);
+        $limit = (int) $this->getParam("limit", 10);
+
+        $total   = $this->controller->getCourseService()->findUserFavoriteCourseCountNotInClassroomWithCourseType(
+            $user['id'],
+            $courseType
+        );
+        $courses = $this->controller->getCourseService()->findUserFavoriteCoursesNotInClassroomWithCourseType(
+            $user['id'],
+            $courseType,
+            $start,
+            $limit
+        );
+
+        return array(
+            "start" => $start,
+            "limit" => $limit,
+            "total" => $total,
+            "data"  => $this->controller->filterCourses($courses)
+        );
+    }
+
     public function getFavoriteCourse()
     {
         $user = $this->controller->getUserByToken($this->request);
@@ -754,8 +784,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $start = (int) $this->getParam("start", 0);
         $limit = (int) $this->getParam("limit", 10);
 
-        $total   = $this->controller->getCourseService()->findUserFavoritedCourseCount($user['id']);
-        $courses = $this->controller->getCourseService()->findUserFavoritedCourses($user['id'], $start, $limit);
+        $total   = $this->controller->getCourseService()->findUserFavoritedCourseCountNotInClassroom($user['id']);
+        $courses = $this->controller->getCourseService()->findUserFavoritedCoursesNotInClassroom($user['id'], $start, $limit);
 
         return array(
             "start" => $start,
@@ -998,7 +1028,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 $member = null;
             }
         }
-
+        $this->updateMemberLastViewTime($member);
         $userFavorited = $user->isLogin() ? $this->controller->getCourseService()->hasFavoritedCourse($courseId) : false;
         $vipLevels     = array();
 
@@ -1096,8 +1126,33 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $total = $this->controller->getCourseService()->searchCourseCount($conditions);
 
-        $sort    = $this->getParam("sort", "latest");
-        $courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
+        $sort    = $this->getParam("sort", "createdTimeByDesc");
+
+        if ($sort == 'recommendedSeq') {
+            $conditions['recommended'] = 1;
+            $recommendCount = $this->getCourseService()->searchCourseCount($conditions);
+
+            //先按推荐顺序展示推荐，再追加非推荐
+            $courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
+
+            if (($start + $limit) > $recommendCount) {
+                $conditions['recommended'] = 0;
+                if ($start < $recommendCount) {
+                    //需要用非推荐课程补全limit
+                    $fixedStart = 0;
+                    $fixedLimit = $limit - ($recommendCount - $start);
+                } else {
+                    $fixedStart = $start - $recommendCount;
+                    $fixedLimit = $limit;
+                }
+                $UnRecommendCourses = $this->controller->getCourseService()->searchCourses($conditions, 'createdTime', $fixedStart, $fixedLimit);
+                $courses = array_merge($courses, $UnRecommendCourses);
+            }
+
+        } else {
+            $courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
+        }
+        
         $result  = array(
             "start" => $start,
             "limit" => $limit,
@@ -1616,6 +1671,14 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     protected function getDiscountService()
     {
         return $this->controller->getService('Discount:Discount.DiscountService');
+    }
+
+    protected function updateMemberLastViewTime($member)
+    {
+        if (!empty($member)) {
+            $fields['lastViewTime'] = time();
+            $this->getCourseService()->updateCourseMember($member['id'], $fields);
+        }
     }
 
     private function getClassroomService()

@@ -5,7 +5,7 @@ namespace Topxia\Api\Resource\IM;
 use Silex\Application;
 use Topxia\Api\Resource\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\Service\CloudPlatform\IMAPIFactory;
 
 class MeLogin extends BaseResource
 {
@@ -21,8 +21,8 @@ class MeLogin extends BaseResource
             'deviceName'    => $request->request->get('deviceName', ''),
             'ignoreServers' => $request->request->get('ignoreServers', '')
         );
-        //@todo leaf
-        return CloudAPIFactory::create('root')->get('/im/login', $message);
+
+        return IMAPIFactory::create()->get('/login', $message);
     }
 
     public function filter($res)

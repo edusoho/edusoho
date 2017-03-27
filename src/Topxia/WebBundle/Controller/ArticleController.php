@@ -158,11 +158,8 @@ class ArticleController extends BaseController
 
         $category = $this->getCategoryService()->getCategory($article['categoryId']);
 
-        if (empty($article['tagIds'])) {
-            $article['tagIds'] = array();
-        }
+        $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'article', 'ownerId'=> $id));
 
-        $tags     = $this->getTagService()->findTagsByIds($article['tagIds']);
         $tagNames = ArrayToolkit::column($tags, 'name');
 
         $seoKeyword = "";
@@ -376,15 +373,17 @@ class ArticleController extends BaseController
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('标签不存在!'));
         }
 
+        $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType(array($tag['id']), 'article');
+
         $conditions = array(
-            'status' => 'published',
-            'tagId'  => $tag['id']
+            'status'     => 'published',
+            'articleIds' => ArrayToolkit::column($tagOwnerRelations, 'ownerId')
         );
 
         $paginator = new Paginator(
             $this->get('request'),
             $this->getArticleService()->searchArticlesCount($conditions),
-            $this->setting('article.pageNums', 10)
+            $this->setting('article.pageNums', 1)
         );
 
         $articles = $this->getArticleService()->searchArticles(

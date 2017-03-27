@@ -52,31 +52,49 @@
       </div>
     </div>
   </form>
+  
+  <div class="alert alert-info none {% if coinSettings.cash_model|default('none') 
+  !="none" %}hidden{% endif %}">
+    <p><strong> 
+      1、{{ '暂无手动修改用户虚拟币余额的功能'|trans }}
+      <br>
+      2、充值虚拟币，需安装<a href="{{ path('admin_app_center') }}">学习卡</a>或<a href="{{ path('admin_app_center') }}">账户充值</a>插件
+      <br>
+    </strong></p>
+  </div>
 
   <div class="alert alert-info deduction {% if coinSettings.cash_model|default('none') 
   !="deduction" %}hidden{% endif %}">
     <p><strong> 
-      1、{{'虚拟币用于抵扣：网校以人民币作为支付货币，并可以使用虚拟币进行按比例抵扣(虚拟币类似于淘金币）'|trans}}
+      1、{{ '暂无手动修改用户虚拟币余额的功能'|trans }}
       <br>
-      2、{{'使用方式一旦保存（使用方式和汇率），请勿随意改动'|trans}}
+      2、充值虚拟币，需安装<a href="{{ path('admin_app_center') }}">学习卡</a>或<a href="{{ path('admin_app_center') }}">账户充值</a>插件
       <br>
-      3、{{'使用方式的切换会使课程价格根据汇率变动'|trans}}
+      3、{{'虚拟币用于抵扣：网校以人民币作为支付货币，并可以使用虚拟币进行按比例抵扣(虚拟币类似于淘金币）'|trans}}
       <br>
-      4、{{'如有参加促销活动的课程，修改价格都将有相应的折扣'|trans}}    
+      4、{{'使用方式一旦保存（使用方式和汇率），请勿随意改动'|trans}}
+      <br>
+      5、{{'使用方式的切换会使课程价格根据汇率变动'|trans}}
+      <br>
+      6、{{'如有参加促销活动的课程，修改价格都将有相应的折扣'|trans}}    
     </strong></p>
   </div>
 
   <div class="alert alert-info currency {% if coinSettings.cash_model|default('none') !="currency" %}hidden{% endif %}">
     <p><strong> 
-      1、{{'虚拟币用于标价：网校以虚拟币作为支付货币，课程和会员以虚拟币标价和结算'|trans}}
+      1、{{ '暂无手动修改用户虚拟币余额的功能'|trans }}
       <br>
-      2、{{'虚拟币用于标价后，移动端仍显示人民币价格（移动端暂不支持虚拟币支付）'|trans}}
+      2、充值虚拟币，需安装<a href="{{ path('admin_app_center') }}">学习卡</a>或<a href="{{ path('admin_app_center') }}">账户充值</a>插件
       <br>
-      3、{{'使用方式一旦保存（使用方式和汇率），请勿随意改动'|trans}}
+      3、{{'虚拟币用于标价：网校以虚拟币作为支付货币，课程和会员以虚拟币标价和结算'|trans}}
       <br>
-      4、{{'使用方式的切换会使课程价格会根据汇率变动'|trans}}
+      4、{{'虚拟币用于标价后，移动端仍显示人民币价格（移动端暂不支持虚拟币支付）'|trans}}
       <br>
-      5、{{'如有参加促销活动的课程，修改价格都将有相应的折扣'|trans}}    
+      5、{{'使用方式一旦保存（使用方式和汇率），请勿随意改动'|trans}}
+      <br>
+      6、{{'使用方式的切换会使课程价格会根据汇率变动'|trans}}
+      <br>
+      7、{{'如有参加促销活动的课程，修改价格都将有相应的折扣'|trans}}    
     </strong></p>
   </div>
 {% endblock %}

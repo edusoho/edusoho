@@ -1,0 +1,54 @@
+{% extends 'TopxiaWebBundle:CourseManage/Dashboard:layout.html.twig' %}
+
+{% set submenu = 'course_dashboard' %}
+{% do load_script('course-manage/dashboard/course') %}
+
+
+{% block dashboard %}
+  <ul class="course-dashboard-header course-dashboard-ul">
+    <li>
+      <div class="title">{{ '课程学员数'|trans }}</div>
+      <span class="number js-student-num">{{ summary.studentNum }}</span>
+    </li>
+    <li>
+      <div class="title">{{ '完成人数'|trans }}</div>
+      <span class="number js-finished-num">{{ summary.finishedNum }}</span>
+    </li>
+    <li>
+      <div class="title">{{ '完课率'|trans }}
+      <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm finisher-lesson-popover" style="z-index: 100"></span>
+      <div class="popover-content hidden">
+        <div class="popover-item">
+          <div class="content">{{ '学完整个课程的人数 ÷ 课程学员总数'|trans }}</div>
+          </div>
+        </div>
+      </div>
+      <span class="number js-finished-rate">{{ summary.finishedRate }}%</span>
+    </li>
+  </ul>
+
+  <ul class="course-dashboard-footer course-dashboard-ul">
+    <li>
+      <div class="title">{{ '课程笔记数'|trans }}</div>
+      <span class="number js-note-num">{{ summary.noteNum }}</span>
+    </li>
+    <li>
+      <div class="title">{{ '课程提问数'|trans }}</div>
+      <span class="number js-ask-num">{{ summary.askNum }}</span>
+    </li>
+    <li>
+      <div class="title">{{ '课程话题数'|trans }}</div>
+      <span class="number js-discussion-num">{{ summary.discussionNum }}</span>
+    </li>
+  </ul>
+
+  <div id="course-dashboard-container" style="height:400px;" 
+    data-days="{{ days|json_encode }}" 
+    data-student-num="{{ studentNum|json_encode }}" 
+    data-finished-num="{{ finishedNum|json_encode }}" 
+    data-finished-rate="{{ finishedRate|json_encode }}" 
+    data-note-num="{{ noteNum|json_encode }}" 
+    data-ask-num="{{ askNum|json_encode }}" 
+    data-discussion-num="{{ discussionNum|json_encode }}">
+  </div>
+{% endblock %}

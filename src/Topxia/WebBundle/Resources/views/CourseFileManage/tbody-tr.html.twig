@@ -1,5 +1,13 @@
+
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 {% set quality = "" %}
+{% if course.type in ['open','liveOpen'] %}
+  {% set fileShowUrl = path('open_course_manage_file_show',{id:course.id,fileId:uploadFile.id}) %}
+  {% set convertUrl = path('open_course_manage_file_convert',{id:course.id, fileId:uploadFile.id})%}
+{% else %}
+  {% set fileShowUrl = path('course_manage_file_show',{id:course.id,fileId:uploadFile.id}) %}
+  {% set convertUrl = path('course_manage_file_convert',{id:course.id, fileId:uploadFile.id})%}
+{% endif %}
 
 <tr id="upload-file-tr-{{uploadFile.id}}" data-role="item" data-convertHash="{{uploadFile.convertHash}}">
 
@@ -10,11 +18,11 @@
       <span class="glyphicon glyphicon-cloud text-muted" title="{{'云文件'|trans}}"></span>
     {% endif %}
 
-    <a href="{{ path('course_manage_file_show', {id:course.id, fileId:uploadFile.id}) }}" target="_blank" rel="tooltip" title data-original-title="{{ uploadFile.filename }}"  >{{ uploadFile.filename|sub_text(30) }}
+    <a href="{{ fileShowUrl }}" target="_blank" rel="tooltip" title data-original-title="{{ uploadFile.filename }}"  >{{ uploadFile.filename|sub_text(30) }}
     </a>
     
     {% if setting('developer.debug') and uploadFile.storage == 'cloud' and uploadFile.type in ['video', 'ppt', 'document'] %}
-      <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">{{'重新转换(调试模式)'|trans}}</a>
+      <a href="javascript:;" data-url="{{ convertUrl }}" class="convert-file-btn text-danger">{{'重新转换(调试模式)'|trans}}</a>
     {% endif %}
     <br>
 
@@ -47,6 +55,16 @@
         {{ uploadFile.updatedTime|date('Y-n-d H:i')}}
       {% endif %}
     </span>
+  </td>
+  <td>
+    {% if uploadFile.storage == "cloud" and uploadFile.type == 'video' %}
+      {% if course.type == 'open' %}
+        {% set goto = path('open_course_manage_files', {id:course.id}) %}
+      {% else %}
+        {% set goto = path('course_manage_files', {id:course.id}) %}
+      {% endif %}
+    <a class="btn btn-default" href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id, goto:goto}) }}">字幕管理</a>
+    {% endif %}
   </td>
 
 </tr>

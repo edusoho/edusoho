@@ -25,20 +25,31 @@ class WeiboOAuthClient extends AbstractOAuthClient
         $data = $this->postRequest('https://api.weibo.com/oauth2/access_token?' . http_build_query($params), array());
 
         $rawToken = json_decode($data, true);
-        
+
+        if (array_key_exists('error', $rawToken)) {
+            return array(
+                'token' => null,
+                'userId' => null,
+                'expiredTime' => null
+            );
+        }
+
         $token = array(
             'token' => $rawToken['access_token'],
             'userId' => $rawToken['uid'],
             'expiredTime' => $rawToken['expires_in'],
         );
+
         return $token;
     }
 
     public function getUserInfo($token)
     {
         $params = array();
+
         $params['access_token'] = $token['token'];
         $params['uid'] = $token['userId'];
+
         $data = $this->getRequest('https://api.weibo.com/2/users/show.json', $params);
         $userInfo = json_decode($data, true);
 
@@ -64,6 +75,9 @@ class WeiboOAuthClient extends AbstractOAuthClient
         }
         if ($userInfo['error_code'] == '21321') {
             throw new \Exception('unaudited');
+        }
+        if ($userInfo['error_code'] == '10006') {
+            throw new \Exception('unAuthorize');
         }
         throw new \Exception($userInfo['error']);
     }

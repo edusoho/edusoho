@@ -1,13 +1,14 @@
 <?php
+
 namespace Custom\WebBundle\Controller;
 
-use Topxia\WebBundle\Controller\BaseController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Topxia\WebBundle\Controller\DefaultController as BaseDefaultController;
 
-
-class DefaultController extends BaseController
+class DefaultController extends BaseDefaultController
 {
-	public function indexAction()
-	{
-         return $this->render('TopxiaWebBundle:Default:test.html.twig');
-	}
+    public function helloAction($name)
+    {
+        return $this->render('CustomAdminBundle:Default:index.html.twig', array('name' => $name));
+    }
 }

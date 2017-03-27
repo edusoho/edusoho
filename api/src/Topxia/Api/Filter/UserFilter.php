@@ -1,6 +1,7 @@
 <?php
 
 namespace Topxia\Api\Filter;
+use Codeages\PluginBundle\System\PluginConfigurationManager;
 use Topxia\Service\Common\ServiceKernel;
 
 class UserFilter implements Filter
@@ -16,7 +17,25 @@ class UserFilter implements Filter
         unset($data['salt']);
         unset($data['payPassword']);
         unset($data['payPasswordSalt']);
-       
+
+        if (!empty($data['verifiedMobile'])) {
+            $data['verifiedMobile'] = substr_replace($data['verifiedMobile'], '****', 3, 4);
+        } else {
+            unset($data['verifiedMobile']);
+        }
+
+        if ($this->isPluginInstalled('Vip')) {
+            $userVip = $this->getVipService()->getMemberByUserId($data['id']);
+
+            if (!empty($userVip)) {
+                $userVipLevel = $this->getVipLevelService()->getLevel($userVip['levelId']);
+
+                $data['vip']['vipName']     = $userVipLevel['name'];
+                $data['vip']['vipDeadLine'] = $userVip['deadline'];
+                $data['vip']['levelId']     = $userVip['levelId'];
+            }
+        }
+
         $data['promotedTime'] = date('c', $data['promotedTime']);
         $data['lastPasswordFailTime'] = date('c', $data['lastPasswordFailTime']);
         $data['loginTime'] = date('c', $data['loginTime']);
@@ -36,7 +55,6 @@ class UserFilter implements Filter
         $profile['about'] = $this->convertAbsoluteUrl($host, $profile['about']);
         if (!$user->isLogin() || !$user->isAdmin() || ($user['id'] != $data['id'])) {
             unset($data['email']);
-            unset($data['verifiedMobile']);
             unset($data['uri']);
             unset($data['tags']);
             unset($data['type']);
@@ -62,6 +80,7 @@ class UserFilter implements Filter
             $data['about'] = $profile['about'];
             return $data;
         }
+
         $data = array_merge($data,$profile);
 
         unset($data['intField1']);
@@ -128,5 +147,20 @@ class UserFilter implements Filter
 
     }
 
+    protected function isPluginInstalled($code)
+    {
+        $pluginManager = new PluginConfigurationManager(ServiceKernel::instance()->getParameter('kernel.root_dir'));
+        return $pluginManager->isPluginInstalled($code);
+    }
+
+    protected function getVipLevelService()
+    {
+        return ServiceKernel::instance()->createService('Vip:Vip.LevelService');
+    }
+
+    protected function getVipService()
+    {
+        return ServiceKernel::instance()->createService('Vip:Vip.VipService');
+    }
 }
 

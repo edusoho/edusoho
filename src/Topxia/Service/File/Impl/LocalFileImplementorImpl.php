@@ -127,7 +127,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         return $file;
     }
 
-    public function moveFile($targetType, $targetId, $originalFile = null, $data)
+    public function moveFile($targetType, $targetId, $originalFile = null, $data = array())
     {
         $errors = FileToolkit::validateFileExtension($originalFile);
 
@@ -151,7 +151,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     {
     }
 
-    public function getDownloadFile($file)
+    public function getDownloadFile($file, $ssl = false)
     {
         return $file;
     }
@@ -170,9 +170,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         unset($conditions['start']);
         unset($conditions['limit']);
 
-        $files = $this->getUploadFileDao()->searchFiles($conditions, array('createdTime', 'DESC'), $start, $limit);
-
-        return $files;
+        return $this->getUploadFileDao()->searchFiles($conditions, array('createdTime', 'DESC'), $start, $limit);
     }
 
     public function synData($conditions)

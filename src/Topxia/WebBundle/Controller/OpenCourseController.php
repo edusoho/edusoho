@@ -47,6 +47,9 @@ class OpenCourseController extends BaseOpenCourseController
         $course      = $this->getOpenCourseService()->getCourse($courseId);
         $preview     = $request->query->get('as');
         $isWxPreview = $request->query->get('as') === 'preview' && $request->query->get('previewType') === 'wx';
+        $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'openCourse', 'ownerId' => $courseId));
+
+        $tagIds = ArrayToolkit::column($tags, 'id');
 
         if ($isWxPreview || $this->isWxClient()) {
             $template = 'TopxiaWebBundle:OpenCourse/Mobile:open-course-show.html.twig';
@@ -61,8 +64,8 @@ class OpenCourseController extends BaseOpenCourseController
             $message = $course['type'] == 'liveOpen' ? '请先设置直播时间！' : '请先创建课时并发布！';
             return $this->createMessageResponse('error', $message);
             }*/
-
             return $this->render($template, array(
+                'tagIds'       => $tagIds,
                 'course'       => $course,
                 'wxPreviewUrl' => $this->getWxPreviewQrCodeUrl($course['id'])
             ));
@@ -80,6 +83,7 @@ class OpenCourseController extends BaseOpenCourseController
         $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
 
         $response = $this->renderView($template, array(
+            'tagIds'   => $tagIds,
             'course'   => $course,
             'lessonId' => $lessonId
         ));
@@ -88,7 +92,7 @@ class OpenCourseController extends BaseOpenCourseController
         if (!$request->cookies->get('uv')) {
             $expire = strtotime(date('Y-m-d').' 23:59:59');
             $response->headers->setCookie(new Cookie("uv", uniqid($prefix = "refererToken"), $expire));
-            $response->send();
+            //$response->send();
         }
 
         if ('liveOpen' != $course['type']) {
@@ -404,12 +408,17 @@ class OpenCourseController extends BaseOpenCourseController
         }
     }
 
-    public function playerAction($courseId, $lessonId)
+    public function playerAction(Request $request, $courseId, $lessonId)
     {
         $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson)) {
             throw $this->createNotFoundException('课时不存在！');
+        }
+
+        if ($lesson['type'] == 'liveOpen' && $lesson['replayStatus'] == 'videoGenerated') {
+            $course = $this->getOpenCourseService()->getCourse($courseId);
+            $this->createRefererLog($request, $course);
         }
 
         return $this->forward('TopxiaWebBundle:Player:show', array(
@@ -466,6 +475,10 @@ class OpenCourseController extends BaseOpenCourseController
 
         if (empty($material)) {
             throw $this->createNotFoundException();
+        }
+
+        if ($material['source'] == 'opencourselesson' || !$material['lessonId']) {
+            return $this->createMessageResponse('error', $this->trans('无权下载该资料'));
         }
 
         return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $material['fileId']));
@@ -550,7 +563,8 @@ class OpenCourseController extends BaseOpenCourseController
             $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
             if ($file) {
-                $lesson['convertStatus'] = $file['convertStatus'];
+                $lesson['convertStatus'] = empty($file['convertStatus']) ? 'none' : $file['convertStatus'];
+                $lesson['storage']       = $file['storage'];
             }
         } elseif ($lesson['mediaSource'] == 'youku') {
             $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
@@ -764,6 +778,11 @@ class OpenCourseController extends BaseOpenCourseController
         }
 
         return $this->getUserService()->findUsersByIds($userIds);
+    }
+
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 
     protected function getOpenCourseService()

@@ -39,9 +39,7 @@ class CardController extends BaseController
         if (!empty($filter)) {
             $groupCards = ArrayToolkit::group($cards, 'status');
 
-            if ($filter == 'useable') {
-                $cards = isset($groupCards['useable']) ? $groupCards['useable'] : null;
-            } elseif ($filter == 'used') {
+            if ($filter == 'used') {
                 $cards = isset($groupCards['used']) ? $groupCards['used'] : null;
             } elseif ($filter == 'outdate') {
                 $cards = isset($groupCards['outdate']) ? $groupCards['outdate'] : null;

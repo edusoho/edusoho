@@ -11,8 +11,8 @@
 
 namespace Topxia\WebBundle\Handler;
 
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 
 /**
@@ -163,6 +163,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      * @var bool Whether session to create ,default is true
      */
     private $createable = true;
+
     /**
      * Constructor.
      *
@@ -184,14 +185,13 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      *  * lock_mode: The strategy for locking, see constants [default: LOCK_TRANSACTIONAL]
      *
      *
-     * @param  \PDO|string|null          $pdoOrDsn A \PDO instance or DSN string or null
-     * @param  array                     $options  An associative array of options
+     * @param  \PDO|string|null $pdoOrDsn A \PDO instance or DSN string or null
+     * @param  array $options An associative array of options
      * @throws \InvalidArgumentException When PDO error mode is not PDO::ERRMODE_EXCEPTION
      */
-    public function __construct($pdoOrDsn = null, array $options = array(), SecurityContext $context, $container)
+    public function __construct($pdoOrDsn = null, array $options = array(), TokenStorage $storage)
     {
-        $request   = $container->get('request');
-        $userAgent = $request->headers->get("user-agent");
+        $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ?  $_SERVER['HTTP_USER_AGENT'] : '';
 
         if (strpos($userAgent, 'Baiduspider') > -1) {
             $this->createable = false;
@@ -219,7 +219,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
         $this->connectionOptions = isset($options['db_connection_options']) ? $options['db_connection_options'] : $this->connectionOptions;
         $this->lockMode          = isset($options['lock_mode']) ? $options['lock_mode'] : $this->lockMode;
 
-        $this->context = $context;
+        $this->storage = $storage;
     }
 
     /**
@@ -373,7 +373,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
 
         $maxlifetime = self::MAX_LIFE_TIME;
 
-        $token = $this->context->getToken();
+        $token = $this->storage->getToken();
 
         if (empty($token) || ($token instanceof AnonymousToken) || !$token->getUser()) {
             $userId = 0;
@@ -635,7 +635,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      * @todo implement missing advisory locks
      *       - for oci using DBMS_LOCK.REQUEST
      *       - for sqlsrv using sp_getapplock with LockOwner = Session
-     * @param  string           $sessionId Session ID
+     * @param  string $sessionId Session ID
      * @throws \DomainException When an unsupported PDO driver is used
      * @return \PDOStatement    The statement that needs to be executed later to release the lock
      */
@@ -732,8 +732,8 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
                 // DUAL is Oracle specific dummy table
                 return "MERGE INTO $this->table USING DUAL ON ($this->idCol = :id) "."WHEN NOT MATCHED THEN INSERT ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (:id, :data, :lifetime, :time) "."WHEN MATCHED THEN UPDATE SET $this->dataCol = :data, $this->lifetimeCol = :lifetime, $this->timeCol = :time";
             case 'sqlsrv' === $this->driver && version_compare($this->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), '10', '>='):
-                                      // MERGE is only available since SQL Server 2008 and must be terminated by semicolon
-                                      // It also requires HOLDLOCK according to http://weblogs.sqlteam.com/dang/archive/2009/01/31/UPSERT-Race-Condition-With-MERGE.aspx
+                // MERGE is only available since SQL Server 2008 and must be terminated by semicolon
+                // It also requires HOLDLOCK according to http://weblogs.sqlteam.com/dang/archive/2009/01/31/UPSERT-Race-Condition-With-MERGE.aspx
                 return "MERGE INTO $this->table WITH (HOLDLOCK) USING (SELECT 1 AS dummy) AS src ON ($this->idCol = :id) "."WHEN NOT MATCHED THEN INSERT ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (:id, :data, :lifetime, :time) "."WHEN MATCHED THEN UPDATE SET $this->dataCol = :data, $this->lifetimeCol = :lifetime, $this->timeCol = :time;";
             case 'sqlite':
                 return "INSERT OR REPLACE INTO $this->table ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (:id, :data, :lifetime, :time)";

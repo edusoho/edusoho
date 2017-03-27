@@ -50,8 +50,6 @@ $resources = array(
     'Playlist',
     'IM/MeLogin',
     'IM/Conversations',
-    'IM/MyConversation',
-    'IM/MyConversations',
     'CourseThread',
     'CourseThreads',
     'CourseThreadPost',
@@ -62,14 +60,25 @@ $resources = array(
     'ClassRoomThreads',
     'ThreadPosts',
     'ThreadPost',
+    'Setting',
     'OpenCourse',
     'OpenCourses',
     'OpenCourse/Lesson',
-    'OpenCourse/Lessons'
+    'OpenCourse/Lessons',
+    'IM/MePush',
+    'IM/Member',
+    'IM/MemberSync',
+    'Emails',
+    'User/Password',
+    'SmsCodes',
+    'User/VerifiedMobile',
+    'MyLearning',
+    'CoursesLearnProgress',
+    'LessonWatchTime'
 );
 
 foreach ($resources as $res) {
-    $app["res.{$res}"] = $app->share(function () use ($res) {
+    $app["res.{$res}"] = function () use ($res) {
         $class    = "Topxia\\Api\\Resource";
         $segments = explode('/', $res);
         foreach ($segments as $seg) {
@@ -77,5 +86,5 @@ foreach ($resources as $res) {
         }
 
         return new $class();
-    });
+    };
 }

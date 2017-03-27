@@ -106,7 +106,7 @@ class ArticleServiceTest extends BaseTestCase
             'categoryId'    => '1',
             'source'        => 'http://www.edusoho.com',
             'sourceUrl'     => 'http://www.edusoho.com',
-            'tags'          => 'default'
+            'tags'          => ''
         );
         $article = $this->getArticleService()->createArticle($fileds);
         $this->assertEquals('test article', $article['title']);
@@ -134,7 +134,7 @@ class ArticleServiceTest extends BaseTestCase
             'categoryId'    => '1',
             'source'        => 'http://www.edusoho.com',
             'sourceUrl'     => 'http://www.edusoho.com',
-            'tags'          => 'default'
+            'tags'          => '1,2'
         );
         $article = $this->getArticleService()->updateArticle($newArticle['id'], $fields);
         $this->assertEquals('正午时分2', $article['body']);
@@ -361,8 +361,13 @@ class ArticleServiceTest extends BaseTestCase
             'source'        => 'http://www.edusoho.com',
             'sourceUrl'     => 'http://www.edusoho.com',
             'tags'          => 'default',
-            'tagIds'        => 'default'
         );
+
+        $category = $this->getCategoryService()->getCategory(1);
+        if (empty($category)) {
+            $this->createCategory();
+        }
+
         return $this->getArticleService()->createArticle($fileds);
     }
 
@@ -375,11 +380,18 @@ class ArticleServiceTest extends BaseTestCase
             'body'          => '正午时分2',
             'thumb'         => 'thumb2',
             'originalThumb' => 'originalThumb2',
-            'categoryId'    => '2',
+            'categoryId'    => '1',
             'source'        => 'http://try6.edusoho.cn',
             'sourceUrl'     => 'http://try6.edusoho.cn',
             'tags'          => 'default'
         );
+
+        $category = $this->getCategoryService()->getCategory(1);
+        if (empty($category)) {
+            $this->createCategory();
+        }
+
+
         return $this->getArticleService()->createArticle($fileds);
     }
 
@@ -405,9 +417,24 @@ class ArticleServiceTest extends BaseTestCase
         return $user;
     }
 
+    protected function createCategory()
+    {
+        $category = array(
+            'name' => '文章',
+            'code' => 'article',
+            'parentId' => 0
+        );
+        $this->getCategoryService()->createCategory($category);
+    }
+
     protected function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
+    }
+
+    protected function getCategoryService()
+    {
+        return $this->getServiceKernel()->createService('Article.CategoryService');
     }
 
     protected function getArticleService()

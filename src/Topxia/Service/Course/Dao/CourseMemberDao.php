@@ -20,21 +20,43 @@ interface CourseMemberDao
 
     public function findMemberCountByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned);
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findMemberCountNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned);
+
     public function findMembersByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned, $start, $limit);
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findMembersNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned, $start, $limit);
+
     public function findMemberCountByUserIdAndRoleAndIsLearned($userId, $role, $isLearned);
+
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findMemberCountNotInClassroomByUserIdAndRoleAndIsLearned($userId, $role, $isLearned);
 
     public function findMobileVerifiedMemberCountByCourseId($courseId, $locked);
 
     public function findMembersByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit);
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findMembersNotInClassroomByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit);
+
     public function findMembersByCourseIdAndRole($courseId, $role, $start, $limit);
 
     public function findMemberCountByCourseIdAndRole($courseId, $role);
 
+    public function findMembersByUserIdAndJoinType($userId, $joinedType);
+
     public function searchMemberCount($conditions);
 
-    public function searchMembers($conditions, $orderBy, $start, $limit);
+    public function searchMembers($conditions, $orderBys, $start, $limit);
 
     public function searchMember($conditions, $start, $limit);
 
@@ -47,6 +69,10 @@ interface CourseMemberDao
     public function updateMember($id, $member);
 
     public function updateMembers($conditions, $updateFields);
+
+    public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline);
+
+    public function updateMembersDeadlineByClassroomId($classroomId, $deadline);
 
     public function deleteMember($id);
 
@@ -64,4 +90,10 @@ interface CourseMemberDao
 
     public function findMemberUserIdsByCourseId($courseId);
 
+    public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
+
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findMembersNotInClassroomByUserIdAndRoleAndType($userId, $role, $type, $start, $limit, $onlyPublished = true);
 }

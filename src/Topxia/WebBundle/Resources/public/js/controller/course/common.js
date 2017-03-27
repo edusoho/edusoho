@@ -26,6 +26,7 @@ define(function(require, exports, module) {
             var $btn = $(this);
             $.post($btn.data('url'), function() {
                 $btn.hide();
+                $('.reward-modal').click();
                 $("#unfavorite-btn").show();
             });
         });

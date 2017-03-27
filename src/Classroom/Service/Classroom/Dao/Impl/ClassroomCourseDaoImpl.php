@@ -8,9 +8,7 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
 {
     protected $table = 'classroom_courses';
 
-    private $serializeFields = array(
-        'tagIds' => 'json'
-    );
+    private $serializeFields = array();
 
     public function getTable()
     {

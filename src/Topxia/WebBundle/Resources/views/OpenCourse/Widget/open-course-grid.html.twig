@@ -8,7 +8,6 @@
       {% endif %}
       {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
     </a>
-
     {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}
     {% if course.type == 'liveOpen' %}
       <div class="open-starttime">{{ lessons[0].startTime|date('Y-m-d H:i')}}直播</div>

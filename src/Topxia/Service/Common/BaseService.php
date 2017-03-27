@@ -2,15 +2,17 @@
 namespace Topxia\Service\Common;
 
 use Monolog\Logger;
+use Topxia\Service\Common\Lock;
 use Monolog\Handler\StreamHandler;
 use Topxia\Service\Common\ServiceException;
 use Topxia\Service\Common\NotFoundException;
-use Topxia\Service\Util\HTMLPurifierFactory;
+use Topxia\Service\Util\HTMLPurifier;
 use Topxia\Service\Common\AccessDeniedException;
 
 abstract class BaseService
 {
     private $logger = null;
+    private $lock   = null;
 
     protected function createService($name)
     {
@@ -60,13 +62,13 @@ abstract class BaseService
         }
 
         $config = array(
-            'cacheDir' => $this->getKernel()->getParameter('kernel.cache_dir').'/htmlpurifier'
+            'cacheDir' => $this->getKernel()->getParameter('kernel.cache_dir').'/htmlpurifier',
+            'safeIframeDomains' => $this->setting('security.safe_iframe_domains', array()),
         );
 
-        $factory  = new HTMLPurifierFactory($config);
-        $purifier = $factory->create($trusted);
+        $purifier = new HTMLPurifier($config);
 
-        return $purifier->purify($html);
+        return $purifier->purify($html, $trusted);
     }
 
     /**
@@ -74,7 +76,7 @@ abstract class BaseService
      */
     protected function createServiceException($message = 'Service Exception', $code = 0)
     {
-        return new ServiceException($message, $code);
+        throw new ServiceException($message, $code);
     }
 
     /**
@@ -82,7 +84,7 @@ abstract class BaseService
      */
     protected function createAccessDeniedException($message = 'Access Denied', $code = 0)
     {
-        return new AccessDeniedException($message, null, $code);
+        throw new AccessDeniedException($message, null, $code);
     }
 
     /**
@@ -90,7 +92,7 @@ abstract class BaseService
      */
     protected function createNotFoundException($message = 'Not Found', $code = 0)
     {
-        return new NotFoundException($message, $code);
+        throw new NotFoundException($message, $code);
     }
 
     protected function fillOrgId($fields)
@@ -130,6 +132,7 @@ abstract class BaseService
 
         return $this->logger;
     }
+
     protected function isAdminUser()
     {
         $user = $this->getCurrentUser();
@@ -143,5 +146,37 @@ abstract class BaseService
             return true;
         }
         return false;
+    }
+
+    public function isPluginInstalled($code)
+    {
+        $appService = $this->createService('CloudPlatform.AppService');
+        $plugin = $appService->getAppByCode($code);
+        if(empty($plugin)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function setting($name, $default = '')
+    {
+        $names = explode('.', $name);
+        $setting = $this->createService('System.SettingService')->get($names[0]);
+        if(empty($names[1])) {
+            return empty($setting) ? $default : $setting;
+        } 
+
+        return empty($setting[$names[1]]) ? $default : $setting[$names[1]];
+
+    }
+
+    protected function getLock()
+    {
+        if (!$this->lock) {
+            $this->lock = new Lock();
+        }
+
+        return $this->lock;
     }
 }

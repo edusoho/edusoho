@@ -51,7 +51,7 @@ class CourseTestpaperManageController extends BaseController
             return $this->redirect($this->generateUrl('course_manage_testpaper_items', array('courseId' => $course['id'], 'testpaperId' => $testpaper['id'])));
         }
 
-        $typeNames = $this->get('topxia.twig.web_extension')->getDict('questionType');
+        $typeNames = $this->get('codeages_plugin.dict_twig_extension')->getDict('questionType');
         $types     = array();
 
         foreach ($typeNames as $type => $name) {
@@ -92,7 +92,7 @@ class CourseTestpaperManageController extends BaseController
             return $this->createJsonResponse(array());
         }
 
-        $typeNames = $this->get('topxia.twig.web_extension')->getDict('questionType');
+        $typeNames = $this->get('codeages_plugin.dict_twig_extension')->getDict('questionType');
         $types     = array();
 
         foreach ($typeNames as $type => $name) {
@@ -134,7 +134,7 @@ class CourseTestpaperManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($id);
+        $testpaper = $this->tryGetTestpaper($courseId, $id);
 
         if (empty($testpaper)) {
             throw $this->createNotFoundException($this->getServiceKernel()->trans('试卷不存在'));
@@ -156,7 +156,7 @@ class CourseTestpaperManageController extends BaseController
     public function deleteAction(Request $request, $courseId, $testpaperId)
     {
         $course    = $this->getCourseService()->tryManageCourse($courseId);
-        $testpaper = $this->getTestpaperWithException($course, $testpaperId);
+        $testpaper = $this->tryGetTestpaper($courseId, $testpaperId);
         $this->getTestpaperService()->deleteTestpaper($testpaper['id']);
 
         return $this->createJsonResponse(true);
@@ -169,7 +169,7 @@ class CourseTestpaperManageController extends BaseController
         $ids = $request->request->get('ids');
 
         foreach (is_array($ids) ? $ids : array() as $id) {
-            $testpaper = $this->getTestpaperWithException($course, $id);
+            $this->tryGetTestpaper($courseId, $id);
             $this->getTestpaperService()->deleteTestpaper($id);
         }
 
@@ -180,7 +180,7 @@ class CourseTestpaperManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
-        $testpaper = $this->getTestpaperWithException($course, $id);
+        $this->tryGetTestpaper($courseId, $id);
 
         $testpaper = $this->getTestpaperService()->publishTestpaper($id);
 
@@ -197,7 +197,7 @@ class CourseTestpaperManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
-        $testpaper = $this->getTestpaperWithException($course, $id);
+        $this->tryGetTestpaper($courseId, $id);
 
         $testpaper = $this->getTestpaperService()->closeTestpaper($id);
 
@@ -210,7 +210,7 @@ class CourseTestpaperManageController extends BaseController
         ));
     }
 
-    protected function getTestpaperWithException($course, $testpaperId)
+    protected function tryGetTestpaper($courseId, $testpaperId)
     {
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
@@ -218,8 +218,8 @@ class CourseTestpaperManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if ($testpaper['target'] != "course-{$course['id']}") {
-            throw $this->createAccessDeniedException();
+        if ($testpaper['target'] != "course-" . $courseId) {
+            throw $this->createNotFoundException($this->trans('试卷不属于该课程'));
         }
 
         return $testpaper;
@@ -229,7 +229,7 @@ class CourseTestpaperManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        $testpaper = $this->tryGetTestpaper($courseId, $testpaperId);
 
         if (empty($testpaper)) {
             throw $this->createNotFoundException($this->getServiceKernel()->trans('试卷不存在'));
@@ -306,7 +306,7 @@ class CourseTestpaperManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        $testpaper = $this->tryGetTestpaper($courseId, $testpaperId);
 
         if (empty($testpaper)) {
             throw $this->createNotFoundException($this->getServiceKernel()->trans('试卷不存在'));
@@ -320,7 +320,7 @@ class CourseTestpaperManageController extends BaseController
             return $this->redirect($this->generateUrl('course_manage_testpaper_items', array('courseId' => $courseId, 'testpaperId' => $testpaperId)));
         }
 
-        $typeNames = $this->get('topxia.twig.web_extension')->getDict('questionType');
+        $typeNames = $this->get('codeages_plugin.dict_twig_extension')->getDict('questionType');
         $types     = array();
 
         foreach ($typeNames as $type => $name) {
@@ -348,7 +348,7 @@ class CourseTestpaperManageController extends BaseController
     public function itemPickerAction(Request $request, $courseId, $testpaperId)
     {
         $course    = $this->getCourseService()->tryManageCourse($courseId);
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        $testpaper = $this->tryGetTestpaper($courseId, $testpaperId);
 
         if (empty($testpaper)) {
             throw $this->createNotFoundException();
@@ -402,7 +402,7 @@ class CourseTestpaperManageController extends BaseController
     public function itemPickedAction(Request $request, $courseId, $testpaperId)
     {
         $course    = $this->getCourseService()->tryManageCourse($courseId);
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        $testpaper = $this->tryGetTestpaper($courseId, $testpaperId);
 
         if (empty($testpaper)) {
             throw $this->createNotFoundException();
@@ -438,7 +438,7 @@ class CourseTestpaperManageController extends BaseController
 
         $testpaperId = $request->request->get('testpaperId');
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        $testpaper = $this->tryGetTestpaper($courseId, $testpaperId);
 
         if (empty($testpaper)) {
             throw $this->createNotFoundException();
@@ -447,28 +447,12 @@ class CourseTestpaperManageController extends BaseController
         $items    = $this->getTestpaperService()->getItemsCountByParams(array('testId' => $testpaperId, 'parentIdDefault' => 0), $gourpBy = 'questionType');
         $subItems = $this->getTestpaperService()->getItemsCountByParams(array('testId' => $testpaperId, 'parentId' => 0));
 
-        $items                    = ArrayToolkit::index($items, 'questionType');
-        $objectiveQuestionsCount  = 0;
-        $subjectiveQuestionsCount = 0;
-
-        foreach ($items as $key => $item) {
-            if ($key == 'essay' || $key == 'material') {
-                $subjectiveQuestionsCount = $subjectiveQuestionsCount + $item['num'];
-            } else {
-                $objectiveQuestionsCount = $objectiveQuestionsCount + $item['num'];
-            }
-        }
-
-        $objectiveQuestionsCountHour = number_format(($objectiveQuestionsCount * 5) / 60, 1);
-        $suggestHours                = number_format(($objectiveQuestionsCount * 5) / 60, 1) + $subjectiveQuestionsCount * 0.5;
-        $multiple                    = ceil($suggestHours / 0.5) * 0.5;
-        $suggestHours                = $suggestHours > $multiple ? ($multiple + 0.5) : $multiple;
+        $items = ArrayToolkit::index($items, 'questionType');
 
         $items['material'] = $subItems[0];
 
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:item-get-table.html.twig', array(
-            'suggestHours' => $suggestHours,
-            'items'        => $items
+            'items' => $items
         ));
     }
 

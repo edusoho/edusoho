@@ -24,10 +24,20 @@ class LoginBindController extends BaseController
 
         $inviteCode  = $request->query->get('inviteCode', null);
         $client      = $this->createOAuthClient($type);
-        $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
+
+        $token = $this->getTokenService()->makeToken('login.bind', array(
+            'data'     => array(
+                'type' => $type,
+                'sessionId' => $request->getSession()->getId(),
+            ),
+            'times'    => 1,
+            'duration' => 3600
+        ));
+
+        $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type, 'token' => $token['token']), true);
 
         if ($inviteCode) {
-            $callbackUrl = $callbackUrl.'?inviteCode='.$inviteCode;
+            $callbackUrl = $callbackUrl.'&inviteCode='.$inviteCode;
         }
 
         $url = $client->getAuthorizeUrl($callbackUrl);
@@ -44,9 +54,15 @@ class LoginBindController extends BaseController
     {
         $code        = $request->query->get('code');
         $inviteCode  = $request->query->get('inviteCode');
-        $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
+        $token  = $request->query->get('token', '');
+
+        $this->validateToken($request, $type);
+
+        $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type, 'token' => $token), true);
         $token       = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
+
         $bind        = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
+
         $request->getSession()->set('oauth_token', $token);
 
         if ($bind) {
@@ -72,6 +88,24 @@ class LoginBindController extends BaseController
         }
     }
 
+    protected function validateToken($request, $type)
+    {
+        $token        = $request->query->get('token', '');
+        if (empty($token)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $token    = $this->getTokenService()->verifyToken('login.bind', $token);
+        $tokenData = $token['data'];
+        if ($tokenData['type'] != $type) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if ($tokenData['sessionId'] != $request->getSession()->getId()) {
+            throw $this->createAccessDeniedException();
+        }
+    }
+
     public function chooseAction(Request $request, $type)
     {
         $token      = $request->getSession()->get('oauth_token');
@@ -91,6 +125,8 @@ class LoginBindController extends BaseController
 
             if ($message == 'unaudited') {
                 $message = $this->trans('抱歉！暂时无法通过第三方帐号登录。原因：%name%登录连接的审核还未通过。', array('%name%' => $clientMeta['name']));
+            } elseif($message == 'unAuthorize') {
+                return $this->redirect($this->generateUrl('login'));
             } else {
                 $message = $this->trans('抱歉！暂时无法通过第三方帐号登录。原因：%message%', array('%message%' => $message));
             }
@@ -443,9 +479,15 @@ class LoginBindController extends BaseController
         }
 
         $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
+
         $client = OAuthClientFactory::create($type, $config);
 
         return $client;
+    }
+
+    protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
     }
 
     protected function getSensitiveService()

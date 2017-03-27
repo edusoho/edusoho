@@ -1,0 +1,20 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_cloud_edulive_overview' %}
+{% block tabs %}{% endblock %}
+{% block main %}
+<div class="panel panel-default notice-panel">
+  <div class="panel-body">
+    {{ web_macro.flash_messages() }}
+    <i class="es-icon es-icon-infooutline text-primary"></i>
+    <div class="text-md mbl">尚未启用云直播</div>
+    {% if overview.isBuy == false %}
+      <div class="color-gray notice-desc">尚未购买云直播服务，不能启用，<a href="{{path('admin_cloud_buy', {type:'live'})}}" target="_blank">立即购买</a> 或 <a href="{{ path('admin_cloud_show', {type:'live'}) }}" target="_blank">了解详情</a>。</div>
+    {% endif %}
+    <form class="form-horizontal" role="form" method="post" action="{{ path('admin_setting_cloud_edulive') }}">
+      <button type="submit" class="btn btn-primary btn-lg notice-btn" {% if overview.isBuy == false %}disabled="disabled"{% endif %} name="live_course_enabled" value="1">立即启用</button>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  </div>
+</div>
+{% endblock %}

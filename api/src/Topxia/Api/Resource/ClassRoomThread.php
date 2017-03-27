@@ -13,6 +13,10 @@ class ClassRoomThread extends BaseResource
     {
         $thread = $this->getThreadService()->getThread($threadId);
 
+        if (empty($thread)) {
+            return $this->error('not_found', '没有找到');
+        }
+
         $user = $this->getUserService()->getUser($thread['userId']);
         $thread['user'] = $this->simpleUser($user);
         $classroom = $this->getClassroomService()->getClassRoom($thread['targetId']);
@@ -26,7 +30,7 @@ class ClassRoomThread extends BaseResource
     {
         $res['lastPostTime'] = date('c', $res['lastPostTime']);
         $res['createdTime'] = date('c', $res['createdTime']);
-        $res['updatedTime'] = date('c', $res['updatedTime']);
+        $res['updatedTime'] = date('c', isset($res['updateTime']) ? $res['updateTime'] : $res['updatedTime']);
         return $res;
     }
 

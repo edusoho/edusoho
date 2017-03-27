@@ -23,9 +23,32 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $user               = $this->getCurrentUser();
         $params['id']       = $user->isLogin() ? $user['id'] : $this->getRandomUserId($request, $courseId, $lessonId);
         $params['nickname'] = $user->isLogin() ? $user['nickname'] : $this->getRandomNickname($request, $courseId, $lessonId);
+        $params['isLogin'] =$user->isLogin() ;
         $this->createRefererLog($request, $course);
 
         return $this->forward('TopxiaWebBundle:Liveroom:_entry', array('id' => $lesson['mediaId']), $params);
+    }
+
+    public function playESLiveReplayAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
+    {
+        $openCourse = $this->getOpenCourseService()->getCourse($courseId);
+        $replay = $this->getCourseService()->getCourseLessonReplay($courseLessonReplayId);
+
+        if ($this->canTakeOpenCourseRelay($openCourse, $replay)) {
+            return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array('globalId' => $replay['globalId']));
+        } else {
+            return $this->createAccessDeniedException();
+        }
+
+    }
+
+    protected function canTakeOpenCourseRelay($openCourse, $replay)
+    {
+        if ($openCourse['status'] == 'published' && $openCourse['id'] == $replay['courseId'] && $openCourse['type'] == $replay['type']) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     protected function getMillisecond()
@@ -192,8 +215,10 @@ class LiveOpenCourseController extends BaseOpenCourseController
 
     public function getReplayUrlAction(Request $request, $courseId, $lessonId, $replayId)
     {
+        $ssl = $request->isSecure() ? true : false;
+
         $course = $this->getOpenCourseService()->getCourse($courseId);
-        $result = $this->getLiveCourseService()->entryReplay($replayId);
+        $result = $this->getLiveCourseService()->entryReplay($replayId, $ssl);
 
         return $this->createJsonResponse(array(
             'url'   => $result['url'],

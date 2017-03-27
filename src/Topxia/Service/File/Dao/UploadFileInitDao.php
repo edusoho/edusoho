@@ -8,6 +8,8 @@ interface UploadFileInitDao
 
     public function getFileByGlobalId($globalId);
 
+    public function getFileByHashId($hash);
+
     public function addFile(array $file);
 
     public function updateFile($id, array $fields);

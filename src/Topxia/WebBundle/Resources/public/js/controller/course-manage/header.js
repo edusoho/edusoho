@@ -4,10 +4,10 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         $('.course-publish-btn').click(function() {
+
             if (!confirm(Translator.trans('您真的要发布该课程吗？'))) {
                 return ;
             }
-
             $.post($(this).data('url'), function(response) {
                 if (!response['result']) {
                     Notify.danger(response['message']);
@@ -15,7 +15,6 @@ define(function(require, exports, module) {
                     window.location.reload();
                 }
             });
-
         });
         $('.js-exit-course').on('click', function(){
             var self = $(this);

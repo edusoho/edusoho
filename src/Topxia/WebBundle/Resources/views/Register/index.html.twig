@@ -1,6 +1,7 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% block title %}{{'注册'|trans}} - {{ parent() }}{% endblock %}
+{% set bodyClass = 'register' %}
 {% set script_controller = 'auth/register' %}
 
 {% set parameter = get_parameters_from_url(app.request.uri) %}
@@ -141,4 +142,8 @@
   {% if setting('login_bind.weixinmob_enabled') == '1' %}
     {% do load_script('auth/isWeiXin') %}
   {% endif %}
+{% endblock %}
+
+{% block bottom %}
+  {% include 'TopxiaWebBundle:Default:Mobile/footer-tool-bar.html.twig' with { mobile_tool_bar: 'register' } %}
 {% endblock %}

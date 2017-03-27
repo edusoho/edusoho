@@ -48,7 +48,7 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
     public function searchChapterCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('COUNT(id)');
+            ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
@@ -56,10 +56,10 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ?: array();
     }
 
@@ -163,8 +163,8 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
     protected function _createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, 'course_chapter')
-                        ->andWhere('courseId = :courseId');
+            ->from($this->table, 'course_chapter')
+            ->andWhere('courseId = :courseId');
         return $builder;
     }
 }

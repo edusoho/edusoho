@@ -11,6 +11,8 @@ use Topxia\MobileBundleV2\Alipay\MobileAlipayRequest;
 
 class MobileAlipayController extends MobileBaseController
 {
+    private $logger;
+
     public function payAction(Request $request)
     {
         $alipayRequest = new MobileAlipayRequest($request);
@@ -38,6 +40,7 @@ class MobileAlipayController extends MobileBaseController
             $this->getLogService()->info('notify', 'check_fail', "paynotify action");
         }
 
+
         return new Response($status);
     }
 
@@ -48,7 +51,7 @@ class MobileAlipayController extends MobileBaseController
 
     public function payCallBackAction(Request $request, $name)
     {
-        $status   = $this->doPayNotify($request, $name);
+        $status   = "success";
         $callback = "<script type='text/javascript'>window.location='objc://alipayCallback?".$status."';</script>";
         return new Response($callback);
     }
@@ -56,6 +59,19 @@ class MobileAlipayController extends MobileBaseController
     //支付校验
     protected function doPayNotify(Request $request, $name)
     {
+        // $response = $this->forward('TopxiaWebBundle:PayCenter:payNotify', array(
+        //     'request' => $request,
+        //     'name' => $name
+        // ));
+        
+        // $this->getLogger('Mobile2DoPayNotify')->info('response code '.$response->getStatusCode());
+
+        // if($response->getContent() == 'success') {
+        //     return 'success';
+        // }
+
+        // return "fail";
+
         $requestParams = array();
 
         if ($request->getMethod() == "GET") {

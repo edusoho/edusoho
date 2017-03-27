@@ -43,7 +43,7 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="truename"]',
-            rule: 'chinese minlength{min:2} maxlength{max:5}'
+            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:36}'
         });
 
         validator.addItem({
@@ -60,7 +60,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="site"]',
             rule: 'url',
-            errormessageUrl: Translator.trans('网站地址不正确，须以http://开头。')
+            errormessageUrl: Translator.trans('网站地址不正确，须以http://或https://开头。')
         });
 
         validator.addItem({

@@ -1,0 +1,9 @@
+parameters:
+    database_driver:   pdo_mysql
+    database_host:     127.0.0.1
+    database_port:     3306
+    database_name:     edusoho_test
+    database_user:     root
+    database_password: ~
+    locale:            zh_CN
+    secret:            ThisTokenIsNotSoSecretChangeIt

@@ -3,7 +3,6 @@ namespace Topxia\Service\User\Event;
 
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\EdusohoTuiClient;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class UserEventSubscriber implements EventSubscriberInterface
@@ -11,17 +10,15 @@ class UserEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'user.service.registered' => 'onUserRegistered',
-            'user.service.follow'     => 'onUserFollowed',
-            'user.service.unfollow'   => 'onUserUnfollowed'
+            'user.registered'   => 'onUserRegistered',
+            'user.follow'     => 'onUserFollowed',
+            'user.unfollow'   => 'onUserUnfollowed'
         );
     }
 
     public function onUserRegistered(ServiceEvent $event)
     {
-        $user      = $event->getSubject();
-        $tuiClient = new EdusohoTuiClient();
-        $result    = $tuiClient->addStudent($user);
+        $user = $event->getSubject();
         $this->sendRegisterMessage($user);
     }
 
@@ -36,21 +33,6 @@ class UserEventSubscriber implements EventSubscriberInterface
             'opration' => 'follow'
         );
         $this->getNotificationService()->notify($friend['toId'], 'user-follow', $message);
-
-        $message = array(
-            'fromId'  => $friend['fromId'],
-            'toId'    => $friend['toId'],
-            'type'    => 'text',
-            'title'   => '好友添加',
-            'content' => $user['nickname'].'添加你为好友',
-            'custom'  => json_encode(array(
-                'fromId'       => $friend['fromId'],
-                'nickname'     => $user['nickname'],
-                'typeBusiness' => 'verified'
-            ))
-        );
-        $tuiClient = new EdusohoTuiClient();
-        $result    = $tuiClient->sendMessage($message);
     }
 
     public function onUserUnfollowed(ServiceEvent $event)
@@ -123,7 +105,7 @@ class UserEventSubscriber implements EventSubscriberInterface
         $welcomeBody = str_replace($valuesToBeReplace, $valuesToReplace, $welcomeBody);
         return $welcomeBody;
     }
-
+    
     protected function getSettingService()
     {
         return ServiceKernel::instance()->createService('System.SettingService');
@@ -143,13 +125,4 @@ class UserEventSubscriber implements EventSubscriberInterface
     {
         return ServiceKernel::instance()->createService('User.NotificationService');
     }
-
-// undefined container, comment out
-
-//  protected function getWebExtension()
-
-// {
-
-//     return $this->container->get('topxia.twig.web_extension');
-    // }
 }

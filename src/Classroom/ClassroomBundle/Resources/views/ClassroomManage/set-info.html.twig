@@ -3,6 +3,10 @@
 {% set side_nav = 'base' %}
 {% set script_controller = 'classroombundle/controller/classroom/set-info' %}
 {% do load_script('classroombundle/controller/classroom-admin/classroom-create') %}
+{% set script_arguments = {
+tagMatchUrl: path('tag_match'),
+classroomStatus: classroom.status
+} %}
 
 {% block title %}{{'基本信息'|trans}} - {{ parent() }}{% endblock %}
 
@@ -30,6 +34,17 @@
           <textarea name="about" class="form-control" rows="6" 
           data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
           data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}" id="about">{{ classroom.about|raw }}</textarea>
+          <div class="help-block">{{ '为正常使用IFrame，请在【管理后台】-【系统】-【安全设置】-【IFrame白名单】中进行设置'|trans }}</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-2 control-label">{{ '标签'|trans }}</label>
+        <div class="col-md-8 controls">
+          <input type="text" id="classroom_tags" name="tags" required="required" class="width-full select2-offscreen"
+                 tabindex="-1" value="{{ tags|join(',') }}"
+                 data-explain="{{ '用于按标签检索班级等，由网校管理员后台统一管理'|trans }}">
+          <div class="help-block">{{ '用于按标签检索班级等，由网校管理员后台统一管理'|trans }}</div>
         </div>
       </div>
 
@@ -64,12 +79,45 @@
         </div>
         </div>
       </div>
-      
+
+      <div class="form-group">
+        <label class="col-md-2 control-label">班级有效期</label>
+        <div class="col-md-8 controls radios">
+          {% if classroom.status == 'draft' %}
+            <input type="hidden" name="expiryMode" value="{{ classroom.expiryMode }}">
+            {{ radios('expiryMode', {'date':'截止日期'|trans, 'days':'有效期天数'|trans,'none':'无'|trans}, classroom.expiryMode|default('none')) }}
+          {% else %}
+            {{ radios('expiryMode', {'date':'截止日期'|trans, 'days':'有效期天数'|trans,'none':'无'|trans}, classroom.expiryMode|default('none'), 'disabled') }}
+            <input type="hidden" name="expiryMode" value="{{ classroom.expiryMode|default('none') }}">
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="form-group expiry-value-js {% if classroom.expiryMode|default('none') == 'none' %} hidden {% endif %}">
+        <label class="col-md-2 control-label"></label>
+        <div class="col-md-8 controls">
+          <input type="text" id="classroom_expiryValue" name="expiryValue" required="required" value="{% if classroom.expiryMode|default('none') == 'date' %}{{ classroom.expiryValue|date('Y-m-d') }}{% else %}{{ classroom.expiryValue }}{% endif %}"
+                 class="form-control width-input width-input-large" > <span
+              {% if classroom.expiryMode|default('none') != 'days' %}class="hidden" {% endif %}>{{ '天'|trans }} </span>
+          {% set date_help = '设置该值后，%user_name%只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)}) %}
+          {% set days_help = '设置该值后，%user_name%只能在有效天数内进行课程的学习，系统默认会在有效期前10天提醒学员。'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)}) %}
+
+          <div class="help-block" data-date="{{ date_help }}" data-days="{{ days_help }}">
+            {% if classroom.expiryMode|default('none') == 'date' %}  {{ date_help }}{% elseif  classroom.expiryMode|default('none') == 'days' %}{{ days_help }} {% endif %}
+          </div>
+          {#即有效期为N天，则只能学习N天，即有效期至yyyy-mm-dd，则只能学习至yyyy-mm-dd 即有效期为N天，则只能学习N天，#}
+        </div>
+        <div class="col-md-offset-2 col-md-10 js-course-rule">
+          <p class="alert-warning"></p>
+          <a href="{{ path('classroom_expiry_date_rule') }}" target="_blank">查看有效期规则</a>
+        </div>
+      </div>
+
       <div class="form-group">
         <label class="col-md-2 control-label">{{'分类'|trans}}</label>
         <div class="col-md-8 controls">
           <select id="course_categoryId" name="categoryId" required="required" class="form-control width-input width-input-large">
-            {{ select_options(category_choices('course'), classroom.categoryId, {'0':'分类'|trans}) }}
+            {{ select_options(category_choices('classroom'), classroom.categoryId, {'0':'分类'|trans}) }}
           </select>
           <div class="help-block" style="display:none;"></div>
         </div>

@@ -8,6 +8,7 @@ use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class FileToolkit
 {
@@ -87,6 +88,18 @@ class FileToolkit
     public static function getFileExtension(File $file)
     {
         return $file instanceof UploadedFile ? $file->getClientOriginalExtension() : $file->getExtension();
+    }
+
+    public static function getSecureFileMimeTypes()
+    {
+        $extensions = self::getSecureFileExtensions();
+        $extensions = explode(' ', $extensions);
+        $mimeTypes = array();
+        foreach ($extensions as $key => $extension) {
+            $mimeTypes[] = self::getMimeTypeByExtension($extension);
+        }
+
+        return $mimeTypes;
     }
 
     public static function getSecureFileExtensions()
@@ -869,7 +882,11 @@ class FileToolkit
             'smv'         => 'video/x-smv',
             'ice'         => 'x-conference/x-cooltalk',
             'mpg'         => 'video/mpeg',
-            'mp3'         => 'audio/mpeg'
+            'mp3'         => 'audio/mpeg',
+            'gz'          => 'application/x-gzip',
+            'jpg'         => 'image/jpeg',
+            'pps'         => 'application/vnd.ms-powerpoint',
+            'mov'         => 'video/quicktime'
         );
         return empty($mimes[$extension]) ? null : $mimes[$extension];
     }
@@ -890,6 +907,8 @@ class FileToolkit
             return 'ppt';
         } elseif (in_array($extension, array('swf'))) {
             return 'flash';
+        } elseif (in_array($extension, array('srt'))) {
+            return 'subtitle';
         } else {
             return 'other';
         }
@@ -1054,6 +1073,41 @@ class FileToolkit
         $scaledSize  = $naturalSize->widen($width)->heighten($height);
 
         return array($naturalSize, $scaledSize);
+    }
+
+    //将图片旋转正确
+    public static function imagerotatecorrect($path)
+    {
+        try {
+            //只旋转JPEG的图片
+            //IMAGETYPE_JPEG = 2
+            if (extension_loaded('gd') && extension_loaded('exif') && exif_imagetype($path) == 2) {
+                $exif = @exif_read_data($path);
+                if (!empty($exif['Orientation'])) {
+                    $image = imagecreatefromstring(file_get_contents($path));
+                    switch ($exif['Orientation']) {
+                        case 8:
+                            $image = imagerotate($image, 90, 0);
+                            break;
+                        case 3:
+                            $image = imagerotate($image, 180, 0);
+                            break;
+                        case 6:
+                            $image = imagerotate($image, -90, 0);
+                            break;
+                    }
+
+                    imagejpeg($image, $path);
+                    imagedestroy($image);
+
+                    return $path;
+                }
+            }
+        } catch (\Exception $e) {
+            //报错了不旋转，保证不影响上传流程
+        }
+
+        return false;
     }
 
     protected function getServiceKernel()

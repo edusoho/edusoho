@@ -97,17 +97,22 @@ define(function(require, exports, module) {
             {
                 title: Translator.trans('删除动态'),
                 url: urls.statusDeleteUrl,
-                progressRange: [87, 96]
+                progressRange: [87, 90]
             },
             {
                 title: Translator.trans('删除成员'),
                 url: urls.memberDeleteUrl,
-                progressRange: [97, 98]
+                progressRange: [91, 93]
+            },
+            {
+                title: Translator.trans('删除会话'),
+                url: urls.conversationDeleteUrl,
+                progressRange: [94, 97]
             },
             {
                 title: Translator.trans('删除课程'),
                 url: urls.courseDeleteUrl,
-                progressRange: [99, 100]
+                progressRange: [98, 100]
             }
         ];
 

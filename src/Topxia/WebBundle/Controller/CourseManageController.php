@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Course\Impl\CourseServiceImpl;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,19 +41,28 @@ class CourseManageController extends BaseController
         ));
     }
 
+    public function courseRuleAction()
+    {
+        return $this->render('TopxiaWebBundle:CourseManage:rule.html.twig');        
+    }
+
     public function baseAction(Request $request, $id)
     {
         $course        = $this->getCourseService()->tryManageCourse($id);
-        $courseSetting = $this->getSettingService()->get('course', array());
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
+            $data['tagIds'] = $this->getTagIdsFromRequest($request);
+
             $this->getCourseService()->updateCourse($id, $data);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('课程基本信息已保存！'));
             return $this->redirect($this->generateUrl('course_manage_base', array('id' => $id)));
         }
 
-        $tags = $this->getTagService()->findTagsByIds($course['tags']);
+        $tags = $this->getTagService()->findTagsByOwner(array(
+            'ownerType' => 'course',
+            'ownerId'   => $id
+        ));
 
         $default = $this->getSettingService()->get('default', array());
 
@@ -163,6 +173,7 @@ class CourseManageController extends BaseController
             }
 
             if (!empty($fields)) {
+                $this->filterFields($fields);
                 $course = $this->getCourseService()->updateCourse($id, $fields);
             } else {
                 $course = $this->getCourseService()->getCourse($id);
@@ -193,7 +204,39 @@ class CourseManageController extends BaseController
         ));
     }
 
-    public function dataAction($id)
+    public function courseDashboardAction($id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        $summary = $this->getCourseReportService()->summary($id);
+        $lateMonthLearndData = $this->getCourseReportService()->getLateMonthLearndData($id);
+
+        return $this->render('TopxiaWebBundle:CourseManage/Dashboard:course.html.twig', array(
+            'course' => $course,
+            'summary' => $summary,
+            'studentNum' => ArrayToolkit::column($lateMonthLearndData, 'studentNum'),
+            'finishedNum' => ArrayToolkit::column($lateMonthLearndData, 'finishedNum'),
+            'finishedRate' => ArrayToolkit::column($lateMonthLearndData, 'finishedRate'),
+            'noteNum' => ArrayToolkit::column($lateMonthLearndData, 'noteNum'),
+            'askNum' => ArrayToolkit::column($lateMonthLearndData, 'askNum'),
+            'discussionNum' => ArrayToolkit::column($lateMonthLearndData, 'discussionNum'),
+            'days' => ArrayToolkit::column($lateMonthLearndData, 'day')
+        ));
+    }
+
+    public function lessonDashboardAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        $lessonStat = $this->getCourseReportService()->getCourseLessonLearnStat($id);
+        return $this->render('TopxiaWebBundle:CourseManage/Dashboard:lesson.html.twig', array(
+            'course' => $course,
+            'lessonTitles' => ArrayToolkit::column($lessonStat, 'alias'),
+            'finishedRate' => ArrayToolkit::column($lessonStat, 'finishedRate'),
+            'finishedNum' => ArrayToolkit::column($lessonStat, 'finishedNum'),
+            'learnNum' => ArrayToolkit::column($lessonStat, 'learnNum'),
+        ));
+    }
+
+    public function lessonlearnDashboardAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
@@ -234,7 +277,7 @@ class CourseManageController extends BaseController
             }
         }
 
-        return $this->render('TopxiaWebBundle:CourseManage:learning-data.html.twig', array(
+        return $this->render('TopxiaWebBundle:CourseManage/Dashboard:lesson-learn.html.twig', array(
             'course'        => $course,
             'isLearnedNum'  => $isLearnedNum,
             'learnTime'     => $learnTime,
@@ -494,6 +537,12 @@ class CourseManageController extends BaseController
 
     public function publishAction(Request $request, $id)
     {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        if ($course['type'] == 'live' && empty($course['maxStudentNum'])) {
+            $response = array('result' => false, 'message' => $this->getServiceKernel()->trans('请设置你的课程人数!')); 
+            return $this->createJsonResponse($response);
+        }
+        
         $this->getCourseService()->publishCourse($id);
         return $this->createJsonResponse(array('result' => true));
     }
@@ -631,9 +680,36 @@ class CourseManageController extends BaseController
         ));
     }
 
+    private function getTagIdsFromRequest($request)
+    {
+        $tags = $request->request->get('tags');
+        $tags = explode(',', $tags);
+        $tags = $this->getTagService()->findTagsByNames($tags);
+        return ArrayToolkit::column($tags, 'id');
+    }
+
+    private function filterFields(&$fields)
+    {
+        if (!empty($fields['enableBuyExpiryTime']) && !empty($fields['buyExpiryTime'])) {
+            $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime'].' 23:59:59');
+        } else {
+            $fields['buyExpiryTime'] = 0;
+        }
+
+        unset($fields['enableBuyExpiryTime']);
+    }
+
+    /**
+     * @return CourseServiceImpl
+     */
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getCourseReportService()
+    {
+        return $this->getServiceKernel()->createService('Course.ReportService');
     }
 
     protected function getLevelService()

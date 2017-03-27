@@ -43,7 +43,8 @@ class CourseMaterialController extends CourseBaseController
             'member'    => $member,
             'lessons'   => $lessons,
             'materials' => $materials,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'tags'      => ArrayToolkit::column($this->getTagsByOwnerId($id), 'id')
         ));
     }
 
@@ -56,8 +57,19 @@ class CourseMaterialController extends CourseBaseController
         }
 
         if ($member && $member['levelId'] > 0) {
-            if ($this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok') {
-                return $this->redirect($this->generateUrl('course_show', array('id' => $courseId)));
+            if(empty($course['vipLevelId'])) {
+                return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
+            } elseif (empty($course['parentId']) 
+                && $this->isVipPluginEnabled()
+                && $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok') {
+                return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
+            } elseif (!empty($course['parentId'])) {
+                $classroom        = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+                if(!empty($classroom) 
+                    && $this->isVipPluginEnabled()
+                    && $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']) != 'ok') {
+                    return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
+                }
             }
         }
 
@@ -65,6 +77,10 @@ class CourseMaterialController extends CourseBaseController
 
         if (empty($material)) {
             throw $this->createNotFoundException();
+        }
+
+        if ($material['source'] == 'courselesson' || !$material['lessonId']) {
+            return $this->createMessageResponse('error', $this->trans('无权下载该资料'));
         }
 
         return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $material['fileId']));
@@ -76,6 +92,11 @@ class CourseMaterialController extends CourseBaseController
 
         $this->getCourseService()->deleteCourseMaterial($id, $materialId);
         return $this->createJsonResponse(true);
+    }
+
+    protected function isVipPluginEnabled()
+    {
+        return $this->isPluginInstalled('Vip') && $this->setting('vip.enabled');
     }
 
     protected function getMaterialService()
@@ -91,5 +112,10 @@ class CourseMaterialController extends CourseBaseController
     protected function getVipService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 }

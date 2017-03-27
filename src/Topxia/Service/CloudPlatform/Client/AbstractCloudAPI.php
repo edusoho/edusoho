@@ -84,19 +84,16 @@ class AbstractCloudAPI
 
     protected function _request($method, $uri, $params, $headers)
     {
-        if ($this->isWithoutNetwork()) {
-            $this->debug && $this->logger && $this->logger->debug("AbstractCloudAPI Network is turned off, you can not request: [{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
-            return true;
-        }
-
-        $requestId = substr(md5(uniqid('', true)), -16);
+		$requestId = substr(md5(uniqid('', true)), -16);
 
         $url = $this->apiUrl.'/'.self::VERSION.$uri;
+
         if ($this->isWithoutNetwork()) {
-            $this->logger && $this->logger->debug("NetWork Off, So Block:[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
+            if ($this->debug && $this->logger) {
+                $this->logger->debug("NetWork Off, So Block:[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
+            }
             return array('network' => 'off');
         }
-        $this->debug && $this->logger && $this->logger->debug("[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
 
         $headers[] = 'Content-type: application/json';
 
@@ -172,9 +169,13 @@ class AbstractCloudAPI
 
         $result = json_decode($body, true);
 
-        if (empty($result)) {
+        if (is_null($result)) {
             $this->logger && $this->logger->error("[{$requestId}] RESPONSE_JSON_DECODE_ERROR", $context);
             throw new CloudAPIIOException("Api result json decode error: (url:{$url}).");
+        }
+
+        if ($this->debug && $this->logger) {
+            $this->logger->debug("[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
         }
 
         return $result;
@@ -199,6 +200,6 @@ class AbstractCloudAPI
     {
         $developer = ServiceKernel::instance()->createService('System.SettingService')->get('developer');
 
-        return empty($developer['without_network']) ? false : boolval($developer['without_network']);
+        return empty($developer['without_network']) ? false : (bool) $developer['without_network'];
     }
 }

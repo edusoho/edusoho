@@ -27,6 +27,7 @@ class Courses extends BaseResource
         } else {
             $total   = $this->getCourseService()->searchCourseCount($conditions);
             $courses = $this->getCourseService()->searchCourses($conditions, array('createdTime', 'DESC'), $start, $limit);
+            $courses = $this->assemblyCourses($courses);
 
             return $this->wrap($this->filter($courses), $total);
         }
@@ -40,13 +41,17 @@ class Courses extends BaseResource
             'showCount' => ''
         );
 
-        $result                   = array_merge($defaultQuery, $request->query->all());
-        $conditions['categoryId'] = $result['categoryId'];
+        $result = array_merge($defaultQuery, $request->query->all());
+
+        if (!empty($result['categoryId'])) {
+            $conditions['categoryId'] = $result['categoryId'];
+        }
 
         if ($result['orderType'] == 'hot') {
             $orderBy = 'hitNum';
         } elseif ($result['orderType'] == 'recommend') {
             $orderBy = 'recommendedSeq';
+            $conditions['recommended'] = 1;
         } else {
             $orderBy = 'createdTime';
         }
@@ -83,32 +88,8 @@ class Courses extends BaseResource
 
     protected function assemblyCourses(&$courses)
     {
-        $tagIds = array();
-        foreach ($courses as $course) {
-            $tagIds = array_merge($tagIds, $course['tags']);
-        }
-
-        $tags = $this->getTagService()->findTagsByIds($tagIds);
-
         $categoryIds = ArrayToolkit::column($courses, 'categoryId');
         $categories  = $this->getCategoryService()->findCategoriesByIds($categoryIds);
-
-        foreach ($courses as &$course) {
-            $courseTags = array();
-            if (empty($course['tags'])) {
-                continue;
-            }
-            foreach ($course['tags'] as $tagId) {
-                if (empty($tags[$tagId])) {
-                    continue;
-                }
-                $courseTags[] = array(
-                    'id'   => $tagId,
-                    'name' => $tags[$tagId]['name']
-                );
-            }
-            $course['tags'] = $courseTags;
-        }
 
         foreach ($courses as &$course) {
             if (isset($categories[$course['categoryId']])) {
@@ -132,11 +113,6 @@ class Courses extends BaseResource
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    protected function getTagService()
-    {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 
     protected function getCategoryService()

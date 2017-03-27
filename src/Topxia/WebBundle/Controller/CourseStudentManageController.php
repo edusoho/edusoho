@@ -3,9 +3,11 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\ExportHelp;
 use Topxia\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\User\Impl\NotificationServiceImpl;
 
 class CourseStudentManageController extends BaseController
 {
@@ -135,6 +137,7 @@ class CourseStudentManageController extends BaseController
 
     public function removeAction(Request $request, $courseId, $userId)
     {
+        $user          = $this->getCurrentUser();
         $courseSetting = $this->getSettingService()->get('course', array());
 
         if (!empty($courseSetting['teacher_manage_student'])) {
@@ -149,13 +152,14 @@ class CourseStudentManageController extends BaseController
             'userId'     => $userId,
             'status'     => 'paid'
         );
-        $orders    = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
+        $orders = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
         foreach ($orders as $key => $value) {
             $order = $value;
         }
         $reason = array(
-            'type' => 'other',
-            'note' => '手动移除'
+            'type'     => 'other',
+            'note'     => '"'.$user['nickname'].'"'.' 手动移除',
+            'operator' => $user['id']
         );
         $refund = $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
 
@@ -169,7 +173,38 @@ class CourseStudentManageController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function exportDatasAction(Request $request, $id)
+    {
+        list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
+
+        list($title, $students, $courseMemberCount) = $this->getExportContent($id, $start, $limit, $exportAllowCount);
+
+        $file = '';
+        if ($start == 0) {
+            $file = ExportHelp::addFileTitle($request,'course_students', $title);
+        }
+
+        $content = implode("\r\n", $students);
+        $file = ExportHelp::saveToTempFile($request, $content, $file);
+
+        $status = ExportHelp::getNextMethod($start+$limit, $courseMemberCount);
+
+        return $this->createJsonResponse(
+            array(
+                'status' => $status,
+                'fileName' => $file,
+                'start' => $start+$limit
+            )
+        );
+    }
+
     public function exportCsvAction(Request $request, $id)
+    {
+        $fileName = sprintf("course-%s-students-(%s).csv", $id, date('Y-n-d'));
+        return ExportHelp::exportCsv($request, $fileName);
+    }
+    
+    private function getExportContent($id, $start, $limit, $exportAllowCount)
     {
         $gender        = array('female' => $this->getServiceKernel()->trans('女'), 'male' => $this->getServiceKernel()->trans('男'), 'secret' => $this->getServiceKernel()->trans('秘密'));
         $courseSetting = $this->getSettingService()->get('course', array());
@@ -186,8 +221,18 @@ class CourseStudentManageController extends BaseController
             $userinfoFields = array_diff($courseSetting['userinfoFields'], array('truename', 'job', 'mobile', 'qq', 'company', 'gender', 'idcard', 'weixin'));
         }
 
-        $courseMembers = $this->getCourseService()->searchMembers(array('courseId' => $course['id'], 'role' => 'student'), array('createdTime', 'DESC'), 0, 20000);
+        $condition = array(
+            'courseId' => $course['id'],
+            'role' => 'student'
+        );
 
+        $courseMemberCount = $this->getCourseService()->searchMemberCount($condition);
+
+        $courseMemberCount = ($courseMemberCount>$exportAllowCount) ? $exportAllowCount:$courseMemberCount;
+        if ($courseMemberCount < ($start + $limit + 1)) {
+            $limit = $courseMemberCount - $start;
+        }
+        $courseMembers = $this->getCourseService()->searchMembers($condition, array('createdTime', 'DESC'), $start, $limit);
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
         $fields['weibo'] = $this->getServiceKernel()->trans('微博');
@@ -200,7 +245,7 @@ class CourseStudentManageController extends BaseController
 
         $fields = array_intersect_key($fields, $userinfoFields);
 
-        if (!$courseSetting['buy_fill_userinfo']) {
+        if (empty($courseSetting['buy_fill_userinfo'])) {
             $fields = array();
         }
 
@@ -221,49 +266,34 @@ class CourseStudentManageController extends BaseController
         $str = $this->getServiceKernel()->trans('用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔');
 
         foreach ($fields as $key => $value) {
-            $str .= "," . $value;
+            $str .= ",".$value;
         }
-
-        $str .= "\r\n";
 
         $students = array();
 
         foreach ($courseMembers as $courseMember) {
             $member = "";
-            $member .= $users[$courseMember['userId']]['nickname'] . ",";
-            $member .= $users[$courseMember['userId']]['email'] . ",";
-            $member .= date('Y-n-d H:i:s', $courseMember['createdTime']) . ",";
-            $member .= $progresses[$courseMember['userId']]['percent'] . ",";
-            $member .= $profiles[$courseMember['userId']]['truename'] ? $profiles[$courseMember['userId']]['truename'] . "," : "-" . ",";
-            $member .= $gender[$profiles[$courseMember['userId']]['gender']] . ",";
-            $member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq'] . "," : "-" . ",";
-            $member .= $profiles[$courseMember['userId']]['weixin'] ? $profiles[$courseMember['userId']]['weixin'] . "," : "-" . ",";
-            $member .= $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile'] . "," : "-" . ",";
-            $member .= $profiles[$courseMember['userId']]['company'] ? $profiles[$courseMember['userId']]['company'] . "," : "-" . ",";
-            $member .= $profiles[$courseMember['userId']]['job'] ? $profiles[$courseMember['userId']]['job'] . "," : "-" . ",";
-            $member .= $users[$courseMember['userId']]['title'] ? $users[$courseMember['userId']]['title'] . "," : "-" . ",";
+            $member .= $users[$courseMember['userId']]['nickname'].",";
+            $member .= $users[$courseMember['userId']]['email'].",";
+            $member .= date('Y-n-d H:i:s', $courseMember['createdTime']).",";
+            $member .= $progresses[$courseMember['userId']]['percent'].",";
+            $member .= $profiles[$courseMember['userId']]['truename'] ? $profiles[$courseMember['userId']]['truename']."," : "-".",";
+            $member .= $gender[$profiles[$courseMember['userId']]['gender']].",";
+            $member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq']."," : "-".",";
+            $member .= $profiles[$courseMember['userId']]['weixin'] ? $profiles[$courseMember['userId']]['weixin']."," : "-".",";
+            $member .= $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile']."," : "-".",";
+            $member .= $profiles[$courseMember['userId']]['company'] ? $profiles[$courseMember['userId']]['company']."," : "-".",";
+            $member .= $profiles[$courseMember['userId']]['job'] ? $profiles[$courseMember['userId']]['job']."," : "-".",";
+            $member .= $users[$courseMember['userId']]['title'] ? $users[$courseMember['userId']]['title']."," : "-".",";
 
             foreach ($fields as $key => $value) {
-                $member .= $profiles[$courseMember['userId']][$key] ? $profiles[$courseMember['userId']][$key] . "," : "-" . ",";
+                $member .= $profiles[$courseMember['userId']][$key] ? $profiles[$courseMember['userId']][$key]."," : "-".",";
             }
 
             $students[] = $member;
         };
 
-        $str .= implode("\r\n", $students);
-        $str = chr(239) . chr(187) . chr(191) . $str;
-
-        $filename = sprintf("course-%s-students-(%s).csv", $course['id'], date('Y-n-d'));
-
-        $userId = $this->getCurrentUser()->id;
-
-        $response = new Response();
-        $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
-        $response->headers->set('Content-length', strlen($str));
-        $response->setContent($str);
-
-        return $response;
+        return array($str, $students, $courseMemberCount);
     }
 
     public function remarkAction(Request $request, $courseId, $userId)
@@ -271,6 +301,9 @@ class CourseStudentManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $user   = $this->getUserService()->getUser($userId);
         $member = $this->getCourseService()->getCourseMember($courseId, $userId);
+        if (empty($member)) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans("学员#{$userId}不属于课程{#courseId}"));
+        }
 
         if ('POST' == $request->getMethod()) {
             $data   = $request->request->all();
@@ -319,81 +352,23 @@ class CourseStudentManageController extends BaseController
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权查看学员详细信息！'));
         }
 
-        $user             = $this->getUserService()->getUser($userId);
-        $profile          = $this->getUserService()->getUserProfile($userId);
-        $profile['title'] = $user['title'];
-
-        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
-
-        for ($i = 0; $i < count($userFields); $i++) {
-            if (strstr($userFields[$i]['fieldName'], "textField")) {
-                $userFields[$i]['type'] = "text";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "varcharField")) {
-                $userFields[$i]['type'] = "varchar";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "intField")) {
-                $userFields[$i]['type'] = "int";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "floatField")) {
-                $userFields[$i]['type'] = "float";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "dateField")) {
-                $userFields[$i]['type'] = "date";
-            }
-        }
-
-        return $this->render('TopxiaWebBundle:CourseStudentManage:show-modal.html.twig', array(
-            'user'       => $user,
-            'profile'    => $profile,
-            'userFields' => $userFields
+        return $this->forward('TopxiaWebBundle:Student:show', array(
+            'request' => $request, 
+            'userId' => $userId
         ));
     }
 
     public function definedShowAction(Request $request, $courseId, $userId)
     {
-        $profile = $this->getUserService()->getUserProfile($userId);
-
-        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
-
-        for ($i = 0; $i < count($userFields); $i++) {
-            if (strstr($userFields[$i]['fieldName'], "textField")) {
-                $userFields[$i]['type'] = "text";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "varcharField")) {
-                $userFields[$i]['type'] = "varchar";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "intField")) {
-                $userFields[$i]['type'] = "int";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "floatField")) {
-                $userFields[$i]['type'] = "float";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "dateField")) {
-                $userFields[$i]['type'] = "date";
-            }
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $member = $this->getCourseService()->getCourseMember($courseId, $userId);
+        if (empty($member)) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans("学员#{$userId}不属于课程{#courseId}"));
         }
 
-        $course = $this->getSettingService()->get('course', array());
-
-        $userinfoFields = array();
-
-        if (isset($course['userinfoFields'])) {
-            $userinfoFields = $course['userinfoFields'];
-        }
-
-        return $this->render('TopxiaWebBundle:CourseStudentManage:defined-show-modal.html.twig', array(
-            'profile'        => $profile,
-            'userFields'     => $userFields,
-            'userinfoFields' => $userinfoFields
+        return $this->forward('TopxiaWebBundle:Student:definedShow', array(
+            'request' => $request, 
+            'userId' => $userId
         ));
     }
 
@@ -455,7 +430,7 @@ class CourseStudentManageController extends BaseController
             return array('percent' => '0%', 'number' => 0, 'total' => 0);
         }
 
-        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
+        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100).'%';
 
         return array(
             'percent' => $percent,
@@ -499,6 +474,9 @@ class CourseStudentManageController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
+    /**
+     * @return NotificationServiceImpl
+     */
     protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');

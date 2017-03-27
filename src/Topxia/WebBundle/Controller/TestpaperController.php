@@ -164,9 +164,10 @@ class TestpaperController extends BaseController
         }
 
         $items = $this->getTestpaperService()->previewTestpaper($testId);
-
+        
         $total       = $this->makeTestpaperTotal($testpaper, $items);
         $attachments = $this->findAttachments($testpaper['id']);
+
         return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-show.html.twig', array(
             'items'       => $items,
             'limitTime'   => $testpaper['limitedTime'] * 60,
@@ -528,9 +529,15 @@ class TestpaperController extends BaseController
             10
         );
 
-        $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds(
-            $testpaperIds,
-            'reviewing',
+        $paperResults = $this->getTestpaperService()->searchTestpaperResults(
+            array(
+                'testIds' => $testpaperIds,
+                'status'  => 'reviewing',
+            ),
+            array(
+                'checkedTime',
+                'DESC'
+            ),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -576,15 +583,24 @@ class TestpaperController extends BaseController
         $testpapers   = $this->getTestpaperService()->findAllTestpapersByTargets($courseIds);
         $testpaperIds = ArrayToolkit::column($testpapers, 'id');
 
+        $conditions = array(
+            'testIds'        => $testpaperIds,
+            'status'         => 'finished',
+            'checkTeacherId' => $user['id']
+        );
+
         $paginator = new Paginator(
             $request,
-            $this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($testpaperIds, 'finished'),
+            $this->getTestpaperService()->searchTestpaperResultsCount($conditions),
             10
         );
 
-        $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds(
-            $testpaperIds,
-            'finished',
+        $paperResults = $this->getTestpaperService()->searchTestpaperResults(
+            $conditions,
+            array(
+                'checkedTime',
+                'DESC'
+            ),            
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -625,6 +641,16 @@ class TestpaperController extends BaseController
 
         $testpapers = $this->getTestpaperService()->findAllTestpapersByTarget($id);
 
+        if (empty($testpapers)) {
+            return $this->render('TopxiaWebBundle:MyQuiz:list-course-test-paper.html.twig', array(
+                'status'       => $status,
+                'course'       => $course,
+                'testpapers'   => array(),
+                'paperResults' => array(),
+                'isTeacher'    => $this->getCourseService()->hasTeacherRole($id, $user['id']) || $user->isSuperAdmin()
+            ));
+        }
+
         $testpaperIds = ArrayToolkit::column($testpapers, 'id');
 
         $paginator = new Paginator(
@@ -633,9 +659,15 @@ class TestpaperController extends BaseController
             10
         );
 
-        $testpaperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds(
-            $testpaperIds,
-            $status,
+        $testpaperResults = $this->getTestpaperService()->searchTestpaperResults(
+            array(
+                'testIds' => $testpaperIds,
+                'status'  => $status
+            ),
+            array(
+                'checkedTime',
+                'DESC'
+            ), 
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

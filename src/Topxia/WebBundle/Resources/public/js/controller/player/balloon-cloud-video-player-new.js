@@ -21,7 +21,9 @@ define(function(require, exports, module) {
                 disableResolutionSwitcher:false
             },
             enablePlaybackRates: false,
-            videoHeaderLength: 0
+            videoHeaderLength: 0,
+            textTrack: '',
+            autoplay: true
         },
 
         events: {},
@@ -61,6 +63,12 @@ define(function(require, exports, module) {
                 })
             }
 
+            if(self.get('autoplay') == false) {
+                extConfig = $.extend(extConfig, {
+                    autoplay: self.get('autoplay')
+                })
+            }
+
             if(self.get('timelimit') != '') {
                 extConfig = $.extend(extConfig, {
                     pluck: {
@@ -76,7 +84,8 @@ define(function(require, exports, module) {
                     playbackRates: {
                         enable : true,
                         source : 'hls',
-                        src : self.get('url')
+                        src : self.get('url'),
+                        rates: [1,1.25,1.5,2]
                     }
                 });
             }
@@ -84,6 +93,24 @@ define(function(require, exports, module) {
             if(self.get('controlBar') != '' ) {
                 extConfig = $.extend(extConfig, {
                     controlBar: self.get('controlBar')
+                });
+            }
+
+            if(self.get('statsInfo') != '' ) {
+                var statsInfo = self.get('statsInfo');
+                extConfig = $.extend(extConfig, {
+                    statsInfo: {
+                        accesskey : statsInfo.accesskey,
+                        globalId : statsInfo.globalId,
+                        userId : statsInfo.userId,
+                        userName : statsInfo.userName
+                    }
+                });
+            }
+
+            if(self.get('textTrack') != '' ) {
+                extConfig = $.extend(extConfig, {
+                    textTrack: self.get('textTrack')
                 });
             }
 

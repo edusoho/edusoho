@@ -20,9 +20,10 @@ class NoteController extends BaseController
         $classroomSetting = $this->setting('classroom', array());
         $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
 
-        $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-        if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));
+        $member = $user->isLogin() ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $canLook = $this->getClassroomService()->canLookClassroom($classroom['id']);
+        if (!$canLook) {
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomName)), '', 3, $this->generateUrl('homepage'));
         }
 
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
@@ -39,7 +40,7 @@ class NoteController extends BaseController
         return $this->render('ClassroomBundle:Classroom\Course:notes-list.html.twig', array(
             'layout'               => $layout,
             'filters'              => $this->getNoteSearchFilters($request),
-            'canLook'              => $this->getClassroomService()->canLookClassroom($classroom['id']),
+            'canLook'              => $canLook,
             'classroom'            => $classroom,
             'courseIds'            => $courseIds,
             'courses'              => $courses,

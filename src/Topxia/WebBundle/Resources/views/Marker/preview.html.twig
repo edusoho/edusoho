@@ -1,0 +1,15 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% block title %}{{'弹题管理'|trans}}{% endblock %}
+
+{% set script_controller = 'marker/preview' %}
+{% set bodyClass="marker-preview" %}
+
+{% block body %}
+	<div  class="marker-preview-content " id="lesson-dashboard"  data-course-id="{{ course.id }}"
+    data-lesson-id="{{ lesson.id }}"
+    data-lesson-mediaid="{{ lesson.mediaId }}"
+    data-hide-media-lesson-learn-btn="{{ is_feature_enabled('hide_media_lesson_learn_btn') }}">
+  	<p class="title">视频预览</p>
+  	<div class="marker-preview-player" id="lesson-video-content"></div>
+	</div>
+{% endblock %}

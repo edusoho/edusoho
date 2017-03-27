@@ -4,7 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\SmsToolkit;
 use Topxia\Common\SimpleValidator;
 use Gregwar\Captcha\CaptchaBuilder;
-use Topxia\Service\Common\MailFactory;
+use Topxia\Service\Common\Mail\MailFactory;
 use Topxia\Service\Common\ServiceException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -56,6 +56,7 @@ class RegisterController extends BaseController
                 }
 
                 $registration['createdIp'] = $request->getClientIp();
+                $registration['registeredWay'] = 'web';
 
                 $user = $this->getAuthService()->register($registration);
 

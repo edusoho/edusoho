@@ -51,11 +51,20 @@ class OpenCourseFileManageController extends BaseController
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
         $file   = $this->getUploadFileService()->getFile($fileId);
 
-        if (empty($file)) {
+        $materialCount = $this->getMaterialService()->searchMaterialCount(
+            array(
+                'courseId' => $id,
+                'fileId'   => $fileId
+            )
+        );
+
+        if (!$materialCount) {
             throw $this->createNotFoundException();
         }
 
-        if ($id != $file["targetId"]) {
+        $file = $this->getUploadFileService()->getFile($fileId);
+
+        if (empty($file)) {
             throw $this->createNotFoundException();
         }
 
@@ -72,13 +81,10 @@ class OpenCourseFileManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $convertHash = $this->getUploadFileService()->reconvertFile(
-            $file['id'],
-            $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
-        );
+        $convertHash = $this->getUploadFileService()->reconvertFile($file['id']);
 
         if (empty($convertHash)) {
-            return $this->createJsonResponse(array('status' => 'error', 'message' => '文件转换请求失败，请重试！'));
+            return $this->createJsonResponse(array('status' => 'error', 'message' => $this->getServiceKernel()->trans('文件转换请求失败，请重试！')));
         }
 
         return $this->createJsonResponse(array('status' => 'ok'));

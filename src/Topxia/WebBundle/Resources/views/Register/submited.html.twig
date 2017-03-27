@@ -21,7 +21,7 @@
         <div class="alert">
           <h5>{{'没有收到确认信怎么办？'|trans}}</h5>
           <ul>
-            <li>{{'检查一下上面Email地址是否正确，错了就重新'|trans}}<a class="text-muted" href="{{ path('logout',{goto:'register'}) }}">{{'注册'|trans}}</a>{{'一次吧'|tans}} :)</li>
+            <li>{{'检查一下上面Email地址是否正确，错了就重新'|trans}}<a class="text-muted" href="{{ path('logout',{goto:'register'}) }}">{{'注册'|trans}}</a>{{'一次吧'|trans}} :)</li>
             <li>{{'看看是否在邮箱的垃圾箱里'|trans}}?</li>
             <li>{{'稍等几分钟，若仍旧没收到确认信，那就'|trans}}<a id="resend-email" class="text-muted" href="javascript:" data-url="{{ path('register_email_send', {id:user.id, hash:hash}) }}">{{'重发'|trans}}</a>{{'一封吧！'|trans}}</li>
           </ul>

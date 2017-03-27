@@ -68,6 +68,12 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
             throw $this->createServiceException($this->getKernel()->trans('参数不正确，评价失败！'));
         }
 
+        if ($fields['rating'] > 5) {
+            throw $this->createServiceException($this->getKernel()->trans('参数不正确，评价数太大'));
+        }
+
+        $this->getClassroomService()->tryTakeClassroom($fields['classroomId']);
+
         $classroom = $this->getClassroomDao()->getClassroom($fields['classroomId']);
 
         $userId = $this->getCurrentUser()->id;
@@ -84,21 +90,26 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
 
         $review = $this->getClassroomReviewDao()->getReviewByUserIdAndClassroomId($user['id'], $classroom['id']);
 
-        if (empty($review)) {
+        $fields['parentId'] = empty($fields['parentId']) ? 0 : $fields['parentId'];
+        if (empty($review) || ($review && $fields['parentId'] > 0)) {
             $review = $this->getClassroomReviewDao()->addReview(array(
                 'userId'      => $fields['userId'],
                 'classroomId' => $fields['classroomId'],
                 'rating'      => $fields['rating'],
-                'content'     => empty($fields['content']) ? '' : $fields['content'],
+                'content'     => empty($fields['content']) ? '' : $this->purifyHtml($fields['content']),
                 'title'       => empty($fields['title']) ? '' : $fields['title'],
-                'createdTime' => time()
+                'parentId'    => $fields['parentId'],
+                'createdTime' => time(),
+                'meta'        => array()
             ));
             $this->dispatchEvent('classReview.add', new ServiceEvent($review));
         } else {
             $review = $this->getClassroomReviewDao()->updateReview($review['id'], array(
-                'rating'  => $fields['rating'],
-                'title'   => empty($fields['title']) ? '' : $fields['title'],
-                'content' => empty($fields['content']) ? '' : $fields['content']
+                'rating'      => $fields['rating'],
+                'title'       => empty($fields['title']) ? '' : $fields['title'],
+                'content'     => empty($fields['content']) ? '' : $this->purifyHtml($fields['content']),
+                'updatedTime' => time(),
+                'meta'        => array()
             ));
         }
 
@@ -120,10 +131,19 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
 
     public function deleteReview($id)
     {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('not login');
+        }
+
         $review = $this->getReview($id);
 
         if (empty($review)) {
-            throw $this->createServiceException($this->getKernel()->trans('评价(#%id%)不存在，删除失败！', array('%id%' => $id)));
+            throw $this->createAccessDeniedException($this->getKernel()->trans('评价(#%id%)不存在，删除失败！', array('%id%' => $id)));
+        }
+
+        if (!$user->isAdmin() && $review['userId'] != $user['id']) {
+            throw $this->createAccessDeniedException('review is not exsits.');
         }
 
         $this->getClassroomReviewDao()->deleteReview($id);

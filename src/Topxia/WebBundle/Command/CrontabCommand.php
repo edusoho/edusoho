@@ -16,30 +16,31 @@ class CrontabCommand extends BaseCommand
 
     protected function configure()
     {
-        $this->setName ( 'topxia:crontab' );
+        $this->setName ( 'crontab:schedule' );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<info>开始执行定时任务</info>');
+        $this->setDisableWebCrontab();
+        $logger = $this->getContainer()->get('logger');
+        $logger->info('Crontab:开始执行定时任务');
         $this->initServiceKernel();
+        putenv('IS_RUN_BY_COMMAND=true');
         $this->getServiceKernel()->createService('Crontab.CrontabService')->scheduleJobs();
-        $output->writeln('<info>定时任务执行完毕</info>');
+        $logger->info('Crontab:定时任务执行完毕');
     }
 
-    protected function initServiceKernel()
-	{
-		$serviceKernel = ServiceKernel::create('dev', false);
-        $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
+    protected function setDisableWebCrontab()
+    {
+        $setting = $this->getSettingService()->get('magic', array());
+        if (empty($setting['disable_web_crontab'])) {
+            $setting['disable_web_crontab'] = 1;
+            $this->getSettingService()->set('magic',$setting); 
+        }
+    }
 
-		$serviceKernel->setConnection($this->getContainer()->get('database_connection'));
-		$currentUser = new CurrentUser();
-		$currentUser->fromArray(array(
-		    'id' => 0,
-		    'nickname' => '游客',
-		    'currentIp' =>  '127.0.0.1',
-		    'roles' => array(),
-		));
-		$serviceKernel->setCurrentUser($currentUser);
-	}
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
 }

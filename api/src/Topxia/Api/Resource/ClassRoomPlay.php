@@ -34,33 +34,32 @@ class ClassRoomPlay extends BaseResource
 		return $this->createPlayArray($courses, $lessons);
 	}
 
-	protected function createPlayArray($courses, $lessons) {
-		$playArray = array();
-		
-		$lastCourseId = 0;
+	protected function createPlayArray($courses, $lessons) {		
+		$courseLabels = $this->getCourseLabelArrayById($courses);
 		foreach ($lessons as $key => $lesson) {
-			$currentCourseId = $lesson['courseId'];
-			if ($lastCourseId != $currentCourseId) {
-				$playArray[] = $this->findLabelInArrayById($currentCourseId, $courses);
-				$lastCourseId = $currentCourseId;
+			$courseId = $lesson['courseId'];
+			if (isset($courseLabels[$courseId])) {
+				$courseLabels[$courseId][] = $lesson;
 			}
-			$playArray[] = $lesson;
+		}
+		$playArray = array();
+		foreach ($courseLabels as $key => $value) {
+			$playArray = array_merge($playArray, $value);
 		}
 		return $playArray;
 	}
 
-	protected function findLabelInArrayById($courseId, $courses) {
+	protected function getCourseLabelArrayById($courses) {
+		$courseLabels = array();
 		foreach ($courses as $key => $course) {
-			if ($courseId == $course['id']) {
-				return array(
-					"id" => $courseId,
-					"title" => $course['title'],
-					"type" => "label"
-				);
-			}
+			$courseLabels[$course['id']][] = array(
+				"id" => $course['id'],
+				"title" => $course['title'],
+				"type" => "label"
+			);
 		}
 
-		return null;
+		return $courseLabels;
 	}
 
 	public function filter($res) {

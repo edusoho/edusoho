@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
+use Topxia\Common\EncryptionToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\SimpleValidator;
@@ -195,7 +196,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
         $conversation = $this->getMessageService()->getConversation($conversationId);
         if (empty($conversation) || $conversation['toId'] != $user['id']) {
-            throw $this->createNotFoundException('私信会话不存在！');
+            throw new \RuntimeException('私信会话不存在！');
         }
 
         $this->getMessageService()->markConversationRead($conversationId);
@@ -461,11 +462,25 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
     public function regist()
     {
+        /*
+         * @password 老接口password字段
+         * @encrypt_password 新的加密过的password字段
+         */
         $email       = $this->getParam('email');
         $password    = $this->getParam('password');
         $nickname    = $this->getParam('nickname');
         $phoneNumber = $this->getParam('phone');
         $smsCode     = $this->getParam('smsCode');
+        $registeredWay = $this->getParam('registeredWay');
+
+        if (empty($password)) {
+            $password    = $this->getParam('encrypt_password');
+            $password = EncryptionToolkit::XXTEADecrypt(base64_decode($password), $this->request->getHost());
+        }
+
+        if (empty($registeredWay) || !in_array(strtolower($registeredWay), array('ios', 'android'))) {
+            $registeredWay = $this->guessDeviceFromUserAgent($this->request->headers->get("user-agent"));
+        }
 
         $result = array('meta' => null);
 
@@ -503,6 +518,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                     $registTypeName => $email,
                     'nickname'      => $nickname,
                     'password'      => $password,
+                    'registeredWay' => $registeredWay,
                     'createdIp'     => $this->request->getClientIp()
                 ));
             } catch (\Exception $e) {
@@ -525,6 +541,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                             $registTypeName => $sessionField['to'],
                             'nickname'      => $nickname,
                             'password'      => $password,
+                            'registeredWay' => $registeredWay,
                             'createdIp'     => $this->request->getClientIp()
                         ));
                     } catch (\Exception $e) {
@@ -658,8 +675,18 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
     public function login()
     {
+        /*
+        * @_password 老接口password字段
+        * @encrypt_password 新的加密过的password字段
+        */
         $username = $this->getParam('_username');
         $password = $this->getParam('_password');
+
+        if (empty($password)) {
+            $password    = $this->getParam('encrypt_password');
+            $password = EncryptionToolkit::XXTEADecrypt(base64_decode($password), $this->request->getHost());
+        }
+
         $user     = $this->loadUserByUsername($this->request, $username);
         if (empty($user)) {
             return $this->createErrorResponse('username_error', '用户帐号不存在');

@@ -4,7 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 
 use Topxia\Common\FileToolkit;
 use Topxia\Common\JsonToolkit;
-use Topxia\Service\Common\MailFactory;
+use Topxia\Service\Common\Mail\MailFactory;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -79,6 +79,49 @@ class SettingController extends BaseController
             'mobileCode' => $mobileCode,
             'hasMobile'  => $hasMobile
         ));
+    }
+
+    public function mobileIapProductAction(Request $request)
+    {
+        $products = $this->getSettingService()->get('mobile_iap_product', array());
+        if ($request->getMethod() == 'POST') {
+            $fileds = $request->request->all();
+
+            //新增校验
+            if (empty($fileds['productId']) || empty($fileds['title']) || empty($fileds['price']) || !is_numeric($fileds['price'])) {
+                $this->setFlashMessage('danger', $this->trans('产品ID或商品名称或价格输入不正确'));
+                return $this->redirect($this->generateUrl('admin_setting_mobile_iap_product'));
+            }
+
+            //新增
+            $products[$fileds['productId']] = array(
+                'productId' => $fileds['productId'],
+                'title' => $fileds['title'],
+                'price' => $fileds['price']
+            );
+            $this->getSettingService()->set('mobile_iap_product', $products);
+
+            $this->getLogService()->info('system', 'update_settings', '更新IOS内购产品设置', $products);
+            $this->setFlashMessage('success', $this->trans('IOS内购产品设置已保存'));
+            return $this->redirect($this->generateUrl('admin_setting_mobile_iap_product'));
+        }
+
+        return $this->render('TopxiaAdminBundle:System:mobile-iap-product.html.twig', array(
+            'products'     => $products
+        ));
+    }
+
+    public function mobileIapProductDeleteAction(Request $request, $productId)
+    {
+        $products = $this->getSettingService()->get('mobile_iap_product', array());
+
+        if (array_key_exists($productId, $products)) {
+            unset($products[$productId]);
+        }
+
+        $this->getSettingService()->set('mobile_iap_product', $products);
+
+        return $this->createJsonResponse(true);
     }
 
     public function mobilePictureUploadAction(Request $request, $type)
@@ -301,7 +344,6 @@ class SettingController extends BaseController
         }
 
         $mailer = $this->getSettingService()->get('mailer', array());
-
         $default = array(
             'enabled'  => 0,
             'host'     => '',
@@ -312,7 +354,6 @@ class SettingController extends BaseController
             'name'     => ''
         );
         $mailer = array_merge($default, $mailer);
-
         if ($request->getMethod() == 'POST') {
             $mailer = $request->request->all();
             $this->getSettingService()->set('mailer', $mailer);
@@ -323,9 +364,11 @@ class SettingController extends BaseController
         }
 
         $status = $this->checkMailerStatus();
+        $cloudMailName = '';
         return $this->render('TopxiaAdminBundle:System:mailer.html.twig', array(
             'mailer' => $mailer,
-            'status' => $status
+            'status' => $status,
+            'cloudMailName' => $cloudMailName
         ));
     }
 
@@ -350,14 +393,17 @@ class SettingController extends BaseController
         }
     }
 
+    /*
+     * 当前云邮件字段为cloud_email_crm
+     */
     protected function checkMailerStatus()
     {
-        $cloudEmail = $this->getSettingService()->get('cloud_email', array());
+        $cloudEmail = $this->getSettingService()->get('cloud_email_crm', array());
         $mailer     = $this->getSettingService()->get('mailer', array());
         $status     = "";
 
         if (!empty($cloudEmail) && $cloudEmail['status'] == 'enable') {
-            return $status = "cloud_email";
+            return $status = "cloud_email_crm";
         }
 
         if (!empty($mailer) && $mailer['enabled'] == 1) {
@@ -426,27 +472,61 @@ class SettingController extends BaseController
 
     public function ipBlacklistAction(Request $request)
     {
-        $ips = $this->getSettingService()->get('blacklist_ip', array());
-
-        if (!empty($ips)) {
-            $default['ips'] = join("\n", $ips['ips']);
-            $ips            = array_merge($ips, $default);
-        }
+        $settingService = $this->getSettingService();
 
         if ($request->getMethod() == 'POST') {
-            $data       = $request->request->all();
-            $ips['ips'] = array_filter(explode(' ', str_replace(array("\r\n", "\n", "\r"), " ", $data['ips'])));
-            $this->getSettingService()->set('blacklist_ip', $ips);
-            $this->getLogService()->info('system', 'update_settings', '更新IP黑名单', $ips);
+            $data = $request->request->all();
 
-            $ips        = $this->getSettingService()->get('blacklist_ip', array());
-            $ips['ips'] = join("\n", $ips['ips']);
+            $purifiedBlackIps = trim(str_replace(array("\r\n", "\n", "\r"), " ", $data['blackListIps']));
+            $purifiedWhiteIps = isset($data['whiteListIps']) ? $data['whiteListIps'] : null;
+            $purifiedWhiteIps = trim(str_replace(array("\r\n", "\n", "\r"), " ", $purifiedWhiteIps));
+
+            $logService = $this->getLogService();
+
+            if (empty($purifiedBlackIps)) {
+                $settingService->delete('blacklist_ip');
+
+                $blackListIps['ips'] = array();
+            } else {
+                $blackListIps['ips'] = array_filter(explode(' ', $purifiedBlackIps));
+                $settingService->set('blacklist_ip', $blackListIps);
+            }
+
+            if (empty($purifiedWhiteIps)) {
+                $settingService->delete('whitelist_ip');
+
+                $whiteListIps['ips'] = array();
+            } else {
+                $whiteListIps['ips'] = array_filter(explode(' ', $purifiedWhiteIps));
+                $settingService->set('whitelist_ip', $whiteListIps);
+            }
+
+            $logService->info('system', 'update_settings', '更新IP黑名单/白名单',
+                array('blacklist_ip' => $blackListIps['ips'],
+                      'whitelist_ip' => $whiteListIps['ips']));
 
             $this->setFlashMessage('success', $this->trans('保存成功！'));
         }
 
+        $blackListIps = $settingService->get('blacklist_ip', array());
+        $whiteListIps = $settingService->get('whitelist_ip', array());
+
+        if (!empty($blackListIps)) {
+            $default['ips'] = join("\n", $blackListIps['ips']);
+            $blackListIps = array_merge($blackListIps, $default);
+        } else {
+            $blackListIps = array();
+        }
+
+        if (!empty($whiteListIps)) {
+            $default['ips'] = join("\n", $whiteListIps['ips']);
+            $whiteListIps = array_merge($whiteListIps, $default);
+        } else {
+            $whiteListIps = array();
+        }
+
         return $this->render('TopxiaAdminBundle:System:ip-blacklist.html.twig', array(
-            'ips' => $ips
+            'blackListIps' => $blackListIps, 'whiteListIps' => $whiteListIps
         ));
     }
 
@@ -472,76 +552,6 @@ class SettingController extends BaseController
 
         return $this->render('TopxiaAdminBundle:System:customer-service.html.twig', array(
             'customerServiceSetting' => $customerServiceSetting
-        ));
-    }
-
-    public function userCenterAction(Request $request)
-    {
-        $setting = $this->getSettingService()->get('user_partner', array());
-
-        $default = array(
-            'mode'             => 'default',
-            'nickname_enabled' => 0,
-            'avatar_alert'     => 'none',
-            'email_filter'     => ''
-        );
-
-        $setting = array_merge($default, $setting);
-
-        $configDirectory   = $this->getServiceKernel()->getParameter('kernel.root_dir').'/config/';
-        $discuzConfigPath  = $configDirectory.'uc_client_config.php';
-        $phpwindConfigPath = $configDirectory.'windid_client_config.php';
-
-        if ($request->getMethod() == 'POST') {
-            $data                 = $request->request->all();
-            $data['email_filter'] = trim(str_replace(array("\n\r", "\r\n", "\r"), "\n", $data['email_filter']));
-            $setting              = array('mode' => $data['mode'],
-                'nickname_enabled'                   => $data['nickname_enabled'],
-                'avatar_alert'                       => $data['avatar_alert'],
-                'email_filter'                       => $data['email_filter']
-            );
-            $this->getSettingService()->set('user_partner', $setting);
-
-            $discuzConfig  = $data['discuz_config'];
-            $phpwindConfig = $data['phpwind_config'];
-
-            if ($setting['mode'] == 'discuz') {
-                if (!file_exists($discuzConfigPath) || !is_writeable($discuzConfigPath)) {
-                    $this->setFlashMessage('danger', $this->trans('配置文件%discuzConfigPath%不可写，请打开此文件，复制Ucenter配置的内容，覆盖原文件的配置。', array('%discuzConfigPath%' => $discuzConfigPath)));
-                    goto response;
-                }
-
-                file_put_contents($discuzConfigPath, $discuzConfig);
-            } elseif ($setting['mode'] == 'phpwind') {
-                if (!file_exists($phpwindConfigPath) || !is_writeable($phpwindConfigPath)) {
-                    $this->setFlashMessage('danger', $this->trans("配置文件%phpwindConfigPath%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。", array('%phpwindConfigPath%' => $phpwindConfigPath)));
-                    goto response;
-                }
-
-                file_put_contents($phpwindConfigPath, $phpwindConfig);
-            }
-
-            $this->getLogService()->info('system', 'setting_userCenter', '用户中心设置', $setting);
-            $this->setFlashMessage('success', $this->trans('用户中心设置已保存！'));
-        }
-
-        if (file_exists($discuzConfigPath)) {
-            $discuzConfig = file_get_contents($discuzConfigPath);
-        } else {
-            $discuzConfig = '';
-        }
-
-        if (file_exists($phpwindConfigPath)) {
-            $phpwindConfig = file_get_contents($phpwindConfigPath);
-        } else {
-            $phpwindConfig = '';
-        }
-
-        response:
-        return $this->render('TopxiaAdminBundle:System:user-center.html.twig', array(
-            'setting'       => $setting,
-            'discuzConfig'  => $discuzConfig,
-            'phpwindConfig' => $phpwindConfig
         ));
     }
 
@@ -676,6 +686,18 @@ class SettingController extends BaseController
             'mode' => $setting['mode'],
             'bind' => $bind
         ));
+    }
+
+    public function performanceAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $data = $request->request->all();
+            $this->setFlashMessage('success', '设置成功');
+            $this->getSettingService()->set('performance', $data);
+            return $this->redirect($this->generateUrl('admin_performance'));
+        }
+
+        return $this->render('TopxiaAdminBundle:System:performance-setting.html.twig');
     }
 
     protected function getCourseService()

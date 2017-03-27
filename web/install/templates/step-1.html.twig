@@ -32,7 +32,7 @@
             <span class="text-danger">X {{ env.phpVersion }}</span>
           {% endif %}
         </td>
-        <td>5.3.3</td>
+        <td>5.3.10</td>
       </tr>
 
       <tr>
@@ -182,7 +182,13 @@
       {% endfor %}
     </tbody>
   </table>
-
+  {% if root == false %}
+    <div class="alert alert-danger" role="alert">
+      <center>您的web服务器项目路径指向不正确，将导致安装失败！点击查看
+        <a href="help.php" target="_blank">解决方案</a>
+      </center>
+    </div>
+  {% endif %}
   <div class="actions">
     {% if pass %}
       <a class="btn btn-primary btn-lg" href="start-install.php?step=2">下一步</a>

@@ -1,0 +1,19 @@
+language: php
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
+services:
+  - mysql
+  - redis-server
+
+before_install:
+  - phpenv config-add tests/php-travis.ini
+  
+before_script:
+  - mysql -e "CREATE DATABASE ratelimit;" -uroot
+  - mysql -e "USE ratelimit; CREATE TABLE ratelimit (id int(10) unsigned NOT NULL AUTO_INCREMENT, _key varchar(64) NOT NULL, data varchar(32) NOT NULL, deadline int(10) unsigned NOT NULL, PRIMARY KEY (id), UNIQUE KEY _key (_key)) ENGINE=InnoDB DEFAULT CHARSET=utf8;" -uroot
+  - composer install
+script: phpunit --coverage-text

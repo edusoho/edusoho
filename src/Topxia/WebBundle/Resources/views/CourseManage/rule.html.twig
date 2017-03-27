@@ -1,0 +1,20 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% block content %}
+<div class="panel panel-default panel-col" style="font-size:18px;padding: 20px 110px 100px 150px; min-height: 515px;">
+  <div style="text-align:center;font-size:30px;">课程规则</div>
+  <div class="panel-body">
+    【普通课程规则】
+    <br>
+    1.免费课程：即价格设置为“0”的课程，必须要登录才能加入学习。<br>
+    2.免费课时：即勾选了课时标题旁【免费课时】的课时，课时标题前，有“免费”标签。<br>
+    3.免费试看：即设置了试看时长并且有“试看”标签的课时，目前只有云视频支持试看。<br>
+    4.管理员可在【管理后台】-【系统】-【课程设置】-【课程】中开启【免费课时允许未登录用户观看】。<br>
+    <br>
+    【直播课程规则】<br>
+    1.直播课程，必须设置课程人数才能发布，否则用户无法加入/购买课程。<br>
+    2.课程人数≠购买的直播人数，每场直播参与的最大人数≤购买的直播人数。<br>
+    3.若课程人数＞购买的直播人数，可能会出现部分用户无法进入直播教室的情况。<br>
+    4.若直播有回放视频，未参与直播过程的用户，只要加入课程，也可观看回放。<br>
+  </div>
+</div>
+{% endblock %}

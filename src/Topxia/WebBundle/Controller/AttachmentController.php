@@ -49,15 +49,6 @@ class AttachmentController extends BaseController
         ));
     }
 
-    public function fileShowAction(Request $request, $fileId)
-    {
-        $file       = $this->getUploadFileService()->getFile($fileId);
-        $attachment = array('file' => $file);
-        return $this->render('TopxiaWebBundle:Attachment:file-item.html.twig', array(
-            'attachment' => $attachment
-        ));
-    }
-
     public function previewAction(Request $request, $id)
     {
         $user = $this->getCurrentUser();
@@ -91,12 +82,31 @@ class AttachmentController extends BaseController
             throw $this->createAccessDeniedException();
         }
         $attachment = $this->getUploadFileService()->getUseFile($id);
-        $file       = $this->getUploadFileService()->getFile($attachment['fileId']);
+
+        if (empty($attachment)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($attachment['type'] != 'attachment') {
+            return $this->createMessageResponse('error', $this->trans('无权下载该资料'));
+        }
+
+        $file = $this->getUploadFileService()->getFile($attachment['fileId']);
         return $this->forward('TopxiaWebBundle:UploadFile:download', array(
             'request' => $request,
             'fileId'  => $file['id']
         ));
     }
+
+    public function fileShowAction(Request $request, $fileId)
+    {
+        $file       = $this->getUploadFileService()->getFile($fileId);
+        $attachment = array('file' => $file);
+        return $this->render('TopxiaWebBundle:Attachment:file-item.html.twig', array(
+            'attachment' => $attachment
+        ));
+    }
+
 
     public function deleteAction(Request $request, $id)
     {
@@ -104,9 +114,12 @@ class AttachmentController extends BaseController
         if ($previewType == 'attachment') {
             $this->getUploadFileService()->deleteUseFile($id);
         } else {
-            $this->getUploadFileService()->deleteFile($id);
+            if ($this->getUploadFileService()->canManageFile($id)) {
+                $this->getUploadFileService()->deleteFile($id);
+            } else {
+                throw $this->createAccessDeniedException('opteration forbiddened');
+            }
         }
-
         return $this->createJsonResponse(array('msg' => 'ok'));
     }
 

@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
@@ -12,7 +13,6 @@ class CourseLessonController extends BaseController
     //加载播放器的地址
     public function playerAction(Request $request, $courseId, $lessonId = 0)
     {
-        $hideQuestion = $request->query->get('hideQuestion', 0);
         $isPreview    = $request->query->get('isPreview', '');
 
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
@@ -22,7 +22,8 @@ class CourseLessonController extends BaseController
         }
 
         $context                 = array();
-        $context['hideQuestion'] = $hideQuestion;
+        $context['hideQuestion'] = $request->query->get('hideQuestion', 0);
+        $context['hideSubtitle'] = $request->query->get('hideSubtitle', 0);
 
         if (($isPreview && $lesson["free"])) {
             return $this->forward('TopxiaWebBundle:Player:show', array(
@@ -36,7 +37,12 @@ class CourseLessonController extends BaseController
         $context['lessonId'] = $lessonId;
 
         if ($isPreview && !empty($course['tryLookable'])) {
-            $context['watchTimeLimit'] = $course['tryLookTime'] * 60;
+           if($lesson['length'] < $course['tryLookTime'] * 60 ){
+                $context['watchTimeLimit'] = $lesson['length']-1;
+           }else{
+                $context['watchTimeLimit'] = $course['tryLookTime'] * 60;
+           }
+           
             return $this->forward('TopxiaWebBundle:Player:show', array(
                 'id'      => $lesson["mediaId"],
                 'context' => $context
@@ -54,6 +60,36 @@ class CourseLessonController extends BaseController
         ));
     }
 
+    private function isEnablePreview($course, $lesson)
+    {
+        if ($lesson['free']) {
+            return true;
+        }
+
+        if ($lesson['type'] == 'video' && $course['tryLookable']) {
+            return true;
+        }
+
+        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
+            $courseVip = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
+
+            if ($courseVip) {
+                $user = $this->getCurrentUser();
+                $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseVip['id']);
+                if (('ok' == $vipStatus) || ('level_low'  && $course['buyable'])) {
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        }
+
+        if (empty($course['buyable'])) {
+            return false;
+        }
+        return true;
+    }
+
     public function previewAction(Request $request, $courseId, $lessonId = 0)
     {
         $course = $this->getCourseService()->getCourse($courseId);
@@ -68,17 +104,18 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        $user = $this->getCurrentUser();
+
 //开启限制加入
 
-        if (empty($lesson['free']) && empty($course['buyable']) && empty($course['tryLookable'])) {
+        if (!$this->isEnablePreview($course, $lesson)) {
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
         }
+
 
         if (!empty($course['status']) && $course['status'] == 'closed') {
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
         }
-
-        $user = $this->getCurrentUser();
 
 //课时不免费并且不满足1.有时间限制设置2.课时为视频课时3.视频课时非优酷等外链视频时提示购买
 
@@ -159,8 +196,6 @@ class CourseLessonController extends BaseController
             if ($matched) {
                 $lesson['mediaUri']    = "http://player.youku.com/embed/{$matches[1]}";
                 $lesson['mediaSource'] = 'iframe';
-            } else {
-                $lesson['mediaUri'] = $lesson['mediaUri'];
             }
         } elseif ($lesson['mediaSource'] == 'tudou') {
             $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
@@ -168,8 +203,6 @@ class CourseLessonController extends BaseController
             if ($matched) {
                 $lesson['mediaUri']    = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
                 $lesson['mediaSource'] = 'iframe';
-            } else {
-                $lesson['mediaUri'] = $lesson['mediaUri'];
             }
         }
 
@@ -183,7 +216,10 @@ class CourseLessonController extends BaseController
                 $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseVip['id']);
             }
         }
-
+        $this->dispatchEvent(
+            'course.preview',
+            new ServiceEvent($course, array('userId' => $user['id']))
+        );
         return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
             'user'                      => $user,
             'course'                    => $course,
@@ -196,6 +232,7 @@ class CourseLessonController extends BaseController
 
     public function showAction(Request $request, $courseId, $lessonId)
     {
+        $ssl = $request->isSecure() ? true : false;
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
         $lesson         = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
@@ -286,7 +323,12 @@ class CourseLessonController extends BaseController
                         ));
                     } elseif (!in_array($file['type'], array('video', 'audio'))) {
                         $api              = CloudAPIFactory::create("leaf");
-                        $result           = $api->get("/resources/{$file['globalId']}/player");
+
+                        $params = array();
+                        if ($ssl) {
+                            $params['protocol'] = 'https';
+                        }
+                        $result           = $api->get("/resources/{$file['globalId']}/player", $params);
                         $json['mediaUri'] = $result['url'];
                     }
                 } else {
@@ -465,7 +507,9 @@ class CourseLessonController extends BaseController
             }
         }
 
-        $result = $this->getMaterialLibService()->player($file['globalId']);
+        $ssl = $request->isSecure() ? true : false;
+
+        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
         return $this->createJsonResponse($result['images']);
     }
 
@@ -480,6 +524,7 @@ class CourseLessonController extends BaseController
         if (!$lesson['free']) {
             $this->getCourseService()->tryTakeCourse($courseId);
         }
+
 
         if ($lesson['type'] != 'document' || empty($lesson['mediaId'])) {
             throw $this->createNotFoundException();
@@ -510,7 +555,9 @@ class CourseLessonController extends BaseController
             }
         }
 
-        $result = $this->getMaterialLibService()->player($file['globalId']);
+        $ssl = $request->isSecure() ? true : false;
+
+        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
         return $this->createJsonResponse($result);
     }
 
@@ -536,8 +583,10 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        $ssl = $request->isSecure() ? true : false;
+
         if ($file['storage'] == 'cloud') {
-            $result             = $this->getMaterialLibService()->player($file['globalId']);
+            $result             = $this->getMaterialLibService()->player($file['globalId'], $ssl);
             $result['mediaUri'] = $result['url'];
         }
 

@@ -40,6 +40,8 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 
 	public function addOrder($order)
 	{
+        $order['createdTime'] = time();
+        $order['updatedTime'] = $order['createdTime'];
         $affected = $this->getConnection()->insert($this->table, $order);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert order error.');
@@ -49,6 +51,7 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 
 	public function updateOrder($id, $fields)
 	{
+        $fields['updatedTime'] = time();
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
 		return $this->getOrder($id);
 	}

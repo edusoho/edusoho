@@ -87,23 +87,17 @@ define(function (require, exports, module) {
         },
 
         _changeLessonMedia : function(){
-            var getItemsTable = function(testpaperId, showSuggestHours) {
+            var getItemsTable = function(testpaperId) {
                 $.post($('#lesson-mediaId-field').data('getTestpaperItems'), {testpaperId:testpaperId},function(html){
                     $("#questionItemShowTable").html(html);
                     $("#questionItemShowDiv").show();
-
-                    if (showSuggestHours) {
-                        var suggestHours = $(".suggestHoursHidden").val();
-                        $("#lesson-suggest-hour-field").val(Number(suggestHours).toFixed(1));
-                    }
-                    
                 });
             }
             
             var mediaId = $('#lesson-mediaId-field').find('option:selected').val();
             if (mediaId != '') {
                 $('#lesson-title-field').val($('#lesson-mediaId-field').find('option:selected').text());
-                getItemsTable(mediaId, true);
+                getItemsTable(mediaId);
             } else {
                 $('#lesson-title-field').val('');
             }
@@ -132,13 +126,6 @@ define(function (require, exports, module) {
                 required: true
             });
 
-            validator.addItem({
-                element: '#lesson-suggest-hour-field',
-                required: true,
-                rule: 'decimal',
-                errormessageRequired: Translator.trans('请填写建议时长')
-            });
-
             if ($('[name="doTimes"]').val() == 0) {
                 validator.addItem({
                     element: '[name="redoInterval"]',
@@ -147,16 +134,6 @@ define(function (require, exports, module) {
                     errormessageMax:'时间不能超过10位'
                 });
             }
-
-            $('#lesson-suggest-hour-field').bind('blur',function(){
-                var val = $(this).val();
-                if (isNaN(val)) {
-                    return false;
-                }
-                var multiple = Math.ceil(val / 0.5)*0.5;
-                var temp = val > multiple ? (multiple+0.5) : multiple;
-                $(this).val(temp.toFixed(1));
-            })
 
             validator.on('formValidated', function (error, msg, $form) {
                 if (error) {
@@ -178,9 +155,9 @@ define(function (require, exports, module) {
 
                         if ($parent.length) {
                             var add = 0;
-                            if ($parent.hasClass('item-chapter  clearfix')) {
+                            if ($parent.hasClass('js-chapter')) {
                                 $parent.nextAll().each(function () {
-                                    if ($(this).hasClass('item-chapter  clearfix')) {
+                                    if ($(this).hasClass('js-chapter')) {
                                         $(this).before(html);
                                         add = 1;
                                         return false;
@@ -193,9 +170,9 @@ define(function (require, exports, module) {
 
                             } else {
                                 $parent.nextAll().each(function () {
-                                    if ($(this).hasClass('item-chapter  clearfix'))
+                                    if ($(this).hasClass('js-chapter'))
                                         return false;
-                                    if ($(this).hasClass('item-chapter item-chapter-unit clearfix')) {
+                                    if ($(this).hasClass('item-chapter-unit')) {
                                         $(this).before(html);
                                         add = 1;
                                         return false;

@@ -2,6 +2,7 @@
 
 namespace Topxia\WebBundle\Handler;
 
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,10 +16,7 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
     {
         $request->getSession()->set('_target_path', $request->request->get('_target_path'));
 
-        if ($exception->getMessage() == "Bad credentials") {
-            $message   = $this->getServiceKernel()->trans('用户名或密码错误');
-            $exception = new AuthenticationException($message);
-        } else {
+        if (!$exception instanceof BadCredentialsException) {
             goto end;
         }
 

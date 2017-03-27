@@ -4,7 +4,7 @@
   <div id="lesson-preview-player" class="lesson-content embed-responsive embed-responsive-16by9" style="display:none;"
     data-balloon-player="1"
     {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
-      data-watermark="{{ file_url(setting('storage.video_watermark_image'), null, true) }}"
+      data-watermark="{{ file_url(setting('storage.video_watermark_image'), null) }}"
     {% endif %}
     {% if setting('storage.video_fingerprint') and app.user %}
       data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"

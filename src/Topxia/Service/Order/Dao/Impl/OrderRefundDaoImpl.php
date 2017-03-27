@@ -94,4 +94,10 @@ class OrderRefundDaoImpl extends BaseDao implements OrderRefundDao
         return  $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function findRefundByOrderId($orderId)
+    {
+        $sql = " SELECT * FROM {$this->table} WHERE orderId = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($orderId));
+    }
+
 }

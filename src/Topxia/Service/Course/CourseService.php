@@ -39,25 +39,80 @@ interface CourseService
 
     public function findUserLearnCoursesNotInClassroom($userId, $start, $limit); //
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findUserLearnCoursesNotInClassroomWithType($userId, $type, $start, $limit);
+
     public function findUserLearnCourseCount($userId);
 
     public function findUserLearnCourseCountNotInClassroom($userId); //
 
     public function findUserLeaningCourses($userId, $start, $limit, $filters = array());
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findUserLearningCoursesNotInClassroom($userId, $start, $limit, $filters = array());
+
     public function findUserLeaningCourseCount($userId, $filters = array());
+
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findUserLearningCourseCountNotInClassroom($userId, $filters = array());
 
     public function findUserLeanedCourseCount($userId, $filters = array());
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findUserLearnedCourseCountNotInClassroom($userId, $filters = array());
+
     public function findUserLeanedCourses($userId, $start, $limit, $filters = array());
+
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findUserLearnedCoursesNotInClassroom($userId, $start, $limit, $filters = array());
 
     public function findUserTeachCourseCount($conditions, $onlyPublished = true);
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findUserTeachCourseCountNotInClassroom($conditions, $onlyPublished = true);
+
     public function findUserTeachCourses($conditions, $start, $limit, $onlyPublished = true);
+
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findUserTeachCoursesNotInClassroom($conditions, $start, $limit, $onlyPublished = true);
 
     public function findUserFavoritedCourseCount($userId);
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findUserFavoritedCourseCountNotInClassroom($userId);
+
     public function findUserFavoritedCourses($userId, $start, $limit);
+
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findUserFavoritedCoursesNotInClassroom($userId, $start, $limit);
+
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType, $start, $limit);
+
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
+    public function findUserFavoriteCourseCountNotInClassroomWithCourseType($userId, $courseType);
 
     public function findRandomCourses($conditions, $num);
 
@@ -125,6 +180,8 @@ interface CourseService
     public function searchLessonCount($conditions);
 
     public function createLesson($lesson);
+
+    public function createLessonByFileId($courseId, $fileId);
 
     public function getCourseDraft($id);
 
@@ -245,6 +302,8 @@ interface CourseService
 
     public function searchMemberCount($conditions);
 
+    public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
+
     public function findWillOverdueCourses();
 
     public function getCourseMember($courseId, $userId);
@@ -256,6 +315,10 @@ interface CourseService
     public function updateCourseMember($id, $fields);
 
     public function updateMembers($conditions, $updateFields);
+
+    public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline);
+
+    public function updateMembersDeadlineByClassroomId($classroomId, $deadline);
 
     public function isMemberNonExpired($course, $member);
 
@@ -273,6 +336,8 @@ interface CourseService
 
     public function isCourseStudent($courseId, $userId);
 
+    public function isCourseMember($courseId, $userId);
+
     public function setCourseTeachers($courseId, $teachers);
 
     public function cancelTeacherInAllCourses($userId);
@@ -284,6 +349,12 @@ interface CourseService
     public function deleteMemberByCourseIdAndRole($courseId, $role);
 
     public function deleteMemberByCourseId($courseId);
+
+    public function findMembersByUserIdAndJoinType($userId, $joinedType = 'course');
+
+    public function quitCourseByDeadlineReach($userId, $courseId);
+
+    public function calculateLearnProgressByUserIdAndCourseIds($userId, array $courseIds);
 
     /**
      * 成为学员，即加入课程的学习
@@ -370,7 +441,7 @@ interface CourseService
 
     public function generateLessonVideoReplay($courseId, $lessonId, $fileId);
 
-    public function entryReplay($lessonId, $courseLessonReplayId);
+    public function entryReplay($lessonId, $courseLessonReplayId, $ssl = false);
 
     public function getCourseLessonReplayByLessonId($lessonId, $lessonType);
 
@@ -398,4 +469,7 @@ interface CourseService
 
     public function searchCourseLessonReplays($conditions, $orderBy, $start, $limit);
 
+    public function findReplaysByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live');
+
+    public function canTryLook($courseId, $type);
 }

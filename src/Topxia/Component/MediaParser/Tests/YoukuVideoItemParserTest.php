@@ -20,7 +20,7 @@ class YoukuVideoItemParserTest extends BaseTestCase
 
         $file = empty($video['files']) ? array() : $video['files'][0];
         $this->assertEquals('swf', $file['type']);
-        $this->assertStringStartsWith('http://', $file['url']);
+        $this->assertStringStartsWith('//', $file['url']);
     }
 
     private function createParser()

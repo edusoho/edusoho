@@ -8,8 +8,6 @@ use Topxia\Service\Common\BaseService;
 use Org\Service\Org\Dao\Impl\OrgDaoImpl;
 use Org\Service\Org\OrgBatchUpdateFactory;
 
- use Topxia\Common\Exception\InvalidArgumentException;
-
 class OrgServiceImpl extends BaseService implements OrgService
 {
     public function createOrg($org)
@@ -133,7 +131,7 @@ class OrgServiceImpl extends BaseService implements OrgService
         if (empty($org)) {
             return true;
         }
-        return ($org['code'] === $exclude) ? true : false;
+        return ($org['code'] === $exclude);
     }
 
     private function checkBeforProccess($id)
@@ -188,7 +186,7 @@ class OrgServiceImpl extends BaseService implements OrgService
         if (empty($org)) {
             return true;
         }
-        return $org['id'] == $exclude ? true : false;
+        return ($org['id'] == $exclude);
     }
 
     public function findRelatedModuleDatas($orgId)

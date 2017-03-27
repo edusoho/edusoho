@@ -42,7 +42,7 @@
         <td>
           {{ role.createdTime|date('Y-m-d H:i:s') }}        </td>
         <td>
-          {{ users[role.createdUserId].nickname }}
+          {{ users[role.createdUserId].nickname|default('--') }}
         </td>
         <td>
           <div class="btn-group">

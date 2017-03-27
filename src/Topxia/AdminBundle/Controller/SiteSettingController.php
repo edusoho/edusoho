@@ -61,6 +61,7 @@ class SiteSettingController extends BaseController
             'phone' => array(
                 array('name' => '', 'number' => ''),
             ),
+            'supplier' => '',
             'webchatURI' => '',
             'email' => '',
             'color' => 'default',
@@ -167,6 +168,30 @@ class SiteSettingController extends BaseController
         ));
     }
 
+    public function securityAction(Request $request)
+    {
+        $security = $this->getSettingService()->get('security', array());
+        $default = array(
+            'safe_iframe_domains' => array(),
+        );
+        $security = array_merge($default, $security);
+
+        if ($request->getMethod() == 'POST') {
+            $security = $request->request->all();
+
+            $security['safe_iframe_domains'] = trim(str_replace(array("\r\n", "\n", "\r"), " ", $security['safe_iframe_domains']));
+            $security['safe_iframe_domains'] = array_filter(explode(' ', $security['safe_iframe_domains']));
+
+            $this->getSettingService()->set('security', $security);
+            $this->getLogService()->info('system', 'update_settings', '更新安全设置', $security);
+            $this->setFlashMessage('success', '安全设置保存成功！');
+        }
+
+        return $this->render('TopxiaAdminBundle:System:security.html.twig', array(
+            'security' => $security,
+        ));
+    }
+
     protected function getDefaultSet()
     {
         $default = array(
@@ -174,6 +199,7 @@ class SiteSettingController extends BaseController
             'defaultCoursePicture' => 0,
             'defaultAvatarFileName' => 'avatar',
             'defaultCoursePictureFileName' => 'coursePicture',
+            'inviteShareContent' => $this->getServiceKernel()->trans('我正在%sitename%网校学习，邀请你也来体验下。', array('%sitename%' => '{{sitename}}')),
             'articleShareContent' => $this->getServiceKernel()->trans('我正在看%articletitle%，关注%sitename%，分享知识，成就未来。', array('%articletitle%' => '{{articletitle}}','%sitename%' => '{{sitename}}' )),
             'courseShareContent' => $this->getServiceKernel()->trans('我正在学习%course%，收获巨大哦，一起来学习吧！', array('%course%' => '{{course}}' )),
             'groupShareContent' => $this->getServiceKernel()->trans('我在%groupname%小组,发表了%threadname%,很不错哦,一起来看看吧!', array('%groupname%' =>'{{groupname}}','%threadname%' => '{{threadname}}' )),

@@ -12,6 +12,8 @@ class PlayerController extends BaseController
 {
     public function showAction(Request $request, $id, $context = array())
     {
+        $ssl = $request->isSecure() ? true : false;
+
         // todo delete try catche
         try {
             $file = $this->getUploadFileService()->getFullFile($id);
@@ -21,41 +23,57 @@ class PlayerController extends BaseController
             }
 
             $agentInWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
-            if ($file["storage"] == 'cloud' && $file["type"] == 'video') {
-                // 加入片头信息
-                if (!$this->isHiddenVideoHeader()) {
-                    $videoHeaderFile = $this->getUploadFileService()->getFileByTargetType('headLeader');
-                    if (!empty($videoHeaderFile) && $videoHeaderFile['convertStatus'] == 'success') {
-                        $context['videoHeaderLength'] = $videoHeaderFile['length'];
+            if ($file["type"] == 'video') {
+                if ($file["storage"] == 'cloud') {
+                    // 加入片头信息
+                    if (!$this->isHiddenVideoHeader()) {
+                        $videoHeaderFile = $this->getUploadFileService()->getFileByTargetType('headLeader');
+                        if (!empty($videoHeaderFile) && $videoHeaderFile['convertStatus'] == 'success') {
+                            $context['videoHeaderLength'] = $videoHeaderFile['length'];
+                        }
                     }
-                }
 
-                if (!empty($file['convertParams']['hasVideoWatermark'])) {
-                    $file['videoWatermarkEmbedded'] = 1;
-                }
-
-                $player = "balloon-cloud-video-player";
-
-                $api    = CloudAPIFactory::create("leaf");
-                $result = $api->get("/resources/{$file['globalId']}/player");
-
-                // 临时修复手机浏览器端视频不能播放的问题
-                if ($agentInWhiteList) {
-                    $context['hideQuestion'] = 1; //手机浏览器不弹题
-                    if (isset($file['mcStatus']) && $file['mcStatus'] == 'yes') {
-                        $player = "local-video-player";
-                        $url    = isset($result['mp4url']) ? $result['mp4url'] : '';
+                    if (!empty($file['convertParams']['hasVideoWatermark'])) {
+                        $file['videoWatermarkEmbedded'] = 1;
                     }
+
+                    $player = "balloon-cloud-video-player";
+
+                    $api    = CloudAPIFactory::create("leaf");
+
+                    $ssl = $request->isSecure() ? true : false;
+                    $params = array();
+                    if ($ssl) {
+                        $params['protocol'] = 'https';
+                    }
+
+                    $result = $api->get("/resources/{$file['globalId']}/player", $params);
+
+                    if (isset($result['subtitles'])) {
+                        $this->filterSubtitles($result['subtitles']);
+                        $context['subtitles'] = $result['subtitles'];
+                    }
+
+                    // 临时修复手机浏览器端视频不能播放的问题
+                    if ($agentInWhiteList) {
+                        $context['hideQuestion'] = 1; //手机浏览器不弹题
+                        if (isset($file['mcStatus']) && $file['mcStatus'] == 'yes') {
+                            $player = "local-video-player";
+                            $mp4Url = isset($result['mp4url']) ? $result['mp4url'] : '';
+                        }
+                    }
+                } elseif ($file["storage"] == 'local') {
+                    $player = "local-video-player";
                 }
-            } elseif ($file["storage"] == 'local' && $file["type"] == 'video') {
-                $player = "local-video-player";
             } elseif ($file["type"] == 'audio') {
                 $player = "audio-player";
             }
 
-            $url = $this->getPlayUrl($id, $context);
+            $url = isset($mp4Url) ? $mp4Url : $this->getPlayUrl($id, $context, $ssl);
         } catch (\Exception $e) {
+            return $this->createMessageResponse('error', $e->getMessage());
         }
+
         return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
             'file'             => $file,
             'url'              => isset($url) ? $url : null,
@@ -215,7 +233,7 @@ class PlayerController extends BaseController
         return new Response($file['metas']['levels'][$token['data']['level']]['hlsKey']);
     }
 
-    protected function getPlayUrl($id, $context)
+    protected function getPlayUrl($id, $context, $ssl)
     {
         $file = $this->getUploadFileService()->getFile($id);
 
@@ -256,7 +274,7 @@ class PlayerController extends BaseController
                 }
 
                 if ($key) {
-                    $result = $this->getMaterialLibService()->player($file['globalId']);
+                    $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
                 }
             }
 
@@ -331,6 +349,13 @@ class PlayerController extends BaseController
             return false;
         } else {
             return true;
+        }
+    }
+
+    private function filterSubtitles(&$subtitles)
+    {
+        foreach ($subtitles as &$subtitle) {
+            $subtitle['name'] = rtrim($subtitle['name'], '.srt');
         }
     }
 

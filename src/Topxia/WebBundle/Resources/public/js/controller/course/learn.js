@@ -194,16 +194,18 @@ define(function(require, exports, module) {
             });
         },
 
-        _afterLoadLesson: function(lessonId) {
+        _afterLoadLesson: function(lesson) {
             if (this._counter && this._counter.timerId) {
                 clearInterval(this._counter.timerId);
             }
 
             var self = this;
-            this._counter = new Counter(self, this.get('courseId'), lessonId, this.get('watchLimit'));
-            this._counter.setTimerId(setInterval(function() {
-                self._counter.execute()
-            }, 1000));
+            if (lesson.type != 'live') {
+                this._counter = new Counter(self, this.get('courseId'), lesson.id, this.get('watchLimit'));
+                this._counter.setTimerId(setInterval(function() {
+                    self._counter.execute()
+                }, 1000));
+            }
         },
 
         _onChangeLessonId: function(id) {
@@ -445,7 +447,15 @@ define(function(require, exports, module) {
                             } else {
                                 if (lesson.replays && lesson.replays.length > 0) {
                                     $.each(lesson.replays, function(i, n) {
-                                        $countDown += "<a class='btn btn-primary' href='" + n.url + "' target='_blank'>" + n.title + "</a>&nbsp;&nbsp;";
+                                        //ES直播，直接播放云资源，TODO(后期需要和其他直播供应商一致的行为)
+                                        if (lesson.liveProvider == 5) {
+                                            //路由要重构
+                                            var playerUrl =  '/course/'+lesson.courseId+'/lesson/'+lesson.id+'/replay/'+n.id+'/play_es_live_replay';
+                                            $countDown += "<a class='btn btn-primary js-play-es-live' href='javascript:;' data-url='"+ playerUrl +"'>" + n.title + "</a>&nbsp;&nbsp;";
+                                        } else {
+                                            $countDown += "<a class='btn btn-primary' href='" + n.url + "' target='_blank'>" + n.title + "</a>&nbsp;&nbsp;";
+                                        }
+                                        
                                     });
                                 }
                             }
@@ -469,6 +479,12 @@ define(function(require, exports, module) {
                     });
                     $("#lesson-live-content").scrollTop(0);
                     $("#lesson-live-content").perfectScrollbar('update');
+
+                    //点击ES直播回放
+                    $('body').on('click', '.js-play-es-live', function(){
+                        $btn = $(this);
+                        self._playESLiveReplay($btn.data('url'));
+                    });
 
                 } else if (lesson.type == 'testpaper') {
                     var url = '../../lesson/' + id + '/test/' + lesson.mediaId + '/do';
@@ -540,6 +556,9 @@ define(function(require, exports, module) {
                         $("#lesson-testpaper-content").perfectScrollbar('update');
 
                     } else {
+                        if (iID) {
+                            clearInterval(iID);
+                        }
                         $.get('../../testpaper/' + lesson.mediaId + '/user_result/json', function(result) {
                             if (result.error) {
                                 html = '<span class="text-danger">' + result.error + '</span>';
@@ -551,7 +570,10 @@ define(function(require, exports, module) {
                                 } else if (result.status == 'finished') {
                                     var redoUrl = '../../lesson/' + id + '/test/' + lesson.mediaId + '/redo';
                                     var resultUrl = '../../test/' + result.id + '/result?targetType=lesson&targetId=' + id;
-                                    
+                                    if (lesson.doTimes == 1 && result) {
+                                        html = Translator.trans('该试卷仅可以做一次，点击查看')+'<a href="' + resultUrl + '" target="_blank">' + Translator.trans('做题结果') + '</a>';
+                                        $("#lesson-testpaper-content").find('.lesson-content-text-body').html(html);
+                                    }
                                     html = Translator.trans('试卷已批阅，成绩') + '：' + result.score + '／' + result.totalScore; 
                                     if (result.passedStatus == 'unpassed') {
                                         html += '<span class="text-danger mls mrs">' + Translator.trans('未通过') + '</span>';
@@ -562,12 +584,9 @@ define(function(require, exports, module) {
                                     html += '<a href="' + resultUrl + '" class="btn btn-link btn-sm mbs" target="_blank">' + Translator.trans('查看结果') + '</a>';
 
                                     var now = parseInt(new Date().getTime()/1000);
+                                    
                                     if (lesson.doTimes == 0 && lesson.redoInterval != 0 && now < (result.checkedTime + lesson.redoInterval * 3600)) {
                                         
-                                        if (iID) {
-                                            clearInterval(iID);
-                                        }
-
                                         function generateTestHtml() {
                                             var now = parseInt(new Date().getTime()/1000),
                                                 day=0,
@@ -727,7 +746,7 @@ define(function(require, exports, module) {
 
                 that._toolbar.set('lesson', lesson);
                 that._startLesson();
-                that._afterLoadLesson(id);
+                that._afterLoadLesson(lesson);
             }, 'json');
 
             $.get(this.get('courseUri') + '/lesson/' + id + '/learn/status', function(json) {
@@ -815,7 +834,13 @@ define(function(require, exports, module) {
 
             return $countDown;          
         },
-
+        _playESLiveReplay: function(playerUrl)
+        {
+            var html = '<iframe src=\'' + playerUrl + '\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
+            $('#lesson-live-content').hide();
+            $('#lesson-video-content').show();
+            $('#lesson-video-content').html(html);
+        },
         _videoPlay: function(lesson){
             var self = this;
 

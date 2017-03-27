@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class CategoryController extends BaseController
 {
-    public function embedAction($group, $layout)
+    public function embedAction($group, $layout, $menu = null)
     {
         $group = $this->getCategoryService()->getGroupByCode($group);
 
@@ -18,6 +18,7 @@ class CategoryController extends BaseController
 
         return $this->render('TopxiaAdminBundle:Category:embed.html.twig', array(
             'group'      => $group,
+            'menu'       => $menu,
             'categories' => $categories,
             'layout'     => $layout
         ));

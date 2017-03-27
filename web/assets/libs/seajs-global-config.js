@@ -1,9 +1,12 @@
+var __URL_PROTOCOL = 'https:' == document.location.protocol ? 'https': 'http';
 
 seajs.config({
     alias: {
         'jquery': 'jquery/1.11.2/jquery',
         '$': 'jquery/1.11.2/jquery',
         '$-debug': 'jquery/1.11.2/jquery',
+        "jquery.intro": "jquery-plugin/intro/intro",
+        "jquery.intro-css": "jquery-plugin/intro/introjs.min.css",
         "jquery.form": "jquery-plugin/form/3.44.0/form",
         "jquery.sortable": "jquery-plugin/sortable/0.9.10/sortable.js",
         "jquery.raty": "jquery-plugin/raty/2.5.2/raty",
@@ -45,7 +48,7 @@ seajs.config({
         'placeholder': 'arale/placeholder/1.1.0/placeholder',
         'json': 'gallery/json/1.0.3/json',
         "handlebars": "gallery/handlebars/1.0.2/handlebars",
-        "backbone": "gallery/backbone/1.0.1/backbone",
+        "backbone": "gallery/backbone/1.0.2/backbone",
         "underscore": "gallery/underscore/1.8.3/underscore",
         "swfobject": "gallery/swfobject/2.2.0/swfobject.js",
         'moment': 'gallery/moment/2.5.1/moment',
@@ -75,7 +78,9 @@ seajs.config({
         'jquery.lavalamp': 'jquery-plugin/jquery.lavalamp/jquery.lavalamp',
         'video-player': 'balloon-video-player/1.3.0/index',
         'edusoho.tree': 'edusoho/tree/1.0.0/tree.js',
-        'video-player-new': (app.cloudSdkCdn ? app.cloudSdkCdn : 'http://cdn.qiqiuyun.net') + '/js-sdk/video-player/v1/sdk.js',
+        'video-player-new': __URL_PROTOCOL + ':' + (app.cloudSdkCdn ? app.cloudSdkCdn : '//service-cdn.qiqiuyun.net') + '/js-sdk/video-player/sdk-v1.js',
+        'new-uploader':  __URL_PROTOCOL + ':' + (app.cloudSdkCdn ? app.cloudSdkCdn : '//service-cdn.qiqiuyun.net') + '/js-sdk/uploader/sdk-v1.js',
+        'subtitle-browser': 'subtitle/1.0.0/subtitle.browser.min.js',
         'echarts': 'gallery2/echarts/3.1.10/echarts',
         'echarts-debug':'gallery2/echarts/3.1.10/echarts-debug',
         'z_tree' :'jquery-plugin/zTree/3.5.21/js/jquery.ztree.all.min',
@@ -84,7 +89,8 @@ seajs.config({
         'org_z_tree_css': 'jquery-plugin/zTree/3.5.21/css/org.css',
         'jquery.treegrid': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid',
         'jquery.treegrid.css': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid.css',
-        'jweixin':'edusoho/wxrs/1.0.0/jweixin.js'
+        'jweixin':'edusoho/wxrs/1.0.0/jweixin.js',
+        'g2':'g2/1.2.4/index.js'
     },
 
     // 预加载项
@@ -101,6 +107,8 @@ seajs.config({
     charset: 'utf-8',
 
     debug: app.debug,
+
+    base: app.basePath+'/assets/libs',
 
     plugins: ['text']
 });
@@ -124,9 +132,12 @@ seajs.on('fetch', function(data) {
         data.requestUri = data.uri + '?flag=' + Math.round(new Date().getTime() / 100000);
         return ;
     }
-    
-    data.requestUri = data.uri + __SEAJS_FILE_VERSION;
 
+    if (data.uri.indexOf('js-sdk/uploader') > 0) {
+        data.requestUri = data.uri + '?flag=' + Math.round(new Date().getTime() / 100000);
+        return ;
+    }
+    data.requestUri = data.uri + __SEAJS_FILE_VERSION;
 });
 
 seajs.on('define', function(data) {

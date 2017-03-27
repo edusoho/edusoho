@@ -54,7 +54,7 @@
           <ul class="list-group teacher-list-group sortable-list" id="teacher-list-group" data-role="list" style="display:none;"></ul>
           <div class="input-group">
             {% set url = path('course_manage_teachers_match', {id:course.id}) ~ '?q={{query}}' %}
-            <input class="form-control" id="teacher-input" type="text" data-role="item-input" data-url="{{ url }}">
+            <input class="form-control" id="teacher-input" type="text" data-role="item-input" data-url="{{ url }}" placeholder="输入教师用户名搜索添加">
             <span class="input-group-btn">
               <button class="btn btn-default" type="button" data-role="item-add" id="teacher-add" >{{'添加'|trans}}</button>
             </span>

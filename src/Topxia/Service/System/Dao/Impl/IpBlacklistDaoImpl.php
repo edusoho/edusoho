@@ -11,21 +11,34 @@ class IpBlacklistDaoImpl extends BaseDao implements IpBlacklistDao
 
     public function getIp($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id));
+        $that = $this;
+
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id));
+        });
     }
 
     public function getIpByIpAndType($ip, $type)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE ip = ? AND type =? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($ip, $type));
+        $that = $this;
+
+        return $this->fetchCached("ip:{$ip}:type:{$type}", $ip, $type, function ($ip, $type) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE ip = ? AND type =? LIMIT 1";
+            $result = $that->getConnection()->fetchAssoc($sql, array($ip, $type));
+            return $result ? $result : array();
+        });
     }
 
     public function findIpsByTypeAndExpiredTimeLessThan($type, $time, $start, $limit)
     {
-        $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE type = ? AND expiredTime <= ? LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAssoc($sql, array($ip));
+        $that = $this;
+
+        return $this->fetchCached("type:{$type}:time:{$time}:start:{$start}:limit:{$limit}", $type, $time, $start, $limit, function ($type, $time, $start, $limit) use ($that) {
+            $this->filterStartLimit($start, $limit);
+            $sql = "SELECT * FROM {$that->getTable()} WHERE type = ? AND expiredTime <= ? LIMIT {$start}, {$limit}";
+            return $that->getConnection()->fetchAssoc($sql, array($ip));
+        });
     }
 
     public function addIp($fields)
@@ -34,6 +47,7 @@ class IpBlacklistDaoImpl extends BaseDao implements IpBlacklistDao
         if ($affected <= 0) {
             throw $this->createDaoException('Insert fields error.');
         }
+        $this->clearCached();
         return $this->getIp($this->getConnection()->lastInsertId());
     }
 
@@ -41,12 +55,16 @@ class IpBlacklistDaoImpl extends BaseDao implements IpBlacklistDao
     {
         $counter = (int) $counter;
         $sql = "UPDATE {$this->table} SET counter = counter + ? WHERE id = ? LIMIT 1";
-        return $this->getConnection()->executeQuery($sql, array($counter, $id));
+        $result = $this->getConnection()->executeQuery($sql, array($counter, $id));
+        $this->clearCached();
+        return $result;
     }
 
     public function deleteIp($id)
     {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
+        $this->clearCached();
+        return $result;
     }
 
 

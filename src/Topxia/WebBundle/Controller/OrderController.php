@@ -112,6 +112,10 @@ class OrderController extends BaseController
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', $this->trans('用户未登录，创建订单失败。'));
         }
+        
+        if (isset($fields['coinPayAmount']) && !$this->canUseCoinPay($fields['coinPayAmount'], $user['id'])) {
+            return $this->createMessageResponse('error', $this->trans('当前使用的账户金额大于账户余额。'));
+        }
 
         if (!array_key_exists("targetId", $fields) || !array_key_exists("targetType", $fields)) {
             return $this->createMessageResponse('error', $this->trans('订单中没有购买的内容，不能创建!'));
@@ -201,6 +205,17 @@ class OrderController extends BaseController
         }
     }
 
+    protected function canUseCoinPay($coinPayAmount, $userId)
+    {
+        $cashAccount = $this->getCashAccountService()->getAccountByUserId($userId, true);
+
+        if ($coinPayAmount > $cashAccount['cash']) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function detailAction(Request $request, $id)
     {
         $order = $this->getOrderService()->getOrder($id);
@@ -232,8 +247,77 @@ class OrderController extends BaseController
             $price = $request->request->get('amount');
 
             $couponInfo = $this->getCouponService()->checkCouponUseable($code, $type, $id, $price);
+
+            $couponInfo = $this->completeInfo($couponInfo, $code, $type);
+
             return $this->createJsonResponse($couponInfo);
         }
+    }
+
+    protected function completeInfo($couponInfo, $code)
+    {
+        if ($couponInfo['useable'] == 'no' && empty($couponInfo['message'])) {
+            $coupon     = $this->getCouponService()->getCouponByCode($code);
+            $targetId   = $coupon['targetId'];
+            $targetType = $coupon['targetType'];
+
+            if ($targetType == 'course') {
+                if ($targetId != 0) {
+                    $course        = $this->getCourseService()->getCourse($targetId);
+                    $couponContent = '课程:'.$course['title'];
+                    $url = $this->generateUrl('course_show', array('id' => $targetId));
+                    $couponContent = "<a href='{$url}' target='_blank'>{$couponContent}</a>";
+                } else {
+                    $couponContent = '全部课程';
+                    $url = $this->generateUrl('course_explore');
+                    $couponContent = "<a href='{$url}' target='_blank'>{$couponContent}</a>";
+                }
+
+                $couponInfo['message'] = $this->getServiceKernel()->trans('无法使用%code%优惠券,该优惠券只能用于《%couponContent%》', array('%code%' => $code, '%couponContent%' => $couponContent));
+
+                return $couponInfo;
+            }
+
+            if ($targetType == 'classroom') {
+                if ($targetId != 0) {
+                    $classroom     = $this->getClassroomService()->getClassroom($targetId);
+                    $couponContent = '班级:'.$classroom['title'];
+                    $url = $this->generateUrl('classroom_introductions', array('id' => $targetId));
+                    $couponContent = "<a href='{$url}' target='_blank'>{$couponContent}</a>";
+                } else {
+                    $couponContent = '全部班级';
+                    $url = $this->generateUrl('classroom_explore');
+                    $couponContent = "<a href='{$url}' target='_blank'>{$couponContent}</a>";
+                }
+
+                $couponInfo['message'] = $this->getServiceKernel()->trans('无法使用%code%优惠券,该优惠券只能用于《%couponContent%》', array('%code%' => $code, '%couponContent%' => $couponContent));
+
+                return $couponInfo;
+            } 
+
+            if ($targetType == 'vip' && $this->isPluginInstalled('Vip')) {
+                if ($targetId != 0) {
+                    $level         = $this->getLevelService()->getLevel($targetId);
+                    $couponContent = '会员:'.$level['name'];
+                } else {
+                    $couponContent = '全部VIP';
+                }
+
+                $url = $this->generateUrl('vip');
+                $couponContent = "<a href='{$url}' target='_blank'>{$couponContent}</a >";  
+
+                $couponInfo['message'] = $this->getServiceKernel()->trans('无法使用%code%优惠券,该优惠券只能用于《%couponContent%》', array('%code%' => $code, '%couponContent%' => $couponContent));
+
+                return $couponInfo;  
+            }
+        }
+
+        return $couponInfo;
+    }
+
+    protected function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 
     protected function getAppService()
@@ -244,6 +328,11 @@ class OrderController extends BaseController
     protected function getCashService()
     {
         return $this->getServiceKernel()->createService('Cash.CashService');
+    }
+
+    protected function getCashAccountService()
+    {
+        return $this->getServiceKernel()->createService('Cash.CashAccountService');
     }
 
     protected function getOrderService()

@@ -4,7 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 
 use Topxia\Common\StringToolkit;
 use Symfony\Component\Finder\Finder;
-use Topxia\Service\Common\MailFactory;
+use Topxia\Service\Common\Mail\MailFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\User\AuthProvider\DiscuzAuthProvider;
 
@@ -84,7 +84,6 @@ class SystemController extends BaseController
             'plugins'     => array(),
             'api'         => array(),
             'vendor'      => array('depth' => '<1', 'dir' => true),
-            'vendor2'     => array('depth' => '<1', 'dir' => true),
             'vendor_user' => array('depth' => '<1', 'dir' => true),
             'web'         => array('depth' => '<1', 'dir' => true)
         );
@@ -114,6 +113,7 @@ class SystemController extends BaseController
                         }
                     }
                 } catch (\Exception $e) {
+                    $errorPaths[] = $e->getMessage();
                 }
             }
         }

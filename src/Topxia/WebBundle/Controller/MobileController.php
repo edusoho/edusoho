@@ -31,11 +31,11 @@ class MobileController extends BaseController
         $result = CloudAPIFactory::create('leaf')->get('/me');
 
         $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
-        
+
         return $this->render('TopxiaWebBundle:Mobile:index.html.twig', array(
             'host' => $request->getHttpHost(),
             'mobileCode' => $mobileCode,
-            'mobile' => $mobile
+            'mobileSetting' => $mobile
         ));
     }
 

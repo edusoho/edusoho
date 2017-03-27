@@ -19,7 +19,7 @@ switchOrg()
     2.班级
     3.article
     5.announcement
-    6. 登陆日志 login_record
+    6.登录日志 login_record
     7.user_approval
     
 ###

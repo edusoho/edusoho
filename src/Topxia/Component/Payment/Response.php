@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\Component\Payment;
 
+use Topxia\Service\Common\ServiceKernel;
+
 abstract class Response
 {
 
@@ -45,5 +47,10 @@ abstract class Response
     }
 
     abstract public function getPayData();
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
 
 }

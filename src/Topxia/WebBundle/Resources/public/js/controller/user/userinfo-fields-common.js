@@ -64,7 +64,7 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: '[name="truename"]',
                 required: true,
-                rule: 'chinese byte_minlength{min:4} byte_maxlength{max:10}'
+                rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:36} '
             });
 
             validator.addItem({
@@ -99,7 +99,7 @@ define(function(require, exports, module) {
                 element: '[name="weibo"]',
                 required: true,
                 rule: 'url',
-                errormessageUrl: Translator.trans('微博地址不正确，须以http://开头。')
+                errormessageUrl: Translator.trans('微博地址不正确，须以http://或者https://开头。')
             });
 
             validator.addItem({

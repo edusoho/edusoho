@@ -489,10 +489,23 @@ class LiveCourseController extends BaseController
         ));
     }
 
+    /**
+     * [playESLiveReplayAction 播放ES直播回放]
+     */
+    public function playESLiveReplayAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
+    {
+        $this->getCourseService()->tryTakeCourse($courseId);
+        $replay = $this->getCourseService()->getCourseLessonReplay($courseLessonReplayId);
+
+        return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array('globalId' => $replay['globalId']));
+    }
+
     public function getReplayUrlAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
     {
+        $ssl = $request->isSecure() ? true : false;
+
         $course = $this->getCourseService()->tryTakeCourse($courseId);
-        $result = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
+        $result = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId, $ssl);
 
         return $this->createJsonResponse(array(
             'url'   => $result['url'],
@@ -588,7 +601,7 @@ class LiveCourseController extends BaseController
             $start = 0;
             $limit = $pageSize - ($futureLiveCoursesCount % $pageSize);
         } else {
-            $start = ($currentPage - $pages - 1) * $pageSize;
+            $start = ($currentPage - 1) * $pageSize;
             $limit = $pageSize;
         }
 

@@ -1,0 +1,8 @@
+# This file is auto-generated during the composer install
+parameters:
+    foo: bar
+    boolean: false
+    another: null
+    nested:
+        foo: bar
+        bar: baz

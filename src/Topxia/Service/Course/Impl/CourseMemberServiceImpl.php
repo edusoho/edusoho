@@ -48,7 +48,7 @@ class CourseMemberServiceImpl extends BaseService implements CourseMemberService
             'targetType' => 'course',
             'targetId'   => $course['id'],
             'amount'     => $data['price'],
-            'totalPrice' => $data['price'],
+            'totalPrice' => $course['price'],
             'payment'    => $payment,
             'snPrefix'   => 'C'
         ));

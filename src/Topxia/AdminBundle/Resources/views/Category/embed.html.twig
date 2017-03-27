@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set menu = 'admin_course_category_manage' %}
+{% set menu = menu|default('admin_course_category_manage') %}
 
 {% block main %}
 

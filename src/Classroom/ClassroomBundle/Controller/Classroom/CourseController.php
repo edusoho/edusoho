@@ -5,6 +5,7 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
+use Topxia\Common\ClassroomToolkit;
 
 class CourseController extends BaseController
 {
@@ -33,13 +34,7 @@ class CourseController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $userIds = array();
-        foreach ($courses as &$course) {
-            $course['tags'] = $this->getTagService()->findTagsByIds($course['tags']);
-            $userIds        = array_merge($userIds, $course['teacherIds']);
-        }
-
-        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->getUsers($courses);
 
         return $this->render("ClassroomBundle:ClassroomManage/Course:course-pick-modal.html.twig", array(
             'users'       => $users,
@@ -72,7 +67,7 @@ class CourseController extends BaseController
 
         $user = $this->getCurrentUser();
 
-        $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
             $classroomName = $this->setting('classroom.name', $this->getServiceKernel()->trans('班级'));
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%classroomName%，如有需要请联系客服',array('%classroomName%'=>$classroomName)), '', 3, $this->generateUrl('homepage'));
@@ -111,29 +106,45 @@ class CourseController extends BaseController
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
         $key = $request->request->get("key");
-
+        
         $conditions             = array("title" => $key);
         $conditions['status']   = 'published';
         $conditions['parentId'] = 0;
-        $courses                = $this->getCourseService()->searchCourses(
-            $conditions,
-            'latest',
-            0,
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->searchCourseCount($conditions),
             5
         );
 
-        $userIds = array();
-        foreach ($courses as &$course) {
-            $course['tags'] = $this->getTagService()->findTagsByIds($course['tags']);
-            $userIds        = array_merge($userIds, $course['teacherIds']);
-        }
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions,
+            'latest',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
-        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->getUsers($courses);
 
         return $this->render('TopxiaWebBundle:Course:course-select-list.html.twig', array(
             'users'   => $users,
-            'courses' => $courses
+            'courses' => $courses,
+            'paginator' => $paginator,
+            'classroomId' => $classroomId,
+            'type' => 'ajax_pagination'
         ));
+    }
+
+    protected function getUsers($courses)
+    {
+        $userIds = array();
+        foreach ($courses as &$course) {
+            $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course', 'ownerId' => $course['id']));
+
+            $course['tags'] = ArrayToolkit::column($tags, 'id');
+            $userIds        = array_merge($userIds, $course['teacherIds']);
+        }
+
+        return $this->getUserService()->findUsersByIds($userIds);
     }
 
     private function previewAsMember($previewAs, $member, $classroom)
@@ -144,6 +155,11 @@ class CourseController extends BaseController
             if ($previewAs == 'guest') {
                 return;
             }
+
+            $deadline = ClassroomToolkit::buildMemberDeadline(array(
+                'expiryMode'  => $classroom['expiryMode'],
+                'expiryValue' => $classroom['expiryValue']
+            ));
 
             $member = array(
                 'id'          => 0,
@@ -156,7 +172,8 @@ class CourseController extends BaseController
                 'remark'      => '',
                 'role'        => array('auditor'),
                 'locked'      => 0,
-                'createdTime' => 0
+                'createdTime' => 0,
+                'deadline'    => $deadline
             );
 
             if ($previewAs == 'member') {

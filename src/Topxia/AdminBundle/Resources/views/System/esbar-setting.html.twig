@@ -14,6 +14,7 @@
     </div>
     <div class="controls col-md-8 radios">
       {{ radios('enabled', {1:'开启'|trans, 0:'关闭'|trans}, esBar.enabled) }}
+      <p class="help-block">{{'网校开启侧边栏后，客服的悬浮框会失效'|trans}}</p>
     </div>
   </div>
 
@@ -25,5 +26,4 @@
   </div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
-
 {% endblock %}

@@ -1,10 +1,11 @@
 <?php
 namespace Topxia\AdminBundle\Controller;
 
+use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Paginator;
+use Topxia\Common\ExportHelp;
 
 class CourseController extends BaseController
 {
@@ -62,6 +63,8 @@ class CourseController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        list($searchCoursesNum, $publishedCoursesNum, $closedCoursesNum, $unPublishedCoursesNum) = $this->getDifferentCoursesNum($conditions);
+
         $classrooms = array();
         $vips       = array();
         if ($filter == 'classroom') {
@@ -91,18 +94,56 @@ class CourseController extends BaseController
 
         $default = $this->getSettingService()->get('default', array());
 
+
+
         return $this->render('TopxiaAdminBundle:Course:index.html.twig', array(
-            'conditions'     => $conditions,
-            'courses'        => $courses,
-            'users'          => $users,
-            'categories'     => $categories,
-            'paginator'      => $paginator,
-            'liveSetEnabled' => $courseSetting['live_course_enabled'],
-            'default'        => $default,
-            'classrooms'     => $classrooms,
-            'filter'         => $filter,
-            'vips'           => $vips
+            'conditions'            => $conditions,
+            'courses'               => $courses,
+            'users'                 => $users,
+            'categories'            => $categories,
+            'paginator'             => $paginator,
+            'liveSetEnabled'        => $courseSetting['live_course_enabled'],
+            'default'               => $default,
+            'classrooms'            => $classrooms,
+            'filter'                => $filter,
+            'vips'                  => $vips,
+            'searchCoursesNum'      => $searchCoursesNum,
+            'publishedCoursesNum'   => $publishedCoursesNum,
+            'closedCoursesNum'      => $closedCoursesNum,
+            'unPublishedCoursesNum' => $unPublishedCoursesNum
         ));
+    }
+
+    protected function getDifferentCoursesNum($conditions)
+    {   
+        $courses   = $this->getCourseService()->searchCourses(
+            $conditions,
+            null,
+            0,
+            PHP_INT_MAX
+        );
+
+        $searchCoursesNum      = 0;
+        $publishedCoursesNum   = 0;
+        $closedCoursesNum      = 0;
+        $unPublishedCoursesNum = 0;
+        $searchCoursesNum      = count($courses);
+
+        foreach ($courses as $course) {
+            if ($course['status'] == 'published') {
+                $publishedCoursesNum ++;
+            }
+
+            if ($course['status'] == 'closed') {
+                $closedCoursesNum ++;
+            }
+
+            if ($course['status'] == 'draft') {
+                $unPublishedCoursesNum ++;
+            }
+        }
+
+        return array($searchCoursesNum, $publishedCoursesNum, $closedCoursesNum, $unPublishedCoursesNum);   
     }
 
     protected function searchFuncUsedBySearchActionAndSearchToFillBannerAction(Request $request, $twigToRender)
@@ -164,11 +205,12 @@ class CourseController extends BaseController
 
         $course = $this->getCourseService()->getCourse($courseId);
 
-        if ($course['status'] == 'published') {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('发布课程，不能删除！'));
-        }
-
         $subCourses = $this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1);
+
+        if ($course['status'] == 'published') {
+            $this->getCourseService()->closeCourse($courseId);
+            $course['status'] = 'closed';
+        }
 
         if (!empty($subCourses)) {
             return $this->createJsonResponse(array('code' => 2, 'message' => $this->getServiceKernel()->trans('请先删除班级课程')));
@@ -420,7 +462,15 @@ class CourseController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id, 'admin_course_data');
 
-        $lessons = $this->getCourseService()->searchLessons(array('courseId' => $id), array('createdTime', 'ASC'), 0, 1000);
+        return $this->render('TopxiaAdminBundle:Course:lesson-data.html.twig', array(
+            'course'  => $course,
+            'lessons' => $this->makeLessonsDatasByCourseId($id)
+        ));
+    }
+
+    protected function makeLessonsDatasByCourseId($courseId, $start = 0, $limit = 1000)
+    {
+        $lessons = $this->getCourseService()->searchLessons(array('courseId' => $courseId), array('createdTime', 'ASC'), $start, $limit);
 
         foreach ($lessons as $key => $value) {
             $lessonLearnedNum = $this->getCourseService()->findLearnsCountByLessonId($value['id']);
@@ -448,10 +498,104 @@ class CourseController extends BaseController
             }
         }
 
-        return $this->render('TopxiaAdminBundle:Course:lesson-data.html.twig', array(
-            'course'  => $course,
-            'lessons' => $lessons
-        ));
+        return $lessons;
+    }
+
+    public function prepareForExportLessonsDatasAction(Request $request, $courseId)
+    {
+        list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
+
+        list($title, $lessons, $courseLessonsCount) = $this->getExportLessonsDatas($courseId, $start, $limit, $exportAllowCount);
+
+        $file = '';
+        if ($start == 0) {
+            $file = ExportHelp::addFileTitle($request,'course_lessons', $title);
+        }
+
+        $datas = implode("\r\n", $lessons);
+        $fileName = ExportHelp::saveToTempFile($request, $datas, $file);
+
+        $method = ExportHelp::getNextMethod($start+$limit, $courseLessonsCount);
+
+        return $this->createJsonResponse(
+            array(
+                'method'   => $method,
+                'fileName' => $fileName,
+                'start'    => $start+$limit
+            )
+        );
+    }
+
+    protected function getExportLessonsDatas($courseId, $start, $limit, $exportAllowCount)
+    {   
+        $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_data');
+
+        $conditions = array(
+            'courseId' => $courseId
+        );
+        $courseLessonsCount = $this->getCourseService()->searchLessonCount($conditions);
+
+        $courseLessonsCount = ($courseLessonsCount>$exportAllowCount) ? $exportAllowCount:$courseLessonsCount;  
+
+        $titles = $this->getServiceKernel()->trans('课时名,课时学习人数,课时完成人数,课时平均学习时长(分),音视频时长(分),音视频平均观看时长(分),测试平均得分');
+
+        $originaLessons = $this->makeLessonsDatasByCourseId($courseId, $start, $limit);
+
+        $exportLessons = array();
+        foreach ($originaLessons as $lesson) {
+            $exportLesson = '';
+
+            if ($lesson['type'] == 'text') {
+                $exportLesson .= $lesson['title'] ? $lesson['title']."(图文)," : "-".",";
+            } elseif ($lesson['type'] == 'video') {
+                $exportLesson .= $lesson['title'] ? $lesson['title']."(视频)," : "-".",";
+            } elseif ($lesson['type'] == 'audio') {
+                $exportLesson .= $lesson['title'] ? $lesson['title']."(音频)," : "-".",";
+            } elseif ($lesson['type'] == 'testpaper') {
+                $exportLesson .= $lesson['title'] ? $lesson['title']."(试卷)," : "-".",";
+            } elseif ($lesson['type'] == 'ppt') {
+                $exportLesson .= $lesson['title'] ? $lesson['title']."(ppt)," : "-".",";
+            } else {
+                $exportLesson .= $lesson['title'] ? $lesson['title']."," : "-".",";
+            }
+
+            $exportLesson .= $lesson['LearnedNum'] ? $lesson['LearnedNum']."," : "-".",";
+            $exportLesson .= $lesson['finishedNum'] ? $lesson['finishedNum']."," : "-".",";
+
+            $learnTime = intval($lesson['learnTime'] ? $lesson['learnTime'] / 60 : 0);
+            $exportLesson .= $learnTime ? $learnTime ."," : "-".",";
+
+            if ($lesson['type'] =='audio' or $lesson['type'] =='video') {
+                $exportLesson .= $lesson['length'] ? $lesson['length']."," : "-".",";
+            } else {
+                $exportLesson .= "-".",";
+            }
+
+            if ($lesson['type'] =='audio' or $lesson['type'] =='video') {
+                $watchTime = intval($lesson['watchTime'] ? $lesson['watchTime'] / 60 : 0);
+                $exportLesson .= $watchTime ? $watchTime ."," : "-".",";
+            } else {
+                $exportLesson .= "-".",";
+            }
+
+            if ($lesson['type'] == 'testpaper') {
+                $exportLesson .= $lesson['score'] ? $lesson['score']."," : "-".",";
+            } else {
+                $exportLesson .= "-".",";
+            }
+
+            $exportLessons[] = $exportLesson;
+        }
+
+        return array($titles, $exportLessons, $courseLessonsCount);
+    }
+
+    public function exportLessonsDatasAction(Request $request, $courseId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_data');
+
+        $fileName = sprintf("%s-(%s).csv", $course['title'], date('Y-n-d'));
+        return ExportHelp::exportCsv($request, $fileName);
     }
 
     public function chooserAction(Request $request)
@@ -540,7 +684,7 @@ class CourseController extends BaseController
 
     protected function returnDeleteStatus($result, $type)
     {
-        $dataDictionary = array('questions' => $this->getServiceKernel()->trans('问题'), 'testpapers' => $this->getServiceKernel()->trans('试卷'), 'materials' => $this->getServiceKernel()->trans('课时资料'), 'chapters' => $this->getServiceKernel()->trans('课时章节'), 'drafts' => $this->getServiceKernel()->trans('课时草稿'), 'lessons' => $this->getServiceKernel()->trans('课时'), 'lessonLearns' => $this->getServiceKernel()->trans('课时时长'), 'lessonReplays' => $this->getServiceKernel()->trans('课时录播'), 'lessonViews' => $this->getServiceKernel()->trans('课时播放时长'), 'homeworks' => $this->getServiceKernel()->trans('课时作业'), 'exercises' => $this->getServiceKernel()->trans('课时练习'), 'favorites' => $this->getServiceKernel()->trans('课时收藏'), 'notes' => $this->getServiceKernel()->trans('课时笔记'), 'threads' => $this->getServiceKernel()->trans('课程话题'), 'reviews' => $this->getServiceKernel()->trans('课程评价'), 'announcements' => $this->getServiceKernel()->trans('课程公告'), 'statuses' => $this->getServiceKernel()->trans('课程动态'), 'members' => $this->getServiceKernel()->trans('课程成员'), 'course' => $this->getServiceKernel()->trans('课程'));
+        $dataDictionary = array('questions' => $this->trans('问题'), 'testpapers' => $this->trans('试卷'), 'materials' => $this->trans('课时资料'), 'chapters' => $this->trans('课时章节'), 'drafts' => $this->trans('课时草稿'), 'lessons' => $this->trans('课时'), 'lessonLearns' => $this->trans('课时时长'), 'lessonReplays' => $this->trans('课时录播'), 'lessonViews' => $this->trans('课时播放时长'), 'homeworks' => $this->trans('课时作业'), 'exercises' => $this->trans('课时练习'), 'favorites' => $this->trans('课时收藏'), 'notes' => $this->trans('课时笔记'), 'threads' => $this->trans('课程话题'), 'reviews' => $this->trans('课程评价'), 'announcements' => $this->trans('课程公告'), 'statuses' => $this->trans('课程动态'), 'members' => $this->trans('课程成员'), 'conversation' => $this->trans('会话'), 'course' => $this->trans('课程'));
 
         if ($result > 0) {
             $message = $dataDictionary[$type].$this->getServiceKernel()->trans('数据删除');

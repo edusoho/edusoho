@@ -118,7 +118,7 @@ class OrderController extends BaseController
             'cancelled' => $this->trans('已关闭')
         );
 
-        $payment        = $this->get('topxia.twig.web_extension')->getDict('payment');
+        $payment        = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
         $orderCount     = $this->getOrderService()->searchOrderCount($conditions);
         $orders         = $this->getOrderService()->searchOrders($conditions, array('createdTime', 'DESC'), $start, $limit);
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
@@ -253,19 +253,19 @@ class OrderController extends BaseController
 
     private function generateVipExportData($orders, $status, $users, $profiles, $payment, $results)
     {
-        foreach ($orders as $key => $orders) {
+        foreach ($orders as $key => $order) {
             $member = "";
-            $member .= $orders['sn'].",";
-            $member .= $status[$orders['status']].",";
-            $member .= $orders['title'].",";
-            $member .= $users[$orders['userId']]['nickname'].",";
-            $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
-            $member .= $orders['amount'].",";
-            $member .= $payment[$orders['payment']].",";
-            $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
+            $member .= $order['sn'].",";
+            $member .= $status[$order['status']].",";
+            $member .= $order['title'].",";
+            $member .= $users[$order['userId']]['nickname'].",";
+            $member .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename']."," : "-".",";
+            $member .= $order['amount'].",";
+            $member .= $payment[$order['payment']].",";
+            $member .= date('Y-n-d H:i:s', $order['createdTime']).",";
 
-            if ($orders['paidTime'] != 0) {
-                $member .= date('Y-n-d H:i:s', $orders['paidTime']).",";
+            if ($order['paidTime'] != 0) {
+                $member .= date('Y-n-d H:i:s', $order['paidTime']).",";
             } else {
                 $member .= "-".",";
             }
@@ -278,40 +278,40 @@ class OrderController extends BaseController
 
     private function generateExportData($orders, $status, $payment, $users, $profiles, $results)
     {
-        foreach ($orders as $key => $orders) {
+        foreach ($orders as $key => $order) {
             $member = "";
-            $member .= $orders['sn'].",";
-            $member .= $status[$orders['status']].",";
-            $member .= $orders['title'].",";
+            $member .= $order['sn'].",";
+            $member .= $status[$order['status']].",";
+            $member .= $order['title'].",";
 
-            $member .= $orders['totalPrice'].",";
+            $member .= $order['totalPrice'].",";
 
-            if (!empty($orders['coupon'])) {
-                $member .= $orders['coupon'].",";
+            if (!empty($order['coupon'])) {
+                $member .= $order['coupon'].",";
             } else {
                 $member .= "无".",";
             }
 
-            $member .= $orders['couponDiscount'].",";
-            $member .= $orders['coinRate'] ? ($orders['coinAmount'] / $orders['coinRate'])."," : '0,';
-            $member .= $orders['amount'].",";
+            $member .= $order['couponDiscount'].",";
+            $member .= $order['coinRate'] ? ($order['coinAmount'] / $order['coinRate'])."," : '0,';
+            $member .= $order['amount'].",";
 
-            $orderPayment = empty($orders['payment']) ? 'none' : $orders['payment'];
+            $orderPayment = empty($order['payment']) ? 'none' : $order['payment'];
             $member .= $payment[$orderPayment].",";
 
-            $member .= $users[$orders['userId']]['nickname'].",";
-            $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
+            $member .= $users[$order['userId']]['nickname'].",";
+            $member .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename']."," : "-".",";
 
-            if (preg_match($this->trans('/管理员添加/'), $orders['title'])) {
+            if (preg_match($this->trans('/管理员添加/'), $order['title'])) {
                 $member .= $this->trans('管理员添加,');
             } else {
                 $member .= "-,";
             }
 
-            $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
+            $member .= date('Y-n-d H:i:s', $order['createdTime']).",";
 
-            if ($orders['paidTime'] != 0) {
-                $member .= date('Y-n-d H:i:s', $orders['paidTime']);
+            if ($order['paidTime'] != 0) {
+                $member .= date('Y-n-d H:i:s', $order['paidTime']);
             } else {
                 $member .= "-";
             }

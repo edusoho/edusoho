@@ -24,7 +24,7 @@ class QiQiuYunV1CourseResponse implements SpecialResponse
                 'lessonNum' => $course['lessonNum'],
                 'rating' => $course['rating'],
                 'ratingNum' => $course['ratingNum'],
-                'tags' => ArrayToolkit::column($course['tags'], 'name'),
+                'tags' => $course['tags'],
                 'category' => isset($course['category']['name']) ? $course['category']['name'] : '',
                 'about' => $course['about'],
                 'goals' => $course['goals'],

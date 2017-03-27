@@ -26,6 +26,10 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             return array('error' => $this->getKernel()->trans('该课程不可购买，如有需要，请联系客服'));
         }
 
+        if ($course['buyExpiryTime'] && $course['buyExpiryTime'] < time()) {
+            return array('error' => $this->getKernel()->trans('该课程已经超过购买截止日期，不允许购买'));
+        }
+
         if ($course['status'] != 'published') {
             return array('error' => $this->getKernel()->trans('不能加入未发布课程!'));
         }

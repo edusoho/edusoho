@@ -25,6 +25,10 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             return array('error' => $this->getKernel()->trans('该班级不可购买，如有需要，请联系客服'));
         }
 
+        if ($classroom['expiryMode'] == 'date' && $classroom['expiryValue'] < time()) {
+            return array('error' => $this->getKernel()->trans('该班级已经超过有效期，不允许购买'));
+        }
+
         if ($classroom['status'] != 'published') {
             return array('error' => $this->getKernel()->trans('不能加入未发布班级!'));
         }
@@ -72,7 +76,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             $paidCourses = $this->getPaidCourses($currentUser, $courseIds);
 
             foreach ($paidCourses as $key => $paidCourse) {
-                $afterDiscountPrice = $this->afterDiscountPrice($paidCourse, $priceType);
+                $afterDiscountPrice = $this->afterDiscountPrice($paidCourse);
 
                 if ($afterDiscountPrice <= 0) {
                     unset($paidCourses[$key]);
@@ -82,7 +86,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             }
         }
 
-        $paidCoursesTotalPrice = $this->getCoursesTotalPrice($paidCourses, $priceType);
+        $paidCoursesTotalPrice = $this->getCoursesTotalPrice($paidCourses);
 
         if (!$coinEnable) {
             $totalPrice = $classroom["price"];
@@ -181,7 +185,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $courseIds = $courses = ArrayToolkit::column($courses, "parentId");
         $courses   = $this->getCourseService()->findCoursesByIds($courseIds);
 
-        $coursesTotalPrice = $this->getCoursesTotalPrice($courses, $priceType);
+        $coursesTotalPrice = $this->getCoursesTotalPrice($courses);
 
         $courseIds = ArrayToolKit::column($courses, "id");
 
@@ -196,7 +200,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         foreach ($paidCourses as $key => $paidCourse) {
-            $afterDiscountPrice = $this->afterDiscountPrice($paidCourse, $priceType);
+            $afterDiscountPrice = $this->afterDiscountPrice($paidCourse);
             $amount -= $afterDiscountPrice;
             $totalPrice -= $afterDiscountPrice;
         }
@@ -281,29 +285,17 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         return;
     }
 
-    protected function afterDiscountPrice($course, $priceType)
+    protected function afterDiscountPrice($course)
     {
-        $coursePrice = 0;
-
-        if ($priceType == "RMB") {
-            $coursePrice = $course["originPrice"];
-        } elseif ($priceType == "Coin") {
-            $coursePrice = $course["originPrice"];
-        }
-
-        return $coursePrice;
+        return $course["originPrice"];
     }
 
-    protected function getCoursesTotalPrice($courses, $priceType)
+    protected function getCoursesTotalPrice($courses)
     {
         $coursesTotalPrice = 0;
 
         foreach ($courses as $key => $course) {
-            if ($priceType == "RMB") {
-                $coursesTotalPrice += $course["originPrice"];
-            } elseif ($priceType == "Coin") {
-                $coursesTotalPrice += $course["originPrice"];
-            }
+            $coursesTotalPrice += $course["originPrice"];
         }
 
         return $coursesTotalPrice;

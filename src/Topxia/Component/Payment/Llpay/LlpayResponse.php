@@ -6,7 +6,7 @@ use Topxia\Component\Payment\Response;
 
 class LlpayResponse extends Response
 {
-    protected $url = 'https://yintong.com.cn/queryapi/orderquery.htm';
+    protected $url = 'https://queryapi.lianlianpay.com/orderquery.htm';
 
     public function getPayData()
     {

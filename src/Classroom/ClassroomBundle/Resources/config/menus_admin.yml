@@ -116,3 +116,18 @@ admin_classroom_thread_manage:
     parent: admin_course_thread
     router_name: admin_classroom_thread
     disable: true
+admin_classroom_category_manage:
+    name: 班级分类
+    parent: admin_course_category
+    router_name: admin_classroom_category
+    disable: true
+    children:
+admin_classroom_category_create:
+    name: 添加分类
+    parent: admin_classroom_category_manage
+    router_name: admin_category_create
+    router_params:
+        groupId: (group.id)
+    router_params_context: 1
+    group: topBtn
+    mode: modal

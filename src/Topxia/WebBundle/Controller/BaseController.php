@@ -1,10 +1,13 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Component\Payment\Request;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Common\AccessDeniedException;
+use Topxia\Service\Common\ServiceEvent;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -21,6 +24,7 @@ abstract class BaseController extends Controller
      * 不能通过empty($this->getCurrentUser())的方式来判断用户是否登录。
      * @return CurrentUser
      */
+    protected $biz;
 
     protected function getCurrentUser()
     {
@@ -29,7 +33,7 @@ abstract class BaseController extends Controller
 
     protected function isAdminOnline()
     {
-        return $this->get('security.context')->isGranted('ROLE_ADMIN');
+        return $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN');
     }
 
     public function getUser()
@@ -83,7 +87,7 @@ abstract class BaseController extends Controller
         ServiceKernel::instance()->setCurrentUser($currentUser);
 
         $token = new UsernamePasswordToken($currentUser, null, 'main', $currentUser['roles']);
-        $this->container->get('security.context')->setToken($token);
+        $this->container->get('security.token_storage')->setToken($token);
 
         $loginEvent = new InteractiveLoginEvent($this->getRequest(), $token);
         $this->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, $loginEvent);
@@ -125,6 +129,18 @@ abstract class BaseController extends Controller
         return new JsonResponse($data);
     }
 
+    private function isSelfHost($request, $url)
+    {
+        if (empty($url)) {
+            return true;
+        }
+
+        $host = $request->getHost();
+        preg_match("/^(http[s]:\/\/)?([^\/]+)/i", $url, $matches);
+        $ulrHost = empty($matches[2]) ? '' : $matches[2];
+        return $host == $ulrHost;
+    }
+
     protected function getTargetPath($request)
     {
         if ($request->query->get('goto')) {
@@ -133,6 +149,9 @@ abstract class BaseController extends Controller
             $targetPath = $request->getSession()->get('_target_path');
         } else {
             $targetPath = $request->headers->get('Referer');
+            if ($this->isSelfHost($request, $targetPath) === false) {
+                $targetPath = '';
+            }
         }
 
         if ($targetPath == $this->generateUrl('login', array(), true)) {
@@ -178,13 +197,9 @@ abstract class BaseController extends Controller
         return $response;
     }
 
-    public function createAccessDeniedException($message = null)
+    public function createAccessDeniedException($message = 'Access Denied', \Exception $previous = null)
     {
-        if ($message) {
-            return new AccessDeniedException($message);
-        } else {
-            return new AccessDeniedException();
-        }
+        throw new AccessDeniedException($message, 403, $previous);
     }
 
     protected function agentInWhiteList($userAgent)
@@ -290,8 +305,24 @@ abstract class BaseController extends Controller
         return $conditions;
     }
 
-    protected function trans($text)
+    protected function trans($text, $arguments = array(), $domain = null, $locale = null)
     {
-        return $this->getServiceKernel()->trans($text);
+        return $this->getServiceKernel()->trans($text, $arguments, $domain, $locale);
+    }
+
+    public function setContainer(ContainerInterface $container = null)
+    {
+        parent::setContainer($container);
+        $this->biz = $this->container->get('biz');
+    }
+
+    protected function dispatchEvent($eventName, $subject)
+    {
+        if ($subject instanceof ServiceEvent) {
+            $event = $subject;
+        } else {
+            $event = new ServiceEvent($subject);
+        }
+        return ServiceKernel::dispatcher()->dispatch($eventName, $event);
     }
 }

@@ -77,4 +77,5 @@ interface AppService
 
     public function getTokenLoginUrl($routingName, $params);
 
+    public function getAppStatusByCode($code);
 }

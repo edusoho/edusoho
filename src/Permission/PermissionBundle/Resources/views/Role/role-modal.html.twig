@@ -55,11 +55,11 @@
 {% endblock %}
 
 {% block footer %}
+  <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
   {% if model != 'show' %}
     <button id="role-submit" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit"
-            data-target="#role-form">保存
+            data-target="#role-form">添加
     </button>
   {% endif %}
-  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">关闭</button>
   <script>app.load('permissionbundle/controller/role/create')</script>
 {% endblock %}

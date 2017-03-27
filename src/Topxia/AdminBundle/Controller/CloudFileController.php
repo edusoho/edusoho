@@ -43,6 +43,8 @@ class CloudFileController extends BaseController
     public function renderAction(Request $request)
     {
         $conditions = $request->query->all();
+        //云资源应该只显示resType为normal的
+        $conditions['resourceType'] = 'normal';
         $results    = $this->getCloudFileService()->search(
             $conditions,
             ($request->query->get('page', 1) - 1) * 20,

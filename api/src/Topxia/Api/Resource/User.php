@@ -12,7 +12,7 @@ class User extends BaseResource
     );
 
     private $_publicFields = array(
-        'id', 'email', 'nickname', 'title', 'roles', 'point', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'createdTime', 'updatedTime'
+        'id', 'nickname', 'title', 'point', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'createdTime', 'updatedTime', 'roles'
     );
 
     private $_publicProfileFields = array(
@@ -75,6 +75,7 @@ class User extends BaseResource
             } else {
                 $returnRes['roles'] = array('ROLE_USER');
             }
+
             if (!empty($res['profile'])) {
                 foreach ($this->_publicProfileFields as $key) {
                     $returnRes[$key] = $res['profile'][$key];
@@ -113,8 +114,18 @@ class User extends BaseResource
         return $simple;
     }
 
+    protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
+    }
+
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getSmsService()
+    {
+        return $this->getServiceKernel()->createService('Sms.SmsService');
     }
 }

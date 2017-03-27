@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Listener;
 
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\AccessDeniedException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -16,20 +17,30 @@ class KernelRequestListener
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
+        if ($event->getRequestType() != HttpKernelInterface::MASTER_REQUEST) {
+            return;
+        }
 
-        if ($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) {
-            $blacklistIps = ServiceKernel::instance()->createService('System.SettingService')->get('blacklist_ip');
+        $settingService = ServiceKernel::instance()->createService('System.SettingService');
 
-            if (isset($blacklistIps['ips'])) {
-                $blacklistIps = $blacklistIps['ips'];
+        $blacklistIps = $settingService->get('blacklist_ip');
+        $whitelistIps = $settingService->get('whitelist_ip');
 
-                if (in_array($request->getClientIp(), $blacklistIps)) {
-                    throw new AccessDeniedException('您的IP已被列入黑名单，访问被拒绝，如有疑问请联系管理员！');
-                }
+        $clientIp = $request->getClientIp();
+
+        if (isset($blacklistIps['ips'])) {
+            if ($this->matchIpConfigList($clientIp, $blacklistIps['ips'])) {
+                throw new AccessDeniedException('您的IP已被列入黑名单，访问被拒绝，如有疑问请联系管理员！');
             }
         }
 
-        if (($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) && ($request->getMethod() == 'POST')) {
+        if (isset($whitelistIps['ips'])) {
+            if ($this->matchIpConfigList($clientIp, $whitelistIps['ips']) == false) {
+                throw new AccessDeniedException('您的IP不在授权访问列表中，访问被拒绝，如有疑问请联系管理员！');
+            }
+        }
+
+        if ($request->getMethod() === 'POST') {
             if (stripos($request->getPathInfo(), '/mapi') === 0) {
                 return;
             }
@@ -69,14 +80,46 @@ class KernelRequestListener
                         'goto'     => '',
                         'duration' => 0
                     ));
-
+                    $response->setStatusCode(403);
                     $event->setResponse($response);
                 }
             }
         }
     }
-            protected function getServiceKernel()
+
+    private function matchIpConfigList($clientIp, $ipConfigList)
+    {
+        foreach ($ipConfigList as $ipConfigEntry) {
+            if ($this->matchIp($clientIp, $ipConfigEntry)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function matchIp($clientIp, $ipConfigEntry)
+    {
+        $ipConfigEntry = trim($ipConfigEntry);
+
+        if(strlen($ipConfigEntry) > 0) {
+            $regex = str_replace(".", "\.", $ipConfigEntry);
+            $regex = str_replace("*", "\d{1,3}", $regex);
+            $regex = "/^" . $regex . "/";
+
+            return preg_match($regex, $clientIp);
+        } else {
+            return false;
+        }
+    }
+
+    protected function getServiceKernel()
     {
         return ServiceKernel::instance();
+    }
+
+    protected function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System.SettingService');
     }
 }

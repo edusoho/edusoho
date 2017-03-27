@@ -1,16 +1,15 @@
 <?php
 namespace Topxia\Service\Common;
 
+
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 class SessionHandlerFactory
 {
-    private static $container;
-    private static $instance;
-
-    public static function getSessionHandler($container)
+    public static function getSessionHandler(ContainerInterface $container)
     {
-        $redisSetting = self::getSettingService()->get('redis');
-
-        if (isset($redisSetting['opened']) && $redisSetting['opened']) {
+        $redisPath = $container->getParameter('kernel.root_dir').'/data/redis.php';
+        if (file_exists($redisPath)) {
             $redisFactory = $container->get('session.handler.redis.factory');
 
             if ($redisFactory->getRedis()) {
@@ -19,10 +18,5 @@ class SessionHandlerFactory
         }
 
         return $container->get('session.handler.pdo');
-    }
-
-    private static function getSettingService()
-    {
-        return ServiceKernel::instance()->createService('System.SettingService');
     }
 }

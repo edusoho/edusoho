@@ -4,6 +4,8 @@ namespace Topxia\Service\Dictionary;
 
 interface DictionaryService
 {
+    public function addDictionary($dictionary);
+    
 	public function findAllDictionaries();
 
 	public function getDictionaryItem($id);

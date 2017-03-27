@@ -660,7 +660,7 @@ class GroupThreadController extends BaseController
 
         $user = $this->getCurrentUser();
 
-        if ($user['id'] == $post['userId'] || $groupMemberRole == 2 || $groupMemberRole == 3 || $this->get('security.context')->isGranted('ROLE_ADMIN') == true) {
+        if ($user['id'] == $post['userId'] || $groupMemberRole == 2 || $groupMemberRole == 3 || $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') == true) {
             $this->getThreadService()->deletePost($postId);
 
             $thread  = $this->getThreadService()->getThread($post['threadId']);
@@ -691,7 +691,7 @@ class GroupThreadController extends BaseController
             $thread          = $this->getThreadService()->getThread($threadId);
             $groupMemberRole = $this->getGroupMemberRole($thread['groupId']);
 
-            if ($groupMemberRole == 2 || $groupMemberRole == 3 || $this->get('security.context')->isGranted('ROLE_ADMIN') == true) {
+            if ($groupMemberRole == 2 || $groupMemberRole == 3 || $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') == true) {
                 $amount = $request->request->get('amount');
 
                 if (!isset($account['cash']) || $account['cash'] < $amount) {
@@ -724,7 +724,7 @@ class GroupThreadController extends BaseController
             goto response;
         }
 
-        if ($groupMemberRole == 2 || $groupMemberRole == 3 || $this->get('security.context')->isGranted('ROLE_ADMIN') == true) {
+        if ($groupMemberRole == 2 || $groupMemberRole == 3 || $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') == true) {
             $account = $this->getCashAccountService()->getAccountByUserId($user->id);
 
             $this->getCashAccountService()->waveCashField($account['id'], $thread['rewardCoin']);
@@ -755,7 +755,7 @@ class GroupThreadController extends BaseController
             goto response;
         }
 
-        if ($groupMemberRole == 2 || $groupMemberRole == 3 || $this->get('security.context')->isGranted('ROLE_ADMIN') == true) {
+        if ($groupMemberRole == 2 || $groupMemberRole == 3 || $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') == true) {
             $post = $this->getThreadService()->updatePost($post['id'], array('adopt' => 1));
 
             $this->getCashAccountService()->reward($thread['rewardCoin'], $this->getServiceKernel()->trans('您的回复被采纳为最佳回答！'), $post['userId']);
@@ -818,7 +818,7 @@ class GroupThreadController extends BaseController
             'threadId' => $thread['id']
         );
 
-        if ($groupMemberRole == 2 || $groupMemberRole == 3 || $this->get('security.context')->isGranted('ROLE_ADMIN') == true) {
+        if ($groupMemberRole == 2 || $groupMemberRole == 3 || $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') == true) {
             if ($action == 'setElite') {
                 $this->getThreadService()->setElite($threadId);
                 $message['type'] = 'elite';
@@ -1126,7 +1126,7 @@ class GroupThreadController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') == true) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') == true) {
             return true;
         }
 

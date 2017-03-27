@@ -11,25 +11,38 @@ class BlacklistDaoImpl extends BaseDao implements BlacklistDao
 
     public function getBlacklist($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        $that = $this;
+
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        });
     }
 
     public function getBlacklistByUserIdAndBlackId($userId, $blackId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND blackId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($userId, $blackId)) ?: null;
+        $that = $this;
+
+        return $this->fetchCached("userId:{$userId}:blackId:{$blackId}", $userId, $blackId, function ($userId, $blackId) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE userId = ? AND blackId = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($userId, $blackId)) ?: null;
+        });
     }
 
     public function findBlacklistsByUserId($userId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? ";
-        return $this->getConnection()->fetchAll($sql, array($userId)) ?: array();
+        $that = $this;
+
+        return $this->fetchCached("userId:{$userId}", $userId, function ($userId) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE userId = ? ";
+            return $that->getConnection()->fetchAll($sql, array($userId)) ?: array();
+        });
     }
 
     public function addBlacklist($blacklist)
     {
         $affected = $this->getConnection()->insert($this->table, $blacklist);
+        $this->clearCached();
         if ($affected <= 0) {
             throw $this->createDaoException('Insert blacklist error.');
         }
@@ -38,6 +51,8 @@ class BlacklistDaoImpl extends BaseDao implements BlacklistDao
 
     public function deleteBlacklistByUserIdAndBlackId($userId, $blackId)
     {
-        return $this->getConnection()->delete($this->table, array('userId' => $userId, 'blackId' => $blackId));
+        $result = $this->getConnection()->delete($this->table, array('userId' => $userId, 'blackId' => $blackId));
+        $this->clearCached();
+        return $result;
     }
 }

@@ -2,6 +2,9 @@
 
 namespace Topxia\Api\Resource;
 
+use Topxia\Api\Util\TagUtil;
+use Topxia\Common\ArrayToolkit;
+
 class Course extends BaseResource
 {
     public function filter($res)
@@ -20,6 +23,16 @@ class Course extends BaseResource
             $res[$key] = $this->getFileUrl($res[$key]);
         }
 
+        $res['convNo'] = $this->getConversation($res['id']);
+
+        //temp fix for app, will be remove when new app version published
+        $res['expiryDay'] = '0';
+
+        $res['tags'] = TagUtil::buildTags('course', $res['id']);
+        $res['tags'] = ArrayToolkit::column($res['tags'], 'name');
+
+
+
         return $res;
     }
 
@@ -27,16 +40,31 @@ class Course extends BaseResource
     {
         $simple = array();
 
-        $simple['id']       = $res['id'];
-        $simple['title'] = $res['title'];
-        $simple['picture']   = $this->getFileUrl($res['smallPicture']);
-        $simple['conversationNo']    = $res['conversationId'];
+        $simple['id']      = $res['id'];
+        $simple['title']   = $res['title'];
+        $simple['picture'] = $this->getFileUrl($res['smallPicture']);
+        $simple['convNo']  = $this->getConversation($res['id']);
 
         return $simple;
+    }
+
+    protected function getConversation($courseId)
+    {
+        $conversation = $this->getConversationService()->getConversationByTarget($courseId, 'course');
+        if ($conversation) {
+            return $conversation['no'];
+        }
+
+        return '';
     }
 
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getConversationService()
+    {
+        return $this->getServiceKernel()->createService('IM.ConversationService');
     }
 }

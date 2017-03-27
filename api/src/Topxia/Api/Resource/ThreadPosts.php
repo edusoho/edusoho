@@ -9,13 +9,30 @@ use Topxia\Common\ArrayToolkit;
 class ThreadPosts extends BaseResource
 {
 	public function get(Application $app, Request $request, $threadId)
-    {   
+    {
         $type = $request->query->get('type', 'course');
+        $courseId = $request->query->get('courseId', 0);
         $posts = array();
-        if ("course" == $type) {
-            $posts = $this->getPostByCourse($threadId);
+        if ($type == "course") {
+            if ($courseId == 0) {
+                $thread = $this->getCourseThreadService()->getThread($courseId, $threadId);
+                $courseId = $thread['courseId'];
+            }
+
+            $total = $this->getCourseThreadService()->getThreadPostCount($courseId, $threadId);
+            $posts = $this->getCourseThreadService()->findThreadPosts($courseId, $threadId, 'elite', 0, $total);
         } else {
-            $posts = $this->getPostByClassRoom($threadId);
+            $conditions = array(
+                'threadId' => $threadId,
+                'parentId' => 0
+            );
+            $total = $this->getThreadService()->searchPostsCount($conditions);
+            $posts = $this->getThreadService()->searchPosts(
+                $conditions,
+                array('createdTime', 'asc'),
+                0,
+                $total
+            );
         }
 
         $userIds = ArrayToolkit::column($posts, 'userId');
@@ -25,28 +42,7 @@ class ThreadPosts extends BaseResource
             $posts[$key]['user'] = $this->simpleUser($users[$value['userId']]);
         }
 
-        return $this->wrap($this->filter($posts));
-    }
-
-    protected function getPostByClassRoom($threadId) {
-        $conditions = array(
-            'threadId' => $threadId,
-            'parentId' => 0
-        );
-        $count = $this->getThreadService()->searchPostsCount($conditions);
-
-        return $this->getThreadService()->searchPosts(
-            $conditions,
-            array('createdTime', 'asc'),
-            0,
-            $count
-        );
-    }
-
-    protected function getPostByCourse($threadId) {
-        $thread = $this->getCourseThreadService()->getThread($threadId);
-        $total = $this->getCourseThreadService()->getThreadPostCount($thread['courseId'], $threadId);
-        return $this->getCourseThreadService()->findThreadPosts($thread['courseId'], $threadId, 'elite', 0, $total);
+        return $this->wrap($this->filter($posts), $total);
     }
 
     public function filter($res)

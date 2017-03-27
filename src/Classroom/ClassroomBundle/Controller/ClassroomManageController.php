@@ -3,10 +3,13 @@ namespace Classroom\ClassroomBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\ExportHelp;
 use Topxia\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Controller\BaseController;
+use Topxia\Common\ClassroomToolkit;
+use Topxia\Service\Common\ServiceException;
 
 class ClassroomManageController extends BaseController
 {
@@ -73,7 +76,7 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function menuAction($classroom, $sideNav, $context)
+    public function menuAction(Request $request, $classroom, $sideNav, $context)
     {
         $user = $this->getCurrentUser();
 
@@ -136,6 +139,67 @@ class ClassroomManageController extends BaseController
             'progresses' => $progresses,
             'paginator'  => $paginator,
             'role'       => $role
+        ));
+    }
+
+    public function studentShowAction(Request $request, $classroomId, $userId)
+    {
+        if (!$this->getCurrentUser()->isAdmin()) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权查看学员详细信息！'));
+        }
+
+        return $this->forward('TopxiaWebBundle:Student:show', array(
+            'request' => $request, 
+            'userId' => $userId
+        ));
+    }
+
+    public function studentDefinedShowAction(Request $request, $classroomId, $userId)
+    {
+        $course = $this->getClassroomService()->tryManageClassroom($classroomId);
+        $member = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
+        if (empty($member)) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans("学员#{$userId}不属于班级{#classroomId}"));
+        }
+
+        return $this->forward('TopxiaWebBundle:Student:definedShow', array(
+            'request' => $request, 
+            'userId' => $userId
+        ));
+    }
+
+    public function setClassroomMemberDeadlineAction(Request $request, $classroomId, $userId)
+    {
+        $this->getClassroomService()->tryManageClassroom($classroomId);
+
+        $member = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
+
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+
+            if (empty($fields['deadline'])) {
+                throw new ServiceException($this->getServiceKernel()->trans('缺少相关参数'));
+            }
+
+            $deadline = ClassroomToolkit::buildMemberDeadline(array(
+                'expiryMode'  => 'date',
+                'expiryValue' => strtotime($fields['deadline'].' 23:59:59')
+            ));
+
+            $this->getClassroomService()->updateMemberDeadlineByMemberId($member['id'], array(
+                'deadline' => $deadline
+            ));
+
+            return $this->createJsonResponse(true);
+        }
+
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        $user      = $this->getUserService()->getUser($userId);
+
+        return $this->render('ClassroomBundle:ClassroomManage/Member:set-deadline-modal.html.twig', array(
+            'classroom' => $classroom,
+            'user'      => $user,
+            'member'    => $member
         ));
     }
 
@@ -236,10 +300,8 @@ class ClassroomManageController extends BaseController
     public function remarkAction(Request $request, $classroomId, $userId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
-
-        $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $user      = $this->getUserService()->getUser($userId);
-        $member    = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         if ('POST' == $request->getMethod()) {
             $data   = $request->request->all();
@@ -247,6 +309,8 @@ class ClassroomManageController extends BaseController
 
             return $this->createStudentTrResponse($classroom, $member);
         }
+
+        $member    = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
 
         return $this->render('ClassroomBundle:ClassroomManage:remark-modal.html.twig', array(
             'member'    => $member,
@@ -257,8 +321,6 @@ class ClassroomManageController extends BaseController
 
     private function createStudentTrResponse($classroom, $student)
     {
-        $this->getClassroomService()->tryManageClassroom($classroom["id"]);
-
         $user     = $this->getUserService()->getUser($student['userId']);
         $progress = $this->calculateUserLearnProgress($classroom, $student);
 
@@ -293,10 +355,11 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->removeStudent($classroomId, $userId);
 
         $reason = array(
-            'type' => 'other',
-            'note' => '手动移除'
+            'type'     => 'other',
+            'note'     => '"'.$user['nickname'].'"'.' 手动移除',
+            'operator' => $user['id']
         );
-        $refund  = $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
+        $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
         $message = array(
             'classroomId'    => $classroom['id'],
             'classroomTitle' => $classroom['title'],
@@ -315,6 +378,7 @@ class ClassroomManageController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
+
             $user = $this->getUserService()->getUserByLoginField($data['queryfield']);
 
             if (empty($user)) {
@@ -340,7 +404,8 @@ class ClassroomManageController extends BaseController
                 'targetId'   => $classroom['id'],
                 'amount'     => $data['price'],
                 'payment'    => 'outside',
-                'snPrefix'   => 'CR'
+                'snPrefix'   => 'CR',
+                'totalPrice' => $classroom['price']
             ));
 
             $this->getOrderService()->payOrder(array(
@@ -356,13 +421,13 @@ class ClassroomManageController extends BaseController
             );
             $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
 
-            $member  = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
-            $user    = $this->getCurrentUser();
-            $message = array(
+            $member      = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
+            $currentUser = $this->getCurrentUser();
+            $message     = array(
                 'classroomId'    => $classroom['id'],
                 'classroomTitle' => $classroom['title'],
-                'userId'         => $user['id'],
-                'userName'       => $user['nickname'],
+                'userId'         => $currentUser['id'],
+                'userName'       => $currentUser['nickname'],
                 'type'           => 'create');
 
             $this->getNotificationService()->notify($member['userId'], 'classroom-student', $message);
@@ -399,7 +464,38 @@ class ClassroomManageController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function exportCsvAction(Request $request, $id, $role)
+    public function exportDatasAction(Request $request, $id, $role)
+    {
+        list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
+
+        list($title, $students, $classroomMemberCount) = $this->getExportContent($id, $role, $start, $limit, $exportAllowCount);
+
+        $file = '';
+        if ($start == 0) {
+            $file = ExportHelp::addFileTitle($request, 'classroom_'.$role.'_students', $title);
+        }
+
+        $content = implode("\r\n", $students);
+        $file = ExportHelp::saveToTempFile($request, $content, $file);
+        $status = ExportHelp::getNextMethod($start+$limit, $classroomMemberCount);
+
+        return $this->createJsonResponse(
+            array(
+                'status' => $status,
+                'fileName' => $file,
+                'start' => $start+$limit
+            )
+        );
+    }
+
+    public function exportCsvAction(Request $request, $id)
+    {
+        $role = $request->query->get('role');
+        $fileName = sprintf("classroom-%s-%s-(%s).csv", $id, $role, date('Y-n-d'));
+        return ExportHelp::exportCsv($request, $fileName);
+    }
+
+    private function getExportContent($id, $role, $start, $limit, $exportAllowCount)
     {
         $this->getClassroomService()->tryManageClassroom($id);
         $gender = array('female' => $this->getServiceKernel()->trans('女'), 'male' => $this->getServiceKernel()->trans('男'), 'secret' => $this->getServiceKernel()->trans('秘密'));
@@ -409,10 +505,27 @@ class ClassroomManageController extends BaseController
         $userinfoFields = array('truename', 'job', 'mobile', 'qq', 'company', 'gender', 'idcard', 'weixin');
 
         if ($role == 'student') {
-            $classroomMembers = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['id'], 'role' => 'student'), array('createdTime', 'DESC'), 0, 1000);
+            $condition = array(
+                'classroomId' => $classroom['id'],
+                'role' => 'student'
+            );
         } else {
-            $classroomMembers = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['id'], 'role' => 'auditor'), array('createdTime', 'DESC'), 0, 1000);
+            $condition = array(
+                'classroomId' => $classroom['id'],
+                'role' => 'auditor'
+            );
         }
+        $classroomMemberCount = $this->getClassroomService()->searchMemberCount($condition);
+        $classroomMemberCount = ($classroomMemberCount > $exportAllowCount) ? $exportAllowCount:$classroomMemberCount;
+        if ($classroomMemberCount < ($start + $limit + 1)) {
+            $limit = $classroomMemberCount - $start;
+        }
+        $classroomMembers = $this->getClassroomService()->searchMembers(
+            $condition,
+            array('createdTime', 'DESC'),
+            $start,
+            $limit
+        );
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
@@ -446,8 +559,6 @@ class ClassroomManageController extends BaseController
             $str .= ",".$value;
         }
 
-        $str .= "\r\n";
-
         $students = array();
 
         foreach ($classroomMembers as $classroomMember) {
@@ -471,21 +582,7 @@ class ClassroomManageController extends BaseController
 
             $students[] = $member;
         }
-
-        $str .= implode("\r\n", $students);
-        $str = chr(239).chr(187).chr(191).$str;
-
-        $filename = sprintf("classroom-%s-students-(%s).csv", $classroom['id'], date('Y-n-d'));
-
-        // $userId = $this->getCurrentUser()->id;
-
-        $response = new Response();
-        $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
-        $response->headers->set('Content-length', strlen($str));
-        $response->setContent($str);
-
-        return $response;
+        return array($str, $students, $classroomMemberCount);
     }
 
     public function serviceAction(Request $request, $id)
@@ -643,13 +740,26 @@ class ClassroomManageController extends BaseController
         if ($request->getMethod() == "POST") {
             $class = $request->request->all();
 
+            $class['tagIds'] = $this->getTagIdsFromRequest($request);
+
+            if ($class['expiryMode'] == 'date') {
+                $class['expiryValue'] = strtotime($class['expiryValue'].' 23:59:59');
+            }
+
             $classroom = $this->getClassroomService()->updateClassroom($id, $class);
 
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('基本信息设置成功！'));
         }
 
+        $tags = $this->getTagService()->findTagsByOwner(array(
+            'ownerType' => 'classroom',
+            'ownerId'   => $id
+        ));
+        
         return $this->render("ClassroomBundle:ClassroomManage:set-info.html.twig", array(
-            'classroom' => $classroom));
+            'classroom' => $classroom,
+            'tags'      => ArrayToolkit::column($tags, 'name')
+        ));
     }
 
     public function setPriceAction(Request $request, $id)
@@ -988,6 +1098,19 @@ class ClassroomManageController extends BaseController
         ));
     }
 
+    public function expiryDateRuleAction()
+    {
+        return $this->render('ClassroomBundle:ClassroomManage:rule.html.twig');
+    }
+
+    private function getTagIdsFromRequest($request)
+    {
+        $tags = $request->request->get('tags');
+        $tags = explode(',', $tags);
+        $tags = $this->getTagService()->findTagsByNames($tags);
+        return ArrayToolkit::column($tags, 'id');
+    }
+
     private function calculateUserLearnProgress($classroom, $member)
     {
         $courses            = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
@@ -1109,6 +1232,11 @@ class ClassroomManageController extends BaseController
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Thread.ThreadService');
+    }
+
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 
     private function getWebExtension()

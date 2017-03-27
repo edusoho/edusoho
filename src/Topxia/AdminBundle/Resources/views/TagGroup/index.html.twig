@@ -1,0 +1,29 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_course_tag_group_manage' %}
+{% set script_controller = 'tag-group/list' %}
+{% block main %}
+
+<table id="tag-group-table" class="table table-striped">
+    <thead>
+        <th width="10%">ID</th>
+        <th width="15%">{{'标签组名称'|trans}}</th>
+        <th width="25%">{{'应用于'|trans}}</th>
+        <th width="20%">{{'包含标签数量'|trans}}</th>
+        <th width="20%">{{'标签组创建时间'|trans}}</th>
+        <th width="10%">{{'操作'|trans}}</th>
+    </thead>
+    
+    <tbody>
+      {% if tagGroups %}
+        {% for tagGroup in tagGroups %}
+          {% include 'TopxiaAdminBundle:TagGroup:list-tr.html.twig' %}
+        {% endfor %}
+      {% else %}
+       <tr><td colspan="20"><div class="empty">{{'暂无标签组记录'|trans}}</div></td></tr>
+      {% endif %}
+
+    </tbody>
+</table>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_setting_message' %}
+
+{% block main %}
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" id="course-form" novalidate>
+
+<fieldset>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>页面静态化</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        <label>
+          <input type="radio" name="pageCache" value="1" {% if setting('performance.pageCache',0) == 1 %}checked{% endif %}> 是
+        </label>
+        <label>
+          <input type="radio" name="pageCache" value="0" {% if setting('performance.pageCache',0) == 0 %}checked{% endif %}> 否
+        </label>
+      </div>
+    </div>
+</fieldset>
+
+  <div class="form-group">
+    <div class="controls col-md-offset-3 col-md-8">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+{% endblock %}

@@ -63,12 +63,6 @@ class DiscoveryColumnController extends BaseController
                 $conditions['status']   = 'published';
                 $courses                = $this->getCourseService()->searchCourses($conditions, 'createdTime', 0, $discoveryColumn['showCount']);
 
-                if ($discoveryColumn['orderType'] == 'recommend' && count($courses) < $discoveryColumn['showCount']) {
-                    $conditions['recommended'] = 0;
-                    $unrecommendCourses        = $this->getCourseService()->searchCourses($conditions, 'createdTime', 0, $discoveryColumn['showCount'] - count($courses));
-                    $courses                   = array_merge($courses, $unrecommendCourses);
-                }
-
                 $discoveryColumns[$key]['count'] = count($courses);
             }
         }
@@ -143,6 +137,19 @@ class DiscoveryColumnController extends BaseController
         return $this->render('TopxiaAdminBundle:DiscoveryColumn:discovery-column-modal.html.twig', array(
             'discoveryColumn' => $discoveryColumn,
             'categoryId'      => $discoveryColumn['categoryId']
+        ));
+    }
+
+    public function categoryTreeAction(Request $request)
+    {
+        $id     = $request->query->get('id');
+        $type = $request->query->get('type');
+        if ($id) {
+            $discoveryColumn = $this->getDiscoveryColumnService()->getDiscoveryColumn($id);
+        }
+        return $this->render('TopxiaAdminBundle:DiscoveryColumn:discovery-column-category.html.twig', array(
+            'categoryId'             => empty($discoveryColumn['categoryId']) ? 0 : $discoveryColumn['categoryId'],
+            'type'                        => $type
         ));
     }
 

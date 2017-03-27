@@ -14,7 +14,8 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
             'course.update'        => 'onCourseUpdate',
             'course.lesson.create' => 'onCourseLessonCreate',
             'course.lesson.delete' => 'onCourseLessonDelete',
-            'course.lesson_finish' => 'onLessonFinish'
+            'course.lesson_finish' => 'onLessonFinish',
+            'course.view'          => 'onCourseView'
         );
     }
 
@@ -100,7 +101,8 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
         $userLearns     = $this->getCourseService()->searchLearns(
             $conditions,
             array('finishedTime', 'DESC'),
-            0, $userLearnCount
+            0,
+            $userLearnCount
         );
 
         $totalCredits = $this->getCourseService()->sumLessonGiveCreditByLessonIds(ArrayToolkit::column($userLearns, 'lessonId'));
@@ -110,16 +112,40 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
 
         if ($course['serializeMode'] != 'serialize') {
             $memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
+            $memberFields['finishedTime'] = $memberFields['isLearned'] ? time() : 0;
         }
 
         $memberFields['credit'] = $totalCredits;
+        $memberFields['lastLearnTime'] = time();
 
         $courseMember = $this->getCourseService()->getCourseMember($course['id'], $learn['userId']);
         $this->getCourseService()->updateCourseMember($courseMember['id'], $memberFields);
+
+        $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+
+        if (!empty($classroom)) {
+            $this->getClassroomService()->updateLearndNumByClassroomIdAndUserId($classroom['classroomId'], $learn['userId']);
+        }
+    }
+
+    public function onCourseView(ServiceEvent $event)
+    {
+        $course = $event->getSubJect();
+        $userId = $event->getArgument('userId');
+        $member = $this->getCourseService()->getCourseMember($course['id'], $userId);
+        if (!empty($member)) {
+            $fields['lastViewTime'] = time();
+            $this->getCourseService()->updateCourseMember($member['id'], $fields);
+        }
     }
 
     protected function getCourseService()
     {
         return ServiceKernel::instance()->createService('Course.CourseService');
+    }
+
+    protected function getClassroomService()
+    {
+        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
     }
 }

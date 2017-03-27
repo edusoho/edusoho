@@ -1,0 +1,9 @@
+{
+    "code": "Test",
+    "name": "测试插件",
+    "description": "这是一个测试插件",
+    "author": "EduSoho官方",
+    "version": "1.0.0",
+    "support_version": "7.2.0",
+    "manage_index": "admin_homepage"
+}

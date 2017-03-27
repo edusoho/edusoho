@@ -27,7 +27,7 @@ class ParsePermissionsCommand extends BaseCommand
 				$permissions = $routing['permissions'];
 				if(count($permissions)==1 && $permissions[0] == $key)
 				{
-					var_dump($key);
+					echo $key.'\n';
 				}
 			}
 		}

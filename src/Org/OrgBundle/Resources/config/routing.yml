@@ -1,5 +1,5 @@
 switch_org:
-    pattern: /swithOrg/{id}
+    path: /swithOrg/{id}
     defaults: { _controller: OrgBundle:Org:switchOrg }
 
 org_tree:

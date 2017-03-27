@@ -40,7 +40,7 @@
 
         validator.addItem({
             element: '[name="profile[truename]"]',
-            rule: 'minlength{min:2} maxlength{max:36}'
+            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:36}'
         });
 
         validator.addItem({
@@ -57,24 +57,24 @@
         validator.addItem({
             element: '[name="profile[weibo]"]',
             rule: 'url',
-            errormessageUrl: Translator.trans(Translator.trans('微博地址不正确，须以http://开头。'))
+            errormessageUrl: Translator.trans(Translator.trans('微博地址不正确，须以http://或者https://开头。'))
         });
 
         validator.addItem({
             element: '[name="profile[blog]"]',
             rule: 'url',
-            errormessageUrl: Translator.trans('博客地址不正确，须以http://开头。')
+            errormessageUrl: Translator.trans('博客地址不正确，须以http://或者https://开头。')
         });
 
         validator.addItem({
             element: '[name="profile[site]"]',
             rule: 'url',
-            errormessageUrl: Translator.trans('个人主页地址不正确，须以http://开头。')
+            errormessageUrl: Translator.trans('个人空间地址不正确，须以http://或者https://开头。')
         });
 
         validator.addItem({
             element: '[name="profile[mobile]"]',
-            rule: 'mobile'
+            rule: 'phone'
         });
 
         validator.addItem({

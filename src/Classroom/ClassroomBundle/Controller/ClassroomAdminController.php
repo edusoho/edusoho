@@ -64,15 +64,25 @@ class ClassroomAdminController extends BaseController
 
     public function setAction(Request $request)
     {
-        if ($request->getMethod() == 'POST') {
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('班级设置成功！'));
+        $classroomSetting = $this->getSettingService()->get('classroom', array());
 
+        $default = array(
+            'explore_default_orderBy' => 'createdTime'
+        );
+
+        $classroomSetting = array_merge($default, $classroomSetting);
+
+        if ($request->getMethod() == 'POST') {
             $set = $request->request->all();
 
+            $classroomSetting = array_merge($classroomSetting, $set);
+
             $this->getSettingService()->set('classroom', $set);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('班级设置成功！'));
         }
 
         return $this->render('ClassroomBundle:ClassroomAdmin:set.html.twig', array(
+            'classroomSetting' => $classroomSetting
         ));
     }
 

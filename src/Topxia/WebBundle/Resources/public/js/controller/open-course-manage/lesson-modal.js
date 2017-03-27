@@ -8,6 +8,7 @@ define(function(require, exports, module) {
     var FlashChooser = require('../widget/media-chooser/flash-chooser');
     var Notify = require('common/bootstrap-notify');
     var _ = require('underscore');
+    var SubtitleDialog = require('topxiawebbundle/controller/media/subtitle/dialog');
     require('jquery.sortable');
     require('es-ckeditor');
 
@@ -289,12 +290,9 @@ define(function(require, exports, module) {
             var second = length - minute * 60;
             var hour = length / 3600;
             var multiple = Math.ceil(hour / 0.5)*0.5;
-            var suggestHour = hour > multiple ? (multiple+0.5) : multiple;
 
             $("#lesson-minute-field").val(minute);
             $("#lesson-second-field").val(second);
-
-            $("#lesson-suggest-period-field").val(suggestHour);
         }
 
         var $content = $("#lesson-content-field");
@@ -333,7 +331,25 @@ define(function(require, exports, module) {
             }
 
             $title.val(name.substring(0, name.lastIndexOf('.')));
-        }; 
+        };
+
+        /**
+         * 视频字幕
+         */
+        var subtitleDialog = {
+            renderHTML: function() {
+            },
+            destroy: function() {
+            }
+        };
+        if ($('.js-subtitle-list').length > 0) {
+            subtitleDialog = new SubtitleDialog({
+                element: '.js-subtitle-list'
+            });
+        }
+
+        //显示字幕编辑组件
+        subtitleDialog.renderHTML(choosedMedia);
 
         videoChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
@@ -341,7 +357,7 @@ define(function(require, exports, module) {
 
             updateDuration(item.length);
             fillTitle(item.name);
-
+            subtitleDialog.renderHTML(item);
         });
 
         audioChooser.on('change', function(item) {
@@ -382,6 +398,8 @@ define(function(require, exports, module) {
                 Notify.danger('文件正在上传，等待上传完后再保存。');
                 return false;
             }
+
+            subtitleDialog.destroy();
 
             _.each(choosers, function (chooser) {
                  chooser.destroy();

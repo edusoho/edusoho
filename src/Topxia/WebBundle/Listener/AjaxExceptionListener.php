@@ -6,12 +6,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use Topxia\Service\Common\AccessDeniedException;
 use Topxia\Service\Common\ServiceKernel;
 
 class AjaxExceptionListener
 {
-    public function __construct($container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -35,18 +34,15 @@ class AjaxExceptionListener
             return;
         }
 
-        if ($exception instanceof AccessDeniedException) {
-            $statusCode = 403;
-        } else {
-            $statusCode = $exception->getCode();
-            if (!array_key_exists($statusCode, Response::$statusTexts)) {
-                $statusCode = 500;
-            }
+        $statusCode = $exception->getCode();
 
-            $error = array('name' => 'Error', 'message' => $exception->getMessage());
-            if (!$this->container->get('kernel')->isDebug()) {
-                $this->getServiceKernel()->createService('System.LogService')->error('ajax', 'exception', $exception->getMessage());
-            }
+        if (!array_key_exists($statusCode, Response::$statusTexts)) {
+            $statusCode = 500;
+        }
+
+        $error = array('name' => 'Error', 'message' => $exception->getMessage());
+        if (!$this->container->get('kernel')->isDebug()) {
+            $this->getServiceKernel()->createService('System.LogService')->error('ajax', 'exception', $exception->getMessage());
         }
 
         if ($statusCode == 403) {
@@ -64,11 +60,11 @@ class AjaxExceptionListener
 
     public function getUser()
     {
-        if (!$this->container->has('security.context')) {
+        if (!$this->container->has('security.token_storage')) {
             throw new \LogicException('The SecurityBundle is not registered in your application.');
         }
 
-        if (null === $token = $this->container->get('security.context')->getToken()) {
+        if (null === $token = $this->container->get('security.token_storage')->getToken()) {
             return null;
         }
 

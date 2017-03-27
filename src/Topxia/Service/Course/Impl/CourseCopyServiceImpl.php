@@ -123,6 +123,10 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
         $map = array();
 
+        $questionIds = ArrayToolkit::column($questions,'id');
+        $allSubQuestions = $this->getQuestionDao()->findQuestionsByParentIds($questionIds);
+        $allSubQuestions = ArrayToolkit::group($allSubQuestions,'parentId');
+
         foreach ($questions as $question) {
             $oldQuestionId = $question['id'];
             $fields        = ArrayToolkit::parts($question, array('type', 'stem', 'score', 'answer', 'analysis', 'metas', 'categoryId', 'difficulty', 'parentId', 'subCount', 'userId', 'copyId'));
@@ -143,7 +147,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             $map[$oldQuestionId] = $question;
 
             if ($question['subCount'] > 0) {
-                $subQuestions = $this->getQuestionDao()->findQuestionsByParentId($oldQuestionId);
+                $subQuestions = $allSubQuestions[$oldQuestionId];
 
                 foreach ($subQuestions as $subQuestion) {
                     $fields                = ArrayToolkit::parts($subQuestion, array('type', 'stem', 'score', 'answer', 'analysis', 'metas', 'categoryId', 'difficulty', 'subCount', 'userId'));
@@ -174,7 +178,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         $map     = array();
 
         foreach ($lessons as $lesson) {
-            $fields             = ArrayToolkit::parts($lesson, array('number', 'seq', 'free', 'status', 'title', 'summary', 'tags', 'type', 'content', 'giveCredit', 'requireCredit', 'mediaId', 'mediaSource', 'mediaName', 'mediaUri', 'length', 'materialNum', 'startTime', 'endTime', 'liveProvider', 'userId', 'replayStatus', 'suggestHours'));
+            $fields             = ArrayToolkit::parts($lesson, array('number', 'seq', 'free', 'status', 'title', 'summary', 'type', 'content', 'giveCredit', 'requireCredit', 'mediaId', 'mediaSource', 'mediaName', 'mediaUri', 'length', 'materialNum', 'startTime', 'endTime', 'liveProvider', 'userId', 'replayStatus'));
             $fields['courseId'] = $newCourse['id'];
 
             if ($lesson['chapterId']) {
@@ -188,8 +192,8 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             $fields['copyId'] = $lesson['id'];
             $copiedLesson     = $this->getLessonDao()->addLesson($fields);
 
-            if (array_key_exists('type', $lesson) && $lesson['type'] == 'live' && $lesson['status'] == 'published') {
-                $this->createJob($lesson);
+            if (array_key_exists('type', $copiedLesson) && $copiedLesson['type'] == 'live' && $copiedLesson['status'] == 'published') {
+                $this->createJob($copiedLesson);
             }
 
             $map[$lesson['id']] = $copiedLesson;
@@ -199,12 +203,23 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             }
 
             if (array_key_exists('type', $lesson) && $lesson['type'] == 'live' && $lesson['replayStatus'] == 'generated' && !empty($copiedLesson)) {
-                $courseLessonReplay                = $this->getCourseService()->getCourseLessonReplayByCourseIdAndLessonId($courseId, $lesson['id']);
-                $courseLessonReplay                = array('title' => $courseLessonReplay['title'], 'replayId' => $courseLessonReplay['replayId'], 'userId' => $courseLessonReplay['userId']);
-                $courseLessonReplay['courseId']    = $copiedLesson['courseId'];
-                $courseLessonReplay['lessonId']    = $copiedLesson['id'];
-                $courseLessonReplay['createdTime'] = time();
-                $this->getCourseService()->addCourseLessonReplay($courseLessonReplay);
+                $courseLessonReplays = $this->getCourseService()->findReplaysByCourseIdAndLessonId($courseId, $lesson['id']);
+                if (!$courseLessonReplays) {
+                    return array();
+                }
+                foreach ($courseLessonReplays as $replay) {
+                    $courseLessonReplay = array(
+                        'title'    => $replay['title'],
+                        'replayId' => $replay['replayId'],
+                        'userId'   => $replay['userId'],
+                        'copyId'   => $replay['id']
+                    );
+                    $courseLessonReplay['courseId']    = $copiedLesson['courseId'];
+                    $courseLessonReplay['lessonId']    = $copiedLesson['id'];
+                    $courseLessonReplay['createdTime'] = time();
+
+                    $this->getCourseService()->addCourseLessonReplay($courseLessonReplay);
+                }
             }
         }
 
@@ -284,7 +299,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
     protected function copyCourse($course, $link = false)
     {
-        $fields                = ArrayToolkit::parts($course, array('price', 'originPrice', 'title', 'status', 'subtitle', 'type', 'maxStudentNum', 'price', 'expiryDay', 'serializeMode', 'lessonNum', 'giveCredit', 'vipLevelId', 'categoryId', 'tags', 'smallPicture', 'middlePicture', 'largePicture', 'about', 'teacherIds', 'goals', 'audiences', 'userId', 'tryLookTime', 'tryLookable'));
+        $fields                = ArrayToolkit::parts($course, array('price', 'originPrice', 'title', 'status', 'subtitle', 'type', 'maxStudentNum', 'price', 'expiryMode', 'expiryDay', 'serializeMode', 'lessonNum', 'giveCredit', 'vipLevelId', 'categoryId', 'smallPicture', 'middlePicture', 'largePicture', 'about', 'teacherIds', 'goals', 'audiences', 'userId', 'tryLookTime', 'tryLookable'));
         $fields['createdTime'] = time();
 
         if ($link) {

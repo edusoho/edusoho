@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\ExportHelp;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,7 +31,8 @@ class OpenCourseManageController extends BaseController
             return $this->redirect($this->generateUrl('open_course_manage_base', array('id' => $id)));
         }
 
-        $tags    = $this->getTagService()->findTagsByIds($course['tags']);
+        $tags    = $this->getTagService()->findTagsByOwner(array('ownerType' => 'openCourse', 'ownerId' => $id));
+
         $default = $this->getSettingService()->get('default', array());
 
         return $this->render('TopxiaWebBundle:OpenCourseManage:open-course-base.html.twig', array(
@@ -245,11 +247,13 @@ class OpenCourseManageController extends BaseController
         }
 
         $recommends = $this->getOpenCourseRecommendedService()->findRecommendedCoursesByOpenCourseId($id);
-
         $recommendedCourses = array();
 
         foreach ($recommends as $key => $recommend) {
-            $recommendedCourses[$recommend['id']] = $this->getTypeCourseService($recommend['type'])->getCourse($recommend['recommendCourseId']);
+            $recommendCourse =  $this->getTypeCourseService($recommend['type'])->getCourse($recommend['recommendCourseId']);
+            if (!empty($recommendCourse)) {
+                $recommendedCourses[$recommend['id']] = $recommendCourse;
+            }
         }
 
         $users = $this->_getTeacherUsers($recommendedCourses);
@@ -289,18 +293,19 @@ class OpenCourseManageController extends BaseController
 
     public function searchAction(Request $request, $id, $filter)
     {
-        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
-
-        $conditions = array("title" => $request->request->get('key'));
-
+        $this->getOpenCourseService()->tryManageOpenCourse($id);
+        $key = $request->query->get('key');
+        $conditions = array("title" => $key);
         list($paginator, $courses) = $this->_getPickCourseData($request, $id, $conditions);
-
         $users = $this->_getTeacherUsers($courses);
 
-        return $this->render('TopxiaWebBundle:Course:course-select-list.html.twig', array(
+        return $this->render('TopxiaWebBundle:OpenCourseManage:open-course-pick-modal.html.twig', array(
             'users'   => $users,
             'courses' => $courses,
-            'filter'  => $filter
+            'filter'  => $filter,
+            'courseId'  => $id,
+            'title' => $key,
+            'paginator' => $paginator
         ));
     }
 
@@ -342,14 +347,41 @@ class OpenCourseManageController extends BaseController
         return $this->createJsonResponse($result);
     }
 
+    public function studentsExportDatasAction(Request $request, $id)
+    {
+        list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
+
+        list($title, $students, $courseMemberCount) = $this->getExportContent($request, $id, $start, $limit, $exportAllowCount);
+
+        $file = '';
+        if ($start == 0) {
+            $file = ExportHelp::addFileTitle($request, 'open-course-students', $title);
+        }
+
+        $content = implode("\r\n", $students);
+        $file = ExportHelp::saveToTempFile($request, $content, $file);
+        $status = ExportHelp::getNextMethod($start+$limit, $courseMemberCount);
+
+        return $this->createJsonResponse(
+            array(
+                'status' => $status,
+                'fileName' => $file,
+                'start' => $start+$limit
+            )
+        );  
+    }
+
     public function studentsExportAction(Request $request, $id)
     {
+        $fileName = sprintf("open-course-%s-students-(%s).csv", $id, date('Y-n-d'));
+        return ExportHelp::exportCsv($request, $fileName);
+    }
+
+    private function getExportContent($request, $id, $start, $limit, $exportAllowCount)
+    {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
-
         $gender = array('female' => '女', 'male' => '男', 'secret' => '秘密');
-
         $conditions = array('courseId' => $course['id'], 'role' => 'student');
-
         $userType = $request->query->get('userType', '');
         if ($userType == 'login') {
             $conditions['userIdGT'] = 0;
@@ -361,8 +393,12 @@ class OpenCourseManageController extends BaseController
             $conditions['isNotified'] = 1;
         }
 
-        $courseMembers = $this->getOpenCourseService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, 20000);
-
+        $courseMemberCount = $this->getOpenCourseService()->searchMemberCount($conditions);
+        $courseMemberCount = ($courseMemberCount>$exportAllowCount) ? $exportAllowCount:$courseMemberCount;
+        if ($courseMemberCount < ($start + $limit + 1)) {
+            $limit = $courseMemberCount - $start;
+        }
+        $courseMembers = $this->getOpenCourseService()->searchMembers($conditions, array('createdTime', 'DESC'), $start, $limit);
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
         $fields['weibo'] = "微博";
@@ -386,8 +422,6 @@ class OpenCourseManageController extends BaseController
         foreach ($fields as $key => $value) {
             $str .= ",".$value;
         }
-
-        $str .= "\r\n";
 
         $students = array();
 
@@ -425,18 +459,7 @@ class OpenCourseManageController extends BaseController
             $students[] = $member;
         };
 
-        $str .= implode("\r\n", $students);
-        $str = chr(239).chr(187).chr(191).$str;
-
-        $filename = sprintf("open-course-%s-students-(%s).csv", $course['id'], date('Y-n-d'));
-
-        $response = new Response();
-        $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
-        $response->headers->set('Content-length', strlen($str));
-        $response->setContent($str);
-
-        return $response;
+        return array($str, $students, $courseMemberCount);
     }
 
     public function lessonTimeCheckAction(Request $request, $courseId)
@@ -498,7 +521,9 @@ class OpenCourseManageController extends BaseController
         $userIds = array();
 
         foreach ($courses as &$course) {
-            $userIds = array_merge($userIds, $course['teacherIds']);
+            if (!empty($course)) {
+                $userIds = array_merge($userIds, $course['teacherIds']);
+            }
         }
 
         $users = $this->getUserService()->findUsersByIds($userIds);

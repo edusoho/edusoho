@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\User;
 
+
 use Permission\Common\PermissionBuilder;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
@@ -17,7 +18,7 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
 
     public function serialize()
     {
-        return serialize($this->data);
+       return serialize($this->data);
     }
 
     public function unserialize($serialized)

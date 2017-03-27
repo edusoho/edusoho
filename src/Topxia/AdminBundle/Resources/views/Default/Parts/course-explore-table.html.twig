@@ -1,0 +1,23 @@
+<table class="table table-condensed table-noborder table-overflow">
+  <thead>
+  <tr>
+    <th width="10%"></th>
+    <th width="70%">{{ '课程名'|trans }}</th>
+    <th width="25%">{{ '新增学员'|trans }}</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for memberCount in memberCounts %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>
+        <a class="link-primary"
+           target="_blank" href="{{ path('course_show',{id: memberCount.courseId}) }}">{{ courses[ memberCount.courseId].title }}</a>
+      </td>
+      <td class="pull-right prl">{{ memberCount.count }}</td>
+    </tr>
+  {% else %}
+    <tr><td><div class="empty">{{'暂无课程'|trans}}</div></td></tr>
+  {% endfor %}
+  </tbody>
+</table>

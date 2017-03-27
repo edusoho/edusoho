@@ -5,7 +5,11 @@ interface UserService
 {
     public function getUser($id, $lock = false);
 
+    public function getSimpleUser($id);
+
     public function getUserByNickname($nickname);
+
+    public function updateUserUpdatedTime($id);
 
     //根据用户名/邮箱/手机号精确查找用户
     public function getUserByLoginField($keyword);
@@ -14,6 +18,12 @@ interface UserService
 
     public function getUserCountByMobileNotEmpty();
 
+    public function countUserHasMobile($isVerified=false);
+
+    public function findUsersHasMobile($start, $limit, $isVerified=false);
+
+    public function findUnlockedUserMobilesByUserIds($userIds, $needVerified=false);
+    
     public function getUserByEmail($email);
 
     public function findUsersByIds(array $id);
@@ -71,6 +81,14 @@ interface UserService
      * @param [string]  $password 新密码
      */
     public function changePassword($id, $password);
+
+    /**
+     * 变更原始密码
+     *
+     * @param [integer] $id       用户ID
+     * @param [string]  $rawPassword 新原始密码
+     */
+    public function changeRawPassword($id, $rawPassword);
 
     /**
      * 校验密码是否正确

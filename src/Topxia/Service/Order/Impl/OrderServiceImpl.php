@@ -4,6 +4,7 @@ namespace Topxia\Service\Order\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\ExtensionManager;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Order\Dao\OrderDao;
 use Topxia\Service\Order\OrderService;
 use Topxia\Service\Common\ServiceEvent;
 
@@ -70,6 +71,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $payment = ExtensionManager::instance()->getDataDict('payment');
         $payment = array_keys($payment);
+
         if (!in_array($order['payment'], $payment)) {
             throw $this->createServiceException($this->getKernel()->trans('创建订单失败：payment取值不正确。'));
         }
@@ -94,7 +96,6 @@ class OrderServiceImpl extends BaseService implements OrderService
         }
 
         $order['status']      = 'created';
-        $order['createdTime'] = time();
 
         $order = $this->getOrderDao()->addOrder($order);
 
@@ -226,9 +227,24 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->analysisVipAmountDataByTime($startTime, $endTime);
     }
 
+    public function analysisAmountsDataByTime($conditions, $orderBy, $startTime, $endTime)
+    {
+        return $this->getOrderDao()->analysisAmountsDataByTime($conditions, $orderBy, $startTime, $endTime);
+    }
+
+    public function analysisAmountsDataByTitle($conditions, $orderBy, $startTime, $endTime)
+    {
+        return $this->getOrderDao()->analysisAmountsDataByTitle($conditions, $orderBy, $startTime, $endTime);
+    }
+
+    public function analysisAmountsDataByUserId($conditions, $orderBy, $startTime, $endTime)
+    {
+        return $this->getOrderDao()->analysisAmountsDataByTitle($conditions, $orderBy, $startTime, $endTime);
+    }
+
     protected function generateOrderSn($order)
     {
-        $prefix = empty($order['snPrefix']) ? 'E' : (string) $order['snPrefix'];
+        $prefix = empty($order['snPrefix']) ? 'E' : (string)$order['snPrefix'];
         return $prefix.date('YmdHis', time()).mt_rand(10000, 99999);
     }
 
@@ -397,11 +413,11 @@ class OrderServiceImpl extends BaseService implements OrderService
             'reasonNote'     => empty($reason['note']) ? '' : $reason['note'],
             'updatedTime'    => time(),
             'createdTime'    => time(),
-            'operator'       => 0
+            'operator'       => empty($reason['operator']) ? 0 : $reason['operator']
         ));
 
         $this->getOrderDao()->updateOrder($order['id'], array(
-            'status'   => ($refund['status'] == 'success') ? 'cancelled' : 'refunding',
+            'status'   => ($refund['status'] == 'success') ? 'paid' : 'refunding',
             'refundId' => $refund['id']
         ));
 
@@ -447,7 +463,7 @@ class OrderServiceImpl extends BaseService implements OrderService
                 $actualAmount = 0;
             }
 
-            $actualAmount = number_format((float) $actualAmount, 2, '.', '');
+            $actualAmount = number_format((float)$actualAmount, 2, '.', '');
 
             $this->getOrderRefundDao()->updateRefund($refund['id'], array(
                 'status'       => 'success',
@@ -524,15 +540,19 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function searchOrders($conditions, $sort, $start, $limit)
     {
-        $orderBy = array();
 
-        if ($sort == 'early') {
-            $orderBy = array('createdTime', 'ASC');
-        } else {
-            $orderBy = array('createdTime', 'DESC');
+        if (!is_array($sort)) {
+            if ($sort == 'early') {
+                $orderBy = array('createdTime', 'ASC');
+            } else {
+                $orderBy = array('createdTime', 'DESC');
+            }
+        }else{
+            $orderBy = $sort;
         }
-
+       
         $conditions = $this->_prepareSearchConditions($conditions);
+
         $orders     = $this->getOrderDao()->searchOrders($conditions, $orderBy, $start, $limit);
 
         return ArrayToolkit::index($orders, 'id');
@@ -582,6 +602,14 @@ class OrderServiceImpl extends BaseService implements OrderService
         if (isset($conditions['amount'])) {
             $tmpConditions['amount'] = $conditions['amount'];
         }
+
+		if (isset($conditions['totalPrice_GT'])){
+			$tmpConditions['totalPrice_GT'] = $conditions['totalPrice_GT'];
+		}
+
+		if (isset($conditions['updatedTime_GE'])){
+			$tmpConditions['updatedTime_GE'] = $conditions['updatedTime_GE'];
+		}
 
         $conditions = array_filter($conditions);
         $conditions = array_merge($conditions, $tmpConditions);
@@ -640,6 +668,14 @@ class OrderServiceImpl extends BaseService implements OrderService
             $user                 = $this->getUserService()->getUserByNickname($conditions['buyer']);
             $conditions['userId'] = $user ? $user['id'] : -1;
         }
+        if (isset($conditions['mobile'])) {
+            $user                 = $this->getUserService()->getUserByVerifiedMobile($conditions['mobile']);
+            $conditions['userId'] = $user ? $user['id'] : -1;
+        }
+        if (isset($conditions['email'])) {
+            $user                 = $this->getUserService()->getUserByEmail($conditions['email']);
+            $conditions['userId'] = $user ? $user['id'] : -1;
+        }
 
         return $conditions;
     }
@@ -659,9 +695,24 @@ class OrderServiceImpl extends BaseService implements OrderService
         $this->getOrderDao()->updateOrder($id, array("cashSn" => $cashSn));
     }
 
+    public function analysisPaidOrderGroupByTargetType($startTime, $groupBy)
+    {
+        return $this->getOrderDao()->analysisPaidOrderGroupByTargetType($startTime, $groupBy);
+    }
+
+    public function analysisOrderDate($conditions)
+    {
+        return $this->getOrderDao()->analysisOrderDate($conditions);
+    }
+
     public function updateOrder($id, $orderFileds)
     {
         return $this->getOrderDao()->updateOrder($id, $orderFileds);
+    }
+
+    public function findRefundByOrderId($orderId)
+    {
+        return $this->getOrderRefundDao()->findRefundByOrderId($orderId);
     }
 
     protected function getLogService()
@@ -689,6 +740,9 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->createDao('Order.OrderRefundDao');
     }
 
+    /**
+     * @return OrderDao
+     */
     protected function getOrderDao()
     {
         return $this->createDao('Order.OrderDao');

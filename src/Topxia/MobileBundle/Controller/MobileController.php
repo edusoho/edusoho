@@ -4,9 +4,8 @@ namespace Topxia\MobileBundle\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\User\Impl\TokenServiceImpl;
+use Topxia\Service\User\TokenService;
 use Topxia\WebBundle\Controller\BaseController;
-use Topxia\Service\User\CurrentUser;
 use Topxia\Common\ArrayToolkit;
 
 class MobileController extends BaseController
@@ -104,14 +103,12 @@ class MobileController extends BaseController
     private function setCurrentUser($userId, $request)
     {
         $user        = $this->getUserService()->getUser($userId);
-        $currentUser = new CurrentUser();
         if ($user) {
             $user['currentIp'] = $request->getClientIp();
         } else {
             $user = array('id' => 0);
         }
-        $currentUser = $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $this->getServiceKernel()->getCurrentUser()->fromArray($user);
     }
 
     protected function getUserToken($request)
@@ -216,7 +213,7 @@ class MobileController extends BaseController
     }
 
     /**
-     * @return TokenServiceImpl
+     * @return TokenService
      */
     protected function getTokenService()
     {

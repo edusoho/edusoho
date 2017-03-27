@@ -1,0 +1,16 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% block title %}
+  {{'视频预览'|trans}}
+{% endblock %}
+
+{% set bodyClass="media-preview" %}
+
+{% block body %}
+  <div  class="media-preview-content">
+    <p class="title">视频预览</p>
+    <div class="media-preview-player">
+      <iframe src="{{ path('media_play',{mediaId:mediaId, context:context}) }}" name="viewerIframe" id="viewerIframe" width="100%" allowfullscreen webkitallowfullscreen height="100%" style="border:0px">
+      </iframe>
+    </div>
+  </div>
+{% endblock %}

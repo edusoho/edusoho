@@ -1,0 +1,50 @@
+stages:
+  - test
+
+variables:
+  MYSQL_DATABASE: edusoho_test
+  MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+
+before_script:
+  - cp app/config/parameters_test.yml.dist app/config/parameters_test.yml
+  - cp app/config/parameters.yml.dist app/config/parameters.yml
+  - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters_test.yml"
+  - mkdir web/files
+  - mkdir app/data/private_files
+  - touch app/config/routing_plugins.yml
+
+Unit Test With PHP 5.3:
+  stage: test
+  image: codeages/ci-php:5.3-2
+  services:
+    - mysql:5.5
+  script:
+    - phpunit -c app/
+  only:
+    - tags
+    - develop
+    - master
+    - trigger
+
+Unit Test With PHP 5.5:
+  stage: test
+  image: codeages/ci-php:5.5-3
+  services:
+    - mysql:5.5
+  script:
+    - phpunit -c app/
+
+Unit Test With PHP 7.0:
+  stage: test
+  image: codeages/ci-php:7.0-7
+  services:
+    - mysql:5.5
+  script:
+    - sed -i 's/memory_limit.*/memory_limit = 2048M/g' /etc/php/7.0/phpdbg/php.ini
+    - cat /etc/php/7.0/phpdbg/php.ini | grep memory_limit
+    - phpdbg -qrr /usr/bin/phpunit -c app/ --coverage-text --colors=never
+  only:
+    - tags
+    - develop
+    - master
+    - trigger
