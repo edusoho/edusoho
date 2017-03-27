@@ -26,7 +26,6 @@ class FinanceSettingController extends BaseController
             'wxpay_enabled'    => 0,
             'wxpay_appid'      => '',
             'wxpay_account'    => '',
-            'wxpay_key'        => '',
             'wxpay_secret'     => '',
             'heepay_enabled'   => 0,
             'heepay_key'       => '',

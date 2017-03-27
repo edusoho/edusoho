@@ -21,7 +21,6 @@ class WxpayRequest extends Request
     public function unifiedOrder($openid = null)
     {
         $params = $this->convertParams($this->params, $openid);
-
         $xml      = $this->toXml($params);
         $response = $this->postRequest($this->unifiedOrderUrl, $xml);
         if (!$response) {
@@ -74,7 +73,7 @@ class WxpayRequest extends Request
         }
 
         $sign = substr($sign, 0, -1);
-        $sign .= '&key=' . $this->options['key'];
+        $sign .= '&key=' . $this->options['secret'];
         return strtoupper(md5($sign));
     }
 
