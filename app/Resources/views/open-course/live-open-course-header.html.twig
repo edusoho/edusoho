@@ -64,7 +64,7 @@
           {% for replay in lesson.replays if replay %}
             {% if lesson.liveProvider == 5 %}
               <a class="btn btn-info btn-lg mask-btn js-play-es-live"
-                data-url="{{ path('live_open_es_live_replay_show',{courseId:lesson.courseId, replayId:replay.id}) }}"
+                data-url="{{ path('es_live_room_replay_show',{ targetType: constant("AppBundle\\Controller\\LiveroomController::LIVE_OPEN_COURSE_TYPE"), targetId: lesson.courseId, lessonId: lesson.id, replayId:replay.id}) }}"
                 target="_blank">{{ '查看回放'|trans }}</a>
             {% else %}
               <a class="btn btn-info btn-lg mask-btn"

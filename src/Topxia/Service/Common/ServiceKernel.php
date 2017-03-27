@@ -3,7 +3,6 @@
 namespace Topxia\Service\Common;
 
 use Biz\User\CurrentUser;
-use Biz\Common\Redis\RedisFactory;
 use Symfony\Component\Finder\Finder;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Dao\Connection;
@@ -45,14 +44,12 @@ class ServiceKernel
 
     public function getRedis($group = 'default')
     {
-        $redisFactory = RedisFactory::instance($this);
-        $redis = $redisFactory->getRedis($group);
-
-        if ($redis) {
-            return $redis;
+        if(empty($biz['cache.cluster'])) {
+            return false;
         }
 
-        return false;
+        $cacheCluster = $biz['cache.cluster'];
+        return $cacheCluster->getCluster();
     }
 
     public static function create($environment, $debug)
@@ -276,7 +273,6 @@ class ServiceKernel
             $class = $this->getClassName('dao', $name);
             $dao = new $class();
             $dao->setConnection($this->getConnection());
-            $dao->setRedis($this->getRedis());
             $this->pool[$name] = $dao;
         }
 
