@@ -66,14 +66,24 @@ class DaoProxy
     {
         $declares = $this->dao->declares();
 
-        if (isset($declares['timestamps'][1])) {
-            $arguments[1][$declares['timestamps'][1]] = time();
+        end($arguments);
+        $lastKey = key($arguments);
+        reset($arguments);
+
+        if (!is_array($arguments[$lastKey])) {
+            throw new DaoException('update method arguments last element must be array type');
         }
-        $arguments[1] = $this->_serialize($arguments[1]);
+
+        if (isset($declares['timestamps'][1])) {
+            $arguments[$lastKey][$declares['timestamps'][1]] = time();
+        }
+
+        $this->_serialize($arguments[$lastKey]);
 
         $row = $this->_callRealDao($method, $arguments);
         $this->clearMemoryCache();
-        return $this->_unserialize($row);
+        $this->_unserialize($row);
+        return $row;
     }
 
     protected function _create($method, $arguments)
