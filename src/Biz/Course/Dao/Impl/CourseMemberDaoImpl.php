@@ -374,6 +374,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
             'orderbys' => array(
                 'createdTime',
                 'lastLearnTime',
+                'classroomId',
                 'id',
                 'updatedTime',
                 'lastViewTime',
