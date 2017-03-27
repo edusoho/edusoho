@@ -62,7 +62,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         return $this->wave(array($id), array($name => $number));
     }
 
-    public function clearCounterById($id, $name)
+    public function deleteCounterById($id, $name)
     {
         $names = array('newMessageNum', 'newNotificationNum');
 
