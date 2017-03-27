@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\Service\LiveReplayService;
 use Biz\OpenCourse\Service\OpenCourseService;
-use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 
 class LiveroomController extends BaseController
