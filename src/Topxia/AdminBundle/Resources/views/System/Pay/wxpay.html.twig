@@ -22,11 +22,11 @@
 
   <div class="form-group">
     <div class="col-md-3 control-label">
-      <label for="wxpay_appid">PID</label>
+      <label for="wxpay_appid">APPID</label>
     </div>
     <div class="controls col-md-8">
       <input type="text" id="wxpay_appid" name="wxpay_appid" class="form-control" value="{{payment.wxpay_appid}}">
-      <div class="help-block">PID即为公众号APPID。</div>
+      <div class="help-block">APPID来自<a target="_blank" href="https://mp.weixin.qq.com/">微信公众平台</a>内左侧栏【开发】-【基本配置】</div>
     </div>
   </div>
   <div class="form-group">
@@ -56,7 +56,7 @@
     <div class="controls col-md-8">
       <input type="text" id="wxpay_secret" name="wxpay_secret" class="form-control" value="{{payment.wxpay_secret}}">
       <div class="help-block">
-        仅JSAPI支付的时候需要配置， 登录公众平台，进入开发者中心可设置.<a href="https://mp.weixin.qq.com/advanced/advanced?action=dev&t=advanced/dev&token=2005451881&lang=zh_CN" target="_blank">设置地址</a>
+        <div class="help-block">仅公众号支付的时候需要配置，AppSecret来自<a target="_blank" href="https://mp.weixin.qq.com/">微信公众平台</a>内左侧栏【开发】-【基本配置】</div>
       </div>
     </div>
   </div>
