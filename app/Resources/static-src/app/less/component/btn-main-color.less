@@ -10,4 +10,15 @@
       border-color: darken(@brand-primary, 10%);
     }
   }
+  .btn-transparent {
+    border-color: @brand-primary;
+    color: @brand-primary;
+    &:after {
+      background-color: @brand-primary;
+    }
+    &:hover,
+    &.active {
+      color: #fff;
+    }
+  }
 }
