@@ -173,7 +173,7 @@ $api->get('/notifications', function (Request $request) {
     $count = ServiceKernel::instance()->createService('User:NotificationService')->countNotifications($conditions);
     return array(
         'data' => filters($notifications, 'notification'),
-        'total' => $count,
+        'total' => (string) $count,
     );
 }
 

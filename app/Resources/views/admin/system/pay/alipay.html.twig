@@ -13,14 +13,17 @@
       <label for="alipay_key">接口类型</label>
     </div>
     <div class="controls col-md-8 radios">
-      {{ radios('alipay_type', {'direct':'立即到账接口', 'escow': '担保交易接口', 'dualfun':'标准双接口' }, payment.alipay_type)}}
+ {#     {{ radios('alipay_type', {'direct':'立即到账接口', 'escow': '担保交易接口', 'dualfun':'标准双接口' }, payment.alipay_type)}}#}
+      <label><input type="radio" name="alipay_type" value="direct" {% if payment.alipay_type == 'direct' %}checked="checked"{% endif %} > 电脑网站支付</label>
+      <label><input type="radio" name="alipay_type" value="escow" {% if payment.alipay_type == 'escow' %}checked="checked"  {% else %} disabled{% endif %} > 担保交易接口</label>
+      <label><input type="radio" name="alipay_type" value="dualfun" {% if payment.alipay_type == 'dualfun' %}checked="checked" {% else %} disabled{% endif %} > 标准双接口</label>
       <div class="help-block">
         PID和Key可在申请支付宝接口后获取，
-        <a href="https://b.alipay.com/order/productDetail.htm?productId=2015110218012942" target="_blank">如何申请？</a>
+        <a href="https://b.alipay.com/signing/productDetail.htm?productId=I1011000290000001000" target="_blank">如何申请？</a>
         <br>
-        "立即到账接口"如需在移动客户端使用，请开通<a href="https://b.alipay.com/order/productDetail.htm?productId=2015110218008816" target="blank">手机网站支付</a>
+        "立即到账接口"如需在移动客户端使用，请开通<a href="https://b.alipay.com/signing/productDetail.htm?productId=I1011000290000001001" target="blank">手机网站支付</a>
         <br>
-        “标准双接口”和“担保交易接口”分别在2014-12-29、2016-1-21停止签约，已生效合同继续有效至合同结束，使用这两个接口的用户请在合同到期前改签即时到账收款。
+        “标准双接口”和“担保交易接口”分别在2014-12-29、2016-1-21停止签约，已生效合同继续有效至合同结束，使用这两个接口的用户请在合同到期前改签电脑网站支付。
       </div>
     </div>
   </div>
@@ -34,12 +37,12 @@
   </div>
   <div class="form-group">
     <div class="col-md-3 control-label">
-      <label for="alipay_secret">Key</label>
+      <label for="alipay_secret">MD5密钥</label>
     </div>
     <div class="controls col-md-8">
       <input type="text" id="alipay_secret" name="alipay_secret" class="form-control" value="{{payment.alipay_secret}}">
       <div class="help-block">
-        登录【支付宝商家服务】-【我的商家服务】，<a href="https://b.alipay.com/newIndex.htm" target="_blank">可查看PID和Key</a>。
+        登录【支付宝商家服务】-【我的商家服务】-【签约管理】，可<a href="https://b.alipay.com/index.htm" target="_blank">查看PID和MD5秘钥</a>。
       </div>
     </div>
   </div>

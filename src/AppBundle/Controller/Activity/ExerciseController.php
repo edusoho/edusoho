@@ -15,10 +15,7 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
     public function showAction(Request $request, $activity, $preview = 0)
     {
         if ($preview) {
-            return $this->forward('AppBundle:Activity/Exercise:preview', array(
-                'id' => $activity['id'],
-                'courseId' => $activity['fromCourseId'],
-            ));
+            return $this->previewExercise($activity['id'], $activity['fromCourseId']);
         }
 
         $user = $this->getUser();
@@ -42,7 +39,12 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
         ));
     }
 
-    public function previewAction(Request $request, $id, $courseId)
+    public function previewAction(Request $request, $task)
+    {
+        return $this->previewExercise($task['activityId'], $task['courseId']);
+    }
+
+    protected function previewExercise($id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
         $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
@@ -114,7 +116,7 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
         ));
     }
 
-    public function finishConditionAction($activity)
+    public function finishConditionAction(Request $request, $activity)
     {
         $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
 

@@ -198,4 +198,8 @@ interface CourseService
     public function findUserManageCoursesByCourseSetId($userId, $courseSetId);
 
     public function unlockCourse($courseId);
+
+    public function getFavoritedCourseByUserIdAndCourseSetId($userId, $courseSetId);
+
+    public function buildCourseExpiryDataFromClassroom($expiryMode, $expiryValue);
 }

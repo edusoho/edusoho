@@ -14,6 +14,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class LiveController extends BaseController implements ActivityActionInterface
 {
+    public function previewAction(Request $request, $task)
+    {
+        return $this->render('activity/no-preview.html.twig');
+    }
+
     public function showAction(Request $request, $activity)
     {
         $live = $this->getActivityService()->getActivityConfig($activity['mediaType'])->get($activity['mediaId']);
@@ -162,7 +167,7 @@ class LiveController extends BaseController implements ActivityActionInterface
         return $this->createJsonResponse(array('success' => true, 'status' => 'on_live'));
     }
 
-    public function finishConditionAction($activity)
+    public function finishConditionAction(Request $request, $activity)
     {
         return $this->render('activity/live/finish-condition.html.twig', array());
     }

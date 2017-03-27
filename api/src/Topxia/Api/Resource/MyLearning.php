@@ -2,19 +2,19 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 
 class MyLearning extends BaseResource
 {
     public function get(Application $app, Request $request)
     {
         $user = $this->getCurrentUser();
-        $beginTime = strtotime("-6 months");
 
+        $beginTime = strtotime("-6 months");
         $conditions = array(
             'lastViewTime_GE' => $beginTime,
-            'userId'          => $user['id']
+            'userId' => $user['id'],
         );
 
         $membersCount = $this->getMemberService()->countMembers($conditions);
@@ -28,7 +28,7 @@ class MyLearning extends BaseResource
         $learningData = $this->buildLearningData($members);
         $learningData = $this->filter($learningData);
 
-        return  $this->wrap($learningData, count($learningData));
+        return $this->wrap($learningData, count($learningData));
     }
 
     public function filter($learningData)
@@ -50,6 +50,7 @@ class MyLearning extends BaseResource
 
         $courseIds = ArrayToolkit::column($members, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
         $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
 
         $groupMembers = ArrayToolkit::group($members, 'joinedType');
@@ -104,6 +105,6 @@ class MyLearning extends BaseResource
 
     protected function getClassroomService()
     {
-        return $this->createService('Classroom:Classroom:ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 }

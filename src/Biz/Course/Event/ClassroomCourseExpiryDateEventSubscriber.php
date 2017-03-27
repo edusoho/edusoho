@@ -96,13 +96,7 @@ class ClassroomCourseExpiryDateEventSubscriber extends EventSubscriber implement
         $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
 
         foreach ($activeCourses as $course) {
-            $this->getCourseDao()->update(
-                $course['id'],
-                array(
-                    'expiryMode' => $expiryDate['expiryMode'],
-                    'expiryDay' => $expiryDate['expiryValue'],
-                )
-            );
+            $this->getCourseDao()->update($course['id'], $this->getCourseService()->buildCourseExpiryDataFromClassroom($expiryMode, $expiryValue));
         }
     }
 

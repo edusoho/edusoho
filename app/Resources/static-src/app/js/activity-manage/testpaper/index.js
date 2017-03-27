@@ -93,6 +93,8 @@ class Testpaper {
       }
       $('#score-single-input').val(passScore);
       $('.js-score-total').text(score);
+
+      $('input[name="title"]').val($option.text());
       this.initScoreSlider(parseInt(passScore),parseInt(score));
     } else {
       $('#questionItemShowDiv').hide();

@@ -17,6 +17,8 @@ class PlayerController extends BaseController
 {
     public function showAction(Request $request, $id, $context = array())
     {
+        $ssl = $request->isSecure() ? true : false;
+
         $file = $this->getUploadFileService()->getFullFile($id);
         if (empty($file)) {
             throw $this->createNotFoundException('file not found');
@@ -41,7 +43,7 @@ class PlayerController extends BaseController
             if (!empty($file['convertParams']['hasVideoWatermark'])) {
                 $file['videoWatermarkEmbedded'] = 1;
             }
-            $ssl = $request->isSecure() ? true : false;
+
             $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
             if (isset($result['subtitles'])) {
@@ -59,7 +61,7 @@ class PlayerController extends BaseController
                 }
             }
         }
-        $url = isset($mp4Url) ? $mp4Url : $this->getPlayUrl($file, $context);
+        $url = isset($mp4Url) ? $mp4Url : $this->getPlayUrl($file, $context, $ssl);
 
         return $this->render('player/show.html.twig', array(
             'file' => $file,
@@ -88,7 +90,7 @@ class PlayerController extends BaseController
         }
 
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
-        $response->trustXSendfileTypeHeader();
+        $response::trustXSendfileTypeHeader();
 
         $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
 
@@ -223,7 +225,7 @@ class PlayerController extends BaseController
         return $this->createJsonResponse($playlist);
     }
 
-    protected function getPlayUrl($file, $context)
+    protected function getPlayUrl($file, $context, $ssl)
     {
         if ($file['storage'] == 'cloud') {
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
@@ -250,7 +252,7 @@ class PlayerController extends BaseController
                 }
 
                 if ($key) {
-                    $result = $this->getMaterialLibService()->player($file['globalId']);
+                    $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
                 }
             }
 

@@ -841,7 +841,7 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
         $mailer = $this->getSettingService()->get('mailer', array());
-        $cloudEmail = $this->getSettingService()->get('cloud_email', array());
+        $cloudEmail = $this->getSettingService()->get('cloud_email_crm', array());
 
         if (empty($user['setup'])) {
             return $this->redirect($this->generateUrl('settings_setup'));

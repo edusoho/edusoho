@@ -2,13 +2,17 @@
 
 {% block title %}{{'实名认证'|trans}} - {{ parent() }}{% endblock %}
 {% set side_nav = 'approval' %}
-{% set script_controller = 'settings/approval' %}
+
+{% if app.user.approvalStatus not in ['approving', 'approved'] %}
+    {% set script_controller = 'settings/approval' %}
+{% endif %}
 
 {% block main %}
 
     {% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
 
         {% block heading %}  {{'实名认证'|trans}}
+        {{ app.user.approvalStatus }}
         {% endblock %}
 
         {% block body %}
@@ -26,7 +30,7 @@
                                     <div class="alert alert-success" role="alert">{{'恭喜您，已通过实名认证！'|trans}}
                                     </div>
                                 {% elseif  app.user.approvalStatus == 'unapprove' %}
-                                    <div class="alert alert-warning" role="alert">{{'您尚未实名认证'|trans}}
+                                    <div class="alert alert-warning" role="alert">{{'您尚未实名认证。'|trans}}
                                     </div>
                                 {% elseif app.user.approvalStatus == 'approve_fail' %}
                                     <p class="color-danger" >

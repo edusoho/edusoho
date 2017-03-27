@@ -1,4 +1,5 @@
-{% extends 'courseset-manage/layout.html.twig' %}
+{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
+
 {% block title %}{{ testpaper.name }} - {{'试卷批阅'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% import 'macro.html.twig' as macro %}
 

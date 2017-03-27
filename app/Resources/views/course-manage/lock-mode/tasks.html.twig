@@ -1,4 +1,5 @@
-{% extends 'course-manage/layout.html.twig' %}
+{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
+
 {% block title %}{{'计划任务'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% do script(['libs/jquery-sortable.js','app/js/course-manage/index.js']) %}
 {% set side_nav = 'tasks' %}
@@ -15,7 +16,7 @@
             任务
           </button>
           {% if courseSet.type|default('') =='normal' %}
-            <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_batch_create', {courseId:course.id,token:uploader_token('cours-task', app.user.id, 'private')}) }}">
+            <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_batch_create', {courseId:course.id,token:uploader_token('course-task', app.user.id, 'private')}) }}">
               <i class="es-icon es-icon-anonymous-iconfont"></i>
               批量添加
             </button>
