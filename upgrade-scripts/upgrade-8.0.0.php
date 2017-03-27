@@ -39,8 +39,9 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getStep($index)
     {
       $oldSteps = array(
-        'c2Activity',
-        'c2VideoActivity',
+        // 'c2CourseTaskMigrate',
+        // 'c2Activity',
+        // 'c2VideoActivity',
         'c2TextActivity',
         'c2AudioActivity',
         'c2FlashActivity',
