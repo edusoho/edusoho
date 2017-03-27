@@ -7,7 +7,6 @@ use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 
 /**
- *
  * @deprecated
  * @see StudyCenterMissionsDataTag
  */

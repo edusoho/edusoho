@@ -33,7 +33,7 @@ class StudyCenterMissionsDataTag extends BaseDataTag implements DataTag
         $userId = $arguments['userId'];
         $count = $arguments['count'];
         $missionCount = $arguments['missionCount'];
-        
+
         $sortedCourses = array();
         //1. 先获取userId的所有course_member数据，获取课程的所属班级
         //2. 对courses按照classroom排序，分离出classroom的courses
@@ -47,7 +47,7 @@ class StudyCenterMissionsDataTag extends BaseDataTag implements DataTag
         $courseIds = ArrayToolkit::column($members, 'courseId');
 
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-        usort($courses, function($c1, $c2){
+        usort($courses, function ($c1, $c2) {
             return $c1['parentId'] < $c2['parentId'];
         });
         $classroomRefs = $this->getClassroomService()->findClassroomsByCoursesIds($courseIds);
@@ -65,14 +65,14 @@ class StudyCenterMissionsDataTag extends BaseDataTag implements DataTag
 
                 $classroomRef = $classroomRefs[$course['id']];
                 $classroomId = $classroomRef['classroomId'];
-                
+
                 $classroom = $this->getClassroomService()->getClassroom($classroomId);
                 if (empty($classrooms['class-'.$classroomId])) {
                     $classroom['tasks'] = array();
                     $classroom['allTaskNum'] = 0;
                     $classroom['learnedTaskNum'] = 0;
                     $classrooms['class-'.$classroomId] = $classroom;
-                    $classroomIndex +=1;
+                    $classroomIndex += 1;
                 }
                 $classrooms['class-'.$classroomId]['allTaskNum'] += $course['taskNum'];
                 $taskData = $this->getTaskDataInClassroomCourse($course['id'], $userId);
@@ -95,7 +95,7 @@ class StudyCenterMissionsDataTag extends BaseDataTag implements DataTag
                 }
             }
         }
-        
+
         return array('courses' => $sortedCourses, 'classrooms' => $classrooms);
     }
 
