@@ -6,6 +6,7 @@ use Topxia\Api\Util\MobileSchoolUtil;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\PluginBundle\Event\EventSubscriber;
+use Biz\CloudPlatform\IMAPIFactory;
 
 class PushMessageEventSubscriber extends EventSubscriber
 {
