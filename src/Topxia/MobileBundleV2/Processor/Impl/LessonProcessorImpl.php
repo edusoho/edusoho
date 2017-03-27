@@ -481,15 +481,6 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
-                    $enablePlayRate = $this->controller->setting('storage.enable_playback_rates');
-                    if ($enablePlayRate && $file['mcStatus'] && $file['mcStatus'] == 'yes') {
-                        $player = $this->controller->getMaterialLibService()->player($file['globalId']);
-                        if (isset($player['mp4url'])) {
-                            $lesson['mediaUri'] = $player['mp4url'];
-                            return $lesson;
-                        }
-                    }
-
                     //do mp4
                     $lesson['mediaConvertStatus'] = $file['status'];
 
