@@ -3,6 +3,8 @@ abstract class AbstractMigrate
 {
     protected $kernel;
 
+    protected $perPageCount = 1000;
+
     public function __construct($kernel)
     {
         $this->kernel = $kernel;
@@ -61,6 +63,22 @@ abstract class AbstractMigrate
         $result = $this->getConnection()->fetchAssoc($sql);
 
         return empty($result) ? false : true;
+    }
+
+    protected function getLastPage($count)
+    {
+        return ceil($count / $this->perPageCount);
+    }
+
+    protected function getNextPage($count, $currentPage)
+    {
+        $diff = $this->getLastPage($count) - $currentPage;
+        return $diff > 0 ? $currentPage + 1 : 0;
+    }
+
+    protected function getStart($page)
+    {
+        return ($page-1) * $this->perPageCount;
     }
 
     abstract public function update($page);

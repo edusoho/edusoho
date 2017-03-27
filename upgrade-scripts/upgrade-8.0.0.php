@@ -116,7 +116,7 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getIndexAndPage($index)
     {
       if($index == 0) {
-        return array(0,0);
+        return array(0,1);
       }
 
       return explode('-', $index);
@@ -131,7 +131,7 @@ class EduSohoUpgrade extends AbstractUpdater
     { 
         $indexAndPage = $this->getIndexAndPage($index);
         $index = $indexAndPage[0];
-        $page = 0;
+        $page = 1;
         if (!empty($indexAndPage[1])) {
             $page = $indexAndPage[1];
         }
@@ -159,7 +159,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         return array(
-            'index' => $this->setIndexAndPage($index+1, 0),
+            'index' => $this->setIndexAndPage($index+1, 1),
             'message' => '正在升级数据...',
             'progress' => 0
         );

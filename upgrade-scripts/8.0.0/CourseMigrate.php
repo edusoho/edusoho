@@ -70,6 +70,24 @@ class CourseMigrate extends AbstractMigrate
             $result = $this->getConnection()->exec($sql);
         }
 
+        $nextPage = $this->updateData($page);
+        if (!empty($nextPage)) {
+          return $nextPage;
+        }
+
+        $sql = "UPDATE `c2_course` ce, `c2_course_set` cs  SET ce.`materialNum` = cs.`materialNum`  WHERE ce.`id` = cs.`id`";
+        $result = $this->getConnection()->exec($sql);
+    }
+
+    private function updateData($page)
+    {
+        $countSql = 'SELECT count(*) FROM `course` where `id` not in (select `id` from `c2_course`)';
+        $count = $this->getConnection()->fetchColumn($countSql);
+        $start = $this->getStart($page);
+        if($count == 0 && $count < $start) {
+          return;
+        }
+
         $sql = "INSERT INTO `c2_course` (
               `id`
               ,`courseSetId`
@@ -176,14 +194,8 @@ class CourseMigrate extends AbstractMigrate
               ,1
               ,'freeMode'
               ,`maxRate`
-          FROM `course` where `id` not in (select `id` from `c2_course`);";
+          FROM `course` where `id` not in (select `id` from `c2_course`) order by id limit {$start}, {$this->perPageCount};";
         $result = $this->getConnection()->exec($sql);
-
-        $sql = "UPDATE `c2_course` ce, `c2_course_set` cs  SET ce.`materialNum` = cs.`materialNum`  WHERE ce.`id` = cs.`id`";
-        $result = $this->getConnection()->exec($sql);
-
-        // refactor: 这条语句不该在这个步骤中执行，应该在迁移完 course_task 后执行
-        $sql = "UPDATE `c2_course` c set `publishedTaskNum` = (select count(*) from course_lesson where courseId=c.id and status = 'published')";
-        $result = $this->getConnection()->exec($sql);
+        return $this->getNextPage($count, $page);
     }
 }
