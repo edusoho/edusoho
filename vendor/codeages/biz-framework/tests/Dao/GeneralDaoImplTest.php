@@ -40,11 +40,13 @@ class GeneralDaoImplTest extends TestCase
             CREATE TABLE `example` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `name` varchar(32) NOT NULL,
+              `code` varchar(32) NOT NULL DEFAULT '',
               `counter1` int(10) unsigned NOT NULL DEFAULT 0,
               `counter2` int(10) unsigned NOT NULL DEFAULT 0,
               `ids1` varchar(32) NOT NULL DEFAULT '',
               `ids2` varchar(32) NOT NULL DEFAULT '',
               `null_value` VARCHAR(32) DEFAULT NULL,
+              `content` text,
               `created_time` int(10) unsigned NOT NULL DEFAULT 0,
               `updated_time` int(10) unsigned NOT NULL DEFAULT 0,
               PRIMARY KEY (`id`)
@@ -56,11 +58,13 @@ class GeneralDaoImplTest extends TestCase
             CREATE TABLE `example2` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `name` varchar(32) NOT NULL,
+              `code` varchar(32) NOT NULL DEFAULT '',
               `counter1` int(10) unsigned NOT NULL DEFAULT 0,
               `counter2` int(10) unsigned NOT NULL DEFAULT 0,
               `ids1` varchar(32) NOT NULL DEFAULT '',
               `ids2` varchar(32) NOT NULL DEFAULT '',
               `null_value` VARCHAR(32) DEFAULT NULL,
+              `content` text,
               `created_time` int(10) unsigned NOT NULL DEFAULT 0,
               `updated_time` int(10) unsigned NOT NULL DEFAULT 0,
               PRIMARY KEY (`id`)
@@ -72,11 +76,13 @@ class GeneralDaoImplTest extends TestCase
             CREATE TABLE `example3` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `name` varchar(32) NOT NULL,
+              `code` varchar(32) NOT NULL DEFAULT '',
               `counter1` int(10) unsigned NOT NULL DEFAULT 0,
               `counter2` int(10) unsigned NOT NULL DEFAULT 0,
               `ids1` varchar(32) NOT NULL DEFAULT '',
               `ids2` varchar(32) NOT NULL DEFAULT '',
               `null_value` VARCHAR(32) DEFAULT NULL,
+              `content` text,
               `created_time` int(10) unsigned NOT NULL DEFAULT 0,
               `updated_time` int(10) unsigned NOT NULL DEFAULT 0,
               PRIMARY KEY (`id`)
@@ -88,6 +94,20 @@ class GeneralDaoImplTest extends TestCase
     {
         foreach ($this->getTestDao() as $dao) {
             $this->get($dao);
+        }
+    }
+
+    public function testUpdateByNameAndCode()
+    {
+        foreach ($this->getTestDao() as $dao) {
+            $dao = $this->biz->dao($dao);
+            $row = $dao->create(array(
+                'name' => 'test1',
+                'code' => 'test1'
+            ));
+
+            $row = $dao->updateByNameAndCode('test1', 'test1', array('content' => 'test'));
+            $this->assertEquals('test', $row[0]['content']);
         }
     }
 
