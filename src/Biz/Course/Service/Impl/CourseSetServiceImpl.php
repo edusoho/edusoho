@@ -432,6 +432,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $fields['tags'] = $tagIds;
         }
 
+        if (isset($fields['summary'])) {
+            $fields['summary'] = $this->purifyHtml($fields['summary'], true);
+        }
+
         $this->updateCourseSerializeMode($courseSet, $fields);
         if (empty($fields['subtitle'])) {
             $fields['subtitle'] = null;

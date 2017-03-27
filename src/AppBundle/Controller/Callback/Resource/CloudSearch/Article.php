@@ -24,12 +24,4 @@ class Article extends BaseResource
 
         return $filteredRes;
     }
-
-    /**
-     * @return Biz\System\Service\SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->getBiz()->service('System:SettingService');
-    }
 }

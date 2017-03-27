@@ -63,7 +63,12 @@ class DownloadController extends BaseController implements ActivityActionInterfa
         ));
     }
 
-    public function finishConditionAction($activity)
+    public function previewAction(Request $request, $task)
+    {
+        return $this->render('activity/no-preview.html.twig');
+    }
+
+    public function finishConditionAction(Request $request, $activity)
     {
         return $this->render('activity/download/finish-condition.html.twig', array());
     }

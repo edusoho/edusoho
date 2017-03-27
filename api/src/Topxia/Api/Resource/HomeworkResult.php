@@ -52,6 +52,20 @@ class HomeworkResult extends BaseResource
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTask($lessonId);
 
+        if ($task['type'] != 'homework') {
+            $conditions = array(
+                'categoryId' => $task['categoryId'],
+                'type' => 'homework',
+                'mode' => 'homework',
+            );
+            $tasks = $this->getTaskService()->searchTasks($conditions, null, 0, 1);
+            if (!$tasks) {
+                return $this->error('404', '该作业不存在!');
+            }
+
+            $task = array_shift($tasks);
+        }
+
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         $homework = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
         if (empty($homework)) {

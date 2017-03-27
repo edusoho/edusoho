@@ -13,7 +13,6 @@ use AppBundle\Component\ShareSdk\WeixinShare;
 use AppBundle\Util\CategoryBuilder;
 use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
-use Biz\Util\HTMLPurifierFactory;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
@@ -241,7 +240,7 @@ class WebExtension extends \Twig_Extension
     public function weixinConfig()
     {
         $weixinmob_enabled = $this->getSetting('login_bind.weixinmob_enabled');
-        if (!(bool)$weixinmob_enabled) {
+        if (!(bool) $weixinmob_enabled) {
             return null;
         }
         $jsApiTicket = $this->createService('User:TokenService')->getTokenByType('jsapi.ticket');
@@ -296,7 +295,7 @@ class WebExtension extends \Twig_Extension
     {
         $network = $this->getSetting('developer.without_network', $default = false);
 
-        return (bool)$network;
+        return (bool) $network;
     }
 
     public function getUserVipLevel($userId)
@@ -389,7 +388,7 @@ class WebExtension extends \Twig_Extension
     {
         $text = trim($text);
 
-        $length = (int)$length;
+        $length = (int) $length;
 
         if (($length > 0) && (mb_strlen($text) > $length)) {
             $text = mb_substr($text, $start, $length, 'UTF-8');
@@ -503,7 +502,6 @@ class WebExtension extends \Twig_Extension
 
     public function getJsPaths()
     {
-
         $cdnUrl = new CdnUrl();
         $basePath = $cdnUrl->get();
 
@@ -528,7 +526,6 @@ class WebExtension extends \Twig_Extension
                 } else {
                     $names[] = $plugin['code'];
                 }
-
             } else {
                 $names[] = $plugin;
             }
@@ -775,7 +772,7 @@ class WebExtension extends \Twig_Extension
 
     public function navigationUrlFilter($url)
     {
-        $url = (string)$url;
+        $url = (string) $url;
 
         if (strpos($url, '://')) {
             return $url;
@@ -794,7 +791,7 @@ class WebExtension extends \Twig_Extension
      *                            D -> 区全称,     d -> 区简称.
      *
      * @param [type] $districeId [description]
-     * @param string $format 格式，默认格式'P C D'
+     * @param string $format     格式，默认格式'P C D'
      *
      * @return [type] [description]
      */
@@ -1138,7 +1135,7 @@ class WebExtension extends \Twig_Extension
         $text = str_replace('&nbsp;', ' ', $text);
         $text = trim($text);
 
-        $length = (int)$length;
+        $length = (int) $length;
 
         if (($length > 0) && (mb_strlen($text) > $length)) {
             $text = mb_substr($text, 0, $length, 'UTF-8');
@@ -1156,7 +1153,7 @@ class WebExtension extends \Twig_Extension
         $text = str_replace('&nbsp;', ' ', $text);
         $text = trim($text);
 
-        $length = (int)$length;
+        $length = (int) $length;
 
         if (($length > 0) && (mb_strlen($text, 'utf-8') > $length)) {
             $text = mb_substr($text, 0, $length, 'UTF-8');
@@ -1227,8 +1224,8 @@ class WebExtension extends \Twig_Extension
     {
         $text = number_format($text, 1, '.', '');
 
-        if ((int)$text == $text) {
-            return (string)(int)$text;
+        if ((int) $text == $text) {
+            return (string) (int) $text;
         }
 
         return $text;
@@ -1274,14 +1271,9 @@ class WebExtension extends \Twig_Extension
             return '';
         }
 
-        $config = array(
-            'cacheDir' => ServiceKernel::instance()->getParameter('kernel.cache_dir').'/htmlpurifier',
-        );
+        $biz = $this->container->get('biz');
 
-        $factory = new HTMLPurifierFactory($config);
-        $purifier = $factory->create($trusted);
-
-        return $purifier->purify($html);
+        return $biz['html_helper']->purify($html, $trusted);
     }
 
     public function atFilter($text, $ats = array())
@@ -1389,7 +1381,7 @@ class WebExtension extends \Twig_Extension
             return '100%';
         }
 
-        return (int)($number / $total * 100).'%';
+        return (int) ($number / $total * 100).'%';
     }
 
     public function arrayMerge($text, $content)

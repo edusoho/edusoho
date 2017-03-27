@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\EduCloud\Service;
 
 interface ConsultService

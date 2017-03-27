@@ -90,6 +90,14 @@ class SiteSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $consult = $request->request->all();
 
+            foreach ($consult['qq'] as &$qq) {
+                $qq['url'] = $this->purifyHtml($qq['url'], true);
+            }
+
+            foreach ($consult['qqgroup'] as &$group) {
+                $group['url'] = $this->purifyHtml($group['url'], true);
+            }
+
             ksort($consult['qq']);
             ksort($consult['qqgroup']);
             ksort($consult['phone']);

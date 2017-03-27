@@ -16,26 +16,26 @@ class User extends BaseResource
 
     public function filter($res)
     {
-        $returnRes = array();
+        $filteredRes = array();
 
         foreach ($this->_publicFields as $key) {
-            $returnRes[$key] = $res[$key];
+            $filteredRes[$key] = $res[$key];
         }
 
         if (!empty($res['profile'])) {
             foreach ($this->_publicProfileFields as $key) {
-                $returnRes[$key] = $res['profile'][$key];
+                $filteredRes[$key] = $res['profile'][$key];
             }
         }
 
-        $returnRes['roles'] = in_array('ROLE_TEACHER', $res['roles']) ? array('teacher') : array('student');
+        $filteredRes['roles'] = in_array('ROLE_TEACHER', $res['roles']) ? array('teacher') : array('student');
 
-        $returnRes['avatar'] = isset($returnRes['largeAvatar']) ? $this->getFileUrl($returnRes['largeAvatar']) : '';
-        unset($returnRes['largeAvatar']);
+        $filteredRes['avatar'] = isset($filteredRes['largeAvatar']) ? $this->getFileUrl($filteredRes['largeAvatar']) : '';
+        unset($filteredRes['largeAvatar']);
 
-        $returnRes['createdTime'] = date('c', $returnRes['createdTime']);
-        $returnRes['updatedTime'] = date('c', $returnRes['updatedTime']);
+        $filteredRes['createdTime'] = date('c', $filteredRes['createdTime']);
+        $filteredRes['updatedTime'] = date('c', $filteredRes['updatedTime']);
 
-        return $returnRes;
+        return $filteredRes;
     }
 }

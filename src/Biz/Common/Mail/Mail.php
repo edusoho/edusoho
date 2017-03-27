@@ -4,7 +4,6 @@ namespace Biz\Common\Mail;
 
 use AppBundle\Common\SettingToolkit;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-use Topxia\Service\Common\Mail\TemplateToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
 abstract class Mail
@@ -63,6 +62,7 @@ abstract class Mail
     public function send()
     {
         $this->mailCheckRatelimiter();
+
         return $this->doSend();
     }
 

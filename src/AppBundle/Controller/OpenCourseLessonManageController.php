@@ -302,7 +302,7 @@ class OpenCourseLessonManageController extends BaseController
             0, PHP_INT_MAX
         );
 
-        return $this->render('TopxiaWebBundle:CourseMaterialManage:material-modal.html.twig', array(
+        return $this->render('open-course-manage/material-edit-modal.html.twig', array(
             'course' => $course,
             'lesson' => $lesson,
             'materials' => $materials,

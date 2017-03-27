@@ -16,32 +16,6 @@
 @import 'mixins/bg-color.less';             //bg颜色
 @import 'mixins/dispaly.less';             //bg颜色
 
-.es-icon {
-  line-height: 1;
-}
-
-
-.label {
-  .border-radius;
-}
-
-a.btn.disabled, fieldset[disabled] a.btn {
-  pointer-events: none;
-}
-
-// 富文本编辑器样式统一处理
-.editor-text {
-  img {
-    max-width: 100% !important;
-    height: auto !important;
-  }
-}
-
-.table td {
-  word-wrap: break-word;
-  word-break: break-all;
-}
-
 .section-gray {
   background-color: @bg-new-color !important;
   .text-line h5 > span {
@@ -75,7 +49,6 @@ a.btn.disabled, fieldset[disabled] a.btn {
 // }
 
 
-
 // 用于空数据
 .empty {
   text-align: center;
@@ -100,7 +73,6 @@ a.transition {
     text-decoration: underline;
   }
 }
-
 
 // 字符串截取 推荐用text-overflow
 .ellipsis,
