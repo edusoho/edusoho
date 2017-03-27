@@ -82,7 +82,6 @@ class ComposerStaticInita9081f4c3a072b5bb824f60da08fba6f
         ),
         'F' => 
         array (
-            'Flexihash\\' => 10,
             'Facebook\\WebDriver\\' => 19,
         ),
         'E' => 
@@ -230,10 +229,6 @@ class ComposerStaticInita9081f4c3a072b5bb824f60da08fba6f
         'Gregwar\\Captcha\\' => 
         array (
             0 => __DIR__ . '/..' . '/gregwar/captcha',
-        ),
-        'Flexihash\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/flexihash/flexihash/src',
         ),
         'Facebook\\WebDriver\\' => 
         array (
