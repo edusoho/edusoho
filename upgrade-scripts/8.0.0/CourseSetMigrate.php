@@ -46,6 +46,24 @@ class CourseSetMigrate extends AbstractMigrate
               $result = $this->getConnection()->exec($sql);
         }
 
+        
+
+        $sql = "UPDATE `c2_course_set` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.num  WHERE ce.id = cm.`courseId`;";
+        $result = $this->getConnection()->exec($sql);
+
+        $sql = "UPDATE `c2_course_set` cs, `course` c SET cs.minCoursePrice = c.price, cs.maxCoursePrice = c.price where cs.id = c.id";
+        $result = $this->getConnection()->exec($sql);
+    }
+
+    private function updateData($page)
+    {
+        $countSql = 'SELECT count(*) FROM `course` where `id` not in (select `id` from `c2_course_set`)';
+        $count = $this->getConnection()->fetchColumn($countSql);
+        $start = $this->getStart($page);
+        if($count == 0 && $count < $start) {
+          return;
+        }
+
         $sql = "INSERT INTO `c2_course_set` (
             `id`
             ,`title`
@@ -108,14 +126,9 @@ class CourseSetMigrate extends AbstractMigrate
             ,`userId`
             ,`about`
             ,`teacherIds`
-        FROM `course` where `id` not in (select `id` from `c2_course_set`);";
+        FROM `course` where `id` not in (select `id` from `c2_course_set`) order by id limit {$start}, {$this->perPageCount};";
 
         $result = $this->getConnection()->exec($sql);
-
-        $sql = "UPDATE `c2_course_set` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.num  WHERE ce.id = cm.`courseId`;";
-        $result = $this->getConnection()->exec($sql);
-
-        $sql = "UPDATE `c2_course_set` cs, `course` c SET cs.minCoursePrice = c.price, cs.maxCoursePrice = c.price where cs.id = c.id";
-        $result = $this->getConnection()->exec($sql);
+        return $this->getNextPage($count, $page);
     }
 }
