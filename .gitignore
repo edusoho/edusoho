@@ -34,3 +34,5 @@ npm-debug.log
 project.sublime-workspace
 .project
 .settings
+.publish
+/installFiles
