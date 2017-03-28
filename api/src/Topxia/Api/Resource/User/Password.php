@@ -23,7 +23,11 @@ class Password extends BaseResource
             return $this->error('500', '不存在此type对应的业务场景');
         }
 
-        $this->limiterCheck($type, $smsToken);
+        $result = $this->limiterCheck($type, $smsToken);
+        if ($result !== true) {
+            return $result;
+        }
+
 
         if (empty($smsCode)) {
             return $this->error('500', '短信验证码为空，请输入');
