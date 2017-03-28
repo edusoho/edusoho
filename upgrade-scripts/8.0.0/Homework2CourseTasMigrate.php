@@ -6,9 +6,8 @@ class Homework2CourseTasMigrate extends AbstractMigrate
     {
         $this->migrateTableStructure();
 
-        $count = $this->getConnection()->fetchColumn('SELECT  count(ee.id)  FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonid');
-        $start = $this->getStart($page);
-        if ($count == 0 && $count < $start) {
+        $count = $this->getConnection()->fetchColumn('SELECT  count(ee.id)  FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonId');
+        if (empty($count)) {
             return;
         }
 
@@ -25,7 +24,7 @@ class Homework2CourseTasMigrate extends AbstractMigrate
     protected function homeworkToActivity($start)
     {
         $this->getConnection()->exec(
-          "
+            "
            INSERT INTO `activity`
           (
               `title`,
@@ -64,13 +63,16 @@ class Homework2CourseTasMigrate extends AbstractMigrate
           FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonid limit 0, {$this->perPageCount}) lesson
           WHERE hhomeworkId NOT IN (SELECT homeworkId FROM activity WHERE homeworkId IS NOT NULL );
                   "
-      );
+        );
+
+        $sql = "UPDATE activity AS a,testpaper_v8 AS t SET a.mediaId = t.id WHERE a.homeworkId = t.migrateTestId AND t.type = 'homework' AND a.type = 'homework';";
+        $this->getConnection()->exec($sql);
     }
 
     protected function homeworkToCourseTask($start)
     {
         $this->exec(
-          "
+            "
           INSERT INTO course_task
             (
               `courseId`,
@@ -119,13 +121,18 @@ class Homework2CourseTasMigrate extends AbstractMigrate
               FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonid limit 0, {$this->perPageCount}) lesson
                   WHERE lesson.hhomeworkId NOT IN (SELECT homeworkId FROM course_task WHERE homeworkId IS NOT NULL );
           "
-      );
+        );
 
         $this->exec(
+<<<<<<< HEAD
+            "UPDATE `course_task` AS ck, activity AS a SET ck.`activityId` = a.`id`
+        WHERE a.`homeworkId` = ck.`homeworkId` AND  ck.type = 'homework' AND  ck.`activityId` = 0
+=======
           "UPDATE `course_task` AS ck, activity AS a SET ck.`activityId` = a.`id`
         WHERE a.`migrateHomeworkId` = ck.`migrateHomeworkId` AND  ck.type = 'homework' AND  ck.`activityId` = 0
+>>>>>>> b2daa043eda0cd9bdf03e6f31f65cd30fced8c61
           "
-      );
+        );
     }
 
     protected function migrateTableStructure()

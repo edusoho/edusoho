@@ -1,6 +1,6 @@
 <?php
 
-class updateCourseChapter extends AbstractMigrate
+class UpdateCourseChapter extends AbstractMigrate
 {
     public function update($page)
     {
