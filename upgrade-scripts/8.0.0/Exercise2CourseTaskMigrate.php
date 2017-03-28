@@ -15,7 +15,7 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
         $this->exerciseToActivity($start);
         $this->exerciseToCourseTask($start);
 
-        return $this->getNextPage($count, $page);
+        return $page++;
     }
 
     /**

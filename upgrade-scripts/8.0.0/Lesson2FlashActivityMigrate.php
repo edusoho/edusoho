@@ -27,8 +27,7 @@ class Lesson2FlashActivityMigrate extends AbstractMigrate
 
         $countSql = "SELECT count(*) from `course_lesson` WHERE `type`='flash' and `id` NOT IN (SELECT migrateLessonId FROM `flash_activity`)";
         $count = $this->getConnection()->fetchColumn($countSql);
-        $start = $this->getStart($page);
-        if ($count == 0 && $count < $start) {
+        if ($count == 0) {
             return;
         }
 
@@ -53,10 +52,10 @@ class Lesson2FlashActivityMigrate extends AbstractMigrate
                 `updatedTime`,
                 `id`
             FROM `course_lesson` WHERE TYPE ='flash' AND id NOT IN (SELECT `migrateLessonId` FROM `flash_activity`)
-            order by id limit {$start}, {$this->perPageCount}
+            order by id limit 0, {$this->perPageCount}
         "
         );
 
-        return $this->getNextPage($count, $page);
+        return $page++;
 	}
 }

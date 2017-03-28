@@ -81,12 +81,17 @@ class EduSohoUpgrade extends AbstractUpdater
 
         'Lesson2LiveActivityMigrate',
         'ActivityRelaLiveActivity',
+
+        'CourseLessonView2CourseTaskView',
+        'CourseLessonLearn2CourseTaskResult',
         // next
         'Exercise2CourseTaskMigrate',
         'Homework2CourseTasMigrate',
 
         'AfterAllCourseTaskMigrate',
         'OtherMigrate',
+
+        'LogMigrate',
       );
 
         if ($index > count($steps) - 1) {

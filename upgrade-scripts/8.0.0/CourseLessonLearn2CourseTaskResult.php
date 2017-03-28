@@ -2,7 +2,9 @@
 
 class CourseLessonLearn2CourseTaskResult extends AbstractMigrate
 {
-    if (!$this->isTableExist('course_task_result')) {
+    public function update($page)
+    {
+        if (!$this->isTableExist('course_task_result')) {
             $this->exec(
                 "
                 CREATE TABLE `course_task_result` (
@@ -21,6 +23,13 @@ class CourseLessonLearn2CourseTaskResult extends AbstractMigrate
                 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
             "
             );
+        }
+
+        $countSql = 'SELECT count(*) FROM `course_lesson_learn` where `id` not in (select `id` from `course_task_result`)';
+        $count = $this->getConnection()->fetchColumn($countSql);
+        if ($count == 0) {
+            $this->exec("UPDATE `course_task_result` cl,  `course_task` ck SET cl.`activityId`= ck.`activityId` WHERE cl.`courseTaskId` = ck.`id`;");
+            return;
         }
 
         $this->exec(
@@ -49,13 +58,10 @@ class CourseLessonLearn2CourseTaskResult extends AbstractMigrate
                 `updateTime`,
                 `learnTime`,
                 `watchTime`
-            from `course_lesson_learn` where id not in (select id from `course_task_result`);
-        "
+            from `course_lesson_learn` where id not in (select id from `course_task_result`) limit 0, 1000;
+            "
         );
 
-        $this->exec(
-            "
-            UPDATE `course_task_result` cl,  `course_task` ck SET cl.`activityId`= ck.`activityId` WHERE cl.`courseTaskId` = ck.`id`;
-        "
-        );
+        return $page++;
+    }
 }

@@ -22,13 +22,12 @@ class Lesson2PptActivityMigrate extends AbstractMigrate
         }
 
         if (!$this->isFieldExist('ppt_activity', 'migrateLessonId')) {
-            $this->exec("alter table `ppt_activity` add `migrateLessonId` int(10) ;");
+            $this->exec('alter table `ppt_activity` add `migrateLessonId` int(10) ;');
         }
 
         $countSql = "SELECT count(*) from `course_lesson` WHERE `type`='ppt' and `id` NOT IN (SELECT migrateLessonId FROM `ppt_activity`)";
         $count = $this->getConnection()->fetchColumn($countSql);
-        $start = $this->getStart($page);
-        if ($count == 0 && $count < $start) {
+        if ($count == 0) {
             return;
         }
 
@@ -56,6 +55,6 @@ class Lesson2PptActivityMigrate extends AbstractMigrate
         "
         );
 
-        return $this->getNextPage($count, $page);
+        return $page++;
     }
 }

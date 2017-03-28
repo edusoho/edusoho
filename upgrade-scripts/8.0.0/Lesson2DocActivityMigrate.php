@@ -27,8 +27,7 @@ class Lesson2DocActivityMigrate extends AbstractMigrate
 
         $countSql = "SELECT count(*) from `course_lesson` WHERE `type`='document' and `id` NOT IN (SELECT migrateLessonId FROM `doc_activity`)";
         $count = $this->getConnection()->fetchColumn($countSql);
-        $start = $this->getStart($page);
-        if ($count == 0 && $count < $start) {
+        if ($count == 0) {
             return;
         }
 
@@ -53,10 +52,10 @@ class Lesson2DocActivityMigrate extends AbstractMigrate
                 `updatedTime`,
                 `id`
             FROM `course_lesson` WHERE TYPE ='document' AND id NOT IN (SELECT `migrateLessonId` FROM `doc_activity`)
-            order by id limit {$start}, {$this->perPageCount};
+            order by id limit 0, {$this->perPageCount};
         "
         );
 
-        return $this->getNextPage($count, $page);
+        return $page++;
     }
 }

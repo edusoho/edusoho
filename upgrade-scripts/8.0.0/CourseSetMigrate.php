@@ -10,7 +10,7 @@ class CourseSetMigrate extends AbstractMigrate
                   `type` varchar(32) NOT NULL DEFAULT '',
                   `title` varchar(1024) DEFAULT '',
                   `subtitle` varchar(1024) DEFAULT '',
-                  `tags` text,
+                `tags` text,
                   `categoryId` int(10) NOT NULL DEFAULT '0',
                   `summary` TEXT,
                   `goals` TEXT,
@@ -168,10 +168,10 @@ class CourseSetMigrate extends AbstractMigrate
             ,`userId`
             ,`about`
             ,`teacherIds`
-        FROM `course` where `id` not in (select `id` from `c2_course_set`) order by id limit {$start}, {$this->perPageCount};";
+        FROM `course` where `id` not in (select `id` from `c2_course_set`) order by id limit 0, {$this->perPageCount};";
 
         $result = $this->getConnection()->exec($sql);
 
-        return $this->getNextPage($count, $page);
+        return $page++;
     }
 }

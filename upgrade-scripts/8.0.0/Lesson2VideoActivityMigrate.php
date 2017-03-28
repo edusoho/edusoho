@@ -25,8 +25,7 @@ class Lesson2VideoActivityMigrate extends AbstractMigrate
 
         $countSql = "SELECT count(*) from `course_lesson` WHERE type ='video' and `id` NOT IN (SELECT migrateLessonId FROM `video_activity`)";
         $count = $this->getConnection()->fetchColumn($countSql);
-        $start = $this->getStart($page);
-        if ($count == 0 && $count < $start) {
+        if ($count == 0) {
             return;
         }
 
@@ -47,10 +46,10 @@ class Lesson2VideoActivityMigrate extends AbstractMigrate
                 'end',
                 '1',
                 `id`
-            from `course_lesson` where  type ='video' and `id` not in (select `migrateLessonId` from `video_activity`) order by id limit {$start}, {$this->perPageCount};
+            from `course_lesson` where  type ='video' and `id` not in (select `migrateLessonId` from `video_activity`) order by id limit 0, {$this->perPageCount};
         "
         );
 
-        return $this->getNextPage($count, $page);
+        return $page;
     }
 }

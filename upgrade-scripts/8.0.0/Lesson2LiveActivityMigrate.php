@@ -5,7 +5,7 @@ class Lesson2LiveActivityMigrate extends AbstractMigrate
     public function update($page)
     {
 
-		if (!$this->isTableExist('live_activity')) {
+		    if (!$this->isTableExist('live_activity')) {
             $sql = "CREATE TABLE `live_activity` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `liveId` int(11) NOT NULL COMMENT '直播间ID',
@@ -19,18 +19,17 @@ class Lesson2LiveActivityMigrate extends AbstractMigrate
             $this->getConnection()->exec($sql);
         }
 
-		if (!$this->isFieldExist('live_activity', 'migrateLessonId')) {
+		    if (!$this->isFieldExist('live_activity', 'migrateLessonId')) {
             $this->exec("alter table `live_activity` add `migrateLessonId` int(10) ;");
         }
 
         $countSql = "SELECT count(*) from `course_lesson` WHERE `type`='live' and `id` NOT IN (SELECT migrateLessonId FROM `live_activity`)";
         $count = $this->getConnection()->fetchColumn($countSql);
-        $start = $this->getStart($page);
-        if ($count == 0 && $count < $start) {
+        if ($count == 0) {
             return;
         }
 
-		$sql = "INSERT INTO `live_activity` (
+		    $sql = "INSERT INTO `live_activity` (
           `id`
           ,`liveId`
           ,`liveProvider`
@@ -45,10 +44,10 @@ class Lesson2LiveActivityMigrate extends AbstractMigrate
             , 0
             ,`id`
         FROM `course_lesson` where type='live' and `id` not in (select `id` from `live_activity`)
-        order by id limit {$start}, {$this->perPageCount};";
+        order by id limit 0, {$this->perPageCount};";
 
         $result = $this->getConnection()->exec($sql);
 
-        return $this->getNextPage($count, $page);
+        return $page++;
     }
 }

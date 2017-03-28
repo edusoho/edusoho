@@ -140,8 +140,7 @@ class CourseMigrate extends AbstractMigrate
     {
         $countSql = 'SELECT count(*) FROM `course` where `id` not in (select `id` from `c2_course`)';
         $count = $this->getConnection()->fetchColumn($countSql);
-        $start = $this->getStart($page);
-        if($count == 0 && $count < $start) {
+        if($count == 0) {
           return;
         }
 
@@ -251,8 +250,8 @@ class CourseMigrate extends AbstractMigrate
               ,1
               ,'freeMode'
               ,`maxRate`
-          FROM `course` where `id` not in (select `id` from `c2_course`) order by id limit {$start}, {$this->perPageCount};";
+          FROM `course` where `id` not in (select `id` from `c2_course`) order by id limit 0, {$this->perPageCount};";
         $result = $this->getConnection()->exec($sql);
-        return $this->getNextPage($count, $page);
+        return $page++;
     }
 }
