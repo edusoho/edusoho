@@ -1,4 +1,3 @@
-# 请不要修改此文件的参数
 parameters:
     role_hierarchy:
         ROLE_TEACHER:     ROLE_USER
@@ -9,7 +8,7 @@ parameters:
     keyword.filter: Biz\Common\EsKeywordFilter
 
     route_white_list:
-        - '/common/crontab'
+        - '/crontab'
         - '/passport/notify'
         - '/oauth/v2/token'
         - '/uploader/upload_callback'
