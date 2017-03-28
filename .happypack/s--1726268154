@@ -1,3 +1,0 @@
-'use strict';
-
-require('../less/turing.less');

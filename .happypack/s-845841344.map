@@ -1,1 +1,0 @@
-{"version":3,"sources":["app/Resources/static-src/app/js/activity/testpaper/index.js"],"names":["$","modal","backdrop","keyboard"],"mappings":";;AAAAA,EAAE,kBAAF,EAAsBC,KAAtB,CAA4B;AAC1BC,YAAS,QADiB;AAE1BC,YAAU;AAFgB,CAA5B","file":"index.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["$('#testpaper-modal').modal({\n  backdrop:'static',\n  keyboard: false\n})"]}

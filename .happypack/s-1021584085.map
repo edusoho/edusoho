@@ -1,1 +1,0 @@
-{"version":3,"sources":["app/Resources/static-src/app/js/admin/main.js"],"names":["console","log"],"mappings":";;AAAAA,QAAQC,GAAR,CAAY,aAAZ","file":"main.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["console.log('app main js');"]}

@@ -1,1 +1,0 @@
-{"version":3,"sources":["app/Resources/static-src/app/js/admin/main.js"],"names":["console","log"],"mappings":";;AAAAA,QAAQC,GAAR,CAAY,mDAAZ;AACA","file":"main.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["console.log('admin app js:bundles/topxiaadmin/js/admin-app.js ');\n// "]}

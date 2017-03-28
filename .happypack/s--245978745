@@ -1,8 +1,0 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var getRandomString = exports.getRandomString = function getRandomString() {
-  return Math.random().toString().replace('.', '');
-};

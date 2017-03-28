@@ -1,1 +1,0 @@
-{"version":3,"sources":["node_modules/.1.2.7@core-js/modules/$.path.js"],"names":["module","exports","require"],"mappings":";;AAAAA,OAAOC,OAAP,GAAiBC,QAAQ,YAAR,CAAjB","file":"$.path.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["module.exports = require('./$.global');"]}

@@ -1,7 +1,0 @@
-'use strict';
-
-var _swiper = require('swiper');
-
-var _swiper2 = _interopRequireDefault(_swiper);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

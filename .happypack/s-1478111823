@@ -1,3 +1,0 @@
-'use strict';
-
-require('postal.xframe/lib/postal.xframe.js');

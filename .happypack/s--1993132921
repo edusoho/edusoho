@@ -1,6 +1,0 @@
-'use strict';
-
-$('#testpaper-modal').modal({
-  backdrop: 'static',
-  keyboard: false
-});

@@ -1,5 +1,0 @@
-'use strict';
-
-require('../bootstrap/less/bootstrap.less');
-
-require('../less/main.less');

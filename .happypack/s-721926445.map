@@ -1,1 +1,0 @@
-{"version":3,"sources":["app/Resources/static-src/app/js/courseset-manage/index.js"],"names":["console","log"],"mappings":";;AAAA;;AACA;;AAGAA,QAAQC,GAAR,CAAY,UAAZ","file":"index.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["import { publishCourse } from 'app/js/course-manage/help';\npublishCourse();\n\n\nconsole.log('setmange');"]}

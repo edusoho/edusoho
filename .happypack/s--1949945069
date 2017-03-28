@@ -1,5 +1,0 @@
-'use strict';
-
-var _help = require('app/course-manage/help');
-
-(0, _help.publishCourse)();

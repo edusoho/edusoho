@@ -1,9 +1,0 @@
-'use strict';
-
-var _download = require('./download.js');
-
-var _download2 = _interopRequireDefault(_download);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-new _download2.default();

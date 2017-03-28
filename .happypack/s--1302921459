@@ -1,7 +1,0 @@
-'use strict';
-
-require('./vendor.less');
-
-require('jquery');
-
-require('bootstrap');

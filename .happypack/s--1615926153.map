@@ -1,1 +1,0 @@
-{"version":3,"sources":["app/Resources/static-src/app/js/activity/text/index.js"],"names":["$","perfectScrollbar"],"mappings":";;AAAAA,EAAE,gBAAF,EAAoBC,gBAApB;AACAD,EAAE,MAAF,EAAUC,gBAAV,CAA2B,QAA3B","file":"index.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["$('#text-activity').perfectScrollbar();\n$('body').perfectScrollbar('update'); "]}

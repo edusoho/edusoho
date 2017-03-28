@@ -1,9 +1,0 @@
-'use strict';
-
-var _notify = require('common/notify');
-
-var _notify2 = _interopRequireDefault(_notify);
-
-require('app/js/classroom/category-select');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

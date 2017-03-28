@@ -1,1 +1,0 @@
-{"version":3,"sources":["plugins/VipPlugin/Resources/static-src/js/admin/index-modal/index.js"],"names":["console","log"],"mappings":";;AAAAA,QAAQC,GAAR,CAAY,QAAZ","file":"index.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["console.log('index ');"]}

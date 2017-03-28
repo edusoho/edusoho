@@ -1,7 +1,0 @@
-'use strict';
-
-var _help = require('app/js/course-manage/help');
-
-(0, _help.publishCourse)();
-
-console.log('setmange');

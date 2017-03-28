@@ -1,1 +1,0 @@
-{"version":3,"sources":["plugins/GracefulThemePlugin/theme/static-src/js/main.js"],"names":[],"mappings":";;AAAA","file":"main.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["import '../less/graceful.less';"]}

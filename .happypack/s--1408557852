@@ -1,4 +1,0 @@
-'use strict';
-
-var listLength = $('#courses-list-table').find('tbody tr').length;
-if (listLength == 2) {}

@@ -1,1 +1,0 @@
-{"version":3,"sources":["app/Resources/static-src/app/js/courseset-manage/index.js"],"names":[],"mappings":";;AAAA;;AACA","file":"index.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["import { publishCourse } from 'app/js/course-manage/help';\npublishCourse();\n\n"]}

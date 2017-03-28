@@ -1,1 +1,0 @@
-{"version":3,"sources":["app/Resources/static-src/app/js/course-manage/list/index.js"],"names":["console","log","listLength"],"mappings":";;AACAA,QAAQC,GAAR,CAAYC,UAAZ","file":"index.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["\nconsole.log(listLength);"]}
