@@ -48,13 +48,14 @@ define(function(require, exports, module) {
                     errormessageRequired: Translator.trans('请输入商户平台Key')
                 });
                 validator.addItem({
-                    element: '[name=AppSecret]',
+                    element: '[name=wxpay_secret]',
                     required: true,
                     errormessageRequired: Translator.trans('请输入商户平台AppSecret')
                 });
             } else {
                 validator.removeItem('[name="wxpay_key"]');
                 validator.removeItem('[name="wxpay_account"]');
+                validator.removeItem('[name="wxpay_key"]');
                 validator.removeItem('[name="wxpay_secret"]');
             }
         });
