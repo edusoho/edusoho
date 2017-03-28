@@ -1,23 +1,23 @@
 const options = {
   output: {
-    path: 'web/static/',       // 用于生产环境下的输出目录
-    publicPath: '/static/',    // 用于开发环境下的输出目录
+    path: 'web/static-dist/',       // 用于生产环境下的输出目录
+    publicPath: '/static-dist/',    // 用于开发环境下的输出目录
   },
   libs: {
-    vendor: ['libs/vendor.js'], //可以是一个js文件,
-    "html5shiv": ['html5shiv'],
-    "fix-ie": ['console-polyfill', 'respond-js'], //也可以是一个npm依赖包
-    "jquery-insertAtCaret": ['libs/js/jquery-insertAtCaret.js'],
-    "jquery-form": ['jquery-form'],
-    "jquery-nouislider":['nouislider'],
-    "jquery-sortable":['jquery-sortable'],
+    'vendor': ['libs/vendor.js'], //可以是一个js文件,
+    'html5shiv': ['html5shiv'],
+    'fix-ie': ['console-polyfill', 'respond-js'], //也可以是一个npm依赖包
+    'jquery-insertAtCaret': ['libs/js/jquery-insertAtCaret.js'],
+    'jquery-form': ['jquery-form'],
+    'jquery-nouislider':['nouislider'],
+    'jquery-sortable':['jquery-sortable'],
     'swiper':['swiper'],
     'perfect-scrollbar':['libs/js/perfect-scrollbar.js'],
     'jquery-validation': ['libs/js/jquery-validation.js'],
     'jquery-intro': ['libs/js/jquery-intro/jquery-intro.js'],
     'bootstrap-datetimepicker':['libs/js/bootstrap-datetimepicker.js'],
-    "iframe-resizer":['libs/js/iframe-resizer.js'],
-    "iframe-resizer-contentWindow":['libs/js/iframe-resizer-contentWindow.js'],
+    'iframe-resizer':['libs/js/iframe-resizer.js'],
+    'iframe-resizer-contentWindow':['libs/js/iframe-resizer-contentWindow.js'],
     'jquery-timer':['libs/js/jquery-timer.js'],
     'jquery-countdown':['libs/js/jquery-countdown.js'],
     'jquery-cycle2': ['jquery-cycle2'],

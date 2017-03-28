@@ -3,6 +3,10 @@
 namespace AppBundle\Controller\Question;
 
 use AppBundle\Common\Paginator;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Question\Service\QuestionService;
+use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
@@ -51,7 +55,7 @@ class ManageController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));
 
         $taskIds = ArrayToolkit::column($questions, 'lessonId');
-        $courseTasks = $this->getCourseTaskService()->findTasksByIds($taskIds);
+        $courseTasks = $this->getTaskService()->findTasksByIds($taskIds);
         $courseTasks = ArrayToolkit::index($courseTasks, 'id');
 
         $courseIds = ArrayToolkit::column($questions, 'courseId');
@@ -60,7 +64,7 @@ class ManageController extends BaseController
         $user = $this->getUser();
         $searchCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSet['id']);
 
-        $showTasks = $this->getCourseTaskService()->findTasksByCourseId($request->query->get('courseId', 0));
+        $showTasks = $this->getTaskService()->findTasksByCourseId($request->query->get('courseId', 0));
         $showTasks = ArrayToolkit::index($showTasks, 'id');
 
         return $this->render('question-manage/index.html.twig', array(
@@ -81,14 +85,14 @@ class ManageController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $data = $request->request->all();
 
             $data['courseSetId'] = $courseSet['id'];
 
             $question = $this->getQuestionService()->create($data);
 
-            if ($data['submission'] == 'continue') {
+            if ($data['submission'] === 'continue') {
                 $urlParams = ArrayToolkit::parts($question, array('target', 'difficulty', 'parentId'));
                 $urlParams['type'] = $type;
                 $urlParams['id'] = $courseSet['id'];
@@ -96,7 +100,7 @@ class ManageController extends BaseController
                 $this->setFlashMessage('success', $this->getServiceKernel()->trans('题目添加成功，请继续添加。'));
 
                 return $this->redirect($this->generateUrl('course_set_manage_question_create', $urlParams));
-            } elseif ($data['submission'] == 'continue_sub') {
+            } elseif ($data['submission'] === 'continue_sub') {
                 $this->setFlashMessage('success', $this->getServiceKernel()->trans('题目添加成功，请继续添加子题。'));
 
                 return $this->redirect($request->query->get('goto', $this->generateUrl('course_set_manage_question', array('id' => $courseSet['id'], 'parentId' => $question['id']))));
@@ -122,11 +126,11 @@ class ManageController extends BaseController
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
         $question = $this->getQuestionService()->get($questionId);
-        if (!$question) {
+        if (!$question || $question['courseSetId'] != $courseSetId) {
             throw new ResourceNotFoundException('question', $questionId);
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $fields = $request->request->all();
             $this->getQuestionService()->update($question['id'], $fields);
 
@@ -147,7 +151,11 @@ class ManageController extends BaseController
 
     public function deleteAction(Request $request, $courseSetId, $questionId)
     {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $question = $this->getQuestionService()->get($questionId);
+        if (!$question || $question['courseSetId'] != $courseSetId) {
+            throw new ResourceNotFoundException('question', $questionId);
+        }
         $this->getQuestionService()->delete($questionId);
 
         return $this->createJsonResponse(true);
@@ -155,10 +163,18 @@ class ManageController extends BaseController
 
     public function deletesAction(Request $request, $courseSetId)
     {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
         $ids = $request->request->get('ids', array());
-
+        $questions = $this->getQuestionService()->findQuestionsByIds($ids);
+        if (empty($questions)) {
+            throw new ResourceNotFoundException('questions', 0);
+        }
+        foreach ($questions as $question) {
+            if ($question['courseSetId'] != $courseSetId) {
+                throw new ResourceNotFoundException('question', $question['id']);
+            }
+        }
         $this->getQuestionService()->batchDeletes($ids);
 
         return $this->createJsonResponse(true);
@@ -166,14 +182,14 @@ class ManageController extends BaseController
 
     public function previewAction(Request $request, $courseSetId, $questionId)
     {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
         $isNewWindow = $request->query->get('isNew');
 
         $question = $this->getQuestionService()->get($questionId);
 
-        if (empty($question)) {
-            throw new ResourceNotFoundException('question', $question['id']);
+        if (!$question || $question['courseSetId'] != $courseSetId) {
+            throw new ResourceNotFoundException('question', $questionId);
         }
 
         if (!empty($question['matas']['mediaId'])) {
@@ -269,6 +285,9 @@ class ManageController extends BaseController
         $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
         foreach ($questions as &$question) {
+            if ($question['courseSetId'] != $courseSetId) {
+                throw new ResourceNotFoundException('question', $question['id']);
+            }
             if ($question['subCount'] > 0) {
                 $question['subs'] = $this->getQuestionService()->findQuestionsByParentId($question['id']);
             }
@@ -277,7 +296,7 @@ class ManageController extends BaseController
         $user = $this->getUser();
         $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSet['id']);
         $taskIds = ArrayToolkit::column($questions, 'lessonId');
-        $courseTasks = $this->getCourseTaskService()->findTasksByIds($taskIds);
+        $courseTasks = $this->getTaskService()->findTasksByIds($taskIds);
         $courseTasks = ArrayToolkit::index($courseTasks, 'id');
 
         return $this->render('question-manage/question-picked.html.twig', array(
@@ -298,7 +317,7 @@ class ManageController extends BaseController
 
         $this->getCourseService()->tryManageCourse($courseId);
 
-        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseId);
+        $courseTasks = $this->getTaskService()->findTasksByCourseId($courseId);
 
         return $this->createJsonResponse($courseTasks);
     }
@@ -328,21 +347,30 @@ class ManageController extends BaseController
             return array();
         }
 
-        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseId);
+        $courseTasks = $this->getTaskService()->findTasksByCourseId($courseId);
 
         return ArrayToolkit::index($courseTasks, 'id');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
     }
 
+    /**
+     * @return QuestionService
+     */
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
@@ -356,7 +384,10 @@ class ManageController extends BaseController
         return $this->createService('User:UserService');
     }
 
-    protected function getCourseTaskService()
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
     }

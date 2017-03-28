@@ -96,7 +96,7 @@ class ClassroomCourseExpiryDateEventSubscriber extends EventSubscriber implement
         $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
 
         foreach ($activeCourses as $course) {
-            $this->getCourseDao()->update($course['id'], $this->getCourseService()->buildCourseExpiryDataFromClassroom($expiryMode, $expiryValue));
+            $this->getCourseDao()->update($course['id'], $this->getCourseService()->buildCourseExpiryDataFromClassroom($expiryDate['expiryMode'], $expiryDate['expiryValue']));
         }
     }
 
@@ -105,7 +105,7 @@ class ClassroomCourseExpiryDateEventSubscriber extends EventSubscriber implement
      */
     protected function getCourseDao()
     {
-        return $this->getBiz()->dao('Course.CourseDao');
+        return $this->getBiz()->dao('Course:CourseDao');
     }
 
     /**
@@ -113,7 +113,7 @@ class ClassroomCourseExpiryDateEventSubscriber extends EventSubscriber implement
      */
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course.CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
     /**

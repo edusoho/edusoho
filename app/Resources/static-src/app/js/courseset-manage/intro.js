@@ -76,6 +76,8 @@ export default class Intro {
     this.intro.start().onexit(function(){
       $('.js-intro-btn-group').removeClass('transparent');
       $('body').removeClass('transparent-intro');
+    }).oncomplete(function(){
+      console.log('ok');
     });
   }
 
@@ -157,22 +159,22 @@ export default class Intro {
     let arry = [
       {
         intro: `<p class="title">功能升级</p>
-        课程管理功能现已全新升级!`,
+        课程管理功能现已全新升级。`,
       },
       {
         element: '#step-1',
         intro: `<p class="title">计划任务</p>
-        教学内容的编辑、管理请点击左侧“计划任务”的菜单项进入!`,
+        教学内容的编辑、管理请点击左侧“计划任务”的菜单项进入。`,
       },
       {
         element: '#step-2',
         intro: `<p class="title">营销设置</p>
-        在“营销设置”中您可以通过设置决定课程如何销售、如何加入、如何学习!`,
+        在“营销设置”中您可以通过设置决定课程如何销售、如何加入、如何学习。`,
       },
       {
         element: '#step-3',
         intro: `<p class="title">添加任务</p>
-        您可以在这里选择各种不同的教学手段，然后上传文件/设置内容/设置学习完成条件。!`,
+        您可以在这里选择各种不同的教学手段，然后上传文件/设置内容/设置学习完成条件。`,
       }
     ];
     //如果存在任务
@@ -181,7 +183,7 @@ export default class Intro {
         element: '#step-5',
         intro: `<p class="title">任务环节</p>
         在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，
-        每个环节都可以通过各种教学手段来实现。!`,
+        每个环节都可以通过各种教学手段来实现。`,
       })
     }
 
@@ -192,17 +194,17 @@ export default class Intro {
     return [
       {
         intro: `<p class="title">功能升级</p>
-        课程管理功能现已全新升级!`,
+        课程管理功能现已全新升级。`,
       },
       {
         element: '#step-1',
         intro: `<p class="title">计划任务</p>
-        教学内容的编辑、管理请点击左侧“计划任务”的菜单项进入!`,
+        教学内容的编辑、管理请点击左侧“计划任务”的菜单项进入。`,
       },
       {
         element: '#step-2',
         intro: `<p class="title">营销设置</p>
-        在“营销设置”中您可以通过设置决定课程如何销售、如何加入、如何学习!`,
+        在“营销设置”中您可以通过设置决定课程如何销售、如何加入、如何学习。`,
       }
     ];
   }
@@ -212,7 +214,7 @@ export default class Intro {
       {
         element: '#step-3',
         intro: `<p class="title">添加任务</p>
-        您可以在这里选择各种不同的教学手段，然后上传文件/设置内容/设置学习完成条件。!`,
+        您可以在这里选择各种不同的教学手段，然后上传文件/设置内容/设置学习完成条件。`,
       }
     ];
     //如果存在任务
@@ -221,7 +223,7 @@ export default class Intro {
         element: '#step-5',
         intro: `<p class="title">任务环节</p>
         在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，
-        每个环节都可以通过各种教学手段来实现。!`,
+        每个环节都可以通过各种教学手段来实现。`,
         position: 'bottom',
       })
     }
@@ -235,7 +237,7 @@ export default class Intro {
         element: element,
         intro: `<p class="title">任务环节</p>
         在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，
-        每个环节都可以通过各种教学手段来实现。!`,
+        每个环节都可以通过各种教学手段来实现。`,
         position: 'bottom',
       },
     ];
