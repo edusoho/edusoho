@@ -338,7 +338,7 @@ class ManageController extends BaseController
 
     protected function getQuestionConfig()
     {
-        return $this->get('extension.default')->getQuestionTypes();
+        return $this->get('extension.manager')->getQuestionTypes();
     }
 
     protected function getQuestionRanges($courseId)

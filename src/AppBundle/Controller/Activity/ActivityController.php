@@ -85,7 +85,7 @@ class ActivityController extends BaseController
 
     protected function getActivityConfig($type)
     {
-        $config = $this->get('extension.default')->getActivities();
+        $config = $this->get('extension.manager')->getActivities();
 
         return $config[$type];
     }
