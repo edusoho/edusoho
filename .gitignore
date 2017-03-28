@@ -51,4 +51,3 @@ chunk-manifest.json
 /.vscode
 .php_cs.cache
 deployment-config.json
->>>>>>> develop
