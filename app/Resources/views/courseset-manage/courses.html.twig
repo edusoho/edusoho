@@ -3,7 +3,7 @@
 {% block title %}{{ '教学计划管理'|trans }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'plan' %}
 
-{% do script(['app/js/course-manage/index.js']) %}
+{% do script(['app/js/course-manage/index.js','app/js/course-manage/list/index.js']) %}
 
 {% block main %}
   <div class="panel panel-default" role="courseset-manage-courses" >
@@ -14,7 +14,7 @@
           class="es-icon es-icon-anonymous-iconfont"></i>{{ '创建教学计划'|trans }}</button>
     </div>
     <div class="panel-body">
-      <table id="course-table" class="table table-striped">
+      <table id="courses-list-table" class="table table-striped">
       	<thead>
       	  <th width="30%">{{'名称'|trans}}</th>
           <th>
