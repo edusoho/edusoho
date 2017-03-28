@@ -167,10 +167,10 @@ class ManageController extends BaseController
 
         $ids = $request->request->get('ids', array());
         $questions = $this->getQuestionService()->findQuestionsByIds($ids);
-        if(empty($questions)){
+        if (empty($questions)) {
             throw new ResourceNotFoundException('questions', 0);
         }
-        foreach ($questions as $question){
+        foreach ($questions as $question) {
             if ($question['courseSetId'] != $courseSetId) {
                 throw new ResourceNotFoundException('question', $question['id']);
             }
@@ -285,6 +285,9 @@ class ManageController extends BaseController
         $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
         foreach ($questions as &$question) {
+            if ($question['courseSetId'] != $courseSetId) {
+                throw new ResourceNotFoundException('question', $question['id']);
+            }
             if ($question['subCount'] > 0) {
                 $question['subs'] = $this->getQuestionService()->findQuestionsByParentId($question['id']);
             }
