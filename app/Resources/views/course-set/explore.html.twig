@@ -76,7 +76,7 @@
           <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
               class="es-icon es-icon-crown text-warning"></i>
             {% if (currentLevelId == 'all') %}{{ '会员课程'|trans }}{% endif %}
-            {% for level in levels %}{% if (level.id == currentLevelId) %}{{ level.name }}{% endif %}{% endfor %}
+            {% for level in levels %}{% if (level.id == currentLevelId) %}{{ level.name|sub_text(4) }}{% endif %}{% endfor %}
           </button>
           <ul class="dropdown-menu" role="menu">
             <li role="presentation" class="{% if (currentLevelId == 'all') %}active {% endif %}"><a

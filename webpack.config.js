@@ -1,5 +1,4 @@
-// webpack配置文件
-const config = {
+const options = {
   output: {
     path: 'web/static-dist/',       // 用于生产环境下的输出目录
     publicPath: '/static-dist/',    // 用于开发环境下的输出目录
@@ -15,7 +14,8 @@ const config = {
     "jquery-sortable":['jquery-sortable'],
     'swiper':['swiper'],
     'perfect-scrollbar':['libs/js/perfect-scrollbar.js'],
-    "jquery-validation": ['libs/js/jquery-validation.js'],
+    'jquery-validation': ['libs/js/jquery-validation.js'],
+    'jquery-intro': ['libs/js/jquery-intro/jquery-intro.js'],
     'bootstrap-datetimepicker':['libs/js/bootstrap-datetimepicker.js'],
     "iframe-resizer":['libs/js/iframe-resizer.js'],
     "iframe-resizer-contentWindow":['libs/js/iframe-resizer-contentWindow.js'],
@@ -101,4 +101,5 @@ const config = {
   ]
 }
 
-export default config;
+export default options;
+

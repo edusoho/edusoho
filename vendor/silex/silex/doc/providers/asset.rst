@@ -43,13 +43,6 @@ Registering
 
         composer require symfony/asset
 
-    If you want to use assets in your Twig templates, you must also install the
-    Symfony Twig Bridge:
-
-    .. code-block:: bash
-
-        composer require symfony/twig-bridge
-
 Usage
 -----
 

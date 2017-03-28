@@ -15,8 +15,10 @@ use Silex\Application;
 use Silex\ControllerCollection;
 use Silex\Api\ControllerProviderInterface;
 use Silex\Route;
+use Silex\Provider\MonologServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -456,7 +458,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function testRegisterShouldReturnSelf()
     {
         $app = new Application();
-        $provider = $this->getMockBuilder('Pimple\ServiceProviderInterface')->getMock();
+        $provider = $this->getMock('Pimple\ServiceProviderInterface');
 
         $this->assertSame($app, $app->register($provider));
     }
@@ -535,6 +537,19 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         unset($app['exception_handler']);
         $app->match('/')->bind('homepage');
         $app->handle(Request::create('/'));
+    }
+
+    public function testRedirectDoesNotRaisePHPNoticesWhenMonologIsRegistered()
+    {
+        $app = new Application();
+
+        ErrorHandler::register(null, false);
+        $app['monolog.logfile'] = 'php://memory';
+        $app->register(new MonologServiceProvider());
+        $app->get('/foo/', function () { return 'ok'; });
+
+        $response = $app->handle(Request::create('/foo'));
+        $this->assertEquals(301, $response->getStatusCode());
     }
 
     public function testBeforeFilterOnMountedControllerGroupIsolatedToGroup()
