@@ -2,11 +2,12 @@
 
 namespace Biz\Coupon;
 
+use AppBundle\Extension\Extension;
 use Pimple\Container;
-use Pimple\ServiceProviderInterface;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use Pimple\ServiceProviderInterface;
 
-class CouponServiceProvider implements ServiceProviderInterface
+class CouponServiceProvider extends Extension implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}

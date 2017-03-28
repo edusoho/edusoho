@@ -45,7 +45,7 @@ class DaoProxy
 
     protected function getDaoProxyMethod($method)
     {
-        $prefix = $this->getPrefix($method);
+        $prefix = $this->getPrefix($method, array('get', 'find', 'create', 'update', 'delete', 'search', 'wave'));
         if ($prefix) {
             return "{$prefix}";
         }
@@ -58,10 +58,10 @@ class DaoProxy
         return $result;
     }
 
-    protected function getPrefix($method)
+    protected function getPrefix($method, $prefixs)
     {
         $_prefix = '';
-        foreach (array('get', 'find', 'create', 'update', 'delete', 'search', 'wave') as $prefix) {
+        foreach ($prefixs as $prefix) {
             if (strpos($method, $prefix) === 0) {
                 $_prefix = $prefix;
                 break;

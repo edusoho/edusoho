@@ -101,4 +101,6 @@ interface TestpaperService
     public function canLookTestpaper($resultId);
 
     public function updateTestpaperItems($testpaperId, $items);
+
+    public function getTestpaperBuilder($type);
 }

@@ -38,7 +38,7 @@ class TaskSmsProcessor extends BaseSmsProcessor
                 ));
             }
         } else {
-            $count = $this->getCourseMemberService()->countMembers(array('courseId' => $course['id']));
+            $count = $this->getCourseMemberService()->countMembers(array('courseId' => $course['id'], 'role' => 'student'));
         }
 
         $api = CloudAPIFactory::create('root');
@@ -106,7 +106,7 @@ class TaskSmsProcessor extends BaseSmsProcessor
                     array('createdTime' => 'Desc'), $index, 1000);
             }
         } else {
-            $students = $this->getCourseMemberService()->searchMembers(array('courseId' => $task['courseId']),
+            $students = $this->getCourseMemberService()->searchMembers(array('courseId' => $task['courseId'], 'role' => 'student'),
                 array('createdTime' => 'Desc'), $index, 1000);
         }
 
