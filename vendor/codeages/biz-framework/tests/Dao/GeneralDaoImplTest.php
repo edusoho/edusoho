@@ -47,6 +47,9 @@ class GeneralDaoImplTest extends TestCase
               `ids2` varchar(32) NOT NULL DEFAULT '',
               `null_value` VARCHAR(32) DEFAULT NULL,
               `content` text,
+              `php_serialize_value` text,
+              `json_serialize_value` text,
+              `delimiter_serialize_value` text,
               `created_time` int(10) unsigned NOT NULL DEFAULT 0,
               `updated_time` int(10) unsigned NOT NULL DEFAULT 0,
               PRIMARY KEY (`id`)
@@ -458,5 +461,26 @@ class GeneralDaoImplTest extends TestCase
 
         $row = $dao->create(array('name' => 'test1'));
         $result = $dao->findByIds(array(1, 2), array('created_time' => 'desc'), null, 10);
+    }
+
+    public function testSerializes()
+    {
+        /**
+         * @var ExampleDao $dao
+         */
+        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+
+        $row = $dao->create(array(
+            'name' => 'test1',
+            'php_serialize_value' => array('value' => 'i_am_php_serialized_value'),
+            'json_serialize_value' => array('value' => 'i_am_json_serialized_value'),
+            'delimiter_serialize_value' => array('i_am_delimiter_serialized_value'),
+        ));
+
+        foreach (array('php', 'json') as $key){
+            $this->assertEquals($row[$key . '_serialize_value']['value'], "i_am_{$key}_serialized_value");
+        }
+
+        $this->assertEquals($row['delimiter_serialize_value'], array('i_am_delimiter_serialized_value'));
     }
 }

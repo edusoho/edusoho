@@ -434,56 +434,6 @@
         ]
     },
     {
-        "name": "paragonie/random_compat",
-        "version": "v2.0.10",
-        "version_normalized": "2.0.10.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/paragonie/random_compat.git",
-            "reference": "634bae8e911eefa89c1abfbf1b66da679ac8f54d"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/paragonie/random_compat/zipball/634bae8e911eefa89c1abfbf1b66da679ac8f54d",
-            "reference": "634bae8e911eefa89c1abfbf1b66da679ac8f54d",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.2.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "4.*|5.*"
-        },
-        "suggest": {
-            "ext-libsodium": "Provides a modern crypto API that can be used to generate random bytes."
-        },
-        "time": "2017-03-13T16:27:32+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "lib/random.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Paragon Initiative Enterprises",
-                "email": "security@paragonie.com",
-                "homepage": "https://paragonie.com"
-            }
-        ],
-        "description": "PHP 5.x polyfill for random_bytes() and random_int() from PHP 7",
-        "keywords": [
-            "csprng",
-            "pseudorandom",
-            "random"
-        ]
-    },
-    {
         "name": "symfony/polyfill-php70",
         "version": "v1.3.0",
         "version_normalized": "1.3.0.0",
@@ -1750,47 +1700,6 @@
         ]
     },
     {
-        "name": "codeages/biz-framework",
-        "version": "v0.2.11",
-        "version_normalized": "0.2.11.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "0fc8c2ef3ceb13d88a7ea056cdd5244358168782"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/0fc8c2ef3ceb13d88a7ea056cdd5244358168782",
-            "reference": "0fc8c2ef3ceb13d88a7ea056cdd5244358168782",
-            "shasum": ""
-        },
-        "require": {
-            "davedevelopment/phpmig": "^1.2.0",
-            "doctrine/dbal": "^2.4.5",
-            "flexihash/flexihash": "^2.0",
-            "php": "^5.3.3 || ^7.0",
-            "pimple/pimple": "^3.0.2",
-            "psr/log": "^1.0.0",
-            "symfony/event-dispatcher": "^2.8.9"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
-        },
-        "time": "2017-03-27T08:38:09+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\Biz\\Framework\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "A service layer framework."
-    },
-    {
         "name": "codeages/biz-rate-limiter",
         "version": "v0.1.4",
         "version_normalized": "0.1.4.0",
@@ -2773,93 +2682,6 @@
         ]
     },
     {
-        "name": "silex/silex",
-        "version": "v2.0.4",
-        "version_normalized": "2.0.4.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/silexphp/Silex.git",
-            "reference": "49ca08d853731d1635374e5019c8696cfd53c161"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/silexphp/Silex/zipball/49ca08d853731d1635374e5019c8696cfd53c161",
-            "reference": "49ca08d853731d1635374e5019c8696cfd53c161",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.5.9",
-            "pimple/pimple": "~3.0",
-            "symfony/event-dispatcher": "~2.8|^3.0",
-            "symfony/http-foundation": "~2.8|^3.0",
-            "symfony/http-kernel": "~2.8|^3.0",
-            "symfony/routing": "~2.8|^3.0"
-        },
-        "replace": {
-            "silex/api": "self.version",
-            "silex/providers": "self.version"
-        },
-        "require-dev": {
-            "doctrine/dbal": "~2.2",
-            "monolog/monolog": "^1.4.1",
-            "swiftmailer/swiftmailer": "~5",
-            "symfony/asset": "~2.8|^3.0",
-            "symfony/browser-kit": "~2.8|^3.0",
-            "symfony/config": "~2.8|^3.0",
-            "symfony/css-selector": "~2.8|^3.0",
-            "symfony/debug": "~2.8|^3.0",
-            "symfony/doctrine-bridge": "~2.8|^3.0",
-            "symfony/dom-crawler": "~2.8|^3.0",
-            "symfony/expression-language": "~2.8|^3.0",
-            "symfony/finder": "~2.8|^3.0",
-            "symfony/form": "~2.8|^3.0",
-            "symfony/intl": "~2.8|^3.0",
-            "symfony/monolog-bridge": "~2.8|^3.0",
-            "symfony/options-resolver": "~2.8|^3.0",
-            "symfony/phpunit-bridge": "~2.8|^3.0",
-            "symfony/process": "~2.8|^3.0",
-            "symfony/security": "~2.8|^3.0",
-            "symfony/serializer": "~2.8|^3.0",
-            "symfony/translation": "~2.8|^3.0",
-            "symfony/twig-bridge": "~2.8|^3.0",
-            "symfony/validator": "~2.8|^3.0",
-            "symfony/var-dumper": "~2.8|^3.0",
-            "twig/twig": "~1.27|~2.0"
-        },
-        "time": "2016-11-06T18:09:06+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.0.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Silex\\": "src/Silex"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Igor Wiedler",
-                "email": "igor@wiedler.ch"
-            }
-        ],
-        "description": "The PHP micro-framework based on the Symfony Components",
-        "homepage": "http://silex.sensiolabs.org",
-        "keywords": [
-            "microframework"
-        ]
-    },
-    {
         "name": "kriswallsmith/assetic",
         "version": "v1.4.0",
         "version_normalized": "1.4.0.0",
@@ -3008,86 +2830,6 @@
             "assets",
             "compression",
             "minification"
-        ]
-    },
-    {
-        "name": "monolog/monolog",
-        "version": "1.22.1",
-        "version_normalized": "1.22.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/Seldaek/monolog.git",
-            "reference": "1e044bc4b34e91743943479f1be7a1d5eb93add0"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1e044bc4b34e91743943479f1be7a1d5eb93add0",
-            "reference": "1e044bc4b34e91743943479f1be7a1d5eb93add0",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0",
-            "psr/log": "~1.0"
-        },
-        "provide": {
-            "psr/log-implementation": "1.0.0"
-        },
-        "require-dev": {
-            "aws/aws-sdk-php": "^2.4.9 || ^3.0",
-            "doctrine/couchdb": "~1.0@dev",
-            "graylog2/gelf-php": "~1.0",
-            "jakub-onderka/php-parallel-lint": "0.9",
-            "php-amqplib/php-amqplib": "~2.4",
-            "php-console/php-console": "^3.1.3",
-            "phpunit/phpunit": "~4.5",
-            "phpunit/phpunit-mock-objects": "2.3.0",
-            "ruflin/elastica": ">=0.90 <3.0",
-            "sentry/sentry": "^0.13",
-            "swiftmailer/swiftmailer": "~5.3"
-        },
-        "suggest": {
-            "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
-            "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
-            "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
-            "ext-mongo": "Allow sending log messages to a MongoDB server",
-            "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
-            "mongodb/mongodb": "Allow sending log messages to a MongoDB server via PHP Driver",
-            "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
-            "php-console/php-console": "Allow sending log messages to Google Chrome",
-            "rollbar/rollbar": "Allow sending log messages to Rollbar",
-            "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
-            "sentry/sentry": "Allow sending log messages to a Sentry server"
-        },
-        "time": "2017-03-13T07:08:03+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.0.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Monolog\\": "src/Monolog"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Jordi Boggiano",
-                "email": "j.boggiano@seld.be",
-                "homepage": "http://seld.be"
-            }
-        ],
-        "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
-        "homepage": "http://github.com/Seldaek/monolog",
-        "keywords": [
-            "log",
-            "logging",
-            "psr-3"
         ]
     },
     {
@@ -4831,6 +4573,264 @@
             "annotations",
             "docblock",
             "parser"
+        ]
+    },
+    {
+        "name": "monolog/monolog",
+        "version": "1.21.0",
+        "version_normalized": "1.21.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Seldaek/monolog.git",
+            "reference": "f42fbdfd53e306bda545845e4dbfd3e72edb4952"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/Seldaek/monolog/f42fbdfd53e306bda545845e4dbfd3e72edb4952.zip",
+            "reference": "f42fbdfd53e306bda545845e4dbfd3e72edb4952",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0",
+            "psr/log": "~1.0"
+        },
+        "provide": {
+            "psr/log-implementation": "1.0.0"
+        },
+        "require-dev": {
+            "aws/aws-sdk-php": "^2.4.9",
+            "doctrine/couchdb": "~1.0@dev",
+            "graylog2/gelf-php": "~1.0",
+            "jakub-onderka/php-parallel-lint": "0.9",
+            "php-amqplib/php-amqplib": "~2.4",
+            "php-console/php-console": "^3.1.3",
+            "phpunit/phpunit": "~4.5",
+            "phpunit/phpunit-mock-objects": "2.3.0",
+            "ruflin/elastica": ">=0.90 <3.0",
+            "sentry/sentry": "^0.13",
+            "swiftmailer/swiftmailer": "~5.3"
+        },
+        "suggest": {
+            "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
+            "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
+            "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
+            "ext-mongo": "Allow sending log messages to a MongoDB server",
+            "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
+            "mongodb/mongodb": "Allow sending log messages to a MongoDB server via PHP Driver",
+            "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
+            "php-console/php-console": "Allow sending log messages to Google Chrome",
+            "rollbar/rollbar": "Allow sending log messages to Rollbar",
+            "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
+            "sentry/sentry": "Allow sending log messages to a Sentry server"
+        },
+        "time": "2016-07-29T03:23:52+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Monolog\\": "src/Monolog"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jordi Boggiano",
+                "email": "j.boggiano@seld.be",
+                "homepage": "http://seld.be"
+            }
+        ],
+        "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
+        "homepage": "http://github.com/Seldaek/monolog",
+        "keywords": [
+            "log",
+            "logging",
+            "psr-3"
+        ]
+    },
+    {
+        "name": "paragonie/random_compat",
+        "version": "v2.0.3",
+        "version_normalized": "2.0.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/paragonie/random_compat.git",
+            "reference": "c0125896dbb151380ab47e96c621741e79623beb"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/paragonie/random_compat/c0125896dbb151380ab47e96c621741e79623beb.zip",
+            "reference": "c0125896dbb151380ab47e96c621741e79623beb",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "4.*|5.*"
+        },
+        "suggest": {
+            "ext-libsodium": "Provides a modern crypto API that can be used to generate random bytes."
+        },
+        "time": "2016-10-17T15:23:22+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "lib/random.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Paragon Initiative Enterprises",
+                "email": "security@paragonie.com",
+                "homepage": "https://paragonie.com"
+            }
+        ],
+        "description": "PHP 5.x polyfill for random_bytes() and random_int() from PHP 7",
+        "keywords": [
+            "csprng",
+            "pseudorandom",
+            "random"
+        ]
+    },
+    {
+        "name": "codeages/biz-framework",
+        "version": "v0.2.12",
+        "version_normalized": "0.2.12.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/biz-framework.git",
+            "reference": "9b3de93e96a6cf39daec0e889260ed5291e7a61c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/codeages/biz-framework/9b3de93e96a6cf39daec0e889260ed5291e7a61c.zip",
+            "reference": "9b3de93e96a6cf39daec0e889260ed5291e7a61c",
+            "shasum": ""
+        },
+        "require": {
+            "davedevelopment/phpmig": "^1.2.0",
+            "doctrine/dbal": "^2.4.5",
+            "flexihash/flexihash": "^2.0",
+            "php": "^5.3.3 || ^7.0",
+            "pimple/pimple": "^3.0.2",
+            "psr/log": "^1.0.0",
+            "symfony/event-dispatcher": "^2.8.9"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
+        },
+        "time": "2017-03-27T14:07:52+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Biz\\Framework\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "A service layer framework."
+    },
+    {
+        "name": "silex/silex",
+        "version": "v2.0.3",
+        "version_normalized": "2.0.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/silexphp/Silex.git",
+            "reference": "fd0852ebfa0a4cf1e17d746bb81962ec69bbb6d1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/silexphp/Silex/fd0852ebfa0a4cf1e17d746bb81962ec69bbb6d1.zip",
+            "reference": "fd0852ebfa0a4cf1e17d746bb81962ec69bbb6d1",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.5.9",
+            "pimple/pimple": "~3.0",
+            "symfony/event-dispatcher": "~2.8|^3.0",
+            "symfony/http-foundation": "~2.8|^3.0",
+            "symfony/http-kernel": "~2.8|^3.0",
+            "symfony/routing": "~2.8|^3.0"
+        },
+        "replace": {
+            "silex/api": "self.version",
+            "silex/providers": "self.version"
+        },
+        "require-dev": {
+            "doctrine/dbal": "~2.2",
+            "monolog/monolog": "^1.4.1",
+            "swiftmailer/swiftmailer": "~5",
+            "symfony/asset": "~2.8|^3.0",
+            "symfony/browser-kit": "~2.8|^3.0",
+            "symfony/config": "~2.8|^3.0",
+            "symfony/css-selector": "~2.8|^3.0",
+            "symfony/debug": "~2.8|^3.0",
+            "symfony/doctrine-bridge": "~2.8|^3.0",
+            "symfony/dom-crawler": "~2.8|^3.0",
+            "symfony/expression-language": "~2.8|^3.0",
+            "symfony/finder": "~2.8|^3.0",
+            "symfony/form": "~2.8|^3.0",
+            "symfony/intl": "~2.8|^3.0",
+            "symfony/monolog-bridge": "~2.8|^3.0",
+            "symfony/options-resolver": "~2.8|^3.0",
+            "symfony/phpunit-bridge": "~2.8|^3.0",
+            "symfony/process": "~2.8|^3.0",
+            "symfony/security": "~2.8|^3.0",
+            "symfony/serializer": "~2.8|^3.0",
+            "symfony/translation": "~2.8|^3.0",
+            "symfony/twig-bridge": "~2.8|^3.0",
+            "symfony/validator": "~2.8|^3.0",
+            "symfony/var-dumper": "~2.8|^3.0",
+            "twig/twig": "~1.8|~2.0"
+        },
+        "time": "2016-08-22T17:50:21+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Silex\\": "src/Silex"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Igor Wiedler",
+                "email": "igor@wiedler.ch"
+            }
+        ],
+        "description": "The PHP micro-framework based on the Symfony Components",
+        "homepage": "http://silex.sensiolabs.org",
+        "keywords": [
+            "microframework"
         ]
     }
 ]

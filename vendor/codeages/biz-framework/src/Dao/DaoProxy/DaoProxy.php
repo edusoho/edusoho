@@ -2,15 +2,24 @@
 
 namespace Codeages\Biz\Framework\Dao\DaoProxy;
 
+use Codeages\Biz\Framework\Dao\DaoException;
+use Codeages\Biz\Framework\Dao\FieldSerializer;
+
 class DaoProxy
 {
     protected $container;
     protected $dao;
     protected $cache = array();
 
+    /**
+     * @var FieldSerializer
+     */
+    protected $serializer;
+
     public function __construct($container)
     {
         $this->container = $container;
+        $this->serializer = new FieldSerializer();
     }
 
     public function setDao($dao)
@@ -25,7 +34,7 @@ class DaoProxy
         if ($daoProxyMethod) {
             return $this->$daoProxyMethod($method, $arguments);
         } else {
-            return $this->_callRealDao($method, $arguments);
+            return $this->callRealDao($method, $arguments);
         }
     }
 
@@ -36,24 +45,24 @@ class DaoProxy
 
     protected function getDaoProxyMethod($method)
     {
-        $prefix = $this->getPrefix($method, array('get', 'find', 'create', 'update', 'delete', 'search', 'wave'));
+        $prefix = $this->getPrefix($method);
         if ($prefix) {
-            return "_{$prefix}";
+            return "{$prefix}";
         }
     }
 
-    protected function _wave($method, $arguments)
+    protected function wave($method, $arguments)
     {
-        $result = $this->_callRealDao($method, $arguments);
+        $result = $this->callRealDao($method, $arguments);
         $this->clearMemoryCache();
         return $result;
     }
 
-    protected function getPrefix($str, $prefixs)
+    protected function getPrefix($method)
     {
         $_prefix = '';
-        foreach ($prefixs as $prefix) {
-            if (strpos($str, $prefix) === 0) {
+        foreach (array('get', 'find', 'create', 'update', 'delete', 'search', 'wave') as $prefix) {
+            if (strpos($method, $prefix) === 0) {
                 $_prefix = $prefix;
                 break;
             }
@@ -62,7 +71,7 @@ class DaoProxy
         return $_prefix;
     }
 
-    protected function _update($method, $arguments)
+    protected function update($method, $arguments)
     {
         $declares = $this->dao->declares();
 
@@ -78,15 +87,15 @@ class DaoProxy
             $arguments[$lastKey][$declares['timestamps'][1]] = time();
         }
 
-        $this->_serialize($arguments[$lastKey]);
+        $this->serialize($arguments[$lastKey]);
 
-        $row = $this->_callRealDao($method, $arguments);
+        $row = $this->callRealDao($method, $arguments);
         $this->clearMemoryCache();
-        $this->_unserialize($row);
+        $this->unserialize($row);
         return $row;
     }
 
-    protected function _create($method, $arguments)
+    protected function create($method, $arguments)
     {
         $declares = $this->dao->declares();
         if (isset($declares['timestamps'][0])) {
@@ -97,28 +106,29 @@ class DaoProxy
             $arguments[0][$declares['timestamps'][1]] = time();
         }
 
-        $arguments[0] = $this->_serialize($arguments[0]);
-        $row          = $this->_callRealDao($method, $arguments);
+        $this->serialize($arguments[0]);
+        $row          = $this->callRealDao($method, $arguments);
         $this->clearMemoryCache();
-        return $this->_unserialize($row);
+        $this->unserialize($row);
+        return $row;
     }
 
-    protected function _delete($method, $arguments)
+    protected function delete($method, $arguments)
     {
-        $result = $this->_callRealDao($method, $arguments);
+        $result = $this->callRealDao($method, $arguments);
         $this->clearMemoryCache();
         return $result;
     }
 
-    protected function _get($method, $arguments)
+    protected function get($method, $arguments)
     {
         $key = $this->getMemoryCacheKey($method, $arguments);
         if (isset($this->cache[$key])) {
             return $this->cache[$key];
         }
 
-        $row = $this->_callRealDao($method, $arguments);
-        $row = $this->_unserialize($row);
+        $row = $this->callRealDao($method, $arguments);
+        $this->unserialize($row);
         $this->cache[$key] = $row;
         return $row;
     }
@@ -136,34 +146,35 @@ class DaoProxy
         return $method.':'.$arguments;
     }
 
-    protected function _find($method, $arguments)
+    protected function find($method, $arguments)
     {
         $key = $this->getMemoryCacheKey($method, $arguments);
         if (isset($this->cache[$key])) {
             return $this->cache[$key];
         }
 
-        $rows = $this->_callRealDao($method, $arguments);
-        $rows = $this->_unserializes($rows);
+        $rows = $this->callRealDao($method, $arguments);
+        $this->unserializes($rows);
         $this->cache[$key] = $rows;
         return $rows;
     }
 
-    protected function _search($method, $arguments)
+    protected function search($method, $arguments)
     {
-        $rows = $this->_callRealDao($method, $arguments);
-        return $this->_unserializes($rows);
+        $rows = $this->callRealDao($method, $arguments);
+        $this->unserializes($rows);
+        return $rows;
     }
 
-    protected function _callRealDao($method, $arguments)
+    protected function callRealDao($method, $arguments)
     {
         return call_user_func_array(array($this->dao, $method), $arguments);
     }
 
-    protected function _unserialize(&$row)
+    protected function unserialize(&$row)
     {
         if (empty($row)) {
-            return $row;
+            return;
         }
 
         $declares   = $this->dao->declares();
@@ -173,23 +184,19 @@ class DaoProxy
             if (!array_key_exists($key, $row)) {
                 continue;
             }
-            $method    = "_{$method}Unserialize";
-            $row[$key] = $this->$method($row[$key]);
-        }
 
-        return $row;
+            $row[$key] = $this->serializer->unserialize($method, $row[$key]);
+        }
     }
 
-    protected function _unserializes(array &$rows)
+    protected function unserializes(array &$rows)
     {
         foreach ($rows as &$row) {
-            $this->_unserialize($row);
+            $this->unserialize($row);
         }
-
-        return $rows;
     }
 
-    protected function _serialize(&$row)
+    protected function serialize(&$row)
     {
         $declares   = $this->dao->declares();
         $serializes = empty($declares['serializes']) ? array() : $declares['serializes'];
@@ -198,45 +205,8 @@ class DaoProxy
             if (!array_key_exists($key, $row)) {
                 continue;
             }
-            $method    = "_{$method}Serialize";
-            $row[$key] = $this->$method($row[$key]);
+
+            $row[$key] = $this->serializer->serialize($method, $row[$key]);
         }
-
-        return $row;
-    }
-
-    protected function _jsonSerialize($value)
-    {
-        if (empty($value)) {
-            return '';
-        }
-
-        return json_encode($value);
-    }
-
-    protected function _jsonUnserialize($value)
-    {
-        if (empty($value)) {
-            return array();
-        }
-        return json_decode($value, true);
-    }
-
-    protected function _delimiterSerialize($value)
-    {
-        if (empty($value)) {
-            return '';
-        }
-
-        return '|'.implode('|', $value).'|';
-    }
-
-    protected function _delimiterUnserialize($value)
-    {
-        if (empty($value)) {
-            return array();
-        }
-
-        return explode('|', trim($value, '|'));
     }
 }
