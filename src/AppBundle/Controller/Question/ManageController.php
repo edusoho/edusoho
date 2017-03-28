@@ -100,15 +100,32 @@ class ManageController extends BaseController
                 $this->setFlashMessage('success', $this->getServiceKernel()->trans('题目添加成功，请继续添加。'));
 
                 return $this->redirect($this->generateUrl('course_set_manage_question_create', $urlParams));
-            } elseif ($data['submission'] === 'continue_sub') {
+            }
+            if ($data['submission'] === 'continue_sub') {
                 $this->setFlashMessage('success', $this->getServiceKernel()->trans('题目添加成功，请继续添加子题。'));
 
-                return $this->redirect($request->query->get('goto', $this->generateUrl('course_set_manage_question', array('id' => $courseSet['id'], 'parentId' => $question['id']))));
-            } else {
-                $this->setFlashMessage('success', $this->getServiceKernel()->trans('题目添加成功。'));
-
-                return $this->redirect($request->query->get('goto', $this->generateUrl('course_set_manage_question', array('id' => $courseSet['id'], 'parentId' => $question['parentId']))));
+                return $this->redirect(
+                    $request->query->get(
+                        'goto',
+                        $this->generateUrl(
+                            'course_set_manage_question',
+                            array('id' => $courseSet['id'], 'parentId' => $question['id'])
+                        )
+                    )
+                );
             }
+
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('题目添加成功。'));
+
+            return $this->redirect(
+                $request->query->get(
+                    'goto',
+                    $this->generateUrl(
+                        'course_set_manage_question',
+                        array('id' => $courseSet['id'], 'parentId' => $question['parentId'])
+                    )
+                )
+            );
         }
 
         $questionConfig = $this->getQuestionConfig();
@@ -136,7 +153,15 @@ class ManageController extends BaseController
 
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('题目修改成功！'));
 
-            return $this->redirect($request->query->get('goto', $this->generateUrl('course_set_manage_question', array('id' => $courseSet['id'], 'parentId' => $question['parentId']))));
+            return $this->redirect(
+                $request->query->get(
+                    'goto',
+                    $this->generateUrl(
+                        'course_set_manage_question',
+                        array('id' => $courseSet['id'], 'parentId' => $question['parentId'])
+                    )
+                )
+            );
         }
 
         $questionConfig = $this->getQuestionConfig();
@@ -338,7 +363,7 @@ class ManageController extends BaseController
 
     protected function getQuestionConfig()
     {
-        return $this->get('extension.default')->getQuestionTypes();
+        return $this->get('extension.manager')->getQuestionTypes();
     }
 
     protected function getQuestionRanges($courseId)
@@ -392,6 +417,9 @@ class ManageController extends BaseController
         return $this->createService('Task:TaskService');
     }
 
+    /**
+     * @return ServiceKernel
+     */
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();

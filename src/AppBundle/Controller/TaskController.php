@@ -548,6 +548,6 @@ class TaskController extends BaseController
 
     protected function getActivityConfig()
     {
-        return $this->get('extension.default')->getActivities();
+        return $this->get('extension.manager')->getActivities();
     }
 }
