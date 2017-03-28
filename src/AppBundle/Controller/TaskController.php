@@ -41,7 +41,7 @@ class TaskController extends BaseController
             return $this->redirectToRoute('my_course_show', array('id' => $courseId));
         }
 
-        if (!$this->getCourseService()->hasCourseManagerRole($course['id']) && $this->isCourseExpired($course)) {
+        if ($this->isCourseExpired($course) && !$this->getCourseService()->hasCourseManagerRole($course['id'])) {
             return $this->redirectToRoute('course_show', array('id' => $courseId));
         }
 
@@ -362,7 +362,7 @@ class TaskController extends BaseController
     public function finishConditionAction($task)
     {
         $config = $this->getActivityConfig();
-        $action = $config[$task['type']]['actions']['finishCondition'];
+        $action = $config[$task['type']]['controller'].':finishCondition';
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         return $this->forward($action, array('activity' => $activity));
@@ -548,6 +548,6 @@ class TaskController extends BaseController
 
     protected function getActivityConfig()
     {
-        return $this->get('extension.default')->getActivities();
+        return $this->get('extension.manager')->getActivities();
     }
 }

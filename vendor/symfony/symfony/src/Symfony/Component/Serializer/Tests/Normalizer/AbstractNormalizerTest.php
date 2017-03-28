@@ -2,6 +2,7 @@
 
 namespace Symfony\Component\Serializer\Tests\Normalizer;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Mapping\AttributeMetadata;
 use Symfony\Component\Serializer\Mapping\ClassMetadata;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactoryInterface;
@@ -15,7 +16,7 @@ use Symfony\Component\Serializer\Tests\Fixtures\ProxyDummy;
  *
  * @author Konstantin S. M. Möllers <ksm.moellers@gmail.com>
  */
-class AbstractNormalizerTest extends \PHPUnit_Framework_TestCase
+class AbstractNormalizerTest extends TestCase
 {
     /**
      * @var AbstractNormalizerDummy
@@ -29,8 +30,8 @@ class AbstractNormalizerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $loader = $this->getMock('Symfony\Component\Serializer\Mapping\Loader\LoaderChain', array(), array(array()));
-        $this->classMetadata = $this->getMock('Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory', array(), array($loader));
+        $loader = $this->getMockBuilder('Symfony\Component\Serializer\Mapping\Loader\LoaderChain')->setConstructorArgs(array(array()))->getMock();
+        $this->classMetadata = $this->getMockBuilder('Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory')->setConstructorArgs(array($loader))->getMock();
         $this->normalizer = new AbstractNormalizerDummy($this->classMetadata);
     }
 

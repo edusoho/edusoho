@@ -86,8 +86,7 @@ class OpenCourseLessonManageController extends BaseController
 
                 if ($file['type'] == 'document' && $file['convertStatus'] == 'none') {
                     $convertHash = $this->getUploadFileService()->reconvertFile(
-                        $file['id'],
-                        $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
+                        $file['id']
                     );
                 }
 
@@ -157,8 +156,7 @@ class OpenCourseLessonManageController extends BaseController
 
                 if ($file['type'] == 'document' && $file['convertStatus'] == 'none') {
                     $convertHash = $this->getUploadFileService()->reconvertFile(
-                        $file['id'],
-                        $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
+                        $file['id']
                     );
                 }
             }
@@ -299,10 +297,11 @@ class OpenCourseLessonManageController extends BaseController
                 'type' => 'openCourse',
             ),
             array('createdTime' => 'DESC'),
-            0, PHP_INT_MAX
+            0,
+            PHP_INT_MAX
         );
 
-        return $this->render('TopxiaWebBundle:CourseMaterialManage:material-modal.html.twig', array(
+        return $this->render('open-course-manage/material-edit-modal.html.twig', array(
             'course' => $course,
             'lesson' => $lesson,
             'materials' => $materials,

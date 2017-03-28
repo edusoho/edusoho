@@ -25,25 +25,13 @@ interface FileImplementor
 
     public function addFile($targetType, $targetId, array $fileInfo = array(), UploadedFile $originalFile = null);
 
-    public function convertFile($file, $status, $result = null, $callback = null);
-
     public function reconvert($globalId, $options);
 
     public function getUploadAuth($params);
 
-    public function reconvertOldFile($file, $convertCallback, $pipeline = null);
-
-    public function saveConvertResult($file, array $result = array());
-
     public function deleteFile($file);
 
     public function moveFile($targetType, $targetId, UploadedFile $originalFile = null, $data = array());
-
-    public function makeUploadParams($params);
-
-    public function reconvertFile($file, $convertCallback, $pipeline = null);
-
-    public function getMediaInfo($key, $mediaType);
 
     //FileImplementor2
     public function getFileByGlobalId($globalId);
@@ -63,8 +51,6 @@ interface FileImplementor
     public function finishedUpload($file, $params);
 
     public function search($conditions);
-
-    public function synData($conditions);
 
     public function download($globalId);
 }

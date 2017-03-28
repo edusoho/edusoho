@@ -36,11 +36,11 @@ class TestpaperController extends BaseController
         $fields = $this->getTestpaperFields($lessonId);
         $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $fields);
 
-        if (in_array($testpaperResult['status'], array('doing'))) {
+        if ('doing' === $testpaperResult['status']) {
             return $this->redirect($this->generateUrl('testpaper_show', array('resultId' => $testpaperResult['id'])));
-        } else {
-            return $this->redirect($this->generateUrl('testpaper_result_show', array('resultId' => $testpaperResult['id'])));
         }
+
+        return $this->redirect($this->generateUrl('testpaper_result_show', array('resultId' => $testpaperResult['id'])));
     }
 
     public function doTestAction(Request $request, $resultId)

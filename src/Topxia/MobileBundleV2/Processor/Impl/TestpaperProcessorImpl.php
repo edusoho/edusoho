@@ -68,6 +68,8 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         }
 
         $items = $this->showTestpaperItems($testpaper['id'], $testpaperResult['id']);
+        $testpaper['metas']['question_type_seq'] = array_keys($items);
+
         return array(
             'testpaperResult' => $testpaperResult,
             'testpaper' => $testpaper,
@@ -271,6 +273,8 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
 
         $items = $this->showTestpaperItems($testpaper['id'], $testpaperResult['id']);
+        $testpaper['metas']['question_type_seq'] = array_keys($items);
+
         return array(
             'testpaperResult' => $testResult,
             'testpaper' => $testpaper,
@@ -316,6 +320,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaperActivity['mediaId'], $activity['fromCourseId'], $activity['id'], $activity['mediaType']);
 
         $items = $this->showTestpaperItems($testpaper['id']);
+        $testpaper['metas']['question_type_seq'] = array_keys($items);
 
         if (empty($testpaperResult)) {
             if ($testpaper['status'] == 'draft') {
@@ -367,8 +372,6 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
 
-        //$targets = $this->controller->get('topxia.target_helper')->getTargets(array($testpaper['target']));
-
         $activity = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
@@ -380,16 +383,13 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
             return $this->createErrorResponse('error', '不可以访问其他学生的试卷哦!');
         }
 
-        //$result = $this->getTestpaperService()->showTestpaper($id, true);
-        //$items = $result['formatItems'];
-        //$accuracy = $result['accuracy'];
-
         $accuracy = $this->getTestpaperService()->makeAccuracy($testpaperResult['id']);
 
         $favorites = $this->getQuestionService()->findUserFavoriteQuestions($user['id']);
 
         $items = $this->showTestpaperItems($testpaper['id'], $testpaperResult['id']);
 
+        $testpaper['metas']['question_type_seq'] = array_keys($items);
         return array(
             'testpaper' => $testpaper,
             'items' => $this->coverTestpaperItems($items, 1),

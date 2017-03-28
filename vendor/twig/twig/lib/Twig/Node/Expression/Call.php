@@ -3,7 +3,7 @@
 /*
  * This file is part of Twig.
  *
- * (c) 2012 Fabien Potencier
+ * (c) Fabien Potencier
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -146,7 +146,7 @@ abstract class Twig_Node_Expression_Call extends Twig_Node_Expression
                     throw new Twig_Error_Syntax(sprintf('Argument "%s" is defined twice for %s "%s".', $name, $callType, $callName));
                 }
 
-                if (!empty($missingArguments)) {
+                if (count($missingArguments)) {
                     throw new Twig_Error_Syntax(sprintf(
                         'Argument "%s" could not be assigned for %s "%s(%s)" because it is mapped to an internal PHP function which cannot determine default value for optional argument%s "%s".',
                         $name, $callType, $callName, implode(', ', $names), count($missingArguments) > 1 ? 's' : '', implode('", "', $missingArguments))
@@ -205,7 +205,7 @@ abstract class Twig_Node_Expression_Call extends Twig_Node_Expression
             throw new Twig_Error_Syntax(sprintf(
                 'Unknown argument%s "%s" for %s "%s(%s)".',
                 count($parameters) > 1 ? 's' : '', implode('", "', array_keys($parameters)), $callType, $callName, implode(', ', $names)
-            ), $unknownParameter ? $unknownParameter->getLine() : -1);
+            ), $unknownParameter ? $unknownParameter->getTemplateLine() : -1);
         }
 
         return $arguments;
@@ -218,7 +218,7 @@ abstract class Twig_Node_Expression_Call extends Twig_Node_Expression
 
     private function getCallableParameters($callable, $isVariadic)
     {
-        list($r, $_) = $this->reflectCallable($callable);
+        list($r) = $this->reflectCallable($callable);
         if (null === $r) {
             return array();
         }

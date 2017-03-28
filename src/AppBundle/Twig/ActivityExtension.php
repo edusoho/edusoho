@@ -41,7 +41,7 @@ class ActivityExtension extends \Twig_Extension
 
     public function getActivityMeta($type = null)
     {
-        $activities = $this->container->get('extension.default')->getActivities();
+        $activities = $this->container->get('extension.manager')->getActivities();
 
         if (empty($type)) {
             $activities = array_map(function ($activity) {
@@ -70,7 +70,7 @@ class ActivityExtension extends \Twig_Extension
      */
     public function isActivityVisible($type, $courseSet, $course)
     {
-        $activities = $this->container->get('extension.default')->getActivities();
+        $activities = $this->container->get('extension.manager')->getActivities();
 
         return call_user_func($activities[$type]['visible'], $courseSet, $course);
     }

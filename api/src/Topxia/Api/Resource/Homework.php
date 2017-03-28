@@ -44,7 +44,8 @@ class Homework extends BaseResource
         $course = $this->getCourseService()->getCourse($homework['courseId']);
         $homework['courseTitle'] = $course['title'];
         $homework['lessonTitle'] = $homework['name'];
-
+        $homework['lessonId'] = $id;
+        
         if ('lesson' != $idType) {
             $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
             $indexdItems = ArrayToolkit::column($items, 'questionId');

@@ -51,6 +51,9 @@ class CoinController extends BaseController
             ));
 
             $coinSettings = array_merge($coinSettingsSaved, $coinSettingsPosted);
+
+            $coinSettings['coin_content'] = $this->purifyHtml($coinSettings['coin_content'], true);
+
             $this->getSettingService()->set('coin', $coinSettings);
             $this->getLogService()->info('system', 'update_settings', '更新Coin虚拟币设置', $coinSettingsPosted);
             $this->setFlashMessage('success', '虚拟币设置已保存！');
@@ -533,7 +536,7 @@ class CoinController extends BaseController
             ->getForm();
 
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 $data = $form->getData();

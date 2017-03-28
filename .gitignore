@@ -70,8 +70,7 @@ chunk-manifest.json
 /web/static-dist/*
 .vscode/
 .sonar
-.happypack
-.chokidar-watch-add.log
 project.sublime-workspace
 .php_cs.cache
 deployment-config.json
+.happypack

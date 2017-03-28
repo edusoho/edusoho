@@ -8,6 +8,8 @@ interface CourseService
 {
     public function getCourse($id);
 
+    public function hasCourseManagerRole($courseId = 0);
+
     public function findCoursesByIds($ids);
 
     public function findCoursesByCourseSetIds(array $setIds);
@@ -200,4 +202,6 @@ interface CourseService
     public function unlockCourse($courseId);
 
     public function getFavoritedCourseByUserIdAndCourseSetId($userId, $courseSetId);
+
+    public function buildCourseExpiryDataFromClassroom($expiryMode, $expiryValue);
 }

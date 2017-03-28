@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Activity;
 
+use AppBundle\Controller\LiveroomController;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -14,6 +15,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class LiveController extends BaseController implements ActivityActionInterface
 {
+    public function previewAction(Request $request, $task)
+    {
+        return $this->render('activity/no-preview.html.twig');
+    }
+
     public function showAction(Request $request, $activity)
     {
         $live = $this->getActivityService()->getActivityConfig($activity['mediaType'])->get($activity['mediaId']);
@@ -162,7 +168,7 @@ class LiveController extends BaseController implements ActivityActionInterface
         return $this->createJsonResponse(array('success' => true, 'status' => 'on_live'));
     }
 
-    public function finishConditionAction($activity)
+    public function finishConditionAction(Request $request, $activity)
     {
         return $this->render('activity/live/finish-condition.html.twig', array());
     }
@@ -232,10 +238,12 @@ class LiveController extends BaseController implements ActivityActionInterface
                 $result = $service->entryReplay($replay['id'], $activity['ext']['liveId'], $activity['ext']['liveProvider'], $ssl);
 
                 if (!empty($result) && !empty($result['resourceNo'])) {
-                    // ES Live
-                    $file = $fileService->getFileByGlobalId($replay['globalId']);
-
-                    $replay['url'] = $self->generateUrl('material_lib_file_player', array('fileId' => $file['id']));
+                    $replay['url'] = $self->generateUrl('es_live_room_replay_show', array(
+                        'targetType' => LiveroomController::LIVE_COURSE_TYPE,
+                        'targetId' => $activity['fromCourseId'],
+                        'replayId' => $replay['id'],
+                        'lessonId' => $activity['id'],
+                    ));
                 } elseif (!empty($result['url'])) {
                     // Other Live
                     $replay['url'] = $result['url'];

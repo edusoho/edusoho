@@ -34,12 +34,12 @@
        	{% for course in courses %}
        	 <tr>
             <td>
-              <a class="pull-left mrm" href="{{ path('open_course_show', {courseId:course.id}) }}" title="{{ course.title }}">
+              <a class="pull-left mrm link-primary" href="{{ path('open_course_show', {courseId:course.id}) }}" title="{{ course.title }}">
                 <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}" width="100">
               </a>
 
               <div class="mlm">
-                <a href="{{ path('open_course_show', {courseId:course.id}) }}" title="{{ course.title }}">{{ course.title }}</a>
+                <a class="link-primary" href="{{ path('open_course_show', {courseId:course.id}) }}" title="{{ course.title }}">{{ course.title }}</a>
                 {% if course.type == 'liveOpen' %}
                   <span class="label label-success live-label">{{'直播'|trans}}</span>
                 {% endif  %}
@@ -50,12 +50,11 @@
             <td>
               <div class="btn-group">
                 {% if 'ROLE_SUPER_ADMIN' in app.user.roles %}
-                  <a class="mr10" href="{{ path('open_course_manage', {id:course.id}) }}">{{'管理'|trans}}</a>
+                  <a class="mr10 link-primary" href="{{ path('open_course_manage', {id:course.id}) }}">{{'管理'|trans}}</a>
                 {% elseif 'ROLE_TEACHER' in app.user.roles %}
-                  <a class="mr10" href="{{ path('open_course_manage', {id:course.id}) }}">{{'查看'|trans}}</a>
+                  <a class="mr10 link-primary" href="{{ path('open_course_manage', {id:course.id}) }}">{{'查看'|trans}}</a>
                 {% endif %}
-
-                <a href="#" type="button" class=" dropdown-toggle" data-toggle="dropdown">
+                <a href="javascript:;"  class="link-primary dropdown-toggle ml10" data-toggle="dropdown">
                   更多
                   <i class="es-icon es-icon-arrowdropdown"></i>
                 </a>

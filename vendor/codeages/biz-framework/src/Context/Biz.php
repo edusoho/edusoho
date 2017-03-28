@@ -2,7 +2,8 @@
 
 namespace Codeages\Biz\Framework\Context;
 
-use Codeages\Biz\Framework\Dao\DaoProxy;
+use Codeages\Biz\Framework\Dao\DaoProxy\DaoProxy;
+use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Dao\FieldSerializer;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -36,11 +37,18 @@ class Biz extends Container
             };
         };
 
-        $this['autoload.object_maker.dao'] = function ($biz) {
-            return function ($namespace, $name) use ($biz) {
-                $class = "{$namespace}\\Dao\\Impl\\{$name}Impl";
+        $this['dao.proxy'] = $this->factory(function($biz) {
+            return new DaoProxy($biz);
+        });
 
-                return new DaoProxy(new $class($biz), $biz['dao.serializer']);
+        $this['autoload.object_maker.dao'] = function($biz) {
+            return function($namespace, $name) use ($biz) {
+                $class = "{$namespace}\\Dao\\Impl\\{$name}Impl";
+                $dao = new $class($biz);
+                $declares = $dao->declares();
+                $daoProxy = $biz['dao.proxy'];
+                $daoProxy->setDao($dao);
+                return $daoProxy;
             };
         };
 

@@ -2,6 +2,8 @@
 
 namespace Biz\Course\Copy\Impl;
 
+use Biz\Activity\Service\TestpaperActivityService;
+
 class ActivityTestpaperCopy extends TestpaperCopy
 {
     public function __construct($biz)
@@ -17,6 +19,12 @@ class ActivityTestpaperCopy extends TestpaperCopy
     {
         // 同课程下复制 不需要创建新的试卷
         if ($source['fromCourseSetId'] === $config['newCourseSetId']) {
+            if ($source['mediaType'] == 'testpaper') {
+                $activity = $this->getTestpaperActivityService()->getActivity($source['mediaId']);
+
+                return $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+            }
+
             return $this->getTestpaperService()->getTestpaper($source['mediaId']);
         }
 
@@ -63,5 +71,13 @@ class ActivityTestpaperCopy extends TestpaperCopy
     public function getActivityConfig($type)
     {
         return $this->biz["activity_type.{$type}"];
+    }
+
+    /**
+     * @return TestpaperActivityService
+     */
+    protected function getTestpaperActivityService()
+    {
+        return $this->biz->service('Activity:TestpaperActivityService');
     }
 }
