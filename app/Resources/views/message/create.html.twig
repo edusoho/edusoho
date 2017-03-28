@@ -1,6 +1,6 @@
 {% extends 'old-layout.html.twig' %}
 
-{% block title %}{{ '写私信'|trans }} - {{ parent() }}{% endblock %}
+{% block title %}{{ 'user.message.send'|trans }} - {{ parent() }}{% endblock %}
 {% set script_controller = 'message/create' %}
 {% set script_arguments = {
 followingMatchByNickname: path('following_match_bynickname')
@@ -43,8 +43,8 @@ followingMatchByNickname: path('following_match_bynickname')
     <div class="col-md-8 col-md-offset-2">
       <div class="panel panel-default panel-page">
         <div class="panel-heading">
-          <a href="{{ path('message') }}" class="btn btn-default pull-right">{{ '返回我的私信'|trans }}</a>
-          <h2>{{ '写私信'|trans }}</h2>
+          <a href="{{ path('message') }}" class="btn btn-default pull-right">{{ 'user.message.btn.back_to_my_message'|trans }}</a>
+          <h2>{{ 'user.message.send.content_title'|trans }}</h2>
         </div>
 
         <form id="message-create-form" class="form-horizontal" method="post">
@@ -52,8 +52,8 @@ followingMatchByNickname: path('following_match_bynickname')
           <div class="form-group">
             <div class="col-md-12 controls">
               <input type="text" id="message_receiver" name="message[receiver]" required="required" class="form-control"
-                     placeholder="收信人用户名" data-auto-url="{{ script_arguments.followingMatchByNickname }}"
-                     data-url="{{ path('message_check_receiver') }}" data-display="{{ '收信人用户名'|trans }}"
+                     placeholder="{{'user.message.send.receiver_name' |trans }}" data-auto-url="{{ script_arguments.followingMatchByNickname }}"
+                     data-url="{{ path('message_check_receiver') }}" data-display="{{'user.message.send.receiver_name'|trans }}"
                      data-widget-cid="widget-2" data-explain=""
                      autocomplete="off">
             </div>
@@ -62,14 +62,14 @@ followingMatchByNickname: path('following_match_bynickname')
           <div class="form-group">
             <div class="col-md-12 controls">
               <textarea id="message_content" name="message[content]" required="required" class="form-control" rows="5"
-                        placeholder="{{ '想要说的话'|trans }}" data-display="{{ '想要说的话'|trans }}" data-widget-cid="widget-3" data-explain=""></textarea>
+                        placeholder="{{ 'user.message.send.message_content'|trans }}" data-display="{{ 'user.message.send.message_content'|trans }}" data-widget-cid="widget-3" data-explain=""></textarea>
             </div>
           </div>
 
           <div class="form-group">
             <div class="col-md-12 controls">
               <button id="message-create-btn" class="btn btn-primary pull-right"
-                      data-loading-text="{{ '正在发送...'|trans }}" type="submit" value="">{{ '发送'|trans }}</button>
+                      data-loading-text="{{ 'form.btn.sending'|trans }}" type="submit" value="">{{ 'form.btn.send'|trans }}</button>
             </div>
           </div>
 

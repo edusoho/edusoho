@@ -1,6 +1,6 @@
 {% extends 'old-layout.html.twig' %}
 
-{% block title %}{{'私信'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'user.message.conversation'|trans}} - {{ parent() }}{% endblock %}
 {% set script_controller = 'message/show' %}
 {% block content %}
 
@@ -8,18 +8,18 @@
   <div class="col-md-8 col-md-offset-2">
     <div class="panel panel-default panel-page">
       <div class="panel-heading">
-        <a href="{{ path('message')}}" class="btn btn-default pull-right">{{'返回我的私信'|trans}}</a>
-        <h2>{{'与%nickname%的私信对话'|trans({'%nickname%':receiver.nickname})}}</h2>
+        <a href="{{ path('message')}}" class="btn btn-default pull-right">{{'user.message.btn.back_to_my_message'|trans}}</a>
+        <h2>{{'user.message.conversation_content_title'|trans({'%nickname%':receiver.nickname})}}</h2>
       </div>
 
       <form id="message-reply-form" class="message-reply-form clearfix" method="post"
       action="{{ path('message_conversation_show', {conversationId:conversation.id}) }}">
         <div class="form-group">
-          <textarea id="message_reply_content" name="message_reply[content]" required="required" class="form-control" rows="3" placeholder="请输入私信内容"></textarea>
+          <textarea id="message_reply_content" name="message_reply[content]" required="required" class="form-control" rows="3" placeholder="{{'user.message.conversation.message_content' |trans }}"></textarea>
         </div>
 
         <div class="form-group">
-          <button id="course-reply-btn" class="btn btn-primary pull-right">{{'发送'|trans}}</button>
+          <button id="course-reply-btn" class="btn btn-primary pull-right">{{'form.btn.send'|trans}}</button>
         </div>
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

@@ -81,14 +81,14 @@
               <li>
                 <a href="{{ path('notification') }}">
                   <span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span>
-                  <i class="es-icon es-icon-notificationson"></i>{{'通知'|trans}}
+                  <i class="es-icon es-icon-notificationson"></i>{{'user.notification'|trans}}
                 </a>
               </li>
             {% endif %}
             <li>
               <a href="{{ path('message') }}">
                 <span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span>
-                <i class="es-icon es-icon-mail"></i>{{'私信'|trans}}
+                <i class="es-icon es-icon-mail"></i>{{'user.message'|trans}}
               </a>
             </li>
           </ul>

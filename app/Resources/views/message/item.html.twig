@@ -8,13 +8,13 @@
       <div class="arrow"></div>
       <div class="popover-content">
         <div class="message-content">
-               <strong>{{'我：'|trans}}</strong>
+               <strong>{{'user.fileds.me'|trans}} :</strong>
               {{message.content|raw}}
         </div>
         <div class="message-footer">
           <span class="color-gray">{{ message.createdTime|smart_time }}</span>
           <div class="message-actions">
-            <a class="color-gray delete-message" href="javascript:" data-url="{{ path('message_delete',{conversationId:conversation.id, messageId:message.id })}}">{{'删除'|trans}}</a>
+            <a class="color-gray delete-message" href="javascript:" data-url="{{ path('message_delete',{conversationId:conversation.id, messageId:message.id })}}">{{'user.message.conversation.delete'|trans}}</a>
           </div>
         </div>
       </div>
