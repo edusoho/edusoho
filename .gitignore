@@ -73,3 +73,4 @@ chunk-manifest.json
 project.sublime-workspace
 .php_cs.cache
 deployment-config.json
+.happypack
