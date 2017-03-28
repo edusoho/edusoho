@@ -1,0 +1,258 @@
+<?php
+
+class CourseMigrate extends AbstractMigrate
+{
+    public function update($page)
+    {
+        if (!$this->isTableExist('c2_course')) {
+            $sql = "CREATE TABLE `c2_course` (
+                  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                  `courseSetId` int(11) NOT NULL DEFAULT 0,
+                  `title` varchar(1024) DEFAULT NULL,
+                  `learnMode` varchar(32) DEFAULT NULL COMMENT 'lockMode, freeMode',
+                  `expiryMode` varchar(32) DEFAULT NULL COMMENT 'days, date',
+                  `expiryDays` int(11) DEFAULT NULL,
+                  `expiryStartDate` int(11) DEFAULT NULL,
+                  `expiryEndDate` int(11) DEFAULT NULL,
+                  `summary` text,
+                  `goals` text,
+                  `audiences` text,
+                  `isDefault` tinyint(1) DEFAULT '0',
+                  `maxStudentNum` int(11) DEFAULT '0',
+                  `status` varchar(32) DEFAULT NULL COMMENT 'draft, published, closed',
+                  `isFree` tinyint(1) DEFAULT 0,
+                  `price` float(10,2) NULL DEFAULT '0',
+                  `vipLevelId` int(11) DEFAULT 0,
+                  `buyable` tinyint(1) DEFAULT 1,
+                  `tryLookable` tinyint(1) DEFAULT 0,
+                  `tryLookLength` int(11) DEFAULT 0,
+                  `watchLimit` int(11) DEFAULT 0,
+                  `services` text,
+                  `taskNum` int(10) DEFAULT 0 COMMENT '任务数',
+                  `studentNum` int(10) DEFAULT 0 COMMENT '学员数',
+                  `teacherIds` VARCHAR(1024) DEFAULT 0 COMMENT '可见教师ID列表',
+                  `parentId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程的父Id',
+                  `ratingNum` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程计划评论数',
+                  `rating` float UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程计划评分',
+                  `noteNum` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+                  `threadNum` int(10) DEFAULt 0 COMMENT '话题数',
+                  `type` varchar(32) NOT NULL DEFAULT 'normal' COMMENT '教学计划类型',
+                  `approval` tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '是否需要实名才能购买',
+                  `income` float(10,2) UNSIGNED NOT NULL DEFAULT '0' COMMENT '总收入',
+                  `originPrice` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '课程人民币原价',
+                  `coinPrice` float(10,2) NOT NULL DEFAULT '0.00',
+                  `originCoinPrice` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '课程虚拟币原价',
+                  `showStudentNumType` enum('opened','closed') NOT NULL DEFAULT 'opened' COMMENT '学员数显示模式',
+                  `serializeMode` VARCHAR(32) NOT NULL DEFAULT 'none' COMMENT 'none, serilized, finished',
+                  `giveCredit` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学完课程所有课时，可获得的总学分',
+                  `about` text COMMENT '简介',
+                  `locationId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上课地区ID',
+                  `address` varchar(255) NOT NULL DEFAULT '' COMMENT '上课地区地址',
+                  `deadlineNotify` enum('active','none') NOT NULL DEFAULT 'none' COMMENT '开启有效期通知',
+                  `daysOfNotifyBeforeDeadline` int(10) NOT NULL DEFAULT '0',
+                  `useInClassroom` enum('single','more') NOT NULL DEFAULT 'single' COMMENT '课程能否用于多个班级',
+                  `singleBuy` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '加入班级后课程能否单独购买',
+                  `freeStartTime` int(10) NOT NULL DEFAULT '0',
+                  `freeEndTime` int(10) NOT NULL DEFAULT '0',
+                  `locked` int(10) NOT NULL DEFAULT '0' COMMENT '是否上锁1上锁,0解锁',
+                  `cover` VARCHAR(1024),
+                  `buyExpiryTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '购买开放有效期',
+                  `enableFinish` INT(1) NOT NULL DEFAULT '1' COMMENT '是否允许学院强制完成任务',
+                  `materialNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上传的资料数量',
+                  `maxRate` tinyint(3) DEFAULT 0 COMMENT '最大抵扣百分比',
+                  `publishedTaskNum` INT(10) DEFAULT '0' COMMENT '已发布的任务数',
+                  `createdTime` INT(10) UNSIGNED NOT NULL COMMENT '课程创建时间',
+                  `updatedTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+                  `creator` int(11) DEFAULT NULL,
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+            $result = $this->getConnection()->exec($sql);
+        }
+
+        $nextPage = $this->insertData($page);
+        if (!empty($nextPage)) {
+          return $nextPage;
+        }
+
+        $this->updateDate();
+    }
+
+    private function updateDate()
+    {
+        $sql = "UPDATE `c2_course` ce, `c2_course_set` cs  SET ce.`materialNum` = cs.`materialNum`  WHERE ce.`id` = cs.`id`";
+        $result = $this->getConnection()->exec($sql);
+
+        $sql = "UPDATE `c2_course` c2, `course` c set
+              c2.`title` = c.`title`
+              ,c2.`status` = c.`status`
+              ,c2.`type` = c.`type`
+              ,c2.`maxStudentNum` = c.`maxStudentNum`
+              ,c2.`price` = c.`price`
+              ,c2.`originCoinPrice` = c.`originCoinPrice`
+              ,c2.`coinPrice` = c.`coinPrice`
+              ,c2.`originPrice` = c.`originPrice`
+              ,c2.`expiryMode` = c.`expiryMode`
+              ,c2.`showStudentNumType` = c.`showStudentNumType`
+              ,c2.`serializeMode` = c.`serializeMode`
+              ,c2.`income` = c.`income`
+              ,c2.`giveCredit` = c.`giveCredit`
+              ,c2.`rating` = c.`rating`
+              ,c2.`ratingNum` = c.`ratingNum`
+              ,c2.`about` = c.`about`
+              ,c2.`teacherIds` = c.`teacherIds`
+              ,c2.`goals` = c.`goals`
+              ,c2.`audiences` = c.`audiences`
+              ,c2.`locationId` = c.`locationId`
+              ,c2.`address` = c.`address`
+              ,c2.`studentNum` = c.`studentNum`
+              ,c2.`deadlineNotify` = c.`deadlineNotify`
+              ,c2.`daysOfNotifyBeforeDeadline` = c.`daysOfNotifyBeforeDeadline`
+              ,c2.`useInClassroom` = c.`useInClassroom`
+              ,c2.`watchLimit` = c.`watchLimit`
+              ,c2.`singleBuy` = c.`singleBuy`
+              ,c2.`createdTime` = c.`createdTime`
+              ,c2.`updatedTime` = c.`updatedTime`
+              ,c2.`freeStartTime` = c.`freeStartTime`
+              ,c2.`freeEndTime` = c.`freeEndTime`
+              ,c2.`approval` = c.`approval`
+              ,c2.`parentId` = c.`parentId`
+              ,c2.`noteNum` = c.`noteNum`
+              ,c2.`locked` = c.`locked`
+              ,c2.`buyable` = c.`buyable`
+              ,c2.`buyExpiryTime` = c.`buyExpiryTime`
+              ,c2.`tryLookable` = c.`tryLookable`
+              ,c2.`summary` = c.`about`
+              ,c2.`cover` = concat('{\"large\":\"',c.largePicture,'\",\"middle\":\"',c.middlePicture,'\",\"small\":\"',c.smallPicture,'\"}') 
+              ,c2.`creator` = c.`userId`
+              ,c2.`vipLevelId` = c.`vipLevelId`
+              ,c2.`tryLookLength` = c.`tryLookTime`
+              ,c2.`taskNum` = c.`lessonNum`
+              ,c2.`isFree` = case when c.`originPrice` = 0 then 1 else 0 end
+              ,c2.`maxRate` = c.`maxRate`
+          where c2.`id` = c.`id` and c2.`updatedTime` < c.`updatedTime`;
+        ";
+
+        $result = $this->getConnection()->exec($sql);
+    }
+
+    private function insertData($page)
+    {
+        $countSql = 'SELECT count(*) FROM `course` where `id` not in (select `id` from `c2_course`)';
+        $count = $this->getConnection()->fetchColumn($countSql);
+        $start = $this->getStart($page);
+        if($count == 0 && $count < $start) {
+          return;
+        }
+
+        $sql = "INSERT INTO `c2_course` (
+              `id`
+              ,`courseSetId`
+              ,`title`
+              ,`status`
+              ,`type`
+              ,`maxStudentNum`
+              ,`price`
+              ,`originCoinPrice`
+              ,`coinPrice`
+              ,`originPrice`
+              ,`expiryMode`
+              ,`showStudentNumType`
+              ,`serializeMode`
+              ,`income`
+              ,`giveCredit`
+              ,`rating`
+              ,`ratingNum`
+              ,`about`
+              ,`teacherIds`
+              ,`goals`
+              ,`audiences`
+              ,`locationId`
+              ,`address`
+              ,`studentNum`
+              ,`deadlineNotify`
+              ,`daysOfNotifyBeforeDeadline`
+              ,`useInClassroom`
+              ,`watchLimit`
+              ,`singleBuy`
+              ,`createdTime`
+              ,`updatedTime`
+              ,`freeStartTime`
+              ,`freeEndTime`
+              ,`approval`
+              ,`parentId`
+              ,`noteNum`
+              ,`locked`
+              ,`buyable`
+              ,`buyExpiryTime`
+              ,`tryLookable`
+              ,`summary`
+              ,`cover`
+              ,`creator`
+              ,`vipLevelId`
+              ,`tryLookLength`
+              ,`taskNum`
+              ,`isDefault`
+              ,`isFree`
+              ,`threadNum`
+              ,`enableFinish`
+              ,`learnMode`
+              ,`maxRate`
+          ) SELECT
+              `id`
+              ,`id`
+              ,`title`
+              ,`status`
+              ,`type`
+              ,`maxStudentNum`
+              ,`price`
+              ,`originCoinPrice`
+              ,`coinPrice`
+              ,`originPrice`
+              ,`expiryMode`
+              ,`showStudentNumType`
+              ,`serializeMode`
+              ,`income`
+              ,`giveCredit`
+              ,`rating`
+              ,`ratingNum`
+              ,`about`
+              ,`teacherIds`
+              ,`goals`
+              ,`audiences`
+              ,`locationId`
+              ,`address`
+              ,`studentNum`
+              ,`deadlineNotify`
+              ,`daysOfNotifyBeforeDeadline`
+              ,`useInClassroom`
+              ,`watchLimit`
+              ,`singleBuy`
+              ,`createdTime`
+              ,`updatedTime`
+              ,`freeStartTime`
+              ,`freeEndTime`
+              ,`approval`
+              ,`parentId`
+              ,`noteNum`
+              ,`locked`
+              ,`buyable`
+              ,`buyExpiryTime`
+              ,`tryLookable`
+              ,`about`
+              ,concat('{\"large\":\"',largePicture,'\",\"middle\":\"',middlePicture,'\",\"small\":\"',smallPicture,'\"}') as cover
+              ,`userId` as `creator`
+              ,`vipLevelId`
+              ,`tryLookTime`
+              ,`lessonNum` as `taskNum`
+              ,1
+              ,case when `originPrice` = 0 then 1 else 0 end
+              ,0
+              ,1
+              ,'freeMode'
+              ,`maxRate`
+          FROM `course` where `id` not in (select `id` from `c2_course`) order by id limit {$start}, {$this->perPageCount};";
+        $result = $this->getConnection()->exec($sql);
+        return $this->getNextPage($count, $page);
+    }
+}
