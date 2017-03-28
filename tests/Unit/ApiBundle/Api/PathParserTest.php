@@ -21,7 +21,7 @@ class PathParserTest extends \PHPUnit_Framework_TestCase
     public function testParseWithTwoLevel()
     {
         $parser = new PathParser();
-        $request = Request::create('http://test.com/courses/1/users/2', 'POST');
+        $request = Request::create('http://test.com/courses/1/users/2', 'PATCH');
         $pathMeta = $parser->parse($request);
 
         $this->assertEquals('ApiBundle\\Api\\Resource\\Course\\CourseUser', $pathMeta->getResourceClassName());

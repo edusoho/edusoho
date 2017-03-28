@@ -15,7 +15,7 @@ class PathMeta
 
     private $singleMap = array(
         'GET' => Resource::METHOD_GET,
-        'POST' => Resource::METHOD_UPDATE,
+        'PATCH' => Resource::METHOD_UPDATE,
         'DELETE' => Resource::METHOD_REMOVE
     );
 
