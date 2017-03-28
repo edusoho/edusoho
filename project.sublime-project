@@ -8,6 +8,8 @@
                 ".happypack",
                 "app/cache",
                 "app/logs",
+                "app/data",
+                "web/files",
                 "node_modules"
             ]
 		}
