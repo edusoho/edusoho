@@ -4,8 +4,7 @@ sudo: false
 
 cache:
     directories:
-        - $HOME/.composer/cache/files
-        - .phpunit
+      - $HOME/.composer/cache
 
 matrix:
     include:
@@ -15,12 +14,8 @@ matrix:
         - php: 5.5
         - php: 5.6
         - php: 7.0
-        - php: 7.1
           env: composer_extra="--prefer-lowest --prefer-stable"
     fast_finish: true
 
 install:
-    - composer $composer_extra update
-
-script:
-    - ./vendor/bin/simple-phpunit
+    - composer --prefer-source $composer_extra update

@@ -13,74 +13,52 @@ namespace Sensio\Bundle\GeneratorBundle\Tests\Command;
 
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\FormatterHelper;
-use Symfony\Component\Filesystem\Filesystem;
 use Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper;
 use Symfony\Component\DependencyInjection\Container;
 
 abstract class GenerateCommandTest extends \PHPUnit_Framework_TestCase
 {
-    protected $bundle;
-
-    protected function tearDown()
+    protected function getHelperSet($input)
     {
-        if (null !== $this->bundle) {
-            $fs = new Filesystem();
-            $fs->remove($this->bundle->getPath());
-        }
-    }
+        $question = new QuestionHelper();
+        $question->setInputStream($this->getInputStream($input));
 
-    protected function getHelperSet()
-    {
-        return new HelperSet(array(new FormatterHelper(), new QuestionHelper()));
-    }
-
-    protected function setInputs($tester, $command, $input)
-    {
-        $input .= str_repeat("\n", 10);
-        if (method_exists($tester, 'setInputs')) {
-            $tester->setInputs(explode("\n", $input));
-        } else {
-            $stream = fopen('php://memory', 'r+', false);
-            fwrite($stream, $input);
-            rewind($stream);
-
-            $command->getHelperSet()->get('question')->setInputStream($stream);
-        }
+        return new HelperSet(array(new FormatterHelper(), $question));
     }
 
     protected function getBundle()
     {
-        if (null !== $this->bundle) {
-            return $this->bundle;
-        }
-
-        $tmpDir = sys_get_temp_dir().'/sf'.mt_rand(111111, 999999);
-        @mkdir($tmpDir, 0777, true);
-
-        $this->bundle = $this->getMockBuilder('Symfony\Component\HttpKernel\Bundle\BundleInterface')->getMock();
-        $this->bundle
+        $bundle = $this->getMockBuilder('Symfony\Component\HttpKernel\Bundle\BundleInterface')->getMock();
+        $bundle
             ->expects($this->any())
             ->method('getPath')
-            ->will($this->returnValue($tmpDir))
+            ->will($this->returnValue(sys_get_temp_dir()))
         ;
 
-        return $this->bundle;
+        return $bundle;
+    }
+
+    protected function getInputStream($input)
+    {
+        $stream = fopen('php://memory', 'r+', false);
+        fwrite($stream, $input.str_repeat("\n", 10));
+        rewind($stream);
+
+        return $stream;
     }
 
     protected function getContainer()
     {
-        $bundle = $this->getBundle();
-
         $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\KernelInterface')->getMock();
         $kernel
             ->expects($this->any())
             ->method('getBundle')
-            ->will($this->returnValue($bundle))
+            ->will($this->returnValue($this->getBundle()))
         ;
         $kernel
             ->expects($this->any())
             ->method('getBundles')
-            ->will($this->returnValue(array($bundle)))
+            ->will($this->returnValue(array($this->getBundle())))
         ;
 
         $filesystem = $this->getMockBuilder('Symfony\Component\Filesystem\Filesystem')->getMock();
@@ -94,7 +72,7 @@ abstract class GenerateCommandTest extends \PHPUnit_Framework_TestCase
         $container->set('kernel', $kernel);
         $container->set('filesystem', $filesystem);
 
-        $container->setParameter('kernel.root_dir', $bundle->getPath());
+        $container->setParameter('kernel.root_dir', sys_get_temp_dir());
 
         return $container;
     }

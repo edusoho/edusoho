@@ -12,7 +12,7 @@
 <p>{{ request.client_id }} would like to access.</p>
 {% endif %}
 
-<form action="?response_type={{ request.response_type }}&amp;client_id={{ request.client_id }}&amp;redirect_uri={{ request.redirect_uri }}&amp;scope={{ request.scope }}&amp;state={{ request.state }}" method="post">
+<form action="?{{ qs|url_encode }}" method="post">
     <input type="hidden" name="authorize" value="1" />
     <input type="submit" value="Auhtorize" />
 </form>

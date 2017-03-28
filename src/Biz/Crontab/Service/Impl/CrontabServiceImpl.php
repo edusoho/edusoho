@@ -28,6 +28,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         }
 
         $this->beginTransaction();
+        $throws = null;
         try {
             // 加锁
             $job = $this->getJob($id, true);
