@@ -3,7 +3,7 @@
 namespace ApiBundle\EventListener;
 
 use ApiBundle\Api\Exception\ApiException;
-use ApiBundle\Security\FireWall;
+use ApiBundle\ApiBundle;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
@@ -18,7 +18,7 @@ class ExceptionListener
 
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-        if (FireWall::isApiPath($event->getRequest())) {
+        if ($this->isApiPath($event->getRequest())) {
             $exception = $event->getException();
 
             $error = array();
@@ -74,6 +74,11 @@ class ExceptionListener
             $event->stopPropagation();
         }
 
+    }
+
+    private function isApiPath($request)
+    {
+        return strpos($request->getPathInfo(), ApiBundle::API_PREFIX) !== false;
     }
 
     private function isDebug()

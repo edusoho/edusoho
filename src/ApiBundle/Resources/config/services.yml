@@ -3,9 +3,13 @@ services:
         class: ApiBundle\Security\TokenUserProvider
         arguments: ['@service_container']
 
+    api_security_policy_manager:
+          class:  ApiBundle\Security\SecurityPolicyManager
+          arguments: ['@service_container']
+
     api_token_authenticator:
         class:  ApiBundle\Security\TokenAuthenticator
-        arguments: ['@service_container']
+        arguments: ['@service_container', '@api_security_policy_manager']
         public: false
 
     api_exception_listener:

@@ -14,15 +14,17 @@ use Symfony\Component\Security\Http\Authentication\SimplePreAuthenticatorInterfa
 class TokenAuthenticator implements SimplePreAuthenticatorInterface
 {
     private $container;
+    private $securityPolicyManger;
 
-    public function __construct($container)
+    public function __construct($container, SecurityPolicyManager $manager)
     {
         $this->container = $container;
+        $this->securityPolicyManger = $manager;
     }
 
     public function createToken(Request $request, $providerKey)
     {
-        $auth = new ApiAuth();
+        $auth = new ApiAuth($this->securityPolicyManger);
 
         $apiToken = $auth->auth($request);
         

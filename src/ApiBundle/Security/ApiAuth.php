@@ -8,6 +8,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ApiAuth
 {
+    private $securityPolicyManger;
+
+    public function __construct(SecurityPolicyManager $manager)
+    {
+        $this->securityPolicyManger = $manager;
+    }
 
     public function auth(Request $request)
     {
@@ -20,7 +26,7 @@ class ApiAuth
             return array('allowed_without_user' => true);
         } else {
 
-            if (FireWall::isInWhiteList($request)) {
+            if ($this->securityPolicyManger->isInWhiteList($request)) {
                 return array('allowed_without_user' => true);
             }
 
