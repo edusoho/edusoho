@@ -6,10 +6,14 @@ export const initThread = () => {
   let btn = '#post-thread-btn';
   let $form = $("#post-thread-form");
   new AttachmentActions($form);
-  initEditor({
-    toolbar: 'Thread',
-    replace: 'post_content'
-  });
+
+  if($('#post_content').length) {
+     initEditor({
+      toolbar: 'Thread',
+      replace: 'post_content'
+    });
+  }
+
   let formValidator = $form.validate({
     currentDom: btn,
     ajax: true,
