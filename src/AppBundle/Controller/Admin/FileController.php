@@ -9,7 +9,7 @@ class FileController extends BaseController
     public function indexAction(Request $request)
     {
         $form = $this->buildFileSearchForm();
-        $form->bind($request);
+        $form->handleRequest($request);
         $conditions = $form->getData();
         $group = empty($conditions['group']) ? null : $conditions['group'];
         $files = $this->getFileService()->getFiles($group, 0, 30);

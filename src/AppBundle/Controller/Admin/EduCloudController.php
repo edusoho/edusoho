@@ -42,7 +42,7 @@ class EduCloudController extends BaseController
                 }
             }
         } catch (\RuntimeException $e) {
-            return $this->render('admin/edu-cloud/api-error.html.twig', array());
+            return $this->render('admin/edu-cloud/cloud-error.html.twig', array());
         }
 
         return $this->render('admin/edu-cloud/edu-cloud.html.twig', array(
