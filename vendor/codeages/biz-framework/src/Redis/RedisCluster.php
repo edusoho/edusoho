@@ -12,12 +12,15 @@ class RedisCluster
     public function __construct($biz)
     {
         $this->biz = $biz;
-        $this->config = $biz['cache.config'];
+        $this->config = $biz['cache.options'];
     }
 
     private function isSingle($config)
     {
-        return empty($config['servers']);
+        if (empty($config['host']) && empty($config['port'])) {
+            return false;
+        }
+        return true;
     }
 
     public function getCluster($group = 'default')
@@ -26,12 +29,7 @@ class RedisCluster
             return $this->pool[$group];
         }
 
-        if (empty($this->config[$group])) {
-            $cnf = $this->config['default'];
-        } else {
-            $cnf = $this->config[$group];
-        }
-
+        $cnf = $this->config;
 
         if ($this->isSingle($cnf)) {
             $redis = new Redis();
