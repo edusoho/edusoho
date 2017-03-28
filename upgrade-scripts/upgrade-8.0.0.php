@@ -86,7 +86,8 @@ class EduSohoUpgrade extends AbstractUpdater
         // next
 
         'AfterAllCourseTaskMigrate',
-        'OtherMigrate'
+        'OtherMigrate',
+        'log',
       );
 
       if ($index > count($steps)-1) {
