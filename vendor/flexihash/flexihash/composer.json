@@ -1,0 +1,42 @@
+{
+    "name": "flexihash/flexihash",
+    "type": "library",
+    "description": "Flexihash is a small PHP library which implements consistent hashing",
+    "homepage": "https://github.com/pda/flexihash",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Paul Annesley",
+            "email": "paul@annesley.cc",
+            "homepage": "http://paul.annesley.cc"
+        },
+        {
+            "name": "Dom Morgan",
+            "email": "dom@d3r.com",
+            "homepage": "https://d3r.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8",
+        "squizlabs/php_codesniffer": "^2.3",
+        "satooshi/php-coveralls": "~1.0",
+        "symfony/config": "^2.0.0",
+        "symfony/console": "^2.0.0",
+        "symfony/filesystem": "^2.0.0",
+        "symfony/stopwatch": "^2.0.0",
+        "symfony/yaml": "^2.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Flexihash\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Flexihash\\Tests\\": "tests/"
+        }
+    }
+}
