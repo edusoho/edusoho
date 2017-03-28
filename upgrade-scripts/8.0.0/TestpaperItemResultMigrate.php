@@ -36,10 +36,10 @@ class TestpaperItemResultMigrate extends AbstractMigrate
 
     private function updateTestpaperItemResult()
     {
-        $sql = "UPDATE testpaper_item_result_v8 AS ir, c2_testpaper as t SET ir.testId = t.id WHERE t.migrateTestId = ir.testId";
+        $sql = "UPDATE testpaper_item_result_v8 AS ir, testpaper_v8 as t SET ir.testId = t.id WHERE t.migrateTestId = ir.testId";
         $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE testpaper_item_result_v8 AS ir, c2_testpaper_result AS tr SET ir.resultId = tr.id WHERE tr.migrateResultId = ir.resultId";
+        $sql = "UPDATE testpaper_item_result_v8 AS ir, testpaper_result_v8 AS tr SET ir.resultId = tr.id WHERE tr.migrateResultId = ir.resultId";
         $this->getConnection()->exec($sql);
     }
 

@@ -22,7 +22,7 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
      * exercise datas convert to  activity
      * TODO datas should read from table tespaper.
      */
-    protected function exerciseToActivity()
+    protected function exerciseToActivity($start)
     {
         $this->getConnection()->exec("
             INSERT INTO `activity`
@@ -41,9 +41,15 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
               `createdTime`,
               `updatedTime`,
               `copyId`,
+<<<<<<< HEAD
               `exerciseId`
             )
             SELECT
+=======
+              `migrateExerciseId`
+          )
+          SELECT
+>>>>>>> b2daa043eda0cd9bdf03e6f31f65cd30fced8c61
               '练习',
               `summary`,
               `eexerciseId`,
@@ -59,6 +65,7 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
               `updatedTime`,
               `ecopyId`,
               `eexerciseId`
+<<<<<<< HEAD
             FROM (SELECT  ee.id AS eexerciseId, ee.`copyId` AS ecopyId , ce.*
             FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid limit {$start}, {$this->perPageCount}) lesson
             WHERE lesson.eexerciseId NOT IN (SELECT exerciseId FROM activity WHERE exerciseId IS NOT NULL );
@@ -66,9 +73,16 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
 
         $sql = "UPDATE activity AS a, testpaper_v8 AS t SET a.mediaId = t.id WHERE a.exerciseId = t.migrateTestId AND t.type = 'exercise' AND a.type = 'exercise';";
         $this->getConnection()->exec($sql);
+=======
+          FROM (SELECT  ee.id AS eexerciseId, ee.`copyId` AS ecopyId , ce.*
+          FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid limit 0, {$this->perPageCount}) lesson
+          WHERE lesson.eexerciseId NOT IN (SELECT exerciseId FROM activity WHERE exerciseId IS NOT NULL );
+        "
+      );
+>>>>>>> b2daa043eda0cd9bdf03e6f31f65cd30fced8c61
     }
 
-    protected function exerciseToCourseTask()
+    protected function exerciseToCourseTask($start)
     {
         $this->getConnection()->exec(
             "insert into course_task
@@ -91,8 +105,8 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
               `length` ,
               `maxOnlineNum`,
               `copyId`,
-              `exerciseId`,
-              `lessonId`
+              `migrateExerciseId`,
+              `migrateLessonId`
             )
           select
             `courseId`,
@@ -116,26 +130,31 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
             `eexerciseId`,
             `id`
             FROM (SELECT  ee.id AS eexerciseId, ee.`copyId` AS ecopyId , ce.*
-              FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid limit {$start}, {$this->perPageCount}) lesson
+              FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid limit 0, {$this->perPageCount}) lesson
                   WHERE lesson.eexerciseId NOT IN (SELECT exerciseId FROM course_task WHERE exerciseId IS NOT NULL );
           "
         );
 
         $this->getConnection()->exec(
+<<<<<<< HEAD
             "UPDATE `course_task` AS ck, activity AS a SET ck.`activityId` = a.`id`
            WHERE a.`exerciseId` = ck.`exerciseId` AND  ck.type = 'exercise' AND  ck.`activityId` = 0
+=======
+          "UPDATE `course_task` AS ck, activity AS a SET ck.`activityId` = a.`id`
+           WHERE a.`migrateExerciseId` = ck.`migrateExerciseId` AND  ck.type = 'exercise' AND  ck.`activityId` = 0
+>>>>>>> b2daa043eda0cd9bdf03e6f31f65cd30fced8c61
           "
         );
     }
 
     protected function migrateTableStructure()
     {
-        if (!$this->isFieldExist('activity', 'exerciseId')) {
-            $this->getConnection()->exec('alter table `activity` add `exerciseId` int(10) ;');
+        if (!$this->isFieldExist('activity', 'migrateExerciseId')) {
+            $this->getConnection()->exec('alter table `activity` add `migrateExerciseId` int(10) ;');
         }
 
-        if (!$this->isFieldExist('course_task', 'exerciseId')) {
-            $this->getConnection()->exec('alter table `course_task` add `exerciseId` int(10) ;');
+        if (!$this->isFieldExist('course_task', 'migrateExerciseId')) {
+            $this->getConnection()->exec('alter table `course_task` add `migrateExerciseId` int(10) ;');
         }
     }
 }
