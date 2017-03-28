@@ -238,7 +238,22 @@ class DefaultController extends BaseController
             $this->getUserService()->updateUserLocale($currentUser['id'], $locale);
         }
 
-        return $this->redirect($targetPath);
+        return $this->redirectSafely($targetPath);
+    }
+
+    public function redirectSafely($url, $status = 302)
+    {
+        $host = $this->get('request')->getHost();
+        $safedHost = array($host);
+
+        $parsedUrl = parse_url($url);
+        $isUnsafedHost = isset($parsedUrl['host']) && !in_array($parsedUrl['host'], $safedHost);
+
+        if (empty($url) || $isUnsafedHost) {
+            $url = $this->get('request')->getSchemeAndHttpHost();
+        }
+
+        return $this->redirect($url, $status);
     }
 
     private function getMeCount()

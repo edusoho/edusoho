@@ -741,11 +741,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFileImplementor($params['storage'])->makeUploadParams($params);
     }
 
-    public function getMediaInfo($key, $type)
-    {
-        return $this->getFileImplementor('cloud')->getMediaInfo($key, $type);
-    }
-
     public function getFileByTargetType($targetType)
     {
         $file = $this->getUploadFileDao()->getByTargetType($targetType);

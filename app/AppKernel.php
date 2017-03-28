@@ -74,7 +74,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new Endroid\Bundle\QrCodeBundle\EndroidQrCodeBundle(),
             new Topxia\WebBundle\TopxiaWebBundle(),
             new Topxia\AdminBundle\TopxiaAdminBundle(),
-            new Topxia\MobileBundle\TopxiaMobileBundle(),
             new Topxia\MobileBundleV2\TopxiaMobileBundleV2(),
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),
             new OAuth2\ServerBundle\OAuth2ServerBundle(),
@@ -136,7 +135,24 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         }
 
         $biz->register(new Codeages\Biz\RateLimiter\RateLimiterServiceProvider());
+
+        $redisConfig = $this->getRedisConfig();
+        if (!empty($redisConfig)) {
+            $biz->register(new Codeages\Biz\Framework\Provider\CacheServiceProvider());
+            $biz['cache.config'] = $redisConfig;
+        }
+
         $biz->boot();
+    }
+
+    protected function getRedisConfig()
+    {
+        $redisConfigFile = $this->getContainer()->getParameter('kernel.root_dir').'/data/redis.php';
+        if (file_exists($redisConfigFile)) {
+            $redisConfig = include $redisConfigFile;
+            return $redisConfig;
+        }
+        return array();
     }
 
     protected function initializeServiceKernel()

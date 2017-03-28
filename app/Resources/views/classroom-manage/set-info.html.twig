@@ -8,7 +8,7 @@ classroomStatus: classroom.status
 
 {% set side_nav = 'base' %}
 
-{% do script(['libs/jquery-validation.js','libs/es-ckeditor/ckeditor.js','app/js/classroom-manage/set-info/index.js']) %}
+{% do script(['libs/jquery-validation.js','libs/es-ckeditor/ckeditor.js','libs/bootstrap-datetimepicker.js','app/js/classroom-manage/set-info/index.js']) %}
 
 {% block main %}
   <div class="panel panel-default" role="classroom-manage-base">
@@ -16,39 +16,35 @@ classroomStatus: classroom.status
     <div class="panel-body">
       {{ web_macro.flash_messages() }}
       <form class="form-horizontal" method="post" id="classroom-set-form" novalidate>
-
         <div class="row form-group">
           <div class="col-md-2 control-label">
-            <label for="title">{{ '名称'|trans }}</label>
+            <label class="control-label-required" for="title" >{{ '名称'|trans }}</label>
           </div>
           <div class="controls col-md-8">
             <input name="title" type="text" id="title" class="form-control" value="{{ classroom.title }}"/>
           </div>
         </div>
-
         <div class="row form-group">
           <div class="col-md-2 control-label">
             <label>{{ '简介'|trans }}</label>
           </div>
           <div class="controls col-md-8">
-          <textarea name="about" class="form-control" rows="6"
+            <textarea name="about" class="form-control" rows="6"
             data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
             data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}"
             id="about">{{ classroom.about|raw }}</textarea>
+            <div class="help-block">{{ '为正常使用IFrame，请在【管理后台】-【系统】-【安全设置】-【IFrame白名单】中进行设置'|trans }}</div>
           </div>
-          <div class="help-block">{{ '为正常使用IFrame，请在【管理后台】-【系统】-【安全设置】-【IFrame白名单】中进行设置'|trans }}</div>
         </div>
-
         <div class="form-group">
           <label class="col-md-2 control-label">{{ '标签'|trans }}</label>
           <div class="col-md-8 controls">
-            <input type="text" id="classroom_tags" name="tags" required="required" class="width-full select2-offscreen"
+            <input type="text" id="classroom_tags" name="tags"  class="width-full select2-offscreen"
               tabindex="-1" value="{{ tags|join(',') }}"
               data-explain="{{ '用于按标签检索班级等，由网校管理员后台统一管理'|trans }}">
             <div class="help-block">{{ '用于按标签检索班级等，由网校管理员后台统一管理'|trans }}</div>
           </div>
         </div>
-
         <div class="row form-group">
           <div class="col-md-2 control-label">
             <label>{{ '%name%展示'|trans({'%name%':setting('classroom.name')|default('班级'|trans)}) }}</label>
@@ -64,23 +60,20 @@ classroomStatus: classroom.status
           </div>
 
         </div>
-        <div class="row form-group">
-          <div id='buyable'>
-            <div class="col-md-2 control-label">
-              <label>{{ setting("classroom.name")|default("班级") }}{{ '购买'|trans }}</label>
-            </div>
-            <div class="col-md-8 controls radios">
-              <label>
-                <input id="buyable-open" type="radio" name="buyable" value="1" data-buyable="{{ classroom.buyable }}"> {{ '开启'|trans }}
-              </label>
-              <label>
-                <input id="buyable-close" type="radio" name="buyable" value="0"> {{ '关闭'|trans }}
-              </label>
-              <div class="help-block">{{ '关闭后%name%将无法在线购买加入。'|trans({'%name%':setting('classroom.name')|default('班级'|trans)}) }}</div>
-            </div>
+        <div class="row form-group" id='buyable'>
+          <div class="col-md-2 control-label">
+            <label>{{ setting("classroom.name")|default("班级") }}{{ '购买'|trans }}</label>
+          </div>
+          <div class="col-md-8 controls radios">
+            <label>
+              <input id="buyable-open" type="radio" name="buyable" value="1" data-buyable="{{ classroom.buyable }}"> {{ '开启'|trans }}
+            </label>
+            <label>
+              <input id="buyable-close" type="radio" name="buyable" value="0"> {{ '关闭'|trans }}
+            </label>
+            <div class="help-block">{{ '关闭后%name%将无法在线购买加入。'|trans({'%name%':setting('classroom.name')|default('班级'|trans)}) }}</div>
           </div>
         </div>
-
         <div class="form-group">
           <label class="col-md-2 control-label">班级有效期</label>
           <div class="col-md-8 controls radios">
@@ -93,11 +86,10 @@ classroomStatus: classroom.status
             {% endif %}
           </div>
         </div>
-
         <div class="form-group expiry-value-js {% if classroom.expiryMode|default('none') == 'none' %} hidden {% endif %}">
           <label class="col-md-2 control-label"></label>
           <div class="col-md-8 controls">
-            <input type="text" id="classroom_expiryValue" name="expiryValue" required="required"
+            <input type="text" id="classroom_expiryValue" name="expiryValue" 
               value="{% if classroom.expiryMode|default('none') == 'date' %}{{ classroom.expiryValue|date('Y-m-d') }}{% else %}{{ classroom.expiryValue }}{% endif %}"
               class="form-control width-input width-input-large"> <span
               {% if classroom.expiryMode|default('none') != 'days' %}class="hidden" {% endif %}>{{ '天'|trans }} </span>
@@ -107,14 +99,12 @@ classroomStatus: classroom.status
             <div class="help-block" data-date="{{ date_help }}" data-days="{{ days_help }}">
               {% if classroom.expiryMode|default('none') == 'date' %}  {{ date_help }}{% elseif  classroom.expiryMode|default('none') == 'days' %}{{ days_help }} {% endif %}
             </div>
-            {#即有效期为N天，则只能学习N天，即有效期至yyyy-mm-dd，则只能学习至yyyy-mm-dd 即有效期为N天，则只能学习N天，#}
           </div>
           <div class="col-md-offset-2 col-md-10 js-course-rule">
             <p class="alert-warning"></p>
-            <a href="{{ path('classroom_expiry_date_rule') }}" target="_blank">查看有效期规则</a>
+            {#<a href="{{ path('classroom_expiry_date_rule') }}" target="_blank">查看有效期规则</a>#}
           </div>
         </div>
-
         <div class="form-group">
           <label class="col-md-2 control-label">{{ '分类'|trans }}</label>
           <div class="col-md-8 controls">
@@ -125,9 +115,7 @@ classroomStatus: classroom.status
             <div class="help-block" style="display:none;"></div>
           </div>
         </div>
-
         {% include 'org/org-tree-select.html.twig' with {orgCode: classroom.orgCode, inputClass: 'width-input width-input-large'} %}
-
         <div class="row form-group">
           <div class="col-md-2 control-label"></div>
           <div class="controls col-md-8">

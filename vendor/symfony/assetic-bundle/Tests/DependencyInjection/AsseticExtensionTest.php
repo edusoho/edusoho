@@ -56,7 +56,7 @@ class AsseticExtensionTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Twig is not available.');
         }
 
-        $this->kernel = $this->getMock('Symfony\\Component\\HttpKernel\\KernelInterface');
+        $this->kernel = $this->getMockBuilder('Symfony\\Component\\HttpKernel\\KernelInterface')->getMock();
 
         $this->container = new ContainerBuilder();
         // Symfony 2.3 BC

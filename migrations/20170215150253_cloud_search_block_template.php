@@ -5,12 +5,12 @@ use Phpmig\Migration\Migration;
 class CloudSearchBlockTemplate extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
         $biz = $this->getContainer();
-        $db  = $biz['db'];
+        $db = $biz['db'];
         $db->exec("
             INSERT INTO `block_template` (`title`, `mode`, `template`, `templateName`, `templateData`, `content`, `data`, `code`, `meta`, `tips`, `category`, `createdTime`, `updateTime`) 
             VALUES(
@@ -28,7 +28,7 @@ class CloudSearchBlockTemplate extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {

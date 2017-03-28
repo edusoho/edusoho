@@ -216,6 +216,14 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
+        if (isset($fields['about'])) {
+            $fields['about'] = $this->purifyHtml($fields['about'], true);
+        }
+
+        if (isset($fields['summary'])) {
+            $fields['summary'] = $this->purifyHtml($fields['summary'], true);
+        }
+
         $course = $this->getCourseDao()->update($id, $fields);
         $this->dispatchEvent('course.update', new Event($course));
 
@@ -962,15 +970,16 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if ($course['parentId'] > 0) {
-            $classrooms = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
-
-            $isTeacher = $this->getClassroomService()->isClassroomTeacher($classrooms[0]['classroomId'], $user['id']);
-            $isHeadTeacher = $this->getClassroomService()->isClassroomHeadTeacher(
-                $classrooms[0]['classroomId'],
-                $user['id']
-            );
-            if ($isTeacher || $isHeadTeacher) {
-                return true;
+            $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($course['courseSetId']);
+            if (!empty($classroomRef)) {
+                $isTeacher = $this->getClassroomService()->isClassroomTeacher($classroomRef['classroomId'], $user['id']);
+                $isHeadTeacher = $this->getClassroomService()->isClassroomHeadTeacher(
+                    $classroomRef['classroomId'],
+                    $user['id']
+                );
+                if ($isTeacher || $isHeadTeacher) {
+                    return true;
+                }
             }
         }
 
@@ -1292,6 +1301,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         } elseif ($task['type'] == 'audio') {
             $task['mediaSource'] = 'self';
         } elseif ($task['type'] == 'live') {
+            if ($activity['ext']['replayStatus'] == 'videoGenerated') {
+                $task['mediaSource'] = 'self';
+            }
+
             $task['liveProvider'] = $activity['ext']['liveProvider'];
             $task['replayStatus'] = $activity['ext']['replayStatus'];
         }
@@ -1533,6 +1546,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($coursesIds, 'id'));
+
         return $courses;
     }
 
@@ -1635,6 +1649,44 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $learnProgress;
+    }
+
+    public function buildCourseExpiryDataFromClassroom($expiryMode, $expiryValue)
+    {
+        $fields = array();
+        if ($expiryMode === 'none') {
+            $fields = array(
+                'expiryMode' => 'forever',
+                'expiryDays' => 0,
+                'expiryStartDate' => null,
+                'expiryEndDate' => null,
+            );
+        } elseif ($expiryMode === 'days') {
+            if ($expiryValue == 0) {
+                $fields = array(
+                    'expiryMode' => 'forever',
+                    'expiryDays' => 0,
+                    'expiryStartDate' => null,
+                    'expiryEndDate' => null,
+                );
+            } else {
+                $fields = array(
+                    'expiryMode' => 'days',
+                    'expiryDays' => $expiryValue,
+                    'expiryStartDate' => null,
+                    'expiryEndDate' => null,
+                );
+            }
+        } elseif ($expiryMode === 'date') {
+            $fields = array(
+                'expiryMode' => 'end_date',
+                'expiryDays' => 0,
+                'expiryStartDate' => null,
+                'expiryEndDate' => $expiryValue,
+            );
+        }
+
+        return $fields;
     }
 
     protected function hasAdminRole()
@@ -1875,7 +1927,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if (!empty($fields['buyExpiryTime'])) {
-            $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime']);
+            $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime'].' 23:59:59');
 
             return $fields;
         } else {

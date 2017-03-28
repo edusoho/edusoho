@@ -52,7 +52,15 @@ class AppServiceImpl extends BaseService implements AppService
 
     public function getCenterApps()
     {
-        return $this->createAppClient()->getApps();
+        $apps = $this->createAppClient()->getApps();
+
+        foreach ($apps as &$app) {
+            if (null !== $app['description']) {
+                $app['description'] = $this->purifyHtml($app['description']);
+            }
+        }
+
+        return $apps;
     }
 
     public function getBinded()

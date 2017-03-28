@@ -11,6 +11,8 @@
 
 namespace Sensio\Bundle\GeneratorBundle\Generator;
 
+use Symfony\Component\Console\Output\ConsoleOutput;
+
 /**
  * Generator is the base class for all generators.
  *
@@ -19,6 +21,7 @@ namespace Sensio\Bundle\GeneratorBundle\Generator;
 class Generator
 {
     private $skeletonDirs;
+    private static $output;
 
     /**
      * Sets an array of directories to look for templates.
@@ -57,10 +60,49 @@ class Generator
 
     protected function renderFile($template, $target, $parameters)
     {
-        if (!is_dir(dirname($target))) {
-            mkdir(dirname($target), 0777, true);
+        self::mkdir(dirname($target));
+
+        return self::dump($target, $this->render($template, $parameters));
+    }
+
+    /**
+     * @internal
+     */
+    public static function mkdir($dir, $mode = 0777, $recursive = true)
+    {
+        if (!is_dir($dir)) {
+            mkdir($dir, $mode, $recursive);
+            self::writeln(sprintf('  <fg=green>created</> %s', self::relativizePath($dir)));
+        }
+    }
+
+    /**
+     * @internal
+     */
+    public static function dump($filename, $content)
+    {
+        if (file_exists($filename)) {
+            self::writeln(sprintf('  <fg=yellow>updated</> %s', self::relativizePath($filename)));
+        } else {
+            self::writeln(sprintf('  <fg=green>created</> %s', self::relativizePath($filename)));
         }
 
-        return file_put_contents($target, $this->render($template, $parameters));
+        return file_put_contents($filename, $content);
+    }
+
+    private static function writeln($message)
+    {
+        if (null === self::$output) {
+            self::$output = new ConsoleOutput();
+        }
+
+        self::$output->writeln($message);
+    }
+
+    private static function relativizePath($absolutePath)
+    {
+        $relativePath = str_replace(getcwd(), '.', $absolutePath);
+
+        return is_dir($absolutePath) ? rtrim($relativePath, '/').'/' : $relativePath;
     }
 }

@@ -1,5 +1,9 @@
+/app/cache
 /bin
 /vendor
 /composer.lock
+/composer.phar
+/phpunit.xml
+.DS_Store
 .php_cs.cache
 .sonar/

@@ -54,6 +54,10 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         $this->beginTransaction();
         try {
+            if (isset($fields['content'])) {
+                $fields['content'] = $this->purifyHtml($fields['content'], true);
+            }
+
             $fields = $this->createActivity($fields);
             $strategy = $this->createCourseStrategy($fields['courseId']);
             $task = $strategy->createTask($fields);
@@ -115,7 +119,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             $strategy = $this->createCourseStrategy($task['courseId']);
             $task = $strategy->updateTask($id, $fields);
             $this->getLogService()->info('course', 'update_task', "更新任务《{$task['title']}》({$task['id']})");
-            $this->dispatchEvent('course.task.update', new Event($task));
+            $this->dispatchEvent('course.task.update', new Event($task), $fields);
             $this->commit();
 
             return $task;

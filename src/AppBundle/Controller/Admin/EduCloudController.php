@@ -42,7 +42,7 @@ class EduCloudController extends BaseController
                 }
             }
         } catch (\RuntimeException $e) {
-            return $this->render('admin/edu-cloud/api-error.html.twig', array());
+            return $this->render('admin/edu-cloud/cloud-error.html.twig', array());
         }
 
         return $this->render('admin/edu-cloud/edu-cloud.html.twig', array(
@@ -1687,5 +1687,57 @@ class EduCloudController extends BaseController
 
             return $this->redirect($this->generateUrl('admin_setting_cloud_edulive'));
         }
+    }
+
+    public function consultSettingAction(Request $request)
+    {
+        if (!$this->isHiddenCloud()) {
+            return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
+        }
+
+        try {
+            $account = $this->getConsultService()->getAccount();
+            $jsResource = $this->getConsultService()->getJsResource();
+        } catch (\RuntimeException $e) {
+            return $this->render('admin/edu-cloud/consult/consult-error.html.twig', array());
+        }
+
+        $cloudConsult = $this->getConsultService()->buildCloudConsult($account, $jsResource);
+
+        if (isset($cloudConsult['error'])) {
+            $this->setFlashMessage('danger', $cloudConsult['error']);
+        }
+
+        if ($cloudConsult['cloud_consult_is_buy'] == 0) {
+            return $this->renderConsultWithoutEnable($cloudConsult);
+        }
+
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
+            $cloudConsult['cloud_consult_setting_enabled'] = $data['cloud_consult_setting_enabled'];
+
+            $this->getSettingService()->set('cloud_consult', $cloudConsult);
+            $this->setFlashMessage('success', '云问答设置已保存！');
+        }
+
+        if ($cloudConsult['cloud_consult_setting_enabled'] == 0) {
+            return $this->renderConsultWithoutEnable($cloudConsult);
+        }
+
+        return $this->render('admin/edu-cloud/consult/setting.html.twig', array(
+            'cloud_consult' => $cloudConsult,
+        ));
+    }
+
+    private function renderConsultWithoutEnable($cloudConsult)
+    {
+        return $this->render('admin/edu-cloud/consult/without-enable.html.twig', array(
+            'cloud_consult' => $cloudConsult,
+        ));
+    }
+
+    protected function getConsultService()
+    {
+        return $this->createService('EduCloud:MicroyanConsultService');
     }
 }

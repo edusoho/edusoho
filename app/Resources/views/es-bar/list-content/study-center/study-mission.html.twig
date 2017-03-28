@@ -4,8 +4,9 @@
 </div>
 
 {% if app.user.id|default(0) %}
-  {% set classrooms = data('ClassroomMissions',{userId:app.user.id, count:5, missionCount:3}) %}
-  {% set courses = data('CourseMissions',{userId:app.user.id, count:5, missionCount:3}) %}
+  {% set studyMissions = data('StudyCenterMissions', {userId: app.user.id, count: 5, missionCount: 3}) %}
+  {% set classrooms = studyMissions.classrooms|default(null) %}
+  {% set courses = studyMissions.courses|default(null) %}
 {% endif %}
 
 {% if classrooms|default(false) or courses|default(false) %}
@@ -20,12 +21,13 @@
 
       <ul class="bar-time-line">
         {% for task in classroom.tasks if classroom.tasks|default(null) %}
-          {% set status = task.isLearned %}
+          {# {% set status = task.isLearned %} #}
           {% set lock  = task.lock|default(false) %}
           <li>
-            {% if status %}
+            {# {% if status %}
               <span class="es-icon es-icon-doing"></span>
-            {% elseif lock %}
+            {% elseif lock %} #}
+            {% if lock %}
               <span class="es-icon es-icon-lock"></span>
             {% else %}
               <span class="es-icon es-icon-undone"></span>

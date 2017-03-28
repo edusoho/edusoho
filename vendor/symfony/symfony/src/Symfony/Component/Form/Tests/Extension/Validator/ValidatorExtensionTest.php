@@ -11,10 +11,11 @@
 
 namespace Symfony\Component\Form\Tests\Extension\Validator;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Validator\ValidatorInterface;
 
-class ValidatorExtensionTest extends \PHPUnit_Framework_TestCase
+class ValidatorExtensionTest extends TestCase
 {
     public function test2Dot5ValidationApi()
     {
@@ -56,8 +57,8 @@ class ValidatorExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function test2Dot4ValidationApi()
     {
-        $factory = $this->getMock('Symfony\Component\Validator\Mapping\Factory\MetadataFactoryInterface');
-        $validator = $this->getMock('Symfony\Component\Validator\ValidatorInterface');
+        $factory = $this->getMockBuilder('Symfony\Component\Validator\Mapping\Factory\MetadataFactoryInterface')->getMock();
+        $validator = $this->getMockBuilder('Symfony\Component\Validator\ValidatorInterface')->getMock();
         $metadata = $this->getMockBuilder('Symfony\Component\Validator\Mapping\ClassMetadata')
             ->disableOriginalConstructor()
             ->getMock();

@@ -432,6 +432,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $fields['tags'] = $tagIds;
         }
 
+        if (isset($fields['summary'])) {
+            $fields['summary'] = $this->purifyHtml($fields['summary'], true);
+        }
+
         $this->updateCourseSerializeMode($courseSet, $fields);
         if (empty($fields['subtitle'])) {
             $fields['subtitle'] = null;
@@ -539,7 +543,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
         $this->getLogService()->info('course', 'delete', "删除课程《{$courseSet['title']}》(#{$courseSet['id']})");
 
-        return $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
+        $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
+
+        $this->dispatchEvent('course-set.delete', new Event($courseSet));
     }
 
     public function findTeachingCourseSetsByUserId($userId, $onlyPublished = true)

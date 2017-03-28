@@ -3,7 +3,7 @@
 namespace Biz\Common\Mail;
 
 use AppBundle\Common\SettingToolkit;
-use Topxia\Service\Common\Mail\TemplateToolkit;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Topxia\Service\Common\ServiceKernel;
 
 abstract class Mail
@@ -59,7 +59,26 @@ abstract class Mail
         return SettingToolkit::getSetting($name, $default);
     }
 
-    abstract public function send();
+    public function send()
+    {
+        $this->mailCheckRatelimiter();
+
+        return $this->doSend();
+    }
+
+    protected function mailCheckRatelimiter()
+    {
+        $biz = $this->getKernel()->getBiz();
+
+        $factory = $biz['ratelimiter.factory'];
+        $limiter = $factory('email_'.$this->options['template'], 5, 1800);
+        $remain = $limiter->check($this->to);
+        if ($remain == 0) {
+            throw new AccessDeniedException('操作过于频繁，请30分钟之后再试');
+        }
+    }
+
+    abstract public function doSend();
 
     protected function getKernel()
     {

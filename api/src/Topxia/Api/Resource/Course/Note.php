@@ -2,12 +2,12 @@
 
 namespace Topxia\Api\Resource\Course;
 
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseNoteService;
-use Biz\Task\Service\TaskService;
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
+use Biz\Task\Service\TaskService;
+use Biz\Course\Service\CourseService;
 use Topxia\Api\Resource\BaseResource;
+use Biz\Course\Service\CourseNoteService;
+use Symfony\Component\HttpFoundation\Request;
 
 class Note extends BaseResource
 {
@@ -25,18 +25,18 @@ class Note extends BaseResource
     public function post(Application $app, Request $request)
     {
         $requiredFields = array('taskId', 'content');
-        $fields         = $this->checkRequiredFields($requiredFields, $request->request->all());
+        $fields = $this->checkRequiredFields($requiredFields, $request->request->all());
 
         $task = $this->getTaskService()->getTask($fields['taskId']);
         if (empty($task)) {
-            throw new \Exception("ID为{$fields['taskId']}的任务不存在");
+            return $this->error('403', "ID为{$fields['taskId']}的任务不存在");
         }
 
         $note = array(
             'courseId' => $task['courseId'],
-            'taskId'   => $task['id'],
-            'status'   => !empty($fields['status']) ? 1 : 0,
-            'content'  => $fields['content']
+            'taskId' => $task['id'],
+            'status' => !empty($fields['status']) ? 1 : 0,
+            'content' => $fields['content'],
         );
         $note = $this->getCourseNoteService()->saveNote($note);
         return $this->filter($note);
@@ -72,5 +72,4 @@ class Note extends BaseResource
     {
         return $this->getServiceKernel()->createService('Task:TaskService');
     }
-
 }

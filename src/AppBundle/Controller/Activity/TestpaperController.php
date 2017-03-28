@@ -4,6 +4,9 @@ namespace AppBundle\Controller\Activity;
 
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Course\Service\CourseService;
+use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 
 class TestpaperController extends BaseController implements ActivityActionInterface
@@ -11,10 +14,7 @@ class TestpaperController extends BaseController implements ActivityActionInterf
     public function showAction(Request $request, $activity, $preview = 0)
     {
         if ($preview) {
-            return $this->forward('AppBundle:Activity/Testpaper:preview', array(
-                'id' => $activity['id'],
-                'courseId' => $activity['fromCourseId'],
-            ));
+            return $this->previewTestpaper($activity['id'], $activity['fromCourseId']);
         }
 
         $user = $this->getUser();
@@ -31,7 +31,7 @@ class TestpaperController extends BaseController implements ActivityActionInterf
                 'testpaper' => $testpaper,
                 'courseId' => $activity['fromCourseId'],
             ));
-        } elseif ($testpaperResult['status'] == 'finished') {
+        } elseif ($testpaperResult['status'] === 'finished') {
             return $this->forward('AppBundle:Testpaper/Testpaper:showResult', array(
                 'resultId' => $testpaperResult['id'],
             ));
@@ -43,7 +43,12 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         ));
     }
 
-    public function previewAction(Request $request, $id, $courseId)
+    public function previewAction(Request $request, $task)
+    {
+        return $this->previewTestpaper($task['activityId'], $task['courseId']);
+    }
+
+    public function previewTestpaper($id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
@@ -110,7 +115,7 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         ));
     }
 
-    public function finishConditionAction($activity)
+    public function finishConditionAction(Request $request, $activity)
     {
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
@@ -163,16 +168,25 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         return $this->createService('Activity:ActivityService');
     }
 
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return TestpaperActivityService
+     */
     protected function getTestpaperActivityService()
     {
         return $this->createService('Activity:TestpaperActivityService');

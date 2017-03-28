@@ -85,6 +85,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
                 'createdTime >= :startCreatedTime',
                 'createdTime < :endCreatedTime',
             ),
+            'cache' => 'table',
         );
     }
 }

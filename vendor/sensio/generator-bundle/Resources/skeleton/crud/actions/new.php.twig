@@ -27,10 +27,10 @@
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist(${{ entity_singularized }});
-            $em->flush(${{ entity_singularized }});
+            $em->flush();
 
             {% if 'show' in actions -%}
-                return $this->redirectToRoute('{{ route_name_prefix }}_show', array('id' => ${{ entity_singularized }}->getId()));
+                return $this->redirectToRoute('{{ route_name_prefix }}_show', array('{{ identifier }}' => ${{ entity_singularized }}->get{{ identifier|capitalize }}()));
             {%- else -%}
                 return $this->redirectToRoute('{{ route_name_prefix }}_index'));
             {%- endif %}
