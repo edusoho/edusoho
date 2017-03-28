@@ -233,26 +233,6 @@ uploadfile_browsers:
     path:  /uploadfile/browsers
     defaults: { _controller: AppBundle:UploadFile:browsers }
 
-uploadfile_cloud_callback:
-    path:  /uploadfile/cloud_callback
-    defaults: { _controller: AppBundle:UploadFile:cloudCallback }
-
-uploadfile_cloud_convert_callback:
-    path:  /uploadfile/cloud_convertcallback
-    defaults: { _controller: AppBundle:UploadFile:cloudConvertCallback }
-
-uploadfile_cloud_convert_callback2:
-    path:  /uploadfile/cloud_convertcallback2
-    defaults: { _controller: AppBundle:UploadFile:cloudConvertCallback2 }
-
-uploadfile_cloud_convert_callback3:
-    path:  /uploadfile/cloud_convertcallback3
-    defaults: { _controller: AppBundle:UploadFile:cloudConvertCallback3 }
-
-uploadfile_cloud_get_media_info:
-    path:  /uploadfile/get_media_info/{type}
-    defaults: { _controller: AppBundle:UploadFile:getMediaInfo }
-
 hls_playlist:
     path: /hls/{id}/playlist/{token}.m3u8
     defaults: { _controller: AppBundle:HLS:playlist}
@@ -784,14 +764,6 @@ partner_phpwind_notify:
 cloud_set_server:
     path: /cloud/set-server
     defaults: {_controller: AppBundle:Cloud:setServer }
-
-cloud_oldkeys:
-    path: /cloud/oldkeys
-    defaults: {_controller: AppBundle:Cloud:oldkeys }
-
-cloud_reconvert_old_file:
-    path: /cloud/reconvert_old_file
-    defaults: {_controller: AppBundle:Cloud:reconvertOldFile }
 
 cloud_video_fingerprint:
     path: /cloud/video_fingerprint
@@ -1512,9 +1484,9 @@ live_open_lesson_time_check:
     path:  /open/course/{courseId}/manage/live/time/check
     defaults: { _controller: AppBundle:OpenCourseManage:lessonTimeCheck }
 
-live_open_es_live_replay_show:
-    path:  /open/course/{courseId}/live/replay/{replayId}/show
-    defaults: { _controller: AppBundle:LiveOpenCourse:playESLiveReplay }
+es_live_room_replay_show:
+    path:  /es_live/{targetType}/{targetId}/lesson/{lessonId}/replay/{replayId}/show
+    defaults: { _controller: AppBundle:Liveroom:playESLiveReplay }
 
 open_course_member_sms:
     path:  /open/course/{id}/member/sms
@@ -2901,3 +2873,8 @@ course_task_question_marker_search:
 callback:
     path:  /callback/{resource}
     defaults: { _controller: AppBundle:Callback/Index:index }
+
+mobile_qrcode:
+    path:  /mobil/qrcode
+    defaults: { _controller: AppBundle:Common:mobileQrcode }
+

@@ -1438,7 +1438,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function clearUserCounter($userId, $name)
     {
-        $this->getUserDao()->clearCounterById($userId, $name);
+        $this->getUserDao()->deleteCounterById($userId, $name);
     }
 
     public function filterFollowingIds($userId, array $followingIds)

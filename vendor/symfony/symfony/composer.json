@@ -18,7 +18,7 @@
     "require": {
         "php": ">=5.3.9",
         "doctrine/common": "~2.4",
-        "twig/twig": "~1.26|~2.0",
+        "twig/twig": "~1.28|~2.0",
         "psr/log": "~1.0",
         "symfony/security-acl": "~2.7|~3.0.0",
         "symfony/polyfill-apcu": "~1.1",
@@ -87,10 +87,12 @@
         "ocramius/proxy-manager": "~0.4|~1.0|~2.0",
         "symfony/phpunit-bridge": "~3.2",
         "egulias/email-validator": "~1.2,>=1.2.1",
-        "phpdocumentor/reflection": "^1.0.7"
+        "phpdocumentor/reflection": "^1.0.7",
+        "sensio/framework-extra-bundle": "^3.0.2"
     },
     "conflict": {
-        "phpdocumentor/reflection": "<1.0.7"
+        "phpdocumentor/reflection": "<1.0.7",
+        "phpunit/phpunit": "<4.8.35|<5.4.3,>=5.0"
     },
     "autoload": {
         "psr-4": {
@@ -108,6 +110,9 @@
         "exclude-from-classmap": [
             "**/Tests/"
         ]
+    },
+    "autoload-dev": {
+        "files": [ "src/Symfony/Component/VarDumper/Resources/functions/dump.php" ]
     },
     "minimum-stability": "dev",
     "extra": {

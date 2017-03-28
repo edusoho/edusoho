@@ -1,6 +1,5 @@
 import notify from 'common/notify';
 import sortList from 'common/sortable';
-import 'store';
 
 export const sortablelist = (list) => {
   let $list = $(list);
@@ -35,14 +34,6 @@ export const taskSortable = (list) => {
     }, (data) => {
       sortablelist(list);
     });
-  }
-}
-
-export const courseFunctionRemask = () => {
-  const COURSE_FEATURE_REMIND = 'COURSE-FEATURE-REMIND'; //课程改版功能提醒
-  if (!store.get(COURSE_FEATURE_REMIND)) {
-    store.set(COURSE_FEATURE_REMIND, true);
-    $('#course-function-modal').modal('show');
   }
 }
 
@@ -185,3 +176,19 @@ export const updateTaskNum = (container) => {
     $('#task-num').text($(container).find('i[data-role="task"]').length);
   })
 }
+
+export const TaskListHeaderFixed = () => {
+  let $header = $('.js-task-list-header');
+  if(!$header.length){
+    return;
+  }
+  let headerTop = $header.offset().top;
+	$(window).scroll(function(event) {
+			if ($(window).scrollTop() >= headerTop) {
+				$header.addClass('fixed')
+			} else {
+				$header.removeClass('fixed');
+			}
+	});
+}
+

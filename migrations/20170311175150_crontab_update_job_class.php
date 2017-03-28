@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class CrontabUpdateJobClass extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -15,7 +15,7 @@ class CrontabUpdateJobClass extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {

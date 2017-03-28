@@ -40,64 +40,6 @@ class CloudController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function reconvertOldFileAction(Request $request)
-    {
-        $sign = $request->query->get('sign');
-        if (empty($sign)) {
-            return $this->createJsonResponse(array('error' => 'sign param is empty.'));
-        }
-
-        $setting = $this->getSettingService()->get('storage', array());
-        if (empty($setting['cloud_secret_key'])) {
-            return $this->createJsonResponse(array('error' => 'secret key not set.'));
-        }
-
-        $fileId = $request->query->get('id');
-        $pipeline = $request->query->get('pipeline');
-
-        if ($sign != md5($fileId.$setting['cloud_secret_key'])) {
-            return $this->createJsonResponse(array('error' => 'sign error.'));
-        }
-
-        $callback = $this->generateUrl('uploadfile_cloud_convert_callback3', array(), true);
-
-        $result = $this->getUploadFileService()->reconvertOldFile($fileId, $callback, $pipeline);
-
-        return $this->createJsonResponse($result);
-    }
-
-    public function oldkeysAction(Request $request)
-    {
-        $sign = $request->query->get('sign');
-        if (empty($sign)) {
-            return $this->createJsonResponse(array('error' => 'sign param is empty.'));
-        }
-
-        $setting = $this->getSettingService()->get('storage', array());
-        if (empty($setting['cloud_secret_key'])) {
-            return $this->createJsonResponse(array('error' => 'secret key not set.'));
-        }
-
-        if ($sign != md5($setting['cloud_secret_key'])) {
-            return $this->createJsonResponse(array('error' => 'sign error.'));
-        }
-
-        $conditions = array(
-            'storage' => 'cloud',
-        );
-        $count = $this->getUploadFileService()->searchFileCount($conditions);
-
-        $files = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), 0, $count);
-
-        foreach ($files as &$file) {
-            $file['metas'] = empty($file['metas']) ? array() : json_decode($file['metas'], true);
-            $file['metas2'] = empty($file['metas2']) ? array() : json_decode($file['metas2'], true);
-            $file['convertParams'] = empty($file['convertParams']) ? array() : json_decode($file['convertParams'], true);
-        }
-
-        return $this->createJsonResponse($files);
-    }
-
     public function videoFingerprintAction(Request $request)
     {
         return new Response($this->get('web.twig.extension')->getFingerprint());

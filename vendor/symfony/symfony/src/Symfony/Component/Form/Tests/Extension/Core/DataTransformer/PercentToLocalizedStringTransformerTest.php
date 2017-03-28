@@ -11,10 +11,11 @@
 
 namespace Symfony\Component\Form\Tests\Extension\Core\DataTransformer;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Extension\Core\DataTransformer\PercentToLocalizedStringTransformer;
 use Symfony\Component\Intl\Util\IntlTestHelper;
 
-class PercentToLocalizedStringTransformerTest extends \PHPUnit_Framework_TestCase
+class PercentToLocalizedStringTransformerTest extends TestCase
 {
     protected function setUp()
     {
@@ -53,7 +54,7 @@ class PercentToLocalizedStringTransformerTest extends \PHPUnit_Framework_TestCas
     public function testTransformWithScale()
     {
         // Since we test against "de_AT", we need the full implementation
-        IntlTestHelper::requireFullIntl($this);
+        IntlTestHelper::requireFullIntl($this, false);
 
         \Locale::setDefault('de_AT');
 
@@ -92,7 +93,7 @@ class PercentToLocalizedStringTransformerTest extends \PHPUnit_Framework_TestCas
     public function testReverseTransformWithScale()
     {
         // Since we test against "de_AT", we need the full implementation
-        IntlTestHelper::requireFullIntl($this);
+        IntlTestHelper::requireFullIntl($this, false);
 
         \Locale::setDefault('de_AT');
 
@@ -105,7 +106,7 @@ class PercentToLocalizedStringTransformerTest extends \PHPUnit_Framework_TestCas
     {
         $transformer = new PercentToLocalizedStringTransformer();
 
-        $this->setExpectedException('Symfony\Component\Form\Exception\TransformationFailedException');
+        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('Symfony\Component\Form\Exception\TransformationFailedException');
 
         $transformer->transform('foo');
     }
@@ -114,7 +115,7 @@ class PercentToLocalizedStringTransformerTest extends \PHPUnit_Framework_TestCas
     {
         $transformer = new PercentToLocalizedStringTransformer();
 
-        $this->setExpectedException('Symfony\Component\Form\Exception\TransformationFailedException');
+        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('Symfony\Component\Form\Exception\TransformationFailedException');
 
         $transformer->reverseTransform(1);
     }

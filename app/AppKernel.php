@@ -135,7 +135,24 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         }
 
         $biz->register(new Codeages\Biz\RateLimiter\RateLimiterServiceProvider());
+
+        $redisConfig = $this->getRedisConfig();
+        if (!empty($redisConfig)) {
+            $biz->register(new Codeages\Biz\Framework\Provider\CacheServiceProvider());
+            $biz['cache.config'] = $redisConfig;
+        }
+
         $biz->boot();
+    }
+
+    protected function getRedisConfig()
+    {
+        $redisConfigFile = $this->getContainer()->getParameter('kernel.root_dir').'/data/redis.php';
+        if (file_exists($redisConfigFile)) {
+            $redisConfig = include $redisConfigFile;
+            return $redisConfig;
+        }
+        return array();
     }
 
     protected function initializeServiceKernel()

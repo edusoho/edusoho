@@ -3,7 +3,6 @@
 namespace Topxia\Api\Resource\Course;
 
 use Silex\Application;
-use Biz\Util\CloudClientFactory;
 use AppBundle\Common\SettingToolkit;
 use Topxia\Api\Resource\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,8 +18,8 @@ class Lesson extends BaseResource
         }
 
         $course = $this->getCourseService()->getCourse($task['courseId']);
-        if (!$this->getCourseService()->canTakeCourse($course['id'])) {
-            return $this->error('403', '无权限查看');
+        if ($task['isFree'] == 0 && !$this->getCourseService()->canTakeCourse($course['id'])) {
+            return $this->error('403', '不是学员或老师,无权限查看');
         }
 
         $lesson = $this->getCourseService()->convertTasks(array($task), $course);
@@ -209,9 +208,6 @@ class Lesson extends BaseResource
             if (!empty($file)) {
                 $lesson['mediaStorage'] = $file['storage'];
                 if ($file['storage'] == 'cloud') {
-                    $factory = new CloudClientFactory();
-                    $client = $factory->createClient();
-
                     $lesson['mediaConvertStatus'] = $file['convertStatus'];
 
                     if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
@@ -248,7 +244,7 @@ class Lesson extends BaseResource
                                 'url' => $this->getHttpHost()."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?format=json&line=".$line,
                             );
                         } else {
-                            $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
+                            return $this->error('404', '当前视频格式不能被播放！');
                         }
 
                         $lesson['mediaUri'] = (isset($url) && is_array($url) && !empty($url['url'])) ? $url['url'] : '';
@@ -264,8 +260,7 @@ class Lesson extends BaseResource
                         }
 
                         if ($key) {
-                            $url = $client->generateFileUrl($key, 3600);
-                            $lesson['mediaUri'] = isset($url['url']) ? $url['url'] : '';
+                            return $this->error('404', '当前视频格式不能被播放！');
                         } else {
                             $lesson['mediaUri'] = '';
                         }
