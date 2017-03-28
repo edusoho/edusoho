@@ -1,5 +1,4 @@
-// webpack配置文件
-const config = {
+const options = {
   output: {
     path: 'web/static-dist/',       // 用于生产环境下的输出目录
     publicPath: '/static-dist/',    // 用于开发环境下的输出目录
@@ -101,4 +100,5 @@ const config = {
   ]
 }
 
-export default config;
+export default options;
+

@@ -26,6 +26,8 @@ class Live extends Activity
         if (empty($config['refLiveroom'])) {
             $activity['fromUserId'] = $biz['user']['id'];
             unset($activity['id']);
+            unset($activity['startTime']);
+            unset($activity['endTime']);
 
             return $this->getLiveActivityService()->createLiveActivity($activity, true);
         }
