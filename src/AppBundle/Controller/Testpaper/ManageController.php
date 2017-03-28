@@ -488,7 +488,7 @@ class ManageController extends BaseController
 
     protected function getQuestionTypes()
     {
-        $typesConfig = $this->get('extension.default')->getQuestionTypes();
+        $typesConfig = $this->get('extension.manager')->getQuestionTypes();
 
         $types = array();
         foreach ($typesConfig as $type => $typeConfig) {

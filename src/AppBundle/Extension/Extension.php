@@ -2,7 +2,9 @@
 
 namespace AppBundle\Extension;
 
-abstract class Extension implements ExtensionInterface
+use Codeages\Biz\Framework\Context\BizAware;
+
+abstract class Extension extends BizAware implements ExtensionInterface
 {
     public function getQuestionTypes()
     {
