@@ -26,6 +26,9 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $payment = $this->getSettingService()->get('payment', array());
         $payment['wxpay_appid'] =   $payment['wxpay_key'];
+        $payment['wxpay_key'] =     $payment['wxpay_secret'];
+        $payment['wxpay_secret'] =  '';
+
 
         $this->getSettingService()->set('payment', $payment);
     }
