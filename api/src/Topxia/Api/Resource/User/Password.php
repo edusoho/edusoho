@@ -23,12 +23,6 @@ class Password extends BaseResource
             return $this->error('500', '不存在此type对应的业务场景');
         }
 
-        $result = $this->limiterCheck($type, $smsToken);
-        if ($result !== true) {
-            return $result;
-        }
-
-
         if (empty($smsCode)) {
             return $this->error('500', '短信验证码为空，请输入');
         }
@@ -78,20 +72,6 @@ class Password extends BaseResource
     public function filter($res)
     {
         return $res;
-    }
-
-    protected function limiterCheck($type, $token)
-    {
-        $biz = $this->getBiz();
-
-        $factory = $biz['ratelimiter.factory'];
-        $limiter = $factory('api_change_'.$type, 5, 1800);
-        $remain = $limiter->check($token);
-        if ($remain == 0) {
-            return $this->error('500', '操作过于频繁，请30分钟之后再试');
-        }
-
-        return true;
     }
 
     protected function getTokenService()
