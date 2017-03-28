@@ -3,7 +3,13 @@
 	[
 		{
 			"path": ".",
-			"folder_exclude_patterns": [".sonar", ".happypack", "app/cache", "node_modules"]
+			"folder_exclude_patterns": [
+                ".sonar",
+                ".happypack",
+                "app/cache",
+                "app/logs",
+                "node_modules"
+            ]
 		}
 	]
 }
