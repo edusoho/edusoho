@@ -114,6 +114,6 @@ class HomeworkMigrate extends AbstractMigrate
             }
         }
 
-        return $page++;
+        return $page+1;
     }
 }

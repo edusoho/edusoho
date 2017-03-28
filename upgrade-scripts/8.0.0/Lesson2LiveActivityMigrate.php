@@ -48,6 +48,6 @@ class Lesson2LiveActivityMigrate extends AbstractMigrate
 
         $result = $this->getConnection()->exec($sql);
 
-        return $page++;
+        return $page+1;
     }
 }

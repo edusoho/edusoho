@@ -62,6 +62,6 @@ class ExerciseResultMigrate extends AbstractMigrate
             FROM exercise_result WHERE id NOT IN (SELECT migrateResultId FROM testpaper_result_v8 WHERE type = 'exercise') order by id limit 0, {$this->perPageCount}";
         $this->getConnection()->exec($sql);
 
-        return $page++;
+        return $page+1;
     }
 }

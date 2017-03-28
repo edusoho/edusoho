@@ -56,6 +56,6 @@ class Lesson2DocActivityMigrate extends AbstractMigrate
         "
         );
 
-        return $page++;
+        return $page+1;
     }
 }

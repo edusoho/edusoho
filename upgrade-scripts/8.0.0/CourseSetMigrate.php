@@ -10,7 +10,7 @@ class CourseSetMigrate extends AbstractMigrate
                   `type` varchar(32) NOT NULL DEFAULT '',
                   `title` varchar(1024) DEFAULT '',
                   `subtitle` varchar(1024) DEFAULT '',
-                `tags` text,
+                  `tags` text,
                   `categoryId` int(10) NOT NULL DEFAULT '0',
                   `summary` TEXT,
                   `goals` TEXT,
@@ -101,8 +101,7 @@ class CourseSetMigrate extends AbstractMigrate
     {
         $countSql = 'SELECT count(*) FROM `course` where `id` not in (select `id` from `c2_course_set`)';
         $count = $this->getConnection()->fetchColumn($countSql);
-        $start = $this->getStart($page);
-        if ($count == 0 && $count < $start) {
+        if ($count == 0) {
             return;
         }
 
@@ -172,6 +171,6 @@ class CourseSetMigrate extends AbstractMigrate
 
         $result = $this->getConnection()->exec($sql);
 
-        return $page++;
+        return $page+1;
     }
 }

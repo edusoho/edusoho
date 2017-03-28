@@ -34,6 +34,6 @@ class QuestionFavoriteMigrate extends AbstractMigrate
             $this->getConnection()->exec($sql);
         }
 
-        return $page++;
+        return $page+1;
     }
 }

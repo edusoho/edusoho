@@ -128,6 +128,6 @@ class TestpaperMigrate extends AbstractMigrate
             $this->getConnection()->exec($insertSql);
         }
 
-        return $page++;
+        return $page+1;
     }
 }

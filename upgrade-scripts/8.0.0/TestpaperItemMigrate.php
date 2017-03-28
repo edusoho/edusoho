@@ -36,6 +36,6 @@ class TestpaperItemMigrate extends AbstractMigrate
             WHERE id NOT IN (SELECT `id` FROM `testpaper_item_v8`) order by id limit 0, {$this->perPageCount};";
         $this->getConnection()->exec($sql);
 
-        return $page++;
+        return $page+1;
     }
 }

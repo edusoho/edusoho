@@ -55,6 +55,6 @@ class Lesson2PptActivityMigrate extends AbstractMigrate
         "
         );
 
-        return $page++;
+        return $page+1;
     }
 }

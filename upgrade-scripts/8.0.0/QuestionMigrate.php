@@ -50,6 +50,6 @@ class QuestionMigrate extends AbstractMigrate
             $this->getConnection()->exec($sql);
         }
 
-        return $page++;
+        return $page+1;
     }
 }

@@ -56,6 +56,6 @@ class Lesson2FlashActivityMigrate extends AbstractMigrate
         "
         );
 
-        return $page++;
+        return $page+1;
 	}
 }

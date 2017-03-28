@@ -51,6 +51,6 @@ class Lesson2TextActivityMigrate extends AbstractMigrate
         "
         );
 
-        return $page++;
+        return $page+1;
     }
 }

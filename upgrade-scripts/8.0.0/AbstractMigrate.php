@@ -3,7 +3,7 @@ abstract class AbstractMigrate
 {
     protected $kernel;
 
-    protected $perPageCount = 1000;
+    protected $perPageCount = 10000;
 
     public function __construct($kernel)
     {

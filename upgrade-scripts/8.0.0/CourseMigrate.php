@@ -252,6 +252,6 @@ class CourseMigrate extends AbstractMigrate
               ,`maxRate`
           FROM `course` where `id` not in (select `id` from `c2_course`) order by id limit 0, {$this->perPageCount};";
         $result = $this->getConnection()->exec($sql);
-        return $page++;
+        return $page+1;
     }
 }

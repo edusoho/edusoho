@@ -57,6 +57,6 @@ class HomeworkItemResultMigrate extends AbstractMigrate
             FROM homework_item_result WHERE id NOT IN (SELECT migrateItemResultId FROM testpaper_item_result_v8 where migrateType = 'homework') order by id limit 0, {$this->perPageCount};";
         $this->getConnection()->exec($sql);
 
-        return $page++;
+        return $page+1;
     }
 }

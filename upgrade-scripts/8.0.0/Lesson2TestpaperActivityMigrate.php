@@ -77,6 +77,6 @@ class Lesson2TestpaperActivityMigrate extends AbstractMigrate
             WHERE cl.type='testpaper' AND cl.id NOT IN (SELECT id FROM testpaper_activity) order by cl.id limit 0, {$this->perPageCount}";
         $this->getConnection()->exec($sql);
 
-        return $page++;
+        return $page+1;
     }
 }

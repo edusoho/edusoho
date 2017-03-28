@@ -93,6 +93,6 @@ class Lesson2CourseTaskMigrate extends AbstractMigrate
                 `id` as `migrateLessonId`
             from `course_lesson` WHERE `id` NOT IN (SELECT id FROM `course_task`) order by id limit 0, {$this->perPageCount}");
 
-        return $page++;
+        return $page+1;
     }
 }

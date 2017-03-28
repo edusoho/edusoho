@@ -39,6 +39,6 @@ class Lesson2CourseChapterMigrate extends AbstractMigrate
         from course_lesson where id not in (select migrateLessonId from course_chapter) order by id limit 0, {$this->perPageCount};";
 
         $this->exec($sql);
-        return $page++;
+        return $page+1;
     }
 }

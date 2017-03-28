@@ -56,10 +56,11 @@ class CourseLessonView2CourseTaskView extends AbstractMigrate
                 `fileStorage`,
                 `fileSource`,
                 `createdTime`
-            FROM `course_lesson_view` WHERE id not in (SELECT id FROM `course_task_view`) limit 0, 1000;
+            FROM `course_lesson_view` WHERE id not in (SELECT id FROM `course_task_view`)
+            order by id limit 0, {$this->perPageCount};
         	"
         );
         
-        return $page++;
+        return $page+1;
     }
 }

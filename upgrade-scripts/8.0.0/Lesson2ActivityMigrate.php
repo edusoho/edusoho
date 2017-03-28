@@ -79,6 +79,6 @@ class Lesson2ActivityMigrate extends AbstractMigrate
         "
         );
 
-        return $page++;
+        return $page+1;
     }
 }
