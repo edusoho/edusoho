@@ -15,10 +15,6 @@ class ClassRoomThreads extends BaseResource
         $sort = $request->query->get('sort', 'posted');
         $simplify = $request->query->get('simplify', 0);
 
-        if (!$this->getClassroomService()->canTakeClassroom($classRoomId)) {
-            return $this->error('403', '无权限查看');
-        }
-
         $conditions = array(
             'targetType' => 'classroom',
             'targetId' => $classRoomId,

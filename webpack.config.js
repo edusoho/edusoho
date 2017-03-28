@@ -1,10 +1,9 @@
 const options = {
   output: {
-    path: 'web/static-dist/',       // 用于生产环境下的输出目录
-    publicPath: '/static-dist/',    // 用于开发环境下的输出目录
+    path: 'web/static/',       // 用于生产环境下的输出目录
+    publicPath: '/static/',    // 用于开发环境下的输出目录
   },
   libs: {
-
     vendor: ['libs/vendor.js'], //可以是一个js文件,
     "html5shiv": ['html5shiv'],
     "fix-ie": ['console-polyfill', 'respond-js'], //也可以是一个npm依赖包
