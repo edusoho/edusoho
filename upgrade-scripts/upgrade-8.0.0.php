@@ -41,7 +41,6 @@ class EduSohoUpgrade extends AbstractUpdater
         $oldSteps = array(
         'c2ActivityLearnLog', // ?
         'c2CourseMaterial',
-        'c2TagOwner',
         'updateCourseChapter',
         'c2testpaperMigrate',
         'c2QuestionMigrate',
@@ -87,6 +86,8 @@ class EduSohoUpgrade extends AbstractUpdater
         // next
         'Exercise2CourseTaskMigrate',
         'Homework2CourseTasMigrate',
+
+        'TagOwnerMigrate',
 
         'AfterAllCourseTaskMigrate',
         'OtherMigrate',
@@ -488,13 +489,6 @@ class EduSohoUpgrade extends AbstractUpdater
                 );
             }
         }
-    }
-
-    protected function c2TagOwner()
-    {
-        $this->exec(
-            "update `tag_owner` set `ownerType` = 'courseSet' where `ownerType`='course';"
-        );
     }
 
     protected function c2CourseMaterial()
