@@ -42,7 +42,7 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
               `createdTime`,
               `updatedTime`,
               `copyId`,
-              `exerciseId`
+              `migrateExerciseId`
           )
           SELECT
               '练习',
@@ -90,8 +90,8 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
               `length` ,
               `maxOnlineNum`,
               `copyId`,
-              `exerciseId`,
-              `lessonId`
+              `migrateExerciseId`,
+              `migrateLessonId`
             )
           select
             `courseId`,
@@ -122,19 +122,19 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
 
         $this->getConnection()->exec(
           "UPDATE `course_task` AS ck, activity AS a SET ck.`activityId` = a.`id`
-           WHERE a.`exerciseId` = ck.`exerciseId` AND  ck.type = 'exercise' AND  ck.`activityId` = 0
+           WHERE a.`migrateExerciseId` = ck.`migrateExerciseId` AND  ck.type = 'exercise' AND  ck.`activityId` = 0
           "
         );
     }
 
     protected function migrateTableStructure()
     {
-        if (!$this->isFieldExist('activity', 'exerciseId')) {
-            $this->getConnection()->exec('alter table `activity` add `exerciseId` int(10) ;');
+        if (!$this->isFieldExist('activity', 'migrateExerciseId')) {
+            $this->getConnection()->exec('alter table `activity` add `migrateExerciseId` int(10) ;');
         }
 
-        if (!$this->isFieldExist('course_task', 'exerciseId')) {
-            $this->getConnection()->exec('alter table `course_task` add `exerciseId` int(10) ;');
+        if (!$this->isFieldExist('course_task', 'migrateExerciseId')) {
+            $this->getConnection()->exec('alter table `course_task` add `migrateExerciseId` int(10) ;');
         }
     }
 }

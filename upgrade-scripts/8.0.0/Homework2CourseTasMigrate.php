@@ -42,7 +42,7 @@ class Homework2CourseTasMigrate extends AbstractMigrate
               `createdTime`,
               `updatedTime`,
               `copyId`,
-              `homeworkId`
+              `migrateHomeworkId`
           )
           SELECT
               '作业',
@@ -91,8 +91,8 @@ class Homework2CourseTasMigrate extends AbstractMigrate
               `length` ,
               `maxOnlineNum`,
               `copyId`,
-              `homeworkId`,
-              `lessonId`
+              `migrateHomeworkId`,
+              `migrateLessonId`
             )
           SELECT
             `courseId`,
@@ -123,19 +123,19 @@ class Homework2CourseTasMigrate extends AbstractMigrate
 
         $this->exec(
           "UPDATE `course_task` AS ck, activity AS a SET ck.`activityId` = a.`id`
-        WHERE a.`homeworkId` = ck.`homeworkId` AND  ck.type = 'homework' AND  ck.`activityId` = 0
+        WHERE a.`migrateHomeworkId` = ck.`migrateHomeworkId` AND  ck.type = 'homework' AND  ck.`activityId` = 0
           "
       );
     }
 
     protected function migrateTableStructure()
     {
-        if (!$this->isFieldExist('activity', 'homeworkId')) {
-            $this->exec('alter table `activity` add `homeworkId` int(10) ;');
+        if (!$this->isFieldExist('activity', 'migrateHomeworkId')) {
+            $this->exec('alter table `activity` add `migrateHomeworkId` int(10) ;');
         }
 
-        if (!$this->isFieldExist('course_task', 'homeworkId')) {
-            $this->exec('alter table `course_task` add `homeworkId` int(10) ;');
+        if (!$this->isFieldExist('course_task', 'migrateHomeworkId')) {
+            $this->exec('alter table `course_task` add `migrateHomeworkId` int(10) ;');
         }
     }
 }
