@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\DependencyInjection\Tests\Loader;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -21,7 +22,7 @@ use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\ExpressionLanguage\Expression;
 
-class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
+class XmlFileLoaderTest extends TestCase
 {
     protected static $fixturesPath;
 
@@ -131,8 +132,8 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $container = new ContainerBuilder();
         $resolver = new LoaderResolver(array(
-            new IniFileLoader($container, new FileLocator(self::$fixturesPath.'/xml')),
-            new YamlFileLoader($container, new FileLocator(self::$fixturesPath.'/xml')),
+            new IniFileLoader($container, new FileLocator(self::$fixturesPath.'/ini')),
+            new YamlFileLoader($container, new FileLocator(self::$fixturesPath.'/yml')),
             $loader = new XmlFileLoader($container, new FileLocator(self::$fixturesPath.'/xml')),
         ));
         $loader->setResolver($resolver);
@@ -576,5 +577,14 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
         $loader->load('services23.xml');
 
         $this->assertTrue($container->getDefinition('bar')->isAutowired());
+    }
+
+    public function testArgumentWithKeyOutsideCollection()
+    {
+        $container = new ContainerBuilder();
+        $loader = new XmlFileLoader($container, new FileLocator(self::$fixturesPath.'/xml'));
+        $loader->load('with_key_outside_collection.xml');
+
+        $this->assertSame(array('type' => 'foo', 'bar'), $container->getDefinition('foo')->getArguments());
     }
 }

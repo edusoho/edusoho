@@ -11,19 +11,20 @@
 
 namespace Symfony\Bridge\Twig\Tests\TokenParser;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Twig\TokenParser\FormThemeTokenParser;
 use Symfony\Bridge\Twig\Node\FormThemeNode;
 
-class FormThemeTokenParserTest extends \PHPUnit_Framework_TestCase
+class FormThemeTokenParserTest extends TestCase
 {
     /**
      * @dataProvider getTestsForFormTheme
      */
     public function testCompile($source, $expected)
     {
-        $env = new \Twig_Environment($this->getMock('Twig_LoaderInterface'), array('cache' => false, 'autoescape' => false, 'optimizations' => 0));
+        $env = new \Twig_Environment($this->getMockBuilder('Twig_LoaderInterface')->getMock(), array('cache' => false, 'autoescape' => false, 'optimizations' => 0));
         $env->addTokenParser(new FormThemeTokenParser());
-        $stream = $env->tokenize($source);
+        $stream = $env->tokenize(new \Twig_Source($source, ''));
         $parser = new \Twig_Parser($env);
 
         $this->assertEquals($expected, $parser->parse($stream)->getNode('body')->getNode(0));

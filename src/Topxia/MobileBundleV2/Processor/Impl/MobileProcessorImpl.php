@@ -16,6 +16,6 @@ class MobileProcessorImpl extends BaseProcessor implements MobileProcessor
             $this->controller->autoLogin($user);
         }
 
-        return $this->controller->redirect($goto);
+        return $this->controller->redirectSafely($goto);
     }
 }

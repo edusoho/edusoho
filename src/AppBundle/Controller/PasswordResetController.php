@@ -77,7 +77,7 @@ class PasswordResetController extends BaseController
 
                     $this->getLogService()->info('user', 'password-reset', "{$user['email']}向发送了找回密码邮件。");
 
-                    return $this->render('TopxiaWebBundle:PasswordReset:sent.html.twig', array(
+                    return $this->render('password-reset/sent.html.twig', array(
                         'user' => $user,
                         'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
                     ));

@@ -99,11 +99,11 @@ class SqlPgsql extends Sql
      */
     public function createSchema()
     {
-        $sql = sprintf("SELECT schema_name FROM {$this->quote}information_schema{$this->quote}.{$this->quote}schemata{$this->quote} WHERE schema_name = '%s';",
+        $sql = sprintf("SELECT COUNT(*) FROM {$this->quote}information_schema{$this->quote}.{$this->quote}schemata{$this->quote} WHERE schema_name = '%s';",
             $this->schemaName);
-        $pgSchemas = $this->connection->exec($sql);
+        $res = $this->connection->query($sql);
 
-        if (empty($pgSchemas)) {
+        if (!$res || !$res->fetchColumn()) {
             $sql = sprintf("CREATE SCHEMA %s;", $this->schemaName);
             if (FALSE === $this->connection->exec($sql)) {
                 $e = $this->connection->errorInfo();

@@ -624,7 +624,7 @@ class CourseController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
 
-        return $this->render('admin/course/course-chooser.html.twig', array(
+        return $this->render('admin/course/course-set-chooser.html.twig', array(
             'conditions' => $conditions,
             'courses' => $courses,
             'users' => $users,

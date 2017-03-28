@@ -4,7 +4,6 @@ namespace AppBundle\Controller\Admin;
 
 use Biz\System\Service\SettingService;
 use Biz\CloudPlatform\Client\EduSohoAppClient;
-use Biz\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 class CloudController extends BaseController
@@ -14,22 +13,6 @@ class CloudController extends BaseController
         $params = array('type' => $type);
 
         return $this->redirectUrl('edu_cloud_buy', $params);
-    }
-
-    public function billAction(Request $request)
-    {
-        $factory = new CloudClientFactory();
-        $client = $factory->createClient();
-
-        $result = $client->getBills();
-        if (!empty($result['error'])) {
-            return $this->createMessageResponse('error', '获取账单信息失败，云视频参数配置不正确，或网络通讯失败。, 获取账单信息失败');
-        }
-
-        return $this->render('admin/cloud/bill.html.twig', array(
-            'money' => $result['money'],
-            'bills' => $result['bills'],
-        ));
     }
 
     public function accessAction(Request $request)

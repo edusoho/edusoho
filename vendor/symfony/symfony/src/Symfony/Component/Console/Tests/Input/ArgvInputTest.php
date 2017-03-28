@@ -11,12 +11,13 @@
 
 namespace Symfony\Component\Console\Tests\Input;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
-class ArgvInputTest extends \PHPUnit_Framework_TestCase
+class ArgvInputTest extends TestCase
 {
     public function testConstructor()
     {
@@ -163,7 +164,12 @@ class ArgvInputTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidInput($argv, $definition, $expectedExceptionMessage)
     {
-        $this->setExpectedException('RuntimeException', $expectedExceptionMessage);
+        if (method_exists($this, 'expectException')) {
+            $this->expectException('RuntimeException');
+            $this->expectExceptionMessage($expectedExceptionMessage);
+        } else {
+            $this->setExpectedException('RuntimeException', $expectedExceptionMessage);
+        }
 
         $input = new ArgvInput($argv);
         $input->bind($definition);

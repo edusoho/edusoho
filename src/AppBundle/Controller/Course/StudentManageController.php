@@ -316,8 +316,8 @@ class StudentManageController extends BaseController
                 'discussionCount' => $discussionCount,
                 'postCount' => $postCount,
                 'daysCount' => $daysCount,
-                'learnedTime' => round($learnedTime / 60, 2),
-                'learnedTimePerDay' => round($learnedTimePerDay / 60, 2),
+                'learnedTime' => round($learnedTime / 60 / 60, 2),
+                'learnedTimePerDay' => round($learnedTimePerDay / 60 / 60, 2),
             )
         );
     }

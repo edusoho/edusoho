@@ -83,7 +83,7 @@ class CourseChapterDaoImpl extends GeneralDaoImpl implements CourseChapterDao
     {
         return array(
             'timestamps' => array('createdTime'),
-            'cache' => 'table'
+            'cache' => 'table',
         );
     }
 }

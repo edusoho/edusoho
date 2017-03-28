@@ -970,15 +970,16 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if ($course['parentId'] > 0) {
-            $classrooms = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
-
-            $isTeacher = $this->getClassroomService()->isClassroomTeacher($classrooms[0]['classroomId'], $user['id']);
-            $isHeadTeacher = $this->getClassroomService()->isClassroomHeadTeacher(
-                $classrooms[0]['classroomId'],
-                $user['id']
-            );
-            if ($isTeacher || $isHeadTeacher) {
-                return true;
+            $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($course['courseSetId']);
+            if (!empty($classroomRef)) {
+                $isTeacher = $this->getClassroomService()->isClassroomTeacher($classroomRef['classroomId'], $user['id']);
+                $isHeadTeacher = $this->getClassroomService()->isClassroomHeadTeacher(
+                    $classroomRef['classroomId'],
+                    $user['id']
+                );
+                if ($isTeacher || $isHeadTeacher) {
+                    return true;
+                }
             }
         }
 

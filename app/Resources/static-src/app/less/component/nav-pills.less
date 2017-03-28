@@ -16,7 +16,7 @@
     &.active {
       > a {
         color: #fff;
-        background: @brand-primary;
+        // background: @brand-primary;
         .es-transition;
       }
     }
@@ -33,7 +33,7 @@
       }
       &.active {
         > a {
-          background: @brand-primary;
+          // background: @brand-primary;
         }
       }
     }
@@ -41,18 +41,45 @@
   &.nav-pills-transparent {
     > li {
       margin-bottom: 10px;
+      .done-icon {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        .opacity(0);
+        color: #fff;
+        font-size: 12px;
+      }
       > a {
-        background-color: transparent;
+        background: transparent;
         border: 1px solid @gray-light;
         color: @gray-dark;
         .border-radius(0);
+        &:after {
+          content: '';
+          position: absolute;
+          width: 0;
+          height: 0;
+          right: 0;
+          bottom: 0;
+          border-color: transparent;
+          border-style: solid;
+          border-width: 0 0 15px 15px;
+          // border-bottom-color: @brand-primary;
+          .opacity(0);
+        }
       }
       &:hover,
       &.active {
+        .done-icon  {
+          .opacity(1);
+        }
         >a {
-          border-color: @brand-primary;
+          // border-color: @brand-primary;
           background-color: transparent;
-          color: @brand-primary;
+          // color: @brand-primary;
+          &:after {
+            .opacity(1);
+          }
         }
       }
     }

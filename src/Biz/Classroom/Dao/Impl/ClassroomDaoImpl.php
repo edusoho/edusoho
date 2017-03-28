@@ -36,7 +36,7 @@ class ClassroomDaoImpl extends GeneralDaoImpl implements ClassroomDao
                 'headTeacherId = :headTeacherId',
                 'updatedTime >= :updatedTime_GE',
             ),
-            'cache' => 'table'
+            'cache' => 'table',
         );
     }
 
