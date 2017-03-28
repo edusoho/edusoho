@@ -6,7 +6,7 @@ class TestpaperMigrate extends AbstractMigrate
     {
         if (!$this->isTableExist('testpaper_v8')) {
             $this->getConnection()->exec("
-                CREATE TABLE IF NOT EXISTS `testpaper_v8` (
+                CREATE TABLE `testpaper_v8` (
                   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
                   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '试卷名称',
                   `description` text COMMENT '试卷说明',
@@ -35,7 +35,7 @@ class TestpaperMigrate extends AbstractMigrate
 
         if (!$this->isTableExist('testpaper_item_v8')) {
             $this->getConnection()->exec("
-                CREATE TABLE IF NOT EXISTS `testpaper_item_v8` (
+                CREATE TABLE `testpaper_item_v8` (
                   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '题目',
                   `testId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属试卷',
                   `seq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目顺序',

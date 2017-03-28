@@ -39,18 +39,10 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getStep($index)
     {
         $oldSteps = array(
-<<<<<<< HEAD
             'c2ActivityLearnLog', // ?
             'c2CourseMaterial',
             'updateCourseChapter',
         );
-=======
-        'c2ActivityLearnLog', // ?
-        'c2CourseMaterial',
-        'c2testpaperMigrate',
-        'c2QuestionMigrate',
-      );
->>>>>>> b2daa043eda0cd9bdf03e6f31f65cd30fced8c61
 
         $steps = array(
             'CourseSetMigrate',
@@ -90,6 +82,9 @@ class EduSohoUpgrade extends AbstractUpdater
             'CourseLessonView2CourseTaskView',
             'CourseLessonLearn2CourseTaskResult',
 
+            'CourseMaterial2DownloadActivityMigrate',
+            'updateCourseChapter',
+
             'TestpaperMigrate',
             'TestpaperItemMigrate',
             'HomeworkMigrate',
@@ -101,18 +96,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'TestpaperResultMigrate',
             'TestpaperItemResultMigrate',
 
-<<<<<<< HEAD
             'HomeworkResultMigrate',
             'HomeworkItemResultMigrate',
-=======
-        'CourseLessonView2CourseTaskView',
-        'CourseLessonLearn2CourseTaskResult',
-        // next
-        'Exercise2CourseTaskMigrate',
-        'Homework2CourseTasMigrate',
-        'CourseMaterial2DownloadActivityMigrate',
-        'updateCourseChapter',
->>>>>>> b2daa043eda0cd9bdf03e6f31f65cd30fced8c61
 
             'ExerciseResultMigrate',
             'ExerciseItemMigrate',
