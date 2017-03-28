@@ -96,7 +96,7 @@ class WxpayResponse extends Response
         }
 
         $sign = substr($sign, 0, -1);
-        $sign .= '&key='.$this->options['secret'];
+        $sign .= '&key='.$this->options['key'];
 
         return md5($sign);
     }
