@@ -73,7 +73,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $key          = "live-open-course-user-id-{$courseId}-{$lessonId}";
         $sessionValue = $request->getSession()->get($key);
         if (empty($sessionValue)) {
-            $sessionValue = $this->getMillisecond();
+            $sessionValue = substr($this->getMillisecond(), 3);
             $request->getSession()->set($key, $sessionValue);
         }
         return $sessionValue;
