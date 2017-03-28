@@ -57,9 +57,12 @@ class EduSohoUpgrade extends AbstractUpdater
         
         'Lesson2CourseTaskMigrate',
         'Lesson2CourseChapterMigrate',
-        'CourseTaskRelaCourseChapter',
-        
         'Lesson2ActivityMigrate',
+
+        'UpdateActivity',
+        'UpdateCourseTask',
+
+        'CourseTaskRelaCourseChapter',
         'ActivityRelaCourseTask',
 
         'Lesson2VideoActivityMigrate',
