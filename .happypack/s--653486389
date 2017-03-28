@@ -1,0 +1,158 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _video = require('video.js');
+
+var _video2 = _interopRequireDefault(_video);
+
+var _componentEmitter = require('component-emitter');
+
+var _componentEmitter2 = _interopRequireDefault(_componentEmitter);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var videoSwf = require('video.js/dist/video-js/video-js.swf');
+
+var LocalVideoPlayer = function (_Emitter) {
+  _inherits(LocalVideoPlayer, _Emitter);
+
+  function LocalVideoPlayer(options) {
+    _classCallCheck(this, LocalVideoPlayer);
+
+    var _this = _possibleConstructorReturn(this, (LocalVideoPlayer.__proto__ || Object.getPrototypeOf(LocalVideoPlayer)).call(this));
+
+    _this.options = options;
+    _this.player = {};
+    _this.setup();
+    return _this;
+  }
+
+  _createClass(LocalVideoPlayer, [{
+    key: 'setup',
+    value: function setup() {
+      var _this2 = this;
+
+      var techOrder = ['flash', 'html5'];
+      if (this.options.agentInWhiteList || this.options.mediaType == 'audio') {
+        techOrder = ['html5', 'flash'];
+      }
+      var that = this;
+      var player = (0, _video2.default)(this.options.element, {
+        techOrder: techOrder,
+        loop: false,
+        flash: {
+          swf: videoSwf
+        },
+        controlBar: {
+          liveDisplay: false
+        }
+      });
+
+      player.dimensions('100%', '100%');
+      player.src(this.options.url);
+
+      player.on('error', function (error) {
+        console.log(error);
+        _this2.set("hasPlayerError", true);
+        var message = Translator.trans('您的浏览器不能播放当前视频。');
+        Notify.danger(message, 60);
+      });
+
+      player.on('fullscreenchange', function (e) {
+        if ($(e.target).hasClass('vjs-fullscreen')) {
+          $("#site-navbar").hide();
+        }
+      });
+
+      player.on('ended', function (e) {
+        _this2.emit('ended', e);
+        _this2._onEnded(e);
+      });
+
+      player.on('timeupdate', function (e) {
+        _this2.emit('timechange', e);
+      });
+
+      player.on('loadedmetadata', function (e) {
+        that.emit('ready', e);
+      });
+
+      player.on("play", function (e) {
+        that.emit("playing", e);
+      });
+
+      player.on("pause", function (e) {
+        that.emit("paused", e);
+      });
+
+      this.player = player;
+    }
+  }, {
+    key: 'checkHtml5',
+    value: function checkHtml5() {
+      if (window.applicationCache) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }, {
+    key: 'play',
+    value: function play() {
+      this.player.play();
+    }
+  }, {
+    key: '_onEnded',
+    value: function _onEnded(e) {
+      this.player.pause();
+      this.player.currentTime(0);
+    }
+  }, {
+    key: 'getCurrentTime',
+    value: function getCurrentTime() {
+      return this.player.currentTime();
+    }
+  }, {
+    key: 'getDuration',
+    value: function getDuration() {
+      return this.player.duration();
+    }
+  }, {
+    key: 'setCurrentTime',
+    value: function setCurrentTime(time) {
+      this.player.currentTime(time);
+      return this;
+    }
+  }, {
+    key: 'replay',
+    value: function replay() {
+      this.setCurrentTime(0).play();
+      return this;
+    }
+  }, {
+    key: 'isPlaying',
+    value: function isPlaying() {
+      return !this.player.paused();
+    }
+  }, {
+    key: 'destroy',
+    value: function destroy() {
+      this.player.dispose();
+    }
+  }]);
+
+  return LocalVideoPlayer;
+}(_componentEmitter2.default);
+
+exports.default = LocalVideoPlayer;

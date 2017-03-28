@@ -1,0 +1,16 @@
+'use strict';
+
+var _intro = require('app/js/courseset-manage/intro');
+
+var _intro2 = _interopRequireDefault(_intro);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var listLength = $('#courses-list-table').find('tbody tr').length;
+if (listLength == 2) {
+  setTimeout(function () {
+    $('.js-sidenav-course-menu').slideUp();
+    var intro = new _intro2.default();
+    intro.initCourseListIntro('.js-sidenav');
+  }, 500);
+}

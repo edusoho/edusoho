@@ -1,0 +1,80 @@
+"use strict";
+
+var _$$select;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+if ($("#create-classroom").val() != '') {
+    if ($("#showable-open").data('showable') == 1) {
+        $("#showable-open").attr('checked', 'checked');
+        if ($("#buyable-open").data('buyable') == 1) {
+            $("#buyable-open").attr('checked', 'checked');
+        } else {
+            $("#buyable-close").attr('checked', 'checked');
+        }
+    } else {
+        $("#showable-close").attr('checked', 'checked');
+        if ($("#buyable-open").data('buyable') == 1) {
+            $("#buyable-open").attr('checked', 'checked');
+        } else {
+            $("#buyable-close").attr('checked', 'checked');
+        }
+        $("#buyable").attr('hidden', 'hidden');
+    }
+}
+$("#showable-close").click(function () {
+    $("#buyable").attr('hidden', 'hidden');
+});
+$("#showable-open").click(function () {
+    $("#buyable").removeAttr('hidden');
+});
+$('#classroom_tags').select2((_$$select = {
+
+    ajax: {
+        url: app.arguments.tagMatchUrl + '#',
+        dataType: 'json',
+        quietMillis: 100,
+        data: function data(term, page) {
+            return {
+                q: term,
+                page_limit: 10
+            };
+        },
+        results: function results(data) {
+            var results = [];
+            $.each(data, function (index, item) {
+
+                results.push({
+                    id: item.name,
+                    name: item.name
+                });
+            });
+
+            return {
+                results: results
+            };
+        }
+    },
+    initSelection: function initSelection(element, callback) {
+        var data = [];
+        $(element.val().split(",")).each(function () {
+            data.push({
+                id: this,
+                name: this
+            });
+        });
+        callback(data);
+    },
+    formatSelection: function formatSelection(item) {
+        return item.name;
+    },
+    formatResult: function formatResult(item) {
+        return item.name;
+    },
+    width: 'off',
+    multiple: true,
+    maximumSelectionSize: 20,
+    placeholder: Translator.trans('请输入标签')
+}, _defineProperty(_$$select, "width", 'off'), _defineProperty(_$$select, "multiple", true), _defineProperty(_$$select, "createSearchChoice", function createSearchChoice() {
+    return null;
+}), _defineProperty(_$$select, "maximumSelectionSize", 20), _$$select));

@@ -1,0 +1,23 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var CopyDeny = function CopyDeny() {
+    _classCallCheck(this, CopyDeny);
+
+    document.oncontextmenu = function () {
+        return false;
+    };
+    document.onselectstart = function () {
+        return false;
+    };
+    document.onmousedown = function () {
+        return false;
+    };
+};
+
+exports.default = CopyDeny;

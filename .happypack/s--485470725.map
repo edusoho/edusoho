@@ -1,0 +1,1 @@
+{"version":3,"sources":["web/themes/default-b/static-src/js/user/index.js"],"names":["console","log"],"mappings":";;AAAAA,QAAQC,GAAR,CAAY,MAAZ","file":"index.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["console.log(123123)"]}

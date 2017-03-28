@@ -1,0 +1,155 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _esSwfobject = require('es-swfobject');
+
+var _esSwfobject2 = _interopRequireDefault(_esSwfobject);
+
+require('app/common/watermark');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+console.log(window.parent);
+
+console.log($(window.parent));
+
+var DocPlayer = function () {
+  function DocPlayer(_ref) {
+    var element = _ref.element,
+        swfUrl = _ref.swfUrl,
+        pdfUrl = _ref.pdfUrl,
+        watermarkOptions = _ref.watermarkOptions,
+        canCopy = _ref.canCopy;
+
+    _classCallCheck(this, DocPlayer);
+
+    this.element = $(element);
+    this.swfUrl = swfUrl || '';
+    this.pdfUrl = pdfUrl || '';
+    this.swfPlayerWidth = '100%';
+    this.swfPlayerHeight = '100%';
+    this.swfPlayerUrl = '';
+    this.watermarkOptions = watermarkOptions || '';
+    this.canCopy = canCopy || false;
+    this.init();
+
+    console.log(watermarkOptions);
+  }
+
+  _createClass(DocPlayer, [{
+    key: 'init',
+    value: function init() {
+      if (this.isSupportHtml5() && !this.isIE9()) {
+        this.initPDFJSViewer();
+      } else {
+        this.initSwfViewer();
+      }
+
+      console.log();
+    }
+  }, {
+    key: 'initscren',
+    value: function initscren(docPlayer) {
+      window.onmessage = function (e) {
+        if (e == null || e == undefined) {
+          return;
+        }
+        var isPageFullScreen = e.data;
+        if (typeof isPageFullScreen != "boolean") {
+          return;
+        }
+
+        var docContent = $('#task-content-iframe', window.parent.document);
+        if (isPageFullScreen) {
+          docContent.removeAttribute("style");
+        } else {
+          docContent.addClss('.screen-full');
+          docContent.style.width = window.document.body.offsetWidth + "px";
+          docContent.style.position = "fixed";
+          docContent.style.left = "0";
+          docContent.style.top = "0";
+          docContent.style.zIndex = "9999";
+        }
+      };
+    }
+  }, {
+    key: 'isIE9',
+    value: function isIE9() {
+      return navigator.appVersion.indexOf("MSIE 9.") != -1;
+    }
+  }, {
+    key: 'isSupportHtml5',
+    value: function isSupportHtml5() {
+      return $.support.leadingWhitespace;
+    }
+  }, {
+    key: 'initPDFJSViewer',
+    value: function initPDFJSViewer() {
+      $("html").attr('dir', 'ltr');
+
+      var src = 'http://opencdn.edusoho.net/pdf.js/v3/viewer.html#' + this.pdfUrl;
+
+      if (!this.canCopy) {
+        src += '#false';
+      }
+
+      // let iframe = document.createElement('iframe');
+      // iframe.style.height = '100%';
+      // iframe.allowfullscreen = true;
+      // iframe.style.width = '100%';
+      // iframe.id = 'doc-pdf-player';
+      // iframe.src = src;
+      // this.element.get(0).appendChild(iframe);
+
+      var $iframe = '<iframe id="doc-pdf-player" class="task-content-iframe" \n   \n     src="' + src + '" style="width:100%;height:100%;border:0px" \n     allowfullscreen="" webkitallowfullscreen="">\n      </iframe>';
+
+      this.initscren('doc-pdf-player');
+
+      this.element.append($iframe);
+
+      this.addWatermark();
+    }
+  }, {
+    key: 'initSwfViewer',
+    value: function initSwfViewer() {
+      $.html('<div id="website"><p align="center" class="style1">' + Translator.trans('您还没有安装flash播放器 请点击') + '<a href="http://www.adobe.com/go/getflashplayer">' + Translator.trans('这里') + '</a>' + Translator.trans('安装') + '</p></div>');
+
+      var flashVars = {
+        doc_url: decodeURI(this.swfUrl.value)
+      };
+
+      var params = {
+        bgcolor: '#efefef',
+        allowFullScreen: true,
+        wmode: 'window',
+        allowNetworking: 'all',
+        allowscriptaccess: 'always',
+        autoPlay: false
+      };
+
+      var attributes = {
+        id: 'website'
+      };
+
+      _esSwfobject2.default.embedSWF(this.swfPlayerUrl, 'website', this.swfPlayerWidth, this.swfPlayerHeight, "9.0.45", null, flashVars, params, attributes);
+
+      this.addWatermark();
+    }
+  }, {
+    key: 'addWatermark',
+    value: function addWatermark() {
+      this.watermarkOptions && this.element.WaterMark(this.watermarkOptions);
+    }
+  }]);
+
+  return DocPlayer;
+}();
+
+exports.default = DocPlayer;

@@ -1,0 +1,18 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var chapterAnimate = exports.chapterAnimate = function chapterAnimate() {
+  console.log();
+  $(".js-task-chapter").click(function () {
+    console.log('click');
+    $(this).nextUntil(".js-task-chapter").animate({ height: 'toggle', opacity: 'toggle' }, "normal");
+    var $icon = $(this).children('.js-remove-icon');
+    if ($icon.hasClass('es-icon-remove')) {
+      $icon.removeClass('es-icon-remove').addClass('es-icon-anonymous-iconfont');
+    } else {
+      $icon.removeClass('es-icon-anonymous-iconfont').addClass('es-icon-remove');
+    }
+  });
+};

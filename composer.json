@@ -29,7 +29,7 @@
     "incenteev/composer-parameter-handler": "~2.1.2",
     "sensio/distribution-bundle": "~5.0",
     "sensio/framework-extra-bundle": "^3.0.16",
-    "silex/silex": "~2.0.3",
+    "silex/silex": "2.0.3",
     "doctrine/orm": "^2.4.8",
     "doctrine/common": "~2.4.3",
     "doctrine/annotations": "~1.2.7",

@@ -1,0 +1,125 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.initThreadReplay = exports.initThread = undefined;
+
+var _editor = require('./editor');
+
+var _notify = require('common/notify');
+
+var _notify2 = _interopRequireDefault(_notify);
+
+var _attachmentActions = require('app/js/attachment/widget/attachment-actions');
+
+var _attachmentActions2 = _interopRequireDefault(_attachmentActions);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var initThread = exports.initThread = function initThread() {
+  var btn = '#post-thread-btn';
+  var $form = $("#post-thread-form");
+  new _attachmentActions2.default($form);
+  (0, _editor.initEditor)({
+    toolbar: 'Thread',
+    replace: 'post_content'
+  });
+  var formValidator = $form.validate({
+    currentDom: btn,
+    ajax: true,
+    rules: {
+      'content': {
+        required: true,
+        minlength: 2,
+        visible_character: true
+      }
+    },
+    submitError: function submitError() {
+      data = data.responseText;
+      data = $.parseJSON(data);
+      if (data.error) {
+        (0, _notify2.default)('danger', data.error.message);
+      } else {
+        (0, _notify2.default)('danger', Translator.trans('发表回复失败，请重试'));
+      }
+    },
+    submitSuccess: function submitSuccess(data) {
+      console.log(data);
+      if (data == "/login") {
+        window.location.href = url;
+        return;
+      }
+      // @TODO优化不刷新页面
+      window.location.reload();
+    }
+  });
+  console.log(formValidator);
+  $(btn).click(function () {
+    formValidator.form();
+  });
+};
+
+var initThreadReplay = exports.initThreadReplay = function initThreadReplay() {
+  var $forms = $('.thread-post-reply-form');
+  $forms.each(function () {
+    var $form = $(this);
+    var content = $form.find('textarea').attr('name');
+    var formValidator = $form.validate({
+      ignore: '',
+      rules: _defineProperty({}, '' + content, {
+        required: true,
+        minlength: 2,
+        visible_character: true
+      }),
+      submitHandler: function submitHandler(form) {
+        // @TODO优化全局的submitHandler方法，提交统一方式；
+        var $replyBtn = $(form).find('.reply-btn');
+        var postId = $replyBtn.attr('postId');
+        var fromUserIdVal = "";
+        if ($('#fromUserId').length > 0) {
+          fromUserIdVal = $('#fromUserId').val();
+        } else {
+          if ($('#fromUserIdNosub').length > 0) {
+            fromUserIdVal = $('#fromUserIdNosub').val();
+          } else {
+            fromUserIdVal = "";
+          }
+        }
+        $replyBtn.button('submiting').addClass('disabled');
+        console.log($(form).attr('action'));
+        console.log("content=" + $(form).find('textarea').val() + '&' + 'postId=' + postId + '&' + 'fromUserId=' + fromUserIdVal);
+        $.ajax({
+          url: $(form).attr('action'),
+          data: "content=" + $(form).find('textarea').val() + '&' + 'postId=' + postId + '&' + 'fromUserId=' + fromUserIdVal,
+          cache: false,
+          async: false,
+          type: "POST",
+          dataType: 'text',
+          success: function success(url) {
+            if (url == "/login") {
+              window.location.href = url;
+              return;
+            }
+            // @TODO优化不刷新页面
+            window.location.reload();
+          },
+          error: function error(data) {
+            data = $.parseJSON(data.responseText);
+            if (data.error) {
+              (0, _notify2.default)('danger', data.error.message);
+            } else {
+              (0, _notify2.default)('danger', Translator.trans('发表回复失败，请重试'));
+            }
+            $replyBtn.button('reset').removeClass('disabled');
+          }
+        });
+      }
+    });
+    $form.find('button').click(function (e) {
+      formValidator.form();
+    });
+  });
+};

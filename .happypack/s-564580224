@@ -1,0 +1,130 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Homework = function () {
+  function Homework($iframeContent) {
+    _classCallCheck(this, Homework);
+
+    this.$homeworkModal = $('#modal', window.parent.document);
+    this.$questionPickedModal = $('#attachment-modal', window.parent.document);
+    this.$element = $iframeContent;
+    this.$step2_form = this.$element.find('#step2-form');
+    this.$step3_form = this.$element.find('#step3-form');
+    this.validator2 = null;
+    this.init();
+  }
+
+  _createClass(Homework, [{
+    key: 'init',
+    value: function init() {
+      this.initEvent();
+      this.setValidateRule();
+      this.inItStep2form();
+    }
+  }, {
+    key: 'initEvent',
+    value: function initEvent() {
+      var _this = this;
+
+      this.$element.on('click', '[data-role="pick-item"]', function (event) {
+        return _this.showPickQuestion(event);
+      });
+      this.$questionPickedModal.on('shown.bs.modal', function () {
+        _this.$homeworkModal.hide();
+      });
+      this.$questionPickedModal.on('hidden.bs.modal', function () {
+        _this.$homeworkModal.show();
+        _this.$questionPickedModal.html('');
+        if (_this.validator2) {
+          _this.validator2.form();
+        }
+      });
+    }
+  }, {
+    key: 'initCkeditor',
+    value: function initCkeditor(validator) {
+      var editor = CKEDITOR.replace('homework-about-field', {
+        toolbar: 'Full',
+        filebrowserImageUploadUrl: $('#homework-about-field').data('imageUploadUrl')
+      });
+      editor.on('change', function () {
+        $('#homework-about-field').val(editor.getData());
+      });
+      editor.on('blur', function () {
+        validator.form();
+      });
+    }
+  }, {
+    key: 'showPickQuestion',
+    value: function showPickQuestion(event) {
+      var _this2 = this;
+
+      event.preventDefault();
+      var $btn = $(event.currentTarget);
+      var excludeIds = [];
+      $("#question-table-tbody").find('[name="questionIds[]"]').each(function () {
+        excludeIds.push($(this).val());
+      });
+      this.$questionPickedModal.modal().data('manager', this);
+      $.get($btn.data('url'), {
+        excludeIds: excludeIds.join(',')
+      }, function (html) {
+        _this2.$questionPickedModal.html(html);
+      });
+    }
+  }, {
+    key: 'inItStep2form',
+    value: function inItStep2form() {
+      var validator = this.$step2_form.validate({
+        onkeyup: false,
+        rules: {
+          title: {
+            required: true,
+            maxlength: 50,
+            trim: true
+          },
+          description: {
+            required: true
+          },
+          content: 'required',
+          'questionLength': {
+            required: true
+          }
+        },
+        messages: {
+          'questionLength': "请选择题目"
+        }
+      });
+      this.validator2 = validator;
+      this.initCkeditor(validator);
+      this.$step2_form.data('validator', validator);
+    }
+  }, {
+    key: 'setValidateRule',
+    value: function setValidateRule() {
+      $.validator.addMethod("arithmeticFloat", function (value, element) {
+        return this.optional(element) || /^[0-9]+(\.[0-9]?)?$/.test(value);
+      }, $.validator.format("必须为正数，保留一位小数"));
+
+      $.validator.addMethod("positiveInteger", function (value, element) {
+        return this.optional(element) || /^[1-9]\d*$/.test(value);
+      }, $.validator.format("必须为正整数"));
+
+      $.validator.addMethod("DateAndTime", function (value, element) {
+        var reg = /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}$/;
+        return this.optional(element) || reg.test(value);
+      }, $.validator.format("请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm"));
+    }
+  }]);
+
+  return Homework;
+}();
+
+exports.default = Homework;

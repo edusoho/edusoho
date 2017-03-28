@@ -1,0 +1,37 @@
+'use strict';
+
+var _help = require('./help');
+
+var _sortable = require('common/sortable');
+
+var _sortable2 = _interopRequireDefault(_sortable);
+
+require('store');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var COURSE_FUNCTION_REMASK = 'COURSE-FUNCTION-REMASK'; //课程改版功能提醒
+
+if ($('#sortable-list').length) {
+  (0, _sortable2.default)({
+    element: '#sortable-list',
+    ajax: false
+  }, function (data) {
+    console.log(data);
+    $.post($list.data('sortUrl'), { ids: data }, function (response) {
+      console.log(response);
+    });
+  });
+}
+
+if (!store.get(COURSE_FUNCTION_REMASK)) {
+  store.set(COURSE_FUNCTION_REMASK, true);
+  $('#course-function-modal').modal('show');
+}
+
+(0, _help.closeCourse)();
+(0, _help.deleteCourse)(store);
+(0, _help.deleteTask)();
+(0, _help.publishTask)();
+(0, _help.unpublishTask)();
+(0, _help.showSettings)();

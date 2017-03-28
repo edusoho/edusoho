@@ -1,0 +1,60 @@
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Creator = function () {
+  function Creator($element) {
+    _classCallCheck(this, Creator);
+
+    this.$element = $element;
+    this.$courseSetType = this.$element.find('.js-courseSetType');
+    this.$currentCourseSetType = this.$element.find('.js-courseSetType.active');;
+    this.init();
+  }
+
+  _createClass(Creator, [{
+    key: 'init',
+    value: function init() {
+      var _this = this;
+
+      var validator = this.$element.validate({
+        onkeyup: false,
+        currentDom: '#courseset-create-btn',
+        rules: {
+          title: {
+            required: true,
+            trim: true,
+            open_live_course_title: function open_live_course_title() {
+              return _this.$currentCourseSetType.data('type') === 'liveOpen';
+            }
+          }
+        },
+        messages: {
+          title: {
+            required: Translator.trans('请输入标题'),
+            trim: Translator.trans('请输入标题'),
+            open_live_course_title: Translator.trans('直播公开课标题暂不支持<、>、\"、&、‘、’、”、“字符')
+          }
+        }
+      });
+
+      this.$courseSetType.click(function (event) {
+        _this.$courseSetType.removeClass('active');
+        _this.$currentCourseSetType = $(event.currentTarget).addClass('active');
+        $('input[name="type"]').val(_this.$currentCourseSetType.data('type'));
+      });
+
+      $('#courseset-create-btn').click(function (event) {
+        if (validator.form()) {
+          _this.$element.submit();
+        }
+      });
+    }
+  }]);
+
+  return Creator;
+}();
+
+new Creator($('#courseset-create-form'));

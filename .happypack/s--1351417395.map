@@ -1,0 +1,1 @@
+{"version":3,"sources":["app/Resources/static-src/app/js/classroom/set-services/index.js"],"names":["$","click"],"mappings":";;AAAAA,EAAE,kBAAF,EAAsBC,KAAtB,CAA4B,YAAI,CAE/B,CAFD","file":"index.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["$('.js-service-item').click(()=>{\n  \n})"]}

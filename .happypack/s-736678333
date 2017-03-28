@@ -1,0 +1,204 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _list = require('./list');
+
+var _list2 = _interopRequireDefault(_list);
+
+var _inputGroup = require('./input-group');
+
+var _inputGroup2 = _interopRequireDefault(_inputGroup);
+
+var _part = require('./part');
+
+require('!style!css!less!./style.less');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function initItem(dataSourceUi, value) {
+  var item = {
+    itemId: (0, _part.getRandomString)(),
+    label: value,
+    seq: dataSourceUi.length + 1,
+    outputValue: value
+  };
+  dataSourceUi.push(item);
+}
+
+function removeItem(dataSourceUi, itemId) {
+  for (var i = 0; i < dataSourceUi.length; i++) {
+    if (dataSourceUi[i].itemId == itemId) {
+      dataSourceUi.splice(i, 1);
+      i--;
+    } else {
+      dataSourceUi[i].seq = i + 1;
+    }
+  }
+}
+
+function updateItemSeq(data, datas) {
+  var temps = [];
+  for (var i = 0; i < data.length; i++) {
+    for (var j = 0; j < datas.length; j++) {
+      if (data[i] == datas[j].itemId) {
+        datas[j].seq = i + 1;
+        temps.push(datas[j]);
+      }
+    }
+  }
+  return temps;
+}
+
+var MultiInput = function (_Component) {
+  _inherits(MultiInput, _Component);
+
+  function MultiInput(props) {
+    _classCallCheck(this, MultiInput);
+
+    var _this = _possibleConstructorReturn(this, (MultiInput.__proto__ || Object.getPrototypeOf(MultiInput)).call(this, props));
+
+    _this.removeItem = function (event) {
+      var id = event.currentTarget.attributes["data-item-id"].value;
+      removeItem(_this.state.dataSourceUi, id);
+      _this.setState({
+        dataSourceUi: _this.state.dataSourceUi
+      });
+    };
+
+    _this.sortItem = function (datas) {
+      _this.state.dataSourceUi = updateItemSeq(datas, _this.state.dataSourceUi);
+      _this.setState({
+        dataSourceUi: _this.state.dataSourceUi
+      });
+    };
+
+    _this.addItem = function (value, data) {
+      initItem(_this.state.dataSourceUi, value);
+      _this.setState({
+        dataSourceUi: _this.state.dataSourceUi
+      });
+    };
+
+    return _this;
+  }
+
+  _createClass(MultiInput, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      var _this2 = this;
+
+      this.state = {
+        dataSourceUi: []
+      };
+      this.props.dataSource.map(function (item, index) {
+        initItem(_this2.state.dataSourceUi, item);
+      });
+    }
+  }, {
+    key: 'getChildContext',
+    value: function getChildContext() {
+      return {
+        removeItem: this.removeItem,
+        sortItem: this.sortItem,
+        addItem: this.addItem
+      };
+    }
+  }, {
+    key: 'getOutputSets',
+    value: function getOutputSets() {
+      //应该优化成表单数据进行填充
+      var outputSets = [];
+      this.state.dataSourceUi.map(function (item, index) {
+        outputSets.push(item.outputValue);
+      });
+      return outputSets;
+    }
+  }, {
+    key: 'getList',
+    value: function getList() {
+      var _props = this.props,
+          sortable = _props.sortable,
+          listClassName = _props.listClassName,
+          inputName = _props.inputName;
+
+      return _react2.default.createElement(_list2.default, { sortable: sortable, inputName: inputName, listClassName: listClassName, dataSourceUi: this.state.dataSourceUi });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props2 = this.props,
+          searchable = _props2.searchable,
+          addable = _props2.addable,
+          blurIsAdd = _props2.blurIsAdd,
+          outputDataElement = _props2.outputDataElement;
+
+      var list = this.getList();
+      var outputSets = this.getOutputSets();
+      return _react2.default.createElement(
+        'div',
+        { className: 'multi-group' },
+        list,
+        this.props.showAddBtnGroup && _react2.default.createElement(_inputGroup2.default, { searchable: searchable, addable: addable, blurIsAdd: blurIsAdd }),
+        _react2.default.createElement('input', { type: 'hidden', name: outputDataElement, value: JSON.stringify(outputSets) })
+      );
+    }
+  }]);
+
+  return MultiInput;
+}(_react.Component);
+
+exports.default = MultiInput;
+
+
+MultiInput.propTypes = {
+  multiInputClassName: _react2.default.PropTypes.string,
+  listClassName: _react2.default.PropTypes.string,
+  dataSource: _react2.default.PropTypes.array.isRequired,
+  sortable: _react2.default.PropTypes.bool,
+  addable: _react2.default.PropTypes.bool,
+  blurIsAdd: _react2.default.PropTypes.bool,
+  searchable: _react2.default.PropTypes.shape({
+    enable: _react2.default.PropTypes.bool,
+    url: _react2.default.PropTypes.string
+  }),
+  showAddBtnGroup: _react2.default.PropTypes.bool,
+  inputName: _react2.default.PropTypes.string,
+  checkBoxName: _react2.default.PropTypes.string,
+  outputDataElement: _react2.default.PropTypes.string };
+
+MultiInput.defaultProps = {
+  multiInputClassName: 'multi-group',
+  listClassName: '',
+  dataSource: [],
+  sortable: true,
+  addable: true,
+  blurIsAdd: false,
+  searchable: {
+    enable: false,
+    url: ''
+  },
+  showAddBtnGroup: true,
+  inputName: '',
+  checkBoxName: 'visible_',
+  outputDataElement: 'hidden-input' };
+
+MultiInput.childContextTypes = {
+  removeItem: _react2.default.PropTypes.func,
+  sortItem: _react2.default.PropTypes.func,
+  addItem: _react2.default.PropTypes.func
+};

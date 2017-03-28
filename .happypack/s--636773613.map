@@ -1,0 +1,1 @@
+{"version":3,"sources":["app/Resources/static-src/app/js/main.js"],"names":[],"mappings":";;AAAA;;AACA","file":"main.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["import '../bootstrap/less/bootstrap.less';\nimport '../less/main.less';"]}

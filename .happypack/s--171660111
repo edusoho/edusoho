@@ -1,0 +1,131 @@
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Creator = function () {
+  function Creator() {
+    _classCallCheck(this, Creator);
+
+    this.init();
+  }
+
+  _createClass(Creator, [{
+    key: 'init',
+    value: function init() {
+      $('[data-toggle="popover"]').popover({
+        html: true
+      });
+      this.initValidator();
+      this.checkBoxChange();
+    }
+  }, {
+    key: 'initValidator',
+    value: function initValidator() {
+      var $form = $("#course-create-form");
+      var validator = $form.validate({
+        groups: {
+          date: 'expiryStartDate expiryEndDate'
+        },
+        rules: {
+          title: {
+            required: true,
+            trim: true
+          },
+          deadline: {
+            required: function required() {
+              return $('input[name="expiryMode"]:checked').val() === 'days' && $('input[name="deadlineType"]:checked').val() === 'end_date';
+            },
+            after_now_date: function name() {
+              return $('input[name="expiryMode"]:checked').val() === 'days' && $('input[name="deadlineType"]:checked').val() === 'end_date';
+            }
+          }
+        },
+        messages: {
+          title: Translator.trans('请输入教学计划课程标题'),
+          expiryDays: {
+            required: '请输入有效期天数'
+          },
+          deadline: {
+            required: '请输入截至日期'
+          },
+          expiryStartDate: {
+            required: '请输入开始日期'
+          },
+          expiryEndDate: {
+            required: '请输入结束日期'
+          }
+        }
+      });
+
+      console.log(validator);
+
+      $('#course-submit').click(function (evt) {
+        if (validator.form()) {
+          $(evt.currentTarget).button('loading');
+          $form.submit();
+        }
+      });
+
+      this.initDatePicker('#expiryStartDate', validator);
+      this.initDatePicker('#expiryEndDate', validator);
+      this.initDatePicker('#deadline', validator);
+    }
+  }, {
+    key: 'checkBoxChange',
+    value: function checkBoxChange() {
+      $('input[name="deadlineType"]').on('change', function (event) {
+        if ($('input[name="deadlineType"]:checked').val() == 'end_date') {
+          $('#deadlineType-date').removeClass('hidden');
+          $('#deadlineType-days').addClass('hidden');
+        } else {
+          $('#deadlineType-date').addClass('hidden');
+          $('#deadlineType-days').removeClass('hidden');
+        }
+      });
+
+      $('input[name="expiryMode"]').on('change', function (event) {
+        if ($('input[name="expiryMode"]:checked').val() == 'date') {
+          $('#expiry-days').removeClass('hidden').addClass('hidden');
+          $('#expiry-date').removeClass('hidden');
+        } else if ($('input[name="expiryMode"]:checked').val() == 'days') {
+          $('#expiry-date').removeClass('hidden').addClass('hidden');
+          $('#expiry-days').removeClass('hidden');
+        } else {
+          $('#expiry-date').removeClass('hidden').addClass('hidden');
+          $('#expiry-days').removeClass('hidden').addClass('hidden');
+        }
+      });
+
+      $('input[name="learnMode"]').on('change', function (event) {
+        if ($('input[name="learnMode"]:checked').val() == 'freeMode') {
+          $('#learnLockModeHelp').removeClass('hidden').addClass('hidden');
+          $('#learnFreeModeHelp').removeClass('hidden');
+        } else {
+          $('#learnFreeModeHelp').removeClass('hidden').addClass('hidden');
+          $('#learnLockModeHelp').removeClass('hidden');
+        }
+      });
+    }
+  }, {
+    key: 'initDatePicker',
+    value: function initDatePicker($id, validator) {
+      var $picker = $($id);
+      $picker.datetimepicker({
+        format: 'yyyy-mm-dd',
+        language: "zh",
+        minView: 2, //month
+        autoclose: true,
+        endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)
+      }).on('hide', function () {
+        validator.form();
+      });
+      $picker.datetimepicker('setStartDate', new Date());
+    }
+  }]);
+
+  return Creator;
+}();
+
+new Creator();

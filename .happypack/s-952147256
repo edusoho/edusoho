@@ -1,0 +1,172 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _unit = require('../../unit');
+
+var _server = require('../../server');
+
+var _options = require('./options');
+
+var _options2 = _interopRequireDefault(_options);
+
+var _postal = require('postal');
+
+var _postal2 = _interopRequireDefault(_postal);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var InputGroup = function (_Component) {
+  _inherits(InputGroup, _Component);
+
+  function InputGroup(props) {
+    _classCallCheck(this, InputGroup);
+
+    var _this = _possibleConstructorReturn(this, (InputGroup.__proto__ || Object.getPrototypeOf(InputGroup)).call(this, props));
+
+    _this.state = {
+      itemName: "",
+      searched: true,
+      resultful: false,
+      searchResult: []
+    };
+
+    console.log(_this.context);
+
+    _this.subscribeMessage();
+    return _this;
+  }
+
+  _createClass(InputGroup, [{
+    key: 'subscribeMessage',
+    value: function subscribeMessage() {
+      var _this2 = this;
+
+      _postal2.default.subscribe({
+        channel: "courseInfoMultiInput",
+        topic: "addMultiInput",
+        callback: function callback() {
+          console.log('add');
+          _this2.handleAdd();
+        }
+      });
+    }
+  }, {
+    key: 'selectChange',
+    value: function selectChange(name, data) {
+      if (data) {
+        this.context.addItem(name, data);
+      }
+      this.setState({
+        itemName: ''
+      });
+    }
+  }, {
+    key: 'onFocus',
+    value: function onFocus(event) {
+      //在这种情况下，重新开启搜索功能；
+      this.setState({
+        searched: true
+      });
+    }
+  }, {
+    key: 'handleNameChange',
+    value: function handleNameChange(event) {
+      var _this3 = this;
+
+      // let value = trim(event.currentTarget.value);
+      var value = event.currentTarget.value;
+      this.setState({
+        itemName: value,
+        searchResult: [],
+        resultful: false
+      });
+
+      if (this.context.searchable.enable && value.length > 0 && this.state.searched) {
+        setTimeout(function () {
+          (0, _server.send)(_this3.context.searchable.url + value, function (searchResult) {
+            if (_this3.state.itemName.length > 0) {
+              console.log({ 'searchResult': searchResult });
+              _this3.setState({
+                searchResult: searchResult,
+                resultful: true
+              });
+            }
+          });
+        }, 100);
+      }
+    }
+  }, {
+    key: 'handleAdd',
+    value: function handleAdd() {
+      if ((0, _unit.trim)(this.state.itemName).length > 0) {
+        this.context.addItem(this.state.itemName, this.state.itemData);
+      }
+      this.setState({
+        itemName: '',
+        searchResult: [],
+        resultful: false
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this4 = this;
+
+      console.log(this.context.searchable.enable);
+      return _react2.default.createElement(
+        'div',
+        { className: 'input-group' },
+        _react2.default.createElement('input', { className: 'form-control', value: this.state.itemName, onChange: function onChange(event) {
+            return _this4.handleNameChange(event);
+          }, onFocus: function onFocus(event) {
+            return _this4.onFocus(event);
+          }, onBlur: function onBlur(event) {
+            return _this4.blurAdd(event);
+          } }),
+        this.context.searchable.enable && this.state.resultful && _react2.default.createElement(_options2.default, { searchResult: this.state.searchResult, selectChange: function selectChange(event, name) {
+            return _this4.selectChange(event, name);
+          }, resultful: this.state.resultful }),
+        this.context.addable && _react2.default.createElement(
+          'span',
+          { className: 'input-group-btn' },
+          _react2.default.createElement(
+            'a',
+            { className: 'btn btn-default', onClick: function onClick() {
+                return _this4.handleAdd();
+              } },
+            '\u6DFB\u52A0'
+          )
+        )
+      );
+    }
+  }]);
+
+  return InputGroup;
+}(_react.Component);
+
+exports.default = InputGroup;
+
+
+InputGroup.contextTypes = {
+  addItem: _react2.default.PropTypes.func,
+  addable: _react2.default.PropTypes.bool,
+  searchable: _react2.default.PropTypes.shape({
+    enable: _react2.default.PropTypes.bool,
+    url: _react2.default.PropTypes.string
+  })
+};

@@ -1,0 +1,9 @@
+'use strict';
+
+var _editor = require('./editor');
+
+var _editor2 = _interopRequireDefault(_editor);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+new _editor2.default($('#modal'));

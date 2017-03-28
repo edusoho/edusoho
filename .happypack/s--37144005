@@ -1,0 +1,19 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+require('select2');
+
+var initCategorySelect = function initCategorySelect() {
+  $('[data-role="tree-select"], [name="categoryId"]').select2({
+    treeview: true,
+    dropdownAutoWidth: true,
+    treeviewInitState: 'collapsed',
+    placeholderOption: 'first'
+    // treeviewInitState: 'expanded'
+  });
+};
+
+exports.default = initCategorySelect();

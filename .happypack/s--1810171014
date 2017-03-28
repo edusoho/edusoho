@@ -1,0 +1,3 @@
+'use strict';
+
+require('postal.xframe/lib/postal.xframe.min.js');

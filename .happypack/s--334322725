@@ -1,0 +1,233 @@
+"use strict";
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+/*** IMPORTS FROM imports-loader ***/
+var define = false;
+var _module = false;
+var _exports = false;
+(function () {
+
+  /*!
+   *  * postal.federation - A base plugin for federating instances of postal.js across various boundaries.
+   *  * Author: Jim Cowart (http://ifandelse.com)
+   *  * Version: v0.5.3
+   *  * Url: http://github.com/postaljs/postal.federation
+   *  * License(s): (MIT OR GPL-2.0)
+   */
+  (function (e, n) {
+    "object" == (typeof _exports === "undefined" ? "undefined" : _typeof(_exports)) && "object" == (typeof _module === "undefined" ? "undefined" : _typeof(_module)) ? _module.exports = n(require("lodash"), require("postal")) : "function" == typeof define && define.amd ? define(["lodash", "postal"], n) : "object" == (typeof _exports === "undefined" ? "undefined" : _typeof(_exports)) ? _exports.postalFedx = n(require("lodash"), require("postal")) : e.postalFedx = n(e._, e.postal);
+  })(this, function (e, n) {
+    return function (e) {
+      function n(i) {
+        if (t[i]) return t[i].exports;var o = t[i] = { exports: {}, id: i, loaded: !1 };return e[i].call(o.exports, o, o.exports, n), o.loaded = !0, o.exports;
+      }var t = {};return n.m = e, n.c = t, n.p = "", n(0);
+    }([function (e, n, t) {
+      function i(e) {
+        x.signalReady.apply(this, e);
+      }function o(e) {
+        x.send.apply(this, e);
+      }function a(e) {
+        x.onFederatedMsg.call(this, e);
+      }var r = function r(e) {
+        return e && e.__esModule ? e["default"] : e;
+      },
+          c = r(t(1)),
+          s = r(t(2));t(3);var u = t(4),
+          d = u.packingSlips,
+          l = u.getPackingSlip,
+          p = t(5),
+          f = p.state,
+          g = p.disconnect,
+          h = p.NO_OP,
+          _ = p.configure,
+          I = t(6),
+          k = I.handlers,
+          v = I.onFederatedMsg,
+          y = t(7),
+          b = r(y),
+          m = y.matchesFilter,
+          S = y.addFilter,
+          w = y.removeFilter,
+          M = r(t(8)),
+          x = s.fedx = { FederationClient: M, packingSlips: d, handlers: k, clients: f._clients, transports: f._transports, filters: b, addFilter: S, removeFilter: w, canSendRemote: function canSendRemote(e, n) {
+          return m(e, n, "out");
+        }, configure: _, getPackingSlip: l, onFederatedMsg: v, sendMessage: function sendMessage(e) {
+          return f._ready ? void c.each(this.transports, function (n) {
+            n.sendMessage(e);
+          }) : void f._outboundQueue.push(arguments);
+        }, disconnect: g, _getTransports: function _getTransports() {
+          return c.reduce(this.transports, function (e, n, t) {
+            return e[t] = !0, e;
+          }, {});
+        }, signalReady: function signalReady(e, n, t) {
+          if (!f._ready) return void f._signalQueue.push(arguments);var i = this._getTransports();switch (arguments.length) {case 1:
+              "function" == typeof e ? t = e : "string" == typeof e && (i = {}, i[e] = this.transports[e], t = h);break;case 2:
+              "string" == typeof e ? (i = {}, i[e] = this.transports[e]) : i = e, t = n || h;break;case 3:
+              i = {}, i[e] = [n];}c.each(i, function (e, n) {
+            e = "boolean" == typeof e ? [] : e, this.transports[n].signalReady(e, t);
+          }, this);
+        } };e.exports = x, s.addWireTap(function (e, n) {
+        x.canSendRemote(n.channel, n.topic) && x.sendMessage(n);
+      }), s.subscribe({ channel: s.configuration.SYSTEM_CHANNEL, topic: "instanceId.changed", callback: function callback() {
+          for (f._ready = !0; f._signalQueue.length;) {
+            i(f._signalQueue.shift());
+          }for (; f._outboundQueue.length;) {
+            o(f._outboundQueue.shift());
+          }for (; f._inboundQueue.length;) {
+            a(f._inboundQueue.shift());
+          }
+        } }), void 0 !== s.instanceId() && (f._ready = !0);
+    }, function (n, t) {
+      n.exports = e;
+    }, function (e, t) {
+      e.exports = n;
+    }, function (e, n, t) {
+      var i = function i(e) {
+        return e && e.__esModule ? e["default"] : e;
+      },
+          o = i(t(2));o.createUUID || (o.createUUID = function () {
+        for (var e = [], n = "0123456789abcdef", t = 0; 36 > t; t++) {
+          e[t] = n.substr(Math.floor(16 * Math.random()), 1);
+        }return e[14] = "4", e[19] = n.substr(3 & e[19] | 8, 1), e[8] = e[13] = e[18] = e[23] = "-", e.join("");
+      }), o.instanceId || (o.instanceId = function () {
+        var e = void 0,
+            n = void 0;return function (t) {
+          return t && (n = e, e = t, o.publish({ channel: o.configuration.SYSTEM_CHANNEL, topic: "instanceId.changed", data: { oldId: n, newId: e } })), e;
+        };
+      }());
+    }, function (e, n, t) {
+      function i(e) {
+        return Object.prototype.hasOwnProperty.call(r, e) ? r[e].apply(this, Array.prototype.slice.call(arguments, 1)) : void 0;
+      }var o = function o(e) {
+        return e && e.__esModule ? e["default"] : e;
+      };n.getPackingSlip = i, Object.defineProperty(n, "__esModule", { value: !0 });var a = o(t(2)),
+          r = { ping: function ping() {
+          return { type: "federation.ping", instanceId: a.instanceId(), timeStamp: new Date(), ticket: a.createUUID() };
+        }, pong: function pong(e) {
+          return { type: "federation.pong", instanceId: a.instanceId(), timeStamp: new Date(), pingData: { instanceId: e.instanceId, timeStamp: e.timeStamp, ticket: e.ticket } };
+        }, message: function message(e) {
+          return { type: "federation.message", instanceId: a.instanceId(), timeStamp: new Date(), envelope: e };
+        }, disconnect: function disconnect() {
+          return { type: "federation.disconnect", instanceId: a.instanceId(), timeStamp: new Date() };
+        }, bundle: function bundle(e) {
+          return { type: "federation.bundle", instanceId: a.instanceId(), timeStamp: new Date(), packingSlips: e };
+        } };n.packingSlips = r;
+    }, function (e, n, t) {
+      function i(e) {
+        if (e && e.filterMode && "blacklist" !== e.filterMode && "whitelist" !== e.filterMode) throw new Error("postal.fedx filterMode must be 'blacklist' or 'whitelist'.");return e && (u._config = r.defaults(e, c)), u._config;
+      }function o(e) {
+        e = e || {};var n = u._transports;e.transport && (n = {}, n[e.transport] = u._transports[e.transport]), r.each(n, function (n) {
+          n.disconnect({ target: e.target, instanceId: e.instanceId, doNotNotify: !!e.doNotNotify });
+        });
+      }var a = function a(e) {
+        return e && e.__esModule ? e["default"] : e;
+      };n.configure = i, n.disconnect = o, Object.defineProperty(n, "__esModule", { value: !0 });var r = a(t(1)),
+          c = { enabled: !0, filterMode: "whitelist", filterDirection: "both" },
+          s = function s() {};n.NO_OP = s;var u = { _clients: [], _transports: {}, _ready: !1, _inboundQueue: [], _outboundQueue: [], _signalQueue: [], _config: c };n.state = u;
+    }, function (e, n, t) {
+      function i(e) {
+        if (!c._ready) return void c._inboundQueue.push(e);if (!Object.prototype.hasOwnProperty.call(p, e.packingSlip.type)) throw new Error("postal.federation does not have a message handler for '" + e.packingSlip.type + "'.");p[e.packingSlip.type](e);
+      }var o = function o(e) {
+        return e && e.__esModule ? e["default"] : e;
+      };n.onFederatedMsg = i, Object.defineProperty(n, "__esModule", { value: !0 });var a = t(4).getPackingSlip,
+          r = t(5),
+          c = r.state,
+          s = r.disconnect,
+          u = t(7).matchesFilter,
+          d = o(t(2)),
+          l = o(t(1)),
+          p = { "federation.ping": function federationPing(e) {
+          e.source.setInstanceId(e.packingSlip.instanceId), e.source.handshakeComplete ? e.source.sendPong(e.packingSlip) : e.source.sendBundle([a("pong", e.packingSlip), a("ping")]);
+        }, "federation.pong": function federationPong(e) {
+          e.source.handshakeComplete = !0, e.source.setInstanceId(e.packingSlip.instanceId), e.source.pings[e.packingSlip.pingData.ticket] && (e.source.pings[e.packingSlip.pingData.ticket].callback({ ticket: e.packingSlip.pingData.ticket, instanceId: e.packingSlip.instanceId, source: e.source }), e.source.pings[e.packingSlip.pingData.ticket] = void 0), l.contains(c._clients, e.packingSlip.instanceId) || c._clients.push(e.packingSlip.instanceId), d.publish({ channel: "postal.federation", topic: "client.federated", data: { remoteId: e.source.instanceId, localId: d.instanceId(), transport: e.transport } });
+        }, "federation.disconnect": function federationDisconnect(e) {
+          c._clients = l.without(c._clients, e.source.instanceId), s({ transport: e.source.transportName, instanceId: e.source.instanceId, doNotNotify: !0 });
+        }, "federation.message": function federationMessage(e) {
+          var n = e.packingSlip.envelope;u(n.channel, n.topic, "in") && (n.lastSender = e.packingSlip.instanceId, d.publish(n));
+        }, "federation.bundle": function federationBundle(e) {
+          l.each(e.packingSlip.packingSlips, function (n) {
+            i(l.extend({}, e, { packingSlip: n }));
+          });
+        } };n.handlers = p;
+    }, function (e, n, t) {
+      function i(e) {
+        e = c.isArray(e) ? e : [e], c.each(e, function (e) {
+          e.direction = e.direction || s._config.filterDirection, c.each("both" === e.direction ? ["in", "out"] : [e.direction], function (n) {
+            d[n][e.channel] ? c.include(d[n][e.channel], e.topic) || d[n][e.channel].push(e.topic) : d[n][e.channel] = [e.topic];
+          });
+        });
+      }function o(e) {
+        e = c.isArray(e) ? e : [e], c.each(e, function (e) {
+          e.direction = e.direction || s._config.filterDirection, c.each("both" === e.direction ? ["in", "out"] : [e.direction], function (n) {
+            d[n][e.channel] && c.include(d[n][e.channel], e.topic) && (d[n][e.channel] = c.without(d[n][e.channel], e.topic));
+          });
+        });
+      }function a(e, n, t) {
+        var i = Object.prototype.hasOwnProperty.call(d[t], e),
+            o = i && c.any(d[t][e], function (e) {
+          return u.configuration.resolver.compare(e, n);
+        }),
+            a = "blacklist" === s._config.filterMode;return s._config.enabled && (a && (!i || i && !o) || !a && i && o);
+      }var r = function r(e) {
+        return e && e.__esModule ? e["default"] : e;
+      };n.addFilter = i, n.removeFilter = o, n.matchesFilter = a, Object.defineProperty(n, "__esModule", { value: !0 });var c = r(t(1)),
+          s = t(5).state,
+          u = r(t(2)),
+          d = { "in": {}, out: {} };n["default"] = d;
+    }, function (e, n, t) {
+      var i = function i(e) {
+        return e && e.__esModule ? e["default"] : e;
+      },
+          o = function () {
+        function e(e, n) {
+          for (var t in n) {
+            var i = n[t];i.configurable = !0, i.value && (i.writable = !0);
+          }Object.defineProperties(e, n);
+        }return function (n, t, i) {
+          return t && e(n.prototype, t), i && e(n, i), n;
+        };
+      }(),
+          a = function a(e, n) {
+        if (!(e instanceof n)) throw new TypeError("Cannot call a class as a function");
+      },
+          r = t(4).getPackingSlip,
+          c = t(6).onFederatedMsg,
+          s = t(5),
+          u = s.state,
+          d = s.NO_OP,
+          l = i(t(2)),
+          p = i(t(1)),
+          f = function () {
+        function e(n, t, i) {
+          a(this, e), this.target = n, this.options = t || {}, this.pings = {}, this.instanceId = i, this.handshakeComplete = !1;
+        }return o(e, { sendPing: { value: function value(e) {
+              var n = r("ping");this.pings[n.ticket] = { ticket: n.ticket, callback: e || d }, this.send(n);
+            } }, sendPong: { value: function value(e) {
+              this.send(r("pong", e));
+            } }, sendBundle: { value: function value(e) {
+              this.send(r("bundle", e));
+            } }, sendMessage: { value: function value(e) {
+              if (this.handshakeComplete) {
+                e.originId = e.originId || l.instanceId();var n = p.clone(e);!this.instanceId || this.instanceId === n.lastSender || n.knownIds && n.knownIds.length && (!n.knownIds || p.include(n.knownIds, this.instanceId)) || (n.knownIds = (n.knownIds || []).concat(p.without(u._clients, this.instanceId)), this.send(r("message", n)));
+              }
+            } }, disconnect: { value: function value() {
+              this.send(r("disconnect"));
+            } }, onMessage: { value: function value(e) {
+              this.shouldProcess() && c({ transport: this.transportName, packingSlip: e, source: this });
+            } }, shouldProcess: { value: function value() {
+              return !0;
+            } }, send: { value: function value() {
+              throw new Error("An object deriving from FederationClient must provide an implementation for 'send'.");
+            } }, setInstanceId: { value: function value(e) {
+              this.instanceId = e;
+            } } }, { extend: { value: function value(n, t) {
+              function i() {
+                e.apply(this, arguments);
+              }return i.prototype = Object.create(e.prototype), p.extend(i.prototype, n), p.extend(i, t), i;
+            } } }), e;
+      }();e.exports = f;
+    }]);
+  });
+  //# sourceMappingURL=postal.federation.min.js.map
+}).call(window);

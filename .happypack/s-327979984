@@ -1,0 +1,14 @@
+"use strict";
+
+var _activityEmitter = require("../activity-emitter");
+
+var _activityEmitter2 = _interopRequireDefault(_activityEmitter);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var emitter = new _activityEmitter2.default();
+
+$(".download-activity-list").on('click', 'a', function () {
+  $(this).attr('href', $(this).data('url'));
+  emitter.emit('finish', { fileId: $(this).data('fileId') });
+});

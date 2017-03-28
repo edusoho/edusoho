@@ -1,0 +1,131 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _notify = require("common/notify");
+
+var _notify2 = _interopRequireDefault(_notify);
+
+var _postal = require("postal");
+
+var _postal2 = _interopRequireDefault(_postal);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var _class = function () {
+  function _class() {
+    _classCallCheck(this, _class);
+
+    this.$element = $('#task-question-plugin-form');
+    this.editor = null;
+    this.validator = null;
+    this.initEvent();
+  }
+
+  _createClass(_class, [{
+    key: "initEvent",
+    value: function initEvent() {
+      var _this = this;
+
+      this.$element.on('focusin', '.expand-form-trigger', function (event) {
+        return _this.expand();
+      });
+      this.$element.on('click', '.btn-primary', function (event) {
+        return _this.save(event);
+      });
+      this.$element.on('click', '.collapse-form-btn', function (event) {
+        return _this.collapse();
+      });
+    }
+  }, {
+    key: "save",
+    value: function save(event) {
+      var _this2 = this;
+
+      event.preventDefault();
+
+      if (!this.validator || !this.validator.form()) {
+        return;
+      }
+      var $btn = $(event.currentTarget);
+      $btn.attr('disabled', 'disabled');
+
+      var channel = _postal2.default.channel('task.plugin.question');
+
+      $.post(this.$element.attr('action'), this.$element.serialize()).done(function (html) {
+        (0, _notify2.default)('success', '提问成功');
+        channel.publish("form.save", {
+          html: html
+        });
+        $btn.removeAttr('disabled');
+        _this2.collapse();
+      }).fail(function (error) {
+        (0, _notify2.default)('danger', error);
+      });
+    }
+  }, {
+    key: "expand",
+    value: function expand() {
+      var _this3 = this;
+
+      if (this.$element.hasClass('form-expanded')) {
+        return;
+      }
+
+      this.$element.addClass('form-expanded');
+
+      var editor = CKEDITOR.replace('question_content', {
+        toolbar: 'Simple',
+        filebrowserImageUploadUrl: this.$element.find('#question_content').data('imageUploadUrl')
+      });
+
+      this.editor = editor;
+
+      this.validator = this.$element.validate({
+        rules: {
+          'question[title]': 'required',
+          'question[content]': 'required'
+        },
+        messages: {
+          'question[title]': "请输入问题标题",
+          'question[content]': "请输入提问内容"
+        }
+      });
+
+      editor.on('change', function () {
+        _this3.$element.find('[name="question[content]"]').val(editor.getData());
+      });
+      editor.on('blur', function () {
+        _this3.$element.find('[name="question[content]"]').val(editor.getData());
+      });
+
+      this.$element.find('.js-detail-form-group').removeClass('hide');
+    }
+  }, {
+    key: "collapse",
+    value: function collapse() {
+      this.$element.removeClass('form-expanded');
+      this.editor && this.editor.destroy();
+      this.$element.removeData("validator");
+      this.clear();
+      this.$element.find('.js-detail-form-group').addClass('hide');
+    }
+  }, {
+    key: "clear",
+    value: function clear() {
+      this.$element.find('input[type=text],textarea').each(function () {
+        $(this).val('');
+      });
+    }
+  }]);
+
+  return _class;
+}();
+
+exports.default = _class;

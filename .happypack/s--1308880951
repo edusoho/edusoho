@@ -1,0 +1,277 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _componentEmitter = require('component-emitter');
+
+var _componentEmitter2 = _interopRequireDefault(_componentEmitter);
+
+var _esSwfobject = require('es-swfobject');
+
+var _esSwfobject2 = _interopRequireDefault(_esSwfobject);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var BalloonCloudVideoPlayer = function (_Emitter) {
+  _inherits(BalloonCloudVideoPlayer, _Emitter);
+
+  function BalloonCloudVideoPlayer(options) {
+    _classCallCheck(this, BalloonCloudVideoPlayer);
+
+    var _this = _possibleConstructorReturn(this, (BalloonCloudVideoPlayer.__proto__ || Object.getPrototypeOf(BalloonCloudVideoPlayer)).call(this));
+
+    _this.options = options;
+    _this.player = {};
+    _this.setup();
+    return _this;
+  }
+
+  _createClass(BalloonCloudVideoPlayer, [{
+    key: 'setup',
+    value: function setup() {
+      var element = this.options.element;
+      // todo delete, to move into the cloud player
+      if (!_esSwfobject2.default.hasFlashPlayerVersion('11') && !/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) {
+        $(element).css({ 'background-color': '#313131', 'position': 'relative' });
+        $(element).html('<p style="color:#fff; position: absolute; top: 49%; left:0; right:0">您的浏览器未装Flash播放器或版本太低，请先安装或升级Flash播放器。请点击<a target="_blank" href="http://www.adobe.com/go/getflashplayer">这里</a>安装最新版本</p>');
+        return;
+      }
+
+      var self = this;
+
+      var extConfig = {};
+
+      //字幕
+      if (self.options.textTrack) {
+        extConfig = Object.assign(extConfig, {
+          textTrack: self.options.textTrack
+        });
+      }
+
+      if (self.options.watermark) {
+        extConfig = Object.assign(extConfig, {
+          watermark: {
+            file: self.options.watermark,
+            pos: 'top.right', //top.right, bottom.right, bottom.left, center
+            xrepeat: 0,
+            opacity: 0.5
+          }
+        });
+      }
+
+      if (self.options.fingerprint) {
+        extConfig = Object.assign(extConfig, {
+          fingerprint: {
+            html: self.options.fingerprint,
+            duration: self.options.fingerprintTime
+          }
+        });
+      }
+
+      if (self.options.timelimit) {
+        extConfig = Object.assign(extConfig, {
+          pluck: {
+            timelimit: self.options.timelimit,
+            text: "免费试看结束，购买后可完整观看",
+            display: true
+          }
+        });
+      }
+
+      if (self.options.enablePlaybackRates && self.isBrowserSupportPlaybackRates()) {
+        extConfig = Object.assign(extConfig, {
+          playbackRates: {
+            enable: true,
+            source: 'hls',
+            src: self.options.url
+          }
+        });
+      }
+
+      if (self.options.controlBar) {
+        extConfig = Object.assign(extConfig, {
+          controlBar: self.options.controlBar
+        });
+      }
+
+      if (self.options.statsInfo) {
+        var statsInfo = self.options.statsInfo;
+        extConfig = Object.assign(extConfig, {
+          statsInfo: {
+            accesskey: statsInfo.accesskey,
+            globalId: statsInfo.globalId,
+            userId: statsInfo.userId,
+            userName: statsInfo.userName
+          }
+        });
+      }
+
+      extConfig = Object.assign(extConfig, {
+        id: $(self.options.element).attr('id'),
+        disableControlBar: self.options.disableControlBar,
+        disableProgressBar: self.options.disableProgressBar,
+        playlist: self.options.url,
+        remeberLastPos: self.options.remeberLastPos,
+        videoHeaderLength: self.options.videoHeaderLength
+      });
+      var player = new VideoPlayerSDK(extConfig);
+
+      player.on('ready', function (e) {
+        self.emit("ready", e);
+      });
+
+      player.on("timeupdate", function (e) {
+        //    player.__events get all the event;
+        self.emit("timechange", e);
+      });
+
+      player.on("ended", function (e) {
+        self.emit("ended", e);
+      });
+
+      player.on("playing", function (e) {
+        self.emit("playing", e);
+      });
+
+      player.on("paused", function (e) {
+        self.emit("paused", e);
+      });
+
+      player.on("answered", function (e) {
+        var data = e.data;
+        data['answer'] = data.result.choosed;
+        data['type'] = self.convertQuestionType(data.type, 'cloud');
+        self.emit("answered", data);
+      });
+
+      this.player = player;
+    }
+  }, {
+    key: 'play',
+    value: function play() {
+      this.player.play();
+    }
+  }, {
+    key: 'pause',
+    value: function pause() {
+      this.player.pause();
+    }
+  }, {
+    key: 'getCurrentTime',
+    value: function getCurrentTime() {
+      return this.player.getCurrentTime();
+    }
+  }, {
+    key: 'setCurrentTime',
+    value: function setCurrentTime(time) {
+      this.player.setCurrentTime(time);
+      return this;
+    }
+  }, {
+    key: 'replay',
+    value: function replay() {
+      this.setCurrentTime(0).play();
+      return this;
+    }
+  }, {
+    key: 'isPlaying',
+    value: function isPlaying() {
+      if (this.player && this.player.paused) {
+        return !this.player.paused();
+      }
+      return false;
+    }
+  }, {
+    key: 'setQuestions',
+    value: function setQuestions(questions) {
+
+      if (questions.length > 0) {
+
+        for (var i in questions) {
+          questions[i]['type'] = this.convertQuestionType(questions[i].type, 'es');
+        }
+
+        var exam = {
+          popupExam: {
+            config: {
+              "mode": "middle"
+            },
+            questions: questions
+          }
+        };
+
+        this.player.setExams(exam);
+      }
+
+      return this;
+    }
+  }, {
+    key: 'isBrowserSupportPlaybackRates',
+    value: function isBrowserSupportPlaybackRates() {
+      var nUserAgent = navigator.userAgent.toLowerCase();
+      // IE不支持，低版本(47以下)的chrome不支持
+      var isIE = nUserAgent.indexOf('msie') > 0;
+      var isIE11 = nUserAgent.indexOf('trident') > 0 && nUserAgent.indexOf('rv') > 0;
+      var isChrome = nUserAgent.indexOf('chrome') > 0;
+      var isSafari = nUserAgent.indexOf('safari') > 0 && !isChrome;
+
+      if (isIE11 || isIE || isSafari) {
+        return false;
+      }
+      if (isChrome) {
+        var matched = navigator.userAgent.match(/Chrome\/(\d{0,3})/i);
+        if (matched && matched[1] < 47) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+  }, {
+    key: 'convertQuestionType',
+    value: function convertQuestionType(source, from) {
+      var map = [//云播放器弹题的字段值跟ES不太一致
+      {
+        es: 'choice',
+        cloud: 'multiChoice'
+      }, {
+        es: 'single_choice',
+        cloud: 'choice'
+      }, {
+        es: 'determine',
+        cloud: 'judge'
+      }, {
+        es: 'fill',
+        cloud: 'completion'
+      }, {
+        es: 'uncertain_choice',
+        cloud: 'uncertainChoice'
+      }];
+
+      for (var i in map) {
+        if (from == 'es' && map[i]['es'] == source) {
+          return map[i]['cloud'];
+        }
+        if (from == 'cloud' && map[i]['cloud'] == source) {
+          return map[i]['es'];
+        }
+      }
+
+      return source;
+    }
+  }]);
+
+  return BalloonCloudVideoPlayer;
+}(_componentEmitter2.default);
+
+exports.default = BalloonCloudVideoPlayer;

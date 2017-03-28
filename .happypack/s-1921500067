@@ -1,0 +1,18 @@
+'use strict';
+
+require('common/sortable');
+
+$(".course-list-group").on('click', '.close', function () {
+  if (confirm('是否要从班级移除该课程？')) {
+    $.post($(this).data('url'), function (resp) {
+      if (resp.success) {
+        Notify.success(Translator.trans('课程移除成功!'));
+        window.location.reload();
+      } else {
+        Notify.danger(Translator.trans('操作失败:') + resp.message);
+      }
+    });
+  }
+});
+
+$('#courses-form');

@@ -1,0 +1,4 @@
+'use strict';
+
+$('body').perfectScrollbar();
+$('body').perfectScrollbar('update');

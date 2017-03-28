@@ -1,0 +1,24 @@
+'use strict';
+
+$('.js-like').on('click', function (event) {
+  var $self = $(event.currentTarget);
+  var $num = $self.find('.js-like-num');
+  var num = parseInt($num.text());
+  var url = void 0,
+      isLiked = $self.hasClass('color-primary');
+  if (isLiked) {
+    url = $self.data('cancelLikeUrl');
+  } else {
+    url = $self.data('likeUrl');
+  }
+
+  $.post(url).done(function (response) {
+    if (isLiked) {
+      $self.removeClass('color-primary');
+      $num.text(num - 1);
+    } else {
+      $self.addClass('color-primary');
+      $num.text(num + 1);
+    }
+  });
+});

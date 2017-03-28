@@ -1,0 +1,1 @@
+{"version":3,"sources":["app/Resources/static-src/app/js/classroom/set-info/index.js"],"names":["console","log"],"mappings":";;AAAAA,QAAQC,GAAR,CAAY,OAAZ","file":"index.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["console.log('index');"]}

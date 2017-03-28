@@ -1,0 +1,1 @@
+{"version":3,"sources":["app/Resources/static-src/libs/js/iframe-resizer-contentWindow.js"],"names":[],"mappings":";;AAAA","file":"iframe-resizer-contentWindow.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["import 'iframe-resizer/js/iframeResizer.contentWindow.js'"]}

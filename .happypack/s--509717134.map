@@ -1,0 +1,1 @@
+{"version":3,"sources":["app/Resources/static-src/app/js/activity-manage/download/index.js"],"names":[],"mappings":";;AAAA;;;;;;AAEA","file":"index.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["import DownLoad from './download.js';\n\nnew DownLoad();"]}

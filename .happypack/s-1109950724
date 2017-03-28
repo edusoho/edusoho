@@ -1,0 +1,39 @@
+'use strict';
+
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _personaMultiInput = require('app/common/component/persona-multi-input');
+
+var _personaMultiInput2 = _interopRequireDefault(_personaMultiInput);
+
+var _sortable = require('common/sortable');
+
+var _sortable2 = _interopRequireDefault(_sortable);
+
+var _notify = require('common/notify');
+
+var _notify2 = _interopRequireDefault(_notify);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_reactDom2.default.render(_react2.default.createElement(_personaMultiInput2.default, {
+  addable: true,
+  dataSource: $('#course-teachers').data('init-value'),
+  outputDataElement: 'teachers',
+  inputName: 'ids[]',
+  searchable: { enable: true, url: $('#course-teachers').data('query-url') + "?q=" }
+}), document.getElementById('course-teachers'));
+
+$('.js-btn-save').on('click', function (event) {
+  if ($("input[name=teachers]").val() !== '[]') {
+    $('#teachers-form').submit();
+  } else {
+    (0, _notify2.default)('warning', '教学计划至少需要一位教师！');
+  }
+});

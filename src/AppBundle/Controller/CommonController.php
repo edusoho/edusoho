@@ -78,6 +78,35 @@ class CommonController extends BaseController
         }
     }
 
+    public function mobileQrcodeAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        if ($user->isLogin()) {
+            $tokenFields = array(
+                'userId' => $user['id'],
+                'duration' => 3600 * 24 * 30,
+                'times' => 1,
+            );
+
+            $token = $this->getTokenService()->makeToken('mobile_login', $tokenFields);
+
+            $url = $request->getSchemeAndHttpHost().'/mapi_v2/User/loginWithToken?token='.$token['token'];
+        } else {
+            $url = $request->getSchemeAndHttpHost().'/mapi_v2/School/loginSchoolWithSite?v=1';
+        }
+
+        $qrCode = new QrCode();
+        $qrCode->setText($url);
+        $qrCode->setSize(215);
+        $qrCode->setPadding(10);
+        $img = $qrCode->get('png');
+
+        $headers = array('Content-Type' => 'image/png',
+            'Content-Disposition' => 'inline; filename="image.png"', );
+
+        return new Response($img, 200, $headers);
+    }
+
     /**
      * @return TokenService
      */

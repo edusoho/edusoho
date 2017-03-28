@@ -1,0 +1,20 @@
+'use strict';
+
+var _batchSelect = require('app/common/widget/batch-select');
+
+var _batchSelect2 = _interopRequireDefault(_batchSelect);
+
+var _questionOperate = require('app/common/component/question-operate');
+
+var _questionOperate2 = _interopRequireDefault(_questionOperate);
+
+var _create = require('./create');
+
+var _create2 = _interopRequireDefault(_create);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var $from = $('#step2-form');
+new _create2.default($('#iframe-content'));
+new _batchSelect2.default($from);
+new _questionOperate2.default($from, $("#attachment-modal", window.parent.document));

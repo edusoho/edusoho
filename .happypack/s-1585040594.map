@@ -1,0 +1,1 @@
+{"version":3,"sources":["node_modules/.0.14.8@react/react.js"],"names":["module","exports","require"],"mappings":"AAAA;;AAEAA,OAAOC,OAAP,GAAiBC,QAAQ,aAAR,CAAjB","file":"react.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["'use strict';\n\nmodule.exports = require('./lib/React');\n"]}

@@ -1,0 +1,163 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _componentEmitter = require('component-emitter');
+
+var _componentEmitter2 = _interopRequireDefault(_componentEmitter);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // import Emitter from 'es6-event-emitter';
+
+
+var TaskSidebar = function (_Emitter) {
+  _inherits(TaskSidebar, _Emitter);
+
+  function TaskSidebar(_ref) {
+    var element = _ref.element,
+        url = _ref.url;
+
+    _classCallCheck(this, TaskSidebar);
+
+    var _this = _possibleConstructorReturn(this, (TaskSidebar.__proto__ || Object.getPrototypeOf(TaskSidebar)).call(this));
+
+    _this.url = url;
+    _this.element = $(element);
+    _this.init();
+    return _this;
+  }
+
+  _createClass(TaskSidebar, [{
+    key: 'init',
+    value: function init() {
+      var _this2 = this;
+
+      this.fixIconInChrome();
+      this.fetchPlugins().then(function (plugins) {
+        _this2.plugins = plugins;
+        _this2.renderToolbar();
+        _this2.renderPane();
+        _this2.bindEvent();
+      }).fail(function (error) {});
+    }
+  }, {
+    key: 'fetchPlugins',
+    value: function fetchPlugins() {
+      return $.post(this.url);
+    }
+
+    // 修复字体图标在chrome下，加载两次从而不能显示的问题
+
+  }, {
+    key: 'fixIconInChrome',
+    value: function fixIconInChrome() {
+      var html = '<i class="es-icon es-icon-chevronleft"></i>';
+      this.element.html(html);
+    }
+  }, {
+    key: 'renderToolbar',
+    value: function renderToolbar() {
+      var html = '\n    <div class="dashboard-toolbar">\n      <ul class="dashboard-toolbar-nav" id="dashboard-toolbar-nav">\n        ' + this.plugins.reduce(function (html, plugin) {
+        return html += '<li data-plugin="' + plugin.code + '" data-url="' + plugin.url + '"><a href="#"><div class="mbs es-icon ' + plugin.icon + '"></div>' + plugin.name + '</a></li>';
+      }, '') + '\n      </ul>\n    </div>';
+      this.element.html(html);
+    }
+  }, {
+    key: 'renderPane',
+    value: function renderPane() {
+      var html = this.plugins.reduce(function (html, plugin) {
+        return html += '<div data-pane="' + plugin.code + '" class=" ' + plugin.code + '-pane"><div class="' + plugin.code + '-pane-body js-sidebar-pane-body"></div></div>';
+      }, '');
+      this.element.append(html);
+    }
+  }, {
+    key: 'bindEvent',
+    value: function bindEvent() {
+      var _this3 = this;
+
+      this.element.find('#dashboard-toolbar-nav').on('click', 'li', function (event) {
+        var $btn = $(event.currentTarget);
+        var pluginCode = $btn.data('plugin');
+        var url = $btn.data('url');
+        var $pane = _this3.element.find('[data-pane="' + pluginCode + '"]');
+        var $paneBody = $pane.find('.js-sidebar-pane-body');
+        if (pluginCode === undefined || url === undefined) {
+          return;
+        }
+
+        if ($btn.data('loaded')) {
+          _this3.operationContent($btn);
+          return;
+        }
+
+        $.get(url).then(function (html) {
+          $paneBody.html(html);
+          $pane.perfectScrollbar();
+          $btn.data('loaded', true);
+          _this3.operationContent($btn);
+        });
+      });
+    }
+  }, {
+    key: 'operationContent',
+    value: function operationContent($btn) {
+      if ($btn.hasClass('active')) {
+        this.foldContent();
+        $btn.removeClass('active');
+      } else {
+        this.element.find('#dashboard-toolbar-nav li').removeClass('active');
+        $btn.addClass('active');
+        this.element.find('[data-pane]').hide();
+        this.element.find('[data-pane="' + $btn.data('plugin') + '"]').show();
+        this.popupContent();
+      }
+    }
+  }, {
+    key: 'popupContent',
+    value: function popupContent() {
+      var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+
+      var side_right = '0px';
+      var content_right = '379px';
+
+      this.emit('popup', content_right, time);
+      this.element.animate({
+        right: side_right
+      }, time);
+    }
+  }, {
+    key: 'foldContent',
+    value: function foldContent() {
+      var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+
+      var side_right = '-' + this.element.width() + 'px';
+      var content_right = '26px';
+
+      this.emit('fold', content_right, time);
+      this.element.animate({
+        right: side_right
+      }, time);
+    }
+  }, {
+    key: 'reload',
+    value: function reload() {
+      var $currentPane = this.element.find('.js-sidebar-pane:visible');
+      var pluginCode = $currentPane.data('pane');
+      $currentPane.undelegate();
+      this.element.find('#dashboard-toolbar-nav').children('[data-plugin="' + pluginCode + '"]').data('loaded', false).click();
+    }
+  }]);
+
+  return TaskSidebar;
+}(_componentEmitter2.default);
+
+exports.default = TaskSidebar;

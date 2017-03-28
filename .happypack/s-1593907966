@@ -1,0 +1,102 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _list = require('app/common/component/multi-input/list');
+
+var _list2 = _interopRequireDefault(_list);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var List = function (_MultiInputList) {
+  _inherits(List, _MultiInputList);
+
+  function List(props) {
+    _classCallCheck(this, List);
+
+    return _possibleConstructorReturn(this, (List.__proto__ || Object.getPrototypeOf(List)).call(this, props));
+  }
+
+  _createClass(List, [{
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var _context = this.context,
+          dataSourceUi = _context.dataSourceUi,
+          listClassName = _context.listClassName,
+          sortable = _context.sortable,
+          showCheckbox = _context.showCheckbox,
+          showDeleteBtn = _context.showDeleteBtn,
+          checkBoxName = _context.checkBoxName,
+          inputName = _context.inputName;
+
+
+      var name = '';
+      if (dataSourceUi.length > 0) {
+        name = 'list-group';
+      }
+      return _react2.default.createElement(
+        'ul',
+        { id: this.listId, className: 'multi-list sortable-list ' + name + ' ' + listClassName },
+        dataSourceUi.map(function (item, i) {
+          return _react2.default.createElement(
+            'li',
+            { className: 'list-group-item', id: item.itemId, key: i, 'data-seq': item.seq },
+            sortable && _react2.default.createElement('i', { className: 'es-icon es-icon-yidong mrl color-gray inline-block vertical-middle' }),
+            _react2.default.createElement('img', { className: 'avatar-sm avatar-sm-square mrm', src: item.avatar }),
+            _react2.default.createElement(
+              'span',
+              { className: 'label-name text-overflow inline-block vertical-middle' },
+              item.nickname
+            ),
+            _react2.default.createElement(
+              'label',
+              { className: showCheckbox ? '' : 'hidden' },
+              _react2.default.createElement('input', { type: 'checkbox', name: checkBoxName + item.id, checked: item.isVisible, onChange: function onChange(event) {
+                  return _this2.context.onChecked(event);
+                }, value: item.itemId }),
+              '\u663E\u793A'
+            ),
+            _react2.default.createElement(
+              'a',
+              { className: showDeleteBtn ? 'pull-right link-gray mtm' : 'hidden', onClick: function onClick(event) {
+                  return _this2.context.removeItem(event);
+                }, 'data-item-id': item.itemId },
+              _react2.default.createElement('i', { className: 'es-icon es-icon-close01 text-12' })
+            ),
+            _react2.default.createElement('input', { type: 'hidden', name: inputName, value: item.id })
+          );
+        })
+      );
+    }
+  }]);
+
+  return List;
+}(_list2.default);
+
+exports.default = List;
+;
+
+List.contextTypes = _extends({}, _list2.default.contextTypes, {
+  showCheckbox: _react2.default.PropTypes.bool,
+  showDeleteBtn: _react2.default.PropTypes.bool,
+  checkBoxName: _react2.default.PropTypes.string,
+  onChecked: _react2.default.PropTypes.func
+});

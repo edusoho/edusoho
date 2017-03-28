@@ -1,0 +1,79 @@
+'use strict';
+
+var _notify = require('common/notify');
+
+var _notify2 = _interopRequireDefault(_notify);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var $modal = $('#member-modal-form').parents('.modal');
+var $form = $('#member-modal-form');
+var validator = $form.validate({
+    rules: {
+        'nickname': {
+            required: true
+        },
+        '#deadline': {
+            required: true,
+            date: true
+        },
+        levelId: {
+            required: true
+        }
+    },
+    messages: {
+        '#nickname': {
+            required: '请输入昵称!'
+        },
+        '#deadline': {
+            required: '请输入会员截止日期!',
+            date: '请输入日期!'
+        },
+        levelId: {
+            required: '请选择会员等级!'
+        }
+    }
+});
+
+var boughtUnitVal = $('input[name="boughtUnit"]:checked').val();
+getBoughtUnitValidator(boughtUnitVal, validator);
+
+$('input[name="boughtUnit"]').change(function () {
+    var value = $(this).attr('checked', true).val();
+    getBoughtUnitValidator(value, validator);
+});
+
+$("#deadline").datetimepicker({
+    language: 'zh-CN',
+    autoclose: true,
+    format: 'yyyy-mm-dd',
+    minView: 'month'
+}).on('hide', function (ev) {
+    validator.query('#deadline').execute();
+});
+
+function getBoughtUnitValidator(boughtUnitVal, validator) {
+
+    if (boughtUnitVal == 'month') {
+        $('#boughtDuration').rules("add", {
+            max: 999,
+            min: 1,
+            positive_integer: true,
+            messages: {
+                maxlength: "长度不能大于20"
+            }
+        });
+    } else {
+        $('#boughtDuration').rules("add", {
+            max: 99,
+            min: 1,
+            positive_integer: true,
+            messages: {
+                maxlength: "长度不能大于20"
+            }
+        });
+        $('#boughtDuration').rules("add", { maxlength: 20, messages: { maxlength: "长度不能大于20" } });
+    }
+}
+
+$('#add-save-btn').click(function (params) {});

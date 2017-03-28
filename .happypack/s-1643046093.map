@@ -1,0 +1,1 @@
+{"version":3,"sources":["app/Resources/static-src/app/js/task-manage/create/index.js"],"names":["$"],"mappings":";;AAAA;;;;;;AAEA,qBAAWA,EAAE,QAAF,CAAX","file":"index.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["import Editor from './editor';\n\nnew Editor($('#modal'));\n"]}

@@ -1,0 +1,29 @@
+'use strict';
+
+var _help = require('app/js/course-manage/help');
+
+(0, _help.publishCourse)();
+(0, _help.courseFunctionRemask)();
+
+startIntro();
+function startIntro() {
+
+  console.log($('#step-1'));
+  var intro = introJs();
+  intro.setOptions({
+    steps: [{
+      intro: "课程管理功能现已全新升级!"
+    }, {
+      element: '#step-1',
+      intro: "教学内容的编辑、管理请点击左侧“计划任务”的菜单项进入!"
+    }, {
+      element: '#step-2',
+      intro: "在“营销设置”中您可以通过设置决定课程如何销售、如何加入、如何学习!"
+    }],
+    skipLabel: '我知道了',
+    nextLabel: '下一步',
+    prevLabel: '上一步'
+  });
+  console.log(intro);
+  intro.start();
+}

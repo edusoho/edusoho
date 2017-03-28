@@ -1,0 +1,3 @@
+'use strict';
+
+console.log($('#courses-list-table').find('tbody tr').length);

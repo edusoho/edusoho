@@ -1,0 +1,207 @@
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _playerFactory = require('./player-factory');
+
+var _playerFactory2 = _interopRequireDefault(_playerFactory);
+
+var _messenger = require('../../common/messenger');
+
+var _messenger2 = _interopRequireDefault(_messenger);
+
+var _durationStorage = require('./util/duration-storage');
+
+var _durationStorage2 = _interopRequireDefault(_durationStorage);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Show = function () {
+  function Show(element) {
+    _classCallCheck(this, Show);
+
+    var container = $(element);
+    this.htmlDom = $(element);
+    this.userId = container.data("userId");
+    this.userName = container.data("userName");
+    this.fileId = container.data("fileId");
+    this.fileGlobalId = container.data("fileGlobalId");
+
+    this.courseId = container.data("courseId");
+    this.lessonId = container.data("lessonId");
+    this.timelimit = container.data('timelimit');
+
+    this.playerType = container.data('player');
+    this.fileType = container.data('fileType');
+    this.url = container.data('url');
+    this.videoHeaderLength = container.data('videoHeaderLength');
+    this.enablePlaybackRates = container.data('enablePlaybackRates');
+    this.watermark = container.data('watermark');
+    this.accesskey = container.data('accessKey');
+    this.fingerprint = container.data('fingerprint');
+    this.fingerprintSrc = container.data('fingerprintSrc');
+    this.fingerprintTime = container.data('fingerprintTime');
+    this.balloonVideoPlayer = container.data('balloonVideoPlayer');
+    this.markerUrl = container.data('markerurl');
+    this.starttime = container.data('starttime');
+    this.agentInWhiteList = container.data('agentInWhiteList');
+    this.disableVolumeButton = container.data('disableVolumeButton');
+    this.disablePlaybackButton = container.data('disablePlaybackButton');
+    this.disableResolutionSwitcher = container.data('disableResolutionSwitcher');
+    this.subtitles = container.data('subtitles');
+
+    this.initView();
+    this.initEvent();
+  }
+
+  _createClass(Show, [{
+    key: 'initView',
+    value: function initView() {
+      var html = "";
+      if (this.fileType == 'video') {
+        if (this.playerType == 'local-video-player') {
+          html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>';
+        } else {
+          html += '<div id="lesson-player" style="width: 100%;height: 100%;"></div>';
+        }
+      } else if (this.fileType == 'audio') {
+        html += '<audio id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto" poster="http://s.cn.bing.net/az/hprichbg/rb/MountScott_ZH-CN8412403132_1920x1080.jpg"></audio>';
+      }
+      this.htmlDom.html(html);
+      this.htmlDom.show();
+    }
+  }, {
+    key: 'initPlayer',
+    value: function initPlayer() {
+      return _playerFactory2.default.create(this.playerType, {
+        element: '#lesson-player',
+        url: this.url,
+        mediaType: this.fileType,
+        fingerprint: this.fingerprint,
+        fingerprintSrc: this.fingerprintSrc,
+        fingerprintTime: this.fingerprintTime,
+        watermark: this.watermark,
+        starttime: this.starttime,
+        agentInWhiteList: this.agentInWhiteList,
+        timelimit: this.timelimit,
+        enablePlaybackRates: this.enablePlaybackRates,
+        controlBar: {
+          disableVolumeButton: this.disableVolumeButton,
+          disablePlaybackButton: this.disablePlaybackButton,
+          disableResolutionSwitcher: this.disableResolutionSwitcher
+        },
+        statsInfo: {
+          accesskey: this.accesskey,
+          globalId: this.fileGlobalId,
+          userId: this.userId,
+          userName: this.userName
+        },
+        videoHeaderLength: this.videoHeaderLength,
+        textTrack: this.transToTextrack(this.subtitles)
+      });
+    }
+  }, {
+    key: 'transToTextrack',
+    value: function transToTextrack(subtitles) {
+      var textTracks = [];
+      if (subtitles) {
+        for (var i in subtitles) {
+          var item = {
+            label: subtitles[i].name,
+            src: subtitles[i].url,
+            'default': "default" in subtitles[i] ? subtitles[i]['default'] : false
+          };
+          textTracks.push(item);
+        }
+      }
+
+      // set first item to default if no default
+      for (var _i in textTracks) {
+        if (textTracks[_i]['default']) {
+          return;
+        }
+        textTracks[0]['default'] = true;
+      }
+
+      return textTracks;
+    }
+  }, {
+    key: 'initMesseger',
+    value: function initMesseger() {
+      return new {
+        name: 'parent',
+        project: 'PlayerProject',
+        type: 'child'
+      }();
+    }
+  }, {
+    key: 'isCloudPalyer',
+    value: function isCloudPalyer() {
+      return 'balloon-cloud-video-player' == this.playerType;
+    }
+  }, {
+    key: 'initEvent',
+    value: function initEvent() {
+      var _this = this;
+
+      var player = this.initPlayer();
+      var messenger = this.initMesseger();
+      player.on("ready", function () {
+        messenger.sendToParent("ready", { pause: true, currentTime: player.getCurrentTime() });
+        if (!_this.isCloudPalyer()) {
+          var time = _durationStorage2.default.get(_this.userId, _this.fileId);
+          if (time > 0) {
+            player.setCurrentTime(time);
+          }
+          player.play();
+        } else if (_this.isCloudPalyer()) {
+          if (_this.markerUrl) {
+            $.getJSON(_this.markerUrl, function (questions) {
+              player.setQuestions(questions);
+            });
+          }
+        }
+      });
+
+      player.on('answered', function (data) {
+        // @todo delete lessonId
+        var finishUrl = '/course/lesson/marker/' + data.markerId + '/question_marker/' + data.id + '/finish';
+        $.post(finishUrl, {
+          "answer": data.answer,
+          "type": data.type,
+          "lessonId": lessonId
+        }, function (result) {}, 'json');
+      });
+
+      player.on("timechange", function (data) {
+        messenger.sendToParent("timechange", { pause: true, currentTime: player.getCurrentTime() });
+        if (!_this.isCloudPalyer()) {
+          if (parseInt(player.getCurrentTime()) != parseInt(player.getDuration())) {
+            _durationStorage2.default.set(_this.userId, _this.fileId, player.getCurrentTime());
+          }
+        }
+      });
+
+      player.on("paused", function () {
+        messenger.sendToParent("paused", { pause: true, currentTime: player.getCurrentTime() });
+      });
+
+      player.on("playing", function () {
+        messenger.sendToParent("playing", { pause: false, currentTime: player.getCurrentTime() });
+      });
+
+      player.on("ended", function () {
+        messenger.sendToParent("ended", { stop: true });
+        if (!_this.isCloudPalyer()) {
+          _durationStorage2.default.del(_this.userId, _this.fileId);
+        }
+      });
+    }
+  }]);
+
+  return Show;
+}();
+
+new Show('#lesson-video-content');

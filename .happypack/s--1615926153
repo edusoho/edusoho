@@ -1,0 +1,4 @@
+'use strict';
+
+$('#text-activity').perfectScrollbar();
+$('body').perfectScrollbar('update');

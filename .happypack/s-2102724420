@@ -1,0 +1,22 @@
+'use strict';
+
+var _notify = require('common/notify');
+
+var _notify2 = _interopRequireDefault(_notify);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+$('.js-generate-replay').on('click', function (event) {
+  var $this = $(event.currentTarget);
+  var url = $this.data('url');
+  if (!url) return;
+  Promise.resolve($.post(url)).then(function (success) {
+    (0, _notify2.default)('success', '生成录制回放成功');
+    window.location.reload();
+  }).catch(function (response) {
+    var error = JSON.parse(response.responseText);
+    var code = error.code;
+    var message = error.error;
+    (0, _notify2.default)('danger', message);
+  });
+});

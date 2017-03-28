@@ -1,0 +1,7 @@
+'use strict';
+
+var listLength = $('#courses-list-table').find('tbody tr').length;
+if (listLength == 2) {
+  setTimeout(function () {}, 2000);
+  $('.js-sidenav-course-menu').slideUp();
+}

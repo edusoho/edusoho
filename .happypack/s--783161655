@@ -1,0 +1,5 @@
+'use strict';
+
+require('./download.js');
+
+new DownLoad($('#step2-form'));

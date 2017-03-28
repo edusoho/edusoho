@@ -1,0 +1,74 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _choiceQuestion = require('../../question/type/choice-question');
+
+var _choiceQuestion2 = _interopRequireDefault(_choiceQuestion);
+
+var _determineQuestion = require('../../question/type/determine-question');
+
+var _determineQuestion2 = _interopRequireDefault(_determineQuestion);
+
+var _essayQuestion = require('../../question/type/essay-question');
+
+var _essayQuestion2 = _interopRequireDefault(_essayQuestion);
+
+var _fillQuestion = require('../../question/type/fill-question');
+
+var _fillQuestion2 = _interopRequireDefault(_fillQuestion);
+
+var _singleChoiceQuestion = require('../../question/type/single-choice-question');
+
+var _singleChoiceQuestion2 = _interopRequireDefault(_singleChoiceQuestion);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var QuestionTypeBuilder = function () {
+	function QuestionTypeBuilder(type) {
+		_classCallCheck(this, QuestionTypeBuilder);
+
+		this.type = type;
+	}
+
+	_createClass(QuestionTypeBuilder, null, [{
+		key: 'getTypeBuilder',
+		value: function getTypeBuilder(type) {
+			var questionBuilder = null;
+			switch (type) {
+				case 'choice':
+					questionBuilder = new _choiceQuestion2.default();
+					break;
+				case 'determine':
+					questionBuilder = new _determineQuestion2.default();
+					break;
+				case 'essay':
+					questionBuilder = new _essayQuestion2.default();
+					break;
+				case 'fill':
+					questionBuilder = new _fillQuestion2.default();
+					break;
+				case 'single_choice':
+					questionBuilder = new _singleChoiceQuestion2.default();
+					break;
+				case 'uncertain_choice':
+					questionBuilder = new _singleChoiceQuestion2.default();
+					break;
+				default:
+					questionBuilder = null;
+			}
+
+			return questionBuilder;
+		}
+	}]);
+
+	return QuestionTypeBuilder;
+}();
+
+exports.default = QuestionTypeBuilder;

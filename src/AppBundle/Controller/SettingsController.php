@@ -544,7 +544,7 @@ class SettingsController extends BaseController
 
     protected function findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile)
     {
-        $questionNum = rand(0, 2);
+        $questionNum = mt_rand(0, 2);
         $question = $userSecureQuestions[$questionNum]['securityQuestionCode'];
 
         return $this->render('settings/find-pay-password.html.twig', array(
@@ -559,9 +559,9 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
         $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
-        $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
+        $hasSecurityQuestions = null !== $userSecureQuestions && count($userSecureQuestions) > 0;
         $verifiedMobile = $user['verifiedMobile'];
-        $hasVerifiedMobile = (isset($verifiedMobile)) && (strlen($verifiedMobile) > 0);
+        $hasVerifiedMobile = null !== $verifiedMobile && strlen($verifiedMobile) > 0;
         $canSmsFind = ($hasVerifiedMobile) &&
             ($this->setting('cloud_sms.sms_enabled') == '1') &&
             ($this->setting('cloud_sms.sms_forget_pay_password') == 'on');
@@ -573,7 +573,7 @@ class SettingsController extends BaseController
         if (!$hasSecurityQuestions) {
             $this->setFlashMessage('danger', '您还没有安全问题，请先设置。');
 
-            return $this->forward('settings/security-questions');
+            return $this->forward('AppBundle:Settings:securityQuestions');
         }
 
         if ($request->getMethod() == 'POST') {

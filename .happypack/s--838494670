@@ -1,0 +1,65 @@
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Creator = function () {
+  function Creator(props) {
+    _classCallCheck(this, Creator);
+
+    this.$element = props;
+    this.$courseSetType = this.$element.find('.js-courseSetType');
+    this.$currentCourseSetType = this.$element.find('.js-courseSetType.active');;
+    this.init();
+  }
+
+  _createClass(Creator, [{
+    key: 'init',
+    value: function init() {
+      var _this = this;
+
+      this._extendValidator();
+      var validator = this.$element.validate({
+        onkeyup: false,
+        rules: {
+          title: {
+            required: true,
+            open_live_course_title: function open_live_course_title() {
+              return _this.$currentCourseSetType.data('type') === 'liveOpen';
+            }
+          }
+        },
+        messages: {
+          title: "请输入有效的课程标题（直播公开课标题暂不支持<、>、\"、&、‘、’、”、“字符）"
+        }
+      });
+
+      this.$courseSetType.click(function (event) {
+        _this.$courseSetType.removeClass('active');
+        _this.$currentCourseSetType = $(event.currentTarget);
+        _this.$currentCourseSetType.addClass('active');
+        $('input[name="type"]').val(_this.$currentCourseSetType.data('type'));
+      });
+
+      $('#courseset-create-btn').click(function (event) {
+        if (validator.form()) {
+          $(event.currentTarget).button('loading');
+          _this.$element.submit();
+        }
+      });
+    }
+  }, {
+    key: '_extendValidator',
+    value: function _extendValidator() {
+      $.validator.addMethod("open_live_course_title", function (value, element, params) {
+        console.log(!/^[^(<|>|'|"|&|‘|’|”|“)]*$/.test(value));
+        return !/^[^(<|>|'|"|&|‘|’|”|“)]*$/.test(value);
+      }, Translator.trans('直播公开课标题暂不支持<、>、\"、&、‘、’、”、“字符'));
+    }
+  }]);
+
+  return Creator;
+}();
+
+new Creator($('#courseset-create-form'));

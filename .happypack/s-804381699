@@ -1,0 +1,155 @@
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _esSwfobject = require('es-swfobject');
+
+var _esSwfobject2 = _interopRequireDefault(_esSwfobject);
+
+var _messenger = require('../../../common/messenger');
+
+var _messenger2 = _interopRequireDefault(_messenger);
+
+var _activityEmitter = require('../activity-emitter');
+
+var _activityEmitter2 = _interopRequireDefault(_activityEmitter);
+
+require('store');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var VideoPlay = function () {
+  function VideoPlay(recorder) {
+    _classCallCheck(this, VideoPlay);
+
+    this.player = {};
+    this.intervalId = null;
+    this.recorder = recorder;
+    this.emitter = new _activityEmitter2.default();
+  }
+
+  _createClass(VideoPlay, [{
+    key: 'play',
+    value: function play() {
+      if ($('#swf-player').length) {
+        this._playerSwf();
+      } else {
+        this._playVideo();
+      }
+      this.record();
+    }
+  }, {
+    key: 'record',
+    value: function record() {
+      var _this = this;
+
+      this.intervalId = setInterval(function () {
+        _this.recorder.addVideoPlayerCounter(_this.emitter, _this.player);
+      }, 1000);
+    }
+  }, {
+    key: 'getPlay',
+    value: function getPlay() {
+      return this.player;
+    }
+  }, {
+    key: '_playerSwf',
+    value: function _playerSwf() {
+      var swf_dom = 'swf-player';
+      _esSwfobject2.default.embedSWF($('#' + swf_dom).data('url'), swf_dom, '100%', '100%', "9.0.0", null, null, {
+        wmode: 'opaque',
+        allowFullScreen: 'true'
+      });
+    }
+  }, {
+    key: '_playVideo',
+    value: function _playVideo() {
+      var _this2 = this;
+
+      var messenger = new _messenger2.default({
+        name: 'partner',
+        project: 'PlayerProject',
+        children: [],
+        type: 'parent'
+      });
+
+      messenger.on("ended", function (msg) {
+        _this2.player.playing = false;
+        _this2._onFinishLearnTask(msg);
+      });
+
+      messenger.on("playing", function (msg) {
+        _this2.player.playing = true;
+      });
+
+      messenger.on("paused", function (msg) {
+        _this2.player.playing = false;
+      });
+
+      messenger.on("timechange", function (msg) {
+        _this2.player.currentTime = msg.currentTime;
+      });
+    }
+  }, {
+    key: '_onFinishLearnTask',
+    value: function _onFinishLearnTask(msg) {
+      var _this3 = this;
+
+      this.emitter.emit('finish', { data: msg }).then(function () {
+        clearInterval(_this3.intervalId);
+      }).catch(function (error) {
+        console.error(error);
+      });
+    }
+  }]);
+
+  return VideoPlay;
+}();
+
+var VideoRecorder = function () {
+  function VideoRecorder(container) {
+    _classCallCheck(this, VideoRecorder);
+
+    this.container = container;
+    this.interval = 120;
+  }
+
+  _createClass(VideoRecorder, [{
+    key: 'addVideoPlayerCounter',
+    value: function addVideoPlayerCounter(emitter, player) {
+      var $container = $(this.container);
+      var activityId = $container.data('id');
+      var playerCounter = store.get("activity_id_" + activityId + "_playing_counter");
+      if (!playerCounter) {
+        playerCounter = 0;
+      }
+      if (!(player && player.playing)) {
+        return false;
+      }
+      if (playerCounter >= this.interval) {
+        emitter.emit('watching', { watchTime: this.interval }).then(function () {
+          var url = $("#video-content").data('watchUrl');
+          $.post(url, function (response) {
+            if (response && response.status == 'error') {
+              window.location.reload();
+            }
+          });
+        }).catch(function (error) {
+          console.error(error);
+        });
+        playerCounter = 0;
+      } else if (player.playing) {
+        playerCounter++;
+      }
+      store.set("activity_id_" + activityId + "_playing_counter", playerCounter);
+    }
+  }]);
+
+  return VideoRecorder;
+}();
+
+var recorder = new VideoRecorder('#video-content');
+var videoplay = new VideoPlay(recorder);
+videoplay.play();

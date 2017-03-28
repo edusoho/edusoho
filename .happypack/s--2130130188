@@ -1,0 +1,19 @@
+'use strict';
+
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _personaMultiInput = require('app/common/component/persona-multi-input');
+
+var _personaMultiInput2 = _interopRequireDefault(_personaMultiInput);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+_reactDom2.default.render(_react2.default.createElement(_personaMultiInput2.default, _defineProperty({ showAddBtnGroup: false, sortable: false, showCheckbox: false, addable: true, dataSource: $('#classroom-manage-set-teachers').data('teachers'), outputDataElement: 'teachers', searchable: { enable: false } }, 'showAddBtnGroup', false)), document.getElementById('classroom-manage-set-teachers'));

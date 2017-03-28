@@ -1,0 +1,96 @@
+'use strict';
+
+require('moment');
+
+var $form = $("#member-buy-form");
+
+var validator = $form.validate({
+    rules: {
+        duration: {
+            required: true,
+            maxlength: 9999,
+            digits: true
+        }
+    },
+    messages: {
+        duration: {
+            required: '请输入开通时长',
+            maxlength: '开通时长必须小于或者等于999',
+            digits: '开通时长必须为整数'
+        }
+    }
+});
+
+$form.find('[name=level]').on('change', function () {
+    refresh();
+});
+$form.find('[name=targetId]').on('change', function () {
+    refresh_price();
+});
+
+$form.find('[name=unit]').on('change', function () {
+    if ($form.find('[name=unit]:checked').val() == 'month') {
+        var $defaultBuyMonth = $('[name=defaultBuyMonth]').val();
+        $form.find('[name=duration]').val($defaultBuyMonth);
+    } else {
+        var $defaultBuyYear = $('[name=defaultBuyYear]').val();
+        $form.find('[name=duration]').val($defaultBuyYear);
+    }
+    refresh();
+});
+
+$form.find('[name=duration]').on('change', function () {
+    refresh();
+});
+
+$("#member-order-confirm-btn").on('click', function () {
+    $form[0].submit();
+});
+
+refresh();
+refresh_price();
+
+function refresh_price() {
+    var $form = $("#member-buy-form");
+    var target = $form.find('[name=targetId]:checked').val() || $form.find('[name=targetId]').val();
+    var prices = $form.find('.js-vip-price').data('vipPrice');
+    var coinDisplay = $form.find('.js-vip-price').data('coinDisplay');
+    var cashRate = $form.find('.js-vip-price').data('cashRate');
+    var coinName = $form.find('.js-vip-price').data('coinName');
+    if (coinDisplay) {
+        $form.find('[name=unit]').each(function () {
+            var price = '<span class="text-primary">(' + prices[target][$(this).val()] * cashRate + ' ' + coinName + ')</span>';
+            $(this).parent().find('span').remove();
+            $(this).parent().append(price);
+        });
+    } else {
+        $form.find('[name=unit]').each(function () {
+            var price = '<span class="text-primary">(' + prices[target][$(this).val()] + ' 元)</span>';
+            $(this).parent().find('span').remove();
+            $(this).parent().append(price);
+        });
+    }
+}
+
+function refresh() {
+    var $form = $("#member-buy-form");
+
+    var unit = $form.find('[name=unit]:checked').val();
+    var duration = $form.find('[name=duration]').val();
+
+    $form.find('.unit-label').hide();
+    $form.find('.unit-label-' + unit).show();
+
+    var startDate = $form.find('[name=startDate]').val();
+    var deadline = '';
+    if (startDate) {
+        deadline = moment(startDate);
+    } else {
+        deadline = moment();
+    }
+
+    deadline = deadline.add(unit + 's', duration).format('YYYY-MM-DD');
+
+    $form.find('.deadline').html(deadline).parent().removeClass('hide');
+    refresh_price();
+}

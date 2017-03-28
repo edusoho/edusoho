@@ -1,0 +1,15 @@
+'use strict';
+
+var _questionPicker = require('../../../../common/component/question-picker');
+
+var _questionPicker2 = _interopRequireDefault(_questionPicker);
+
+var _batchSelect = require('../../../../common/widget/batch-select');
+
+var _batchSelect2 = _interopRequireDefault(_batchSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var $questionPickerBody = $('#question-picker-body', window.parent.document);
+new _questionPicker2.default($questionPickerBody, $('#step2-form'));
+new _batchSelect2.default($questionPickerBody);

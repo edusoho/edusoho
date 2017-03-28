@@ -1,0 +1,48 @@
+'use strict';
+
+var _doTestBase = require('../widget/do-test-base');
+
+var _doTestBase2 = _interopRequireDefault(_doTestBase);
+
+var _part = require('../widget/part');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+(0, _part.initScrollbar)();
+(0, _part.testpaperCardFixed)();
+(0, _part.testpaperCardLocation)();
+(0, _part.onlyShowError)();
+(0, _part.initWatermark)();
+
+var ShowResult = function (_DoTestBase) {
+  _inherits(ShowResult, _DoTestBase);
+
+  function ShowResult($container) {
+    _classCallCheck(this, ShowResult);
+
+    return _possibleConstructorReturn(this, (ShowResult.__proto__ || Object.getPrototypeOf(ShowResult)).call(this, $container));
+  }
+
+  return ShowResult;
+}(_doTestBase2.default);
+
+new ShowResult($('.js-task-testpaper-body-iframe'));
+
+$('.js-testpaper-redo-timer').timer({
+  countdown: true,
+  duration: $('.js-testpaper-redo-timer').data('time'),
+  format: '%H:%M:%S',
+  callback: function callback() {
+    $('#finishPaper').attr('disabled', false);
+  },
+  repeat: true,
+  start: function start() {
+    self.usedTime = 0;
+  }
+});
