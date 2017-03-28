@@ -355,7 +355,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
             'testpaper' => array(
                 'meta' => array(
                     'name' => '考试',
-                    'icon' => 'es-icon es-icon-lesson',
+                    'icon' => 'es-icon es-icon-assignment-turned-in',
                 ),
                 'controller' => 'AppBundle:Activity/Testpaper',
                 'visible' => function ($courseSet, $course) use ($biz) {
@@ -365,7 +365,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
             'homework' => array(
                 'meta' => array(
                     'name' => '作业',
-                    'icon' => 'es-icon es-icon-exam',
+                    'icon' => 'es-icon es-icon-writefill',
                 ),
                 'controller' => 'AppBundle:Activity/Homework',
                 'visible' => function ($courseSet, $course) use ($biz) {
