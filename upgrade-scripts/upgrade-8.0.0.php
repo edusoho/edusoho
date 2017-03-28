@@ -20,7 +20,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         try {
-            $dir = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."../web/install");
+            $dir = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir').'../web/install');
             $filesystem = new Filesystem();
 
             if (!empty($dir)) {
@@ -33,15 +33,13 @@ class EduSohoUpgrade extends AbstractUpdater
         $developerSetting['debug'] = 0;
 
         ServiceKernel::instance()->createService('System:SettingService')->set('developer', $developerSetting);
-        ServiceKernel::instance()->createService('System:SettingService')->set("crontab_next_executed_time", time());
+        ServiceKernel::instance()->createService('System:SettingService')->set('crontab_next_executed_time', time());
     }
 
     protected function getStep($index)
     {
-      $oldSteps = array(
+        $oldSteps = array(
         'c2ActivityLearnLog', // ?
-        'c2Exercise',
-        'c2Homework',
         'c2CourseMaterial',
         'c2TagOwner',
         'updateCourseChapter',
@@ -49,10 +47,10 @@ class EduSohoUpgrade extends AbstractUpdater
         'c2QuestionMigrate',
       );
 
-      $steps = array(
+        $steps = array(
         'CourseSetMigrate',
         'CourseMigrate',
-        
+
         'Lesson2CourseTaskMigrate',
         'Lesson2CourseChapterMigrate',
         'Lesson2ActivityMigrate',
@@ -84,34 +82,36 @@ class EduSohoUpgrade extends AbstractUpdater
         'Lesson2LiveActivityMigrate',
         'ActivityRelaLiveActivity',
         // next
+        'Exercise2CourseTaskMigrate',
+        'Homework2CourseTasMigrate',
 
         'AfterAllCourseTaskMigrate',
-        'OtherMigrate'
+        'OtherMigrate',
       );
 
-      if ($index > count($steps)-1) {
-         return '';
-      }
+        if ($index > count($steps) - 1) {
+            return '';
+        }
 
-      return $steps[$index];
+        return $steps[$index];
     }
 
     protected function getIndexAndPage($index)
     {
-      if($index == 0) {
-        return array(0,1);
-      }
+        if ($index == 0) {
+            return array(0, 1);
+        }
 
-      return explode('-', $index);
+        return explode('-', $index);
     }
 
     protected function setIndexAndPage($index, $page)
     {
-      return "{$index}-{$page}";
+        return "{$index}-{$page}";
     }
 
     protected function batchUpdate($index)
-    { 
+    {
         $indexAndPage = $this->getIndexAndPage($index);
         $index = $indexAndPage[0];
         $page = 1;
@@ -121,14 +121,14 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $method = $this->getStep($index);
         if (empty($method)) {
-          return;
+            return;
         }
 
         require_once '8.0.0/AbstractMigrate.php';
         $file = "8.0.0/{$method}.php";
         require_once $file;
         $migrate = new $method($this->kernel);
-        
+
         $this->logger('info', "开始迁移 {$method}");
         $nextPage = $migrate->update($page);
         $this->logger('info', "迁移 {$method} 成功");
@@ -137,14 +137,14 @@ class EduSohoUpgrade extends AbstractUpdater
             return array(
                 'index' => $this->setIndexAndPage($index, $nextPage),
                 'message' => '正在升级数据...',
-                'progress' => 0
+                'progress' => 0,
             );
         }
 
         return array(
-            'index' => $this->setIndexAndPage($index+1, 1),
+            'index' => $this->setIndexAndPage($index + 1, 1),
             'message' => '正在升级数据...',
-            'progress' => 0
+            'progress' => 0,
         );
     }
 
@@ -258,10 +258,10 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $result = $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE `c2_course_set` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.num  WHERE ce.id = cm.`courseId`;";
+        $sql = 'UPDATE `c2_course_set` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.num  WHERE ce.id = cm.`courseId`;';
         $result = $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE `c2_course_set` cs, `course` c SET cs.minCoursePrice = c.price, cs.maxCoursePrice = c.price where cs.id = c.id";
+        $sql = 'UPDATE `c2_course_set` cs, `course` c SET cs.minCoursePrice = c.price, cs.maxCoursePrice = c.price where cs.id = c.id';
         $result = $this->getConnection()->exec($sql);
     }
 
@@ -452,7 +452,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $result = $this->getConnection()->exec($sql);
 
         // refactor: 直接course_set取
-        $sql = "UPDATE `c2_course` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.num  WHERE ce.id = cm.courseId;";
+        $sql = 'UPDATE `c2_course` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.num  WHERE ce.id = cm.courseId;';
         $result = $this->getConnection()->exec($sql);
 
         // refactor: 这条语句不该在这个步骤中执行，应该在迁移完course_task后执行
@@ -462,7 +462,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function updateCourseChapter()
     {
-        $totalTasks = $this->getConnection()->fetchAll("SELECT * FROM `course_task`");
+        $totalTasks = $this->getConnection()->fetchAll('SELECT * FROM `course_task`');
 
         $totalTasks = \AppBundle\Common\ArrayToolkit::group($totalTasks, 'lessonId');
 
@@ -481,7 +481,6 @@ class EduSohoUpgrade extends AbstractUpdater
                     array('categoryId' => $categoryId),
                     array('id' => $task['id'])
                 );
-
             }
         }
     }
@@ -495,7 +494,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function c2CourseMaterial()
     {
-
         if (!$this->isTableExist('download_activity')) {
             $this->exec(
                 "
@@ -512,15 +510,14 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if (!$this->isFieldExist('download_activity', 'lessonId')) {
-            $this->exec("alter table `download_activity` add `lessonId` int(10) ;");
+            $this->exec('alter table `download_activity` add `lessonId` int(10) ;');
         }
 
         if (!$this->isFieldExist('course_material', 'courseSetId')) {
-            $this->exec("alter table `course_material` add `courseSetId` int(10) ;");
+            $this->exec('alter table `course_material` add `courseSetId` int(10) ;');
         }
-        $this->exec(" UPDATE `course_material` SET `courseSetId` = courseId;");
+        $this->exec(' UPDATE `course_material` SET `courseSetId` = courseId;');
         $this->exec(" UPDATE `course_material` SET  `source`= 'courseactivity' WHERE source= 'courselesson';");
-
 
         //查找有复习资料的记录
         $downloadMaterials = $this->getConnection()->fetchAll(
@@ -533,9 +530,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $downloadActivities = $this->getConnection()->fetchAll('select * from download_activity');
         $downloadActivities = \AppBundle\Common\ArrayToolkit::column($downloadActivities, 'lessonId');
 
-
         foreach ($downloadMaterials as $lessonId => $materials) {
-
             if (in_array($lessonId, $downloadActivities)) {
                 continue;
             }
@@ -549,7 +544,6 @@ class EduSohoUpgrade extends AbstractUpdater
                     }
                 }
             );
-
 
             $fileCount = count($materials);
             $fileIds = \AppBundle\Common\ArrayToolkit::column($materials, 'fileId');
@@ -576,7 +570,6 @@ class EduSohoUpgrade extends AbstractUpdater
                 'fromUserId' => $material['userId'],
                 'createdTime' => $material['createdTime'],
                 'updatedTime' => $material['createdTime'],
-
             );
 
             $this->getConnection()->insert('activity', $activity);
@@ -598,7 +591,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 'number' => $lesson['number'],
                 'type' => 'download',
                 'lessonId' => $lessonId,
-                'fromCourseSetId' => $lesson['courseId']
+                'fromCourseSetId' => $lesson['courseId'],
             );
 
             $this->getConnection()->insert('course_task', $task);
@@ -607,7 +600,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function c2CourseTaskResult()
     {
-        
     }
 
     protected function c2ActivityLearnLog()
@@ -617,7 +609,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 "
                 CREATE TABLE `activity_learn_log` (
                   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-                  `activityId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '教学活动id',          
+                  `activityId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '教学活动id',
                   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
                   `event` varchar(255) NOT NULL DEFAULT '' COMMENT '',
                   `data` text COMMENT '',
@@ -642,247 +634,13 @@ class EduSohoUpgrade extends AbstractUpdater
         //       ,courseTaskId
         //       ,learnedTime
         //       ,createdTime
-        //     ) values select 
+        //     ) values select
         //       id
         //       ,lessonId
         //       ,userId
         //       ,learnedTime
         //     from course_lesson_learn where id not in (select id from activity_learn_log)
         // ");
-    }
-
-    /**
-     * 将原来的练习转为activity 和 task
-     */
-    protected function c2Exercise()
-    {
-        if (!$this->isFieldExist('activity', 'exerciseId')) {
-            $this->exec("alter table `activity` add `exerciseId` int(10) ;");
-        }
-
-        if (!$this->isFieldExist('course_task', 'exerciseId')) {
-            $this->exec("alter table `course_task` add `exerciseId` int(10) ;");
-        }
-
-        //update activity
-        $this->getConnection()->exec(
-            "
-            INSERT INTO `activity`
-            (
-                `title`,
-                `remark` ,
-                `mediaId` ,
-                `mediaType`,
-                `content`,
-                `length`,
-                `fromCourseId`,
-                `fromCourseSetId`,
-                `fromUserId`,
-                `startTime`,
-                `endTime`,
-                `createdTime`,
-                `updatedTime`,
-                `copyId`,
-                `exerciseId`
-            )
-            SELECT 
-                '练习',
-                `summary`,
-                `eexerciseId`,
-                'exercise',
-                `summary`,
-                CASE WHEN `length` is null THEN 0  ELSE `length` END AS `length`,
-                `courseId`,
-                `courseId`,
-                `userId`,
-                `startTime`,
-                `endTime`,
-                `createdTime`,
-                `updatedTime`,
-                `ecopyId`,
-                `eexerciseId`
-            FROM (SELECT  ee.id AS eexerciseId, ee.`copyId` AS ecopyId , ce.*  
-            FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid) lesson  
-            WHERE lesson.eexerciseId NOT IN (SELECT exerciseId FROM activity WHERE exerciseId IS NOT NULL );
-                    "
-        );
-
-        $this->exec(
-            "
-            insert into course_task
-              (
-                `courseId`,
-                `fromCourseSetId`,
-                `categoryId`,
-                `seq`,
-                `title`,
-                `isFree`,
-                `startTime`,
-                `endTime`,
-                `status`,
-                `createdUserId`,
-                `createdTime`,
-                `updatedTime`,
-                `mode` ,
-                `number`,
-                `type`,
-                `length` ,
-                `maxOnlineNum`,
-                `copyId`,
-                `exerciseId`,
-                `lessonId`
-              ) 
-            select
-              `courseId`,
-              `courseId`,
-              `chapterId`,
-              `seq`,
-              '练习',
-              `free`,
-              `startTime`,
-              `endTime`,
-              `status`,
-              `userId`,
-              `createdTime`,
-              `updatedTime`,
-              'exercise',
-              `number`,
-              'exercise',
-              CASE WHEN `length` is null THEN 0  ELSE `length` END AS `length`,
-              `maxOnlineNum`,
-              `copyId`,
-              `eexerciseId`,
-              `id`
-              FROM (SELECT  ee.id AS eexerciseId, ee.`copyId` AS ecopyId , ce.*  
-                FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid) lesson  
-                    WHERE lesson.eexerciseId NOT IN (SELECT exerciseId FROM course_task WHERE exerciseId IS NOT NULL );
-            "
-        );
-
-        $this->exec(
-            "UPDATE `course_task` AS ck, activity AS a SET ck.`activityId` = a.`id` 
-          WHERE a.`exerciseId` = ck.`exerciseId` AND  ck.type = 'exercise' AND  ck.`activityId` = 0
-            "
-        );
-
-    }
-
-
-    /**
-     * 将原来的练习转为activity 和 task
-     */
-    protected function c2Homework()
-    {
-        if (!$this->isFieldExist('activity', 'homeworkId')) {
-            $this->exec("alter table `activity` add `homeworkId` int(10) ;");
-        }
-
-        if (!$this->isFieldExist('course_task', 'homeworkId')) {
-            $this->exec("alter table `course_task` add `homeworkId` int(10) ;");
-        }
-
-        //update activity
-        $this->getConnection()->exec(
-            "
-             INSERT INTO `activity`
-            (
-                `title`,
-                `remark` ,
-                `mediaId` ,
-                `mediaType`,
-                `content`,
-                `length`,
-                `fromCourseId`,
-                `fromCourseSetId`,
-                `fromUserId`,
-                `startTime`,
-                `endTime`,
-                `createdTime`,
-                `updatedTime`,
-                `copyId`,
-                `homeworkId`
-            )
-            SELECT 
-                '作业',
-                `summary`,
-                `hhomeworkId`,
-                'homework',
-                `summary`,
-                case when `length` is null then 0 else `length` end,
-                `courseId`,
-                `courseId`,
-                `userId`,
-                `startTime`,
-                `endTime`,
-                `createdTime`,
-                `updatedTime`,
-                `ecopyId`,
-                `hhomeworkId`
-            FROM (SELECT  ee.id AS hhomeworkId, ee.`copyId` AS ecopyId , ce.*  
-            FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonid) lesson  
-            WHERE hhomeworkId NOT IN (SELECT homeworkId FROM activity WHERE homeworkId IS NOT NULL );
-                    "
-        );
-
-        $this->exec(
-            "
-            INSERT INTO course_task
-              (
-                `courseId`,
-                `fromCourseSetId`,
-                `categoryId`,
-                `seq`,
-                `title`,
-                `isFree`,
-                `startTime`,
-                `endTime`,
-                `status`,
-                `createdUserId`,
-                `createdTime`,
-                `updatedTime`,
-                `mode` ,
-                `number`,
-                `type`,
-                `length` ,
-                `maxOnlineNum`,
-                `copyId`,
-                `homeworkId`,
-                `lessonId`
-              ) 
-            SELECT
-              `courseId`,
-              `courseId`,
-              `chapterId`,
-              `seq`,
-              '作业',
-              `free`,
-              `startTime`,
-              `endTime`,
-              `status`,
-              `userId`,
-              `createdTime`,
-              `updatedTime`,
-              'homework',
-              `number`,
-              'homework',
-              CASE WHEN `length` is null THEN 0  ELSE `length` END AS `length`,
-              `maxOnlineNum`,
-              `copyId`,
-              `hhomeworkId`,
-              `id`
-              FROM (SELECT  ee.id AS hhomeworkId, ee.`copyId` AS ecopyId , ce.*  
-                FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonid) lesson  
-                    WHERE lesson.hhomeworkId NOT IN (SELECT homeworkId FROM course_task WHERE homeworkId IS NOT NULL );
-                    WHERE lesson.eexerciseId NOT IN (SELECT exerciseId FROM course_task WHERE exerciseId IS NOT NULL );
-            "
-        );
-
-        $this->exec(
-            "UPDATE `course_task` AS ck, activity AS a SET ck.`activityId` = a.`id` 
-          WHERE a.`homeworkId` = ck.`homeworkId` AND  ck.type = 'homework' AND  ck.`activityId` = 0
-            "
-        );
-
     }
 
     protected function c2testpaperMigrate()
@@ -1147,7 +905,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $courseArr = explode('-', $targetArr[0]);
             $lessonArr = explode('-', $targetArr[1]);
 
-            $courseSql = "SELECT * FROM c2_course WHERE id = ".$courseArr[1];
+            $courseSql = 'SELECT * FROM c2_course WHERE id = '.$courseArr[1];
             $course = $this->getConnection()->fetchAssoc($courseSql);
 
             $lessonId = empty($lessonArr[1]) ? 0 : $lessonArr[1];
@@ -1193,10 +951,10 @@ class EduSohoUpgrade extends AbstractUpdater
             FROM testpaper_item_result WHERE id NOT IN (SELECT id FROM c2_testpaper_item_result)";
         $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE c2_testpaper_item_result AS ir, c2_testpaper as t SET ir.testId = t.id WHERE t.oldTestId = ir.testId";
+        $sql = 'UPDATE c2_testpaper_item_result AS ir, c2_testpaper as t SET ir.testId = t.id WHERE t.oldTestId = ir.testId';
         $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE c2_testpaper_item_result AS ir, c2_testpaper_result AS tr SET ir.resultId = tr.id WHERE tr.oldResultId = ir.resultId";
+        $sql = 'UPDATE c2_testpaper_item_result AS ir, c2_testpaper_result AS tr SET ir.resultId = tr.id WHERE tr.oldResultId = ir.resultId';
         $this->getConnection()->exec($sql);
 
         $this->testpaperActivity();
@@ -1578,7 +1336,7 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function testpaperActivity()
     {
         if (!$this->isFieldExist('testpaper_activity', 'lessonId')) {
-            $this->exec("ALTER TABLE `testpaper_activity` add `lessonId` int(10) ;");
+            $this->exec('ALTER TABLE `testpaper_activity` add `lessonId` int(10) ;');
         }
 
         $sql = "INSERT INTO testpaper_activity (
@@ -1604,7 +1362,7 @@ class EduSohoUpgrade extends AbstractUpdater
             WHERE cl.type='testpaper' AND cl.id NOT IN (SELECT id FROM testpaper_activity)";
         $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE testpaper_activity AS ta,(SELECT id,limitedTime,oldTestId FROM c2_testpaper) AS tmp SET ta.mediaId = tmp.id, ta.limitedTime = tmp.limitedTime WHERE tmp.oldTestId = ta.mediaId";
+        $sql = 'UPDATE testpaper_activity AS ta,(SELECT id,limitedTime,oldTestId FROM c2_testpaper) AS tmp SET ta.mediaId = tmp.id, ta.limitedTime = tmp.limitedTime WHERE tmp.oldTestId = ta.mediaId';
         $this->getConnection()->exec($sql);
 
         $this->exec(
@@ -1641,7 +1399,7 @@ class EduSohoUpgrade extends AbstractUpdater
             );
         }
 
-        $sql = "SELECT * FROM question";
+        $sql = 'SELECT * FROM question';
         $questions = $this->getConnection()->fetchAll($sql);
 
         foreach ($questions as $question) {
@@ -1673,7 +1431,7 @@ class EduSohoUpgrade extends AbstractUpdater
             );
         }
 
-        $sql = "SELECT * FROM question_favorite";
+        $sql = 'SELECT * FROM question_favorite';
         $favorites = $this->getConnection()->fetchAll($sql);
 
         foreach ($favorites as $favorite) {
@@ -1687,9 +1445,11 @@ class EduSohoUpgrade extends AbstractUpdater
     /**
      * Executes an SQL statement and return the number of affected rows.
      *
-     * @param  string $statement
+     * @param string $statement
+     *
      * @throws \Doctrine\DBAL\DBALException
-     * @return integer                        The number of affected rows.
+     *
+     * @return int the number of affected rows
      */
     protected function exec($statement)
     {
@@ -1740,18 +1500,18 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function getCourseChapterDao()
     {
-        return ServiceKernel::instance()->getBiz()->dao('Course:CourseChapterDao'); 
+        return ServiceKernel::instance()->getBiz()->dao('Course:CourseChapterDao');
     }
 
     protected function logger($level, $message)
     {
-        $data = date("Y-m-d H:i:s").' ['.$level.'] 6.17.9 '.$message.PHP_EOL;
+        $data = date('Y-m-d H:i:s').' ['.$level.'] 6.17.9 '.$message.PHP_EOL;
         file_put_contents($this->getLoggerFile(), $data, FILE_APPEND);
     }
 
     protected function getLoggerFile()
     {
-        return ServiceKernel::instance()->getParameter('kernel.root_dir')."/../app/logs/upgrade.log";
+        return ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/logs/upgrade.log';
     }
 }
 

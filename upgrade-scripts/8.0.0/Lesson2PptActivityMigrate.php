@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 class Lesson2PptActivityMigrate extends AbstractMigrate
 {
     public function update($page)
     {
-    	if (!$this->isTableExist('ppt_activity')) {
+        if (!$this->isTableExist('ppt_activity')) {
             $this->exec(
                 "
                 CREATE TABLE `ppt_activity` (
@@ -34,7 +34,7 @@ class Lesson2PptActivityMigrate extends AbstractMigrate
 
         $this->exec(
             "
-            insert into `ppt_activity`
+          insert into `ppt_activity`
             (
             `mediaId`,
             `finishType`,
@@ -44,16 +44,15 @@ class Lesson2PptActivityMigrate extends AbstractMigrate
             `updatedTime`,
             `migrateLessonId`
             )
-            select
-                `mediaId`,
-                'end',
-                '1',
-                `createdTime`,
-                `userId` ,
-                `updatedTime`,
-                `id`
-            from `course_lesson` where type ='ppt' and id not in (select `migrateLessonId` from `ppt_activity`)
-            order by id limit {$start}, {$this->perPageCount};
+          select
+            `mediaId`,
+            'end',
+            '1',
+            `createdTime`,
+            `userId` ,
+            `updatedTime`,
+            `id`
+          from `course_lesson` where type ='ppt' and id not in (select `migrateLessonId` from `ppt_activity`) order by id limit {$start}, {$this->perPageCount};
         "
         );
 
