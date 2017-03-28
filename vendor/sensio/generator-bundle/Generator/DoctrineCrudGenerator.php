@@ -83,7 +83,7 @@ class DoctrineCrudGenerator extends Generator
         $dir = sprintf('%s/Resources/views/%s', $this->rootDir, strtolower($entity));
 
         if (!file_exists($dir)) {
-            self::mkdir($dir);
+            $this->filesystem->mkdir($dir, 0777);
         }
 
         $this->generateIndexView($dir);
@@ -146,7 +146,6 @@ class DoctrineCrudGenerator extends Generator
             'route_name_prefix' => $this->routeNamePrefix,
             'bundle' => $this->bundle->getName(),
             'entity' => $this->entity,
-            'identifier' => $this->metadata->identifier[0],
         ));
     }
 
@@ -180,7 +179,6 @@ class DoctrineCrudGenerator extends Generator
             'entity' => $this->entity,
             'entity_singularized' => $this->entitySingularized,
             'entity_pluralized' => $this->entityPluralized,
-            'identifier' => $this->metadata->identifier[0],
             'entity_class' => $entityClass,
             'namespace' => $this->bundle->getNamespace(),
             'entity_namespace' => $entityNamespace,

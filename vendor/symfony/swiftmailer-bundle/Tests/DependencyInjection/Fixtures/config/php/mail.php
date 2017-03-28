@@ -1,4 +1,6 @@
 <?php
+
 $container->loadFromExtension('swiftmailer', array(
-    'transport'  => "mail",
+    'transport' => 'mail',
+    'spool' => null,
 ));

@@ -61,7 +61,7 @@ class OAuth2UserProvider implements UserProviderInterface
      */
     public function refreshUser(UserInterface $user)
     {
-        if (!$user instanceof OAuth2User) {
+        if (!$user instanceof OAuth2UserInterface) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
         }
 
@@ -77,7 +77,7 @@ class OAuth2UserProvider implements UserProviderInterface
      */
     public function supportsClass($class)
     {
-        if ($class == 'OAuth2User') {
+        if ($class == 'OAuth2UserInterface') {
             return true;
         }
 

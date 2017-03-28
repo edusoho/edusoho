@@ -14,13 +14,34 @@ function checkUrl(url) {
 let addBtnClicked = false;
 
 $('#add-btn').click(function () {
-  if (!addBtnClicked) {
-    $('#add-btn').button('loading').addClass('disabled');
-    addBtnClicked = true;
-  }
-
-  return true;
+  $(this).addClass('disabled');
+  var url = $(this).data('url');
+  $.post(url, function (data) {
+    if (data.status == 'success') {
+      window.location.reload();
+    } else {
+      Notify.danger(data.message);
+    }
+  });
 });
+
+if ($('#exit-btn').length > 0) {
+  $('#exit-btn').click(function () {
+    if (!confirm(Translator.trans('真的要退出该小组？您在该小组的信息将删除！'))) {
+      return false;
+    }
+
+    var url = $(this).data('url');
+    $.post(url, function (data) {
+      if (data.status == 'success') {
+        window.location.reload();
+      } else {
+        Notify.danger(data.message);
+      }
+    });
+  })
+
+}
 
 $('#thread-list').on('click', '.uncollect-btn, .collect-btn', function () {
   let $this = $(this);
