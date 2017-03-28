@@ -20,7 +20,6 @@
 !/web/customize/.gitkeep
 /plugins/*
 !/plugins/.gitkeep
-/installFiles
 /node_modules/
 npm-debug.log
 /build/
@@ -35,5 +34,21 @@ project.sublime-workspace
 .project
 .settings
 .publish
-deployment-config.json
 /installFiles
+.buildpath
+.phpintel*
+/src/Tests/*
+.crunch
+/app/config/parameters_test.yml
+*.css.map
+*.codekit
+web/php-performance.php
+chunk-manifest.json
+.npminstall.done
+/web/static-dist/*
+!/web/static-dist/libs
+!/web/static-dist/app
+/.vscode
+.php_cs.cache
+deployment-config.json
+>>>>>>> develop

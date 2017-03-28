@@ -2,3 +2,4 @@
 /vendor
 /config/biz.php
 /composer.lock
+/bin
