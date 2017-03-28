@@ -22,7 +22,7 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
      * exercise datas convert to  activity
      * TODO datas should read from table tespaper.
      */
-    protected function exerciseToActivity()
+    protected function exerciseToActivity($start)
     {
         $this->getConnection()->exec(
           "
@@ -61,13 +61,13 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
               `ecopyId`,
               `eexerciseId`
           FROM (SELECT  ee.id AS eexerciseId, ee.`copyId` AS ecopyId , ce.*
-          FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid limit {$start}, {$this->perPageCount}) lesson
+          FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid limit 0, {$this->perPageCount}) lesson
           WHERE lesson.eexerciseId NOT IN (SELECT exerciseId FROM activity WHERE exerciseId IS NOT NULL );
         "
       );
     }
 
-    protected function exerciseToCourseTask()
+    protected function exerciseToCourseTask($start)
     {
         $this->getConnection()->exec(
           "insert into course_task
@@ -115,7 +115,7 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
             `eexerciseId`,
             `id`
             FROM (SELECT  ee.id AS eexerciseId, ee.`copyId` AS ecopyId , ce.*
-              FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid limit {$start}, {$this->perPageCount}) lesson
+              FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid limit 0, {$this->perPageCount}) lesson
                   WHERE lesson.eexerciseId NOT IN (SELECT exerciseId FROM course_task WHERE exerciseId IS NOT NULL );
           "
         );

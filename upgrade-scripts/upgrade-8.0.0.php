@@ -41,7 +41,6 @@ class EduSohoUpgrade extends AbstractUpdater
         $oldSteps = array(
         'c2ActivityLearnLog', // ?
         'c2CourseMaterial',
-        'updateCourseChapter',
         'c2testpaperMigrate',
         'c2QuestionMigrate',
       );
@@ -86,6 +85,8 @@ class EduSohoUpgrade extends AbstractUpdater
         // next
         'Exercise2CourseTaskMigrate',
         'Homework2CourseTasMigrate',
+        'CourseMaterial2DownloadActivityMigrate',
+        'updateCourseChapter',
 
         'TagOwnerMigrate',
 
@@ -464,31 +465,6 @@ class EduSohoUpgrade extends AbstractUpdater
         // refactor: 这条语句不该在这个步骤中执行，应该在迁移完course_task后执行
         $sql = "UPDATE `c2_course` c set `publishedTaskNum` = (select count(*) from course_lesson where courseId=c.id and status = 'published')";
         $result = $this->getConnection()->exec($sql);
-    }
-
-    protected function updateCourseChapter()
-    {
-        $totalTasks = $this->getConnection()->fetchAll('SELECT * FROM `course_task`');
-
-        $totalTasks = \AppBundle\Common\ArrayToolkit::group($totalTasks, 'lessonId');
-
-        foreach ($totalTasks as $key => $tasks) {
-            if (count($tasks) < 2) {
-                continue;
-            }
-            foreach ($tasks as $task) {
-                if ($task['mode'] == 'lesson') {
-                    $categoryId = $task['categoryId'];
-                    continue;
-                }
-
-                $this->getConnection()->update(
-                    'course_task',
-                    array('categoryId' => $categoryId),
-                    array('id' => $task['id'])
-                );
-            }
-        }
     }
 
     protected function c2CourseMaterial()

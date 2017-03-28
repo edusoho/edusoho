@@ -22,7 +22,7 @@ class Homework2CourseTasMigrate extends AbstractMigrate
      * exercise datas convert to  activity
      * TODO datas should read from table tespaper.
      */
-    protected function homeworkToActivity()
+    protected function homeworkToActivity($start)
     {
         $this->getConnection()->exec(
           "
@@ -61,13 +61,13 @@ class Homework2CourseTasMigrate extends AbstractMigrate
               `ecopyId`,
               `hhomeworkId`
           FROM (SELECT  ee.id AS hhomeworkId, ee.`copyId` AS ecopyId , ce.*
-          FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonid limit {$start}, {$this->perPageCount}) lesson
+          FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonid limit 0, {$this->perPageCount}) lesson
           WHERE hhomeworkId NOT IN (SELECT homeworkId FROM activity WHERE homeworkId IS NOT NULL );
                   "
       );
     }
 
-    protected function homeworkToCourseTask()
+    protected function homeworkToCourseTask($start)
     {
         $this->exec(
           "
@@ -116,7 +116,7 @@ class Homework2CourseTasMigrate extends AbstractMigrate
             `hhomeworkId`,
             `id`
             FROM (SELECT  ee.id AS hhomeworkId, ee.`copyId` AS ecopyId , ce.*
-              FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonid limit {$start}, {$this->perPageCount}) lesson
+              FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonid limit 0, {$this->perPageCount}) lesson
                   WHERE lesson.hhomeworkId NOT IN (SELECT homeworkId FROM course_task WHERE homeworkId IS NOT NULL );
           "
       );
