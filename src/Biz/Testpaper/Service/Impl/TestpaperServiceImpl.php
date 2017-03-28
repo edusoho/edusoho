@@ -740,7 +740,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             throw $this->createNotFoundException($this->getKernel()->trans('试卷不存在!'));
         }
 
-        if ($paperResult['status'] == 'doing' && ($paperResult['userId'] != $user['id'])) {
+        if ($paperResult['status'] === 'doing' && ($paperResult['userId'] != $user['id'])) {
             throw $this->createNotFoundException('无权查看此试卷');
         }
 
@@ -751,7 +751,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $course = $this->getCourseService()->getCourse($paperResult['courseId']);
         $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
 
-        if ($member['role'] == 'teacher') {
+        if ($member['role'] === 'teacher') {
             return true;
         }
 
