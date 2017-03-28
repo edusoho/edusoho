@@ -1,9 +1,4 @@
 <?php
-/**
- * User: Edusoho V8
- * Date: 9/7/16
- * Time: 10:45
- */
 
 namespace Topxia\Component\Payment\Wxpay;
 
