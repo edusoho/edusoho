@@ -15,17 +15,17 @@
 
     {% if 'full' in shows or 'price' in shows %}
       {% if priceType == 'coin' %}
-        <span >{{ course.price * setting('coin.cash_rate')}} {{setting('coin.coin_name', '虚拟币'|trans)}}</span>
+        <span >{{ course.price * setting('coin.cash_rate')}} {{setting('coin.coin_name', 'finance.virtual_coin'|trans)}}</span>
       {% else %}
-        <span >{{'%price%元'|trans({'%price%': course.price})}}</span>
+        <span >{{'course.price.RMB'|trans({'%price%': course.price})}}</span>
       {% endif %}
     {% endif %}
 
     {% if 'full' in shows or 'originPrice' in shows %}
       {% if priceType == 'coin' %}
-        <span class="origin-price"><del>{{course.originPrice * setting('coin.cash_rate')}} {{setting('coin.coin_name', '虚拟币'|trans)}}</del></span>
+        <span class="origin-price"><del>{{course.originPrice * setting('coin.cash_rate')}} {{setting('coin.coin_name', 'finance.virtual_coin'|trans)}}</del></span>
       {% else %}
-        <span class="origin-price"><del>{{'%originPrice%元'|trans({'%originPrice%': course.originPrice})}}</del></span>
+        <span class="origin-price"><del>{{'course.origin_price.RMB'|trans({'%originPrice%': course.originPrice})}}</del></span>
       {% endif %}
     {% endif %}
 
@@ -33,9 +33,9 @@
 
       <span class="discount">
         {% if (courseSet.discount == 0) or (priceType == 'coin' and course.originPrice == 0) or (priceType == 'default' and course.originPrice == 0) %}
-          {{'限免'|trans}}
+          {{'course.price.limited_time_free'|trans}}
         {% else  %}
-          {{'%discount%折'|trans({'%discount%': courseSet.discount|round(2, 'common') })}}
+          {{'course.price.discount'|trans({'%discount%': courseSet.discount|round(2, 'common') })}}
         {% endif %}
       </span>
 
@@ -48,15 +48,15 @@
         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
           {% if course.price > 0 %} 
             {{ course.price * setting('coin.cash_rate')}}
-            {{setting('coin.coin_name', '虚拟币'|trans)}} 
+            {{setting('coin.coin_name', 'finance.virtual_coin'|trans)}} 
           {% else %} 
-            <span class="color-success">{{'免费'|trans}}</span> 
+            <span class="color-success">{{'course.price.free'|trans}}</span> 
           {% endif  %}
         {% else %}
           {% if course.price > 0 %}
-            {{'%price%元'|trans({'%price%': course.price})}}
+            {{'course.price.RMB'|trans({'%price%': course.price})}}
           {% else %} 
-            <span class="color-success">{{'免费'|trans}}</span> 
+            <span class="color-success">{{'course.price.free'|trans}}</span> 
           {% endif %} 
         {% endif %}
       </span>
@@ -64,7 +64,7 @@
 
     {% if 'originPrice' in shows %}
       {% if priceType == 'coin' %}
-        <span class="origin-price">{{course.originPrice * setting('coin.cash_rate')}}{{setting('coin.coin_name', '虚拟币'|trans)}}</span>
+        <span class="origin-price">{{course.originPrice * setting('coin.cash_rate')}}{{setting('coin.coin_name', 'finance.virtual_coin'|trans)}}</span>
       {% else %}
         ¥<span class="origin-price">{{course.originPrice}}</span>
       {% endif %}

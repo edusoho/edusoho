@@ -1,7 +1,10 @@
 #币种，货币面额
 currency.RMB: 元
 
-# 用户通用字段
+#时间
+time.month: 月
+
+# 用户通用
 user.fields.login_password: 登录密码
 user.fields.pay_password: 支付密码
 user.fileds.microblog: 微博
@@ -18,6 +21,14 @@ user.fields.mobile_label.bind: 已绑定
 user.fields.mobile_label.no_bind: 未绑定
 user.fields.company_label: 公司
 user.fileds.realname: 真实姓名
+user.fields.following: 关注
+user.fields.fan: 粉丝
+user.fields.no_title: 暂无头衔
+user.fields.no_sign: 暂无签名
+user.fields.no_introduction: 暂无简介
+user.btn.following_btn: 关注
+user.btn.followed_btn: 已关注
+user.btn.send_letter_btn: 私信
 
 #财务通用
 finance.income: 收入
@@ -64,12 +75,31 @@ order.payment_pattern.llpay: 连连支付
 order.payment_pattern.cash: 现金支付
 order.payment_pattern.other: 其他支付
 
+# 课程
+course: 课程
+course.price.RMB: %price%元
+course.origin_price.RMB: %originPrice%元
+course.price.free: 免费
+course.price.limited_time_free: 限免
+course.price.discount: %discount%折
+
+#公开课
+open_course: 公开课
+open_course.live: %live%直播 
+open_course.status.live: 正在直播
+open_course.status.living: 即将直播
+
+# 班级
+classroom: 班级
+classroom.courses_count: 共%courseNum%门课程
+
 # 表单通用
 form.btn.modify: 修改
 form.btn.set: 设置
 form.btn.reset: 重置
 form.btn.view: 查看
 form.btn.bind: 绑定
+form.btn.search: 搜索
 form.btn.bind_cancel: 取消绑定
 form.btn.submit: 提交
 form.btn.login: 登录
@@ -300,3 +330,108 @@ user.account_center.cards.invalid: 已作废
 user.account_center.cards.no_qualified_hint: 没有搜索到符合条件的 
 user.account_center.cards.moneycard_not_install_hint: 网站没有开启%coin_name%功能,学习卡功能暂时没法使用
 
+# 个人主页模块
+user.homepage: %nickname%的个人主页
+user.homepage.introductions: 个人介绍
+user.homepage.teaching_courses: 在教课程
+user.homepage.teaching_classrooms: 在教%name%
+user.homepage.learning_courses: 在学课程
+user.homepage.learning_classrooms: 在学%name%
+user.homepage.favorite_courses: 收藏课程
+user.homepage.joined_group: 加入小组
+user.homepage.following_fan: 关注 / 粉丝
+
+# 个人主页模块-个人介绍
+user.homepage.introductions.empty: 暂无介绍
+
+#个人主页模块-在教课程
+user.homepage.teaching_courses.empty: 无在教的课程
+
+#个人主页模块-在学课程
+user.homepage.learning_courses.empty: 无在学的课程
+
+#个人主页模块-收藏课程
+user.homepage.favorite_courses.empty: 无收藏的课程
+
+#个人主页模块-在教班级
+user.homepage.teaching_classrooms.empty: 无在教的%name%
+
+#个人主页模块-在学班级
+user.homepage.learning_classrooms.empty: 无在学的%name%！
+
+#个人主页模块-加入小组
+user.homepage.joined_group.join: 加入小组
+user.homepage.joined_group.manage: 管理小组
+user.homepage.joined_group.empty: 暂无小组信息！
+
+#个人主页模块-关注/粉丝
+user.homepage.following_fan.following_empty: 无关注的人
+user.homepage.following_fan.fan_empty: 无粉丝
+
+# 主页头部模块
+homepage.header.search: 搜索 
+homepage.header.login: 登录
+homepage.header.logout: 退出登录
+homepage.header.register: 注册
+homepage.header.my_course: 我的教学
+homepage.header.my_learning: 我的学习
+homepage.header.notice: 通知
+homepage.header.letter: 私信
+homepage.header.drop_menu.personal_menu: 个人主页
+homepage.header.drop_menu.settings_menu: 个人设置
+homepage.header.drop_menu.my_teaching_menu: 我的教学
+homepage.header.drop_menu.my_learning_menu: 我的学习
+homepage.header.drop_menu.account_menu: 账户中心
+homepage.header.drop_menu.admin_menu: 管理后台
+
+# 师资力量模块
+teacher.introductions: 师资介绍
+teacher.SEO.keywords: 师资介绍%name%
+teacher.SEO.description: %name%的师资介绍。
+teacher.content_title: 所有教师
+
+# 自定义页面模块-常见问题
+DIY_page.empty: 当前页面尚未编辑内容，请在管理后台编辑。
+
+# 搜索模块
+searching.empty: 没有搜到相关课程，请换个关键词试试！
+searching.content_title: 搜索
+searching.result_relevant_course_copy: 共找到<span>%count%</span>门<span>“%keywords%”</span>相关课程
+searching.result_course_copy: 共找到<span>%count%</span>门课程
+searching.all_courses: 全部课程
+searching.vip_courses: 会员课程
+searching.free_courses: 免费课程
+searching.live_courses: 直播课程
+
+# 云搜索模块
+cloud_searching.content_title: 搜索
+cloud_searching.result_sum: 个
+cloud_searching.common_keywords: 常用关键字
+cloud_searching.result: 搜索结果
+cloud_searching.all_courses: 全部课程
+cloud_searching.input_placeholder: 可搜索课程、教师、话题、资讯
+
+cloud_searching.course_type: 课程
+cloud_searching.course_type.result: 为您找到课程结果约
+cloud_searching.course_type.learning: 正在学
+cloud_searching.course_type.evaluate: 人评价
+cloud_searching.course_type.learned: 人学习
+cloud_searching.course_type.task: 课时
+cloud_searching.course_type.recommend.content_title: 推荐课程
+cloud_searching.course_type.recommend.empty: 暂无推荐课程
+
+cloud_searching.teacher_type: 教师
+cloud_searching.teacher_type.result: 为您找到教师结果约
+cloud_searching.teacher_type.recommend.content_title: 推荐教师
+cloud_searching.teacher_type.recommend.empty: 暂无推荐教师信息！
+
+cloud_searching.thread_type: 小组话题
+cloud_searching.thread_type.result: 为您找到话题结果约
+cloud_searching.thread_type.reply: 回复
+cloud_searching.thread_type.from: 来自
+cloud_searching.thread_type.recommend.content_title: 热门小组
+
+cloud_searching.article_type: 资讯
+cloud_searching.article_type.result: 为您找到资讯结果约
+cloud_searching.article_type.recommend.content_title: 热门资讯
+cloud_searching.article_type.recommend.empty: 暂无热门资讯

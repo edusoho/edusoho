@@ -8,8 +8,8 @@
 
 
 <ul class="nav nav-pills mbl">
-  <li {% if friendNav == 'following' %}class="active"{% endif %}><a href="{{ path('user_following', {id:user.id}) }}">{{'关注'|trans}}</a></li>
-  <li {% if friendNav == 'follower' %}class="active"{% endif %}><a href="{{ path('user_follower', {id:user.id}) }}">{{'粉丝'|trans}}</a></li>
+  <li {% if friendNav == 'following' %}class="active"{% endif %}><a href="{{ path('user_following', {id:user.id}) }}">{{'user.fields.following'|trans}}</a></li>
+  <li {% if friendNav == 'follower' %}class="active"{% endif %}><a href="{{ path('user_follower', {id:user.id}) }}">{{'user.fields.fan'|trans}}</a></li>
 </ul>
 
 <div class="row">
@@ -28,7 +28,7 @@
             {% if friend.title %}
               {{ friend.title|sub_text(12) }}
             {% else %}
-              {{'暂无头衔'|trans}}
+              {{'user.fields.no_title'|trans}}
             {% endif %}
           </div>
         </div>
@@ -41,9 +41,9 @@
           </div>
           <div class="metas">
             {% if not app.user or (friend.id != app.user.id) %}
-              <a class="btn btn-primary btn-sm follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:friend.id}) }}" {% if isFollowed %} style="display:none;"{% endif %} data-loggedin={% if app.user and app.user.isLogin() %}"1"{% else %}"0"{% endif %}>{{'关注'|trans}}</a>
-              <a class="btn btn-default btn-sm unfollow-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:friend.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>{{'已关注'|trans}}</a>
-              <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-backdrop="static"  data-url="{{path('message_create', {toId:friend.id})}}">{{'私信'|trans}}</a>
+              <a class="btn btn-primary btn-sm follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:friend.id}) }}" {% if isFollowed %} style="display:none;"{% endif %} data-loggedin={% if app.user and app.user.isLogin() %}"1"{% else %}"0"{% endif %}>{{'user.btn.following_btn'|trans}}</a>
+              <a class="btn btn-default btn-sm unfollow-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:friend.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>{{'user.btn.followed_btn'|trans}}</a>
+              <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-backdrop="static"  data-url="{{path('message_create', {toId:friend.id})}}">{{'user.btn.send_letter_btn'|trans}}</a>
             {% endif %}
           </div>
         </div>
@@ -51,9 +51,9 @@
     </div>
   {% else %}
     {% if friendNav == 'following' %}
-      <div class="empty">{{'无关注的人'|trans}}</div>
+      <div class="empty">{{'user.fields.following_empty'|trans}}</div>
     {% elseif friendNav == 'follower' %}
-      <div class="empty">{{'无粉丝'|trans}}</div>
+      <div class="empty">{{'user.fields.fan_empty'|trans}}</div>
     {% endif %}
   {% endfor %}
 </div>
