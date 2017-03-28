@@ -90,7 +90,7 @@ class JsApiPay
      *
      * @return openid
      */
-    public function GetOpenidFromMp($code)
+    public function getOpenidFromMp($code)
     {
         $url = $this->__createOauthUrlForOpenid($code);
         //初始化curl
