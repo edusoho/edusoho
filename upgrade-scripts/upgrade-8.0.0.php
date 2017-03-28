@@ -39,7 +39,6 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getStep($index)
     {
       $oldSteps = array(
-        'c2CourseTaskView',
         'c2CourseTaskResult',
         'c2ActivityLearnLog', // ?
         'c2Exercise',
@@ -86,7 +85,6 @@ class EduSohoUpgrade extends AbstractUpdater
         'Lesson2LiveActivityMigrate',
         'ActivityRelaLiveActivity',
         // next
-
 
         'AfterAllCourseTaskMigrate',
         'OtherMigrate'
@@ -606,59 +604,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
             $this->getConnection()->insert('course_task', $task);
         }
-    }
-
-    protected function c2CourseTaskView()
-    {
-        if (!$this->isTableExist('course_task_view')) {
-            $this->exec(
-                "
-                CREATE TABLE `course_task_view` (
-                  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `courseSetId` int(10) NOT NULL,
-                  `courseId` int(10) NOT NULL,
-                  `taskId` int(10) NOT NULL,
-                  `fileId` int(10) NOT NULL,
-                  `userId` int(10) NOT NULL,
-                  `fileType` varchar(80) NOT NULL,
-                  `fileStorage` varchar(80) NOT NULL,
-                  `fileSource` varchar(32) NOT NULL,
-                  `createdTime` int(10) unsigned NOT NULL,
-                  PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            "
-            );
-        }
-
-        $this->exec(
-            "
-            INSERT INTO `course_task_view`
-            (
-                `id`,
-                `courseSetId`,
-                `courseId`,
-                `taskId`,
-                `fileId`,
-                `userId`,
-                `fileType`,
-                `fileStorage`,
-                `fileSource`,
-                `createdTime`
-            )
-            SELECT
-                `id`,
-                `courseId`,
-                `courseId`,
-                `lessonId`,
-                `fileId`,
-                `userId`,
-                `fileType`,
-                `fileStorage`,
-                `fileSource`,
-                `createdTime`
-            FROM `course_lesson_view` WHERE id NOT IN (SELECT id FROM `course_task_view`);
-        "
-        );
     }
 
     protected function c2CourseTaskResult()
