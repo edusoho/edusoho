@@ -35,7 +35,7 @@ class InitCommand extends BaseCommand
         $initializer->initLockFile();
         $initializer->initRegisterSetting($user);
 
-        $this->installPhpCsFixerHook($output);
+        // $this->installPhpCsFixerHook($output);
 
         $output->writeln('<info>初始化系统完毕</info>');
     }

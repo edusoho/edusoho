@@ -343,7 +343,7 @@ class CourseController extends CourseBaseController
         $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
 
         $characteristicData = array();
-        $activities = $this->get('extension.default')->getActivities();
+        $activities = $this->get('extension.manager')->getActivities();
         foreach ($tasks as $task) {
             $type = strtolower($task['activity']['mediaType']);
 
@@ -658,7 +658,7 @@ class CourseController extends CourseBaseController
      */
     protected function prepareTab($tab)
     {
-        $metas = $this->container->get('extension.default')->getCourseShowMetas();
+        $metas = $this->container->get('course.extension')->getCourseShowMetas();
         $tabs = array_keys($metas['for_guest']['tabs']);
         if (!in_array($tab, $tabs)) {
             $tab = 'summary';

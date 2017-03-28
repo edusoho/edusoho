@@ -1928,12 +1928,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if (!empty($fields['buyExpiryTime'])) {
             $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime'] . ' 23:59:59');
-
-            return $fields;
         } else {
             $fields['buyExpiryTime'] = 0;
-
-            return $fields;
         }
+
+        return $fields;
     }
 }
