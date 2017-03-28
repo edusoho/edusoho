@@ -43,8 +43,7 @@ class Lesson2CourseTaskMigrate extends AbstractMigrate
 
         $countSql = 'SELECT count(*) from `course_lesson` WHERE `id` NOT IN (SELECT migrateLessonId FROM `course_task`)';
         $count = $this->getConnection()->fetchColumn($countSql);
-        $start = $this->getStart($page);
-        if ($count == 0 && $count < $start) {
+        if ($count == 0) {
             return;
         }
 
@@ -92,8 +91,8 @@ class Lesson2CourseTaskMigrate extends AbstractMigrate
                 `maxOnlineNum`,
                 `copyId`,
                 `id` as `migrateLessonId`
-            from `course_lesson` WHERE `id` NOT IN (SELECT id FROM `course_task`) order by id limit {$start}, {$this->perPageCount}");
+            from `course_lesson` WHERE `id` NOT IN (SELECT id FROM `course_task`) order by id limit 0, {$this->perPageCount}");
 
-        return $this->getNextPage($count, $page);
+        return $page++;
     }
 }

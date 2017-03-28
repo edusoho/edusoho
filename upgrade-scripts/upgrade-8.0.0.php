@@ -83,6 +83,9 @@ class EduSohoUpgrade extends AbstractUpdater
 
         'Lesson2LiveActivityMigrate',
         'ActivityRelaLiveActivity',
+
+        'CourseLessonView2CourseTaskView',
+        'CourseLessonLearn2CourseTaskResult',
         // next
 
         'AfterAllCourseTaskMigrate',
