@@ -146,6 +146,14 @@ class OtherMigrate extends AbstractMigrate
         }
     }
 
+    private function getUserByType()
+    {
+        $sql = "select * from user where type='scheduler' limit 1;";
+        $result = $this->getConnection()->fetchAssoc($sql);
+
+        return $result;
+    }
+
     public function update($page)
     {
         if ($page>12) {
