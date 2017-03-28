@@ -84,7 +84,7 @@ class CourseMigrate extends AbstractMigrate
         $result = $this->getConnection()->exec($sql);
 
         $sql = "UPDATE `c2_course` c2, `course` c set
-              ,c2.`title` = c.`title`
+              c2.`title` = c.`title`
               ,c2.`status` = c.`status`
               ,c2.`type` = c.`type`
               ,c2.`maxStudentNum` = c.`maxStudentNum`
@@ -127,7 +127,7 @@ class CourseMigrate extends AbstractMigrate
               ,c2.`creator` = c.`userId`
               ,c2.`vipLevelId` = c.`vipLevelId`
               ,c2.`tryLookLength` = c.`tryLookTime`
-              ,c2.`taskNum` = c.`taskNum`
+              ,c2.`taskNum` = c.`lessonNum`
               ,c2.`isFree` = case when c.`originPrice` = 0 then 1 else 0 end
               ,c2.`maxRate` = c.`maxRate`
           where c2.`id` = c.`id` and c2.`updatedTime` < c.`updatedTime`;
