@@ -23,11 +23,7 @@
       {% endif %}
       <li class="pt30 mb10 mll">
         学习有效期：
-        {% if course.expiryMode == 'forever' %}
-        永久有效
-        {% else %}
-          {% include 'course/header/parts/member-deadline-info.html.twig' %}
-        {% endif %}
+        {% include 'course/header/parts/member-deadline-info.html.twig' %}
       </li>
     </ul>
   </div>

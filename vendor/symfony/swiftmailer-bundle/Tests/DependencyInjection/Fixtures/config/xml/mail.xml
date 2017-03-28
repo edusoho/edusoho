@@ -6,7 +6,7 @@
                         http://symfony.com/schema/dic/swiftmailer http://symfony.com/schema/dic/swiftmailer/swiftmailer-1.0.xsd">
 
 
-    <swiftmailer:config
-        transport="mail"
-    />
+    <swiftmailer:config transport="mail">
+        <swiftmailer:spool />
+    </swiftmailer:config>
 </container>

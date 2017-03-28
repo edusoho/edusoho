@@ -85,25 +85,26 @@ EOT
         $generator = $this->getGenerator();
 
         $output->writeln(sprintf(
-            '> Generating a sample bundle skeleton into <info>%s</info>',
+            '> Generating a sample bundle skeleton into <info>%s</info> <comment>OK!</comment>',
             $this->makePathRelative($bundle->getTargetDirectory())
         ));
         $generator->generateBundle($bundle);
 
         $errors = array();
+        $runner = $questionHelper->getRunner($output, $errors);
 
         // check that the namespace is already autoloaded
-        $this->checkAutoloader($output, $bundle);
+        $runner($this->checkAutoloader($output, $bundle));
 
         // register the bundle in the Kernel class
-        $this->updateKernel($output, $this->getContainer()->get('kernel'), $bundle);
+        $runner($this->updateKernel($output, $this->getContainer()->get('kernel'), $bundle));
 
         // routing importing
-        $this->updateRouting($output, $bundle);
+        $runner($this->updateRouting($output, $bundle));
 
         if (!$bundle->shouldGenerateDependencyInjectionDirectory()) {
             // we need to import their services.yml manually!
-            $this->updateConfiguration($output, $bundle);
+            $runner($this->updateConfiguration($output, $bundle));
         }
 
         $questionHelper->writeGeneratorSummary($output, $errors);
@@ -261,7 +262,7 @@ EOT
 
     protected function checkAutoloader(OutputInterface $output, Bundle $bundle)
     {
-        $output->writeln('> Checking that the bundle is autoloaded');
+        $output->write('> Checking that the bundle is autoloaded: ');
         if (!class_exists($bundle->getBundleClassName())) {
             return array(
                 '- Edit the <comment>composer.json</comment> file and register the bundle',
@@ -275,8 +276,8 @@ EOT
     {
         $kernelManipulator = new KernelManipulator($kernel);
 
-        $output->writeln(sprintf(
-            '> Enabling the bundle inside <info>%s</info>',
+        $output->write(sprintf(
+            '> Enabling the bundle inside <info>%s</info>: ',
             $this->makePathRelative($kernelManipulator->getFilename())
         ));
 
@@ -305,8 +306,8 @@ EOT
     protected function updateRouting(OutputInterface $output, Bundle $bundle)
     {
         $targetRoutingPath = $this->getContainer()->getParameter('kernel.root_dir').'/config/routing.yml';
-        $output->writeln(sprintf(
-            '> Importing the bundle\'s routes from the <info>%s</info> file',
+        $output->write(sprintf(
+            '> Importing the bundle\'s routes from the <info>%s</info> file: ',
             $this->makePathRelative($targetRoutingPath)
         ));
         $routing = new RoutingManipulator($targetRoutingPath);
@@ -339,8 +340,8 @@ EOT
     protected function updateConfiguration(OutputInterface $output, Bundle $bundle)
     {
         $targetConfigurationPath = $this->getContainer()->getParameter('kernel.root_dir').'/config/config.yml';
-        $output->writeln(sprintf(
-            '> Importing the bundle\'s %s from the <info>%s</info> file',
+        $output->write(sprintf(
+            '> Importing the bundle\'s %s from the <info>%s</info> file: ',
             $bundle->getServicesConfigurationFilename(),
             $this->makePathRelative($targetConfigurationPath)
         ));
@@ -349,7 +350,7 @@ EOT
             $manipulator->addResource($bundle);
         } catch (\RuntimeException $e) {
             return array(
-                sprintf('- Import the bundle\'s "%s" resource in the app\'s main configuration file:', $bundle->getServicesConfigurationFilename()),
+                '- Import the bundle\'s %s resource in the app\'s main configuration file:',
                 '',
                 $manipulator->getImportCode($bundle),
                 '',
