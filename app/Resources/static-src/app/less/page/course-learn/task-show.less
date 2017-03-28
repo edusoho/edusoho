@@ -6,6 +6,9 @@
   background-color: #e5e5e5;
   height: 100%;
   padding-right: 360px;
+  @media(max-width:@screen-xs-min) {
+    padding-right: 0;
+  }
   .dashboard-content {
     position: absolute;
     left: 26px;
@@ -13,6 +16,10 @@
     top:0;
     padding-top: 54px;
     bottom: 70px;
+    @media(max-width:@screen-xs-min) {
+      right: 15px;
+      left: 15px;
+    }
     .dashboard-header {
       position: absolute;
       top:0;
@@ -61,6 +68,9 @@
       text-align: right;
       vertical-align: middle;
       min-width: 300px;
+      @media(max-width:@screen-xs-max) {
+        min-width: auto;
+      }
       >.btn {
         position: absolute;
         top: 60px;
@@ -100,6 +110,10 @@
     bottom: 0;
     width: 360px;
     right: -360px;
+    @media(max-width:@screen-xs-min) {
+      width: 320px;
+      right: -320px;
+    }
     background-color: #fff;
     .box-shadow(-1px 0 5px rgba(0,0,0,0.1));
   }
