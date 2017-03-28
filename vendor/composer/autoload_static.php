@@ -82,7 +82,6 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         ),
         'F' => 
         array (
-            'Flexihash\\' => 10,
             'Facebook\\WebDriver\\' => 19,
         ),
         'E' => 
@@ -230,10 +229,6 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         'Gregwar\\Captcha\\' => 
         array (
             0 => __DIR__ . '/..' . '/gregwar/captcha',
-        ),
-        'Flexihash\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/flexihash/flexihash/src',
         ),
         'Facebook\\WebDriver\\' => 
         array (
@@ -392,6 +387,13 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
             'Doctrine\\Common\\' => 
             array (
                 0 => __DIR__ . '/..' . '/doctrine/common/lib',
+            ),
+        ),
+        'C' => 
+        array (
+            'Canoma' => 
+            array (
+                0 => __DIR__ . '/..' . '/canoma/canoma/src',
             ),
         ),
         'B' => 
