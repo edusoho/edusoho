@@ -3,9 +3,9 @@
 namespace Biz\Notification\Job;
 
 use Biz\Crontab\Service\Job;
-use Topxia\Service\Common\ServiceKernel;
+use Codeages\Biz\Framework\Context\BizAware;
 
-class PushNotificationOneHourJob implements Job
+class PushNotificationOneHourJob extends BizAware implements Job
 {
     public function execute($params)
     {
@@ -41,21 +41,21 @@ class PushNotificationOneHourJob implements Job
 
     private function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->biz->service('Course:CourseService');
     }
 
     private function getCourseSetService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseSetService');
+        return $this->biz->service('Course:CourseSetService');
     }
 
     protected function getTaskService()
     {
-        return $this->getServiceKernel()->createService('Task:TaskService');
+        return $this->biz->service('Task:TaskService');
     }
 
     protected function getCloudDataService()
     {
-        return ServiceKernel::instance()->createService('CloudData:CloudDataService');
+        return $this->biz->service('CloudData:CloudDataService');
     }
 }
