@@ -70,16 +70,73 @@ class CourseMigrate extends AbstractMigrate
             $result = $this->getConnection()->exec($sql);
         }
 
-        $nextPage = $this->updateData($page);
+        $nextPage = $this->insertData($page);
         if (!empty($nextPage)) {
           return $nextPage;
         }
 
+        $this->updateDate();
+    }
+
+    private function updateDate()
+    {
         $sql = "UPDATE `c2_course` ce, `c2_course_set` cs  SET ce.`materialNum` = cs.`materialNum`  WHERE ce.`id` = cs.`id`";
+        $result = $this->getConnection()->exec($sql);
+
+        $sql = "UPDATE `c2_course` c2, `course` c set
+              ,c2.`title` = c.`title`
+              ,c2.`status` = c.`status`
+              ,c2.`type` = c.`type`
+              ,c2.`maxStudentNum` = c.`maxStudentNum`
+              ,c2.`price` = c.`price`
+              ,c2.`originCoinPrice` = c.`originCoinPrice`
+              ,c2.`coinPrice` = c.`coinPrice`
+              ,c2.`originPrice` = c.`originPrice`
+              ,c2.`expiryMode` = c.`expiryMode`
+              ,c2.`showStudentNumType` = c.`showStudentNumType`
+              ,c2.`serializeMode` = c.`serializeMode`
+              ,c2.`income` = c.`income`
+              ,c2.`giveCredit` = c.`giveCredit`
+              ,c2.`rating` = c.`rating`
+              ,c2.`ratingNum` = c.`ratingNum`
+              ,c2.`about` = c.`about`
+              ,c2.`teacherIds` = c.`teacherIds`
+              ,c2.`goals` = c.`goals`
+              ,c2.`audiences` = c.`audiences`
+              ,c2.`locationId` = c.`locationId`
+              ,c2.`address` = c.`address`
+              ,c2.`studentNum` = c.`studentNum`
+              ,c2.`deadlineNotify` = c.`deadlineNotify`
+              ,c2.`daysOfNotifyBeforeDeadline` = c.`daysOfNotifyBeforeDeadline`
+              ,c2.`useInClassroom` = c.`useInClassroom`
+              ,c2.`watchLimit` = c.`watchLimit`
+              ,c2.`singleBuy` = c.`singleBuy`
+              ,c2.`createdTime` = c.`createdTime`
+              ,c2.`updatedTime` = c.`updatedTime`
+              ,c2.`freeStartTime` = c.`freeStartTime`
+              ,c2.`freeEndTime` = c.`freeEndTime`
+              ,c2.`approval` = c.`approval`
+              ,c2.`parentId` = c.`parentId`
+              ,c2.`noteNum` = c.`noteNum`
+              ,c2.`locked` = c.`locked`
+              ,c2.`buyable` = c.`buyable`
+              ,c2.`buyExpiryTime` = c.`buyExpiryTime`
+              ,c2.`tryLookable` = c.`tryLookable`
+              ,c2.`summary` = c.`about`
+              ,c2.`cover` = concat('{\"large\":\"',c.largePicture,'\",\"middle\":\"',c.middlePicture,'\",\"small\":\"',c.smallPicture,'\"}') 
+              ,c2.`creator` = c.`userId`
+              ,c2.`vipLevelId` = c.`vipLevelId`
+              ,c2.`tryLookLength` = c.`tryLookTime`
+              ,c2.`taskNum` = c.`taskNum`
+              ,c2.`isFree` = case when c.`originPrice` = 0 then 1 else 0 end
+              ,c2.`maxRate` = c.`maxRate`
+          where c2.`id` = c.`id` and c2.`updatedTime` < c.`updatedTime`;
+        ";
+
         $result = $this->getConnection()->exec($sql);
     }
 
-    private function updateData($page)
+    private function insertData($page)
     {
         $countSql = 'SELECT count(*) FROM `course` where `id` not in (select `id` from `c2_course`)';
         $count = $this->getConnection()->fetchColumn($countSql);

@@ -46,16 +46,58 @@ class CourseSetMigrate extends AbstractMigrate
               $result = $this->getConnection()->exec($sql);
         }
 
-        
+        $nextPage = $this->insertCourseSet($page);
+        if (!empty($nextPage)) {
+          return $nextPage;
+        }
 
-        $sql = "UPDATE `c2_course_set` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.num  WHERE ce.id = cm.`courseId`;";
+        $this->updateCourseSet();
+    }
+
+    private function updateCourseSet()
+    {
+        $sql = "UPDATE `c2_course_set` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.`num`  WHERE ce.`id` = cm.`courseId`;";
         $result = $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE `c2_course_set` cs, `course` c SET cs.minCoursePrice = c.price, cs.maxCoursePrice = c.price where cs.id = c.id";
+        $sql = "UPDATE `c2_course_set` cs, `course` c SET cs.`minCoursePrice` = c.`price`, cs.`maxCoursePrice` = c.`price` where cs.`id` = c.`id`";
+        $result = $this->getConnection()->exec($sql);
+
+        $sql = "UPDATE `c2_course_set` ccs, `course` c  set 
+            ccs.`title` = c.`title`
+            ,ccs.`subtitle` = c.`subtitle`
+            ,ccs.`status` = c.`status`
+            ,ccs.`type` = c.`type`
+            ,ccs.`serializeMode` = c.`serializeMode`
+            ,ccs.`rating` = c.`rating`
+            ,ccs.`ratingNum` = c.`ratingNum`
+            ,ccs.`categoryId` = c.`categoryId`
+            ,ccs.`goals` = c.`goals`
+            ,ccs.`audiences` = c.`audiences`
+            ,ccs.`recommended` = c.`recommended`
+            ,ccs.`recommendedSeq` = c.`recommendedSeq`
+            ,ccs.`recommendedTime` = c.`recommendedTime`
+            ,ccs.`studentNum` = c.`studentNum`
+            ,ccs.`hitNum` = c.`hitNum`
+            ,ccs.`discountId` = c.`discountId`
+            ,ccs.`discount` = c.`discount`
+            ,ccs.`createdTime` = c.`createdTime`
+            ,ccs.`updatedTime` = c.`updatedTime`
+            ,ccs.`parentId` = c.`parentId`
+            ,ccs.`noteNum` = c.`noteNum`
+            ,ccs.`locked` = c.`locked`
+            ,ccs.`maxRate` = c.`maxRate`
+            ,ccs.`orgId` = c.`orgId`
+            ,ccs.`orgCode` = c.`orgCode`
+            ,ccs.`cover` = concat('{\"large\":\"',c.largePicture,'\",\"middle\":\"',c.middlePicture,'\",\"small\":\"',c.smallPicture,'\"}')
+            ,ccs.`creator` = c.`userId`
+            ,ccs.`summary` = c.`about`
+            ,ccs.`teacherIds` = c.`teacherIds`
+          where ccs.`id` = c.`id` and ccs.`updatedTime` < c.`updatedTime`
+        ";
         $result = $this->getConnection()->exec($sql);
     }
 
-    private function updateData($page)
+    private function insertCourseSet($page)
     {
         $countSql = 'SELECT count(*) FROM `course` where `id` not in (select `id` from `c2_course_set`)';
         $count = $this->getConnection()->fetchColumn($countSql);
