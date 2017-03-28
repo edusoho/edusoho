@@ -8,6 +8,10 @@ parameters:
     locale:            zh_CN
     secret:            ThisTokenIsNotSoSecretChangeIt
 
+    #cache集群配置
+    #cache_options:
+    #  - { host: "127.0.0.1", port: 6378, timeout: 1, reserved: null, retry_interval: 100}
+
     #扩展参数
     #oauth2_clients: #oauth2客户端配置
     #    third_party_oauth:
