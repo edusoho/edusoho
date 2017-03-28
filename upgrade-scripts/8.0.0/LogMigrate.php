@@ -1,6 +1,6 @@
 <?php
 
-class log extends AbstractMigrate
+class LogMigrate extends AbstractMigrate
 {
     public function update($page)
     {
