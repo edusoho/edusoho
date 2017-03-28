@@ -2,16 +2,16 @@
 
 use Phpmig\Migration\Migration;
 
-class AddC2Testpaper extends Migration
+class AddTestpaperV8 extends Migration
 {
     /**
-     * Do the migration.
+     * Do the migration
      */
     public function up()
     {
         $biz = $this->getContainer();
         $biz['db']->exec("
-            CREATE TABLE IF NOT EXISTS `c2_testpaper` (
+            CREATE TABLE IF NOT EXISTS `testpaper_v8` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
               `name` varchar(255) NOT NULL DEFAULT '' COMMENT '试卷名称',
               `description` text COMMENT '试卷说明',
@@ -32,11 +32,11 @@ class AddC2Testpaper extends Migration
               `copyId` int(10) NOT NULL DEFAULT '0' COMMENT '复制试卷对应Id',
               `type` varchar(32) NOT NULL DEFAULT 'testpaper' COMMENT '测验类型',
               `courseSetId` int(11) unsigned NOT NULL DEFAULT '0',
-              `oldTestId` int(11) unsigned NOT NULL DEFAULT '0',
+              `migrateTestId` int(11) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE IF NOT EXISTS `c2_testpaper_item` (
+            CREATE TABLE IF NOT EXISTS `testpaper_item_v8` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '题目',
               `testId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属试卷',
               `seq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目顺序',
@@ -46,12 +46,12 @@ class AddC2Testpaper extends Migration
               `score` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '分值',
               `missScore` float(10,1) unsigned NOT NULL DEFAULT '0.0',
               `copyId` int(10) NOT NULL DEFAULT '0' COMMENT '复制来源testpaper_item的id',
-              `oldItemId` int(11) unsigned NOT NULL DEFAULT '0',
-              `type` varchar(32) NOT NULL DEFAULT 'testpaper' COMMENT '测验类型',
+              `migrateItemId` int(11) unsigned NOT NULL DEFAULT '0',
+              `migrateType` varchar(32) NOT NULL DEFAULT 'testpaper' COMMENT '测验类型',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-            CREATE TABLE IF NOT EXISTS `c2_testpaper_result` (
+            CREATE TABLE IF NOT EXISTS `testpaper_result_v8` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
               `paperName` varchar(255) NOT NULL DEFAULT '',
               `testId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'testId',
@@ -76,11 +76,11 @@ class AddC2Testpaper extends Migration
               `usedTime` int(10) unsigned NOT NULL DEFAULT '0',
               `type` varchar(32) NOT NULL DEFAULT 'testpaper' COMMENT '测验类型',
               `courseSetId` int(11) unsigned NOT NULL DEFAULT '0',
-              `oldResultId` int(11) unsigned NOT NULL DEFAULT '0',
+              `migrateResultId` int(11) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE IF NOT EXISTS `c2_testpaper_item_result` (
+            CREATE TABLE IF NOT EXISTS `testpaper_item_result_v8` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `itemId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷题目id',
               `testId` int(10) unsigned NOT NULL DEFAULT '0',
@@ -92,17 +92,17 @@ class AddC2Testpaper extends Migration
               `answer` text,
               `teacherSay` text,
               `pId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '复制试卷题目Id',
-              `oldItemResultId` int(11) unsigned NOT NULL DEFAULT '0',
-              `type` varchar(32) NOT NULL DEFAULT 'testpaper' COMMENT '测验类型',
+              `migrateItemResultId` int(11) unsigned NOT NULL DEFAULT '0',
+              `migrateType` varchar(32) NOT NULL DEFAULT 'testpaper' COMMENT '测验类型',
               PRIMARY KEY (`id`),
               KEY `testPaperResultId` (`resultId`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         ");
 
         //以下仅供cours2.0开发使用
-        if ($this->isFieldExist('testpaper', 'courseSetId')) {
+        if ($this->isTableExist('c2_testpaper')) {
             $biz['db']->exec('
-                INSERT INTO c2_testpaper (
+                INSERT INTO testpaper_v8 (
                     id,
                     name,
                     description,
@@ -143,12 +143,12 @@ class AddC2Testpaper extends Migration
                     metas,
                     copyId,
                     type,
-                    courseSetId FROM testpaper
-                    WHERE id NOT IN (SELECT `id` FROM `c2_testpaper`);
+                    courseSetId FROM c2_testpaper
+                    WHERE id NOT IN (SELECT `id` FROM `testpaper_v8`);
             ');
 
             $biz['db']->exec('
-                INSERT INTO c2_testpaper_item (
+                INSERT INTO testpaper_item_v8 (
                     id,
                     testId,
                     seq,
@@ -167,12 +167,12 @@ class AddC2Testpaper extends Migration
                     parentId,
                     score,
                     missScore,
-                    copyId FROM testpaper_item
-                WHERE id NOT IN (SELECT `id` FROM `c2_testpaper_item`)
+                    copyId FROM c2_testpaper_item
+                WHERE id NOT IN (SELECT `id` FROM `testpaper_item_v8`)
             ');
 
             $biz['db']->exec('
-                INSERT INTO c2_testpaper_result(
+                INSERT INTO testpaper_result_v8(
                     id,
                     paperName,
                     testId,
@@ -222,11 +222,11 @@ class AddC2Testpaper extends Migration
                     usedTime,
                     type,
                     courseSetId
-                FROM testpaper_result WHERE id NOT IN (SELECT id FROM c2_testpaper_result)
+                FROM c2_testpaper_result WHERE id NOT IN (SELECT id FROM testpaper_result_v8)
             ');
 
             $biz['db']->exec('
-                INSERT INTO c2_testpaper_item_result (
+                INSERT INTO testpaper_item_result_v8 (
                     id,
                     itemId,
                     testId,
@@ -250,27 +250,27 @@ class AddC2Testpaper extends Migration
                     answer,
                     teacherSay,
                     pId
-                FROM testpaper_item_result WHERE id NOT IN (SELECT id FROM c2_testpaper_item_result)
+                FROM c2_testpaper_item_result WHERE id NOT IN (SELECT id FROM testpaper_item_result_v8)
             ');
         }
     }
 
     /**
-     * Undo the migration.
+     * Undo the migration
      */
     public function down()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec(' drop table c2_testpaper');
-        $biz['db']->exec(' drop table c2_testpaper_item');
-        $biz['db']->exec(' drop table c2_testpaper_result');
-        $biz['db']->exec(' drop table c2_testpaper_item_result');
+        $biz['db']->exec(' drop table testpaper_v8');
+        $biz['db']->exec(' drop table testpaper_item_v8');
+        $biz['db']->exec(' drop table testpaper_result_v8');
+        $biz['db']->exec(' drop table testpaper_item_result_v8');
     }
 
-    protected function isFieldExist($table, $filedName)
+    protected function isTableExist($table)
     {
         $biz = $this->getContainer();
-        $sql = "DESCRIBE `{$table}` `{$filedName}`;";
+        $sql = "SHOW TABLES LIKE '{$table}'";
         $result = $biz['db']->fetchAssoc($sql);
 
         return empty($result) ? false : true;
