@@ -39,6 +39,10 @@ security:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        crontab:
+            pattern: ^/crontab$
+            security: false
+
         main:
             pattern:    /.*
             form_login:
