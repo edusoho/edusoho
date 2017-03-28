@@ -1,0 +1,41 @@
+'use strict';
+
+var _pptPlayer = require('../../../common/ppt-player');
+
+var _pptPlayer2 = _interopRequireDefault(_pptPlayer);
+
+var _activityEmitter = require('../activity-emitter');
+
+var _activityEmitter2 = _interopRequireDefault(_activityEmitter);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var emitter = new _activityEmitter2.default();
+var $content = $('#activity-ppt-content');
+var watermarkUrl = $content.data('watermarkUrl');
+
+var createPPT = function createPPT(watermark) {
+  var ppt = new _pptPlayer2.default({
+    element: '#activity-ppt-content',
+    slides: $content.data('slides').split(','),
+    watermark: watermark
+  });
+
+  if ($content.data('finishType') === 'end') {
+    ppt.once('end', function (data) {
+      emitter.emit('finish', data);
+    });
+  }
+
+  return ppt;
+};
+
+if (watermarkUrl === undefined) {
+  var ppt = createPPT();
+} else {
+  $.get(watermarkUrl).then(function (watermark) {
+    var ppt = createPPT(watermark);
+  }).fail(function (error) {
+    console.error(error);
+  });
+}

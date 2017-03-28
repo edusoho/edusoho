@@ -1,0 +1,33 @@
+'use strict';
+
+var _help = require('app/js/course-manage/help');
+
+var _intro = require('./intro');
+
+var _intro2 = _interopRequireDefault(_intro);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+(0, _help.publishCourse)();
+
+if (isTaskCreatePage()) {
+  undefined.initTaskCreatePageIntro();
+}
+if (isInitTaskDetailIntro()) {}
+
+//加载到
+
+function isTaskCreatePage() {
+  return $('#step-3').length;
+}
+
+function isInitTaskDetailIntro() {
+  return !!$('.js-settings-list').lenght;
+}
+
+var intro = new _intro2.default();
+intro.init();
+// 判断是否有任务有任务的时候直接展示第一个任务
+if ($('.js-settings-list').lenght > 0) {
+  intro.initTaskDetailIntro('.js-settings-list');
+}

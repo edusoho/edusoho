@@ -1,0 +1,51 @@
+'use strict';
+
+var _notify = require('common/notify');
+
+var _notify2 = _interopRequireDefault(_notify);
+
+require('common/select2');
+
+require('app/js/classroom-manage/classroom-create');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var editor_classroom_about = CKEDITOR.replace('about', {
+  allowedContent: true,
+  toolbar: 'Detail',
+  filebrowserImageUploadUrl: $('#about').data('imageUploadUrl'),
+  filebrowserFlashUploadUrl: $('#about').data('flashUploadUrl')
+});
+
+$('[data-role="tree-select"], [name="categoryId"]').select2({
+  treeview: true,
+  dropdownAutoWidth: true,
+  treeviewInitState: 'collapsed',
+  placeholderOption: 'first'
+});
+
+var validator = $('#classroom-set-form').validate({
+  onkeyup: false,
+  rules: {
+    title: {
+      required: true
+    }
+  }
+});
+
+$('[name="expiryMode"]').change(function () {
+  if ($('[name="expiryMode"]:checked').val() === 'date') {
+    $('.js-expiryValue-date').removeClass('hidden');
+    $('.js-expiryValue-days').addClass('hidden');
+  } else if ($('[name="expiryMode"]:checked').val() === 'days') {
+    $('.js-expiryValue-date').addClass('hidden');
+    $('.js-expiryValue-days').removeClass('hidden');
+  } else {
+    $('.js-expiryValue-date').removeClass('hidden').addClass('hidden');
+    $('.js-expiryValue-days').removeClass('hidden').addClass();
+  }
+});
+
+$('#classroom-save').click(function () {
+  validator.form();
+});

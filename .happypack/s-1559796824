@@ -1,0 +1,139 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _questionSubjective = require('../question-subjective');
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var QuestionPicker = function () {
+  function QuestionPicker($questionPickerBody, $questionAppendForm) {
+    _classCallCheck(this, QuestionPicker);
+
+    this.$questionPickerBody = $questionPickerBody;
+    this.$questionPickerModal = this.$questionPickerBody.closest('.modal');
+    this.$questionAppendForm = $questionAppendForm;
+    this._initEvent();
+  }
+
+  _createClass(QuestionPicker, [{
+    key: '_initEvent',
+    value: function _initEvent() {
+      var _this = this;
+
+      this.$questionPickerBody.find('[data-role="search-btn"]').on('click', function (event) {
+        return _this.searchQuestion(event);
+      });
+      this.$questionPickerBody.find('[data-role="picked-item"]').on('click', function (event) {
+        return _this.pickItem(event);
+      });
+      this.$questionPickerBody.find('[data-role="preview-btn"]').on('click', function (event) {
+        return _this.questionPreview(event);
+      });
+      this.$questionPickerBody.find('.pagination a').on('click', function (event) {
+        return _this.pagination(event);
+      });
+
+      var $batchSelectSave = $('[data-role="batch-select-save"]', window.parent.document);
+      $batchSelectSave.on('click', function (event) {
+        return _this.batchSelectSave(event);
+      });
+    }
+  }, {
+    key: 'pagination',
+    value: function pagination(event) {
+      var _this2 = this;
+
+      var $btn = $(event.currentTarget);
+      $.get($btn.attr('href'), function (html) {
+        _this2.$questionPickerModal.html(html);
+      });
+      return false;
+    }
+  }, {
+    key: 'searchQuestion',
+    value: function searchQuestion(event) {
+      var _this3 = this;
+
+      event.preventDefault();
+      var $this = $(event.currentTarget);
+      var $form = $this.closest('form');
+      $.get($form.attr('action'), $form.serialize(), function (html) {
+        console.log(html);
+        _this3.$questionPickerModal.html(html);
+      });
+    }
+  }, {
+    key: 'pickItem',
+    value: function pickItem(event) {
+      var $target = $(event.currentTarget);
+      var replace = parseInt($target.data('replace'));
+      var questionId = $target.data('questionId');
+      var questionIds = [];
+      questionIds.push(questionId);
+
+      this.pickItemGet($target.data('url'), questionIds, replace);
+    }
+  }, {
+    key: 'pickItemGet',
+    value: function pickItemGet(url, questionIds) {
+      var _this4 = this;
+
+      var replace = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
+      $.get(url, { questionIds: questionIds }, function (html) {
+        if (replace) {
+          _this4.$questionAppendForm.find('tr[data-id="' + replace + '"]').replaceWith(html);
+          _this4.$questionAppendForm.find('tr[data-parent-id="' + replace + '"]').remove();
+        } else {
+          console.log(_this4.$questionAppendForm.length);
+          _this4.$questionAppendForm.find('tbody:visible').append(html).removeClass('hide');
+        }
+        _this4._refreshSeqs();
+        (0, _questionSubjective.questionSubjectiveRemask)(_this4.$questionAppendForm);
+        _this4.$questionPickerModal.modal('hide');
+      });
+    }
+  }, {
+    key: 'questionPreview',
+    value: function questionPreview(event) {
+      window.open($(event.currentTarget).data('url'), '_blank', "directories=0,height=580,width=820,scrollbars=1,toolbar=0,status=0,menubar=0,location=0");
+    }
+  }, {
+    key: 'batchSelectSave',
+    value: function batchSelectSave(event) {
+      var $target = $(event.currentTarget);
+      var questionIds = [];
+      var url = $target.data('url');
+
+      this.$questionPickerBody.find('[data-role="batch-item"]:checked').each(function (index, item) {
+        var questionId = $(this).data('questionId');
+        questionIds.push(questionId);
+      });
+
+      this.pickItemGet(url, questionIds, null);
+    }
+  }, {
+    key: '_refreshSeqs',
+    value: function _refreshSeqs() {
+      var seq = 1;
+      this.$questionAppendForm.find('tbody tr').each(function (index, item) {
+        var $tr = $(item);
+
+        if (!$tr.hasClass('have-sub-questions')) {
+          $tr.find('td.seq').html(seq);
+          seq++;
+        }
+      });
+      this.$questionAppendForm.find('[name="questionLength"]').val(seq - 1 > 0 ? seq - 1 : null);
+    }
+  }]);
+
+  return QuestionPicker;
+}();
+
+exports.default = QuestionPicker;

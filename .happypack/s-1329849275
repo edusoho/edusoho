@@ -1,0 +1,86 @@
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _notify = require('common/notify');
+
+var _notify2 = _interopRequireDefault(_notify);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Students = function () {
+  function Students() {
+    _classCallCheck(this, Students);
+
+    this.initTooltips();
+    this.initDeleteActions();
+    this.initFollowActions();
+    this.initExportActions();
+  }
+
+  _createClass(Students, [{
+    key: 'initTooltips',
+    value: function initTooltips() {
+      $("#refund-coin-tips").popover({
+        html: true,
+        trigger: 'hover', //'hover','click'
+        placement: 'left', //'bottom',
+        content: $("#refund-coin-tips-html").html()
+      });
+    }
+  }, {
+    key: 'initDeleteActions',
+    value: function initDeleteActions() {
+      $('body').on('click', '.js-remove-student', function (evt) {
+        if (!confirm(Translator.trans('是否确定删除该学员？'))) {
+          return;
+        }
+        $.post($(evt.target).data('url'), function (data) {
+          if (data.success) {
+            (0, _notify2.default)('success', '移除成功');
+            location.reload();
+          } else {
+            (0, _notify2.default)('danger', '移除失败：' + data.message);
+          }
+        });
+      });
+    }
+  }, {
+    key: 'initFollowActions',
+    value: function initFollowActions() {
+      $("#course-student-list").on('click', '.follow-student-btn, .unfollow-student-btn', function () {
+        var $this = $(this);
+        $.post($this.data('url'), function () {
+          $this.hide();
+          if ($this.hasClass('follow-student-btn')) {
+            $this.parent().find('.unfollow-student-btn').show();
+          } else {
+            $this.parent().find('.follow-student-btn').show();
+          }
+        });
+      });
+    }
+  }, {
+    key: 'initExportActions',
+    value: function initExportActions() {
+      $('#export-students-btn').on('click', function () {
+        $(this).button('loading');
+        var self = $(this);
+        $.get($(this).data('datasUrl'), { start: 0 }, function (response) {
+          if (response.status === 'getData') {
+            exportStudents(response.start, response.fileName);
+          } else {
+            self.button('reset');
+            location.href = self.data('url') + '?fileName=' + response.fileName;
+          }
+        });
+      });
+    }
+  }]);
+
+  return Students;
+}();
+
+new Students();

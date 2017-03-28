@@ -1,0 +1,39 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+/**
+ * [description]
+ * @param  {[string]} $item [te]
+ * @return {[type]}       [description]
+ */
+var initEditor = exports.initEditor = function initEditor($item, validator) {
+  var _CKEDITOR$replace;
+
+  CKEDITOR.replace('summary', {
+    allowedContent: true,
+    toolbar: 'Detail',
+    filebrowserImageUploadUrl: $('#courseset-summary-field').data('imageUploadUrl')
+  });
+  var editor = CKEDITOR.replace('text-content-field', (_CKEDITOR$replace = {
+    toolbar: 'Detail'
+  }, _defineProperty(_CKEDITOR$replace, 'toolbar', 'Full'), _defineProperty(_CKEDITOR$replace, 'filebrowserImageUploadUrl', $('#text-content-field').data('imageUploadUrl')), _defineProperty(_CKEDITOR$replace, 'filebrowserFlashUploadUrl', $('#text-content-field').data('flashUploadUrl')), _defineProperty(_CKEDITOR$replace, 'allowedContent', true), _defineProperty(_CKEDITOR$replace, 'height', 300), _defineProperty(_CKEDITOR$replace, 'chkFull', false), _CKEDITOR$replace));
+
+  console.log(editor);
+  editor.on('change', function () {
+    $item.val(editor.getData());
+  });
+
+  editor.on('blur', function () {
+    $item.val(editor.getData()); //ie11
+    if (validator) {
+      validator.form();
+    }
+  });
+
+  return editor;
+};

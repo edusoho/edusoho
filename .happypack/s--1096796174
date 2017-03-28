@@ -1,0 +1,41 @@
+'use strict';
+
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _multiInput = require('app/common/component/multi-input');
+
+var _multiInput2 = _interopRequireDefault(_multiInput);
+
+var _sortable = require('common/sortable');
+
+var _sortable2 = _interopRequireDefault(_sortable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+CKEDITOR.replace('summary', {
+  allowedContent: true,
+  toolbar: 'Detail',
+  filebrowserImageUploadUrl: $('#courseset-summary-field').data('imageUploadUrl')
+});
+
+$('#courseset-submit').click(function (evt) {
+  console.log($('#courseset-detail-form').serializeArray());
+  $(evt.currentTarget).button('loading');
+  $('#courseset-detail-form').submit();
+});
+
+function renderMultiGroupComponent(elementId, name) {
+  var datas = $('#' + elementId).data('init-value');
+  _reactDom2.default.render(_react2.default.createElement(_multiInput2.default, { dataSource: datas,
+    outputDataElement: name,
+    sortable: true }), document.getElementById(elementId));
+}
+
+renderMultiGroupComponent('course-goals', 'goals');
+renderMultiGroupComponent('intended-students', 'audiences');

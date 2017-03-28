@@ -1,0 +1,3 @@
+'use strict';
+
+$('.js-service-item').click(function () {});

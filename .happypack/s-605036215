@@ -1,0 +1,72 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Created by Simon on 2016/11/18.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
+
+require("store");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var DurationStorage = function () {
+  function DurationStorage() {
+    _classCallCheck(this, DurationStorage);
+  }
+
+  _createClass(DurationStorage, null, [{
+    key: "set",
+    value: function set(userId, fileId, duration) {
+      var durations = store.get("durations", {});
+      if (!durations || !(durations instanceof Array)) {
+        durations = new Array();
+      }
+
+      var value = userId + "-" + fileId + ":" + duration;
+      if (durations.length > 0 && durations.slice(durations.length - 1, durations.length)[0].indexOf(userId + "-" + fileId) > -1) {
+        durations.splice(durations.length - 1, durations.length);
+      }
+      if (durations.length >= 20) {
+        durations.shift();
+      }
+      durations.push(value);
+      store.set("durations", durations);
+    }
+  }, {
+    key: "get",
+    value: function get(userId, fileId) {
+      var durationTmpArray = store.get("durations", {});
+      if (durationTmpArray) {
+        for (var i = 0; i < durationTmpArray.length; i++) {
+          var index = durationTmpArray[i].indexOf(userId + "-" + fileId);
+          if (index > -1) {
+            var key = durationTmpArray[i];
+            return parseFloat(key.split(":")[1]) - 5;
+          }
+        }
+      }
+      return 0;
+    }
+  }, {
+    key: "del",
+    value: function del(userId, fileId) {
+      var key = userId + "-" + fileId;
+      var durationTmpArray = store.get("durations");
+      for (var i = 0; i < durationTmpArray.length; i++) {
+        var index = durationTmpArray[i].indexOf(userId + "-" + fileId);
+        if (index > -1) {
+          durationTmpArray.splice(i, 1);
+        }
+      }
+      store.set("durations", durationTmpArray);
+    }
+  }]);
+
+  return DurationStorage;
+}();
+
+exports.default = DurationStorage;

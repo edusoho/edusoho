@@ -1,0 +1,116 @@
+'use strict';
+
+var _notify = require('common/notify');
+
+var _notify2 = _interopRequireDefault(_notify);
+
+require('common/select2');
+
+require('app/js/classroom-manage/classroom-create');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var validator = $('#classroom-set-form').validate({
+  rules: {
+    title: {
+      required: true
+    }
+  }
+});
+
+toggleExpiryValue($("[name=expiryMode]:checked").val());
+
+$('#classroom-save').click(function () {
+  validator.form();
+});
+
+var editor_classroom_about = CKEDITOR.replace('about', {
+  allowedContent: true,
+  toolbar: 'Detail',
+  filebrowserImageUploadUrl: $('#about').data('imageUploadUrl'),
+  filebrowserFlashUploadUrl: $('#about').data('flashUploadUrl')
+});
+
+$('[data-role="tree-select"], [name="categoryId"]').select2({
+  treeview: true,
+  dropdownAutoWidth: true,
+  treeviewInitState: 'collapsed',
+  placeholderOption: 'first'
+});
+
+$("[name='expiryMode']").change(function () {
+  if (app.arguments.classroomStatus == 'published') {
+    return false;
+  }
+  var expiryValue = $("[name='expiryValue']").val();
+  if (expiryValue) {
+    if (expiryValue.match("-")) {
+      $("[name='expiryValue']").data('date', $("[name='expiryValue']").val());
+    } else {
+      $("[name='expiryValue']").data('days', $("[name='expiryValue']").val());
+    }
+    $("[name='expiryValue']").val('');
+  }
+  if ($(this).val() == 'none') {
+    $('.expiry-value-js').addClass('hidden');
+  } else {
+    $('.expiry-value-js').removeClass('hidden');
+    var $esBlock = $('.expiry-value-js > .controls > .help-block');
+    $esBlock.text($esBlock.data($(this).val()));
+    toggleExpiryValue($(this).val());
+  }
+});
+
+function toggleExpiryValue(expiryMode) {
+  if (!$("[name='expiryValue']").val()) {
+    $("[name='expiryValue']").val($("[name='expiryValue']").data(expiryMode));
+  }
+  switch (expiryMode) {
+    case 'days':
+      $('[name="expiryValue"]').datetimepicker('remove');
+      $(".expiry-value-js .controls > span").removeClass('hidden');
+      break;
+    case 'date':
+      $(".expiry-value-js .controls > span").addClass('hidden');
+      $("#classroom_expiryValue").datetimepicker({
+        language: 'zh-CN',
+        autoclose: true,
+        format: 'yyyy-mm-dd',
+        minView: 'month',
+        endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)
+      });
+      $("#classroom_expiryValue").datetimepicker('setStartDate', new Date());
+      break;
+    default:
+      break;
+  }
+}
+
+function getExpiryModeDaysRules() {
+  return {
+    required: true,
+    positive_currency: true,
+    messages: {
+      required: '请输入有效期天数'
+    }
+  };
+}
+
+function getExpiryModeDateRules() {
+  return {
+    required: true,
+    data: true,
+    messages: {
+      required: '请输入截至日期',
+      after_now_date: true
+    }
+  };
+}
+
+function elementAddRules($element, options) {
+  $element.rules("add", options);
+}
+
+function elementRemoveRules($element) {
+  $element.rules('remove');
+}

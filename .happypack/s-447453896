@@ -1,0 +1,99 @@
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _fileChoose = require('../../file-chooser/file-choose');
+
+var _fileChoose2 = _interopRequireDefault(_fileChoose);
+
+var _chooserUi = require('../widget/chooser-ui.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Audio = function () {
+  function Audio() {
+    _classCallCheck(this, Audio);
+
+    (0, _chooserUi.showChooserType)($('[name="ext[mediaId]"]'));
+    this.inItStep2form();
+    this.autoValidatorLength();
+    this.initfileChooser();
+  }
+
+  _createClass(Audio, [{
+    key: 'inItStep2form',
+    value: function inItStep2form() {
+      var $step2_form = $('#step2-form');
+      var validator = $step2_form.data('validator');
+
+      $step2_form.validate({
+        groups: {
+          nameGroup: 'minute second'
+        },
+        rules: {
+          title: {
+            required: true,
+            maxlength: 50,
+            trim: true
+          },
+          minute: 'required unsigned_integer unsigned_integer',
+          second: 'required second_range unsigned_integer',
+          'ext[mediaId]': 'required'
+        },
+        messages: {
+          minute: {
+            required: '请输入时长',
+            unsigned_integer: '时长必须大于0'
+          },
+          second: {
+            required: '请输入时长',
+            second_range: '秒只能在0-59之间',
+            unsigned_integer: '时长必须大于0'
+          },
+          'ext[mediaId]': '请上传或选择%display%'
+        }
+      });
+    }
+  }, {
+    key: 'autoValidatorLength',
+    value: function autoValidatorLength() {
+      $(".js-length").blur(function () {
+        var validator = $("#step2-form").data('validator');
+        if (validator && validator.form()) {
+          var minute = parseInt($('#minute').val()) | 0;
+          var second = parseInt($('#second').val()) | 0;
+          $("#length").val(minute * 60 + second);
+        }
+      });
+    }
+  }, {
+    key: 'initfileChooser',
+    value: function initfileChooser() {
+      var fileChooser = new _fileChoose2.default();
+      var onSelectFile = function onSelectFile(file) {
+        (0, _chooserUi.chooserUiClose)();
+        if (file.length) {
+          var minute = parseInt(file.length / 60);
+          var second = Math.round(file.length % 60);
+          $("#minute").val(minute);
+          $("#second").val(second);
+          $("#length").val(minute * 60 + second);
+        }
+        $('[name="ext[mediaId]"]').val(file.source);
+        if (file.source == 'self') {
+          $("#ext_mediaId").val(file.id);
+          $("#ext_mediaUri").val('');
+        } else {
+          $("#ext_mediaId").val('');
+          $("#ext_mediaUri").val(file.uri);
+        }
+      };
+
+      fileChooser.on('select', onSelectFile);
+    }
+  }]);
+
+  return Audio;
+}();

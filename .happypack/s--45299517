@@ -1,0 +1,71 @@
+'use strict';
+
+echo.init();
+var main = {
+    init: function init() {
+        main.displayCategory();
+        main.carouselCid();
+        main.courseNav();
+        main.animateAd();
+    },
+    displayCategory: function displayCategory() {
+        var $ul = $('.ul-list'),
+            $li = $ul.find("li.course-list"),
+            $liLen = $li.length;
+        if ($liLen > 7) {
+            $ul.find('.course-jiantou i').show();
+            $li.each(function (index, dom) {
+                if (index > 7) {
+                    $(dom).removeClass('hidden').appendTo($ul.find(".dropdown-menu"));
+                }
+            });
+        }
+    },
+    _changeCarouseBg: function _changeCarouseBg() {
+        var bgActive = $('.carousel-inner .active');
+        if (bgActive.length >= 1) {
+            $('.index-poster').css('background-color', bgActive.css('background-color'));
+        }
+    },
+    carouselCid: function carouselCid(dely) {
+        var $this = $(".index-poster .carousel-inner .item");
+        var timer = dely || 4000;
+        $('.carousel').carousel({
+            interval: timer
+        });
+        main._changeCarouseBg();
+        $('.carousel').on('slide.bs.carousel', function () {
+            setTimeout(function () {
+                main._changeCarouseBg();
+            }, 650);
+        });
+        for (var i = 0; i < $this.length; i++) {
+            if (i == 0) {
+                var html = '<li data-target=".carousel" data-slide-to="0" class="active"></li>';
+                $this.parents(".carousel-inner").siblings(".carousel-indicators").append(html);
+            } else {
+                var html = '<li data-target=".carousel" data-slide-to="' + i + '"></li>';
+                $this.parents(".carousel-inner").siblings(".carousel-indicators").append(html);
+            }
+        }
+    },
+    courseNav: function courseNav() {
+        var $obj = $('.index-course');
+        var $nav = $obj.find('.index-course-nav li');
+        $obj.find('.row:gt(0)').hide();
+        $nav.hover(function () {
+            $(this).addClass('active').siblings().removeClass('active');
+            $obj.find('.row').eq($nav.index(this)).show().siblings('.row').hide();
+        });
+    },
+    animateAd: function animateAd() {
+        var scroll = $(window).scrollTop();
+        if ($('.index-motto').length) {
+            var mottotop = $('.index-motto').position().top - window.innerHeight;
+            if (scroll >= mottotop) {
+                $(".index-motto a").addClass('animate');
+            }
+        }
+    }
+};
+main.init();

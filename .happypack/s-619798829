@@ -1,0 +1,131 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _attachmentActions = require('../../attachment/widget/attachment-actions');
+
+var _attachmentActions2 = _interopRequireDefault(_attachmentActions);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+alert('ol');
+
+alert('ol2');
+
+var QuestionFormBase = function () {
+  function QuestionFormBase($form) {
+    _classCallCheck(this, QuestionFormBase);
+
+    this.$form = $form;
+    this.titleFieldId = 'question-stem-field';
+    this.analysisFieldId = 'question-analysis-field';
+    this.validator = null;
+    this.titleEditorToolBarName = 'Minimal';
+    this._init();
+    this.attachmentActions = new _attachmentActions2.default($form);
+  }
+
+  _createClass(QuestionFormBase, [{
+    key: '_init',
+    value: function _init() {
+      this._initEvent();
+      this._initValidate();
+    }
+  }, {
+    key: '_initEvent',
+    value: function _initEvent() {
+      var _this = this;
+
+      this.$form.on('click', '[data-role=submit]', function (event) {
+        return _this.submitForm(event);
+      });
+    }
+  }, {
+    key: 'submitForm',
+    value: function submitForm(event) {
+      var submitType = $(event.currentTarget).data('submission');
+      this.$form.find('[name=submission]').val(submitType);
+      var self = this;
+
+      if (this.validator.form()) {
+        $(event.currentTarget).button('loading');
+        self.$form.submit();
+      }
+    }
+  }, {
+    key: '_initValidate',
+    value: function _initValidate() {
+      var validator = this.$form.validate({
+        onkeyup: false,
+        rules: {
+          '[data-role="target"]': {
+            required: true
+          },
+          difficulty: {
+            required: true
+          },
+          stem: {
+            required: true
+          },
+          score: {
+            required: true,
+            number: true,
+            max: 999,
+            min: 0
+          }
+        },
+        messages: {
+          '[data-role="target"]': "请选择从属",
+          difficulty: "请选择难度"
+        }
+      });
+      this.validator = validator;
+    }
+  }, {
+    key: 'initTitleEditor',
+    value: function initTitleEditor() {
+      var $target = $('#' + this.titleFieldId);
+      var editor = CKEDITOR.replace(this.titleFieldId, {
+        toolbar: this.titleEditorToolBarName,
+        filebrowserImageUploadUrl: $target.data('imageUploadUrl'),
+        height: $target.height()
+      });
+
+      editor.on('change', function () {
+        $target.val(editor.getData());
+      });
+    }
+  }, {
+    key: 'initAnalysisEditor',
+    value: function initAnalysisEditor() {
+      var $target = $('#' + this.analysisFieldId);
+      var editor = CKEDITOR.replace(this.analysisFieldId, {
+        toolbar: this.titleEditorToolBarName,
+        filebrowserImageUploadUrl: $target.data('imageUploadUrl'),
+        height: $target.height()
+      });
+
+      editor.on('change', function () {
+        $target.val(editor.getData());
+      });
+    }
+  }, {
+    key: 'titleEditorToolBarName',
+    set: function set(toolbarName) {
+      this._titleEditorToolBarName = toolbarName;
+    },
+    get: function get() {
+      return this._titleEditorToolBarName;
+    }
+  }]);
+
+  return QuestionFormBase;
+}();
+
+exports.default = QuestionFormBase;

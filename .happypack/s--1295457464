@@ -1,0 +1,5 @@
+'use strict';
+
+var listLength = $('#courses-list-table').find('tbody tr').length;
+
+console.log(listLength);

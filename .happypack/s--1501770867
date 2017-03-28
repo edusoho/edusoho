@@ -1,0 +1,78 @@
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _multiInput = require('app/common/component/multi-input');
+
+var _multiInput2 = _interopRequireDefault(_multiInput);
+
+var _postal = require('postal');
+
+var _postal2 = _interopRequireDefault(_postal);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var detail = function () {
+  function detail() {
+    _classCallCheck(this, detail);
+
+    this.init();
+  }
+
+  _createClass(detail, [{
+    key: 'init',
+    value: function init() {
+      this.renderMultiGroupComponent('course-goals', 'goals');
+      this.renderMultiGroupComponent('intended-students', 'audiences');
+      this.initCkeditor();
+    }
+  }, {
+    key: 'initCkeditor',
+    value: function initCkeditor() {
+      CKEDITOR.replace('summary', {
+        allowedContent: true,
+        toolbar: 'Detail',
+        filebrowserImageUploadUrl: $('#courseset-summary-field').data('imageUploadUrl')
+      });
+    }
+  }, {
+    key: 'renderMultiGroupComponent',
+    value: function renderMultiGroupComponent(elementId, name) {
+      var datas = $('#' + elementId).data('init-value');
+      _reactDom2.default.render(_react2.default.createElement(_multiInput2.default, {
+        blurIsAdd: true,
+        sortable: true,
+        dataSource: datas,
+        inputName: name + "[]",
+        outputDataElement: name }), document.getElementById(elementId));
+    }
+  }, {
+    key: 'submitEvent',
+    value: function submitEvent() {
+      $('#courseset-submit').click(function (evt) {
+        publishAddMessage();
+        $(evt.currentTarget).button('loading');
+        $('#courseset-detail-form').submit();
+      });
+    }
+  }]);
+
+  return detail;
+}();
+
+function publishAddMessage() {
+  _postal2.default.publish({
+    channel: "courseInfoMultiInput",
+    topic: "addMultiInput"
+  });
+}

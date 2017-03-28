@@ -1,0 +1,22 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _arguments = arguments;
+var loadAnimation = function loadAnimation(fn, $element) {
+  var $loading = $('<div class="load-animation"></div>');
+  $loading.prependTo($element).nextAll().hide();
+  $element.append();
+  var arr = [],
+      l = fn.length;
+  return function (x) {
+    arr.push(x);
+    $loading.hide().nextAll().show();
+    /* eslint-disable */
+    return arr.length < l ? _arguments.callee : fn.apply(null, arr);
+    /* eslint-enable */
+  };
+};
+
+exports.default = loadAnimation;

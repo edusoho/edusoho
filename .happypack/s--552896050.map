@@ -1,0 +1,1 @@
+{"version":3,"sources":["web/themes/default-b/static-src/js/default/index.js"],"names":["echo","init"],"mappings":";;AAAAA,KAAKC,IAAL","file":"index.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["echo.init();"]}

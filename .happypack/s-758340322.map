@@ -1,0 +1,1 @@
+{"version":3,"sources":["app/Resources/static-src/common/postal-xframe.js"],"names":[],"mappings":";;AAAA","file":"postal-xframe.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["import 'postal.xframe/lib/postal.xframe.min.js';"]}

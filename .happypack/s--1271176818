@@ -1,0 +1,13 @@
+'use strict';
+
+var _intro = require('app/js/courseset-manage/intro');
+
+var _intro2 = _interopRequireDefault(_intro);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+console.log(_intro2.default.introStart());
+
+var listLength = $('#courses-list-table').find('tbody tr').length;
+
+console.log(listLength);

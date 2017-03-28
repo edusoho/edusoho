@@ -1,0 +1,72 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Intro = function () {
+  function Intro() {
+    _classCallCheck(this, Intro);
+
+    this.init();
+    var COURSE_BASE_INTRO = 'COURSE_BASE_INTRO';
+    var COURSE_TASK_INTRO = 'COURSE_TASK_INTRO';
+  }
+
+  _createClass(Intro, [{
+    key: 'init',
+    value: function init() {
+
+      console.log(this.isHaveTaskCreateStep());
+
+      //
+
+
+      //第一次重基本信息进来,做三步引导
+      if (this.isBaseInfoFristEnter()) {
+        //...
+        return;
+      }
+
+      //第一次次从计划任务进来
+
+      //判断基本信息做过引导，显示一步引导
+      if (this.isBaseInfoFristEnter()) {
+
+        return;
+      }
+
+      //判断基本信息未做过引导，显示4步引导
+    }
+  }, {
+    key: 'isHaveTaskCreateStep',
+    value: function isHaveTaskCreateStep() {
+      return $('#step-4').length;
+    }
+  }, {
+    key: 'isCourseBaseIntro',
+    value: function isCourseBaseIntro() {
+      if (store.get(COURSE_TASK_INTRO)) {
+        //先进入的任务页
+        return;
+      }
+      if (!store.get(COURSE_BASE_INTRO)) {
+        store.set(COURSE_BASE_INTRO, true);
+      }
+    }
+  }, {
+    key: 'isBaseInfoFristEnter',
+    value: function isBaseInfoFristEnter() {
+
+      return true;
+    }
+  }]);
+
+  return Intro;
+}();
+
+exports.default = Intro;

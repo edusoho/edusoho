@@ -1,0 +1,24 @@
+"use strict";
+
+var _help = require("app/js/course-manage/help");
+
+(0, _help.publishCourse)();
+
+console.log();
+
+startIntro();
+
+function startIntro() {
+
+  var options = {
+    steps: [{
+      intro: "Hello world!"
+    }]
+  };
+
+  console.log(introJs);
+
+  var intro = new introJs(options);
+  console.log(intro);
+  intro.start();
+}

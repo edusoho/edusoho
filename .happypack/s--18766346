@@ -1,0 +1,25 @@
+'use strict';
+
+var _help = require('app/js/course-manage/help');
+
+(0, _help.publishCourse)();
+
+startIntro();
+function startIntro() {
+
+  console.log();
+  var intro = introJs();
+  intro.setOptions({
+    steps: [{
+      intro: "课程管理功能现已全新升级!"
+    }, {
+      element: '#step1',
+      intro: "教学内容的编辑、管理请点击左侧“计划任务”的菜单项进入!"
+    }],
+    skipLabel: '我知道了',
+    nextLabel: '下一步',
+    prevLabel: '上一步'
+  });
+  console.log(intro);
+  intro.start();
+}

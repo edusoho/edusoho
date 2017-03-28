@@ -1,0 +1,3 @@
+'use strict';
+
+require('postal.federation/lib/postal.federation.min.js');

@@ -1,0 +1,119 @@
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Creator = function () {
+  function Creator() {
+    _classCallCheck(this, Creator);
+
+    this.init();
+  }
+
+  _createClass(Creator, [{
+    key: 'init',
+    value: function init() {
+      this._initDatePicker('#expiryStartDate');
+      this._initDatePicker('#expiryEndDate');
+
+      $('input[name="expiryMode"]').on('change', function (event) {
+        if ($('input[name="expiryMode"]:checked').val() == 'date') {
+          $('#expiry-days').removeClass('hidden').addClass('hidden');
+          $('#expiry-date').removeClass('hidden');
+        } else {
+          $('#expiry-date').removeClass('hidden').addClass('hidden');
+          $('#expiry-days').removeClass('hidden');
+        }
+      });
+
+      $('input[name="learnMode"]').on('change', function (event) {
+        if ($('input[name="learnMode"]:checked').val() == 'freeMode') {
+          $('#learnLockModeHelp').removeClass('hidden').addClass('hidden');
+          $('#learnFreeModeHelp').removeClass('hidden');
+        } else {
+          $('#learnFreeModeHelp').removeClass('hidden').addClass('hidden');
+          $('#learnLockModeHelp').removeClass('hidden');
+        }
+      });
+
+      var $form = $("#course-create-form");
+      //init validator
+      var validator = $form.validate({
+        onkeyup: false,
+        groups: {
+          date: 'expiryStartDate expiryEndDate'
+        },
+        rules: {
+          title: {
+            required: true
+          },
+          expiryDays: {
+            required: '#expiryByDays:checked',
+            digits: true,
+            max_year: true
+          },
+          expiryStartDate: {
+            required: '#expiryByDate:checked',
+            date: true,
+            before: '#expiryEndDate'
+          },
+          expiryEndDate: {
+            required: '#expiryByDate:checked',
+            date: true,
+            after: '#expiryStartDate'
+          }
+        },
+        messages: {
+          title: Translator.trans('请输入教学计划课程标题'),
+          expiryStartDate: {
+            required: Translator.trans('请输入开始日期'),
+            before: Translator.trans('开始日期应早于结束日期')
+          },
+          expiryEndDate: {
+            required: Translator.trans('请输入结束日期'),
+            after: Translator.trans('结束日期应晚于开始日期')
+          }
+        }
+      });
+
+      $.validator.addMethod("before", function (value, element, params) {
+        if ($('input[name="expiryMode"]:checked').val() !== 'date') {
+          return true;
+        }
+        return value && $(params).val() >= value;
+      }, Translator.trans('开始日期应早于结束日期'));
+
+      $.validator.addMethod("after", function (value, element, params) {
+        if ($('input[name="expiryMode"]:checked').val() !== 'date') {
+          return true;
+        }
+        return value && $(params).val() <= value;
+      }, Translator.trans('结束日期应晚于开始日期'));
+
+      $('#course-submit').click(function (evt) {
+        if (validator.form()) {
+          $(evt.currentTarget).button('loading');
+          $form.submit();
+        }
+      });
+    }
+  }, {
+    key: '_initDatePicker',
+    value: function _initDatePicker($id) {
+      var $picker = $($id);
+      $picker.datetimepicker({
+        format: 'yyyy-mm-dd',
+        language: "zh",
+        minView: 2, //month
+        autoclose: true,
+        endDate: new Date(Date.now() + 86400 * 365 * 100 * 1000)
+      });
+      $picker.datetimepicker('setStartDate', new Date());
+    }
+  }]);
+
+  return Creator;
+}();
+
+new Creator();

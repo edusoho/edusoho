@@ -1,0 +1,3 @@
+'use strict';
+
+$('#step2-form');

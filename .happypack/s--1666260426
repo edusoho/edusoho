@@ -1,0 +1,36 @@
+SyntaxError: Unexpected token, expected , (13:11)
+
+[0m [90m 11 | [39m      onkeyup[33m:[39m [36mfalse[39m[33m,[39m
+ [90m 12 | [39m      currentDom[33m:[39m 
+[31m[1m>[22m[39m[90m 13 | [39m      rules[33m:[39m {
+ [90m    | [39m           [31m[1m^[22m[39m
+ [90m 14 | [39m        title[33m:[39m {
+ [90m 15 | [39m          required[33m:[39m [36mtrue[39m[33m,[39m
+ [90m 16 | [39m          trim[33m:[39m [36mtrue[39m[33m,[39m[0m
+
+BabelLoaderError: SyntaxError: Unexpected token, expected , (13:11)
+
+[0m [90m 11 | [39m      onkeyup[33m:[39m [36mfalse[39m[33m,[39m
+ [90m 12 | [39m      currentDom[33m:[39m 
+[31m[1m>[22m[39m[90m 13 | [39m      rules[33m:[39m {
+ [90m    | [39m           [31m[1m^[22m[39m
+ [90m 14 | [39m        title[33m:[39m {
+ [90m 15 | [39m          required[33m:[39m [36mtrue[39m[33m,[39m
+ [90m 16 | [39m          trim[33m:[39m [36mtrue[39m[33m,[39m[0m
+
+    at transpile (/Users/kz/projects/edusoho/node_modules/.6.2.10@babel-loader/lib/index.js:52:13)
+    at Object.module.exports (/Users/kz/projects/edusoho/node_modules/.6.2.10@babel-loader/lib/index.js:133:12)
+    at applySyncOrAsync (/Users/kz/projects/edusoho/node_modules/.3.0.2@happypack/lib/applyLoaders.js:341:21)
+    at apply (/Users/kz/projects/edusoho/node_modules/.3.0.2@happypack/lib/applyLoaders.js:268:5)
+    at /Users/kz/projects/edusoho/node_modules/.3.0.2@happypack/lib/applyLoaders.js:131:7
+    at applyPitchLoader (/Users/kz/projects/edusoho/node_modules/.3.0.2@happypack/lib/applyLoaders.js:184:14)
+    at applyPitchLoader (/Users/kz/projects/edusoho/node_modules/.3.0.2@happypack/lib/applyLoaders.js:192:14)
+    at applyPitchLoaders (/Users/kz/projects/edusoho/node_modules/.3.0.2@happypack/lib/applyLoaders.js:222:4)
+    at applyLoaders (/Users/kz/projects/edusoho/node_modules/.3.0.2@happypack/lib/applyLoaders.js:116:3)
+    at HappyWorker.compile (/Users/kz/projects/edusoho/node_modules/.3.0.2@happypack/lib/HappyWorker.js:32:3)
+    at Object.HappyForegroundThreadPool.compile (/Users/kz/projects/edusoho/node_modules/.3.0.2@happypack/lib/HappyForegroundThreadPool.js:61:14)
+    at HappyPlugin.compileAndUpdateCache (/Users/kz/projects/edusoho/node_modules/.3.0.2@happypack/lib/HappyPlugin.js:345:14)
+    at HappyPlugin.compileInForeground (/Users/kz/projects/edusoho/node_modules/.3.0.2@happypack/lib/HappyPlugin.js:320:25)
+    at HappyPlugin.compile (/Users/kz/projects/edusoho/node_modules/.3.0.2@happypack/lib/HappyPlugin.js:236:32)
+    at Object.HappyLoader (/Users/kz/projects/edusoho/node_modules/.3.0.2@happypack/lib/HappyLoader.js:34:15)
+    at WEBPACK_CORE_LOADER_EXECUTION (/Users/kz/projects/edusoho/node_modules/.0.6.9@webpack-core/lib/NormalModuleMixin.js:155:71)

@@ -1,0 +1,40 @@
+'use strict';
+
+var _help = require('app/js/course-manage/help');
+
+(0, _help.publishCourse)();
+
+console.log();
+
+startIntro();
+
+function startIntro() {
+
+  var options = {
+    steps: [{
+      intro: "Hello world!"
+    }, {
+      element: document.querySelector('#step1'),
+      intro: "This is a tooltip."
+    }, {
+      element: document.querySelectorAll('#step2')[0],
+      intro: "Ok, wasn't that fun?",
+      position: 'right'
+    }, {
+      element: '#step3',
+      intro: 'More features, more fun.',
+      position: 'left'
+    }, {
+      element: '#step4',
+      intro: "Another step.",
+      position: 'bottom'
+    }, {
+      element: '#step5',
+      intro: 'Get it, use it.'
+    }]
+  };
+  var intro = new introJs(options);
+
+  console.log(intro);
+  intro.start();
+}

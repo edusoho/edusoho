@@ -1,0 +1,199 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _notify = require('common/notify');
+
+var _notify2 = _interopRequireDefault(_notify);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var QuestionManage = function () {
+    function QuestionManage($element) {
+        _classCallCheck(this, QuestionManage);
+
+        this.$element = $element;
+        this.$button = this.$element.find('[data-role="pick-item"]');
+        this.$typeNav = this.$element.find('#testpaper-question-nav');
+        this.$modal = $('#testpaper-confirm-modal');
+        this.currentType = this.$typeNav.find('.active').children().data('type');
+        this.questions = [];
+        this._initEvent();
+    }
+
+    _createClass(QuestionManage, [{
+        key: '_initEvent',
+        value: function _initEvent() {
+            var _this = this;
+
+            this.$button.on('click', function (event) {
+                return _this._showPickerModal(event);
+            });
+            this.$typeNav.on('click', 'li', function (event) {
+                return _this._changeNav(event);
+            });
+            this.$element.on('click', '.js-request-save', function (event) {
+                return _this._confirmSave(event);
+            });
+            this.$modal.on('click', '.js-confirm-submit', function (event) {
+                return _this._submitSave(event);
+            });
+        }
+    }, {
+        key: '_showPickerModal',
+        value: function _showPickerModal(event) {
+            var excludeIds = [];
+            $('[data-type="' + this.currentType + '"]').find('[name="questionIds[]"]').each(function () {
+                excludeIds.push($(this).val());
+            });
+
+            var $modal = $("#modal").modal();
+            $modal.data('manager', this);
+            $.get(this.$button.data('url'), { excludeIds: excludeIds.join(','), type: this.currentType }, function (html) {
+                $modal.html(html);
+            });
+        }
+    }, {
+        key: '_changeNav',
+        value: function _changeNav(event) {
+            var $target = $(event.currentTarget);
+            var type = $target.children().data('type');
+            this.currentType = type;
+
+            this.$typeNav.find('li').removeClass('active');
+            $target.addClass('active');
+
+            this.$element.find('[data-role="question-body"]').addClass('hide');
+            this.$element.find('#testpaper-items-' + type).removeClass('hide');
+            this.$element.find('[data-role="batch-select"]').prop('checked', false);
+            this.$element.find('[data-role="batch-item"]').prop('checked', false);
+        }
+    }, {
+        key: '_confirmSave',
+        value: function _confirmSave(event) {
+            var isOk = this._validateScore();
+
+            if (!isOk) {
+                return;
+            }
+
+            if ($('[name="passedScore"]').length > 0) {
+                var passedScoreErrorMsg = $('.passedScoreDiv').siblings('.help-block').html();
+                if ($.trim(passedScoreErrorMsg) != '') {
+                    return;
+                }
+            }
+
+            var stats = this._calTestpaperStats();
+
+            var html = '';
+            $.each(stats, function (index, statsItem) {
+                var tr = "<tr>";
+                tr += "<td>" + statsItem.name + "</td>";
+                tr += "<td>" + statsItem.count + "</td>";
+                tr += "<td>" + statsItem.score.toFixed(1) + "</td>";
+                tr += "</tr>";
+                html += tr;
+            });
+
+            this.$modal.find('.detail-tbody').html(html);
+
+            this.$modal.modal('show');
+        }
+    }, {
+        key: '_validateScore',
+        value: function _validateScore() {
+            var isOk = true;
+
+            if (this.$element.find('[name="scores[]"]').length == 0) {
+                (0, _notify2.default)('danger', '请选择题目。');
+                isOk = false;
+            }
+
+            this.$element.find('input[type="text"][name="scores[]"]').each(function () {
+                var score = $(this).val();
+
+                if (score == '0') {
+                    (0, _notify2.default)('danger', '题目分值不能为0。');
+                    isOk = false;
+                }
+
+                if (!/^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test(score)) {
+                    (0, _notify2.default)('danger', '题目分值只能填写数字，并且在3位数以内，保留一位小数。');
+                    $(this).focus();
+                    isOk = false;
+                }
+            });
+
+            return isOk;
+        }
+    }, {
+        key: '_calTestpaperStats',
+        value: function _calTestpaperStats() {
+            var stats = {};
+            var self = this;
+
+            this.$typeNav.find('li').each(function () {
+                var type = $(this).find('a').data('type'),
+                    name = $(this).find('a').data('name');
+
+                stats[type] = { name: name, count: 0, score: 0, missScore: 0 };
+
+                self.$element.find('#testpaper-items-' + type).find('[name="scores[]"]').each(function () {
+                    var itemType = $(this).closest('tr').data('type');
+                    var score = itemType == 'material' ? 0 : parseFloat($(this).val());
+                    var question = {};
+
+                    if (itemType != 'material') {
+                        stats[type]['count']++;
+                    }
+
+                    stats[type]['score'] += score;
+                    stats[type]['missScore'] = parseFloat($(this).data('miss-score'));
+
+                    var questionId = $(this).closest('tr').data('id');
+
+                    question['id'] = questionId;
+                    question['score'] = score;
+                    question['missScore'] = parseFloat($(this).data('miss-score'));
+                    question['type'] = type;
+
+                    self.questions.push(question);
+                });
+            });
+
+            var total = { name: Translator.trans('总计'), count: 0, score: 0 };
+            $.each(stats, function (index, statsItem) {
+                total.count += statsItem.count;
+                total.score += statsItem.score;
+            });
+
+            stats.total = total;
+
+            return stats;
+        }
+    }, {
+        key: '_submitSave',
+        value: function _submitSave(event) {
+            var passedScore = 0;
+            if ($('input[name="passedScore"]:visible').length > 0) {
+                passedScore = $('input[name="passedScore"]').val();
+            }
+            $.post(this.$element.attr('action'), { questions: this.questions, passedScore: passedScore }, function (result) {
+                if (result.goto) {
+                    window.location.href = result.goto;
+                }
+            });
+        }
+    }]);
+
+    return QuestionManage;
+}();
+
+exports.default = QuestionManage;

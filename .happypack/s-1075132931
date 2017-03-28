@@ -1,0 +1,194 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.TabChange = exports.showSettings = exports.unpublishTask = exports.publishTask = exports.deleteTask = exports.publishCourse = exports.deleteCourse = exports.closeCourse = exports.courseFunctionRemask = exports.taskSortable = exports.sortablelist = undefined;
+
+var _notify = require('common/notify');
+
+var _notify2 = _interopRequireDefault(_notify);
+
+var _sortable = require('common/sortable');
+
+var _sortable2 = _interopRequireDefault(_sortable);
+
+require('store');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var sortablelist = exports.sortablelist = function sortablelist(list) {
+  var $list = $(list);
+  var data = $list.sortable("serialize").get();
+  $.post($list.data('sortUrl'), { ids: data }, function (response) {
+    var lessonNum = 0,
+        chapterNum = 0,
+        unitNum = 0;
+    $list.find('.task-manage-item').each(function () {
+      var $item = $(this);
+      if ($item.hasClass('js-task-manage-item')) {
+        lessonNum++;
+        $item.find('.number').text(lessonNum);
+      } else if ($item.hasClass('task-manage-unit')) {
+        unitNum++;
+        $item.find('.number').text(unitNum);
+      } else if ($item.hasClass('task-manage-chapter')) {
+        chapterNum++;
+        unitNum = 0;
+        $item.find('.number').text(chapterNum);
+      }
+    });
+  });
+};
+
+var taskSortable = exports.taskSortable = function taskSortable(list) {
+  if ($(list).length) {
+    (0, _sortable2.default)({
+      element: list,
+      ajax: false
+    }, function (data) {
+      sortablelist(list);
+    });
+  }
+};
+
+var courseFunctionRemask = exports.courseFunctionRemask = function courseFunctionRemask() {
+  var COURSE_FEATURE_REMIND = 'COURSE-FEATURE-REMIND'; //课程改版功能提醒
+  if (!store.get(COURSE_FEATURE_REMIND)) {
+    store.set(COURSE_FEATURE_REMIND, true);
+    $('#course-function-modal').modal('show');
+  }
+};
+
+var closeCourse = exports.closeCourse = function closeCourse() {
+  $('body').on('click', '.js-close-course', function (evt) {
+    var $target = $(evt.currentTarget);
+    if (!confirm(Translator.trans('是否确定关闭该教学计划？'))) {
+      return;
+    }
+
+    $.post($target.data('check-url'), function (data) {
+
+      if (data.warn) {
+        if (!confirm(Translator.trans(data.message))) {
+          return;
+        }
+      }
+
+      $.post($target.data('url'), function (data) {
+        if (data.success) {
+          (0, _notify2.default)('success', '关闭成功');
+          location.reload();
+        } else {
+          (0, _notify2.default)('danger', '关闭失败：' + data.message);
+        }
+      });
+    });
+  });
+};
+
+var deleteCourse = exports.deleteCourse = function deleteCourse() {
+  $('body').on('click', '.js-delete-course', function (evt) {
+    if (!confirm(Translator.trans('是否确定删除该教学计划？'))) {
+      return;
+    }
+    $.post($(evt.currentTarget).data('url'), function (data) {
+      if (data.success) {
+        (0, _notify2.default)('success', '删除成功');
+        location.reload();
+      } else {
+        (0, _notify2.default)('danger', '删除失败：' + data.message);
+      }
+    });
+  });
+};
+
+var publishCourse = exports.publishCourse = function publishCourse() {
+  $('body').on('click', '.js-publish-course', function (evt) {
+    if (!confirm(Translator.trans('是否确定发布该教学计划？'))) {
+      return;
+    }
+    $.post($(evt.target).data('url'), function (data) {
+      if (data.success) {
+        (0, _notify2.default)('success', '发布成功');
+        location.reload();
+      } else {
+        (0, _notify2.default)('danger', '发布失败：' + data.message, 5000);
+      }
+    });
+  });
+};
+
+var deleteTask = exports.deleteTask = function deleteTask() {
+  $('body').on('click', '.delete-item', function (evt) {
+    if ($(evt.currentTarget).data('type') == 'task') {
+      if (!confirm(Translator.trans('是否确定删除该任务吗？'))) {
+        return;
+      }
+    } else if ($(evt.currentTarget).data('type') == 'chapter') {
+      if (!confirm(Translator.trans('是否确定删除该章节吗？'))) {
+        return;
+      }
+    }
+    $.post($(evt.currentTarget).data('url'), function (data) {
+      if (data.success) {
+        (0, _notify2.default)('success', '删除成功');
+        $(evt.target).parents('.task-manage-item').remove();
+        sortablelist('#sortable-list');
+      } else {
+        (0, _notify2.default)('danger', '删除失败：' + data.message);
+      }
+    });
+  });
+};
+
+var publishTask = exports.publishTask = function publishTask() {
+  $('body').on('click', '.publish-item', function (event) {
+    $.post($(event.target).data('url'), function (data) {
+      if (data.success) {
+        (0, _notify2.default)('success', '发布成功');
+        location.reload();
+      } else {
+        (0, _notify2.default)('danger', '发布失败：' + data.message);
+      }
+    });
+  });
+};
+
+var unpublishTask = exports.unpublishTask = function unpublishTask() {
+  $('body').on('click', '.unpublish-item', function (event) {
+    $.post($(event.target).data('url'), function (data) {
+      if (data.success) {
+        (0, _notify2.default)('success', '取消发布成功');
+        location.reload();
+      } else {
+        (0, _notify2.default)('danger', '取消发布失败：' + data.message);
+      }
+    });
+  });
+};
+
+var showSettings = exports.showSettings = function showSettings() {
+  $("#sortable-list").on('mouseenter', '.js-task-manage-item', function (event) {
+    var $list = $(event.delegateTarget);
+    var $this = $(event.delegateTarget);
+    $(".js-task-manage-item.active").removeClass('active').find('.js-settings-list').hide();
+    if (!$this.hasClass('active')) {
+      $this.addClass('active').find('.js-settings-list').stop().slideDown(1000);
+    }
+
+    // if ($this.hasClass('active')) {
+    //   $this.removeClass('active').find('.js-settings-list').hide();
+    // } else {
+    //   $list.find(".js-task-manage-item.active").removeClass('active').find('.js-settings-list').hide();
+    //   $this.addClass('active').find('.js-settings-list').stop().slideDown(1000);
+    // }
+  });
+};
+
+var TabChange = exports.TabChange = function TabChange() {
+  $('[data-role="tab"]').click(function (event) {
+    var $this = $(this);
+    $($this.data('tab-content')).removeClass("hidden").siblings('[data-role="tab-content"]').addClass('hidden');
+  });
+};

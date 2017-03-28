@@ -1,0 +1,116 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _chooser = require('./chooser');
+
+var _chooser2 = _interopRequireDefault(_chooser);
+
+var _notify = require('common/notify');
+
+var _notify2 = _interopRequireDefault(_notify);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var UploaderChooser = function (_Chooser) {
+  _inherits(UploaderChooser, _Chooser);
+
+  function UploaderChooser(element) {
+    _classCallCheck(this, UploaderChooser);
+
+    var _this = _possibleConstructorReturn(this, (UploaderChooser.__proto__ || Object.getPrototypeOf(UploaderChooser)).call(this));
+
+    _this.element = $(element);
+    _this._sdk = undefined;
+    _this._initSdk()._bindEvent();
+    return _this;
+  }
+
+  _createClass(UploaderChooser, [{
+    key: '_initSdk',
+    value: function _initSdk() {
+      if (this._sdk !== undefined) {
+        return this;
+      }
+
+      var $uploader = this.element.find('#uploader-container');
+      this._sdk = new UploaderSDK({
+        id: $uploader.attr('id'),
+        initUrl: $uploader.data('initUrl'),
+        finishUrl: $uploader.data('finishUrl'),
+        accept: $uploader.data('accept'),
+        process: $uploader.data('process'),
+        ui: 'single'
+      });
+
+      return this;
+    }
+  }, {
+    key: '_bindEvent',
+    value: function _bindEvent() {
+      var _this2 = this;
+
+      this.element.on('change', '.js-upload-params', function (event) {
+        var uploadProcess = _this2.element.find('.js-upload-params').get().reduce(function (prams, dom) {
+          prams[$(dom).attr('name')] = $(dom).find('option:selected').val();
+          return prams;
+        }, {});
+        _this2._sdk.setProcess(uploadProcess);
+      });
+
+      this._sdk.on('file.finish', function (file) {
+        return _this2._onFileUploadFinish(file);
+      });
+
+      this._sdk.on('error', function (error) {
+        (0, _notify2.default)('danger', error.message);
+      });
+
+      return this;
+    }
+  }, {
+    key: '_onFileUploadFinish',
+    value: function _onFileUploadFinish(file) {
+      file.source = 'self';
+
+      var placeFileName = function placeFileName(name) {
+        $('[data-role="placeholder"]').html(name);
+      };
+
+      this.emit('select', file);
+
+      var placeMediaAttr = function placeMediaAttr(file) {
+        if (file.length !== 0 && file.length !== undefined) {
+          var $minute = $('#minute');
+          var $second = $('#second');
+          var length = parseInt(file.length);
+          var minute = parseInt(length / 60);
+          var second = length % 60;
+          $minute.val(minute);
+          $second.val(second);
+          file.minute = minute;
+          file.second = second;
+        }
+
+        $('[name="media"]').val(JSON.stringify(file));
+      };
+
+      placeFileName(file.name);
+      placeMediaAttr(file);
+    }
+  }]);
+
+  return UploaderChooser;
+}(_chooser2.default);
+
+exports.default = UploaderChooser;

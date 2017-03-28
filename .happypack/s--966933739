@@ -1,0 +1,53 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _notify = require('common/notify');
+
+var _notify2 = _interopRequireDefault(_notify);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var AttachmentActions = function () {
+  function AttachmentActions($ele) {
+    _classCallCheck(this, AttachmentActions);
+
+    this.$ele = $ele;
+    this.initEvent();
+  }
+
+  _createClass(AttachmentActions, [{
+    key: 'initEvent',
+    value: function initEvent() {
+      var _this = this;
+
+      this.$ele.on('click', '[data-role="delte-item"]', function (event) {
+        return _this._deleteItem(event);
+      });
+    }
+  }, {
+    key: '_deleteItem',
+    value: function _deleteItem(event) {
+      var $target = $(event.currentTarget).button('loading');
+      $.post($target.data('url'), {}, function (response) {
+        if (response.msg == 'ok') {
+          (0, _notify2.default)('success', Translator.trans('删除成功！'));
+          $target.closest('.js-attachment-list').siblings('.js-upload-file').show();
+          $target.closest('.js-attachment-list').closest('div').siblings('[data-role="fileId"]').val('');
+          $target.closest('div').remove();
+          $('.js-upload-file').show();
+        }
+      });
+    }
+  }]);
+
+  return AttachmentActions;
+}();
+
+exports.default = AttachmentActions;

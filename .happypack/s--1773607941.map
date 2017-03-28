@@ -1,0 +1,1 @@
+{"version":3,"sources":["node_modules/.0.14.8@react-dom/index.js"],"names":["module","exports","require"],"mappings":"AAAA;;AAEAA,OAAOC,OAAP,GAAiBC,QAAQ,oBAAR,CAAjB","file":"index.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["'use strict';\n\nmodule.exports = require('react/lib/ReactDOM');\n"]}

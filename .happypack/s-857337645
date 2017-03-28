@@ -1,0 +1,74 @@
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _postal = require('postal');
+
+var _postal2 = _interopRequireDefault(_postal);
+
+var _form = require('./form');
+
+var _form2 = _interopRequireDefault(_form);
+
+var _question = require('./question');
+
+var _question2 = _interopRequireDefault(_question);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var QuestionPlugin = function () {
+  function QuestionPlugin() {
+    _classCallCheck(this, QuestionPlugin);
+
+    this.$element = $('.question-pane');
+    this.$list = this.$element.find('.question-list-block');
+    this.$detail = this.$element.find('.question-detail-block');
+    this.form = new _form2.default();
+    this.question = null;
+    this.initEvent();
+  }
+
+  _createClass(QuestionPlugin, [{
+    key: 'initEvent',
+    value: function initEvent() {
+      var _this = this;
+
+      this.$element.on('click', '.js-redirect-question-detail', function (event) {
+        return _this.onRedirectQuestion(event);
+      });
+
+      var channel = _postal2.default.channel('task.plugin.question');
+
+      channel.subscribe('form.save', function (data, envelope) {
+        _this.$element.find('[data-role="list"]').prepend(data.html);
+        _this.$element.find('.empty-item').remove();
+      });
+
+      channel.subscribe('back-to-list', function () {
+        return _this.onBackList();
+      });
+    }
+  }, {
+    key: 'onRedirectQuestion',
+    value: function onRedirectQuestion(event) {
+      var $target = $(event.currentTarget);
+      var url = $target.data('url');
+      this.question = new _question2.default(url);
+      this.$list.hide();
+      this.$detail.show();
+    }
+  }, {
+    key: 'onBackList',
+    value: function onBackList() {
+      this.question && this.question.destroy();
+      this.$list.show();
+      this.$detail.hide();
+    }
+  }]);
+
+  return QuestionPlugin;
+}();
+
+new QuestionPlugin();

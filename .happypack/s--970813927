@@ -1,0 +1,9 @@
+"use strict";
+
+var _help = require("../course-manage/help");
+
+$("#course-select").change(function () {
+	location.href = $(this).val();
+});
+
+(0, _help.publishCourse)();

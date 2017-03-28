@@ -1,0 +1,12 @@
+'use strict';
+
+var store = require('./_shared')('wks'),
+    uid = require('./_uid'),
+    _Symbol = require('./_global').Symbol,
+    USE_SYMBOL = typeof _Symbol == 'function';
+
+var $exports = module.exports = function (name) {
+  return store[name] || (store[name] = USE_SYMBOL && _Symbol[name] || (USE_SYMBOL ? _Symbol : uid)('Symbol.' + name));
+};
+
+$exports.store = store;

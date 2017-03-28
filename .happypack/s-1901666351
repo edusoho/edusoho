@@ -1,0 +1,100 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _notify = require("common/notify");
+
+var _notify2 = _interopRequireDefault(_notify);
+
+var _postal = require("postal");
+
+var _postal2 = _interopRequireDefault(_postal);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var _class = function () {
+  function _class(url) {
+    _classCallCheck(this, _class);
+
+    this.url = url;
+    this.$element = $('.question-detail-block');
+    this.$form = null;
+    this.validator = null;
+    this.channel = _postal2.default.channel('task.plugin.question');
+    this.render();
+  }
+
+  _createClass(_class, [{
+    key: "initEvent",
+    value: function initEvent() {
+      var _this = this;
+
+      this.$element.on('click', '.back-to-list', function () {
+        _this.channel.publish('back-to-list');
+      });
+
+      this.$form.on('click', '.btn-primary', function (event) {
+        return _this.onSavePost(event);
+      });
+    }
+  }, {
+    key: "onSavePost",
+    value: function onSavePost(event) {
+      var _this2 = this;
+
+      event.preventDefault();
+
+      if (!this.validator || !this.validator.form()) {
+        return;
+      }
+
+      $.post(this.$form.attr('action'), this.$form.serialize()).done(function (html) {
+        _this2.$element.find('[data-role=post-list]').append(html);
+        var number = parseInt(_this2.$element.find('[data-role=post-number]').text());
+        _this2.$element.find('[data-role=post-number]').text(number + 1);
+        _this2.$form.find('textarea').val('');
+      }).error(function (response) {
+        Notify.danger(response.error.message);
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this3 = this;
+
+      $.get(this.url).done(function (html) {
+        _this3.$element.html(html);
+
+        _this3.$form = _this3.$element.find('.post-form');
+        _this3.validator = _this3.$form.validate({
+          rules: {
+            'post[content]': 'required'
+          },
+          messages: {
+            'post[content]': "请输入回复内容"
+          }
+        });
+
+        _this3.initEvent();
+      }).fail(function (error) {
+        (0, _notify2.default)('danger', 'error');
+      });
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.$element.html('');
+      this.$element.undelegate();
+    }
+  }]);
+
+  return _class;
+}();
+
+exports.default = _class;

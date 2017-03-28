@@ -1,0 +1,203 @@
+"use strict";
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+/*!
+ *  * postal.xframe - postal.js/postal.federation plugin for federating instances of postal.js across iframe/window boundaries.
+ *  * Author: Jim Cowart (http://ifandelse.com)
+ *  * Version: v0.5.0
+ *  * Url: http://github.com/postaljs/postal.xframe
+ *  * License(s): (MIT OR GPL-2.0)
+ */
+(function (e, t) {
+  "object" == (typeof exports === "undefined" ? "undefined" : _typeof(exports)) && "object" == (typeof module === "undefined" ? "undefined" : _typeof(module)) ? module.exports = t(require("lodash"), require("postal")) : "function" == typeof define && define.amd ? define(["lodash", "postal"], t) : "object" == (typeof exports === "undefined" ? "undefined" : _typeof(exports)) ? exports.postalXframe = t(require("lodash"), require("postal")) : e.postalXframe = t(e._, e.postal);
+})(undefined, function (e, t) {
+  return function (e) {
+    function t(n) {
+      if (r[n]) return r[n].exports;var o = r[n] = { exports: {}, id: n, loaded: !1 };return e[n].call(o.exports, o, o.exports, t), o.loaded = !0, o.exports;
+    }var r = {};return t.m = e, t.c = r, t.p = "", t(0);
+  }([function (e, t, r) {
+    function n() {
+      w.routeMessage.apply(w, arguments);
+    }function o(e) {
+      a.include(g.workers, e) || (e.addEventListener("message", n), g.workers.push(e));
+    }var i = function i(e) {
+      return e && e.__esModule ? e["default"] : e;
+    },
+        a = i(r(1)),
+        s = i(r(2)),
+        u = r(3),
+        c = u._memoRemoteByInstanceId,
+        f = u._memoRemoteByTarget,
+        l = u._disconnectClient,
+        p = u.safeSerialize,
+        d = r(4),
+        g = d.state,
+        h = d.env,
+        v = i(r(5));v.getInstance = function (e, t, r) {
+      var n = new v(e, { origin: t, isWorker: "undefined" != typeof Worker && e instanceof Worker }, r);return n.options.isWorker && o(n.target), n;
+    };var m = function m() {},
+        w = s.fedx.transports.xframe = { eagerSerialize: h.useEagerSerialize, XFrameClient: v, configure: function configure(e) {
+        return e && (g.config = a.defaults(a.extend(g.config, e), g.defaults)), g.config;
+      }, clearConfiguration: function clearConfiguration() {
+        g.config = a.extend({}, g.defaults);
+      }, getTargets: h.isWorker ? function () {
+        return [{ target: { postMessage: postMessage } }];
+      } : function () {
+        var e = a.map(document.getElementsByTagName("iframe"), function (e) {
+          var t = document.createElement("a");t.href = e.src;var r = t.protocol + "//" + t.host;return "//" === r && (r = null), { target: e.contentWindow, origin: r || g.config.defaultOriginUrl };
+        });return window.parent && window.parent !== window && e.push({ target: window.parent, origin: "*" }), e.concat(g.workers);
+      }, remotes: [], wrapForTransport: h.useEagerSerialize ? function (e) {
+        return JSON.stringify({ postal: !0, packingSlip: e });
+      } : function (e) {
+        return { postal: !0, packingSlip: e };
+      }, unwrapFromTransport: function unwrapFromTransport(e) {
+        if ("string" != typeof e || !h.useEagerSerialize && -1 === e.indexOf('"postal":true')) return e;try {
+          return JSON.parse(e);
+        } catch (t) {
+          return {};
+        }
+      }, routeMessage: function routeMessage(e) {
+        var t = e.source || e.currentTarget,
+            r = this.unwrapFromTransport(e.data);if (r.postal) {
+          var n = a.find(this.remotes, function (e) {
+            return e.target === t;
+          });n || (n = v.getInstance(t, e.origin, r.packingSlip.instanceId), this.remotes.push(n)), n.onMessage(r.packingSlip);
+        }
+      }, sendMessage: function sendMessage(e) {
+        var t = e;g.config.safeSerialize && (t = p(a.cloneDeep(e))), a.each(this.remotes, function (e) {
+          e.sendMessage(t);
+        });
+      }, disconnect: function disconnect(e) {
+        e = e || {};var t = e.instanceId ? a.reduce(a.isArray(e.instanceId) ? e.instanceId : [e.instanceId], c, [], this) : e.target ? a.reduce(a.isArray(e.target) ? e.target : [e.target], f, [], this) : this.remotes;e.doNotNotify || a.each(t, l, this), this.remotes = a.without.apply(null, [this.remotes].concat(t));
+      }, signalReady: function signalReady(e, t) {
+        e = a.isArray(e) ? e : [e], e = e.length ? e : this.getTargets(), t = t || m, a.each(e, function (e) {
+          if (e.target) {
+            e.origin = e.origin || g.config.defaultOriginUrl;var r = a.find(this.remotes, function (t) {
+              return t.target === e.target;
+            });r || (r = v.getInstance(e.target, e.origin), this.remotes.push(r)), r.sendPing(t);
+          }
+        }, this);
+      }, addEventListener: h.isWorker ? function () {
+        addEventListener("message", n);
+      } : function (e, t, r) {
+        if ("undefined" == typeof window || "function" != typeof window.addEventListener) throw new Error("postal.xframe only works with browsers that support window.addEventListener");window.addEventListener(e, t, r);
+      }, listenToWorker: o, stopListeningToWorker: function stopListeningToWorker(e) {
+        if (e) e.removeEventListener("message", n), g.workers = a.without(g.workers, e);else for (; g.workers.length;) {
+          g.workers.pop().removeEventListener("message", n);
+        }
+      } };w.addEventListener("message", n, !1);
+  }, function (t, r) {
+    t.exports = e;
+  }, function (e, r) {
+    e.exports = t;
+  }, function (e, t, r) {
+    function n(e, t) {
+      var r = c.find(this.remotes, function (e) {
+        return e.instanceId === t;
+      });return r && e.push(r), e;
+    }function o(e, t) {
+      var r = c.find(this.remotes, function (e) {
+        return e.target === t;
+      });return r && e.push(r), e;
+    }function i(e) {
+      e.disconnect();
+    }function a(e) {
+      var t = !0,
+          r = !1,
+          n = void 0;try {
+        for (var o, i = f(e)[Symbol.iterator](); !(t = (o = i.next()).done); t = !0) {
+          var s = u(o.value, 2),
+              l = s[0],
+              p = s[1];"function" == typeof p && delete e[l], c.isPlainObject(p) && a(p), c.isArray(p) && c.each(p, a);
+        }
+      } catch (d) {
+        r = !0, n = d;
+      } finally {
+        try {
+          !t && i["return"] && i["return"]();
+        } finally {
+          if (r) throw n;
+        }
+      }return e;
+    }var s = function s(e) {
+      return e && e.__esModule ? e["default"] : e;
+    },
+        u = function u(e, t) {
+      if (Array.isArray(e)) return e;if (Symbol.iterator in Object(e)) {
+        for (var r, n = [], o = e[Symbol.iterator](); !(r = o.next()).done && (n.push(r.value), !t || n.length !== t);) {}return n;
+      }throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    };t._memoRemoteByInstanceId = n, t._memoRemoteByTarget = o, t._disconnectClient = i, t.safeSerialize = a, Object.defineProperty(t, "__esModule", { value: !0 });var c = s(r(1)),
+        f = regeneratorRuntime.mark(function l(e) {
+      var t, r, n, o, i, a;return regeneratorRuntime.wrap(function (s) {
+        for (;;) {
+          switch (s.prev = s.next) {case 0:
+              -1 === ["object", "function"].indexOf(typeof e === "undefined" ? "undefined" : _typeof(e)) && (e = {}), t = !0, r = !1, n = void 0, s.prev = 4, o = Object.keys(e)[Symbol.iterator]();case 6:
+              if (t = (i = o.next()).done) {
+                s.next = 13;break;
+              }return a = i.value, s.next = 10, [a, e[a]];case 10:
+              t = !0, s.next = 6;break;case 13:
+              s.next = 19;break;case 15:
+              s.prev = 15, s.t0 = s["catch"](4), r = !0, n = s.t0;case 19:
+              s.prev = 19, s.prev = 20, !t && o["return"] && o["return"]();case 22:
+              if (s.prev = 22, !r) {
+                s.next = 25;break;
+              }throw n;case 25:
+              return s.finish(22);case 26:
+              return s.finish(19);case 27:case "end":
+              return s.stop();}
+        }
+      }, l, this, [[4, 15, 19, 27], [20,, 22, 26]]);
+    });t.entries = f;
+  }, function (e, t, r) {
+    var n = function n(e) {
+      return e && e.__esModule ? e["default"] : e;
+    };Object.defineProperty(t, "__esModule", { value: !0 });var o = n(r(1)),
+        i = { origin: location.origin || location.protocol + "//" + location.host, isWorker: "undefined" == typeof window && postMessage && location, useEagerSerialize: /MSIE [8,9]/.test(navigator.userAgent) };t.env = i;var a = { allowedOrigins: [i.origin], enabled: !0, defaultOriginUrl: "*", safeSerialize: !1 },
+        s = { workers: [], config: o.extend({}, a), defaults: a };t.state = s;
+  }, function (e, t, r) {
+    var n = function n(e) {
+      return e && e.__esModule ? e["default"] : e;
+    },
+        o = function () {
+      function e(e, t) {
+        for (var r in t) {
+          var n = t[r];n.configurable = !0, n.value && (n.writable = !0);
+        }Object.defineProperties(e, t);
+      }return function (t, r, n) {
+        return r && e(t.prototype, r), n && e(t, n), t;
+      };
+    }(),
+        i = function g(e, t, r) {
+      var n = Object.getOwnPropertyDescriptor(e, t);if (void 0 === n) {
+        var o = Object.getPrototypeOf(e);return null === o ? void 0 : g(o, t, r);
+      }if ("value" in n && n.writable) return n.value;var i = n.get;return void 0 === i ? void 0 : i.call(r);
+    },
+        a = function a(e, t) {
+      if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + (typeof t === "undefined" ? "undefined" : _typeof(t)));e.prototype = Object.create(t && t.prototype, { constructor: { value: e, enumerable: !1, writable: !0, configurable: !0 } }), t && (e.__proto__ = t);
+    },
+        s = function s(e, t) {
+      if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function");
+    },
+        u = n(r(2)),
+        c = n(r(1)),
+        f = r(4),
+        l = f.state,
+        p = f.env,
+        d = function (e) {
+      function t() {
+        for (var e = arguments.length, r = Array(e), n = 0; e > n; n++) {
+          r[n] = arguments[n];
+        }s(this, t), this.transportName = "xframe", i(Object.getPrototypeOf(t.prototype), "constructor", this).apply(this, r);
+      }return a(t, e), o(t, { shouldProcess: { value: function value() {
+            var e = !!l.config.allowedOrigins.length;return l.config.enabled && ("*" === this.options.origin || e && c.contains(l.config.allowedOrigins, this.options.origin) || !e || this.options.isWorker && c.contains(l.workers, this.target) || p.isWorker);
+          } }, send: { value: function value(e) {
+            if (this.shouldProcess()) {
+              var t = p.isWorker ? null : this.target,
+                  r = [u.fedx.transports.xframe.wrapForTransport(e)];this.options.isWorker || p.isWorker || r.push(this.options.origin), p.isWorker ? this.target.postMessage.apply(t, r) : 1 === r.length ? this.target.postMessage(r[0]) : this.target.postMessage(r[0], r[1]);
+            }
+          } } }), t;
+    }(u.fedx.FederationClient);e.exports = d;
+  }]);
+});
+//# sourceMappingURL=postal.xframe.min.js.map

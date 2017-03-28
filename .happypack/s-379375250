@@ -1,0 +1,25 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.saveRedmineSuccess = exports.saveRedmineLoading = undefined;
+
+var _unit = require('app/common/unit');
+
+var $savedMessage = $('[data-role=saved-message]');
+(0, _unit.dateFormat)();
+var saveRedmineLoading = function saveRedmineLoading() {
+  $savedMessage.html(Translator.trans('正在保存...')).show();
+};
+
+var saveRedmineSuccess = function saveRedmineSuccess() {
+  var data = new Date().Format('yyyy-MM-dd hh:mm:ss');
+  $savedMessage.html(Translator.trans('\u4FDD\u5B58\u4E8E\uFF1A' + data)).show();
+  setTimeout(function () {
+    $savedMessage.hide();
+  }, 3000);
+};
+
+exports.saveRedmineLoading = saveRedmineLoading;
+exports.saveRedmineSuccess = saveRedmineSuccess;

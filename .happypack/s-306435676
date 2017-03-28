@@ -1,0 +1,32 @@
+"use strict";
+
+function carouselCreat() {
+    var $this = $(".carousel");
+    if ($this.length >= 1) {
+        $this.each(function (i, d) {
+            var $thisItem = $(d).find(".item");
+            var thisId = $(d).attr("id");
+            for (var i = 0; i < $thisItem.length; i++) {
+                var html = '';
+                if (i == 0) {
+                    html = '<li data-target=#' + thisId + ' data-slide-to="0" class="active"></li>';
+                } else {
+                    html = '<li data-target=#' + thisId + ' data-slide-to="' + i + '"></li>';
+                }
+                $(d).find(".carousel-indicators").append(html);
+            }
+        });
+    }
+}
+
+function showHide(taht, tar) {
+    $(taht).click(function () {
+        $(this).addClass("active").siblings().removeClass("active");
+        $(tar).hide().eq($(this).index()).show();
+    }).eq(0).click();
+}
+
+carouselCreat();
+showHide(".js-course-tags a,.js-course-tags li", ".category-course-list .item");
+showHide(".article-left a", ".article-right .item");
+showHide(".student-imgs li", ".lang-star-show");

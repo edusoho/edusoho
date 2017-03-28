@@ -1,0 +1,1 @@
+{"version":3,"sources":["web/themes/autumn/static-src/js/main.js"],"names":[],"mappings":";;AAAA","file":"main.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["import '../less/autumn.less';"]}

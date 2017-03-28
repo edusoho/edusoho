@@ -1,0 +1,36 @@
+'use strict';
+
+var $form = $('#classroom-set-form');
+var validator = $form.validate({
+  rule: {
+    price: 'required'
+  }
+});
+
+$('#classroom-save').click(function () {
+  $form.form();
+});
+
+$("#price").on('input', function () {
+  var price = $("#price").val();
+  var rate = $("#coinPrice").data('rate');
+  var name = $("#coinPrice").data('name');
+  $("#coinPrice").text(Translator.trans('相当于') + price * rate + name);
+});
+
+// var validator = new Validator({
+//     element: '#classroom-set-form',
+//     onFormValidated: function(error){
+//         if (error) {
+//             return false;
+//         }
+//         $('#classroom-save').button('submiting').addClass('disabled');
+//     }
+// });
+
+
+// validator.addItem({
+//     element: '[name="price"]',
+//     required: true,
+//     rule: 'currency'
+// });

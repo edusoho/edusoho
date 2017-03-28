@@ -1,0 +1,7 @@
+'use strict';
+
+$('.js-service-item').click(function () {
+  var $this = $(this);
+  var $input = $this.find('input');
+  if ($input.is("")) {}
+});

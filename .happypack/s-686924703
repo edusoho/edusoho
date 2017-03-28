@@ -1,0 +1,158 @@
+"use strict";
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _sidebar = require("./widget/sidebar");
+
+var _sidebar2 = _interopRequireDefault(_sidebar);
+
+var _taskUi = require("./widget/task-ui");
+
+var _taskUi2 = _interopRequireDefault(_taskUi);
+
+var _taskEventEmitter = require("./widget/task-event-emitter");
+
+var _taskEventEmitter2 = _interopRequireDefault(_taskEventEmitter);
+
+var _esEventEmitter = require("common/es-event-emitter");
+
+var _esEventEmitter2 = _interopRequireDefault(_esEventEmitter);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var TaskShow = function (_Emitter) {
+  _inherits(TaskShow, _Emitter);
+
+  function TaskShow(_ref) {
+    var element = _ref.element,
+        courseId = _ref.courseId,
+        taskId = _ref.taskId,
+        mode = _ref.mode;
+
+    _classCallCheck(this, TaskShow);
+
+    var _this = _possibleConstructorReturn(this, (TaskShow.__proto__ || Object.getPrototypeOf(TaskShow)).call(this));
+
+    _this.element = $(element);
+    _this.courseId = courseId;
+    _this.taskId = taskId;
+    _this.mode = mode;
+    _this.eventEmitter = new _taskEventEmitter2.default(_this.element.find('#task-content-iframe'));
+    _this.ui = new _taskUi2.default({
+      element: '.js-task-dashboard-page'
+    });
+
+    _this.init();
+    return _this;
+  }
+
+  _createClass(TaskShow, [{
+    key: "init",
+    value: function init() {
+      this.initPlugin();
+      this.initSidebar();
+
+      if (this.mode != 'preview') {
+        this.bindEvent();
+      }
+    }
+  }, {
+    key: "initPlugin",
+    value: function initPlugin() {
+      $('[data-toggle="tooltip"]').tooltip();
+      $('[data-toggle="popover"]').popover({
+        html: true,
+        trigger: 'hover'
+      });
+    }
+  }, {
+    key: "bindEvent",
+    value: function bindEvent() {
+      var _this2 = this;
+
+      var learnedTime = 0;
+      var minute = 60 * 1000;
+      var timeStep = 1; // 分钟
+      //注册doing延时监听
+      this.delay('doing', function (timeStep) {
+        learnedTime = parseInt(timeStep) + parseInt(learnedTime);
+        var eventData = {
+          timeStep: timeStep,
+          learnedTime: learnedTime,
+          taskId: _this2.taskId
+        };
+        _this2.eventEmitter.emit('doing', eventData).then(undefined, function (response) {
+          _this2.receiveFinish(response);
+        })['catch'](function () {}).then(undefined, function () {
+          //always
+          _this2.emit('doing', timeStep);
+        });
+      }, timeStep * minute);
+
+      this.emit('doing', timeStep);
+
+      this.element.on('click', '#learn-btn', function (event) {
+        $.post($('#learn-btn').data('url'), function (response) {
+          $('#modal').modal('show');
+          $('#modal').html(response);
+          $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
+          _this2.ui.learned();
+        });
+      });
+
+      // 接收活动的finish事件
+      this.eventEmitter.receive('finish', function (response) {
+        _this2.receiveFinish(response);
+      });
+    }
+  }, {
+    key: "receiveFinish",
+    value: function receiveFinish(response) {
+      var _this3 = this;
+
+      if (response.result.status == 'finish' && $('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
+        $.get($(".js-learned-prompt").data('url'), function (html) {
+          $(".js-learned-prompt").attr('data-content', html);
+          _this3.ui.learnedWeakPrompt();
+          _this3.ui.learned();
+          _this3.sidebar.reload();
+          $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
+        });
+      }
+    }
+  }, {
+    key: "initSidebar",
+    value: function initSidebar() {
+      var _this4 = this;
+
+      this.sidebar = new _sidebar2.default({
+        element: this.element.find('#dashboard-sidebar'),
+        url: this.element.find('#js-hidden-data [name="plugins_url"]').val()
+      });
+      this.sidebar.on('popup', function (px, time) {
+        _this4.element.find('#dashboard-content').animate({
+          right: px
+        }, time);
+      }).on('fold', function (px, time) {
+        _this4.element.find('#dashboard-content').animate({
+          right: px
+        }, time);
+      });
+    }
+  }]);
+
+  return TaskShow;
+}(_esEventEmitter2.default);
+
+new TaskShow({
+  element: $('body'),
+  courseId: $('body').find('#js-hidden-data [name="course-id"]').val(),
+  taskId: $('body').find('#js-hidden-data [name="task-id"]').val(),
+  mode: $('body').find('#js-hidden-data [name="mode"]').val()
+});

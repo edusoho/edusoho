@@ -1,0 +1,116 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _postal = require('postal');
+
+var _postal2 = _interopRequireDefault(_postal);
+
+require('postal.federation');
+
+require('postal.xframe');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ActivityEmitter = function () {
+  function ActivityEmitter() {
+    _classCallCheck(this, ActivityEmitter);
+
+    this.eventMap = {
+      receives: {}
+    };
+
+    this._registerIframeEvents();
+  }
+
+  _createClass(ActivityEmitter, [{
+    key: '_registerIframeEvents',
+    value: function _registerIframeEvents() {
+      _postal2.default.instanceId('activity');
+
+      _postal2.default.fedx.addFilter([{
+        channel: 'activity-events', //发送事件到task parent
+        topic: '#',
+        direction: 'out'
+      }, {
+        channel: 'task-events', //接收 task parent 的事件
+        topic: '#',
+        direction: 'in'
+      }]);
+
+      _postal2.default.fedx.signalReady();
+      this._registerReceiveTaskParentEvents();
+
+      return this;
+    }
+  }, {
+    key: '_registerReceiveTaskParentEvents',
+    value: function _registerReceiveTaskParentEvents() {
+      var _this = this;
+
+      _postal2.default.subscribe({
+        channel: 'task-events',
+        topic: '#',
+        callback: function callback(_ref) {
+          var event = _ref.event,
+              data = _ref.data;
+
+          var listeners = _this.eventMap.receives[event];
+          if (typeof listeners !== 'undefined') {
+            listeners.forEach(function (callback) {
+              return callback(data);
+            });
+          }
+        }
+      });
+    }
+
+    //发送事件到task
+
+  }, {
+    key: 'emit',
+    value: function emit(event, data) {
+      return new Promise(function (resolve, reject) {
+        var message = {
+          event: event,
+          data: data
+        };
+
+        _postal2.default.publish({
+          channel: 'activity-events',
+          topic: '#',
+          data: message
+        });
+
+        var channel = _postal2.default.channel('task-events');
+        var subscriber = channel.subscribe('#', function (data) {
+          if (data.error) {
+            reject(data.error);
+          } else {
+            resolve(data);
+          }
+          subscriber.unsubscribe();
+        });
+      });
+    }
+
+    //监听task的事件
+
+  }, {
+    key: 'receive',
+    value: function receive(event, callback) {
+      this.eventMap.receives[event] = this.eventMap.receives[event] || [];
+      this.eventMap.receives[event].push(callback);
+    }
+  }]);
+
+  return ActivityEmitter;
+}();
+
+exports.default = ActivityEmitter;

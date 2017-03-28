@@ -1,0 +1,1 @@
+{"version":3,"sources":["node_modules/.1.2.7@core-js/modules/$.html.js"],"names":["module","exports","require","document","documentElement"],"mappings":";;AAAAA,OAAOC,OAAP,GAAiBC,QAAQ,YAAR,EAAsBC,QAAtB,IAAkCA,SAASC,eAA5D","file":"$.html.js","sourceRoot":"/Users/kz/projects/edusoho","sourcesContent":["module.exports = require('./$.global').document && document.documentElement;"]}
