@@ -12,7 +12,7 @@
     "url": ""
   },
   "devDependencies": {
-    "es-webpack-engine": "~3.0.0",
+    "es-webpack-engine": "~3.0.6",
     "eslint": "3.16.0",
     "eslint-config-airbnb": "14.1.0",
     "eslint-plugin-import": "2.2.0",
