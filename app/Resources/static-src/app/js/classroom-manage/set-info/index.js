@@ -56,7 +56,7 @@ function initValidator() {
 
   $('#classroom-save').click(() => {
     console.log(validator.settings.rules);
-    validator.form();
+    // validator.form();
   })
 }
 
