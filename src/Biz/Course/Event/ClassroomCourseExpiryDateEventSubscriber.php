@@ -105,7 +105,7 @@ class ClassroomCourseExpiryDateEventSubscriber extends EventSubscriber implement
      */
     protected function getCourseDao()
     {
-        return $this->getBiz()->dao('Course.CourseDao');
+        return $this->getBiz()->dao('Course:CourseDao');
     }
 
     /**
@@ -113,7 +113,7 @@ class ClassroomCourseExpiryDateEventSubscriber extends EventSubscriber implement
      */
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course.CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
     /**
