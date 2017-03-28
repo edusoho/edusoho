@@ -126,5 +126,5 @@ services:
         arguments:      ['@service_container']
 
     callback.resource_factory:
-        class: AppBundle\Controller\Callback\Resource\ResourceFactory
+        class: AppBundle\Controller\Callback\ResourceFactory
         arguments:    ['@service_container']

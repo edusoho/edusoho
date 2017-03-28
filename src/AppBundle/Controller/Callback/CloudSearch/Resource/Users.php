@@ -1,10 +1,10 @@
 <?php
 
-namespace AppBundle\Controller\Callback\Resource\CloudSearch;
+namespace AppBundle\Controller\Callback\CloudSearch\Resource;
 
+use AppBundle\Controller\Callback\CloudSearch\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Controller\Callback\Resource\BaseResource;
 
 class Users extends BaseResource
 {

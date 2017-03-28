@@ -35,4 +35,5 @@ project.sublime-workspace
 .project
 .settings
 .publish
+deployment-config.json
 /installFiles

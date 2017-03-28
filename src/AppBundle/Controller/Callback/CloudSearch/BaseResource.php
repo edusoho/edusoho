@@ -1,35 +1,16 @@
 <?php
 
-namespace AppBundle\Controller\Callback;
+namespace AppBundle\Controller\Callback\CloudSearch;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\Callback\Resource;
 
-class IndexController extends BaseController
+abstract class BaseResource extends Resource
 {
-    public function indexAction(Request $request, $resource)
+    public function auth(Request $request)
     {
         $token = $request->headers->get('X-Auth-Token');
-        $method = strtolower($request->headers->get('X-Auth-Method'));
-        $this->checkToken($token, $method);
-
-        $resourceInstance = $this->get('callback.resource_factory')->create($resource);
-        $method = strtolower($request->getMethod());
-        if (!in_array($method, array('post', 'get'))) {
-            throw new \InvalidArgumentException(sprintf('unsupported method: %s', $method));
-        }
-
-        return new JsonResponse($resourceInstance->$method($request));
-    }
-
-    protected function checkToken($token, $method)
-    {
-        if ($method == 'keysign') {
-            $this->decodeKeysign($token);
-        } else {
-            throw new \RuntimeException(sprintf('系统尚不支持此授权方式：%s', $method));
-        }
+        $this->decodeKeysign($token);
     }
 
     protected function decodeKeysign($token)
@@ -107,6 +88,46 @@ class IndexController extends BaseController
         $replace = array('+', '/');
 
         return base64_decode(str_replace($find, $replace, $string));
+    }
+
+    protected function nextCursorPaging($currentCursor, $currentStart, $currentLimit, $currentRows)
+    {
+        $end = end($currentRows);
+        if (empty($end)) {
+            return array(
+                'cursor' => $currentCursor + 1,
+                'start' => 0,
+                'limit' => $currentLimit,
+                'eof' => true,
+            );
+        }
+
+        if (count($currentRows) < $currentLimit) {
+            return array(
+                'cursor' => $end['updatedTime'] + 1,
+                'start' => 0,
+                'limit' => $currentLimit,
+                'eof' => true,
+            );
+        }
+
+        if ($end['updatedTime'] != $currentCursor) {
+            $next = array(
+                'cursor' => $end['updatedTime'],
+                'start' => 0,
+                'limit' => $currentLimit,
+                'eof' => false,
+            );
+        } else {
+            $next = array(
+                'cursor' => $currentCursor,
+                'start' => $currentStart + $currentLimit,
+                'limit' => $currentLimit,
+                'eof' => false,
+            );
+        }
+
+        return $next;
     }
 
     protected function getSettingService()

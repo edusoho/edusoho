@@ -1,11 +1,12 @@
 <?php
 
-namespace AppBundle\Controller\Callback\Resource;
+namespace AppBundle\Controller\Callback;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Pimple\Container;
 
-abstract class BaseResource implements ResourceInterface
+abstract class Resource implements ResourceInterface
 {
     protected $container;
 
@@ -13,6 +14,8 @@ abstract class BaseResource implements ResourceInterface
     {
         $this->container = $container;
     }
+
+    abstract public function auth(Request $request);
 
     public function get(Request $request)
     {
@@ -101,46 +104,6 @@ abstract class BaseResource implements ResourceInterface
         return $requestData;
     }
 
-    protected function nextCursorPaging($currentCursor, $currentStart, $currentLimit, $currentRows)
-    {
-        $end = end($currentRows);
-        if (empty($end)) {
-            return array(
-                'cursor' => $currentCursor + 1,
-                'start' => 0,
-                'limit' => $currentLimit,
-                'eof' => true,
-            );
-        }
-
-        if (count($currentRows) < $currentLimit) {
-            return array(
-                'cursor' => $end['updatedTime'] + 1,
-                'start' => 0,
-                'limit' => $currentLimit,
-                'eof' => true,
-            );
-        }
-
-        if ($end['updatedTime'] != $currentCursor) {
-            $next = array(
-                'cursor' => $end['updatedTime'],
-                'start' => 0,
-                'limit' => $currentLimit,
-                'eof' => false,
-            );
-        } else {
-            $next = array(
-                'cursor' => $currentCursor,
-                'start' => $currentStart + $currentLimit,
-                'limit' => $currentLimit,
-                'eof' => false,
-            );
-        }
-
-        return $next;
-    }
-
     protected function filterHtml($text)
     {
         preg_match_all('/\<img.*?src\s*=\s*[\'\"](.*?)[\'\"]/i', $text, $matches);
@@ -182,6 +145,11 @@ abstract class BaseResource implements ResourceInterface
         return $this->container->get('router')->generate($route, $parameters);
     }
 
+    public function getBiz()
+    {
+        return $this->container->get('biz');
+    }
+
     protected function getCurrentUser()
     {
         $biz = $this->getBiz();
@@ -189,8 +157,10 @@ abstract class BaseResource implements ResourceInterface
         return isset($biz['user']) ? $biz['user'] : array();
     }
 
-    protected function getBiz()
+    protected function createService($alias)
     {
-        return $this->container->get('biz');
+        $biz = $this->getBiz();
+
+        return $biz->service($alias);
     }
 }

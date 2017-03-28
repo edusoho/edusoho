@@ -59,7 +59,10 @@ class SearchServiceImpl extends BaseService implements SearchService
                 'category' => 'lesson',
                 'url' => $siteUrl.'/callback/cloud_search_lessons?cursor=0&start=0&limit=100',
             ),
-            array('category' => 'user', 'url' => $siteUrl.'/callback/cloud_search_users?cursor=0&start=0&limit=100'),
+            array(
+                'category' => 'user',
+                'url' => $siteUrl.'/callback/cloud_search_users?cursor=0&start=0&limit=100',
+            ),
             array(
                 'category' => 'thread',
                 'url' => $siteUrl.'/callback/cloud_search_chaos_threads?cursor=0,0,0&start=0,0,0&limit=50',

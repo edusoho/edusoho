@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\Callback\Resource;
+namespace AppBundle\Controller\Callback;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
