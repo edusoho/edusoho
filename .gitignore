@@ -1,6 +1,6 @@
 /app/cache
-/app/data
 /app/logs
+/app/data
 /app/config/plugin_installed.php
 /app/config/plugin.php
 /app/config/parameters.yml
@@ -15,7 +15,7 @@
 !/web/themes/jianmo
 !/web/themes/block.json
 /web/bundles/
-/web/files/
+/web/files
 /web/customize/*
 !/web/customize/.gitkeep
 /plugins/*
