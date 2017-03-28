@@ -24,10 +24,9 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
      */
     protected function exerciseToActivity()
     {
-        $this->getConnection()->exec(
-          "
-          INSERT INTO `activity`
-          (
+        $this->getConnection()->exec("
+            INSERT INTO `activity`
+            (
               `title`,
               `remark` ,
               `mediaId` ,
@@ -43,8 +42,8 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
               `updatedTime`,
               `copyId`,
               `exerciseId`
-          )
-          SELECT
+            )
+            SELECT
               '练习',
               `summary`,
               `eexerciseId`,
@@ -60,17 +59,19 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
               `updatedTime`,
               `ecopyId`,
               `eexerciseId`
-          FROM (SELECT  ee.id AS eexerciseId, ee.`copyId` AS ecopyId , ce.*
-          FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid limit {$start}, {$this->perPageCount}) lesson
-          WHERE lesson.eexerciseId NOT IN (SELECT exerciseId FROM activity WHERE exerciseId IS NOT NULL );
-        "
-      );
+            FROM (SELECT  ee.id AS eexerciseId, ee.`copyId` AS ecopyId , ce.*
+            FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid limit {$start}, {$this->perPageCount}) lesson
+            WHERE lesson.eexerciseId NOT IN (SELECT exerciseId FROM activity WHERE exerciseId IS NOT NULL );
+        ");
+
+        $sql = "UPDATE activity AS a, testpaper_v8 AS t SET a.mediaId = t.id WHERE a.exerciseId = t.migrateTestId AND t.type = 'exercise' AND a.type = 'exercise';";
+        $this->getConnection()->exec($sql);
     }
 
     protected function exerciseToCourseTask()
     {
         $this->getConnection()->exec(
-          "insert into course_task
+            "insert into course_task
             (
               `courseId`,
               `fromCourseSetId`,
@@ -121,7 +122,7 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
         );
 
         $this->getConnection()->exec(
-          "UPDATE `course_task` AS ck, activity AS a SET ck.`activityId` = a.`id`
+            "UPDATE `course_task` AS ck, activity AS a SET ck.`activityId` = a.`id`
            WHERE a.`exerciseId` = ck.`exerciseId` AND  ck.type = 'exercise' AND  ck.`activityId` = 0
           "
         );

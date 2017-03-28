@@ -39,61 +39,76 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getStep($index)
     {
         $oldSteps = array(
-        'c2ActivityLearnLog', // ?
-        'c2CourseMaterial',
-        'updateCourseChapter',
-        'c2testpaperMigrate',
-        'c2QuestionMigrate',
-      );
+            'c2ActivityLearnLog', // ?
+            'c2CourseMaterial',
+            'updateCourseChapter',
+        );
 
         $steps = array(
-        'CourseSetMigrate',
-        'CourseMigrate',
+            'CourseSetMigrate',
+            'CourseMigrate',
 
-        'Lesson2CourseTaskMigrate',
-        'Lesson2CourseChapterMigrate',
-        'Lesson2ActivityMigrate',
+            'Lesson2CourseTaskMigrate',
+            'Lesson2CourseChapterMigrate',
+            'Lesson2ActivityMigrate',
 
-        'UpdateActivity',
-        'UpdateCourseTask',
+            'UpdateActivity',
+            'UpdateCourseTask',
 
-        'CourseTaskRelaCourseChapter',
-        'ActivityRelaCourseTask',
+            'CourseTaskRelaCourseChapter',
+            'ActivityRelaCourseTask',
 
-        'Lesson2VideoActivityMigrate',
-        'ActivityRelaVideoActivity',
+            'Lesson2VideoActivityMigrate',
+            'ActivityRelaVideoActivity',
 
-        'Lesson2TextActivityMigrate',
-        'ActivityRelaTextActivity',
+            'Lesson2TextActivityMigrate',
+            'ActivityRelaTextActivity',
 
-        'Lesson2AudioActivityMigrate',
-        'ActivityRelaAudioActivity',
+            'Lesson2AudioActivityMigrate',
+            'ActivityRelaAudioActivity',
 
-        'Lesson2FlashActivityMigrate',
-        'ActivityRelaFlashActivity',
+            'Lesson2FlashActivityMigrate',
+            'ActivityRelaFlashActivity',
 
-        'Lesson2PptActivityMigrate',
-        'ActivityRelaPptActivity',
+            'Lesson2PptActivityMigrate',
+            'ActivityRelaPptActivity',
 
-        'Lesson2DocActivityMigrate',
-        'ActivityRelaDocActivity',
+            'Lesson2DocActivityMigrate',
+            'ActivityRelaDocActivity',
 
-        'Lesson2LiveActivityMigrate',
-        'ActivityRelaLiveActivity',
+            'Lesson2LiveActivityMigrate',
+            'ActivityRelaLiveActivity',
 
-        'CourseLessonView2CourseTaskView',
-        'CourseLessonLearn2CourseTaskResult',
-        // next
-        'Exercise2CourseTaskMigrate',
-        'Homework2CourseTasMigrate',
+            'CourseLessonView2CourseTaskView',
+            'CourseLessonLearn2CourseTaskResult',
 
-        'TagOwnerMigrate',
+            'TestpaperMigrate',
+            'TestpaperItemMigrate',
+            'HomeworkMigrate',
+            'ExerciseMigrate',
 
-        'AfterAllCourseTaskMigrate',
-        'OtherMigrate',
+            'Exercise2CourseTaskMigrate',
+            'Homework2CourseTasMigrate',
 
-        'LogMigrate',
-      );
+            'TestpaperResultMigrate',
+            'TestpaperItemResultMigrate',
+
+            'HomeworkResultMigrate',
+            'HomeworkItemResultMigrate',
+
+            'ExerciseResultMigrate',
+            'ExerciseItemMigrate',
+
+            'QuestionMigrate',
+            'QuestionFavoriteMigrate',
+
+            'TagOwnerMigrate',
+
+            'AfterAllCourseTaskMigrate',
+            'OtherMigrate',
+
+            'LogMigrate',
+        );
 
         if ($index > count($steps) - 1) {
             return '';
@@ -1444,11 +1459,9 @@ class EduSohoUpgrade extends AbstractUpdater
     /**
      * Executes an SQL statement and return the number of affected rows.
      *
-     * @param string $statement
-     *
+     * @param  string                         $statement
      * @throws \Doctrine\DBAL\DBALException
-     *
-     * @return int the number of affected rows
+     * @return int                            the number of affected rows
      */
     protected function exec($statement)
     {
