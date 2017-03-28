@@ -68,7 +68,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         }
 
         $items = $this->showTestpaperItems($testpaper['id'], $testpaperResult['id']);
-        $testpaper['question_type_seq'] = array_keys($items);
+        $testpaper['metas']['question_type_seq'] = array_keys($items);
 
         return array(
             'testpaperResult' => $testpaperResult,
@@ -273,7 +273,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
 
         $items = $this->showTestpaperItems($testpaper['id'], $testpaperResult['id']);
-        $testpaper['question_type_seq'] = array_keys($items);
+        $testpaper['metas']['question_type_seq'] = array_keys($items);
 
         return array(
             'testpaperResult' => $testResult,
@@ -320,7 +320,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaperActivity['mediaId'], $activity['fromCourseId'], $activity['id'], $activity['mediaType']);
 
         $items = $this->showTestpaperItems($testpaper['id']);
-        $testpaper['question_type_seq'] = array_keys($items);
+        $testpaper['metas']['question_type_seq'] = array_keys($items);
 
         if (empty($testpaperResult)) {
             if ($testpaper['status'] == 'draft') {
@@ -389,7 +389,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 
         $items = $this->showTestpaperItems($testpaper['id'], $testpaperResult['id']);
 
-        $testpaper['question_type_seq'] = array_keys($items);
+        $testpaper['metas']['question_type_seq'] = array_keys($items);
         return array(
             'testpaper' => $testpaper,
             'items' => $this->coverTestpaperItems($items, 1),
