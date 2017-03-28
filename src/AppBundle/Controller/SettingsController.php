@@ -489,7 +489,7 @@ class SettingsController extends BaseController
         $token = $this->getUserService()->makeToken('pay-password-reset', $userId, strtotime('+1 day'));
         $request->request->set('token', $token);
 
-        return $this->forward('settings/updatePayPassword', array(
+        return $this->forward('AppBundle:Settings:updatePayPassword', array(
             'request' => $request,
         ));
     }
@@ -532,7 +532,7 @@ class SettingsController extends BaseController
                     $this->getAuthService()->changePayPassword($token['userId'], $data['currentUserLoginPassword'], $data['payPassword']);
                     $this->getUserService()->deleteToken('pay-password-reset', $token['token']);
 
-                    return $this->render('TopxiaWebBundle:Settings:pay-password-success.html.twig');
+                    return $this->render('settings/pay-password-success.html.twig');
                 } else {
                     $this->setFlashMessage('danger', '用户登录密码错误。');
                 }
@@ -610,9 +610,9 @@ class SettingsController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($currentUser['id']);
-        $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
+        $hasSecurityQuestions = null !== $userSecureQuestions && count($userSecureQuestions) > 0;
         $verifiedMobile = $currentUser['verifiedMobile'];
-        $hasVerifiedMobile = (isset($verifiedMobile)) && (strlen($verifiedMobile) > 0);
+        $hasVerifiedMobile = null !== $verifiedMobile && strlen($verifiedMobile) > 0;
 
         if (!$hasVerifiedMobile) {
             $this->setFlashMessage('danger', '您还没有绑定手机，请先绑定。');
