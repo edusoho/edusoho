@@ -40,7 +40,6 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $oldSteps = array(
             'c2ActivityLearnLog', // ?
-            'updateCourseChapter',
         );
 
         $steps = array(
@@ -82,7 +81,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'CourseLessonLearn2CourseTaskResult',
 
             'CourseMaterial2DownloadActivityMigrate',
-            'updateCourseChapter',
+            'UpdateCourseChapter',
 
             'TestpaperMigrate',
             'TestpaperItemMigrate',
