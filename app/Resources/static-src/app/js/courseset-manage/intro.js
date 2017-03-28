@@ -76,6 +76,8 @@ export default class Intro {
     this.intro.start().onexit(function(){
       $('.js-intro-btn-group').removeClass('transparent');
       $('body').removeClass('transparent-intro');
+    }).oncomplete(function(){
+      console.log('ok');
     });
   }
 
