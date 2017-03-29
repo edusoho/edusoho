@@ -180,6 +180,17 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             throw $this->createNotFoundException("CourseSet#{$id} Not Found");
         }
 
+        if ($courseSet['parentId'] > 0) {
+            $classroomCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($id);
+            if (!empty($classroomCourse)) {
+                $classroom = $this->getClassroomService()->getClassroom($classroomCourse['classroomId']);
+                if (!empty($classroom) && $classroom['headTeacherId'] == $user['id']) {
+                    //班主任有权管理班级下所有课程
+                    return $courseSet;
+                }
+            }
+        }
+
         if (!$this->hasCourseSetManageRole($id)) {
             throw $this->createAccessDeniedException('can not access');
         }
