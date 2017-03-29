@@ -317,7 +317,6 @@ global.notification.empty: 通知已经被管理员删除
 user.message: 私信
 user.message.content_title: 私信
 user.message.empty: 暂无私信
-user.message.btn.send: 写私信
 
 #用户写私信模块
 user.message.send: 写私信
@@ -332,8 +331,9 @@ user.message.conversation.message_content: 请输入私信内容
 user.message.conversation.send_for: 发给
 user.message.conversation.unread_number: %unreadNum%条未读
 user.message.conversation.total_number: 共%messageNum%条
-user.message.conversation.delete: 删除
 
 #私信模块通用button
-user.message.btn.back_to_my_message: 返回我的私信
+user.message.btn.delete: 删除
+user.message.btn.back: 返回我的私信
+user.message.btn.send: 写私信
 

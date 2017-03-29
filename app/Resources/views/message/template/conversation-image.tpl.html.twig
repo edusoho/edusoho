@@ -17,7 +17,7 @@
       <span class="pull-left">{{ conversation.latestMessageTime|smart_time }}</span>
       <span class="pull-right">{{'user.message.conversation.total_number'|trans({'%messageNum%':conversation.messageNum})}}</span>
       <div class="actions pull-right">
-        <a class="delete-conversation-btn color-gray" href="javascript:" data-url="{{ path('message_conversation_delete', {conversationId:conversation.id })}}">{{'user.message.conversation.delete'|trans}}</a>
+        <a class="delete-conversation-btn color-gray" href="javascript:" data-url="{{ path('message_conversation_delete', {conversationId:conversation.id })}}">{{'user.message.btn.delete'|trans}}</a>
         <span class="color-gray mhm">|</span>
       </div>
     </div>
