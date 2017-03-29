@@ -725,7 +725,10 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         if ($course['learnMode'] == 'freeMode') {
-            $toLearnTasks[] = $this->getToLearnTaskWithFreeMode($courseId);
+            $toLearnTask = $this->getToLearnTaskWithFreeMode($courseId);
+            if (!empty($toLearnTask)) {
+                $toLearnTasks[] = $toLearnTask;
+            }
         }
         if ($course['learnMode'] == 'lockMode') {
             list($tasks, $toLearnTasks) = $this->getToLearnTasksWithLockMode($courseId);
@@ -759,9 +762,15 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getToLearnTaskWithFreeMode($courseId)
     {
         $taskResults = $this->getTaskResultService()->findUserProgressingTaskResultByCourseId($courseId);
+
         if (empty($taskResults)) {
             $minSeq = $this->getTaskDao()->getMinSeqByCourseId($courseId);
             $toLearnTask = $this->getTaskDao()->getByCourseIdAndSeq($courseId, $minSeq);
+            $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($toLearnTask['id']);
+            if (!empty($taskResult) && $taskResult['status'] === 'finish') {
+                //任务已全部完成
+                return array();
+            }
         } else {
             $latestTaskResult = array_shift($taskResults);
             $latestLearnTask = $this->getTask($latestTaskResult['courseTaskId']); //获取最新学习未学完的课程
