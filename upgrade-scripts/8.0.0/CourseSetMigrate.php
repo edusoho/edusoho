@@ -4,8 +4,8 @@ class CourseSetMigrate extends AbstractMigrate
 {
     public function update($page)
     {
-        if (!$this->isTableExist('c2_course_set')) {
-            $sql = "CREATE TABLE `c2_course_set` (
+        if (!$this->isTableExist('course_set_v8')) {
+            $sql = "CREATE TABLE `course_set_v8` (
                   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                   `type` varchar(32) NOT NULL DEFAULT '',
                   `title` varchar(1024) DEFAULT '',
@@ -56,13 +56,13 @@ class CourseSetMigrate extends AbstractMigrate
 
     private function updateCourseSet()
     {
-        $sql = 'UPDATE `c2_course_set` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.`num`  WHERE ce.`id` = cm.`courseId`;';
+        $sql = 'UPDATE `course_set_v8` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.`num`  WHERE ce.`id` = cm.`courseId`;';
         $result = $this->getConnection()->exec($sql);
 
-        $sql = 'UPDATE `c2_course_set` cs, `course` c SET cs.`minCoursePrice` = c.`price`, cs.`maxCoursePrice` = c.`price` where cs.`id` = c.`id`';
+        $sql = 'UPDATE `course_set_v8` cs, `course` c SET cs.`minCoursePrice` = c.`price`, cs.`maxCoursePrice` = c.`price` where cs.`id` = c.`id`';
         $result = $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE `c2_course_set` ccs, `course` c  set
+        $sql = "UPDATE `course_set_v8` ccs, `course` c  set
             ccs.`title` = c.`title`
             ,ccs.`subtitle` = c.`subtitle`
             ,ccs.`status` = c.`status`
@@ -99,13 +99,13 @@ class CourseSetMigrate extends AbstractMigrate
 
     private function insertCourseSet($page)
     {
-        $countSql = 'SELECT count(*) FROM `course` where `id` not in (select `id` from `c2_course_set`)';
+        $countSql = 'SELECT count(*) FROM `course` where `id` not in (select `id` from `course_set_v8`)';
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
             return;
         }
 
-        $sql = "INSERT INTO `c2_course_set` (
+        $sql = "INSERT INTO `course_set_v8` (
             `id`
             ,`title`
             ,`subtitle`
@@ -167,7 +167,7 @@ class CourseSetMigrate extends AbstractMigrate
             ,`userId`
             ,`about`
             ,`teacherIds`
-        FROM `course` where `id` not in (select `id` from `c2_course_set`) order by id limit 0, {$this->perPageCount};";
+        FROM `course` where `id` not in (select `id` from `course_set_v8`) order by id limit 0, {$this->perPageCount};";
 
         $result = $this->getConnection()->exec($sql);
 

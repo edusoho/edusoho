@@ -4,10 +4,10 @@ class Lesson2PptActivityMigrate extends AbstractMigrate
 {
     public function update($page)
     {
-        if (!$this->isTableExist('ppt_activity')) {
+        if (!$this->isTableExist('activity_ppt')) {
             $this->exec(
                 "
-                CREATE TABLE `ppt_activity` (
+                CREATE TABLE `activity_ppt` (
                   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                   `mediaId` int(11) NOT NULL,
                   `finishType` varchar(32) NOT NULL DEFAULT '' COMMENT 'end, time',
@@ -21,11 +21,11 @@ class Lesson2PptActivityMigrate extends AbstractMigrate
             );
         }
 
-        if (!$this->isFieldExist('ppt_activity', 'migrateLessonId')) {
-            $this->exec('alter table `ppt_activity` add `migrateLessonId` int(10) ;');
+        if (!$this->isFieldExist('activity_ppt', 'migrateLessonId')) {
+            $this->exec('alter table `activity_ppt` add `migrateLessonId` int(10) ;');
         }
 
-        $countSql = "SELECT count(*) from `course_lesson` WHERE `type`='ppt' and `id` NOT IN (SELECT migrateLessonId FROM `ppt_activity`)";
+        $countSql = "SELECT count(*) from `course_lesson` WHERE `type`='ppt' and `id` NOT IN (SELECT migrateLessonId FROM `activity_ppt`)";
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
             return;
@@ -33,7 +33,7 @@ class Lesson2PptActivityMigrate extends AbstractMigrate
 
         $this->exec(
             "
-          insert into `ppt_activity`
+          insert into `activity_ppt`
             (
             `mediaId`,
             `finishType`,
@@ -51,7 +51,7 @@ class Lesson2PptActivityMigrate extends AbstractMigrate
             `userId` ,
             `updatedTime`,
             `id`
-          from `course_lesson` where type ='ppt' and id not in (select `migrateLessonId` from `ppt_activity`) order by id limit 0, {$this->perPageCount};
+          from `course_lesson` where type ='ppt' and id not in (select `migrateLessonId` from `activity_ppt`) order by id limit 0, {$this->perPageCount};
         "
         );
 

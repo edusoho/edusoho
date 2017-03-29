@@ -19,11 +19,11 @@ class ExerciseItemResultMigrate extends AbstractMigrate
     private function updateExerciseItemResult()
     {
         $sql = "UPDATE testpaper_item_result_v8 AS rt,(SELECT id ,migrateTestId FROM testpaper_v8 WHERE type = 'exercise') AS tmp SET
-            rt.testId = tmp.id WHERE rt.type = 'exercise' AND tmp.migrateTestId = rt.testId ";
+            rt.testId = tmp.id WHERE rt.migrateType = 'exercise' AND tmp.migrateTestId = rt.testId ";
         $this->getConnection()->exec($sql);
 
         $sql = "UPDATE testpaper_item_result_v8 AS rt,(SELECT id,migrateResultId FROM testpaper_result_v8 WHERE type = 'exercise') AS tmp SET
-            rt.resultId = tmp.id WHERE rt.type = 'exercise' AND tmp.migrateResultId = rt.resultId ";
+            rt.resultId = tmp.id WHERE rt.migrateType = 'exercise' AND tmp.migrateResultId = rt.resultId ";
         $this->getConnection()->exec($sql);
     }
 
@@ -58,6 +58,6 @@ class ExerciseItemResultMigrate extends AbstractMigrate
             'exercise' FROM exercise_item_result WHERE id NOT IN (SELECT migrateItemResultId FROM testpaper_item_result_v8 WHERE migrateType = 'exercise') order by id limit 0, {$this->perPageCount};";
         $this->getConnection()->exec($sql);
 
-        return $page+1;
+        return $page + 1;
     }
 }

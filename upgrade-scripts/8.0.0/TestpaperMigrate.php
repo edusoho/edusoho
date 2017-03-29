@@ -64,7 +64,7 @@ class TestpaperMigrate extends AbstractMigrate
 
         $testpapers = $this->getConnection()->fetchAll($sql);
 
-        if (empty($testpaper)) {
+        if (empty($testpapers)) {
             return;
         }
 
@@ -128,6 +128,6 @@ class TestpaperMigrate extends AbstractMigrate
             $this->getConnection()->exec($insertSql);
         }
 
-        return $page+1;
+        return $page + 1;
     }
 }

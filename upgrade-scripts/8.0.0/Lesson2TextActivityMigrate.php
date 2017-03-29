@@ -4,10 +4,10 @@ class Lesson2TextActivityMigrate extends AbstractMigrate
 {
     public function update($page)
     {
-    	if (!$this->isTableExist("text_activity")) {
+    	if (!$this->isTableExist("activity_text")) {
             $this->getConnection()->exec(
                 "
-            CREATE TABLE `text_activity` (
+            CREATE TABLE `activity_text` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `finishType` varchar(32) NOT NULL DEFAULT '' COMMENT 'click, time',
               `finishDetail` varchar(32) DEFAULT '0' COMMENT '至少观看X分钟',
@@ -20,11 +20,11 @@ class Lesson2TextActivityMigrate extends AbstractMigrate
             );
         }
 
-        if (!$this->isFieldExist('text_activity', 'migrateLessonId')) {
-            $this->exec("alter table `text_activity` add `migrateLessonId` int(10) ;");
+        if (!$this->isFieldExist('activity_text', 'migrateLessonId')) {
+            $this->exec("alter table `activity_text` add `migrateLessonId` int(10) ;");
         }
 
-        $countSql = "SELECT count(*) from `course_lesson` WHERE `type`='text' and `id` NOT IN (SELECT migrateLessonId FROM `text_activity`)";
+        $countSql = "SELECT count(*) from `course_lesson` WHERE `type`='text' and `id` NOT IN (SELECT migrateLessonId FROM `activity_text`)";
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
             return;
@@ -32,7 +32,7 @@ class Lesson2TextActivityMigrate extends AbstractMigrate
 
         $this->getConnection()->exec(
             "
-            INSERT INTO `text_activity` (
+            INSERT INTO `activity_text` (
                 `finishType`,
                 `finishDetail`,
                 `createdTime`,
@@ -47,7 +47,7 @@ class Lesson2TextActivityMigrate extends AbstractMigrate
                 `userId`,
                 `updatedTime`,
                 `id`
-            FROM `course_lesson` WHERE  `type`='text' AND  `id` NOT IN (SELECT `migrateLessonId` FROM `text_activity`) order by id limit 0, {$this->perPageCount};
+            FROM `course_lesson` WHERE  `type`='text' AND  `id` NOT IN (SELECT `migrateLessonId` FROM `activity_text`) order by id limit 0, {$this->perPageCount};
         "
         );
 

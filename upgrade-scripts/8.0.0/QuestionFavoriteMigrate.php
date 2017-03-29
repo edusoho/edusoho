@@ -24,8 +24,11 @@ class QuestionFavoriteMigrate extends AbstractMigrate
 
     private function updateQuestionFavorite($page)
     {
-        $sql = "SELECT * FROM question_favorite ORDER BY id LIMIT 0, {$this->perPageCount};";
+        $sql = "SELECT * FROM question_favorite WHERE targetId = 0 ORDER BY id LIMIT 0, {$this->perPageCount};";
         $favorites = $this->getConnection()->fetchAll($sql);
+        if (empty($favorites)) {
+            return;
+        }
 
         foreach ($favorites as $favorite) {
             $targetArr = explode('-', $favorite['target']);
@@ -34,6 +37,6 @@ class QuestionFavoriteMigrate extends AbstractMigrate
             $this->getConnection()->exec($sql);
         }
 
-        return $page+1;
+        return $page + 1;
     }
 }

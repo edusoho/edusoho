@@ -6,13 +6,14 @@ class Homework2CourseTasMigrate extends AbstractMigrate
     {
         $this->migrateTableStructure();
 
-        $count = $this->getConnection()->fetchColumn('SELECT  count(ee.id)  FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonId');
+        $count = $this->getConnection()->fetchColumn("SELECT count(id) FROM homework WHERE id NOT IN (SELECT migrateHomeworkId FROM activity WHERE mediaType='homework');");
+
         if (empty($count)) {
             return;
         }
 
-        $this->homeworkToActivity($start);
-        $this->homeworkToCourseTask($start);
+        $this->homeworkToActivity();
+        $this->homeworkToCourseTask();
 
         return $page + 1;
     }
@@ -21,7 +22,7 @@ class Homework2CourseTasMigrate extends AbstractMigrate
      * exercise datas convert to  activity
      * TODO datas should read from table tespaper.
      */
-    protected function homeworkToActivity($start)
+    protected function homeworkToActivity()
     {
         $this->getConnection()->exec(
             "
@@ -65,11 +66,11 @@ class Homework2CourseTasMigrate extends AbstractMigrate
                   "
         );
 
-        $sql = "UPDATE activity AS a,testpaper_v8 AS t SET a.mediaId = t.id WHERE a.migrateHomeworkId = t.migrateTestId AND t.type = 'homework' AND a.type = 'homework';";
+        $sql = "UPDATE activity AS a,testpaper_v8 AS t SET a.mediaId = t.id WHERE a.migrateHomeworkId = t.migrateTestId AND t.type = 'homework' AND a.mediaType = 'homework';";
         $this->getConnection()->exec($sql);
     }
 
-    protected function homeworkToCourseTask($start)
+    protected function homeworkToCourseTask()
     {
         $this->exec(
             "
@@ -119,7 +120,7 @@ class Homework2CourseTasMigrate extends AbstractMigrate
             `id`
             FROM (SELECT  ee.id AS hhomeworkId, ee.`copyId` AS ecopyId , ce.*
               FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonid limit 0, {$this->perPageCount}) lesson
-                  WHERE lesson.hhomeworkId NOT IN (SELECT homeworkId FROM course_task WHERE homeworkId IS NOT NULL );
+                  WHERE lesson.hhomeworkId NOT IN (SELECT migrateHomeworkId FROM course_task WHERE migrateHomeworkId IS NOT NULL );
           "
         );
 
