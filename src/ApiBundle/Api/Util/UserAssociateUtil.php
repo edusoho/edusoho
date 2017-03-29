@@ -54,6 +54,7 @@ class UserAssociateUtil
         foreach ($userIdFields as $userIdField) {
             $userId = $object[$userIdField];
             if (is_array($userId)) {
+                $object[$userIdField] = array();
                 foreach ($userId as $uid) {
                     $object[$userIdField][] = $users[$uid];
                 }
@@ -61,6 +62,7 @@ class UserAssociateUtil
                 $object[$userIdField] = $users[$object[$userIdField]];
             }
         }
+
     }
 
     /**
