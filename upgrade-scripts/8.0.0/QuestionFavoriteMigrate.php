@@ -33,7 +33,7 @@ class QuestionFavoriteMigrate extends AbstractMigrate
         foreach ($favorites as $favorite) {
             $targetArr = explode('-', $favorite['target']);
             $targetType = empty($targetArr[0]) ? 'testpaper' : $targetArr[0];
-            $targetId = empty($targetArr[1]) ? '-1' : $targetArr[1];
+            $targetId = empty($targetArr[1]) ? 0 : $targetArr[1];
 
             $sql = "UPDATE question_favorite set targetId = {$targetId},targetType='".$targetType."' WHERE id = {$favorite['id']}";
             $this->getConnection()->exec($sql);
