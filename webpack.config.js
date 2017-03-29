@@ -24,7 +24,7 @@ const options = {
     'excanvas-compiled':['libs/js/excanvas-compiled.js'],
     'echo-js': ['echo-js'],
   },
-  noParseDeps: [ //these node modules will use a dist version to speed up compilation
+  noParseDeps: [ // 不解析依赖，加快编译速度
     'jquery/dist/jquery.js',
     'bootstrap/dist/js/bootstrap.js',
     'admin-lte/dist/js/app.js',
@@ -33,8 +33,7 @@ const options = {
     'jquery-form/jquery.form.js',
     'bootstrap-notify/bootstrap-notify.js',
     'store/store.js',
-    // The `.` will auto be replaced to `-` for compatibility
-    'respond.js/dest/respond.src.js',
+    'respond.js/dest/respond.src.js', // '.'会被转换成'-'
     'fetch-ie8/fetch.js',
     'console-polyfill/index.js',
     'html5shiv/dist/html5shiv.js',
