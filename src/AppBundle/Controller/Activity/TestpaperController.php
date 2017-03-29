@@ -55,7 +55,9 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
 
         if (!$testpaper) {
-            return $this->createMessageResponse('error', 'testpaper not found');
+            return $this->render('activity/testpaper/preview.html.twig', array(
+                'paper' => null,
+            ));
         }
 
         $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
@@ -151,9 +153,11 @@ class TestpaperController extends BaseController implements ActivityActionInterf
     protected function getCheckedQuestionType($testpaper)
     {
         $questionTypes = array();
-        foreach ($testpaper['metas']['counts'] as $type => $count) {
-            if ($count > 0) {
-                $questionTypes[] = $type;
+        if (!empty($testpaper['metas']['counts'])) {
+            foreach ($testpaper['metas']['counts'] as $type => $count) {
+                if ($count > 0) {
+                    $questionTypes[] = $type;
+                }
             }
         }
 

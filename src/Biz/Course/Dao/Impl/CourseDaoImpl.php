@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
 {
-    protected $table = 'c2_course';
+    protected $table = 'course_v8';
 
     public function findCoursesByParentIdAndLocked($parentId, $locked)
     {

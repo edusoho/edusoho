@@ -20,8 +20,8 @@ class X8ScriptCheckCommand extends BaseCommand
 
         // 课程
         $c1 = $connection->fetchColumn('select count(*) from course;');
-        $c2 = $connection->fetchColumn('select count(*) from c2_course;');
-        $c3 = $connection->fetchColumn('select count(*) from c2_course_set;');
+        $c2 = $connection->fetchColumn('select count(*) from course_v8;');
+        $c3 = $connection->fetchColumn('select count(*) from course_set_v8;');
         if ($c1 == $c2 && $c2 == $c3) {
             $output->writeln('<info> 课程 数据验证通过.</info>');
         } else {
@@ -30,7 +30,7 @@ class X8ScriptCheckCommand extends BaseCommand
 
         // 试卷
         $c1 = $connection->fetchColumn('select count(*) from testpaper;');
-        $c2 = $connection->fetchColumn("select count(*) from c2_testpaper where type='testpaper';");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_v8 where type='testpaper';");
         if ($c1 == $c2) {
             $output->writeln('<info> 试卷 数据验证通过.</info>');
         } else {
@@ -39,7 +39,7 @@ class X8ScriptCheckCommand extends BaseCommand
 
         $c1 = $connection->fetchColumn("select count(*) from activity where mediaType = 'testpaper';");
         $c2 = $connection->fetchColumn("select count(*) from course_task where activityId in (select id from activity where mediaType = 'testpaper');");
-        $c3 = $connection->fetchColumn('select count(*) from testpaper_activity;');
+        $c3 = $connection->fetchColumn('select count(*) from activity_testpaper;');
         if ($c1 == $c2 && $c2 == $c3) {
             $output->writeln('<info> 试卷活动 数据验证通过.</info>');
         } else {
@@ -47,7 +47,7 @@ class X8ScriptCheckCommand extends BaseCommand
         }
 
         $c1 = $connection->fetchColumn('select count(*) from testpaper_item;');
-        $c2 = $connection->fetchColumn("select count(*) from c2_testpaper_item where testId in (select id from c2_testpaper where type='testpaper');");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_v8 where testId in (select id from testpaper_v8 where type='testpaper');");
         if ($c1 == $c2) {
             $output->writeln('<info> 试卷中题目 数据验证通过.</info>');
         } else {
@@ -56,7 +56,7 @@ class X8ScriptCheckCommand extends BaseCommand
 
         // 作业：
         $c1 = $connection->fetchColumn('select count(*) from homework;');
-        $c2 = $connection->fetchColumn("select count(*) from c2_testpaper where type='homework';");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_v8 where type='homework';");
         $c3 = $connection->fetchColumn("select count(*) from activity where mediaType = 'homework';");
         $c4 = $connection->fetchColumn("select count(*) from course_task where activityId in (select id from activity where mediaType = 'homework');");
         if ($c1 == $c2 && $c2 == $c3 && $c3 == $c4) {
@@ -66,7 +66,7 @@ class X8ScriptCheckCommand extends BaseCommand
         }
 
         $c1 = $connection->fetchColumn('select count(*) from homework_item;');
-        $c2 = $connection->fetchColumn("select count(*) from c2_testpaper_item where testId in (select id from c2_testpaper where type='homework');");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_v8 where testId in (select id from testpaper_v8 where type='homework');");
         if ($c1 == $c2) {
             $output->writeln('<info> 作业中题目 数据验证通过.</info>');
         } else {
@@ -75,7 +75,7 @@ class X8ScriptCheckCommand extends BaseCommand
 
         // 练习：
         $c1 = $connection->fetchColumn('select count(*) from exercise;');
-        $c2 = $connection->fetchColumn("select count(*) from c2_testpaper where type='exercise';");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_v8 where type='exercise';");
         $c3 = $connection->fetchColumn("select count(*) from activity where mediaType = 'exercise';");
         $c4 = $connection->fetchColumn("select count(*) from course_task where activityId in (select id from activity where mediaType = 'exercise');");
         if ($c1 == $c2 && $c2 == $c3 && $c3 == $c4) {
@@ -85,7 +85,7 @@ class X8ScriptCheckCommand extends BaseCommand
         }
 
         $c1 = $connection->fetchColumn('select count(*) from exercise_item;');
-        $c2 = $connection->fetchColumn("select count(*) from c2_testpaper_item where testId in (select id from c2_testpaper where type='exercise');");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_v8 where testId in (select id from testpaper_v8 where type='exercise');");
         if ($c1 == $c2) {
             $output->writeln('<info> 练习中题目 数据验证通过.</info>');
         } else {
@@ -95,7 +95,7 @@ class X8ScriptCheckCommand extends BaseCommand
         // 视频：
         $c1 = $connection->fetchColumn("select count(*) from course_lesson where type='video';");
         $c2 = $connection->fetchColumn("select count(*) from activity where mediaType='video';");
-        $c3 = $connection->fetchColumn('select count(*) from video_activity;');
+        $c3 = $connection->fetchColumn('select count(*) from activity_video;');
         $c4 = $connection->fetchColumn("select count(*) from course_task where activityId in (select id from activity where mediaType = 'video');");
         if ($c1 == $c2 && $c2 == $c3 && $c3 == $c4) {
             $output->writeln('<info> 视频 数据验证通过.</info>');
@@ -106,7 +106,7 @@ class X8ScriptCheckCommand extends BaseCommand
         // 音频：
         $c1 = $connection->fetchColumn("select count(*) from course_lesson where type='audio';");
         $c2 = $connection->fetchColumn("select count(*) from activity where mediaType='audio';");
-        $c3 = $connection->fetchColumn('select count(*) from audio_activity;');
+        $c3 = $connection->fetchColumn('select count(*) from activity_audio;');
         $c4 = $connection->fetchColumn("select count(*) from course_task where activityId in (select id from activity where mediaType = 'audio');");
         if ($c1 == $c2 && $c2 == $c3 && $c3 == $c4) {
             $output->writeln('<info> 音频 数据验证通过.</info>');
@@ -117,7 +117,7 @@ class X8ScriptCheckCommand extends BaseCommand
         // ppt：
         $c1 = $connection->fetchColumn("select count(*) from course_lesson where type='ppt';");
         $c2 = $connection->fetchColumn("select count(*) from activity where mediaType='ppt';");
-        $c3 = $connection->fetchColumn('select count(*) from ppt_activity;');
+        $c3 = $connection->fetchColumn('select count(*) from activity_ppt;');
         $c4 = $connection->fetchColumn("select count(*) from course_task where activityId in (select id from activity where mediaType = 'ppt');");
         if ($c1 == $c2 && $c2 == $c3 && $c3 == $c4) {
             $output->writeln('<info> ppt 数据验证通过.</info>');
@@ -128,7 +128,7 @@ class X8ScriptCheckCommand extends BaseCommand
         // live：
         $c1 = $connection->fetchColumn("select count(*) from course_lesson where type='live';");
         $c2 = $connection->fetchColumn("select count(*) from activity where mediaType='live';");
-        $c3 = $connection->fetchColumn('select count(*) from live_activity;');
+        $c3 = $connection->fetchColumn('select count(*) from activity_live;');
         $c4 = $connection->fetchColumn("select count(*) from course_task where activityId in (select id from activity where mediaType = 'live');");
         if ($c1 == $c2 && $c2 == $c3 && $c3 == $c4) {
             $output->writeln('<info> live 数据验证通过.</info>');
@@ -139,7 +139,7 @@ class X8ScriptCheckCommand extends BaseCommand
         // document：
         $c1 = $connection->fetchColumn("select count(*) from course_lesson where type='document';");
         $c2 = $connection->fetchColumn("select count(*) from activity where mediaType='doc';");
-        $c3 = $connection->fetchColumn('select count(*) from doc_activity;');
+        $c3 = $connection->fetchColumn('select count(*) from activity_doc;');
         $c4 = $connection->fetchColumn("select count(*) from course_task where activityId in (select id from activity where mediaType = 'doc');");
         if ($c1 == $c2 && $c2 == $c3 && $c3 == $c4) {
             $output->writeln('<info> document 数据验证通过.</info>');
@@ -150,7 +150,7 @@ class X8ScriptCheckCommand extends BaseCommand
         // text:
         $c1 = $connection->fetchColumn("select count(*) from course_lesson where type='text';");
         $c2 = $connection->fetchColumn("select count(*) from activity where mediaType='text';");
-        $c3 = $connection->fetchColumn('select count(*) from text_activity;');
+        $c3 = $connection->fetchColumn('select count(*) from activity_text;');
         $c4 = $connection->fetchColumn("select count(*) from course_task where activityId in (select id from activity where mediaType = 'text');");
         if ($c1 == $c2 && $c2 == $c3 && $c3 == $c4) {
             $output->writeln('<info> text 数据验证通过.</info>');
@@ -161,7 +161,7 @@ class X8ScriptCheckCommand extends BaseCommand
         // flash:
         $c1 = $connection->fetchColumn("select count(*) from course_lesson where type='flash';");
         $c2 = $connection->fetchColumn("select count(*) from activity where mediaType='flash';");
-        $c3 = $connection->fetchColumn('select count(*) from flash_activity;');
+        $c3 = $connection->fetchColumn('select count(*) from activity_flash;');
         $c4 = $connection->fetchColumn("select count(*) from course_task where activityId in (select id from activity where mediaType = 'flash');");
         if ($c1 == $c2 && $c2 == $c3 && $c3 == $c4) {
             $output->writeln('<info> flash 数据验证通过.</info>');
@@ -170,11 +170,12 @@ class X8ScriptCheckCommand extends BaseCommand
         }
 
         // download:
-        $c1 = $connection->fetchColumn("select count(*) from course_material where source = 'coursematerial';");
-        $c2 = $connection->fetchColumn('select count(*) from download_activity;');
+        $c1 = $connection->fetchColumn("SELECT count(*) FROM (SELECT max(lessonId) FROM course_material WHERE source = 'coursematerial' AND  `lessonId` >0 GROUP BY lessonId ) cm;");
+        $c2 = $connection->fetchColumn('select count(*) from activity_download;');
         $c3 = $connection->fetchColumn("select count(*) from activity where mediaType='download';");
         $c4 = $connection->fetchColumn("select count(*) from course_task where activityId in (select id from activity where mediaType = 'download');");
-        if ($c1 == $c2 && $c2 == $c3 && $c3 == $c4) {
+        $c5 = $connection->fetchColumn("SELECT count(*) FROM activity WHERE mediaId IN (SELECT id FROM activity_download ) AND mediaType = 'download';");
+        if ($c1 == $c2 && $c2 == $c3 && $c3 == $c4 and $c4 == $c5) {
             $output->writeln('<info> download 数据验证通过.</info>');
         } else {
             $output->writeln('<error> download 数据验证不通过.</error>');
@@ -210,7 +211,7 @@ class X8ScriptCheckCommand extends BaseCommand
 
         // testpaper_result校验
         $c1 = $connection->fetchColumn('select count(*) from testpaper_result;');
-        $c2 = $connection->fetchColumn("select count(*) from c2_testpaper_result where type='testpaper';");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_result_v8 where type='testpaper';");
         if ($c1 == $c2) {
             $output->writeln('<info> testpaper_result校验 数据验证通过.</info>');
         } else {
@@ -219,7 +220,7 @@ class X8ScriptCheckCommand extends BaseCommand
 
         // testpaper_item_result校验
         $c1 = $connection->fetchColumn('select count(*) from testpaper_item_result;');
-        $c2 = $connection->fetchColumn("select count(*) from c2_testpaper_item_result where type='testpaper';");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_result_v8 where migrateType='testpaper';");
         if ($c1 == $c2) {
             $output->writeln('<info> testpaper_item_result校验 数据验证通过.</info>');
         } else {
@@ -228,7 +229,7 @@ class X8ScriptCheckCommand extends BaseCommand
 
         // homework_result校验
         $c1 = $connection->fetchColumn('select count(*) from homework_result;');
-        $c2 = $connection->fetchColumn("select count(*) from c2_testpaper_result where type='homework';");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_result_v8 where type='homework';");
         if ($c1 == $c2) {
             $output->writeln('<info> homework_result校验 数据验证通过.</info>');
         } else {
@@ -237,7 +238,7 @@ class X8ScriptCheckCommand extends BaseCommand
 
         // homework_item_result校验
         $c1 = $connection->fetchColumn('select count(*) from homework_item_result;');
-        $c2 = $connection->fetchColumn("select count(*) from c2_testpaper_item_result where type='homework';");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_result_v8 where migrateType='homework';");
         if ($c1 == $c2) {
             $output->writeln('<info> homework_item_result校验 数据验证通过.</info>');
         } else {
@@ -246,7 +247,7 @@ class X8ScriptCheckCommand extends BaseCommand
 
         // exercise_result校验
         $c1 = $connection->fetchColumn('select count(*) from exercise_result;');
-        $c2 = $connection->fetchColumn("select count(*) from c2_testpaper_result where type='exercise';");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_result_v8 where type='exercise';");
         if ($c1 == $c2) {
             $output->writeln('<info> exercise_result校验 数据验证通过.</info>');
         } else {
@@ -255,7 +256,7 @@ class X8ScriptCheckCommand extends BaseCommand
 
         // exercise_item_result校验
         $c1 = $connection->fetchColumn('select count(*) from exercise_item_result;');
-        $c2 = $connection->fetchColumn("select count(*) from c2_testpaper_item_result where type='exercise';");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_result_v8 where migrateType='exercise';");
         if ($c1 == $c2) {
             $output->writeln('<info> exercise_item_result校验 数据验证通过.</info>');
         } else {

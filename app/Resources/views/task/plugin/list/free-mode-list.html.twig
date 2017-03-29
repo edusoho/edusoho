@@ -1,5 +1,4 @@
 <ul class="task-list task-show">
-  {% set taskIndex = 0 %}
   {% for key, item in courseItems %}
     {% if item.type == 'chapter' %}
       <li class="task-item bg-gray-lighter js-task-chapter">
@@ -13,7 +12,11 @@
       </li>
     {% elseif  item.type == 'lesson' %}
       {% for task in item.tasks %}
-        {% set taskIndex = taskIndex +1%}
+        {% if  item.tasks|length > 1 %}
+          {% set taskIndex = item.number ~'-' ~ loop.index %}
+        {% else %}
+          {% set taskIndex = item.number  %}
+        {% endif %}
         {% set task_lock =  (course.learnMode  == 'lockMode')  and (task.lock  and   task.number != 1) %}
         <li class="task-item task-content {% if task.activityId == activity.id %} active {% endif %} mouse-control">
           <i class="es-icon

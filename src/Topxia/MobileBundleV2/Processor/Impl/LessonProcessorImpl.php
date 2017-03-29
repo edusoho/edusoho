@@ -244,6 +244,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
     public function getCourseDownLessons()
     {
         $courseId = $this->getParam('courseId');
+        $user = $this->controller->getuserByToken($this->request);
+        
         if (!$this->controller->getCourseService()->canTakeCourse($courseId)) {
             return $this->createErrorResponse('403', 'Access Denied');
         }

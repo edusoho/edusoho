@@ -456,7 +456,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             foreach ($courses as $course) {
                 $this->getCourseService()->updateCourse(
                     $course['id'],
-                    array('serializeMode' => $fields['serializeMode'])
+                    array('serializeMode' => $fields['serializeMode'], 'title' => $course['title'], 'courseSetId' => $courseSet['id'])
                 );
             }
         }

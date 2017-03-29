@@ -22,11 +22,7 @@
             <i class="es-icon es-icon-today mrm"></i>学习有效期
           </p>
           <span class="text-16">
-            {% if course.expiryMode == 'forever' %}
-            永久有效
-            {% else %}
-              {% include 'course/header/parts/member-deadline-info.html.twig' %}
-            {% endif %}
+            {% include 'course/header/parts/member-deadline-info.html.twig' %}
            </span>
         </li>
         <li>

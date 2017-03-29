@@ -9,6 +9,7 @@ use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Biz\Role\Util\PermissionBuilder;
 
 class MobileBaseController extends BaseController
 {
@@ -90,6 +91,10 @@ class MobileBaseController extends BaseController
         $user['currentIp'] = $request->getClientIp();
 
         $currentUser = $currentUser->fromArray($user);
+
+        $permissions = PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles());
+        $currentUser->setPermissions($permissions);
+        
         $biz = $this->getBiz();
         $biz['user'] = $currentUser;
     }

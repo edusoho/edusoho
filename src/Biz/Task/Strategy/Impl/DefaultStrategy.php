@@ -268,7 +268,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     protected function getTaskSeq($taskMode, $chapterSeq)
     {
         $taskModes = array('preparation' => 1, 'lesson' => 2, 'exercise' => 3, 'homework' => 4, 'extraClass' => 5);
-        if (!in_array($taskMode, array_keys($taskModes))) {
+        if(!array_key_exists($taskMode, $taskModes)){
             throw new InvalidArgumentException('task mode is invalida');
         }
 
