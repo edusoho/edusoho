@@ -51,7 +51,7 @@ class Lesson2PptActivityMigrate extends AbstractMigrate
             `userId` ,
             `updatedTime`,
             `id`
-          from `course_lesson` where type ='ppt' and id not in (select `migrateLessonId` from `ppt_activity`) order by id limit {$start}, {$this->perPageCount};
+          from `course_lesson` where type ='ppt' and id not in (select `migrateLessonId` from `ppt_activity`) order by id limit 0, {$this->perPageCount};
         "
         );
 

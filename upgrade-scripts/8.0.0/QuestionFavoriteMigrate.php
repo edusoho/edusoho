@@ -24,7 +24,7 @@ class QuestionFavoriteMigrate extends AbstractMigrate
 
     private function updateQuestionFavorite($page)
     {
-        $sql = 'SELECT * FROM question_favorite ORDER BY id LIMIT 0, {$this->perPageCount};';
+        $sql = "SELECT * FROM question_favorite ORDER BY id LIMIT 0, {$this->perPageCount};";
         $favorites = $this->getConnection()->fetchAll($sql);
 
         foreach ($favorites as $favorite) {

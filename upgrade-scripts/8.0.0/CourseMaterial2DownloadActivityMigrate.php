@@ -7,6 +7,7 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
         $this->migrateTableStructure();
 
         //create table course_material_v8 and dumplcate date from course_material
+        
         $this->dumplicateCourseMaterialDatas();
 
         $this->exec(' UPDATE `course_material_v8` SET `courseSetId` = courseId;');
@@ -56,11 +57,9 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
 
     protected function dumplicateCourseMaterialDatas()
     {
-        $this->exec(
-            '
-          CREATE TABLE course_material_v8 AS SELECT * FROM course_material;
-          '
-        );
+      if (!$this->isTableExist("course_material_v8")) {
+        $this->exec('CREATE TABLE course_material_v8 AS SELECT * FROM course_material;');
+      }
     }
 
     protected function proccessDownloadActivity()
@@ -142,7 +141,7 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
           `courseId`,
           `seq`,
           `chapterId`,
-          '下载', AS title
+          '下载' AS title,
           `status`,
           `userId`,
           `createdTime`,
