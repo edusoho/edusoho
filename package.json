@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "es-webpack-engine": "~3.0.6",
-    "eslint": "3.16.0",
+    "eslint": "3.18.0",
     "eslint-config-airbnb": "14.1.0",
     "eslint-plugin-import": "2.2.0",
     "eslint-plugin-jsx-a11y": "4.0.0",
