@@ -11,8 +11,8 @@ class Homework2CourseTasMigrate extends AbstractMigrate
             return;
         }
 
-        $this->homeworkToActivity($start);
-        $this->homeworkToCourseTask($start);
+        $this->homeworkToActivity(0);
+        $this->homeworkToCourseTask(0);
 
         return $page + 1;
     }
