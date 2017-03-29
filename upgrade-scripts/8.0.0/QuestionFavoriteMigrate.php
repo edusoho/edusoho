@@ -24,7 +24,7 @@ class QuestionFavoriteMigrate extends AbstractMigrate
 
     private function updateQuestionFavorite($page)
     {
-        $sql = "SELECT * FROM question_favorite WHERE targetId = 0 ORDER BY id LIMIT 0, {$this->perPageCount};";
+        $sql = "SELECT * FROM question_favorite WHERE targetType = '' AND target != '' ORDER BY id LIMIT 0, {$this->perPageCount};";
         $favorites = $this->getConnection()->fetchAll($sql);
         if (empty($favorites)) {
             return;
@@ -32,8 +32,10 @@ class QuestionFavoriteMigrate extends AbstractMigrate
 
         foreach ($favorites as $favorite) {
             $targetArr = explode('-', $favorite['target']);
+            $targetType = empty($targetArr[0]) ? 'testpaper' : $targetArr[0];
+            $targetId = empty($targetArr[1]) ? '-1' : $targetArr[1];
 
-            $sql = "UPDATE question_favorite set targetId = {$targetArr[1]},targetType='".$targetArr[0]."' WHERE id = {$favorite['id']}";
+            $sql = "UPDATE question_favorite set targetId = {$targetId},targetType='".$targetType."' WHERE id = {$favorite['id']}";
             $this->getConnection()->exec($sql);
         }
 
