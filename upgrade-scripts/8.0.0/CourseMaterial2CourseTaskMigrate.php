@@ -5,7 +5,7 @@ class CourseMaterial2CourseTaskMigrate extends AbstractMigrate
     public function update($page)
     {
         // refactor: 数据完整性校验，校验同一个lesson下是否全部的资料已经迁移完成
-        // $countSql = "SELECT count(id) FROM course_material WHERE source ='coursematerial' AND type = 'course' AND  lessonId > 0 AND lessonId NOT IN (SELECT lessonId FROM `download_activity`)";
+        // $countSql = "SELECT count(id) FROM course_material WHERE source ='coursematerial' AND type = 'course' AND  lessonId > 0 AND lessonId NOT IN (SELECT lessonId FROM `activity_download`)";
         // $count = $this->getConnection()->fetchColumn($countSql);
         // if ($count == 0) {
         //     return;
@@ -62,7 +62,7 @@ class CourseMaterial2CourseTaskMigrate extends AbstractMigrate
     {
         $this->exec(
             "
-         	UPDATE  `activity` AS ay ,`download_activity` AS dy SET ay.`mediaId`  =  dy.`id`
+         	UPDATE  `activity` AS ay ,`activity_download` AS dy SET ay.`mediaId`  =  dy.`id`
          WHERE ay.`migrateLessonId`  = dy.`migrateLessonId` AND ay.`mediaType` = 'download' AND ay.`mediaId` IS NULL;
         "
         );

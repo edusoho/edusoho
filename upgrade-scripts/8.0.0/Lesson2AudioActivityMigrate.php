@@ -4,10 +4,10 @@ class Lesson2AudioActivityMigrate extends AbstractMigrate
 {
     public function update($page)
     {
-        if (!$this->isTableExist('audio_activity')) {
+        if (!$this->isTableExist('activity_audio')) {
             $this->exec(
                 "
-                CREATE TABLE `audio_activity` (
+                CREATE TABLE `activity_audio` (
                   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
                   `mediaId` int(10) DEFAULT NULL COMMENT '媒体文件ID',
                   PRIMARY KEY (`id`)
@@ -16,11 +16,11 @@ class Lesson2AudioActivityMigrate extends AbstractMigrate
             );
         }
 
-        if (!$this->isFieldExist('audio_activity', 'migrateLessonId')) {
-            $this->exec("alter table `audio_activity` add `migrateLessonId` int(10) ;");
+        if (!$this->isFieldExist('activity_audio', 'migrateLessonId')) {
+            $this->exec("alter table `activity_audio` add `migrateLessonId` int(10) ;");
         }
 
-        $countSql = "SELECT count(*) from `course_lesson` WHERE type ='audio' and `id` NOT IN (SELECT migrateLessonId FROM `audio_activity`)";
+        $countSql = "SELECT count(*) from `course_lesson` WHERE type ='audio' and `id` NOT IN (SELECT migrateLessonId FROM `activity_audio`)";
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
             return;
@@ -28,7 +28,7 @@ class Lesson2AudioActivityMigrate extends AbstractMigrate
 
         $this->exec(
             "
-            insert into `audio_activity`
+            insert into `activity_audio`
             (
                 `mediaId`,
                 `migrateLessonId`
@@ -36,7 +36,7 @@ class Lesson2AudioActivityMigrate extends AbstractMigrate
             select
               `mediaId`,
               `id`
-            from `course_lesson` where  type ='audio' and   `id` not in (select `migrateLessonId` from `audio_activity`) order by id limit 0, {$this->perPageCount};
+            from `course_lesson` where  type ='audio' and   `id` not in (select `migrateLessonId` from `activity_audio`) order by id limit 0, {$this->perPageCount};
         "
         );
 

@@ -4,10 +4,10 @@ class Lesson2VideoActivityMigrate extends AbstractMigrate
 {
     public function update($page)
     {
-    	if (!$this->isTableExist('video_activity')) {
+    	if (!$this->isTableExist('activity_video')) {
             $this->getConnection()->exec(
                 "
-                CREATE TABLE `video_activity` (
+                CREATE TABLE `activity_video` (
                   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
                   `mediaSource` varchar(32) NOT NULL DEFAULT '' COMMENT '媒体文件来源(self:本站上传,youku:优酷)',
                   `mediaId` int(10) NOT NULL DEFAULT 0 COMMENT '媒体文件ID',
@@ -19,11 +19,11 @@ class Lesson2VideoActivityMigrate extends AbstractMigrate
             "
             );
         }
-        if (!$this->isFieldExist('video_activity', 'migrateLessonId')) {
-            $this->exec("alter table `video_activity` add `migrateLessonId` int(10) ;");
+        if (!$this->isFieldExist('activity_video', 'migrateLessonId')) {
+            $this->exec("alter table `activity_video` add `migrateLessonId` int(10) ;");
         }
 
-        $countSql = "SELECT count(*) from `course_lesson` WHERE type ='video' and `id` NOT IN (SELECT migrateLessonId FROM `video_activity`)";
+        $countSql = "SELECT count(*) from `course_lesson` WHERE type ='video' and `id` NOT IN (SELECT migrateLessonId FROM `activity_video`)";
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
             return;
@@ -31,7 +31,7 @@ class Lesson2VideoActivityMigrate extends AbstractMigrate
 
         $this->getConnection()->exec(
             "
-            insert into `video_activity` (
+            insert into `activity_video` (
                 `mediaSource`,
                 `mediaId`,
                 `mediaUri`,
@@ -46,7 +46,7 @@ class Lesson2VideoActivityMigrate extends AbstractMigrate
                 'end',
                 '1',
                 `id`
-            from `course_lesson` where  type ='video' and `id` not in (select `migrateLessonId` from `video_activity`) order by id limit 0, {$this->perPageCount};
+            from `course_lesson` where  type ='video' and `id` not in (select `migrateLessonId` from `activity_video`) order by id limit 0, {$this->perPageCount};
         "
         );
 

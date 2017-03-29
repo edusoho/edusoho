@@ -4,10 +4,10 @@ class Lesson2FlashActivityMigrate extends AbstractMigrate
 {
     public function update($page)
     {
-		if (!$this->isTableExist("flash_activity")) {
+		if (!$this->isTableExist("activity_flash")) {
             $this->exec(
                 "
-                CREATE TABLE `flash_activity` (
+                CREATE TABLE `activity_flash` (
                   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                   `mediaId` int(11) NOT NULL,
                   `finishType` varchar(32) NOT NULL DEFAULT '' COMMENT 'click, time',
@@ -21,11 +21,11 @@ class Lesson2FlashActivityMigrate extends AbstractMigrate
             );
         }
 
-        if (!$this->isFieldExist('flash_activity', 'migrateLessonId')) {
-            $this->exec("alter table `flash_activity` add `migrateLessonId` int(10) ;");
+        if (!$this->isFieldExist('activity_flash', 'migrateLessonId')) {
+            $this->exec("alter table `activity_flash` add `migrateLessonId` int(10) ;");
         }
 
-        $countSql = "SELECT count(*) from `course_lesson` WHERE `type`='flash' and `id` NOT IN (SELECT migrateLessonId FROM `flash_activity`)";
+        $countSql = "SELECT count(*) from `course_lesson` WHERE `type`='flash' and `id` NOT IN (SELECT migrateLessonId FROM `activity_flash`)";
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
             return;
@@ -33,7 +33,7 @@ class Lesson2FlashActivityMigrate extends AbstractMigrate
 
         $this->exec(
             "
-            INSERT INTO `flash_activity`
+            INSERT INTO `activity_flash`
             (
             `mediaId`,
             `finishType`,
@@ -51,7 +51,7 @@ class Lesson2FlashActivityMigrate extends AbstractMigrate
                 `userId` ,
                 `updatedTime`,
                 `id`
-            FROM `course_lesson` WHERE TYPE ='flash' AND id NOT IN (SELECT `migrateLessonId` FROM `flash_activity`)
+            FROM `course_lesson` WHERE TYPE ='flash' AND id NOT IN (SELECT `migrateLessonId` FROM `activity_flash`)
             order by id limit 0, {$this->perPageCount}
         "
         );

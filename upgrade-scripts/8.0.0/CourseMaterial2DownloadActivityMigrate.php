@@ -17,10 +17,10 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
 
     protected function migrateTableStructure()
     {
-        if (!$this->isTableExist('download_activity')) {
+        if (!$this->isTableExist('activity_download')) {
             $this->exec(
                 "
-              CREATE TABLE `download_activity` (
+              CREATE TABLE `activity_download` (
                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
                 `mediaCount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料数',
                 `createdTime` int(10) unsigned NOT NULL,
@@ -32,8 +32,8 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
             );
         }
 
-        if (!$this->isFieldExist('download_activity', 'migrateLessonId')) {
-            $this->exec('alter table `download_activity` add `migrateLessonId` int(10) ;');
+        if (!$this->isFieldExist('activity_download', 'migrateLessonId')) {
+            $this->exec('alter table `activity_download` add `migrateLessonId` int(10) ;');
         }
 
         if (!$this->isFieldExist('course_material', 'courseSetId')) {
@@ -52,7 +52,7 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
     {
         $this->exec(
           "
-          INSERT INTO `download_activity`
+          INSERT INTO `activity_download`
           (
             `mediaCount`,
             `createdTime`,
@@ -67,7 +67,7 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
             concat('[', group_concat( CASE WHEN `fileid` = 0 THEN `link`  ELSE `fileid` END), ']')  AS fileIds,
             min(`lessonId`) AS lessonId
           FROM course_material_v8 WHERE source ='coursematerial' AND lessonId >0 
-          AND  lessonId NOT IN (SELECT DISTINCT   (CASE WHEN `migrateLessonId` IS NULL THEN 0 ELSE `migrateLessonId` END) AS lessonId FROM `download_activity`) GROUP BY lessonId
+          AND  lessonId NOT IN (SELECT DISTINCT   (CASE WHEN `migrateLessonId` IS NULL THEN 0 ELSE `migrateLessonId` END) AS lessonId FROM `activity_download`) GROUP BY lessonId
           "
         );
     }

@@ -4,8 +4,8 @@ class CourseMigrate extends AbstractMigrate
 {
     public function update($page)
     {
-        if (!$this->isTableExist('c2_course')) {
-            $sql = "CREATE TABLE `c2_course` (
+        if (!$this->isTableExist('course_v8')) {
+            $sql = "CREATE TABLE `course_v8` (
                   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                   `courseSetId` int(11) NOT NULL DEFAULT 0,
                   `title` varchar(1024) DEFAULT NULL,
@@ -80,10 +80,10 @@ class CourseMigrate extends AbstractMigrate
 
     private function updateDate()
     {
-        $sql = "UPDATE `c2_course` ce, `c2_course_set` cs  SET ce.`materialNum` = cs.`materialNum`  WHERE ce.`id` = cs.`id`";
+        $sql = "UPDATE `course_v8` ce, `course_set_v8` cs  SET ce.`materialNum` = cs.`materialNum`  WHERE ce.`id` = cs.`id`";
         $result = $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE `c2_course` c2, `course` c set
+        $sql = "UPDATE `course_v8` c2, `course` c set
               c2.`title` = c.`title`
               ,c2.`status` = c.`status`
               ,c2.`type` = c.`type`
@@ -138,13 +138,13 @@ class CourseMigrate extends AbstractMigrate
 
     private function insertData($page)
     {
-        $countSql = 'SELECT count(*) FROM `course` where `id` not in (select `id` from `c2_course`)';
+        $countSql = 'SELECT count(*) FROM `course` where `id` not in (select `id` from `course_v8`)';
         $count = $this->getConnection()->fetchColumn($countSql);
         if($count == 0) {
           return;
         }
 
-        $sql = "INSERT INTO `c2_course` (
+        $sql = "INSERT INTO `course_v8` (
               `id`
               ,`courseSetId`
               ,`title`
@@ -250,7 +250,7 @@ class CourseMigrate extends AbstractMigrate
               ,1
               ,'freeMode'
               ,`maxRate`
-          FROM `course` where `id` not in (select `id` from `c2_course`) order by id limit 0, {$this->perPageCount};";
+          FROM `course` where `id` not in (select `id` from `course_v8`) order by id limit 0, {$this->perPageCount};";
         $result = $this->getConnection()->exec($sql);
         return $page+1;
     }

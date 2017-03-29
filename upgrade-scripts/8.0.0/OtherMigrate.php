@@ -82,7 +82,7 @@ class OtherMigrate extends AbstractMigrate
             $this->exec("ALTER TABLE `course_member` MODIFY courseId INT(10) unsigned NOT NULL COMMENT '教学计划ID';");
         }
         $this->exec(
-            'UPDATE course_member AS cm INNER JOIN c2_course c ON c.id = cm.courseId SET cm.courseSetId=c.courseSetId;'
+            'UPDATE course_member AS cm INNER JOIN course_v8 c ON c.id = cm.courseId SET cm.courseSetId=c.courseSetId;'
         );
     }
 

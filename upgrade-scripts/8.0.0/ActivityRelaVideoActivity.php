@@ -6,7 +6,7 @@ class ActivityRelaVideoActivity extends AbstractMigrate
     {
 		$this->getConnection()->exec(
         "
-            UPDATE  `activity` AS ay ,`video_activity` AS vy SET ay.`mediaId`  =  vy.`id`
+            UPDATE  `activity` AS ay ,`activity_video` AS vy SET ay.`mediaId`  =  vy.`id`
             	WHERE ay.`migrateLessonId`  = vy.`migrateLessonId`   AND ay.`mediaType` = 'video';
         "
         );
