@@ -27,6 +27,9 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function updateWxPayConfig()
     {
         $payment = $this->getSettingService()->get('payment', array());
+        if(!empty($payment['wxpay_appid'])){
+            return ;
+        }
         $payment['wxpay_appid'] =   $payment['wxpay_key'];
         $payment['wxpay_key'] =     $payment['wxpay_secret'];
         $payment['wxpay_secret'] =  '';
