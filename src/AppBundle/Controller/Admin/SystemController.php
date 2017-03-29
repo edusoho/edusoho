@@ -135,9 +135,9 @@ class SystemController extends BaseController
         $env['user'] = getenv('USER');
         $env['pdoMysqlOk'] = extension_loaded('pdo_mysql');
         $env['uploadMaxFilesize'] = ini_get('upload_max_filesize');
-        $env['uploadMaxFilesizeOk'] = intval($env['uploadMaxFilesize']) >= 2;
+        $env['uploadMaxFilesizeOk'] = (int) ($env['uploadMaxFilesize']) >= 2;
         $env['postMaxsize'] = ini_get('post_max_size');
-        $env['postMaxsizeOk'] = intval($env['postMaxsize']) >= 8;
+        $env['postMaxsizeOk'] = (int) ($env['postMaxsize']) >= 8;
         $env['maxExecutionTime'] = ini_get('max_execution_time');
         $env['maxExecutionTimeOk'] = ini_get('max_execution_time') >= 30;
         $env['mbstringOk'] = extension_loaded('mbstring');

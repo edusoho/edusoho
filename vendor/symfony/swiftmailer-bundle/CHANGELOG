@@ -1,0 +1,22 @@
+* 2.5.0 (2017-XX-XX)
+
+ * n/a
+
+* 2.4.2 (2016-12-20)
+
+ * fixed compatibility with Symfony 3.3
+
+* 2.4.1 (2016-12-20)
+
+ * added missing attachments in the web profiler
+
+* 2.4.0 (2016-10-09)
+
+ * added support for setLocalDomain() and setStreamOptions()
+ * updated the styles of the SwiftMailer commands
+ * removed support for deprecated versions of Symfony
+ * added support for LoadBalancedTransport in SendEmailCommand
+ * fixed messagePart.charset not defined in the web profiler
+ * fixed performance on Symfony 3 (IntrospectableContainerInterface does not exist anymore)
+ * allowed empty transport configs
+ * added a priority flag on plugins tag

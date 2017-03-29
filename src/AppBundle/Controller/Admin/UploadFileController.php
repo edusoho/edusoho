@@ -23,12 +23,7 @@ class UploadFileController extends BaseController
         $params['convertor'] = 'HLSEncryptedVideo';
         $params['videoQuality'] = 'normal';
         $params['audioQuality'] = 'normal';
-
-        if (empty($params['lazyConvert'])) {
-            $params['convertCallback'] = $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true);
-        } else {
-            $params['convertCallback'] = null;
-        }
+        $params['convertCallback'] = null;
 
         $params = $this->getUploadFileService()->makeUploadParams($params);
 

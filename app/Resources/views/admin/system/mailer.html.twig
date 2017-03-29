@@ -1,20 +1,16 @@
 {% extends 'admin/layout.html.twig' %}
-
 {% set script_controller = 'system/mailer' %}
 {% set script_arguments = { registerEmailVerified: setting('auth.email_enabled','closed') } %}
-
 {% set menu = 'admin_setting_mailer' %}
-
 {% block main %}
   {% if is_trial() %}
     <div class="row form-group">
       <div class="help-block">
-        <br>
+        </br></br>
         <script>
           var _hmt = _hmt || [];
         </script>
         <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
-
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         <p style = "text-align:center;font-size:16px">{{'当前版本为试⽤版,不能进⾏邮件服务设置。如需购买授权版,请联系销售人员。'|trans}}
           {{'电话：'|trans}}4008041114 {{'或'|trans}}
@@ -23,6 +19,7 @@
         <script type="text/javascript">
           BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 800023860, selector: 'BizQQWPA'});
         </script>
+        </br>
       </div>
     </div>
   {% else %}
@@ -69,7 +66,6 @@
             <p class="help-block">{{'需要登录邮箱，并在邮箱设置中开启smtp服务才能发送验证邮件'|trans}}</p>
           </div>
         </div>
-
         <div class="row form-group">
           <div class="col-md-3 control-label">
             <label for="host">SMTP{{'服务器地址'|trans}}</label>
@@ -105,7 +101,6 @@
           </div>
         </div>
         <p></p>
-
         <div class="row form-group">
           <div class="col-md-3 control-label">
             <label for="password" >{{'SMTP密码'|trans}}</label>
@@ -116,7 +111,6 @@
           </div>
         </div>
         <p></p>
-
         <div class="row form-group">
           <div class="col-md-3 control-label">
             <label for="from" >{{'发信人地址'|trans}}</label>
@@ -127,7 +121,6 @@
           </div>
         </div>
         <p></p>
-
         <div class="row form-group">
           <div class="col-md-3 control-label">
             <label for="name" >{{'发信人名称'|trans}}</label>
@@ -155,6 +148,5 @@
       <input type="hidden" name="email-setting-status" value="{{status}}">
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
-
   {% endif %}
 {% endblock %}

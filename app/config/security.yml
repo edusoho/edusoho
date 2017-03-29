@@ -48,6 +48,10 @@ security:
                 authenticator: api_token_authenticator
             provider: api_token_user_provider
 
+        crontab:
+            pattern: ^/crontab$
+            security: false
+
         main:
             pattern:    /.*
             form_login:

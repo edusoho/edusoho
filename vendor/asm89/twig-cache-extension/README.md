@@ -58,7 +58,7 @@ composer require cache/apcu-adapter
 use Asm89\Twig\CacheExtension\CacheProvider\PsrCacheAdapter;
 use Asm89\Twig\CacheExtension\CacheStrategy\LifetimeCacheStrategy;
 use Asm89\Twig\CacheExtension\Extension as CacheExtension;
-use Cache\Adapter\Apcu\ApcuCachePool();
+use Cache\Adapter\Apcu\ApcuCachePool;
 
 $cacheProvider  = new PsrCacheAdapter(new ApcuCachePool());
 $cacheStrategy  = new LifetimeCacheStrategy($cacheProvider);

@@ -11,10 +11,11 @@
 
 namespace Symfony\Component\Asset\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Asset\PathPackage;
 use Symfony\Component\Asset\VersionStrategy\StaticVersionStrategy;
 
-class PathPackageTest extends \PHPUnit_Framework_TestCase
+class PathPackageTest extends TestCase
 {
     /**
      * @dataProvider getConfigs
@@ -76,7 +77,7 @@ class PathPackageTest extends \PHPUnit_Framework_TestCase
 
     private function getContext($basePath)
     {
-        $context = $this->getMock('Symfony\Component\Asset\Context\ContextInterface');
+        $context = $this->getMockBuilder('Symfony\Component\Asset\Context\ContextInterface')->getMock();
         $context->expects($this->any())->method('getBasePath')->will($this->returnValue($basePath));
 
         return $context;

@@ -51,7 +51,7 @@ class CourseExtension extends \Twig_Extension
 
     public function getCourseShowMetas($mode = 'guest')
     {
-        $metas = $this->container->get('extension.default')->getCourseShowMetas();
+        $metas = $this->container->get('course.extension')->getCourseShowMetas();
 
         return $metas["for_{$mode}"];
     }

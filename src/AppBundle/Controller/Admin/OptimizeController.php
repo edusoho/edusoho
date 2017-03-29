@@ -63,16 +63,7 @@ class OptimizeController extends BaseController
 
     protected function isDisabledUpgrade()
     {
-        if (!$this->container->hasParameter('disabled_features')) {
-            return false;
-        }
-
-        $disableds = $this->container->getParameter('disabled_features');
-        if (!is_array($disableds) || empty($disableds)) {
-            return false;
-        }
-
-        return in_array('upgrade', $disableds);
+        return false;
     }
 
     protected function getSystemUtilService()

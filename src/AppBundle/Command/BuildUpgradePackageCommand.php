@@ -185,24 +185,25 @@ class BuildUpgradePackageCommand extends BaseCommand
 
     private function copyFileAndDir($opFile, $packageDirectory)
     {
-        $destPath = $packageDirectory.'/source/'.$opFile;
+        $distPath = $packageDirectory.'/source/'.$opFile;
 
-        if (!file_exists(dirname($destPath))) {
-            mkdir(dirname($destPath), 0777, true);
+        if (@mkdir(dirname($distPath), 0777, true) && !is_dir(dirname($distPath))) {
+            $this->output->writeln("创建升级包目录{$distPath} 失败");
+            exit(1);
         }
 
-        $root = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
+        $root = dirname($this->getContainer()->getParameter('kernel.root_dir').'/../');
 
         if (!is_file("{$root}/{$opFile}")) {
             return;
         }
 
-        $this->filesystem->copy("{$root}/{$opFile}", $destPath, true);
+        $this->filesystem->copy("{$root}/{$opFile}", $distPath, true);
     }
 
     private function createDirectory()
     {
-        $root = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
+        $root = dirname($this->getContainer()->getParameter('kernel.root_dir').'/../');
         $path = "{$root}/build/EduSoho_{$this->version}/";
 
         if ($this->filesystem->exists($path)) {
@@ -256,7 +257,7 @@ class BuildUpgradePackageCommand extends BaseCommand
         $this->output->writeln("\n\n");
         $this->output->write('<info>拷贝升级脚本：</info>');
 
-        $path = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../').'/scripts/upgrade-'.$this->version.'.php';
+        $path = dirname($this->getContainer()->getParameter('kernel.root_dir').'/../').'/scripts/upgrade-'.$this->version.'.php';
 
         if (!file_exists($path)) {
             $this->output->writeln('无升级脚本');
@@ -335,10 +336,12 @@ class BuildUpgradePackageCommand extends BaseCommand
         $gitRelease = exec("git branch | grep release/{$this->version}");
         if (empty($gitTag)) {
             $this->output->writeln("标签 v{$this->fromVersion} 不存在, 无法生成差异文件");
+            exit(1);
         }
+
         if (empty($gitRelease)) {
             $this->output->writeln("分支 release/{$this->version} 不存在, 无法生成差异文件");
-            exit();
+            exit(1);
         }
 
         $this->output->writeln("<info>  使用 git  diff --name-status  v{$this->fromVersion} release{$this->version} > build/diff-{$this->version} 生成差异文件：build/diff-{$this->version}</info>");

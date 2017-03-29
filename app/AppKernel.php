@@ -136,7 +136,17 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         }
 
         $biz->register(new Codeages\Biz\RateLimiter\RateLimiterServiceProvider());
+        $this->registerCacheServiceProvider($biz);
+
         $biz->boot();
+    }
+
+    protected function registerCacheServiceProvider($biz)
+    {
+        if ($this->getContainer()->hasParameter('cache_options')) {
+            $biz->register(new Codeages\Biz\Framework\Provider\CacheServiceProvider());
+            $biz['cache.options'] = $this->getContainer()->getParameter('cache_options');
+        }
     }
 
     protected function initializeServiceKernel()

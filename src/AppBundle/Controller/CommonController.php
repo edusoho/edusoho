@@ -63,11 +63,13 @@ class CommonController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
         $currentUserToken = $this->container->get('security.token_storage')->getToken();
+
         try {
             $switchUser = new CurrentUser();
             $switchUser->fromArray($this->getUserService()->getUserByType('scheduler'));
             $this->switchUser($request, $switchUser);
             $this->getBiz()->service('Crontab:CrontabService')->scheduleJobs();
+
             $this->switchUser($request, $currentUser);
 
             return $this->createJsonResponse(true);
@@ -76,6 +78,35 @@ class CommonController extends BaseController
 
             return $this->createJsonResponse(false);
         }
+    }
+
+    public function mobileQrcodeAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        if ($user->isLogin()) {
+            $tokenFields = array(
+                'userId' => $user['id'],
+                'duration' => 3600 * 24 * 30,
+                'times' => 1,
+            );
+
+            $token = $this->getTokenService()->makeToken('mobile_login', $tokenFields);
+
+            $url = $request->getSchemeAndHttpHost().'/mapi_v2/User/loginWithToken?token='.$token['token'];
+        } else {
+            $url = $request->getSchemeAndHttpHost().'/mapi_v2/School/loginSchoolWithSite?v=1';
+        }
+
+        $qrCode = new QrCode();
+        $qrCode->setText($url);
+        $qrCode->setSize(215);
+        $qrCode->setPadding(10);
+        $img = $qrCode->get('png');
+
+        $headers = array('Content-Type' => 'image/png',
+            'Content-Disposition' => 'inline; filename="image.png"', );
+
+        return new Response($img, 200, $headers);
     }
 
     /**
