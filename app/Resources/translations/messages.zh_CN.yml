@@ -29,6 +29,10 @@ user.fields.no_introduction: 暂无简介
 user.btn.following_btn: 关注
 user.btn.followed_btn: 已关注
 user.btn.send_letter_btn: 私信
+user.not_login.first_part: 你还没有登录，请先
+user.not_login.second_part: 登录
+user.not_login.third_part: 或
+user.not_login.fourth_part: 注册
 
 #财务通用
 finance.income: 收入
@@ -75,6 +79,10 @@ order.payment_pattern.llpay: 连连支付
 order.payment_pattern.cash: 现金支付
 order.payment_pattern.other: 其他支付
 
+# 上传模块
+upload.titile: 上传附件
+
+
 # 课程
 course: 课程
 course.price.RMB: %price%元
@@ -96,20 +104,28 @@ classroom.courses_count: 共%courseNum%门课程
 # 表单通用
 form.btn.modify: 修改
 form.btn.set: 设置
+form.btn.publish: 发布
 form.btn.reset: 重置
 form.btn.view: 查看
 form.btn.bind: 绑定
 form.btn.search: 搜索
+form.btn.reply: 发表
 form.btn.bind_cancel: 取消绑定
 form.btn.submit: 提交
 form.btn.login: 登录
 form.btn.save: 保存
 form.btn.detail: 详情
 form.btn.close: 关闭
+form.btn.cancel: 取消
+form.btn.confirm: 确定
+form.btn.insert: 插入
 form.btn.submit_disabled: 已提交
 form.btn.reset_password: 重设密码
+form.btn.reply.submiting: 正在发表回复
 form.btn.save.submiting: 正在保存...
+form.btn.publish.submiting: 正在创建...
 form.btn.submit.submiting: 正在提交...
+form.btn.modify.submiting: 正在修改...
 form.checkbox.public: 公开
 form.placeholder.max_int: 最大值为9位整数
 form.placeholer.save_two_decimal: 保留到2位小数
@@ -368,7 +384,8 @@ user.homepage.joined_group.empty: 暂无小组信息！
 user.homepage.following_fan.following_empty: 无关注的人
 user.homepage.following_fan.fan_empty: 无粉丝
 
-# 主页头部模块
+# 主页模块-头部
+homepage: 首页
 homepage.header.search: 搜索 
 homepage.header.login: 登录
 homepage.header.logout: 退出登录
@@ -435,3 +452,140 @@ cloud_searching.article_type: 资讯
 cloud_searching.article_type.result: 为您找到资讯结果约
 cloud_searching.article_type.recommend.content_title: 热门资讯
 cloud_searching.article_type.recommend.empty: 暂无热门资讯
+
+# 小组
+group: 小组频道
+group.page_title: 小组
+group.bread_crumbs: 小组主页
+group.input_placeholder: 小组搜索
+group.create_btn: 创建小组
+group.my_group_btn: 我的小组
+group.hot.content_title: 热门小组
+group.hot.empty: 暂无小组信息！
+group.recent_article.content_title: 最近话题
+group.my_group.content_title: 我的小组
+group.new_group.content_title: 新晋小组
+group.search: 搜索
+group.search.homepage: 小组主页
+group.search.bread_crumbs: 搜索小组
+group.search.content_title: 所有小组
+
+group.thread.title: 标题
+group.thread.top: 置顶
+group.thread.essence: 精华
+group.thread.reward: 奖 
+group.thread.share: 分享
+group.thread.favorite_btn: 收藏
+group.thread.favorited_btn: 已收藏
+group.thread.created_time: 发表于%createdTime%
+group.thread.check_times: %hitNum%次查看
+group.thread.wanted: 悬赏:%rewardCoin%%coin_name%
+
+group.thread.attachments_upload: 上传附件 
+group.thread.attachments_upload.upload_btn: 上传
+group.thread.attachments_upload.upload_waring: 大小不能超过
+group.thread.attachments_upload.upload_size: 2
+group.thread.attachments_upload.upload_type: MB，文件类型支持png ,jpg ,gif ,doc ,xls ,txt ,rar ,zip .)
+group.thread.attachments_upload.file_name: 文件名
+group.thread.attachments_upload.description: 描述
+group.thread.attachments_upload.operations: 操作
+group.thread.attachments_upload.delete: 删除
+group.thread.attachments_upload.hint: 用户下载附件扣除的%name%会在扣除50%之后添加到您的账户
+
+group.thread.attachments_download: 附件下载
+group.thread.attachments_download.description: 描述：%description%
+group.thread.attachments_download.upload_time: 上传于 %createdTime%
+group.thread.attachments_download.price: 售价:%coin%%coin_name%
+group.thread.attachments_download.free: 免费
+group.thread.attachments_download.times: 下载次数：%hitNum%
+group.thread.attachments_download.delete: 删除
+group.thread.attachments_download.delete_warning: 确定删除此附件
+
+group.thread.check_hide_content: 查看隐藏内容
+group.thread.edit_btn: 编辑
+group.thread.cancel_essence: 取消加精
+group.thread.set_essence: 加精
+group.thread.cancel_top: 取消置顶
+group.thread.set_top: 置顶
+group.thread.cancel_reward: 取消悬赏
+group.thread.set_reward: 悬赏
+group.thread.all_see: 查看全部
+group.thread.owner_see: 只看楼主
+group.thread.asc_see: 顺序查看
+group.thread.desc_see: 倒序查看
+group.thread.best_reply: 最佳回答
+group.thread.reply_numbers: %postNum%回复
+group.thread.desc_floors_count: %postCount%楼
+group.thread.asc_floors_count: %loop.index%楼
+group.thread.delete: 删除
+group.thread.delete_warning: 确定删除这条回复
+group.thread.accept: 采纳
+group.thread.accept_warning: 确定采纳这条回复
+group.thread.reply: 回复
+group.thread.publish_reply: 发表回复
+group.thread.publish_reply.content_title: 回复内容
+group.thread.reply_content: 回复内容
+group.thread.pack_up: 收起
+group.thread.content: 内容
+group.thread.writer: 话题作者
+group.thread.writer.empty: 无
+
+group.thread.insert_hide_content: 插入隐藏内容 
+group.thread.insert_hide_content_hint: 隐藏话题获得的%coin_name%会在扣除50%之后添加到您的账户
+group.thread.insert_hide_content_description: 请输入要隐藏的内容
+group.thread.check_need: 查看所需
+group.thread.check_need_hint: 回复话题后可见
+group.thread.creat.content_title: 发表话题
+group.thread.edit.content_title: 编辑话题
+
+
+group.detail.page_title: %title%小组
+group.detail.introductions: 小组介绍
+group.detail.introductions.empty: 暂无简介
+group.detail.join_group_btn: 加入小组
+group.detail.quit_group_btn: 退出小组
+group.detail.publish_article: 发表话题
+group.detail.search_input_placeholder: 组内搜索
+group.detail.member: 组员
+group.detail.leader: 组长
+group.detail.deputy_leader: 副组长
+group.detail.my_group_btn: 我的小组
+group.detail.articles: 话题
+group.detail.replies: 回复
+group.detail.member_number: %memberNum%个成员
+group.detail.thread_number: %threadNum%个话题
+group.detail.created_time: 创建时间：%createdTime%
+group.detail.group_homepage: 小组首页
+group.detail.group_homepage.all: 全部
+group.detail.group_homepage.essence: 精华
+group.detail.group_homepage.wanted: 悬赏
+group.detail.group_homepage.order: 排序
+group.detail.group_homepage.newest_order: 最新发帖
+group.detail.group_homepage.last_reply_order: 最后回复
+group.detail.group_homepage.reply_count_order: 回复数
+group.detail.group_leader: 小组组长
+group.detail.group_leader.empty: 无
+group.detail.group_members: 小组成员
+group.detail.group_members.leader: 组长
+group.detail.group_members.deputy_leader: 副组长
+group.detail.group_members.deputy_leader.empty: 还没有副组长！
+group.detail.group_members.deputy_leader.cancle_member_btn: 踢出成员
+group.detail.group_members.deputy_leader.set_btn: 设置副组长
+group.detail.group_members.cancle_deputy_leader_btn: 撤销副组长
+group.detail.group_members.members: 组员
+group.detail.group_members.members.empty: 还没有小组成员！
+group.detail.group_settings: 小组设置
+group.detail.new_group_members: 新加组员
+group.detail.new_group_members.empty: 还没有小组成员！
+group.detail.hot_group: 热门小组
+group.detail.hot_group_empty: 暂无小组信息！
+
+# 话题
+article: 话题
+article.reply: 回复
+article.empty: 暂无话题！
+article.status.top: 置顶
+article.status.essence: 精华
+article.status.reward: 奖
+article.create: 发起了话题
+article.last_reply: 最后回复

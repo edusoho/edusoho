@@ -8,16 +8,16 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       {% if thread|default(null) %}
-        <h3 class="panel-title">{{ '编辑话题'|trans }}</h3>
+        <h3 class="panel-title">{{ 'group.thread.edit.content_title'|trans }}</h3>
       {% else %}
-        <h3 class="panel-title">{{ '发表话题'|trans }}</h3>
+        <h3 class="panel-title">{{ 'group.thread.creat.content_title'|trans }}</h3>
       {% endif %}
     </div>
     <div class="panel-body">
       <form id="user-thread-form" class="form-horizontal thread-form" method="post">
 
         <div class="form-group">
-          <label class="col-xs-2 control-label" for="thread_title">{{ '标题'|trans }}</label>
+          <label class="col-xs-2 control-label" for="thread_title">{{ 'group.thread.title'|trans }}</label>
           <div class="col-xs-7 col-xs-10 controls">
             <input type="text" id="thread_title" name="thread[title]" class="form-control"
                    value="{{ thread.title|default('') }}">
@@ -26,7 +26,7 @@
         </div>
 
         <div class="form-group">
-          <label class="col-xs-2 control-label" for="{% if is_feature_enabled('group_reward') %}thread_content1{% else %}thread_content{% endif %}">{{ '内容'|trans }}</label>
+          <label class="col-xs-2 control-label" for="{% if is_feature_enabled('group_reward') %}thread_content1{% else %}thread_content{% endif %}">{{ 'group.thread.content'|trans }}</label>
           <div class="col-sm-7 col-xs-10 controls">
             {% if is_feature_enabled('group_reward') %}
               <textarea name="thread[content]" rows="10" id="thread_content1" class="form-control"
@@ -44,11 +44,11 @@
         <div class="form-group">
           <div class="col-sm-7 col-xs-10 col-xs-offset-2">
             {% if thread|default(null) %}
-              <button id="groupthread-save-btn" data-loading-text="{{ '正在修改...'|trans }}" type="button"
-                      class="btn btn-primary">{{ '修改'|trans }}</button>
+              <button id="groupthread-save-btn" data-loading-text="{{ 'form.btn.modify.submiting'|trans }}" type="button"
+                      class="btn btn-primary">{{ 'form.btn.modify'|trans }}</button>
             {% else %}
-              <button id="groupthread-save-btn" data-loading-text="{{ '正在创建...'|trans }}" type="button"
-                      class="btn btn-primary">{{ '发布'|trans }}</button>
+              <button id="groupthread-save-btn" data-loading-text="{{ 'form.btn.publish.submiting'|trans }}" type="button"
+                      class="btn btn-primary">{{ 'form.btn.publish'|trans }}</button>
             {% endif %}
           </div>
         </div>
@@ -66,7 +66,7 @@
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
                 class="sr-only">Close</span></button>
-          <h4 class="modal-title" id="myModalLabel">{{ '插入隐藏内容'|trans }}</h4>
+          <h4 class="modal-title" id="myModalLabel">{{ 'group.thread.insert_hide_content'|trans }}</h4>
         </div>
         <div class="modal-body">
 
@@ -74,7 +74,7 @@
 
             <div class="row form-group">
               <div class="col-md-4 control">
-                <label class="control-label"> {{ '请输入要隐藏的内容'|trans }}:</label>
+                <label class="control-label"> {{ 'group.thread.insert_hide_content_description'|trans }}:</label>
               </div>
               <div class="col-md-7 controls">
                 <textarea class="form-control" rows="3" id="text"> </textarea>
@@ -87,7 +87,7 @@
                 <div class="col-md-4 control">
                   <input type="radio" id="type0" name="type" required="required" value="coin" checked=true>
                   <label for="amount"
-                         class="control-label"> {{ '查看所需'|trans }}{{ setting('coin').coin_name|default('') }}:</label>
+                         class="control-label"> {{ 'group.thread.check_need'|trans }}{{ setting('coin').coin_name|default('') }}:</label>
                 </div>
                 <div class="col-md-3 controls">
                   <input name="amount" class="form-control" tyoe="text" id="amount"/>
@@ -98,7 +98,7 @@
             <div class="row form-group">
               <div class="col-md-4 control">
                 <input type="radio" id="type1" name="type" required="required" value="reply">
-                <label for="amount" class="control-label"> {{ '回复话题后可见'|trans }}</label>
+                <label for="amount" class="control-label"> {{ 'group.thread.check_need_hint'|trans }}</label>
               </div>
 
             </div>
@@ -106,10 +106,10 @@
           </form>
         </div>
         <div class="modal-footer">
-          <div class="pull-left color-gray">{{'隐藏话题获得的%coin_name%会在扣除50%之后添加到您的账户'|trans({'%coin_name%':setting('coin').coin_name|default('')})}}
+          <div class="pull-left color-gray">{{'group.thread.insert_hide_content_hint'|trans({'%coin_name%':setting('coin').coin_name|default('')})}}
           </div>
-          <button type="button" class="btn btn-default" data-dismiss="modal">{{ '取消'|trans }}</button>
-          <button type="button" class="btn btn-primary" id="insert">{{ '插入'|trans }}</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+          <button type="button" class="btn btn-primary" id="insert">{{ 'form.btn.insert'|trans }}</button>
         </div>
       </div>
     </div>
