@@ -63,14 +63,14 @@ class CourseMaterial2CourseTaskMigrate extends AbstractMigrate
         $this->exec(
             "
          	UPDATE  `activity` AS ay ,`activity_download` AS dy SET ay.`mediaId`  =  dy.`id`
-         WHERE ay.`migrateLessonId`  = dy.`migrateLessonId` AND ay.`mediaType` = 'download' AND ay.`mediaId` IS NULL;
+         WHERE ay.`migrateLessonId`  = dy.`migrateLessonId` AND ay.`mediaType` = 'download' AND  ay.`mediaId` <>  dy.`id`;
         "
         );
 
         $this->exec(
         "
             UPDATE  `course_task` AS ck ,`activity` AS ay SET ck.`activityId`  =  ay.`id`
-            WHERE ck.`migrateLessonId`  = ay.`migrateLessonId` AND ck.`type` = 'download' AND ck.`activityId` IS NULL;
+            WHERE ck.`migrateLessonId`  = ay.`migrateLessonId` AND ck.`type` = 'download'  AND ay.mediaType= 'download' AND ck.`activityId`  <>  ay.`id`;
         "
         );
     }

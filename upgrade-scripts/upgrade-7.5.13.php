@@ -3,6 +3,7 @@
 use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Component\Payment\Payment;
+use Topxia\Service\Util\PluginUtil;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
@@ -19,12 +20,16 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $this->updateWxPayConfig();
+        $this->fixPluginFile();
         $this->resetDeveloperSetting();
     }
 
     protected function updateWxPayConfig()
     {
         $payment = $this->getSettingService()->get('payment', array());
+        if(!empty($payment['wxpay_appid'])){
+            return ;
+        }
         $payment['wxpay_appid'] =   $payment['wxpay_key'];
         $payment['wxpay_key'] =     $payment['wxpay_secret'];
         $payment['wxpay_secret'] =  '';
@@ -40,6 +45,16 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $this->getSettingService()->set('developer', $developerSetting);
         $this->getSettingService()->set("crontab_next_executed_time", time());
+    }
+    private function fixPluginFile()
+    {
+        $pluginFile = ServiceKernel::instance()->getParameter('kernel.root_dir').'/config/plugin.php';
+        $fileSystem = new Filesystem();
+        if (!$fileSystem->exists($pluginFile)) {
+            return;
+        }
+        $fileSystem->remove($pluginFile);
+        PluginUtil::refresh();
     }
 
     protected function getOrderService()

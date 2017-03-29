@@ -133,7 +133,7 @@ class OtherMigrate extends AbstractMigrate
             $result = $this->getUserByType();
 
             $sql = "INSERT INTO `user_profile` (`id`, `truename`, `idcard`, `gender`, `iam`, `birthday`, `city`, `mobile`, `qq`, `signature`, `about`, `company`, `job`, `school`, `class`, `weibo`, `weixin`, `isQQPublic`, `isWeixinPublic`, `isWeiboPublic`, `site`, `intField1`, `intField2`, `intField3`, `intField4`, `intField5`, `dateField1`, `dateField2`, `dateField3`, `dateField4`, `dateField5`, `floatField1`, `floatField2`, `floatField3`, `floatField4`, `floatField5`, `varcharField1`, `varcharField2`, `varcharField3`, `varcharField4`, `varcharField5`, `varcharField6`, `varcharField7`, `varcharField8`, `varcharField9`, `varcharField10`, `textField1`, `textField2`, `textField3`, `textField4`, `textField5`, `textField6`, `textField7`, `textField8`, `textField9`, `textField10`) VALUES
-    ({$result['id']}, '', '', 'secret', '', NULL, '', '', '', NULL, NULL, '', '', '', '', '', '', 0, 0, 0, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);";
+    ('{$result['id']}', '', '', 'secret', '', NULL, '', '', '', NULL, NULL, '', '', '', '', '', '', 0, 0, 0, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);";
 
             $this->exec($sql);
         }
@@ -148,7 +148,7 @@ class OtherMigrate extends AbstractMigrate
 
     private function getUserByType()
     {
-        $sql = "select * from user where type='scheduler' limit 1;";
+        $sql = "select * from user where type='system' limit 1;";
         $result = $this->getConnection()->fetchAssoc($sql);
 
         return $result;

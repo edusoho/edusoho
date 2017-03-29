@@ -4,14 +4,15 @@ class Lesson2CourseChapterMigrate extends AbstractMigrate
 {
     public function update($page)
     {
-        $countSql = 'SELECT count(*) from `course_lesson` WHERE `id` NOT IN (SELECT migrateLessonId FROM `course_task`)';
+
+        if (!$this->isFieldExist('course_chapter', 'migrateLessonId')) {
+            $this->exec("alter table `course_chapter` add `migrateLessonId` int(10) default 0;");
+        }
+
+        $countSql = 'SELECT count(*) from `course_lesson` WHERE `id` NOT IN (SELECT migrateLessonId FROM `course_chapter`)';
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
             return;
-        }
-
-        if (!$this->isFieldExist('course_chapter', 'migrateLessonId')) {
-            $this->exec("alter table `course_chapter` add `migrateLessonId` int(10);");
         }
 
         $this->exec("alter table `course_chapter` modify `type` varchar(255) NOT NULL DEFAULT 'chapter' COMMENT '章节类型：chapter为章节，unit为单元，lesson为课时。';");
