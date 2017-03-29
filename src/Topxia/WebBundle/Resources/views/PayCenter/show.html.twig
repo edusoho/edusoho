@@ -51,7 +51,7 @@
                 {% set cbpay = true %}
               {% elseif  payment.name == 'alipay' and payment.enabled == 0 %}
                 {% set alipay = true %}
-              {% else if payment.name == 'wxpay' and payment.enabled == 0 %}
+              {% elseif payment.name == 'wxpay' and payment.enabled == 0 %}
                 {% set wxpay = true %}
               {% endif %}
               {% if activePayment in ['none', ''] and payment.enabled %}
