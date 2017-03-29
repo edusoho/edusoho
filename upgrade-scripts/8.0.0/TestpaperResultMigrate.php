@@ -71,7 +71,7 @@ class TestpaperResultMigrate extends AbstractMigrate
 
     private function insertTestpaperResult($page)
     {
-        $countSql = 'SELECT count(id) FROM `testpaper_result` where `id` not in (select `id` from `testpaper_result_v8`);';
+        $countSql = 'SELECT count(id) FROM `testpaper_result` where `id` not in (select `migrateResultId` from `testpaper_result_v8`);';
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
             return;
@@ -125,7 +125,7 @@ class TestpaperResultMigrate extends AbstractMigrate
             usedTime,
             id AS migrateResultId,
             'testpaper'
-            FROM testpaper_result WHERE id NOT IN (SELECT id FROM testpaper_result_v8) order by id limit 0, {$this->perPageCount};";
+            FROM testpaper_result WHERE id NOT IN (SELECT migrateResultId FROM testpaper_result_v8) order by id limit 0, {$this->perPageCount};";
         $this->getConnection()->exec($sql);
 
         return $page + 1;
