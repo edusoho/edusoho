@@ -5,7 +5,7 @@ namespace ApiBundle\Api\Resource\CourseSet;
 use ApiBundle\Api\Resource\Course\CourseFilter;
 use ApiBundle\Api\Resource\Filter;
 
-class CourseSetFilter extends Filter
+class CourseSetCourseFilter extends Filter
 {
     function filter(&$data)
     {

@@ -16,6 +16,8 @@ class CourseSetCourse extends Resource
             throw new ResourceNotFoundException('课程不存在');
         }
 
-        return $this->service('Course:CourseService')->findPublishedCoursesByCourseSetId($courseSetId);
+        $courses = $this->service('Course:CourseService')->findPublishedCoursesByCourseSetId($courseSetId);
+        $this->getUAUtil()->multiple($courses, array('creator', 'teacherIds'));
+        return $courses;
     }
 }

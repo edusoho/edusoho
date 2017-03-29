@@ -30,7 +30,7 @@ class UserAssociateUtil
 
         $users = $this->findUsers($userIds);
 
-        foreach ($objects as $object) {
+        foreach ($objects as &$object) {
             $this->replaceUser($users, $object, $userIdFields);
         }
     }
