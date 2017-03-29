@@ -33,6 +33,7 @@ class PayCenterController extends BaseController
         $orderInfo['sn']         = $fields['sn'];
         $orderInfo['targetType'] = $fields['targetType'];
         $orderInfo['isMobile']   = $this->isMobileClient();
+        $orderInfo['isWeixin']   = $this->isWxClient();
         $processor               = OrderProcessorFactory::create($fields['targetType']);
         $orderInfo['template']   = $processor->getOrderInfoTemplate();
         $order                   = $processor->getOrderBySn($orderInfo['sn']);
@@ -618,7 +619,7 @@ class PayCenterController extends BaseController
                     $enableds[$key]['enabled'] = 0;
                 }
 
-                if ($this->isMobileClient() && $payName == 'wxpay') {
+                if ($this->isMobileClient() && !($this->isWxClient()) && $payName == 'wxpay') {
                     $enableds[$key]['enabled'] = 0;
                 }
             }

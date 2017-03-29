@@ -43,7 +43,6 @@
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
           {% set cbpay = false %}
           {% set alipay = false %}
-          {% set wxpay = isMobile  %}
 
           <div class="form-group order-detail-bg">
             {% for payment in payments %}
@@ -100,7 +99,7 @@
                 <p class="color-danger">{{'若需使用网银支付，请使用IE浏览器'|trans}}</p>
               {% endif %}
             {% endif %}
-            {% if wxpay | default('') %}
+            {% if isMobile and not isWeixin | default('') %}
               <p class="color-danger">{{'您正在使用手机浏览，暂不支持微信支付方式'|trans}}</p>
             {% endif %}
           </div>
