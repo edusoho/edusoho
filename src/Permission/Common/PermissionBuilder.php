@@ -247,7 +247,7 @@ class PermissionBuilder
 
             $code          = ucfirst($app['code']);
 
-            if ($app['protocol'] == 3) {
+            if (isset($app['protocol']) && $app['protocol'] == 3) {
                 $configPaths[] = "{$rootDir}/plugins/{$code}Plugin/Resources/config/menus_{$position}.yml";
             } else {
                 $configPaths[] = "{$rootDir}/plugins/{$code}/{$code}Bundle/Resources/config/menus_{$position}.yml";
