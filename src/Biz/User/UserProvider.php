@@ -28,7 +28,7 @@ class UserProvider implements UserProviderInterface
 
         if (empty($user)) {
             throw new UsernameNotFoundException(sprintf('User "%s" not found.', $username));
-        } elseif (isset($user['type']) && $user['type'] == 'scheduler') {
+        } elseif (isset($user['type']) && $user['type'] == 'system') {
             throw new UsernameNotFoundException(sprintf('User "%s" not found.', $username));
         }
 
