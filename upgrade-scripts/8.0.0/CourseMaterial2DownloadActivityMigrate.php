@@ -9,8 +9,7 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
         //create table course_material_v8 and dumplcate date from course_material
         
         $this->dumplicateCourseMaterialDatas();
-
-        $this->exec(' UPDATE `course_material_v8` SET `courseSetId` = courseId WHERE `courseSetId`<>`courseId`;');
+        $this->exec(' UPDATE `course_material_v8` SET `courseSetId` = courseId WHERE `courseSetId` is null;');
         $this->exec(" UPDATE `course_material_v8` SET  `source`= 'courseactivity' WHERE source = 'courselesson';");
 
         $this->proccessDownloadActivity();
