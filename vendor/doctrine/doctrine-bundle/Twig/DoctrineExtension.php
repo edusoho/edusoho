@@ -32,7 +32,7 @@ class DoctrineExtension extends \Twig_Extension
     /**
      * Define our functions
      *
-     * @return \Twig_SimpleFilter[]
+     * @return array
      */
     public function getFilters()
     {
@@ -247,11 +247,6 @@ class DoctrineExtension extends \Twig_Extension
         $result = $parameter;
 
         switch (true) {
-            // Check if result is non-unicode string using PCRE_UTF8 modifier
-            case is_string($result) && !preg_match('//u', $result):
-                $result = '0x'. strtoupper(bin2hex($result));
-                break;
-
             case is_string($result):
                 $result = "'".addslashes($result)."'";
                 break;
@@ -291,10 +286,6 @@ class DoctrineExtension extends \Twig_Extension
     public function replaceQueryParameters($query, array $parameters)
     {
         $i = 0;
-
-        if (!array_key_exists(0, $parameters) && array_key_exists(1, $parameters)) {
-            $i = 1;
-        }
 
         $result = preg_replace_callback(
             '/\?|((?<!:):[a-z0-9_]+)/i',

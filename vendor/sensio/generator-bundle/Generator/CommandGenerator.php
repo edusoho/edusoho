@@ -32,7 +32,7 @@ class CommandGenerator extends Generator
     {
         $bundleDir = $bundle->getPath();
         $commandDir = $bundleDir.'/Command';
-        self::mkdir($commandDir);
+        $this->filesystem->mkdir($commandDir);
 
         $commandClassName = $this->classify($name).'Command';
         $commandFile = $commandDir.'/'.$commandClassName.'.php';

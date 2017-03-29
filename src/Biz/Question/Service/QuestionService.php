@@ -48,4 +48,6 @@ interface QuestionService
     public function findUserFavoriteQuestions($userId);
 
     public function deleteFavoriteByQuestionId($questionId);
+
+    public function batchDeletes($ids);
 }

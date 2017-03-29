@@ -13,7 +13,6 @@ abstract class CacheStrategy
     public function __construct($container)
     {
         $this->container = $container;
-        $this->maxLifeTime = empty($container['cache.config']['maxLifeTime']) ? 86400: $container['cache.config']['maxLifeTime'];
     }
 
     public function parseDao($dao)

@@ -119,10 +119,6 @@ class RegistryTest extends TestCase
     public function testResetDefaultEntityManager()
     {
         $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $container->expects($this->any())
-            ->method('initialized')
-            ->with($this->equalTo('doctrine.orm.default_entity_manager'))
-            ->willReturn(true);
         $container->expects($this->once())
                   ->method('set')
                   ->with($this->equalTo('doctrine.orm.default_entity_manager'), $this->equalTo(null));
@@ -134,10 +130,6 @@ class RegistryTest extends TestCase
     public function testResetEntityManager()
     {
         $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $container->expects($this->any())
-            ->method('initialized')
-            ->with($this->equalTo('doctrine.orm.default_entity_manager'))
-            ->willReturn(true);
         $container->expects($this->once())
                   ->method('set')
                   ->with($this->equalTo('doctrine.orm.default_entity_manager'), $this->equalTo(null));

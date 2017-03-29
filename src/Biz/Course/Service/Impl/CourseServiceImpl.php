@@ -642,13 +642,13 @@ class CourseServiceImpl extends BaseService implements CourseService
             return false;
         }
 
-        if ($user->hasPermission('admin_course_manage')) {
-            return true;
-        }
-
         $member = $this->getMemberDao()->getByCourseIdAndUserId($course['id'], $user['id']);
 
         if ($member && in_array($member['role'], array('teacher', 'student'))) {
+            return true;
+        }
+
+        if ($user->hasPermission('admin_course_manage')) {
             return true;
         }
 
@@ -1928,12 +1928,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if (!empty($fields['buyExpiryTime'])) {
             $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime'].' 23:59:59');
-
-            return $fields;
         } else {
             $fields['buyExpiryTime'] = 0;
-
-            return $fields;
         }
+
+        return $fields;
     }
 }

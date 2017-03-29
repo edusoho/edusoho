@@ -135,24 +135,17 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         }
 
         $biz->register(new Codeages\Biz\RateLimiter\RateLimiterServiceProvider());
-
-        $redisConfig = $this->getRedisConfig();
-        if (!empty($redisConfig)) {
-            $biz->register(new Codeages\Biz\Framework\Provider\CacheServiceProvider());
-            $biz['cache.config'] = $redisConfig;
-        }
+        $this->registerCacheServiceProvider($biz);
 
         $biz->boot();
     }
 
-    protected function getRedisConfig()
+    protected function registerCacheServiceProvider($biz)
     {
-        $redisConfigFile = $this->getContainer()->getParameter('kernel.root_dir').'/data/redis.php';
-        if (file_exists($redisConfigFile)) {
-            $redisConfig = include $redisConfigFile;
-            return $redisConfig;
+        if ($this->getContainer()->hasParameter('cache_options')) {
+            $biz->register(new Codeages\Biz\Framework\Provider\CacheServiceProvider());
+            $biz['cache.options'] = $this->getContainer()->getParameter('cache_options');
         }
-        return array();
     }
 
     protected function initializeServiceKernel()
@@ -163,16 +156,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
             $serviceKernel = ServiceKernel::create($this->getEnvironment(), $this->isDebug());
 
-            $currentUser = new CurrentUser();
-            $currentUser->fromArray(
-                array(
-                    'id' => 0,
-                    'nickname' => '游客',
-                    'email' => 'test.edusoho.com',
-                    'currentIp' => $this->request->getClientIp() ?: '127.0.0.1',
-                    'roles' => array(),
-                )
-            );
+            $currentUser = new \Biz\User\AnonymousUser($this->request->getClientIp() ?: '127.0.0.1');
 
             $biz['user'] = $currentUser;
             $serviceKernel

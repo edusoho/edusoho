@@ -21,7 +21,7 @@
         "davedevelopment/phpmig": "^1.2.0",
         "psr/log": "^1.0.0",
         "symfony/event-dispatcher": "^2.8.9",
-        "flexihash/flexihash": "^2.0"
+        "canoma/canoma": "^0.0.3"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
