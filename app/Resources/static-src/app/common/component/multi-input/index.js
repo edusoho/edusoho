@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import List from './list';
 import InputGroup from './input-group';
 import { getRandomString } from './part';
-import '!style!css!less!./style.less';
+import '!style!css!less!./style.less?insertAt=top';
 
 function initItem(dataSourceUi, value) {
   let item = {

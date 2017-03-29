@@ -93,13 +93,19 @@ Basic Swiper Styles
     font-size: 50px;
   }
   color: #dbdbdb;
-  .es-transition;
+  -webkit-transition: all 3s ease;
+     -moz-transition: all 3s ease;
+       -o-transition: all 3s ease;
+          transition: all 3s ease;
   &:focus {
     color: #dbdbdb;
   }
   &:hover {
-    color: @gray-dark;
-    .es-transition;
+    color: #616161;
+    -webkit-transition: all 3s ease;
+     -moz-transition: all 3s ease;
+       -o-transition: all 3s ease;
+          transition: all 3s ease;
   }
 }
 
@@ -117,44 +123,4 @@ Basic Swiper Styles
 }
 .swiper-wp8-vertical {
   -ms-touch-action: pan-x;
-}
-
-/* ===============================================================
-Your custom styles, here you need to specify container's and slide's
-sizes, pagination, etc.
-================================================================*/
-.swiper-container {
-  /* Specify Swiper's Size: */
-
-  /*width:200px;
-  height: 100px;*/
-}
-.swiper-slide {
-  /* Specify Slides's Size: */
-  
-  /*width: 100%;
-  height: 100%;*/
-}
-.swiper-slide-active {
-  /* Specific active slide styling: */
-  
-}
-.swiper-slide-visible {
-  /* Specific visible slide styling: */   
-
-}
-/* ===============================================================
-Pagination Styles
-================================================================*/
-.swiper-pagination-switch {
-  /* Stylize pagination button: */    
-
-}
-.swiper-active-switch {
-  /* Specific active button style: */ 
-  
-}
-.swiper-visible-switch {
-  /* Specific visible button style: */    
-  
 }

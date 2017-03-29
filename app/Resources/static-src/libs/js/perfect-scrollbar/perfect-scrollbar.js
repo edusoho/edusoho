@@ -1,4 +1,5 @@
-import "./jquery-mousewheel.js"
+import "./jquery-mousewheel.js";
+import "!style!css!./perfect-scrollbar.css?insertAt=top";
 
 "use strict";
 (function(factory) {

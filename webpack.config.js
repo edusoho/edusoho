@@ -9,10 +9,10 @@ const options = {
     'fix-ie': ['console-polyfill', 'respond-js'], //也可以是一个npm依赖包
     'jquery-insertAtCaret': ['libs/js/jquery-insertAtCaret.js'],
     'jquery-form': ['jquery-form'],
-    'jquery-nouislider':['nouislider'],
+    'jquery-nouislider':['libs/js/jquery-nouislider.js'],
     'jquery-sortable':['jquery-sortable'],
     'swiper':['swiper'],
-    'perfect-scrollbar':['libs/js/perfect-scrollbar.js'],
+    'perfect-scrollbar':['libs/js/perfect-scrollbar/perfect-scrollbar.js'],
     'jquery-validation': ['libs/js/jquery-validation.js'],
     'jquery-intro': ['libs/js/jquery-intro/jquery-intro.js'],
     'bootstrap-datetimepicker':['libs/js/bootstrap-datetimepicker.js'],
