@@ -54,6 +54,10 @@
               {% if activePayment in ['none', ''] and payment.enabled %}
                 {% set activePayment = payment.name %}
               {% endif %}
+              {{ dump(isWeixin) }}
+              {{ dump(isMobile) }}
+              {{ dump(payment.name) }}
+              {{ dump(payment.enabled) }}
               {% if isMobile and not isWeixin and payment.name =='wxpay' and payment.enabled | default('') %}
                 {% set wxpay = true %}
               {% endif %}
