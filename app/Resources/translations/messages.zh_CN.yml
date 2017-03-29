@@ -489,7 +489,7 @@ group.thread.attachments_upload.upload_type: MB，文件类型支持png ,jpg ,gi
 group.thread.attachments_upload.file_name: 文件名
 group.thread.attachments_upload.description: 描述
 group.thread.attachments_upload.operations: 操作
-group.thread.attachments_upload.delete: 删除
+group.thread.attachments_upload.delete_btn: 删除
 group.thread.attachments_upload.hint: 用户下载附件扣除的%name%会在扣除50%之后添加到您的账户
 
 group.thread.attachments_download: 附件下载
@@ -498,34 +498,34 @@ group.thread.attachments_download.upload_time: 上传于 %createdTime%
 group.thread.attachments_download.price: 售价:%coin%%coin_name%
 group.thread.attachments_download.free: 免费
 group.thread.attachments_download.times: 下载次数：%hitNum%
-group.thread.attachments_download.delete: 删除
+group.thread.attachments_download.delete_btn: 删除
 group.thread.attachments_download.delete_warning: 确定删除此附件
 
 group.thread.check_hide_content: 查看隐藏内容
 group.thread.edit_btn: 编辑
-group.thread.cancel_essence: 取消加精
-group.thread.set_essence: 加精
-group.thread.cancel_top: 取消置顶
-group.thread.set_top: 置顶
-group.thread.cancel_reward: 取消悬赏
-group.thread.set_reward: 悬赏
-group.thread.all_see: 查看全部
-group.thread.owner_see: 只看楼主
-group.thread.asc_see: 顺序查看
-group.thread.desc_see: 倒序查看
+group.thread.cancel_essence_btn: 取消加精
+group.thread.set_essence_btn: 加精
+group.thread.cancel_top_btn: 取消置顶
+group.thread.set_top_btn: 置顶
+group.thread.cancel_reward_btn: 取消悬赏
+group.thread.set_reward_btn: 悬赏
+group.thread.all_see_btn: 查看全部
+group.thread.owner_see_btn: 只看楼主
+group.thread.asc_see_btn: 顺序查看
+group.thread.desc_see_btn: 倒序查看
 group.thread.best_reply: 最佳回答
 group.thread.reply_numbers: %postNum%回复
 group.thread.desc_floors_count: %postCount%楼
 group.thread.asc_floors_count: %loop.index%楼
-group.thread.delete: 删除
+group.thread.delete_btn: 删除
 group.thread.delete_warning: 确定删除这条回复
-group.thread.accept: 采纳
+group.thread.accept_btn: 采纳
 group.thread.accept_warning: 确定采纳这条回复
-group.thread.reply: 回复
+group.thread.reply_btn: 回复
 group.thread.publish_reply: 发表回复
 group.thread.publish_reply.content_title: 回复内容
 group.thread.reply_content: 回复内容
-group.thread.pack_up: 收起
+group.thread.pack_up_btn: 收起
 group.thread.content: 内容
 group.thread.writer: 话题作者
 group.thread.writer.empty: 无
@@ -537,7 +537,6 @@ group.thread.check_need: 查看所需
 group.thread.check_need_hint: 回复话题后可见
 group.thread.creat.content_title: 发表话题
 group.thread.edit.content_title: 编辑话题
-
 
 group.detail.page_title: %title%小组
 group.detail.introductions: 小组介绍

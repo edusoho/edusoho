@@ -98,48 +98,48 @@
 
         {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3 %}
           {% if threadMain.isElite==1 %}
-            <a id="elite"  title="{{'group.thread.cancel_essence'|trans}}" class="btn btn-default btn-sm mrm"
+            <a id="elite"  title="{{'group.thread.cancel_essence_btn'|trans}}" class="btn btn-default btn-sm mrm"
               href="javascript:"
-            data-url="{{path('group_thread_removeElite',{threadId:threadMain.id})}}">{{'group.thread.cancel_essence'|trans}}</a>
+            data-url="{{path('group_thread_removeElite',{threadId:threadMain.id})}}">{{'group.thread.cancel_essence_btn'|trans}}</a>
           {% else %}
-            <a id="elite"  title="{{'group.thread.set_essence'|trans}}" class="btn btn-default btn-sm mrm"
-            href="javascript:" data-url="{{path('group_thread_setElite',{threadId:threadMain.id})}}">{{'group.thread.set_essence'|trans}}</a>
+            <a id="elite"  title="{{'group.thread.set_essence_btn'|trans}}" class="btn btn-default btn-sm mrm"
+            href="javascript:" data-url="{{path('group_thread_setElite',{threadId:threadMain.id})}}">{{'group.thread.set_essence_btn'|trans}}</a>
           {% endif %}
 
           {% if threadMain.isStick==1 %}
-             <a id="stick" title="{{'group.thread.cancel_top'|trans}}" class="btn btn-default btn-sm mrm"
-            href="javascript:" data-url="{{path('group_thread_removeStick',{threadId:threadMain.id})}}"> {{'group.thread.cancel_top'|trans}}</a>
+             <a id="stick" title="{{'group.thread.cancel_top_btn'|trans}}" class="btn btn-default btn-sm mrm"
+            href="javascript:" data-url="{{path('group_thread_removeStick',{threadId:threadMain.id})}}"> {{'group.thread.cancel_top_btn'|trans}}</a>
           {% else %}
-            <a id="stick"  title="{{'group.thread.set_top'|trans}}" class="btn btn-default btn-sm mrm"
-            href="javascript:" data-url="{{path('group_thread_setStick',{threadId:threadMain.id})}}">{{'group.thread.set_top'|trans}}</a>
+            <a id="stick"  title="{{'group.thread.set_top_btn'|trans}}" class="btn btn-default btn-sm mrm"
+            href="javascript:" data-url="{{path('group_thread_setStick',{threadId:threadMain.id})}}">{{'group.thread.set_top_btn'|trans}}</a>
           {% endif %}
 
           {% if is_feature_enabled('group_reward') %}
             {% if is_granted('ROLE_ADMIN') or user.id==groupinfo.ownerId or is_groupmember==3 %}
               {% if threadMain.type == 'reward' and  threadMain.rewardCoin > 0 %}
                 {% if not isAdopt %}
-                  <a id="cancelReward" title="{{'group.thread.cancel_reward'|trans}}" class="btn btn-default btn-sm mrm"
-                  href="javascript:" data-url="{{path('group_thread_cancel_reward',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-ban-circle"></span> {{'group.thread.cancel_reward'|trans}}</a>
+                  <a id="cancelReward" title="{{'group.thread.cancel_reward_btn'|trans}}" class="btn btn-default btn-sm mrm"
+                  href="javascript:" data-url="{{path('group_thread_cancel_reward',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-ban-circle"></span> {{'group.thread.cancel_reward_btn'|trans}}</a>
                 {% endif %}
               {% else %}
                 {% if threadMain.type == 'default' %}
-                  <a id="rewardCoin"  title="{{'group.thread.set_reward'|trans}}" class="btn btn-default btn-sm mrm"
-                    href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_reward',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-usd"></span>  {{'group.thread.set_reward'|trans}}</a>
+                  <a id="rewardCoin"  title="{{'group.thread.set_reward_btn'|trans}}" class="btn btn-default btn-sm mrm"
+                    href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_reward',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-usd"></span>  {{'group.thread.set_reward_btn'|trans}}</a>
                 {% endif %}
               {% endif %}
             {% endif %}
           {% endif %}
         {% endif %}
         {% if filters.type=='onlyOwner' %}
-          <a class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:'all',sort:filters.sort})}}" %}><span class="glyphicon glyphicon-filter"></span> {{'group.thread.all_see'|trans}}</a>
+          <a class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:'all',sort:filters.sort})}}" %}><span class="glyphicon glyphicon-filter"></span> {{'group.thread.all_see_btn'|trans}}</a>
         {% else %}
-          <a class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:'onlyOwner',sort:filters.sort})}}">{{'group.thread.owner_see'|trans}}</a>
+          <a class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:'onlyOwner',sort:filters.sort})}}">{{'group.thread.owner_see_btn'|trans}}</a>
         {% endif %}
 
         {% if filters.sort=='desc' %}
-          <a type="button" class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'asc'})}}">{{'group.thread.asc_see'|trans}}</a>
+          <a type="button" class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'asc'})}}">{{'group.thread.asc_see_btn'|trans}}</a>
         {% else %}
-          <a type="button" class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'desc'})}}">{{'group.thread.desc_see'|trans}}</a>
+          <a type="button" class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'desc'})}}">{{'group.thread.desc_see_btn'|trans}}</a>
         {% endif %}
       </div>
     </div>
@@ -203,23 +203,23 @@
 
               <div class="actions">
                 {% if user.id==post.userId or is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
-                  <a title="{{'group.thread.delete_warning'|trans}}" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id})}}">{{'group.thread.delete'|trans}}</a>
+                  <a title="{{'group.thread.delete_warning'|trans}}" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id})}}">{{'group.thread.delete_btn'|trans}}</a>
                 {% endif %}
 
                 {% if is_feature_enabled('group_reward') %}
                   {% if not isAdopt and threadMain.type == "reward" %}
                     {% if is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
-                      <a title="{{'group.thread.accept_warning'|trans}}" class="mhm post-adopt-btn" href="javascript:" data-url="{{path('group_thread_adopt',{postId:post.id})}}">{{'group.thread.accept'|trans}}</a>
+                      <a title="{{'group.thread.accept_warning'|trans}}" class="mhm post-adopt-btn" href="javascript:" data-url="{{path('group_thread_adopt',{postId:post.id})}}">{{'group.thread.accept_btn'|trans}}</a>
                     {% endif %}
                   {% endif %}
                 {% endif %}
 
                 {% if not subPosts %}
-                  <a href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="{{postMember[post.userId].id}}">{{'group.thread.reply'|trans}}</a>
-                  <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" style="display:none;">{{'group.thread.pack_up'|trans}}</a>
+                  <a href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="{{postMember[post.userId].id}}">{{'group.thread.reply_btn'|trans}}</a>
+                  <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" style="display:none;">{{'group.thread.pack_up_btn'|trans}}</a>
                 {% else %}
-                  <a style="display:none;" href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="">{{'group.thread.reply'|trans}}({{postReplyCount[post.id]}})</a>
-                  <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" >{{'group.thread.pack_up'|trans}}</a>
+                  <a style="display:none;" href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="">{{'group.thread.reply_btn'|trans}}({{postReplyCount[post.id]}})</a>
+                  <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" >{{'group.thread.pack_up_btn'|trans}}</a>
                 {% endif %}
               </div>
               <div class="reply-{{post.id}}">
@@ -273,7 +273,7 @@
                       <br>{{'group.thread.attachments_download.times'|trans({'%hitNum%':attach.hitNum})}}
                     </div>
                     {% if user.id==post.userId or is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
-                      <a title="{{'group.thread.attachments_download.delete_warning'|trans}}" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_delete_attach',{goodsId:attach.id})}}">{{'group.thread.attachments_download.delete'|trans}}</a>
+                      <a title="{{'group.thread.attachments_download.delete_warning'|trans}}" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_delete_attach',{goodsId:attach.id})}}">{{'group.thread.attachments_download.delete_btn'|trans}}</a>
                     {% endif %}
                   </div>
                 </div>

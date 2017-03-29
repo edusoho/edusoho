@@ -23,7 +23,7 @@
               <td><label class="control-label"><span class="glyphicon glyphicon-folder-close"></span> {{attach.title}}</label></td>
               <td><input type="hidden" name="id[]" value="{{attach.fileId}}"/><input type="text" class="form-control" name="description[]" title="{{attach.title}}" value="{{attach.description}}"></td>
               <td><input type="text" name="coin[]" class="form-control" value="{{attach.coin}}"></td>
-              <td><button type="button" class="del-file btn btn-default" data-id="{{attach.id}}">{{'group.thread.attachments_upload.delete'|trans}}</button></td>
+              <td><button type="button" class="del-file btn btn-default" data-id="{{attach.id}}">{{'group.thread.attachments_upload.delete_btn'|trans}}</button></td>
             </tr>
           {% endfor %}
         {% endif %}
