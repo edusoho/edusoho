@@ -43,6 +43,7 @@
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
           {% set cbpay = false %}
           {% set alipay = false %}
+          {% set wxpay = false %}
 
           <div class="form-group order-detail-bg">
             {% for payment in payments %}
@@ -53,6 +54,9 @@
               {% endif %}
               {% if activePayment in ['none', ''] and payment.enabled %}
                 {% set activePayment = payment.name %}
+              {% endif %}
+              {% if isMobile and not isWeixin and payment.wxpay_setting_enabled | default('') %}
+                {% set wxpay = true %}
               {% endif %}
               <div
                   class="check {% if not payment.enabled %}disabled{% endif %} {% if activePayment == payment.name %}active{% endif %}"
@@ -99,8 +103,7 @@
                 <p class="color-danger">{{'若需使用网银支付，请使用IE浏览器'|trans}}</p>
               {% endif %}
             {% endif %}
-            {{ dump(payment) }}
-            {% if isMobile and not isWeixin and payment.wxpay_setting_enabled | default('') %}
+            {% if wxpay | default('') %}
               <p class="color-danger">{{'您正在使用手机浏览，暂不支持微信支付方式'|trans}}</p>
             {% endif %}
           </div>
