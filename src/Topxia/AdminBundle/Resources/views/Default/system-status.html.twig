@@ -78,7 +78,7 @@
                 <a href="{{ path('admin_edu_cloud_search') }}" class="value value-danger"><i class="dot"></i>未开启</a>
               {% endif %}
             </li>
-          {#   <li>
+            <li>
               <span class="key">云问答</span>
               {% set cloud_consult = setting('cloud_consult', '') %}
               {% if cloud_consult.cloud_consult_setting_enabled | default(0)  %}
@@ -86,7 +86,7 @@
               {% else %}
                 <a href="{{ path('admin_cloud_consult_setting') }}" class="value value-danger"><i class="dot"></i>未开启</a>
               {% endif %}
-            </li> #}
+            </li>
           </ul>
         </div>
       </span>
