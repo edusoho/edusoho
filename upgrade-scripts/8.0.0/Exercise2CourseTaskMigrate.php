@@ -15,7 +15,7 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
         $this->exerciseToActivity($start);
         $this->exerciseToCourseTask($start);
 
-        return $page+1;
+        return $page + 1;
     }
 
     /**
@@ -41,15 +41,9 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
               `createdTime`,
               `updatedTime`,
               `copyId`,
-<<<<<<< HEAD
-              `exerciseId`
+              `migrateExerciseId`
             )
             SELECT
-=======
-              `migrateExerciseId`
-          )
-          SELECT
->>>>>>> b2daa043eda0cd9bdf03e6f31f65cd30fced8c61
               '练习',
               `summary`,
               `eexerciseId`,
@@ -65,21 +59,14 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
               `updatedTime`,
               `ecopyId`,
               `eexerciseId`
-<<<<<<< HEAD
             FROM (SELECT  ee.id AS eexerciseId, ee.`copyId` AS ecopyId , ce.*
-            FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid limit {$start}, {$this->perPageCount}) lesson
-            WHERE lesson.eexerciseId NOT IN (SELECT exerciseId FROM activity WHERE exerciseId IS NOT NULL );
-        ");
-
-        $sql = "UPDATE activity AS a, testpaper_v8 AS t SET a.mediaId = t.id WHERE a.exerciseId = t.migrateTestId AND t.type = 'exercise' AND a.type = 'exercise';";
-        $this->getConnection()->exec($sql);
-=======
-          FROM (SELECT  ee.id AS eexerciseId, ee.`copyId` AS ecopyId , ce.*
-          FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid limit 0, {$this->perPageCount}) lesson
-          WHERE lesson.eexerciseId NOT IN (SELECT exerciseId FROM activity WHERE exerciseId IS NOT NULL );
+                FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid limit 0, {$this->perPageCount}) lesson
+            WHERE lesson.eexerciseId NOT IN (SELECT migrateExerciseId FROM activity WHERE migrateExerciseId IS NOT NULL );
         "
-      );
->>>>>>> b2daa043eda0cd9bdf03e6f31f65cd30fced8c61
+        );
+
+        $sql = "UPDATE activity AS a, testpaper_v8 AS t SET a.mediaId = t.id WHERE a.migrateExerciseId = t.migrateTestId AND t.type = 'exercise' AND a.mediaType = 'exercise';";
+        $this->getConnection()->exec($sql);
     }
 
     protected function exerciseToCourseTask($start)
@@ -136,13 +123,8 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
         );
 
         $this->getConnection()->exec(
-<<<<<<< HEAD
             "UPDATE `course_task` AS ck, activity AS a SET ck.`activityId` = a.`id`
-           WHERE a.`exerciseId` = ck.`exerciseId` AND  ck.type = 'exercise' AND  ck.`activityId` = 0
-=======
-          "UPDATE `course_task` AS ck, activity AS a SET ck.`activityId` = a.`id`
            WHERE a.`migrateExerciseId` = ck.`migrateExerciseId` AND  ck.type = 'exercise' AND  ck.`activityId` = 0
->>>>>>> b2daa043eda0cd9bdf03e6f31f65cd30fced8c61
           "
         );
     }
