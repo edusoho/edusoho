@@ -120,9 +120,11 @@ form.btn.close: 关闭
 form.btn.cancel: 取消
 form.btn.confirm: 确定
 form.btn.insert: 插入
+form.btn.delete: 删除
 form.btn.submit_disabled: 已提交
 form.btn.reset_password: 重设密码
 form.btn.send: 发送
+form.btn.delete.submiting: 正在删除...
 form.btn.reply.submiting: 正在发表回复
 form.btn.save.submiting: 正在保存...
 form.btn.publish.submiting: 正在创建...
@@ -350,6 +352,7 @@ user.account_center.cards.no_qualified_hint: 没有搜索到符合条件的
 user.account_center.cards.moneycard_not_install_hint: 网站没有开启%coin_name%功能,学习卡功能暂时没法使用
 
 #用户通知模块
+user.notification: 通知
 user.notification.content_title: 通知
 user.notification.empty: 暂无记录
 
@@ -359,6 +362,7 @@ global.notification.publish_time: 发布时间
 global.notification.empty: 通知已经被管理员删除
 
 #用户私信模块
+user.message: 私信
 user.message.content_title: 私信
 user.message.empty: 暂无私信
 
@@ -570,7 +574,13 @@ group.thread.insert_hide_content_hint: 隐藏话题获得的%coin_name%会在扣
 group.thread.insert_hide_content_description: 请输入要隐藏的内容
 group.thread.check_need: 查看所需
 group.thread.check_need_hint: 回复话题后可见
+
 group.thread.creat.content_title: 发表话题
+group.thread.creat.attachments: 附件
+group.thread.creat.analysis_attachment: 解析附件
+group.thread.creat.question_stem_attachment: 题干附件
+group.thread.creat.preview: 预览
+
 group.thread.edit.content_title: 编辑话题
 
 group.detail.page_title: %title%小组
