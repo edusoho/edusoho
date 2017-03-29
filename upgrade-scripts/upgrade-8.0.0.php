@@ -84,8 +84,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'HomeworkMigrate',
             'ExerciseMigrate',
 
-            // 'Exercise2CourseTaskMigrate',
-            // 'Homework2CourseTasMigrate',
+            'Exercise2CourseTaskMigrate',
+            'Homework2CourseTasMigrate',
 
             'TestpaperResultMigrate',
             'TestpaperItemResultMigrate',
@@ -151,7 +151,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $nextPage = $migrate->update($page);
         $end = time();
         var_dump("{$method} {$page} end:".($end - $start));
-        
+
         $this->logger('info', "迁移 {$method} 成功");
 
         if (!empty($nextPage)) {
