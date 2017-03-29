@@ -621,7 +621,7 @@ class PayCenterController extends BaseController
 
                 if ($this->isMobileClient() && !($this->isWxClient()) && $payName == 'wxpay') {
                     $enableds[$key]['enabled'] = 0;
-                    $enableds[$key]['wxpay_original_enabled'] = $enableds[$key]['enabled'];
+                    $enableds[$key]['wxpay_setting_enabled'] = $setting[$payName.'_enabled'];
                 }
             }
         }
