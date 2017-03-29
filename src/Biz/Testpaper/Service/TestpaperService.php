@@ -103,4 +103,6 @@ interface TestpaperService
     public function updateTestpaperItems($testpaperId, $items);
 
     public function getTestpaperBuilder($type);
+
+    public function countQuestionTypes($testpaper, $items);
 }

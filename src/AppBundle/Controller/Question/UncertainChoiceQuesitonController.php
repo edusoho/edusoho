@@ -2,8 +2,6 @@
 
 namespace AppBundle\Controller\Question;
 
-use AppBundle\Controller\BaseController;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
 class UncertainChoiceQuesitonController extends BaseQuestionController
