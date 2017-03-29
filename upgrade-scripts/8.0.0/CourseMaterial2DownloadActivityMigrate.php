@@ -11,7 +11,7 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
         $this->dumplicateCourseMaterialDatas();
 
         $this->exec(' UPDATE `course_material_v8` SET `courseSetId` = courseId WHERE `courseSetId`<>`courseId`;');
-        $this->exec(" UPDATE `course_material_v8` SET  `source`= 'courseactivity' WHERE source= 'courselesson';");
+        $this->exec(" UPDATE `course_material_v8` SET  `source`= 'courseactivity' WHERE source = 'courselesson';");
 
         // refactor: 数据完整性校验，校验同一个lesson下是否全部的资料已经迁移完成
         // $countSql = "SELECT count(id) FROM course_material WHERE source ='coursematerial' AND type = 'course' AND  lessonId > 0 AND lessonId NOT IN (SELECT lessonId FROM `download_activity`)";
@@ -48,7 +48,7 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
         }
 
         if (!$this->isFieldExist('course_material', 'courseSetId')) {
-            $this->exec('alter table `course_material` add `courseSetId` int(10) ;');
+            $this->exec('alter table `course_material` add `courseSetId` int(10);');
         }
     }
 
@@ -77,7 +77,7 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
             min(`createdTime`) AS updatedTime,
             concat('[', group_concat( CASE WHEN `fileid` = 0 THEN `link`  ELSE `fileid` END), ']')  as fileIds,
             min(`lessonId`) as lessonId
-          FROM course_material WHERE source ='coursematerial' AND lessonId >0 GROUP BY lessonId
+          FROM course_material_v8 WHERE source ='coursematerial' AND lessonId >0 GROUP BY lessonId
           AND  lessonId NOT IN (SELECT `migrateLessonId` FROM `download_activity`);
           "
         );
@@ -107,7 +107,7 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
           max(`createdTime`) AS createdTime,
           max(`createdTime`) AS updatedTime,
           max(`lessonId`) AS lessonId
-        FROM course_material WHERE source ='coursematerial' AND TYPE = 'course' AND  lessonid >0 GROUP BY  lessonid
+        FROM course_material_v8 WHERE source ='coursematerial' AND TYPE = 'course' AND  lessonid >0 GROUP BY  lessonid
           AND  lessonId NOT IN (SELECT  `migrateLessonId` FROM `activity` WHERE mediaType = 'download');
         "
         );
@@ -151,7 +151,7 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
         FROM  `course_lesson`  WHERE id IN
         (
           SELECT  max(`lessonId`) AS lessonId
-          FROM course_material WHERE source ='coursematerial' AND TYPE = 'course' AND  lessonid >0 GROUP BY  lessonid
+          FROM course_material_v8 WHERE source ='coursematerial' AND TYPE = 'course' AND  lessonid >0 GROUP BY  lessonid
         ) AND  id NOT IN (SELECT `migrateLessonId` FROM course_task WHERE  TYPE ='download')
         "
         );
