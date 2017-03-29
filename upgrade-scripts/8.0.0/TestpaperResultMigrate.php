@@ -47,20 +47,18 @@ class TestpaperResultMigrate extends AbstractMigrate
 
     private function updateTestpaperResult()
     {
-        $sql = "SELECT * FROM testpaper_result_v8 WHERE type = 'testpaper' AND courseId = 0";
+        $sql = "SELECT * FROM testpaper_result_v8 WHERE type = 'testpaper' AND courseId = 0 AND target != '';";
         $newTestpaperResults = $this->getConnection()->fetchAll($sql);
         foreach ($newTestpaperResults as $testpaperResult) {
-          if(empty($testpaperResult['target'])){
-            continue;
-          }
             $targetArr = explode('/', $testpaperResult['target']);
             $courseArr = explode('-', $targetArr[0]);
             $lessonArr = explode('-', $targetArr[1]);
 
+            $courseId = intval($courseArr[1]);
             $lessonId = empty($lessonArr[1]) ? 0 : intval($lessonArr[1]);
             $sql = "UPDATE testpaper_result_v8 SET
-                courseId = {$courseArr[1]},
-                courseSetId = {$courseArr[1]},
+                courseId = {$courseId},
+                courseSetId = {$courseId},
                 lessonId = {$lessonId}
                 WHERE id = {$testpaperResult['id']}";
 
@@ -81,7 +79,6 @@ class TestpaperResultMigrate extends AbstractMigrate
         }
 
         $sql = "INSERT INTO testpaper_result_v8(
-            id,
             paperName,
             testId,
             userId,
@@ -106,7 +103,6 @@ class TestpaperResultMigrate extends AbstractMigrate
             migrateResultId,
             type
         ) SELECT
-            id,
             paperName,
             testId,
             userId,
@@ -133,6 +129,6 @@ class TestpaperResultMigrate extends AbstractMigrate
             FROM testpaper_result WHERE id NOT IN (SELECT id FROM testpaper_result_v8) order by id limit 0, {$this->perPageCount};";
         $this->getConnection()->exec($sql);
 
-        return $page+1;
+        return $page + 1;
     }
 }

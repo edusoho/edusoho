@@ -30,7 +30,7 @@ class QuestionMigrate extends AbstractMigrate
 
     private function updateQuestion($page)
     {
-        $sql = "SELECT * FROM question where courseSetId = 0 ORDER BY id LIMIT 0, {$this->perPageCount};";
+        $sql = "SELECT * FROM question where courseSetId = 0 AND target != '' ORDER BY id LIMIT 0, {$this->perPageCount};";
 
         $questions = $this->getConnection()->fetchAll($sql);
 
@@ -39,9 +39,6 @@ class QuestionMigrate extends AbstractMigrate
         }
 
         foreach ($questions as $question) {
-          if(empty($testpaperResult['target'])){
-            continue;
-          }
             $targetArr = explode('/', $question['target']);
             $courseArr = explode('-', $targetArr[0]);
             $lessonId = 0;
