@@ -99,8 +99,7 @@
                 <p class="color-danger">{{'若需使用网银支付，请使用IE浏览器'|trans}}</p>
               {% endif %}
             {% endif %}
-            {{ dump(payments) }}
-            {% if isMobile and not isWeixin | default('') %}
+            {% if isMobile and not isWeixin and payment.wxpay_setting_enabled | default('') %}
               <p class="color-danger">{{'您正在使用手机浏览，暂不支持微信支付方式'|trans}}</p>
             {% endif %}
           </div>
