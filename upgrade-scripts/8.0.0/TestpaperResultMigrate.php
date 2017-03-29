@@ -54,8 +54,8 @@ class TestpaperResultMigrate extends AbstractMigrate
             $courseArr = explode('-', $targetArr[0]);
             $lessonArr = explode('-', $targetArr[1]);
 
-            $courseId = intval($courseArr[1]);
-            $lessonId = empty($lessonArr[1]) ? 0 : intval($lessonArr[1]);
+            $courseId = (int)$courseArr[1];
+            $lessonId = empty($lessonArr[1]) ? 0 : (int)$lessonArr[1];
             $sql = "UPDATE testpaper_result_v8 SET
                 courseId = {$courseId},
                 courseSetId = {$courseId},
@@ -73,7 +73,6 @@ class TestpaperResultMigrate extends AbstractMigrate
     {
         $countSql = 'SELECT count(id) FROM `testpaper_result` where `id` not in (select `id` from `testpaper_result_v8`);';
         $count = $this->getConnection()->fetchColumn($countSql);
-
         if ($count == 0) {
             return;
         }
