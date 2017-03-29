@@ -170,11 +170,12 @@ class X8ScriptCheckCommand extends BaseCommand
         }
 
         // download:
-        $c1 = $connection->fetchColumn("select count(*) from course_material where source = 'coursematerial';");
+        $c1 = $connection->fetchColumn("SELECT count(*) FROM (SELECT max(lessonId) FROM course_material WHERE source = 'coursematerial' AND  `lessonId` >0 GROUP BY lessonId ) cm;");
         $c2 = $connection->fetchColumn('select count(*) from activity_download;');
         $c3 = $connection->fetchColumn("select count(*) from activity where mediaType='download';");
         $c4 = $connection->fetchColumn("select count(*) from course_task where activityId in (select id from activity where mediaType = 'download');");
-        if ($c1 == $c2 && $c2 == $c3 && $c3 == $c4) {
+        $c5 = $connection->fetchColumn("SELECT count(*) FROM activity WHERE mediaId IN (SELECT id FROM activity_download ) AND mediaType = 'download';");
+        if ($c1 == $c2 && $c2 == $c3 && $c3 == $c4 and $c4 == $c5) {
             $output->writeln('<info> download 数据验证通过.</info>');
         } else {
             $output->writeln('<error> download 数据验证不通过.</error>');
