@@ -14,7 +14,7 @@ class Homework2CourseTasMigrate extends AbstractMigrate
         $this->homeworkToActivity($start);
         $this->homeworkToCourseTask($start);
 
-        return $page+1;
+        return $page + 1;
     }
 
     /**
@@ -61,11 +61,11 @@ class Homework2CourseTasMigrate extends AbstractMigrate
               `hhomeworkId`
           FROM (SELECT  ee.id AS hhomeworkId, ee.`copyId` AS ecopyId , ce.*
           FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonid limit 0, {$this->perPageCount}) lesson
-          WHERE hhomeworkId NOT IN (SELECT homeworkId FROM activity WHERE homeworkId IS NOT NULL );
+          WHERE hhomeworkId NOT IN (SELECT migrateHomeworkId FROM activity WHERE migrateHomeworkId IS NOT NULL );
                   "
         );
 
-        $sql = "UPDATE activity AS a,testpaper_v8 AS t SET a.mediaId = t.id WHERE a.homeworkId = t.migrateTestId AND t.type = 'homework' AND a.type = 'homework';";
+        $sql = "UPDATE activity AS a,testpaper_v8 AS t SET a.mediaId = t.id WHERE a.migrateHomeworkId = t.migrateTestId AND t.type = 'homework' AND a.type = 'homework';";
         $this->getConnection()->exec($sql);
     }
 
@@ -123,14 +123,8 @@ class Homework2CourseTasMigrate extends AbstractMigrate
           "
         );
 
-        $this->exec(
-<<<<<<< HEAD
-            "UPDATE `course_task` AS ck, activity AS a SET ck.`activityId` = a.`id`
-        WHERE a.`homeworkId` = ck.`homeworkId` AND  ck.type = 'homework' AND  ck.`activityId` = 0
-=======
-          "UPDATE `course_task` AS ck, activity AS a SET ck.`activityId` = a.`id`
-        WHERE a.`migrateHomeworkId` = ck.`migrateHomeworkId` AND  ck.type = 'homework' AND  ck.`activityId` = 0
->>>>>>> b2daa043eda0cd9bdf03e6f31f65cd30fced8c61
+        $this->exec("
+          UPDATE `course_task` AS ck, activity AS a SET ck.`activityId` = a.`id` WHERE a.`migrateHomeworkId` = ck.`migrateHomeworkId` AND  ck.type = 'homework' AND  ck.`activityId` = 0
           "
         );
     }
