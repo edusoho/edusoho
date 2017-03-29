@@ -81,17 +81,15 @@
 								<input type="text" id="profile_mobile" name="profile[mobile]" class="form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile.mobile|default('') }}">
 
 								<div class="help-block" style="display:none"></div>
+                {% if setting('cloud_sms.sms_enabled', '') == '1' %}
+                  <div class="color-warning">
+                    {{'还没绑定手机号码。'|trans}}<strong><a href="{{path('settings_bind_mobile')}}">{{'去绑定'|trans}}</a>
+                    </strong>
+                  </div>
+                {% endif %}
 							</div>
 						</div>
-						{% if setting('cloud_sms.sms_enabled', '') == '1' %}
-							<div class="help-block">
-								<label class="col-md-2 control-label"></label>
-								<p class="text-warning">
-								{{'还没绑定手机号码，'|trans}}<strong><a href="{{path('settings_bind_mobile')}}">{{'前去绑定'|trans}}</a>{{'。'|trans}}
-								</strong>
-								</p>
-							</div>
-						{% endif %}
+						
 					{% endif %}
 
 					<div class="form-group form-forIam-group form-notStudent-group">

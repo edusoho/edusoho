@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class TestpaperItemResultDaoImpl extends GeneralDaoImpl implements TestpaperItemResultDao
 {
-    protected $table = 'c2_testpaper_item_result';
+    protected $table = 'testpaper_item_result_v8';
 
     public function findItemResultsByResultId($resultId)
     {

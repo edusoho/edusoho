@@ -459,9 +459,9 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $container = $this->getContainer();
 
         return array_map(function ($classroom) use ($self, $container, $isList, $coinSetting) {
-            $classroom['smallPicture'] = $container->get('web.twig.extension')->getFilePath($classroom['smallPicture'], 'course-large.png', true);
-            $classroom['middlePicture'] = $container->get('web.twig.extension')->getFilePath($classroom['middlePicture'], 'course-large.png', true);
-            $classroom['largePicture'] = $container->get('web.twig.extension')->getFilePath($classroom['largePicture'], 'course-large.png', true);
+            $classroom['smallPicture'] = $container->get('web.twig.extension')->getFilePath($classroom['smallPicture'], 'classroom.png', true);
+            $classroom['middlePicture'] = $container->get('web.twig.extension')->getFilePath($classroom['middlePicture'], 'classroom.png', true);
+            $classroom['largePicture'] = $container->get('web.twig.extension')->getFilePath($classroom['largePicture'], 'classroom.png', true);
 
             $classroom['recommendedTime'] = date('c', $classroom['recommendedTime']);
             $classroom['createdTime'] = date('c', $classroom['createdTime']);

@@ -11,6 +11,7 @@ export default class Intro {
   constructor() {
     showSettings();
     this.intro = null;
+    this.customClass = "es-intro-help multistep";
     // $('body').on('click', '.js-reset-intro', (event) => {
     //   event.stopPropagation();
     //   $('body').removeClass('transparent-intro');
@@ -22,6 +23,10 @@ export default class Intro {
     //   this.showResetStep();
     //   $('.js-intro-btn-group').addClass('transparent');
     // });
+
+    $('body').on('click','.js-skip',(event)=>{
+      this.intro.exit();
+    });
   }
   
   introType() {
@@ -36,14 +41,15 @@ export default class Intro {
     this.initCourseListPageIntro();
   }
 
-  isRestintroType() {
-    if (this.isTaskCreatePage()) { 
-      $('.js-task-manage-item:first').trigger('mouseenter');
-      this.introStart(this.initAllSteps());
-      return ;
-    }
-    this.introStart(this.initNotTaskPageSteps());
-  }
+  // isRestintroType() {
+  //   if (this.isTaskCreatePage()) { 
+  //     $('.js-task-manage-item:first').trigger('mouseenter');
+  //     this.introStart(this.initAllSteps());
+  //     return ;
+  //   }
+  //   this.introStart(this.initNotTaskPageSteps());
+    
+  // }
 
   isCourseListPage() {
     return !!$('#courses-list-table').length;
@@ -59,26 +65,44 @@ export default class Intro {
   }
 
   introStart(steps) {
+    let doneLabel = '<i class="es-icon es-icon-close01"></i>';
     this.intro = introJs();
+    if(steps.length < 2) {
+       doneLabel= '我知道了';
+       this.customClass = "es-intro-help";
+    }else {
+       this.customClass = "es-intro-help multistep";
+    }
+    console.log(steps.length < 2);
+    console.log(this.customClass);
+    console.log(doneLabel);
     this.intro.setOptions({
       steps: steps,
-      skipLabel: '<i class="es-icon es-icon-close01"></i>',
+      skipLabel: doneLabel,
       nextLabel: '继续了解',
       prevLabel: '上一步',
-      doneLabel: '<i class="es-icon es-icon-close01"></i>',
+      doneLabel: doneLabel,
       showBullets: false,
       tooltipPosition: 'auto',
       // positionPrecedence:['left', 'right', 'bottom', 'top'],
       showStepNumbers: false,
        exitOnEsc: false,
       exitOnOverlayClick: false,
+      tooltipClass:this.customClass,
     });
+    
     this.intro.start().onexit(function(){
-      $('.js-intro-btn-group').removeClass('transparent');
-      $('body').removeClass('transparent-intro');
-    }).oncomplete(function(){
-      console.log('ok');
-    });
+      // $('.js-intro-btn-group').removeClass('transparent');
+      // $('body').removeClass('transparent-intro');
+    }).onchange(()=>{
+      console.log(this.intro);
+      if(this.intro._currentStep ==(this.intro._introItems.length -1 ) ) {
+        $('.introjs-nextbutton').before('<a class="introjs-button  done-button js-skip">我知道了<a/>');
+      }
+      else {
+        $('.js-skip').remove();
+      }
+    })
   }
 
   initTaskCreatePageIntro() {
@@ -185,7 +209,13 @@ export default class Intro {
         在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，
         每个环节都可以通过各种教学手段来实现。`,
       })
+      if (!store.get(COURSE_TASK_DETAIL_INTRO)) {
+        store.set(COURSE_TASK_DETAIL_INTRO);
+      }
     }
+
+
+
 
     return arry;
   }
@@ -226,6 +256,9 @@ export default class Intro {
         每个环节都可以通过各种教学手段来实现。`,
         position: 'bottom',
       })
+      if (!store.get(COURSE_TASK_DETAIL_INTRO)) {
+        store.set(COURSE_TASK_DETAIL_INTRO);
+      }
     }
 
     return arry;
@@ -250,7 +283,7 @@ export default class Intro {
         intro: `
           <p class="title">多个教学计划</p>
           恭喜你创建了多个教学计划！左侧的功能菜单会有所简化，
-          只会显示课程公共的相关设置。`,
+          只会显示课程公共的相关设置。`
       }
     ];
   }
