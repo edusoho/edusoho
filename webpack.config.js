@@ -23,6 +23,8 @@ const options = {
     'jquery-cycle2': ['jquery-cycle2'],
     'excanvas-compiled':['libs/js/excanvas-compiled.js'],
     'echo-js': ['echo-js'],
+    // 样式
+    'app-bootstrap': ['libs/app-bootstrap/less/bootstrap.less']
   },
   noParseDeps: [ // 不解析依赖，加快编译速度
     'jquery/dist/jquery.js',
