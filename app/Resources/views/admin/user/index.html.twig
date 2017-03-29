@@ -63,6 +63,9 @@
   <table id="user-table" class="table table-striped table-hover" data-search-form="#user-search-form">
     <thead>
     <tr>
+      {% if setting('magic.enable_org','0') %}
+        <th><input type="checkbox"  data-role="batch-select"></th>
+      {% endif %}
       <th>{{ '用户名'|trans }}</th>
       {% include 'org/parts/table-thead-tr.html.twig' %}
       <th>{{ '手机号'|trans }}</th>
