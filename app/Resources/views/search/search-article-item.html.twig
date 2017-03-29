@@ -3,7 +3,7 @@
     <div class="pull-left">
       <div class="date">
         <div class="day">{{ article.publishedTime|date('d') }}</div>
-        <div class="month">{{ article.publishedTime|date('m') }}月</div>
+        <div class="month">{{ article.publishedTime|date('m') }}{{'time.month'|trans}}</div>
       </div>
     </div>
     <div class="metas-body">

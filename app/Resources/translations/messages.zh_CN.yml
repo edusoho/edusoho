@@ -1,7 +1,10 @@
 #币种，货币面额
 currency.RMB: 元
 
-# 用户通用字段
+#时间
+time.month: 月
+
+# 用户通用
 user.fields.login_password: 登录密码
 user.fields.pay_password: 支付密码
 user.fileds.microblog: 微博
@@ -19,6 +22,18 @@ user.fields.mobile_label.no_bind: 未绑定
 user.fields.company_label: 公司
 user.fileds.realname: 真实姓名
 user.fileds.me: 我
+user.fields.following: 关注
+user.fields.fan: 粉丝
+user.fields.no_title: 暂无头衔
+user.fields.no_sign: 暂无签名
+user.fields.no_introduction: 暂无简介
+user.btn.following_btn: 关注
+user.btn.followed_btn: 已关注
+user.btn.send_message_btn: 私信
+user.not_login.first_part: 你还没有登录，请先
+user.not_login.second_part: 登录
+user.not_login.third_part: 或
+user.not_login.fourth_part: 注册
 
 #财务通用
 finance.income: 收入
@@ -65,24 +80,55 @@ order.payment_pattern.llpay: 连连支付
 order.payment_pattern.cash: 现金支付
 order.payment_pattern.other: 其他支付
 
+# 上传模块
+upload.titile: 上传附件
+
+
+# 课程
+course: 课程
+course.price.RMB: %price%元
+course.origin_price.RMB: %originPrice%元
+course.price.free: 免费
+course.price.limited_time_free: 限免
+course.price.discount: %discount%折
+
+#公开课
+open_course: 公开课
+open_course.live: %live%直播 
+open_course.status.live: 正在直播
+open_course.status.living: 即将直播
+
+# 班级
+classroom: 班级
+classroom.courses_count: 共%courseNum%门课程
+
 # 表单通用
 form.btn.modify: 修改
 form.btn.set: 设置
+form.btn.publish: 发布
 form.btn.reset: 重置
 form.btn.view: 查看
 form.btn.bind: 绑定
+form.btn.search: 搜索
+form.btn.reply: 发表
 form.btn.bind_cancel: 取消绑定
 form.btn.submit: 提交
 form.btn.login: 登录
 form.btn.save: 保存
 form.btn.detail: 详情
 form.btn.close: 关闭
+form.btn.cancel: 取消
+form.btn.confirm: 确定
+form.btn.insert: 插入
 form.btn.submit_disabled: 已提交
 form.btn.reset_password: 重设密码
-form.btn.save.submiting: 正在保存...
-form.btn.submit.submiting: 正在提交...
-form.btn.sending: 正在发送...
 form.btn.send: 发送
+form.btn.reply.submiting: 正在发表回复
+form.btn.save.submiting: 正在保存...
+form.btn.publish.submiting: 正在创建...
+form.btn.submit.submiting: 正在提交...
+form.btn.send.submiting: 正在发送...
+form.btn.modify.submiting: 正在修改...
 form.checkbox.public: 公开
 form.placeholder.max_int: 最大值为9位整数
 form.placeholer.save_two_decimal: 保留到2位小数
@@ -304,7 +350,6 @@ user.account_center.cards.no_qualified_hint: 没有搜索到符合条件的
 user.account_center.cards.moneycard_not_install_hint: 网站没有开启%coin_name%功能,学习卡功能暂时没法使用
 
 #用户通知模块
-user.notification: 通知
 user.notification.content_title: 通知
 user.notification.empty: 暂无记录
 
@@ -314,7 +359,6 @@ global.notification.publish_time: 发布时间
 global.notification.empty: 通知已经被管理员删除
 
 #用户私信模块
-user.message: 私信
 user.message.content_title: 私信
 user.message.empty: 暂无私信
 
@@ -337,3 +381,245 @@ user.message.btn.delete: 删除
 user.message.btn.back: 返回我的私信
 user.message.btn.send: 写私信
 
+# 个人主页模块
+user.homepage: %nickname%的个人主页
+user.homepage.introductions: 个人介绍
+user.homepage.teaching_courses: 在教课程
+user.homepage.teaching_classrooms: 在教%name%
+user.homepage.learning_courses: 在学课程
+user.homepage.learning_classrooms: 在学%name%
+user.homepage.favorite_courses: 收藏课程
+user.homepage.joined_group: 加入小组
+user.homepage.following_fan: 关注 / 粉丝
+
+# 个人主页模块-个人介绍
+user.homepage.introductions.empty: 暂无介绍
+
+#个人主页模块-在教课程
+user.homepage.teaching_courses.empty: 无在教的课程
+
+#个人主页模块-在学课程
+user.homepage.learning_courses.empty: 无在学的课程
+
+#个人主页模块-收藏课程
+user.homepage.favorite_courses.empty: 无收藏的课程
+
+#个人主页模块-在教班级
+user.homepage.teaching_classrooms.empty: 无在教的%name%
+
+#个人主页模块-在学班级
+user.homepage.learning_classrooms.empty: 无在学的%name%！
+
+#个人主页模块-加入小组
+user.homepage.joined_group.join: 加入小组
+user.homepage.joined_group.manage: 管理小组
+user.homepage.joined_group.empty: 暂无小组信息！
+
+#个人主页模块-关注/粉丝
+user.homepage.following_fan.following_empty: 无关注的人
+user.homepage.following_fan.fan_empty: 无粉丝
+
+# 主页模块-头部
+homepage: 首页
+homepage.header.search: 搜索 
+homepage.header.login: 登录
+homepage.header.logout: 退出登录
+homepage.header.register: 注册
+homepage.header.my_course: 我的教学
+homepage.header.my_learning: 我的学习
+homepage.header.notice: 通知
+homepage.header.message: 私信
+homepage.header.drop_menu.personal_menu: 个人主页
+homepage.header.drop_menu.settings_menu: 个人设置
+homepage.header.drop_menu.my_teaching_menu: 我的教学
+homepage.header.drop_menu.my_learning_menu: 我的学习
+homepage.header.drop_menu.account_menu: 账户中心
+homepage.header.drop_menu.admin_menu: 管理后台
+
+# 师资力量模块
+teacher.introductions: 师资介绍
+teacher.SEO.keywords: 师资介绍%name%
+teacher.SEO.description: %name%的师资介绍。
+teacher.content_title: 所有教师
+
+# 自定义页面模块-常见问题
+DIY_page.empty: 当前页面尚未编辑内容，请在管理后台编辑。
+
+# 搜索模块
+searching.empty: 没有搜到相关课程，请换个关键词试试！
+searching.content_title: 搜索
+searching.result_relevant_course_copy: 共找到<span>%count%</span>门<span>“%keywords%”</span>相关课程
+searching.result_course_copy: 共找到<span>%count%</span>门课程
+searching.all_courses: 全部课程
+searching.vip_courses: 会员课程
+searching.free_courses: 免费课程
+searching.live_courses: 直播课程
+
+# 云搜索模块
+cloud_searching.content_title: 搜索
+cloud_searching.result_sum: 个
+cloud_searching.common_keywords: 常用关键字
+cloud_searching.result: 搜索结果
+cloud_searching.all_courses: 全部课程
+cloud_searching.input_placeholder: 可搜索课程、教师、话题、资讯
+
+cloud_searching.course_type: 课程
+cloud_searching.course_type.result: 为您找到课程结果约
+cloud_searching.course_type.learning: 正在学
+cloud_searching.course_type.evaluate: 人评价
+cloud_searching.course_type.learned: 人学习
+cloud_searching.course_type.task: 课时
+cloud_searching.course_type.recommend.content_title: 推荐课程
+cloud_searching.course_type.recommend.empty: 暂无推荐课程
+
+cloud_searching.teacher_type: 教师
+cloud_searching.teacher_type.result: 为您找到教师结果约
+cloud_searching.teacher_type.recommend.content_title: 推荐教师
+cloud_searching.teacher_type.recommend.empty: 暂无推荐教师信息！
+
+cloud_searching.thread_type: 小组话题
+cloud_searching.thread_type.result: 为您找到话题结果约
+cloud_searching.thread_type.reply: 回复
+cloud_searching.thread_type.from: 来自
+cloud_searching.thread_type.recommend.content_title: 热门小组
+
+cloud_searching.article_type: 资讯
+cloud_searching.article_type.result: 为您找到资讯结果约
+cloud_searching.article_type.recommend.content_title: 热门资讯
+cloud_searching.article_type.recommend.empty: 暂无热门资讯
+
+# 小组
+group: 小组频道
+group.page_title: 小组
+group.bread_crumbs: 小组主页
+group.input_placeholder: 小组搜索
+group.create_btn: 创建小组
+group.my_group_btn: 我的小组
+group.hot.content_title: 热门小组
+group.hot.empty: 暂无小组信息！
+group.recent_article.content_title: 最近话题
+group.my_group.content_title: 我的小组
+group.new_group.content_title: 新晋小组
+group.search: 搜索
+group.search.homepage: 小组主页
+group.search.bread_crumbs: 搜索小组
+group.search.content_title: 所有小组
+
+group.thread.title: 标题
+group.thread.top: 置顶
+group.thread.essence: 精华
+group.thread.reward: 奖 
+group.thread.share: 分享
+group.thread.favorite_btn: 收藏
+group.thread.favorited_btn: 已收藏
+group.thread.created_time: 发表于%createdTime%
+group.thread.check_times: %hitNum%次查看
+group.thread.wanted: 悬赏:%rewardCoin%%coin_name%
+
+group.thread.attachments_upload: 上传附件 
+group.thread.attachments_upload.upload_btn: 上传
+group.thread.attachments_upload.upload_waring: 大小不能超过
+group.thread.attachments_upload.upload_size: 2
+group.thread.attachments_upload.upload_type: MB，文件类型支持png ,jpg ,gif ,doc ,xls ,txt ,rar ,zip .)
+group.thread.attachments_upload.file_name: 文件名
+group.thread.attachments_upload.description: 描述
+group.thread.attachments_upload.operations: 操作
+group.thread.attachments_upload.delete_btn: 删除
+group.thread.attachments_upload.hint: 用户下载附件扣除的%name%会在扣除50%之后添加到您的账户
+
+group.thread.attachments_download: 附件下载
+group.thread.attachments_download.description: 描述：%description%
+group.thread.attachments_download.upload_time: 上传于 %createdTime%
+group.thread.attachments_download.price: 售价:%coin%%coin_name%
+group.thread.attachments_download.free: 免费
+group.thread.attachments_download.times: 下载次数：%hitNum%
+group.thread.attachments_download.delete_btn: 删除
+group.thread.attachments_download.delete_warning: 确定删除此附件
+
+group.thread.check_hide_content: 查看隐藏内容
+group.thread.edit_btn: 编辑
+group.thread.cancel_essence_btn: 取消加精
+group.thread.set_essence_btn: 加精
+group.thread.cancel_top_btn: 取消置顶
+group.thread.set_top_btn: 置顶
+group.thread.cancel_reward_btn: 取消悬赏
+group.thread.set_reward_btn: 悬赏
+group.thread.all_see_btn: 查看全部
+group.thread.owner_see_btn: 只看楼主
+group.thread.asc_see_btn: 顺序查看
+group.thread.desc_see_btn: 倒序查看
+group.thread.best_reply: 最佳回答
+group.thread.reply_numbers: %postNum%回复
+group.thread.desc_floors_count: %postCount%楼
+group.thread.asc_floors_count: %loop.index%楼
+group.thread.delete_btn: 删除
+group.thread.delete_warning: 确定删除这条回复
+group.thread.accept_btn: 采纳
+group.thread.accept_warning: 确定采纳这条回复
+group.thread.reply_btn: 回复
+group.thread.publish_reply: 发表回复
+group.thread.publish_reply.content_title: 回复内容
+group.thread.reply_content: 回复内容
+group.thread.pack_up_btn: 收起
+group.thread.content: 内容
+group.thread.writer: 话题作者
+group.thread.writer.empty: 无
+
+group.thread.insert_hide_content: 插入隐藏内容 
+group.thread.insert_hide_content_hint: 隐藏话题获得的%coin_name%会在扣除50%之后添加到您的账户
+group.thread.insert_hide_content_description: 请输入要隐藏的内容
+group.thread.check_need: 查看所需
+group.thread.check_need_hint: 回复话题后可见
+group.thread.creat.content_title: 发表话题
+group.thread.edit.content_title: 编辑话题
+
+group.detail.page_title: %title%小组
+group.detail.introductions: 小组介绍
+group.detail.introductions.empty: 暂无简介
+group.detail.join_group_btn: 加入小组
+group.detail.quit_group_btn: 退出小组
+group.detail.publish_article: 发表话题
+group.detail.search_input_placeholder: 组内搜索
+group.detail.member: 组员
+group.detail.leader: 组长
+group.detail.deputy_leader: 副组长
+group.detail.my_group_btn: 我的小组
+group.detail.articles: 话题
+group.detail.replies: 回复
+group.detail.member_number: %memberNum%个成员
+group.detail.thread_number: %threadNum%个话题
+group.detail.created_time: 创建时间：%createdTime%
+group.detail.group_homepage: 小组首页
+group.detail.group_homepage.all: 全部
+group.detail.group_homepage.essence: 精华
+group.detail.group_homepage.wanted: 悬赏
+group.detail.group_homepage.order: 排序
+group.detail.group_homepage.newest_order: 最新发帖
+group.detail.group_homepage.last_reply_order: 最后回复
+group.detail.group_homepage.reply_count_order: 回复数
+group.detail.group_leader: 小组组长
+group.detail.group_leader.empty: 无
+group.detail.group_members: 小组成员
+group.detail.group_members.leader: 组长
+group.detail.group_members.deputy_leader: 副组长
+group.detail.group_members.deputy_leader.empty: 还没有副组长！
+group.detail.group_members.deputy_leader.cancle_member_btn: 踢出成员
+group.detail.group_members.deputy_leader.set_btn: 设置副组长
+group.detail.group_members.cancle_deputy_leader_btn: 撤销副组长
+group.detail.group_members.members: 组员
+group.detail.group_members.members.empty: 还没有小组成员！
+group.detail.group_settings: 小组设置
+group.detail.new_group_members: 新加组员
+group.detail.new_group_members.empty: 还没有小组成员！
+group.detail.hot_group: 热门小组
+group.detail.hot_group_empty: 暂无小组信息！
+
+# 话题
+article: 话题
+article.reply: 回复
+article.empty: 暂无话题！
+article.status.top: 置顶
+article.status.essence: 精华
+article.status.reward: 奖
+article.create: 发起了话题
+article.last_reply: 最后回复

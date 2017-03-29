@@ -1,17 +1,17 @@
 {% extends 'group/layout.html.twig' %}
-{% block title %}{{'搜索'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'group.search'|trans}} - {{ parent() }}{% endblock %}
 {% block content %}
   <ol class="breadcrumb breadcrumb-o" style="margin-top:-18px">
-    <li><a href="{{path('homepage')}}">{{ homepage.name|default('首页'|trans) }}</a></li>
-    <li><a href="{{path('group')}}">{{ group.name|default('小组主页'|trans) }}</a></li>
-    <li><a href="{{path('group_search_group')}}">{{ search.name|default('搜索小组'|trans) }}</a></li>
+    <li><a href="{{path('homepage')}}">{{ homepage.name|default('homepage'|trans) }}</a></li>
+    <li><a href="{{path('group')}}">{{ group.name|default('group.search.homepage'|trans) }}</a></li>
+    <li><a href="{{path('group_search_group')}}">{{ search.name|default('group.search.bread_crumbs'|trans) }}</a></li>
   </ol>
 
   <div class="row">
     <div class="col-md-9 group-main">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">{{'所有小组'|trans}}</h3>
+          <h3 class="panel-title">{{'group.search.content_title'|trans}}</h3>
         </div>
 
         <div class="panel-body">
@@ -25,7 +25,7 @@
             {{ web_macro.paginator(paginator) }}
           </div>
           {% else %}
-          <div class="empty">{{'暂无小组信息'|trans}}</div>
+          <div class="empty">{{'group.hot.empty'|trans}}</div>
           {% endif %}
 
         </div>

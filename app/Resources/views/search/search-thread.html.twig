@@ -1,5 +1,5 @@
 <div class="alert alert-blank alert-sm">
-	{{'为您找到话题结果约'|trans}} <span class="color-danger">{{counts}}</span>{{'个'|trans}}
+	{{'cloud_searching.thread_type.result'|trans}} <span class="color-danger">{{counts}}</span>{{'cloud_searching.result_sum'|trans}}
 </div>
 
 <div class="media-list">
@@ -8,12 +8,12 @@
 			<div class="media-left">
 				<div class="reply">
 					{{thread.postNum}}<br>
-					<span class="text-sm">{{'回复'|trans}}</span>
+					<span class="text-sm">{{'cloud_searching.thread_type.reply'|trans}}</span>
 				</div>
 			</div>
 			<div class="media-body">
 				<div class="title"><a class="link-dark" href="{{path('group_thread_show',{id:thread.targetId,threadId:thread.id})}}" target="_blank">{{thread.title|raw}}</a></div>
-				<div class="text-sm color-gray">{{'来自'|trans}}
+				<div class="text-sm color-gray">{{'cloud_searching.thread_type.from'|trans}}
 						{% set group = data('Group',{'groupId':thread.targetId|default(0)}) %}
 						<a class="mls" href="{{path('group_show',{id:thread.targetId})}}" target="_blank">{{group.title|default('')}}</a>
 					<span class="mlm">{{thread.createdTime|smart_time}}</span>

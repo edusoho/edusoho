@@ -1,6 +1,6 @@
 {% extends 'old-layout.html.twig' %}
 
-{% block title %}{{'搜索：'|trans}}{% if keywords %}{{ keywords }}{% else %}{{'全部课程'|trans}}{% endif %} - {{ parent() }}{% endblock %}
+{% block title %}{{'cloud_searching.content_title'|trans}}{% if keywords %}{{ keywords }}{% else %}{{'cloud_searching.all_courses'|trans}}{% endif %} - {{ parent() }}{% endblock %}
 
 {% do load_script('search/cloud-search') %}
 
@@ -9,11 +9,11 @@
     <div class="container">
       <form class="input-group search-input-group" id="search-input-group" action="{{path('search')}}" method="get">
         <div class="input-wrap">
-          <input type="text" name="q" class="form-control" placeholder="{{'可搜索课程、教师、话题、资讯'|trans}}" value="{{keywords}}">
+          <input type="text" name="q" class="form-control" placeholder="{{'cloud_searching.input_placeholder'|trans}}" value="{{keywords}}">
           <i class="js-btn-clear es-icon es-icon-close01"></i>
         </div>
         <span class="input-group-btn">
-          <button class="btn btn-primary" type="submit">{{'搜索'|trans}}</button>
+          <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
         </span>
         <input type="hidden" name="type" value="{{type|default('')}}" >
       </form>
@@ -26,10 +26,10 @@
     <div class="col-md-8">
       <div class="es-section">
         <ul class="nav nav-tabs" id="search-nav-tabs" role="tablist">
-          <li {% if type == 'course' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'course'}) }}" data-type="course" >{{'课程'|trans}}</a></li>
-          <li {% if type == 'teacher' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'teacher'}) }}" data-type="teacher" >{{'教师'|trans}}</a></li>
-          <li {% if type == 'thread' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'thread'}) }}" data-type="thread" >{{'小组话题'|trans}}</a></li>
-          <li {% if type == 'article' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'article'}) }}" data-type="article" >{{'资讯'|trans}}</a></li>
+          <li {% if type == 'course' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'course'}) }}" data-type="course" >{{'cloud_searching.course_type'|trans}}</a></li>
+          <li {% if type == 'teacher' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'teacher'}) }}" data-type="teacher" >{{'cloud_searching.teacher_type'|trans}}</a></li>
+          <li {% if type == 'thread' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'thread'}) }}" data-type="thread" >{{'cloud_searching.thread_type'|trans}}</a></li>
+          <li {% if type == 'article' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'article'}) }}" data-type="article" >{{'cloud_searching.article_type'|trans}}</a></li>
         </ul>
         <div class="search-result" id="search-result">
         {% if type %}
@@ -47,7 +47,7 @@
         {% else %}
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">{{'常用关键词'|trans}}</h3>
+            <h3 class="panel-title">{{'cloud_searching.common_keywords'|trans}}</h3>
           </div>
           <div class="panel-body">
 
