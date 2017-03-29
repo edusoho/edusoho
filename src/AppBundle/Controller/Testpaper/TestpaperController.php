@@ -212,7 +212,7 @@ class TestpaperController extends BaseController
         if ($testPaper['limitedTime'] == 0) {
             $response = array(
                 'success' => false,
-                'message' => $this->getServiceKernel()->trans('该试卷考试时间未限制,请选择其他限制时长的试卷')
+                'message' => $this->getServiceKernel()->trans('该试卷考试时间未限制,请选择其他限制时长的试卷'),
             );
         } else {
             $response = array('success' => true, 'message' => '');
@@ -224,9 +224,11 @@ class TestpaperController extends BaseController
     protected function getCheckedQuestionType($testpaper)
     {
         $questionTypes = array();
-        foreach ($testpaper['metas']['counts'] as $type => $count) {
-            if ($count > 0) {
-                $questionTypes[] = $type;
+        if (!empty($testpaper['metas']['counts'])) {
+            foreach ($testpaper['metas']['counts'] as $type => $count) {
+                if ($count > 0) {
+                    $questionTypes[] = $type;
+                }
             }
         }
 
@@ -315,7 +317,9 @@ class TestpaperController extends BaseController
     protected function makeTestpaperTotal($testpaper, $items)
     {
         $total = array();
-
+        if (!empty($testpaper['metas']['counts'])) {
+            return $total;
+        }
         foreach ($testpaper['metas']['counts'] as $type => $count) {
             if (empty($items[$type])) {
                 $total[$type]['score'] = 0;
@@ -356,7 +360,7 @@ class TestpaperController extends BaseController
         if ($activity['startTime'] && $activity['startTime'] > time()) {
             return array(
                 'result' => false,
-                'message' => $this->getServiceKernel()->trans('考试未开始，请在'.date('Y-m-d H:i:s', $activity['startTime']).'之后再来！')
+                'message' => $this->getServiceKernel()->trans('考试未开始，请在'.date('Y-m-d H:i:s', $activity['startTime']).'之后再来！'),
             );
         }
 
@@ -374,7 +378,7 @@ class TestpaperController extends BaseController
             if ($nextDoTime > time()) {
                 return array(
                     'result' => false,
-                    'message' => $this->getServiceKernel()->trans('教师设置了重考间隔，请在'.date('Y-m-d H:i:s', $nextDoTime).'之后再考！')
+                    'message' => $this->getServiceKernel()->trans('教师设置了重考间隔，请在'.date('Y-m-d H:i:s', $nextDoTime).'之后再考！'),
                 );
             }
         }

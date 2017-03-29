@@ -61,6 +61,7 @@ security:
                 success_handler: topxia.logout.success_handler
             anonymous:  true
     access_control:
+        - { path: ^/crontab, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/task, role: ROLE_USER }
         - { path: ^/my, role: ROLE_USER }
         - { path: ^/settings, role: ROLE_USER }
