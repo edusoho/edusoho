@@ -522,10 +522,12 @@ class StudentManageController extends BaseController
         $isFollowing = $this->getUserService()->isFollowed($curUser['id'], $student['userId']);
         $progress = $this->calculateUserLearnProgress($course, $student);
         $default = $this->getSettingService()->get('default', array());
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         return $this->render(
             'course-manage/student/tr.html.twig',
             array(
+                'courseSet' => $courseSet,
                 'course' => $course,
                 'student' => $student,
                 'user' => $user,

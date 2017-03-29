@@ -20,7 +20,7 @@
     <div class="form-group">
       <div class="col-md-10 col-md-offset-1 controls" id="material-file-chooser">
 
-        {% include 'file-chooser/file-choose.html.twig' with {mediaType: 'video',fileType:'video', file: task.media|default(null) } %}
+        {% include 'file-chooser/file-choose.html.twig' with {mediaType: 'video',fileType:'video', file: task.media|default(null), hideImportVideo: true } %}
 
         <input type="hidden" name="fileId">
       </div>

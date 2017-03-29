@@ -156,16 +156,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
             $serviceKernel = ServiceKernel::create($this->getEnvironment(), $this->isDebug());
 
-            $currentUser = new CurrentUser();
-            $currentUser->fromArray(
-                array(
-                    'id' => 0,
-                    'nickname' => '游客',
-                    'email' => 'test.edusoho.com',
-                    'currentIp' => $this->request->getClientIp() ?: '127.0.0.1',
-                    'roles' => array(),
-                )
-            );
+            $currentUser = new \Biz\User\AnonymousUser($this->request->getClientIp() ?: '127.0.0.1');
 
             $biz['user'] = $currentUser;
             $serviceKernel

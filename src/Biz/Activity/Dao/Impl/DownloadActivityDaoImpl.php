@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class DownloadActivityDaoImpl extends GeneralDaoImpl implements DownloadActivityDao
 {
-    protected $table = 'download_activity';
+    protected $table = 'activity_download';
 
     public function declares()
     {
