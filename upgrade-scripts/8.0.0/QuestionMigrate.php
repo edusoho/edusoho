@@ -30,7 +30,8 @@ class QuestionMigrate extends AbstractMigrate
 
     private function updateQuestion($page)
     {
-        $sql = 'SELECT * FROM question ORDER BY id LIMIT 0, {$this->perPageCount};';
+        $sql = "SELECT * FROM question where courseSetId = 0 ORDER BY id LIMIT 0, {$this->perPageCount};";
+
         $questions = $this->getConnection()->fetchAll($sql);
 
         if (empty($questions)) {
@@ -50,6 +51,6 @@ class QuestionMigrate extends AbstractMigrate
             $this->getConnection()->exec($sql);
         }
 
-        return $page+1;
+        return $page + 1;
     }
 }

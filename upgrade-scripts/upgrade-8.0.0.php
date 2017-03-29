@@ -90,14 +90,14 @@ class EduSohoUpgrade extends AbstractUpdater
             'TestpaperResultMigrate',
             'TestpaperItemResultMigrate',
 
-            // 'HomeworkResultMigrate',
-            // 'HomeworkItemResultMigrate',
+            'HomeworkResultMigrate',
+            'HomeworkItemResultMigrate',
 
-            // 'ExerciseResultMigrate',
-            // 'ExerciseItemResultMigrate',
+            'ExerciseResultMigrate',
+            'ExerciseItemResultMigrate',
 
-            // 'QuestionMigrate',
-            // 'QuestionFavoriteMigrate',
+            'QuestionMigrate',
+            'QuestionFavoriteMigrate',
 
             'TagOwnerMigrate',
 

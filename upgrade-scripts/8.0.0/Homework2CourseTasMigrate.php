@@ -6,13 +6,14 @@ class Homework2CourseTasMigrate extends AbstractMigrate
     {
         $this->migrateTableStructure();
 
-        $count = $this->getConnection()->fetchColumn('SELECT  count(ee.id)  FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonId');
+        $count = $this->getConnection()->fetchColumn("SELECT count(id) FROM activity WHERE migrateHomeworkId NOT IN (SELECT id FROM homework)");
+
         if (empty($count)) {
             return;
         }
 
-        $this->homeworkToActivity(0);
-        $this->homeworkToCourseTask(0);
+        $this->homeworkToActivity();
+        $this->homeworkToCourseTask();
 
         return $page + 1;
     }
@@ -21,7 +22,7 @@ class Homework2CourseTasMigrate extends AbstractMigrate
      * exercise datas convert to  activity
      * TODO datas should read from table tespaper.
      */
-    protected function homeworkToActivity($start)
+    protected function homeworkToActivity()
     {
         $this->getConnection()->exec(
             "
@@ -69,7 +70,7 @@ class Homework2CourseTasMigrate extends AbstractMigrate
         $this->getConnection()->exec($sql);
     }
 
-    protected function homeworkToCourseTask($start)
+    protected function homeworkToCourseTask()
     {
         $this->exec(
             "

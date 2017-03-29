@@ -6,14 +6,14 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
     {
         $this->migrateTableStructure();
 
-        $count = $this->getConnection()->fetchColumn('SELECT  count(ee.id) FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid');
-        $start = $this->getStart($page);
-        if ($count == 0 && $count < $start) {
+        $count = $this->getConnection()->fetchColumn("SELECT count(id) FROM activity WHERE migrateExerciseId NOT IN (SELECT id FROM exercise) AND mediaType='exercise';");
+
+        if (empty($count)) {
             return;
         }
 
-        $this->exerciseToActivity($start);
-        $this->exerciseToCourseTask($start);
+        $this->exerciseToActivity();
+        $this->exerciseToCourseTask();
 
         return $page + 1;
     }
@@ -22,7 +22,7 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
      * exercise datas convert to  activity
      * TODO datas should read from table tespaper.
      */
-    protected function exerciseToActivity($start)
+    protected function exerciseToActivity()
     {
         $this->getConnection()->exec("
             INSERT INTO `activity`
@@ -69,7 +69,7 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
         $this->getConnection()->exec($sql);
     }
 
-    protected function exerciseToCourseTask($start)
+    protected function exerciseToCourseTask()
     {
         $this->getConnection()->exec(
             "insert into course_task
