@@ -22,7 +22,7 @@ use Symfony\Component\Config\Resource\SelfCheckingResourceChecker;
  * be used to check cache freshness.
  *
  * During a transition period, also instances of
- * \Symfony\Component\Config\Resource\ProcessorInterface will be checked
+ * \Symfony\Component\Config\Resource\ResourceInterface will be checked
  * by means of the isFresh() method. This behaviour is deprecated since 2.8
  * and will be removed in 3.0.
  *
