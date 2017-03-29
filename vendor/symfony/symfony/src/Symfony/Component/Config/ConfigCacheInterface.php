@@ -41,7 +41,7 @@ interface ConfigCacheInterface
      * independently and can be used to check cache freshness at a later time.
      *
      * @param string                   $content  The content to write into the cache
-     * @param ResourceInterface[]|null $metadata An array of ResourceInterface instances
+     * @param ResourceInterface[]|null $metadata An array of ProcessorInterface instances
      *
      * @throws \RuntimeException When the cache file cannot be written
      */

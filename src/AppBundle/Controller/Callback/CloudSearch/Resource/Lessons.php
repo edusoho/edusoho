@@ -48,12 +48,12 @@ class Lessons extends BaseResource
 
     public function filter($res)
     {
-        return $this->multicallFilter('cloud_search_lesson', $res);
+        return $this->multicallFilter('lesson', $res);
     }
 
     public function simplify($res)
     {
-        return $this->multicallSimplify('cloud_search_lesson', $res);
+        return $this->multicallSimplify('lesson', $res);
     }
 
     protected function multicallFilter($name, array $res)

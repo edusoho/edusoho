@@ -77,7 +77,7 @@ class Articles extends BaseResource
 
     public function filter($res)
     {
-        return $this->multicallFilter('cloud_search_article', $res);
+        return $this->multicallFilter('article', $res);
     }
 
     /**

@@ -79,7 +79,7 @@ class OpenCourses extends BaseResource
 
     public function filter($res)
     {
-        return $this->multicallFilter('cloud_search_open_course', $res);
+        return $this->multicallFilter('open_course', $res);
     }
 
     /**

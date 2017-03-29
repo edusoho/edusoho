@@ -125,6 +125,6 @@ services:
         class:          AppBundle\Util\TargetHelper
         arguments:      ['@service_container']
 
-    callback.resource_factory:
-        class: AppBundle\Controller\Callback\ResourceFactory
+    callback.processor_factory:
+        class: AppBundle\Controller\Callback\ProcessorFactory
         arguments:    ['@service_container']

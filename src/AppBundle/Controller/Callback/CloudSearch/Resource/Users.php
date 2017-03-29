@@ -24,7 +24,7 @@ class Users extends BaseResource
 
     public function filter($res)
     {
-        return $this->multicallFilter('cloud_search_user', $res);
+        return $this->multicallFilter('user', $res);
     }
 
     protected function multicallFilter($name, array $res)

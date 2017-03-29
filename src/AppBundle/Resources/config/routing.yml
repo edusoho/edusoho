@@ -2871,7 +2871,7 @@ course_task_question_marker_search:
     defaults: { _controller: AppBundle:QuestionMarker:search }
 
 callback:
-    path:  /callback/{resource}
+    path:  /callback/{type}
     defaults: { _controller: AppBundle:Callback/Endpoint:publish }
 
 mobile_qrcode:

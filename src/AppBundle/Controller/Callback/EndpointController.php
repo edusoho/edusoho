@@ -8,15 +8,10 @@ use AppBundle\Controller\BaseController;
 
 class EndpointController extends BaseController
 {
-    public function publishAction(Request $request, $resource)
+    public function publishAction(Request $request, $type)
     {
-        $resourceInstance = $this->get('callback.resource_factory')->create($resource);
-        $method = strtolower($request->getMethod());
-        if (!in_array($method, array('post', 'get'))) {
-            throw new \InvalidArgumentException(sprintf('unsupported method: %s', $method));
-        }
-        $resourceInstance->auth($request);
+        $processerInstance = $this->get('callback.processor_factory')->create($type);
 
-        return new JsonResponse($resourceInstance->$method($request));
+        return new JsonResponse($processerInstance->execute($request));
     }
 }

@@ -14,7 +14,6 @@ class Courses extends BaseResource
     public function get(Request $request)
     {
         $conditions = $request->query->all();
-
         $cursor = $request->query->get('cursor', time());
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 20);
@@ -22,6 +21,7 @@ class Courses extends BaseResource
         $conditions['status'] = 'published';
         $conditions['parentId'] = 0;
         $conditions['updatedTime_GE'] = $cursor;
+
         $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, array('updatedTime' => 'ASC'), $start, $limit);
         $courseSets = $this->build($courseSets);
         $next = $this->nextCursorPaging($cursor, $start, $limit, $courseSets);
@@ -31,7 +31,7 @@ class Courses extends BaseResource
 
     public function filter($res)
     {
-        return $this->multicallFilter('cloud_search_course', $res);
+        return $this->multicallFilter('course', $res);
     }
 
     public function build($courseSets)

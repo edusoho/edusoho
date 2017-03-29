@@ -23,7 +23,7 @@ class OpenCourseLessons extends BaseResource
 
     public function filter($res)
     {
-        return $this->multicallFilter('cloud_search_open_course_lesson', $res);
+        return $this->multicallFilter('open_course_lesson', $res);
     }
 
     protected function multicallFilter($name, array $res)
