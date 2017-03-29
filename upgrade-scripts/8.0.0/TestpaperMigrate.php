@@ -80,52 +80,29 @@ class TestpaperMigrate extends AbstractMigrate
 
             $courseSetId = $courseArr[1];
 
-            $insertSql = "INSERT INTO testpaper_v8 (
-                id,
-                name,
-                description,
-                courseId,
-                lessonId,
-                limitedTime,
-                pattern,
-                target,
-                status,
-                score,
-                passedCondition,
-                itemCount,
-                createdUserId,
-                createdTime,
-                updatedUserId,
-                updatedTime,
-                metas,
-                copyId,
-                type,
-                courseSetId,
-                migrateTestId
-            ) VALUES (
-                {$testpaper['id']},
-                '".$testpaper['name']."',
-                '".$testpaper['description']."',
-                {$courseSetId},
-                {$lessonId},
-                {$testpaper['limitedTime']},
-                'questionType',
-                '".$testpaper['target']."',
-                '".$testpaper['status']."',
-                {$testpaper['score']},
-                '".$passedCondition."',
-                {$testpaper['itemCount']},
-                {$testpaper['createdUserId']},
-                {$testpaper['createdTime']},
-                {$testpaper['updatedUserId']},
-                {$testpaper['updatedTime']},
-                '".$testpaper['metas']."',
-                {$testpaper['copyId']},
-                'testpaper',
-                {$courseSetId},
-                {$testpaper['id']}
-                )";
-            $this->getConnection()->exec($insertSql);
+            $this->getConnection()->insert('testpaper_v8', array(
+                'id' => $testpaper['id'],
+                'name' => $testpaper['name'],
+                'description' => $testpaper['description'],
+                'courseId' => $courseSetId,
+                'lessonId' => $lessonId,
+                'limitedTime' => $testpaper['limitedTime'],
+                'pattern' => 'questionType',
+                'target' => $testpaper['target'],
+                'status' => $testpaper['status'],
+                'score' => $testpaper['score'],
+                'passedCondition' => $passedCondition,
+                'itemCount' => $testpaper['itemCount'],
+                'createdUserId' => $testpaper['createdUserId'],
+                'createdTime' => $testpaper['createdTime'],
+                'updatedUserId' => $testpaper['updatedUserId'],
+                'updatedTime' => $testpaper['updatedTime'],
+                'metas' => $testpaper['metas'],
+                'copyId' => $testpaper['copyId'],
+                'type' => 'testpaper',
+                'courseSetId' => $courseSetId,
+                'migrateTestId' => $testpaper['id']
+            ));
         }
 
         return $page + 1;
