@@ -1,2 +1,2 @@
 import 'nouislider';
-import '!style!css!nodeModulesDir/nouislider/distribute/nouislider.css?insertAt=top';
+import '!style?insertAt=top!css!nodeModulesDir/nouislider/distribute/nouislider.css';

@@ -5,7 +5,7 @@
  * Copyright (C) 2016 Afshin Mehrabani (@afshinmeh)
  */
 // import './jquery-intro.css';
-import '!style!css!less!./jquery-intro.less?insertAt=top';
+import '!style?insertAt=top!css!less!./jquery-intro.less';
 (function (root, factory) {
   // if (typeof exports === 'object') {
 
