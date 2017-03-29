@@ -7,7 +7,7 @@ class ActivityRelaFlashActivity extends AbstractMigrate
     {
 		$this->exec(
 			"
-	          UPDATE  `activity` AS ay ,`flash_activity` AS ty SET ay.`mediaId`  =  ty.`id`
+	          UPDATE  `activity` AS ay ,`activity_flash` AS ty SET ay.`mediaId`  =  ty.`id`
 	          WHERE ay.`id` = ty.`migrateLessonId` AND ay.`mediaType` = 'flash';
 			"
         );

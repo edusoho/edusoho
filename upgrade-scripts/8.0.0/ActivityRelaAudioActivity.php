@@ -4,7 +4,7 @@ class ActivityRelaAudioActivity extends AbstractMigrate
 {
     public function update($page)
     {
-		$this->exec("UPDATE  `activity` AS ay ,`audio_activity` AS ty SET ay.`mediaId`  =  ty.`id` WHERE ay.`id`  = ty.`migrateLessonId`   AND ay.`mediaType` = 'audio';"
+		$this->exec("UPDATE  `activity` AS ay ,`activity_audio` AS ty SET ay.`mediaId`  =  ty.`id` WHERE ay.`id`  = ty.`migrateLessonId`   AND ay.`mediaType` = 'audio';"
         );
 	}
 }

@@ -9,29 +9,18 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
         //create table course_material_v8 and dumplcate date from course_material
         
         $this->dumplicateCourseMaterialDatas();
-
-        $this->exec(' UPDATE `course_material_v8` SET `courseSetId` = courseId WHERE `courseSetId`<>`courseId`;');
-        $this->exec(" UPDATE `course_material_v8` SET  `source`= 'courseactivity' WHERE source= 'courselesson';");
-
-        // refactor: 数据完整性校验，校验同一个lesson下是否全部的资料已经迁移完成
-        // $countSql = "SELECT count(id) FROM course_material WHERE source ='coursematerial' AND type = 'course' AND  lessonId > 0 AND lessonId NOT IN (SELECT lessonId FROM `download_activity`)";
-        // $count = $this->getConnection()->fetchColumn($countSql);
-        // if ($count == 0) {
-        //     return;
-        // }
+        $this->exec(' UPDATE `course_material_v8` SET `courseSetId` = courseId WHERE `courseSetId` is null;');
+        $this->exec(" UPDATE `course_material_v8` SET  `source`= 'courseactivity' WHERE source = 'courselesson';");
 
         $this->proccessDownloadActivity();
-        $this->preccessActivity();
-        $this->proccessCourseTask();
-        $this->processRelations();
     }
 
     protected function migrateTableStructure()
     {
-        if (!$this->isTableExist('download_activity')) {
+        if (!$this->isTableExist('activity_download')) {
             $this->exec(
                 "
-              CREATE TABLE `download_activity` (
+              CREATE TABLE `activity_download` (
                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
                 `mediaCount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料数',
                 `createdTime` int(10) unsigned NOT NULL,
@@ -43,12 +32,12 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
             );
         }
 
-        if (!$this->isFieldExist('download_activity', 'migrateLessonId')) {
-            $this->exec('alter table `download_activity` add `migrateLessonId` int(10) ;');
+        if (!$this->isFieldExist('activity_download', 'migrateLessonId')) {
+            $this->exec('alter table `activity_download` add `migrateLessonId` int(10) ;');
         }
 
         if (!$this->isFieldExist('course_material', 'courseSetId')) {
-            $this->exec('alter table `course_material` add `courseSetId` int(10) ;');
+            $this->exec('alter table `course_material` add `courseSetId` int(10);');
         }
     }
 
@@ -62,8 +51,8 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
     protected function proccessDownloadActivity()
     {
         $this->exec(
-            "
-          INSERT INTO `download_activity`
+          "
+          INSERT INTO `activity_download`
           (
             `mediaCount`,
             `createdTime`,
@@ -75,102 +64,11 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
             count(lessonId) AS mediaCount,
             min(`createdTime`) AS createdTime,
             min(`createdTime`) AS updatedTime,
-            concat('[', group_concat( CASE WHEN `fileid` = 0 THEN `link`  ELSE `fileid` END), ']')  as fileIds,
-            min(`lessonId`) as lessonId
-          FROM course_material WHERE source ='coursematerial' AND lessonId >0 GROUP BY lessonId
-          AND  lessonId NOT IN (SELECT `migrateLessonId` FROM `download_activity`);
+            concat('[', group_concat( CASE WHEN `fileid` = 0 THEN `link`  ELSE `fileid` END), ']')  AS fileIds,
+            min(`lessonId`) AS lessonId
+          FROM course_material_v8 WHERE source ='coursematerial' AND lessonId >0 
+          AND  lessonId NOT IN (SELECT DISTINCT   (CASE WHEN `migrateLessonId` IS NULL THEN 0 ELSE `migrateLessonId` END) AS lessonId FROM `activity_download`) GROUP BY lessonId
           "
-        );
-    }
-
-    protected function preccessActivity()
-    {
-        $this->exec(
-            "
-        INSERT INTO activity
-        (
-          `title`,
-          `mediaType`,
-          `fromCourseId`,
-          `fromCourseSetId`,
-          `fromUserId`,
-          `createdTime`,
-          `updatedTime`,
-          `migrateLessonId`
-        )
-        SELECT
-          '下载',
-          'download',
-          max(`courseId`) AS `courseId`,
-          max(`courseSetId`) AS courseSetId,
-          max(`userId`) AS userId ,
-          max(`createdTime`) AS createdTime,
-          max(`createdTime`) AS updatedTime,
-          max(`lessonId`) AS lessonId
-        FROM course_material WHERE source ='coursematerial' AND TYPE = 'course' AND  lessonid >0 GROUP BY  lessonid
-          AND  lessonId NOT IN (SELECT  `migrateLessonId` FROM `activity` WHERE mediaType = 'download');
-        "
-        );
-    }
-
-    // refactor: id not in问题
-    protected function proccessCourseTask()
-    {
-        $this->exec(
-            "
-        INSERT INTO `course_task`
-        (
-          `courseId`,
-          `fromCourseSetId`,
-          `seq`,
-          `categoryId`,
-          `title`,
-          `status`,
-          `createdUserId`,
-          `createdTime`,
-          `updatedTime`,
-          `mode`,
-          `number`,
-          `type`,
-          `migrateLessonId`
-        )
-        SELECT
-          `courseId`,
-          `courseId`,
-          `seq`,
-          `chapterId`,
-          '下载' AS title,
-          `status`,
-          `userId`,
-          `createdTime`,
-          `updatedTime`,
-          'extraClass',
-          `number`,
-          'download',
-          `id`
-        FROM  `course_lesson`  WHERE id IN
-        (
-          SELECT  max(`lessonId`) AS lessonId
-          FROM course_material WHERE source ='coursematerial' AND TYPE = 'course' AND  lessonid >0 GROUP BY  lessonid
-        ) AND  id NOT IN (SELECT `migrateLessonId` FROM course_task WHERE  TYPE ='download')
-        "
-        );
-    }
-
-    protected function processRelations()
-    {
-        $this->exec(
-            "
-         	UPDATE  `activity` AS ay ,`download_activity` AS dy SET ay.`mediaId`  =  dy.`id`
-         WHERE ay.`migrateLessonId`  = dy.`migrateLessonId` AND ay.`mediaType` = 'download' AND ay.`mediaId` IS NULL;
-        "
-        );
-
-        $this->exec(
-        "
-            UPDATE  `course_task` AS ck ,`activity` AS ay SET ck.`activityId`  =  ay.`id`
-            WHERE ck.`migrateLessonId`  = ay.`migrateLessonId` AND ck.`type` = 'download' AND ck.`activityId` IS NULL;
-        "
         );
     }
 }

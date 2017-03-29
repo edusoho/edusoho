@@ -77,6 +77,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'CourseLessonLearn2CourseTaskResult',
 
             'CourseMaterial2DownloadActivityMigrate',
+            'CourseMaterial2ActivityMigrate',
+            'CourseMaterial2CourseTaskMigrate',
             'UpdateCourseChapter',
 
             'TestpaperMigrate',

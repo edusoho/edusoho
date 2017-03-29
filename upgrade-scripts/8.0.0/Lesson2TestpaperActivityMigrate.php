@@ -4,10 +4,10 @@ class Lesson2TestpaperActivityMigrate extends AbstractMigrate
 {
     public function update($page)
     {
-        if (!$this->isTableExist('testpaper_activity')) {
+        if (!$this->isTableExist('activity_testpaper')) {
             $this->exec(
                 "
-                CREATE TABLE `testpaper_activity` (
+                CREATE TABLE `activity_testpaper` (
                   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '关联activity表的ID',
                   `mediaId` int(10) NOT NULL DEFAULT '0' COMMENT '试卷ID',
                   `doTimes` smallint(6) NOT NULL DEFAULT '0' COMMENT '考试次数',
@@ -23,8 +23,8 @@ class Lesson2TestpaperActivityMigrate extends AbstractMigrate
             );
         }
 
-        if (!$this->isFieldExist('testpaper_activity', 'migrateLessonId')) {
-            $this->exec("alter table `testpaper_activity` add `migrateLessonId` int(10) ;");
+        if (!$this->isFieldExist('activity_testpaper', 'migrateLessonId')) {
+            $this->exec("alter table `activity_testpaper` add `migrateLessonId` int(10) ;");
         }
 
         $nextPage = $this->insertTestpaperActivity($page);
@@ -38,23 +38,24 @@ class Lesson2TestpaperActivityMigrate extends AbstractMigrate
     private function updateTestpaperActivity()
     {
         $sql = "UPDATE testpaper_activity AS ta,(SELECT id,limitedTime,migrateTestId FROM testpaper_v8) AS tmp SET ta.mediaId = tmp.id, ta.limitedTime = tmp.limitedTime WHERE tmp.migrateTestId = ta.mediaId";
+
         $this->getConnection()->exec($sql);
 
         $this->getConnection()->exec("
-            UPDATE  `activity` AS ay ,`testpaper_activity` AS ty SET ay.`mediaId` = ty.id WHERE ay.id = ty.migrateLessonId   AND ay.`mediaType` = 'testpaper';
+            UPDATE  `activity` AS ay ,`activity_testpaper` AS ty SET ay.`mediaId` = ty.id WHERE ay.id = ty.migrateLessonId   AND ay.`mediaType` = 'testpaper';
         ");
     }
 
     private function insertTestpaperActivity($page)
     {
-        $countSql = "SELECT count(id) FROM `course_lesson` where `id` not in (select `id` from `testpaper_activity`) and type = 'testpaper'";
+        $countSql = "SELECT count(id) FROM `course_lesson` where `id` not in (select `id` from `activity_testpaper`) and type = 'testpaper'";
         $count = $this->getConnection()->fetchColumn($countSql);
 
         if ($count == 0) {
             return;
         }
 
-        $sql = "INSERT INTO testpaper_activity (
+        $sql = "INSERT INTO activity_testpaper (
             id,
             mediaId,
             checkType,
@@ -74,7 +75,7 @@ class Lesson2TestpaperActivityMigrate extends AbstractMigrate
             LEFT JOIN
             course_lesson_extend AS cle
             ON cl.id=cle.id
-            WHERE cl.type='testpaper' AND cl.id NOT IN (SELECT id FROM testpaper_activity) order by cl.id limit 0, {$this->perPageCount}";
+            WHERE cl.type='testpaper' AND cl.id NOT IN (SELECT id FROM activity_testpaper) order by cl.id limit 0, {$this->perPageCount}";
         $this->getConnection()->exec($sql);
 
         return $page + 1;

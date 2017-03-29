@@ -4,10 +4,10 @@ class Lesson2DocActivityMigrate extends AbstractMigrate
 {
     public function update($page)
     {
-    	if (!$this->isTableExist('doc_activity')) {
+    	if (!$this->isTableExist('activity_doc')) {
             $this->exec(
                 "
-                CREATE TABLE `doc_activity` (
+                CREATE TABLE `activity_doc` (
                   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                   `mediaId` int(11) NOT NULL,
                   `finishType` varchar(32) NOT NULL DEFAULT '' COMMENT 'click, detail',
@@ -21,11 +21,11 @@ class Lesson2DocActivityMigrate extends AbstractMigrate
             );
         }
 
-        if (!$this->isFieldExist('doc_activity', 'migrateLessonId')) {
-            $this->exec("alter table `doc_activity` add `migrateLessonId` int(10) ;");
+        if (!$this->isFieldExist('activity_doc', 'migrateLessonId')) {
+            $this->exec("alter table `activity_doc` add `migrateLessonId` int(10) ;");
         }
 
-        $countSql = "SELECT count(*) from `course_lesson` WHERE `type`='document' and `id` NOT IN (SELECT migrateLessonId FROM `doc_activity`)";
+        $countSql = "SELECT count(*) from `course_lesson` WHERE `type`='document' and `id` NOT IN (SELECT migrateLessonId FROM `activity_doc`)";
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
             return;
@@ -33,7 +33,7 @@ class Lesson2DocActivityMigrate extends AbstractMigrate
 
         $this->exec(
             "
-            INSERT INTO `doc_activity`
+            INSERT INTO `activity_doc`
             (
             `mediaId`,
             `finishType`,
@@ -51,7 +51,7 @@ class Lesson2DocActivityMigrate extends AbstractMigrate
                 `userId` ,
                 `updatedTime`,
                 `id`
-            FROM `course_lesson` WHERE TYPE ='document' AND id NOT IN (SELECT `migrateLessonId` FROM `doc_activity`)
+            FROM `course_lesson` WHERE TYPE ='document' AND id NOT IN (SELECT `migrateLessonId` FROM `activity_doc`)
             order by id limit 0, {$this->perPageCount};
         "
         );
