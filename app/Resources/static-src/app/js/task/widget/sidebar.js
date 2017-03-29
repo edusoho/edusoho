@@ -99,7 +99,9 @@ export default class TaskSidebar extends Emitter {
 
   popupContent(time = 500) {
     let side_right = '0px';
-    let content_right = '395px';
+    let width = $('#dashboard-sidebar').width();
+    
+    let content_right = width +  35 +'px';
 
     this.emit('popup', content_right, time);
     this.element.animate({

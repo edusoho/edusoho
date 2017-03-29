@@ -32,6 +32,7 @@
         <xsd:attribute name="priority" type="xsd:integer" />
         <xsd:attribute name="level" type="level" />
         <xsd:attribute name="bubble" type="xsd:boolean" />
+        <xsd:attribute name="process-psr-3-messages" type="xsd:boolean" />
         <xsd:attribute name="app-name" type="xsd:string" />
         <xsd:attribute name="path" type="xsd:string" />
         <xsd:attribute name="id" type="xsd:string" />
@@ -83,6 +84,8 @@
         <xsd:attribute name="api_version" type="xsd:string" />
         <xsd:attribute name="include-stacktraces" type="xsd:string" />
         <xsd:attribute name="content-type" type="xsd:string" />
+        <xsd:attribute name="webhook-url" type="xsd:string" />
+        <xsd:attribute name="slack-team" type="xsd:string" />
     </xsd:complexType>
 
     <xsd:simpleType name="level">

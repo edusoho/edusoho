@@ -20,6 +20,7 @@
 !/web/customize/.gitkeep
 /plugins/*
 !/plugins/.gitkeep
+/installFiles
 /node_modules/
 npm-debug.log
 /build/
@@ -33,3 +34,5 @@ npm-debug.log
 project.sublime-workspace
 .project
 .settings
+.publish
+/installFiles

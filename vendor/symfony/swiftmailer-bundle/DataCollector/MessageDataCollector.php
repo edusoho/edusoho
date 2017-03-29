@@ -28,12 +28,8 @@ class MessageDataCollector extends DataCollector
     private $container;
 
     /**
-     * Constructor.
-     *
      * We don't inject the message logger and mailer here
      * to avoid the creation of these objects when no emails are sent.
-     *
-     * @param ContainerInterface $container A ContainerInterface instance
      */
     public function __construct(ContainerInterface $container)
     {
@@ -86,11 +82,10 @@ class MessageDataCollector extends DataCollector
      *
      * @return array The data of the mailer.
      */
-
     public function getMailerData($name)
     {
         if (!isset($this->data['mailer'][$name])) {
-            throw new \LogicException(sprintf("Missing %s data in %s", $name, get_class()));
+            throw new \LogicException(sprintf('Missing "%s" data in "%s".', $name, get_class($this)));
         }
 
         return $this->data['mailer'][$name];
@@ -109,7 +104,7 @@ class MessageDataCollector extends DataCollector
             return $data['messageCount'];
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -129,7 +124,7 @@ class MessageDataCollector extends DataCollector
     /**
      * Returns if the mailer has spool.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSpool($name)
     {
@@ -137,17 +132,30 @@ class MessageDataCollector extends DataCollector
             return $data['isSpool'];
         }
 
-        return null;
+        return;
     }
 
     /**
      * Returns if the mailer is the default mailer.
      *
-     * @return boolean
+     * @return bool
      */
     public function isDefaultMailer($name)
     {
         return $this->data['defaultMailer'] == $name;
+    }
+
+    public function extractAttachments(\Swift_Message $message)
+    {
+        $attachments = array();
+
+        foreach ($message->getChildren() as $child) {
+            if ($child instanceof \Swift_Attachment) {
+                $attachments[] = $child;
+            }
+        }
+
+        return $attachments;
     }
 
     /**

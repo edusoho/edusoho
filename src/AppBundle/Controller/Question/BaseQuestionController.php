@@ -12,7 +12,6 @@ use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class BaseQuestionController extends BaseController
 {
-
     protected function tryGetCourseSetAndQuestion($courseSetId, $questionId)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
@@ -24,15 +23,19 @@ class BaseQuestionController extends BaseController
 
         return array($courseSet, $question);
     }
+
     /**
      * @param string $message
+     *
      * @return NotFoundException
      */
     protected function createResourceNotFoundException($message)
     {
         $message = $message ?: 'Resource Not Found';
+
         return new NotFoundException($message);
     }
+
     /**
      * @return QuestionService
      */
