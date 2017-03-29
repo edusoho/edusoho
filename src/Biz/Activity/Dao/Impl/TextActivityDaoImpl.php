@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class TextActivityDaoImpl extends GeneralDaoImpl implements TextActivityDao
 {
-    protected $table = 'text_activity';
+    protected $table = 'activity_text';
 
     public function declares()
     {
