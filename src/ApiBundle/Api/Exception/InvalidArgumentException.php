@@ -8,7 +8,7 @@ class InvalidArgumentException extends ApiException
 
     const TYPE = 'INVALID_ARGUMENT';
 
-    public function __construct($message = 'INVALID_CREDENTIAL', $code = 8, \Exception $previous = null)
+    public function __construct($message = 'INVALID_CREDENTIAL', $code = 9, \Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }

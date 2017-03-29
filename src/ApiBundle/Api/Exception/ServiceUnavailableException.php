@@ -8,7 +8,7 @@ class ServiceUnavailableException extends ApiException
 
     const TYPE = 'SERVICE_UNAVAILABLE';
 
-    public function __construct($message = 'SERVICE_UNAVAILABLE', $code = 7, \Exception $previous = null)
+    public function __construct($message = 'SERVICE_UNAVAILABLE', $code = 8, \Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }

@@ -19,7 +19,7 @@ class CourseSet extends Resource
         $results = $this->service('Course:CourseSetService')->searchCourseSets($conditions, array(), 0, 1);
 
         if (empty($results)) {
-            throw new ResourceNotFoundException('课程不存在或者无权限访问', 9);
+            throw new ResourceNotFoundException('课程不存在或者无权限访问');
         }
 
         $courseSet = $results[0];

@@ -13,7 +13,7 @@ class CourseTask extends Resource
         $course = $this->service('Course:CourseService')->getCourse($courseId);
 
         if (!$course) {
-            throw new ResourceNotFoundException('教学计划不存在', 9);
+            throw new ResourceNotFoundException('教学计划不存在');
         }
 
         return $this->service('Task:TaskService')->findTasksByCourseId($courseId);

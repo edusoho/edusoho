@@ -8,7 +8,7 @@ class ResourceNotFoundException extends ApiException
 
     const TYPE = 'RESOURCE_NOT_FOUND';
 
-    public function __construct($message = 'RESOURCE_NOT_FOUND', $code = 9, \Exception $previous = null)
+    public function __construct($message = 'RESOURCE_NOT_FOUND', $code = 10, \Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }

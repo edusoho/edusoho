@@ -8,7 +8,7 @@ namespace ApiBundle\Api\Exception;
 
      const TYPE = 'BAD_REQUEST';
 
-     public function __construct($message = 'BAD_REQUEST', $code = 3, \Exception $previous = null)
+     public function __construct($message = 'BAD_REQUEST', $code = 2, \Exception $previous = null)
      {
          parent::__construct($message, $code, $previous);
      }

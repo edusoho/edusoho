@@ -8,7 +8,7 @@ class BannedCredentialException extends ApiException
 
     const TYPE = 'BANNED_CREDENTIAL';
 
-    public function __construct($message = 'BANNED_CREDENTIAL', $code = 5, \Exception $previous = null)
+    public function __construct($message = 'BANNED_CREDENTIAL', $code = 6, \Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
