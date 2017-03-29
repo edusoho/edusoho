@@ -37,7 +37,7 @@ class Lesson2TestpaperActivityMigrate extends AbstractMigrate
 
     private function updateTestpaperActivity()
     {
-        $sql = "UPDATE testpaper_activity AS ta,(SELECT id,limitedTime,migrateTestId FROM testpaper_v8) AS tmp SET ta.mediaId = tmp.id, ta.limitedTime = tmp.limitedTime WHERE tmp.migrateTestId = ta.mediaId";
+        $sql = "UPDATE activity_testpaper AS ta,(SELECT id,limitedTime,migrateTestId FROM testpaper_v8) AS tmp SET ta.mediaId = tmp.id, ta.limitedTime = tmp.limitedTime WHERE tmp.migrateTestId = ta.mediaId";
 
         $this->getConnection()->exec($sql);
 

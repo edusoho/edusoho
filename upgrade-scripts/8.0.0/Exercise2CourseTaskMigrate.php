@@ -6,7 +6,7 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
     {
         $this->migrateTableStructure();
 
-        $count = $this->getConnection()->fetchColumn("SELECT count(id) FROM activity WHERE migrateExerciseId NOT IN (SELECT id FROM exercise) AND mediaType='exercise';");
+        $count = $this->getConnection()->fetchColumn("SELECT count(id) FROM exercise WHERE id NOT IN (SELECT migrateExerciseId FROM activity WHERE mediaType='exercise');");
 
         if (empty($count)) {
             return;
