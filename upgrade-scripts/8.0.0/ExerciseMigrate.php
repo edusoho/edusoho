@@ -91,41 +91,8 @@ class ExerciseMigrate extends AbstractMigrate
                 $subSql = "UPDATE testpaper_v8 SET copyId = {$exerciseNew['id']} WHERE copyId = {$exercise['id']} AND type = 'exercise'";
                 $this->getConnection()->exec($subSql);
             }
-
-            //exercise_item
-            $itemSql = "SELECT * FROM exercise_item WHERE exerciseId = {$exercise['id']} AND id NOT IN (SELECT migrateItemId FROM testpaper_item_v8 WHERE migrateType = 'exercise' AND testId = {$exercise['id']})";
-            $items = $this->getConnection()->fetchAll($itemSql);
-
-            if (!$items) {
-                continue;
-            }
-
-            foreach ($items as $item) {
-                $sql = "INSERT INTO testpaper_item_v8 (
-                    testId,
-                    seq,
-                    questionId,
-                    questionType,
-                    parentId,
-                    score,
-                    missScore,
-                    migrateItemId,
-                    migrateType
-                ) values (
-                    {$exerciseNew['id']},
-                    {$item['seq']},
-                    {$item['questionId']},
-                    '',
-                    {$item['parentId']},
-                    {$item['score']},
-                    {$item['missScore']},
-                    {$item['id']},
-                    'exercise'
-                )";
-                $this->getConnection()->exec($sql);
-            }
         }
 
-        return $page+1;
+        return $page + 1;
     }
 }
