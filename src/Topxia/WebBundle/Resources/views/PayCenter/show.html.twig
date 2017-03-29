@@ -57,6 +57,7 @@
               {% if isMobile and not isWeixin and payment.name =='wxpay' and payment.enabled | default('') %}
                 {% set wxpay = true %}
               {% endif %}
+              {{ dump(wxpay) }}
               <div
                   class="check {% if not payment.enabled %}disabled{% endif %} {% if activePayment == payment.name %}active{% endif %}"
                   id="{{ payment.name }}">
