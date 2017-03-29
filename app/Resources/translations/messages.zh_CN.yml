@@ -21,6 +21,7 @@ user.fields.mobile_label.bind: 已绑定
 user.fields.mobile_label.no_bind: 未绑定
 user.fields.company_label: 公司
 user.fileds.realname: 真实姓名
+user.fileds.me: 我
 user.fields.following: 关注
 user.fields.fan: 粉丝
 user.fields.no_title: 暂无头衔
@@ -121,10 +122,12 @@ form.btn.confirm: 确定
 form.btn.insert: 插入
 form.btn.submit_disabled: 已提交
 form.btn.reset_password: 重设密码
+form.btn.send: 发送
 form.btn.reply.submiting: 正在发表回复
 form.btn.save.submiting: 正在保存...
 form.btn.publish.submiting: 正在创建...
 form.btn.submit.submiting: 正在提交...
+form.btn.send.submiting: 正在发送...
 form.btn.modify.submiting: 正在修改...
 form.checkbox.public: 公开
 form.placeholder.max_int: 最大值为9位整数
@@ -345,6 +348,38 @@ user.account_center.cards.outdate: 已过期
 user.account_center.cards.invalid: 已作废
 user.account_center.cards.no_qualified_hint: 没有搜索到符合条件的 
 user.account_center.cards.moneycard_not_install_hint: 网站没有开启%coin_name%功能,学习卡功能暂时没法使用
+
+#用户通知模块
+user.notification.content_title: 通知
+user.notification.empty: 暂无记录
+
+#全站通知
+global.notification: 全站站内通知
+global.notification.publish_time: 发布时间
+global.notification.empty: 通知已经被管理员删除
+
+#用户私信模块
+user.message.content_title: 私信
+user.message.empty: 暂无私信
+
+#用户写私信模块
+user.message.send: 写私信
+user.message.send.content_title: 写私信
+user.message.send.receiver_name: 收信人用户名
+user.message.send.message_content: 想要说的话
+
+#用户私信对话模块
+user.message.conversation: 私信
+user.message.conversation_content_title: 与%nickname%的私信对话
+user.message.conversation.message_content: 请输入私信内容
+user.message.conversation.send_for: 发给
+user.message.conversation.unread_number: %unreadNum%条未读
+user.message.conversation.total_number: 共%messageNum%条
+
+#私信模块通用button
+user.message.btn.delete: 删除
+user.message.btn.back: 返回我的私信
+user.message.btn.send: 写私信
 
 # 个人主页模块
 user.homepage: %nickname%的个人主页

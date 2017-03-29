@@ -7,7 +7,7 @@
       <div class="popover-content">
         <div class="message-content">
           {% if messageFrom == 'me' %}
-            <strong>{{'我：'|trans}}</strong>
+            <strong>{{'user.fileds.me'|trans}}:</strong>
           {% else %}
             <strong>{{ web_macro.user_link(message.createdUser) }}：</strong>
           {% endif %}
