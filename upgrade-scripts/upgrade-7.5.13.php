@@ -20,7 +20,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $this->updateWxPayConfig();
-        $this->fixPluginFile();
+        // $this->fixPluginFile();
         $this->resetDeveloperSetting();
     }
 
