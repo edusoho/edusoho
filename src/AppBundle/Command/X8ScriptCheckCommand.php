@@ -20,9 +20,8 @@ class X8ScriptCheckCommand extends BaseCommand
 
         // 课程
         $c1 = $connection->fetchColumn('select count(*) from course;');
-        $c2 = $connection->fetchColumn('select count(*) from course_x8;');
-        $c3 = $connection->fetchColumn('select count(*) from course_set_x8;');
-
+        $c2 = $connection->fetchColumn('select count(*) from course_v8;');
+        $c3 = $connection->fetchColumn('select count(*) from course_set_v8;');
         if ($c1 == $c2 && $c2 == $c3) {
             $output->writeln('<info> 课程 数据验证通过.</info>');
         } else {
