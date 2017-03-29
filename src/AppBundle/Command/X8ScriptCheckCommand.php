@@ -219,7 +219,7 @@ class X8ScriptCheckCommand extends BaseCommand
 
         // testpaper_item_result校验
         $c1 = $connection->fetchColumn('select count(*) from testpaper_item_result;');
-        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_result_v8 where type='testpaper';");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_result_v8 where migrateType='testpaper';");
         if ($c1 == $c2) {
             $output->writeln('<info> testpaper_item_result校验 数据验证通过.</info>');
         } else {
@@ -237,7 +237,7 @@ class X8ScriptCheckCommand extends BaseCommand
 
         // homework_item_result校验
         $c1 = $connection->fetchColumn('select count(*) from homework_item_result;');
-        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_result_v8 where type='homework';");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_result_v8 where migrateType='homework';");
         if ($c1 == $c2) {
             $output->writeln('<info> homework_item_result校验 数据验证通过.</info>');
         } else {
@@ -255,7 +255,7 @@ class X8ScriptCheckCommand extends BaseCommand
 
         // exercise_item_result校验
         $c1 = $connection->fetchColumn('select count(*) from exercise_item_result;');
-        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_result_v8 where type='exercise';");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_result_v8 where migrateType='exercise';");
         if ($c1 == $c2) {
             $output->writeln('<info> exercise_item_result校验 数据验证通过.</info>');
         } else {
