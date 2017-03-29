@@ -34,7 +34,6 @@
         <form class="form-paytype" method="post" action="{{ form_action }}">
           <input type="hidden" name="targetType" value="{{ order.targetType }}">
           <input type="hidden" name="orderId" value="{{ order.id }}"/>
-
           {% set activePayment = order.payment|default(firstEnabledPayment.name|default('')) %}
           {% if order.payment == 'none' %}
             {% set activePayment = firstEnabledPayment.name|default('') %}
@@ -44,6 +43,7 @@
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
           {% set cbpay = false %}
           {% set alipay = false %}
+          {% set wxpay = isMobile  %}
 
           <div class="form-group order-detail-bg">
             {% for payment in payments %}
@@ -99,6 +99,9 @@
               {% else %}
                 <p class="color-danger">{{'若需使用网银支付，请使用IE浏览器'|trans}}</p>
               {% endif %}
+            {% endif %}
+            {% if wxpay | default('') %}
+              <p class="color-danger">{{'您正在使用手机浏览，暂不支持微信支付方式'|trans}}</p>
             {% endif %}
           </div>
           <div class="form-group">
