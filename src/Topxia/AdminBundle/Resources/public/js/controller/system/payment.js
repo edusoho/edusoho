@@ -7,7 +7,7 @@ define(function(require, exports, module) {
         var validator = new Validator({
                 element: '#payment-form'
             });
-        
+
         $('[name=alipay_enabled]').change(function(e) {
             var radio = e.target.value;
 
@@ -33,9 +33,9 @@ define(function(require, exports, module) {
 
             if (radio == '1') {
                 validator.addItem({
-                    element: '[name="wxpay_key"]',
+                    element: '[name="wxpay_appid"]',
                     required: true,
-                    errormessageRequired: Translator.trans('请输入PID')
+                    errormessageRequired: Translator.trans('请输入AppID')
                 });
                 validator.addItem({
                     element: '[name=wxpay_account]',
@@ -43,14 +43,14 @@ define(function(require, exports, module) {
                     errormessageRequired: Translator.trans('请输入商户号')
                 });
                 validator.addItem({
-                    element: '[name=wxpay_secret]',
+                    element: '[name=wxpay_key]',
                     required: true,
                     errormessageRequired: Translator.trans('请输入商户平台Key')
                 });
             } else {
                 validator.removeItem('[name="wxpay_key"]');
                 validator.removeItem('[name="wxpay_account"]');
-                validator.removeItem('[name="wxpay_secret"]');
+                validator.removeItem('[name="wxpay_key"]');
             }
         });
 
@@ -102,7 +102,7 @@ define(function(require, exports, module) {
 
         $('[name=llpay_enabled]').change(function(e) {
             var radio = e.target.value;
-            
+
             if (radio == '1') {
                 validator.addItem({
                     element: '[name="llpay_key"]',

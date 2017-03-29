@@ -12,18 +12,22 @@ class WxpayRequest extends Request
 
     public function form()
     {
-        $params         = array();
-        $form['action'] = $this->unifiedOrderUrl.'?_input_charset=utf-8';
+        $form['action'] = $this->unifiedOrderUrl . '?_input_charset=utf-8';
         $form['method'] = 'post';
         $form['params'] = $this->convertParams($this->params);
         return $form;
     }
 
-    public function unifiedOrder()
+    public function unifiedOrder($openid = null)
     {
-        $params   = $this->convertParams($this->params);
+        $params = $this->convertParams($this->params, $openid);
         $xml      = $this->toXml($params);
         $response = $this->postRequest($this->unifiedOrderUrl, $xml);
+        if (!$response) {
+            throw new \RuntimeException('xml数据异常！');
+        }
+        $response = $this->fromXml($response);
+         $this->checkSign($response);
         return $response;
     }
 
@@ -31,15 +35,17 @@ class WxpayRequest extends Request
     {
         $params                    = $this->params;
         $converted                 = array();
-        $converted['appid']        = $this->options['key'];
+        $converted['appid']        = $this->options['appid'];
         $settings                  = $this->getSettingService()->get('payment');
         $converted['mch_id']       = $settings["wxpay_account"];
         $converted['nonce_str']    = $this->getNonceStr();
         $converted['out_trade_no'] = $params['orderSn'];
-        $converted['sign']         = strtoupper($this->signParams($converted));
+        $converted['sign']         = $this->signParams($converted);
 
         $xml      = $this->toXml($converted);
         $response = $this->postRequest($this->orderQueryUrl, $xml);
+        $response = $this->fromXml($response);
+        $this->checkSign($response);
         return $response;
     }
 
@@ -55,7 +61,7 @@ class WxpayRequest extends Request
         unset($params['sign']);
 
         ksort($params);
-
+        reset($params);
         $sign = '';
 
         foreach ($params as $key => $value) {
@@ -63,33 +69,49 @@ class WxpayRequest extends Request
                 continue;
             }
 
-            $sign .= $key.'='.$value.'&';
+            $sign .= $key . '=' . $value . '&';
         }
 
         $sign = substr($sign, 0, -1);
-        $sign .= '&key='.$this->options['secret'];
-
-        return md5($sign);
+        $sign .= '&key=' . $this->options['key'];
+        return strtoupper(md5($sign));
     }
 
-    protected function convertParams($params)
+    /**
+     *
+     * 检测签名
+     */
+    public function checkSign($params)
+    {
+        if (empty($params['sign'])) {
+            throw new \RuntimeException("签名错误！");
+        }
+
+        $sign = $this->signParams($params);
+
+        if ($params['sign'] == $sign) {
+            return true;
+        }
+        throw new \RuntimeException("签名错误！");
+    }
+
+    protected function convertParams($params, $openid = null)
     {
         $converted = array();
 
-        $converted['appid']            = $this->options['key'];
+        $converted['openid']           = $openid;
+        $converted['appid']            = $this->options['appid'];
         $converted['attach']           = '支付';
         $converted['body']             = mb_substr($this->filterText($params['title']), 0, 49, 'utf-8');
-        $settings                      = $this->getSettingService()->get('payment');
-        $converted['mch_id']           = $settings["wxpay_account"];
+        $converted['mch_id']           = $this->options['account'];
         $converted['nonce_str']        = $this->getNonceStr();
         $converted['notify_url']       = $params['notifyUrl'];
         $converted['out_trade_no']     = $params['orderSn'];
         $converted['spbill_create_ip'] = $this->getClientIp();
         $converted['total_fee']        = $this->getAmount($params['amount']);
-        $converted['trade_type']       = 'NATIVE';
+        $converted['trade_type']       = $this->options['isMicroMessenger'] ? 'JSAPI' : 'NATIVE';
         $converted['product_id']       = $params['orderSn'];
-        $converted['sign']             = strtoupper($this->signParams($converted));
-
+        $converted['sign']             = $this->signParams($converted);
         return $converted;
     }
 
@@ -101,26 +123,66 @@ class WxpayRequest extends Request
             $suffix = $array[1];
             $len    = strlen($suffix);
             for ($i = $len; $i < 2; $i++) {
-                $suffix = $suffix.'0';
+                $suffix = $suffix . '0';
             }
 
-            $amount = $array[0].$suffix;
+            $amount = $array[0] . $suffix;
         } else {
-            $amount = $amount.'00';
+            $amount = $amount . '00';
         }
 
         return intval($amount);
     }
 
+
+    /**
+     *
+     * 获取jsapi支付的参数
+     * @param array $UnifiedOrderResult 统一支付接口返回的数据
+     * @throws WxPayException
+     *
+     * @return json数据，可直接填入js函数作为参数
+     */
+    public function getJsApiParameters($UnifiedOrderResult)
+    {
+        if (!array_key_exists("appid", $UnifiedOrderResult)
+            || !array_key_exists("prepay_id", $UnifiedOrderResult)
+            || $UnifiedOrderResult['prepay_id'] == ""
+        ) {
+            throw new \RuntimeException("参数错误");
+        }
+        $jsApi              = array();
+        $timeStamp          = time();
+        $jsApi['appId']     = $UnifiedOrderResult["appid"];
+        $jsApi['timeStamp'] = "$timeStamp";
+        $jsApi['nonceStr']  = $this->getNonceStr();
+        $jsApi['package']   = "prepay_id=" . $UnifiedOrderResult['prepay_id'];
+        $jsApi['signType']  = "MD5";
+        $jsApi['paySign']   = $this->signParams($jsApi);
+
+        return json_encode($jsApi);
+    }
+
     private function toXml($array, $xml = false)
     {
-        $simxml = new simpleXMLElement('<!--?xml version="1.0" encoding="utf-8"?--><root></root>');
-
-        foreach ($array as $k => $v) {
-            $simxml->addChild($k, $v);
+        if (!is_array($array)
+            || count($array) <= 0
+        ) {
+            throw new WxPayException("数组数据异常！");
         }
 
-        return $simxml->saveXML();
+        $xml = "<xml>";
+        foreach ($array as $key => $val) {
+            if (is_numeric($val)) {
+                $xml .= "<" . $key . ">" . $val . "</" . $key . ">";
+            } else {
+                $xml .= "<" . $key . "><![CDATA[" . $val . "]]></" . $key . ">";
+            }
+        }
+        $xml .= "</xml>";
+        return $xml;
+
+
     }
 
     private function getNonceStr($length = 32)
