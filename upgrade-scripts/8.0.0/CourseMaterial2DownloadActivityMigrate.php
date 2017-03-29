@@ -10,22 +10,19 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
         
         $this->dumplicateCourseMaterialDatas();
 
-        $this->exec(' UPDATE `course_material_v8` SET `courseSetId` = courseId;');
-
+        $this->exec(' UPDATE `course_material_v8` SET `courseSetId` = courseId WHERE `courseSetId`<>`courseId`;');
         $this->exec(" UPDATE `course_material_v8` SET  `source`= 'courseactivity' WHERE source= 'courselesson';");
 
-        $countSql = "SELECT count(id) FROM course_material WHERE source ='coursematerial' AND TYPE = 'course' AND  lessonid >0   AND lessonid NOT IN (SELECT lessonid FROM `download_activity`)";
-        $count = $this->getConnection()->fetchColumn($countSql);
-        if ($count == 0) {
-            return;
-        }
+        // refactor: 数据完整性校验，校验同一个lesson下是否全部的资料已经迁移完成
+        // $countSql = "SELECT count(id) FROM course_material WHERE source ='coursematerial' AND type = 'course' AND  lessonId > 0 AND lessonId NOT IN (SELECT lessonId FROM `download_activity`)";
+        // $count = $this->getConnection()->fetchColumn($countSql);
+        // if ($count == 0) {
+        //     return;
+        // }
 
         $this->proccessDownloadActivity();
-
-        $this->proccessDownloadActivity();
-
+        $this->preccessActivity();
         $this->proccessCourseTask();
-
         $this->processRelations();
     }
 
@@ -57,9 +54,9 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
 
     protected function dumplicateCourseMaterialDatas()
     {
-      if (!$this->isTableExist("course_material_v8")) {
-        $this->exec('CREATE TABLE course_material_v8 AS SELECT * FROM course_material;');
-      }
+        if (!$this->isTableExist("course_material_v8")) {
+            $this->exec('CREATE TABLE course_material_v8 AS SELECT * FROM course_material;');
+        }
     }
 
     protected function proccessDownloadActivity()
@@ -116,6 +113,7 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
         );
     }
 
+    // refactor: id not in问题
     protected function proccessCourseTask()
     {
         $this->exec(
@@ -174,112 +172,5 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
             WHERE ck.`migrateLessonId`  = ay.`migrateLessonId` AND ck.`type` = 'download' AND ck.`activityId` IS NULL;
         "
         );
-    }
-
-    //TODO remove this function
-    protected function c2CourseMaterial()
-    {
-        if (!$this->isTableExist('download_activity')) {
-            $this->exec(
-                "
-                CREATE TABLE `download_activity` (
-                      `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
-                      `mediaCount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料数',
-                      `createdTime` int(10) unsigned NOT NULL,
-                      `updatedTime` int(10) unsigned NOT NULL,
-                      `fileIds` varchar(1024) DEFAULT NULL COMMENT '下载资料Ids',
-                      PRIMARY KEY (`id`)
-                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            "
-            );
-        }
-
-        if (!$this->isFieldExist('download_activity', 'lessonId')) {
-            $this->exec('alter table `download_activity` add `lessonId` int(10) ;');
-        }
-
-        if (!$this->isFieldExist('course_material', 'courseSetId')) {
-            $this->exec('alter table `course_material` add `courseSetId` int(10) ;');
-        }
-        $this->exec(' UPDATE `course_material` SET `courseSetId` = courseId;');
-        $this->exec(" UPDATE `course_material` SET  `source`= 'courseactivity' WHERE source= 'courselesson';");
-
-        //查找有复习资料的记录
-        $downloadMaterials = $this->getConnection()->fetchAll(
-            "SELECT *  FROM course_material WHERE source ='coursematerial' AND lessonid >0"
-        );
-
-        $downloadMaterials = \AppBundle\Common\ArrayToolkit::group($downloadMaterials, 'lessonId');
-
-        //获取已经处理过的下载资料
-        $downloadActivities = $this->getConnection()->fetchAll('select * from download_activity');
-        $downloadActivities = \AppBundle\Common\ArrayToolkit::column($downloadActivities, 'lessonId');
-
-        foreach ($downloadMaterials as $lessonId => $materials) {
-            if (in_array($lessonId, $downloadActivities)) {
-                continue;
-            }
-
-            //合并外链和本地资料
-            array_filter(
-                $materials,
-                function (&$material) {
-                    if (empty($material['fileId'])) {
-                        $material['fileId'] = $material['link'];
-                    }
-                }
-            );
-
-            $fileCount = count($materials);
-            $fileIds = \AppBundle\Common\ArrayToolkit::column($materials, 'fileId');
-            $material = array_pop($materials);
-
-            //download_activity
-            $download = array(
-                'mediaCount' => $fileCount,
-                'createdTime' => $material['createdTime'],
-                'updatedTime' => $material['createdTime'],
-                'fileIds' => json_encode($fileIds),
-                'lessonId' => $lessonId,
-            );
-
-            $this->getConnection()->insert('download_activity', $download);
-            $downloadId = $this->getConnection()->lastInsertId();
-            //activity
-            $activity = array(
-                'title' => '下载',
-                'mediaId' => $downloadId,
-                'mediaType' => 'download',
-                'fromCourseId' => $material['courseId'],
-                'fromCourseSetId' => $material['courseSetId'],
-                'fromUserId' => $material['userId'],
-                'createdTime' => $material['createdTime'],
-                'updatedTime' => $material['createdTime'],
-            );
-
-            $this->getConnection()->insert('activity', $activity);
-            $activityId = $this->getConnection()->lastInsertId();
-
-            $lesson = $this->getConnection()->fetchAssoc("SELECT * FROM `course_lesson` WHERE id = {$lessonId}  ");
-            //course_task
-            $task = array(
-                'courseId' => $lesson['courseId'],
-                'seq' => $lesson['seq'],
-                'categoryId' => $lesson['chapterId'],
-                'activityId' => $activityId,
-                'title' => '下载',
-                'status' => $lesson['status'],
-                'createdUserId' => $lesson['userId'],
-                'createdTime' => $lesson['createdTime'],
-                'updatedTime' => $lesson['updatedTime'],
-                'mode' => 'extraClass',
-                'number' => $lesson['number'],
-                'type' => 'download',
-                'lessonId' => $lessonId,
-                'fromCourseSetId' => $lesson['courseId'],
-            );
-
-            $this->getConnection()->insert('course_task', $task);
-        }
     }
 }
