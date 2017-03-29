@@ -28,7 +28,7 @@ user.fields.no_sign: 暂无签名
 user.fields.no_introduction: 暂无简介
 user.btn.following_btn: 关注
 user.btn.followed_btn: 已关注
-user.btn.send_letter_btn: 私信
+user.btn.send_message_btn: 私信
 user.not_login.first_part: 你还没有登录，请先
 user.not_login.second_part: 登录
 user.not_login.third_part: 或
@@ -393,7 +393,7 @@ homepage.header.register: 注册
 homepage.header.my_course: 我的教学
 homepage.header.my_learning: 我的学习
 homepage.header.notice: 通知
-homepage.header.letter: 私信
+homepage.header.message: 私信
 homepage.header.drop_menu.personal_menu: 个人主页
 homepage.header.drop_menu.settings_menu: 个人设置
 homepage.header.drop_menu.my_teaching_menu: 我的教学

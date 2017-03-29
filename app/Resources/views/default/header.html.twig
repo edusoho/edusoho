@@ -53,7 +53,7 @@
             {% endif %}
 
             <li class="hidden-lg"><a href="{{ path('notification') }}"><span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span><i class="es-icon es-icon-notificationson"></i>{{'homepage.header.notice'|trans}}</a></li>
-            <li class="hidden-lg"><a href="{{ path('message') }}"><span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span><i class="es-icon es-icon-mail"></i>{{'homepage.header.letter'|trans}}</a></li>
+            <li class="hidden-lg"><a href="{{ path('message') }}"><span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span><i class="es-icon es-icon-mail"></i>{{'homepage.header.message'|trans}}</a></li>
             <li><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>{{'homepage.header.logout'|trans}}</a></li>
           </ul>
         </li>
@@ -88,7 +88,7 @@
             <li>
               <a href="{{ path('message') }}">
                 <span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span>
-                <i class="es-icon es-icon-mail"></i>{{'homepage.header.letter'|trans}}
+                <i class="es-icon es-icon-mail"></i>{{'homepage.header.message'|trans}}
               </a>
             </li>
           </ul>
