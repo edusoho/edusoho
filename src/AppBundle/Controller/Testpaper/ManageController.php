@@ -331,7 +331,7 @@ class ManageController extends BaseController
 
         $testpapers = $this->getTestpaperService()->findTestpapersByIds($ids);
         if (!empty($testpapers)) {
-            foreach ($testpapers as $testpaper){
+            foreach ($testpapers as $testpaper) {
                 if ($testpaper['courseSetId'] != $courseSetId) {
                     return $this->createMessageResponse('error', 'testpaper not found');
                 }
@@ -520,9 +520,11 @@ class ManageController extends BaseController
     protected function getCheckedQuestionType($testpaper)
     {
         $questionTypes = array();
-        foreach ($testpaper['metas']['counts'] as $type => $count) {
-            if ($count > 0) {
-                $questionTypes[] = $type;
+        if (!empty($testpaper['metas']['counts'])) {
+            foreach ($testpaper['metas']['counts'] as $type => $count) {
+                if ($count > 0) {
+                    $questionTypes[] = $type;
+                }
             }
         }
 
