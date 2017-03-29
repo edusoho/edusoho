@@ -50,12 +50,14 @@ class TestpaperResultMigrate extends AbstractMigrate
         $sql = "SELECT * FROM testpaper_result_v8 WHERE type = 'testpaper' AND courseId = 0";
         $newTestpaperResults = $this->getConnection()->fetchAll($sql);
         foreach ($newTestpaperResults as $testpaperResult) {
+          if(empty($testpaperResult['target'])){
+            continue;
+          }
             $targetArr = explode('/', $testpaperResult['target']);
             $courseArr = explode('-', $targetArr[0]);
             $lessonArr = explode('-', $targetArr[1]);
 
-            $lessonId = empty($lessonArr[1]) ? 0 : $lessonArr[1];
-
+            $lessonId = empty($lessonArr[1]) ? 0 : intval($lessonArr[1]);
             $sql = "UPDATE testpaper_result_v8 SET
                 courseId = {$courseArr[1]},
                 courseSetId = {$courseArr[1]},

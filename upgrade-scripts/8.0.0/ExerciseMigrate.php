@@ -38,51 +38,31 @@ class ExerciseMigrate extends AbstractMigrate
             $metas['questionTypes'] = json_decode($exercise['questionTypeRange']);
             $metas = json_encode($metas);
 
-            $insertSql = "INSERT INTO testpaper_v8 (
-                name,
-                description,
-                courseId,
-                lessonId,
-                limitedTime,
-                pattern,
-                target,
-                status,
-                score,
-                passedCondition,
-                itemCount,
-                createdUserId,
-                createdTime,
-                updatedUserId,
-                updatedTime,
-                metas,
-                copyId,
-                type,
-                courseSetId,
-                migrateTestId
-            ) VALUES (
-                '',
-                '',
-                {$exercise['courseId']},
-                {$exercise['lessonId']},
-                0,
-                'questionType',
-                '',
-                'open',
-                0,
-                '".$passedCondition."',
-                {$exercise['itemCount']},
-                {$exercise['createdUserId']},
-                {$exercise['createdTime']},
-                0,
-                0,
-                '".$metas."',
-                {$exercise['copyId']},
-                'exercise',
-                {$courseSetId},
-                {$exercise['id']}
-            )";
+            $insert = array(
+                'name' => '',
+                'description' => '',
+                'courseId' => $exercise['courseId'],
+                'lessonId' => $exercise['lessonId'],
+                'limitedTime' => 0,
+                'pattern' => 'questionType',
+                'target' => '',
+                'status' => 'open',
+                'score' => 0,
+                'passedCondition' => $passedCondition,
+                'itemCount' => $exercise['itemCount'],
+                'createdUserId' => $exercise['createdUserId'],
+                'createdTime' => $exercise['createdTime'],
+                'updatedUserId' => 0,
+                'updatedTime' => 0,
+                'metas' => $metas,
+                'copyId' => $exercise['copyId'],
+                'type' => 'exercise',
+                'courseSetId' => $courseSetId,
+                'migrateTestId' => $exercise['id'],
+            );
 
-            $this->getConnection()->exec($insertSql);
+            $this->getConnection()->insert('testpaper_v8', $insert);
+
             $exerciseId = $this->getConnection()->lastInsertId();
 
             $exerciseNew = $this->getConnection()->fetchAssoc("SELECT * FROM testpaper_v8 WHERE id={$exerciseId}");
@@ -91,41 +71,8 @@ class ExerciseMigrate extends AbstractMigrate
                 $subSql = "UPDATE testpaper_v8 SET copyId = {$exerciseNew['id']} WHERE copyId = {$exercise['id']} AND type = 'exercise'";
                 $this->getConnection()->exec($subSql);
             }
-
-            //exercise_item
-            $itemSql = "SELECT * FROM exercise_item WHERE exerciseId = {$exercise['id']} AND id NOT IN (SELECT migrateItemId FROM testpaper_item_v8 WHERE migrateType = 'exercise' AND testId = {$exercise['id']})";
-            $items = $this->getConnection()->fetchAll($itemSql);
-
-            if (!$items) {
-                continue;
-            }
-
-            foreach ($items as $item) {
-                $sql = "INSERT INTO testpaper_item_v8 (
-                    testId,
-                    seq,
-                    questionId,
-                    questionType,
-                    parentId,
-                    score,
-                    missScore,
-                    migrateItemId,
-                    migrateType
-                ) values (
-                    {$exerciseNew['id']},
-                    {$item['seq']},
-                    {$item['questionId']},
-                    '',
-                    {$item['parentId']},
-                    {$item['score']},
-                    {$item['missScore']},
-                    {$item['id']},
-                    'exercise'
-                )";
-                $this->getConnection()->exec($sql);
-            }
         }
 
-        return $page+1;
+        return $page + 1;
     }
 }

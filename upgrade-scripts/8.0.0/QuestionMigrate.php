@@ -39,12 +39,15 @@ class QuestionMigrate extends AbstractMigrate
         }
 
         foreach ($questions as $question) {
+          if(empty($testpaperResult['target'])){
+            continue;
+          }
             $targetArr = explode('/', $question['target']);
             $courseArr = explode('-', $targetArr[0]);
             $lessonId = 0;
             if (!empty($targetArr[1])) {
                 $lessonArr = explode('-', $targetArr[1]);
-                $lessonId = $lessonArr[1];
+                $lessonId = intval($lessonArr[1]);
             }
 
             $sql = "UPDATE question set courseId = {$courseArr[1]},courseSetId = {$courseArr[1]},lessonId={$lessonId} WHERE id = {$question['id']}";
