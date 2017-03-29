@@ -103,7 +103,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
                 'targetId' => $targetId,
                 'targetType' => $targetType,
             );
-            $userFavorits = $this->getQuestionService()->searchFavoriteQuestions($conditions, $null, 0, 1);
+            $userFavorits = $this->getQuestionService()->searchFavoriteQuestions($conditions, null, 0, 1);
             if ($userFavorits) {
                 $this->getQuestionService()->deleteFavoriteQuestion($userFavorits[0]['id']);
             }
