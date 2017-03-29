@@ -45,9 +45,9 @@ class EduSohoUpgrade extends AbstractUpdater
     }
     private function fixPluginFile()
     {
-        $pluginFile = ServiceKernel::instance()->getParameter('kernel.root.dir').'/config/plugin.php';
+        $pluginFile = ServiceKernel::instance()->getParameter('kernel.root_dir').'/config/plugin.php';
         $fileSystem = new Filesystem();
-        if (!$fileSystem->exists($fileSystem)) {
+        if (!$fileSystem->exists($pluginFile)) {
             return;
         }
         $fileSystem->remove($pluginFile);
