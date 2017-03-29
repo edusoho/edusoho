@@ -495,103 +495,133 @@ tr.introjs-showElement > th {
  }
 }
 
-.introjs-arrow {
-  display: none!important;
-}
 
-.introjs-tooltip {
-  padding: 20px;
-  position: relative;
-  min-height: 80px;
-  color: @gray-darker;
-}
-.introjs-tooltiptext {
-  margin-bottom: 10px;
-  font-size: 12px;
-  .title {
-    font-size: 16px;
-    margin-bottom: 20px;
-    font-weight: bolder;
+.es-intro-help {
+  .introjs-arrow {
+    display: none!important;
   }
-}
 
-.introjs-button {
-  font-size: 14px;
-}
+  .introjs-tooltip {
+    padding: 20px;
+    position: relative;
+    min-height: 80px;
+    color: @gray-darker;
+  }
+  .introjs-tooltiptext {
+    margin-bottom: 10px;
+    font-size: 12px;
+    .title {
+      font-size: 16px;
+      margin-bottom: 20px;
+      font-weight: bolder;
+    }
+  }
 
-.introjs-skipbutton {
-  background: transparent;
-  border: none;
-  position: absolute;
-  right: 0;
-  top:9px;
-  color: @gray;
-  i {
+  .introjs-button {
     font-size: 14px;
-    color: @gray;
   }
-  &:hover,
-  &:focus {
-    .box-shadow(none);
-    background-image: none;
-    outline: none;
-  }
-}
-
-.introjs-nextbutton {
-  background-color: @brand-primary;
-  border-color: @brand-primary;
-  background-image: none;
-  padding: 5px 10px;
-  color: #fff;
-  text-shadow: none;
-  // .es-transition(all,0);
-  margin-left: 13px;
-  .border-radius(4px);
-  &:hover,
-  &:focus {
-    border-color: @brand-primary;
-    background-color: darken(@brand-primary,10%);
-    color:#fff;
-    .box-shadow(none);
-    background-image: none;
-    outline: none;
-  }
-}
-
-.introjs-prevbutton {
-  padding: 5px 10px;
-  background-color: transparent;
-  border-color: transparent;
-  background-image: none;
-  &:hover,
-  &:focus {
-    background-color: transparent;
-    border-color: transparent;
-    .box-shadow(none);
-    background-image: none;
-    outline: none;
-  }
-}
-
-.transparent-intro {
   .introjs-skipbutton {
-    display: none;
-  }
-  .introjs-overlay {
-    .opacity( 0  )!important;
-  }
-  .introjs-helperLayer {
-    .opacity(0);
-  }
-  .introjs-tooltip{
-    .box-shadow(none);  
-    padding: 0;
-    min-height: auto;
-    background: transparent;
-    .btn-content {
-      margin-left: 54px;
-      
+    background-color: @brand-primary;
+    border-color: @brand-primary;
+    background-image: none;
+    padding: 5px 10px;
+    color: #fff;
+    text-shadow: none;
+    // .es-transition(all,0);
+    margin-left: 13px;
+    .border-radius(4px);
+    &:hover,
+    &:focus {
+      border-color: @brand-primary;
+      background-color: darken(@brand-primary,10%);
+      color:#fff;
+      .box-shadow(none);
+      background-image: none;
+      outline: none;
     }
   }
 }
+
+.es-intro-help.multistep  {
+  .introjs-skipbutton {
+    background: transparent;
+    border: none;
+    position: absolute;
+    right: 0;
+    top:9px;
+    color: @gray;
+    i {
+      font-size: 14px;
+      color: @gray;
+    }
+    &:hover,
+    &:focus {
+      .box-shadow(none);
+      background-image: none;
+      outline: none;
+    }
+  }
+
+  .done-button,
+  .introjs-nextbutton {
+    background-color: @brand-primary;
+    border-color: @brand-primary;
+    background-image: none;
+    padding: 5px 10px;
+    color: #fff;
+    text-shadow: none;
+    // .es-transition(all,0);
+    margin-left: 13px;
+    .border-radius(4px);
+    &:hover,
+    &:focus {
+      border-color: @brand-primary;
+      background-color: darken(@brand-primary,10%);
+      color:#fff;
+      .box-shadow(none);
+      background-image: none;
+      outline: none;
+    }
+  }
+
+  .introjs-prevbutton {
+    padding: 5px 10px;
+    background-color: transparent;
+    border-color: transparent;
+    background-image: none;
+    &:hover,
+    &:focus {
+      background-color: transparent;
+      border-color: transparent;
+      .box-shadow(none);
+      background-image: none;
+      outline: none;
+    }
+  }
+}
+
+
+
+
+
+// .transparent-intro {
+//   .introjs-skipbutton {
+//     display: none;
+//   }
+//   .introjs-overlay {
+//     .opacity( 0  )!important;
+//   }
+//   .introjs-helperLayer {
+//     .opacity(0);
+//   }
+//   .introjs-tooltip{
+//     .box-shadow(none);  
+//     padding: 0;
+//     min-height: auto;
+//     background: transparent;
+//     .btn-content {
+//       margin-left: 54px;
+      
+//     }
+//   }
+// }

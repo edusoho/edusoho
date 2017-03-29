@@ -92,6 +92,10 @@ class ClassroomThreadController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $thread = $this->getThreadService()->getThread($threadId);
 
+        if (empty($thread) || $thread['targetId'] != $classroomId) {
+            return $this->createMessageResponse('error', "Thread#{$threadId} Not Found in Classroom#{$classroomId}");
+        }
+        
         $user = $this->getCurrentUser();
         $canManage = $this->canManageThread($user, $classroomId, $thread);
 
@@ -119,6 +123,11 @@ class ClassroomThreadController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $thread = $this->getThreadService()->getThread($threadId);
+        
+        if (empty($thread) || $thread['targetId'] != $classroomId) {
+            return $this->createMessageResponse('error', "Thread#{$threadId} Not Found in Classroom#{$classroomId}");
+        }
+
         $author = $this->getUserService()->getUser($thread['userId']);
         $user = $this->getCurrentUser();
         $adopted = $request->query->get('adopted');
