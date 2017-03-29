@@ -7,7 +7,7 @@ use Biz\Activity\Dao\VideoActivityDao;
 
 class VideoActivityDaoImpl extends GeneralDaoImpl implements VideoActivityDao
 {
-    protected $table = 'video_activity';
+    protected $table = 'activity_video';
 
     public function declares()
     {
