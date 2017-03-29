@@ -27,51 +27,30 @@ class HomeworkMigrate extends AbstractMigrate
 
             $passedCondition = !empty($homework['correctPercent']) ? $homework['correctPercent'] : null;
 
-            $insertSql = "INSERT INTO testpaper_v8 (
-                name,
-                description,
-                courseId,
-                lessonId,
-                limitedTime,
-                pattern,
-                target,
-                status,
-                score,
-                passedCondition,
-                itemCount,
-                createdUserId,
-                createdTime,
-                updatedUserId,
-                updatedTime,
-                metas,
-                copyId,
-                type,
-                courseSetId,
-                migrateTestId
-            ) VALUES (
-                '',
-                '".$homework['description']."',
-                {$homework['courseId']},
-                {$homework['lessonId']},
-                0,
-                'questionType',
-                '',
-                'open',
-                0,
-                '".$passedCondition."',
-                {$homework['itemCount']},
-                {$homework['createdUserId']},
-                {$homework['createdTime']},
-                {$homework['updatedUserId']},
-                {$homework['updatedTime']},
-                null,
-                {$homework['copyId']},
-                'homework',
-                {$courseSetId},
-                {$homework['id']}
-            )";
+            $insert = array(
+                'name' => '',
+                'description' => $homework['description'],
+                'courseId' => $homework['courseId'],
+                'lessonId' => $homework['lessonId'],
+                'limitedTime' => 0,
+                'pattern' => 'questionType',
+                'target' => '',
+                'status' => 'open',
+                'score' => 0,
+                'passedCondition' => $passedCondition,
+                'itemCount' => $homework['itemCount'],
+                'createdUserId' => $homework['createdUserId'],
+                'createdTime' => $homework['createdTime'],
+                'updatedUserId' => $homework['updatedUserId'],
+                'updatedTime' => $homework['updatedTime'],
+                'metas' => null,
+                'copyId' => $homework['copyId'],
+                'type' => 'homework',
+                'courseSetId' => $courseSetId,
+                'migrateTestId' => $homework['id'],
+            );
 
-            $this->getConnection()->exec($insertSql);
+            $this->getConnection()->insert('testpaper_v8', $insert);
             $homeworkId = $this->getConnection()->lastInsertId();
             $homeworkNew = $this->getConnection()->fetchAssoc("SELECT * FROM testpaper_v8 WHERE id={$homeworkId}");
 
