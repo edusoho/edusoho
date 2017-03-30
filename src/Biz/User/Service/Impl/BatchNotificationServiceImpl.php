@@ -20,6 +20,7 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
         $user = $this->getCurrentUser();
         $fields['fromId'] = $user['id'];
 
+        $fields['title'] = $this->purifyHtml($fields['title']);
         $fields['targetId'] = empty($fields['targetId']) ? 0 : $fields['targetId'];
         $fields['type'] = empty($fields['type']) ? 'text' : $fields['type'];
         $fields['published'] = empty($fields['published']) ? 0 : $fields['published'];
@@ -72,31 +73,40 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
             'userId' => $userId,
             'type' => 'global',
         );
-        $notification = $this->getNotificationDao()->search($conditions, array(), 0, 1);
-        $comparetime = $notification ? $notification[0]['createdTime'] : 0;
-        $conditions = array(
-            'id' => 0,
-            'published' => 1,
-            'createdTime' => $comparetime,
+
+        $notifications = $this->getNotificationService()->searchNotifications(
+            $conditions,
+            array(),
+            0,
+            PHP_INT_MAX
         );
-        $batchNotifications = $this->searchBatchNotifications($conditions, array(), 0, 10);
-        $user = $this->getUserService()->getUser($userId);
+        $batchIds = ArrayToolkit::column($notifications, 'batchId');
+        $batchIds = array_values(array_unique($batchIds));
+
+        $batchNotifications = $this->searchBatchNotifications(
+            array(
+                'excludeIds' => $batchIds,
+                'type' => 'global',
+                'published' => 1,
+                'sendedTime_LE' => time(),
+            ),
+            array(),
+            0,
+            PHP_INT_MAX);
         foreach ($batchNotifications as $key => $batchNotification) {
-            if ($batchNotification['sendedTime'] > $user['createdTime']) {
-                $content = array(
-                    'content' => $batchNotification['content'],
-                    'title' => $batchNotification['title'],
-                );
-                $notification = array(
-                    'userId' => $userId,
-                    'type' => $batchNotification['targetType'],
-                    'content' => $content,
-                    'batchId' => $batchNotification['id'],
-                    'createdTime' => $batchNotification['sendedTime'],
-                );
-                $this->getNotificationDao()->create($notification);
-                $this->getUserService()->waveUserCounter($userId, 'newNotificationNum', 1);
-            }
+            $content = array(
+                'content' => $batchNotification['content'],
+                'title' => $batchNotification['title'],
+            );
+            $notification = array(
+                'userId' => $userId,
+                'type' => $batchNotification['targetType'],
+                'content' => $content,
+                'batchId' => $batchNotification['id'],
+                'createdTime' => $batchNotification['sendedTime'],
+            );
+            $this->getNotificationDao()->create($notification);
+            $this->getUserService()->waveUserCounter($userId, 'newNotificationNum', 1);
         }
     }
 
@@ -150,6 +160,11 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
     protected function getBatchNotificationDao()
     {
         return $this->createDao('User:BatchNotificationDao');
+    }
+
+    protected function getNotificationService()
+    {
+        return $this->createService('User:NotificationService');
     }
 
     protected function getNotificationDao()

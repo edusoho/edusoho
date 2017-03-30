@@ -124,13 +124,14 @@ class Swift_StreamFilters_ByteArrayReplacementFilter implements Swift_StreamFilt
 
         $newBuffer = array();
         $buf_size = count($buffer);
+        $last_size = 0;
         for ($i = 0; $i < $buf_size; ++$i) {
             $search_pos = $this->_tree;
             $last_found = PHP_INT_MAX;
             // We try to find if the next byte is part of a search pattern
             for ($j = 0; $j <= $this->_treeMaxLen; ++$j) {
                 // We have a new byte for a search pattern
-                if (isset($buffer [$p = $i + $j]) && isset($search_pos[$buffer[$p]])) {
+                if (isset($buffer[$p = $i + $j]) && isset($search_pos[$buffer[$p]])) {
                     $search_pos = $search_pos[$buffer[$p]];
                     // We have a complete pattern, save, in case we don't find a better match later
                     if (isset($search_pos[-1]) && $search_pos[-1] < $last_found

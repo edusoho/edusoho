@@ -2,6 +2,10 @@
 {% block title %}{{ '教学计划管理'|trans }} - {{ parent() }}{% endblock %} {%
 do script(['app/js/course-manage/index.js']) %} 
 
+{% block course_header %}
+  {{ render(controller('AppBundle:Course/CourseManage:header', {courseSet:courseSet, course: course, manage: true})) }}
+{% endblock %}
+
 {% block main %}
   <div class="panel panel-default">
     {% if courseSet.type != 'live' %}

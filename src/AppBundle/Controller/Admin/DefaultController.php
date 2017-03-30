@@ -184,8 +184,8 @@ class DefaultController extends BaseController
         $onlineCount = $this->getStatisticsService()->countOnline(15 * 60);
         $loginCount = $this->getStatisticsService()->countLogin(15 * 60);
 
-        $todayRegisterNum = $this->getUserService()->searchUserCount(array('startTime' => $todayTimeStart, 'endTime' => $todayTimeEnd));
-        $totalRegisterNum = $this->getUserService()->searchUserCount(array());
+        $todayRegisterNum = $this->getUserService()->countUsers(array('startTime' => $todayTimeStart, 'endTime' => $todayTimeEnd));
+        $totalRegisterNum = $this->getUserService()->countUsers(array());
 
         $todayCourseMemberNum = $this->getOrderService()->countOrders(array('paidStartTime' => $todayTimeStart, 'paidEndTime' => $todayTimeEnd, 'targetType' => 'course', 'status' => 'paid'));
         $todayClassroomMemberNum = $this->getOrderService()->countOrders(array('paidStartTime' => $todayTimeStart, 'paidEndTime' => $todayTimeEnd, 'targetType' => 'classroom', 'status' => 'paid'));
@@ -583,11 +583,6 @@ class DefaultController extends BaseController
     protected function getCashService()
     {
         return $this->createService('Cash:CashService');
-    }
-
-    private function getWebExtension()
-    {
-        return $this->container->get('web.twig.extension');
     }
 
     protected function getUpgradeNoticeService()

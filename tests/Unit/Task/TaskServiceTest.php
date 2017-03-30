@@ -197,8 +197,7 @@ class TaskServiceTest extends BaseTestCase
             'title' => 'Demo Course',
             'courseSetId' => 1,
             'learnMode' => 'lockMode',
-            'expiryMode' => 'days',
-            'expiryDays' => 0,
+            'expiryMode' => 'forever',
         ));
 
         return array(

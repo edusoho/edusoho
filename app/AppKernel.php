@@ -1,15 +1,14 @@
 <?php
 
 use AppBundle\Common\ExtensionManager;
-use Biz\User\CurrentUser;
+use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
+use Codeages\Biz\Framework\Provider\MonologServiceProvider;
+use Codeages\PluginBundle\System\PluginableHttpKernelInterface;
+use Codeages\PluginBundle\System\PluginConfigurationManager;
+use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
 use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Config\Loader\LoaderInterface;
-use Codeages\Biz\Framework\Provider\MonologServiceProvider;
-use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
-use Codeages\PluginBundle\System\PluginConfigurationManager;
-use Codeages\PluginBundle\System\PluginableHttpKernelInterface;
 
 
 class AppKernel extends Kernel implements PluginableHttpKernelInterface
@@ -74,7 +73,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new Endroid\Bundle\QrCodeBundle\EndroidQrCodeBundle(),
             new Topxia\WebBundle\TopxiaWebBundle(),
             new Topxia\AdminBundle\TopxiaAdminBundle(),
-            new Topxia\MobileBundle\TopxiaMobileBundle(),
             new Topxia\MobileBundleV2\TopxiaMobileBundleV2(),
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),
             new OAuth2\ServerBundle\OAuth2ServerBundle(),
@@ -82,7 +80,10 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new AppBundle\AppBundle(),
         );
 
-        $bundles = array_merge($bundles, $this->pluginConfigurationManager->getInstalledPluginBundles());
+        if ($this->getEnvironment() !== 'test') {
+            $bundles = array_merge($bundles, $this->pluginConfigurationManager->getInstalledPluginBundles());
+        }
+
 
         $bundles[] = new Custom\WebBundle\CustomWebBundle();
         $bundles[] = new Custom\AdminBundle\CustomAdminBundle();
@@ -136,7 +137,17 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         }
 
         $biz->register(new Codeages\Biz\RateLimiter\RateLimiterServiceProvider());
+        $this->registerCacheServiceProvider($biz);
+
         $biz->boot();
+    }
+
+    protected function registerCacheServiceProvider($biz)
+    {
+        if ($this->getContainer()->hasParameter('cache_options')) {
+            $biz->register(new Codeages\Biz\Framework\Provider\CacheServiceProvider());
+            $biz['cache.options'] = $this->getContainer()->getParameter('cache_options');
+        }
     }
 
     protected function initializeServiceKernel()
@@ -147,16 +158,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
             $serviceKernel = ServiceKernel::create($this->getEnvironment(), $this->isDebug());
 
-            $currentUser = new CurrentUser();
-            $currentUser->fromArray(
-                array(
-                    'id' => 0,
-                    'nickname' => '游客',
-                    'email' => 'test.edusoho.com',
-                    'currentIp' => $this->request->getClientIp() ?: '127.0.0.1',
-                    'roles' => array(),
-                )
-            );
+            $currentUser = new \Biz\User\AnonymousUser($this->request->getClientIp() ?: '127.0.0.1');
 
             $biz['user'] = $currentUser;
             $serviceKernel

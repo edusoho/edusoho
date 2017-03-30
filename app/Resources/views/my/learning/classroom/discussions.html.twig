@@ -38,14 +38,14 @@
               </div>
               <div class="color-gray text-normal">
                 {% if classroom %}
-                  <span>{{'发表于%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}<a href="{{ path('classroom_show', {id:classroom.id}) }}" class="link-muted">{{ classroom.title }}</a></span>
+                  <span>{{'发表于%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}<a href="{{ path('classroom_show', {id:classroom.id}) }}" class="link-primary">{{ classroom.title }}</a></span>
                 {% else %}
                   <span>{{ setting('classroom.name')|default("班级") }}{{'已删除'|trans}}</span>
                 {% endif %}
                 <span class="bullet">•</span>
                 {% if thread.postNum > 0 %}
                   {% set poster = users[thread.lastPostUserId] %}
-                  <span>{{'最后回复'|trans}} {{ web_macro.user_link(poster, 'link-muted') }}</span>
+                  <span>{{'最后回复'|trans}} {{ web_macro.user_link(poster, 'link-primary') }}</span>
                   ,
                   <span>{{ thread.lastPostTime|smart_time }}</span>
                   <span class="bullet">•</span>

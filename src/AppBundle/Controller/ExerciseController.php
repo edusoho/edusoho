@@ -2,6 +2,11 @@
 
 namespace AppBundle\Controller;
 
+use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseService;
+use Biz\Question\Service\QuestionService;
+use Biz\Testpaper\Service\TestpaperService;
+use Biz\User\Service\UserService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Exception\ResourceNotFoundException;
@@ -15,7 +20,13 @@ class ExerciseController extends BaseController
             throw new ResourceNotFoundException('exercise', $exerciseId);
         }
 
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($exercise['courseId']);
+        $activity = $this->getActivityService()->getActivity($lessonId);
+        if ($activity['mediaId'] != $exerciseId) {
+            //exerciseId not belong to activity(lessonId)
+            throw new ResourceNotFoundException('exercise', $exerciseId);
+        }
+
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($activity['fromCourseId']);
 
         $result = $this->getTestpaperService()->startTestpaper($exercise['id'], array('lessonId' => $lessonId, 'courseId' => $course['id']));
 
@@ -47,6 +58,8 @@ class ExerciseController extends BaseController
         $questions = $this->getTestpaperService()->showTestpaperItems($exercise['id'], $result['id']);
 
         $activity = $this->getActivityService()->getActivity($result['lessonId']);
+
+        $exercise['itemCount'] = $this->getActureQuestionNum($questions);
 
         return $this->render('exercise/do.html.twig', array(
             'paper' => $exercise,
@@ -86,6 +99,8 @@ class ExerciseController extends BaseController
 
         $attachments = $this->getTestpaperService()->findAttachments($exercise['id']);
 
+        $exercise['itemCount'] = $this->getActureQuestionNum($questions);
+
         return $this->render('exercise/do.html.twig', array(
             'questions' => $questions,
             'paper' => $exercise,
@@ -104,7 +119,7 @@ class ExerciseController extends BaseController
             return $this->createJsonResponse(array('result' => false, 'message' => '练习已提交，不能再修改答案！'));
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $formData = $request->request->all();
 
             $paperResult = $this->getTestpaperService()->finishTest($result['id'], $formData);
@@ -113,33 +128,67 @@ class ExerciseController extends BaseController
 
             return $this->createJsonResponse(array('result' => true, 'message' => '', 'goto' => $goto));
         }
+
+        return $this->createJsonResponse(array('result' => false, 'message' => 'result not found'));
     }
 
+    protected function getActureQuestionNum($questions)
+    {
+        $count = 0;
+        array_map(function ($question) use (&$count) {
+            if ($question['type'] === 'material') {
+                $count += count($question['subs']);
+            } else {
+                $count += 1;
+            }
+        }, $questions);
+
+        return $count;
+    }
+
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
     }
 
+    /**
+     * @return QuestionService
+     */
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
         return $this->createService('User:UserService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return ServiceKernel
+     */
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();

@@ -3,7 +3,10 @@
 {% if not isMarketingPage|default(null) %}
   <div class="es-piece">
     <div class="piece-body">
-      想查看更多教学计划？<a href="{{ path('course_show', {id: course.id}) }}">返回课程宣传页</a>
+      想查看更多教学计划？
+      {% if course.courseNum|default(1) > 1 %}
+        <a href="{{ path('course_show', {id: course.id}) }}">返回课程宣传页</a>
+      {% endif %}
     </div>
   </div>
 {% endif %}

@@ -24,6 +24,7 @@ class RecommendedCourseDaoImpl extends GeneralDaoImpl implements RecommendedCour
                 'createdTime >= :startTimeGreaterThan',
                 'createdTime < :startTimeLessThan',
             ),
+            'cache' => 'table',
         );
     }
 
@@ -55,11 +56,13 @@ class RecommendedCourseDaoImpl extends GeneralDaoImpl implements RecommendedCour
         );
 
         $count = $this->count($conditions);
+        $num = (int) $num;
         $max = $count - $num - 1;
         if ($max < 0) {
             $max = 0;
         }
-        $randomSeed = (int) rand(0, $max);
+        $randomSeed = (int) mt_rand(0, $max);
+
         $sql = "SELECT * FROM {$this->table()} WHERE openCourseId = ? LIMIT {$randomSeed}, $num";
 
         return $this->db()->fetchAll($sql, array($courseId)) ?: array();

@@ -61,7 +61,7 @@ class FlashController extends BaseController implements ActivityActionInterface
         ));
     }
 
-    public function finishConditionAction($activity)
+    public function finishConditionAction(Request $request, $activity)
     {
         $media = $this->getActivityService()->getActivityConfig('flash')->get($activity['mediaId']);
 

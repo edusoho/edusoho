@@ -4,7 +4,6 @@ namespace Tests\Unit\Activity;
 
 use Biz\BaseTestCase;
 use Biz\Task\Service\TaskService;
-use Topxia\Service\Course\CourseService;
 use Biz\Activity\Service\ActivityService;
 
 class ActivityServiceTest extends BaseTestCase
@@ -101,9 +100,8 @@ class ActivityServiceTest extends BaseTestCase
             'id' => 1,
             'title' => 'test',
             'courseSetId' => 1,
-            'expiryMode' => 'days',
+            'expiryMode' => 'forever',
             'learnMode' => 'lockMode',
-            'expiryDays' => 0,
             'isDefault' => 0,
             'status' => 'published',
             'parentId' => 0,

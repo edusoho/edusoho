@@ -15,7 +15,7 @@ class Articles extends BaseResource
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 20);
 
-        $total = $this->getArticleService()->searchArticlesCount($conditions);
+        $total = $this->getArticleService()->countArticles($conditions);
         $articles = $this->getArticleService()->searchArticles($conditions, array('publishedTime' => 'DESC'), $start, $limit);
         $articles = $this->assemblyArticles($articles);
         return $this->wrap($this->filter($articles), $total);

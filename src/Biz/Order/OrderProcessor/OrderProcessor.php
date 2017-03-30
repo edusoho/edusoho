@@ -30,6 +30,8 @@ interface OrderProcessor
 
     public function createPayRecord($id, $payData);
 
+    public function getTarget($targetId);
+
     public function generateOrderToken();
 
     public function getOrderInfoTemplate();

@@ -343,7 +343,7 @@ class GroupServiceTest extends BaseTestCase
 
         $member = $this->getGroupService()->getMemberByGroupIdAndUserId($group1['id'], $user1['id']);
 
-        $this->assertEquals(null, $member);
+        $this->assertEmpty($member);
     }
 
     public function testWaveGroup()

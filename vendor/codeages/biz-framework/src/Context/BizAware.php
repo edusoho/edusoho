@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Codeages\Biz\Framework\Context;
-
 
 abstract class BizAware
 {

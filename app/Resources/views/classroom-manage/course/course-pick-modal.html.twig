@@ -28,4 +28,5 @@
 {% block footer %}
   <button id="sure" class="btn btn-primary pull-right" data-url="{{ path('classroom_courses_select', {id:classroomId})}}">{{'添加'|trans}}</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
+  <p id="tip" class="color-danger pull-right mts mbs hide" >班级数据处理中，请耐心等待。</p>
 {% endblock %}

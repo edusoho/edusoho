@@ -28,7 +28,7 @@
 		<div class="col-sm-6 material-search-form visible-xs mtm">
       <span class="input-group js-file-name-group">
         <input name="file-filter-by-name" class="form-control width-150 js-file-name" type="text"
-               placeholder="输入视频标题关键字">
+               placeholder="输入{{ placeholder|default(null) }}标题关键字">
         <span class="input-group-btn">
           <button type="button" class="btn btn-default js-browser-search mbm"
                   data-url="{{ path('media_materiallib_choose') }}" data-loading-text="正在加载，请稍等">搜索</button>

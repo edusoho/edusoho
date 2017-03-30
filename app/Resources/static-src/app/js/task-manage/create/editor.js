@@ -1,6 +1,7 @@
 import loadAnimation from 'common/load-animation'
 import 'jquery-sortable';
-import notify from "common/notify";
+import notify from 'common/notify';
+import Intro from 'app/js/courseset-manage/intro';
 import { sortablelist } from "app/js/course-manage/help";
 
 
@@ -142,6 +143,7 @@ class Editor {
           $("#sortable-list").append($item);
         }
         this.showDefaultSetting($item);
+        this.initIntro();
         sortablelist('#sortable-list');
       })
       .fail((response) => {
@@ -153,6 +155,15 @@ class Editor {
         notify('warning', '保存出错: ' + msg);
         $("#course-tasks-submit").attr('disabled', null);
       });
+  }
+
+  initIntro() {
+    setTimeout(function() {
+      if($('.js-settings-list').length === 1) {
+        let intro = new Intro();
+        intro.initTaskDetailIntro('.js-settings-list');
+      }
+    }, 500);
   }
 
   showDefaultSetting($item = null) {
@@ -186,6 +197,7 @@ class Editor {
     this._rendStepIframe(this.step);
     this._rendButton(this.step);
     if (this.step == 2 && !this.loaded) {
+      console.log({'loading':new Date().toLocaleTimeString()});
       this._initIframe();
     }
   }
@@ -202,7 +214,7 @@ class Editor {
       this._rendButton(2);
       this.$iframe_body.find("#step2-form").data('validator', validator);
       this.$iframe_body.find("#step3-form").data('validator', validator);
-
+      console.log({'loaded':new Date().toLocaleTimeString()});
     };
     this.$frame.load(loadAnimation(loadiframe, this.$task_manage_content));
   }
@@ -224,12 +236,15 @@ class Editor {
 
   _validator(step) {
     let validator = null;
+
     if (step === 1) {
       validator = $("#step1-form").data('validator');
     } else if (this.loaded) {
       var $from = this.$iframe_body.find("#step" + step + "-form");
       validator = this.iframe_jQuery.data($from[0], 'validator');
     }
+
+    console.log(validator);
 
     if (validator && !validator.form()) {
       return false;

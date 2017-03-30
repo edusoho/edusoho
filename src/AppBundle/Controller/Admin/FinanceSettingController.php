@@ -53,6 +53,8 @@ class FinanceSettingController extends BaseController
                 $payment['llpay_enabled'] = 0;
             }
 
+            $payment['disabled_message'] = $this->purifyHtml($payment['disabled_message'], true);
+
             //新增支付方式，加入下列列表计算，以便判断是否关闭支付功能
             $payment = $this->isClosePayment($payment);
             $this->getSettingService()->set('payment', $payment);

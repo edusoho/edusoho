@@ -56,7 +56,7 @@ class ThreadEventSubscriber extends EventSubscriber implements EventSubscriberIn
         $this->callTargetEventProcessor('onPostVote', $event);
     }
 
-    protected function callTargetEventProcessor($method, $event)
+    protected function callTargetEventProcessor($method, Event $event)
     {
         $subject = $event->getSubject();
 
@@ -78,6 +78,6 @@ class ThreadEventSubscriber extends EventSubscriber implements EventSubscriberIn
 
     protected function getThreadService()
     {
-        return $this->getBiz()->service('Thread.ThreadService');
+        return $this->getBiz()->service('Thread:ThreadService');
     }
 }

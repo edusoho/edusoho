@@ -185,7 +185,7 @@ class CoinController extends BaseController
             $conditions = array('userIds' => $invitedUserIds);
             $paginator = new Paginator(
                 $request,
-                $this->getUserService()->searchUserCount($conditions),
+                $this->getUserService()->countUsers($conditions),
                 20
             );
 

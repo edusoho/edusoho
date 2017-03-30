@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Group\Service\ThreadService;
 
 class CourseThreadController extends BaseController
 {
@@ -15,9 +16,8 @@ class CourseThreadController extends BaseController
         if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle') {
             $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($conditions['keyword']);
             $conditions['courseSetIds'] = ArrayToolkit::column($courseSets, 'id');
-            $conditions['courseSetIds'] = !empty($conditions['courseSetIds']) ?: array(-1);
+            $conditions['courseSetIds'] = empty($conditions['courseSetIds']) ? array(-1) : $conditions['courseSetIds'];
         }
-
         $paginator = new Paginator(
             $request,
             $this->getThreadService()->countThreads($conditions),
@@ -61,6 +61,9 @@ class CourseThreadController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    /**
+     * @return ThreadService
+     */
     protected function getThreadService()
     {
         return $this->createService('Course:ThreadService');

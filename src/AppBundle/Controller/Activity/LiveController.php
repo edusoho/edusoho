@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Activity;
 
+use AppBundle\Controller\LiveroomController;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -14,6 +15,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class LiveController extends BaseController implements ActivityActionInterface
 {
+    public function previewAction(Request $request, $task)
+    {
+        return $this->render('activity/no-preview.html.twig');
+    }
+
     public function showAction(Request $request, $activity)
     {
         $live = $this->getActivityService()->getActivityConfig($activity['mediaType'])->get($activity['mediaId']);
@@ -162,7 +168,7 @@ class LiveController extends BaseController implements ActivityActionInterface
         return $this->createJsonResponse(array('success' => true, 'status' => 'on_live'));
     }
 
-    public function finishConditionAction($activity)
+    public function finishConditionAction(Request $request, $activity)
     {
         return $this->render('activity/live/finish-condition.html.twig', array());
     }
@@ -222,17 +228,22 @@ class LiveController extends BaseController implements ActivityActionInterface
 
     protected function _getLiveReplays($activity, $ssl = false)
     {
-        if ($activity['ext']['replayStatus'] == LiveReplayService::REPLAY_GENERATE_STATUS) {
+        if ($activity['ext']['replayStatus'] === LiveReplayService::REPLAY_GENERATE_STATUS) {
             $replays = $this->getLiveReplayService()->findReplayByLessonId($activity['id']);
 
             $service = $this->getLiveReplayService();
+            $fileService = $this->getUploadFileService();
             $self = $this;
-            $replays = array_map(function ($replay) use ($service, $activity, $ssl, $self) {
+            $replays = array_map(function ($replay) use ($service, $activity, $ssl, $self, $fileService) {
                 $result = $service->entryReplay($replay['id'], $activity['ext']['liveId'], $activity['ext']['liveProvider'], $ssl);
 
                 if (!empty($result) && !empty($result['resourceNo'])) {
-                    // ES Live
-                    $replay['url'] = $self->generateUrl('global_file_player', array('globalId' => $replay['globalId']));
+                    $replay['url'] = $self->generateUrl('es_live_room_replay_show', array(
+                        'targetType' => LiveroomController::LIVE_COURSE_TYPE,
+                        'targetId' => $activity['fromCourseId'],
+                        'replayId' => $replay['id'],
+                        'lessonId' => $activity['id'],
+                    ));
                 } elseif (!empty($result['url'])) {
                     // Other Live
                     $replay['url'] = $result['url'];

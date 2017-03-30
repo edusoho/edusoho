@@ -2,13 +2,13 @@
 
 namespace AppBundle\Controller;
 
-use Biz\File\Service\UploadFileService;
-use Biz\System\Service\SettingService;
-use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
+use Biz\User\Service\TokenService;
+use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\System\Service\SettingService;
+use Biz\File\Service\UploadFileService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Biz\CloudPlatform\CloudAPIFactory;
 
 class HLSController extends BaseController
 {
@@ -32,7 +32,7 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $file = $this->getUploadFileService()->getFullFile($id);
+        $file = $this->getFile($id, $token);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -54,6 +54,11 @@ class HLSController extends BaseController
                     'times' => $inWhiteList ? 0 : 1,
                     'duration' => 3600,
                 );
+
+                if (!empty($token['data']['replayId'])) {
+                    $tokenFields['data']['replayId'] = $token['data']['replayId'];
+                    $tokenFields['data']['type'] = $token['data']['type'];
+                }
 
                 if (!empty($token['userId'])) {
                     $tokenFields['userId'] = $token['userId'];
@@ -135,7 +140,7 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $file = $this->getUploadFileService()->getFullFile($id);
+        $file = $this->getFile($id, $token);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -166,6 +171,11 @@ class HLSController extends BaseController
             'times' => $inWhiteList ? 0 : 1,
             'duration' => 3600,
         );
+
+        if (!empty($token['data']['replayId'])) {
+            $tokenFields['data']['replayId'] = $token['data']['replayId'];
+            $tokenFields['data']['type'] = $token['data']['type'];
+        }
 
         if (!empty($token['userId'])) {
             $tokenFields['userId'] = $token['userId'];
@@ -205,7 +215,7 @@ class HLSController extends BaseController
         $stream = $api->get('/hls/stream', $params);
 
         if (empty($stream['stream'])) {
-            return $this->createMessageResponse('error', $this->trans('生成视频播放地址失败！'));
+            return $this->createMessageResponse('error', '生成视频播放地址失败！');
         }
 
         return $this->responseEnhanced($stream['stream'], array(
@@ -240,7 +250,7 @@ class HLSController extends BaseController
             return $this->makeFakeTokenString();
         }
 
-        $file = $this->getUploadFileService()->getFullFile($id);
+        $file = $this->getFile($id, $token);
 
         if (empty($file)) {
             return $this->makeFakeTokenString();
@@ -349,6 +359,18 @@ class HLSController extends BaseController
         return $beginning;
     }
 
+    protected function getFile($fileId, $token)
+    {
+        if (empty($fileId) && !empty($token['data']['replayId'])) {
+            $replay = $this->getLiveReplayService()->getReplay($token['data']['replayId']);
+            $file = $file = $this->getCloudFileService()->getByGlobalId($replay['globalId']);
+        } else {
+            $file = $this->getUploadFileService()->getFullFile($fileId);
+        }
+
+        return $file;
+    }
+
     /**
      * @return UploadFileService
      */
@@ -379,5 +401,15 @@ class HLSController extends BaseController
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
+    }
+
+    protected function getLiveReplayService()
+    {
+        return $this->getBiz()->service('Course:LiveReplayService');
+    }
+
+    protected function getCloudFileService()
+    {
+        return $this->getBiz()->service('CloudFile:CloudFileService');
     }
 }

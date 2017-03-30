@@ -2,7 +2,6 @@
 
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
-use Biz\Util\CloudClientFactory;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Response;
@@ -245,6 +244,11 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
     public function getCourseDownLessons()
     {
         $courseId = $this->getParam('courseId');
+        $user = $this->controller->getuserByToken($this->request);
+
+        if (!$this->controller->getCourseService()->canTakeCourse($courseId)) {
+            return $this->createErrorResponse('403', 'Access Denied');
+        }
         $course = $this->controller->getCourseService()->getCourse($courseId);
         $lessons = $this->controller->getCourseService()->findCourseTasksAndChapters($courseId);
 
@@ -268,7 +272,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     public function getCourseLessons()
     {
-        $user = $this->controller->getUser();
+        $user = $this->controller->getuserByToken($this->request);
         $courseId = $this->getParam('courseId');
 
         $lessons = $this->controller->getCourseService()->findCourseTasksAndChapters($courseId);
@@ -287,6 +291,40 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             'lessons' => array_values($lessons),
             'learnStatuses' => empty($learnStatuses) ? array('-1' => 'learning') : $learnStatuses,
         );
+    }
+
+    private function makeTryLookVideoUrl($lessons, $courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        foreach ($lessons as $key => $lesson) {
+            if ($lesson['type'] == 'video') {
+                $lessonFree = $this->isLessonFree($lesson);
+                $courseTryLookAble = $this->isCourseTryLookAble($course);
+
+                if ($lessonFree) {
+                    $lessons[$key] = $this->getVideoLesson($lesson);
+                }
+
+                if ($courseTryLookAble && !$lessonFree) {
+                    $tryLookTime = $course['tryLookTime'];
+                    $options = array('watchTimeLimit' => $tryLookTime * 60);
+                    $lessons[$key] = $this->getVideoLesson($lesson, $options);
+                }
+            }
+        }
+
+        return $lessons;
+    }
+
+    private function isCourseTryLookAble($course)
+    {
+        return empty($course['tryLookable']) ? false : true;
+    }
+
+    private function isLessonFree($lesson)
+    {
+        return empty($lesson['free']) ? false : true;
     }
 
     private function getUploadFiles($courseId)
@@ -321,12 +359,15 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $courseId = $this->getParam('courseId');
         $lessonId = $this->getParam('lessonId');
 
-        if (empty($courseId)) {
+        $course = $this->getCourseService()->getCourse($courseId);
+        if (empty($course)) {
             return $this->createErrorResponse('not_courseId', '课程信息不存在！');
         }
 
         $user = $this->controller->getUserByToken($this->request);
-        $lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $lesson = $this->getTaskService()->getTask($lessonId);
+        $lessons = $this->getCourseService()->convertTasks(array($lesson), $course);
+        $lesson = $lessons[0];
 
         if (empty($lesson)) {
             return $this->createErrorResponse('not_courseId', '课时信息不存在！');
@@ -335,7 +376,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         if ($lesson['free'] == 1) {
             if ($user->isLogin()) {
                 if ($this->controller->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
-                    $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
+                    $this->getTaskService()->startTask($lesson['id']);
                 }
             }
 
@@ -347,7 +388,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         }
 
         if ($this->controller->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
-            $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
+            $this->getTaskService()->startTask($lesson['id']);
         }
 
         $member = $this->controller->getCourseMemberService()->getCourseMember($courseId, $user['id']);
@@ -395,7 +436,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             return $this->createErrorResponse('error', '试卷已删除，请联系管理员。!');
         }
 
-        $items = $this->getTestpaperService()->getTestpaperItems($id);
+        $items = $this->getTestpaperService()->showTestpaperItems($id);
+        $testpaper['metas']['question_type_seq'] = array_keys($items);
 
         return array(
             'testpaper' => $testpaper,
@@ -407,15 +449,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
     {
         $itemArray = array();
 
-        foreach ($items as $key => $item) {
-            $type = $item['questionType'];
-
-            if (isset($itemArray[$type])) {
-                $count = $itemArray[$type];
-                $itemArray[$type] = $count + 1;
-            } else {
-                $itemArray[$type] = 1;
-            }
+        foreach ($items as $questionType => $item) {
+            $itemArray[$questionType] = count($item);
         }
 
         return $itemArray;
@@ -442,7 +477,18 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         return $lesson;
     }
 
-    private function getVideoLesson($lesson)
+    protected function makeTokenData($fields)
+    {
+        $options = array();
+        if (!empty($fields['options'])) {
+            $options = $fields['options'];
+            unset($fields['options']);
+        }
+
+        return array_merge($fields, $options);
+    }
+
+    private function getVideoLesson($lesson, $options = null)
     {
         $token = $this->controller->getUserToken($this->request);
         $mediaId = $lesson['mediaId'];
@@ -499,10 +545,11 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                             }
 
                             $token = $this->getTokenService()->makeToken('hls.playlist', array(
-                                'data' => array(
+                                'data' => $this->makeTokenData(array(
                                     'id' => $file['id'],
                                     'fromApi' => true,
-                                ),
+                                    'options' => $options,
+                                )),
                                 'times' => 2,
                                 'duration' => 3600,
                             ));
@@ -516,7 +563,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                                 ), true),
                             );
                         } else {
-                            $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
+                            throw new \RuntimeException('当前视频不支持播放！');
                         }
 
                         $lesson['mediaUri'] = (isset($url) && is_array($url) && !empty($url['url'])) ? $url['url'] : '';
@@ -620,47 +667,6 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         return $lesson;
     }
 
-    public function test()
-    {
-        $user = $this->controller->getUserByToken($this->request);
-        $lesson = $this->controller->getCourseService()->getCourseLesson(11, 185);
-
-        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
-
-        if (empty($file)) {
-            return $this->createErrorResponse('not_document', '文档还在转换中，还不能查看，请稍等。!');
-        }
-
-        if ($file['convertStatus'] != 'success') {
-            if ($file['convertStatus'] == 'error') {
-                return $this->createErrorResponse('not_document', '文档转换失败，请联系管理员!');
-            } else {
-                return $this->createErrorResponse('not_document', '文档还在转换中，还不能查看，请稍等!');
-            }
-        }
-
-        $factory = new CloudClientFactory();
-        $client = $factory->createClient();
-
-        $metas2 = $file['metas2'];
-        $url = $client->generateFileUrl($metas2['pdf']['key'], 3600);
-        $pdfUri = $url['url'];
-        $url = $client->generateFileUrl($metas2['swf']['key'], 3600);
-        $swfUri = $url['url'];
-
-        $content = $lesson['content'];
-        $content = $this->controller->convertAbsoluteUrl($this->request, $content);
-        $render = $this->controller->render('TopxiaMobileBundleV2:Course:document.html.twig', array(
-            'pdfUri' => $pdfUri,
-            'swfUri' => $swfUri,
-            'title' => $lesson['title'],
-        ));
-
-        $lesson['content'] = $render->getContent();
-
-        return $render;
-    }
-
     private function getDocumentLesson($lesson)
     {
         $file = $this->controller->getUploadFileService()->getFullFile($lesson['mediaId']);
@@ -728,7 +734,6 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             }
 
             unset($lesson['tags']);
-
             return $lesson;
         }, $lessons);
     }
@@ -738,11 +743,11 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $taskResults = $this->controller->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
         $learnStatuses = array();
         foreach ($taskResults as $result) {
-            if($result['status'] === 'finish'){
+            if ($result['status'] === 'finish') {
                 $status = 'finished';
-            }else if($result['status'] === 'start'){
+            } elseif ($result['status'] === 'start') {
                 $status = 'learning';
-            }else{
+            } else {
                 continue;
             }
             $learnStatuses[$result['courseTaskId']] = $status;

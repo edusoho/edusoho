@@ -28,11 +28,11 @@
           <div class="color-gray text-normal">
             {% if course %}
               <span>{{ '来自'|trans }}
-                <a href="{{ path('course_show', {id:course.id}) }}" class="link-muted">
+                <a href="{{ path('course_show', {id:course.id}) }}" class="link-primary">
                   {{ course.title }}
                 </a>
                 -
-                <a href="{{ path('course_set_show', {id: course.courseSetId}) }}" class="link-muted">
+                <a href="{{ path('course_set_show', {id: course.courseSetId}) }}" class="link-primary">
                   {{ courseSets[course.courseSetId].title }}
                 </a>
               </span>
@@ -42,7 +42,7 @@
             <span class="bullet">•</span>
             {% if thread.postNum > 0 %}
               {% set poster = users[thread.latestPostUserId] %}
-              <span>{{ '最后回复'|trans }} {{ web_macro.user_link(poster, 'link-muted') }}</span>
+              <span>{{ '最后回复'|trans }} {{ web_macro.user_link(poster, 'link-primary') }}</span>
               ,
               <span>{{ thread.latestPostTime|smart_time }}</span>
               <span class="bullet">•</span>

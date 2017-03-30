@@ -2,13 +2,13 @@
 
 namespace Codeages\PluginBundle\Command;
 
-use AppBundle\Common\BlockToolkit;
-use Codeages\PluginBundle\System\PluginRegister;
-use Symfony\Component\Console\Input\InputOption;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Codeages\PluginBundle\System\PluginRegister;
+use AppBundle\Common\BlockToolkit;
 
 class PluginRegisterCommand extends ContainerAwareCommand
 {
@@ -23,8 +23,8 @@ class PluginRegisterCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $biz             = $this->getContainer()->get('biz');
-        $code            = $input->getArgument('code');
+        $biz = $this->getContainer()->get('biz');
+        $code = $input->getArgument('code');
         $withoutDatabase = $input->getOption('without-database');
 
         $output->writeln(sprintf('Register plugin <comment>%s</comment> :', $code));
@@ -70,4 +70,5 @@ class PluginRegisterCommand extends ContainerAwareCommand
 
         $output->writeln("<info>Finished!</info>\n");
     }
+
 }

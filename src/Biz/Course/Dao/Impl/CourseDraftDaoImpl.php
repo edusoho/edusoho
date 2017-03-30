@@ -2,20 +2,22 @@
 
 namespace Biz\Course\Dao\Impl;
 
+use Biz\Course\Dao\CourseDraftDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class CourseDraftDaoImpl extends GeneralDaoImpl implements CourseDraftDao
 {
     protected $table = 'course_draft';
 
-    public function findCourseDraft($courseId, $lessonId, $userId)
+    public function getByCourseIdAndActivityIdAndUserId($courseId, $activityId, $userId)
     {
-        return $this->findByFields(array('courseId' => $courseId, 'lessonId' => $lessonId, 'userId' => $userId));
+        return $this->getByFields(array('courseId' => $courseId, 'activityId' => $activityId, 'userId' => $userId));
     }
 
-    public function deleteCourseDrafts($courseId, $lessonId, $userId)
+    public function deleteCourseDrafts($courseId, $activityId, $userId)
     {
-        return $this->db()->delete($this->table(), array('courseId' => $courseId, 'lessonId' => $lessonId, 'userId' => $userId));
+        return $this->db()->delete($this->table(),
+            array('courseId' => $courseId, 'activityId' => $activityId, 'userId' => $userId));
     }
 
     public function declares()

@@ -37,26 +37,29 @@
         {% for courseSet in courseSets %}
           <tr>
             <td>
-              <a class="pull-left mrm" href="{{ path('course_set_show', {id: courseSet.id}) }}">
+              <a class="pull-left mrm link-primary" href="{{ path('course_set_show', {id: courseSet.id}) }}">
                 <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}"
                      alt="{{ courseSet.title }}" width="100">
               </a>
               <div class="mlm">
                 {% if courseSet.status == 'published' %}
-                  <a href="{{ path('course_set_show', {id: courseSet.id}) }}">{{ courseSet.title }}</a>
+                  <a class="link-primary" href="{{ path('course_set_show', {id: courseSet.id}) }}">{{ courseSet.title }}</a>
                 {% else %}
-                  <a href="{{ path('course_set_show', {id: courseSet.id, previewAs: 'member'}) }}">{{ courseSet.title }}</a>
+                  <a class="link-primary" href="{{ path('course_set_show', {id: courseSet.id, previewAs: 'member'}) }}">{{ courseSet.title }}</a>
                 {% endif %}
+                <br/>
                 {% if courseSet.courses|length > 1 %}
-                   <span class="label label-warning ml5">{{ '多个教学计划'|trans }}</span>
+                  <a href="{{ path('course_set_manage_courses', {courseSetId: courseSet.id}) }}">
+                   <span class="label label-warning mr5">{{ courseSet.courses|length ~ '个教学计划'|trans }}</span>
+                  </a>
                 {% endif %}
                 {% if courseSet.type == 'live' %}
-                  <span class="label label-success live-label ml5">{{ '直播'|trans }}</span>
+                  <span class="label label-success live-label mr5">{{ '直播'|trans }}</span>
                 {% endif %}
                 {% if filter == 'classroom' %}
                   {% set classroom = classrooms[courseSet.id]|default(null) %}
                   {% if not classroom %}
-                    <span class="label label-danger live-label ml5">{{'已移除'|trans}}</span>
+                    <span class="label label-danger live-label mr5">{{'已移除'|trans}}</span>
                   {% endif %}
                 {% endif %}
               </div>
@@ -65,7 +68,7 @@
             <td>
               {% set classroom = classrooms[courseSet.id]|default(null) %}
               {% if classroom %}
-                <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
+                <a class="link-primary" href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
               {% endif %}
             </td>
             {% else %}
@@ -76,11 +79,11 @@
             <td> {{ dict_macro.courseStatus( courseSet.status) }}</td>
             <td>
               <div class="btn-group">
-                <a class="mr10" target="_blank" href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">
+                <a class="mr10 link-primary" target="_blank" href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">
                   {{ '管理'|trans }}
                 </a>
                 {% if courseSet.canManage|default(false) %}
-                  <a href="#" type="button" class="dropdown-toggle" data-toggle="dropdown">
+                  <a href="javascript:;" type="button" class="link-primary dropdown-toggle ml10" data-toggle="dropdown">
                     更多
                     <i class="es-icon es-icon-arrowdropdown"></i>
                   </a>
@@ -105,7 +108,7 @@
         {% else %}
           <tr>
             <td class="text-center" colspan="20">
-              <a href="{{ path('course_set_manage_create') }}" target="_blank">
+              <a class=""  href="{{ path('course_set_manage_create') }}" target="_blank">
                 {% if filter|default('normal') == 'live' %}
                   {{ '你还没有在教的直播课程哦, 赶快去创建吧!'|trans }}
                 {% else %}

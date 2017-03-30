@@ -22,10 +22,12 @@ class NotificationDaoImpl extends GeneralDaoImpl implements NotificationDao
             ),
             'conditions' => array(
                 'userId = :userId',
+                'type = :type',
             ),
             'orderbys' => array(
                 'createdTime',
             ),
+            'cache' => 'table',
         );
     }
 }

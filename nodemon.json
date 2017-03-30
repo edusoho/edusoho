@@ -1,6 +1,6 @@
 {
   "watch": [
-    "app/Resources/webpack",
-    ".chokidar-watch-add.log"
+    "webpack.config.js",
+    "nodemon.json"
   ]
 }

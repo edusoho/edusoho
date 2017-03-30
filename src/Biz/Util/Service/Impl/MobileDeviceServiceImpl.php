@@ -9,7 +9,7 @@ class MobileDeviceServiceImpl extends BaseService implements MobileDeviceService
 {
     public function addMobileDevice($parames)
     {
-        if ($this->getMobileDeviceDao()->findMobileDeviceByIMEI($parames['imei'])) {
+        if ($this->findMobileDeviceByIMEI($parames['imei'])) {
             return false;
         }
         $mobileDevice = $this->getMobileDeviceDao()->addMobileDevice($parames);
@@ -19,7 +19,7 @@ class MobileDeviceServiceImpl extends BaseService implements MobileDeviceService
 
     public function findMobileDeviceByIMEI($imei)
     {
-        return $this->getMobileDeviceDao()->findMobileDeviceByIMEI($imei);
+        return $this->getMobileDeviceDao()->getMobileDeviceByIMEI($imei);
     }
 
     protected function getMobileDeviceDao()

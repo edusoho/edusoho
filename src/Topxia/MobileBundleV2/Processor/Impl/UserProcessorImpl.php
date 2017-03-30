@@ -2,16 +2,17 @@
 
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
-use AppBundle\Common\EncryptionToolkit;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\ExtensionManager;
+use AppBundle\Common\EncryptionToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\UserProcessor;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
-use Topxia\Service\Common\ServiceKernel;
 
 class UserProcessorImpl extends BaseProcessor implements UserProcessor
 {
@@ -338,7 +339,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'start' => $start,
             'total' => $total,
             'limit' => $limit,
-            'data' => $notifications, );
+            'data' => $notifications);
     }
 
     private function coverNotifyContent($notification)
@@ -383,7 +384,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         if (!empty($token)) {
             $user = $this->controller->getUserByToken($this->request);
             $this->log('user_logout', '用户退出', array(
-                    'userToken' => $user, )
+                'userToken' => $user)
             );
         }
         $this->controller->getUserService()->deleteToken(MobileBaseController::TOKEN_TYPE, $token);
@@ -417,7 +418,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         try {
             $this->request->request->set('to', $phoneNumber);
             $this->request->request->set('sms_type', 'sms_registration');
-            $response = $this->controller->forward('TopxiaWebBundle:EduCloud:smsSend', array());
+            $response = $this->controller->forward('AppBundle:EduCloud:smsSend', array());
             $content = $response->getContent();
             $content = json_decode($content);
             if (!empty($content) && isset($content->error)) {
@@ -554,7 +555,13 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             }
             if ($this->controller->setting('cloud_sms.sms_enabled') == '1') {
                 $requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
+
+                $limiterResult = SmsToolkit::smsCheckRatelimiter($this->request, 'sms_registration', $smsCode);
+                if (!$limiterResult['success']) {
+                    return $this->createErrorResponse('sms_invalid', $limiterResult['message']);
+                }
                 list($result, $sessionField) = $this->smsCheck($this->request, $requestInfo, 'sms_registration');
+
                 if ($result) {
                     $registTypeName = $auth['register_mode'] == 'mobile' ? 'mobile' : 'emailOrMobile';
                     try {
@@ -698,9 +705,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     public function login()
     {
         /*
-        * @_password 老接口password字段
-        * @encrypt_password 新的加密过的password字段
-        */
+         * @_password 老接口password字段
+         * @encrypt_password 新的加密过的password字段
+         */
         $username = $this->getParam('_username');
         $password = $this->getParam('_password');
 
@@ -847,11 +854,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('error', $e->getMessage());
         }
 
-        $message = array('userId' => $user['id'],
-                         'userName' => $user['nickname'],
-                         'opration' => 'follow', );
-        $this->controller->getNotificationService()->notify($toId, 'user-follow', $message);
-
         return $result;
     }
 
@@ -870,8 +872,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
 
         $message = array('userId' => $user['id'],
-                         'userName' => $user['nickname'],
-                         'opration' => 'unfollow', );
+            'userName' => $user['nickname'],
+            'opration' => 'unfollow');
         $this->getNotificationService()->notify($toId, 'user-follow', $message);
 
         return $result;
@@ -949,9 +951,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $testSum = $this->getTestpaperService()->findTestpaperResultsCountByUserId($user['id']);
 
         return array('thread' => $threadSum,
-                     'discussion' => $discussionSum,
-                     'note' => $noteSum,
-                     'test' => $testSum, );
+            'discussion' => $discussionSum,
+            'note' => $noteSum,
+            'test' => $testSum);
     }
 
     public function getSchoolRoom()
@@ -964,7 +966,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 array('title' => '问答', 'data' => null),
                 array('title' => '讨论', 'data' => null),
                 array('title' => '笔记', 'data' => null),
-                array('title' => '私信', 'data' => null), );
+                array('title' => '私信', 'data' => null));
         }
         $index = 0;
         $dataLiveCourse = null;

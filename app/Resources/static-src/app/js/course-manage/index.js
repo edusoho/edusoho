@@ -6,14 +6,22 @@ import {
   showSettings,
   deleteTask,
   publishTask,
-  unpublishTask
+  unpublishTask,
+  updateTaskNum,
+  TaskListHeaderFixed
 } from './help';
 
-taskSortable('#sortable-list');
-courseFunctionRemask();
+$('[data-help="popover"]').popover();
+let sortableList = '#sortable-list';
+taskSortable(sortableList);
+updateTaskNum(sortableList);
 closeCourse();
-deleteCourse(store);
+deleteCourse();
 deleteTask();
 publishTask();
 unpublishTask();
 showSettings();
+TaskListHeaderFixed();
+// @TODO拆分，这个js被几个页面引用了有的页面根本不用js
+
+

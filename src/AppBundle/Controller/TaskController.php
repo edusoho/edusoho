@@ -2,16 +2,16 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Task\Service\TaskService;
-use Biz\User\Service\TokenService;
+use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskResultService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Activity\Service\ActivityService;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\TokenService;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException as ServiceAccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException as ServiceAccessDeniedException;
 
 class TaskController extends BaseController
 {
@@ -41,11 +41,11 @@ class TaskController extends BaseController
             return $this->redirectToRoute('my_course_show', array('id' => $courseId));
         }
 
-        if ($course['expiryMode'] == 'date' && $course['expiryStartDate'] >= time()) {
+        if ($this->isCourseExpired($course) && !$this->getCourseService()->hasCourseManagerRole($course['id'])) {
             return $this->redirectToRoute('course_show', array('id' => $courseId));
         }
 
-        if ($member && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {
+        if ($member !== null && $member['role'] != 'teacher' && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {
             return $this->redirect($this->generateUrl('my_course_show', array('id' => $courseId)));
         }
 
@@ -245,7 +245,7 @@ class TaskController extends BaseController
             array(
                 array(
                     'code' => 'task-list',
-                    'name' => '课程',
+                    'name' => '目录',
                     'icon' => 'es-icon-menu',
                     'url' => $this->generateUrl(
                         'course_task_show_plugin_task_list',
@@ -362,7 +362,7 @@ class TaskController extends BaseController
     public function finishConditionAction($task)
     {
         $config = $this->getActivityConfig();
-        $action = $config[$task['type']]['actions']['finishCondition'];
+        $action = $config[$task['type']]['controller'].':finishCondition';
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         return $this->forward($action, array('activity' => $activity));
@@ -381,19 +381,16 @@ class TaskController extends BaseController
      */
     protected function handleAccessDeniedException(\Exception $exception, Request $request, $taskId)
     {
-        // 学员动态跳转到无权限任务进入到计划营销页
-        if ($request->query->get('from', '') === 'student_status') {
-            $task = $this->getTaskService()->getTask($taskId);
+        $task = $this->getTaskService()->getTask($taskId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($task['fromCourseSetId']);
 
-            return $this->redirectToRoute(
-                'course_show',
+        return $this->createMessageResponse('info', "您还不是课程《{$courseSet['title']}》的学员，请先购买或加入学习。", '提示消息', 3,
+            $this->generateUrl('course_show',
                 array(
                     'id' => $task['courseId'],
                 )
-            );
-        }
-
-        throw $exception;
+            )
+        );
     }
 
     protected function getNextTaskAndFinishedRate($task)
@@ -408,11 +405,20 @@ class TaskController extends BaseController
         );
         $finishedCount = $this->getTaskResultService()->countTaskResults($conditions);
 
-        $finishedRate = empty($course['publishedTaskNum']) ? 0 : intval(
-            $finishedCount / $course['publishedTaskNum'] * 100
-        );
+        $finishedRate = $this->calcuteProgress($finishedCount, $course);
 
         return array($course, $nextTask, $finishedRate);
+    }
+
+    protected function calcuteProgress($finishedCount, $course)
+    {
+        $progress = 0;
+        if (empty($course['publishedTaskNum'])) {
+            return $progress;
+        }
+        $progress = intval($finishedCount / $course['publishedTaskNum'] * 100);
+
+        return $progress > 100 ? 100 : $progress;
     }
 
     protected function tryLearnTask($courseId, $taskId, $preview = false)
@@ -473,6 +479,17 @@ class TaskController extends BaseController
         return false;
     }
 
+    protected function isCourseExpired($course)
+    {
+        return (
+                $course['expiryMode'] == 'date'
+                && ($course['expiryStartDate'] > time() || $course['expiryEndDate'] < time())
+            )
+            || (
+                $course['expiryMode'] == 'endDate' && $course['expiryEndDate'] < time()
+            );
+    }
+
     /**
      * @return CourseService
      */
@@ -531,6 +548,6 @@ class TaskController extends BaseController
 
     protected function getActivityConfig()
     {
-        return $this->get('extension.default')->getActivities();
+        return $this->get('extension.manager')->getActivities();
     }
 }

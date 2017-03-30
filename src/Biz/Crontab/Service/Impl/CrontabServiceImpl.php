@@ -28,6 +28,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         }
 
         $this->beginTransaction();
+        $throws = null;
         try {
             // 加锁
             $job = $this->getJob($id, true);
@@ -51,11 +52,16 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             $message = $e->getMessage();
             $this->updateJob($job['id'], array('executing' => 0));
             $this->getLogService()->error('crontab', 'execute', "执行任务(#{$job['id']})失败: {$message}", $job);
+            $throws = $e;
         }
 
         $this->afterJonExecute($job);
         $this->commit();
         $this->refreshNextExecutedTime();
+
+        if (null !== $throws) {
+            throw $throws;
+        }
     }
 
     protected function afterJonExecute($job)

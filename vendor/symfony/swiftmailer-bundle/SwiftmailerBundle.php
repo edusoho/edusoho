@@ -16,8 +16,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Bundle\SwiftmailerBundle\DependencyInjection\Compiler\RegisterPluginsPass;
 
 /**
- * Bundle.
- *
  * @author Fabien Potencier <fabien@symfony.com>
  */
 class SwiftmailerBundle extends Bundle

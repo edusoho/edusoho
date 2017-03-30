@@ -79,7 +79,7 @@ class MaterialController extends CourseBaseController
         }
 
         if ($material['source'] == 'courselesson' || !$material['lessonId']) {
-            return $this->createMessageResponse('error', $this->trans('无权下载该资料'));
+            return $this->createMessageResponse('error', '无权下载该资料');
         }
 
         return $this->forward('AppBundle:UploadFile:download', array('fileId' => $material['fileId']));
