@@ -82,8 +82,9 @@ class OrgServiceImpl extends BaseService implements OrgService
             $this->biz['db']->beginTransaction();
 
             if ($org['parentId']) {
-                $this->getOrgDao()->wave($org['parentId'], array('childrenNum' => -1));
+                $this->getOrgDao()->wave(array($org['parentId']), array('childrenNum' => -1));
             }
+
             $this->getOrgDao()->delete($id);
             //删除辖下
             $this->getOrgDao()->deleteByPrefixOrgCode($org['orgCode']);
@@ -206,8 +207,9 @@ class OrgServiceImpl extends BaseService implements OrgService
         $modalesDatas = array();
         $conditions = array('likeOrgCode' => $org['orgCode']);
         foreach ($modules as $module => $service) {
-            $dispay = OrgBatchUpdateFactory::getDispayModuleName($module);
-            $modalesDatas[$dispay] = $this->createService($service['service'])->$service['method']($conditions);
+            $display = OrgBatchUpdateFactory::getDispayModuleName($module);
+            $callable = array($this->createService($service['service']), $service['method']);
+            $modalesDatas[$display] = call_user_func($callable, $conditions);
         }
 
         return array_filter($modalesDatas);
