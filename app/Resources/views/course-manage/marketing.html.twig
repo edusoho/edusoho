@@ -14,6 +14,7 @@
   <div class="panel panel-default">
     {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
     <div class="panel-body">
+      {% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles or ('ROLE_TEACHER' in app.user.roles and setting('course.teacher_manage_marketing', 0) == 1) %}
       {{ web_macro.flash_messages() }}
       <form id="course-marketing-form" class="form-horizontal" action="{{path('course_set_manage_course_marketing', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
         
@@ -231,6 +232,9 @@
         </div>
         
       </form>
+      {% else %}
+        <div class="alert alert-danger">{{ '抱歉，您无权管理课程营销，如有需要请联系网站管理员！'|trans }}</div>
+      {% endif %}
     </div>
   </div>
 {% endblock %}
