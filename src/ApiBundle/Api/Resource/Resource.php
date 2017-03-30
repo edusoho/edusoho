@@ -148,17 +148,7 @@ abstract class Resource
 
     public function getFileUrl($path)
     {
-        if (empty($path)) {
-            return '';
-        }
-        if (strpos($path, $this->getHttpHost()."://") !== false) {
-            return $path;
-        }
-        $path = str_replace('public://', '', $path);
-        $path = str_replace('files/', '', $path);
-        $path = $this->getHttpHost()."/files/{$path}";
 
-        return $path;
     }
 
     public function supportMethods()
@@ -191,41 +181,6 @@ abstract class Resource
                 'limit' => $limit
             )
         );
-    }
-
-    protected function getAssetUrl($path)
-    {
-        if (empty($path)) {
-            return '';
-        }
-        $path = $this->getHttpHost()."/assets/{$path}";
-        return $path;
-    }
-
-    protected function getHttpHost()
-    {
-        return $this->getSchema()."://{$_SERVER['HTTP_HOST']}";
-    }
-
-    protected function getSchema()
-    {
-        $https = $_SERVER['HTTPS'];
-        if(!empty($https) && 'off' !== strtolower($https)) {
-            return 'https';
-        }
-        return 'http';
-    }
-
-    protected function generateUrl($route, $parameters = array())
-    {
-        global $app;
-        return $app['url_generator']->generate($route, $parameters);
-    }
-
-    protected function render($templatePath, $args)
-    {
-        global $app;
-        return $app['twig']->render($templatePath, $args);
     }
 
     protected function getCurrentUser()

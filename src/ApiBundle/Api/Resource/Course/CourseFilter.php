@@ -21,7 +21,9 @@ class CourseFilter extends Filter
         $data = ArrayToolkit::parts($data, $this->publicFields);
         $data['createdTime'] = date('c', $data['createdTime']);
         $data['updatedTime'] = date('c', $data['updatedTime']);
+
         $data['services'] = ServiceToolkit::getServicesByCodes($data['services']);
+
         $userFilter = new UserFilter();
         $userFilter->filter($data['creator']);
 

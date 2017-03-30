@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\CourseSet;
 
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
+use ApiBundle\Api\Util\RequestUtil;
 use AppBundle\Common\ArrayToolkit;
 
 class CourseSetFilter extends Filter
@@ -22,6 +23,11 @@ class CourseSetFilter extends Filter
         $data['recommendedTime'] = date('c', $data['recommendedTime']);
         $data['createdTime'] = date('c', $data['createdTime']);
         $data['updatedTime'] = date('c', $data['updatedTime']);
+
+        foreach ($data['cover'] as $size => $imagePath) {
+            $data['cover'][$size] = RequestUtil::asset($imagePath);
+        }
+
         $userFilter = new UserFilter();
         $userFilter->filter($data['creator']);
     }
