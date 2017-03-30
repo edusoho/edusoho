@@ -1,0 +1,40 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}{{ '微信支付'|trans }} - {{ parent() }}{% endblock %}
+{% block esBar %}{% endblock %}
+{% set script_controller = 'pay/wxpay-h5' %}
+{% block content %}
+
+<div class="panel panel-default panel-wxpay ">
+  <div class="panel-heading">
+    支付信息
+  </div>
+  <div class="panel-body">
+    <p>订单号： {{ order.sn }} </p>
+    <p>订单详情： {{ order.title }} </p>
+    <p>订单价格：<span class="text-danger text-lg">¥ {{ order.amount }}</span></p>
+    <div class="pull-right mtm">
+      <button class="btn btn-primary js-wxpay">立即支付</button>
+    </div>
+    <div id="jsApiParameters" data-value="{{ jsApiParameters }}"
+       data-goto="{{ url('pay_success_show',{id:order['id']}) }}">
+    </div>
+  </div>
+</div>
+
+{#   <div class="es-section section-wxpay">
+  <font color="#f00"><b>支付信息</b></font><br/>
+  <font color='#00ff55;'>订单号</font> : {{ order.sn }} <br/>
+  <font color='#00ff55;'>订单详情</font> : {{ order.title }} <br/>
+  <font color='#00ff55;'>订单价格</font> : ¥{{ order.amount }} <br/>
+  <font color="#9ACD32"><b>该笔订单支付金额为<span style="color:#f00;font-size:50px">1分</span>钱</b></font><br/><br/>
+  <div id="jsApiParameters" data-value="{{ jsApiParameters }}"
+       data-goto="{{ url('pay_success_show',{id:order['id']}) }}">
+  </div>
+  <div align="center">
+    <button class="js-wxpay"
+            style="width:210px; height:50px; border-radius: 15px;background-color:#FE6714; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;"
+            type="button">立即支付
+    </button>
+  </div> #}
+{% endblock %}

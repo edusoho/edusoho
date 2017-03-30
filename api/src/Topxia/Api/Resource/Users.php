@@ -137,7 +137,7 @@ class Users extends BaseResource
 
         $mobileList = $this->getUserService()->findUsersByIds(ArrayToolkit::column($mobileProfiles, 'id'));
         $qqList = $this->getUserService()->findUsersByIds(ArrayToolkit::column($qqProfiles, 'id'));
-        $nicknameList = $this->getUserService()->searchUsers(array('nickname' => $q), array('LENGTH(nickname)', 'ASC'), 0, 5);
+        $nicknameList = $this->getUserService()->searchUsers(array('nickname' => $q), array('nickname', 'ASC'), 0, 5);
 
         return array(
             'mobile' => filters($mobileList, 'user'),

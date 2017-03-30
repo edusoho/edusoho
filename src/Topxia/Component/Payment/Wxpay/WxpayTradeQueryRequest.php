@@ -23,7 +23,7 @@ class WxpayTradeQueryRequest extends Request
     {
         $params             = $this->params;
         $converted          = array();
-        $converted['appid'] = $this->options['key'];
+        $converted['appid'] = $this->options['appid'];
 
         $settings                  = $this->getSettingService()->get('payment');
         $converted['mch_id']       = $settings["wxpay_account"];
@@ -60,7 +60,7 @@ class WxpayTradeQueryRequest extends Request
         }
 
         $sign = substr($sign, 0, -1);
-        $sign .= '&key='.$this->options['secret'];
+        $sign .= '&key='.$this->options['key'];
 
         return md5($sign);
     }
@@ -69,7 +69,7 @@ class WxpayTradeQueryRequest extends Request
     {
         $converted = array();
 
-        $converted['appid']            = $this->options['key'];
+        $converted['appid']            = $this->options['appid'];
         $converted['attach']           = '支付';
         $converted['body']             = mb_substr($this->filterText($params['title']), 0, 49, 'utf-8');
         $settings                      = $this->getSettingService()->get('payment');
