@@ -108,85 +108,22 @@ class OrderController extends BaseController
         $targetType = $fields['targetType'];
         $targetId = $fields['targetId'];
 
-        $priceType = 'RMB';
-        $coinSetting = $this->setting('coin');
-        $coinEnabled = isset($coinSetting['coin_enabled']) && $coinSetting['coin_enabled'];
-
-        if ($coinEnabled && isset($coinSetting['price_type'])) {
-            $priceType = $coinSetting['price_type'];
+        if (!isset($fields['couponCode']) || $fields['couponCode'] === '请输入优惠券') {
+            $fields['couponCode'] = '';
+        } else {
+            $fields['couponCode'] = trim($fields['couponCode']);
         }
 
-        $cashRate = 1;
+        list($order, $processor) = $this->getOrderFacadeService()->createOrder($targetType, $targetId, $fields);
 
-        if ($coinEnabled && isset($coinSetting['cash_rate'])) {
-            $cashRate = $coinSetting['cash_rate'];
+        if ($order['status'] == 'paid') {
+            return $this->redirect($processor->callbackUrl($order, $this->container));
         }
 
-        $processor = OrderProcessorFactory::create($targetType);
-
-        try {
-            if (!isset($fields['couponCode']) || $fields['couponCode'] === '请输入优惠券') {
-                $fields['couponCode'] = '';
-            } else {
-                $fields['couponCode'] = trim($fields['couponCode']);
-            }
-
-            list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
-
-            $amount = (string) ((float) $amount);
-            $shouldPayMoney = (string) ((float) $fields['shouldPayMoney']);
-            //价格比较
-
-            if ((int) ($totalPrice * 100) !== (int) ($fields['totalPrice'] * 100)) {
-                $this->createMessageResponse('error', '实际价格不匹配，不能创建订单!');
-            }
-
-            //价格比较
-
-            if ((int) ($amount * 100) !== (int) ($shouldPayMoney * 100)) {
-                return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
-            }
-
-            //虚拟币抵扣率比较
-            $target = $processor->getTarget($targetId);
-
-            $maxRate = $coinSetting['cash_model'] == 'deduction' && isset($target['maxRate']) ? $target['maxRate'] : 100;
-            $priceCoin = $priceType == 'RMB' ? NumberToolkit::roundUp($totalPrice * $cashRate) : $totalPrice;
-
-            if ($coinEnabled && isset($fields['coinPayAmount']) && ((int) ((float) $fields['coinPayAmount'] * $maxRate) > (int) ($priceCoin * $maxRate))) {
-                return $this->createMessageResponse('error', '虚拟币抵扣超出限定，不能创建订单!');
-            }
-
-            if (isset($couponResult['useable']) && $couponResult['useable'] == 'yes') {
-                $coupon = $fields['couponCode'];
-                $couponDiscount = $couponResult['decreaseAmount'];
-            }
-
-            $orderFileds = array(
-                'priceType' => $priceType,
-                'totalPrice' => $totalPrice,
-                'amount' => $amount,
-                'coinRate' => $cashRate,
-                'coinAmount' => empty($fields['coinPayAmount']) ? 0 : $fields['coinPayAmount'],
-                'userId' => $user['id'],
-                'payment' => 'none',
-                'targetId' => $targetId,
-                'coupon' => empty($coupon) ? '' : $coupon,
-                'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount,
-            );
-
-            $order = $processor->createOrder($orderFileds, $fields);
-            if ($order['status'] == 'paid') {
-                return $this->redirect($processor->callbackUrl($order, $this->container));
-            }
-
-            return $this->redirect($this->generateUrl('pay_center_show', array(
-                'sn' => $order['sn'],
-                'targetType' => $order['targetType'],
-            )));
-        } catch (\Exception $e) {
-            return $this->createMessageResponse('error', $e->getMessage());
-        }
+        return $this->redirect($this->generateUrl('pay_center_show', array(
+            'sn' => $order['sn'],
+            'targetType' => $order['targetType'],
+        )));
     }
 
     public function detailAction(Request $request, $id)
