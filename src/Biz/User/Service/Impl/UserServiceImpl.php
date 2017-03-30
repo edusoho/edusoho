@@ -1104,7 +1104,7 @@ class UserServiceImpl extends BaseService implements UserService
         $token['type'] = $type;
         $token['userId'] = $userId ? (int) $userId : 0;
         $token['token'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-        $token['data'] = serialize($data);
+        $token['data'] = $data;
         $token['times'] = empty($args['times']) ? 0 : (int) ($args['times']);
         $token['expiredTime'] = $expiredTime ? (int) $expiredTime : 0;
         $token['createdTime'] = time();
