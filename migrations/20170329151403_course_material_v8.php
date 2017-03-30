@@ -33,7 +33,7 @@ class CourseMaterialV8 extends Migration
           ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
         ");
 
-        $this->exec('INSERT INTO `course_material_v8`  SELECT * FROM `course_material` WHERE  id NOT IN (SELECT id FROM  `course_material_v8`);');
+        $db->exec('INSERT INTO `course_material_v8`  SELECT * FROM `course_material` WHERE  id NOT IN (SELECT id FROM  `course_material_v8`);');
     }
 
     /**

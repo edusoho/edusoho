@@ -169,7 +169,7 @@ class ClassroomMemberDaoTest extends BaseDaoTestCase
         $expected = array();
         $expected[] = $this->mockDataObject(array('userId' => 1));
         $expected[] = $this->mockDataObject(array('userId' => 2));
-        $res = $this->getDao()->findByClassroomIdAndRole(1, 'student', 0, 923456789);
+        $res = $this->getDao()->findByClassroomIdAndRole(1, 'student', 0, PHP_INT_MAX);
         $this->assertArrayEquals($expected[0], $res[0]);
         $this->assertArrayEquals($expected[1], $res[1]);
     }
