@@ -11,15 +11,16 @@
 
 namespace Symfony\Component\Security\Core\Tests\Authentication\Token\Storage;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
-class TokenStorageTest extends \PHPUnit_Framework_TestCase
+class TokenStorageTest extends TestCase
 {
     public function testGetSetToken()
     {
         $tokenStorage = new TokenStorage();
         $this->assertNull($tokenStorage->getToken());
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')->getMock();
         $tokenStorage->setToken($token);
         $this->assertSame($token, $tokenStorage->getToken());
     }

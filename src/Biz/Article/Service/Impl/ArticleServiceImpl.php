@@ -2,6 +2,7 @@
 
 namespace Biz\Article\Service\Impl;
 
+use AppBundle\Common\SimpleValidator;
 use Biz\BaseService;
 use Biz\Article\Dao\ArticleDao;
 use AppBundle\Common\ArrayToolkit;
@@ -426,17 +427,21 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $article['thumb'] = $fields['thumb'];
         $article['originalThumb'] = $fields['originalThumb'];
-        $article['title'] = $fields['title'];
-        $article['body'] = $fields['body'];
+        $article['title'] = $this->purifyHtml($fields['title']);
+        $article['body'] = $this->purifyHtml($fields['body'], true);
         $article['featured'] = empty($fields['featured']) ? 0 : 1;
         $article['promoted'] = empty($fields['promoted']) ? 0 : 1;
         $article['sticky'] = empty($fields['sticky']) ? 0 : 1;
 
         $article['categoryId'] = $fields['categoryId'];
-        $article['source'] = $fields['source'];
-        $article['sourceUrl'] = $fields['sourceUrl'];
+        $article['source'] = $this->purifyHtml($fields['source']);
+        $article['sourceUrl'] = empty($fields['sourceUrl']) ? '' : $fields['sourceUrl'];
         $article['publishedTime'] = strtotime($fields['publishedTime']);
         $article['updatedTime'] = time();
+
+        if (!empty($article['sourceUrl']) && !SimpleValidator::site($article['sourceUrl'])) {
+            throw $this->createInvalidArgumentException('来源地址不正确！');
+        }
 
         $fields = $this->fillOrgId($fields);
         if (isset($fields['orgId'])) {
@@ -452,7 +457,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         if ($mode == 'add') {
             $article['status'] = 'published';
-            $article['userId'] = $user['id'];
+            $article['userId'] = $user->id;
             $article['createdTime'] = time();
         }
 

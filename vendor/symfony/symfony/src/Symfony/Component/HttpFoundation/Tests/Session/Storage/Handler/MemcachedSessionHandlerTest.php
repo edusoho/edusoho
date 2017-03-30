@@ -11,13 +11,14 @@
 
 namespace Symfony\Component\HttpFoundation\Tests\Session\Storage\Handler;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler;
 
 /**
  * @requires extension memcached
  * @group time-sensitive
  */
-class MemcachedSessionHandlerTest extends \PHPUnit_Framework_TestCase
+class MemcachedSessionHandlerTest extends TestCase
 {
     const PREFIX = 'prefix_';
     const TTL = 1000;
@@ -41,7 +42,7 @@ class MemcachedSessionHandlerTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Tests can only be run with memcached extension 2.1.0 or lower, or 3.0.0b1 or higher');
         }
 
-        $this->memcached = $this->getMock('Memcached');
+        $this->memcached = $this->getMockBuilder('Memcached')->getMock();
         $this->storage = new MemcachedSessionHandler(
             $this->memcached,
             array('prefix' => self::PREFIX, 'expiretime' => self::TTL)

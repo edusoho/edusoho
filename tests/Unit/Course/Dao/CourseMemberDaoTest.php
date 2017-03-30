@@ -13,16 +13,16 @@ class CourseMemberDaoTest extends BaseDaoTestCase
         $expected[] = $this->mockDataObject(array('userId' => 2));
         $expected[] = $this->mockDataObject(array('userId' => 3));
 
-        $ids = array();
+        $values = array();
         foreach ($expected as $val) {
-            $ids[] = current($val);
+            $values[] = $val;
         }
 
         $res = array();
         $res[] = $this->getDao()->findByCourseId(1);
         $res[] = $this->getDao()->findByCourseId(2);
 
-        $this->assertEquals($ids, $res[0]);
+        $this->assertEquals($values, $res[0]);
         $this->assertEquals(array(), $res[1]);
     }
 
@@ -33,16 +33,16 @@ class CourseMemberDaoTest extends BaseDaoTestCase
         $expected[] = $this->mockDataObject(array('courseId' => 2));
         $expected[] = $this->mockDataObject(array('courseId' => 3));
 
-        $ids = array();
+        $values = array();
         foreach ($expected as $val) {
-            $ids[] = current($val);
+            $values[] = $val;
         }
 
         $res = array();
         $res[] = $this->getDao()->findByUserId(1);
         $res[] = $this->getDao()->findByUserId(2);
 
-        $this->assertEquals($ids, $res[0]);
+        $this->assertEquals($values, $res[0]);
         $this->assertEquals(array(), $res[1]);
     }
 
@@ -227,7 +227,8 @@ class CourseMemberDaoTest extends BaseDaoTestCase
 
         $res = array();
         $res[] = $this->getDao()->searchMemberCountGroupByFields(array('courseId' => 1), 'courseId', 0, 10);
-        $res[] = $this->getDao()->searchMemberCountGroupByFields(array('courseId' => 1, 'userId' => 1), 'courseId', 0, 10);
+        $res[] = $this->getDao()->searchMemberCountGroupByFields(array('courseId' => 1, 'userId' => 1), 'courseId', 0,
+            10);
 
         $this->assertEquals(array(array('courseId' => '1', 'count' => '2')), $res[0]);
         $this->assertEquals(array(array('courseId' => '1', 'count' => '1')), $res[1]);
@@ -298,7 +299,8 @@ class CourseMemberDaoTest extends BaseDaoTestCase
 
         $res = $this->getDao()->searchMemberIds(array('unique' => true), array('createdTime', 'ASC'), 0, 10);
 
-        $this->assertEquals(array(array('userId' => $expected[0]['userId']), array('userId' => $expected[1]['userId'])), $res);
+        $this->assertEquals(array(array('userId' => $expected[0]['userId']), array('userId' => $expected[1]['userId'])),
+            $res);
     }
 
     public function testUpdateMembers()
@@ -374,6 +376,7 @@ class CourseMemberDaoTest extends BaseDaoTestCase
             'deadlineNotified' => '1',
             'lastLearnTime' => '1',
             'courseSetId' => '1',
+            'lastViewTime' => '0',
         );
     }
 

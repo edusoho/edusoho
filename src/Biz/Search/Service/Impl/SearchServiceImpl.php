@@ -3,9 +3,9 @@
 namespace Biz\Search\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Search\Service\SearchService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Search\Adapter\SearchAdapterFactory;
+use Biz\Search\Service\SearchService;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class SearchServiceImpl extends BaseService implements SearchService
@@ -51,13 +51,34 @@ class SearchServiceImpl extends BaseService implements SearchService
 
         $api = CloudAPIFactory::create('root');
         $urls = array(
-            array('category' => 'course', 'url' => $siteUrl.'/callback/cloud_search_courses?cursor=0&start=0&limit=100'),
-            array('category' => 'lesson', 'url' => $siteUrl.'/callback/cloud_search_lessons?cursor=0&start=0&limit=100'),
-            array('category' => 'user', 'url' => $siteUrl.'/callback/cloud_search_users?cursor=0&start=0&limit=100'),
-            array('category' => 'thread', 'url' => $siteUrl.'/callback/cloud_search_chaos_threads?cursor=0,0,0&start=0,0,0&limit=50'),
-            array('category' => 'article', 'url' => $siteUrl.'/callback/cloud_search_articles?cursor=0&start=0&limit=100'),
-            array('category' => 'openCourse', 'url' => $siteUrl.'/callback/cloud_search_open_courses?cursor=0&start=0&limit=100'),
-            array('category' => 'openLesson', 'url' => $siteUrl.'/callback/cloud_search_open_course_lessons?cursor=0&start=0&limit=100'),
+            array(
+                'category' => 'course',
+                'url' => $siteUrl.'/callback/cloud_search?provider=courses&cursor=0&start=0&limit=100',
+            ),
+            array(
+                'category' => 'lesson',
+                'url' => $siteUrl.'/callback/cloud_search?provider=lessons&cursor=0&start=0&limit=100',
+            ),
+            array(
+                'category' => 'user',
+                'url' => $siteUrl.'/callback/cloud_search?provider=users&cursor=0&start=0&limit=100',
+            ),
+            array(
+                'category' => 'thread',
+                'url' => $siteUrl.'/callback/cloud_search?provider=chaos_threads&cursor=0,0,0&start=0,0,0&limit=50',
+            ),
+            array(
+                'category' => 'article',
+                'url' => $siteUrl.'/callback/cloud_search?provider=articles&cursor=0&start=0&limit=100',
+            ),
+            array(
+                'category' => 'openCourse',
+                'url' => $siteUrl.'/callback/cloud_search?provider=open_courses&cursor=0&start=0&limit=100',
+            ),
+            array(
+                'category' => 'openLesson',
+                'url' => $siteUrl.'/callback/cloud_search?provider=open_course_lessons&cursor=0&start=0&limit=100',
+            ),
         );
         $urls = urlencode(json_encode($urls));
 
@@ -87,10 +108,20 @@ class SearchServiceImpl extends BaseService implements SearchService
 
     protected function setCloudSearchWaiting()
     {
-        $searchSetting = array(
+        $searchSetting = $this->getSettingService()->get('cloud_search', array(
             'search_enabled' => 1,
             'status' => 'waiting',
-        );
+        ));
+
+        if (empty($searchSetting['type'])) {
+            $searchSetting['type'] = array(
+                'course' => 1,
+                'teacher' => 1,
+                'thread' => 1,
+                'article' => 1,
+            );
+        }
+
         $this->getSettingService()->set('cloud_search', $searchSetting);
     }
 

@@ -2,6 +2,12 @@
 
 namespace AppBundle\Controller;
 
+use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseService;
+use Biz\Question\Service\QuestionService;
+use Biz\Task\Service\TaskService;
+use Biz\Testpaper\Service\TestpaperService;
+use Biz\User\Service\UserService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -14,19 +20,25 @@ class HomeworkController extends BaseController
             return $this->createMessageResponse('info', 'homework not found');
         }
 
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($homework['courseId']);
+        $activity = $this->getActivityService()->getActivity($lessonId);
+        if ($activity['mediaId'] != $homeworkId) {
+            //homeworkId not belong to activity(lessonId)
+            return $this->createMessageResponse('info', "homework#{$homeworkId} not found in activity#{$lessonId}");
+        }
+
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($activity['fromCourseId']);
 
         $result = $this->getTestpaperService()->startTestpaper($homeworkId, array('lessonId' => $lessonId, 'courseId' => $course['id']));
 
-        if ($result['status'] == 'doing') {
+        if ($result['status'] === 'doing') {
             return $this->redirect($this->generateUrl('homework_show', array(
                 'resultId' => $result['id'],
             )));
-        } else {
-            return $this->redirect($this->generateUrl('homework_result_show', array(
-                'resultId' => $result['id'],
-            )));
         }
+
+        return $this->redirect($this->generateUrl('homework_result_show', array(
+            'resultId' => $result['id'],
+        )));
     }
 
     public function doTestAction(Request $request, $resultId)
@@ -69,7 +81,7 @@ class HomeworkController extends BaseController
         }
 
         if (in_array($homeworkResult['status'], array('doing', 'paused'))) {
-            return $this->redirect($this->generateUrl('homework_result_show', array('resultId' => $testpaperResult['id'])));
+            return $this->redirect($this->generateUrl('homework_result_show', array('resultId' => $homeworkResult['id'])));
         }
 
         $canLookHomework = $this->getTestpaperService()->canLookTestpaper($homeworkResult['id']);
@@ -107,7 +119,7 @@ class HomeworkController extends BaseController
             return $this->createJsonResponse(array('result' => false, 'message' => '作业已提交，不能再修改答案！'));
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $formData = $request->request->all();
 
             $paperResult = $this->getTestpaperService()->finishTest($result['id'], $formData);
@@ -116,38 +128,61 @@ class HomeworkController extends BaseController
 
             return $this->createJsonResponse(array('result' => true, 'message' => '', 'goto' => $goto));
         }
+
+        return $this->createJsonResponse(array('result' => false, 'message' => 'result not found'));
     }
 
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
     }
 
+    /**
+     * @return QuestionService
+     */
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
         return $this->createService('User:UserService');
     }
 
+    /**
+     * @return ServiceKernel
+     */
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();

@@ -1,0 +1,897 @@
+// 暂时决定启用这种匹配方式，不易维护容易出错,新的方式虽然会让文件增加，但更易于维护
+
+.main-color(@brand-primary) {
+  .btn-primary {
+    background: @brand-primary;
+    border-color: darken(@brand-primary,10%);
+    &:hover {
+      background: darken(@brand-primary, 8%);
+      border-color: darken(@brand-primary, 10%);
+    }
+  }
+  .alert-notice {
+    color: @brand-primary;
+  }
+  .badge-primary {
+    background-color: @brand-primary;
+  }
+  .breadcrumb {
+    &:hover {
+      color: @brand-primary;
+    }
+  }
+  .color-lump {
+    &.lump-card {
+      &.done {
+        border: 1px solid @brand-primary;
+        color: @brand-primary;
+      }
+      &.doing {
+        background-color: @brand-primary;
+        border: 1px solid @brand-primary-darker;
+        color: #fff;
+      }
+    }
+  }
+  .dropdown-menu {
+    > li {
+      > a {
+        &:hover {
+          background: @brand-primary;
+        }
+      }
+    }
+  }
+  .es-piece {
+    .piece-header {
+      &:after {
+        background-color: @brand-primary;
+      }
+    }
+  }
+  .es-tabs {
+    .tab-header {
+      > ul > li {
+        > a {
+          &:hover {
+            color: @brand-primary;
+          }
+        }
+      }
+    }
+    .tab-body {
+      > ul > li {
+        > a {
+          &:hover {
+            color: @brand-primary;
+          }
+        }
+        &.active > a {
+          color: @brand-primary;
+        }
+      }
+    }
+  }
+  .es-tag {
+    border-left: 2px solid @brand-primary;
+  }
+  .control-label span.required {
+    color: @brand-primary;
+  }
+  .label {
+    &.label-hover-primary {
+      &:hover {
+        background-color: @brand-primary;
+      }
+    }
+  }
+  .sidenav {
+    .list-group {
+      .list-group-item {
+        &.active {
+          border-left: 2px solid @brand-primary;
+          > a {
+            color: @brand-primary;
+          }
+        }
+      }
+    }
+  }
+  .chooser-list {
+    .table-striped  {
+      > tbody > tr {
+        &:hover {
+          > td {
+            color: @brand-primary;
+          }
+        }
+      }
+    }
+  }
+  .media-comment,
+  .media-subcomment {
+    .reply-link {
+      &:hover {
+        color: @brand-primary;
+      }
+    }
+    .comment-sns {
+      a {
+        &:hover {
+          color: @brand-primary;
+        }
+      }
+    }
+  }
+  .nav-pills {
+    > li {
+      &.active {
+        > a {
+          background: @brand-primary;
+        }
+      }
+    }
+    &.nav-pills-gray  {
+      > li {
+        &.active {
+          > a {
+            background: @brand-primary;
+          }
+        }
+      }
+    }
+    &.nav-pills-transparent {
+      > li {
+        &:hover,
+        &.active {
+          >a {
+            background-color: transparent;
+            border-color: @brand-primary;
+            color: @brand-primary;
+          }
+        }
+      }
+    }
+  }
+  .nav.nav-tabs {
+    .highlight {
+      border-bottom: 2px solid @brand-primary;
+    }
+    > li.active > a,
+    > li:hover > a {
+      color: @brand-primary;
+    }
+    .text-muted {
+      color: @brand-primary;
+    }
+    .badge {
+      background-color: @brand-primary;
+    }
+  }
+  .panel-primary {
+    >.panel-heading {
+      background-color: @brand-primary;
+    }
+  }
+  .tabs-wrapper {
+    .tabs-mark-group {
+      .classify {
+        a {
+          &:hover,&:focus {
+            color: @brand-primary;
+          }
+        }
+      }
+    }
+    .tabs-mark {
+      &.active {
+        a {
+          color: @brand-primary;
+          border: 1px solid @brand-primary;        
+        }
+      }
+    }
+    .tabs-group {
+      .content {
+        > li {
+          &:hover, &:focus, &.active {
+            > a {
+              color: @brand-primary;
+            }
+          }
+        }
+      }
+    }
+  }
+  .nav > li.nav-more {
+    .open > a,
+    .open.active >a,
+    .open > a:hover, 
+    .open > a:focus {
+      background: @brand-primary !important;
+    }
+  }
+  .nav.user-nav {
+    .dropdown-menu {
+      > li {
+        > a { 
+          &:hover {
+            .num {
+              color:@brand-primary;
+            }
+          }
+        }
+      }
+    }
+  }
+  .bg-primary {
+    background-color: @brand-primary !important;
+  }
+  .color-primary {
+    color: @brand-primary !important;
+  }
+  .link-darker {
+    &:hover {
+      color: @brand-primary !important;
+    }
+  }
+  .link-dark {
+    &:hover {
+      color: @brand-primary !important;
+    }
+  }
+  .link-gray {
+    &:hover {
+      color: @brand-primary !important;
+    }
+  }
+  .link-light {
+    &:hover {
+      color: @brand-primary !important;
+    }
+  }
+  .link-lighter {
+    &:hover {
+      color: @brand-primary !important;
+    }
+  }
+  .link-medium {
+    &:hover {
+      color: @brand-primary !important;
+    }
+  }
+  .link-white {
+    &:hover {
+      color: @brand-primary !important;
+    }
+  }
+  .link-primary {
+    color: @brand-primary !important;
+    &:hover {
+      color: @brand-primary-darker !important;
+    }
+  }
+  .loader-inner > span {
+    background-color: @brand-primary;
+  }
+  .class-serve {
+    > ul {
+      > li {
+        &.active {
+          background-color: @brand-primary;
+        }
+      }
+    }
+  }
+  .course-list {
+    .course-date {
+      .btn-circle {
+        &.btn-live {
+          background: @brand-primary;
+        }
+      }
+    }
+  }
+  .es-bar-menu {
+    > ul {
+      > li {
+        &.active,
+        &:hover {
+          background-color: @brand-primary;
+        }
+      }
+    }
+  }
+  .bar-menu-top {
+    .bar-user {
+      &.active,
+      &:hover {
+        .badge {
+          color: @brand-primary;
+        } 
+      }
+    }
+  }
+  .bar-task {
+    .bar-task-header {
+      background-color: @brand-primary;
+    }
+    .bar-time-line {
+      > li {
+        &:before {
+          background-color: @brand-primary;
+        }
+      }
+      .es-icon {
+        color: @brand-primary;
+      }
+    }
+  }
+  .bar-history {
+    ul {
+      > li {
+        .icon {
+          background-color: @brand-primary;
+        }
+      }
+    }
+  }
+  .es-filter {
+    > li > a {
+      &:hover {
+        color: @brand-primary;
+      }
+      &.active {
+        background-color: @brand-primary;
+      }
+    }
+    .btn-group.open .dropdown-toggle {
+      color: @brand-primary;
+    }
+    .filter {
+      .btn {
+        &:hover {
+          color: @brand-primary;
+        }
+      }
+      label {
+        &:hover {
+          color: @brand-primary;
+        }
+      }
+    }
+  }
+  .nav-filter {
+    .nav-pills {
+      li {
+        &.dropdown {
+          > a {
+            &:hover {
+              color: @brand-primary;
+            }
+          }
+        }
+      }
+    }
+  }
+  .order-nav .on {
+    background: @brand-primary;
+    span {
+      border: 23px solid @brand-primary;
+    }
+    b {
+      border-left-color: @brand-primary;
+    }
+  }
+  .note-list {
+    .note-item {
+      .metas {
+        > .name {
+          &:hover {
+            color: @brand-primary;
+          }
+        }
+      }
+      > .period {
+        color: @brand-primary;
+      }
+      .metas-sns {
+        > span {
+          > a {
+            &:hover {
+              color: @brand-primary;
+            }
+          }
+        }
+      }
+    }
+  }
+  .task-list {
+    &.task-show {
+      .task-item {
+        &:hover,
+        &.active {
+          &.task-content {
+            .title,
+            .left-menu{
+              color: @brand-primary;
+            }
+          }
+        }
+      }
+    }
+  }
+  .topic-list {
+    .topic-item {
+      .title {
+        a {
+          &:hover {
+            color: @brand-primary;
+          }
+        }
+      }
+      .metas {
+        > .name {
+          &:hover {
+            color: @brand-primary;
+          }
+        }
+        > .period {
+          color: @brand-primary;
+        }
+      }
+    }
+  }
+  .article-sns {
+    a.love,
+    .es-share > a {
+      &:hover {
+        color: @brand-primary;
+      }
+    }
+  }
+  .aricle-carousel {
+    .swiper-pager {
+      span {
+        &:hover,
+        &.swiper-active-switch {
+          background: #fff;
+          color: @brand-primary;
+          .opacity(1);
+        }
+      }
+    }
+  }
+  .article-metas {
+    .metas-body {
+      .title {
+        a {
+          &:hover {
+            color: @brand-primary;
+          }
+        }
+      }
+    }
+  }
+  .class-header {
+    .class-data {
+      > li {
+        .dropdown-toggle {
+          color:@gray;
+          &:hover {
+            color: @brand-primary;
+          } 
+        }
+      }
+    }
+    &.before {
+      .bottom-metas {
+        .btn-buy {
+          .btn-link {
+            &:hover {
+              color: @brand-primary;
+            }
+          }
+        }
+      }
+    }
+    &.after {
+      .class-data {
+        > li {
+          > a {
+            &:hover {
+              color: @brand-primary;
+            }
+          }
+        }
+      }
+    }
+  }
+  .class-course-list {
+    .course-item {
+      .media {
+        .course-show {
+          &:hover {
+            color: @brand-primary;
+          }
+        }
+      }
+    }
+  }
+  .topic-detail {
+    .topic-header {
+      .title {
+        > a {
+          &:hover {
+            color: @brand-primary;
+          }
+        }
+      }
+      .metas {
+        > a {
+          &:hover {
+            color: @brand-primary;
+          }
+        }
+      }
+    }
+    .topic-num {
+      .num-more {
+        i {
+          &:hover {
+            color: @brand-primary;
+          }
+        }
+      }
+    }
+  }
+  .class-signin {
+    .btn-signin {
+      background-color: @brand-primary;
+    }
+  }
+  .belongs-class {
+    .media-body {
+      > a {
+        &:hover {
+          color: @brand-primary;
+        }
+      }
+    }
+  }
+  .course-progress {
+    .cricle-progress {
+      .percent {
+        .num {
+          color: @brand-primary;
+        }
+      }
+    }
+  }
+  .orderlearn-poster {
+    span.swiper-active-switch {
+      background-color: @brand-primary;
+    }
+  }
+  .download-activity-list {
+    > li {
+      > a {
+        &:hover {
+          .download-icon {
+            color: @brand-primary;
+          }
+          color: @brand-primary;
+        }
+      }
+    }
+  }
+  .task-dashboard-page {
+    .dashboard-content {
+      .dashboard-header {
+        .back-link {
+          &:hover {
+            color: @brand-primary;
+          }
+        }
+      }
+    }
+    .dashboard-toolbar {
+      .dashboard-toolbar-nav {
+        > li {
+          &.active,
+          &:hover {
+            > a {
+              background-color: @brand-primary;
+            }
+          }
+        }
+      }
+    }
+  }
+  .testpaper-timer {
+    .btn-pause {
+      background-color: @brand-primary;
+    }
+  }
+  .task-create-editor {
+    .task-create-type-list {
+      .task-create-type-item {
+        &:hover  {
+          > a {
+            border: 3px solid @brand-primary;
+          }
+        }
+        &.active {
+          > a {
+            background: @brand-primary;
+            border: 3px solid @brand-primary;
+          }
+        }
+      }
+    }
+  }
+  .chooser-list {
+    .table-striped {
+      > tbody > tr {
+        &:hover {
+          > td {
+            color: @brand-primary;
+          }
+        }
+      }
+    }
+  }
+  .panel-create-course {
+    .course-select {
+      &:hover {
+        border: 2px solid @brand-primary;
+      }
+      &.active {
+        background-color: @brand-primary;
+      }
+    }
+  }
+  .es-poster {
+    .swiper-slide {
+      .subtitle {
+        color: @brand-primary;
+      }
+    }
+  }
+  .introduction-section {
+    background-color: @brand-primary;
+  }
+  .live-course-body {
+    .es-live-back {
+      ul {
+        li {
+          .dat {
+            background: @brand-primary;
+          }
+          a {
+            &:hover {
+              color: @brand-primary;
+            }
+          }
+        }
+      }
+    }
+    .es-live-all {
+      .media-body {
+        .user a {
+          &:hover {
+            color: @brand-primary;
+          }
+        }
+      }
+    }
+  }
+  .social-login {
+    .social-icon {
+      &.social-more:hover {
+        background: @brand-primary;
+        border-color: @brand-primary;
+      }
+    }
+  }
+  .es-materials-manage .nav-tabs > li > a:hover {
+    color: @brand-primary;
+  }
+  .es-materials-manage .nav-tabs > li.active > a {
+    color: @brand-primary;
+  }
+  .es-materillib-table a:hover {
+    color: @brand-primary;
+  }
+  .material-search-list {
+    &.material-tabs {
+      .right-content {
+        li {
+          &.active,
+          &:hover {
+            a {
+              color: @brand-primary;
+            }
+          }
+        }
+      }
+    }
+  }
+  .materials-modal-body { 
+    .nav.nav-tabs > li.active > a, 
+    .nav.nav-tabs > li:hover > a {
+      border-bottom: 1px solid @brand-primary;
+    }
+  }
+  .es-mobile {
+    .step {
+      .member {
+        background: @brand-primary;
+        box-shadow: 0 6px 20px rgba(red(@brand-primary), green(@brand-primary), blue(@brand-primary), 0.4);
+      }
+    }
+  }
+  .open-course-panel {
+    .panel-heading {
+      &:before {
+        background: @brand-primary;
+      }
+    }
+  }
+  .open-course-tab {
+    .tab-recommand {
+      .open-course-info {
+        .title {
+          &:hover {
+            color: @brand-primary;
+          }
+        }
+      }
+    }
+    .tab-live a {
+      &:hover,&:active,&.active {
+        color: rgba(255, 255, 255, 1);
+        background-color: @brand-primary;
+      }
+    }
+  }
+  .open-course-mobile-tab {
+    ul {
+      .tab-header.active {
+        border-bottom: 2px solid @brand-primary;
+        color: @brand-primary;
+      }
+    }
+  }
+  .marker-manage {
+    .nav.nav-pills.nav-pills-difficulty {
+      > li {
+        &.active {
+          > a {
+            background-color: @brand-primary;
+            color: #fff;
+          }
+        }
+      }
+    }
+    .lesson-list {
+      .item-lesson {
+        .btn-preview {
+          &:hover {
+            color: @brand-primary;
+          }
+        }
+      }
+      .more-questions {
+        a {
+          &:hover {
+            color: @brand-primary;
+          }
+        }
+      }
+    }
+  }
+  .marker-manage-content {
+    .manage-player-body {
+      .manage-player-header {
+        .title-link {
+          &:hover {
+            color: @brand-primary;
+          }
+        }
+      }
+    }
+    .editbox {
+      .scalebox {
+        .lesson-list {
+          .item-lesson {
+            &:hover {
+              background-color: @brand-primary;
+            }
+          }
+          .placeholder {
+            &:after {
+              border-color: transparent transparent transparent @brand-primary;
+            }
+          }
+        }
+      }
+    }
+  }
+  .search-course-list {
+    .course-item {
+      .title {
+        > a {
+          &:hover {
+            color: @brand-primary;
+          }
+        }
+      }
+    }
+  }
+  .subtitle-transcode-status {
+    &.success {
+      background: @brand-primary;
+    }
+  }
+  .section-wxpay {
+    .text-qrcode {
+      background: @brand-primary;
+    }
+  }
+  .select2-container-active .select2-choice, .select2-container-active .select2-choices, .select2-drop-active {
+    border-color: @brand-primary !important;
+  }
+  .select2-results .select2-highlighted {
+    background: @brand-primary !important;
+  }
+  .select2-container-multi.select2-container-active .select2-choices {
+    border: 1px solid @brand-primary !important;
+  }
+
+  .select2-dropdown-open.select2-drop-above .select2-choice, 
+  .select2-dropdown-open.select2-drop-above .select2-choices {
+    border: 1px solid @brand-primary !important;
+  }
+  .noUi-horizontal {
+    .noUi-handle {
+      border: 2px solid @brand-primary;
+    }
+    .noUi-tooltip {
+      color: @brand-primary;
+    }
+  }
+  .noUi-connect {
+    background-color: @brand-primary;
+  }
+  .vip-new-member {
+    .member-list {
+      img {
+        &:hover {
+          border-color: @brand-primary;
+        }
+      }
+    }
+  }
+  .list-group-panel .list-group-item.active, 
+  .list-group-panel .list-group-item.active:hover {
+    color: @brand-primary;
+    border-left: 3px solid @brand-primary;
+  }
+  .page-header {
+    .badge {
+      background-color: @brand-primary;
+    }
+  }
+  .float-consult {
+    .btn-consult-default {
+      background: @brand-primary;
+      border-color: @brand-primary - #111;
+      &:hover {
+        background: @brand-primary - #111;
+        border-color: @brand-primary - #222;
+      }
+    }
+  }
+  //添加所有关于配色的样式
+}

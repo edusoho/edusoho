@@ -72,16 +72,24 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
             throw $this->createInvalidArgumentException('参数不正确，评价失败！');
         }
 
+        if ($fields['rating'] > 5) {
+            throw $this->createInvalidArgumentException('参数不正确，评价数太大');
+        }
+
+        $this->getClassroomService()->tryTakeClassroom($fields['classroomId']);
+
         $classroom = $this->getClassroomDao()->get($fields['classroomId']);
 
+        $userId = $this->getCurrentUser()->id;
+
         if (empty($classroom)) {
-            throw $this->createNotFoundException("班级(#{$fields['classroomId']})不存在，评价失败！");
+            throw $this->createNotFoundException(sprintf('班级(%s)不存在，评价失败！', $fields['classroomId']));
         }
 
         $user = $this->getUserService()->getUser($fields['userId']);
 
         if (empty($user)) {
-            throw $this->createNotFoundException("用户(#{$fields['userId']})不存在,评价失败!");
+            throw $this->createNotFoundException(sprintf('用户(%s)不存在,评价失败!', $fields['userId']));
         }
 
         $review = $this->getClassroomReviewDao()->getByUserIdAndClassroomId($user['id'], $classroom['id']);
@@ -92,9 +100,10 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
                 'userId' => $fields['userId'],
                 'classroomId' => $fields['classroomId'],
                 'rating' => $fields['rating'],
-                'content' => empty($fields['content']) ? '' : $fields['content'],
+                'content' => !isset($fields['content']) ? '' : $this->purifyHtml($fields['content']),
                 'title' => empty($fields['title']) ? '' : $fields['title'],
                 'parentId' => $fields['parentId'],
+                'createdTime' => time(),
                 'meta' => array(),
             ));
             $this->dispatchEvent('classReview.add', new Event($review));
@@ -102,7 +111,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
             $review = $this->getClassroomReviewDao()->update($review['id'], array(
                 'rating' => $fields['rating'],
                 'title' => empty($fields['title']) ? '' : $fields['title'],
-                'content' => empty($fields['content']) ? '' : $fields['content'],
+                'content' => !isset($fields['content']) ? '' : $this->purifyHtml($fields['content']),
                 'updatedTime' => time(),
                 'meta' => array(),
             ));
@@ -126,10 +135,19 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
 
     public function deleteReview($id)
     {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('not login');
+        }
+
         $review = $this->getReview($id);
 
         if (empty($review)) {
-            throw $this->createNotFoundException("评价(#{$id})不存在，删除失败！");
+            throw $this->createNotFoundException(sprintf('评价(#%s)不存在，删除失败！', $id));
+        }
+
+        if (!$user->isAdmin() && $review['userId'] != $user['id']) {
+            throw $this->createAccessDeniedException('review is not exsits.');
         }
 
         $this->getClassroomReviewDao()->delete($id);

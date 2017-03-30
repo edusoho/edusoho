@@ -36,7 +36,11 @@ class HomeworkResult extends BaseResource
         $lessonId = $activities[0]['id'];
         $result = $this->getTestpaperService()->startTestpaper($homework['id'], array('lessonId' => $lessonId, 'courseId' => $homework['courseId']));
 
-        $this->getTestpaperService()->finishTest($result['id'], $answers);
+        try {
+            $this->getTestpaperService()->finishTest($result['id'], $answers);
+        } catch (\Exception $e) {
+            return $this->error('500', $e->getMessage());
+        }
 
         return array(
             'id' => $result['id'],
@@ -47,6 +51,20 @@ class HomeworkResult extends BaseResource
     {
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTask($lessonId);
+
+        if ($task['type'] != 'homework') {
+            $conditions = array(
+                'categoryId' => $task['categoryId'],
+                'type' => 'homework',
+                'mode' => 'homework',
+            );
+            $tasks = $this->getTaskService()->searchTasks($conditions, null, 0, 1);
+            if (!$tasks) {
+                return $this->error('404', '该作业不存在!');
+            }
+
+            $task = array_shift($tasks);
+        }
 
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         $homework = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
@@ -71,7 +89,7 @@ class HomeworkResult extends BaseResource
         $homeworkResult = $homeworkResults[0];
         $canTakeCourse = $this->getTestpaperService()->canLookTestpaper($homeworkResult['id']);
         if (!$canTakeCourse) {
-            throw $this->createAccessDeniedException('无权查看作业！');
+            return $this->error('500', '无权限访问!');
         }
         $itemSetResults = $this->getTestpaperService()->findItemResultsByResultId($homeworkResult['id']);
         $homeworkResult['items'] = $this->filterItem($itemSetResults);
@@ -137,6 +155,11 @@ class HomeworkResult extends BaseResource
     protected function getTaskService()
     {
         return $this->getServiceKernel()->createService('Task:TaskService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getActivityService()

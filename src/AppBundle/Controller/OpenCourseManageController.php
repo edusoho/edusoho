@@ -421,12 +421,15 @@ class OpenCourseManageController extends BaseController
         return $this->getBiz()->service('Course:CourseService');
     }
 
-    protected function _getTeacherUsers($courses)
+    protected function _getTeacherUsers(array $courses)
     {
-        $userIds = ArrayToolkit::column($courses, 'creator');
-        if (!$userIds) {
+        $teachers = ArrayToolkit::column($courses, 'teacherIds');
+
+        if (empty($teachers)) {
             return array();
         }
+
+        $userIds = call_user_func_array('array_merge', $teachers);
 
         return $this->getUserService()->findUsersByIds($userIds);
     }
@@ -519,10 +522,9 @@ class OpenCourseManageController extends BaseController
 
     public function searchAction(Request $request, $id, $filter)
     {
-        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
-
-        $conditions = array('title' => $request->request->get('key'));
-
+        $this->getOpenCourseService()->tryManageOpenCourse($id);
+        $key = $request->query->get('key');
+        $conditions = array('title' => $key);
         list($paginator, $courseSets) = $this->_getPickCourseData($request, $id, $conditions);
 
         $users = $this->_getTeacherUsers($courseSets);
@@ -533,6 +535,9 @@ class OpenCourseManageController extends BaseController
                 'users' => $users,
                 'courseSets' => $courseSets,
                 'filter' => $filter,
+                'courseId' => $id,
+                'title' => $key,
+                'paginator' => $paginator,
             )
         );
     }

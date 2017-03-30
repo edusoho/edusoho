@@ -7,6 +7,32 @@ use Symfony\Component\HttpFoundation\Request;
 
 class OperationSettingController extends BaseController
 {
+    public function wapSetAction(Request $request)
+    {
+        $defaultWapSetting = array(
+            'enabled' => 1,
+        );
+
+        if ($request->isMethod('POST')) {
+            $wapSetting = $request->request->all();
+            $wapSetting = ArrayToolkit::parts($wapSetting, array(
+                'enabled',
+            ));
+
+            $wapSetting = array_merge($defaultWapSetting, $wapSetting);
+            $this->getSettingService()->set('wap', $wapSetting);
+            $this->getLogService()->info('system', 'update_settings', '更新WAP设置', $wapSetting);
+            $this->setFlashMessage('success', '手机微网校设置已保存！');
+        }
+
+        $wapSetting = $this->setting('wap', array());
+        $wapSetting = array_merge($defaultWapSetting, $wapSetting);
+
+        return $this->render('admin/wap/set.html.twig', array(
+            'wapSetting' => $wapSetting,
+        ));
+    }
+
     public function articleSetAction(Request $request)
     {
         $articleSetting = $this->getSettingService()->get('article', array());

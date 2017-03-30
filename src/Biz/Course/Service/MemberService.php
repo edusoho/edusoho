@@ -126,4 +126,8 @@ interface MemberService
     public function addMemberExpiryDays($courseId, $userId, $day);
 
     public function findCourseLiveMembersByCourseId($courseId);
+
+    public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline);
+
+    public function updateMembersDeadlineByClassroomId($classroomId, $deadline);
 }

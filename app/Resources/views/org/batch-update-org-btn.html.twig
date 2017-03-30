@@ -1,6 +1,6 @@
 {% if setting('magic.enable_org','0') %}
 	{% do load_script('topxiawebbundle/controller/org/batch-org-btn') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 	{% set generate = generate|default('generate') != 'no-generate' %}
 	{% if generate %}
 		<div>
@@ -10,5 +10,4 @@
 	{% if generate %}
 	  </div>
 	{% endif %}
-
 {% endif %}

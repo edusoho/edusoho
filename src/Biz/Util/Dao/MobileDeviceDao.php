@@ -10,5 +10,5 @@ interface MobileDeviceDao extends GeneralDaoInterface
 
     public function getMobileDeviceById($id);
 
-    public function findMobileDeviceByIMEI($imei);
+    public function getMobileDeviceByIMEI($imei);
 }

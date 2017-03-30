@@ -3,12 +3,13 @@
 namespace Biz\Question\Type;
 
 use AppBundle\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Context\BizAware;
 
-class BaseQuestion
+class BaseQuestion extends BizAware
 {
     public function filter(array $fields)
     {
-        return ArrayToolkit::parts($fields, array(
+        $fields = ArrayToolkit::parts($fields, array(
             'type',
             'stem',
             'difficulty',
@@ -31,5 +32,11 @@ class BaseQuestion
             'updatedTime',
             'createdTime',
         ));
+
+        if (!empty($fields['analysis'])) {
+            $fields['analysis'] = $this->biz['html_helper']->purify($fields['analysis']);
+        }
+
+        return $fields;
     }
 }

@@ -150,7 +150,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function findFriendCount($userId)
     {
-        return $this->getFriendDao()->count(array('fromId' => $userId));
+        return $this->getFriendDao()->count(array('fromId' => $userId, 'pair' => 1));
     }
 
     public function getSimpleUser($id)
@@ -716,7 +716,7 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $users = array(
             array(
-                'type' => 'scheduler',
+                'type' => 'system',
                 'roles' => array('ROLE_USER', 'ROLE_SUPER_ADMIN'),
             ),
         );
@@ -904,7 +904,7 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $this->beginTransaction();
         try {
-            for ($i = 0; $i < count($users); ++$i) {
+            for ($i = 0, $iMax = count($users); $i < $iMax; ++$i) {
                 $member = $this->getUserDao()->getByEmail($users[$i]['email']);
                 $member = UserSerialize::unserialize($member);
                 $this->changePassword($member['id'], $users[$i]['password']);
@@ -938,7 +938,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUser($id);
 
         if (empty($user)) {
-            throw $this->createNotFoundException("User#{$id} Not Found");
+            throw $this->createNotFoundException('user not found');
         }
 
         $fields = ArrayToolkit::filter($fields, array(
@@ -1028,7 +1028,17 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if (!empty($fields['about'])) {
-            $fields['about'] = $this->biz['html_helper']->purify($fields['about']);
+            $fields['about'] = $this->purifyHtml($fields['about']);
+        }
+
+        if (!empty($fields['site']) && !SimpleValidator::site($fields['site'])) {
+            throw $this->createInvalidArgumentException('个人空间不正确，更新用户失败');
+        }
+        if (!empty($fields['weibo']) && !SimpleValidator::site($fields['weibo'])) {
+            throw $this->createInvalidArgumentException('微博地址不正确，更新用户失败');
+        }
+        if (!empty($fields['blog']) && !SimpleValidator::site($fields['blog'])) {
+            throw $this->createInvalidArgumentException('地址不正确，更新用户失败');
         }
 
         if (empty($fields['isWeiboPublic'])) {
@@ -1095,7 +1105,7 @@ class UserServiceImpl extends BaseService implements UserService
         $token['userId'] = $userId ? (int) $userId : 0;
         $token['token'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $token['data'] = serialize($data);
-        $token['times'] = empty($args['times']) ? 0 : intval($args['times']);
+        $token['times'] = empty($args['times']) ? 0 : (int) ($args['times']);
         $token['expiredTime'] = $expiredTime ? (int) $expiredTime : 0;
         $token['createdTime'] = time();
         $token = $this->getUserTokenDao()->create($token);
@@ -1428,7 +1438,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function clearUserCounter($userId, $name)
     {
-        $this->getUserDao()->clearCounterById($userId, $name);
+        $this->getUserDao()->deleteCounterById($userId, $name);
     }
 
     public function filterFollowingIds($userId, array $followingIds)
@@ -1486,7 +1496,12 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function findFriends($userId, $start, $limit)
     {
-        $friends = $this->getFriendDao()->searchByUserId($userId, $start, $limit);
+        $friends = $this->getFriendDao()->search(
+            array('fromId' => $userId, 'pair' => 1),
+            null,
+            $start,
+            $limit
+        );
         $ids = ArrayToolkit::column($friends, 'toId');
 
         return $this->findUsersByIds($ids);
@@ -1526,7 +1541,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createAccessDeniedException('You have Followed User#{$toId}.');
         }
 
-        $isFollowed = $this->isFollowed($fromId, $toId);
+        $isFollowed = $this->isFollowed($toId, $fromId);
         $pair = $isFollowed ? 1 : 0;
         $friend = $this->getFriendDao()->create(array(
             'fromId' => $fromId,
@@ -1535,6 +1550,11 @@ class UserServiceImpl extends BaseService implements UserService
             'pair' => $pair,
         ));
         $this->getFriendDao()->updateByFromIdAndToId($fromId, $toId, array('pair' => $pair));
+
+        if ($isFollowed) {
+            $this->getFriendDao()->updateByFromIdAndToId($toId, $fromId, array('pair' => $pair));
+        }
+
         $this->dispatchEvent('user.follow', new Event($friend));
 
         return $friend;
@@ -1662,14 +1682,17 @@ class UserServiceImpl extends BaseService implements UserService
 
         $lastestApproval = $this->getUserApprovalDao()->getLastestByUserIdAndStatus($user['id'], 'approving');
 
-        $this->getProfileDao()->update($userId, array(
-            'truename' => $lastestApproval['truename'],
-            'idcard' => $lastestApproval['idcard'],
-        )
+        $this->getProfileDao()->update(
+            $userId,
+            array(
+                'truename' => $lastestApproval['truename'],
+                'idcard' => $lastestApproval['idcard'],
+            )
         );
 
         $currentUser = $this->getCurrentUser();
-        $this->getUserApprovalDao()->update($lastestApproval['id'],
+        $this->getUserApprovalDao()->update(
+            $lastestApproval['id'],
             array(
                 'userId' => $user['id'],
                 'note' => $note,
@@ -1704,7 +1727,8 @@ class UserServiceImpl extends BaseService implements UserService
 
         $lastestApproval = $this->getUserApprovalDao()->getLastestByUserIdAndStatus($user['id'], 'approved');
         $currentUser = $this->getCurrentUser();
-        $this->getUserApprovalDao()->update($lastestApproval['id'],
+        $this->getUserApprovalDao()->update(
+            $lastestApproval['id'],
             array(
                 'userId' => $user['id'],
                 'note' => $note,

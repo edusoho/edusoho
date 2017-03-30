@@ -11,10 +11,11 @@
 
 namespace Symfony\Component\Form\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\Form\Tests\Fixtures\LegacyFooType;
 
-class FormFactoryBuilderTest extends \PHPUnit_Framework_TestCase
+class FormFactoryBuilderTest extends TestCase
 {
     private $registry;
     private $guesser;
@@ -26,7 +27,7 @@ class FormFactoryBuilderTest extends \PHPUnit_Framework_TestCase
         $this->registry = $factory->getProperty('registry');
         $this->registry->setAccessible(true);
 
-        $this->guesser = $this->getMock('Symfony\Component\Form\FormTypeGuesserInterface');
+        $this->guesser = $this->getMockBuilder('Symfony\Component\Form\FormTypeGuesserInterface')->getMock();
         $this->type = new LegacyFooType();
     }
 

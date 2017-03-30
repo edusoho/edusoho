@@ -132,7 +132,7 @@ class ThreadController extends BaseController
 
     public function createAction(Request $request, $target, $type = 'discussion', $thread = null)
     {
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             try {
                 $data = $request->request->all();
                 $data['targetType'] = $target['type'];
@@ -161,7 +161,7 @@ class ThreadController extends BaseController
 
     public function updateAction(Request $request, $target, $thread)
     {
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             try {
                 $user = $this->getCurrentUser();
                 $data = $request->request->all();
@@ -255,7 +255,7 @@ class ThreadController extends BaseController
         $user = $this->getCurrentUser();
         $thread = $this->getThreadService()->getThread($threadId);
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $fields = $request->request->all();
             $fields['threadId'] = $threadId;
             unset($fields['attachment']);
@@ -285,7 +285,7 @@ class ThreadController extends BaseController
             $this->createAccessDeniedException('用户没有登录,不能评论!');
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $fields = $request->request->all();
 
             $post['content'] = $this->autoParagraph($fields['content']);
@@ -294,7 +294,7 @@ class ThreadController extends BaseController
 
             $post = $this->getThreadService()->createPost($post);
 
-            if ($targetType == 'openCourse') {
+            if ($targetType === 'openCourse') {
                 $postReplyUrl = $this->container->get('router')->generate('open_course_post_reply', array('id' => $targetId, 'postId' => $post['id'], 'targetType' => 'openCourse'));
             } else {
                 $postReplyUrl = $this->container->get('router')->generate('thread_post_reply', array('threadId' => $post['threadId'], 'postId' => $post['id']));

@@ -11,6 +11,8 @@ class OrderProcessorFactory
     /**
      * @param $type
      *
+     * @throws InvalidArgumentException
+     *
      * @return OrderProcessor
      */
     public static function create($type)

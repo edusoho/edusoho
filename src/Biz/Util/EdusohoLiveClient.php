@@ -82,6 +82,7 @@ class EdusohoLiveClient
         $args = array(
             'liveId' => $liveId,
         );
+
         $response = CloudAPIFactory::create($server)->get('/lives/'.$liveId.'/available_record', $args);
 
         return isset($response['success']) ? true : false;

@@ -73,8 +73,6 @@ interface UploadFileService
 
     public function makeUploadParams($params);
 
-    public function getMediaInfo($key, $type);
-
     public function getFileByTargetType($targetType);
 
     public function tryManageFile($fileId);

@@ -2,7 +2,8 @@
 
 namespace Biz\Common\Mail;
 
-use Biz\System\Service\SettingService;
+use AppBundle\Common\SettingToolkit;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Topxia\Service\Common\ServiceKernel;
 
 abstract class Mail
@@ -21,11 +22,24 @@ abstract class Mail
 
     public function __get($name)
     {
+        if ('options' === $name) {
+            return $this->options;
+        }
+
         if (!array_key_exists($name, $this->options)) {
             return null;
         }
 
         return $this->options[$name];
+    }
+
+    public function __isset($name)
+    {
+        if ('options' === $name) {
+            return $this->options !== null;
+        }
+
+        return isset($this->options[$name]);
     }
 
     public function __unset($name)
@@ -35,48 +49,36 @@ abstract class Mail
         return $this;
     }
 
+    protected function parseTemplate($options)
+    {
+        return TemplateToolkit::parseTemplate($options);
+    }
+
     protected function setting($name, $default = '')
     {
-        $names = explode('.', $name);
-
-        $name = array_shift($names);
-
-        if (empty($name)) {
-            return $default;
-        }
-
-        $value = $this->getSettingService()->get($name, $default);
-
-        if (!isset($value)) {
-            return $default;
-        }
-
-        if (empty($names)) {
-            return $value;
-        }
-
-        $result = $value;
-
-        foreach ($names as $name) {
-            if (!isset($result[$name])) {
-                return $default;
-            }
-
-            $result = $result[$name];
-        }
-
-        return $result;
+        return SettingToolkit::getSetting($name, $default);
     }
 
-    abstract public function send();
-
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
+    public function send()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        $this->mailCheckRatelimiter();
+
+        return $this->doSend();
     }
+
+    protected function mailCheckRatelimiter()
+    {
+        $biz = $this->getKernel()->getBiz();
+
+        $factory = $biz['ratelimiter.factory'];
+        $limiter = $factory('email_'.$this->options['template'], 5, 1800);
+        $remain = $limiter->check($this->to);
+        if ($remain == 0) {
+            throw new AccessDeniedException('操作过于频繁，请30分钟之后再试');
+        }
+    }
+
+    abstract public function doSend();
 
     protected function getKernel()
     {

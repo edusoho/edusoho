@@ -56,8 +56,8 @@
         <div class="mb15">
           <span class="course-detail-title">活动</span>
           <span class="text-12 color-warning">
-            <b class="">{{ course.discount.name|sub_text(10) }}</b>
-            <i class="es-icon es-icon-accesstime text-14 ml20 mr10"></i>
+            <b class="mr20 hidden-xs">{{ course.discount.name|sub_text(10) }}</b>
+            <i class="es-icon es-icon-accesstime text-14  mr10"></i>
             <span id="discount-endtime-countdown" data-remaintime={{ course.discount.endTime - timestamp() }}>
             </span>
           <span>
@@ -71,7 +71,9 @@
               {% set current_course = course %}
               {% for course in  courses %}
                 <li class="mb10 mr10 {% if current_course.id == course.id %} active {% endif %}">
-                  <a href="{{ path('course_show',{id: course.id, previewAs: previewAs}) }}" title="{{ course.title }}">{{ course.title|sub_text(10) }}</a>
+                  <a href="{{ path('course_show',{id: course.id, previewAs: previewAs}) }}" title="{{ course.title }}">{{ course.title|sub_text(10) }}
+                  </a>
+                  <i class="es-icon es-icon-done done-icon"></i>
                 </li>
               {% endfor %}
             </ul>
@@ -100,8 +102,14 @@
           {% elseif course.expiryMode == 'forever' %}
             <span class="gray-dark mrl">永久有效</span>
           {% endif %}
-          
         </div>
+
+        {% if course.buyable != 0  and course.buyExpiryTime != 0 %}
+        <div class="mb15">
+          <span class="course-detail-title ">购买截止日期</span>
+          <span class="gray-dark mrl">{{ course.buyExpiryTime|date('Y-m-d ') }} 23:59</span>
+        </div>
+        {% endif %}
 
         {% if course.showServices | default(1) %}
           <span class="course-detail-title">承诺服务</span>

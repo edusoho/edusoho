@@ -63,7 +63,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
             return $this->createMessageResponse('vip_closed', '会员专区已关闭');
         }
 
-        $levels = $this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100);
+        $levels = $this->getLevelService()->searchLevels(array('enabled' => 1), array(), 0, 100);
 
         $levels = array_map(function ($level) {
             $level['picture'] = sprintf('/assets/img/default/vip_%d.png', $level['id']);
@@ -87,7 +87,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
         foreach ($appsInstalled as $key => $value) {
             foreach ($value as $valueKey => $v) {
                 if (!in_array($valueKey, array(
-                    'id', 'version', 'type', ))) {
+                    'id', 'version', 'type'))) {
                     unset($value[$valueKey]);
                 }
 
@@ -282,7 +282,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
         $result = array(
             'start' => 0,
             'limit' => 3,
-            'data' => $this->controller->filterCourses($sortedCourses), );
+            'data' => $this->controller->filterCourses($sortedCourses));
 
         return $result;
     }
@@ -356,7 +356,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
             'start' => $start,
             'limit' => $limit,
             'total' => $total,
-            'data' => $this->controller->filterCourses($courses), );
+            'data' => $this->controller->filterCourses($courses));
 
         return $result;
     }
@@ -378,10 +378,19 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
         $mobile = $this->getSettingService()->get('mobile', array());
         $baseUrl = $this->request->getSchemeAndHttpHost();
 
+        if (empty($mobile)) {
+            return array();
+        }
+
         for ($i = 1; $i < 6; ++$i) {
+            if (empty($mobile['banner'.$i])) {
+                continue;
+            }
+
             $bannerIndex = $mobile['banner'.$i];
+
             if (!empty($bannerIndex)) {
-                $bannerClick = $mobile['bannerClick'.$i];
+                $bannerClick = empty($mobile['bannerClick'.$i]) ? '' : $mobile['bannerClick'.$i];
                 $bannerParams = null;
                 $action = 'none';
                 switch ($bannerClick) {
@@ -412,11 +421,6 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
                     'params' => $bannerParams,
                 );
             }
-            $banner[] = array(
-                'url' => $baseUrl.'/'.$bannerIndex,
-                'action' => $action,
-                'params' => $bannerParams,
-            );
         }
 
         return $banner;

@@ -10,25 +10,8 @@ use Biz\Activity\Service\ActivityLearnLogService;
 
 class Ppt extends Activity
 {
-    public function registerActions()
-    {
-        return array(
-            'edit' => 'AppBundle:Ppt:edit',
-            'show' => 'AppBundle:Ppt:show',
-            'create' => 'AppBundle:Ppt:create',
-        );
-    }
-
     protected function registerListeners()
     {
-    }
-
-    public function getMetas()
-    {
-        return array(
-            'name' => 'PPT',
-            'icon' => 'es-icon es-icon-pptclass',
-        );
     }
 
     public function isFinished($activityId)
@@ -38,6 +21,7 @@ class Ppt extends Activity
 
         if ($ppt['finishType'] == 'time') {
             $result = $this->getActivityLearnLogService()->sumMyLearnedTimeByActivityId($activityId);
+            $result /= 60;
 
             return !empty($result) && $result >= $ppt['finishDetail'];
         }

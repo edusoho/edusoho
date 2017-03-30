@@ -32,6 +32,7 @@ class CouponDaoImpl extends GeneralDaoImpl implements CouponDao
                 'orderTime',
                 'id',
             ),
+            'cache' => 'table',
         );
     }
 

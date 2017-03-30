@@ -13,6 +13,7 @@ use Biz\File\Service\UploadFileService;
 use Biz\Order\Service\OrderService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
+use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\TokenService;
 use Symfony\Component\HttpFoundation\Request;
 use VipPlugin\Biz\Vip\Service\VipService;
@@ -146,16 +147,22 @@ class CourseController extends CourseBaseController
 
         $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($courseSet['categoryId']);
         $user = $this->getCurrentUser();
+
         $member = $user->isLogin() ? $this->getMemberService()->getCourseMember(
             $course['id'],
             $user['id']
         ) : array();
+
         $isUserFavorite = $user->isLogin() ? $this->getCourseSetService()->isUserFavorite(
             $user['id'],
             $course['courseSetId']
         ) : false;
-        $previewAs = $request->query->get('previewAs', false);
+
+        $previewAs = $request->query->get('previewAs', null);
         $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+        if (!empty($classroom) && $classroom['headTeacherId'] == $user['id']) {
+            $member = $this->createMemberFromClassroomHeadteacher($course, $classroom);
+        }
 
         $previewTasks = $this->getTaskService()->searchTasks(
             array('courseId' => $course['id'], 'type' => 'video', 'isFree' => '1'),
@@ -178,6 +185,21 @@ class CourseController extends CourseBaseController
                 'marketingPage' => 1,
                 'breadcrumbs' => $breadcrumbs,
             )
+        );
+    }
+
+    private function createMemberFromClassroomHeadteacher($course, $classroom)
+    {
+        return array(
+            'id' => 0,
+            'courseSetId' => $course['courseSetId'],
+            'courseId' => $course['id'],
+            'classroomId' => $classroom['id'],
+            'userId' => $classroom['headTeacherId'],
+            'deadline' => 0,
+            'role' => 'teacher',
+            'isVisible' => 0,
+            'locked' => 0,
         );
     }
 
@@ -342,7 +364,7 @@ class CourseController extends CourseBaseController
         $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
 
         $characteristicData = array();
-        $activities = $this->get('extension.default')->getActivities();
+        $activities = $this->get('extension.manager')->getActivities();
         foreach ($tasks as $task) {
             $type = strtolower($task['activity']['mediaType']);
 
@@ -657,7 +679,7 @@ class CourseController extends CourseBaseController
      */
     protected function prepareTab($tab)
     {
-        $metas = $this->container->get('extension.default')->getCourseShowMetas();
+        $metas = $this->container->get('course.extension')->getCourseShowMetas();
         $tabs = array_keys($metas['for_guest']['tabs']);
         if (!in_array($tab, $tabs)) {
             $tab = 'summary';

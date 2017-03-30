@@ -15,7 +15,6 @@ class CourseThreads extends BaseResource
         $limit = $request->query->get('limit', 10);
         $sort = $request->query->get('sort', 'posted');
         $simplify = $request->query->get('simplify', 0);
-
         $conditions = array(
             'courseId' => $courseId,
         );
@@ -48,6 +47,11 @@ class CourseThreads extends BaseResource
     protected function simplify($res)
     {
         return $this->multicallSimplify('CourseThread', $res);
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getCourseThreadService()

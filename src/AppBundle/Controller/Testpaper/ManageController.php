@@ -5,6 +5,15 @@ namespace AppBundle\Controller\Testpaper;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
+use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Question\Service\QuestionService;
+use Biz\Task\Service\TaskService;
+use Biz\Testpaper\Service\TestpaperService;
+use Biz\User\Service\UserService;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -63,7 +72,7 @@ class ManageController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $fields = $request->request->all();
 
             $fields['courseSetId'] = $courseSet['id'];
@@ -72,7 +81,12 @@ class ManageController extends BaseController
 
             $testpaper = $this->getTestpaperService()->buildTestpaper($fields, 'testpaper');
 
-            return $this->redirect($this->generateUrl('course_set_manage_testpaper_questions', array('courseSetId' => $courseSet['id'], 'testpaperId' => $testpaper['id'])));
+            return $this->redirect(
+                $this->generateUrl(
+                    'course_set_manage_testpaper_questions',
+                    array('courseSetId' => $courseSet['id'], 'testpaperId' => $testpaper['id'])
+                )
+            );
         }
 
         $types = $this->getQuestionTypes();
@@ -126,7 +140,7 @@ class ManageController extends BaseController
         );
 
         $courseIds = array($targetId);
-        if ($targetType == 'classroom') {
+        if ($targetType === 'classroom') {
             $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
             $courseIds = ArrayToolkit::column($courses, 'id');
         }
@@ -160,11 +174,11 @@ class ManageController extends BaseController
             throw $this->createResourceNotFoundException('testpaper', $result['id']);
         }
 
-        if ($result['status'] != 'reviewing') {
+        if ($result['status'] !== 'reviewing') {
             return $this->redirect($this->generateUrl('testpaper_result_show', array('resultId' => $result['id'])));
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $formData = $request->request->all();
             $this->getTestpaperService()->checkFinish($result['id'], $formData);
 
@@ -196,8 +210,6 @@ class ManageController extends BaseController
 
     public function resultListAction(Request $request, $testpaperId, $source, $targetId)
     {
-        $user = $this->getUser();
-
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
         if (!$testpaper) {
             throw $this->createResourceNotFoundException('testpaper', $testpaperId);
@@ -211,7 +223,7 @@ class ManageController extends BaseController
         }
 
         $conditions = array('testId' => $testpaper['id']);
-        if ($status != 'all') {
+        if ($status !== 'all') {
             $conditions['status'] = $status;
         }
         $conditions['type'] = $testpaper['type'];
@@ -222,7 +234,7 @@ class ManageController extends BaseController
         }
 
         $courseIds = array($targetId);
-        if ($source == 'classroom') {
+        if ($source === 'classroom') {
             $courses = $this->getClassroomService()->findCoursesByClassroomId($id);
             $courseIds = ArrayToolkit::column($courses, 'id');
         }
@@ -277,13 +289,13 @@ class ManageController extends BaseController
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
-        if (empty($testpaper)) {
+        if (empty($testpaper) || $testpaper['courseSetId'] != $courseSetId) {
             return $this->createMessageResponse('error', 'testpaper not found');
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $data = $request->request->all();
-            $testpaper = $this->getTestpaperService()->updateTestpaper($testpaper['id'], $data);
+            $this->getTestpaperService()->updateTestpaper($testpaper['id'], $data);
 
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('试卷信息保存成功！'));
 
@@ -298,7 +310,13 @@ class ManageController extends BaseController
 
     public function deleteAction(Request $request, $courseSetId, $testpaperId)
     {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+
+        if (empty($testpaper) || $testpaper['courseSetId'] != $courseSetId) {
+            return $this->createMessageResponse('error', 'testpaper not found');
+        }
 
         $this->getTestpaperService()->deleteTestpaper($testpaperId);
 
@@ -307,18 +325,33 @@ class ManageController extends BaseController
 
     public function deletesAction(Request $request, $courseSetId)
     {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
         $ids = $request->request->get('ids');
 
-        $this->getTestpaperService()->deleteTestpapers($ids);
+        $testpapers = $this->getTestpaperService()->findTestpapersByIds($ids);
+        if (!empty($testpapers)) {
+            foreach ($testpapers as $testpaper) {
+                if ($testpaper['courseSetId'] != $courseSetId) {
+                    return $this->createMessageResponse('error', 'testpaper not found');
+                }
+            }
+            $this->getTestpaperService()->deleteTestpapers($ids);
 
-        return $this->createJsonResponse(true);
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->createMessageResponse('error', 'testpaper not found');
     }
 
     public function publishAction(Request $request, $courseSetId, $testpaperId)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        if (empty($testpaper) || $testpaper['courseSetId'] != $courseSetId) {
+            throw new NotFoundException("testpaper#{$testpaperId} not found");
+        }
 
         $testpaper = $this->getTestpaperService()->publishTestpaper($testpaperId);
 
@@ -334,6 +367,11 @@ class ManageController extends BaseController
     public function closeAction(Request $request, $courseSetId, $testpaperId)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        if (empty($testpaper) || $testpaper['courseSetId'] != $courseSetId) {
+            throw new NotFoundException("testpaper#{$testpaperId} not found");
+        }
 
         $testpaper = $this->getTestpaperService()->closeTestpaper($testpaperId);
 
@@ -352,11 +390,11 @@ class ManageController extends BaseController
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
-        if (!$testpaper) {
+        if (!$testpaper || $testpaper['courseSetId'] != $courseSetId) {
             return $this->createMessageResponse('error', 'testpaper not found');
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $fields = $request->request->all();
 
             if (empty($fields['questions'])) {
@@ -401,18 +439,23 @@ class ManageController extends BaseController
 
     public function infoAction(Request $request, $id)
     {
-        $course = $this->getCourseSetService()->tryManageCourseSet($id);
+        $this->getCourseSetService()->tryManageCourseSet($id);
 
         $testpaperId = $request->request->get('testpaperId');
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
-        if (empty($testpaper)) {
+        if (empty($testpaper) || $testpaper['courseSetId'] != $id) {
             return $this->createMessageResponse('error', 'testpaper not found');
         }
 
-        $items = $this->getTestpaperService()->getItemsCountByParams(array('testId' => $testpaperId, 'parentIdDefault' => 0), $gourpBy = 'questionType');
-        $subItems = $this->getTestpaperService()->getItemsCountByParams(array('testId' => $testpaperId, 'parentId' => 0));
+        $items = $this->getTestpaperService()->getItemsCountByParams(
+            array('testId' => $testpaperId, 'parentIdDefault' => 0),
+            $gourpBy = 'questionType'
+        );
+        $subItems = $this->getTestpaperService()->getItemsCountByParams(
+            array('testId' => $testpaperId, 'parentId' => 0)
+        );
 
         $items = ArrayToolkit::index($items, 'questionType');
 
@@ -425,14 +468,14 @@ class ManageController extends BaseController
 
     public function previewAction(Request $request, $courseSetId, $testpaperId)
     {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-        if (!$testpaper) {
+        if (!$testpaper || $testpaper['courseSetId'] != $courseSetId) {
             return $this->createMessageResponse('error', 'testpaper not found');
         }
 
-        if ($testpaper['status'] == 'closed') {
+        if ($testpaper['status'] === 'closed') {
             return $this->createMessageResponse('warning', 'testpaper already closed');
         }
 
@@ -477,9 +520,11 @@ class ManageController extends BaseController
     protected function getCheckedQuestionType($testpaper)
     {
         $questionTypes = array();
-        foreach ($testpaper['metas']['counts'] as $type => $count) {
-            if ($count > 0) {
-                $questionTypes[] = $type;
+        if (!empty($testpaper['metas']['counts'])) {
+            foreach ($testpaper['metas']['counts'] as $type => $count) {
+                if ($count > 0) {
+                    $questionTypes[] = $type;
+                }
             }
         }
 
@@ -488,7 +533,7 @@ class ManageController extends BaseController
 
     protected function getQuestionTypes()
     {
-        $typesConfig = $this->get('extension.default')->getQuestionTypes();
+        $typesConfig = $this->get('extension.manager')->getQuestionTypes();
 
         $types = array();
         foreach ($typesConfig as $type => $typeConfig) {
@@ -509,57 +554,79 @@ class ManageController extends BaseController
         $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
         $taskIds = ArrayToolkit::column($questions, 'lessonId');
 
-        $courseTasks = $this->getCourseTaskService()->findTasksByIds($taskIds);
+        $courseTasks = $this->getTaskService()->findTasksByIds($taskIds);
         $courseTasks = ArrayToolkit::index($courseTasks, 'id');
 
         return $courseTasks;
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
     }
 
-    protected function getCourseTaskService()
-    {
-        return $this->createService('Task:TaskService');
-    }
-
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
         return $this->createService('User:UserService');
     }
 
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
     }
 
+    /**
+     * @return QuestionService
+     */
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
     }
 
+    /**
+     * @return TaskService
+     */
     public function getTaskService()
     {
         return $this->createService('Task:TaskService');
     }
 
+    /**
+     * @return TestpaperActivityService
+     */
     protected function getTestpaperActivityService()
     {
         return $this->createService('Activity:TestpaperActivityService');
     }
 
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return ServiceKernel
+     */
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();

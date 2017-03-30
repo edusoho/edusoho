@@ -31,7 +31,7 @@
             <span class="bullet">•</span>
           {% endif %}
           {% if task %}
-            <a class="link-muted" href="{{ path('course_task_show', {courseId:course.id, id:task.id }) }}" title="{{ task.title }}">{{'任务%number%'|trans({'%number%': task.number })}}</a>
+            <a class="link-primary" href="{{ path('course_task_show', {courseId:course.id, id:task.id }) }}" title="{{ task.title }}">{{'任务%number%'|trans({'%number%': task.number })}}</a>
             <span class="bullet">•</span>
           {% endif %}
           <span class="color-gray">{{'上传于'|trans}}{{ material.createdTime|smart_time }}</span>

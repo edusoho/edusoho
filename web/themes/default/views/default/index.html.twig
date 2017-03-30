@@ -54,7 +54,7 @@
                         <div class="class-metas">
                           {% if teachers %}
                             <span class="class-teacher">
-                      <i class="fa fa-user"></i>
+                      <i class="es-icon es-icon-people"></i>
                               {% for teacher in teachers %}
                                 {% if loop.index <= 5 %}
                                   {# {{ web_macro.user_link(teacher,'teacher-nickname mrl') }} #}
@@ -65,7 +65,7 @@
                     </span>
                           {% endif %}
                           <span class="class-student hidden-md"><i
-                              class="fa fa-users"></i>{{ classroom.studentNum + classroom.auditorNum }}</span>
+                              class="es-icon es-icon-people"></i>{{ classroom.studentNum + classroom.auditorNum }}</span>
                           <span class="class-price">
 
                         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
@@ -133,7 +133,7 @@
         {% if articles %}
           <div class="es-box news">
             <div class="es-box-heading">
-              <h2>{{ '最新资讯'|trans }}</h2>
+              <h2>{{'最新%article_name%'|trans({'%article_name%': setting('article.name')|default('资讯'|trans)})}}</h2>
               <a class="pull-right" href="{{ path('article_show') }}">{{ '更多'|trans }}&gt;</a>
             </div>
             <div class="es-box-body">
@@ -307,7 +307,7 @@
       {% set course = data('PublishedCourseByCourseSet', { courseSetId: courseSet.id }) %}
       {% if course %}
         <li class="course-item clearfix">
-        <a class="course-picture-link" href="{{ path('course_show', {id:courseSet.id}) }}">
+        <a class="course-picture-link" href="{{ path('course_set_show', {id:courseSet.id}) }}">
           {{ lazy_img(filepath(courseSet.cover.large|default(''), 'course.png'), 'course-picture', '') }}
           {% if courseSet.serializeMode=='serialize' %}
             <span class="label label-success ">{{ '更新中'|trans }}</span>

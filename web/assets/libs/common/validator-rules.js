@@ -49,7 +49,12 @@ define(function(require, exports, module) {
         [
             'phone', 
             /^1\d{10}$/,
-            Translator.trans('请输入有效的%display%', {display: '{{display}}'})
+            Translator.trans('请输入有效的%display%（仅支持中国大陆手机号）。', {display: '{{display}}'})
+        ],
+        [
+            'mobile',
+            /^1\d{10}$/,
+            Translator.trans('请输入有效的%display%（仅支持中国大陆手机号）。', {display: '{{display}}'})
         ],
         [
             'chinese_alphanumeric',
@@ -360,11 +365,6 @@ define(function(require, exports, module) {
                 return  result;  
              },
             Translator.trans('%display%格式错误', {display: '{{display}}'})
-        ],
-        [
-            'mobile',
-            /^1\d{10}$/,
-            Translator.trans('请输入正确的%display%', {display:'{{display}}'})
         ],
         [
             'email',

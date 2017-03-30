@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class FlashActivityDaoImpl extends GeneralDaoImpl implements FlashActivityDao
 {
-    protected $table = 'flash_activity';
+    protected $table = 'activity_flash';
 
     public function declares()
     {

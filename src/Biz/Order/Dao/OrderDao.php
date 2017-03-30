@@ -45,4 +45,8 @@ interface OrderDao extends GeneralDaoInterface
     public function analysisPaidOrderGroupByTargetType($startTime, $groupBy);
 
     public function analysisOrderDate($conditions);
+
+    public function searchBill($conditions, $orderBy, $start, $limit);
+
+    public function countUserBill($conditions);
 }

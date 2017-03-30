@@ -11,7 +11,7 @@
   <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="mbm">
 
-      {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+      
 
       <select class="form-control" name="datePicker" id="datePicker">
         {{ select_options({longinDate:'登录时间'|trans, registerDate: '注册时间'|trans}, app.request.get('datePicker') ,'--时间类型--'|trans) }}
@@ -63,6 +63,9 @@
   <table id="user-table" class="table table-striped table-hover" data-search-form="#user-search-form">
     <thead>
     <tr>
+      {% if setting('magic.enable_org','0') %}
+        <th><input type="checkbox"  data-role="batch-select"></th>
+      {% endif %}
       <th>{{ '用户名'|trans }}</th>
       {% include 'org/parts/table-thead-tr.html.twig' %}
       <th>{{ '手机号'|trans }}</th>
@@ -81,6 +84,7 @@
     {% endfor %}
     </tbody>
   </table>
+  {#{% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}#}
   {% include 'org/batch-update-org-btn.html.twig' with {module:'user', formId:'user-table'} %}
   {{ admin_macro.paginator(paginator) }}
 {% endblock %}

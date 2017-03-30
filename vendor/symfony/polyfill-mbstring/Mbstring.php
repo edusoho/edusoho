@@ -15,6 +15,7 @@ namespace Symfony\Polyfill\Mbstring;
  * Partial mbstring implementation in PHP, iconv based, UTF-8 centric.
  *
  * Implemented:
+ * - mb_chr                  - Returns a specific character from its Unicode code point
  * - mb_convert_encoding     - Convert character encoding
  * - mb_convert_variables    - Convert character code in variable(s)
  * - mb_decode_mimeheader    - Decode string in MIME header field
@@ -25,7 +26,9 @@ namespace Symfony\Polyfill\Mbstring;
  * - mb_http_output          - Set/Get HTTP output character encoding
  * - mb_internal_encoding    - Set/Get internal character encoding
  * - mb_list_encodings       - Returns an array of all supported encodings
+ * - mb_ord                  - Returns the Unicode code point of a character
  * - mb_output_handler       - Callback function converts character encoding in output buffer
+ * - mb_scrub                - Replaces ill-formed byte sequences with substitute characters
  * - mb_strlen               - Get string length
  * - mb_strpos               - Find position of first occurrence of string in a string
  * - mb_strrpos              - Find position of last occurrence of a string in a string
@@ -96,7 +99,7 @@ final class Mbstring
                 $fromEncoding = 'Windows-1252';
             }
             if ('UTF-8' !== $fromEncoding) {
-                $s = iconv($fromEncoding, 'UTF-8', $s);
+                $s = iconv($fromEncoding, 'UTF-8//IGNORE', $s);
             }
 
             return preg_replace_callback('/[\x80-\xFF]+/', array(__CLASS__, 'html_encoding_callback'), $s);
@@ -107,7 +110,7 @@ final class Mbstring
             $fromEncoding = 'UTF-8';
         }
 
-        return iconv($fromEncoding, $toEncoding, $s);
+        return iconv($fromEncoding, $toEncoding.'//IGNORE', $s);
     }
 
     public static function mb_convert_variables($toEncoding, $fromEncoding, &$a = null, &$b = null, &$c = null, &$d = null, &$e = null, &$f = null)
@@ -145,7 +148,7 @@ final class Mbstring
         if ('UTF-8' === $encoding) {
             $encoding = null;
         } else {
-            $s = iconv($encoding, 'UTF-8', $s);
+            $s = iconv($encoding, 'UTF-8//IGNORE', $s);
         }
 
         if (MB_CASE_TITLE == $mode) {
@@ -202,7 +205,7 @@ final class Mbstring
             return $s;
         }
 
-        return iconv('UTF-8', $encoding, $s);
+        return iconv('UTF-8', $encoding.'//IGNORE', $s);
     }
 
     public static function mb_internal_encoding($encoding = null)
@@ -333,9 +336,13 @@ final class Mbstring
 
     public static function mb_strlen($s, $encoding = null)
     {
-        $encoding = self::getEncoding($encoding);
+        switch ($encoding = self::getEncoding($encoding)) {
+            case 'ASCII':
+            case 'CP850':
+                return strlen($s);
+        }
 
-        return iconv_strlen($s, $encoding);
+        return @iconv_strlen($s, $encoding);
     }
 
     public static function mb_strpos($haystack, $needle, $offset = 0, $encoding = null)
@@ -510,7 +517,7 @@ final class Mbstring
         $encoding = self::getEncoding($encoding);
 
         if ('UTF-8' !== $encoding) {
-            $s = iconv($encoding, 'UTF-8', $s);
+            $s = iconv($encoding, 'UTF-8//IGNORE', $s);
         }
 
         $s = preg_replace('/[\x{1100}-\x{115F}\x{2329}\x{232A}\x{2E80}-\x{303E}\x{3040}-\x{A4CF}\x{AC00}-\x{D7A3}\x{F900}-\x{FAFF}\x{FE10}-\x{FE19}\x{FE30}-\x{FE6F}\x{FF00}-\x{FF60}\x{FFE0}-\x{FFE6}\x{20000}-\x{2FFFD}\x{30000}-\x{3FFFD}]/u', '', $s, -1, $wide);
@@ -526,6 +533,45 @@ final class Mbstring
     public static function mb_output_handler($contents, $status)
     {
         return $contents;
+    }
+
+    public static function mb_chr($code, $encoding = null)
+    {
+        if (0x80 > $code %= 0x200000) {
+            $s = chr($code);
+        } elseif (0x800 > $code) {
+            $s = chr(0xC0 | $code >> 6).chr(0x80 | $code & 0x3F);
+        } elseif (0x10000 > $code) {
+            $s = chr(0xE0 | $code >> 12).chr(0x80 | $code >> 6 & 0x3F).chr(0x80 | $code & 0x3F);
+        } else {
+            $s = chr(0xF0 | $code >> 18).chr(0x80 | $code >> 12 & 0x3F).chr(0x80 | $code >> 6 & 0x3F).chr(0x80 | $code & 0x3F);
+        }
+
+        if ('UTF-8' !== $encoding = self::getEncoding($encoding)) {
+            $s = mb_convert_encoding($s, $encoding, 'UTF-8');
+        }
+
+        return $s;
+    }
+
+    public static function mb_ord($s, $encoding = null)
+    {
+        if ('UTF-8' !== $encoding = self::getEncoding($encoding)) {
+            $s = mb_convert_encoding($s, 'UTF-8', $encoding);
+        }
+
+        $code = ($s = unpack('C*', substr($s, 0, 4))) ? $s[1] : 0;
+        if (0xF0 <= $code) {
+            return (($code - 0xF0) << 18) + (($s[2] - 0x80) << 12) + (($s[3] - 0x80) << 6) + $s[4] - 0x80;
+        }
+        if (0xE0 <= $code) {
+            return (($code - 0xE0) << 12) + (($s[2] - 0x80) << 6) + $s[3] - 0x80;
+        }
+        if (0xC0 <= $code) {
+            return (($code - 0xC0) << 6) + $s[2] - 0x80;
+        }
+
+        return $code;
     }
 
     private static function getSubpart($pos, $part, $haystack, $encoding)

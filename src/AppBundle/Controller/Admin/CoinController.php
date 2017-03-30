@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller\Admin;
 
-use Imagine\Image\Box;
-use Imagine\Gd\Imagine;
-use AppBundle\Common\Paginator;
-use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\Paginator;
+use Imagine\Gd\Imagine;
+use Imagine\Image\Box;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -37,16 +37,23 @@ class CoinController extends BaseController
             $fields = $request->request->all();
 
             $coinSettingsPosted = ArrayToolkit::parts($fields, array(
-                'coin_enabled', 'cash_model',
+                'coin_enabled',
+                'cash_model',
                 'cash_rate',
                 'coin_name',
-                'coin_content', 'coin_picture',
-                'coin_picture_50_50', 'coin_picture_30_30',
-                'coin_picture_20_20', 'coin_picture_10_10',
+                'coin_content',
+                'coin_picture',
+                'coin_picture_50_50',
+                'coin_picture_30_30',
+                'coin_picture_20_20',
+                'coin_picture_10_10',
                 'charge_coin_enabled',
             ));
 
             $coinSettings = array_merge($coinSettingsSaved, $coinSettingsPosted);
+
+            $coinSettings['coin_content'] = $this->purifyHtml($coinSettings['coin_content'], true);
+
             $this->getSettingService()->set('coin', $coinSettings);
             $this->getLogService()->info('system', 'update_settings', '更新Coin虚拟币设置', $coinSettingsPosted);
             $this->setFlashMessage('success', '虚拟币设置已保存！');
@@ -71,8 +78,8 @@ class CoinController extends BaseController
 
         $image = $rawImage->copy();
         $image->resize(new Box($size, $size));
-        $filePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$size}*{$size}.{$pathinfo['extension']}";
-        $imageName = "{$pathinfo['filename']}_{$size}*{$size}.{$pathinfo['extension']}";
+        $filePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$size}-{$size}.{$pathinfo['extension']}";
+        $imageName = "{$pathinfo['filename']}_{$size}-{$size}.{$pathinfo['extension']}";
         $image = $image->save($filePath, array('quality' => 100));
 
         $coin = $this->getSettingService()->get('coin', array());
@@ -100,7 +107,10 @@ class CoinController extends BaseController
                 goto response;
             }
 
-            $courseSets = $this->getCourseSetService()->searchCourseSets(array('parentId' => 0, 'maxCoursePrice_GT' => 0), array('updatedTime' => 'desc'), 0, PHP_INT_MAX);
+            $courseSets = $this->getCourseSetService()->searchCourseSets(array(
+                'parentId' => 0,
+                'maxCoursePrice_GT' => 0,
+            ), array('updatedTime' => 'desc'), 0, PHP_INT_MAX);
 
             return $this->render('admin/coin/coin-course-set.html.twig', array(
                 'set' => $set,
@@ -113,6 +123,7 @@ class CoinController extends BaseController
         }
 
         response:
+
         return $this->render('admin/coin/coin-model.html.twig', array(
             'coinSettings' => $coinSettings,
         ));
@@ -125,9 +136,13 @@ class CoinController extends BaseController
         $set = $conditions['set'];
 
         if ($type == 'course') {
-            $items = $this->getCourseSetService()->searchCourseSets(array('maxCoursePrice_GT' => '0.00', 'parentId' => 0), array('updatedTime' => 'desc'), 0, PHP_INT_MAX);
+            $items = $this->getCourseSetService()->searchCourseSets(array(
+                'maxCoursePrice_GT' => '0.00',
+                'parentId' => 0,
+            ), array('updatedTime' => 'desc'), 0, PHP_INT_MAX);
         } elseif ($type == 'classroom') {
-            $items = $this->getClassroomService()->searchClassrooms(array('private' => 0, 'price_GT' => '0.00'), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
+            $items = $this->getClassroomService()->searchClassrooms(array('private' => 0, 'price_GT' => '0.00'),
+                array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
         } elseif ($type == 'vip') {
             // todo
             $items = $this->getLevelService()->searchLevels(array('enable' => 1), 0, PHP_INT_MAX);
@@ -236,7 +251,8 @@ class CoinController extends BaseController
 
         $this->getSettingService()->set('coin', $coin);
 
-        $this->getLogService()->info('system', 'update_settings', '更新虚拟币图片', array('coin_picture' => $coin['coin_picture']));
+        $this->getLogService()->info('system', 'update_settings', '更新虚拟币图片',
+            array('coin_picture' => $coin['coin_picture']));
 
         $response = array(
             'path' => $coin['coin_picture'],
@@ -270,7 +286,8 @@ class CoinController extends BaseController
     {
         $fields = $request->query->all();
         $conditions = array(
-            'startTime' => time() - 7 * 24 * 3600, );
+            'startTime' => time() - 7 * 24 * 3600,
+        );
 
         if (!empty($fields)) {
             $conditions = $this->filterCondition($fields);
@@ -363,6 +380,7 @@ class CoinController extends BaseController
             $users = array($condition['userId'] => $user);
 
             response:
+
             return $this->render('admin/coin/coin-user-records.html.twig', array(
                 'condition' => $condition,
                 'userIds' => $userIds,
@@ -455,10 +473,12 @@ class CoinController extends BaseController
 
             if ($fields['type'] == 'add') {
                 $this->getCashAccountService()->waveCashField($account['id'], $fields['amount']);
-                $this->getLogService()->info('coin', 'add_coin', '添加 '.$user['nickname']." {$fields['amount']} 虚拟币", array());
+                $this->getLogService()->info('coin', 'add_coin', '添加 '.$user['nickname']." {$fields['amount']} 虚拟币",
+                    array());
             } else {
                 $this->getCashAccountService()->waveDownCashField($account['id'], $fields['amount']);
-                $this->getLogService()->info('coin', 'deduct_coin', '扣除 '.$user['nickname']." {$fields['amount']} 虚拟币", array());
+                $this->getLogService()->info('coin', 'deduct_coin', '扣除 '.$user['nickname']." {$fields['amount']} 虚拟币",
+                    array());
             }
         }
 
@@ -478,10 +498,12 @@ class CoinController extends BaseController
                 if ($fields['type'] == 'add') {
                     $this->getCashAccountService()->waveCashField($id, $fields['amount']);
 
-                    $this->getLogService()->info('coin', 'add_coin', '添加 '.$user['nickname']." {$fields['amount']} 虚拟币", array());
+                    $this->getLogService()->info('coin', 'add_coin', '添加 '.$user['nickname']." {$fields['amount']} 虚拟币",
+                        array());
                 } else {
                     $this->getCashAccountService()->waveDownCashField($id, $fields['amount']);
-                    $this->getLogService()->info('coin', 'deduct_coin', '扣除 '.$user['nickname']." {$fields['amount']} 虚拟币", array());
+                    $this->getLogService()->info('coin', 'deduct_coin',
+                        '扣除 '.$user['nickname']." {$fields['amount']} 虚拟币", array());
                 }
             }
         }
@@ -514,7 +536,7 @@ class CoinController extends BaseController
             ->getForm();
 
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 $data = $form->getData();
@@ -535,7 +557,8 @@ class CoinController extends BaseController
                 $fileName = str_replace('.', '!', $file->getFilename());
 
                 return $this->redirect($this->generateUrl('settings_avatar_crop', array(
-                        'file' => $fileName, )
+                        'file' => $fileName,
+                    )
                 ));
             }
         }

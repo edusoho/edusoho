@@ -11,9 +11,10 @@
 
 namespace Symfony\Component\Security\Core\Tests\Authentication;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolver;
 
-class AuthenticationTrustResolverTest extends \PHPUnit_Framework_TestCase
+class AuthenticationTrustResolverTest extends TestCase
 {
     public function testIsAnonymous()
     {
@@ -47,17 +48,17 @@ class AuthenticationTrustResolverTest extends \PHPUnit_Framework_TestCase
 
     protected function getToken()
     {
-        return $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        return $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')->getMock();
     }
 
     protected function getAnonymousToken()
     {
-        return $this->getMock('Symfony\Component\Security\Core\Authentication\Token\AnonymousToken', null, array('', ''));
+        return $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\AnonymousToken')->setConstructorArgs(array('', ''))->getMock();
     }
 
     protected function getRememberMeToken()
     {
-        return $this->getMock('Symfony\Component\Security\Core\Authentication\Token\RememberMeToken', array('setPersistent'), array(), '', false);
+        return $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\RememberMeToken')->setMethods(array('setPersistent'))->disableOriginalConstructor()->getMock();
     }
 
     protected function getResolver()

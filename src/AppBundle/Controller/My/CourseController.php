@@ -2,13 +2,14 @@
 
 namespace AppBundle\Controller\My;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
+use AppBundle\Controller\Course\CourseBaseController;
 use Biz\Classroom\Service\ClassroomService;
-use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Controller\Course\CourseBaseController;
 
 class CourseController extends CourseBaseController
 {
@@ -36,11 +37,16 @@ class CourseController extends CourseBaseController
             $paginator->getPerPageCount()
         );
 
+        $setIds = ArrayToolkit::column($courses, 'courseSetId');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($setIds);
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+
         return $this->render(
             'my/learning/course/learning.html.twig',
             array(
                 'courses' => $courses,
                 'paginator' => $paginator,
+                'courseSets' => $courseSets,
             )
         );
     }
@@ -61,6 +67,7 @@ class CourseController extends CourseBaseController
         );
 
         $userIds = array();
+
         foreach ($courses as $key => $course) {
             $userIds = array_merge($userIds, $course['teacherIds']);
             $learnTime = $this->getTaskResultService()->sumLearnTimeByCourseIdAndUserId(
@@ -68,7 +75,7 @@ class CourseController extends CourseBaseController
                 $currentUser['id']
             );
 
-            $courses[$key]['learnTime'] = intval($learnTime / 60).'小时'.($learnTime % 60).'分钟';
+            $courses[$key]['learnTime'] = (int) ($learnTime / 60).'小时'.($learnTime % 60).'分钟';
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 
@@ -217,7 +224,7 @@ class CourseController extends CourseBaseController
             $joinDays = (time() - $course['expiryStartDate']) / (24 * 60 * 60);
         }
 
-        return $taskPerDay * $joinDays >= $taskNum ? $taskNum : round($taskPerDay * $joinDays);
+        return $taskPerDay * $joinDays >= $taskNum ? $taskNum : ceil($taskPerDay * $joinDays);
     }
 
     /**

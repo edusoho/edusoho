@@ -1,10 +1,11 @@
 {% set recommendCourses = data('RecommendOpenCourses',{courseId:course.id,count:5}) %}
 
+{# course 实际是courseSet #}
 {% for course in recommendCourses if course %}
 	{% if course.type == 'open' or course.type == 'liveOpen' %}
 		{% set showUrl = path('open_course_show',{courseId:course.id}) %}
 	{% else %}
-		{% set showUrl = path('course_show',{id:course.id}) %}
+		{% set showUrl = path('course_set_show',{id:course.id}) %}
 	{% endif %}
 
 	<li class="tab-recommand clearfix">

@@ -5,7 +5,7 @@ define(function(require, exports, module){
 	exports.run = function(){
 		$("#nextExcutedStartTime,#nextExcutedEndTime").datetimepicker({
 			autoclose: true
-		});
+		});	
 
         $("#log-table").on('click', '.show-data', function(){
             $(this).hide().parent().find('.hide-data').show().end().find('.data').show();
