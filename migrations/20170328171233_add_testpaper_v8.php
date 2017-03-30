@@ -99,10 +99,10 @@ class AddTestpaperV8 extends Migration
         //以下仅供cours2.0开发使用
         if ($this->isTableExist('c2_testpaper')) {
             $biz['db']->exec('
-                rename table c2_testpaper to testpaper_v8;
-                rename table c2_testpaper_item to testpaper_item_v8;
-                rename table c2_testpaper_result to testpaper_result_v8;
-                rename table c2_testpaper_item_result to testpaper_item_result_v8;
+                ALTER TABLE `c2_testpaper` RENAME TO `testpaper_v8`;
+                ALTER TABLE `c2_testpaper_item` RENAME TO `testpaper_item_v8`;
+                ALTER TABLE `c2_testpaper_result` RENAME TO `testpaper_result_v8`;
+                ALTER TABLE `c2_testpaper_item_result` RENAME TO `testpaper_item_result_v8`;
             ');
         }
 

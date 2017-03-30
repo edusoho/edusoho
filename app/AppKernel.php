@@ -1,15 +1,14 @@
 <?php
 
 use AppBundle\Common\ExtensionManager;
-use Biz\User\CurrentUser;
+use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
+use Codeages\Biz\Framework\Provider\MonologServiceProvider;
+use Codeages\PluginBundle\System\PluginableHttpKernelInterface;
+use Codeages\PluginBundle\System\PluginConfigurationManager;
+use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
 use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Config\Loader\LoaderInterface;
-use Codeages\Biz\Framework\Provider\MonologServiceProvider;
-use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
-use Codeages\PluginBundle\System\PluginConfigurationManager;
-use Codeages\PluginBundle\System\PluginableHttpKernelInterface;
 
 
 class AppKernel extends Kernel implements PluginableHttpKernelInterface
@@ -81,7 +80,10 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new AppBundle\AppBundle(),
         );
 
-        $bundles = array_merge($bundles, $this->pluginConfigurationManager->getInstalledPluginBundles());
+        if ($this->getEnvironment() !== 'test') {
+            $bundles = array_merge($bundles, $this->pluginConfigurationManager->getInstalledPluginBundles());
+        }
+
 
         $bundles[] = new Custom\WebBundle\CustomWebBundle();
         $bundles[] = new Custom\AdminBundle\CustomAdminBundle();
