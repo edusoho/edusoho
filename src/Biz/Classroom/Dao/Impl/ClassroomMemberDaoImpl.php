@@ -163,6 +163,7 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
         $role = '%|'.$role.'|%';
         $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND role LIKE ? ORDER BY createdTime DESC";
         $sql = $this->sql($sql, array(), $start, $limit);
+
         return $this->db()->fetchAll($sql, array($classroomId, $role));
     }
 
