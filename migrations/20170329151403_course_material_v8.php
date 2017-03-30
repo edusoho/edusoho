@@ -13,7 +13,7 @@ class CourseMaterialV8 extends Migration
         $biz = $this->getContainer();
         $db = $biz['db'];
         $db->exec("
-            CREATE TABLE course_material_v8 AS SELECT * FROM course_material;;
+            ALTER TABLE `course_material` RENAME TO `course_material_v8`;
         ");
 
     }
@@ -27,7 +27,7 @@ class CourseMaterialV8 extends Migration
         $biz = $this->getContainer();
         $db = $biz['db'];
         $db->exec('
-           DROP TABLE `course_material_v8`;
+           ALTER TABLE `course_material_v8` RENAME TO `course_material`;
         ');
 
     }
