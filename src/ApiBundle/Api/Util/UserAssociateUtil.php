@@ -52,15 +52,18 @@ class UserAssociateUtil
     private function replaceUser($users, &$object, $userIdFields)
     {
         foreach ($userIdFields as $userIdField) {
+            $newUserField = str_replace('Id', '', $userIdField);
+            $object[$newUserField] = array();
             $userId = $object[$userIdField];
             if (is_array($userId)) {
-                $object[$userIdField] = array();
                 foreach ($userId as $uid) {
-                    $object[$userIdField][] = $users[$uid];
+                    $object[$newUserField][] = $users[$uid];
                 }
             } else {
-                $object[$userIdField] = $users[$object[$userIdField]];
+                $object[$newUserField] = $users[$object[$userIdField]];
             }
+
+            unset($object[$userIdField]);
         }
 
     }

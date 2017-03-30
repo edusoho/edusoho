@@ -16,7 +16,12 @@ class OrderInfo extends Resource
             throw new InvalidArgumentException("缺少参数");
         }
 
-        return $this->service('Order:OrderFacadeServic')->getOrderInfo($params['targetId'], $params['targetType'], array());
+        list($checkInfo, $orderInfo) = $this->service('Order:OrderFacadeService')->getOrderInfo($params['targetType'], $params['targetId'], array());
+
+        if (isset($checkInfo['error'])) {
+            throw new InvalidArgumentException($checkInfo['error']);
+        }
+        return $orderInfo;
     }
 
 

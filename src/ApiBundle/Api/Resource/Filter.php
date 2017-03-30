@@ -23,8 +23,11 @@ abstract class Filter
 
     public function filters(&$dataSet)
     {
-        if (array_key_exists('data', $dataSet) && array_key_exists('paging', $dataSet)
-        ) {
+        if (!$dataSet) {
+            return;
+        }
+
+        if (array_key_exists('data', $dataSet) && array_key_exists('paging', $dataSet)) {
             foreach ($dataSet['data'] as &$data) {
                 $this->filter($data);
             }

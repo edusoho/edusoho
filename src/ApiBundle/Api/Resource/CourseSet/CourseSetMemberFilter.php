@@ -21,10 +21,6 @@ class CourseSetMemberFilter extends Filter
         $data['lastLearnTime'] = date('c', $data['lastLearnTime']);
         $data['lastViewTime'] = date('c', $data['lastViewTime']);
 
-
-        $data['user'] = $data['userId'];
-        unset($data['userId']);
-
         $userFilter = new UserFilter();
         $userFilter->filter($data['user']);
     }

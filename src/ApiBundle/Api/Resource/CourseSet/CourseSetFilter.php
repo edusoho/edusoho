@@ -5,7 +5,6 @@ namespace ApiBundle\Api\Resource\CourseSet;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
 use ApiBundle\Api\Util\RequestUtil;
-use AppBundle\Common\ArrayToolkit;
 
 class CourseSetFilter extends Filter
 {

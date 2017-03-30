@@ -20,7 +20,6 @@ class ExceptionListener
     {
         if ($this->isApiPath($event->getRequest())) {
             $exception = $event->getException();
-
             $error = array();
             $error['message'] = $exception->getMessage();
             if ($exception instanceof ApiException) {

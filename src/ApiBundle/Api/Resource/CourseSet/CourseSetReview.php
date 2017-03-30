@@ -30,6 +30,8 @@ class CourseSetReview extends Resource
             $limit
         );
 
+        $this->getUAUtil()->multiple($reviews, array('userId'));
+
         $total = $this->service('Course:ReviewService')->searchReviewsCount($conditions);
 
         return $this->makePagingObject($reviews, $total, $offset, $limit);

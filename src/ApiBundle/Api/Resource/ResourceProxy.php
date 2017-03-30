@@ -6,7 +6,7 @@ class ResourceProxy
 {
     private $resource;
 
-    public function __construct(Resource $resource)
+    public function __construct($resource)
     {
         $this->resource = $resource;
     }

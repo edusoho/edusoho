@@ -21,9 +21,6 @@ class CourseFilter extends Filter
 
         $userFilter = new UserFilter();
         $userFilter->filter($data['creator']);
-
-        $data['teachers'] = $data['teacherIds'];
-        unset($data['teacherIds']);
         $userFilter->filters($data['teachers']);
     }
 }
