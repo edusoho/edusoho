@@ -36,6 +36,8 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFunction('course_count', array($this, 'courseCount')),
             new \Twig_SimpleFunction('course_cover', array($this, 'courseCover')),
             new \Twig_SimpleFunction('course_set_cover', array($this, 'courseSetCover')),
+            //@deprecated 请勿使用，后续将删除  2017-03-30
+            //@see WebExtension#avatarPath
             new \Twig_SimpleFunction('user_avatar', array($this, 'userAvatar')),
             new \Twig_SimpleFunction('course_price', array($this, 'coursePrice')),
         );
@@ -113,7 +115,7 @@ class AppExtension extends \Twig_Extension
             return $tags;
         }
         foreach ($tags as &$tag) {
-            if (in_array($tag['full_name'], $selectedTags)) {
+            if (in_array($tag['code'], $selectedTags)) {
                 $tag['active'] = 1;
             }
         }

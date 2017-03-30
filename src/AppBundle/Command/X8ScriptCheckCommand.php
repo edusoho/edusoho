@@ -47,7 +47,7 @@ class X8ScriptCheckCommand extends BaseCommand
         }
 
         $c1 = $connection->fetchColumn('select count(*) from testpaper_item;');
-        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_v8 where testId in (select id from testpaper_v8 where type='testpaper');");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_v8 where testId in (select id from testpaper_v8 where type='testpaper') and migrateType='testpaper';");
         if ($c1 == $c2) {
             $output->writeln('<info> 试卷中题目 数据验证通过.</info>');
         } else {
@@ -66,7 +66,7 @@ class X8ScriptCheckCommand extends BaseCommand
         }
 
         $c1 = $connection->fetchColumn('select count(*) from homework_item;');
-        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_v8 where testId in (select id from testpaper_v8 where type='homework');");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_v8 where testId in (select id from testpaper_v8 where type='homework') and migrateType='homework';");
         if ($c1 == $c2) {
             $output->writeln('<info> 作业中题目 数据验证通过.</info>');
         } else {
@@ -85,7 +85,7 @@ class X8ScriptCheckCommand extends BaseCommand
         }
 
         $c1 = $connection->fetchColumn('select count(*) from exercise_item;');
-        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_v8 where testId in (select id from testpaper_v8 where type='exercise');");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_v8 where testId in (select id from testpaper_v8 where type='exercise') and migrateType='exercise';");
         if ($c1 == $c2) {
             $output->writeln('<info> 练习中题目 数据验证通过.</info>');
         } else {
@@ -170,11 +170,12 @@ class X8ScriptCheckCommand extends BaseCommand
         }
 
         // download:
-        $c1 = $connection->fetchColumn("SELECT count(*) FROM (SELECT max(lessonId) FROM course_material WHERE source = 'coursematerial' AND  `lessonId` >0 GROUP BY lessonId ) cm;");
-        $c2 = $connection->fetchColumn('select count(*) from activity_download;');
-        $c3 = $connection->fetchColumn("select count(*) from activity where mediaType='download';");
+        $c1 = $connection->fetchColumn(" SELECT count(*) FROM (SELECT max(lessonId) FROM course_material WHERE source = 'coursematerial' AND  `lessonId` >0 AND `lessonId`  IN  (SELECT migrateLessonId FROM `course_task`)   GROUP BY lessonId ) cm;");
+        $c2 = $connection->fetchColumn('SELECT count(*) FROM `activity_download` WHERE migrateLessonId IN (SELECT migrateLessonId FROM `course_task`)');
+        $c3 = $connection->fetchColumn("select count(*) from activity where mediaType='download' and migrateLessonId IN (SELECT migrateLessonId FROM `course_task`) ;");
         $c4 = $connection->fetchColumn("select count(*) from course_task where activityId in (select id from activity where mediaType = 'download');");
-        $c5 = $connection->fetchColumn("SELECT count(*) FROM activity WHERE mediaId IN (SELECT id FROM activity_download ) AND mediaType = 'download';");
+        $c5 = $connection->fetchColumn("SELECT count(*) FROM activity WHERE mediaId IN (SELECT id FROM activity_download ) AND  migrateLessonId IN (SELECT migrateLessonId FROM `course_task`)  and mediaType = 'download';");
+
         if ($c1 == $c2 && $c2 == $c3 && $c3 == $c4 and $c4 == $c5) {
             $output->writeln('<info> download 数据验证通过.</info>');
         } else {

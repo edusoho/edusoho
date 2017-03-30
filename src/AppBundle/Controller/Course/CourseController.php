@@ -147,16 +147,22 @@ class CourseController extends CourseBaseController
 
         $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($courseSet['categoryId']);
         $user = $this->getCurrentUser();
+
         $member = $user->isLogin() ? $this->getMemberService()->getCourseMember(
             $course['id'],
             $user['id']
         ) : array();
+
         $isUserFavorite = $user->isLogin() ? $this->getCourseSetService()->isUserFavorite(
             $user['id'],
             $course['courseSetId']
         ) : false;
+
         $previewAs = $request->query->get('previewAs', null);
         $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+        if (!empty($classroom) && $classroom['headTeacherId'] == $user['id']) {
+            $member = $this->createMemberFromClassroomHeadteacher($course, $classroom);
+        }
 
         $previewTasks = $this->getTaskService()->searchTasks(
             array('courseId' => $course['id'], 'type' => 'video', 'isFree' => '1'),
@@ -179,6 +185,21 @@ class CourseController extends CourseBaseController
                 'marketingPage' => 1,
                 'breadcrumbs' => $breadcrumbs,
             )
+        );
+    }
+
+    private function createMemberFromClassroomHeadteacher($course, $classroom)
+    {
+        return array(
+            'id' => 0,
+            'courseSetId' => $course['courseSetId'],
+            'courseId' => $course['id'],
+            'classroomId' => $classroom['id'],
+            'userId' => $classroom['headTeacherId'],
+            'deadline' => 0,
+            'role' => 'teacher',
+            'isVisible' => 0,
+            'locked' => 0,
         );
     }
 

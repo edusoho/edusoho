@@ -4,6 +4,7 @@ namespace Topxia\MobileBundleV2\Processor\Impl;
 
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\EncryptionToolkit;
@@ -554,7 +555,13 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             }
             if ($this->controller->setting('cloud_sms.sms_enabled') == '1') {
                 $requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
+
+                $limiterResult = SmsToolkit::smsCheckRatelimiter($this->request, 'sms_registration', $smsCode);
+                if (!$limiterResult['success']) {
+                    return $this->createErrorResponse('sms_invalid', $limiterResult['message']);
+                }
                 list($result, $sessionField) = $this->smsCheck($this->request, $requestInfo, 'sms_registration');
+
                 if ($result) {
                     $registTypeName = $auth['register_mode'] == 'mobile' ? 'mobile' : 'emailOrMobile';
                     try {

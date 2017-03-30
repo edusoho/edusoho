@@ -55,7 +55,9 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
 
         if (!$testpaper) {
-            return $this->createMessageResponse('error', 'testpaper not found');
+            return $this->render('activity/testpaper/preview.html.twig', array(
+                'paper' => null,
+            ));
         }
 
         $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
