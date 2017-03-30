@@ -17,6 +17,7 @@ use Biz\User\Service\StatusService;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseMaterialDao;
 use Biz\Course\Dao\CourseNoteLikeDao;
+use Biz\System\Service\SettingService;
 use Biz\IM\Service\ConversationService;
 use Biz\Question\Service\QuestionService;
 use Biz\Course\Service\CourseDeleteService;
@@ -135,6 +136,9 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
             //delete message_conversation ? todo
 
+            //delete mobile setting
+            $this->updateMobileSetting($courseId);
+
             //delete course
             $this->getCourseDao()->delete($courseId);
 
@@ -145,6 +149,32 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             $this->rollback();
             throw $e;
         }
+    }
+
+    protected function updateMobileSetting($courseId)
+    {
+        $courseGrids = $this->getSettingService()->get('operation_course_grids', array());
+        if (empty($courseGrids) || empty($courseGrids['courseIds'])) {
+            return;
+        }
+
+        $courseIds = explode(',', $courseGrids['courseIds']);
+        if (!in_array($courseId, $courseIds)) {
+            return;
+        }
+
+        $operationMobile = $this->getSettingService()->get('operation_mobile', array());
+        $settingMobile = $this->getSettingService()->get('mobile', array());
+
+        $courseIds = array_diff($courseIds, array($courseId));
+
+        $mobile = array_merge($operationMobile, $settingMobile, $courseIds);
+
+        $this->getSettingService()->set('operation_course_grids', array('courseIds' => implode(',', $courseIds)));
+        $this->getSettingService()->set('operation_mobile', $operationMobile);
+        $this->getSettingService()->set('mobile', $mobile);
+        $this->getLogService()->info('system', 'update_settings', '更新移动客户端设置', $mobile);
+        // var_dump('mobile');exit;
     }
 
     /**
@@ -281,6 +311,14 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function getConversationService()
     {
         return $this->createService('IM:ConversationService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 
     /**
