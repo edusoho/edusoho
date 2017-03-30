@@ -52,9 +52,9 @@
   }
   .course-operation-responsive {
     background-color: @bg-color;
-    padding: 20px 20px;
-    margin: 0 -10px 12px;
-    >ul {
+    padding: 22px 10px 18px;
+    margin: -10px;;
+    ul {
       margin: 0;
       padding: 0;
       >li {
@@ -63,8 +63,10 @@
         list-style-type: none;
         text-align: center;
         color: @gray;
-        font-size: 14px;
-        line-height: 30px;
+        font-size: 12px;
+        &:last-child {
+          border-left: 1px solid @gray-light;
+        }
         &:hover {
           color: @brand-primary;
           a {
@@ -73,11 +75,11 @@
         }
         a {
           color: @gray;
-          i {
-            font-size: 24px;
-          }
         }
       }
+    }
+    .btn-lg {
+      padding: 6px 12px;
     }
     .es-share.top .dropdown-menu {
       left: 50%;
