@@ -119,7 +119,7 @@ export default class Intro {
 
   initTaskDetailIntro(element) {
     if (!store.get(COURSE_TASK_DETAIL_INTRO)) {
-      store.set(COURSE_TASK_DETAIL_INTRO);
+      store.set(COURSE_TASK_DETAIL_INTRO,true);
       this.introStart(this.initTaskDetailSteps(element));
     }
   }
@@ -210,7 +210,7 @@ export default class Intro {
         每个环节都可以通过各种教学手段来实现。`,
       })
       if (!store.get(COURSE_TASK_DETAIL_INTRO)) {
-        store.set(COURSE_TASK_DETAIL_INTRO);
+        store.set(COURSE_TASK_DETAIL_INTRO,true);
       }
     }
 
@@ -257,7 +257,7 @@ export default class Intro {
         position: 'bottom',
       })
       if (!store.get(COURSE_TASK_DETAIL_INTRO)) {
-        store.set(COURSE_TASK_DETAIL_INTRO);
+        store.set(COURSE_TASK_DETAIL_INTRO,true);
       }
     }
 
