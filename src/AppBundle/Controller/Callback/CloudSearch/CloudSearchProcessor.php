@@ -2,20 +2,20 @@
 
 namespace AppBundle\Controller\Callback\CloudSearch;
 
+use Pimple\Container;
 use AppBundle\Controller\Callback\ProcessorInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class CloudSearchProcessor implements ProcessorInterface
 {
     private $pool = array();
 
     /**
-     * @var ContainerInterface
+     * @var Container
      */
     protected $container;
 
-    public function setContainer(ContainerInterface $container = null)
+    public function setContainer(Container $container = null)
     {
         $this->container = $container;
     }

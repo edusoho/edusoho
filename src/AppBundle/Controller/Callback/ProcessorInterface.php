@@ -3,11 +3,11 @@
 namespace AppBundle\Controller\Callback;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Pimple\Container;
 
 interface ProcessorInterface
 {
-    public function setContainer(ContainerInterface $container = null);
+    public function setContainer(Container $container = null);
 
     public function execute(Request $request);
 }
