@@ -4,8 +4,8 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Dao\ThreadDao;
-use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -35,7 +35,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function getThread($courseId, $threadId)
     {
         $thread = $this->getThreadDao()->get($threadId);
-        if (!empty($thread) && $thread['courseId'] != $courseId) {
+        if (!empty($thread) && !empty($courseId) && $thread['courseId'] != $courseId) {
             throw $this->createNotFoundException("Thread#{$threadId} Not Found in Course#{$courseId}");
         }
 

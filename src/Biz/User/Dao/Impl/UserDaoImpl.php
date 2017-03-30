@@ -144,11 +144,6 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
             }
         }
 
-        if (isset($conditions['likeOrgCode'])) {
-            $conditions['likeOrgCode'] = $conditions['likeOrgCode'].'%';
-            unset($conditions['orgCode']);
-        }
-
         $conditions['verifiedMobileNull'] = '';
 
         $builder = parent::createQueryBuilder($conditions);
@@ -205,7 +200,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
                 'inviteCode = :inviteCode',
                 'inviteCode != :NoInviteCode',
                 'id NOT IN ( :excludeIds )',
-                'orgCode LIKE :likeOrgCode',
+                'orgCode PRE_LIKE :likeOrgCode',
                 'orgCode = :orgCode',
             ),
             'cache' => 'table',
