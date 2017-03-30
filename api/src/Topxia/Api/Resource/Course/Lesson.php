@@ -367,9 +367,10 @@ class Lesson extends BaseResource
 
     protected function getRemainTime($user, $lesson)
     {
-        $lessonLearn = $this->getCourseService()->getLearnByUserIdAndLessonId($user['id'], $lesson['id']);
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($lessonId);
+
         $course = $this->getCourseService()->getCourse($lesson['courseId']);
-        $remainTime = ($course['watchLimit'] * $lesson['length']) - $lessonLearn['watchTime'];
+        $remainTime = ($course['watchLimit'] * $lesson['length']) - $taskResult['watchTime'];
         return $remainTime;
     }
 
@@ -416,5 +417,10 @@ class Lesson extends BaseResource
     protected function getMaterialLibService()
     {
         return $this->createService('MaterialLib:MaterialLibService');
+    }
+
+    protected function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 }
