@@ -1098,7 +1098,7 @@ class UserServiceImpl extends BaseService implements UserService
         return UserSerialize::unserialize($user);
     }
 
-    public function makeToken($type, $userId = null, $expiredTime = null, $data = null, $args = array())
+    public function makeToken($type, $userId = null, $expiredTime = null, $data = '', $args = array())
     {
         $token = array();
         $token['type'] = $type;
@@ -1124,8 +1124,6 @@ class UserServiceImpl extends BaseService implements UserService
         if ($token['expiredTime'] > 0 && $token['expiredTime'] < time()) {
             return null;
         }
-
-        $token['data'] = unserialize($token['data']);
 
         return $token;
     }
