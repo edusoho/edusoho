@@ -2,8 +2,8 @@
 
 namespace Biz\Activity\Type;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Activity\Service\ActivityLearnLogService;
@@ -131,6 +131,7 @@ class Testpaper extends Activity
             'limitedTime',
             'checkType',
             'finishCondition',
+            'condition',
             'finishScore',
             'requireCredit',
             'testMode',
@@ -138,8 +139,9 @@ class Testpaper extends Activity
 
         $finishCondition = array();
 
-        if (!empty($filterFields['finishCondition'])) {
-            $finishCondition['type'] = $filterFields['finishCondition'];
+        if (!empty($filterFields['condition'])) {
+            $finishCondition['type'] = $filterFields['condition'];
+            unset($filterFields['condition']);
         }
 
         if (isset($filterFields['finishScore'])) {
@@ -156,7 +158,7 @@ class Testpaper extends Activity
             $filterFields['testMode'] = 'normal';
         }
 
-        $filterFields['finishCondition'] = $finishCondition;
+        $filterFields['finishCondition'] = empty($filterFields['finishCondition']) ? $finishCondition : $filterFields['finishCondition'];
 
         return $filterFields;
     }
