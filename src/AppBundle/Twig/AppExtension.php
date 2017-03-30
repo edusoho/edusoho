@@ -115,7 +115,7 @@ class AppExtension extends \Twig_Extension
             return $tags;
         }
         foreach ($tags as &$tag) {
-            if (in_array($tag['full_name'], $selectedTags)) {
+            if (in_array($tag['code'], $selectedTags)) {
                 $tag['active'] = 1;
             }
         }
