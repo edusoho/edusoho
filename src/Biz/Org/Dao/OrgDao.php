@@ -2,7 +2,9 @@
 
 namespace Biz\Org\Dao;
 
-interface OrgDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface OrgDao extends GeneralDaoInterface
 {
     public function findByIds($ids);
 
