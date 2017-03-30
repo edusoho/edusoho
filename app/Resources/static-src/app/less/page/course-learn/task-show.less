@@ -12,8 +12,8 @@
     top:0;
     padding-top: 54px;
     bottom: 70px;
-    @media(max-width:@screen-xs-min) {
-      right: 15px;
+    @media(max-width:@screen-xs-max) {
+      right: 15px!important;
       left: 15px;
     }
     .dashboard-header {
@@ -107,9 +107,14 @@
     bottom: 0;
     width: 360px;
     right: -360px;
-    @media(max-width:@screen-xs-min) {
+    z-index: 1;
+    @media(max-width:@screen-xs-max) and (min-width:400px) {
       width: 300px;
       right: -300px;
+    }
+    @media(max-width:400px) {
+      width: 260px;
+      right: -260px;
     }
     background-color: #fff;
     .box-shadow(-1px 0 5px rgba(0,0,0,0.1));
