@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class TestpaperActivityDaoImpl extends GeneralDaoImpl implements TestpaperActivityDao
 {
-    protected $table = 'testpaper_activity';
+    protected $table = 'activity_testpaper';
 
     public function findActivitiesByIds($ids)
     {

@@ -1,12 +1,8 @@
 class CopyDeny {
-  constructor() {
-
-    document.oncontextmenu = function(){
-        return false;
-    }
-    document.onselectstart = function(){
-        return false;
-    }
+  constructor($element = $('html')) {
+    $element.attr('unselectable', 'on')
+      .css('user-select', 'none')
+      .on('selectstart', false);
   }
 }
 
