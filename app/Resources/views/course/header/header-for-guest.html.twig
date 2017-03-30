@@ -165,26 +165,9 @@
               </li>
             </ul>
           </div>
-          <div class="col-xs-8 text-right">
-            {% if member | default(false) %}
-              {% if course.expiryMode == 'date' and course.expiryStartDate >= timestamp() %}
-                课程将于{{course.expiryStartDate|date('Y年m月d日')}}开始授课，请耐心等待
-              {% else %}
-                <a class="btn btn-primary btn-lg" href="{{ path('my_course_show', {id: course.id}) }}">
-                  去学习
-                </a>
-              {% endif %}
-            {% else %}
-              {% if classroom | default(null) %}
-                {% include 'course/header/header-for-classroom-info.html.twig' %}
-              {% else %}
-                {% include 'course/header/header-for-guest-buy-btn.html.twig' %}
-              {% endif %}
-            {% endif %}
-          </div>
         </div>
       </div>
-      <div class="hidden-sm hidden-xs text-right">
+      <div class="text-right buy-btn-group">
         {% if member | default(false) %}
           {% if course.expiryMode == 'date' and course.expiryStartDate >= timestamp() %}
             课程将于{{course.expiryStartDate|date('Y年m月d日')}}开始授课，请耐心等待
