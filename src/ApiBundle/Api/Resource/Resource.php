@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource;
 
+use ApiBundle\Api\Exception\InvalidArgumentException;
 use ApiBundle\Api\Util\UserAssociateUtil;
 use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
@@ -67,88 +68,11 @@ abstract class Resource
         $requestFields = array_keys($requestData);
         foreach ($requiredFields as $field) {
             if (!in_array($field, $requestFields)) {
-                throw new \Exception("缺少必需的请求参数{$field}");
+                throw new InvalidArgumentException("缺少必需的请求参数{$field}");
             }
         }
 
         return $requestData;
-    }
-
-    protected function guessDeviceFromUserAgent($userAgent)
-    {
-        $userAgent = strtolower($userAgent);
-
-        $ios = array("iphone", "ipad", "ipod");
-        foreach ($ios as $keyword) {
-            if (strpos($userAgent, $keyword) > -1) {
-                return 'ios';
-            }
-        }
-
-        if (strpos($userAgent, "Android") > -1) {
-            return 'android';
-        }
-
-        return 'unknown';
-    }
-
-    protected function error($code, $message)
-    {
-        return array('error' => array(
-            'code'    => $code,
-            'message' => $message
-        ));
-    }
-
-    protected function wrap($resources, $total)
-    {
-        if (is_array($total)) {
-            return array('resources' => $resources, 'next' => $total);
-        } else {
-            return array('resources' => $resources, 'total' => $total ?: 0);
-        }
-    }
-
-    protected function simpleUsers($users)
-    {
-        $newArray = array();
-        foreach ($users as $key => $user) {
-            $newArray[$key] = $this->simpleUser($user);
-        }
-
-        return $newArray;
-    }
-
-    protected function simpleUser($user)
-    {
-        $simple = array();
-
-        $simple['id']       = $user['id'];
-        $simple['nickname'] = $user['nickname'];
-        $simple['title']    = $user['title'];
-        $simple['roles']    = $user['roles'];
-        $simple['avatar']   = $this->getFileUrl($user['smallAvatar']);
-
-        return $simple;
-    }
-
-    protected function filterHtml($text)
-    {
-        preg_match_all('/\<img.*?src\s*=\s*[\'\"](.*?)[\'\"]/i', $text, $matches);
-        if (empty($matches)) {
-            return $text;
-        }
-
-        foreach ($matches[1] as $url) {
-            $text = str_replace($url, $this->getFileUrl($url), $text);
-        }
-
-        return $text;
-    }
-
-    public function getFileUrl($path)
-    {
-
     }
 
     public function supportMethods()
@@ -225,7 +149,7 @@ abstract class Resource
         }
 
         $this->logger = new Logger($name);
-        $this->logger->pushHandler(new StreamHandler($this->biz['kernel.logs_dir'].'/service.log', Logger::DEBUG));
+        $this->logger->pushHandler(new StreamHandler($this->biz['kernel.logs_dir'].'/api.log', Logger::DEBUG));
 
         return $this->logger;
     }

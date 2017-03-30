@@ -15,7 +15,9 @@ class ApiBundle extends Bundle
     public function boot()
     {
         parent::boot();
-        $biz = $this->container->get('biz');
+        $container = $this->container;
+        $biz = $container->get('biz');
+
         $biz['api.resource.manager'] = function ($biz) {
             return new ResourceManager($biz);
         };
