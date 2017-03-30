@@ -25,7 +25,7 @@
     </div>
 
     <div class="panel-footer text-right">
-      {% if paperResult.status|default(null) == 'reviewing' and app.user.id|default(0) != paperResult.userId %}
+      {% if paperResult.status|default(null) == 'reviewing' and isTeacher|default(false) %}
         <a class="btn btn-success" data-role="check-submit">{{'完成批阅'|trans}}</a>
       {% elseif paperResult.status|default(null) in ['reviewing','finished'] %}
         <div class="checkbox">

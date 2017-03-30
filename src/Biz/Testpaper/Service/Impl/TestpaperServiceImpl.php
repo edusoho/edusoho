@@ -465,17 +465,15 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 continue;
             }
 
-            if (!empty($userAnswer['answer'])) {
+            if (!empty($userAnswer['answer']) && !empty(str_replace('""', '', $userAnswer['answer'][0]))) {
                 if ($paperResult['type'] == 'homework') {
                     $checkedFields['status'] = 'right';
                 } else {
                     $checkedFields['status'] = $checkedFields['score'] == $item['score'] ? 'right' : 'wrong';
                 }
             }
-
             $this->updateItemResult($userAnswer['id'], $checkedFields);
         }
-
         $fields['checkTeacherId'] = $user['id'];
         $fields['checkedTime'] = time();
         $fields['subjectiveScore'] = array_sum(ArrayToolkit::column($checkData, 'score'));
