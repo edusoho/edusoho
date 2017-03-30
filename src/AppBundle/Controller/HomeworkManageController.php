@@ -85,12 +85,17 @@ class HomeworkManageController extends BaseController
         $result = $this->getTestpaperService()->getTestpaperResult($resultId);
 
         if (!$result) {
-            throw $this->createResourceNotFoundException('homeworkResult', $resultId);
+            return $this->createMessageResponse('error', '该作业结果不存在');
         }
 
         $homework = $this->getTestpaperService()->getTestpaper($result['testId']);
         if (!$homework) {
-            throw $this->createResourceNotFoundException('homework', $result['id']);
+            return $this->createMessageResponse('error', '该作业不存在');
+        }
+
+        $canCheck = $this->getTestpaperService()->canLookTestpaper($result['id']);
+        if (!$canCheck) {
+            return $this->createMessageResponse('warning', '没有权限查看');
         }
 
         if ($result['status'] != 'reviewing') {
