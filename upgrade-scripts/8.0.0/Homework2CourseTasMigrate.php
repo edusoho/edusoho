@@ -42,7 +42,8 @@ class Homework2CourseTasMigrate extends AbstractMigrate
               `createdTime`,
               `updatedTime`,
               `copyId`,
-              `migrateHomeworkId`
+              `migrateHomeworkId`,
+              `migrateLessonId`
           )
           SELECT
               '作业',
@@ -59,7 +60,8 @@ class Homework2CourseTasMigrate extends AbstractMigrate
               `createdTime`,
               `updatedTime`,
               `ecopyId`,
-              `hhomeworkId`
+              `hhomeworkId`,
+              `id`
           FROM (SELECT  ee.id AS hhomeworkId, ee.`copyId` AS ecopyId , ce.*
           FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonid limit 0, {$this->perPageCount}) lesson
           WHERE hhomeworkId NOT IN (SELECT migrateHomeworkId FROM activity WHERE migrateHomeworkId IS NOT NULL );
