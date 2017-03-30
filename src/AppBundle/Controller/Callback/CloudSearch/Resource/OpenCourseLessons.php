@@ -1,8 +1,8 @@
 <?php
 
-namespace AppBundle\Controller\Callback\Resource\CloudSearch;
+namespace AppBundle\Controller\Callback\CloudSearch\Resource;
 
-use AppBundle\Controller\Callback\Resource\BaseResource;
+use AppBundle\Controller\Callback\CloudSearch\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
 
 class OpenCourseLessons extends BaseResource
@@ -23,7 +23,7 @@ class OpenCourseLessons extends BaseResource
 
     public function filter($res)
     {
-        return $this->multicallFilter('cloud_search_open_course_lesson', $res);
+        return $this->multicallFilter('open_course_lesson', $res);
     }
 
     protected function multicallFilter($name, array $res)
