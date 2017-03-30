@@ -245,7 +245,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
     {
         $courseId = $this->getParam('courseId');
         $user = $this->controller->getuserByToken($this->request);
-        
+
         if (!$this->controller->getCourseService()->canTakeCourse($courseId)) {
             return $this->createErrorResponse('403', 'Access Denied');
         }
@@ -437,6 +437,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         }
 
         $items = $this->getTestpaperService()->showTestpaperItems($id);
+        $testpaper['metas']['question_type_seq'] = array_keys($items);
 
         return array(
             'testpaper' => $testpaper,
