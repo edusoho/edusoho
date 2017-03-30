@@ -223,6 +223,19 @@ class MemberServiceImpl extends BaseService implements MemberService
         return ArrayToolkit::column($members, 'userId');
     }
 
+    public function findCourseLiveMembersByCourseId($courseId)
+    {
+        // var_dump($courseId);
+        $sourceCourseMembers = $this->getMemberDao()->findByCourseId($courseId);
+        var_dump($sourceCourseMembers);exit();
+        $userIds = ArrayToolkit::column($sourceCourseMembers, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        $result = $this->buildNeedCourseMemberFields($sourceCourseMembers, $users);
+
+        return $result;
+    }
+
     public function updateMember($id, $fields)
     {
         return $this->getMemberDao()->update($id, $fields);
@@ -889,6 +902,22 @@ class MemberServiceImpl extends BaseService implements MemberService
                 'deadline' => $deadline,
             )
         );
+    }
+
+    protected function buildNeedCourseMemberFields($sourceCourseMembers, $users)
+    {
+        $courseMembers = array();
+        $filter = array( 'nickname' => '', 'smallAvatar' => '', 'id' => 0, 'role' => '');
+        $sourceCourseMembers = ArrayToolkit::index($sourceCourseMembers, 'userId');
+        $users = ArrayToolkit::index($users, 'id');
+        foreach ($sourceCourseMembers as $userId => $sourceCourseMember) {
+            $courseMember['clientName'] = $users[$userId]['nickname'];
+            $courseMember['avatar'] = $_SERVER['SERVER_NAME'].$users[$userId]['smallAvatar'];
+            $countMember['clientId'] = $userId;
+            $courseMember['role'] = $sourceCourseMember['role'];
+            $courseMembers['data'][] = $courseMember;
+        }
+        return $courseMembers;
     }
 
     /**

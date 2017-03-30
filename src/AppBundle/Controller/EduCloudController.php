@@ -13,6 +13,32 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class EduCloudController extends BaseController
 {
+    public function courseCloudFilesCallBackAction(Request $request, $courseId)
+    {
+        $start = $request->query->get('start', 0);
+        $limit = $request->query->get('limit', 100);
+
+        $course = $this->getCourseService()->getCourse($courseId);
+        $conditions = array('targetId' => $course['courseSetId'], 'storage' => 'cloud');
+        $courseCloudFiles = $this->getUploadFileService()->searchCourseLiveCloudFiles(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            $start,
+            $limit
+        );
+        return $this->createJsonResponse($courseCloudFiles);
+    }
+
+    public function courseMemberCallBackAction(Request $request, $courseId)
+    {
+        $start = $request->query->get('start', 0);
+        $limit = $request->query->get('limit', 100);
+        $course = $this->getCourseService()->getCourse($courseId);
+        $courseMember = $this->getCourseMemberService()->findCourseLiveMembersByCourseId($course['id']);
+
+        return $this->createJsonResponse($courseMember);
+    }
+
     public function smsSendAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
@@ -312,5 +338,20 @@ class EduCloudController extends BaseController
     protected function getSignEncoder()
     {
         return new MessageDigestPasswordEncoder('sha256');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->getBiz()->service('File:UploadFileService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }
