@@ -98,7 +98,7 @@ class CourseMigrate extends AbstractMigrate
               ,c2.`originCoinPrice` = c.`originCoinPrice`
               ,c2.`coinPrice` = c.`coinPrice`
               ,c2.`originPrice` = c.`originPrice`
-              ,c2.`expiryMode` = (case when c.`expiryMode` = 'none' then 'forever' else c.`expiryMode` end) as `expiryMode`
+              ,c2.`expiryMode` = (case when c.`expiryMode` = 'none' then 'forever' else c.`expiryMode` end)
               ,c2.`showStudentNumType` = c.`showStudentNumType`
               ,c2.`serializeMode` = c.`serializeMode`
               ,c2.`income` = c.`income`
