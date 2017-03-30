@@ -110,6 +110,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'ActivityLearnLog',
             'OtherMigrate',
             'LogMigrate',
+            'DeletePlugins'
         );
 
         if ($index > count($steps) - 1) {
