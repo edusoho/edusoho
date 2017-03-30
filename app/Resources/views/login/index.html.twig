@@ -52,10 +52,10 @@
       </form>
 
       <div class="mbl">
-        <a href="{{ path('password_reset') }}">{{ '找回密码'|trans }}</a>
+        <a class="link-primary" href="{{ path('password_reset') }}">{{ '找回密码'|trans }}</a>
         <span class="color-gray mhs">|</span>
         <span class="color-gray">{{ '还没有注册帐号？'|trans }}</span>
-        <a href="{{ path('register', {goto:_target_path}) }}">{{ '立即注册'|trans }}</a>
+        <a class="link-primary" href="{{ path('register', {goto:_target_path}) }}">{{ '立即注册'|trans }}</a>
       </div>
 
       {% if setting('login_bind.enabled') %}
