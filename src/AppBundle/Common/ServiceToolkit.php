@@ -51,6 +51,6 @@ class ServiceToolkit
 
     public static function getServicesByCodes($codes)
     {
-        return ArrayToolkit::parts(static::$services, $codes);
+        return array_values(ArrayToolkit::parts(static::$services, $codes));
     }
 }
