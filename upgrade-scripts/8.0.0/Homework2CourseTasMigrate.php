@@ -6,7 +6,7 @@ class Homework2CourseTasMigrate extends AbstractMigrate
     {
         $this->migrateTableStructure();
 
-        $count = $this->getConnection()->fetchColumn("SELECT count(id) FROM homework WHERE id NOT IN (SELECT migrateHomeworkId FROM activity WHERE mediaType='homework');");
+        $count = $this->getConnection()->fetchColumn("SELECT count(id) FROM homework WHERE id NOT IN (SELECT migrateHomeworkId FROM activity WHERE mediaType='homework') AND   `lessonId`  IN (SELECT id FROM `course_lesson`);");
 
         if (empty($count)) {
             return;

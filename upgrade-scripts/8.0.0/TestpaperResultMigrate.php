@@ -47,20 +47,18 @@ class TestpaperResultMigrate extends AbstractMigrate
 
     private function updateTestpaperResult()
     {
-        $sql = "SELECT * FROM testpaper_result_v8 WHERE type = 'testpaper' AND courseId = 0";
+        $sql = "SELECT * FROM testpaper_result_v8 WHERE type = 'testpaper' AND courseId = 0 AND target != '';";
         $newTestpaperResults = $this->getConnection()->fetchAll($sql);
         foreach ($newTestpaperResults as $testpaperResult) {
-          if(empty($testpaperResult['target'])){
-            continue;
-          }
             $targetArr = explode('/', $testpaperResult['target']);
             $courseArr = explode('-', $targetArr[0]);
             $lessonArr = explode('-', $targetArr[1]);
 
-            $lessonId = empty($lessonArr[1]) ? 0 : intval($lessonArr[1]);
+            $courseId = (int)$courseArr[1];
+            $lessonId = empty($lessonArr[1]) ? 0 : (int)$lessonArr[1];
             $sql = "UPDATE testpaper_result_v8 SET
-                courseId = {$courseArr[1]},
-                courseSetId = {$courseArr[1]},
+                courseId = {$courseId},
+                courseSetId = {$courseId},
                 lessonId = {$lessonId}
                 WHERE id = {$testpaperResult['id']}";
 
@@ -73,15 +71,13 @@ class TestpaperResultMigrate extends AbstractMigrate
 
     private function insertTestpaperResult($page)
     {
-        $countSql = 'SELECT count(id) FROM `testpaper_result` where `id` not in (select `id` from `testpaper_result_v8`);';
+        $countSql = 'SELECT count(id) FROM `testpaper_result` where `id` not in (select `migrateResultId` from `testpaper_result_v8`);';
         $count = $this->getConnection()->fetchColumn($countSql);
-
         if ($count == 0) {
             return;
         }
 
         $sql = "INSERT INTO testpaper_result_v8(
-            id,
             paperName,
             testId,
             userId,
@@ -106,7 +102,6 @@ class TestpaperResultMigrate extends AbstractMigrate
             migrateResultId,
             type
         ) SELECT
-            id,
             paperName,
             testId,
             userId,
@@ -130,9 +125,9 @@ class TestpaperResultMigrate extends AbstractMigrate
             usedTime,
             id AS migrateResultId,
             'testpaper'
-            FROM testpaper_result WHERE id NOT IN (SELECT id FROM testpaper_result_v8) order by id limit 0, {$this->perPageCount};";
+            FROM testpaper_result WHERE id NOT IN (SELECT migrateResultId FROM testpaper_result_v8) order by id limit 0, {$this->perPageCount};";
         $this->getConnection()->exec($sql);
 
-        return $page+1;
+        return $page + 1;
     }
 }

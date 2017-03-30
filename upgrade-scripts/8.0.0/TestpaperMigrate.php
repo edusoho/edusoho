@@ -69,16 +69,20 @@ class TestpaperMigrate extends AbstractMigrate
         }
 
         foreach ($testpapers as $testpaper) {
-            $targetArr = explode('/', $testpaper['target']);
-            $courseArr = explode('-', $targetArr[0]);
+            $courseSetId = 0;
             $lessonId = 0;
-            if (!empty($targetArr[1])) {
-                $lessonArr = explode('-', $targetArr[1]);
-                $lessonId = $lessonArr[1];
-            }
-            $passedCondition = empty($testpaper['passedStatus']) ? '' : json_encode(array($testpaper['passedStatus']));
+            if (!empty($testpaper['target'])) {
+                $targetArr = explode('/', $testpaper['target']);
+                $courseArr = explode('-', $targetArr[0]);
 
-            $courseSetId = $courseArr[1];
+                if (!empty($targetArr[1])) {
+                    $lessonArr = explode('-', $targetArr[1]);
+                    $lessonId = intval($lessonArr[1]);
+                }
+                $courseSetId = intval($courseArr[1]);
+            }
+
+            $passedCondition = empty($testpaper['passedStatus']) ? '' : json_encode(array($testpaper['passedStatus']));
 
             $this->getConnection()->insert('testpaper_v8', array(
                 'id' => $testpaper['id'],
@@ -101,7 +105,7 @@ class TestpaperMigrate extends AbstractMigrate
                 'copyId' => $testpaper['copyId'],
                 'type' => 'testpaper',
                 'courseSetId' => $courseSetId,
-                'migrateTestId' => $testpaper['id']
+                'migrateTestId' => $testpaper['id'],
             ));
         }
 
