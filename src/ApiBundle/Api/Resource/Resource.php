@@ -7,6 +7,7 @@ use ApiBundle\Api\Util\UserAssociateUtil;
 use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 
 abstract class Resource
@@ -73,6 +74,22 @@ abstract class Resource
         }
 
         return $requestData;
+    }
+
+    protected function getOffsetAndLimit(Request $request)
+    {
+        $offset = $request->query->get('offset');
+        $limit = $request->query->get('limit');
+
+        if (!$offset) {
+            $offset = static::DEFAULT_PAGING_OFFSET;
+        }
+
+        if (!$limit) {
+            $limit = static::DEFAULT_PAGING_LIMIT;
+        }
+
+        return array($offset, $limit);
     }
 
     public function supportMethods()

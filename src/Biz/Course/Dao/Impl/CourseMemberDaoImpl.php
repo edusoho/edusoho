@@ -382,6 +382,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
             ),
             'conditions' => array(
                 'userId = :userId',
+                'courseSetId = :courseSetId',
                 'courseId = :courseId',
                 'isLearned = :isLearned',
                 'joinedType = :joinedType',
