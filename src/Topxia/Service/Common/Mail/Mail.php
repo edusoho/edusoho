@@ -1,7 +1,9 @@
 <?php
 namespace Topxia\Service\Common\Mail;
 
+use Topxia\Common\SettingToolkit;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\Exception\AccessDeniedException;
 
 abstract class Mail
 {
@@ -19,7 +21,11 @@ abstract class Mail
 
     public function __get($name)
     {
-        if(!array_key_exists($name, $this->options)){
+        if ('options' == $name) {
+            return $this->options;
+        }
+
+        if (!array_key_exists($name, $this->options)) {
             return null;
         };
 
@@ -34,39 +40,33 @@ abstract class Mail
 
     protected function setting($name, $default = '')
     {
-        
-        $names = explode('.', $name);
-
-        $name = array_shift($names);
-
-        if (empty($name)) {
-            return $default;
-        }
-
-        $value = $this->getSettingService()->get($name,$default);
-
-        if (!isset($value)) {
-            return $default;
-        }
-
-        if (empty($names)) {
-            return $value;
-        }
-
-        $result = $value;
-
-        foreach ($names as $name) {
-            if (!isset($result[$name])) {
-                return $default;
-            }
-
-            $result = $result[$name];
-        }
-
-        return $result;
+        return SettingToolkit::getSetting($name, $default);
     }
 
-    public abstract function send();
+    public function send()
+    {
+        $this->mailCheckRatelimiter();
+        return $this->doSend();
+    }
+
+    protected function mailCheckRatelimiter()
+    {
+        $biz = $this->getKernel()->getBiz();
+
+        $factory = $biz['ratelimiter.factory'];
+        $limiter = $factory('email_'.$this->options['template'], 5, 1800);
+        $remain = $limiter->check($this->to);
+        if ($remain == 0) {
+            throw new AccessDeniedException($this->getKernel()->trans('操作过于频繁，请30分钟之后再试'));
+        }
+    }
+
+    public abstract function doSend();
+
+    protected function parseTemplate($options)
+    {
+        return TemplateToolkit::parseTemplate($options);
+    }
 
     protected function getSettingService()
     {

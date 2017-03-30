@@ -59,6 +59,7 @@
         <div class="col-md-2 control-label"><label>{{'课程简介'|trans}}</label></div>
         <div class="col-md-8 controls">
           <textarea name="about" rows="10" id="course-about-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ course.about }}</textarea>
+          <div class="help-block">{{ '为正常使用IFrame，请在【管理后台】-【系统】-【安全设置】-【IFrame白名单】中进行设置'|trans }}</div>
         </div>
       </div>
 

@@ -85,10 +85,19 @@ class SearchServiceImpl extends BaseService implements SearchService
 
     protected function setCloudSearchWaiting()
     {
+        $searchSetting = $this->getSettingService()->get('cloud_search', array());
         $searchSetting = array(
             'search_enabled' => 1,
             'status'         => 'waiting'
         );
+        if (empty($searchSetting['type'])) {
+            $searchSetting['type'] = array(
+                'course'     => 1,
+                'teacher'    => 1,
+                'thread'     => 1, 
+                'article'    => 1
+            );
+        }
         $this->getSettingService()->set('cloud_search', $searchSetting);
     }
 

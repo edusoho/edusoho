@@ -11,7 +11,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="form[password]"]',
             required: true,
-            rule: 'minlength{min:6,max:24}'
+            rule: 'minlength{min:5} maxlength{max:20}'
         });
 
         validator.addItem({

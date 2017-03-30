@@ -240,7 +240,8 @@ class EduCloudController extends BaseController
             'video_watermark_position'    => 'topright',
             'video_fingerprint'           => 0,
             'video_fingerprint_time'      => 0.5,
-            'video_header'                => null
+            'video_header'                => null,
+            'video_auto_play'             => 'true'
         );
 
         if ($request->getMethod() == 'POST') {
@@ -583,9 +584,9 @@ class EduCloudController extends BaseController
         }
         try {
             $api         = CloudAPIFactory::create('root');
-            $overview        = $api->get('/me/email/overview');
+            $account        = $api->get('/me/email_account');
             return $this->render('TopxiaAdminBundle:EduCloud/Email:setting.html.twig', array(
-                'account' => $overview['account']
+                'account' => $account
             ));
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:email-error.html.twig', array());
@@ -868,7 +869,7 @@ class EduCloudController extends BaseController
 
             $userOverview = $api->get("/users/{$api->getAccessKey()}/overview");
             $searchOverview = $api->get("/me/search/overview");
-            $data = $this->isSearchInited($api, $cloud_search_setting);
+            $data = $this->initCloudSearch($api, $cloud_search_setting);
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud/Search:without-enable.html.twig', array(
                 'data' => array('status' => 'unlink')
@@ -922,12 +923,10 @@ class EduCloudController extends BaseController
 
     public function searchOpenAction()
     {
-        $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
-        if ($cloud_search_settting['status'] == 'ok' || $cloud_search_settting['status'] == 'waiting') {
-            $this->getSettingService()->set('cloud_search', array(
-                'search_enabled' => 1,
-                'status'         => $cloud_search_settting['status']
-            ));
+        $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
+        if ($cloud_search_setting['status'] == 'ok' || $cloud_search_setting['status'] == 'waiting') {
+            $cloud_search_setting['search_enabled'] = 1;
+            $this->getSettingService()->set('cloud_search', $cloud_search_setting);
         }
 
         return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
@@ -935,14 +934,31 @@ class EduCloudController extends BaseController
 
     public function searchCloseAction()
     {
-        $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
-
-        $this->getSettingService()->set('cloud_search', array(
-            'search_enabled' => 0,
-            'status'         => $cloud_search_settting['status']
-        ));
+        $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
+        $cloud_search_setting['search_enabled'] = 0;
+        $this->getSettingService()->set('cloud_search', $cloud_search_setting);
 
         return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
+    }
+
+    public function setSearchResultTypeAction(Request $request)
+    {
+        $newSetting = $request->query->all();
+
+        $cloud_search_setting = $this->getSettingService()->get('cloud_search');
+
+        $differentSetting = array_diff_assoc($cloud_search_setting['type'], $newSetting);
+        foreach ($cloud_search_setting['type'] as $key => &$type) {
+            if (array_key_exists($key, $differentSetting) && $key != 'course') {
+                $type = 0;
+            } else {
+                $type = 1;
+            }
+        }
+
+        $this->getSettingService()->set('cloud_search', $cloud_search_setting);
+
+        return $this->redirect($this->generateUrl('admin_edu_cloud_setting_search'));
     }
 
     public function keyApplyAction(Request $request)
@@ -1057,6 +1073,55 @@ class EduCloudController extends BaseController
         }
 
         return $this->createJsonResponse(false);
+    }
+
+    public function consultSettingAction(Request $request)
+    {
+        if (!($this->isHiddenCloud())) {
+            return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
+        }
+
+        try {
+            $account = $this->getConsultService()->getAccount();
+            $jsResource = $this->getConsultService()->getJsResource();
+
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud/Consult:consult-error.html.twig', array());
+        }
+
+        $cloudConsult = $this->getConsultService()->buildCloudConsult($account, $jsResource);
+
+        if (isset($cloudConsult['error'])) {
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans($cloudConsult['error']));
+        }
+
+        if ($cloudConsult['cloud_consult_is_buy'] == 0) {
+            return $this->renderConsultWithoutEnable($cloudConsult);
+        }
+
+        if ($request->getMethod() == 'POST') {
+
+            $data = $request->request->all();
+            $cloudConsult['cloud_consult_setting_enabled'] = $data['cloud_consult_setting_enabled'];
+
+            $this->getSettingService()->set('cloud_consult', $cloudConsult);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('云问答设置已保存！'));
+        }
+
+        if ($cloudConsult['cloud_consult_setting_enabled'] == 0) {
+            return $this->renderConsultWithoutEnable($cloudConsult);
+        }
+
+        return $this->render('TopxiaAdminBundle:EduCloud/Consult:setting.html.twig', array(
+            'cloud_consult'=> $cloudConsult
+        ));
+    }
+
+    private function renderConsultWithoutEnable($cloudConsult)
+    {
+        return $this->render('TopxiaAdminBundle:EduCloud/Consult:without-enable.html.twig', array(
+            'cloud_consult' => $cloudConsult
+        ));
     }
 
     protected function dateFormat($time)
@@ -1338,13 +1403,17 @@ class EduCloudController extends BaseController
         }
     }
 
-    protected function isSearchInited($api, $data)
+    protected function initCloudSearch($api, $data)
     {
         if (!$data) {
             $data = array(
                 'search_enabled' => 0,
                 'status'         => 'closed' //'closed':未开启；'waiting':'索引中';'ok':'索引完成'
             );
+        }
+
+        if (empty($data['status'])) {
+            $data['status'] = 'closed';
         }
 
         if ($data['status'] == 'waiting') {
@@ -1356,6 +1425,14 @@ class EduCloudController extends BaseController
                     'status'         => 'ok'
                 );
             }
+        }
+        if (empty($data['type'])) {
+            $data['type'] = array(
+                'course'     => 1,
+                'teacher'    => 1,
+                'thread'     => 1, 
+                'article'    => 1
+            );
         }
         $this->getSettingService()->set('cloud_search', $data);
 
@@ -1435,6 +1512,11 @@ class EduCloudController extends BaseController
     protected function getEduCloudService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.EduCloudService');
+    }
+
+    protected function getConsultService()
+    {
+        return $this->getServiceKernel()->createService('EduCloud.MicroyanConsultService');
     }
 
     protected function getAppService()
@@ -1549,10 +1631,10 @@ class EduCloudController extends BaseController
             return $this->redirect($this->generateUrl('admin_cloud_edulive_overview'));
         }
 
-        $liveEnabled = $liveCourseSetting['live_course_enabled'];
-        if ((isset($liveEnabled) && $liveEnabled == 0)||!isset($liveEnabled)) {
+        if (empty($liveCourseSetting['live_course_enabled'])) {
             return $this->redirect($this->generateUrl('admin_cloud_edulive_overview'));
         }
+
         try {
             $api         = CloudAPIFactory::create('root');
             $overview    = $api->get("/me/live/overview");
@@ -1570,7 +1652,7 @@ class EduCloudController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $liveCourseSetting = $this->getSettingService()->get('live-course', array());
-            $courseSetting     = $this->getSettingService()->get('course', array()); 
+            $courseSetting     = $this->getSettingService()->get('course', array());
 
             $liveLogo = $request->request->all();
             $liveCourseSetting = array_merge($liveCourseSetting, $liveLogo);

@@ -5,7 +5,8 @@
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html> <!--<![endif]-->
 {# returns app.request.locale if available and app.request.defaultLocale if app.request.locale is not set#}
-<html lang="{{ app.request.getLocale() }}">
+{% set mobile = is_show_mobile_page() %}
+<html lang="{{ app.request.getLocale() }}" {% if mobile %} class="es-mobile"{% endif %}>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
@@ -70,6 +71,9 @@
       {% include 'TopxiaWebBundle:Default:footer.html.twig' %}
     {% endblock %}
 
+    {% block footer_mobile %}
+    {% endblock %}
+
     {% block bottom %}{% endblock %}
   </div>
 
@@ -80,6 +84,11 @@
   {% endblock %}
 
   {% block floatConsult %}
+    {% set cloud_consult = setting('cloud_consult', '') %}
+    {% if cloud_consult and cloud_consult.cloud_consult_setting_enabled |default(0) and cloud_consult.cloud_consult_is_buy |default(0) and cloud_consult.cloud_consult_js |default('') %}
+      {{ cloud_consult.cloud_consult_js | raw }}
+    {% endif %}
+
     {% if setting('consult.enabled', 0) and (consultDisplay|default(false) or siteNav|default() == '/' ) %}
       {% if not setting('esBar.enabled',0) %}
         {% include 'TopxiaWebBundle::float-consult.html.twig' %}

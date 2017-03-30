@@ -1,15 +1,9 @@
 parameters:
-    biz_config:
-        debug: "%kernel.debug%"
-        db.options:
-            dbname: edusoho-test
-            user: tester
-            password: tester
-            host: "%database_host%"
-            port: "%database_port%"
-            driver: pdo_mysql
-            charset: UTF8
-            wrapperClass: Codeages\Biz\Framework\Dao\TestCaseConnection
-        cache_directory: "%kernel.root_dir%/../var/cache"
-        tmp_directory: "%kernel.root_dir%/../var/tmp"
-        log_directory: "%kernel.root_dir%/../var/logs"
+    database_driver:   pdo_mysql
+    database_host:     127.0.0.1
+    database_port:     3306
+    database_name:     edusoho_test
+    database_user:     root
+    database_password: ~
+    locale:            zh_CN
+    secret:            ThisTokenIsNotSoSecretChangeIt

@@ -43,7 +43,8 @@ class CourseMaterialController extends CourseBaseController
             'member'    => $member,
             'lessons'   => $lessons,
             'materials' => $materials,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'tags'      => ArrayToolkit::column($this->getTagsByOwnerId($id), 'id')
         ));
     }
 

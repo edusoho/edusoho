@@ -39,16 +39,17 @@ class QuestionEventSubscriber implements EventSubscriberInterface
 
             //材料题
             if($argument['parentId']){
-                $lockedTarget= '';
+                $lockedTargets = array();
                 foreach ($courseIds as $key => $courseId) {
                     if ($num > 1) {
-                        $lockedTarget .= "'course-".$courseId."/lesson-".$lessonIds[$key]."',";
-                   } else {
-                        $lockedTarget .= "'course-".$courseId."',";
+                        $lockedTarget = "course-".$courseId."/lesson-".$lessonIds[$key];
+                    } else {
+                        $lockedTarget = "course-".$courseId;
                     }
+                    $lockedTargets[] = $lockedTarget;
                 }
-                $lockedTarget = "(".trim($lockedTarget,',').")";
-                $questionIds = ArrayToolkit::column($this->getQuestionService()->findQuestionsByCopyIdAndLockedTarget($question['parentId'],$lockedTarget),'id');
+
+                $questionIds = ArrayToolkit::column($this->getQuestionService()->findQuestionsByCopyIdAndLockedTarget($question['parentId'], $lockedTargets), 'id');
             }
 
             $argument['copyId'] = $question['id'];
@@ -71,7 +72,6 @@ class QuestionEventSubscriber implements EventSubscriberInterface
         $context = $event->getSubject();
         $question = $context['question'];
         $argument = $context['argument'];
-        $copyId = $question['id'];
         $questionOldTarget = explode('/', $argument['question']['target']);
         $questionOldCourseTarget = explode('-',$questionOldTarget[0]);
         $courseId = $questionOldCourseTarget[1];
@@ -90,18 +90,18 @@ class QuestionEventSubscriber implements EventSubscriberInterface
             if($oldNum > 1){
                 $questionOldLessonTarget = explode('-',$questionOldTarget[1]);
                 $oldLessonId = $questionOldLessonTarget[1];
-                $oldLessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lessonId,$courseIds),'id');
+                $oldLessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($oldLessonId,$courseIds),'id');
             }
-            $lockedTarget = '';
+            $lockedTargets = array();
             foreach ($courseIds as $key => $courseId) {
                 if ($oldNum > 1) {
-                    $lockedTarget .= "'course-".$courseId."/lesson-".$oldLessonIds[$key]."',";
+                    $lockedTarget = "course-".$courseId."/lesson-".$oldLessonIds[$key];
                 } else {
-                    $lockedTarget .= "'course-".$courseId."',";
+                    $lockedTarget = "course-".$courseId;
                 }
+                $lockedTargets[] = $lockedTarget;
             }
-            $lockedTarget = "(".trim($lockedTarget,',').")";
-            $questionIds = ArrayToolkit::column($this->getQuestionService()->findQuestionsByCopyIdAndLockedTarget($question['id'],$lockedTarget),'id');
+            $questionIds = ArrayToolkit::column($this->getQuestionService()->findQuestionsByCopyIdAndLockedTarget($question['id'], $lockedTargets), 'id');
             foreach ($questionIds as $key => $questionId) {
                 if ($num > 1) {
                     $argument['fields']['target'] = "course-".$courseIds[$key]."/lesson-".$lessonIds[$key]."";
@@ -128,16 +128,16 @@ class QuestionEventSubscriber implements EventSubscriberInterface
                 $lessonId = $questionLessonTarget[1];
                 $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lessonId,$courseIds),'id');
             }
-            $lockedTarget= '';
+            $lockedTargets = array();
             foreach ($courseIds as $key => $courseId) {
                 if ($num > 1) {
-                    $lockedTarget .= "'course-".$courseId."/lesson-".$lessonIds[$key]."',";
+                    $lockedTarget = "course-".$courseId."/lesson-".$lessonIds[$key];
                 } else {
-                    $lockedTarget .= "'course-".$courseId."',";
+                    $lockedTarget = "course-".$courseId;
                 }
+                $lockedTargets[] = $lockedTarget;
             }
-            $lockedTarget = "(".trim($lockedTarget,',').")";
-            $questionIds = ArrayToolkit::column($this->getQuestionService()->findQuestionsByCopyIdAndLockedTarget($question['id'],$lockedTarget),'id');
+            $questionIds = ArrayToolkit::column($this->getQuestionService()->findQuestionsByCopyIdAndLockedTarget($question['id'], $lockedTargets), 'id');
             foreach ($questionIds as  $questionId) {
                 $this->getQuestionService()->deleteQuestion($questionId);
             }

@@ -6,6 +6,7 @@ use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Sms\SmsProcessor\SmsProcessorFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Topxia\Common\SmsToolkit;
 
 class EduCloudController extends BaseController
 {
@@ -13,7 +14,7 @@ class EduCloudController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             if ($this->setting('cloud_sms.sms_enabled') != '1') {
-                return $this->createJsonResponse(array('error' => $this->trans('短信服务被管理员关闭了')));
+                return $this->createJsonResponse(array('error' => $this->trans('短信服务未开启，请联系网校管理员')));
             }
 
             $currentUser = $this->getCurrentUser();
@@ -146,6 +147,13 @@ class EduCloudController extends BaseController
     public function smsCheckAction(Request $request, $type)
     {
         $targetSession = $request->getSession()->get($type);
+        $targetMobile =  $targetSession['to'] ? $targetSession['to'] : '';
+        $postSmsCode = $request->query->get('value');
+
+        $ratelimiterResult =  SmsToolkit::smsCheckRatelimiter($request,$type,$postSmsCode);
+        if($ratelimiterResult && $ratelimiterResult['success'] === false ){
+            return $this->createJsonResponse($ratelimiterResult);
+        }
 
         if (strlen($request->query->get('value')) == 0 || strlen($targetSession['sms_code']) == 0) {
             $response = array('success' => false, 'message' => $this->trans('验证码错误'));

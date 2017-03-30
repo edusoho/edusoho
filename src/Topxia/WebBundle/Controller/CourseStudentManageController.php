@@ -301,6 +301,9 @@ class CourseStudentManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $user   = $this->getUserService()->getUser($userId);
         $member = $this->getCourseService()->getCourseMember($courseId, $userId);
+        if (empty($member)) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans("学员#{$userId}不属于课程{#courseId}"));
+        }
 
         if ('POST' == $request->getMethod()) {
             $data   = $request->request->all();
@@ -349,81 +352,23 @@ class CourseStudentManageController extends BaseController
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权查看学员详细信息！'));
         }
 
-        $user             = $this->getUserService()->getUser($userId);
-        $profile          = $this->getUserService()->getUserProfile($userId);
-        $profile['title'] = $user['title'];
-
-        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
-
-        for ($i = 0; $i < count($userFields); $i++) {
-            if (strstr($userFields[$i]['fieldName'], "textField")) {
-                $userFields[$i]['type'] = "text";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "varcharField")) {
-                $userFields[$i]['type'] = "varchar";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "intField")) {
-                $userFields[$i]['type'] = "int";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "floatField")) {
-                $userFields[$i]['type'] = "float";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "dateField")) {
-                $userFields[$i]['type'] = "date";
-            }
-        }
-
-        return $this->render('TopxiaWebBundle:CourseStudentManage:show-modal.html.twig', array(
-            'user'       => $user,
-            'profile'    => $profile,
-            'userFields' => $userFields
+        return $this->forward('TopxiaWebBundle:Student:show', array(
+            'request' => $request, 
+            'userId' => $userId
         ));
     }
 
     public function definedShowAction(Request $request, $courseId, $userId)
     {
-        $profile = $this->getUserService()->getUserProfile($userId);
-
-        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
-
-        for ($i = 0; $i < count($userFields); $i++) {
-            if (strstr($userFields[$i]['fieldName'], "textField")) {
-                $userFields[$i]['type'] = "text";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "varcharField")) {
-                $userFields[$i]['type'] = "varchar";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "intField")) {
-                $userFields[$i]['type'] = "int";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "floatField")) {
-                $userFields[$i]['type'] = "float";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "dateField")) {
-                $userFields[$i]['type'] = "date";
-            }
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $member = $this->getCourseService()->getCourseMember($courseId, $userId);
+        if (empty($member)) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans("学员#{$userId}不属于课程{#courseId}"));
         }
 
-        $course = $this->getSettingService()->get('course', array());
-
-        $userinfoFields = array();
-
-        if (isset($course['userinfoFields'])) {
-            $userinfoFields = $course['userinfoFields'];
-        }
-
-        return $this->render('TopxiaWebBundle:CourseStudentManage:defined-show-modal.html.twig', array(
-            'profile'        => $profile,
-            'userFields'     => $userFields,
-            'userinfoFields' => $userinfoFields
+        return $this->forward('TopxiaWebBundle:Student:definedShow', array(
+            'request' => $request, 
+            'userId' => $userId
         ));
     }
 

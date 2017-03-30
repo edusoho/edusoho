@@ -18,6 +18,8 @@ interface ClassroomMemberDao
 
     public function updateMember($id, $member);
 
+    public function updateMembersDeadlineByClassroomId($classroomId, $deadline);
+
     public function deleteMember($id);
 
     public function deleteMemberByClassroomIdAndUserId($classroomId, $userId);
@@ -37,4 +39,6 @@ interface ClassroomMemberDao
     public function findMemberUserIdsByClassroomId($classroomId);
 
     public function findUserJoinedClassroomIds($userId);
+
+    public function findMembersByUserId($userId);
 }

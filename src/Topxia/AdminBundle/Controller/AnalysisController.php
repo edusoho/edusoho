@@ -20,6 +20,7 @@ class AnalysisController extends BaseController
     public function registerAction(Request $request, $tab)
     {
         $data              = array();
+        $count = 0;
         $registerStartDate = "";
 
         $condition = $request->query->all();
@@ -50,6 +51,9 @@ class AnalysisController extends BaseController
         if ($tab == "trend") {
             $registerData = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
             $data         = $this->fillAnalysisData($condition, $registerData);
+            foreach ($registerData as $key => $value) {
+                $count += $value['count'];
+            }
         }
 
         $registerStartData = $this->getUserService()->searchUsers(array(), array('createdTime', 'ASC'), 0, 1);
@@ -70,7 +74,8 @@ class AnalysisController extends BaseController
             'registerProfiles'  => $registerProfiles,
             'data'              => $data,
             "registerStartDate" => $registerStartDate,
-            "dataInfo"          => $dataInfo
+            "dataInfo"          => $dataInfo,
+            'count'             => $count
         ));
     }
 
@@ -197,6 +202,7 @@ class AnalysisController extends BaseController
     public function loginAction(Request $request, $tab)
     {
         $data           = array();
+        $count = 0;
         $loginStartDate = "";
 
         $condition = $request->query->all();
@@ -228,6 +234,9 @@ class AnalysisController extends BaseController
             $loginData = $this->getLogService()->analysisLoginDataByTime($timeRange['startTime'], $timeRange['endTime']);
 
             $data = $this->fillAnalysisData($condition, $loginData);
+            foreach ($loginData as $key => $value) {
+                $count += $value['count'];
+            }
         }
 
         $userIds = ArrayToolkit::column($loginDetail, 'userId');
@@ -248,13 +257,15 @@ class AnalysisController extends BaseController
             'data'           => $data,
             'users'          => $users,
             'loginStartDate' => $loginStartDate,
-            'dataInfo'       => $dataInfo
+            'dataInfo'       => $dataInfo,
+            'count'          => $count
         ));
     }
 
     public function courseAction(Request $request, $tab)
     {
         $data            = array();
+        $count = 0;
         $courseStartDate = "";
 
         $condition = $request->query->all();
@@ -286,6 +297,9 @@ class AnalysisController extends BaseController
             $courseData = $this->getCourseService()->analysisCourseDataByTime($timeRange['startTime'], $timeRange['endTime']);
 
             $data = $this->fillAnalysisData($condition, $courseData);
+            foreach ($courseData as $key => $value) {
+                $count += $value['count'];
+            }
         }
 
         $userIds = ArrayToolkit::column($courseDetail, 'userId');
@@ -309,13 +323,15 @@ class AnalysisController extends BaseController
             'data'            => $data,
             'users'           => $users,
             'courseStartDate' => $courseStartDate,
-            'dataInfo'        => $dataInfo
+            'dataInfo'        => $dataInfo,
+            'count'           => $count
         ));
     }
 
     public function lessonAction(Request $request, $tab)
     {
         $data            = array();
+        $count = 0;
         $lessonStartDate = "";
 
         $condition = $request->query->all();
@@ -347,6 +363,9 @@ class AnalysisController extends BaseController
             $lessonData = $this->getCourseService()->analysisLessonDataByTime($timeRange['startTime'], $timeRange['endTime']);
 
             $data = $this->fillAnalysisData($condition, $lessonData);
+            foreach ($lessonData as $key => $value) {
+                $count += $value['count'];
+            }
         }
 
         $courseIds = ArrayToolkit::column($lessonDetail, 'courseId');
@@ -372,13 +391,15 @@ class AnalysisController extends BaseController
             'courses'         => $courses,
             'users'           => $users,
             'lessonStartDate' => $lessonStartDate,
-            'dataInfo'        => $dataInfo
+            'dataInfo'        => $dataInfo,
+            'count'           => $count
         ));
     }
 
     public function joinLessonAction(Request $request, $tab)
     {
         $data                = array();
+        $count = 0;
         $joinLessonStartDate = "";
 
         $condition = $request->query->all();
@@ -410,6 +431,9 @@ class AnalysisController extends BaseController
             $joinLessonData = $this->getOrderService()->analysisCourseOrderDataByTimeAndStatus($timeRange['startTime'], $timeRange['endTime'], "paid");
 
             $data = $this->fillAnalysisData($condition, $joinLessonData);
+            foreach ($joinLessonData as $key => $value) {
+                $count += $value['count'];
+            }
         }
 
         $courseIds = ArrayToolkit::column($joinLessonDetail, 'targetId');
@@ -435,7 +459,8 @@ class AnalysisController extends BaseController
             'courses'             => $courses,
             'users'               => $users,
             'joinLessonStartDate' => $joinLessonStartDate,
-            'dataInfo'            => $dataInfo
+            'dataInfo'            => $dataInfo,
+            'count'               => $count
         ));
     }
 
@@ -510,6 +535,7 @@ class AnalysisController extends BaseController
     public function paidLessonAction(Request $request, $tab)
     {
         $data                = array();
+        $count = 0;
         $paidLessonStartDate = "";
 
         $condition = $request->query->all();
@@ -542,6 +568,9 @@ class AnalysisController extends BaseController
             $paidLessonData = $this->getOrderService()->analysisPaidCourseOrderDataByTime($timeRange['startTime'], $timeRange['endTime']);
 
             $data = $this->fillAnalysisData($condition, $paidLessonData);
+            foreach ($paidLessonData as $key => $value) {
+                $count += $value['count'];
+            }
         }
 
         $courseIds = ArrayToolkit::column($paidCourseDetail, 'targetId'); //订单中的课程
@@ -573,13 +602,15 @@ class AnalysisController extends BaseController
             'courses'             => $courses,
             'users'               => $users,
             'paidLessonStartDate' => $paidLessonStartDate,
-            'dataInfo'            => $dataInfo
+            'dataInfo'            => $dataInfo,
+            'count'               => $count
         ));
     }
 
     public function paidClassroomAction(Request $request, $tab)
     {
         $data = array();
+        $count = 0;
 
         $condition              = $request->query->all();
         $timeRange              = $this->getTimeRange($condition);
@@ -609,6 +640,9 @@ class AnalysisController extends BaseController
         if ($tab == "trend") {
             $paidClassroomData = $this->getOrderService()->analysisPaidClassroomOrderDataByTime($timeRange['startTime'], $timeRange['endTime']);
             $data              = $this->fillAnalysisData($condition, $paidClassroomData);
+            foreach ($paidClassroomData as $key => $value) {
+                $count += $value['count'];
+            }
         }
 
         $classroomIds = ArrayToolkit::column($paidClassroomDetail, 'targetId');
@@ -635,13 +669,15 @@ class AnalysisController extends BaseController
             'classroom'              => $classroom,
             'users'                  => $users,
             'paidClassroomStartDate' => $paidClassroomStartDate,
-            'dataInfo'               => $dataInfo
+            'dataInfo'               => $dataInfo,
+            'count'                  => $count
         ));
     }
 
     public function finishedLessonAction(Request $request, $tab)
     {
         $data                    = array();
+        $count = 0;
         $finishedLessonStartDate = "";
 
         $condition = $request->query->all();
@@ -673,6 +709,9 @@ class AnalysisController extends BaseController
             $finishedLessonData = $this->getCourseService()->analysisLessonFinishedDataByTime($timeRange['startTime'], $timeRange['endTime']);
 
             $data = $this->fillAnalysisData($condition, $finishedLessonData);
+            foreach ($finishedLessonData as $key => $value) {
+                $count += $value['count'];
+            }
         }
 
         $courseIds = ArrayToolkit::column($finishedLessonDetail, 'courseId');
@@ -703,13 +742,15 @@ class AnalysisController extends BaseController
             'lessons'                 => $lessons,
             'users'                   => $users,
             'finishedLessonStartDate' => $finishedLessonStartDate,
-            'dataInfo'                => $dataInfo
+            'dataInfo'                => $dataInfo,
+            'count'                   => $count
         ));
     }
 
     public function videoViewedAction(Request $request, $tab)
     {
         $data      = array();
+        $count = 0;
         $condition = $request->query->all();
 
         $timeRange = $this->getTimeRange($condition);
@@ -746,6 +787,9 @@ class AnalysisController extends BaseController
             $videoViewedTrendData = $this->getCourseService()->analysisLessonViewDataByTime($timeRange['startTime'], $timeRange['endTime'], array("fileType" => 'video'));
 
             $data = $this->fillAnalysisData($condition, $videoViewedTrendData);
+            foreach ($videoViewedTrendData as $key => $value) {
+                $count += $value['count'];
+            }
         }
 
         $lessonIds = ArrayToolkit::column($videoViewedDetail, 'lessonId');
@@ -768,13 +812,15 @@ class AnalysisController extends BaseController
             'users'             => $users,
             'dataInfo'          => $dataInfo,
             'minCreatedTime'    => date("Y-m-d", $minCreatedTime['createdTime']),
-            'showHelpMessage'   => 1
+            'showHelpMessage'   => 1,
+            'count'             => $count
         ));
     }
 
     public function cloudVideoViewedAction(Request $request, $tab)
     {
         $data      = array();
+        $count = 0;
         $condition = $request->query->all();
 
         $timeRange = $this->getTimeRange($condition);
@@ -813,6 +859,9 @@ class AnalysisController extends BaseController
             $videoViewedTrendData = $this->getCourseService()->analysisLessonViewDataByTime($timeRange['startTime'], $timeRange['endTime'], array("fileType" => 'video', "fileStorage" => 'cloud'));
 
             $data = $this->fillAnalysisData($condition, $videoViewedTrendData);
+            foreach ($videoViewedTrendData as $key => $value) {
+                $count += $value['count'];
+            }
         }
 
         $lessonIds = ArrayToolkit::column($videoViewedDetail, 'lessonId');
@@ -834,13 +883,15 @@ class AnalysisController extends BaseController
             'users'             => $users,
             'dataInfo'          => $dataInfo,
             'minCreatedTime'    => date("Y-m-d", $minCreatedTime['createdTime']),
-            'showHelpMessage'   => 1
+            'showHelpMessage'   => 1,
+            'count'             => $count
         ));
     }
 
     public function localVideoViewedAction(Request $request, $tab)
     {
         $data      = array();
+        $count = 0;
         $condition = $request->query->all();
 
         $timeRange = $this->getTimeRange($condition);
@@ -879,6 +930,9 @@ class AnalysisController extends BaseController
             $videoViewedTrendData = $this->getCourseService()->analysisLessonViewDataByTime($timeRange['startTime'], $timeRange['endTime'], array("fileType" => 'video', "fileStorage" => 'local'));
 
             $data = $this->fillAnalysisData($condition, $videoViewedTrendData);
+            foreach ($videoViewedTrendData as $key => $value) {
+                $count += $value['count'];
+            }
         }
 
         $lessonIds = ArrayToolkit::column($videoViewedDetail, 'lessonId');
@@ -900,13 +954,15 @@ class AnalysisController extends BaseController
             'users'             => $users,
             'dataInfo'          => $dataInfo,
             'minCreatedTime'    => date("Y-m-d", $minCreatedTime['createdTime']),
-            'showHelpMessage'   => 1
+            'showHelpMessage'   => 1,
+            'count'             => $count
         ));
     }
 
     public function netVideoViewedAction(Request $request, $tab)
     {
         $data      = array();
+        $count = 0;
         $condition = $request->query->all();
 
         $timeRange = $this->getTimeRange($condition);
@@ -945,6 +1001,9 @@ class AnalysisController extends BaseController
             $videoViewedTrendData = $this->getCourseService()->analysisLessonViewDataByTime($timeRange['startTime'], $timeRange['endTime'], array("fileType" => 'video', "fileStorage" => 'net'));
 
             $data = $this->fillAnalysisData($condition, $videoViewedTrendData);
+            foreach ($videoViewedTrendData as $key => $value) {
+                $count += $value['count'];
+            }
         }
 
         $lessonIds = ArrayToolkit::column($videoViewedDetail, 'lessonId');
@@ -966,13 +1025,15 @@ class AnalysisController extends BaseController
             'users'             => $users,
             'minCreatedTime'    => date("Y-m-d", $minCreatedTime['createdTime']),
             'dataInfo'          => $dataInfo,
-            'showHelpMessage'   => 1
+            'showHelpMessage'   => 1,
+            'count'             => $count
         ));
     }
 
     public function incomeAction(Request $request, $tab)
     {
         $data            = array();
+        $count = 0;
         $incomeStartDate = "";
 
         $condition = $request->query->all();
@@ -990,6 +1051,9 @@ class AnalysisController extends BaseController
         if ($tab == "trend") {
             $incomeData = $this->getOrderService()->analysisAmountDataByTime($timeRange['startTime'], $timeRange['endTime']);
             $data       = $this->fillAnalysisData($condition, $incomeData);
+            foreach ($incomeData as $key => $value) {
+                $count += $value['count'];
+            }
         }
 
         $paginator = new Paginator(
@@ -1040,13 +1104,15 @@ class AnalysisController extends BaseController
             'classrooms'      => $classrooms,
             'users'           => $users,
             'incomeStartDate' => $incomeStartDate,
-            'dataInfo'        => $dataInfo
+            'dataInfo'        => $dataInfo,
+            'count'           => $count
         ));
     }
 
     public function courseIncomeAction(Request $request, $tab)
     {
         $data                  = array();
+        $count = 0;
         $courseIncomeStartDate = "";
 
         $condition = $request->query->all();
@@ -1078,6 +1144,9 @@ class AnalysisController extends BaseController
             $courseIncomeData = $this->getOrderService()->analysisCourseAmountDataByTime($timeRange['startTime'], $timeRange['endTime']);
 
             $data = $this->fillAnalysisData($condition, $courseIncomeData);
+            foreach ($courseIncomeData as $key => $value) {
+                $count += $value['count'];
+            }
         }
 
         $courseIds = ArrayToolkit::column($courseIncomeDetail, 'targetId');
@@ -1103,13 +1172,15 @@ class AnalysisController extends BaseController
             'courses'               => $courses,
             'users'                 => $users,
             'courseIncomeStartDate' => $courseIncomeStartDate,
-            'dataInfo'              => $dataInfo
+            'dataInfo'              => $dataInfo,
+            'count'                 => $count
         ));
     }
 
     public function classroomIncomeAction(Request $request, $tab)
     {
         $data                     = array();
+        $count = 0;
         $classroomIncomeStartDate = "";
 
         $condition = $request->query->all();
@@ -1141,6 +1212,9 @@ class AnalysisController extends BaseController
             $classroomIncomeData = $this->getOrderService()->analysisClassroomAmountDataByTime($timeRange['startTime'], $timeRange['endTime']);
 
             $data = $this->fillAnalysisData($condition, $classroomIncomeData);
+            foreach ($classroomIncomeData as $key => $value) {
+                $count += $value['count'];
+            }
         }
 
         $classroomIds = ArrayToolkit::column($classroomIncomeDetail, 'targetId');
@@ -1166,13 +1240,15 @@ class AnalysisController extends BaseController
             'classrooms'               => $classrooms,
             'users'                    => $users,
             'classroomIncomeStartDate' => $classroomIncomeStartDate,
-            'dataInfo'                 => $dataInfo
+            'dataInfo'                 => $dataInfo,
+            'count'                    => $count
         ));
     }
 
     public function vipIncomeAction(Request $request, $tab)
     {
         $data               = array();
+        $count = 0;
         $vipIncomeStartDate = "";
 
         $condition = $request->query->all();
@@ -1204,6 +1280,9 @@ class AnalysisController extends BaseController
             $vipIncomeData = $this->getOrderService()->analysisvipAmountDataByTime($timeRange['startTime'], $timeRange['endTime']);
 
             $data = $this->fillAnalysisData($condition, $vipIncomeData);
+            foreach ($vipIncomeData as $key => $value) {
+                $count += $value['count'];
+            }
         }
 
         $userIds = ArrayToolkit::column($vipIncomeDetail, 'userId');
@@ -1224,7 +1303,8 @@ class AnalysisController extends BaseController
             'data'               => $data,
             'users'              => $users,
             'vipIncomeStartDate' => $vipIncomeStartDate,
-            'dataInfo'           => $dataInfo
+            'dataInfo'           => $dataInfo,
+            'count'              => $count
         ));
     }
 

@@ -22,9 +22,9 @@
         <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">{{'发私信'|trans}}</button>
       {% endif %}
       {% if app.user.isAdmin() %}
-        <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_students_show', {courseId:classroom.id, userId:user.id})}}">{{'查看资料'|trans}}</button>
+        <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('classroom_manage_students_show', {classroomId:classroom.id, userId:user.id})}}">{{'查看资料'|trans}}</button>
       {% elseif setting("course.buy_fill_userinfo") %}
-        <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_students_defined_show', {courseId:classroom.id, userId:user.id}) }}">{{'查看资料'|trans}}</button>
+        <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('classroom_manage_students_defined_show', {classroomId:classroom.id, userId:user.id}) }}">{{'查看资料'|trans}}</button>
       {% endif %}
       <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">{{'管理'|trans}}
         <span class="caret"></span>
@@ -32,6 +32,7 @@
       <ul class="dropdown-menu pull-right">
         <li><a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('classroom_manage_student_remark', {classroomId:classroom.id, userId:user.id})}}">{{'备注'|trans}}</a></li>
         <li><a class="student-remove" href="javascript:;" data-url="{{path('classroom_manage_student_remove', {classroomId:classroom.id, userId:user.id})}}" data-user="{{default.user_name|default('学员'|trans)}}">{{'移除'|trans}}</a></li>
+        <li><a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('classroom_manage_member_deadline', {classroomId:classroom.id, userId:user.id})}}">{{'修改有效期'|trans}}</a></li>
       </ul>
     </div>
   </td>

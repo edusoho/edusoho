@@ -5,6 +5,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class DefaultController extends BaseController
 {
@@ -16,8 +17,48 @@ class DefaultController extends BaseController
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
         }
 
+        $meCount = $this->getMeCount();
+        $custom = $this->isCustom($meCount);
+
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
-        return $this->render('TopxiaWebBundle:Default:index.html.twig', array('friendlyLinks' => $friendlyLinks));
+
+        return $this->render('TopxiaWebBundle:Default:index.html.twig', array('friendlyLinks' => $friendlyLinks, 'custom' => $custom));
+    }
+
+    private function getMeCount()
+    {
+        $meCount = $this->setting('meCount',array());
+        if( empty($meCount) ){
+            //判断是否是定制用户
+            $result = CloudAPIFactory::create('leaf')->get('/me');
+            $this->getSettingService()->set('meCount',$result);
+        }
+        $meCount = $this->setting('meCount');
+        return $meCount;
+    }
+
+    public function appDownloadAction()
+    {
+        $meCount = $this->getMeCount();
+
+        $mobileCode = (empty($meCount["mobileCode"]) ? 'edusohov3' : $meCount["mobileCode"]);
+
+        if ($this->getWebExtension()->isMicroMessenger()) {
+            $url ="http://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.kuozhi";
+        } else {
+            $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', 'code' => $mobileCode), true);
+        }
+
+        return $this->render('TopxiaWebBundle:Default:Mobile/app-download.html.twig', array(
+            'url' => $url
+        ));
+    }
+
+    private function isCustom($result)
+    {
+        $hasMobile = isset($result['hasMobile']) ? $result['hasMobile'] : 0;
+
+        return $hasMobile;
     }
 
     public function userlearningAction()
@@ -256,5 +297,10 @@ class DefaultController extends BaseController
     private function getBlacklistService()
     {
         return $this->getServiceKernel()->createService('User.BlacklistService');
+    }
+
+    protected function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 }

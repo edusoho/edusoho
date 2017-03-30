@@ -6,7 +6,7 @@
 <li class="period lesson-item lesson-item-{{ item.id }}" data-id="{{ item.id }}" data-num="{{ loop.index }}">
   {% if item.status == 'published' %}
     {% if item.free or member or course.buyable or course.tryLookable %}
-      <a 
+      <a class="course-lesson" 
       {% if member %}
         {% if item.type == 'live' and item.endTime > timestamp() %}
           href="{{path('live_course_play', {courseId:item.courseId, lessonId:item.id})}}" 

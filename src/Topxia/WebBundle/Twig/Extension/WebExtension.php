@@ -14,6 +14,7 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\Component\ShareSdk\WeixinShare;
 use Topxia\WebBundle\Util\CategoryBuilder;
 use Topxia\Service\Util\HTMLPurifierFactory;
+use Topxia\Common\DeviceToolkit;
 
 class WebExtension extends \Twig_Extension
 {
@@ -124,10 +125,23 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('wx_js_sdk_config', array($this, 'weixinConfig')),
             new \Twig_SimpleFunction('plugin_update_notify', array($this, 'pluginUpdateNotify')),
             new \Twig_SimpleFunction('tag_equal', array($this, 'tag_equal')),
-            new \Twig_SimpleFunction('cdn', array($this, 'getCdn'))
+            new \Twig_SimpleFunction('is_show_mobile_page', array($this, 'isShowMobilePage')),
+            new \Twig_SimpleFunction('cdn', array($this, 'getCdn')),
+            new \Twig_SimpleFunction('can_try_look', array($this, 'canTryLook')),
+            new \Twig_SimpleFunction('is_ES_copyright', array($this, 'isESCopyright'))
         );
     }
-
+    public function isESCopyright()
+    {
+        $copyright = $this->getSetting('copyright');
+        $request    = $this->container->get('request');
+        $host          = $request->getHttpHost();
+        if ($copyright) {
+            $result = !( isset($copyright['owned']) && isset($copyright['thirdCopyright']) && $copyright['thirdCopyright'] != 2 && isset($copyright['licenseDomains'])  && in_array($host,  explode(';', $copyright['licenseDomains'])) || (isset($copyright['thirdCopyright']) && $copyright['thirdCopyright'] == 2) );
+            return $result;
+        }
+        return true;
+    }
     public function tag_equal($tags, $target_tagId, $target_tagGroupId)
     {
         foreach ($tags as $groupId => $tagId) {
@@ -373,6 +387,11 @@ class WebExtension extends \Twig_Extension
         return ServiceKernel::instance()->createService('User.UserService');
     }
 
+    private function getCourseService()
+    {
+        return ServiceKernel::instance()->createService('Course.CourseService');
+    }
+
     public function getAccount($userId)
     {
         return ServiceKernel::instance()->createService('Cash.CashAccountService')->getAccountByUserId($userId);
@@ -464,6 +483,7 @@ class WebExtension extends \Twig_Extension
 
         $plugins = $this->container->get('kernel')->getPlugins();
         $names   = array();
+        $newPluginNames = array();
 
         foreach ($plugins as $plugin) {
             if (is_array($plugin)) {
@@ -471,7 +491,12 @@ class WebExtension extends \Twig_Extension
                     continue;
                 }
 
-                $names[] = $plugin['code'];
+                if (isset($plugin['protocol']) && $plugin['protocol'] == 3) {
+                    $newPluginNames[] = $plugin['code'].'plugin';
+                } else {
+                    $names[] = $plugin['code'];
+                }
+
             } else {
                 $names[] = $plugin;
             }
@@ -495,6 +520,11 @@ class WebExtension extends \Twig_Extension
         foreach ($names as $name) {
             $name                   = strtolower($name);
             $paths["{$name}bundle"] = "{$basePath}/bundles/{$name}/js";
+        }
+
+        foreach ($newPluginNames as $newPluginName) {
+            $newPluginName = strtolower($newPluginName);
+            $paths["{$newPluginName}"] = "{$basePath}/bundles/{$newPluginName}/js";
         }
 
         // $paths['balloon-video-player'] = 'http://player-cdn.edusoho.net/balloon-video-player';
@@ -849,7 +879,7 @@ class WebExtension extends \Twig_Extension
 
     private function parseUri($uri, $absolute = false, $package = 'content')
     {
-        if (strpos($uri, "http://") !== false) {
+        if (strpos($uri, "http://") !== false || strpos($uri, "https://") !== false) {
             return $uri;
         }
 
@@ -1313,6 +1343,11 @@ class WebExtension extends \Twig_Extension
         return NumberToolkit::roundUp($price);
     }
 
+    public function canTryLook($courseId, $type)
+    {
+        return $this->getCourseService()->canTryLook($courseId, $type);
+    }
+
     public function getCategoryChoices($groupName, $indent = '　')
     {
         $builder = new CategoryBuilder();
@@ -1388,6 +1423,20 @@ class WebExtension extends \Twig_Extension
     public function arrayColumn($array, $column)
     {
         return ArrayToolkit::column($array, $column);
+    }
+
+    public function isShowMobilePage()
+    {
+        $wapSetting = $this->getSetting('wap', array());
+        if (empty($wapSetting['enabled'])) {
+            return false;
+        }
+
+        $pcVersion = $this->container->get('request')->cookies->get("PCVersion", 0);
+        if ($pcVersion) {
+            return false;
+        }
+        return DeviceToolkit::isMobileClient();
     }
 
     public function mb_trim($string, $charlist = '\\\\s', $ltrim = true, $rtrim = true)

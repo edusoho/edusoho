@@ -31,6 +31,14 @@ classroom_manage_students:
     path: /classroom/{id}/manage/students
     defaults: { _controller:ClassroomBundle:ClassroomManage:students }
 
+classroom_manage_students_defined_show:
+    path:  /classroom/{classroomId}/manage/students/{userId}/defined_show
+    defaults: { _controller: ClassroomBundle:ClassroomManage:studentDefinedShow }
+
+classroom_manage_students_show:
+    path:  /classroom/{classroomId}/manage/students/{userId}/show
+    defaults: { _controller: ClassroomBundle:ClassroomManage:studentShow }
+
 classroom_manage_aduitor:
     path: /classroom/{id}/manage/aduitor
     defaults: { _controller: ClassroomBundle:ClassroomManage:aduitor }
@@ -72,6 +80,10 @@ classroom_manage_checkName:
 classroom_manage_student_remark:
     path:  /classroom/{classroomId}/manage/student/{userId}/remark
     defaults: { _controller: ClassroomBundle:ClassroomManage:remark }
+
+classroom_manage_member_deadline:
+    path: /classroom/{classroomId}/manage/member/{userId}/deadline
+    defaults: { _controller: ClassroomBundle:ClassroomManage:setClassroomMemberDeadline }
 
 classroom_manage_student_remove:
     path:  /classroom/{classroomId}/manage/student/{userId}/remove
@@ -264,3 +276,11 @@ classroom_buy_hint:
 classrom_course_lessons_list:
     path: /classroom/{classroomId}/course/{courseId}/lessons/list
     defaults: { _controller: ClassroomBundle:Course/Lesson:list }
+
+classroom_member_deadline_reach:
+    path: /classroom/{classroomId}/member/deadline/reach
+    defaults: { _controller: ClassroomBundle:Classroom:deadlineReach }
+
+classroom_expiry_date_rule:
+    path: /classroom_expiry_date_rule
+    defaults: { _controller: ClassroomBundle:ClassroomManage:expiryDateRule }

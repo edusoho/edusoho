@@ -247,6 +247,7 @@
       {{ radios('video_audio_quality', {'low':'流畅'|trans, 'normal':'标准'|trans, 'high': '高品'|trans}, storageSetting.video_audio_quality) }}
     </div>
   </div>
+
   <div class="row form-group">
     <div class="col-md-3 control-label">
       <label for="enable_playback_rates">倍速播放：</label>
@@ -259,6 +260,15 @@
     </div>
   </div>
   <div class="upload-mode">
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="video_auto_play">云视频自动播放：</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('video_auto_play', {'true':'开启', 'false':'关闭'}, storageSetting.video_auto_play ) }}
+    </div>
   </div>
 
   <div class="row form-group">
@@ -311,8 +321,7 @@
 
         <div class="alert alert-info">
           <ul>
-            <li>{{ '支持'|trans }}<strong>mp4, avi, flv, f4v, wmv, mov, rmvb, mkv,
-                m4v</strong>{{ '格式的视频文件上传，文件大小不能超过'|trans }}<strong>10 MB</strong>。
+            <li>{{ '支持'|trans }}<strong>mp4, avi, flv, f4v, wmv, mov, rmvb, mkv, m4v, mpg</strong>{{ '格式的视频文件上传，文件大小不能超过'|trans }}<strong>10 MB</strong>。
             </li>
             <li>{{ '支持'|trans }}<strong>{{ '断点续传'|trans }}</strong>{{ '（仅支持HTML5浏览器）。'|trans }}</li>
             <li>{{ '视频将上传到'|trans }}
@@ -391,7 +400,7 @@
   </div>
         <div class="row form-group">
           <div class="col-md-3 control-label">
-            <label>{{ '云视频指纹:'|trans }}</label>
+            <label>{{ '云视频指纹：'|trans }}</label>
           </div>
           <div class="controls col-md-8 radios">
             {{ radios('video_fingerprint', {'0':'关闭'|trans, '1':'开启'|trans}, storageSetting.video_fingerprint) }}
@@ -409,6 +418,15 @@
       <input type="text" id="video_fingerprint_time" class="form-control width-input width-input-small"
              name="video_fingerprint_time" value="{{ storageSetting.video_fingerprint_time }}"> 秒
       <div class="text-muted mts">建议时长在0.5 - 1.5秒之间</div>
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ '云视频防盗增强：'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('enable_hls_encryption_plus', {'0':'关闭'|trans, '1':'开启'|trans}, storageSetting.enable_hls_encryption_plus|default(0)) }}
+      <div class="help-block">{{ '开启后，云视频防盗效果进一步提升，但视频将无法在手机浏览器中播放，系统会引导用户使用App观看。'|trans }}</div>
     </div>
   </div>
   <div class="row form-group">

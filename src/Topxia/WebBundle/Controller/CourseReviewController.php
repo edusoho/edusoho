@@ -50,7 +50,8 @@ class CourseReviewController extends CourseBaseController
             'userReview'    => $userReview,
             'reviews'       => $reviews,
             'users'         => $users,
-            'paginator'     => $paginator
+            'paginator'     => $paginator,
+            'tags'          => ArrayToolkit::column($this->getTagsByOwnerId($id), 'id')
         ));
     }
 

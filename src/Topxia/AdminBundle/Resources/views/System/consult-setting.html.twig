@@ -205,7 +205,18 @@
     </div>
   </fieldset>
 
-  
+  {#<fieldset>#}
+    {#<legend>{{'第三方客服设置'|trans}}</legend>#}
+    {#<div class="form-group">#}
+      {#<div class="col-md-2 control-label">#}
+        {#<label>{{'客服系统代码'|trans}}</label>#}
+      {#</div>#}
+      {#<div class="controls col-md-8">#}
+        {#<textarea name="supplier" rows="8" class="form-control">{{consult.supplier}}</textarea>#}
+        {#<div class="help-block">{{'客服系统代码由第三方客服系统提供, 支持乐语、百度商桥、53客服等客服系统,客服会出现在首页、班级详情、会员展示、课程详情页面。'|trans}}</div>#}
+      {#</div>#}
+    {#</div>#}
+  {#</fieldset>#}
 
   <div class="row form-group">
     <div class="col-md-3 control-label"></div>

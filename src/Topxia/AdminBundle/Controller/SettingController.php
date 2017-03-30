@@ -104,7 +104,6 @@ class SettingController extends BaseController
             $this->getLogService()->info('system', 'update_settings', '更新IOS内购产品设置', $products);
             $this->setFlashMessage('success', $this->trans('IOS内购产品设置已保存'));
             return $this->redirect($this->generateUrl('admin_setting_mobile_iap_product'));
-            
         }
 
         return $this->render('TopxiaAdminBundle:System:mobile-iap-product.html.twig', array(
@@ -345,7 +344,6 @@ class SettingController extends BaseController
         }
 
         $mailer = $this->getSettingService()->get('mailer', array());
-
         $default = array(
             'enabled'  => 0,
             'host'     => '',
@@ -356,7 +354,6 @@ class SettingController extends BaseController
             'name'     => ''
         );
         $mailer = array_merge($default, $mailer);
-
         if ($request->getMethod() == 'POST') {
             $mailer = $request->request->all();
             $this->getSettingService()->set('mailer', $mailer);
@@ -367,9 +364,11 @@ class SettingController extends BaseController
         }
 
         $status = $this->checkMailerStatus();
+        $cloudMailName = '';
         return $this->render('TopxiaAdminBundle:System:mailer.html.twig', array(
             'mailer' => $mailer,
-            'status' => $status
+            'status' => $status,
+            'cloudMailName' => $cloudMailName
         ));
     }
 
@@ -394,14 +393,17 @@ class SettingController extends BaseController
         }
     }
 
+    /*
+     * 当前云邮件字段为cloud_email_crm
+     */
     protected function checkMailerStatus()
     {
-        $cloudEmail = $this->getSettingService()->get('cloud_email', array());
+        $cloudEmail = $this->getSettingService()->get('cloud_email_crm', array());
         $mailer     = $this->getSettingService()->get('mailer', array());
         $status     = "";
 
         if (!empty($cloudEmail) && $cloudEmail['status'] == 'enable') {
-            return $status = "cloud_email";
+            return $status = "cloud_email_crm";
         }
 
         if (!empty($mailer) && $mailer['enabled'] == 1) {
@@ -499,9 +501,9 @@ class SettingController extends BaseController
                 $settingService->set('whitelist_ip', $whiteListIps);
             }
 
-            $logService->info('system', 'update_settings', '更新IP黑名单/白名单', 
-                array('blacklist_ip' => $blackListIps['ips'], 
-                    'whitelist_ip' => $whiteListIps['ips']));
+            $logService->info('system', 'update_settings', '更新IP黑名单/白名单',
+                array('blacklist_ip' => $blackListIps['ips'],
+                      'whitelist_ip' => $whiteListIps['ips']));
 
             $this->setFlashMessage('success', $this->trans('保存成功！'));
         }

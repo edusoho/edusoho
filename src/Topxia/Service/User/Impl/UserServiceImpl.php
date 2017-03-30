@@ -390,6 +390,10 @@ class UserServiceImpl extends BaseService implements UserService
             throw new InvalidArgumentException('参数不正确，更改密码失败');
         }
 
+        if (!SimpleValidator::password($password)) {
+            throw new UnexpectedValueException('密码校验失败');
+        }
+
         $user = $this->getUser($id);
 
         if (empty($user)) {
@@ -904,6 +908,16 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (!empty($fields['about'])) {
             $fields['about'] = $this->purifyHtml($fields['about']);
+        }
+
+        if (!empty($fields['site']) && !SimpleValidator::site($fields['site'])) {
+            throw new UnexpectedValueException('个人空间不正确，更新用户失败');
+        }
+        if (!empty($fields['weibo']) && !SimpleValidator::site($fields['weibo'])) {
+            throw new UnexpectedValueException('微博地址不正确，更新用户失败');
+        }
+        if (!empty($fields['blog']) && !SimpleValidator::site($fields['blog'])) {
+            throw new UnexpectedValueException('地址不正确，更新用户失败');
         }
 
         if (empty($fields['isWeiboPublic'])) {
@@ -1562,15 +1576,14 @@ class UserServiceImpl extends BaseService implements UserService
             'approvalTime'   => time()
         ));
 
-        $lastestApproval = $this->getUserApprovalDao()->getLastestApprovalByUserIdAndStatus($user['id'], 'approved');
+        $latestApproval = $this->getUserApprovalDao()->getLastestApprovalByUserIdAndStatus($user['id'], 'approving');
         $currentUser     = $this->getCurrentUser();
-        $this->getUserApprovalDao()->updateApproval($lastestApproval['id'],
-            array(
-                'userId'     => $user['id'],
-                'note'       => $note,
-                'status'     => 'approve_fail',
-                'operatorId' => $currentUser['id'])
-        );
+        $this->getUserApprovalDao()->updateApproval($latestApproval['id'], array(
+            'userId'     => $user['id'],
+            'note'       => $note,
+            // 'status'     => 'approve_fail',
+            'operatorId' => $currentUser['id']
+            ));
 
         $this->getLogService()->info('user', 'approval_fail', sprintf('用户%s实名认证失败，操作人:%s !', $user['nickname'], $currentUser['nickname']));
         $message = array(

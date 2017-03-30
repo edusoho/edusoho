@@ -155,21 +155,22 @@
                 <p class="help-block">{{'在%admin_name%官方审核通过您的接入申请以前，请不要开启此选项，否则可能审核将无法通过'|trans({'%admin_name%': client.admin_name })}}</p>
             </div>
         </div>
-      {% if type != 'weixinmob' and type != 'weixinweb' %}
-        <div class="form-group">
-          <div class="col-md-3 control-label">
-            <label for=""></label>
-          </div>
-          <div class="controls col-md-8 radios">
-            <div class="help-block"><a href="#port">{{'最后一步,请在底部输入登录接口验证代码'|trans}}></a></div>
-          </div>
-        </div>
-      {% endif %}
     </fieldset>
-  {% endfor %}
+    {% if type == 'weibo' %}
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for=""></label>
+        </div>
 
+        <div class="controls col-md-8 radios">
+          <div class="help-block"><a href="#port">{{'最后一步,请在底部输入登录接口验证代码'|trans}}></a></div>
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
   <fieldset>
     <legend id="port" >{{'登录接口验证代码'|trans}}</legend>
+
     <div class="form-group">
       <div class="col-md-3 control-label">
         <label for="verify_code" >{{'验证代码'|trans}}</label>

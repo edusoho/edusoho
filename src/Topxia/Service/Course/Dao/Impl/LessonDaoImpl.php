@@ -281,7 +281,8 @@ class LessonDaoImpl extends BaseDao implements LessonDao
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime')
             ->andWhere('copyId = :copyId')
-            ->andWhere('courseId IN ( :courseIds )');
+            ->andWhere('courseId IN ( :courseIds )')
+            ->andWhere('mediaSource = :mediaSource');
 
         if (isset($conditions['notLearnedIds']) && !empty($conditions['notLearnedIds'])) {
             $builder->andWhere('id NOT IN ( :notLearnedIds)');
@@ -324,6 +325,8 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
         $time = time();
 
+        $limit = (int) $limit;
+
         $sql = "SELECT count( id) as count, from_unixtime(startTime,'%Y-%m-%d') as date FROM `{$this->getTable()}` WHERE  `type`= 'live' AND status='published' AND courseId IN ({$marks}) AND startTime >= {$time} group by date order by date ASC limit 0, {$limit}";
         return $this->getConnection()->fetchAll($sql, $courseIds);
     }
@@ -349,6 +352,8 @@ class LessonDaoImpl extends BaseDao implements LessonDao
     public function findBeginningLiveCoures($afterSecond, $limit)
     {
         $that = $this;
+
+        $limit = (int) $limit;
 
         return $this->fetchCached("afterSecond:{$afterSecond}:limit:{$limit}", $afterSecond, $limit, function ($afterSecond, $limit) use ($that) {
             $currentTime = time();

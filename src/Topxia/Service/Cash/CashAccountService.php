@@ -24,4 +24,6 @@ interface CashAccountService
     public function waveCashField($id, $value);
 
     public function waveDownCashField($id, $value);
+    
+    public function findAccountsByUserIds($userIds);
 }

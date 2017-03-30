@@ -67,16 +67,33 @@
             <span>{{ member.deadline|date('Y-m-d H:i') }}</span>
           </p>
         {% else %}
-         <div class="alert alert-danger alert-dismissable">
-            {{'您购买的课程已到期，无法学习课时、提问等。如有疑问请联系老师，或点击'|trans}}
-              <a href="{{path('course_member_deadline_reach',{courseId:course.id})}}">
-              {% if course.price>0 %}
-              {{'重新购买'|trans}}
-              {% else %}
-              {{'重新加入'|trans}}
-              {% endif %}
-              </a>。
-          </div>
+          {% if course.parentId == 0 %}
+             <div class="alert alert-danger alert-dismissable">
+                {{'您购买的课程已到期，无法学习课时、提问等。如有疑问请联系老师，或点击'|trans}}
+                  <a href="{{path('course_member_deadline_reach',{courseId:course.id})}}">
+                  {% if course.price>0 %}
+                  {{'重新购买'|trans}}
+                  {% else %}
+                  {{'重新加入'|trans}}
+                  {% endif %}
+                  </a>。
+              </div>
+            {% else %}
+              {% set classroom = data('GetClassroomByCourseId', {courseId: course.id}) %}
+                {% if classroom %}
+                  {% if classroom.expiryMode == 'days' %}
+                    <div class="alert alert-warning">你的班级已过有效期，无法继续学习，请<a href="{{ path('classroom_member_deadline_reach', {classroomId:classroom.id}) }}">
+                      {% if classroom.buyable == 1 %}
+                        {{ '重新购买'|trans }}
+                      {% else %}
+                        {{ '重新加入'|trans }}
+                      {% endif %}
+                    </a></div>
+                  {% elseif classroom.expiryMode == 'date' %}
+                    <div class="alert alert-warning">{{ '你的班级已过有效期，无法继续学习'|trans }}</a></div>
+                  {% endif %}
+                {% endif %}
+            {% endif %}
         {% endif %}
       {% endif %}
 
@@ -168,21 +185,37 @@
     {% endif %}
   </div>
 {% endmacro %}
+ 
+
+{% set favoriteReward = setting('favorite_reward') %}
 
 {% macro favorite_btn(course, hasFavorited) %}
+  {% set favoriteReward = setting('favorite_reward') %}
   <li id="unfavorite-btn" data-url="{{ path('course_unfavorite', {id:course.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %}>
     <a href="javascript:;" class="color-primary">
-      <p><i class="es-icon es-icon-bookmark"></i></p>
+      {% if is_plugin_installed('FavoriteReward') and favoriteReward.enabled|default(0)%}
+        {% include 'FavoriteRewardBundle:Widget:unfavorite.html.twig' %}
+      {% else %}
+        <p><i class="es-icon es-icon-bookmark"></i></p>
+      {% endif %}
       <p>{{'已收藏'|trans}}</p>
     </a>
   </li>
 
-  <li id="favorite-btn" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}>
-    <a href="javascript:;">
+{% if is_plugin_installed('FavoriteReward') and favoriteReward.enabled|default(0) %}
+  <a href="#modal" class="reward-modal hidden" data-toggle="modal" data-url="{{ path('favorite_reward') }}" ><span class=""></span></a>
+{% endif %}
+
+<li id="favorite-btn" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}>
+  <a href="javascript:;">
+    {% if is_plugin_installed('FavoriteReward') and favoriteReward.enabled|default(0) %}
+      {% include 'FavoriteRewardBundle:Widget:favorite.html.twig' %}
+    {% else %}
       <p><i class="es-icon es-icon-bookmarkoutline"></i></p>
       <p>{{'收藏'|trans}}</p>
-    </a>
-  </li>
+    {% endif %}
+  </a>
+</li>
 {% endmacro %}
 
 {% macro share_btn(course) %}
@@ -195,4 +228,13 @@
       {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'course'} %}
     </span>
   </li>
+{% endmacro %}
+
+{% macro vip_btn(userVipStatus) %}
+  {% if userVipStatus %}
+    <li class="color-warning icon-vip">
+      <p><i class="es-icon es-icon-crown"></i></p>
+      <p>{{'会员'|trans}}</p>
+    </li>
+  {% endif %}
 {% endmacro %}

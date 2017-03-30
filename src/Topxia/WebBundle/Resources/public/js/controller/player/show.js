@@ -35,6 +35,7 @@ define(function(require, exports, module) {
         var disablePlaybackButton = videoHtml.data('disablePlaybackButton');
         var disableResolutionSwitcher = videoHtml.data('disableResolutionSwitcher');
         var subtitlesData = videoHtml.data('subtitles');
+        var autoplay = videoHtml.data('autoplay');
         var subtitles = [];
         if (subtitlesData) {
             for (var i in subtitlesData) {
@@ -99,7 +100,8 @@ define(function(require, exports, module) {
                     userName : userName
                 },
                 videoHeaderLength: videoHeaderLength || 0,
-                textTrack: subtitles
+                textTrack: subtitles,
+                autoplay: autoplay
             }
         );
 

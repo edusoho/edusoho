@@ -19,6 +19,15 @@ class AnnouncementController extends BaseController
         ));
     }
 
+    public function globalShowAction(Request $request, $id)
+    {
+        $announcement = $this->getAnnouncementService()->getAnnouncement($id);
+
+        return $this->render('TopxiaWebBundle:Announcement:announcement-global-show-modal.html.twig', array(
+            'announcement' => $announcement,
+        ));
+    }
+
     public function listAction(Request $request, $targetType, $targetId)
     {
         $conditions = array(

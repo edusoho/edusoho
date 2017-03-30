@@ -9,12 +9,20 @@ class TagUtil
 {
     public static function buildTags($ownerType, $ownerId)
     {
-        $res['tags'] = self::getTagService()->findTagsByOwner(array(
+        $originalTags = self::getTagService()->findTagsByOwner(array(
             'ownerType' => $ownerType,
             'ownerId'   => $ownerId
         ));
 
-        return ArrayToolkit::column($res['tags'], 'name');
+        $formalTags = array();
+        foreach ($originalTags as $tag) {
+            $formalTags[] = array(
+                'id'   => $tag['id'],
+                'name' => $tag['name'],
+            );
+        }
+
+        return $formalTags;
     }
 
     protected static function getTagService()

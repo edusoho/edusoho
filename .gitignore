@@ -66,3 +66,4 @@ chunk-manifest.json
 /web/static-dist/*
 !/web/static-dist/libs
 !/web/static-dist/app
+/.vscode

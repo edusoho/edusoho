@@ -6,7 +6,7 @@ use Topxia\Service\Common\Lock;
 use Monolog\Handler\StreamHandler;
 use Topxia\Service\Common\ServiceException;
 use Topxia\Service\Common\NotFoundException;
-use Topxia\Service\Util\HTMLPurifierFactory;
+use Topxia\Service\Util\HTMLPurifier;
 use Topxia\Service\Common\AccessDeniedException;
 
 abstract class BaseService
@@ -62,13 +62,13 @@ abstract class BaseService
         }
 
         $config = array(
-            'cacheDir' => $this->getKernel()->getParameter('kernel.cache_dir').'/htmlpurifier'
+            'cacheDir' => $this->getKernel()->getParameter('kernel.cache_dir').'/htmlpurifier',
+            'safeIframeDomains' => $this->setting('security.safe_iframe_domains', array()),
         );
 
-        $factory  = new HTMLPurifierFactory($config);
-        $purifier = $factory->create($trusted);
+        $purifier = new HTMLPurifier($config);
 
-        return $purifier->purify($html);
+        return $purifier->purify($html, $trusted);
     }
 
     /**
@@ -76,7 +76,7 @@ abstract class BaseService
      */
     protected function createServiceException($message = 'Service Exception', $code = 0)
     {
-        return new ServiceException($message, $code);
+        throw new ServiceException($message, $code);
     }
 
     /**
@@ -84,7 +84,7 @@ abstract class BaseService
      */
     protected function createAccessDeniedException($message = 'Access Denied', $code = 0)
     {
-        return new AccessDeniedException($message, null, $code);
+        throw new AccessDeniedException($message, null, $code);
     }
 
     /**
@@ -92,7 +92,7 @@ abstract class BaseService
      */
     protected function createNotFoundException($message = 'Not Found', $code = 0)
     {
-        return new NotFoundException($message, $code);
+        throw new NotFoundException($message, $code);
     }
 
     protected function fillOrgId($fields)
@@ -159,7 +159,7 @@ abstract class BaseService
         return true;
     }
 
-    public function setting($name, $default) 
+    public function setting($name, $default = '')
     {
         $names = explode('.', $name);
         $setting = $this->createService('System.SettingService')->get($names[0]);

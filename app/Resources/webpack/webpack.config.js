@@ -40,7 +40,13 @@ const config = {
       name: 'bootstrap/dist/css/bootstrap.css'
     },
     {
+      name: 'bootstrap/dist/fonts/'
+    },
+    {
       name: 'font-awesome/css/font-awesome.css'
+    },
+    {
+      name: 'font-awesome/fonts/'
     },
     {
       name: 'es5-shim/es5-shim.js'

@@ -2,6 +2,10 @@ homepage:
     path:  /
     defaults: { _controller: TopxiaWebBundle:Default:index }
 
+app_download:
+    path: /app/download
+    defaults: { _controller: TopxiaWebBundle:Default:appDownload }
+
 switch_language:
     path: /switch/language
     defaults: { _controller: TopxiaWebBundle:Default:translate }
@@ -1224,6 +1228,10 @@ announcement_show:
     path:  /announcement/{id}/{targetId}/show
     defaults: { _controller: TopxiaWebBundle:Announcement:show }
 
+announcement_global_show:
+    path:  /announcement/{id}/opreate/global/show
+    defaults: { _controller: TopxiaWebBundle:Announcement:globalShow }
+
 announcement_manage:
     path:  /announcement/{targetType}/{targetId}/manage
     defaults: { _controller: TopxiaWebBundle:Announcement:manage }
@@ -1807,9 +1815,11 @@ group_show:
 group_join:
     path:  /group/{id}/join
     defaults: { _controller: TopxiaWebBundle:Group:groupJoin }
+    methods: [POST]
 group_exit:
     path:  /group/{id}/exit
     defaults: { _controller: TopxiaWebBundle:Group:groupExit }
+    methods: [POST]
 group_member:
     path:  /group/member/{id}
     defaults: { _controller: TopxiaWebBundle:Group:groupMember }
@@ -2463,6 +2473,9 @@ importer_index:
     path: /importer/{type}/index
     defaults: { _controller: TopxiaWebBundle:Importer:template}
 
+changelog_list:
+    path: /changelog/list
+    defaults: { _controller: TopxiaWebBundle:Changelog:list }
 #esbar_my_history:
 #    path:  /esbar/my/history
 #    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:history}

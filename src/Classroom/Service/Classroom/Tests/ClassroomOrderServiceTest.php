@@ -172,7 +172,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
             'paidTime' => time()
         ));
         $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
-        $refund = $this->getClassroomOrderService()->applyRefundOrder($order['id'], "a", "我要外卖啊", "a");
+        $refund = $this->getClassroomOrderService()->applyRefundOrder($order['id'], 0, "我要外卖啊", "a");
         $this->assertEquals($refund['status'], 'success');
     }
 
@@ -182,7 +182,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
     public function testApplyRefundOrderWithEmptyOrder()
     {
         $order = array('id' => '100');
-        $this->getClassroomOrderService()->applyRefundOrder($order['id'], "a", "我要外卖啊", "a");
+        $this->getClassroomOrderService()->applyRefundOrder($order['id'], 0, "我要外卖啊", "a");
     }
 
     public function getOrder()

@@ -32,40 +32,17 @@ class OpenCourses extends BaseResource
         } else {
             $total       = $this->getOpenCourseService()->searchCourseCount($conditions);
             $openCourses = $this->getOpenCourseService()->searchCourses($conditions, array('createdTime', 'DESC'), $start, $limit);
-
+            $openCourses = $this->assembly($openCourses);
             return $this->wrap($this->filter($openCourses), $total);
         }
     }
 
     protected function assembly(array $openCourses)
     {
-        $tagIds = array();
-        foreach ($openCourses as $course) {
-            $tempTagIds = $this->getTagIdsByCourse($course);
-            $tagIds = array_merge($tagIds, $tempTagIds);
-        }
-
-        $tags = $this->getTagService()->findTagsByIds($tagIds);
-
         $categoryIds = ArrayToolkit::column($openCourses, 'categoryId');
         $categories  = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
         foreach ($openCourses as &$course) {
-            $courseTags = array();
-            if (empty($course['tags'])) {
-                continue;
-            }
-            foreach ($course['tags'] as $tagId) {
-                if (empty($tags[$tagId])) {
-                    continue;
-                }
-                $courseTags[] = array(
-                    'id'   => $tagId,
-                    'name' => $tags[$tagId]['name']
-                );
-            }
-            $course['tags'] = $courseTags;
-
             if (isset($categories[$course['categoryId']])) {
                 $course['category'] = array(
                     'id'   => $categories[$course['categoryId']]['id'],
@@ -85,27 +62,12 @@ class OpenCourses extends BaseResource
         return $this->multicallFilter('OpenCourse', $res);
     }
 
-    protected function getTagIdsByCourse($course)
-    {
-        $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course', 'ownerId' => $course['id']));
-
-        return ArrayToolkit::column($tags, 'id');
-    }
-
     /**
      * @return OpenCourseServiceImpl
      */
     protected function getOpenCourseService()
     {
         return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
-    }
-
-    /**
-     * @return TagServiceImpl
-     */
-    protected function getTagService()
-    {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 
     /**
