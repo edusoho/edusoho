@@ -30,6 +30,9 @@ class EduSohoUpgrade extends AbstractUpdater
         if(!empty($payment['wxpay_appid'])){
             return ;
         }
+        if(empty($payment['wxpay_key']) ||  empty($payment['wxpay_secret'])){
+            return ;
+        }
         $payment['wxpay_appid'] =   $payment['wxpay_key'];
         $payment['wxpay_key'] =     $payment['wxpay_secret'];
         $payment['wxpay_secret'] =  '';
