@@ -90,19 +90,28 @@ class ChaosThreadsPosts extends BaseResource
             return array();
         }
 
-        $courseIds = ArrayToolkit::column($posts, "courseId");
+        $courseIds = ArrayToolkit::column($posts, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
+        $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+
         foreach ($posts as $key => &$post) {
-            $thread = $this->getCourseThreadService()->getThread(null, $post['threadId']);
+            $thread = $this->getCourseThreadService()->getThread(0, $post['threadId']);
             if ($thread['userId'] == $currentUser['id'] || !isset($courses[$post['courseId']])) {
                 unset($posts[$key]);
                 continue;
             }
+
             $course = $courses[$post['courseId']];
-            $course['smallPicture'] = $this->getFileUrl($course['smallPicture']);
-            $course['middlePicture'] = $this->getFileUrl($course['middlePicture']);
-            $course['largePicture'] = $this->getFileUrl($course['largePicture']);
+            $courseSet = $courseSets[$course['courseSetId']];
+
+            $smallPicture = empty($courseSet['cover']['small']) ? '' : $courseSet['cover']['small'];
+            $middlePicture = empty($courseSet['cover']['middle']) ? '' : $courseSet['cover']['middle'];
+            $largePicture = empty($courseSet['cover']['large']) ? '' : $courseSet['cover']['large'];
+            $course['smallPicture'] = $this->getFileUrl($smallPicturem, 'course.png');
+            $course['middlePicture'] = $this->getFileUrl($middlePicture, 'course.png');
+            $course['largePicture'] = $this->getFileUrl($largePicture, 'course.png');
             $post['type'] = $thread['type'];
             $post['title'] = $thread['title'];
             $post['course'] = $this->filterCourse($course);
