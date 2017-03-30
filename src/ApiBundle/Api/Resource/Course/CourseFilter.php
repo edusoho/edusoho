@@ -12,7 +12,7 @@ class CourseFilter extends Filter
     private $publicFields = array(
         'id', 'courseSetId', 'title', 'learnMode', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'summary',
         'goals', 'audiences', 'isDefault', 'maxStudentNum', 'status', 'creator', 'isFree', 'price',
-        'vipLevelId', 'buyable', 'tryLookable', 'tryLookLength', 'watchLimit', 'services',
+        'vipLevelId', 'buyable', 'tryLookable', 'tryLookLength', 'watchLimit', 'services', 'ratingNum', 'rating',
         'taskNum', 'publishedTaskNum', 'studentNum', 'teacherIds', 'parentId', 'createdTime', 'updatedTime'
     );
 

@@ -25,7 +25,7 @@ class UserAssociateUtil
     {
         $userIds = array();
         foreach ($objects as $object) {
-            $userIds = $userIds + $this->findUserIds($object, $userIdFields);
+            $userIds = array_merge($userIds, $this->findUserIds($object, $userIdFields));
         }
 
         $users = $this->findUsers($userIds);
