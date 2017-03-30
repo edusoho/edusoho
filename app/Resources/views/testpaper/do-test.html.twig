@@ -5,9 +5,9 @@
 
 {% if  ((paperResult|default(null) and paperResult.status|default(null) in ['finished','reviewing'] and setting('questions.testpaper_answers_show_mode','submitted') == 'hide') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed' and paperResult.status|default(null) == 'reviewing' )) and not isTeacher|default(0) %}
 {% else %}
-  
+
   <form id='teacherCheckForm' autocomplete="off">
-    
+
     {% for type in questionTypes|default([]) if questions[type]|default(null) %}
       <div class="panel panel-default js-testpaper-question-block" id="testpaper-questions-{{ type }}">
         <div class="panel-heading">

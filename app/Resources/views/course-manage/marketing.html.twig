@@ -218,7 +218,7 @@
             <div class="col-sm-8 form-control-static">
               {% set serviceTags = services(course.services | default([])) %}
               {% for tag in serviceTags %}
-                <a class="label label-md js-service-item mr10 mb10 inline-block {% if tag.active %}label-primary{% else %}label-default{% endif %}" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{tag.summary}}">{{ tag.full_name }}</a>
+                <a class="label label-md js-service-item mr10 mb10 inline-block {% if tag.active %}label-primary{% else %}label-default{% endif %}" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{tag.summary}}" data-code="{{tag.code}}">{{ tag.full_name }}</a>
               {% endfor %}
               <input type="hidden" id="course_services" name="services" value="{{course.services|default([])|json_encode_utf8()}}">
             </div>
