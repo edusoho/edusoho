@@ -19,6 +19,7 @@
 		<ul class="course-grids">
 		{% if courses %}
 			{% for course in courses %}
+        {% set courseSet=data('CourseSet',{'id':course.courseSetId}) %}
 			{% include 'admin/course/course-item.html.twig' with {course:course} %}
 			{% endfor %}
 		{% else %}
