@@ -539,8 +539,11 @@ class PayCenterController extends BaseController
         if (empty($settings[$payment.'_enabled'])) {
             throw new \RuntimeException($this->trans('支付模块(%payment%)未开启，请先开启。', array('%payment%' => $payment)));
         }
+        if ($payment === 'alipay' && (empty($settings["{$payment}_key"]) || empty($settings["{$payment}_secret"]))) {
+            throw new \RuntimeException($this->trans('支付模块(%payment%)参数未设置，请先设置。', array('%payment%' => $payment)));
+        }
 
-        if (empty($settings["{$payment}_appid"]) || empty($settings["{$payment}_secret"])) {
+        if ($payment === 'wxpay' && (empty($settings["{$payment}_appid"]) || empty($settings["{$payment}_secret"]))) {
             throw new \RuntimeException($this->trans('支付模块(%payment%)参数未设置，请先设置。', array('%payment%' => $payment)));
         }
 
@@ -615,6 +618,10 @@ class PayCenterController extends BaseController
                 }
 
                 if ($this->isMobileClient() && $payName == 'llcbpay') {
+                    $enableds[$key]['enabled'] = 0;
+                }
+
+                if ($this->isMobileClient() && !($this->isWxClient()) && $payName == 'wxpay') {
                     $enableds[$key]['enabled'] = 0;
                 }
             }
