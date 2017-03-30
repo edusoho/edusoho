@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class PptActivityDaoImpl extends GeneralDaoImpl implements PptActivityDao
 {
-    protected $table = 'ppt_activity';
+    protected $table = 'activity_ppt';
 
     public function declares()
     {

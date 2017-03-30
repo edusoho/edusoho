@@ -187,6 +187,8 @@ class LiveCourseSetController extends CourseBaseController
                 $dateTabs[] = $date;
             }
         }
+        $liveTabs = array_slice($liveTabs, 0, 3);
+        $dateTabs = array_slice($dateTabs, 0, 3);
 
         return $this->render(
             'course-set/live/tab.html.twig',
@@ -208,7 +210,7 @@ class LiveCourseSetController extends CourseBaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getCourseSetService()->countCourseSets(array('ids' => $vipCourseSetIds)),
+            $this->getCourseSetService()->countCourseSets(array('ids' => $vipCourseSetIds, 'type' => 'live')),
             10
         );
         $replayLiveCourseSets = array();

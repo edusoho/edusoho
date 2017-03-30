@@ -96,12 +96,12 @@ class DoctrineEntityGenerator extends Generator
             $entityCode
         );
 
-        self::mkdir(dirname($entityPath));
-        self::dump($entityPath, $entityCode);
+        $this->filesystem->mkdir(dirname($entityPath));
+        file_put_contents($entityPath, $entityCode);
 
         if ($mappingPath) {
-            self::mkdir(dirname($mappingPath));
-            self::dump($mappingPath, $mappingCode);
+            $this->filesystem->mkdir(dirname($mappingPath));
+            file_put_contents($mappingPath, $mappingCode);
         }
 
         $path = $bundle->getPath().str_repeat('/..', substr_count(get_class($bundle), '\\'));

@@ -30,12 +30,12 @@ class Marketing {
 
       if ($item.hasClass('label-primary')) {
         $item.removeClass('label-primary').addClass('label-default');
-        values.splice($values.indexOf($item.text()), 1);
+        values.splice(values.indexOf($item.data('code')), 1);
       } else {
         $item.removeClass('label-default').addClass('label-primary');
-        values.push($item.text());
+        values.push($item.data('code'));
       }
-
+      
       $('#course_services').val(JSON.stringify(values));
     });
   }

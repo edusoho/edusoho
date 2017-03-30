@@ -30,7 +30,7 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
         $classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
 
-        if ($classroom && $note['status'] === CourseNoteService::PUBLIC_STATUS) {
+        if ($classroom && $note['status'] == CourseNoteService::PUBLIC_STATUS) {
             $this->getClassroomService()->waveClassroom($classroom['id'], 'noteNum', +1);
         }
 
@@ -54,11 +54,11 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
         $preStatus = $event->getArgument('preStatus');
 
-        if ($note['status'] === CourseNoteService::PUBLIC_STATUS && $preStatus === CourseNoteService::PRIVATE_STATUS) {
+        if ($note['status'] == CourseNoteService::PUBLIC_STATUS && $preStatus == CourseNoteService::PRIVATE_STATUS) {
             $this->getClassroomService()->waveClassroom($classroom['id'], 'noteNum', +1);
         }
 
-        if ($note['status'] === CourseNoteService::PRIVATE_STATUS && $preStatus === CourseNoteService::PUBLIC_STATUS) {
+        if ($note['status'] == CourseNoteService::PRIVATE_STATUS && $preStatus == CourseNoteService::PUBLIC_STATUS) {
             $this->getClassroomService()->waveClassroom($classroom['id'], 'noteNum', -1);
         }
     }

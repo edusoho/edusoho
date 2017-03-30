@@ -128,7 +128,7 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
 
     public function countCourseTasksByClassroomId($classroomId)
     {
-        $sql = "select sum(`taskNum`) from `c2_course` where id in (select `courseId` from `{$this->table}` where `classroomId` = {$classroomId} )";
+        $sql = "select sum(`taskNum`) from `course_v8` where id in (select `courseId` from `{$this->table}` where `classroomId` = {$classroomId} )";
         $result = $this->db()->fetchColumn($sql);
         if (is_null($result)) {
             return 0;

@@ -11,6 +11,7 @@ export default class Intro {
   constructor() {
     showSettings();
     this.intro = null;
+    this.customClass = "es-intro-help multistep";
     // $('body').on('click', '.js-reset-intro', (event) => {
     //   event.stopPropagation();
     //   $('body').removeClass('transparent-intro');
@@ -22,6 +23,10 @@ export default class Intro {
     //   this.showResetStep();
     //   $('.js-intro-btn-group').addClass('transparent');
     // });
+
+    $('body').on('click','.js-skip',(event)=>{
+      this.intro.exit();
+    });
   }
   
   introType() {
@@ -36,14 +41,15 @@ export default class Intro {
     this.initCourseListPageIntro();
   }
 
-  isRestintroType() {
-    if (this.isTaskCreatePage()) { 
-      $('.js-task-manage-item:first').trigger('mouseenter');
-      this.introStart(this.initAllSteps());
-      return ;
-    }
-    this.introStart(this.initNotTaskPageSteps());
-  }
+  // isRestintroType() {
+  //   if (this.isTaskCreatePage()) { 
+  //     $('.js-task-manage-item:first').trigger('mouseenter');
+  //     this.introStart(this.initAllSteps());
+  //     return ;
+  //   }
+  //   this.introStart(this.initNotTaskPageSteps());
+    
+  // }
 
   isCourseListPage() {
     return !!$('#courses-list-table').length;
@@ -59,24 +65,44 @@ export default class Intro {
   }
 
   introStart(steps) {
+    let doneLabel = '<i class="es-icon es-icon-close01"></i>';
     this.intro = introJs();
+    if(steps.length < 2) {
+       doneLabel= '我知道了';
+       this.customClass = "es-intro-help";
+    }else {
+       this.customClass = "es-intro-help multistep";
+    }
+    console.log(steps.length < 2);
+    console.log(this.customClass);
+    console.log(doneLabel);
     this.intro.setOptions({
       steps: steps,
-      skipLabel: '<i class="es-icon es-icon-close01"></i>',
+      skipLabel: doneLabel,
       nextLabel: '继续了解',
       prevLabel: '上一步',
-      doneLabel: '<i class="es-icon es-icon-close01"></i>',
+      doneLabel: doneLabel,
       showBullets: false,
       tooltipPosition: 'auto',
       // positionPrecedence:['left', 'right', 'bottom', 'top'],
       showStepNumbers: false,
        exitOnEsc: false,
       exitOnOverlayClick: false,
+      tooltipClass:this.customClass,
     });
+    
     this.intro.start().onexit(function(){
-      $('.js-intro-btn-group').removeClass('transparent');
-      $('body').removeClass('transparent-intro');
-    });
+      // $('.js-intro-btn-group').removeClass('transparent');
+      // $('body').removeClass('transparent-intro');
+    }).onchange(()=>{
+      console.log(this.intro);
+      if(this.intro._currentStep ==(this.intro._introItems.length -1 ) ) {
+        $('.introjs-nextbutton').before('<a class="introjs-button  done-button js-skip">我知道了<a/>');
+      }
+      else {
+        $('.js-skip').remove();
+      }
+    })
   }
 
   initTaskCreatePageIntro() {
@@ -157,22 +183,22 @@ export default class Intro {
     let arry = [
       {
         intro: `<p class="title">功能升级</p>
-        课程管理功能现已全新升级!`,
+        课程管理功能现已全新升级。`,
       },
       {
         element: '#step-1',
         intro: `<p class="title">计划任务</p>
-        教学内容的编辑、管理请点击左侧“计划任务”的菜单项进入!`,
+        教学内容的编辑、管理请点击左侧“计划任务”的菜单项进入。`,
       },
       {
         element: '#step-2',
         intro: `<p class="title">营销设置</p>
-        在“营销设置”中您可以通过设置决定课程如何销售、如何加入、如何学习!`,
+        在“营销设置”中您可以通过设置决定课程如何销售、如何加入、如何学习。`,
       },
       {
         element: '#step-3',
         intro: `<p class="title">添加任务</p>
-        您可以在这里选择各种不同的教学手段，然后上传文件/设置内容/设置学习完成条件。!`,
+        您可以在这里选择各种不同的教学手段，然后上传文件/设置内容/设置学习完成条件。`,
       }
     ];
     //如果存在任务
@@ -181,9 +207,15 @@ export default class Intro {
         element: '#step-5',
         intro: `<p class="title">任务环节</p>
         在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，
-        每个环节都可以通过各种教学手段来实现。!`,
+        每个环节都可以通过各种教学手段来实现。`,
       })
+      if (!store.get(COURSE_TASK_DETAIL_INTRO)) {
+        store.set(COURSE_TASK_DETAIL_INTRO);
+      }
     }
+
+
+
 
     return arry;
   }
@@ -192,17 +224,17 @@ export default class Intro {
     return [
       {
         intro: `<p class="title">功能升级</p>
-        课程管理功能现已全新升级!`,
+        课程管理功能现已全新升级。`,
       },
       {
         element: '#step-1',
         intro: `<p class="title">计划任务</p>
-        教学内容的编辑、管理请点击左侧“计划任务”的菜单项进入!`,
+        教学内容的编辑、管理请点击左侧“计划任务”的菜单项进入。`,
       },
       {
         element: '#step-2',
         intro: `<p class="title">营销设置</p>
-        在“营销设置”中您可以通过设置决定课程如何销售、如何加入、如何学习!`,
+        在“营销设置”中您可以通过设置决定课程如何销售、如何加入、如何学习。`,
       }
     ];
   }
@@ -212,7 +244,7 @@ export default class Intro {
       {
         element: '#step-3',
         intro: `<p class="title">添加任务</p>
-        您可以在这里选择各种不同的教学手段，然后上传文件/设置内容/设置学习完成条件。!`,
+        您可以在这里选择各种不同的教学手段，然后上传文件/设置内容/设置学习完成条件。`,
       }
     ];
     //如果存在任务
@@ -221,9 +253,12 @@ export default class Intro {
         element: '#step-5',
         intro: `<p class="title">任务环节</p>
         在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，
-        每个环节都可以通过各种教学手段来实现。!`,
+        每个环节都可以通过各种教学手段来实现。`,
         position: 'bottom',
       })
+      if (!store.get(COURSE_TASK_DETAIL_INTRO)) {
+        store.set(COURSE_TASK_DETAIL_INTRO);
+      }
     }
 
     return arry;
@@ -235,7 +270,7 @@ export default class Intro {
         element: element,
         intro: `<p class="title">任务环节</p>
         在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，
-        每个环节都可以通过各种教学手段来实现。!`,
+        每个环节都可以通过各种教学手段来实现。`,
         position: 'bottom',
       },
     ];
@@ -248,7 +283,7 @@ export default class Intro {
         intro: `
           <p class="title">多个教学计划</p>
           恭喜你创建了多个教学计划！左侧的功能菜单会有所简化，
-          只会显示课程公共的相关设置。`,
+          只会显示课程公共的相关设置。`
       }
     ];
   }

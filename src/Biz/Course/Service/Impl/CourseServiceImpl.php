@@ -539,6 +539,15 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'Invalid Argument: Course#{$courseId} not in CoruseSet#{$courseSetId}'
             );
         }
+
+        if ($course['parentId'] > 0) {
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($courseId);
+            if (!empty($classroom) && $classroom['headTeacherId'] == $user['id']) {
+                //班主任有权管理班级下所有课程
+                return $course;
+            }
+        }
+
         if (!$this->hasCourseManagerRole($courseId)) {
             throw $this->createAccessDeniedException('Unauthorized');
         }
@@ -642,13 +651,13 @@ class CourseServiceImpl extends BaseService implements CourseService
             return false;
         }
 
-        if ($user->hasPermission('admin_course_manage')) {
-            return true;
-        }
-
         $member = $this->getMemberDao()->getByCourseIdAndUserId($course['id'], $user['id']);
 
         if ($member && in_array($member['role'], array('teacher', 'student'))) {
+            return true;
+        }
+
+        if ($user->hasPermission('admin_course_manage')) {
             return true;
         }
 
@@ -1927,13 +1936,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if (!empty($fields['buyExpiryTime'])) {
-            $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime'].' 23:59:59');
+            if (is_numeric($fields['buyExpiryTime'])) {
+                $fields['buyExpiryTime'] = date('Y-m-d', $fields['buyExpiryTime']);
+            }
 
-            return $fields;
+            $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime'].' 23:59:59');
         } else {
             $fields['buyExpiryTime'] = 0;
-
-            return $fields;
         }
+
+        return $fields;
     }
 }

@@ -640,7 +640,7 @@ EOD;
         ));
 
         $this->getSettingService()->set('crontab_next_executed_time', time());
-
+        $this->getUserService()->initSystemUsers();
         $this->output->writeln(' ...<info>成功</info>');
     }
 

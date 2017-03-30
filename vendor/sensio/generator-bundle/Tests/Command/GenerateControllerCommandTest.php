@@ -18,6 +18,8 @@ use Sensio\Bundle\GeneratorBundle\Command\GenerateControllerCommand;
 class GenerateControllerCommandTest extends GenerateCommandTest
 {
     protected $generator;
+    protected $bundle;
+    protected $tmpDir;
 
     /**
      * @dataProvider getInteractiveCommandData
@@ -33,13 +35,14 @@ class GenerateControllerCommandTest extends GenerateCommandTest
             ->with($this->getBundle(), $controller, $routeFormat, $templateFormat, $actions)
         ;
 
-        $tester = new CommandTester($command = $this->getCommand($generator));
-        $this->setInputs($tester, $command, $input);
+        $tester = $this->getCommandTester($generator, $input);
         $tester->execute($options);
     }
 
     public function getInteractiveCommandData()
     {
+        $tmp = sys_get_temp_dir();
+
         return array(
             array(array(), "AcmeBlogBundle:Post\n", array('Post', 'annotation', 'twig', array())),
             array(array('--controller' => 'AcmeBlogBundle:Post'), '', array('Post', 'annotation', 'twig', array())),
@@ -86,12 +89,14 @@ class GenerateControllerCommandTest extends GenerateCommandTest
             ->with($this->getBundle(), $controller, $routeFormat, $templateFormat, $actions)
         ;
 
-        $tester = new CommandTester($command = $this->getCommand($generator));
+        $tester = $this->getCommandTester($generator);
         $tester->execute($options, array('interactive' => false));
     }
 
     public function getNonInteractiveCommandData()
     {
+        $tmp = sys_get_temp_dir();
+
         return array(
             array(array('--controller' => 'AcmeBlogBundle:Post'), array('Post', 'annotation', 'twig', array())),
             array(array('--controller' => 'AcmeBlogBundle:Post', '--route-format' => 'yml', '--template-format' => 'php'), array('Post', 'yml', 'php', array())),
@@ -126,7 +131,7 @@ class GenerateControllerCommandTest extends GenerateCommandTest
         );
     }
 
-    protected function getCommand($generator)
+    protected function getCommand($generator, $input)
     {
         $command = $this
             ->getMockBuilder('Sensio\Bundle\GeneratorBundle\Command\GenerateControllerCommand')
@@ -135,10 +140,15 @@ class GenerateControllerCommandTest extends GenerateCommandTest
         ;
 
         $command->setContainer($this->getContainer());
-        $command->setHelperSet($this->getHelperSet());
+        $command->setHelperSet($this->getHelperSet($input));
         $command->setGenerator($generator);
 
         return $command;
+    }
+
+    protected function getCommandTester($generator, $input = '')
+    {
+        return new CommandTester($this->getCommand($generator, $input));
     }
 
     protected function getApplication($input = '')
@@ -187,7 +197,7 @@ class GenerateControllerCommandTest extends GenerateCommandTest
     protected function setBundle()
     {
         $bundle = $this->getMockBuilder('Symfony\Component\HttpKernel\Bundle\BundleInterface')->getMock();
-        $bundle->expects($this->any())->method('getPath')->will($this->returnValue(''));
+        $bundle->expects($this->any())->method('getPath')->will($this->returnValue($this->tmpDir));
         $bundle->expects($this->any())->method('getName')->will($this->returnValue('FooBarBundle'));
         $bundle->expects($this->any())->method('getNamespace')->will($this->returnValue('Foo\BarBundle'));
 

@@ -77,7 +77,7 @@ common_qrcode:
     defaults: { _controller: AppBundle:Common:qrcode }
 
 common_crontab:
-    path:  /common/crontab
+    path:  /crontab
     defaults: { _controller: AppBundle:Common:crontab }
     methods: [POST]
 
@@ -2871,10 +2871,9 @@ course_task_question_marker_search:
     defaults: { _controller: AppBundle:QuestionMarker:search }
 
 callback:
-    path:  /callback/{resource}
-    defaults: { _controller: AppBundle:Callback/Index:index }
+    path:  /callback/{type}
+    defaults: { _controller: AppBundle:Callback/Endpoint:publish }
 
 mobile_qrcode:
     path:  /mobil/qrcode
     defaults: { _controller: AppBundle:Common:mobileQrcode }
-

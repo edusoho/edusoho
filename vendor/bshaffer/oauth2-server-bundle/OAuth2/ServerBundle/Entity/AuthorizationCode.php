@@ -38,6 +38,11 @@ class AuthorizationCode
     private $client;
 
     /**
+     * @var string
+     */
+    private $id_token;
+
+    /**
      * Set code
      *
      * @param  string            $code
@@ -63,7 +68,7 @@ class AuthorizationCode
     /**
      * Set expires
      *
-     * @param  \DateTime         $expires
+     * @param  \DateTime|int $expires
      * @return AuthorizationCode
      */
     public function setExpires($expires)
@@ -180,5 +185,21 @@ class AuthorizationCode
     public function getClient()
     {
         return $this->client;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdToken()
+    {
+      return $this->id_token;
+    }
+
+    /**
+     * @param string $idToken
+     */
+    public function setIdToken($idToken)
+    {
+      $this->id_token = $idToken;
     }
 }

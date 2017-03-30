@@ -3,48 +3,53 @@
 namespace Codeages\Biz\Framework\Redis;
 
 use Redis;
-use Flexihash;
 
 class MultipleRedis
 {
     private $hash;
-    private $reidsPool;
-    private $servers;
+    private $redisNodes = array();
+    private $servers = array();
 
-    public function __construct($config)
+    public function __construct($servers)
     {
-        $this->reidsPool = array();
-        $this->hash      = new Flexihash();
-        $servers         = $config['servers'];
-        $redisServers    = array();
+        $this->createRedisManager();
 
-        foreach ($servers as $key => $value) {
-            $key                 = $value['host'].':'.$value['port'];
-            $redisServers[]      = $key;
-            $this->servers[$key] = $value;
+        foreach ($servers as $key => $config) {
+            $node = $config['host'].':'.$config['port'];
+            $this->hash->addNode($node);
+            $this->servers[$node] = $config;
+        }
+    }
+
+    protected function createRedisManager()
+    {
+        if (empty($this->hash)) {
+            $this->hash = new \Canoma\Manager(
+                new \Canoma\HashAdapter\Md5,
+                30
+            );
         }
 
-        $this->hash->addTargets($redisServers);
+        return $this->hash;
     }
 
     public function __call($method, $arguments)
     {
-        return call_user_func_array(array($this->lookup($key), $method), $arguments);
+        return call_user_func_array(array($this->lookup($arguments[0]), $method), $arguments);
     }
 
     public function lookup($key)
     {
-        $redisIndex = $this->hash->lookup($key);
-        $redis      = $this->reidsPool[$redisIndex];
+        $node = $this->hash->getNodeForString($key);
 
-        if (empty($this->reidsPool[$redisIndex])) {
-            $value = $this->servers[$redisIndex];
+        if (empty($this->redisNodes[$node])) {
+            $config = $this->servers[$node];
             $redis = new Redis();
-            $redis->pconnect($value['host'], $value['port'], $value['timeout'], $value['reserved'], $value['retry_interval']);
+            $redis->pconnect($config['host'], $config['port'], $config['timeout'], $config['reserved'], $config['retry_interval']);
             $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
-            $this->reidsPool[$redisIndex] = $redis;
+            $this->redisNodes[$node] = $redis;
         }
 
-        return $this->reidsPool[$redisIndex];
+        return $this->redisNodes[$node];
     }
 }
