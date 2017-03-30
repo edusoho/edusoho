@@ -58,7 +58,8 @@ class KernelRequestListener
 
             $whiteList = $this->container->hasParameter('route_white_list') ? $this->container->getParameter('route_white_list') : array();
 
-            if (in_array($request->getPathInfo(), $whiteList) || strpos($request->getPathInfo(), ApiBundle::API_PREFIX) == 0) {
+            if (in_array($request->getPathInfo(), $whiteList)
+                || $this->container->get('api_security_policy_manager')->isApiPath($request)) {
                 return;
             }
 

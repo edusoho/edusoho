@@ -20,6 +20,11 @@ class SecurityPolicyManager
         $this->pluginConfigManager = new PluginConfigurationManager($container->getParameter('kernel.root_dir'));
     }
 
+    public function isApiPath(Request $request)
+    {
+        return strpos($request->getPathInfo(), ApiBundle::API_PREFIX) === 0;
+    }
+
     public function isInWhiteList(Request $request)
     {
         $whiteList = $this->getWhiteList();
