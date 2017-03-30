@@ -406,10 +406,10 @@ user.homepage.learning_courses.empty: 无在学的课程
 user.homepage.favorite_courses.empty: 无收藏的课程
 
 #个人主页模块-在教班级
-user.homepage.teaching_classrooms.empty: 无在教的%name%
+user.homepage.teaching_classrooms.empty: 无在教的%classroomName%
 
 #个人主页模块-在学班级
-user.homepage.learning_classrooms.empty: 无在学的%name%！
+user.homepage.learning_classrooms.empty: 无在学的%classroomName%！
 
 #个人主页模块-加入小组
 user.homepage.joined_group.join: 加入小组
@@ -526,7 +526,7 @@ group.thread.attachments_upload.file_name: 文件名
 group.thread.attachments_upload.description: 描述
 group.thread.attachments_upload.operations: 操作
 group.thread.attachments_upload.delete_btn: 删除
-group.thread.attachments_upload.hint: 用户下载附件扣除的%name%会在扣除50%之后添加到您的账户
+group.thread.attachments_upload.tips: 用户下载附件扣除的%name%会在扣除50%之后添加到您的账户
 
 group.thread.attachments_download: 附件下载
 group.thread.attachments_download.description: 描述：%description%
@@ -554,9 +554,9 @@ group.thread.reply_numbers: %postNum%回复
 group.thread.desc_floors_count: %postCount%楼
 group.thread.asc_floors_count: %loop.index%楼
 group.thread.delete_btn: 删除
-group.thread.delete_warning: 确定删除这条回复
+group.thread.delete_tips: 确定删除这条回复
 group.thread.accept_btn: 采纳
-group.thread.accept_warning: 确定采纳这条回复
+group.thread.accept_tips: 确定采纳这条回复
 group.thread.reply_btn: 回复
 group.thread.publish_reply: 发表回复
 group.thread.publish_reply.content_title: 回复内容
@@ -567,10 +567,10 @@ group.thread.writer: 话题作者
 group.thread.writer.empty: 无
 
 group.thread.insert_hide_content: 插入隐藏内容 
-group.thread.insert_hide_content_hint: 隐藏话题获得的%coin_name%会在扣除50%之后添加到您的账户
-group.thread.insert_hide_content_description: 请输入要隐藏的内容
+group.thread.insert_hide_content_tips: 隐藏话题获得的%coin_name%会在扣除50%之后添加到您的账户
+group.thread.insert_hide_content_tips: 请输入要隐藏的内容
 group.thread.check_need: 查看所需
-group.thread.check_need_hint: 回复话题后可见
+group.thread.check_need_tips: 回复话题后可见
 
 group.thread.creat.content_title: 发表话题
 group.thread.creat.attachments: 附件

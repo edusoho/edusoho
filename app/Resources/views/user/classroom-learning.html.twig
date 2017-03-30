@@ -20,7 +20,7 @@
       {% endfor %}
     </div>
   {% else %}
-    <div class="empty">{{'user.homepage.learning_classrooms.empty'|trans({'%name%': setting('classroom.name')|default('classroom'|trans)})}}</div>
+    <div class="empty">{{'user.homepage.learning_classrooms.empty'|trans({'%classroomName%': setting('classroom.name')|default('classroom'|trans)})}}</div>
   {% endif %}
 
   {{ web_macro.paginator(paginator) }}

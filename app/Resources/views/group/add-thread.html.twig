@@ -74,7 +74,7 @@
 
             <div class="row form-group">
               <div class="col-md-4 control">
-                <label class="control-label"> {{ 'group.thread.insert_hide_content_description'|trans }}:</label>
+                <label class="control-label"> {{ 'group.thread.insert_hide_content_tips'|trans }}:</label>
               </div>
               <div class="col-md-7 controls">
                 <textarea class="form-control" rows="3" id="text"> </textarea>
@@ -98,7 +98,7 @@
             <div class="row form-group">
               <div class="col-md-4 control">
                 <input type="radio" id="type1" name="type" required="required" value="reply">
-                <label for="amount" class="control-label"> {{ 'group.thread.check_need_hint'|trans }}</label>
+                <label for="amount" class="control-label"> {{ 'group.thread.check_need_tips'|trans }}</label>
               </div>
 
             </div>
@@ -106,7 +106,7 @@
           </form>
         </div>
         <div class="modal-footer">
-          <div class="pull-left color-gray">{{'group.thread.insert_hide_content_hint'|trans({'%coin_name%':setting('coin').coin_name|default('')})}}
+          <div class="pull-left color-gray">{{'group.thread.insert_hide_content_tips'|trans({'%coin_name%':setting('coin').coin_name|default('')})}}
           </div>
           <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
           <button type="button" class="btn btn-primary" id="insert">{{ 'form.btn.insert'|trans }}</button>

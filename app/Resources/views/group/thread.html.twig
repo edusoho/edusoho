@@ -203,13 +203,13 @@
 
               <div class="actions">
                 {% if user.id==post.userId or is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
-                  <a title="{{'group.thread.delete_warning'|trans}}" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id})}}">{{'group.thread.delete_btn'|trans}}</a>
+                  <a title="{{'group.thread.delete_tips'|trans}}" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id})}}">{{'group.thread.delete_btn'|trans}}</a>
                 {% endif %}
 
                 {% if is_feature_enabled('group_reward') %}
                   {% if not isAdopt and threadMain.type == "reward" %}
                     {% if is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
-                      <a title="{{'group.thread.accept_warning'|trans}}" class="mhm post-adopt-btn" href="javascript:" data-url="{{path('group_thread_adopt',{postId:post.id})}}">{{'group.thread.accept_btn'|trans}}</a>
+                      <a title="{{'group.thread.accept_tips'|trans}}" class="mhm post-adopt-btn" href="javascript:" data-url="{{path('group_thread_adopt',{postId:post.id})}}">{{'group.thread.accept_btn'|trans}}</a>
                     {% endif %}
                   {% endif %}
                 {% endif %}
