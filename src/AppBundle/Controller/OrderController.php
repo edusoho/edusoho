@@ -12,7 +12,6 @@ use Biz\Order\Service\OrderService;
 use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\NumberToolkit;
-use AppBundle\Common\JoinPointToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
 use VipPlugin\Biz\Vip\Service\LevelService;
@@ -30,29 +29,18 @@ class OrderController extends BaseController
 
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');
-        $orderTypes = JoinPointToolkit::load('order');
-        if (empty($targetType)
-            || empty($targetId)
-            || !array_key_exists($targetType, $orderTypes)
-        ) {
-            return $this->createMessageResponse('error', '参数不正确');
-        }
-
-        $processor = OrderProcessorFactory::create($targetType);
-        $checkInfo = $processor->preCheck($targetId, $currentUser['id']);
-
-        if (isset($checkInfo['error'])) {
-            return $this->createMessageResponse('error', $checkInfo['error']);
-        }
-
         $fields = $request->query->all();
-        $orderInfo = $processor->getOrderInfo($targetId, $fields);
+        list($error, $orderInfo, $processor) = $this->getOrderFacadeService()->getOrderInfo($targetType, $targetId, $fields);
+
+        if (isset($error['error'])) {
+            return $this->createMessageResponse('error', $error['error']);
+        }
 
         if (((float) $orderInfo['totalPrice']) == 0) {
             $formData = array();
             $formData['userId'] = $currentUser['id'];
-            $formData['targetId'] = $fields['targetId'];
-            $formData['targetType'] = $fields['targetType'];
+            $formData['targetId'] = $targetId;
+            $formData['targetType'] = $targetType;
             $formData['amount'] = 0;
             $formData['totalPrice'] = 0;
             $coinSetting = $this->setting('coin');
@@ -61,20 +49,10 @@ class OrderController extends BaseController
             $formData['coinAmount'] = 0;
             $formData['payment'] = 'alipay';
             $order = $processor->createOrder($formData, $fields);
-
             if ($order['status'] == 'paid') {
                 return $this->redirect($processor->callbackUrl($order, $this->container));
             }
         }
-
-        $verifiedMobile = '';
-
-        if ((isset($currentUser['verifiedMobile'])) && (strlen($currentUser['verifiedMobile']) > 0)) {
-            $verifiedMobile = $currentUser['verifiedMobile'];
-        }
-
-        $orderInfo['verifiedMobile'] = $verifiedMobile;
-        $orderInfo['hasPassword'] = strlen($currentUser['password']) > 0;
 
         return $this->render('order/order-create.html.twig', $orderInfo);
     }
@@ -395,5 +373,10 @@ class OrderController extends BaseController
     protected function getCashAccountService()
     {
         return $this->createService('Cash:CashAccountService');
+    }
+
+    protected function getOrderFacadeService()
+    {
+        return $this->createService('Order:OrderFacadeService');
     }
 }
