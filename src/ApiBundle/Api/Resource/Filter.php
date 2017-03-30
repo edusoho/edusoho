@@ -13,6 +13,7 @@ abstract class Filter
         }
 
         $this->defaultFieldsFilter($data);
+
         $this->defaultTimeFilter($data);
 
         $this->customFilter($data);
@@ -47,11 +48,11 @@ abstract class Filter
 
     private function defaultTimeFilter(&$data)
     {
-        if (isset($data['createdTime'])) {
+        if (isset($data['createdTime']) && is_numeric($data['createdTime'])) {
             $data['createdTime'] = date('c', $data['createdTime']);
         }
 
-        if (isset($data['updatedTime'])) {
+        if (isset($data['updatedTime']) && is_numeric($data['updatedTime'])) {
             $data['updatedTime'] = date('c', $data['updatedTime']);
         }
     }

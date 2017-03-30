@@ -18,6 +18,7 @@ class CourseSetCourse extends Resource
 
         $courses = $this->service('Course:CourseService')->findPublishedCoursesByCourseSetId($courseSetId);
         $this->getUAUtil()->multiple($courses, array('creator', 'teacherIds'));
+
         return $courses;
     }
 }
