@@ -25,6 +25,7 @@ class AuthController extends BaseController
         }
 
         $newEmail = $token['data'];
+
         if (empty($newEmail)) {
             return $this->render('auth/email-confirm-error.html.twig');
         }

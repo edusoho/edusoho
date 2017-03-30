@@ -879,8 +879,14 @@ class SettingsController extends BaseController
                     return $this->redirect($this->generateUrl('settings_email'));
                 }
 
-                $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $data['email']);
+                $tokenArgs = array(
+                    'userId' => $user['id'],
+                    'duration' => 60 * 60 * 24,
+                    'data' => $data['email'],
+                );
 
+                $token = $this->getTokenService()->makeToken('email-verify', $tokenArgs);
+                $token = $token['token'];
                 try {
                     $site = $this->setting('site', array());
                     $mailOptions = array(
@@ -1155,6 +1161,14 @@ class SettingsController extends BaseController
     protected function getUserFieldService()
     {
         return $this->getBiz()->service('User:UserFieldService');
+    }
+
+    /**
+     * @return \Biz\User\Service\TokenService
+     */
+    protected function getTokenService()
+    {
+        return $this->getBiz()->service('User:TokenService');
     }
 
     /**
