@@ -174,7 +174,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         $this->getSettingService()->set('operation_mobile', $operationMobile);
         $this->getSettingService()->set('mobile', $mobile);
         $this->getLogService()->info('system', 'update_settings', '更新移动客户端设置', $mobile);
-        // var_dump('mobile');exit;
     }
 
     /**
