@@ -8,7 +8,12 @@
 {% block course_header_qrcode %}{% endblock %}
 
 {% block course_header_subtitle %}
-  <p class="text-overflow  pt5">{{ courseSet.subtitle }}</p>
+  <p class="text-overflow subtitle" data-toggle="popover" data-placement="bottom"  
+    data-trigger="hover"  data-content="{{courseSet.subtitle}}">
+    <a class="color-gray">
+    {{ courseSet.subtitle }}
+    </a>
+  </p>
 {% endblock %}
 
 {% block course_header_people_num %}{% endblock %}

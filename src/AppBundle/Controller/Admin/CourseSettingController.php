@@ -20,7 +20,7 @@ class CourseSettingController extends BaseController
         $default = array(
             'welcome_message_enabled' => '0',
             'welcome_message_body' => '{{nickname}},欢迎加入课程{{course}}',
-            'teacher_modify_price' => '1',
+            'teacher_manage_marketing' => '1',
             'teacher_search_order' => '0',
             'teacher_manage_student' => '0',
             'teacher_export_student' => '0',
