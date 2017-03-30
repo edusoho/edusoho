@@ -70,10 +70,13 @@ class QuestionFormBase {
     editor.on('change', () => {
       $target.val(editor.getData());
       validator.form();
+
+      console.log(editor.getData());
     });
     editor.on('blur', () => {
       $target.val(editor.getData());
       validator.form();
+      console.log(editor.getData());
     });
   }
 
