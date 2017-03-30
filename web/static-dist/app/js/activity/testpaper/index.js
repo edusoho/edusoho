@@ -1,1 +1,0 @@
-webpackJsonp(["app/js/activity/testpaper/index"],[function(module,exports){"use strict";$("#testpaper-modal").modal({backdrop:"static",keyboard:!1})}]);

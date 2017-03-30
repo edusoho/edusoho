@@ -1,1 +1,0 @@
-webpackJsonp(["app/js/admin/main","admin"],[function(module,exports){"use strict";console.log("admin app js:bundles/topxiaadmin/js/admin-app.js ")}]);

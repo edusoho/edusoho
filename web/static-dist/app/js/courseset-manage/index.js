@@ -1,1 +1,0 @@
-webpackJsonp(["app/js/courseset-manage/index"],[function(module,exports,__webpack_require__){"use strict";var _help=__webpack_require__("4e68e437f5b716377a9d");(0,_help.publishCourse)()}]);

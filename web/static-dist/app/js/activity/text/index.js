@@ -1,1 +1,0 @@
-webpackJsonp(["app/js/activity/text/index"],[function(module,exports){"use strict";$("#text-activity").perfectScrollbar(),$("#text-activity").perfectScrollbar("update")}]);
