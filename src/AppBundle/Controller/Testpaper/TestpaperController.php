@@ -317,7 +317,7 @@ class TestpaperController extends BaseController
     protected function makeTestpaperTotal($testpaper, $items)
     {
         $total = array();
-        if (!empty($testpaper['metas']['counts'])) {
+        if (empty($testpaper['metas']['counts'])) {
             return $total;
         }
         foreach ($testpaper['metas']['counts'] as $type => $count) {
