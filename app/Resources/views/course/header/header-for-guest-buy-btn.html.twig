@@ -4,7 +4,7 @@
   {% if course.status != 'published' or courseSet.status != 'published' %}
     课程还未发布，不允许加入和购买
   {% else %}
-    {% if course.buyExpiryTime and course.buyExpiryTime + 24 * 3600 < 'now'|date('U') %}
+    {% if course.buyExpiryTime and course.buyExpiryTime < 'now'|date('U') %}
       超过加入截止日期，不允许加入和购买
     {% elseif (course.expiryMode in ['end_date', 'date'] and course.expiryEndDate < 'now'|date('U')) %}
       超过学习截止日期，不允许加入和购买

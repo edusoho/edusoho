@@ -20,8 +20,6 @@ class VerifiedMobile extends BaseResource
             return $this->error('500', '手机号为空');
         }
 
-        $this->limiterCheck($mobile);
-
         if (empty($smsCode)) {
             return $this->error('500', '短信验证码为空，请输入');
         }
@@ -54,20 +52,6 @@ class VerifiedMobile extends BaseResource
     public function filter($res)
     {
         return $res;
-    }
-
-    protected function limiterCheck($mobile)
-    {
-        $biz = $this->getBiz();
-
-        $factory = $biz['ratelimiter.factory'];
-        $limiter = $factory('api_mobile_verified', 5, 1800);
-        $remain = $limiter->check($mobile);
-        if ($remain == 0) {
-            return $this->error('500', '操作过于频繁，请30分钟之后再试');
-        }
-
-        return true;
     }
 
     protected function getTokenService()

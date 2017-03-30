@@ -5,6 +5,7 @@ namespace Topxia\MobileBundleV2\Controller;
 use Biz\User\CurrentUser;
 use Topxia\Api\Util\TagUtil;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Role\Util\PermissionBuilder;
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
@@ -90,6 +91,10 @@ class MobileBaseController extends BaseController
         $user['currentIp'] = $request->getClientIp();
 
         $currentUser = $currentUser->fromArray($user);
+
+        $permissions = PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles());
+        $currentUser->setPermissions($permissions);
+
         $biz = $this->getBiz();
         $biz['user'] = $currentUser;
     }
@@ -534,10 +539,8 @@ class MobileBaseController extends BaseController
                 unset($user['inviteCode']);
                 unset($user['createdTime']);
                 unset($user['lockDeadline']);
-                unset($user['roles']);
                 unset($user['updatedTime']);
                 unset($user['truename']);
-                unset($user['gender']);
                 unset($user['emailVerified']);
                 unset($user['setup']);
                 unset($user['lastPasswordFailTime']);

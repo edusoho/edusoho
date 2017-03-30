@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class DocActivityDaoImpl extends GeneralDaoImpl implements DocActivityDao
 {
-    protected $table = 'doc_activity';
+    protected $table = 'activity_doc';
 
     public function declares()
     {

@@ -3,14 +3,14 @@
 namespace AppBundle\Controller\Question;
 
 use AppBundle\Common\Paginator;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Question\Service\QuestionService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
+use Biz\Course\Service\CourseSetService;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\Question\Service\QuestionService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Exception\ResourceNotFoundException;
 
@@ -218,6 +218,7 @@ class ManageController extends BaseController
         }
 
         if (!empty($question['matas']['mediaId'])) {
+            $questionTypeObj = $this->getQuestionService()->getQuestionConfig($question['type']);
             $questionExtends = $questionTypeObj->get($question['matas']['mediaId']);
             $question = array_merge_recursive($question, $questionExtends);
         }

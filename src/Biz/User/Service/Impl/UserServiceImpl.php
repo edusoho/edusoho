@@ -716,7 +716,7 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $users = array(
             array(
-                'type' => 'scheduler',
+                'type' => 'system',
                 'roles' => array('ROLE_USER', 'ROLE_SUPER_ADMIN'),
             ),
         );

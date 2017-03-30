@@ -32,7 +32,11 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
 
     public function sumLearnedTimeByCourseIdAndUserId($courseId, $userId)
     {
-        $sql = "SELECT sum(learnedTime) FROM {$this->table()} WHERE userId = ? AND activityId IN (SELECT id FROM activity WHERE fromCourseId = ?)";
+        $sql = "SELECT sum(learnedTime) 
+                FROM {$this->table()} 
+                WHERE userId = ? AND activityId IN (
+                    SELECT id FROM activity WHERE fromCourseId = ?
+                    )";
 
         return $this->db()->fetchColumn($sql, array($userId, $courseId)) ?: 0;
     }
@@ -46,7 +50,11 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
 
     public function countLearnedDaysByCourseIdAndUserId($courseId, $userId)
     {
-        $sql = "SELECT count(distinct(from_unixtime(createdTime, '%Y-%m-%d'))) FROM {$this->table()} WHERE userId = ? AND activityId IN (SELECT id FROM activity WHERE fromCourseId = ?)";
+        $sql = "SELECT count(distinct (from_unixtime(createdTime, '%Y-%m-%d'))) 
+                FROM {$this->table()} 
+                WHERE userId = ? AND activityId IN (
+                    SELECT id FROM activity WHERE fromCourseId = ?
+                    )";
 
         return $this->db()->fetchColumn($sql, array($userId, $courseId)) ?: 0;
     }

@@ -41,6 +41,8 @@ class SmsToolkit
 
             return array('success' => false, 'message' => '错误次数已经超过最大次数，请重新获取');
         }
+
+        return array('success' => true);
     }
 
     public static function updateSmsSessionRemain(Request $request, $type, $remain)

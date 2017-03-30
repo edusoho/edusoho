@@ -19,26 +19,21 @@ class RedisFlushallCommand extends BaseCommand
         $output->writeln('<info>开始清空Redis的所有key</info>');
 
         $this->flushallRedis($output);
-
-        $output->writeln('<info>Redis清空完毕</info>');
     }
 
     protected function flushallRedis($output)
     {
         $redisConfigFile = $this->getContainer()->getParameter('kernel.root_dir').'/data/redis.php';
 
-        if (!$redisConfigFile) {
-            $output->writeln('<info>Redis未开启</info>');
-        } else {
-            $redisConfig = include $redisConfigFile;
-            $cnf = $redisConfig['default'];
-            if (empty($cnf['servers'])) {
+        if ($this->getContainer()->hasParameter('cache_options')) {
+            $biz->register(new Codeages\Biz\Framework\Provider\CacheServiceProvider());
+            $cnfs = $this->getContainer()->getParameter('cache_options');
+            foreach ($cnfs as $cnf) {
                 $this->flushall($cnf);
-            } else {
-                foreach ($cnf['servers'] as $server) {
-                    $this->flushall($server);
-                }
             }
+            $output->writeln('<info>Redis清空完毕</info>');
+        } else {
+            $output->writeln('<info>Redis未开启</info>');
         }
     }
 

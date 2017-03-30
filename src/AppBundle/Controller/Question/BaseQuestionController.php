@@ -18,22 +18,10 @@ class BaseQuestionController extends BaseController
         $question = $this->getQuestionService()->get($questionId);
 
         if ($question['courseSetId'] != $courseSetId) {
-            throw $this->createResourceNotFoundException('question#{$questionId} not found');
+            throw new NotFoundException('question#{$questionId} not found');
         }
 
         return array($courseSet, $question);
-    }
-
-    /**
-     * @param string $message
-     *
-     * @return NotFoundException
-     */
-    protected function createResourceNotFoundException($message)
-    {
-        $message = $message ?: 'Resource Not Found';
-
-        return new NotFoundException($message);
     }
 
     /**
