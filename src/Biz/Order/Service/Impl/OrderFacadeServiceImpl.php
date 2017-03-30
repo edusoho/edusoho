@@ -63,18 +63,18 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
 
             $amount = (string) ((float) $amount);
-            $shouldPayMoney = (string) ((float) $fields['shouldPayMoney']);
-            //价格比较
-
-            if ((int) ($totalPrice * 100) !== (int) ($fields['totalPrice'] * 100)) {
-                throw $this->createServiceException('实际价格不匹配，不能创建订单!');
-            }
-
-            //价格比较
-
-            if ((int) ($amount * 100) !== (int) ($shouldPayMoney * 100)) {
-                throw $this->createServiceException('支付价格不匹配，不能创建订单!');
-            }
+//            $shouldPayMoney = (string) ((float) $fields['shouldPayMoney']);
+//            //价格比较
+//
+//            if ((int) ($totalPrice * 100) !== (int) ($fields['totalPrice'] * 100)) {
+//                throw $this->createServiceException('实际价格不匹配，不能创建订单!');
+//            }
+//
+//            //价格比较
+//
+//            if ((int) ($amount * 100) !== (int) ($shouldPayMoney * 100)) {
+//                throw $this->createServiceException('支付价格不匹配，不能创建订单!');
+//            }
 
             //虚拟币抵扣率比较
             $target = $processor->getTarget($targetId);
