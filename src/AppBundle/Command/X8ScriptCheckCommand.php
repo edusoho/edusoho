@@ -203,7 +203,7 @@ class X8ScriptCheckCommand extends BaseCommand
 
         // task、activity汇总校验：
         $c1 = $connection->fetchColumn('select count(*) from course_task;');
-        $c2 = $connection->fetchColumn('select count(*) from activity;');
+        $c2 = $connection->fetchColumn('select count(*) from activity WHERE `migrateLessonId` IN (SELECT migrateLessonId FROM `course_task`);');
         if ($c1 == $c2) {
             $output->writeln('<info> task、activity汇总校验 数据验证通过.</info>');
         } else {

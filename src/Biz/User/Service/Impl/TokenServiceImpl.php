@@ -13,7 +13,7 @@ class TokenServiceImpl extends BaseService implements TokenService
         $token['type'] = $type;
         $token['token'] = $this->_makeTokenValue(32);
         $token['data'] = !isset($args['data']) ? '' : $args['data'];
-        $token['times'] = empty($args['times']) ? 0 : intval($args['times']);
+        $token['times'] = empty($args['times']) ? 0 : (int) $args['times'];
         $token['remainedTimes'] = $token['times'];
         $token['userId'] = empty($args['userId']) ? 0 : $args['userId'];
         $token['expiredTime'] = empty($args['duration']) ? 0 : time() + $args['duration'];
