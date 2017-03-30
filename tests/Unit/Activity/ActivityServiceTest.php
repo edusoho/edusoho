@@ -4,7 +4,6 @@ namespace Tests\Unit\Activity;
 
 use Biz\BaseTestCase;
 use Biz\Task\Service\TaskService;
-use Topxia\Service\Course\CourseService;
 use Biz\Activity\Service\ActivityService;
 
 class ActivityServiceTest extends BaseTestCase

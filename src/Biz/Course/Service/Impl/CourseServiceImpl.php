@@ -539,6 +539,15 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'Invalid Argument: Course#{$courseId} not in CoruseSet#{$courseSetId}'
             );
         }
+
+        if ($course['parentId'] > 0) {
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($courseId);
+            if (!empty($classroom) && $classroom['headTeacherId'] == $user['id']) {
+                //班主任有权管理班级下所有课程
+                return $course;
+            }
+        }
+
         if (!$this->hasCourseManagerRole($courseId)) {
             throw $this->createAccessDeniedException('Unauthorized');
         }

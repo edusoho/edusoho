@@ -766,7 +766,7 @@ class ClassroomManageController extends BaseController
             $teacherItems[] = array(
                 'id' => $user['id'],
                 'nickname' => $user['nickname'],
-                'avatar' => $this->getWebExtension()->getFilePath($user['smallAvatar'], 'avatar.png'),
+                'avatar' => $this->getWebExtension()->avatarPath($user, 'small'),
             );
         }
 
@@ -804,7 +804,7 @@ class ClassroomManageController extends BaseController
             $newheadTeacher[] = array(
                 'id' => $headTeacher['id'],
                 'nickname' => $headTeacher['nickname'],
-                'avatar' => $this->getWebExtension()->getFilePath($headTeacher['smallAvatar'], 'avatar.png'),
+                'avatar' => $this->getWebExtension()->avatarPath($headTeacher, 'small'),
             );
         }
 
@@ -845,7 +845,7 @@ class ClassroomManageController extends BaseController
             $sortedAssistants[] = array(
                 'id' => $user['id'],
                 'nickname' => $user['nickname'],
-                'avatar' => $this->getWebExtension()->getFilePath($user['smallAvatar'], 'avatar.png'),
+                'avatar' => $this->getWebExtension()->avatarPath($user, 'small'),
             );
         }
 

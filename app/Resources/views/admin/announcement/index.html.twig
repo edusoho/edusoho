@@ -15,6 +15,9 @@
   <table id="announcement-table" class="table table-striped">
     <thead>
     <tr>
+      {% if setting('magic.enable_org','0') %}
+        <th><input type="checkbox"  data-role="batch-select"></th>
+      {% endif %}
       <th width="25%">{{'公告内容'|trans}}</th>
       {% include 'org/parts/table-thead-tr.html.twig' %}
       <th>{{'发布时间'|trans}}</th>

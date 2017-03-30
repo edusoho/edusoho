@@ -1,10 +1,10 @@
 <?php
 
-namespace AppBundle\Controller\Callback\Resource\CloudSearch;
+namespace AppBundle\Controller\Callback\CloudSearch\Resource;
 
+use AppBundle\Controller\Callback\CloudSearch\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Controller\Callback\Resource\BaseResource;
 
 class Articles extends BaseResource
 {
@@ -77,7 +77,7 @@ class Articles extends BaseResource
 
     public function filter($res)
     {
-        return $this->multicallFilter('cloud_search_article', $res);
+        return $this->multicallFilter('article', $res);
     }
 
     /**
