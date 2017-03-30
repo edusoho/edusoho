@@ -367,7 +367,7 @@ class Lesson extends BaseResource
 
     protected function getRemainTime($user, $lesson)
     {
-        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($lessonId);
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($lesson['id']);
 
         $course = $this->getCourseService()->getCourse($lesson['courseId']);
         $remainTime = ($course['watchLimit'] * $lesson['length']) - $taskResult['watchTime'];
