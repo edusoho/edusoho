@@ -4,7 +4,21 @@ namespace ApiBundle\Api\Resource;
 
 abstract class Filter
 {
-    abstract function filter(&$data);
+    protected $publicFields;
+
+    public function filter(&$data)
+    {
+        if (empty($data)) {
+            return null;
+        }
+
+        $this->defaultFieldsFilter($data);
+        $this->defaultTimeFilter($data);
+
+        $this->customFilter($data);
+    }
+
+    abstract protected function customFilter(&$data);
 
     public function filters(&$dataSet)
     {
@@ -17,6 +31,28 @@ abstract class Filter
             foreach($dataSet as &$data) {
                 $this->filter($data);
             }
+        }
+    }
+
+    private function defaultFieldsFilter(&$data)
+    {
+        if ($this->publicFields) {
+            foreach (array_keys($data) as $field) {
+                if (!in_array($field, $this->publicFields)) {
+                    unset($data[$field]);
+                }
+            }
+        }
+    }
+
+    private function defaultTimeFilter(&$data)
+    {
+        if (isset($data['createdTime'])) {
+            $data['createdTime'] = date('c', $data['createdTime']);
+        }
+
+        if (isset($data['updatedTime'])) {
+            $data['updatedTime'] = date('c', $data['updatedTime']);
         }
     }
 }

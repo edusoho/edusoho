@@ -9,7 +9,7 @@ use AppBundle\Common\ArrayToolkit;
 
 class CourseSetFilter extends Filter
 {
-    private $publicFields = array(
+    protected $publicFields = array(
         'id', 'title', 'subtitle', 'type', 'tags', 'category', 'serializeMode', 'status',
         'summary', 'goals', 'audiences', 'cover', 'ratingNum', 'rating', 'noteNum', 'studentNum',
         'recommended', 'recommendedSeq', 'recommendedTime', 'orgId', 'orgCode', 'discountId',
@@ -17,12 +17,9 @@ class CourseSetFilter extends Filter
         'minCoursePrice', 'teachers', 'creator', 'createdTime', 'updatedTime'
     );
 
-    function filter(&$data)
+    protected function customFilter(&$data)
     {
-        $data = ArrayToolkit::parts($data, $this->publicFields);
         $data['recommendedTime'] = date('c', $data['recommendedTime']);
-        $data['createdTime'] = date('c', $data['createdTime']);
-        $data['updatedTime'] = date('c', $data['updatedTime']);
 
         foreach ($data['cover'] as $size => $imagePath) {
             $data['cover'][$size] = RequestUtil::asset($imagePath);

@@ -8,13 +8,12 @@ use AppBundle\Common\ArrayToolkit;
 
 class UserFilter extends Filter
 {
-    private $publicFields = array(
+    protected $publicFields = array(
         'id', 'nickname', 'title', 'smallAvatar', 'mediumAvatar', 'largeAvatar'
     );
 
-    function filter(&$data)
+    protected function customFilter(&$data)
     {
-        $data = ArrayToolkit::parts($data, $this->publicFields);
         $data['smallAvatar'] = RequestUtil::asset($data['smallAvatar']);
         $data['mediumAvatar'] = RequestUtil::asset($data['mediumAvatar']);
         $data['largeAvatar'] = RequestUtil::asset($data['largeAvatar']);
