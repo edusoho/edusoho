@@ -35,6 +35,8 @@ class InitCommand extends BaseCommand
         $initializer->initLockFile();
         $initializer->initRegisterSetting($user);
 
+        // $this->installPhpCsFixerHook($output);
+
         $output->writeln('<info>初始化系统完毕</info>');
     }
 
@@ -45,5 +47,18 @@ class InitCommand extends BaseCommand
         $subInput = new StringInput('--symlink --relative');
         $command->run($subInput, $output);
         $output->writeln('<info>installAssets成功</info>');
+    }
+
+    private function installPhpCsFixerHook($output)
+    {
+        $biz = $this->getBiz();
+        $sourcePath = realpath($biz['root_directory']).'/.pre-push';
+        $distPath = realpath($biz['root_directory']).'/.git/hooks/pre-push';
+
+        if (!file_exists($distPath)) {
+            copy($sourcePath, $distPath);
+            chmod($distPath, 0755);
+            $output->writeln('初始化代码格式化Hook...<info>成功</info>');
+        }
     }
 }

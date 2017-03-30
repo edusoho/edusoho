@@ -1,6 +1,6 @@
 {% extends 'old-layout.html.twig' %}
 
-{% block title %}{{'user.notification'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'notification.user_notification'|trans}} - {{ parent() }}{% endblock %}
 {% set script_controller = 'message/notification-list' %}
 
 {% block content %}
@@ -8,7 +8,7 @@
   <div class="col-md-8 col-md-offset-2">
     <div class="panel panel-default panel-page">
       <div class="panel-heading">
-        <h2> {{'user.notification.content_title'|trans}} </h2>
+        <h2> {{'notification.user_notification.content_title'|trans}} </h2>
       </div>
 
       <ul class="media-list notification-list">
@@ -16,7 +16,7 @@
           {% set notification = render_notification(notification) %}
           {{ notification.message|raw }}
         {% else %}
-          <li class="empty">{{'user.notification.empty'|trans}}</li>
+          <li class="empty">{{'site.datagrid.empty'|trans}}</li>
         {% endfor %}
       </ul>
 

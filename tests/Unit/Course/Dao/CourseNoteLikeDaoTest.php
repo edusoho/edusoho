@@ -34,7 +34,7 @@ class CourseNoteLikeDaoTest extends BaseDaoTestCase
 
         $res = $this->getDao()->getByNoteIdAndUserId(1, 1);
 
-        $this->assertNull($res);
+        $this->assertEmpty($res);
     }
 
     public function testFindByUserId()

@@ -1,11 +1,11 @@
 {% extends 'coin/layout.html.twig' %}
-{% block title %}{{'user.account_center.cards'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'user.cards'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-cards' %}
 
 {% block main %}
 <div class="es-section h400">
-  <div class="section-header"><h3>{{'user.account_center.cards.content_title'|trans}}</h3></div>
+  <div class="section-header"><h3>{{'user.cards.content_title'|trans}}</h3></div>
 
   {% set main_nav = main_nav|default(null) %}
 

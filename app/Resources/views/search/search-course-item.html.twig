@@ -37,7 +37,7 @@
         <span>{{ course.ratingNum|default(0) }}{{'cloud_searching.course_type.evaluate'|trans}}({{ course.studentNum|default(0) }}{{ 'cloud_searching.course_type.learned'|trans }})</span>
       {% endif %}
     </div>
-    <div class="content">{{ course.about|raw }}</div>
+    <div class="content editor-text">{{ course.about|raw }}</div>
     {% if not is_open_course and course.lessons|default(null) %}
       <ul class="ul-lesson">
         {% for task in course.lessons|slice(0, 3) %}

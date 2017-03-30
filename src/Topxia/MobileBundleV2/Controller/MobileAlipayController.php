@@ -49,7 +49,7 @@ class MobileAlipayController extends MobileBaseController
 
     public function payCallBackAction(Request $request, $name)
     {
-        $status = $this->doPayNotify($request, $name);
+        $status = 'success';
         $callback = "<script type='text/javascript'>window.location='objc://alipayCallback?".$status."';</script>";
 
         return new Response($callback);
@@ -58,6 +58,19 @@ class MobileAlipayController extends MobileBaseController
     //支付校验
     protected function doPayNotify(Request $request, $name)
     {
+        // $response = $this->forward('TopxiaWebBundle:PayCenter:payNotify', array(
+        //     'request' => $request,
+        //     'name' => $name
+        // ));
+
+        // $this->getLogger('Mobile2DoPayNotify')->info('response code '.$response->getStatusCode());
+
+        // if($response->getContent() == 'success') {
+        //     return 'success';
+        // }
+
+        // return "fail";
+
         $requestParams = array();
 
         if ($request->getMethod() == 'GET') {
@@ -166,11 +179,11 @@ class MobileAlipayController extends MobileBaseController
 
     protected function getPayCenterService()
     {
-        return $this->getServiceKernel()->createService('PayCenter:PayCenterService');
+        return $this->createService('PayCenter:PayCenterService');
     }
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order:OrderService');
+        return $this->createService('Order:OrderService');
     }
 }

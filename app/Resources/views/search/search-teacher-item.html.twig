@@ -4,7 +4,7 @@
       <img class="avatar-lg" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt="">
     </a>
     <h3 class="title">
-      <a class="link-dark" href="{{ path('user_show', {id:teacher.id}) }}" target="_blank">{{ teacher.nickname|raw }}</a>
+      <a class="link-dark" href="{{ path('user_show', {id:teacher.id}) }}" target="_blank">{{ teacher.nickname }}</a>
     </h3>
     <div class="position">
       {% if teacher.title %}

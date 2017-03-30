@@ -1,6 +1,6 @@
 {% extends 'coin/layout.html.twig' %}
 
-{% block title %}{{'user.account_center.account.my_virtual_coin'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'user.account.my_coin'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-bill' %}
 
@@ -11,15 +11,15 @@
   <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="form-group">
       <select class="form-control" name="lastHowManyMonths"  onchange="submit();">
-        {% set options = {'':'user.account_center.all_records'|trans,'oneWeek':'user.account_center.last_one_week'|trans,'twoWeeks':'user.account_center.last_two_week'|trans,'oneMonth':'user.account_center.last_one_month'|trans,'twoMonths':'user.account_center.last_two_month'|trans,'threeMonths':'user.account_center.last_three_month'|trans} %}
+        {% set options = {'':'user.all_records'|trans,'oneWeek':'user.last_one_week'|trans,'twoWeeks':'user.last_two_week'|trans,'oneMonth':'user.last_one_month'|trans,'twoMonths':'user.last_two_month'|trans,'threeMonths':'user.last_three_month'|trans} %}
         {{ select_options(options, app.request.get('lastHowManyMonths')) }}
       </select>
     </div>
 
     {#<button class="btn btn-primary">搜索</button>#}
      <div class="control-label pull-right" style="padding-top: 8px;">
-      {{'finance.income'|trans}}<span style="color:#1bb974;">{{ amountInflow }}</span>&nbsp;{{'currency.RMB'|trans}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      {{'finance.expense'|trans}}<span style="color:#ff7b0e;">{{ amountOutflow }}</span>&nbsp;{{'currency.RMB'|trans}}
+      {{'finance.income'|trans}}<span style="color:#1bb974;">{{ amountInflow }}</span>&nbsp;{{'site.currency.RMB'|trans}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      {{'finance.expense'|trans}}<span style="color:#ff7b0e;">{{ amountOutflow }}</span>&nbsp;{{'site.currency.RMB'|trans}}
       </div>
   </form>
   <br>
@@ -63,7 +63,7 @@
           </tr>
         {% endfor %}
       {% else %}
-      <div class="empty">{{'user.account_center.account.empty'|trans}}</div>
+      <div class="empty">{{'user.account.empty'|trans}}</div>
       {% endif %}
     </table>
   </div>

@@ -2,15 +2,15 @@
 
 namespace Topxia\Api\Resource\IM;
 
+use Silex\Application;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
-use Biz\IM\Service\ConversationService;
-use Biz\System\Service\SettingService;
-use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Api\Resource\BaseResource;
+use Biz\System\Service\SettingService;
+use Biz\IM\Service\ConversationService;
+use Biz\Classroom\Service\ClassroomService;
+use Symfony\Component\HttpFoundation\Request;
 
 class MemberSync extends BaseResource
 {
@@ -150,7 +150,7 @@ class MemberSync extends BaseResource
             if (in_array($id, $toCreate)) {
                 // 防止请求过于频繁造成服务器压力过大
                 $cnt += 1;
-                if ($cnt > MemberSync::MAX_CREATION_PER_TIME) {
+                if ($cnt > self::MAX_CREATION_PER_TIME) {
                     break;
                 }
                 $this->addDebug(
@@ -219,7 +219,7 @@ class MemberSync extends BaseResource
     /**
      * @return SettingService
      */
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->createService('System:SettingService');
     }

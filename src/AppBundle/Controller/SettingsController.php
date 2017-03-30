@@ -489,7 +489,7 @@ class SettingsController extends BaseController
         $token = $this->getUserService()->makeToken('pay-password-reset', $userId, strtotime('+1 day'));
         $request->request->set('token', $token);
 
-        return $this->forward('settings/updatePayPassword', array(
+        return $this->forward('AppBundle:Settings:updatePayPassword', array(
             'request' => $request,
         ));
     }
@@ -532,7 +532,7 @@ class SettingsController extends BaseController
                     $this->getAuthService()->changePayPassword($token['userId'], $data['currentUserLoginPassword'], $data['payPassword']);
                     $this->getUserService()->deleteToken('pay-password-reset', $token['token']);
 
-                    return $this->render('TopxiaWebBundle:Settings:pay-password-success.html.twig');
+                    return $this->render('settings/pay-password-success.html.twig');
                 } else {
                     $this->setFlashMessage('danger', '用户登录密码错误。');
                 }
@@ -544,7 +544,7 @@ class SettingsController extends BaseController
 
     protected function findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile)
     {
-        $questionNum = rand(0, 2);
+        $questionNum = mt_rand(0, 2);
         $question = $userSecureQuestions[$questionNum]['securityQuestionCode'];
 
         return $this->render('settings/find-pay-password.html.twig', array(
@@ -559,9 +559,9 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
         $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
-        $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
+        $hasSecurityQuestions = null !== $userSecureQuestions && count($userSecureQuestions) > 0;
         $verifiedMobile = $user['verifiedMobile'];
-        $hasVerifiedMobile = (isset($verifiedMobile)) && (strlen($verifiedMobile) > 0);
+        $hasVerifiedMobile = null !== $verifiedMobile && strlen($verifiedMobile) > 0;
         $canSmsFind = ($hasVerifiedMobile) &&
             ($this->setting('cloud_sms.sms_enabled') == '1') &&
             ($this->setting('cloud_sms.sms_forget_pay_password') == 'on');
@@ -573,7 +573,7 @@ class SettingsController extends BaseController
         if (!$hasSecurityQuestions) {
             $this->setFlashMessage('danger', '您还没有安全问题，请先设置。');
 
-            return $this->forward('settings/security-questions');
+            return $this->forward('AppBundle:Settings:securityQuestions');
         }
 
         if ($request->getMethod() == 'POST') {
@@ -610,9 +610,9 @@ class SettingsController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($currentUser['id']);
-        $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
+        $hasSecurityQuestions = null !== $userSecureQuestions && count($userSecureQuestions) > 0;
         $verifiedMobile = $currentUser['verifiedMobile'];
-        $hasVerifiedMobile = (isset($verifiedMobile)) && (strlen($verifiedMobile) > 0);
+        $hasVerifiedMobile = null !== $verifiedMobile && strlen($verifiedMobile) > 0;
 
         if (!$hasVerifiedMobile) {
             $this->setFlashMessage('danger', '您还没有绑定手机，请先绑定。');
@@ -841,7 +841,7 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
         $mailer = $this->getSettingService()->get('mailer', array());
-        $cloudEmail = $this->getSettingService()->get('cloud_email', array());
+        $cloudEmail = $this->getSettingService()->get('cloud_email_crm', array());
 
         if (empty($user['setup'])) {
             return $this->redirect($this->generateUrl('settings_setup'));
@@ -1171,11 +1171,6 @@ class SettingsController extends BaseController
     protected function getLogService()
     {
         return $this->getBiz()->service('System:LogService');
-    }
-
-    private function getWebExtension()
-    {
-        return $this->container->get('web.twig.extension');
     }
 
     protected function downloadImg($url)

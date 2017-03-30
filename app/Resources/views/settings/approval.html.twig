@@ -2,7 +2,10 @@
 
 {% block title %}{{'user.settings.certification'|trans}} - {{ parent() }}{% endblock %}
 {% set side_nav = 'approval' %}
-{% set script_controller = 'settings/approval' %}
+
+{% if app.user.approvalStatus not in ['approving', 'approved'] %}
+    {% set script_controller = 'settings/approval' %}
+{% endif %}
 
 {% block main %}
 
@@ -20,17 +23,17 @@
                             <div class="help-block approval">
                                 <label class="col-md-2 control-label" ></label>
                                 {% if app.user.approvalStatus == 'approving' %}
-                                    <div class="alert alert-info" role="alert">{{'user.settings.certification.approving_description'|trans}}
+                                    <div class="alert alert-info" role="alert">{{'user.settings.certification.approving_tips'|trans}}
                                     </div>
                                 {% elseif  app.user.approvalStatus == 'approved' %}
-                                    <div class="alert alert-success" role="alert">{{'user.settings.certification.approved_description'|trans}}
+                                    <div class="alert alert-success" role="alert">{{'user.settings.certification.approved_tips'|trans}}
                                     </div>
                                 {% elseif  app.user.approvalStatus == 'unapprove' %}
-                                    <div class="alert alert-warning" role="alert">{{'user.settings.certification.unapprove_description'|trans}}
+                                    <div class="alert alert-warning" role="alert">{{'user.settings.certification.unapprove_tips'|trans}}
                                     </div>
                                 {% elseif app.user.approvalStatus == 'approve_fail' %}
                                     <p class="color-danger" >
-                                        {{'user.settings.certification.approve_fail_description'|trans}}
+                                        {{'user.settings.certification.approve_fail_tips'|trans}}
                                     </p>
                                 {% endif %}
                             </div>
@@ -68,7 +71,7 @@
                                         <label>{{'user.settings.certification.photo_require'|trans}}</label>
                                 </div>
                                 <div class="controls col-md-8 controls">
-                                  <p class="text-warning"> {{'user.settings.certification.photo_require_description'|trans|raw}}</p>
+                                  <p class="text-warning"> {{'user.settings.certification.photo_require_tips'|trans|raw}}</p>
                                 </div>
                             </div>
 
@@ -76,7 +79,7 @@
                                 <div class="col-md-2 control-label">
                                     <label for="faceImg">{{'user.settings.certification.idcard_ront_photo'|trans}}</label>
                                 </div>
-                                <div class="controls col-md-8 controls">
+                                <div class="col-md-8 form-control-static">
                                     {% if  app.user.approvalStatus in ['approving' , 'approved']  %}
                                         <input type="file" id="faceImg" name="faceImg" accept="image/bmp,image/jpeg,image/png" disabled="true">
                                     {% else %}
@@ -89,7 +92,7 @@
                                 <div class="col-md-2 control-label">
                                     <label for="backImg">{{'user.settings.certification.idcard_opposite_photo'|trans}}</label>
                                 </div>
-                                <div class="controls col-md-8 controls">
+                                <div class="col-md-8 form-control-static">
                                     {% if  app.user.approvalStatus in ['approving' , 'approved']  %}
                                         <input type="file" id="backImg" name="backImg" accept="image/bmp,image/jpeg,image/png" disabled="true">
                                     {% else %}

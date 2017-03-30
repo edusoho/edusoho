@@ -3,18 +3,18 @@
   {% if user %}
   <a class="{{ class }} {% if card %}js-user-card{% endif %}" href="{{ path('user_show', {id:user.id}) }}" data-card-url="{{ path('user_card_show', {userId:user.id}) }}" data-user-id="{{ user.id }}">
     {% if imgClass == 'avatar-md' %}
-      {% set userAvatar = user.mediumAvatar %}
+      {% set avatarType = 'medium' %}
     {% elseif imgClass == 'avatar-lg' %}
-      {% set userAvatar = user.largeAvatar %}
+      {% set avatarType = 'large' %}
     {% else %}
-      {% set userAvatar = user.smallAvatar %}
+      {% set avatarType = 'small' %}
     {% endif %}
-    <img class="{{ imgClass|default('avatar-sm') }}" src="{{ filepath(userAvatar, 'avatar.png') }}">
+    <img class="{{ imgClass|default('avatar-sm') }}" src="{{ avatar_path(user, avatarType) }}">
 
   </a>
   {% else %}
     <a class="{{ class }}" href="javascript:;">
-      <img class="{{ imgClass|default('avatar-sm') }}"  src="{{ filepath('', 'avatar.png') }}">
+      <img class="{{ imgClass|default('avatar-sm') }}"  src="{{ avatar_path('', 'small') }}">
     </a>
   {% endif %}
 {%- endmacro -%}
@@ -41,8 +41,7 @@
 {%- endmacro -%}
 
 {%- macro user_avater_img(user, size) -%}
-  {% set userAvatar = user[size~'Avatar']|default('') %}
-  <img class="avatar-{{ size }}"  src="{{ filepath(userAvatar, 'avatar.png', 'user') }}">
+  <img class="avatar-{{ size }}"  src="{{ avatar_path(user, size) }}">
 {%- endmacro -%}
 
 

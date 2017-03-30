@@ -9,7 +9,7 @@
 
       <div class="sidenav">
         <ul class="list-group">
-          <li class="list-group-heading">{{'user.account_center.menu_heading'|trans}}</li>
+          <li class="list-group-heading">{{'user.menu_heading'|trans}}</li>
           <li class="list-group-item {% if side_nav in ['my-bill', 'my-coin', 'my-invite-code'] %} active {% endif %}">
             <a href="
               {% if setting('coin.coin_enabled') %}
@@ -17,19 +17,19 @@
               {% else %}
                 {{path('my_bill')}}
               {% endif %}
-              ">{{'user.account_center.account_menu'|trans}}
+              ">{{'user.account_menu'|trans}}
             </a>
           </li>
           <li class="list-group-item {% if side_nav == 'my-orders' %} active {% endif %}">
-            <a href="{{path('my_orders')}}">{{'user.account_center.order_menu'|trans}}</a>
+            <a href="{{path('my_orders')}}">{{'user.order_menu'|trans}}</a>
           </li>
           <li class="list-group-item {% if side_nav == 'my-cards' %} active {% endif %}">
-            <a href="{{path('my_cards')}}">{{'user.account_center.cards_menu'|trans}}</a>
+            <a href="{{path('my_cards')}}">{{'user.cards_menu'|trans}}</a>
           </li>
           </li>
           {% if is_plugin_installed('Vip')%}
           <li class="list-group-item {% if side_nav == 'my-vip-record' %} active {% endif %}">
-            <a href="{{path('vip_history')}}">{{'user.account_center.vip_history'|trans}}</a>
+            <a href="{{path('vip_history')}}">{{'user.vip_history_menu'|trans}}</a>
           </li>
           {% endif %}
         </ul>

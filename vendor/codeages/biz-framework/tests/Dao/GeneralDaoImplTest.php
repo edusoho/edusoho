@@ -1,7 +1,9 @@
 <?php
+
 namespace Tests;
 
 use Codeages\Biz\Framework\Context\Biz;
+use Codeages\Biz\Framework\Provider\CacheServiceProvider;
 use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -25,6 +27,7 @@ class GeneralDaoImplTest extends TestCase
         $biz = new Biz($config);
         $biz['autoload.aliases']['TestProject'] = 'TestProject\Biz';
         $biz->register(new DoctrineServiceProvider());
+        // $biz->register(new CacheServiceProvider());
         $biz->boot();
 
         $this->biz = $biz;
@@ -37,10 +40,52 @@ class GeneralDaoImplTest extends TestCase
             CREATE TABLE `example` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `name` varchar(32) NOT NULL,
+              `code` varchar(32) NOT NULL DEFAULT '',
               `counter1` int(10) unsigned NOT NULL DEFAULT 0,
               `counter2` int(10) unsigned NOT NULL DEFAULT 0,
               `ids1` varchar(32) NOT NULL DEFAULT '',
               `ids2` varchar(32) NOT NULL DEFAULT '',
+              `null_value` VARCHAR(32) DEFAULT NULL,
+              `content` text,
+              `php_serialize_value` text,
+              `json_serialize_value` text,
+              `delimiter_serialize_value` text,
+              `created_time` int(10) unsigned NOT NULL DEFAULT 0,
+              `updated_time` int(10) unsigned NOT NULL DEFAULT 0,
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
+
+        $this->biz['db']->exec('DROP TABLE IF EXISTS `example2`');
+        $this->biz['db']->exec("
+            CREATE TABLE `example2` (
+              `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+              `name` varchar(32) NOT NULL,
+              `code` varchar(32) NOT NULL DEFAULT '',
+              `counter1` int(10) unsigned NOT NULL DEFAULT 0,
+              `counter2` int(10) unsigned NOT NULL DEFAULT 0,
+              `ids1` varchar(32) NOT NULL DEFAULT '',
+              `ids2` varchar(32) NOT NULL DEFAULT '',
+              `null_value` VARCHAR(32) DEFAULT NULL,
+              `content` text,
+              `created_time` int(10) unsigned NOT NULL DEFAULT 0,
+              `updated_time` int(10) unsigned NOT NULL DEFAULT 0,
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
+
+        $this->biz['db']->exec('DROP TABLE IF EXISTS `example3`');
+        $this->biz['db']->exec("
+            CREATE TABLE `example3` (
+              `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+              `name` varchar(32) NOT NULL,
+              `code` varchar(32) NOT NULL DEFAULT '',
+              `counter1` int(10) unsigned NOT NULL DEFAULT 0,
+              `counter2` int(10) unsigned NOT NULL DEFAULT 0,
+              `ids1` varchar(32) NOT NULL DEFAULT '',
+              `ids2` varchar(32) NOT NULL DEFAULT '',
+              `null_value` VARCHAR(32) DEFAULT NULL,
+              `content` text,
               `created_time` int(10) unsigned NOT NULL DEFAULT 0,
               `updated_time` int(10) unsigned NOT NULL DEFAULT 0,
               PRIMARY KEY (`id`)
@@ -50,8 +95,37 @@ class GeneralDaoImplTest extends TestCase
 
     public function testGet()
     {
-        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+        foreach ($this->getTestDao() as $dao) {
+            $this->get($dao);
+        }
+    }
 
+    public function testUpdateByNameAndCode()
+    {
+        foreach ($this->getTestDao() as $dao) {
+            $dao = $this->biz->dao($dao);
+            $row = $dao->create(array(
+                'name' => 'test1',
+                'code' => 'test1'
+            ));
+
+            $row = $dao->updateByNameAndCode('test1', 'test1', array('content' => 'test'));
+            $this->assertEquals('test', $row[0]['content']);
+        }
+    }
+
+    private function getTestDao()
+    {
+        return array(
+            'TestProject:Example:ExampleDao',
+            'TestProject:Example:Example2Dao',
+            'TestProject:Example:Example3Dao',
+        );
+    }
+
+    private function get($dao)
+    {
+        $dao = $this->biz->dao($dao);
         $row = $dao->create(array(
             'name' => 'test1',
         ));
@@ -65,7 +139,14 @@ class GeneralDaoImplTest extends TestCase
 
     public function testCreate()
     {
-        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+        foreach ($this->getTestDao() as $dao) {
+            $this->create($dao);
+        }
+    }
+
+    private function create($dao)
+    {
+        $dao = $this->biz->dao($dao);
 
         $fields = array(
             'name' => 'test1',
@@ -88,7 +169,14 @@ class GeneralDaoImplTest extends TestCase
 
     public function testUpdate()
     {
-        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+        foreach ($this->getTestDao() as $dao) {
+            $this->update($dao);
+        }
+    }
+
+    private function update($dao)
+    {
+        $dao = $this->biz->dao($dao);
 
         $row = $dao->create(array(
             'name' => 'test1',
@@ -113,7 +201,14 @@ class GeneralDaoImplTest extends TestCase
 
     public function testDelete()
     {
-        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+        foreach ($this->getTestDao() as $dao) {
+            $this->delete($dao);
+        }
+    }
+
+    private function delete($dao)
+    {
+        $dao = $this->biz->dao($dao);
 
         $row = $dao->create(array(
             'name' => 'test1',
@@ -126,7 +221,14 @@ class GeneralDaoImplTest extends TestCase
 
     public function testWave()
     {
-        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+        foreach ($this->getTestDao() as $dao) {
+            $this->wave($dao);
+        }
+    }
+
+    public function wave($dao)
+    {
+        $dao = $this->biz->dao($dao);
 
         $row = $dao->create(array(
             'name' => 'test1',
@@ -151,7 +253,14 @@ class GeneralDaoImplTest extends TestCase
 
     public function testLikeSearch()
     {
-        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+        foreach ($this->getTestDao() as $dao) {
+            $this->search($dao);
+        }
+    }
+
+    private function search($dao)
+    {
+        $dao = $this->biz->dao($dao);
 
         $dao->create(array('name' => 'pre_test1'));
         $dao->create(array('name' => 'pre_test2'));
@@ -188,7 +297,7 @@ class GeneralDaoImplTest extends TestCase
 
         $results = $dao->search(array('ids' => array()), array('created_time' => 'desc'), 0, 100);
 
-        $this->assertCount(0, $results);
+        $this->assertCount(4, $results);
     }
 
     /**
@@ -202,7 +311,14 @@ class GeneralDaoImplTest extends TestCase
 
     public function testCount()
     {
-        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+        foreach ($this->getTestDao() as $dao) {
+            $this->daoCount($dao);
+        }
+    }
+
+    private function daoCount($dao)
+    {
+        $dao = $this->biz->dao($dao);
 
         $dao->create(array('name' => 'test1'));
         $dao->create(array('name' => 'test2'));
@@ -227,12 +343,144 @@ class GeneralDaoImplTest extends TestCase
 
     public function testTransactional()
     {
-        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+        foreach ($this->getTestDao() as $dao) {
+            $this->transactional($dao);
+        }
+    }
+
+    public function transactional($dao)
+    {
+        $dao = $this->biz->dao($dao);
 
         $result = $dao->db()->transactional(function () {
             return 1;
         });
 
         $this->assertEquals(1, $result);
+    }
+
+    public function testNullValueUnserializer()
+    {
+        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+
+        $row = $dao->create(array('name' => 'test1'));
+
+        $result = $dao->get($row['id']);
+        $this->assertInternalType('array', $result['null_value']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Dao\DaoException
+     */
+    public function testOrderBysInject()
+    {
+        /**
+         * @var ExampleDao $dao
+         */
+        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+
+        $row = $dao->create(array('name' => 'test1'));
+
+        $dao->findByIds(array(1), array('; SELECT * FROM example'), 0, 10);
+
+        $dao->findByIds(array(1), array('id' => '; SELECT * FROM example'));
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Dao\DaoException
+     */
+    public function testStartInject()
+    {
+        /**
+         * @var ExampleDao $dao
+         */
+        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+
+        $row = $dao->create(array('name' => 'test1'));
+
+        $dao->findByIds(array(1), array('created_time' => 'desc'), '; SELECT * FROM example', 10);
+        $dao->findByIds(array(1), array('created_time' => 'desc'), 0, "; UPDATE example SET name = 'inject' WHERE id = 1");
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Dao\DaoException
+     */
+    public function testLimitInject()
+    {
+        /**
+         * @var ExampleDao $dao
+         */
+        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+
+        $row = $dao->create(array('name' => 'test1'));
+        $dao->findByIds(array(1), array('created_time' => 'desc'), 0, "; UPDATE example SET name = 'inject' WHERE id = 1");
+    }
+
+    public function testNonInject()
+    {
+        /**
+         * @var ExampleDao $dao
+         */
+        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+
+        $row = $dao->create(array('name' => 'test1'));
+        $result = $dao->findByIds(array(1), array('created_time' => 'desc'), '0', '2');
+
+        $this->assertCount(1, $result);
+        $row = $dao->create(array('name' => 'test2'));
+        $result = $dao->findByIds(array(1, 2), array('created_time' => 'desc'), '0', 1);
+        $this->assertCount(1, $result);
+
+        $result = $dao->findByIds(array(1, 2), array('created_time' => 'desc'), '0', 10);
+        $this->assertCount(2, $result);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Dao\DaoException
+     */
+    public function testOnlySetStart()
+    {
+        /**
+         * @var ExampleDao $dao
+         */
+        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+
+        $row = $dao->create(array('name' => 'test1'));
+        $result = $dao->findByIds(array(1, 2), array('created_time' => 'desc'), '0', null);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Dao\DaoException
+     */
+    public function testOnlySetLimit()
+    {
+        /**
+         * @var ExampleDao $dao
+         */
+        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+
+        $row = $dao->create(array('name' => 'test1'));
+        $result = $dao->findByIds(array(1, 2), array('created_time' => 'desc'), null, 10);
+    }
+
+    public function testSerializes()
+    {
+        /**
+         * @var ExampleDao $dao
+         */
+        $dao = $this->biz->dao('TestProject:Example:ExampleDao');
+
+        $row = $dao->create(array(
+            'name' => 'test1',
+            'php_serialize_value' => array('value' => 'i_am_php_serialized_value'),
+            'json_serialize_value' => array('value' => 'i_am_json_serialized_value'),
+            'delimiter_serialize_value' => array('i_am_delimiter_serialized_value'),
+        ));
+
+        foreach (array('php', 'json') as $key){
+            $this->assertEquals($row[$key . '_serialize_value']['value'], "i_am_{$key}_serialized_value");
+        }
+
+        $this->assertEquals($row['delimiter_serialize_value'], array('i_am_delimiter_serialized_value'));
     }
 }

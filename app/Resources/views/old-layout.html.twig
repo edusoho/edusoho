@@ -5,7 +5,8 @@
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html> <!--<![endif]-->
 {# returns app.request.locale if available and app.request.defaultLocale if app.request.locale is not set#}
-<html lang="{{ app.request.getLocale() }}">
+{% set mobile = is_show_mobile_page() %}
+<html lang="{{ app.request.getLocale() }}" {% if mobile %} class="es-mobile"{% endif %}>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
@@ -41,7 +42,6 @@
     {% for path in css() %}
       <link href="{{ asset('build/' ~ path) }}" rel="stylesheet" />
     {% endfor %}
-
   {% endblock %}#}
 
   {% block stylesheets %}
@@ -66,11 +66,17 @@
 {#<body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>#}
 
 {% block body %}
+
+  <!--[if lt IE 9]>
+    <script src="{{ asset('static-dist/libs/fix-ie.js') }}"></script>
+    {% include 'default/ie8-alert.html.twig' %}
+  <![endif]-->
+
   <div class="es-wrap">
 
     {% block header %}
       {% include 'site-hint.html.twig' %}
-      {% include 'default/header.html.twig' %}
+      {% include 'default/header.html.twig' with { useSeajs: true } %}
     {% endblock %}
 
     {% block full_content %}
@@ -85,6 +91,9 @@
 
     {% block footer %}
       {% include 'default/footer.html.twig' %}
+    {% endblock %}
+
+    {% block footer_mobile %}
     {% endblock %}
 
     {% block bottom %}{% endblock %}

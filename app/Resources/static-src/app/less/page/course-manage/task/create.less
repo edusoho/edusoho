@@ -1,4 +1,3 @@
-//less 需重构多用组合减少业务样式
 .task-create-editor {
   padding: 0 20px;
   .task-create-type-list {
@@ -20,15 +19,15 @@
       &:hover  {
         >a {
           background: #f4f6f8;
-          border: 3px solid @brand-primary;
+          // border: 3px solid @brand-primary;
           .es-transition;
         }
       }
       &.active {
         >a {
-          background: @brand-primary;
+          // background: @brand-primary;
           color: #fff;
-          border: 3px solid @brand-primary;
+          // border: 3px solid @brand-primary;
           .es-transition;
         }
       }
@@ -46,6 +45,7 @@
     position: relative;
     .task-create-content-iframe {
       width: 100%;
+      min-height: 200px;
       border: none;
     }
   }
@@ -91,7 +91,7 @@
       >.btn-delete {
         visibility: visible;
         &:hover {
-          color: @brand-primary;
+          // color: @brand-primary;
         }
       }
     }
@@ -132,7 +132,7 @@
       &.active,
       &:hover {
         > td {
-          color: @brand-primary;
+          // color: @brand-primary;
         }
       }
       > td {
@@ -141,15 +141,6 @@
       }
     }
   }
-  // &.ps-container {
-  //   padding-right: 14px;
-  //   .ps-scrollbar-y-rail {
-  //     .opacity(.6);
-  //     .ps-scrollbar-y {
-  //       min-height: 80px;
-  //     }
-  //   }
-  // }
 }
 
 .uploader-content {

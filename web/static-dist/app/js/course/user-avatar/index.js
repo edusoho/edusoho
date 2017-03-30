@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/course/user-avatar/index"],[function(module,exports,__webpack_require__){"use strict";__webpack_require__("98fcd491acac0f6e3e07"),$(".js-course-avatar").on("click",function(){store.set("COURSE-GUEST-PAGE-URL",window.location.href),this.href=$(this).data("url")})}]);

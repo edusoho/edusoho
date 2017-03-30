@@ -2,11 +2,9 @@
 
 namespace AppBundle\Controller\Question;
 
-use AppBundle\Controller\BaseController;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
-class DetermineQuestionController extends BaseController
+class DetermineQuestionController extends BaseQuestionController
 {
     public function showAction(Request $request, $id, $courseId)
     {
@@ -15,10 +13,8 @@ class DetermineQuestionController extends BaseController
 
     public function editAction(Request $request, $courseSetId, $questionId)
     {
+        list($courseSet, $question) = $this->tryGetCourseSetAndQuestion($courseSetId, $questionId);
         $user = $this->getUser();
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-
-        $question = $this->getQuestionService()->get($questionId);
 
         $parentQuestion = array();
         if ($question['parentId'] > 0) {
@@ -26,7 +22,7 @@ class DetermineQuestionController extends BaseController
         }
 
         $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSetId);
-        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($question['courseId']);
+        $courseTasks = $this->getTaskService()->findTasksByCourseId($question['courseId']);
 
         return $this->render('question-manage/determine-form.html.twig', array(
             'courseSet' => $courseSet,
@@ -53,30 +49,5 @@ class DetermineQuestionController extends BaseController
             'type' => $type,
             'courses' => $manageCourses,
         ));
-    }
-
-    protected function getQuestionService()
-    {
-        return $this->createService('Question:QuestionService');
-    }
-
-    protected function getCourseTaskService()
-    {
-        return $this->createService('Task:TaskService');
-    }
-
-    protected function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
-    }
-
-    protected function getCourseSetService()
-    {
-        return $this->createService('Course:CourseSetService');
-    }
-
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
     }
 }

@@ -6,16 +6,16 @@
 
 {% block main_body %}
   <ul class="nav nav-pills" role="tablist">
-    <li role="presentation" {% if app.request.query.get('status')=='' %}class="active"{% endif %}><a href="{{path('my_orders',{status:''})}}">{{'user.account_center.orders.all_orders'|trans}}</a></li>
-    <li role="presentation" {% if app.request.query.get('status')=='created' %}class="active"{% endif %}><a href="{{path('my_orders',{status:'created'})}}">{{'user.account_center.orders.created_status'|trans}}<span class="badge">{{waitToBePaidCount}}</span></a></li>
-    <li role="presentation" {% if app.request.query.get('status')=='paid' %}class="active"{% endif %}><a href="{{path('my_orders',{status:'paid'})}}">{{'user.account_center.orders.paid_status'|trans}}</a></li>
+    <li role="presentation" {% if app.request.query.get('status')=='' %}class="active"{% endif %}><a href="{{path('my_orders',{status:''})}}">{{'user.orders.all_orders'|trans}}</a></li>
+    <li role="presentation" {% if app.request.query.get('status')=='created' %}class="active"{% endif %}><a href="{{path('my_orders',{status:'created'})}}">{{'user.orders.created_status'|trans}}<span class="badge">{{waitToBePaidCount}}</span></a></li>
+    <li role="presentation" {% if app.request.query.get('status')=='paid' %}class="active"{% endif %}><a href="{{path('my_orders',{status:'paid'})}}">{{'user.orders.paid_status'|trans}}</a></li>
   </ul>
   <br>
   <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <input type="hidden" name="status" value="{{app.request.query.get('status')}}">
     <div class="form-group">
       <select class="form-control" name="lastHowManyMonths"  onchange="submit();" >
-        {% set options = {'oneWeek':'user.account_center.last_one_week'|trans,'twoWeeks':'user.account_center.last_two_week'|trans,'oneMonth':'user.account_center.last_one_month'|trans,'twoMonths':'user.account_center.last_two_month'|trans,'threeMonths':'user.account_center.last_three_month'|trans,'':'user.account_center.all_records'|trans} %}
+        {% set options = {'oneWeek':'user.last_one_week'|trans,'twoWeeks':'user.last_two_week'|trans,'oneMonth':'user.last_one_month'|trans,'twoMonths':'user.last_two_month'|trans,'threeMonths':'user.last_three_month'|trans,'':'user.all_records'|trans} %}
         {{ select_options(options, request.get('lastHowManyMonths')) }}
       </select>
     </div>

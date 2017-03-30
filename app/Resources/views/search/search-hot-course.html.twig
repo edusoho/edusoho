@@ -18,7 +18,7 @@
 			  <a href="{{ path('course_set_show',{id:courseSet.id}) }}" class="gray-darker" title="{{ courseSet.title }}" target="_blank">{{ courseSet.title|plain_text(20) }}</a>
 	        </div>
 	        <div class="metas">
-	        	{% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows:'price'} %}
+                {% include 'course/widgets/course-set-price.html.twig' with {shows: 'price'} %}
 	        </div>
 	      </div>
 	    </div>

@@ -57,8 +57,9 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
         $receipt = $this->getParam('receipt-data');
         $amount = $this->getParam('amount', 0);
+        $transactionId = $this->getParam('transaction_id', false);
 
-        return $this->requestReceiptData($user['id'], $amount, $receipt, false);
+        return $this->requestReceiptData($user['id'], $amount, $receipt, $transactionId, false);
     }
 
     public function checkCoupon()
@@ -95,10 +96,11 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
             $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
+            $picture = empty($courseSet['cover']['middle']) ? '' : $courseSet['cover']['middle'];
             $payOrderInfo = array(
                 'title' => $course['title'],
                 'price' => $course['price'],
-                'picture' => $this->coverPic($courseSet['cover']['middle'], 'course-large.png'),
+                'picture' => $this->coverPic($picture, 'course.png'),
             );
         } elseif ('classroom' == $targetType) {
             $classroom = $this->getClassroomService()->getClassRoom($targetId);
@@ -110,7 +112,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             $payOrderInfo = array(
                 'title' => $classroom['title'],
                 'price' => $classroom['price'],
-                'picture' => $this->coverPic($classroom['middlePicture'], 'course-large.png'),
+                'picture' => $this->coverPic($classroom['middlePicture'], 'classroom.png'),
             );
         } elseif ('vip' == $targetType) {
             $result = $this->getVipOrderInfo($targetId);
@@ -215,7 +217,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
     }
 
     //amount改为有方法体内自己计算，不信任URL传参
-    private function requestReceiptData($userId, $amount, $receipt, $isSandbox = false)
+    private function requestReceiptData($userId, $amount, $receipt, $transactionId, $isSandbox = false)
     {
         if ($isSandbox) {
             $endpoint = 'https://sandbox.itunes.apple.com/verifyReceipt';
@@ -250,7 +252,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
         if ($data['status'] == 21007) {
             //sandbox receipt
-            return $this->requestReceiptData($userId, $amount, $receipt, true);
+            return $this->requestReceiptData($userId, $amount, $receipt, $transactionId, true);
         }
 
         if (!isset($data['status']) || $data['status'] != 0) {
@@ -258,10 +260,28 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         }
 
         if ($data['status'] == 0) {
-            if (isset($data['receipt']) && !empty($data['receipt']['in_app']) && ArrayToolkit::requireds($data['receipt']['in_app'][0], array('transaction_id', 'quantity', 'product_id'))) {
-                $token = 'iap-'.$data['receipt']['in_app'][0]['transaction_id'];
-                $quantity = $data['receipt']['in_app'][0]['quantity'];
-                $productId = $data['receipt']['in_app'][0]['product_id'];
+            if (isset($data['receipt']) && !empty($data['receipt']['in_app'])) {
+                $inApp = false;
+
+                if ($transactionId) {
+                    foreach ($data['receipt']['in_app'] as $value) {
+                        if (ArrayToolkit::requireds($value, array('transaction_id', 'quantity', 'product_id')) && $value['transaction_id'] == $transactionId) {
+                            $inApp = $value;
+                            break;
+                        }
+                    }
+                } else {
+                    //兼容没有transactionId的模式
+                    $inApp = $data['receipt']['in_app'][0];
+                }
+
+                if (!$inApp) {
+                    return $this->createErrorResponse('error', 'receipt校验失败：找不到对应的transaction_id');
+                }
+
+                $token = 'iap-'.$inApp['transaction_id'];
+                $quantity = $inApp['quantity'];
+                $productId = $inApp['product_id'];
 
                 try {
                     $calculatedAmount = $this->calculateBoughtAmount($productId, $quantity);

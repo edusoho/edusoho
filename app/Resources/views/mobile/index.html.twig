@@ -27,14 +27,14 @@
             {% endif %}
             
             {% if not isEsApp %}
-              {{mobile.appname|default('阔知学堂'|trans)}}
+              {{mobileSetting.appname|default('阔知学堂'|trans)}}
             {% else %}
               {{'阔知学堂'|trans}}
             {% endif %}
           </div>
           <div class="subtitle">
             {% if not isEsApp %}
-              {{mobile.appabout|default(' 将学校装进口袋，移动学习，随时随地。'|trans)}}
+              {{mobileSetting.appabout|default(' 将学校装进口袋，移动学习，随时随地。'|trans)}}
             {% else %}
                {{'将学校装进口袋，移动学习，随时随地。'|trans}}
             {% endif %}
@@ -76,7 +76,7 @@
           <div class="col-sm-6 text-center">
             <div class="qrcode">
               <p>{{'扫一扫登录客户端'|trans}}</p>
-              <img src="{{ path('topxia_mobile_qrcode') }}" alt="">
+              <img src="{{ path('mobile_qrcode') }}" alt="">
             </div>
           </div>
         </div>

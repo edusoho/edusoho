@@ -3,6 +3,7 @@
 namespace Tests\Unit\Classroom;
 
 use Biz\BaseTestCase;
+use Biz\Classroom\Service\ClassroomReviewService;
 
 class ClassroomReviewServiceTest extends BaseTestCase
 {
@@ -122,9 +123,11 @@ class ClassroomReviewServiceTest extends BaseTestCase
         $this->assertEquals('test2', $result['title']);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
     public function testGetUserClassroomReviewWithNotExistId()
     {
-        $this->setExpectedException('Exception');
         $user = $this->getCurrentUser();
         $user1 = $this->createStudentUser();
 
@@ -154,10 +157,11 @@ class ClassroomReviewServiceTest extends BaseTestCase
         $result = $this->getClassRoomReviewService()->getUserClassroomReview($user['id'], $classroom['id'] + 1);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
     public function testSaveReviewWithoutUserId()
     {
-        $this->setExpectedException('Exception');
-
         $classroom = array(
             'title' => 'test',
         );
@@ -180,10 +184,11 @@ class ClassroomReviewServiceTest extends BaseTestCase
         $this->getClassRoomReviewService()->saveReview($fields2);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     */
     public function testSaveReviewWithNotExistClassroom()
     {
-        $this->setExpectedException('Exception');
-
         $user1 = $this->createStudentUser();
 
         $classroom = array(
@@ -201,9 +206,11 @@ class ClassroomReviewServiceTest extends BaseTestCase
         $this->getClassRoomReviewService()->saveReview($fields1);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
     public function testSaveReviewWithNotExistUser()
     {
-        $this->setExpectedException('Exception');
         $user = $this->getCurrentUser();
 
         $classroom = array(
@@ -266,13 +273,15 @@ class ClassroomReviewServiceTest extends BaseTestCase
         $this->assertNull($review);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
     public function testDeleteReviewWithNotExistReview()
     {
-        $this->setExpectedException('Exception');
-
         $classroom = array(
             'title' => 'test',
         );
+
         $classroom = $this->getClassroomService()->addClassroom($classroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $this->getClassRoomReviewService()->deleteReview(100);
@@ -283,6 +292,9 @@ class ClassroomReviewServiceTest extends BaseTestCase
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return ClassroomReviewService
+     */
     protected function getClassRoomReviewService()
     {
         return $this->createService('Classroom:ClassroomReviewService');

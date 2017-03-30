@@ -22,7 +22,7 @@ class AnnouncementController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getAnnouncementService()->searchAnnouncementsCount($conditions),
+            $this->getAnnouncementService()->countAnnouncements($conditions),
             20
         );
 

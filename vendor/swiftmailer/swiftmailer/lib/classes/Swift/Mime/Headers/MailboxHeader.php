@@ -231,14 +231,12 @@ class Swift_Mime_Headers_MailboxHeader extends Swift_Mime_Headers_AbstractHeader
     public function getFieldBody()
     {
         // Compute the string value of the header only if needed
-        if (is_null($this->getCachedValue())) {
+        if (null === $this->getCachedValue()) {
             $this->setCachedValue($this->createMailboxListString($this->_mailboxes));
         }
 
         return $this->getCachedValue();
     }
-
-    // -- Points of extension
 
     /**
      * Normalizes a user-input list of mailboxes into consistent key=>value pairs.
@@ -298,7 +296,7 @@ class Swift_Mime_Headers_MailboxHeader extends Swift_Mime_Headers_AbstractHeader
      * Redefine the encoding requirements for mailboxes.
      *
      * All "specials" must be encoded as the full header value will not be quoted
-     * 
+     *
      * @see RFC 2822 3.2.1
      *
      * @param string $token
@@ -323,7 +321,7 @@ class Swift_Mime_Headers_MailboxHeader extends Swift_Mime_Headers_AbstractHeader
 
         foreach ($mailboxes as $email => $name) {
             $mailboxStr = $email;
-            if (!is_null($name)) {
+            if (null !== $name) {
                 $nameStr = $this->createDisplayNameString($name, empty($strings));
                 $mailboxStr = $nameStr.' <'.$mailboxStr.'>';
             }

@@ -210,7 +210,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
 
     protected function getLessonDao()
     {
-        return $this->createDao('Course.LessonDao');
+        return $this->createDao('OpenCourse:OpenCourseLessonDao');
     }
 
     protected function getCourseMemberService()

@@ -5,9 +5,18 @@
 {% do load_script('search/cloud-search') %}
 
 {% block top_content %}
-  <div class="search-banner">
-    <div class="container">
-      <form class="input-group search-input-group" id="search-input-group" action="{{path('search')}}" method="get">
+  {% cache 'cloud-search/top/banner' 600 %}
+  <section class="search-banner es-live-poster swiper-container">
+    {% set banner = block_show('cloud_search_banner') %}
+    {% if  banner %}
+      {{ block_show('cloud_search_banner') }}
+    {% else %}
+      <div class="swiper-slide swiper-hidden"
+        style="background: #ffffff url({{ asset('/assets/img/placeholder/banner_search.jpg') }}) no-repeat; background-size: cover;">
+      </div>
+    {% endif %}
+    <div class="cloud-search-box">
+      <form class="input-group search-input-group" id="search-input-group" action="{{ path('search') }}" method="get">
         <div class="input-wrap">
           <input type="text" name="q" class="form-control" placeholder="{{'cloud_searching.input_placeholder'|trans}}" value="{{keywords}}">
           <i class="js-btn-clear es-icon es-icon-close01"></i>
@@ -18,7 +27,8 @@
         <input type="hidden" name="type" value="{{type|default('')}}" >
       </form>
     </div>
-  </div>
+  </section>
+  {% endcache %}
 {% endblock %}
 
 {% block content %}
@@ -32,9 +42,9 @@
           <li {% if type == 'article' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'article'}) }}" data-type="article" >{{'cloud_searching.article_type'|trans}}</a></li>
         </ul>
         <div class="search-result" id="search-result">
-        {% if type %}
-          {% include 'search/search-' ~ type|lower ~ '.html.twig' %}
-        {% endif %}
+          {% if type %}
+            {% include 'search/search-' ~ type|lower ~ '.html.twig' %}
+          {% endif %}
         </div>
         <nav class="text-center">
           {{ web_macro.paginator(paginator) }}
@@ -42,9 +52,9 @@
       </div>
     </div>
     <div class="col-md-4">
-        {% if type %}
-          {% include 'search/search-hot-' ~ type|lower ~ '.html.twig' %}
-        {% else %}
+      {% if type %}
+        {% include 'search/search-hot-' ~ type|lower ~ '.html.twig' %}
+      {% else %}
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">{{'cloud_searching.common_keywords'|trans}}</h3>
@@ -53,7 +63,7 @@
 
           </div>
         </div>
-        {% endif %}
+      {% endif %}
     </div>
   </div>
 

@@ -31,7 +31,7 @@ export default class Homework {
 
   initCkeditor(validator) {
     let editor = CKEDITOR.replace('homework-about-field', {
-      toolbar: 'Minimal',
+      toolbar: 'Task',
       filebrowserImageUploadUrl: $('#homework-about-field').data('imageUploadUrl'),
     });
     editor.on('change', () => {

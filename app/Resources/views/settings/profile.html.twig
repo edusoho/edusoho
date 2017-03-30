@@ -29,7 +29,7 @@
 					<div class="form-group">
 						<label class="col-md-2 control-label" for="profile_truename">{{'user.fileds.realname'|trans}}</label>
 						{% if profile.truename and (app.user.approvalStatus == 'approved' or app.user.approvalStatus == 'approving') %}
-              <div class="control-text">{{ profile.truename }}</div>
+              <div class="form-control-static">{{ profile.truename }}</div>
             {% else %}
             	<div class="col-md-7 controls radios">
               	<input type="text" id="profile_truename" name="profile[truename]" class="form-control" data-widget-cid="widget-1" data-explain="" value="{{ profile.truename|default('') }}">
@@ -54,7 +54,7 @@
 						<label class="col-md-2 control-label" for="profile_idcard">{{'user.fields.idcard_label'|trans}}</label>
 						{% if profile.idcard and (app.user.approvalStatus == 'approved' or app.user.approvalStatus == 'approving') %}
               <div class="col-md-7 controls">
-                <div class="control-text">{{ blur_idcard_number(profile.idcard) }}</div>
+                <div class="form-control-static">{{ blur_idcard_number(profile.idcard) }}</div>
               </div>
             {% else %}
               <div class="col-md-7 controls radios">
@@ -68,7 +68,7 @@
 						<div class="form-group">
 							<label for="profile_mobile" class="col-md-2 control-label">{{'user.fields.mobile_label'|trans}}</label>
 							<div class="col-md-7 controls">
-								<div class="control-text">
+								<div class="form-control-static">
 									{{ blur_phone_number(user.verifiedMobile|default('')) }}
 									<small class="color-success">({{'user.fields.mobile_label.bind'|trans}})</small>
 								</div>
@@ -81,17 +81,14 @@
 								<input type="text" id="profile_mobile" name="profile[mobile]" class="form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile.mobile|default('') }}">
 
 								<div class="help-block" style="display:none"></div>
+                {% if setting('cloud_sms.sms_enabled', '') == '1' %}
+                  <div class="color-warning">
+                    {{'user.settings.profile.no_bind_mobile_tips'|trans}}<strong><a href="{{path('settings_bind_mobile')}}">{{'user.settings.profile.bind_mobile_btn'|trans}}</a>
+                    </strong>
+                  </div>
+                {% endif %}
 							</div>
 						</div>
-						{% if setting('cloud_sms.sms_enabled', '') == '1' %}
-							<div class="help-block">
-								<label class="col-md-2 control-label"></label>
-								<p class="text-warning">
-								{{'user.settings.profile.no_bind_mobile_hint'|trans}}<strong><a href="{{path('settings_bind_mobile')}}">{{'user.settings.profile.go_bind_mobile_btn'|trans}}</a>{{'。'|trans}}
-								</strong>
-								</p>
-							</div>
-						{% endif %}
 					{% endif %}
 
 					<div class="form-group form-forIam-group form-notStudent-group">
@@ -149,7 +146,15 @@
 							<input type="text" id="weibo" name="profile[weibo]" class="form-control" data-widget-cid="widget-3" data-explain="" value="{{ profile.weibo|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
-						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isWeiboPublic]" {% if profile.isWeiboPublic %}checked="checked" {% endif %}/>{{'form.checkbox.public'|trans}}</div>
+						<div class="col-md-2 controls mts">
+			              <label class="text-normal">
+			                <input type="checkbox" name="profile[isWeiboPublic]" 
+			                {% if profile.isWeiboPublic %}
+			                  checked="checked" 
+			                {% endif %}/>
+			                {{'form.checkbox.public'|trans}}
+			              </label>
+			            </div>
 					</div>
 
 					<div class="form-group">
@@ -158,7 +163,13 @@
 							<input type="text" id="profile_weixin" name="profile[weixin]" class="form-control" value="{{ profile.weixin|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
-						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isWeixinPublic]" {% if profile.isWeixinPublic %}checked="checked" {% endif %}/>{{'form.checkbox.public'|trans}}</div>
+						<div class="col-md-2 controls mts">
+			              <label class="text-normal">
+			                <input type="checkbox" name="profile[isWeixinPublic]" 
+			                {% if profile.isWeixinPublic %}checked="checked" {% endif %}/>
+			                {{'form.checkbox.public'|trans}}
+			              </label>
+			            </div>
 					</div>
 
 					<div class="form-group">
@@ -167,7 +178,15 @@
 							<input type="text" id="profile_qq" name="profile[qq]" class="form-control" data-widget-cid="widget-2" data-explain="" value="{{ profile.qq|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
-						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isQQPublic]" {% if profile.isQQPublic %}checked="checked"{% endif %}/>{{'form.checkbox.public'|trans}}</div>
+						<div class="col-md-2 controls mts">
+			              <label class="text-normal">
+			               <input type="checkbox" name="profile[isQQPublic]"
+			               {% if profile.isQQPublic %}
+			                checked="checked"
+			                {% endif %}/>
+			                {{'form.checkbox.public'|trans}}
+			              </label>
+			            </div>
 					</div>
 
 

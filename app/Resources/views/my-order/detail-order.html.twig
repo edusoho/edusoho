@@ -40,7 +40,7 @@
       </tr>
       <tr> <th width="25%">{{'plugin.coupon.code'|trans}}</th>
         <td width="75%">
-          {% if order.coupon %}{{ order.coupon }}{% else %}{{'user.account_center.orders.detail.none'|trans}}{% endif %}
+          {% if order.coupon %}{{ order.coupon }}{% else %}{{'site.data.empty'|trans}}{% endif %}
         </td>
       </tr>
       <tr> <th width="25%">{{'plugin.coupon.amount'|trans}}</th>
@@ -65,7 +65,7 @@
       {% endif %}
       <tr> <th width="25%">{{'order.payment_pattern.cash'|trans}}</th>
         <td width="75%">
-          <span class="money-text">{{ order.amount }}</span> {{'currency.RMB'|trans}}
+          <span class="money-text">{{ order.amount }}</span> {{'site.currency.RMB'|trans}}
         </td>
       </tr>
       <tr> <th width="25%">{{'order.payment_pattern'|trans}}</th>
@@ -76,7 +76,7 @@
       </tr>
       <tr> <th width="25%">{{'order.bank_code'|trans}}</th>
            <td width="75%">
-            {% if order.bank == null %} {{'user.account_center.orders.detail.none'|trans}}
+            {% if order.bank == null %} {{'site.data.empty'|trans}}
             {% else %} {{ order.bank }}
             {% endif %}
            </td>
@@ -89,7 +89,7 @@
         {% endif %}
       {% endif %}
       <tr>
-        <th width="25%">{{'user.account_center.orders.detail.special_operations'|trans}}</th>
+        <th width="25%">{{'user.orders.detail.special_operations'|trans}}</th>
         <td width="75%">{{ order.edit[0]|default('--') }}</td>
       </tr>
     </table>
@@ -100,9 +100,9 @@
       <table class="table">
         <thead>
           <tr>
-            <th width="50%">{{'user.account_center.orders.detail.log_info'|trans}}</th>
-            <th width="25%">{{'user.account_center.orders.detail.operator'|trans}}</th>
-            <th width="25%">{{'user.account_center.orders.detail.log_createdTime'|trans}}</th>
+            <th width="50%">{{'user.orders.detail.log_info'|trans}}</th>
+            <th width="25%">{{'user.orders.detail.operator'|trans}}</th>
+            <th width="25%">{{'user.orders.detail.log_createdTime'|trans}}</th>
           </tr>
         </thead>
         <tbody>
@@ -132,7 +132,7 @@
         </tbody>
       </table>
     {% else %}
-      <div class="empty">{{'user.account_center.orders.detail.empty'|trans}}!</div>
+      <div class="empty">{{'user.orders.detail.empty'|trans}}!</div>
     {% endif %}
   </div>
 

@@ -2,9 +2,7 @@
 
 namespace Biz\Question\Type;
 
-use AppBundle\Common\ArrayToolkit;
-
-class Choice implements TypeInterface
+class Choice extends BaseQuestion implements TypeInterface
 {
     public function create($fields)
     {
@@ -24,12 +22,14 @@ class Choice implements TypeInterface
 
     public function judge($question, $answer)
     {
-        if (count(array_diff($question['answer'], $answer)) == 0 && count(array_diff($answer, $question['answer'])) == 0) {
+        if (count(array_diff($question['answer'], $answer)) == 0 && count(array_diff($answer,
+                $question['answer'])) == 0
+        ) {
             return array('status' => 'right', 'score' => $question['score']);
         }
 
         if (count(array_diff($answer, $question['answer'])) == 0) {
-            $percentage = intval(count($answer) / count($question['answer']) * 100);
+            $percentage = (int) (count($answer) / count($question['answer']) * 100);
 
             return array(
                 'status' => 'partRight',
@@ -41,45 +41,17 @@ class Choice implements TypeInterface
         return array('status' => 'wrong', 'score' => 0);
     }
 
-    public function filter($fields)
+    public function filter(array $fields)
     {
         if (!empty($fields['choices'])) {
+            foreach ($fields['choices'] as &$choice) {
+                $choice = $this->biz['html_helper']->purify($choice);
+                unset($choice);
+            }
+
             $fields['metas'] = array('choices' => $fields['choices']);
         }
 
-        return $this->commonFilter($fields);
-    }
-
-    protected function commonFilter($fields)
-    {
-        if (isset($fields['target'])) {
-            $fields['lessonId'] = $fields['target'];
-            unset($fields['target']);
-        }
-        $fields = ArrayToolkit::parts($fields, array(
-            'type',
-            'stem',
-            'difficulty',
-            'userId',
-            'answer',
-            'analysis',
-            'metas',
-            'score',
-            'categoryId',
-            'parentId',
-            'copyId',
-            'target',
-            'courseId',
-            'courseSetId',
-            'lessonId',
-            'subCount',
-            'finishedTimes',
-            'passedTimes',
-            'userId',
-            'updatedTime',
-            'createdTime',
-        ));
-
-        return $fields;
+        return parent::filter($fields);
     }
 }

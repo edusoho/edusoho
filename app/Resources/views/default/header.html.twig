@@ -1,3 +1,5 @@
+{% do script(['app/js/header/index.js']) %}
+
 <header class="es-header navbar">
   <div class="navbar-header">
     <div class="visible-xs  navbar-mobile">
@@ -18,6 +20,9 @@
           {% include 'default/top-navigation.html.twig' with {navigations: navigations,siteNav: siteNav|default(null), isMobile: true} %}
         </ul>
       </div>
+    </div>
+    <div class="M_header-back js-back">
+      <a><i class="es-icon es-icon-chevronleft"></i></a>
     </div>
     <a href="{{ path('homepage') }}" class="navbar-brand">
       {% if setting('site.logo') %}
@@ -64,27 +69,22 @@
             {% else %}
               {{'homepage.header.my_learning'|trans}}
             {% endif %}
-          </a>
-        </li>
-        <li class="visible-lg nav-hover">
 
-          {% if setting('esBar.enabled', 0) and app.user.newMessageNum > 0 %}
-            <a class="hasmessage"><i class="es-icon es-icon-mail"></i><span class="dot"></span></a>
-          {% elseif ( not setting('esBar.enabled', 0)) and ( app.user.newNotificationNum > 0 or app.user.newMessageNum > 0) %}
-            <a class="hasmessage"><i class="es-icon es-icon-mail"></i><span class="dot"></span></a>
-          {% else %}
-            <a><i class="es-icon es-icon-mail"></i></a>
-          {% endif %}
-
-          <ul class="dropdown-menu" role="menu">
-            {% if not setting('esBar.enabled', 0) %}
+            <ul class="dropdown-menu" role="menu">
+              {% if not setting('esBar.enabled', 0) %}
+                <li>
+                  <a href="{{ path('notification') }}">
+                    <span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span>
+                    <i class="es-icon es-icon-notificationson"></i>{{'通知'|trans}}
+                  </a>
+                </li>
+              {% endif %}
               <li>
                 <a href="{{ path('notification') }}">
                   <span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span>
                   <i class="es-icon es-icon-notificationson"></i>{{'homepage.header.notice'|trans}}
                 </a>
               </li>
-            {% endif %}
             <li>
               <a href="{{ path('message') }}">
                 <span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span>
@@ -106,7 +106,7 @@
         <li class="hidden-xs"><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.login'|trans}}</a></li>
         <li class="hidden-xs"><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.register'|trans}}</a></li>
         {% endif %}
-        {# {% include 'default/switch-language.html.twig' %} #}
+        {# {% include 'TopxiaWebBundle:Default:switch-language.html.twig' %} #}
       </ul>
       <form class="navbar-form navbar-right hidden-xs hidden-sm" action="{{ path('search') }}" method="get">
         <div class="form-group">
@@ -117,3 +117,9 @@
     </div>
   </nav>
 </header>
+
+
+
+{% if useSeajs|default(false) %}
+  {% do load_script('default/header.js') %}
+{% endif %}

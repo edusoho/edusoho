@@ -11,9 +11,10 @@
 
 namespace Symfony\Component\BrowserKit\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\BrowserKit\Cookie;
 
-class CookieTest extends \PHPUnit_Framework_TestCase
+class CookieTest extends TestCase
 {
     /**
      * @dataProvider getTestsForToFromString
@@ -84,19 +85,20 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
     public function testFromStringThrowsAnExceptionIfCookieIsNotValid()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('InvalidArgumentException');
         Cookie::fromString('foo');
     }
 
-    public function testFromStringThrowsAnExceptionIfCookieDateIsNotValid()
+    public function testFromStringIgnoresInvalidExpiresDate()
     {
-        $this->setExpectedException('InvalidArgumentException');
-        Cookie::fromString('foo=bar; expires=Flursday July 31st 2020, 08:49:37 GMT');
+        $cookie = Cookie::fromString('foo=bar; expires=Flursday July 31st 2020, 08:49:37 GMT');
+
+        $this->assertFalse($cookie->isExpired());
     }
 
     public function testFromStringThrowsAnExceptionIfUrlIsNotValid()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('InvalidArgumentException');
         Cookie::fromString('foo=bar', 'foobar');
     }
 

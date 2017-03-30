@@ -9,6 +9,7 @@ OAuth2\ServerBundle\Entity\Client:
         client_secret:
             type:       string
             length:     40
+            nullable:   true
         redirect_uri:
             type:       simple_array
         grant_types:

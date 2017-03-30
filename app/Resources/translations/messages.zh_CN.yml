@@ -1,8 +1,8 @@
-#币种，货币面额
-currency.RMB: 元
-
-#时间
-time.month: 月
+# 全站
+site.currency.RMB: 元
+site.date.month: 月
+site.data.empty: 无
+site.datagrid.empty: 暂无记录
 
 # 用户通用
 user.fields.login_password: 登录密码
@@ -147,12 +147,12 @@ user.settings.teachers_qualification_menu: 教师资格申请
 user.settings.oauth_menu: 第三方登录
 
 # 个人设置模块-基础信息
-user.settings.profile.no_bind_mobile_hint: 还没绑定手机号码，
-user.settings.profile.go_bind_mobile_btn: 前去绑定
+user.settings.profile.no_bind_mobile_tips: 还没绑定手机号码，
+user.settings.profile.bind_mobile_btn: 前去绑定
 
 # 个人设置模块-安全设置
 user.settings.security.sms_code: 短信验证码
-user.settings.security.sms_code_hint: 输入短信验证码
+user.settings.security.sms_code_tips: 输入短信验证码
 user.settings.security.get_sms_code_btn: 获取短信验证码
 user.settings.security.mobile: 手机号码
 user.settings.security.bind_mobile: 已绑定手机号
@@ -161,12 +161,12 @@ user.settings.security.content_title: 安全设置
 user.settings.security.high_level: 安全等级：高
 user.settings.security.middle_level: 安全等级：中
 user.settings.security.low_level: 安全等级：低
-user.settings.security.login_password_description: 登录网校时需要输入的密码
-user.settings.security.pay_password_description: 在网校进行消费行为时需要输入的密码
+user.settings.security.login_password_tips: 登录网校时需要输入的密码
+user.settings.security.pay_password_tips: 在网校进行消费行为时需要输入的密码
 user.settings.security.questions: 安全问题
-user.settings.security.questions_description: 通过设置并且验证安全问题，保护帐号密码安全
+user.settings.security.questions_tips: 通过设置并且验证安全问题，保护帐号密码安全
 user.settings.security.mobile_bind: 手机绑定
-user.settings.security.mobile_bind_description: 增加账户登录、购买课程时的安全性，同时还可以找回登录密码，支付密码。
+user.settings.security.mobile_bind_tips: 增加账户登录、购买课程时的安全性，同时还可以找回登录密码，支付密码。
 user.settings.security.password_modify: 密码修改
 user.settings.security.password_modify.content_title: 安全设置
 user.settings.security.password_modify.bread_crumbs: 登录密码修改
@@ -174,23 +174,23 @@ user.settings.security.password_modify.current_password: 当前密码
 user.settings.security.password_modify.new_password: 新密码
 user.settings.security.password_modify.confirm_password: 确认密码
 
-user.settings.security.no_password.line_one_hint: 当前帐号从第三方帐号直接登录时创建，尚未设置密码。
-user.settings.security.no_password.line_two_hint: 为了帐号的安全，请通过邮箱找回密码的方式，重设密码！
+user.settings.security.no_password.line_one_tips: 当前帐号从第三方帐号直接登录时创建，尚未设置密码。
+user.settings.security.no_password.line_two_tips: 为了帐号的安全，请通过邮箱找回密码的方式，重设密码！
 user.settings.security.no_password.go_reset_password_btn: 现在就去重设密码！
 
 user.settings.security.password_reset: 重设密码
 user.settings.security.password_reset.content_title: 重设密码
 user.settings.security.password_reset.email: 邮箱地址
-user.settings.security.password_reset.email.step_one.email_hint: 请输入你在%name%注册时填写的邮箱地址
+user.settings.security.password_reset.email.step_one.email_tips: 请输入你在%name%注册时填写的邮箱地址
 user.settings.security.password_reset.email.step_one.send_email_submiting: 正在发送重设密码邮件
 user.settings.security.password_reset.email.step_two.content_title: 重设密码
 user.settings.security.password_reset.email.step_two.goto: 请到
-user.settings.security.password_reset.email.step_two.email_hint: 查阅来自%site.name%的邮件, 从邮件重设你的密码。
+user.settings.security.password_reset.email.step_two.email_tips: 查阅来自%site.name%的邮件, 从邮件重设你的密码。
 user.settings.security.password_reset.email.step_two.check_email_btn: 登录邮箱查收邮件
 user.settings.security.password_reset.mobile: 手机号码
 user.settings.security.password_reset.success: 重设密码成功
 user.settings.security.password_reset.success.content_title: 重设密码成功
-user.settings.security.password_reset.success.hint: 新密码设置成功，请重新登录。
+user.settings.security.password_reset.success.tips: 新密码设置成功，请重新登录。
 
 user.settings.security.pay_password_set: 设置支付密码
 user.settings.security.pay_password_set.password_forget: 忘记支付密码？
@@ -234,13 +234,13 @@ user.settings.basic_info.alter_description: 设置头衔、自我介绍并保存
 user.settings.certification: 实名认证
 user.settings.certification.content_title: 实名认证
 user.settings.certification.photo_require: 照片要求
-user.settings.certification.photo_require_description: 证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。图片格式支持jpg、gif、png，每张图片文件大小不能超过2M
+user.settings.certification.photo_require_tips: 证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。图片格式支持jpg、gif、png，每张图片文件大小不能超过2M
 user.settings.certification.idcard_ront_photo: 正面照片
 user.settings.certification.idcard_opposite_photo: 反面照片
-user.settings.certification.approving_description: 正在实名认证中，管理员会尽快答复您。
-user.settings.certification.approved_description: 恭喜您，已通过实名认证！
-user.settings.certification.unapprove_description: 您尚未实名认证
-user.settings.certification.approve_fail_description: 实名认证审核尚未通过，请参照通知中的信息，修改后重新认证。
+user.settings.certification.approving_tips: 正在实名认证中，管理员会尽快答复您。
+user.settings.certification.approved_tips: 恭喜您，已通过实名认证！
+user.settings.certification.unapprove_tips: 您尚未实名认证
+user.settings.certification.approve_fail_tips: 实名认证审核尚未通过，请参照通知中的信息，修改后重新认证。
 
 # 个人设置模块-头像设置
 user.settings.avatar: 头像设置
@@ -248,142 +248,139 @@ user.settings.avatar.crop: 头像图片
 user.settings.avatar.content_title: 头像设置
 user.settings.avatar.current_avatar: 当前头像
 user.settings.avatar.partner_avatar: 论坛头像
-user.settings.avatar.upload_hint: 你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过
+user.settings.avatar.upload_tips: 你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过
 user.settings.avatar.upload_size: 2M
 user.settings.avatar.upload_submit_btn: 上传新头像
 user.settings.avatar.using_current_avatar: 使用该头像
-user.settings.avatar.alter_description: 请设置自定义头像。
-user.settings.avatar.crop_hint: 提示：请选择图片裁剪区域。
-user.settings.avatar.reselect: 重新选择图片
+user.settings.avatar.alter_tips: 请设置自定义头像。
+user.settings.avatar.crop_tips: 提示：请选择图片裁剪区域。
 
 # 个人设置模块-邮箱设置
 user.settings.email: 邮箱设置
 user.settings.email.content_title: 邮箱设置
-user.settings.email.no_change_email_warning: 管理员尚未设置邮件服务器，不能更改邮箱地址。
+user.settings.email.no_change_email_tips: 管理员尚未设置邮件服务器，不能更改邮箱地址。
 user.settings.email.current_email: 当前登录邮箱
 user.settings.email.verified: 已验证
-user.settings.email.unverified_hint: 邮箱地址尚未验证，
-user.settings.email.go_verify_btn: 去验证
-user.settings.email.set_email_warning: 您还未设置邮箱，请在下方设置你的新邮箱。
+user.settings.email.unverified_tips: 邮箱地址尚未验证，
+user.settings.email.verify_btn: 去验证
+user.settings.email.set_email_tips: 您还未设置邮箱，请在下方设置你的新邮箱。
 user.settings.email.new_email: 新登录邮箱
-user.settings.email.password: 网站登录密码
-user.settings.email.verify_password_warning: 设置新的登录邮箱，需要校验当前的网站登录密码
+user.settings.email.verify_password_tips: 设置新的登录邮箱，需要校验当前的网站登录密码
 
 # 个人设置模块-第三方登录
-user.settings.oauth: 第三方登陆
-user.settings.oauth.content_title: 第三方登陆
+user.settings.oauth: 第三方登录
+user.settings.oauth.content_title: 第三方登录
 user.settings.oauth.weixin: 微信登录
 
 # 账户中心模块
 user.account_center: 账户中心
-user.account_center.menu_heading: 账户中心
-user.account_center.account_menu: 我的账户
-user.account_center.order_menu: 我的订单
-user.account_center.cards_menu: 我的卡包
-user.account_center.vip_history: 会员记录
-user.account_center.all_records: 全部记录
-user.account_center.last_one_week: 最近一周
-user.account_center.last_two_week: 最近两周
-user.account_center.last_one_month: 最近一个月
-user.account_center.last_two_month: 最近两个月
-user.account_center.last_three_month: 最近三个月
+user.menu_heading: 账户中心
+user.account_menu: 我的账户
+user.order_menu: 我的订单
+user.cards_menu: 我的卡包
+user.vip_history_menu: 会员记录
+user.all_records: 全部记录
+user.last_one_week: 最近一周
+user.last_two_week: 最近两周
+user.last_one_month: 最近一个月
+user.last_two_month: 最近两个月
+user.last_three_month: 最近三个月
 
 # 账户中心模块-我的账户
-user.account_center.account.empty: 暂无记录
-user.account_center.account.virtual_coin_introductions: %coin_name%说明
-user.account_center.account.virtual_coin_image: 虚拟币图片
-user.account_center.account.my_virtual_coin: 我的%coin_name%
-user.account_center.account.my_virtual_coin.inflow: 充值记录
-user.account_center.account.my_virtual_coin.outflow: 消费记录
-user.account_center.account.my_virtual_coin.recharge: 学习卡充值
-user.account_center.account.my_bill: 我的现金账单
-user.account_center.account.my_invite_code: 我的邀请码
-user.account_center.account.my_invite_code.invite: 邀请好友
-user.account_center.account.my_invite_code.invite.modal_title: 分享邀请链接
-user.account_center.account.my_invite_code.invite.copy_btn: 复制到剪贴板
-user.account_center.account.my_invite_code.other_invite_code: TA的邀请码
-user.account_center.account.my_invite_code.other_invite_code.modal_title: 填写TA的邀请码
-user.account_center.account.my_invite_code.other_invite_code.invite_code: TA的邀请码 
-user.account_center.account.my_invite_code.other_invite_code.input_placeholder: 邀请码
-user.account_center.account.my_invite_code.other_invite_code.hint_one: 填写TA的邀请码，当您第一次消费后，TA会获得邀请奖励。
-user.account_center.account.my_invite_code.other_invite_code.hint_two: 填写TA的邀请码，TA会获得邀请奖励。
-user.account_center.account.my_invite_code.first_part: 给TA分享您的邀请码或者邀请链接
-user.account_center.account.my_invite_code.second_part: ，TA注册后将获得%promoted_user_value%元优惠券
-user.account_center.account.my_invite_code.third_part: TA在消费后您将获得%promote_user_value%元优惠券
-user.account_center.account.my_invite_code.fourth_part: 同时您将获得%promote_user_value%元优惠券
-user.account_center.account.my_invite_code.invitees: 邀请对象
-user.account_center.account.my_invite_code.invite_time: 邀请时间
-user.account_center.account.my_invite_code.invite_rewords: 邀请奖励
-user.account_center.account.my_invite_code.get_invite_rewords_time: 奖励获取时间
-user.account_center.account.my_invite_code.empty: 暂无邀请用户
-user.account_center.account.my_invite_code.close: 邀请码功能已关闭
+user.account.empty: 暂无记录
+user.account.coin_introductions: %coin_name%说明
+user.account.coin_image: 虚拟币图片
+user.account.my_coin: 我的%coin_name%
+user.account.my_coin.inflow: 充值记录
+user.account.my_coin.outflow: 消费记录
+user.account.my_coin.recharge: 学习卡充值
+user.account.my_bill: 我的现金账单
+user.account.my_invite_code: 我的邀请码
+user.account.my_invite_code.invite: 邀请好友
+user.account.my_invite_code.invite.modal_title: 分享邀请链接
+user.account.my_invite_code.invite.copy_btn: 复制到剪贴板
+
+user.account.other_invite_code: TA的邀请码
+user.account.other_invite_code.modal_title: 填写TA的邀请码
+user.account.other_invite_code.invite_code: TA的邀请码 
+
+#TODO 梳理业务
+user.account.other_invite_code.tips_one: 填写TA的邀请码，当您第一次消费后，TA会获得邀请奖励。
+user.account.other_invite_code.tips_two: 填写TA的邀请码，TA会获得邀请奖励。
+
+user.account.my_invite_code.first_tips: 给TA分享您的邀请码或者邀请链接
+user.account.my_invite_code.second_tips: ，TA注册后将获得%promoted_user_value%元优惠券
+user.account.my_invite_code.third_tips: TA在消费后您将获得%promote_user_value%元优惠券
+user.account.my_invite_code.fourth_tips: 同时您将获得%promote_user_value%元优惠券
+user.account.my_invite_code.invitees: 邀请对象
+user.account.my_invite_code.invite_time: 邀请时间
+user.account.my_invite_code.invite_rewords: 邀请奖励
+user.account.my_invite_code.get_invite_rewords_time: 奖励获取时间
+user.account.my_invite_code.empty: 暂无邀请用户
+user.account.my_invite_code.close: 邀请码功能已关闭
 
 # 账户中心模块-我的订单
-user.account_center.orders: 我的订单
-user.account_center.orders.content_title: 我的订单
-user.account_center.orders.all_orders: 全部订单
-user.account_center.orders.created_status: 代付款
-user.account_center.orders.paid_status: 已付款
-user.account_center.orders.operation: 操作
-user.account_center.orders.order_id: 订单号：%sn%
-user.account_center.orders.target_course: 所属课程
-user.account_center.orders.target_course_deleted: 该课程已被删除
-user.account_center.orders.cancel_refund: 取消退款
-user.account_center.orders.go_pay: 去支付
-user.account_center.orders.cancel_order: 取消订单
-user.account_center.orders.empty: 暂无订单记录
-user.account_center.orders.detail.none: 无
-user.account_center.orders.detail.modal_title: 订单详情
-user.account_center.orders.detail.special_operations: 特殊操作
-user.account_center.orders.detail.log_info: 日志信息
-user.account_center.orders.detail.operator: 操作人
-user.account_center.orders.detail.log_createdTime: 创建时间
-user.account_center.orders.detail.empty: 暂无交易日志
+user.orders: 我的订单
+user.orders.content_title: 我的订单
+user.orders.all_orders: 全部订单
+user.orders.created_status: 代付款
+user.orders.paid_status: 已付款
+user.orders.operation: 操作
+user.orders.order_id: 订单号：%sn%
+user.orders.target_course: 所属课程
+user.orders.target_course_deleted: 该课程已被删除
+user.orders.cancel_refund: 取消退款
+user.orders.pay: 去支付
+user.orders.cancel_order: 取消订单
+user.orders.detail.modal_title: 订单详情
+user.orders.detail.special_operations: 特殊操作
+user.orders.detail.log_info: 日志信息
+user.orders.detail.operator: 操作人
+user.orders.detail.log_createdTime: 创建时间
+user.orders.detail.empty: 暂无交易日志
 
 # 账户中心模块-我的卡包
-user.account_center.cards: 我的卡包
-user.account_center.cards.content_title: 我的卡包
-user.account_center.cards.all: 全部
-user.account_center.cards.useable: 未使用
-user.account_center.cards.used: 已使用
-user.account_center.cards.outdate: 已过期
-user.account_center.cards.invalid: 已作废
-user.account_center.cards.no_qualified_hint: 没有搜索到符合条件的 
-user.account_center.cards.moneycard_not_install_hint: 网站没有开启%coin_name%功能,学习卡功能暂时没法使用
+user.cards: 我的卡包
+user.cards.content_title: 我的卡包
+user.cards.all: 全部
+user.cards.useable: 未使用
+user.cards.used: 已使用
+user.cards.outdate: 已过期
+user.cards.invalid: 已作废
+user.cards.empty: 没有搜索到符合条件的 
+user.cards.moneycard_not_install_tips: 网站没有开启%coin_name%功能,学习卡功能暂时没法使用
 
 #用户通知模块
-user.notification: 通知
-user.notification.content_title: 通知
-user.notification.empty: 暂无记录
-
-#全站通知
-global.notification: 全站站内通知
-global.notification.publish_time: 发布时间
-global.notification.empty: 通知已经被管理员删除
+notification: 通知
+notification.user_notification: 通知
+notification.user_notification.content_title: 通知
+notification.site_notification: 全站站内通知
+notification.site_notification.publish_time: 发布时间
+notification.site_notification.empty: 通知已经被管理员删除
 
 #用户私信模块
-user.message: 私信
-user.message.content_title: 私信
-user.message.empty: 暂无私信
+message: 私信
+message.content_title: 私信
+message.empty: 暂无私信
 
 #用户写私信模块
-user.message.send: 写私信
-user.message.send.content_title: 写私信
-user.message.send.receiver_name: 收信人用户名
-user.message.send.message_content: 想要说的话
+message.send: 写私信
+message.send.content_title: 写私信
+message.send.receiver_name: 收信人用户名
+message.send.message_content: 想要说的话
 
 #用户私信对话模块
-user.message.conversation: 私信
-user.message.conversation_content_title: 与%nickname%的私信对话
-user.message.conversation.message_content: 请输入私信内容
-user.message.conversation.send_for: 发给
-user.message.conversation.unread_number: %unreadNum%条未读
-user.message.conversation.total_number: 共%messageNum%条
+message.chat: 私信
+message.chat.content_title: 与%nickname%的私信对话
+message.chat.content_tips: 请输入私信内容
+message.chat.send_for: 发给
+message.chat.unread_number: %unreadNum%条未读
+message.chat.total_number: 共%messageNum%条
 
 #私信模块通用button
-user.message.btn.delete: 删除
-user.message.btn.back: 返回我的私信
-user.message.btn.send: 写私信
+message.btn.delete: 删除
+message.btn.back: 返回我的私信
+message.btn.send: 写私信
 
 # 个人主页模块
 user.homepage: %nickname%的个人主页

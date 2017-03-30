@@ -2,9 +2,7 @@
 
 namespace Biz\Question\Type;
 
-use AppBundle\Common\ArrayToolkit;
-
-class Essay implements TypeInterface
+class Essay extends BaseQuestion implements TypeInterface
 {
     public function create($fields)
     {
@@ -22,41 +20,21 @@ class Essay implements TypeInterface
     {
     }
 
+    public function filter(array $fields)
+    {
+        $fields = parent::filter($fields);
+        if (!empty($fields['answer']) && is_array($fields['answer'])) {
+            foreach ($fields['answer'] as &$answer) {
+                $answer = $this->biz['html_helper']->purify($answer);
+                unset($answer);
+            }
+        }
+
+        return $fields;
+    }
+
     public function judge($question, $answer)
     {
         return array('status' => 'none', 'score' => 0);
-    }
-
-    public function filter($fields)
-    {
-        if (isset($fields['target'])) {
-            $fields['lessonId'] = $fields['target'];
-            unset($fields['target']);
-        }
-        $fields = ArrayToolkit::parts($fields, array(
-            'type',
-            'stem',
-            'difficulty',
-            'userId',
-            'answer',
-            'analysis',
-            'metas',
-            'score',
-            'categoryId',
-            'parentId',
-            'copyId',
-            'target',
-            'courseId',
-            'courseSetId',
-            'lessonId',
-            'subCount',
-            'finishedTimes',
-            'passedTimes',
-            'userId',
-            'updatedTime',
-            'createdTime',
-        ));
-
-        return $fields;
     }
 }

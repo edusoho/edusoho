@@ -117,13 +117,17 @@ function install_step1($init_data = 0)
     if ($safemode == 'On') {
         $pass = false;
     }
-
+    $result = _checkWebRoot();
+    if ($result === false) {
+        $pass = false;
+    }
     echo $twig->render('step-1.html.twig', array(
         'step'     => 1,
         'env'      => $env,
         'paths'    => $checkedPaths,
         'safemode' => $safemode,
-        'pass'     => $pass
+        'pass'     => $pass,
+        'root'   => $result,
     ));
 }
 
@@ -162,13 +166,11 @@ function install_step3($init_data = 0)
     $error = null;
 
     if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
-
         $biz['db']->beginTransaction();
         $installLogFd = @fopen($biz['log_directory'] . '/install.log', 'w');
         $output = new \Symfony\Component\Console\Output\StreamOutput($installLogFd);
         $initializer = new \AppBundle\Common\SystemInitializer($output);
         try {
-
             if (!empty($init_data)) {
                 $biz['db']->exec("delete from `user` where id=1;");
                 $biz['db']->exec("delete from `user_profile` where id=1;");
@@ -199,7 +201,6 @@ function install_step3($init_data = 0)
         } catch (\Exception $e) {
             echo $e->getMessage();
             $biz['db']->rollBack();
-        } finally{
             @fclose($installLogFd);
         }
     }
@@ -360,9 +361,9 @@ function _create_config($config)
 {
     $secret = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
     $server = $_SERVER['SERVER_NAME'];
-    if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'){
+    if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
         $server = 'https://' . $server;
-    }else{
+    } else {
         $server = 'http://' . $server;
     }
     $config = "parameters:
@@ -551,4 +552,14 @@ function _initKey()
     $settingService->set('storage', $settings);
 
     return $keys;
+}
+
+function _checkWebRoot()
+{
+    $host = $_SERVER["HTTP_REFERER"];
+    $hostArray = explode('/',$host);
+    if (in_array('web', $hostArray)) {
+        return false;
+    }
+    return true;
 }

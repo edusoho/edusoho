@@ -2,17 +2,17 @@
 {% if setting('coin.coin_enabled') %}
     {% if setting('coin.coin_enabled') %}
     <li  class="{% if side_nav == 'my-coin' %}active{% endif %}" >
-      <a href="{{ url('my_coin') }}" >{% trans with {'%coin_name%': setting('coin.coin_name')|default("finance.virtual_coin"|trans)} %}user.account_center.account.my_virtual_coin{% endtrans %}</a>
+      <a href="{{ url('my_coin') }}" >{% trans with {'%coin_name%': setting('coin.coin_name')|default("finance.virtual_coin"|trans)} %}user.account.my_coin{% endtrans %}</a>
     </li>
     {% endif %}
 {% endif %}
   <li class="{% if side_nav == 'my-bill' %}active{% endif %}">
-    <a href="{{ url('my_bill') }}">{{'user.account_center.account.my_bill'|trans}}
+    <a href="{{ url('my_bill') }}">{{'user.account.my_bill'|trans}}
     </a>
   </li>
 {% if setting('invite.invite_code_setting') == 1 %}
   <li class="{% if side_nav == 'my-invite-code' %}active{% endif %}">
-    <a href="{{ url('my_invite_code') }}">{{'user.account_center.account.my_invite_code'|trans}}
+    <a href="{{ url('my_invite_code') }}">{{'user.account.my_invite_code'|trans}}
     </a>
   </li>
 {% endif %}

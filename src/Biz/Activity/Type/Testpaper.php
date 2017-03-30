@@ -77,7 +77,7 @@ class Testpaper extends Activity
         }
 
         //引用传递，当考试时间设置改变时，时间值也改变
-        if ($fields['testMode'] == 'normal') {
+        if ($fields['doTimes'] == 0 || $fields['testMode'] == 'normal') {
             $fields['startTime'] = 0;
         }
 

@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Serializer\Tests\Encoder;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Tests\Fixtures\Dummy;
 use Symfony\Component\Serializer\Tests\Fixtures\NormalizableTraversableDummy;
 use Symfony\Component\Serializer\Tests\Fixtures\ScalarDummy;
@@ -18,10 +19,16 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\CustomNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class XmlEncoderTest extends \PHPUnit_Framework_TestCase
+class XmlEncoderTest extends TestCase
 {
+    /**
+     * @var XmlEncoder
+     */
     private $encoder;
+
+    private $exampleDateTimeString = '2017-02-19T15:16:08+0300';
 
     protected function setUp()
     {
@@ -141,7 +148,7 @@ class XmlEncoderTest extends \PHPUnit_Framework_TestCase
     public function testContext()
     {
         $array = array('person' => array('name' => 'George Abitbol'));
-        $expected = <<<XML
+        $expected = <<<'XML'
 <?xml version="1.0"?>
 <response>
   <person>
@@ -255,7 +262,7 @@ XML;
         $serializer = new Serializer(array(new CustomNormalizer()), array('xml' => new XmlEncoder()));
         $this->encoder->setSerializer($serializer);
 
-        $expected = <<<XML
+        $expected = <<<'XML'
 <?xml version="1.0"?>
 <response><foo>normalizedFoo</foo><bar>normalizedBar</bar></response>
 
@@ -366,7 +373,7 @@ XML;
 
     public function testDecodeIgnoreWhiteSpace()
     {
-        $source = <<<XML
+        $source = <<<'XML'
 <?xml version="1.0"?>
 <people>
     <person>
@@ -449,7 +456,12 @@ XML;
 
     public function testDecodeEmptyXml()
     {
-        $this->setExpectedException('Symfony\Component\Serializer\Exception\UnexpectedValueException', 'Invalid XML data, it can not be empty.');
+        if (method_exists($this, 'expectException')) {
+            $this->expectException('Symfony\Component\Serializer\Exception\UnexpectedValueException');
+            $this->expectExceptionMessage('Invalid XML data, it can not be empty.');
+        } else {
+            $this->setExpectedException('Symfony\Component\Serializer\Exception\UnexpectedValueException', 'Invalid XML data, it can not be empty.');
+        }
         $this->encoder->decode(' ', 'xml');
     }
 
@@ -522,5 +534,90 @@ XML;
         $obj->qux = '1';
 
         return $obj;
+    }
+
+    public function testEncodeXmlWithBoolValue()
+    {
+        $expectedXml = <<<'XML'
+<?xml version="1.0"?>
+<response><foo>1</foo><bar>0</bar></response>
+
+XML;
+
+        $actualXml = $this->encoder->encode(array('foo' => true, 'bar' => false), 'xml');
+
+        $this->assertEquals($expectedXml, $actualXml);
+    }
+
+    public function testEncodeXmlWithDateTimeObjectValue()
+    {
+        $xmlEncoder = $this->createXmlEncoderWithDateTimeNormalizer();
+
+        $actualXml = $xmlEncoder->encode(array('dateTime' => new \DateTime($this->exampleDateTimeString)), 'xml');
+
+        $this->assertEquals($this->createXmlWithDateTime(), $actualXml);
+    }
+
+    public function testEncodeXmlWithDateTimeObjectField()
+    {
+        $xmlEncoder = $this->createXmlEncoderWithDateTimeNormalizer();
+
+        $actualXml = $xmlEncoder->encode(array('foo' => array('@dateTime' => new \DateTime($this->exampleDateTimeString))), 'xml');
+
+        $this->assertEquals($this->createXmlWithDateTimeField(), $actualXml);
+    }
+
+    /**
+     * @return XmlEncoder
+     */
+    private function createXmlEncoderWithDateTimeNormalizer()
+    {
+        $encoder = new XmlEncoder();
+        $serializer = new Serializer(array($this->createMockDateTimeNormalizer()), array('xml' => new XmlEncoder()));
+        $encoder->setSerializer($serializer);
+
+        return $encoder;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|NormalizerInterface
+     */
+    private function createMockDateTimeNormalizer()
+    {
+        $mock = $this->getMockBuilder('\Symfony\Component\Serializer\Normalizer\CustomNormalizer')->getMock();
+
+        $mock
+            ->expects($this->once())
+            ->method('normalize')
+            ->with(new \DateTime($this->exampleDateTimeString), 'xml', array())
+            ->willReturn($this->exampleDateTimeString);
+
+        $mock
+            ->expects($this->once())
+            ->method('supportsNormalization')
+            ->with(new \DateTime($this->exampleDateTimeString), 'xml')
+            ->willReturn(true);
+
+        return $mock;
+    }
+
+    /**
+     * @return string
+     */
+    private function createXmlWithDateTime()
+    {
+        return sprintf('<?xml version="1.0"?>
+<response><dateTime>%s</dateTime></response>
+', $this->exampleDateTimeString);
+    }
+
+    /**
+     * @return string
+     */
+    private function createXmlWithDateTimeField()
+    {
+        return sprintf('<?xml version="1.0"?>
+<response><foo dateTime="%s"/></response>
+', $this->exampleDateTimeString);
     }
 }

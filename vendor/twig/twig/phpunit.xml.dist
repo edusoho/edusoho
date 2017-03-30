@@ -9,13 +9,21 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         bootstrap="vendor/autoload.php"
+         bootstrap="test/bootstrap.php"
 >
   <testsuites>
     <testsuite name="Twig Test Suite">
       <directory>./test/Twig/</directory>
     </testsuite>
   </testsuites>
+
+  <php>
+    <ini name="error_reporting" value="-1" />
+  </php>
+
+  <listeners>
+    <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
+  </listeners>
 
   <filter>
     <whitelist>

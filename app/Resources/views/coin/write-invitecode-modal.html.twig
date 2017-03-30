@@ -2,19 +2,19 @@
 
 
 
-{% block title %}{{'user.account_center.account.my_invite_code.other_invite_code.modal_title'|trans}}{% endblock %}
+{% block title %}{{'user.account.other_invite_code.modal_title'|trans}}{% endblock %}
 
 {% block body %}
 
 <form id="write-invite-code" class="form-horizontal" action="{{path('write_invitecode')}}" method="post" >
   <div class="form-group">
-    <div class="col-md-2 control-label"><label>{{'user.account_center.account.my_invite_code.other_invite_code.invite_code'|trans}}</label></div>
+    <div class="col-md-2 control-label"><label>{{'user.account.other_invite_code.invite_code'|trans}}</label></div>
     <div class="controls col-md-8">
-      <input class="form-control" type="text" placeholder="{{'user.account_center.account.my_invite_code.other_invite_code.input_placeholder'|trans}}" name="inviteCode" value="{{ app.request.get('inviteCode') }}">
+      <input class="form-control" type="text" name="inviteCode" value="{{ app.request.get('inviteCode') }}">
      {% if setting('invite.get_coupon_setting',1) == 1 %}
-      <div class="help-block">{{'user.account_center.account.my_invite_code.other_invite_code.hint_one'|trans}}</div>
+      <div class="help-block">{{'user.account.other_invite_code.tips_one'|trans}}</div>
      {% elseif setting('invite.get_coupon_setting',1) == 0 %}
-      <div class="help-block">{{'user.account_center.account.my_invite_code.other_invite_code.hint_two'|trans}}</div>
+      <div class="help-block">{{'user.account.other_invite_code.tips_two'|trans}}</div>
      {% endif %} 
     </div>
   </div>

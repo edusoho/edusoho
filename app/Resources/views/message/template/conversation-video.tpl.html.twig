@@ -3,19 +3,19 @@
   <div class="media-body">
     <h4 class="media-heading">
       {% if conversation.latestMessageUserId == app.user.id %}
-        {{'user.message.conversation.send_for'|trans}}
+        {{'user.message.chat.send_for'|trans}}
       {% endif  %}
       {{ web_macro.user_link(fromUser) }}:
       {{conversation.latestMessageContent|plain_text(40)}}
 
       {% if conversation.unreadNum > 0 %}
-        <span class="text-warning">({{'user.message.conversation.unread_number'|trans({'%unreadNum%':conversation.unreadNum})}})</span>
+        <span class="text-warning">({{'user.message.chat.unread_number'|trans({'%unreadNum%':conversation.unreadNum})}})</span>
       {% endif %}
     </h4>
 
     <div class="conversation-footer clearfix">
       <span class="pull-left">{{ conversation.latestMessageTime|smart_time }}</span>
-      <span class="pull-right">{{'user.message.conversation.total_number'|trans({'%messageNum%':conversation.messageNum})}}</span>
+      <span class="pull-right">{{'user.message.chat.total_number'|trans({'%messageNum%':conversation.messageNum})}}</span>
       <div class="actions pull-right">
         <a class="delete-conversation-btn color-gray" href="javascript:" data-url="{{ path('message_conversation_delete', {conversationId:conversation.id })}}">{{'user.message.btn.delete'|trans}}</a>
         <span class="color-gray mhm">|</span>

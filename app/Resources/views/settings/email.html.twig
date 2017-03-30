@@ -17,7 +17,7 @@
         <div class="form-group">
           <div class="col-md-2 control-label"><label>{{'user.settings.email.current_email'|trans}}</label></div>
           <div class="col-md-8 controls">
-            <span class="control-text">
+            <span class="form-control-static">
               {% set emailArr = app.user.email|split('@') %}
               {% if emailArr[1] != 'edusoho.net' %}
                 {{ app.user.email }}
@@ -25,12 +25,12 @@
                   <span class="color-success">({{'user.settings.email.verified'|trans}})</span>
                 {% else %}
                   <p class="help-block mtm">
-                    {{'user.settings.email.unverified_hint'|trans}}
-                    <a id="send-verify-email" class="btn btn-info btn-sm" href="javascript:;" data-url="{{ path('settings_email_verify') }}">{{'user.settings.email.go_verify_btn'|trans}}</a>
+                    {{'user.settings.email.unverified_tips'|trans}}
+                    <a id="send-verify-email" class="btn btn-info btn-sm" href="javascript:;" data-url="{{ path('settings_email_verify') }}">{{'user.settings.email.verify_btn'|trans}}</a>
                   </p>
                 {% endif %}
               {% else %}
-                <span class="color-success">{{'user.settings.email.set_email_warning'|trans}}</span>
+                <span class="color-success">{{'user.settings.email.set_email_tips'|trans}}</span>
               {% endif %}
 
             </span>
@@ -45,10 +45,10 @@
         </div>
 
         <div class="form-group">
-          <div class="col-md-2 control-label">{{ form_label(form.password, 'user.settings.email.password'|trans) }}</div>
+          <div class="col-md-2 control-label">{{ form_label(form.password, 'user.fields.login_password'|trans) }}</div>
           <div class="col-md-8 controls">
             {{ form_widget(form.password, {attr:{class:'form-control'}}) }}
-            <p class="help-block">{{'user.settings.email.verify_password_warning'|trans}}</p>
+            <p class="help-block">{{'user.settings.email.verify_password_tips'|trans}}</p>
           </div>
         </div>
 
@@ -63,7 +63,7 @@
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
     {% else %}
-      <div class="alert alert-danger">{{'user.settings.email.no_change_email_warning'|trans}}</div>
+      <div class="alert alert-danger">{{'user.settings.email.no_change_email_tips'|trans}}</div>
     {% endif %}
     {% endblock %}
   {% endembed %}

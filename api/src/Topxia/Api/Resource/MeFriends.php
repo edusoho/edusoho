@@ -9,7 +9,6 @@ class MeFriends extends BaseResource
 {
     public function get(Application $app, Request $request)
     {
-
         $user = getCurrentUser();
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 10);
@@ -20,14 +19,13 @@ class MeFriends extends BaseResource
         $friends = filters($friends, 'user');
 
         return array(
-            'data'  => $friends,
-            'total' => $count
+            'data' => $friends,
+            'total' => (string) $count,
         );
     }
 
     public function filter($res)
     {
-
     }
 
     protected function getUserService()

@@ -79,7 +79,6 @@
               {% endif %}
             </td>
             <td>
-              {# TODO mediaSource ? #}
               {% if task.mediaSource|default('') != 'self' and task.type == 'video' %}
                 {{ '无'|trans }}
               {% elseif task.type =='audio' or task.type =='video' %}
@@ -96,7 +95,7 @@
               {% endif %}
             </td>
             <td>
-              <a data-toggle="modal" data-target="#modal"
+              <a  class="link-primary" data-toggle="modal" data-target="#modal"
                  data-url="{{ path('course_set_manage_course_dashboard_task_detail',{courseSetId: courseSet.id, courseId:task.courseId,taskId:task.id}) }}"
                  href="javascript:">查看</a>
             </td>

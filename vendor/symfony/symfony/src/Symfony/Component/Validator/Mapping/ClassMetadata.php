@@ -261,7 +261,7 @@ class ClassMetadata extends ElementMetadata implements ClassMetadataInterface
      * @param string     $property   The name of the property
      * @param Constraint $constraint The constraint
      *
-     * @return ClassMetadata This object
+     * @return $this
      */
     public function addPropertyConstraint($property, Constraint $constraint)
     {
@@ -282,7 +282,7 @@ class ClassMetadata extends ElementMetadata implements ClassMetadataInterface
      * @param string       $property
      * @param Constraint[] $constraints
      *
-     * @return ClassMetadata
+     * @return $this
      */
     public function addPropertyConstraints($property, array $constraints)
     {
@@ -299,10 +299,11 @@ class ClassMetadata extends ElementMetadata implements ClassMetadataInterface
      * The name of the getter is assumed to be the name of the property with an
      * uppercased first letter and either the prefix "get" or "is".
      *
-     * @param string     $property   The name of the property
-     * @param Constraint $constraint The constraint
+     * @param string      $property   The name of the property
+     * @param Constraint  $constraint The constraint
+     * @param string|null $method     The method that is called to retrieve the value being validated (null for auto-detection)
      *
-     * @return ClassMetadata This object
+     * @return $this
      */
     public function addGetterConstraint($property, Constraint $constraint)
     {
@@ -320,15 +321,55 @@ class ClassMetadata extends ElementMetadata implements ClassMetadataInterface
     }
 
     /**
+     * Adds a constraint to the getter of the given property.
+     *
+     * @param string     $property   The name of the property
+     * @param string     $method     The name of the getter method
+     * @param Constraint $constraint The constraint
+     *
+     * @return $this
+     */
+    public function addGetterMethodConstraint($property, $method, Constraint $constraint)
+    {
+        if (!isset($this->getters[$property])) {
+            $this->getters[$property] = new GetterMetadata($this->getClassName(), $property, $method);
+
+            $this->addPropertyMetadata($this->getters[$property]);
+        }
+
+        $constraint->addImplicitGroupName($this->getDefaultGroup());
+
+        $this->getters[$property]->addConstraint($constraint);
+
+        return $this;
+    }
+
+    /**
      * @param string       $property
      * @param Constraint[] $constraints
      *
-     * @return ClassMetadata
+     * @return $this
      */
     public function addGetterConstraints($property, array $constraints)
     {
         foreach ($constraints as $constraint) {
             $this->addGetterConstraint($property, $constraint);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string       $property
+     * @param string       $method
+     * @param Constraint[] $constraints
+     *
+     * @return $this
+     */
+    public function addGetterMethodConstraints($property, $method, array $constraints)
+    {
+        foreach ($constraints as $constraint) {
+            $this->addGetterMethodConstraint($property, $method, $constraint);
         }
 
         return $this;
@@ -350,7 +391,10 @@ class ClassMetadata extends ElementMetadata implements ClassMetadataInterface
                 $member = clone $member;
 
                 foreach ($member->getConstraints() as $constraint) {
-                    $member->constraintsByGroup[$this->getDefaultGroup()][] = $constraint;
+                    if (in_array($constraint::DEFAULT_GROUP, $constraint->groups, true)) {
+                        $member->constraintsByGroup[$this->getDefaultGroup()][] = $constraint;
+                    }
+
                     $constraint->addImplicitGroupName($this->getDefaultGroup());
                 }
 
@@ -448,7 +492,7 @@ class ClassMetadata extends ElementMetadata implements ClassMetadataInterface
      *
      * @param array $groupSequence An array of group names
      *
-     * @return ClassMetadata
+     * @return $this
      *
      * @throws GroupDefinitionException
      */

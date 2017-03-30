@@ -8,7 +8,7 @@
     <div class="panel panel-default panel-page">
       <div class="panel-heading"><h2>{{'user.settings.security.password_reset.email.step_two.content_title'|trans}}</h2></div>
       <p>
-        {{'user.settings.security.password_reset.email.step_two.goto'|trans}} <span class="color-success">{{ user.email }}</span> {{'user.settings.security.password_reset.email.step_two.email_hint'|trans({'%site.name%': setting('site.name')})}}
+        {{'user.settings.security.password_reset.email.step_two.goto'|trans}} <span class="color-success">{{ user.email }}</span> {{'user.settings.security.password_reset.email.step_two.email_tips'|trans({'%site.name%': setting('site.name')})}}
       </p>
       <p>
         <a class="btn btn-primary" href="{{ emailLoginUrl }}" target="_blank">{{'user.settings.security.password_reset.email.step_two.check_email_btn'|trans}}</a>

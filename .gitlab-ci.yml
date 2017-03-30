@@ -11,7 +11,7 @@ before_script:
   - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters_test.yml"
   - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters_test.yml"
   - mkdir web/files
-  - mkdir app/data/private_files
+  - mkdir -p app/data/private_files
   - touch app/config/routing_plugins.yml
 
 Unit Test With PHP 5.3:

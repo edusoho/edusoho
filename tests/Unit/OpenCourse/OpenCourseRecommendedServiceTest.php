@@ -121,7 +121,7 @@ class OpenCourseRecommendedServiceTest extends BaseTestCase
             'title' => $title,
             'type' => 'normal',
             'courseSetId' => '1',
-            'expiryMode' => 'days',
+            'expiryMode' => 'forever',
             'learnMode' => 'freeMode',
         );
         $createCourse = $this->getCourseSetService()->createCourseSet($course);

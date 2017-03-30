@@ -1,6 +1,6 @@
 {% extends 'old-layout.html.twig' %}
 
-{% block title %}{{'user.message.conversation'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'message.chat'|trans}} - {{ parent() }}{% endblock %}
 {% set script_controller = 'message/show' %}
 {% block content %}
 
@@ -8,14 +8,14 @@
   <div class="col-md-8 col-md-offset-2">
     <div class="panel panel-default panel-page">
       <div class="panel-heading">
-        <a href="{{ path('message')}}" class="btn btn-default pull-right">{{'user.message.btn.back'|trans}}</a>
-        <h2>{{'user.message.conversation_content_title'|trans({'%nickname%':receiver.nickname})}}</h2>
+        <a href="{{ path('message')}}" class="btn btn-default pull-right">{{'message.btn.back'|trans}}</a>
+        <h2>{{'message.chat.content_title'|trans({'%nickname%':receiver.nickname})}}</h2>
       </div>
 
       <form id="message-reply-form" class="message-reply-form clearfix" method="post"
       action="{{ path('message_conversation_show', {conversationId:conversation.id}) }}">
         <div class="form-group">
-          <textarea id="message_reply_content" name="message_reply[content]" required="required" class="form-control" rows="3" placeholder="{{'user.message.conversation.message_content' |trans }}"></textarea>
+          <textarea id="message_reply_content" name="message_reply[content]" required="required" class="form-control" rows="3" placeholder="{{'message.chat.content_tips' |trans }}"></textarea>
         </div>
 
         <div class="form-group">

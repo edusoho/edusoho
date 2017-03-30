@@ -77,8 +77,9 @@ common_qrcode:
     defaults: { _controller: AppBundle:Common:qrcode }
 
 common_crontab:
-    path:  /common/crontab
+    path:  /crontab
     defaults: { _controller: AppBundle:Common:crontab }
+    methods: [POST]
 
 user_terms:
     path:  /userterms
@@ -231,26 +232,6 @@ uploadfile_params:
 uploadfile_browsers:
     path:  /uploadfile/browsers
     defaults: { _controller: AppBundle:UploadFile:browsers }
-
-uploadfile_cloud_callback:
-    path:  /uploadfile/cloud_callback
-    defaults: { _controller: AppBundle:UploadFile:cloudCallback }
-
-uploadfile_cloud_convert_callback:
-    path:  /uploadfile/cloud_convertcallback
-    defaults: { _controller: AppBundle:UploadFile:cloudConvertCallback }
-
-uploadfile_cloud_convert_callback2:
-    path:  /uploadfile/cloud_convertcallback2
-    defaults: { _controller: AppBundle:UploadFile:cloudConvertCallback2 }
-
-uploadfile_cloud_convert_callback3:
-    path:  /uploadfile/cloud_convertcallback3
-    defaults: { _controller: AppBundle:UploadFile:cloudConvertCallback3 }
-
-uploadfile_cloud_get_media_info:
-    path:  /uploadfile/get_media_info/{type}
-    defaults: { _controller: AppBundle:UploadFile:getMediaInfo }
 
 hls_playlist:
     path: /hls/{id}/playlist/{token}.m3u8
@@ -623,6 +604,11 @@ user_show:
     path:  /user/{id}
     defaults: { _controller: AppBundle:User:show }
 
+user_info_fill:
+    path: /user/{id}/saveinfo
+    defaults: { _controller: AppBundle:User:fillInfoWhenBuy }
+    methods: [POST]
+
 my_page_show:
     path:  /my/page/show
     defaults: { _controller: AppBundle:User:pageShow }
@@ -779,14 +765,6 @@ cloud_set_server:
     path: /cloud/set-server
     defaults: {_controller: AppBundle:Cloud:setServer }
 
-cloud_oldkeys:
-    path: /cloud/oldkeys
-    defaults: {_controller: AppBundle:Cloud:oldkeys }
-
-cloud_reconvert_old_file:
-    path: /cloud/reconvert_old_file
-    defaults: {_controller: AppBundle:Cloud:reconvertOldFile }
-
 cloud_video_fingerprint:
     path: /cloud/video_fingerprint
     defaults: {_controller: AppBundle:Cloud:videoFingerprint }
@@ -877,12 +855,17 @@ group_add:
 group_show:
     path:  /group/{id}
     defaults: { _controller: AppBundle:Group:groupIndex }
+
 group_join:
     path:  /group/{id}/join
     defaults: { _controller: AppBundle:Group:groupJoin }
+    methods: [POST]
+
 group_exit:
     path:  /group/{id}/exit
     defaults: { _controller: AppBundle:Group:groupExit }
+    methods: [POST]
+
 group_member:
     path:  /group/member/{id}
     defaults: { _controller: AppBundle:Group:groupMember }
@@ -1501,9 +1484,9 @@ live_open_lesson_time_check:
     path:  /open/course/{courseId}/manage/live/time/check
     defaults: { _controller: AppBundle:OpenCourseManage:lessonTimeCheck }
 
-live_open_es_live_replay_show:
-    path:  /open/course/live/replay/{replayId}/show
-    defaults: { _controller: AppBundle:LiveOpenCourse:playESLiveReplay }
+es_live_room_replay_show:
+    path:  /es_live/{targetType}/{targetId}/lesson/{lessonId}/replay/{replayId}/show
+    defaults: { _controller: AppBundle:Liveroom:playESLiveReplay }
 
 open_course_member_sms:
     path:  /open/course/{id}/member/sms
@@ -1554,6 +1537,11 @@ course_acitvity_watch:
 course_activity_download:
     path: /course/{courseId}/activiy/{activityId}/download
     defaults: { _controller: AppBundle:Activity/Download:downloadFile }
+
+course_text_activity_auto_save:
+    path: /course/{courseId}/activity/{activityId}/text/auto_save
+    defaults: { _controller: AppBundle:Activity/Text:autoSave }
+    methods: [POST]
 
 #task
 course_task_show:
@@ -2144,6 +2132,11 @@ course_set_manage_show_tasks:
   defaults: { _controller: AppBundle:Question/Manage:showTasks }
   methods: [POST]
 
+course_set_manage_question_check_num:
+  path: /course_set/{courseSetId}/manage/question/check/num
+  defaults: { _controller: AppBundle:Question/Manage:showQuestionTypesNum }
+  methods: [POST]
+
 #testpaper
 course_set_manage_testpaper:
   path: /course_set/{id}/manage/testpaper
@@ -2458,6 +2451,26 @@ classroom_manage_homework_check:
   path: /classroom/{id}/manage/homework/{resultId}/check
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:homeworkCheck }
 
+classroom_manage_students_defined_show:
+    path:  /classroom/{classroomId}/manage/students/{userId}/defined_show
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:studentDefinedShow }
+
+classroom_manage_students_show:
+    path:  /classroom/{classroomId}/manage/students/{userId}/show
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:studentShow }
+
+classroom_manage_member_deadline:
+    path: /classroom/{classroomId}/manage/member/{userId}/deadline
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:setClassroomMemberDeadline }
+
+classroom_member_deadline_reach:
+    path: /classroom/{classroomId}/member/deadline/reach
+    defaults: { _controller: AppBundle:Classroom/Classroom:deadlineReach }
+
+classroom_expiry_date_rule:
+    path: /classroom_expiry_date_rule
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:expiryDateRule }
+
 classroom_explore:
     path:  /classroom/explore/{category}
     defaults: { _controller: AppBundle:Explore:classroom, category:'' }
@@ -2497,10 +2510,6 @@ classroom_introductions:
 classroom_buy:
     path: /classroom/{id}/buy
     defaults: { _controller: AppBundle:Classroom/Classroom:buy }
-
-classroom_buy_modify_user_info:
-    path: /classroom/buy/modify_user_info
-    defaults: { _controller: AppBundle:Classroom/Classroom:modifyUserInfo }
 
 classroom_sign:
     path:  classroom/sign/{classroomId}
@@ -2662,6 +2671,14 @@ material_reconvert:
   path:  /material/lib/{globalId}/reconvert
   defaults: { _controller: AppBundle:MaterialLib/MaterialLib:reconvert }
 
+app_download:
+    path: /app/download
+    defaults: { _controller: AppBundle:Default:appDownload }
+
+announcement_global_show:
+    path:  /announcement/{id}/opreate/global/show
+    defaults: { _controller: AppBundle:Announcement:globalShow }
+
 material_thumbnail_generate:
   path:  /material/lib/{globalId}/thumbnail/generate
   defaults: { _controller: AppBundle:MaterialLib/MaterialLib:generateThumbnail }
@@ -2702,9 +2719,10 @@ material_batch_tag_show:
   path: /materials/batch/tag/show
   defaults: { _controller: AppBundle:MaterialLib/MaterialLib:batchTagShow }
 
-global_file_player:
-  path:  /global_file/{globalId}/player
-  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:player }
+# remove it, use material_lib_file_player
+#global_file_player:
+#  path:  /global_file/{globalId}/player
+#  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:player }
 
 global_file_hls_playlist:
   path:  /global_file/{globalId}/playlist/{token}.m3u8
@@ -2761,10 +2779,6 @@ course_member_deadline_reach:
 course_buy:
     path: /course/{id}/buy
     defaults: { _controller: AppBundle:Course/CourseOrder:buy }
-
-course_buy_modify_user_info:
-    path: /course/buy/modify_user_info
-    defaults: { _controller: AppBundle:Course/CourseOrder:modifyUserInfo }
 
 course_order_repay:
     path:  /course/order/repay
@@ -2857,5 +2871,9 @@ course_task_question_marker_search:
     defaults: { _controller: AppBundle:QuestionMarker:search }
 
 callback:
-    path:  /callback/{resource}
-    defaults: { _controller: AppBundle:Callback/Index:index }
+    path:  /callback/{type}
+    defaults: { _controller: AppBundle:Callback/Endpoint:publish }
+
+mobile_qrcode:
+    path:  /mobil/qrcode
+    defaults: { _controller: AppBundle:Common:mobileQrcode }

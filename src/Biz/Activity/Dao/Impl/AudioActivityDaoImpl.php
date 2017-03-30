@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class AudioActivityDaoImpl extends GeneralDaoImpl implements AudioActivityDao
 {
-    protected $table = 'audio_activity';
+    protected $table = 'activity_audio';
 
     public function declares()
     {

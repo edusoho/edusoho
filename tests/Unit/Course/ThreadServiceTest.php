@@ -368,8 +368,7 @@ class ThreadServiceTest extends BaseTestCase
             'title' => '教学计划Demo-'.rand(0, 1000),
             'courseSetId' => 1,
             'learnMode' => 'lockMode',
-            'expiryMode' => 'days',
-            'expiryDays' => 0,
+            'expiryMode' => 'forever',
         );
 
         return $this->getCourseService()->createCourse($course);

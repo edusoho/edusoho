@@ -11,10 +11,11 @@
 
 namespace Symfony\Component\Console\Tests\Formatter;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
-class OutputFormatterTest extends \PHPUnit_Framework_TestCase
+class OutputFormatterTest extends TestCase
 {
     public function testEmptyTag()
     {
@@ -195,6 +196,9 @@ class OutputFormatterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             'some question', $formatter->format('<question>some question</question>')
         );
+        $this->assertEquals(
+            'some text with inline style', $formatter->format('<fg=red>some text with inline style</>')
+        );
 
         $formatter->setDecorated(true);
 
@@ -209,6 +213,9 @@ class OutputFormatterTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals(
             "\033[30;46msome question\033[39;49m", $formatter->format('<question>some question</question>')
+        );
+        $this->assertEquals(
+            "\033[31msome text with inline style\033[39m", $formatter->format('<fg=red>some text with inline style</>')
         );
     }
 

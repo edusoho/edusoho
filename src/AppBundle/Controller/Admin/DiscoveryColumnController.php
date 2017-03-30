@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\DiscoveryColumn\Service\DiscoveryColumnService;
 use Symfony\Component\HttpFoundation\Request;
 
 class DiscoveryColumnController extends BaseController
@@ -16,6 +17,20 @@ class DiscoveryColumnController extends BaseController
         } else {
             return $this->createJsonResponse(array('status' => 'error'));
         }
+    }
+
+    public function categoryTreeAction(Request $request)
+    {
+        $id = $request->query->get('id');
+        $type = $request->query->get('type');
+        if ($id) {
+            $discoveryColumn = $this->getDiscoveryColumnService()->getDiscoveryColumn($id);
+        }
+
+        return $this->render('admin/discovery-column/discovery-column-category.html.twig', array(
+            'categoryId' => empty($discoveryColumn['categoryId']) ? 0 : $discoveryColumn['categoryId'],
+            'type' => $type,
+        ));
     }
 
     public function indexAction(Request $request)
@@ -38,7 +53,7 @@ class DiscoveryColumnController extends BaseController
                     $conditions['categoryIds'] = array_merge(array($discoveryColumn['categoryId']), $childrenIds);
                 }
 
-                $classrooms = $this->getClassroomService()->searchClassrooms($conditions, array('createdTime', 'desc'), 0, $discoveryColumn['showCount']);
+                $classrooms = $this->getClassroomService()->searchClassrooms($conditions, array('createdTime' => 'desc'), 0, $discoveryColumn['showCount']);
 
                 $discoveryColumns[$key]['count'] = count($classrooms);
             } else {
@@ -168,6 +183,9 @@ class DiscoveryColumnController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    /**
+     * @return DiscoveryColumnService
+     */
     protected function getDiscoveryColumnService()
     {
         return $this->createService('DiscoveryColumn:DiscoveryColumnService');

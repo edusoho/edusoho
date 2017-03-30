@@ -2,25 +2,25 @@
 
 namespace Biz\Course\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\CloudPlatform\Service\AppService;
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\CourseMemberDao;
-use Biz\Course\Service\CourseNoteService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\MemberService;
-use Biz\Order\Service\OrderService;
+use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
+use Biz\Course\Dao\CourseMemberDao;
+use Biz\Order\Service\OrderService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
+use Codeages\Biz\Framework\Event\Event;
+use Biz\Course\Service\CourseSetService;
+use Biz\CloudPlatform\Service\AppService;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\NotificationService;
-use Biz\User\Service\UserService;
-use Codeages\Biz\Framework\Event\Event;
 use VipPlugin\Biz\Vip\Service\VipService;
+use Biz\Classroom\Service\ClassroomService;
 
 /**
  * Class MemberServiceImpl
@@ -124,6 +124,13 @@ class MemberServiceImpl extends BaseService implements MemberService
         $result = $this->getMemberDao()->delete($member['id']);
 
         $course = $this->getCourseService()->getCourse($courseId);
+
+        $this->getLogService()->info(
+            'course',
+            'remove_student',
+            "教学计划《{$course['title']}》(#{$course['id']})，移除学员{$user['nickname']}(#{$user['id']})"
+        );
+
         $this->dispatchEvent('course.quit', $course, array('userId' => $userId, 'member' => $member));
 
         if ($this->getCurrentUser()->isAdmin()) {
@@ -258,8 +265,8 @@ class MemberServiceImpl extends BaseService implements MemberService
     /**
      * 会员到期后、会员被取消后、课程会员等级被提高均为过期
      *
-     * @param $course
-     * @param $member
+     * @param  $course
+     * @param  $member
      *
      * @return bool 会员加入的学员是否已到期
      */
@@ -535,7 +542,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         if ($course['expiryMode'] == 'days' && $course['expiryDays'] > 0) {
             $endTime = strtotime(date('Y-m-d', time())); //从第二天零点开始计算
             $deadline = $course['expiryDays'] * 24 * 60 * 60 + $endTime;
-        } elseif ($course['expiryMode'] == 'date') {
+        } elseif ($course['expiryMode'] == 'date' || $course['expiryMode'] == 'end_date') {
             $deadline = $course['expiryEndDate'];
         }
 
@@ -727,9 +734,11 @@ class MemberServiceImpl extends BaseService implements MemberService
         $classroom = $this->getClassroomService()->getClassroomByCourseId($courseId);
 
         if (!empty($classroom)) {
-            $member = $this->getClassroomService()->getClassroomMember($classroom['classroomId'], $userId);
+            $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $userId);
 
-            if (!$isCourseStudent && !empty($member) && array_intersect($member['role'], array('student', 'teacher', 'headTeacher', 'assistant'))) {
+            if (!$isCourseStudent && !empty($member) && array_intersect($member['role'],
+                    array('student', 'teacher', 'headTeacher', 'assistant'))
+            ) {
                 $info = ArrayToolkit::parts($member, array('levelId'));
                 $member = $this->createMemberByClassroomJoined($courseId, $userId, $member['classroomId'], $info);
 
@@ -888,6 +897,18 @@ class MemberServiceImpl extends BaseService implements MemberService
                 'deadline' => $deadline,
             )
         );
+    }
+
+    public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline)
+    {
+        return $this->getMemberDao()->updateByClassroomIdAndUserId($classroomId, $userId, array(
+            'deadline' => $deadline,
+        ));
+    }
+
+    public function updateMembersDeadlineByClassroomId($classroomId, $deadline)
+    {
+        return $this->getMemberDao()->updateByClassroomId($classroomId, array('deadline' => $deadline));
     }
 
     /**

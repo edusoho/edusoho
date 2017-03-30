@@ -5,10 +5,12 @@
 
   <div class="tab-header">
     <ul class="clearfix">
-      <li class="{% if categoryCode is empty %}active{% endif %}"><a href="{{ path('article_show') }}">{{ article.name|default('资讯频道'|trans) }}</a></li>
+      <li class="{% if categoryCode is empty %}active{% endif %}"><a
+          href="{{ path('article_show') }}">{{ '%article_name%频道'|trans({'%article_name%': setting('article.name')|default('资讯'|trans)}) }}</a></li>
       {% for cateogory in rootCategories %}
         {% if cateogory.parentId == 0 %}
-        <li class="{% if cateogory.id in activeIds %}{% set nextCode = cateogory.code %}active{% endif %}"><a href="{{ path('article_category', {categoryCode:cateogory.code}) }}">{{ cateogory.name }}</a></li>
+          <li class="{% if cateogory.id in activeIds %}{% set nextCode = cateogory.code %}active{% endif %}"><a
+              href="{{ path('article_category', {categoryCode:cateogory.code}) }}">{{ cateogory.name }}</a></li>
         {% endif %}
       {% endfor %}
     </ul>
@@ -20,10 +22,11 @@
       {% for l,cs in categories if cs %}
         <ul class="clearfix">
           {% for c in cs %}
-              {% if loop.index == 1 %}
-                <li class="all"><a href="{{ path('article_category', {categoryCode:nextCode}) }}">{{'全部'|trans}}</a></li>
-              {% endif %}
-              <li class="{% if c.id in activeIds %}{% set nextCode = c.code %}active{% endif %}"><a href="{{ path('article_category', {categoryCode:c.code}) }}">{{ c.name }}</a></li>
+            {% if loop.index == 1 %}
+              <li class="all"><a href="{{ path('article_category', {categoryCode:nextCode}) }}">{{ '全部'|trans }}</a></li>
+            {% endif %}
+            <li class="{% if c.id in activeIds %}{% set nextCode = c.code %}active{% endif %}"><a
+                href="{{ path('article_category', {categoryCode:c.code}) }}">{{ c.name }}</a></li>
           {% endfor %}
         </ul>
       {% endfor %}

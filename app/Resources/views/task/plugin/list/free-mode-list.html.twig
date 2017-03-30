@@ -1,18 +1,22 @@
 <ul class="task-list task-show">
-  {% set taskIndex = 0 %}
   {% for key, item in courseItems %}
     {% if item.type == 'chapter' %}
-      <li class="task-item">
-        <i class="es-icon es-icon-viewlist left-menu"></i><span class="title">第{{ item.number }}
+      <li class="task-item bg-gray-lighter js-task-chapter">
+        <i class="es-icon es-icon-menu left-menu"></i><span class="title">第{{ item.number }}
           章: {{ item.title }}</span>
+          <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
       </li>
     {% elseif item.type == 'unit' %}
-      <li class="task-item">
+      <li class="task-item color-gray bg-gray-lighter">
         <span class="title">第{{ item.number }}节: {{ item.title }}</span>
       </li>
     {% elseif  item.type == 'lesson' %}
       {% for task in item.tasks %}
-        {% set taskIndex = taskIndex +1%}
+        {% if  item.tasks|length > 1 %}
+          {% set taskIndex = item.number ~'-' ~ loop.index %}
+        {% else %}
+          {% set taskIndex = item.number  %}
+        {% endif %}
         {% set task_lock =  (course.learnMode  == 'lockMode')  and (task.lock  and   task.number != 1) %}
         <li class="task-item task-content {% if task.activityId == activity.id %} active {% endif %} mouse-control">
           <i class="es-icon
@@ -48,7 +52,7 @@
             <span class="right-menu mouse-leave">{{ task.activity.length|activity_length_format }}
               <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} ml5"></i>
           </span>
-            <span class="right-menu mouse-enter color-primary">任务未解锁</span>
+            <span class="right-menu mouse-enter color-warning">任务未解锁</span>
           {% else %}
             <span class="right-menu">{{ task.activity.length|activity_length_format }}
               <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} ml5" data-toggle="tooltip"

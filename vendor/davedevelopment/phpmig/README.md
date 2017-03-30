@@ -32,28 +32,11 @@ abstraction][doctrineschemamanager].
 Getting Started
 ---------------
 
-The best way to install phpmig and pimple is using composer. Start by creating
-or adding to your project's `composer.json` file:
-
-``` JSON
-{
-    "require": {
-        "php": ">=5.3.1",
-        "davedevelopment/phpmig": "*",
-        "pimple/pimple": "1.*"
-    },
-
-    "config": {
-        "bin-dir": "bin/"
-    }
-}
-```
-
-Then download composer.phar and run install command
+The best way to install phpmig is using composer:
 
 ```bash
 $ curl -sS https://getcomposer.org/installer | php
-$ php composer.phar install
+$ php composer.phar require davedevelopment/phpmig
 ```
 
 You can then use the localised version of phpmig for that project
@@ -109,25 +92,25 @@ The init command creates a bootstrap file that specifies a flat file to use to
 track which migrations have been run, which isn't great. You can use the
 provided adapters to store this information in your database.
 
-``` php
+```php
 <?php
 
 # phpmig.php
 
-use \Phpmig\Adapter,
-    \Pimple;
+use Phpmig\Adapter;
+use Pimple\Container;
 
-$container = new Pimple();
+$container = new Container();
 
-$container['db'] = $container->share(function() {
+$container['db'] = function () {
     $dbh = new PDO('mysql:dbname=testdb;host=127.0.0.1','username','passwd');
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     return $dbh;
-});
+};
 
-$container['phpmig.adapter'] = $container->share(function() use ($container) {
-    return new Adapter\PDO\Sql($container['db'], 'migrations');
-});
+$container['phpmig.adapter'] = function ($c) {
+    return new Adapter\PDO\Sql($c['db'], 'migrations');
+};
 
 $container['phpmig.migrations_path'] = __DIR__ . DIRECTORY_SEPARATOR . 'migrations';
 
@@ -143,20 +126,20 @@ Adds support for qualifying the migrations table with a schema.
 
 # phpmig
 
-use \Phpmig\Adapter,
-    \Pimple;
+use Phpmig\Adapter;
+use Pimple\Container;
 
-$container = new Pimple();
+$container = new Container();
 
-$container['db'] = $container->share(function() {
+$container['db'] = function () {
     $dbh = new PDO(sprintf('pgsql:dbname=%s;host=%s;password=%s', 'dbname', 'localhost', 'password'), 'dbuser', '');
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     return $dbh;
-});
+};
 
-$container['phpmig.adapter'] = $container->share(function() use ($container) {
-    return new Adapter\PDO\SqlPgsql($container['db'], 'migrations', 'migrationschema');
-});	
+$container['phpmig.adapter'] = function ($c) {
+    return new Adapter\PDO\SqlPgsql($c['db'], 'migrations', 'migrationschema');
+};
 
 return $container;
 ```
@@ -165,33 +148,31 @@ return $container;
 
 Or you can use Doctrine's DBAL:
 
-``` php
+```php
 <?php
 
 # phpmig.php
 
 // do some autoloading of Doctrine here
 
-use \Phpmig\Adapter,
-    \Pimple, 
-    \Doctrine\DBAL\DriverManager;
+use Phpmig\Adapter;
+use Pimple\Container;
+use Doctrine\DBAL\DriverManager;
 
-$container = new Pimple();
+$container = new Container();
 
-$container['db'] = $container->share(function() {
+$container['db'] = function () {
     return DriverManager::getConnection(array(
         'driver' => 'pdo_sqlite',
         'path'   => __DIR__ . DIRECTORY_SEPARATOR . 'db.sqlite',
     ));
-});
-
-$container['phpmig.adapter'] = $container->share(function() use ($container) {
-    return new Adapter\Doctrine\DBAL($container['db'], 'migrations');
-});
-
-$container['phpmig.migrations_path'] = function() {
-    return __DIR__ . DIRECTORY_SEPARATOR . 'migrations';
 };
+
+$container['phpmig.adapter'] = function ($c) {
+    return new Adapter\Doctrine\DBAL($c['db'], 'migrations');
+};
+
+$container['phpmig.migrations_path'] = __DIR__ . DIRECTORY_SEPARATOR . 'migrations';
 
 return $container;
 ```
@@ -201,7 +182,7 @@ setting up migrations requires couple additional steps. You first need to prepar
 the configuration. It might be in any format supported by Zend_Config. Here is an
 example in YAML for MySQL:
 
-``` yaml
+```yaml
 phpmig:
   tableName: migrations
   createStatement: CREATE TABLE migrations ( version VARCHAR(255) NOT NULL );
@@ -213,7 +194,7 @@ in the config folder for some common RDBMS.
 
 Here is how the bootstrap file should look like:
 
-``` php
+```php
 <?php
 
 # phpmig.php
@@ -228,21 +209,21 @@ require_once 'Zend/Loader/Autoloader.php';
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->registerNamespace('Zend_');
 
-use \Pimple,
-    \Phpmig\Adapter\Zend\Db;
+use Phpmig\Adapter\Zend\Db;
+use Pimple\Container;
 
-$container = new Pimple();
+$container = new Container();
 
-$container['db'] = $container->share(function() {
+$container['db'] = function () {
     return Zend_Db::factory('pdo_mysql', array(
         'dbname' => 'DBNAME',
         'username' => 'USERNAME',
         'password' => 'PASSWORD',
         'host' => 'localhost'
     ));
-});
+};
 
-$container['phpmig.adapter'] = $container->share(function() use ($container) {
+$container['phpmig.adapter'] = function($c) {
     $configuration = null;
     $configurationFile = PHPMIG_PATH . '/config/mysql.yaml';
 
@@ -250,16 +231,53 @@ $container['phpmig.adapter'] = $container->share(function() use ($container) {
         $configuration = new Zend_Config_Yaml($configurationFile, null, array('ignore_constants' => true));
     }
 
-    return new Db($container['db'], $configuration);
-});
-
-$container['phpmig.migrations_path'] = function() {
-    return __DIR__ . DIRECTORY_SEPARATOR . 'migrations';
+    return new Db($c['db'], $configuration);
 };
 
+$container['phpmig.migrations_path'] = __DIR__ . DIRECTORY_SEPARATOR . 'migrations';
 
 return $container;
 ```
+
+Example with Eloquent ORM 5.1
+------------------
+```php
+<?php
+
+use Phpmig\Adapter;
+use Pimple\Container;
+use Illuminate\Database\Capsule\Manager as Capsule;
+
+$container = new Container();
+
+$container['config'] = [
+    'driver'    => 'xxx',
+    'host'      => 'xxx',
+    'database'  => 'xxx',
+    'username'  => 'xxx',
+    'password'  => 'x',
+    'charset'   => 'xxx',
+    'collation' => 'xxx',
+    'prefix'    => '',
+];
+
+$container['db'] = function ($c) {
+    $capsule = new Capsule();
+    $capsule->addConnection($c['config']);
+    $capsule->setAsGlobal();
+    $capsule->bootEloquent();
+
+   return $capsule;
+};
+
+$container['phpmig.adapter'] = function($c) {
+    return new Adapter\Illuminate\Database($c['db'], 'migrations');
+};
+$container['phpmig.migrations_path'] = __DIR__ . DIRECTORY_SEPARATOR . 'migrations';
+
+return $container;
+```
+
 
 Writing Migrations
 ------------------
@@ -268,7 +286,7 @@ The migrations should extend the Phpmig\Migration\Migration class, and have
 access to the container. For example, assuming you've rewritten your bootstrap
 file like above:
 
-``` php
+```php
 <?php
 
 use Phpmig\Migration\Migration;
@@ -361,6 +379,51 @@ class %s extends Migration
 }
 ```
 
+Module Migrations
+---------------------
+
+If you have an application that consists of different modules and you want to be able to separate the migration, Phpmig has a built-in way to achieve this.
+
+```php
+<?php
+
+/** @var Pimple\Container $container */
+$container['phpmig.sets'] = function ($container) {
+    return array(
+        'cms' => array(
+            'adapter' => new Adapter\File\Flat('modules/migrationLogs/cms_migrations.log'),
+            'migrations_path' => 'migrations/cms'
+        ),
+        'blog' => array(
+            'adapter' => new Adapter\File\Flat('modules/migrationLogs/blog_migrations.log'),
+            'migrations_path' => 'migrations/blog'
+        )
+    );
+};
+```
+
+this way each set has their own migration log and the ability to migrate changes independently of each other.
+
+to run the set migration you just use the command below:
+
+```bash
+$ phpmig up -s <SET NAME HERE> --<VERSION HERE>
+```
+
+For example, if a change was made to the cms migration, you'll type in this command:
+
+```bash
+$ phpmig up -s cms --2
+```
+
+and the migration tool will run the migration setup for cms.
+
+to downgrade a migration would be:
+
+```bash
+$ phpmig down -s <SET NAME HERE> --<VERSION HERE>
+```
+
 Multi path migrations
 ---------------------
 
@@ -369,9 +432,11 @@ organize your migrations script however you like and have several migrations
 directory.  To do this you can provide an array of migration file paths to the
 container :
 
-``` php
+```php
+<?php
 
-$container['phpmig.migrations'] = function() {
+/** @var Pimple\Container $container */
+$container['phpmig.migrations'] = function () {
     return array_merge(
         glob('migrations_1/*.php'),
         glob('migrations_2/*.php')
@@ -421,6 +486,29 @@ You can also rollback only a specific migration using the down command
 $ phpmig down 20111101000144
 ```
 
+Using Outside CLI
+-----------------
+In order to use the migration tool outside the cli context use `Phpmig\Api\PhpmigApplication`.
+
+```php
+<?php
+
+use Phpmig\Api\PhpmigApplication;
+
+// require the composer autoloader
+require __DIR__ . '/vendor/autoload.php';
+
+$output = new \Symfony\Component\Console\Output\NullOutput();
+
+// create container from bootstrap file
+$container = require __DIR__ . '/tests/dom/phpmig.php';
+
+$app = new PhpmigApplication($container, $output);
+
+// run the migrations
+$app->up();
+```
+
 Todo
 ----
 
@@ -437,9 +525,9 @@ Todo
 Contributing
 ------------
 
-Feel free to fork and send me pull requests, but I don't have a 1.0 release yet,
-so I may change the API quite frequently. If you want to implement something
-that I might easily break, please drop me an email
+Feel free to fork and send me pull requests, I try and keep the tool really
+basic, if you want to start adding tons of features to phpmig, I'd recommend
+taking a look at [robmorgan/phinx](https://github.com/robmorgan/phinx).
 
 Inspiration
 -----------

@@ -1,6 +1,6 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{{'global.notification'|trans}}{% endblock %}
+{% block title %}{{'notification.site_notification'|trans}}{% endblock %}
 
 {% set notification = notification|default(null) %}
 
@@ -12,13 +12,13 @@
         {{ batchnotification.title }}
       </h2>
       <p class="color-gray">
-        {{'global.notification.publish_time'|trans}} ：{{ batchnotification.sendedTime|date_format }}
+        {{'notification.site_notificationpublish_time'|trans}} ：{{ batchnotification.sendedTime|date_format }}
       </p>
       <div class="editor-text">
         {{ batchnotification.content|raw }}
       </div>
     {% else %}
-      <div class="empty">{{'global.notification.empty'|trans}}</div>
+      <div class="empty">{{'notification.site_notification.empty'|trans}}</div>
     {% endif %}
   </div>
 </div>

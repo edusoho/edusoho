@@ -2,11 +2,13 @@
 
 namespace Biz\Course\Copy\Impl;
 
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Dao\CourseDao;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Dao\CourseMaterialDao;
 use Biz\Classroom\Dao\ClassroomMemberDao;
+use Biz\Course\Service\CourseService;
 
 class ClassroomCourseCopy extends CourseCopy
 {
@@ -41,6 +43,8 @@ class ClassroomCourseCopy extends CourseCopy
         $courseSetId = $newCourseSet['id'];
 
         $newCourse = $this->doCopy($course);
+        //todo 使用班级有效期，覆盖课程的
+        $newCourse = $this->buildCourseExpiryDataFromClassroom($newCourse, $config['classroomId']);
         $newCourse['isDefault'] = $course['isDefault'];
         $modeChange = false;
         $newCourse['parentId'] = $course['id'];
@@ -64,6 +68,14 @@ class ClassroomCourseCopy extends CourseCopy
         ));
 
         return $newCourse;
+    }
+
+    private function buildCourseExpiryDataFromClassroom($newCourse, $classroomId)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        $expiryData = $this->getCourseService()->buildCourseExpiryDataFromClassroom($classroom['expiryMode'], $classroom['expiryValue']);
+
+        return array_replace($newCourse, $expiryData);
     }
 
     private function doCopyCourseSet($courseSet)
@@ -201,6 +213,14 @@ class ClassroomCourseCopy extends CourseCopy
     }
 
     /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->biz->service('Course:CourseService');
+    }
+
+    /**
      * @return CourseDao
      */
     protected function getCourseDao()
@@ -214,6 +234,14 @@ class ClassroomCourseCopy extends CourseCopy
     protected function getMaterialDao()
     {
         return $this->biz->dao('Course:CourseMaterialDao');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->biz->service('Classroom:ClassroomService');
     }
 
     /**

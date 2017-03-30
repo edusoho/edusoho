@@ -165,7 +165,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
             $classroomSetting['name'] = empty($classroomSetting['name']) ? '班级' : $classroomSetting['name'];
 
             $adminMessage = "用户{$user['nickname']}申请退款<a href='{$classroomUrl}'>{$classroom['title']}</a>{$classroomSetting['name']}，请审核。";
-            $adminCount = $this->getUserService()->searchUserCount(array('roles' => 'ADMIN'));
+            $adminCount = $this->getUserService()->countUsers(array('roles' => 'ADMIN'));
             $admins = $this->getUserService()->searchUsers(array('roles' => 'ADMIN'), array('id' => 'DESC'), 0, $adminCount);
 
             foreach ($admins as $key => $admin) {

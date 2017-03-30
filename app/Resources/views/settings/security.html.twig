@@ -48,7 +48,7 @@
 
       <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'user.fields.login_password'|trans}}</span>
 
-      <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'user.settings.security.login_password_description'|trans}}</span>
+      <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'user.settings.security.login_password_tips'|trans}}</span>
 
       <a href="{{ path('settings_password') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >{{'form.btn.modify'|trans}}</a>
     </div>
@@ -71,7 +71,7 @@
 
       <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'user.fields.pay_password'|trans}}</span>
 
-      <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'user.settings.security.pay_password_description'|trans}}</span>
+      <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'user.settings.security.pay_password_tips'|trans}}</span>
 
       {% if hasPayPassword %}
         <a href="{{ path('settings_reset_pay_password') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >{{'form.btn.reset'|trans}}</a>
@@ -100,7 +100,7 @@
 
       <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'user.settings.security.questions'|trans}}</span>
 
-      <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'user.settings.security.questions_description'|trans}}</span>
+      <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'user.settings.security.questions_tips'|trans}}</span>
 
       <a href="{{ path('settings_security_questions') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >
       {% if hasFindPayPasswordQuestion %}
@@ -133,7 +133,7 @@
 
         <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'user.settings.security.mobile_bind'|trans}}</span>
 
-        <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'user.settings.security.mobile_bind_description'|trans}}</span>
+        <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'user.settings.security.mobile_bind_tips'|trans}}</span>
 
         <a href="{{ path('settings_bind_mobile') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >
         {% if hasVerifiedMobile %}

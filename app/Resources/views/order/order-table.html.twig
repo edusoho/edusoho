@@ -20,7 +20,7 @@
       <span data-toggle="popover" data-trigger="hover" data-placement="bottom" data-container="body" data-content="
        <div>站外支付为该笔订单是通过导入或者手动添加的方式产生的，故为站外支付</div>" class="glyphicon glyphicon-question-sign color-gray text-sm js-pay-way-popover"></span>
       </th>
-      <th style="min-width:100px">{{'user.account_center.orders.operation'|trans}}</th>
+      <th style="min-width:100px">{{'user.orders.operation'|trans}}</th>
     </tr>
   </thead>
   <tbody>
@@ -29,24 +29,24 @@
         <tr id="order-table-{{order.id}}" style="word-break: break-all;word-wrap: break-word;">
           <td>
             {% if order.targetType == 'course' %}
-              <a href="{{ path('course_show', {id:order.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+              <a  class="link-primary" href="{{ path('course_show', {id:order.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
             {% elseif order.targetType == 'vip' %}
-              <a href="{{ path('vip', {id:order.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+              <a class="link-primary" href="{{ path('vip', {id:order.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
             {% elseif order.targetType == 'classroom' %}
-              <a href="{{ path('classroom_show', {id:order.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+              <a class="link-primary" href="{{ path('classroom_show', {id:order.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
             {% else %}
               <strong>{{order.title}}</strong>
             {% endif %}
             <br>
-            <span class="color-gray text-sm">{{'user.account_center.orders.order_id'|trans({'%sn%':order.sn})}}</span>
+            <span class="color-gray text-sm">{{'user.orders.order_id'|trans({'%sn%':order.sn})}}</span>
             {% if order.targetType == 'course' %}
               <br>
               <span class="color-gray text-sm">
                 {% if courses[order.targetId]|default(false) and courseSets[courses[order.targetId].courseSetId]|default(false) %}
                   {% set courseSet = courseSets[courses[order.targetId].courseSetId] %}
-                  {{'user.account_center.orders.target_course'|trans}}<a href="{{ path('course_set_show', {id:courseSet.id}) }}">{{ courseSet.title }}</a>
+                  {{'user.orders.target_course'|trans}}<a href="{{ path('course_set_show', {id:courseSet.id}) }}">{{ courseSet.title }}</a>
                 {% else %}
-                  {{'user.account_center.orders.target_course_deleted'|trans}}
+                  {{'user.orders.target_course_deleted'|trans}}
                 {% endif %}
               </span>
             {% endif %}
@@ -80,21 +80,21 @@
               <div class="btn-group">
                 <a href="javascript:;" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'form.btn.detail'|trans}}</a>
                 {% if order.status == 'refunding' or  order.status == 'created' %}
-                  <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                  <a href="#" type="button" class="link-primary ml10 dropdown-toggle" data-toggle="dropdown">
                   <span class="caret"></span>
                   </a>
                   <ul class="dropdown-menu pull-right {# text-right #}" style="min-width: 120px;" >
 
                   {# <div class="actions"> #}
                     {% if order.status == 'refunding' %}
-                      <li><a href="javascript:;" class="cancel-refund" data-url="{{ path('my_order_cancel_refund', {id:order.id}) }}">{{'user.account_center.orders.cancel_refund'|trans}}</a></li>
+                      <li><a href="javascript:;" class="cancel-refund" data-url="{{ path('my_order_cancel_refund', {id:order.id}) }}">{{'user.orders.cancel_refund'|trans}}</a></li>
                     {% endif %}
                     {% if order.status == 'created' %}
 
                       <li>
-                        <a href="{{path('pay_center_show', {sn:order.sn,targetType:order.targetType})}}"  style="display:block" >{{'user.account_center.orders.go_pay'|trans}}</a>
+                        <a href="{{path('pay_center_show', {sn:order.sn,targetType:order.targetType})}}"  style="display:block" >{{'user.orders.pay'|trans}}</a>
                       </li>
-                      <li><a href="javascript:;" class=" cancel" style="display:block" data-url="{{ path('my_order_cancel', {id:order.id}) }}">{{'user.account_center.orders.cancel_order'|trans}}</a></li>
+                      <li><a href="javascript:;" class=" cancel" style="display:block" data-url="{{ path('my_order_cancel', {id:order.id}) }}">{{'user.orders.cancel_order'|trans}}</a></li>
 
                     {% endif %}
                    {#  </div> #}
@@ -105,6 +105,6 @@
           </td>
         </tr>
     {% else %}
-      <tr><td colspan="20"><div class="empty">{{'user.account_center.orders.empty'|trans}}</div></td></tr>
+      <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
     {% endfor %}
   </tbody>
