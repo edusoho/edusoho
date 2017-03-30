@@ -9,12 +9,12 @@
     {% else %}
       {% set avatarType = 'small' %}
     {% endif %}
-    <img class="{{ imgClass|default('avatar-sm') }}" src="{{ avatarPath(user, avatarType) }}">
+    <img class="{{ imgClass|default('avatar-sm') }}" src="{{ avatar_path(user, avatarType) }}">
 
   </a>
   {% else %}
     <a class="{{ class }}" href="javascript:;">
-      <img class="{{ imgClass|default('avatar-sm') }}"  src="{{ avatarPath('', 'small') }}">
+      <img class="{{ imgClass|default('avatar-sm') }}"  src="{{ avatar_path('', 'small') }}">
     </a>
   {% endif %}
 {%- endmacro -%}
@@ -41,7 +41,7 @@
 {%- endmacro -%}
 
 {%- macro user_avater_img(user, size) -%}
-  <img class="avatar-{{ size }}"  src="{{ avatarPath(user, size) }}">
+  <img class="avatar-{{ size }}"  src="{{ avatar_path(user, size) }}">
 {%- endmacro -%}
 
 
