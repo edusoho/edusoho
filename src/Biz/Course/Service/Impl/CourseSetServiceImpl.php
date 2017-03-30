@@ -2,25 +2,25 @@
 
 namespace Biz\Course\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\Content\Service\FileService;
-use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Dao\FavoriteDao;
-use Biz\Course\Service\CourseDeleteService;
-use Biz\Course\Service\CourseNoteService;
+use Biz\Course\Dao\CourseSetDao;
+use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\LogService;
+use Biz\Content\Service\FileService;
+use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
-use Biz\System\Service\LogService;
-use Biz\Taxonomy\Service\TagService;
-use Biz\User\Service\UserService;
+use Biz\Course\Service\MaterialService;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\CourseNoteService;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseDeleteService;
+use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
@@ -154,6 +154,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         $this->getFavoriteDao()->delete($favorite['id']);
+        $this->getLogService()->info('course', 'delete_favorite', "删除收藏(#{$id})", $favorite);
 
         return true;
     }
@@ -177,6 +178,17 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         if (empty($courseSet)) {
             throw $this->createNotFoundException("CourseSet#{$id} Not Found");
+        }
+
+        if ($courseSet['parentId'] > 0) {
+            $classroomCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($id);
+            if (!empty($classroomCourse)) {
+                $classroom = $this->getClassroomService()->getClassroom($classroomCourse['classroomId']);
+                if (!empty($classroom) && $classroom['headTeacherId'] == $user['id']) {
+                    //班主任有权管理班级下所有课程
+                    return $courseSet;
+                }
+            }
         }
 
         if (!$this->hasCourseSetManageRole($id)) {
@@ -352,6 +364,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             array(
                 'type',
                 'title',
+                'orgCode',
             )
         );
 
@@ -366,6 +379,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $defaultCourse = $this->generateDefaultCourse($created);
 
         $this->getCourseService()->createCourse($defaultCourse);
+        $this->getLogService()->info('course', 'create', sprintf('创建课程《%s》(#%s)', $created['title'], $created['id']));
 
         return $created;
     }
@@ -417,13 +431,21 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             )
         );
 
-        if (!empty($fields['tags'])) {
-            $fields['tags'] = explode(',', $fields['tags']);
-            $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
-            $fields['tags'] = ArrayToolkit::column($fields['tags'], 'id');
+        if ($fields['tags'] !== null) {
+            $tags = explode(',', $fields['tags']);
+            $tags = $this->getTagService()->findTagsByNames($tags);
+            $tagIds = ArrayToolkit::column($tags, 'id');
         }
 
-        $fields = array_filter($fields);
+        $fields = $this->filterFields($fields);
+
+        if (null !== $tagIds) {
+            $fields['tags'] = $tagIds;
+        }
+
+        if (isset($fields['summary'])) {
+            $fields['summary'] = $this->purifyHtml($fields['summary'], true);
+        }
 
         $this->updateCourseSerializeMode($courseSet, $fields);
         if (empty($fields['subtitle'])) {
@@ -432,6 +454,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $fields);
 
+        $this->getLogService()->info('course', 'update', "修改课程《{$courseSet['title']}》(#{$courseSet['id']})");
         $this->dispatchEvent('course-set.update', new Event($courseSet));
 
         return $courseSet;
@@ -444,7 +467,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             foreach ($courses as $course) {
                 $this->getCourseService()->updateCourse(
                     $course['id'],
-                    array('serializeMode' => $fields['serializeMode'])
+                    array('serializeMode' => $fields['serializeMode'], 'title' => $course['title'], 'courseSetId' => $courseSet['id'])
                 );
             }
         }
@@ -515,6 +538,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('cover' => $covers));
+
+        $this->getLogService()->info('course', 'update_picture', "更新课程《{$courseSet['title']}》(#{$courseSet['id']})图片", $covers);
         $this->dispatchEvent('course-set.update', new Event($courseSet));
 
         return $courseSet;
@@ -527,8 +552,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if (!empty($subCourseSets)) {
             throw $this->createAccessDeniedException('该课程在班级下引用，请先删除引用课程！');
         }
+        $this->getLogService()->info('course', 'delete', "删除课程《{$courseSet['title']}》(#{$courseSet['id']})");
 
-        return $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
+        $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
+
+        $this->dispatchEvent('course-set.delete', new Event($courseSet));
     }
 
     public function findTeachingCourseSetsByUserId($userId, $onlyPublished = true)
@@ -598,35 +626,76 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function publishCourseSet($id)
     {
         $courseSet = $this->tryManageCourseSet($id);
+
+        if (empty($courseSet)) {
+            throw $this->createNotFoundException('course set not found');
+        }
+
         $publishedCourses = $this->getCourseService()->findPublishedCoursesByCourseSetId($id);
 
         $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
+        $this->beginTransaction();
 
-        if (empty($publishedCourses) && empty($classroomRef)) {
-            throw $this->createAccessDeniedException('发布课程时请确保课程下至少有一个已发布的教学计划');
-        }
+        try {
+            if (empty($publishedCourses) && $courseSet['type'] === 'live') {
+                // 直播课程隐藏了教学计划，所以发布直播课程的时候自动发布教学计划
+                $course = $this->getCourseService()->getFirstCourseByCourseSetId($courseSet['id']);
+                $this->getCourseService()->publishCourse($course['id']);
+                $publishedCourses = $this->getCourseService()->findPublishedCoursesByCourseSetId($id);
+            }
 
-        if (!empty($classroomRef)) {
-            $this->getCourseService()->publishCourse($classroomRef['courseId']);
+            if (empty($publishedCourses)) {
+                $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+                if (!empty($classroomRef)) {
+                    $this->getCourseService()->publishCourse($classroomRef['courseId']);
+                } elseif (count($courses) === 1) {
+                    //如果课程下仅有一个教学计划且未发布，则级联发布该教学计划
+                    $this->getCourseService()->publishCourse($courses[0]['id']);
+                } else {
+                    throw $this->createAccessDeniedException('发布课程时请确保课程下至少有一个已发布的教学计划');
+                }
+            }
+
+            $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
+
+            $this->commit();
+
+            $this->dispatchEvent('course-set.publish', new Event($courseSet));
+            $this->getLogService()->info('course', 'publish', "发布课程《{$courseSet['title']}》(#{$courseSet['id']})");
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
         }
-        $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
-        
-        $this->dispatchEvent('course-set.publish', new Event($courseSet));
     }
 
     public function closeCourseSet($id)
     {
         $courseSet = $this->tryManageCourseSet($id);
-        if ($courseSet['status'] != 'published') {
+        if ($courseSet['status'] !== 'published') {
             throw $this->createAccessDeniedException('CourseSet has not bean published');
         }
-        
+
         $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
-        if (!empty($classroomRef)) {
-            $this->getCourseService()->closeCourse($classroomRef['courseId']);
+
+        try {
+            $this->beginTransaction();
+
+            if (!empty($classroomRef)) {
+                $this->getCourseService()->closeCourse($classroomRef['courseId']);
+            }
+            $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'closed'));
+
+            $this->commit();
+
+            $this->dispatchEvent('course-set.closed', new Event($courseSet));
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
         }
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'closed'));
-        
+
+        $this->getLogService()->info('course', 'close', "关闭课程《{$courseSet['title']}》(#{$courseSet['id']})");
+
         $this->dispatchEvent('course-set.closed', new Event($courseSet));
     }
 
@@ -900,15 +969,30 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $defaultCourse = array(
             'courseSetId' => $created['id'],
             'title' => '默认教学计划',
-            'expiryMode' => 'days',
-            'expiryDays' => 0,
+            'expiryMode' => 'forever',
             'learnMode' => 'freeMode',
             'isDefault' => 1,
             'isFree' => 1,
             'serializeMode' => $created['serializeMode'],
             'status' => 'draft',
+            'type' => $created['type'],
         );
 
         return $defaultCourse;
+    }
+
+    protected function filterFields($fields)
+    {
+        return array_filter($fields, function ($value) {
+            if ($value === '' || $value === null) {
+                return false;
+            }
+
+            if (is_array($value) && empty($value)) {
+                return false;
+            }
+
+            return true;
+        });
     }
 }

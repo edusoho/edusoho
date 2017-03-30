@@ -1,4 +1,5 @@
-{% extends 'courseset-manage/layout.html.twig' %}
+{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
+
 {% block title %}{{'计划设置'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'info' %}
 {% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','libs/bootstrap-datetimepicker.js','app/js/course-manage/info/index.js']) %}
@@ -32,15 +33,14 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="" class="col-sm-2 control-label">{{'学习完成规则'|trans}}</label>
+          <label for="" class="col-sm-2 control-label">{{'任务完成规则'|trans}}</label>
           <div class="col-sm-8 radios"> 
             <label>
               <input type="radio" name="enableFinish" value="0" {% if course.enableFinish|default('0') == 0 %}checked{% endif %}> 由任务完成条件决定
               <a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'必须达到完成条件，任务才算完成'|trans}}"></a>
             </label>
             <label>
-              <input type="radio" name="enableFinish" value="1" {% if course.enableFinish|default('0') == 1 %}checked{% endif %}> 学员自己决定
-              <a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'学员点击“学过了”按钮，任务即为完成'|trans}}"></a>
+              <input type="radio" name="enableFinish" value="1" {% if course.enableFinish|default('0') == 1 %}checked{% endif %}> 无限制
             </label>
           </div>
         </div>

@@ -185,7 +185,7 @@ class ClassroomReviewServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
      */
     public function testSaveReviewWithNotExistClassroom()
     {

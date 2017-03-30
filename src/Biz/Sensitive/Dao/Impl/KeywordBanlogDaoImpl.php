@@ -14,7 +14,7 @@ class KeywordBanlogDaoImpl extends GeneralDaoImpl implements KeywordBanlogDao
         if (empty($userIds)) {
             return array();
         }
-
+        // @TODO  SQL Inject
         $marks = str_repeat('?,', count($userIds) - 1).'?';
         $sql = "SELECT * FROM {$this->table} WHERE userId IN ({$marks}) ORDER BY id DESC LIMIT {$start}, {$limit};";
 

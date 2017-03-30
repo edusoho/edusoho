@@ -2,20 +2,20 @@
 
 namespace AppBundle\Twig;
 
-use Codeages\Biz\Framework\Context\Biz;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\NumberToolkit;
-use AppBundle\Util\CdnUrl;
 use AppBundle\Common\ConvertIpToolkit;
+use AppBundle\Common\DeviceToolkit;
 use AppBundle\Common\ExtensionManager;
-use AppBundle\Util\UploadToken;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\NumberToolkit;
 use AppBundle\Common\PluginVersionToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Component\ShareSdk\WeixinShare;
 use AppBundle\Util\CategoryBuilder;
-use Biz\Util\HTMLPurifierFactory;
+use AppBundle\Util\CdnUrl;
+use AppBundle\Util\UploadToken;
+use Codeages\Biz\Framework\Context\Biz;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Topxia\Service\Common\ServiceKernel;
 
 class WebExtension extends \Twig_Extension
 {
@@ -90,6 +90,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('fileurl', array($this, 'getFurl')),
             new \Twig_SimpleFunction('filepath', array($this, 'getFpath')),
             new \Twig_SimpleFunction('lazy_img', array($this, 'makeLazyImg'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('avatar_path', array($this, 'avatarPath')),
             new \Twig_SimpleFunction('object_load', array($this, 'loadObject')),
             new \Twig_SimpleFunction('setting', array($this, 'getSetting')),
             new \Twig_SimpleFunction('set_price', array($this, 'getSetPrice')),
@@ -131,16 +132,54 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_micro_messenger', array($this, 'isMicroMessenger')),
             new \Twig_SimpleFunction('wx_js_sdk_config', array($this, 'weixinConfig')),
             new \Twig_SimpleFunction('plugin_update_notify', array($this, 'pluginUpdateNotify')),
-            new \Twig_SimpleFunction('tag_equal', array($this, 'tag_equal')),
+            new \Twig_SimpleFunction('tag_equal', array($this, 'tagEqual')),
             new \Twig_SimpleFunction('array_index', array($this, 'arrayIndex')),
             new \Twig_SimpleFunction('cdn', array($this, 'getCdn')),
+            new \Twig_SimpleFunction('is_show_mobile_page', array($this, 'isShowMobilePage')),
+            new \Twig_SimpleFunction('is_ES_copyright', array($this, 'isESCopyright')),
         );
     }
 
-    public function tag_equal($tags, $target_tagId, $target_tagGroupId)
+    public function isShowMobilePage()
+    {
+        $wapSetting = $this->getSetting('wap', array());
+        if (empty($wapSetting['enabled'])) {
+            return false;
+        }
+
+        $pcVersion = $this->container->get('request')->cookies->get('PCVersion', 0);
+        if ($pcVersion) {
+            return false;
+        }
+
+        return DeviceToolkit::isMobileClient();
+    }
+
+    public function isESCopyright()
+    {
+        $copyright = $this->getSetting('copyright');
+        $request = $this->container->get('request');
+        $host = $request->getHttpHost();
+        if ($copyright) {
+            $result = !(
+                isset($copyright['owned'])
+                && isset($copyright['thirdCopyright'])
+                && $copyright['thirdCopyright'] != 2
+                && isset($copyright['licenseDomains'])
+                && in_array($host, explode(';', $copyright['licenseDomains']))
+                || (isset($copyright['thirdCopyright']) && $copyright['thirdCopyright'] == 2)
+            );
+
+            return $result;
+        }
+
+        return true;
+    }
+
+    public function tagEqual($tags, $targetTagId, $targetTagGroupId)
     {
         foreach ($tags as $groupId => $tagId) {
-            if ($groupId == $target_tagGroupId && $tagId == $target_tagId) {
+            if ($groupId == $targetTagGroupId && $tagId == $targetTagId) {
                 return true;
             }
         }
@@ -478,6 +517,7 @@ class WebExtension extends \Twig_Extension
 
         $plugins = $this->container->get('kernel')->getPlugins();
         $names = array();
+        $newPluginNames = array();
 
         foreach ($plugins as $plugin) {
             if (is_array($plugin)) {
@@ -485,7 +525,11 @@ class WebExtension extends \Twig_Extension
                     continue;
                 }
 
-                $names[] = $plugin['code'];
+                if (isset($plugin['protocol']) && $plugin['protocol'] == 3) {
+                    $newPluginNames[] = $plugin['code'].'plugin';
+                } else {
+                    $names[] = $plugin['code'];
+                }
             } else {
                 $names[] = $plugin;
             }
@@ -511,6 +555,11 @@ class WebExtension extends \Twig_Extension
             $paths["{$name}bundle"] = "{$basePath}/bundles/{$name}/js";
         }
 
+        foreach ($newPluginNames as $newPluginName) {
+            $newPluginName = strtolower($newPluginName);
+            $paths["{$newPluginName}"] = "{$basePath}/bundles/{$newPluginName}/js";
+        }
+
         // $paths['balloon-video-player'] = 'http://player-cdn.edusoho.net/balloon-video-player';
 
         return $paths;
@@ -523,7 +572,8 @@ class WebExtension extends \Twig_Extension
 
         foreach ($keys as $key) {
             if (!isset($value[$key])) {
-                throw new \InvalidArgumentException(sprintf('Key `%s` is not in context with %s', $key, implode(array_keys($context), ', ')));
+                throw new \InvalidArgumentException(sprintf('Key `%s` is not in context with %s', $key,
+                    implode(array_keys($context), ', ')));
             }
 
             $value = $value[$key];
@@ -878,6 +928,17 @@ class WebExtension extends \Twig_Extension
         return $this->parseUri($uri, $absolute);
     }
 
+    public function avatarPath($user, $type = 'middle', $package = 'user')
+    {
+        $avatar = !empty($user[$type.'Avatar']) ? $user[$type.'Avatar'] : null;
+
+        if (empty($avatar)) {
+            $avatar = $this->getSetting('avatar.png');
+        }
+
+        return $this->getFpath($avatar, 'avatar.png', $package);
+    }
+
     private function parseUri($uri, $absolute = false, $package = 'content')
     {
         if (strpos($uri, 'http://') !== false || strpos($uri, 'https://') !== false) {
@@ -990,8 +1051,10 @@ class WebExtension extends \Twig_Extension
         if (empty($path)) {
             $defaultSetting = $this->getSetting('default', array());
 
-            if ((($defaultKey == 'course.png' && array_key_exists('defaultCoursePicture', $defaultSetting) && $defaultSetting['defaultCoursePicture'] == 1)
-                    || ($defaultKey == 'avatar.png' && array_key_exists('defaultAvatar', $defaultSetting) && $defaultSetting['defaultAvatar'] == 1))
+            if ((($defaultKey == 'course.png' && array_key_exists('defaultCoursePicture',
+                            $defaultSetting) && $defaultSetting['defaultCoursePicture'] == 1)
+                    || ($defaultKey == 'avatar.png' && array_key_exists('defaultAvatar',
+                            $defaultSetting) && $defaultSetting['defaultAvatar'] == 1))
                 && (array_key_exists($defaultKey, $defaultSetting)
                     && $defaultSetting[$defaultKey])
             ) {
@@ -1176,8 +1239,8 @@ class WebExtension extends \Twig_Extension
     {
         $text = number_format($text, 1, '.', '');
 
-        if (intval($text) == $text) {
-            return (string) intval($text);
+        if ((int) $text == $text) {
+            return (string) (int) $text;
         }
 
         return $text;
@@ -1223,14 +1286,9 @@ class WebExtension extends \Twig_Extension
             return '';
         }
 
-        $config = array(
-            'cacheDir' => ServiceKernel::instance()->getParameter('kernel.cache_dir').'/htmlpurifier',
-        );
+        $biz = $this->container->get('biz');
 
-        $factory = new HTMLPurifierFactory($config);
-        $purifier = $factory->create($trusted);
-
-        return $purifier->purify($html);
+        return $biz['html_helper']->purify($html, $trusted);
     }
 
     public function atFilter($text, $ats = array())
@@ -1338,14 +1396,12 @@ class WebExtension extends \Twig_Extension
             return '100%';
         }
 
-        return intval($number / $total * 100).'%';
+        return (int) ($number / $total * 100).'%';
     }
 
     public function arrayMerge($text, $content)
     {
-        $array = array_merge($text, $content);
-
-        return $array;
+        return array_merge($text, $content);
     }
 
     public function getSetPrice($price)
@@ -1374,11 +1430,6 @@ class WebExtension extends \Twig_Extension
         }
 
         return $max;
-    }
-
-    public function getName()
-    {
-        return 'topxia_web_twig';
     }
 
     public function isTrial()

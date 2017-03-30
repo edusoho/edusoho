@@ -15,6 +15,7 @@ class CategoryDaoImpl extends GeneralDaoImpl implements CategoryDao
             'conditions' => array(
                 'parentId = :parentId',
             ),
+            'cache' => 'table',
         );
     }
 
@@ -27,9 +28,9 @@ class CategoryDaoImpl extends GeneralDaoImpl implements CategoryDao
 
     public function findByParentId($parentId)
     {
-        $sql = "SELECT * FROM {$this->table()} WHERE parentId = ? order by weight";
-
-        return $this->db()->fetchAll($sql, array($parentId)) ?: array();
+        return $this->findByFields(array(
+            'parentId' => $parentId,
+        ));
     }
 
     public function findAllPublishedByParentId($parentId)

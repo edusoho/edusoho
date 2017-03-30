@@ -2,19 +2,19 @@
 
 namespace Biz\Course\Event;
 
-use Biz\Course\Dao\CourseDao;
-use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Order\Service\OrderService;
-use Biz\User\Service\StatusService;
-use Biz\User\Service\MessageService;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Dao\CourseDao;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
+use Biz\Order\Service\OrderService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
+use Biz\User\Service\MessageService;
+use Biz\User\Service\StatusService;
+use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
-use Biz\Course\Service\CourseSetService;
-use Biz\Classroom\Service\ClassroomService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -25,6 +25,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         return array(
             'course.join' => 'onCourseJoin',
             'course.quit' => 'onMemberDelete',
+            'course.view' => 'onCourseView',
 
             'classroom.course.join' => 'onClassroomCourseJoin',
             'classroom.course.copy' => 'onClassroomCourseCopy',
@@ -32,6 +33,17 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             'course.task.delete' => 'onTaskDelete',
             'course.task.finish' => 'onTaskFinish',
         );
+    }
+
+    public function onCourseView(Event $event)
+    {
+        $course = $event->getSubJect();
+        $userId = $event->getArgument('userId');
+        $member = $this->getCourseMemberService()->getCourseMember($course['id'], $userId);
+        if (!empty($member)) {
+            $fields['lastViewTime'] = time();
+            $this->getCourseMemberService()->updateMember($member['id'], $fields);
+        }
     }
 
     public function onCourseJoin(Event $event)

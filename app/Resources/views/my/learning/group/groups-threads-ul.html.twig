@@ -38,7 +38,7 @@
           {% endif %}
           {% if thread.lastPostTime %}
             <span class="divider">•</span>
-            {{'最后回复'|trans}} {{ web_macro.user_link(lastPostMembers[thread.lastPostMemberId] , 'link-muted') }}
+            {{'最后回复'|trans}} {{ web_macro.user_link(lastPostMembers[thread.lastPostMemberId] , 'link-primary') }}
             <span class="divider">•</span>
             {{ thread.lastPostTime|smart_time}}
           {% endif %}

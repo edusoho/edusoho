@@ -17,6 +17,7 @@ use Biz\User\Service\StatusService;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseMaterialDao;
 use Biz\Course\Dao\CourseNoteLikeDao;
+use Biz\System\Service\SettingService;
 use Biz\IM\Service\ConversationService;
 use Biz\Question\Service\QuestionService;
 use Biz\Course\Service\CourseDeleteService;
@@ -120,16 +121,23 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
                 foreach ($announcements as $announcement) {
                     $this->getAnnouncementService()->deleteAnnouncement($announcement['id']);
                 }
+                $announcementLog = "删除课程(#{$courseId})的公告";
+                $this->getLogService()->info('course', 'delete_announcement', $announcementLog);
             }
 
             //delete status
             $this->getStatusService()->deleteStatusesByCourseId($courseId);
+            $statusLog = "删除课程(#{$courseId})的动态";
+            $this->getLogService()->info('course', 'delete_status', $statusLog);
 
             //delete conversation
             $this->getConversationService()->deleteConversationByTargetIdAndTargetType($courseId, 'course');
             $this->getConversationService()->deleteConversationByTargetIdAndTargetType($courseId, 'course-push');
 
             //delete message_conversation ? todo
+
+            //delete mobile setting
+            $this->updateMobileSetting($courseId);
 
             //delete course
             $this->getCourseDao()->delete($courseId);
@@ -141,6 +149,31 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             $this->rollback();
             throw $e;
         }
+    }
+
+    protected function updateMobileSetting($courseId)
+    {
+        $courseGrids = $this->getSettingService()->get('operation_course_grids', array());
+        if (empty($courseGrids) || empty($courseGrids['courseIds'])) {
+            return;
+        }
+
+        $courseIds = explode(',', $courseGrids['courseIds']);
+        if (!in_array($courseId, $courseIds)) {
+            return;
+        }
+
+        $operationMobile = $this->getSettingService()->get('operation_mobile', array());
+        $settingMobile = $this->getSettingService()->get('mobile', array());
+
+        $courseIds = array_diff($courseIds, array($courseId));
+
+        $mobile = array_merge($operationMobile, $settingMobile, $courseIds);
+
+        $this->getSettingService()->set('operation_course_grids', array('courseIds' => implode(',', $courseIds)));
+        $this->getSettingService()->set('operation_mobile', $operationMobile);
+        $this->getSettingService()->set('mobile', $mobile);
+        $this->getLogService()->info('system', 'update_settings', '更新移动客户端设置', $mobile);
     }
 
     /**
@@ -277,5 +310,21 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function getConversationService()
     {
         return $this->createService('IM:ConversationService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 }

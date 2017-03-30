@@ -2,26 +2,27 @@
 
 namespace Biz\Classroom\Service\Impl;
 
-use Biz\BaseService;
-use Vip\Service\Vip\VipService;
-use Biz\Course\Dao\CourseNoteDao;
-use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
-use Biz\System\Service\LogService;
-use Biz\Classroom\Dao\ClassroomDao;
-use Biz\Order\Service\OrderService;
-use Biz\User\Service\StatusService;
-use Biz\Content\Service\FileService;
-use Biz\Taxonomy\Service\TagService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\MemberService;
-use Biz\Task\Service\TaskResultService;
-use Codeages\Biz\Framework\Event\Event;
-use Biz\Course\Service\CourseSetService;
+use AppBundle\Common\ClassroomToolkit;
+use Biz\BaseService;
 use Biz\Classroom\Dao\ClassroomCourseDao;
+use Biz\Classroom\Dao\ClassroomDao;
 use Biz\Classroom\Dao\ClassroomMemberDao;
-use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Content\Service\FileService;
+use Biz\Course\Dao\CourseNoteDao;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\MemberService;
+use Biz\Order\Service\OrderService;
+use Biz\System\Service\LogService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Taxonomy\Service\CategoryService;
+use Biz\Taxonomy\Service\TagService;
+use Biz\User\Service\StatusService;
+use Biz\User\Service\UserService;
+use Codeages\Biz\Framework\Event\Event;
+use VipPlugin\Biz\Vip\Service\VipService;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
 {
@@ -275,61 +276,191 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
         }
 
-        $fields = ArrayToolkit::parts(
-            $fields,
-            array(
-                'rating',
-                'ratingNum',
-                'categoryId',
-                'title',
-                'status',
-                'about',
-                'description',
-                'price',
-                'vipLevelId',
-                'smallPicture',
-                'middlePicture',
-                'largePicture',
-                'headTeacherId',
-                'teacherIds',
-                'assistantIds',
-                'hitNum',
-                'auditorNum',
-                'studentNum',
-                'courseNum',
-                'lessonNum',
-                'threadNum',
-                'postNum',
-                'income',
-                'createdTime',
-                'private',
-                'service',
-                'maxRate',
-                'buyable',
-                'showable',
-                'orgCode',
-                'orgId',
-            )
-        );
+        $classroom = $this->getClassroom($id);
+
+        $fields = $this->filterClassroomFields($fields);
 
         if (empty($fields)) {
             throw $this->createInvalidArgumentException('参数不正确，更新失败！');
         }
 
-        $fields = $this->fillOrgId($fields);
-
-        $classroom = $this->getClassroomDao()->update($id, $fields);
-
-        if (isset($tagIds)) {
-            $this->dispatchEvent(
-                'classroom.update',
-                new Event(array('userId' => $user['id'], 'classroomId' => $id, 'tagIds' => $tagIds))
-            );
-        } else {
-            $this->dispatchEvent('classroom.update', new Event(array('userId' => $user['id'], 'classroomId' => $id)));
+        if (!$this->canUpdateClassroomExpiryDate($fields, $classroom)) {
+            throw $this->createServiceException('已发布的班级不允许修改班级原先的有效期模式');
         }
 
+        if (isset($fields['description'])) {
+            $fields['description'] = $this->purifyHtml($fields['description'], true);
+        }
+
+        if (isset($fields['about'])) {
+            $fields['about'] = $this->purifyHtml($fields['about'], true);
+        }
+
+        $fields = $this->fillOrgId($fields);
+        $classroom = $this->getClassroomDao()->update($id, $fields);
+
+        $arguments = $fields;
+
+        if (!empty($arguments['expiryMode']) && !empty($arguments['expiryValue']) && $this->canUpdateMembersDeadline($classroom,
+                $arguments['expiryMode'])
+        ) {
+            $deadline = ClassroomToolkit::buildMemberDeadline(array(
+                'expiryMode' => $arguments['expiryMode'],
+                'expiryValue' => $arguments['expiryValue'],
+            ));
+
+            $this->updateMembersDeadlineByClassroomId($id, $deadline);
+        }
+        if (!empty($tagIds)) {
+            $arguments['tagIds'] = $tagIds;
+        }
+
+        $this->dispatchEvent('classroom.update', new Event(array(
+            'userId' => $user['id'],
+            'classroom' => $classroom,
+            'fields' => $arguments,
+        )));
+
         return $classroom;
+    }
+
+    public function updateMembersDeadlineByClassroomId($classroomId, $deadline)
+    {
+        return $this->getClassroomMemberDao()->updateByClassroomIdAndRole($classroomId, 'student', array(
+            'deadline' => $deadline,
+        ));
+    }
+
+    protected function canUpdateMembersDeadline($classroom, $expiryMode)
+    {
+        if ($expiryMode == $classroom['expiryMode'] && $expiryMode != 'days') {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function canUpdateClassroomExpiryDate($fields, $classroom)
+    {
+        if (empty($fields['expiryMode']) && empty($fields['expiryValue'])) {
+            return true;
+        }
+
+        if ($classroom['status'] == 'draft') {
+            return true;
+        }
+
+        if ($fields['expiryMode'] == $classroom['expiryMode']) {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function filterClassroomFields($fields)
+    {
+        $fields = ArrayToolkit::parts($fields, array(
+            'rating',
+            'ratingNum',
+            'categoryId',
+            'title',
+            'status',
+            'about',
+            'description',
+            'price',
+            'vipLevelId',
+            'smallPicture',
+            'middlePicture',
+            'largePicture',
+            'headTeacherId',
+            'teacherIds',
+            'assistantIds',
+            'hitNum',
+            'auditorNum',
+            'studentNum',
+            'courseNum',
+            'lessonNum',
+            'threadNum',
+            'postNum',
+            'income',
+            'createdTime',
+            'private',
+            'service',
+            'maxRate',
+            'buyable',
+            'showable',
+            'orgCode',
+            'orgId',
+            'expiryMode',
+            'expiryValue',
+        ));
+
+        if (isset($fields['expiryMode']) && $fields['expiryMode'] == 'date') {
+            if ($fields['expiryValue'] < time()) {
+                throw $this->createServiceException($this->getKernel()->trans('设置的有效期小于当前时间！'));
+            }
+        }
+
+        if (isset($fields['about'])) {
+            $fields['about'] = $this->purifyHtml($fields['about'], true);
+        }
+
+        return $fields;
+    }
+
+    public function isClassroomOverDue($classroomId)
+    {
+        $classroom = $this->getClassroom($classroomId);
+
+        if ($classroom['expiryMode'] == 'date' && $classroom['expiryValue'] < time()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function updateMemberDeadlineByMemberId($memberId, $deadline)
+    {
+        $member = $this->getClassroomMemberDao()->update($memberId, $deadline);
+
+        $this->dispatchEvent('classroom.member.deadline.update', new Event(array(
+            'userId' => $member['userId'],
+            'deadline' => $deadline['deadline'],
+            'classroomId' => $member['classroomId'],
+        )));
+
+        return $this->getClassroomMemberDao()->update($memberId, $deadline);
+    }
+
+    public function findWillOverdueClassrooms()
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('用户未登录');
+        }
+
+        $members = $this->getClassroomMemberDao()->findMembersByUserId($user['id']);
+        $members = ArrayToolkit::index($members, 'classroomId');
+
+        $classroomIds = ArrayToolkit::column($members, 'classroomId');
+        $classrooms = $this->findClassroomsByIds($classroomIds);
+
+        $shouldNotifyClassrooms = array();
+        $shouldNotifyClassroomMembers = array();
+
+        $currentTime = time();
+
+        foreach ($classrooms as $classroom) {
+            $member = $members[$classroom['id']];
+
+            if ($classroom['expiryValue'] > 0 && $currentTime < $member['deadline'] && (10 * 24 * 60 * 60 + $currentTime) > $member['deadline']) {
+                $shouldNotifyClassrooms[] = $classroom;
+                $shouldNotifyClassroomMembers[] = $member;
+            }
+        }
+
+        return array($shouldNotifyClassrooms, $shouldNotifyClassroomMembers);
     }
 
     public function batchUpdateOrg($classroomIds, $orgCode)
@@ -346,6 +477,21 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function waveClassroom($id, $field, $diff)
     {
+        $fields = array(
+            'hitNum',
+            'auditorNum',
+            'studentNum',
+            'courseNum',
+            'lessonNum',
+            'threadNum',
+            'postNum',
+            'noteNum',
+        );
+
+        if (!in_array($field, $fields)) {
+            throw $this->createInvalidArgumentException(sprintf('%s字段不允许增减，只有%s才被允许增减', $field, implode(',', $fields)));
+        }
+
         return $this->getClassroomDao()->wave(array($id), array($field => $diff));
     }
 
@@ -515,7 +661,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $courses = $this->findCoursesByClassroomId($classroomId);
         $existCourseIds = ArrayToolkit::column($courses, 'id');
-        foreach ($courseIds as $key => $value) {
+        foreach ($courseIds as $value) {
             if (!(in_array($value, $existCourseIds))) {
                 $this->addCourse($classroomId, $value);
             }
@@ -705,6 +851,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $order = null;
         }
 
+        $deadline = ClassroomToolkit::buildMemberDeadline(array(
+            'expiryMode' => $classroom['expiryMode'],
+            'expiryValue' => $classroom['expiryValue'],
+        ));
+
         $fields = array(
             'classroomId' => $classroomId,
             'userId' => $userId,
@@ -712,6 +863,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'levelId' => empty($info['becomeUseMember']) ? 0 : $userMember['levelId'],
             'role' => array('student'),
             'remark' => empty($order['note']) ? '' : $order['note'],
+            'deadline' => $deadline,
         );
 
         if (empty($fields['remark'])) {
@@ -746,6 +898,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     'orderId' => empty($order) ? 0 : $order['id'],
                     'orderNote' => empty($order['note']) ? '' : $order['note'],
                     'levelId' => empty($member['levelId']) ? 0 : $member['levelId'],
+                    'deadline' => $member['deadline'],
                 );
                 $this->getCourseMemberService()->createMemberByClassroomJoined($courseId, $userId, $classroomId, $info);
             }
@@ -783,7 +936,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $classroom = $this->getClassroom($classroomId);
             if (!empty($diff)) {
                 foreach ($diff as $courseId) {
-                    $this->getCourseService()->updateCourse($courseId, array('locked' => 0));
+                    $this->getCourseService()->unlockCourse($courseId);
                     $this->getCourseService()->closeCourse($courseId); //, 'classroom'
 
                     $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $courseId);

@@ -10,7 +10,7 @@ interface CardDao extends GeneralDaoInterface
 
     public function getByUserId($userId);
 
-    public function updateByCardIdAndCardType($fields, $cardId, $cardType);
+    public function updateByCardIdAndCardType($cardId, $cardType, $fields);
 
     public function getByCardIdAndCardType($cardId, $cardType);
 

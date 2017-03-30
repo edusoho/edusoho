@@ -333,6 +333,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         $total = array();
 
+        if ($testpaper['type'] == 'homework') {
+            return $total;
+        }
+
         foreach ($testpaper['metas']['counts'] as $type => $count) {
             $total[$type]['score'] = empty($items[$type]) ? 0 : array_sum(ArrayToolkit::column($items[$type], 'score'));
             $total[$type]['number'] = empty($items[$type]) ? 0 : count($items[$type]);
@@ -461,17 +465,15 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 continue;
             }
 
-            if (!empty($userAnswer['answer'])) {
+            if (!empty($userAnswer['answer']) && !empty(str_replace('""', '', $userAnswer['answer'][0]))) {
                 if ($paperResult['type'] == 'homework') {
                     $checkedFields['status'] = 'right';
                 } else {
                     $checkedFields['status'] = $checkedFields['score'] == $item['score'] ? 'right' : 'wrong';
                 }
             }
-
             $this->updateItemResult($userAnswer['id'], $checkedFields);
         }
-
         $fields['checkTeacherId'] = $user['id'];
         $fields['checkedTime'] = time();
         $fields['subjectiveScore'] = array_sum(ArrayToolkit::column($checkData, 'score'));
@@ -736,7 +738,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             throw $this->createNotFoundException($this->getKernel()->trans('试卷不存在!'));
         }
 
-        if ($paperResult['status'] == 'doing' && ($paperResult['userId'] != $user['id'])) {
+        if ($paperResult['status'] === 'doing' && ($paperResult['userId'] != $user['id'])) {
             throw $this->createNotFoundException('无权查看此试卷');
         }
 
@@ -747,7 +749,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $course = $this->getCourseService()->getCourse($paperResult['courseId']);
         $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
 
-        if ($member['role'] == 'teacher') {
+        if ($member['role'] === 'teacher') {
             return true;
         }
 

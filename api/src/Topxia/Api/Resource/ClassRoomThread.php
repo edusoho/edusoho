@@ -3,7 +3,6 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
-use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 class ClassRoomThread extends BaseResource
@@ -16,9 +15,13 @@ class ClassRoomThread extends BaseResource
             return $this->error('not_found', '没有找到');
         }
 
+        if (!$this->getClassroomService()->canTakeClassroom($thread['targetId'])) {
+            return $this->error('403', '无权限查看');
+        }
+
         $user = $this->getUserService()->getUser($thread['userId']);
         $thread['user'] = $this->simpleUser($user);
-        $classroom = $this->getClassroomService()->getClassRoom($thread['targetId']);
+        $classroom = $this->getClassroomService()->getClassroom($thread['targetId']);
         $thread['target']['id'] = $classroom['id'];
         $thread['target']['title'] = $classroom['title'];
 
@@ -37,14 +40,14 @@ class ClassRoomThread extends BaseResource
     {
         $simple = array();
 
-        $simple['id']          = $res['id'];
-        $simple['title']       = $res['title'];
-        $simple['content']     = substr(strip_tags($res['content']), 0, 100);
-        $simple['postNum']     = $res['postNum'];
-        $simple['hitNum']      = $res['hitNum'];
-        $simple['userId']      = $res['userId'];
+        $simple['id'] = $res['id'];
+        $simple['title'] = $res['title'];
+        $simple['content'] = substr(strip_tags($res['content']), 0, 100);
+        $simple['postNum'] = $res['postNum'];
+        $simple['hitNum'] = $res['hitNum'];
+        $simple['userId'] = $res['userId'];
         $simple['classRoomId'] = $res['classRoomId'];
-        $simple['type']        = $res['type'];
+        $simple['type'] = $res['type'];
 
         if (isset($res['user'])) {
             $simple['user'] = $res['user'];

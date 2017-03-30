@@ -49,7 +49,7 @@ class BaseProcessor
         return array_map(function ($user) use ($container) {
             foreach ($user as $key => $value) {
                 if (!in_array($key, array(
-                    'id', 'email', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'nickname', 'roles', 'locked', 'about', 'title'))
+                    'id', 'email', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'nickname', 'roles', 'locked', 'about', 'title', ))
                 ) {
                     unset($user[$key]);
                 }

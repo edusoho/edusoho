@@ -346,7 +346,6 @@ class SettingController extends BaseController
         }
 
         $mailer = $this->getSettingService()->get('mailer', array());
-
         $default = array(
             'enabled' => 0,
             'host' => '',
@@ -355,11 +354,9 @@ class SettingController extends BaseController
             'password' => '',
             'from' => '',
             'name' => '',
-            'encryption' => '',
         );
         $mailer = array_merge($default, $mailer);
-
-        if ($request->getMethod() == 'POST') {
+        if ($request->isMethod('POST')) {
             $mailer = $request->request->all();
             $this->getSettingService()->set('mailer', $mailer);
             $mailerWithoutPassword = $mailer;
@@ -369,11 +366,33 @@ class SettingController extends BaseController
         }
 
         $status = $this->checkMailerStatus();
+        $cloudMailName = '';
 
         return $this->render('admin/system/mailer.html.twig', array(
             'mailer' => $mailer,
             'status' => $status,
+            'cloudMailName' => $cloudMailName,
         ));
+    }
+
+    /*
+     * 当前云邮件字段为cloud_email_crm
+     */
+    protected function checkMailerStatus()
+    {
+        $cloudEmail = $this->getSettingService()->get('cloud_email_crm', array());
+        $mailer = $this->getSettingService()->get('mailer', array());
+        $status = '';
+
+        if (!empty($cloudEmail) && $cloudEmail['status'] == 'enable') {
+            $status = 'cloud_email_crm';
+        }
+
+        if (!empty($mailer) && $mailer['enabled'] == 1) {
+            $status = 'email';
+        }
+
+        return $status;
     }
 
     public function mailerTestAction(Request $request)
@@ -396,23 +415,6 @@ class SettingController extends BaseController
                 'message' => $e->getMessage(),
             ));
         }
-    }
-
-    protected function checkMailerStatus()
-    {
-        $cloudEmail = $this->getSettingService()->get('cloud_email', array());
-        $mailer = $this->getSettingService()->get('mailer', array());
-        $status = '';
-
-        if (!empty($cloudEmail) && $cloudEmail['status'] == 'enable') {
-            return $status = 'cloud_email';
-        }
-
-        if (!empty($mailer) && $mailer['enabled'] == 1) {
-            return $status = 'email';
-        }
-
-        return $status;
     }
 
     public function defaultAction(Request $request)
@@ -569,7 +571,7 @@ class SettingController extends BaseController
             'welcome_message_enabled' => '0',
             'welcome_message_body' => '{{nickname}},欢迎加入课程{{course}}',
             'buy_fill_userinfo' => '0',
-            'teacher_modify_price' => '1',
+            'teacher_manage_marketing' => '1',
             'teacher_search_order' => '0',
             'teacher_manage_student' => '0',
             'teacher_export_student' => '0',
@@ -732,10 +734,5 @@ class SettingController extends BaseController
     protected function getAuthService()
     {
         return $this->createService('User:AuthService');
-    }
-
-    private function getWebExtension()
-    {
-        return $this->container->get('web.twig.extension');
     }
 }

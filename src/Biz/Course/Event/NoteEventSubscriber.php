@@ -2,12 +2,12 @@
 
 namespace Biz\Course\Event;
 
-use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
-use Biz\Course\Service\CourseNoteService;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\CourseNoteService;
+use Biz\Classroom\Service\ClassroomService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -30,8 +30,8 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
         $classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
 
-        if ($classroom && $note['status'] === CourseNoteService::PUBLIC_STATUS) {
-            $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', +1);
+        if ($classroom && $note['status'] == CourseNoteService::PUBLIC_STATUS) {
+            $this->getClassroomService()->waveClassroom($classroom['id'], 'noteNum', +1);
         }
 
         $this->getCourseMemberService()->refreshMemberNoteNumber($note['courseId'], $note['userId']);
@@ -54,12 +54,12 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
         $preStatus = $event->getArgument('preStatus');
 
-        if ($note['status'] === CourseNoteService::PUBLIC_STATUS && $preStatus === CourseNoteService::PRIVATE_STATUS) {
-            $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', +1);
+        if ($note['status'] == CourseNoteService::PUBLIC_STATUS && $preStatus == CourseNoteService::PRIVATE_STATUS) {
+            $this->getClassroomService()->waveClassroom($classroom['id'], 'noteNum', +1);
         }
 
-        if ($note['status'] === CourseNoteService::PRIVATE_STATUS && $preStatus === CourseNoteService::PUBLIC_STATUS) {
-            $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', -1);
+        if ($note['status'] == CourseNoteService::PRIVATE_STATUS && $preStatus == CourseNoteService::PUBLIC_STATUS) {
+            $this->getClassroomService()->waveClassroom($classroom['id'], 'noteNum', -1);
         }
     }
 
@@ -70,7 +70,7 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
         $classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
 
         if (!empty($classroom)) {
-            $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', -1);
+            $this->getClassroomService()->waveClassroom($classroom['id'], 'noteNum', -1);
         }
 
         $this->getCourseService()->updateCourseStatistics($note['courseId'], array('noteNum'));

@@ -15,20 +15,22 @@
 {#}  {% if version_compare(plugin_version('Coupon'),'1.3.3','>') %}#}
   {% if true %}
       <div role="null-coupon-code">
-        {% if coupons is not null %}
+        {% if coupons %}
           <select class="form-control width-input width-input-large" id="coupon-select" name="couponCode">
-              {% for coupon in coupons %}
-                {% if coupon.type == 'minus' %}
-                    <option data-target-type="{{targetType}}" data-target-id="{{targetId|default(0) }}" data-amount="{{ totalPrice }}" data-code="{{ coupon.code }}" value="{{ coupon.code }}">{{'优惠券 抵扣%rate%元'|trans({'%rate%':coupon.rate})}}</option>
-                {% endif %}
-                {% if coupon.type == 'discount' %}
-                  <option data-target-type="{{targetType}}" data-target-id="{{targetId|default(0) }}" data-amount="{{ totalPrice }}" data-code="{{ coupon.code }}" value="{{ coupon.code }}">{{'优惠券 抵价%rate%折'|trans({'%rate%':coupon.rate})}}</option>
-                {% endif %}
-              {% endfor %}
-              <option data-code="" value="">{{'不使用优惠券'|trans}}</option>
+            {% for coupon in coupons %}
+              {% if coupon.type == 'minus' %}
+                  <option data-target-type="{{targetType}}" data-target-id="{{targetId|default(0) }}" data-amount="{{ totalPrice }}" data-code="{{ coupon.code }}" value="{{ coupon.code }}">{{'优惠券 抵扣%rate%元'|trans({'%rate%':coupon.rate})}}</option>
+              {% endif %}
+              {% if coupon.type == 'discount' %}
+                <option data-target-type="{{targetType}}" data-target-id="{{targetId|default(0) }}" data-amount="{{ totalPrice }}" data-code="{{ coupon.code }}" value="{{ coupon.code }}">{{'优惠券 抵价%rate%折'|trans({'%rate%':coupon.rate})}}</option>
+              {% endif %}
+            {% endfor %}
+            <option data-code="" value="">{{'不使用优惠券'|trans}}</option>
           </select>
+          <a id="coupon-code-btn" class="btn btn-primary" href="javascript:;">{{'更换优惠券'|trans}}</a>
+        {% else %}
+          <a id="coupon-code-btn" class="btn btn-primary" href="javascript:;">{{'使用优惠券'|trans}}</a>
         {% endif %}
-        <a id="coupon-code-btn" class="btn btn-primary" href="javascript:;">{{'使用优惠券'|trans}}</a>
       </div>
 
 

@@ -2,6 +2,14 @@ admin:
     path:  /
     defaults: { _controller: AppBundle:Admin/Default:index }
 
+admin_discovery_column_category_tree:
+    path: /discovery_column/category/tree
+    defaults: { _controller: AppBundle:Admin/DiscoveryColumn:categoryTree }
+
+admin_setting_security:
+    path:  /setting/security
+    defaults: { _controller: AppBundle:Admin/SiteSetting:security }
+
 admin_notice_modal:
     path:  /notice/modal
     defaults: { _controller: AppBundle:Admin/Default:notice }
@@ -917,10 +925,6 @@ admin_setting_developer_magic:
     path:  /setting/developer/magic
     defaults: { _controller: AppBundle:Admin/DeveloperSetting:magic }
 
-admin_setting_developer_sync_file_data:
-    path:  /setting/developer/sync_upload_file
-    defaults: { _controller: AppBundle:Admin/DeveloperSetting:syncUploadFile }
-
 admin_setting_post_num_rules:
     path:  /setting/post_num_rules
     defaults: { _controller: AppBundle:Admin/Setting:postNumRules }
@@ -929,10 +933,6 @@ admin_setting_post_num_rules:
 admin_setting_cdn:
     path:  /setting/cdn
     defaults: { _controller: AppBundle:Admin/CdnSetting:index }
-
-admin_setting_redis:
-    path:  /setting/developer/redis
-    defaults: { _controller: AppBundle:Admin/DeveloperSetting:redis }
 
 admin_optimize:
     path:  /setting/optimize
@@ -998,11 +998,6 @@ admin_cloud_access:
     defaults: { _controller: AppBundle:Admin/Cloud:access }
     permissions: [admin_my_cloud_overview]
 
-admin_cloud_bill:
-    path:  /cloud/bill
-    defaults: { _controller: AppBundle:Admin/Cloud:bill }
-    permissions: [admin_my_cloud_overview]
-
 admin_cloud_recharge:
     path:  /cloud/recharge
     defaults: { _controller: AppBundle:Admin/Cloud:recharge }
@@ -1060,8 +1055,16 @@ admin_cloud_show:
     defaults: { _controller: AppBundle:Admin/Cloud:cloudShow , type: 'video'}
 
 admin_cloud_email_buy:
-    path:  /cloud/{type}/buy/show
+    path:  /cloud/{type}/buy/custom
     defaults: { _controller: AppBundle:Admin/Cloud:emailBuy }
+
+admin_edu_cloud_search_result_type:
+    path: /setting/edu_cloud/search_result/type
+    defaults: { _controller: AppBundle:Admin/EduCloud:setSearchResultType }
+
+admin_wap_set:
+    path: /setting/wap
+    defaults: { _controller: AppBundle:Admin/OperationSetting:wapSet }
 
 admin_cloud_sms_sign:
     path:  /cloud/sms/sign
@@ -1922,10 +1925,10 @@ admin_edu_cloud_email:
     defaults: { _controller: AppBundle:Admin/EduCloud:emailOverview }
     permissions: [admin_edu_cloud_email_overview]
 
-#admin_edu_cloud_email_setting:
-#    path: /edu_cloud/email/setting
-#    defaults: { _controller: AppBundle:Admin/EduCloud:emailSetting }
-#    permissions: [admin_edu_cloud_email_overview]
+admin_edu_cloud_email_setting:
+   path: /edu_cloud/email/setting
+   defaults: { _controller: AppBundle:Admin/EduCloud:emailSetting }
+   permissions: [admin_edu_cloud_email_overview]
 
 admin_edu_cloud_email_switch:
     path: /edu_cloud/email/switch

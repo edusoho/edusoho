@@ -3,7 +3,6 @@
 namespace AppBundle\Component\Payment\Heepay;
 
 use AppBundle\Component\Payment\Response;
-use Topxia\Service\Common\ServiceKernel;
 
 class HeepayResponse extends Response
 {
@@ -142,11 +141,6 @@ class HeepayResponse extends Response
         }
 
         return $param;
-    }
-
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
     }
 
     protected function getOrderService()

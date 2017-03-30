@@ -171,8 +171,11 @@ $.validator.addMethod("visible_character", function (value, element, params) {
   return this.optional(element) || $.trim(value).length > 0;
 }, jQuery.validator.format("请输入可见性字符"));
 
-$.validator.addMethod('positive_integer', function (value, element) {
-  return !value || /^\+?[1-9][0-9]*$/.test(value);
+$.validator.addMethod('positive_integer', function (value, element, params = true) {
+  if (!params) {
+    return true;
+  }
+  return this.optional(element) || /^\+?[1-9][0-9]*$/.test(value);
 }, jQuery.validator.format("请输入正整数"));
 
 $.validator.addMethod('unsigned_integer', function (value, element) {
@@ -188,13 +191,14 @@ jQuery.validator.addMethod("second_range", function (value, element) {
 }, "请输入0-59之间的数字");
 
 $.validator.addMethod("open_live_course_title", function (value, element, params) {
-  return !params || /^[^(<|>|'|"|&|‘|’|”|“)]*$/.test(value);
-}, Translator.trans('直播公开课标题暂不支持<、>、\"、&、‘、’、”、“字符'));
+  return this.optional(element) || /^[^(<|>|'|"|&|‘|’|”|“)]*$/.test(value);
+}, Translator.trans('不支持输入<、>、\"、&、‘、’、”、“字符'));
 
 $.validator.addMethod("currency", function (value, element, params) {
   return this.optional(element) || /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
 }, jQuery.validator.format('请输入有效价格，最多两位小数，整数位不超过8位！'));
 
+//@TODO这里不应该判断大于0，应该用组合positive_currency:true，min:1，看到替换
 $.validator.addMethod("positive_currency", function (value, element, params) {
   return value > 0 && /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
 }, jQuery.validator.format('请输入大于0的有效价格，最多两位小数，整数位不超过8位！'));
@@ -206,7 +210,7 @@ jQuery.validator.addMethod("max_year", function (value, element) {
 $.validator.addMethod("before_date", function (value, element, params) {
   let date = new Date(value);
   let afterDate = new Date($(params).val());
-  return !value || !$(params).val() || afterDate >= date;
+  return this.optional(element) || afterDate >= date;
 },
   Translator.trans('开始日期应早于结束日期')
 );
@@ -214,14 +218,14 @@ $.validator.addMethod("before_date", function (value, element, params) {
 $.validator.addMethod("after_date", function (value, element, params) {
   let date = new Date(value);
   let afterDate = new Date($(params).val());
-  return !value || !$(params).val() || afterDate <= date;
+  return this.optional(element) || afterDate <= date;
 },
   Translator.trans('开始日期应早于结束日期')
 );
 
 $.validator.addMethod("after_now", function (value, element, params) {
-  let afterDate =  new Date(value.replace(/-/g, '/'));//fix sf;
-  return !value || afterDate >=new Date();
+  let afterDate = new Date(value.replace(/-/g, '/'));//fix sf;
+  return this.optional(element) || afterDate >= new Date();
 },
   Translator.trans('开始时间应晚于当前时间')
 );
@@ -231,20 +235,20 @@ $.validator.addMethod("after_now_date", function (value, element, params) {
   let now = new Date();
   let afterDate = new Date(value);
   let str = now.getFullYear() + "/" + (now.getMonth() + 1) + "/" + now.getDate();
-  return !value || afterDate >= new Date(str);
+  return this.optional(element) || afterDate >= new Date(str);
 },
   Translator.trans('开始日期应晚于当前日期')
 );
 
-//检查将废除
+//检查将废除,没有严格的时间转换，有兼容问题
 $.validator.addMethod("before", function (value, element, params) {
   return value && $(params).val() >= value;
 },
   Translator.trans('开始日期应早于结束日期')
 );
-//检查将废除
+//检查将废除,没有严格的时间转换，有兼容问题
 $.validator.addMethod("after", function (value, element, params) {
-  
+
   return value && $(params).val() < value;
 },
   Translator.trans('结束日期应晚于开始日期')

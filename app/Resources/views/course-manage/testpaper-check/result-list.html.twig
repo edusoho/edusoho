@@ -1,4 +1,5 @@
-{% extends 'courseset-manage/layout.html.twig' %}
+{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
+
 {% block title %}{{ testpaper.name }} - {{'试卷批阅'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% import 'macro.html.twig' as macro %}
 
@@ -21,9 +22,9 @@
           {{ '发布计划'|trans }}
         </button>
       {% endif %}
-      {% if course_count(course.courseSetId) > 1 %}
+      {#{% if course_count(course.courseSetId) > 1 %}
         <a class="btn btn-default btn-sm pull-right ml5" href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">返回课程编辑</a>
-      {% endif %}
+      {% endif %}#}
     </div>
     <div class="panel-body">
       {% if isTeacher is defined and not isTeacher %}

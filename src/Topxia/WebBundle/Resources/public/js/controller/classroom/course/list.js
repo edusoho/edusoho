@@ -20,13 +20,13 @@ define(function (require, exports, module) {
         var $target = $(e.currentTarget);
         var $parent = $target.parents(".course-item");
         var $lessonList = $target.parents(".media").siblings(".course-detail-content");
-        var self = this;
         if ($lessonList.length > 0) {
           this._lessonListSHow($lessonList)
         } else {
+          var self = this;
           $.get($target.data('lessonUrl'), { 'visibility': 0 }, function (html) {
             $parent.append(html);
-            this._initChapter();
+            self._initChapter();
             self._lessonListSHow($parent.siblings(".course-detail-content"));
           });
         }

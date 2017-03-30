@@ -75,7 +75,7 @@ export default class TaskPipe {
         this._publishResponse(response);
         this.eventDatas = {};
         this.lastTime = response.lastTime;
-        if (response.result.status) {
+        if (response && response.result && response.result.status) {
           let listners = this.eventMap.receives[response.result.status];
           if (listners) {
             for (var i = listners.length - 1; i >= 0; i--) {

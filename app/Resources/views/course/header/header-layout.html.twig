@@ -26,7 +26,7 @@
           <span class="tag-finished"></span>
         {% endif %}
       </span>
-      <span class="text-overflow course-detail-heading">
+      <span class="course-detail-heading">
        {% if marketingPage %}
         {{ courseSet.title }}
          {% else %}
@@ -49,7 +49,7 @@
         {% block course_header_people_num %}
           {% if setting('course.show_student_num_enabled', '1') == 1 %}
             <li>
-              <span class="btn btn-xs">
+              <span class="btn btn-xs cursor-default">
                 <i class="es-icon es-icon-people text-16"></i>
                 <span class="mls">{% block course_member_count %}{{ course.studentNum }}人 {% endblock %}</span>
               </span>

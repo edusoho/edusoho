@@ -1,6 +1,5 @@
 <div class="course-detail-content">
 	<ul class="task-list task-list-md task-list-hover">
-		{% set taskIndex = 0 %}
 		{% for key, item in courseItems %}
 			{% if item.type|default(null) == 'chapter' %}
 				<li class="task-item bg-gray-lighter js-task-chapter"><i class="es-icon es-icon-menu left-menu"></i>
@@ -14,8 +13,14 @@
 	          节: {{ item.title }}</span>
 				</li>
 			{% elseif  item.type|default(null)  == 'lesson' %}
+
 				{% for task in item.tasks %}
-					{% set taskIndex = taskIndex +1 %}
+          {% if  item.tasks|length > 1 %}
+            {% set taskIndex = item.number ~'-' ~ loop.index %}
+          {% else %}
+            {% set taskIndex = item.number  %}
+          {% endif %}
+
 					{% set task_lock =  false %}
 					{% set file = files[task.activity.mediaId]|default(null) %}
 					<li class="task-item task-content mouse-control">
@@ -38,7 +43,9 @@
                   {% include 'course/task-list/parts/list-li-title.html.twig' %}
                 </a>
               {% else %}
-							  <span class="title">{% include 'course/task-list/parts/list-li-title.html.twig' %}</span>
+							<a class="title" href="#modal" data-toggle="modal"
+								 data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
+								 style="margin-top:-8px">{% include 'course/task-list/parts/list-li-title.html.twig' %}</a>
               {% endif %}
 							<span class="right-menu color-gray {% if not member %} mouse-leave {% endif %}">
                 {{ task.activity.length|default(0)|activity_length_format }}
@@ -78,7 +85,7 @@
 	              {% elseif (not task.isFree) and course.parentId|default(0) == 0 %}
 		              <a class="btn btn-primary" href="#modal" data-toggle="modal"
 		                 data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
-		                 style="margin-top:-8px">立即购买</a>
+		                 style="margin-top:-8px">购买</a>
 	              {% endif %}
 
               {% endif %}
@@ -97,6 +104,3 @@
 		{% endfor %}
 	</ul>
 </div>
-
-
-

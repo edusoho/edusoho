@@ -29,11 +29,11 @@
         <input class="course-item-cbx" type="checkbox" name="course-{{courseSet.id}}">
       </td>
       <td>
-        <a class="pull-left mr5" href="{{ path('course_set_show',{id:courseSet.id}) }}" target="_blank">
+        <a class="pull-left mr5 link-primary" href="{{ path('course_set_show',{id:courseSet.id}) }}" target="_blank">
           <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}" alt="{{ courseSet.title }}" width="100">
         </a>
         <div class="mlm">
-          <a href="{{ path('course_set_show',{id:courseSet.id}) }}">{{ courseSet.title }}</a>
+          <a class="link-primary" href="{{ path('course_set_show',{id:courseSet.id}) }}">{{ courseSet.title }}</a>
         </div>
       </td>
       <td>
@@ -61,14 +61,14 @@
               {% endfor %}
             {% endif %}
           </select>
-          <a class="color-gray" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="课程下包含多个教学计划，请选择需要复制的教学计划！"><i class="es-icon es-icon-help"></i></a>
+          <a class="color-gray" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="课程下包含多个教学计划，请选择其中某个教学计划。"><i class="es-icon es-icon-help"></i></a>
         {% endif %}
       </td>
       <td>
         {% set teacher = users[courseSet.creator]|default(null) %}
         {% if teacher %}
           <div class="teacher">
-            <a class="teacher-nickname ellipsis" target="_blank"  href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+            <a class="teacher-nickname ellipsis link-primary" target="_blank"  href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
           </div>
         {% endif %}
       </td>

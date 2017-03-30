@@ -1,4 +1,4 @@
-<div class="testpaper-card {% if action|default('') is empty %}affix{% endif %}">
+<div class="testpaper-card {{testpaperCardClass|default('')}}">
   {% if paperResult.status|default(null) == 'finished' and (app.user.id|default(0) == paperResult.userId ) %}
     <div class="mbl">
       <a href="{% if action|default('') is not empty and task|default(null) %}{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}{% else %}{{ path('homework_start_do',{lessonId:paperResult.lessonId,homeworkId:paperResult.testId}) }}{% endif %}" class="btn btn-primary btn-block btn-lg  border-radius-none">再次尝试</a>
@@ -7,7 +7,6 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       {{'答题卡'|trans}} 
-      <a class="pull-right link-medium" href="javascript:;" data-container="body" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content='<div>本次考试共<span class="color-primary">2题</span>，总分<span class="color-primary">8.0分</span>，及格为<span class="color-primary">5.0</span>分。请在<span class="color-primary">50分钟</span>内作答。</div>'><i class="es-icon es-icon-info"></i></a>
     </div>
     <div class="panel-body">
       {% for question in questions %}
@@ -26,7 +25,7 @@
     </div>
 
     <div class="panel-footer text-right">
-      {% if paperResult.status|default(null) == 'reviewing' and app.user.id|default(0) != paperResult.userId %}
+      {% if paperResult.status|default(null) == 'reviewing' and isTeacher|default(false) %}
         <a class="btn btn-success" data-role="check-submit">{{'完成批阅'|trans}}</a>
       {% elseif paperResult.status|default(null) in ['reviewing','finished'] %}
         <div class="checkbox">

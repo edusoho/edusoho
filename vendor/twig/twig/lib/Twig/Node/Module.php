@@ -3,8 +3,8 @@
 /*
  * This file is part of Twig.
  *
- * (c) 2009 Fabien Potencier
- * (c) 2009 Armin Ronacher
+ * (c) Fabien Potencier
+ * (c) Armin Ronacher
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,8 +21,17 @@
  */
 class Twig_Node_Module extends Twig_Node
 {
-    public function __construct(Twig_NodeInterface $body, Twig_Node_Expression $parent = null, Twig_NodeInterface $blocks, Twig_NodeInterface $macros, Twig_NodeInterface $traits, $embeddedTemplates, $filename, $source = '')
+    private $source;
+
+    public function __construct(Twig_NodeInterface $body, Twig_Node_Expression $parent = null, Twig_NodeInterface $blocks, Twig_NodeInterface $macros, Twig_NodeInterface $traits, $embeddedTemplates, $name, $source = '')
     {
+        if (!$name instanceof Twig_Source) {
+            @trigger_error(sprintf('Passing a string as the $name argument of %s() is deprecated since version 1.27. Pass a Twig_Source instance instead.', __METHOD__), E_USER_DEPRECATED);
+            $this->source = new Twig_Source($source, $name);
+        } else {
+            $this->source = $name;
+        }
+
         $nodes = array(
             'body' => $body,
             'blocks' => $blocks,
@@ -40,11 +49,16 @@ class Twig_Node_Module extends Twig_Node
 
         // embedded templates are set as attributes so that they are only visited once by the visitors
         parent::__construct($nodes, array(
-            'source' => $source,
-            'filename' => $filename,
+            // source to be remove in 2.0
+            'source' => $this->source->getCode(),
+            // filename to be remove in 2.0 (use getTemplateName() instead)
+            'filename' => $this->source->getName(),
             'index' => null,
             'embedded_templates' => $embeddedTemplates,
         ), 1);
+
+        // populate the template name of all node children
+        $this->setTemplateName($this->source->getName());
     }
 
     public function setIndex($index)
@@ -96,6 +110,8 @@ class Twig_Node_Module extends Twig_Node
 
         $this->compileGetSource($compiler);
 
+        $this->compileGetSourceContext($compiler);
+
         $this->compileClassFooter($compiler);
     }
 
@@ -120,9 +136,9 @@ class Twig_Node_Module extends Twig_Node
                 ->raw('$this->loadTemplate(')
                 ->subcompile($parent)
                 ->raw(', ')
-                ->repr($this->getAttribute('filename'))
+                ->repr($this->source->getName())
                 ->raw(', ')
-                ->repr($parent->getLine())
+                ->repr($parent->getTemplateLine())
                 ->raw(')')
             ;
         }
@@ -138,9 +154,9 @@ class Twig_Node_Module extends Twig_Node
     {
         $compiler
             ->write("\n\n")
-            // if the filename contains */, add a blank to avoid a PHP parse error
-            ->write('/* '.str_replace('*/', '* /', $this->getAttribute('filename'))." */\n")
-            ->write('class '.$compiler->getEnvironment()->getTemplateClass($this->getAttribute('filename'), $this->getAttribute('index')))
+            // if the template name contains */, add a blank to avoid a PHP parse error
+            ->write('/* '.str_replace('*/', '* /', $this->source->getName())." */\n")
+            ->write('class '.$compiler->getEnvironment()->getTemplateClass($this->source->getName(), $this->getAttribute('index')))
             ->raw(sprintf(" extends %s\n", $compiler->getEnvironment()->getBaseTemplateClass()))
             ->write("{\n")
             ->indent()
@@ -165,9 +181,9 @@ class Twig_Node_Module extends Twig_Node
                 ->write('$this->parent = $this->loadTemplate(')
                 ->subcompile($parent)
                 ->raw(', ')
-                ->repr($this->getAttribute('filename'))
+                ->repr($this->source->getName())
                 ->raw(', ')
-                ->repr($parent->getLine())
+                ->repr($parent->getTemplateLine())
                 ->raw(");\n")
             ;
         }
@@ -323,7 +339,7 @@ class Twig_Node_Module extends Twig_Node
             ->write("public function getTemplateName()\n", "{\n")
             ->indent()
             ->write('return ')
-            ->repr($this->getAttribute('filename'))
+            ->repr($this->source->getName())
             ->raw(";\n")
             ->outdent()
             ->write("}\n\n")
@@ -396,11 +412,29 @@ class Twig_Node_Module extends Twig_Node
     protected function compileGetSource(Twig_Compiler $compiler)
     {
         $compiler
+            ->write("/** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */\n")
             ->write("public function getSource()\n", "{\n")
             ->indent()
-            ->write('return ')
-            ->string($this->getAttribute('source'))
-            ->raw(";\n")
+            ->write("@trigger_error('The '.__METHOD__.' method is deprecated since version 1.27 and will be removed in 2.0. Use getSourceContext() instead.', E_USER_DEPRECATED);\n\n")
+            ->write('return $this->getSourceContext()->getCode();')
+            ->raw("\n")
+            ->outdent()
+            ->write("}\n\n")
+        ;
+    }
+
+    protected function compileGetSourceContext(Twig_Compiler $compiler)
+    {
+        $compiler
+            ->write("public function getSourceContext()\n", "{\n")
+            ->indent()
+            ->write('return new Twig_Source(')
+            ->string($compiler->getEnvironment()->isDebug() ? $this->source->getCode() : '')
+            ->raw(', ')
+            ->string($this->source->getName())
+            ->raw(', ')
+            ->string($this->source->getPath())
+            ->raw(");\n")
             ->outdent()
             ->write("}\n")
         ;
@@ -413,9 +447,9 @@ class Twig_Node_Module extends Twig_Node
                 ->write(sprintf('%s = $this->loadTemplate(', $var))
                 ->subcompile($node)
                 ->raw(', ')
-                ->repr($this->getAttribute('filename'))
+                ->repr($node->getTemplateName())
                 ->raw(', ')
-                ->repr($node->getLine())
+                ->repr($node->getTemplateLine())
                 ->raw(");\n")
             ;
         } else {

@@ -11,11 +11,12 @@
 
 namespace Symfony\Component\HttpKernel\Tests\HttpCache;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\HttpCache\Esi;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class EsiTest extends \PHPUnit_Framework_TestCase
+class EsiTest extends TestCase
 {
     public function testHasSurrogateEsiCapability()
     {
@@ -225,7 +226,7 @@ class EsiTest extends \PHPUnit_Framework_TestCase
 
     protected function getCache($request, $response)
     {
-        $cache = $this->getMock('Symfony\Component\HttpKernel\HttpCache\HttpCache', array('getRequest', 'handle'), array(), '', false);
+        $cache = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpCache\HttpCache')->setMethods(array('getRequest', 'handle'))->disableOriginalConstructor()->getMock();
         $cache->expects($this->any())
               ->method('getRequest')
               ->will($this->returnValue($request))

@@ -1,4 +1,5 @@
-{% extends 'courseset-manage/layout.html.twig' %}
+{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
+
 {% block title %}{{'营销设置'|trans}}
   -
   {{ course.title }}
@@ -13,6 +14,7 @@
   <div class="panel panel-default">
     {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
     <div class="panel-body">
+      {% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles or ('ROLE_TEACHER' in app.user.roles and setting('course.teacher_manage_marketing', 0) == 1) %}
       {{ web_macro.flash_messages() }}
       <form id="course-marketing-form" class="form-horizontal" action="{{path('course_set_manage_course_marketing', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
         
@@ -44,8 +46,9 @@
               <span class="js-course-add-close-show {% if course.buyable|default(1) == 1 %} hidden {% endif %} ">仅作展示用</span>
             </div>
           </div>
+          {{ slot('course.marketing.setting', {'course':course}) }}
+          
           <div class="js-course-add-open-show {% if course.buyable|default(1) == 0 %} hidden {% endif %}">
-            {{ slot('course.marketing.setting', {'course':course}) }}
             <div class="form-group ">
               <div class="col-sm-2 control-label">
                 <label class="control-label-required">{{'加入截止日期'|trans}}</label>
@@ -56,7 +59,8 @@
             </div>
             <div class="form-group {% if course.buyExpiryTime == 0 %}hidden{% endif %} " id="buyExpiryTime">
               <div class="col-sm-8 col-sm-offset-2">
-                <input type="text" class="form-control width-input width-input-large" name="buyExpiryTime" value="{% if course.buyExpiryTime > 0 %}{{course.buyExpiryTime|date_format('Y-m-d')}}{% endif %}">
+                <input type="text" class="form-control width-150 mr10" name="buyExpiryTime" value="{% if course.buyExpiryTime > 0 %}{{course.buyExpiryTime|date_format('Y-m-d')}}{% endif %}">
+                在此日期前，学员可加入。
               </div>
             </div>
             {#缺少学员数限制#}
@@ -74,59 +78,59 @@
             {% endif %}
           </div>
         </div>
+        <hr class="mb30  bg-border-color">
 
         <div class="es-piece">
           <div class="piece-header">学习规则</div>
           <div class="form-group">
             <label class="col-sm-2 control-label">
               {{'学习有效期'|trans}}
-              <a class="es-icon es-icon-help link-gray text-normal" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" 
-              data-content="{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}">
+              <a class="es-icon es-icon-help ml5 link-gray text-normal" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" 
+                data-content="<ul class='pl10 ul-list-none'>
+                  <li class='mb10'>{{'<b>随到随学：</b>有效期从学员加入的当天开始算起'|trans}}</li>
+                  <li class='mb10'>{{'<b>固定周期：</b>有固定的学习开始日期和结束日期'|trans}}</li>
+                  <li>{{'过期后无法继续学习，系统会在到期前10天提醒学员。'|trans}}</li>
+                </ul>">
               </a>
             </label>
-            {#{% if course.status|default('draft') == 'draft' %}#}
             <div class="col-sm-8 radios">
-                {{ radios('expiryMode', { 'days': '随到随学'|trans, 'date': '固定周期'|trans,'foever':'永久有效' }, course.expiryMode|default('days'), course.status|default('draft') == 'published'? 'disabled': '') }}
-                <div class="mb20 mt20 {% if course.expiryMode|default('days') == 'date' %}hidden{% endif %}" id="expiry-days">
-                  {{ radios('deadlineType', { 'date': '按截止日期'|trans, 'days': '按有效天数'|trans})}}
-                  <div class="mb20 mt20" id="deadlineType-date">
-                    <input class="form-control width-150 mr10" />{{'在此日期前，学员可进行学习。'|trans}}
+                {% set coursePublished = course.status|default('draft') == 'published' or course.status|default('draft') == 'closed'  %}
+                {{ 
+                  radios('expiryMode', 
+                    { 'days': '随到随学'|trans, 'date': '固定周期'|trans,'forever':'永久有效' }, 
+                    course.expiryMode|default('days'), coursePublished ? 'disabled' : ''
+                  ) 
+                }}
+                {#随到随学#}
+                <div class="mb20 mt20 {% if course.expiryMode|default('days') in ['date', 'forever'] %}hidden{% endif %}" id="expiry-days">
+                  {{ 
+                    radios(
+                      'deadlineType', 
+                      { 'end_date': '按截止日期'|trans, 'days': '按有效天数'|trans},
+                      course.deadlineType|default('days'),  coursePublished ? 'disabled' : ''
+                    )
+                  }}
+                  <div class="mb20 mt20 {% if course.deadlineType|default('days') != 'end_date' %}hidden{% endif %}" id="deadlineType-date">
+                    <input class="form-control width-150 mr10" id="deadline" name="deadline"  
+                    value="{{course.expiryEndDate|default(null)}}" {% if coursePublished %} disabled  {% endif %}>{{'在此日期前，学员可进行学习。'|trans}}
                   </div>
-                  <div class="mb20 mt20 hidden" id="deadlineType-days">
-                    {{'学习有效期'|trans}}
-                    <input class="form-control mhs width-150" type="text" id="expiryDeadline" name="expiryDeadline"  value="">
-                    {{'天'|trans}}
+                  <div class="mb20 mt20 {% if course.deadlineType|default('days') != 'days' %}hidden{% endif %}" id="deadlineType-days">
+                    <input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays"  
+                    value="{{course.expiryDays|default(1)}}" {% if coursePublished %} disabled  {% endif %}>
+                    {{'从加入当天起，在几天内可进行学习。'|trans}}
                   </div>
                 </div>
-                <div class="mb20 mt20 {% if course.expiryMode|default('days') == 'days' %}hidden{% endif %}" id="expiry-date">
+                {#固定周期#}
+                <div class="mb20 mt20 {% if course.expiryMode|default('days') in ['days', 'forever'] %}hidden{% endif %}" id="expiry-date">
                   {{'开始日期'|trans}}
-                  <input class="form-control mls mrl" id="expiryStartDate" type="text" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" style="display:inline-block;width:150px">
+                  <input class="form-control mh10 width-150 " id="expiryStartDate" type="text" name="expiryStartDate" 
+                  value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" {% if coursePublished %} disabled  {% endif %}>
                   {{'结束日期'|trans}}
-                  <input class="form-control mls" type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}" style="display:inline-block;width:150px">
+                  <input class="form-control ml5 width-150 " type="text" id="expiryEndDate" name="expiryEndDate" 
+                  value="{{course.expiryEndDate|default('')}}"  {% if coursePublished %} disabled  {% endif %} >
                 </div>
-                <div class="color-warning">{{'课程首次发布后“学习有效期方式”将不能再修改'|trans}}</div>
+                <div class="color-warning">{{'教学计划首次发布后“学习有效期”不能再修改'|trans}}</div>
             </div>
-            {#{% else %}
-              <div class="col-sm-8 form-control-static">
-                {% if course.expiryMode|default('days') != 'date' %}
-                  随到随学
-                  <div class="mb20 mt20" id="expiry-days">
-                    {{'学习有效期'|trans}}<input class="form-control mhs" type="text" id="expiryDays" name="expiryDays" style="display:inline-block;width:150px" value="{{course.expiryDays|default('0')}}" >{{'天'|trans}}
-                    <a class="es-icon es-icon-info ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'设置为0天则无限制'|trans}}"></a>
-                  </div>
-                {% else %}
-                  指定日期学习
-                  <a class="es-icon es-icon-help ml5 link-gray" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" data-content="{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}"></a>
-                  <div class="mb20 mt20" id="expiry-date">
-                  {{'开始日期'|trans}}
-                  <input class="form-control mls mrl" disabled id="expiryStartDate" type="text" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" style="display:inline-block;width:150px" >
-                  {{'结束日期'|trans}}
-                  <input class="form-control mls" disabled type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}" style="display:inline-block;width:150px">
-                  </div>
-                {% endif %}
-                <p class="help-block mt20">{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}</p>
-              </div>
-            {% endif %}#}
           </div>
           {% if setting('magic.lesson_watch_limit') %}
             <div class="form-group">
@@ -146,49 +150,46 @@
             </div>
           {% endif %}
         </div>
+        <hr class="mb30  bg-border-color">
 
-        <div class="es-piece">
+        {% if courseSet.type != 'live' %}
+        <div class="es-piece ">
           <div class="piece-header">预览试看</div>
-          {% if courseSet.type != 'live' %}
-            <div class="form-group js-is-free {% if course.isFree|default(0) == 1 %} hidden {% endif %}">
-              <label class="col-sm-2 control-label">{{'设置免费学习任务'|trans}}</label>
-              <div class="col-sm-8">
-                <ul class="list-group mb0 pb0 task-price-setting-group js-task-price-setting">
-                  {% for task in canFreeTasks %}
-                    <li class="list-group-item {% if freeTasks[task.id]|default(null) %} open {% endif %} {% if loop.index == canFreeTasks|length %} mb5 {% endif %}">
-                      <input type="checkbox" class="mr10" name="freeTaskIds[]" value="{{ task.id }}" {% if freeTasks[task.id]|default(null) %} checked {% endif %}>
-                      {% set meta = activity_meta(task.type) %}
-                      <i class="{{ meta.icon }} color-gray" data-toggle="tooltip" data-placement="top" title="" data-container="body" data-original-title="{{ meta.name }}任务"></i>
-                      <span class="inline-block vertical-middle text-overflow title">任务{{ loop.index }}：{{ task.title }}
-                      </span>
-                      <span class="label label-warning pull-right price">免费</span>
-                    </li>
-                  {% endfor %}
-                </ul>
-                <div class="help-block ">免费任务仅支持图文、视频、音频、flash、文档、PPT
-                </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">{{'设置免费学习任务'|trans}}</label>
+            <div class="col-sm-8">
+              <ul class="list-group mb0 pb0 task-price-setting-group js-task-price-setting">
+                {% for task in canFreeTasks %}
+                  <li class="list-group-item {% if freeTasks[task.id]|default(null) %} open {% endif %} {% if loop.index == canFreeTasks|length %} mb5 {% endif %}">
+                    <input type="checkbox" class="mr10" name="freeTaskIds[]" value="{{ task.id }}" {% if freeTasks[task.id]|default(null) %} checked {% endif %}>
+                    {% set meta = activity_meta(task.type) %}
+                    <i class="{{ meta.icon }} color-gray" data-toggle="tooltip" data-placement="top" title="" data-container="body" data-original-title="{{ meta.name }}任务"></i>
+                    <span class="inline-block vertical-middle text-overflow title">任务{{ loop.index }}：{{ task.title }}
+                    </span>
+                    <span class="label label-warning pull-right price">免费</span>
+                  </li>
+                {% endfor %}
+              </ul>
+              <div class="help-block ">免费任务仅支持图文、视频、音频、flash、文档、PPT
               </div>
             </div>
-          {% endif %}
-          {% if courseSet.type | default('normal') != 'live' %}
-            <div class="form-group">
-              <label class="col-sm-2 control-label">
-                {{'视频试看'|trans}}
-                <a class="es-icon es-icon-help text-normal link-gray" data-container="body" 
-                  data-toggle="popover" 
-                  data-trigger="hover" 
-                  data-placement="top" 
-                  data-content="{{'常用于收费视频内容的前几分钟免费试看'|trans}}">
-                </a>
-              </label>
-              <div class="col-sm-8 radios">
-                {{ radios('tryLookable', { '1': '是'|trans, '0': '否'|trans }, course.tryLookable|default(0)) }}
-              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">
+              {{'视频试看'|trans}}
+              <a class="es-icon es-icon-help text-normal link-gray" data-container="body" 
+                data-toggle="popover" 
+                data-trigger="hover" 
+                data-placement="top" 
+                data-content="{{'常用于收费视频内容的前几分钟免费试看'|trans}}">
+              </a>
+            </label>
+            <div class="col-sm-8 radios">
+              {{ radios('tryLookable', { '1': '是'|trans, '0': '否'|trans }, course.tryLookable|default(0)) }}
             </div>
-          {% endif %}
+          </div>
           <div class="form-group js-enable-try-look {% if course.tryLookable|default(0) == 0 %}hidden{% endif %}">
             <div class="col-sm-8 col-sm-offset-2">
-              试看
               <select class="form-control width-150 mh5" id="tryLookLength" name="tryLookLength">
                 {% for i in 1..10 %}
                   {% if course.tryLookLength | default(1) == i %}
@@ -201,7 +202,10 @@
             </div>
           </div>
         </div>
-        
+        <hr class="mb30  bg-border-color">
+        {% endif %}
+
+
         <div class="es-piece">
           <div class="piece-header">增值服务</div>
             <div class="form-group">
@@ -210,12 +214,12 @@
               {{ radios('showServices', {'1': '是'|trans,'0': '否'|trans}, course.showServices|default(1)) }}
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group js-services {% if course.showServices|default(1) == 0 %}hidden{% endif %}">
             <label class="col-sm-2 control-label">{{'承诺提供服务'|trans}}</label>
             <div class="col-sm-8 form-control-static">
               {% set serviceTags = services(course.services | default([])) %}
               {% for tag in serviceTags %}
-                <a class="label label-md js-service-item mr10 mb10 inline-block {% if tag.active %}label-primary{% else %}label-default{% endif %}" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{tag.summary}}">{{ tag.full_name }}</a>
+                <a class="label label-md js-service-item mr10 mb10 inline-block {% if tag.active %}label-primary{% else %}label-default{% endif %}" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{tag.summary}}" data-code="{{tag.code}}">{{ tag.full_name }}</a>
               {% endfor %}
               <input type="hidden" id="course_services" name="services" value="{{course.services|default([])|json_encode_utf8()}}">
             </div>
@@ -228,6 +232,9 @@
         </div>
         
       </form>
+      {% else %}
+        <div class="alert alert-danger">{{ '抱歉，您无权管理课程营销，如有需要请联系网站管理员！'|trans }}</div>
+      {% endif %}
     </div>
   </div>
 {% endblock %}
