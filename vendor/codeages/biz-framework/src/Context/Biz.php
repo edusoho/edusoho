@@ -73,6 +73,10 @@ class Biz extends Container
             return new CacheStrategy\MemoryCacheStrategy();
         };
 
+        $this['dao.cache.second.strategy.default'] = function($biz) {
+            return $biz['dao.cache.second.strategy.table'];
+        };
+
         $this['dao.cache.second.strategy.table'] = function ($biz) {
             return new CacheStrategy\TableCacheStrategy($biz['redis'], $biz['logger']);
         };

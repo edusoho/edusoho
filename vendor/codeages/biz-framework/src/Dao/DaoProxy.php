@@ -251,10 +251,10 @@ class DaoProxy
 
         if ($secondEnabled) {
             $declares = $this->dao->declares();
-            if (empty($declares['cache'])) {
+            if (isset($declares['cache']) && $declares['cache'] === false) {
                 $secondEnabled = false;
             } else {
-                $secondStrategy = $this->container['dao.cache.second.strategy.'.$declares['cache']];
+                $secondStrategy = $this->container['dao.cache.second.strategy.'.(empty($declares['cache']) ? 'default' : $declares['cache'])];
             }
         }
 
