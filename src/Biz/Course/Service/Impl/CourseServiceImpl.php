@@ -1663,7 +1663,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function buildCourseExpiryDataFromClassroom($expiryMode, $expiryValue)
     {
         $fields = array();
-        if ($expiryMode === 'none') {
+        if ($expiryMode === 'forever') {
             $fields = array(
                 'expiryMode' => 'forever',
                 'expiryDays' => 0,

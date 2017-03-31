@@ -869,8 +869,10 @@ class ClassroomManageController extends BaseController
 
             $class['tagIds'] = $this->getTagIdsFromRequest($request);
 
-            if ($class['expiryMode'] == 'date') {
+            if ($class['expiryMode'] === 'date') {
                 $class['expiryValue'] = strtotime($class['expiryValue'].' 23:59:59');
+            } elseif ($class['expiryMode'] === 'forever') {
+                $class['expiryValue'] = 0;
             }
 
             $classroom = $this->getClassroomService()->updateClassroom($id, $class);

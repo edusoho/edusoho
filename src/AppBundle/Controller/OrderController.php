@@ -97,14 +97,6 @@ class OrderController extends BaseController
             return $this->createMessageResponse('error', '用户未登录，创建订单失败。');
         }
 
-        if (isset($fields['coinPayAmount']) && !$this->canUseCoinPay($fields['coinPayAmount'], $user['id'])) {
-            return $this->createMessageResponse('error', '当前使用的账户金额大于账户余额。');
-        }
-
-        if (!array_key_exists('targetId', $fields) || !array_key_exists('targetType', $fields)) {
-            return $this->createMessageResponse('error', '订单中没有购买的内容，不能创建!');
-        }
-
         $targetType = $fields['targetType'];
         $targetId = $fields['targetId'];
 
@@ -162,13 +154,6 @@ class OrderController extends BaseController
 
             return $this->createJsonResponse($couponInfo);
         }
-    }
-
-    protected function canUseCoinPay($coinPayAmount, $userId)
-    {
-        $cashAccount = $this->getCashAccountService()->getAccountByUserId($userId, true);
-
-        return !($coinPayAmount > $cashAccount['cash']);
     }
 
     protected function completeInfo($couponInfo, $code, $type)
@@ -302,14 +287,6 @@ class OrderController extends BaseController
     private function getClassroomService()
     {
         return $this->getBiz()->service('Classroom:ClassroomService');
-    }
-
-    /**
-     * @return CashAccountService
-     */
-    protected function getCashAccountService()
-    {
-        return $this->createService('Cash:CashAccountService');
     }
 
     protected function getOrderFacadeService()
