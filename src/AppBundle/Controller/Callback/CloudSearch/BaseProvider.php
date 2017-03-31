@@ -3,20 +3,10 @@
 namespace AppBundle\Controller\Callback\CloudSearch;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Codeages\Biz\Framework\Context\BizAware;
 
-abstract class BaseResource
+abstract class BaseProvider extends BizAware
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
-
     public function get(Request $request)
     {
         return array();
@@ -168,7 +158,7 @@ abstract class BaseResource
 
     protected function callFilter($name, $res)
     {
-        return $this->container->get('callback.processor_factory')->create('cloud_search')->getProvider($name)->filter($res);
+        return $this->biz['callback.cloud_search_processor']->getProvider($name)->filter($res);
     }
 
     protected function multicallFilter($name, array $res)
@@ -187,7 +177,7 @@ abstract class BaseResource
 
     protected function callSimplify($name, $res)
     {
-        return $this->container->get('callback.processor_factory')->create('cloud_search')->getProvider($name)->simplify($res);
+        return $this->biz['callback.cloud_search_processor']->getProvider($name)->simplify($res);
     }
 
     protected function multicallSimplify($name, array $res)
@@ -201,7 +191,7 @@ abstract class BaseResource
 
     protected function callBuild($name, array $res)
     {
-        return $this->container->get('callback.processor_factory')->create('cloud_search')->getProvider($name)->build($res);
+        return $this->biz['callback.cloud_search_processor']->getProvider($name)->build($res);
     }
 
     protected function singlecallBuild($name, $res)
@@ -257,11 +247,6 @@ abstract class BaseResource
         return $schema."://{$_SERVER['HTTP_HOST']}";
     }
 
-    protected function generateUrl($route, $parameters = array())
-    {
-        return $this->container->get('router')->generate($route, $parameters);
-    }
-
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
@@ -269,7 +254,7 @@ abstract class BaseResource
 
     public function getBiz()
     {
-        return $this->container->get('biz');
+        return $this->biz;
     }
 
     protected function getCurrentUser()

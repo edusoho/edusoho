@@ -60,19 +60,25 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             }
 
             $processor = OrderProcessorFactory::create($targetType);
-            list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
+            list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount(
+                $targetId,
+                $priceType,
+                $cashRate,
+                $coinEnabled,
+                $fields
+            );
 
-            $amount = (string) ((float) $amount);
-            $shouldPayMoney = (string) ((float) $fields['shouldPayMoney']);
+            $amount = (string)((float)$amount);
+            $shouldPayMoney = (string)((float)$fields['shouldPayMoney']);
             //价格比较
 
-            if ((int) ($totalPrice * 100) !== (int) ($fields['totalPrice'] * 100)) {
+            if ((int)($totalPrice * 100) !== (int)($fields['totalPrice'] * 100)) {
                 throw $this->createServiceException('实际价格不匹配，不能创建订单!');
             }
 
             //价格比较
 
-            if ((int) ($amount * 100) !== (int) ($shouldPayMoney * 100)) {
+            if ((int)($amount * 100) !== (int)($shouldPayMoney * 100)) {
                 throw $this->createServiceException('支付价格不匹配，不能创建订单!');
             }
 
@@ -82,7 +88,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             $maxRate = $coinSetting['cash_model'] == 'deduction' && isset($target['maxRate']) ? $target['maxRate'] : 100;
             $priceCoin = $priceType == 'RMB' ? NumberToolkit::roundUp($totalPrice * $cashRate) : $totalPrice;
 
-            if ($coinEnabled && isset($fields['coinPayAmount']) && ((int) ((float) $fields['coinPayAmount'] * $maxRate) > (int) ($priceCoin * $maxRate))) {
+            if ($coinEnabled && isset($fields['coinPayAmount']) && ((int)((float)$fields['coinPayAmount'] * $maxRate) > (int)($priceCoin * $maxRate))) {
                 throw $this->createServiceException('虚拟币抵扣超出限定，不能创建订单!');
             }
 

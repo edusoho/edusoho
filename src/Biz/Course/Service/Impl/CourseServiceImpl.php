@@ -169,11 +169,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
     }
 
-    public function copyCourse($fields)
+    public function copyCourse($newCourse)
     {
-        $course = $this->tryManageCourse($fields['copyCourseId']);
-        $fields = ArrayToolkit::parts(
-            $fields,
+        $sourceCourse = $this->tryManageCourse($newCourse['copyCourseId']);
+        $newCourse = ArrayToolkit::parts(
+            $newCourse,
             array(
                 'title',
                 'courseSetId',
@@ -186,11 +186,11 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
-        $fields = $this->validateExpiryMode($fields);
+        $newCourse = $this->validateExpiryMode($newCourse);
 
         $entityCopy = new CourseCopy($this->biz);
 
-        return $entityCopy->copy($course, $fields);
+        return $entityCopy->copy($sourceCourse, $newCourse);
     }
 
     public function updateCourse($id, $fields)
@@ -491,8 +491,8 @@ class CourseServiceImpl extends BaseService implements CourseService
                 );
             }
         } elseif ($course['expiryMode'] == 'forever') {
-            $course['expiryStartDate'] = null;
-            $course['expiryEndDate'] = null;
+            $course['expiryStartDate'] = 0;
+            $course['expiryEndDate'] = 0;
             $course['expiryDays'] = 0;
         } else {
             throw $this->createInvalidArgumentException('Param Invalid: expiryMode');

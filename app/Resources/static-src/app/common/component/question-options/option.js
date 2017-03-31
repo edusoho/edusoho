@@ -22,6 +22,7 @@ export default class Options extends Component {
   }
 
   onChangeChecked(event) {
+    this.updateInputValue(this.editor.getData()); //fix ie 11,check befor blur;
     this.props.changeOptionChecked(event.currentTarget.attributes["data-option-id"].value,this.props.datas.checked);
   }
 
@@ -38,6 +39,13 @@ export default class Options extends Component {
         //setData两个问题：1、引发事件失效 2、死循环触发；
       }); 
       this.editor.on('change',function(){
+        console.log('change'+self.editor.getData());
+        setTimeout(function(){
+          self.updateInputValue(self.editor.getData());
+        },100)
+      });
+      this.editor.on('blur', () => { //fix ie 11 中文输入
+        console.log('blur'+ self.editor.getData());
         setTimeout(function(){
           self.updateInputValue(self.editor.getData());
         },100)
@@ -49,6 +57,7 @@ export default class Options extends Component {
 
   updateInputValue(inputValue) {
     console.log(inputValue);
+
     this.editorHtml = inputValue;
     this.props.updateInputValue(this.props.datas.optionId,inputValue);
   }

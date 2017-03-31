@@ -190,7 +190,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
             if ($item['questionType'] != 'material') {
                 ++$seq;
             }
-
+            $item['type'] = 'testpaper';
             $testpaperItems[] = $this->getTestpaperService()->createItem($item);
         }
 
