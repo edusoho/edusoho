@@ -135,7 +135,7 @@ class ChaosThreads extends BaseResource
     }
 
     /**
-     * @return Biz\Thread\Service\ThreadService
+     * @return \Biz\Thread\Service\ThreadService
      */
     protected function getThreadService()
     {
@@ -143,7 +143,7 @@ class ChaosThreads extends BaseResource
     }
 
     /**
-     * @return Biz\Course\Service\ThreadService
+     * @return \Biz\Course\Service\ThreadService
      */
     protected function getCourseThreadService()
     {
@@ -151,7 +151,7 @@ class ChaosThreads extends BaseResource
     }
 
     /**
-     * @return Biz\Group\Service\ThreadService
+     * @return \Biz\Group\Service\ThreadService
      */
     protected function getGroupThreadService()
     {
