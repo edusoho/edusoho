@@ -149,8 +149,8 @@ class PayCenterController extends BaseController
         if (!isset($fields['payment'])) {
             return $this->createMessageResponse('error', '支付方式未开启，请先开启');
         }
-
-        $order = OrderProcessorFactory::create($fields['targetType'])->updateOrder($fields['orderId'], array('payment' => $fields['payment']));
+        $token = $this->makeWxpayToken();
+        $order = OrderProcessorFactory::create($fields['targetType'])->updateOrder($fields['orderId'], array('payment' => $fields['payment'],'token' => $token['token']));
 
         if ($user['id'] != $order['userId']) {
             return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
@@ -242,6 +242,7 @@ class PayCenterController extends BaseController
         $params         = $formRequest['params'];
 
         if ($payment == 'wxpay') {
+            $order = $this->generateWxpayOrderToken($order);
             $returnArray = $paymentRequest->unifiedOrder();
 
             if ($returnArray['return_code'] == 'SUCCESS') {
@@ -437,6 +438,7 @@ class PayCenterController extends BaseController
 
     public function wxpayRollAction(Request $request)
     {
+
         $order = $request->query->get('order');
 
         if ($order['status'] == 'paid') {
@@ -455,10 +457,10 @@ class PayCenterController extends BaseController
                 $payData['payment']  = 'wxpay';
                 $payData['amount']   = $order['amount'];
                 $payData['paidTime'] = time();
-                $payData['sn']       = $returnArray['out_trade_no'];
+                $order = $this->getOrderService()->getOrderByToken($returnArray['out_trade_no']);
+                $payData['sn']       = $order['sn'];
 
                 list($success, $order) = OrderProcessorFactory::create($order['targetType'])->pay($payData);
-
                 if ($success) {
                     return $this->createJsonResponse(true);
                 }
@@ -502,12 +504,35 @@ class PayCenterController extends BaseController
         return $request->setParams(array('authBank' => $params['authBank'], 'mobile' => $params['mobile']));
     }
 
+    private function makeWxpayToken()
+    {
+        $token = $this->getTokenService()->makeToken('wxpay', array(
+            'duration' => time()+ 60*60*24
+        ));
+        return $token;
+    }
+
+    public function generateWxpayOrderToken($order)
+    {
+        $token = $this->getTokenService()->makeToken('wxpay', array(
+            'duration' => time()+ 60*60*24
+        ));
+        
+        $processor = OrderProcessorFactory::create($order['targetType']);
+
+
+        return $processor->updateOrder($order['id'], array('token' => $token['token']));
+    
+    }
+
     public function generateOrderToken($order, $params)
     {
+
         $processor = OrderProcessorFactory::create($order['targetType']);
 
         return $processor->updateOrder($order['id'], array('token' => $params['agent_bill_id']));
     }
+
 
     public function verification($fields)
     {
@@ -662,5 +687,10 @@ class PayCenterController extends BaseController
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
     }
 }

@@ -8,22 +8,6 @@ use Symfony\Component\DependencyInjection\SimpleXMLElement;
 class WxpayRequest extends Request
 {
 
-    public function __construct(array $options = null)
-    {
-        $token = $this->createWxpayToken();
-        $options['token'] = $token['token'];
-
-        parent::__construct($options);
-    }
-
-    private function createWxpayToken()
-    {
-        $token = $this->getTokenService()->makeToken('wxpay', array(
-            'duration' => time()+ 60*60*24
-        ));
-        return $token;
-
-    }
 
     protected $unifiedOrderUrl = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
     protected $orderQueryUrl   = 'https://api.mch.weixin.qq.com/pay/orderquery';
@@ -52,12 +36,13 @@ class WxpayRequest extends Request
     public function orderQuery()
     {
         $params                    = $this->params;
+        $order = $this->getOrderService()->getOrderBySn($params['orderSn']);
         $converted                 = array();
         $converted['appid']        = $this->options['appid'];
         $settings                  = $this->getSettingService()->get('payment');
         $converted['mch_id']       = $settings["wxpay_account"];
         $converted['nonce_str']    = $this->getNonceStr();
-        $converted['out_trade_no'] = $params['orderSn'];
+        $converted['out_trade_no'] = $order['token'];
         $converted['sign']         = $this->signParams($converted);
 
         $xml      = $this->toXml($converted);
@@ -116,7 +101,7 @@ class WxpayRequest extends Request
     protected function convertParams($params, $openid = null)
     {
         $converted = array();
-
+        $order = $this->getOrderService()->getOrderBySn($params['orderSn']);           
         $converted['openid']           = $openid;
         $converted['appid']            = $this->options['appid'];
         $converted['attach']           = '支付';
@@ -124,7 +109,7 @@ class WxpayRequest extends Request
         $converted['mch_id']           = $this->options['account'];
         $converted['nonce_str']        = $this->getNonceStr();
         $converted['notify_url']       = $params['notifyUrl'];
-        $converted['out_trade_no']     = $this->options['token'];
+        $converted['out_trade_no']     = $order['token'];
         $converted['spbill_create_ip'] = $this->getClientIp();
         $converted['total_fee']        = $this->getAmount($params['amount']);
         $converted['trade_type']       = $this->options['isMicroMessenger'] ? 'JSAPI' : 'NATIVE';
@@ -261,6 +246,11 @@ class WxpayRequest extends Request
     protected function getTokenService()
     {
         return $this->getServiceKernel()->createService('User.TokenService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
     }
 
     protected function getSettingService()
