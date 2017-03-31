@@ -39,7 +39,7 @@
     <div class="course-metas">
       <span class="teachers">
          {{'主讲:'|trans}}
-        {% for teacher in courseSet.teachers %}
+        {% for teacher in courseSet.teachers|default(null) %}
          {% if loop.index <= 1 %}
           {{ web_macro.user_link(teacher, 'text-muted') }}
          {% endif %}
