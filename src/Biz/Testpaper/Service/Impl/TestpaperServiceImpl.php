@@ -129,6 +129,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'parentId',
             'score',
             'missScore',
+            'type',
         ));
 
         return $this->getItemDao()->create($fields);
@@ -156,7 +157,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function findItemsByTestId($testpaperId)
     {
-        $items = $this->getItemDao()->findItemsByTestId($testpaperId);
+        $testpaper = $this->getTestpaper($testpaperId);
+        $items = $this->getItemDao()->findItemsByTestId($testpaperId, $testpaper['type']);
 
         return ArrayToolkit::index($items, 'questionId');
     }
@@ -229,7 +231,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function findItemResultsByResultId($resultId)
     {
-        return $this->getItemResultDao()->findItemResultsByResultId($resultId);
+        $result = $this->getTestpaperResult($resultId);
+        return $this->getItemResultDao()->findItemResultsByResultId($resultId, $result['type']);
     }
 
     /**
@@ -533,6 +536,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                     $fields['userId'] = $user['id'];
                     $fields['questionId'] = $questionId;
                     $fields['answer'] = $answer;
+                    $fields['type'] = $testpaperResult['type'];
 
                     $this->createItemResult($fields);
                 }
