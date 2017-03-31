@@ -1131,13 +1131,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $attachments;
     }
 
-    public function searchCourseLiveCloudFiles($conditions, $orderBy, $start, $limit)
-    {
-        $sourceCourseFiles = $this->getUploadFileDao()->search($conditions, $orderBy, $start, $limit);
-        $cloudFiles = $this->buildNeedCloudFileFields($sourceCourseFiles);
-        return $cloudFiles;
-    }
-
     public function getUseFile($id)
     {
         $attachment = $this->getFileUsedDao()->get($id);
@@ -1214,26 +1207,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 unset($attachments[$key]);
             }
         }
-    }
-
-    protected function buildNeedCloudFileFields($sourceCourseFiles)
-    {
-        $cloudFiles = array();
-        $filter = array( 'type' => '', 'status' => '', 'globalId' => 0, 'filename' => '');
-
-        foreach ($sourceCourseFiles as $sourceCourseFile) {
-            $cloudFile = ArrayToolkit::filter($filter, $sourceCourseFile);
-
-            $cloudFile['mediaId'] = $cloudFile['globalId'];
-            unset($cloudFile['globalId']);
-
-            $cloudFile['name'] = $cloudFile['filename'];
-            unset($cloudFile['filename']);
-
-            $cloudFiles['data'][] = $cloudFile;
-        }
-        $cloudFiles['total'] = count($sourceCourseFiles);
-        return $cloudFiles;
     }
 
     /**

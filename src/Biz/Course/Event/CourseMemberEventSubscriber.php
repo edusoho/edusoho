@@ -17,6 +17,8 @@ use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Topxia\Service\Common\ServiceKernel;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
@@ -24,14 +26,22 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         return array(
             'course.join' => 'onCourseJoin',
+            'course.join' => 'onLiveCourseJoin',
             'course.quit' => 'onMemberDelete',
+            'course.quit' => 'onLiveMemberDelete',
             'course.view' => 'onCourseView',
 
             'classroom.course.join' => 'onClassroomCourseJoin',
+            'classroom.course.join' => 'onClassroomLiveCourseJoin',
             'classroom.course.copy' => 'onClassroomCourseCopy',
+            'classroom.quit' => 'onClassroomLiveMemberDelete',
 
             'course.task.delete' => 'onTaskDelete',
             'course.task.finish' => 'onTaskFinish',
+            'course.teachers.update' => 'onLiveCourseTeachersJoin',
+
+            'course.teachers.create' =>'onCourseTeachersCreate',
+            'course.teachers.delete' =>'onCourseTeachersDelete',
         );
     }
 
@@ -52,6 +62,98 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $this->countIncome($event);
         $this->sendWelcomeMsg($event);
         $this->publishStatus($event, 'become_student');
+    }
+
+    public function onCourseTeachersCreate(Event $event)
+    {
+        $teacherIds = $event->getSubJect();
+        $course = $event->getArgument('course');
+        if ($course['type'] != 'live') {
+            return;
+        }
+        if (time() < $course['startTime'] || time() > $course['endTime']) {
+            return;
+        }
+
+        $teachers = $this->getCourseMember()->findMembersByUserIds($teacherIds);
+        $teachers = ArrayToolkit::index($teachers, 'userId');
+
+        $users = $this->getUserService()->findUsersByIds($teacherIds);
+        $users = ArrayToolkit::index($users, 'id');
+        foreach ($teachers as $userId => $teacher) {
+            $this->pushJoinLiveCourseMember($user[$userId], $teacher);
+        }
+
+    }
+
+    public function onCourseTeachersDelete(Event $event)
+    {
+        $teacherIds = $event->getSubJect();
+        foreach ($teacherIds as $teacherId) {
+            $this->pushDeleteLiveCourseMember($teacherId);
+        }
+    }
+
+    public function onLiveCourseJoin(Event $event)
+    {
+        $course = $event->getSubject();
+        $userId = $event->getArgument('userId');
+        $user = $this->getUserService()->getUser($userId);
+        $member = $event->getArgument('member');
+
+        if ($course['type'] != 'live') {
+            return;
+        }
+        if (time() < $course['startTime'] || time() > $course['endTime']) {
+            return;
+        }
+        $this->pushJoinLiveCourseMember($user, $member);
+    }
+
+    public function onClassroomLiveCourseJoin(Event $event)
+    {
+        $course = $event->getSubject();
+        $member = $event->getArgument('member');
+        $user = $this->getUserService()->getUser($member['userId']);
+        if ($course['type'] != 'live') {
+            return;
+        }
+        if (time() < $course['startTime'] || time() > $course['endTime']) {
+            return;
+        }
+        $this->pushJoinLiveCourseMember($user, $member);
+    }
+
+    protected function getAvatarFilePath($avatar)
+    {
+        if (empty($avatar)) {
+            return $_SERVER['HTTP_HOST'].'/assets/img/default/avatar.png';
+        }
+        return $_SERVER['HTTP_HOST'].'/files'.substr($avatar, 8);
+    }
+
+    protected function pushJoinLiveCourseMember($user, $member)
+    {
+        $result['clientName'] = $user['nickname'];
+        $result['clientId'] = $user['id'];
+        $result['avatar'] = $this->getAvatarFilePath($user['smallAvatar']);
+        $result['role'] = $member['role'];
+        try {
+            $api = CloudAPIFactory::create('leaf');
+            $result = $api->post('/v1/lives/room_members', array($result));
+        } catch (\RuntimeException $e) {
+            throw new \RuntimeException(ServiceKernel::instance()->trans('发送失败！'));
+        }
+    }
+
+    public function pushDeleteLiveCourseMember($userId)
+    {
+        try {
+            $api = CloudAPIFactory::create('leaf');
+            $result = $api->delete('/v1/lives/room_members', array('clientId' => $userId));
+        } catch (\RuntimeException $e) {
+            throw new \RuntimeException(ServiceKernel::instance()->trans('发送失败！'));
+        }
     }
 
     public function onClassroomCourseJoin(Event $event)
@@ -148,6 +250,18 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             $this->getCourseService()->updateCourseStatistics($course['id'], array('studentNum'));
             $this->getCourseSetService()->updateCourseSetStatistics($course['courseSetId'], array('studentNum'));
         }
+    }
+
+    public function onLiveMemberDelete(Event $event)
+    {
+        $userId = $event->getArgument('userId');
+        $this->pushDeleteLiveCourseMember($userId);
+    }
+
+    public function onClassroomLiveMemberDelete(Event $event)
+    {
+        $userId = $event->getArgument('userId');
+        $this->pushDeleteLiveCourseMember($userId);
     }
 
     public function onTaskFinish(Event $event)

@@ -126,6 +126,4 @@ interface UploadFileService
     public function deleteUseFile($id);
 
     public function findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type);
-
-    public function searchCourseLiveCloudFiles($conditions, $orderBy, $start, $limit);
 }

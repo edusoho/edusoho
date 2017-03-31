@@ -1160,9 +1160,9 @@ edu_cloud_sms_send_callback:
     path:  /edu_cloud/sms/callback/{targetType}/{targetId}
     defaults: { _controller: AppBundle:EduCloud:smsCallBack }
 
-find_course_edu_cloud_files_callback:
-    path:  /edu_cloud/files/callback
-    defaults: { _controller: AppBundle:EduCloud:searchCallBack }
+edu_cloud_callback:
+    path:  /edu_cloud/callback
+    defaults: { _controller: AppBundle:EduCloud:callBack }
 
 edu_cloud_search_callback:
     path:  /course/{courseId}/edu_cloud/search/callback

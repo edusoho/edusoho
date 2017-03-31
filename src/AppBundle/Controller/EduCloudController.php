@@ -9,35 +9,35 @@ use Biz\System\Service\LogService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\System\Service\SettingService;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
+use Biz\File\FileProcessor\FileProcessorFactory;
+use Biz\Course\CourseProcessor\CourseProcessorFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class EduCloudController extends BaseController
 {
-    public function courseCloudFilesCallBackAction(Request $request, $courseId)
+    public function callBackAction(Request $request)
     {
-        $start = $request->query->get('start', 0);
-        $limit = $request->query->get('limit', 100);
-
-        $course = $this->getCourseService()->getCourse($courseId);
-        $conditions = array('targetId' => $course['courseSetId'], 'storage' => 'cloud');
-        $courseCloudFiles = $this->getUploadFileService()->searchCourseLiveCloudFiles(
-            $conditions,
-            array('createdTime' => 'DESC'),
-            $start,
-            $limit
-        );
-        return $this->createJsonResponse($courseCloudFiles);
+        $type = $request->query->get('type', '');
+        if ($type == 'cloudData') {
+            $result = $this->courseCloudFilesCallBack($request, $type);
+        }
+        if ($type == 'member') {
+            $result = $this->courseMemberCallBack($request, $type);
+        }
+        return $this->createJsonResponse($result);
     }
 
-    public function courseMemberCallBackAction(Request $request, $courseId)
+    protected function courseCloudFilesCallBack($request, $type)
     {
-        $start = $request->query->get('start', 0);
-        $limit = $request->query->get('limit', 100);
-        $course = $this->getCourseService()->getCourse($courseId);
-        $courseMember = $this->getCourseMemberService()->findCourseLiveMembersByCourseId($course['id']);
+        $processor = FileProcessorFactory::create($type);
+        return $processor->getCourseCloudFileInfo($request);
+    }
 
-        return $this->createJsonResponse($courseMember);
+    protected function courseMemberCallBack($request, $type)
+    {
+        $processor = CourseProcessorFactory::create($type);
+        return $processor->getCourseMemberInfo($request, $this->container);
     }
 
     public function smsSendAction(Request $request)
@@ -350,20 +350,5 @@ class EduCloudController extends BaseController
     protected function getSignEncoder()
     {
         return new MessageDigestPasswordEncoder('sha256');
-    }
-
-    protected function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
-    }
-
-    protected function getUploadFileService()
-    {
-        return $this->getBiz()->service('File:UploadFileService');
-    }
-
-    protected function getCourseMemberService()
-    {
-        return $this->createService('Course:MemberService');
     }
 }

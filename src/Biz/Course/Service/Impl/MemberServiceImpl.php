@@ -229,17 +229,9 @@ class MemberServiceImpl extends BaseService implements MemberService
         return ArrayToolkit::column($members, 'userId');
     }
 
-    public function findCourseLiveMembersByCourseId($courseId)
+    public function findMemberByCourseId($courseId)
     {
-        // var_dump($courseId);
-        $sourceCourseMembers = $this->getMemberDao()->findByCourseId($courseId);
-        var_dump($sourceCourseMembers);exit();
-        $userIds = ArrayToolkit::column($sourceCourseMembers, 'userId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        $result = $this->buildNeedCourseMemberFields($sourceCourseMembers, $users);
-
-        return $result;
+        return $this->getMemberDao()->findByCourseId($courseId);
     }
 
     public function updateMember($id, $fields)
@@ -400,6 +392,17 @@ class MemberServiceImpl extends BaseService implements MemberService
             if ($member['isVisible']) {
                 $visibleTeacherIds[] = $member['userId'];
             }
+        }
+        $existTeacherIds = ArrayToolkit::column($existTeacherMembers, 'userId');
+        $teacherIds = ArrayToolkit::column($teacherMembers, 'userId');
+        $newTeacherIds = array_diff($teacherIds, $existTeacherIds);
+        if ($newTeacherIds) {
+            $this->dispatchEvent('course.teachers.create', new Event($newTeacherIds, array('course' => $course)));
+        }
+
+        $deleteTeacherIds = array_diff($existTeacherIds, $teacherIds);
+        if ($deleteTeacherIds) {
+            $this->dispatchEvent('course.teachers.delete', new Event($deleteTeacherIds, array('course' => $course)));
         }
 
         $this->getLogService()->info('course', 'update_teacher', "更新教学计划#{$courseId}的教师", $teacherMembers);
@@ -910,22 +913,6 @@ class MemberServiceImpl extends BaseService implements MemberService
                 'deadline' => $deadline,
             )
         );
-    }
-
-    protected function buildNeedCourseMemberFields($sourceCourseMembers, $users)
-    {
-        $courseMembers = array();
-        $filter = array( 'nickname' => '', 'smallAvatar' => '', 'id' => 0, 'role' => '');
-        $sourceCourseMembers = ArrayToolkit::index($sourceCourseMembers, 'userId');
-        $users = ArrayToolkit::index($users, 'id');
-        foreach ($sourceCourseMembers as $userId => $sourceCourseMember) {
-            $courseMember['clientName'] = $users[$userId]['nickname'];
-            $courseMember['avatar'] = $_SERVER['SERVER_NAME'].$users[$userId]['smallAvatar'];
-            $countMember['clientId'] = $userId;
-            $courseMember['role'] = $sourceCourseMember['role'];
-            $courseMembers['data'][] = $courseMember;
-        }
-        return $courseMembers;
     }
 
     public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline)
