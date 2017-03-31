@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class TestpaperItemChangeField extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -18,28 +18,28 @@ class TestpaperItemChangeField extends Migration
 
         //以下仅供开发使用
         if ($this->isFieldExist('testpaper_item_v8', 'migrateType')) {
-            $biz['db']->exec("
+            $biz['db']->exec('
                 ALTER TABLE testpaper_item_v8 drop column migrateType;
-            ");
+            ');
 
-            $biz['db']->exec("
+            $biz['db']->exec('
                 UPDATE testpaper_item_v8 as ti, testpaper_v8 as t set ti.type = t.type where ti.testId =t.id;
-            ");
+            ');
         }
 
         if ($this->isFieldExist('testpaper_item_result_v8', 'migrateType')) {
-            $biz['db']->exec("
+            $biz['db']->exec('
                 ALTER TABLE testpaper_item_result_v8 drop column migrateType;
-            ");
+            ');
 
-            $biz['db']->exec("
+            $biz['db']->exec('
                 UPDATE testpaper_item_result_v8 as tr,testpaper_v8 as t set tr.type = t.type where tr.testId = t.id;
-            ");
+            ');
         }
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
