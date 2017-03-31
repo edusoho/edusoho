@@ -8,7 +8,7 @@ use ApiBundle\Api\Resource\User\UserFilter;
 class CourseSetMemberFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'courseId', 'userId', 'deadline', 'levelId', 'learnedNum', 'noteNum',
+        'id', 'courseId', 'user', 'deadline', 'levelId', 'learnedNum', 'noteNum',
         'noteLastUpdateTime', 'isLearned', 'finishedTime', 'role', 'locked', 'createdTime',
         'lastLearnTime', 'lastViewTime', 'courseSetId'
     );

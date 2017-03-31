@@ -12,7 +12,7 @@ class CourseFilter extends Filter
         'id', 'courseSetId', 'title', 'learnMode', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'summary',
         'goals', 'audiences', 'isDefault', 'maxStudentNum', 'status', 'creator', 'isFree', 'price', 'originPrice',
         'vipLevelId', 'buyable', 'tryLookable', 'tryLookLength', 'watchLimit', 'services', 'ratingNum', 'rating',
-        'taskNum', 'publishedTaskNum', 'studentNum', 'teacherIds', 'parentId', 'createdTime', 'updatedTime'
+        'taskNum', 'publishedTaskNum', 'studentNum', 'teachers', 'parentId', 'createdTime', 'updatedTime'
     );
 
     protected function customFilter(&$data)
