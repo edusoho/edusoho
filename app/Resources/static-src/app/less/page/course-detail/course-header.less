@@ -4,6 +4,9 @@
   padding: 15px ;
   .course-detail-top {
     padding-right: 130px;
+    @media(max-width:@screen-sm-max) {
+      padding-right: 0;
+    }
     .course-detail-heading {
       vertical-align: top;
       display: inline-block;
@@ -16,6 +19,9 @@
     .subtitle {
       padding-top: 5px;
       max-width: 50%;
+      @media(max-width:@screen-sm-max) {
+        max-width: 100%;
+      }
     }
     .tags {
       float: left;
@@ -197,29 +203,47 @@
     }
     .buy-btn-group  {
       @media(max-width:@screen-sm-max) {
-        .btn-lg{
-          padding: 5px 10px;
-        }
         line-height: 30px;
         position:absolute;
-        right: 15px;
+        right: 10px;
         bottom: 18px;
+      }
+      @media(max-width:329px) {
+         bottom: 24px;
+      }
+      .btn-lg {
+        padding: 10px 35px;
+        @media(max-width:500px) and (min-width:400px){
+          padding: 10px 20px;
+        }
+        @media(max-width:399px) and (min-width:330px){
+           padding: 10px 13px;
+        }
+        @media(max-width:329px) {
+          padding: 5px 10px;
+        }
       }
     }
     .course-operation-responsive {
       background-color: @bg-color;
-      padding: 18px 10px;
+      padding: 22px 10px 22px 0;
       margin: -15px;
       ul {
         margin: 0;
         padding: 0;
         >li {
-          width: 50%;
           float: left;
+          width: 60px;
           list-style-type: none;
           text-align: center;
           color: @gray;
           font-size: 12px;
+          @media(max-width:399px) and (min-width:330px){
+            width: 50px;
+          }
+          @media(max-width:329px) {
+            width: 45px;
+          }
           &:last-child {
             border-left: 1px solid @gray-light;
           }
@@ -233,9 +257,6 @@
             color: @gray;
           }
         }
-      }
-      .btn-lg {
-        padding: 6px 12px;
       }
       .es-share.top .dropdown-menu {
         left: 50%;
