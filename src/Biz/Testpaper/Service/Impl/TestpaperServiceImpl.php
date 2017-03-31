@@ -470,9 +470,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             }
 
             if (!empty($userAnswer['answer'])) {
-                $userAnswer = str_replace('""', '', $userAnswer['answer'][0]);
+                $answerFilter = str_replace('""', '', $userAnswer['answer'][0]);
 
-                if (!empty($userAnswer)) {
+                if (!empty($answerFilter)) {
                     if ($paperResult['type'] == 'homework') {
                         $checkedFields['status'] = 'right';
                     } else {
