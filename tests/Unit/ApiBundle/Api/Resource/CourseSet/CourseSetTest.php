@@ -11,25 +11,23 @@ class CourseSetTest extends ApiTestCase
     public function testGet()
     {
         $createdTime = time();
-        $fakeCourseSets = array(
-          array(
-              'id' => 1,
-              'title' => 'fakeCourseSet',
-              'fakeField' => 'blablabla...',
-              'creator' => $this->getCurrentUser()->id,
-              'createdTime' => $createdTime,
-              'recommendedTime' => $createdTime,
-              'updatedTime' => $createdTime
-          )
+        $fakeCourseSet = array(
+            'id' => 1,
+            'title' => 'fakeCourseSet',
+            'fakeField' => 'blablabla...',
+            'creator' => $this->getCurrentUser()->id,
+            'createdTime' => $createdTime,
+            'recommendedTime' => $createdTime,
+            'updatedTime' => $createdTime
         );
 
         $this->mockBiz('Course:CourseSetService',array(
-            array('functionName' => 'searchCourseSets', 'runTimes' => 1, 'returnValue' => $fakeCourseSets)
+            array('functionName' => 'getCourseSet', 'runTimes' => 1, 'returnValue' => $fakeCourseSet)
         ));
 
         $res = new CourseSet($this->getBiz());
         $resp = $res->get(Request::create(''), 1);
 
-        $this->assertEquals($fakeCourseSets[0], $resp);
+        $this->assertEquals($fakeCourseSet, $resp);
     }
 }

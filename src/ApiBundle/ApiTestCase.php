@@ -2,8 +2,9 @@
 
 namespace ApiBundle;
 
-use ApiBundle\Api\Util\UserAssociateUtil;
+use ApiBundle\Api\Util\ObjectCombinationUtil;
 use Biz\BaseTestCase;
+use Mockery;
 
 class ApiTestCase extends BaseTestCase
 {
@@ -16,12 +17,11 @@ class ApiTestCase extends BaseTestCase
     private function stubUserAssoc()
     {
         $biz = $this->getBiz();
-        $userAssocUtilStub = $this->createMock(UserAssociateUtil::class);
-        $userAssocUtilStub->method('single')
-            ->willReturn('do nothing');
-        $userAssocUtilStub->method('multiple')
-            ->willReturn('do nothing');
 
-        $biz['api.util.userAssoc'] =$userAssocUtilStub;
+        $stub = Mockery::mock(ObjectCombinationUtil::class);
+        $stub->shouldReceive('single');
+        $stub->shouldReceive('multiple');
+
+        $biz['api.util.oc'] = $stub;
     }
 }

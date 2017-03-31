@@ -56,7 +56,7 @@ class TokenTest extends ApiTestCase
             new PathParser(),
             new ResourceManager($this->getBiz())
         );
-        $kernel->handle(Request::create('http://test.com/tokens', 'POST', array('username' => 'admin@admin.com', 'password' => 'admin')));
+        $kernel->handle(Request::create('http://test.com/tokens', 'POST', array('username' => 'admin@admin.com', 'password' => 'zpeh2fmD8mhGqcdP')));
     }
 
     public function testAddWithSuccess()
@@ -65,7 +65,7 @@ class TokenTest extends ApiTestCase
             new PathParser(),
             new ResourceManager($this->getBiz())
         );
-        $token = $kernel->handle(Request::create('http://test.com/tokens', 'POST', array('username' => 'admin@admin.com', 'password' => 'admin')));
+        $token = $kernel->handle(Request::create('http://test.com/tokens', 'POST', array('username' => 'admin@admin.com', 'password' => 'zpeh2fmD8mhGqcdP')));
         $this->assertArrayHasKey('token', $token);
         $user = $this->getCurrentUser();
         $this->assertEquals($user['id'], $token['userId']);
