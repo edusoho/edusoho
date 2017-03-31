@@ -37,13 +37,14 @@ class Lesson2TestpaperActivityMigrate extends AbstractMigrate
 
     private function updateTestpaperActivity()
     {
-        $sql = "UPDATE activity_testpaper AS ta,(SELECT id,limitedTime,migrateTestId FROM testpaper_v8) AS tmp SET ta.mediaId = tmp.id, ta.limitedTime = tmp.limitedTime WHERE tmp.migrateTestId = ta.mediaId";
+        $sql = "UPDATE activity_testpaper AS ta, testpaper_v8 tmp
+        SET ta.mediaId = tmp.id, ta.limitedTime = tmp.limitedTime WHERE tmp.migrateTestId = ta.mediaId";
 
         $this->getConnection()->exec($sql);
 
-        $this->getConnection()->exec("
-            UPDATE  `activity` AS ay ,`activity_testpaper` AS ty SET ay.`mediaId` = ty.id WHERE ay.id = ty.migrateLessonId   AND ay.`mediaType` = 'testpaper';
-        ");
+        $sql = "UPDATE  `activity` AS ay ,`activity_testpaper` AS ty SET ay.`mediaId` = ty.id WHERE ay.migrateLessonId = ty.migrateLessonId   AND ay.`mediaType` = 'testpaper'";
+var_dump($sql);
+        $this->getConnection()->exec($sql);
     }
 
     private function insertTestpaperActivity($page)
@@ -62,7 +63,8 @@ class Lesson2TestpaperActivityMigrate extends AbstractMigrate
             finishCondition,
             requireCredit,
             doTimes,
-            redoInterval
+            redoInterval,
+            migrateLessonId
         )SELECT
             cl.id,
             cl.mediaId,
@@ -70,7 +72,8 @@ class Lesson2TestpaperActivityMigrate extends AbstractMigrate
             '{\"type\":\"submit\",\"finishScore\":\"0\"}',
             cl.requireCredit,
             case when cle.doTimes is null then 0 else cle.doTimes end as doTimes,
-            case when cle.redoInterval is null then 0 else cle.redoInterval end as redoInterval
+            case when cle.redoInterval is null then 0 else cle.redoInterval end as redoInterval,
+            cl.id
             FROM course_lesson AS cl
             LEFT JOIN
             course_lesson_extend AS cle
