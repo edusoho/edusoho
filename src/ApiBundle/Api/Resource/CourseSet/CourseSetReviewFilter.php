@@ -19,6 +19,6 @@ class CourseSetReviewFilter extends Filter
         $userFilter = new UserFilter();
         $userFilter->filter($data['user']);
 
-        $data['course'] = ArrayToolkit::parts($data['course'], array('title'));
+        $data['course'] = ArrayToolkit::parts($data['course'], array('title', 'id'));
     }
 }
