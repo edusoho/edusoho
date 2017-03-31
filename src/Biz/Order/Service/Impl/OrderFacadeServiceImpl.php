@@ -7,6 +7,7 @@ use Biz\BaseService;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
 use Biz\Order\Service\OrderFacadeService;
 use AppBundle\Common\JoinPointToolkit;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 {
@@ -45,6 +46,16 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     public function createOrder($targetType, $targetId, $fields)
     {
         try {
+
+            if (!array_key_exists('targetId', $fields) || !array_key_exists('targetType', $fields)) {
+                throw $this->createServiceException('参数不正确');
+            }
+
+            if (isset($fields['coinPayAmount'])
+                && !$this->canUseCoinPay($fields['coinPayAmount'], $this->getCurrentUser()->getId())) {
+                throw new ServiceException('当前使用的账户金额大于账户余额', 2001);
+            }
+
             $priceType = 'RMB';
             $coinSetting = $this->getSettingService()->get('coin');
             $coinEnabled = isset($coinSetting['coin_enabled']) && $coinSetting['coin_enabled'];
@@ -60,32 +71,17 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             }
 
             $processor = OrderProcessorFactory::create($targetType);
-            list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount(
-                $targetId,
-                $priceType,
-                $cashRate,
-                $coinEnabled,
-                $fields
-            );
+            list($amount, $totalPrice, $couponResult) =
+                $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
 
             $amount = (string) ((float) $amount);
-            $shouldPayMoney = (string) ((float) $fields['shouldPayMoney']);
-            //价格比较
-
-            if ((int) ($totalPrice * 100) !== (int) ($fields['totalPrice'] * 100)) {
-                throw $this->createServiceException('实际价格不匹配，不能创建订单!');
-            }
-
-            //价格比较
-
-            if ((int) ($amount * 100) !== (int) ($shouldPayMoney * 100)) {
-                throw $this->createServiceException('支付价格不匹配，不能创建订单!');
-            }
 
             //虚拟币抵扣率比较
             $target = $processor->getTarget($targetId);
 
-            $maxRate = $coinSetting['cash_model'] == 'deduction' && isset($target['maxRate']) ? $target['maxRate'] : 100;
+            $maxRate = $coinSetting['cash_model']
+                == 'deduction' && isset($target['maxRate']) ? $target['maxRate'] : 100;
+
             $priceCoin = $priceType == 'RMB' ? NumberToolkit::roundUp($totalPrice * $cashRate) : $totalPrice;
 
             if ($coinEnabled && isset($fields['coinPayAmount']) && ((int) ((float) $fields['coinPayAmount'] * $maxRate) > (int) ($priceCoin * $maxRate))) {
@@ -113,9 +109,22 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             $order = $processor->createOrder($orderFileds, $fields);
 
             return array($order, $processor);
+
         } catch (\Exception $e) {
             throw $this->createServiceException($e->getMessage());
         }
+    }
+
+    private function canUseCoinPay($coinPayAmount, $userId)
+    {
+        $cashAccount = $this->getCashAccountService()->getAccountByUserId($userId, true);
+
+        return !($coinPayAmount > $cashAccount['cash']);
+    }
+
+    private function getCashAccountService()
+    {
+        return $this->createService('Cash:CashAccountService');
     }
 
     private function getSettingService()
