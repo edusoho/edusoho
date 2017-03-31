@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller\Callback\CloudSearch\Resource;
 
-use AppBundle\Controller\Callback\CloudSearch\BaseResource;
+use AppBundle\Controller\Callback\CloudSearch\BaseProvider;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
 
-class Articles extends BaseResource
+class Articles extends BaseProvider
 {
     public function get(Request $request)
     {

@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Callback;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Controller\BaseController;
 
 class EndpointController extends BaseController
@@ -14,6 +13,6 @@ class EndpointController extends BaseController
         $biz = $this->getBiz();
         $processerInstance = $biz[$callbacks[$type]];
 
-        return new JsonResponse($processerInstance->execute($request));
+        return $processerInstance->execute($request);
     }
 }

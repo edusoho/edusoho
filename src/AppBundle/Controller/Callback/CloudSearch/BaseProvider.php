@@ -2,21 +2,11 @@
 
 namespace AppBundle\Controller\Callback\CloudSearch;
 
-use Pimple\Container;
 use Symfony\Component\HttpFoundation\Request;
+use Codeages\Biz\Framework\Context\BizAware;
 
-abstract class BaseResource
+abstract class BaseProvider extends BizAware
 {
-    /**
-     * @var Container
-     */
-    protected $container;
-
-    public function setContainer(Container $container = null)
-    {
-        $this->container = $container;
-    }
-
     public function get(Request $request)
     {
         return array();
@@ -168,7 +158,7 @@ abstract class BaseResource
 
     protected function callFilter($name, $res)
     {
-        return $this->container['callback.cloud_search_processor']->getProvider($name)->filter($res);
+        return $this->biz['callback.cloud_search_processor']->getProvider($name)->filter($res);
     }
 
     protected function multicallFilter($name, array $res)
@@ -187,7 +177,7 @@ abstract class BaseResource
 
     protected function callSimplify($name, $res)
     {
-        return $this->container['callback.cloud_search_processor']->getProvider($name)->simplify($res);
+        return $this->biz['callback.cloud_search_processor']->getProvider($name)->simplify($res);
     }
 
     protected function multicallSimplify($name, array $res)
@@ -201,7 +191,7 @@ abstract class BaseResource
 
     protected function callBuild($name, array $res)
     {
-        return $this->container['callback.cloud_search_processor']->getProvider($name)->build($res);
+        return $this->biz['callback.cloud_search_processor']->getProvider($name)->build($res);
     }
 
     protected function singlecallBuild($name, $res)
@@ -264,7 +254,7 @@ abstract class BaseResource
 
     public function getBiz()
     {
-        return $this->container;
+        return $this->biz;
     }
 
     protected function getCurrentUser()

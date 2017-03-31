@@ -3,11 +3,13 @@
 namespace AppBundle\Controller\Callback;
 
 use Symfony\Component\HttpFoundation\Request;
-use Pimple\Container;
 
 interface ProcessorInterface
 {
-    public function setContainer(Container $container = null);
-
+    /**
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function execute(Request $request);
 }

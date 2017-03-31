@@ -12,7 +12,7 @@ class CallbackExtension extends Extension implements ServiceProviderInterface
     {
         $container['callback.cloud_search_processor'] = function ($biz) {
             $instance = new CloudSearchProcessor();
-            $instance->setContainer($biz);
+            $instance->setBiz($biz);
 
             return $instance;
         };

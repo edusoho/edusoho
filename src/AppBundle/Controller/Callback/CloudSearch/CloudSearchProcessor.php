@@ -2,23 +2,14 @@
 
 namespace AppBundle\Controller\Callback\CloudSearch;
 
-use Pimple\Container;
+use Codeages\Biz\Framework\Context\BizAware;
 use AppBundle\Controller\Callback\ProcessorInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
-class CloudSearchProcessor implements ProcessorInterface
+class CloudSearchProcessor extends BizAware implements ProcessorInterface
 {
     private $pool = array();
-
-    /**
-     * @var Container
-     */
-    protected $container;
-
-    public function setContainer(Container $container = null)
-    {
-        $this->container = $container;
-    }
 
     public function getProviderClassMap($type)
     {
@@ -47,12 +38,17 @@ class CloudSearchProcessor implements ProcessorInterface
         return $classMap[$type];
     }
 
+    /**
+     * @param [type] $type
+     *
+     * @return \AppBundle\Controller\Callback\CloudSearch\BaseProvider
+     */
     public function getProvider($type)
     {
         if (empty($this->pool[$type])) {
             $class = $this->getProviderClassMap($type);
             $instance = new $class();
-            $instance->setContainer($this->container);
+            $instance->setBiz($this->biz);
             $this->pool[$type] = $instance;
         }
 
@@ -71,6 +67,6 @@ class CloudSearchProcessor implements ProcessorInterface
         $token = $request->headers->get('X-Auth-Token');
         $provider->checkToken($token);
 
-        return $provider->get($request);
+        return new JsonResponse($provider->get($request));
     }
 }
