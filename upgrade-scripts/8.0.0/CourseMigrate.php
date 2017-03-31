@@ -206,6 +206,7 @@ class CourseMigrate extends AbstractMigrate
               ,`enableFinish`
               ,`learnMode`
               ,`maxRate`
+              ,`showServices`
           ) SELECT
               `id`
               ,`id`
@@ -217,7 +218,7 @@ class CourseMigrate extends AbstractMigrate
               ,`originCoinPrice`
               ,`coinPrice`
               ,`originPrice`
-              ,`expiryMode`
+              , case when `expiryMode` = 'none' then 'forever' else `expiryMode` end
               ,`showStudentNumType`
               ,`serializeMode`
               ,`income`
@@ -259,6 +260,7 @@ class CourseMigrate extends AbstractMigrate
               ,1
               ,'freeMode'
               ,`maxRate`
+              ,0
           FROM `course` where `id` not in (select `id` from `course_v8`) order by id limit 0, {$this->perPageCount};";
         $result = $this->getConnection()->exec($sql);
         return $page+1;
