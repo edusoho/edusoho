@@ -12,10 +12,10 @@ class SecurityPolicy implements SecurityPolicyInterface
             'GET'  => array(
                 '/users/\d+',
                 '/course_sets/\d+',
-                '/courses/\d+',
+                '/course_sets/\d+/reviews',
                 '/course_sets/\d+/courses',
+                '/courses/\d+',
                 '/courses/\d+/tasks',
-                '/courses_sets/\d+/reviews',
                 '/courses/\d+/reviews',
             ),
             'POST' => array(
