@@ -45,8 +45,8 @@ class TestpaperMigrate extends AbstractMigrate
                   `score` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '分值',
                   `missScore` float(10,1) unsigned NOT NULL DEFAULT '0.0',
                   `copyId` int(10) NOT NULL DEFAULT '0' COMMENT '复制来源testpaper_item的id',
+                  `type` varchar(32) NOT NULL DEFAULT 'testpaper' COMMENT '测验类型',
                   `migrateItemId` int(11) unsigned NOT NULL DEFAULT '0',
-                  `migrateType` varchar(32) NOT NULL DEFAULT 'testpaper' COMMENT '测验类型',
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");

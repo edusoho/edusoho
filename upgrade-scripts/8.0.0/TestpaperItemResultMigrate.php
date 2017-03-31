@@ -18,8 +18,8 @@ class TestpaperItemResultMigrate extends AbstractMigrate
                   `answer` text,
                   `teacherSay` text,
                   `pId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '复制试卷题目Id',
+                  `type` varchar(32) NOT NULL DEFAULT 'testpaper' COMMENT '测验类型',
                   `migrateItemResultId` int(11) unsigned NOT NULL DEFAULT '0',
-                  `migrateType` varchar(32) NOT NULL DEFAULT 'testpaper' COMMENT '测验类型',
                   PRIMARY KEY (`id`),
                   KEY `testPaperResultId` (`resultId`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -65,7 +65,7 @@ class TestpaperItemResultMigrate extends AbstractMigrate
             teacherSay,
             pId,
             migrateItemResultId,
-            migrateType
+            type
         ) SELECT
             id,
             itemId,
@@ -80,9 +80,9 @@ class TestpaperItemResultMigrate extends AbstractMigrate
             pId,
             id,
             'testpaper'
-            FROM testpaper_item_result WHERE id NOT IN (SELECT id FROM testpaper_item_result_v8) order by id limit 0, {$this->perPageCount};";
+            FROM testpaper_item_result WHERE id NOT IN (SELECT id FROM testpaper_item_result_v8 WHERE type = 'testpaper') order by id limit 0, {$this->perPageCount};";
         $this->getConnection()->exec($sql);
 
-        return $page+1;
+        return $page + 1;
     }
 }

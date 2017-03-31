@@ -21,7 +21,7 @@ class TestpaperItemMigrate extends AbstractMigrate
             score,
             missScore,
             migrateItemId,
-            migrateType
+            type
         ) SELECT
             id,
             testId,
@@ -33,9 +33,9 @@ class TestpaperItemMigrate extends AbstractMigrate
             missScore,
             id,
             'testpaper' FROM testpaper_item
-            WHERE id NOT IN (SELECT `id` FROM `testpaper_item_v8`) order by id limit 0, {$this->perPageCount};";
+            WHERE id NOT IN (SELECT `id` FROM `testpaper_item_v8` WHERE type = 'testpaper') order by id limit 0, {$this->perPageCount};";
         $this->getConnection()->exec($sql);
 
-        return $page+1;
+        return $page + 1;
     }
 }
