@@ -31,6 +31,7 @@ export default class Text {
         },
         content: {
           required: true,
+          trim: true,
         },
       },
     });

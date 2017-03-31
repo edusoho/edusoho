@@ -34,28 +34,27 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $this->tryManageCourseSet($id);
         if (!is_numeric($number)) {
-            throw $this->createAccessDeniedException('recmendNum should be number!');
+            throw $this->createAccessDeniedException('recommend seq must be number!');
         }
+
         $fields = array(
             'recommended' => 1,
             'recommendedSeq' => (int) $number,
             'recommendedTime' => time(),
         );
-        $course = $this->getCourseSetDao()->update(
-            $id,
-            $fields
-        );
 
-        $this->getLogService()->info('course', 'recommend', "推荐课程《{$course['title']}》(#{$course['id']}),序号为{$number}");
+        $courseSet = $this->getCourseSetDao()->update($id, $fields);
+
+        $this->getLogService()->info('course', 'recommend', "推荐课程《{$courseSet['title']}》(#{$courseSet['id']}),序号为{$number}");
         $this->dispatchEvent(
             'courseSet.recommend',
             new Event(
-                $course,
+                $courseSet,
                 $fields
             )
         );
 
-        return $course;
+        return $courseSet;
     }
 
     // Refactor: cancelRecommendCourseSet

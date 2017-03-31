@@ -2,9 +2,9 @@
 
 namespace Topxia\Api\Resource;
 
+use Silex\Application;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseSetService;
-use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
 class Courses extends BaseResource
@@ -23,7 +23,7 @@ class Courses extends BaseResource
 
     public function discoveryColumn(Application $app, Request $request)
     {
-        $conditions =  $request->query->all();
+        $conditions = $request->query->all();
         list($orderBy, $count) = $this->getOrderByAndCountByConditions($conditions);
         $conditions = $this->filterConditions($conditions);
 
@@ -39,9 +39,9 @@ class Courses extends BaseResource
         foreach ($courses as $key => $value) {
             $courses[$key]['createdTime'] = strval(strtotime($value['createdTime']));
             $courses[$key]['updatedTime'] = strval(strtotime($value['updatedTime']));
-            $userIds                      = $courses[$key]['teacherIds'];
-            $courses[$key]['teachers']    = $this->getUserService()->findUsersByIds($userIds);
-            $courses[$key]['teachers']    = array_values($this->multicallFilter('User', $courses[$key]['teachers']));
+            $userIds = $courses[$key]['teacherIds'];
+            $courses[$key]['teachers'] = $this->getUserService()->findUsersByIds($userIds);
+            $courses[$key]['teachers'] = array_values($this->multicallFilter('User', $courses[$key]['teachers']));
         }
 
         return $this->wrap($courses, min($count, $total));
@@ -51,13 +51,13 @@ class Courses extends BaseResource
     {
         $count = empty($conditions['showCount']) ? 6 : $conditions['showCount'];
         $orderBy = array(
-            'hot' =>  array(
-                'hitNum' => 'DESC'
-             ),
+            'hot' => array(
+                'hitNum' => 'DESC',
+            ),
             'recommend' => array(
                 'recommendedSeq' => 'ASC',
                 'recommendedTime' => 'DESC',
-            )
+            ),
         );
 
         if (in_array($conditions['orderType'], $orderBy)) {
@@ -83,7 +83,7 @@ class Courses extends BaseResource
             'type',
             'parentId',
             'status',
-            'recommended'
+            'recommended',
         ));
         return $conditions;
     }
@@ -92,8 +92,13 @@ class Courses extends BaseResource
     {
         $courseIds = ArrayToolkit::column($courses, 'id');
         $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
-        foreach ($courses as &$course) {
-            $course['courseSet'] = $courseSets[$course['courseSetId']];
+        foreach ($courses as $key => $course) {
+            $courseSet = $courseSets[$course['courseSetId']];
+            if ($courseSet['status'] == 'published') {
+                $courses[$key]['courseSet'] = $courseSet;
+            } else {
+                unset($courses[$key]);
+            }
         }
 
         return $this->multicallFilter('Course', $courses);

@@ -169,11 +169,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
     }
 
-    public function copyCourse($fields)
+    public function copyCourse($newCourse)
     {
-        $course = $this->tryManageCourse($fields['copyCourseId']);
-        $fields = ArrayToolkit::parts(
-            $fields,
+        $sourceCourse = $this->tryManageCourse($newCourse['copyCourseId']);
+        $newCourse = ArrayToolkit::parts(
+            $newCourse,
             array(
                 'title',
                 'courseSetId',
@@ -186,11 +186,11 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
-        $fields = $this->validateExpiryMode($fields);
+        $newCourse = $this->validateExpiryMode($newCourse);
 
         $entityCopy = new CourseCopy($this->biz);
 
-        return $entityCopy->copy($course, $fields);
+        return $entityCopy->copy($sourceCourse, $newCourse);
     }
 
     public function updateCourse($id, $fields)
@@ -469,7 +469,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $course['expiryStartDate'] = null;
             $course['expiryDays'] = 0;
 
-            if (empty($course['expiryEndDate']) || strtotime($course['expiryEndDate'].' 23:59:59') <= time()) {
+            if (empty($course['expiryEndDate'])) {
                 throw $this->createInvalidArgumentException('Param Invalid: expiryEndDate');
             }
             $course['expiryEndDate'] = strtotime($course['expiryEndDate'].' 23:59:59');
@@ -480,10 +480,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             } else {
                 throw $this->createInvalidArgumentException('Param Required: expiryStartDate');
             }
-            if (!empty($course['expiryEndDate']) && strtotime($course['expiryEndDate'].' 23:59:59') > time()) {
-                $course['expiryEndDate'] = strtotime($course['expiryEndDate'].' 23:59:59');
-            } else {
+            if (empty($course['expiryEndDate'])) {
                 throw $this->createInvalidArgumentException('Param Required: expiryEndDate');
+            } else {
+                $course['expiryEndDate'] = strtotime($course['expiryEndDate'].' 23:59:59');
             }
             if ($course['expiryEndDate'] <= $course['expiryStartDate']) {
                 throw $this->createInvalidArgumentException(
@@ -491,8 +491,8 @@ class CourseServiceImpl extends BaseService implements CourseService
                 );
             }
         } elseif ($course['expiryMode'] == 'forever') {
-            $course['expiryStartDate'] = null;
-            $course['expiryEndDate'] = null;
+            $course['expiryStartDate'] = 0;
+            $course['expiryEndDate'] = 0;
             $course['expiryDays'] = 0;
         } else {
             throw $this->createInvalidArgumentException('Param Invalid: expiryMode');
@@ -1663,7 +1663,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function buildCourseExpiryDataFromClassroom($expiryMode, $expiryValue)
     {
         $fields = array();
-        if ($expiryMode === 'none') {
+        if ($expiryMode === 'forever') {
             $fields = array(
                 'expiryMode' => 'forever',
                 'expiryDays' => 0,

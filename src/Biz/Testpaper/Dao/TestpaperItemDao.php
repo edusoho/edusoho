@@ -8,7 +8,7 @@ interface TestpaperItemDao extends GeneralDaoInterface
 {
     public function findItemsByIds(array $ids);
 
-    public function findItemsByTestId($testpaperId);
+    public function findItemsByTestId($testpaperId, $type);
 
     public function findItemsByTestIds($testpaperIds);
 

@@ -60,7 +60,13 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             }
 
             $processor = OrderProcessorFactory::create($targetType);
-            list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
+            list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount(
+                $targetId,
+                $priceType,
+                $cashRate,
+                $coinEnabled,
+                $fields
+            );
 
             $amount = (string) ((float) $amount);
 //            $shouldPayMoney = (string) ((float) $fields['shouldPayMoney']);
@@ -107,7 +113,6 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             $order = $processor->createOrder($orderFileds, $fields);
 
             return array($order, $processor);
-
         } catch (\Exception $e) {
             throw $this->createServiceException($e->getMessage());
         }

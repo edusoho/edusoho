@@ -2,9 +2,9 @@
 
 namespace AppBundle\Controller\Callback\CloudSearch\Resource;
 
-use AppBundle\Controller\Callback\CloudSearch\BaseResource;
+use AppBundle\Controller\Callback\CloudSearch\BaseProvider;
 
-class User extends BaseResource
+class User extends BaseProvider
 {
     private $_publicFields = array(
         'id', 'nickname', 'title', 'point', 'largeAvatar', 'createdTime', 'updatedTime', 'roles',

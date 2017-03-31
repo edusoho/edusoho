@@ -53,6 +53,10 @@ class RecentLiveCourseSetsDataTag extends CourseBaseDataTag implements DataTag
         $recentCourseSets = array();
 
         foreach ($recentTasks as $task) {
+            if (empty($courseSets[$task['fromCourseSetId']])) {
+                continue;
+            }
+
             $courseSet = $courseSets[$task['fromCourseSetId']];
             if ($courseSet['status'] != 'published') {
                 continue;

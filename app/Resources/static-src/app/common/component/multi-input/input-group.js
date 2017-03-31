@@ -13,9 +13,6 @@ export default class InputGroup extends Component {
       resultful: false,
       searchResult: [],
     }
-    this.searchable = this.props.searchable.enable;
-    this.addable = this.props.addable;
-    this.searchableUrl = this.props.searchable.url;
     this.subscribeMessage();
   }
 
@@ -55,19 +52,21 @@ export default class InputGroup extends Component {
       resultful: false,
     });
 
-    if (this.searchable && value.length > 0 && this.state.searched) {
-      setTimeout(() => {
-        send(this.searchableUrl + value, searchResult => {
-          if (this.state.itemName.length > 0) {
-            console.log({ 'searchResult': searchResult });
-            this.setState({
-              searchResult: searchResult,
-              resultful: true,
-            });
-          }
-        });
-      }, 100)
+    if (!this.context.searchable.enable || value.length < 0 || !this.state.searched) {
+      return;
     }
+
+    setTimeout(() => {
+      send(this.context.searchable.url + value, searchResult => {
+        if (this.state.itemName.length > 0) {
+          console.log({ 'searchResult': searchResult });
+          this.setState({
+            searchResult: searchResult,
+            resultful: true,
+          });
+        }
+      });
+    }, 100)
   }
 
   handleAdd() {
@@ -81,18 +80,12 @@ export default class InputGroup extends Component {
     })
   }
 
-  blurAdd() {
-    if (this.props.blurIsAdd) {
-      console.log('ok');
-    }
-  }
-
   render() {
     return (
       <div className="input-group">
-        <input className="form-control" value={this.state.itemName} onChange={event => this.handleNameChange(event)} onFocus={event => this.onFocus(event)} onBlur={event => this.blurAdd(event)} />
-        {this.searchable && this.state.resultful && <Options searchResult={this.state.searchResult} selectChange={(event, name) => this.selectChange(event, name)} resultful={this.state.resultful} />}
-        {this.addable && <span className="input-group-btn"><a className="btn btn-default" onClick={() => this.handleAdd()}>添加</a></span>}
+        <input className="form-control" value={this.state.itemName} onChange={event => this.handleNameChange(event)} onFocus={event => this.onFocus(event)} />
+        {this.context.searchable.enable && this.state.resultful && <Options searchResult={this.state.searchResult} selectChange={(event, name) => this.selectChange(event, name)} resultful={this.state.resultful} />}
+        {this.context.addable && <span className="input-group-btn"><a className="btn btn-default" onClick={() => this.handleAdd()}>添加</a></span>}
       </div>
     );
   }
@@ -100,4 +93,9 @@ export default class InputGroup extends Component {
 
 InputGroup.contextTypes = {
   addItem: React.PropTypes.func,
+  addable: React.PropTypes.bool,
+  searchable:  React.PropTypes.shape({
+    enable: React.PropTypes.bool,
+    url: React.PropTypes.string,
+  }),
 };
