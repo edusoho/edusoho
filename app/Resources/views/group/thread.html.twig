@@ -320,7 +320,7 @@
         </form>
       {% else %}
         <div class="empty">
-          {{'user.not_login.first_part'|trans}}<a href="{{ path('login', {goto:app.request.server.get('REQUEST_URI')}) }}">{{'user.not_login.second_part'|trans}}</a>{{'user.not_login.third_part'|trans}}<a href="{{ path('register', {goto:app.request.server.get('REQUEST_URI')}) }}">{{'user.not_login.fourth_part'|trans}}</a>！
+          {{ 'user.not_login.not_login_tips'|trans({'%loginUrl%':path('login', {goto:app.request.server.get('REQUEST_URI')}), '%registerUrl%':path('register', {goto:app.request.server.get('REQUEST_URI')})})|raw }}
         </div>
       {% endif %}
     </div>

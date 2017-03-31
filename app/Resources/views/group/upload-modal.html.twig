@@ -8,7 +8,7 @@
       </div>
       <div class="modal-body">
         <button class="btn btn-default btn-sm upload-img" style="height:33px;" type="button" data-url="{{ path('group_upload', {group:'user'}) }}"  >{{'group.thread.attachments_upload.upload_btn'|trans}}</button>
-        <span> {{'(group.thread.attachments_upload.upload_waring'|trans}}<span style="color:red;">{{'group.thread.attachments_upload.upload_size'|trans}}</span>{{'group.thread.attachments_upload.upload_type'|trans}}</span>
+        {{ 'group.thread.attachments_upload.upload_tips'|trans|raw }}
 
         <table id="block-table" class="table table-striped table-condensed mtl">
           <tr >

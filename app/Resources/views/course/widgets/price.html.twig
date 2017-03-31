@@ -15,7 +15,7 @@
 
     {% if 'full' in shows or 'price' in shows %}
       {% if priceType == 'coin' %}
-        <span >{{ course.price * setting('coin.cash_rate')}} {{setting('coin.coin_name', 'finance.virtual_coin'|trans)}}</span>
+        <span >{{ course.price * setting('coin.cash_rate')}} {{setting('coin.coin_name', 'finance.coin'|trans)}}</span>
       {% else %}
         <span >{{'course.price.RMB'|trans({'%price%': course.price})}}</span>
       {% endif %}
@@ -23,7 +23,7 @@
 
     {% if 'full' in shows or 'originPrice' in shows %}
       {% if priceType == 'coin' %}
-        <span class="origin-price"><del>{{course.originPrice * setting('coin.cash_rate')}} {{setting('coin.coin_name', 'finance.virtual_coin'|trans)}}</del></span>
+        <span class="origin-price"><del>{{course.originPrice * setting('coin.cash_rate')}} {{setting('coin.coin_name', 'finance.coin'|trans)}}</del></span>
       {% else %}
         <span class="origin-price"><del>{{'course.origin_price.RMB'|trans({'%originPrice%': course.originPrice})}}</del></span>
       {% endif %}
@@ -48,7 +48,7 @@
         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
           {% if course.price > 0 %} 
             {{ course.price * setting('coin.cash_rate')}}
-            {{setting('coin.coin_name', 'finance.virtual_coin'|trans)}} 
+            {{setting('coin.coin_name', 'finance.coin'|trans)}} 
           {% else %} 
             <span class="color-success">{{'course.price.free'|trans}}</span> 
           {% endif  %}
@@ -64,7 +64,7 @@
 
     {% if 'originPrice' in shows %}
       {% if priceType == 'coin' %}
-        <span class="origin-price">{{course.originPrice * setting('coin.cash_rate')}}{{setting('coin.coin_name', 'finance.virtual_coin'|trans)}}</span>
+        <span class="origin-price">{{course.originPrice * setting('coin.cash_rate')}}{{setting('coin.coin_name', 'finance.coin'|trans)}}</span>
       {% else %}
         ¥<span class="origin-price">{{course.originPrice}}</span>
       {% endif %}

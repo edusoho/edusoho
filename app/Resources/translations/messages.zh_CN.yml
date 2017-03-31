@@ -30,10 +30,10 @@ user.fields.no_introduction: 暂无简介
 user.btn.following_btn: 关注
 user.btn.followed_btn: 已关注
 user.btn.send_message_btn: 私信
-user.not_login.first_part: 你还没有登录，请先
-user.not_login.second_part: 登录
-user.not_login.third_part: 或
-user.not_login.fourth_part: 注册
+user.not_login.not_login_tips: >
+  你还没有登录，请先
+  <a href="%loginUrl%">登录或</a>
+  <a href="%registerUrl%">注册！</a>
 
 #财务通用
 finance.income: 收入
@@ -94,7 +94,7 @@ course.price.discount: %discount%折
 
 #公开课
 open_course: 公开课
-open_course.live: %live%直播 
+open_course.live: %live%直播
 open_course.status.live: 正在直播
 open_course.status.living: 即将直播
 
@@ -249,15 +249,8 @@ user.settings.avatar.crop: 头像图片
 user.settings.avatar.content_title: 头像设置
 user.settings.avatar.current_avatar: 当前头像
 user.settings.avatar.partner_avatar: 论坛头像
-
-
-
 user.settings.avatar.upload_tips: >
   <p class="help-block">你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。</p>
-
-# 改善
-# user.settings.avatar.upload_size: 你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过2M
-
 user.settings.avatar.upload_submit_btn: 上传新头像
 user.settings.avatar.using_current_avatar: 使用该头像
 user.settings.avatar.alter_tips: 请设置自定义头像。
@@ -310,7 +303,7 @@ user.account.my_invite_code.invite.copy_btn: 复制到剪贴板
 
 user.account.other_invite_code: TA的邀请码
 user.account.other_invite_code.modal_title: 填写TA的邀请码
-user.account.other_invite_code.invite_code: TA的邀请码 
+user.account.other_invite_code.invite_code: TA的邀请码
 
 user.account.other_invite_code.reward_after_custom_tips: 填写TA的邀请码，当您第一次消费后，TA会获得邀请奖励。
 user.account.other_invite_code.reward_tips: 填写TA的邀请码，TA会获得邀请奖励。
@@ -353,7 +346,7 @@ user.cards.useable: 未使用
 user.cards.used: 已使用
 user.cards.outdate: 已过期
 user.cards.invalid: 已作废
-user.cards.empty: 没有搜索到符合条件的 
+user.cards.empty: 没有搜索到符合条件的
 user.cards.moneycard_not_install_tips: 网站没有开启%coin_name%功能,学习卡功能暂时没法使用
 
 #用户通知模块
@@ -428,7 +421,7 @@ user.homepage.following_fan.fan_empty: 无粉丝
 
 # 主页模块-头部
 homepage: 首页
-homepage.header.search: 搜索 
+homepage.header.search: 搜索
 homepage.header.login: 登录
 homepage.header.logout: 退出登录
 homepage.header.register: 注册
@@ -515,7 +508,7 @@ group.search.content_title: 所有小组
 group.thread.title: 标题
 group.thread.top: 置顶
 group.thread.essence: 精华
-group.thread.reward: 奖 
+group.thread.reward: 奖
 group.thread.share: 分享
 group.thread.favorite_btn: 收藏
 group.thread.favorited_btn: 已收藏
@@ -523,17 +516,18 @@ group.thread.created_time: 发表于%createdTime%
 group.thread.check_times: %hitNum%次查看
 group.thread.wanted: 悬赏:%rewardCoin%%coin_name%
 
-group.thread.attachments_upload: 上传附件 
+group.thread.attachments_upload: 上传附件
 group.thread.attachments_upload.upload_btn: 上传
-group.thread.attachments_upload.upload_waring: 大小不能超过
-group.thread.attachments_upload.upload_size: 2
-group.thread.attachments_upload.upload_type: MB，文件类型支持png ,jpg ,gif ,doc ,xls ,txt ,rar ,zip .)
+group.thread.attachments_upload.upload_tips: >
+  <span> (大小不能超过
+  <span style="color:red;">2</span>
+  MB，文件类型支持png ,jpg ,gif ,doc ,xls ,txt ,rar ,zip .)
+  </span>
 group.thread.attachments_upload.file_name: 文件名
 group.thread.attachments_upload.description: 描述
 group.thread.attachments_upload.operations: 操作
 group.thread.attachments_upload.delete_btn: 删除
 group.thread.attachments_upload.tips: 用户下载附件扣除的%name%会在扣除50%之后添加到您的账户
-
 group.thread.attachments_download: 附件下载
 group.thread.attachments_download.description: 描述：%description%
 group.thread.attachments_download.upload_time: 上传于 %createdTime%
@@ -572,7 +566,7 @@ group.thread.content: 内容
 group.thread.writer: 话题作者
 group.thread.writer.empty: 无
 
-group.thread.insert_hide_content: 插入隐藏内容 
+group.thread.insert_hide_content: 插入隐藏内容
 group.thread.insert_hide_content_tips: 隐藏话题获得的%coin_name%会在扣除50%之后添加到您的账户
 group.thread.insert_hide_content_tips: 请输入要隐藏的内容
 group.thread.check_need: 查看所需
@@ -583,7 +577,6 @@ group.thread.creat.attachments: 附件
 group.thread.creat.analysis_attachment: 解析附件
 group.thread.creat.question_stem_attachment: 题干附件
 group.thread.creat.preview: 预览
-
 group.thread.edit.content_title: 编辑话题
 
 group.detail.page_title: %title%小组

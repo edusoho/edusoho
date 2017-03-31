@@ -2,7 +2,7 @@
 {% if setting('coin.coin_enabled') %}
     {% if setting('coin.coin_enabled') %}
     <li  class="{% if side_nav == 'my-coin' %}active{% endif %}" >
-      <a href="{{ url('my_coin') }}" >{% trans with {'%coin_name%': setting('coin.coin_name')|default("finance.virtual_coin"|trans)} %}user.account.my_coin{% endtrans %}</a>
+      <a href="{{ url('my_coin') }}" >{% trans with {'%coin_name%': setting('coin.coin_name')|default("finance.coin"|trans)} %}user.account.my_coin{% endtrans %}</a>
     </li>
     {% endif %}
 {% endif %}

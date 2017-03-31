@@ -6,7 +6,7 @@
   {% if courseSet.discountId %}
     {% if 'full' in shows or 'price' in shows %}
       {% if priceType == 'coin' %}
-        <span class="price">{{ courseSet.minCoursePrice * setting('coin.cash_rate')}} {{setting('coin.coin_name', 'finance.virtual_coin'|trans)}}</span>
+        <span class="price">{{ courseSet.minCoursePrice * setting('coin.cash_rate')}} {{setting('coin.coin_name', 'finance.coin'|trans)}}</span>
       {% else %}
         <span class="price">{{'course.price.RMB'|trans({'%price%': courseSet.minCoursePrice})}}</span>
       {% endif %}
@@ -27,7 +27,7 @@
       {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
         {% if courseSet.minCoursePrice > 0 %} 
           <span class="price">{{ courseSet.minCoursePrice * setting('coin.cash_rate')}}
-          {{setting('coin.coin_name', 'finance.virtual_coin'|trans)}}</span>
+          {{setting('coin.coin_name', 'finance.coin'|trans)}}</span>
         {% else %} 
           <span class="free">{{'course.price.free'|trans}}</span> 
         {% endif  %}
