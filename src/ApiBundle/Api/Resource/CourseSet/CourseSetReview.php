@@ -18,6 +18,7 @@ class CourseSetReview extends Resource
 
         $conditions = array(
             'courseSetId' => $courseSetId,
+            'courseId' => $request->query->get('courseId'),
             'private' => 0
         );
 
@@ -31,6 +32,7 @@ class CourseSetReview extends Resource
         );
 
         $this->getOCUtil()->multiple($reviews, array('userId'));
+        $this->getOCUtil()->multiple($reviews, array('courseId'), 'course');
 
         $total = $this->service('Course:ReviewService')->searchReviewsCount($conditions);
 
