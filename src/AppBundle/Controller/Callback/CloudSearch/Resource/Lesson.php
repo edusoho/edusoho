@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller\Callback\CloudSearch\Resource;
 
-use AppBundle\Controller\Callback\CloudSearch\BaseResource;
+use AppBundle\Controller\Callback\CloudSearch\BaseProvider;
 
 /**
  * 兼容模式，对应course_task.
  */
-class Lesson extends BaseResource
+class Lesson extends BaseProvider
 {
     public function filter($res)
     {
