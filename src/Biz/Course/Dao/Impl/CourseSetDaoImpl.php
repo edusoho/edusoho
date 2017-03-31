@@ -90,7 +90,6 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
             'timestamps' => array(
                 'createdTime', 'updatedTime',
             ),
-            'cache' => 'table',
         );
     }
 }

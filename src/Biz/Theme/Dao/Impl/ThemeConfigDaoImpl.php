@@ -33,7 +33,6 @@ class ThemeConfigDaoImpl extends GeneralDaoImpl implements ThemeConfigDao
                 'createdTime',
                 'updatedTime',
             ),
-            'cache' => 'table',
         );
     }
 }

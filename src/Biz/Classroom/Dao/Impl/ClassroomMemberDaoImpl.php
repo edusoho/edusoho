@@ -38,33 +38,6 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
         );
     }
 
-    public function declares()
-    {
-        return array(
-            'timestamps' => array('createdTime'),
-            'serializes' => array(
-                'role' => 'delimiter',
-                'assistantIds' => 'json',
-                'teacherIds' => 'json',
-                'service' => 'json',
-            ),
-            'orderbys' => array('name', 'createdTime', 'updatedTime', 'id'),
-            'conditions' => array(
-                'userId = :userId',
-                'classroomId = :classroomId',
-                'noteNum > :noteNumGreaterThan',
-                'role LIKE :role',
-                'role IN (:roles)',
-                'userId IN ( :userIds)',
-                'createdTime >= :startTimeGreaterThan',
-                'createdTime >= :createdTime_GE',
-                'createdTime < :startTimeLessThan',
-                'updatedTime >= :updatedTime_GE',
-            ),
-            'cache' => 'table',
-        );
-    }
-
     public function countStudents($classroomId)
     {
         $sql = "SELECT count(*) FROM {$this->table()} WHERE classroomId = ? AND role LIKE '%|student|%' LIMIT 1";
@@ -179,6 +152,32 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
         return $this->findByFields(array(
             'userId' => $userId,
         ));
+    }
+
+    public function declares()
+    {
+        return array(
+            'timestamps' => array('createdTime'),
+            'serializes' => array(
+                'role' => 'delimiter',
+                'assistantIds' => 'json',
+                'teacherIds' => 'json',
+                'service' => 'json',
+            ),
+            'orderbys' => array('name', 'createdTime', 'updatedTime', 'id'),
+            'conditions' => array(
+                'userId = :userId',
+                'classroomId = :classroomId',
+                'noteNum > :noteNumGreaterThan',
+                'role LIKE :role',
+                'role IN (:roles)',
+                'userId IN ( :userIds)',
+                'createdTime >= :startTimeGreaterThan',
+                'createdTime >= :createdTime_GE',
+                'createdTime < :startTimeLessThan',
+                'updatedTime >= :updatedTime_GE',
+            ),
+        );
     }
 
     protected function createQueryBuilder($conditions)

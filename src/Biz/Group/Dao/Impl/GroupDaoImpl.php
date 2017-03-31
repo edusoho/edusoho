@@ -39,7 +39,6 @@ class GroupDaoImpl extends GeneralDaoImpl implements GroupDao
                 'status = :status',
                 'title like :title',
             ),
-            'cache' => 'table',
         );
     }
 }

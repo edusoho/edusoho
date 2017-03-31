@@ -48,7 +48,6 @@ class TokenDaoImpl extends GeneralDaoImpl implements TokenDao
         return array(
             'conditions' => array('type = :type'),
             'serializes' => array('data' => 'php'),
-            'cache' => 'table',
         );
     }
 }

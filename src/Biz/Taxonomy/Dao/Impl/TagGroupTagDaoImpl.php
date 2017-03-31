@@ -9,13 +9,6 @@ class TagGroupTagDaoImpl extends GeneralDaoImpl implements TagGroupTagDao
 {
     protected $table = 'tag_group_tag';
 
-    public function declares()
-    {
-        return array(
-            'cache' => 'table',
-        );
-    }
-
     public function findTagRelationsByTagIds($tagIds)
     {
         return $this->findInField('tagId', $tagIds);
@@ -47,5 +40,11 @@ class TagGroupTagDaoImpl extends GeneralDaoImpl implements TagGroupTagDao
         $result = $this->db()->delete($this->table, array('groupId' => $groupId, 'tagId' => $tagId));
 
         return $result;
+    }
+
+    public function declares()
+    {
+        return array(
+        );
     }
 }

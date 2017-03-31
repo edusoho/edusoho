@@ -67,7 +67,6 @@ class NavigationDaoImpl extends GeneralDaoImpl implements NavigationDao
             'orderbys' => array(
                 'sequence',
             ),
-            'cache' => 'table',
         );
     }
 
