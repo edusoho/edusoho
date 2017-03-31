@@ -128,7 +128,9 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             'base_url' => $this->request->getSchemeAndHttpHost().$this->request->getBasePath(),
         );
         $biz->register(new DoctrineServiceProvider());
-        $biz->register(new MonologServiceProvider());
+        $biz->register(new MonologServiceProvider(), array(
+            'monolog.logfile' => $this->getContainer()->getParameter('kernel.logs_dir') . '/biz.log',
+        ));
         $biz->register(new \Biz\DefaultServiceProvider());
 
         $collector = $this->getContainer()->get('biz.service_provider.collector');

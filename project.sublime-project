@@ -13,12 +13,6 @@
 				"node_modules"
 			],
 			"path": "."
-		},
-		{
-			"path": "/private/var/www/biz-rate-limiter"
-		},
-		{
-			"path": "/private/var/www/plugin-bundle"
 		}
 	]
 }

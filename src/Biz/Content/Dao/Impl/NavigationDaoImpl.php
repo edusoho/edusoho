@@ -9,25 +9,6 @@ class NavigationDaoImpl extends GeneralDaoImpl implements NavigationDao
 {
     protected $table = 'navigation';
 
-    public function declares()
-    {
-        return array(
-            'conditions' => array(
-                'name = :name',
-                'type = :type',
-                'isOpen = :isOpen',
-                'isNewWin =:isNewWin',
-                'orgId = :orgId',
-                'orgCode = :orgCode',
-                'orgCode LIKE :likeOrgCode',
-            ),
-            'orderbys' => array(
-                'sequence',
-            ),
-            'cache' => 'table',
-        );
-    }
-
     public function countByType($type)
     {
         return $this->count(array(
@@ -68,6 +49,25 @@ class NavigationDaoImpl extends GeneralDaoImpl implements NavigationDao
             ),
             $start,
             $limit
+        );
+    }
+
+    public function declares()
+    {
+        return array(
+            'conditions' => array(
+                'name = :name',
+                'type = :type',
+                'isOpen = :isOpen',
+                'isNewWin =:isNewWin',
+                'orgId = :orgId',
+                'orgCode = :orgCode',
+                'orgCode LIKE :likeOrgCode',
+            ),
+            'orderbys' => array(
+                'sequence',
+            ),
+            'cache' => 'table',
         );
     }
 

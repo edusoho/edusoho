@@ -71,6 +71,28 @@ interface CacheStrategy
     public function afterSearch(GeneralDaoInterface $dao, $methd, $arguments, array $rows);
 
     /**
+     * 在Dao的count系列方法调用之前调用，以获取缓存。
+     *
+     * @param string $dao Dao
+     * @param  string $method 调用Dao方法名
+     * @param  array $arguments 调用Dao参数
+     * 
+     * @return mixed 缓存存在返回结果集，否则返回false。
+     */
+    public function beforeCount(GeneralDaoInterface $dao, $methd, $arguments);
+
+    /**
+     * 在Dao的count系列方法调用之后调用，可以缓存结果集。
+     *
+     * @param string $dao Dao
+     * @param  string $method 调用Dao方法名
+     * @param  array $arguments 调用Dao参数
+     * @param  mixed $rows 调用Dao后的结果
+     */
+    public function afterCount(GeneralDaoInterface $dao, $methd, $arguments, $count);
+
+
+    /**
      * 在Dao的create系列方法调用之后调用，可以缓存结果集。
      *
      * @param string $dao Dao

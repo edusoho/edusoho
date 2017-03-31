@@ -136,6 +136,7 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
             'serializes' => array(
                 'tagIds' => 'delimiter',
             ),
+            'cache' => 'table',
         );
     }
 }

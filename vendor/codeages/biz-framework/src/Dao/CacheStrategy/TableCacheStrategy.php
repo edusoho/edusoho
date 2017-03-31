@@ -11,11 +11,14 @@ class TableCacheStrategy extends AbstractCacheStrategy implements CacheStrategy
 {
     private $redis;
 
+    private $logger;
+
     const LIFE_TIME = 3600;
 
-    public function __construct($redis)
+    public function __construct($redis, $logger)
     {
         $this->redis = $redis;
+        $this->logger = $logger;
     }
 
     public function beforeGet(GeneralDaoInterface $dao, $method, $arguments)
@@ -54,6 +57,18 @@ class TableCacheStrategy extends AbstractCacheStrategy implements CacheStrategy
         return $this->redis->set($key, $rows, self::LIFE_TIME);
     }
 
+    public function beforeCount(GeneralDaoInterface $dao, $method, $arguments)
+    {
+        $key = $this->key($dao, $method, $arguments);
+        return $this->redis->get($key);
+    }
+
+    public function afterCount(GeneralDaoInterface $dao, $method, $arguments, $count)
+    {
+        $key = $this->key($dao, $method, $arguments);
+        return $this->redis->set($key, $count, self::LIFE_TIME);
+    }
+
     public function afterCreate(GeneralDaoInterface $dao, $method, $arguments, $row)
     {
         $this->upTableVersion($dao);
@@ -64,7 +79,7 @@ class TableCacheStrategy extends AbstractCacheStrategy implements CacheStrategy
         $this->upTableVersion($dao);
     }
 
-    public function afterWave(GeneralDaoInterface $dao, $methd, $arguments, $affected)
+    public function afterWave(GeneralDaoInterface $dao, $method, $arguments, $affected)
     {
         $this->upTableVersion($dao);
     }

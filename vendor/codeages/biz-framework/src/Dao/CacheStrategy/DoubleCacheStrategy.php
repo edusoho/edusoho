@@ -20,7 +20,7 @@ class DoubleCacheStrategy extends AbstractCacheStrategy implements CacheStrategy
     public function beforeGet(GeneralDaoInterface $dao, $method, $arguments)
     {
         $cache = $this->first->beforeGet($dao, $method, $arguments);
-        if ($cache) {
+        if ($cache && $cache !== false) {
             return $cache;
         }
 
@@ -36,7 +36,7 @@ class DoubleCacheStrategy extends AbstractCacheStrategy implements CacheStrategy
     public function beforeFind(GeneralDaoInterface $dao, $method, $arguments)
     {
         $cache = $this->first->beforeFind($dao, $method, $arguments);
-        if ($cache) {
+        if ($cache && $cache !== false) {
             return $cache;
         }
 
@@ -52,7 +52,7 @@ class DoubleCacheStrategy extends AbstractCacheStrategy implements CacheStrategy
     public function beforeSearch(GeneralDaoInterface $dao, $method, $arguments)
     {
         $cache = $this->first->beforeSearch($dao, $method, $arguments);
-        if ($cache) {
+        if ($cache && $cache !== false) {
             return $cache;
         }
 
@@ -63,6 +63,22 @@ class DoubleCacheStrategy extends AbstractCacheStrategy implements CacheStrategy
     {
         $this->first->afterSearch($dao, $method, $arguments, $rows);
         $this->second->afterSearch($dao, $method, $arguments, $rows);
+    }
+
+    public function beforeCount(GeneralDaoInterface $dao, $method, $arguments)
+    {
+        $cache = $this->first->beforeCount($dao, $method, $arguments);
+        if ($cache && $cache !== false) {
+            return $cache;
+        }
+
+        return $this->second->beforeCount($dao, $method, $arguments);
+    }
+
+    public function afterCount(GeneralDaoInterface $dao, $method, $arguments, array $count)
+    {
+        $this->first->afterCount($dao, $method, $arguments, $count);
+        $this->second->afterCount($dao, $method, $arguments, $count);
     }
 
     public function afterCreate(GeneralDaoInterface $dao, $method, $arguments, $row)

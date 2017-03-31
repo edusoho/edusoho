@@ -62,7 +62,7 @@ class Biz extends Container
             return new FieldSerializer();
         };
 
-        $this['dao.cache.first.enabled'] = true;
+        $this['dao.cache.first.enabled'] = false;
         $this['dao.cache.second.enabled'] = true;
 
         $this['dao.cache.chain'] = $this->factory(function ($biz) {
@@ -74,7 +74,7 @@ class Biz extends Container
         };
 
         $this['dao.cache.second.strategy.table'] = function ($biz) {
-            return new CacheStrategy\TableCacheStrategy($biz['redis']);
+            return new CacheStrategy\TableCacheStrategy($biz['redis'], $biz['logger']);
         };
 
         foreach ($values as $key => $value) {
