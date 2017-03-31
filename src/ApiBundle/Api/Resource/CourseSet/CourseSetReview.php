@@ -26,7 +26,7 @@ class CourseSetReview extends Resource
         $limit = $request->query->get('limit', static::DEFAULT_PAGING_LIMIT);
         $reviews = $this->service('Course:ReviewService')->searchReviews(
             $conditions,
-            array('createdTime' => 'DESC'),
+            array('updatedTime' => 'DESC'),
             $offset,
             $limit
         );
