@@ -95,7 +95,7 @@ class OtherMigrate extends AbstractMigrate
         }
         $this->exec("UPDATE classroom_courses SET courseSetId = courseId");
     }
-    
+
     private function migrate9()
     {
         $this->exec(
@@ -109,7 +109,7 @@ class OtherMigrate extends AbstractMigrate
             "UPDATE `block_template` SET templateName = 'block/cloud-search-banner.template.html.twig' WHERE code = 'cloud_search_banner';"
         );
     }
-    
+
     private function migrate10()
     {
         $this->exec(
@@ -119,7 +119,7 @@ class OtherMigrate extends AbstractMigrate
             "UPDATE crontab_job SET targetType = 'task' WHERE targetType = 'lesson' AND name = 'SmsSendOneHourJob';"
         );
     }
-    
+
     private function migrate11()
     {
         $result = $this->getUserByType();
@@ -138,11 +138,18 @@ class OtherMigrate extends AbstractMigrate
             $this->exec($sql);
         }
     }
-    
+
     private function migrate12()
     {
         if ($this->isFieldExist('course_draft', 'lessonId')) {
             $this->exec("ALTER TABLE course_draft CHANGE lessonId activityId INT(10) unsigned NOT NULL COMMENT '教学活动ID';");
+        }
+    }
+
+    private function migrate13()
+    {
+        if (!$this->isFieldExist('classroom', 'creator')) {
+            $this->exec("ALTER TABLE classroom ADD `creator` int(10) NOT NULL DEFAULT '0' COMMENT '班级创建者';");
         }
     }
 
@@ -156,7 +163,7 @@ class OtherMigrate extends AbstractMigrate
 
     public function update($page)
     {
-        if ($page>12) {
+        if ($page>13) {
             return;
         }
 
