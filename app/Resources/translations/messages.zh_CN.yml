@@ -174,10 +174,11 @@ user.settings.security.password_modify.current_password: 当前密码
 user.settings.security.password_modify.new_password: 新密码
 user.settings.security.password_modify.confirm_password: 确认密码
 
-user.settings.security.no_password.line_one_tips: 当前帐号从第三方帐号直接登录时创建，尚未设置密码。
-user.settings.security.no_password.line_two_tips: 为了帐号的安全，请通过邮箱找回密码的方式，重设密码！
-user.settings.security.no_password.go_reset_password_btn: 现在就去重设密码！
 
+user.settings.security.no_password_tips: >
+  <p>当前帐号从第三方帐号直接登录时创建，尚未设置密码。</p>
+  <p>为了帐号的安全，请通过邮箱找回密码的方式，重设密码！</p>
+  <p><a href="%passwordResetUrl%" class='btn btn-primary'>现在就去重设密码</a></p>
 user.settings.security.password_reset: 重设密码
 user.settings.security.password_reset.content_title: 重设密码
 user.settings.security.password_reset.email: 邮箱地址
@@ -248,8 +249,15 @@ user.settings.avatar.crop: 头像图片
 user.settings.avatar.content_title: 头像设置
 user.settings.avatar.current_avatar: 当前头像
 user.settings.avatar.partner_avatar: 论坛头像
-user.settings.avatar.upload_tips: 你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过
-user.settings.avatar.upload_size: 2M
+
+
+
+user.settings.avatar.upload_tips: >
+  <p class="help-block">你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。</p>
+
+# 改善
+# user.settings.avatar.upload_size: 你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过2M
+
 user.settings.avatar.upload_submit_btn: 上传新头像
 user.settings.avatar.using_current_avatar: 使用该头像
 user.settings.avatar.alter_tips: 请设置自定义头像。
@@ -304,14 +312,12 @@ user.account.other_invite_code: TA的邀请码
 user.account.other_invite_code.modal_title: 填写TA的邀请码
 user.account.other_invite_code.invite_code: TA的邀请码 
 
-#TODO 梳理业务
-user.account.other_invite_code.tips_one: 填写TA的邀请码，当您第一次消费后，TA会获得邀请奖励。
-user.account.other_invite_code.tips_two: 填写TA的邀请码，TA会获得邀请奖励。
+user.account.other_invite_code.reward_after_custom_tips: 填写TA的邀请码，当您第一次消费后，TA会获得邀请奖励。
+user.account.other_invite_code.reward_tips: 填写TA的邀请码，TA会获得邀请奖励。
 
-user.account.my_invite_code.first_tips: 给TA分享您的邀请码或者邀请链接
-user.account.my_invite_code.second_tips: ，TA注册后将获得%promoted_user_value%元优惠券
-user.account.my_invite_code.third_tips: TA在消费后您将获得%promote_user_value%元优惠券
-user.account.my_invite_code.fourth_tips: 同时您将获得%promote_user_value%元优惠券
+user.account.my_invite_code.no_reward_tips: 给TA分享您的邀请码或者邀请链接。
+user.account.my_invite_code.reward_after_custom_tips: 给TA分享您的邀请码或者邀请链接，TA注册后将获得%promoted_user_value%元优惠券，TA在消费后您将获得%promote_user_value%元优惠券。
+user.account.my_invite_code.reward_after_register_tips: 给TA分享您的邀请码或者邀请链接，TA注册后将获得%promoted_user_value%元优惠券，同时您将获得%promote_user_value%元优惠券。
 user.account.my_invite_code.invitees: 邀请对象
 user.account.my_invite_code.invite_time: 邀请时间
 user.account.my_invite_code.invite_rewords: 邀请奖励

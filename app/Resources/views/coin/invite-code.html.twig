@@ -54,24 +54,23 @@
 
     <br>
     <div class="alert alert-warning">
-    {{'user.account.my_invite_code.first_tips'|trans}}
-    {% if setting('invite')|default(false) %}
-      {% if setting('invite.promoted_user_value')|default(false)  %}
-        {{'user.account.my_invite_code.second_tips'|trans({'%promoted_user_value%':inviteSetting.promoted_user_value})}}
-      {% endif %}
-
-      {% if setting('invite.promote_user_value')|default(false) %}
-        ，
-        {% if setting('invite.get_coupon_setting')|default(false) %}
-            {{'user.account.my_invite_code.third_tips'|trans({'%promote_user_value%':inviteSetting.promote_user_value})}}
+      {% if setting('invite')|default(false) %}
+        {% if setting('invite.promoted_user_value')|default(false) %}
+          {% if setting('invite.promote_user_value')|default(false) %}
+            {% if setting('invite.get_coupon_setting')|default(false) %}
+              {{'user.account.my_invite_code.reward_after_custom_tips'|trans({'%promote_user_value%':inviteSetting.promote_user_value, '%promoted_user_value%': inviteSetting.promoted_user_value})}}
+            {% else %}
+                {{'user.account.my_invite_code.reward_after_register_tips'|trans({'%promote_user_value%':inviteSetting.promote_user_value, '%promoted_user_value%':inviteSetting.promoted_user_value})}}
+            {% endif %}
+          {% endif %}
         {% else %}
-            {{'user.account.my_invite_code.fourth_tips'|trans({'%promote_user_value%':inviteSetting.promote_user_value})}}
+          {% if not setting('invite.promote_user_value')|default(false) %}
+            {{ 'user.account.my_invite_code.no_reward_tips'|trans }}
+          {% endif %}
         {% endif %}
+      {% else %}
+        {{ 'user.account.my_invite_code.no_reward_tips'|trans }}
       {% endif %}
-    {{'。'|trans}}
-    {% else %}
-    {{'。'|trans}}
-    {% endif %}
     </div>
 
 <table class="table table-striped table-hover" id="course-table" style="word-break:break-all;">

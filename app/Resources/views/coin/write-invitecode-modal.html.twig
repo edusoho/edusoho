@@ -12,9 +12,9 @@
     <div class="controls col-md-8">
       <input class="form-control" type="text" name="inviteCode" value="{{ app.request.get('inviteCode') }}">
      {% if setting('invite.get_coupon_setting',1) == 1 %}
-      <div class="help-block">{{'user.account.other_invite_code.tips_one'|trans}}</div>
+      <div class="help-block">{{'user.account.other_invite_code.reward_after_custom_tips'|trans}}</div>
      {% elseif setting('invite.get_coupon_setting',1) == 0 %}
-      <div class="help-block">{{'user.account.other_invite_code.tips_two'|trans}}</div>
+      <div class="help-block">{{'user.account.other_invite_code.reward_tips'|trans}}</div>
      {% endif %} 
     </div>
   </div>
