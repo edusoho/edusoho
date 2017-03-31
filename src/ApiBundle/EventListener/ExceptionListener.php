@@ -27,7 +27,6 @@ class ExceptionListener
                 $error['type'] = $exception->getType();
                 $httpCode = $exception->getHttpCode();
             } else{
-                throw $exception;
                 $error['code'] = $exception->getCode() ? : ApiException::CODE;
                 $error['type'] = ApiException::TYPE;
                 $httpCode = ApiException::HTTP_CODE;

@@ -53,7 +53,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
             if (isset($fields['coinPayAmount'])
                 && !$this->canUseCoinPay($fields['coinPayAmount'], $this->getCurrentUser()->getId())) {
-                throw new ServiceException('当前使用的账户金额大于账户余额', 2001);
+                throw $this->createServiceException('当前使用的账户金额大于账户余额', 2001);
             }
 
             $priceType = 'RMB';
@@ -111,7 +111,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             return array($order, $processor);
 
         } catch (\Exception $e) {
-            throw $this->createServiceException($e->getMessage());
+            throw $this->createServiceException($e->getMessage(), $e->getCode());
         }
     }
 
