@@ -203,7 +203,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             throw new ResourceNotFoundException('testpaper', $id);
         }
 
-        if (!in_array($testpaper['status'], array('open'))) {
+        if ('open' != $testpaper['status']) {
             throw $this->createAccessDeniedException($this->getKernel()->trans('试卷状态不合法!'));
         }
 
@@ -465,11 +465,15 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 continue;
             }
 
-            if (!empty($userAnswer['answer']) && !empty(str_replace('""', '', $userAnswer['answer'][0]))) {
-                if ($paperResult['type'] == 'homework') {
-                    $checkedFields['status'] = 'right';
-                } else {
-                    $checkedFields['status'] = $checkedFields['score'] == $item['score'] ? 'right' : 'wrong';
+            if (!empty($userAnswer['answer'])) {
+                $userAnswer = str_replace('""', '', $userAnswer['answer'][0]);
+
+                if (!empty($userAnswer)) {
+                    if ($paperResult['type'] == 'homework') {
+                        $checkedFields['status'] = 'right';
+                    } else {
+                        $checkedFields['status'] = $checkedFields['score'] == $item['score'] ? 'right' : 'wrong';
+                    }
                 }
             }
             $this->updateItemResult($userAnswer['id'], $checkedFields);
@@ -761,7 +765,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
 
-            if ($member && (in_array('teacher', $member['role'])) || in_array('headTeacher', $member['role'])) {
+            if ($member && (in_array('teacher', $member['role']) || in_array('headTeacher', $member['role']))) {
                 return true;
             }
         }
