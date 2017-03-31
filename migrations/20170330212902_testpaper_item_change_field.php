@@ -19,7 +19,7 @@ class TestpaperItemChangeField extends Migration
 
         if (!$this->isFieldExist('testpaper_item_result_v8', 'type')) {
             $biz['db']->exec("
-                ALTER TABLE testpaper_item_v8 ADD `type` varchar(32) NOT NULL DEFAULT 'testpaper' COMMENT '测验类型';
+                ALTER TABLE testpaper_item_result_v8 ADD `type` varchar(32) NOT NULL DEFAULT 'testpaper' COMMENT '测验类型';
             ");
         }
 
