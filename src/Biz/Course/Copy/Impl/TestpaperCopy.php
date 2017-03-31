@@ -88,6 +88,7 @@ class TestpaperCopy extends AbstractEntityCopy
                 'score' => $item['score'],
                 'missScore' => $item['missScore'],
                 'copyId' => $isCopy ? $item['id'] : 0,
+                'type' => $item['type'],
             );
 
             $this->getTestpaperService()->createItem($newItem);

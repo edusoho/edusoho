@@ -58,19 +58,19 @@ class CourseCopy extends AbstractEntityCopy
             $new['expiryMode'] = $config['expiryMode'];
             if ($config['expiryMode'] == 'days') {
                 $new['expiryDays'] = $config['expiryDays'];
-                $new['expiryStartDate'] = null;
-                $new['expiryEndDate'] = null;
+                $new['expiryStartDate'] = 0;
+                $new['expiryEndDate'] = 0;
             } elseif ($config['expiryMode'] == 'end_date') {
-                $course['expiryStartDate'] = null;
-                $course['expiryDays'] = 0;
+                $new['expiryStartDate'] = 0;
+                $new['expiryDays'] = 0;
                 $new['expiryEndDate'] = $config['expiryEndDate'];
             } elseif ($config['expiryMode'] == 'date') {
-                $course['expiryDays'] = 0;
+                $new['expiryDays'] = 0;
                 $new['expiryStartDate'] = $config['expiryStartDate'];
                 $new['expiryEndDate'] = $config['expiryEndDate'];
             } else {//forever
-                $course['expiryStartDate'] = null;
-                $course['expiryDays'] = 0;
+                $new['expiryStartDate'] = 0;
+                $new['expiryDays'] = 0;
                 $new['expiryEndDate'] = 0;
             }
         }
