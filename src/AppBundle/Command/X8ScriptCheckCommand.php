@@ -47,7 +47,7 @@ class X8ScriptCheckCommand extends BaseCommand
         }
 
         $c1 = $connection->fetchColumn('select count(*) from testpaper_item;');
-        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_v8 where testId in (select id from testpaper_v8 where type='testpaper') and migrateType='testpaper';");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_v8 where testId in (select id from testpaper_v8 where type='testpaper') and type='testpaper';");
         if ($c1 == $c2) {
             $output->writeln('<info> 试卷中题目 数据验证通过.</info>');
         } else {
@@ -66,7 +66,7 @@ class X8ScriptCheckCommand extends BaseCommand
         }
 
         $c1 = $connection->fetchColumn('select count(*) from homework_item where homeworkId in (select id from homework);');
-        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_v8 where testId in (select id from testpaper_v8 where type='homework') and migrateType='homework';");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_v8 where testId in (select id from testpaper_v8 where type='homework') and type='homework';");
         if ($c1 == $c2) {
             $output->writeln('<info> 作业中题目 数据验证通过.</info>');
         } else {
@@ -85,7 +85,7 @@ class X8ScriptCheckCommand extends BaseCommand
         }
 
         $c1 = $connection->fetchColumn('select count(*) from exercise_item where exerciseId in (select id from exercise);');
-        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_v8 where testId in (select id from testpaper_v8 where type='exercise') and migrateType='exercise';");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_v8 where testId in (select id from testpaper_v8 where type='exercise') and type='exercise';");
         if ($c1 == $c2) {
             $output->writeln('<info> 练习中题目 数据验证通过.</info>');
         } else {
@@ -203,7 +203,7 @@ class X8ScriptCheckCommand extends BaseCommand
 
         // task、activity汇总校验：
         $c1 = $connection->fetchColumn('select count(*) from course_task;');
-        $c2 = $connection->fetchColumn('select count(*) from activity;');
+        $c2 = $connection->fetchColumn('select count(*) from activity WHERE `migrateLessonId` IN (SELECT migrateLessonId FROM `course_task`);');
         if ($c1 == $c2) {
             $output->writeln('<info> task、activity汇总校验 数据验证通过.</info>');
         } else {
@@ -221,7 +221,7 @@ class X8ScriptCheckCommand extends BaseCommand
 
         // testpaper_item_result校验
         $c1 = $connection->fetchColumn('select count(*) from testpaper_item_result;');
-        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_result_v8 where migrateType='testpaper';");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_result_v8 where type='testpaper';");
         if ($c1 == $c2) {
             $output->writeln('<info> testpaper_item_result校验 数据验证通过.</info>');
         } else {
@@ -239,7 +239,7 @@ class X8ScriptCheckCommand extends BaseCommand
 
         // homework_item_result校验
         $c1 = $connection->fetchColumn('select count(*) from homework_item_result;');
-        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_result_v8 where migrateType='homework';");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_result_v8 where type='homework';");
         if ($c1 == $c2) {
             $output->writeln('<info> homework_item_result校验 数据验证通过.</info>');
         } else {
@@ -257,7 +257,7 @@ class X8ScriptCheckCommand extends BaseCommand
 
         // exercise_item_result校验
         $c1 = $connection->fetchColumn('select count(*) from exercise_item_result;');
-        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_result_v8 where migrateType='exercise';");
+        $c2 = $connection->fetchColumn("select count(*) from testpaper_item_result_v8 where type='exercise';");
         if ($c1 == $c2) {
             $output->writeln('<info> exercise_item_result校验 数据验证通过.</info>');
         } else {
