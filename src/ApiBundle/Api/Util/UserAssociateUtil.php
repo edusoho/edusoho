@@ -74,7 +74,7 @@ class UserAssociateUtil
      */
     private function findUsers($userIds)
     {
-        $userIds = array_unique($userIds);
+        $userIds = array_values(array_unique($userIds));
         $users = $this->getUserService()->findUsersByIds($userIds);
         return ArrayToolkit::index($users, 'id');
     }
