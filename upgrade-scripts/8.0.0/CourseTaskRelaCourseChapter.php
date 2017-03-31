@@ -4,6 +4,6 @@ class CourseTaskRelaCourseChapter extends AbstractMigrate
 {
     public function update($page)
     {
-    	$this->exec("update course_task ct set ct.categoryId = (select id from course_chapter where migrateLessonId=ct.migrateLessonId limit 1) where migrateLessonId = 0");
+    	$this->exec(" UPDATE `course_task` ck, `course_chapter` cr SET ck.`categoryId` = cr.id WHERE ck.`migrateLessonId` = cr.`migrateLessonId` AND cr.type = 'lesson' ");
     }
 }
