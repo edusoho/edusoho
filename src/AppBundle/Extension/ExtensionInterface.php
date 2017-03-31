@@ -9,4 +9,6 @@ interface ExtensionInterface
     public function getPayments();
 
     public function getActivities();
+
+    public function getCallbacks();
 }
