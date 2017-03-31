@@ -74,6 +74,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
     public function get($id, $lock = false)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE id = ?".($lock ? ' FOR UPDATE' : '');
+
         return $this->db()->fetchAssoc($sql, array($id)) ?: null;
     }
 
@@ -202,7 +203,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
             return "{$name} = ?";
         }, array_keys($fields));
 
-        $sql = "SELECT * FROM {$this->table()} WHERE ".implode(' AND ', $placeholders). ' LIMIT 1 ';
+        $sql = "SELECT * FROM {$this->table()} WHERE ".implode(' AND ', $placeholders).' LIMIT 1 ';
 
         return $this->db()->fetchAssoc($sql, array_values($fields)) ?: null;
     }

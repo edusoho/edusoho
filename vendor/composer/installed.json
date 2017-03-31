@@ -1594,91 +1594,6 @@
         ]
     },
     {
-        "name": "codeages/biz-rate-limiter",
-        "version": "v0.1.4",
-        "version_normalized": "0.1.4.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/biz-rate-limiter.git",
-            "reference": "f0b5eeaf1a98138c25d0f0d097027438f59e2930"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-rate-limiter/zipball/f0b5eeaf1a98138c25d0f0d097027438f59e2930",
-            "reference": "f0b5eeaf1a98138c25d0f0d097027438f59e2930",
-            "shasum": ""
-        },
-        "require": {
-            "codeages/biz-framework": "^0.1.6 || ^0.2.0",
-            "codeages/rate-limiter": "^0.1.3"
-        },
-        "time": "2017-03-27T08:39:31+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\Biz\\RateLimiter\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "Rate limiter with Biz Framework."
-    },
-    {
-        "name": "codeages/plugin-bundle",
-        "version": "v0.1.7",
-        "version_normalized": "0.1.7.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/plugin-bundle.git",
-            "reference": "9e212c1a5ce98464ae73250df4bb0717732277d0"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/9e212c1a5ce98464ae73250df4bb0717732277d0",
-            "reference": "9e212c1a5ce98464ae73250df4bb0717732277d0",
-            "shasum": ""
-        },
-        "require": {
-            "codeages/biz-framework": "^0.1.7 || ^0.2",
-            "php": "^5.3.3 || ^7.0",
-            "symfony/framework-bundle": "^2.8 || ^3.0",
-            "symfony/twig-bundle": "^2.8 || ^3.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~4.8 || ~5.0",
-            "symfony/browser-kit": "^2.8 || ^3.0",
-            "symfony/phpunit-bridge": "~3.2"
-        },
-        "time": "2017-02-27T08:46:09+00:00",
-        "type": "symfony-bundle",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\PluginBundle\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "codeages team",
-                "email": "team@codeages.com"
-            }
-        ],
-        "description": "Symfony PluginBundle",
-        "homepage": "https://github.com/codeages/plugin-bundle",
-        "keywords": [
-            "extension",
-            "plugin",
-            "theme"
-        ]
-    },
-    {
         "name": "codeages/rest-api-client",
         "version": "v0.1.4",
         "version_normalized": "0.1.4.0",
@@ -2391,52 +2306,6 @@
             "xls",
             "xlsx"
         ]
-    },
-    {
-        "name": "sensiolabs/security-checker",
-        "version": "v4.0.2",
-        "version_normalized": "4.0.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/sensiolabs/security-checker.git",
-            "reference": "56bded66985e22f6eac2cf86735fd21c625bff2f"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/56bded66985e22f6eac2cf86735fd21c625bff2f",
-            "reference": "56bded66985e22f6eac2cf86735fd21c625bff2f",
-            "shasum": ""
-        },
-        "require": {
-            "symfony/console": "~2.7|~3.0"
-        },
-        "time": "2017-03-09T17:33:20+00:00",
-        "bin": [
-            "security-checker"
-        ],
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "4.0-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "SensioLabs\\Security": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien.potencier@gmail.com"
-            }
-        ],
-        "description": "A security checker for your composer.lock"
     },
     {
         "name": "sensio/distribution-bundle",
@@ -4226,47 +4095,6 @@
         ]
     },
     {
-        "name": "codeages/biz-framework",
-        "version": "v0.2.13",
-        "version_normalized": "0.2.13.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "ef07e3c3d4a830dc33e2bc3ed218304a5c927f05"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/biz-framework/ef07e3c3d4a830dc33e2bc3ed218304a5c927f05.zip",
-            "reference": "ef07e3c3d4a830dc33e2bc3ed218304a5c927f05",
-            "shasum": ""
-        },
-        "require": {
-            "canoma/canoma": "^0.0.3",
-            "davedevelopment/phpmig": "^1.2.0",
-            "doctrine/dbal": "^2.4.5",
-            "php": "^5.3.3 || ^7.0",
-            "pimple/pimple": "^3.0.2",
-            "psr/log": "^1.0.0",
-            "symfony/event-dispatcher": "^2.8.9"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
-        },
-        "time": "2017-03-28T08:47:05+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\Biz\\Framework\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "A service layer framework."
-    },
-    {
         "name": "monolog/monolog",
         "version": "1.22.1",
         "version_normalized": "1.22.1.0",
@@ -4835,5 +4663,177 @@
         ],
         "description": "Symfony PHPUnit Bridge",
         "homepage": "https://symfony.com"
+    },
+    {
+        "name": "codeages/biz-framework",
+        "version": "v0.3.0",
+        "version_normalized": "0.3.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/biz-framework.git",
+            "reference": "a88b1f1cf110660022119892f378264ed09ab521"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/codeages/biz-framework/a88b1f1cf110660022119892f378264ed09ab521.zip",
+            "reference": "a88b1f1cf110660022119892f378264ed09ab521",
+            "shasum": ""
+        },
+        "require": {
+            "canoma/canoma": "^0.0.3",
+            "davedevelopment/phpmig": "^1.2.0",
+            "doctrine/dbal": "^2.4.5",
+            "php": "^5.3.3 || ^7.0",
+            "pimple/pimple": "^3.0.2",
+            "psr/log": "^1.0.0",
+            "symfony/event-dispatcher": "^2.8.9"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
+        },
+        "time": "2017-03-31T12:03:00+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Biz\\Framework\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "A service layer framework."
+    },
+    {
+        "name": "codeages/plugin-bundle",
+        "version": "v0.1.8",
+        "version_normalized": "0.1.8.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/plugin-bundle.git",
+            "reference": "8fe75a86901f627aa19d6945ad7af3a1e110a6b3"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/codeages/plugin-bundle/8fe75a86901f627aa19d6945ad7af3a1e110a6b3.zip",
+            "reference": "8fe75a86901f627aa19d6945ad7af3a1e110a6b3",
+            "shasum": ""
+        },
+        "require": {
+            "codeages/biz-framework": "^0.1.7 || ^0.2 || ^0.3",
+            "php": "^5.3.3 || ^7.0",
+            "symfony/framework-bundle": "^2.8 || ^3.0",
+            "symfony/twig-bundle": "^2.8 || ^3.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "~4.8 || ~5.0",
+            "symfony/browser-kit": "^2.8 || ^3.0",
+            "symfony/phpunit-bridge": "~3.2"
+        },
+        "time": "2017-03-31T13:04:09+00:00",
+        "type": "symfony-bundle",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\PluginBundle\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "codeages team",
+                "email": "team@codeages.com"
+            }
+        ],
+        "description": "Symfony PluginBundle",
+        "homepage": "https://github.com/codeages/plugin-bundle",
+        "keywords": [
+            "extension",
+            "plugin",
+            "theme"
+        ]
+    },
+    {
+        "name": "codeages/biz-rate-limiter",
+        "version": "v0.1.6",
+        "version_normalized": "0.1.6.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/biz-rate-limiter.git",
+            "reference": "9c734290ff58e33ae3b97f348a114818460fc1db"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/codeages/biz-rate-limiter/9c734290ff58e33ae3b97f348a114818460fc1db.zip",
+            "reference": "9c734290ff58e33ae3b97f348a114818460fc1db",
+            "shasum": ""
+        },
+        "require": {
+            "codeages/biz-framework": "^0.1.6 || ^0.2.0 || ^0.3.0",
+            "codeages/rate-limiter": "^0.1.3"
+        },
+        "time": "2017-03-31T12:22:40+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Biz\\RateLimiter\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "Rate limiter with Biz Framework."
+    },
+    {
+        "name": "sensiolabs/security-checker",
+        "version": "v4.0.3",
+        "version_normalized": "4.0.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/sensiolabs/security-checker.git",
+            "reference": "04bb87f5bd28a7d6ce7f4a4d1d6b94b3c1aa8dae"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/sensiolabs/security-checker/04bb87f5bd28a7d6ce7f4a4d1d6b94b3c1aa8dae.zip",
+            "reference": "04bb87f5bd28a7d6ce7f4a4d1d6b94b3c1aa8dae",
+            "shasum": ""
+        },
+        "require": {
+            "symfony/console": "~2.7|~3.0"
+        },
+        "time": "2017-03-29T08:08:00+00:00",
+        "bin": [
+            "security-checker"
+        ],
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "4.0-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "SensioLabs\\Security": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien.potencier@gmail.com"
+            }
+        ],
+        "description": "A security checker for your composer.lock"
     }
 ]

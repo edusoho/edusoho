@@ -2,16 +2,23 @@
 	"folders":
 	[
 		{
-			"path": ".",
-			"folder_exclude_patterns": [
-                ".sonar",
-                ".happypack",
-                "app/cache",
-                "app/logs",
-                "app/data",
-                "web/files",
-                "node_modules"
-            ]
+			"folder_exclude_patterns":
+			[
+				".sonar",
+				".happypack",
+				"app/cache",
+				"app/logs",
+				"app/data",
+				"web/files",
+				"node_modules"
+			],
+			"path": "."
+		},
+		{
+			"path": "/private/var/www/biz-rate-limiter"
+		},
+		{
+			"path": "/private/var/www/plugin-bundle"
 		}
 	]
 }

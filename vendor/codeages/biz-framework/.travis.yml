@@ -2,6 +2,10 @@ branches:
   - master
   - develop
 
+services:
+  - mysql
+  - redis-server
+
 language: php
 
 php:

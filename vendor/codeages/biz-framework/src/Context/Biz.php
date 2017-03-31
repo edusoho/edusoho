@@ -2,13 +2,13 @@
 
 namespace Codeages\Biz\Framework\Context;
 
-use Codeages\Biz\Framework\Dao\DaoProxy\DaoProxy;
-use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Framework\Dao\DaoProxy;
 use Codeages\Biz\Framework\Dao\FieldSerializer;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Codeages\Biz\Framework\Dao\CacheStrategy;
 
 class Biz extends Container
 {
@@ -25,31 +25,12 @@ class Biz extends Container
 
         $this['autoload.aliases'] = new \ArrayObject(array('' => 'Biz'));
 
-        $this['dao.serializer'] = function () {
-            return new FieldSerializer();
+        $this['dispatcher'] = function () {
+            return new EventDispatcher();
         };
 
-        $this['autoload.object_maker.service'] = function ($biz) {
-            return function ($namespace, $name) use ($biz) {
-                $class = "{$namespace}\\Service\\Impl\\{$name}Impl";
-
-                return new $class($biz);
-            };
-        };
-
-        $this['dao.proxy'] = $this->factory(function($biz) {
-            return new DaoProxy($biz);
-        });
-
-        $this['autoload.object_maker.dao'] = function($biz) {
-            return function($namespace, $name) use ($biz) {
-                $class = "{$namespace}\\Dao\\Impl\\{$name}Impl";
-                $dao = new $class($biz);
-                $declares = $dao->declares();
-                $daoProxy = $biz['dao.proxy'];
-                $daoProxy->setDao($dao);
-                return $daoProxy;
-            };
+        $this['callback_resolver'] = function ($biz) {
+            return new CallbackResolver($biz);
         };
 
         $this['autoloader'] = function ($biz) {
@@ -63,16 +44,41 @@ class Biz extends Container
             );
         };
 
-        $this['dispatcher'] = function () {
-            return new EventDispatcher();
+        $this['autoload.object_maker.service'] = function ($biz) {
+            return function ($namespace, $name) use ($biz) {
+                $class = "{$namespace}\\Service\\Impl\\{$name}Impl";
+                return new $class($biz);
+            };
         };
 
-        $this['callback_resolver'] = function ($biz) {
-            return new CallbackResolver($biz);
+        $this['autoload.object_maker.dao'] = function ($biz) {
+            return function ($namespace, $name) use ($biz) {
+                $class = "{$namespace}\\Dao\\Impl\\{$name}Impl";
+                return new DaoProxy($biz, new $class($biz), $biz['dao.serializer']);
+            };
+        };
+
+        $this['dao.serializer'] = function () {
+            return new FieldSerializer();
+        };
+
+        $this['dao.cache.first.enabled'] = true;
+        $this['dao.cache.second.enabled'] = true;
+
+        $this['dao.cache.chain'] = $this->factory(function ($biz) {
+            return new CacheStrategy\DoubleCacheStrategy();
+        });
+
+        $this['dao.cache.first'] = function() {
+            return new CacheStrategy\MemoryCacheStrategy();
+        };
+
+        $this['dao.cache.second.strategy.table'] = function ($biz) {
+            return new CacheStrategy\TableCacheStrategy($biz['redis']);
         };
 
         foreach ($values as $key => $value) {
-            $this[$key] = $value;
+            $this->offsetSet($key, $value);
         }
     }
 

@@ -144,9 +144,18 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
     protected function registerCacheServiceProvider($biz)
     {
-        if ($this->getContainer()->hasParameter('cache_options')) {
-            $biz->register(new Codeages\Biz\Framework\Provider\CacheServiceProvider());
-            $biz['cache.options'] = $this->getContainer()->getParameter('cache_options');
+        if ($this->getContainer()->hasParameter('redis_host')) {
+            $biz->register(
+                new Codeages\Biz\Framework\Provider\RedisServiceProvider(),
+                array(
+                    'redis.options' => array(
+                        'host' => $this->getContainer()->getParameter('redis_host'),
+                        'timeout' => $this->getContainer()->getParameter('redis_timeout'),
+                        'reserved' => $this->getContainer()->getParameter('redis_reserved'),
+                        'redis_interval' => $this->getContainer()->getParameter('redis_interval'),
+                    )
+                )
+            );
         }
     }
 
