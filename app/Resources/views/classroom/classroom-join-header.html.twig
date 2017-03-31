@@ -91,7 +91,7 @@
           </div>
 
           <div class="hidden-sm fsn">
-            {% if classroom.expiryMode != 'none' %}
+            {% if classroom.expiryMode != 'forever' %}
               {% if 'student' in member.role or 'member' in member.role %}
                 <span class="mrm">班级有效期</span>
                 <span>{{ memberDeadline|date('Y-n-d') }}</span>
