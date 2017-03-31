@@ -110,6 +110,7 @@
             </a>
             <div name="bannerCourseShow1">
               <ul class="banner-course" role="bannerCourse">
+                {% set courseSet=data('CourseSet',{'id':bannerCourse1.courseSetId}) %}
                 {% include 'admin/course/course-item.html.twig' with {course:bannerCourse1} %}
               </ul>
             </div>
