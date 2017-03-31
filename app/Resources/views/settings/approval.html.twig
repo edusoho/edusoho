@@ -11,8 +11,8 @@
 
     {% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
 
-        {% block heading %}  {{'实名认证'|trans}}
-        {{ app.user.approvalStatus }}
+        {% block heading %}
+          {{'实名认证'|trans}}
         {% endblock %}
 
         {% block body %}

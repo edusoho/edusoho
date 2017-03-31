@@ -48,6 +48,7 @@ export default class Options extends Component {
   }
 
   updateInputValue(inputValue) {
+    console.log(inputValue);
     this.editorHtml = inputValue;
     this.props.updateInputValue(this.props.datas.optionId,inputValue);
   }

@@ -192,14 +192,12 @@ class Marketing {
     let $buyable = $('[name="buyable"]:checked');
     let $buyExpiryTime = $('[name="buyExpiryTime"]');
     if ($buyable.val() == 1 && $enableBuyExpiryTime.val() == 1) {
-      console.log('ok');
       this.elementAddRules($buyExpiryTime, this.getBuyExpiryTimeRules());
     }
     else {
       this.elementRemoveRules($buyExpiryTime);
     }
     this.validator.form();
-    console.log(this.validator.settings.rules);
   }
 
   initExpiryMode() {
@@ -208,7 +206,6 @@ class Marketing {
     let $expiryStartDate = $('[name="expiryStartDate"]');
     let $expiryEndDate = $('[name="expiryEndDate"]');
     let expiryMode = $('[name="expiryMode"]:checked').val();
-    console.log(expiryMode);
     this.elementRemoveRules($deadline);
     this.elementRemoveRules($expiryDays);
     this.elementRemoveRules($expiryStartDate);
@@ -239,7 +236,6 @@ class Marketing {
   getBuyExpiryTimeRules() {
     return {
       required: true,
-      after_now_date: true,
       messages: {
         required: Translator.trans('请输入加入截止日期!')
       }
@@ -261,7 +257,6 @@ class Marketing {
     return {
       required: true,
       date: true,
-      after_now_date: true,
       before_date: '#expiryEndDate',
       messages: {
         required: Translator.trans('请输入开始日期!')
@@ -284,7 +279,6 @@ class Marketing {
     return {
       required: true,
       date: true,
-      after_now_date: true,
       messages: {
         required: Translator.trans('请输入截至日期!')
       }
