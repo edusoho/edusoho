@@ -1,3 +1,5 @@
+import { EventReport } from  './event-report';
+EventReport();
 $('#modal').on('hidden.bs.modal', function () {
     $("#viewerIframe").attr('src', '');
 });

@@ -25,7 +25,7 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-9 col-md-8 course-detail-content">
-
+        <div id="event" data-subject-id={{ course.id }} data-user-id={{ app.user.id }}></div>
         {% include 'course/announcement/block.html.twig' with { courseId:course.id } %}
 
         <section class="es-section">

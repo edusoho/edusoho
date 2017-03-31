@@ -8,6 +8,7 @@
 {% do script(['app/js/task/preview/index.js']) %}
 
 {% block body %}
+  <div id="event" data-subject-id={{ course.id }} data-user-id={{ app.user.id }}></div>
   <iframe src="{{ path('course_task_content_preview',{courseId:task.courseId, id:task.id}) }}" id="viewerIframe" width="100%" allowfullscreen="" webkitallowfullscreen="" height="400px" style="border:0px"></iframe>
 {% endblock %}
 

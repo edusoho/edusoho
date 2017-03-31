@@ -154,14 +154,14 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $taskResult = $event->getSubject();
         $user = $event->getArgument('user');
-        $this->updateMemberLearnedNum($taskResult['courseId'], $user['id']);
+        $this->updateMemberLearneData($taskResult['courseId'], $user['id']);
     }
 
     public function onTaskDelete(Event $event)
     {
         $task = $event->getSubject();
         $user = $event->getArgument('user');
-        $this->updateMemberLearnedNum($task['courseId'], $user['id']);
+        $this->updateMemberLearneData($task['courseId'], $user['id']);
     }
 
     protected function getWelcomeMessageBody($user, $course)
@@ -265,7 +265,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         return $this->getBiz()->service('Course:MemberService');
     }
 
-    protected function updateMemberLearnedNum($courseId, $userId)
+    protected function updateMemberLearneData($courseId, $userId)
     {
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
 
@@ -276,7 +276,11 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         );
         $learnedNum = $this->getTaskResultService()->countTaskResults($conditions);
 
-        $this->getCourseMemberService()->updateMember($member['id'], array('learnedNum' => $learnedNum));
+        $learnData = array(
+            'learnedNum'    => $learnedNum,
+            'lastLearnTime' => time(),
+        );
+        $this->getCourseMemberService()->updateMember($member['id'], $learnData);
     }
 
     /**
