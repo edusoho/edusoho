@@ -23,7 +23,6 @@ class CourseSetFilter extends Filter
         foreach ($data['cover'] as $size => $imagePath) {
             $data['cover'][$size] = RequestUtil::asset($imagePath);
         }
-
         $userFilter = new UserFilter();
         $userFilter->filter($data['creator']);
     }

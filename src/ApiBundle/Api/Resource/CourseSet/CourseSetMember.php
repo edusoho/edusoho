@@ -22,8 +22,8 @@ class CourseSetMember extends Resource
 
         $total = $this->service('Course:MemberService')->countMembers($conditions);
 
-        $this->getUAUtil()->multiple($members, array('userId'));
-
+        $this->getOCUtil()->multiple($members, array('userId'));
+        
         return $this->makePagingObject($members, $total, $offset, $limit);
     }
 }

@@ -16,7 +16,7 @@ class Course extends Resource
             throw new ResourceNotFoundException('教学计划不存在');
         }
 
-        $this->getUAUtil()->single($course, array('creator', 'teacherIds'));
+        $this->getOCUtil()->single($course, array('creator', 'teacherIds'));
 
         return $course;
     }

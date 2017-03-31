@@ -3,7 +3,7 @@
 namespace ApiBundle\Api\Resource;
 
 use ApiBundle\Api\Exception\InvalidArgumentException;
-use ApiBundle\Api\Util\UserAssociateUtil;
+use ApiBundle\Api\Util\ObjectCombinationUtil;
 use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -104,12 +104,12 @@ abstract class Resource
     }
 
     /**
-     * @return UserAssociateUtil
+     * @return ObjectCombinationUtil
      */
-    public function getUAUtil()
+    public function getOCUtil()
     {
         $biz = $this->getBiz();
-        return $biz['api.util.userAssoc'];
+        return $biz['api.util.oc'];
     }
     
     protected function makePagingObject($objects, $total, $offset, $limit)

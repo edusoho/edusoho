@@ -33,6 +33,7 @@ class ResourceProxy
         } else {
             $this->resource->getFilter()->filter($result);
         }
+
     }
 
 }

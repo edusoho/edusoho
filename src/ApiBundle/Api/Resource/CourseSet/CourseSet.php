@@ -10,20 +10,13 @@ class CourseSet extends Resource
 {
     public function get(Request $request, $courseSetId)
     {
-        $currentUser = $this->getCurrentUser();
-        $conditions = array('id' => $courseSetId);
-        if (!$currentUser->isAdmin()) {
-            $conditions['status'] = 'published';
+        $courseSet = $this->service('Course:CourseSetService')->getCourseSet($courseSetId);
+
+        if (empty($courseSet)) {
+            throw new ResourceNotFoundException('课程不存在');
         }
 
-        $results = $this->service('Course:CourseSetService')->searchCourseSets($conditions, array(), 0, 1);
-
-        if (empty($results)) {
-            throw new ResourceNotFoundException('课程不存在或者无权限访问');
-        }
-
-        $courseSet = $results[0];
-        $this->getUAUtil()->single($courseSet, array('creator'));
+        $this->getOCUtil()->single($courseSet, array('creator'));
 
         return $courseSet;
     }

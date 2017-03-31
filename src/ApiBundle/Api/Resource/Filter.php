@@ -16,7 +16,7 @@ abstract class Filter
 
         $this->defaultTimeFilter($data);
 
-        $this->customFilter($data);
+        static::customFilter($data);
     }
 
     abstract protected function customFilter(&$data);

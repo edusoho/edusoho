@@ -30,7 +30,7 @@ class CourseSetReview extends Resource
             $limit
         );
 
-        $this->getUAUtil()->multiple($reviews, array('userId'));
+        $this->getOCUtil()->multiple($reviews, array('userId'));
 
         $total = $this->service('Course:ReviewService')->searchReviewsCount($conditions);
 
