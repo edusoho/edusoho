@@ -232,6 +232,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     public function findItemResultsByResultId($resultId)
     {
         $result = $this->getTestpaperResult($resultId);
+
         return $this->getItemResultDao()->findItemResultsByResultId($resultId, $result['type']);
     }
 
