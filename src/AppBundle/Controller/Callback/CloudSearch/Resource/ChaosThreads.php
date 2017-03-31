@@ -2,10 +2,10 @@
 
 namespace AppBundle\Controller\Callback\CloudSearch\Resource;
 
-use AppBundle\Controller\Callback\CloudSearch\BaseResource;
+use AppBundle\Controller\Callback\CloudSearch\BaseProvider;
 use Symfony\Component\HttpFoundation\Request;
 
-class ChaosThreads extends BaseResource
+class ChaosThreads extends BaseProvider
 {
     public function get(Request $request)
     {

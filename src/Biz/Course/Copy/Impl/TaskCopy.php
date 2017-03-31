@@ -268,6 +268,7 @@ class TaskCopy extends AbstractEntityCopy
 
     /**
      * @param  $type
+     *
      * @return Activity
      */
     private function getActivityConfig($type)

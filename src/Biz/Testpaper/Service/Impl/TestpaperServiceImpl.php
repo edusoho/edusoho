@@ -203,7 +203,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             throw new ResourceNotFoundException('testpaper', $id);
         }
 
-        if (!in_array($testpaper['status'], array('open'))) {
+        if ('open' != $testpaper['status']) {
             throw $this->createAccessDeniedException($this->getKernel()->trans('试卷状态不合法!'));
         }
 
@@ -466,16 +466,18 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             }
 
             if (!empty($userAnswer['answer'])) {
-                if ($paperResult['type'] == 'homework') {
-                    $checkedFields['status'] = 'right';
-                } else {
-                    $checkedFields['status'] = $checkedFields['score'] == $item['score'] ? 'right' : 'wrong';
+                $userAnswer = str_replace('""', '', $userAnswer['answer'][0]);
+
+                if (!empty($userAnswer)) {
+                    if ($paperResult['type'] == 'homework') {
+                        $checkedFields['status'] = 'right';
+                    } else {
+                        $checkedFields['status'] = $checkedFields['score'] == $item['score'] ? 'right' : 'wrong';
+                    }
                 }
             }
-
             $this->updateItemResult($userAnswer['id'], $checkedFields);
         }
-
         $fields['checkTeacherId'] = $user['id'];
         $fields['checkedTime'] = time();
         $fields['subjectiveScore'] = array_sum(ArrayToolkit::column($checkData, 'score'));
@@ -763,7 +765,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
 
-            if ($member && (in_array('teacher', $member['role'])) || in_array('headTeacher', $member['role'])) {
+            if ($member && (in_array('teacher', $member['role']) || in_array('headTeacher', $member['role']))) {
                 return true;
             }
         }

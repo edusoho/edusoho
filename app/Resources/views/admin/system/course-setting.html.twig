@@ -59,10 +59,10 @@
     <legend>权限与版权</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >{{'允许教师设置课程价格'|trans}}</label>
+        <label >{{'允许教师管理课程营销'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('teacher_modify_price', {1:'是'|trans, 0:'否'|trans}, courseSetting.teacher_modify_price) }}
+        {{ radios('teacher_manage_marketing', {1:'是'|trans, 0:'否'|trans}, courseSetting.teacher_manage_marketing) }}
       </div>
     </div>
 

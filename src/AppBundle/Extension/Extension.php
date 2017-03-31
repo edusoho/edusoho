@@ -20,4 +20,9 @@ abstract class Extension extends BizAware implements ExtensionInterface
     {
         return array();
     }
+
+    public function getCallbacks()
+    {
+        return array();
+    }
 }

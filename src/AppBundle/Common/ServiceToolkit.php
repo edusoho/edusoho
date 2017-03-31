@@ -33,7 +33,7 @@ class ServiceToolkit
             'summary' => '提供专属的一对一在线答疑，快速答疑解惑。',
             'active' => 0,
         ),
-        'event' =>  array(
+        'event' => array(
             'code' => 'event',
             'short_name' => '动',
             'full_name' => '班级活动',
@@ -46,7 +46,7 @@ class ServiceToolkit
             'full_name' => '就业指导',
             'summary' => '完成全部学习后，老师对您的学习成果和能力水平给出评估，并提供专业化的就业指导',
             'active' => 0,
-        )
+        ),
     );
 
     public static function getServicesByCodes($codes)

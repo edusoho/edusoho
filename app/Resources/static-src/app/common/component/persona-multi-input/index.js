@@ -31,7 +31,7 @@ export default class PersonaMultiInput extends MultiInput {
   constructor(props) {
     super(props);
   }
-
+  
   componentWillMount() {
     this.state = {
       dataSourceUi: [],
@@ -43,10 +43,19 @@ export default class PersonaMultiInput extends MultiInput {
 
   getChildContext() {
     return {
+      addable: this.props.addable,
+      searchable: this.props.searchable,
+      sortable: this.props.sortable,
+      listClassName:this.props.listClassName,
+      inputName: this.props.inputName,
+      showCheckbox:this.props.showCheckbox,
+      showDeleteBtn:this.props.showDeleteBtn,
+      checkBoxName:this.props.checkBoxName,
+      onChecked:this.onChecked,
       removeItem: this.removeItem,
       sortItem: this.sortItem,
       addItem: this.addItem,
-      onChecked:this.onChecked,
+      dataSourceUi: this.state.dataSourceUi,
     }
   }
 
@@ -74,7 +83,7 @@ export default class PersonaMultiInput extends MultiInput {
   }
 
   getList() {
-    return (<List listClassName={this.props.listClassName}  dataSourceUi = {this.state.dataSourceUi}  sortable={this.props.sortable} showCheckbox = {this.props.showCheckbox} showDeleteBtn = {this.props.showDeleteBtn}  inputName = { this.props.inputName } checkBoxName ={this.props.checkBoxName}></List>);
+    return (<List></List>);
   }
 }
 
@@ -102,6 +111,9 @@ PersonaMultiInput.defaultProps = {
 
 PersonaMultiInput.childContextTypes = {
   ...MultiInput.childContextTypes,
-  onChecked: React.PropTypes.func
+  showCheckbox:React.PropTypes.bool,
+  showDeleteBtn:React.PropTypes.bool,
+  checkBoxName:React.PropTypes.string,
+  onChecked: React.PropTypes.func,
 };
 

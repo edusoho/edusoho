@@ -38,7 +38,8 @@
       {% endif %}
     </div>
     <div class="content editor-text">{{ course.about|raw }}</div>
-    {% if not is_open_course and course.lessons|default(null) %}
+    {# 云搜索任务直接取前三个会造成与搜索结果不匹配，暂时先隐藏 #}
+    {#{% if not is_open_course and course.lessons|default(null) %}
       <ul class="ul-lesson">
         {% for task in course.lessons|slice(0, 3) %}
           <li>
@@ -50,6 +51,6 @@
           </li>
         {% endfor %}
       </ul>
-    {% endif %}
+    {% endif %}#}
   </div>
 </div>
