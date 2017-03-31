@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class ClassroomUpdateExpiryMode extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -18,7 +18,7 @@ class ClassroomUpdateExpiryMode extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
