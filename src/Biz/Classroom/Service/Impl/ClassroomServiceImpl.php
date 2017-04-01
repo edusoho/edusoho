@@ -544,13 +544,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $newTeacherIds = array_unique($newTeacherIds);
-        $ids = array();
 
-        foreach ($newTeacherIds as $key => $value) {
-            $ids[] = $value;
-        }
+        $newTeacherIds = array_filter($newTeacherIds, function ($newTeacherId) {
+            return !empty($newTeacherId);
+        });
 
-        $newTeacherIds = $ids;
         $deleteTeacherIds = array_diff($oldTeacherIds, $newTeacherIds);
         $addTeacherIds = array_diff($newTeacherIds, $oldTeacherIds);
         $addMembers = $this->findMembersByClassroomIdAndUserIds($id, $addTeacherIds);
