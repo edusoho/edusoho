@@ -1322,7 +1322,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function tryManageClassroom($id, $actionPermission = null)
     {
         if (!$this->canManageClassroom($id, $actionPermission)) {
-            // throw $this->createAccessDeniedException('您无权操作！');
+            throw $this->createAccessDeniedException('您无权操作！');
         }
     }
 
