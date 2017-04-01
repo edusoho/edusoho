@@ -65,6 +65,7 @@ export default class Homework {
           required: true,
           maxlength: 50,
           trim: true,
+          open_live_course_title: true,
         },
         description: {
           required: true

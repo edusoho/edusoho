@@ -2,10 +2,10 @@
 
 namespace AppBundle\Controller\Callback\CloudSearch\Resource;
 
-use AppBundle\Controller\Callback\CloudSearch\BaseResource;
+use AppBundle\Controller\Callback\CloudSearch\BaseProvider;
 use AppBundle\Common\ArrayToolkit;
 
-class Article extends BaseResource
+class Article extends BaseProvider
 {
     public function filter($res)
     {

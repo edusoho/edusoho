@@ -340,23 +340,44 @@ class TestpaperServiceTest extends BaseTestCase
 
     public function testFindItemResultsByResultId()
     {
-        $item = $this->createSingleItem();
+        $choiceQuestions = $this->generateChoiceQuestions(1, 2);
+        $fillQuestions = $this->generateFillQuestions(1, 2);
+        $determineQuestions = $this->generateDetermineQuestions(1, 2);
+        $essayQuestions = $this->generateEssayQuestions(1, 2);
 
-        $fields = array(
-            'itemId' => $item['id'],
-            'testId' => $item['testId'],
-            'resultId' => 1,
-            'userId' => 1,
-            'questionId' => $item['questionId'],
-            'answer' => array(1),
-            'status' => 'wrong',
-            'score' => 0,
+        $fields1 = array(
+            'name' => 'testpaper',
+            'description' => 'testpaper description',
+            'mode' => 'range',
+            'ranges' => array('courseId' => 0),
+            'passedScore' => 60,
+            'counts' => array('choice' => 2, 'fill' => 2, 'determine' => 1),
+            'scores' => array('choice' => 2, 'fill' => 2, 'determine' => 2),
+            'missScores' => array('choice' => 1, 'uncertain_choice' => 1),
+            'courseSetId' => 1,
+            'courseId' => 0,
+            'pattern' => 'questionType',
+            'type' => 'testpaper',
         );
-        $itemResult = $this->getTestpaperService()->createItemResult($fields);
+        $testpaper = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
+        $fields = array(
+            'lessonId' => 1,
+            'courseId' => 1,
+        );
+        $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $fields);
 
-        $itemResults = $this->getTestpaperService()->findItemResultsByResultId(1);
+        $formData = array(
+            'usedTime' => 5,
+            'data' => array(
+                $choiceQuestions[0]['id'] => array(2, 3),
+                $fillQuestions[0]['id'] => array('fill answer'),
+            ),
+        );
+        $result = $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
 
-        $this->assertEquals(1, count($itemResults));
+        $itemResults = $this->getTestpaperService()->findItemResultsByResultId($result['id']);
+
+        $this->assertEquals(2, count($itemResults));
     }
 
     /**
@@ -1004,6 +1025,7 @@ class TestpaperServiceTest extends BaseTestCase
                 'parentId' => $question['parentId'],
                 'score' => $question['score'],
                 'missScore' => 0,
+                'type' => $testpaper['type'],
             );
             $items[] = $this->getTestpaperService()->createItem($fields);
             ++$seq;

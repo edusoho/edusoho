@@ -18,6 +18,7 @@ export default class DownLoad {
           required: true,
           maxlength: 50,
           trim: true,
+          open_live_course_title: true,
         },
         link: 'url',
         materials: 'required',

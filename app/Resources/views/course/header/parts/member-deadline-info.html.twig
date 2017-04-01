@@ -12,17 +12,25 @@
           {{ course.expiryEndDate|date('Y-m-d') }}
           {% set lastDays = course.expiryEndDate|time_diff %}
           {% if lastDays > 0 %}
-            剩余 {{ lastDays }} 天
+            {% if lastDays == 1 %}
+              <span class="color-warning">(今日到期)</span>
+            {% else %}
+              (剩余 {{ lastDays }} 天)
+            {% endif %}
           {% else %}
-            <span class="color-danger">已到期</span>
+            <span class="color-danger">(已到期)</span>
           {% endif %}
         {% else %}
           {{ member.deadline|date('Y-m-d') }}
           {% set lastDays = member.deadline|time_diff %}
           {% if lastDays > 0 %}
-            剩余 {{ lastDays }} 天
+            {% if lastDays == 1 %}
+              <span class="color-warning">(今日到期)</span>
+            {% else %}
+              (剩余 {{ lastDays }} 天)
+            {% endif %}
           {% else %}
-            <span class="color-danger">已到期</span>
+            <span class="color-danger">(已到期)</span>
           {% endif %}
         {% endif %}
     {% endif %}

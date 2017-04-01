@@ -869,8 +869,10 @@ class ClassroomManageController extends BaseController
 
             $class['tagIds'] = $this->getTagIdsFromRequest($request);
 
-            if ($class['expiryMode'] == 'date') {
+            if ($class['expiryMode'] === 'date') {
                 $class['expiryValue'] = strtotime($class['expiryValue'].' 23:59:59');
+            } elseif ($class['expiryMode'] === 'forever') {
+                $class['expiryValue'] = 0;
             }
 
             $classroom = $this->getClassroomService()->updateClassroom($id, $class);
@@ -1064,10 +1066,6 @@ class ClassroomManageController extends BaseController
 
     public function publishAction($id)
     {
-        $this->getClassroomService()->tryManageClassroom($id);
-
-        // $classroom = $this->getClassroomService()->getClassroom($id);
-
         $this->getClassroomService()->publishClassroom($id);
 
         return new Response('success');
@@ -1099,10 +1097,6 @@ class ClassroomManageController extends BaseController
 
     public function closeAction($id)
     {
-        $this->getClassroomService()->tryManageClassroom($id);
-
-        // $classroom = $this->getClassroomService()->getClassroom($id);
-
         $this->getClassroomService()->closeClassroom($id);
 
         return new Response('success');

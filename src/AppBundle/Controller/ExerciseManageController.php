@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ExerciseManageController extends BaseController
 {
-    public function buildCheckAction(Request $request, $courseId, $lessonId)
+    public function buildCheckAction(Request $request, $courseId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
 

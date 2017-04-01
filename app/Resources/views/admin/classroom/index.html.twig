@@ -21,11 +21,7 @@
     <thead>
     <tr>
       {% if setting('magic.enable_org','0') %}
-<<<<<<< HEAD
         <th><input type="checkbox"  data-role="batch-select"></th>
-=======
-        <th><input type="checkbox"  data-role="batch-item"></th>
->>>>>>> origin/feature/x8
       {% endif %}
       <th>{{'%title%编号'|trans({'%title%':setting('calssroom.title')|default('班级'|trans)}) }}</th>
       <th width="22%">{{'%name%名称'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</th>

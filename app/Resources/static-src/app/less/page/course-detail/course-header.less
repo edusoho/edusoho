@@ -3,14 +3,23 @@
   position: relative;
   padding: 15px ;
   .course-detail-top {
+    padding-right: 130px;
+    @media(max-width:@screen-sm-max) {
+      padding-right: 0;
+    }
     .course-detail-heading {
-      max-width: 60%;
       vertical-align: top;
       display: inline-block;
       color:@gray-darker;
       font-size: 24px;
-      // vertical-top inline-block gray-darker text-24
       @media(max-width:@screen-sm-max){
+        max-width: 100%;
+      }
+    }
+    .subtitle {
+      padding-top: 5px;
+      max-width: 50%;
+      @media(max-width:@screen-sm-max) {
         max-width: 100%;
       }
     }
@@ -50,40 +59,8 @@
       }
     }
   }
-  .course-operation-responsive {
-    background-color: @bg-color;
-    padding: 20px 20px;
-    margin: 0 -10px 12px;
-    >ul {
-      margin: 0;
-      padding: 0;
-      >li {
-        width: 50%;
-        float: left;
-        list-style-type: none;
-        text-align: center;
-        color: @gray;
-        font-size: 14px;
-        line-height: 30px;
-        &:hover {
-          color: @brand-primary;
-          a {
-            color: @brand-primary;
-          }
-        }
-        a {
-          color: @gray;
-          i {
-            font-size: 24px;
-          }
-        }
-      }
-    }
-    .es-share.top .dropdown-menu {
-      left: 50%;
-      margin-left: -70px;
-    }
-  }
+  
+  
   .course-detail-bottom {
     .course-detail-img {
       position: relative;
@@ -155,7 +132,7 @@
         @media(max-width:@screen-sm-max){
           padding-left: 15px;
           min-height: auto;
-          margin: 0px -15px 15px -15px;
+          margin: 0px -15px 10px -15px;
           padding-top: 0;
           background-color: transparent;
         }
@@ -207,6 +184,9 @@
         }
       }
       .tag-discount{
+        @media(max-width:@screen-sm-min) {
+          display: none;
+        }
         position: relative;
         top:-3px;
         background: url("@{img-src}course2_tag_discount.png") no-repeat;
@@ -220,6 +200,68 @@
           margin-left:25px;
         }
       } 
+    }
+    .buy-btn-group  {
+      @media(max-width:@screen-sm-max) {
+        line-height: 30px;
+        position:absolute;
+        right: 10px;
+        bottom: 18px;
+      }
+      @media(max-width:329px) {
+         bottom: 24px;
+      }
+      .btn-lg {
+        padding: 10px 35px;
+        @media(max-width:500px) and (min-width:400px){
+          padding: 10px 20px;
+        }
+        @media(max-width:399px) and (min-width:330px){
+           padding: 10px 13px;
+        }
+        @media(max-width:329px) {
+          padding: 5px 10px;
+        }
+      }
+    }
+    .course-operation-responsive {
+      background-color: @bg-color;
+      padding: 22px 10px 22px 0;
+      margin: -15px;
+      ul {
+        margin: 0;
+        padding: 0;
+        >li {
+          float: left;
+          width: 60px;
+          list-style-type: none;
+          text-align: center;
+          color: @gray;
+          font-size: 12px;
+          @media(max-width:399px) and (min-width:330px){
+            width: 50px;
+          }
+          @media(max-width:329px) {
+            width: 45px;
+          }
+          &:last-child {
+            border-left: 1px solid @gray-light;
+          }
+          &:hover {
+            color: @brand-primary;
+            a {
+              color: @brand-primary;
+            }
+          }
+          a {
+            color: @gray;
+          }
+        }
+      }
+      .es-share.top .dropdown-menu {
+        left: 50%;
+        margin-left: -70px;
+      }
     }
   }
 }

@@ -2,14 +2,14 @@
 
 namespace AppBundle\Controller\Callback\CloudSearch\Resource;
 
-use AppBundle\Controller\Callback\CloudSearch\BaseResource;
+use AppBundle\Controller\Callback\CloudSearch\BaseProvider;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * 课程资源集合(对应course_set表).
  */
-class Courses extends BaseResource
+class Courses extends BaseProvider
 {
     public function get(Request $request)
     {

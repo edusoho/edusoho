@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\ArrayToolkit;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\FileToolkit;
-use Biz\CloudPlatform\CloudAPIFactory;
 
 class MobileController extends BaseController
 {
@@ -97,7 +97,7 @@ class MobileController extends BaseController
         $courses = ArrayToolkit::index($courses, 'id');
         $sortedCourses = array();
         foreach ($courseIds as $value) {
-            if (!empty($value)) {
+            if (!empty($value) && !empty($courses[$value])) {
                 $sortedCourses[] = $courses[$value];
             }
         }

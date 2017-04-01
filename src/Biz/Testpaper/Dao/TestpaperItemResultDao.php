@@ -6,7 +6,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface TestpaperItemResultDao extends GeneralDaoInterface
 {
-    public function findItemResultsByResultId($resultId);
+    public function findItemResultsByResultId($resultId, $type);
 
     public function addItemAnswers($testPaperResultId, $answers, $testPaperId, $userId);
 

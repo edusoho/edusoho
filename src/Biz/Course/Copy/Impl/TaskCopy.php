@@ -248,6 +248,7 @@ class TaskCopy extends AbstractEntityCopy
             'type',
             'mediaSource',
             'status',
+            'length',
         );
 
         $new = array(
