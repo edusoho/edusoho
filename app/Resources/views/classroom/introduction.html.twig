@@ -1,6 +1,5 @@
 {% extends 'classroom/content-layout.html.twig' %}
 {% block title %}{{ parent() }}{% endblock %}
-{% do load_script('topxiawebbundle/controller/classroom/event-report') %}
 {% set nav = 'introduction' %}
 {% block description %}{{ classroomDescription|default('')|plain_text(100) }}{% endblock %}
 {% block keywords %}{{ parent() }}{% endblock %}
@@ -8,7 +7,8 @@
 
 {% block main %}
   <div class="class-about">
-    <div id="event" data-subject-id={{ classroom.id }} data-user-id={{ app.user.id }}></div>
+    {% set eventReportOptions = {'user-id': app.user.id} %}
+    {{ event_report_twig('classroom.view', 'classroom', classroom.id, eventReportOptions) }}
         {% if introduction is empty %}
             <p class="mvl tac color-gray">{{'暂无介绍'|trans}}</p>
         {% else %}

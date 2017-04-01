@@ -1,14 +1,12 @@
 import { chapterAnimate } from 'app/common/widget/chapter-animate';
 import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
 import { Browser } from 'common/utils';
-import {EventReport} from './event-report';
 import Swiper from 'swiper';
 
 chapterAnimate();
 initTaskLearnChart();
 triggerMemberExpired();
 remainTime();
-EventReport();
 
 if ($('.js-attachment-list').length > 0) {
   new AttachmentActions($('.js-attachment-list'));

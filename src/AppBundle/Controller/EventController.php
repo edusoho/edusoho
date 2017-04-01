@@ -9,18 +9,24 @@ class EventController extends BaseController
 {
     public function dispatchAction(Request $request)
     {
+        $currentUser = $this->getCurrentUser();
+        if (!$currentUser->isLogin()) {
+            return $this->createJsonResponse('fail');
+        }
         $data        = $request->request->all();
         $eventName   = $request->request->get('eventName');
         $subjectId   = $request->request->get('subjectId');
         $subjectType = $request->request->get('subjectType');
 
-        $subject     = $this->getEventService()->getEventSubject($subjectType, $subjectId);
+        $subject = $this->getEventService()->getEventSubject($subjectType, $subjectId);
 
-        if (!empty($subject)) {
-            $this->getEventService()->dispatch($eventName, $subject, $data);
+        if (empty($subject)) {
+            return $this->createJsonResponse('fail');
         }
 
-        return $this->createJsonResponse('');
+        $this->getEventService()->dispatch($eventName, $subject, $data);
+
+        return $this->createJsonResponse('success');
     }
 
     /**
