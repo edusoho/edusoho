@@ -255,7 +255,7 @@ class PayCenterController extends BaseController
             if($isMicroMessenger){
                 $url = $this->generateUrl('pay_center_wxpay',array($request));
                 $request->headers->add(array('X_ORIGINAL_URL'=>$url));
-                
+
                 return $this->forward('TopxiaWebBundle:PayCenter:wxpay', array(
                     'order' => $order
                 ));
@@ -529,8 +529,14 @@ class PayCenterController extends BaseController
 
     private function makeWxpayToken($orderId)
     {
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $value = '';
+        for ($i = 0; $i < 5; $i++) {
+            $value .= $chars[mt_rand(0, strlen($chars) - 1)];
+        }
+        
         $order = $this->getOrderService()->getOrder($orderId);
-        $token['token'] = $order['sn'].rand(1,9);
+        $token['token'] = $order['sn'].$value;
         return $token;
     }
 
