@@ -8,6 +8,7 @@ use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Topxia\Service\Common\ServiceKernel;
 
 abstract class Resource
@@ -41,6 +42,12 @@ abstract class Resource
         if (class_exists($filterClass)) {
             $this->filter = new $filterClass();
         }
+    }
+
+    public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    {
+        $router = $this->biz['router'];
+        return $router->generate($route, $parameters, $referenceType);
     }
 
     /**

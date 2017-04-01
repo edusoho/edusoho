@@ -31,6 +31,11 @@ class CourseMember extends Resource
         return $this->makePagingObject($members, $total, $offset, $limit);
     }
 
+    public function get(Request $request, $courseId, $userId)
+    {
+        return $this->service('Course:MemberService')->getCourseMember($courseId, $userId);
+    }
+
     public function add(Request $request, $courseId)
     {
         $course = $this->service('Course:CourseService')->getCourse($courseId);
