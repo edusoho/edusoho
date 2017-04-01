@@ -373,7 +373,7 @@ class PayCenterController extends BaseController
         $response = $this->createPaymentResponse($name, $returnArray);
 
         $payData = $response->getPayData();
-        $this->getPayLogger()->addInfo($payData);
+        $this->getPayLogger()->addInfo(implode('-',$payData));
         if ($payData['status'] == 'waitBuyerConfirmGoods') {
             return new Response('success');
         }
