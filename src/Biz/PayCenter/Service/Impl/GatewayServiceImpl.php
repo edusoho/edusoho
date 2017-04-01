@@ -9,7 +9,7 @@ use Biz\PayCenter\Service\GatewayService;
 
 class GatewayServiceImpl extends BaseService implements GatewayService
 {
-    public function payOrder($orderId, $payment)
+    public function beforePayOrder($orderId, $payment)
     {
         $order = $this->getOrderService()->getOrder($orderId);
 
@@ -130,6 +130,6 @@ class GatewayServiceImpl extends BaseService implements GatewayService
 
     protected function getPayCenterService()
     {
-        return $this->getBiz()->service('PayCenter:PayCenterService');
+        return $this->createService('PayCenter:PayCenterService');
     }
 }
