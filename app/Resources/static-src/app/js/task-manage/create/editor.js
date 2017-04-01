@@ -105,6 +105,9 @@ class Editor {
         const needAppend = response.append;
         const html = response.html;
         this.$element.modal('hide');
+        if(!$('.js-task-empty').hasClass('hidden') ){
+            $('.js-task-empty').addClass('hidden');
+        }
         if (needAppend === false) {
           // @TODO这里也需要返回html,进行替换          
           document.location.reload();

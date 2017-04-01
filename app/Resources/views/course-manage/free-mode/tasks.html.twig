@@ -45,23 +45,20 @@
           </div>
         </div>
       </div>
-      {% if items %}
-        <ul id="sortable-list" class="task-manage-list sortable-list"
-            data-sort-url='{{ path("course_manage_items_sort",{courseId: course.id}) }}'>
-          {% for key, item in items %}
-            {% if item.type == 'lesson' %}
-              {% include 'task-manage/list-item.html.twig' with {task:item} %}
-            {% else %}
-              {% include 'course-manage/chapter/list-item.html.twig' with {chapter:item, course:course} %}
-            {% endif %}
-          {% endfor %}
-        </ul>
-      {% else %}
-        <div class="empty task-empty">
-            <i class="es-icon es-icon-book task-empty-icon"></i>
-            什么都没有，快去添加一个学习任务!
-        </div>
-      {% endif %}
+      <ul id="sortable-list" class="task-manage-list sortable-list"
+          data-sort-url='{{ path("course_manage_items_sort",{courseId: course.id}) }}'>
+        {% for key, item in items %}
+          {% if item.type == 'lesson' %}
+            {% include 'task-manage/list-item.html.twig' with {task:item} %}
+          {% else %}
+            {% include 'course-manage/chapter/list-item.html.twig' with {chapter:item, course:course} %}
+          {% endif %}
+        {% endfor %}
+      </ul>
+      <div class="empty task-empty js-task-empty {% if items %}  hidden {% endif %}">
+        <i class="es-icon es-icon-book task-empty-icon"></i>
+        什么都没有，快去添加一个学习任务!
+      </div>
     </div>
   </div>
 {% endblock %}

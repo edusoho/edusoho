@@ -9,10 +9,8 @@
     </div>
     <div class="col-sm-10">
       {% if draft %}
-        <a id="see-draft-btn" class="btn js-continue-edit" data-content="{{ draft.content }}">
-          <small>
-            您有一段自动保存内容，继续编辑请点击
-          </small>
+        <a id="see-draft-btn" class="link-primary text-12 js-continue-edit" data-content="{{ draft.content }}">
+          {{'您有一段自动保存内容，请点击继续编辑'|trans}}
         </a>
       {% endif %}
       <textarea class="form-control type-hidden js-text" id="text-content-field" name="content"
