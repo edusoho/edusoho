@@ -73,26 +73,8 @@ class Editor {
     this._onNext(event);
   }
 
-  _askSave() {
-    const isCreateOperation = $('#task-create-type').data('editor-mode') == 'create';
-    const isDaysMode = $('#courseExpiryMode').val() == 'days';
-    const isNormalCourseSet = $('#courseSetType').val() == 'normal';
-    const isLiveType = this.type == 'live';
-    let confirmResult = true;
-    console.log($('#courseExpiryMode').val());
-    if (isCreateOperation && isDaysMode && isNormalCourseSet && isLiveType) {
-      confirmResult = confirm('本计划的学习加入方式为“随到随学”，加入直播活动可能会导致后来的学员无法参加，只能观看回放。确定要添加吗？');
-    }
-
-    return confirmResult;
-  }
-
   _onSave(event) {
     if (!this._validator(this.step)) {
-      return;
-    }
-
-    if (!this._askSave()) {
       return;
     }
 
