@@ -32,6 +32,22 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
             );
         }
 
+        if (!$this->isTableExist('download_file_record')) {
+            $this->exec("
+              CREATE TABLE `download_file_record` (
+                `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+                `downloadActivityId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料所属活动ID',
+                `materialId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料文件ID',
+                `fileId` varchar(1024) DEFAULT '' COMMENT '文件ID',
+                `link` varchar(1024) DEFAULT '' COMMENT '链接地址',
+                `createdTime` int(10) unsigned NOT NULL COMMENT '下载时间',
+                `userId` int(10) unsigned NOT NULL COMMENT '下载用户ID',
+                PRIMARY KEY (`id`),
+                KEY `createdTime` (`createdTime`)
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
+        }
+
         if (!$this->isFieldExist('activity_download', 'migrateLessonId')) {
             $this->exec('alter table `activity_download` add `migrateLessonId` int(10) ;');
         }
@@ -43,7 +59,7 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
 
     protected function dumplicateCourseMaterialDatas()
     {
-        if (!$this->isTableExist("course_material_v8")) {
+        if (!$this->isTableExist('course_material_v8')) {
             $this->exec("
             CREATE TABLE `course_material_v8` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程资料ID',
@@ -68,9 +84,9 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
         }
 
         $this->exec(
-          "
+          '
            INSERT INTO `course_material_v8`  SELECT * FROM `course_material` WHERE  id NOT IN (SELECT id FROM  `course_material_v8`);
-        ");
+        ');
     }
 
     protected function proccessDownloadActivity()
