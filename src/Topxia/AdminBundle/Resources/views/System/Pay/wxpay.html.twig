@@ -20,7 +20,7 @@
       <div class="alert alert-info text-left" role="alert">
         使用前提：
         <p>1、填写支付授权目录，路径：微信公众平台【微信支付】-【开发配置】-【支付授权目录】，目录地址为：网站域名/pay/center/  ；</p>
-        <p>2、绑定网页授权域名，路径：微信公众平台【接口权限】-【网页授权】-【修改】-【网页授权域名】，MP文件到【用户设置】-【登录】-【微信内分享登录】填写。<br><a target="_blank" href="http://www.qiqiuyu.com/article/892">【查看教程】</a></p>
+        <p>2、绑定网页授权域名，路径：微信公众平台【接口权限】-【网页授权】-【修改】-【网页授权域名】。<br><a target="_blank" href="http://www.qiqiuyu.com/article/892">【查看教程】</a></p>
       </div>
     </div>
   </div>
@@ -42,6 +42,17 @@
       <input type="text" id="wxpay_secret" name="wxpay_secret" class="form-control" value="{{payment.wxpay_secret}}">
       <div class="help-block">
         <div class="help-block">如需支持微信内购买，必须填写。AppSecret来自<a target="_blank" href="https://mp.weixin.qq.com/">微信公众平台</a>内左侧栏【开发】-【基本配置】</div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label for="wxpay_secret">MP文件验证码</label>
+    </div>
+    <div class="controls col-md-8">
+      <input type="text" id="wxpay_secret" name="wxpay_mp_secret" class="form-control" value="{{payment.wxpay_mp_secret|default()}}">
+      <div class="help-block">
+        <div class="help-block">{{'请填写微信提供的MP_verify文件中的内容'|trans}}</div>
       </div>
     </div>
   </div>
