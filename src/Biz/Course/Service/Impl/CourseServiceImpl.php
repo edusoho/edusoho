@@ -1663,7 +1663,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function buildCourseExpiryDataFromClassroom($expiryMode, $expiryValue)
     {
         $fields = array();
-        if ($expiryMode === 'none') {
+        if ($expiryMode === 'forever') {
             $fields = array(
                 'expiryMode' => 'forever',
                 'expiryDays' => 0,
@@ -1928,7 +1928,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if ($fields['isFree'] == 1) {
             $fields['price'] = 0;
-            $fields['vipLevelId'] = 0;
         }
 
         if ($courseSet['type'] == 'normal' && $fields['tryLookable'] == 0) {

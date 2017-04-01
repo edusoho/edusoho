@@ -25,15 +25,18 @@ class ThemeTwigLoader extends \Twig_Loader_Filesystem
             return $this->cache[$logicalName];
         }
 
-        $previous = null;
-        $file     = $this->getCustomFile($logicalName);
+        $file = $this->getCustomFile($logicalName);
 
         if (is_null($file)) {
             $file = $this->getThemeFile($logicalName);
         }
 
         if ($file === false || null === $file) {
-            throw new \Twig_Error_Loader(sprintf('Unable to find template "%s".', $logicalName));
+            if ($throw) {
+                throw new \Twig_Error_Loader(sprintf('Unable to find template "%s".', $logicalName));
+            }
+
+            return false;
         }
 
         return $this->cache[$logicalName] = $file;
@@ -44,7 +47,7 @@ class ThemeTwigLoader extends \Twig_Loader_Filesystem
 
         if ($this->isAppResourceFile($file)) {
             $themeDir = $this->kernel->getPluginConfigurationManager()->getActiveThemeDirectory();
-            $file     = $themeDir.'/views/'.$file;
+            $file = $themeDir.'/views/'.$file;
         }
 
         if (is_file($file)) {
