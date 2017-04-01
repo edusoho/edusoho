@@ -10,9 +10,9 @@ class GracefulBlockMigrate extends AbstractMigrate
             SELECT count(id) from block_template where category = 'graceful';
         ");
 
-        // if (empty($gracefullBlockCount)) {
-        //     return;
-        // }
+        if (empty($gracefullBlockCount)) {
+            return;
+        }
 
         $this->getConnection()->exec("
             DELETE FROM block_template where category = 'graceful';
