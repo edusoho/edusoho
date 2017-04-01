@@ -158,7 +158,7 @@ class PayCenterController extends BaseController
         if (!isset($fields['payment'])) {
             return $this->createMessageResponse('error', '支付方式未开启，请先开启');
         }
-        $token = $this->makeWxpayToken();
+        $token = $this->makeWxpayToken($fields['orderId']);
         $order = OrderProcessorFactory::create($fields['targetType'])->updateOrder($fields['orderId'], array('payment' => $fields['payment'],'token' => $token['token']));
 
         if ($user['id'] != $order['userId']) {
@@ -518,17 +518,16 @@ class PayCenterController extends BaseController
         return $request->setParams(array('authBank' => $params['authBank'], 'mobile' => $params['mobile']));
     }
 
-    private function makeWxpayToken()
+    private function makeWxpayToken($orderId)
     {
-        $token = $this->getTokenService()->makeToken('wxpay', array(
-            'duration' => time()+ 60*60*24
-        ));
+        $order = $this->getOrderService()->getOrder($orderId);
+        $token['token'] = $order['sn'].rand(9);
         return $token;
     }
 
     public function generateWxpayOrderToken($order)
     {
-        $token = $this->makeWxpayToken();
+        $token = $this->makeWxpayToken($order['id']);
         
         $processor = OrderProcessorFactory::create($order['targetType']);
         return $processor->updateOrder($order['id'], array('token' => $token['token']));
