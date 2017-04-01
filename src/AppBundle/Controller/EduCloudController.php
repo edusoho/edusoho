@@ -11,20 +11,29 @@ use Biz\System\Service\SettingService;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
 use Biz\File\FileProcessor\FileProcessorFactory;
 use Biz\Course\CourseProcessor\CourseProcessorFactory;
+use AppBundle\Controller\Callback\ProcessorFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class EduCloudController extends BaseController
 {
-    public function callBackAction(Request $request)
+    public function callBackAction(Request $request, $type, $function)
     {
-        $type = $request->query->get('type', '');
-        if ($type == 'cloudData') {
-            $result = $this->courseCloudFilesCallBack($request, $type);
-        }
-        if ($type == 'member') {
-            $result = $this->courseMemberCallBack($request, $type);
-        }
+        $processor = ProcessorFactory::create($type);
+
+        // $type = $request->query->get('type', '');
+        // if (empty($type)) {
+        //     return $this->createJsonResponse(array('error' => '类型不能为空'));
+        // }
+        // if ($type == 'cloudData') {
+        //     $result = $this->courseCloudFilesCallBack($request, $type);
+        // }
+        // if ($type == 'member') {
+        //     $result = $this->courseMemberCallBack($request, $type);
+        // }
+        // if ($type == 'openMember') {
+        //     $result = $this->openCourseMemberCallBack($request, $type);
+        // }
         return $this->createJsonResponse($result);
     }
 
@@ -38,6 +47,12 @@ class EduCloudController extends BaseController
     {
         $processor = CourseProcessorFactory::create($type);
         return $processor->getCourseMemberInfo($request, $this->container);
+    }
+
+    protected function openCourseMemberCallBack($request, $type)
+    {
+        $processor = ProcessorFactory::create($type);
+        return $processor->getOpenCourseMemberInfo($request, $this->container);
     }
 
     public function smsSendAction(Request $request)
