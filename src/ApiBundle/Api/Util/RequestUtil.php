@@ -30,6 +30,6 @@ class RequestUtil
             $path = '/files/'.str_replace('public://', '', $path);
         }
 
-        return self::$request->getSchemeAndHttpHost().'/'.$path;
+        return self::$request->getSchemeAndHttpHost().'/'.ltrim($path, '/');
     }
 }
