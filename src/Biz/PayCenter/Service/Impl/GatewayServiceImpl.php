@@ -108,7 +108,7 @@ class GatewayServiceImpl extends BaseService implements GatewayService
             list($success, $order) = $this->getPayCenterService()->pay($payData);
 
             if (!$success) {
-                throw new PayCenterException('非法支付订单');
+                throw new PayCenterException('非法支付订单', 2000);
             }
         }
     }
