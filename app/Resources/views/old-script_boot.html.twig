@@ -1,7 +1,7 @@
 <script>
   var app = {};
   app.debug = {% if app.debug %}true{% else %}false{% endif %};
-  app.version = '{{ assets_version() }}';
+  app.version = '{{ asset_version('/') }}';
   app.httpHost = '{{ app.request.getSchemeAndHttpHost() }}';
   app.basePath = '{{ cdn() }}';
   app.theme = '{{ setting("theme.uri"|default("default")) }}';

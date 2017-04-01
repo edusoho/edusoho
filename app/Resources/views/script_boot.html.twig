@@ -1,6 +1,6 @@
 <script>
   var app = {};
-  app.version = '{{ assets_version() }}';
+  app.version = '{{ asset_version('/') }}';
   app.httpHost = '{{ app.request.getSchemeAndHttpHost() }}';
   app.basePath = '{{ app.request.getBasePath() }}';
   app.theme = '{{ setting("theme.uri"|default("default")) }}';
