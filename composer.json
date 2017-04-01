@@ -46,7 +46,7 @@
     "codeages/rest-api-client": "0.1.4",
     "xxtea/xxtea": "1.0.2",
     "codeages/biz-rate-limiter": "0.1.4",
-    "codeages/plugin-bundle": "0.1.7",
+    "codeages/plugin-bundle": "0.1.9",
     "cerdic/css-tidy": "1.5.5",
     "codeages/biz-framework": "0.2.13"
   },
