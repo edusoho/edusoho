@@ -716,7 +716,7 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $users = array(
             array(
-                'type' => 'scheduler',
+                'type' => 'system',
                 'roles' => array('ROLE_USER', 'ROLE_SUPER_ADMIN'),
             ),
         );
@@ -1098,13 +1098,13 @@ class UserServiceImpl extends BaseService implements UserService
         return UserSerialize::unserialize($user);
     }
 
-    public function makeToken($type, $userId = null, $expiredTime = null, $data = null, $args = array())
+    public function makeToken($type, $userId = null, $expiredTime = null, $data = '', $args = array())
     {
         $token = array();
         $token['type'] = $type;
         $token['userId'] = $userId ? (int) $userId : 0;
         $token['token'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-        $token['data'] = serialize($data);
+        $token['data'] = $data;
         $token['times'] = empty($args['times']) ? 0 : (int) ($args['times']);
         $token['expiredTime'] = $expiredTime ? (int) $expiredTime : 0;
         $token['createdTime'] = time();
@@ -1124,8 +1124,6 @@ class UserServiceImpl extends BaseService implements UserService
         if ($token['expiredTime'] > 0 && $token['expiredTime'] < time()) {
             return null;
         }
-
-        $token['data'] = unserialize($token['data']);
 
         return $token;
     }
@@ -1438,7 +1436,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function clearUserCounter($userId, $name)
     {
-        $this->getUserDao()->clearCounterById($userId, $name);
+        $this->getUserDao()->deleteCounterById($userId, $name);
     }
 
     public function filterFollowingIds($userId, array $followingIds)

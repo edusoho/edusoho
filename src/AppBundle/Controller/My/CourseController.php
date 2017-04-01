@@ -224,7 +224,7 @@ class CourseController extends CourseBaseController
             $joinDays = (time() - $course['expiryStartDate']) / (24 * 60 * 60);
         }
 
-        return $taskPerDay * $joinDays >= $taskNum ? $taskNum : round($taskPerDay * $joinDays);
+        return $taskPerDay * $joinDays >= $taskNum ? $taskNum : ceil($taskPerDay * $joinDays);
     }
 
     /**

@@ -1,8 +1,12 @@
 {% extends 'settings/layout.html.twig' %}
 {% block title %}{{'安全问题'|trans}} - {{'安全设置'|trans}} - {{ parent() }}{% endblock %}
-{% set script_controller = 'settings/security-questions' %}
+
 {% set side_nav = 'security' %}
 {% set questionOptions = dict('secureQuestion') %}
+
+{% if not hasSecurityQuestions %}
+  {% set script_controller = 'settings/security-questions' %}
+{% endif %}
 
 {% block main %}
  {% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
@@ -13,7 +17,7 @@
 
     {{ web_macro.flash_messages() }}
 
-  {%  if not hasSecurityQuestions  %}
+  {% if not hasSecurityQuestions %}
 
     <ul class="breadcrumb">
       <li><a href="{{ path('settings_security') }}">{{'安全设置'|trans}}</a></li>
@@ -79,7 +83,7 @@
       <div class="form-group row">
         <div  class="col-md-3 control-label"><label for="userLoginPassword">{{'您的登录密码'|trans}}</label></div>
         <div class="col-md-4 controls">
-          <input type="password" id="userLoginPassword" name="userLoginPassword" class="form-control" autocomplete="off" value="">
+          <input type="text" id="userLoginPassword" name="userLoginPassword" class="form-control" onfocus="this.type='password'" autocomplete="false"  value="">
         </div>
       </div>
 

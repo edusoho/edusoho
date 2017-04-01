@@ -61,6 +61,7 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
                 'createdTime < :startTimeLessThan',
                 'updatedTime >= :updatedTime_GE',
             ),
+            'cache' => 'table',
         );
     }
 
@@ -160,7 +161,8 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
     public function findByClassroomIdAndRole($classroomId, $role, $start, $limit)
     {
         $role = '%|'.$role.'|%';
-        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND role LIKE ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND role LIKE ? ORDER BY createdTime DESC";
+        $sql = $this->sql($sql, array(), $start, $limit);
 
         return $this->db()->fetchAll($sql, array($classroomId, $role));
     }

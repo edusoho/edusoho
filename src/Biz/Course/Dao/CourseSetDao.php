@@ -6,7 +6,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface CourseSetDao extends GeneralDaoInterface
 {
-    const TABLENAME = 'c2_course_set';
+    const TABLENAME = 'course_set_v8';
 
     public function findByIds(array $ids);
 

@@ -4,8 +4,8 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Dao\ThreadDao;
-use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -34,12 +34,17 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function getThread($courseId, $threadId)
     {
-        return $this->getThreadDao()->get($threadId);
+        $thread = $this->getThreadDao()->get($threadId);
+        if (!empty($thread) && !empty($courseId) && $thread['courseId'] != $courseId) {
+            throw $this->createNotFoundException("Thread#{$threadId} Not Found in Course#{$courseId}");
+        }
+
+        return $thread;
     }
 
     public function findThreadsByType($courseId, $type, $sort, $start, $limit)
     {
-        if ($sort == 'latestPosted') {
+        if ($sort === 'latestPosted') {
             $orderBy = array('latestPosted' => 'DESC');
         } else {
             $orderBy = array('createdTime' => 'DESC');
@@ -49,7 +54,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $type = 'all';
         }
 
-        if ($type == 'all') {
+        if ($type === 'all') {
             return $this->getThreadDao()->search(array('courseId' => $courseId), $orderBy, $start, $limit);
         }
 
@@ -85,7 +90,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     {
         if (is_array($sort)) {
             $orderBy = $sort;
-        } elseif ($sort == 'createdTimeByAsc') {
+        } elseif ($sort === 'createdTimeByAsc') {
             $orderBy = array('createdTime' => 'ASC');
         } else {
             $orderBy = array('createdTime' => 'DESC');
@@ -128,7 +133,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread['createdTime'] = time();
         $thread['latestPostUserId'] = $thread['userId'];
         $thread['latestPostTime'] = $thread['createdTime'];
-        $thread['private'] = $course['status'] == 'published' ? 0 : 1;
+        $thread['private'] = $course['status'] === 'published' ? 0 : 1;
 
         $thread = $this->getThreadDao()->create($thread);
 
@@ -137,7 +142,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
                 continue;
             }
 
-            if ($thread['type'] != 'question') {
+            if ($thread['type'] !== 'question') {
                 continue;
             }
 
@@ -162,7 +167,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThread($courseId, $threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException('Thread #{$threadId} Not Found');
+            throw $this->createNotFoundException("Thread #{$threadId} Not Found");
         }
 
         $fields['content'] = $this->sensitiveFilter($fields['content'], 'course-thread-update');
@@ -192,7 +197,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThreadDao()->get($threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException('Thread #{$threadId} Not Found');
+            throw $this->createNotFoundException("Thread #{$threadId} Not Found");
         }
         $this->getCourseService()->tryManageCourse($thread['courseId']);
 
@@ -205,12 +210,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function stickThread($courseId, $threadId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
+        $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
 
         $thread = $this->getThread($courseId, $threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException('Thread #{$threadId} Not Found');
+            throw $this->createNotFoundException("Thread #{$threadId} Not Found");
         }
 
         $this->getThreadDao()->update($thread['id'], array('isStick' => 1));
@@ -218,12 +223,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function unstickThread($courseId, $threadId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
+        $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
 
         $thread = $this->getThread($courseId, $threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException('Thread #{$threadId} Not Found');
+            throw $this->createNotFoundException("Thread #{$threadId} Not Found");
         }
 
         $this->getThreadDao()->update($thread['id'], array('isStick' => 0));
@@ -231,12 +236,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function eliteThread($courseId, $threadId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
+        $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
 
         $thread = $this->getThread($courseId, $threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException('Thread #{$threadId} Not Found');
+            throw $this->createNotFoundException("Thread #{$threadId} Not Found");
         }
 
         $this->getThreadDao()->update($thread['id'], array('isElite' => 1));
@@ -246,12 +251,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function uneliteThread($courseId, $threadId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
+        $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
 
         $thread = $this->getThread($courseId, $threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException('Thread #{$threadId} Not Found');
+            throw $this->createNotFoundException("Thread #{$threadId} Not Found");
         }
 
         $this->getThreadDao()->update($thread['id'], array('isElite' => 0));
@@ -259,6 +264,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function hitThread($courseId, $threadId)
     {
+        $thread = $this->getThread($courseId, $threadId);
+        if (empty($thread)) {
+            return;
+        }
+
         $this->getThreadDao()->wave(array($threadId), array('hitNum' => +1));
     }
 
@@ -270,9 +280,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             return array();
         }
 
-        if ($sort == 'best') {
+        if ($sort === 'best') {
             $orderBy = array('score' => 'DESC');
-        } elseif ($sort == 'elite') {
+        } elseif ($sort === 'elite') {
             $orderBy = array('createdTime' => 'DESC', 'isElite' => 'ASC');
         } else {
             $orderBy = array('createdTime' => 'ASC');
@@ -323,12 +333,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThread($post['courseId'], $post['threadId']);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException('Thread#{$threadId} Not Found');
+            throw $this->createNotFoundException("Thread#{$post['threadId']} Not Found");
         }
 
         $post['content'] = $this->sensitiveFilter($post['content'], 'course-thread-post-create');
 
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($post['courseId']);
+        $this->getCourseService()->tryTakeCourse($post['courseId']);
 
         $post['userId'] = $this->getCurrentUser()->id;
         $post['isElite'] = $this->getMemberService()->isCourseTeacher($post['courseId'], $post['userId']) ? 1 : 0;
@@ -358,7 +368,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $post = $this->getPost($courseId, $id);
 
         if (empty($post)) {
-            throw $this->createNotFoundException('Post #{$id} Not Found');
+            throw $this->createNotFoundException("Post #{$id} Not Found");
         }
 
         $user = $this->getCurrentUser();
@@ -380,16 +390,16 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function deletePost($courseId, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
+        $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
 
         $post = $this->getThreadPostDao()->get($id);
 
         if (empty($post)) {
-            throw $this->createNotFoundException('Post #{$id} Not Found');
+            throw $this->createNotFoundException("Post #{$id} Not Found");
         }
 
         if ($post['courseId'] != $courseId) {
-            throw $this->createAccessDeniedException('No Such Post#{$id} in Course#{$courseId}');
+            throw $this->createAccessDeniedException("No Such Post#{$id} in Course#{$courseId}");
         }
 
         $this->getThreadPostDao()->delete($post['id']);
@@ -403,7 +413,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $conditions[$conditions['threadType']] = 1;
         }
 
-        if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
+        if (isset($conditions['keywordType'], $conditions['keyword'])) {
             if (!in_array($conditions['keywordType'], array('title', 'content', 'courseId', 'courseTitle'))) {
                 throw $this->createInvalidArgumentException('Invalid keywordType');
             }

@@ -7,7 +7,7 @@ class NormalMail extends Mail
     /**
      * @return bool
      */
-    public function send()
+    public function doSend()
     {
         $format = isset($this->format) && $this->format == 'html' ? 'text/html' : 'text/plain';
 

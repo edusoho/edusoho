@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
 {
-    protected $table = 'c2_course';
+    protected $table = 'course_v8';
 
     public function findCoursesByParentIdAndLocked($parentId, $locked)
     {
@@ -124,17 +124,23 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
 
     public function updateMaxRateByCourseSetId($courseSetId, $updateFields)
     {
-        return $this->db()->update($this->table, $updateFields, array('courseSetId' => $courseSetId));
+        $this->db()->update($this->table, $updateFields, array('courseSetId' => $courseSetId));
+
+        return $this->getByFields(array(
+            'courseSetId' => $courseSetId,
+        ));
     }
 
     public function updateCourseRecommendByCourseSetId($courseSetId, $fields)
     {
-        return $this->db()->update($this->table, $fields, array('courseSetId' => $courseSetId));
+        $this->db()->update($this->table, $fields, array('courseSetId' => $courseSetId));
+
+        return $this->get($courseSetId);
     }
 
     public function updateCategoryByCourseSetId($courseSetId, $fields)
     {
-        return $this->db()->update($this->table, $fields, array('courseSetId' => $courseSetId));
+        $this->db()->update($this->table, $fields, array('courseSetId' => $courseSetId));
 
         return $this->getByFields(array(
             'courseSetId' => $courseSetId,
@@ -197,6 +203,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
                 'orgCode = :orgCode',
                 'orgCode LIKE :likeOrgCode',
             ),
+            'cache' => 'table',
         );
     }
 

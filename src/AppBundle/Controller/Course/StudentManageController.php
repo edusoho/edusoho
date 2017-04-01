@@ -293,7 +293,7 @@ class StudentManageController extends BaseController
 
         $student = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
         if (empty($student)) {
-            throw $this->createNotFoundException('Student#{$userId} Not Found');
+            throw $this->createNotFoundException("Student#{$userId} Not Found");
         }
         $user = $this->getUserService()->getUser($student['userId']);
 
@@ -302,8 +302,9 @@ class StudentManageController extends BaseController
         $discussionCount = $this->getCourseMemberService()->countDiscussionsByCourseIdAndUserId($courseId, $userId);
         $postCount = $this->getCourseMemberService()->countPostsByCourseIdAndUserId($courseId, $userId);
 
-        list($daysCount, $learnedTime, $learnedTimePerDay) = $this->getActivityLearnLogService(
-        )->calcLearnProcessByCourseIdAndUserId($courseId, $userId);
+        list($daysCount, $learnedTime, $learnedTimePerDay) = $this
+            ->getActivityLearnLogService()
+            ->calcLearnProcessByCourseIdAndUserId($courseId, $userId);
 
         return $this->render(
             'course-manage/student/process-modal.html.twig',
@@ -316,8 +317,8 @@ class StudentManageController extends BaseController
                 'discussionCount' => $discussionCount,
                 'postCount' => $postCount,
                 'daysCount' => $daysCount,
-                'learnedTime' => round($learnedTime / 60, 2),
-                'learnedTimePerDay' => round($learnedTimePerDay / 60, 2),
+                'learnedTime' => round($learnedTime / 60 / 60, 2, PHP_ROUND_HALF_EVEN),
+                'learnedTimePerDay' => round($learnedTimePerDay / 60 / 60, 2, PHP_ROUND_HALF_EVEN),
             )
         );
     }
@@ -522,10 +523,12 @@ class StudentManageController extends BaseController
         $isFollowing = $this->getUserService()->isFollowed($curUser['id'], $student['userId']);
         $progress = $this->calculateUserLearnProgress($course, $student);
         $default = $this->getSettingService()->get('default', array());
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         return $this->render(
             'course-manage/student/tr.html.twig',
             array(
+                'courseSet' => $courseSet,
                 'course' => $course,
                 'student' => $student,
                 'user' => $user,
@@ -582,11 +585,9 @@ class StudentManageController extends BaseController
         $reviewingTargets = array();
         if (!empty($activities)) {
             $testIds = ArrayToolkit::column($activities, 'mediaId');
-
             $allTests = $this->getTestpaperService()->searchTestpapers(
                 array(
                     'ids' => $testIds,
-                    'types' => array('homework', 'testpaper'),
                 ),
                 array('createdTime' => 'ASC'),
                 0,

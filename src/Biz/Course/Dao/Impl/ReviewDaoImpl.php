@@ -36,7 +36,7 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
                 'meta' => 'json',
             ),
             'timestamps' => array(
-                'createdTime',
+                'createdTime', 'updatedTime',
             ),
             'orderbys' => array(
                 'createdTime',
@@ -54,6 +54,7 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
                 'parentId = :parentId',
                 'private = :private',
             ),
+            'cache' => 'table',
         );
     }
 }

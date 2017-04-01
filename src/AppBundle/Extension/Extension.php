@@ -2,7 +2,9 @@
 
 namespace AppBundle\Extension;
 
-abstract class Extension implements ExtensionInterface
+use Codeages\Biz\Framework\Context\BizAware;
+
+abstract class Extension extends BizAware implements ExtensionInterface
 {
     public function getQuestionTypes()
     {
@@ -15,6 +17,11 @@ abstract class Extension implements ExtensionInterface
     }
 
     public function getActivities()
+    {
+        return array();
+    }
+
+    public function getCallbacks()
     {
         return array();
     }

@@ -104,14 +104,14 @@ class VideoController extends BaseController implements ActivityActionInterface
     protected function fillMinuteAndSecond($activity)
     {
         if (!empty($activity['length'])) {
-            $activity['minute'] = intval($activity['length'] / 60);
-            $activity['second'] = intval($activity['length'] % 60);
+            $activity['minute'] = (int) ($activity['length'] / 60);
+            $activity['second'] = (int) ($activity['length'] % 60);
         }
 
         return $activity;
     }
 
-    public function finishConditionAction($activity)
+    public function finishConditionAction(Request $request, $activity)
     {
         $video = $this->getActivityService()->getActivityConfig($activity['mediaType'])->get($activity['mediaId']);
 

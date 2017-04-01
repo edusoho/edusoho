@@ -285,19 +285,7 @@ class TaskManageController extends BaseController
 
     protected function getActivityConfig()
     {
-        return $this->get('extension.default')->getActivities();
-    }
-
-    /**
-     * @param  $type
-     *
-     * @return mixed
-     */
-    protected function getActivityActionConfig($type)
-    {
-        $config = $this->getActivityConfig();
-
-        return $config[$type]['actions'];
+        return $this->get('extension.manager')->getActivities();
     }
 
     /**

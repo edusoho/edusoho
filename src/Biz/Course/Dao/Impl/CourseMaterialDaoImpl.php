@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class CourseMaterialDaoImpl extends GeneralDaoImpl implements CourseMaterialDao
 {
-    protected $table = 'course_material';
+    protected $table = 'course_material_v8';
 
     public function declares()
     {

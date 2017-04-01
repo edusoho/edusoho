@@ -5,21 +5,45 @@ services:
     extension.manager:
         class: AppBundle\Extension\ExtensionManager
 
-    extension.default:
-        class: AppBundle\Extension\DefaultExtension
-        arguments: ['@biz']
+    activity.extension:
+        class: AppBundle\Extension\ActivityExtension
+        calls:
+            - [setBiz, ['@biz']]
         tags:
             - { name: extension }
 
+    course.extension:
+        class: AppBundle\Extension\CourseExtension
+        calls:
+            - [setBiz, ['@biz']]
+        tags:
+            - { name: extension }
+            
+    question.extension:
+        class: AppBundle\Extension\QuestionExtension
+        calls:
+            - [setBiz, ['@biz']]
+        tags:
+            - { name: extension }
+    
+    callback.extension:
+        class: AppBundle\Extension\CallbackExtension
+        calls:
+            - [setBiz, ['@biz']]
+        tags:
+            - { name: extension }
+            
     authentication_handler:
-            class: Biz\Common\LoginListener
-            arguments: ["@biz"]
+        class: Biz\Common\LoginListener
+        arguments: ["@biz"]
 
     biz.service_provider.collector:
         class: Biz\ServiceProviderCollector
 
     coupon_service_provider:
         class: Biz\Coupon\CouponServiceProvider
+        calls:
+            - [setBiz, ['@biz']]
         tags:
             - { name: extension }
 
@@ -107,7 +131,3 @@ services:
     topxia.target_helper:
         class:          AppBundle\Util\TargetHelper
         arguments:      ['@service_container']
-
-    callback.resource_factory:
-        class: AppBundle\Controller\Callback\Resource\ResourceFactory
-        arguments:    ['@service_container']

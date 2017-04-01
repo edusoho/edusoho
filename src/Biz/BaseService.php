@@ -128,9 +128,9 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
      *
      * @return ServiceException
      */
-    protected function createServiceException($message = '')
+    protected function createServiceException($message = '', $code = 0)
     {
-        return new ServiceException($message);
+        return new ServiceException($message, $code);
     }
 
     protected function fillOrgId($fields)
@@ -158,7 +158,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     {
         $htmlHelper = $this->biz['html_helper'];
 
-        return $htmlHelper->purify($html);
+        return $htmlHelper->purify($html, $trusted);
     }
 
     protected function getLock()

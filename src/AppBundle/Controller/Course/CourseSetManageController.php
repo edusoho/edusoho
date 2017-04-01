@@ -121,9 +121,8 @@ class CourseSetManageController extends BaseController
             $curCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
         }
         if (empty($curCourse) && !empty($courses)) {
-            $curCourse = current($courses);
+            $curCourse = reset($courses);
         }
-
         $tasks = $this->getTaskService()->findTasksByCourseId($curCourse['id']);
 
         $hasLiveTasks = ArrayToolkit::some($tasks, function ($task) {

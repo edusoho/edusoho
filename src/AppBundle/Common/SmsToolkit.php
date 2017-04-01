@@ -2,10 +2,19 @@
 
 namespace AppBundle\Common;
 
+use Symfony\Component\HttpFoundation\Request;
+
 class SmsToolkit
 {
     public static function smsCheck($request, $scenario)
     {
+        $mobile = $request->request->get('mobile');
+        $postSmsCode = $request->request->get('sms_code');
+        $ratelimiterResult = self::smsCheckRatelimiter($request, $scenario, $postSmsCode);
+        if ($ratelimiterResult && $ratelimiterResult['success'] === false) {
+            return array(false, null, null);
+        }
+
         list($sessionField, $requestField) = self::paramForSmsCheck($request, $scenario);
         $result = self::checkSms($sessionField, $requestField, $scenario);
         self::clearSmsSession($request, $scenario);
@@ -13,7 +22,42 @@ class SmsToolkit
         return array($result, $sessionField, $requestField);
     }
 
-    private static function paramForSmsCheck($request, $scenario)
+    public static function smsCheckRatelimiter(Request $request, $type, $smsCode)
+    {
+        $smsSession = $request->getSession()->get($type);
+        $smsSessionCode = $smsSession['sms_code'];
+
+        if (!isset($smsSession['sms_remain'])) {
+            $smsSession['sms_remain'] = 5;
+        }
+        $remain = $smsSession['sms_remain'];
+
+        if ($smsSessionCode != $smsCode) {
+            $remain = (int) $remain - 1;
+            self::updateSmsSessionRemain($request, $type, $remain);
+        }
+        if ($remain == 0) {
+            self::clearSmsSession($request, $type);
+
+            return array('success' => false, 'message' => '错误次数已经超过最大次数，请重新获取');
+        }
+
+        return array('success' => true);
+    }
+
+    public static function updateSmsSessionRemain(Request $request, $type, $remain)
+    {
+        $smsSmsSession = $request->getSession()->get($type);
+        $request->getSession()->set($type, array(
+            'to' => $smsSmsSession['to'],
+            'sms_code' => $smsSmsSession['sms_code'],
+            'sms_last_time' => $smsSmsSession['sms_last_time'],
+            'sms_type' => $type,
+            'sms_remain' => $remain,
+        ));
+    }
+
+    private static function paramForSmsCheck(Request $request, $scenario)
     {
         $sessionField = $request->getSession()->get($scenario);
         $sessionField['sms_type'] = $scenario;
@@ -67,7 +111,7 @@ class SmsToolkit
         return true;
     }
 
-    public static function clearSmsSession($request, $scenario)
+    public static function clearSmsSession(Request $request, $scenario)
     {
         $request->getSession()->set($scenario, array(
             'to' => '',

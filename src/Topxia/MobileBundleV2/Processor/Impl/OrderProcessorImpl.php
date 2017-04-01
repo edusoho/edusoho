@@ -96,10 +96,11 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
             $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
+            $picture = empty($courseSet['cover']['middle']) ? '' : $courseSet['cover']['middle'];
             $payOrderInfo = array(
                 'title' => $course['title'],
                 'price' => $course['price'],
-                'picture' => $this->coverPic($courseSet['cover']['middle'], 'course-large.png'),
+                'picture' => $this->coverPic($picture, 'course.png'),
             );
         } elseif ('classroom' == $targetType) {
             $classroom = $this->getClassroomService()->getClassRoom($targetId);
@@ -111,7 +112,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             $payOrderInfo = array(
                 'title' => $classroom['title'],
                 'price' => $classroom['price'],
-                'picture' => $this->coverPic($classroom['middlePicture'], 'course-large.png'),
+                'picture' => $this->coverPic($classroom['middlePicture'], 'classroom.png'),
             );
         } elseif ('vip' == $targetType) {
             $result = $this->getVipOrderInfo($targetId);
@@ -171,7 +172,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
         foreach ($userProfile as $key => $value) {
             if (!in_array($key, array(
-                'truename', 'id', 'mobile', 'qq', 'weixin', ))) {
+                'truename', 'id', 'mobile', 'qq', 'weixin'))) {
                 unset($userProfile[$key]);
             }
         }
@@ -269,7 +270,8 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                             break;
                         }
                     }
-                } else { //兼容没有transactionId的模式
+                } else {
+                    //兼容没有transactionId的模式
                     $inApp = $data['receipt']['in_app'][0];
                 }
 

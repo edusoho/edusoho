@@ -288,7 +288,7 @@ class ThreadController extends CourseBaseController
     public function deleteAction(Request $request, $courseId, $threadId)
     {
         $thread = $this->getThreadService()->getThread($courseId, $threadId);
-        $this->getThreadService()->deleteThread($threadId);
+        $this->getThreadService()->deleteThread($thread['id']);
         $user = $this->getCurrentUser();
 
         if ($user->isAdmin()) {

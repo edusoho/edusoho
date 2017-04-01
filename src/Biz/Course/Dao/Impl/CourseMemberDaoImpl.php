@@ -81,7 +81,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function countLearningMembers($conditions)
     {
         $sql = "SELECT COUNT(m.id) FROM {$this->table()} m ";
-        $sql .= 'INNER JOIN c2_course c ON m.courseId = c.id ';
+        $sql .= 'INNER JOIN course_v8 c ON m.courseId = c.id ';
         $sql .= 'WHERE ';
 
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
@@ -94,7 +94,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function findLearningMembers($conditions, $start, $limit)
     {
         $sql = "SELECT m.* FROM {$this->table()} m ";
-        $sql .= 'INNER JOIN c2_course c ON m.courseId = c.id ';
+        $sql .= 'INNER JOIN course_v8 c ON m.courseId = c.id ';
         $sql .= 'WHERE ';
 
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
@@ -108,7 +108,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function countLearnedMembers($conditions)
     {
         $sql = "SELECT COUNT(m.id) FROM {$this->table()} m ";
-        $sql .= 'INNER JOIN c2_course c ON m.courseId = c.id ';
+        $sql .= 'INNER JOIN course_v8 c ON m.courseId = c.id ';
         $sql .= 'WHERE ';
 
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
@@ -120,7 +120,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function findLearnedMembers($conditions, $start, $limit)
     {
         $sql = "SELECT m.* FROM {$this->table()} m ";
-        $sql .= 'INNER JOIN c2_course c ON m.courseId = c.id ';
+        $sql .= 'INNER JOIN course_v8 c ON m.courseId = c.id ';
         $sql .= 'WHERE ';
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
         $sql .= "m.learnedNum >= c.publishedTaskNum  AND c.serializeMode IN ( 'none','finished') ";
@@ -167,7 +167,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true)
     {
         $sql = "SELECT m.* FROM {$this->table} m ";
-        $sql .= ' JOIN  c2_course AS c ON m.userId = ? ';
+        $sql .= ' JOIN  course_v8 AS c ON m.userId = ? ';
         $sql .= ' AND m.role =  ? AND m.courseId = c.id AND c.parentId = 0';
 
         if ($onlyPublished) {
@@ -352,7 +352,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
         $builder = new DynamicQueryBuilder($this->db(), $conditions);
         $builder->from($this->table(), 'm')
-            ->join('m', 'c2_course', 'c', 'm.courseId = c.id '.$joinConnections)
+            ->join('m', 'course_v8', 'c', 'm.courseId = c.id '.$joinConnections)
             ->andWhere('m.isLearned = :isLearned')
             ->andWhere('m.userId = :userId')
             ->andWhere('m.role = :role')
@@ -374,6 +374,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
             'orderbys' => array(
                 'createdTime',
                 'lastLearnTime',
+                'classroomId',
                 'id',
                 'updatedTime',
                 'lastViewTime',
@@ -398,6 +399,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'lastViewTime >= lastViewTime_GE',
                 'lastLearnTime >= :lastLearnTimeGreaterThan',
             ),
+            'cache' => 'table',
         );
     }
 

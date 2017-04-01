@@ -81,17 +81,15 @@
 								<input type="text" id="profile_mobile" name="profile[mobile]" class="form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile.mobile|default('') }}">
 
 								<div class="help-block" style="display:none"></div>
+                {% if setting('cloud_sms.sms_enabled', '') == '1' %}
+                  <div class="color-warning">
+                    {{'还没绑定手机号码。'|trans}}<strong><a href="{{path('settings_bind_mobile')}}">{{'去绑定'|trans}}</a>
+                    </strong>
+                  </div>
+                {% endif %}
 							</div>
 						</div>
-						{% if setting('cloud_sms.sms_enabled', '') == '1' %}
-							<div class="help-block">
-								<label class="col-md-2 control-label"></label>
-								<p class="text-warning">
-								{{'还没绑定手机号码，'|trans}}<strong><a href="{{path('settings_bind_mobile')}}">{{'前去绑定'|trans}}</a>{{'。'|trans}}
-								</strong>
-								</p>
-							</div>
-						{% endif %}
+						
 					{% endif %}
 
 					<div class="form-group form-forIam-group form-notStudent-group">
@@ -149,7 +147,15 @@
 							<input type="text" id="weibo" name="profile[weibo]" class="form-control" data-widget-cid="widget-3" data-explain="" value="{{ profile.weibo|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
-						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isWeiboPublic]" {% if profile.isWeiboPublic %}checked="checked" {% endif %}/>{{'公开'|trans}}</div>
+						<div class="col-md-2 controls mts">
+              <label class="text-normal">
+                <input type="checkbox" name="profile[isWeiboPublic]" 
+                {% if profile.isWeiboPublic %}
+                  checked="checked" 
+                {% endif %}/>
+                {{'公开'|trans}}
+              </label>
+            </div>
 					</div>
 
 					<div class="form-group">
@@ -158,7 +164,13 @@
 							<input type="text" id="profile_weixin" name="profile[weixin]" class="form-control" value="{{ profile.weixin|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
-						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isWeixinPublic]" {% if profile.isWeixinPublic %}checked="checked" {% endif %}/>{{'公开'|trans}}</div>
+						<div class="col-md-2 controls mts">
+              <label class="text-normal">
+                <input type="checkbox" name="profile[isWeixinPublic]" 
+                {% if profile.isWeixinPublic %}checked="checked" {% endif %}/>
+                {{'公开'|trans}}
+              </label>
+            </div>
 					</div>
 
 					<div class="form-group">
@@ -167,7 +179,15 @@
 							<input type="text" id="profile_qq" name="profile[qq]" class="form-control" data-widget-cid="widget-2" data-explain="" value="{{ profile.qq|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
-						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isQQPublic]" {% if profile.isQQPublic %}checked="checked"{% endif %}/>{{'公开'|trans}}</div>
+						<div class="col-md-2 controls mts">
+              <label class="text-normal">
+               <input type="checkbox" name="profile[isQQPublic]"
+               {% if profile.isQQPublic %}
+                checked="checked"
+                {% endif %}/>
+                {{'公开'|trans}}
+              </label>
+            </div>
 					</div>
 
 

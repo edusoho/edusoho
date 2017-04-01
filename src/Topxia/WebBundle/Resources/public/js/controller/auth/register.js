@@ -170,6 +170,7 @@ define(function(require, exports, module) {
             var isMobile = reg_mobile.test(mobile);
             if(isMobile){
                 validator.addItem({
+                    triggerType: false,
                     element: '[name="sms_code"]',
                     required: true,
                     rule: 'integer fixedLength{len:6} remote',

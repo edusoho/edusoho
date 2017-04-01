@@ -34,28 +34,27 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $this->tryManageCourseSet($id);
         if (!is_numeric($number)) {
-            throw $this->createAccessDeniedException('recmendNum should be number!');
+            throw $this->createAccessDeniedException('recommend seq must be number!');
         }
+
         $fields = array(
             'recommended' => 1,
             'recommendedSeq' => (int) $number,
             'recommendedTime' => time(),
         );
-        $course = $this->getCourseSetDao()->update(
-            $id,
-            $fields
-        );
 
-        $this->getLogService()->info('course', 'recommend', "推荐课程《{$course['title']}》(#{$course['id']}),序号为{$number}");
+        $courseSet = $this->getCourseSetDao()->update($id, $fields);
+
+        $this->getLogService()->info('course', 'recommend', "推荐课程《{$courseSet['title']}》(#{$courseSet['id']}),序号为{$number}");
         $this->dispatchEvent(
             'courseSet.recommend',
             new Event(
-                $course,
+                $courseSet,
                 $fields
             )
         );
 
-        return $course;
+        return $courseSet;
     }
 
     // Refactor: cancelRecommendCourseSet
@@ -178,6 +177,17 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         if (empty($courseSet)) {
             throw $this->createNotFoundException("CourseSet#{$id} Not Found");
+        }
+
+        if ($courseSet['parentId'] > 0) {
+            $classroomCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($id);
+            if (!empty($classroomCourse)) {
+                $classroom = $this->getClassroomService()->getClassroom($classroomCourse['classroomId']);
+                if (!empty($classroom) && $classroom['headTeacherId'] == $user['id']) {
+                    //班主任有权管理班级下所有课程
+                    return $courseSet;
+                }
+            }
         }
 
         if (!$this->hasCourseSetManageRole($id)) {
@@ -432,6 +442,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $fields['tags'] = $tagIds;
         }
 
+        if (isset($fields['summary'])) {
+            $fields['summary'] = $this->purifyHtml($fields['summary'], true);
+        }
+
         $this->updateCourseSerializeMode($courseSet, $fields);
         if (empty($fields['subtitle'])) {
             $fields['subtitle'] = null;
@@ -452,7 +466,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             foreach ($courses as $course) {
                 $this->getCourseService()->updateCourse(
                     $course['id'],
-                    array('serializeMode' => $fields['serializeMode'])
+                    array('serializeMode' => $fields['serializeMode'], 'title' => $course['title'], 'courseSetId' => $courseSet['id'])
                 );
             }
         }
@@ -539,7 +553,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
         $this->getLogService()->info('course', 'delete', "删除课程《{$courseSet['title']}》(#{$courseSet['id']})");
 
-        return $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
+        $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
+
+        $this->dispatchEvent('course-set.delete', new Event($courseSet));
     }
 
     public function findTeachingCourseSetsByUserId($userId, $onlyPublished = true)

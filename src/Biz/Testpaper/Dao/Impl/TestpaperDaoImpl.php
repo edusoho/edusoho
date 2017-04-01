@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class TestpaperDaoImpl extends GeneralDaoImpl implements TestpaperDao
 {
-    protected $table = 'c2_testpaper';
+    protected $table = 'testpaper_v8';
 
     public function findTestpapersByIds(array $ids)
     {

@@ -13,7 +13,6 @@ use AppBundle\Component\ShareSdk\WeixinShare;
 use AppBundle\Util\CategoryBuilder;
 use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
-use Biz\Util\HTMLPurifierFactory;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
@@ -91,6 +90,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('fileurl', array($this, 'getFurl')),
             new \Twig_SimpleFunction('filepath', array($this, 'getFpath')),
             new \Twig_SimpleFunction('lazy_img', array($this, 'makeLazyImg'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('avatar_path', array($this, 'avatarPath')),
             new \Twig_SimpleFunction('object_load', array($this, 'loadObject')),
             new \Twig_SimpleFunction('setting', array($this, 'getSetting')),
             new \Twig_SimpleFunction('set_price', array($this, 'getSetPrice')),
@@ -132,7 +132,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_micro_messenger', array($this, 'isMicroMessenger')),
             new \Twig_SimpleFunction('wx_js_sdk_config', array($this, 'weixinConfig')),
             new \Twig_SimpleFunction('plugin_update_notify', array($this, 'pluginUpdateNotify')),
-            new \Twig_SimpleFunction('tag_equal', array($this, 'tag_equal')),
+            new \Twig_SimpleFunction('tag_equal', array($this, 'tagEqual')),
             new \Twig_SimpleFunction('array_index', array($this, 'arrayIndex')),
             new \Twig_SimpleFunction('cdn', array($this, 'getCdn')),
             new \Twig_SimpleFunction('is_show_mobile_page', array($this, 'isShowMobilePage')),
@@ -162,7 +162,11 @@ class WebExtension extends \Twig_Extension
         $host = $request->getHttpHost();
         if ($copyright) {
             $result = !(
-                isset($copyright['owned']) && isset($copyright['thirdCopyright']) && $copyright['thirdCopyright'] != 2 && isset($copyright['licenseDomains']) && in_array($host, explode(';', $copyright['licenseDomains']))
+                isset($copyright['owned'])
+                && isset($copyright['thirdCopyright'])
+                && $copyright['thirdCopyright'] != 2
+                && isset($copyright['licenseDomains'])
+                && in_array($host, explode(';', $copyright['licenseDomains']))
                 || (isset($copyright['thirdCopyright']) && $copyright['thirdCopyright'] == 2)
             );
 
@@ -172,10 +176,10 @@ class WebExtension extends \Twig_Extension
         return true;
     }
 
-    public function tag_equal($tags, $target_tagId, $target_tagGroupId)
+    public function tagEqual($tags, $targetTagId, $targetTagGroupId)
     {
         foreach ($tags as $groupId => $tagId) {
-            if ($groupId == $target_tagGroupId && $tagId == $target_tagId) {
+            if ($groupId == $targetTagGroupId && $tagId == $targetTagId) {
                 return true;
             }
         }
@@ -513,6 +517,7 @@ class WebExtension extends \Twig_Extension
 
         $plugins = $this->container->get('kernel')->getPlugins();
         $names = array();
+        $newPluginNames = array();
 
         foreach ($plugins as $plugin) {
             if (is_array($plugin)) {
@@ -520,7 +525,11 @@ class WebExtension extends \Twig_Extension
                     continue;
                 }
 
-                $names[] = $plugin['code'];
+                if (isset($plugin['protocol']) && $plugin['protocol'] == 3) {
+                    $newPluginNames[] = $plugin['code'].'plugin';
+                } else {
+                    $names[] = $plugin['code'];
+                }
             } else {
                 $names[] = $plugin;
             }
@@ -544,6 +553,11 @@ class WebExtension extends \Twig_Extension
         foreach ($names as $name) {
             $name = strtolower($name);
             $paths["{$name}bundle"] = "{$basePath}/bundles/{$name}/js";
+        }
+
+        foreach ($newPluginNames as $newPluginName) {
+            $newPluginName = strtolower($newPluginName);
+            $paths["{$newPluginName}"] = "{$basePath}/bundles/{$newPluginName}/js";
         }
 
         // $paths['balloon-video-player'] = 'http://player-cdn.edusoho.net/balloon-video-player';
@@ -914,6 +928,17 @@ class WebExtension extends \Twig_Extension
         return $this->parseUri($uri, $absolute);
     }
 
+    public function avatarPath($user, $type = 'middle', $package = 'user')
+    {
+        $avatar = !empty($user[$type.'Avatar']) ? $user[$type.'Avatar'] : null;
+
+        if (empty($avatar)) {
+            $avatar = $this->getSetting('avatar.png');
+        }
+
+        return $this->getFpath($avatar, 'avatar.png', $package);
+    }
+
     private function parseUri($uri, $absolute = false, $package = 'content')
     {
         if (strpos($uri, 'http://') !== false || strpos($uri, 'https://') !== false) {
@@ -1261,14 +1286,9 @@ class WebExtension extends \Twig_Extension
             return '';
         }
 
-        $config = array(
-            'cacheDir' => ServiceKernel::instance()->getParameter('kernel.cache_dir').'/htmlpurifier',
-        );
+        $biz = $this->container->get('biz');
 
-        $factory = new HTMLPurifierFactory($config);
-        $purifier = $factory->create($trusted);
-
-        return $purifier->purify($html);
+        return $biz['html_helper']->purify($html, $trusted);
     }
 
     public function atFilter($text, $ats = array())

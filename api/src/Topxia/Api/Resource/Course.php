@@ -2,9 +2,9 @@
 
 namespace Topxia\Api\Resource;
 
+use Silex\Application;
 use Topxia\Api\Util\TagUtil;
 use AppBundle\Common\ArrayToolkit;
-use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
 class Course extends BaseResource
@@ -12,6 +12,7 @@ class Course extends BaseResource
     public function get(Application $app, Request $request, $id)
     {
         $course = $this->getCourseService()->getCourse($id);
+
         $course['courseSet'] = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         return $this->filter($course);
@@ -29,7 +30,7 @@ class Course extends BaseResource
         $course['expiryDay'] = $course['expiryDays'];
         $course['lessonNum'] = $course['taskNum'];
         $course['userId'] = $course['creator'];
-        $course['tryLookTime']  = $course['tryLookLength'];
+        $course['tryLookTime'] = $course['tryLookLength'];
         $course['createdTime'] = date('c', $course['createdTime']);
         return $course;
     }
@@ -39,16 +40,18 @@ class Course extends BaseResource
         $courseSet = $course['courseSet'];
         $copyKeys = array('tags', 'hitNum', 'orgCode', 'orgId',
             'discount', 'categoryId', 'recommended', 'recommendedSeq', 'recommendedTime',
-            'subtitle', 'discountId', 'smallPicture', 'middlePicture', 'largePicture'
+            'subtitle', 'discountId', 'smallPicture', 'middlePicture', 'largePicture',
         );
-        if (!empty($courseSet['cover'])) {
-            $courseSetImg = array(
-                'smallPicture' => $this->getFileUrl($courseSet['cover']['small']),
-                'middlePicture' => $this->getFileUrl($courseSet['cover']['middle']),
-                'largePicture' => $this->getFileUrl($courseSet['cover']['large'])
-            );
-            $courseSet = array_merge($courseSet, $courseSetImg);
-        };
+
+        $smallPicture = empty($courseSet['cover']['small']) ? '' : $courseSet['cover']['small'];
+        $middlePicture = empty($courseSet['cover']['middle']) ? '' : $courseSet['cover']['middle'];
+        $largePicture = empty($courseSet['cover']['large']) ? '' : $courseSet['cover']['large'];
+        $courseSetImg = array(
+            'smallPicture' => $this->getFileUrl($smallPicture, 'course.png'),
+            'middlePicture' => $this->getFileUrl($middlePicture, 'course.png'),
+            'largePicture' => $this->getFileUrl($largePicture, 'course.png'),
+        );
+        $courseSet = array_merge($courseSet, $courseSetImg);
 
         foreach ($copyKeys as $value) {
             $course[$value] = isset($courseSet[$value]) ? $courseSet[$value] : '';
@@ -60,7 +63,7 @@ class Course extends BaseResource
         if ($course['isDefault'] == 1 && $course['title'] == '默认教学计划') {
             $course['title'] = $courseSet['title'];
         } else {
-            $course['title'] = $courseSet['title'] . '-' . $course['title'];
+            $course['title'] = $courseSet['title'].'-'.$course['title'];
         }
 
         unset($course['courseSet']);
@@ -71,10 +74,10 @@ class Course extends BaseResource
     {
         $simple = array();
 
-        $simple['id']      = $res['id'];
-        $simple['title']   = $res['title'];
+        $simple['id'] = $res['id'];
+        $simple['title'] = $res['title'];
         $simple['picture'] = $this->getFileUrl($res['smallPicture']);
-        $simple['convNo']  = $this->getConversation($res['id']);
+        $simple['convNo'] = $this->getConversation($res['id']);
 
         return $simple;
     }
@@ -108,5 +111,4 @@ class Course extends BaseResource
     {
         return $this->createService('Course:CourseSetService');
     }
-
 }

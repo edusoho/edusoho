@@ -23,7 +23,8 @@ class ChaosThreadsPosts extends BaseResource
                 }
 
                 $fields = ArrayToolkit::parts($fields, array('threadId', 'parentId', 'content'));
-                $post   = $this->getThreadService()->createPost($fields);
+
+                $post = $this->getThreadService()->createPost($fields);
                 break;
 
             case 'course':
@@ -31,8 +32,12 @@ class ChaosThreadsPosts extends BaseResource
                     return array('message' => '缺少必填字段');
                 }
 
+                if (!$this->getCourseService()->canTakeCourse($fields['courseId'])) {
+                    return array('message' => '没有发布话题权限');
+                }
+
                 $fields = ArrayToolkit::parts($fields, array('threadId', 'content', 'courseId'));
-                $post   = $this->getCourseThreadService()->createPost($fields);
+                $post = $this->getCourseThreadService()->createPost($fields);
                 break;
 
             case 'group':
@@ -44,10 +49,10 @@ class ChaosThreadsPosts extends BaseResource
 
                 $fields['userId'] = $currentUser['id'];
                 $fields['postId'] = isset($fields['postId']) ? $fields['postId'] : 0;
-                $fields           = ArrayToolkit::parts($fields, array('content', 'groupId', 'userId', 'threadId', 'postId'));
-                $postContent      = array(
-                    'content'    => $fields['content'],
-                    'fromUserId' => 0
+                $fields = ArrayToolkit::parts($fields, array('content', 'groupId', 'userId', 'threadId', 'postId'));
+                $postContent = array(
+                    'content' => $fields['content'],
+                    'fromUserId' => 0,
                 );
 
                 $post = $this->getGroupThreadService()->postThread($postContent, $fields['groupId'], $fields['userId'], $fields['threadId'], $fields['postId']);
@@ -64,13 +69,13 @@ class ChaosThreadsPosts extends BaseResource
     public function getThreadPosts(Application $app, Request $request)
     {
         $currentUser = $this->getCurrentUser();
-        $start       = $request->query->get('start', 0);
-        $limit       = $request->query->get('limit', 10);
-        $conditions  = array(
-            'userId' => $currentUser['id']
+        $start = $request->query->get('start', 0);
+        $limit = $request->query->get('limit', 10);
+        $conditions = array(
+            'userId' => $currentUser['id'],
         );
 
-        $userCourses = $this->getCourseMemberService()->searchMembers(array('userId' => $currentUser['id']), array('createdTime'=> 'DESC'), 0, PHP_INT_MAX);
+        $userCourses = $this->getCourseMemberService()->searchMembers(array('userId' => $currentUser['id']), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
 
         if (!$userCourses) {
             return array();
@@ -85,22 +90,31 @@ class ChaosThreadsPosts extends BaseResource
             return array();
         }
 
-        $courseIds = ArrayToolkit::column($posts, "courseId");
-        $courses   = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courseIds = ArrayToolkit::column($posts, 'courseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
+        $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
 
         foreach ($posts as $key => &$post) {
-            $thread = $this->getCourseThreadService()->getThread(null, $post['threadId']);
+            $thread = $this->getCourseThreadService()->getThread(0, $post['threadId']);
             if ($thread['userId'] == $currentUser['id'] || !isset($courses[$post['courseId']])) {
                 unset($posts[$key]);
                 continue;
             }
-            $course                  = $courses[$post['courseId']];
-            $course['smallPicture']  = $this->getFileUrl($course['smallPicture']);
-            $course['middlePicture'] = $this->getFileUrl($course['middlePicture']);
-            $course['largePicture']  = $this->getFileUrl($course['largePicture']);
-            $post['type']            = $thread['type'];
-            $post['title']           = $thread['title'];
-            $post['course']          = $this->filterCourse($course);
+
+            $course = $courses[$post['courseId']];
+            $courseSet = $courseSets[$course['courseSetId']];
+
+            $smallPicture = empty($courseSet['cover']['small']) ? '' : $courseSet['cover']['small'];
+            $middlePicture = empty($courseSet['cover']['middle']) ? '' : $courseSet['cover']['middle'];
+            $largePicture = empty($courseSet['cover']['large']) ? '' : $courseSet['cover']['large'];
+            $course['smallPicture'] = $this->getFileUrl($smallPicturem, 'course.png');
+            $course['middlePicture'] = $this->getFileUrl($middlePicture, 'course.png');
+            $course['largePicture'] = $this->getFileUrl($largePicture, 'course.png');
+            $post['type'] = $thread['type'];
+            $post['title'] = $thread['title'];
+            $post['course'] = $this->filterCourse($course);
         }
 
         return array_values($posts);
@@ -116,7 +130,7 @@ class ChaosThreadsPosts extends BaseResource
             'smallPicture',
             'middlePicture',
             'largePicture',
-            'createdTime'
+            'createdTime',
         );
         return ArrayToolkit::parts($course, $keys);
     }
@@ -145,6 +159,11 @@ class ChaosThreadsPosts extends BaseResource
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->getServiceKernel()->createService('Course:CourseSetService');
     }
 
     protected function getCourseMemberService()

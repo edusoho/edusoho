@@ -91,7 +91,7 @@
           </div>
 
           <div class="hidden-sm fsn">
-            {% if classroom.expiryMode != 'none' %}
+            {% if classroom.expiryMode != 'forever' %}
               {% if 'student' in member.role or 'member' in member.role %}
                 <span class="mrm">班级有效期</span>
                 <span>{{ memberDeadline|date('Y-n-d') }}</span>
@@ -138,10 +138,10 @@
               </li>
               {% if 'auditor' in member.role and classroomMemberLevel and  classroom.showable %}
                 <li class="hidden-xs color-warning icon-vip" title="会员{{ setting("classroom.name")|default("班级") }}"
-                  data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' with {courseVip:classroomMemberLevel,userVipStatus:checkMemberLevelResult} %}"
+                  data-content="{% include 'course/header/parts/normal-header-vip.html.twig' with {courseVip:classroomMemberLevel,userVipStatus:checkMemberLevelResult} %}"
                   data-original-title="会员{{ setting("classroom.name")|default("班级") }}">
                   <i class="es-icon es-icon-crown"></i><br>
-                  {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:checkMemberLevelResult, level: classroomMemberLevel} %}
+                  {% include 'course/header/parts/normal-header-vip-link.html.twig' with {userVipStatus:checkMemberLevelResult, level: classroomMemberLevel} %}
                 </li>
               {% endif %}
             </ul>
