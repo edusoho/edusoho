@@ -8,9 +8,18 @@ use Topxia\Component\Payment\Wxpay\JsApiPay;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 class PayCenterController extends BaseController
 {
+    protected function getPayLogger()
+    {
+        $logger = new Logger('PayCenter');
+        $logger->pushHandler(new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir').'/payCenter.log', Logger::DEBUG));
+        return $logger;
+    }
+
     public function showAction(Request $request)
     {
         $user = $this->getCurrentUser();
@@ -345,8 +354,10 @@ class PayCenterController extends BaseController
 
     public function payNotifyAction(Request $request, $name)
     {
+        $this->getPayLogger()->addInfo('payNotifyAction');
         if ($name == 'wxpay') {
             $returnXml   = $request->getContent();
+            $this->getPayLogger()->addInfo('wxpay_returnXml'.$returnXml);
             $returnArray = $this->fromXml($returnXml);
         } elseif ($name == 'heepay' || $name == 'quickpay') {
             $returnArray = $request->query->all();
@@ -362,6 +373,7 @@ class PayCenterController extends BaseController
         $response = $this->createPaymentResponse($name, $returnArray);
 
         $payData = $response->getPayData();
+        $this->getPayLogger()->addInfo($payData);
         if ($payData['status'] == 'waitBuyerConfirmGoods') {
             return new Response('success');
         }
@@ -404,11 +416,13 @@ class PayCenterController extends BaseController
 
     public function showTargetAction(Request $request)
     {
+        $this->getPayLogger()->addInfo('showTargetAction');
         $orderId = $request->query->get('id');
         $order   = $this->getOrderService()->getOrder($orderId);
 
         $processor = OrderProcessorFactory::create($order['targetType']);
         $router    = $processor->callbackUrl($order, $this->container);
+
 
         return $this->render('TopxiaWebBundle:PayCenter:pay-return.html.twig', array(
             'goto' => $router
