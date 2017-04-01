@@ -676,9 +676,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->beginTransaction();
 
             foreach ($courseIds as $courseId) {
+                $classroomRef = $this->getClassroomCourse($classroomId, $courseId);
+                if (empty($classroomRef)) {
+                    continue;
+                }
+                $this->getCourseSetService()->unlockCourseSet($classroomRef['courseSetId']);
                 $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $courseId);
-                $course = $this->getCourseService()->getCourse($courseId);
-                $this->getCourseSetService()->unlockCourseSet($course['courseSetId']);
                 $this->dispatchEvent(
                     'classroom.course.delete',
                     new Event($classroom, array('deleteCourseId' => $courseId))
@@ -1312,7 +1315,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
 
-        if (array_intersect($member['role'], array('headTeacher'))) {
+        if (in_array('headTeacher', $member['role'])) {
             return true;
         }
 
