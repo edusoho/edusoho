@@ -117,12 +117,6 @@ services:
         tags:
             - { name: twig.extension }
 
-    web.twig.event.report_extension:
-        class: AppBundle\Twig\EventReportExtension
-        arguments:    ['@service_container']
-        tags:
-            - { name: twig.extension }
-
     topxia.timemachine:
         class:			AppBundle\Common\TimeMachine
         arguments:		['Asia/Shanghai']

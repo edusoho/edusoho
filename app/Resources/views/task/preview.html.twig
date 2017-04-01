@@ -8,8 +8,8 @@
 {% do script(['app/js/task/preview/index.js']) %}
 
 {% block body %}
-  {% set eventReportOptions = {'user-id': app.user.id} %}
-  {{ event_report_twig('course.preview', 'course', course.id, eventReportOptions) }}
+  {% set eventReportParams = {'user-id': app.user.id} %}
+  {% include 'event_report.html.twig' with{ 'eventName':'course.preview', 'subjectType':'course', 'subjectId': course.id, 'eventReportParams':eventReportParams, 'eventId':'modal-event-report'} %}
   <iframe src="{{ path('course_task_content_preview',{courseId:task.courseId, id:task.id}) }}" id="viewerIframe" width="100%" allowfullscreen="" webkitallowfullscreen="" height="400px" style="border:0px"></iframe>
 {% endblock %}
 

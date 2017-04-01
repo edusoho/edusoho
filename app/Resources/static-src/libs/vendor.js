@@ -116,8 +116,15 @@ $("select[name='language']").change(function () {
   $("select[name='language']").parents('form').trigger('submit');
 });
 
+$('body').on('event-report', function(e, name){
+  let $obj = $(name);
+  if ($obj.length) {
+    var postData = $obj.data();
+    $.post($obj.data('url'), postData)
+  }
+})
 
-if ($("#event-report").length > 0) {
-  var postData = $("#event-report").data();
-  $.post('/event/dispatch', postData)
-}
+$('body').trigger('event-report','#event-report');
+
+
+
