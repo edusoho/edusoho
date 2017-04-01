@@ -199,6 +199,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $userId = $this->getCurrentUser()->getId();
         $classroom['creator'] = $userId;
         $classroom['teacherIds'] = array($userId);
+        $classroom['expiryMode'] = 'forever';
+        $classroom['expiryValue'] = 0;
 
         $classroom = $this->getClassroomDao()->create($classroom);
         $this->becomeTeacher($classroom['id'], $userId);
