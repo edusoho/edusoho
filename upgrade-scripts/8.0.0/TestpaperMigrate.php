@@ -84,6 +84,21 @@ class TestpaperMigrate extends AbstractMigrate
 
             $passedCondition = empty($testpaper['passedStatus']) ? '' : json_encode(array($testpaper['passedStatus']));
 
+            $metas = json_decode($testpaper['metas'], true);
+            if (empty($metas['counts'])) {
+                $sql = "select questionType,count(id) as count from testpaper_item where testId={$testpaper['id']} group by questionType";
+                $testpaperItemCounts = $this->getConnection()->fetchAll($sql);
+
+                $counts = array();
+                array_map(function ($count) use (&$counts) {
+                    $counts[$count['questionType']] = $count['count'];
+                }, $testpaperItemCounts);
+
+                $metas['counts'] = $counts;
+
+                $testpaper['metas'] = json_encode($metas);
+            }
+
             $this->getConnection()->insert('testpaper_v8', array(
                 'id' => $testpaper['id'],
                 'name' => $testpaper['name'],
