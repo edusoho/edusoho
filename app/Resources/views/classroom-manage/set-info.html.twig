@@ -33,7 +33,7 @@ classroomStatus: classroom.status
             data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
             data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}"
             id="about">{{ classroom.about|raw }}</textarea>
-            <div class="help-block">{{ '为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】中进行设置'|trans }}</div>
+            <div class="help-block">{{ '为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置'|trans }}</div>
           </div>
         </div>
         <div class="form-group">
