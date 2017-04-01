@@ -46,8 +46,14 @@ abstract class Resource
 
     public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
-        $router = $this->biz['router'];
+        $router = $this->biz['api.router'];
         return $router->generate($route, $parameters, $referenceType);
+    }
+
+    public function renderView($view, array $parameters = array())
+    {
+        $templating = $this->biz['api.templating'];
+        return $templating->render($view, $parameters);
     }
 
     /**

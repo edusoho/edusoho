@@ -29,8 +29,11 @@ class PayCenter extends Resource
 
         if ($order['status'] == 'paid') {
             $order['paymentForm'] = array();
+            $order['paymentHtml'] = '';
         } else {
             $order['paymentForm'] = $this->generatePaymentForm($order, $request);
+            $order['paymentHtml'] = $this->renderView('pay-center/submit-pay-request.html.twig',
+                array('form' => $order['paymentForm']));
         }
 
         return $order;

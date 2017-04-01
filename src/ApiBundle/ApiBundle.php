@@ -18,7 +18,8 @@ class ApiBundle extends Bundle
         $container = $this->container;
         $biz = $container->get('biz');
 
-        $biz['router'] = $container->get('router');
+        $biz['api.router'] = $container->get('router');
+        $biz['api.templating'] = $container->get('templating');
 
         $biz['api.resource.manager'] = function ($biz) {
             return new ResourceManager($biz);
