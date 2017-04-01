@@ -14,6 +14,7 @@ class CourseMaterial2CourseTaskMigrate extends AbstractMigrate
         $this->proccessCourseTask();
         $this->processRelations();
     }
+
     // refactor: id not in问题
     protected function proccessCourseTask()
     {
@@ -68,10 +69,16 @@ class CourseMaterial2CourseTaskMigrate extends AbstractMigrate
         );
 
         $this->exec(
-        "
+            "
             UPDATE  `course_task` AS ck ,`activity` AS ay SET ck.`activityId`  =  ay.`id`
             WHERE ck.`migrateLessonId`  = ay.`migrateLessonId` AND ck.`type` = 'download'  AND ay.mediaType= 'download' AND ck.`activityId`  <>  ay.`id`;
         "
         );
+
+        //修复下载活动和资料的的关系
+        $this->exec(
+            "
+          UPDATE `course_material_v8` cm , `activity`  ay SET  cm.lessonId = ay.id WHERE  cm.`lessonId` = ay.`migrateLessonId` AND cm.`source` = 'coursematerial'  AND ay.`mediaType` = 'download' and cm.lessonId > 0;
+        ");
     }
 }

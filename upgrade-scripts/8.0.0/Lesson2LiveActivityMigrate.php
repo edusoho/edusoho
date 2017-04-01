@@ -1,11 +1,10 @@
-<?php 
+<?php
 
 class Lesson2LiveActivityMigrate extends AbstractMigrate
 {
     public function update($page)
     {
-
-		    if (!$this->isTableExist('activity_live')) {
+        if (!$this->isTableExist('activity_live')) {
             $sql = "CREATE TABLE `activity_live` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `liveId` int(11) NOT NULL COMMENT '直播间ID',
@@ -19,7 +18,7 @@ class Lesson2LiveActivityMigrate extends AbstractMigrate
             $this->getConnection()->exec($sql);
         }
 
-		    if (!$this->isFieldExist('activity_live', 'migrateLessonId')) {
+        if (!$this->isFieldExist('activity_live', 'migrateLessonId')) {
             $this->exec("alter table `activity_live` add `migrateLessonId` int(10) ;");
         }
 
@@ -29,7 +28,8 @@ class Lesson2LiveActivityMigrate extends AbstractMigrate
             return;
         }
 
-		    $sql = "INSERT INTO `activity_live` (
+        //老数据当直播回放是视频文件的时候，会修改mediaId成fileId，正常mediaId是liveId
+        $sql = "INSERT INTO `activity_live` (
           `id`
           ,`liveId`
           ,`liveProvider`
@@ -41,13 +41,13 @@ class Lesson2LiveActivityMigrate extends AbstractMigrate
             ,`mediaId`
             ,`liveProvider`
             ,`replayStatus`
-            , 0
+            , case when replayStatus = 'videoGenerated' then mediaId else 0 end
             ,`id`
         FROM `course_lesson` where type='live' and `id` not in (select `id` from `activity_live`)
         order by id limit 0, {$this->perPageCount};";
 
         $result = $this->getConnection()->exec($sql);
 
-        return $page+1;
+        return $page + 1;
     }
 }
