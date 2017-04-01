@@ -9,8 +9,7 @@ class MemberRecentlyLearnedDataTag extends CourseBaseDataTag implements DataTag
      *
      *   user     必须
      *
-     * @param array $arguments 参数
-     *
+     * @param  array $arguments                             参数
      * @return array 个人正在学习课程相关信息
      */
     public function getData(array $arguments)
@@ -23,12 +22,10 @@ class MemberRecentlyLearnedDataTag extends CourseBaseDataTag implements DataTag
             $courseSet = $this->getCourseSetService()->getCourseSet($task['fromCourseSetId']);
             $course = $this->getCourseService()->getCourse($task['courseId']);
 
-            if ($course && $course['status'] == 'published') {
-                $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user->id);
-                $course['teachers'] = $this->getUserService()->findUsersByIds($course['teacherIds']);
-                $course['nextLearnTask'] = $this->getTaskService()->getNextTask($task['id']);
-                $course['progress'] = $this->calculateUserLearnProgress($course, $member);
-            }
+            $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user->id);
+            $course['teachers'] = $this->getUserService()->findUsersByIds($course['teacherIds']);
+            $course['nextLearnTask'] = $this->getTaskService()->getNextTask($task['id']);
+            $course['progress'] = $this->calculateUserLearnProgress($course, $member);
             $courseSet['course'] = $course;
         } else {
             $courseSet = array();
