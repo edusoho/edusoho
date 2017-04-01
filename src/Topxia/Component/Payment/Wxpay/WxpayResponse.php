@@ -10,8 +10,9 @@ class WxpayResponse extends Response
     protected $orderQueryUrl = 'https://api.mch.weixin.qq.com/pay/orderquery';
     public function getPayData()
     {
-        $order = $this->getOrderService()->getOrderByToken($params['out_trade_no']);
         $params          = $this->params;
+        $order = $this->getOrderService()->getOrderByToken($params['out_trade_no']);
+       
         $data            = array();
         $data['payment'] = 'wxpay';
         $data['sn']      = $order['sn'];
