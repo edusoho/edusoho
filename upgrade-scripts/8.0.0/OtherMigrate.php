@@ -150,6 +150,7 @@ class OtherMigrate extends AbstractMigrate
     {
         if (!$this->isFieldExist('classroom', 'creator')) {
             $this->exec("ALTER TABLE classroom ADD `creator` int(10) NOT NULL DEFAULT '0' COMMENT '班级创建者';");
+            $this->exec("UPDATE `classroom` SET `creator` = `headTeacherId` WHERE `creator` = 0;");
         }
     }
 
