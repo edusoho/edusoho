@@ -78,7 +78,7 @@ class CourseMigrate extends AbstractMigrate
 
         $nextPage = $this->insertData($page);
         if (!empty($nextPage)) {
-          return $nextPage;
+            return $nextPage;
         }
 
         $this->updateDate();
@@ -99,6 +99,8 @@ class CourseMigrate extends AbstractMigrate
               ,c2.`coinPrice` = c.`coinPrice`
               ,c2.`originPrice` = c.`originPrice`
               ,c2.`expiryMode` = (case when c.`expiryMode` = 'none' then 'forever' else c.`expiryMode` end)
+              ,c2.`expiryDays` = (case when c.`expiryMode` = 'days' then c.`expiryDay` end)
+              ,c2.`expiryEndDate` = (case when c.`expiryMode` = 'date' then c.`expiryDay` end)
               ,c2.`showStudentNumType` = c.`showStudentNumType`
               ,c2.`serializeMode` = c.`serializeMode`
               ,c2.`income` = c.`income`
@@ -149,8 +151,8 @@ class CourseMigrate extends AbstractMigrate
     {
         $countSql = 'SELECT count(*) FROM `course` where `id` not in (select `id` from `course_v8`)';
         $count = $this->getConnection()->fetchColumn($countSql);
-        if($count == 0) {
-          return;
+        if ($count == 0) {
+            return;
         }
 
         $sql = "INSERT INTO `course_v8` (
@@ -165,6 +167,9 @@ class CourseMigrate extends AbstractMigrate
               ,`coinPrice`
               ,`originPrice`
               ,`expiryMode`
+              ,`expiryDays`
+              ,`expiryStartDate`
+              ,`expiryEndDate`
               ,`showStudentNumType`
               ,`serializeMode`
               ,`income`
@@ -206,7 +211,6 @@ class CourseMigrate extends AbstractMigrate
               ,`enableFinish`
               ,`learnMode`
               ,`maxRate`
-              ,`showServices`
           ) SELECT
               `id`
               ,`id`
@@ -218,7 +222,10 @@ class CourseMigrate extends AbstractMigrate
               ,`originCoinPrice`
               ,`coinPrice`
               ,`originPrice`
-              , case when `expiryMode` = 'none' then 'forever' else `expiryMode` end
+              ,(case when `expiryMode` = 'none' then 'forever' else `expiryMode` end)
+              ,(case when `expiryMode` = 'days' then `expiryDay` end)
+              ,(case when `expiryMode` = 'date' then `createdTime` end)
+              ,(case when `expiryMode` = 'date' then `expiryDay` end)
               ,`showStudentNumType`
               ,`serializeMode`
               ,`income`
@@ -260,9 +267,8 @@ class CourseMigrate extends AbstractMigrate
               ,1
               ,'freeMode'
               ,`maxRate`
-              ,0
           FROM `course` where `id` not in (select `id` from `course_v8`) order by id limit 0, {$this->perPageCount};";
         $result = $this->getConnection()->exec($sql);
-        return $page+1;
+        return $page + 1;
     }
 }
