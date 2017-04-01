@@ -514,13 +514,9 @@ class PayCenterController extends BaseController
 
     public function generateWxpayOrderToken($order)
     {
-        $token = $this->getTokenService()->makeToken('wxpay', array(
-            'duration' => time()+ 60*60*24
-        ));
+        $token = $this->makeWxpayToken();
         
         $processor = OrderProcessorFactory::create($order['targetType']);
-
-
         return $processor->updateOrder($order['id'], array('token' => $token['token']));
     
     }
