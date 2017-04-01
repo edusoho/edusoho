@@ -18,16 +18,16 @@ class HomeworkItemResultMigrate extends AbstractMigrate
 
     private function updateHomeworkItemResult()
     {
-        $sql = "UPDATE testpaper_item_result_v8 AS rt,(SELECT id,migrateTestId FROM testpaper_v8 WHERE type = 'homework') AS tmp SET rt.testId = tmp.id WHERE rt.migrateType = 'homework' AND rt.testId = tmp.migrateTestId;";
+        $sql = "UPDATE testpaper_item_result_v8 AS rt,(SELECT id,migrateTestId FROM testpaper_v8 WHERE type = 'homework') AS tmp SET rt.testId = tmp.id WHERE rt.type = 'homework' AND rt.testId = tmp.migrateTestId;";
         $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE testpaper_item_result_v8 AS rt,(SELECT id,migrateResultId FROM testpaper_result_v8 WHERE type = 'homework') AS tmp SET rt.resultId = tmp.id WHERE rt.migrateType = 'homework' AND rt.resultId = tmp.migrateResultId;";
+        $sql = "UPDATE testpaper_item_result_v8 AS rt,(SELECT id,migrateResultId FROM testpaper_result_v8 WHERE type = 'homework') AS tmp SET rt.resultId = tmp.id WHERE rt.type = 'homework' AND rt.resultId = tmp.migrateResultId;";
         $this->getConnection()->exec($sql);
     }
 
     private function insertHomeworkItemResult($page)
     {
-        $countSql = "SELECT count(id) FROM `homework_item_result` where `id` not in (select `migrateItemResultId` from `testpaper_item_result_v8` where migrateType = 'homework');";
+        $countSql = "SELECT count(id) FROM `homework_item_result` where `id` not in (select `migrateItemResultId` from `testpaper_item_result_v8` where type = 'homework');";
         $count = $this->getConnection()->fetchColumn($countSql);
 
         if ($count == 0) {
@@ -43,7 +43,7 @@ class HomeworkItemResultMigrate extends AbstractMigrate
             answer,
             teacherSay,
             migrateItemResultId,
-            migrateType
+            type
         ) SELECT
             homeworkId,
             homeworkResultId,
@@ -54,7 +54,7 @@ class HomeworkItemResultMigrate extends AbstractMigrate
             teacherSay,
             id AS migrateItemResultId,
             'homework'
-            FROM homework_item_result WHERE id NOT IN (SELECT migrateItemResultId FROM testpaper_item_result_v8 where migrateType = 'homework') order by id limit 0, {$this->perPageCount};";
+            FROM homework_item_result WHERE id NOT IN (SELECT migrateItemResultId FROM testpaper_item_result_v8 where type = 'homework') order by id limit 0, {$this->perPageCount};";
         $this->getConnection()->exec($sql);
 
         return $page + 1;

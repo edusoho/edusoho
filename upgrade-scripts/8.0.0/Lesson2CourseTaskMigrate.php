@@ -52,6 +52,7 @@ class Lesson2CourseTaskMigrate extends AbstractMigrate
             insert into course_task(
                  `id`,
                  `courseId`,
+                 `fromCourseSetId`,
                  `seq`,
                  `categoryId`,
                  `title`,
@@ -72,6 +73,7 @@ class Lesson2CourseTaskMigrate extends AbstractMigrate
                  `migrateLessonId`
             ) select
                 `id`,
+                `courseId`,
                 `courseId`,
                 `seq`,
                 `chapterId`,

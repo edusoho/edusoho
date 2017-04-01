@@ -9,7 +9,7 @@ class Lesson2CourseChapterMigrate extends AbstractMigrate
             $this->exec("alter table `course_chapter` add `migrateLessonId` int(10) default 0;");
         }
 
-        $countSql = 'SELECT count(*) from `course_lesson` WHERE `id` NOT IN (SELECT migrateLessonId FROM `course_chapter`)';
+        $countSql = 'SELECT count(id) from `course_lesson` WHERE `id` NOT IN (SELECT migrateLessonId FROM `course_chapter`)';
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
             return;
@@ -27,7 +27,7 @@ class Lesson2CourseChapterMigrate extends AbstractMigrate
           createdTime,
           copyId,
           migrateLessonId
-        ) select 
+        ) select
           courseId,
           'lesson',
           chapterId,

@@ -110,6 +110,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'ActivityLearnLog',
             'OtherMigrate',
             'LogMigrate',
+            'GracefulBlockMigrate',
         );
 
         if ($index > count($steps) - 1) {
@@ -142,6 +143,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $method = $this->getStep($index);
 
         if (empty($method)) {
+            $this->logger('8.0.0', 'info', "8.0.0升级成功！");
             return;
         }
 
@@ -150,14 +152,12 @@ class EduSohoUpgrade extends AbstractUpdater
         require_once $file;
         $migrate = new $method($this->kernel);
 
-        $this->logger('info', "开始迁移 {$method}");
-        var_dump("{$method} {$page} start");
+        $this->logger('8.0.0', 'info', "开始迁移 {$method} {$page}");
         $start = time();
         $nextPage = $migrate->update($page);
-        $end = time();
-        var_dump("{$method} {$page} end:".($end - $start));
+        $end = time() - $start;
 
-        $this->logger('info', "迁移 {$method} 成功");
+        $this->logger('8.0.0', 'info', "迁移 {$method} {$page} 成功, time: {$end}");
 
         if (!empty($nextPage)) {
             return array(
@@ -233,9 +233,9 @@ class EduSohoUpgrade extends AbstractUpdater
         return ServiceKernel::instance()->getBiz()->dao('Course:CourseChapterDao');
     }
 
-    protected function logger($level, $message)
+    protected function logger($version, $level, $message)
     {
-        $data = date('Y-m-d H:i:s').' ['.$level.'] 6.17.9 '.$message.PHP_EOL;
+        $data = date('Y-m-d H:i:s')." [{$level}] {$version} ".$message.PHP_EOL;
         file_put_contents($this->getLoggerFile(), $data, FILE_APPEND);
     }
 

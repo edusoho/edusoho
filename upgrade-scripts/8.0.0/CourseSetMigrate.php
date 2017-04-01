@@ -56,7 +56,7 @@ class CourseSetMigrate extends AbstractMigrate
 
     private function updateCourseSet()
     {
-        $sql = 'UPDATE `course_set_v8` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.`num`  WHERE ce.`id` = cm.`courseId`;';
+        $sql = "UPDATE `course_set_v8` ce, (SELECT count(id) AS num , courseId FROM `course_material` WHERE  source ='coursematerial' AND lessonId >0 GROUP BY courseId) cm  SET ce.`materialNum` = cm.`num`  WHERE ce.`id` = cm.`courseId`;";
         $result = $this->getConnection()->exec($sql);
 
         $sql = 'UPDATE `course_set_v8` cs, `course` c SET cs.`minCoursePrice` = c.`price`, cs.`maxCoursePrice` = c.`price` where cs.`id` = c.`id`';
