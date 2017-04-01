@@ -46,7 +46,6 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     public function createOrder($targetType, $targetId, $fields)
     {
         try {
-
             if (!array_key_exists('targetId', $fields) || !array_key_exists('targetType', $fields)) {
                 throw $this->createServiceException('参数不正确');
             }
@@ -109,7 +108,6 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             $order = $processor->createOrder($orderFileds, $fields);
 
             return array($order, $processor);
-
         } catch (\Exception $e) {
             throw $this->createServiceException($e->getMessage());
         }

@@ -115,7 +115,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     /**
      * @deprecated
-     * @param  int     $courseId
+     *
+     * @param int $courseId
+     *
      * @return array
      */
     public function findClassroomsByCourseId($courseId)
@@ -1280,6 +1282,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     /**
      * @param  $id
      * @param  $permission
+     *
      * @return bool
      */
     public function canManageClassroom($id, $permission = 'admin_classroom_content_manage')
