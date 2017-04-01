@@ -3,7 +3,6 @@
 namespace AppBundle\Controller;
 
 use Biz\Cash\Service\CashOrdersService;
-use Biz\Coupon\Service\CouponService;
 use Biz\Order\Service\OrderService;
 use Biz\PayCenter\Service\PayCenterService;
 use Biz\System\Service\LogService;
