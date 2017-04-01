@@ -17,6 +17,7 @@ class GatewayServiceImpl extends BaseService implements GatewayService
             $this->check($order, $payment);
         } catch (PayCenterException $e) {
             $checkResult['error'] = $e->getMessage();
+            $checkResult['code'] = $e->getCode();
 
             return array($checkResult, null);
         }

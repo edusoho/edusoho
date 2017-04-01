@@ -18,7 +18,8 @@ class Order extends Resource
             throw new InvalidArgumentException();
         }
 
-        list($order, $process) = $this->service('Order:OrderFacadeService')->createOrder($params['targetType'], $params['targetId'], $params);
+        list($order) = $this->service('Order:OrderFacadeService')
+            ->createOrder($params['targetType'], $params['targetId'], $params);
         return $order;
     }
 }

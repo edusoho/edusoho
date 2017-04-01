@@ -9,6 +9,28 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CourseMember extends Resource
 {
+    public function search(Request $request, $courseId)
+    {
+        $conditions = $request->query->all();
+        $conditions['$courseId'] = $courseId;
+        $conditions['role'] = 'student';
+        $conditions['locked'] = 0;
+
+        list($offset, $limit) = $this->getOffsetAndLimit($request);
+        $members = $this->service('Course:MemberService')->searchMembers(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            $offset,
+            $limit
+        );
+
+        $total = $this->service('Course:MemberService')->countMembers($conditions);
+
+        $this->getOCUtil()->multiple($members, array('userId'));
+
+        return $this->makePagingObject($members, $total, $offset, $limit);
+    }
+
     public function add(Request $request, $courseId)
     {
         $course = $this->service('Course:CourseService')->getCourse($courseId);

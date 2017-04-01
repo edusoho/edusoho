@@ -13,9 +13,11 @@ class SecurityPolicy implements SecurityPolicyInterface
                 '/users/\d+',
                 '/course_sets/\d+',
                 '/course_sets/\d+/reviews',
+                '/course_sets/\d+/members',
                 '/course_sets/\d+/courses',
                 '/courses/\d+',
-                '/courses/\d+/tasks'
+                '/courses/\d+/tasks',
+                '/courses/\d+/members'
             ),
             'POST' => array(
                 '/tokens',

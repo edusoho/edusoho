@@ -6,7 +6,7 @@ interface TokenService
 {
     const MOBILE_MODULE = 'mobile';
 
-    const TYPE_API_AUTH = 'api_auth';
+    const TYPE_API_AUTH = 'mobile_login';
 
     const DEVICE_UNKNOWN = 'unknown';
 

@@ -1117,7 +1117,7 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $token = $this->getUserTokenDao()->getByToken($token);
 
-        if (empty($token)) {
+        if (empty($token) || $token['type'] != $type) {
             return null;
         }
 

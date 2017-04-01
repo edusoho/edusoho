@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\CourseSet;
 
+use ApiBundle\Api\Resource\Course\CourseMemberFilter;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
 
@@ -15,13 +16,7 @@ class CourseSetMemberFilter extends Filter
 
     protected function customFilter(&$data)
     {
-        $data['deadline'] = date('c', $data['deadline']);
-        $data['noteLastUpdateTime'] = date('c', $data['noteLastUpdateTime']);
-        $data['finishedTime'] = date('c', $data['finishedTime']);
-        $data['lastLearnTime'] = date('c', $data['lastLearnTime']);
-        $data['lastViewTime'] = date('c', $data['lastViewTime']);
-
-        $userFilter = new UserFilter();
-        $userFilter->filter($data['user']);
+        $courseMember = new CourseMemberFilter();
+        $courseMember->filter($data);
     }
 }
