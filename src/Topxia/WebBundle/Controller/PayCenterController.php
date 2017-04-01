@@ -521,7 +521,7 @@ class PayCenterController extends BaseController
     private function makeWxpayToken($orderId)
     {
         $order = $this->getOrderService()->getOrder($orderId);
-        $token['token'] = $order['sn'].rand(9);
+        $token['token'] = $order['sn'].rand(1,9);
         return $token;
     }
 
