@@ -2,14 +2,26 @@
 
 namespace ApiBundle\Api\Util;
 
+use Symfony\Component\HttpFoundation\Request;
+
 class RequestUtil
 {
+    /**
+     * @var Request
+     */
+    private static $request;
+
+    public static function setRequest(Request $request)
+    {
+        self::$request = $request;
+    }
+
     public static function asset($path)
     {
         if (empty($path)) {
             return '';
         }
-        if (strpos($path, static::getSchema()."://") !== false) {
+        if (strpos($path, self::$request->getScheme()."://") !== false) {
             return $path;
         }
 
@@ -18,22 +30,6 @@ class RequestUtil
             $path = '/files/'.str_replace('public://', '', $path);
         }
 
-        return static::getHttpHost().$path;
-    }
-
-    public static function getHttpHost()
-    {
-        return static ::getSchema()."://{$_SERVER['HTTP_HOST']}";
-    }
-
-    public static function getSchema()
-    {
-        if(!empty($_SERVER['HTTPS']) && 'off' !== strtolower($_SERVER['HTTPS'])) {
-            $schema = 'https';
-        } else {
-            $schema = 'http';
-        }
-
-        return $schema;
+        return self::$request->getSchemeAndHttpHost().'/'.$path;
     }
 }
