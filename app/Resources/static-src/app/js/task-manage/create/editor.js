@@ -179,7 +179,9 @@ class Editor {
     if (url === undefined) {
       return;
     }
-
+    if (!confirm(Translator.trans('是否确定删除该任务吗？'))) {
+      return;
+    }
     $.post(url)
       .then((response) => {
         notify('success', '删除成功');
