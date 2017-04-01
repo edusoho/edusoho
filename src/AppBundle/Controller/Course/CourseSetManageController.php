@@ -47,7 +47,9 @@ class CourseSetManageController extends BaseController
                 );
             }
         }
-
+        if (!$this->getCourseSetService()->hasCourseSetManageRole()) {
+            throw new \Exception('Unauthorized');
+        }
         $user = $this->getUser();
         $userProfile = $this->getUserService()->getUserProfile($user->getId());
         $user = $this->getUserService()->getUser($user->getId());
@@ -84,7 +86,6 @@ class CourseSetManageController extends BaseController
 
     public function headerAction($courseSet, $course = null)
     {
-        // $users = empty($courseSet['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($courseSet['teacherIds']);
         //暂时显示课程的创建者
         if (empty($courseSet['teacherIds'])) {
             $courseSet['teacherIds'] = array($courseSet['creator']);
@@ -250,14 +251,14 @@ class CourseSetManageController extends BaseController
 
     public function coverCropAction(Request $request, $id)
     {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
-
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
             $this->getCourseSetService()->changeCourseSetCover($courseSet['id'], json_decode($data['images'], true));
 
             return $this->redirect($this->generateUrl('course_set_manage_cover', array('id' => $courseSet['id'])));
         }
+
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
         if ($courseSet['locked']) {
             return $this->redirectToRoute(
