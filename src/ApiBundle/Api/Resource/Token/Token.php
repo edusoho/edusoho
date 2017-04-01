@@ -28,9 +28,11 @@ class Token extends Resource
 
         $token = $this->getTokenService()->makeApiAuthToken($args);
 
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+        $user = array_merge($profile, $user);
         return array(
             'token' => $token['token'],
-            'userId' => $user['id']
+            'user' => $user
         );
     }
 

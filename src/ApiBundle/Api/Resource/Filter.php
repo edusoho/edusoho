@@ -6,6 +6,13 @@ abstract class Filter
 {
     protected $publicFields;
 
+    protected $fieldMode = 'public';
+
+    public function setFieldMode($fieldMode)
+    {
+        $this->fieldMode = $fieldMode;
+    }
+
     public function filter(&$data)
     {
         if (empty($data)) {
@@ -40,9 +47,10 @@ abstract class Filter
 
     private function defaultFieldsFilter(&$data)
     {
-        if ($this->publicFields) {
+        $filterFields = $this->fieldMode.'Fields';
+        if ($this->$filterFields) {
             foreach (array_keys($data) as $field) {
-                if (!in_array($field, $this->publicFields)) {
+                if (!in_array($field, $this->$filterFields)) {
                     unset($data[$field]);
                 }
             }
