@@ -251,6 +251,15 @@ class PayCenterController extends BaseController
         $params         = $formRequest['params'];
 
         if ($payment == 'wxpay') {
+            $isMicroMessenger = $this->getWebExtension()->isMicroMessenger();
+            if($isMicroMessenger){
+                $url = $this->generateUrl('pay_center_wxpay',array($request));
+                $request->headers->add(array('X_ORIGINAL_URL'=>$url));
+                
+                return $this->forward('TopxiaWebBundle:PayCenter:wxpay', array(
+                    'order' => $order
+                ));
+            }
             $order = $this->generateWxpayOrderToken($order);
             $returnArray = $paymentRequest->unifiedOrder();
 
