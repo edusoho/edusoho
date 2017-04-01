@@ -10,10 +10,11 @@ class WxpayResponse extends Response
     protected $orderQueryUrl = 'https://api.mch.weixin.qq.com/pay/orderquery';
     public function getPayData()
     {
+        $order = $this->getOrderService()->getOrderByToken($params['out_trade_no']);
         $params          = $this->params;
         $data            = array();
         $data['payment'] = 'wxpay';
-        $data['sn']      = $params['out_trade_no'];
+        $data['sn']      = $order['sn'];
         $result          = $this->confirmSellerSendGoods($data['sn']);
         $returnArray     = $this->fromXml($result);
         if ($returnArray['return_code'] != 'SUCCESS' || $returnArray['result_code'] != 'SUCCESS' || $returnArray['trade_state'] != 'SUCCESS') {
@@ -133,5 +134,10 @@ class WxpayResponse extends Response
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
     }
 }
