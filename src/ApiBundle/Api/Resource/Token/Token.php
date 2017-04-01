@@ -17,7 +17,7 @@ class Token extends Resource
     {
         $username = $request->request->get('username');
         $password =  $request->request->get('password');
-        $password = EncryptionToolkit::XXTEADecrypt(base64_decode($password), $request->getHost());
+        $password = EncryptionToolkit::XXTEADecrypt(base64_decode($password), 'edusoho');
 
         $user = $this->checkParams($username, $password);
 
