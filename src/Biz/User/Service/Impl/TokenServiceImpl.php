@@ -68,6 +68,11 @@ class TokenServiceImpl extends BaseService implements TokenService
         return $this->getTokenDao()->findByUserIdAndType($userId, $type);
     }
 
+    public function getTokenByToken($token)
+    {
+        return $this->getTokenDao()->getByToken($token);
+    }
+
     public function getTokenByType($type)
     {
         return $this->getTokenDao()->getByType($type);

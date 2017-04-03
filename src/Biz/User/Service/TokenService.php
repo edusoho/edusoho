@@ -41,4 +41,6 @@ interface TokenService
     public function findTokensByUserIdAndType($userId, $type);
 
     public function getTokenByType($type);
+
+    public function getTokenByToken($token);
 }

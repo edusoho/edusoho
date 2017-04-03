@@ -156,6 +156,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         $params = array(
             'summary' => isset($lesson['summary']) ? $lesson['summary'] : '',
             'title' => $lesson['title'],
+            'type' => $lesson['type'],
             'speaker' => $this->_getSpeaker($courseTeacherIds),
             'authUrl' => $container->get('router')->generate('live_auth', array(), true),
             'jumpUrl' => $container->get('router')->generate('live_jump', array('id' => $lesson['courseId']), true),
