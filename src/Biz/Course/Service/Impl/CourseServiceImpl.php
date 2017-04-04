@@ -1928,7 +1928,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if ($fields['isFree'] == 1) {
             $fields['price'] = 0;
-            $fields['vipLevelId'] = 0;
         }
 
         if ($courseSet['type'] == 'normal' && $fields['tryLookable'] == 0) {

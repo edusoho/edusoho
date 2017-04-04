@@ -4706,58 +4706,6 @@
         "description": "A service layer framework."
     },
     {
-        "name": "codeages/plugin-bundle",
-        "version": "v0.1.8",
-        "version_normalized": "0.1.8.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/plugin-bundle.git",
-            "reference": "8fe75a86901f627aa19d6945ad7af3a1e110a6b3"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/plugin-bundle/8fe75a86901f627aa19d6945ad7af3a1e110a6b3.zip",
-            "reference": "8fe75a86901f627aa19d6945ad7af3a1e110a6b3",
-            "shasum": ""
-        },
-        "require": {
-            "codeages/biz-framework": "^0.1.7 || ^0.2 || ^0.3",
-            "php": "^5.3.3 || ^7.0",
-            "symfony/framework-bundle": "^2.8 || ^3.0",
-            "symfony/twig-bundle": "^2.8 || ^3.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~4.8 || ~5.0",
-            "symfony/browser-kit": "^2.8 || ^3.0",
-            "symfony/phpunit-bridge": "~3.2"
-        },
-        "time": "2017-03-31T13:04:09+00:00",
-        "type": "symfony-bundle",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\PluginBundle\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "codeages team",
-                "email": "team@codeages.com"
-            }
-        ],
-        "description": "Symfony PluginBundle",
-        "homepage": "https://github.com/codeages/plugin-bundle",
-        "keywords": [
-            "extension",
-            "plugin",
-            "theme"
-        ]
-    },
-    {
         "name": "codeages/biz-rate-limiter",
         "version": "v0.1.6",
         "version_normalized": "0.1.6.0",
@@ -4791,24 +4739,138 @@
         "description": "Rate limiter with Biz Framework."
     },
     {
-        "name": "sensiolabs/security-checker",
-        "version": "v4.0.3",
-        "version_normalized": "4.0.3.0",
+        "name": "codeages/plugin-bundle",
+        "version": "v0.1.9",
+        "version_normalized": "0.1.9.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/sensiolabs/security-checker.git",
-            "reference": "04bb87f5bd28a7d6ce7f4a4d1d6b94b3c1aa8dae"
+            "url": "https://github.com/codeages/plugin-bundle.git",
+            "reference": "2572a433e5677b6faf9d4b3de3890856e00cd892"
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/sensiolabs/security-checker/04bb87f5bd28a7d6ce7f4a4d1d6b94b3c1aa8dae.zip",
-            "reference": "04bb87f5bd28a7d6ce7f4a4d1d6b94b3c1aa8dae",
+            "url": "https://files.phpcomposer.com/files/codeages/plugin-bundle/2572a433e5677b6faf9d4b3de3890856e00cd892.zip",
+            "reference": "2572a433e5677b6faf9d4b3de3890856e00cd892",
             "shasum": ""
         },
         "require": {
+            "codeages/biz-framework": "^0.1.7 || ^0.2 || ^0.3",
+            "php": "^5.3.3 || ^7.0",
+            "symfony/framework-bundle": "^2.8 || ^3.0",
+            "symfony/twig-bundle": "^2.8 || ^3.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "~4.8 || ~5.7",
+            "symfony/browser-kit": "^2.8 || ^3.0",
+            "symfony/phpunit-bridge": "~3.2"
+        },
+        "time": "2017-04-01T03:50:40+00:00",
+        "type": "symfony-bundle",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\PluginBundle\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "codeages team",
+                "email": "team@codeages.com"
+            }
+        ],
+        "description": "Symfony PluginBundle",
+        "homepage": "https://github.com/codeages/plugin-bundle",
+        "keywords": [
+            "extension",
+            "plugin",
+            "theme"
+        ]
+    },
+    {
+        "name": "composer/ca-bundle",
+        "version": "1.0.7",
+        "version_normalized": "1.0.7.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/composer/ca-bundle.git",
+            "reference": "b17e6153cb7f33c7e44eb59578dc12eee5dc8e12"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/composer/ca-bundle/b17e6153cb7f33c7e44eb59578dc12eee5dc8e12.zip",
+            "reference": "b17e6153cb7f33c7e44eb59578dc12eee5dc8e12",
+            "shasum": ""
+        },
+        "require": {
+            "ext-openssl": "*",
+            "ext-pcre": "*",
+            "php": "^5.3.2 || ^7.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.5",
+            "psr/log": "^1.0",
+            "symfony/process": "^2.5 || ^3.0"
+        },
+        "suggest": {
+            "symfony/process": "This is necessary to reliably check whether openssl_x509_parse is vulnerable on older php versions, but can be ignored on PHP 5.5.6+"
+        },
+        "time": "2017-03-06T11:59:08+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Composer\\CaBundle\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jordi Boggiano",
+                "email": "j.boggiano@seld.be",
+                "homepage": "http://seld.be"
+            }
+        ],
+        "description": "Lets you find a path to the system CA bundle, and includes a fallback to the Mozilla CA bundle.",
+        "keywords": [
+            "cabundle",
+            "cacert",
+            "certificate",
+            "ssl",
+            "tls"
+        ]
+    },
+    {
+        "name": "sensiolabs/security-checker",
+        "version": "v4.0.4",
+        "version_normalized": "4.0.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/sensiolabs/security-checker.git",
+            "reference": "9e69eddf3bc49d1ee5c7908564da3141796d4bbc"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/sensiolabs/security-checker/9e69eddf3bc49d1ee5c7908564da3141796d4bbc.zip",
+            "reference": "9e69eddf3bc49d1ee5c7908564da3141796d4bbc",
+            "shasum": ""
+        },
+        "require": {
+            "composer/ca-bundle": "^1.0",
             "symfony/console": "~2.7|~3.0"
         },
-        "time": "2017-03-29T08:08:00+00:00",
+        "time": "2017-03-31T14:50:32+00:00",
         "bin": [
             "security-checker"
         ],

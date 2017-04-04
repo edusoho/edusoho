@@ -191,7 +191,7 @@ jQuery.validator.addMethod("second_range", function (value, element) {
 }, "请输入0-59之间的数字");
 
 $.validator.addMethod("open_live_course_title", function (value, element, params) {
-  return this.optional(element) || /^[^(<|>|'|"|&|‘|’|”|“)]*$/.test(value);
+  return this.optional(element) || /^[^<|>|'|"|&|‘|’|”|“]*$/.test(value);
 }, Translator.trans('不支持输入<、>、\"、&、‘、’、”、“字符'));
 
 $.validator.addMethod("currency", function (value, element, params) {

@@ -73,26 +73,8 @@ class Editor {
     this._onNext(event);
   }
 
-  _askSave() {
-    const isCreateOperation = $('#task-create-type').data('editor-mode') == 'create';
-    const isDaysMode = $('#courseExpiryMode').val() == 'days';
-    const isNormalCourseSet = $('#courseSetType').val() == 'normal';
-    const isLiveType = this.type == 'live';
-    let confirmResult = true;
-    console.log($('#courseExpiryMode').val());
-    if (isCreateOperation && isDaysMode && isNormalCourseSet && isLiveType) {
-      confirmResult = confirm('本计划的学习加入方式为“随到随学”，加入直播活动可能会导致后来的学员无法参加，只能观看回放。确定要添加吗？');
-    }
-
-    return confirmResult;
-  }
-
   _onSave(event) {
     if (!this._validator(this.step)) {
-      return;
-    }
-
-    if (!this._askSave()) {
       return;
     }
 
@@ -105,6 +87,9 @@ class Editor {
         const needAppend = response.append;
         const html = response.html;
         this.$element.modal('hide');
+        if(!$('.js-task-empty').hasClass('hidden') ){
+            $('.js-task-empty').addClass('hidden');
+        }
         if (needAppend === false) {
           // @TODO这里也需要返回html,进行替换          
           document.location.reload();
@@ -179,7 +164,9 @@ class Editor {
     if (url === undefined) {
       return;
     }
-
+    if (!confirm(Translator.trans('是否确定删除该任务吗？'))) {
+      return;
+    }
     $.post(url)
       .then((response) => {
         notify('success', '删除成功');

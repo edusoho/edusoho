@@ -33,9 +33,9 @@
                                     <div class="alert alert-warning" role="alert">{{'您尚未实名认证。'|trans}}
                                     </div>
                                 {% elseif app.user.approvalStatus == 'approve_fail' %}
-                                    <p class="color-danger" >
+                                    <div class="alert alert-info" role="alert">
                                         {{'实名认证审核尚未通过，请参照通知中的信息，修改后重新认证。'|trans}}
-                                    </p>
+                                    </div>
                                 {% endif %}
                             </div>
 
