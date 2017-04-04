@@ -34,7 +34,7 @@
     </div>
     <hr>
     <ul class="nav nav-pills" role="tablist">
-      <li role="presentation" {% if app.request.query.get('type') != "inflow" and app.request.query.get('type') != "outflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:''})}}">{{'user.all_records'|trans}}</a></li>
+      <li role="presentation" {% if app.request.query.get('type') != "inflow" and app.request.query.get('type') != "outflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:''})}}">{{'site.dategrid.filter.all_records'|trans}}</a></li>
       <li role="presentation" {% if app.request.query.get('type') == "inflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:'inflow'})}}">{{'user.account.my_coin.inflow'|trans}}</a></li>
       <li role="presentation" {% if app.request.query.get('type') == "outflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:'outflow'})}}">{{'user.account.my_coin.outflow'|trans}}</a></li>
     </ul>
@@ -43,7 +43,7 @@
       <div class="form-group">
         <input type="hidden" name="type" value="{{ app.request.query.get('type')|default('') }}">
         <select class="form-control" name="lastHowManyMonths" onchange="submit();">
-          {% set options = {'':'user.all_records'|trans,'oneWeek':'user.last_one_week'|trans,'twoWeeks':'user.last_two_week'|trans,'oneMonth':'user.last_one_month'|trans,'twoMonths':'user.last_two_month'|trans,'threeMonths':'user.last_three_month'|trans} %}
+          {% set options = {'':'site.dategrid.filter.all_records'|trans,'oneWeek':'site.dategrid.filter.last_one_week'|trans,'twoWeeks':'site.dategrid.filter.last_two_week'|trans,'oneMonth':'site.dategrid.filter.last_one_month'|trans,'twoMonths':'user.last_two_month'|trans,'threeMonths':'site.dategrid.filter.last_three_month'|trans} %}
           {{ select_options(options, app.request.get('lastHowManyMonths')) }}
         </select>
       </div>

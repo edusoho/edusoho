@@ -13,11 +13,11 @@
           <span class="label label-primary">{{'group.thread.top'|trans}}</span>
         {% endif %}
         {% if threadMain.isElite %}
-          <span class="label label-danger">{{'group.thread.essence'|trans}}</span>
+          <span class="label label-danger">{{'group.thread.essence_label'|trans}}</span>
         {% endif %}
         {% if is_feature_enabled('group_reward') %}
           {% if threadMain.type == 'reward' and threadMain.rewardCoin > 0 %}
-            <span class="label label-danger">{{'group.thread.reward'|trans}}</span>
+            <span class="label label-danger">{{'group.thread.reward_label'|trans}}</span>
 
             <span style="color:#d9534f;" class="mll"> {{'group.thread.wanted'|trans({'%rewardCoin%':threadMain.rewardCoin,'%coin_name%':setting('coin').coin_name})}}</span>
 
@@ -29,7 +29,7 @@
       <div class="well well-sm text-sm color-gray clearfix" style="line-height:20px">
         <div class="es-share dropdown pull-right">
           <span class="es-share top" style="font-size:14px;">
-            <a href="javascript:;" class="gray-dark" data-toggle="dropdown"><i class="es-icon es-icon-share"></i> {{'group.thread.share'|trans}}</a>
+            <a href="javascript:;" class="gray-dark" data-toggle="dropdown"><i class="es-icon es-icon-share"></i> {{'group.thread.share_label'|trans}}</a>
             {% include 'common/share-dropdown.html.twig' with {type:'group_thread', thread:threadMain, group:groupinfo} %}
           </span>
         </div>
@@ -40,12 +40,12 @@
           {% endif %}
         </div>
         {{'group.thread.created_time'|trans({'%createdTime%':threadMain.createdTime|smart_time})}}
-        <span class="mll"> {{'group.thread.check_times'|trans({'%hitNum%':threadMain.hitNum})}}</span>
+        <span class="mll"> {{'group.thread.hit_num'|trans({'%hitNum%':threadMain.hitNum})}}</span>
       </div>
       <div class="editor-text">
         {{threadMain.content|raw}}
       </div>
-      
+
       {% include 'attachment/widget/list.html.twig' with {targetType:'group.thread', targetId:threadMain.id} %}
 
       {% if attachs %}
@@ -107,11 +107,11 @@
           {% endif %}
 
           {% if threadMain.isStick==1 %}
-             <a id="stick" title="{{'group.thread.cancel_top_btn'|trans}}" class="btn btn-default btn-sm mrm"
-            href="javascript:" data-url="{{path('group_thread_removeStick',{threadId:threadMain.id})}}"> {{'group.thread.cancel_top_btn'|trans}}</a>
+             <a id="stick" title="{{'group.thread.stick_cancel_btn'|trans}}" class="btn btn-default btn-sm mrm"
+            href="javascript:" data-url="{{path('group_thread_removeStick',{threadId:threadMain.id})}}"> {{'group.thread.stick_cancel_btn'|trans}}</a>
           {% else %}
-            <a id="stick"  title="{{'group.thread.set_top_btn'|trans}}" class="btn btn-default btn-sm mrm"
-            href="javascript:" data-url="{{path('group_thread_setStick',{threadId:threadMain.id})}}">{{'group.thread.set_top_btn'|trans}}</a>
+            <a id="stick"  title="{{'group.thread.stick_btn'|trans}}" class="btn btn-default btn-sm mrm"
+            href="javascript:" data-url="{{path('group_thread_setStick',{threadId:threadMain.id})}}">{{'group.thread.stick_btn'|trans}}</a>
           {% endif %}
 
           {% if is_feature_enabled('group_reward') %}
@@ -131,9 +131,9 @@
           {% endif %}
         {% endif %}
         {% if filters.type=='onlyOwner' %}
-          <a class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:'all',sort:filters.sort})}}" %}><span class="glyphicon glyphicon-filter"></span> {{'group.thread.all_see_btn'|trans}}</a>
+          <a class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:'all',sort:filters.sort})}}" %}><span class="glyphicon glyphicon-filter"></span> {{'group.thread.view_all_btn'|trans}}</a>
         {% else %}
-          <a class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:'onlyOwner',sort:filters.sort})}}">{{'group.thread.owner_see_btn'|trans}}</a>
+          <a class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:'onlyOwner',sort:filters.sort})}}">{{'group.thread.view_owner_btn'|trans}}</a>
         {% endif %}
 
         {% if filters.sort=='desc' %}
@@ -186,9 +186,9 @@
               <div class="metas">
                 <span class="floor">
                   {% if filters.sort=='desc' %}
-                    {{'group.thread.floors_count'|trans({'%postCount%':(postCount+1)-paginator.getPerPageCount()*(paginator.currentPage-1)-loop.index0})}}
+                    {{'group.thread.desc_floor'|trans({'%postCount%':(postCount+1)-paginator.getPerPageCount()*(paginator.currentPage-1)-loop.index0})}}
                   {% else %}
-                    {{'group.thread.asc_floors_count'|trans({'%loop.index%':(loop.index+1)+paginator.getPerPageCount()*(paginator.currentPage-1)})}}
+                    {{'group.thread.asc_floor'|trans({'%loop.index%':(loop.index+1)+paginator.getPerPageCount()*(paginator.currentPage-1)})}}
                   {% endif %}
                 </span>
                 <strong>{{ web_macro.user_link(postMember[post.userId]) }}</strong>
@@ -216,10 +216,10 @@
 
                 {% if not subPosts %}
                   <a href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="{{postMember[post.userId].id}}">{{'group.thread.reply_btn'|trans}}</a>
-                  <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" style="display:none;">{{'group.thread.pack_up_btn'|trans}}</a>
+                  <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" style="display:none;">{{'group.thread.collapse_btn'|trans}}</a>
                 {% else %}
                   <a style="display:none;" href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="">{{'group.thread.reply_btn'|trans}}({{postReplyCount[post.id]}})</a>
-                  <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" >{{'group.thread.pack_up_btn'|trans}}</a>
+                  <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" >{{'group.thread.collapse_btn'|trans}}</a>
                 {% endif %}
               </div>
               <div class="reply-{{post.id}}">
@@ -290,7 +290,7 @@
   {% endif %}
 
   <div class="panel panel-default">
-    <div class="panel-heading">{{'group.thread.publish_reply'|trans}}</div>
+    <div class="panel-heading">{{'group.thread.reply'|trans}}</div>
 
     <div class="panel-body">
 
@@ -298,7 +298,7 @@
         <form id="post-thread-form" class="post-thread-form thread-form" method="post" action="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
 
           <div class="form-group">
-            <label class="control-label hide" for="post_content">{{'group.thread.publish_reply.content_title'|trans}}</label>
+            <label class="control-label hide" for="post_content">{{'group.thread.reply.content_title'|trans}}</label>
             <div class="controls">
               <textarea name="content" value="" rows="10" id="post_content" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('default')}) }}"></textarea>
             </div>
@@ -320,7 +320,7 @@
         </form>
       {% else %}
         <div class="empty">
-          {{ 'user.not_login.not_login_tips'|trans({'%loginUrl%':path('login', {goto:app.request.server.get('REQUEST_URI')}), '%registerUrl%':path('register', {goto:app.request.server.get('REQUEST_URI')})})|raw }}
+          {{ 'user.not_login.tips'|trans({'%loginUrl%':path('login', {goto:app.request.server.get('REQUEST_URI')}), '%registerUrl%':path('register', {goto:app.request.server.get('REQUEST_URI')})})|raw }}
         </div>
       {% endif %}
     </div>
@@ -330,7 +330,7 @@
 
 {% block group_side %}
   <div class="panel panel-default">
-    <div class="panel-heading">{{'group.thread.writer'|trans}}</div>
+    <div class="panel-heading">{{'group.thread.owner'|trans}}</div>
     <div class="panel-body">
       <div class="media">
         <div class="media-left prm">
@@ -342,7 +342,7 @@
           <div>
             <a class="gray-darker">{{ web_macro.user_link(owner)}}</a>
           </div>
-          <span class="text-sm gray-medium">{{ owner.title|default('group.thread.writer.empty'|trans) }}</span>
+          <span class="text-sm gray-medium">{{ owner.title|default('group.thread.owner.empty'|trans) }}</span>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 {% extends 'user/layout.html.twig' %}
-{% block title %}{{'user.homepage.teaching_classrooms'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}  - {{ parent() }}{% endblock %}
+{% block title %}{{'user.homepage.teaching_classrooms'|trans({'%classroomName%':setting('classroom.name')|default('classroom'|trans)})}}  - {{ parent() }}{% endblock %}
 {% set pageNav = 'teaching' %}
 {% block main %}
   {% if classrooms %}

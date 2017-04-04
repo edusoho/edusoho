@@ -13,7 +13,7 @@
   
   <div class="form-group">
     {% if showLabel|default(false) %}
-      <label class="col-xs-2 control-label" for="thread_title">{% if targetType == 'question.stem' %}{{ 'group.thread.creat.question_stem_attachment'|trans }}{% elseif targetType == 'question.analysis' %}{{ 'group.thread.creat.analysis_attachment'|trans }}{% else %}{{ 'group.thread.creat.attachments'|trans }}{% endif %}</label>
+      <label class="col-xs-2 control-label" for="thread_title">{% if targetType == 'question.stem' %}{{ 'group.thread.create.question_stem_attachment'|trans }}{% elseif targetType == 'question.analysis' %}{{ 'group.thread.create.analysis_attachment'|trans }}{% else %}{{ 'group.thread.create.attachments'|trans }}{% endif %}</label>
       <div class="col-xs-7 controls">
     {% else %}
       <div class="controls"> 
@@ -24,7 +24,7 @@
             <img class="mrm" src="{{ asset('assets/img/default/cloud_' ~ attachment.file.type ~ '.png') }}" height="60px" width="107px">
             {{ attachment.file.filename }}
             <button class="btn btn-link js-attachment-delete pull-right" data-url="{{path('attachment_delete',{id:attachment.id})  }}" type="button" style="margin-top:13px" data-role="delte-item" data-loading-text="{{'form.btn.delete.submiting'|trans}}">{{ 'form.btn.delete'|trans }}</button> 
-            <a class="btn btn-link pull-right" style="margin-top:13px" href="#modal" data-toggle="modal" data-url="{{ path('attachment_preview', {'id': attachment.id}) }}">{{ 'group.thread.creat.preview'|trans }}</a>
+            <a class="btn btn-link pull-right" style="margin-top:13px" href="#modal" data-toggle="modal" data-url="{{ path('attachment_preview', {'id': attachment.id}) }}">{{ 'group.thread.create.preview'|trans }}</a>
           </div>
         {% endfor %}
       </div>

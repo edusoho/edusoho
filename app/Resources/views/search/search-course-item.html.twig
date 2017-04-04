@@ -27,14 +27,14 @@
       <a href="{{ course_show_url }}" target="_blank">
         {{ course.title|raw }}
         {% if course.learning|default(false) %}
-          <small class="label label-primary label-xs">{{ 'cloud_searching.course_type.learning'|trans }}</small>
+          <small class="label label-primary label-xs">{{ 'cloud_search.course.learning'|trans }}</small>
         {% endif %}
       </a>
     </h3>
     <div class="score">
       {% if not is_open_course %}
         {{ web_macro.star(course.rating|default(0)) }}
-        <span>{{ course.ratingNum|default(0) }}{{'cloud_searching.course_type.evaluate'|trans}}({{ course.studentNum|default(0) }}{{ 'cloud_searching.course_type.learned'|trans }})</span>
+        <span>{{ course.ratingNum|default(0) }}{{'cloud_search.course.evaluate'|trans}}({{ course.studentNum|default(0) }}{{ 'cloud_search.course.learned'|trans }})</span>
       {% endif %}
     </div>
     <div class="content editor-text">{{ course.about|raw }}</div>
@@ -45,7 +45,7 @@
             <i class="es-icon es-icon-arrowdropleft"></i>
             {% set course_show_url = path('course_show', {id : task.courseId}) %}
             <a class="link-dark" href="{{ course_show_url }}" target="_blank">
-              {{ 'cloud_searching.course_type.task'|trans }} {{ task.number }}: {{ task.title|raw }}
+              {{ 'cloud_search.course.task'|trans }} {{ task.number }}: {{ task.title|raw }}
             </a>
           </li>
         {% endfor %}

@@ -10,7 +10,7 @@
     {% block body %}
 
       {% if fromCourse %}
-      <div class="alert alert-info">{{'user.settings.avatar.alter_tips。'|trans}}</div>
+      <div class="alert alert-info">{{'user.settings.avatar.setup_tips。'|trans}}</div>
       {% endif %}
 
       <form id="settings-avatar-form" class="form-horizontal" method="post">
@@ -28,7 +28,9 @@
           <div class="col-md-2 control-label">
           </div>
           <div class="controls col-md-8 controls">
-            {{ 'user.settings.avatar.upload_tips'|trans|raw }}
+            <p class="help-block">
+              {{ 'user.settings.avatar.upload_tips'|trans|raw }}
+            </p>
           </div>
         </div>
 
@@ -39,7 +41,7 @@
             class="btn btn-primary upload-picture-btn"
             data-upload-token="{{ upload_token('tmp', 'image') }}"
             data-goto-url="{{path('settings_avatar_crop',{goto: goto})}}"
-            >{{'user.settings.avatar.upload_submit_btn'|trans}}</a>
+            >{{'user.settings.avatar.upload_btn'|trans}}</a>
           </div>
         </div>
 

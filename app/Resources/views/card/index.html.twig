@@ -45,7 +45,7 @@
             </div>
           {% endfor %}
         {% else %}
-        <div class="empty">{{'user.cards.empty'|trans}}{% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %}{{'plugin.coupon'|trans}}{% else %}{{'plugin.money_card'|trans}}{% endif %}</div>
+        <div class="empty">{{'site.datagrid.empty'|trans}}{% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %}{{'plugin.coupon'|trans}}{% else %}{{'plugin.money_card'|trans}}{% endif %}</div>
         {% endif %}
       {% else %}
       <div class="empty">{{'user.cards.moneycard_not_install_tips'|trans({'%coin_name%': coin.coin_name|default('finance.coin'|trans)})}}</div>

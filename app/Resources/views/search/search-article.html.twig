@@ -1,5 +1,5 @@
 <div class="alert alert-blank alert-sm">
-  {{'cloud_searching.article_type.result'|trans}} <span class="color-danger">{{counts}}</span>{{'cloud_searching.result_sum'|trans}}
+  {{ 'cloud_search.article.result'|trans({'%counts%':counts|default(0)})|raw }}
 </div>
 {% for article in resultSet %}
 {% set category = article.category %}

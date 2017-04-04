@@ -20,10 +20,10 @@
     {% endif %}
 
     {% if 'ROLE_TEACHER' in user.roles %}
-      <li {% if pageNav == 'teaching' %}class="active"{% endif %}><a href="{{ path('user_teaching_classrooms', {id:user.id}) }}">{{'user.homepage.teaching_classrooms'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</a></li>
+      <li {% if pageNav == 'teaching' %}class="active"{% endif %}><a href="{{ path('user_teaching_classrooms', {id:user.id}) }}">{{'user.homepage.teaching_classrooms'|trans({'%classroomName%':setting('classroom.name')|default('班级'|trans)})}}</a></li>
     {% endif %}
     <li {% if pageNav == 'learn' %}class="active"{% endif %}><a href="{{ path('user_learn', {id:user.id}) }}">{{'user.homepage.learning_courses'|trans}}</a></li>
-    <li {% if pageNav == 'learning' %}class="active"{% endif %}><a href="{{ path('user_learning_classrooms', {id:user.id}) }}">{{'user.homepage.learning_classrooms'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</a></li>
+    <li {% if pageNav == 'learning' %}class="active"{% endif %}><a href="{{ path('user_learning_classrooms', {id:user.id}) }}">{{'user.homepage.learning_classrooms'|trans({'%classroomName%':setting('classroom.name')|default('班级'|trans)})}}</a></li>
 
 
     <li {% if pageNav == 'favorited' %}class="active"{% endif %}><a href="{{ path('user_favorited', {id:user.id}) }}">{{'user.homepage.favorite_courses'|trans}}</a></li>

@@ -3,7 +3,7 @@
 {% block content %}
   <ol class="breadcrumb breadcrumb-o" style="margin-top:-18px">
     <li><a href="{{path('homepage')}}">{{ homepage.name|default('homepage'|trans) }}</a></li>
-    <li class="active"><a href="{{path('group')}}">{{ group.name|default ('group.bread_crumbs'|trans)}}</a></li>
+    <li class="active"><a href="{{path('group')}}">{{ group.name|default ('group.homepage'|trans)}}</a></li>
   </ol>
   <div class="row">
     <div class="col-md-9">

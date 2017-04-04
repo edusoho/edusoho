@@ -14,7 +14,7 @@
         <div class="media-heading">
          <a class="title gray-darker" href="{{ path('group_thread_show', {id:thread.groupId, threadId:thread.id}) }}">{{thread.title|sub_text(90)}}</a>
           {% if thread.isStick %}
-            <span class="label label-primary">{{'article.status.top'|trans}}</span>
+            <span class="label label-primary">{{'article.status.stick'|trans}}</span>
           {% endif %}
           {% if thread.isElite %}
             <span class="label label-danger">{{'article.status.essence'|trans}}</span>

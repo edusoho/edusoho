@@ -1,5 +1,5 @@
 <div class="alert alert-blank alert-sm">
-	{{'cloud_searching.thread_type.result'|trans}} <span class="color-danger">{{counts}}</span>{{'cloud_searching.result_sum'|trans}}
+	{{ 'cloud_search.thread.result'|trans({'%counts%':counts|default(0)})|raw }}
 </div>
 
 <div class="media-list">
@@ -8,12 +8,12 @@
 			<div class="media-left">
 				<div class="reply">
 					{{thread.postNum}}<br>
-					<span class="text-sm">{{'cloud_searching.thread_type.reply'|trans}}</span>
+					<span class="text-sm">{{'cloud_search.thread.reply'|trans}}</span>
 				</div>
 			</div>
 			<div class="media-body">
 				<div class="title"><a class="link-dark" href="{{path('group_thread_show',{id:thread.targetId,threadId:thread.id})}}" target="_blank">{{thread.title|raw}}</a></div>
-				<div class="text-sm color-gray">{{'cloud_searching.thread_type.from'|trans}}
+				<div class="text-sm color-gray">{{'cloud_search.thread.from'|trans}}
 					{% set group = data('Group',{'groupId':thread.targetId|default(0)}) %}
 					<a class="mls" href="{{path('group_show',{id:thread.targetId})}}" target="_blank">{{group.title|default('')}}</a>
 					<span class="mlm">{{thread.createdTime|smart_time}}</span>

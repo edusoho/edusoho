@@ -58,7 +58,7 @@
         {% if setting('invite.promoted_user_value')|default(false) %}
           {% if setting('invite.promote_user_value')|default(false) %}
             {% if setting('invite.get_coupon_setting')|default(false) %}
-              {{'user.account.my_invite_code.reward_after_custom_tips'|trans({'%promote_user_value%':inviteSetting.promote_user_value, '%promoted_user_value%': inviteSetting.promoted_user_value})}}
+              {{'user.account.my_invite_code.reward_after_consume_tips'|trans({'%promote_user_value%':inviteSetting.promote_user_value, '%promoted_user_value%': inviteSetting.promoted_user_value})}}
             {% else %}
                 {{'user.account.my_invite_code.reward_after_register_tips'|trans({'%promote_user_value%':inviteSetting.promote_user_value, '%promoted_user_value%':inviteSetting.promoted_user_value})}}
             {% endif %}
@@ -79,7 +79,7 @@
       <th>{{'user.account.my_invite_code.invitees'|trans}}</th>
       <th>{{'user.account.my_invite_code.invite_time'|trans}}</th>
       <th>{{'user.account.my_invite_code.invite_rewords'|trans}}</th>
-      <th>{{'user.account.my_invite_code.get_invite_rewords_time'|trans}}</th>
+      <th>{{'user.account.my_invite_code.invite_rewords_time'|trans}}</th>
     </tr>
   </thead>
   <tbody>
@@ -91,7 +91,7 @@
         <td>{{user.inviteRewardTime|default('-')}}</td>
       </tr>
       {% else %}
-        <tr><td colspan="20"><div class="empty">{{'user.account.my_invite_code.empty'|trans}}</div></td></tr>
+        <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
       {% endfor %}
   </tbody>
 </table>

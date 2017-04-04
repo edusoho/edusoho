@@ -9,8 +9,7 @@
     {% block body %}
 
     	<ul class="breadcrumb">
-	      <li><a href="{{ path('settings_security') }}">{{'user.settings.security.mobile_bind.content_title'|trans}}</a></li>
-	      <li class="active">{{'user.settings.security.mobile_bind.bread_crumbs'|trans}}</li>
+        {{ 'user.settings.security.mobile_bind.bread_crumbs'|trans({'%settingSecurityUrl%':path('settings_security')})|raw}}
 	    </ul>
 
 	    {{ web_macro.flash_messages() }}

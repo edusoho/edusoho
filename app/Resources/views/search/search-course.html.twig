@@ -1,5 +1,5 @@
 <div class="alert alert-blank alert-sm">
-  {{'cloud_searching.course_type.result'|trans}} <span class="color-danger">{{counts|default(0)}}</span>{{'cloud_searching.result_sum'|trans}}
+  {{ 'cloud_search.course.result'|trans({'%counts%':counts|default(0)})|raw }}
 </div>
 <div class="search-course-list" id="search-course">
   {% for course in resultSet %}

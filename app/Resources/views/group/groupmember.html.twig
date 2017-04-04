@@ -5,11 +5,11 @@
 
 {% block group_main %}
   <div class="panel panel-default">
-    <div class="panel-heading"><h3 class="panel-title">{{'group.detail.introductions'|trans}}</h3></div>
+    <div class="panel-heading"><h3 class="panel-title">{{'group.detail.introduction'|trans}}</h3></div>
     <div class="panel-body">
       {% if paginator.currentPage == paginator.firstPage %}
         <div class="well editor-text">
-          {% if groupinfo.about%} {{groupinfo.about|raw}} {% else %} {{'group.detail.introductions.empty'|trans}} {% endif %}
+          {% if groupinfo.about%} {{groupinfo.about|raw}} {% else %} {{'group.detail.introduction.empty'|trans}} {% endif %}
         </div>
       {% endif %}
     </div>
@@ -36,12 +36,12 @@
     </div>
 
     <div class="es-piece">
-      <div class="piece-header">{{'group.detail.group_members.deputy_leader'|trans}}</div>
+      <div class="piece-header">{{'group.detail.group_members.vice_leader'|trans}}</div>
       <div class="piece-body clearfix">
         <form action="{{path('group_remove_admin',{id:groupinfo.id})}}" method="post" id="admin-form">
           {% if groupAdmin %}
             {% if is_groupmember==2 or is_granted('ROLE_ADMIN')  %}
-              <button id="remove-admin-btn" type="button" class="btn btn-default btn-sm pull-right">{{'group.detail.group_members.cancle_deputy_leader_btn'|trans}}</button>
+              <button id="remove-admin-btn" type="button" class="btn btn-default btn-sm pull-right">{{'group.detail.group_members.cancel_vice_leader_btn'|trans}}</button>
             {% endif %}
             {% for member in groupAdmin %}
               <div class="grouplist"  style="width: 82px;">
@@ -54,7 +54,7 @@
               </div>
             {% endfor %}
           {% else %}
-            <p><span class="color-gray">{{'group.detail.group_members.deputy_leader.empty'|trans}}</span></p>
+            <p><span class="color-gray">{{'group.detail.group_members.vice_leader.empty'|trans}}</span></p>
           {% endif %}
         </form>
       </div>
@@ -63,10 +63,10 @@
     <div class="btn-group pull-right">
       {% if groupmember_info %}
         {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3 %}
-          <button  id="delete-btn" type="button" class="btn btn-default btn-sm ">{{'group.detail.group_members.deputy_leader.cancle_member_btn'|trans}}</button>
+          <button  id="delete-btn" type="button" class="btn btn-default btn-sm ">{{'group.detail.group_members.vice_leader.cancel_member_btn'|trans}}</button>
         {% endif %}
         {% if is_groupmember==2 or is_granted('ROLE_ADMIN') %}
-          <button  id="set-admin-btn" type="button" class="btn btn-default btn-sm ">{{'group.detail.group_members.deputy_leader.set_btn'|trans}}</button>
+          <button  id="set-admin-btn" type="button" class="btn btn-default btn-sm ">{{'group.detail.group_members.vice_leader.setup_btn'|trans}}</button>
           <input id="set-admin-url" type="hidden" value="{{path('group_set_admin',{id:groupinfo.id})}}">
         {% endif %}
       {% endif %}
@@ -106,7 +106,7 @@
 
 {% block group_side %}
   {% if is_groupmember != 0 %}
-    <div class="mbm"><a href="{{path('group_thread_add',{id:groupinfo.id})}}" class="btn btn-success btn-xlg btn-block" role="button"><i class="es-icon es-icon-comment mrs text-xlg"></i>{{'group.detail.publish_article'|trans}}</a>
+    <div class="mbm"><a href="{{path('group_thread_add',{id:groupinfo.id})}}" class="btn btn-success btn-xlg btn-block" role="button"><i class="es-icon es-icon-comment mrs text-xlg"></i>{{'group.detail.create_article'|trans}}</a>
     </div>
   {% endif %}
   <form class="mbl" action="{{path('group_search',{id:groupinfo.id})}}" method="get">
@@ -135,7 +135,7 @@
               {% endif %}
 
               {% if is_groupmember==3%}
-              <span class="label label-primary">{{'group.detail.deputy_leader'|trans}}</span>
+              <span class="label label-primary">{{'group.detail.vice_leader'|trans}}</span>
               {% endif %}
             </p>
             <a href="{{ path ('my_group_member_center') }}" class="btn btn-default btn-sm" role="button">{{'group.detail.my_group_btn'|trans}}</a>

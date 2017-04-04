@@ -10,7 +10,7 @@
       {% if thread|default(null) %}
         <h3 class="panel-title">{{ 'group.thread.edit.content_title'|trans }}</h3>
       {% else %}
-        <h3 class="panel-title">{{ 'group.thread.creat.content_title'|trans }}</h3>
+        <h3 class="panel-title">{{ 'group.thread.create.content_title'|trans }}</h3>
       {% endif %}
     </div>
     <div class="panel-body">
@@ -74,7 +74,7 @@
 
             <div class="row form-group">
               <div class="col-md-4 control">
-                <label class="control-label"> {{ 'group.thread.insert_hide_content_tips'|trans }}:</label>
+                <label class="control-label"> {{ 'group.thread.insert_hide_content_title'|trans }}:</label>
               </div>
               <div class="col-md-7 controls">
                 <textarea class="form-control" rows="3" id="text"> </textarea>

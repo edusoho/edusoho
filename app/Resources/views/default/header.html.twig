@@ -45,16 +45,16 @@
           </a>
           <ul class="dropdown-menu" role="menu">
             <li role="presentation" class="dropdown-header">{{ app.user.nickname }}</li>
-            <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="es-icon es-icon-person"></i>{{'homepage.header.drop_menu.personal_menu'|trans}}</a></li>
-            <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{'homepage.header.drop_menu.settings_menu'|trans}}</a></li>
+            <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="es-icon es-icon-person"></i>{{'homepage.header.personal_menu'|trans}}</a></li>
+            <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{'homepage.header.settings_menu'|trans}}</a></li>
             <li class="hidden-lg">
               <a href="{{ path('my') }}">
-                <i class="es-icon es-icon-eventnote"></i>{% if 'ROLE_TEACHER' in app.user.roles %}{{'homepage.header.drop_menu.my_teaching_menu'|trans}}{% else %}{{'homepage.header.drop_menu.my_learning_menu'|trans}}{% endif %}
+                <i class="es-icon es-icon-eventnote"></i>{% if 'ROLE_TEACHER' in app.user.roles %}{{'homepage.header.my_teaching_menu'|trans}}{% else %}{{'homepage.header.my_learning_menu'|trans}}{% endif %}
               </a>
             </li>
-            <li><a href="{% if setting('coin.coin_enabled') %}{{path('my_coin')}}{% else %}{{path('my_bill')}}{% endif %}"><i class="es-icon es-icon-accountwallet"></i>{{'homepage.header.drop_menu.account_menu'|trans}}</a></li>
+            <li><a href="{% if setting('coin.coin_enabled') %}{{path('my_coin')}}{% else %}{{path('my_bill')}}{% endif %}"><i class="es-icon es-icon-accountwallet"></i>{{'homepage.header.account_menu'|trans}}</a></li>
 
-            {% if has_permission('admin') %}<li><a href="{{ path('admin') }}"><i class="es-icon es-icon-dashboard"></i>{{'homepage.header.drop_menu.admin_menu'|trans}}</a></li>
+            {% if has_permission('admin') %}<li><a href="{{ path('admin') }}"><i class="es-icon es-icon-dashboard"></i>{{'homepage.header.admin_menu'|trans}}</a></li>
             {% endif %}
 
             <li class="hidden-lg"><a href="{{ path('notification') }}"><span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span><i class="es-icon es-icon-notificationson"></i>{{'homepage.header.notice'|trans}}</a></li>

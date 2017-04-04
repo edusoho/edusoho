@@ -1,7 +1,7 @@
 {% extends 'group/layout.html.twig' %}
 {% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/group/index.js']) %}
 
-{% block title %}{{'group.detail.page_title'|trans({'%title%': groupinfo.title})}} {{ parent() }}{% endblock %}
+{% block title %}{{'group.detail.group_name'|trans({'%title%': groupinfo.title})}} {{ parent() }}{% endblock %}
 
 
 {% block keywords %}{{groupinfo.title}}{% endblock %}
@@ -10,11 +10,11 @@
 
 {% block group_main %}
   <div class="panel panel-default">
-    <div class="panel-heading"><h3 class="panel-title">{{'group.detail.introductions'|trans}}</h3></div>
+    <div class="panel-heading"><h3 class="panel-title">{{'group.detail.introduction'|trans}}</h3></div>
     <div class="panel-body">
       {% if paginator.currentPage == paginator.firstPage %}
         <div class="well editor-text">
-          {% if groupinfo.about%} {{groupinfo.about|raw}} {% else %} {{'group.detail.introductions.empty'|trans}} {% endif %}
+          {% if groupinfo.about%} {{groupinfo.about|raw}} {% else %} {{'group.detail.introduction.empty'|trans}} {% endif %}
         </div>
       {% endif %}
     </div>
@@ -34,30 +34,30 @@
 
       <ul class="nav nav-pills nav-pills-sm">
 
-        <li{% if condition.type == 'all' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_show',{id:id,num:condition.num,sort:condition.sort,isElite:0})}}">{{'group.detail.group_homepage.all'|trans}}</a></li>
+        <li{% if condition.type == 'all' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_show',{id:id,num:condition.num,sort:condition.sort,isElite:0})}}">{{'group.detail.all_btn'|trans}}</a></li>
 
-        <li{% if condition.type == 'elite' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_show',{id:id,type:'elite',num:condition.num,sort:condition.sort})}}">{{'group.detail.group_homepage.essence'|trans}}</a></li>
+        <li{% if condition.type == 'elite' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_show',{id:id,type:'elite',num:condition.num,sort:condition.sort})}}">{{'group.detail.essence_btn'|trans}}</a></li>
 
         {% if is_feature_enabled('group_reward') %}
-        <li{% if condition.type == 'reward' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_show',{id:id,type:'reward',num:condition.num,sort:condition.sort})}}">{{'group.detail.group_homepage.wanted'|trans}}</a></li>
+        <li{% if condition.type == 'reward' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_show',{id:id,type:'reward',num:condition.num,sort:condition.sort})}}">{{'group.detail.wanted_btn'|trans}}</a></li>
         {% endif %}
 
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-            <span class="color-gray">{{'group.detail.group_homepage.order'|trans}}</span>
+            <span class="color-gray">{{'group.detail.order_btn'|trans}}</span>
             {% if condition.sort == 'byLastPostTime' %}
-              {{'group.detail.group_homepage.last_reply_order'|trans}}
+              {{'group.detail.last_reply_order_btn'|trans}}
             {% elseif condition.sort == 'byCreatedTime' %}
-              {{'group.detail.group_homepage.newest_order'|trans}}
+              {{'group.detail.newest_order_btn'|trans}}
             {% elseif condition.sort == 'byPostNum' %}
-              {{'group.detail.group_homepage.reply_count_order'|trans}}
+              {{'group.detail.reply_count_order_btn'|trans}}
             {% endif %}
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
-            <li class="{% if condition.sort == 'byCreatedTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byCreatedTime'})}}">{{'group.detail.group_homepage.newest_order'|trans}}</a></li>
-            <li class="{% if condition.sort == 'byLastPostTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byLastPostTime'})}}">{{'group.detail.group_homepage.last_reply_order'|trans}}</a></li>
-            <li class="{% if condition.sort == 'byPostNum' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byPostNum'})}}">{{'group.detail.group_homepage.reply_count_order'|trans}}</a></li>
+            <li class="{% if condition.sort == 'byCreatedTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byCreatedTime'})}}">{{'group.detail.newest_order'|trans}}</a></li>
+            <li class="{% if condition.sort == 'byLastPostTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byLastPostTime'})}}">{{'group.detail.last_reply_order'|trans}}</a></li>
+            <li class="{% if condition.sort == 'byPostNum' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byPostNum'})}}">{{'group.detail.reply_count_order'|trans}}</a></li>
           </ul>
         </li>
       </ul>
@@ -74,7 +74,7 @@
 
 {% block group_side %}
   {% if is_groupmember != 0 %}
-    <div class="mbm"><a href="{{path('group_thread_add',{id:groupinfo.id})}}" class="btn btn-success btn-xlg btn-block" role="button"><i class="es-icon es-icon-comment mrs text-xlg"></i>{{'group.detail.publish_article'|trans}}</a>
+    <div class="mbm"><a href="{{path('group_thread_add',{id:groupinfo.id})}}" class="btn btn-success btn-xlg btn-block" role="button"><i class="es-icon es-icon-comment mrs text-xlg"></i>{{'group.detail.create_article'|trans}}</a>
     </div>
   {% endif %}
   <form class="mbl" action="{{path('group_search',{id:groupinfo.id})}}" method="get">
@@ -103,7 +103,7 @@
               {% endif %}
 
               {% if is_groupmember==3%}
-              <span class="label label-primary">{{'group.detail.deputy_leader'|trans}}</span>
+              <span class="label label-primary">{{'group.detail.vice_leader'|trans}}</span>
               {% endif %}
             </p>
             <a href="{{ path ('my_group_member_center') }}" class="btn btn-default btn-sm" role="button">{{'group.detail.my_group_btn'|trans}}</a>

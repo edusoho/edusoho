@@ -56,7 +56,7 @@
       {% if setting("coin.coin_enabled")|default(0) == 1 %}
       <tr> 
         <th width="25%">
-          {% trans with {'%coin_name%': setting('coin.coin_name')|default("finance.coin"|trans)} %}order.payment_pattern.virtual_coin{% endtrans %}
+          {% trans with {'%coin_name%': setting('coin.coin_name')|default("finance.coin"|trans)} %}order.payment_pattern.coin{% endtrans %}
         </th>
         <td width="75%">
           <span class="money-text">{{ order.coinAmount }}</span> {{setting("coin.coin_name")}}
@@ -85,7 +85,7 @@
       {% if order.status == 'paid' %}
         <tr> <th width="25%">{{'order.pay_time'|trans}}</th> <td width="75%">{% if not order.paidTime == 0 %} {{ order.paidTime | date('Y-n-d H:i:s') }} {% endif %}</td> </tr>
         {% if order.token %}
-          <tr> <th width="25%">{{'order.merchant_order_id'|trans}}</th> <td width="75%">{{order.token}}</td> </tr>
+          <tr> <th width="25%">{{'order.token_id'|trans}}</th> <td width="75%">{{order.token}}</td> </tr>
         {% endif %}
       {% endif %}
       <tr>

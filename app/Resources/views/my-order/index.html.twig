@@ -15,7 +15,7 @@
     <input type="hidden" name="status" value="{{app.request.query.get('status')}}">
     <div class="form-group">
       <select class="form-control" name="lastHowManyMonths"  onchange="submit();" >
-        {% set options = {'oneWeek':'user.last_one_week'|trans,'twoWeeks':'user.last_two_week'|trans,'oneMonth':'user.last_one_month'|trans,'twoMonths':'user.last_two_month'|trans,'threeMonths':'user.last_three_month'|trans,'':'user.all_records'|trans} %}
+        {% set options = {'oneWeek':'site.dategrid.filter.last_one_week'|trans,'twoWeeks':'site.dategrid.filter.last_two_week'|trans,'oneMonth':'site.dategrid.filter.last_one_month'|trans,'twoMonths':'user.last_two_month'|trans,'threeMonths':'site.dategrid.filter.last_three_month'|trans,'':'site.dategrid.filter.all_records'|trans} %}
         {{ select_options(options, request.get('lastHowManyMonths')) }}
       </select>
     </div>

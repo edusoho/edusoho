@@ -20,8 +20,7 @@
   {% if not hasSecurityQuestions %}
 
     <ul class="breadcrumb">
-      <li><a href="{{ path('settings_security') }}">{{'user.settings.security.questions.content_title'|trans}}</a></li>
-      <li class="active">{{'user.settings.security.questions.setting.bread_crumbs'|trans}}</li>
+      {{ 'user.settings.security.questions.setting.bread_crumbs'|trans({'%settingSecurityUrl%':path('settings_security')})|raw }}
     </ul>
 
     <div class="alert alert-warning"> <span class="glyphicon glyphicon-info-sign"></span> {{'user.settings.security.questions.setting.warning'|trans}}</div>
@@ -101,8 +100,7 @@
   {% else %}
 
     <ul class="breadcrumb">
-      <li><a href="{{ path('settings_security') }}">{{'user.settings.security.questions.content_title'|trans}}</a></li>
-      <li class="active">{{'user.settings.security.questions.check.bread_crumbs'|trans}}</li>
+      {{ 'user.settings.security.questions.check.bread_crumbs'|trans({'%settingSecurityUrl%':path('settings_security')})|raw }}
     </ul>
 
 
