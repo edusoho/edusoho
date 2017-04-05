@@ -1,4 +1,4 @@
-{% extends 'bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
 {% set billable = false %}
 {% if classroom.price > 0 %}
@@ -101,6 +101,7 @@
     {% endif %}
 
   {% endif %}
-  {% do load_script('topxiawebbundle/controller/classroom/buy-modal') %}
+
   {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script>app.lazyLoad = function() { app.load('classroom/buy-modal') };</script>
 {% endblock %}

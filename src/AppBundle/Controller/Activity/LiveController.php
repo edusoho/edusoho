@@ -61,6 +61,7 @@ class LiveController extends BaseController implements ActivityActionInterface
 
         return $this->render('activity/live/modal.html.twig', array(
             'activity' => $this->formatTimeFields($activity),
+            'courseId' => $courseId,
         ));
     }
 

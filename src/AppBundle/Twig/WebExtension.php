@@ -753,11 +753,11 @@ class WebExtension extends \Twig_Extension
 
     public function timeDiffFilter($endTime, $diffDay = 0, $startTime = '')
     {
-        $endSecond = $endTime + intval($diffDay) * 86400;
+        $endSecond = $endTime + (int) $diffDay * 86400;
 
         $startSecond = empty($startTime) ? strtotime(date('Y-m-d', time())) : $startTime;
 
-        $diffDay = round(ceil($endSecond - $startSecond) / 86400);
+        $diffDay = round(ceil($endSecond - $startSecond) / 86400, 0, PHP_ROUND_HALF_DOWN); // 丢弃小数点
 
         return $diffDay > 0 ? $diffDay : 0;
     }
