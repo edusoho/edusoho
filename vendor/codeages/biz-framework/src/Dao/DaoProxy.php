@@ -203,7 +203,7 @@ class DaoProxy
             $this->unserialize($row);
         }
 
-        if (!is_array($row) && !is_numeric($row)) {
+        if (!is_array($row) && !is_numeric($row) && !is_null($row)) {
             throw new DaoException('update method return value must be array type or int type');
         }
 

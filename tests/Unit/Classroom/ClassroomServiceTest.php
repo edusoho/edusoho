@@ -53,9 +53,9 @@ class ClassroomServiceTest extends BaseTestCase
             'expiryValue' => $time,
         ));
 
-        $student = $this->getClassroomService()->updateMembersDeadlineByClassroomId($classroom['id'], $deadline);
+        $updated = $this->getClassroomService()->updateMembersDeadlineByClassroomId($classroom['id'], $deadline);
 
-        $this->assertCount(1, $student);
+        $this->assertEquals(1, $updated);
     }
 
     public function testAddClassroom()

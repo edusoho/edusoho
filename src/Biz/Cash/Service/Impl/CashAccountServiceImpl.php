@@ -56,7 +56,7 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
         try {
             $this->beginTransaction();
 
-            $account = $this->getAccountDao()->getByUserId($userId, true);
+            $account = $this->getAccountDao()->getByUserId($userId, array('lock' => true));
             if (empty($account)) {
                 throw $this->createNotFoundException(sprintf('Account #%s is not exist.', $userId));
             }
@@ -76,7 +76,7 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
 
             $this->getAccountDao()->waveCashField($account['id'], $coinAmount);
 
-            $change = $this->getChangeDao()->getByUserId($userId, true);
+            $change = $this->getChangeDao()->getByUserId($userId, array('lock' => true));
 
             $this->getChangeDao()->waveCashField($change['id'], $amount);
 
@@ -146,7 +146,7 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
     {
         try {
             $this->beginTransaction();
-            $account = $this->getAccountDao()->getByUserId($userId, true);
+            $account = $this->getAccountDao()->getByUserId($userId, array('lock' => true));
 
             if (empty($account)) {
                 $account = $this->createAccount($userId);

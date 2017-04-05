@@ -8,14 +8,11 @@ class ThemeConfigDaoTest extends BaseDaoTestCase
 {
     public function testGetThemeConfigByName()
     {
-        // $config = $this->mockDataObject();
-
         $config = $this->getDao()->getThemeConfigByName('简墨');
         $config = $this->getDao()->getThemeConfigByName('简墨');
         $config = $this->getDao()->getThemeConfigByName('简墨');
         $config = $this->getDao()->getThemeConfigByName('简墨');
         $config = $this->getDao()->getThemeConfigByName('简墨');
-        var_dump($config);
     }
 
     protected function getDefaultMockFields()

@@ -41,7 +41,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
     public function update($identifier, array $fields)
     {
         if (empty($identifier)) {
-            return null;
+            return 0;
         }
 
         if (is_numeric($identifier)) {

@@ -76,7 +76,7 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
         try {
             $this->beginTransaction();
 
-            $order = $this->getOrderDao()->getBySn($payData['sn'], true);
+            $order = $this->getOrderDao()->getBySn($payData['sn'], array('lock' => true));
 
             if (empty($order)) {
                 throw $this->createNotFoundException(sprintf('订单(%s)已被删除，支付失败。', $payData['sn']));
