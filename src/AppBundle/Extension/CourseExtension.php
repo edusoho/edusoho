@@ -59,16 +59,13 @@ class CourseExtension extends Extension implements ServiceProviderInterface
         );
 
         $forGuestWidgets = array(
-            'recommendClassroom' => $widgets['recommendClassroom'],
-            'characteristic' => $widgets['characteristic'],
             'teachers' => $widgets['teachers'],
+            'characteristic' => $widgets['characteristic'],
             'newestStudents' => $widgets['newestStudents'],
             'studentActivity' => $widgets['studentActivity'],
         );
 
         $forMemberWidgets = array(
-            'belongClassroom' => $widgets['belongClassroom'],
-            'recommendClassroom' => $widgets['recommendClassroom'],
             'teachers' => $widgets['teachers'],
             'newestStudents' => $widgets['newestStudents'],
             'studentActivity' => $widgets['studentActivity'],
