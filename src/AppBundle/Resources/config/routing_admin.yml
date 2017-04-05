@@ -1086,10 +1086,6 @@ admin_cloud_live_renew:
     path:  /cloud/live/renew
     defaults: { _controller: AppBundle:Admin/Cloud:liveRenew }
 
-admin_cloud_email_list:
-    path: /cloud/email/list
-    defaults: { _controller: AppBundle:Admin/Cloud:emailList }
-
 admin_cloud_email_count:
     path: /cloud/email/list
     defaults: { _controller: AppBundle:Admin/Cloud:emailCount }
@@ -2210,34 +2206,38 @@ admin_batch_update_org:
 
 ### role
 admin_roles:
-    pattern:  /roles
+    path:  /roles
     defaults: { _controller: AppBundle:Admin/Role:index }
     permissions: [admin_role_manage]
 
 admin_role_create:
-    pattern:  /role/create
+    path:  /role/create
     defaults: { _controller: AppBundle:Admin/Role:create }
 
 admin_role_edit:
-    pattern:  /role/{id}/edit
+    path:  /role/{id}/edit
     defaults: { _controller: AppBundle:Admin/Role:edit }
 
 admin_role_delete:
-    pattern:  /role/{id}/delete
+    path:  /role/{id}/delete
     defaults: { _controller: AppBundle:Admin/Role:delete }
     methods: [POST]
 
 admin_role_show:
-    pattern:  /role/{id}/show
+    path:  /role/{id}/show
     defaults: { _controller: AppBundle:Admin/Role:show }
     permissions: [admin_role_manage]
 
 admin_role_check_name:
-    pattern:  /role/checkName
+    path:  /role/checkName
     defaults: { _controller: AppBundle:Admin/Role:checkName }
     permissions: [admin_role_manage]
 
 admin_role_check_code:
-    pattern:  /role/checkCode
+    path:  /role/checkCode
     defaults: { _controller: AppBundle:Admin/Role:checkCode }
     permissions: [admin_role_manage]
+
+admin_cloud_consult_setting:
+    path: /cloud/consult/setting
+    defaults: { _controller: AppBundle:Admin/EduCloud:consultSetting }
