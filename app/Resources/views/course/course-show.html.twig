@@ -25,7 +25,8 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-9 col-md-8 course-detail-content">
-
+        {% set eventReportParams = {'user-id': app.user.id} %}
+        {% include 'event_report.html.twig' with{ 'eventName':'course.view', 'subjectType':'course', 'subjectId': course.id, 'eventReportParams':eventReportParams} %}
         {% include 'course/announcement/block.html.twig' with { courseId:course.id } %}
 
         <section class="es-section">
