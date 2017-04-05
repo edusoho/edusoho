@@ -47,7 +47,7 @@ class QuestionMigrate extends AbstractMigrate
                 $lessonId = intval($lessonArr[1]);
             }
 
-            $sql = "UPDATE question set courseId = {$courseArr[1]},courseSetId = {$courseArr[1]},lessonId={$lessonId} WHERE id = {$question['id']}";
+            $sql = "UPDATE question set courseId = 0,courseSetId = {$courseArr[1]},lessonId={$lessonId} WHERE id = {$question['id']}";
             $this->getConnection()->exec($sql);
         }
 
