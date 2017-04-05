@@ -77,7 +77,10 @@ class OtherMigrate extends AbstractMigrate
             );
         }
         $this->exec("UPDATE course_member SET courseSetId = courseId");
+    }
 
+    private function migrate14()
+    {
         if ($this->isFieldExist('course_member', 'courseId')) {
             $this->exec("ALTER TABLE `course_member` MODIFY courseId INT(10) unsigned NOT NULL COMMENT '教学计划ID';");
         }
@@ -164,7 +167,7 @@ class OtherMigrate extends AbstractMigrate
 
     public function update($page)
     {
-        if ($page>13) {
+        if ($page>14) {
             return;
         }
 
