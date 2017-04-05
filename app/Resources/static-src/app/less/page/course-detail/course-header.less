@@ -115,6 +115,8 @@
     .course-detail-info {
       padding-left: 60px;
       margin-left: 480px;
+      font-size: 12px;
+      color: @gray;
       @media(max-width:@screen-sm-max){
        margin: 0;
        padding: 0;
@@ -122,6 +124,9 @@
       .course-detail-title {
         width: 80px;
         display: inline-block;
+        @media(max-width:@screen-xs-max) {
+          display: none;
+        }
       }
       .course-detail-gray {
         padding-left: 60px;
@@ -145,17 +150,21 @@
         .course-detail-content {
           position: relative;
           padding-left: 80px;
-          @media(max-width:370px){
-            padding-right: 20px;
-            .course-detail-nav >li {
-              width: 100%;
-              >a {
-                text-align: center;
-              }
-            }
+          @media(max-width: @screen-xs-max){
+            padding-left: 0;
+            padding-right: 15px;
           }
           .course-detail-nav {
             display: inline-block;
+             @media(max-width: @screen-xs-max){
+               display: block;
+                >li {
+                  width: 100%;
+                  >a {
+                    text-align: center;
+                  }
+                }
+             }
           }
           .course-detail-title {
             position: absolute;
@@ -201,68 +210,7 @@
         }
       } 
     }
-    .buy-btn-group  {
-      @media(max-width:@screen-sm-max) {
-        line-height: 30px;
-        position:absolute;
-        right: 10px;
-        bottom: 18px;
-      }
-      @media(max-width:329px) {
-         bottom: 24px;
-      }
-      .btn-lg {
-        padding: 10px 35px;
-        @media(max-width:500px) and (min-width:400px){
-          padding: 10px 20px;
-        }
-        @media(max-width:399px) and (min-width:330px){
-           padding: 10px 13px;
-        }
-        @media(max-width:329px) {
-          padding: 5px 10px;
-        }
-      }
-    }
-    .course-operation-responsive {
-      background-color: @bg-color;
-      padding: 22px 10px 22px 0;
-      margin: -15px;
-      ul {
-        margin: 0;
-        padding: 0;
-        >li {
-          float: left;
-          width: 60px;
-          list-style-type: none;
-          text-align: center;
-          color: @gray;
-          font-size: 12px;
-          @media(max-width:399px) and (min-width:330px){
-            width: 50px;
-          }
-          @media(max-width:329px) {
-            width: 45px;
-          }
-          &:last-child {
-            border-left: 1px solid @gray-light;
-          }
-          &:hover {
-            color: @brand-primary;
-            a {
-              color: @brand-primary;
-            }
-          }
-          a {
-            color: @gray;
-          }
-        }
-      }
-      .es-share.top .dropdown-menu {
-        left: 50%;
-        margin-left: -70px;
-      }
-    }
+    
   }
 }
 
@@ -271,12 +219,10 @@
   background-color: @bg-color;
   margin: 65px -15px 20px;
   padding: 33px 15px;
-  @media (max-width: @screen-xs-max) {
-    padding-bottom: 20px;
-    margin-top: 20px;
-    margin-bottom: 0;
-    margin-left: -10px;
-    margin-right: -10px;
+  @media (max-width: @screen-sm-max) {
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
   }
   .course-learn-list {
     list-style: none;
@@ -294,12 +240,9 @@
   .course-progress{
     top: -50px;
     left: 75px;
-    @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max){
-      left: 15px;
-    }
-    @media (max-width: @screen-xs-max) {
+    @media (max-width: @screen-sm-max) {
      left: 0;
-     top: -10px;
+     top: 0;
     }
   }
 }
@@ -308,8 +251,9 @@
 .course-orderlearn-section {
   min-height: 230px;
   padding-top: 40px;
-  @media (max-width: @screen-xs-max) {
-    padding-top: 20px;
+  @media (max-width: @screen-sm-max) {
+    min-height: auto;
+    padding-top: 0;
   }
   .progress-info {
     list-style: none;
@@ -336,9 +280,9 @@
   .border-radius(50%);
   background-color: #fff;
   .box-shadow(0 0 18px 2px rgba(41,94,64,0.1));
-  @media (max-width: @screen-xs-max) {
+  @media (max-width: @screen-sm-max) {
     position: relative;
-    margin: 0 auto;
+    margin: 20px auto 40px;
     left: 0;
   }
   .cricle-progress {
@@ -399,5 +343,70 @@
   }
   span.swiper-active-switch {
     background-color: @brand-primary;
+  }
+}
+
+// 
+.course-detail-section-responsive {
+  background-color: @bg-color;
+  padding: 18px 10px 18px 0;
+  margin: -15px;
+  ul {
+    margin: 0;
+    padding: 0;
+    >li {
+      float: left;
+      width: 60px;
+      list-style-type: none;
+      text-align: center;
+      color: @gray;
+      font-size: 12px;
+      @media(max-width:399px) and (min-width:330px){
+        width: 50px;
+      }
+      @media(max-width:329px) {
+        width: 45px;
+      }
+      &:last-child {
+        border-left: 1px solid @gray-light;
+      }
+      &:first-child {
+       border-left: 1px solid transparent; 
+      }
+      &:hover {
+        color: @brand-primary;
+        a {
+          color: @brand-primary;
+        }
+      }
+      a {
+        color: @gray;
+      }
+    }
+  }
+  .es-share.top .dropdown-menu {
+    left: 50%;
+    margin-left: -70px;
+  }
+}
+
+.buy-btn-group  {
+  @media(max-width:@screen-sm-max) {
+    line-height: 33px;
+    position:absolute;
+    right: 10px;
+    bottom: 15px;
+  }
+  .btn-lg {
+    padding: 10px 35px;
+    @media(max-width:500px) and (min-width:400px){
+      padding: 10px 20px;
+    }
+    @media(max-width:399px) and (min-width:330px){
+        padding: 10px 13px;
+    }
+    @media(max-width:329px) {
+      padding: 10px 10px;
+    }
   }
 }
