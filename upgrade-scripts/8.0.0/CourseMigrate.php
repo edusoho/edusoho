@@ -76,6 +76,18 @@ class CourseMigrate extends AbstractMigrate
             $result = $this->getConnection()->exec($sql);
         }
 
+        if (!$this->isIndexExist('course_v8', 'courseSetId')) {
+            $this->getConnection()->exec("
+                ALTER TABLE course_v8 ADD INDEX courseSetId (`courseSetId`);
+            ");
+        }
+
+        if (!$this->isIndexExist('course_v8', 'courseSetId_status')) {
+            $this->getConnection()->exec("
+                ALTER TABLE course_v8 ADD INDEX courseSetId_status (`courseSetId`,`status`);
+            ");
+        }
+
         $nextPage = $this->insertData($page);
         if (!empty($nextPage)) {
             return $nextPage;
