@@ -53,6 +53,8 @@ interface UploadFileService
 
     public function searchFiles($conditions, $sort, $start, $limit);
 
+    public function searchLiveCloudFiles($conditions, $sort, $start, $limit);
+
     public function searchFileCount($conditions);
 
     public function addFile($targetType, $targetId, array $fileInfo = array(), $implemtor = 'local', UploadedFile $originalFile = null);

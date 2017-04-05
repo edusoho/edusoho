@@ -9,9 +9,6 @@ use Biz\System\Service\LogService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\System\Service\SettingService;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
-use Biz\File\FileProcessor\FileProcessorFactory;
-use Biz\Course\CourseProcessor\CourseProcessorFactory;
-use AppBundle\Controller\Callback\ProcessorFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 

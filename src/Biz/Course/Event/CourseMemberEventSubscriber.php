@@ -34,7 +34,6 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             'classroom.course.join' => 'onClassroomCourseJoin',
             'classroom.course.join' => 'onClassroomLiveCourseJoin',
             'classroom.course.copy' => 'onClassroomCourseCopy',
-            'classroom.quit' => 'onClassroomLiveMemberDelete',
 
             'course.task.delete' => 'onTaskDelete',
             'course.task.finish' => 'onTaskFinish',
@@ -68,10 +67,8 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $teacherIds = $event->getSubJect();
         $course = $event->getArgument('course');
-        if ($course['type'] != 'live') {
-            return;
-        }
-        if (time() < $course['startTime'] || time() > $course['endTime']) {
+        $isPush = $this->isPushLiveDelete($course);
+        if (!$isPush) {
             return;
         }
 
@@ -83,11 +80,16 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         foreach ($teachers as $userId => $teacher) {
             $this->pushJoinLiveCourseMember($user[$userId], $teacher);
         }
-
     }
 
     public function onCourseTeachersDelete(Event $event)
     {
+        $course = $event->getArgument('course');
+        $isPush = $this->isPushLiveDelete($course);
+        if (!$isPush) {
+            return;
+        }
+
         $teacherIds = $event->getSubJect();
         foreach ($teacherIds as $teacherId) {
             $this->pushDeleteLiveCourseMember($teacherId);
@@ -97,30 +99,28 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     public function onLiveCourseJoin(Event $event)
     {
         $course = $event->getSubject();
+        $isPush = $this->isPushLiveDelete($course);
+        if (!$isPush) {
+            return;
+        }
+        
         $userId = $event->getArgument('userId');
         $user = $this->getUserService()->getUser($userId);
         $member = $event->getArgument('member');
 
-        if ($course['type'] != 'live') {
-            return;
-        }
-        if (time() < $course['startTime'] || time() > $course['endTime']) {
-            return;
-        }
         $this->pushJoinLiveCourseMember($user, $member);
     }
 
     public function onClassroomLiveCourseJoin(Event $event)
     {
         $course = $event->getSubject();
+        $isPush = $this->isPushLiveDelete($course);
+        if (!$isPush) {
+            return;
+        }
+
         $member = $event->getArgument('member');
         $user = $this->getUserService()->getUser($member['userId']);
-        if ($course['type'] != 'live') {
-            return;
-        }
-        if (time() < $course['startTime'] || time() > $course['endTime']) {
-            return;
-        }
         $this->pushJoinLiveCourseMember($user, $member);
     }
 
@@ -273,14 +273,24 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
 
     public function onLiveMemberDelete(Event $event)
     {
+        $course = $event->getSubject();
+        $isPush = $this->isPushLiveDelete($course);
+        if (!$isPush) {
+            return;
+        }
         $userId = $event->getArgument('userId');
         $this->pushDeleteLiveCourseMember($userId);
     }
 
-    public function onClassroomLiveMemberDelete(Event $event)
+    protected function isPushLiveDelete($course)
     {
-        $userId = $event->getArgument('userId');
-        $this->pushDeleteLiveCourseMember($userId);
+        if ($course['type'] != 'live') {
+            return false;
+        }
+        if (time() < $course['startTime'] || time() > $course['endTime']) {
+            return false;
+        }
+        return true;
     }
 
     public function onTaskFinish(Event $event)

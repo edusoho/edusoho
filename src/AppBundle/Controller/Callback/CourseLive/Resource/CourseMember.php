@@ -21,8 +21,10 @@ class CourseMember extends BaseProvider
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 100);
         $courseId = $request->query->get('courseId');
+
         $course = $this->getCourseService()->getCourse($courseId);
         $sourceCourseMembers = $this->getCourseMemberService()->findMemberByCourseId($course['id']);
+
         $userIds = ArrayToolkit::column($sourceCourseMembers, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
 
@@ -49,7 +51,6 @@ class CourseMember extends BaseProvider
     protected function buildNeedCourseMemberFields($sourceCourseMembers, $users)
     {
         $result = array();
-        $filter = array( 'nickname' => '', 'smallAvatar' => '', 'id' => 0, 'role' => '');
         $sourceCourseMembers = ArrayToolkit::index($sourceCourseMembers, 'userId');
         $users = ArrayToolkit::index($users, 'id');
         foreach ($sourceCourseMembers as $userId => $sourceCourseMember) {
@@ -57,6 +58,7 @@ class CourseMember extends BaseProvider
             $courseMember['avatar'] = $this->getFileUrl($users[$userId]['smallAvatar'], 'avatar.png');
             $courseMember['clientId'] = $userId;
             $courseMember['role'] = $sourceCourseMember['role'];
+            
             $result['data'][] = $courseMember;
         }
 

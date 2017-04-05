@@ -12,8 +12,11 @@ class CourseCloudFiles extends BaseProvider
     {
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 100);
+        $token = $request->query->get('token');
         $name = $request->query->get('name', '');
         $courseId = $request->query->get('courseId');
+
+        $this->checkToken($token);
 
         $course = $this->getCourseService()->getCourse($courseId);
         $conditions = array('targetId' => $course['courseSetId'], 'storage' => 'cloud');
@@ -21,7 +24,7 @@ class CourseCloudFiles extends BaseProvider
             $conditions['filename'] = $name;
         }
 
-        $sourceCourseFiles = $this->getUploadFileService()->searchFiles(
+        $sourceCourseFiles = $this->getUploadFileService()->searchLiveCloudFiles(
             $conditions,
             array('createdTime' => 'DESC'),
             $start,
@@ -32,19 +35,25 @@ class CourseCloudFiles extends BaseProvider
         return $cloudFiles;
     }
 
+    protected function checkToken($token)
+    {
+        $isTrue = $this->getTokenService()->verifyToken('live.create', $token);
+
+        if (!$isTrue) {
+            throw new \RuntimeException('Token不正确！');
+        }
+    }
+
     protected function buildNeedCloudFileFields($sourceCourseFiles)
     {
         $cloudFiles = array();
         $filter = array( 'type' => '', 'status' => '', 'globalId' => 0, 'filename' => '');
 
         foreach ($sourceCourseFiles as $sourceCourseFile) {
-            $cloudFile = ArrayToolkit::filter($filter, $sourceCourseFile);
-
-            $cloudFile['mediaId'] = $cloudFile['globalId'];
-            unset($cloudFile['globalId']);
-
-            $cloudFile['name'] = $cloudFile['filename'];
-            unset($cloudFile['filename']);
+            $cloudFile['mediaId'] = $sourceCourseFile['globalId'];
+            $cloudFile['name'] = $sourceCourseFile['filename'];
+            $cloudFile['type'] = $sourceCourseFile['type'];
+            $cloudFile['status'] = $sourceCourseFile['status'];
 
             $cloudFiles['data'][] = $cloudFile;
         }
@@ -60,5 +69,10 @@ class CourseCloudFiles extends BaseProvider
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
+    }
+
+    protected function getTokenService()
+    {
+        return $this->createService('User:TokenService');
     }
 }

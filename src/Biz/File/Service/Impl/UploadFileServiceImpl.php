@@ -502,6 +502,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
     }
 
+    public function searchLiveCloudFiles($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getUploadFileDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
     protected function searchFilesFromCloud($conditions, $orderBy, $start, $limit)
     {
         $files = $this->getUploadFileDao()->search($conditions, $orderBy, 0, PHP_INT_MAX);
@@ -529,7 +534,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     protected function searchFilesFromLocal($conditions, $orderBy, $start, $limit)
     {
         $files = $this->getUploadFileDao()->search($conditions, $orderBy, $start, $limit);
-
         if (empty($files)) {
             return array();
         }
