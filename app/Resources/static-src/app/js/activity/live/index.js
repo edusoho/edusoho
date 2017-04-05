@@ -7,14 +7,23 @@ class LiveShow {
   }
 
   init() {
-    let summary = $('#activity-summary').text();
-    let $liveNotice = `<div class="live-show-item">
+    let activityData = JSON.parse($('#activity-data').text());
+    let startTime = parseInt(activityData.startTime);
+    let endTime = parseInt(activityData.endTime);
+    let nowDate = parseInt(activityData.nowDate);
+    this.liveStartTimeFormat = activityData.startTimeFormat;
+    this.liveEndTimeFormat = activityData.endTimeFormat;
+    let courseId = activityData.fromCourseId;
+    let activityId = activityData.id;
+    // let replayStatus = activityData.ext.replayStatus || 'ungenerated';
+    this.summary = $('#activity-summary').text();
+    this.$liveNotice = `<div class="live-show-item">
           <p class="title">直播时间</p>
-          <p>直播将于${liveStartTimeFormat}开始，于${liveEndTimeFormat}结束<p>
+          <p>直播将于${this.liveStartTimeFormat}开始，于${this.liveEndTimeFormat}结束<p>
           (请在课前10分钟内提早进入)
          </div>`
-    let iID;
-    if (iID) {
+    this.iID = null;
+    if (this.iID) {
       clearInterval(iID);
     }
     this.intervalSecond = 0;
@@ -24,7 +33,9 @@ class LiveShow {
     if (endTime > nowDate) {
       millisecond = 1000;
     }
-    iID = setInterval(generateHtml, millisecond);
+    this.iID = setInterval(()=> {
+      this.generateHtml();
+    }, millisecond);
 
     $("#lesson-live-content").show();
     this.started = false;
@@ -47,9 +58,10 @@ class LiveShow {
 
   generateHtml() {
     let activityData = JSON.parse($('#activity-data').text());
+    let startTime = parseInt(activityData.startTime);
     let endTime = parseInt(activityData.endTime);
     let nowDate = parseInt(activityData.nowDate);
-    nowDate = nowDate + intervalSecond;
+    nowDate = nowDate + this.intervalSecond;
     let startLeftSeconds = parseInt(startTime - nowDate);
     let endLeftSeconds = parseInt(endTime - nowDate);
     let days = Math.floor(startLeftSeconds / (60 * 60 * 24));
@@ -78,9 +90,9 @@ class LiveShow {
     let $btn = '';
 
     if (0 < startLeftSeconds && startLeftSeconds < 7200) {
-      $liveNotice = `<div class="live-show-item">
+      this.$liveNotice = `<div class="live-show-item">
           <p class="title">直播时间</p>
-          <p>直播将于${liveStartTimeFormat}开始，于${liveEndTimeFormat}结束<p>
+          <p>直播将于${this.liveStartTimeFormat}开始，于${this.liveEndTimeFormat}结束<p>
           (请在课前10分钟内提早进入)
          </div>`
       $btn = `<div class='live-show-item'>
@@ -94,11 +106,11 @@ class LiveShow {
       }
     }
     if (startLeftSeconds <= 0) {
-      clearInterval(iID);
+      clearInterval(this.iID);
       $countDown = '';
-      $liveNotice = `<div class='live-show-item'>
+      this.$liveNotice = `<div class='live-show-item'>
           <p class="title">直播时间</p>
-          直播已经开始，直播将于${liveEndTimeFormat}结束。
+          直播已经开始，直播将于${this.liveEndTimeFormat}结束。
         </div>`;
       $btn = `<div class='live-show-item'>
           <a class='btn btn-primary js-start-live' href='javascript:;' 
@@ -113,7 +125,7 @@ class LiveShow {
     if (endLeftSeconds <= 0) {
       $countDown = "";
       $btn = '';
-      $liveNotice = `<div class='live-show-item'>
+      this.$liveNotice = `<div class='live-show-item'>
           <i class='es-icon es-icon-xinxi color-danger icon-live-end'></i>
           ${Translator.trans('直播已经结束')}
         </div>`
@@ -124,10 +136,10 @@ class LiveShow {
       }
     }
 
-    let $content = `${$liveNotice} ${$countDown}
+    let $content = `${this.$liveNotice} ${$countDown}
       <div class='live-show-item'>
         <p class='title'>直播说明</p>
-        ${summary}
+        ${this.summary}
       </div>${$btn}`;
     $("#lesson-live-content").find('.lesson-content-text-body').html($content);
     this.intervalSecond++;
