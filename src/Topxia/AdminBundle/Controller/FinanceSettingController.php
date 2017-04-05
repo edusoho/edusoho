@@ -39,9 +39,9 @@ class FinanceSettingController extends BaseController
             'llpay_key'        => '',
             'llpay_secret'     => ''
         );
+        $default['wxpay_mp_secret'] = $this->getWeixinMpFile();
 
         $payment = array_merge($default, $payment);
-
         if ($request->getMethod() == 'POST') {
             $payment = $request->request->all();
             $payment = ArrayToolkit::trim($payment);
@@ -58,6 +58,9 @@ class FinanceSettingController extends BaseController
             //新增支付方式，加入下列列表计算，以便判断是否关闭支付功能
             $payment = $this->isClosePayment($payment);
             $this->getSettingService()->set('payment', $payment);
+            if($payment['wxpay_enabled'] && $payment['wxpay_mp_secret']){
+                $this->updateWeixinMpFile($payment['wxpay_mp_secret']);
+            }
             $this->getLogService()->info('system', 'update_settings', '更支付方式设置', $payment);
             $this->setFlashMessage('success', $this->trans('支付方式设置已保存！'));
         }
@@ -65,6 +68,22 @@ class FinanceSettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:payment.html.twig', array(
             'payment' => $payment
         ));
+    }
+
+    private function getWeixinMpFile()
+    {
+        $dir = realpath(__DIR__.'/../../../../web/');
+        $mp_secret = array_map('file_get_contents', glob($dir.'/MP_verify_*.txt'));
+        return implode($mp_secret);
+    }
+
+    protected function updateWeixinMpFile($val)
+    {
+        $dir = realpath(__DIR__.'/../../../../web/');
+        array_map('unlink', glob($dir.'/MP_verify_*.txt'));
+        if (!empty($val)) {
+            file_put_contents($dir.'/MP_verify_'.$val.'.txt', $val);
+        }
     }
 
     public function isClosePayment($payment)

@@ -8,9 +8,18 @@ use Topxia\Component\Payment\Wxpay\JsApiPay;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 class PayCenterController extends BaseController
 {
+    protected function getPayLogger()
+    {
+        $logger = new Logger('PayCenter');
+        $logger->pushHandler(new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir').'/payCenter.log', Logger::DEBUG));
+        return $logger;
+    }
+
     public function showAction(Request $request)
     {
         $user = $this->getCurrentUser();
@@ -149,8 +158,8 @@ class PayCenterController extends BaseController
         if (!isset($fields['payment'])) {
             return $this->createMessageResponse('error', '支付方式未开启，请先开启');
         }
-
-        $order = OrderProcessorFactory::create($fields['targetType'])->updateOrder($fields['orderId'], array('payment' => $fields['payment']));
+        $token = $this->makeWxpayToken($fields['orderId']);
+        $order = OrderProcessorFactory::create($fields['targetType'])->updateOrder($fields['orderId'], array('payment' => $fields['payment'],'token' => $token['token']));
 
         if ($user['id'] != $order['userId']) {
             return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
@@ -242,6 +251,16 @@ class PayCenterController extends BaseController
         $params         = $formRequest['params'];
 
         if ($payment == 'wxpay') {
+            $isMicroMessenger = $this->getWebExtension()->isMicroMessenger();
+            if($isMicroMessenger){
+                $url = $this->generateUrl('pay_center_wxpay',array($request));
+                $request->headers->add(array('X_ORIGINAL_URL'=>$url));
+
+                return $this->forward('TopxiaWebBundle:PayCenter:wxpay', array(
+                    'order' => $order
+                ));
+            }
+            $order = $this->generateWxpayOrderToken($order);
             $returnArray = $paymentRequest->unifiedOrder();
 
             if ($returnArray['return_code'] == 'SUCCESS') {
@@ -344,8 +363,10 @@ class PayCenterController extends BaseController
 
     public function payNotifyAction(Request $request, $name)
     {
+        $this->getPayLogger()->addInfo('payNotifyAction');
         if ($name == 'wxpay') {
             $returnXml   = $request->getContent();
+            $this->getPayLogger()->addInfo('wxpay_returnXml'.$returnXml);
             $returnArray = $this->fromXml($returnXml);
         } elseif ($name == 'heepay' || $name == 'quickpay') {
             $returnArray = $request->query->all();
@@ -361,6 +382,7 @@ class PayCenterController extends BaseController
         $response = $this->createPaymentResponse($name, $returnArray);
 
         $payData = $response->getPayData();
+        $this->getPayLogger()->addInfo("notify_responseData".implode('-',$payData));
         if ($payData['status'] == 'waitBuyerConfirmGoods') {
             return new Response('success');
         }
@@ -403,11 +425,13 @@ class PayCenterController extends BaseController
 
     public function showTargetAction(Request $request)
     {
+        $this->getPayLogger()->addInfo('showTargetAction');
         $orderId = $request->query->get('id');
         $order   = $this->getOrderService()->getOrder($orderId);
 
         $processor = OrderProcessorFactory::create($order['targetType']);
         $router    = $processor->callbackUrl($order, $this->container);
+
 
         return $this->render('TopxiaWebBundle:PayCenter:pay-return.html.twig', array(
             'goto' => $router
@@ -437,6 +461,7 @@ class PayCenterController extends BaseController
 
     public function wxpayRollAction(Request $request)
     {
+
         $order = $request->query->get('order');
 
         if ($order['status'] == 'paid') {
@@ -455,10 +480,10 @@ class PayCenterController extends BaseController
                 $payData['payment']  = 'wxpay';
                 $payData['amount']   = $order['amount'];
                 $payData['paidTime'] = time();
-                $payData['sn']       = $returnArray['out_trade_no'];
+                $order = $this->getOrderService()->getOrderByToken($returnArray['out_trade_no']);
+                $payData['sn']       = $order['sn'];
 
                 list($success, $order) = OrderProcessorFactory::create($order['targetType'])->pay($payData);
-
                 if ($success) {
                     return $this->createJsonResponse(true);
                 }
@@ -502,12 +527,36 @@ class PayCenterController extends BaseController
         return $request->setParams(array('authBank' => $params['authBank'], 'mobile' => $params['mobile']));
     }
 
+    private function makeWxpayToken($orderId)
+    {
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $value = '';
+        for ($i = 0; $i < 5; $i++) {
+            $value .= $chars[mt_rand(0, strlen($chars) - 1)];
+        }
+        
+        $order = $this->getOrderService()->getOrder($orderId);
+        $token['token'] = $order['sn'].$value;
+        return $token;
+    }
+
+    public function generateWxpayOrderToken($order)
+    {
+        $token = $this->makeWxpayToken($order['id']);
+        
+        $processor = OrderProcessorFactory::create($order['targetType']);
+        return $processor->updateOrder($order['id'], array('token' => $token['token']));
+    
+    }
+
     public function generateOrderToken($order, $params)
     {
+
         $processor = OrderProcessorFactory::create($order['targetType']);
 
         return $processor->updateOrder($order['id'], array('token' => $params['agent_bill_id']));
     }
+
 
     public function verification($fields)
     {
@@ -662,5 +711,10 @@ class PayCenterController extends BaseController
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
     }
 }

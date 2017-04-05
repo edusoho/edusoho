@@ -183,7 +183,7 @@
       <td><span class="text-muted js-ucenter-check"
                 data-url="{{ path('admin_report_status_ucenter') }}">{{ '正在检测.....'|trans }}</span></td>
     </tr>
-    {% if setting("cloud_email.status")|default("disable") == "disable" %}
+    {% if setting("cloud_email_crm.status")|default("disable") == "disable" %}
       <tr>
         <td>{{ '邮件发送'|trans }} <i class="glyphicon glyphicon-info-sign text-info" data-toggle="tooltip" data-placement="top"
                     title="{{ '每次检测，都会向当前用户发一封测试邮件，请保证当前用户的邮箱正确,邮件异常请到系统日志查看'|trans }}"></i></td>

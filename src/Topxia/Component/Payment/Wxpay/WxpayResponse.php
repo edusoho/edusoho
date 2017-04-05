@@ -11,10 +11,12 @@ class WxpayResponse extends Response
     public function getPayData()
     {
         $params          = $this->params;
+        $order = $this->getOrderService()->getOrderByToken($params['out_trade_no']);
+       
         $data            = array();
         $data['payment'] = 'wxpay';
-        $data['sn']      = $params['out_trade_no'];
-        $result          = $this->confirmSellerSendGoods($data['sn']);
+        $data['sn']      = $order['sn'];
+        $result          = $this->confirmSellerSendGoods($params['out_trade_no']);
         $returnArray     = $this->fromXml($result);
         if ($returnArray['return_code'] != 'SUCCESS' || $returnArray['result_code'] != 'SUCCESS' || $returnArray['trade_state'] != 'SUCCESS') {
             throw new \RuntimeException($this->getServiceKernel()->trans('微信支付失败'));
@@ -133,5 +135,10 @@ class WxpayResponse extends Response
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
     }
 }
