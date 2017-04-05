@@ -2,20 +2,20 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\ExportHelp;
 use AppBundle\Common\Paginator;
+use Biz\Util\EdusohoLiveClient;
+use AppBundle\Common\ExportHelp;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Content\Service\FileService;
+use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\UserFieldService;
 use Biz\File\Service\UploadFileService;
+use Biz\OpenCourse\Service\OpenCourseService;
+use Symfony\Component\HttpFoundation\Request;
 use Biz\OpenCourse\Processor\CourseProcessorFactory;
 use Biz\OpenCourse\Service\OpenCourseRecommendedService;
-use Biz\OpenCourse\Service\OpenCourseService;
-use Biz\System\Service\SettingService;
-use Biz\Taxonomy\Service\TagService;
-use Biz\User\Service\UserFieldService;
-use Biz\Util\EdusohoLiveClient;
-use Symfony\Component\HttpFoundation\Request;
 
 class OpenCourseManageController extends BaseController
 {
@@ -366,13 +366,13 @@ class OpenCourseManageController extends BaseController
 
         $recommends = $this->getOpenCourseRecommendedService()->findRecommendedCoursesByOpenCourseId($id);
 
-        /*$recommendedCourses = array();
-
-        foreach ($recommends as $key => $recommend) {
-        $recommendedCourses[$recommend['id']] = $this->getTypeCourseService($recommend['type'])->getCourse($recommend['recommendCourseId']);
-        }*/
         $courseSetIds = ArrayToolkit::column($recommends, 'recommendCourseId');
         $commendedCourseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+
+        $recommendedCourses = array();
+        foreach ($recommends as $key => $recommend) {
+            $recommendedCourses[$recommend['id']] = $commendedCourseSets[$recommend['recommendCourseId']];
+        }
 
         $coursesPrice = $this->_findCoursesPriceInterval($courseSetIds);
         $users = $this->_getTeacherUsers($commendedCourseSets);
@@ -380,7 +380,7 @@ class OpenCourseManageController extends BaseController
         return $this->render(
             'open-course-manage/open-course-marketing.html.twig',
             array(
-                'courseSets' => $commendedCourseSets,
+                'courseSets' => $recommendedCourses,
                 'users' => $users,
                 'course' => $course,
                 'coursesPrice' => $coursesPrice,
@@ -798,7 +798,6 @@ class OpenCourseManageController extends BaseController
 
     /**
      * @param  $type
-     *
      * @return mixed
      */
     protected function getTypeCourseService($type)
