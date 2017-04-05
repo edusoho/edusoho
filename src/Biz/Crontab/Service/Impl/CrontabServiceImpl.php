@@ -14,7 +14,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 {
     public function getJob($id, $lock = false)
     {
-        return $this->getJobDao()->get($id, $lock);
+        return $this->getJobDao()->get($id, array('lock' => $lock));
     }
 
     public function executeJob($id)

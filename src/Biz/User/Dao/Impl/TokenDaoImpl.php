@@ -9,8 +9,9 @@ class TokenDaoImpl extends GeneralDaoImpl implements TokenDao
 {
     protected $table = 'user_token';
 
-    public function get($id, $lock = false)
+    public function get($id, array $options = array())
     {
+        $lock = isset($options['lock']) && $options['lock'] === true;
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
 
         return $this->db()->fetchAssoc($sql, array($id)) ?: null;

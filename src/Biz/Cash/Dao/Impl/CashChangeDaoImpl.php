@@ -9,8 +9,9 @@ class CashChangeDaoImpl extends GeneralDaoImpl implements CashChangeDao
 {
     protected $table = 'cash_change';
 
-    public function getByUserId($userId, $lock = false)
+    public function getByUserId($userId, array $options = array())
     {
+        $lock = isset($options['lock']) && $options['lock'] === true;
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? LIMIT 1".($lock ? ' FOR UPDATE' : '');
 
         return $this->db()->fetchAssoc($sql, array($userId)) ?: null;

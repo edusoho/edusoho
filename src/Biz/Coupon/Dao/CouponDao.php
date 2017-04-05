@@ -8,7 +8,7 @@ interface CouponDao extends GeneralDaoInterface
 {
     public function findByIds(array $ids);
 
-    public function getByCode($code, $lock = false);
+    public function getByCode($code, array $options = array());
 
     public function findByBatchId($batchId, $start, $limit);
 
