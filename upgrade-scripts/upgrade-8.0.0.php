@@ -79,7 +79,6 @@ class EduSohoUpgrade extends AbstractUpdater
             'CourseMaterial2DownloadActivityMigrate',
             'CourseMaterial2ActivityMigrate',
             'CourseMaterial2CourseTaskMigrate',
-            'UpdateCourseChapter',
 
             'TestpaperMigrate',
             'TestpaperItemMigrate',
@@ -91,6 +90,8 @@ class EduSohoUpgrade extends AbstractUpdater
 
             'Exercise2CourseTaskMigrate',
             'Homework2CourseTasMigrate',
+
+            'UpdateCourseChapter',
 
             'TestpaperResultMigrate',
             'TestpaperItemResultMigrate',
