@@ -53,7 +53,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $course['userId'] = $this->getCurrentUser()->id;
         $course['createdTime'] = time();
         $course['teacherIds'] = array($course['userId']);
-        $course['categoryId'] = 1;
 
         $course = $this->getOpenCourseDao()->create($course);
 
