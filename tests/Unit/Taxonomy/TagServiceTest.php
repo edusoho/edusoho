@@ -412,12 +412,9 @@ class TagServiceTest extends BaseTestCase
         );
 
         $this->getTagService()->addTagOwnerRelation($fields);
-
         $fields['tagId'] = 2;
         $this->getTagService()->addTagOwnerRelation($fields);
-
         $tagIds = $this->getTagService()->findTagIdsByOwnerTypeAndOwnerIds('course', array($ownerId));
-
         $this->assertEquals(1, $tagIds['1'][0]);
         $this->assertEquals(2, $tagIds['1'][1]);
     }
