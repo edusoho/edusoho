@@ -9,7 +9,6 @@ class LiveShow {
   init() {
     let that = this;
     let activityData = JSON.parse($('#activity-data').text());
-    console.log('activityData : ', activityData);
     let liveStartTimeFormat = activityData.startTimeFormat;
     let liveEndTimeFormat = activityData.endTimeFormat;
     let startTime = parseInt(activityData.startTime);
@@ -40,6 +39,7 @@ class LiveShow {
     this.entry_url = location.protocol + "//" + location.hostname + '/course/' + courseId + '/activity/' + activityId + '/live_entry';
 
     function generateHtml() {
+      let activityData = JSON.parse($('#activity-data').text());
       let endTime = parseInt(activityData.endTime);
       let nowDate = parseInt(activityData.nowDate);
       nowDate = nowDate + intervalSecond;
@@ -139,7 +139,7 @@ class LiveShow {
           ${Translator.trans('直播已经结束')}
         </div>`
         $countDown = "";
-        $btn ='';
+        $btn = '';
         if (activityData.replays && activityData.replays.length > 0) {
           $.each(activityData.replays, function (i, n) {
             $btn += "<a class='btn btn-primary' href='" + n.url + "' target='_blank'>" + n.title + "</a>&nbsp;&nbsp;";
