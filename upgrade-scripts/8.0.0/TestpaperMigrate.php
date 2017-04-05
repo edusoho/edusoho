@@ -33,6 +33,12 @@ class TestpaperMigrate extends AbstractMigrate
             ");
         }
 
+        if (!$this->isIndexExist('testpaper_v8', 'courseSetId', 'courseSetId')) {
+            $this->getConnection()->exec("
+                ALTER TABLE testpaper_v8 ADD INDEX courseSetId (`courseSetId`);
+            ");
+        }
+
         if (!$this->isTableExist('testpaper_item_v8')) {
             $this->getConnection()->exec("
                 CREATE TABLE `testpaper_item_v8` (
@@ -49,6 +55,12 @@ class TestpaperMigrate extends AbstractMigrate
                   `migrateItemId` int(11) unsigned NOT NULL DEFAULT '0',
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
+        }
+
+        if (!$this->isIndexExist('testpaper_item_v8', 'testId', 'testId')) {
+            $this->getConnection()->exec("
+                ALTER TABLE testpaper_item_v8 ADD INDEX testId (`testId`);
             ");
         }
 

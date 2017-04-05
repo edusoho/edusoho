@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 class ActivityLearnLog extends AbstractMigrate
 {
     public function update($page)
     {
-    	if (!$this->isTableExist('activity_learn_log')) {
+        if (!$this->isTableExist('activity_learn_log')) {
             $this->exec(
                 "
                 CREATE TABLE `activity_learn_log` (
@@ -21,6 +21,12 @@ class ActivityLearnLog extends AbstractMigrate
               ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
             "
             );
+        }
+
+        if (!$this->isIndexKeyExist('activity_learn_log', 'activityId_userId')) {
+            $this->getConnection()->exec("
+                ALTER TABLE activity_learn_log ADD INDEX activityId_userId (`activityId`,`userId`);
+            ");
         }
     }
 }

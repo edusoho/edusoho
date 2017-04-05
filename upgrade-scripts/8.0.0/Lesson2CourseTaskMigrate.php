@@ -37,6 +37,12 @@ class Lesson2CourseTaskMigrate extends AbstractMigrate
             );
         }
 
+        if (!$this->isIndexExist('course_task', 'courseId', 'courseId')) {
+            $this->getConnection()->exec("
+                ALTER TABLE course_task ADD INDEX courseId (`courseId`);
+            ");
+        }
+
         if (!$this->isFieldExist('course_task', 'migrateLessonId')) {
             $this->exec("alter table `course_task` add `migrateLessonId` int(10);");
         }
@@ -95,6 +101,6 @@ class Lesson2CourseTaskMigrate extends AbstractMigrate
                 `id` as `migrateLessonId`
             from `course_lesson` WHERE `id` NOT IN (SELECT id FROM `course_task`) order by id limit 0, {$this->perPageCount}");
 
-        return $page+1;
+        return $page + 1;
     }
 }

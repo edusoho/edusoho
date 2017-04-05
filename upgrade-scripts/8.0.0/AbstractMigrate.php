@@ -57,6 +57,14 @@ abstract class AbstractMigrate
         return empty($result) ? false : true;
     }
 
+    protected function isIndexKeyExist($table, $indexName)
+    {
+        $sql = "show index from `{$table}` where Key_name = '{$indexName}';";
+        $result = $this->getConnection()->fetchAssoc($sql);
+
+        return empty($result) ? false : true;
+    }
+
     protected function isCrontabJobExist($code)
     {
         $sql = "select * from crontab_job where name='{$code}'";
@@ -78,7 +86,7 @@ abstract class AbstractMigrate
 
     protected function getStart($page)
     {
-        return ($page-1) * $this->perPageCount;
+        return ($page - 1) * $this->perPageCount;
     }
 
     abstract public function update($page);
