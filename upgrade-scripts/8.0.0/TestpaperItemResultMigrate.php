@@ -26,7 +26,7 @@ class TestpaperItemResultMigrate extends AbstractMigrate
             ");
         }
 
-        if (!$this->isIndexKeyExist('testpaper_item_result_v8', 'resultId_type')) {
+        if (!$this->isIndexExist('testpaper_item_result_v8', 'resultId_type')) {
             $this->getConnection()->exec("
                 ALTER TABLE testpaper_item_result_v8 ADD INDEX resultId_type (`resultId`,`type`);
             ");

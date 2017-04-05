@@ -23,7 +23,7 @@ class ActivityLearnLog extends AbstractMigrate
             );
         }
 
-        if (!$this->isIndexKeyExist('activity_learn_log', 'activityId_userId')) {
+        if (!$this->isIndexExist('activity_learn_log', 'activityId_userId')) {
             $this->getConnection()->exec("
                 ALTER TABLE activity_learn_log ADD INDEX activityId_userId (`activityId`,`userId`);
             ");

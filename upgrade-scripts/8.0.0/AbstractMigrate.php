@@ -49,15 +49,7 @@ abstract class AbstractMigrate
         return empty($result) ? false : true;
     }
 
-    protected function isIndexExist($table, $filedName, $indexName)
-    {
-        $sql = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
-        $result = $this->getConnection()->fetchAssoc($sql);
-
-        return empty($result) ? false : true;
-    }
-
-    protected function isIndexKeyExist($table, $indexName)
+    protected function isIndexExist($table, $indexName)
     {
         $sql = "show index from `{$table}` where Key_name = '{$indexName}';";
         $result = $this->getConnection()->fetchAssoc($sql);
