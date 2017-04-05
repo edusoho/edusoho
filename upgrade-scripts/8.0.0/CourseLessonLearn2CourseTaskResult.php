@@ -71,7 +71,7 @@ class CourseLessonLearn2CourseTaskResult extends AbstractMigrate
                 `learnTime`,
                 `watchTime`
             from `course_lesson_learn` where id not in (select id from `course_task_result`) 
-            order by id limit 0, 200000;
+            order by id limit 0, 100000;
             "
         );
 

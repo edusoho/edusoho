@@ -57,7 +57,7 @@ class CourseLessonView2CourseTaskView extends AbstractMigrate
                 `fileSource`,
                 `createdTime`
             FROM `course_lesson_view` WHERE id not in (SELECT id FROM `course_task_view`)
-            order by id limit 0, 1000000;
+            order by id limit 0, 100000;
         	"
         );
         
