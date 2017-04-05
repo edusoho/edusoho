@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3314ae014822a201b379854a837e53f8",
+    "content-hash": "c865de5cd57555dd6cf80adf316d74ef",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -212,51 +212,6 @@
             "time": "2017-01-06T23:20:00+00:00"
         },
         {
-            "name": "canoma/canoma",
-            "version": "v0.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Dynom/Canoma.git",
-                "reference": "22caaf38c8e585e12024777877a12752ed3f98b8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://files.phpcomposer.com/files/Dynom/Canoma/22caaf38c8e585e12024777877a12752ed3f98b8.zip",
-                "reference": "22caaf38c8e585e12024777877a12752ed3f98b8",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "phake/phake": "dev-master"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Canoma": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "WTFPL"
-            ],
-            "authors": [
-                {
-                    "name": "Mark van der Velden",
-                    "email": "mark@dynom.nl",
-                    "homepage": "http://blog.dynom.nl"
-                }
-            ],
-            "description": "An intuitive and well tested library. That allows you to easily implement consistent hashing in your caching implementation. It's completely back-end agnostic, easy to extend and free to use.",
-            "keywords": [
-                "Canoma",
-                "Consistent Hashing",
-                "cache"
-            ],
-            "time": "2012-12-27T14:12:05+00:00"
-        },
-        {
             "name": "cerdic/css-tidy",
             "version": "v1.5.5",
             "source": {
@@ -291,20 +246,19 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.3.0",
+            "version": "v0.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "a88b1f1cf110660022119892f378264ed09ab521"
+                "reference": "2026099942ee775e41a98c1eb7a206b806eb923d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/biz-framework/a88b1f1cf110660022119892f378264ed09ab521.zip",
-                "reference": "a88b1f1cf110660022119892f378264ed09ab521",
+                "url": "https://files.phpcomposer.com/files/codeages/biz-framework/2026099942ee775e41a98c1eb7a206b806eb923d.zip",
+                "reference": "2026099942ee775e41a98c1eb7a206b806eb923d",
                 "shasum": ""
             },
             "require": {
-                "canoma/canoma": "^0.0.3",
                 "davedevelopment/phpmig": "^1.2.0",
                 "doctrine/dbal": "^2.4.5",
                 "php": "^5.3.3 || ^7.0",
@@ -326,7 +280,7 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2017-03-31T12:03:00+00:00"
+            "time": "2017-04-04T17:12:07+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",

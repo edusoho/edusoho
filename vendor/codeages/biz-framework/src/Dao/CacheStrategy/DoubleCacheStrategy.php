@@ -1,4 +1,5 @@
 <?php
+
 namespace Codeages\Biz\Framework\Dao\CacheStrategy;
 
 use Codeages\Biz\Framework\Dao\CacheStrategy;
@@ -14,7 +15,6 @@ class DoubleCacheStrategy extends AbstractCacheStrategy implements CacheStrategy
     {
         $this->first = $first;
         $this->second = $second;
-
     }
 
     public function beforeGet(GeneralDaoInterface $dao, $method, $arguments)

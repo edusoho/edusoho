@@ -115,17 +115,18 @@ class GeneralDaoImplTest extends TestCase
                 'code' => 'test1',
             ));
 
-            $row = $dao->updateByNameAndCode('test1', 'test1', array('content' => 'test'));
-            $this->assertEquals('test', $row[0]['content']);
+            $affected = $dao->updateByNameAndCode('test1', 'test1', array('content' => 'test'));
+
+            $this->assertEquals(1, $affected);
         }
     }
 
     private function getTestDao()
     {
         return array(
-            // 'TestProject:Example:ExampleDao',
+            'TestProject:Example:ExampleDao',
             'TestProject:Example:Example2Dao',
-            // 'TestProject:Example:Example3Dao',
+            'TestProject:Example:Example3Dao',
         );
     }
 

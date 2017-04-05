@@ -394,13 +394,6 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
                 0 => __DIR__ . '/..' . '/doctrine/common/lib',
             ),
         ),
-        'C' => 
-        array (
-            'Canoma' => 
-            array (
-                0 => __DIR__ . '/..' . '/canoma/canoma/src',
-            ),
-        ),
         'B' => 
         array (
             'Bazinga\\Bundle\\JsTranslationBundle' => 

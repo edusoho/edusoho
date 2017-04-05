@@ -10,15 +10,13 @@ namespace Codeages\Biz\Framework\Provider;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use Codeages\Biz\Framework\Dao\DaoProxy\CacheDaoProxy;
-use Codeages\Biz\Framework\Dao\CacheStrategy\TableCacheStrategy;
 use Codeages\Biz\Framework\Context\BizException;
 use Redis;
 use RedisArray;
 
 class RedisServiceProvider implements ServiceProviderInterface
 {
-    public function register(Container $container)  
+    public function register(Container $container)
     {
         $container['redis.default_options'] = array(
             'host' => '127.0.0.1:6379',
@@ -27,10 +25,10 @@ class RedisServiceProvider implements ServiceProviderInterface
             'retry_interval' => 100,
         );
 
-        $container['redis'] = function($container) {
+        $container['redis'] = function ($container) {
             $options = array_replace($container['redis.default_options'], $container['redis.options']);
             if (!is_array($options['host'])) {
-                $options['host'] = array((string)$options['host']);
+                $options['host'] = array((string) $options['host']);
             }
 
             if (empty($options['host'])) {
@@ -49,6 +47,5 @@ class RedisServiceProvider implements ServiceProviderInterface
 
             return $redis;
         };
-
     }
 }
