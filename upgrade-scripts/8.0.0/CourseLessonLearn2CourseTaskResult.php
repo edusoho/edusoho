@@ -70,8 +70,8 @@ class CourseLessonLearn2CourseTaskResult extends AbstractMigrate
                 `updateTime`,
                 `learnTime`,
                 `watchTime`
-            from `course_lesson_learn` where id not in (select id from `course_task_result`)
-            order by id limit 0, {$this->perPageCount};
+            from `course_lesson_learn` where id not in (select id from `course_task_result`) 
+            order by id limit 0, 200000;
             "
         );
 

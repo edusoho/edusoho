@@ -13,6 +13,15 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
         );
 
         if (empty($count)) {
+
+            $sql = "UPDATE activity AS a, testpaper_v8 AS t SET a.mediaId = t.id WHERE a.migrateExerciseId = t.migrateTestId AND t.type = 'exercise' AND a.mediaType = 'exercise';";
+            $this->getConnection()->exec($sql);
+
+            $this->getConnection()->exec(
+                "UPDATE `course_task` AS ck, activity AS a SET ck.`activityId` = a.`id`
+               WHERE a.`migrateExerciseId` = ck.`migrateExerciseId` AND  ck.type = 'exercise' AND  ck.`activityId` = 0
+              "
+            );
             return;
         }
 
@@ -71,8 +80,6 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
         "
         );
 
-        $sql = "UPDATE activity AS a, testpaper_v8 AS t SET a.mediaId = t.id WHERE a.migrateExerciseId = t.migrateTestId AND t.type = 'exercise' AND a.mediaType = 'exercise';";
-        $this->getConnection()->exec($sql);
     }
 
     protected function exerciseToCourseTask()
@@ -125,12 +132,6 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
             FROM (SELECT  ee.id AS eexerciseId, ee.`copyId` AS ecopyId , ce.*
               FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid limit 0, {$this->perPageCount}) lesson
                   WHERE lesson.eexerciseId NOT IN (SELECT migrateExerciseId FROM course_task WHERE migrateExerciseId IS NOT NULL );
-          "
-        );
-
-        $this->getConnection()->exec(
-            "UPDATE `course_task` AS ck, activity AS a SET ck.`activityId` = a.`id`
-           WHERE a.`migrateExerciseId` = ck.`migrateExerciseId` AND  ck.type = 'exercise' AND  ck.`activityId` = 0
           "
         );
     }

@@ -24,7 +24,7 @@ class Lesson2TestpaperActivityMigrate extends AbstractMigrate
         }
 
         if (!$this->isFieldExist('activity_testpaper', 'migrateLessonId')) {
-            $this->exec("alter table `activity_testpaper` add `migrateLessonId` int(10) ;");
+            $this->exec("alter table `activity_testpaper` add `migrateLessonId` int(10) default 0;");
         }
 
         $nextPage = $this->insertTestpaperActivity($page);

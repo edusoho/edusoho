@@ -44,7 +44,15 @@ class Lesson2CourseTaskMigrate extends AbstractMigrate
         }
 
         if (!$this->isFieldExist('course_task', 'migrateLessonId')) {
-            $this->exec("alter table `course_task` add `migrateLessonId` int(10);");
+            $this->exec("alter table `course_task` add `migrateLessonId` int(10) default 0;");
+        }
+
+        if (!$this->isIndexExist('course_task', 'migrateLessonIdAndType')) {
+            $this->exec("alter table `course_task` add index migrateLessonIdAndType (`migrateLessonId`, `type`)");
+        }
+
+        if (!$this->isIndexExist('course_task', 'migrateLessonIdAndActivityId')) {
+            $this->exec("alter table `course_task` add index migrateLessonIdAndActivityId (`migrateLessonId`, `activityId`)");
         }
 
         $countSql = 'SELECT count(*) from `course_lesson` WHERE `id` NOT IN (SELECT migrateLessonId FROM `course_task`)';
