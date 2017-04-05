@@ -105,36 +105,6 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertEquals(array_shift($classrooms), $classroom);
     }
 
-    public function testCountMobileVerifiedMembersByClassroomId()
-    {
-        $textClassroom = array(
-            'title' => 'test1',
-        );
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
-
-        $this->getClassroomService()->publishClassroom($classroom['id']);
-
-        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
-
-        $user = $this->createUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
-        $this->getUserService()->changeMobile($currentUser['id'], '13456520930');
-        $this->getClassroomService()->becomeStudent($classroom['id'], $currentUser['id']);
-        $result = $this->getClassroomService()->countMobileVerifiedMembersByClassroomId($classroom['id'], 0);
-        $this->assertEquals(1, $result);
-        $this->getUserService()->lockUser($currentUser['id']);
-        $result = $this->getClassroomService()->countMobileVerifiedMembersByClassroomId($classroom['id'], 1);
-        $this->assertEquals(0, $result);
-        $this->getUserService()->unlockUser($currentUser['id']);
-        $result = $this->getClassroomService()->countMobileVerifiedMembersByClassroomId($classroom['id'], 1);
-        $this->assertEquals(1, $result);
-        $this->getClassroomService()->lockStudent($classroom['id'], $currentUser['id']);
-        $result = $this->getClassroomService()->countMobileVerifiedMembersByClassroomId($classroom['id'], 1);
-        $this->assertEquals(0, $result);
-    }
-
     public function testcountClassrooms()
     {
         $textClassroom1 = array(

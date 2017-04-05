@@ -695,11 +695,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
     }
 
-    public function countMobileVerifiedMembersByClassroomId($classroomId, $locked = 0)
-    {
-        return $this->getClassroomMemberDao()->countMobileVerifiedMembersByClassroomId($classroomId, $locked);
-    }
-
     public function countMobileFilledMembersByClassroomId($classroomId, $locked = 0)
     {
         return $this->getClassroomMemberDao()->countMobileFilledMembersByClassroomId($classroomId, $locked);
