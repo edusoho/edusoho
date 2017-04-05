@@ -8,7 +8,7 @@ class SessionHandlerFactory
 {
     public static function getSessionHandler($biz, ContainerInterface $container)
     {
-        if ($container->hasParameter('cache_options') && !empty($biz['cache.cluster'])) {
+        if ($container->hasParameter('redis_host')) {
             return $container->get('session.handler.redis');
         }
 
