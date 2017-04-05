@@ -33,7 +33,7 @@ class TestpaperMigrate extends AbstractMigrate
             ");
         }
 
-        if (!$this->isIndexExist('testpaper_v8', 'courseSetId', 'courseSetId')) {
+        if (!$this->isIndexExist('testpaper_v8', 'courseSetId')) {
             $this->getConnection()->exec("
                 ALTER TABLE testpaper_v8 ADD INDEX courseSetId (`courseSetId`);
             ");
@@ -58,7 +58,7 @@ class TestpaperMigrate extends AbstractMigrate
             ");
         }
 
-        if (!$this->isIndexExist('testpaper_item_v8', 'testId', 'testId')) {
+        if (!$this->isIndexExist('testpaper_item_v8', 'testId')) {
             $this->getConnection()->exec("
                 ALTER TABLE testpaper_item_v8 ADD INDEX testId (`testId`);
             ");

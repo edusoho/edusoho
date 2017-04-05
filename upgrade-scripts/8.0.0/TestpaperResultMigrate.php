@@ -37,7 +37,7 @@ class TestpaperResultMigrate extends AbstractMigrate
             ");
         }
 
-        if (!$this->isIndexExist('testpaper_result_v8', 'testId', 'testId')) {
+        if (!$this->isIndexExist('testpaper_result_v8', 'testId')) {
             $this->getConnection()->exec("
                 ALTER TABLE testpaper_result_v8 ADD INDEX testId (`testId`);
             ");

@@ -79,7 +79,6 @@ class CourseMigrate extends AbstractMigrate
         if (!$this->isIndexExist('course_v8', 'courseSetId')) {
             $this->getConnection()->exec("
                 ALTER TABLE course_v8 ADD INDEX courseSetId (`courseSetId`);
-                ALTER TABLE course_v8 ADD INDEX courseSetId_status (`courseSetId`,`status`);
             ");
         }
 
