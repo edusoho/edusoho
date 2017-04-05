@@ -4,7 +4,6 @@ namespace AppBundle\Component\Payment\Wxpay;
 
 use AppBundle\Component\Payment\Request;
 use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\DependencyInjection\SimpleXMLElement;
 
 class WxpayRequest extends Request
 {
@@ -13,7 +12,6 @@ class WxpayRequest extends Request
 
     public function form()
     {
-        $params = array();
         $form['action'] = $this->unifiedOrderUrl.'?_input_charset=utf-8';
         $form['method'] = 'post';
         $form['params'] = $this->convertParams($this->params);
@@ -21,11 +19,16 @@ class WxpayRequest extends Request
         return $form;
     }
 
-    public function unifiedOrder()
+    public function unifiedOrder($openid = null)
     {
-        $params = $this->convertParams($this->params);
+        $params = $this->convertParams($this->params, $openid);
         $xml = $this->toXml($params);
         $response = $this->postRequest($this->unifiedOrderUrl, $xml);
+        if (!$response) {
+            throw new \RuntimeException('xml数据异常！');
+        }
+        $response = $this->fromXml($response);
+        $this->checkSign($response);
 
         return $response;
     }
@@ -33,16 +36,19 @@ class WxpayRequest extends Request
     public function orderQuery()
     {
         $params = $this->params;
+        $order = $this->getOrderService()->getOrderBySn($params['orderSn']);
         $converted = array();
-        $converted['appid'] = $this->options['key'];
+        $converted['appid'] = $this->options['appid'];
         $settings = $this->getSettingService()->get('payment');
         $converted['mch_id'] = $settings['wxpay_account'];
         $converted['nonce_str'] = $this->getNonceStr();
-        $converted['out_trade_no'] = $params['orderSn'];
-        $converted['sign'] = strtoupper($this->signParams($converted));
+        $converted['out_trade_no'] = $order['token'];
+        $converted['sign'] = $this->signParams($converted);
 
         $xml = $this->toXml($converted);
         $response = $this->postRequest($this->orderQueryUrl, $xml);
+        $response = $this->fromXml($response);
+        $this->checkSign($response);
 
         return $response;
     }
@@ -56,11 +62,10 @@ class WxpayRequest extends Request
 
     public function signParams($params)
     {
-        unset($params['sign_type']);
-        unset($params['sign']);
+        unset($params['sign_type'], $params['sign']);
 
         ksort($params);
-
+        reset($params);
         $sign = '';
 
         foreach ($params as $key => $value) {
@@ -72,28 +77,48 @@ class WxpayRequest extends Request
         }
 
         $sign = substr($sign, 0, -1);
-        $sign .= '&key='.$this->options['secret'];
+        $sign .= '&key='.$this->options['key'];
 
-        return md5($sign);
+        return strtoupper(md5($sign));
     }
 
-    protected function convertParams($params)
+    /**
+     * 检测签名.
+     *
+     * @throws \RuntimeException
+     */
+    public function checkSign($params)
+    {
+        if (empty($params['sign'])) {
+            throw new \RuntimeException('签名错误！');
+        }
+
+        $sign = $this->signParams($params);
+
+        if ($params['sign'] == $sign) {
+            return true;
+        }
+
+        throw new \RuntimeException('签名错误！');
+    }
+
+    protected function convertParams($params, $openid = null)
     {
         $converted = array();
-
-        $converted['appid'] = $this->options['key'];
+        $order = $this->getOrderService()->getOrderBySn($params['orderSn']);
+        $converted['openid'] = $openid;
+        $converted['appid'] = $this->options['appid'];
         $converted['attach'] = '支付';
-        $converted['body'] = mb_substr($this->filterText($params['title']), 0, 42, 'utf-8');
-        $settings = $this->getSettingService()->get('payment');
-        $converted['mch_id'] = $settings['wxpay_account'];
+        $converted['body'] = mb_substr($this->filterText($params['title']), 0, 49, 'utf-8');
+        $converted['mch_id'] = $this->options['account'];
         $converted['nonce_str'] = $this->getNonceStr();
         $converted['notify_url'] = $params['notifyUrl'];
-        $converted['out_trade_no'] = $params['orderSn'];
+        $converted['out_trade_no'] = $order['token'];
         $converted['spbill_create_ip'] = $this->getClientIp();
         $converted['total_fee'] = $this->getAmount($params['amount']);
-        $converted['trade_type'] = 'NATIVE';
+        $converted['trade_type'] = $this->options['isMicroMessenger'] ? 'JSAPI' : 'NATIVE';
         $converted['product_id'] = $params['orderSn'];
-        $converted['sign'] = strtoupper($this->signParams($converted));
+        $converted['sign'] = $this->signParams($converted);
 
         return $converted;
     }
@@ -114,18 +139,57 @@ class WxpayRequest extends Request
             $amount = $amount.'00';
         }
 
-        return intval($amount);
+        return (int) ($amount);
     }
 
-    private function toXml($array, $xml = false)
+    /**
+     * 获取jsapi支付的参数.
+     *
+     * @param array $UnifiedOrderResult 统一支付接口返回的数据
+     *
+     * @throws \RuntimeException
+     *
+     * @return json数据，可直接填入js函数作为参数
+     */
+    public function getJsApiParameters($UnifiedOrderResult)
     {
-        $simxml = new simpleXMLElement('<!--?xml version="1.0" encoding="utf-8"?--><root></root>');
+        if (!array_key_exists('appid', $UnifiedOrderResult)
+            || !array_key_exists('prepay_id', $UnifiedOrderResult)
+            || $UnifiedOrderResult['prepay_id'] == ''
+        ) {
+            throw new \RuntimeException('参数错误');
+        }
+        $jsApi = array();
+        $timeStamp = time();
+        $jsApi['appId'] = $UnifiedOrderResult['appid'];
+        $jsApi['timeStamp'] = "$timeStamp";
+        $jsApi['nonceStr'] = $this->getNonceStr();
+        $jsApi['package'] = 'prepay_id='.$UnifiedOrderResult['prepay_id'];
+        $jsApi['signType'] = 'MD5';
+        $jsApi['paySign'] = $this->signParams($jsApi);
 
-        foreach ($array as $k => $v) {
-            $simxml->addChild($k, $v);
+        return json_encode($jsApi);
+    }
+
+    private function toXml($array)
+    {
+        if (!is_array($array)
+            || count($array) <= 0
+        ) {
+            throw new \InvalidArgumentException('数组数据异常！');
         }
 
-        return $simxml->saveXML();
+        $xml = '<xml>';
+        foreach ($array as $key => $val) {
+            if (is_numeric($val)) {
+                $xml .= '<'.$key.'>'.$val.'</'.$key.'>';
+            } else {
+                $xml .= '<'.$key.'><![CDATA['.$val.']]></'.$key.'>';
+            }
+        }
+        $xml .= '</xml>';
+
+        return $xml;
     }
 
     private function getNonceStr($length = 32)
@@ -168,23 +232,23 @@ class WxpayRequest extends Request
         return str_replace(array('#', '%', '&', '+'), array('＃', '％', '＆', '＋'), $text);
     }
 
-    private function getPaymentType()
-    {
-        return empty($this->options['type']) ? 'direct' : $this->options['type'];
-    }
-
-    protected function setting($name, $default = null)
-    {
-        return $this->get('web.twig.extension')->getSetting($name, $default);
-    }
-
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();
     }
 
+    protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User:TokenService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order:OrderService');
+    }
+
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->getServiceKernel()->createService('System:SettingService');
     }
 }
