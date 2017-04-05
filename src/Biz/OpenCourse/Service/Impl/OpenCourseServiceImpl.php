@@ -72,7 +72,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     protected function tryCreateCourse()
     {
         $user = $this->getCurrentUser();
-        if (!$user->isLogin() || !($user->isTeacher() && $user->isAdmin() && $user->isSuperAdmin())) {
+        if (!$user->isLogin() || !($user->isTeacher() || $user->isAdmin() || $user->isSuperAdmin())) {
             throw $this->createAccessDeniedException('Unauthorized');
         }
     }
