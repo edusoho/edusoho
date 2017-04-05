@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "58ace0ae89f737ebf66c47cb4bedeaef",
+    "content-hash": "747622b4809e7366c0855bb0cc4ed736",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -361,26 +361,26 @@
         },
         {
             "name": "codeages/plugin-bundle",
-            "version": "v0.1.7",
+            "version": "v0.1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/plugin-bundle.git",
-                "reference": "9e212c1a5ce98464ae73250df4bb0717732277d0"
+                "reference": "2572a433e5677b6faf9d4b3de3890856e00cd892"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/9e212c1a5ce98464ae73250df4bb0717732277d0",
-                "reference": "9e212c1a5ce98464ae73250df4bb0717732277d0",
+                "url": "https://files.phpcomposer.com/files/codeages/plugin-bundle/2572a433e5677b6faf9d4b3de3890856e00cd892.zip",
+                "reference": "2572a433e5677b6faf9d4b3de3890856e00cd892",
                 "shasum": ""
             },
             "require": {
-                "codeages/biz-framework": "^0.1.7 || ^0.2",
+                "codeages/biz-framework": "^0.1.7 || ^0.2 || ^0.3",
                 "php": "^5.3.3 || ^7.0",
                 "symfony/framework-bundle": "^2.8 || ^3.0",
                 "symfony/twig-bundle": "^2.8 || ^3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.8 || ~5.0",
+                "phpunit/phpunit": "~4.8 || ~5.7",
                 "symfony/browser-kit": "^2.8 || ^3.0",
                 "symfony/phpunit-bridge": "~3.2"
             },
@@ -407,7 +407,7 @@
                 "plugin",
                 "theme"
             ],
-            "time": "2017-02-27T08:46:09+00:00"
+            "time": "2017-04-01T03:50:40+00:00"
         },
         {
             "name": "codeages/rate-limiter",

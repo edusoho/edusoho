@@ -70,7 +70,15 @@
           </tr>
         {% endfor %}
         {% else %}
-          <tr><td colspan="20"><div class="empty">{{'暂无在教的公开课'|trans}}</div></td></tr>
+          <tr>
+            <td colspan="20">
+              <div class="empty">
+                <a class="link-primary"  href="{{ path('course_set_manage_create') }}" target="_blank">
+                  {{'你还没有在教的公开课哦, 赶快去创建吧!'|trans}}
+                </a>
+              </div>
+            </td>
+          </tr>
        {% endif %}
         
       </tbody>
