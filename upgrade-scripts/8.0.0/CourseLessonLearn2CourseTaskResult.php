@@ -54,7 +54,7 @@ class CourseLessonLearn2CourseTaskResult extends AbstractMigrate
                 `userId`,
                 case when `status` = 'finished' then 'finish' else 'start' end AS 'status',
                 `finishedTime`,
-                `updateTime`,
+                `startTime`,
                 `updateTime`,
                 `learnTime`,
                 `watchTime`
