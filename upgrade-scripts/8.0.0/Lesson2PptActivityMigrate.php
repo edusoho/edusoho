@@ -22,7 +22,7 @@ class Lesson2PptActivityMigrate extends AbstractMigrate
         }
 
         if (!$this->isFieldExist('activity_ppt', 'migrateLessonId')) {
-            $this->exec('alter table `activity_ppt` add `migrateLessonId` int(10) ;');
+            $this->exec('alter table `activity_ppt` add `migrateLessonId` int(10) default 0;');
         }
 
         $countSql = "SELECT count(*) from `course_lesson` WHERE `type`='ppt' and `id` NOT IN (SELECT migrateLessonId FROM `activity_ppt`)";

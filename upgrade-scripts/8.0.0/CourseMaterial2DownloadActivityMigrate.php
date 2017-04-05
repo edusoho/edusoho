@@ -49,7 +49,7 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
         }
 
         if (!$this->isFieldExist('activity_download', 'migrateLessonId')) {
-            $this->exec('alter table `activity_download` add `migrateLessonId` int(10) ;');
+            $this->exec('alter table `activity_download` add `migrateLessonId` int(10) default 0;');
         }
 
         if (!$this->isFieldExist('course_material', 'courseSetId')) {

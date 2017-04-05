@@ -14,7 +14,7 @@ class CourseMigrate extends AbstractMigrate
                 `expiryMode` varchar(32) DEFAULT NULL COMMENT 'days, date',
                 `expiryDays` int(11) DEFAULT NULL,
                 `expiryStartDate` int(11) DEFAULT NULL,
-                `expiryEndDate` int(11) DEFAULT NULL,
+                `expiryEndDate` int(11) unsigned DEFAULT NULL ,
                 `summary` text,
                 `goals` text,
                 `audiences` text,

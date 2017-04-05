@@ -30,7 +30,11 @@ class Lesson2ActivityMigrate extends AbstractMigrate
         }
 
         if (!$this->isFieldExist('activity', 'migrateLessonId')) {
-            $this->exec("alter table `activity` add `migrateLessonId` int(10);");
+            $this->exec("alter table `activity` add `migrateLessonId` int(10) default 0;");
+        }
+
+        if (!$this->isIndexExist('activity', 'migrateLessonIdAndType')) {
+            $this->exec("alter table `activity` add index migrateLessonIdAndType (`migrateLessonId`, `mediaType`)");
         }
 
         $countSql = 'SELECT count(*) from `course_lesson` WHERE `id` NOT IN (SELECT migrateLessonId FROM `activity`)';

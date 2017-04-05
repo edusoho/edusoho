@@ -22,7 +22,7 @@ class Lesson2DocActivityMigrate extends AbstractMigrate
         }
 
         if (!$this->isFieldExist('activity_doc', 'migrateLessonId')) {
-            $this->exec("alter table `activity_doc` add `migrateLessonId` int(10) ;");
+            $this->exec("alter table `activity_doc` add `migrateLessonId` int(10) default 0;");
         }
 
         $countSql = "SELECT count(*) from `course_lesson` WHERE `type`='document' and `id` NOT IN (SELECT migrateLessonId FROM `activity_doc`)";
