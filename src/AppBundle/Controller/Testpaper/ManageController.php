@@ -255,7 +255,9 @@ class ManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $userIds = ArrayToolkit::column($testpaperResults, 'userId');
+        $studentIds = ArrayToolkit::column($testpaperResults, 'userId');
+        $teacherIds = ArrayToolkit::column($testpaperResults, 'checkTeacherId');
+        $userIds = array_merge($studentIds, $teacherIds);
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('testpaper/manage/result-list.html.twig', array(
