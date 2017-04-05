@@ -13,9 +13,9 @@ class EventController extends BaseController
         if (!$currentUser->isLogin()) {
             return $this->createJsonResponse('fail');
         }
-        $data        = $request->request->all();
-        $eventName   = $request->request->get('eventName');
-        $subjectId   = $request->request->get('subjectId');
+        $data = $request->request->all();
+        $eventName = $request->request->get('eventName');
+        $subjectId = $request->request->get('subjectId');
         $subjectType = $request->request->get('subjectType');
 
         $subject = $this->getEventService()->getEventSubject($subjectType, $subjectId);
