@@ -115,16 +115,3 @@ $("select[name='language']").change(function () {
   // Cookie.set("locale", $('select[name=language]').val(), { 'path': '/' });
   $("select[name='language']").parents('form').trigger('submit');
 });
-
-$('body').on('event-report', function(e, name){
-  let $obj = $(name);
-  if ($obj.length) {
-    var postData = $obj.data();
-    $.post($obj.data('url'), postData)
-  }
-})
-
-$('body').trigger('event-report','#event-report');
-
-
-
