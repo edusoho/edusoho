@@ -112,6 +112,10 @@ export const deleteTask = () => {
         notify('success', '删除成功');
         $(evt.target).parents('.task-manage-item').remove();
         sortablelist('#sortable-list');
+        console.log($('#sortable-list').children('li').length);
+        if($('#sortable-list').children('li').length < 1 && $('.js-task-empty').hasClass('hidden') ) {
+            $('.js-task-empty').removeClass('hidden');
+        }
       } else {
         notify('danger', '删除失败：' + data.message);
       }
