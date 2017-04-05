@@ -1,5 +1,5 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
-{% do script(['libs/bootstrap-datetimepicker.js','app/js/activity-manage/live/index.js']) %}
+{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js','app/js/activity-manage/live/index.js']) %}
 
 {% block activity_content %}
   <div class="form-group expiry-day-js">
@@ -35,7 +35,6 @@
     </div>
   </div>
 {% endblock %}
-
 
 {% block activity_finish %}
   <div class="form-group">
