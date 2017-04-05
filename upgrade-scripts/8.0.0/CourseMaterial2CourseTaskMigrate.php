@@ -80,5 +80,6 @@ class CourseMaterial2CourseTaskMigrate extends AbstractMigrate
             "
           UPDATE `course_material_v8` cm , `activity`  ay SET  cm.lessonId = ay.id WHERE  cm.`lessonId` = ay.`migrateLessonId` AND cm.`source` = 'coursematerial'  AND ay.`mediaType` = 'download' and cm.lessonId > 0;
         ");
+
     }
 }
