@@ -1224,17 +1224,17 @@ class EduCloudController extends BaseController
         $emailStatus = array_merge($emailStatus, $sign);
 
         if ($emailStatus['status'] != 'error' && !empty($dataUserPosted)) {
-            $this->getSettingService()->set('cloud_email', $emailStatus);
+            $this->getSettingService()->set('cloud_email_crm', $emailStatus);
         }
 
-        $emailStatus = $this->getSettingService()->get('cloud_email', array());
+        $emailStatus = $this->getSettingService()->get('cloud_email_crm', array());
         return $emailStatus;
     }
 
     protected function getSign($operation)
     {
         $api         = CloudAPIFactory::create('root');
-        $settings    = $this->getSettingService()->get('cloud_email', array());
+        $settings    = $this->getSettingService()->get('cloud_email_crm', array());
         $result      = array();
         $sign        = array();
         $emailStatus = array();
