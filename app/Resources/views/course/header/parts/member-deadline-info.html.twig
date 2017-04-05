@@ -1,13 +1,15 @@
 {#<li class="mll">#}
   {% if member.role == 'teacher' %}
-    {% if course.expiryMode == 'days' %}
+    {% if course.expiryMode == 'forever' %}
+      {{ '永久有效'|trans }}
+    {% elseif course.expiryMode == 'days' %}
       共{{ course.expiryDays }}天
     {% else %}
       {{ course.expiryEndDate|date('Y-m-d') }}
     {% endif %}
   {% else %}
     {% if course.expiryMode == 'forever' %}
-      永久有效
+      {{ '永久有效'|trans }}
     {% elseif course.expiryMode in ['end_date', 'date'] %}
       {{ course.expiryEndDate|date('Y-m-d') }}
       {% if date('now').timestamp > member.deadline %}
