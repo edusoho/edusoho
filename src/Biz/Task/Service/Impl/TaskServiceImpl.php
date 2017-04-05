@@ -36,7 +36,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields = array_filter(
             $fields,
             function ($value) {
-                if (is_array($value) || ctype_digit((string) $value)) {
+                if (is_array($value) || ctype_digit((string)$value)) {
                     return true;
                 }
 
@@ -460,8 +460,10 @@ class TaskServiceImpl extends BaseService implements TaskService
         $this->tryTakeTask($taskId);
 
         if (!$this->isFinished($taskId)) {
-            throw $this->createAccessDeniedException("can not finish task #{
-        $taskId}.");
+            throw $this->createAccessDeniedException(
+                "can not finish task #{
+        $taskId}."
+            );
         }
 
         return $this->finishTaskResult($taskId);
@@ -764,13 +766,22 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResults = $this->getTaskResultService()->findUserProgressingTaskResultByCourseId($courseId);
 
         if (empty($taskResults)) {
-            $minSeq = $this->getTaskDao()->getMinSeqByCourseId($courseId);
-            $toLearnTask = $this->getTaskDao()->getByCourseIdAndSeq($courseId, $minSeq);
-            $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($toLearnTask['id']);
-            if (!empty($taskResult) && $taskResult['status'] === 'finish') {
+            $tasks = $this->getTaskDao()->findByCourseId($courseId);
+            $taskResults = $this->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
+
+            $finishedTaskIds = ArrayToolkit::column($taskResults, 'courseTaskId');
+
+            $tasks = array_filter(
+                $tasks,
+                function ($task) use ($finishedTaskIds) {
+                    return !in_array($task['id'], $finishedTaskIds);
+                }
+            );
+            if (empty($tasks)) {
                 //任务已全部完成
                 return array();
             }
+            $toLearnTask = array_shift($tasks);
         } else {
             $latestTaskResult = array_shift($taskResults);
             $latestLearnTask = $this->getTask($latestTaskResult['courseTaskId']); //获取最新学习未学完的课程
