@@ -37,7 +37,7 @@ class Lesson2CourseTaskMigrate extends AbstractMigrate
             );
         }
 
-        if (!$this->isIndexExist('course_task', 'courseId', 'courseId')) {
+        if (!$this->isIndexExist('course_task', 'courseId')) {
             $this->getConnection()->exec("
                 ALTER TABLE course_task ADD INDEX courseId (`courseId`);
             ");
