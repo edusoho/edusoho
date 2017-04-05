@@ -406,9 +406,9 @@ class TagServiceTest extends BaseTestCase
     {
         $ownerId = 1;
         $fields = array(
-            'tagId'     => 1,
+            'tagId' => 1,
             'ownerType' => 'course',
-            'ownerId'   => $ownerId,
+            'ownerId' => $ownerId,
         );
 
         $this->getTagService()->addTagOwnerRelation($fields);
