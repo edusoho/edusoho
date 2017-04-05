@@ -2,6 +2,7 @@
 
 namespace AppBundle\Extensions\DataTag;
 
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
 abstract class BaseDataTag
@@ -28,6 +29,13 @@ abstract class BaseDataTag
         }
 
         return $conditions;
+    }
+
+    protected function checkArguments(array $arguments, $requires)
+    {
+        if (!ArrayToolkit::requireds($arguments, $requires)) {
+            throw new \InvalidArgumentException('missing argument');
+        }
     }
 
     protected function getCurrentUser()
