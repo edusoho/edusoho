@@ -37,7 +37,6 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
 
             'course.task.delete' => 'onTaskDelete',
             'course.task.finish' => 'onTaskFinish',
-            'course.teachers.update' => 'onLiveCourseTeachersJoin',
 
             'course.teachers.create' =>'onCourseTeachersCreate',
             'course.teachers.delete' =>'onCourseTeachersDelete',
