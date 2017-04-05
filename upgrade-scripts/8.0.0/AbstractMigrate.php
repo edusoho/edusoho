@@ -78,7 +78,7 @@ abstract class AbstractMigrate
 
     protected function getStart($page)
     {
-        return ($page-1) * $this->perPageCount;
+        return ($page - 1) * $this->perPageCount;
     }
 
     abstract public function update($page);

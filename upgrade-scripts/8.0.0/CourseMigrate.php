@@ -13,8 +13,8 @@ class CourseMigrate extends AbstractMigrate
                 `learnMode` varchar(32) DEFAULT NULL COMMENT 'lockMode, freeMode',
                 `expiryMode` varchar(32) DEFAULT NULL COMMENT 'days, date',
                 `expiryDays` int(11) DEFAULT NULL,
-                `expiryStartDate` int(11) DEFAULT NULL,
-                `expiryEndDate` int(11) unsigned DEFAULT NULL ,
+                `expiryStartDate` int(10) unsigned DEFAULT NULL,
+                `expiryEndDate` int(10) unsigned DEFAULT NULL,
                 `summary` text,
                 `goals` text,
                 `audiences` text,
@@ -76,6 +76,18 @@ class CourseMigrate extends AbstractMigrate
             $result = $this->getConnection()->exec($sql);
         }
 
+        if (!$this->isIndexExist('course_v8', 'courseSetId')) {
+            $this->getConnection()->exec("
+                ALTER TABLE course_v8 ADD INDEX courseSetId (`courseSetId`);
+            ");
+        }
+
+        if (!$this->isIndexExist('course_v8', 'courseSetId_status')) {
+            $this->getConnection()->exec("
+                ALTER TABLE course_v8 ADD INDEX courseSetId_status (`courseSetId`,`status`);
+            ");
+        }
+
         $nextPage = $this->insertData($page);
         if (!empty($nextPage)) {
             return $nextPage;
@@ -86,7 +98,7 @@ class CourseMigrate extends AbstractMigrate
 
     private function updateDate()
     {
-        $sql = "UPDATE `course_v8` ce, `course_set_v8` cs  SET ce.`materialNum` = cs.`materialNum`  WHERE ce.`id` = cs.`id`";
+        $sql = 'UPDATE `course_v8` ce, `course_set_v8` cs  SET ce.`materialNum` = cs.`materialNum`  WHERE ce.`id` = cs.`id`';
         $result = $this->getConnection()->exec($sql);
 
         $sql = "UPDATE `course_v8` c2, `course` c set
@@ -269,6 +281,7 @@ class CourseMigrate extends AbstractMigrate
               ,`maxRate`
           FROM `course` where `id` not in (select `id` from `course_v8`) order by id limit 0, {$this->perPageCount};";
         $result = $this->getConnection()->exec($sql);
+
         return $page + 1;
     }
 }
