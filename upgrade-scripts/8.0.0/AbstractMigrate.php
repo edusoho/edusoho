@@ -49,9 +49,9 @@ abstract class AbstractMigrate
         return empty($result) ? false : true;
     }
 
-    protected function isIndexExist($table, $filedName, $indexName)
+    protected function isIndexExist($table, $indexName)
     {
-        $sql = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
+        $sql = "show index from `{$table}` where Key_name = '{$indexName}';";
         $result = $this->getConnection()->fetchAssoc($sql);
 
         return empty($result) ? false : true;
@@ -78,7 +78,7 @@ abstract class AbstractMigrate
 
     protected function getStart($page)
     {
-        return ($page-1) * $this->perPageCount;
+        return ($page - 1) * $this->perPageCount;
     }
 
     abstract public function update($page);

@@ -25,6 +25,18 @@ class CourseLessonLearn2CourseTaskResult extends AbstractMigrate
             );
         }
 
+        if (!$this->isIndexExist('course_task_result', 'courseId_userId')) {
+            $this->getConnection()->exec("
+                ALTER TABLE course_task_result ADD INDEX courseId_userId (`courseId`,`userId`);
+            ");
+        }
+
+        if (!$this->isIndexExist('course_task_result', 'courseTaskId_userId')) {
+            $this->getConnection()->exec("
+                ALTER TABLE course_task_result ADD INDEX courseTaskId_userId (`courseTaskId`,`userId`);
+            ");
+        }
+
         $countSql = 'SELECT count(*) FROM `course_lesson_learn` where `id` not in (select `id` from `course_task_result`)';
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
@@ -59,10 +71,10 @@ class CourseLessonLearn2CourseTaskResult extends AbstractMigrate
                 `learnTime`,
                 `watchTime`
             from `course_lesson_learn` where id not in (select id from `course_task_result`) 
-            order by id limit 0, {$this->perPageCount};
+            order by id limit 0, 100000;
             "
         );
 
-        return $page+1;
+        return $page + 1;
     }
 }

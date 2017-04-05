@@ -17,7 +17,7 @@ class Lesson2AudioActivityMigrate extends AbstractMigrate
         }
 
         if (!$this->isFieldExist('activity_audio', 'migrateLessonId')) {
-            $this->exec("alter table `activity_audio` add `migrateLessonId` int(10) ;");
+            $this->exec("alter table `activity_audio` add `migrateLessonId` int(10) default 0;");
         }
 
         $countSql = "SELECT count(*) from `course_lesson` WHERE type ='audio' and `id` NOT IN (SELECT migrateLessonId FROM `activity_audio`)";

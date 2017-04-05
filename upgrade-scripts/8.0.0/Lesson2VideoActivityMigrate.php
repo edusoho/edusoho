@@ -20,7 +20,7 @@ class Lesson2VideoActivityMigrate extends AbstractMigrate
             );
         }
         if (!$this->isFieldExist('activity_video', 'migrateLessonId')) {
-            $this->exec("alter table `activity_video` add `migrateLessonId` int(10) ;");
+            $this->exec("alter table `activity_video` add `migrateLessonId` int(10) default 0;");
         }
 
         $countSql = "SELECT count(*) from `course_lesson` WHERE type ='video' and `id` NOT IN (SELECT migrateLessonId FROM `activity_video`)";

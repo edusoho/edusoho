@@ -22,7 +22,7 @@ class Lesson2FlashActivityMigrate extends AbstractMigrate
         }
 
         if (!$this->isFieldExist('activity_flash', 'migrateLessonId')) {
-            $this->exec("alter table `activity_flash` add `migrateLessonId` int(10) ;");
+            $this->exec("alter table `activity_flash` add `migrateLessonId` int(10) default 0;");
         }
 
         $countSql = "SELECT count(*) from `course_lesson` WHERE `type`='flash' and `id` NOT IN (SELECT migrateLessonId FROM `activity_flash`)";
