@@ -124,23 +124,42 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $this->pushJoinLiveCourseMember($user, $member);
     }
 
-    protected function getAvatarFilePath($avatar)
+    protected function getFileUrl($path, $default = '')
     {
-        if (empty($avatar)) {
-            return $_SERVER['HTTP_HOST'].'/assets/img/default/avatar.png';
+        if (empty($path)) {
+            if (empty($default)) {
+                return '';
+            }
+            $path = $this->getHttpHost().'/assets/img/default/'.$default;
+            return $path;
+        };
+        
+        if (strpos($path, $this->getHttpHost().'://') !== false) {
+            return $path;
         }
-        return $_SERVER['HTTP_HOST'].'/files'.substr($avatar, 8);
+        $path = str_replace('public://', '', $path);
+        $path = str_replace('files/', '', $path);
+        $path = $this->getHttpHost().'/files/'.ltrim($path, '/');
+
+        return $path;
+    }
+
+    protected function getHttpHost()
+    {
+        $schema = (!empty($_SERVER['HTTPS']) && 'off' !== strtolower($_SERVER['HTTPS'])) ? 'https' : 'http';
+
+        return $schema."://{$_SERVER['HTTP_HOST']}";
     }
 
     protected function pushJoinLiveCourseMember($user, $member)
     {
         $result['clientName'] = $user['nickname'];
         $result['clientId'] = $user['id'];
-        $result['avatar'] = $this->getAvatarFilePath($user['smallAvatar']);
+        $result['avatar'] = $this->getFileUrl($user['smallAvatar'], 'avatar.png');
         $result['role'] = $member['role'];
         try {
             $api = CloudAPIFactory::create('leaf');
-            $result = $api->post('/v1/lives/room_members', array($result));
+            $result = $api->post('/lives/room_members', array($result));
         } catch (\RuntimeException $e) {
             throw new \RuntimeException(ServiceKernel::instance()->trans('发送失败！'));
         }
@@ -150,7 +169,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         try {
             $api = CloudAPIFactory::create('leaf');
-            $result = $api->delete('/v1/lives/room_members', array('clientId' => $userId));
+            $result = $api->delete('/lives/room_members', array('clientId' => $userId));
         } catch (\RuntimeException $e) {
             throw new \RuntimeException(ServiceKernel::instance()->trans('发送失败！'));
         }

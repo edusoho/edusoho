@@ -8,16 +8,6 @@ use AppBundle\Common\ArrayToolkit;
 
 class CourseCloudFiles extends BaseProvider
 {
-    // public function filter($res)
-    // {
-    //     $filteredRes = array();
-
-    //     $filteredRes['id'] = $res['id'];
-    //     $filteredRes['title'] = $res['title'];
-
-    //     return $filteredRes;
-    // }
-
     public function get(Request $request)
     {
         $start = $request->query->get('start', 0);

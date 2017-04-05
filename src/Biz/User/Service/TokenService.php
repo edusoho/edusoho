@@ -42,5 +42,5 @@ interface TokenService
 
     public function getTokenByType($type);
 
-    public function getTokenByToken($token);
+    public function getByToken($token);
 }

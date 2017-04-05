@@ -8,31 +8,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CourseMember extends BaseProvider
 {
-    // public function filter($res)
-    // {
-    //     $filteredRes = array();
-
-    //     $filteredRes['id'] = $res['id'];
-    //     $filteredRes['title'] = $res['title'];
-    //     $filteredRes['content'] = $this->filterHtml($res['body']);
-    //     $filteredRes['tags'] = empty($res['tags']) ? array() : ArrayToolkit::column($res['tags'], 'name');
-    //     $filteredRes['category'] = isset($res['category']['name']) ? $res['category']['name'] : '';
-    //     $filteredRes['hitNum'] = $res['hits'];
-    //     $filteredRes['postNum'] = $res['postNum'];
-    //     $filteredRes['upsNum'] = $res['upsNum'];
-    //     $filteredRes['createdTime'] = date('c', $res['createdTime']);
-    //     $filteredRes['updatedTime'] = date('c', $res['updatedTime']);
-
-    //     return $filteredRes;
-    // }
-
     public function get(Request $request)
     {
         $token = $request->query->get('token');
         $courseId = $request->query->get('courseId');
         $this->checkToken($token);
 
-        $userToken = $this->getTokenService()->getTokenByToken($token);
+        $userToken = $this->getTokenService()->getByToken($token);
         if ($userToken['data'] != $courseId) {
             throw new \RuntimeException(sprintf('只能查看课程id为%s的成员', $userToken['data']));
         }
@@ -72,7 +54,7 @@ class CourseMember extends BaseProvider
         $users = ArrayToolkit::index($users, 'id');
         foreach ($sourceCourseMembers as $userId => $sourceCourseMember) {
             $courseMember['clientName'] = $users[$userId]['nickname'];
-            $courseMember['avatar'] = $this->getFileUrl($users[$userId]['smallAvatar']);
+            $courseMember['avatar'] = $this->getFileUrl($users[$userId]['smallAvatar'], 'avatar.png');
             $courseMember['clientId'] = $userId;
             $courseMember['role'] = $sourceCourseMember['role'];
             $result['data'][] = $courseMember;
