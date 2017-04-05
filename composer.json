@@ -45,7 +45,7 @@
     "bshaffer/oauth2-server-bundle": "v0.4",
     "xxtea/xxtea": "1.0.2",
     "cerdic/css-tidy": "1.5.5",
-    "codeages/biz-framework": "0.3.1",
+    "codeages/biz-framework": "0.3.3",
     "codeages/plugin-bundle": "0.1.9",
     "codeages/rest-api-client": "0.1.4",
     "codeages/biz-rate-limiter": "0.1.6"

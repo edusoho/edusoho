@@ -75,7 +75,7 @@ class DoubleCacheStrategy extends AbstractCacheStrategy implements CacheStrategy
         return $this->second->beforeCount($dao, $method, $arguments);
     }
 
-    public function afterCount(GeneralDaoInterface $dao, $method, $arguments, array $count)
+    public function afterCount(GeneralDaoInterface $dao, $method, $arguments, $count)
     {
         $this->first->afterCount($dao, $method, $arguments, $count);
         $this->second->afterCount($dao, $method, $arguments, $count);
