@@ -37,12 +37,25 @@ class CourseLessonLearn2CourseTaskResult extends AbstractMigrate
             ");
         }
 
-        $countSql = 'SELECT count(*) FROM `course_lesson_learn` where `id` not in (select `id` from `course_task_result`)';
+        if (!$this->isIndexExist('course_task_result', 'courseTaskId_activityId')) {
+            $this->getConnection()->exec("
+                ALTER TABLE course_task_result ADD INDEX courseTaskId_activityId (`courseTaskId`,`activityId`);
+            ");
+        }
+
+        if ($page==1) {
+            $sql = "delete from course_task_result where id<= (select max(id) from course_lesson_learn)";
+            $this->exec($sql);
+        }
+
+
+        $countSql = 'SELECT count(*) FROM `course_lesson_learn`';
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
-            $this->exec("UPDATE `course_task_result` cl,  `course_task` ck SET cl.`activityId`= ck.`activityId` WHERE cl.`courseTaskId` = ck.`id`;");
             return;
         }
+        $this->perPageCount = 100000;
+        $start = $this->getStart($page);
 
         $this->exec(
             "
@@ -70,11 +83,18 @@ class CourseLessonLearn2CourseTaskResult extends AbstractMigrate
                 `updateTime`,
                 `learnTime`,
                 `watchTime`
-            from `course_lesson_learn` where id not in (select id from `course_task_result`) 
-            order by id limit 0, 100000;
+            from `course_lesson_learn` 
+            order by id limit {$start}, {$this->perPageCount};
             "
         );
 
-        return $page + 1;
+        $this->exec("UPDATE `course_task_result` cl,  `course_task` ck SET cl.`activityId`= ck.`activityId` WHERE cl.`courseTaskId` = ck.`id` and cl.`activityId` = 0;");
+
+        $nextPage = $this->getNextPage($count, $page);
+        if (empty($nextPage)) {
+            return;
+        }
+
+        return $nextPage;
     }
 }

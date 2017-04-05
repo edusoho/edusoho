@@ -24,11 +24,19 @@ class CourseLessonView2CourseTaskView extends AbstractMigrate
             );
         }
 
-        $countSql = 'SELECT count(*) FROM `course_lesson_view` where `id` not in (select `id` from `course_task_view`)';
+        if ($page==1) {
+            $sql = "delete from course_task_view where id<= (select max(id) from course_lesson_view)";
+            $this->exec($sql);
+        }
+
+        $countSql = 'SELECT count(*) FROM `course_lesson_view`';
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
 			return;
         }
+
+        $this->perPageCount = 100000;
+        $start = $this->getStart($page);
 
         $this->exec(
             "
@@ -56,11 +64,11 @@ class CourseLessonView2CourseTaskView extends AbstractMigrate
                 `fileStorage`,
                 `fileSource`,
                 `createdTime`
-            FROM `course_lesson_view` WHERE id not in (SELECT id FROM `course_task_view`)
-            order by id limit 0, 100000;
+            FROM `course_lesson_view` 
+            order by id limit {$start}, {$this->perPageCount};
         	"
         );
         
-        return $page+1;
+        return $this->getNextPage($count, $page);
     }
 }
