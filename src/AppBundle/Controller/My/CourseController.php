@@ -104,7 +104,7 @@ class CourseController extends CourseBaseController
             $taskResultCount = $this->getTaskResultService()->countTaskResults(
                 array('courseId' => $course['id'], 'status' => 'finish', 'userId' => $user['id'])
             );
-
+            
             //学习进度
             $progress = empty($taskCount) ? 0 : round($taskResultCount / $taskCount, 2) * 100;
             $progress = $progress > 100 ? 100 : $progress;
@@ -206,7 +206,7 @@ class CourseController extends CourseBaseController
             $finishedTaskPerDay = empty($diffDay) ? false : $taskNum / $diffDay;
         }
 
-        return round($finishedTaskPerDay);
+        return ceil($finishedTaskPerDay);
     }
 
     protected function getPlanStudyTaskCount($course, $member, $taskNum, $taskPerDay)
@@ -223,6 +223,7 @@ class CourseController extends CourseBaseController
             //当前时间-减去课程有效期开始时间  获得天数 *应学任务数量
             $joinDays = (time() - $course['expiryStartDate']) / (24 * 60 * 60);
         }
+        $joinDays = ceil($joinDays);
 
         return $taskPerDay * $joinDays >= $taskNum ? $taskNum : ceil($taskPerDay * $joinDays);
     }
