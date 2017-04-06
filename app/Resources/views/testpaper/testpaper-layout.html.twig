@@ -16,6 +16,12 @@
   {% block header %}
     {% if showHeader|default(1) %}{{ parent() }}{% endif %}
   {% endblock %}
+
+  {% if mobile %}
+    {# fix mobile sofair #}
+    <div class="iframe-parent-content">
+  {% endif %}
+  
   <div class="container {{containerClass|default('')}}">
     {% block paper_content %}
       <div class="row">
@@ -137,6 +143,12 @@
       </div>
     {% endblock %}
   </div>
+
+  {% if mobile %}
+    {# fix mobile sofair #}
+    </div>
+  {% endif %}
+
   {% block footer %}
     {% if showHeader|default(1) %}{{ parent() }}{% endif %}
   {% endblock %}
