@@ -104,7 +104,7 @@ class CourseController extends CourseBaseController
             $taskResultCount = $this->getTaskResultService()->countTaskResults(
                 array('courseId' => $course['id'], 'status' => 'finish', 'userId' => $user['id'])
             );
-            
+
             //学习进度
             $progress = empty($taskCount) ? 0 : round($taskResultCount / $taskCount, 2) * 100;
             $progress = $progress > 100 ? 100 : $progress;
