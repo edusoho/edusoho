@@ -98,6 +98,7 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         ),
         'C' => 
         array (
+            'Composer\\CaBundle\\' => 18,
             'Codeages\\RestApiClient\\Tests\\' => 29,
             'Codeages\\RestApiClient\\' => 23,
             'Codeages\\RateLimiter\\' => 21,
@@ -258,6 +259,10 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         array (
             0 => __DIR__ . '/..' . '/doctrine/doctrine-bundle',
         ),
+        'Composer\\CaBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/composer/ca-bundle/src',
+        ),
         'Codeages\\RestApiClient\\Tests\\' => 
         array (
             0 => __DIR__ . '/..' . '/codeages/rest-api-client/tests',
@@ -387,13 +392,6 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
             'Doctrine\\Common\\' => 
             array (
                 0 => __DIR__ . '/..' . '/doctrine/common/lib',
-            ),
-        ),
-        'C' => 
-        array (
-            'Canoma' => 
-            array (
-                0 => __DIR__ . '/..' . '/canoma/canoma/src',
             ),
         ),
         'B' => 

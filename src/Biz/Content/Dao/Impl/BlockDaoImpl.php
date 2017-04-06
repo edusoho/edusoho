@@ -46,7 +46,6 @@ class BlockDaoImpl extends GeneralDaoImpl implements BlockDao
                 'meta' => 'json',
                 'data' => 'json',
             ),
-            'cache' => 'table',
         );
     }
 }

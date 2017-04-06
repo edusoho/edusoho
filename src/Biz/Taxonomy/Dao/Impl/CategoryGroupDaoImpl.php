@@ -9,13 +9,6 @@ class CategoryGroupDaoImpl extends GeneralDaoImpl implements CategoryGroupDao
 {
     protected $table = 'category_group';
 
-    public function declares()
-    {
-        return array(
-            'cache' => 'table',
-        );
-    }
-
     public function getByCode($code)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE code = ? LIMIT 1";
@@ -36,6 +29,12 @@ class CategoryGroupDaoImpl extends GeneralDaoImpl implements CategoryGroupDao
         $sql = "SELECT * FROM {$this->table()}";
 
         return $this->db()->fetchAll($sql) ?: array();
+    }
+
+    public function declares()
+    {
+        return array(
+        );
     }
 
     protected function filterStartLimit(&$start, &$limit)

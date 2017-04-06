@@ -12,7 +12,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 {
     public function getMoneyCard($id, $lock = false)
     {
-        return $this->getMoneyCardDao()->get($id, $lock);
+        return $this->getMoneyCardDao()->get($id, array('lock' => $lock));
     }
 
     public function getMoneyCardByIds($ids)

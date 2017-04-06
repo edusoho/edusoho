@@ -1594,39 +1594,6 @@
         ]
     },
     {
-        "name": "codeages/biz-rate-limiter",
-        "version": "v0.1.4",
-        "version_normalized": "0.1.4.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/biz-rate-limiter.git",
-            "reference": "f0b5eeaf1a98138c25d0f0d097027438f59e2930"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-rate-limiter/zipball/f0b5eeaf1a98138c25d0f0d097027438f59e2930",
-            "reference": "f0b5eeaf1a98138c25d0f0d097027438f59e2930",
-            "shasum": ""
-        },
-        "require": {
-            "codeages/biz-framework": "^0.1.6 || ^0.2.0",
-            "codeages/rate-limiter": "^0.1.3"
-        },
-        "time": "2017-03-27T08:39:31+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\Biz\\RateLimiter\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "Rate limiter with Biz Framework."
-    },
-    {
         "name": "codeages/rest-api-client",
         "version": "v0.1.4",
         "version_normalized": "0.1.4.0",
@@ -2339,52 +2306,6 @@
             "xls",
             "xlsx"
         ]
-    },
-    {
-        "name": "sensiolabs/security-checker",
-        "version": "v4.0.2",
-        "version_normalized": "4.0.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/sensiolabs/security-checker.git",
-            "reference": "56bded66985e22f6eac2cf86735fd21c625bff2f"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/56bded66985e22f6eac2cf86735fd21c625bff2f",
-            "reference": "56bded66985e22f6eac2cf86735fd21c625bff2f",
-            "shasum": ""
-        },
-        "require": {
-            "symfony/console": "~2.7|~3.0"
-        },
-        "time": "2017-03-09T17:33:20+00:00",
-        "bin": [
-            "security-checker"
-        ],
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "4.0-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "SensioLabs\\Security": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien.potencier@gmail.com"
-            }
-        ],
-        "description": "A security checker for your composer.lock"
     },
     {
         "name": "sensio/distribution-bundle",
@@ -4127,94 +4048,6 @@
         ]
     },
     {
-        "name": "canoma/canoma",
-        "version": "v0.0.3",
-        "version_normalized": "0.0.3.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/Dynom/Canoma.git",
-            "reference": "22caaf38c8e585e12024777877a12752ed3f98b8"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://files.phpcomposer.com/files/Dynom/Canoma/22caaf38c8e585e12024777877a12752ed3f98b8.zip",
-            "reference": "22caaf38c8e585e12024777877a12752ed3f98b8",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "phake/phake": "dev-master"
-        },
-        "time": "2012-12-27T14:12:05+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Canoma": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "WTFPL"
-        ],
-        "authors": [
-            {
-                "name": "Mark van der Velden",
-                "email": "mark@dynom.nl",
-                "homepage": "http://blog.dynom.nl"
-            }
-        ],
-        "description": "An intuitive and well tested library. That allows you to easily implement consistent hashing in your caching implementation. It's completely back-end agnostic, easy to extend and free to use.",
-        "keywords": [
-            "Canoma",
-            "Consistent Hashing",
-            "cache"
-        ]
-    },
-    {
-        "name": "codeages/biz-framework",
-        "version": "v0.2.13",
-        "version_normalized": "0.2.13.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "ef07e3c3d4a830dc33e2bc3ed218304a5c927f05"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/biz-framework/ef07e3c3d4a830dc33e2bc3ed218304a5c927f05.zip",
-            "reference": "ef07e3c3d4a830dc33e2bc3ed218304a5c927f05",
-            "shasum": ""
-        },
-        "require": {
-            "canoma/canoma": "^0.0.3",
-            "davedevelopment/phpmig": "^1.2.0",
-            "doctrine/dbal": "^2.4.5",
-            "php": "^5.3.3 || ^7.0",
-            "pimple/pimple": "^3.0.2",
-            "psr/log": "^1.0.0",
-            "symfony/event-dispatcher": "^2.8.9"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
-        },
-        "time": "2017-03-28T08:47:05+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\Biz\\Framework\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "A service layer framework."
-    },
-    {
         "name": "monolog/monolog",
         "version": "1.22.1",
         "version_normalized": "1.22.1.0",
@@ -4785,6 +4618,39 @@
         "homepage": "https://symfony.com"
     },
     {
+        "name": "codeages/biz-rate-limiter",
+        "version": "v0.1.6",
+        "version_normalized": "0.1.6.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/biz-rate-limiter.git",
+            "reference": "9c734290ff58e33ae3b97f348a114818460fc1db"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/codeages/biz-rate-limiter/9c734290ff58e33ae3b97f348a114818460fc1db.zip",
+            "reference": "9c734290ff58e33ae3b97f348a114818460fc1db",
+            "shasum": ""
+        },
+        "require": {
+            "codeages/biz-framework": "^0.1.6 || ^0.2.0 || ^0.3.0",
+            "codeages/rate-limiter": "^0.1.3"
+        },
+        "time": "2017-03-31T12:22:40+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Biz\\RateLimiter\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "Rate limiter with Biz Framework."
+    },
+    {
         "name": "codeages/plugin-bundle",
         "version": "v0.1.9",
         "version_normalized": "0.1.9.0",
@@ -4835,5 +4701,153 @@
             "plugin",
             "theme"
         ]
+    },
+    {
+        "name": "composer/ca-bundle",
+        "version": "1.0.7",
+        "version_normalized": "1.0.7.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/composer/ca-bundle.git",
+            "reference": "b17e6153cb7f33c7e44eb59578dc12eee5dc8e12"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/composer/ca-bundle/b17e6153cb7f33c7e44eb59578dc12eee5dc8e12.zip",
+            "reference": "b17e6153cb7f33c7e44eb59578dc12eee5dc8e12",
+            "shasum": ""
+        },
+        "require": {
+            "ext-openssl": "*",
+            "ext-pcre": "*",
+            "php": "^5.3.2 || ^7.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.5",
+            "psr/log": "^1.0",
+            "symfony/process": "^2.5 || ^3.0"
+        },
+        "suggest": {
+            "symfony/process": "This is necessary to reliably check whether openssl_x509_parse is vulnerable on older php versions, but can be ignored on PHP 5.5.6+"
+        },
+        "time": "2017-03-06T11:59:08+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Composer\\CaBundle\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jordi Boggiano",
+                "email": "j.boggiano@seld.be",
+                "homepage": "http://seld.be"
+            }
+        ],
+        "description": "Lets you find a path to the system CA bundle, and includes a fallback to the Mozilla CA bundle.",
+        "keywords": [
+            "cabundle",
+            "cacert",
+            "certificate",
+            "ssl",
+            "tls"
+        ]
+    },
+    {
+        "name": "sensiolabs/security-checker",
+        "version": "v4.0.4",
+        "version_normalized": "4.0.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/sensiolabs/security-checker.git",
+            "reference": "9e69eddf3bc49d1ee5c7908564da3141796d4bbc"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/sensiolabs/security-checker/9e69eddf3bc49d1ee5c7908564da3141796d4bbc.zip",
+            "reference": "9e69eddf3bc49d1ee5c7908564da3141796d4bbc",
+            "shasum": ""
+        },
+        "require": {
+            "composer/ca-bundle": "^1.0",
+            "symfony/console": "~2.7|~3.0"
+        },
+        "time": "2017-03-31T14:50:32+00:00",
+        "bin": [
+            "security-checker"
+        ],
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "4.0-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "SensioLabs\\Security": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien.potencier@gmail.com"
+            }
+        ],
+        "description": "A security checker for your composer.lock"
+    },
+    {
+        "name": "codeages/biz-framework",
+        "version": "v0.3.4",
+        "version_normalized": "0.3.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/biz-framework.git",
+            "reference": "856a741902459c65496bbd2886e63b63f7f16d92"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/codeages/biz-framework/856a741902459c65496bbd2886e63b63f7f16d92.zip",
+            "reference": "856a741902459c65496bbd2886e63b63f7f16d92",
+            "shasum": ""
+        },
+        "require": {
+            "davedevelopment/phpmig": "^1.2.0",
+            "doctrine/dbal": "^2.4.5",
+            "php": "^5.3.3 || ^7.0",
+            "pimple/pimple": "^3.0.2",
+            "psr/log": "^1.0.0",
+            "symfony/event-dispatcher": "^2.8.9"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
+        },
+        "time": "2017-04-06T07:46:11+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Biz\\Framework\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "A service layer framework."
     }
 ]

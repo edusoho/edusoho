@@ -47,5 +47,7 @@ class CacheDaoImpl extends GeneralDaoImpl implements CacheDao
 
     public function declares()
     {
+        return array(
+        );
     }
 }

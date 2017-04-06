@@ -203,7 +203,6 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
                 'orgCode PRE_LIKE :likeOrgCode',
                 'orgCode = :orgCode',
             ),
-            'cache' => 'table',
         );
     }
 }
