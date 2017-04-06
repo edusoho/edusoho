@@ -112,6 +112,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'OtherMigrate',
             'LogMigrate',
             'GracefulBlockMigrate',
+            'PluginMigrate',
         );
 
         if ($index > count($steps) - 1) {
