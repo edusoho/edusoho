@@ -96,7 +96,11 @@
             {% elseif task.result.status == 'finish' %}
             es-icon-iccheckcircleblack24px
             {% endif %}
-            left-menu"></i>
+            left-menu"
+            {% if  task_lock  %} 
+              data-toggle="tooltip" data-trigger="hover" data-placement="top" title="需要解锁上一个任务才能学习"
+            {% endif %}
+            ></i>
             {% if task_lock is empty %}
               <a class="title"
                 href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">{{ task.title }}</a>

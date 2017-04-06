@@ -78,7 +78,7 @@ export default class TaskSidebar extends Emitter {
           $paneBody.html(html);
           $pane.perfectScrollbar();
           $btn.data('loaded', true);
-          chapterAnimate();
+          this.listEvent();
           this.isManualOperation = true;
         });
     });
@@ -127,5 +127,11 @@ export default class TaskSidebar extends Emitter {
       .data('loaded', false)
       .click();
     this.isManualOperation = false;
+  }
+
+  listEvent() {
+    if($('.js-sidebar-pane-body').lenght) {
+      chapterAnimate();
+    }
   }
 }

@@ -36,7 +36,14 @@
   <span class="mr20">完成任务：{{ taskResultCount }} / {{ taskCount }}</span>
   {% for toLearnTask in toLearnTasks %}
     {% if loop.index == 1%}
-      <a class="btn btn-primary btn-lg " href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">继续学习</a>
+      <a class="btn btn-primary btn-lg " 
+        href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">
+        {% if taskResultCount < 1 %}
+          开始学习
+        {% else %}
+          继续学习
+        {% endif %}
+      </a>
     {% endif %}
   {% endfor %}
 </div>
