@@ -108,7 +108,10 @@ class EduSohoUpgrade extends AbstractUpdater
             'TagOwnerMigrate',
 
             'AfterAllCourseTaskMigrate',
-            'ActivityLearnLog',
+            'ActivityLearnLogStart',
+            'ActivityLearnLogDoing',
+            'ActivityLearnLogFinish',
+
             'OtherMigrate',
             'LogMigrate',
             'GracefulBlockMigrate',

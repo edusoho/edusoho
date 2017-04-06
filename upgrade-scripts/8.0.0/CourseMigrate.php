@@ -102,8 +102,7 @@ class CourseMigrate extends AbstractMigrate
         $result = $this->getConnection()->exec($sql);
 
         $sql = "UPDATE `course_v8` c2, `course` c set
-              c2.`title` = c.`title`
-              ,c2.`status` = c.`status`
+               c2.`status` = c.`status`
               ,c2.`type` = c.`type`
               ,c2.`maxStudentNum` = c.`maxStudentNum`
               ,c2.`price` = c.`price`
@@ -226,7 +225,7 @@ class CourseMigrate extends AbstractMigrate
           ) SELECT
               `id`
               ,`id`
-              ,`title`
+              ,'默认教学计划'
               ,`status`
               ,`type`
               ,`maxStudentNum`
