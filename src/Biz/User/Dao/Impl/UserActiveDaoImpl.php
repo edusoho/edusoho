@@ -29,7 +29,6 @@ class UserActiveDaoImpl extends GeneralDaoImpl implements UserActiveDao
     {
         return array(
             'timestamps' => array('createdTime'),
-            'cache' => 'table',
         );
     }
 }

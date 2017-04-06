@@ -22,8 +22,9 @@ class MoneyCardBatchDaoImpl extends GeneralDaoImpl implements MoneyCardBatchDao
         );
     }
 
-    public function getBatchByToken($token, $locked = false)
+    public function getBatchByToken($token, array $options = array())
     {
+        $lock = isset($options['lock']) && $options['lock'] === true;
         $sql = "SELECT * FROM {$this->table} WHERE token = ? LIMIT 1";
         if ($locked) {
             $sql = $sql.' for update';

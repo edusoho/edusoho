@@ -23,7 +23,6 @@ class FileUsedDaoImpl extends GeneralDaoImpl implements FileUsedDao
             'orderbys' => array(
                 'createdTime',
             ),
-            'cache' => 'table',
         );
     }
 }

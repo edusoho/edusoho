@@ -39,7 +39,6 @@ class OpenCourseDaoImpl extends GeneralDaoImpl implements OpenCourseDao
                 'recommended = :recommended',
                 'locked = :locked',
             ),
-            'cache' => 'table',
         );
     }
 

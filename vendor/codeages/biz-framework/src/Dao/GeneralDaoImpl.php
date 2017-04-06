@@ -41,12 +41,14 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
     public function update($identifier, array $fields)
     {
         if (empty($identifier)) {
-            return null;
+            return 0;
         }
 
         if (is_numeric($identifier)) {
             return $this->updateById($identifier, $fields);
-        } elseif (is_array($identifier)) {
+        }
+
+        if (is_array($identifier)) {
             return $this->updateByConditions($identifier, $fields);
         }
 
@@ -60,9 +62,12 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
 
     public function wave(array $ids, array $diffs)
     {
-        $sets = array_map(function ($name) {
-            return "{$name} = {$name} + ?";
-        }, array_keys($diffs));
+        $sets = array_map(
+            function ($name) {
+                return "{$name} = {$name} + ?";
+            },
+            array_keys($diffs)
+        );
 
         $marks = str_repeat('?,', count($ids) - 1).'?';
 
@@ -71,9 +76,11 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         return $this->db()->executeUpdate($sql, array_merge(array_values($diffs), $ids));
     }
 
-    public function get($id, $lock = false)
+    public function get($id, array $options = array())
     {
+        $lock = isset($options['lock']) && $options['lock'] === true;
         $sql = "SELECT * FROM {$this->table()} WHERE id = ?".($lock ? ' FOR UPDATE' : '');
+
         return $this->db()->fetchAssoc($sql, array($id)) ?: null;
     }
 
@@ -98,7 +105,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         $builder = $this->createQueryBuilder($conditions)
             ->select('COUNT(*)');
 
-        return (int) ($builder->execute()->fetchColumn(0));
+        return (int) $builder->execute()->fetchColumn(0);
     }
 
     protected function updateById($id, $fields)
@@ -113,12 +120,19 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         return $this->get($id);
     }
 
+    /**
+     * @param array $conditions conditions of need update rows
+     * @param array $fields     updated values
+     *
+     * @return int the number of affected rows
+     */
     protected function updateByConditions(array $conditions, array $fields)
     {
         $builder = $this->createQueryBuilder($conditions)
             ->update($this->table, $this->table);
 
         $timestampField = $this->getTimestampField('updated');
+
         if ($timestampField) {
             $fields[$timestampField] = time();
         }
@@ -129,11 +143,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
                 ->setParameter($key, $value);
         }
 
-        $builder->execute();
-
-        $resultBuilder = $this->createQueryBuilder($conditions)->select('*')->from($this->table(), $this->table());
-
-        return $resultBuilder->execute()->fetchAll();
+        return $builder->execute();
     }
 
     /**
@@ -198,11 +208,14 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
 
     protected function getByFields($fields)
     {
-        $placeholders = array_map(function ($name) {
-            return "{$name} = ?";
-        }, array_keys($fields));
+        $placeholders = array_map(
+            function ($name) {
+                return "{$name} = ?";
+            },
+            array_keys($fields)
+        );
 
-        $sql = "SELECT * FROM {$this->table()} WHERE ".implode(' AND ', $placeholders). ' LIMIT 1 ';
+        $sql = "SELECT * FROM {$this->table()} WHERE ".implode(' AND ', $placeholders).' LIMIT 1 ';
 
         return $this->db()->fetchAssoc($sql, array_values($fields)) ?: null;
     }
@@ -221,9 +234,12 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
 
     protected function findByFields($fields)
     {
-        $placeholders = array_map(function ($name) {
-            return "{$name} = ?";
-        }, array_keys($fields));
+        $placeholders = array_map(
+            function ($name) {
+                return "{$name} = ?";
+            },
+            array_keys($fields)
+        );
 
         $sql = "SELECT * FROM {$this->table()} WHERE ".implode(' AND ', $placeholders);
 
@@ -232,17 +248,20 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
 
     protected function createQueryBuilder($conditions)
     {
-        $conditions = array_filter($conditions, function ($value) {
-            if ($value === '' || $value === null) {
-                return false;
-            }
+        $conditions = array_filter(
+            $conditions,
+            function ($value) {
+                if ($value === '' || $value === null) {
+                    return false;
+                }
 
-            if (is_array($value) && empty($value)) {
-                return false;
-            }
+                if (is_array($value) && empty($value)) {
+                    return false;
+                }
 
-            return true;
-        });
+                return true;
+            }
+        );
 
         $builder = $this->getQueryBuilder($conditions);
         $builder->from($this->table(), $this->table());
@@ -265,16 +284,18 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
     private function getTimestampField($mode = null)
     {
         if (empty($this->timestamps)) {
-            return;
+            return null;
         }
 
         if ($mode == 'created') {
             return isset($this->timestamps[0]) ? $this->timestamps[0] : null;
-        } elseif ($mode == 'updated') {
-            return isset($this->timestamps[1]) ? $this->timestamps[1] : null;
-        } else {
-            throw $this->createDaoException('mode error.');
         }
+
+        if ($mode == 'updated') {
+            return isset($this->timestamps[1]) ? $this->timestamps[1] : null;
+        }
+
+        throw $this->createDaoException('mode error.');
     }
 
     private function createDaoException($message = '', $code = 0)
@@ -285,7 +306,9 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
     private function checkOrderBy($order, $sort, $allowOrderBys)
     {
         if (!in_array($order, $allowOrderBys, true)) {
-            throw $this->createDaoException(sprintf("SQL order by field is only allowed '%s', but you give `{$order}`.", implode(',', $allowOrderBys)));
+            throw $this->createDaoException(
+                sprintf("SQL order by field is only allowed '%s', but you give `{$order}`.", implode(',', $allowOrderBys))
+            );
         }
         if (!in_array(strtoupper($sort), array('ASC', 'DESC'), true)) {
             throw $this->createDaoException("SQL order by direction is only allowed `ASC`, `DESC`, but you give `{$sort}`.");

@@ -40,7 +40,7 @@ class UserServiceImpl extends BaseService implements UserService
 {
     public function getUser($id, $lock = false)
     {
-        $user = $this->getUserDao()->get($id, $lock);
+        $user = $this->getUserDao()->get($id, array('lock' => $lock));
 
         return !$user ? null : UserSerialize::unserialize($user);
     }

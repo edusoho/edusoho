@@ -1,4 +1,5 @@
 parameters:
+    session.service_id: session.handler.pdo
     role_hierarchy:
         ROLE_TEACHER:     ROLE_USER
         ROLE_BACKEND:     ROLE_USER
