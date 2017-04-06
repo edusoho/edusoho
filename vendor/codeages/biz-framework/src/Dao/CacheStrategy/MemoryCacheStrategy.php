@@ -57,6 +57,7 @@ class MemoryCacheStrategy extends AbstractCacheStrategy implements CacheStrategy
 
     public function afterCreate(GeneralDaoInterface $dao, $method, $arguments, $row)
     {
+        $this->cache = array();
     }
 
     public function afterUpdate(GeneralDaoInterface $dao, $method, $arguments, $row)
