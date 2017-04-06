@@ -40,7 +40,6 @@ project.sublime-workspace
 .phpintel*
 /src/Tests/*
 .crunch
-/app/config/parameters_test.yml
 *.css.map
 *.codekit
 web/php-performance.php
@@ -49,6 +48,8 @@ chunk-manifest.json
 /web/static-dist/*
 !/web/static-dist/libs
 !/web/static-dist/app
-/.vscode
-.php_cs.cache
+!/web/static-dist/jianmotheme
+!/web/static-dist/defaulttheme
+!/web/static-dist/defaultbtheme
+!/web/static-dist/autumntheme
 deployment-config.json
