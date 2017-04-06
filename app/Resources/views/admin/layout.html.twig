@@ -155,6 +155,27 @@
   {% endblock %}
 
   {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
+  {# 升级说明，用路由替换掉 #}
+  <div class="modal update-modal"  style="display:block">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="update-modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">升级说明</h4>
+        </div>
+        <div class="modal-body">
+           <div class="update-redminey-body">
+            
+           </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="update-modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <div id="modal" class="modal" ></div>
   <div id="attachment-modal" class="modal" ></div>
   {% if setting('copyright.thirdCopyright') != 1 %}
