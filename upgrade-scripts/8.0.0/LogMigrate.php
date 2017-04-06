@@ -5,7 +5,7 @@ class LogMigrate extends AbstractMigrate
     private function step1()
     {
         if (!$this->isIndexExist('log', 'actionAndModule')) {
-            $this->exec("alter table `log` add index actionAndModule (`action`, `MODULE`)");
+            // $this->exec("alter table `log` add index actionAndModule (`action`, `MODULE`)");
         }
     }
 

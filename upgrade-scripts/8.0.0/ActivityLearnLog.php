@@ -4,6 +4,8 @@ class ActivityLearnLog extends AbstractMigrate
 {
     public function update($page)
     {
+        $this->perPageCount = 100000;
+
         if (!$this->isTableExist('activity_learn_log')) {
             $this->exec(
                 "
