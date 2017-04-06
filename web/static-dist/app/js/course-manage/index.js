@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/course-manage/index"],[function(e,s,a){"use strict";var t=a("4e68e437f5b716377a9d");$('[data-help="popover"]').popover();var o="#sortable-list";(0,t.taskSortable)(o),(0,t.updateTaskNum)(o),(0,t.closeCourse)(),(0,t.deleteCourse)(),(0,t.deleteTask)(),(0,t.publishTask)(),(0,t.unpublishTask)(),(0,t.showSettings)(),(0,t.TaskListHeaderFixed)()}]);
