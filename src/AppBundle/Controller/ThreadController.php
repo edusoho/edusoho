@@ -15,11 +15,10 @@ class ThreadController extends BaseController
     /**
      * [listAction description].
      *
-     * @param Request $request [description]
-     * @param [type]  $target  [description]
-     * @param [type]  $filters [description]
-     *
-     * @return [type] [description]
+     * @param  Request $request        [description]
+     * @param  [type]  $target         [description]
+     * @param  [type]  $filters        [description]
+     * @return [type]  [description]
      */
     public function listAction(Request $request, $target, $filters)
     {
@@ -82,7 +81,6 @@ class ThreadController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column(array_merge($goodPosts, $posts), 'userId'));
 
-        // $users = $this->getThreadService()->setUserBadgeTitle($thread, $users);
         $this->getThreadService()->hitThread($target['id'], $thread['id']);
 
         return $this->render('thread/show.html.twig', array(
@@ -181,7 +179,7 @@ class ThreadController extends BaseController
                     'targetId' => $target['id'],
                     'type' => 'type-modify',
                     'userId' => $user['id'],
-                    'userName' => $user['nickname'], );
+                    'userName' => $user['nickname']);
 
                 if ($thread['userId'] != $user['id']) {
                     $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', $message);
@@ -214,7 +212,7 @@ class ThreadController extends BaseController
                 'title' => $thread['title'],
                 'type' => 'delete',
                 'userId' => $user['id'],
-                'userName' => $user['nickname'], );
+                'userName' => $user['nickname']);
 
             $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', $message);
         }
@@ -408,8 +406,17 @@ class ThreadController extends BaseController
 
     public function zeroPostThreadsBlockAction(Request $request, $thread)
     {
-        $target = array('type' => $thread['targetType'], 'id' => $thread['targetId']);
-        $threads = $this->getThreadService()->findZeroPostThreadsByTarget($target, 0, 11);
+        $conditions = array(
+            'targetType' => $thread['targetType'],
+            'targetId' => $thread['targetId'],
+            'postNum' => 0,
+        );
+        $threads = $this->getThreadService()->searchThreads(
+            $conditions,
+            array('createdTime' => 'desc'),
+            0,
+            11
+        );
 
         return $this->render('thread/zero-post-threads-block.html.twig', array(
             'currentThread' => $thread,

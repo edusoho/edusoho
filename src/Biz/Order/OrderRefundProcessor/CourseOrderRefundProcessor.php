@@ -13,7 +13,10 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
 
     public function findByLikeTitle($title)
     {
-        return $this->getCourseService()->findCoursesByLikeTitle($title);
+        $conditions = array(
+            'title' => $title,
+        );
+        return $this->getCourseService()->searchCourses($conditions, null, 0, PHP_INT_MAX);
     }
 
     public function auditRefundOrder($id, $pass, $data)
