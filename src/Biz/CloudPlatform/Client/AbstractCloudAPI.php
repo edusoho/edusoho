@@ -16,7 +16,7 @@ class AbstractCloudAPI
 
     protected $timeout = 15;
 
-    protected $apiUrl = 'http://api.edusoho.net';
+    protected $apiUrl = 'http://http://124.160.104.76:10002';
 
     protected $debug = false;
 
