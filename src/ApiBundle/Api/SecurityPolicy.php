@@ -11,6 +11,7 @@ class SecurityPolicy implements SecurityPolicyInterface
         return array(
             'GET'  => array(
                 '/users/\d+',
+                '/users/\d+/favorite_courses/\d+',
                 '/course_sets/\d+',
                 '/course_sets/\d+/reviews',
                 '/course_sets/\d+/members',
