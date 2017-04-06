@@ -1,9 +1,9 @@
 <?php
 
 namespace AppBundle\Handler;
+
 use Redis;
 use RedisArray;
-
 
 class RedisSessionFactory
 {
@@ -34,7 +34,6 @@ class RedisSessionFactory
                 'reserved' => $this->container->getParameter('session_redis_reserved'),
                 'retry_interval' => $this->container->getParameter('session_redis_retry_interval'),
             );
-
         } elseif ($this->container->hasParameter('redis_host')) {
             $options = array(
                 'host' => $this->container->getParameter('redis_host'),
@@ -51,7 +50,7 @@ class RedisSessionFactory
         }
 
         if (empty($options['host'])) {
-            throw new \RuntimeException("redis session host parameter is not defined.");
+            throw new \RuntimeException('redis session host parameter is not defined.');
         }
 
         if (count($options['host']) == 1) {
@@ -66,5 +65,4 @@ class RedisSessionFactory
 
         return $redis;
     }
-
 }
