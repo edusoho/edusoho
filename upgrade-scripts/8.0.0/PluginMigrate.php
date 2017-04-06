@@ -23,11 +23,7 @@ class PluginMigrate extends AbstractMigrate
         $content = "<?php \n return " . var_export($config, true) . ";";
         $saved = file_put_contents($pluginFile, $content);
 
-        $filesystem = new Filesystem();
-
-        if ($this->filesystem->exists($this->buildDirectory)) {
-            $this->filesystem->remove($this->buildDirectory);
-        }
+        $this->moveRoutingPluginsYml();
     }
 
 
@@ -38,13 +34,13 @@ class PluginMigrate extends AbstractMigrate
 
     protected function moveRoutingPluginsYml()
     {
-        $file = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/config/routing_plugin.yml';
-        $targetFile = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/config/old_routing_plugin.yml';
+        $file = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/config/routing_plugins.yml';
+        $targetFile = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/config/old_routing_plugins.yml';
         $filesystem = new Filesystem();
 
-        if ($this->filesystem->exists($file)) {
-            $this->filesystem->copy($file, $targetFile, true);
-            $this->filesystem->touch($file);
+        if ($filesystem->exists($file)) {
+            $filesystem->copy($file, $targetFile, true);
+            $filesystem->touch($file);
         }
     }
 }

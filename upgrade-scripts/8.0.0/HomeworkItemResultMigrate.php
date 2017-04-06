@@ -27,12 +27,20 @@ class HomeworkItemResultMigrate extends AbstractMigrate
 
     private function insertHomeworkItemResult($page)
     {
-        $countSql = "SELECT count(id) FROM `homework_item_result` where `id` not in (select `migrateItemResultId` from `testpaper_item_result_v8` where type = 'homework');";
+        if ($page==1) {
+            $sql = "delete from testpaper_item_result_v8";
+            $this->exec($sql);
+        }
+
+        $countSql = "SELECT count(id) FROM `homework_item_result`";
         $count = $this->getConnection()->fetchColumn($countSql);
 
         if ($count == 0) {
             return;
         }
+
+        $this->perPageCount = 100000;
+        $start = $this->getStart($page);
 
         $sql = "INSERT INTO testpaper_item_result_v8 (
             testId,
@@ -54,9 +62,15 @@ class HomeworkItemResultMigrate extends AbstractMigrate
             teacherSay,
             id AS migrateItemResultId,
             'homework'
-            FROM homework_item_result WHERE id NOT IN (SELECT migrateItemResultId FROM testpaper_item_result_v8 where type = 'homework') order by id limit 0, {$this->perPageCount};";
+            FROM homework_item_result 
+            order by id limit {$start}, {$this->perPageCount};";
         $this->getConnection()->exec($sql);
 
-        return $page + 1;
+        $nextPage = $this->getNextPage($count, $page);
+        if (empty($nextPage)) {
+            return;
+        }
+
+        return $nextPage;
     }
 }

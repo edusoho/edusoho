@@ -35,18 +35,19 @@ class ActivityLearnLogStart extends AbstractMigrate
             ");
         }
 
-        if (!$this->isIndexExist('activity_learn_log', 'event')) {
-            $this->getConnection()->exec("
-                ALTER TABLE activity_learn_log ADD INDEX event (`event`);
-            ");
+        if ($page==1) {
+            $sql = "delete from activity_learn_log";
+            $this->exec($sql);
         }
 
-
-        $countSql = "SELECT count(ct.id) FROM course_task ck, course_task_result ct WHERE ck.id = ct.`activityId` and ct.id NOT IN (SELECT migrateTaskResultId FROM `activity_learn_log` where event = 'start' )";
+        $countSql = "SELECT count(ct.id) FROM course_task ck, course_task_result ct WHERE ck.id = ct.`activityId`";
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
             return;
         }
+
+        $this->perPageCount = 100000;
+        $start = $this->getStart($page);
 
         $this->exec(
             "
@@ -72,11 +73,16 @@ class ActivityLearnLogStart extends AbstractMigrate
                   0,
                   ct.createdTime,
                   ct.id
-                 FROM course_task ck, course_task_result ct WHERE ck.id = ct.`activityId` and ct.id not in (select migrateTaskResultId from activity_learn_log where event = 'start')
-                 limit 0, {$this->perPageCount};
+                 FROM course_task ck, course_task_result ct WHERE ck.id = ct.`activityId`
+                 order by ct.id limit {$start}, {$this->perPageCount};
                 "
         );
 
-        return $page+1;
+        $nextPage = $this->getNextPage($count, $page);
+        if (empty($nextPage)) {
+            return;
+        }
+
+        return $nextPage;
     }
 }

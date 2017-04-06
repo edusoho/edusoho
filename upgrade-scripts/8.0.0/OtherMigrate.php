@@ -156,6 +156,21 @@ class OtherMigrate extends AbstractMigrate
             $this->exec("UPDATE `classroom` SET `creator` = `headTeacherId` WHERE `creator` = 0;");
         }
     }
+    private function migrate15(){
+
+        $this->exec("UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\Biz\\Discount\\Job\\DiscountEndJob' WHERE `name` = 'DiscountEndJob';");
+        $this->exec("UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\Biz\\Discount\\Job\\DiscountStartJob' WHERE `name` = 'DiscountStartJob';");
+        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\Crontab\\Service\\Impl\\EmptyJob' WHERE `name` = 'EmptyJob';");
+        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\Notification\\Job\\LiveLessonStartNotifyJob' WHERE `name` = 'LiveLessonStartNotifyJob';");
+        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\Notification\\Job\\LiveOpenPushNotificationOneHourJob' WHERE `name` = 'LiveOpenPushNotificationOneHourJob';");
+        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\Notification\\Job\\PushNotificationOneHourJob' WHERE `name` = 'PushNotificationOneHourJob';");
+        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\Order\\Job\\CancelOrderJob' WHERE `name` = 'CancelOrderJob';");
+        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\Sms\\Job\\SmsSendOneDayJob' WHERE `name` = 'SmsSendOneDayJob';");
+        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\Sms\\Job\\SmsSendOneHourJob' WHERE `name` = 'SmsSendOneHourJob';");
+        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\Testpaper\\Job\\UpdateRealTimeTestResultStatusJob' WHERE `name` = 'UpdateRealTimeTestResultStatusJob';");
+        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\User\\Job\\DeleteExpiredTokenJob' WHERE `name` = 'DeleteExpiredTokenJob';");
+        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\User\\Job\\DeleteSessionJob' WHERE `name` = 'DeleteSessionJob';");
+    }
 
     private function getUserByType()
     {
@@ -167,7 +182,7 @@ class OtherMigrate extends AbstractMigrate
 
     public function update($page)
     {
-        if ($page>14) {
+        if ($page>15) {
             return;
         }
 
