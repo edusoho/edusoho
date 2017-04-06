@@ -9,6 +9,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
 use Biz\Crontab\Service\CrontabService;
 use Codeages\Biz\Framework\Context\BizAware;
+use Topxia\Service\Common\ServiceKernel;
 
 class CrontabServiceImpl extends BaseService implements CrontabService
 {
@@ -229,7 +230,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
     private function getCrontabConfigYml()
     {
-        return $this->biz->getParameter('kernel.root_dir').'/../app/data/crontab_config.yml';
+        return ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/data/crontab_config.yml';
     }
 
     public function findJobByTargetTypeAndTargetId($targetType, $targetId)
