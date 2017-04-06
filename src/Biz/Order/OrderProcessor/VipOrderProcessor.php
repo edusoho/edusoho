@@ -27,7 +27,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         $memberLevel = $this->getLevelService()->getLevel($member['levelId']);
 
         if ($memberLevel['seq'] > $targetLevel['seq']) {
-            return array('error' => $this->getKernel()->trans('已经是该等级会员了!'));
+            return array('error' => '已经是该等级会员了!');
         }
 
         return array();

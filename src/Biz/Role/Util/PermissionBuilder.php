@@ -374,7 +374,7 @@ class PermissionBuilder
 
         foreach ($parents as $key => $value) {
             $value['code'] = $key;
-            $value['name'] = ServiceKernel::instance()->trans($value['name']);
+            $value['name'] = $value['name'];
             $menus[$key] = $value;
 
             if (isset($value['children'])) {

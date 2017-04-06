@@ -21,30 +21,30 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     public function preCheck($targetId, $userId)
     {
         if ($this->getCourseMemberService()->isCourseStudent($targetId, $userId)) {
-            return array('error' => $this->getKernel()->trans('已经是该教学计划的学员了!'));
+            return array('error' => '已经是该教学计划的学员了!');
         }
 
         $course = $this->getCourseService()->getCourse($targetId);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         if (!$course['buyable']) {
-            return array('error' => $this->getKernel()->trans('该教学计划不可购买，如有需要，请联系客服'));
+            return array('error' => '该教学计划不可购买，如有需要，请联系客服');
         }
 
         if ($course['buyExpiryTime'] && $course['buyExpiryTime'] < time()) {
-            return array('error' => $this->getKernel()->trans('该教学计划已经超过购买截止日期，不允许购买'));
+            return array('error' => '该教学计划已经超过购买截止日期，不允许购买');
         }
 
         if ($course['status'] != 'published') {
-            return array('error' => $this->getKernel()->trans('不能加入未发布的教学计划!'));
+            return array('error' => '不能加入未发布的教学计划!');
         }
 
         if ($courseSet['status'] != 'published') {
-            return array('error' => $this->getKernel()->trans('不能加入未发布课程中的教学计划!'));
+            return array('error' => '不能加入未发布课程中的教学计划!');
         }
 
         if ($course['type'] == 'live' && $course['studentNum'] >= $course['maxStudentNum']) {
-            return array('error' => $this->getKernel()->trans('名额已满，不能加入!'));
+            return array('error' => '名额已满，不能加入!');
         }
 
         return array();
@@ -55,7 +55,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         $course = $this->getCourseService()->getCourse($targetId);
 
         if (empty($course)) {
-            throw new Exception($this->getKernel()->trans('找不到要购买教学计划!'));
+            throw new Exception('找不到要购买教学计划!');
         }
 
         $users = $this->getUserService()->findUsersByIds($course['teacherIds']);
@@ -321,10 +321,5 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     protected function getCourseMemberService()
     {
         return ServiceKernel::instance()->createService('Course:MemberService');
-    }
-
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
     }
 }

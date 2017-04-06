@@ -4,7 +4,6 @@ namespace Biz\Sms\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Sms\Service\SmsService;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\CloudPlatform\CloudAPIFactory;
 
 class SmsServiceImpl extends BaseService implements SmsService
@@ -26,7 +25,7 @@ class SmsServiceImpl extends BaseService implements SmsService
     public function smsSend($smsType, $userIds, $description, $parameters = array())
     {
         if (!$this->isOpen($smsType)) {
-            throw new \RuntimeException($this->getKernel()->trans('云短信相关设置未开启!'));
+            throw new \RuntimeException('云短信相关设置未开启!');
         }
 
         //这里不考虑去重，只考虑unlock
@@ -36,10 +35,10 @@ class SmsServiceImpl extends BaseService implements SmsService
             $api = $this->createCloudeApi();
             $result = $api->post('/sms/send', array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'parameters' => $parameters));
         } catch (\RuntimeException $e) {
-            throw new \RuntimeException($this->getKernel()->trans('发送失败！'));
+            throw new \RuntimeException('发送失败！');
         }
 
-        $message = $this->getKernel()->trans('对%To%发送用于%Type%的通知短信', array('%To%' => $to, '%Type%' => $smsType));
+        $message = sprintf('对%s发送用于%s的通知短信', $to, $smsType);
         $this->getLogService()->info('sms', $smsType, $message, $mobiles);
 
         return true;
@@ -48,17 +47,17 @@ class SmsServiceImpl extends BaseService implements SmsService
     public function sendVerifySms($smsType, $to, $smsLastTime = 0)
     {
         if (!$this->checkPhoneNum($to)) {
-            throw new \RuntimeException($this->getKernel()->trans('手机号错误:%to%', array('%to%' => $to)));
+            throw new \RuntimeException(sprintf('手机号错误:%s', $to));
         }
 
         if (!$this->isOpen($smsType)) {
-            throw new \RuntimeException($this->getKernel()->trans('云短信相关设置未开启!'));
+            throw new \RuntimeException('云短信相关设置未开启!');
         }
 
         $allowedTime = 120;
         $currentTime = time();
         if ($this->isNeedWaiting($smsLastTime, $currentTime, $allowedTime)) {
-            throw new \RuntimeException($this->getKernel()->trans('请等待120秒再申请!'));
+            throw new \RuntimeException('请等待120秒再申请!');
         }
         $currentUser = $this->getCurrentUser();
 
@@ -66,53 +65,53 @@ class SmsServiceImpl extends BaseService implements SmsService
 
         if (in_array($smsType, array('sms_bind', 'sms_registration'))) {
             if ($smsType == 'sms_bind') {
-                $description = $this->getKernel()->trans('手机绑定');
+                $description = '手机绑定';
             } else {
-                $description = $this->getKernel()->trans('用户注册');
+                $description = '用户注册';
             }
 
             $hasVerifiedMobile = (isset($currentUser['verifiedMobile']) && (strlen($currentUser['verifiedMobile']) > 0));
 
             if ($hasVerifiedMobile && ($to == $currentUser['verifiedMobile'])) {
-                throw new \RuntimeException($this->getKernel()->trans('您已经绑定了该手机号码'));
+                throw new \RuntimeException('您已经绑定了该手机号码');
             }
 
             if (!$this->getUserService()->isMobileUnique($to)) {
-                throw new \RuntimeException($this->getKernel()->trans('该手机号码已被其他用户绑定'));
+                throw new \RuntimeException('该手机号码已被其他用户绑定');
             }
         }
 
         if ($smsType == 'sms_forget_password') {
-            $description = $this->getKernel()->trans('登录密码重置');
+            $description = '登录密码重置';
             $targetUser = $this->getUserService()->getUserByVerifiedMobile($to);
 
             if (empty($targetUser)) {
-                throw new \RuntimeException($this->getKernel()->trans('用户不存在'));
+                throw new \RuntimeException('用户不存在');
             }
 
             if ((!isset($targetUser['verifiedMobile']) || (strlen($targetUser['verifiedMobile']) == 0))) {
-                throw new \RuntimeExceptionarray($this->getKernel()->trans('用户没有被绑定的手机号'));
+                throw new \RuntimeExceptionarray('用户没有被绑定的手机号');
             }
 
             if ($targetUser['verifiedMobile'] != $to) {
-                throw new \RuntimeExceptionarray($this->getKernel()->trans('手机与用户名不匹配'));
+                throw new \RuntimeExceptionarray('手机与用户名不匹配');
             }
             $to = $targetUser['verifiedMobile'];
         }
 
         if (in_array($smsType, array('sms_user_pay', 'sms_forget_pay_password'))) {
             if ($smsType == 'sms_user_pay') {
-                $description = $this->getKernel()->trans('网站余额支付');
+                $description = '网站余额支付';
             } else {
-                $description = $this->getKernel()->trans('支付密码重置');
+                $description = '支付密码重置';
             }
 
             if ((!isset($currentUser['verifiedMobile']) || (strlen($currentUser['verifiedMobile']) == 0))) {
-                throw new \RuntimeExceptionarray($this->getKernel()->trans('用户没有被绑定的手机号'));
+                throw new \RuntimeExceptionarray('用户没有被绑定的手机号');
             }
 
             if ($currentUser['verifiedMobile'] != $to) {
-                throw new \RuntimeExceptionarray($this->getKernel()->trans('您输入的手机号，不是已绑定的手机'));
+                throw new \RuntimeExceptionarray('您输入的手机号，不是已绑定的手机');
             }
 
             $to = $currentUser['verifiedMobile'];
@@ -129,12 +128,12 @@ class SmsServiceImpl extends BaseService implements SmsService
             $api = $this->createCloudeApi();
             $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'verify' => $smsCode));
             if (isset($result['error'])) {
-                return array('error' => $this->getKernel()->trans('发送失败, %resulterror%', array('%resulterror%' => $result['error'])));
+                return array('error' => sprintf('发送失败, %s', $result['error']));
             }
         } catch (\RuntimeException $e) {
             $message = $e->getMessage();
 
-            return array('error' => $this->getKernel()->trans('发送失败, %message%', array('%message%' => $message)));
+            return array('error' => sprintf('发送失败, %s', $message));
         }
 
         $result['to'] = $to;
@@ -145,7 +144,8 @@ class SmsServiceImpl extends BaseService implements SmsService
             $result['nickname'] = $currentUser['nickname'];
         }
 
-        $this->getLogService()->info('sms', $smsType, $this->getKernel()->trans('userId:%currentUserid%,对%to%发送用于%smsType%的验证短信%smsCode%', array('%currentUserid%' => $currentUser['id'], '%to%' => $to, '%smsType%' => $smsType, '%smsCode%' => $smsCode)), $result);
+        $this->getLogService()->info(
+            'sms', $smsType, sprintf('userId:%s,对%s发送用于%s的验证短信%s', $currentUser['id'], $to, $smsType, $smsCode), $result);
 
         return array(
             'to' => $to,
@@ -157,7 +157,7 @@ class SmsServiceImpl extends BaseService implements SmsService
     public function checkVerifySms($actualMobile, $expectedMobile, $actualSmsCode, $expectedSmsCode)
     {
         if (strlen($actualSmsCode) == 0 || strlen($expectedSmsCode) == 0) {
-            $result = array('success' => false, 'message' => $this->getKernel()->trans('验证码错误'));
+            $result = array('success' => false, 'message' => '验证码错误');
         }
 
         if ($actualMobile != '' && !empty($expectedMobile) && $actualMobile != $expectedMobile) {
@@ -165,9 +165,9 @@ class SmsServiceImpl extends BaseService implements SmsService
         }
 
         if ($expectedSmsCode == $actualSmsCode) {
-            $result = array('success' => true, 'message' => $this->getKernel()->trans('验证码正确'));
+            $result = array('success' => true, 'message' => '验证码正确');
         } else {
-            $result = array('success' => false, 'message' => $this->getKernel()->trans('验证码错误'));
+            $result = array('success' => false, 'message' => '验证码错误');
         }
 
         return $result;
@@ -181,13 +181,13 @@ class SmsServiceImpl extends BaseService implements SmsService
     protected function checkSmsType($smsType, $user)
     {
         if (!in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password', 'system_remind'))) {
-            throw new \RuntimeException($this->getKernel()->trans('不存在的sms Type'));
+            throw new \RuntimeException('不存在的sms Type');
         }
 
         $smsSetting = $this->getSettingService()->get('cloud_sms', array());
 
         if (!empty($smsSetting["{$smsType}"]) && $smsSetting["{$smsType}"] != 'on' && !$this->getUserService()->isMobileRegisterMode()) {
-            throw new \RuntimeException($this->getKernel()->trans('该使用场景未开启'));
+            throw new \RuntimeException('该使用场景未开启');
         }
     }
 
@@ -252,10 +252,5 @@ class SmsServiceImpl extends BaseService implements SmsService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
-    }
-
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
     }
 }

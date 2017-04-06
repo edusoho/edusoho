@@ -58,7 +58,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
                     $this->getLogger('PayCenter')->info("订单号：{$order['sn']} 更新订单的支付流水号");
                     list($success, $order) = $this->processOrder($payData, false);
                 } else {
-                    $order = $this->getOrderService()->cancelOrder($order['id'], $this->getKernel()->trans('余额不足扣款不成功'));
+                    $order = $this->getOrderService()->cancelOrder($order['id'], '余额不足扣款不成功');
                     $success = false;
                     $this->getLogger('PayCenter')->info("订单号：{$order['sn']} 余额不足扣款不成功");
                 }
@@ -127,19 +127,19 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
         $settings = $this->getSettingService()->get('payment');
 
         if (empty($settings)) {
-            throw new \RuntimeException($this->getKernel()->trans('支付参数尚未配置，请先配置。'));
+            throw new \RuntimeException('支付参数尚未配置，请先配置。');
         }
 
         if (empty($settings['enabled'])) {
-            throw new \RuntimeException($this->getKernel()->trans('支付模块未开启，请先开启。'));
+            throw new \RuntimeException('支付模块未开启，请先开启。');
         }
 
         if (empty($settings[$payment.'_enabled'])) {
-            throw new \RuntimeException($this->getKernel()->trans('支付模块(%payment%)未开启，请先开启。', array('%payment%' => $payment)));
+            throw new \RuntimeException(sprintf('支付模块(%s)未开启，请先开启。', $payment));
         }
 
         if (empty($settings["{$payment}_key"]) || empty($settings["{$payment}_secret"])) {
-            throw new \RuntimeException($this->getKernel()->trans('支付模块(%payment%)参数未设置，请先设置。', array('%payment%' => $payment)));
+            throw new \RuntimeException(sprintf('支付模块(%s)参数未设置，请先设置。', $payment));
         }
 
         $options = array(
@@ -183,7 +183,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
         $inflow = array(
             'userId' => $order['userId'],
             'amount' => $order['amount'],
-            'name' => $this->getKernel()->trans('入账'),
+            'name' => '入账',
             'orderSn' => $order['sn'],
             'category' => 'inflow',
             'note' => '',
@@ -224,7 +224,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
         $inflow = array(
             'userId' => $userId,
             'amount' => $order['amount'],
-            'name' => $this->getKernel()->trans('入账'),
+            'name' => '入账',
             'orderSn' => $order['sn'],
             'category' => 'inflow',
             'note' => '',
@@ -236,7 +236,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
         $rmbOutFlow = array(
             'userId' => $userId,
             'amount' => $order['amount'],
-            'name' => $this->getKernel()->trans('出账'),
+            'name' => '出账',
             'orderSn' => $order['sn'],
             'category' => 'outflow',
             'note' => '',
@@ -294,10 +294,5 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
-    }
-
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
     }
 }

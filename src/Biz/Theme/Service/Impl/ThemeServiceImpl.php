@@ -33,7 +33,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $currentTheme = $this->getSettingService()->get('theme');
 
         if (!isset($currentTheme['name'])) {
-            $currentTheme['name'] = $this->getKernel()->trans('简墨');
+            $currentTheme['name'] = '简墨';
         }
 
         if (empty($this->themeName) && empty($this->defaultConfig)) {
@@ -83,7 +83,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
             $currentTheme = $this->getSettingService()->get('theme');
 
             if (!isset($currentTheme['name'])) {
-                $currentTheme['name'] = $this->getKernel()->trans('简墨');
+                $currentTheme['name'] = '简墨';
             }
 
             $config['name'] = $currentTheme['name'];
@@ -97,7 +97,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $currentTheme = $this->getSettingService()->get('theme');
 
         if (!isset($currentTheme['name'])) {
-            $currentTheme['name'] = $this->getKernel()->trans('简墨');
+            $currentTheme['name'] = '简墨';
         }
 
         return $this->getThemeConfigByName($currentTheme['name']);
@@ -108,7 +108,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $currentTheme = $this->getSettingService()->get('theme');
 
         if (!isset($currentTheme['name'])) {
-            $currentTheme['name'] = $this->getKernel()->trans('简墨');
+            $currentTheme['name'] = '简墨';
         }
 
         $currentTheme = $this->getThemeConfigDao()->getThemeConfigByName($currentTheme['name']);
@@ -117,7 +117,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
             $currentTheme = $this->getSettingService()->get('theme');
 
             if (!isset($currentTheme['name'])) {
-                $currentTheme['name'] = $this->getKernel()->trans('简墨');
+                $currentTheme['name'] = '简墨';
             }
 
             return $this->createThemeConfig($currentTheme['name'], $config);
@@ -142,7 +142,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $currentTheme = $this->getSettingService()->get('theme');
 
         if (!isset($currentTheme['name'])) {
-            $currentTheme['name'] = $this->getKernel()->trans('简墨');
+            $currentTheme['name'] = '简墨';
         }
 
         return $this->saveCurrentThemeConfig($this->defaultConfig);
@@ -153,7 +153,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $currentTheme = $this->getSettingService()->get('theme');
 
         if (!isset($currentTheme['name'])) {
-            $currentTheme['name'] = $this->getKernel()->trans('简墨');
+            $currentTheme['name'] = '简墨';
         }
 
         $currentTheme = $this->getThemeConfigDao()->getThemeConfigByName($currentTheme['name']);
@@ -162,7 +162,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
             $currentTheme = $this->getSettingService()->get('theme');
 
             if (!isset($currentTheme['name'])) {
-                $currentTheme['name'] = $this->getKernel()->trans('简墨');
+                $currentTheme['name'] = '简墨';
             }
 
             return $this->createThemeConfig($currentTheme['name'], $this->defaultConfig);
