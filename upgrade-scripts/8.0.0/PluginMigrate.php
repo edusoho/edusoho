@@ -34,8 +34,8 @@ class PluginMigrate extends AbstractMigrate
 
     protected function moveRoutingPluginsYml()
     {
-        $file = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/config/routing_plugin.yml';
-        $targetFile = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/config/old_routing_plugin.yml';
+        $file = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/config/routing_plugins.yml';
+        $targetFile = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/config/old_routing_plugins.yml';
         $filesystem = new Filesystem();
 
         if ($filesystem->exists($file)) {
