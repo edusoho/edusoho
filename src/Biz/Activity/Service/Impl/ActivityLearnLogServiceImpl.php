@@ -18,6 +18,7 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
             'activityId' => $activity['id'],
             'userId' => $this->getCurrentUser()->getId(),
             'event' => $eventName,
+            'mediaType' => $activity['mediaType'],
             'watchTime' => !empty($data['watchTime']) ? $data['watchTime'] : 0,
             'learnedTime' => !empty($data['learnedTime']) ? $data['learnedTime'] : 0,
             'data' => $data,
@@ -85,6 +86,11 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
     public function deleteLearnLogsByActivityId($activityId)
     {
         return $this->getActivityLearnLogDao()->deleteByActivityId($activityId);
+    }
+
+    public function getLastestLearnLogByActivityIdAndUserId($activityId, $userId)
+    {
+        return $this->getActivityLearnLogDao()->getLastestByActivityIdAndUserId($activityId, $userId);
     }
 
     /**

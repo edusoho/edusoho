@@ -99,6 +99,13 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         if ($eventName == 'start') {
             $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
+        } elseif ($eventName != 'finish') {
+            $user = $this->getCurrentUser();
+            //查询用户当前活动的最新学习记录，如果记录间隔小于1分钟（定为55秒是为了兼容网络延迟）则不记录本次trigger信息
+            $learnLog = $this->getActivityLearnLogService()->getLastestLearnLogByActivityIdAndUserId($id, $user['id']);
+            if (!empty($learnLog) && (time() - $learnLog['createdTime'] < 55)) {
+                return;
+            }
         }
 
         $this->triggerActivityLearnLogListener($activity, $eventName, $data);
@@ -125,7 +132,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $logListener = new ActivityLearnLogListener($this->biz);
 
         $logData = $data;
-        $logData['event'] = $activity['mediaType'].'.'.$eventName;
+        $logData['event'] = $eventName;
         $logListener->handle($activity, $logData);
     }
 
