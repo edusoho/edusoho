@@ -1056,6 +1056,10 @@ wxpay_roll:
     path: /pay/wxpay/roll
     defaults: {_controller: AppBundle:PayCenter:wxpayRoll }
 
+pay_center_wxpay:
+    path:   /pay/center/wxpay
+    defaults: { _controller: AppBundle:PayCenter:wxpay }
+
 order_show:
     path:  /order/show
     defaults: { _controller: AppBundle:Order:show }
@@ -2877,3 +2881,8 @@ callback:
 mobile_qrcode:
     path:  /mobil/qrcode
     defaults: { _controller: AppBundle:Common:mobileQrcode }
+
+event_dispatch:
+    path: /event/dispatch
+    defaults: { _controller: AppBundle:Event:dispatch }
+    methods: [POST]

@@ -34,41 +34,40 @@ class PluginRegisterCommand extends ContainerAwareCommand
         $installer = new PluginRegister($rootDir, 'plugins', $biz);
 
         if ($installer->isPluginRegisted($code)) {
-            throw new \RuntimeException("Plugin is already registed.");
+            throw new \RuntimeException('Plugin is already registed.');
         }
 
-        $output->write("  - Parse meta file plugin.json");
+        $output->write('  - Parse meta file plugin.json');
         $metas = $installer->parseMetas($code);
-        $output->writeln("  <info>[Ok]</info>");
+        $output->writeln('  <info>[Ok]</info>');
 
         if (!$withoutDatabase) {
-            $output->write("  - Execute create database scripts.");
+            $output->write('  - Execute create database scripts.');
             $executed = $installer->executeDatabaseScript($code);
-            $output->writeln($executed ? "  <info>[Ok]</info>" : "  <info>[Ignore]</info>");
+            $output->writeln($executed ? '  <info>[Ok]</info>' : '  <info>[Ignore]</info>');
         }
 
-        $output->write("  - Execute install script.");
+        $output->write('  - Execute install script.');
         $executed = $installer->executeScript($code);
-        $output->writeln($executed ? "  <info>[Ok]</info>" : "  <info>[Ignore]</info>");
+        $output->writeln($executed ? '  <info>[Ok]</info>' : '  <info>[Ignore]</info>');
 
-        $output->write("  - Install assets.");
+        $output->write('  - Install assets.');
         $content = $installer->installAssets($code);
-        $output->writeln("  <info>[Ok]</info>");
+        $output->writeln('  <info>[Ok]</info>');
         $output->writeln($content);
 
-        $output->write("  - Install block.");
+        $output->write('  - Install block.');
         BlockToolkit::init($installer->getPluginDirectory($code).'/block.json', $this->getContainer());
-        $output->writeln("  <info>[Ok]</info>");
+        $output->writeln('  <info>[Ok]</info>');
 
-        $output->write("  - Create plugin installed record.");
+        $output->write('  - Create plugin installed record.');
         $app = $installer->registerPlugin($code);
-        $output->writeln($app ? "  <info>[Ok]</info>" : "  <info>[Ignore]</info>");
+        $output->writeln($app ? '  <info>[Ok]</info>' : '  <info>[Ignore]</info>');
 
-        $output->write("  - Refresh plugin cache.");
+        $output->write('  - Refresh plugin cache.');
         $installer->refreshInstalledPluginConfiguration();
-        $output->writeln($executed ? "  <info>[Ok]</info>" : "  <info>[Ignore]</info>");
+        $output->writeln($executed ? '  <info>[Ok]</info>' : '  <info>[Ignore]</info>');
 
         $output->writeln("<info>Finished!</info>\n");
     }
-
 }

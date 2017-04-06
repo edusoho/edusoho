@@ -43,7 +43,9 @@
                   {% include 'course/task-list/parts/list-li-title.html.twig' %}
                 </a>
               {% else %}
-							  <span class="title">{% include 'course/task-list/parts/list-li-title.html.twig' %}</span>
+							<a class="title" href="#modal" data-toggle="modal"
+								 data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
+								 style="margin-top:-8px">{% include 'course/task-list/parts/list-li-title.html.twig' %}</a>
               {% endif %}
 							<span class="right-menu color-gray {% if not member %} mouse-leave {% endif %}">
                 {{ task.activity.length|default(0)|activity_length_format }}
@@ -83,7 +85,7 @@
 	              {% elseif (not task.isFree) and course.parentId|default(0) == 0 %}
 		              <a class="btn btn-primary" href="#modal" data-toggle="modal"
 		                 data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
-		                 style="margin-top:-8px">立即购买</a>
+		                 style="margin-top:-8px">购买</a>
 	              {% endif %}
 
               {% endif %}
@@ -102,6 +104,3 @@
 		{% endfor %}
 	</ul>
 </div>
-
-
-

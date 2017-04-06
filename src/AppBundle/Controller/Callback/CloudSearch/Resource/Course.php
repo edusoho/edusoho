@@ -2,13 +2,13 @@
 
 namespace AppBundle\Controller\Callback\CloudSearch\Resource;
 
-use AppBundle\Controller\Callback\CloudSearch\BaseResource;
+use AppBundle\Controller\Callback\CloudSearch\BaseProvider;
 use AppBundle\Common\ArrayToolkit;
 
 /**
  * 单个课程资源(对应course_set表).
  */
-class Course extends BaseResource
+class Course extends BaseProvider
 {
     public function filter($res)
     {

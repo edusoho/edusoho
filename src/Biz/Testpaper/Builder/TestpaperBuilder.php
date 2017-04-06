@@ -189,7 +189,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
             if ($item['questionType'] != 'material') {
                 ++$seq;
             }
-
+            $item['type'] = 'testpaper';
             $testpaperItems[] = $this->getTestpaperService()->createItem($item);
         }
 
@@ -223,8 +223,11 @@ class TestpaperBuilder implements TestpaperBuilderInterface
         $conditions = array();
         $options['ranges'] = array_filter($options['ranges']);
 
-        if (!empty($options['ranges'])) {
-            $conditions['lessonIds'] = $options['ranges'];
+        if (!empty($options['ranges']['courseId'])) {
+            $conditions['courseId'] = $options['ranges']['courseId'];
+        }
+        if (!empty($options['ranges']['lessonId'])) {
+            $conditions['lessonId'] = $options['ranges']['lessonId'];
         }
         $conditions['courseSetId'] = $options['courseSetId'];
         $conditions['parentId'] = 0;

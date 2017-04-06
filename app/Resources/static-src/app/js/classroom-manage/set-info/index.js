@@ -19,14 +19,15 @@ $("[name='expiryMode']").change(function () {
     }
     $("[name='expiryValue']").val('')
   }
-  if ($(this).val() == 'none') {
+
+  if ($(this).val() == 'forever') {
     $('.expiry-value-js').addClass('hidden');
   } else {
     $('.expiry-value-js').removeClass('hidden');
     var $esBlock = $('.expiry-value-js > .controls > .help-block');
     $esBlock.text($esBlock.data($(this).val()));
-    toggleExpiryValue($(this).val());
   }
+  toggleExpiryValue($(this).val());
 });
 
 function initEditor() {
@@ -55,12 +56,12 @@ function initValidator() {
   });
 
   $('#classroom-save').click(() => {
-    console.log(validator.settings.rules);
     // validator.form();
   })
 }
 
 function toggleExpiryValue(expiryMode) {
+  console.log('toggleExpiryValue: ', expiryMode);
   if (!$("[name='expiryValue']").val()) {
     $("[name='expiryValue']").val($("[name='expiryValue']").data(expiryMode));
   }
@@ -93,7 +94,9 @@ function toggleExpiryValue(expiryMode) {
 function getExpiryModeDaysRules() {
   return {
     required: true,
-    positive_currency: true,
+    digits:true,
+    min: 1,
+    max: 10000,
     messages: {
       required: '请输入有效期天数',
     }

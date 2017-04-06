@@ -8,7 +8,7 @@ define(function(require, exports, module) {
                 pagination: '.swiper-pager',
                 calculateHeight: true,
                 paginationClickable: true,
-                autoplay: 5000,
+                autoplay: 100000000,
                 autoplayDisableOnInteraction: false,
                 loop: true,
                 onInit: function(swiper) {

@@ -1,4 +1,4 @@
-{% if (member is empty) and task.isFree and ( not course.isFree ) %}
+{% if (member is empty) and task.isFree %}
   <span class="label label-success mr10">免费</span>
 {% elseif (member is empty) and ( not course.isFree ) and course.tryLookable and task.type == 'video' and file.storage|default('') == 'cloud' %}
   <span class="label label-warning mrm">{{ '试看'|trans }}</span>

@@ -95,7 +95,7 @@
       <label for="condition-select">{{ '完成条件'|trans }}</label>
     </div>
     <div class="col-xs-4 controls">
-      <select class="form-control" id="condition-select" name="finishCondition">
+      <select class="form-control" id="condition-select" name="condition">
         {{ select_options({'score':'分数达标'|trans,'submit':'提交答卷'|trans}, activity.finishCondition['type']|default('score')) }}
       </select>
       <input type="hidden" name="finishScore" value="{{ activity.finishCondition['finishScore']|default('0') }}" />

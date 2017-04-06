@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import List from './list';
 import InputGroup from './input-group';
 import { getRandomString } from './part';
-import '!style!css!less!./style.less';
+import '!style?insertAt=top!css!less!./style.less';
 
 function initItem(dataSourceUi, value) {
   let item = {
     itemId: getRandomString(),
     label: value,
-    seq: dataSourceUi.length + 1,
     outputValue: value
   };
   dataSourceUi.push(item);
@@ -18,20 +17,18 @@ function removeItem(dataSourceUi, itemId) {
   for (let i = 0; i < dataSourceUi.length; i++) {
     if (dataSourceUi[i].itemId == itemId) {
       dataSourceUi.splice(i, 1);
-      i--;
-    } else {
-      dataSourceUi[i].seq = i + 1;
-    }
+      break;
+    } 
   }
 }
 
-function updateItemSeq(data, datas) {
+function updateItemSeq(sortDatas, dataSourceUi) {
   let temps = [];
-  for (let i = 0; i < data.length; i++) {
-    for (let j = 0; j < datas.length; j++) {
-      if (data[i] == datas[j].itemId) {
-        datas[j].seq = i + 1;
-        temps.push(datas[j]);
+  for (let i = 0; i < sortDatas.length; i++) {
+    for (let j = 0; j < dataSourceUi.length; j++) {
+      if (sortDatas[i] == dataSourceUi[j].itemId) {
+        temps.push(dataSourceUi[j]);
+        break;
       }
     }
   }
@@ -50,6 +47,8 @@ export default class MultiInput extends Component {
     this.props.dataSource.map((item, index) => {
       initItem(this.state.dataSourceUi, item);
     })
+
+    console.log({'initItem after':this.state.dataSourceUi})
   }
 
   getChildContext() {
@@ -57,6 +56,12 @@ export default class MultiInput extends Component {
       removeItem: this.removeItem,
       sortItem: this.sortItem,
       addItem: this.addItem,
+      addable: this.props.addable,
+      searchable: this.props.searchable,
+      sortable: this.props.sortable,
+      listClassName:this.props.listClassName,
+      inputName: this.props.inputName,
+      dataSourceUi: this.state.dataSourceUi,
     }
   }
 
@@ -93,19 +98,17 @@ export default class MultiInput extends Component {
   }
 
   getList() {
-    const { sortable, listClassName, inputName } = this.props;
-    return (<List sortable={sortable} inputName={inputName} listClassName={listClassName} dataSourceUi={this.state.dataSourceUi}></List>);
+    return (<List></List>);
   }
 
   render() {
-    const { searchable, addable, blurIsAdd, outputDataElement} = this.props;
     let list = this.getList();
     let outputSets = this.getOutputSets();
     return (
       <div className="multi-group">
         {list}
-        {this.props.showAddBtnGroup && <InputGroup searchable={searchable} addable={addable} blurIsAdd={blurIsAdd} />}
-        <input type='hidden' name={outputDataElement} value={JSON.stringify(outputSets)} />
+        {this.props.showAddBtnGroup && <InputGroup/>}
+        <input type='hidden' name={this.props.outputDataElement} value={JSON.stringify(outputSets)} />
       </div>
     );
   }
@@ -117,7 +120,6 @@ MultiInput.propTypes = {
   dataSource: React.PropTypes.array.isRequired,
   sortable: React.PropTypes.bool,
   addable: React.PropTypes.bool,
-  blurIsAdd: React.PropTypes.bool,
   searchable: React.PropTypes.shape({
     enable: React.PropTypes.bool,
     url: React.PropTypes.string,
@@ -134,7 +136,6 @@ MultiInput.defaultProps = {
   dataSource: [],
   sortable: true,
   addable: true,
-  blurIsAdd: false,
   searchable: {
     enable: false,
     url: '',
@@ -149,6 +150,15 @@ MultiInput.childContextTypes = {
   removeItem: React.PropTypes.func,
   sortItem: React.PropTypes.func,
   addItem: React.PropTypes.func,
+  addable: React.PropTypes.bool,
+  searchable:  React.PropTypes.shape({
+    enable: React.PropTypes.bool,
+    url: React.PropTypes.string,
+  }),
+  sortable: React.PropTypes.bool,
+  listClassName:React.PropTypes.string,
+  inputName: React.PropTypes.string,
+  dataSourceUi: React.PropTypes.array.isRequired,
 };
 
 

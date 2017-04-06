@@ -196,6 +196,7 @@ class HomeworkBuilder implements TestpaperBuilderInterface
             $items['questionType'] = $question['type'];
             $items['testId'] = $homeworkId;
             $items['parentId'] = $question['parentId'];
+            $items['type'] = 'homework';
             $homeworkItems[] = $this->getTestpaperService()->createItem($items);
         }
 

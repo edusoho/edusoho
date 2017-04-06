@@ -2,27 +2,27 @@
 
 namespace Biz\Classroom\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\ClassroomToolkit;
 use Biz\BaseService;
-use Biz\Classroom\Dao\ClassroomCourseDao;
-use Biz\Classroom\Dao\ClassroomDao;
-use Biz\Classroom\Dao\ClassroomMemberDao;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\Content\Service\FileService;
 use Biz\Course\Dao\CourseNoteDao;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\MemberService;
-use Biz\Order\Service\OrderService;
-use Biz\System\Service\LogService;
-use Biz\Task\Service\TaskResultService;
-use Biz\Taxonomy\Service\CategoryService;
-use Biz\Taxonomy\Service\TagService;
-use Biz\User\Service\StatusService;
 use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\LogService;
+use Biz\Classroom\Dao\ClassroomDao;
+use Biz\Order\Service\OrderService;
+use Biz\User\Service\StatusService;
+use Biz\Content\Service\FileService;
+use Biz\Taxonomy\Service\TagService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
+use AppBundle\Common\ClassroomToolkit;
+use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\Course\Service\CourseSetService;
+use Biz\Classroom\Dao\ClassroomCourseDao;
+use Biz\Classroom\Dao\ClassroomMemberDao;
+use Biz\Taxonomy\Service\CategoryService;
 use VipPlugin\Biz\Vip\Service\VipService;
+use Biz\Classroom\Service\ClassroomService;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
 {
@@ -199,6 +199,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $userId = $this->getCurrentUser()->getId();
         $classroom['creator'] = $userId;
         $classroom['teacherIds'] = array($userId);
+        $classroom['expiryMode'] = 'forever';
+        $classroom['expiryValue'] = 0;
 
         $classroom = $this->getClassroomDao()->create($classroom);
         $this->becomeTeacher($classroom['id'], $userId);
@@ -244,12 +246,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             }
             $this->refreshCoursesSeq($classroomId, $courseIds);
 
-            $this->commit();
-
             $this->dispatchEvent(
                 'classroom.course.create',
                 new Event($classroom, array('courseIds' => $courseIds))
             );
+
+            $this->commit();
 
             return $this->findActiveCoursesByClassroomId($classroomId);
         } catch (\Exception $e) {
@@ -302,7 +304,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $arguments = $fields;
 
         if (!empty($arguments['expiryMode']) && !empty($arguments['expiryValue']) && $this->canUpdateMembersDeadline($classroom,
-                $arguments['expiryMode'])
+            $arguments['expiryMode'])
         ) {
             $deadline = ClassroomToolkit::buildMemberDeadline(array(
                 'expiryMode' => $arguments['expiryMode'],
@@ -544,13 +546,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $newTeacherIds = array_unique($newTeacherIds);
-        $ids = array();
 
-        foreach ($newTeacherIds as $key => $value) {
-            $ids[] = $value;
-        }
+        $newTeacherIds = array_filter($newTeacherIds, function ($newTeacherId) {
+            return !empty($newTeacherId);
+        });
 
-        $newTeacherIds = $ids;
         $deleteTeacherIds = array_diff($oldTeacherIds, $newTeacherIds);
         $addTeacherIds = array_diff($newTeacherIds, $oldTeacherIds);
         $addMembers = $this->findMembersByClassroomIdAndUserIds($id, $addTeacherIds);
@@ -676,9 +676,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->beginTransaction();
 
             foreach ($courseIds as $courseId) {
+                $classroomRef = $this->getClassroomCourse($classroomId, $courseId);
+                if (empty($classroomRef)) {
+                    continue;
+                }
+                $this->getCourseSetService()->unlockCourseSet($classroomRef['courseSetId']);
                 $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $courseId);
-                $course = $this->getCourseService()->getCourse($courseId);
-                $this->getCourseSetService()->unlockCourseSet($course['courseSetId']);
                 $this->dispatchEvent(
                     'classroom.course.delete',
                     new Event($classroom, array('deleteCourseId' => $courseId))
@@ -1200,10 +1203,17 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createNotFoundException();
         }
 
-        $user = $this->getUserService()->getUser($userId);
+        if (!empty($userId)) {
+            $user = $this->getUserService()->getUser($userId);
 
-        if (empty($user)) {
-            throw $this->createServiceException("用户(#{$userId})不存在，加入班级失败！");
+            if (empty($user)) {
+                throw $this->createServiceException("用户(#{$userId})不存在，加入班级失败！");
+            }
+        } else {
+            $user = $this->getCurrentUser();
+            if (!in_array('ROLE_SUPER_ADMIN', $user['roles']) && !in_array('ROLE_ADMIN', $user['roles'])) {
+                throw $this->createServiceException('Access denied!');
+            }
         }
 
         $fields = array(
@@ -1305,7 +1315,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
 
-        if (array_intersect($member['role'], array('headTeacher'))) {
+        if (in_array('headTeacher', $member['role'])) {
             return true;
         }
 
@@ -1315,7 +1325,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function tryManageClassroom($id, $actionPermission = null)
     {
         if (!$this->canManageClassroom($id, $actionPermission)) {
-            // throw $this->createAccessDeniedException('您无权操作！');
+            throw $this->createAccessDeniedException('Unauthorized');
         }
     }
 
@@ -1395,7 +1405,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function tryHandleClassroom($id)
     {
         if (!$this->canHandleClassroom($id)) {
-            throw $this->createAccessDeniedException('您无权操作！');
+            throw $this->createAccessDeniedException('Unauthorized');
         }
     }
 

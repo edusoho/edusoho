@@ -1,5 +1,5 @@
 {% extends 'layout.html.twig' %}
-{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','libs/iframe-resizer-contentWindow.js',], 500) %}
+{% do script(['libs/jquery-validation.js','libs/iframe-resizer-contentWindow.js',], 500) %}
 
 {% block body %}
   <div class="tab-content" id="iframe-content">
@@ -21,10 +21,12 @@
       <form class="form-horizontal" id="step3-form" >
         {% block activity_finish %}
         {% endblock %}
+
+        {% set task = data('TaskByActivity', {courseId: activity.fromCourseId|default(0), activityId: activity.id|default(0)}) %}
         <div class="form-group">
           <div class="col-sm-10 col-sm-offset-2 radios">
             <label>
-              <input type="checkbox" name="isOptional" value="1" {% if task is defined and task.isOptional %} checked {% endif %}>
+              <input type="checkbox" name="isOptional" value="1" {% if task.isOptional|default(false) %} checked {% endif %}>
               设为选修
             </label>
               <span class="color-gray">学习结果将不会计入学习进度、学习统计中，并且不会影响下一任务的解锁</span>

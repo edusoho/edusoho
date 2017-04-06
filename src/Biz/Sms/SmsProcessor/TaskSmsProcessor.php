@@ -101,7 +101,7 @@ class TaskSmsProcessor extends BaseSmsProcessor
             $classroom = $this->getClassroomService()->getClassroomByCourseId($task['courseId']);
 
             if ($classroom) {
-                $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['id']),
+                $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['id'], 'role' => 'student'),
                     array('createdTime' => 'Desc'), $index, 1000);
             }
         } else {

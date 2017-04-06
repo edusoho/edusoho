@@ -118,7 +118,14 @@
             </div>
           {% endif %}
         {% endif %}
-        <div class="title">{{ courseSet.title|sub_text(8) }}<span class="pull-right color-primary text-12"><span class="gray-light mrs">|</span>{{course.title|sub_text(6)}}</span></div>
+        <div class="title">
+          {{ courseSet.title|sub_text(8) }}
+          <span class="pull-right color-primary text-12" data-trigger="hover" data-container="body" 
+            data-toggle="popover" data-placement="top" data-content="{{course.title}}">
+            <span class="gray-light mrs">|</span>
+            {{course.title|sub_text(6)}}
+          </span>
+        </div>
       </a>
     </li>
   {% endfor %}

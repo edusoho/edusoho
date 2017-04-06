@@ -108,13 +108,15 @@
         {% else %}
           <tr>
             <td class="text-center" colspan="20">
-              <a class=""  href="{{ path('course_set_manage_create') }}" target="_blank">
-                {% if filter|default('normal') == 'live' %}
-                  {{ '你还没有在教的直播课程哦, 赶快去创建吧!'|trans }}
-                {% else %}
-                  {{ '你还没有在教的课程哦, 赶快去创建吧!'|trans }}
-                {% endif %}
-              </a>
+              <div class="empty">
+                <a class="link-primary"  href="{{ path('course_set_manage_create') }}" target="_blank">
+                  {% if filter|default('normal') == 'live' %}
+                    {{ '你还没有在教的直播课程哦, 赶快去创建吧!'|trans }}
+                  {% else %}
+                    {{ '你还没有在教的课程哦, 赶快去创建吧!'|trans }}
+                  {% endif %}
+                </a>
+              </div>
             </td>
           </tr>
         {% endfor %}
