@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c6f2284e6999d08d2a5c90b8fbf8fc80",
+    "content-hash": "d708934ca98bd738999889fde97cf8dd",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -246,16 +246,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.3.3",
+            "version": "v0.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "ccad710f43cb902cfe435bf5faaab13d10b60538"
+                "reference": "856a741902459c65496bbd2886e63b63f7f16d92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/biz-framework/ccad710f43cb902cfe435bf5faaab13d10b60538.zip",
-                "reference": "ccad710f43cb902cfe435bf5faaab13d10b60538",
+                "url": "https://files.phpcomposer.com/files/codeages/biz-framework/856a741902459c65496bbd2886e63b63f7f16d92.zip",
+                "reference": "856a741902459c65496bbd2886e63b63f7f16d92",
                 "shasum": ""
             },
             "require": {
@@ -280,7 +280,7 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2017-04-05T16:25:31+00:00"
+            "time": "2017-04-06T07:46:11+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
