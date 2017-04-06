@@ -187,12 +187,12 @@ class BuildUpgradePackageCommand extends BaseCommand
     {
         $distPath = $packageDirectory.'/source/'.$opFile;
 
-        if (@mkdir(dirname($distPath), 0777, true) && !is_dir(dirname($distPath))) {
+        if (@mkdir(realpath($distPath), 0777, true) && !is_dir(realpath($distPath))) {
             $this->output->writeln("创建升级包目录{$distPath} 失败");
             exit(1);
         }
 
-        $root = dirname($this->getContainer()->getParameter('kernel.root_dir').'/../');
+        $root = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
 
         if (!is_file("{$root}/{$opFile}")) {
             return;
@@ -203,7 +203,7 @@ class BuildUpgradePackageCommand extends BaseCommand
 
     private function createDirectory()
     {
-        $root = dirname($this->getContainer()->getParameter('kernel.root_dir').'/../');
+        $root = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
         $path = "{$root}/build/EduSoho_{$this->version}/";
 
         if ($this->filesystem->exists($path)) {
@@ -257,7 +257,7 @@ class BuildUpgradePackageCommand extends BaseCommand
         $this->output->writeln("\n\n");
         $this->output->write('<info>拷贝升级脚本：</info>');
 
-        $path = dirname($this->getContainer()->getParameter('kernel.root_dir').'/../').'/scripts/upgrade-'.$this->version.'.php';
+        $path = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../').'/scripts/upgrade-'.$this->version.'.php';
 
         if (!file_exists($path)) {
             $this->output->writeln('无升级脚本');
@@ -270,7 +270,7 @@ class BuildUpgradePackageCommand extends BaseCommand
 
     private function zipPackage($distDir)
     {
-        $buildDir = dirname($distDir);
+        $buildDir = realpath($distDir);
         $filename = basename($distDir);
 
         if ($this->filesystem->exists("{$buildDir}/{$filename}.zip")) {
