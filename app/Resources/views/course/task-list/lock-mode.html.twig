@@ -64,8 +64,8 @@
                 {% if task.isFree %}
                   <a class="btn btn-primary" href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" style="margin-top:-8px">预览</a>
                 {% elseif course.tryLookable and task.type == 'video' and file.storage | default('') == 'cloud' %}
-                  <a class="btn btn-warning" href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" style="margin-top:-8px">试看</a>
-                {% elseif(not task.isFree)and course.parentId | default(0) == 0 %}
+                  <a class="btn btn-warning" href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" style="margin-top:-8px">试看11</a>
+                {% elseif (not task.isFree) and course.parentId | default(0) == 0 %}
                   {% if course.isFree %}
                     <a
                       style="margin-top:-8px"

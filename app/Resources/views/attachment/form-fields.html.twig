@@ -25,7 +25,7 @@
             <img class="mrm" src="{{ asset('assets/img/default/cloud_' ~ attachment.file.type ~ '.png') }}" height="60px" width="107px">
             {{ attachment.file.filename }}
             <button class="btn btn-link js-attachment-delete pull-right" data-url="{{path('attachment_delete',{id:attachment.id})  }}" type="button" style="margin-top:13px" data-role="delte-item" data-loading-text="{{'正在删除...'|trans}}">删除</button> 
-            <a class="btn btn-link pull-right" style="margin-top:13px" href="#modal" data-toggle="modal" data-url="{{ path('attachment_preview', {'id': attachment.id}) }}">预览</a>
+            <a class="btn btn-link pull-right" style="margin-top:13px" href="{{ path('attachment_preview', {'id': attachment.id}) }}" target="_blank">预览</a>
           </div>
         {% endfor %}
       </div>
