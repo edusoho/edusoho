@@ -27,7 +27,6 @@ class OpenCourseFileManageController extends BaseController
         );
 
         //FIXME 同一个courseId下文件可能存在重复，所以需考虑去重，但没法直接根据groupbyFileId去重（sql_mode）
-        // $materials = $this->getMaterialService()->searchMaterialsGroupByFileId(
         $materials = $this->getMaterialService()->searchMaterials(
             $conditions,
             array('createdTime' => 'DESC'),
@@ -183,7 +182,8 @@ class OpenCourseFileManageController extends BaseController
         $materials = $this->getMaterialService()->searchMaterials(
             array('lessonId' => $lesson['id'], 'type' => 'openCourse'),
             array('createdTime' => 'DESC'),
-            0, 100
+            0,
+            100
         );
 
         return $this->render('open-course-manage/material-edit-modal.html.twig', array(
