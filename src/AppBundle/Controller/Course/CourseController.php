@@ -651,6 +651,7 @@ class CourseController extends CourseBaseController
     /**
      * @param  $courseId
      * @param  $member
+     *
      * @return array
      */
     protected function isMarketingPage($courseId, $member)
@@ -672,6 +673,7 @@ class CourseController extends CourseBaseController
 
     /**
      * @param  $tab
+     *
      * @return string
      */
     protected function prepareTab($tab)

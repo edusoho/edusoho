@@ -15,10 +15,11 @@ class ThreadController extends BaseController
     /**
      * [listAction description].
      *
-     * @param  Request $request        [description]
-     * @param  [type]  $target         [description]
-     * @param  [type]  $filters        [description]
-     * @return [type]  [description]
+     * @param Request $request [description]
+     * @param [type]  $target  [description]
+     * @param [type]  $filters [description]
+     *
+     * @return [type] [description]
      */
     public function listAction(Request $request, $target, $filters)
     {
@@ -179,7 +180,7 @@ class ThreadController extends BaseController
                     'targetId' => $target['id'],
                     'type' => 'type-modify',
                     'userId' => $user['id'],
-                    'userName' => $user['nickname']);
+                    'userName' => $user['nickname'], );
 
                 if ($thread['userId'] != $user['id']) {
                     $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', $message);
@@ -212,7 +213,7 @@ class ThreadController extends BaseController
                 'title' => $thread['title'],
                 'type' => 'delete',
                 'userId' => $user['id'],
-                'userName' => $user['nickname']);
+                'userName' => $user['nickname'], );
 
             $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', $message);
         }

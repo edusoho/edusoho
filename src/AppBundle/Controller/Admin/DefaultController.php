@@ -262,8 +262,9 @@ class DefaultController extends BaseController
     /**
      * 订单统计
      *
-     * @param  Request                                          $request
+     * @param Request $request
      * @param  $period
+     *
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function studyStatisticAction(Request $request, $period)

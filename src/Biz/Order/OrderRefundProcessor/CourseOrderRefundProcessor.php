@@ -16,6 +16,7 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
         $conditions = array(
             'title' => $title,
         );
+
         return $this->getCourseService()->searchCourses($conditions, null, 0, PHP_INT_MAX);
     }
 

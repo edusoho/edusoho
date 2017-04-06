@@ -89,6 +89,7 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
             $questionMarkers = $this->findQuestionMarkersByMarkerId($markerId);
             $this->getQuestionMarkerDao()->waveSeqBehind($markerId, $seq);
             $questionmarker = $this->getQuestionMarkerDao()->create($questionMarker);
+
             return $questionmarker;
         }
     }

@@ -1153,8 +1153,9 @@ class EduCloudController extends BaseController
     /**
      * 处理支付成功回执的总开关.
      *
-     * @param  Request $request        [description]
-     * @return [type]  [description]
+     * @param Request $request [description]
+     *
+     * @return [type] [description]
      */
     private function updateSmstrategy($smsStatus, $dataUserPosted)
     {
