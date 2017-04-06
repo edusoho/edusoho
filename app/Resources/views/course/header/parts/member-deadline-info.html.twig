@@ -19,8 +19,10 @@
         {{ lastDays }}
         {% if lastDays == 0 %}
           <span class="color-warning">(今日到期)</span>
-        {% elseif lastDays < 30 %}
-          (剩余 {{ lastDays }} )
+        {% elseif lastDays == 1 %}
+          <span class="color-warning">(明日到期)</span>
+        {% elseif lastDays < 31 %}
+          (剩余 {{ lastDays }} 天)
         {% endif %}
       {% endif %}
     {% else %}
@@ -31,7 +33,9 @@
         {% set lastDays = member.deadline|time_diff %}
         {% if lastDays == 0 %}
           <span class="color-warning">(今日到期)</span>
-        {% elseif lastDays < 30 %}
+        {% elseif lastDays == 1 %}
+          <span class="color-warning">(明日到期)</span>
+        {% elseif lastDays < 31 %}
           (剩余 {{ lastDays }} 天)
         {% endif %}
       {% endif %}

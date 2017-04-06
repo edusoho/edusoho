@@ -107,7 +107,7 @@ class PluginRegister
 
         $installeds = array();
         foreach ($plugins as $plugin) {
-            if ($plugin['code'] == 'MAIN') {
+            if ($plugin['code'] == 'MAIN' || $plugin['protocol'] < 3) {
                 continue;
             }
             $installeds[$plugin['code']] = array(
@@ -131,13 +131,12 @@ class PluginRegister
 
         foreach ($plugins as $plugin) {
             foreach (array('' => 'routing.yml', 'admin' => 'routing_admin.yml') as $prefix => $filename) {
-                if ($plugin['protocol'] == 2) {
-                    $resourcePath = sprintf("%sBundle/Resources/config/%s", ucfirst($plugin['code']), $filename);
-                    $filePath = sprintf("%s/%s/%s", $this->pluginRootDir, ucfirst($plugin['code']), $resourcePath);
-                } else {
-                    $resourcePath = sprintf("%sPlugin/Resources/config/%s", ucfirst($plugin['code']), $filename);
-                    $filePath = sprintf("%s/%s", $this->pluginRootDir, $resourcePath);
-                }
+                if ($plugin['protocol'] < 3) {
+                    continue;
+                } 
+
+                $resourcePath = sprintf("%sPlugin/Resources/config/%s", ucfirst($plugin['code']), $filename);
+                $filePath = sprintf("%s/%s", $this->pluginRootDir, $resourcePath);
 
                 if ($fs->exists($filePath)) {
                     $routing["_plugin_{$plugin['code']}_{$prefix}"] = array(

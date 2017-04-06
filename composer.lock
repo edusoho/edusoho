@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d708934ca98bd738999889fde97cf8dd",
+    "content-hash": "814f2c06b03ad41e35e822fe09a2481e",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -315,16 +315,16 @@
         },
         {
             "name": "codeages/plugin-bundle",
-            "version": "v0.1.9",
+            "version": "v0.1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/plugin-bundle.git",
-                "reference": "2572a433e5677b6faf9d4b3de3890856e00cd892"
+                "reference": "a30f1891ccf4e68e83beec0aa79f70f8e024288e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/plugin-bundle/2572a433e5677b6faf9d4b3de3890856e00cd892.zip",
-                "reference": "2572a433e5677b6faf9d4b3de3890856e00cd892",
+                "url": "https://files.phpcomposer.com/files/codeages/plugin-bundle/a30f1891ccf4e68e83beec0aa79f70f8e024288e.zip",
+                "reference": "a30f1891ccf4e68e83beec0aa79f70f8e024288e",
                 "shasum": ""
             },
             "require": {
@@ -361,7 +361,7 @@
                 "plugin",
                 "theme"
             ],
-            "time": "2017-04-01T03:50:40+00:00"
+            "time": "2017-04-06T13:37:21+00:00"
         },
         {
             "name": "codeages/rate-limiter",

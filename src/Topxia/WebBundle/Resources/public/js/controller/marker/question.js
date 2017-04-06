@@ -8,7 +8,7 @@ define(function (require, exports, module) {
 
     exports.run = function () {
         $form = $('.js-mark-from');
-        var count = parseInt((document.body.clientHeight - 350) / 50) ? parseInt((document.body.clientHeight - 350) / 50) : 1;
+        var count = parseInt((document.body.clientHeight - 350) / 50) > 0 ? parseInt((document.body.clientHeight - 350) / 50) : 1;
         $.post($form.attr('action'), $form.serialize() + '&pageSize=' + count, function (response) {
             $('#subject-lesson-list').html(response);
             $('[data-toggle="popover"]').popover();
@@ -20,6 +20,7 @@ define(function (require, exports, module) {
 
             }
             Cookie.set("MARK-MANGE-GUIDE", 'true', {expires: 360, path: "/"});
+            $form.data('pageSize', count);
         });
 
         var validator = new Validator({
@@ -30,7 +31,7 @@ define(function (require, exports, module) {
                 if (error) {
                     return;
                 }
-                var count = parseInt((document.body.clientHeight - 350) / 50) ? parseInt((document.body.clientHeight - 350) / 50) : 1;
+                var count = $('.js-mark-from').data('pageSize');
 
                 $.post($form.attr('action'), $form.serialize() + '&pageSize=' + count, function (response) {
                     $('#subject-lesson-list').html(response);
@@ -39,7 +40,7 @@ define(function (require, exports, module) {
         });
 
         $(".js-marker-manage-content").on('change', 'select[name=target]', function () {
-            var count = parseInt((document.body.clientHeight - 350) / 50) ? parseInt((document.body.clientHeight - 350) / 50) : 1;
+            var count = $('.js-mark-from').data('pageSize');
             $.post($form.attr('action'), $form.serialize() + '&pageSize=' + count, function (response) {
                 $('#subject-lesson-list').html(response);
             });
@@ -59,9 +60,7 @@ define(function (require, exports, module) {
                 $list = $('#subject-lesson-list').css('max-height', $('#subject-lesson-list').height()),
                 getpage = parseInt($this.data('current-page')) + 1,
                 lastpage = $this.data('last-page');
-            $.post($this.data('url') + getpage, {
-                "target": target.val()
-            }, function (response) {
+            $.post($this.data('url') + getpage, {'target': target.val(), 'pageSize': $('.js-mark-from').data('pageSize')}, function (response) {
                 $this.remove();
                 $list.append(response).animate({scrollTop: 40 * ($list.find('.item-task').length + 1)});
                 if (getpage == lastpage) {
