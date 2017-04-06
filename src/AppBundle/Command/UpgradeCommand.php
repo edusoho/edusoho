@@ -29,6 +29,7 @@ class UpgradeCommand extends BaseCommand
         $app = $this->getAppService()->getAppByCode($code);
         if (empty($app)) {
             $output->writeln("<info>{$code}不存在</info>");
+            return;
         }
 
         $this->unzipUpgradePackage($code, $version);
