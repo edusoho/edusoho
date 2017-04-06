@@ -224,6 +224,9 @@ class CourseMigrate extends AbstractMigrate
               ,`learnMode`
               ,`maxRate`
               ,`hitNum`
+              ,`recommended`
+              ,`recommendedSeq`
+              ,`recommendedTime`
           ) SELECT
               `id`
               ,`id`
@@ -281,6 +284,9 @@ class CourseMigrate extends AbstractMigrate
               ,'freeMode'
               ,`maxRate`
               ,`hitNum`
+              ,`recommended`
+              ,`recommendedSeq`
+              ,`recommendedTime`
           FROM `course` where `id` not in (select `id` from `course_v8`) order by id limit 0, {$this->perPageCount};";
         $result = $this->getConnection()->exec($sql);
 
