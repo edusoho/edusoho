@@ -18,14 +18,21 @@ services:
             - [setBiz, ['@biz']]
         tags:
             - { name: extension }
-
+            
     question.extension:
         class: AppBundle\Extension\QuestionExtension
         calls:
             - [setBiz, ['@biz']]
         tags:
             - { name: extension }
-
+    
+    callback.extension:
+        class: AppBundle\Extension\CallbackExtension
+        calls:
+            - [setBiz, ['@biz']]
+        tags:
+            - { name: extension }
+            
     authentication_handler:
         class: Biz\Common\LoginListener
         arguments: ["@biz"]
@@ -124,7 +131,3 @@ services:
     topxia.target_helper:
         class:          AppBundle\Util\TargetHelper
         arguments:      ['@service_container']
-
-    callback.processor_factory:
-        class: AppBundle\Controller\Callback\ProcessorFactory
-        arguments:    ['@service_container']

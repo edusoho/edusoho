@@ -190,6 +190,8 @@ export default class QuestionOptions extends Component {
     this.setState({
       dataSource: this.state.dataSource,
     })
+
+    console.log(this.state.dataSource);
   }
 
   render() {

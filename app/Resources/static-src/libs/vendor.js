@@ -1,7 +1,7 @@
 import 'babel-polyfill';
 import 'jquery';
 import 'bootstrap';
-import Swiper from 'swiper';
+import Swiper from 'common/swiper';
 // import 'placeholder';
 import 'es6-promise/auto';
 import 'libs/js/jquery-lavalamp';

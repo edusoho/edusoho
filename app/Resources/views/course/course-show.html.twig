@@ -2,18 +2,31 @@
 {% do script(['libs/easy-pie-chart/dist/jquery.easypiechart.js','libs/excanvas-compiled.js','libs/jquery-countdown.js',
 'app/js/courseset/show/index.js']) %}
 
+{% set course_set = data('CourseSet', {id: course.courseSetId}) %}
+
+{% block title %}
+  {{ course_set.title }} - {{ parent() }}
+{% endblock %}
+
+{% block keywords %}
+  {% set tags = data('Tags', {tagIds: course_set.tags|default('')}) %}
+  {% for tag in tags %}{{tag.name}}{% if not loop.last%},{% endif %}{% else %}{{ parent() }}{% endfor %}
+{% endblock %}
+
+{% block description %}{{ course.about|purify_and_trim_html|default('')|plain_text(100) }}{% endblock %}
+
 {% block full_content %}
   {% set previewAs = app.request.query.get('previewAs') %}
   {% set metas = course_show_metas(member|default(null) ? 'member' : 'guest') %}
   {% set route_params = app.request.attributes.get('_route_params') %}
-  {% set course_set = data('CourseSet', {id: course.courseSetId}) %}
 
   {{ render(controller(metas.header,{request:app.request, course: course, member: member|default(null)})) }}
 
   <div class="container">
     <div class="row">
       <div class="col-lg-9 col-md-8 course-detail-content">
-
+        {% set eventReportParams = {'user-id': app.user.id} %}
+        {% include 'event_report.html.twig' with{ 'eventName':'course.view', 'subjectType':'course', 'subjectId': course.id, 'eventReportParams':eventReportParams} %}
         {% include 'course/announcement/block.html.twig' with { courseId:course.id } %}
 
         <section class="es-section">

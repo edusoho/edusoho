@@ -1,29 +1,40 @@
 {#<li class="mll">#}
-    {% if member.role == 'teacher' %}
-        {% if course.expiryMode == 'days' %}
-              共{{ course.expiryDays }}天
-        {% else %}
-            {{ course.expiryEndDate|date('Y-m-d') }}
-        {% endif %}
+  {% if member.role == 'teacher' %}
+    {% if course.expiryMode == 'forever' %}
+      {{ '永久有效'|trans }}
+    {% elseif course.expiryMode == 'days' %}
+      共{{ course.expiryDays }}天
     {% else %}
-        {% if course.expiryMode == 'forever' %}
-          永久有效
-        {% elseif course.expiryMode in ['end_date', 'date'] %}
-          {{ course.expiryEndDate|date('Y-m-d') }}
-          {% set lastDays = course.expiryEndDate|time_diff %}
-          {% if lastDays > 0 %}
-            剩余 {{ lastDays }} 天
-          {% else %}
-            <span class="color-danger">已到期</span>
-          {% endif %}
-        {% else %}
-          {{ member.deadline|date('Y-m-d') }}
-          {% set lastDays = member.deadline|time_diff %}
-          {% if lastDays > 0 %}
-            剩余 {{ lastDays }} 天
-          {% else %}
-            <span class="color-danger">已到期</span>
-          {% endif %}
-        {% endif %}
+      {{ course.expiryEndDate|date('Y-m-d') }}
     {% endif %}
+  {% else %}
+    {% if course.expiryMode == 'forever' %}
+      {{ '永久有效'|trans }}
+    {% elseif course.expiryMode in ['end_date', 'date'] %}
+      {{ course.expiryEndDate|date('Y-m-d') }}
+      {% if date('now').timestamp > member.deadline %}
+        <span class="color-danger">(已到期)</span>
+      {% else %}
+        {% set lastDays = course.expiryEndDate|time_diff %}
+        {{ lastDays }}
+        {% if lastDays == 0 %}
+          <span class="color-warning">(今日到期)</span>
+        {% elseif lastDays < 30 %}
+          (剩余 {{ lastDays }} )
+        {% endif %}
+      {% endif %}
+    {% else %}
+      {{ member.deadline|date('Y-m-d') }}
+      {% if date('now').timestamp > member.deadline %}
+        <span class="color-danger">(已到期)</span>
+      {% else %}
+        {% set lastDays = member.deadline|time_diff %}
+        {% if lastDays == 0 %}
+          <span class="color-warning">(今日到期)</span>
+        {% elseif lastDays < 30 %}
+          (剩余 {{ lastDays }} 天)
+        {% endif %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
 {#</li>#}

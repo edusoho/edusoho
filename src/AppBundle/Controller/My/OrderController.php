@@ -141,7 +141,7 @@ class OrderController extends BaseController
     public function cancelAction(Request $request, $id)
     {
         $this->tryManageOrder($id);
-        $order = $this->getOrderService()->cancelOrder($id, $this->getServiceKernel()->trans('取消订单'));
+        $order = $this->getOrderService()->cancelOrder($id, '取消订单');
 
         return $this->createJsonResponse(true);
     }

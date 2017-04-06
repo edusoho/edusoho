@@ -34,28 +34,27 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $this->tryManageCourseSet($id);
         if (!is_numeric($number)) {
-            throw $this->createAccessDeniedException('recmendNum should be number!');
+            throw $this->createAccessDeniedException('recommend seq must be number!');
         }
+
         $fields = array(
             'recommended' => 1,
             'recommendedSeq' => (int) $number,
             'recommendedTime' => time(),
         );
-        $course = $this->getCourseSetDao()->update(
-            $id,
-            $fields
-        );
 
-        $this->getLogService()->info('course', 'recommend', "推荐课程《{$course['title']}》(#{$course['id']}),序号为{$number}");
+        $courseSet = $this->getCourseSetDao()->update($id, $fields);
+
+        $this->getLogService()->info('course', 'recommend', "推荐课程《{$courseSet['title']}》(#{$courseSet['id']}),序号为{$number}");
         $this->dispatchEvent(
             'courseSet.recommend',
             new Event(
-                $course,
+                $courseSet,
                 $fields
             )
         );
 
-        return $course;
+        return $courseSet;
     }
 
     // Refactor: cancelRecommendCourseSet
@@ -347,16 +346,16 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function createCourseSet($courseSet)
     {
+        if (!$this->hasCourseSetManageRole()) {
+            throw $this->createAccessDeniedException('You have no access to Course Set Management');
+        }
+
         if (!ArrayToolkit::requireds($courseSet, array('title', 'type'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
 
         if (!in_array($courseSet['type'], array('normal', 'live', 'liveOpen', 'open'))) {
             throw $this->createInvalidArgumentException('Invalid Param: type');
-        }
-
-        if (!$this->hasCourseSetManageRole()) {
-            throw $this->createAccessDeniedException('You have no access to Course Set Management');
         }
 
         $courseSet = ArrayToolkit::parts(
@@ -634,22 +633,27 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $publishedCourses = $this->getCourseService()->findPublishedCoursesByCourseSetId($id);
 
         $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
-        $this->beginTransaction();
 
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+
+        $this->beginTransaction();
         try {
+            // 直播课程隐藏了教学计划，所以发布直播课程的时候自动发布教学计划
             if (empty($publishedCourses) && $courseSet['type'] === 'live') {
-                // 直播课程隐藏了教学计划，所以发布直播课程的时候自动发布教学计划
-                $course = $this->getCourseService()->getFirstCourseByCourseSetId($courseSet['id']);
+                //对于直播课程，有且仅有一个教学计划
+                $course = $courses[0];
+                if (empty($course['maxStudentNum'])) {
+                    throw $this->createAccessDeniedException('直播课程发布前需要在计划设置中设置课程人数');
+                }
                 $this->getCourseService()->publishCourse($course['id']);
                 $publishedCourses = $this->getCourseService()->findPublishedCoursesByCourseSetId($id);
             }
 
             if (empty($publishedCourses)) {
-                $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
                 if (!empty($classroomRef)) {
                     $this->getCourseService()->publishCourse($classroomRef['courseId']);
                 } elseif (count($courses) === 1) {
-                    //如果课程下仅有一个教学计划且未发布，则级联发布该教学计划
+                    //如果普通课程下仅有一个教学计划且未发布，则级联发布该教学计划
                     $this->getCourseService()->publishCourse($courses[0]['id']);
                 } else {
                     throw $this->createAccessDeniedException('发布课程时请确保课程下至少有一个已发布的教学计划');
@@ -768,8 +772,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
         try {
             $this->beginTransaction();
-            $courseSet = $this->getCourseSetDao()->update($id, array('locked' => 0));
-            $this->getCourseDao()->update($courses[0]['id'], array('locked' => 0));
+            $courseSet = $this->getCourseSetDao()->update($id, array(
+                'locked' => 0,
+                'status' => 'closed',
+            ));
+            $this->getCourseDao()->update($courses[0]['id'], array(
+                'locked' => 0,
+                'status' => 'closed',
+            ));
             $this->commit();
 
             return $courseSet;

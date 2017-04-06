@@ -33,11 +33,11 @@ interface CourseService
     /**
      * 复制教学计划.
      *
-     * @param array $fields
+     * @param array $newCourse
      *
      * @return mixed
      */
-    public function copyCourse($fields);
+    public function copyCourse($newCourse);
 
     public function createChapter($chapter);
 

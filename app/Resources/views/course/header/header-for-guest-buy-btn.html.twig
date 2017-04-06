@@ -1,4 +1,4 @@
-{% if course.buyable|default(true) == false and not is_plugin_installed('Vip') %}
+{% if course.buyable|default(true) == false and ( is_plugin_installed('Vip') and  course.vipLevelId == 0) %}
   {{ '该课程为限制课程'|trans }}<br>{{ '请联系客服'|trans }}
 {% else %}
   {% if course.status != 'published' or courseSet.status != 'published' %}

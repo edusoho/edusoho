@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Cash\Service\CashAccountService;
 use Biz\Cash\Service\CashService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\Service\AppService;
@@ -11,10 +10,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Order\Service\OrderService;
 use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\NumberToolkit;
-use AppBundle\Common\JoinPointToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\Order\OrderProcessor\OrderProcessorFactory;
 use VipPlugin\Biz\Vip\Service\LevelService;
 use VipPlugin\Biz\Vip\Service\VipService;
 
@@ -30,29 +26,18 @@ class OrderController extends BaseController
 
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');
-        $orderTypes = JoinPointToolkit::load('order');
-        if (empty($targetType)
-            || empty($targetId)
-            || !array_key_exists($targetType, $orderTypes)
-        ) {
-            return $this->createMessageResponse('error', '参数不正确');
-        }
-
-        $processor = OrderProcessorFactory::create($targetType);
-        $checkInfo = $processor->preCheck($targetId, $currentUser['id']);
-
-        if (isset($checkInfo['error'])) {
-            return $this->createMessageResponse('error', $checkInfo['error']);
-        }
-
         $fields = $request->query->all();
-        $orderInfo = $processor->getOrderInfo($targetId, $fields);
+        list($error, $orderInfo, $processor) = $this->getOrderFacadeService()->getOrderInfo($targetType, $targetId, $fields);
+
+        if (isset($error['error'])) {
+            return $this->createMessageResponse('error', $error['error']);
+        }
 
         if (((float) $orderInfo['totalPrice']) == 0) {
             $formData = array();
             $formData['userId'] = $currentUser['id'];
-            $formData['targetId'] = $fields['targetId'];
-            $formData['targetType'] = $fields['targetType'];
+            $formData['targetId'] = $targetId;
+            $formData['targetType'] = $targetType;
             $formData['amount'] = 0;
             $formData['totalPrice'] = 0;
             $coinSetting = $this->setting('coin');
@@ -61,20 +46,10 @@ class OrderController extends BaseController
             $formData['coinAmount'] = 0;
             $formData['payment'] = 'alipay';
             $order = $processor->createOrder($formData, $fields);
-
             if ($order['status'] == 'paid') {
                 return $this->redirect($processor->callbackUrl($order, $this->container));
             }
         }
-
-        $verifiedMobile = '';
-
-        if ((isset($currentUser['verifiedMobile'])) && (strlen($currentUser['verifiedMobile']) > 0)) {
-            $verifiedMobile = $currentUser['verifiedMobile'];
-        }
-
-        $orderInfo['verifiedMobile'] = $verifiedMobile;
-        $orderInfo['hasPassword'] = strlen($currentUser['password']) > 0;
 
         return $this->render('order/order-create.html.twig', $orderInfo);
     }
@@ -119,96 +94,25 @@ class OrderController extends BaseController
             return $this->createMessageResponse('error', '用户未登录，创建订单失败。');
         }
 
-        if (isset($fields['coinPayAmount']) && !$this->canUseCoinPay($fields['coinPayAmount'], $user['id'])) {
-            return $this->createMessageResponse('error', '当前使用的账户金额大于账户余额。');
-        }
-
-        if (!array_key_exists('targetId', $fields) || !array_key_exists('targetType', $fields)) {
-            return $this->createMessageResponse('error', '订单中没有购买的内容，不能创建!');
-        }
-
         $targetType = $fields['targetType'];
         $targetId = $fields['targetId'];
 
-        $priceType = 'RMB';
-        $coinSetting = $this->setting('coin');
-        $coinEnabled = isset($coinSetting['coin_enabled']) && $coinSetting['coin_enabled'];
-
-        if ($coinEnabled && isset($coinSetting['price_type'])) {
-            $priceType = $coinSetting['price_type'];
+        if (!isset($fields['couponCode']) || $fields['couponCode'] === '请输入优惠券') {
+            $fields['couponCode'] = '';
+        } else {
+            $fields['couponCode'] = trim($fields['couponCode']);
         }
 
-        $cashRate = 1;
+        list($order, $processor) = $this->getOrderFacadeService()->createOrder($targetType, $targetId, $fields);
 
-        if ($coinEnabled && isset($coinSetting['cash_rate'])) {
-            $cashRate = $coinSetting['cash_rate'];
+        if ($order['status'] == 'paid') {
+            return $this->redirect($processor->callbackUrl($order, $this->container));
         }
 
-        $processor = OrderProcessorFactory::create($targetType);
-
-        try {
-            if (!isset($fields['couponCode']) || $fields['couponCode'] === '请输入优惠券') {
-                $fields['couponCode'] = '';
-            } else {
-                $fields['couponCode'] = trim($fields['couponCode']);
-            }
-
-            list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
-
-            $amount = (string) ((float) $amount);
-            $shouldPayMoney = (string) ((float) $fields['shouldPayMoney']);
-            //价格比较
-
-            if ((int) ($totalPrice * 100) !== (int) ($fields['totalPrice'] * 100)) {
-                $this->createMessageResponse('error', '实际价格不匹配，不能创建订单!');
-            }
-
-            //价格比较
-
-            if ((int) ($amount * 100) !== (int) ($shouldPayMoney * 100)) {
-                return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
-            }
-
-            //虚拟币抵扣率比较
-            $target = $processor->getTarget($targetId);
-
-            $maxRate = $coinSetting['cash_model'] == 'deduction' && isset($target['maxRate']) ? $target['maxRate'] : 100;
-            $priceCoin = $priceType == 'RMB' ? NumberToolkit::roundUp($totalPrice * $cashRate) : $totalPrice;
-
-            if ($coinEnabled && isset($fields['coinPayAmount']) && ((int) ((float) $fields['coinPayAmount'] * $maxRate) > (int) ($priceCoin * $maxRate))) {
-                return $this->createMessageResponse('error', '虚拟币抵扣超出限定，不能创建订单!');
-            }
-
-            if (isset($couponResult['useable']) && $couponResult['useable'] == 'yes') {
-                $coupon = $fields['couponCode'];
-                $couponDiscount = $couponResult['decreaseAmount'];
-            }
-
-            $orderFileds = array(
-                'priceType' => $priceType,
-                'totalPrice' => $totalPrice,
-                'amount' => $amount,
-                'coinRate' => $cashRate,
-                'coinAmount' => empty($fields['coinPayAmount']) ? 0 : $fields['coinPayAmount'],
-                'userId' => $user['id'],
-                'payment' => 'none',
-                'targetId' => $targetId,
-                'coupon' => empty($coupon) ? '' : $coupon,
-                'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount,
-            );
-
-            $order = $processor->createOrder($orderFileds, $fields);
-            if ($order['status'] == 'paid') {
-                return $this->redirect($processor->callbackUrl($order, $this->container));
-            }
-
-            return $this->redirect($this->generateUrl('pay_center_show', array(
-                'sn' => $order['sn'],
-                'targetType' => $order['targetType'],
-            )));
-        } catch (\Exception $e) {
-            return $this->createMessageResponse('error', $e->getMessage());
-        }
+        return $this->redirect($this->generateUrl('pay_center_show', array(
+            'sn' => $order['sn'],
+            'targetType' => $order['targetType'],
+        )));
     }
 
     public function detailAction(Request $request, $id)
@@ -247,13 +151,6 @@ class OrderController extends BaseController
 
             return $this->createJsonResponse($couponInfo);
         }
-    }
-
-    protected function canUseCoinPay($coinPayAmount, $userId)
-    {
-        $cashAccount = $this->getCashAccountService()->getAccountByUserId($userId, true);
-
-        return !($coinPayAmount > $cashAccount['cash']);
     }
 
     protected function completeInfo($couponInfo, $code, $type)
@@ -389,11 +286,8 @@ class OrderController extends BaseController
         return $this->getBiz()->service('Classroom:ClassroomService');
     }
 
-    /**
-     * @return CashAccountService
-     */
-    protected function getCashAccountService()
+    protected function getOrderFacadeService()
     {
-        return $this->createService('Cash:CashAccountService');
+        return $this->createService('Order:OrderFacadeService');
     }
 }

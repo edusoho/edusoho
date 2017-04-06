@@ -47,9 +47,9 @@ class TestpaperItemDaoImpl extends GeneralDaoImpl implements TestpaperItemDao
         return $this->findInField('id', array($ids));
     }
 
-    public function findItemsByTestId($testpaperId)
+    public function findItemsByTestId($testpaperId, $type)
     {
-        return $this->findInField('testId', array($testpaperId));
+        return $this->findByFields(array('testId' => $testpaperId, 'type' => $type));
     }
 
     public function findItemsByTestIds($testpaperIds)
@@ -116,6 +116,7 @@ class TestpaperItemDaoImpl extends GeneralDaoImpl implements TestpaperItemDao
             'questionType IN ( :questionTypes )',
             'parentId = :parentIdDefault',
             'parentId > :parentId',
+            'type = :type',
         );
 
         $declares['orderbys'] = array(
