@@ -192,7 +192,7 @@ class OrgServiceImpl extends BaseService implements OrgService
 
     public function isNameAvaliable($name, $parentId, $exclude)
     {
-        $org = $this->getOrgDao()->findByNameAndParentId($name, $parentId);
+        $org = $this->getOrgDao()->getByNameAndParentId($name, $parentId);
         if (empty($org)) {
             return true;
         }

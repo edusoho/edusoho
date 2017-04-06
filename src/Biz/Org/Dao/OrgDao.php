@@ -14,5 +14,5 @@ interface OrgDao extends GeneralDaoInterface
 
     public function findByPrefixOrgCode($orgCode);
 
-    public function findByNameAndParentId($name, $parentId);
+    public function getByNameAndParentId($name, $parentId);
 }
