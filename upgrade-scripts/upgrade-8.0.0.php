@@ -108,10 +108,14 @@ class EduSohoUpgrade extends AbstractUpdater
             'TagOwnerMigrate',
 
             'AfterAllCourseTaskMigrate',
-            'ActivityLearnLog',
+            'ActivityLearnLogStart',
+            'ActivityLearnLogDoing',
+            'ActivityLearnLogFinish',
+
             'OtherMigrate',
             'LogMigrate',
             'GracefulBlockMigrate',
+            'PluginMigrate',
         );
 
         if ($index > count($steps) - 1) {
@@ -237,6 +241,9 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function logger($version, $level, $message)
     {
         $data = date('Y-m-d H:i:s')." [{$level}] {$version} ".$message.PHP_EOL;
+        if (!file_exists($this->getLoggerFile())) {
+            touch($this->getLoggerFile());
+        }
         file_put_contents($this->getLoggerFile(), $data, FILE_APPEND);
     }
 

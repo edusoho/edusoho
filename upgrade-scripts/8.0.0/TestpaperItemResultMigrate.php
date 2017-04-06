@@ -4,6 +4,8 @@ class TestpaperItemResultMigrate extends AbstractMigrate
 {
     public function update($page)
     {
+        $this->perPageCount = 10000;
+
         if (!$this->isTableExist('testpaper_item_result_v8')) {
             $this->getConnection()->exec("
                 CREATE TABLE `testpaper_item_result_v8` (
@@ -23,6 +25,12 @@ class TestpaperItemResultMigrate extends AbstractMigrate
                   PRIMARY KEY (`id`),
                   KEY `testPaperResultId` (`resultId`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
+        }
+
+        if (!$this->isIndexExist('testpaper_item_result_v8', 'resultId_type')) {
+            $this->getConnection()->exec("
+                ALTER TABLE testpaper_item_result_v8 ADD INDEX resultId_type (`resultId`,`type`);
             ");
         }
 

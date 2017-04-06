@@ -37,6 +37,12 @@ class TestpaperResultMigrate extends AbstractMigrate
             ");
         }
 
+        if (!$this->isIndexExist('testpaper_result_v8', 'testId')) {
+            $this->getConnection()->exec("
+                ALTER TABLE testpaper_result_v8 ADD INDEX testId (`testId`);
+            ");
+        }
+
         $nextPage = $this->insertTestpaperResult($page);
         if (!empty($nextPage)) {
             return $nextPage;
@@ -54,8 +60,8 @@ class TestpaperResultMigrate extends AbstractMigrate
             $courseArr = explode('-', $targetArr[0]);
             $lessonArr = explode('-', $targetArr[1]);
 
-            $courseId = (int)$courseArr[1];
-            $lessonId = empty($lessonArr[1]) ? 0 : (int)$lessonArr[1];
+            $courseId = (int) $courseArr[1];
+            $lessonId = empty($lessonArr[1]) ? 0 : (int) $lessonArr[1];
             $sql = "UPDATE testpaper_result_v8 SET
                 courseId = {$courseId},
                 courseSetId = {$courseId},

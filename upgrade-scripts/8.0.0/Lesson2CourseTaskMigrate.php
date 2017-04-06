@@ -37,8 +37,22 @@ class Lesson2CourseTaskMigrate extends AbstractMigrate
             );
         }
 
+        if (!$this->isIndexExist('course_task', 'courseId')) {
+            $this->getConnection()->exec("
+                ALTER TABLE course_task ADD INDEX courseId (`courseId`);
+            ");
+        }
+
         if (!$this->isFieldExist('course_task', 'migrateLessonId')) {
-            $this->exec("alter table `course_task` add `migrateLessonId` int(10);");
+            $this->exec("alter table `course_task` add `migrateLessonId` int(10) default 0;");
+        }
+
+        if (!$this->isIndexExist('course_task', 'migrateLessonIdAndType')) {
+            $this->exec("alter table `course_task` add index migrateLessonIdAndType (`migrateLessonId`, `type`)");
+        }
+
+        if (!$this->isIndexExist('course_task', 'migrateLessonIdAndActivityId')) {
+            $this->exec("alter table `course_task` add index migrateLessonIdAndActivityId (`migrateLessonId`, `activityId`)");
         }
 
         $countSql = 'SELECT count(*) from `course_lesson` WHERE `id` NOT IN (SELECT migrateLessonId FROM `course_task`)';
@@ -87,7 +101,7 @@ class Lesson2CourseTaskMigrate extends AbstractMigrate
                 `updatedTime`,
                 'lesson',
                 `number`,
-                `type`,
+                 CASE WHEN `type` = 'document' THEN 'doc'  ELSE TYPE END AS 'type',
                 `mediaSource`,
                 CASE WHEN `length` is null THEN 0  ELSE `length` END AS `length`,
                 `maxOnlineNum`,
@@ -95,6 +109,6 @@ class Lesson2CourseTaskMigrate extends AbstractMigrate
                 `id` as `migrateLessonId`
             from `course_lesson` WHERE `id` NOT IN (SELECT id FROM `course_task`) order by id limit 0, {$this->perPageCount}");
 
-        return $page+1;
+        return $page + 1;
     }
 }

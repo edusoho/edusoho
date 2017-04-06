@@ -1,5 +1,5 @@
 <?php
-use AppBundle\Common\BlockToolkit;
+use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 
 class GracefulBlockMigrate extends AbstractMigrate
@@ -44,6 +44,7 @@ class GracefulBlockMigrate extends AbstractMigrate
                 'data' => json_encode($default),
                 'templateName' => $meta['templateName'],
                 'title' => $meta['title'],
+                'createdTime' => time()
             );
 
             $this->getConnection()->insert('block_template', $blockTemplate);
@@ -57,7 +58,7 @@ class GracefulBlockMigrate extends AbstractMigrate
 
                 global $kernel;
 
-                $content = BlockToolkit::render($blockTemplate, $kernel->getContainer());
+                $content = $this->render($blockTemplate, $kernel->getContainer());
 
                 $updateFields = array(
                     'content' => $content,
@@ -67,5 +68,19 @@ class GracefulBlockMigrate extends AbstractMigrate
                 $this->getConnection()->update('block_template', $updateFields, array('id' => $blockTemplate['id']));
             }
         }
+    }
+
+    private function render($block, $container)
+    {
+        if (!$container->isScopeActive('request')) {
+            $container->enterScope('request');
+            $container->set('request', new Request(), 'request');
+        }
+
+        if (empty($block['templateName']) || empty($block['data'])) {
+            return '';
+        }
+
+        return $container->get('templating')->render($block['templateName'], $block['data']);
     }
 }
