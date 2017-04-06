@@ -30,6 +30,10 @@ class ObjectCombinationUtil
      */
     public function single(&$sourceObj, array $targetIdFields, $targetObjectType = 'user')
     {
+        if (!$sourceObj) {
+            return;
+        }
+
         $targetIds = $this->findTargetIds($sourceObj, $targetIdFields);
 
         $targetObjects = $this->findTargetObjects($targetObjectType, $targetIds);
@@ -39,6 +43,10 @@ class ObjectCombinationUtil
     public function multiple(&$sourceObjects, array $targetIdFields, $targetObjectType = 'user')
     {
 
+        if (!$sourceObjects) {
+            return;
+        }
+        
         $targetIds = array();
         foreach ($sourceObjects as $sourceObject) {
             $tempTargetIds = $this->findTargetIds($sourceObject, $targetIdFields);

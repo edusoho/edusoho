@@ -33,7 +33,9 @@ class CourseMember extends Resource
 
     public function get(Request $request, $courseId, $userId)
     {
-        return $this->service('Course:MemberService')->getCourseMember($courseId, $userId);
+        $courseMember = $this->service('Course:MemberService')->getCourseMember($courseId, $userId);
+        $this->getOCUtil()->single($courseMember, array('userId'));
+        return $courseMember;
     }
 
     public function add(Request $request, $courseId)
