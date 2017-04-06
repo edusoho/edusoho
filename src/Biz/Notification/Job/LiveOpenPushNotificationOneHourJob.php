@@ -3,8 +3,8 @@
 namespace Biz\Notification\Job;
 
 use Biz\Crontab\Service\Job;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Topxia\Service\Common\ServiceKernel;
 
 class LiveOpenPushNotificationOneHourJob implements Job
 {
@@ -14,8 +14,8 @@ class LiveOpenPushNotificationOneHourJob implements Job
         $targetId = $params['targetId'];
 
         if ($targetType == 'liveOpenLesson') {
-            $lesson = $this->getCourseService()->getLesson($targetId);
-            $course = $this->getCourseService()->getCourse($lesson['courseId']);
+            $lesson = $this->getOpenCourseService()->getLesson($targetId);
+            $course = $this->getOpenCourseService()->getCourse($lesson['courseId']);
         }
 
         $from = array(
@@ -46,7 +46,7 @@ class LiveOpenPushNotificationOneHourJob implements Job
         $result = CloudAPIFactory::create('tui')->post('/message/send', $message);
     }
 
-    protected function getCourseService()
+    protected function getOpenCourseService()
     {
         return ServiceKernel::instance()->createService('OpenCourse:OpenCourseService');
     }

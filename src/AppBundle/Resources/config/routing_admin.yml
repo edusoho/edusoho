@@ -516,20 +516,6 @@ admin_courses_data:
     defaults: { _controller: AppBundle:Admin/CourseSet:coursesData }
     permissions: [admin_course_set_data]
 
-# admin_course_disk:
-#     path: /course/disk
-#     defaults: { _controller: AppBundle:Admin/CourseDisk:index }
-
-# admin_course_disk_delete:
-#     path: /disk/{id}/delete
-#     defaults: { _controller: AppBundle:Admin/CourseDisk:delete }
-#     methods: [POST]
-
-# admin_course_disk_batch_delete:
-#     path: /disk/batch_delete
-#     defaults: { _controller: AppBundle:Admin/CourseDisk:batchDelete }
-#     methods: [POST]
-
 admin_course_order_manage:
     path: /course/order/manage
     defaults: { _controller: AppBundle:Admin/CourseOrder:manage }
@@ -1908,11 +1894,6 @@ admin_edu_cloud_sms_status:
 admin_edu_cloud_apply_for_sms:
     path:  /edu_cloud/apply_for_sms
     defaults: { _controller: AppBundle:Admin/EduCloud:applyForSms }
-    permissions: [admin_edu_cloud_sms_overview]
-
-admin_edu_cloud_sms_bill:
-    path:  /edu_cloud/sms_bill
-    defaults: { _controller: AppBundle:Admin/EduCloud:smsBill }
     permissions: [admin_edu_cloud_sms_overview]
 
 admin_edu_cloud_sms_no_message:
