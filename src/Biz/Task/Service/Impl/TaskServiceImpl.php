@@ -36,7 +36,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields = array_filter(
             $fields,
             function ($value) {
-                if (is_array($value) || ctype_digit((string)$value)) {
+                if (is_array($value) || ctype_digit((string) $value)) {
                     return true;
                 }
 
