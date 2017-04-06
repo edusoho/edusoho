@@ -721,8 +721,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     /**
      * 根据排序规则返回排序数组.
      *
-     * @param string $order
-     *
+     * @param  string  $order
      * @return array
      */
     protected function getOrderBys($order)
@@ -814,6 +813,17 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
 
         return $courseSet;
+    }
+
+    public function hitCourseSet($id)
+    {
+        $courseSet = $this->getCourseSet($id);
+
+        if (empty($courseSet)) {
+            throw $this->createNotFoundException('course set not found');
+        }
+
+        return $this->getCourseSetDao()->wave(array($courseSet['id']), array('hitNum' => 1));
     }
 
     protected function validateCourseSet($courseSet)
