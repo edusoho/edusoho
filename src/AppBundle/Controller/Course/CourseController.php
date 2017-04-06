@@ -100,7 +100,7 @@ class CourseController extends CourseBaseController
         foreach ($tasks as $task) {
             if ($task['type'] == 'video' && $course['tryLookable']) {
                 $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-                if ($activity['ext']['mediaSource'] == 'cloud') {
+                if (!empty($activity['ext']['file']) && $activity['ext']['file']['storage'] == 'cloud') {
                     return '试看';
                 }
             }
