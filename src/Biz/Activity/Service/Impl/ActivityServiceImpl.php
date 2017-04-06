@@ -507,6 +507,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
      * @param $activity
      * @param $eventName
      * @param $data
+     *
      * @return mixed
      */
     protected function extractLogData($activity, $eventName, $data)

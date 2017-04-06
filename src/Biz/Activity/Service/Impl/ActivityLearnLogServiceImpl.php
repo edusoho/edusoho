@@ -76,7 +76,7 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
     {
         $result = $this->getActivityLearnLogDao()->sumLearnTime($conditions);
 
-        return (int)($result / 60);
+        return (int) ($result / 60);
     }
 
     public function sumWatchTime($conditions)
