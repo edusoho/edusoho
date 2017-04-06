@@ -70,6 +70,7 @@ class CourseMigrate extends AbstractMigrate
                 `recommendedSeq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐序号',
                 `recommendedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间',
                 `categoryId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '分类',
+                `hitNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点击量',
                 PRIMARY KEY (`id`)
               ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
@@ -222,6 +223,10 @@ class CourseMigrate extends AbstractMigrate
               ,`enableFinish`
               ,`learnMode`
               ,`maxRate`
+              ,`hitNum`
+              ,`recommended`
+              ,`recommendedSeq`
+              ,`recommendedTime`
           ) SELECT
               `id`
               ,`id`
@@ -278,6 +283,10 @@ class CourseMigrate extends AbstractMigrate
               ,1
               ,'freeMode'
               ,`maxRate`
+              ,`hitNum`
+              ,`recommended`
+              ,`recommendedSeq`
+              ,`recommendedTime`
           FROM `course` where `id` not in (select `id` from `course_v8`) order by id limit 0, {$this->perPageCount};";
         $result = $this->getConnection()->exec($sql);
 
