@@ -2,21 +2,21 @@
 
 namespace AppBundle\Controller\Course;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
-use Biz\Activity\Service\ActivityService;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\Course\Service\CourseNoteService;
-use Biz\Course\Service\MaterialService;
-use Biz\Course\Service\ReviewService;
-use Biz\File\Service\UploadFileService;
-use Biz\Order\Service\OrderService;
-use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
-use Biz\Taxonomy\Service\CategoryService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\TokenService;
-use Symfony\Component\HttpFoundation\Request;
+use Biz\Order\Service\OrderService;
+use Biz\Course\Service\ReviewService;
+use Biz\Course\Service\MaterialService;
+use Biz\File\Service\UploadFileService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseNoteService;
+use Biz\Taxonomy\Service\CategoryService;
 use VipPlugin\Biz\Vip\Service\VipService;
+use Biz\Classroom\Service\ClassroomService;
+use Symfony\Component\HttpFoundation\Request;
 
 class CourseController extends CourseBaseController
 {
@@ -72,6 +72,8 @@ class CourseController extends CourseBaseController
 
         $user = $this->getCurrentUser();
         $isCourseTeacher = $this->getMemberService()->isCourseTeacher($id, $user['id']);
+
+        $this->getCourseService()->hitCourse($id);
 
         return $this->render(
             'course/course-show.html.twig',
@@ -650,9 +652,8 @@ class CourseController extends CourseBaseController
     }
 
     /**
-     * @param $courseId
-     * @param $member
-     *
+     * @param  $courseId
+     * @param  $member
      * @return array
      */
     protected function isMarketingPage($courseId, $member)
@@ -673,8 +674,7 @@ class CourseController extends CourseBaseController
     }
 
     /**
-     * @param $tab
-     *
+     * @param  $tab
      * @return string
      */
     protected function prepareTab($tab)
