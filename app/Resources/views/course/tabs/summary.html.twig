@@ -48,12 +48,10 @@
 </div>
 
 
-{% if  isMarketingPage|default(null) %}
-  </section>
+{% if  isMarketingPage|default(null)  and course.taskNum > 0 %}
 
   <div class="panel panel-default hidden-xs">
     <div class="panel-heading ">
-      
       <h3 class="panel-title">目录</h3>
     </div>
     <div class="panel-body">
