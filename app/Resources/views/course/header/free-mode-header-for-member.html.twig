@@ -27,20 +27,26 @@
         </li>
         <li>
           <p class="mb15 color-gray">
-            <i class="es-icon es-icon-book mrm"></i>下一任务
+            <i class="es-icon es-icon-book mrm"></i>下一学习任务
           </p>
           {% for toLearnTask in toLearnTasks %}
             <a class="link-dark text-16" href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">{{ toLearnTask.title|sub_text(15) }}</a>
           {% else %}
-            <span class="text-16">暂无任务</span>
+            <span class="text-16">暂无学习任务</span>
           {% endfor %}
         </li>
       </ul>
     </div>
     <div class="col-md-2 hidden-xs hidden-sm">
       {% for toLearnTask in toLearnTasks %}
-        <a class="btn btn-primary btn-lg mt5"
-           href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">继续学习</a>
+        <a class="btn btn-primary btn-lg mt10" 
+          href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">
+          {% if taskResultCount < 1 %}
+            开始学习
+          {% else %}
+            继续学习
+          {% endif %}
+        </a>
       {% endfor %}
     </div>
   </div>

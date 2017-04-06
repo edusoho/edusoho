@@ -38,7 +38,10 @@
               {% elseif task.result.status == 'finish' %}
               es-icon-iccheckcircleblack24px color-primary
               {% endif %}
-              left-menu"></i>
+              left-menu" 
+              {% if  task_lock  %} 
+                data-toggle="tooltip" data-trigger="hover" data-placement="top" title="需要解锁上一个任务才能学习"
+              {% endif %} ></i>
           {% if course.status == 'published' and task.status == 'published' %}
 
             {% if member %}
