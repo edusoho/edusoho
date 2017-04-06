@@ -4,7 +4,8 @@
   <h4 class="title">我的课程</h4>
   <div class="row my-course-list">
     {% for course in courses %}
-      {% set courseSet = courseSets[course.courseSetId] %}
+      {% set courseSet = data('CourseSet', { id: course.courseSetId }) %}
+     
       <div class="col-xs-6 course-list">
         <div class="course-item">
           <div class="course-img">
@@ -34,12 +35,12 @@
           <div class="course-info">
             <div class="title">
               <a class="link-dark" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
-                {{ courseSet.title }}
+                 {{course.title}}
               </a>
             </div>
             <div class="metas clearfix">
-              <span class="finished-percentage text-sm color-gray">完成课时: <span class="gray-dark">{{ course.memberLearnedNum }}/{{ course.taskNum }}</span></span>
-              <a href="{{ path('course_show', {id:course.id}) }}" target="_blank"><span class="btn btn-primary btn-xs pull-right">继续学习</span></a>
+              <span class="finished-percentage text-sm color-gray">完成任务: <span class="gray-dark">{{ course.memberLearnedNum }}/{{ course.taskNum }}</span></span>
+              <a href="{{ path('my_course_show', {id:course.id}) }}" target="_blank"><span class="btn btn-primary btn-xs pull-right">继续学习</span></a>
             </div>
           </div>
         </div>

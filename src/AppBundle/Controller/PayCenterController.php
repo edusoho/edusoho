@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Component\Payment\Wxpay\JsApiPay;
 use Biz\Cash\Service\CashOrdersService;
-use Biz\Coupon\Service\CouponService;
 use Biz\Order\Service\OrderService;
 use Biz\PayCenter\Service\PayCenterService;
 use Biz\System\Service\LogService;
@@ -18,22 +18,6 @@ class PayCenterController extends BaseController
 {
     public function showAction(Request $request)
     {
-        $user = $this->getCurrentUser();
-
-        if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '用户未登录，不能支付。');
-        }
-
-        $paymentSetting = $this->setting('payment');
-
-        if (!isset($paymentSetting['enabled']) || $paymentSetting['enabled'] == 0) {
-            if (!isset($paymentSetting['disabled_message'])) {
-                $paymentSetting['disabled_message'] = '尚未开启支付模块，无法购买课程。';
-            }
-
-            return $this->createMessageResponse('error', $paymentSetting['disabled_message']);
-        }
-
         $fields = $request->query->all();
         $orderInfo['sn'] = $fields['sn'];
         $orderInfo['targetType'] = $fields['targetType'];
@@ -41,67 +25,11 @@ class PayCenterController extends BaseController
         $processor = OrderProcessorFactory::create($fields['targetType']);
         $orderInfo['template'] = $processor->getOrderInfoTemplate();
         $order = $processor->getOrderBySn($orderInfo['sn']);
-        $targetId = isset($order['targetId']) ? $order['targetId'] : '';
-        $isTargetExist = $processor->isTargetExist($targetId);
-
-        if (!$isTargetExist) {
-            return $this->createMessageResponse('error', '该订单已失效');
-        }
-
-        if (empty($order)) {
-            return $this->createMessageResponse('error', '订单不存在!');
-        }
-
-        if ($order['userId'] != $user['id']) {
-            return $this->createMessageResponse('error', '不是您的订单，不能支付');
-        }
-
-        if ($order['status'] != 'created') {
-            return $this->createMessageResponse('error', '订单状态被更改，不能支付');
-        }
-
-        if (($order['createdTime'] + 40 * 60 * 60) < time()) {
-            return $this->createMessageResponse('error', '订单已经过期，不能支付');
-        }
-
-        if (!empty($order['coupon'])) {
-            $result = $this->getCouponService()->checkCouponUseable($order['coupon'], $order['targetType'], $order['targetId'], $order['amount']);
-
-            if ($result['useable'] == 'no') {
-                return $this->createMessageResponse('error', $result['message']);
-            }
-        }
-
-        if ($order['amount'] == 0 && $order['coinAmount'] == 0) {
-            $payData = array(
-                'sn' => $order['sn'],
-                'status' => 'success',
-                'amount' => $order['amount'],
-                'paidTime' => time(),
-            );
-            $this->getPayCenterService()->processOrder($payData);
-
-            return $this->redirectOrderTarget($order);
-        } elseif ($order['amount'] == 0 && $order['coinAmount'] > 0) {
-            $payData = array(
-                'sn' => $order['sn'],
-                'status' => 'success',
-                'amount' => $order['amount'],
-                'paidTime' => time(),
-                'payment' => 'coin',
-            );
-            list($success, $order) = $this->getPayCenterService()->pay($payData);
-
-            if ($success) {
-                return $this->redirectOrderTarget($order);
-            } else {
-                return $this->redirect($this->generateUrl('homepage', array(), true));
-            }
-        }
 
         $orderInfo['order'] = $order;
         $orderInfo['payments'] = $this->getEnabledPayments();
-        $orderInfo['payAgreements'] = $this->getUserService()->findUserPayAgreementsByUserId($user['id']);
+        $orderInfo['payAgreements'] = $this->getUserService()
+            ->findUserPayAgreementsByUserId($this->getCurrentUser()->getId());
 
         foreach ($orderInfo['payments'] as $payment) {
             if ($payment['enabled']) {
@@ -113,19 +41,28 @@ class PayCenterController extends BaseController
         return $this->render('pay-center/show.html.twig', $orderInfo);
     }
 
-    public function redirectOrderTarget($order)
+    /**
+     * wxjs pay.
+     *
+     * @param Request $request
+     *
+     * @throws \RuntimeException
+     *
+     * @return Response
+     */
+    public function wxpayAction(Request $request)
     {
-        $processor = OrderProcessorFactory::create($order['targetType']);
-        $goto = $processor->callbackUrl($order, $this->container);
+        $method = $request->getMethod();
+        $fields = $method == 'POST' ? $request->request->all() : $request->query->all();
+        $options = $this->getPaymentOptions($fields['payment']);
 
-        return $this->render('pay-center/pay-return.html.twig', array(
-            'goto' => $goto,
-        ));
-    }
+        $jsApi = new JsApiPay($options, $request);
 
-    public function payAction(Request $request)
-    {
-        $fields = $request->request->all();
+        $openid = $jsApi->getOpenid();
+        if (empty($openid)) {
+            throw new \RuntimeException('Error');
+        }
+
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
@@ -140,10 +77,88 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '支付方式未开启，请先开启');
         }
 
-        $order = OrderProcessorFactory::create($fields['targetType'])->updateOrder($fields['orderId'], array('payment' => $fields['payment']));
+        $token = $this->makeWxpayToken($fields['orderId']);
+
+        $order = OrderProcessorFactory::create($fields['targetType'])->updateOrder($fields['orderId'], array('payment' => $fields['payment'], 'token' => $token['token']));
 
         if ($user['id'] != $order['userId']) {
             return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
+        }
+
+        if ($order['status'] == 'paid') {
+            return $this->redirectOrderTarget($order);
+        }
+
+        $requestParams = array(
+            'notifyUrl' => $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
+        );
+
+        $paymentRequest = $this->createPaymentRequest($order, $requestParams);
+
+        $returnArray = $paymentRequest->unifiedOrder($openid);
+
+        if ($returnArray['return_code'] == 'SUCCESS') {
+            return $this->render('pay-center/wxpay-h5.html.twig', array(
+                'order' => $order,
+                'jsApiParameters' => $paymentRequest->getJsApiParameters($returnArray),
+            ));
+        }
+
+        throw new \RuntimeException($returnArray['return_msg']);
+    }
+
+    public function wxpayRollAction(Request $request)
+    {
+        $order = $request->query->get('order');
+
+        if ($order['status'] == 'paid') {
+            return $this->createJsonResponse(true);
+        } else {
+            $paymentRequest = $this->createPaymentRequest($order, array(
+                'returnUrl' => '',
+                'notifyUrl' => '',
+                'showUrl' => '',
+            ));
+            $returnArray = $paymentRequest->orderQuery();
+
+            if ($returnArray['trade_state'] == 'SUCCESS') {
+                $payData = array();
+                $payData['status'] = 'success';
+                $payData['payment'] = 'wxpay';
+                $payData['amount'] = $order['amount'];
+                $payData['paidTime'] = time();
+                $order = $this->getOrderService()->getOrderByToken($returnArray['out_trade_no']);
+                $payData['sn'] = $order['sn'];
+
+                list($success, $order) = OrderProcessorFactory::create($order['targetType'])->pay($payData);
+                if ($success) {
+                    return $this->createJsonResponse(true);
+                }
+            }
+        }
+
+        return $this->createJsonResponse(false);
+    }
+
+    public function redirectOrderTarget($order)
+    {
+        $processor = OrderProcessorFactory::create($order['targetType']);
+        $goto = $processor->callbackUrl($order, $this->container);
+
+        return $this->render('pay-center/pay-return.html.twig', array(
+            'goto' => $goto,
+        ));
+    }
+
+    public function payAction(Request $request)
+    {
+        $orderId = $request->request->get('orderId');
+        $payment = $request->request->get('payment');
+
+        list($checkResult, $order) = $this->getPayCenterGatewayService()->beforePayOrder($orderId, $payment);
+
+        if ($checkResult) {
+            return $this->createMessageResponse('error', $checkResult['error']);
         }
 
         if ($order['status'] == 'paid') {
@@ -189,14 +204,19 @@ class PayCenterController extends BaseController
         $params = $formRequest['params'];
 
         if ($payment == 'wxpay') {
-            $returnXml = $paymentRequest->unifiedOrder();
+            $isMicroMessenger = $this->getWebExtension()->isMicroMessenger();
 
-            if (!$returnXml) {
-                throw new \RuntimeException('xml数据异常！');
+            if ($isMicroMessenger) {
+                $url = $this->generateUrl('pay_center_wxpay', array($request));
+                $request->headers->add(array('X_ORIGINAL_URL' => $url));
+
+                return $this->forward('AppBundle:PayCenter:wxpay', array(
+                    'order' => $order,
+                ));
             }
 
-            $returnArray = $paymentRequest->fromXml($returnXml);
-
+            $order = $this->generateWxpayOrderToken($order);
+            $returnArray = $paymentRequest->unifiedOrder();
             if ($returnArray['return_code'] == 'SUCCESS') {
                 $url = $returnArray['code_url'];
 
@@ -389,40 +409,6 @@ class PayCenterController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function wxpayRollAction(Request $request)
-    {
-        $order = $request->query->get('order');
-
-        if ($order['status'] == 'paid') {
-            return $this->createJsonResponse(true);
-        } else {
-            $paymentRequest = $this->createPaymentRequest($order, array(
-                'returnUrl' => '',
-                'notifyUrl' => '',
-                'showUrl' => '',
-            ));
-            $returnXml = $paymentRequest->orderQuery();
-            $returnArray = $this->fromXml($returnXml);
-
-            if ($returnArray['trade_state'] == 'SUCCESS') {
-                $payData = array();
-                $payData['status'] = 'success';
-                $payData['payment'] = 'wxpay';
-                $payData['amount'] = $order['amount'];
-                $payData['paidTime'] = time();
-                $payData['sn'] = $returnArray['out_trade_no'];
-
-                list($success, $order) = OrderProcessorFactory::create($order['targetType'])->pay($payData);
-
-                if ($success) {
-                    return $this->createJsonResponse(true);
-                }
-            }
-        }
-
-        return $this->createJsonResponse(false);
-    }
-
     public function resultNoticeAction(Request $request)
     {
         return $this->render('pay-center/result-notice.html.twig');
@@ -482,7 +468,6 @@ class PayCenterController extends BaseController
     protected function getPaymentOptions($payment)
     {
         $settings = $this->setting('payment');
-
         if (empty($settings)) {
             throw new \RuntimeException('支付参数尚未配置，请先配置。');
         }
@@ -492,11 +477,14 @@ class PayCenterController extends BaseController
         }
 
         if (empty($settings[$payment.'_enabled'])) {
-            throw new \RuntimeException('支付模块('.$payment.')未开启，请先开启。');
+            throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
+        }
+        if ($payment === 'alipay' && (empty($settings["{$payment}_key"]) || empty($settings["{$payment}_secret"]))) {
+            throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
         }
 
-        if (empty($settings["{$payment}_key"]) || empty($settings["{$payment}_secret"])) {
-            throw new \RuntimeException('支付模块('.$payment.')参数未设置，请先设置。');
+        if ($payment === 'wxpay' && (empty($settings["{$payment}_appid"]) || empty($settings["{$payment}_secret"]))) {
+            throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
         }
 
         if ($payment == 'alipay') {
@@ -510,6 +498,14 @@ class PayCenterController extends BaseController
                 'key' => $settings["{$payment}_key"],
                 'secret' => $settings["{$payment}_secret"],
                 'aes' => $settings["{$payment}_aes"],
+            );
+        } elseif ($payment == 'wxpay') {
+            $options = array(
+                'appid' => $settings["{$payment}_appid"],
+                'account' => $settings["{$payment}_account"],
+                'key' => $settings["{$payment}_key"],
+                'secret' => $settings["{$payment}_secret"],
+                'isMicroMessenger' => $this->getWebExtension()->isMicroMessenger(),
             );
         } else {
             $options = array(
@@ -571,12 +567,27 @@ class PayCenterController extends BaseController
         return $enableds;
     }
 
-    /**
-     * @return CouponService
-     */
-    protected function getCouponService()
+    private function makeWxpayToken($orderId)
     {
-        return $this->getBiz()->service('Coupon:CouponService');
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $value = '';
+        for ($i = 0; $i < 5; ++$i) {
+            $value .= $chars[mt_rand(0, strlen($chars) - 1)];
+        }
+
+        $order = $this->getOrderService()->getOrder($orderId);
+        $token['token'] = $order['sn'].$value;
+
+        return $token;
+    }
+
+    public function generateWxpayOrderToken($order)
+    {
+        $token = $this->makeWxpayToken($order['id']);
+
+        $processor = OrderProcessorFactory::create($order['targetType']);
+
+        return $processor->updateOrder($order['id'], array('token' => $token['token']));
     }
 
     /**
@@ -617,5 +628,10 @@ class PayCenterController extends BaseController
     protected function getLogService()
     {
         return $this->getBiz()->service('System:LogService');
+    }
+
+    protected function getPayCenterGatewayService()
+    {
+        return $this->createService('PayCenter:GatewayService');
     }
 }

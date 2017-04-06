@@ -22,8 +22,20 @@ class OpenCourseController extends BaseController
             unset($conditions['title']);
         }
 
-        if (empty($conditions['creator'])) {
+        if (!empty($conditions['creator'])) {
+            $users = $this->getUserService()->searchUsers(
+                array('nickname' => $conditions['creator']),
+                array('createdTime' => 'DESC'),
+                0,
+                PHP_INT_MAX
+            );
             unset($conditions['creator']);
+
+            if ($users) {
+                $conditions['userIds'] = ArrayToolkit::column($users, 'id');
+            } else {
+                $conditions['userIds'] = array(-1);
+            }
         }
 
         $count = $this->getOpenCourseService()->countCourses($conditions);

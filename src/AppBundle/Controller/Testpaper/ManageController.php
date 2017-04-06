@@ -3,19 +3,19 @@
 namespace AppBundle\Controller\Testpaper;
 
 use AppBundle\Common\Paginator;
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Controller\BaseController;
-use Biz\Activity\Service\TestpaperActivityService;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Question\Service\QuestionService;
 use Biz\Task\Service\TaskService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserService;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
+use AppBundle\Controller\BaseController;
+use Biz\Course\Service\CourseSetService;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\Question\Service\QuestionService;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\Activity\Service\TestpaperActivityService;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class ManageController extends BaseController
 {
@@ -255,7 +255,9 @@ class ManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $userIds = ArrayToolkit::column($testpaperResults, 'userId');
+        $studentIds = ArrayToolkit::column($testpaperResults, 'userId');
+        $teacherIds = ArrayToolkit::column($testpaperResults, 'checkTeacherId');
+        $userIds = array_merge($studentIds, $teacherIds);
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('testpaper/manage/result-list.html.twig', array(
@@ -392,6 +394,10 @@ class ManageController extends BaseController
 
         if (!$testpaper || $testpaper['courseSetId'] != $courseSetId) {
             return $this->createMessageResponse('error', 'testpaper not found');
+        }
+
+        if ($testpaper['status'] != 'draft') {
+            return $this->createMessageResponse('error', '已发布或已关闭的试卷不能再修改题目');
         }
 
         if ($request->getMethod() === 'POST') {
