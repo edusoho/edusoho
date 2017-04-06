@@ -44,7 +44,7 @@ user.not_login.tips: >
 finance.income: 收入
 finance.expense: 支出
 finance.income_expense: 收支
-finance.virtual_coin: 虚拟币
+finance.coin: 虚拟币
 finance.balance: 账户余额
 
 #插件
@@ -129,6 +129,8 @@ form.btn.delete: 删除
 form.btn.submit_disabled: 已提交
 form.btn.reset_password: 重设密码
 form.btn.send: 发送
+form.btn.upload: 上传
+form.btn.upload.submiting: 正在上传...
 form.btn.delete.submiting: 正在删除...
 form.btn.reply.submiting: 正在发表回复
 form.btn.save.submiting: 正在保存...
@@ -629,6 +631,18 @@ group.detail.group_members.cancel_vice_leader_btn: 撤销副组长
 group.detail.group_members.members: 组员
 group.detail.group_members.members.empty: 还没有小组成员！
 group.detail.group_settings: 小组设置
+group.detail.group_settings.group_edit: 编辑小组
+group.detail.group_settings.group_edit.name: 小组名称
+group.detail.group_settings.group_edit.introduction: 小组介绍
+group.detail.group_settings.logo_setup: 图标设置
+group.detail.group_settings.logo_setup.current_logo: 当前图标
+group.detail.group_settings.logo_setup.tips: >
+  你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。推荐大小（180*180）
+group.detail.group_settings.logo_setup.upload_btn: 上传新图标
+group.detail.group_settings.background_image_setup: 背景设置
+group.detail.group_settings.background_image_setup.current_image: 当前背景
+group.detail.group_settings.background_image_setup.tips: >
+  你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。推荐大小（1140*150）
 group.detail.new_group_members: 新加组员
 group.detail.new_group_members.empty: 还没有小组成员！
 group.detail.hot_group: 热门小组
