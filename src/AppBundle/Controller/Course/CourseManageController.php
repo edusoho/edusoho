@@ -763,8 +763,10 @@ class CourseManageController extends BaseController
         );
         $payment = array(
             'alipay' => '支付宝',
+            'llpay' => '连连支付',
+            'quikpay' => '快捷支付',
             'wxpay' => '微信支付',
-            'cion' => '虚拟币支付',
+            'coin' => '虚拟币支付',
             'outside' => '站外支付',
             'none' => '--',
         );
