@@ -114,7 +114,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
             'OtherMigrate',
             'LogMigrate',
-            'GracefulBlockMigrate',
             'PluginMigrate',
         );
 
