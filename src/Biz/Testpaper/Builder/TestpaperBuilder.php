@@ -122,6 +122,10 @@ class TestpaperBuilder implements TestpaperBuilderInterface
             $fields['passedCondition'] = array($fields['passedScore']);
         }
 
+        if (empty($fields['passedCondition'])) {
+            $fields['passedCondition'] = array(0);
+        }
+
         $fields = ArrayToolkit::parts($fields, array(
             'name',
             'description',
