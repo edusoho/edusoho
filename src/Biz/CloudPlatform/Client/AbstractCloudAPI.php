@@ -139,8 +139,7 @@ class AbstractCloudAPI
                 $url = $url.(strpos($url, '?') ? '&' : '?').http_build_query($params);
             }
         }
-        var_dump($params);
-        // var_dump($url);exit();
+        
         $headers[] = 'Auth-Token: '.$this->_makeAuthToken($url, $method == 'GET' ? array() : $params);
         $headers[] = 'API-REQUEST-ID: '.$requestId;
 

@@ -182,7 +182,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         if (!empty($liveLogo) && array_key_exists('live_logo', $liveLogo) && !empty($liveLogo['live_logo'])) {
             $liveLogoUrl = $baseUrl.'/'.$liveLogo['live_logo'];
         }
-        $callbackUrl = $this->buildCallbackUrl($activity);
+        $callbackUrl = $this->buildCallbackUrl($activity, $baseUrl);
 
         $live = $this->getEdusohoLiveClient()->createLive(array(
             'summary' => empty($activity['remark']) ? '' : $activity['remark'],
@@ -200,13 +200,13 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $live;
     }
 
-    protected function buildCallbackUrl($activity)
+    protected function buildCallbackUrl($activity, $baseUrl)
     {
         $duration = $activity['startTime'] + $activity['length'] * 60 + 86400 - time();
         $args = array('duration' => $duration, 'data' => $activity['fromCourseId']);
         $token = $this->getTokenService()->makeToken('live.create', $args);
-        $memberUrl = "/callback/course_live?provider=course_member&&token = {$token['token']} && courseId = {$activity['fromCourseId']}";
-        $mediaUrl = "/callback/course_live?provider=course_cloud_files&&token = {$token['token']} && courseId = {$activity['fromCourseId']}";
+        $memberUrl = "{$baseUrl}/callback/course_live?provider=course_member&&token = {$token['token']} && courseId = {$activity['fromCourseId']}";
+        $mediaUrl = "{$baseUrl}/callback/course_live?provider=course_cloud_files&&token = {$token['token']} && courseId = {$activity['fromCourseId']}";
         $callbackUrl = array(
             array('type' => 'member', 'url' => $memberUrl), 
             array('type' => 'media', 'url' => $mediaUrl)            
