@@ -205,8 +205,8 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         $duration = $activity['startTime'] + $activity['length'] * 60 + 86400 - time();
         $args = array('duration' => $duration, 'data' => $activity['fromCourseId']);
         $token = $this->getTokenService()->makeToken('live.create', $args);
-        $memberUrl = "{$baseUrl}/callback/course_live?provider=course_member&&token = {$token['token']} && courseId = {$activity['fromCourseId']}";
-        $mediaUrl = "{$baseUrl}/callback/course_live?provider=course_cloud_files&&token = {$token['token']} && courseId = {$activity['fromCourseId']}";
+        $memberUrl = "{$baseUrl}/callback/course_live?provider=course_member&token={$token['token']}&courseId={$activity['fromCourseId']}";
+        $mediaUrl = "{$baseUrl}/callback/course_live?provider=course_cloud_files&token ={$token['token']}&courseId={$activity['fromCourseId']}";
         $callbackUrl = array(
             array('type' => 'member', 'url' => $memberUrl), 
             array('type' => 'media', 'url' => $mediaUrl)            
