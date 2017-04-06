@@ -257,9 +257,7 @@ class QuestionMarkerController extends BaseController
 
         $task = $this->getTaskService()->getTask($taskId);
 
-        $conditions = $request->request->all();
-
-        list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $conditions, $course, $task);
+        list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $course, $task);
 
         return $this->render(
             'marker/question-tr.html.twig',
@@ -286,9 +284,9 @@ class QuestionMarkerController extends BaseController
         return $choices;
     }
 
-    protected function getPaginatorAndQuestion($request, $conditions, $course, $task)
+    protected function getPaginatorAndQuestion($request, $course, $task)
     {
-        $conditions = $this->processTarget($conditions);
+        $conditions = $this->processTarget($request->request->all());
 
         if (!empty($conditions['keyword'])) {
             $conditions['stem'] = $conditions['keyword'];
@@ -301,10 +299,8 @@ class QuestionMarkerController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getQuestionService()->searchCount($conditions),
-            empty($conditions['pageSize']) ? 7 : $conditions['pageSize']
+            empty($conditions['pageSize']) ? 1 : $conditions['pageSize']
         );
-
-        $paginator->setPageRange(4);
 
         $questions = $this->getQuestionService()->search(
             $conditions,
