@@ -205,7 +205,7 @@ class WebExtension extends \Twig_Extension
             return $notifies;
         }, array());
 
-        return implode('、', $notifies);
+        return $notifies;
     }
 
     public function getAdminRoles()

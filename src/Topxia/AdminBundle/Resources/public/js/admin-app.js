@@ -69,8 +69,12 @@ define(function(require, exports, module) {
 		}
 	});
 
-    if (app.scheduleCrontab) {
-        $.post(app.scheduleCrontab);
-    }	
+  if (app.scheduleCrontab) {
+      $.post(app.scheduleCrontab);
+  }	
+
+  if($('.js-update-modal').length) {
+    $('.js-update-modal').modal('show');
+  }
 
 });

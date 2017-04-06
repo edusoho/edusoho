@@ -3,7 +3,7 @@ body {
   padding-bottom: 40px;
 }
 .color-primary {
-  color: #46c37b !important;
+  color: #428bca !important;
 }
 .color-warning {
   color: #ff8a0c !important;
@@ -16,6 +16,12 @@ body {
 }
 .color-danger {
   color: #e83d2c !important;
+}
+.color-gray {
+  color: #999;
+}
+.color-dark {
+  color: #666;
 }
 .table td {
   word-wrap: break-word;
