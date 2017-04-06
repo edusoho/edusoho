@@ -764,6 +764,7 @@ class CourseManageController extends BaseController
         $payment = array(
             'alipay' => '支付宝',
             'llpay' => '连连支付',
+            'heepay' => '汇付宝',
             'quikpay' => '快捷支付',
             'wxpay' => '微信支付',
             'coin' => '虚拟币支付',
