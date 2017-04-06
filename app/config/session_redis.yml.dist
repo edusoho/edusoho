@@ -1,8 +1,0 @@
-services:
-    session.handler.redis:
-        class:     AppBundle\Handler\RedisSessionHandler
-        arguments: ['@session.handler.redis.factory', '@security.token_storage']
-
-    session.handler.redis.factory:
-        class:     AppBundle\Handler\RedisSessionFactory
-        arguments: ['@service_container']

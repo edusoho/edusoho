@@ -1,0 +1,42 @@
+{
+    "name": "sentry/sentry",
+    "type": "library",
+    "description": "A PHP client for Sentry (http://getsentry.com)",
+    "keywords": ["log", "logging"],
+    "homepage": "http://getsentry.com",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "David Cramer",
+            "email": "dcramer@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^1.8.0",
+        "phpunit/phpunit": "^4.8 || ^5.0",
+        "monolog/monolog": "*"
+    },
+    "require": {
+        "php": ">=5.2.4",
+        "ext-curl": "*"
+    },
+    "suggest": {
+        "monolog/monolog": "Automatically capture Monolog events as breadcrumbs"
+    },
+    "conflict": {
+        "raven/raven": "*"
+    },
+    "bin": [
+        "bin/sentry"
+    ],
+    "autoload": {
+        "psr-0" : {
+            "Raven_" : "lib/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.6.x-dev"
+        }
+    }
+}

@@ -78,6 +78,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new OAuth2\ServerBundle\OAuth2ServerBundle(),
             new Codeages\PluginBundle\CodeagesPluginBundle(),
             new AppBundle\AppBundle(),
+            new Sentry\SentryBundle\SentryBundle(),
         );
 
         if ($this->getEnvironment() !== 'test') {

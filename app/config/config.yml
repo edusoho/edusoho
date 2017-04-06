@@ -1,12 +1,14 @@
 imports:
     - { resource: biz.yml }
     - { resource: parameters_default.yml }
+    - { resource: parameters_version.yml }
     - { resource: parameters_service.yml, ignore_errors: true }
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.xml }
     - { resource: service_listener.yml }
     - { resource: session_redis.yml, ignore_errors: true }
+    - { resource: sentry.yml, ignore_errors: true }
     - { resource: theme_jianmo_parameters.yml }
 
 framework:
@@ -28,7 +30,7 @@ framework:
     fragments:       ~
     http_method_override: true
     assets:
-        version: '7.5.14'
+        version: '%app_version%'
 
 # Twig Configuration
 twig:

@@ -48,7 +48,8 @@
     "codeages/biz-framework": "0.3.4",
     "codeages/plugin-bundle": "0.1.10",
     "codeages/rest-api-client": "0.1.4",
-    "codeages/biz-rate-limiter": "0.1.6"
+    "codeages/biz-rate-limiter": "0.1.6",
+    "sentry/sentry-symfony": "0.7.1"
   },
   "require-dev": {
     "sensio/generator-bundle": "3.0.11",

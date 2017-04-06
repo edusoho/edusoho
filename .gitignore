@@ -8,6 +8,7 @@
 /app/config/menu_blacklist.yml
 /app/config/uc_client_config.php
 /app/config/routing_plugins.yml
+/app/config/sentry.yml
 /web/themes/*
 !/web/themes/autumn
 !/web/themes/default

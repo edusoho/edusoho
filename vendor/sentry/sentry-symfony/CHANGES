@@ -1,0 +1,35 @@
+0.7.1
+-----
+
+- Quote sentry.options in services.yml.
+
+0.7.0
+-----
+
+- Expose all configuration options (#36).
+
+0.6.0
+-----
+
+- Improve app path detection to exclude root folder and exclude vendor.
+
+0.5.0
+-----
+
+- Raise sentry/sentry minimum requirement to 1.2.0.
+- Fixed an issue with a missing import (#24).
+- ``prefixes`` and ``app_path`` will now be bound by default.
+
+0.4.0
+-----
+
+- Added ``skip_capture`` configuration for excluding exceptions.
+- Security services are now optional.
+- Console exceptions are now captured.
+- Default PHP SDK hooks will now be installed (via ``Raven_Client->install``).
+- SDK will now be registered as 'sentry-symfony'.
+
+0.3.0
+-----
+
+- Added support for capturing the current user.
