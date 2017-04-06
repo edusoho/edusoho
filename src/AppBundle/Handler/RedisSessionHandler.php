@@ -48,7 +48,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
      * @param TokenStorage $storage
      * @param array        $options
      */
-    public function __construct($biz, TokenStorage $storage, array $options = array())
+    public function __construct($factory, TokenStorage $storage, array $options = array())
     {
         if ($diff = array_diff(array_keys($options), array('prefix', 'expiretime'))) {
             throw new \InvalidArgumentException(sprintf(
@@ -56,7 +56,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
             ));
         }
 
-        $this->redis = $biz['redis'];
+        $this->redis = $factory->getRedis();
         $this->ttl = isset($options['expiretime']) ? (int) $options['expiretime'] : 86400;
         $this->prefix = isset($options['prefix']) ? $options['prefix'] : 'es3_sess';
 
