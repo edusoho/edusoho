@@ -93,8 +93,31 @@
     
     {% set notifies = plugin_update_notify() %}
     {% if not notifies is empty %}
-      <div class="alert alert-warning">
+      {#<div class="alert alert-warning">
         【重要】网站升级v7.2.0后，为保证正常使用，请务必及时升级插件（{{ notifies }}）至最新版！请立即升级！ <a href="{{ path('admin_app_upgrades') }}">查看详情</a>
+      </div>#}
+      <div class="modal js-update-modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">升级引导</h4>
+            </div>
+            <div class="modal-body">
+              <div class="update-redmine-body">
+                <img class="pbm" src ='{{ asset('bundles/topxiaadmin/img/course-8-update.jpg') }}'>
+                <div class="mll mtl">
+                  <p class="color-primary mbl">请即刻升级以下插件，否则会影响到网站的正常使用</p>
+                  {% for notifie in notifies %}
+                    <p class="color-dark"><span class="mrm">●</span>{{notifie}}</p>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" href="{{ path('admin_app_upgrades') }}">去升级</button>
+            </div>
+          </div>
+        </div>
       </div>
     {% endif %}
 
@@ -155,26 +178,6 @@
   {% endblock %}
 
   {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
-  {# 升级说明，用路由替换掉 #}
-  <div class="modal update-modal"  style="display:block">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">升级引导</h4>
-        </div>
-        <div class="modal-body">
-           <div class="update-redminey-body">
-            <img src =''>
-
-           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary">去升级</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  
   <div id="modal" class="modal" ></div>
   <div id="attachment-modal" class="modal" ></div>
   {% if setting('copyright.thirdCopyright') != 1 %}
