@@ -397,7 +397,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         if (isset($fields['expiryMode']) && $fields['expiryMode'] == 'date') {
             if ($fields['expiryValue'] < time()) {
-                throw $this->createServiceException($this->getKernel()->trans('设置的有效期小于当前时间！'));
+                throw $this->createServiceException('设置的有效期小于当前时间！');
             }
         }
 

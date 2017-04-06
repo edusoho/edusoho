@@ -26,7 +26,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         if ($classroom['expiryMode'] == 'date' && $classroom['expiryValue'] < time()) {
-            return array('error' => $this->getKernel()->trans('该班级已经超过有效期，不允许购买'));
+            return array('error' => '该班级已经超过有效期，不允许购买');
         }
 
         if ($classroom['status'] != 'published') {

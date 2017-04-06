@@ -3,7 +3,6 @@
 namespace Biz\Common\Mail;
 
 use AppBundle\Common\SettingToolkit;
-use Topxia\Service\Common\ServiceKernel;
 
 class TemplateToolkit
 {
@@ -45,7 +44,7 @@ class TemplateToolkit
         );
 
         return array(
-            'title' => self::trans('重置您的%sitename%帐号密码', $arguments),
+            'title' => strtr('重置您帐号%nickname%在%sitename%的密码', $arguments),
             'body' => self::renderBody('effect-reset.txt.twig', $options['params']),
         );
     }
@@ -58,7 +57,7 @@ class TemplateToolkit
         );
 
         return array(
-            'title' => self::trans('重设%nickname%在%sitename%的密码', $arguments),
+            'title' => strtr('重设%nickname%在%sitename%的密码', $arguments),
             'body' => self::renderBody('reset.txt.twig', $options['params']),
         );
     }
@@ -70,15 +69,15 @@ class TemplateToolkit
         );
 
         return array(
-            'title' => self::trans('【%sitename%】系统自检邮件', $arguments),
-            'body' => self::trans('系统邮件发送检测测试，请不要回复此邮件！'),
+            'title' => strtr('【%sitename%】系统自检邮件', $arguments),
+            'body' => '系统邮件发送检测测试，请不要回复此邮件！',
         );
     }
 
     private static function getEmailRegistration($options)
     {
-        $emailTitle = self::setting('auth.email_activation_title', self::trans('请激活你的帐号 完成注册'));
-        $emailBody = self::setting('auth.email_activation_body', self::trans(' 验证邮箱内容'));
+        $emailTitle = self::setting('auth.email_activation_title', '请激活你的帐号 完成注册');
+        $emailBody = self::setting('auth.email_activation_body', ' 验证邮箱内容');
         $params = $options['params'];
         $valuesToReplace = array($params['nickname'], $params['sitename'], $params['siteurl'], $params['verifyurl']);
         $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');
@@ -100,7 +99,7 @@ class TemplateToolkit
         );
 
         return array(
-            'title' => self::trans('重设%nickname%在%sitename%的电子邮箱', $arguments),
+            'title' => strtr('重设%nickname%在%sitename%的电子邮箱', $arguments),
             'body' => self::renderBody('email-change.txt.twig', $options['params']),
         );
     }
@@ -113,7 +112,7 @@ class TemplateToolkit
         );
 
         return array(
-            'title' => self::trans('验证%nickname%在%sitename%的电子邮箱', $arguments),
+            'title' => strtr('验证%nickname%在%sitename%的电子邮箱', $arguments),
             'body' => self::renderBody('email-verify.txt.twig', $options['params']),
         );
     }
@@ -134,15 +133,5 @@ class TemplateToolkit
         $twig = new \Twig_Environment($loader);
 
         return  $twig->render($view, $params);
-    }
-
-    private static function trans($message, $arguments = array())
-    {
-        return self::getKernel()->trans($message, $arguments);
-    }
-
-    private static function getKernel()
-    {
-        return ServiceKernel::instance();
     }
 }
