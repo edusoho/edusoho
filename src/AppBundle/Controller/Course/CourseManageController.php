@@ -765,7 +765,7 @@ class CourseManageController extends BaseController
             'alipay' => '支付宝',
             'llpay' => '连连支付',
             'heepay' => '汇付宝',
-            'quikpay' => '快捷支付',
+            'quickpay' => '快捷支付',
             'wxpay' => '微信支付',
             'coin' => '虚拟币支付',
             'outside' => '站外支付',
