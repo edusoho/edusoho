@@ -1698,6 +1698,17 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $fields;
     }
 
+    public function hitCourse($id)
+    {
+        $course = $this->getCourse($id);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException("Course#{$courseId} Not Found");
+        }
+
+        return $this->getCourseDao()->wave(array($id), array('hitNum' => 1));
+    }
+
     protected function hasAdminRole()
     {
         $user = $this->getCurrentUser();

@@ -73,6 +73,8 @@ class CourseController extends CourseBaseController
         $user = $this->getCurrentUser();
         $isCourseTeacher = $this->getMemberService()->isCourseTeacher($id, $user['id']);
 
+        $this->getCourseService()->hitCourse($id);
+
         return $this->render(
             'course/course-show.html.twig',
             array(
