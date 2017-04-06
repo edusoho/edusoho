@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Classroom;
 
-use AppBundle\Common\ClassroomToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ExportHelp;
 use Biz\Task\Service\TaskService;
@@ -13,6 +12,7 @@ use Biz\Taxonomy\Service\TagService;
 use AppBundle\Common\SimpleValidator;
 use Biz\Course\Service\CourseService;
 use Biz\Thread\Service\ThreadService;
+use AppBundle\Common\ClassroomToolkit;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
 use Biz\Task\Service\TaskResultService;
@@ -1066,10 +1066,6 @@ class ClassroomManageController extends BaseController
 
     public function publishAction($id)
     {
-        $this->getClassroomService()->tryManageClassroom($id);
-
-        // $classroom = $this->getClassroomService()->getClassroom($id);
-
         $this->getClassroomService()->publishClassroom($id);
 
         return new Response('success');
@@ -1101,10 +1097,6 @@ class ClassroomManageController extends BaseController
 
     public function closeAction($id)
     {
-        $this->getClassroomService()->tryManageClassroom($id);
-
-        // $classroom = $this->getClassroomService()->getClassroom($id);
-
         $this->getClassroomService()->closeClassroom($id);
 
         return new Response('success');
@@ -1191,7 +1183,7 @@ class ClassroomManageController extends BaseController
         );
     }
 
-    public function homeworkAction($id, $status)
+    public function homeworkAction($id)
     {
         $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
@@ -1206,7 +1198,7 @@ class ClassroomManageController extends BaseController
         $courseIds = ArrayToolkit::column($courses, 'id');
 
         $conditions = array(
-            'courseIds' => $courseIds,
+            'courseIds' => empty($courseIds) ? array(-1) : $courseIds,
             'mediaType' => 'homework',
         );
         $activities = $this->getActivityService()->search($conditions, null, 0, PHP_INT_MAX);

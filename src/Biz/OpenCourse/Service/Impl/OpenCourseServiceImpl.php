@@ -41,6 +41,8 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function createCourse($course)
     {
+        $this->tryCreateCourse();
+
         if (!ArrayToolkit::requireds($course, array('title'))) {
             throw $this->createServiceException('缺少必要字段，创建课程失败！');
         }
@@ -65,6 +67,14 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $this->getLogService()->info('open_course', 'create_course', "创建公开课《{$course['title']}》(#{$course['id']})");
 
         return $course;
+    }
+
+    protected function tryCreateCourse()
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin() || !($user->isTeacher() || $user->isAdmin() || $user->isSuperAdmin())) {
+            throw $this->createAccessDeniedException('Unauthorized');
+        }
     }
 
     public function updateCourse($id, $fields)
@@ -317,8 +327,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         uasort($items, function ($item1, $item2) {
             return $item1['seq'] > $item2['seq'];
-        }
-        );
+        });
 
         return $items;
     }
@@ -903,8 +912,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
                 $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
                 array_walk($fields['tags'], function (&$item, $key) {
                     $item = (int) $item['id'];
-                }
-                );
+                });
             } else {
                 $fields['tags'] = array();
             }
@@ -940,8 +948,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             }
 
             return !empty($value);
-        }
-        );
+        });
 
         if (isset($conditions['creator']) && !empty($conditions['creator'])) {
             $user = $this->getUserService()->getUserByNickname($conditions['creator']);

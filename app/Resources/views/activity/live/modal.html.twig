@@ -1,5 +1,5 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
-{% do script(['libs/bootstrap-datetimepicker.js','app/js/activity-manage/live/index.js']) %}
+{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js','app/js/activity-manage/live/index.js']) %}
 
 {% block activity_content %}
   <div class="form-group expiry-day-js">
@@ -28,10 +28,13 @@
     <div class="col-sm-10">
       <textarea class="form-control type-hidden" id="text-content-field" name="remark" rows="10" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
     >{{ activity.remark|default('') }}</textarea>
+      {% set course=data('Course',{'courseId':courseId}) %}
+      {% if course.expiryMode=='days' %}
+        <p class="help-block color-warning">{{'提示：本计划的学习加入方式为“随到随学”，加入直播活动可能会导致后来的学员无法参加，只能观看回放。'|trans}}</p>
+      {% endif %}
     </div>
   </div>
 {% endblock %}
-
 
 {% block activity_finish %}
   <div class="form-group">

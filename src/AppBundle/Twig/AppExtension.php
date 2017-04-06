@@ -81,11 +81,9 @@ class AppExtension extends \Twig_Extension
 
     public function buildServiceTags($selectedTags)
     {
-
         $tags = ServiceToolkit::getServicesByCodes(
             array('homeworkReview', 'testpaperReview', 'teacherAnswer', 'liveAnswer')
         );
-
 
         if (empty($selectedTags)) {
             return $tags;

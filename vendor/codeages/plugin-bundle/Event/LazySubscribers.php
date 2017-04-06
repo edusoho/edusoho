@@ -15,6 +15,9 @@ class LazySubscribers
      */
     private $container;
 
+    /**
+     * @var string[]
+     */
     private $services = array();
 
     /**
@@ -46,9 +49,9 @@ class LazySubscribers
 
         if (isset($eventMap[$eventName])) {
             return $eventMap[$eventName];
-        } else {
-            return array();
         }
+
+        return array();
     }
 
     /**
@@ -65,8 +68,7 @@ class LazySubscribers
     protected function getEventMap()
     {
         $this->generateCache();
-        $eventMap = require $this->cache->getPath();
-        return $eventMap;
+        return require $this->cache->getPath();
     }
 
     public function generateCache()
@@ -80,25 +82,19 @@ class LazySubscribers
         $eventMap = array();
 
         foreach ($this->services as $service) {
+            /**
+             * @var $class EventSubscriber
+             */
             $class  = $this->container->get($service);
-            $events = forward_static_call(array($class, 'getSubscribedEvents'));
-            foreach ($events as $eventName => $callbacks) {
-                if (is_array($callbacks)) {
-                    array_walk($callbacks, function ($callback) use (&$eventMap, $service,$eventName) {
-                        $eventMap[$eventName][] = array($service, $callback);
-                    });
-                } else {
-                    $eventMap[$eventName][] = array($service, $callbacks);
-                }
-            }
-        }
 
-        $biz = $this->container->get('biz');
-        foreach ($biz['subscribers'] as $subscriber) {
-            $events = forward_static_call(array($subscriber, 'getSubscribedEvents'));
+            /**
+             * @var $events array<string, string|array>
+             */
+            $events = forward_static_call(array($class, 'getSubscribedEvents'));
+
             foreach ($events as $eventName => $callbacks) {
                 if (is_array($callbacks)) {
-                    array_walk($callbacks, function ($callback) use (&$eventMap, $service,$eventName) {
+                    array_walk($callbacks, function ($callback) use (&$eventMap, $eventName, $service) {
                         $eventMap[$eventName][] = array($service, $callback);
                     });
                 } else {
