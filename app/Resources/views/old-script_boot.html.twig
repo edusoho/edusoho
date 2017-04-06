@@ -15,8 +15,8 @@
     {% endif %}
   {% endif %}
 
-  var CKEDITOR_BASEPATH = app.basePath + '/assets/libs/ckeditor/4.6.7/';
-  var CLOUD_FILE_SERVER = "{{ setting('developer.cloud_file_server', '') }}"; 
+  window.CKEDITOR_BASEPATH = app.basePath + '/assets/libs/ckeditor/4.6.7/';
+  window.CLOUD_FILE_SERVER = "{{ setting('developer.cloud_file_server', '') }}"; 
 
   app.config = {{
     {
@@ -25,11 +25,6 @@
         qq:{key:setting('login_bind.qq_key', '')},
         douban:{key:setting('login_bind.douban_key', '')},
         renren:{key:setting('login_bind.renren_key', '')}
-      },
-      cloud: {
-        video_player: parameter('cloud.video_player'),
-        video_player_watermark_plugin: parameter('cloud.video_player_watermark_plugin'),
-        video_player_fingerprint_plugin: parameter('cloud.video_player_fingerprint_plugin')
       },
       loading_img_path: asset('assets/img/default/loading.gif'),
     }|json_encode|raw

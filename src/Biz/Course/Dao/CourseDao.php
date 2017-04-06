@@ -6,7 +6,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface CourseDao extends GeneralDaoInterface
 {
-    const TABLENAME = 'c2_course';
+    const TABLENAME = 'course_v8';
 
     public function findCoursesByCourseSetIdAndStatus($courseSetId, $status);
 
@@ -32,5 +32,9 @@ interface CourseDao extends GeneralDaoInterface
 
     public function updateCourseRecommendByCourseSetId($courseSetId, $fields);
 
-    public function updateCategoryByCourseSetId($courseSetId, $categoryId);
+    public function updateCategoryByCourseSetId($courseSetId, $fields);
+
+    public function countCreatedCoursesLessThanEndTimeByGroupDate($endTime);
+
+    public function countGroupByCourseSetIds($courseSetIds);
 }

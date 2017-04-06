@@ -2,9 +2,7 @@
 
 namespace Biz\Question\Type;
 
-use AppBundle\Common\ArrayToolkit;
-
-class UncertainChoice implements TypeInterface
+class UncertainChoice extends BaseQuestion implements TypeInterface
 {
     public function create($fields)
     {
@@ -41,45 +39,12 @@ class UncertainChoice implements TypeInterface
         return array('status' => 'wrong', 'score' => 0);
     }
 
-    public function filter($fields)
+    public function filter(array $fields)
     {
         if (!empty($fields['choices'])) {
             $fields['metas'] = array('choices' => $fields['choices']);
         }
 
-        return $this->commonFilter($fields);
-    }
-
-    protected function commonFilter($fields)
-    {
-        if (isset($fields['target'])) {
-            $fields['lessonId'] = $fields['target'];
-            unset($fields['target']);
-        }
-        $fields = ArrayToolkit::parts($fields, array(
-            'type',
-            'stem',
-            'difficulty',
-            'userId',
-            'answer',
-            'analysis',
-            'metas',
-            'score',
-            'categoryId',
-            'parentId',
-            'copyId',
-            'target',
-            'courseId',
-            'courseSetId',
-            'lessonId',
-            'subCount',
-            'finishedTimes',
-            'passedTimes',
-            'userId',
-            'updatedTime',
-            'createdTime',
-        ));
-
-        return $fields;
+        return parent::filter($fields);
     }
 }

@@ -52,6 +52,10 @@ class PhpmigApplicationTest extends \PHPUnit_Framework_TestCase
     public function testUp()
     {
         $adapter = $this->getAdapter(array($this->prev_version, $this->current_version));
+        $adapter->expects($this->once())
+                ->method('hasSchema')
+                ->will($this->returnValue(false));
+
         $migrations = $this->getMigrations();
         $this->createTestMigrations($migrations);
         
@@ -59,10 +63,10 @@ class PhpmigApplicationTest extends \PHPUnit_Framework_TestCase
         $container['phpmig.migrator'] = $this->getMigrator($adapter, $container, $this->output, 1, 0);
         
         $app = new PhpmigApplication($container, $this->output);
-        
+
         $app->up($this->next_version);
     }
-    
+
     /**
      * @covers ::down
      */

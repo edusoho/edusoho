@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Twig\WebExtension;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
@@ -17,6 +18,9 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class BaseController extends Controller
 {
+    /**
+     * @return CurrentUser
+     */
     protected function getCurrentUser()
     {
         return $this->getUser();
@@ -27,6 +31,9 @@ class BaseController extends Controller
         return $this->get('biz');
     }
 
+    /**
+     * @return CurrentUser
+     */
     public function getUser()
     {
         $biz = $this->getBiz();
@@ -45,14 +52,16 @@ class BaseController extends Controller
     protected function switchUser(Request $request, CurrentUser $user)
     {
         $user['currentIp'] = $request->getClientIp();
-        $biz = $this->getBiz();
-        $biz['user'] = $user;
+
         $token = new UsernamePasswordToken($user, null, 'main', $user['roles']);
         $this->container->get('security.token_storage')->setToken($token);
 
+        $biz = $this->getBiz();
+        $biz['user'] = $user;
+
         $this->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, new InteractiveLoginEvent($request, $token));
 
-        $this->getLogService()->info('user', 'login_success', '登录成功');
+        $this->getLogService()->info('user', 'user_switch_success', '用户切换登录成功');
 
         return $user;
     }
@@ -142,6 +151,14 @@ class BaseController extends Controller
         return false;
     }
 
+    protected function purifyHtml($html, $trusted = false)
+    {
+        $biz = $this->getBiz();
+        $htmlHelper = $biz['html_helper'];
+
+        return $htmlHelper->purify($html, $trusted);
+    }
+
     protected function isPluginInstalled($pluginName)
     {
         return $this->get('kernel')->getPluginConfigurationManager()->isPluginInstalled($pluginName);
@@ -155,6 +172,9 @@ class BaseController extends Controller
             $targetPath = $request->getSession()->get('_target_path');
         } else {
             $targetPath = $request->headers->get('Referer');
+            if ($this->isSelfHost($request, $targetPath) === false) {
+                $targetPath = '';
+            }
         }
 
         if ($targetPath == $this->generateUrl('login', array(), true)) {
@@ -269,6 +289,27 @@ class BaseController extends Controller
     protected function createResourceNotFoundException($resourceType, $resourceId, $message = '')
     {
         return new ResourceNotFoundException($resourceType, $resourceId, $message);
+    }
+
+    private function isSelfHost(Request $request, $url)
+    {
+        if (empty($url)) {
+            return true;
+        }
+
+        $host = $request->getHost();
+        preg_match("/^(http[s]:\/\/)?([^\/]+)/i", $url, $matches);
+        $ulrHost = empty($matches[2]) ? '' : $matches[2];
+
+        return $host === $ulrHost;
+    }
+
+    /**
+     * @return WebExtension
+     */
+    protected function getWebExtension()
+    {
+        return $this->get('web.twig.extension');
     }
 
     protected function createService($alias)

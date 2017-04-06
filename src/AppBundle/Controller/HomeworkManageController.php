@@ -74,7 +74,6 @@ class HomeworkManageController extends BaseController
         return $this->render('homework/manage/question-picked.html.twig', array(
             'courseSet' => $courseSet,
             'questions' => $questions,
-            'type' => $question['type'],
             'targetType' => $request->query->get('targetType', 'testpaper'),
             'courseTasks' => $courseTasks,
             'courses' => $manageCourses,

@@ -31,7 +31,7 @@
       {% if thread.postNum > 0 %}
         {% set poster = users[thread.lastPostUserId] %}
         •
-        <span>{{'最后回复'|trans}} {{ web_macro.user_link(poster, 'link-muted') }}</span>
+        <span>{{'最后回复'|trans}} {{ web_macro.user_link(poster, 'link-primary') }}</span>
       {% endif %}
       
       • <span>{{ thread.lastPostTime|smart_time }}</span>

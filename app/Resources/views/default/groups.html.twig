@@ -48,7 +48,7 @@
         <div class="panel panel-default index-article">
           <div class="panel-heading">
             <h3 class="panel-title">
-              {{'最新资讯'|trans}}
+              {{'最新%article_name%'|trans({'%article_name%': setting('article.name')|default('资讯'|trans)})}}
               <a class="more" href="{{ path('article_show') }}"><i class="es-icon es-icon-morehoriz"></i></a>
             </h3>
           </div>

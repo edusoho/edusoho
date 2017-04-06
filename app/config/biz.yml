@@ -8,7 +8,6 @@ parameters:
         kernel.root_dir: "%kernel.root_dir%"
         plugin.directory: "%kernel.root_dir%/../plugins"
         theme.directory: "%kernel.root_dir%/../web/themes"
-        cloud_convertor: "%cloud_convertor%"
         topxia.upload.public_url_path: "%topxia.upload.public_url_path%"
         topxia.disk.local_directory: "%topxia.disk.local_directory%"
         topxia.disk.backup_dir: "%topxia.disk.backup_dir%"

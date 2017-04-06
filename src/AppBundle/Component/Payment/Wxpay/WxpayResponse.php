@@ -138,9 +138,4 @@ class WxpayResponse extends Response
     {
         return ServiceKernel::instance()->createService('System:SettingService');
     }
-
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
-    }
 }

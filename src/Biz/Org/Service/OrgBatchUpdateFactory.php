@@ -25,26 +25,27 @@ class OrgBatchUpdateFactory
             'user' => array(
                 'protocol' => 'biz',
                 'service' => 'User:UserService',
+                'method' => 'countUsers',
             ),
             'courseSet' => array(
                 'protocol' => 'biz',
                 'service' => 'Course:CourseSetService',
-            ),
-            'course' => array(
-                'protocol' => 'biz',
-                'service' => 'Course:CourseService',
+                'method' => 'countCourseSets',
             ),
             'classroom' => array(
                 'protocol' => 'biz',
                 'service' => 'Classroom:ClassroomService',
+                'method' => 'countClassrooms',
             ),
             'article' => array(
                 'protocol' => 'biz',
                 'service' => 'Article:ArticleService',
+                'method' => 'countArticles',
             ),
             'announcement' => array(
                 'protocol' => 'biz',
                 'service' => 'Announcement:AnnouncementService',
+                'method' => 'countAnnouncements',
             ),
         );
     }
@@ -53,7 +54,7 @@ class OrgBatchUpdateFactory
     {
         $modules = array(
             'user' => '用户',
-            'course' => '课程',
+            'courseSet' => '课程',
             'classroom' => '班级',
             'article' => '咨询',
             'announcement' => '网站公告',

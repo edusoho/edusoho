@@ -10,7 +10,6 @@
 
 namespace AppBundle\Handler;
 
-use Biz\Common\Redis\RedisFactory;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 
@@ -45,11 +44,11 @@ class RedisSessionHandler implements \SessionHandlerInterface
      *  prefix: The prefix to use for the redis keys in order to avoid collision
      *  expiretime: The time to live in seconds.
      *
-     * @param              $redisFactory
+     * @param              $biz
      * @param TokenStorage $storage
      * @param array        $options
      */
-    public function __construct(RedisFactory $redisFactory, TokenStorage $storage, array $options = array())
+    public function __construct($biz, TokenStorage $storage, array $options = array())
     {
         if ($diff = array_diff(array_keys($options), array('prefix', 'expiretime'))) {
             throw new \InvalidArgumentException(sprintf(
@@ -57,7 +56,8 @@ class RedisSessionHandler implements \SessionHandlerInterface
             ));
         }
 
-        $this->redis = $redisFactory->getRedis();
+        $cacheCluster = $biz['cache.cluster'];
+        $this->redis = $cacheCluster->getCluster();
         $this->ttl = isset($options['expiretime']) ? (int) $options['expiretime'] : 86400;
         $this->prefix = isset($options['prefix']) ? $options['prefix'] : 'session';
 

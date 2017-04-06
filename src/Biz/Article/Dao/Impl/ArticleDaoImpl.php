@@ -62,7 +62,7 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
         $fields = array('hits', 'upsNum', 'postNum');
 
         if (!in_array($field, $fields)) {
-            throw new InvalidArgumentException(sprintf('%s字段不允许增减，只有%s才被允许增减', $field, implode(',', $fields)));
+            throw new \InvalidArgumentException(sprintf('%s字段不允许增减，只有%s才被允许增减', $field, implode(',', $fields)));
         }
 
         return $this->wave(array($id), array(

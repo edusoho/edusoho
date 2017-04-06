@@ -1,4 +1,5 @@
-{% extends 'course-manage/layout.html.twig' %}
+{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
+
 {% block title %}{{'计划任务'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% do script(['libs/jquery-sortable.js','app/js/course-manage/index.js']) %}
 {% set side_nav = 'tasks' %}
@@ -7,17 +8,19 @@
   <div class="panel panel-default">
     {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
     <div class="panel-body">
-      <div class="task-list-header clearfix">
-        任务总数：<span class="color-warning space">{{ taskNum }}</span>  {% if taskPerDay|default(false) %}日均约需完成：<span class="color-warning">{{ taskPerDay }}</span> 个任务{% endif %}
+      <div class="task-list-header clearfix js-task-list-header">
+        任务总数：<span class="color-warning space" id="task-num">{{ taskNum }}</span>  {% if taskPerDay|default(false) %}日均约需完成：<span class="color-warning">{{ taskPerDay }}</span> 个任务{% endif %}
         <div class="pull-right">
-          <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}">
+          <button class="btn btn-info btn-sm" id="step-3" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}">
             <i class="es-icon es-icon-anonymous-iconfont"></i>
             任务
           </button>
-          <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_batch_create', {courseId:course.id,token:uploader_token('cours-task', app.user.id, 'private')}) }}">
-            <i class="es-icon es-icon-anonymous-iconfont"></i>
-            批量添加
-          </button>
+          {% if courseSet.type|default('') =='normal' %}
+            <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_batch_create', {courseId:course.id,token:uploader_token('course-task', app.user.id, 'private')}) }}">
+              <i class="es-icon es-icon-anonymous-iconfont"></i>
+              批量添加
+            </button>
+          {% endif %}
           <div class="btn-group">
             <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
               <i class="es-icon es-icon-anonymous-iconfont"></i>

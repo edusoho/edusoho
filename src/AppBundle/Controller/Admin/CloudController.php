@@ -4,25 +4,15 @@ namespace AppBundle\Controller\Admin;
 
 use Biz\System\Service\SettingService;
 use Biz\CloudPlatform\Client\EduSohoAppClient;
-use Biz\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 class CloudController extends BaseController
 {
-    public function billAction(Request $request)
+    public function buyAction(Request $request, $type)
     {
-        $factory = new CloudClientFactory();
-        $client = $factory->createClient();
+        $params = array('type' => $type);
 
-        $result = $client->getBills();
-        if (!empty($result['error'])) {
-            return $this->createMessageResponse('error', '获取账单信息失败，云视频参数配置不正确，或网络通讯失败。, 获取账单信息失败');
-        }
-
-        return $this->render('admin/cloud/bill.html.twig', array(
-            'money' => $result['money'],
-            'bills' => $result['bills'],
-        ));
+        return $this->redirectUrl('edu_cloud_buy', $params);
     }
 
     public function accessAction(Request $request)
@@ -100,13 +90,6 @@ class CloudController extends BaseController
     public function videoAccountAction(Request $request)
     {
         return $this->redirectUrl('bill_video_detail');
-    }
-
-    public function buyAction(Request $request, $type)
-    {
-        $params = array('type' => $type);
-
-        return $this->redirectUrl('edu_cloud_buy_custom', $params);
     }
 
     public function videoDetailAction()

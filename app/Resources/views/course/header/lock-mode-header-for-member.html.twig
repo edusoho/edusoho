@@ -21,12 +21,10 @@
             落后计划 {{ planProgressProgress - progress }}%</span>{% endif %}
         </li>
       {% endif %}
-      <li class="pt30 mb10 mll">学习有效期</li>
-      {% if course.expiryMode == 'days' and course.expiryDays == 0 %}
-        <li class="mll"> 不限</li>
-      {% else %}
+      <li class="pt30 mb10 mll">
+        学习有效期：
         {% include 'course/header/parts/member-deadline-info.html.twig' %}
-      {% endif %}
+      </li>
     </ul>
   </div>
   <div class="col-sm-6 ">

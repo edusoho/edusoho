@@ -18,6 +18,11 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
     public function preCheck($targetId, $userId)
     {
         $member = $this->getVipService()->getMemberByUserId($userId);
+
+        if (empty($member)) {
+            return array();
+        }
+
         $targetLevel = $this->getLevelService()->getLevel($targetId);
         $memberLevel = $this->getLevelService()->getLevel($member['levelId']);
 

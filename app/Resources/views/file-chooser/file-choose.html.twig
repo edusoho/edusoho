@@ -17,8 +17,8 @@
             href="#chooser-upload-panel">上传资料</a></li>
       <li role="presentation"><a href="#chooser-material-panel">从资料库中选择</a></li>
       <li role="presentation"><a href="#chooser-course-panel">从课程中选择文件</a></li>
-      {% if mediaType == 'video' %}
-        <li role="presentation"><a href="#import-video-panel">导入网络视频</a>
+      {% if mediaType == 'video' and not hideImportVideo|default(false) %}
+        <li role="presentation"><a class="js-import-video" href="#import-video-panel">导入网络视频</a>
         </li>
       {% endif %}
       {% if mediaType == 'download' %}
@@ -40,7 +40,7 @@
       {% include 'file-chooser/parts/course-file-choose.html.twig' %}
     </div>
 
-    {% if mediaType == 'video' %}
+    {% if mediaType == 'video' and not hideImportVideo|default(false) %}
       <div class="tab-pane file-chooser-tab" id="import-video-panel">
         {% include 'file-chooser/parts/import-video.html.twig' %}
       </div>

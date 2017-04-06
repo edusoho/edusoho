@@ -2,8 +2,8 @@
 
 namespace Biz\User\Dao\Impl;
 
-use Biz\User\Dao\TokenDao;
 use Biz\Common\FieldSerializer;
+use Biz\User\Dao\TokenDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class TokenDaoImpl extends GeneralDaoImpl implements TokenDao
@@ -41,9 +41,7 @@ class TokenDaoImpl extends GeneralDaoImpl implements TokenDao
 
     public function findByUserIdAndType($userId, $type)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? and type = ?";
-
-        return $this->db()->fetchAll($sql, array($userId, $type)) ?: null;
+        return $this->findByFields(array('userId' => $userId, 'type' => $type));
     }
 
     public function getByType($type)
@@ -56,16 +54,17 @@ class TokenDaoImpl extends GeneralDaoImpl implements TokenDao
 
     public function deleteTopsByExpiredTime($expiredTime, $limit)
     {
+        $limit = (int) $limit;
         $sql = "DELETE FROM {$this->table} WHERE expiredTime < ? LIMIT {$limit} ";
-        $result = $this->db()->executeQuery($sql, array($expiredTime));
 
-        return $result;
+        return $this->db()->executeQuery($sql, array($expiredTime));
     }
 
     public function declares()
     {
         return array(
             'conditions' => array('type = :type'),
+            'cache' => 'table',
         );
     }
 

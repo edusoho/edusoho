@@ -21,7 +21,7 @@
 					<div class="form-group">
 					<label class="col-md-2 control-label" >{{'用户名'|trans}}</label>
 						<div class="col-md-7 controls">
-						<div class="control-text">
+						<div class="form-control-static">
 							{{app.user.nickname}} {% if setting('user_partner.nickname_enabled') %} <a href="{{ path('setting_nickname') }}">{{'修改'|trans}}</a> {% endif %}</div>
 						</div>
 					</div>
@@ -29,7 +29,7 @@
 					<div class="form-group">
 						<label class="col-md-2 control-label" for="profile_truename">{{'真实姓名'|trans}}</label>
 						{% if profile.truename and (app.user.approvalStatus == 'approved' or app.user.approvalStatus == 'approving') %}
-              <div class="control-text">{{ profile.truename }}</div>
+              <div class="form-control-static">{{ profile.truename }}</div>
             {% else %}
             	<div class="col-md-7 controls radios">
               	<input type="text" id="profile_truename" name="profile[truename]" class="form-control" data-widget-cid="widget-1" data-explain="" value="{{ profile.truename|default('') }}">
@@ -54,7 +54,7 @@
 						<label class="col-md-2 control-label" for="profile_idcard">{{'身份证号码'|trans}}</label>
 						{% if profile.idcard and (app.user.approvalStatus == 'approved' or app.user.approvalStatus == 'approving') %}
               <div class="col-md-7 controls">
-                <div class="control-text">{{ blur_idcard_number(profile.idcard) }}</div>
+                <div class="form-control-static">{{ blur_idcard_number(profile.idcard) }}</div>
               </div>
             {% else %}
               <div class="col-md-7 controls radios">
@@ -68,7 +68,7 @@
 						<div class="form-group">
 							<label for="profile_mobile" class="col-md-2 control-label">{{'手机号码'|trans}}</label>
 							<div class="col-md-7 controls">
-								<div class="control-text">
+								<div class="form-control-static">
 									{{ blur_phone_number(user.verifiedMobile|default('')) }}
 									<small class="color-success">({{'已绑定'|trans}})</small>
 								</div>
@@ -81,17 +81,15 @@
 								<input type="text" id="profile_mobile" name="profile[mobile]" class="form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile.mobile|default('') }}">
 
 								<div class="help-block" style="display:none"></div>
+                {% if setting('cloud_sms.sms_enabled', '') == '1' %}
+                  <div class="color-warning">
+                    {{'还没绑定手机号码。'|trans}}<strong><a href="{{path('settings_bind_mobile')}}">{{'去绑定'|trans}}</a>
+                    </strong>
+                  </div>
+                {% endif %}
 							</div>
 						</div>
-						{% if setting('cloud_sms.sms_enabled', '') == '1' %}
-							<div class="help-block">
-								<label class="col-md-2 control-label"></label>
-								<p class="text-warning">
-								{{'还没绑定手机号码，'|trans}}<strong><a href="{{path('settings_bind_mobile')}}">{{'前去绑定'|trans}}</a>{{'。'|trans}}
-								</strong>
-								</p>
-							</div>
-						{% endif %}
+						
 					{% endif %}
 
 					<div class="form-group form-forIam-group form-notStudent-group">
@@ -149,7 +147,15 @@
 							<input type="text" id="weibo" name="profile[weibo]" class="form-control" data-widget-cid="widget-3" data-explain="" value="{{ profile.weibo|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
-						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isWeiboPublic]" {% if profile.isWeiboPublic %}checked="checked" {% endif %}/>{{'公开'|trans}}</div>
+						<div class="col-md-2 controls mts">
+              <label class="text-normal">
+                <input type="checkbox" name="profile[isWeiboPublic]" 
+                {% if profile.isWeiboPublic %}
+                  checked="checked" 
+                {% endif %}/>
+                {{'公开'|trans}}
+              </label>
+            </div>
 					</div>
 
 					<div class="form-group">
@@ -158,7 +164,13 @@
 							<input type="text" id="profile_weixin" name="profile[weixin]" class="form-control" value="{{ profile.weixin|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
-						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isWeixinPublic]" {% if profile.isWeixinPublic %}checked="checked" {% endif %}/>{{'公开'|trans}}</div>
+						<div class="col-md-2 controls mts">
+              <label class="text-normal">
+                <input type="checkbox" name="profile[isWeixinPublic]" 
+                {% if profile.isWeixinPublic %}checked="checked" {% endif %}/>
+                {{'公开'|trans}}
+              </label>
+            </div>
 					</div>
 
 					<div class="form-group">
@@ -167,7 +179,15 @@
 							<input type="text" id="profile_qq" name="profile[qq]" class="form-control" data-widget-cid="widget-2" data-explain="" value="{{ profile.qq|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
-						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isQQPublic]" {% if profile.isQQPublic %}checked="checked"{% endif %}/>{{'公开'|trans}}</div>
+						<div class="col-md-2 controls mts">
+              <label class="text-normal">
+               <input type="checkbox" name="profile[isQQPublic]"
+               {% if profile.isQQPublic %}
+                checked="checked"
+                {% endif %}/>
+                {{'公开'|trans}}
+              </label>
+            </div>
 					</div>
 
 

@@ -21,7 +21,13 @@
           </a>
           <div class="media-body">
             <div class="title">
-              <a href="{{ path(courseShowPath, {id:course.id}) }}">{{ course.title }}</a>
+              <a href="{{ path(courseShowPath, {id:course.id}) }}">
+                {% if course.courseNum|default(1) > 1 %}
+                  {{ course.courseSet.title ~ ' - ' ~ course.title }}
+                {% else %}
+                  {{ course.courseSet.title }}
+                {% endif %}
+              </a>
             </div>
             <div class="score">
               {{ web_macro.star(course.rating) }}
@@ -38,7 +44,7 @@
 
       </div>
     {% endfor %}
-    
+
   </div>
 {% endblock %}
-   
+

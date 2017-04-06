@@ -20,9 +20,9 @@ export let questionSubjectiveRemask = ($element) => {
 
   if($subjectiveRemask.data('type') == 'homework') {
     html = '这是一份纯客观题的作业，正确率达到为' +
-    '<input type="text" name="passedCondition[]" class="form-control width-input width-input-mini correctPercent1" value="60" />％合格，'+
-    '<input type="text" name="passedCondition[]" class="form-control width-input width-input-mini correctPercent2" value="80" />％良好，'+
-    '<input type="text" name="passedCondition[]" class="form-control width-input width-input-mini correctPercent3" value="100" />％优秀';
+    '<input type="text" name="passedCondition[]" class="form-control width-input width-input-mini ph5 text-center correctPercent1" value="60" />％合格，'+
+    '<input type="text" name="passedCondition[]" class="form-control width-input width-input-mini ph5 text-center correctPercent2" value="80" />％良好，'+
+    '<input type="text" name="passedCondition[]" class="form-control width-input width-input-mini ph5 text-center correctPercent3" value="100" />％优秀';
   }
   else {
     html = '这是一份纯客观题的试卷, 达到'+

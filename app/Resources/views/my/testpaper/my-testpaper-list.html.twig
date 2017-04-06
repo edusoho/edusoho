@@ -29,10 +29,10 @@
                     {% endif %}
                     <div>
                       {% if courseSet|default(null) %}
-                        <small class="color-gray">{{'来自课程'|trans}}<a href="{{ path('course_set_show',{id:courseSet.id}) }}" target="_blank">《{{ courseSet.title }}》</a></small>
+                        <small class="color-gray">{{'来自课程'|trans}}<a class="color-primary" href="{{ path('course_set_show',{id:courseSet.id}) }}" target="_blank">《{{ courseSet.title }}》</a></small>
                       {% endif %}
                       {% if course|default(null) %}
-                        <small class="color-gray">{{'计划'|trans}}<a href="{{ path('course_show',{id:course.id}) }}" target="_blank">《{{ course.title|default(null) }}》</a></small>
+                        <small class="color-gray">{{'计划'|trans}}<a class="color-primary" href="{{ path('course_show',{id:course.id}) }}" target="_blank">《{{ course.title|default(null) }}》</a></small>
                       {% endif %}
                       
                       <small class="color-gray mhs">•</small>
@@ -52,16 +52,16 @@
                   </td>
                   <td class="vertical-middle">
                     {% if paperResult.status in ['doing', 'paused'] and task %}
-                      <a href="{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}" >{{'继续考试'|trans}}</a>
+                      <a class="color-primary" href="{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}" >{{'继续考试'|trans}}</a>
                     {% elseif paperResult.status == 'finished' %}
                       
                       {% if lesson|default(null) and lesson.redoInterval|default(0) and ("now"|date("U")) < (paperResult.checkedTime + lesson.redoInterval * 3600)%}
                         <span class="color-success text-sm">{{ (paperResult.checkedTime + lesson.redoInterval * 3600)|date('m-d H:i:s') }} 后可重考</span>
                       {% elseif lesson|default(null) and not lesson.doTimes|default(0) and task %}
-                        <a href="{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}" >{{'再做一次'|trans}}</a>
+                        <a class="color-primary" href="{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}" >{{'再做一次'|trans}}</a>
                       {% endif %}
                       {% if task %}
-                        <a href="{{ path('testpaper_result_show',{resultId:paperResult.id,action:'my'}) }}" class="btn btn-link btn-sm" target="_blank">{{'查看结果'|trans}}</a>
+                        <a class="color-primary" href="{{ path('testpaper_result_show',{resultId:paperResult.id,action:'my'}) }}" class="btn btn-link btn-sm" target="_blank">{{'查看结果'|trans}}</a>
                       {% endif %}
                     {% endif %}
                   </td>
@@ -69,7 +69,7 @@
               {% else %}
                 <tr>
                   <td colspan="3">
-                    <a href="javascript:;">{{ paperResult.paperName }}</a>
+                    {{ paperResult.paperName }}
                     <br>
                     <small>{{'该试卷已删除'|trans}}</small>
                   </td>

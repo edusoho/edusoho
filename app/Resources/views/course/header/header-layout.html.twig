@@ -4,10 +4,16 @@
 <!-- 3、加入后：任务式学习 -->
 <div class="container">
   <ol class="breadcrumb breadcrumb-o">
-    <li>
-      <a href="{{ path('homepage') }}">首页</a>
-    </li>
-    <li class="active">{{ courseSet.title }} </li>
+    <li><a href="{{ path('homepage') }}">{{'首页'|trans}}</a></li>
+    {% for breadcrumb in breadcrumbs|default() %}
+      <li><a href="{{ path('course_set_explore',{'category':breadcrumb.code}) }}">{{ breadcrumb.name }}</a></li>
+    {% endfor %}
+    {% if page_type|default('guest') == 'member' %}
+      <li><a href="{{ path('course_set_show',{id:courseSet.id}) }}">{{ courseSet.title }} </a></li>
+      <li class="active">{{ course.title }} </li>
+    {% else %}
+      <li class="active">{{ courseSet.title }} </li>
+    {% endif %}
   </ol>
 
   {% block course_header_info %}{% endblock %}
@@ -20,7 +26,7 @@
           <span class="tag-finished"></span>
         {% endif %}
       </span>
-      <span class="text-overflow vertical-top inline-block gray-darker text-24 course-detail-heading">
+      <span class="text-overflow course-detail-heading">
        {% if marketingPage %}
         {{ courseSet.title }}
          {% else %}
@@ -29,7 +35,7 @@
       </span>
       {% block course_header_qrcode %}
         <!--非营销页显示-->
-        <span class="es-qrcode top" data-url="{{ path('course_qrcode', { id: course.id }) }}">
+        <span class="es-qrcode top inline-block pt5" data-url="{{ path('course_qrcode', { id: course.id }) }}">
           <i class="es-icon es-icon-qrcode"></i>
           <span class="qrcode-popover">
             <img src="" alt="">
@@ -43,7 +49,7 @@
         {% block course_header_people_num %}
           {% if setting('course.show_student_num_enabled', '1') == 1 %}
             <li>
-              <span class="btn btn-xs">
+              <span class="btn btn-xs cursor-default">
                 <i class="es-icon es-icon-people text-16"></i>
                 <span class="mls">{% block course_member_count %}{{ course.studentNum }}人 {% endblock %}</span>
               </span>

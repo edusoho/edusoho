@@ -66,6 +66,7 @@ class UserProfileDaoImpl extends GeneralDaoImpl implements UserProfileDao
 
     public function findDistinctMobileProfiles($start, $limit)
     {
+        // @TODO SQL Inject
         $sql = "SELECT * FROM {$this->table} WHERE `mobile` <> '' GROUP BY `mobile` ORDER BY `id` ASC LIMIT {$start}, {$limit}";
 
         return $this->db()->fetchAll($sql);
@@ -105,6 +106,7 @@ class UserProfileDaoImpl extends GeneralDaoImpl implements UserProfileDao
                 'mobile <> :mobileNotEqual',
                 'qq LIKE :qq',
             ),
+            'cache' => 'table',
         );
     }
 }

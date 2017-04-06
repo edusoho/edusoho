@@ -1,5 +1,4 @@
 export let initEditor = (options) => {
-
   var editor = CKEDITOR.replace(options.replace, {
     toolbar: options.toolbar,
     filebrowserImageUploadUrl: $("#" + options.replace).data('imageUploadUrl'),

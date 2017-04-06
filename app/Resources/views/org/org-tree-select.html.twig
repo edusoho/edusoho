@@ -1,16 +1,20 @@
 {% if setting('magic.enable_org', '0') %} 
-  
   {# formType: normal/horizontal/inline #}
   {# isModal: true/false #}
-
   {% set modal = modal|default(null) %}
 
-  {% if modal == 'modal' %}
-    {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-    <script>app.lazyLoad = function() { app.load('topxiawebbundle/controller/widget/category-select') };</script>
-  {% else %}
-    {% do load_script('topxiawebbundle/controller/widget/category-select') %}
-    {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  {# 不加载js,用于js局部改造的情况 #}
+  {% if not notLoadJs|default(false)%}
+     {# 全seajs加载的模态框，如后台 #}
+    {% if seajsLoade|default(false) and modal == 'modal' %}
+       <script>app.load('topxiawebbundle/controller/widget/category-select')</script> 
+    {% elseif modal == 'modal'  %}
+      {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+      <script>app.lazyLoad = function() { app.load('topxiawebbundle/controller/widget/category-select') };</script>
+    {% else %}
+      {% do load_script('topxiawebbundle/controller/widget/category-select') %}
+      {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+    {% endif %}
   {% endif %}
 
   {% set colmd = colmd|default(8) %}
@@ -28,6 +32,7 @@
       {% endif %}
       
       <select data-role="tree-select" name="orgCode" class="form-control tree-select {{inputClass}}">
+        <option value={{ currentOrgTree.0.orgCode }}>{{ currentOrgTree.0.name }}</option>
         {% for org in currentOrgTree %}
           <option value={{ org.orgCode }} {% if org.orgCode == currentOrgCode  %}selected{% endif %}>{% for i in 1..(org.depth-1) if org.depth > 1 %}　{% endfor %}{{ org.name }}</option>
         {% endfor %}

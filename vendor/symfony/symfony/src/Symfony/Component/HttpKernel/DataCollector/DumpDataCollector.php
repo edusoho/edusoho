@@ -97,21 +97,24 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
 
                         break;
                     } elseif (isset($trace[$i]['object']) && $trace[$i]['object'] instanceof \Twig_Template) {
-                        $info = $trace[$i]['object'];
-                        $name = $info->getTemplateName();
-                        $src = method_exists($info, 'getSource') ? $info->getSource() : $info->getEnvironment()->getLoader()->getSource($name);
-                        $info = $info->getDebugInfo();
-                        if (null !== $src && isset($info[$trace[$i - 1]['line']])) {
-                            $file = false;
+                        $template = $trace[$i]['object'];
+                        $name = $template->getTemplateName();
+                        $src = method_exists($template, 'getSourceContext') ? $template->getSourceContext()->getCode() : (method_exists($template, 'getSource') ? $template->getSource() : false);
+                        $info = $template->getDebugInfo();
+                        if (isset($info[$trace[$i - 1]['line']])) {
                             $line = $info[$trace[$i - 1]['line']];
-                            $src = explode("\n", $src);
-                            $fileExcerpt = array();
+                            $file = method_exists($template, 'getSourceContext') ? $template->getSourceContext()->getPath() : null;
 
-                            for ($i = max($line - 3, 1), $max = min($line + 3, count($src)); $i <= $max; ++$i) {
-                                $fileExcerpt[] = '<li'.($i === $line ? ' class="selected"' : '').'><code>'.$this->htmlEncode($src[$i - 1]).'</code></li>';
+                            if ($src) {
+                                $src = explode("\n", $src);
+                                $fileExcerpt = array();
+
+                                for ($i = max($line - 3, 1), $max = min($line + 3, count($src)); $i <= $max; ++$i) {
+                                    $fileExcerpt[] = '<li'.($i === $line ? ' class="selected"' : '').'><code>'.$this->htmlEncode($src[$i - 1]).'</code></li>';
+                                }
+
+                                $fileExcerpt = '<ol start="'.max($line - 3, 1).'">'.implode("\n", $fileExcerpt).'</ol>';
                             }
-
-                            $fileExcerpt = '<ol start="'.max($line - 3, 1).'">'.implode("\n", $fileExcerpt).'</ol>';
                         }
                         break;
                     }
@@ -263,7 +266,7 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
         if (PHP_VERSION_ID >= 50400 && $this->dumper instanceof CliDumper) {
             $contextDumper = function ($name, $file, $line, $fileLinkFormat) {
                 if ($this instanceof HtmlDumper) {
-                    if ('' !== $file) {
+                    if ($file) {
                         $s = $this->style('meta', '%s');
                         $name = strip_tags($this->style('', $name));
                         $file = strip_tags($this->style('', $file));
@@ -295,7 +298,7 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
     {
         $html = '';
 
-        $dumper = new HtmlDumper(function ($line) use (&$html) {$html .= $line;}, $this->charset);
+        $dumper = new HtmlDumper(function ($line) use (&$html) { $html .= $line; }, $this->charset);
         $dumper->setDumpHeader('');
         $dumper->setDumpBoundaries('', '');
 

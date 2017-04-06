@@ -1,6 +1,6 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{{ '课程已到期'|trans }}{% endblock %}
+{% block title %}{{ '提示'|trans }}{% endblock %}
 {% block body %}
   <div class="alert">
     {% set message = slot('course.expired.message', {
@@ -19,7 +19,8 @@
   </div>
 {% endblock %}
 
-{% set hide_footer = course.expiryMode == 'date' %}
+{% set hide_footer = course.expiryMode != 'days' %}
+
 {% block footer %}
   <a href="{{ path('course_member_deadline_reach',{id: course.id}) }}" class="btn btn-primary">
     {{'退出并重新加入'|trans }}

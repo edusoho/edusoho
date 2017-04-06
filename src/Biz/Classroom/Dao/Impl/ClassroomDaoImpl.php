@@ -14,7 +14,7 @@ class ClassroomDaoImpl extends GeneralDaoImpl implements ClassroomDao
         return array(
             'timestamps' => array('createdTime'),
             'serializes' => array('assistantIds' => 'json', 'teacherIds' => 'json', 'service' => 'json'),
-            'orderbys' => array('name', 'createdTime', 'recommendedSeq', 'studentNum'),
+            'orderbys' => array('name', 'createdTime', 'recommendedSeq', 'studentNum', 'id', 'updatedTime'),
             'conditions' => array(
                 'title = :title',
                 'status = :status',
@@ -36,6 +36,7 @@ class ClassroomDaoImpl extends GeneralDaoImpl implements ClassroomDao
                 'headTeacherId = :headTeacherId',
                 'updatedTime >= :updatedTime_GE',
             ),
+            'cache' => 'table',
         );
     }
 

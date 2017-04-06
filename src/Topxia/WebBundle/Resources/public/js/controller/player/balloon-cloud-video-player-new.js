@@ -22,7 +22,8 @@ define(function(require, exports, module) {
             },
             enablePlaybackRates: false,
             videoHeaderLength: 0,
-            textTrack: ''
+            textTrack: '',
+            autoplay: true
         },
 
         events: {},
@@ -59,6 +60,12 @@ define(function(require, exports, module) {
                         html: self.get('fingerprint'),
                         duration: self.get('fingerprintTime')
                     }
+                })
+            }
+
+            if(self.get('autoplay') == false) {
+                extConfig = $.extend(extConfig, {
+                    autoplay: self.get('autoplay')
                 })
             }
 

@@ -54,10 +54,14 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         $this->beginTransaction();
         try {
+            if (isset($fields['content'])) {
+                $fields['content'] = $this->purifyHtml($fields['content'], true);
+            }
+
             $fields = $this->createActivity($fields);
             $strategy = $this->createCourseStrategy($fields['courseId']);
             $task = $strategy->createTask($fields);
-
+            $this->getLogService()->info('course', 'add_task', "添加任务《{$task['title']}》({$task['id']})", $task);
             $this->dispatchEvent('course.task.create', new Event($task));
             $this->commit();
 
@@ -114,7 +118,8 @@ class TaskServiceImpl extends BaseService implements TaskService
             $fields['endTime'] = $activity['endTime'];
             $strategy = $this->createCourseStrategy($task['courseId']);
             $task = $strategy->updateTask($id, $fields);
-            $this->dispatchEvent('course.task.update', new Event($task));
+            $this->getLogService()->info('course', 'update_task', "更新任务《{$task['title']}》({$task['id']})");
+            $this->dispatchEvent('course.task.update', new Event($task), $fields);
             $this->commit();
 
             return $task;
@@ -129,7 +134,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $task = $this->getTask($id);
 
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
-            throw $this->createAccessDeniedException("can not publish task #{$id}.");
+            throw $this->createAccessDeniedExcpubeption("can not publish task #{$id}.");
         }
 
         if ($task['status'] == 'published') {
@@ -151,6 +156,10 @@ class TaskServiceImpl extends BaseService implements TaskService
         if (!empty($tasks)) {
             foreach ($tasks as $task) {
                 if ($task['status'] !== 'published') {
+                    //mode存在且不等于lesson的任务会随着mode=lesson的任务发布，这里不应重复发布
+                    if (!empty($task['mode']) && $task['mode'] !== 'lesson') {
+                        continue;
+                    }
                     $this->publishTask($task['id']);
                 }
             }
@@ -214,6 +223,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         $result = $this->createCourseStrategy($task['courseId'])->deleteTask($task);
 
+        $this->getLogService()->info('course', 'delete_task', "删除任务《{$task['title']}》({$task['id']})", $task);
         $this->dispatchEvent('course.task.delete', new Event($task, array('user' => $this->getCurrentUser())));
 
         return $result;
@@ -462,7 +472,14 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
 
         if (empty($taskResult)) {
-            throw $this->createAccessDeniedException('task access denied. ');
+            $task = $this->getTask($taskId);
+            $activity = $this->getActivityService()->getActivity($task['activityId']);
+            if ($activity['mediaType'] == 'live') {
+                $this->trigger($activity['id'], 'start', array('task' => $task));
+                $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
+            } else {
+                throw $this->createAccessDeniedException('task access denied. ');
+            }
         }
 
         if ($taskResult['status'] === 'finish') {
@@ -708,7 +725,10 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         if ($course['learnMode'] == 'freeMode') {
-            $toLearnTasks[] = $this->getToLearnTaskWithFreeMode($courseId);
+            $toLearnTask = $this->getToLearnTaskWithFreeMode($courseId);
+            if (!empty($toLearnTask)) {
+                $toLearnTasks[] = $toLearnTask;
+            }
         }
         if ($course['learnMode'] == 'lockMode') {
             list($tasks, $toLearnTasks) = $this->getToLearnTasksWithLockMode($courseId);
@@ -742,9 +762,15 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getToLearnTaskWithFreeMode($courseId)
     {
         $taskResults = $this->getTaskResultService()->findUserProgressingTaskResultByCourseId($courseId);
+
         if (empty($taskResults)) {
             $minSeq = $this->getTaskDao()->getMinSeqByCourseId($courseId);
             $toLearnTask = $this->getTaskDao()->getByCourseIdAndSeq($courseId, $minSeq);
+            $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($toLearnTask['id']);
+            if (!empty($taskResult) && $taskResult['status'] === 'finish') {
+                //任务已全部完成
+                return array();
+            }
         } else {
             $latestTaskResult = array_shift($taskResults);
             $latestLearnTask = $this->getTask($latestTaskResult['courseTaskId']); //获取最新学习未学完的课程
@@ -959,6 +985,14 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         return $task;
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 
     /**

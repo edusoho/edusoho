@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Validator\Tests\Mapping;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Valid;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
@@ -18,7 +19,7 @@ use Symfony\Component\Validator\Tests\Fixtures\ConstraintA;
 use Symfony\Component\Validator\Tests\Fixtures\ConstraintB;
 use Symfony\Component\Validator\Tests\Fixtures\PropertyConstraint;
 
-class ClassMetadataTest extends \PHPUnit_Framework_TestCase
+class ClassMetadataTest extends TestCase
 {
     const CLASSNAME = 'Symfony\Component\Validator\Tests\Fixtures\Entity';
     const PARENTCLASS = 'Symfony\Component\Validator\Tests\Fixtures\EntityParent';
@@ -38,14 +39,14 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
 
     public function testAddConstraintDoesNotAcceptValid()
     {
-        $this->setExpectedException('Symfony\Component\Validator\Exception\ConstraintDefinitionException');
+        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('Symfony\Component\Validator\Exception\ConstraintDefinitionException');
 
         $this->metadata->addConstraint(new Valid());
     }
 
     public function testAddConstraintRequiresClassConstraints()
     {
-        $this->setExpectedException('Symfony\Component\Validator\Exception\ConstraintDefinitionException');
+        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('Symfony\Component\Validator\Exception\ConstraintDefinitionException');
 
         $this->metadata->addConstraint(new PropertyConstraint());
     }
@@ -134,6 +135,7 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
     {
         $parent = new ClassMetadata(self::PARENTCLASS);
         $parent->addPropertyConstraint('firstName', new ConstraintA());
+        $parent->addPropertyConstraint('firstName', new ConstraintB(array('groups' => 'foo')));
 
         $this->metadata->mergeConstraints($parent);
         $this->metadata->addPropertyConstraint('firstName', new ConstraintA());
@@ -147,9 +149,13 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
             'Default',
             'Entity',
         )));
+        $constraintB = new ConstraintB(array(
+            'groups' => array('foo'),
+        ));
 
         $constraints = array(
             $constraintA1,
+            $constraintB,
             $constraintA2,
         );
 
@@ -164,6 +170,9 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
             'Entity' => array(
                 $constraintA1,
                 $constraintA2,
+            ),
+            'foo' => array(
+                $constraintB,
             ),
         );
 
@@ -240,14 +249,14 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
 
     public function testGroupSequencesFailIfNotContainingDefaultGroup()
     {
-        $this->setExpectedException('Symfony\Component\Validator\Exception\GroupDefinitionException');
+        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('Symfony\Component\Validator\Exception\GroupDefinitionException');
 
         $this->metadata->setGroupSequence(array('Foo', 'Bar'));
     }
 
     public function testGroupSequencesFailIfContainingDefault()
     {
-        $this->setExpectedException('Symfony\Component\Validator\Exception\GroupDefinitionException');
+        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('Symfony\Component\Validator\Exception\GroupDefinitionException');
 
         $this->metadata->setGroupSequence(array('Foo', $this->metadata->getDefaultGroup(), Constraint::DEFAULT_GROUP));
     }
@@ -295,4 +304,14 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertCount(0, $this->metadata->getPropertyMetadata('foo'), '->getPropertyMetadata() returns an empty collection if no metadata is configured for the given property');
     }
+}
+
+class ParentClass
+{
+    public $example = 0;
+}
+
+class ChildClass extends ParentClass
+{
+    public $example = 1;    // overrides parent property of same name
 }

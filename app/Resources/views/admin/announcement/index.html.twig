@@ -15,6 +15,9 @@
   <table id="announcement-table" class="table table-striped">
     <thead>
     <tr>
+      {% if setting('magic.enable_org','0') %}
+        <th><input type="checkbox"  data-role="batch-select"></th>
+      {% endif %}
       <th width="25%">{{'公告内容'|trans}}</th>
       {% include 'org/parts/table-thead-tr.html.twig' %}
       <th>{{'发布时间'|trans}}</th>
@@ -29,7 +32,7 @@
       {% for announcement in announcements %}
         <tr announcement-table-tr-{{ announcement.id }}>
           {% include 'org/parts/table-body-checkbox.html.twig' %}
-          <td><a href="{{ announcement.url }}" target="_content">{{ announcement.content }}</td>
+          <td><a href="{{ announcement.url }}" target="_content">{{ announcement.content|raw }}</td>
           {% include 'org/parts/table-body-td.html.twig' with {orgCode: announcement.orgCode}%}
           <td>{{ announcement.startTime|date('Y-m-d H:i') }}</td>
           <td>{{ announcement.endTime|date('Y-m-d H:i') }}</td>

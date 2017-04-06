@@ -73,7 +73,7 @@ class TaskManageController extends BaseController
             $file = $this->getUploadFileService()->getFile($fileId);
 
             if (!in_array($file['type'], array('document', 'video', 'audio', 'ppt', 'flash'))) {
-                throw $this->createAccessDeniedException('不支持的文件类型');
+                return $this->createJsonResponse(array('error' => '不支持的文件类型'));
             }
 
             $course = $this->getCourseService()->getCourse($courseId);
@@ -285,19 +285,7 @@ class TaskManageController extends BaseController
 
     protected function getActivityConfig()
     {
-        return $this->get('extension.default')->getActivities();
-    }
-
-    /**
-     * @param  $type
-     *
-     * @return mixed
-     */
-    protected function getActivityActionConfig($type)
-    {
-        $config = $this->getActivityConfig();
-
-        return $config[$type]['actions'];
+        return $this->get('extension.manager')->getActivities();
     }
 
     /**

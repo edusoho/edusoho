@@ -28,7 +28,7 @@ class QuestionTypeExtension extends \Twig_Extension
 
     public function getQuestionTypes()
     {
-        $questionExtension = $this->container->get('extension.default')->getQuestionTypes();
+        $questionExtension = $this->container->get('extension.manager')->getQuestionTypes();
 
         $types = array();
         $questionTypes = array_walk($questionExtension, function ($value, $type) use (&$types) {
@@ -40,7 +40,7 @@ class QuestionTypeExtension extends \Twig_Extension
 
     public function getQuestionTypeTemplate($type, $showAction)
     {
-        $questionExtension = $this->container->get('extension.default')->getQuestionTypes();
+        $questionExtension = $this->container->get('extension.manager')->getQuestionTypes();
 
         if (empty($questionExtension[$type]) || empty($questionExtension[$type]['templates'][$showAction])) {
             return '';

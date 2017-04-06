@@ -2,10 +2,11 @@
 
 namespace Biz\Sms\SmsProcessor;
 
-use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\StringToolkit;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
@@ -14,7 +15,6 @@ use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
-use Biz\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class TaskSmsProcessor extends BaseSmsProcessor
@@ -31,10 +31,13 @@ class TaskSmsProcessor extends BaseSmsProcessor
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
             if ($classroom) {
-                $count = $this->getClassroomService()->searchMemberCount(array('classroomId' => $classroom['id']));
+                $count = $this->getClassroomService()->searchMemberCount(array(
+                    'classroomId' => $classroom['id'],
+                    'role' => 'student',
+                ));
             }
         } else {
-            $count = $this->getCourseMemberService()->countMembers(array('courseId' => $course['id']));
+            $count = $this->getCourseMemberService()->countMembers(array('courseId' => $course['id'], 'role' => 'student'));
         }
 
         $api = CloudAPIFactory::create('root');
@@ -45,7 +48,7 @@ class TaskSmsProcessor extends BaseSmsProcessor
         $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], ' \/');
 
         $urls = array();
-        for ($i = 0; $i <= intval($count / 1000); ++$i) {
+        for ($i = 0; $i <= (int) ($count / 1000); ++$i) {
             if (empty($url)) {
                 $urls[$i] = $router->generate(
                     'edu_cloud_sms_send_callback',
@@ -56,7 +59,8 @@ class TaskSmsProcessor extends BaseSmsProcessor
                     true
                 );
             } else {
-                $urls[$i] = $url.$router->generate('edu_cloud_sms_send_callback', array('targetType' => self::PROCESSOR_TYPE, 'targetId' => $targetId));
+                $urls[$i] = $url.$router->generate('edu_cloud_sms_send_callback',
+                        array('targetType' => self::PROCESSOR_TYPE, 'targetId' => $targetId));
             }
             $urls[$i] .= '?index='.($i * 1000);
             $urls[$i] .= '&smsType='.$smsType;
@@ -80,9 +84,11 @@ class TaskSmsProcessor extends BaseSmsProcessor
         $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], ' \/');
 
         if (empty($url)) {
-            $originUrl = $kernel->getContainer()->get('router')->generate('course_task_show', array('courseId' => $task['courseId'], 'id' => $task['id']), true);
+            $originUrl = $kernel->getContainer()->get('router')->generate('course_task_show',
+                array('courseId' => $task['courseId'], 'id' => $task['id']), true);
         } else {
-            $originUrl = $url.$kernel->getContainer()->get('router')->generate('course_task_show', array('courseId' => $task['courseId'], 'id' => $task['id']));
+            $originUrl = $url.$kernel->getContainer()->get('router')->generate('course_task_show',
+                    array('courseId' => $task['courseId'], 'id' => $task['id']));
         }
 
         $shortUrl = SmsToolkit::getShortLink($originUrl);
@@ -95,10 +101,12 @@ class TaskSmsProcessor extends BaseSmsProcessor
             $classroom = $this->getClassroomService()->getClassroomByCourseId($task['courseId']);
 
             if ($classroom) {
-                $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['id']), array('createdTime' => 'Desc'), $index, 1000);
+                $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['id']),
+                    array('createdTime' => 'Desc'), $index, 1000);
             }
         } else {
-            $students = $this->getCourseMemberService()->searchMembers(array('courseId' => $task['courseId']), array('createdTime' => 'Desc'), $index, 1000);
+            $students = $this->getCourseMemberService()->searchMembers(array('courseId' => $task['courseId'], 'role' => 'student'),
+                array('createdTime' => 'Desc'), $index, 1000);
         }
 
         $studentIds = ArrayToolkit::column($students, 'userId');
@@ -124,7 +132,13 @@ class TaskSmsProcessor extends BaseSmsProcessor
 
         $this->getLogService()->info('sms', $smsType, $description, array($to));
 
-        return array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'parameters' => $parameters);
+        return array(
+            'mobile' => $to,
+            'category' => $smsType,
+            'sendStyle' => 'templateId',
+            'description' => $description,
+            'parameters' => $parameters,
+        );
     }
 
     /**

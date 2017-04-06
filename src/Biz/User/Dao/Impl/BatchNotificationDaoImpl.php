@@ -43,7 +43,15 @@ class BatchNotificationDaoImpl extends GeneralDaoImpl implements BatchNotificati
             'serializes' => array(
                 'content' => 'json',
             ),
+            'conditions' => array(
+                'id NOT in ( :excludeIds )',
+                'id = :id',
+                'published = :published',
+                'createdTime = :createdTime',
+                'sendedTime <= :sendedTime_LE',
+            ),
             'orderbys' => array('createdTime'),
+            'cache' => 'table',
         );
     }
 }

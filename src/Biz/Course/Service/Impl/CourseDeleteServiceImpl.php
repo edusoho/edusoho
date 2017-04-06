@@ -120,10 +120,14 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
                 foreach ($announcements as $announcement) {
                     $this->getAnnouncementService()->deleteAnnouncement($announcement['id']);
                 }
+                $announcementLog = "删除课程(#{$courseId})的公告";
+                $this->getLogService()->info('course', 'delete_announcement', $announcementLog);
             }
 
             //delete status
             $this->getStatusService()->deleteStatusesByCourseId($courseId);
+            $statusLog = "删除课程(#{$courseId})的动态";
+            $this->getLogService()->info('course', 'delete_status', $statusLog);
 
             //delete conversation
             $this->getConversationService()->deleteConversationByTargetIdAndTargetType($courseId, 'course');
@@ -277,5 +281,13 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function getConversationService()
     {
         return $this->createService('IM:ConversationService');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 }

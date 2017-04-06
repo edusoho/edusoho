@@ -2,10 +2,10 @@
 
 namespace AppBundle\Controller\Admin;
 
-use Biz\User\AuthProvider\DiscuzAuthProvider;
+use Biz\Common\Mail\MailFactory;
 use AppBundle\Common\StringToolkit;
 use Symfony\Component\Finder\Finder;
-use Biz\Common\Mail\MailFactory;
+use Biz\User\AuthProvider\DiscuzAuthProvider;
 use Symfony\Component\HttpFoundation\Response;
 
 class SystemController extends BaseController
@@ -30,7 +30,7 @@ class SystemController extends BaseController
         $setting = $this->getSettingService()->get('user_partner', array());
 
         if (!empty($setting['mode']) && $setting['mode'] == 'discuz') {
-            $discuzProvider = new DiscuzAuthProvider();
+            $discuzProvider = new DiscuzAuthProvider($this->getBiz());
 
             if ($discuzProvider->checkConnect()) {
                 return $this->createJsonResponse(array('status' => true, 'message' => '通信成功'));
@@ -135,9 +135,9 @@ class SystemController extends BaseController
         $env['user'] = getenv('USER');
         $env['pdoMysqlOk'] = extension_loaded('pdo_mysql');
         $env['uploadMaxFilesize'] = ini_get('upload_max_filesize');
-        $env['uploadMaxFilesizeOk'] = intval($env['uploadMaxFilesize']) >= 2;
+        $env['uploadMaxFilesizeOk'] = (int) ($env['uploadMaxFilesize']) >= 2;
         $env['postMaxsize'] = ini_get('post_max_size');
-        $env['postMaxsizeOk'] = intval($env['postMaxsize']) >= 8;
+        $env['postMaxsizeOk'] = (int) ($env['postMaxsize']) >= 8;
         $env['maxExecutionTime'] = ini_get('max_execution_time');
         $env['maxExecutionTimeOk'] = ini_get('max_execution_time') >= 30;
         $env['mbstringOk'] = extension_loaded('mbstring');

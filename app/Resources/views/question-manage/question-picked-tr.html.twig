@@ -24,9 +24,9 @@
   <td>
     <div class="btn-group">
       {% if question.parentId == 0 %}
-        <a href="#modal" data-toggle="modal" data-url="{{ path('course_set_manage_question_preview', {courseSetId:courseSet.id,questionId:question.id}) }}" class="notMoveHandle mrm ">{{'预览'|trans}}</a>
-        <a href="javascript:" class="notMoveHandle mrm" data-role="item-delete-btn">{{'删除'|trans}}</a>
-        <a href="javascript:" class="notMoveHandle" data-role="replace-item" data-url="{{ path('course_set_manage_question_picker', {id:courseSet.id, replace: question.id }) }}" >{{'替换'|trans}}</a>
+        <a class="link-primary" href="#modal" data-toggle="modal" data-url="{{ path('course_set_manage_question_preview', {courseSetId:courseSet.id,questionId:question.id}) }}" class="notMoveHandle mrm ">{{'预览'|trans}}</a>
+        <a class="link-primary" href="javascript:" class="notMoveHandle mrm" data-role="item-delete-btn">{{'删除'|trans}}</a>
+        <a class="link-primary" href="javascript:" class="notMoveHandle" data-role="replace-item" data-url="{{ path('course_set_manage_question_picker', {id:courseSet.id, replace: question.id }) }}" >{{'替换'|trans}}</a>
       {% endif %}
     </div>
   </td>

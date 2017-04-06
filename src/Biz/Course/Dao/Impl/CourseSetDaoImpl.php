@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
 {
-    protected $table = 'c2_course_set';
+    protected $table = 'course_set_v8';
 
     public function findCourseSetsByParentIdAndLocked($parentId, $locked)
     {
@@ -66,6 +66,9 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'discountId = :discountId',
                 'minCoursePrice = :minCoursePrice',
                 'maxCoursePrice > :maxCoursePrice_GT',
+                'updatedTime >= updatedTime_GE',
+                'updatedTime <= updatedTime_LE',
+                'minCoursePrice = :price',
             ),
             'serializes' => array(
                 'tags' => 'delimiter',
@@ -82,6 +85,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'recommendedTime',
                 'rating',
                 'studentNum',
+                'id',
             ),
             'timestamps' => array(
                 'createdTime', 'updatedTime',

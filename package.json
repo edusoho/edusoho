@@ -12,20 +12,12 @@
     "url": ""
   },
   "devDependencies": {
-    "babel-cli": "6.18.0",
-    "babel-core": "6.8.0",
-    "babel-preset-es2015": "6.9.0",
-    "babel-preset-react": "6.11.1",
-    "babel-runtime": "6.20.0",
-    "cross-env": "3.1.4",
-    "es-webpack-engine": "~2.4.3",
-    "eslint": "3.16.0",
+    "es-webpack-engine": "~3.0.6",
+    "eslint": "3.18.0",
     "eslint-config-airbnb": "14.1.0",
     "eslint-plugin-import": "2.2.0",
     "eslint-plugin-jsx-a11y": "4.0.0",
-    "eslint-plugin-react": "6.10.0",
-    "nodemon": "1.11.0",
-    "webpack": "1.14.0"
+    "eslint-plugin-react": "6.10.0"
   },
   "dependencies": {
     "babel-polyfill": "6.5.0",
@@ -34,7 +26,7 @@
     "bootstrap-datetime-picker": "2.3.10",
     "bootstrap-notify": "3.1.3",
     "chokidar": "1.6.1",
-    "component-emitter": "component/emitter",
+    "component-emitter": "1.2.0",
     "console-polyfill": "0.2.3",
     "easy-pie-chart": "2.1.7",
     "echarts": "3.3.1",
@@ -55,6 +47,7 @@
     "jquery-sortable": "0.9.13",
     "jquery-validation": "1.15.1",
     "jquery.cycle2": "2.1.7",
+    "js-cookie": "2.1.3",
     "lodash": "3.10.1",
     "moment": "2.16.0",
     "nouislider": "9.1.0",
@@ -77,12 +70,16 @@
     "typeahead.js": "0.11.1",
     "video.js": "4.10.2"
   },
+  "babel": {
+    "presets": ["es2015", "react", "stage-0"],
+    "plugins": [],
+    "compact": false
+  },
   "scripts": {
     "start": "npm run dev",
-    "dev": "babel-node  ./node_modules/es-webpack-engine/dist/chokidar-watch.js && cross-env NODE_ENV=development nodemon ./app/Resources/webpack/webpack.dev.js --exec babel-node --max_old_space_size=4096",
-    "compile": "cross-env NODE_ENV=production babel-node --max_old_space_size=4096 ./node_modules/.bin/webpack --progress --config ./app/Resources/webpack/webpack.js",
+    "dev": "./node_modules/.bin/cross-env NODE_ENV=development ./node_modules/.bin/nodemon ./node_modules/es-webpack-engine/dist/webpack.dev.js --parameters ./webpack.config.js --exec ./node_modules/.bin/babel-node --max_old_space_size=4096",
+    "compile": "./node_modules/.bin/cross-env NODE_ENV=production ./node_modules/.bin/babel-node --max_old_space_size=4096 ./node_modules/.bin/webpack --progress --config ./node_modules/es-webpack-engine/dist/webpack.prod.js --parameters ./webpack.config.js",
     "compile:debug": "npm run compile -- --debugMode=true",
-    "compile:debug-compress": "npm run compile -- --debugMode=true --compress=true",
     "lint": "eslint app/Resources/static-src/**/*.js",
     "clean": "npm prune"
   }

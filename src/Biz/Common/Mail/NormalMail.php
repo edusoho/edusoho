@@ -2,14 +2,12 @@
 
 namespace Biz\Common\Mail;
 
-use Topxia\Service\Common\ServiceKernel;
-
 class NormalMail extends Mail
 {
     /**
      * @return bool
      */
-    public function send()
+    public function doSend()
     {
         $format = isset($this->format) && $this->format == 'html' ? 'text/html' : 'text/plain';
 
@@ -24,7 +22,7 @@ class NormalMail extends Mail
 
             $email = \Swift_Message::newInstance();
 
-            $options = $this->parseTemplate();
+            $options = $this->parseTemplate($this->options);
 
             $email->setSubject($options['title']);
             $email->setFrom(array($config['from'] => $config['name']));
