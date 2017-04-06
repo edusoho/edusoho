@@ -15,6 +15,7 @@ class PluginMigrate extends AbstractMigrate
         );
 
         $pluginFile = $this->getPluginConfig();
+        $pluginFile = realpath($pluginFile);
         $config = require_once $pluginFile;
         if (!empty($config['installed_plugins']['Homework'])) {
             $installedPlugins = $config['installed_plugins'];
