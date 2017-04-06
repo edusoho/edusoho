@@ -10,7 +10,8 @@ class UserFavoriteCourse extends Resource
 {
     public function get(Request $request, $userId, $courseId)
     {
-        return $this->service('Course:CourseSetService')->isUserFavorite($userId, $courseId);
+        $isFavorite = $this->service('Course:CourseSetService')->isUserFavorite($userId, $courseId);
+        return array('isFavorite' => $isFavorite);
     }
 
     public function search()

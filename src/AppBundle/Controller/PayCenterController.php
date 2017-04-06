@@ -271,6 +271,23 @@ class PayCenterController extends BaseController
 
     public function payReturnAction(Request $request, $name, $successCallback = null)
     {
+        list($success, $order) = $this->payOrder($request, $name);
+
+        if (!$success) {
+            return $this->redirect($this->generateUrl('pay_error'));
+        }
+
+        $processor = OrderProcessorFactory::create($order['targetType']);
+
+        $goto = $processor->callbackUrl($order, $this->container);
+
+        return $this->render('pay-center/pay-return.html.twig', array(
+            'goto' => $goto,
+        ));
+    }
+
+    private function payOrder($request, $name)
+    {
         if ($name == 'llpay') {
             $returnArray = $request->request->all();
             $returnArray['isMobile'] = $this->isMobileClient();
@@ -295,19 +312,15 @@ class PayCenterController extends BaseController
         } else {
             $order = $this->getOrderService()->getOrderBySn($payData['sn']);
         }
-        list($success, $order) = OrderProcessorFactory::create($order['targetType'])->pay($payData);
 
-        if (!$success) {
-            return $this->redirect($this->generateUrl('pay_error'));
-        }
+        return OrderProcessorFactory::create($order['targetType'])->pay($payData);
+    }
 
-        $processor = OrderProcessorFactory::create($order['targetType']);
+    public function payReturnForAppAction(Request $request, $name)
+    {
+        list($success, $order) = $this->payOrder($request, $name);
 
-        $goto = $processor->callbackUrl($order, $this->container);
-
-        return $this->render('pay-center/pay-return.html.twig', array(
-            'goto' => $goto,
-        ));
+        return new Response("<script type='text/javascript'>window.location='objc://alipayCallback?{$success}';</script>");
     }
 
     public function payErrorAction(Request $request)

@@ -42,7 +42,7 @@ class PayCenter extends Resource
     private function generatePaymentForm($order, $request)
     {
         $requestParams = array(
-            'returnUrl' => $this->generateUrl('pay_return', array('name' => $order['payment']), true),
+            'returnUrl' => $this->generateUrl('pay_return_for_app', array('name' => $order['payment']), true),
             'notifyUrl' => $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
             'showUrl' => $this->generateUrl('pay_success_show', array('id' => $order['id']), true)
         );

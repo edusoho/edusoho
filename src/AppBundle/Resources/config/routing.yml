@@ -1032,6 +1032,10 @@ pay_return:
     path:  /pay/center/pay/{name}/return
     defaults: { _controller: AppBundle:PayCenter:payReturn }
 
+pay_return_for_app:
+    path:  /pay/center/pay/{name}/return_for_app
+    defaults: { _controller: AppBundle:PayCenter:payReturnForApp }
+
 pay_notify:
     path:  /pay/center/pay/{name}/notify
     defaults: { _controller: AppBundle:PayCenter:payNotify }
