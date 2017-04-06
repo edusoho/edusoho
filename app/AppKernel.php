@@ -81,7 +81,21 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         );
 
         if ($this->getEnvironment() !== 'test') {
-            $bundles = array_merge($bundles, $this->pluginConfigurationManager->getInstalledPluginBundles());
+            $plugins = $this->pluginConfigurationManager->getInstalledPlugins();
+
+            foreach ($plugins as $plugin) {
+                if ($plugin['type'] != 'plugin') {
+                    continue;
+                }
+
+                if ($plugin['protocol'] != 3) {
+                    continue;
+                }
+
+                $code = ucfirst($plugin['code']);
+                $class = "{$code}Plugin\\{$code}Plugin";
+                $bundles[] = new $class();
+            }
         }
 
 
