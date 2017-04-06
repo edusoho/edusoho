@@ -94,7 +94,8 @@ class TestpaperMigrate extends AbstractMigrate
                 $courseSetId = intval($courseArr[1]);
             }
 
-            $passedCondition = empty($testpaper['passedStatus']) ? '' : json_encode(array($testpaper['passedStatus']));
+            $passedCondition = empty($testpaper['passedStatus']) ? array(0) : array($testpaper['passedStatus']);
+            $passedCondition = json_encode($passedCondition);
 
             $metas = json_decode($testpaper['metas'], true);
             if (empty($metas['counts'])) {
