@@ -10,14 +10,11 @@ before_script:
   - cp app/config/parameters.yml.dist app/config/parameters_test.yml
   - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters_test.yml"
   - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters_test.yml"
-  - "echo '    redis_host: [\'127.0.0.1:6379\']' >> app/config/parameters_test.yml"
+  - "echo '    redis_host: [redis:6379]' >> app/config/parameters_test.yml"
+  - "echo '    redis_timeout: 1' >> app/config/parameters_test.yml"
+  - "echo '    redis_reserved: null' >> app/config/parameters_test.yml"
+  - "echo '    redis_retry_interval: 100' >> app/config/parameters_test.yml"
   - cat app/config/parameters_test.yml
-
-    # 
-    # redis_timeout: 1
-    # redis_reserved: null
-    # redis_retry_interval: 100
-
   - mkdir web/files
   - mkdir -p app/data/private_files
   - touch app/config/routing_plugins.yml
