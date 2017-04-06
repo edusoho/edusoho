@@ -10,6 +10,11 @@ before_script:
   - cp app/config/parameters.yml.dist app/config/parameters_test.yml
   - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters_test.yml"
   - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters_test.yml"
+  - "echo '    redis_host: [redis:6379]' >> app/config/parameters_test.yml"
+  - "echo '    redis_timeout: 1' >> app/config/parameters_test.yml"
+  - "echo '    redis_reserved: null' >> app/config/parameters_test.yml"
+  - "echo '    redis_retry_interval: 100' >> app/config/parameters_test.yml"
+  - cat app/config/parameters_test.yml
   - mkdir web/files
   - mkdir -p app/data/private_files
   - touch app/config/routing_plugins.yml
@@ -19,6 +24,7 @@ Unit Test With PHP 5.3:
   image: codeages/ci-php:5.3-2
   services:
     - mysql:5.5
+    - redis:latest
   script:
     - phpunit -c app/
   only:
@@ -29,9 +35,10 @@ Unit Test With PHP 5.3:
 
 Unit Test With PHP 5.5:
   stage: test
-  image: codeages/ci-php:5.5-4
+  image: codeages/ci-php:5.5-5
   services:
     - mysql:5.5
+    - redis:latest
   script:
     - phpunit -c app/
     - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
@@ -41,6 +48,7 @@ Unit Test With PHP 7.0:
   image: codeages/ci-php:7.0-7
   services:
     - mysql:5.5
+    - redis:latest
   script:
     - sed -i 's/memory_limit.*/memory_limit = 2048M/g' /etc/php/7.0/phpdbg/php.ini
     - cat /etc/php/7.0/phpdbg/php.ini | grep memory_limit
@@ -53,9 +61,10 @@ Unit Test With PHP 7.0:
 
 Functional Test With 5.5:
   stage: test
-  image: codeages/ci-php:5.5-4
+  image: codeages/ci-php:5.5-5
   services:
     - mysql:5.5
+    - redis:latest
     - selenium/standalone-chrome:latest
   script:
     - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`

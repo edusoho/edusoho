@@ -1,7 +1,7 @@
 import 'babel-polyfill';
 import 'jquery';
 import 'bootstrap';
-import Swiper from 'common/swiper';
+import Swiper from 'swiper'
 // import 'placeholder';
 import 'es6-promise/auto';
 import 'libs/js/jquery-lavalamp';
@@ -10,11 +10,8 @@ import 'common/script';
 import 'common/card';
 import 'common/es-polyfill';
 import { isMobileDevice } from 'common/utils';
-
+import Cookies from 'js-cookie';
 import './vendor.less';
-
-// 等待确认可删除Cookie
-// var Cookie = require('cookie');  
 
 $('[data-toggle="popover"]').popover({
   html: true,
@@ -67,7 +64,7 @@ $("i.hover-spin").mouseenter(function () {
 
 if ($(".set-email-alert").length > 0) {
   $(".set-email-alert .close").click(function () {
-    // Cookie.set("close_set_email_alert", 'true');
+    Cookies.set("close_set_email_alert", 'true');
   });
 }
 
@@ -83,9 +80,9 @@ if ($(".announcements-alert").length > 0) {
   }
 
   $(".announcements-alert .close").click(function () {
-    // Cookie.set("close_announcements_alert", 'true', {
-    //   path: '/'
-    // });
+    Cookies.set("close_announcements_alert", 'true', {
+      path: '/'
+    });
   });
 }
 
@@ -112,6 +109,6 @@ if ($(".nav.nav-tabs").length > 0 && !isMobileDevice()) {
 }
 
 $("select[name='language']").change(function () {
-  // Cookie.set("locale", $('select[name=language]').val(), { 'path': '/' });
+  Cookies.set("locale", $('select[name=language]').val(), { 'path': '/' });
   $("select[name='language']").parents('form').trigger('submit');
 });

@@ -19,7 +19,6 @@ class DictionaryDaoImpl extends GeneralDaoImpl implements DictionaryDao
     public function declares()
     {
         return array(
-            'cache' => 'table',
         );
     }
 }
