@@ -44,6 +44,7 @@ class GracefulBlockMigrate extends AbstractMigrate
                 'data' => json_encode($default),
                 'templateName' => $meta['templateName'],
                 'title' => $meta['title'],
+                'createdTime' => time()
             );
 
             $this->getConnection()->insert('block_template', $blockTemplate);

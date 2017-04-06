@@ -4,6 +4,8 @@ class TestpaperItemResultMigrate extends AbstractMigrate
 {
     public function update($page)
     {
+        $this->perPageCount = 10000;
+
         if (!$this->isTableExist('testpaper_item_result_v8')) {
             $this->getConnection()->exec("
                 CREATE TABLE `testpaper_item_result_v8` (

@@ -25,17 +25,17 @@ class CourseLessonLearn2CourseTaskResult extends AbstractMigrate
             );
         }
 
-        if (!$this->isIndexExist('course_task_result', 'courseId_userId')) {
-            $this->getConnection()->exec("
-                ALTER TABLE course_task_result ADD INDEX courseId_userId (`courseId`,`userId`);
-            ");
-        }
+        // if (!$this->isIndexExist('course_task_result', 'courseId_userId')) {
+        //     $this->getConnection()->exec("
+        //         ALTER TABLE course_task_result ADD INDEX courseId_userId (`courseId`,`userId`);
+        //     ");
+        // }
 
-        if (!$this->isIndexExist('course_task_result', 'courseTaskId_userId')) {
-            $this->getConnection()->exec("
-                ALTER TABLE course_task_result ADD INDEX courseTaskId_userId (`courseTaskId`,`userId`);
-            ");
-        }
+        // if (!$this->isIndexExist('course_task_result', 'courseTaskId_userId')) {
+        //     $this->getConnection()->exec("
+        //         ALTER TABLE course_task_result ADD INDEX courseTaskId_userId (`courseTaskId`,`userId`);
+        //     ");
+        // }
 
         if (!$this->isIndexExist('course_task_result', 'courseTaskId_activityId')) {
             $this->getConnection()->exec("
