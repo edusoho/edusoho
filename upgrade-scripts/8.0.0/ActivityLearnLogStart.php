@@ -35,6 +35,11 @@ class ActivityLearnLogStart extends AbstractMigrate
             ");
         }
 
+        if ($page==1) {
+            $sql = "delete from activity_learn_log";
+            $this->exec($sql);
+        }
+
         $countSql = "SELECT count(ct.id) FROM course_task ck, course_task_result ct WHERE ck.id = ct.`activityId`";
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {

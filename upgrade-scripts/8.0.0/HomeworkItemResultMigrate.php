@@ -27,6 +27,11 @@ class HomeworkItemResultMigrate extends AbstractMigrate
 
     private function insertHomeworkItemResult($page)
     {
+        if ($page==1) {
+            $sql = "delete from testpaper_item_result_v8";
+            $this->exec($sql);
+        }
+
         $countSql = "SELECT count(id) FROM `homework_item_result`";
         $count = $this->getConnection()->fetchColumn($countSql);
 
