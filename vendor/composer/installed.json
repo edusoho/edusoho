@@ -4651,58 +4651,6 @@
         "description": "Rate limiter with Biz Framework."
     },
     {
-        "name": "codeages/plugin-bundle",
-        "version": "v0.1.9",
-        "version_normalized": "0.1.9.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/plugin-bundle.git",
-            "reference": "2572a433e5677b6faf9d4b3de3890856e00cd892"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/plugin-bundle/2572a433e5677b6faf9d4b3de3890856e00cd892.zip",
-            "reference": "2572a433e5677b6faf9d4b3de3890856e00cd892",
-            "shasum": ""
-        },
-        "require": {
-            "codeages/biz-framework": "^0.1.7 || ^0.2 || ^0.3",
-            "php": "^5.3.3 || ^7.0",
-            "symfony/framework-bundle": "^2.8 || ^3.0",
-            "symfony/twig-bundle": "^2.8 || ^3.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~4.8 || ~5.7",
-            "symfony/browser-kit": "^2.8 || ^3.0",
-            "symfony/phpunit-bridge": "~3.2"
-        },
-        "time": "2017-04-01T03:50:40+00:00",
-        "type": "symfony-bundle",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\PluginBundle\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "codeages team",
-                "email": "team@codeages.com"
-            }
-        ],
-        "description": "Symfony PluginBundle",
-        "homepage": "https://github.com/codeages/plugin-bundle",
-        "keywords": [
-            "extension",
-            "plugin",
-            "theme"
-        ]
-    },
-    {
         "name": "composer/ca-bundle",
         "version": "1.0.7",
         "version_normalized": "1.0.7.0",
@@ -4849,5 +4797,57 @@
             "MIT"
         ],
         "description": "A service layer framework."
+    },
+    {
+        "name": "codeages/plugin-bundle",
+        "version": "v0.1.10",
+        "version_normalized": "0.1.10.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/plugin-bundle.git",
+            "reference": "a30f1891ccf4e68e83beec0aa79f70f8e024288e"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/codeages/plugin-bundle/a30f1891ccf4e68e83beec0aa79f70f8e024288e.zip",
+            "reference": "a30f1891ccf4e68e83beec0aa79f70f8e024288e",
+            "shasum": ""
+        },
+        "require": {
+            "codeages/biz-framework": "^0.1.7 || ^0.2 || ^0.3",
+            "php": "^5.3.3 || ^7.0",
+            "symfony/framework-bundle": "^2.8 || ^3.0",
+            "symfony/twig-bundle": "^2.8 || ^3.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "~4.8 || ~5.7",
+            "symfony/browser-kit": "^2.8 || ^3.0",
+            "symfony/phpunit-bridge": "~3.2"
+        },
+        "time": "2017-04-06T13:37:21+00:00",
+        "type": "symfony-bundle",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\PluginBundle\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "codeages team",
+                "email": "team@codeages.com"
+            }
+        ],
+        "description": "Symfony PluginBundle",
+        "homepage": "https://github.com/codeages/plugin-bundle",
+        "keywords": [
+            "extension",
+            "plugin",
+            "theme"
+        ]
     }
 ]
