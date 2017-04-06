@@ -867,6 +867,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $limit
         );
         $courses = $this->controller->filterCourses($courses);
+
         return array(
             'start' => $start,
             'limit' => $limit,
@@ -1655,7 +1656,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return array(
             'start' => $start + count($resultLiveCourses),
             'limit' => $limit,
-            'data' => $resultLiveCourses);
+            'data' => $resultLiveCourses, );
     }
 
     public function hitThread()
@@ -1694,7 +1695,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'start' => $start,
             'limit' => $limit,
             'total' => $total,
-            'data' => $this->controller->filterCourses($liveCourses));
+            'data' => $this->controller->filterCourses($liveCourses), );
 
         return $result;
     }

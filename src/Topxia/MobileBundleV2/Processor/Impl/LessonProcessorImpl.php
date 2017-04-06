@@ -1,4 +1,5 @@
 <?php
+
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
 use AppBundle\Common\FileToolkit;
@@ -504,7 +505,6 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
-
                     $lesson['mediaConvertStatus'] = $file['status'];
                     if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
@@ -713,7 +713,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
     private function filterLessons($lessons, $files)
     {
         return array_map(function ($lesson) use ($files) {
-            $lesson['content'] = "";
+            $lesson['content'] = '';
 
             if (isset($lesson['mediaId'])) {
                 $file = isset($files[$lesson['mediaId']]) ? $files[$lesson['mediaId']] : null;

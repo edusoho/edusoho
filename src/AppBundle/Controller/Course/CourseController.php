@@ -392,7 +392,6 @@ class CourseController extends CourseBaseController
 
     public function otherCourseAction($course)
     {
-        // $this->getCourseService()->getOtherCourses($course['id']);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $course['courseSet'] = $courseSet;
 

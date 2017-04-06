@@ -10,7 +10,7 @@
     {% set eventReportParams = {'user-id': app.user.id|default(0)} %}
     {% include 'event_report.html.twig' with{ 'eventName':'classroom.view', 'subjectType':'classroom', 'subjectId': classroom.id, 'eventReportParams':eventReportParams} %}
     {% if introduction is empty %}
-      <p class="mvl tac color-gray">{{ '暂无介绍'|trans }}</p>
+      <p class="mvl tac color-gray">{{ '暂无介绍！'|trans }}</p>
     {% else %}
       {{ introduction|raw }}
     {% endif %}

@@ -407,10 +407,10 @@ class OpenCourseLessonManageController extends BaseController
 
         $content = $formData['content'];
 
-        $drafts = $this->getCourseDraftService()->findCourseDraft($courseId, $lessonId, $userId);
+        $draft = $this->getCourseDraftService()->getCourseDraftByCourseIdAndActivityIdAndUserId($courseId, $lessonId, $userId);
 
-        if ($drafts) {
-            $draft = $this->getCourseDraftService()->updateCourseDraft($courseId, $lessonId, $userId, $formData);
+        if ($draft) {
+            $draft = $this->getCourseDraftService()->updateCourseDraft($draft['id'], $formData);
         } else {
             $draft = $this->getCourseDraftService()->createCourseDraft($formData);
         }
