@@ -32,7 +32,7 @@ class ClassroomDaoImpl extends GeneralDaoImpl implements ClassroomDao
                 'vipLevelId = :vipLevelId',
                 'vipLevelId IN ( :vipLevelIds )',
                 'orgCode = :orgCode',
-                'orgCode LIKE :likeOrgCode',
+                'orgCode PRE_LIKE :likeOrgCode',
                 'headTeacherId = :headTeacherId',
                 'updatedTime >= :updatedTime_GE',
             ),
