@@ -10,6 +10,7 @@ before_script:
   - cp app/config/parameters.yml.dist app/config/parameters_test.yml
   - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters_test.yml"
   - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters_test.yml"
+  - "sed -i 's/\\s*redis_host.*/    redis_host: redis:6379/g' app/config/parameters_test.yml"
   - mkdir web/files
   - mkdir -p app/data/private_files
   - touch app/config/routing_plugins.yml
