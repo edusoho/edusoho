@@ -56,15 +56,15 @@
     <div class="col-sm-4">
       <select id="finish-condition" name="ext[finishType]" class="form-control">
         {% set finishType = activity.ext.finishType|default('end') %}
-        <option value="end" {% if finishType == 'end' %} selected {% endif %}>观看到最后</option>
-        <option value="time" {% if finishType == 'time' %} selected {% endif %}>观看时长</option>
+        <option value="end" {% if finishType == 'end' %} selected {% endif %}>学习到最后</option>
+        <option value="time" {% if finishType == 'time' %} selected {% endif %}>学习时长</option>
       </select>
     </div>
   </div>
 
   <div class=" form-group hidden viewLength">
     <div class="col-sm-2 control-label">
-      <label>{{ '至少观看'|trans }}</label>
+      <label>{{ '至少学习'|trans }}</label>
     </div>
     <div class="col-sm-4 controls">
       <input id="condition-detail" class="form-control" type="text" name="ext[finishDetail]" value="{{ activity.ext.finishDetail|default(1) }}">
