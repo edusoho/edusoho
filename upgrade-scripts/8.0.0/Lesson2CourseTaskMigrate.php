@@ -101,7 +101,7 @@ class Lesson2CourseTaskMigrate extends AbstractMigrate
                 `updatedTime`,
                 'lesson',
                 `number`,
-                `type`,
+                 CASE WHEN `type` = 'document' THEN 'doc'  ELSE TYPE END AS 'type',
                 `mediaSource`,
                 CASE WHEN `length` is null THEN 0  ELSE `length` END AS `length`,
                 `maxOnlineNum`,
