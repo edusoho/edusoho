@@ -23,6 +23,8 @@ class PluginMigrate extends AbstractMigrate
             $config['installed_plugins'] = $installedPlugins;
         }
 
+        $config = is_array($config) ? $config : array();
+
         $content = "<?php \n return " . var_export($config, true) . ";";
         $saved = file_put_contents($pluginFile, $content);
 
