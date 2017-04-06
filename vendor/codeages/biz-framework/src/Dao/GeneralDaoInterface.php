@@ -10,7 +10,7 @@ interface GeneralDaoInterface extends DaoInterface
 
     public function delete($id);
 
-    public function get($id, array $options =array());
+    public function get($id, array $options = array());
 
     public function search($conditions, $orderBys, $start, $limit);
 

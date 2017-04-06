@@ -39,11 +39,6 @@ class DaoProxy
         }
     }
 
-    public function getRealDao()
-    {
-        return $this->dao;
-    }
-
     protected function getProxyMethod($method)
     {
         foreach (array('get', 'find', 'search', 'count', 'create', 'update', 'wave', 'delete') as $prefix) {
@@ -63,6 +58,7 @@ class DaoProxy
         if (is_array($lastArgument) && isset($lastArgument['lock']) && $lastArgument['lock'] === true) {
             $row = $this->callRealDao($method, $arguments);
             $this->unserialize($row);
+
             return $row;
         }
 
@@ -73,7 +69,6 @@ class DaoProxy
                 return $cache;
             }
         }
-
 
         $row = $this->callRealDao($method, $arguments);
         $this->unserialize($row);

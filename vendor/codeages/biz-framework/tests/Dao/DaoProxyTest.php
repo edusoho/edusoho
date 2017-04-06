@@ -38,6 +38,7 @@ class DaoProxyTest extends TestCase
 
     /**
      * @group current
+     *
      * @return [type] [description]
      */
     public function testGetWithLock()
