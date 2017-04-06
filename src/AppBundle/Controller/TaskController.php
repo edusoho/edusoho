@@ -361,7 +361,6 @@ class TaskController extends BaseController
 
     public function finishConditionAction($task)
     {
-
         $config = $this->getActivityConfig();
         $action = $config[$task['type']]['controller'].':finishCondition';
         $activity = $this->getActivityService()->getActivity($task['activityId']);
