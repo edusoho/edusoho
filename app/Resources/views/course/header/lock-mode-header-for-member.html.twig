@@ -15,11 +15,11 @@
           已完成
           <span class="mhs"><span class="color-primary">{{ taskResultCount }}</span> / {{ taskCount }}</span>个任务
         </li>
-        {% if taskPerDay %}
+        {% if taskPerDay and planProgressProgress - progress  > 0 %}
           <li class="mb10">
             <i class="es-icon es-icon-dot color-warning"></i>
-            今日预计完成<span class="mhs">{{ planStudyTaskCount }}</span>个任务{% if planProgressProgress- progress  > 0 %}，<span>
-              落后计划 {{ planProgressProgress - progress }}%</span>{% endif %}
+            {# 今日预计完成<span class="mhs">{{ planStudyTaskCount }}</span>个任务 #}
+            <span>落后计划 {{ planProgressProgress - progress }}%</span>
           </li>
         {% endif %}
         <li class="pt30 mb10 mll">
