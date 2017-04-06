@@ -42,7 +42,7 @@ class ActivityLearnLogStart extends AbstractMigrate
         }
 
 
-        $countSql = "SELECT count(id) FROM `course_task_result` WHERE id NOT IN (SELECT migrateTaskResultId FROM `activity_learn_log` where event = 'start' )";
+        $countSql = "SELECT count(ct.id) FROM course_task ck, course_task_result ct WHERE ck.id = ct.`activityId` and ct.id NOT IN (SELECT migrateTaskResultId FROM `activity_learn_log` where event = 'start' )";
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
             return;
@@ -72,7 +72,7 @@ class ActivityLearnLogStart extends AbstractMigrate
                   0,
                   ct.createdTime,
                   ct.id
-                 FROM course_task ck, course_task_result ct WHERE ck.id = ct.`activityId` and ck.id not in (select courseTaskId from activity_learn_log where event = 'start')
+                 FROM course_task ck, course_task_result ct WHERE ck.id = ct.`activityId` and ct.id not in (select migrateTaskResultId from activity_learn_log where event = 'start')
                  limit 0, {$this->perPageCount};
                 "
         );
