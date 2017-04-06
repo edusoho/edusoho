@@ -69,6 +69,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'updatedTime >= updatedTime_GE',
                 'updatedTime <= updatedTime_LE',
                 'minCoursePrice = :price',
+                'orgCode PRE_LIKE :likeOrgCode',
             ),
             'serializes' => array(
                 'tags' => 'delimiter',
