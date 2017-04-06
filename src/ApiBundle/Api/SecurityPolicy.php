@@ -17,6 +17,7 @@ class SecurityPolicy implements SecurityPolicyInterface
                 '/course_sets/\d+/courses',
                 '/courses/\d+',
                 '/courses/\d+/tasks',
+                '/courses/\d+/items',
                 '/courses/\d+/members',
                 '/courses/\d+/members/\d+',
             ),
