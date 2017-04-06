@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class ActivityLearnLogChangeEvent extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -19,7 +19,7 @@ class ActivityLearnLogChangeEvent extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {

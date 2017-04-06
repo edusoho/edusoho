@@ -94,7 +94,7 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
     {
         return array(
             'orderbys' => array(
-                'createdTime'
+                'createdTime',
             ),
             'serializes' => array(
                 'data' => 'json',
@@ -102,7 +102,7 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
             'conditions' => array(
                 'activityId = :activityId',
                 'event_EQ = :event',
-                'event_NEQ <> :event', 
+                'event_NEQ <> :event',
                 'userId = :userId',
             ),
         );
