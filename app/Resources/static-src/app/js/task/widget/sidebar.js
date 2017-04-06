@@ -78,7 +78,7 @@ export default class TaskSidebar extends Emitter {
           $paneBody.html(html);
           $pane.perfectScrollbar();
           $btn.data('loaded', true);
-          $('[data-toggle="tooltip"]').tooltip();
+          this.listEvent();
           this.isManualOperation = true;
         });
     });
