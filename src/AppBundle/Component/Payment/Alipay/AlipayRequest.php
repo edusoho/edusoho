@@ -41,24 +41,11 @@ class AlipayRequest extends Request
     protected function convertParams($params)
     {
         $converted = array();
-        // $isMobile = $this->isMobile($params['userAgent']);
 
-        // if ($isMobile) {
-        //     $converted['service'] = 'alipay.wap.create.direct.pay.by.user';
-        // } else if ($this->getPaymentType() == 'dualfun') {
-        //     $converted['service'] = 'trade_create_by_buyer';
-        // } elseif ($this->getPaymentType() == 'escow') {
-        //     $converted['service'] = 'create_partner_trade_by_buyer';
-        // } else {
-        //     $converted['service'] = 'create_direct_pay_by_user';
-        // }
-
-        if ($this->getPaymentType() == 'dualfun') {
-            $converted['service'] = 'trade_create_by_buyer';
-        } elseif ($this->getPaymentType() == 'escow') {
-            $converted['service'] = 'create_partner_trade_by_buyer';
-        } else {
+        if (empty($params['isMobile'])) {
             $converted['service'] = 'create_direct_pay_by_user';
+        } else {
+            $converted['service'] = 'alipay.wap.create.direct.pay.by.user';
         }
 
         $converted['partner'] = $this->options['key'];
