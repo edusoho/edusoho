@@ -139,7 +139,7 @@ script(['libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstra
                   <input class="form-control ml5 width-150 " type="text" id="expiryEndDate" name="expiryEndDate"
                          value="{{ course.expiryEndDate|default('') }}" {% if coursePublished %} disabled  {% endif %} >
                 </div>
-                <div class="color-warning">{{ '教学计划首次发布后“学习有效期”不能再修改'|trans }}</div>
+                <div class="color-warning">{{ '教学计划首次发布后“学习有效期”不能再修改。'|trans }}</div>
               </div>
             </div>
             {% if setting('magic.lesson_watch_limit') %}

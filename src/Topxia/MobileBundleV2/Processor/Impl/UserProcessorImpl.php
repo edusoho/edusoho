@@ -339,7 +339,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'start' => $start,
             'total' => $total,
             'limit' => $limit,
-            'data' => $notifications);
+            'data' => $notifications, );
     }
 
     private function coverNotifyContent($notification)
@@ -384,7 +384,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         if (!empty($token)) {
             $user = $this->controller->getUserByToken($this->request);
             $this->log('user_logout', '用户退出', array(
-                'userToken' => $user)
+                'userToken' => $user, )
             );
         }
         $this->controller->getUserService()->deleteToken(MobileBaseController::TOKEN_TYPE, $token);
@@ -873,7 +873,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $message = array('userId' => $user['id'],
             'userName' => $user['nickname'],
-            'opration' => 'unfollow');
+            'opration' => 'unfollow', );
         $this->getNotificationService()->notify($toId, 'user-follow', $message);
 
         return $result;
@@ -953,7 +953,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         return array('thread' => $threadSum,
             'discussion' => $discussionSum,
             'note' => $noteSum,
-            'test' => $testSum);
+            'test' => $testSum, );
     }
 
     public function getSchoolRoom()
@@ -966,7 +966,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 array('title' => '问答', 'data' => null),
                 array('title' => '讨论', 'data' => null),
                 array('title' => '笔记', 'data' => null),
-                array('title' => '私信', 'data' => null));
+                array('title' => '私信', 'data' => null), );
         }
         $index = 0;
         $dataLiveCourse = null;

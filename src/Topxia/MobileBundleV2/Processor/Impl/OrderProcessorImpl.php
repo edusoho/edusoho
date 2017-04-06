@@ -172,7 +172,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
         foreach ($userProfile as $key => $value) {
             if (!in_array($key, array(
-                'truename', 'id', 'mobile', 'qq', 'weixin'))) {
+                'truename', 'id', 'mobile', 'qq', 'weixin', ))) {
                 unset($userProfile[$key]);
             }
         }
