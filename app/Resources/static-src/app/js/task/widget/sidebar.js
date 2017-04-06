@@ -35,7 +35,6 @@ export default class TaskSidebar extends Emitter {
   }
 
   renderToolbar() {
-    console.log(this.plugins);
     let html = `
     <div class="dashboard-toolbar">
       <ul class="dashboard-toolbar-nav" id="dashboard-toolbar-nav">

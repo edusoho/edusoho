@@ -19,12 +19,15 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
             'userId' => $this->getCurrentUser()->getId(),
             'event' => $eventName,
             'mediaType' => $activity['mediaType'],
-            'watchTime' => !empty($data['watchTime']) ? $data['watchTime'] : 0,
             'learnedTime' => !empty($data['learnedTime']) ? $data['learnedTime'] : 0,
             'data' => $data,
             'createdTime' => time(),
         );
 
+        //TODO 临时方案, 要考虑数据的准确性和扩展性
+        if (!empty($data['watchTime'])) {
+            $fields['learnedTime'] = $data['watchTime'];
+        }
         if (!empty($data['task'])) {
             $fields['courseTaskId'] = $data['task']['id'];
         } elseif (!empty($data['taskId'])) {
@@ -73,7 +76,7 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
     {
         $result = $this->getActivityLearnLogDao()->sumLearnTime($conditions);
 
-        return (int) ($result / 60);
+        return (int)($result / 60);
     }
 
     public function sumWatchTime($conditions)
