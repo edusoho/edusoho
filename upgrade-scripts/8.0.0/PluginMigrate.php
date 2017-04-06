@@ -17,7 +17,9 @@ class PluginMigrate extends AbstractMigrate
         $pluginFile = $this->getPluginConfig();
         $config = require_once $pluginFile;
         if (!empty($config['installed_plugins']['Homework'])) {
-        	unset($config['installed_plugins']['Homework']);
+            $installedPlugins = $config['installed_plugins'];
+        	unset($installedPlugins['Homework']);
+            $config['installed_plugins'] = $installedPlugins;
         }
 
         $content = "<?php \n return " . var_export($config, true) . ";";
@@ -40,6 +42,7 @@ class PluginMigrate extends AbstractMigrate
 
         if ($filesystem->exists($file)) {
             $filesystem->copy($file, $targetFile, true);
+            $filesystem->remove($file);
             $filesystem->touch($file);
         }
     }
