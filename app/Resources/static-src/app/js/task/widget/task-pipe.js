@@ -64,9 +64,6 @@ export default class TaskPipe {
   }
 
   _flush() {
-    Object.assign(this.eventDatas, {
-    });
-
     let ajax = $.post(this.eventUrl, {data: {lastTime: this.lastTime, events: this.eventDatas}})
       .done((response) => {
         this._publishResponse(response);

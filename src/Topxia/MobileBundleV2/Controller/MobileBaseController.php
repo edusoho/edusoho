@@ -339,6 +339,7 @@ class MobileBaseController extends BaseController
         foreach ($convertKeys as $key => $value) {
             $course[$value] = $course[$key];
         }
+
         return $course;
     }
 

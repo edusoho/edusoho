@@ -59,6 +59,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
             $nextDoTime = $testpaperResult['checkedTime'] + $testpaperActivity['redoInterval'] * 3600;
             if ($nextDoTime > time()) {
                 return array('result' => false, 'message' => $this->getServiceKernel()->trans('教师设置了重考间隔，请在'.date('Y-m-d H:i:s', $nextDoTime).'之后再考！'));
+
                 return $this->createErrorResponse('error', '教师设置了重考间隔，请在'.date('Y-m-d H:i:s', $nextDoTime).'之后再考！');
             }
         }
@@ -390,6 +391,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         $items = $this->showTestpaperItems($testpaper['id'], $testpaperResult['id']);
 
         $testpaper['metas']['question_type_seq'] = array_keys($items);
+
         return array(
             'testpaper' => $testpaper,
             'items' => $this->coverTestpaperItems($items, 1),
