@@ -49,7 +49,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
     public function getBySn($sn, array $options = array())
     {
         $lock = isset($options['lock']) && $options['lock'] === true;
-        
+
         $forUpdate = '';
 
         if ($lock) {

@@ -114,6 +114,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
         $this->redis->delete($this->prefix.':'.$sessionId);
         $this->redis->zRem($this->prefix.':logined', $sessionId);
         $this->redis->zRem($this->prefix.':online', $sessionId);
+
         return true;
     }
 
