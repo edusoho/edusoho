@@ -34,6 +34,12 @@ class TestpaperItemResultMigrate extends AbstractMigrate
             ");
         }
 
+        if (!$this->isIndexExist('testpaper_item_result_v8', 'testId_type')) {
+            $this->getConnection()->exec("
+              alter table testpaper_item_result_v8 add index testId_type (testId, type);
+            ");
+        }
+
         $nextPage = $this->insertTestpaperItemResult($page);
         if (!empty($nextPage)) {
             return $nextPage;
