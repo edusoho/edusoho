@@ -133,6 +133,7 @@ class LiveShow {
         $.each(activityData.replays, function (i, n) {
           $btn = "<a class='btn btn-primary' href='" + n.url + "' target='_blank'>" + n.title + "</a>&nbsp;&nbsp;";
         });
+        $btn = `<div class='live-show-item'>${$btn}</div>`;
       }
     }
 
