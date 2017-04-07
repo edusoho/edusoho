@@ -5,6 +5,7 @@ namespace Biz\Testpaper\Service\Impl;
 use Biz\BaseService;
 use Biz\Activity\Type\Testpaper;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Testpaper\Builder\TestpaperBuilderInterface;
 use Biz\Testpaper\Dao\TestpaperDao;
 use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
@@ -778,6 +779,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return false;
     }
 
+    /**
+     * @param $type
+     *
+     * @return TestpaperBuilderInterface
+     */
     public function getTestpaperBuilder($type)
     {
         return $this->biz["testpaper_builder.{$type}"];
