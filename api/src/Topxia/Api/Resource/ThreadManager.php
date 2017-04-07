@@ -3,9 +3,9 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Request;
 
 class ThreadManager extends BaseResource
 {
@@ -51,9 +51,11 @@ class ThreadManager extends BaseResource
 
         $threads = $this->sortThreads($threads, $start);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
-        $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($threads, 'lessonId'));
+        $lessons = $this->getTaskService()->findTasksByIds(ArrayToolkit::column($threads, 'taskId'));
+        $lessons = ArrayToolkit::index($lessons, 'id');
+
         foreach ($threads as $key => &$thread) {
-            $lesson = $lessons[$thread['lessonId']];
+            $lesson = $lessons[$thread['taskId']];
             $lessonTitle = empty($lesson) ? '课程提问' : '课时:'.$lesson['number'].$lesson['title'];
             $thread['lessonTitle'] = $lessonTitle;
             $thread['isTeacherAnswer'] = $this->getCourseThreadService()->getPostCountByuserIdAndThreadId($user['id'], $thread['id']);
@@ -129,5 +131,10 @@ class ThreadManager extends BaseResource
     protected function getCourseMemberService()
     {
         return $this->getServiceKernel()->createService('Course:MemberService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->getServiceKernel()->createService('Task:TaskService');
     }
 }
