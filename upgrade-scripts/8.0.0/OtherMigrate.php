@@ -155,8 +155,9 @@ class OtherMigrate extends AbstractMigrate
             $this->exec("UPDATE `classroom` SET `creator` = `headTeacherId` WHERE `creator` = 0;");
         }
 
-        if (!$this->isFieldExist('classroom', 'expiryMode')) {
-            $this->exec("ALTER TABLE `classroom` ADD `expiryMode` enum('date', 'days', 'none') NOT NULL DEFAULT 'none' COMMENT '有效期的模式';");
+        if ($this->isFieldExist('classroom', 'expiryMode')) {
+            $this->exec("ALTER TABLE `classroom` CHANGE `expiryMode` `expiryMode` VARCHAR(32) NOT NULL DEFAULT 'forever' COMMENT '学习有效期模式：date、days、forever';");
+            $this->exec("UPDATE `classroom` SET expiryMode='forever' WHERE expiryMode='none';");
         }
     }
 
