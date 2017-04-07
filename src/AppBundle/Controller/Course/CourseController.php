@@ -164,7 +164,7 @@ class CourseController extends CourseBaseController
 
         $previewAs = $request->query->get('previewAs', null);
         $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
-        if (!empty($classroom) && $classroom['headTeacherId'] == $user['id']) {
+        if ($user->isLogin() && !empty($classroom) && $classroom['headTeacherId'] == $user['id']) {
             $member = $this->createMemberFromClassroomHeadteacher($course, $classroom);
         }
 

@@ -43,7 +43,7 @@ class ClassroomCourseCopy extends CourseCopy
         $courseSetId = $newCourseSet['id'];
 
         $newCourse = $this->doCopy($course);
-        
+
         $newCourse = $this->extendConfigFromClassroom($newCourse, $config['classroomId']);
         $newCourse['isDefault'] = $course['isDefault'];
         $modeChange = false;
@@ -77,7 +77,7 @@ class ClassroomCourseCopy extends CourseCopy
 
         $newCourse = array_replace($newCourse, $expiryData);
         $newCourse['vipLevelId'] = $classroom['vipLevelId'];
-        
+
         return $newCourse;
     }
 

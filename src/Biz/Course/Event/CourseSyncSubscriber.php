@@ -50,7 +50,7 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         }
 
         foreach ($courses as $course) {
-            $this->getCourseDao()->updateCourse($id, array('vipLevelId' => $classroom['vipLevelId']));
+            $this->getCourseDao()->update($course['id'], array('vipLevelId' => $classroom['vipLevelId']));
         }
     }
 
