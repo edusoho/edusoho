@@ -56,25 +56,7 @@
 
 							<span class="right-menu mouse-enter">
               {% if not member %}
-
-	              {% if course.isFree %}
-		              {% if task.type in ['text','video','audio','flash','doc','ppt'] %}
-			              <a class="btn btn-primary" href="#modal" data-toggle="modal"
-			                 data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
-			                 style="margin-top:-8px">预览</a>
-		              {% else %}
-  			            <a style="margin-top:-8px" class="btn btn-primary {% if previewAs|default() %}disabled{% endif %}"
-  			              {% if is_buy_course_from_modal(course.id) %}
-  				              href="#modal"
-  				              data-toggle="modal"
-  				              data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
-  			              {% else %}
-  				              href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
-  			              {% endif %}>加入学习
-		                </a>
-		              {% endif %}
-
-	              {% elseif task.isFree %}
+	              {% if task.isFree %}
 		              <a class="btn btn-primary" href="#modal" data-toggle="modal"
 		                 data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
 		                 style="margin-top:-8px">预览</a>
@@ -83,9 +65,21 @@
 		                 data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
 		                 style="margin-top:-8px">试看</a>
 	              {% elseif (not task.isFree) and course.parentId|default(0) == 0 %}
-		              <a class="btn btn-primary" href="#modal" data-toggle="modal"
-		                 data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
-		                 style="margin-top:-8px">购买</a>
+										{% if course.isFree %}
+											<a style="margin-top:-8px" class="btn btn-primary {% if previewAs|default() %}disabled{% endif %}"
+                        {% if is_buy_course_from_modal(course.id) %}
+												href="#modal"
+												data-toggle="modal"
+												data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+                      {% else %}
+												href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+                        {% endif %}>加入
+		                	</a>
+										{% else %}
+											<a class="btn btn-primary" href="#modal" data-toggle="modal"
+												data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
+												style="margin-top:-8px">购买</a>
+										{% endif %}
 	              {% endif %}
 
               {% endif %}
