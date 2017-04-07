@@ -774,6 +774,11 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         if (empty($user)) {
             return null;
         }
+
+        if ($user['type'] == 'system') {
+            return null;
+        }
+
         $user['currentIp'] = $request->getClientIp();
 
         return $user;

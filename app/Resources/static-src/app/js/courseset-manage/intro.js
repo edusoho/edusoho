@@ -1,6 +1,5 @@
 import 'store';
 import Cookies from 'js-cookie';
-import { showSettings } from 'app/js/course-manage/help';
 const COURSE_BASE_INTRO = 'COURSE_BASE_INTRO';
 const COURSE_TASK_INTRO = 'COURSE_TASK_INTRO';
 const COURSE_TASK_DETAIL_INTRO = 'COURSE_TASK_DETAIL_INTRO';
@@ -9,21 +8,8 @@ const COURSE_LIST_INTRO_COOKIE = 'COURSE_LIST_INTRO_COOKIE';
 
 export default class Intro {
   constructor() {
-    showSettings();
     this.intro = null;
     this.customClass = "es-intro-help multistep";
-    // $('body').on('click', '.js-reset-intro', (event) => {
-    //   event.stopPropagation();
-    //   $('body').removeClass('transparent-intro');
-    //   this.intro.exit();
-    //   this.isRestintroType();
-    //   $('.js-intro-btn-group').removeClass('transparent');
-    // })
-    // $('.js-intro-btn-group').click(()=>{
-    //   this.showResetStep();
-    //   $('.js-intro-btn-group').addClass('transparent');
-    // });
-
     $('body').on('click','.js-skip',(event)=>{
       this.intro.exit();
     });
@@ -40,16 +26,6 @@ export default class Intro {
     }
     this.initCourseListPageIntro();
   }
-
-  // isRestintroType() {
-  //   if (this.isTaskCreatePage()) { 
-  //     $('.js-task-manage-item:first').trigger('mouseenter');
-  //     this.introStart(this.initAllSteps());
-  //     return ;
-  //   }
-  //   this.introStart(this.initNotTaskPageSteps());
-    
-  // }
 
   isCourseListPage() {
     return !!$('#courses-list-table').length;
@@ -84,7 +60,6 @@ export default class Intro {
       doneLabel: doneLabel,
       showBullets: false,
       tooltipPosition: 'auto',
-      // positionPrecedence:['left', 'right', 'bottom', 'top'],
       showStepNumbers: false,
        exitOnEsc: false,
       exitOnOverlayClick: false,
@@ -92,8 +67,6 @@ export default class Intro {
     });
     
     this.intro.start().onexit(function(){
-      // $('.js-intro-btn-group').removeClass('transparent');
-      // $('body').removeClass('transparent-intro');
     }).onchange(()=>{
       console.log(this.intro);
       if(this.intro._currentStep ==(this.intro._introItems.length -1 ) ) {
@@ -106,7 +79,7 @@ export default class Intro {
   }
 
   initTaskCreatePageIntro() {
-    $('.js-task-manage-item:first').trigger('mouseenter');
+    $('.js-task-manage-item:first').trigger('click');
     if (!store.get(COURSE_BASE_INTRO) && !store.get(COURSE_TASK_INTRO)) {
       store.set(COURSE_BASE_INTRO, true);
       store.set(COURSE_TASK_INTRO, true);
@@ -170,15 +143,6 @@ export default class Intro {
     }
   }
 
-  // showResetStep() {
-  //   let introBtnClassName = '';
-  //   if($('.js-sidenav').data('course-length') >   1 ) {
-  //     introBtnClassName  = 'hidden'
-  //   }
-  //   $('body').addClass('transparent-intro');
-  //   this.introStart(this.initResetStep(introBtnClassName));
-  // }
-
   initAllSteps() {
     let arry = [
       {
@@ -213,10 +177,6 @@ export default class Intro {
         store.set(COURSE_TASK_DETAIL_INTRO,true);
       }
     }
-
-
-
-
     return arry;
   }
 

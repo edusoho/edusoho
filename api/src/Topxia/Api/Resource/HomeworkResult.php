@@ -93,6 +93,7 @@ class HomeworkResult extends BaseResource
         }
         $itemSetResults = $this->getTestpaperService()->findItemResultsByResultId($homeworkResult['id']);
         $homeworkResult['items'] = $this->filterItem($itemSetResults);
+        $homeworkResult['homeworkId'] = $homeworkResult['testId'];
 
         return $this->filter($homeworkResult);
     }

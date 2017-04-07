@@ -38,6 +38,21 @@ class PayCenterController extends BaseController
             }
         }
 
+        //处理0元订单
+        if ($order['amount'] == 0) {
+            list($checkResult, $newOrder) = $this->getPayCenterGatewayService()->beforePayOrder($order['id'], $orderInfo['targetType'], 'none');
+
+            if ($checkResult) {
+                return $this->createMessageResponse('error', $checkResult['error']);
+            }
+
+            if ($newOrder['status'] == 'paid') {
+                return $this->redirectOrderTarget($newOrder);
+            } else {
+                return $this->createAccessDeniedException();
+            }
+        }
+
         return $this->render('pay-center/show.html.twig', $orderInfo);
     }
 
@@ -154,8 +169,9 @@ class PayCenterController extends BaseController
     {
         $orderId = $request->request->get('orderId');
         $payment = $request->request->get('payment');
+        $targetType = $request->request->get('targetType');
 
-        list($checkResult, $order) = $this->getPayCenterGatewayService()->beforePayOrder($orderId, $payment);
+        list($checkResult, $order) = $this->getPayCenterGatewayService()->beforePayOrder($orderId, $targetType, $payment);
 
         if ($checkResult) {
             return $this->createMessageResponse('error', $checkResult['error']);

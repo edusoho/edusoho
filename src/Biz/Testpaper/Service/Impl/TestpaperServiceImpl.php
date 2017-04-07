@@ -5,6 +5,7 @@ namespace Biz\Testpaper\Service\Impl;
 use Biz\BaseService;
 use Biz\Activity\Type\Testpaper;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Testpaper\Builder\TestpaperBuilderInterface;
 use Biz\Testpaper\Dao\TestpaperDao;
 use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
@@ -288,11 +289,19 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function searchTestpaperResultsCount($conditions)
     {
+        if (isset($conditions['courseIds']) && empty($conditions['courseIds'])) {
+            return 0;
+        }
+
         return $this->getTestpaperResultDao()->count($conditions);
     }
 
     public function searchTestpaperResults($conditions, $sort, $start, $limit)
     {
+        if (isset($conditions['courseIds']) && empty($conditions['courseIds'])) {
+            return array();
+        }
+
         return $this->getTestpaperResultDao()->search($conditions, $sort, $start, $limit);
     }
 
@@ -778,6 +787,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return false;
     }
 
+    /**
+     * @param $type
+     *
+     * @return TestpaperBuilderInterface
+     */
     public function getTestpaperBuilder($type)
     {
         return $this->biz["testpaper_builder.{$type}"];

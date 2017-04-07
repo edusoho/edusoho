@@ -2,7 +2,7 @@
 
 <table class="table table-striped">
   <tbody>
-    {% for paperResult in paperResults %}
+    {% for paperResult in paperResults if testpapers[paperResult.testId] is defined %}
       {% set testpaper = testpapers[paperResult.testId] %}
       {% set student = users[paperResult.userId] %}
       {% set teacher = users[paperResult.checkTeacherId]|default(null) %}
