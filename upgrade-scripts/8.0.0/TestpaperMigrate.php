@@ -1,7 +1,5 @@
 <?php
 
-use AppBundle\Common\ArrayToolkit;
-
 class TestpaperMigrate extends AbstractMigrate
 {
     public function update($page)
@@ -103,7 +101,7 @@ class TestpaperMigrate extends AbstractMigrate
             if (empty($metas['question_type_seq'])) {
                 $sql = "select questionType,count(id) as count from testpaper_item where testId={$testpaper['id']} and parentId > 0 group by questionType order by questionType desc";
                 $testpaperItemCounts = $this->getConnection()->fetchAll($sql);
-                $metas['question_type_seq'] = ArrayToolkit::column($testpaperItemCounts, 'questionType');
+                $metas['question_type_seq'] = $this->column($testpaperItemCounts, 'questionType');
             }
 
             if (empty($metas['counts'])) {
@@ -143,5 +141,22 @@ class TestpaperMigrate extends AbstractMigrate
         }
 
         return $page + 1;
+    }
+
+    protected function column(array $array, $columnName)
+    {
+        if (empty($array)) {
+            return array();
+        }
+
+        $column = array();
+
+        foreach ($array as $item) {
+            if (isset($item[$columnName])) {
+                $column[] = $item[$columnName];
+            }
+        }
+
+        return $column;
     }
 }
