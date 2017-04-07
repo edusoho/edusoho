@@ -22,8 +22,12 @@ class CourseMember extends BaseProvider
         $limit = $request->query->get('limit', 100);
         $courseId = $request->query->get('courseId');
 
-        $course = $this->getCourseService()->getCourse($courseId);
-        $sourceCourseMembers = $this->getCourseMemberService()->findMemberByCourseId($course['id']);
+        $sourceCourseMembers = $this->getCourseMemberService()->searchMembers(
+            array('id' => $courseId),
+            array('createdTime' => 'DESC'),
+            $start,
+            $limit
+        );
 
         $userIds = ArrayToolkit::column($sourceCourseMembers, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
