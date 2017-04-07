@@ -158,7 +158,7 @@ export const unpublishTask = () => {
 };
 
 export const showSettings = () => {
-  $("#sortable-list").on('mouseenter', '.js-task-manage-item', (event) => {
+  $("#sortable-list").on('click', '.js-task-manage-item', (event) => {
     let $this = $(event.currentTarget);
     $this.siblings(".js-task-manage-item.active").removeClass('active').find('.js-settings-list').hide();
     if (!$this.hasClass('active')) {
