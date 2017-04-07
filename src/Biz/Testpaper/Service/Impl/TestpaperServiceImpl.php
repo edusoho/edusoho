@@ -289,11 +289,19 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function searchTestpaperResultsCount($conditions)
     {
+        if (isset($conditions['courseIds']) && empty($conditions['courseIds'])) {
+            return 0;
+        }
+
         return $this->getTestpaperResultDao()->count($conditions);
     }
 
     public function searchTestpaperResults($conditions, $sort, $start, $limit)
     {
+        if (isset($conditions['courseIds']) && empty($conditions['courseIds'])) {
+            return array();
+        }
+
         return $this->getTestpaperResultDao()->search($conditions, $sort, $start, $limit);
     }
 

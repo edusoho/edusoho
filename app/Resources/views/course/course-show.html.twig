@@ -30,7 +30,6 @@
         {% set eventReportParams = {'user-id': app.user.id|default(0)} %}
         {% include 'event_report.html.twig' with{ 'eventName':'course.view', 'subjectType':'course', 'subjectId': course.id, 'eventReportParams':eventReportParams} %}
         {% include 'course/announcement/block.html.twig' with { courseId:course.id } %}
-
         <section class="es-section">
           <div class="nav-btn-tab">
             <ul class="nav nav-tabs {% if mobile  %} es-mobile-nav {% endif %}" role="tablist">
@@ -126,7 +125,6 @@
             {{ render(controller(metas.tabs[tab].content, {request: app.request, course: course, member: member|default(null)})) }}
           {% endblock %}
         </section>
-
       </div>
       <div class="col-lg-3 col-md-4 course-sidebar">
         {# 有些widget只有班级计划才显示 #}
