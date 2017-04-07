@@ -1,6 +1,6 @@
 <div class="panel panel-default hot-article">
   <div class="panel-heading">
-    <h3 class="panel-title"><i class="es-icon es-icon-whatshot"></i>{{'cloud_search.article.recommend.content_title'|trans}}</h3>
+    <h3 class="panel-title"><i class="es-icon es-icon-whatshot"></i>{{'article.popular_article'|trans}}</h3>
   </div>
   <div class="panel-body">
     {% if articles %}
@@ -15,7 +15,7 @@
           </div>
       {% endfor %}
     {% else %}
-      <div class="empty">{{'cloud_search.article.recommend.empty'|trans}}</div>
+      <div class="empty">{{'article.popular_article_mpty'|trans}}</div>
     {% endif %}
   </div>
 </div>

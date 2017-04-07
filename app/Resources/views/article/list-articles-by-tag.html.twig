@@ -1,6 +1,6 @@
 {% extends 'old-layout.html.twig' %}
 
-{% block title %}{{'%article_name%频道'|trans({'%article_name%': setting('article.name')|default('资讯'|trans)})}} - {{ parent() }}{% endblock %}
+{% block title %}{{'article.channel'|trans({'%article_name%': setting('article.name')|default('article'|trans)})}} - {{ parent() }}{% endblock %}
 
 {% set bodyClass = 'artcile-tag-page' %}
 

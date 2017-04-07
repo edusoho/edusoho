@@ -133,6 +133,8 @@ form.btn.submit_disabled: 已提交
 form.btn.reset_password: 重设密码
 form.btn.send: 发送
 form.btn.upload: 上传
+form.btn.comment: 发表评论
+form.btn.comment.submiting: 正在评论...
 form.btn.upload.submiting: 正在上传...
 form.btn.delete.submiting: 正在删除...
 form.btn.reply.submiting: 正在发表回复
@@ -300,6 +302,7 @@ user.settings.verification.approve_failed_tips: 实名认证审核尚未通过�
 user.settings.avatar: 头像设置
 user.settings.avatar.page_title: 头像设置
 user.settings.avatar.crop: 头像图片
+user.settings.avatar.reselect: 重新选择图片
 user.settings.avatar.content_title: 头像设置
 user.settings.avatar.current_avatar: 当前头像
 user.settings.avatar.partner_avatar: 论坛头像
@@ -535,8 +538,6 @@ cloud_search.thread.recommend.content_title: 热门小组
 cloud_search.article: 资讯
 cloud_search.article.result: >
   为您找到资讯结果约 <span class="color-danger">%counts%</span>个
-cloud_search.article.recommend.content_title: 热门资讯
-cloud_search.article.recommend.empty: 暂无热门资讯
 
 # 小组
 group: 小组频道
@@ -565,28 +566,6 @@ group.thread.favorited_btn: 已收藏
 group.thread.created_time: 发表于%createdTime%
 group.thread.hit_num: %hitNum%次查看
 group.thread.wanted: 悬赏:%rewardCoin%%coin_name%
-
-group.thread.attachments_upload: 上传附件
-group.thread.attachments_upload.upload_btn: 上传
-group.thread.attachments_upload.upload_tips: >
-  <span> (大小不能超过
-  <span style="color:red;">2</span>
-  MB，文件类型支持png ,jpg ,gif ,doc ,xls ,txt ,rar ,zip .)
-  </span>
-group.thread.attachments_upload.file_name: 文件名
-group.thread.attachments_upload.description: 描述
-group.thread.attachments_upload.operations: 操作
-group.thread.attachments_upload.delete_btn: 删除
-group.thread.attachments_upload.tips: 用户下载附件扣除的%name%会在扣除50%之后添加到您的账户
-group.thread.attachments_download: 附件下载
-group.thread.attachments_download.description: 描述：%description%
-group.thread.attachments_download.upload_time: 上传于 %createdTime%
-group.thread.attachments_download.price: 售价:%coin%%coin_name%
-group.thread.attachments_download.free: 免费
-group.thread.attachments_download.times: 下载次数：%hitNum%
-group.thread.attachments_download.delete_btn: 删除
-group.thread.attachments_download.delete_warning: 确定删除此附件
-
 group.thread.check_hide_content: 查看隐藏内容
 group.thread.edit_btn: 编辑
 group.thread.cancel_essence_btn: 取消加精
@@ -684,11 +663,83 @@ group.detail.hot_group: 热门小组
 group.detail.hot_group_empty: 暂无小组信息！
 
 # 话题
-article: 话题
-article.reply: 回复
-article.empty: 暂无话题！
-article.status.stick: 置顶
-article.status.essence: 精华
-article.status.reward: 奖
-article.create: 发起了话题
+thread: 话题
+thread.reply: 回复
+thread.empty: 暂无话题！
+thread.status.stick: 置顶
+thread.status.essence: 精华
+thread.status.reward: 奖
+thread.create: 发起了话题
 article.last_reply: 最后回复
+
+# 咨询
+article: 资讯
+article.channel: %article_name%频道
+article.banner_tips: >
+  头条大图轮播功能需先在后台资讯管理页面设置缩略图以及添加头条属性<a class="mls alert-link" href="%articleUrl%">前往设置</a>
+article.empty: 还没有任何资讯
+article.popular_article: 热门资讯
+article.popular_article_mpty: 暂无热门资讯
+article.popular_comments: 热门评论
+article.popular_comments_empty: 一个评论都没有！
+article.comment_target: 评论于
+article.recommend_article: 推荐%article_name%
+article.recommend_article_empty: 暂无推荐%article_name%
+article.detail.text: 正文
+article.detail.source: 文章来源
+article.detail.source_url: 原文链接
+article.detail.tag: 标签：
+article.detail.post_num: >
+  文章评论<span class="badge badge-primary thread-post-num">%postNum%</span>
+article.detail.input_placeholder: 您的想法
+article.detail.comment_empty: 还没有人评论，欢迎说说您的想法！
+article.tag: 标签：%name%
+
+# 标签
+tag: 标签
+tag.popular_tag: 热门标签
+
+# 分类
+category: 分类
+category.all_category: 全部
+
+# 附件
+attachments: 附件
+attachments.preview: 预览
+attachments.preview.preview_btn: 预览
+attachments.preview.success_tips: 转码中请稍后预览
+attachments.preview.failed_tips: 文件类型暂不支持预览
+attachments.upload: 上传附件
+attachments.upload.upload_btn: 上传
+attachments.upload.upload_tips: >
+  <span> (大小不能超过
+  <span style="color:red;">2</span>
+  MB，文件类型支持png ,jpg ,gif ,doc ,xls ,txt ,rar ,zip .)
+  </span>
+attachments.upload.file_name: 文件名
+attachments.upload.description: 描述
+attachments.upload.operations: 操作
+attachments.upload.delete_btn: 删除
+attachments.upload.tips: 用户下载附件扣除的%name%会在扣除50%之后添加到您的账户
+attachments.download: 附件下载
+attachments.download.description: 描述：%description%
+attachments.download.upload_time: 上传于 %createdTime%
+attachments.download.price: 售价:%coin%%coin_name%
+attachments.download.free: 免费
+attachments.download.times: 下载次数：%hitNum%
+attachments.download.download_btn: 下载
+attachments.download.delete_btn: 删除
+attachments.download.delete_warning: 确定删除此附件
+
+# 分享
+share.course_set_message: 我正在学习《%course%》，收获巨大哦，一起来学习吧！
+share.classroom_message: 我正在学习「%classroom%」，收获巨大哦，一起来学习吧！
+share.article_message: 我正在看「%articletitle%」，关注「%sitename%」，分享知识，成就未来。
+share.group_thread_message: 我正在「%groupname%」小组，看到「%threadname%」，很不错哦，一起来看看吧！
+share.course_message: 我正在学习《%course%》，收获巨大哦，一起来学习吧！
+share.open_course_message: 我正在学习《%course%》，收获巨大哦，一起来学习吧！
+share.task_message: 我正在学习《%course%》，收获巨大哦，一起来学习吧！
+share.weixin_share: 分享到微信
+share.tsina_share: 分享到新浪微博
+share.qq_share: 分享到QQ好友
+share.qzone_share: 分享到QQ空间
