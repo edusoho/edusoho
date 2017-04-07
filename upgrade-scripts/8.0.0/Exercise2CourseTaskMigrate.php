@@ -10,13 +10,14 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
 
         $this->migrateTableStructure();
 
-        $count = $this->getConnection()->fetchColumn(
-            "
-          SELECT count(id) FROM exercise WHERE id NOT IN (SELECT migrateExerciseId FROM activity WHERE mediaType='exercise') AND `lessonId`  IN (SELECT id FROM `course_lesson`);
-          "
-        );
+        $count = $this->getConnection()->fetchColumn("
+            SELECT count(id) FROM exercise WHERE id NOT IN (SELECT migrateExerciseId FROM activity WHERE mediaType='exercise') AND `lessonId`  IN (SELECT id FROM `course_lesson`);
+        ");
 
         if (empty($count)) {
+            $this->updateExerciseActivity();
+            $this->updateExerciseTask();
+
             return;
         }
 
@@ -128,6 +129,20 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
                   WHERE lesson.eexerciseId NOT IN (SELECT migrateExerciseId FROM course_task WHERE migrateExerciseId IS NOT NULL );
           "
         );
+    }
+
+    protected function updateExerciseTask()
+    {
+        $this->getConnection()->exec("
+            UPDATE course_task as a, (SELECT id,migrateExerciseId from course_task where type = 'exercise') AS tmp set a.copyId = tmp.id WHERE tmp.migrateExerciseId = a.copyId AND a.type = 'exercise' AND a.copyId > 0;
+        ");
+    }
+
+    protected function updateExerciseActivity()
+    {
+        $this->getConnection()->exec("
+            UPDATE activity as a, (SELECT id,migrateExerciseId from activity where mediaType = 'exercise') AS tmp set a.copyId = tmp.id WHERE tmp.migrateExerciseId = a.copyId AND a.mediaType = 'exercise' AND a.copyId > 0;
+        ");
     }
 
     protected function migrateTableStructure()

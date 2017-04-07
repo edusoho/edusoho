@@ -13,6 +13,9 @@ class Homework2CourseTasMigrate extends AbstractMigrate
         $count = $this->getConnection()->fetchColumn("SELECT count(id) FROM homework WHERE id NOT IN (SELECT migrateHomeworkId FROM activity WHERE mediaType='homework') AND   `lessonId`  IN (SELECT id FROM `course_lesson`);");
 
         if (empty($count)) {
+            $this->updateHomeworkTask();
+            $this->updateHomeworkActivity();
+
             return;
         }
 
@@ -126,6 +129,20 @@ class Homework2CourseTasMigrate extends AbstractMigrate
                   WHERE lesson.hhomeworkId NOT IN (SELECT migrateHomeworkId FROM course_task WHERE migrateHomeworkId IS NOT NULL );
           "
         );
+    }
+
+    protected function updateHomeworkTask()
+    {
+        $this->getConnection()->exec("
+            UPDATE course_task as a, (SELECT id,migrateHomeworkId from course_task where type = 'homework') AS tmp set a.copyId = tmp.id WHERE tmp.migrateHomeworkId = a.copyId AND a.type = 'homework' AND a.copyId > 0;
+        ");
+    }
+
+    protected function updateHomeworkActivity()
+    {
+        $this->getConnection()->exec("
+            UPDATE activity as a, (SELECT id,migrateHomeworkId from activity where mediaType = 'homework') AS tmp set a.copyId = tmp.id WHERE tmp.migrateHomeworkId = a.copyId AND a.mediaType = 'homework' AND a.copyId > 0;
+        ");
     }
 
     protected function migrateTableStructure()
