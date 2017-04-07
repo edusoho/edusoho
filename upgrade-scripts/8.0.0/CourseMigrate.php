@@ -114,7 +114,7 @@ class CourseMigrate extends AbstractMigrate
               ,c2.`expiryDays` = (case when c.`expiryMode` = 'days' then c.`expiryDay` end)
               ,c2.`expiryEndDate` = (case when c.`expiryMode` = 'date' then c.`expiryDay` end)
               ,c2.`showStudentNumType` = c.`showStudentNumType`
-              ,c2.`serializeMode` = c.`serializeMode`
+              ,c2.`serializeMode` = (case when c.`serializeMode` = 'serialize' then 'serialized' else c.`serializeMode` end)
               ,c2.`income` = c.`income`
               ,c2.`giveCredit` = c.`giveCredit`
               ,c2.`rating` = c.`rating`
@@ -243,7 +243,7 @@ class CourseMigrate extends AbstractMigrate
               ,(case when `expiryMode` = 'date' then `createdTime` end)
               ,(case when `expiryMode` = 'date' then `expiryDay` end)
               ,`showStudentNumType`
-              ,`serializeMode`
+              ,(case when `serializeMode` = 'serialize' then 'serialized' else `serializeMode` end)
               ,`income`
               ,`giveCredit`
               ,`rating`

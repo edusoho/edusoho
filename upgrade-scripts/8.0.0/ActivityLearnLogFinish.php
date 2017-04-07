@@ -4,7 +4,7 @@ class ActivityLearnLogFinish extends AbstractMigrate
 {
     public function update($page)
     {
-        $countSql = "SELECT count(ct.id) FROM course_task ck, course_task_result ct WHERE ck.id = ct.`activityId` and ct.status = 'finish'";
+        $countSql = "SELECT count(ct.id) FROM  course_task_result ct, course_task ck  WHERE ct.`activityId` = ck.id  and ct.status = 'finish'";
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
             return;
@@ -36,7 +36,7 @@ class ActivityLearnLogFinish extends AbstractMigrate
                 ct.`time`,
                 ct.`createdTime`,
                 ct.`id`
-               FROM course_task ck, course_task_result ct WHERE ck.id = ct.`activityId` and ct.status = 'finish'
+               FROM course_task_result ct ,course_task ck  WHERE  ct.`activityId` = ck.id   and ct.status = 'finish'
                order by ct.id limit {$start}, {$this->perPageCount};
             ");
 

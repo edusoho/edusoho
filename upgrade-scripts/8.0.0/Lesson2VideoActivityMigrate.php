@@ -12,8 +12,8 @@ class Lesson2VideoActivityMigrate extends AbstractMigrate
                   `mediaSource` varchar(32) NOT NULL DEFAULT '' COMMENT '媒体文件来源(self:本站上传,youku:优酷)',
                   `mediaId` int(10) NOT NULL DEFAULT 0 COMMENT '媒体文件ID',
                   `mediaUri` text COMMENT '媒体文件资UR',
-                  `finishType` varchar(60) NOT NULL COMMENT '完成类型',
-                  `finishDetail` text NOT NULL COMMENT '完成条件',
+                  `finishType` varchar(60) NOT NULL DEFAULT 'end' COMMENT '完成类型',
+                  `finishDetail` varchar(32) NOT NULL DEFAULT '0' COMMENT '完成条件',
                    PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='视频活动扩展表';
             "
@@ -44,7 +44,7 @@ class Lesson2VideoActivityMigrate extends AbstractMigrate
                 `mediaId`,
                 `mediaUri`,
                 'end',
-                '1',
+                '0',
                 `id`
             from `course_lesson` where  type ='video' and `id` not in (select `migrateLessonId` from `activity_video`) order by id limit 0, {$this->perPageCount};
         "
