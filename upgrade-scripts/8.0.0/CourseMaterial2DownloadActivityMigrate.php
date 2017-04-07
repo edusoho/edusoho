@@ -85,7 +85,41 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
 
         $this->exec(
             '
-           INSERT INTO `course_material_v8`  SELECT * FROM `course_material` WHERE  id NOT IN (SELECT id FROM  `course_material_v8`);
+           INSERT INTO `course_material_v8` 
+           (
+              `id`,
+              `courseId`,
+              `lessonId`,
+              `title`,
+              `description`,
+              `link`,
+              `fileId`,
+              `fileUri`,
+              `fileMime`,
+              `fileSize`,
+              `source`,
+              `userId`,
+              `createdTime`,
+              `copyId`,
+              `type`
+           )
+           SELECT  
+              `id`,
+              `courseId`,
+              `lessonId`,
+              `title`,
+              `description`,
+              `link`,
+              `fileId`,
+              `fileUri`,
+              `fileMime`,
+              `fileSize`,
+              `source`,
+              `userId`,
+              `createdTime`,
+              `copyId`,
+              `type`
+           FROM `course_material` WHERE  id NOT IN (SELECT id FROM  `course_material_v8`);
         ');
     }
 
