@@ -32,6 +32,7 @@ define(function (require, exports, module) {
         render: function () {
             var self = this;
             var courseViews = this.collection.map(function (course) {
+              console.log('open-course-header : ', course);
                 return self.template(course.toJSON());
             });
             var html = _.reduce(courseViews, function (html, courseView) {
