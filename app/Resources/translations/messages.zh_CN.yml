@@ -1,4 +1,5 @@
 # 全站
+# 整站导航
 site.currency.RMB: 元
 site.date.month: 月
 site.data.empty: 无
@@ -108,6 +109,8 @@ classroom: 班级
 classroom.courses_count: 共%courseNum%门课程
 
 # 表单通用
+form.field.optional: 选填
+form.field.privacy_public: 公开
 form.btn.modify: 修改
 form.btn.set: 设置
 form.btn.publish: 发布
@@ -142,8 +145,39 @@ form.checkbox.public: 公开
 form.placeholder.max_int: 最大值为9位整数
 form.placeholer.two_decimal_places: 保留到2位小数
 
-# 个人设置模块
+# 用户登录
+user.login.page_title: 登录账号
+user.login.account_label: 账号
+user.login.account_placeholder: 邮箱/手机/用户名
+user.login.password_label: 密码
+user.login.password_placeholder: 密码
+user.login.remember_me: 记住密码
+user.login.submit_button: 登录
+user.login.find_password: 找回密码
+user.login.ask_register: 还没有注册帐号？
+user.login.go_register: 立即注册
+
+# 用户注册
+user.register.page_title: 注册帐号
+user.register.account_with_email_label: 手机
+user.register.account_with_email_placeholder: 填写你常用的邮箱作为登录帐号
+user.register.account_with_mobile_label: 手机
+user.register.account_with_mobile_placeholder: 填写你常用的邮箱作为登录帐号
+user.register.account_with_mobile_or_email_label: 手机/邮箱
+user.register.account_with_mobile_or_email_placeholder: 填写你常用的邮箱或手机号码作为登录帐号
+user.register.username_label: 用户名
+user.register.username_label_placeholder: 中、英文均可，最长18个英文或9个汉字
+user.register.password_label: 密码
+user.register.password_label_placeholder: 5-20位英文、数字、符号，区分大小写
+user.register.invite_code_label: 邀请码
+user.register.invite_code_placeholder: 如果您有邀请码，请填写您的邀请码
+user.register.i_agree: 我已阅读并同意
+user.register.terms: 服务协议
+user.register.submit_button: 注册
+
+# 用户个人设置
 user.settings: 个人设置
+user.settings.basic.page_title: 基础信息
 user.settings.menu_heading: 个人设置
 user.settings.basic_info_menu: 基础信息
 user.settings.avatar_menu: 头像设置
@@ -264,16 +298,17 @@ user.settings.verification.approve_failed_tips: 实名认证审核尚未通过�
 
 # 个人设置模块-头像设置
 user.settings.avatar: 头像设置
+user.settings.avatar.page_title: 头像设置
 user.settings.avatar.crop: 头像图片
 user.settings.avatar.content_title: 头像设置
 user.settings.avatar.current_avatar: 当前头像
 user.settings.avatar.partner_avatar: 论坛头像
-user.settings.avatar.upload_tips: >
+user.settings.avatar.upload_hint: >
   你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。
 user.settings.avatar.upload_btn: 上传新头像
 user.settings.avatar.using_current_avatar: 使用该头像
-user.settings.avatar.setup_tips: 请设置自定义头像。
-user.settings.avatar.crop_tips: 提示：请选择图片裁剪区域。
+user.settings.avatar.setup_hint: 请设置自定义头像。
+user.settings.avatar.crop_hint: 提示：请选择图片裁剪区域。
 
 # 个人设置模块-邮箱设置
 user.settings.email: 邮箱设置
