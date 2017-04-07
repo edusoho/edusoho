@@ -91,6 +91,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
             'timestamps' => array(
                 'createdTime', 'updatedTime',
             ),
+            'wave_cahceable_fields' => array('hitNum'),
         );
     }
 }

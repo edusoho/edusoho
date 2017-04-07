@@ -204,6 +204,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
                 'orgCode = :orgCode',
                 'orgCode LIKE :likeOrgCode',
             ),
+            'wave_cahceable_fields' => array('hitNum'),
         );
     }
 
