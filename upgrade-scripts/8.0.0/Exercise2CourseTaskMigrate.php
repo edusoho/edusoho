@@ -11,7 +11,7 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
         $this->migrateTableStructure();
 
         $count = $this->getConnection()->fetchColumn("
-            SELECT count(id) FROM exercise WHERE id NOT IN (SELECT migrateExerciseId FROM activity WHERE mediaType='exercise') AND `lessonId`  IN (SELECT id FROM `course_lesson`);
+            SELECT count(*) FROM (select max(id) as id,lessonId from exercise group by lessonId) as tmp WHERE id NOT IN (SELECT migrateExerciseId FROM activity WHERE mediaType='exercise') AND `lessonId`  IN (SELECT id FROM `course_lesson`);
         ");
 
         if (empty($count)) {
@@ -70,8 +70,8 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
               `ecopyId`,
               `eexerciseId`,
               `id`
-            FROM (SELECT  ee.id AS eexerciseId, ee.`copyId` AS ecopyId , ce.*
-                FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid limit 0, {$this->perPageCount}) lesson
+            FROM (SELECT  max(ee.id) AS eexerciseId, ee.`copyId` AS ecopyId , ce.*
+                FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonId group by ee.lessonId limit 0, {$this->perPageCount}) lesson
             WHERE lesson.eexerciseId NOT IN (SELECT migrateExerciseId FROM activity WHERE migrateExerciseId IS NOT NULL );
         "
         );
@@ -108,7 +108,7 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
             `courseId`,
             `chapterId`,
             `seq`,
-            '练习',
+            CONCAT(`title`,'的练习'),
             `free`,
             `startTime`,
             `endTime`,
@@ -124,8 +124,8 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
             `copyId`,
             `eexerciseId`,
             `id`
-            FROM (SELECT  ee.id AS eexerciseId, ee.`copyId` AS ecopyId , ce.*
-              FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid limit 0, {$this->perPageCount}) lesson
+            FROM (SELECT  max(ee.id) AS eexerciseId, ee.`copyId` AS ecopyId , ce.*
+              FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonid group by ee.lessonId limit 0, {$this->perPageCount}) lesson
                   WHERE lesson.eexerciseId NOT IN (SELECT migrateExerciseId FROM course_task WHERE migrateExerciseId IS NOT NULL );
           "
         );

@@ -10,7 +10,7 @@ class Homework2CourseTasMigrate extends AbstractMigrate
 
         $this->migrateTableStructure();
 
-        $count = $this->getConnection()->fetchColumn("SELECT count(id) FROM homework WHERE id NOT IN (SELECT migrateHomeworkId FROM activity WHERE mediaType='homework') AND   `lessonId`  IN (SELECT id FROM `course_lesson`);");
+        $count = $this->getConnection()->fetchColumn("SELECT count(id) FROM (select max(id) as id,lessonId from homework) as tmp WHERE id NOT IN (SELECT migrateHomeworkId FROM activity WHERE mediaType='homework') AND `lessonId`  IN (SELECT id FROM `course_lesson`);");
 
         if (empty($count)) {
             $this->updateHomeworkTask();
@@ -69,8 +69,8 @@ class Homework2CourseTasMigrate extends AbstractMigrate
               `ecopyId`,
               `hhomeworkId`,
               `id`
-          FROM (SELECT  ee.id AS hhomeworkId, ee.`copyId` AS ecopyId , ce.*
-          FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonid limit 0, {$this->perPageCount}) lesson
+          FROM (SELECT  max(ee.id) AS hhomeworkId, ee.`copyId` AS ecopyId , ce.*
+          FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonId group by ee.lessonId limit 0, {$this->perPageCount}) lesson
           WHERE hhomeworkId NOT IN (SELECT migrateHomeworkId FROM activity WHERE migrateHomeworkId IS NOT NULL );
                   "
         );
@@ -108,7 +108,7 @@ class Homework2CourseTasMigrate extends AbstractMigrate
             `courseId`,
             `chapterId`,
             `seq`,
-            '作业',
+            CONCAT(`title`,'的作业'),
             `free`,
             `startTime`,
             `endTime`,
@@ -124,8 +124,8 @@ class Homework2CourseTasMigrate extends AbstractMigrate
             `copyId`,
             `hhomeworkId`,
             `id`
-            FROM (SELECT  ee.id AS hhomeworkId, ee.`copyId` AS ecopyId , ce.*
-              FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonid limit 0, {$this->perPageCount}) lesson
+            FROM (SELECT  max(ee.id) AS hhomeworkId, ee.`copyId` AS ecopyId , ce.*
+              FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonId group by ee.lessonId limit 0, {$this->perPageCount}) lesson
                   WHERE lesson.hhomeworkId NOT IN (SELECT migrateHomeworkId FROM course_task WHERE migrateHomeworkId IS NOT NULL );
           "
         );
