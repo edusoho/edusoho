@@ -32,13 +32,13 @@ class EduSohoUpgrade extends AbstractUpdater
         $developerSetting = $this->getSettingService()->get('developer', array());
         $developerSetting['debug'] = 0;
 
-        ServiceKernel::instance()->createService('System:SettingService')->set('developer', $developerSetting);
-        ServiceKernel::instance()->createService('System:SettingService')->set('crontab_next_executed_time', time());
+        $this->getSettingService()->set('developer', $developerSetting);
+        $this->getSettingService()->set('crontab_next_executed_time', time());
     }
 
-    protected function getStep($index)
+    protected function getAllStep()
     {
-        $steps = array(
+        return array(
             'TruncateTables',
             'CourseSetMigrate',
             'CourseMigrate',
@@ -120,6 +120,11 @@ class EduSohoUpgrade extends AbstractUpdater
             'LogMigrate',
             'PluginMigrate',
         );
+    }
+
+    protected function getStep($index)
+    {
+        $steps = $this->getAllStep();
 
         if ($index > count($steps) - 1) {
             return '';
@@ -167,17 +172,21 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $this->logger('8.0.0', 'info', "迁移 {$method} {$page} 成功, time: {$end}");
 
+        $steps = $this->getAllStep();
+        $stepCount = count($steps);
+        $rate = ceil($index/$stepCount*100);
+
         if (!empty($nextPage)) {
             return array(
                 'index' => $this->setIndexAndPage($index, $nextPage),
-                'message' => '正在升级数据...',
+                'message' => "正在升级数据{$rate}%...",
                 'progress' => 0,
             );
         }
 
         return array(
             'index' => $this->setIndexAndPage($index + 1, 1),
-            'message' => '正在升级数据...',
+            'message' => "正在升级数据{$rate}%...",
             'progress' => 0,
         );
     }
@@ -228,17 +237,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
-    }
-
-    protected function getCourseService()
-    {
-        return ServiceKernel::instance()->createService('Course:CourseService');
-    }
-
-    protected function getCourseChapterDao()
-    {
-        return ServiceKernel::instance()->getBiz()->dao('Course:CourseChapterDao');
+        return ServiceKernel::instance()->createService('System.SettingService');
     }
 
     protected function logger($version, $level, $message)
