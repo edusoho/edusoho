@@ -4,6 +4,10 @@ class Homework2CourseTasMigrate extends AbstractMigrate
 {
     public function update($page)
     {
+        if (!$this->isTableExist('homework')) {
+            return;
+        }
+
         $this->migrateTableStructure();
 
         $count = $this->getConnection()->fetchColumn("SELECT count(id) FROM homework WHERE id NOT IN (SELECT migrateHomeworkId FROM activity WHERE mediaType='homework') AND   `lessonId`  IN (SELECT id FROM `course_lesson`);");
@@ -46,7 +50,7 @@ class Homework2CourseTasMigrate extends AbstractMigrate
               `migrateLessonId`
           )
           SELECT
-              '作业',
+              CONCAT(`title`,'的作业'),
               `summary`,
               `hhomeworkId`,
               'homework',
@@ -67,8 +71,6 @@ class Homework2CourseTasMigrate extends AbstractMigrate
           WHERE hhomeworkId NOT IN (SELECT migrateHomeworkId FROM activity WHERE migrateHomeworkId IS NOT NULL );
                   "
         );
-
-        
     }
 
     protected function homeworkToCourseTask()

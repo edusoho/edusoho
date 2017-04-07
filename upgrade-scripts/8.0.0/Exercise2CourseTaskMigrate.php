@@ -4,6 +4,10 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
 {
     public function update($page)
     {
+        if (!$this->isTableExist('exercise')) {
+            return;
+        }
+
         $this->migrateTableStructure();
 
         $count = $this->getConnection()->fetchColumn(
@@ -49,7 +53,7 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
               `migrateLessonId`
             )
             SELECT
-              '练习',
+              CONCAT(`title`,'的练习'),
               `summary`,
               `eexerciseId`,
               'exercise',
@@ -70,7 +74,6 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
             WHERE lesson.eexerciseId NOT IN (SELECT migrateExerciseId FROM activity WHERE migrateExerciseId IS NOT NULL );
         "
         );
-
     }
 
     protected function exerciseToCourseTask()

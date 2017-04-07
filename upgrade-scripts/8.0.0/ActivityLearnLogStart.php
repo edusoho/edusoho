@@ -29,18 +29,13 @@ class ActivityLearnLogStart extends AbstractMigrate
             $this->exec('alter table `activity_learn_log` add `migrateTaskResultId` int(10);');
         }
 
-        if (!$this->isIndexExist('activity_learn_log', 'activityId_userId')) {
-            $this->getConnection()->exec("
-                ALTER TABLE activity_learn_log ADD INDEX activityId_userId (`activityId`,`userId`);
-            ");
-        }
 
         if ($page==1) {
             $sql = "delete from activity_learn_log";
             $this->exec($sql);
         }
 
-        $countSql = "SELECT count(ct.id) FROM course_task ck, course_task_result ct WHERE ck.id = ct.`activityId`";
+        $countSql = "SELECT count(ct.id) FROM course_task_result ct,course_task ck  WHERE ct.`activityId` = ck.id";
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
             return;
@@ -73,7 +68,7 @@ class ActivityLearnLogStart extends AbstractMigrate
                   0,
                   ct.createdTime,
                   ct.id
-                 FROM course_task ck, course_task_result ct WHERE ck.id = ct.`activityId`
+                 FROM course_task_result ct , course_task ck  WHERE  ct.`activityId` = ck.id 
                  order by ct.id limit {$start}, {$this->perPageCount};
                 "
         );
