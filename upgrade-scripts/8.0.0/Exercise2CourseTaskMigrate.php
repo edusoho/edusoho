@@ -61,7 +61,7 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
               `migrateLessonId`
             )
             SELECT
-              '练习',
+              CONCAT(`title`,'的练习'),
               `summary`,
               `eexerciseId`,
               'exercise',

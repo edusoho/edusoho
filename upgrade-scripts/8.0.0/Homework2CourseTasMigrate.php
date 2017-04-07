@@ -54,7 +54,7 @@ class Homework2CourseTasMigrate extends AbstractMigrate
               `migrateLessonId`
           )
           SELECT
-              '作业',
+              CONCAT(`title`,'的作业'),
               `summary`,
               `hhomeworkId`,
               'homework',
