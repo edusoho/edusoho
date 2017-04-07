@@ -1,0 +1,23 @@
+services:
+    sentry.client:
+        class: '%sentry.client%'
+        arguments: ['%sentry.dsn%', '%sentry.options%', '%sentry.error_types%']
+        calls:
+            - [setRelease, ['%sentry.release%']]
+            - [setEnvironment, ['%sentry.environment%']]
+            - [setAppPath, ['%sentry.app_path%']]
+            - [setExcludedAppPaths, ['%sentry.excluded_app_paths%']]
+            - [setPrefixes, ['%sentry.prefixes%']]
+            - [install, []]
+
+    sentry.exception_listener:
+        class: '%sentry.exception_listener%'
+        arguments:
+          - '@?security.token_storage'
+          - '@?security.authorization_checker'
+          - '@sentry.client'
+          - '%sentry.skip_capture%'
+        tags:
+            - { name: kernel.event_listener, event: kernel.request,    method: onKernelRequest }
+            - { name: kernel.event_listener, event: kernel.exception,  method: onKernelException }
+            - { name: kernel.event_listener, event: console.exception, method: onConsoleException }

@@ -1,12 +1,10 @@
 {% set courseSet = data('CourseSet', {id: course.courseSetId}) %}
 
-{% if not isMarketingPage|default(null) %}
+{% if not isMarketingPage|default(null) and course.courseNum|default(1) > 1 %}
   <div class="es-piece">
     <div class="piece-body">
       想查看更多教学计划？
-      {% if course.courseNum|default(1) > 1 %}
         <a href="{{ path('course_show', {id: course.id}) }}">返回课程宣传页</a>
-      {% endif %}
     </div>
   </div>
 {% endif %}
@@ -50,12 +48,10 @@
 </div>
 
 
-{% if  isMarketingPage|default(null) %}
-  </section>
+{% if  isMarketingPage|default(null)  and course.taskNum > 0 %}
 
-  <div class="panel panel-default">
+  <div class="panel panel-default hidden-xs">
     <div class="panel-heading ">
-      
       <h3 class="panel-title">目录</h3>
     </div>
     <div class="panel-body">

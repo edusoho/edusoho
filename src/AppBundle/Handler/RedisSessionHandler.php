@@ -54,7 +54,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
      * @param TokenStorage $storage
      * @param array        $options
      */
-    public function __construct($biz, TokenStorage $storage, array $options = array())
+    public function __construct($factory, TokenStorage $storage, array $options = array())
     {
         if ($diff = array_diff(array_keys($options), array('prefix', 'expiretime'))) {
             throw new \InvalidArgumentException(sprintf(
@@ -62,10 +62,9 @@ class RedisSessionHandler implements \SessionHandlerInterface
             ));
         }
 
-        $cacheCluster = $biz['cache.cluster'];
-        $this->redis = $cacheCluster->getCluster();
+        $this->redis = $factory->getRedis();
         $this->ttl = isset($options['expiretime']) ? (int) $options['expiretime'] : 86400;
-        $this->prefix = isset($options['prefix']) ? $options['prefix'] : 'session';
+        $this->prefix = isset($options['prefix']) ? $options['prefix'] : 'es3_sess';
 
         $this->storage = $storage;
 
@@ -87,7 +86,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
      */
     public function close()
     {
-        // return $this->redis->close();
+        return true;
     }
 
     /**
@@ -116,7 +115,9 @@ class RedisSessionHandler implements \SessionHandlerInterface
         $this->redis->zAdd($this->prefix.':online', $time, $sessionId);
         $this->redis->setTimeout($this->prefix.':online', $this->ttl);
 
-        return $this->redis->setex($this->prefix.':'.$sessionId, $this->ttl, $data);
+        $this->redis->setex($this->prefix.':'.$sessionId, $this->ttl, $data);
+
+        return true;
     }
 
     /**
@@ -126,8 +127,9 @@ class RedisSessionHandler implements \SessionHandlerInterface
     {
         $this->redis->delete($this->prefix.':'.$sessionId);
         $this->redis->zRem($this->prefix.':logined', $sessionId);
+        $this->redis->zRem($this->prefix.':online', $sessionId);
 
-        return $this->redis->zRem($this->prefix.':online', $sessionId);
+        return true;
     }
 
     /**
@@ -135,7 +137,6 @@ class RedisSessionHandler implements \SessionHandlerInterface
      */
     public function gc($maxlifetime)
     {
-        // not required here because memcache will auto expire the records anyhow.
         $end = time() - $this->ttl;
         $start = 0;
         $this->redis->zRemRangeByScore($this->prefix.':logined', $start, $end);

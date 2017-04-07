@@ -1,0 +1,31 @@
+{% set current_route = app.request.get('_route') %}
+
+{% if current_route != 'admin_app_upgrades' %}
+  {% set notifies = plugin_update_notify() %}
+  {% if not notifies is empty %}
+    <div class="modal js-update-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">升级引导</h4>
+          </div>
+          <div class="modal-body">
+            <div class="update-redmine-body">
+              <img class="pbm" src='{{ asset('bundles/topxiaadmin/img/course-8-update.jpg') }}'>
+              <div class="mll mtl mrl clearfix">
+                <p class="color-primary mbl">请即刻升级以下插件，否则会影响到网站的正常使用</p>
+                {% for notifie in notifies %}
+                    <p class="color-dark" style="float:left;width:33.33%"><span class="mrm">●</span>{{ notifie }}</p>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a type="button" class="btn btn-primary" href="{{ path('admin_app_upgrades') }}">去升级</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endif %}

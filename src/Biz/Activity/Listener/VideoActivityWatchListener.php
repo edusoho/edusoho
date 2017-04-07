@@ -13,12 +13,11 @@ class VideoActivityWatchListener extends Listener
 
     public function handle($activity, $data)
     {
-        if (!$data['watchTime'] || $data['watchTime'] >= self::WATCH_TIME_STEP) {
-            $watchTime = TaskService::WATCH_TIME_STEP;
+        if (!empty($data['timeStep'])) {
+            $watchTime = $data['timeStep'];
         } else {
-            $watchTime = $data['watchTime'];
+            $watchTime = TaskService::LEARN_TIME_STEP;
         }
-
         if (empty($data['task'])) {
             return;
         }

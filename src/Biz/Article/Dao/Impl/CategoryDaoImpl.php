@@ -9,16 +9,6 @@ class CategoryDaoImpl extends GeneralDaoImpl implements CategoryDao
 {
     protected $table = 'article_category';
 
-    public function declares()
-    {
-        return array(
-            'conditions' => array(
-                'parentId = :parentId',
-            ),
-            'cache' => 'table',
-        );
-    }
-
     public function getByParentId($parentId)
     {
         return $this->getByFields(array(
@@ -76,5 +66,14 @@ class CategoryDaoImpl extends GeneralDaoImpl implements CategoryDao
         $sql = "SELECT * FROM {$this->table()} ORDER BY weight ASC";
 
         return $this->db()->fetchAll($sql) ?: array();
+    }
+
+    public function declares()
+    {
+        return array(
+            'conditions' => array(
+                'parentId = :parentId',
+            ),
+        );
     }
 }

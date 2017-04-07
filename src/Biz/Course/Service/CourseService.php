@@ -204,4 +204,6 @@ interface CourseService
     public function getFavoritedCourseByUserIdAndCourseSetId($userId, $courseSetId);
 
     public function buildCourseExpiryDataFromClassroom($expiryMode, $expiryValue);
+
+    public function hitCourse($id);
 }

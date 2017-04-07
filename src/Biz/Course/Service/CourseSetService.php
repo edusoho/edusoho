@@ -236,4 +236,6 @@ interface CourseSetService
     public function unlockCourseSet($id);
 
     public function updateMaxRate($id, $maxRate);
+
+    public function hitCourseSet($id);
 }

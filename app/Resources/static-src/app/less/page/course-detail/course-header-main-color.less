@@ -1,20 +1,5 @@
 .course-header-main-color(@brand-primary) {
-  //加入前头部
-  .course-detail-section {
-    .course-operation-responsive {
-      ul {
-        >li {
-          &:hover {
-            color: @brand-primary;
-            a {
-              color: @brand-primary;
-            }
-          }
-        }
-      }
-    }
-  }
-
+  
   //课程进度条
   .course-progress {
     .cricle-progress {
@@ -29,6 +14,19 @@
   .orderlearn-poster {
     span.swiper-active-switch {
       background-color: @brand-primary;
+    }
+  }
+
+  .course-detail-section-responsive {
+    ul {
+      >li {
+        &:hover {
+          color: @brand-primary;
+          a {
+            color: @brand-primary;
+          }
+        }
+      }
     }
   }
 }

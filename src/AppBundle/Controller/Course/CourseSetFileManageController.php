@@ -49,6 +49,10 @@ class CourseSetFileManageController extends BaseController
         );
 
         $files = $this->getUploadFileService()->findFilesByIds($fileIds, $showCloud = 1);
+        usort($files, function ($f1, $f2) {
+            return $f1['updatedTime'] < $f2['updatedTime'];
+        });
+
         //XXX 暂不考虑公开课
         $filesQuote = $this->getMaterialService()->findUsedCourseSetMaterials($fileIds, $id);
 

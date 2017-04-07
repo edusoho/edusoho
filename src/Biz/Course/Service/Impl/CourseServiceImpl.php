@@ -906,7 +906,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     // Refactor: 该函数方法名和逻辑表达的意思不一致
     public function findUserLearnCourses($userId, $start, $limit)
     {
-        return $this->getTaskService()->searchMembers(array('userId' => $userId), array(), $start, $limit);
+        return $this->getMemberService()->searchMembers(array('userId' => $userId), array(), $start, $limit);
     }
 
     // Refactor: 该函数方法名和逻辑表达的意思不一致
@@ -1696,6 +1696,17 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $fields;
+    }
+
+    public function hitCourse($id)
+    {
+        $course = $this->getCourse($id);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException("Course#{$courseId} Not Found");
+        }
+
+        return $this->getCourseDao()->wave(array($id), array('hitNum' => 1));
     }
 
     protected function hasAdminRole()

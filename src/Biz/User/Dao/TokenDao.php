@@ -6,7 +6,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface TokenDao extends GeneralDaoInterface
 {
-    public function get($id, $lock = false);
+    public function get($id, array $options = array());
 
     public function getByToken($token);
 

@@ -8,6 +8,7 @@
 /app/config/menu_blacklist.yml
 /app/config/uc_client_config.php
 /app/config/routing_plugins.yml
+/app/config/sentry.yml
 /web/themes/*
 !/web/themes/autumn
 !/web/themes/default
@@ -46,8 +47,6 @@ web/php-performance.php
 chunk-manifest.json
 .npminstall.done
 /web/static-dist/*
-!/web/static-dist/libs
-!/web/static-dist/app
 /.vscode
 .php_cs.cache
 deployment-config.json

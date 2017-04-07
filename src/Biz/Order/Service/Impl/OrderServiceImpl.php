@@ -22,7 +22,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function getOrderBySn($sn, $lock = false)
     {
-        return $this->getOrderDao()->getBySn($sn, $lock);
+        return $this->getOrderDao()->getBySn($sn, array('lock' => $lock));
     }
 
     public function getOrderByToken($token)

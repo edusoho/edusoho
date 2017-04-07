@@ -415,8 +415,15 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
                         }
                         break;
                 }
+
+                if (strpos($bannerIndex, 'http://') !== false || strpos($bannerIndex, 'https://') !== false) {
+                    $uri = $bannerIndex;
+                } else {
+                    $uri = $baseUrl.'/'.$bannerIndex;
+                }
+
                 $banner[] = array(
-                    'url' => $baseUrl.'/'.$bannerIndex,
+                    'url' => $uri,
                     'action' => $action,
                     'params' => $bannerParams,
                 );
