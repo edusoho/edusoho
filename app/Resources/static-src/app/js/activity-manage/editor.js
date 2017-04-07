@@ -1,8 +1,3 @@
-/**
- * [description]
- * @param  {[string]} $item [te]
- * @return {[type]}       [description]
- */
 export const initEditor = ($item, validator) => {
   
   var editor = CKEDITOR.replace('text-content-field', {
