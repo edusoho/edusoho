@@ -17,7 +17,6 @@ class OpenCourseFileManageController extends BaseController
         $conditions = array(
             'courseId' => $course['id'],
             'type' => 'openCourse',
-            'courseSetId' => 0,
         );
 
         $paginator = new Paginator(
