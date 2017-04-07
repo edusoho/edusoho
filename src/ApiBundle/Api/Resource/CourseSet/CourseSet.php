@@ -16,7 +16,7 @@ class CourseSet extends Resource
             throw new ResourceNotFoundException('课程不存在');
         }
 
-        $this->getOCUtil()->single($courseSet, array('creator'));
+        $this->getOCUtil()->single($courseSet, array('creator', 'teacherIds'));
 
         return $courseSet;
     }
