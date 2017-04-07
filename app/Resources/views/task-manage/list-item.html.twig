@@ -179,7 +179,7 @@
           {% if activity_metas(tasks.extraClass.type) %}
             {{ activity_metas(tasks.extraClass.type).icon }} 
           {% endif %}
-          '></i>{{tasks.exercise.title|trans}}"
+          '></i>{{tasks.extraClass.title|trans}}"
           data-url="{{ path('course_manage_task_update', {id:tasks.extraClass.id,courseId:tasks.extraClass.courseId, type:'extraClass', categoryId: chapter.id}) }}">
         {% endif %}
         <i class="es-icon es-icon-sun mrm" {% if tasks.extraClass.id|default(null) %}data-role="task"{% endif %}></i>
