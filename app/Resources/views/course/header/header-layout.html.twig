@@ -32,17 +32,19 @@
          {% else %}
         {{ course.title }}
        {% endif %}
-      </span>
-      {% block course_header_qrcode %}
+       {% block course_header_qrcode %}
         <!--非营销页显示-->
-        <span class="es-qrcode top inline-block pt5" data-url="{{ path('course_qrcode', { id: course.id }) }}">
-          <i class="es-icon es-icon-qrcode"></i>
-          <span class="qrcode-popover">
-            <img src="" alt="">
-            扫二维码继续学习二维码时效为半小时
+        {% if not marketingPage %}
+          <span class="es-qrcode top pt5 hidden-xs" data-url="{{ path('course_qrcode', { id: course.id }) }}">
+            <i class="es-icon es-icon-qrcode"></i>
+            <span class="qrcode-popover">
+              <img src="" alt="">
+              扫二维码继续学习二维码时效为半小时
+            </span>
           </span>
-        </span>
-      {% endblock %}
+        {% endif %}
+       {% endblock %}
+      </span>
       {% block course_header_subtitle %}{% endblock %}
       <ul class="course-operation hidden-xs hidden-sm clearfix">
         <!--非营销页显示-->

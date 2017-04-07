@@ -44,7 +44,7 @@
   {% else %}
 
     {% if 'full' in shows or 'price' in shows %}
-      <span >
+      <span class="price">
         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
           {% if course.price > 0 %} 
             {{ course.price * setting('coin.cash_rate')}}
