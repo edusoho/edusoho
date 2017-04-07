@@ -47,8 +47,6 @@ class CourseCloudFiles extends BaseProvider
     protected function buildNeedCloudFileFields($sourceCourseFiles)
     {
         $cloudFiles = array();
-        $filter = array( 'type' => '', 'status' => '', 'globalId' => 0, 'filename' => '');
-
         foreach ($sourceCourseFiles as $sourceCourseFile) {
             $cloudFile['mediaId'] = $sourceCourseFile['globalId'];
             $cloudFile['name'] = $sourceCourseFile['filename'];
