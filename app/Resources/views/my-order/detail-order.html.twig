@@ -3,24 +3,24 @@
 
   <div class="tab-pane fade active in" id="detail">
      <table class="table table-striped order-table">
-      <tr> <th width="25%">{{'订单号'|trans}}</th> <td width="75%">{{ order.sn }}</td> </tr>
-      <tr> <th width="25%">{{'订单状态'|trans}}</th>
+      <tr> <th width="25%">{{'order.id'|trans}}</th> <td width="75%">{{ order.sn }}</td> </tr>
+      <tr> <th width="25%">{{'order.status'|trans}}</th>
            <td width="75%">
-            {% if order.status == 'created' %} {{'未完成'|trans}}
-            {% elseif order.status == 'paid' %} {{'已付款'|trans}}
-            {% elseif order.status == 'cancelled' %} {{'已关闭'|trans}}
-            {% elseif order.status == 'refunding' %} {{'申请退款'|trans}}
-            {% elseif order.status == 'refunded' %} {{'退款成功'|trans}}
+            {% if order.status == 'created' %} {{'order.status.created'|trans}}
+            {% elseif order.status == 'paid' %} {{'order.status.paid'|trans}}
+            {% elseif order.status == 'cancelled' %} {{'order.status.cancel'|trans}}
+            {% elseif order.status == 'refunding' %} {{'order.status.refunding'|trans}}
+            {% elseif order.status == 'refunded' %} {{'order.status.refunded'|trans}}
             {% endif %}
            </td>
       </tr>
       <tr>
-        <th width="25%">{{'订单名称'|trans}}</th>
+        <th width="25%">{{'order.name'|trans}}</th>
         <td width="75%">
           {{ order.title }}
         </td>
       </tr>
-      <tr> <th width="25%">{{'购买者'|trans}}</th>
+      <tr> <th width="25%">{{'order.buyers'|trans}}</th>
         <td width="75%">
           <strong>
             {# {{ admin_macro.user_link(user) }} #}
@@ -28,7 +28,7 @@
           </strong>
         </td>
       </tr>
-      <tr> <th width="25%">{{'订单价格'|trans}}</th>
+      <tr> <th width="25%">{{'order.price'|trans}}</th>
         <td width="75%">
           <span class="money-text">{{ order.totalPrice }}</span>
           {% if order.priceType == "RMB" %}
@@ -38,12 +38,12 @@
           {% endif %}
         </td>
       </tr>
-      <tr> <th width="25%">{{'优惠码'|trans}}</th>
+      <tr> <th width="25%">{{'plugin.coupon.code'|trans}}</th>
         <td width="75%">
-          {% if order.coupon %}{{ order.coupon }}{% else %}{{'无'|trans}}{% endif %}
+          {% if order.coupon %}{{ order.coupon }}{% else %}{{'site.data.empty'|trans}}{% endif %}
         </td>
       </tr>
-      <tr> <th width="25%">{{'优惠金额'|trans}}</th>
+      <tr> <th width="25%">{{'plugin.coupon.amount'|trans}}</th>
         <td width="75%">
           <span class="money-text">{{ order.couponDiscount }}</span>
           {% if order.priceType == "RMB" %}
@@ -56,40 +56,40 @@
       {% if setting("coin.coin_enabled")|default(0) == 1 %}
       <tr> 
         <th width="25%">
-          {% trans with {'%coin_name%': setting('coin.coin_name')|default("虚拟币"|trans)} %}%coin_name%支付{% endtrans %}
+          {% trans with {'%coin_name%': setting('coin.coin_name')|default("finance.coin"|trans)} %}order.payment_pattern.coin{% endtrans %}
         </th>
         <td width="75%">
           <span class="money-text">{{ order.coinAmount }}</span> {{setting("coin.coin_name")}}
         </td>
       </tr>
       {% endif %}
-      <tr> <th width="25%">{{'现金支付'|trans}}</th>
+      <tr> <th width="25%">{{'order.payment_pattern.cash'|trans}}</th>
         <td width="75%">
-          <span class="money-text">{{ order.amount }}</span> {{'元'|trans}}
+          <span class="money-text">{{ order.amount }}</span> {{'site.currency.RMB'|trans}}
         </td>
       </tr>
-      <tr> <th width="25%">{{'支付方式'|trans}}</th>
+      <tr> <th width="25%">{{'order.payment_pattern'|trans}}</th>
            <td width="75%">
             {# {% if order.payment == 'none' %} 暂无 #}
             {{ order_payment(order) }}
            </td>
       </tr>
-      <tr> <th width="25%">{{'银行编号'|trans}}</th>
+      <tr> <th width="25%">{{'order.bank_code'|trans}}</th>
            <td width="75%">
-            {% if order.bank == null %} {{'暂无'|trans}}
+            {% if order.bank == null %} {{'site.data.empty'|trans}}
             {% else %} {{ order.bank }}
             {% endif %}
            </td>
       </tr>
-      <tr> <th width="25%">{{'创建时间'|trans}}</th> <td width="75%">{{ order.createdTime | date('Y-n-d H:i:s') }}</td> </tr>
+      <tr> <th width="25%">{{'order.createdTime'|trans}}</th> <td width="75%">{{ order.createdTime | date('Y-n-d H:i:s') }}</td> </tr>
       {% if order.status == 'paid' %}
-        <tr> <th width="25%">{{'付款时间'|trans}}</th> <td width="75%">{% if not order.paidTime == 0 %} {{ order.paidTime | date('Y-n-d H:i:s') }} {% endif %}</td> </tr>
+        <tr> <th width="25%">{{'order.pay_time'|trans}}</th> <td width="75%">{% if not order.paidTime == 0 %} {{ order.paidTime | date('Y-n-d H:i:s') }} {% endif %}</td> </tr>
         {% if order.token %}
-          <tr> <th width="25%">{{'商户订单号'|trans}}</th> <td width="75%">{{order.token}}</td> </tr>
+          <tr> <th width="25%">{{'order.token_id'|trans}}</th> <td width="75%">{{order.token}}</td> </tr>
         {% endif %}
       {% endif %}
       <tr>
-        <th width="25%">{{'特殊操作'|trans}}</th>
+        <th width="25%">{{'user.orders.detail.special_operations'|trans}}</th>
         <td width="75%">{{ order.edit[0]|default('--') }}</td>
       </tr>
     </table>
@@ -100,9 +100,9 @@
       <table class="table">
         <thead>
           <tr>
-            <th width="50%">{{'日志信息'|trans}}</th>
-            <th width="25%">{{'操作人'|trans}}</th>
-            <th width="25%">{{'创建时间'|trans}}</th>
+            <th width="50%">{{'user.orders.detail.log_info'|trans}}</th>
+            <th width="25%">{{'user.orders.detail.operator'|trans}}</th>
+            <th width="25%">{{'user.orders.detail.log_createdTime'|trans}}</th>
           </tr>
         </thead>
         <tbody>
@@ -132,7 +132,7 @@
         </tbody>
       </table>
     {% else %}
-      <div class="empty">{{'暂无交易日志'|trans}}!</div>
+      <div class="empty">{{'user.orders.detail.empty'|trans}}!</div>
     {% endif %}
   </div>
 

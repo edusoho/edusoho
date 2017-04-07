@@ -1,6 +1,6 @@
 {% extends 'settings/layout.html.twig' %}
 
-{% block title %}{{'实名认证'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'user.settings.verification'|trans}} - {{ parent() }}{% endblock %}
 {% set side_nav = 'approval' %}
 
 {% if app.user.approvalStatus not in ['approving', 'approved'] %}
@@ -11,8 +11,7 @@
 
     {% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
 
-        {% block heading %}
-          {{'实名认证'|trans}}
+        {% block heading %}  {{'user.settings.verification.content_title'|trans}}
         {% endblock %}
 
         {% block body %}
@@ -24,18 +23,18 @@
                             <div class="help-block approval">
                                 <label class="col-md-2 control-label" ></label>
                                 {% if app.user.approvalStatus == 'approving' %}
-                                    <div class="alert alert-info" role="alert">{{'正在实名认证中，管理员会尽快答复您。'|trans}}
+                                    <div class="alert alert-info" role="alert">{{'user.settings.verification.approving_tips'|trans}}
                                     </div>
                                 {% elseif  app.user.approvalStatus == 'approved' %}
-                                    <div class="alert alert-success" role="alert">{{'恭喜您，已通过实名认证！'|trans}}
+                                    <div class="alert alert-success" role="alert">{{'user.settings.verification.approved_tips'|trans}}
                                     </div>
                                 {% elseif  app.user.approvalStatus == 'unapprove' %}
-                                    <div class="alert alert-warning" role="alert">{{'您尚未实名认证。'|trans}}
+                                    <div class="alert alert-warning" role="alert">{{'user.settings.verification.unapprove_tips'|trans}}
                                     </div>
                                 {% elseif app.user.approvalStatus == 'approve_fail' %}
-                                    <div class="alert alert-info" role="alert">
-                                        {{'实名认证审核尚未通过，请参照通知中的信息，修改后重新认证。'|trans}}
-                                    </div>
+                                    <p class="color-danger" >
+                                        {{'user.settings.verification.approve_failed_tips'|trans}}
+                                    </p>
                                 {% endif %}
                             </div>
 
@@ -43,7 +42,7 @@
 
                             <div class="form-group">
                                 <div class="col-md-2 control-label">
-                                    <label for="truename">{{'真实姓名'|trans}}</label>
+                                    <label for="truename">{{'user.fileds.realname'|trans}}</label>
                                 </div>
                                 <div class="col-md-8 controls">
                                     {% if  app.user.approvalStatus in ['approved']  %}
@@ -56,7 +55,7 @@
 
                             <div class="form-group">
                             <div class="col-md-2 control-label">
-                                <label for="idcard">{{'身份证号'|trans}}</label>
+                                <label for="idcard">{{'user.fields.idcard_label'|trans}}</label>
                             </div>
                             <div class="col-md-8 controls">
                                 {% if  app.user.approvalStatus in ['approved']  %}
@@ -69,16 +68,16 @@
                             {% if app.user.approvalStatus != 'approved' %}
                             <div class="form-group">
                                 <div class="col-md-2 control-label">
-                                        <label>{{'照片要求'|trans}}</label>
+                                        <label>{{'user.settings.verification.photo_require'|trans}}</label>
                                 </div>
-                                <div class="col-md-8 form-control-static">
-                                    {{'<p class="color-warning">证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。<br />图片格式支持jpg、gif、png，每张图片文件大小不能超过2M。</p>'|trans|raw}}
+                                <div class="controls col-md-8 controls">
+                                  <p class="text-warning"> {{'user.settings.verification.photo_require_tips'|trans|raw}}</p>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="col-md-2 control-label">
-                                    <label for="faceImg">{{'身份证正面照'|trans}}</label>
+                                    <label for="faceImg">{{'user.settings.verification.idcard_front_photo'|trans}}</label>
                                 </div>
                                 <div class="col-md-8 form-control-static">
                                     {% if  app.user.approvalStatus in ['approving' , 'approved']  %}
@@ -91,7 +90,7 @@
 
                              <div class="form-group">
                                 <div class="col-md-2 control-label">
-                                    <label for="backImg">{{'身份证反面照'|trans}}</label>
+                                    <label for="backImg">{{'user.settings.verification.idcard_back_photo'|trans}}</label>
                                 </div>
                                 <div class="col-md-8 form-control-static">
                                     {% if  app.user.approvalStatus in ['approving' , 'approved']  %}
@@ -105,9 +104,9 @@
                             <div class="row">
                                 <div class="col-md-7 col-md-offset-2">
                                     {% if  app.user.approvalStatus in ['approving' , 'approved']  %}
-                                        <button type="submit" class="btn btn-primary" disabled="true">{{'已提交'|trans}}</button>
+                                        <button type="submit" class="btn btn-primary" disabled="true">{{'form.btn.submit_disabled'|trans}}</button>
                                     {% else %}
-                                        <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>
+                                        <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
                                     {% endif %}
                                 </div>
                             </div>

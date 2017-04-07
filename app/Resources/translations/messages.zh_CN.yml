@@ -1,1 +1,694 @@
-Bad credentials.: 用户名或密码错误
+# 全站
+# 整站导航
+site.currency.RMB: 元
+site.date.month: 月
+site.data.empty: 无
+site.datagrid.empty: 暂无记录
+site.dategrid.filter.all_records: 全部记录
+site.dategrid.filter.last_one_week: 最近一周
+site.dategrid.filter.last_two_week: 最近两周
+site.dategrid.filter.last_one_month: 最近一个月
+site.dategrid.filter.last_three_month: 最近三个月
+
+# 用户通用
+user.fields.login_password: 登录密码
+user.fields.pay_password: 支付密码
+user.fileds.microblog: 微博
+user.fileds.wechat: 微信
+user.fileds.qq: QQ
+user.fields.username_label: 用户名
+user.fields.truename_label: 姓名
+user.fields.gender_label: 性别
+user.fields.gender.male: 男
+user.fields.gender.female: 女
+user.fields.idcard_label: 身份证号
+user.fields.mobile_label: 手机号码
+user.fields.mobile_label.bind: 已绑定
+user.fields.mobile_label.no_bind: 未绑定
+user.fields.company_label: 公司
+user.fileds.realname: 真实姓名
+user.fileds.me: 我
+user.fields.following: 关注
+user.fields.fan: 粉丝
+user.fields.no_title: 暂无头衔
+user.fields.no_sign: 暂无签名
+user.fields.no_introduction: 暂无简介
+user.btn.following_btn: 关注
+user.btn.followed_btn: 已关注
+user.btn.send_message_btn: 私信
+user.not_login.tips: >
+  你还没有登录，请先
+  <a href="%loginUrl%">登录或</a>
+  <a href="%registerUrl%">注册！</a>
+
+#财务通用
+finance.income: 收入
+finance.expense: 支出
+finance.income_expense: 收支
+finance.coin: 虚拟币
+finance.balance: 账户余额
+
+#插件
+plugin.charge_coin.recharge: 充 值
+plugin.money_card: 学习卡
+plugin.money_card.use: 使用学习卡
+plugin.coupon: 优惠码
+plugin.coupon.code: 优惠码
+plugin.coupon.amount: 优惠金额
+
+#订单通用
+order.name: 订单名称
+order.createdTime: 创建时间
+order.pay_time: 付款时间
+order.status: 订单状态
+order.status.created: 未完成
+order.status.paid: 已付款
+order.status.cancel: 已关闭
+order.status.refunding: 申请退款
+order.status.refunded: 退款成功
+order.real_pay: 实付(元)
+order.buyers: 购买者
+order.id: 订单号
+order.token_id: 商户订单号
+order.sn: 流水号
+order.price: 订单价格
+order.paid_time: 成交时间
+order.bank_code: 银行编号
+order.payment_pattern: 支付方式
+order.payment_pattern.coin: %coin_name%支付
+order.payment_pattern.school: 网校支付
+order.payment_pattern.balance: 余额支付
+order.payment_pattern.alipay: 支付宝
+order.payment_pattern.wxpay: 微信支付
+order.payment_pattern.heepay: 网银支付
+order.payment_pattern.quickpay: 快捷支付
+order.payment_pattern.llpay: 连连支付
+order.payment_pattern.cash: 现金支付
+order.payment_pattern.other: 其他支付
+
+# 上传模块
+upload.titile: 上传附件
+
+
+# 课程
+course: 课程
+course.price.RMB: %price%元
+course.origin_price.RMB: %originPrice%元
+course.price.free: 免费
+course.price.limited_time_free: 限免
+course.price.discount: %discount%折
+
+#公开课
+open_course: 公开课
+open_course.live: %live%直播
+open_course.status.live: 正在直播
+open_course.status.living: 即将直播
+
+# 班级
+classroom: 班级
+classroom.courses_count: 共%courseNum%门课程
+
+# 表单通用
+form.field.optional: 选填
+form.field.privacy_public: 公开
+form.btn.modify: 修改
+form.btn.set: 设置
+form.btn.publish: 发布
+form.btn.reset: 重置
+form.btn.view: 查看
+form.btn.bind: 绑定
+form.btn.search: 搜索
+form.btn.reply: 发表
+form.btn.bind_cancel: 取消绑定
+form.btn.submit: 提交
+form.btn.login: 登录
+form.btn.save: 保存
+form.btn.detail: 详情
+form.btn.close: 关闭
+form.btn.cancel: 取消
+form.btn.confirm: 确定
+form.btn.insert: 插入
+form.btn.delete: 删除
+form.btn.submit_disabled: 已提交
+form.btn.reset_password: 重设密码
+form.btn.send: 发送
+form.btn.upload: 上传
+form.btn.upload.submiting: 正在上传...
+form.btn.delete.submiting: 正在删除...
+form.btn.reply.submiting: 正在发表回复
+form.btn.save.submiting: 正在保存...
+form.btn.publish.submiting: 正在创建...
+form.btn.submit.submiting: 正在提交...
+form.btn.send.submiting: 正在发送...
+form.btn.modify.submiting: 正在修改...
+form.checkbox.public: 公开
+form.placeholder.max_int: 最大值为9位整数
+form.placeholer.two_decimal_places: 保留到2位小数
+
+# 用户登录
+user.login.page_title: 登录账号
+user.login.account_label: 账号
+user.login.account_placeholder: 邮箱/手机/用户名
+user.login.password_label: 密码
+user.login.password_placeholder: 密码
+user.login.remember_me: 记住密码
+user.login.submit_button: 登录
+user.login.find_password: 找回密码
+user.login.ask_register: 还没有注册帐号？
+user.login.go_register: 立即注册
+
+# 用户注册
+user.register.page_title: 注册帐号
+user.register.account_with_email_label: 手机
+user.register.account_with_email_placeholder: 填写你常用的邮箱作为登录帐号
+user.register.account_with_mobile_label: 手机
+user.register.account_with_mobile_placeholder: 填写你常用的邮箱作为登录帐号
+user.register.account_with_mobile_or_email_label: 手机/邮箱
+user.register.account_with_mobile_or_email_placeholder: 填写你常用的邮箱或手机号码作为登录帐号
+user.register.username_label: 用户名
+user.register.username_label_placeholder: 中、英文均可，最长18个英文或9个汉字
+user.register.password_label: 密码
+user.register.password_label_placeholder: 5-20位英文、数字、符号，区分大小写
+user.register.invite_code_label: 邀请码
+user.register.invite_code_placeholder: 如果您有邀请码，请填写您的邀请码
+user.register.i_agree: 我已阅读并同意
+user.register.terms: 服务协议
+user.register.submit_button: 注册
+
+# 用户个人设置
+user.settings: 个人设置
+user.settings.basic.page_title: 基础信息
+user.settings.menu_heading: 个人设置
+user.settings.basic_info_menu: 基础信息
+user.settings.avatar_menu: 头像设置
+user.settings.verification_menu: 实名认证
+user.settings.security_menu: 安全设置
+user.settings.email_menu: 邮箱设置
+user.settings.teachers_qualification_menu: 教师资格申请
+user.settings.oauth_menu: 第三方登录
+
+# 个人设置模块-基础信息
+user.settings.profile.no_bind_mobile_tips: 还没绑定手机号码，
+user.settings.profile.bind_mobile_btn: 前去绑定
+
+# 个人设置模块-安全设置
+user.settings.security.sms_code: 短信验证码
+user.settings.security.sms_code_tips: 输入短信验证码
+user.settings.security.get_sms_code_btn: 获取短信验证码
+user.settings.security.mobile: 手机号码
+user.settings.security.bind_mobile: 已绑定手机号
+user.settings.security.login_password: 您的登录密码
+user.settings.security.content_title: 安全设置
+user.settings.security.high_level: 安全等级：高
+user.settings.security.middle_level: 安全等级：中
+user.settings.security.low_level: 安全等级：低
+user.settings.security.login_password_tips: 登录网校时需要输入的密码
+user.settings.security.pay_password_tips: 在网校进行消费行为时需要输入的密码
+user.settings.security.questions: 安全问题
+user.settings.security.questions_tips: 通过设置并且验证安全问题，保护帐号密码安全
+user.settings.security.mobile_bind: 手机绑定
+user.settings.security.mobile_bind_tips: 增加账户登录、购买课程时的安全性，同时还可以找回登录密码，支付密码。
+user.settings.security.password_modify: 密码修改
+user.settings.security.password_modify.content_title: 安全设置
+user.settings.security.password_modify.bread_crumbs: >
+  <li><a href="%settingSecurityUrl%">安全设置</a></li>
+  <li class="active">登录密码修改</li>
+user.settings.security.password_modify.current_password: 当前密码
+user.settings.security.password_modify.new_password: 新密码
+user.settings.security.password_modify.confirm_password: 确认密码
+
+
+user.settings.security.no_password_tips: >
+  <p>当前帐号从第三方帐号直接登录时创建，尚未设置密码。</p>
+  <p>为了帐号的安全，请通过邮箱找回密码的方式，重设密码！</p>
+  <p><a href="%passwordResetUrl%" class='btn btn-primary'>现在就去重设密码</a></p>
+user.settings.security.password_reset: 重设密码
+user.settings.security.password_reset.content_title: 重设密码
+user.settings.security.password_reset.email: 邮箱地址
+user.settings.security.password_reset.email.step_one.email_tips: 请输入你在%name%注册时填写的邮箱地址
+user.settings.security.password_reset.email.step_one.send_email_submiting: 正在发送重设密码邮件
+user.settings.security.password_reset.email.step_two.content_title: 重设密码
+user.settings.security.password_reset.email.step_two.goto: 请到
+user.settings.security.password_reset.email.step_two.email_tips: 查阅来自%site.name%的邮件, 从邮件重设你的密码。
+user.settings.security.password_reset.email.step_two.check_email_btn: 登录邮箱查收邮件
+user.settings.security.password_reset.mobile: 手机号码
+user.settings.security.password_reset.success: 重设密码成功
+user.settings.security.password_reset.success.content_title: 重设密码成功
+user.settings.security.password_reset.success.tips: 新密码设置成功，请重新登录。
+
+user.settings.security.pay_password_set: 设置支付密码
+user.settings.security.pay_password_set.password_forget: 忘记支付密码？
+user.settings.security.pay_password_set.content_title: 安全设置
+user.settings.security.pay_password_set.bread_crumbs: >
+  <li><a href="%settingSecurityUrl%">安全设置</a></li>
+  <li class="active">设置支付密码</li>
+user.settings.security.pay_password_set.new_pay_password: 新支付密码
+user.settings.security.pay_password_set.old_pay_password: 旧的支付密码
+user.settings.security.pay_password_set.confirm_pay_password: 确认支付密码
+user.settings.security.pay_password_find.content_title: 安全设置
+user.settings.security.pay_password_find.bread_crumbs: >
+  <li><a href="%settingSecurityUrl%">安全设置</a></li>
+  <li class="active">找回支付密码</li>
+user.settings.security.pay_password_find.by_question: 通过安全问题找回
+user.settings.security.pay_password_find.by_question.answer: 安全问题答案
+user.settings.security.pay_password_find.by_mobile: 通过手机找回
+user.settings.security.pay_password_find.by_mobile.change: 修改手机号？
+
+user.settings.security.questions.answer: 答案
+user.settings.security.questions.content_title: 安全设置
+user.settings.security.questions.first_question: 安全问题1
+user.settings.security.questions.second_question: 安全问题2
+user.settings.security.questions.third_question: 安全问题3
+user.settings.security.questions.setting.warning: 安全问题一经设置，不可再次修改。
+user.settings.security.questions.setting.bread_crumbs: >
+  <li><a href="%settingSecurityUrl%">安全设置</a></li>
+  <li class="active">设置安全问题</li>
+user.settings.security.questions.setting.first_question_answer: 安全问题1答案
+user.settings.security.questions.setting.second_question_answer: 安全问题2答案
+user.settings.security.questions.setting.third_question_answer: 安全问题3答案
+user.settings.security.questions.check.bread_crumbs: >
+  <li><a href="%settingSecurityUrl%">安全设置</a></li>
+  <li class="active">查看安全问题</li>
+user.settings.security.mobile_bind.content_title: 绑定手机
+user.settings.security.mobile_bind.bread_crumbs: >
+  <li><a href="%settingSecurityUrl%">安全设置</a></li>
+  <li class="active">手机号码绑定</li>
+
+# 个人设置模块-基础信息
+user.settings.basic_info: 基础信息
+user.settings.basic_info.content_title: 基础信息
+user.settings.basic_info.occupation: 职业
+user.settings.basic_info.rank: 头衔
+user.settings.basic_info.personal_signature: 个人签名
+user.settings.basic_info.personal_space: 个人空间
+user.settings.basic_info.self_introduction: 自我介绍
+user.settings.basic_info.alter_description: 设置头衔、自我介绍并保存后，即可开始创建课程
+
+# 个人设置模块-实名认证
+user.settings.verification: 实名认证
+user.settings.verification.content_title: 实名认证
+user.settings.verification.photo_require: 照片要求
+user.settings.verification.photo_require_tips: 证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。图片格式支持jpg、gif、png，每张图片文件大小不能超过2M
+user.settings.verification.idcard_front_photo: 正面照片
+user.settings.verification.idcard_back_photo: 反面照片
+user.settings.verification.approving_tips: 正在实名认证中，管理员会尽快答复您。
+user.settings.verification.approved_tips: 恭喜您，已通过实名认证！
+user.settings.verification.unapprove_tips: 您尚未实名认证
+user.settings.verification.approve_failed_tips: 实名认证审核尚未通过，请参照通知中的信息，修改后重新认证。
+
+# 个人设置模块-头像设置
+user.settings.avatar: 头像设置
+user.settings.avatar.page_title: 头像设置
+user.settings.avatar.crop: 头像图片
+user.settings.avatar.content_title: 头像设置
+user.settings.avatar.current_avatar: 当前头像
+user.settings.avatar.partner_avatar: 论坛头像
+user.settings.avatar.upload_hint: >
+  你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。
+user.settings.avatar.upload_btn: 上传新头像
+user.settings.avatar.using_current_avatar: 使用该头像
+user.settings.avatar.setup_hint: 请设置自定义头像。
+user.settings.avatar.crop_hint: 提示：请选择图片裁剪区域。
+
+# 个人设置模块-邮箱设置
+user.settings.email: 邮箱设置
+user.settings.email.content_title: 邮箱设置
+user.settings.email.no_change_email_tips: 管理员尚未设置邮件服务器，不能更改邮箱地址。
+user.settings.email.current_email: 当前登录邮箱
+user.settings.email.verified: 已验证
+user.settings.email.unverified_tips: 邮箱地址尚未验证，
+user.settings.email.verify_btn: 去验证
+user.settings.email.setup_email_tips: 您还未设置邮箱，请在下方设置你的新邮箱。
+user.settings.email.new_email: 新登录邮箱
+user.settings.email.verify_password_tips: 设置新的登录邮箱，需要校验当前的网站登录密码
+
+# 个人设置模块-第三方登录
+user.settings.oauth: 第三方登录
+user.settings.oauth.content_title: 第三方登录
+user.settings.oauth.weixin: 微信登录
+
+# 账户中心模块
+user.account_center: 账户中心
+user.menu_heading: 账户中心
+user.account_menu: 我的账户
+user.order_menu: 我的订单
+user.cards_menu: 我的卡包
+user.vip_history_menu: 会员记录
+
+# 账户中心模块-我的账户
+user.account.empty: 暂无记录
+user.account.coin_introductions: %coin_name%说明
+user.account.coin_image: 虚拟币图片
+user.account.my_coin: 我的%coin_name%
+user.account.my_coin.inflow: 充值记录
+user.account.my_coin.outflow: 消费记录
+user.account.my_coin.recharge: 学习卡充值
+user.account.my_bill: 我的现金账单
+user.account.my_invite_code: 我的邀请码
+user.account.my_invite_code.invite: 邀请好友
+user.account.my_invite_code.invite.modal_title: 分享邀请链接
+user.account.my_invite_code.invite.copy_btn: 复制到剪贴板
+
+user.account.other_invite_code: TA的邀请码
+user.account.other_invite_code.modal_title: 填写TA的邀请码
+user.account.other_invite_code.invite_code: TA的邀请码
+
+user.account.other_invite_code.reward_after_custom_tips: 填写TA的邀请码，当您第一次消费后，TA会获得邀请奖励。
+user.account.other_invite_code.reward_tips: 填写TA的邀请码，TA会获得邀请奖励。
+
+user.account.my_invite_code.no_reward_tips: 给TA分享您的邀请码或者邀请链接。
+user.account.my_invite_code.reward_after_consume_tips: 给TA分享您的邀请码或者邀请链接，TA注册后将获得%promoted_user_value%元优惠券，TA在消费后您将获得%promote_user_value%元优惠券。
+user.account.my_invite_code.reward_after_register_tips: 给TA分享您的邀请码或者邀请链接，TA注册后将获得%promoted_user_value%元优惠券，同时您将获得%promote_user_value%元优惠券。
+user.account.my_invite_code.invitees: 邀请对象
+user.account.my_invite_code.invite_time: 邀请时间
+user.account.my_invite_code.invite_rewords: 邀请奖励
+user.account.my_invite_code.invite_rewords_time: 奖励获取时间
+user.account.my_invite_code.close: 邀请码功能已关闭
+
+# 账户中心模块-我的订单
+user.orders: 我的订单
+user.orders.content_title: 我的订单
+user.orders.all_orders: 全部订单
+user.orders.created_status: 代付款
+user.orders.paid_status: 已付款
+user.orders.operation: 操作
+user.orders.order_id: 订单号：%sn%
+user.orders.target_course: 所属课程
+user.orders.target_course_deleted: 该课程已被删除
+user.orders.cancel_refund: 取消退款
+user.orders.pay: 去支付
+user.orders.cancel_order: 取消订单
+user.orders.detail.modal_title: 订单详情
+user.orders.detail.special_operations: 特殊操作
+user.orders.detail.log_info: 日志信息
+user.orders.detail.operator: 操作人
+user.orders.detail.log_createdTime: 创建时间
+user.orders.detail.empty: 暂无交易日志
+
+# 账户中心模块-我的卡包
+user.cards: 我的卡包
+user.cards.content_title: 我的卡包
+user.cards.all: 全部
+user.cards.useable: 未使用
+user.cards.used: 已使用
+user.cards.outdate: 已过期
+user.cards.invalid: 已作废
+user.cards.moneycard_not_install_tips: 网站没有开启%coin_name%功能,学习卡功能暂时没法使用
+
+#用户通知模块
+notification: 通知
+notification.user_notification: 通知
+notification.user_notification.content_title: 通知
+notification.site_notification: 全站站内通知
+notification.site_notification.publish_time: 发布时间
+notification.site_notification.empty: 通知已经被管理员删除
+
+#用户私信模块
+message: 私信
+message.content_title: 私信
+message.empty: 暂无私信
+
+#用户写私信模块
+message.send: 写私信
+message.send.content_title: 写私信
+message.send.receiver_name: 收信人用户名
+message.send.message_content: 想要说的话
+
+#用户私信对话模块
+message.chat: 私信
+message.chat.content_title: 与%nickname%的私信对话
+message.chat.content_tips: 请输入私信内容
+message.chat.send_for: 发给
+message.chat.unread_number: %unreadNum%条未读
+message.chat.total_number: 共%messageNum%条
+
+#私信模块通用button
+message.btn.delete: 删除
+message.btn.back: 返回我的私信
+message.btn.send: 写私信
+
+# 个人主页模块
+user.homepage: %nickname%的个人主页
+user.homepage.introductions: 个人介绍
+user.homepage.teaching_courses: 在教课程
+user.homepage.teaching_classrooms: 在教%classroomName%
+user.homepage.learning_courses: 在学课程
+user.homepage.learning_classrooms: 在学%classroomName%
+user.homepage.favorite_courses: 收藏课程
+user.homepage.joined_group: 加入小组
+user.homepage.following_fan: 关注 / 粉丝
+
+# 个人主页模块-个人介绍
+user.homepage.introductions.empty: 暂无介绍
+
+#个人主页模块-在教课程
+user.homepage.teaching_courses.empty: 无在教的课程
+
+#个人主页模块-在学课程
+user.homepage.learning_courses.empty: 无在学的课程
+
+#个人主页模块-收藏课程
+user.homepage.favorite_courses.empty: 无收藏的课程
+
+#个人主页模块-在教班级
+user.homepage.teaching_classrooms.empty: 无在教的%classroomName%
+
+#个人主页模块-在学班级
+user.homepage.learning_classrooms.empty: 无在学的%classroomName%
+
+#个人主页模块-加入小组
+user.homepage.joined_group.join: 加入小组
+user.homepage.joined_group.manage: 管理小组
+user.homepage.joined_group.empty: 暂无小组信息
+
+#个人主页模块-关注/粉丝
+user.homepage.following_fan.following_empty: 无关注的人
+user.homepage.following_fan.fan_empty: 无粉丝
+
+# 主页模块-头部
+homepage: 首页
+homepage.header.search: 搜索
+homepage.header.login: 登录
+homepage.header.logout: 退出登录
+homepage.header.register: 注册
+homepage.header.my_course: 我的教学
+homepage.header.my_learning: 我的学习
+homepage.header.notice: 通知
+homepage.header.message: 私信
+homepage.header.personal_menu: 个人主页
+homepage.header.settings_menu: 个人设置
+homepage.header.my_teaching_menu: 我的教学
+homepage.header.my_learning_menu: 我的学习
+homepage.header.account_menu: 账户中心
+homepage.header.admin_menu: 管理后台
+
+# 师资力量模块
+teacher.introductions: 师资介绍
+teacher.SEO.keywords: 师资介绍%name%
+teacher.SEO.description: %name%的师资介绍。
+teacher.content_title: 所有教师
+
+# 自定义页面模块-常见问题
+custom_page.empty: 当前页面尚未编辑内容，请在管理后台编辑。
+
+# 搜索模块
+search.empty: 没有搜到相关课程，请换个关键词试试！
+search.content_title: 搜索
+search.relative_courses_result: 共找到<span>%count%</span>门<span>“%keywords%”</span>相关课程
+search.result_course_copy: 共找到<span>%count%</span>门课程
+search.all_courses: 全部课程
+search.vip_courses: 会员课程
+search.free_courses: 免费课程
+search.live_courses: 直播课程
+
+# 云搜索模块
+cloud_search.content_title: 搜索
+cloud_search.result_sum: 个
+cloud_search.common_keywords: 常用关键字
+cloud_search.result: 搜索结果
+cloud_search.all_courses: 全部课程
+cloud_search.input_placeholder: 可搜索课程、教师、话题、资讯
+
+cloud_search.course: 课程
+cloud_search.course.result: >
+  为您找到课程结果约 <span class="color-danger">%counts%</span>个
+cloud_search.course.learning: 正在学
+cloud_search.course.evaluate: %ratingNum%人评价
+cloud_search.course.learned: (%studentNum%)人学习
+cloud_search.course.task: 课时
+cloud_search.course.recommend.content_title: 推荐课程
+cloud_search.course.recommend.empty: 暂无推荐课程
+
+cloud_search.teacher: 教师
+cloud_search.teacher.result: >
+  为您找到教师结果约 <span class="color-danger">%counts%</span>个
+cloud_search.teacher.recommend.content_title: 推荐教师
+cloud_search.teacher.recommend.empty: 暂无推荐教师信息！
+
+cloud_search.thread: 小组话题
+cloud_search.thread.result: >
+  为您找到话题结果约 <span class="color-danger">%counts%</span>个
+cloud_search.thread.reply: 回复
+cloud_search.thread.from: 来自
+cloud_search.thread.recommend.content_title: 热门小组
+
+cloud_search.article: 资讯
+cloud_search.article.result: >
+  为您找到资讯结果约 <span class="color-danger">%counts%</span>个
+cloud_search.article.recommend.content_title: 热门资讯
+cloud_search.article.recommend.empty: 暂无热门资讯
+
+# 小组
+group: 小组频道
+group.page_title: 小组
+group.homepage: 小组主页
+group.input_placeholder: 小组搜索
+group.create_btn: 创建小组
+group.my_group_btn: 我的小组
+group.hot_group.content_title: 热门小组
+group.hot_group.empty: 暂无小组信息！
+group.recent_article.content_title: 最近话题
+group.my_group.content_title: 我的小组
+group.new_group.content_title: 新晋小组
+group.search: 搜索
+group.search.homepage: 小组主页
+group.search.search_group_name: 搜索小组
+group.search.content_title: 所有小组
+
+group.thread.title: 标题
+group.thread.stick_label: 置顶
+group.thread.essence_label: 精华
+group.thread.reward_label: 奖
+group.thread.share_label: 分享
+group.thread.favorite_btn: 收藏
+group.thread.favorited_btn: 已收藏
+group.thread.created_time: 发表于%createdTime%
+group.thread.hit_num: %hitNum%次查看
+group.thread.wanted: 悬赏:%rewardCoin%%coin_name%
+
+group.thread.attachments_upload: 上传附件
+group.thread.attachments_upload.upload_btn: 上传
+group.thread.attachments_upload.upload_tips: >
+  <span> (大小不能超过
+  <span style="color:red;">2</span>
+  MB，文件类型支持png ,jpg ,gif ,doc ,xls ,txt ,rar ,zip .)
+  </span>
+group.thread.attachments_upload.file_name: 文件名
+group.thread.attachments_upload.description: 描述
+group.thread.attachments_upload.operations: 操作
+group.thread.attachments_upload.delete_btn: 删除
+group.thread.attachments_upload.tips: 用户下载附件扣除的%name%会在扣除50%之后添加到您的账户
+group.thread.attachments_download: 附件下载
+group.thread.attachments_download.description: 描述：%description%
+group.thread.attachments_download.upload_time: 上传于 %createdTime%
+group.thread.attachments_download.price: 售价:%coin%%coin_name%
+group.thread.attachments_download.free: 免费
+group.thread.attachments_download.times: 下载次数：%hitNum%
+group.thread.attachments_download.delete_btn: 删除
+group.thread.attachments_download.delete_warning: 确定删除此附件
+
+group.thread.check_hide_content: 查看隐藏内容
+group.thread.edit_btn: 编辑
+group.thread.cancel_essence_btn: 取消加精
+group.thread.set_essence_btn: 加精
+group.thread.stick_cancel_btn: 取消置顶
+group.thread.stick_btn: 置顶
+group.thread.cancel_reward_btn: 取消悬赏
+group.thread.set_reward_btn: 悬赏
+group.thread.view_all_btn: 查看全部
+group.thread.view_owner_btn: 只看楼主
+group.thread.asc_see_btn: 顺序查看
+group.thread.desc_see_btn: 倒序查看
+group.thread.best_reply: 最佳回答
+group.thread.reply_numbers: %postNum%回复
+group.thread.desc_floor: %postCount%楼
+group.thread.asc_floor: %loop.index%楼
+group.thread.delete_btn: 删除
+group.thread.delete_tips: 确定删除这条回复
+group.thread.accept_btn: 采纳
+group.thread.accept_tips: 确定采纳这条回复
+group.thread.reply_btn: 回复
+group.thread.reply: 发表回复
+group.thread.eply.content_title: 回复内容
+group.thread.reply_content: 回复内容
+group.thread.collapse_btn: 收起
+group.thread.content: 内容
+group.thread.owner: 话题作者
+group.thread.owner.empty: 无
+
+group.thread.insert_hide_content: 插入隐藏内容
+group.thread.insert_hide_content_title: 请输入要隐藏的内容
+group.thread.insert_hide_content_tips: 隐藏话题获得的%coin_name%会在扣除50%之后添加到您的账户
+group.thread.check_need: 查看所需
+group.thread.check_need_tips: 回复话题后可见
+
+group.thread.create.content_title: 发表话题
+group.thread.create.attachments: 附件
+group.thread.create.analysis_attachment: 解析附件
+group.thread.create.question_stem_attachment: 题干附件
+group.thread.create.preview: 预览
+group.thread.edit.content_title: 编辑话题
+
+group.detail.group_name: %title%小组
+group.detail.introduction: 小组介绍
+group.detail.introduction.empty: 暂无简介
+group.detail.join_group_btn: 加入小组
+group.detail.quit_group_btn: 退出小组
+group.detail.create_article: 发表话题
+group.detail.search_input_placeholder: 组内搜索
+group.detail.member: 组员
+group.detail.leader: 组长
+group.detail.vice_leader: 副组长
+group.detail.my_group_btn: 我的小组
+group.detail.articles: 话题
+group.detail.replies: 回复
+group.detail.member_number: %memberNum%个成员
+group.detail.thread_number: %threadNum%个话题
+group.detail.created_time: 创建时间：%createdTime%
+
+group.detail.group_homepage: 小组首页
+group.detail.all_btn: 全部
+group.detail.essence_btn: 精华
+group.detail.wanted_btn: 悬赏
+group.detail.order_btn: 排序
+group.detail.newest_order_btn: 最新发帖
+group.detail.last_reply_order_btn: 最后回复
+group.detail.reply_count_order_btn: 回复数
+group.detail.group_leader: 小组组长
+group.detail.group_leader.empty: 无
+group.detail.group_members: 小组成员
+group.detail.group_members.leader: 组长
+group.detail.group_members.vice_leader: 副组长
+group.detail.group_members.vice_leader.empty: 还没有副组长！
+group.detail.group_members.vice_leader.cancel_member_btn: 踢出成员
+group.detail.group_members.vice_leader.setup_btn: 设置副组长
+group.detail.group_members.cancel_vice_leader_btn: 撤销副组长
+group.detail.group_members.members: 组员
+group.detail.group_members.members.empty: 还没有小组成员！
+group.detail.group_settings: 小组设置
+group.detail.group_settings.group_edit: 编辑小组
+group.detail.group_settings.group_edit.name: 小组名称
+group.detail.group_settings.group_edit.introduction: 小组介绍
+group.detail.group_settings.logo_setup: 图标设置
+group.detail.group_settings.logo_setup.current_logo: 当前图标
+group.detail.group_settings.logo_setup.tips: >
+  你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。推荐大小（180*180）
+group.detail.group_settings.logo_setup.upload_btn: 上传新图标
+group.detail.group_settings.background_image_setup: 背景设置
+group.detail.group_settings.background_image_setup.current_image: 当前背景
+group.detail.group_settings.background_image_setup.tips: >
+  你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。推荐大小（1140*150）
+group.detail.new_group_members: 新加组员
+group.detail.new_group_members.empty: 还没有小组成员！
+group.detail.hot_group: 热门小组
+group.detail.hot_group_empty: 暂无小组信息！
+
+# 话题
+article: 话题
+article.reply: 回复
+article.empty: 暂无话题！
+article.status.stick: 置顶
+article.status.essence: 精华
+article.status.reward: 奖
+article.create: 发起了话题
+article.last_reply: 最后回复

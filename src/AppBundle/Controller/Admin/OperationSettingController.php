@@ -87,6 +87,7 @@ class OperationSettingController extends BaseController
             } else {
                 $inviteSetting['get_coupon_setting'] = 0;
             }
+
             $inviteSetting = ArrayToolkit::parts($inviteSetting, array(
                 'invite_code_setting',
                 'promoted_user_value',

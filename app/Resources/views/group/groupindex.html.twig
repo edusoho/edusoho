@@ -1,7 +1,7 @@
 {% extends 'group/layout.html.twig' %}
 {% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/group/index.js']) %}
 
-{% block title %}{{'%title%小组'|trans({'%title%': groupinfo.title})}} {{ parent() }}{% endblock %}
+{% block title %}{{'group.detail.group_name'|trans({'%title%': groupinfo.title})}} {{ parent() }}{% endblock %}
 
 
 {% block keywords %}{{groupinfo.title}}{% endblock %}
@@ -10,11 +10,11 @@
 
 {% block group_main %}
   <div class="panel panel-default">
-    <div class="panel-heading"><h3 class="panel-title">{{'小组介绍'|trans}}</h3></div>
+    <div class="panel-heading"><h3 class="panel-title">{{'group.detail.introduction'|trans}}</h3></div>
     <div class="panel-body">
       {% if paginator.currentPage == paginator.firstPage %}
         <div class="well editor-text">
-          {% if groupinfo.about%} {{groupinfo.about|raw}} {% else %} {{'暂无简介'|trans}} {% endif %}
+          {% if groupinfo.about%} {{groupinfo.about|raw}} {% else %} {{'group.detail.introduction.empty'|trans}} {% endif %}
         </div>
       {% endif %}
     </div>
@@ -22,10 +22,10 @@
   <div class="panel panel-default">
     <div class="panel-body">
       <ul class="nav nav-tabs">
-        <li {% if groupNav=="index" %}class="active"{% endif %}><a href="{{path('group_show',{id:groupinfo.id})}}">{{'小组首页'|trans}}</a></li>
-        <li {% if groupNav=="member" %}class="active"{% endif %}><a href="{{path('group_member',{id:groupinfo.id})}}">{{'小组成员'|trans}}</a></li>
+        <li {% if groupNav=="index" %}class="active"{% endif %}><a href="{{path('group_show',{id:groupinfo.id})}}">{{'group.detail.group_homepage'|trans}}</a></li>
+        <li {% if groupNav=="member" %}class="active"{% endif %}><a href="{{path('group_member',{id:groupinfo.id})}}">{{'group.detail.group_members'|trans}}</a></li>
         {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3%}
-          <li {% if groupNav=="setting" %}class="active" {% endif %}><a  href="{{path('group_set',{id:groupinfo.id})}}">{{'小组设置'|trans}}</a></li>
+          <li {% if groupNav=="setting" %}class="active" {% endif %}><a  href="{{path('group_set',{id:groupinfo.id})}}">{{'group.detail.group_settings'|trans}}</a></li>
         {% endif %}
       </ul>
 
@@ -34,30 +34,30 @@
 
       <ul class="nav nav-pills nav-pills-sm">
 
-        <li{% if condition.type == 'all' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_show',{id:id,num:condition.num,sort:condition.sort,isElite:0})}}">{{'全部'|trans}}</a></li>
+        <li{% if condition.type == 'all' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_show',{id:id,num:condition.num,sort:condition.sort,isElite:0})}}">{{'group.detail.all_btn'|trans}}</a></li>
 
-        <li{% if condition.type == 'elite' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_show',{id:id,type:'elite',num:condition.num,sort:condition.sort})}}">{{'精华'|trans}}</a></li>
+        <li{% if condition.type == 'elite' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_show',{id:id,type:'elite',num:condition.num,sort:condition.sort})}}">{{'group.detail.essence_btn'|trans}}</a></li>
 
         {% if is_feature_enabled('group_reward') %}
-        <li{% if condition.type == 'reward' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_show',{id:id,type:'reward',num:condition.num,sort:condition.sort})}}">{{'悬赏'|trans}}</a></li>
+        <li{% if condition.type == 'reward' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_show',{id:id,type:'reward',num:condition.num,sort:condition.sort})}}">{{'group.detail.wanted_btn'|trans}}</a></li>
         {% endif %}
 
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-            <span class="color-gray">{{'排序：'|trans}}</span>
+            <span class="color-gray">{{'group.detail.order_btn'|trans}}</span>
             {% if condition.sort == 'byLastPostTime' %}
-              {{'最后回复'|trans}}
+              {{'group.detail.last_reply_order_btn'|trans}}
             {% elseif condition.sort == 'byCreatedTime' %}
-              {{'最新发帖'|trans}}
+              {{'group.detail.newest_order_btn'|trans}}
             {% elseif condition.sort == 'byPostNum' %}
-              {{'回复数'|trans}}
+              {{'group.detail.reply_count_order_btn'|trans}}
             {% endif %}
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
-            <li class="{% if condition.sort == 'byCreatedTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byCreatedTime'})}}">{{'最新发帖'|trans}}</a></li>
-            <li class="{% if condition.sort == 'byLastPostTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byLastPostTime'})}}">{{'最后回复'|trans}}</a></li>
-            <li class="{% if condition.sort == 'byPostNum' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byPostNum'})}}">{{'回复数'|trans}}</a></li>
+            <li class="{% if condition.sort == 'byCreatedTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byCreatedTime'})}}">{{'group.detail.newest_order'|trans}}</a></li>
+            <li class="{% if condition.sort == 'byLastPostTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byLastPostTime'})}}">{{'group.detail.last_reply_order'|trans}}</a></li>
+            <li class="{% if condition.sort == 'byPostNum' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byPostNum'})}}">{{'group.detail.reply_count_order'|trans}}</a></li>
           </ul>
         </li>
       </ul>
@@ -74,13 +74,13 @@
 
 {% block group_side %}
   {% if is_groupmember != 0 %}
-    <div class="mbm"><a href="{{path('group_thread_add',{id:groupinfo.id})}}" class="btn btn-success btn-xlg btn-block" role="button"><i class="es-icon es-icon-comment mrs text-xlg"></i>{{'发表话题'|trans}}</a>
+    <div class="mbm"><a href="{{path('group_thread_add',{id:groupinfo.id})}}" class="btn btn-success btn-xlg btn-block" role="button"><i class="es-icon es-icon-comment mrs text-xlg"></i>{{'group.detail.create_article'|trans}}</a>
     </div>
   {% endif %}
   <form class="mbl" action="{{path('group_search',{id:groupinfo.id})}}" method="get">
   <div class="search-with-btn">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-    <input type="text" class="form-control" placeholder="{{'组内搜索'|trans}}" name="keyWord">
+    <input type="text" class="form-control" placeholder="{{'group.detail.search_input_placeholder'|trans}}" name="keyWord">
     <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
   </div>
   </form>
@@ -95,30 +95,30 @@
             <p>{{ web_macro.user_link(user , '') }}
 
               {% if is_groupmember==1%}
-              <span class="label label-primary">{{'组员'|trans}}</span>
+              <span class="label label-primary">{{'group.detail.member'|trans}}</span>
               {% endif %}
 
               {% if is_groupmember==2%}
-              <span class="label label-primary">{{'组长'|trans}}</span>
+              <span class="label label-primary">{{'group.detail.leader'|trans}}</span>
               {% endif %}
 
               {% if is_groupmember==3%}
-              <span class="label label-primary">{{'副组长'|trans}}</span>
+              <span class="label label-primary">{{'group.detail.vice_leader'|trans}}</span>
               {% endif %}
             </p>
-            <a href="{{ path ('my_group_member_center') }}" class="btn btn-default btn-sm" role="button">{{'我的小组'|trans}}</a>
+            <a href="{{ path ('my_group_member_center') }}" class="btn btn-default btn-sm" role="button">{{'group.detail.my_group_btn'|trans}}</a>
           </div>
           <hr>
            <p class="group-message clearfix">
-              <span><strong>{{userIsGroupMember.threadNum}}</strong>{{'话题'|trans}}</span>
-              <span><strong>{{userIsGroupMember.postNum}}</strong>{{'回复'|trans}}</span>
+              <span><strong>{{userIsGroupMember.threadNum}}</strong>{{'group.detail.articles'|trans}}</span>
+              <span><strong>{{userIsGroupMember.postNum}}</strong>{{'group.detail.replies'|trans}}</span>
             </p>
         </div>
       </div>
     </div>
   {% endif %}
   <div class="panel panel-default">
-    <div class="panel-heading"><h3 class="panel-title">{{'小组组长'|trans}}</h3></div>
+    <div class="panel-heading"><h3 class="panel-title">{{'group.detail.group_leader'|trans}}</h3></div>
     <div class="panel-body">
       <div class="media group-item">
         <div class="media-left">
@@ -126,7 +126,7 @@
         </div>
         <div class="media-body">
           <div><a class="gray-darker" href="{{path('user_show',{id:groupOwner.id})}}" title="{{groupOwner.nickname}}">{{groupOwner.nickname}}</a></div>
-          <span class="text-sm gray-medium">{{ groupOwner.title|default('无'|trans) }}</span>
+          <span class="text-sm gray-medium">{{ groupOwner.title|default('group.detail.group_leader.empty'|trans) }}</span>
         </div>
       </div>
     </div>
@@ -134,7 +134,7 @@
 
 
   <div class="panel panel-default">
-    <div class="panel-heading"><h3 class="panel-title">{{'新加组员'|trans}}</h3></div>
+    <div class="panel-heading"><h3 class="panel-title">{{'group.detail.new_group_members'|trans}}</h3></div>
     <div class="panel-body">
       {% if recentlyJoinMember %}
         <ul class="user-avatar-list clearfix">
@@ -145,13 +145,13 @@
           {% endfor %}
         </ul>
       {% else %}
-        <div class="empty">{{'还没有小组成员！'|trans}}</div>
+        <div class="empty">{{'group.detail.new_group_members.empty'|trans}}</div>
       {% endif %}
     </div>
   </div>
 
   <div class="panel panel-default">
-    <div class="panel-heading"><h3 class="panel-title">{{'热门小组'|trans}}</h3></div>
+    <div class="panel-heading"><h3 class="panel-title">{{'group.detail.hot_group'|trans}}</h3></div>
     <div class="panel-body">
       <div class="media-group-list">
       {% set hotGroups = data('HotGroup',{'count':3}) %}
@@ -175,7 +175,7 @@
           </div>
         </div>
       {% else %}
-        <div class="empty">{{'暂无小组信息！'|trans}}</div>
+        <div class="empty">{{'group.detail.hot_group_empty'|trans}}</div>
       {% endfor %}
       </div>
 

@@ -1,6 +1,6 @@
 <div class="panel panel-default hot-article">
   <div class="panel-heading">
-    <h3 class="panel-title"><i class="es-icon es-icon-whatshot"></i>{{'热门%article_name%'|trans({'%article_name%': setting('article.name')|default('资讯'|trans)})}}
+    <h3 class="panel-title"><i class="es-icon es-icon-whatshot"></i>{{'cloud_search.article.recommend.content_title'|trans}}</h3>
   </div>
   <div class="panel-body">
     {% if articles %}
@@ -15,7 +15,7 @@
           </div>
       {% endfor %}
     {% else %}
-      <div class="empty">{{'暂无热门资讯'|trans}}</div>
+      <div class="empty">{{'cloud_search.article.recommend.empty'|trans}}</div>
     {% endif %}
   </div>
 </div>

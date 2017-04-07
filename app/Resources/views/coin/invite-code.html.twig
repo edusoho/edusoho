@@ -1,5 +1,5 @@
 {% extends 'coin/layout.html.twig' %}
-{% block title %}{{'我的邀请码'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'user.account.my_invite_code'|trans}} - {{ parent() }}{% endblock %}
 
 
 
@@ -23,14 +23,14 @@
   {% include 'coin/bill-bar.html.twig' %}
   {% if setting('invite.invite_code_setting') == 1 %}
     <p class="clearfix">
-      <span class="label label-primary label-md mrl">{{'我的邀请码'|trans}}</span><span class="mrl text-xlg">{{code}}</span>
+      <span class="label label-primary label-md mrl">{{'user.account.my_invite_code'|trans}}</span><span class="mrl text-xlg">{{code}}</span>
      
       {% if record == null %}
      
-      <a  class="btn btn-primary btn-sm pull-right mlm" href="#modal" data-toggle="modal" id="writeInvite" data-url="{{ path('write_invitecode')}}">{{'TA的邀请码'|trans}}</a>   
+      <a  class="btn btn-primary btn-sm pull-right mlm" href="#modal" data-toggle="modal" id="writeInvite" data-url="{{ path('write_invitecode')}}">{{'user.account.other_invite_code'|trans}}</a>   
       {% endif %}
      
-      <a  class="btn btn-primary btn-sm pull-right" href="#modal" data-toggle="modal" data-url="{{ path('invite_promote_link')}}">{{'邀请好友'|trans}}</a>
+      <a  class="btn btn-primary btn-sm pull-right" href="#modal" data-toggle="modal" data-url="{{ path('invite_promote_link')}}">{{'user.account.my_invite_code.invite'|trans}}</a>
     </p>
     {#
     <div class="clearfix">
@@ -54,33 +54,32 @@
 
     <br>
     <div class="alert alert-warning">
-    {{'给TA分享您的邀请码或者邀请链接'|trans}}
-    {% if setting('invite')|default(false) %}
-      {% if setting('invite.promoted_user_value')|default(false)  %}
-        {{'，TA注册后将获得%promoted_user_value%元优惠券'|trans({'%promoted_user_value%':inviteSetting.promoted_user_value})}}
-      {% endif %}
-
-      {% if setting('invite.promote_user_value')|default(false) %}
-        ，
-        {% if setting('invite.get_coupon_setting')|default(false) %}
-            {{'TA在消费后您将获得%promote_user_value%元优惠券'|trans({'%promote_user_value%':inviteSetting.promote_user_value})}}
+      {% if setting('invite')|default(false) %}
+        {% if setting('invite.promoted_user_value')|default(false) %}
+          {% if setting('invite.promote_user_value')|default(false) %}
+            {% if setting('invite.get_coupon_setting')|default(false) %}
+              {{'user.account.my_invite_code.reward_after_consume_tips'|trans({'%promote_user_value%':inviteSetting.promote_user_value, '%promoted_user_value%': inviteSetting.promoted_user_value})}}
+            {% else %}
+                {{'user.account.my_invite_code.reward_after_register_tips'|trans({'%promote_user_value%':inviteSetting.promote_user_value, '%promoted_user_value%':inviteSetting.promoted_user_value})}}
+            {% endif %}
+          {% endif %}
         {% else %}
-            {{'同时您将获得%promote_user_value%元优惠券'|trans({'%promote_user_value%':inviteSetting.promote_user_value})}}
+          {% if not setting('invite.promote_user_value')|default(false) %}
+            {{ 'user.account.my_invite_code.no_reward_tips'|trans }}
+          {% endif %}
         {% endif %}
+      {% else %}
+        {{ 'user.account.my_invite_code.no_reward_tips'|trans }}
       {% endif %}
-    {{'。'|trans}}
-    {% else %}
-    {{'。'|trans}}
-    {% endif %}
     </div>
 
 <table class="table table-striped table-hover" id="course-table" style="word-break:break-all;">
   <thead>
     <tr>
-      <th>{{'邀请对象'|trans}}</th>
-      <th>{{'邀请时间'|trans}}</th>
-      <th>{{'邀请奖励'|trans}}</th>
-      <th>{{'奖励获取时间'|trans}}</th>
+      <th>{{'user.account.my_invite_code.invitees'|trans}}</th>
+      <th>{{'user.account.my_invite_code.invite_time'|trans}}</th>
+      <th>{{'user.account.my_invite_code.invite_rewords'|trans}}</th>
+      <th>{{'user.account.my_invite_code.invite_rewords_time'|trans}}</th>
     </tr>
   </thead>
   <tbody>
@@ -92,7 +91,7 @@
         <td>{{user.inviteRewardTime|default('-')}}</td>
       </tr>
       {% else %}
-        <tr><td colspan="20"><div class="empty">{{'暂无邀请用户'|trans}}</div></td></tr>
+        <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
       {% endfor %}
   </tbody>
 </table>
@@ -101,7 +100,7 @@
 
   {% else %}
   <div class="well" style="text-align:center;">
-    {{'邀请码功能已关闭'|trans}}
+    {{'user.account.my_invite_code.close'|trans}}
   </div>
   {% endif %}
   </div>
