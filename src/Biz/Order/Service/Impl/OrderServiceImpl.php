@@ -8,7 +8,6 @@ use Biz\Order\Dao\OrderRefundDao;
 use Biz\Order\Service\OrderService;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ExtensionManager;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Order\Dao\OrderDao;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
@@ -106,7 +105,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $order = $this->getOrderDao()->create($order);
 
-        $this->_createLog($order['id'], 'created', $this->getKernel()->trans('创建订单'));
+        $this->_createLog($order['id'], 'created', '创建订单');
         $this->dispatchEvent('order.service.created', new Event($order));
 
         return $order;
@@ -786,11 +785,6 @@ class OrderServiceImpl extends BaseService implements OrderService
     protected function getInviteRecordService()
     {
         return $this->createService('User:InviteRecordService');
-    }
-
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
     }
 
     protected function getSettingService()

@@ -13,7 +13,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         $bannedResult = $this->bannedKeyword($text, $type);
 
         if ($bannedResult['success']) {
-            throw $this->createServiceException($this->getKernel()->trans('您填写的内容中包含敏感词!'));
+            throw $this->createServiceException('您填写的内容中包含敏感词!');
         } else {
             return $this->replaceText($text, $type);
         }
