@@ -65,13 +65,16 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     public function onCourseTeachersCreate(Event $event)
     {
         $teacherIds = $event->getSubJect();
-        $teachers = $this->getCourseMember()->findMembersByUserIds($teacherIds);
+        $teachers = $this->getCourseMemberService()->findMembersByUserIds($teacherIds);
         $teachers = ArrayToolkit::index($teachers, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($teacherIds);
         $users = ArrayToolkit::index($users, 'id');
 
         $course = $event->getArgument('course');
+        if ($course['locked']) {
+            $course = $this->getCourseService()->getCourse($course['parentId']);
+        }
         list($activitys, $liveActivitys) = $this->findActivitysAndLiveActivitys($course);
 
         foreach ($activitys as $mediaId => $activity) {
@@ -89,15 +92,24 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
 
     public function onCourseTeachersDelete(Event $event)
     {
-        $course = $event->getArgument('course');
-        $isPush = $this->canPushLiveMessage($course);
-        if (!$isPush) {
-            return;
-        }
-
         $teacherIds = $event->getSubJect();
-        foreach ($teacherIds as $teacherId) {
-            $this->pushDeleteLiveCourseMember($teacherId);
+        $teachers = $this->getCourseMemberService()->findMembersByUserIds($teacherIds);
+
+        $course = $event->getArgument('course');
+        if ($course['locked']) {
+            $course = $this->getCourseService()->getCourse($course['parentId']);
+        }
+        list($activitys, $liveActivitys) = $this->findActivitysAndLiveActivitys($course);
+
+        foreach ($activitys as $mediaId => $activity) {
+            $isPush = $this->canPushLiveMessage($activity);
+            if (!$isPush) {
+                continue;
+            }
+
+            foreach ($teachers as $teacher) {
+                $this->pushDeleteLiveCourseMember($teacher['id'], $liveActivitys[$mediaId]['liveId']);
+            }
         }
     }
 
@@ -297,7 +309,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $course = $event->getSubject();
         $userId = $event->getArgument('userId');
-        
+
         if ($course['locked']) {
             $course = $this->getCourseService()->getCourse($course['parentId']);
         }
@@ -316,7 +328,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         if ($activity['type'] != 'live') {
             return false;
         }
-        if (time() < $activity['startTime'] || time() > $activity['endTime']) {
+        if (time() > $activity['endTime']) {
             return false;
         }
         return true;
