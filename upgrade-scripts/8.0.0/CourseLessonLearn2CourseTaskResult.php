@@ -25,18 +25,6 @@ class CourseLessonLearn2CourseTaskResult extends AbstractMigrate
             );
         }
 
-        // if (!$this->isIndexExist('course_task_result', 'courseId_userId')) {
-        //     $this->getConnection()->exec("
-        //         ALTER TABLE course_task_result ADD INDEX courseId_userId (`courseId`,`userId`);
-        //     ");
-        // }
-
-        // if (!$this->isIndexExist('course_task_result', 'courseTaskId_userId')) {
-        //     $this->getConnection()->exec("
-        //         ALTER TABLE course_task_result ADD INDEX courseTaskId_userId (`courseTaskId`,`userId`);
-        //     ");
-        // }
-
         if (!$this->isIndexExist('course_task_result', 'courseTaskId_activityId')) {
             $this->getConnection()->exec("
                 ALTER TABLE course_task_result ADD INDEX courseTaskId_activityId (`courseTaskId`,`activityId`);
@@ -47,7 +35,6 @@ class CourseLessonLearn2CourseTaskResult extends AbstractMigrate
             $sql = "delete from course_task_result where id<= (select max(id) from course_lesson_learn)";
             $this->exec($sql);
         }
-
 
         $countSql = 'SELECT count(*) FROM `course_lesson_learn`';
         $count = $this->getConnection()->fetchColumn($countSql);

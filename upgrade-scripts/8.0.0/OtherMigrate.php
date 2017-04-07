@@ -128,10 +128,12 @@ class OtherMigrate extends AbstractMigrate
         $result = $this->getUserByType();
 
         if (empty($result)) {
-            $this->exec("
+            $this->exec(
+                "
                 INSERT INTO `user` (`email`, `verifiedMobile`, `password`, `salt`, `payPassword`, `payPasswordSalt`, `locale`, `uri`, `nickname`, `title`, `tags`, `type`, `point`, `coin`, `smallAvatar`, `mediumAvatar`, `largeAvatar`, `emailVerified`, `setup`, `roles`, `promoted`, `promotedSeq`, `promotedTime`, `locked`, `lockDeadline`, `consecutivePasswordErrorTimes`, `lastPasswordFailTime`, `loginTime`, `loginIp`, `loginSessionId`, `approvalTime`, `approvalStatus`, `newMessageNum`, `newNotificationNum`, `createdIp`, `createdTime`, `updatedTime`, `inviteCode`, `orgId`, `orgCode`, `registeredWay`) VALUES
     ('user_tfo2ex19h@edusoho.net', '', '3DMYb8GyEXk32ruFzw4lxy2elz6/aoPtA5X8vCTWezg=', 'qunt972ow5c48k4wc8k0ss448os0oko', '', '', NULL, '', 'user70rbkm(系统用户)', '', '', 'system', 0, 0, '', '', '', 1, 1, '|ROLE_USER|ROLE_SUPER_ADMIN|', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 'unapprove', 0, 0, '', 1489204100, 1489204100, NULL, 1, '1.', '');
-            ");
+            "
+            );
 
             $result = $this->getUserByType();
 
@@ -145,7 +147,9 @@ class OtherMigrate extends AbstractMigrate
     private function migrate12()
     {
         if ($this->isFieldExist('course_draft', 'lessonId')) {
-            $this->exec("ALTER TABLE course_draft CHANGE lessonId activityId INT(10) unsigned NOT NULL COMMENT '教学活动ID';");
+            $this->exec(
+                "ALTER TABLE course_draft CHANGE lessonId activityId INT(10) unsigned NOT NULL COMMENT '教学活动ID';"
+            );
         }
     }
 
@@ -156,21 +160,59 @@ class OtherMigrate extends AbstractMigrate
             $this->exec("UPDATE `classroom` SET `creator` = `headTeacherId` WHERE `creator` = 0;");
         }
     }
-    private function migrate15(){
 
-        $this->exec("UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\Biz\\Discount\\Job\\DiscountEndJob' WHERE `name` = 'DiscountEndJob';");
-        $this->exec("UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\Biz\\Discount\\Job\\DiscountStartJob' WHERE `name` = 'DiscountStartJob';");
-        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\Crontab\\Service\\Impl\\EmptyJob' WHERE `name` = 'EmptyJob';");
-        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\Notification\\Job\\LiveLessonStartNotifyJob' WHERE `name` = 'LiveLessonStartNotifyJob';");
-        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\Notification\\Job\\LiveOpenPushNotificationOneHourJob' WHERE `name` = 'LiveOpenPushNotificationOneHourJob';");
-        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\Notification\\Job\\PushNotificationOneHourJob' WHERE `name` = 'PushNotificationOneHourJob';");
-        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\Order\\Job\\CancelOrderJob' WHERE `name` = 'CancelOrderJob';");
-        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\Sms\\Job\\SmsSendOneDayJob' WHERE `name` = 'SmsSendOneDayJob';");
-        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\Sms\\Job\\SmsSendOneHourJob' WHERE `name` = 'SmsSendOneHourJob';");
-        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\Testpaper\\Job\\UpdateRealTimeTestResultStatusJob' WHERE `name` = 'UpdateRealTimeTestResultStatusJob';");
-        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\User\\Job\\DeleteExpiredTokenJob' WHERE `name` = 'DeleteExpiredTokenJob';");
-        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\User\\Job\\DeleteSessionJob' WHERE `name` = 'DeleteSessionJob';");
+    private function migrate15()
+    {
+
+        $this->exec(
+            "UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\Biz\\Discount\\Job\\DiscountEndJob' WHERE `name` = 'DiscountEndJob';"
+        );
+        $this->exec(
+            "UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\Biz\\Discount\\Job\\DiscountStartJob' WHERE `name` = 'DiscountStartJob';"
+        );
+        $this->exec(
+            "UPDATE crontab_job SET `jobClass` = 'Biz\\Crontab\\Service\\Impl\\EmptyJob' WHERE `name` = 'EmptyJob';"
+        );
+        $this->exec(
+            "UPDATE crontab_job SET `jobClass` = 'Biz\\Notification\\Job\\LiveLessonStartNotifyJob' WHERE `name` = 'LiveLessonStartNotifyJob';"
+        );
+        $this->exec(
+            "UPDATE crontab_job SET `jobClass` = 'Biz\\Notification\\Job\\LiveOpenPushNotificationOneHourJob' WHERE `name` = 'LiveOpenPushNotificationOneHourJob';"
+        );
+        $this->exec(
+            "UPDATE crontab_job SET `jobClass` = 'Biz\\Notification\\Job\\PushNotificationOneHourJob' WHERE `name` = 'PushNotificationOneHourJob';"
+        );
+        $this->exec(
+            "UPDATE crontab_job SET `jobClass` = 'Biz\\Order\\Job\\CancelOrderJob' WHERE `name` = 'CancelOrderJob';"
+        );
+        $this->exec(
+            "UPDATE crontab_job SET `jobClass` = 'Biz\\Sms\\Job\\SmsSendOneDayJob' WHERE `name` = 'SmsSendOneDayJob';"
+        );
+        $this->exec(
+            "UPDATE crontab_job SET `jobClass` = 'Biz\\Sms\\Job\\SmsSendOneHourJob' WHERE `name` = 'SmsSendOneHourJob';"
+        );
+        $this->exec(
+            "UPDATE crontab_job SET `jobClass` = 'Biz\\Testpaper\\Job\\UpdateRealTimeTestResultStatusJob' WHERE `name` = 'UpdateRealTimeTestResultStatusJob';"
+        );
+        $this->exec(
+            "UPDATE crontab_job SET `jobClass` = 'Biz\\User\\Job\\DeleteExpiredTokenJob' WHERE `name` = 'DeleteExpiredTokenJob';"
+        );
+        $this->exec(
+            "UPDATE crontab_job SET `jobClass` = 'Biz\\User\\Job\\DeleteSessionJob' WHERE `name` = 'DeleteSessionJob';"
+        );
     }
+
+    private function migrate16()
+    {
+        $this->exec(
+            "
+            UPDATE `course_v8` ce RIGHT JOIN (
+	          SELECT count(id) num , courseId FROM `course_thread`  WHERE TYPE IN ('discussion', 'question') GROUP BY courseid )
+            cd  ON ce.id = cd.`courseId` SET ce.`threadNum` = cd.num   
+            "
+        );
+    }
+
 
     private function getUserByType()
     {
@@ -182,12 +224,13 @@ class OtherMigrate extends AbstractMigrate
 
     public function update($page)
     {
-        if ($page>15) {
+        if ($page > 16) {
             return;
         }
 
         $method = "migrate{$page}";
         $this->$method();
-        return $page+1;
+
+        return $page + 1;
     }
 }

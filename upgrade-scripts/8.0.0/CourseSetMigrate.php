@@ -65,6 +65,7 @@ class CourseSetMigrate extends AbstractMigrate
         $sql = "UPDATE `course_set_v8` ccs, `course` c  set
             ccs.`title` = c.`title`
             ,ccs.`subtitle` = c.`subtitle`
+            ,ccs.`tags` =  c.`tags`
             ,ccs.`status` = c.`status`
             ,ccs.`type` = c.`type`
             ,ccs.`serializeMode` = c.`serializeMode`
@@ -109,6 +110,7 @@ class CourseSetMigrate extends AbstractMigrate
             `id`
             ,`title`
             ,`subtitle`
+            ,`tags`
             ,`status`
             ,`type`
             ,`serializeMode`
@@ -140,6 +142,7 @@ class CourseSetMigrate extends AbstractMigrate
             `id`
             ,`title`
             ,`subtitle`
+            ,`tags`
             ,`status`
             ,`type`
             ,`serializeMode`
