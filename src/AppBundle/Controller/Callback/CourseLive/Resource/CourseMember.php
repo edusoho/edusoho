@@ -34,7 +34,7 @@ class CourseMember extends BaseProvider
 
         $result = $this->buildNeedCourseMemberFields($sourceCourseMembers, $users);
         if (empty($result)) {
-            $result['data'] = '';
+            $result['data'] = array();
             $result['finish'] = true;
             return $result;
         }
