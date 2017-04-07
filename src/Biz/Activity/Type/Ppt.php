@@ -27,7 +27,7 @@ class Ppt extends Activity
         }
 
         if ($ppt['finishType'] == 'end') {
-            $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'ppt.finish');
+            $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'finish');
 
             return !empty($logs);
         }
