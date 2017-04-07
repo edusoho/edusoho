@@ -544,7 +544,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
             } elseif ($resultId) {
                 //兼容
                 $questions[$questionId]['testResult'] = array(
-                    'questionId' => $questionId,
+                    'questionId' => (string) $questionId,
                     'status' => 'noAnswer',
                     'score' => '0.0',
                     'answer' => array(),
