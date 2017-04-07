@@ -43,8 +43,8 @@ class ClassroomCourseCopy extends CourseCopy
         $courseSetId = $newCourseSet['id'];
 
         $newCourse = $this->doCopy($course);
-        //todo 使用班级有效期，覆盖课程的
-        $newCourse = $this->buildCourseExpiryDataFromClassroom($newCourse, $config['classroomId']);
+        
+        $newCourse = $this->extendConfigFromClassroom($newCourse, $config['classroomId']);
         $newCourse['isDefault'] = $course['isDefault'];
         $modeChange = false;
         $newCourse['parentId'] = $course['id'];
@@ -70,12 +70,15 @@ class ClassroomCourseCopy extends CourseCopy
         return $newCourse;
     }
 
-    private function buildCourseExpiryDataFromClassroom($newCourse, $classroomId)
+    private function extendConfigFromClassroom($newCourse, $classroomId)
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $expiryData = $this->getCourseService()->buildCourseExpiryDataFromClassroom($classroom['expiryMode'], $classroom['expiryValue']);
 
-        return array_replace($newCourse, $expiryData);
+        $newCourse = array_replace($newCourse, $expiryData);
+        $newCourse['vipLevelId'] = $classroom['vipLevelId'];
+        
+        return $newCourse;
     }
 
     private function doCopyCourseSet($courseSet)

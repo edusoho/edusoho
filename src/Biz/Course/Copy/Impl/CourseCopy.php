@@ -97,7 +97,7 @@ class CourseCopy extends AbstractEntityCopy
             'maxStudentNum',
             'isFree',
             'price',
-            'vipLevelId',
+            // 'vipLevelId',
             'buyable',
             'tryLookable',
             'tryLookLength',

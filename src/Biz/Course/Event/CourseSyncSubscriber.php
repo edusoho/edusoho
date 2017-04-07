@@ -20,6 +20,8 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
     public static function getSubscribedEvents()
     {
         return array(
+            'classroom.update' => 'onClassroomUpdate',
+
             'course-set.update' => 'onCourseSetUpdate',
 
             'course.update' => 'onCourseUpdate',
@@ -35,6 +37,21 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
             'course.material.update' => 'onCourseMaterialUpdate',
             'course.material.delete' => 'onCourseMaterialDelete',
         );
+    }
+
+    public function onClassroomUpdate(Event $event)
+    {
+        $arguments = $event->getSubject();
+        $classroom = $arguments['classroom'];
+
+        $courses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
+        if (empty($courses)) {
+            return;
+        }
+
+        foreach ($courses as $course) {
+            $this->getCourseDao()->updateCourse($id, array('vipLevelId' => $classroom['vipLevelId']));
+        }
     }
 
     public function onCourseSetUpdate(Event $event)
@@ -94,7 +111,7 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
                 'audiences',
                 'isFree',
                 'price',
-                'vipLevelId',
+                // 'vipLevelId',
                 'buyable',
                 'tryLookable',
                 'tryLookLength',

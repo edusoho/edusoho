@@ -119,11 +119,8 @@ class CourseController extends CourseBaseController
         if ($this->getMemberService()->isMemberNonExpired($course, $member)) {
             return $this->createJsonResponse(true);
         }
-        //todo
-        //1. 普通课程
-        //2. 班级课程
-        //3. 班级课程但已被移除
-        // $type = $course['']
+
+        $type = $course['parentId'] > 0 ? 'classroom' : 'normal';
 
         return $this->render(
             "course/member/{$type}-course-expired.html.twig",
