@@ -15,13 +15,14 @@ class PayCenter extends Resource
     {
         $params = $request->request->all();
         if (empty($params['orderId'])
+            || empty($params['targetType'])
             || empty($params['payment'])
             ||!in_array($params['payment'], array('alipay', 'coin')) ) {
             throw new InvalidArgumentException();
         }
 
         list($checkResult, $order) = $this->service('PayCenter:GatewayService')
-            ->beforePayOrder($params['orderId'], $params['payment']);
+            ->beforePayOrder($params['orderId'], $params['targetType'], $params['payment']);
 
         if ($checkResult) {
             throw new ApiException($checkResult['error'], $checkResult['code']);
