@@ -72,7 +72,7 @@ class Course extends BaseAnalysisType
         $course = $this->getCourseService()->getCourse($courseId);
         $studentNum = (float) $course["studentNum"];
         $totalPercent = $pointData[date("m-d", time())];
-        $totalPercent = (int) ($totalPercent / $studentNum * 100);
+        $totalPercent = (int) ($studentNum ? ($totalPercent / $studentNum * 100) : 0);
 
         $header = array(
             array(
