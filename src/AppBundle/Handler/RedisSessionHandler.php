@@ -162,6 +162,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
     {
         $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
         $token = $this->storage->getToken();
+
         return strpos($userAgent, 'Baiduspider') > -1 || ($token instanceof PreAuthenticatedToken && $token->getProviderKey() == 'api');
     }
 }
