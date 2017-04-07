@@ -9,27 +9,25 @@ use Biz\PayCenter\Service\GatewayService;
 
 class GatewayServiceImpl extends BaseService implements GatewayService
 {
-    public function beforePayOrder($orderId, $payment)
+    public function beforePayOrder($orderId, $targetType, $payment)
     {
-        $order = $this->getOrderService()->getOrder($orderId);
+        $processor = OrderProcessorFactory::create($targetType);
+        $order = $processor->updateOrder($orderId, array('payment' => $payment));
 
         try {
-            $this->check($order, $payment);
+            $this->check($processor, $order, $payment);
         } catch (PayCenterException $e) {
             $checkResult['error'] = $e->getMessage();
 
             return array($checkResult, null);
         }
 
-        $newOrder = OrderProcessorFactory::create($order['targetType'])
-            ->updateOrder($order['id'], array('payment' => $payment));
+        $this->ifZeroOrderThenPay($order);
 
-        $this->ifZeroOrderThenPay($newOrder);
-
-        return array(null, $this->getOrderService()->getOrder($orderId));
+        return array(null, $order);
     }
 
-    private function check($order, $payment)
+    private function check($processor, $order, $payment)
     {
         if (!$payment) {
             throw new PayCenterException('支付方式未开启, 请先开启', 2007);
@@ -55,11 +53,12 @@ class GatewayServiceImpl extends BaseService implements GatewayService
             throw new PayCenterException($paymentSetting['disabled_message'], 2002);
         }
 
-        $processor = OrderProcessorFactory::create($order['targetType']);
-        $isTargetExist = $processor->isTargetExist($order['targetId']);
+        if (!empty($order['targetId'])) {
+            $isTargetExist = $processor->isTargetExist($order['targetId']);
 
-        if (!$isTargetExist) {
-            throw new PayCenterException('该订单已失效', 2003);
+            if (!$isTargetExist) {
+                throw new PayCenterException('该订单已失效', 2003);
+            }
         }
 
         if ($order['userId'] != $user['id']) {
