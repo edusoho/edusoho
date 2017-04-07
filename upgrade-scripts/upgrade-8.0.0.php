@@ -39,6 +39,7 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getStep($index)
     {
         $steps = array(
+            'TruncateTables',
             'CourseSetMigrate',
             'CourseMigrate',
 
