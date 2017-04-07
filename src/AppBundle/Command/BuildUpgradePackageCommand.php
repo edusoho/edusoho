@@ -122,6 +122,11 @@ class BuildUpgradePackageCommand extends BaseCommand
                     continue;
                 }
 
+                if (strpos($opFile, 'tests') === 0 || strpos($newFile, 'tests') === 0) {
+                    $this->output->writeln("<comment>忽略文件：{$opFile}</comment>");
+                    continue;
+                }
+
                 if (strpos($opFile, 'migrations') === 0) {
                     $this->output->writeln("<comment>忽略文件：{$opFile}</comment>");
                     continue;
@@ -187,7 +192,7 @@ class BuildUpgradePackageCommand extends BaseCommand
     {
         $distPath = $packageDirectory.'/source/'.$opFile;
 
-        if (@mkdir(realpath($distPath), 0777, true) && !is_dir(realpath($distPath))) {
+        if (@mkdir(dirname($distPath), 0777, true) && !is_dir(dirname($distPath))) {
             $this->output->writeln("创建升级包目录{$distPath} 失败");
             exit(1);
         }
@@ -270,7 +275,7 @@ class BuildUpgradePackageCommand extends BaseCommand
 
     private function zipPackage($distDir)
     {
-        $buildDir = realpath($distDir);
+        $buildDir = dirname($distDir);
         $filename = basename($distDir);
 
         if ($this->filesystem->exists("{$buildDir}/{$filename}.zip")) {
