@@ -154,8 +154,9 @@ class PayCenterController extends BaseController
     {
         $orderId = $request->request->get('orderId');
         $payment = $request->request->get('payment');
+        $targetType = $request->request->get('targetType');
 
-        list($checkResult, $order) = $this->getPayCenterGatewayService()->beforePayOrder($orderId, $payment);
+        list($checkResult, $order) = $this->getPayCenterGatewayService()->beforePayOrder($orderId, $targetType, $payment);
 
         if ($checkResult) {
             return $this->createMessageResponse('error', $checkResult['error']);

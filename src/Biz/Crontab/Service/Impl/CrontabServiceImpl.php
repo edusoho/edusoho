@@ -9,6 +9,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
 use Biz\Crontab\Service\CrontabService;
 use Codeages\Biz\Framework\Context\BizAware;
+use Topxia\Service\Common\ServiceKernel;
 
 class CrontabServiceImpl extends BaseService implements CrontabService
 {
@@ -201,7 +202,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
     public function getNextExcutedTime()
     {
-        $filePath = __DIR__.'/../../../../../app/data/crontab_config.yml';
+        $filePath = $this->getCrontabConfigYml();
         $yaml = new Yaml();
 
         if (!file_exists($filePath)) {
@@ -219,12 +220,17 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
     public function setNextExcutedTime($nextExcutedTime)
     {
-        $filePath = __DIR__.'/../../../../../app/data/crontab_config.yml';
+        $filePath = $this->getCrontabConfigYml();
         $yaml = new Yaml();
         $content = $yaml->dump(array('crontab_next_executed_time' => $nextExcutedTime));
         $fh = fopen($filePath, 'w');
         fwrite($fh, $content);
         fclose($fh);
+    }
+
+    private function getCrontabConfigYml()
+    {
+        return ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/data/crontab_config.yml';
     }
 
     public function findJobByTargetTypeAndTargetId($targetType, $targetId)
