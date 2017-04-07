@@ -13,7 +13,7 @@ class Lesson2VideoActivityMigrate extends AbstractMigrate
                   `mediaId` int(10) NOT NULL DEFAULT 0 COMMENT '媒体文件ID',
                   `mediaUri` text COMMENT '媒体文件资UR',
                   `finishType` varchar(60) NOT NULL DEFAULT 'end' COMMENT '完成类型',
-                  `finishDetail` text NOT NULL DEFAULT '0' COMMENT '完成条件',
+                  `finishDetail` text NOT NULL COMMENT '完成条件',
                    PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='视频活动扩展表';
             "
