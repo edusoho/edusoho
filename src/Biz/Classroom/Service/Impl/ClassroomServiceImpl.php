@@ -320,6 +320,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $arguments['tagIds'] = $tagIds;
         }
 
+        $this->getLogService()->info('classroom', 'update', "更新班级《{$classroom['title']}》(#{$classroom['id']})");
         $this->dispatchEvent('classroom.update', new Event(array(
             'userId' => $user['id'],
             'classroom' => $classroom,
