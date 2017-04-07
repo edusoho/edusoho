@@ -15,10 +15,15 @@ class PluginMigrate extends AbstractMigrate
         );
 
         $pluginFile = $this->getPluginConfig();
+        $pluginFile = realpath($pluginFile);
         $config = require_once $pluginFile;
         if (!empty($config['installed_plugins']['Homework'])) {
-        	unset($config['installed_plugins']['Homework']);
+            $installedPlugins = $config['installed_plugins'];
+        	unset($installedPlugins['Homework']);
+            $config['installed_plugins'] = $installedPlugins;
         }
+
+        $config = is_array($config) ? $config : array();
 
         $content = "<?php \n return " . var_export($config, true) . ";";
         $saved = file_put_contents($pluginFile, $content);
@@ -34,12 +39,13 @@ class PluginMigrate extends AbstractMigrate
 
     protected function moveRoutingPluginsYml()
     {
-        $file = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/config/routing_plugin.yml';
-        $targetFile = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/config/old_routing_plugin.yml';
+        $file = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/config/routing_plugins.yml';
+        $targetFile = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/config/old_routing_plugins.yml';
         $filesystem = new Filesystem();
 
         if ($filesystem->exists($file)) {
             $filesystem->copy($file, $targetFile, true);
+            $filesystem->remove($file);
             $filesystem->touch($file);
         }
     }

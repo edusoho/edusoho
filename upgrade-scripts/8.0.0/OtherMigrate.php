@@ -70,7 +70,6 @@ class OtherMigrate extends AbstractMigrate
 
     private function migrate7()
     {
-
         if (!$this->isFieldExist('course_member', 'courseSetId')) {
             $this->exec(
                 "ALTER TABLE `course_member` ADD COLUMN  `courseSetId` int(10) unsigned NOT NULL COMMENT '课程ID';"
@@ -159,6 +158,11 @@ class OtherMigrate extends AbstractMigrate
             $this->exec("ALTER TABLE classroom ADD `creator` int(10) NOT NULL DEFAULT '0' COMMENT '班级创建者';");
             $this->exec("UPDATE `classroom` SET `creator` = `headTeacherId` WHERE `creator` = 0;");
         }
+
+        if ($this->isFieldExist('classroom', 'expiryMode')) {
+            $this->exec("ALTER TABLE `classroom` CHANGE `expiryMode` `expiryMode` VARCHAR(32) NOT NULL DEFAULT 'forever' COMMENT '学习有效期模式：date、days、forever';");
+            $this->exec("UPDATE `classroom` SET expiryMode='forever' WHERE expiryMode='none';");
+        }
     }
 
     private function migrate15()
@@ -200,6 +204,18 @@ class OtherMigrate extends AbstractMigrate
         $this->exec(
             "UPDATE crontab_job SET `jobClass` = 'Biz\\User\\Job\\DeleteSessionJob' WHERE `name` = 'DeleteSessionJob';"
         );
+//        $this->exec("UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\\\Biz\\\\Discount\\\\Job\\\\DiscountEndJob' WHERE `name` = 'DiscountEndJob';");
+//        $this->exec("UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\\\Biz\\\\Discount\\\\Job\\\\DiscountStartJob' WHERE `name` = 'DiscountStartJob';");
+//        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\Crontab\\\\Service\\\\Impl\\\\EmptyJob' WHERE `name` = 'EmptyJob';");
+//        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\Notification\\\\Job\\\\LiveLessonStartNotifyJob' WHERE `name` = 'LiveLessonStartNotifyJob';");
+//        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\Notification\\\\Job\\\\LiveOpenPushNotificationOneHourJob' WHERE `name` = 'LiveOpenPushNotificationOneHourJob';");
+//        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\Notification\\\\Job\\\\PushNotificationOneHourJob' WHERE `name` = 'PushNotificationOneHourJob';");
+//        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\Order\\\\Job\\\\CancelOrderJob' WHERE `name` = 'CancelOrderJob';");
+//        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\Sms\\\\Job\\\\SmsSendOneDayJob' WHERE `name` = 'SmsSendOneDayJob';");
+//        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\Sms\\\\Job\\\\SmsSendOneHourJob' WHERE `name` = 'SmsSendOneHourJob';");
+//        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\Testpaper\\\\Job\\\\UpdateRealTimeTestResultStatusJob' WHERE `name` = 'UpdateRealTimeTestResultStatusJob';");
+//        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\User\\\\Job\\\\DeleteExpiredTokenJob' WHERE `name` = 'DeleteExpiredTokenJob';");
+//        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\User\\\\Job\\\\DeleteSessionJob' WHERE `name` = 'DeleteSessionJob';");
     }
 
     private function migrate16()
