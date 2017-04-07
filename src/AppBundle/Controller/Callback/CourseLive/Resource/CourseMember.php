@@ -33,6 +33,11 @@ class CourseMember extends BaseProvider
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $result = $this->buildNeedCourseMemberFields($sourceCourseMembers, $users);
+        if (empty($result)) {
+            $result['data'] = '';
+            $result['finish'] = true;
+            return $result;
+        }
         $result['start'] = $start + $limit;
         $result['limit'] = $limit;
         if (count($result['data']) < $limit) {
