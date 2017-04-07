@@ -62,7 +62,7 @@ class Audio extends Activity
 
     public function isFinished($activityId)
     {
-        $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'audio.finish');
+        $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'finish');
 
         return !empty($logs);
     }
