@@ -34,7 +34,7 @@
     <div class="score">
       {% if not is_open_course %}
         {{ web_macro.star(course.rating|default(0)) }}
-        <span>{{ course.ratingNum|default(0) }}{{'cloud_search.course.evaluate'|trans}}({{ course.studentNum|default(0) }}{{ 'cloud_search.course.learned'|trans }})</span>
+        <span>{{'cloud_search.course.evaluate'|trans({'%ratingNum%':course.ratingNum|default(0)})}}{{ 'cloud_search.course.learned'|trans({'%studentNum%':course.studentNum|default(0)}) }}</span>
       {% endif %}
     </div>
     <div class="content editor-text">{{ course.about|raw }}</div>

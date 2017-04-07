@@ -478,8 +478,8 @@ cloud_search.course: 课程
 cloud_search.course.result: >
   为您找到课程结果约 <span class="color-danger">%counts%</span>个
 cloud_search.course.learning: 正在学
-cloud_search.course.evaluate: 人评价
-cloud_search.course.learned: 人学习
+cloud_search.course.evaluate: %ratingNum%人评价
+cloud_search.course.learned: (%studentNum%)人学习
 cloud_search.course.task: 课时
 cloud_search.course.recommend.content_title: 推荐课程
 cloud_search.course.recommend.empty: 暂无推荐课程
