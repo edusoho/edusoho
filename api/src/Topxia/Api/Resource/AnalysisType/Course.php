@@ -18,7 +18,7 @@ class Course extends BaseAnalysisType
         $condition = array(
             'finishedTime_GE' => $timeRange['startTime'],
             'finishedTime_LE' => $timeRange['endTime'],
-            'status' => 'finished',
+            'status' => 'finish',
             'courseId' => $courseId,
         );
 
@@ -30,22 +30,11 @@ class Course extends BaseAnalysisType
             $condition,
             array('finishedTime' => 'desc'),
             0,
-            1000
+            $count
         );
 
         $userIds = ArrayToolkit::column($finishedLessonDetail, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
-
-        $finishedLessonStartData = $this->getTaskResultService()->searchTaskResults(
-            array('status' => 'finished'),
-            array('finishedTime' => 'ASC'),
-            0,
-            1
-        );
-
-        if ($finishedLessonStartData) {
-            $finishedLessonStartDate = date("Y-m-d", $finishedLessonStartData[0]['finishedTime']);
-        }
 
         $chartData = array();
         $pointData = array();
