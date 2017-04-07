@@ -121,19 +121,23 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
 
     public function onClassroomLiveCourseJoin(Event $event)
     {
-        // $course = $event->getSubject();
-        // $member = $event->getArgument('member');
-        // $user = $this->getUserService()->getUser($member['userId']);
+        $course = $event->getSubject();
+        $member = $event->getArgument('member');
+        $user = $this->getUserService()->getUser($member['userId']);
 
-        // $activitys = $this->getActivityService()->findActivitiesByCourseIdAndType($course['id'], 'live');
-        // foreach ($activitys as $activity) {
-        //     $isPush = $this->canPushLiveMessage($activity);
-        //     if (!$isPush) {
-        //         continue;
-        //     }
-        //     $result = buildLiveMemberData($user, $teacher);
-        //     $this->pushJoinLiveCourseMember($result, $liveId);
-        // }
+        if ($course['locked']) {
+            $course = $this->getCourseService()->getCourse($course['parentId']);
+        }
+
+        list($activitys, $liveActivitys) = $this->findActivitysAndLiveActivitys($course);
+        foreach ($activitys as $mediaId => $activity) {
+            $isPush = $this->canPushLiveMessage($activity);
+            if (!$isPush) {
+                continue;
+            }
+            $result = buildLiveMemberData($user, $member);
+            $this->pushJoinLiveCourseMember($result, $liveActivitys[$mediaId]['liveId']);
+        }
     }
 
     protected function getFileUrl($path, $default = '')
@@ -183,11 +187,11 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         }
     }
 
-    public function pushDeleteLiveCourseMember($userId)
+    public function pushDeleteLiveCourseMember($userId, $liveId)
     {
         try {
-            $api = CloudAPIFactory::create('leaf');
-            $result = $api->delete('/lives/room_members', array('clientId' => $userId));
+            $api = CloudAPIFactory::create('root');
+            $result = $api->delete("/lives/{$liveId}/room_members", array('clientId' => $userId));
         } catch (\RuntimeException $e) {
             throw new \RuntimeException(ServiceKernel::instance()->trans('发送失败！'));
         }
@@ -292,12 +296,19 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     public function onLiveMemberDelete(Event $event)
     {
         $course = $event->getSubject();
-        $isPush = $this->canPushLiveMessage($course);
-        if (!$isPush) {
-            return;
-        }
         $userId = $event->getArgument('userId');
-        $this->pushDeleteLiveCourseMember($userId);
+        
+        if ($course['locked']) {
+            $course = $this->getCourseService()->getCourse($course['parentId']);
+        }
+        list($activitys, $liveActivitys) = $this->findActivitysAndLiveActivitys($course);
+        foreach ($activitys as $mediaId => $activity) {
+            $isPush = $this->canPushLiveMessage($activity);
+            if (!$isPush) {
+                continue;
+            }
+            $this->pushDeleteLiveCourseMember($userId, $liveActivitys[$mediaId]['liveId']);
+        }
     }
 
     protected function canPushLiveMessage($activity)
