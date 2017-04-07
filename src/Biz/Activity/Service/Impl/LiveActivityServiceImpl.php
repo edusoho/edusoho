@@ -20,6 +20,11 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $this->getLiveActivityDao()->get($id);
     }
 
+    public function findLiveActivity(array $ids)
+    {
+        return $this->getLiveActivityDao()->findInField('id', $ids);
+    }
+
     public function createLiveActivity($activity, $ignoreValidation = false)
     {
         if (!$ignoreValidation && (empty($activity['startTime'])
@@ -206,7 +211,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         $args = array('duration' => $duration, 'data' => $activity['fromCourseId']);
         $token = $this->getTokenService()->makeToken('live.create', $args);
         $memberUrl = "{$baseUrl}/callback/course_live?provider=course_member&token={$token['token']}&courseId={$activity['fromCourseId']}";
-        $mediaUrl = "{$baseUrl}/callback/course_live?provider=course_cloud_files&token ={$token['token']}&courseId={$activity['fromCourseId']}";
+        $mediaUrl = "{$baseUrl}/callback/course_live?provider=course_cloud_files&token={$token['token']}&courseId={$activity['fromCourseId']}";
         $callbackUrl = array(
             array('type' => 'member', 'url' => $memberUrl), 
             array('type' => 'media', 'url' => $mediaUrl)            
