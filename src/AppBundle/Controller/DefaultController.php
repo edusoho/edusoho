@@ -2,19 +2,19 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Classroom\Service\ClassroomService;
-use Biz\CloudPlatform\CloudAPIFactory;
-use Biz\CloudPlatform\Service\AppService;
-use Biz\Content\Service\BlockService;
-use Biz\Content\Service\NavigationService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
-use Biz\System\Service\SettingService;
-use Biz\Taxonomy\Service\CategoryService;
-use Biz\Theme\Service\ThemeService;
-use Biz\User\Service\BatchNotificationService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Theme\Service\ThemeService;
+use Biz\Content\Service\BlockService;
+use Biz\Course\Service\CourseService;
+use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\System\Service\SettingService;
+use Biz\Course\Service\CourseSetService;
+use Biz\CloudPlatform\Service\AppService;
+use Biz\Taxonomy\Service\CategoryService;
+use Biz\Content\Service\NavigationService;
+use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\User\Service\BatchNotificationService;
 use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends BaseController
@@ -65,7 +65,7 @@ class DefaultController extends BaseController
                 $teachers = $this->getUserService()->findUsersByIds($course['teacherIds']);
             }
 
-            $nextLearnLesson = $this->getCourseService()->getUserNextLearnLesson($user->id, $course['id']);
+            $nextLearnLesson = $this->getTaskService()->getUserRecentlyStartTask($user['id']);
 
             $progress = $this->calculateUserLearnProgress($course, $member);
         } else {
@@ -212,16 +212,16 @@ class DefaultController extends BaseController
 
     protected function calculateUserLearnProgress($course, $member)
     {
-        if ($course['lessonNum'] == 0) {
+        if ($course['taskNum'] == 0) {
             return array('percent' => '0%', 'number' => 0, 'total' => 0);
         }
 
-        $percent = (int) ($member['learnedNum'] / $course['lessonNum'] * 100).'%';
+        $percent = (int) ($member['taskNum'] / $course['taskNum'] * 100).'%';
 
         return array(
             'percent' => $percent,
             'number' => $member['learnedNum'],
-            'total' => $course['lessonNum'],
+            'total' => $course['taskNum'],
         );
     }
 
@@ -364,5 +364,10 @@ class DefaultController extends BaseController
     protected function getCourseMemberService()
     {
         return $this->getBiz()->service('Course:MemberService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
     }
 }

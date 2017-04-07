@@ -23,7 +23,8 @@ class AnnouncementDataTag extends BaseDataTag implements DataTag
     {
         $this->checkCount($arguments);
 
-        $currentTime = time();
+        // 以每10分钟为单位，以免Cache开启的时候，避免每次请求都要查询数据库
+        $currentTime = strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0');
 
         $conditions = $this->fillOrgCode(array('targetType' => 'global', 'startTime' => $currentTime, 'endTime' => $currentTime));
 

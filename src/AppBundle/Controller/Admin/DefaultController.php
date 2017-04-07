@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller\Admin;
 
+use Vip\Service\Vip\VipService;
 use AppBundle\Common\CurlToolkit;
 use AppBundle\Common\ArrayToolkit;
-use Vip\Service\Vip\VipService;
 use Biz\CloudPlatform\CloudAPIFactory;
-use AppBundle\Component\Echats\EchartsBuilder;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Component\Echats\EchartsBuilder;
 
 class DefaultController extends BaseController
 {
@@ -414,7 +414,7 @@ class DefaultController extends BaseController
 
     private function getRegisterTotalCount($timeRange, $days)
     {
-        $registerCount = $this->getUserService()->findUsersCountByLessThanCreatedTime($timeRange['startTime']);
+        $registerCount = $this->getUserService()->countUsersByLessThanCreatedTime($timeRange['startTime']);
         $dayRegisterTotal = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
         $dayRegisterTotal = $this->fillAnalysisUserSum($registerCount, $dayRegisterTotal, $days);
 

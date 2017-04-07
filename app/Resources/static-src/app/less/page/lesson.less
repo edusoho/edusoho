@@ -235,11 +235,18 @@
 
 .slide-player-control .goto-first {
   margin-left: 100px;
+  @media(max-width:@screen-xs-min) {
+    margin-left: 0;
+  }
 }
 
 .slide-player-control .goto-page {
   width: 50px;
   display: inline-block;
+  @media(max-width:@screen-xs-min) {
+    width: 35px;
+    padding: 0 5px;
+  }
 } 
 
 .slide-player-control .goto-page-input {
@@ -250,6 +257,10 @@
 .slide-player-control .glyphicon {
   padding-left: 10px;
   padding-right: 10px;
+  @media(max-width:@screen-xs-min) {
+    padding-left: 0;
+    padding-right: 5px;
+  }
 }
 
 .slide-player-body {

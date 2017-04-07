@@ -56,13 +56,16 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $courseSetIds = ArrayToolkit::column($classroomCourses, 'courseSetId');
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
         $courseSets = ArrayToolkit::index($courseSets, 'id');
-        $courseNums = $this->getCourseService()->countCoursesGroupByCourseSetIds($courseSetIds);
+        $parentIds = ArrayToolkit::column($courseSets, 'parentId');
+        $courseNums = $this->getCourseService()->countCoursesGroupByCourseSetIds($parentIds);
         $courseNums = ArrayToolkit::index($courseNums, 'courseSetId');
 
         foreach ($courses as &$course) {
-            $course['courseSet'] = $courseSets[$course['courseSetId']];
-            $course['courseNum'] = $courseNums[$course['courseSetId']]['courseNum'];
-            $course['parentCourseSetId'] = $course['courseSet']['parentId'];
+            $curCourseSet = $courseSets[$course['courseSetId']];
+
+            $course['courseSet'] = $curCourseSet;
+            $course['courseNum'] = $courseNums[$curCourseSet['parentId']]['courseNum'];
+            $course['parentCourseSetId'] = $curCourseSet['parentId'];
         }
 
         $sortedCourses = array();
@@ -317,6 +320,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $arguments['tagIds'] = $tagIds;
         }
 
+        $this->getLogService()->info('classroom', 'update', "更新班级《{$classroom['title']}》(#{$classroom['id']})");
         $this->dispatchEvent('classroom.update', new Event(array(
             'userId' => $user['id'],
             'classroom' => $classroom,
@@ -693,11 +697,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->rollback();
             throw $e;
         }
-    }
-
-    public function countMobileVerifiedMembersByClassroomId($classroomId, $locked = 0)
-    {
-        return $this->getClassroomMemberDao()->countMobileVerifiedMembersByClassroomId($classroomId, $locked);
     }
 
     public function countMobileFilledMembersByClassroomId($classroomId, $locked = 0)

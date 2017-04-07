@@ -21,6 +21,7 @@ class OpenCourseDaoImpl extends GeneralDaoImpl implements OpenCourseDao
                 'type = :type',
                 'title LIKE :titleLike',
                 'userId = :userId',
+                'userId IN ( :userIds )',
                 'startTime >= :startTimeGreaterThan',
                 'startTime < :startTimeLessThan',
                 'rating > :ratingGreaterThan',
@@ -38,7 +39,6 @@ class OpenCourseDaoImpl extends GeneralDaoImpl implements OpenCourseDao
                 'recommended = :recommended',
                 'locked = :locked',
             ),
-            'cache' => 'table',
         );
     }
 

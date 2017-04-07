@@ -30,7 +30,7 @@
       </tr>
       <tr> <th width="25%">{{'order.price'|trans}}</th>
         <td width="75%">
-          <span class="money-text">{{ order.totalPrice }}</span>
+          <span class="color-warning">{{ order.totalPrice }}</span>
           {% if order.priceType == "RMB" %}
           {{'元'|trans}}
           {% elseif order.priceType == "Coin" %}
@@ -45,7 +45,7 @@
       </tr>
       <tr> <th width="25%">{{'plugin.coupon.amount'|trans}}</th>
         <td width="75%">
-          <span class="money-text">{{ order.couponDiscount }}</span>
+          <span class="color-warning">{{ order.couponDiscount }}</span>
           {% if order.priceType == "RMB" %}
           {{'元'|trans}}
           {% elseif order.priceType == "Coin" %}
@@ -59,13 +59,13 @@
           {% trans with {'%coin_name%': setting('coin.coin_name')|default("finance.coin"|trans)} %}order.payment_pattern.coin{% endtrans %}
         </th>
         <td width="75%">
-          <span class="money-text">{{ order.coinAmount }}</span> {{setting("coin.coin_name")}}
+          <span class="color-warning">{{ order.coinAmount }}</span> {{setting("coin.coin_name")}}
         </td>
       </tr>
       {% endif %}
       <tr> <th width="25%">{{'order.payment_pattern.cash'|trans}}</th>
         <td width="75%">
-          <span class="money-text">{{ order.amount }}</span> {{'site.currency.RMB'|trans}}
+          <span class="color-warning">{{ order.amount }}</span> {{'site.currency.RMB'|trans}}
         </td>
       </tr>
       <tr> <th width="25%">{{'order.payment_pattern'|trans}}</th>

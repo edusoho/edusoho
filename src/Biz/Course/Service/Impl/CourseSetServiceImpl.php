@@ -816,6 +816,17 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $courseSet;
     }
 
+    public function hitCourseSet($id)
+    {
+        $courseSet = $this->getCourseSet($id);
+
+        if (empty($courseSet)) {
+            throw $this->createNotFoundException('course set not found');
+        }
+
+        return $this->getCourseSetDao()->wave(array($courseSet['id']), array('hitNum' => 1));
+    }
+
     protected function validateCourseSet($courseSet)
     {
         if (!ArrayToolkit::requireds($courseSet, array('title', 'type'))) {

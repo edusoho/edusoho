@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Component\Payment\Wxpay\JsApiPay;
 use Biz\Cash\Service\CashOrdersService;
-use Biz\Coupon\Service\CouponService;
 use Biz\Order\Service\OrderService;
 use Biz\PayCenter\Service\PayCenterService;
 use Biz\System\Service\LogService;
@@ -19,22 +18,6 @@ class PayCenterController extends BaseController
 {
     public function showAction(Request $request)
     {
-        $user = $this->getCurrentUser();
-
-        if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '用户未登录，不能支付。');
-        }
-
-        $paymentSetting = $this->setting('payment');
-
-        if (!isset($paymentSetting['enabled']) || $paymentSetting['enabled'] == 0) {
-            if (!isset($paymentSetting['disabled_message'])) {
-                $paymentSetting['disabled_message'] = '尚未开启支付模块，无法购买课程。';
-            }
-
-            return $this->createMessageResponse('error', $paymentSetting['disabled_message']);
-        }
-
         $fields = $request->query->all();
         $orderInfo['sn'] = $fields['sn'];
         $orderInfo['targetType'] = $fields['targetType'];
@@ -42,67 +25,11 @@ class PayCenterController extends BaseController
         $processor = OrderProcessorFactory::create($fields['targetType']);
         $orderInfo['template'] = $processor->getOrderInfoTemplate();
         $order = $processor->getOrderBySn($orderInfo['sn']);
-        $targetId = isset($order['targetId']) ? $order['targetId'] : '';
-        $isTargetExist = $processor->isTargetExist($targetId);
-
-        if (!$isTargetExist) {
-            return $this->createMessageResponse('error', '该订单已失效');
-        }
-
-        if (empty($order)) {
-            return $this->createMessageResponse('error', '订单不存在!');
-        }
-
-        if ($order['userId'] != $user['id']) {
-            return $this->createMessageResponse('error', '不是您的订单，不能支付');
-        }
-
-        if ($order['status'] != 'created') {
-            return $this->createMessageResponse('error', '订单状态被更改，不能支付');
-        }
-
-        if (($order['createdTime'] + 40 * 60 * 60) < time()) {
-            return $this->createMessageResponse('error', '订单已经过期，不能支付');
-        }
-
-        if (!empty($order['coupon'])) {
-            $result = $this->getCouponService()->checkCouponUseable($order['coupon'], $order['targetType'], $order['targetId'], $order['amount']);
-
-            if ($result['useable'] == 'no') {
-                return $this->createMessageResponse('error', $result['message']);
-            }
-        }
-
-        if ($order['amount'] == 0 && $order['coinAmount'] == 0) {
-            $payData = array(
-                'sn' => $order['sn'],
-                'status' => 'success',
-                'amount' => $order['amount'],
-                'paidTime' => time(),
-            );
-            $this->getPayCenterService()->processOrder($payData);
-
-            return $this->redirectOrderTarget($order);
-        } elseif ($order['amount'] == 0 && $order['coinAmount'] > 0) {
-            $payData = array(
-                'sn' => $order['sn'],
-                'status' => 'success',
-                'amount' => $order['amount'],
-                'paidTime' => time(),
-                'payment' => 'coin',
-            );
-            list($success, $order) = $this->getPayCenterService()->pay($payData);
-
-            if ($success) {
-                return $this->redirectOrderTarget($order);
-            } else {
-                return $this->redirect($this->generateUrl('homepage', array(), true));
-            }
-        }
 
         $orderInfo['order'] = $order;
         $orderInfo['payments'] = $this->getEnabledPayments();
-        $orderInfo['payAgreements'] = $this->getUserService()->findUserPayAgreementsByUserId($user['id']);
+        $orderInfo['payAgreements'] = $this->getUserService()
+            ->findUserPayAgreementsByUserId($this->getCurrentUser()->getId());
 
         foreach ($orderInfo['payments'] as $payment) {
             if ($payment['enabled']) {
@@ -225,25 +152,14 @@ class PayCenterController extends BaseController
 
     public function payAction(Request $request)
     {
-        $fields = $request->request->all();
-        $user = $this->getCurrentUser();
+        $orderId = $request->request->get('orderId');
+        $payment = $request->request->get('payment');
+        $targetType = $request->request->get('targetType');
 
-        if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '用户未登录，支付失败。');
-        }
+        list($checkResult, $order) = $this->getPayCenterGatewayService()->beforePayOrder($orderId, $targetType, $payment);
 
-        if (!array_key_exists('orderId', $fields)) {
-            return $this->createMessageResponse('error', '缺少订单，支付失败');
-        }
-
-        if (!isset($fields['payment'])) {
-            return $this->createMessageResponse('error', '支付方式未开启，请先开启');
-        }
-
-        $order = OrderProcessorFactory::create($fields['targetType'])->updateOrder($fields['orderId'], array('payment' => $fields['payment']));
-
-        if ($user['id'] != $order['userId']) {
-            return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
+        if ($checkResult) {
+            return $this->createMessageResponse('error', $checkResult['error']);
         }
 
         if ($order['status'] == 'paid') {
@@ -676,14 +592,6 @@ class PayCenterController extends BaseController
     }
 
     /**
-     * @return CouponService
-     */
-    protected function getCouponService()
-    {
-        return $this->getBiz()->service('Coupon:CouponService');
-    }
-
-    /**
      * @return AuthService
      */
     protected function getAuthService()
@@ -721,5 +629,10 @@ class PayCenterController extends BaseController
     protected function getLogService()
     {
         return $this->getBiz()->service('System:LogService');
+    }
+
+    protected function getPayCenterGatewayService()
+    {
+        return $this->createService('PayCenter:GatewayService');
     }
 }

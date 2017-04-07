@@ -29,7 +29,7 @@
       {{ dict_macro.orderStatus(order.status) }}
       </td>
       <td>
-        <span class="money-text">{{order.amount}}</span>
+        <span class="color-warning">{{order.amount}}</span>
       </td>
       <td>
         <a target="_blank" href="{{ path('user_show', {id:order.userId}) }}">

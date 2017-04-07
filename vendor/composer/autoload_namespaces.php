@@ -7,7 +7,9 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Twig_' => array($vendorDir . '/twig/twig/lib'),
+    'Sentry\\SentryBundle\\' => array($vendorDir . '/sentry/sentry-symfony/src'),
     'SensioLabs\\Security' => array($vendorDir . '/sensiolabs/security-checker'),
+    'Raven_' => array($vendorDir . '/sentry/sentry/lib'),
     'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
     'Pimple' => array($vendorDir . '/pimple/pimple/src'),
     'Phpmig' => array($vendorDir . '/davedevelopment/phpmig/src'),
@@ -25,7 +27,6 @@ return array(
     'Doctrine\\Common\\Collections\\' => array($vendorDir . '/doctrine/collections/lib'),
     'Doctrine\\Common\\Annotations\\' => array($vendorDir . '/doctrine/annotations/lib'),
     'Doctrine\\Common\\' => array($vendorDir . '/doctrine/common/lib'),
-    'Canoma' => array($vendorDir . '/canoma/canoma/src'),
     'Bazinga\\Bundle\\JsTranslationBundle' => array($vendorDir . '/willdurand/js-translation-bundle'),
     'Assetic' => array($vendorDir . '/kriswallsmith/assetic/src'),
     '' => array($baseDir . '/src', $baseDir . '/plugins'),

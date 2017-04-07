@@ -262,7 +262,7 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     public function useCoupon($code, $order)
     {
-        $coupon = $this->getCouponDao()->getByCode($code, true);
+        $coupon = $this->getCouponDao()->getByCode($code, array('lock' => 1));
         $user = $this->getUserService()->getUser($order['userId']);
         if (empty($coupon)) {
             return null;

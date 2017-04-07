@@ -1,11 +1,14 @@
 imports:
     - { resource: biz.yml }
     - { resource: parameters_default.yml }
+    - { resource: parameters_version.yml }
     - { resource: parameters_service.yml, ignore_errors: true }
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.xml }
     - { resource: service_listener.yml }
+    - { resource: session_redis.yml, ignore_errors: true }
+    - { resource: sentry.yml, ignore_errors: true }
     - { resource: theme_jianmo_parameters.yml }
 
 framework:
@@ -23,11 +26,11 @@ framework:
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
-        handler_id:  session.handler.factory
+        handler_id:  "%session.service_id%"
     fragments:       ~
     http_method_override: true
     assets:
-        version: '7.5.14'
+        version: '%app_version%'
 
 # Twig Configuration
 twig:
@@ -94,12 +97,11 @@ services:
 
     session.handler.redis:
         class:     AppBundle\Handler\RedisSessionHandler
-        arguments: ['@biz', '@security.token_storage']
+        arguments: ['@session.handler.redis.factory', '@security.token_storage']
 
-    session.handler.factory:
-        class: SessionHandlerInterface
-        factory: ['Biz\Common\SessionHandlerFactory', getSessionHandler]
-        arguments: ['@biz', '@service_container']
+    session.handler.redis.factory:
+        class:     AppBundle\Handler\RedisSessionFactory
+        arguments: ['@service_container']
 
     topxia.twig.file_cache:
         class: Biz\Common\FilesystemCache

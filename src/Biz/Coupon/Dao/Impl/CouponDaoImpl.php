@@ -32,7 +32,6 @@ class CouponDaoImpl extends GeneralDaoImpl implements CouponDao
                 'orderTime',
                 'id',
             ),
-            'cache' => 'table',
         );
     }
 
@@ -41,8 +40,9 @@ class CouponDaoImpl extends GeneralDaoImpl implements CouponDao
         return $this->findInField('id', $ids);
     }
 
-    public function getByCode($code, $lock = false)
+    public function getByCode($code, array $options = array())
     {
+        $lock = isset($options['lock']) && $options['lock'] === true;
         $sql = "SELECT * FROM {$this->table} WHERE code = ? LIMIT 1".($lock ? ' FOR UPDATE' : '');
 
         return $this->db()->fetchAssoc($sql, array($code)) ?: null;

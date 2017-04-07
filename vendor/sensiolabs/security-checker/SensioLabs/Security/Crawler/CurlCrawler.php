@@ -11,7 +11,9 @@
 
 namespace SensioLabs\Security\Crawler;
 
+use Composer\CaBundle\CaBundle;
 use SensioLabs\Security\Exception\RuntimeException;
+use SensioLabs\Security\SecurityChecker;
 
 /**
  * @internal
@@ -48,8 +50,8 @@ class CurlCrawler extends BaseCrawler
         curl_setopt($curl, CURLOPT_FAILONERROR, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 1);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($curl, CURLOPT_CAINFO, $certFile);
-        curl_setopt($curl, CURLOPT_USERAGENT, 'SecurityChecker-CLI/4 CURL PHP');
+        curl_setopt($curl, CURLOPT_CAINFO, CaBundle::getSystemCaRootBundlePath());
+        curl_setopt($curl, CURLOPT_USERAGENT, sprintf('SecurityChecker-CLI/%s CURL PHP', SecurityChecker::VERSION));
 
         $response = curl_exec($curl);
 

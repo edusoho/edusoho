@@ -127,7 +127,7 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
                 'picture != :pictureNull',
                 'updatedTime >= :updatedTime_GE',
                 'categoryId IN (:categoryIds)',
-                'orgCode LIKE :likeOrgCode',
+                'orgCode PRE_LIKE :likeOrgCode',
                 'id != :idNotEqual',
                 'id = :articleId',
                 'thumb != :thumbNotEqual',

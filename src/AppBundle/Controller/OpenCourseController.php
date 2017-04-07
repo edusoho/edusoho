@@ -3,16 +3,16 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
-use AppBundle\Common\ArrayToolkit;
-use Biz\Course\Service\CourseSetService;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\TokenService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
 use Biz\Thread\Service\ThreadService;
 use Biz\System\Service\SettingService;
 use Biz\File\Service\UploadFileService;
+use Biz\Course\Service\CourseSetService;
 use Symfony\Component\HttpFoundation\Cookie;
 use Biz\OpenCourse\Service\OpenCourseService;
 use Symfony\Component\HttpFoundation\Request;
@@ -201,7 +201,6 @@ class OpenCourseController extends BaseOpenCourseController
     public function infoBarAction(Request $request, $courseId)
     {
         $course = $this->getOpenCourseService()->getCourse($courseId);
-        //$course['favoriteNum'] = $this->_getFavoriteNum($courseId);
 
         $member = $this->_getMember($course['id']);
 
@@ -630,18 +629,6 @@ class OpenCourseController extends BaseOpenCourseController
         }
 
         return $lessons[0];
-    }
-
-    private function _getFavoriteNum($courseId)
-    {
-        //涉及到课程 暂定
-        $favoriteNum = $this->getCourseService()->searchCourseFavoriteCount(array(
-            'courseId' => $courseId,
-            'type' => 'openCourse',
-        )
-        );
-
-        return $favoriteNum;
     }
 
     private function _memberOperate(Request $request, $courseId)

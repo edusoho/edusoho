@@ -1,5 +1,5 @@
 {% if course.buyable|default(true) == false and ( is_plugin_installed('Vip') and  course.vipLevelId == 0) %}
-  {{ '该课程为限制课程'|trans }}<br>{{ '请联系客服'|trans }}
+  {{ '该课程为限制课程'|trans }},{{ '请联系客服'|trans }}
 {% else %}
   {% if course.status != 'published' or courseSet.status != 'published' %}
     课程还未发布，不允许加入和购买

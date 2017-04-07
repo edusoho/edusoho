@@ -802,10 +802,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $file;
     }
 
-    // TODO
     public function tryAccessFile($fileId)
     {
         $file = $this->getFullFile($fileId);
+
         if (empty($file)) {
             throw $this->createNotFoundException();
         }

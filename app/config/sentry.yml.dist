@@ -1,0 +1,8 @@
+sentry:
+    dsn: "%sentry_dsn%" 
+    app_path: "%sentry_app_path%"
+    environment: "%kernel.environment%"
+    release: "%app_version%"
+    skip_capture:
+        - "Symfony\\Component\\HttpKernel\\Exception\\HttpExceptionInterface"
+    error_types: E_ALL & ~E_DEPRECATED & ~E_NOTICE

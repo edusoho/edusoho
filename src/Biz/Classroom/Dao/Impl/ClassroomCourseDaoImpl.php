@@ -9,19 +9,6 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
 {
     protected $table = 'classroom_courses';
 
-    public function declares()
-    {
-        return array(
-            'orderbys' => array('seq'),
-            'conditions' => array(
-                'classroomId =:classroomId',
-                'courseId = :courseId',
-                'disabled = :disabled',
-            ),
-            'cache' => 'table',
-        );
-    }
-
     public function updateByParam($params, $fields)
     {
         return $this->db()->update($this->table, $fields, $params);
@@ -135,5 +122,17 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
         }
 
         return $result;
+    }
+
+    public function declares()
+    {
+        return array(
+            'orderbys' => array('seq'),
+            'conditions' => array(
+                'classroomId =:classroomId',
+                'courseId = :courseId',
+                'disabled = :disabled',
+            ),
+        );
     }
 }

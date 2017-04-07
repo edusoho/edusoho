@@ -64,7 +64,7 @@ class OrgManageController extends BaseController
 
     public function deleteAction(Request $request, $id)
     {
-        $relatedDatas = $this->getOrgService()->findRelatedModuleDatas($id);
+        $relatedDatas = $this->getOrgService()->findRelatedModuleCounts($id);
 
         if (empty($relatedDatas)) {
             $this->getOrgService()->deleteOrg($id);

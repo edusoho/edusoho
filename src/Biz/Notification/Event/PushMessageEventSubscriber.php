@@ -2,10 +2,10 @@
 
 namespace Biz\Notification\Event;
 
+use Biz\CloudPlatform\IMAPIFactory;
 use Topxia\Api\Util\MobileSchoolUtil;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
-use Biz\CloudPlatform\IMAPIFactory;
 
 class PushMessageEventSubscriber extends EventSubscriber
 {
@@ -766,7 +766,7 @@ class PushMessageEventSubscriber extends EventSubscriber
                 $target['convNo'] = empty($conv) ? '' : $conv['no'];
                 break;
             case 'lesson':
-                $lesson = $this->getCourseService()->getLesson($id);
+                $task = $this->getTaskService()->getTask($id);
                 $target['title'] = $lesson['title'];
                 break;
             case 'classroom':
@@ -915,6 +915,11 @@ class PushMessageEventSubscriber extends EventSubscriber
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 
     protected function getClassroomService()

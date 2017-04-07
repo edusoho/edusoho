@@ -33,7 +33,6 @@ class SettingDaoImpl extends GeneralDaoImpl implements SettingDao
                 'name = :name',
                 'namespace = :namespace',
             ),
-            'cache' => 'table',
         );
     }
 }
