@@ -1,10 +1,12 @@
 <?php
 namespace Codeages\PluginBundle\System;
 
-use Symfony\Component\Yaml\Yaml;
+use Codeages\Biz\Framework\Context\BizAware;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Yaml\Yaml;
 
 class PluginRegister
 {
@@ -12,10 +14,10 @@ class PluginRegister
 
     protected $biz;
 
-    public function __construct($rootDir, $pluginBaseDir, $biz = null)
+    public function __construct($rootDir, $pluginBaseDir,  $biz = null)
     {
         $this->rootDir = rtrim($rootDir, "\/");
-        $this->pluginRootDir = $this->rootDir."/{$pluginBaseDir}";
+        $this->pluginRootDir = $this->rootDir . "/{$pluginBaseDir}";
         $this->biz = $biz;
     }
 
@@ -50,7 +52,7 @@ class PluginRegister
 
     public function executeDatabaseScript($code)
     {
-        $file = $this->getPluginDirectory($code).DIRECTORY_SEPARATOR.'Scripts'.DIRECTORY_SEPARATOR.'database.sql';
+        $file = $this->getPluginDirectory($code) . DIRECTORY_SEPARATOR . 'Scripts' . DIRECTORY_SEPARATOR . 'database.sql';
         if (!file_exists($file)) {
             return false;
         }
@@ -62,7 +64,7 @@ class PluginRegister
 
     public function executeScript($code)
     {
-        $file = $this->getPluginDirectory($code).DIRECTORY_SEPARATOR.'Scripts'.DIRECTORY_SEPARATOR.'InstallScript.php';
+        $file = $this->getPluginDirectory($code) . DIRECTORY_SEPARATOR . 'Scripts' . DIRECTORY_SEPARATOR . 'InstallScript.php';
         if (!file_exists($file)) {
             return false;
         }
@@ -118,7 +120,7 @@ class PluginRegister
             );
         }
 
-        $manager = new PluginConfigurationManager(dirname($this->pluginRootDir).'/app');
+        $manager = new PluginConfigurationManager(dirname($this->pluginRootDir) . '/app');
         $manager->setInstalledPlugins($installeds)->save();
 
         $this->refreshInstalledPluginRouting($installeds);
@@ -133,7 +135,7 @@ class PluginRegister
             foreach (array('' => 'routing.yml', 'admin' => 'routing_admin.yml') as $prefix => $filename) {
                 if ($plugin['protocol'] < 3) {
                     continue;
-                }
+                } 
 
                 $resourcePath = sprintf("%sPlugin/Resources/config/%s", ucfirst($plugin['code']), $filename);
                 $filePath = sprintf("%s/%s", $this->pluginRootDir, $resourcePath);
@@ -147,7 +149,7 @@ class PluginRegister
             }
         }
 
-        $routingFile = $this->rootDir.'/app/config/routing_plugins.yml';
+        $routingFile = $this->rootDir . '/app/config/routing_plugins.yml';
 
         if (!$fs->exists($routingFile)) {
             $fs->touch($routingFile);
@@ -189,11 +191,11 @@ class PluginRegister
 
     public function getPluginDirectory($code)
     {
-        return $this->pluginRootDir.DIRECTORY_SEPARATOR.ucfirst($code).'Plugin';
+        return $this->pluginRootDir . DIRECTORY_SEPARATOR . ucfirst($code) . 'Plugin';
     }
 
     public function getPluginMetasFile($code)
     {
-        return $this->getPluginDirectory($code).DIRECTORY_SEPARATOR.'plugin.json';
+        return $this->getPluginDirectory($code) . DIRECTORY_SEPARATOR . 'plugin.json';
     }
 }
