@@ -7,7 +7,7 @@ const validator = initValidator();
 toggleExpiryValue($("[name=expiryMode]:checked").val());
 
 $("[name='expiryMode']").change(function () {
-  if (app.arguments.classroomStatus == 'published') {
+  if (app.arguments.classroomStatus === 'published') {
     return false;
   }
   var expiryValue = $("[name='expiryValue']").val();
@@ -61,7 +61,6 @@ function initValidator() {
 }
 
 function toggleExpiryValue(expiryMode) {
-  console.log('toggleExpiryValue: ', expiryMode);
   if (!$("[name='expiryValue']").val()) {
     $("[name='expiryValue']").val($("[name='expiryValue']").data(expiryMode));
   }
@@ -74,6 +73,9 @@ function toggleExpiryValue(expiryMode) {
       validator.form();
       break;
     case 'date':
+      if($('#classroom_expiryValue').attr('readonly') !== undefined){
+        return false;
+      }
       $(".expiry-value-js .controls > span").addClass('hidden');
       $("#classroom_expiryValue").datetimepicker({
         language: 'zh-CN',
