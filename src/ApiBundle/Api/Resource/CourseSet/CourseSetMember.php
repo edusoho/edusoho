@@ -11,7 +11,6 @@ class CourseSetMember extends Resource
     {
         $conditions = $request->query->all();
         $conditions['courseSetId'] = $courseSetId;
-        $conditions['role'] = 'student';
         $conditions['locked'] = 0;
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);

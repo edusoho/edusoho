@@ -12,8 +12,7 @@ class CourseMember extends Resource
     public function search(Request $request, $courseId)
     {
         $conditions = $request->query->all();
-        $conditions['$courseId'] = $courseId;
-        $conditions['role'] = 'student';
+        $conditions['courseId'] = $courseId;
         $conditions['locked'] = 0;
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
