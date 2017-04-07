@@ -1,5 +1,7 @@
 <?php
 
+use AppBundle\Common\ArrayToolkit;
+
 class TestpaperMigrate extends AbstractMigrate
 {
     public function update($page)
@@ -98,19 +100,22 @@ class TestpaperMigrate extends AbstractMigrate
             $passedCondition = json_encode($passedCondition);
 
             $metas = json_decode($testpaper['metas'], true);
-            if (empty($metas['counts'])) {
-                $sql = "select questionType,count(id) as count from testpaper_item where testId={$testpaper['id']} group by questionType";
+            if (empty($metas['question_type_seq'])) {
+                $sql = "select questionType,count(id) as count from testpaper_item where testId={$testpaper['id']} and parentId > 0 group by questionType order by questionType desc";
                 $testpaperItemCounts = $this->getConnection()->fetchAll($sql);
+                $metas['question_type_seq'] = ArrayToolkit::column($testpaperItemCounts, 'questionType');
+            }
 
+            if (empty($metas['counts'])) {
                 $counts = array();
-                array_map(function ($count) use (&$counts) {
-                    $counts[$count['questionType']] = $count['count'];
-                }, $testpaperItemCounts);
+                array_map(function ($type) use (&$counts) {
+                    return $counts[$type] = 1;
+                }, $metas['question_type_seq']);
 
                 $metas['counts'] = $counts;
-
-                $testpaper['metas'] = json_encode($metas);
             }
+
+            $testpaper['metas'] = json_encode($metas);
 
             $this->getConnection()->insert('testpaper_v8', array(
                 'id' => $testpaper['id'],
