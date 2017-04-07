@@ -16,7 +16,6 @@
         <span class="color-danger">(已到期)</span>
       {% else %}
         {% set lastDays = course.expiryEndDate|time_diff %}
-        {{ lastDays }}
         {% if lastDays == 0 %}
           <span class="color-warning">(今日到期)</span>
         {% elseif lastDays == 1 %}
