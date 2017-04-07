@@ -28,8 +28,9 @@ class CourseThreadEventSubscriber extends EventSubscriber implements EventSubscr
         $course = $this->getCourseService()->getCourse($post['courseId']);
 
         if ($course['parentId']) {
-            $classroom = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
-            $isTeacher = $this->getClassroomService()->isClassroomTeacher($classroom[0], $post['userId']);
+            $classrooms = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
+            $classroom = array_shift($classrooms);
+            $isTeacher = $this->getClassroomService()->isClassroomTeacher($classroom['classroomId'], $post['userId']);
         } else {
             $isTeacher = $this->getCourseMemberService()->isCourseTeacher($post['courseId'], $post['userId']);
         }
