@@ -122,6 +122,11 @@ class BuildUpgradePackageCommand extends BaseCommand
                     continue;
                 }
 
+                if (strpos($opFile, 'tests') === 0 || strpos($newFile, 'tests') === 0) {
+                    $this->output->writeln("<comment>忽略文件：{$opFile}</comment>");
+                    continue;
+                }
+
                 if (strpos($opFile, 'migrations') === 0) {
                     $this->output->writeln("<comment>忽略文件：{$opFile}</comment>");
                     continue;
@@ -192,7 +197,7 @@ class BuildUpgradePackageCommand extends BaseCommand
             exit(1);
         }
 
-        $root = dirname($this->getContainer()->getParameter('kernel.root_dir').'/../');
+        $root = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
 
         if (!is_file("{$root}/{$opFile}")) {
             return;
@@ -203,7 +208,7 @@ class BuildUpgradePackageCommand extends BaseCommand
 
     private function createDirectory()
     {
-        $root = dirname($this->getContainer()->getParameter('kernel.root_dir').'/../');
+        $root = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
         $path = "{$root}/build/EduSoho_{$this->version}/";
 
         if ($this->filesystem->exists($path)) {
@@ -257,7 +262,7 @@ class BuildUpgradePackageCommand extends BaseCommand
         $this->output->writeln("\n\n");
         $this->output->write('<info>拷贝升级脚本：</info>');
 
-        $path = dirname($this->getContainer()->getParameter('kernel.root_dir').'/../').'/scripts/upgrade-'.$this->version.'.php';
+        $path = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../').'/scripts/upgrade-'.$this->version.'.php';
 
         if (!file_exists($path)) {
             $this->output->writeln('无升级脚本');

@@ -9,27 +9,25 @@ use Biz\PayCenter\Service\GatewayService;
 
 class GatewayServiceImpl extends BaseService implements GatewayService
 {
-    public function beforePayOrder($orderId, $payment)
+    public function beforePayOrder($orderId, $targetType, $payment)
     {
-        $order = $this->getOrderService()->getOrder($orderId);
+        $processor = OrderProcessorFactory::create($targetType);
+        $order = $processor->updateOrder($orderId, array('payment' => $payment));
 
         try {
-            $this->check($order, $payment);
+            $this->check($processor, $order, $payment);
         } catch (PayCenterException $e) {
             $checkResult['error'] = $e->getMessage();
 
             return array($checkResult, null);
         }
 
-        $newOrder = OrderProcessorFactory::create($order['targetType'])
-            ->updateOrder($order['id'], array('payment' => $payment));
+        $newOrder = $this->ifZeroOrderThenPay($order);
 
-        $this->ifZeroOrderThenPay($newOrder);
-
-        return array(null, $this->getOrderService()->getOrder($orderId));
+        return array(null, $newOrder);
     }
 
-    private function check($order, $payment)
+    private function check($processor, $order, $payment)
     {
         if (!$payment) {
             throw new PayCenterException('支付方式未开启, 请先开启', 2007);
@@ -55,11 +53,12 @@ class GatewayServiceImpl extends BaseService implements GatewayService
             throw new PayCenterException($paymentSetting['disabled_message'], 2002);
         }
 
-        $processor = OrderProcessorFactory::create($order['targetType']);
-        $isTargetExist = $processor->isTargetExist($order['targetId']);
+        if (!empty($order['targetId'])) {
+            $isTargetExist = $processor->isTargetExist($order['targetId']);
 
-        if (!$isTargetExist) {
-            throw new PayCenterException('该订单已失效', 2003);
+            if (!$isTargetExist) {
+                throw new PayCenterException('该订单已失效', 2003);
+            }
         }
 
         if ($order['userId'] != $user['id']) {
@@ -97,7 +96,13 @@ class GatewayServiceImpl extends BaseService implements GatewayService
                 'amount' => $order['amount'],
                 'paidTime' => time(),
             );
-            $this->getPayCenterService()->processOrder($payData);
+            list($success, $newOrder) = $this->getPayCenterService()->processOrder($payData);
+
+            if (!$success) {
+                throw new PayCenterException('非法支付订单', 2000);
+            }
+
+            return $newOrder;
         } elseif ($order['amount'] == 0 && $order['coinAmount'] > 0) {
             $payData = array(
                 'sn' => $order['sn'],
@@ -106,22 +111,21 @@ class GatewayServiceImpl extends BaseService implements GatewayService
                 'paidTime' => time(),
                 'payment' => 'coin',
             );
-            list($success, $order) = $this->getPayCenterService()->pay($payData);
+            list($success, $newOrder) = $this->getPayCenterService()->pay($payData);
 
             if (!$success) {
                 throw new PayCenterException('非法支付订单', 2000);
             }
+
+            return $newOrder;
         }
+
+        return $order;
     }
 
     private function getSettingService()
     {
         return $this->createService('System:SettingService');
-    }
-
-    private function getOrderService()
-    {
-        return $this->createService('Order:OrderService');
     }
 
     protected function getCouponService()
