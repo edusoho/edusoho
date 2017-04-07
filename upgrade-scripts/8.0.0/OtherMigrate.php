@@ -70,7 +70,6 @@ class OtherMigrate extends AbstractMigrate
 
     private function migrate7()
     {
-
         if (!$this->isFieldExist('course_member', 'courseSetId')) {
             $this->exec(
                 "ALTER TABLE `course_member` ADD COLUMN  `courseSetId` int(10) unsigned NOT NULL COMMENT '课程ID';"
@@ -155,9 +154,14 @@ class OtherMigrate extends AbstractMigrate
             $this->exec("ALTER TABLE classroom ADD `creator` int(10) NOT NULL DEFAULT '0' COMMENT '班级创建者';");
             $this->exec("UPDATE `classroom` SET `creator` = `headTeacherId` WHERE `creator` = 0;");
         }
-    }
-    private function migrate15(){
 
+        if (!$this->isFieldExist('classroom', 'expiryMode')) {
+            $this->exec("ALTER TABLE `classroom` ADD `expiryMode` enum('date', 'days', 'none') NOT NULL DEFAULT 'none' COMMENT '有效期的模式';");
+        }
+    }
+
+    private function migrate15()
+    {
         $this->exec("UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\Biz\\Discount\\Job\\DiscountEndJob' WHERE `name` = 'DiscountEndJob';");
         $this->exec("UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\Biz\\Discount\\Job\\DiscountStartJob' WHERE `name` = 'DiscountStartJob';");
         $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\Crontab\\Service\\Impl\\EmptyJob' WHERE `name` = 'EmptyJob';");
@@ -182,12 +186,12 @@ class OtherMigrate extends AbstractMigrate
 
     public function update($page)
     {
-        if ($page>15) {
+        if ($page > 15) {
             return;
         }
 
         $method = "migrate{$page}";
         $this->$method();
-        return $page+1;
+        return $page + 1;
     }
 }
