@@ -305,7 +305,7 @@ class OpenCourseController extends BaseOpenCourseController
 
         $posts = $this->getThreadService()->searchPosts(
             $conditions,
-            array('createdTime' => 'DESC'),
+            array('createdTime' => 'ASC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
