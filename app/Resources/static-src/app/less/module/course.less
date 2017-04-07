@@ -110,24 +110,7 @@
       i {
         margin-right: 5px;
       }
-      .course-price-widget {
-        float: right;
-      }
-     
-      .price {
-        //不能用color-dange代替...便于主题重写
-        color: @brand-danger;
-        font-size: 14px;
-        margin-right: 0;
-      }
-      .free {
-        //不能用color-dange代替...便于主题重写
-        color: @brand-success;
-      }
-      .discount {
-        //不能用color-dange代替...便于主题重写
-        color: @brand-warning;
-      }
+      
       .comment {
         margin-left: 10px;
         @media (max-width: @screen-xs-max) {
@@ -171,5 +154,26 @@
         // background: @brand-primary;
       }
     }
+  }
+  .course-price-widget {
+    float: right;
+  }
+}
+
+.course-price-widget {
+  .price {
+    //不能用color-dange代替...便于主题重写
+    color: @brand-danger;
+    font-size: 14px;
+    margin-right: 0;
+  }
+
+  .free {
+    //不能用color-dange代替...便于主题重写
+    color: @brand-success;
+  }
+  .discount {
+    //不能用color-dange代替...便于主题重写
+    color: @brand-warning;
   }
 }

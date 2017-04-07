@@ -22,9 +22,9 @@ class GatewayServiceImpl extends BaseService implements GatewayService
             return array($checkResult, null);
         }
 
-        $this->ifZeroOrderThenPay($order);
+        $newOrder = $this->ifZeroOrderThenPay($order);
 
-        return array(null, $order);
+        return array(null, $newOrder);
     }
 
     private function check($processor, $order, $payment)
@@ -96,7 +96,13 @@ class GatewayServiceImpl extends BaseService implements GatewayService
                 'amount' => $order['amount'],
                 'paidTime' => time(),
             );
-            $this->getPayCenterService()->processOrder($payData);
+            list($success, $newOrder) = $this->getPayCenterService()->processOrder($payData);
+
+            if (!$success) {
+                throw new PayCenterException('非法支付订单', 2000);
+            }
+
+            return $newOrder;
         } elseif ($order['amount'] == 0 && $order['coinAmount'] > 0) {
             $payData = array(
                 'sn' => $order['sn'],
@@ -105,22 +111,21 @@ class GatewayServiceImpl extends BaseService implements GatewayService
                 'paidTime' => time(),
                 'payment' => 'coin',
             );
-            list($success, $order) = $this->getPayCenterService()->pay($payData);
+            list($success, $newOrder) = $this->getPayCenterService()->pay($payData);
 
             if (!$success) {
                 throw new PayCenterException('非法支付订单', 2000);
             }
+
+            return $newOrder;
         }
+
+        return $order;
     }
 
     private function getSettingService()
     {
         return $this->createService('System:SettingService');
-    }
-
-    private function getOrderService()
-    {
-        return $this->createService('Order:OrderService');
     }
 
     protected function getCouponService()
