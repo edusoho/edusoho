@@ -47,7 +47,7 @@ class BuildPluginAppCommand extends BaseCommand
 
     private function _copySource($name, $pluginDir, $distDir)
     {
-        $sourceTargetDir = $distDir.'/source/'.$name;
+        $sourceTargetDir = $distDir.'/source/'.$name.'Plugin';
         $this->output->writeln("<info>    * 拷贝代码：{$pluginDir} -> {$sourceTargetDir}</info>");
         $this->filesystem->mirror($pluginDir, $sourceTargetDir);
 
@@ -147,7 +147,7 @@ class BuildPluginAppCommand extends BaseCommand
 
     private function getPluginDirectory($name)
     {
-        $pluginDir = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../plugins/'.$name);
+        $pluginDir = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../plugins/'.$name.'Plugin');
 
         if (empty($pluginDir)) {
             throw new \RuntimeException("${pluginDir}目录不存在");
