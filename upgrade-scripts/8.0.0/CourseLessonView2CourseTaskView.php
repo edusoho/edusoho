@@ -24,11 +24,6 @@ class CourseLessonView2CourseTaskView extends AbstractMigrate
             );
         }
 
-        if ($page==1) {
-            $sql = "delete from course_task_view where id<= (select max(id) from course_lesson_view)";
-            $this->exec($sql);
-        }
-
         $countSql = 'SELECT count(*) FROM `course_lesson_view`';
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
