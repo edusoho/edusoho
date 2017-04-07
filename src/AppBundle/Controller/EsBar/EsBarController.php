@@ -58,9 +58,12 @@ class EsBarController extends BaseController
             }
         }
 
-        return $this->render('es-bar/list-content/study-place/my-course.html.twig', array(
-            'courses' => $sortedCourses,
-        ));
+        return $this->render(
+            'es-bar/list-content/study-place/my-course.html.twig',
+            array(
+                'courses' => $sortedCourses,
+            )
+        );
     }
 
     public function classroomAction(Request $request)
@@ -98,9 +101,12 @@ class EsBarController extends BaseController
             $sortedClassrooms[] = $classroom;
         }
 
-        return $this->render('es-bar/list-content/study-place/my-classroom.html.twig', array(
-            'classrooms' => $sortedClassrooms,
-        ));
+        return $this->render(
+            'es-bar/list-content/study-place/my-classroom.html.twig',
+            array(
+                'classrooms' => $sortedClassrooms,
+            )
+        );
     }
 
     public function notifyAction(Request $request)
@@ -114,9 +120,12 @@ class EsBarController extends BaseController
         $notifications = $this->getNotificationService()->searchNotificationsByUserId($user->id, 0, 15);
         $this->getNotificationService()->clearUserNewNotificationCounter($user->id);
 
-        return $this->render('es-bar/list-content/notification/notify.html.twig', array(
-            'notifications' => $notifications,
-        ));
+        return $this->render(
+            'es-bar/list-content/notification/notify.html.twig',
+            array(
+                'notifications' => $notifications,
+            )
+        );
     }
 
     public function practiceAction(Request $request, $status)
@@ -134,10 +143,18 @@ class EsBarController extends BaseController
         );
         $sort = array('updateTime' => 'DESC');
         $homeworkResults = $this->getTestpaperService()->searchTestpaperResults($conditions, $sort, 0, 10);
+
         $courseIds = ArrayToolkit::column($homeworkResults, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-
         $homeworkActivityIds = ArrayToolkit::column($homeworkResults, 'lessonId');
+
+        $existCourseIds = ArrayToolkit::column($courses, 'id');
+        $homeworkResults = array_filter(
+            $homeworkResults,
+            function ($homeworkResult) use ($existCourseIds) {
+                return in_array($homeworkResult['courseId'], $existCourseIds);
+            }
+        );
 
         $conditions = array(
             'status' => $status,
@@ -153,13 +170,16 @@ class EsBarController extends BaseController
         $activityIds = array_merge($homeworkActivityIds, $testpaperActivityIds);
         $tasks = $this->getTaskService()->findTasksByActivityIds($activityIds);
 
-        return $this->render('es-bar/list-content/practice/practice.html.twig', array(
-            'testPaperResults' => $testPaperResults,
-            'courses' => $courses,
-            'tasks' => $tasks,
-            'homeworkResults' => $homeworkResults,
-            'status' => $status,
-        ));
+        return $this->render(
+            'es-bar/list-content/practice/practice.html.twig',
+            array(
+                'testPaperResults' => $testPaperResults,
+                'courses' => $courses,
+                'tasks' => $tasks,
+                'homeworkResults' => $homeworkResults,
+                'status' => $status,
+            )
+        );
     }
 
     protected function getClassroomService()
