@@ -58,6 +58,14 @@ export default class QuestionManage{
     }
 
     let stats = this._calTestpaperStats();
+
+    if($('[name="passedScore"]').length > 0){
+      let passedScore = $('input[name="passedScore"]').val();
+      if( passedScore > stats.total.score){
+        notify('danger','及格分数（' + passedScore + '）不能高于总分（' + stats.total.score + '）。');
+        return;
+      }
+    }
     
     let html='';
     $.each(stats, function(index, statsItem){
