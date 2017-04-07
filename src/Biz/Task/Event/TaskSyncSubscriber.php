@@ -160,7 +160,9 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
 
         $testId = empty($testpaper) ? 0 : $testpaper['id'];
 
-        $ext = $this->getActivityConfig($activity['mediaType'])->copy($activity, array('testId' => $testId));
+        $ext = $this->getActivityConfig($activity['mediaType'])->copy($activity, array(
+            'testId' => $testId, 'refLiveroom' => 1,
+        ));
         $newActivity = array(
             'title' => $activity['title'],
             'remark' => $activity['remark'],
