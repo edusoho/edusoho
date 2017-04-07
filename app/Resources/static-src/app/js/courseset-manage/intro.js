@@ -1,6 +1,5 @@
 import 'store';
 import Cookies from 'js-cookie';
-import { showSettings } from 'app/js/course-manage/help';
 const COURSE_BASE_INTRO = 'COURSE_BASE_INTRO';
 const COURSE_TASK_INTRO = 'COURSE_TASK_INTRO';
 const COURSE_TASK_DETAIL_INTRO = 'COURSE_TASK_DETAIL_INTRO';
@@ -9,7 +8,6 @@ const COURSE_LIST_INTRO_COOKIE = 'COURSE_LIST_INTRO_COOKIE';
 
 export default class Intro {
   constructor() {
-    showSettings();
     this.intro = null;
     this.customClass = "es-intro-help multistep";
     $('body').on('click','.js-skip',(event)=>{
