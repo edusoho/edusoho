@@ -541,10 +541,10 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         foreach ($items as $questionId => $item) {
             if (array_key_exists($questionId, $itemResults)) {
                 $questions[$questionId]['testResult'] = $itemResults[$questionId];
-            } else {
+            } elseif ($resultId) {
                 //兼容
                 $questions[$questionId]['testResult'] = array(
-                    'questionId' => $questonId
+                    'questionId' => $questionId,
                     'status' => 'noAnswer',
                     'score' => '0.0',
                     'answer' => array(),
