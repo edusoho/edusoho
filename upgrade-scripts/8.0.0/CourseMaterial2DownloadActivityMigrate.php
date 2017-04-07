@@ -77,7 +77,7 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
               `createdTime` int(10) unsigned NOT NULL COMMENT '资料创建时间',
               `copyId` int(10) NOT NULL DEFAULT '0' COMMENT '复制的资料Id',
               `type` varchar(50) NOT NULL DEFAULT 'course' COMMENT '课程类型',
-              `courseSetId` int(10) DEFAULT NULL,
+              `courseSetId` int(10) DEFAULT 0,
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
             ");
