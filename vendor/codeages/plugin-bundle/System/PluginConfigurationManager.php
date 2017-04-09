@@ -2,6 +2,7 @@
 
 namespace Codeages\PluginBundle\System;
 
+
 class PluginConfigurationManager
 {
     protected $filepath;
@@ -91,12 +92,11 @@ class PluginConfigurationManager
 
     public function isPluginInstalled($code)
     {
-    
         $plugins = $this->getInstalledPlugins();
         $code = strtolower($code);
 
         foreach ($plugins as $plugin) {
-            if ($code == strtolower($plugin['code'])) {
+            if ($code == strtolower($plugin['code']) && $plugin['protocol'] >=3) {
                 return true;
             }
         }
