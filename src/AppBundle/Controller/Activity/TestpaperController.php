@@ -58,7 +58,7 @@ class TestpaperController extends BaseController implements ActivityActionInterf
     {
         $activity = $this->getActivityService()->getActivity($id);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
-        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testpaperActivity['mediaId'], $activity['type']);
+        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testpaperActivity['mediaId'], $activity['mediaType']);
 
         if (!$testpaper) {
             return $this->render('activity/testpaper/preview.html.twig', array(
