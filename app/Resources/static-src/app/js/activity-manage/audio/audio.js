@@ -1,10 +1,5 @@
 import FileChooser from 'app/js/file-chooser/file-choose';
-import {
-  chooserUiOpen,
-  chooserUiClose,
-  showChooserType
-} from 'app/js/activity-manage/widget/chooser-ui.js';
-
+import { chooserUiOpen, chooserUiClose, showChooserType } from 'app/js/activity-manage/widget/chooser-ui.js';
 export default class Audio {
   constructor() {
     showChooserType($('[name="ext[mediaId]"]'));
@@ -61,6 +56,7 @@ export default class Audio {
 
   initFileChooser() {
     const fileChooser = new FileChooser();
+    console.log(fileChooser);
     const onSelectFile = file => {
       chooserUiClose();
       if (file.length) {

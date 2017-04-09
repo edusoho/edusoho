@@ -1,5 +1,4 @@
 import swfobject from "es-swfobject";
-
 let $el = $('#flash-player');
 
 if (!swfobject.hasFlashPlayerVersion('11')) {

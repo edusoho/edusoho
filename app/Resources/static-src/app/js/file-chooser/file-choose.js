@@ -37,11 +37,11 @@ class FileChooser extends Emitter{
   }
 
   fileSelect(file) {
-    this._fillTitle(file);
+    this.fillTitle(file);
     this.emit('select', file);
   }
 
-  _fillTitle(file){
+  fillTitle(file){
     let $title = $("#title");
     if ($title.length > 0 && $title.val()=='') {
       let title = file.name.substring(0,file.name.lastIndexOf('.'));
