@@ -19,7 +19,7 @@ class ExerciseResultMigrate extends AbstractMigrate
     private function updateExerciseResult()
     {
         //courseId,courseSetId 跟原来的值相同，只需要改testId和lessonId
-        $sql = "UPDATE testpaper_result_v8 AS tr, (SELECT id,migrateTestId FROM testpaper_v8 WHERE type = 'exercise') as tmp set testId = tmp.id where tr.type = 'exercise' AND tr.testId = tmp.id";
+        $sql = "UPDATE testpaper_result_v8 AS tr, (SELECT id,migrateTestId,name FROM testpaper_v8 WHERE type = 'exercise') as tmp set tr.testId = tmp.id,tr.paperName = tmp.name where tr.type = 'exercise' AND tmp.migrateTestId = tr.testId";
         $this->getConnection()->exec($sql);
 
         $sql = "UPDATE testpaper_result_v8 AS tr, (SELECT id,mediaId FROM activity WHERE mediaType = 'exercise') as tmp set lessonId = tmp.id where tr.type = 'exercise' AND tr.testId = tmp.mediaId";
@@ -62,6 +62,6 @@ class ExerciseResultMigrate extends AbstractMigrate
             FROM exercise_result WHERE id NOT IN (SELECT migrateResultId FROM testpaper_result_v8 WHERE type = 'exercise') order by id limit 0, {$this->perPageCount}";
         $this->getConnection()->exec($sql);
 
-        return $page+1;
+        return $page + 1;
     }
 }

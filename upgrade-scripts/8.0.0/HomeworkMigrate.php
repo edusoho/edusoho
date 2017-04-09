@@ -12,6 +12,8 @@ class HomeworkMigrate extends AbstractMigrate
         if (!empty($nextPage)) {
             return $nextPage;
         }
+
+        $this->updateHomeworkMigrate();
     }
 
     private function insertHomework($page)
@@ -56,10 +58,16 @@ class HomeworkMigrate extends AbstractMigrate
 
             if ($homework['copyId'] == 0) {
                 $subSql = "UPDATE testpaper_v8 SET copyId = {$homeworkNew['id']} WHERE copyId = {$homework['id']} AND type = 'homework'";
-                $this->exec($subSql);
+                $this->getConnection()->exec($subSql);
             }
         }
 
         return $page + 1;
+    }
+
+    public function updateHomeworkMigrate()
+    {
+        $sql = "UPDATE testpaper_v8 AS t, course_lesson AS cl SET t.name = CONCAT(cl.title,'的作业') WHERE t.lessonId = cl.id AND t.type = 'homework'";
+        $this->getConnection()->exec($sql);
     }
 }

@@ -18,10 +18,10 @@ class HomeworkResultMigrate extends AbstractMigrate
 
     private function updateHomeworkResult()
     {
-        $sql = "UPDATE testpaper_result_v8 AS tr,(SELECT id,migrateTestId FROM testpaper_v8 WHERE type ='homework') AS tmp SET testId = tmp.id WHERE tr.type = 'homework' AND tmp.migrateTestId = tr.testId";
+        $sql = "UPDATE testpaper_result_v8 AS tr,(SELECT id,migrateTestId,name FROM testpaper_v8 WHERE type ='homework') AS tmp SET tr.testId = tmp.id,tr.paperName = tmp.name WHERE tr.type = 'homework' AND tmp.migrateTestId = tr.testId";
         $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE testpaper_result_v8 AS tr,(SELECT id,mediaId FROM activity) AS tmp SET lessonId = tmp.Id WHERE tr.type = 'homework' AND tmp.mediaId = tr.testId";
+        $sql = "UPDATE testpaper_result_v8 AS tr,(SELECT id,mediaId FROM activity WHERE mediaType = 'homework') AS tmp SET lessonId = tmp.Id WHERE tr.type = 'homework' AND tmp.mediaId = tr.testId";
         $this->getConnection()->exec($sql);
     }
 
@@ -74,6 +74,6 @@ class HomeworkResultMigrate extends AbstractMigrate
                 id AS migrateResultId FROM homework_result WHERE id NOT IN (SELECT migrateResultId FROM testpaper_result_v8 WHERE type = 'homework') order by id limit 0, {$this->perPageCount}";
         $this->exec($sql);
 
-        return $page+1;
+        return $page + 1;
     }
 }

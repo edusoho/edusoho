@@ -12,6 +12,8 @@ class ExerciseMigrate extends AbstractMigrate
         if (!empty($nextPage)) {
             return $nextPage;
         }
+
+        $this->updateExerciseMigrate();
     }
 
     private function insertExercise($page)
@@ -74,5 +76,11 @@ class ExerciseMigrate extends AbstractMigrate
         }
 
         return $page + 1;
+    }
+
+    public function updateExerciseMigrate()
+    {
+        $sql = "UPDATE testpaper_v8 AS t, course_lesson AS cl SET t.name = CONCAT(cl.title,'的练习') WHERE t.lessonId = cl.id AND t.type = 'exercise'";
+        $this->getConnection()->exec($sql);
     }
 }
