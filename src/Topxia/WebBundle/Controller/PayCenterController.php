@@ -175,10 +175,18 @@ class PayCenterController extends BaseController
         $paymentRequest = $this->createPaymentRequest($order, $requestParams);
 
         $returnArray = $paymentRequest->unifiedOrder($openid);
+        $gotoParameters = $returnArray;
+        $gotoParameters['name'] = $fields['payment'];
+        $gotoParameters['sn'] = $order['sn'];
+        $gotoParameters['out_trade_no'] = $order['token'];
+
+        $goto = $this->generateUrl('pay_return',$gotoParameters);
+        
         if ($returnArray['return_code'] == 'SUCCESS') {
             return $this->render('TopxiaWebBundle:PayCenter:wxpay-h5.html.twig', array(
                 'order'           => $order,
-                'jsApiParameters' => $paymentRequest->getJsApiParameters($returnArray)
+                'jsApiParameters' => $paymentRequest->getJsApiParameters($returnArray),
+                'goto' => $goto
             ));
         }
         throw new \RuntimeException($returnArray['return_msg']);
