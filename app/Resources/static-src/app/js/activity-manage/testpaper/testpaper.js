@@ -46,7 +46,7 @@ export default class Testpaper {
               required:true,
               trim: true,
               maxlength: 50,
-              open_live_course_title: true,
+              course_title: true,
             },
             mediaId: {
               required: true,
