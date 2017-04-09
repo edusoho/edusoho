@@ -20,12 +20,12 @@
 
         </div>
         <span class="course-label">
-          {% if course.status == 'draft' %}
+          {% if courseSet.status == 'draft' %}
             <span class="label  label-warning">{{'未发布'|trans}}</span>
-          {% elseif course.status == 'closed' %}
+          {% elseif courseSet.status == 'closed' %}
             <span class="label label-danger">{{'已关闭'|trans}}</span>
           {% endif %}
-          {% if course.status != 'closed' %}
+          {% if courseSet.status != 'closed' %}
             {% if courseSet.serializeMode=='serialize' %}
               <span class="label label-success">{{'更新中'|trans}}</span>
             {% elseif courseSet.serializeMode=='finished' %}

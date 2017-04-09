@@ -13,7 +13,9 @@ class Testpaper extends Activity
 {
     protected function registerListeners()
     {
-        return array();
+        return array(
+            'activity.created' => 'Biz\Activity\Listener\TestpaperActivityCreateListener',
+        );
     }
 
     public function get($targetId)

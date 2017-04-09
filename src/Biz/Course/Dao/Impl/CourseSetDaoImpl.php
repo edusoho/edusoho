@@ -72,8 +72,8 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'orgCode PRE_LIKE :likeOrgCode',
             ),
             'serializes' => array(
-                'tags' => 'delimiter',
                 'goals' => 'delimiter',
+                'tags' => 'delimiter',
                 'audiences' => 'delimiter',
                 'teacherIds' => 'delimiter',
                 'cover' => 'json',
