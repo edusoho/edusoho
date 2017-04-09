@@ -942,7 +942,6 @@ class CourseManageController extends BaseController
     {
         $summary = $this->getReportService()->summary($course['id']);
         $lateMonthLearndData = $this->getReportService()->getLateMonthLearndData($course['id']);
-
         return $this->render(
             'course-manage/dashboard/course.html.twig',
             array(
@@ -984,7 +983,7 @@ class CourseManageController extends BaseController
         );
 
         $learnTime = $this->getActivityLearnLogService()->sumLearnTime(array('courseId' => $course['id']));
-        $learnTime = $course['studentNum'] == 0 ? 0 : intval($learnTime / $course['studentNum']);
+        $learnTime = $course['studentNum'] == 0 ? 0 : (int)$learnTime / $course['studentNum'];
 
         $noteCount = $this->getNoteService()->countCourseNotes(array('courseId' => $course['id']));
 

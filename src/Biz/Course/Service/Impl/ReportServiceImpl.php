@@ -95,7 +95,7 @@ class ReportServiceImpl extends BaseService implements ReportService
             }
         }
 
-        return $tasks;
+        return array_reverse($tasks);
     }
 
     private function countMembersFinishedAllTasksByCourseId($courseId)
