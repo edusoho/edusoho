@@ -108,6 +108,7 @@ interface TestpaperService
 
     /**
      * @param  $type
+     *
      * @return TestpaperBuilder
      */
     public function getTestpaperBuilder($type);
