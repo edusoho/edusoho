@@ -5,8 +5,10 @@ namespace AppBundle\Controller\Course;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
+use AppBundle\Common\ArrayToolkit;
 
 abstract class CourseBaseController extends BaseController
 {
@@ -52,7 +54,13 @@ abstract class CourseBaseController extends BaseController
         }
 
         if (!$this->getCourseService()->canTakeCourse($course)) {
-            $response = $this->createMessageResponse('info', '您还不是课程《'.$courseSet['title'].'》的学员，请先购买或加入学习。', null, 3000, $this->generateUrl('course_show', array('id' => $courseId)));
+            $response = $this->createMessageResponse(
+                'info',
+                '您还不是课程《'.$courseSet['title'].'》的学员，请先购买或加入学习。',
+                null,
+                3000,
+                $this->generateUrl('course_show', array('id' => $courseId))
+            );
         }
 
         return array($course, $member, $response);
@@ -111,6 +119,14 @@ abstract class CourseBaseController extends BaseController
         return $member;
     }
 
+    protected function findCourseSetTagsByCourseSetId($courseSetId)
+    {
+        $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course-set', 'ownerId' => $courseSetId));
+        $tagIds = ArrayToolkit::column($tags, 'id');
+
+        return $this->getTagService()->findTagsByIds($tagIds);
+    }
+
     /**
      * @return CourseService
      */
@@ -133,5 +149,13 @@ abstract class CourseBaseController extends BaseController
     protected function getMemberService()
     {
         return $this->getBiz()->service('Course:MemberService');
+    }
+
+    /**
+     * @return TagService
+     */
+    protected function getTagService()
+    {
+        return $this->createService('Taxonomy:TagService');
     }
 }
