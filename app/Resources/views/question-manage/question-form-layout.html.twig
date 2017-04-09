@@ -48,7 +48,7 @@
                   <option value="{{ task.id }}" {% if question.lessonId|default(0) == task.id %}selected{% endif %}>{{ task.title }}</option>
                 {% endfor %}
               </select>
-              <div class="help-block">{{'可以导入本课程、某个计划或者某个任务的题目'|trans}}</div>
+              <div class="help-block">{{'可以针对本课程、某个教学计划或者某个学习任务出题'|trans}}</div>
             </div>
           </div>
         {% endif %}
