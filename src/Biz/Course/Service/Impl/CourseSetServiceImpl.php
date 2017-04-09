@@ -21,6 +21,7 @@ use Biz\Course\Service\CourseNoteService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseDeleteService;
 use Biz\Course\Copy\Impl\ClassroomCourseCopy;
+use Biz\Taxonomy\TagOwnerManager;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
@@ -443,7 +444,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $fields = $this->filterFields($fields);
 
         if (null !== $tagIds) {
-            $fields['tags'] = $tagIds;
+            $tagOwnerManager = new TagOwnerManager('courseSet', $id, $tagIds, $userId);
+            $tagOwnerManager->update();
         }
 
         if (isset($fields['summary'])) {
