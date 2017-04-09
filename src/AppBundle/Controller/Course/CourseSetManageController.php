@@ -168,7 +168,7 @@ class CourseSetManageController extends BaseController
 
         $tags = $this->getTagService()->findTagsByOwner(array(
             'ownerType' => 'courseSet',
-            'ownerId'   => $id
+            'ownerId' => $id,
         ));
 
         return $this->render(

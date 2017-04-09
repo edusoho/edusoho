@@ -444,7 +444,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $fields = $this->filterFields($fields);
 
-
         if (isset($fields['summary'])) {
             $fields['summary'] = $this->purifyHtml($fields['summary'], true);
         }
