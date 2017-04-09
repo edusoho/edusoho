@@ -15,7 +15,7 @@ class ExerciseResult extends BaseResource
         $answers = $this->answerFormat($answers);
         $answers['usedTime'] = 0;
 
-        $exercise = $this->getTestpaperService()->getTestpaper($exerciseId);
+        $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($exerciseId, 'exercise');
         if (!$exercise) {
             return $this->error('404', '该练习不存在!');
         }
@@ -52,7 +52,7 @@ class ExerciseResult extends BaseResource
 
         $task = $this->getTaskService()->getTask($lessonId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
-        $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], 'exercise');
 
         if (empty($exercise)) {
             return $this->error('404', '该练习不存在!');

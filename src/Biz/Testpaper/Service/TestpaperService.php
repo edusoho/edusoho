@@ -8,6 +8,8 @@ interface TestpaperService
 {
     public function getTestpaper($id);
 
+    public function getTestpaperByIdAndType($id, $type);
+
     public function createTestpaper($fields);
 
     public function updateTestpaper($id, $fields);
@@ -105,7 +107,7 @@ interface TestpaperService
     public function updateTestpaperItems($testpaperId, $items);
 
     /**
-     * @param $type
+     * @param  $type
      *
      * @return TestpaperBuilder
      */
