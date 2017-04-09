@@ -2,7 +2,7 @@
 {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 {% import "macro.html.twig" as web_macro %}
 
-{% if member|default(false) and not 'auditor' in member.role %}
+{% if member|default(false) and not ('auditor' in member.role) %}
   <div class="clearfix">
      <button class="btn btn-primary btn-sm pull-right js-show-review-form" {% if not userReview or (hideRereview|default(false)) %}style="display:none;"{% endif %}>{{'重新评价'|trans}}</button>
   </div>
