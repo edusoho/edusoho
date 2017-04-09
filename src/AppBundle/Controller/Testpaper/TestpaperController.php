@@ -109,7 +109,7 @@ class TestpaperController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
 
         if (!$testpaper) {
-            throw $this->createResourceNotFoundException('testpaper', $testpaperResult['testId']);
+            return $this->createMessageResponse('info', '改试卷已删除，不能查看结果');
         }
 
         if ($testpaperResult['status'] === 'doing') {
@@ -149,7 +149,6 @@ class TestpaperController extends BaseController
             'source' => $request->query->get('source', 'course'),
             'attachments' => $attachments,
             'questionTypes' => $this->getCheckedQuestionType($testpaper),
-            'limitedTime' => 0,
             'task' => $task,
             'action' => $request->query->get('action', ''),
             'target' => $testpaperActivity,

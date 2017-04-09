@@ -1,5 +1,5 @@
 {% extends 'layout.html.twig' %}
-{% block title %}{{ paper.name }} - {{ parent() }}{% endblock %}
+{% block title %}{% if paperResult|default(null) %}{{ paperResult.paperName }}{% else %}{{ paper.name }}{% endif %} - {{ parent() }}{% endblock %}
 
 {% if isIframeBody|default(1) %}
   {% set bodyClass = 'task-testpaper-body-iframe js-task-testpaper-body js-task-testpaper-body-iframe' %}
@@ -31,7 +31,7 @@
               <div class="es-section testpaper-heading js-testpaper-heading">
                 <div class="testpaper-titlebar clearfix">
                   <h1 class="testpaper-title">
-                    {{ paper.name }} <br>
+                    {% if paperResult|default(null) %}{{ paperResult.paperName }}{% else %}{{ paper.name }}{% endif %} <br>
                     <small class="text-sm">
                       {% if paperResult.status|default('doing') in ['reviewing','finished'] %}
                         {{'答题人：'|trans}}{{ student.nickname }} 
