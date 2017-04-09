@@ -91,9 +91,8 @@ class Editor {
             $('.js-task-empty').addClass('hidden');
         }
         if (needAppend === false) {
-          // @TODO这里也需要返回html,进行替换          
+          // @TODO这里也需要返回html,进行替换   
           document.location.reload();
-          console.log('needAppend');
         }
 
         let chapterId = postData.find(function (input) {

@@ -95,7 +95,7 @@ class ReportServiceImpl extends BaseService implements ReportService
             }
         }
 
-        return $tasks;
+        return array_reverse($tasks);
     }
 
     private function countMembersFinishedAllTasksByCourseId($courseId)
@@ -138,15 +138,6 @@ class ReportServiceImpl extends BaseService implements ReportService
 
         //完成数
         $userFinishedTimes = $this->getTaskResultService()->findFinishedTimeByCourseIdGroupByUserId($courseId);
-        // $idx = 0;
-        // if (!empty($userFinishedTimes)) {
-        //     foreach ($userFinishedTimes as $value) {
-        //         if ($value <= $startTimeLessThan) {
-        //             $idx ++;
-        //         }
-        //     }
-        // }
-        // $result['finishedNum'] = $idx;
         $result['finishedNum'] = count($userFinishedTimes);
 
         //完成率
