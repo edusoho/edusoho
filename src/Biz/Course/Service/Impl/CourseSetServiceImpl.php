@@ -439,6 +439,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $tags = explode(',', $fields['tags']);
             $tags = $this->getTagService()->findTagsByNames($tags);
             $tagIds = ArrayToolkit::column($tags, 'id');
+            unset($fields['tags']);
         }
 
         $fields = $this->filterFields($fields);
