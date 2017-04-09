@@ -17,7 +17,7 @@ class Exercise extends Activity
 
     public function get($targetId)
     {
-        return $this->getTestpaperService()->getTestpaper($targetId);
+        return $this->getTestpaperService()->getTestpaperByIdAndType($targetId, 'exercise');
     }
 
     public function create($fields)
@@ -56,7 +56,7 @@ class Exercise extends Activity
         $user = $biz['user'];
 
         $activity = $this->getActivityService()->getActivity($activityId);
-        $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], 'exercise');
 
         $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $activity['mediaId'], $activity['fromCourseId'], $activity['id'], 'exercise');
 

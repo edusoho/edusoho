@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller\Activity;
 
+use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\TestpaperActivityService;
-use Biz\Course\Service\CourseService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\Activity\Service\TestpaperActivityService;
 
 class TestpaperController extends BaseController implements ActivityActionInterface
 {
@@ -19,7 +19,7 @@ class TestpaperController extends BaseController implements ActivityActionInterf
 
         $user = $this->getUser();
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
+        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testpaperActivity['mediaId'], $activity['mediaType']);
 
         if (!$testpaper) {
             return $this->render('activity/testpaper/preview.html.twig', array(
@@ -58,7 +58,7 @@ class TestpaperController extends BaseController implements ActivityActionInterf
     {
         $activity = $this->getActivityService()->getActivity($id);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
+        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testpaperActivity['mediaId'], $activity['mediaType']);
 
         if (!$testpaper) {
             return $this->render('activity/testpaper/preview.html.twig', array(

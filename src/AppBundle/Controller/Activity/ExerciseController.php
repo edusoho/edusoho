@@ -21,7 +21,7 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
         $user = $this->getUser();
 
         $activity = $this->getActivityService()->getActivity($activity['id']);
-        $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
         $exerciseResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $exercise['id'], $activity['fromCourseId'], $activity['id'], $activity['mediaType']);
 
         if (!$exerciseResult || ($exerciseResult['status'] == 'doing' && !$exerciseResult['updateTime'])) {
@@ -47,7 +47,7 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
     protected function previewExercise($id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
-        $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
 
         if (!$exercise) {
             return $this->createMessageResponse('error', 'exercise not found');
@@ -70,7 +70,7 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
     {
         $activity = $this->getActivityService()->getActivity($id);
         $course = $this->getCourseService()->getCourse($courseId);
-        $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
 
         $activity = array_merge($activity, $exercise);
 
@@ -118,7 +118,7 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
 
     public function finishConditionAction(Request $request, $activity)
     {
-        $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
 
         return $this->render('activity/exercise/finish-condition.html.twig', array(
             'exercise' => $exercise,
