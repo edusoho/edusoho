@@ -16,8 +16,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
 
     public function findByCourseId($courseId)
     {
-        $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? ORDER  BY seq, id";
-
+        $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? ORDER  BY seq";
         return $this->db()->fetchAll($sql, array($courseId)) ?: array();
     }
 
