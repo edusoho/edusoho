@@ -50,7 +50,7 @@ class CourseSetFileManageController extends BaseController
 
         $files = $this->getUploadFileService()->findFilesByIds($fileIds, $showCloud = 1);
         usort($files, function ($f1, $f2) {
-            if (empty($f1['updatedTime'] || empty($f2['updatedTime']))) {
+            if (empty($f1['updatedTime']) || empty($f2['updatedTime'])) {
                 return $f1['createdTime'] < $f2['createdTime'];
             }
 
