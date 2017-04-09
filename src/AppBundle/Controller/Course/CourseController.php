@@ -120,8 +120,10 @@ class CourseController extends CourseBaseController
             return $this->createJsonResponse(true);
         }
 
+        $type = $course['parentId'] > 0 ? 'classroom' : 'normal';
+
         return $this->render(
-            'course/member/expired.html.twig',
+            "course/member/{$type}-course-expired.html.twig",
             array(
                 'course' => $course,
                 'member' => $member,
@@ -162,7 +164,7 @@ class CourseController extends CourseBaseController
 
         $previewAs = $request->query->get('previewAs', null);
         $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
-        if (!empty($classroom) && $classroom['headTeacherId'] == $user['id']) {
+        if ($user->isLogin() && !empty($classroom) && $classroom['headTeacherId'] == $user['id']) {
             $member = $this->createMemberFromClassroomHeadteacher($course, $classroom);
         }
 

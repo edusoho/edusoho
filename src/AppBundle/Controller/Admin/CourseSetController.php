@@ -371,6 +371,7 @@ class CourseSetController extends BaseController
             $taskCount = $this->getTaskService()->countTasks(array('fromCourseSetId' => $courseSetId));
 
             $courseSet['learnedTime'] = $this->getTaskService()->sumCourseSetLearnedTimeByCourseSetId($courseSetId);
+            $courseSet['learnedTime'] = round($courseSet['learnedTime'] / 60);
             if (!empty($courseSetIncomes[$courseSetId])) {
                 $courseSet['income'] = $courseSetIncomes[$courseSetId]['income'];
             } else {
@@ -481,7 +482,7 @@ class CourseSetController extends BaseController
             $task['finishedNum'] = $finishedNum;
             $task['studentNum'] = $studentNum;
 
-            $task['learnedTime'] = $learnedTime;
+            $task['learnedTime'] = round($learnedTime / 60);
         }
 
         return $this->render(
