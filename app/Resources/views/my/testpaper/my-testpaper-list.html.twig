@@ -46,8 +46,8 @@
                     {% elseif paperResult.status == 'finished' %}
                       <span class="color-gray">{{'得分'|trans}}<strong class="color-warning">{{ paperResult.score }}</strong>{{'分'|trans}}</span><br>
                       <small class="color-gray">
-                        {{'做对'|trans}}<strong>{{ paperResult.rightItemCount }}</strong>{{'题'|trans}}{% if testpaper %}
-                        {{' / 共'|trans}}<strong>{{ testpaper.itemCount }}</strong>{{'题'|trans}}{% endif %}
+                        {{'做对'|trans}}<strong>{{ paperResult.rightItemCount }}</strong>{{'题'|trans}}
+                        {% if testpaper %}{{' / 共'|trans}}<strong>{{ testpaper.itemCount }}</strong>{{'题'|trans}}{% endif %}
                       </small>
                     {% else %}
                       <span class="color-gray">{{'未交卷'|trans}}</span>
