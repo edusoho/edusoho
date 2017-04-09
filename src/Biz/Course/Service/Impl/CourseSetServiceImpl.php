@@ -443,10 +443,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $fields = $this->filterFields($fields);
 
-        if (null !== $tagIds) {
-            $tagOwnerManager = new TagOwnerManager('courseSet', $id, $tagIds, $userId);
-            $tagOwnerManager->update();
-        }
 
         if (isset($fields['summary'])) {
             $fields['summary'] = $this->purifyHtml($fields['summary'], true);
@@ -455,6 +451,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $this->updateCourseSerializeMode($courseSet, $fields);
         if (empty($fields['subtitle'])) {
             $fields['subtitle'] = null;
+        }
+
+        if (null !== $tagIds) {
+            $tagOwnerManager = new TagOwnerManager('courseSet', $id, $tagIds, $this->getCurrentUser()->getId());
+            $tagOwnerManager->update();
         }
 
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $fields);
