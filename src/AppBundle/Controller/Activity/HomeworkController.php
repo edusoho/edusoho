@@ -3,13 +3,13 @@
 namespace AppBundle\Controller\Activity;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Controller\BaseController;
-use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
+use AppBundle\Controller\BaseController;
+use Topxia\Service\Common\ServiceKernel;
+use Biz\Activity\Service\ActivityService;
 use Biz\Question\Service\QuestionService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class HomeworkController extends BaseController implements ActivityActionInterface
 {
@@ -22,7 +22,7 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
         $user = $this->getUser();
 
         $activity = $this->getActivityService()->getActivity($activity['id']);
-        $homework = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
         $homeworkResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $homework['id'], $activity['fromCourseId'], $activity['id'], $activity['mediaType']);
 
         if (!$homeworkResult || ($homeworkResult['status'] == 'doing' && !$homeworkResult['updateTime'])) {
@@ -53,7 +53,7 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
     {
         $activity = $this->getActivityService()->getActivity($id);
 
-        $homework = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
 
         if (!$homework) {
             return $this->createMessageResponse('error', 'homework not found');
@@ -75,14 +75,15 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
         $course = $this->getCourseService()->getCourse($courseId);
         $activity = $this->getActivityService()->getActivity($id);
 
-        $homeworkActivity = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        $homeworkActivity = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
 
         $activity = array_merge($activity, $homeworkActivity);
 
         $questionItems = $this->getTestpaperService()->searchItems(
             array('testId' => $activity['mediaId']),
             array('id' => 'DESC'),
-            0, PHP_INT_MAX
+            0,
+            PHP_INT_MAX
         );
 
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($questionItems, 'questionId'));
@@ -108,7 +109,7 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
 
     public function finishConditionAction(Request $request, $activity)
     {
-        $homework = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
 
         return $this->render('activity/homework/finish-condition.html.twig', array(
             'homework' => $homework,

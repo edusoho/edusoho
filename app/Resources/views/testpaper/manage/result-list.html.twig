@@ -21,7 +21,14 @@
       {% set student = users[paperResult.userId]|default(null) %}
       <tr>
         <td>{% if student %}{{ student.nickname }}{% else %}{{'无'|trans}}{% endif %}</td>
-        <td>{% if paperResult.status == 'finished' %}{{ paperResult.score }}/{{ testpaper.score }}{% else %} -- {% endif %}</td>
+        <td>
+          {% if paperResult.status == 'finished' %}
+            {% if paperResult.type == 'testpaper' %}
+              {{ paperResult.score }}/{{ testpaper.score }}
+            {% elseif paperResult.type == 'homework' %}
+              {{ dict_text('passedStatus',paperResult.passedStatus) }}
+            {% endif %}
+          {% else %} -- {% endif %}</td>
         <td>{% if paperResult.status != 'doing' %}{{ paperResult.endTime|date('Y-m-d H:i:s') }}{% else %}{% endif %}</td>
         <td>
           {% if paperResult.status == 'doing' %}

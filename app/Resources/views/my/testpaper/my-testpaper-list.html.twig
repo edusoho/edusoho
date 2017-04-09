@@ -45,7 +45,10 @@
                       <span class="color-warning">{{'正在批阅'|trans}}</span>
                     {% elseif paperResult.status == 'finished' %}
                       <span class="color-gray">{{'得分'|trans}}<strong class="color-warning">{{ paperResult.score }}</strong>{{'分'|trans}}</span><br>
-                      <small class="color-gray">{{'做对'|trans}}<strong>{{ paperResult.rightItemCount }}</strong>{{'题 / 共'|trans}}<strong>{{ testpaper.itemCount }}</strong>{{'题'|trans}}</small>
+                      <small class="color-gray">
+                        {{'做对'|trans}}<strong>{{ paperResult.rightItemCount }}</strong>{{'题'|trans}}
+                        {% if testpaper %}{{' / 共'|trans}}<strong>{{ testpaper.itemCount }}</strong>{{'题'|trans}}{% endif %}
+                      </small>
                     {% else %}
                       <span class="color-gray">{{'未交卷'|trans}}</span>
                     {% endif %}
@@ -54,12 +57,6 @@
                     {% if paperResult.status in ['doing', 'paused'] and task %}
                       <a class="color-primary" href="{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}" >{{'继续考试'|trans}}</a>
                     {% elseif paperResult.status == 'finished' %}
-                      
-                      {% if lesson|default(null) and lesson.redoInterval|default(0) and ("now"|date("U")) < (paperResult.checkedTime + lesson.redoInterval * 3600)%}
-                        <span class="color-success text-sm">{{ (paperResult.checkedTime + lesson.redoInterval * 3600)|date('m-d H:i:s') }} 后可重考</span>
-                      {% elseif lesson|default(null) and not lesson.doTimes|default(0) and task %}
-                        <a class="color-primary" href="{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}" >{{'再做一次'|trans}}</a>
-                      {% endif %}
                       {% if task %}
                         <a class="color-primary" href="{{ path('testpaper_result_show',{resultId:paperResult.id,action:'my'}) }}" class="btn btn-link btn-sm" target="_blank">{{'查看结果'|trans}}</a>
                       {% endif %}

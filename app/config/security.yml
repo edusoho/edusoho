@@ -38,11 +38,9 @@ security:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
-        crontab:
-            pattern: ^/crontab$
+        disabled:
+            pattern: ^/(anon|callback)/
             security: false
-
         main:
             pattern:    /.*
             form_login:

@@ -22,7 +22,6 @@ export default class Live {
         startTime: {
           required: true,
           DateAndTime: true,
-          after_now: true,
         },
         length: {
           required: true,

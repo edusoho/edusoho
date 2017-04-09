@@ -39,7 +39,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $fields = array(
             'recommended' => 1,
-            'recommendedSeq' => (int)$number,
+            'recommendedSeq' => (int) $number,
             'recommendedTime' => time(),
         );
 
@@ -438,13 +438,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $tags = explode(',', $fields['tags']);
             $tags = $this->getTagService()->findTagsByNames($tags);
             $tagIds = ArrayToolkit::column($tags, 'id');
+            $fields['tags'] = $tagIds;
         }
 
         $fields = $this->filterFields($fields);
-
-        if (null !== $tagIds) {
-            $fields['tags'] = $tagIds;
-        }
 
         if (isset($fields['summary'])) {
             $fields['summary'] = $this->purifyHtml($fields['summary'], true);

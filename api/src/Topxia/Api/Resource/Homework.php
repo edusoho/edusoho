@@ -27,9 +27,9 @@ class Homework extends BaseResource
             $homeworkTask = $homeworkTasks[0];
 
             $activity = $this->getActivityService()->getActivity($homeworkTask['activityId']);
-            $homework = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+            $homework = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
         } else {
-            $homework = $this->getTestpaperService()->getTestpaper($id);
+            $homework = $this->getTestpaperService()->getTestpaperByIdAndType($id, 'homework');
         }
 
         if (empty($homework)) {
@@ -45,7 +45,7 @@ class Homework extends BaseResource
         $homework['courseTitle'] = $course['title'];
         $homework['lessonTitle'] = $homework['name'];
         $homework['lessonId'] = $id;
-        
+
         if ('lesson' != $idType) {
             $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
             $indexdItems = ArrayToolkit::column($items, 'questionId');
@@ -70,7 +70,7 @@ class Homework extends BaseResource
             return $this->error('404', '作业任务不存在！');
         }
 
-        $homework = $this->getTestpaperService()->getTestpaper($homeworkResult['testId']);
+        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($homeworkResult['testId'], $activity['mediaType']);
 
         if (empty($homework)) {
             return $this->error('404', '作业不存在！');
