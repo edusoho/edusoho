@@ -74,9 +74,10 @@ class Course extends BaseResource
     {
         $simple = array();
 
+        $courseSet = $this->getCourseSetService()->getCourseSet($res['courseSetId']);
         $simple['id'] = $res['id'];
         $simple['title'] = $res['title'];
-        $simple['picture'] = $this->getFileUrl($res['smallPicture']);
+        $simple['picture'] = $this->getFileUrl($courseSet['cover']['small'], 'course.png');
         $simple['convNo'] = $this->getConversation($res['id']);
 
         return $simple;
