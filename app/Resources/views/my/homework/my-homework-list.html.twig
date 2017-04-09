@@ -42,7 +42,10 @@
                     {% if paperResult.status == 'reviewing' %}
                       <span class="color-warning">{{'正在批阅'|trans}}</span>
                     {% elseif paperResult.status == 'finished' %}
-                      <span class="color-gray">{{'做对'|trans}}<strong>{{ paperResult.rightItemCount }}</strong>{{'题 / 共'|trans}}<strong>{{ homework.itemCount }}</strong>{{'题'|trans}}</span>
+                      <span class="color-gray">
+                        {{'做对'|trans}}<strong>{{ paperResult.rightItemCount }}</strong>{{'题'|trans}}
+                        {% if homework %}{{ ' / 共'|trans }}<strong>{{ homework.itemCount }}</strong>{{'题'|trans}}{% endif %}
+                      </span>
                     {% else %}
                       <span class="color-gray">{{'未提交'|trans}}</span>
                     {% endif %}
@@ -50,7 +53,7 @@
                   <td>
                     {% if paperResult.status in ['doing', 'paused'] %}
                       <a href="{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}" class="btn btn-default btn-sm">{{'继续做题'|trans}}</a>
-                    {% elseif paperResult.status == 'finished' %}
+                    {% elseif paperResult.status == 'finished' and homework %}
                       <a href="{{ path('homework_result_show',{resultId:paperResult.id,action:'my'}) }}" class="btn btn-link btn-sm" target="_blank">{{'查看结果'|trans}}</a>
                     {% endif %}
                   </td>
