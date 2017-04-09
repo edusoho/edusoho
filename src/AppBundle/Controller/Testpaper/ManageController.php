@@ -35,10 +35,8 @@ class ManageController extends BaseController
             'type' => 'testpaper',
         );
 
-        if ($courseSet['parentId'] > 0) {
+        if ($courseSet['parentId'] > 0 && $courseSet['locked']) {
             $conditions['copyIdGT'] = 0;
-        } else {
-            $conditions['copyId'] = 0;
         }
 
         $paginator = new Paginator(
