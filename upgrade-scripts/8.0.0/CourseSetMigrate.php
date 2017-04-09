@@ -61,41 +61,6 @@ class CourseSetMigrate extends AbstractMigrate
 
         $sql = 'UPDATE `course_set_v8` cs, `course` c SET cs.`minCoursePrice` = c.`price`, cs.`maxCoursePrice` = c.`price` where cs.`id` = c.`id`';
         $result = $this->getConnection()->exec($sql);
-
-        $sql = "UPDATE `course_set_v8` ccs, `course` c  set
-            ccs.`title` = c.`title`
-            ,ccs.`subtitle` = c.`subtitle`
-            ,ccs.`tags` =  c.`tags`
-            ,ccs.`status` = c.`status`
-            ,ccs.`type` = c.`type`
-            ,ccs.`serializeMode` = c.`serializeMode`
-            ,ccs.`rating` = c.`rating`
-            ,ccs.`ratingNum` = c.`ratingNum`
-            ,ccs.`categoryId` = c.`categoryId`
-            ,ccs.`goals` = c.`goals`
-            ,ccs.`audiences` = c.`audiences`
-            ,ccs.`recommended` = c.`recommended`
-            ,ccs.`recommendedSeq` = c.`recommendedSeq`
-            ,ccs.`recommendedTime` = c.`recommendedTime`
-            ,ccs.`studentNum` = c.`studentNum`
-            ,ccs.`hitNum` = c.`hitNum`
-            ,ccs.`discountId` = c.`discountId`
-            ,ccs.`discount` = c.`discount`
-            ,ccs.`createdTime` = c.`createdTime`
-            ,ccs.`updatedTime` = c.`updatedTime`
-            ,ccs.`parentId` = c.`parentId`
-            ,ccs.`noteNum` = c.`noteNum`
-            ,ccs.`locked` = c.`locked`
-            ,ccs.`maxRate` = c.`maxRate`
-            ,ccs.`orgId` = c.`orgId`
-            ,ccs.`orgCode` = c.`orgCode`
-            ,ccs.`cover` = concat('{\"large\":\"',c.largePicture,'\",\"middle\":\"',c.middlePicture,'\",\"small\":\"',c.smallPicture,'\"}')
-            ,ccs.`creator` = c.`userId`
-            ,ccs.`summary` = c.`about`
-            ,ccs.`teacherIds` = c.`teacherIds`
-          where ccs.`id` = c.`id` and ccs.`updatedTime` < c.`updatedTime`
-        ";
-        $result = $this->getConnection()->exec($sql);
     }
 
     private function insertCourseSet($page)
