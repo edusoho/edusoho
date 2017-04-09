@@ -165,9 +165,9 @@ class EsBarController extends BaseController
 
         $testPaperResults = $this->getTestpaperService()->searchTestpaperResults($conditions, $sort, 0, 10);
 
-        $testpaperActivityIds = ArrayToolkit::column($testPaperResults, 'lessonId');
+        $testPaperActivityIds = ArrayToolkit::column($testPaperResults, 'lessonId');
 
-        $activityIds = array_merge($homeworkActivityIds, $testpaperActivityIds);
+        $activityIds = array_merge($homeworkActivityIds, $testPaperActivityIds);
         $tasks = $this->getTaskService()->findTasksByActivityIds($activityIds);
 
         return $this->render(
