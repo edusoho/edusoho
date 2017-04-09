@@ -127,7 +127,14 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     protected function sortTasks($tasks)
     {
         $tasks = ArrayToolkit::group($tasks, 'categoryId');
-        $modes = array('preparation', 'lesson', 'exercise', 'homework', 'extraClass');
+        $modes = array(
+            'preparation' => 0,
+            'lesson' => 1,
+            'exercise' => 2,
+            'homework' => 3,
+            'extraClass' => 4,
+        );
+
         foreach ($tasks as $key => $taskGroups) {
             uasort(
                 $taskGroups,
