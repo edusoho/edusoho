@@ -41,7 +41,7 @@ class CourseMaterial2CourseTaskMigrate extends AbstractMigrate
           `courseId`,
           `seq`,
           `chapterId`,
-          '下载' AS title,
+          CONCAT(`title`, '-下载资料'),
           `status`,
           `userId`,
           `createdTime`,
