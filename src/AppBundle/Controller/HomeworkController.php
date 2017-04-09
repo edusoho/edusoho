@@ -2,20 +2,20 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Activity\Service\ActivityService;
-use Biz\Course\Service\CourseService;
-use Biz\Question\Service\QuestionService;
 use Biz\Task\Service\TaskService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserService;
+use Biz\Course\Service\CourseService;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\Activity\Service\ActivityService;
+use Biz\Question\Service\QuestionService;
+use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 
 class HomeworkController extends BaseController
 {
     public function startDoAction(Request $request, $lessonId, $homeworkId)
     {
-        $homework = $this->getTestpaperService()->getTestpaper($homeworkId);
+        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($homeworkId, 'homework');
         if (empty($homework)) {
             return $this->createMessageResponse('info', 'homework not found');
         }
@@ -50,7 +50,7 @@ class HomeworkController extends BaseController
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($result['courseId']);
 
-        $homework = $this->getTestpaperService()->getTestpaper($result['testId']);
+        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($result['testId'], $result['type']);
         if (!$homework) {
             return $this->createMessageResponse('info', 'homework not found');
         }
@@ -74,10 +74,10 @@ class HomeworkController extends BaseController
     {
         $homeworkResult = $this->getTestpaperService()->getTestpaperResult($resultId);
 
-        $homework = $this->getTestpaperService()->getTestpaper($homeworkResult['testId']);
+        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($homeworkResult['testId'], $homeworkResult['type']);
 
         if (!$homework) {
-            throw $this->createResourceNotFoundException('homework', $homeworkResult['testId']);
+            return $this->createMessageResponse('info', '该作业已删除，不能查看结果');
         }
 
         if (in_array($homeworkResult['status'], array('doing', 'paused'))) {
@@ -90,8 +90,7 @@ class HomeworkController extends BaseController
             return $this->createMessageResponse('info', '无权查看作业！');
         }
 
-        $builder = $this->getTestpaperService()->getTestpaperBuilder($homework['type']);
-        $questions = $builder->showTestItems($homework['id'], $homeworkResult['id']);
+        $questions = $this->getTestpaperService()->showTestpaperItems($homework['id'], $homeworkResult['id']);
 
         $student = $this->getUserService()->getUser($homeworkResult['userId']);
 
