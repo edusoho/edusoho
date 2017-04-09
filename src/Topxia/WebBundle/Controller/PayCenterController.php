@@ -175,7 +175,6 @@ class PayCenterController extends BaseController
         $paymentRequest = $this->createPaymentRequest($order, $requestParams);
 
         $returnArray = $paymentRequest->unifiedOrder($openid);
-        $gotoParameters = $returnArray;
         $gotoParameters['name'] = $fields['payment'];
         $gotoParameters['sn'] = $order['sn'];
         $gotoParameters['out_trade_no'] = $order['token'];
