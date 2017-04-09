@@ -125,7 +125,7 @@ class Homework extends BaseResource
                 $materialMap[$item['id']] = array();
             }
 
-            if ($itemSetResults) {
+            if ($itemSetResults && !empty($itemSetResults[$item['id']])) {
                 $item['result'] = $itemSetResults[$item['id']];
             }
 
