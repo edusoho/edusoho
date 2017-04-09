@@ -93,6 +93,7 @@ class Editor {
         if (needAppend === false) {
           // @TODO这里也需要返回html,进行替换          
           document.location.reload();
+          console.log('needAppend');
         }
 
         let chapterId = postData.find(function (input) {
@@ -171,6 +172,8 @@ class Editor {
       .then((response) => {
         notify('success', '删除成功');
         this.$element.modal('hide');
+
+
         document.location.reload();
       })
       .fail(error => {
