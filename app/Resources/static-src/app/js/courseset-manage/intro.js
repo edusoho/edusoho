@@ -79,7 +79,7 @@ export default class Intro {
   }
 
   initTaskCreatePageIntro() {
-    $('.js-task-manage-item:first').trigger('click');
+    $('.js-task-manage-item:first .js-item-content').trigger('click');
     if (!store.get(COURSE_BASE_INTRO) && !store.get(COURSE_TASK_INTRO)) {
       store.set(COURSE_BASE_INTRO, true);
       store.set(COURSE_TASK_INTRO, true);
