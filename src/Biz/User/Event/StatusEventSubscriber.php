@@ -213,6 +213,11 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
         return $biz['user'];
     }
 
+    protected function getMemberService()
+    {
+        return $this->getBiz()->service('Course:MemberService');
+    }
+
     /**
      * @return StatusService
      */

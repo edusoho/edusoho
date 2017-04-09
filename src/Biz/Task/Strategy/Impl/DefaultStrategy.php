@@ -100,7 +100,11 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         uasort(
             $items,
             function ($item1, $item2) {
-                return $item1['seq'] > $item2['seq'];
+                if ($item1['seq'] != $item2['seq']) {
+                    return $item1['seq'] > $item2['seq'];
+                }
+
+                return $item1['id'] > $item2['id'];
             }
         );
 
