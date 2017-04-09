@@ -25,6 +25,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperDao()->get($id);
     }
 
+    public function getTestpaperByIdAndType($id, $type)
+    {
+        return $this->getTestpaperDao()->getByIdAndType($id, $type);
+    }
+
     public function createTestpaper($fields)
     {
         $user = $this->getCurrentUser();
