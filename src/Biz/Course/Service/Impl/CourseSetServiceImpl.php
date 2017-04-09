@@ -21,7 +21,6 @@ use Biz\Course\Service\CourseNoteService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseDeleteService;
 use Biz\Course\Copy\Impl\ClassroomCourseCopy;
-use Biz\Taxonomy\TagOwnerManager;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
