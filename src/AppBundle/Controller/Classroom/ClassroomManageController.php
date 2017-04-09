@@ -1270,7 +1270,7 @@ class ClassroomManageController extends BaseController
                 'userId' => $member['userId'],
                 'status' => 'finish',
             ));
-            if ($finishedTaskCount >= $taskCount) {
+            if ($taskCount > 0 && $finishedTaskCount >= $taskCount) {
                 ++$learnedCoursesCount;
             }
         }
