@@ -137,7 +137,7 @@ class HomeworkResult extends BaseResource
     public function filter($res)
     {
         $res['usedTime'] = $res['usedTime'];
-        $res['updatedTime'] = date('c', $res['updatedTime']);
+        $res['updatedTime'] = date('c', $res['updateTime']);
         $res['createdTime'] = date('c', $res['beginTime']);
 
         return $res;

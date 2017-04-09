@@ -56,8 +56,8 @@ class Exercise extends BaseResource
 
         $course = $this->getCourseService()->getCourse($exercise['courseId']);
         $exercise['courseTitle'] = $course['title'];
-        $exercise['lessonTitle'] = $exercise['title'];
-        $exercise['description'] = $exercise['title'];
+        $exercise['lessonTitle'] = $activity['title'];
+        $exercise['description'] = $activity['title'];
 
         $result = $this->getTestpaperService()->startTestpaper($exercise['id'], array('lessonId' => $activity['id'], 'courseId' => $exercise['courseId']));
 
