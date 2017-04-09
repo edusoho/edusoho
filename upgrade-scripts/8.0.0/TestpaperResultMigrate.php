@@ -69,6 +69,13 @@ class TestpaperResultMigrate extends AbstractMigrate
                 WHERE id = {$testpaperResult['id']}";
 
             $this->getConnection()->exec($sql);
+
+            $sql = "UPDATE testpaper_result_v8 SET
+                courseId = {$courseId},
+                courseSetId = {$courseId},
+                lessonId = {$lessonId}
+                WHERE testId = {$testpaperResult['testId']} AND userId = {$testpaperResult['userId']} AND target = ''";
+            $this->getConnection()->exec($sql);
         }
 
         $sql = "UPDATE testpaper_result_v8 AS tr, course_task as ct SET tr.lessonId = ct.activityId WHERE tr.lessonId = ct.id AND ct.type = 'testpaper' AND tr.type='testpaper'";
