@@ -145,7 +145,7 @@ class CourseSetMigrate extends AbstractMigrate
             ,`tags`
             ,`status`
             ,`type`
-            ,`serializeMode`
+            ,(case when `serializeMode` = 'serialize' then 'serialized' else `serializeMode` end)
             ,`rating`
             ,`ratingNum`
             ,`categoryId`
