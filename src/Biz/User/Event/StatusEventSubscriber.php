@@ -99,7 +99,7 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
 
         $course = $this->getCourseService()->getCourse($paperResult['courseId']);
         $activity = $this->getActivityService()->getActivity($paperResult['lessonId']);
-        $testpaper = $this->getTestpaperService()->getTestpaper($paperResult['testId']);
+        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($paperResult['testId'], $paperResult['type']);
 
         if (!$course || !$activity || !$testpaper) {
             return;

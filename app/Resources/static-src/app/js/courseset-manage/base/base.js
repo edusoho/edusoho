@@ -11,6 +11,10 @@ export default class Base {
   }
 
   initValidator() {
+    let titleRules = 'open_live_course_title';
+    if($('#courseSetType').val() != 'live') {
+      titleRules = 'course_title';
+    }
     const $form = $('#courseset-form');
     const validator = $form.validate({
       rules: {
@@ -22,7 +26,7 @@ export default class Base {
               return true;
             }
           },
-          open_live_course_title: true
+          [titleRules]: true
         },
         subtitle: {
           required: {

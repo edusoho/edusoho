@@ -59,7 +59,7 @@ class PluginUtil extends BaseService
                 continue;
             }
 
-            if ($app['protocol' != 3]) {
+            if ($app['protocol'] != 3) {
                 continue;
             }
 

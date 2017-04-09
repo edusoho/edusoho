@@ -35,10 +35,8 @@ class ManageController extends BaseController
             'type' => 'testpaper',
         );
 
-        if ($courseSet['parentId'] > 0) {
+        if ($courseSet['parentId'] > 0 && $courseSet['locked']) {
             $conditions['copyIdGT'] = 0;
-        } else {
-            $conditions['copyId'] = 0;
         }
 
         $paginator = new Paginator(
@@ -169,7 +167,7 @@ class ManageController extends BaseController
             return $this->createMessageResponse('error', 'access denied');
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($result['testId']);
+        $testpaper = $this->getTestpaperService()->getTestpaper($result['testId'], $result['type']);
         if (!$testpaper) {
             throw $this->createResourceNotFoundException('testpaper', $result['id']);
         }

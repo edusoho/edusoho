@@ -14,6 +14,8 @@ class TableCacheStrategy extends AbstractCacheStrategy implements CacheStrategy
 
     private $logger;
 
+    private $versions;
+
     const LIFE_TIME = 3600;
 
     const MAX_WAVE_CACHEABLE_TIMES = 32;
@@ -136,10 +138,17 @@ class TableCacheStrategy extends AbstractCacheStrategy implements CacheStrategy
     private function getTableVersion($dao)
     {
         $key = sprintf('dao:%s:v', $dao->table());
+
+        if (isset($this->versions[$key])) {
+            return $this->versions[$key];
+        }
+
         $version = $this->redis->get($key);
         if ($version === false) {
-            return $this->redis->incr($key);
+            $version = $this->redis->incr($key);
         }
+
+        $this->versions[$key] = $version;
 
         return $version;
     }

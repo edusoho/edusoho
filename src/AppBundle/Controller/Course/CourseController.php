@@ -65,6 +65,7 @@ class CourseController extends CourseBaseController
             }
         }
 
+
         $classroom = array();
         if ($course['parentId'] > 0) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
@@ -75,10 +76,13 @@ class CourseController extends CourseBaseController
 
         $this->getCourseService()->hitCourse($id);
 
+        $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
+
         return $this->render(
             'course/course-show.html.twig',
             array(
                 'tab' => $tab,
+                'tags' => $tags,
                 'course' => $course,
                 'categoryTag' => $this->calculateCategoryTag($course),
                 'classroom' => $classroom,

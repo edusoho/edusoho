@@ -109,7 +109,7 @@ class ChaosThreadsPosts extends BaseResource
             $smallPicture = empty($courseSet['cover']['small']) ? '' : $courseSet['cover']['small'];
             $middlePicture = empty($courseSet['cover']['middle']) ? '' : $courseSet['cover']['middle'];
             $largePicture = empty($courseSet['cover']['large']) ? '' : $courseSet['cover']['large'];
-            $course['smallPicture'] = $this->getFileUrl($smallPicturem, 'course.png');
+            $course['smallPicture'] = $this->getFileUrl($smallPicture, 'course.png');
             $course['middlePicture'] = $this->getFileUrl($middlePicture, 'course.png');
             $course['largePicture'] = $this->getFileUrl($largePicture, 'course.png');
             $post['type'] = $thread['type'];
