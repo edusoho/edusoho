@@ -139,9 +139,10 @@ class TableCacheStrategy extends AbstractCacheStrategy implements CacheStrategy
     {
         $key = sprintf('dao:%s:v', $dao->table());
 
-        if (isset($this->versions[$key])) {
-            return $this->versions[$key];
-        }
+        // 跑单元测试时，因为每个test会flushdb，而TableCacheStrategy又是单例，这里还缓存着原来的结果，会有问题，暂时注释，待重构
+        // if (isset($this->versions[$key])) {
+        //     return $this->versions[$key];
+        // }
 
         $version = $this->redis->get($key);
         if ($version === false) {
@@ -156,8 +157,9 @@ class TableCacheStrategy extends AbstractCacheStrategy implements CacheStrategy
     private function upTableVersion($dao)
     {
         $key = sprintf('dao:%s:v', $dao->table());
+        $version = $this->versions[$key] = $this->redis->incr($key);
 
-        return $this->redis->incr($key);
+        return $version;
     }
 
     private function key(GeneralDaoInterface $dao, $method, $arguments)
