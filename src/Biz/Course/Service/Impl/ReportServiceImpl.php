@@ -128,18 +128,25 @@ class ReportServiceImpl extends BaseService implements ReportService
         $role = 'student';
         $startTimeLessThan = strtotime('- 29 days', $now);
         $result = array();
+        
         //学员数
         $result['studentNum'] = $this->getCourseMemberService()->countMembers(array(
             'courseId' => $courseId,
             'role' => $role,
             'startTimeLessThan' => $startTimeLessThan,
         ));
+
         //完成数
-        $result['finishedNum'] = $this->getTaskResultService()->countTaskResults(array(
-            'courseId' => $courseId,
-            'status' => 'finish',
-            'createdTime_LE' => $startTimeLessThan,
-        ));
+        $userFinishedTimes = $this->getTaskResultService()->findFinishedTimeByCourseIdGroupByUserId($courseId);
+        $idx = 0;
+        if (!empty($userFinishedTimes)) {
+            foreach ($userFinishedTimes as $value) {
+                if ($value <= $startTimeLessThan) {
+                    $idx ++;
+                }
+            }
+        }
+        $result['finishedNum'] = $idx;
 
         //完成率
         if ($result['studentNum']) {
