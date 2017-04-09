@@ -229,7 +229,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         return ArrayToolkit::column($members, 'userId');
     }
 
-    public function findMemberByCourseId($courseId)
+    public function findMembersByCourseId($courseId)
     {
         return $this->getMemberDao()->findByCourseId($courseId);
     }
@@ -296,6 +296,11 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function findCourseStudentsByCourseIds($courseIds)
     {
         return $this->getMemberDao()->findByCourseIds($courseIds);
+    }
+
+    public function findCourseMembersByUserIds(array $userIds)
+    {
+        return $this->getMemberDao()->findByUserIds($userIds);
     }
 
     public function getCourseStudentCount($courseId)
@@ -528,6 +533,20 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function becomeStudent($courseId, $userId, $info = array())
     {
         $course = $this->getCourseService()->getCourse($courseId);
+        $member = $this->doBecomeStudent($course['id'], $userId, $info);
+
+        $this->dispatchEvent(
+            'course.join',
+            $course,
+            array('userId' => $member['userId'], 'member' => $member)
+        );
+
+        return $member;
+    }
+
+    public function doBecomeStudent($courseId, $userId, $info)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
             throw $this->createNotFoundException();
@@ -599,12 +618,6 @@ class MemberServiceImpl extends BaseService implements MemberService
         $member = $this->getMemberDao()->create($fields);
 
         $this->refreshMemberNoteNumber($courseId, $userId);
-
-        $this->dispatchEvent(
-            'course.join',
-            $course,
-            array('userId' => $member['userId'], 'member' => $member)
-        );
 
         return $member;
     }

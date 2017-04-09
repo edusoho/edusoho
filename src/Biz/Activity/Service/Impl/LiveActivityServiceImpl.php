@@ -20,9 +20,9 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $this->getLiveActivityDao()->get($id);
     }
 
-    public function findLiveActivity(array $ids)
+    public function findLiveActivityByIds(array $ids)
     {
-        return $this->getLiveActivityDao()->findInField('id', $ids);
+        return $this->getLiveActivityDao()->findLiveActivityByIds($ids);
     }
 
     public function createLiveActivity($activity, $ignoreValidation = false)

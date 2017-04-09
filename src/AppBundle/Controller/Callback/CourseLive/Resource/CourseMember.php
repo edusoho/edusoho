@@ -23,7 +23,7 @@ class CourseMember extends BaseProvider
         $courseId = $request->query->get('courseId');
 
         $sourceCourseMembers = $this->getCourseMemberService()->searchMembers(
-            array('id' => $courseId),
+            array('courseId' => $courseId),
             array('createdTime' => 'DESC'),
             $start,
             $limit

@@ -40,6 +40,8 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
 
             'course.teachers.create' =>'onCourseTeachersCreate',
             'course.teachers.delete' =>'onCourseTeachersDelete',
+
+            'course.member.import' =>'onCourseMemberImprt',
         );
     }
 
@@ -65,7 +67,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     public function onCourseTeachersCreate(Event $event)
     {
         $teacherIds = $event->getSubJect();
-        $teachers = $this->getCourseMemberService()->findMembersByUserIds($teacherIds);
+        $teachers = $this->getCourseMemberService()->findCourseMembersByUserIds($teacherIds);
         $teachers = ArrayToolkit::index($teachers, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($teacherIds);
@@ -214,6 +216,34 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $this->publishStatus($event, 'become_student');
     }
 
+    public function onCourseMemberImprt(Event $event)
+    {
+        $members = $event->getArgument('members');
+        $members = ArrayToolkit::index($members, 'userId');
+        $userIds = ArrayToolkit::column($members, 'userId');
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users = ArrayToolkit::index($users, 'id');
+
+        $course = $event->getSubject();
+        if ($course['locked']) {
+            $course = $this->getCourseService()->getCourse($course['parentId']);
+        }
+        list($activitys, $liveActivitys) = $this->findActivitysAndLiveActivitys($course);
+
+        foreach ($activitys as $mediaId => $activity) {
+            $isPush = $this->canPushLiveMessage($activity);
+            if (!$isPush) {
+                continue;
+            }
+
+            foreach ($members as $member) {
+                $result = buildLiveMemberData($users[$userId], $member);
+                $this->pushJoinLiveCourseMember($result, $liveActivitys[$mediaId]['liveId']);
+            }
+        }
+    }
+
     public function onClassroomCourseCopy(Event $event)
     {
         $course = $event->getSubject();
@@ -325,7 +355,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
 
     protected function canPushLiveMessage($activity)
     {
-        if ($activity['type'] != 'live') {
+        if ($activity['mediaType'] != 'live') {
             return false;
         }
         if (time() > $activity['endTime']) {
@@ -362,7 +392,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $activitys = $this->getActivityService()->findActivitiesByCourseIdAndType($course['id'], 'live');
         $activitys = ArrayToolkit::index($activitys, 'mediaId');
-        $liveActivitys = $this->getLiveActivityService()->findLiveActivity(ArrayToolkit::column($activitys, 'mediaId'));
+        $liveActivitys = $this->getLiveActivityService()->findLiveActivityByIds(ArrayToolkit::column($activitys, 'mediaId'));
         $liveActivitys = ArrayToolkit::index($liveActivitys, 'id');
 
         return array($activitys, $liveActivitys);        

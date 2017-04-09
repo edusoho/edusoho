@@ -4,6 +4,7 @@ namespace Biz\Importer;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\FileToolkit;
+use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,6 +40,7 @@ class CourseMemberImporter extends Importer
         $existsUserCount = 0;
         $successCount = 0;
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $members = array();
         foreach ($userData as $key => $user) {
             if (!empty($user['nickname'])) {
                 $user = $this->getUserService()->getUserByNickname($user['nickname']);
@@ -90,12 +92,15 @@ class CourseMemberImporter extends Importer
                     'orderId' => $order['id'],
                 );
 
-                if ($this->getCourseMemberService()->becomeStudent($order['targetId'], $order['userId'], $info)) {
+                if ($this->getCourseMemberService()->doBecomeStudent($order['targetId'], $order['userId'], $info)) {
                     ++$successCount;
                 }
 
                 $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
-
+                if ($member) {
+                    $members[] = $member;
+                }
+                
                 $message = array(
                     'courseId' => $course['id'],
                     'courseTitle' => $courseSet['title'],
@@ -113,6 +118,7 @@ class CourseMemberImporter extends Importer
                 );
             }
         }
+        $this->dispatchEvent('course.member.import', $course, array('members' => $members));
 
         return array('existsUserCount' => $existsUserCount, 'successCount' => $successCount);
     }
@@ -429,6 +435,22 @@ class CourseMemberImporter extends Importer
                 'importerType' => $this->type,
             )
         );
+    }
+
+    protected function dispatchEvent($eventName, $subject, $arguments = array())
+    {
+        if ($subject instanceof Event) {
+            $event = $subject;
+        } else {
+            $event = new Event($subject, $arguments);
+        }
+
+        return $this->getDispatcher()->dispatch($eventName, $event);
+    }
+
+    private function getDispatcher()
+    {
+        return $this->biz['dispatcher'];
     }
 
     public function tryImport(Request $request)

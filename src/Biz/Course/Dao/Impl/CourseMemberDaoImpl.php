@@ -31,6 +31,11 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->findInField('courseId', $courseIds);
     }
 
+    public function findByUserIds(array $userIds)
+    {
+        return $this->findInField('userId', $userIds);
+    }
+
     public function getByCourseIdAndUserId($courseId, $userId)
     {
         return $this->getByFields(array(
