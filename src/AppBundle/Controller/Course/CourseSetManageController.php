@@ -166,10 +166,7 @@ class CourseSetManageController extends BaseController
             );
         }
 
-        $tags = $this->getTagService()->findTagsByOwner(array(
-            'ownerType' => 'courseSet',
-            'ownerId' => $id,
-        ));
+        $tags = $this->getTagService()->findTagsByIds($courseSet['tags']);
 
         return $this->render(
             'courseset-manage/base.html.twig',
