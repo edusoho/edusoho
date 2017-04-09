@@ -62,7 +62,7 @@
             {% set classroom = data('Classroom',{classroomId:job.targetId}) %}
             {{'班级：'|trans}}《<a href="{{path('classroom_show', {id:classroom.id})}}" target='_blank'>{{classroom.title}}</a>》
           {% elseif job.targetType == 'lesson' or job.targetType == 'task' %}
-            {% set task = data('Task',{lessonId:job.targetId}) %}
+            {% set task = data('Task',{ taskId:job.targetId }) %}
             {% set course = data('Course',{courseId: task.courseId}) %}
             {{'课程：'|trans}}《<a href="{{path('course_show', {id:course.id})}}" target='_blank'>{{ course.title }}</a>》,{{'任务：'|trans}}{{ task.title }}
           {% elseif job.targetType == 'liveOpenLesson' %}
