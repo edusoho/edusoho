@@ -32,8 +32,8 @@
       <a class="btn btn-primary js-upload-file" {% if reupload %}style="display: none;"{% endif %} data-toggle="modal" data-backdrop="static"
          data-target="#attachment-modal"
          data-url="{{ path('attachment_upload', {useSeajs: useSeajs|default(false), idsClass: ids_class, listClass : list_class, token:uploader_token('attachment', app.user.id, 'private')}) }}"
-         title="{{ 'group.thread.attachments_upload'|trans }}" data-placement="bottom" data-title="{{ 'group.thread.attachments_upload'|trans }}">
-         {{ 'group.thread.attachments_upload'|trans }}
+         title="{{ 'attachments.upload'|trans }}" data-placement="bottom" data-title="{{ 'attachments.upload'|trans }}">
+         {{ 'attachments.upload'|trans }}
       </a>
     </div>
     {# 应该标记该附件是否新增,或者修改 #}
