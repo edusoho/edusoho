@@ -65,12 +65,10 @@ class CardController extends BaseController
         );
 
         if ($availableCoupons) {
-
             $higherTop = array();
             $lowerTop = array();
 
             foreach ($availableCoupons as $key => &$coupon) {
-
                 if ($coupon['type'] == 'minus') {
                     $coupon['truePrice'] = $totalPrice - $coupon['rate'];
                 } else {
