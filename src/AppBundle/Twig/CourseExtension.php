@@ -3,7 +3,10 @@
 namespace AppBundle\Twig;
 
 use AppBundle\Util\AvatarAlert;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -44,6 +47,16 @@ class CourseExtension extends \Twig_Extension
     {
         if (empty($course) || empty($member)) {
             return false;
+        }
+
+        if ($course['parentId'] > 0) {
+            $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($course['courseSetId']);
+            if (!empty($classroomRef)) {
+                $user = $this->biz['user'];
+                $member = $this->getClassroomService()->getClassroomMember($classroomRef['classroomId'], $user['id']);
+
+                return $member['deadline'] > 0 && $member['deadline'] < time();
+            }
         }
 
         return !$this->getMemberService()->isMemberNonExpired($course, $member);
@@ -93,11 +106,25 @@ class CourseExtension extends \Twig_Extension
         return !empty($setting['buy_fill_userinfo']);
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->biz->service('System:SettingService');
     }
 
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->biz->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
