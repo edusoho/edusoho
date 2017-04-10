@@ -175,7 +175,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $this->logger('8.0.0', 'info', "开始迁移 {$method} {$page}");
         $start = time();
-        $nextPage = $migrate->update($page);
+        $nextPage = (int) $migrate->update($page);
         $end = time() - $start;
 
         $this->logger('8.0.0', 'info', "迁移 {$method} {$page} 成功, time: {$end}");
