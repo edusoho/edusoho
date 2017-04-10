@@ -230,16 +230,9 @@ class OtherMigrate extends AbstractMigrate
 
     private function migrate17()
     {
-        if(!$this->isIndexExist('user', 'type', 'user_type_index')){
+        if(!$this->isIndexExist('user', 'user_type_index')){
             $this->exec('CREATE INDEX user_type_index ON user (type);');
         }
-    }
-
-    protected function isIndexExist($table, $filedName, $indexName)
-    {
-        $sql    = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
-        $result = $this->getConnection()->fetchAssoc($sql);
-        return empty($result) ? false : true;
     }
 
     private function getUserByType()
