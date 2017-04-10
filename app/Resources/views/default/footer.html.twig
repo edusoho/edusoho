@@ -13,14 +13,10 @@
     <div class="container">
       {% include "powered-by.html.twig" %}
       {{ setting('site.analytics')|raw }}
-      <a class="mlm" href="{{ path('course_set_archive') }}">{{'课程存档'|trans}}</a>
+      <a class="mlm" href="{{ path('course_set_archive') }}">{{'homepage.footer.archive'|trans}}</a>
       <div class="mts">
         {% if setting('site.copyright') %}
-          {{'课程内容版权均归'|trans}}
-          <a href="/">
-            {{ setting('site.copyright') }}
-          </a>
-          {{'所有'|trans}}
+          {{ 'homepage.footer.course_copyright'|trans({'%copyRightUrl%':setting('site.copyright')})|raw }}
         {% endif %}
         {% if setting('site.icp') %}
           <a class="mlm" href="http://www.miibeian.gov.cn/" target="_blank">
