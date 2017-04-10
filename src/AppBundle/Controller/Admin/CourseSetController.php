@@ -47,6 +47,12 @@ class CourseSetController extends BaseController
 
         $count = $this->getCourseSetService()->countCourseSets($conditions);
 
+        if (!empty($conditions['categoryId'])) {
+            $conditions['categoryIds'] = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+            $conditions['categoryIds'][] = $conditions['categoryId'];
+            unset($conditions['categoryId']);
+        }
+
         $paginator = new Paginator($this->get('request'), $count, 20);
         $courseSets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
