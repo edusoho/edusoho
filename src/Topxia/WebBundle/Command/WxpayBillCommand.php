@@ -69,25 +69,31 @@ class WxpayBillCommand extends BaseCommand
         }
         $data = explode("\r", $response);
         $length = count($data);
+        $j = 1;
         for($i = 1 ;$i < $length - 3;$i++ ){
             $lineData = explode(",", $data[$i]);
             $orderStatus = $lineData[9];
             $out_trade_no = $lineData[6];
             if($orderStatus === "`SUCCESS"){
                 $out_trade_no = substr($out_trade_no,1);
-                if( strlen($out_trade_no) > 25 ){
-                    $sn = $substr($out_trade_no,-5);
+                if( strlen($out_trade_no) >= 25 ){
+                    $sn = substr($out_trade_no,0,strlen($out_trade_no) - 5 );
                     $this->getPayLogger()->addInfo("out_trade_no:".$out_trade_no.",转化之后sn:".$sn);
+                }else{
+                    $sn = $out_trade_no;
                 }
-                $sn = $out_trade_no;
                 $this->getPayLogger()->addInfo("根据Sn:".$sn.",查询订单");
                 $order = $this->getOrderService()->getOrderBySn($sn);
                 if($order['status'] == "paid"){
                 $this->getPayLogger()->addInfo("sn:".$order['sn']."，状态一致，不用处理");
                     continue;
                 }
-                $this->getPayLogger()->addInfo("sn:".$order['sn']."，状态不一致，开始处理");
-                $this->processOrder($order,$out_trade_no);
+
+                $this->getPayLogger()->addInfo("sn:".$order['sn']."，状态不一致，开始处理,".$j);
+                if($j == 1){
+                  $this->processOrder($order,$out_trade_no);
+                }
+                $j++;
                 
             }
         }
