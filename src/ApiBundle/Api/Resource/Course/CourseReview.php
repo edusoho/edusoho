@@ -1,23 +1,23 @@
 <?php
 
-namespace ApiBundle\Api\Resource\CourseSet;
+namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\Exception\ResourceNotFoundException;
 use ApiBundle\Api\Resource\Resource;
 use Symfony\Component\HttpFoundation\Request;
 
-class CourseSetReview extends Resource
+class CourseReview extends Resource
 {
-    public function search(Request $request, $courseSetId)
+    public function search(Request $request, $courseId)
     {
-        $courseSet = $this->service('Course:CourseSetService')->getCourseSet($courseSetId);
+        $course = $this->service('Course:CourseService')->getCourse($courseId);
 
-        if (!$courseSet) {
-            throw new ResourceNotFoundException('课程不存在');
+        if (!$course) {
+            throw new ResourceNotFoundException('教学计划不存在');
         }
 
         $conditions = array(
-            'courseSetId' => $courseSetId,
+            'courseId' => $courseId,
             'private' => 0
         );
 
