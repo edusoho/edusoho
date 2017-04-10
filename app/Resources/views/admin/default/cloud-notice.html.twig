@@ -6,26 +6,18 @@
   <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
   <div class="col-md-12">
     <div class="alert alert-warning">
-      <p>
-        &nbsp;&nbsp;{{'admin.homepage.alert.version_expired.welcome'|trans}} 
-        <span style="color:#fed032;"> 
-          {% if trialTime.endTime is defined %}
-            {{trialTime.endTime|date("Y-m-d")}} 
-          {% else %} 
-            {{'admin.homepage.alert.version_expired.unknown_time'|trans}}
-          {% endif %}
-        </span> 
-        {{'admin.homepage.alert.version_expired.remaining'|trans}} 
-        <span style="color:#fed032;">
-          {% if trialTime.remainDays is defined %} {{ trialTime.remainDays }} {% else %}{{'unknown'|trans}}{% endif %}
-        </span> {{'admin.homepage.alert.version_expired.days'|trans}}
-      </p>
-      <p>
-        &nbsp; {{'admin.homepage.alert.version_expired.contact_our_business_managers'|trans}}{{'admin.homepage.alert.version_expired.phone'|trans}}4008041114 {{'or'|trans}}
-        <span>
-          <a id="BizQQWPA" href="javascript:" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])" style='text-decoration:none;'>QQ：800023860 </a>。
-        </span>
-      </p>
+      {% if trialTime.endTime is defined %}
+        {% set endTime = trialTime.endTime|date("Y-m-d") %} 
+      {% else %} 
+        {% set endTime = 'admin.homepage.cloud_notic.unknown_time'|trans %}
+      {% endif %}
+      
+      {% if trialTime.remainDays is defined %}
+        {% set remainDays = trialTime.remainDays %}
+      {% else %}
+        {% set remainDays = 'unknown'|trans %}
+      {% endif %}
+      {{ 'admin.homepage.cloud_notice'|trans({'%endTime%':endTime, '%remainDays%': remainDays})|raw }}
     </div>
   </div>
 

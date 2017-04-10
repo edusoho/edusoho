@@ -693,31 +693,32 @@ article.status.reward: 奖
 article.create: 发起了话题
 article.last_reply: 最后回复
 
-#通用key
+#后台首页通用key
 unknown: 未知
-or: 或
+admin.homepage.more_btn: 更多
+admin.homepage.loadig_date_tips: 正在载入数据，请稍等。
 
 # 后台首页
-admin.navbar.header.console: 管理后台
-admin.navbar.header.often_used: 常用
+admin.navbar.header.console_btn: 管理后台
+admin.navbar.header.often_used_btn: 常用
 admin.navbar.header.often_used.dropdown_menu.add_current_page: 添加当前页面为常用功能
 admin.navbar.header.often_used.dropdown_menu.added_current_page: 当前页面已添加
-admin.navbar.header.home: 回首页
-admin.navbar.header.dropdown_menu.exit: 退出
+admin.navbar.header.often_used.dropdown_menu.delete_often_used_link_btn_title: 删除常用链接
+admin.navbar.header.home_btn: 回首页
+admin.navbar.header.dropdown_menu.exit_btn: 退出
 admin.fixed_bar.product: 产品
 admin.fixed_bar.feedback: 反馈
 admin.hompage.html_head_title: 管理后台
-admin.homepage.alert.setting_domain: 设置
-admin.homepage.alert.version_expired.welcome: 欢迎使用，试用将于
-admin.homepage.alert.version_expired.unknown_time: 未知时间
-admin.homepage.alert.version_expired.remaining: 到期,剩余
-admin.homepage.alert.version_expired.days: 天。
-admin.homepage.alert.version_expired.phone: 电话：
-admin.homepage.alert.version_expired.contact_our_business_managers: 您可以联系销售人员购买授权版本，或者延长试用期限。
+admin.homepage.setting_domain_btn: 设置
+admin.homepage.cloud_notic.unknown_time: 未知时间
+admin.homepage.cloud_notice: >
+  欢迎使用，试用将于<span style="color:#fed032;">%endTime%</span>到期,剩余<span style="color:#fed032;">%remainDays%</span>天。
+  </br>
+  您可以联系销售人员购买授权版本，或者延长试用期限。电话：4008041114 或 
+  <a id="BizQQWPA" href="javascript:" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])" style='text-decoration:none;'>QQ：800023860 </a>。
 admin.homepage.admins_announcements_title: 站长公告
 admin.homepage.admins_announcements_empty: 暂无公告
 admin.homepage.status_bar_title: 状态栏
-admin.homepage.status_bar.loadig_date_tips: 正在载入数据，请稍等。
 admin.homepage.status_bar.system_version_title: 系统版本
 admin.homepage.status_bar.system_version_status.have_update: 有更新
 admin.homepage.status_bar.school_app_title: 网校应用
@@ -726,9 +727,100 @@ admin.homepage.status_bar.school_app_status.several_are_not_updated: 个未更�
 admin.homepage.status_bar.cloud_service_title: 教育云服务
 admin.homepage.status_bar.cloud_service_status.several_are_not_open: 个未开启
 admin.homepage.status_bar.cloud_service_status.open: 已开启
+admin.homepage.status_bar.cloud_service_status.not_open: 未开启
 admin.homepage.status_bar.cloud_video_title: 云视频
-admin.homepage.status_bar.cloud_video_status.not_open: 未开启
-admin.homepage.status_bar.cloud_video_status.open: 已开启
+admin.homepage.status_bar.cloud_document_title: 云文档
+admin.homepage.status_bar.cloud_live_title: 云直播
+admin.homepage.status_bar.cloud_sms_title: 云短信
+admin.homepage.status_bar.cloud_search_title: 云搜索
+admin.homepage.status_bar.cloud_question_title: 云问答
+admin.homepage.status_bar.mobile_app_title: 移动客户端
+admin.homepage.status_bar.mobile_app_status.open: 已开启
+admin.homepage.status_bar.mobile_app_status.not_open: 未开启
+admin.homepage.todays_data_title: 今日数据
+admin.homepage.todays_data.tooltips: >
+  <div class="popover-content hidden">
+    <div class="popover-item">
+      <div class="title">登录用户</div>
+      <div class="content">15分钟内活动的登录用户</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">在线总数</div>
+      <div class="content">15分钟内活动用户数，包括登录用户及未登录用户</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">新增注册</div>
+      <div class="content">平台新增用户数，包括自主注册、第三方注册及导入</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">新增学员人次</div>
+      <div class="content">今日加入课程和班级的总人次，1个学员加入2个课程，算2人次</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">新增会员</div>
+      <div class="content">今日购买会员的人数</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">未回复问答</div>
+      <div class="content">今日新产生问题中未回答的数量</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">未回复总数</div>
+      <div class="content">到目前为止，未回答问题总数</div>
+    </div>
+  </div>
+admin.homepage.todays_data.login_users: 登录用户 
+admin.homepage.todays_data.login_users.online_total: 在线总数 
+admin.homepage.todays_data.new_registration: 新增注册 
+admin.homepage.todays_data.total: 总数
+admin.homepage.todays_data.new_students: 新增学员
+admin.homepage.todays_data.new_vip_members: 新增会员
+admin.homepage.todays_data.thread_un_answer: 未回复回答
+admin.homepage.todays_data.thread_un_answer: 未回复回答
+admin.homepage.statistic.week: 最近7天
+admin.homepage.statistic.month: 最近30天
+admin.homepage.order_statistic_title: 订单统计
+admin.homepage.order_statistic.tips: >
+  <div class="popover-content hidden">
+    <div class="popover-item">`
+      <div class="title">新增订单</div>
+      <div class="content">平台当日产生的所有订单，包括免费和付费</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">付费订单</div>
+      <div class="content">平台当日产生的订单价格大于0元的订单</div>
+    </div>
+  </div>
+admin.homepage.pay_order_statistic_title: 付费订单统计
+admin.homepage.task_finish_statistic_title: 任务完成数
+admin.homepage.task_finish_statistic.tips: >
+  <div class="content">点击"学过了"的任务数量</div>
+admin.homepage.course_ranking_title: 课程排行榜
+admin.homepage.latest_question_title: 最新问答
+admin.homepage.latest_question.tr.question_th: 问题
+admin.homepage.latest_question.tr.view_count_th: 查看数
+admin.homepage.latest_question.tr.operation_th: 操作
+admin.homepage.latest_question.empty: 暂无最新未回复问答
+admin.homepage.latest_question.remind_teacher_btn: 提醒教师
+admin.homepage.latest_review_title: 最新评价
+admin.homepage.latest_review.review_content_th: 评价内容
+admin.homepage.latest_review.review_rating_th: 评分
+admin.homepage.latest_review.operation_th: 操作
+admin.homepage.latest_review.rating_start: 星
+admin.homepage.latest_review.view_btn: 查看
+admin.homepage.latest_review.empty: 暂无评价
+admin.homepage.top_search_title: 热门搜索
+admin.homepage.top_search.keyword_th: 关键词
+admin.homepage.top_search.search_number_th: 搜索次数
+admin.homepage.top_search.empty: 暂无搜索数据
+admin.homepage.free_access_edu_cloud_search_btn: 免费接入云搜索获取热门搜索关键词
+
+
+
+
+
+
+
 
 
 
