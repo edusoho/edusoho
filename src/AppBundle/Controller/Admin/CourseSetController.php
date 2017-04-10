@@ -12,7 +12,6 @@ use Biz\Course\Service\ThreadService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Course\Service\CourseSetService;
-use Biz\Activity\Service\ActivityService;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
@@ -46,6 +45,12 @@ class CourseSetController extends BaseController
         $conditions = $this->fillOrgCode($conditions);
 
         $count = $this->getCourseSetService()->countCourseSets($conditions);
+
+        if (!empty($conditions['categoryId'])) {
+            $conditions['categoryIds'] = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+            $conditions['categoryIds'][] = $conditions['categoryId'];
+            unset($conditions['categoryId']);
+        }
 
         $paginator = new Paginator($this->get('request'), $count, 20);
         $courseSets = $this->getCourseSetService()->searchCourseSets(
