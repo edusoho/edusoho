@@ -167,7 +167,6 @@ class OtherMigrate extends AbstractMigrate
 
     private function migrate15()
     {
-
         $this->exec(
             "UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\Biz\\Discount\\Job\\DiscountEndJob' WHERE `jobClass` like '%DiscountEndJob%';"
         );
@@ -198,23 +197,17 @@ class OtherMigrate extends AbstractMigrate
         $this->exec(
             "UPDATE crontab_job SET `jobClass` = 'Biz\\Testpaper\\Job\\UpdateRealTimeTestResultStatusJob' WHERE `name` = 'UpdateRealTimeTestResultStatusJob';"
         );
+
+        $this->exec(
+            "UPDATE crontab_job SET `jobClass` = 'Biz\\Testpaper\\Job\\UpdateRealTimeTestResultStatusJob' WHERE `name` = 'updateRealTimeTestResultStatusJob';"
+        );
+
         $this->exec(
             "UPDATE crontab_job SET `jobClass` = 'Biz\\User\\Job\\DeleteExpiredTokenJob' WHERE `name` = 'DeleteExpiredTokenJob';"
         );
         $this->exec(
             "UPDATE crontab_job SET `jobClass` = 'Biz\\User\\Job\\DeleteSessionJob' WHERE `name` = 'DeleteSessionJob';"
         );
-
-//        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\Crontab\\\\Service\\\\Impl\\\\EmptyJob' WHERE `name` = 'EmptyJob';");
-//        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\Notification\\\\Job\\\\LiveLessonStartNotifyJob' WHERE `name` = 'LiveLessonStartNotifyJob';");
-//        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\Notification\\\\Job\\\\LiveOpenPushNotificationOneHourJob' WHERE `name` = 'LiveOpenPushNotificationOneHourJob';");
-//        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\Notification\\\\Job\\\\PushNotificationOneHourJob' WHERE `name` = 'PushNotificationOneHourJob';");
-//        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\Order\\\\Job\\\\CancelOrderJob' WHERE `name` = 'CancelOrderJob';");
-//        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\Sms\\\\Job\\\\SmsSendOneDayJob' WHERE `name` = 'SmsSendOneDayJob';");
-//        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\Sms\\\\Job\\\\SmsSendOneHourJob' WHERE `name` = 'SmsSendOneHourJob';");
-//        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\Testpaper\\\\Job\\\\UpdateRealTimeTestResultStatusJob' WHERE `name` = 'UpdateRealTimeTestResultStatusJob';");
-//        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\User\\\\Job\\\\DeleteExpiredTokenJob' WHERE `name` = 'DeleteExpiredTokenJob';");
-//        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\User\\\\Job\\\\DeleteSessionJob' WHERE `name` = 'DeleteSessionJob';");
     }
 
     private function migrate16()
@@ -223,14 +216,14 @@ class OtherMigrate extends AbstractMigrate
             "
             UPDATE `course_v8` ce RIGHT JOIN (
 	          SELECT count(id) num , courseId FROM `course_thread`  WHERE TYPE IN ('discussion', 'question') GROUP BY courseid )
-            cd  ON ce.id = cd.`courseId` SET ce.`threadNum` = cd.num   
+            cd  ON ce.id = cd.`courseId` SET ce.`threadNum` = cd.num
             "
         );
     }
 
     private function migrate17()
     {
-        if(!$this->isIndexExist('user', 'user_type_index')){
+        if (!$this->isIndexExist('user', 'user_type_index')) {
             $this->exec('CREATE INDEX user_type_index ON user (type);');
         }
     }
