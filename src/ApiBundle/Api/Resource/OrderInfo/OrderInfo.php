@@ -21,6 +21,11 @@ class OrderInfo extends Resource
         if (isset($checkInfo['error'])) {
             throw new InvalidArgumentException($checkInfo['error']);
         }
+
+        $orderInfo['availableCoupons'] = $this->service('Card:CardService')->findCurrentUserAvailableCouponForTargetTypeAndTargetId(
+            $params['targetType'], $params['targetId']
+        );
+
         return $orderInfo;
     }
 

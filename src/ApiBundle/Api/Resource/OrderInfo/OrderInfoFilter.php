@@ -18,7 +18,8 @@ class OrderInfoFilter extends Filter
             'cashRate' => empty($data['cashRate']) ? 0 : $data['cashRate'],
             'priceType' => empty($data['priceType']) ? 'RMB' : $data['priceType'],
             'coinPayAmount' => empty($data['coinPayAmount']) ? 0 : $data['coinPayAmount'],
-            'maxCoin' => empty($data['maxCoin']) ? 0: $data['maxCoin']
+            'maxCoin' => empty($data['maxCoin']) ? 0: $data['maxCoin'],
+            'availableCoupons' => $data['availableCoupons']
         );
 
         $data = $orderInfo;
