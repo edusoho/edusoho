@@ -151,8 +151,8 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function batchUpdate($index)
     {
         $indexAndPage = $this->getIndexAndPage($index);
-        $index = $indexAndPage[0];
-        $page = $indexAndPage[1];
+        $index = (int)$indexAndPage[0];
+        $page = (int)$indexAndPage[1];
 
         $method = $this->getStep($index);
 
