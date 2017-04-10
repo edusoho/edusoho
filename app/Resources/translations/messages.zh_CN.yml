@@ -743,3 +743,30 @@ share.weixin_share: 分享到微信
 share.tsina_share: 分享到新浪微博
 share.qq_share: 分享到QQ好友
 share.qzone_share: 分享到QQ空间
+
+# 话题管理
+admin.course_thread.course_thread_manage_tab.form.type_option: 帖子类型
+admin.course_thread.course_thread_manage_tab.form.thread_type_option: 属性
+admin.course_thread.course_thread_manage_tab.form.thread_type.isStick_option: 置顶
+admin.course_thread.course_thread_manage_tab.form.thread_type.isElite_option: 加精
+admin.course_thread.course_thread_manage_tab.form.keyword_type.title_option: 标题
+admin.course_thread.course_thread_manage_tab.form.keyword_type.content_option: 内容
+admin.course_thread.course_thread_manage_tab.form.keyword_type.courseId_option: 课程编号
+admin.course_thread.course_thread_manage_tab.form.keyword_type.courseTitle_option: 课程名
+admin.course_thread.course_thread_manage_tab.form.input.keyword.placeholer: 关键词
+admin.course_thread.course_thread_manage_tab.form.input.author.placeholer: 作者
+admin.course_thread.course_thread_manage_tab.post_th: 帖子
+admin.course_thread.course_thread_manage_tab.replay_or_review_th: 回复/查看
+admin.course_thread.course_thread_manage_tab.type_th: 属性
+admin.course_thread.course_thread_manage_tab.author_th: 作者
+admin.course_thread.course_thread_manage_tab.operation_th: 操作
+admin.course_thread.course_thread_manage_tab.question_td_label: 问
+admin.course_thread.course_thread_manage_tab.expand_td: 展开
+admin.course_thread.course_thread_manage_tab.collapse_td: 收起
+admin.course_thread.course_thread_manage_tab.task_btn: 任务
+admin.course_thread.course_thread_manage_tab.isElite_btn: 精
+admin.course_thread.course_thread_manage_tab.isStick_btn: 顶
+admin.course_thread.course_thread_manage_tab.select_all_btn: 全选
+admin.course_thread.classroom_thread_manage_tab.form:
+ 
+
