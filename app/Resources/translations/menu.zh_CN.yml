@@ -1,0 +1,71 @@
+#后台菜单
+admin.basic_menu: 后台管理员
+
+#后台顶部导航
+admin.nav.user: 用户
+admin.nav.course: 课程
+admin.nav.operation: 运营
+admin.nav.order: 订单
+admin.nav.finance: 账务
+admin.nav.app: 教育云
+admin.nav.system: 系统
+
+#用户模块
+admin.user.basic_menu: 用户管理
+admin.user.teacher_menu: 教师管理
+admin.user.approval_menu: 实名认证管理
+admin.user.message_menu: 私信管理
+
+##用户管理模块
+admin.user.basic.tab.user_manage_tab: 用户管理
+admin.user.basic.tab.login_record_tab: 登录日志
+
+admin.user.basic.top_btn.create_user_btn: '添加新用户'
+admin.user.basic.btn_group.edit_user_info_btn: '编辑用户信息'
+admin.user.basic.btn_group.setting_roles_btn: '设置用户组'
+admin.user.basic.btn_group.update_avatar_btn: '修改用户头像' 
+admin.user.basic.btn_group.change_password_btn: '修改密码'
+admin.user.basic.btn_group.send_passwordreset_email_btn: '发送密码重置邮件'
+admin.user.basic.btn_group.send_emailverify_email_btn: '发送Email验证邮件'
+admin.user.basic.btn_group.lock_btn: '封禁用户'
+admin.user.basic.btn_group.unlock_btn: '解禁用户'
+admin.user.basic.btn_group.org_update_btn: '修改用户组织机构'
+
+##教师管理模块
+admin.user.teacher.tab.teacher_manage_tab: 教师管理
+admin.user.teacher.tab.promote_list_tab: 教师推荐
+
+admin.user.teacher.btn_group.promote_btn: 推荐老师
+admin.user.teacher.btn_group.promote_cancel_btn: 取消推荐
+
+##实名认证管理模块
+admin.user.approval.tab.approvals_tab: 实名认证管理
+
+admin.user.approval.btn_group.cancel_btn: 撤销
+
+##私信管理模块
+admin.user.message.tab.message_tab: 私信管理
+
+#课程模块
+admin.course.basic_menu: 课程管理
+admin.course.classroom_menu: 班级管理
+admin.course.open_course_menu: 公开课管理
+admin.course.live_menu: 直播管理
+admin.course.thread_menu: 话题管理
+admin.course.question_menu: 问答管理
+admin.course.note_menu: 笔记管理
+admin.course.review_menu: 评价管理
+admin.course.category_menu: 分类管理
+admin.course.tag_menu: '标签管理'
+
+##课程管理模块
+admin.course.basic.tab.manage_tab: 课程管理
+admin.course.basic.tab.recommend_list_tab: 课程推荐
+admin.course.basic.tab.data_tab: 课程统计
+
+admin.course.basic.top_btn.create_btn: 创建课程
+
+
+
+
+
