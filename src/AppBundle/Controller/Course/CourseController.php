@@ -65,7 +65,6 @@ class CourseController extends CourseBaseController
             }
         }
 
-
         $classroom = array();
         if ($course['parentId'] > 0) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
@@ -105,11 +104,11 @@ class CourseController extends CourseBaseController
             if ($task['type'] == 'video' && $course['tryLookable']) {
                 $activity = $this->getActivityService()->getActivity($task['activityId'], true);
                 if (!empty($activity['ext']['file']) && $activity['ext']['file']['storage'] == 'cloud') {
-                    return '试看';
+                    $tag = '试看';
                 }
             }
             if ($task['isFree']) {
-                $tag = '免费';
+                return '免费';
             }
         }
 
