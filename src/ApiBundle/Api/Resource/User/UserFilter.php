@@ -4,7 +4,6 @@ namespace ApiBundle\Api\Resource\User;
 
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Util\RequestUtil;
-use AppBundle\Common\ArrayToolkit;
 
 class UserFilter extends Filter
 {
@@ -52,16 +51,5 @@ class UserFilter extends Filter
         $data['smallAvatar'] = RequestUtil::asset($data['smallAvatar']);
         $data['mediumAvatar'] = RequestUtil::asset($data['mediumAvatar']);
         $data['largeAvatar'] = RequestUtil::asset($data['largeAvatar']);
-    }
-
-    private function convertAbsoluteUrl($html)
-    {
-        $html = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function($matches) {
-            $absoluteUrl = RequestUtil::asset($matches[1]);
-            return "src=\"{$absoluteUrl}\"";
-        }, $html);
-
-        return $html;
-
     }
 }

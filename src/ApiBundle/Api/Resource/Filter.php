@@ -2,6 +2,8 @@
 
 namespace ApiBundle\Api\Resource;
 
+use ApiBundle\Api\Util\RequestUtil;
+
 abstract class Filter
 {
     protected $publicFields;
@@ -66,5 +68,16 @@ abstract class Filter
         if (isset($data['updatedTime']) && is_numeric($data['updatedTime'])) {
             $data['updatedTime'] = date('c', $data['updatedTime']);
         }
+    }
+
+    protected function convertAbsoluteUrl($html)
+    {
+        $html = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function($matches) {
+            $absoluteUrl = RequestUtil::asset($matches[1]);
+            return "src=\"{$absoluteUrl}\"";
+        }, $html);
+
+        return $html;
+
     }
 }

@@ -18,6 +18,8 @@ class CourseSetFilter extends Filter
 
     protected function customFilter(&$data)
     {
+        $data['summary'] = $this->convertAbsoluteUrl($data['summary']);
+
         $data['recommendedTime'] = date('c', $data['recommendedTime']);
 
         foreach ($data['cover'] as $size => $imagePath) {
