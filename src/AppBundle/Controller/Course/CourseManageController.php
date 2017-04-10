@@ -21,7 +21,6 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\Testpaper\Service\TestpaperService;
-use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\Activity\Service\ActivityLearnLogService;
@@ -111,7 +110,7 @@ class CourseManageController extends BaseController
         );
 
         foreach ($liveTasks as $key => $task) {
-            $task['isEnd'] = (int)(time() - $task['endTime']) > 0;
+            $task['isEnd'] = (int) (time() - $task['endTime']) > 0;
             $task['file'] = $this->_getLiveReplayMedia($task);
             $liveTasks[$key] = $task;
         }
@@ -515,7 +514,6 @@ class CourseManageController extends BaseController
         );
     }
 
-
     protected function sortTasks($tasks)
     {
         $tasks = ArrayToolkit::group($tasks, 'categoryId');
@@ -540,7 +538,6 @@ class CourseManageController extends BaseController
 
         return $tasks;
     }
-
 
     public function teachersAction(Request $request, $courseSetId, $courseId)
     {
@@ -962,6 +959,7 @@ class CourseManageController extends BaseController
      * @param $courseId
      * @param $conditions
      * @param $course
+     *
      * @return array
      */
     protected function processTaskNumberForList($courseId, $conditions, $course)
@@ -1057,7 +1055,7 @@ class CourseManageController extends BaseController
         );
 
         $learnTime = $this->getActivityLearnLogService()->sumLearnTime(array('courseId' => $course['id']));
-        $learnTime = $course['studentNum'] == 0 ? 0 : (int)$learnTime / $course['studentNum'];
+        $learnTime = $course['studentNum'] == 0 ? 0 : (int) $learnTime / $course['studentNum'];
 
         $noteCount = $this->getNoteService()->countCourseNotes(array('courseId' => $course['id']));
 
