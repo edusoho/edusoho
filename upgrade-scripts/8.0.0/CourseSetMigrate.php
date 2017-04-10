@@ -15,6 +15,7 @@ class CourseSetMigrate extends AbstractMigrate
                   `summary` TEXT,
                   `goals` TEXT,
                   `audiences` TEXT,
+                  `isVip` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否是VIP课程',
                   `cover` VARCHAR(1024),
                   `status` varchar(32) DEFAULT '0' COMMENT 'draft, published, closed',
                   `creator` int(11) DEFAULT '0',
@@ -84,6 +85,7 @@ class CourseSetMigrate extends AbstractMigrate
             ,`categoryId`
             ,`goals`
             ,`audiences`
+            ,`isVip`
             ,`recommended`
             ,`recommendedSeq`
             ,`recommendedTime`
@@ -116,6 +118,7 @@ class CourseSetMigrate extends AbstractMigrate
             ,`categoryId`
             ,`goals`
             ,`audiences`
+            ,(case when `vipLevelId` > 0 then 1 else 0 end)
             ,`recommended`
             ,`recommendedSeq`
             ,`recommendedTime`
