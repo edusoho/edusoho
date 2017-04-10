@@ -4,16 +4,16 @@ class FileMigrate extends AbstractMigrate
 {
     public function update($page)
     {
-        if ($page == 26) {
+        if ($page == 27) {
             return 0;
         }
 
-        if($page == 24){
+        if($page == 25){
             $this->extractUpgradeFiles();
             return $page + 1;
         }
 
-        if($page == 25){
+        if($page == 26){
             $this->copyAndOverwriteUpgradeFiles();
             return $page + 1;
         }
@@ -39,7 +39,7 @@ class FileMigrate extends AbstractMigrate
         $filesystem = new \Symfony\Component\Filesystem\Filesystem();
         $tmpUnzipDir = $this->kernel->getParameter('kernel.root_dir').'/data/upgrade/es-8.0';
 
-        foreach (range(1, 23) as $page) {
+        foreach (range(1, 24) as $page) {
             $zip = new \ZipArchive;
             $filepath = $this->kernel->getParameter('kernel.root_dir').'/data/upgrade/es-8.0/upgrade-' . $page . '.zip';
 
