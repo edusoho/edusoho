@@ -27,7 +27,12 @@ class HomeworkMigrate extends AbstractMigrate
         foreach ($homeworks as $homework) {
             $courseSetId = $homework['courseId'];
 
-            $passedCondition = !empty($homework['correctPercent']) ? $homework['correctPercent'] : null;
+            $passedCondition = array('type' => 'submit');
+
+            if (!empty($homework['correctPercent'])) {
+                $passedCondition = array(0 => '60', 1 => '80', 2 => '100', 'type' => 'submit');
+            }
+            $passedCondition = json_encode($passedCondition);
 
             $insert = array(
                 'name' => '',
