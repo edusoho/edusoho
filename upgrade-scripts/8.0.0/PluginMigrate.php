@@ -27,7 +27,7 @@ class PluginMigrate extends AbstractMigrate
             $saved = file_put_contents($pluginFile, $content);
         } 
 
-        ServiceKernel::instance()->createService('System:SettingService')->set('theme', array('uri' => 'jianmo'));
+        ServiceKernel::instance()->createService('System.SettingService')->set('theme', array('uri' => 'jianmo'));
 
         $this->moveRoutingPluginsYml();
     }
