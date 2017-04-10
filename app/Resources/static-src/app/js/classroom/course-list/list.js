@@ -1,10 +1,16 @@
-export default class courseList {
+import {chapterAnimate} from 'app/common/widget/chapter-animate';
+
+export default class CourseList {
   constructor($element) {
-    this._initChapter();
+    this.$element = $element;
+    chapterAnimate();
+    this.initEvent();
+    echo.init();
   }
 
   initEvent() {
-
+    this.$element.on('click','.es-icon-keyboardarrowdown',(event)=>this.onExpandCourse(event));
+    this.$element.on('click','.es-icon-keyboardarrowup',(event)=>this.onCollapseCourse(event));
   }
 
   onExpandCourse(e) {
@@ -17,7 +23,6 @@ export default class courseList {
       var self = this;
       $.get($target.data('lessonUrl'), { 'visibility': 0 }, function (html) {
         $parent.append(html);
-        self._initChapter();
         self._lessonListSHow($parent.siblings(".course-detail-content"));
       });
     }
@@ -39,16 +44,5 @@ export default class courseList {
       $list.height();
     }
 
-  }
-  _initChapter(e) {
-    $('body').on('click', '.js-task-chapter', function () {
-      $(this).nextUntil(".js-task-chapter").animate({ height: 'toggle', opacity: 'toggle' }, "normal");
-      let $icon = $(this).children('.js-remove-icon');
-      if ($icon.hasClass('es-icon-remove')) {
-        $icon.removeClass('es-icon-remove').addClass('es-icon-anonymous-iconfont');
-      } else {
-        $icon.removeClass('es-icon-anonymous-iconfont').addClass('es-icon-remove');
-      }
-    });
   }
 }

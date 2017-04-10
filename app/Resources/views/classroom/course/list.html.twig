@@ -2,11 +2,9 @@
 {% block title %}{{ parent() }}{% endblock %}
 {% block description %}{{ classroomDescription|default('')|plain_text(100) }}{% endblock %}
 {% set nav = 'course' %}
-{% do script(['libs/echo.js','app/js/classroom/course/index.js'])%}
+{% do script(['libs/echo-js.js','app/js/classroom/course-list/index.js'])%}
 
 {% block main %}
-  {% do load_script('topxiawebbundle/controller/classroom/course-list/index.js') %}
-  {% include 'seajs_loader_compatible.html.twig' with {'topxiawebbundle':true} %}
 
   {% if isCourseMember|default(false) %}
     {% set courseShowPath = 'my_course_show' %}
