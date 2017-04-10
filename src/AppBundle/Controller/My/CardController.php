@@ -58,53 +58,37 @@ class CardController extends BaseController
         ));
     }
 
-    public function useableCouponsAction($targetType, $targetId, $totalPrice, $priceType)
+    public function availableCouponsAction($targetType, $targetId, $totalPrice, $priceType)
     {
-        $user = $this->getCurrentUser();
+        $availableCoupons = $this->getCardService()->findCurrentUserAvailableCouponForTargetTypeAndTargetId(
+            $targetType, $targetId
+        );
 
-        if (!$user->isLogin()) {
-            return $this->redirect($this->generateUrl('login'));
-        }
-
-        $cards = $this->getCardService()->findCardsByUserIdAndCardType($user['id'], 'coupon');
-        $cards = $this->sortCards($cards);
-        $groupCards = ArrayToolkit::group($cards, 'status');
-
-        if (isset($groupCards['useable'])) {
-            $cardIds = ArrayToolkit::column($groupCards['useable'], 'cardId');
-            $cardDetails = $this->getCardService()->findCardDetailsByCardTypeAndCardIds('coupon', $cardIds);
-            $useableCards = array();
-
-            foreach ($cardDetails as $key => $value) {
-                $useable = $this->isUseable($value, $targetType, $targetId);
-
-                if ($useable) {
-                    if ($value['type'] == 'minus') {
-                        $cardDetails[$key]['truePrice'] = $totalPrice - $value['rate'];
-                        $useableCards[] = $cardDetails[$key];
-                    } else {
-                        $cardDetails[$key]['truePrice'] = $totalPrice * ($value['rate'] / 10);
-                        $useableCards[] = $cardDetails[$key];
-                    }
-                }
-            }
+        if ($availableCoupons) {
 
             $higherTop = array();
             $lowerTop = array();
 
-            foreach ($useableCards as $key => $useableCard) {
-                if ($useableCard['truePrice'] > 0) {
-                    $useableCards[$key]['decrease'] = 0 - $useableCard['truePrice'];
-                    $lowerTop[] = $useableCards[$key];
+            foreach ($availableCoupons as $key => &$coupon) {
+
+                if ($coupon['type'] == 'minus') {
+                    $coupon['truePrice'] = $totalPrice - $coupon['rate'];
                 } else {
-                    $useableCards[$key]['decrease'] = 0 - $useableCard['truePrice'];
-                    $higherTop[] = $useableCards[$key];
+                    $coupon['truePrice'] = $totalPrice * ($coupon['rate'] / 10);
+                }
+
+                if ($coupon['truePrice'] > 0) {
+                    $coupon['decrease'] = 0 - $coupon['truePrice'];
+                    $lowerTop[] = $coupon;
+                } else {
+                    $coupon['decrease'] = 0 - $coupon['truePrice'];
+                    $higherTop[] = $coupon;
                 }
             }
 
             $higherTop = $this->getCardService()->sortArrayByField($higherTop, 'decrease');
             $lowerTop = $this->getCardService()->sortArrayByField($lowerTop, 'decrease');
-            $useableCards = array_merge(array_reverse($higherTop), $lowerTop);
+            $availableCoupons = array_merge(array_reverse($higherTop), $lowerTop);
         }
 
         return $this->render('order/order-item-coupon.html.twig', array(
@@ -112,19 +96,8 @@ class CardController extends BaseController
             'targetId' => $targetId,
             'totalPrice' => $totalPrice,
             'priceType' => $priceType,
-            'coupons' => isset($useableCards) ? $useableCards : null,
+            'coupons' => $availableCoupons,
         ));
-    }
-
-    protected function isUseable($cardDetail, $targetType, $targetId)
-    {
-        if ($cardDetail['targetType'] == 'all' || $cardDetail['targetType'] == 'fullDiscount') {
-            return true;
-        }
-
-        if ($cardDetail['targetType'] == $targetType && ($cardDetail['targetId'] == 0 || $cardDetail['targetId'] == $targetId)) {
-            return true;
-        }
     }
 
     public function cardInfoAction(Request $request)
