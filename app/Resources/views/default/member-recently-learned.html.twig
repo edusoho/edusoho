@@ -3,7 +3,7 @@
 {% if courseSet %}
   <div class="es-box">
     <div class="es-box-heading">
-      <h2>{{'在学课程'|trans}}</h2>
+      <h2>{{'homepage.learning_course.content_title'|trans}}</h2>
     </div>
     <div class="es-box-body user-learn clearfix">
       <a href="{{ path('course_set_show', {id: courseSet.id}) }}">
@@ -12,18 +12,18 @@
       <p>《{{ courseSet.title }}》</p>
       {% set teacher = courseSet.course.teachers|first %}
       {% set progress = courseSet.course.progress %}
-      <p class="teacher-name">{{'教师：%nickname%'|trans({'%nickname%': teacher.nickname|default("") })}}</p>
+      <p class="teacher-name">{{'homepage.learning_course.teacher_name'|trans({'%nickname%': teacher.nickname|default("") })}}</p>
       <div class="progress-block clearfix">
         <div class="progress" style="width:90%">
           <span class="progress-bar" style="width: {{ progress.percent }};"></span>
         </div>
-        <div class="percentage clearfix">{{'完成%percent%'|trans({'%percent%': progress.percent })}}</div>
+        <div class="percentage clearfix">{{'homepage.learning_course.learning_progress'|trans({'%percent%': progress.percent })}}</div>
 
         {% set task = courseSet.course.nextLearnTask %}
         {% if task %}
           <div class="continue">
-            <a href="{{ path('course_task_show', {id: task.id, courseId: courseSet.course.id}) }}" title="{{'继续学习：%title%'|trans({'%title%':  task.title })}}" class="btn btn-success pull-right">
-            {{'继续学习'|trans}}
+            <a href="{{ path('course_task_show', {id: task.id, courseId: courseSet.course.id}) }}" title="{{'homepage.learning_course'|trans({'%title%':  task.title })}}" class="btn btn-success pull-right">
+            {{'homepage.learning_course.continue_learning_btn'|trans}}
             </a>
           </div>
         {% endif %}

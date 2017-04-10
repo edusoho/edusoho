@@ -9,6 +9,16 @@ site.dategrid.filter.last_one_week: 最近一周
 site.dategrid.filter.last_two_week: 最近两周
 site.dategrid.filter.last_one_month: 最近一个月
 site.dategrid.filter.last_three_month: 最近三个月
+site.dategrid.filter.all_course: 全部课程
+site.dategrid.filter.latest: 最新
+site.dategrid.filter.topest: 最热
+site.dategrid.filter.recommended: 推荐
+site.dategrid.filter.category_more: 更多
+site.dategrid.filter.course_more: 更多课程
+site.message.info: 提示信息
+site.message.warning: 警告信息
+site.message.error: 错误提示
+site.power_by: 好知网
 
 # 用户通用
 user.fields.login_password: 登录密码
@@ -107,6 +117,8 @@ open_course.status.living: 即将直播
 # 班级
 classroom: 班级
 classroom.courses_count: 共%courseNum%门课程
+classroom.continue_learning_btn: 继续学习
+classroom.join_btn: 立即加入
 
 # 表单通用
 form.field.optional: 选填
@@ -484,12 +496,47 @@ homepage.header.my_teaching_menu: 我的教学
 homepage.header.my_learning_menu: 我的学习
 homepage.header.account_menu: 账户中心
 homepage.header.admin_menu: 管理后台
+homepage.friend-link.content_title: 友情链接：
+homepage.live_course.living: 正在直播
+homepage.live_course.expect: 敬请期待
+homepage.live_course.teacher: 授课老师:
+homepage.live_course.start_time: 直播时间:
+homepage.live_course.time_before_start: >
+  距离直播还有<span>%minutes%</span>分钟
+homepage.live_course.join_btn: 进入直播教室
+homepage.live_course.more: 更多直播
+homepage.open_course.tips: 随时随地，免费听课。
+homepage.open_course.more: 更多公开课
+homepage.learning_course: 继续学习：%title%
+homepage.learning_course.continue_learning_btn: 继续学习
+homepage.learning_course.content_title: 在学课程
+homepage.learning_course.teacher_name: 教师：%nickname%
+homepage.learning_course.learning_progress: 完成%percent%
+homepage.recommend_classroom.content_title: 推荐班级
+homepage.recommend_classroom.more: >
+  更多%moreClassrooms%
+homepage.article.content_title: 最新%article_name%
+homepage.student_comment.content_title: 学员评价
+homepage.student_comment.from: >
+  发布于 <a class="link-dark" href="%courseUrl%">《%courseTitle%》</a>
+homepage.student_comment.empty: 还没有评价
+homepage.student_dynamic.content_title: 学员动态
+homepage.recommend_teacher.more: 更多教师
+homepage.footer.archive: 课程存档
+homepage.footer.course_copyright: >
+  课程内容版权均归
+  <a href="/">
+    %copyRightUrl%
+  </a>
+  所有
 
-# 师资力量模块
+# 教师模块
 teacher.introductions: 师资介绍
 teacher.SEO.keywords: 师资介绍%name%
 teacher.SEO.description: %name%的师资介绍。
 teacher.content_title: 所有教师
+teacher.promoted_teacher.content_title: 名师风采
+teacher.promoted_teacher.see_ben: 去老师主页看看
 
 # 自定义页面模块-常见问题
 custom_page.empty: 当前页面尚未编辑内容，请在管理后台编辑。
@@ -743,3 +790,32 @@ share.weixin_share: 分享到微信
 share.tsina_share: 分享到新浪微博
 share.qq_share: 分享到QQ好友
 share.qzone_share: 分享到QQ空间
+
+# 移动端
+mobile.page_title: 移动学习
+mobile.app_name: 阔知学堂
+mobile.app_tips: 将学校装进口袋，移动学习，随时随地。
+mobile.app_download_btn: 下载APP
+mobile.app_download_tips: >
+  <p class="main-slogan">{{ '更好的移动端学习'|trans }}</p>
+  <p class="sub-slogan">{{ '好好学习，天天向上'|trans }}</p>
+mobile.app_login_btn: 登录网校
+mobile.app_login_tips: 扫一扫登录客户端
+mobile.step_one: >
+  <span class="member">1</span>第一步:
+mobile.step_one_tips: 扫描二维码，下载手机APP。
+mobile.Android_client: Android 客户端
+mobile.iPhone_client: iPhome客户端
+mobile.step_two: >
+  <span class="member">2</span>第二步: 打开阔知学堂APP，扫描网校二维码。
+
+# 客服
+customer_service.open_content_title: 查看在线客服
+customer_service.close_content_title: 关闭在线客服
+customer_service.open_btn: 展开
+customer_service.close_btn: 收缩
+customer_service.QQ: 客服QQ
+customer_service.mobile: 电话
+customer_service.customer_mobile: 客服电话
+customer_service.email: 邮件
+customer_service.customer_email: 反馈邮件
