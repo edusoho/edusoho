@@ -85,6 +85,10 @@ class CardServiceImpl extends BaseService implements CardService
 
     private function isAvailable($coupon, $targetType, $targetId)
     {
+        if ($coupon['deadline'] + 86400 < time()) {
+            return false;
+        }
+
         if ($coupon['targetType'] == 'all' || $coupon['targetType'] == 'fullDiscount') {
             return true;
         }
