@@ -23,6 +23,7 @@ const options = {
     'jquery-cycle2': ['jquery-cycle2'],
     'excanvas-compiled':['libs/js/excanvas-compiled.js'],
     'echo-js': ['echo-js'],
+    'jquery-blurr':['jquery-blurr'],
     // 样式
     'app-bootstrap': ['libs/app-bootstrap/less/bootstrap.less']
   },
