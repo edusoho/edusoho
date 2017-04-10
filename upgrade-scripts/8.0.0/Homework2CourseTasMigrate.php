@@ -10,7 +10,7 @@ class Homework2CourseTasMigrate extends AbstractMigrate
 
         $this->migrateTableStructure();
 
-        $count = $this->getConnection()->fetchColumn("SELECT count(id) FROM (select max(id) as id,lessonId from homework) as tmp WHERE id NOT IN (SELECT migrateHomeworkId FROM activity WHERE mediaType='homework') AND `lessonId`  IN (SELECT id FROM `course_lesson`);");
+        $count = $this->getConnection()->fetchColumn("SELECT count(id) FROM (select max(id) as id,lessonId from homework group by lessonId) as tmp WHERE id NOT IN (SELECT migrateHomeworkId FROM activity WHERE mediaType='homework') AND `lessonId`  IN (SELECT id FROM `course_lesson`);");
 
         if (empty($count)) {
             $this->updateHomeworkTask();
