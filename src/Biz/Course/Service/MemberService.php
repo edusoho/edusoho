@@ -130,6 +130,4 @@ interface MemberService
     public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline);
 
     public function updateMembersDeadlineByClassroomId($classroomId, $deadline);
-
-    public function findCourseMembersByUserIds(array $userId);
 }

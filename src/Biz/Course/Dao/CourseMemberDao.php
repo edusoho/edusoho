@@ -117,6 +117,4 @@ interface CourseMemberDao extends GeneralDaoInterface
     public function updateByClassroomIdAndUserId($classroomId, $userId, array $fields);
 
     public function updateByClassroomId($classroomId, array $fields);
-
-    public function findByUserIds(array $userIds);
 }
