@@ -190,6 +190,7 @@ script(['libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstra
                   </div>
                 </div>
               </div>
+              {% if setting('storage.upload_mode', 'local') != 'local' %}
               <div class="form-group">
                 <label class="col-sm-2 control-label">
                   {{ '视频试看'|trans }}
@@ -204,6 +205,7 @@ script(['libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstra
                   {{ radios('tryLookable', { '1': '是'|trans, '0': '否'|trans }, course.tryLookable|default(0)) }}
                 </div>
               </div>
+              {% endif %}
               <div class="form-group js-enable-try-look {% if course.tryLookable|default(0) == 0 %}hidden{% endif %}">
                 <div class="col-sm-8 col-sm-offset-2">
                   <select class="form-control width-150 mh5" id="tryLookLength" name="tryLookLength">
