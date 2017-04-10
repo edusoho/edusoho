@@ -24,4 +24,7 @@ showSettings();
 TaskListHeaderFixed();
 // @TODO拆分，这个js被几个页面引用了有的页面根本不用js
 
+$('.js-batch-add').hover(()=>{
+  $('.js-batch-add').popover('show');
+})
 
