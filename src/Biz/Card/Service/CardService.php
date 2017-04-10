@@ -4,6 +4,10 @@ namespace Biz\Card\Service;
 
 interface CardService
 {
+    const STATUS_RECEIVE = 'receive';
+
+    const TYPE_COUPON = 'coupon';
+
     public function addCard($card);
 
     public function getCard($id);
@@ -17,6 +21,8 @@ interface CardService
     public function searchCards($conditions, $orderBy, $start, $limit);
 
     public function updateCardByCardIdAndCardType($cardId, $cardType, $fields);
+
+    public function findCurrentUserAvailableCouponForTargetTypeAndTargetId($targetType, $targetId);
 
     public function findCardsByUserIdAndCardType($userId, $cardType);
 
