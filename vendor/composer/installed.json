@@ -4759,46 +4759,6 @@
         "description": "A security checker for your composer.lock"
     },
     {
-        "name": "codeages/biz-framework",
-        "version": "v0.3.4",
-        "version_normalized": "0.3.4.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "856a741902459c65496bbd2886e63b63f7f16d92"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/biz-framework/856a741902459c65496bbd2886e63b63f7f16d92.zip",
-            "reference": "856a741902459c65496bbd2886e63b63f7f16d92",
-            "shasum": ""
-        },
-        "require": {
-            "davedevelopment/phpmig": "^1.2.0",
-            "doctrine/dbal": "^2.4.5",
-            "php": "^5.3.3 || ^7.0",
-            "pimple/pimple": "^3.0.2",
-            "psr/log": "^1.0.0",
-            "symfony/event-dispatcher": "^2.8.9"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
-        },
-        "time": "2017-04-06T07:46:11+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\Biz\\Framework\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "A service layer framework."
-    },
-    {
         "name": "sentry/sentry",
         "version": "1.6.2",
         "version_normalized": "1.6.2.0",
@@ -4968,5 +4928,45 @@
             "plugin",
             "theme"
         ]
+    },
+    {
+        "name": "codeages/biz-framework",
+        "version": "v0.3.5",
+        "version_normalized": "0.3.5.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/biz-framework.git",
+            "reference": "711db06c6417b1b076c61e520df513591c3556f9"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/codeages/biz-framework/711db06c6417b1b076c61e520df513591c3556f9.zip",
+            "reference": "711db06c6417b1b076c61e520df513591c3556f9",
+            "shasum": ""
+        },
+        "require": {
+            "davedevelopment/phpmig": "^1.2.0",
+            "doctrine/dbal": "^2.4.5",
+            "php": "^5.3.3 || ^7.0",
+            "pimple/pimple": "^3.0.2",
+            "psr/log": "^1.0.0",
+            "symfony/event-dispatcher": "^2.8.9"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
+        },
+        "time": "2017-04-09T11:58:53+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Biz\\Framework\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "A service layer framework."
     }
 ]
