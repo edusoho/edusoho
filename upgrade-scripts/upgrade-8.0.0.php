@@ -92,6 +92,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'Homework2CourseTasMigrate',
             'UpdateHomework2CourseTasMigrate',
             'UpdateExercise2CourseTaskMigrate',
+            'ExerciseResult2CourseTaskResultMigrate',
+            'HomeWorkResult2CourseTaskResultMigrate',
 
             'UpdateCourseChapter',
 
