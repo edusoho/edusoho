@@ -2,12 +2,16 @@
 
 namespace ApiBundle\Api\Resource\OrderInfo;
 
+use ApiBundle\Api\Resource\Coupon\CouponFilter;
 use ApiBundle\Api\Resource\Filter;
 
 class OrderInfoFilter extends Filter
 {
     protected function customFilter(&$data)
     {
+        $couponFilter = new CouponFilter();
+        $couponFilter->filters($data['availableCoupons']);
+
         $orderInfo = array(
             'targetId' => $data['targetId'],
             'targetType' => $data['targetType'],
