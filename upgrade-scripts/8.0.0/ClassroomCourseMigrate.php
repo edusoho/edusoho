@@ -4,7 +4,7 @@ class ClassroomCourseMigrate extends AbstractMigrate
 {
     public function update($page)
     {
-        $countSql = 'SELECT count(c2.id) SELECT  courseId  FROM `classroom_courses` c2   LEFT JOIN  `course_v8` c1  ON c1.id = c2.`courseId`';
+        $countSql = 'SELECT count(c2.id)  FROM `classroom_courses` c2   LEFT JOIN  `course_v8` c1  ON c1.id = c2.`courseId`';
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
             return;
