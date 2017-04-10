@@ -692,3 +692,27 @@ article.status.essence: 精华
 article.status.reward: 奖
 article.create: 发起了话题
 article.last_reply: 最后回复
+
+# 课程管理
+# 普通课程
+admin.course.manage.normal_course: 普通课程
+
+# 班级课程
+# 会员课程
+admin.course.manage.vip_course: 会员课程
+
+#课程管理通用模块
+admin.course.manage.course.category_placeholder: 课程分类
+admin.course.manage.course.status_placeholder: 课程状态
+admin.course.manage.course.title_placeholder: 标题
+admin.course.manage.course.creator_placeholer: 创建者
+admin.course.manage.course.tips: >
+  <div style='width:250px;'>
+    <span style='color:blue;'>课程说明</span><br>
+    1. 编号及排序无法修改；<br>
+    2. 课程地址规则：域名/course/课程编号；
+  </div>
+admin.course.manage.course_published: 已发布
+admin.course.manage.course_closed: 已关闭
+admin.course.manage.course_unpublish: 未发布
+admin.course.manage.course_count: 个
