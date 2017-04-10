@@ -6,6 +6,7 @@ use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
 use Biz\Thread\Service\ThreadService;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
@@ -196,6 +197,14 @@ class ClassroomController extends BaseController
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 
     /**
