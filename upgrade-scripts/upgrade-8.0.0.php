@@ -28,12 +28,6 @@ class EduSohoUpgrade extends AbstractUpdater
             }
         } catch (\Exception $e) {
         }
-
-        $developerSetting = $this->getSettingService()->get('developer', array());
-        $developerSetting['debug'] = 0;
-
-        $this->getSettingService()->set('developer', $developerSetting);
-        $this->getSettingService()->set('crontab_next_executed_time', time());
     }
 
     protected function getAllStep()

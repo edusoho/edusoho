@@ -25,13 +25,23 @@ class PluginMigrate extends AbstractMigrate
 
             $content = "<?php \n return " . var_export($config, true) . ";";
             $saved = file_put_contents($pluginFile, $content);
-        } 
+        }
 
-        ServiceKernel::instance()->createService('System.SettingService')->set('theme', array('uri' => 'jianmo'));
+        $this->getSettingService()->set('theme', array('uri' => 'jianmo'));
 
         $this->moveRoutingPluginsYml();
+
+        $developerSetting = $this->getSettingService()->get('developer', array());
+        $developerSetting['debug'] = 0;
+
+        $this->getSettingService()->set('developer', $developerSetting);
+        $this->getSettingService()->set('crontab_next_executed_time', time());
     }
 
+    protected function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System.SettingService');
+    }
 
     protected function getPluginConfig()
     {

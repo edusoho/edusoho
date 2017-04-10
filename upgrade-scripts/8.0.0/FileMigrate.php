@@ -4,9 +4,6 @@ class FileMigrate extends AbstractMigrate
 {
     public function update($page)
     {
-        if ($page == 27) {
-            return 0;
-        }
 
         if($page == 25){
             $this->extractUpgradeFiles();
@@ -15,12 +12,13 @@ class FileMigrate extends AbstractMigrate
 
         if($page == 26){
             $this->copyAndOverwriteUpgradeFiles();
-            return $page + 1;
+            echo json_encode(array('status' => 'ok'));
+            exit(0);
         }
 
         $filepath = 'http://ojc8jepus.bkt.clouddn.com/x8-package/x8-'.$page.'.zip';
 
-        $dir = $this->kernel->getParameter('kernel.root_dir').'/data/upgrade/es-8.0';
+        $dir = $this->kernel->getParameter('kernel.root_dir').'/data/upgrade';
 
         $filesystem = new \Symfony\Component\Filesystem\Filesystem();
 
@@ -41,7 +39,7 @@ class FileMigrate extends AbstractMigrate
 
         foreach (range(1, 24) as $page) {
             $zip = new \ZipArchive;
-            $filepath = $this->kernel->getParameter('kernel.root_dir').'/data/upgrade/es-8.0/upgrade-' . $page . '.zip';
+            $filepath = $this->kernel->getParameter('kernel.root_dir').'/data/upgrade/upgrade-' . $page . '.zip';
 
             if ($zip->open($filepath) === true) {
                 $zip->extractTo($tmpUnzipDir);
@@ -57,7 +55,7 @@ class FileMigrate extends AbstractMigrate
 
     private function copyAndOverwriteUpgradeFiles()
     {
-        $tmpUnzipDir = $this->kernel->getParameter('kernel.root_dir').'/data/upgrade/es-8.0';
+        $tmpUnzipDir = $this->kernel->getParameter('kernel.root_dir').'/data/upgrade/es-8.0/source';
         $edusohoDir = $this->kernel->getParameter('kernel.root_dir') . '/../';
 
         $filesystem = new \Symfony\Component\Filesystem\Filesystem();
@@ -66,5 +64,6 @@ class FileMigrate extends AbstractMigrate
             'copy_on_windows' => true,
         ));
         $filesystem->remove($tmpUnzipDir);
+        $filesystem->remove($this->kernel->getParameter('kernel.root_dir') .'/cache');
     }
 }
