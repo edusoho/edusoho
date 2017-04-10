@@ -2,8 +2,8 @@
 
 namespace Biz\Activity\Type;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Activity\Service\ActivityLearnLogService;
@@ -18,7 +18,7 @@ class Homework extends Activity
 
     public function get($targetId)
     {
-        return $this->getTestpaperService()->getTestpaper($targetId);
+        return $this->getTestpaperService()->getTestpaperByIdAndType($targetId, 'homework');
     }
 
     public function create($fields)
@@ -57,7 +57,7 @@ class Homework extends Activity
         $user = $biz['user'];
 
         $activity = $this->getActivityService()->getActivity($activityId);
-        $homework = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], 'homework');
 
         $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $activity['mediaId'], $activity['fromCourseId'], $activity['id'], 'homework');
         if (!$result) {

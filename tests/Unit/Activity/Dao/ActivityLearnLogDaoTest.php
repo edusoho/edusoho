@@ -162,6 +162,7 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
         return array(
             'activityId' => 1,
             'userId' => 1,
+            'mediaType' => 'video',
             'event' => 'ffff',
             'data' => array('a'),
             'learnedTime' => 1,

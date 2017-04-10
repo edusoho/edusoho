@@ -91,7 +91,7 @@ class Editor {
             $('.js-task-empty').addClass('hidden');
         }
         if (needAppend === false) {
-          // @TODO这里也需要返回html,进行替换          
+          // @TODO这里也需要返回html,进行替换   
           document.location.reload();
         }
 
@@ -171,6 +171,8 @@ class Editor {
       .then((response) => {
         notify('success', '删除成功');
         this.$element.modal('hide');
+
+
         document.location.reload();
       })
       .fail(error => {

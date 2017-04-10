@@ -2,7 +2,7 @@
 {% do script(['libs/easy-pie-chart/dist/jquery.easypiechart.js','libs/excanvas-compiled.js','libs/jquery-countdown.js',
 'app/js/courseset/show/index.js']) %}
 
-{% set course_set = data('CourseSet', {id: course.courseSetId}) %}
+{% set course_set = data('CourseSet', {id: course.courseSetId})|merge({'tags': 'tags'}) %}
 {% set bodyClass = 'course-dashboard-page' %}
 
 
@@ -11,8 +11,7 @@
 {% endblock %}
 
 {% block keywords %}
-  {% set tags = data('Tags', {tagIds: course_set.tags|default('')}) %}
-  {% for tag in tags %}{{tag.name}}{% if not loop.last%},{% endif %}{% else %}{{ parent() }}{% endfor %}
+  {% for tag in course_set.tags %}{{ tag.name }}{% if not loop.last %},{% endif %}{% else %}{{ parent() }}{% endfor %}
 {% endblock %}
 
 {% block description %}{{ course.about|purify_and_trim_html|default('')|plain_text(100) }}{% endblock %}
@@ -30,25 +29,24 @@
         {% set eventReportParams = {'user-id': app.user.id|default(0)} %}
         {% include 'event_report.html.twig' with{ 'eventName':'course.view', 'subjectType':'course', 'subjectId': course.id, 'eventReportParams':eventReportParams} %}
         {% include 'course/announcement/block.html.twig' with { courseId:course.id } %}
-
         <section class="es-section">
           <div class="nav-btn-tab">
-            <ul class="nav nav-tabs {% if mobile  %} es-mobile-nav {% endif %}" role="tablist">
+            <ul class="nav nav-tabs {% if mobile %} es-mobile-nav {% endif %}" role="tablist">
               {% for key, tab in metas.tabs %}
-                {% if mobile  %}
-                  {% if not  member|default(null)  and loop.index <= 3  %}
+                {% if mobile %}
+                  {% if not  member|default(null)  and loop.index <= 3 %}
                     <li role="presentation" id="{{ key }}"
                       class="{% if route_params.tab|default('') == key  or nav|default('') == key %}active{% endif %}">
                       <a
-                          {% if member|default(false) %}
-                            href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-                          {% else %}
-                            href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-                          {% endif %}
+                        {% if member|default(false) %}
+                          href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
+                        {% else %}
+                          href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
+                        {% endif %}
                       >
                         {{ tab.name }}
                         {% if key == 'tasks' and categoryTag|default(null) %}
-                          <span class="badge badge-primary">{{categoryTag}}</span>
+                          <span class="badge badge-primary">{{ categoryTag }}</span>
                         {% endif %}
                         {% if tab.number|default(false) %}
                           {% if member|default(false) %}
@@ -63,15 +61,15 @@
                     <li role="presentation" id="{{ key }}"
                       class="navs {% if route_params.tab|default('') == key  or nav|default('') == key %}active{% endif %}">
                       <a
-                          {% if member|default(false) %}
-                            href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-                          {% else %}
-                            href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-                          {% endif %}
+                        {% if member|default(false) %}
+                          href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
+                        {% else %}
+                          href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
+                        {% endif %}
                       >
                         {{ tab.name }}
                         {% if key == 'tasks' and categoryTag|default(null) %}
-                          <span class="badge badge-primary">{{categoryTag}}</span>
+                          <span class="badge badge-primary">{{ categoryTag }}</span>
                         {% endif %}
                         {% if tab.number|default(false) %}
                           {% if member|default(false) %}
@@ -85,17 +83,17 @@
                   {% endif %}
                 {% else %}
                   <li role="presentation" id="{{ key }}"
-                      class="{% if route_params.tab|default('') == key  or nav|default('') == key %}active{% endif %}">
+                    class="{% if route_params.tab|default('') == key  or nav|default('') == key %}active{% endif %}">
                     <a
-                        {% if member|default(false) %}
-                          href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-                        {% else %}
-                          href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-                        {% endif %}
+                      {% if member|default(false) %}
+                        href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
+                      {% else %}
+                        href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
+                      {% endif %}
                     >
                       {{ tab.name }}
                       {% if key == 'tasks' and categoryTag|default(null) %}
-                        <span class="badge badge-primary">{{categoryTag}}</span>
+                        <span class="badge badge-primary">{{ categoryTag }}</span>
                       {% endif %}
                       {% if tab.number|default(false) %}
                         {% if member|default(false) %}
@@ -113,8 +111,8 @@
             {% if app.user.admin|default(false) or isCourseTeacher|default(false) %}
               <div class="btnbar hidden-xs">
                 <a href="#modal" data-toggle="modal"
-                   data-url="{{ path('announcement_add',{targetType:'course',targetId:course.id}) }}"
-                   class="btn btn-link">
+                  data-url="{{ path('announcement_add',{targetType:'course',targetId:course.id}) }}"
+                  class="btn btn-link">
                   <i class="es-icon es-icon-anonymous-iconfont"></i>
                   {{ '公告'|trans }}
                 </a>
@@ -126,14 +124,13 @@
             {{ render(controller(metas.tabs[tab].content, {request: app.request, course: course, member: member|default(null)})) }}
           {% endblock %}
         </section>
-
       </div>
       <div class="col-lg-3 col-md-4 course-sidebar">
         {# 有些widget只有班级计划才显示 #}
         {% for key, widget in metas.widgets %}
           {% if (widget.showMode|default('all') == 'classroom' and course.parentId > 0)
-              or (widget.showMode|default('all') == 'course' and course.parentId == 0)
-              or widget.showMode|default('all') == 'all' %}
+          or (widget.showMode|default('all') == 'course' and course.parentId == 0)
+          or widget.showMode|default('all') == 'all' %}
             {% if widget.renderType == 'render' %}
               {{ render(controller(widget.uri, {course: course, member: member|default({})})) }}
             {% elseif widget.renderType == 'include' %}

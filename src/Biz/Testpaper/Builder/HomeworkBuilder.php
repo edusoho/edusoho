@@ -44,7 +44,7 @@ class HomeworkBuilder implements TestpaperBuilderInterface
 
     public function showTestItems($testId, $resultId = 0)
     {
-        $test = $this->getTestpaperService()->getTestpaper($testId);
+        $test = $this->getTestpaperService()->getTestpaperByIdAndType($testId, 'homework');
         $items = $this->getTestpaperService()->findItemsByTestId($test['id']);
         if (!$items) {
             return array();
@@ -122,7 +122,7 @@ class HomeworkBuilder implements TestpaperBuilderInterface
     public function updateSubmitedResult($resultId, $usedTime)
     {
         $result = $this->getTestpaperService()->getTestpaperResult($resultId);
-        $homework = $this->getTestpaperService()->getTestpaper($result['testId']);
+        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($result['testId'], $result['type']);
         $items = $this->getTestpaperService()->findItemsByTestId($result['testId']);
         $itemResults = $this->getTestpaperService()->findItemResultsByResultId($result['id']);
 
