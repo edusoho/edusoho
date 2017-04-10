@@ -46,7 +46,13 @@
                     --
                   {% endif %}
                 </td>
-                <td>{{ task.score|default('--') }}</td>
+                <td>
+                  {% if task.type in ['testpaper'] %}
+                    {{ task.score|default('0') }}
+                  {% else %}
+                    --
+                  {% endif %}
+                </td>
               </tr>
             {% endfor %}
           {% endif %}
