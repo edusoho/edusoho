@@ -169,10 +169,10 @@ class OtherMigrate extends AbstractMigrate
     {
 
         $this->exec(
-            "UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\Biz\\Discount\\Job\\DiscountEndJob' WHERE `name` = 'DiscountEndJob';"
+            "UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\Biz\\Discount\\Job\\DiscountEndJob' WHERE `name` LIKE '结束：打折活动%';"
         );
         $this->exec(
-            "UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\Biz\\Discount\\Job\\DiscountStartJob' WHERE `name` = 'DiscountStartJob';"
+            "UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\Biz\\Discount\\Job\\DiscountStartJob' WHERE `name` LIKE '开启：打折活动%';"
         );
         $this->exec(
             "UPDATE crontab_job SET `jobClass` = 'Biz\\Crontab\\Service\\Impl\\EmptyJob' WHERE `name` = 'EmptyJob';"
@@ -204,8 +204,7 @@ class OtherMigrate extends AbstractMigrate
         $this->exec(
             "UPDATE crontab_job SET `jobClass` = 'Biz\\User\\Job\\DeleteSessionJob' WHERE `name` = 'DeleteSessionJob';"
         );
-//        $this->exec("UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\\\Biz\\\\Discount\\\\Job\\\\DiscountEndJob' WHERE `name` = 'DiscountEndJob';");
-//        $this->exec("UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\\\Biz\\\\Discount\\\\Job\\\\DiscountStartJob' WHERE `name` = 'DiscountStartJob';");
+
 //        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\Crontab\\\\Service\\\\Impl\\\\EmptyJob' WHERE `name` = 'EmptyJob';");
 //        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\Notification\\\\Job\\\\LiveLessonStartNotifyJob' WHERE `name` = 'LiveLessonStartNotifyJob';");
 //        $this->exec("UPDATE crontab_job SET `jobClass` = 'Biz\\\\Notification\\\\Job\\\\LiveOpenPushNotificationOneHourJob' WHERE `name` = 'LiveOpenPushNotificationOneHourJob';");
@@ -229,6 +228,19 @@ class OtherMigrate extends AbstractMigrate
         );
     }
 
+    private function migrate17()
+    {
+        if(!$this->isIndexExist('user', 'type', 'user_type_index')){
+            $this->exec('CREATE INDEX user_type_index ON user (type);');
+        }
+    }
+
+    protected function isIndexExist($table, $filedName, $indexName)
+    {
+        $sql    = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
+        $result = $this->getConnection()->fetchAssoc($sql);
+        return empty($result) ? false : true;
+    }
 
     private function getUserByType()
     {
@@ -240,7 +252,7 @@ class OtherMigrate extends AbstractMigrate
 
     public function update($page)
     {
-        if ($page > 16) {
+        if ($page > 17) {
             return;
         }
 
