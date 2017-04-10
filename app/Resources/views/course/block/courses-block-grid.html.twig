@@ -26,7 +26,7 @@
             <span class="label label-danger">{{'已关闭'|trans}}</span>
           {% endif %}
           {% if courseSet.status != constant('Biz\\Course\\Service\\CourseSetService::CLOSE_STATUS') %}
-            {% if courseSet.serializeMode == constant('Biz\\Course\\Service\\CourseSetService::SERIALIZING_SERIALIZE_MODE') %}
+            {% if courseSet.serializeMode == constant('Biz\\Course\\Service\\CourseSetService::SERIALIZE_SERIALIZE_MODE') %}
               <span class="label label-success">{{'更新中'|trans}}</span>
             {% elseif courseSet.serializeMode == constant('Biz\\Course\\Service\\CourseSetService::FINISH_SERIALIZE_MODE') %}
               <span class="label label-warning">{{'已完结'|trans}}</span>
