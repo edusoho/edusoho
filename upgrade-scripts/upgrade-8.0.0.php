@@ -43,6 +43,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'CourseSetMigrate',
             'CourseMigrate',
 
+            'ClassroomCourseMigrate'
+            
             'Lesson2CourseTaskMigrate',
             'Lesson2CourseChapterMigrate',
             'Lesson2ActivityMigrate',
@@ -234,7 +236,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function logger($version, $level, $message)
