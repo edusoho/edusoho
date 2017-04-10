@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Activity\Service\ActivityService;
+use Biz\User\Service\UserService;
 use Biz\Course\Service\CourseService;
+use Topxia\Service\Common\ServiceKernel;
+use Biz\Activity\Service\ActivityService;
 use Biz\Question\Service\QuestionService;
 use Biz\Testpaper\Service\TestpaperService;
-use Biz\User\Service\UserService;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Exception\ResourceNotFoundException;
 
@@ -15,7 +15,7 @@ class ExerciseController extends BaseController
 {
     public function startDoAction(Request $request, $lessonId, $exerciseId)
     {
-        $exercise = $this->getTestpaperService()->getTestpaper($exerciseId);
+        $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($exerciseId, 'exercise');
         if (empty($exercise)) {
             throw new ResourceNotFoundException('exercise', $exerciseId);
         }
@@ -50,7 +50,7 @@ class ExerciseController extends BaseController
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($result['courseId']);
 
-        $exercise = $this->getTestpaperService()->getTestpaper($result['testId']);
+        $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($result['testId'], 'exercise');
         if (!$exercise) {
             throw new ResourceNotFoundException('exercise', $result['testId']);
         }
@@ -76,7 +76,7 @@ class ExerciseController extends BaseController
     {
         $exerciseResult = $this->getTestpaperService()->getTestpaperResult($resultId);
 
-        $exercise = $this->getTestpaperService()->getTestpaper($exerciseResult['testId']);
+        $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($exerciseResult['testId'], $exerciseResult['type']);
 
         if (!$exercise) {
             throw $this->createResourceNotFoundException('exercise', $exerciseResult['testId']);
@@ -89,7 +89,7 @@ class ExerciseController extends BaseController
         $canLookExercise = $this->getTestpaperService()->canLookTestpaper($exerciseResult['id']);
 
         if (!$canLookExercise) {
-            throw new AccessDeniedException($this->getServiceKernel()->trans('无权查看作业！'));
+            throw $this->createAccessDeniedException('无权查看作业！');
         }
 
         $builder = $this->getTestpaperService()->getTestpaperBuilder($exercise['type']);
@@ -134,16 +134,15 @@ class ExerciseController extends BaseController
 
     protected function getActureQuestionNum($questions)
     {
-        $count = 0;
-        array_map(function ($question) use (&$count) {
-            if ($question['type'] === 'material') {
+        return array_reduce($questions, function ($count, $question) {
+            if ($question['type'] == 'material' && isset($question['subs'])) {
                 $count += count($question['subs']);
             } else {
                 $count += 1;
             }
-        }, $questions);
 
-        return $count;
+            return $count;
+        }, 0);
     }
 
     /**

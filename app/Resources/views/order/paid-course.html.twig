@@ -2,9 +2,10 @@
   <h4>{{'您已购买过：'|trans}}</h4>
   <div class="paid-courses">
     {% for paidCourse in paidCourses %}
+      {% set courseSet = data('CourseSet',{id:paidCourse.courseSetId}) %}
     <div class="course-item clearfix">
       <div class="course-img">
-        <a href="{{path("course_show", {id:paidCourse.id})}}" target="_blank"><img  src="{{ filepath(paidCourse.middlePicture, 'course.png') }}" alt=""></a>
+        <a href="{{path("course_show", {id:paidCourse.id})}}" target="_blank"><img  src="{{ filepath(courseSet.cover.middle|default(null), 'course.png') }}" alt=""></a>
       </div>
       <div class="course-title">
         <h4><a class="link-dark" href="{{path("course_show", {id:paidCourse.id})}}" target="_blank">{{paidCourse.title}}</a></h4>

@@ -9,8 +9,10 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
-class KernelResponseListener
+class KernelResponseListener extends AbstractSecurityDisabledListener
 {
+    private $container;
+
     public function __construct($container)
     {
         $this->container = $container;
@@ -23,6 +25,11 @@ class KernelResponseListener
         }
 
         $request = $event->getRequest();
+
+        if ($this->isSecurityDisabledRequest($this->container, $request)) {
+            return;
+        }
+
         $currentUser = $this->getUserService()->getCurrentUser();
 
         $this->generateUserActiveLog($request);

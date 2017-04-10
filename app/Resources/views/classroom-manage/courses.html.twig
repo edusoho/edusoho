@@ -58,7 +58,7 @@
                     </div>
 
                     <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.courseSet.title }}({{'教学计划：'|trans}}{{course.title}})</a>
-                    {% if course.serializeMode=='serialize' %}
+                    {% if course.serializeMode=='serialized' %}
                       <span class="label label-success ">{{'更新中'|trans}}</span>
                     {% elseif course.serializeMode=='finished' %}
                       <span class="label label-warning ">{{'已完结'|trans}}</span>

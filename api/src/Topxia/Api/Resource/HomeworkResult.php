@@ -14,7 +14,7 @@ class HomeworkResult extends BaseResource
         $answers = $request->request->all();
         $answers['usedTime'] = 0;
 
-        $homework = $this->getTestpaperService()->getTestpaper($homeworkId);
+        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($homeworkId, 'homework');
 
         $canTakeCourse = $this->getCourseService()->canTakeCourse($homework['courseId']);
         if (!$canTakeCourse) {
@@ -67,7 +67,7 @@ class HomeworkResult extends BaseResource
         }
 
         $activity = $this->getActivityService()->getActivity($task['activityId']);
-        $homework = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
         if (empty($homework)) {
             return $this->error('404', '该作业不存在!');
         }
@@ -93,6 +93,7 @@ class HomeworkResult extends BaseResource
         }
         $itemSetResults = $this->getTestpaperService()->findItemResultsByResultId($homeworkResult['id']);
         $homeworkResult['items'] = $this->filterItem($itemSetResults);
+        $homeworkResult['homeworkId'] = $homeworkResult['testId'];
 
         return $this->filter($homeworkResult);
     }
@@ -136,7 +137,7 @@ class HomeworkResult extends BaseResource
     public function filter($res)
     {
         $res['usedTime'] = $res['usedTime'];
-        $res['updatedTime'] = date('c', $res['updatedTime']);
+        $res['updatedTime'] = date('c', $res['updateTime']);
         $res['createdTime'] = date('c', $res['beginTime']);
 
         return $res;

@@ -73,8 +73,8 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'orgCode PRE_LIKE :likeOrgCode',
             ),
             'serializes' => array(
-                'tags' => 'delimiter',
                 'goals' => 'delimiter',
+                'tags' => 'delimiter',
                 'audiences' => 'delimiter',
                 'teacherIds' => 'delimiter',
                 'cover' => 'json',
@@ -92,6 +92,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
             'timestamps' => array(
                 'createdTime', 'updatedTime',
             ),
+            'wave_cahceable_fields' => array('hitNum'),
         );
     }
 }

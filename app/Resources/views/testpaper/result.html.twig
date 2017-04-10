@@ -50,7 +50,7 @@
 {% if (paperResult.status|default(null) in ['reviewing', 'finished'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed'  and paperResult.status|default(null) == 'finished') %}
 
   <div class="testpaper-card {{testpaperCardClass|default('')}} {% if action|default('') is empty %}affix{% endif %}" >
-    {% if not target.doTimes|default('0') and paperResult.status == 'finished' and (app.user.id|default(0) == paperResult.userId) %}
+    {% if target|default(null) and not target.doTimes|default('0') and paperResult.status == 'finished' and (app.user.id|default(0) == paperResult.userId) %}
       {% if ("now"|date("U")) < (paperResult.checkedTime + target.redoInterval * 3600) %}
         <div class="testpaper-timer">
           {% set redoTime = (paperResult.checkedTime + target.redoInterval * 3600) - ("now"|date("U")) %}
@@ -72,7 +72,7 @@
           <span class="color-danger">{{'本次考试仅一次机会'|trans}}</span>
         {% endif %}
         {% if paperResult|default(null) %}
-          <a class="pull-right link-medium" href="javascript:;" data-container="body" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content='<div>本次考试共<span class="color-primary">{{ paper.itemCount }}题</span>，总分<span class="color-primary">{{ paper.score }}分</span>{% if testpaperActivity.finishCondition.type|default(null) == 'score' %}，及格为<span class="color-primary">{{ testpaperActivity.finishCondition.finishScore|default(0) }}</span>分{% endif %}。{% if paper.limitedTime > 0 %}请在<span class="color-primary">{{ limitedTime }}分钟</span>内作答。{% endif %}</div>'><i class="es-icon es-icon-info"></i></a>
+          <a class="pull-right link-medium" href="javascript:;" data-container="body" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content='<div>本次考试共<span class="color-primary">{{ paper.itemCount }}题</span>，总分<span class="color-primary">{{ paper.score }}分</span>{% if testpaperActivity.finishCondition.type|default(null) == 'score' %}，及格为<span class="color-primary">{{ testpaperActivity.finishCondition.finishScore|default(0) }}</span>分{% endif %}。{% if target.limitedTime|default(testpaper.limitedTime|default(0)) > 0 %}请在<span class="color-primary">{{ target.limitedTime|default(testpaper.limitedTime|default(0)) }}分钟</span>内作答。{% endif %}</div>'><i class="es-icon es-icon-info"></i></a>
         {% endif %}
       </div>
       <div class="panel-body">

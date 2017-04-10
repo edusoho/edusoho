@@ -89,24 +89,28 @@ class GenerateNotificationHandler
 
     protected function sendVipsOverdueNotification($user)
     {
-        $vipApp = $this->getAppService()->findInstallApp('Vip');
-        if (!empty($vipApp) && version_compare($vipApp['version'], '1.0.5', '>=')) {
-            $vipSetting = $this->getSettingService()->get('vip', array());
-            if (array_key_exists('deadlineNotify', $vipSetting) && $vipSetting['deadlineNotify'] == 1) {
-                $vip = $this->getVipService()->getMemberByUserId($user['id']);
-                $currentTime = time();
-                if ($vip['deadlineNotified'] != 1 && $currentTime < $vip['deadline']
-                    && ($currentTime + $vipSetting['daysOfNotifyBeforeDeadline'] * 24 * 60 * 60) > $vip['deadline']) {
-                    $message = array('endtime' => date('Y-m-d', $vip['deadline']));
-                    $this->getNotificationService()->notify($user['id'], 'vip-deadline', $message);
-                    $this->getVipService()->updateDeadlineNotified($vip['id'], 1);
-                }
+        if (!$this->isPluginInstalled('vip')) {
+            return false;
+        }
+        $vipSetting = $this->getSettingService()->get('vip', array());
+        if (array_key_exists('deadlineNotify', $vipSetting) && $vipSetting['deadlineNotify'] == 1) {
+            $vip = $this->getVipService()->getMemberByUserId($user['id']);
+            $currentTime = time();
+            if ($vip['deadlineNotified'] != 1 && $currentTime < $vip['deadline']
+                && ($currentTime + $vipSetting['daysOfNotifyBeforeDeadline'] * 24 * 60 * 60) > $vip['deadline']
+            ) {
+                $message = array('endtime' => date('Y-m-d', $vip['deadline']));
+                $this->getNotificationService()->notify($user['id'], 'vip-deadline', $message);
+                $this->getVipService()->updateDeadlineNotified($vip['id'], 1);
             }
         }
     }
 
-    public function generateUrl($route, array $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
-    {
+    public function generateUrl(
+        $route,
+        array $parameters = array(),
+        $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH
+    ) {
         return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
 
@@ -156,5 +160,10 @@ class GenerateNotificationHandler
     protected function getCourseMemberService()
     {
         return $this->biz->service('Course:MemberService');
+    }
+
+    protected function isPluginInstalled($pluginName)
+    {
+        return $this->container->get('kernel')->getPluginConfigurationManager()->isPluginInstalled($pluginName);
     }
 }

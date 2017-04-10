@@ -14,7 +14,7 @@
           <button class="btn btn-info btn-sm" id="step-3" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:course.id,type:'lesson'}) }}"> <i class="es-icon es-icon-anonymous-iconfont"></i>
             任务
           </button>
-          {% if courseSet.type|default('') =='normal' %}
+          {% if courseSet.type|default('') =='normal' and setting('storage.upload_mode', 'local') != 'local' %}
             <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_batch_create', {courseId:course.id, mode:'lesson', token:uploader_token('course-task', app.user.id, 'private')}) }}">
               <i class="es-icon es-icon-anonymous-iconfont"></i>
               批量添加

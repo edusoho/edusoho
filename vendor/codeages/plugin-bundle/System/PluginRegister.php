@@ -1,6 +1,7 @@
 <?php
 namespace Codeages\PluginBundle\System;
 
+use Codeages\Biz\Framework\Context\BizAware;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -74,6 +75,7 @@ class PluginRegister
         }
 
         $installer = new \InstallScript($this->biz);
+        $installer->setInstallMode('command');
         $installer->execute();
 
         return true;

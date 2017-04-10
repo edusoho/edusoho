@@ -24,11 +24,20 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
 
     public function onCourseTaskStart(Event $event)
     {
+        $user = $this->getCurrentUser();
+        if (empty($user) || !$user->isLogin()) {
+            return;
+        }
+
         $taskResult = $event->getSubject();
         $course = $this->getCourseService()->getCourse($taskResult['courseId']);
+        if (empty($course) || !$this->getMemberService()->isCourseStudent($course['id'], $user['id'])) {
+            return;
+        }
+
         $task = $this->getTaskService()->getTask($taskResult['courseTaskId']);
 
-        if (!$course || !$task) {
+        if (empty($task)) {
             return;
         }
 
@@ -50,11 +59,21 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
 
     public function onCourseTaskFinish(Event $event)
     {
+        $user = $this->getCurrentUser();
+        if (empty($user) || !$user->isLogin()) {
+            return;
+        }
+
         $taskResult = $event->getSubject();
         $course = $this->getCourseService()->getCourse($taskResult['courseId']);
+
+        if (empty($course) || !$this->getMemberService()->isCourseStudent($course['id'], $user['id'])) {
+            return;
+        }
+
         $task = $this->getTaskService()->getTask($taskResult['courseTaskId']);
 
-        if (!$course || !$task) {
+        if (empty($task)) {
             return;
         }
 
@@ -80,7 +99,7 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
 
         $course = $this->getCourseService()->getCourse($paperResult['courseId']);
         $activity = $this->getActivityService()->getActivity($paperResult['lessonId']);
-        $testpaper = $this->getTestpaperService()->getTestpaper($paperResult['testId']);
+        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($paperResult['testId'], $paperResult['type']);
 
         if (!$course || !$activity || !$testpaper) {
             return;
@@ -185,6 +204,18 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
         }
 
         return array($classroom, $private);
+    }
+
+    protected function getCurrentUser()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['user'];
+    }
+
+    protected function getMemberService()
+    {
+        return $this->getBiz()->service('Course:MemberService');
     }
 
     /**

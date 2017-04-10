@@ -10,7 +10,7 @@
 <html> <!--<![endif]-->
 {# returns app.request.locale if available and app.request.defaultLocale if app.request.locale is not set#}
 {% set mobile = is_show_mobile_page() %}
-<html lang="{{ app.request.getLocale() }}" {% if mobile %} class="es-mobile"{% endif %}>
+<html lang="{{ app.request.getLocale() }}" {% if mobile  and setting('theme.code', 'jianmo') == 'jianmo' %} class="es-mobile"{% endif %}>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">

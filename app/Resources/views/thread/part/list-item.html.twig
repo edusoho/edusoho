@@ -28,7 +28,7 @@
     <div class="metas text-sm">
       <a href="{{ path('user_show', {id:author.id}) }}" class="color-gray">{{ author.nickname }}</a>
       <span>{{'发起了%dict_text%'|trans({'%dict_text%':dict_text('threadType', thread.type)})}}</span>
-      {% if thread.postNum > 0 %}
+      {% if thread.postNum > 0 and users[thread.lastPostUserId] is defined %}
         {% set poster = users[thread.lastPostUserId] %}
         •
         <span>{{'最后回复'|trans}} {{ web_macro.user_link(poster, 'link-primary') }}</span>

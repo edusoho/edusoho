@@ -73,7 +73,6 @@ class courseInfo {
             return $('input[name="expiryMode"]:checked').val() == 'date';
           },
           date: true,
-          after_now_date: true,
           before_date: '#expiryEndDate'
         },
         expiryEndDate: {

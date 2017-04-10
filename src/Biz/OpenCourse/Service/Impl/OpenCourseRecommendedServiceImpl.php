@@ -147,9 +147,9 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         }
         $recommendCourses = $this->getRecommendedCourseDao()->findRandomRecommendCourses($courseId, $num);
 
-        $courseIds = ArrayToolkit::column($recommendCourses, 'recommendCourseId');
+        $courseSetIds = ArrayToolkit::column($recommendCourses, 'recommendCourseId');
 
-        return $this->getTypeCourseService('course')->findCoursesByIds($courseIds);
+        return $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
     }
 
     protected function getTypeCourseService($type)

@@ -87,7 +87,7 @@ class Video extends Activity
         }
 
         if ($video['finishType'] == 'end') {
-            $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'video.finish');
+            $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'finish');
 
             return !empty($logs);
         }

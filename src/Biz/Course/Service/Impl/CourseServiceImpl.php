@@ -536,7 +536,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
         if ($courseSetId > 0 && $course['courseSetId'] !== $courseSetId) {
             throw $this->createInvalidArgumentException(
-                'Invalid Argument: Course#{$courseId} not in CoruseSet#{$courseSetId}'
+                "Invalid Argument: Course#{$courseId} not in CoruseSet#{$courseSetId}"
             );
         }
 

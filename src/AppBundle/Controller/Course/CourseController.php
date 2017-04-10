@@ -75,10 +75,13 @@ class CourseController extends CourseBaseController
 
         $this->getCourseService()->hitCourse($id);
 
+        $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
+
         return $this->render(
             'course/course-show.html.twig',
             array(
                 'tab' => $tab,
+                'tags' => $tags,
                 'course' => $course,
                 'categoryTag' => $this->calculateCategoryTag($course),
                 'classroom' => $classroom,
@@ -101,11 +104,11 @@ class CourseController extends CourseBaseController
             if ($task['type'] == 'video' && $course['tryLookable']) {
                 $activity = $this->getActivityService()->getActivity($task['activityId'], true);
                 if (!empty($activity['ext']['file']) && $activity['ext']['file']['storage'] == 'cloud') {
-                    return '试看';
+                    $tag = '试看';
                 }
             }
             if ($task['isFree']) {
-                $tag = '免费';
+                return '免费';
             }
         }
 
@@ -120,8 +123,10 @@ class CourseController extends CourseBaseController
             return $this->createJsonResponse(true);
         }
 
+        $type = $course['parentId'] > 0 ? 'classroom' : 'normal';
+
         return $this->render(
-            'course/member/expired.html.twig',
+            "course/member/{$type}-course-expired.html.twig",
             array(
                 'course' => $course,
                 'member' => $member,
@@ -162,7 +167,7 @@ class CourseController extends CourseBaseController
 
         $previewAs = $request->query->get('previewAs', null);
         $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
-        if (!empty($classroom) && $classroom['headTeacherId'] == $user['id']) {
+        if ($user->isLogin() && !empty($classroom) && $classroom['headTeacherId'] == $user['id']) {
             $member = $this->createMemberFromClassroomHeadteacher($course, $classroom);
         }
 

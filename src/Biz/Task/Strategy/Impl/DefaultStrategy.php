@@ -88,7 +88,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         if ($limitNum) {
             $tasks = array_slice($tasks, 0, $limitNum);
         }
-        $tasks = ArrayToolkit::group($tasks, 'categoryId');
+        $tasks = $this->sortTasks($tasks);
 
         $items = array();
         $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
@@ -122,6 +122,31 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         }
 
         return $items;
+    }
+
+    protected function sortTasks($tasks)
+    {
+        $tasks = ArrayToolkit::group($tasks, 'categoryId');
+        $modes = array(
+            'preparation' => 0,
+            'lesson' => 1,
+            'exercise' => 2,
+            'homework' => 3,
+            'extraClass' => 4,
+        );
+
+        foreach ($tasks as $key => $taskGroups) {
+            uasort(
+                $taskGroups,
+                function ($item1, $item2) use ($modes) {
+                    return $modes[$item1['mode']] > $modes[$item2['mode']];
+                }
+            );
+
+            $tasks[$key] = $taskGroups;
+        }
+
+        return $tasks;
     }
 
     public function sortCourseItems($courseId, array $ids)
