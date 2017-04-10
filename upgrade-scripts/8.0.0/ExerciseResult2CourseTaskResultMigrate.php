@@ -4,6 +4,10 @@ class ExerciseResult2CourseTaskResultMigrate extends AbstractMigrate
 {
     public function update($page)
     {
+        if (!$this->isTableExist('exercise')) {
+            return;
+        }
+
         $countSql = 'SELECT count(*) FROM `exercise_result`';
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {

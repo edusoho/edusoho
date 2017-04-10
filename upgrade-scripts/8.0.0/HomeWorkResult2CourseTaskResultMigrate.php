@@ -4,6 +4,10 @@ class HomeWorkResult2CourseTaskResultMigrate extends AbstractMigrate
 {
     public function update($page)
     {
+        if (!$this->isTableExist('homework')) {
+            return;
+        }
+
         $countSql = 'SELECT count(*) FROM `homework_result`';
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
