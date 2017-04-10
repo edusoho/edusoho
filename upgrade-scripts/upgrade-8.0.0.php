@@ -161,8 +161,8 @@ class EduSohoUpgrade extends AbstractUpdater
             return;
         }
 
-        require_once '8.0.0/AbstractMigrate.php';
-        $file = "8.0.0/{$method}.php";
+        require_once 'source/8.0.0/AbstractMigrate.php';
+        $file = "source/8.0.0/{$method}.php";
         require_once $file;
         $migrate = new $method($this->kernel);
 
