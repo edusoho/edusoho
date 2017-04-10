@@ -544,7 +544,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $member;
     }
 
-    public function doBecomeStudent($courseId, $userId, $info)
+    public function doBecomeStudent($courseId, $userId, $info = array())
     {
         $course = $this->getCourseService()->getCourse($courseId);
 

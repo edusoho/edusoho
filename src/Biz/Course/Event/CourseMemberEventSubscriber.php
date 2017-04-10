@@ -128,7 +128,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             if (!$isPush) {
                 continue;
             }
-            $result = buildLiveMemberData($user, $member);
+            $result = $this->buildLiveMemberData($user, $member);
             $this->pushJoinLiveCourseMember($result, $liveActivitys[$mediaId]['liveId']);
         }
     }
@@ -195,7 +195,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         try {
             $api = CloudAPIFactory::create('root');
-            $result = $api->post("/lives/{$liveId}/room_members", array($result));
+            $result = $api->post("/lives/{$liveId}/room_members", array('members' => array($result)));
         } catch (\RuntimeException $e) {
             throw new \RuntimeException(ServiceKernel::instance()->trans('发送失败！'));
         }
