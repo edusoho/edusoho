@@ -4,10 +4,18 @@
   {% set task = tasks.lesson|default(null) %}
   <div class="item-default-header clearfix">
     <div class="item-line"></div>
-    <div class="item-content  js-item-content text-overflow">
-      <i class="es-icon {% if activity_metas(task.activity.mediaType) %} {{ activity_metas(task.activity.mediaType).icon }}  {% endif %} mrm"></i>
-      {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}
-    </i>任务<span class="number">{{ task.number }}</span>：  {{ task.title|sub_text(30) }}
+    <div class="item-content text-overflow js-item-content">
+      <i class="mrm es-icon 
+        {% if activity_metas(task.activity.mediaType) %} 
+          {{ activity_metas(task.activity.mediaType).icon }}  
+        {% endif %}">
+      </i>
+      {% if task.isOptional %}
+        <span class="label label-success mrm">选修</span>
+      {% endif %}
+      任务
+      <span class="number">{{ task.number }}</span>：
+      {{ task.title|sub_text(30) }}
       {% if task.activity.mediaType is same as('live') %}
         {% if not task.activity.ext.roomCreated|default(true) %}
           <span class="color-warning">{{ '编辑以创建直播教室'|trans }}</span>
@@ -21,13 +29,19 @@
         {% if task.activity.length|activity_length_format %}<span class="color-gray mls">
           （{{ task.activity.length|activity_length_format }}）</span>{% endif %}
       {% endif %}
-      <span class="color-warning publish-status {% if task.status == 'published' %}
-        hidden {% endif %}"> (未发布)</span>
+      <span class="color-warning publish-status 
+        {% if task.status == 'published' %}
+          hidden 
+        {% endif %}">
+         (未发布)
+      </span>
     </div>
     <div class="item-actions">
-      <a class="btn gray-darker" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal"
-        data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId, type:'lesson'}) }}"><i
-          class="es-icon es-icon-edit mrs"></i>编辑</a>
+      <a class="btn gray-darker" data-role='update-task' href="javascript:;" 
+        data-toggle="modal" data-target="#modal"
+        data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId, type:'lesson'}) }}">
+        <i class="es-icon es-icon-edit mrs"></i>编辑
+      </a>
       <a class="btn gray-darker" href="{{ path('course_task_show', {id:task.id,courseId:task.courseId,preview:1}) }}"
         target="_blank"><i class="es-icon es-icon-removeredeye mrs"></i>预览</a>
       <span class="dropdown">
@@ -78,21 +92,37 @@
   </div>
   <div class="settings-list js-settings-list clearfix">
     <div class="settings-item {% if tasks.preparation|default(null) %} active {% endif %}">
-      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
-        data-help="popover" data-placement="top" data-trigger="hover" data-content="{{'学员可通过看视频、阅读资料等预习任务，导入学习。'|trans}}"
+      <a href="javascript:;" data-toggle="modal" data-target="#modal" 
+        data-backdrop="static" data-keyboard="false"
+        data-help="popover" data-placement="top" data-html="true" data-trigger="hover" 
         {% if not tasks.preparation|default(null) %}
-        data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'preparation', categoryId: chapter.id}) }}">
+          data-content="{{'学员可通过看视频、阅读资料等预习任务，导入学习。'|trans}}"
+          data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'preparation', categoryId: chapter.id}) }}">
         {% else %}
-          data-url="{{ path('course_manage_task_update', {id:tasks.preparation.id,courseId:tasks.preparation.courseId, type:'preparation', categoryId: chapter.id}) }}">
+          data-content="<i class='mr10 es-icon 
+            {% if activity_metas(tasks.preparation.type) %} 
+              {{ activity_metas(tasks.preparation.type).icon }}  
+            {% endif %}'></i>{{tasks.preparation.title|trans}}"
+          data-url= "{{ path('course_manage_task_update', {id:tasks.preparation.id,courseId:tasks.preparation.courseId, type:'preparation', categoryId: chapter.id}) }}">
         {% endif %}
-        <i class="es-icon es-icon-yulan mrm" {% if tasks.preparation.id|default(null) %}data-role="task"{% endif %}></i>
+        <i class="mrm es-icon es-icon-yulan " 
+          {% if tasks.preparation.id|default(null) %}
+            data-role="task"
+          {% endif %}>
+        </i>
         预习
       </a>
       <i class="es-icon es-icon-angledoubleright after"></i>
     </div>
     <div class="settings-item js-settings-item active">
-      <a href="javascript:;" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal"
-        data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId, type:'lesson'}) }}">
+      <a href="javascript:;" data-role='update-task' 
+        data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId, type:'lesson'}) }}"
+        data-toggle="modal" data-target="#modal"
+        data-help="popover" data-placement="top" data-html="true" data-trigger="hover"
+        data-content="<i class='mr10 es-icon 
+          {% if activity_metas(task.activity.mediaType) %} 
+            {{ activity_metas(task.activity.mediaType).icon }}  
+          {% endif %} '></i>{{task.title|trans}}">
         <i class="es-icon es-icon-book mrm" data-role="task"></i>
         任务学习
       </a>
@@ -100,10 +130,16 @@
     </div>
     <div class="settings-item {% if tasks.exercise|default(null) %} active {% endif %}">
       <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
-        data-help="popover" data-placement="top" data-trigger="hover" data-content="{{'练习的设置包括做题在内的多种形式。'|trans}}"
+        data-help="popover" data-placement="top" data-html="true" data-trigger="hover"  
         {% if not tasks.exercise|default(null) %}
-        data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'exercise', categoryId: chapter.id}) }}">
+          data-content="{{'练习的设置包括做题在内的多种形式。'|trans}}"
+          data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'exercise', categoryId: chapter.id}) }}">
         {% else %}
+          data-content="<i class='mr10 es-icon 
+            {% if activity_metas(tasks.exercise.type) %}
+              {{ activity_metas(tasks.exercise.type).icon }}  
+            {% endif %}
+          '></i>{{tasks.exercise.title|trans}}"
           data-url="{{ path('course_manage_task_update', {id:tasks.exercise.id,courseId:tasks.exercise.courseId, type:'exercise', categoryId: chapter.id}) }}">
         {% endif %}
         <i class="es-icon es-icon-exam mrm" {% if tasks.exercise.id|default(null) %}data-role="task"{% endif %}></i>
@@ -112,11 +148,18 @@
       <i class="es-icon es-icon-angledoubleright after"></i>
     </div>
     <div class="settings-item {% if tasks.homework|default(null) %} active {% endif %}">
-      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
-        data-help="popover" data-placement="top" data-trigger="hover" data-content="{{'作业的设置包括做题在内的多种形式。'|trans}}"
+      <a href="javascript:;" data-toggle="modal" data-target="#modal" 
+        data-backdrop="static" data-keyboard="false"
+        data-help="popover" data-placement="top" data-html="true" data-trigger="hover" 
         {% if not tasks.homework|default(null) %}
-        data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'homework', categoryId: chapter.id}) }}">
+          data-content="{{'作业的设置包括做题在内的多种形式。'|trans}}"
+          data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'homework', categoryId: chapter.id}) }}">
         {% else %}
+          data-content="<i class='mr10 es-icon 
+            {% if activity_metas(tasks.homework.type) %}
+              {{ activity_metas(tasks.homework.type).icon }}
+            {% endif %}
+          '></i>{{tasks.exercise.title|trans}}"
           data-url="{{ path('course_manage_task_update', {id:tasks.homework.id,courseId:tasks.homework.courseId, type:'homework', categoryId: chapter.id}) }}">
         {% endif %}
         <i class="es-icon es-icon-mylibrarybooks mrm" {% if tasks.homework.id|default(null) %}data-role="task"{% endif %}></i>
@@ -125,11 +168,18 @@
       <i class="es-icon es-icon-angledoubleright after"></i>
     </div>
     <div class="settings-item {% if tasks.extraClass|default(null) %} active {% endif %}">
-      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
-        data-help="popover" data-placement="top" data-trigger="hover" data-content="{{'学员可通过课外阅读、课外作业等，扩展学习。'|trans}}"
+      <a href="javascript:;" data-toggle="modal" data-target="#modal" 
+        data-backdrop="static" data-keyboard="false"
+        data-help="popover" data-placement="top" data-html="true" data-trigger="hover" 
         {% if not  tasks.extraClass|default(null) %}
-        data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'extraClass', categoryId: chapter.id}) }}">
+          data-content="{{'学员可通过课外阅读、课外作业等，扩展学习。'|trans}}"
+          data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'extraClass', categoryId: chapter.id}) }}">
         {% else %}
+          data-content="<i class='mr10 es-icon 
+          {% if activity_metas(tasks.extraClass.type) %}
+            {{ activity_metas(tasks.extraClass.type).icon }} 
+          {% endif %}
+          '></i>{{tasks.exercise.title|trans}}"
           data-url="{{ path('course_manage_task_update', {id:tasks.extraClass.id,courseId:tasks.extraClass.courseId, type:'extraClass', categoryId: chapter.id}) }}">
         {% endif %}
         <i class="es-icon es-icon-sun mrm" {% if tasks.extraClass.id|default(null) %}data-role="task"{% endif %}></i>

@@ -63,12 +63,12 @@ class VideoPlay {
 
     messenger.on("timechange", (msg) => {
       this.player.currentTime = msg.currentTime;
-    })
+    });
   }
 
   _onFinishLearnTask(msg) {
-    this.emitter.emit('finish', {data: msg}).then(() => {
-      clearInterval(this.intervalId)
+    this.emitter.emit('finish', { data: msg }).then(() => {
+      clearInterval(this.intervalId);
     }).catch((error) => {
       console.error(error);
     });
