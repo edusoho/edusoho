@@ -168,10 +168,10 @@ class OtherMigrate extends AbstractMigrate
     private function migrate15()
     {
         $this->exec(
-            "UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\Biz\\Discount\\Job\\DiscountEndJob' WHERE `name` = 'DiscountEndJob';"
+            "UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\Biz\\Discount\\Job\\DiscountEndJob' WHERE `jobClass` like '%DiscountEndJob%';"
         );
         $this->exec(
-            "UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\Biz\\Discount\\Job\\DiscountStartJob' WHERE `name` = 'DiscountStartJob';"
+            "UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\Biz\\Discount\\Job\\DiscountStartJob' WHERE `jobClass` like '%DiscountStartJob%';"
         );
         $this->exec(
             "UPDATE crontab_job SET `jobClass` = 'Biz\\Crontab\\Service\\Impl\\EmptyJob' WHERE `name` = 'EmptyJob';"
@@ -221,6 +221,13 @@ class OtherMigrate extends AbstractMigrate
         );
     }
 
+    private function migrate17()
+    {
+        if (!$this->isIndexExist('user', 'user_type_index')) {
+            $this->exec('CREATE INDEX user_type_index ON user (type);');
+        }
+    }
+
     private function getUserByType()
     {
         $sql = "select * from user where type='system' limit 1;";
@@ -231,7 +238,7 @@ class OtherMigrate extends AbstractMigrate
 
     public function update($page)
     {
-        if ($page > 16) {
+        if ($page > 17) {
             return;
         }
 
