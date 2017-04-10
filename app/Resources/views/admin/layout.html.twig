@@ -63,24 +63,24 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="{{ url('admin') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}{{'管理后台'|trans}}</a>
+        <a class="navbar-brand" href="{{ url('admin') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}{{'admin.navbar.header.console'|trans}}</a>
       </div>
       <div class="navbar-collapse collapse">
         {% include 'admin/role/templates/navigation.html.twig' with {parentCode:'admin'} %}
 
         <ul class="nav navbar-nav navbar-right">
           <li data-url="{{path('admin_common_admin')}}">
-            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" ><span class="glyphicon glyphicon-list admin-star"></span> {{'常用'|trans}}</a>
+            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" ><span class="glyphicon glyphicon-list admin-star"></span> {{'admin.navbar.header.often_used'|trans}}</a>
             <ul class="dropdown-menu shortcuts">
               {{ render(controller('AppBundle:Admin/CommonAdmin:commonAdmin')) }}
             </ul>
           </li>
-          <li><a href="{{ path('homepage') }}"><i class="glyphicon glyphicon-home"></i> {{'回首页'|trans}}</a></li>
+          <li><a href="{{ path('homepage') }}"><i class="glyphicon glyphicon-home"></i> {{'admin.navbar.header.home'|trans}}</a></li>
 
           <li class="dropdown">
             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> {{ app.user.nickname }} <span class="glyphicon glyphicon-chevron-down"></span></a>
             <ul class="dropdown-menu main-list">
-              <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> {{'退出'|trans}}</a></li>
+              <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> {{'admin.navbar.header.dropdown_menu.exit'|trans}}</a></li>
             </ul>
           </li>
         </ul>
@@ -156,7 +156,7 @@
     <div class="fixed-bar">
       <a href="{{path('admin_feedback')}}"  target='_blank' class="icon-question-text feedback">
         <i class="es-icon es-icon-help"></i>
-        <span>{{'产品'|trans}}<br/>{{'反馈'|trans}}</span>
+        <span>{{'admin.fixed_bar.product'|trans}}<br/>{{'admin.fixed_bar.feedback'|trans}}</span>
       </a>
     </div>
   {% endif %}

@@ -692,3 +692,43 @@ article.status.essence: 精华
 article.status.reward: 奖
 article.create: 发起了话题
 article.last_reply: 最后回复
+
+#通用key
+unknown: 未知
+or: 或
+
+# 后台首页
+admin.navbar.header.console: 管理后台
+admin.navbar.header.often_used: 常用
+admin.navbar.header.often_used.dropdown_menu.add_current_page: 添加当前页面为常用功能
+admin.navbar.header.often_used.dropdown_menu.added_current_page: 当前页面已添加
+admin.navbar.header.home: 回首页
+admin.navbar.header.dropdown_menu.exit: 退出
+admin.fixed_bar.product: 产品
+admin.fixed_bar.feedback: 反馈
+admin.hompage.html_head_title: 管理后台
+admin.homepage.alert.setting_domain: 设置
+admin.homepage.alert.version_expired.welcome: 欢迎使用，试用将于
+admin.homepage.alert.version_expired.unknown_time: 未知时间
+admin.homepage.alert.version_expired.remaining: 到期,剩余
+admin.homepage.alert.version_expired.days: 天。
+admin.homepage.alert.version_expired.phone: 电话：
+admin.homepage.alert.version_expired.contact_our_business_managers: 您可以联系销售人员购买授权版本，或者延长试用期限。
+admin.homepage.admins_announcements_title: 站长公告
+admin.homepage.admins_announcements_empty: 暂无公告
+admin.homepage.status_bar_title: 状态栏
+admin.homepage.status_bar.loadig_date_tips: 正在载入数据，请稍等。
+admin.homepage.status_bar.system_version_title: 系统版本
+admin.homepage.status_bar.system_version_status.have_update: 有更新
+admin.homepage.status_bar.school_app_title: 网校应用
+admin.homepage.status_bar.school_app_status.updated: 已更新
+admin.homepage.status_bar.school_app_status.several_are_not_updated: 个未更新
+admin.homepage.status_bar.cloud_service_title: 教育云服务
+admin.homepage.status_bar.cloud_service_status.several_are_not_open: 个未开启
+admin.homepage.status_bar.cloud_service_status.open: 已开启
+admin.homepage.status_bar.cloud_video_title: 云视频
+admin.homepage.status_bar.cloud_video_status.not_open: 未开启
+admin.homepage.status_bar.cloud_video_status.open: 已开启
+
+
+

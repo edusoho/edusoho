@@ -1,5 +1,5 @@
 {% extends 'admin/layout.html.twig' %}
-{% block title %}{{ '管理后台'|trans }}{% endblock %}
+{% block title %}{{ 'admin.hompage.html_head_title'|trans }}{% endblock %}
 {% set panel = 'dashboard' %}
 {% set script_controller = 'default/index' %}
 {% block container %}
@@ -19,10 +19,10 @@
       ">
       <div class="panel panel-default panel-150">
         <div class="panel-heading">
-          <h3 class="panel-title">{{ '状态栏'|trans }}</h3>
+          <h3 class="panel-title">{{ 'admin.homepage.status_bar_title'|trans }}</h3>
         </div>
         <div class="panel-body" id="system-status" data-url="{{ path('admin_system_status') }}">
-          <div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>
+          <div class="empty">{{ 'admin.homepage.status_bar.loadig_date_tips'|trans }}</div>
         </div>
       </div>
     </div>
