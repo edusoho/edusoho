@@ -4,7 +4,11 @@ class UpdateExercise2CourseTaskMigrate extends AbstractMigrate
 {
     public function update($page)
     {
-    	$sql = "UPDATE activity AS a, testpaper_v8 AS t SET a.mediaId = t.id WHERE a.migrateExerciseId = t.migrateTestId AND t.type = 'exercise' AND a.mediaType = 'exercise';";
+        if (!$this->isTableExist('exercise')) {
+            return;
+        }
+
+        $sql = "UPDATE activity AS a, testpaper_v8 AS t SET a.mediaId = t.id WHERE a.migrateExerciseId = t.migrateTestId AND t.type = 'exercise' AND a.mediaType = 'exercise';";
         $this->getConnection()->exec($sql);
 
         $this->getConnection()->exec(
