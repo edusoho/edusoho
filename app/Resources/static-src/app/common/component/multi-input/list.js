@@ -51,10 +51,10 @@ export default class List extends Component {
           dataSourceUi.map((item, i) => {
             return (
               <li className="list-group-item" id={item.itemId} key={i} data-seq={item.seq}>
-                <i className={sortable ? 'es-icon es-icon-yidong mrl color-gray inline-block vertical-middle' : 'hidden'}></i>
-                <span className="label-name text-overflow inline-block vertical-middle">{item.label}</span>
-                <a className="link-gray mts pull-right" onClick={event => this.context.removeItem(event)} data-item-id={item.itemId}>
-                  <i className="es-icon es-icon-close01 inline-block vertical-top text-12"></i>
+                <i className={sortable ? 'es-icon es-icon-yidong drag-icon-btn' : 'hidden'}></i>
+                <span className="content">{item.label}</span>
+                <a className="move-icon-btn link-gray" onClick={event => this.context.removeItem(event)} data-item-id={item.itemId}>
+                  <i className="es-icon es-icon-close01 "></i>
                 </a>
                 <input type="hidden" name={inputName} value={item.label} />
               </li>

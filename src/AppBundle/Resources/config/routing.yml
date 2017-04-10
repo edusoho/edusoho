@@ -1242,10 +1242,6 @@ my_cards:
     path:  /my/cards
     defaults: { _controller: AppBundle:My/Card:index }
 
-my_useable_coupons:
-    path: /my/useable_coupons
-    defaults: { _controller: AppBundle:My/Card:useableCoupons }
-
 card_info:
     path:  /card/info
     defaults: { _controller: AppBundle:My/Card:cardInfo }
