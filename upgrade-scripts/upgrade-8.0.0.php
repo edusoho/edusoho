@@ -139,13 +139,21 @@ class EduSohoUpgrade extends AbstractUpdater
         if ($index == 0) {
             return array(0, 1);
         }
+        
+        $step = substr($index, 0, -8);
+        $page = substr($index, strlen($index)-8);
 
-        return explode('-', $index);
+        return array($step, $page);
     }
 
     protected function setIndexAndPage($index, $page)
     {
-        return "{$index}-{$page}";
+        $length = strlen($page);
+        if ($length < 8) {
+            $page = str_repeat(0, 8-$length).$page;
+        }
+
+        return "{$index}{$page}";
     }
 
     protected function batchUpdate($index)
