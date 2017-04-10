@@ -43,6 +43,8 @@ interface CourseService
 
     public function updateChapter($courseId, $chapterId, $fields);
 
+    public function findChaptersByCourseId($courseId);
+
     public function updateCourse($id, $fields);
 
     public function updateCourseMarketing($id, $fields);
