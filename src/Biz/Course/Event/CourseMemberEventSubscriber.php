@@ -86,9 +86,9 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             }
 
             foreach ($teachers as $userId => $teacher) {
-                $result = buildLiveMemberData($users[$userId], $teacher);
-                $this->pushJoinLiveCourseMember($result, $liveActivitys[$mediaId]['liveId']);
+                $result[] = $this->buildLiveMemberData($users[$userId], $teacher);
             }
+            $this->pushJoinLiveCourseMember($result, $liveActivitys[$mediaId]['liveId']);
         }
     }
 
@@ -128,7 +128,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             if (!$isPush) {
                 continue;
             }
-            $result = $this->buildLiveMemberData($user, $member);
+            $result[] = $this->buildLiveMemberData($user, $member);
             $this->pushJoinLiveCourseMember($result, $liveActivitys[$mediaId]['liveId']);
         }
     }
@@ -149,7 +149,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             if (!$isPush) {
                 continue;
             }
-            $result = buildLiveMemberData($user, $member);
+            $result[] = $this->buildLiveMemberData($user, $member);
             $this->pushJoinLiveCourseMember($result, $liveActivitys[$mediaId]['liveId']);
         }
     }
@@ -195,7 +195,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         try {
             $api = CloudAPIFactory::create('root');
-            $result = $api->post("/lives/{$liveId}/room_members", array('members' => array($result)));
+            $result = $api->post("/lives/{$liveId}/room_members", array('members' => $result));
         } catch (\RuntimeException $e) {
             throw new \RuntimeException(ServiceKernel::instance()->trans('发送失败！'));
         }
@@ -238,9 +238,9 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             }
 
             foreach ($members as $member) {
-                $result = buildLiveMemberData($users[$userId], $member);
-                $this->pushJoinLiveCourseMember($result, $liveActivitys[$mediaId]['liveId']);
+                $result[] = $this->buildLiveMemberData($users[$userId], $member);
             }
+            $this->pushJoinLiveCourseMember($result, $liveActivitys[$mediaId]['liveId']);
         }
     }
 
