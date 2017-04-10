@@ -9,6 +9,7 @@ use Pimple\ServiceProviderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Codeages\Biz\Framework\Dao\CacheStrategy;
+use Codeages\Biz\Framework\Dao\CacheStrategy\SharedStorage;
 
 class Biz extends Container
 {
@@ -80,7 +81,11 @@ class Biz extends Container
         };
 
         $this['dao.cache.second.strategy.table'] = function ($biz) {
-            return new CacheStrategy\TableCacheStrategy($biz['redis'], $biz['logger']);
+            return new CacheStrategy\TableCacheStrategy($biz['redis'], $biz['dao.cache.shared_storage']);
+        };
+
+        $this['dao.cache.shared_storage'] = function ($biz) {
+            return new SharedStorage();
         };
 
         foreach ($values as $key => $value) {

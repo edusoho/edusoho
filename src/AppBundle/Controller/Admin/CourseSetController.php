@@ -12,7 +12,6 @@ use Biz\Course\Service\ThreadService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Course\Service\CourseSetService;
-use Biz\Activity\Service\ActivityService;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
@@ -459,7 +458,7 @@ class CourseSetController extends BaseController
         if (empty($courseId)) {
             $courseId = $courses[0]['id'];
         }
-        $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
+        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
 
         foreach ($tasks as $key => &$task) {
             $finishedNum = $this->getTaskResultService()->countTaskResults(
@@ -467,16 +466,16 @@ class CourseSetController extends BaseController
             );
             $studentNum = $this->getTaskResultService()->countTaskResults(array('courseTaskId' => $task['id']));
             $learnedTime = $this->getTaskResultService()->getLearnedTimeByCourseIdGroupByCourseTaskId($task['id']);
-            if (in_array($task['type'], array('video', 'audio'))) {
-                $activity = $this->getActivityService()->getActivity($task['activityId']);
+            if (in_array($task['type'], array('video', 'audio')) && !empty($task['activity'])) {
+                $activity = $task['activity'];
                 $task['length'] = $activity['length'];
                 $task['watchTime'] = $this->getTaskResultService()->getWatchTimeByCourseIdGroupByCourseTaskId(
                     $task['id']
                 );
             }
 
-            if ($task['type'] == 'testpaper') {
-                $activity = $this->getActivityService()->getActivity($task['activityId']);
+            if ($task['type'] == 'testpaper' && !empty($task['activity'])) {
+                $activity = $task['activity'];
                 $score = $this->getTestpaperService()->searchTestpapersScore(array('testId' => $activity['mediaId']));
                 $paperNum = $this->getTestpaperService()->searchTestpaperResultsCount(
                     array('testId' => $activity['mediaId'])
@@ -765,14 +764,6 @@ class CourseSetController extends BaseController
     protected function getThreadService()
     {
         return $this->createService('Course:ThreadService');
-    }
-
-    /**
-     * @return ActivityService
-     */
-    protected function getActivityService()
-    {
-        return $this->createService('Activity:ActivityService');
     }
 
     /**

@@ -31,19 +31,20 @@
                 <td>{{task.finishedNum|default() }}</td>
                 <td>{% if task.studentNum|default() == 0 %}0{% else %}{{task.learnedTime|default() // task.studentNum|default()}}{% endif %}</td>
                 <td>
-                    {% if task.length|default() %}
-                        {{ task.length // 60 }}
-                    {% else %}
-                       ----
-                    {% endif %}
+                  {{ task.length|default(0) // 60 }}
                 </td>
                 <td>
-                  {% if  task.studentNum == 0 %}
-                    0
+                  {% if task.type in ['video', 'audio'] %}
+                    {% if task.type == 'video' and task.activity.ext.mediaSource != 'self' %}
+                      --
+                    {% elseif  task.studentNum == 0 %}
+                      0
+                    {% else %}
+                      {{task.watchTime|default(0) // task.studentNum  }}                  
+                    {% endif %}
                   {% else %}
-                    {{task.watchTime|default(0) // task.studentNum  }}                    
+                    --
                   {% endif %}
-
                 </td>
                 <td>{{ task.score|default('--') }}</td>
               </tr>
