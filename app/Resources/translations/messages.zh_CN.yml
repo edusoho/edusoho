@@ -797,8 +797,8 @@ mobile.app_name: 阔知学堂
 mobile.app_tips: 将学校装进口袋，移动学习，随时随地。
 mobile.app_download_btn: 下载APP
 mobile.app_download_tips: >
-  <p class="main-slogan">{{ '更好的移动端学习'|trans }}</p>
-  <p class="sub-slogan">{{ '好好学习，天天向上'|trans }}</p>
+  <p class="main-slogan">更好的移动端学习</p>
+  <p class="sub-slogan">好好学习，天天向上</p>
 mobile.app_login_btn: 登录网校
 mobile.app_login_tips: 扫一扫登录客户端
 mobile.step_one: >
