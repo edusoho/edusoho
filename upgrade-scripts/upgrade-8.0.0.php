@@ -120,6 +120,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'OtherMigrate',
             'LogMigrate',
             'PluginMigrate',
+
+            'FileMigrate'
         );
     }
 
