@@ -523,6 +523,7 @@ homepage.student_comment.empty: 还没有评价
 homepage.student_dynamic.content_title: 学员动态
 homepage.recommend_teacher.more: 更多教师
 homepage.footer.archive: 课程存档
+homepage.footer.learning: 学习
 homepage.footer.course_copyright: >
   课程内容版权均归
   <a href="/">
