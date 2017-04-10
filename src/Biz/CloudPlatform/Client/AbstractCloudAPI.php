@@ -193,8 +193,6 @@ class AbstractCloudAPI
         if ($this->debug && $this->logger) {
             $this->logger->debug("[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
         }
-        var_dump('======');
-        var_dump($result);
         return $result;
     }
 
