@@ -169,10 +169,10 @@ class OtherMigrate extends AbstractMigrate
     {
 
         $this->exec(
-            "UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\Biz\\Discount\\Job\\DiscountEndJob' WHERE `name` = 'DiscountEndJob';"
+            "UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\Biz\\Discount\\Job\\DiscountEndJob' WHERE `jobClass` like '%DiscountEndJob%';"
         );
         $this->exec(
-            "UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\Biz\\Discount\\Job\\DiscountStartJob' WHERE `name` = 'DiscountStartJob';"
+            "UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\Biz\\Discount\\Job\\DiscountStartJob' WHERE `jobClass` like '%DiscountStartJob%';"
         );
         $this->exec(
             "UPDATE crontab_job SET `jobClass` = 'Biz\\Crontab\\Service\\Impl\\EmptyJob' WHERE `name` = 'EmptyJob';"
