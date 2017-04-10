@@ -88,7 +88,7 @@ class HomeworkManageController extends BaseController
             return $this->createMessageResponse('error', '该作业结果不存在');
         }
 
-        $homework = $this->getTestpaperService()->getTestpaper($result['testId']);
+        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($result['testId'], $result['type']);
         if (!$homework) {
             return $this->createMessageResponse('error', '该作业不存在');
         }

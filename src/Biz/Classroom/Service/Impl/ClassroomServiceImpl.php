@@ -1005,13 +1005,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $courseIds = ArrayToolkit::column($classroomCourses, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $courses = ArrayToolkit::index($courses, 'id');
-        $sordtedCourses = array();
+        $sortedCourses = array();
 
         foreach ($classroomCourses as $key => $classroomCourse) {
-            $sordtedCourses[$key] = $courses[$classroomCourse['courseId']];
+            $sortedCourses[$key] = $courses[$classroomCourse['courseId']];
         }
 
-        return $sordtedCourses;
+        return $sortedCourses;
     }
 
     public function getClassroomStudentCount($classroomId)

@@ -5,7 +5,6 @@ namespace Biz\Testpaper\Service\Impl;
 use Biz\BaseService;
 use Biz\Activity\Type\Testpaper;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Testpaper\Builder\TestpaperBuilderInterface;
 use Biz\Testpaper\Dao\TestpaperDao;
 use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
@@ -15,6 +14,7 @@ use Biz\Question\Service\QuestionService;
 use Biz\Testpaper\Dao\TestpaperResultDao;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\Dao\TestpaperItemResultDao;
+use Biz\Testpaper\Builder\TestpaperBuilderInterface;
 use AppBundle\Common\Exception\ResourceNotFoundException;
 
 class TestpaperServiceImpl extends BaseService implements TestpaperService
@@ -22,6 +22,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     public function getTestpaper($id)
     {
         return $this->getTestpaperDao()->get($id);
+    }
+
+    public function getTestpaperByIdAndType($id, $type)
+    {
+        return $this->getTestpaperDao()->getByIdAndType($id, $type);
     }
 
     public function createTestpaper($fields)
@@ -288,11 +293,19 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function searchTestpaperResultsCount($conditions)
     {
+        if (isset($conditions['courseIds']) && empty($conditions['courseIds'])) {
+            return 0;
+        }
+
         return $this->getTestpaperResultDao()->count($conditions);
     }
 
     public function searchTestpaperResults($conditions, $sort, $start, $limit)
     {
+        if (isset($conditions['courseIds']) && empty($conditions['courseIds'])) {
+            return array();
+        }
+
         return $this->getTestpaperResultDao()->search($conditions, $sort, $start, $limit);
     }
 
@@ -779,7 +792,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     }
 
     /**
-     * @param $type
+     * @param  $type
      *
      * @return TestpaperBuilderInterface
      */

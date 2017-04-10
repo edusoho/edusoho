@@ -130,7 +130,8 @@ export default class TaskSidebar extends Emitter {
   }
 
   listEvent() {
-    if($('.js-sidebar-pane-body').lenght) {
+    console.log($('.js-sidebar-pane:visible .task-list-pane-body').length);
+    if($('.js-sidebar-pane:visible .task-list-pane-body').length) {
       chapterAnimate();
     }
   }

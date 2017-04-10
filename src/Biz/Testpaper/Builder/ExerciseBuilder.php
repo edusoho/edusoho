@@ -42,7 +42,7 @@ class ExerciseBuilder implements TestpaperBuilderInterface
 
     public function showTestItems($testId, $resultId = 0)
     {
-        $exercise = $this->getTestpaperService()->getTestpaper($testId);
+        $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($testId, 'exercise');
 
         $itemResults = array();
         if ($resultId) {

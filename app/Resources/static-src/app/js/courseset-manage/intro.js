@@ -1,6 +1,5 @@
 import 'store';
 import Cookies from 'js-cookie';
-import { showSettings } from 'app/js/course-manage/help';
 const COURSE_BASE_INTRO = 'COURSE_BASE_INTRO';
 const COURSE_TASK_INTRO = 'COURSE_TASK_INTRO';
 const COURSE_TASK_DETAIL_INTRO = 'COURSE_TASK_DETAIL_INTRO';
@@ -9,7 +8,6 @@ const COURSE_LIST_INTRO_COOKIE = 'COURSE_LIST_INTRO_COOKIE';
 
 export default class Intro {
   constructor() {
-    showSettings();
     this.intro = null;
     this.customClass = "es-intro-help multistep";
     $('body').on('click','.js-skip',(event)=>{
@@ -81,7 +79,7 @@ export default class Intro {
   }
 
   initTaskCreatePageIntro() {
-    $('.js-task-manage-item:first').trigger('click');
+    $('.js-task-manage-item:first .js-item-content').trigger('click');
     if (!store.get(COURSE_BASE_INTRO) && !store.get(COURSE_TASK_INTRO)) {
       store.set(COURSE_BASE_INTRO, true);
       store.set(COURSE_TASK_INTRO, true);

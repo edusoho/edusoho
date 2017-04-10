@@ -22,7 +22,7 @@ export default class Flash {
           required: true,
           maxlength: 50,
           trim: true,
-          open_live_course_title: true,
+          course_title: true,
         },
         mediaId: 'required',
       },

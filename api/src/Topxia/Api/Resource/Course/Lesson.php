@@ -166,7 +166,7 @@ class Lesson extends BaseResource
         $activity = $this->getActivityService()->getActivity($lesson['activityId']);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
+        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testpaperActivity['mediaId'], $activity['mediaType']);
         if (empty($testpaper)) {
             return $this->error('error', '试卷不存在!');
         }

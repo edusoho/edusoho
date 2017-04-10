@@ -8,6 +8,10 @@ parameters:
 
     keyword.filter: Biz\Common\EsKeywordFilter
 
+    security_disabled_uri_prefixs:
+        - anon
+        - callback
+
     route_white_list:
         - '/crontab'
         - '/passport/notify'

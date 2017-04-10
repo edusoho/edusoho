@@ -146,7 +146,6 @@ class OrderController extends BaseController
             $price = $request->request->get('amount');
 
             $couponInfo = $this->getCouponService()->checkCouponUseable($code, $type, $id, $price);
-
             $couponInfo = $this->completeInfo($couponInfo, $code, $type);
 
             return $this->createJsonResponse($couponInfo);
@@ -155,15 +154,9 @@ class OrderController extends BaseController
 
     protected function completeInfo($couponInfo, $code, $type)
     {
-        $couponContents = array(
-            'all' => '全站可用',
-            'vip' => '全部会员',
-            'course' => '全部课程',
-            'classroom' => '全部班级',
-        );
-
-        $couponContent = '';
-        $target = '';
+        if ($couponInfo['useable'] == 'no' && !empty($couponInfo['message'])) {
+            return $couponInfo;
+        }
 
         $coupon = $this->getCouponService()->getCouponByCode($code);
         $targetId = $coupon['targetId'];

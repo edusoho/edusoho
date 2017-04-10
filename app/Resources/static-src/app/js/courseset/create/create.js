@@ -1,4 +1,4 @@
-export default  class Create {
+export default class Create {
   constructor($element) {
     this.$element = $element;
     this.$courseSetType = this.$element.find('.js-courseSetType');
@@ -7,13 +7,13 @@ export default  class Create {
   }
 
   init() {
-    let validator = this.$element.validate({
+    this.validator = this.$element.validate({
       currentDom: '#courseset-create-btn',
       rules: {
         title: {
           required: true,
           trim: true,
-          open_live_course_title: true,
+          course_title: true,
         }
       },
       messages: {
@@ -28,10 +28,27 @@ export default  class Create {
       this.$courseSetType.removeClass('active');
       this.$currentCourseSetType = $(event.currentTarget).addClass('active');
       $('input[name="type"]').val(this.$currentCourseSetType.data('type'));
+      let $title = $('#course_title');
+       $title.rules('remove');
+      if (this.$currentCourseSetType.data('type') != 'live') {
+        $title.rules("add", {
+          required: true,
+          trim: true,
+          course_title: true,
+        });
+      }else {
+        $title.rules("add", {
+          required: true,
+          trim: true,
+          open_live_course_title: true,
+        });
+      }
+
+      console.log(this.validator);
     });
 
     $('#courseset-create-btn').click(event => {
-      if (validator.form()) {
+      if (this.validator.form()) {
         this.$element.submit();
       }
     });
