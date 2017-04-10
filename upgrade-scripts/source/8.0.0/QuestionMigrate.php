@@ -41,13 +41,15 @@ class QuestionMigrate extends AbstractMigrate
         foreach ($questions as $question) {
             $targetArr = explode('/', $question['target']);
             $courseArr = explode('-', $targetArr[0]);
+            $courseId = 0;
             $lessonId = 0;
             if (!empty($targetArr[1])) {
+                $courseId = intval($courseArr[1]);
                 $lessonArr = explode('-', $targetArr[1]);
                 $lessonId = intval($lessonArr[1]);
             }
 
-            $sql = "UPDATE question set courseId = 0,courseSetId = {$courseArr[1]},lessonId={$lessonId} WHERE id = {$question['id']}";
+            $sql = "UPDATE question set courseId = {$courseId},courseSetId = {$courseArr[1]},lessonId={$lessonId} WHERE id = {$question['id']}";
             $this->getConnection()->exec($sql);
         }
 

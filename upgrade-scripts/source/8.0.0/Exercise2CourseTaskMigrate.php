@@ -17,7 +17,7 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
         if (empty($count)) {
             $this->updateExerciseActivity();
             $this->updateExerciseTask();
-
+            $this->updateExerciseLessonId();
             return;
         }
 
@@ -154,5 +154,11 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
         if (!$this->isFieldExist('course_task', 'migrateExerciseId')) {
             $this->getConnection()->exec('alter table `course_task` add `migrateExerciseId` int(10) ;');
         }
+    }
+
+    protected function updateExerciseLessonId()
+    {
+        $sql = "UPDATE testpaper_v8 AS t, activity AS a SET t.lessonId = a.id WHERE t.lessonId = a.migrateLessonId AND t.type = 'exercise';";
+        $this->getConnection()->exec($sql);
     }
 }

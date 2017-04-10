@@ -15,6 +15,7 @@ class Homework2CourseTasMigrate extends AbstractMigrate
         if (empty($count)) {
             $this->updateHomeworkTask();
             $this->updateHomeworkActivity();
+            $this->updateHomeworkLessonId();
 
             return;
         }
@@ -154,5 +155,11 @@ class Homework2CourseTasMigrate extends AbstractMigrate
         if (!$this->isFieldExist('course_task', 'migrateHomeworkId')) {
             $this->exec('alter table `course_task` add `migrateHomeworkId` int(10) ;');
         }
+    }
+
+    protected function updateHomeworkLessonId()
+    {
+        $sql = "UPDATE testpaper_v8 AS t, activity AS a SET t.lessonId = a.id WHERE t.lessonId = a.migrateLessonId AND t.type = 'homework';";
+        $this->getConnection()->exec($sql);
     }
 }
