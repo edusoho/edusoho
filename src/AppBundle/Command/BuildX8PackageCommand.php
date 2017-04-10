@@ -28,8 +28,6 @@ class BuildX8PackageCommand extends ContainerAwareCommand
         $command = $this->getApplication()->find('build:upgrade-package');
 
         $buildDir = $this->getContainer()->get('kernel')->getRootDir().'/../build';
-        $x8PackageDir = $buildDir.'/EduSoho_8.0.0';
-        $x8SourceDir = $x8PackageDir.'/source';
 
         $commandInput = new ArrayInput(array(
             'fromVersion' => '7.5.14',
@@ -40,40 +38,30 @@ class BuildX8PackageCommand extends ContainerAwareCommand
 
         $filesystem = new Filesystem();
 
+        $x8PackageDir = $buildDir.'/EduSoho_8.0.0';
+        $x8SourceDir = $x8PackageDir.'/source';
+
         $filesystem->remove($x8PackageDir.'/delete');
-        $filesystem->touch($x8PackageDir.'/delete');
 
-        $zip = new \ZipArchive();
-        $zip->open($buildDir.'/x8.zip', \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+        $x8UpgradeDir = $x8SourceDir . '/scripts/8.0.0';
+        $x8TempUpgradeDir = $buildDir . '/scripts/8.0.0';
+        $filesystem->mirror($x8UpgradeDir, $x8TempUpgradeDir);
 
-        $x8SourceDir = str_replace('\\', '/', realpath($x8SourceDir));
-        $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($x8SourceDir), \RecursiveIteratorIterator::SELF_FIRST);
-        foreach ($files as $file) {
-            $file = str_replace('\\', '/', $file);
+        $filesystem->remove($buildDir. '/x8.zip');
 
-            // Ignore "." and ".." folders
-            if (in_array(substr($file, strrpos($file, '/') + 1), array('.', '..'))) {
-                continue;
-            }
-
-            $file = realpath($file);
-
-            if (is_dir($file) === true) {
-                $zip->addEmptyDir(str_replace($x8SourceDir.'/', '', $file.'/'));
-            } elseif (is_file($file) === true) {
-                $zip->addFromString(str_replace($x8SourceDir.'/', '', $file), file_get_contents($file));
-            }
-        }
-        $zip->close();
+        chdir($x8PackageDir);
+        $command = "zip -r ./../x8.zip source/";
+        exec($command);
 
         $filesystem->remove($x8SourceDir);
-        $filesystem->mkdir($x8SourceDir);
+        $filesystem->mirror($x8TempUpgradeDir, $x8UpgradeDir);
 
-        $zip->open($buildDir.'/EduSoho_8.0.0.zip', \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+        $filesystem->remove($x8TempUpgradeDir);
 
-        $zip->addEmptyDir('source');
-        $zip->addFromString('delete', '');
-        $zip->addFromString('Upgrade.php', file_get_contents($x8PackageDir.'/Upgrade.php'));
-        $zip->close();
+        $filesystem->remove($buildDir.'/EduSoho_8.0.0.zip');
+
+        chdir($this->getContainer()->get('kernel')->getRootDir().'/../build');
+        $command = "zip -r EduSoho_8.0.0.zip EduSoho_8.0.0/";
+        exec($command);
     }
 }
