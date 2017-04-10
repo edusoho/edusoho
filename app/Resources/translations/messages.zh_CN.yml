@@ -717,7 +717,7 @@ thread.status.stick: 置顶
 thread.status.essence: 精华
 thread.status.reward: 奖
 thread.create: 发起了话题
-article.last_reply: 最后回复
+thread.last_reply: 最后回复
 
 # 咨询
 article: 资讯
