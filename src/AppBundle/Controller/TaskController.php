@@ -292,7 +292,7 @@ class TaskController extends BaseController
 
         $this->getCourseService()->tryTakeCourse($courseId);
 
-        if ($this->validTaskLearnStat($request, $id)) {
+        if (!empty($data['events']) || $this->validTaskLearnStat($request, $id)) {
             $result = $this->getTaskService()->trigger($id, $eventName, $data);
             $data['valid'] = 1;
         } else {
