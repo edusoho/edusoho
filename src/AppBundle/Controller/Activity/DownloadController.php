@@ -44,16 +44,18 @@ class DownloadController extends BaseController implements ActivityActionInterfa
         $this->getCourseService()->tryTakeCourse($courseId);
 
         $materialId = $request->query->get('materialId');
-        $downloadFile = $this->getDownloadActivityService()->downloadActivityFile($activityId, $materialId);
 
         if (!empty($downloadFile['link'])) {
-            return $this->redirect($downloadFile['link']);
+            $reponse = $this->redirect($downloadFile['link']);
         } else {
-            return $this->forward('AppBundle:UploadFile:download', array(
+            $reponse = $this->forward('AppBundle:UploadFile:download', array(
                 'request' => $request,
                 'fileId' => $downloadFile['fileId'],
             ));
         }
+        $downloadFile = $this->getDownloadActivityService()->downloadActivityFile($activityId, $materialId);
+
+        return $reponse;
     }
 
     public function createAction(Request $request, $courseId)
