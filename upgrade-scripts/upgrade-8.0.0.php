@@ -43,6 +43,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'CourseSetMigrate',
             'CourseMigrate',
 
+            'ClassroomCourseMigrate',
+
             'Lesson2CourseTaskMigrate',
             'Lesson2CourseChapterMigrate',
             'Lesson2ActivityMigrate',
@@ -90,6 +92,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'Homework2CourseTasMigrate',
             'UpdateHomework2CourseTasMigrate',
             'UpdateExercise2CourseTaskMigrate',
+            'ExerciseResult2CourseTaskResultMigrate',
+            'HomeWorkResult2CourseTaskResultMigrate',
 
             'UpdateCourseChapter',
 

@@ -8,25 +8,26 @@ class PluginMigrate extends AbstractMigrate
 {
     public function update($page)
     {
-        $this->exec(
-            "
-            delete from cloud_app where code = 'Homework';
-            "
-        );
+        $this->exec("delete from cloud_app where code = 'Homework';");
 
         $pluginFile = $this->getPluginConfig();
         $pluginFile = realpath($pluginFile);
-        $config = require_once $pluginFile;
-        if (!empty($config['installed_plugins']['Homework'])) {
-            $installedPlugins = $config['installed_plugins'];
-        	unset($installedPlugins['Homework']);
-            $config['installed_plugins'] = $installedPlugins;
-        }
+        if (!empty($pluginFile)) {
+            $config = require_once $pluginFile;
+            if (isset($config['installed_plugins']['Homework'])) {
+                $installedPlugins = $config['installed_plugins'];
+                unset($installedPlugins['Homework']);
+                $config['installed_plugins'] = $installedPlugins;
+            }
 
-        $config = is_array($config) ? $config : array();
+            $config = is_array($config) ? $config : array();
+            $config['active_theme_name'] = 'jianmo';
 
-        $content = "<?php \n return " . var_export($config, true) . ";";
-        $saved = file_put_contents($pluginFile, $content);
+            $content = "<?php \n return " . var_export($config, true) . ";";
+            $saved = file_put_contents($pluginFile, $content);
+        } 
+
+        ServiceKernel::instance()->createService('System.SettingService')->set('theme', array('uri' => 'jianmo'));
 
         $this->moveRoutingPluginsYml();
     }
