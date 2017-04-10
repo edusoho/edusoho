@@ -79,6 +79,7 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
             'courseId IN ( :courseIds)',
             'type = :type',
             'type IN ( :types )',
+            'lessonId = :lessonId',
         );
 
         return $declares;
