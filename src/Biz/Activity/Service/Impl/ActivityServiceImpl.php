@@ -36,12 +36,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     {
         $activities = $this->getActivityDao()->findByIds($ids);
 
-        $activityGroups = ArrayToolkit::group($activities, 'mediaType');
-
-        var_dump($activityGroups);
-
         if ($fetchMedia) {
-            foreach ($activityGroups as $type => $activities) {
+            foreach ($activities as &$activity) {
                 $activity = $this->fetchMedia($activity);
             }
         }
