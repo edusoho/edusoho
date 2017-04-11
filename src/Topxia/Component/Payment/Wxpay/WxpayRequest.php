@@ -106,7 +106,7 @@ class WxpayRequest extends Request
         $converted['openid']           = $openid;
         $converted['appid']            = $this->options['appid'];
         $converted['attach']           = '支付';
-        $converted['body']             = mb_substr($this->filterText($params['title']), 0, 49, 'utf-8');
+        $converted['body']             = mb_strcut($this->filterText($params['title']), 0, 110, 'utf-8');
         $converted['mch_id']           = $this->options['account'];
         $converted['nonce_str']        = $this->getNonceStr();
         $converted['notify_url']       = $params['notifyUrl'];
