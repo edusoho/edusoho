@@ -63,9 +63,9 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
 
     public function findFinishedTasksByCourseIdGroupByUserId($courseId)
     {
-        $sql = "SELECT count(courseTaskId) as taskCount, userId FROM {$this->table()} WHERE courseId = ? and status='finish' group by userId";
+        $sql = "SELECT count(courseTaskId) as taskCount, userId FROM {$this->table()} WHERE courseId = ? and status='finish' AND userId IN (SELECT userId FROM course_member WHERE courseId = ? AND role='student' ) group by userId";
 
-        return $this->db()->fetchAll($sql, array($courseId)) ?: array();
+        return $this->db()->fetchAll($sql, array($courseId, $courseId)) ?: array();
     }
 
     public function findFinishedTimeByCourseIdGroupByUserId($courseId)
@@ -78,9 +78,11 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
             return array();
         }
 
-        $sql = "SELECT max(finishedTime) AS finishedTime, count(courseTaskId) AS taskCount, userId FROM {$this->table()} WHERE courseId = ? and status='finish' group by userId HAVING taskCount >= ?";
+        $sql = "SELECT max(finishedTime) AS finishedTime, count(courseTaskId) AS taskCount, userId FROM {$this->table()}
+                WHERE courseId = ? and status='finish' AND userId IN (SELECT userId FROM course_member WHERE courseId = ? AND role='student' )
+                group by userId HAVING taskCount >= ?";
 
-        return $this->db()->fetchAll($sql, array($courseId, $totalTaskCount)) ?: array();
+        return $this->db()->fetchAll($sql, array($courseId, $courseId, $totalTaskCount)) ?: array();
     }
 
     public function sumLearnTimeByCourseIdAndUserId($courseId, $userId)

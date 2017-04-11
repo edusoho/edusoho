@@ -738,6 +738,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $chapter;
     }
 
+    public function findChaptersByCourseId($courseId)
+    {
+        return $this->getChapterDao()->findChaptersByCourseId($courseId);
+    }
+
     public function deleteChapter($courseId, $chapterId)
     {
         $course = $this->tryManageCourse($courseId);
@@ -981,7 +986,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($course['parentId'] > 0) {
             $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($course['courseSetId']);
             if (!empty($classroomRef)) {
-                $isTeacher = $this->getClassroomService()->isClassroomTeacher($classroomRef['classroomId'], $user['id']);
+                $isTeacher = $this->getClassroomService()->isClassroomTeacher(
+                    $classroomRef['classroomId'],
+                    $user['id']
+                );
                 $isHeadTeacher = $this->getClassroomService()->isClassroomHeadTeacher(
                     $classroomRef['classroomId'],
                     $user['id']
@@ -1263,15 +1271,18 @@ class CourseServiceImpl extends BaseService implements CourseService
     //移动端 数字转字符
     protected function filterTask($task)
     {
-        array_walk($task, function ($value, $key) use (&$task) {
-            if (is_numeric($value)) {
-                $task[$key] = (string) $value;
-            } elseif (is_null($value)) {
-                $task[$key] = '';
-            } else {
-                $task[$key] = $value;
+        array_walk(
+            $task,
+            function ($value, $key) use (&$task) {
+                if (is_numeric($value)) {
+                    $task[$key] = (string) $value;
+                } elseif (is_null($value)) {
+                    $task[$key] = '';
+                } else {
+                    $task[$key] = $value;
+                }
             }
-        });
+        );
 
         return $task;
     }

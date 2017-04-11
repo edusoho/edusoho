@@ -138,7 +138,13 @@ class ReportServiceImpl extends BaseService implements ReportService
 
         //完成数
         $userFinishedTimes = $this->getTaskResultService()->findFinishedTimeByCourseIdGroupByUserId($courseId);
-        $result['finishedNum'] = count($userFinishedTimes);
+        $finishedNum = 0;
+        if (!empty($userFinishedTimes)) {
+            array_filter($userFinishedTimes, function ($val) use ($startTimeLessThan) {
+                return $val < $startTimeLessThan;
+            });
+        }
+        $result['finishedNum'] = $finishedNum;
 
         //完成率
         if ($result['studentNum']) {

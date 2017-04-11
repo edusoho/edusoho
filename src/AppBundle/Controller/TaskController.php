@@ -49,7 +49,7 @@ class TaskController extends BaseController
             return $this->redirect($this->generateUrl('my_course_show', array('id' => $courseId)));
         }
 
-        if ($this->canStartTask($task)) {
+        if ($member !== null && $member['role'] === 'student' && $this->canStartTask($task)) {
             $this->getActivityService()->trigger(
                 $task['activityId'],
                 'start',
@@ -292,7 +292,7 @@ class TaskController extends BaseController
 
         $this->getCourseService()->tryTakeCourse($courseId);
 
-        if ($this->validTaskLearnStat($request, $id)) {
+        if (!empty($data['events']) || $this->validTaskLearnStat($request, $id)) {
             $result = $this->getTaskService()->trigger($id, $eventName, $data);
             $data['valid'] = 1;
         } else {

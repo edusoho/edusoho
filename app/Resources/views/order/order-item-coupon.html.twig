@@ -7,7 +7,6 @@
   </div>
 
   <div class="order-item-detail  coupon-detail">
-{#}  {% if version_compare(plugin_version('Coupon'),'1.3.3','>') %}#}
   {% if true %}
       <div role="null-coupon-code">
         {% if coupons %}
@@ -49,10 +48,22 @@
       <div role="coupon-code" class="input-group" style="display: none;">
         <input role="coupon-code-verified" name="couponCode" type="hidden"/>
         <input style="width:150px;" role="coupon-code-input" type="text" class="form-control mrm" placeholder="{{'请输入优惠券'|trans}}" data-target-type="{{targetType}}" data-target-id="{{targetId|default(0) }}" data-amount="
-         {{ totalPrice }}  {# {{courses[0]['price']}} #}
+         {{ totalPrice }}
         "/>
-        <button class="btn btn-primary" type="button" role="coupon-use">{{'使用'|trans}}</button>
-        <a href="javascript:;" class="btn btn-link" role="cancel-coupon">{{'取消'|trans}}</a>
+          <button class="btn btn-primary" type="button" role="coupon-use">{{'使用'|trans}}</button>
+          <a href="javascript:;" class="btn btn-link" role="cancel-coupon">{{'取消'|trans}}</a>
+      </div>
+    {% endif %}
+  {% else %}
+    <a id="coupon-code-btn" class="btn btn-primary" href="javascript:;">{{'输入优惠券'|trans}}</a>
+    {% if app.request.query.get('targetType') in ['course','vip','classroom'] %}
+      <div role="coupon-code" class="input-group" style="display: none;">
+        <input role="coupon-code-verified" name="couponCode" type="hidden"/>
+        <input style="width:150px;" role="coupon-code-input" type="text" class="form-control mrm" placeholder="{{'请输入优惠券'|trans}}" data-target-type="{{app.request.query.get('targetType')}}" data-target-id="{{app.request.query.get('targetId')|default(0) }}" data-amount="
+         {{ totalPrice }}
+        "/>
+          <button class="btn btn-primary" type="button" role="coupon-use">{{'使用'|trans}}</button>
+          <a href="javascript:;" class="btn btn-link" role="cancel-coupon">{{'取消'|trans}}</a>
       </div>
     {% endif %}
 
