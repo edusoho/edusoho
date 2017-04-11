@@ -743,3 +743,129 @@ share.weixin_share: 分享到微信
 share.tsina_share: 分享到新浪微博
 share.qq_share: 分享到QQ好友
 share.qzone_share: 分享到QQ空间
+
+# 学员
+role.student: 学员
+# 教师
+role.teacher: 教师
+
+#后台用户模块
+##用户模块通用字段
+admin.user.fields.register_date_label: 注册时间
+admin.user.fields.operation_label: 操作
+admin.user.fields.empty: 暂无
+admin.user.form.input_placeholder.startDate: 起始时间
+admin.user.form.input_placeholder.endDate: 结束时间
+admin.user.form.input_placeholder.keyword: 关键词 
+admin.user.fields.job_label: 职业
+admin.user.fields.title_label: 头衔
+admin.user.fields.signature_label: 个人签名
+admin.user.fields.about_label: 自我介绍
+admin.user.fields.personal_menu_label: 个人主页
+admin.user.fields.user_email: 用户邮箱
+admin.user.fields.password_hint: 5-20位英文、数字、符号，区分大小写
+admin.user.fields.confirm_password_label: 确认密码
+admin.user.fields.confirm_password_hint: 再输入一次密码
+admin.user.fields.password_label: 密码
+admin.user.fields.role_label: 用户权限
+admin.user.fields.email: 邮箱
+admin.user.fields.idcard: 身份证号码
+
+##用户模块通用按钮
+admin.user.form.btn.search_submit_btn: 搜索
+admin.user.btn.show_btn: 查看
+
+##用户管理模块
+admin.user.manage.form.time_option.login: 登录时间
+admin.user.manage.form.time_option.register: 注册时间
+admin.user.manage.form.time_option.default: --时间类型--
+admin.user.manage.form.role_option.default: --所有角色--
+admin.user.manage.form.user_type_option.default: --注册来源--
+plugin.admin.user.manage.form.user_export_btn: 导出搜索结果
+admin.user.manage.fields.mobile_label: 手机号
+admin.user.manage.fields.recent_login_label: 最近登录
+admin.user.manage.fields.user_total_num_label: 用户总数：
+admin.user.manage.fields.forbid_label: 禁
+admin.user.manage.fields.verified_label: 已验证
+admin.user.manage.label.email_verified_hint: 该Email地址已验证
+admin.user.manage.user_show.fields.user_org_label: 所属组织机构
+admin.user.manage.user_show.fields.user_role_label: 用户组
+admin.user.manage.user_show.fields.recent_login_date_and_ip_label: 最近登录时间/IP
+admin.user.manage.user_show.fields.heading_title: 个人详细信息
+admin.user.manage.user_show.fields.gender_male_label: 男性
+admin.user.manage.user_show.fields.gender_female_label: 女性
+admin.user.manage.user_show.fields.gender_secret_label: 秘密
+admin.user.manage.user_show.fields.personal_website_label: 个人网站
+
+admin.user.manage.user_edit.fields.heading_title: 编辑用户信息
+
+admin.user.manage.user_role.fields.heading_title: 设置用户组
+
+admin.user.manage.user_avatar.fields.heading_title: 设置用户头像
+admin.user.manage.user_avatar.fields.current_avatar: 当前头像
+admin.user.manage.user_avatar.upload_hint: 你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过
+admin.user.manage.user_avatar.upload_btn: 上传新头像
+admin.user.manage.user_avatar.fields.partner_avatar: 论坛头像
+admin.user.manage.user_avatar.using_current_avatar_btn: 使用该头像
+
+admin.user.manage.change_password.heading_title: 重置用户%nickname%的密码
+admin.user.manage.change_password.new_password_label: 新密码
+admin.user.manage.change_password.input_data_explain.confirm_password: 再输入一次密码
+
+admin.user.manage.create.heading_title: 添加新用户
+admin.user.manage.create.email_label: 邮箱地址
+
+admin.user.manage.avatar_crop.heading_title: 头像设置
+admin.user.manage.avatar_crop.crop_hint: 提示：请选择图片裁剪区域。
+
+admin.user.manage.create_by_mobile.heading_title: 添加新用户
+admin.user.manage.create_by_mobile.mobile.input_placeholder: 手机号码
+admin.user.manage.create_by_mobile.nickname.input_placeholder: 不填将自动生成
+
+admin.user.manage.create_by_mobile_or_email.heading_title: 添加新用户
+admin.user.manage.create_by_mobile_or_email.email_or_mobile_label: 邮箱/手机
+admin.user.manage.create_by_mobile_or_email.email_or_mobile.input_placeholder: 邮箱地址/手机号码
+admin.user.manage.create_by_mobile_or_email.nickname.input_placeholder: 不填将自动生成
+
+##用户登陆日志模块
+admin.user.login_record.fields.login_time_and_ip_label: 登录时间IP
+admin.user.login_record.fields.login_address_label: 登录地点
+admin.user.login_record.fields.view_record_label: 查看记录
+admin.user.login_record.detail.heading_title: 登录日志
+admin.user.login_record.detail.fields.login_time: 登录时间
+admin.user.login_record.detail.fields.login_ip: 登录IP
+admin.user.login_record.detail.fields.login_address: 登录地点
+
+##实名认证管理
+admin.user.approval.approving_tab: 审核中
+admin.user.approval.approved_tab: 审核成功
+
+admin.user.approval.form.keyword_type_option.default: --查询条件--
+admin.user.approval.fields.application_date_label: 申请时间:
+admin.user.approval.fields.email: 邮件
+admin.user.approval.approve_submit_btn: 审核
+admin.user.approval.approved_empty_hint: 暂无已经审核成功的实名认证用户
+admin.user.approval.approving_empty_hint: 暂无需要审核中的实名认证用户
+admin.user.approval.fields.idcard_face_img_label: 身份证正面照
+admin.user.approval.fields.idcard_back_img_label: 身份证反面照
+
+admin.user.approval.approving_tab.approve.heading_title: 用户认证审核
+admin.user.approval.approving_tab.approve.fields.rejection_reason_label: 驳回原因
+admin.user.approval.approving_tab.approve.failed_btn: 审核驳回
+admin.user.approval.approving_tab.approve.success_btn: 审核通过
+
+admin.user.approval.approved_tab.approval_info.heading_title: 用户认证查看
+
+##私信管理模块
+admin.user.message.nickname.input_placeholder: 发信人用户名
+admin.user.message.content.input_placeholder: 私信内容关键词
+admin.user.message.fields.sender_label: 发信人
+admin.user.message.fields.receiver_label: 收信人
+admin.user.message.fields.content_label: 内容
+admin.user.message.fields.send_time_label: 发送时间
+admin.user.message.fields.content_spread_label: (展开)
+admin.user.message.fields.content_retract_label: (收起)
+admin.user.message.empty_hint: 暂无私信记录
+admin.user.message.fields.check_all_label: 全选
+admin.user.message.delete_btn: 删除
+admin.user.message.delete_btn.data_name: 私信
