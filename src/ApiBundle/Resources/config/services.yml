@@ -1,16 +1,7 @@
 services:
-    api_token_user_provider:
-        class: ApiBundle\Security\TokenUserProvider
+    api_resource_kernel:
+        class: ApiBundle\Api\ResourceKernel
         arguments: ['@service_container']
-
-    api_security_policy_manager:
-          class:  ApiBundle\Security\SecurityPolicyManager
-          arguments: ['@service_container']
-
-    api_token_authenticator:
-        class:  ApiBundle\Security\TokenAuthenticator
-        arguments: ['@service_container', '@api_security_policy_manager']
-        public: false
 
     api_exception_listener:
         class: ApiBundle\EventListener\ExceptionListener

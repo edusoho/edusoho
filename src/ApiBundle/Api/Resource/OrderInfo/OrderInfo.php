@@ -2,13 +2,13 @@
 
 namespace ApiBundle\Api\Resource\OrderInfo;
 
+use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\InvalidArgumentException;
 use ApiBundle\Api\Resource\Resource;
-use Symfony\Component\HttpFoundation\Request;
 
 class OrderInfo extends Resource
 {
-    public function add(Request $request)
+    public function add(ApiRequest $request)
     {
         $params = $request->request->all();
 

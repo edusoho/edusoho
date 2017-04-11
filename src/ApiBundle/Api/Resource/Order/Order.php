@@ -2,14 +2,14 @@
 
 namespace ApiBundle\Api\Resource\Order;
 
+use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\InvalidArgumentException;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
 use ApiBundle\Api\Resource\Resource;
-use Symfony\Component\HttpFoundation\Request;
 
 class Order extends Resource
 {
-    public function add(Request $request)
+    public function add(ApiRequest $request)
     {
         $params = $request->request->all();
 

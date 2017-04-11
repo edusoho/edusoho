@@ -31,8 +31,6 @@ security:
     providers:
         custom_provider:
             id: topxia.user_provider
-        api_token_user_provider:
-            id: api_token_user_provider
 
     role_hierarchy: "%role_hierarchy%"
 
@@ -41,15 +39,8 @@ security:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        api:
-            pattern: ^/api
-            stateless: true
-            simple_preauth:
-                authenticator: api_token_authenticator
-            provider: api_token_user_provider
-
         disabled:
-            pattern: ^/(anon|callback)/
+            pattern: ^/(anon|callback|api)/
             security: false
 
         main:

@@ -29,10 +29,6 @@ class ApiBundle extends Bundle
             return new PathParser();
         };
 
-        $biz['api.resource.kernel'] = function($biz) {
-            return new ResourceKernel($biz['api.path.parser'], $biz['api.resource.manager']);
-        };
-
         $biz['api.util.oc'] = function($biz) {
             return new ObjectCombinationUtil($biz);
         };

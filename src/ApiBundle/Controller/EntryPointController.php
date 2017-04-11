@@ -24,8 +24,7 @@ class EntryPointController extends Controller
     {
         $this->initEnv();
 
-        $biz = $this->container->get('biz');
-        $kernel = $biz['api.resource.kernel'];
+        $kernel = $this->container->get('api_resource_kernel');
         return new JsonResponse($kernel->handle($request));
     }
 

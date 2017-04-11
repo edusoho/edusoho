@@ -3,11 +3,10 @@
 namespace ApiBundle\Api;
 
 use ApiBundle\ApiBundle;
-use Symfony\Component\HttpFoundation\Request;
 
 class PathParser
 {
-    public function parse(Request $request)
+    public function parse(ApiRequest $request)
     {
         $pathInfo = $request->getPathInfo();
         $pathMeta = new PathMeta();

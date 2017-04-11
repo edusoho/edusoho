@@ -11,6 +11,7 @@ parameters:
     security_disabled_uri_prefixs:
         - anon
         - callback
+        - api
 
     route_white_list:
         - '/crontab'
