@@ -22,7 +22,7 @@ class ActivityTestpaperCopy extends TestpaperCopy
             if ($source['mediaType'] == 'testpaper') {
                 $activity = $this->getTestpaperActivityService()->getActivity($source['mediaId']);
 
-                return $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
+                return $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $source['mediaType']);
             }
 
             return $this->getTestpaperService()->getTestpaper($source['mediaId']);
