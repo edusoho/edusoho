@@ -222,22 +222,14 @@ class PermissionBuilder
         $configPaths = array();
         $position = $this->position;
 
-        $rootDir = realpath(__DIR__.'/../../../../');
+        $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
+        $files = array(
+            $rootDir.'/../src/AppBundle/Resources/config/menus_admin.yml',
+            $rootDir.'/../src/Custom/AdminBundle/Resources/config/menus_admin.yml'
+        );
 
-        $finder = new Finder();
-        $finder->directories()->depth('== 0');
-
-        if (glob($rootDir.'/src/*/*/Resources', GLOB_ONLYDIR)) {
-            $finder->in($rootDir.'/src/*/*/Resources');
-        }
-
-        if (glob($rootDir.'/src/*/Resources', GLOB_ONLYDIR)) {
-            $finder->in($rootDir.'/src/*/Resources');
-        }
-        foreach ($finder as $dir) {
-            $filepath = $dir->getRealPath()."/menus_{$position}.yml";
-
-            if (file_exists($filepath)) {
+        foreach ($files as $filepath) {
+            if (is_file($filepath)) {
                 $configPaths[] = $filepath;
             }
         }
