@@ -293,8 +293,13 @@ class AppServiceImpl extends BaseService implements AppService
         try {
             $package = $this->getCenterPackageInfo($packageId);
             // $errors  = $this->checkPluginDepend($package);
+
             if (!version_compare(System::VERSION, $package['edusohoMinVersion'], '>=')) {
                 $errors[] = sprintf('EduSoho版本需大于等于%s，您的版本为%s，请先升级EduSoho', $package['edusohoMinVersion'], System::VERSION);
+            }
+
+            if ($package['edusohoMaxVersion'] != 'up' && version_compare($package['edusohoMaxVersion'], System::VERSION, '<')) {
+                $errors[] = sprintf('当前插件版本 (%s) 与主系统版本不匹配, 无法安装。', $package['toVersion']);
             }
         } catch (\Exception $e) {
             $errors[] = $e->getMessage();
@@ -527,6 +532,13 @@ class AppServiceImpl extends BaseService implements AppService
         }
 
         try {
+            $protocol = $this->tryGetProtocolFromFile($packageDir);
+
+            if ($protocol < 3) {
+                $errors[] = '：%s';
+                goto last;
+            }
+
             $info = $this->_execScriptForPackageUpdate($package, $packageDir, $type, $index);
 
             if (isset($info['index'])) {
@@ -681,19 +693,13 @@ class AppServiceImpl extends BaseService implements AppService
 
     protected function _execScriptForPackageUpdate($package, $packageDir, $type, $index = 0)
     {
-        $protocol = $this->tryGetProtocolFromFile($packageDir);
-
         if (!file_exists($packageDir.'/Upgrade.php')) {
             return;
         }
 
         include_once $packageDir.'/Upgrade.php';
 
-        if ($protocol == 3) {
-            $upgrade = new \EduSohoUpgrade($this->getKernel()->getBiz());
-        } else {
-            $upgrade = new \EduSohoUpgrade($this->getKernel());
-        }
+        $upgrade = new \EduSohoUpgrade($this->biz);
 
         if (method_exists($upgrade, 'setUpgradeType')) {
             $upgrade->setUpgradeType($type, $package['toVersion']);
