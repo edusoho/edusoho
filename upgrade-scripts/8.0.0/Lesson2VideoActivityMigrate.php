@@ -44,7 +44,7 @@ class Lesson2VideoActivityMigrate extends AbstractMigrate
                 `mediaId`,
                 `mediaUri`,
                 case when `mediaSource` = 'self' then 'end' else 'time' end,
-                case when `mediaSource` = 'self' then 0 else `length` end,
+                case when `mediaSource` = 'self' then 0 else CEIL(`length`/60) end,
                 `id`
             from `course_lesson` where  type ='video' and `id` not in (select `migrateLessonId` from `activity_video`) order by id limit 0, {$this->perPageCount};
         "
