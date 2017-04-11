@@ -28,6 +28,14 @@ export default class Video {
     });
   }
 
+  displayFinishCondition(source) {
+    if(source === 'self') {
+      $("#finish-condition option[value=end]").attr('disabled', null);
+    }else{
+      $("#finish-condition option[value=end]").attr('disabled', 'disabled');
+    }
+  }
+
   initStep2form() {
     var $step2_form = $('#step2-form');
     var validator = $step2_form.data('validator');
@@ -116,6 +124,8 @@ export default class Video {
     //字幕组件
     const subtitleDialog = new SubtitleDialog('.js-subtitle-list');
     const onSelectFile = file => {
+      console.log(file)
+      this.displayFinishCondition(file.source);
       FileChooser.closeUI();
       if (file.length && file.length > 0) {
         let minute = parseInt(file.length / 60);
