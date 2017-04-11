@@ -19,13 +19,14 @@ class FileMigrate extends AbstractMigrate
             $this->copyAndOverwriteUpgradeFiles();
             $this->rebuildCloudSearchIndex();
             $this->upgradeEduSohoApp();
+            $this->getConnection()->commit();
             $filesystem = new \Symfony\Component\Filesystem\Filesystem();
             $filesystem->remove($this->kernel->getParameter('kernel.root_dir') .'/cache');
             echo json_encode(array('status' => 'ok'));
             exit(0);
         }
 
-        $filepath = 'http://ojc8jepus.bkt.clouddn.com/x8-package/x8-'.$page.'.zip';
+        $filepath = 'http://ojc8jepus.bkt.clouddn.com/x8-package/x8-'.$page.'.zip?' . mt_rand(0, mt_getrandmax());
 
         $dir = $this->kernel->getParameter('kernel.root_dir').'/data/upgrade';
 
