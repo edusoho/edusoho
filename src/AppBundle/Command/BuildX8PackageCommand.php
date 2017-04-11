@@ -43,14 +43,16 @@ class BuildX8PackageCommand extends ContainerAwareCommand
 
         $filesystem->remove($x8PackageDir.'/delete');
 
-        $x8UpgradeDir = $x8SourceDir . '/scripts/8.0.0';
-        $x8TempUpgradeDir = $buildDir . '/scripts/8.0.0';
-        $filesystem->mirror($x8UpgradeDir, $x8TempUpgradeDir);
+        $x8UpgradeDir = $x8SourceDir.'/scripts/8.0.0';
+        $x8TempUpgradeDir = $buildDir.'/scripts/8.0.0';
 
-        $filesystem->remove($buildDir. '/x8.zip');
+        $filesystem->mirror($x8UpgradeDir, $x8TempUpgradeDir);
+        $filesystem->remove($x8UpgradeDir);
+
+        $filesystem->remove($buildDir.'/x8.zip');
 
         chdir($x8PackageDir);
-        $command = "zip -r ./../x8.zip source/";
+        $command = 'zip -r ./../x8.zip source/';
         exec($command);
 
         $filesystem->remove($x8SourceDir);
@@ -61,7 +63,7 @@ class BuildX8PackageCommand extends ContainerAwareCommand
         $filesystem->remove($buildDir.'/EduSoho_8.0.0.zip');
 
         chdir($this->getContainer()->get('kernel')->getRootDir().'/../build');
-        $command = "zip -r EduSoho_8.0.0.zip EduSoho_8.0.0/";
+        $command = 'zip -r EduSoho_8.0.0.zip EduSoho_8.0.0/';
         exec($command);
     }
 }
