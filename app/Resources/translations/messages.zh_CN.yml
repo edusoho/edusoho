@@ -756,6 +756,8 @@ admin.course_thread.operation_th: 操作
 admin.course_thread.question_td_label: 问
 admin.course_thread.form.keyword_type.title_option: 标题
 admin.course_thread.form.keyword_type.content_option: 内容
+admin.course_thread.form.keyword_type.courseId_option: 课程编号
+admin.course_thread.form.keyword_type.courseTitle_option: 课程名
 admin.course_thread.expand_td: 展开
 admin.course_thread.collapse_td: 收起
 
@@ -764,12 +766,40 @@ admin.course_thread.course_thread_manage_tab.form.type_option: 帖子类型
 admin.course_thread.course_thread_manage_tab.form.thread_type_option: 属性
 admin.course_thread.course_thread_manage_tab.form.thread_type.isStick_option: 置顶
 admin.course_thread.course_thread_manage_tab.form.thread_type.isElite_option: 加精
-admin.course_thread.course_thread_manage_tab.form.keyword_type.courseId_option: 课程编号
-admin.course_thread.course_thread_manage_tab.form.keyword_type.courseTitle_option: 课程名
 admin.course_thread.course_thread_manage_tab.task_btn: 任务
 admin.course_thread.course_thread_manage_tab.isElite_btn: 精
 admin.course_thread.course_thread_manage_tab.isStick_btn: 顶
 
-admin.course_thread.classroom_thread_manage_tab.form:
- 
+# 问答管理通用key
+admin.course_question.question_th: 问答
+admin.course_question.view_th: 查看
+admin.course_question.createdTime_th: 创建时间
+admin.course_question.replay_or_review_th: 回复/查看
+admin.course_question.task_btn: 任务
+
+# 问答管理
+admin.course_question.td_operations.remind_teachers_btn: 提醒教师
+admin.course_question.td_operations.dropdown.delete_question_btn: 删除问答
+
+# 笔记管理
+admin.course_note.content_th: 内容
+admin.course_note.note: 笔记
+
+#评价管理
+admin.course_review.start: 星
+admin.course_review.one_start: 1星
+admin.course_review.two_starts: 2星
+admin.course_review.three_starts: 3星
+admin.course_review.four_starts: 4星
+admin.course_review.five_starts: 5星
+admin.course_review.rate_option: 评分
+admin.course_review.form.input.courseTitle.placeholer: 课程名
+admin.course_review.form.input.content.placeholer: 评价内容关键词
+admin.course_review.content_th: 评价内容
+admin.course_review.content: 评价
+admin.course_review.rate_th: 评分
+admin.course_review.completed_progress_th: 完成进度
+
+
+
 
