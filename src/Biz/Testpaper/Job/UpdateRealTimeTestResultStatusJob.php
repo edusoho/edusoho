@@ -39,11 +39,13 @@ class UpdateRealTimeTestResultStatusJob implements Job
             return;
         }
 
+        $testpaperId = $activity['ext']['mediaId'];
         $conditions = array(
-            'testId' => $testpaper['id'],
+            'testId' => $testpaperId,
             'questionTypes' => array('essay'),
             'type' => 'testpaper',
         );
+
         $itemCount = $this->getTestpaperService()->searchItemCount($conditions);
         $status = $itemCount > 0 ? 'reviewing' : 'finished';
 
