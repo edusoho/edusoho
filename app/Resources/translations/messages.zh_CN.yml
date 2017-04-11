@@ -20,6 +20,7 @@ site.message.warning: 警告信息
 site.message.error: 错误提示
 site.power_by: 好知网
 site.default.student: 学员
+site.org.belongs_to_org_th: 所属组织机构
 
 # 用户通用
 user.fields.login_password: 登录密码
@@ -832,6 +833,37 @@ admin.homepage.top_search.keyword_th: 关键词
 admin.homepage.top_search.search_number_th: 搜索次数
 admin.homepage.top_search.empty: 暂无搜索数据
 admin.homepage.free_access_edu_cloud_search_btn: 免费接入云搜索获取热门搜索关键词
+
+# 咨询管理
+admin.operation_article.category_option: --所属栏目--
+admin.operation_article.property_option: --属性--
+admin.operation_article.status_option: --发布状态--
+admin.operation_article.keywords.placeholer: 标题关键词
+admin.operation_article.article_title_th: 资讯标题
+admin.operation_article.category_th: 栏目
+admin.operation_article.updatedTime_th: 更新时间
+admin.operation_article.property_th: 属性
+admin.operation_article.article_property_tooltip: 资讯属性Tooltip
+admin.operation_article.status_th: 状态
+admin.operation_article.operation_th: 操作
+admin.operation_article.not_category: 未分类
+admin.operation_article.Headline: 头
+admin.operation_article.Headline.tips: 设置为头条
+admin.operation_article.recommend: 荐
+admin.operation_article.recommend.tips: 推荐该资讯
+admin.operation_article.Sticky: 顶
+admin.operation_article.Sticky.tips: 置顶该资讯
+admin.operation_article.edit_btn: 编辑
+admin.operation_article.publish_btn: 发布
+admin.operation_article.unpublish_btn: 取消发布
+admin.operation_article.trash_btn: 移至回收站
+admin.operation_article.delete_btn: 永久删除
+admin.operation_article.select_all: 全选
+admin.operation_article.article_title: 资讯
+admin.operation_article.category_title: 栏目名称
+admin.operation_article.category_addr: 栏目地址
+admin.operation_article.category_code: 编码
+admin.operation_article.add_child_category_btn: 添加子栏目
 
 # 话题
 thread: 话题
