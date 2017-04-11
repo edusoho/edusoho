@@ -17,7 +17,7 @@ class CourseLiveProcessor extends BizAware implements ProcessorInterface
 
         $classMap = array(
             'course_cloud_files' => $namespace.'\\Resource\\CourseCloudFiles',
-            'course_member' => $namespace.'\\Resource\\CourseMember',
+            'course_members' => $namespace.'\\Resource\\CourseMembers',
         );
 
         if (!isset($classMap[$type])) {
@@ -30,7 +30,7 @@ class CourseLiveProcessor extends BizAware implements ProcessorInterface
     /**
      * @param [type] $type
      *
-     * @return \AppBundle\Controller\Callback\CloudSearch\BaseProvider
+     * @return \AppBundle\Controller\Callback\CourseLive\BaseProvider
      */
     public function getProvider($type)
     {

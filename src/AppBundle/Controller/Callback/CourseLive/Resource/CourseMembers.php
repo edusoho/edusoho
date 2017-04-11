@@ -6,7 +6,7 @@ use AppBundle\Controller\Callback\CourseLive\BaseProvider;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
-class CourseMember extends BaseProvider
+class CourseMembers extends BaseProvider
 {
     public function get(Request $request)
     {
