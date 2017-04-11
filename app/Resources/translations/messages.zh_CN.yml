@@ -89,14 +89,102 @@ order.payment_pattern.other: 其他支付
 # 上传模块
 upload.titile: 上传附件
 
-
 # 课程
 course: 课程
 course.price.RMB: %price%元
 course.origin_price.RMB: %originPrice%元
 course.price.free: 免费
+course.price: 价格
 course.price.limited_time_free: 限免
 course.price.discount: %discount%折
+course.chapter: 第%number%章: %title%
+course.unit: 第%number%节: %title%
+course.course_manage: 课程管理
+course.scan_qrcode_tips: 扫二维码继续学习二维码时效为半小时
+course.announcement.default_content: >
+  <span class="text-warning">(请点击查看)</span>
+course.students_count: >
+  <span class="mhs">%studentsNum%</span>人加入学习
+course.course_member_count: %studentsNum%人
+course.activity: 活动
+course.teaching_plan: 教学计划
+course.expiry_date: 学习有效期
+course.expiry_date.days_mode: >
+  <span class="gray-dark">%expiryDays% 天（随到随学）</span>
+course.expiry_date.end_date_mode: >
+  截止：%expiryEndDate%（随到随学）
+course.expiry_date.date_mode: >
+  开始：%expiryStartDate% &nbsp;
+  截止：%expiryEndDate%
+course.expiry_date.forever_mode: 永久有效
+course.expiry_date.expiryStartDate: >
+  课程将于%expiryStartDate%开始授课，请耐心等待
+course.buy_expiry_date: 购买有效期
+course.buy_expiry_date.buy_expiry_time: >
+  <span class="course-detail-title ">购买截止日期</span>
+  <span class="gray-dark mrl">%buyExpiryTime% 23:59</span>
+course.showServices: 承诺服务
+course.showServices.empty: 暂未提供
+course.status.followed: 已收藏
+course.status.follow: 收藏
+course.share: 分享
+course.belong_to_classroom_tips: >
+  该课程属于
+  <a href="%classroomUrl%">%classroomTitle%</a>
+  请加入后再学习
+course.limited_tips: 该课程为限制课程，请联系客服
+course.unbuyable.unpublished_tips: 课程还未发布，不允许加入和购买
+course.unbuyable.over_buy_expiry_time_tips: 超过加入截止日期，不允许加入和购买
+course.unbuyable.over_expiry_end_date_tips: 超过学习截止日期，不允许加入和购买
+course.introduction: 介绍
+course.introduction.more_teaching_plan: >
+  想查看更多教学计划？<a href="%courseUrl%">返回课程宣传页</a>
+course.introduction.course_introduction: 课程介绍
+course.introduction.course_target: 课程目标
+course.introduction.course_target_empty: 为设置目标
+course.introduction.audiences: 适合人群
+course.introduction.audiences_empty: 为设置目标
+course.catalogue.content_title: 目录
+course.catalogue.task.preview_btn: 预览
+course.catalogue.task.try_look_btn: 试看
+course.catalogue.task.join_btn: 加入
+course.catalogue.task.buy_btn: 购买
+course.catalogue.task.name: %name%任务
+course.catalogue.task.lock_tips: 需要解锁上一个任务才能学习
+course.catalogue.task_status.task: 任务%taskNumber%： %taskTitle%
+course.catalogue.task_status.free: 免费
+course.catalogue.task_status.try_lookable: 试看
+course.catalogue.task_status.is_optional: 选修
+course.catalogue.task_status.looking_forward: 敬请期待
+course.catalogue.view_all_btn: 查看全部  &gt;
+course.reviews.teaching_plan: 教学计划
+course.reviews.additional_reviews_btn: 追评
+course.reviews.expand_btn: 展开全文
+course.reviews.reply_btn: 回复
+course.reviews.content: 内容
+course.reviews.delete_btn: 删除
+course.reviews.cancel_reply_btn: 收起
+course.reviews.collapse_btn: 收起全文
+course.reviews.teaching_plan_progress: 完成进度
+course.reviews.all_catagory: 全部
+course.reviews.review_again: 重新评价
+course.reviews.mark: 请打分：
+course.reviews.detail: 评价详细内容
+course.reviews.success_tips: 评价已保存！
+course.reviews.empty: 暂无评价
+course.teacher.content_title: 授课教师
+course.characteristic.content_title: 课程特色
+course.newest_students.content_title: 最新学员
+course.students_dynamic.content_title: 学员动态
+course.students_dynamic.empty: 还没有动态
+course.note.expand_btn: [展开全文]
+course.note.mission_delete_tips: · 该任务已被删除
+course.note.empty: 暂无笔记
+
+course.btn.learn: 去学习
+course.btn.join: 加入学习
+course.btn.buy: 购买课程
+course.btn.announcement: 公告
 
 #公开课
 open_course: 公开课
@@ -137,7 +225,7 @@ form.btn.comment: 发表评论
 form.btn.comment.submiting: 正在评论...
 form.btn.upload.submiting: 正在上传...
 form.btn.delete.submiting: 正在删除...
-form.btn.reply.submiting: 正在发表回复
+form.btn.reply.submiting: 正在发表...
 form.btn.save.submiting: 正在保存...
 form.btn.publish.submiting: 正在创建...
 form.btn.submit.submiting: 正在提交...

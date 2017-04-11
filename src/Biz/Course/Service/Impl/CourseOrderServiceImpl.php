@@ -57,7 +57,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $order = array();
 
             $order['userId'] = $user['id'];
-            $order['title'] = sprintf('购买课程《%s%》- %s', $courseSet['title'], $course['title']);
+            $order['title'] = sprintf("购买课程《%s》- %s", $courseSet['title'], $course['title']);
             $order['targetType'] = 'course';
             $order['targetId'] = $course['id'];
             if (!empty($course['discountId'])) {

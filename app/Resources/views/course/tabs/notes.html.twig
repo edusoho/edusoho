@@ -25,7 +25,7 @@
           <div class="content">
             {{ note.content|raw }}
           </div>
-          <a href="javascript:;" class="more more-show">[展开全文]</a>
+          <a href="javascript:;" class="more more-show">{{ 'course.note.expand_btn'|trans }}</a>
           <div class="metas clearfix">
             <a class="link-dark name" href="{{ path('user_show', {'id': author.id }) }}">{{ author.nickname }}</a>
             · <span>{{ note.updatedTime|smart_time }}</span>
@@ -41,7 +41,7 @@
               </a>
             {% endif %}
             {% else %}
-              · 该任务已被删除
+              {{ 'course.note.mission_delete_tips'|trans }}
             {% endif %}
             <span class="metas-sns">
               <span class="icon-favour">
@@ -57,7 +57,7 @@
         </div>
       </div>
     {% else %}
-      <div class="empty">{{ '暂无笔记'|trans }}</div>
+      <div class="empty">{{ 'course.note.empty'|trans }}</div>
     {% endfor %}
   </div>
 
