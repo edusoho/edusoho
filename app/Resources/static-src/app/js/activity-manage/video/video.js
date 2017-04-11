@@ -29,10 +29,15 @@ export default class Video {
   }
 
   displayFinishCondition(source) {
-    if(source === 'self') {
-      $("#finish-condition option[value=end]").attr('disabled', null);
-    }else{
+    console.log(source);
+    if (source === 'self') {
+      $("#finish-condition option[value=end]").removeAttr('disabled');
+    } else {
       $("#finish-condition option[value=end]").attr('disabled', 'disabled');
+      $("#finish-condition option[value=time]").attr('selected', false);
+      $("#finish-condition option[value=time]").attr('selected', true);
+      $('.viewLength').removeClass('hidden');
+      this.initStep3from();
     }
   }
 
@@ -108,7 +113,7 @@ export default class Video {
       this.initStep3from();
     }
 
-    $("#finish-condition").on('change', (event)=>{
+    $("#finish-condition").on('change', (event) => {
       if (event.target.value == 'time') {
         $('.viewLength').removeClass('hidden');
         this.initStep3from();
