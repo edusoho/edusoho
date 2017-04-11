@@ -36,11 +36,7 @@ class OrderInfoFilter extends Filter
             return 1;
         }
 
-        if ($data['cashRate'] == 0) {
-            return 0;
-        }
-
-        if ($data[$data['targetType']]['maxRate'] == 100) {
+        if ($data['cashRate'] != 0 && $data[$data['targetType']]['maxRate'] == 100) {
             return 1;
         }
 
