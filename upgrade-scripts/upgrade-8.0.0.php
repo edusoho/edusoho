@@ -273,7 +273,7 @@ abstract class AbstractUpdater
 
     public function __construct($kernel)
     {
-        $this->kernel = $kernel;
+        $this->kernel = ServiceKernel::instance();
     }
 
     /**
