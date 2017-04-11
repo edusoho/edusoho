@@ -346,11 +346,16 @@ e.g. <video class="video-js my-skin-name">
   -moz-transition: visibility 0.1s, opacity 0.1s;
   -o-transition: visibility 0.1s, opacity 0.1s;
   transition: visibility 0.1s, opacity 0.1s;
+
+  width: 90%;
+  top: 50%;
+  margin-top: -25px;
+  left: 5%;
 }
 .local-video-player .vjs-default-skin.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar {
   display: block;
-  visibility: hidden;
-  opacity: 0;
+  /*visibility: hidden;
+  opacity: 0;*/
   /* transition */
   -webkit-transition: visibility 1s, opacity 1s;
   -moz-transition: visibility 1s, opacity 1s;
@@ -787,7 +792,7 @@ e.g. <video class="video-js my-skin-name">
   box-shadow: 0 0 1em #ffffff;
 }
 .local-video-player .video-js {
-  background-color: #000;
+  /*background-color: #000;*/
   position: relative;
   padding: 0;
   /* Start with 10px for base font size so other dimensions can be em based and
