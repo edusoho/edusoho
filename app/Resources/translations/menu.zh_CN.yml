@@ -72,6 +72,7 @@ admin.course.basic.basic_tab: 课程管理
 admin.course.basic.recommend_list_tab: 课程推荐
 admin.course.basic.analysis_tab: 课程统计
 
+admin.course.basic.basic_tab.manage_btn: 管理课程
 admin.course.basic.basic_tab.create_btn: 创建课程
 admin.course.basic.basic_tab.recommend_btn: 推荐课程
 admin.course.basic.basic_tab.preview_btn: 预览
