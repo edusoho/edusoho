@@ -122,18 +122,18 @@ $.validator.addMethod("DateAndTime", function (value, element) {
   return this.optional(element) || reg.test(value);
 }, $.validator.format("请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm"));
 
-function strlen(str) {  
-  let len = 0;  
-  for (let i = 0; i < str.length; i++) {   
-    let chars = str.charCodeAt(i);   
+function strlen(str) {
+  let len = 0;
+  for (let i = 0; i < str.length; i++) {
+    let chars = str.charCodeAt(i);
     //单字节加1   
-    if ((chars >= 0x0001 && chars <= 0x007e) || (0xff60 <= chars && chars <= 0xff9f)) {   
-      len ++;   
-    } else {   
-      len += 2;   
-    }   
-  }   
-  return len;  
+    if ((chars >= 0x0001 && chars <= 0x007e) || (0xff60 <= chars && chars <= 0xff9f)) {
+      len++;
+    } else {
+      len += 2;
+    }
+  }
+  return len;
 }
 
 $.validator.addMethod("trim", function (value, element, params) {
@@ -311,41 +311,41 @@ $.validator.addMethod('passwordCheck', function (value, element) {
     data: { value: value },
     dataType: 'json'
   })
-  .success(function (response) {
-    isSuccess = response.success;
-  })
+    .success(function (response) {
+      isSuccess = response.success;
+    })
   return this.optional(element) || isSuccess
 }, Translator.trans('密码错误'))
 
-$.validator.addMethod('chinese', function(value, element) {
-  return this.optional(element) ||  /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3])*$/i.test(value);
+$.validator.addMethod('chinese', function (value, element) {
+  return this.optional(element) || /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3])*$/i.test(value);
 }, jQuery.validator.format('必须是中文字'));
 
-$.validator.addMethod('chinese_limit', function(value, element, params) {
+$.validator.addMethod('chinese_limit', function (value, element, params) {
   let l = strlen(value);
-  console.log('params',params)
-  return this.optional(element) ||  l <= Number(params);
+  console.log('params', params)
+  return this.optional(element) || l <= Number(params);
 }, jQuery.validator.format('长度必须小于等于 {0} 字符,一个中文为2个字符'));
 
-$.validator.addMethod('isImage', function(value, element) {
+$.validator.addMethod('isImage', function (value, element) {
 
   if (navigator.userAgent.toLowerCase().indexOf('msie') > 0) {
     return this.optional(element) || true;
   }
 
-  const imgType = ['jpg','JPG','jpeg','JPEG','bmp','BMP','gif','GIF','png','PNG'];
+  const imgType = ['jpg', 'JPG', 'jpeg', 'JPEG', 'bmp', 'BMP', 'gif', 'GIF', 'png', 'PNG'];
 
   // imgType = $(element).attr('accept').replace(/image\//g,"").split(',');
 
-  for (let i = 0; i < imgType.length; i ++) {
-    if(value.indexOf(imgType[i]) > 0) {
+  for (let i = 0; i < imgType.length; i++) {
+    if (value.indexOf(imgType[i]) > 0) {
       return this.optional(element) || true;
     }
   }
 
 }, jQuery.validator.format('只能上传图片'));
 
-$.validator.addMethod('limitSize', function(value, element) {
+$.validator.addMethod('limitSize', function (value, element) {
   if (navigator.userAgent.toLowerCase().indexOf('msie') > 0) {
     return this.optional(element) || true;
   }
@@ -353,7 +353,7 @@ $.validator.addMethod('limitSize', function(value, element) {
   const fileSize = $(element)[0]['files'][0].size;
 
   return this.optional(element) || fileSize / 1024 <= 2048;
-  
+
 }, jQuery.validator.format('大小不能超过2M'));
 
 
@@ -382,7 +382,7 @@ $.validator.addMethod("chinese_alphanumeric", function (value, element, params) 
 
 $.validator.addMethod("nickname", function (value, element, params) {
 
-  return  this.optional(element) || ! /^1\d{10}$/.test(value)
+  return this.optional(element) || ! /^1\d{10}$/.test(value)
 }, jQuery.validator.format('不允许以1开头的11位纯数字'));
 
 
@@ -395,13 +395,19 @@ $.validator.addMethod("nickname_remote", function (value, element, params) {
     url: url,
     type: 'GET',
     async: false,
-    data: {value: value},
+    data: { value: value },
     dataType: 'json'
   })
-  .success(function(response) {
-    isSuccess = response.success;
-  })
+    .success(function (response) {
+      isSuccess = response.success;
+    })
 
   return this.optional(element) || isSuccess;
 
 }, jQuery.validator.format('该用户名已存在'))
+
+// Validator.addRule(
+//   'time_check',
+//   /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}$/,
+//   Translator.trans('请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm')
+// );
