@@ -3,7 +3,7 @@
 namespace Tests;
 
 use Codeages\Biz\Framework\Context\Biz;
-use Codeages\Biz\Framework\Provider\CacheServiceProvider;
+use Codeages\Biz\Framework\Provider\RedisServiceProvider;
 use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -23,11 +23,14 @@ class GeneralDaoImplTest extends TestCase
                 'charset' => getenv('DB_CHARSET'),
                 'port' => getenv('DB_PORT'),
             ),
+            'redis.options' => array(
+                'host' => array('127.0.0.1:6379'),
+            ),
         );
         $biz = new Biz($config);
         $biz['autoload.aliases']['TestProject'] = 'TestProject\Biz';
         $biz->register(new DoctrineServiceProvider());
-        // $biz->register(new CacheServiceProvider());
+        $biz->register(new RedisServiceProvider());
         $biz->boot();
 
         $this->biz = $biz;
@@ -93,6 +96,9 @@ class GeneralDaoImplTest extends TestCase
         ");
     }
 
+    /**
+     * @group current
+     */
     public function testGet()
     {
         foreach ($this->getTestDao() as $dao) {
@@ -106,11 +112,12 @@ class GeneralDaoImplTest extends TestCase
             $dao = $this->biz->dao($dao);
             $row = $dao->create(array(
                 'name' => 'test1',
-                'code' => 'test1'
+                'code' => 'test1',
             ));
 
-            $row = $dao->updateByNameAndCode('test1', 'test1', array('content' => 'test'));
-            $this->assertEquals('test', $row[0]['content']);
+            $affected = $dao->updateByNameAndCode('test1', 'test1', array('content' => 'test'));
+
+            $this->assertEquals(1, $affected);
         }
     }
 
@@ -375,7 +382,7 @@ class GeneralDaoImplTest extends TestCase
     public function testOrderBysInject()
     {
         /**
-         * @var ExampleDao $dao
+         * @var ExampleDao
          */
         $dao = $this->biz->dao('TestProject:Example:ExampleDao');
 
@@ -392,7 +399,7 @@ class GeneralDaoImplTest extends TestCase
     public function testStartInject()
     {
         /**
-         * @var ExampleDao $dao
+         * @var ExampleDao
          */
         $dao = $this->biz->dao('TestProject:Example:ExampleDao');
 
@@ -408,7 +415,7 @@ class GeneralDaoImplTest extends TestCase
     public function testLimitInject()
     {
         /**
-         * @var ExampleDao $dao
+         * @var ExampleDao
          */
         $dao = $this->biz->dao('TestProject:Example:ExampleDao');
 
@@ -419,7 +426,7 @@ class GeneralDaoImplTest extends TestCase
     public function testNonInject()
     {
         /**
-         * @var ExampleDao $dao
+         * @var ExampleDao
          */
         $dao = $this->biz->dao('TestProject:Example:ExampleDao');
 
@@ -441,7 +448,7 @@ class GeneralDaoImplTest extends TestCase
     public function testOnlySetStart()
     {
         /**
-         * @var ExampleDao $dao
+         * @var ExampleDao
          */
         $dao = $this->biz->dao('TestProject:Example:ExampleDao');
 
@@ -455,7 +462,7 @@ class GeneralDaoImplTest extends TestCase
     public function testOnlySetLimit()
     {
         /**
-         * @var ExampleDao $dao
+         * @var ExampleDao
          */
         $dao = $this->biz->dao('TestProject:Example:ExampleDao');
 
@@ -466,7 +473,7 @@ class GeneralDaoImplTest extends TestCase
     public function testSerializes()
     {
         /**
-         * @var ExampleDao $dao
+         * @var ExampleDao
          */
         $dao = $this->biz->dao('TestProject:Example:ExampleDao');
 
@@ -477,8 +484,8 @@ class GeneralDaoImplTest extends TestCase
             'delimiter_serialize_value' => array('i_am_delimiter_serialized_value'),
         ));
 
-        foreach (array('php', 'json') as $key){
-            $this->assertEquals($row[$key . '_serialize_value']['value'], "i_am_{$key}_serialized_value");
+        foreach (array('php', 'json') as $key) {
+            $this->assertEquals($row[$key.'_serialize_value']['value'], "i_am_{$key}_serialized_value");
         }
 
         $this->assertEquals($row['delimiter_serialize_value'], array('i_am_delimiter_serialized_value'));

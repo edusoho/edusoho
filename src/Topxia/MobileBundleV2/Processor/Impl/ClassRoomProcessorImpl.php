@@ -699,12 +699,12 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 
     private function getSignService()
     {
-        return $this->controller->getService('Sign.SignService');
+        return $this->controller->getService('Sign:SignService');
     }
 
     private function getCategoryService()
     {
-        return $this->controller->getService('Taxonomy.CategoryService');
+        return $this->controller->getService('Taxonomy:CategoryService');
     }
 
     private function getClassroomService()

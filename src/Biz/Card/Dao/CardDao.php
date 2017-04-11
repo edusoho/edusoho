@@ -16,5 +16,7 @@ interface CardDao extends GeneralDaoInterface
 
     public function findByUserIdAndCardType($userId, $cardType);
 
+    public function findByUserIdAndCardTypeAndStatus($userId, $cardType, $status);
+
     public function findByCardIds(array $cardIds);
 }

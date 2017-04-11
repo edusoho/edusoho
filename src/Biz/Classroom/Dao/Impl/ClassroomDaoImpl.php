@@ -9,6 +9,29 @@ class ClassroomDaoImpl extends GeneralDaoImpl implements ClassroomDao
 {
     protected $table = 'classroom';
 
+    public function getByTitle($title)
+    {
+        $sql = "SELECT * FROM {$this->table} where title=? LIMIT 1";
+
+        return $this->db()->fetchAssoc($sql, array($title));
+    }
+
+    public function findByLikeTitle($title)
+    {
+        if (empty($title)) {
+            return array();
+        }
+
+        $sql = "SELECT * FROM {$this->table} WHERE `title` LIKE ?; ";
+
+        return $this->db()->fetchAll($sql, array('%'.$title.'%'));
+    }
+
+    public function findByIds($ids)
+    {
+        return $this->findInField('id', $ids);
+    }
+
     public function declares()
     {
         return array(
@@ -32,34 +55,10 @@ class ClassroomDaoImpl extends GeneralDaoImpl implements ClassroomDao
                 'vipLevelId = :vipLevelId',
                 'vipLevelId IN ( :vipLevelIds )',
                 'orgCode = :orgCode',
-                'orgCode LIKE :likeOrgCode',
+                'orgCode PRE_LIKE :likeOrgCode',
                 'headTeacherId = :headTeacherId',
                 'updatedTime >= :updatedTime_GE',
             ),
-            'cache' => 'table',
         );
-    }
-
-    public function getByTitle($title)
-    {
-        $sql = "SELECT * FROM {$this->table} where title=? LIMIT 1";
-
-        return $this->db()->fetchAssoc($sql, array($title));
-    }
-
-    public function findByLikeTitle($title)
-    {
-        if (empty($title)) {
-            return array();
-        }
-
-        $sql = "SELECT * FROM {$this->table} WHERE `title` LIKE ?; ";
-
-        return $this->db()->fetchAll($sql, array('%'.$title.'%'));
-    }
-
-    public function findByIds($ids)
-    {
-        return $this->findInField('id', $ids);
     }
 }

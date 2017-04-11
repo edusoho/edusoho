@@ -1,4 +1,5 @@
 parameters:
+    session.service_id: session.handler.pdo
     role_hierarchy:
         ROLE_TEACHER:     ROLE_USER
         ROLE_BACKEND:     ROLE_USER
@@ -6,6 +7,10 @@ parameters:
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     keyword.filter: Biz\Common\EsKeywordFilter
+
+    security_disabled_uri_prefixs:
+        - anon
+        - callback
 
     route_white_list:
         - '/crontab'

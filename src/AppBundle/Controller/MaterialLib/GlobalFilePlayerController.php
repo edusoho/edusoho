@@ -18,24 +18,23 @@ class GlobalFilePlayerController extends BaseController
         if (empty($file)) {
             throw $this->createNotFoundException('file not found');
         }
-
         if ($file['type'] == 'video') {
             return $this->videoPlayer($file, $request);
         } elseif ($file['type'] == 'audio') {
             return $this->audioPlayer($file, $request);
         } elseif (in_array($file['type'], array('ppt', 'document', 'image', 'flash'))) {
-            $ssl = $request->isSecure() ? true : false;
-            $file = $this->getMaterialLibService()->player($globalId, $ssl);
-
             return $this->render("material-lib/player/{$file['type']}-player.html.twig", array(
                 'file' => $file,
             ));
         }
+
+        throw $this->createNotFoundException('not support play');
     }
 
     public function pptAction(Request $request, $globalId)
     {
-        $file = $this->getMaterialLibService()->player($globalId);
+        $ssl = $request->isSecure() ? true : false;
+        $file = $this->getMaterialLibService()->player($globalId, $ssl);
 
         if (empty($file)) {
             throw $this->createNotFoundException('file not found');
@@ -46,7 +45,8 @@ class GlobalFilePlayerController extends BaseController
 
     public function documentAction(Request $request, $globalId)
     {
-        $file = $this->getMaterialLibService()->player($globalId);
+        $ssl = $request->isSecure() ? true : false;
+        $file = $this->getMaterialLibService()->player($globalId, $ssl);
 
         if (empty($file)) {
             throw $this->createNotFoundException('file not found');

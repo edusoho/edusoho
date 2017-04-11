@@ -9,8 +9,9 @@ class CashOrdersDaoImpl extends GeneralDaoImpl implements CashOrdersDao
 {
     protected $table = 'cash_orders';
 
-    public function getBySn($sn, $lock = false)
+    public function getBySn($sn, array $options = array())
     {
+        $lock = isset($options['lock']) && $options['lock'] === true;
         $sql = "SELECT * FROM {$this->table} WHERE sn = ?  LIMIT 1".($lock ? ' FOR UPDATE' : '');
 
         return $this->db()->fetchAssoc($sql, array($sn)) ?: array();

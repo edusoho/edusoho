@@ -73,7 +73,7 @@ class Download extends Activity
 
     public function isFinished($activityId)
     {
-        $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'download.finish');
+        $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'finish');
 
         return !empty($result);
     }

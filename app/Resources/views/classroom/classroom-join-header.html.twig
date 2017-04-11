@@ -94,7 +94,7 @@
             {% if classroom.expiryMode != 'forever' %}
               {% if 'student' in member.role or 'member' in member.role %}
                 <span class="mrm">班级有效期</span>
-                <span>{{ memberDeadline|date('Y-n-d') }}</span>
+                <span>{{ memberDeadline|date('Y-m-d') }}</span>
               {% endif %}
             {% endif %}
           </div>
@@ -106,6 +106,7 @@
             {% include 'classroom/service-block.html.twig' with {'services':classroom.service} %}
           </div>
         </div>
+
         <div class="class-operation">
           {% if (memberDeadline != 0 and date(memberDeadline) < date()) and ('student' in member.role or 'member' in member.role) %}
             <div class="class-deadline">
@@ -122,44 +123,46 @@
                   </a></div>
               {% endif %}
             </div>
-            <ul class='class-data clearfix {% if classroomMemberLevel and 'auditor' in member.role %}hidden-sm{% else %}two-col{% endif %}'>
-              <li>
-                <p><i class="es-icon es-icon-person"></i></p>
-                <p>{{ '学员'|trans }}({{ classroom.studentNum + classroom.auditorNum }})</p>
-              </li>
-              <li>
-              <span class="es-share top">
-                <a class="dropdown-toggle" href="" data-toggle="dropdown" aria-labelledby="dropdownMenu1">
-                  <p><i class="es-icon es-icon-share"></i></p>
-                  <p>{{ '分享'|trans }}</p>
-                </a>
-                {% include 'common/share-dropdown.html.twig' with {type: 'classroom'} %} 
-              </span>
-              </li>
-              {% if 'auditor' in member.role and classroomMemberLevel and  classroom.showable %}
-                <li class="hidden-xs color-warning icon-vip" title="会员{{ setting("classroom.name")|default("班级") }}"
-                  data-content="{% include 'course/header/parts/normal-header-vip.html.twig' with {courseVip:classroomMemberLevel,userVipStatus:checkMemberLevelResult} %}"
-                  data-original-title="会员{{ setting("classroom.name")|default("班级") }}">
-                  <i class="es-icon es-icon-crown"></i><br>
-                  {% include 'course/header/parts/normal-header-vip-link.html.twig' with {userVipStatus:checkMemberLevelResult, level: classroomMemberLevel} %}
-                </li>
-              {% endif %}
-            </ul>
-            {% if 'auditor' in member.role %}
-              <div class="class-auditor hidden-sm">
-                {{ '您现在是'|trans }}<span class="color-warning">{{ '旁听生'|trans }}</span>{{ '，不能完整学习'|trans }}<i
-                  class="es-icon es-icon-help color-primary"
-                  data-toggle="tooltip" data-placement="top" title=""
-                  data-original-title="{{ '旁听生只能参与话题讨论，正式学员可以完整地学习所有内容，享受所有教学服务'|trans }}"></i><br>
+          {% endif %}
 
-                {% if  classroom.showable and classroom.status != 'closed' %}
-                  <div class="btn-buy">
-                    {% include 'classroom/part/classroom-buy-btn.html.twig' with {isAuditor:true} %}
-                  </div>
-                {% endif %}
-
-              </div>
+          <ul class="class-data clearfix {% if classroomMemberLevel and 'auditor' in member.role %}hidden-sm{% else %}two-col{% endif %}">
+            <li>
+              <p><i class="es-icon es-icon-person"></i></p>
+              <p>{{ '学员'|trans }}({{ classroom.studentNum + classroom.auditorNum }})</p>
+            </li>
+            <li>
+            <span class="es-share top">
+              <a class="dropdown-toggle" href="" data-toggle="dropdown" aria-labelledby="dropdownMenu1">
+                <p><i class="es-icon es-icon-share"></i></p>
+                <p>{{ '分享'|trans }}</p>
+              </a>
+              {% include 'common/share-dropdown.html.twig' with {type: 'classroom'} %} 
+            </span>
+            </li>
+            {% if 'auditor' in member.role and classroomMemberLevel and  classroom.showable %}
+              <li class="hidden-xs color-warning icon-vip" title="会员{{ setting("classroom.name")|default("班级") }}"
+                data-content="{% include 'course/header/parts/normal-header-vip.html.twig' with {courseVip:classroomMemberLevel,userVipStatus:checkMemberLevelResult} %}"
+                data-original-title="会员{{ setting("classroom.name")|default("班级") }}">
+                <i class="es-icon es-icon-crown"></i><br>
+                {% include 'course/header/parts/normal-header-vip-link.html.twig' with {userVipStatus:checkMemberLevelResult, level: classroomMemberLevel} %}
+              </li>
             {% endif %}
+          </ul>
+          
+          {% if 'auditor' in member.role %}
+            <div class="class-auditor hidden-sm">
+              {{ '您现在是'|trans }}<span class="color-warning">{{ '旁听生'|trans }}</span>{{ '，不能完整学习'|trans }}<i
+                class="es-icon es-icon-help color-primary"
+                data-toggle="tooltip" data-placement="top" title=""
+                data-original-title="{{ '旁听生只能参与话题讨论，正式学员可以完整地学习所有内容，享受所有教学服务'|trans }}"></i><br>
+
+              {% if  classroom.showable and classroom.status != 'closed' %}
+                <div class="btn-buy">
+                  {% include 'classroom/part/classroom-buy-btn.html.twig' with {isAuditor:true} %}
+                </div>
+              {% endif %}
+
+            </div>
           {% endif %}
         </div>
 

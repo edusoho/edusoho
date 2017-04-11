@@ -6,6 +6,14 @@ use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
 interface CourseSetService
 {
+    const NONE_SERIALIZE_MODE = 'none';
+    const SERIALIZE_SERIALIZE_MODE = 'serialized';
+    const FINISH_SERIALIZE_MODE = 'finished';
+
+    const DRAFT_STATUS = 'draft';
+    const PUBLISH_STATUS = 'published';
+    const CLOSE_STATUS = 'closed';
+
     /**
      * collect course set.
      *
@@ -236,4 +244,6 @@ interface CourseSetService
     public function unlockCourseSet($id);
 
     public function updateMaxRate($id, $maxRate);
+
+    public function hitCourseSet($id);
 }

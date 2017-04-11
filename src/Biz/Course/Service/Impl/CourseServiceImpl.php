@@ -536,7 +536,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
         if ($courseSetId > 0 && $course['courseSetId'] !== $courseSetId) {
             throw $this->createInvalidArgumentException(
-                'Invalid Argument: Course#{$courseId} not in CoruseSet#{$courseSetId}'
+                "Invalid Argument: Course#{$courseId} not in CoruseSet#{$courseSetId}"
             );
         }
 
@@ -738,6 +738,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $chapter;
     }
 
+    public function findChaptersByCourseId($courseId)
+    {
+        return $this->getChapterDao()->findChaptersByCourseId($courseId);
+    }
+
     public function deleteChapter($courseId, $chapterId)
     {
         $course = $this->tryManageCourse($courseId);
@@ -906,7 +911,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     // Refactor: 该函数方法名和逻辑表达的意思不一致
     public function findUserLearnCourses($userId, $start, $limit)
     {
-        return $this->getTaskService()->searchMembers(array('userId' => $userId), array(), $start, $limit);
+        return $this->getMemberService()->searchMembers(array('userId' => $userId), array(), $start, $limit);
     }
 
     // Refactor: 该函数方法名和逻辑表达的意思不一致
@@ -981,7 +986,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($course['parentId'] > 0) {
             $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($course['courseSetId']);
             if (!empty($classroomRef)) {
-                $isTeacher = $this->getClassroomService()->isClassroomTeacher($classroomRef['classroomId'], $user['id']);
+                $isTeacher = $this->getClassroomService()->isClassroomTeacher(
+                    $classroomRef['classroomId'],
+                    $user['id']
+                );
                 $isHeadTeacher = $this->getClassroomService()->isClassroomHeadTeacher(
                     $classroomRef['classroomId'],
                     $user['id']
@@ -1263,15 +1271,18 @@ class CourseServiceImpl extends BaseService implements CourseService
     //移动端 数字转字符
     protected function filterTask($task)
     {
-        array_walk($task, function ($value, $key) use (&$task) {
-            if (is_numeric($value)) {
-                $task[$key] = (string) $value;
-            } elseif (is_null($value)) {
-                $task[$key] = '';
-            } else {
-                $task[$key] = $value;
+        array_walk(
+            $task,
+            function ($value, $key) use (&$task) {
+                if (is_numeric($value)) {
+                    $task[$key] = (string) $value;
+                } elseif (is_null($value)) {
+                    $task[$key] = '';
+                } else {
+                    $task[$key] = $value;
+                }
             }
-        });
+        );
 
         return $task;
     }
@@ -1696,6 +1707,17 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $fields;
+    }
+
+    public function hitCourse($id)
+    {
+        $course = $this->getCourse($id);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException("Course#{$courseId} Not Found");
+        }
+
+        return $this->getCourseDao()->wave(array($id), array('hitNum' => 1));
     }
 
     protected function hasAdminRole()

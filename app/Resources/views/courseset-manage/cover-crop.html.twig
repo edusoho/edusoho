@@ -1,6 +1,6 @@
 {% extends 'courseset-manage/layout.html.twig' %}
 
-{% block title %}{{ '课程封面'|trans }} - {{ parent() }}{% endblock %}
+{% block title %}{{ '封面图片'|trans }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'cover' %}
 {% do script(['app/js/courseset-manage/cover-crop/index.js']) %}
 {% set token = upload_token('tmp', 'image') %}
@@ -8,7 +8,7 @@
 
 <div class="panel panel-default panel-col">
   <div class="panel-heading">
-    {{'课程图片'|trans}}
+    {{'封面图片'|trans}}
   </div>
 
   <div id="courseset-picture-crop-form" class="panel-body">

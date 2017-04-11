@@ -12,6 +12,7 @@
   		{% if not can_preview_type %}文件类型暂不支持预览 {% else %} 转码中请稍后预览{% endif %}">预览</a>
   	 {% else %}
   	 	<a  class="attachment-preview btn btn-sm btn-info"  href="#attachment-modal"  data-toggle="modal" data-url="{{ path('attachment_preview', {'id': attachment.id}) }}">预览</a>
+      {#<a class="attachment-preview btn btn-sm btn-info"  href="{{ path('attachment_preview', {'id': attachment.id}) }}" target="_blank">预览</a>#}
   	{% endif %}
     <a class="attachment-download btn btn-sm btn-primary" {% if app.user.id|default(null) %} href="{{ path('attachment_download', {'id': attachment.id}) }}" {% else %}  href="#attachment-modal"  data-toggle="modal" data-url="{{ path('login_ajax') }}" {% endif %}>下载</a>
   </span>

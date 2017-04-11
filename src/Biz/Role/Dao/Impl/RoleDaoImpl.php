@@ -9,6 +9,21 @@ class RoleDaoImpl extends GeneralDaoImpl implements RoleDao
 {
     protected $table = 'role';
 
+    public function getByCode($code)
+    {
+        return $this->getByFields(array('code' => $code));
+    }
+
+    public function findByCodes($codes)
+    {
+        return $this->findInField('code', $codes);
+    }
+
+    public function getByName($name)
+    {
+        return $this->getByFields(array('name' => $name));
+    }
+
     public function declares()
     {
         $declares['conditions'] = array(
@@ -28,23 +43,6 @@ class RoleDaoImpl extends GeneralDaoImpl implements RoleDao
             'updatedTime',
         );
 
-        $declares['cache'] = 'table';
-
         return $declares;
-    }
-
-    public function getByCode($code)
-    {
-        return $this->getByFields(array('code' => $code));
-    }
-
-    public function findByCodes($codes)
-    {
-        return $this->findInField('code', $codes);
-    }
-
-    public function getByName($name)
-    {
-        return $this->getByFields(array('name' => $name));
     }
 }

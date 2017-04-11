@@ -12,7 +12,7 @@ class QuestionFileFireWall extends BaseFireWall implements FireWallInterface
         if ($user->isAdmin()) {
             return true;
         }
-        $question = $this->getQuestionService()->getQuestion($attachment['targetId']);
+        $question = $this->getQuestionService()->get($attachment['targetId']);
         if ($user['id'] == $question['userId']) {
             return true;
         }

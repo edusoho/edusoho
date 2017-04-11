@@ -54,6 +54,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'status = :status',
                 'isVip = :isVip',
                 'categoryId = :categoryId',
+                'categoryId IN (:categoryIds)',
                 'title LIKE :title',
                 'creator LIKE :creator',
                 'type = :type',
@@ -69,10 +70,11 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'updatedTime >= updatedTime_GE',
                 'updatedTime <= updatedTime_LE',
                 'minCoursePrice = :price',
+                'orgCode PRE_LIKE :likeOrgCode',
             ),
             'serializes' => array(
-                'tags' => 'delimiter',
                 'goals' => 'delimiter',
+                'tags' => 'delimiter',
                 'audiences' => 'delimiter',
                 'teacherIds' => 'delimiter',
                 'cover' => 'json',
@@ -90,6 +92,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
             'timestamps' => array(
                 'createdTime', 'updatedTime',
             ),
+            'wave_cahceable_fields' => array('hitNum'),
         );
     }
 }

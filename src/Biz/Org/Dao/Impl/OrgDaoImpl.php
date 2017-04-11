@@ -23,7 +23,6 @@ class OrgDaoImpl extends GeneralDaoImpl implements OrgDao
                 'parentId = :parentId',
                 'depth = :depth',
             ),
-            'cache' => 'table',
         );
     }
 
@@ -65,8 +64,8 @@ class OrgDaoImpl extends GeneralDaoImpl implements OrgDao
         return $this->findInField('id', $ids);
     }
 
-    public function findByNameAndParentId($name, $parentId)
+    public function getByNameAndParentId($name, $parentId)
     {
-        return $this->findByFields(array('name' => $name, 'parentId' => $parentId));
+        return $this->getByFields(array('name' => $name, 'parentId' => $parentId));
     }
 }

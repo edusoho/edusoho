@@ -15,13 +15,6 @@ class CategoryDaoImpl extends GeneralDaoImpl implements CategoryDao
 {
     protected $table = 'category';
 
-    public function declares()
-    {
-        return array(
-            'cache' => 'table',
-        );
-    }
-
     public function getByCode($code)
     {
         return $this->getByFields(array('code' => $code));
@@ -95,5 +88,11 @@ class CategoryDaoImpl extends GeneralDaoImpl implements CategoryDao
     {
         $start = (int) $start;
         $limit = (int) $limit;
+    }
+
+    public function declares()
+    {
+        return array(
+        );
     }
 }

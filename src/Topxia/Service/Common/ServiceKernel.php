@@ -44,11 +44,12 @@ class ServiceKernel
 
     public function getRedis($group = 'default')
     {
-        if(empty($biz['cache.cluster'])) {
+        if (empty($biz['cache.cluster'])) {
             return false;
         }
 
         $cacheCluster = $biz['cache.cluster'];
+
         return $cacheCluster->getCluster();
     }
 

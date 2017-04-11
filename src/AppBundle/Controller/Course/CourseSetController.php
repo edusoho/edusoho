@@ -3,14 +3,14 @@
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\Paginator;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
 use Biz\Task\Service\TaskService;
-use Biz\Taxonomy\Service\CategoryService;
-use Biz\Taxonomy\Service\TagService;
-use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Taxonomy\Service\TagService;
+use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
+use Biz\Course\Service\CourseSetService;
+use Biz\Taxonomy\Service\CategoryService;
+use Symfony\Component\HttpFoundation\Request;
 
 class CourseSetController extends BaseController
 {
@@ -25,6 +25,8 @@ class CourseSetController extends BaseController
         if (empty($course)) {
             throw $this->createNotFoundException('No Avaliable Course in CourseSet#{$id}');
         }
+
+        $this->getCourseSetService()->hitCourseSet($id);
 
         return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'], 'previewAs' => $previewAs)));
     }

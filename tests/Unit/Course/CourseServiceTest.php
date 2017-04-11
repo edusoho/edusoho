@@ -38,9 +38,9 @@ class CourseServiceTest extends BaseTestCase
 
         $this->getClassroomService()->becomeStudent($classroom['id'], $user['id']);
 
-        $result = $this->getMemberService()->updateMembersDeadlineByClassroomId($classroom['id'], '1488433547');
+        $updated = $this->getMemberService()->updateMembersDeadlineByClassroomId($classroom['id'], '1488433547');
 
-        $this->assertCount(1, $result);
+        $this->assertEquals(1, $updated);
     }
 
     /**

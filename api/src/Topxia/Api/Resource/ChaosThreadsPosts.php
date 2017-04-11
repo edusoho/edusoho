@@ -109,9 +109,16 @@ class ChaosThreadsPosts extends BaseResource
             $smallPicture = empty($courseSet['cover']['small']) ? '' : $courseSet['cover']['small'];
             $middlePicture = empty($courseSet['cover']['middle']) ? '' : $courseSet['cover']['middle'];
             $largePicture = empty($courseSet['cover']['large']) ? '' : $courseSet['cover']['large'];
-            $course['smallPicture'] = $this->getFileUrl($smallPicturem, 'course.png');
+            $course['smallPicture'] = $this->getFileUrl($smallPicture, 'course.png');
             $course['middlePicture'] = $this->getFileUrl($middlePicture, 'course.png');
             $course['largePicture'] = $this->getFileUrl($largePicture, 'course.png');
+
+            if ($course['isDefault'] == 1 && $course['title'] == '默认教学计划') {
+                $course['title'] = $courseSet['title'];
+            } else {
+                $course['title'] = $courseSet['title'].'-'.$course['title'];
+            }
+
             $post['type'] = $thread['type'];
             $post['title'] = $thread['title'];
             $post['course'] = $this->filterCourse($course);

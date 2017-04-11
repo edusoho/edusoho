@@ -4,7 +4,6 @@ namespace AppBundle\Component\Payment\Wxpay;
 
 use AppBundle\Component\Payment\Request;
 use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\DependencyInjection\SimpleXMLElement;
 
 class WxpayTradeQueryRequest extends Request
 {
@@ -25,7 +24,7 @@ class WxpayTradeQueryRequest extends Request
     {
         $params = $this->params;
         $converted = array();
-        $converted['appid'] = $this->options['key'];
+        $converted['appid'] = $this->options['appid'];
 
         $settings = $this->getSettingService()->get('payment');
         $converted['mch_id'] = $settings['wxpay_account'];
@@ -64,7 +63,7 @@ class WxpayTradeQueryRequest extends Request
         }
 
         $sign = substr($sign, 0, -1);
-        $sign .= '&key='.$this->options['secret'];
+        $sign .= '&key='.$this->options['key'];
 
         return md5($sign);
     }
@@ -73,7 +72,7 @@ class WxpayTradeQueryRequest extends Request
     {
         $converted = array();
 
-        $converted['appid'] = $this->options['key'];
+        $converted['appid'] = $this->options['appid'];
         $converted['attach'] = '支付';
         $converted['body'] = mb_substr($this->filterText($params['title']), 0, 49, 'utf-8');
         $settings = $this->getSettingService()->get('payment');
@@ -82,7 +81,7 @@ class WxpayTradeQueryRequest extends Request
         $converted['notify_url'] = $params['notifyUrl'];
         $converted['out_trade_no'] = $params['orderSn'];
         $converted['spbill_create_ip'] = $this->getClientIp();
-        $converted['total_fee'] = intval($params['amount'] * 100);
+        $converted['total_fee'] = (int) ($params['amount'] * 100);
         $converted['trade_type'] = 'NATIVE';
         $converted['product_id'] = $params['orderSn'];
         $converted['sign'] = strtoupper($this->signParams($converted));
@@ -92,7 +91,7 @@ class WxpayTradeQueryRequest extends Request
 
     private function toXml($array, $xml = false)
     {
-        $simxml = new simpleXMLElement('<!--?xml version="1.0" encoding="utf-8"?--><root></root>');
+        $simxml = new \simpleXMLElement('<!--?xml version="1.0" encoding="utf-8"?--><root></root>');
 
         foreach ($array as $k => $v) {
             $simxml->addChild($k, $v);
@@ -141,16 +140,6 @@ class WxpayTradeQueryRequest extends Request
         return str_replace(array('#', '%', '&', '+'), array('＃', '％', '＆', '＋'), $text);
     }
 
-    private function getPaymentType()
-    {
-        return empty($this->options['type']) ? 'direct' : $this->options['type'];
-    }
-
-    protected function setting($name, $default = null)
-    {
-        return $this->get('web.twig.extension')->getSetting($name, $default);
-    }
-
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();
@@ -158,6 +147,6 @@ class WxpayTradeQueryRequest extends Request
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->getServiceKernel()->createService('System:SettingService');
     }
 }

@@ -11,21 +11,21 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
 
     public function sumLearnedTimeByActivityId($activityId)
     {
-        $sql = "SELECT sum(learnedTime) FROM {$this->table()} WHERE activityId = ?";
+        $sql = "SELECT sum(learnedTime) FROM {$this->table()} WHERE activityId = ? and `event` <> 'watching'";
 
         return $this->db()->fetchColumn($sql, array($activityId)) ?: 0;
     }
 
     public function sumLearnedTimeByActivityIdAndUserId($activityId, $userId)
     {
-        $sql = "SELECT sum(learnedTime) FROM {$this->table()} WHERE activityId = ? and userId = ? ";
+        $sql = "SELECT sum(learnedTime) FROM {$this->table()} WHERE activityId = ? and userId = ? and `event` <> 'watching' ";
 
         return $this->db()->fetchColumn($sql, array($activityId, $userId)) ?: 0;
     }
 
     public function sumWatchTimeByActivityIdAndUserId($activityId, $userId)
     {
-        $sql = "SELECT sum(watchTime) FROM {$this->table()} WHERE activityId = ? and userId = ? ";
+        $sql = "SELECT sum(learnedTime) FROM {$this->table()} WHERE activityId = ? and userId = ? and `event` = 'watching' ";
 
         return $this->db()->fetchColumn($sql, array($activityId, $userId)) ?: 0;
     }
@@ -35,7 +35,7 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
         $sql = "SELECT sum(learnedTime) 
                 FROM {$this->table()} 
                 WHERE userId = ? AND activityId IN (
-                    SELECT id FROM activity WHERE fromCourseId = ?
+                    SELECT id FROM activity WHERE fromCourseId = ? and `event` <> 'watching'
                     )";
 
         return $this->db()->fetchColumn($sql, array($userId, $courseId)) ?: 0;
@@ -71,6 +71,7 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
             unset($conditions['taskId']);
             $conditions['activityId'] = $activityId;
         }
+        $conditions['event_NEQ'] = 'watching';
         $builder = $this->createQueryBuilder($conditions)
             ->select('sum(learnedTime)');
 
@@ -82,14 +83,26 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
         return $this->db()->delete($this->table(), array('activityId' => $activityId));
     }
 
+    public function getLastestByActivityIdAndUserId($activityId, $userId)
+    {
+        $sql = "SELECT * FROM {$this->table()} WHERE activityId = ? AND userId = ? ORDER BY createdTime DESC";
+
+        return $this->db()->fetchAssoc($sql, array($activityId, $userId));
+    }
+
     public function declares()
     {
         return array(
+            'orderbys' => array(
+                'createdTime',
+            ),
             'serializes' => array(
                 'data' => 'json',
             ),
             'conditions' => array(
                 'activityId = :activityId',
+                'event_EQ = :event',
+                'event_NEQ <> :event',
                 'userId = :userId',
             ),
         );

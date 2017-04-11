@@ -47,7 +47,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
 
     public function showTestItems($testId, $resultId = 0)
     {
-        $test = $this->getTestpaperService()->getTestpaper($testId);
+        $test = $this->getTestpaperService()->getTestpaperByIdAndType($testId, 'testpaper');
         $items = $this->getTestpaperService()->findItemsByTestId($test['id']);
         if (!$items) {
             return array();
@@ -122,6 +122,10 @@ class TestpaperBuilder implements TestpaperBuilderInterface
             $fields['passedCondition'] = array($fields['passedScore']);
         }
 
+        if (empty($fields['passedCondition'])) {
+            $fields['passedCondition'] = array(0);
+        }
+
         $fields = ArrayToolkit::parts($fields, array(
             'name',
             'description',
@@ -145,8 +149,8 @@ class TestpaperBuilder implements TestpaperBuilderInterface
     public function updateSubmitedResult($resultId, $usedTime)
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
-        $items = $this->getTestpaperService()->findItemsByTestId($testpaperResult['testId']);
+        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testpaperResult['testId'], $testpaperResult['type']);
+        $items = $this->getTestpaperService()->findItemsByTestId($testpaperResult['testId'], $testpaperResult['type']);
         $itemResults = $this->getTestpaperService()->findItemResultsByResultId($testpaperResult['id']);
 
         $questionIds = ArrayToolkit::column($items, 'questionId');

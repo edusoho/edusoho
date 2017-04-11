@@ -24,7 +24,7 @@
 
     <div class="form-group">
       <div class="col-sm-3 control-label">{{'价格'|trans}}</div>
-      <div class="col-sm-9 controls money-text">
+      <div class="col-sm-9 controls color-warning">
       	<span class="form-control-static">
           {% if course.isFree or vipStatus|default(0) %}
             <strong class="money">{{ '免费'|trans }}</strong>

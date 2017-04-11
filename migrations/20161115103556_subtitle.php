@@ -25,7 +25,7 @@ class Subtitle extends Migration
                 `ext` varchar(12) NOT NULL DEFAULT '' COMMENT '后缀',
                 `createdTime` int(10) UNSIGNED NOT NULL DEFAULT 0,
                 PRIMARY KEY (`id`)
-            ) COMMENT='字幕关联表';");
+            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='字幕关联表' ;");
 
         $db->exec("ALTER TABLE `upload_files` CHANGE COLUMN `type` `type` enum('document','video','audio','image','ppt','other','flash','subtitle') NOT NULL DEFAULT 'other' COMMENT '文件类型';");
         $db->exec("ALTER TABLE `upload_file_inits` CHANGE COLUMN `type` `type` enum('document','video','audio','image','ppt','other','flash','subtitle') NOT NULL DEFAULT 'other' COMMENT '文件类型';");

@@ -100,7 +100,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         if ($eventName == 'start') {
             $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
         }
-
         $this->triggerActivityLearnLogListener($activity, $eventName, $data);
 
         if (empty($data['events'])) {
@@ -109,13 +108,12 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $events = $data['events'];
             unset($data['events']);
         }
-        foreach ($events as $key => $value) {
-            $value = array_merge($value, $data);
-            $this->triggerActivityLearnLogListener($activity, $key, $value);
-            $this->triggerExtendListener($activity, $key, $value);
+        foreach ($events as $key => $event) {
+            $data = array_merge($event, $data);
+            $this->triggerActivityLearnLogListener($activity, $key, $data);
+            $this->triggerExtendListener($activity, $key, $data);
         }
-
-        if (in_array($eventName, array('doing'))) {
+        if ($eventName == 'doing') {
             $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
         }
     }
@@ -123,16 +121,14 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     protected function triggerActivityLearnLogListener($activity, $eventName, $data)
     {
         $logListener = new ActivityLearnLogListener($this->biz);
-
-        $logData = $data;
-        $logData['event'] = $activity['mediaType'].'.'.$eventName;
+        $logData = $this->extractLogData($eventName, $data);
         $logListener->handle($activity, $logData);
     }
 
     protected function triggerExtendListener($activity, $eventName, $data)
     {
         $activityListener = $this->getActivityConfig($activity['mediaType'])->getListener($eventName);
-        if (!is_null($activityListener)) {
+        if (null !== $activityListener) {
             $activityListener->handle($activity, $data);
         }
     }
@@ -249,7 +245,12 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 }
                 break;
             case 'update':
-                $exists = $this->getMaterialService()->searchMaterials(array('lessonId' => $activity['id']), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
+                $exists = $this->getMaterialService()->searchMaterials(
+                    array('lessonId' => $activity['id']),
+                    array('createdTime' => 'DESC'),
+                    0,
+                    PHP_INT_MAX
+                );
                 $currents = array();
                 foreach ($materials as $id => $material) {
                     $currents[] = $this->buildMaterial($material, $activity);
@@ -343,19 +344,22 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     protected function filterFields($fields)
     {
-        $fields = ArrayToolkit::parts($fields, array(
-            'title',
-            'remark',
-            'mediaId',
-            'mediaType',
-            'content',
-            'length',
-            'fromCourseId',
-            'fromCourseSetId',
-            'fromUserId',
-            'startTime',
-            'endTime',
-        ));
+        $fields = ArrayToolkit::parts(
+            $fields,
+            array(
+                'title',
+                'remark',
+                'mediaId',
+                'mediaType',
+                'content',
+                'length',
+                'fromCourseId',
+                'fromCourseSetId',
+                'fromUserId',
+                'startTime',
+                'endTime',
+            )
+        );
 
         if (!empty($fields['startTime']) && !empty($fields['length']) && $fields['mediaType'] != 'testpaper') {
             $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
@@ -370,12 +374,15 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     protected function invalidActivity($activity)
     {
-        if (!ArrayToolkit::requireds($activity, array(
-            'title',
-            'mediaType',
-            'fromCourseId',
-            'fromCourseSetId',
-        ))
+        if (!ArrayToolkit::requireds(
+            $activity,
+            array(
+                'title',
+                'mediaType',
+                'fromCourseId',
+                'fromCourseSetId',
+            )
+        )
         ) {
             return true;
         }
@@ -484,5 +491,21 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
+    }
+
+    /**
+     * @param $activity
+     * @param $eventName
+     * @param $data
+     *
+     * @return mixed
+     */
+    protected function extractLogData($eventName, $data)
+    {
+        unset($data['task']);
+        $logData = $data;
+        $logData['event'] = $eventName;
+
+        return $logData;
     }
 }

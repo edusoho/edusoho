@@ -3,7 +3,6 @@
 namespace AppBundle\Component\Payment\Wxpay;
 
 use AppBundle\Component\Payment\Response;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\DependencyInjection\SimpleXMLElement;
 
 class WxpayResponse extends Response
@@ -13,10 +12,12 @@ class WxpayResponse extends Response
     public function getPayData()
     {
         $params = $this->params;
+        $order = $this->getOrderService()->getOrderByToken($params['out_trade_no']);
+
         $data = array();
         $data['payment'] = 'wxpay';
-        $data['sn'] = $params['out_trade_no'];
-        $result = $this->confirmSellerSendGoods($data['sn']);
+        $data['sn'] = $order['sn'];
+        $result = $this->confirmSellerSendGoods($params['out_trade_no']);
         $returnArray = $this->fromXml($result);
         if ($returnArray['return_code'] != 'SUCCESS' || $returnArray['result_code'] != 'SUCCESS' || $returnArray['trade_state'] != 'SUCCESS') {
             throw new \RuntimeException($this->getServiceKernel()->trans('微信支付失败'));
@@ -45,7 +46,7 @@ class WxpayResponse extends Response
     {
         $params = $this->params;
         $converted = array();
-        $converted['appid'] = $this->options['key'];
+        $converted['appid'] = $this->options['appid'];
         $settings = $this->getSettingService()->get('payment');
         $converted['mch_id'] = $settings['wxpay_account'];
         $converted['nonce_str'] = $this->getNonceStr();
@@ -83,8 +84,7 @@ class WxpayResponse extends Response
 
     public function signParams($params)
     {
-        unset($params['sign_type']);
-        unset($params['sign']);
+        unset($params['sign_type'], $params['sign']);
 
         ksort($params);
 
@@ -99,14 +99,14 @@ class WxpayResponse extends Response
         }
 
         $sign = substr($sign, 0, -1);
-        $sign .= '&key='.$this->options['secret'];
+        $sign .= '&key='.$this->options['key'];
 
         return md5($sign);
     }
 
     private function toXml($array, $xml = false)
     {
-        $simxml = new simpleXMLElement('<!--?xml version="1.0" encoding="utf-8"?--><root></root>');
+        $simxml = new \simpleXMLElement('<!--?xml version="1.0" encoding="utf-8"?--><root></root>');
 
         foreach ($array as $k => $v) {
             $simxml->addChild($k, $v);
@@ -136,6 +136,11 @@ class WxpayResponse extends Response
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->getServiceKernel()->createService('System:SettingService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order:OrderService');
     }
 }

@@ -23,9 +23,10 @@ class FinanceSettingController extends BaseController
             'tenpay_key' => '',
             'tenpay_secret' => '',
             'wxpay_enabled' => 0,
+            'wxpay_appid' => '',
+            'wxpay_account' => '',
             'wxpay_key' => '',
             'wxpay_secret' => '',
-            'wxpay_account' => '',
             'heepay_enabled' => 0,
             'heepay_key' => '',
             'heepay_secret' => '',
@@ -37,9 +38,9 @@ class FinanceSettingController extends BaseController
             'llpay_key' => '',
             'llpay_secret' => '',
         );
+        $default['wxpay_mp_secret'] = $this->getWeixinMpFile();
 
         $payment = array_merge($default, $payment);
-
         if ($request->getMethod() == 'POST') {
             $payment = $request->request->all();
             $payment = ArrayToolkit::trim($payment);
@@ -53,11 +54,12 @@ class FinanceSettingController extends BaseController
                 $payment['llpay_enabled'] = 0;
             }
 
-            $payment['disabled_message'] = $this->purifyHtml($payment['disabled_message'], true);
-
             //新增支付方式，加入下列列表计算，以便判断是否关闭支付功能
             $payment = $this->isClosePayment($payment);
             $this->getSettingService()->set('payment', $payment);
+            if ($payment['wxpay_enabled'] && $payment['wxpay_mp_secret']) {
+                $this->updateWeixinMpFile($payment['wxpay_mp_secret']);
+            }
             $this->getLogService()->info('system', 'update_settings', '更支付方式设置', $payment);
             $this->setFlashMessage('success', '支付方式设置已保存！');
         }
@@ -106,6 +108,23 @@ class FinanceSettingController extends BaseController
         return $this->render('admin/system/refund.html.twig', array(
             'refundSetting' => $refundSetting,
         ));
+    }
+
+    private function getWeixinMpFile()
+    {
+        $dir = dirname(__DIR__.'/../../../../web/');
+        $mp_secret = array_map('file_get_contents', glob($dir.'/MP_verify_*.txt'));
+
+        return implode($mp_secret);
+    }
+
+    protected function updateWeixinMpFile($val)
+    {
+        $dir = dirname(__DIR__.'/../../../../web/');
+        array_map('unlink', glob($dir.'/MP_verify_*.txt'));
+        if (!empty($val)) {
+            file_put_contents($dir.'/MP_verify_'.$val.'.txt', $val);
+        }
     }
 
     protected function getCourseService()

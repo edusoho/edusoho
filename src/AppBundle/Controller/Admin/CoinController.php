@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\FileToolkit;
-use AppBundle\Common\Paginator;
-use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
+use Imagine\Gd\Imagine;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -175,11 +175,6 @@ class CoinController extends BaseController
             } else {
                 $coinSettings['price_type'] = 'Coin';
                 $coinSettings['cash_model'] = 'currency';
-
-                if (isset($data['item-cash'])) {
-                    $data['course-cash'] = $data['item-cash'];
-                    $this->updateCoursesCoinPrice($data['course-cash']);
-                }
             }
 
             $this->getSettingService()->set('coin', $coinSettings);
@@ -207,13 +202,6 @@ class CoinController extends BaseController
             foreach ($data as $key => $value) {
                 $this->getLevelService()->updateLevel($key, array('maxRate' => $value));
             }
-        }
-    }
-
-    protected function updateCoursesCoinPrice($data)
-    {
-        foreach ($data as $key => $value) {
-            $this->getCourseService()->setCoursePrice($key, 'coin', $value);
         }
     }
 
@@ -557,8 +545,8 @@ class CoinController extends BaseController
                 $fileName = str_replace('.', '!', $file->getFilename());
 
                 return $this->redirect($this->generateUrl('settings_avatar_crop', array(
-                        'file' => $fileName,
-                    )
+                    'file' => $fileName,
+                )
                 ));
             }
         }

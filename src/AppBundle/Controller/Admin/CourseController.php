@@ -2,9 +2,9 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\ExportHelp;
 use AppBundle\Common\Paginator;
+use AppBundle\Common\ExportHelp;
+use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
@@ -180,81 +180,18 @@ class CourseController extends BaseController
 
     public function searchAction(Request $request)
     {
-        return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction($request,
-            'admin/course/search.html.twig');
+        return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction(
+            $request,
+            'admin/course/search.html.twig'
+        );
     }
 
     public function searchToFillBannerAction(Request $request)
     {
-        return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction($request,
-            'admin/course/search-to-fill-banner.html.twig');
-    }
-
-    /*
-    code 状态编号
-    1:　删除班级课程
-    2: 移除班级课程
-    0: 删除未发布课程成功
-     */
-    public function deleteAction(Request $request, $courseId, $type)
-    {
-        $currentUser = $this->getUser();
-
-        if (!$currentUser->hasPermission('admin_course_set_delete')) {
-            throw $this->createAccessDeniedException('您没有删除课程的权限！');
-        }
-
-        $course = $this->getCourseService()->getCourse($courseId);
-
-        $subCourses = $this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1);
-
-        if ($course['status'] == 'published') {
-            $this->getCourseService()->closeCourse($courseId);
-            $course['status'] = 'closed';
-        }
-
-        if (!empty($subCourses)) {
-            return $this->createJsonResponse(array('code' => 2, 'message' => '请先删除班级课程'));
-        }
-
-        if ($course['status'] == 'draft') {
-            $result = $this->getCourseService()->deleteCourse($courseId);
-
-            return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
-        }
-
-        if ($course['status'] == 'closed') {
-            $classroomCourse = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
-
-            if ($classroomCourse) {
-                return $this->createJsonResponse(array('code' => 3, 'message' => '当前课程未移除,请先移除班级课程'));
-            }
-
-            //判断作业插件版本号
-            $homework = $this->getAppService()->findInstallApp('Homework');
-
-            if (!empty($homework)) {
-                $isDeleteHomework = $homework && version_compare($homework['version'], '1.3.1', '>=');
-
-                if (!$isDeleteHomework) {
-                    return $this->createJsonResponse(array('code' => 1, 'message' => '作业插件未升级'));
-                }
-            }
-
-            if ($type) {
-                $isCheckPassword = $request->getSession()->get('checkPassword');
-
-                if (!$isCheckPassword) {
-                    throw $this->createAccessDeniedException('未输入正确的校验密码！');
-                }
-
-                $result = $this->getCourseDeleteService()->delete($courseId, $type);
-
-                return $this->createJsonResponse($this->returnDeleteStatus($result, $type));
-            }
-        }
-
-        return $this->render('admin/course/delete.html.twig', array('course' => $course));
+        return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction(
+            $request,
+            'admin/course/search-to-fill-banner.html.twig'
+        );
     }
 
     public function checkPasswordAction(Request $request)
@@ -376,123 +313,17 @@ class CourseController extends BaseController
         ));
     }
 
-    public function dataAction(Request $request, $filter)
-    {
-        $conditions = $request->query->all();
-
-        if ($filter == 'normal') {
-            $conditions['parentId'] = 0;
-        }
-
-        if ($filter == 'classroom') {
-            $conditions['parentId_GT'] = 0;
-        }
-
-        if (isset($conditions['title']) && $conditions['title'] == '') {
-            unset($conditions['title']);
-        }
-
-        if (isset($conditions['creator']) && $conditions['creator'] == '') {
-            unset($conditions['creator']);
-        }
-
-        $conditions = $this->fillOrgCode($conditions);
-
-        $count = $this->getCourseService()->searchCourseCount($conditions);
-        $paginator = new Paginator($this->get('request'), $count, 20);
-
-        $courses = $this->getCourseService()->searchCourses(
-            $conditions,
-            null,
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $classrooms = array();
-
-        if ($filter == 'classroom') {
-            $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courses,
-                'id'));
-            $classrooms = ArrayToolkit::index($classrooms, 'courseId');
-
-            foreach ($classrooms as $key => $classroom) {
-                $classroomInfo = $this->getClassroomService()->getClassroom($classroom['classroomId']);
-                $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
-            }
-        }
-
-        foreach ($courses as $key => $course) {
-            $isLearnedNum = $this->getCourseMemberService()->countMembers(array(
-                'isLearned' => 1,
-                'courseId' => $course['id'],
-            ));
-
-            $learnTime = $this->getCourseService()->searchLearnTime(array('courseId' => $course['id']));
-
-            $lessonCount = $this->getCourseService()->searchLessonCount(array('courseId' => $course['id']));
-
-            $courses[$key]['isLearnedNum'] = $isLearnedNum;
-            $courses[$key]['learnTime'] = $learnTime;
-            $courses[$key]['lessonCount'] = $lessonCount;
-        }
-
-        return $this->render('admin/course/data.html.twig', array(
-            'courses' => $courses,
-            'paginator' => $paginator,
-            'filter' => $filter,
-            'classrooms' => $classrooms,
-        ));
-    }
-
-    public function lessonDataAction($id)
-    {
-        $course = $this->getCourseService()->tryManageCourse($id, 'admin_course_data');
-
-        $lessons = $this->getCourseService()->searchLessons(array('courseId' => $id), array('createdTime', 'ASC'), 0,
-            1000);
-
-        foreach ($lessons as $key => $value) {
-            $lessonLearnedNum = $this->getCourseService()->findLearnsCountByLessonId($value['id']);
-
-            $finishedNum = $this->getCourseService()->searchLearnCount(array(
-                'status' => 'finished',
-                'lessonId' => $value['id'],
-            ));
-
-            $lessonLearnTime = $this->getCourseService()->searchLearnTime(array('lessonId' => $value['id']));
-            $lessonLearnTime = $lessonLearnedNum == 0 ? 0 : (int) ($lessonLearnTime / $lessonLearnedNum);
-
-            $lessonWatchTime = $this->getCourseService()->searchWatchTime(array('lessonId' => $value['id']));
-            $lessonWatchTime = $lessonWatchTime == 0 ? 0 : (int) ($lessonWatchTime / $lessonLearnedNum);
-
-            $lessons[$key]['LearnedNum'] = $lessonLearnedNum;
-            $lessons[$key]['length'] = (int) ($lessons[$key]['length'] / 60);
-            $lessons[$key]['finishedNum'] = $finishedNum;
-            $lessons[$key]['learnTime'] = $lessonLearnTime;
-            $lessons[$key]['watchTime'] = $lessonWatchTime;
-
-            if ($value['type'] == 'testpaper') {
-                $paperId = $value['mediaId'];
-                $score = $this->getTestpaperService()->searchTestpapersScore(array('testId' => $paperId));
-                $paperNum = $this->getTestpaperService()->searchTestpaperResultsCount(array('testId' => $paperId));
-
-                $lessons[$key]['score'] = $finishedNum == 0 ? 0 : (int) ($score / $paperNum);
-            }
-        }
-
-        return $this->render('admin/course/lesson-data.html.twig', array(
-            'course' => $course,
-            'lessons' => $lessons,
-        ));
-    }
-
     // @TODO 导出课时学习数据 从master合并 需修改
     public function prepareForExportLessonsDatasAction(Request $request, $courseId)
     {
         list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
 
-        list($title, $lessons, $courseLessonsCount) = $this->getExportLessonsDatas($courseId, $start, $limit,
-            $exportAllowCount);
+        list($title, $lessons, $courseLessonsCount) = $this->getExportLessonsDatas(
+            $courseId,
+            $start,
+            $limit,
+            $exportAllowCount
+        );
 
         $file = '';
         if ($start == 0) {
@@ -553,13 +384,13 @@ class CourseController extends BaseController
             $learnTime = (int) ($lesson['learnTime'] ? $lesson['learnTime'] / 60 : 0);
             $exportLesson .= $learnTime ? $learnTime.',' : '-'.',';
 
-            if ($lesson['type'] == 'audio' or $lesson['type'] == 'video') {
+            if ($lesson['type'] == 'audio' || $lesson['type'] == 'video') {
                 $exportLesson .= $lesson['length'] ? $lesson['length'].',' : '-'.',';
             } else {
                 $exportLesson .= '-'.',';
             }
 
-            if ($lesson['type'] == 'audio' or $lesson['type'] == 'video') {
+            if ($lesson['type'] == 'audio' || $lesson['type'] == 'video') {
                 $watchTime = (int) ($lesson['watchTime'] ? $lesson['watchTime'] / 60 : 0);
                 $exportLesson .= $watchTime ? $watchTime.',' : '-'.',';
             } else {
@@ -730,11 +561,6 @@ class CourseController extends BaseController
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
-    }
-
-    protected function getCourseDeleteService()
-    {
-        return $this->createService('Course:CourseDeleteService');
     }
 
     protected function getCourseCopyService()

@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class UpdateSchedulerUser extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -14,10 +14,9 @@ class UpdateSchedulerUser extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
-
     }
 }

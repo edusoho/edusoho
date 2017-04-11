@@ -200,8 +200,9 @@ class MemberSync extends BaseResource
     {
         if ($targetType == 'course') {
             $course = $this->getCourseService()->getCourse($id);
+            $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
-            return $course['title'];
+            return $courseSet['title'].'-'.$course['title'];
         }
         $classroom = $this->getClassroomService()->getClassroom($id);
 
@@ -238,6 +239,11 @@ class MemberSync extends BaseResource
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     /**

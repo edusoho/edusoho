@@ -13,4 +13,6 @@ interface OrderRefundDao extends GeneralDaoInterface
     public function findByIds(array $ids);
 
     public function getByOrderId($orderId);
+
+    public function findByOrderIds(array $orderIds);
 }

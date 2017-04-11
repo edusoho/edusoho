@@ -22,7 +22,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function getOrderBySn($sn, $lock = false)
     {
-        return $this->getOrderDao()->getBySn($sn, $lock);
+        return $this->getOrderDao()->getBySn($sn, array('lock' => $lock));
     }
 
     public function getOrderByToken($token)
@@ -727,6 +727,16 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function getRefundByOrderId($orderId)
     {
         return $this->getOrderRefundDao()->getByOrderId($orderId);
+    }
+
+    public function findOrderLogsByOrderIds(array $orderIds)
+    {
+        return $this->getOrderLogDao()->findByOrderIds($orderIds);
+    }
+
+    public function findOrderRefundsByOrderIds(array $orderIds)
+    {
+        return $this->getOrderRefundDao()->findByOrderIds($orderIds);
     }
 
     protected function getLogService()

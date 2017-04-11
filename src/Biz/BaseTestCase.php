@@ -38,7 +38,12 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
 
     public function setUp()
     {
-        parent::emptyDatabase();
+        $biz = $this->getBiz();
+        parent::emptyDatabaseQuickly();
+        if (isset($biz['redis'])) {
+            $biz['redis']->flushDb();
+            $biz['dao.cache.shared_storage']->flush();
+        }
         $this
             ->flushPool()
             ->initDevelopSetting()

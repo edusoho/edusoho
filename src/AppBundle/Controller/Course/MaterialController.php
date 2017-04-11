@@ -89,7 +89,7 @@ class MaterialController extends CourseBaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
-        $this->getCourseService()->deleteCourseMaterial($id, $materialId);
+        $this->getMaterialService()->deleteMaterial($id, $materialId);
 
         return $this->createJsonResponse(true);
     }

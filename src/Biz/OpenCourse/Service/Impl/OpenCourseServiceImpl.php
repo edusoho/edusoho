@@ -72,7 +72,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     protected function tryCreateCourse()
     {
         $user = $this->getCurrentUser();
-        if (!$user->isLogin() || !($user->isTeacher() && $user->isAdmin() && $user->isSuperAdmin())) {
+        if (!$user->isLogin() || !($user->isTeacher() || $user->isAdmin() || $user->isSuperAdmin())) {
             throw $this->createAccessDeniedException('Unauthorized');
         }
     }
@@ -327,8 +327,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         uasort($items, function ($item1, $item2) {
             return $item1['seq'] > $item2['seq'];
-        }
-        );
+        });
 
         return $items;
     }
@@ -913,8 +912,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
                 $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
                 array_walk($fields['tags'], function (&$item, $key) {
                     $item = (int) $item['id'];
-                }
-                );
+                });
             } else {
                 $fields['tags'] = array();
             }
@@ -950,8 +948,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             }
 
             return !empty($value);
-        }
-        );
+        });
 
         if (isset($conditions['creator']) && !empty($conditions['creator'])) {
             $user = $this->getUserService()->getUserByNickname($conditions['creator']);

@@ -201,6 +201,7 @@ class ArticleServiceTest extends BaseTestCase
         $this->getArticleService()->like($newArticle['id']);
 
         $like = $this->getArticleService()->getArticleLike($newArticle['id'], $currentUser['id']);
+
         $this->assertNotNull($like);
     }
 

@@ -1,0 +1,4 @@
+{% do script(['app/js/event/report/index.js']) %}
+<div id="{{ eventId|default('event-report') }}" data-url="{{ path('event_dispatch') }}" data-event-name="{{ eventName }}"
+     data-subject-type="{{ subjectType }}"
+     data-subject-id="{{ subjectId }}" {% for key,value in eventReportParams|default() %} data-{{ key }}="{{ value }}"{% endfor %}></div>

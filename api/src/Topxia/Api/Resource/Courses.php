@@ -60,7 +60,7 @@ class Courses extends BaseResource
             ),
         );
 
-        if (in_array($conditions['orderType'], $orderBy)) {
+        if (!empty($orderBy[$conditions['orderType']])) {
             $orderBy = $orderBy[$conditions['orderType']];
         } else {
             $orderBy = array('createdTime' => 'DESC');
@@ -92,9 +92,11 @@ class Courses extends BaseResource
     {
         $courseIds = ArrayToolkit::column($courses, 'id');
         $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
+
         foreach ($courses as $key => $course) {
             $courseSet = $courseSets[$course['courseSetId']];
             if ($courseSet['status'] == 'published') {
+                $courses[$key]['hitNum'] = $courseSet['hitNum'];
                 $courses[$key]['courseSet'] = $courseSet;
             } else {
                 unset($courses[$key]);

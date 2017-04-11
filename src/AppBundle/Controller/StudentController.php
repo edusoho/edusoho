@@ -49,7 +49,7 @@ class StudentController extends BaseController
     {
         $profile = $this->getUserService()->getUserProfile($userId);
 
-        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
         for ($i = 0, $iMax = count($userFields); $i < $iMax; ++$i) {
             if (strstr($userFields[$i]['fieldName'], 'textField')) {

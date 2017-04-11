@@ -2,56 +2,22 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\FileToolkit;
-use AppBundle\Common\Paginator;
-use Biz\CloudPlatform\Client\AbstractCloudAPI;
-use Biz\CloudPlatform\CloudAPIFactory;
-use Biz\CloudPlatform\IMAPIFactory;
-use Biz\CloudPlatform\KeyApplier;
-use Biz\CloudPlatform\Service\AppService;
-use Biz\Util\EdusohoLiveClient;
-use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
+use Imagine\Gd\Imagine;
+use Biz\Util\EdusohoLiveClient;
+use AppBundle\Common\FileToolkit;
+use Biz\CloudPlatform\KeyApplier;
+use AppBundle\Common\ArrayToolkit;
+use Biz\CloudPlatform\IMAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\Service\AppService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\CloudPlatform\Client\AbstractCloudAPI;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class EduCloudController extends BaseController
 {
-    public function indexAction(Request $request)
-    {
-        try {
-            $api = CloudAPIFactory::create('root');
-
-            $account = $api->get('/accounts');
-
-            if (!empty($account)) {
-                $money = isset($account['cash']) ? $account['cash'] : '--';
-
-                $loginToken = $this->getAppService()->getLoginToken();
-
-                $result = $api->post("/sms/{$api->getAccessKey()}/applyResult");
-
-                if (isset($result['apply']['status'])) {
-                    $smsStatus['status'] = $result['apply']['status'];
-                    $smsStatus['message'] = $result['apply']['message'];
-                } elseif (isset($result['error'])) {
-                    $smsStatus['status'] = 'error';
-                    $smsStatus['message'] = $result['error'];
-                }
-            }
-        } catch (\RuntimeException $e) {
-            return $this->render('admin/edu-cloud/cloud-error.html.twig', array());
-        }
-
-        return $this->render('admin/edu-cloud/edu-cloud.html.twig', array(
-            'account' => $account,
-            'token' => isset($loginToken) && isset($loginToken['token']) ? $loginToken['token'] : '',
-            'smsStatus' => isset($smsStatus) ? $smsStatus : null,
-        ));
-    }
-
     //概览页，产品简介页
     public function myCloudAction(Request $request)
     {
@@ -687,41 +653,6 @@ class EduCloudController extends BaseController
         return $this->redirect($this->generateUrl('admin_edu_cloud_sms', array()));
     }
 
-    public function smsBillAction(Request $request)
-    {
-        try {
-            $api = CloudAPIFactory::create('root');
-
-            $loginToken = $this->getAppService()->getLoginToken();
-            $account = $api->get('/accounts');
-
-            $result = $api->get('/bills', array('type' => 'sms', 'page' => 1, 'limit' => 20));
-
-            $paginator = new Paginator(
-                $this->get('request'),
-                $result['total'],
-                20
-            );
-
-            $result = $api->get('/bills', array(
-                'type' => 'sms',
-                'page' => $paginator->getCurrentPage(),
-                'limit' => $paginator->getPerPageCount(),
-            ));
-
-            $bills = $result['items'];
-        } catch (\RuntimeException $e) {
-            return $this->render('admin/edu-cloud/sms-error.html.twig', array());
-        }
-
-        return $this->render('admin/edu-cloud/sms-bill.html.twig', array(
-            'account' => $account,
-            'token' => isset($loginToken) && isset($loginToken['token']) ? $loginToken['token'] : '',
-            'bills' => $bills,
-            'paginator' => $paginator,
-        ));
-    }
-
     //授权页
     public function keyAction(Request $request)
     {
@@ -1251,10 +1182,10 @@ class EduCloudController extends BaseController
         $emailStatus = array_merge($emailStatus, $sign);
 
         if ($emailStatus['status'] != 'error' && !empty($dataUserPosted)) {
-            $this->getSettingService()->set('cloud_email', $emailStatus);
+            $this->getSettingService()->set('cloud_email_crm', $emailStatus);
         }
 
-        $emailStatus = $this->getSettingService()->get('cloud_email', array());
+        $emailStatus = $this->getSettingService()->get('cloud_email_crm', array());
 
         return $emailStatus;
     }
@@ -1262,7 +1193,7 @@ class EduCloudController extends BaseController
     protected function getSign($operation)
     {
         $api = CloudAPIFactory::create('root');
-        $settings = $this->getSettingService()->get('cloud_email', array());
+        $settings = $this->getSettingService()->get('cloud_email_crm', array());
         $result = array();
         $sign = array();
         $emailStatus = array();

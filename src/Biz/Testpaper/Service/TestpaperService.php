@@ -2,9 +2,13 @@
 
 namespace Biz\Testpaper\Service;
 
+use Biz\Testpaper\Builder\TestpaperBuilder;
+
 interface TestpaperService
 {
     public function getTestpaper($id);
+
+    public function getTestpaperByIdAndType($id, $type);
 
     public function createTestpaper($fields);
 
@@ -102,6 +106,11 @@ interface TestpaperService
 
     public function updateTestpaperItems($testpaperId, $items);
 
+    /**
+     * @param  $type
+     *
+     * @return TestpaperBuilder
+     */
     public function getTestpaperBuilder($type);
 
     public function countQuestionTypes($testpaper, $items);

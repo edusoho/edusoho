@@ -12,7 +12,7 @@ class InitSystemUsers extends Migration
         $biz = $this->getContainer();
 
         $result = $this->getUserByType();
-        if(!empty($result)){
+        if (!empty($result)) {
             return;
         }
 

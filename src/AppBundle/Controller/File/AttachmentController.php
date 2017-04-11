@@ -63,27 +63,33 @@ class AttachmentController extends BaseController
 
     public function previewAction(Request $request, $id)
     {
+        return $this->render('attachment/preview.html.twig', array(
+            'id' => $id,
+        ));
+    }
+
+    public function playerAction(Request $request, $id)
+    {
         $user = $this->getUser();
+
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
-        $previewType = $request->query->get('type', 'attachment');
-        if ($previewType == 'attachment') {
-            $attachment = $this->getUploadFileService()->getUseFile($id);
-            $file = $this->getUploadFileService()->getFile($attachment['fileId']);
-        } else {
-            $file = $this->getUploadFileService()->getFile($id);
+
+        $attachment = $this->getUploadFileService()->getUseFile($id);
+        $file = $this->getUploadFileService()->getFile($attachment['fileId']);
+
+        if ($file['storage'] != 'cloud') {
+            throw $this->createNotFoundException('attachment not found');
         }
 
-        if ($file['storage'] == 'cloud') {
-            return $this->forward('AppBundle:Admin/CloudFile:preview', array(
-                'request' => $request,
-                'globalId' => $file['globalId'],
-            ));
+        if ($file['targetType'] != 'attachment') {
+            throw $this->createNotFoundException('attachment not found');
         }
 
-        return $this->render('material-lib/Web/preview.html.twig', array(
-            'file' => $file,
+        return $this->forward('AppBundle:MaterialLib/GlobalFilePlayer:player', array(
+            'request' => $request,
+            'globalId' => $file['globalId'],
         ));
     }
 

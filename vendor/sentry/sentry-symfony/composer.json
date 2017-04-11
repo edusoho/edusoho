@@ -1,0 +1,33 @@
+{
+    "name": "sentry/sentry-symfony",
+    "type": "library",
+    "description": "Symfony integration for Sentry (http://getsentry.com)",
+    "keywords": ["logging", "errors", "symfony", "sentry"],
+    "homepage": "http://getsentry.com",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "David Cramer",
+            "email": "dcramer@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "sentry/sentry": ">=1.5.0",
+        "symfony/symfony": ">=2.4.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^1.8.0",
+        "phpunit/phpunit": "^4.6.6"
+    },
+    "autoload": {
+        "psr-0" : {
+            "Sentry\\SentryBundle\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.7.x-dev"
+        }
+    }
+}

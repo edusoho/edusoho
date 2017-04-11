@@ -29,14 +29,14 @@
 
     <div class="col-xs-4 controls">
       <select class="form-control" id="condition-select" name="finishType">
-        <option value="end" {% if ppt.finishType|default('end') == 'end' %}selected{% endif %}>观看到最后一页</option>
-        <option value="time" {% if ppt.finishType|default('end') == 'time' %}selected{% endif %}>观看时长</option>
+        <option value="end" {% if ppt.finishType|default('end') == 'end' %}selected{% endif %}>学习到最后一页</option>
+        <option value="time" {% if ppt.finishType|default('end') == 'time' %}selected{% endif %}>学习时长</option>
       </select>
     </div>
   </div>
   <div class=" form-group {% if ppt.finishType|default('end') != 'time' %}hidden{% endif %}" id="condition-group">
     <div class="col-sm-2 control-label">
-      <label for="condition-detail">{{ '至少观看'|trans }}</label>
+      <label for="condition-detail">{{ '至少学习'|trans }}</label>
     </div>
     <div class="col-xs-4 controls">
       <input id="condition-detail" class="form-control" type="text" name="finishDetail" value="{{ ppt.finishDetail|default(1) }}">

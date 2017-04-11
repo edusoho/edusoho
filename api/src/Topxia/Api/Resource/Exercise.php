@@ -27,9 +27,9 @@ class Exercise extends BaseResource
             $exerciseTask = $exerciseTasks[0];
 
             $activity = $this->getActivityService()->getActivity($exerciseTask['activityId']);
-            $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+            $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
         } else {
-            $exercise = $this->getTestpaperService()->getTestpaper($id);
+            $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($id, 'exercise');
 
             $conditions = array(
                 'mediaId' => $exercise['id'],
@@ -56,8 +56,8 @@ class Exercise extends BaseResource
 
         $course = $this->getCourseService()->getCourse($exercise['courseId']);
         $exercise['courseTitle'] = $course['title'];
-        $exercise['lessonTitle'] = $exercise['title'];
-        $exercise['description'] = $exercise['title'];
+        $exercise['lessonTitle'] = $activity['title'];
+        $exercise['description'] = $activity['title'];
 
         $result = $this->getTestpaperService()->startTestpaper($exercise['id'], array('lessonId' => $activity['id'], 'courseId' => $exercise['courseId']));
 
@@ -80,7 +80,7 @@ class Exercise extends BaseResource
     public function result(Application $app, Request $request, $id)
     {
         $user = $this->getCurrentUser();
-        $exercise = $this->getTestpaperService()->getTestpaper($id);
+        $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($id, 'exercise');
 
         $canTakeCourse = $this->getCourseService()->canTakeCourse($exercise['courseId']);
         if (!$canTakeCourse) {

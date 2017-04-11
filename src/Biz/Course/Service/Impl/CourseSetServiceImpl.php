@@ -45,7 +45,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $courseSet = $this->getCourseSetDao()->update($id, $fields);
 
-        $this->getLogService()->info('course', 'recommend', "推荐课程《{$courseSet['title']}》(#{$courseSet['id']}),序号为{$number}");
+        $this->getLogService()->info(
+            'course',
+            'recommend',
+            "推荐课程《{$courseSet['title']}》(#{$courseSet['id']}),序号为{$number}"
+        );
         $this->dispatchEvent(
             'courseSet.recommend',
             new Event(
@@ -434,13 +438,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $tags = explode(',', $fields['tags']);
             $tags = $this->getTagService()->findTagsByNames($tags);
             $tagIds = ArrayToolkit::column($tags, 'id');
+            $fields['tags'] = $tagIds;
         }
 
         $fields = $this->filterFields($fields);
-
-        if (null !== $tagIds) {
-            $fields['tags'] = $tagIds;
-        }
 
         if (isset($fields['summary'])) {
             $fields['summary'] = $this->purifyHtml($fields['summary'], true);
@@ -466,7 +467,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             foreach ($courses as $course) {
                 $this->getCourseService()->updateCourse(
                     $course['id'],
-                    array('serializeMode' => $fields['serializeMode'], 'title' => $course['title'], 'courseSetId' => $courseSet['id'])
+                    array(
+                        'serializeMode' => $fields['serializeMode'],
+                        'title' => $course['title'],
+                        'courseSetId' => $courseSet['id'],
+                    )
                 );
             }
         }
@@ -538,7 +543,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('cover' => $covers));
 
-        $this->getLogService()->info('course', 'update_picture', "更新课程《{$courseSet['title']}》(#{$courseSet['id']})图片", $covers);
+        $this->getLogService()->info(
+            'course',
+            'update_picture',
+            "更新课程《{$courseSet['title']}》(#{$courseSet['id']})图片",
+            $covers
+        );
         $this->dispatchEvent('course-set.update', new Event($courseSet));
 
         return $courseSet;
@@ -772,14 +782,20 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
         try {
             $this->beginTransaction();
-            $courseSet = $this->getCourseSetDao()->update($id, array(
-                'locked' => 0,
-                'status' => 'closed',
-            ));
-            $this->getCourseDao()->update($courses[0]['id'], array(
-                'locked' => 0,
-                'status' => 'closed',
-            ));
+            $courseSet = $this->getCourseSetDao()->update(
+                $id,
+                array(
+                    'locked' => 0,
+                    'status' => 'closed',
+                )
+            );
+            $this->getCourseDao()->update(
+                $courses[0]['id'],
+                array(
+                    'locked' => 0,
+                    'status' => 'closed',
+                )
+            );
             $this->commit();
 
             return $courseSet;
@@ -797,7 +813,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function updateCourseSetMinAndMaxPublishedCoursePrice($courseSetId)
     {
-        $price = $this->getCourseService()->getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId);
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+        //只有一个计划时，直接同步计划的价格到课程上
+        if (count($courses) === 1) {
+            $course = array_shift($courses);
+            $price = array('minPrice' => $course['price'], 'maxPrice' => $course['price']);
+        } else {
+            $price = $this->getCourseService()->getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId);
+        }
 
         return $this->getCourseSetDao()->update(
             $courseSetId,
@@ -814,6 +837,17 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
 
         return $courseSet;
+    }
+
+    public function hitCourseSet($id)
+    {
+        $courseSet = $this->getCourseSet($id);
+
+        if (empty($courseSet)) {
+            throw $this->createNotFoundException('course set not found');
+        }
+
+        return $this->getCourseSetDao()->wave(array($courseSet['id']), array('hitNum' => 1));
     }
 
     protected function validateCourseSet($courseSet)
@@ -993,16 +1027,19 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     protected function filterFields($fields)
     {
-        return array_filter($fields, function ($value) {
-            if ($value === '' || $value === null) {
-                return false;
-            }
+        return array_filter(
+            $fields,
+            function ($value) {
+                if ($value === '' || $value === null) {
+                    return false;
+                }
 
-            if (is_array($value) && empty($value)) {
-                return false;
-            }
+                if (is_array($value) && empty($value)) {
+                    return false;
+                }
 
-            return true;
-        });
+                return true;
+            }
+        );
     }
 }

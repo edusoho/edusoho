@@ -192,7 +192,7 @@ class OrgServiceImpl extends BaseService implements OrgService
 
     public function isNameAvaliable($name, $parentId, $exclude)
     {
-        $org = $this->getOrgDao()->findByNameAndParentId($name, $parentId);
+        $org = $this->getOrgDao()->getByNameAndParentId($name, $parentId);
         if (empty($org)) {
             return true;
         }
@@ -200,19 +200,19 @@ class OrgServiceImpl extends BaseService implements OrgService
         return $org['id'] == $exclude;
     }
 
-    public function findRelatedModuleDatas($orgId)
+    public function findRelatedModuleCounts($orgId)
     {
         $org = $this->getOrg($orgId);
         $modules = OrgBatchUpdateFactory::getModules();
-        $modalesDatas = array();
+        $modalesCounts = array();
         $conditions = array('likeOrgCode' => $org['orgCode']);
         foreach ($modules as $module => $service) {
             $display = OrgBatchUpdateFactory::getDispayModuleName($module);
             $callable = array($this->createService($service['service']), $service['method']);
-            $modalesDatas[$display] = call_user_func($callable, $conditions);
+            $modalesCounts[$display] = call_user_func($callable, $conditions);
         }
 
-        return array_filter($modalesDatas);
+        return array_filter($modalesCounts);
     }
 
     /**

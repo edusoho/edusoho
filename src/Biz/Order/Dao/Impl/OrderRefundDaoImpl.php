@@ -63,4 +63,9 @@ class OrderRefundDaoImpl extends GeneralDaoImpl implements OrderRefundDao
     {
         return $this->getByFields(array('orderId' => $orderId));
     }
+
+    public function findByOrderIds(array $orderIds)
+    {
+        return $this->findInField('orderId', $orderIds);
+    }
 }

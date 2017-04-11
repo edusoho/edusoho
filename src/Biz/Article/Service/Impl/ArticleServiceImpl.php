@@ -180,7 +180,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
     public function getArticleLike($articleId, $userId)
     {
-        return $this->getArticleLikeDao()->get($articleId, $userId);
+        return $this->getArticleLikeDao()->getByArticleIdAndUserId($articleId, $userId);
     }
 
     public function like($articleId)

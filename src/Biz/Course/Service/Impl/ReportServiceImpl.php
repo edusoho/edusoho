@@ -3,8 +3,8 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReportService;
@@ -84,8 +84,7 @@ class ReportServiceImpl extends BaseService implements ReportService
 
             $task['alias'] = '任务'.$index;
             ++$index;
-//            $lesson['finishedNum'] = $this->getCourseService()->searchLearnCount(array('lessonId' => $lesson['id'], 'excludeUserIds' => $excludeUserIds, 'status' => 'finished'));
-            //            $lesson['learnNum']    = $this->getCourseService()->searchLearnCount(array('lessonId' => $lesson['id'], 'excludeUserIds' => $excludeUserIds, 'status' => 'learning'));
+
             $task['finishedNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'finish');
             $task['learnNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'start');
 
@@ -96,7 +95,7 @@ class ReportServiceImpl extends BaseService implements ReportService
             }
         }
 
-        return $tasks;
+        return array_reverse($tasks);
     }
 
     private function countMembersFinishedAllTasksByCourseId($courseId)
@@ -129,18 +128,23 @@ class ReportServiceImpl extends BaseService implements ReportService
         $role = 'student';
         $startTimeLessThan = strtotime('- 29 days', $now);
         $result = array();
+
         //学员数
         $result['studentNum'] = $this->getCourseMemberService()->countMembers(array(
             'courseId' => $courseId,
             'role' => $role,
             'startTimeLessThan' => $startTimeLessThan,
         ));
+
         //完成数
-        $result['finishedNum'] = $this->getTaskResultService()->countTaskResults(array(
-            'courseId' => $courseId,
-            'status' => 'finish',
-            'createdTime_LE' => $startTimeLessThan,
-        ));
+        $userFinishedTimes = $this->getTaskResultService()->findFinishedTimeByCourseIdGroupByUserId($courseId);
+        $finishedNum = 0;
+        if (!empty($userFinishedTimes)) {
+            array_filter($userFinishedTimes, function ($val) use ($startTimeLessThan) {
+                return $val < $startTimeLessThan;
+            });
+        }
+        $result['finishedNum'] = $finishedNum;
 
         //完成率
         if ($result['studentNum']) {

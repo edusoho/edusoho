@@ -3,11 +3,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
+use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MaterialService;
 use Biz\File\Service\UploadFileService;
-use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Component\MediaParser\ParserProxy;
 
@@ -141,7 +141,6 @@ class FileChooserController extends BaseController
         );
 
         //FIXME 同一个courseId下文件可能存在重复，所以需考虑去重，但没法直接根据groupbyFileId去重（sql_mode）
-        // $courseMaterials = $this->getMaterialService()->searchMaterialsGroupByFileId(
         $courseMaterials = $this->getMaterialService()->searchMaterials(
             $conditions,
             array('createdTime' => 'DESC'),

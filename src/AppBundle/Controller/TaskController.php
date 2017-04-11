@@ -49,7 +49,7 @@ class TaskController extends BaseController
             return $this->redirect($this->generateUrl('my_course_show', array('id' => $courseId)));
         }
 
-        if ($this->canStartTask($task)) {
+        if ($member !== null && $member['role'] === 'student' && $this->canStartTask($task)) {
             $this->getActivityService()->trigger(
                 $task['activityId'],
                 'start',
@@ -118,7 +118,7 @@ class TaskController extends BaseController
         // 3. 视频课时非优酷等外链视频时提示购买
         $taskCanTryLook = $course['tryLookable'] && $task['type'] == 'video' && $task['mediaSource'] == 'self';
 
-        if (empty($course['isFree']) && empty($task['isFree']) && !$taskCanTryLook) {
+        if (empty($task['isFree']) && !$taskCanTryLook) {
             if (!$user->isLogin()) {
                 throw $this->createAccessDeniedException();
             }
@@ -170,7 +170,7 @@ class TaskController extends BaseController
 
     private function canPreviewTask($task, $course)
     {
-        if ($course['isFree'] || $task['isFree']) {
+        if ($task['isFree']) {
             return true;
         }
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
@@ -292,7 +292,7 @@ class TaskController extends BaseController
 
         $this->getCourseService()->tryTakeCourse($courseId);
 
-        if ($this->validTaskLearnStat($request, $id)) {
+        if (!empty($data['events']) || $this->validTaskLearnStat($request, $id)) {
             $result = $this->getTaskService()->trigger($id, $eventName, $data);
             $data['valid'] = 1;
         } else {

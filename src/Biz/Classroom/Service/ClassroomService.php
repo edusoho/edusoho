@@ -151,8 +151,6 @@ interface ClassroomService
 
     public function findCoursesByClassroomId($classroomId);
 
-    public function countMobileVerifiedMembersByClassroomId($classroomId, $locked);
-
     public function findClassroomStudents($classroomId, $start, $limit);
 
     public function findClassroomMembersByRole($classroomId, $role, $start, $limit);

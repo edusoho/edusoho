@@ -29,7 +29,7 @@
     <div class="info">
 
       <span class="status-card-warp">
-        {% if   disabledCloudServiceCount > 0 %}
+        {% if disabledCloudServiceCount > 0 %}
           <span class="glyphicon glyphicon-exclamation-sign text-danger"></span>
           <a class="text-lg link-underline text-danger" href="{{ path('admin_my_cloud_overview') }}">{{ disabledCloudServiceCount }}个未开启</a>
         {% else %}
@@ -78,15 +78,15 @@
                 <a href="{{ path('admin_edu_cloud_search') }}" class="value value-danger"><i class="dot"></i>未开启</a>
               {% endif %}
             </li>
-            {#   <li>
+            <li>
               <span class="key">云问答</span>
               {% set cloud_consult = setting('cloud_consult', '') %}
-              {% if cloud_consult.cloud_consult_setting_enabled | default(0)  %}
+              {% if cloud_consult.cloud_consult_setting_enabled | default(0) %}
                 <span class="value value-success"><i class="dot"></i>已开启</span>
               {% else %}
                 <a href="{{ path('admin_cloud_consult_setting') }}" class="value value-danger"><i class="dot"></i>未开启</a>
               {% endif %}
-            </li> #}
+            </li>
           </ul>
         </div>
       </span>

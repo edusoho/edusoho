@@ -23,6 +23,7 @@ class Example3DaoImpl extends GeneralDaoImpl implements ExampleDao
     {
         $marks = str_repeat('?,', count($ids) - 1).'?';
         $sql = "SELECT * FROM {$this->table()} WHERE id IN ({$marks})";
+
         return $this->db()->fetchAll($this->sql($sql, $orderBys, $start, $limit), $ids) ?: array();
     }
 
@@ -43,9 +44,9 @@ class Example3DaoImpl extends GeneralDaoImpl implements ExampleDao
                 'name suF_like :suf_name',
                 'name LIKE :like_name',
                 'id iN (:ids)',
-                'ids1 = :ids1'
+                'ids1 = :ids1',
             ),
-            'cache'      => 'table'
+            'cache' => 'table',
         );
     }
 }

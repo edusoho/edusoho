@@ -392,6 +392,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'createdTime >= :startTimeGreaterThan',
                 'createdTime < :startTimeLessThan',
                 'courseId IN (:courseIds)',
+                'courseSetId = :courseSetId',
                 'userId IN (:userIds)',
                 'learnedNum >= :learnedNumGreaterThan',
                 'learnedNum < :learnedNumLessThan',
@@ -399,7 +400,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'lastViewTime >= lastViewTime_GE',
                 'lastLearnTime >= :lastLearnTimeGreaterThan',
             ),
-            'cache' => 'table',
         );
     }
 

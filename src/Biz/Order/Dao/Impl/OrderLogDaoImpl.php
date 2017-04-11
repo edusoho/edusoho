@@ -20,4 +20,9 @@ class OrderLogDaoImpl extends GeneralDaoImpl implements OrderLogDao
 
         return $this->db()->fetchAll($sql, array($orderId));
     }
+
+    public function findByOrderIds(array $orderIds)
+    {
+        return $this->findInField('orderId', $orderIds);
+    }
 }

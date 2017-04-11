@@ -1,5 +1,5 @@
 {% extends 'layout.html.twig' %}
-{% block title %}{{ paper.name }} - {{ parent() }}{% endblock %}
+{% block title %}{% if paperResult|default(null) %}{{ paperResult.paperName }}{% else %}{{ paper.name }}{% endif %} - {{ parent() }}{% endblock %}
 
 {% if isIframeBody|default(1) %}
   {% set bodyClass = 'task-testpaper-body-iframe js-task-testpaper-body js-task-testpaper-body-iframe' %}
@@ -16,6 +16,12 @@
   {% block header %}
     {% if showHeader|default(1) %}{{ parent() }}{% endif %}
   {% endblock %}
+
+  {% if mobile %}
+    {# fix mobile sofair #}
+    <div class="iframe-parent-content">
+  {% endif %}
+  
   <div class="container {{containerClass|default('')}}">
     {% block paper_content %}
       <div class="row">
@@ -25,7 +31,7 @@
               <div class="es-section testpaper-heading js-testpaper-heading">
                 <div class="testpaper-titlebar clearfix">
                   <h1 class="testpaper-title">
-                    {{ paper.name }} <br>
+                    {% if paperResult|default(null) %}{{ paperResult.paperName }}{% else %}{{ paper.name }}{% endif %} <br>
                     <small class="text-sm">
                       {% if paperResult.status|default('doing') in ['reviewing','finished'] %}
                         {{'答题人：'|trans}}{{ student.nickname }} 
@@ -137,6 +143,12 @@
       </div>
     {% endblock %}
   </div>
+
+  {% if mobile %}
+    {# fix mobile sofair #}
+    </div>
+  {% endif %}
+
   {% block footer %}
     {% if showHeader|default(1) %}{{ parent() }}{% endif %}
   {% endblock %}

@@ -5,7 +5,6 @@
 {% endif %}
 
 {% set page_type = 'guest' %}
-{% block course_header_qrcode %}{% endblock %}
 
 {% block course_header_subtitle %}
   <p class="text-overflow subtitle" data-toggle="popover" data-placement="bottom"  
@@ -44,7 +43,7 @@
         </div>
       </div>
     </div>
-    <div class="course-detail-info text-12 color-gray">
+    <div class="course-detail-info">
 
       {#确认下判断是否有误#}
       {% if course.price > 0 and course.price < course.originPrice  %} 
@@ -58,7 +57,7 @@
       </div>
 
       {% if onDiscount  %} 
-        <div class="mb15">
+        <div class="mb15 ">
           <span class="course-detail-title">活动</span>
           <span class="text-12 color-warning">
             <b class="mr20 hidden-xs">{{ course.discount.name|sub_text(10) }}</b>
@@ -85,7 +84,7 @@
           </div>
         {% endif %}
 
-        <div class="mb15">
+        <div class="mb15 hidden-xs">
           <span class="course-detail-title ">学习有效期</span>
           {% if course.expiryMode == 'days'  %}
             <span class="gray-dark">{{ course.expiryDays }} 天（随到随学）</span>
@@ -104,7 +103,7 @@
         </div>
 
         {% if course.buyable != 0  and course.buyExpiryTime != 0 %}
-        <div class="mb15">
+        <div class="mb15 hidden-xs">
           <span class="course-detail-title ">购买截止日期</span>
           <span class="gray-dark mrl">{{ course.buyExpiryTime|date('Y-m-d ') }} 23:59</span>
         </div>
@@ -115,7 +114,7 @@
           {% set serviceTags = services(course.services|default([])) %}
           {% for tag in serviceTags %}
             <span
-              class="lump-sm color-lump {% if tag.active %}bg-primary{% endif %} mr5"
+              class="lump-sm color-lump {% if tag.active %}bg-primary{% endif %} mr5 hidden-xs"
               data-container="body"
               data-trigger="hover"
               data-placement="top"
@@ -128,7 +127,7 @@
         {% endif %}
         
       </div>
-      <div class="course-operation-responsive visible-xs visible-sm clearfix">
+      <div class="course-detail-section-responsive visible-xs visible-sm clearfix">
         <ul class="clearfix">
           <!--营销页显示-->
           {% if marketingPage %}

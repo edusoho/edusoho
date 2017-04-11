@@ -2,18 +2,18 @@
 
 namespace AppBundle\Controller\Testpaper;
 
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Controller\BaseController;
-use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\TestpaperActivityService;
-use Biz\Course\Service\CourseService;
-use Biz\Question\Service\QuestionService;
-use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
+use Biz\System\Service\SettingService;
+use AppBundle\Controller\BaseController;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\Activity\Service\ActivityService;
+use Biz\Question\Service\QuestionService;
+use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\Activity\Service\TestpaperActivityService;
 use AppBundle\Common\Exception\AccessDeniedException;
 
 class TestpaperController extends BaseController
@@ -22,7 +22,7 @@ class TestpaperController extends BaseController
     {
         $user = $this->getUser();
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testId);
+        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testId, 'testpaper');
 
         if (empty($testpaper)) {
             throw $this->createResourceNotFoundException('testpaper', $testId);
@@ -68,7 +68,7 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('info', 'access denied');
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testpaperResult['testId'], $testpaperResult['type']);
 
         $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id'], $testpaperResult['id']);
 
@@ -106,10 +106,10 @@ class TestpaperController extends BaseController
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testpaperResult['testId'], $testpaperResult['type']);
 
         if (!$testpaper) {
-            throw $this->createResourceNotFoundException('testpaper', $testpaperResult['testId']);
+            return $this->createMessageResponse('info', '该试卷已删除，不能查看结果');
         }
 
         if ($testpaperResult['status'] === 'doing') {
@@ -149,52 +149,10 @@ class TestpaperController extends BaseController
             'source' => $request->query->get('source', 'course'),
             'attachments' => $attachments,
             'questionTypes' => $this->getCheckedQuestionType($testpaper),
-            'limitedTime' => 0,
             'task' => $task,
             'action' => $request->query->get('action', ''),
             'target' => $testpaperActivity,
         ));
-    }
-
-    public function reDoTestpaperAction($targetType, $targetId, $testId)
-    {
-        $userId = $this->getUser()->id;
-
-        $testpaper = $this->getTestpaperService()->getTestpaper($testId);
-
-        if (empty($testpaper)) {
-            throw $this->createResourceNotFoundException('testpaper', $testId);
-        }
-
-        $testResult = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId(
-            $testId, $userId, array('doing', 'paused')
-        );
-
-        if ($testResult) {
-            return $this->redirect($this->generateUrl('testpaper_result_show', array('resultId' => $testResult['id'])));
-        }
-
-        if ($testpaper['status'] === 'draft') {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('该试卷未发布，如有疑问请联系老师！'));
-        }
-
-        if ($testpaper['status'] === 'closed') {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('该试卷已关闭，如有疑问请联系老师！'));
-        }
-
-        $testResult = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId(
-            $testId, $userId, array('reviewing')
-        );
-
-        if (!empty($testResult)) {
-            throw new AccessDeniedException($this->getServiceKernel()->trans('试卷还在批阅中'));
-        }
-
-        $testResult = $this->getTestpaperService()->startTestpaper(
-            $testId, array('type' => $targetType, 'id' => $targetId)
-        );
-
-        return $this->redirect($this->generateUrl('testpaper_result_show', array('resultId' => $testResult['id'])));
     }
 
     public function realTimeCheckAction(Request $request)

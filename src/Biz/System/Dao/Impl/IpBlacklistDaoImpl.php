@@ -21,7 +21,6 @@ class IpBlacklistDaoImpl extends GeneralDaoImpl implements IpBlacklistDao
                 'ip = :ip',
                 'type = :type',
             ),
-            'cache' => 'table',
         );
     }
 }

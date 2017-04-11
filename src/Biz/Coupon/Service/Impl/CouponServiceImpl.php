@@ -2,16 +2,16 @@
 
 namespace Biz\Coupon\Service\Impl;
 
-use Biz\BaseService;
-use Biz\Coupon\Dao\CouponDao;
-use Biz\User\Service\UserService;
-use Biz\Card\Service\CardService;
 use AppBundle\Common\ArrayToolkit;
-use Biz\System\Service\LogService;
+use Biz\BaseService;
+use Biz\Card\Service\CardService;
+use Biz\Coupon\Dao\CouponDao;
 use Biz\Coupon\Service\CouponService;
 use Biz\Course\Service\CourseService;
+use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\NotificationService;
+use Biz\User\Service\UserService;
 
 class CouponServiceImpl extends BaseService implements CouponService
 {
@@ -206,16 +206,15 @@ class CouponServiceImpl extends BaseService implements CouponService
             $afterAmount = $amount - $discount;
         }
 
-        $couponFactory = $this->biz['coupon_factory'];
-        $couponModel = $couponFactory($coupon['targetType']);
-        if ($coupon['targetId'] != 0 && !$couponModel->canUseable(
-            $coupon,
-            array('id' => $targetId, 'type' => $targetType)
-        )) {
-            return array(
-                'useable' => 'no',
-                'message' => '',
-            );
+        if ($coupon['targetId'] != 0) {
+            $couponFactory = $this->biz['coupon_factory'];
+            $couponModel = $couponFactory($coupon['targetType']);
+            if (!$couponModel->canUseable($coupon, array('id' => $targetId, 'type' => $targetType))) {
+                return array(
+                    'useable' => 'no',
+                    'message' => '',
+                );
+            }
         }
 
         if ($coupon['status'] == 'unused') {
@@ -262,7 +261,7 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     public function useCoupon($code, $order)
     {
-        $coupon = $this->getCouponDao()->getByCode($code, true);
+        $coupon = $this->getCouponDao()->getByCode($code, array('lock' => 1));
         $user = $this->getUserService()->getUser($order['userId']);
         if (empty($coupon)) {
             return null;

@@ -23,4 +23,6 @@ interface ActivityLearnLogService
     public function sumWatchTime($conditions);
 
     public function deleteLearnLogsByActivityId($activityId);
+
+    public function getLastestLearnLogByActivityIdAndUserId($activityId, $userId);
 }

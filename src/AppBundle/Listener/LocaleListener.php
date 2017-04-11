@@ -6,12 +6,16 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class LocaleListener implements EventSubscriberInterface
+class LocaleListener extends AbstractSecurityDisabledListener implements EventSubscriberInterface
 {
     private $defaultLocale;
 
-    public function __construct($defaultLocale)
+    private $container;
+
+    public function __construct($container, $defaultLocale)
     {
+        $this->container = $container;
+
         if ($defaultLocale == 'en') {
             $defaultLocale = 'en_US'; //兼容原来的配置
         }
@@ -21,9 +25,10 @@ class LocaleListener implements EventSubscriberInterface
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
-        if (!$request->hasPreviousSession()) {
+        if (!$request->hasPreviousSession() || $this->isSecurityDisabledRequest($this->container, $request)) {
             return;
         }
+
         $locale = $request->getSession()->get('_locale', $request->cookies->get('_last_logout_locale') ?: $this->defaultLocale);
         $request->setLocale($locale);
     }

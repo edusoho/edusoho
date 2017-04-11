@@ -10,11 +10,11 @@ let s;
           (s = userAgent.match(/version\/([\d.]+).*safari/)) ? Browser.safari = s[1] : 0;
 /* eslint-enable */
 
-if (Browser.ie) console.log('IE: ' + Browser.ie);
-if (Browser.firefox) console.log('Firefox: ' + Browser.firefox);
-if (Browser.chrome) console.log('Chrome: ' + Browser.chrome);
-if (Browser.opera) console.log('Opera: ' + Browser.opera);
-if (Browser.safari) console.log('Safari: ' + Browser.safari);
+if (Browser.ie) console.info('IE: ' + Browser.ie);
+if (Browser.firefox) console.info('Firefox: ' + Browser.firefox);
+if (Browser.chrome) console.info('Chrome: ' + Browser.chrome);
+if (Browser.opera) console.info('Opera: ' + Browser.opera);
+if (Browser.safari) console.info('Safari: ' + Browser.safari);
 
 const isMobileDevice = () => {
   return navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i);

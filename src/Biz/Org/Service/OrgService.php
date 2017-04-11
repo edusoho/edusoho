@@ -68,5 +68,5 @@ interface OrgService
      *
      * @return mixed
      */
-    public function findRelatedModuleDatas($orgId);
+    public function findRelatedModuleCounts($orgId);
 }

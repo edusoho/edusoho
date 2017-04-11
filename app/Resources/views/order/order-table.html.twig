@@ -53,7 +53,7 @@
           </td>
           <td><span class="color-gray text-sm">{{ order.createdTime|date('Y-n-d H:i:s') }}</span></td>
           <td>{{ dict_macro.orderStatus(order.status) }}</td>
-          <td><span class="money-text">{{order.amount}}</span></td>
+          <td><span class="color-warning">{{order.amount}}</span></td>
           {% if mode in ['admin', 'course'] %}
             <td>
               {{ web_macro.user_link(buyer) }}

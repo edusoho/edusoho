@@ -20,7 +20,10 @@ class UserClassroomPlanTaskNumInfoDataTag extends BaseDataTag implements DataTag
      */
     public function getData(array $arguments)
     {
-        $this->checkArguments($arguments);
+        $this->checkArguments($arguments, array(
+            'userId',
+            'classroomId',
+        ));
         $classroomPlan = $this->getClassroomPlanService()->getPlanByClassroomId($arguments['classroomId']);
         if (!$classroomPlan) {
             return array();
@@ -77,17 +80,6 @@ class UserClassroomPlanTaskNumInfoDataTag extends BaseDataTag implements DataTag
         $userDoneInfo['lessonTaskNum'] = $userDoneInfo['tasksNum'] - $userDoneInfo['homeworkTaskNum'] - $userDoneInfo['testpaperTaskNum'];
 
         return $userDoneInfo;
-    }
-
-    protected function checkArguments(array $arguments)
-    {
-        if (empty($arguments['userId'])) {
-            throw new \InvalidArgumentException($this->getServiceKernel()->trans('userId参数缺失'));
-        }
-
-        if (empty($arguments['classroomId'])) {
-            throw new \InvalidArgumentException($this->getServiceKernel()->trans('classroomId参数缺失'));
-        }
     }
 
     protected function getClassroomPlanService()

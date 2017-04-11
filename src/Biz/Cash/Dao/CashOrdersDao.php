@@ -6,7 +6,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface CashOrdersDao extends GeneralDaoInterface
 {
-    public function getBySn($sn, $lock = false);
+    public function getBySn($sn, array $options = array());
 
     public function getByToken($token);
 

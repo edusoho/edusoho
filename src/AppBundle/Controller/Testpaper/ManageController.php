@@ -35,10 +35,8 @@ class ManageController extends BaseController
             'type' => 'testpaper',
         );
 
-        if ($courseSet['parentId'] > 0) {
+        if ($courseSet['parentId'] > 0 && $courseSet['locked']) {
             $conditions['copyIdGT'] = 0;
-        } else {
-            $conditions['copyId'] = 0;
         }
 
         $paginator = new Paginator(
@@ -169,7 +167,7 @@ class ManageController extends BaseController
             return $this->createMessageResponse('error', 'access denied');
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($result['testId']);
+        $testpaper = $this->getTestpaperService()->getTestpaper($result['testId'], $result['type']);
         if (!$testpaper) {
             throw $this->createResourceNotFoundException('testpaper', $result['id']);
         }
@@ -235,7 +233,7 @@ class ManageController extends BaseController
 
         $courseIds = array($targetId);
         if ($source === 'classroom') {
-            $courses = $this->getClassroomService()->findCoursesByClassroomId($id);
+            $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
             $courseIds = ArrayToolkit::column($courses, 'id');
         }
         $conditions['courseIds'] = $courseIds;
@@ -255,7 +253,9 @@ class ManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $userIds = ArrayToolkit::column($testpaperResults, 'userId');
+        $studentIds = ArrayToolkit::column($testpaperResults, 'userId');
+        $teacherIds = ArrayToolkit::column($testpaperResults, 'checkTeacherId');
+        $userIds = array_merge($studentIds, $teacherIds);
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('testpaper/manage/result-list.html.twig', array(

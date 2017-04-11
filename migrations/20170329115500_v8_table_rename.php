@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class V8TableRename extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -42,7 +42,7 @@ class V8TableRename extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {

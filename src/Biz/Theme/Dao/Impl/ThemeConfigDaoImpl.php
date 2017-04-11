@@ -23,15 +23,16 @@ class ThemeConfigDaoImpl extends GeneralDaoImpl implements ThemeConfigDao
 
     public function declares()
     {
-        $declares = array(
+        return array(
             'serializes' => array(
                 'config' => 'json',
                 'allConfig' => 'json',
                 'confirmConfig' => 'json',
             ),
-            'cache' => 'table',
+            'timestamps' => array(
+                'createdTime',
+                'updatedTime',
+            ),
         );
-
-        return $declares;
     }
 }

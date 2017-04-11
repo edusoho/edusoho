@@ -155,7 +155,7 @@ class AppPackageUpdateController extends BaseController
      */
     protected function getAppService()
     {
-        return $this->createService('CloudPlatform.AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     protected function getSettingService()

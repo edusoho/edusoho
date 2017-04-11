@@ -1,19 +1,21 @@
-const Cookie = require('cookie');
+import Cookies from 'js-cookie';
+
 
 const PCSwitcher = $('.js-switch-pc');
 const MobileSwitcher = $('.js-switch-mobile');
 if (PCSwitcher.length) {
   PCSwitcher.on('click', () => {
-    Cookie.set('PCVersion', 1);
+    Cookies.set('PCVersion', 1);
     window.location.reload();
   });
 }
 if (MobileSwitcher.length) {
   MobileSwitcher.on('click', () => {
-    Cookie.remove('PCVersion');
+    Cookies.remove('PCVersion');
     window.location.reload();
   });
 }
+
 
 $('.js-back').click(() => {
   if (history.length !== 1) {

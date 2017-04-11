@@ -2,21 +2,21 @@
 
 namespace AppBundle\Controller\Course;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
-use Biz\Activity\Service\ActivityService;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\Course\Service\CourseNoteService;
-use Biz\Course\Service\MaterialService;
-use Biz\Course\Service\ReviewService;
-use Biz\File\Service\UploadFileService;
-use Biz\Order\Service\OrderService;
-use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
-use Biz\Taxonomy\Service\CategoryService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\TokenService;
-use Symfony\Component\HttpFoundation\Request;
+use Biz\Order\Service\OrderService;
+use Biz\Course\Service\ReviewService;
+use Biz\Course\Service\MaterialService;
+use Biz\File\Service\UploadFileService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseNoteService;
+use Biz\Taxonomy\Service\CategoryService;
 use VipPlugin\Biz\Vip\Service\VipService;
+use Biz\Classroom\Service\ClassroomService;
+use Symfony\Component\HttpFoundation\Request;
 
 class CourseController extends CourseBaseController
 {
@@ -73,10 +73,15 @@ class CourseController extends CourseBaseController
         $user = $this->getCurrentUser();
         $isCourseTeacher = $this->getMemberService()->isCourseTeacher($id, $user['id']);
 
+        $this->getCourseService()->hitCourse($id);
+
+        $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
+
         return $this->render(
             'course/course-show.html.twig',
             array(
                 'tab' => $tab,
+                'tags' => $tags,
                 'course' => $course,
                 'categoryTag' => $this->calculateCategoryTag($course),
                 'classroom' => $classroom,
@@ -96,14 +101,14 @@ class CourseController extends CourseBaseController
         }
         $tag = null;
         foreach ($tasks as $task) {
-            if ($task['type'] == 'video' && $course['tryLookable']) {
+            if ($task['type'] === 'video' && $course['tryLookable']) {
                 $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-                if ($activity['ext']['mediaSource'] == 'cloud') {
-                    return '试看';
+                if (!empty($activity['ext']['file']) && $activity['ext']['file']['storage'] === 'cloud') {
+                    $tag = '试看';
                 }
             }
             if ($task['isFree']) {
-                $tag = '免费';
+                return '免费';
             }
         }
 
@@ -114,12 +119,31 @@ class CourseController extends CourseBaseController
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
 
+        if ($course['parentId'] > 0) {
+            $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($course['courseSetId']);
+            if (!empty($classroomRef)) {
+                $user = $this->getCurrentUser();
+                $member = $this->getClassroomService()->getClassroomMember($classroomRef['classroomId'], $user['id']);
+                if ($member['deadline'] > 0 && $member['deadline'] < time()) {
+                    return $this->render(
+                        'course/member/classroom-course-expired.html.twig',
+                        array(
+                            'course' => $course,
+                            'member' => $member,
+                        )
+                    );
+                }
+
+                return $this->createJsonResponse(true);
+            }
+        }
+
         if ($this->getMemberService()->isMemberNonExpired($course, $member)) {
             return $this->createJsonResponse(true);
         }
 
         return $this->render(
-            'course/member/expired.html.twig',
+            'course/member/normal-course-expired.html.twig',
             array(
                 'course' => $course,
                 'member' => $member,
@@ -160,7 +184,7 @@ class CourseController extends CourseBaseController
 
         $previewAs = $request->query->get('previewAs', null);
         $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
-        if (!empty($classroom) && $classroom['headTeacherId'] == $user['id']) {
+        if ($user->isLogin() && !empty($classroom) && $classroom['headTeacherId'] == $user['id']) {
             $member = $this->createMemberFromClassroomHeadteacher($course, $classroom);
         }
 
@@ -390,7 +414,6 @@ class CourseController extends CourseBaseController
 
     public function otherCourseAction($course)
     {
-        // $this->getCourseService()->getOtherCourses($course['id']);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $course['courseSet'] = $courseSet;
 
@@ -650,8 +673,8 @@ class CourseController extends CourseBaseController
     }
 
     /**
-     * @param $courseId
-     * @param $member
+     * @param  $courseId
+     * @param  $member
      *
      * @return array
      */
@@ -673,7 +696,7 @@ class CourseController extends CourseBaseController
     }
 
     /**
-     * @param $tab
+     * @param  $tab
      *
      * @return string
      */

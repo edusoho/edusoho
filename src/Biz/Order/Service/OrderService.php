@@ -128,4 +128,8 @@ interface OrderService
     public function analysisPaidOrderGroupByTargetType($startTime, $groupBy);
 
     public function analysisOrderDate($conditions);
+
+    public function findOrderLogsByOrderIds(array $orderIds);
+
+    public function findOrderRefundsByOrderIds(array $orderIds);
 }

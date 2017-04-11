@@ -27,7 +27,6 @@ class NotificationDaoImpl extends GeneralDaoImpl implements NotificationDao
             'orderbys' => array(
                 'createdTime',
             ),
-            'cache' => 'table',
         );
     }
 }

@@ -113,7 +113,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
             $member = $this->getCourseMemberService()->getCourseMember($lesson['courseId'], $currentUser['id']);
             if (!empty($member)) {
                 $lesson['course'] = $this->getCourseService()->getCourse($lesson['courseId']);
-                $teacherMembers = $this->getCourseService()->findCourseTeachers($lesson['courseId']);
+                $teacherMembers = $this->getCourseMemberService()->findCourseTeachers($lesson['courseId']);
                 $teacherIds = ArrayToolkit::column($teacherMembers, 'userId');
                 $lesson['teachers'] = $this->getUserService()->findUsersByIds($teacherIds);
 
