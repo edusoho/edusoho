@@ -22,6 +22,8 @@ class FileMigrate extends AbstractMigrate
             $this->getConnection()->commit();
             $filesystem = new \Symfony\Component\Filesystem\Filesystem();
             $filesystem->remove($this->kernel->getParameter('kernel.root_dir') .'/cache');
+            $lockFile = $this->kernel->getParameter('kernel.root_dir') . '/data/upgrade.lock';
+            @unlink($lockFile);
             echo json_encode(array('status' => 'ok'));
             exit(0);
         }
@@ -282,6 +284,24 @@ class FileMigrate extends AbstractMigrate
 
             $conditions = array('categorys' => 'course,user,thread,article');
             $api->post('/search/refactor_documents', $conditions);
+
+            $openApi = new EduSohoAppClient(array(
+                'accessKey' => empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'],
+                'secretKey' => empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'],
+            ));
+            $log = array(
+                'level' => 'info',
+                'productId' => 1,
+                'productName' => 'EduSoho主程序',
+                'packageId' => 929,
+                'type' => 'install',
+                'fromVersion' => '7.5.14',
+                'toVersion' => '8.0.0',
+                'message' => '成功',
+                'data' => '',
+            );
+
+            $openApi->submitRunLog($log);
         }catch (\Exception $exception){
             return;
         }
@@ -498,5 +518,111 @@ class CloudAPI
     protected function getLoggerFile()
     {
         return \Topxia\Service\Common\ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/logs/upgrade.log';
+    }
+}
+
+class EduSohoAppClient
+{
+    protected $userAgent = 'Open EduSoho App Client 1.0';
+
+    protected $connectTimeout = 5;
+
+    protected $timeout = 5;
+
+    private $apiUrl = 'http://open.edusoho.com/app_api';
+
+    private $debug = false;
+
+    /**
+     * @var string
+     */
+    private $accessKey;
+
+    /**
+     * @var string
+     */
+    private $secretKey;
+
+    /**
+     * tmp dir path.
+     *
+     * @var string
+     */
+    private $tmpDir;
+
+    public function __construct(array $options)
+    {
+        $this->accessKey = empty($options['accessKey']) ? 'Anonymous' : $options['accessKey'];
+        $this->secretKey = empty($options['secretKey']) ? '' : $options['secretKey'];
+
+        if (!empty($options['apiUrl'])) {
+            $this->apiUrl = $options['apiUrl'];
+        }
+
+        $this->debug = empty($options['debug']) ? false : true;
+        $this->tmpDir = empty($options['tmpDir']) ? sys_get_temp_dir() : $options['tmpDir'];
+    }
+
+    public function submitRunLog($log)
+    {
+        $args = array('log' => $log);
+
+        return $this->callRemoteApi('POST', 'SubmitRunLog', $args);
+    }
+
+    protected function callRemoteApi($httpMethod, $action, array $args)
+    {
+        list($url, $httpParams) = $this->assembleCallRemoteApiUrlAndParams($action, $args);
+        $result = $this->sendRequest($httpMethod, $url, $httpParams);
+
+        return json_decode($result, true);
+    }
+
+    protected function assembleCallRemoteApiUrlAndParams($action, array $args)
+    {
+        $url = "{$this->apiUrl}?action={$action}";
+        $edusoho = array(
+            'edition' => 'opensource',
+            'host' => $_SERVER['HTTP_HOST'],
+            'version' => '8.0.0',
+            'debug' => $this->debug ? '1' : '0',
+        );
+        $args['_edusoho'] = $edusoho;
+
+        $httpParams = array();
+        $httpParams['accessKey'] = $this->accessKey;
+        $httpParams['args'] = $args;
+        $httpParams['sign'] = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
+
+        return array($url, $httpParams);
+    }
+
+    protected function sendRequest($method, $url, $params = array())
+    {
+        $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_USERAGENT, $this->userAgent);
+
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+
+        if (strtoupper($method) == 'POST') {
+            curl_setopt($curl, CURLOPT_POST, 1);
+            $params = http_build_query($params);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
+        } else {
+            if (!empty($params)) {
+                $url = $url.(strpos($url, '?') ? '&' : '?').http_build_query($params);
+            }
+        }
+
+        curl_setopt($curl, CURLOPT_URL, $url);
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        return $response;
     }
 }
