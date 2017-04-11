@@ -2,14 +2,13 @@
 
 namespace AppBundle\Listener;
 
-use ApiBundle\ApiBundle;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
-class KernelRequestListener
+class KernelRequestListener extends AbstractSecurityDisabledListener
 {
     /**
      * @var ContainerInterface
@@ -48,6 +47,12 @@ class KernelRequestListener
         }
 
         if ($request->getMethod() === 'POST') {
+
+            if ($this->isSecurityDisabledRequest($this->container, $request))
+            {
+                return;
+            }
+
             if (stripos($request->getPathInfo(), '/mapi') === 0) {
                 return;
             }
@@ -58,8 +63,7 @@ class KernelRequestListener
 
             $whiteList = $this->container->hasParameter('route_white_list') ? $this->container->getParameter('route_white_list') : array();
 
-            if (in_array($request->getPathInfo(), $whiteList)
-                || $this->container->get('api_security_policy_manager')->isApiPath($request)) {
+            if (in_array($request->getPathInfo(), $whiteList)) {
                 return;
             }
 
