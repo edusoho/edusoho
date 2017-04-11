@@ -8,16 +8,19 @@ class PluginMigrate extends AbstractMigrate
 {
     public function update($page)
     {
-        $this->exec("delete from cloud_app where code = 'Homework';");
+        $this->exec("delete from cloud_app where code in ('Homework', 'Crm');");
 
         $pluginFile = $this->getPluginConfig();
         $pluginFile = realpath($pluginFile);
         if (!empty($pluginFile)) {
             $config = require_once $pluginFile;
-            if (isset($config['installed_plugins']['Homework'])) {
-                $installedPlugins = $config['installed_plugins'];
-                unset($installedPlugins['Homework']);
-                $config['installed_plugins'] = $installedPlugins;
+
+            foreach (array('Homework', 'Crm') as $key => $value) {
+                if (isset($config['installed_plugins'][$value])) {
+                    $installedPlugins = $config['installed_plugins'];
+                    unset($installedPlugins[$value]);
+                    $config['installed_plugins'] = $installedPlugins;
+                }
             }
 
             $config = is_array($config) ? $config : array();
