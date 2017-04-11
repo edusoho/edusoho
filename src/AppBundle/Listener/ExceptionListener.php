@@ -2,6 +2,9 @@
 
 namespace AppBundle\Listener;
 
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -27,7 +30,15 @@ class ExceptionListener
         $request = $event->getRequest();
 
         if (!$request->isXmlHttpRequest()) {
-            $event->setException(new HttpException($exception->getCode(), $exception->getMessage(), $exception->getPrevious()));
+
+            $event->setException(
+                new HttpException(
+                    $this->convertStateCode($exception),
+                    $exception->getMessage(),
+                    $exception->getPrevious()
+                )
+            );
+
             return;
         }
 
@@ -88,6 +99,21 @@ class ExceptionListener
         return $user;
     }
 
+    private function convertStateCode($exception)
+    {
+        if ($exception instanceof AccessDeniedException) {
+            return Response::HTTP_FORBIDDEN;
+        }
+        if ($exception instanceof InvalidArgumentException) {
+            return Response::HTTP_FORBIDDEN;
+        }
+        if ($exception instanceof NotFoundException) {
+            return Response::HTTP_NOT_FOUND;
+        }
+
+        return Response::HTTP_INTERNAL_SERVER_ERROR;
+    }
+
     protected function getLogger()
     {
         if ($this->logger) {
@@ -95,7 +121,9 @@ class ExceptionListener
         }
 
         $this->logger = new Logger('AjaxExceptionListener');
-        $this->logger->pushHandler(new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir').'/dev.log', Logger::DEBUG));
+        $this->logger->pushHandler(
+            new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir').'/dev.log', Logger::DEBUG)
+        );
 
         return $this->logger;
     }
