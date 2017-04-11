@@ -954,7 +954,7 @@ admin.course_question.td_operations.dropdown.delete_question_btn: 删除问答
 admin.course_note.content_th: 内容
 admin.course_note.note: 笔记
 
-#评价管理
+#评价管理通用key
 admin.course_review.start: 星
 admin.course_review.one_start: 1星
 admin.course_review.two_starts: 2星
