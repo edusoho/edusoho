@@ -916,6 +916,7 @@ share.qq_share: 分享到QQ好友
 share.qzone_share: 分享到QQ空间
 
 # 话题管理通用key
+admin.classroom_default_name: 班级
 admin.course_thread.select_all_btn: 全选
 admin.course_thread.form.input.keyword.placeholer: 关键词
 admin.course_thread.form.input.author.placeholer: 作者
@@ -970,6 +971,8 @@ admin.course_review.content_th: 评价内容
 admin.course_review.content: 评价
 admin.course_review.rate_th: 评分
 admin.course_review.completed_progress_th: 完成进度
+admin.course_review.classroom_title.placeholer: %classroomName%名
+admin.course_review.classroom_deleted: %classroomName%已删除
 
 
 
