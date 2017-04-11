@@ -6,8 +6,8 @@
         <h5><span>{{ config.title|default(config.defaultTitle) }}</span><div class="line"></div></h5>
         <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div>
       </div>
-      <div class="course-list"> 
-        <div class="row"> 
+      <div class="course-list">
+        <div class="row">
           {% for courseSet in RecentLiveCourseSets %}
             <div class="col-lg-3 col-md-4 col-xs-6">
               {% include 'course/widgets/course-grid.html.twig' with {courseSet: courseSet} %}
@@ -18,7 +18,7 @@
                     <i class="es-icon es-icon-videocam"></i>
                   </div>
                   <div class="date">
-                    {{'正在直播'|trans}}
+                    {{'homepage.live_course.living'|trans}}
                   </div>
                 </div>
               {% else %}
@@ -42,7 +42,7 @@
                 <div class="course-item course-default">
                   <i class="es-icon es-icon-videocam"></i>
                   <br>
-                  {{'敬请期待'|trans}}
+                  {{'homepage.live_course.expect'|trans}}
                 </div>
                 <div class="course-date">
                   <div class="btn-circle btn-circle-md">
@@ -56,7 +56,7 @@
       </div>
       <div class="section-more-btn">
         <a href="{{  path('live_course_set_explore') }}" class="btn btn-default btn-lg">
-          {{'更多直播'|trans}} <i class="mrs-o es-icon es-icon-chevronright"></i>
+          {{'homepage.live_course.more'|trans}} <i class="mrs-o es-icon es-icon-chevronright"></i>
         </a>
       </div>
     </div>
