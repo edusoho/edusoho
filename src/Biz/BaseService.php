@@ -95,40 +95,40 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 
     /**
      * @param string $message
-     *
+     * @param int $code
      * @return AccessDeniedException
      */
-    protected function createAccessDeniedException($message = '')
+    protected function createAccessDeniedException($message = '', $code = 403)
     {
-        return new AccessDeniedException($message);
+        return new AccessDeniedException($message, $code);
     }
 
     /**
      * @param string $message
-     *
+     * @param int $code
      * @return InvalidArgumentException
      */
-    protected function createInvalidArgumentException($message = '')
+    protected function createInvalidArgumentException($message = '', $code = 403)
     {
-        return new InvalidArgumentException($message);
+        return new InvalidArgumentException($message, $code);
     }
 
     /**
      * @param string $message
-     *
+     * @param int $code
      * @return NotFoundException
      */
-    protected function createNotFoundException($message = '')
+    protected function createNotFoundException($message = '', $code = 404)
     {
-        return new NotFoundException($message);
+        return new NotFoundException($message, $code);
     }
 
     /**
      * @param string $message
-     *
+     * @param int $code
      * @return ServiceException
      */
-    protected function createServiceException($message = '', $code = 0)
+    protected function createServiceException($message = '', $code = 404)
     {
         return new ServiceException($message, $code);
     }

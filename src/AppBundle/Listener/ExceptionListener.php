@@ -4,13 +4,14 @@ namespace AppBundle\Listener;
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 
-class AjaxExceptionListener
+class ExceptionListener
 {
     private $logger;
 
@@ -26,6 +27,7 @@ class AjaxExceptionListener
         $request = $event->getRequest();
 
         if (!$request->isXmlHttpRequest()) {
+            $event->setException(new HttpException($exception->getCode(), $exception->getMessage(), $exception->getPrevious()));
             return;
         }
 
