@@ -167,40 +167,50 @@ class OtherMigrate extends AbstractMigrate
 
     private function migrate15()
     {
+        if (!$this->isFieldExist('crontab_job', 'enabled')) {
+            $this->exec(
+                "ALTER TABLE crontab_job Add COLUMN enabled tinyint(1) default 1 COMMENT '是否启用';"
+            );
+
+            $this->exec("
+                UPDATE crontab_job SET `enabled` = 0;
+            ");
+        }
+
         $this->exec(
-            "UPDATE crontab_job SET `jobClass` = 'Biz\\\\Crontab\\\\Service\\\\Impl\\\\EmptyJob' WHERE `name` = 'EmptyJob';"
+            "UPDATE crontab_job SET `jobClass` = 'Biz\\\\Crontab\\\\Service\\\\Impl\\\\EmptyJob', `enabled` = 1 WHERE `name` = 'EmptyJob';"
         );
         $this->exec(
-            "UPDATE crontab_job SET `jobClass` = 'Biz\\\\Notification\\\\Job\\\\LiveLessonStartNotifyJob' WHERE `name` = 'LiveLessonStartNotifyJob';"
+            "UPDATE crontab_job SET `jobClass` = 'Biz\\\\Notification\\\\Job\\\\LiveLessonStartNotifyJob', `enabled` = 1 WHERE `name` = 'LiveLessonStartNotifyJob';"
         );
         $this->exec(
-            "UPDATE crontab_job SET `jobClass` = 'Biz\\\\Notification\\\\Job\\\\LiveOpenPushNotificationOneHourJob' WHERE `name` = 'LiveOpenPushNotificationOneHourJob';"
+            "UPDATE crontab_job SET `jobClass` = 'Biz\\\\Notification\\\\Job\\\\LiveOpenPushNotificationOneHourJob', `enabled` = 1 WHERE `name` = 'LiveOpenPushNotificationOneHourJob';"
         );
         $this->exec(
-            "UPDATE crontab_job SET `jobClass` = 'Biz\\\\Notification\\\\Job\\\\PushNotificationOneHourJob' WHERE `name` = 'PushNotificationOneHourJob';"
+            "UPDATE crontab_job SET `jobClass` = 'Biz\\\\Notification\\\\Job\\\\PushNotificationOneHourJob', `enabled` = 1 WHERE `name` = 'PushNotificationOneHourJob';"
         );
         $this->exec(
-            "UPDATE crontab_job SET `jobClass` = 'Biz\\\\Order\\\\Job\\\\CancelOrderJob' WHERE `name` = 'CancelOrderJob';"
+            "UPDATE crontab_job SET `jobClass` = 'Biz\\\\Order\\\\Job\\\\CancelOrderJob', `enabled` = 1 WHERE `name` = 'CancelOrderJob';"
         );
         $this->exec(
-            "UPDATE crontab_job SET `jobClass` = 'Biz\\\\Sms\\\\Job\\\\SmsSendOneDayJob' WHERE `name` = 'SmsSendOneDayJob';"
+            "UPDATE crontab_job SET `jobClass` = 'Biz\\\\Sms\\\\Job\\\\SmsSendOneDayJob', `enabled` = 1 WHERE `name` = 'SmsSendOneDayJob';"
         );
         $this->exec(
-            "UPDATE crontab_job SET `jobClass` = 'Biz\\\\Sms\\\\Job\\\\SmsSendOneHourJob' WHERE `name` = 'SmsSendOneHourJob';"
+            "UPDATE crontab_job SET `jobClass` = 'Biz\\\\Sms\\\\Job\\\\SmsSendOneHourJob', `enabled` = 1 WHERE `name` = 'SmsSendOneHourJob';"
         );
         $this->exec(
-            "UPDATE crontab_job SET `jobClass` = 'Biz\\\\Testpaper\\\\Job\\\\UpdateRealTimeTestResultStatusJob' WHERE `name` = 'UpdateRealTimeTestResultStatusJob';"
+            "UPDATE crontab_job SET `jobClass` = 'Biz\\\\Testpaper\\\\Job\\\\UpdateRealTimeTestResultStatusJob', `enabled` = 1 WHERE `name` = 'UpdateRealTimeTestResultStatusJob';"
         );
 
         $this->exec(
-            "UPDATE crontab_job SET `jobClass` = 'Biz\\\\Testpaper\\\\Job\\\\UpdateRealTimeTestResultStatusJob' WHERE `name` = 'updateRealTimeTestResultStatusJob';"
+            "UPDATE crontab_job SET `jobClass` = 'Biz\\\\Testpaper\\\\Job\\\\UpdateRealTimeTestResultStatusJob', `enabled` = 1 WHERE `name` = 'updateRealTimeTestResultStatusJob';"
         );
 
         $this->exec(
-            "UPDATE crontab_job SET `jobClass` = 'Biz\\\\User\\\\Job\\\\DeleteExpiredTokenJob' WHERE `name` = 'DeleteExpiredTokenJob';"
+            "UPDATE crontab_job SET `jobClass` = 'Biz\\\\User\\\\Job\\\\DeleteExpiredTokenJob', `enabled` = 1 WHERE `name` = 'DeleteExpiredTokenJob';"
         );
         $this->exec(
-            "UPDATE crontab_job SET `jobClass` = 'Biz\\\\User\\\\Job\\\\DeleteSessionJob' WHERE `name` = 'DeleteSessionJob';"
+            "UPDATE crontab_job SET `jobClass` = 'Biz\\\\User\\\\Job\\\\DeleteSessionJob', `enabled` = 1 WHERE `name` = 'DeleteSessionJob';"
         );
     }
 
