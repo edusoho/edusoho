@@ -162,7 +162,7 @@ class BuildUpgradePackageCommand extends BaseCommand
 
                     if ($newBundleFile) {
                         $this->output->writeln("<comment>增加更新文件：[BUNDLE]        {$newBundleFile}</comment>");
-                        $this->insertDelete($newBundleFile, $packageDirectory);
+                        $this->copyFileAndDir($newBundleFile, $packageDirectory);
                     }
                 }
 
