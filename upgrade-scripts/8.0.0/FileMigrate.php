@@ -197,9 +197,18 @@ class FileMigrate extends AbstractMigrate
         ));
     }
 
+    protected function getSettingService()
+    {
+        try {
+            return $this->kernel->createService('System.SettingService');
+        } catch (\Exception $e) {
+            return $this->kernel->createService('System:SettingService');
+        }
+    }
+
     private function rebuildCloudSearchIndex()
     {
-        $service = $this->kernel->createService('System.SettingService');
+        $service = $this->getSettingService();
 
         $cloudSearchSetting = $service->get('cloud_search');
 

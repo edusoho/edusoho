@@ -51,7 +51,11 @@ class PluginMigrate extends AbstractMigrate
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        try {
+            return ServiceKernel::instance()->createService('System.SettingService');
+        } catch (\Exception $e) {
+            return ServiceKernel::instance()->createService('System:SettingService');
+        }
     }
 
     protected function getPluginConfig()

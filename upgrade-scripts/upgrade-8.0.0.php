@@ -250,9 +250,13 @@ class EduSohoUpgrade extends AbstractUpdater
         return empty($result) ? false : true;
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        try {
+            return ServiceKernel::instance()->createService('System.SettingService');
+        } catch (\Exception $e) {
+            return ServiceKernel::instance()->createService('System:SettingService');
+        }
     }
 
     protected function logger($version, $level, $message)
