@@ -26,16 +26,16 @@
 
     <div class="form-group">
       <select class="form-control" name="keywordType">
-        {{ select_options({title:'admin.course_thread.course_thread_manage_tab.form.keyword_type.title_option'|trans, content: 'admin.course_thread.course_thread_manage_tab.form.keyword_type.content_option'|trans, courseId:'admin.course_thread.course_thread_manage_tab.form.keyword_type.courseId_option'|trans, courseTitle:'admin.course_thread.course_thread_manage_tab.form.keyword_type.courseTitle_option'|trans}, app.request.get('keywordType')) }}
+        {{ select_options({title:'admin.course_thread.form.keyword_type.title_option'|trans, content: 'admin.course_thread.form.keyword_type.content_option'|trans, courseId:'admin.course_thread.course_thread_manage_tab.form.keyword_type.courseId_option'|trans, courseTitle:'admin.course_thread.course_thread_manage_tab.form.keyword_type.courseTitle_option'|trans}, app.request.get('keywordType')) }}
       </select>
     </div>
 
     <div class="form-group">
-      <input class="form-control" type="text" placeholder="{{'admin.course_thread.course_thread_manage_tab.form.input.keyword.placeholer'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
+      <input class="form-control" type="text" placeholder="{{'admin.course_thread.form.input.keyword.placeholer'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
     </div>
 
     <div class="form-group">
-      <input class="form-control" type="text" placeholder="{{'admin.course_thread.course_thread_manage_tab.form.input.author.placeholer'|trans}}" name="author" value="{{ app.request.get('author') }}">
+      <input class="form-control" type="text" placeholder="{{'admin.course_thread.form.input.author.placeholer'|trans}}" name="author" value="{{ app.request.get('author') }}">
     </div>
 
     <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
@@ -47,11 +47,11 @@
       <thead>
         <tr>
           <th width="5%"><input type="checkbox" data-role="batch-select"></th>
-          <th width="50%">{{'admin.course_thread.course_thread_manage_tab.post_th'|trans}}</th>
-          <th width="10%">{{'admin.course_thread.course_thread_manage_tab.replay_or_review_th'|trans}}</th>
-          <th width="10%">{{'admin.course_thread.course_thread_manage_tab.type_th'|trans}}</th>
-          <th width="15%">{{'admin.course_thread.course_thread_manage_tab.author_th'|trans}}</th>
-          <th width="10%">{{'admin.course_thread.course_thread_manage_tab.operation_th'|trans}}</th>
+          <th width="50%">{{'admin.course_thread.post_th'|trans}}</th>
+          <th width="10%">{{'admin.course_thread.replay_or_review_th'|trans}}</th>
+          <th width="10%">{{'admin.course_thread.type_th'|trans}}</th>
+          <th width="15%">{{'admin.course_thread.author_th'|trans}}</th>
+          <th width="10%">{{'admin.course_thread.operation_th'|trans}}</th>
         </tr>
       </thead>
       <body>
@@ -64,14 +64,14 @@
             <td><input value="{{thread.id}}" type="checkbox" data-role="batch-item"> </td>
             <td>
               {% if thread.type == 'question' %}
-                <span class="label label-info">{{'admin.course_thread.course_thread_manage_tab.question_td_label'|trans}}</span>
+                <span class="label label-info">{{'admin.course_thread.question_td_label'|trans}}</span>
               {% endif %}
 
               <a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" target="_blank"><strong>{{ thread.title }}</strong></a>
 
               <div class="short-long-text">
-                <div class="short-text text-sm text-muted">{{ thread.content|plain_text(60) }} <span class="trigger">({{'admin.course_thread.course_thread_manage_tab.expand_td'|trans}})</span></div>
-                <div class="long-text">{{ thread.content|raw }} <span class="trigger">({{'admin.course_thread.course_thread_manage_tab.collapse_td'|trans}})</span></div>
+                <div class="short-text text-sm text-muted">{{ thread.content|plain_text(60) }} <span class="trigger">({{'admin.course_thread.expand_td'|trans}})</span></div>
+                <div class="long-text">{{ thread.content|raw }} <span class="trigger">({{'admin.course_thread.collapse_td'|trans}})</span></div>
               </div>
               
               <div class="text-sm mts">
@@ -109,19 +109,19 @@
             <td>
               <div class="btn-group">
                 <a href="javascript:;" data-role="item-delete" data-url="{{ path('admin_thread_delete', {id:thread.id}) }}" class="btn btn-default btn-sm" 
-                data-name="{{'admin.course_thread.course_thread_manage_tab.post_th'|trans}}" >{{'form.btn.delete'|trans}}</a>
+                data-name="{{'admin.course_thread.post_th'|trans}}" >{{'form.btn.delete'|trans}}</a>
               </div>
             </td>
           </tr>
         {% else %}
-          <tr><td colspan="20"><div class="empty">{{'暂无帖子记录'|trans}}</div></td></tr>
+          <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
         {% endfor %}
       </body>
     </table>
 
     <div class="mbm">
-        <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'admin.course_thread.course_thread_manage_tab.select_all_btn'|trans}}</label>
-        <button class="btn btn-default btn-sm mlm" data-role="batch-delete" data-name="{{'admin.course_thread.course_thread_manage_tab.post_th'|trans}}" data-url="{{ path('admin_thread_batch_delete') }}">{{'form.btn.delete'|trans}}</button>
+        <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'admin.course_thread.select_all_btn'|trans}}</label>
+        <button class="btn btn-default btn-sm mlm" data-role="batch-delete" data-name="{{'admin.course_thread.post_th'|trans}}" data-url="{{ path('admin_thread_batch_delete') }}">{{'form.btn.delete'|trans}}</button>
     </div>
 
   </div>
