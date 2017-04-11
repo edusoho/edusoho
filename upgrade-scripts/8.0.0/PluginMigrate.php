@@ -10,6 +10,16 @@ class PluginMigrate extends AbstractMigrate
     {
         $this->exec("delete from cloud_app where code = 'Homework';");
 
+        $theme = $this->getSettingService()->get('theme');
+
+        if(empty($theme['uri'])){
+            $this->getSettingService()->set('theme', array('uri' => 'jianmo'));
+        }else if(!in_array($theme['uri'], array('jianmo', 'autumn', 'default', 'default-b'))){
+            $this->getSettingService()->set('theme', array('uri' => 'jianmo'));
+        }
+
+        $theme = $this->getSettingService()->get('theme');
+
         $pluginFile = $this->getPluginConfig();
         $pluginFile = realpath($pluginFile);
         if (!empty($pluginFile)) {
@@ -21,13 +31,11 @@ class PluginMigrate extends AbstractMigrate
             }
 
             $config = is_array($config) ? $config : array();
-            $config['active_theme_name'] = 'jianmo';
+            $config['active_theme_name'] = $theme['uri'];
 
             $content = "<?php \n return " . var_export($config, true) . ";";
             $saved = file_put_contents($pluginFile, $content);
         }
-
-        $this->getSettingService()->set('theme', array('uri' => 'jianmo'));
 
         $this->moveRoutingPluginsYml();
 
