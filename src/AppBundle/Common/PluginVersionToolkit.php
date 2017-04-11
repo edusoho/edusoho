@@ -15,6 +15,7 @@ class PluginVersionToolkit
             'Coupon' => '2.1.6',
             'ChargeCoin' => '1.2.6',
             'QuestionPlus' => '1.2.2',
+            'Crm' => '1.0.2'
         );
 
         $code = ucfirst($code);
