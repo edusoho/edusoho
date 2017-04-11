@@ -310,8 +310,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $requireFields = array('isFree', 'buyable');
         $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
-        $storage = $this->getSettingService()->get('storage', array());
-        if ($courseSet['type'] == 'normal' && $storage['upload_mode'] === 'cloud') {
+        if ($courseSet['type'] == 'normal' && $this->isCloudStorage()) {
             array_push($requireFields, 'tryLookable');
         } else {
             $fields['tryLookable'] = 0;
@@ -331,6 +330,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->dispatchEvent('course.marketing.update', array('oldCourse' => $oldCourse, 'newCourse' => $newCourse));
 
         return $newCourse;
+    }
+
+    protected function isCloudStorage()
+    {
+        $storage = $this->getSettingService()->get('storage', array());
+        return !empty($storage['upload_mode']) && $storage['upload_mode'] === 'cloud';
     }
 
     /**
