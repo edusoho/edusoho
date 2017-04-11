@@ -194,14 +194,14 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!empty($nextPage)) {
             return array(
                 'index' => $this->setIndexAndPage($index, $nextPage),
-                'message' => "正在升级数据{$rate}%...",
+                'message' => "数据升级中，已升级{$rate}%...",
                 'progress' => 0,
             );
         }
 
         return array(
             'index' => $this->setIndexAndPage($index + 1, 1),
-            'message' => "正在升级数据{$rate}%...",
+            'message' => "数据升级中，已升级{$rate}%...",
             'progress' => 0,
         );
     }
