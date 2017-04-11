@@ -46,7 +46,9 @@ class PluginMigrate extends AbstractMigrate
         $developerSetting['debug'] = 0;
 
         $this->getSettingService()->set('developer', $developerSetting);
-        $this->getSettingService()->set('crontab_next_executed_time', time());
+        $currentTime = time();
+        $this->getSettingService()->set('crontab_next_executed_time', $currentTime);
+        $this->getCrontabService()->setNextExcutedTime($currentTime);
     }
 
     protected function getSettingService()
@@ -55,6 +57,15 @@ class PluginMigrate extends AbstractMigrate
             return ServiceKernel::instance()->createService('System.SettingService');
         } catch (\Exception $e) {
             return ServiceKernel::instance()->createService('System:SettingService');
+        }
+    }
+
+    protected function getCrontabService()
+    {
+        try {
+            return ServiceKernel::instance()->createService('Crontab.CrontabService');
+        } catch (\Exception $e) {
+            return ServiceKernel::instance()->createService('Crontab:CrontabService');
         }
     }
 
