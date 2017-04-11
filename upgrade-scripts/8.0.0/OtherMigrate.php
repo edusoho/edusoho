@@ -168,12 +168,6 @@ class OtherMigrate extends AbstractMigrate
     private function migrate15()
     {
         $this->exec(
-            "UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\\\Biz\\\\Discount\\\\Job\\\\DiscountEndJob' WHERE `jobClass` like '%DiscountEndJob%';"
-        );
-        $this->exec(
-            "UPDATE crontab_job SET `jobClass` = 'DiscountPlugin\\\\Biz\\\\Discount\\\\Job\\\\DiscountStartJob' WHERE `jobClass` like '%DiscountStartJob%';"
-        );
-        $this->exec(
             "UPDATE crontab_job SET `jobClass` = 'Biz\\\\Crontab\\\\Service\\\\Impl\\\\EmptyJob' WHERE `name` = 'EmptyJob';"
         );
         $this->exec(
