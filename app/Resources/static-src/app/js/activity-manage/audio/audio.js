@@ -22,7 +22,7 @@ export default class Audio {
           required: true,
           maxlength: 50,
           trim: true,
-          open_live_course_title: true,
+          course_title: true,
         },
         minute: 'required unsigned_integer unsigned_integer',
         second: 'required second_range unsigned_integer',

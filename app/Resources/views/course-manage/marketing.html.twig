@@ -119,7 +119,7 @@ script(['libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstra
                   <div class="mb20 mt20 {% if course.deadlineType|default('days') != 'end_date' %}hidden{% endif %}"
                        id="deadlineType-date">
                     <input class="form-control width-150 mr10" id="deadline" name="deadline"
-                           value="{{ course.expiryEndDate|default(null) }}" {% if coursePublished %} disabled {% endif %}>{{ '在此日期前，学员可进行学习。'|trans }}
+                           value="{% if course.expiryEndDate|default(0) != 0 %}{{ course.expiryEndDate|default(0) }} {% endif %}" {% if coursePublished %} disabled {% endif %}>{{ '在此日期前，学员可进行学习。'|trans }}
                   </div>
                   <div class="mb20 mt20 {% if course.deadlineType|default('days') != 'days' %}hidden{% endif %}"
                        id="deadlineType-days">
@@ -134,10 +134,10 @@ script(['libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstra
                   id="expiry-date">
                   {{ '开始日期'|trans }}
                   <input class="form-control mh10 width-150 " id="expiryStartDate" type="text" name="expiryStartDate"
-                         value="{{ course.expiryStartDate|default('now'|date('Y-m-d')) }}" {% if coursePublished %} disabled {% endif %}>
+                         value="{% if course.expiryStartDate|default(0) == 0 %} {{'now'|date('Y-m-d')}} {% else %} {{ course.expiryStartDate|default('now'|date('Y-m-d')) }} {% endif %}" {% if coursePublished %} disabled {% endif %}>
                   {{ '结束日期'|trans }}
                   <input class="form-control ml5 width-150 " type="text" id="expiryEndDate" name="expiryEndDate"
-                         value="{{ course.expiryEndDate|default('') }}" {% if coursePublished %} disabled  {% endif %} >
+                         value="{% if course.expiryEndDate|default(0) != 0 %} {{ course.expiryEndDate|default(0) }} {% endif %}" {% if coursePublished %} disabled  {% endif %} >
                 </div>
                 <div class="color-warning">{{ '教学计划首次发布后“学习有效期”不能再修改。'|trans }}</div>
               </div>

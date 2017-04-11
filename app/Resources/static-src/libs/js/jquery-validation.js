@@ -190,6 +190,10 @@ jQuery.validator.addMethod("second_range", function (value, element) {
   return this.optional(element) || /^([0-9]|[012345][0-9]|59)$/.test(value);
 }, "请输入0-59之间的数字");
 
+$.validator.addMethod("course_title", function (value, element, params) {
+  return this.optional(element) || /^[^<|>]*$/.test(value);
+}, Translator.trans('不支持输入<、>字符'));
+
 $.validator.addMethod("open_live_course_title", function (value, element, params) {
   return this.optional(element) || /^[^<|>|'|"|&|‘|’|”|“]*$/.test(value);
 }, Translator.trans('不支持输入<、>、\"、&、‘、’、”、“字符'));

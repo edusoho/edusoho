@@ -6,6 +6,8 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface TestpaperDao extends GeneralDaoInterface
 {
+    public function getByIdAndType($id, $type);
+
     public function findTestpapersByIds(array $ids);
 
     public function findTestpapersByCopyIdAndLockedTarget($copyId, $lockedTarget);

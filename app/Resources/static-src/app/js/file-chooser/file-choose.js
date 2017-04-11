@@ -23,6 +23,10 @@ class FileChooser extends Emitter{
       $this.closest('li').siblings('li').find('[type="radio"]').prop('checked', false);
       $this.tab('show')
     });
+
+    if($('.js-import-video').data('link')){
+      $('.js-import-video').click();
+    }
   }
 
   initFileChooser() {
