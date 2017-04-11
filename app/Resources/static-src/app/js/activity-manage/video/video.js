@@ -28,6 +28,19 @@ export default class Video {
     });
   }
 
+  displayFinishCondition(source) {
+    console.log(source);
+    if (source === 'self') {
+      $("#finish-condition option[value=end]").removeAttr('disabled');
+    } else {
+      $("#finish-condition option[value=end]").attr('disabled', 'disabled');
+      $("#finish-condition option[value=time]").attr('selected', false);
+      $("#finish-condition option[value=time]").attr('selected', true);
+      $('.viewLength').removeClass('hidden');
+      this.initStep3from();
+    }
+  }
+
   initStep2form() {
     var $step2_form = $('#step2-form');
     var validator = $step2_form.data('validator');
@@ -100,7 +113,7 @@ export default class Video {
       this.initStep3from();
     }
 
-    $("#finish-condition").on('change', (event)=>{
+    $("#finish-condition").on('change', (event) => {
       if (event.target.value == 'time') {
         $('.viewLength').removeClass('hidden');
         this.initStep3from();
@@ -116,6 +129,8 @@ export default class Video {
     //字幕组件
     const subtitleDialog = new SubtitleDialog('.js-subtitle-list');
     const onSelectFile = file => {
+      console.log(file)
+      this.displayFinishCondition(file.source);
       FileChooser.closeUI();
       if (file.length && file.length > 0) {
         let minute = parseInt(file.length / 60);
