@@ -197,6 +197,9 @@ class WebExtension extends \Twig_Extension
         $count = $this->getAppService()->findAppCount();
         $apps = $this->getAppService()->findApps(0, $count);
 
+        $apps = array_filter($apps, function ($app) {
+            return $app['developerName'] == 'EduSoho官方';
+        });
         $notifies = array_reduce(
             $apps,
             function ($notifies, $app) {

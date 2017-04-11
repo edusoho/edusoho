@@ -3,7 +3,7 @@
 {% if current_route != 'admin_app_upgrades' and app.user and app.user.isSuperAdmin() %}
   {% set notifies = plugin_update_notify() %}
 
-  {% set dispalys = {plugin: '插件', theme: '主题'} %}
+  {% set dispalys = {plugin: '应用', theme: '主题'} %}
   {% if not notifies is empty %}
     <div class="modal js-update-modal">
       <div class="modal-dialog">
@@ -24,6 +24,8 @@
                     {% endfor  %}
                   </div>
                 {% endfor %}
+                <p class="color-primary mbl mtl">非官方应用暂不支持8.0，请等待第三方开发者升级</p>
+
               </div>
             </div>
           </div>
