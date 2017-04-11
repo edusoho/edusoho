@@ -92,9 +92,6 @@ class CourseController extends CourseBaseController
 
     private function calculateCategoryTag($course)
     {
-        if ($course['isFree']) {
-            return null;
-        }
         $tasks = $this->getTaskService()->findTasksByCourseId($course['id']);
         if (empty($tasks)) {
             return null;
