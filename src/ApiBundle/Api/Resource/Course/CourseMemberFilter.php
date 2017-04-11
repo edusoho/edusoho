@@ -15,7 +15,10 @@ class CourseMemberFilter extends Filter
 
     protected function customFilter(&$data)
     {
-        $data['deadline'] = date('c', $data['deadline']);
+        if ($data['deadline']) {
+            $data['deadline'] = date('c', $data['deadline']);
+        }
+
         $data['noteLastUpdateTime'] = date('c', $data['noteLastUpdateTime']);
         $data['finishedTime'] = date('c', $data['finishedTime']);
         $data['lastLearnTime'] = date('c', $data['lastLearnTime']);
