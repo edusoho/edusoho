@@ -47,7 +47,7 @@ class BuildX8PackageCommand extends ContainerAwareCommand
         $x8TempUpgradeDir = $buildDir.'/scripts/8.0.0';
 
         $filesystem->mirror($x8UpgradeDir, $x8TempUpgradeDir);
-        $filesystem->remove($x8UpgradeDir);
+        $filesystem->remove($x8UpgradeDir.'/..');
 
         $filesystem->remove($buildDir.'/x8.zip');
 
