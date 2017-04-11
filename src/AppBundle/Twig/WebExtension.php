@@ -197,13 +197,18 @@ class WebExtension extends \Twig_Extension
         $count = $this->getAppService()->findAppCount();
         $apps = $this->getAppService()->findApps(0, $count);
 
-        $notifies = array_reduce($apps, function ($notifies, $app) {
-            if ($app['type'] === 'plugin' && !PluginVersionToolkit::dependencyVersion($app['code'], $app['version'])) {
-                $notifies[] = $app['name'];
-            }
-
-            return $notifies;
-        }, array());
+        $notifies = array_reduce(
+            $apps,
+            function ($notifies, $app) {
+                if (!PluginVersionToolkit::dependencyVersion($app['code'], $app['version'])) {
+                    $notifies[$app['type']][] = $app['name'];
+                } elseif ($app['code'] !== 'MAIN' && $app['protocol'] < 3) {
+                    $notifies[$app['type']][] = $app['name'];
+                }
+                return $notifies;
+            },
+            array()
+        );
 
         return $notifies;
     }
@@ -244,7 +249,7 @@ class WebExtension extends \Twig_Extension
     public function weixinConfig()
     {
         $weixinmob_enabled = $this->getSetting('login_bind.weixinmob_enabled');
-        if (!(bool) $weixinmob_enabled) {
+        if (!(bool)$weixinmob_enabled) {
             return null;
         }
         $jsApiTicket = $this->createService('User:TokenService')->getTokenByType('jsapi.ticket');
@@ -299,7 +304,7 @@ class WebExtension extends \Twig_Extension
     {
         $network = $this->getSetting('developer.without_network', $default = false);
 
-        return (bool) $network;
+        return (bool)$network;
     }
 
     public function getUserVipLevel($userId)
@@ -380,9 +385,11 @@ class WebExtension extends \Twig_Extension
         $profile = $this->getUserService()->getUserProfile($user['id']);
 
         $values = array_merge($user, $profile);
-        $values = array_filter($values, function ($value) {
-            return !is_array($value);
-        }
+        $values = array_filter(
+            $values,
+            function ($value) {
+                return !is_array($value);
+            }
         );
 
         return $this->simpleTemplateFilter($pattern, $values);
@@ -392,7 +399,7 @@ class WebExtension extends \Twig_Extension
     {
         $text = trim($text);
 
-        $length = (int) $length;
+        $length = (int)$length;
 
         if (($length > 0) && (mb_strlen($text) > $length)) {
             $text = mb_substr($text, $start, $length, 'UTF-8');
@@ -472,7 +479,9 @@ class WebExtension extends \Twig_Extension
     public function getThemeGlobalScript()
     {
         $theme = $this->getSetting('theme.uri', 'default');
-        $filePath = realpath($this->container->getParameter('kernel.root_dir')."/../web/themes/{$theme}/js/global-script.js");
+        $filePath = realpath(
+            $this->container->getParameter('kernel.root_dir')."/../web/themes/{$theme}/js/global-script.js"
+        );
 
         if ($filePath) {
             return 'theme/global-script';
@@ -572,8 +581,13 @@ class WebExtension extends \Twig_Extension
 
         foreach ($keys as $key) {
             if (!isset($value[$key])) {
-                throw new \InvalidArgumentException(sprintf('Key `%s` is not in context with %s', $key,
-                    implode(array_keys($context), ', ')));
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        'Key `%s` is not in context with %s',
+                        $key,
+                        implode(array_keys($context), ', ')
+                    )
+                );
             }
 
             $value = $value[$key];
@@ -584,7 +598,9 @@ class WebExtension extends \Twig_Extension
 
     public function isFeatureEnabled($feature)
     {
-        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter(
+            'enabled_features'
+        ) : array();
 
         return in_array($feature, $features);
     }
@@ -776,7 +792,7 @@ class WebExtension extends \Twig_Extension
 
     public function navigationUrlFilter($url)
     {
-        $url = (string) $url;
+        $url = (string)$url;
 
         if (strpos($url, '://')) {
             return $url;
@@ -795,7 +811,7 @@ class WebExtension extends \Twig_Extension
      *                            D -> 区全称,     d -> 区简称.
      *
      * @param [type] $districeId [description]
-     * @param string $format     格式，默认格式'P C D'
+     * @param string $format 格式，默认格式'P C D'
      *
      * @return [type] [description]
      */
@@ -1051,10 +1067,14 @@ class WebExtension extends \Twig_Extension
         if (empty($path)) {
             $defaultSetting = $this->getSetting('default', array());
 
-            if ((($defaultKey == 'course.png' && array_key_exists('defaultCoursePicture',
-                            $defaultSetting) && $defaultSetting['defaultCoursePicture'] == 1)
-                    || ($defaultKey == 'avatar.png' && array_key_exists('defaultAvatar',
-                            $defaultSetting) && $defaultSetting['defaultAvatar'] == 1))
+            if ((($defaultKey == 'course.png' && array_key_exists(
+                            'defaultCoursePicture',
+                            $defaultSetting
+                        ) && $defaultSetting['defaultCoursePicture'] == 1)
+                    || ($defaultKey == 'avatar.png' && array_key_exists(
+                            'defaultAvatar',
+                            $defaultSetting
+                        ) && $defaultSetting['defaultAvatar'] == 1))
                 && (array_key_exists($defaultKey, $defaultSetting)
                     && $defaultSetting[$defaultKey])
             ) {
@@ -1150,7 +1170,7 @@ class WebExtension extends \Twig_Extension
         $text = str_replace('&nbsp;', ' ', $text);
         $text = trim($text);
 
-        $length = (int) $length;
+        $length = (int)$length;
 
         if (($length > 0) && (mb_strlen($text) > $length)) {
             $text = mb_substr($text, 0, $length, 'UTF-8');
@@ -1168,7 +1188,7 @@ class WebExtension extends \Twig_Extension
         $text = str_replace('&nbsp;', ' ', $text);
         $text = trim($text);
 
-        $length = (int) $length;
+        $length = (int)$length;
 
         if (($length > 0) && (mb_strlen($text, 'utf-8') > $length)) {
             $text = mb_substr($text, 0, $length, 'UTF-8');
@@ -1222,15 +1242,23 @@ class WebExtension extends \Twig_Extension
     {
         $ext = $this;
 
-        $bbCode = preg_replace_callback('/\[image\](.*?)\[\/image\]/i', function ($matches) use ($ext) {
-            $src = $ext->getFileUrl($matches[1]);
+        $bbCode = preg_replace_callback(
+            '/\[image\](.*?)\[\/image\]/i',
+            function ($matches) use ($ext) {
+                $src = $ext->getFileUrl($matches[1]);
 
-            return "<img src='{$src}' />";
-        }, $bbCode);
+                return "<img src='{$src}' />";
+            },
+            $bbCode
+        );
 
-        $bbCode = preg_replace_callback('/\[audio.*?id="(\d+)"\](.*?)\[\/audio\]/i', function ($matches) {
-            return "<span class='audio-play-trigger' href='javascript:;' data-file-id=\"{$matches[1]}\" data-file-type=\"audio\"></span>";
-        }, $bbCode);
+        $bbCode = preg_replace_callback(
+            '/\[audio.*?id="(\d+)"\](.*?)\[\/audio\]/i',
+            function ($matches) {
+                return "<span class='audio-play-trigger' href='javascript:;' data-file-id=\"{$matches[1]}\" data-file-type=\"audio\"></span>";
+            },
+            $bbCode
+        );
 
         return $bbCode;
     }
@@ -1239,8 +1267,8 @@ class WebExtension extends \Twig_Extension
     {
         $text = number_format($text, 1, '.', '');
 
-        if ((int) $text == $text) {
-            return (string) (int) $text;
+        if ((int)$text == $text) {
+            return (string)(int)$text;
         }
 
         return $text;
@@ -1263,11 +1291,15 @@ class WebExtension extends \Twig_Extension
     public function fillQuestionStemHtmlFilter($stem)
     {
         $index = 0;
-        $stem = preg_replace_callback('/\[\[.+?\]\]/', function ($matches) use (&$index) {
-            ++$index;
+        $stem = preg_replace_callback(
+            '/\[\[.+?\]\]/',
+            function ($matches) use (&$index) {
+                ++$index;
 
-            return "<span class='question-stem-fill-blank'>({$index})</span>";
-        }, $stem);
+                return "<span class='question-stem-fill-blank'>({$index})</span>";
+            },
+            $stem
+        );
 
         return $stem;
     }
@@ -1396,7 +1428,7 @@ class WebExtension extends \Twig_Extension
             return '100%';
         }
 
-        return (int) ($number / $total * 100).'%';
+        return (int)($number / $total * 100).'%';
     }
 
     public function arrayMerge($text, $content)
