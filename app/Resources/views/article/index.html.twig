@@ -3,7 +3,6 @@
 {% block title %}{{ '%article_name%频道'|trans({'%article_name%': setting('article.name')|default('资讯'|trans)}) }} - {{ parent() }}{% endblock %}
 
 {% set bodyClass = 'artcile-list-page' %}
-{#{% set script_controller = 'article/list.js' %}#}
 {% do script(['app/js/article/list/index.js']) %}
 
 {% block content %}
