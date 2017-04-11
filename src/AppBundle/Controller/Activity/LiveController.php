@@ -227,10 +227,12 @@ class LiveController extends BaseController implements ActivityActionInterface
         }
     }
 
+    // Refactor: redesign course_lesson_replay table
     protected function _getLiveReplays($activity, $ssl = false)
     {
         if ($activity['ext']['replayStatus'] === LiveReplayService::REPLAY_GENERATE_STATUS) {
-            $replays = $this->getLiveReplayService()->findReplayByLessonId($activity['id']);
+            $lessonId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
+            $replays = $this->getLiveReplayService()->findReplayByLessonId($lessonId);
 
             $service = $this->getLiveReplayService();
             $fileService = $this->getUploadFileService();
