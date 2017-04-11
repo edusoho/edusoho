@@ -84,7 +84,7 @@
            class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'studentNum') %} active {% endif %}js-course-filter"
            data-url="{{ path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'studentNum'}) }}"
            data-type='course'>
-          {{ 'site.dategrid.filter.topest'|trans }}
+          {{ 'site.dategrid.filter.hotest'|trans }}
         </a>
         <a href="javascript:;"
            class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'recommendedSeq') %} active {% endif %}js-course-filter"
