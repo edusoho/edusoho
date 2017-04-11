@@ -111,15 +111,15 @@ class ResourceKernel
         $pathMeta = $this->pathParser->parse($apiRequest);
         $resourceProxy = $this->resManager->create($pathMeta);
 
-        $this->checkResourcePermission($resourceProxy);
+        $this->checkResourcePermission($resourceProxy, $pathMeta->getResMethod());
 
         return $this->invoke($apiRequest, $resourceProxy, $pathMeta);
     }
 
-    private function checkResourcePermission(ResourceProxy $resourceProxy)
+    private function checkResourcePermission(ResourceProxy $resourceProxy, $method)
     {
-        $annotation = $this->annotationReader->getClassAnnotation(
-            new \ReflectionClass(get_class($resourceProxy->getResource())),
+        $annotation = $this->annotationReader->getMethodAnnotation(
+            new \ReflectionMethod(get_class($resourceProxy->getResource()), $method),
             'ApiBundle\Api\Annotation\ApiConf'
         );
 
