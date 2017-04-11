@@ -335,6 +335,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function isCloudStorage()
     {
         $storage = $this->getSettingService()->get('storage', array());
+
         return !empty($storage['upload_mode']) && $storage['upload_mode'] === 'cloud';
     }
 
