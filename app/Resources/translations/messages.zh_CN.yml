@@ -694,25 +694,185 @@ article.create: 发起了话题
 article.last_reply: 最后回复
 
 # 课程管理
-# 普通课程
-admin.course.manage.normal_course: 普通课程
-
-# 班级课程
-# 会员课程
-admin.course.manage.vip_course: 会员课程
-
 #课程管理通用模块
-admin.course.manage.course.category_placeholder: 课程分类
-admin.course.manage.course.status_placeholder: 课程状态
-admin.course.manage.course.title_placeholder: 标题
-admin.course.manage.course.creator_placeholer: 创建者
-admin.course.manage.course.tips: >
+admin.course_manage.category_placeholder: 课程分类
+admin.course_manage.title_placeholder: 标题
+admin.course_manage.creator_placeholer: 创建者
+admin.course_manage.operater: 操作
+
+## 课程管理
+### 普通课程
+admin.course_manage.manage.normal_course: 普通课程
+admin.course_manage.manage.student_number: >
+  %student%数
+admin.course_manage.manage.income_RMB: 收入(元)
+
+### 班级课程
+admin.course_manage.manage.classroom_course_location: >
+  所在%classroom%
+admin.course_manage.manage.classroom_course_removed: 已移除
+
+### 会员课程
+admin.course_manage.manage.vip_course: 会员课程
+admin.course_manage.manage.vip_grade: 会员等级
+admin.course_manage.manage.vip_grade_removed: 该会员等级已删除
+admin.course_manage.manage.vip_grade_count: >
+  <span class="text-muted text-sm">等%count%个会员等级</span>
+
+### 直播课程
+admin.course_manage.manage.live_course: 直播课程
+
+### 课程管理通用模块
+admin.course_manage.manage.status_placeholder: 课程状态
+admin.course_manage.manage.course_tips: >
   <div style='width:250px;'>
     <span style='color:blue;'>课程说明</span><br>
     1. 编号及排序无法修改；<br>
     2. 课程地址规则：域名/course/课程编号；
   </div>
-admin.course.manage.course_published: 已发布
-admin.course.manage.course_closed: 已关闭
-admin.course.manage.course_unpublish: 未发布
-admin.course.manage.course_count: 个
+admin.course_manage.manage.count: >
+  课程：<strong class="inflow-num">%courseNum%</strong>个
+admin.course_manage.manage.published_count: >
+  已发布：<strong class="inflow-num">%publishedNum%</strong>个
+admin.course_manage.manage.closed_count: >
+  已关闭：<strong class="inflow-num">%closedNum%</strong>个
+admin.course_manage.manage.unpublish_count: >
+  未发布：<strong class="inflow-num">%unPublishedNum%</strong>个
+admin.course_manage.manage.number: 编号
+admin.course_manage.manage.name: 名称
+admin.course_manage.manage.price: 价格
+admin.course_manage.manage.serialize_mode: 连载状态
+admin.course_manage.manage.status: 状态
+admin.course_manage.manage.creator: 创建者
+admin.course_manage.manage.manage_btn: 管理
+admin.course_manage.manage.empty: 暂无课程记录
+admin.course_manage.manage.category: 分类
+admin.course_manage.manage.recommend: >
+  <span class="label label-default">荐：%recommendedTime% / 序号：%recommendedSeq%</span>
+admin.course_manage.manage.no_serialize: 非连载课程
+admin.course_manage.manage.serializing: 连载中
+admin.course_manage.manage.serialize_finished: 已完结
+
+## 课程推荐
+admin.course_manage.recommend.seq: 顺序号
+admin.course_manage.recommend.name: 课程名称
+admin.course_manage.recommend.creator: 创建者
+admin.course_manage.recommend.time: 推荐时间
+admin.course_manage.recommend.empty: 暂无推荐课程
+admin.course_manage.recommend.category: 分类
+admin.course_manage.recommend.set_seq_btn: 设置序号
+admin.course_manage.recommend.cancel_seq_btn: 取消推荐
+admin.course_manage.recommend.set_seq.modal_title: 设置推荐课程
+admin.course_manage.recommend.set_seq.seq_label: 序号
+admin.course_manage.recommend.set_seq.seq_tips: 请输入0-10000的整数
+
+## 课程统计
+admin.course_manage.statistics.name: 课程名
+admin.course_manage.statistics.classroom: >
+  所在%classroom%
+admin.course_manage.statistics.teach_plan_count: 教学计划数量
+admin.course_manage.statistics.task_count: 任务数量
+admin.course_manage.statistics.student: 学员
+admin.course_manage.statistics.student_number: >
+  %user_name%人数
+admin.course_manage.statistics.finished_number: 完成课程人数
+admin.course_manage.statistics.study_time_minute: 课程学习时长(分)
+admin.course_manage.statistics.income_RMB: 课程收入(元)
+admin.course_manage.statistics.no_introduce: 未引入
+admin.course_manage.statistics.watch_task: 查看任务
+### 任务统计数据
+admin.course_manage.statistics.modal_title: >
+  %title%课程的数据
+admin.course_manage.statistics.data.name: 任务名
+admin.course_manage.statistics.data.study_number: 学习人数
+admin.course_manage.statistics.data.finished_number: 完成人数
+admin.course_manage.statistics.data.average_study_time: 平均学习时长(分)
+admin.course_manage.statistics.data.video_and_music_study_time: 音视频时长(分)
+admin.course_manage.statistics.data.video_and_music_average_study_time: 音视频平均观看时长(分)
+admin.course_manage.statistics.data.average_score: 测试平均得分
+### 任务统计详细数据
+admin.course_manage.statistics.data_detail.name: 用户名
+admin.course_manage.statistics.data_detail.join_time: 加入课程时间
+admin.course_manage.statistics.data_detail.finished_time: 完成课程时间
+admin.course_manage.statistics.data_detail.study_days: 课程学习天数
+admin.course_manage.statistics.data_detail.study_time: 课程学习时长（分）
+admin.course_manage.statistics.data_detail.question_number: 提问数
+admin.course_manage.statistics.data_detail.note_number: 笔记数
+
+# 公开课管理
+#公开课通用模块
+admin.open_manage.category_placeholder: 课程分类
+admin.open_manage.title_placeholder: 标题
+admin.open_manage.creator_placeholer: 创建者
+admin.open_manage.operater: 操作
+
+## 公开课管理
+admin.open_manage.manage.open_cloud_sms_tips: 尚未开启云短信的直播通知开关，开启后直播公开课将支持短信提醒功能
+admin.open_manage.manage.open_cloud_sms: 去开启
+admin.open_manage.manage.manage_btn: 管理
+admin.open_manage.manage.number: 编号
+admin.open_manage.manage.name: 名称
+admin.open_manage.manage.status: 状态
+admin.open_manage.manage.recommend_course: 推荐课程
+admin.open_manage.manage.cancel_recommend: 取消推荐
+admin.open_manage.manage.closed_course: 关闭课程
+admin.open_manage.manage.published_course: 发布课程
+admin.open_manage.manage.delete_course: 删除课程
+admin.open_manage.manage.student: 学员
+admin.open_manage.manage.chapter: 章
+admin.open_manage.manage.section: 节
+
+### 直播课管理
+admin.open_manage.manage.live_course: 直播
+admin.open_manage.manage.empty: 该直播课程已删除
+
+### 公开课管理通用模块
+admin.open_manage.manage.status_placeholder: 课程状态
+admin.open_manage.manage.open_tips: >
+  <div style='width:250px;'>
+    <span style='color:blue;'>公开课说明</span><br>
+    1. 编号及排序无法修改；<br>
+  </div>
+admin.open_manage.manage.creator: 创建者
+admin.open_manage.manage.empty: 暂无课程记录
+admin.open_manage.manage.category: 分类
+admin.open_manage.manage.recommend: >
+  <span class="label label-default">荐：%recommendedTime% / 序号：%recommendedSeq%</span>
+
+### 公开课推荐
+admin.open_manage.recommend.seq: 顺序号
+admin.open_manage.recommend.name: 课程名称
+admin.open_manage.recommend.creator: 创建者
+admin.open_manage.recommend.time: 推荐时间
+admin.open_manage.recommend.empty: 暂无推荐课程
+admin.open_manage.recommend.category: 分类
+admin.open_manage.recommend.set_seq_btn: 设置序号
+admin.open_manage.recommend.cancel_btn: 取消推荐
+
+#### 设置推荐序号
+admin.open_manage.recommend.set_seq.modal_title: 设置推荐课程
+admin.open_manage.recommend.set_seq.seq_label: 序号
+admin.open_manage.recommend.set_seq.seq_tips: 请输入0-10000的整数
+
+### 公开课统计
+admin.open_manage.analysis.start_date: 起始日期
+admin.open_manage.analysis.end_date: 截止日期
+admin.open_manage.analysis.yesterday: 昨天
+admin.open_manage.analysis.recent_seven_day: 最近七天
+admin.open_manage.analysis.recent_thirty_day: 最近30天
+admin.open_manage.analysis.referer: 来源分析
+admin.open_manage.analysis.conversion: 购买转化分析
+admin.open_manage.analysis.watch: 观看统计
+
+#### 公开课来源分析
+admin.open_manage.analysis.referer.summary_list: 明细
+admin.open_manage.analysis.referer.summary: 汇总
+admin.open_manage.analysis.referer.course_name: 公开课名称
+admin.open_manage.analysis.referer.visit_number: 访问数
+admin.open_manage.analysis.referer.detail: 详情
+admin.open_manage.analysis.referer.empty: 暂无记录
+admin.open_manage.analysis.referer.footer_tips: 注：列表结果中，不会包含没有访问过的课程
+admin.open_manage.analysis.referer.summary.referer: 来源
+admin.open_manage.analysis.referer.summary.referer_number: 来源数
+admin.open_manage.analysis.referer.summary.proportion: 占比
+admin.open_manage.analysis.referer.summary.empty: 暂无记录
