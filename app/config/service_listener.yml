@@ -37,7 +37,7 @@ services:
 
     app.locale_listener:
         class: AppBundle\Listener\LocaleListener
-        arguments: ['%kernel.default_locale%']
+        arguments: ['@service_container', '%kernel.default_locale%']
         tags:
             - { name: kernel.event_subscriber }
 

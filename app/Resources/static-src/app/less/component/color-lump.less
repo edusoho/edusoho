@@ -26,14 +26,18 @@
     height: 10px;
   }
   &.lump-card {
-    background-color: @gray-lighter;
-    color: @gray;
-    border: 1px solid #d6d6d6;
+    color: @gray-dark;
+    border: 1px solid @border-color;
+    background-color: #fff;
     &.done {
-      background-color: #d2f2df;
+      border: 1px solid @brand-primary;
+      background-color: @brand-primary;
+      color: #fff;
     }
     &.doing {
-      color: #fff;
+      border: 1px solid @brand-primary;
+      background-color: transparent;
+      color: @gray-dark;
     }
   }
 }

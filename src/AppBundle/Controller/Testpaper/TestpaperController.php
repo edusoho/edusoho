@@ -22,7 +22,7 @@ class TestpaperController extends BaseController
     {
         $user = $this->getUser();
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testId);
+        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testId, 'testpaper');
 
         if (empty($testpaper)) {
             throw $this->createResourceNotFoundException('testpaper', $testId);
@@ -68,7 +68,7 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('info', 'access denied');
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testpaperResult['testId'], $testpaperResult['type']);
 
         $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id'], $testpaperResult['id']);
 
@@ -106,10 +106,10 @@ class TestpaperController extends BaseController
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testpaperResult['testId'], $testpaperResult['type']);
 
         if (!$testpaper) {
-            throw $this->createResourceNotFoundException('testpaper', $testpaperResult['testId']);
+            return $this->createMessageResponse('info', '该试卷已删除，不能查看结果');
         }
 
         if ($testpaperResult['status'] === 'doing') {
@@ -149,7 +149,6 @@ class TestpaperController extends BaseController
             'source' => $request->query->get('source', 'course'),
             'attachments' => $attachments,
             'questionTypes' => $this->getCheckedQuestionType($testpaper),
-            'limitedTime' => 0,
             'task' => $task,
             'action' => $request->query->get('action', ''),
             'target' => $testpaperActivity,

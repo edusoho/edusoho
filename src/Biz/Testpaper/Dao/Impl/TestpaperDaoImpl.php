@@ -9,6 +9,11 @@ class TestpaperDaoImpl extends GeneralDaoImpl implements TestpaperDao
 {
     protected $table = 'testpaper_v8';
 
+    public function getByIdAndType($id, $type)
+    {
+        return $this->getByFields(array('id' => $id, 'type' => $type));
+    }
+
     public function findTestpapersByIds(array $ids)
     {
         return $this->findInField('id', $ids);

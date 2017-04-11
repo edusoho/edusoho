@@ -1,0 +1,8 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{ '提示'|trans }}{% endblock %}
+{% block body %}
+  <div class="alert">
+      {{ '您购买的班级已到期，无法学习任务、提问等。如有疑问请联系老师。'|trans }}
+  </div>
+{% endblock %}

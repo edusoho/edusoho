@@ -496,7 +496,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 
         try {
             $this->biz['db']->beginTransaction();
-            $batch = $this->getMoneyCardBatchDao()->getBatchByToken($token['token'], true);
+            $batch = $this->getMoneyCardBatchDao()->getBatchByToken($token['token'], array('lock' => 1));
 
             if (empty($batch)) {
                 $this->biz['db']->commit();

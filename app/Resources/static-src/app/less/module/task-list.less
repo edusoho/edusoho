@@ -128,13 +128,16 @@
     cursor: move;
     word-wrap: break-word;
     word-break: break-all;
+    &:hover,
     &.active {
       background: #f3f3f3;
-      .item-default-header  {
-        border-color: @gray-medium;
-      }
       .item-actions {
         visibility: visible;;
+      }
+    }
+    &.active {
+      .item-default-header  {
+        border-color: @gray-medium;
       }
     }
   }
@@ -199,8 +202,10 @@
       >a {
         color: @gray;
         line-height: 58px;
+        &:hover {
+          color: @brand-success;
+        }
       }
-      &:hover,
       &.active {
         >a {
           color: @brand-success;

@@ -5,7 +5,6 @@ namespace Biz\System\Service\Impl;
 use Biz\BaseService;
 use Biz\System\Dao\LogDao;
 use Biz\User\Service\UserService;
-use AppBundle\Common\PluginToolkit;
 use Biz\Common\Logger;
 use Biz\System\Service\LogService;
 
@@ -65,16 +64,18 @@ class LogServiceImpl extends BaseService implements LogService
     {
         $user = $this->getCurrentUser();
 
-        return $this->getLogDao()->create(array(
-            'module' => Logger::getModule($module),
-            'action' => $action,
-            'message' => $message,
-            'data' => empty($data) ? '' : json_encode($data),
-            'userId' => $user['id'],
-            'ip' => $user['currentIp'],
-            'createdTime' => time(),
-            'level' => $level,
-        ));
+        return $this->getLogDao()->create(
+            array(
+                'module' => Logger::getModule($module),
+                'action' => $action,
+                'message' => $message,
+                'data' => empty($data) ? '' : json_encode($data),
+                'userId' => $user['id'],
+                'ip' => $user['currentIp'],
+                'createdTime' => time(),
+                'level' => $level,
+            )
+        );
     }
 
     public function analysisLoginNumByTime($startTime, $endTime)
@@ -160,20 +161,26 @@ class LogServiceImpl extends BaseService implements LogService
         $systemModules = array_keys(Logger::systemModuleConfig());
         $pluginModules = array_keys(Logger::pluginModuleConfig());
 
-        $plugins = PluginToolkit::getPlugins();
+        $rootDir = realpath($this->biz['root_directory']);
+
+        $filepath = $rootDir.'/config/plugin.php';
+
+        $plugins = array();
+        if (file_exists($filepath)) {
+            $plugins = require $filepath;
+        }
+
+        $plugins = array_map('strtolower', array_keys($plugins));
+
         if (empty($plugins)) {
             return $systemModules;
         }
-        $plugins = array_map('strtolower', array_keys($plugins));
 
         foreach ($pluginModules as $key => $module) {
             $formatModule = str_replace('_', '', $module);
             if (!in_array($formatModule, $plugins)) {
                 unset($pluginModules[$key]);
             }
-        }
-        if (in_array('homework', $plugins)) {
-            $pluginModules[] = 'exercise';
         }
 
         $modules = array_merge($systemModules, $pluginModules);

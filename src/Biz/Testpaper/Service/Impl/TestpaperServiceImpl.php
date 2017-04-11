@@ -14,6 +14,7 @@ use Biz\Question\Service\QuestionService;
 use Biz\Testpaper\Dao\TestpaperResultDao;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\Dao\TestpaperItemResultDao;
+use Biz\Testpaper\Builder\TestpaperBuilderInterface;
 use AppBundle\Common\Exception\ResourceNotFoundException;
 
 class TestpaperServiceImpl extends BaseService implements TestpaperService
@@ -21,6 +22,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     public function getTestpaper($id)
     {
         return $this->getTestpaperDao()->get($id);
+    }
+
+    public function getTestpaperByIdAndType($id, $type)
+    {
+        return $this->getTestpaperDao()->getByIdAndType($id, $type);
     }
 
     public function createTestpaper($fields)
@@ -287,11 +293,19 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function searchTestpaperResultsCount($conditions)
     {
+        if (isset($conditions['courseIds']) && empty($conditions['courseIds'])) {
+            return 0;
+        }
+
         return $this->getTestpaperResultDao()->count($conditions);
     }
 
     public function searchTestpaperResults($conditions, $sort, $start, $limit)
     {
+        if (isset($conditions['courseIds']) && empty($conditions['courseIds'])) {
+            return array();
+        }
+
         return $this->getTestpaperResultDao()->search($conditions, $sort, $start, $limit);
     }
 
@@ -777,6 +791,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return false;
     }
 
+    /**
+     * @param  $type
+     *
+     * @return TestpaperBuilderInterface
+     */
     public function getTestpaperBuilder($type)
     {
         return $this->biz["testpaper_builder.{$type}"];

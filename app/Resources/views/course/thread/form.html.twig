@@ -4,7 +4,8 @@
 
 {% block title %}{% if thread %}{{'编辑话题'|trans}}{% else %}{{'发表话题'|trans}}{% endif %} - {{ parent() }}{% endblock %}
 
-{% do load_script('course/thread-form') %}
+
+
 
 {% set nav = 'threads' %}
 
@@ -77,5 +78,8 @@
   <input type="hidden" name="courseSetId" value="{{ course.courseSetId }}">
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
+
+{% do load_script('course/thread-form') %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 
 {% endblock %}

@@ -125,7 +125,7 @@ class LessonReplay extends BaseResource
             }
 
             if ($key) {
-                $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+                $result = $this->getCloudFileService()->player($file['globalId'], $ssl);
             }
         }
 

@@ -1167,7 +1167,7 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testpaperId, 'testpaper');
 
         if (!$testpaper) {
             throw $this->createResourceNotFoundException('testpaper', $testpaperId);
@@ -1270,7 +1270,7 @@ class ClassroomManageController extends BaseController
                 'userId' => $member['userId'],
                 'status' => 'finish',
             ));
-            if ($finishedTaskCount >= $taskCount) {
+            if ($taskCount > 0 && $finishedTaskCount >= $taskCount) {
                 ++$learnedCoursesCount;
             }
         }

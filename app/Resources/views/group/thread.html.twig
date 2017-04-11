@@ -50,10 +50,10 @@
 
       {% if attachs %}
         <hr>
-        <span class="glyphicon glyphicon-paperclip"></span> {{'group.thread.attachments_download'|trans}} :
+        <span class="glyphicon glyphicon-paperclip"></span> {{'attachments.download'|trans}} :
         <div class="row clearfix mtm">
           {% for attach in attachs %}
-            <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}{{'group.thread.attachments_download.description'|trans({'%description%':attach.description})}}{% endif %}  {{'group.thread.attachments_download.upload_time'|trans({'%createdTime%':files[attach.fileId].createdTime|smart_time})}}">
+            <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}{{'attachments.download.description'|trans({'%description%':attach.description})}}{% endif %}  {{'attachments.download.upload_time'|trans({'%createdTime%':files[attach.fileId].createdTime|smart_time})}}">
               {% if attach.coin > 0  and   user.id != attach.userId and app.user %}
                 <a href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_buy_attach',{attachId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="avatar-md"></a>
               {% else %}
@@ -71,11 +71,11 @@
                 <div class="content" style="color: #999;font-size:11px;">
                   {{files[attach.fileId].size|file_size}}
                   {% if attach.coin > 0 %}
-                    <span class="mls">{{'group.thread.attachments_download.price'|trans({'%coin%':attach.coin,'%coin_name%':setting('coin').coin_name})}}</span>
+                    <span class="mls">{{'attachments.download.price'|trans({'%coin%':attach.coin,'%coin_name%':setting('coin').coin_name})}}</span>
                     {% else %}
-                    <span class="mls">{{'group.thread.attachments_download.free'|trans}}</span>
+                    <span class="mls">{{'attachments.download.free'|trans}}</span>
                   {% endif %}
-                  <br>{{'group.thread.attachments_download.times'|trans({'%hitNum%':attach.hitNum})}}
+                  <br>{{'attachments.download.times'|trans({'%hitNum%':attach.hitNum})}}
                 </div>
               </div>
             </div>
@@ -245,11 +245,11 @@
             </div>
           {% if postAttachs[post.id] %}
             <hr>
-            <span class="glyphicon glyphicon-paperclip"></span> {{'group.thread.attachments_download'|trans}} :
+            <span class="glyphicon glyphicon-paperclip"></span> {{'attachments.download'|trans}} :
             <div class="row clearfix mtm">
               {% for attach in postAttachs[post.id] %}
                 {% set postFile = postFiles[post.id] %}
-                <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}{{'group.thread.attachments_download.description'|trans({'%description%': attach.description})}} {% endif %}  {{'group.thread.attachments_download.upload_time'|trans({'%createdTime%': postFile[attach.fileId].createdTime|smart_time})}}">
+                <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}{{'attachments.download.description'|trans({'%description%': attach.description})}} {% endif %}  {{'attachments.download.upload_time'|trans({'%createdTime%': postFile[attach.fileId].createdTime|smart_time})}}">
                   {% if attach.coin > 0  and app.user and  user.id != attach.userId %}
                     <a href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_buy_attach',{attachId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="avatar-md"></a>
                   {% else %}
@@ -266,14 +266,14 @@
                     <div class="content" style="color: #999;font-size:11px;">
                       {{postFile[attach.fileId].size|file_size}}
                       {% if attach.coin > 0 %}
-                        <span class="mls">{{'group.thread.attachments_download.price'|trans({'%coin%':attach.coin,'%coin_name%':setting('coin').coin_name})}}</span>
+                        <span class="mls">{{'attachments.download.price'|trans({'%coin%':attach.coin,'%coin_name%':setting('coin').coin_name})}}</span>
                         {% else %}
-                        <span class="mls">{{'group.thread.attachments_download.free'|trans}}</span>
+                        <span class="mls">{{'attachments.download.free'|trans}}</span>
                       {% endif %}
-                      <br>{{'group.thread.attachments_download.times'|trans({'%hitNum%':attach.hitNum})}}
+                      <br>{{'attachments.download.times'|trans({'%hitNum%':attach.hitNum})}}
                     </div>
                     {% if user.id==post.userId or is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
-                      <a title="{{'group.thread.attachments_download.delete_warning'|trans}}" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_delete_attach',{goodsId:attach.id})}}">{{'group.thread.attachments_download.delete_btn'|trans}}</a>
+                      <a title="{{'attachments.download.delete_warning'|trans}}" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_delete_attach',{goodsId:attach.id})}}">{{'attachments.download.delete_btn'|trans}}</a>
                     {% endif %}
                   </div>
                 </div>
