@@ -710,16 +710,6 @@ group.detail.new_group_members.empty: 还没有小组成员！
 group.detail.hot_group: 热门小组
 group.detail.hot_group_empty: 暂无小组信息！
 
-# 话题
-article: 话题
-article.reply: 回复
-article.empty: 暂无话题！
-article.status.stick: 置顶
-article.status.essence: 精华
-article.status.reward: 奖
-article.create: 发起了话题
-article.last_reply: 最后回复
-
 # 课程管理
 #课程管理通用模块
 admin.course_manage.category_placeholder: 课程分类
@@ -903,6 +893,7 @@ admin.open_manage.analysis.referer.summary.referer: 来源
 admin.open_manage.analysis.referer.summary.referer_number: 来源数
 admin.open_manage.analysis.referer.summary.proportion: 占比
 admin.open_manage.analysis.referer.summary.empty: 暂无记录
+
 ##
 thread: 话题
 thread.reply: 回复
