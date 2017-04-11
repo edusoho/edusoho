@@ -6,11 +6,11 @@ use ApiBundle\Api\Exception\ResourceNotFoundException;
 use ApiBundle\Api\Resource\Resource;
 use Symfony\Component\HttpFoundation\Request;
 
-class UserFavoriteCourse extends Resource
+class UserFavoriteCourseSet extends Resource
 {
-    public function get(Request $request, $userId, $courseId)
+    public function get(Request $request, $userId, $courseSetId)
     {
-        $isFavorite = $this->service('Course:CourseSetService')->isUserFavorite($userId, $courseId);
+        $isFavorite = $this->service('Course:CourseSetService')->isUserFavorite($userId, $courseSetId);
         return array('isFavorite' => $isFavorite);
     }
 
