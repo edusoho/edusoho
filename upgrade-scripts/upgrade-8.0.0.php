@@ -20,7 +20,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         try {
-            $dir = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir').'../web/install');
+            $dir = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir').'/../web/install');
             $filesystem = new Filesystem();
 
             if (!empty($dir)) {
