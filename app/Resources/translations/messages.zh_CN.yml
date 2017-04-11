@@ -9,6 +9,17 @@ site.dategrid.filter.last_one_week: 最近一周
 site.dategrid.filter.last_two_week: 最近两周
 site.dategrid.filter.last_one_month: 最近一个月
 site.dategrid.filter.last_three_month: 最近三个月
+site.dategrid.filter.all_course: 全部课程
+site.dategrid.filter.latest: 最新
+site.dategrid.filter.topest: 最热
+site.dategrid.filter.recommended: 推荐
+site.dategrid.filter.category_more: 更多
+site.dategrid.filter.course_more: 更多课程
+site.message.info: 提示信息
+site.message.warning: 警告信息
+site.message.error: 错误提示
+site.power_by: 好知网
+site.default.student: 学员
 
 # 用户通用
 user.fields.login_password: 登录密码
@@ -107,6 +118,8 @@ open_course.status.living: 即将直播
 # 班级
 classroom: 班级
 classroom.courses_count: 共%courseNum%门课程
+classroom.continue_learning_btn: 继续学习
+classroom.join_btn: 立即加入
 
 # 表单通用
 form.field.optional: 选填
@@ -484,12 +497,48 @@ homepage.header.my_teaching_menu: 我的教学
 homepage.header.my_learning_menu: 我的学习
 homepage.header.account_menu: 账户中心
 homepage.header.admin_menu: 管理后台
+homepage.friend-link.content_title: 友情链接：
+homepage.live_course.living: 正在直播
+homepage.live_course.expect: 敬请期待
+homepage.live_course.teacher: 授课老师:
+homepage.live_course.start_time: 直播时间:
+homepage.live_course.time_before_start: >
+  距离直播还有<span>%minutes%</span>分钟
+homepage.live_course.join_btn: 进入直播教室
+homepage.live_course.more: 更多直播
+homepage.open_course.tips: 随时随地，免费听课。
+homepage.open_course.more: 更多公开课
+homepage.learning_course: 继续学习：%title%
+homepage.learning_course.continue_learning_btn: 继续学习
+homepage.learning_course.content_title: 在学课程
+homepage.learning_course.teacher_name: 教师：%nickname%
+homepage.learning_course.learning_progress: 完成%percent%
+homepage.recommend_classroom.content_title: 推荐班级
+homepage.recommend_classroom.more: >
+  更多%moreClassrooms%
+homepage.article.content_title: 最新%article_name%
+homepage.student_comment.content_title: 学员评价
+homepage.student_comment.from: >
+  发布于 <a class="link-dark" href="%courseUrl%">《%courseTitle%》</a>
+homepage.student_comment.empty: 还没有评价
+homepage.student_dynamic.content_title: 学员动态
+homepage.recommend_teacher.more: 更多教师
+homepage.footer.archive: 课程存档
+homepage.footer.learning: 学习
+homepage.footer.course_copyright: >
+  课程内容版权均归
+  <a href="/">
+    %copyRightUrl%
+  </a>
+  所有
 
-# 师资力量模块
+# 教师模块
 teacher.introductions: 师资介绍
 teacher.SEO.keywords: 师资介绍%name%
 teacher.SEO.description: %name%的师资介绍。
 teacher.content_title: 所有教师
+teacher.promoted_teacher.content_title: 名师风采
+teacher.promoted_teacher.see_ben: 去老师主页看看
 
 # 自定义页面模块-常见问题
 custom_page.empty: 当前页面尚未编辑内容，请在管理后台编辑。
@@ -662,6 +711,128 @@ group.detail.new_group_members.empty: 还没有小组成员！
 group.detail.hot_group: 热门小组
 group.detail.hot_group_empty: 暂无小组信息！
 
+#后台首页通用key
+unknown: 未知
+admin.homepage.more_btn: 更多
+admin.homepage.loadig_date_tips: 正在载入数据，请稍等。
+
+# 后台首页
+admin.navbar.header.console_btn: 管理后台
+admin.navbar.header.often_used_btn: 常用
+admin.navbar.header.often_used.dropdown_menu.add_current_page: 添加当前页面为常用功能
+admin.navbar.header.often_used.dropdown_menu.added_current_page: 当前页面已添加
+admin.navbar.header.often_used.dropdown_menu.delete_often_used_link_btn_title: 删除常用链接
+admin.navbar.header.home_btn: 回首页
+admin.navbar.header.dropdown_menu.exit_btn: 退出
+admin.fixed_bar.product: 产品
+admin.fixed_bar.feedback: 反馈
+admin.hompage.html_head_title: 管理后台
+admin.homepage.setting_domain_btn: 设置
+admin.homepage.cloud_notic.unknown_time: 未知时间
+admin.homepage.cloud_notice: >
+  欢迎使用，试用将于<span style="color:#fed032;">%endTime%</span>到期,剩余<span style="color:#fed032;">%remainDays%</span>天。
+  </br>
+  您可以联系销售人员购买授权版本，或者延长试用期限。电话：4008041114 或 
+  <a id="BizQQWPA" href="javascript:" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])" style='text-decoration:none;'>QQ：800023860 </a>。
+admin.homepage.admins_announcements_title: 站长公告
+admin.homepage.admins_announcements_empty: 暂无公告
+admin.homepage.status_bar_title: 状态栏
+admin.homepage.status_bar.system_version_title: 系统版本
+admin.homepage.status_bar.system_version_status.have_update: 有更新
+admin.homepage.status_bar.school_app_title: 网校应用
+admin.homepage.status_bar.school_app_status.updated: 已更新
+admin.homepage.status_bar.school_app_status.several_are_not_updated: 个未更新
+admin.homepage.status_bar.cloud_service_title: 教育云服务
+admin.homepage.status_bar.cloud_service_status.several_are_not_open: 个未开启
+admin.homepage.status_bar.cloud_service_status.open: 已开启
+admin.homepage.status_bar.cloud_service_status.not_open: 未开启
+admin.homepage.status_bar.cloud_video_title: 云视频
+admin.homepage.status_bar.cloud_document_title: 云文档
+admin.homepage.status_bar.cloud_live_title: 云直播
+admin.homepage.status_bar.cloud_sms_title: 云短信
+admin.homepage.status_bar.cloud_search_title: 云搜索
+admin.homepage.status_bar.cloud_question_title: 云问答
+admin.homepage.status_bar.mobile_app_title: 移动客户端
+admin.homepage.status_bar.mobile_app_status.open: 已开启
+admin.homepage.status_bar.mobile_app_status.not_open: 未开启
+admin.homepage.todays_data_title: 今日数据
+admin.homepage.todays_data.tooltips: >
+  <div class="popover-content hidden">
+    <div class="popover-item">
+      <div class="title">登录用户</div>
+      <div class="content">15分钟内活动的登录用户</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">在线总数</div>
+      <div class="content">15分钟内活动用户数，包括登录用户及未登录用户</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">新增注册</div>
+      <div class="content">平台新增用户数，包括自主注册、第三方注册及导入</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">新增学员人次</div>
+      <div class="content">今日加入课程和班级的总人次，1个学员加入2个课程，算2人次</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">新增会员</div>
+      <div class="content">今日购买会员的人数</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">未回复问答</div>
+      <div class="content">今日新产生问题中未回答的数量</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">未回复总数</div>
+      <div class="content">到目前为止，未回答问题总数</div>
+    </div>
+  </div>
+admin.homepage.todays_data.login_users: 登录用户 
+admin.homepage.todays_data.login_users.online_total: 在线总数 
+admin.homepage.todays_data.new_registration: 新增注册 
+admin.homepage.todays_data.total: 总数
+admin.homepage.todays_data.new_students: 新增学员
+admin.homepage.todays_data.new_vip_members: 新增会员
+admin.homepage.todays_data.thread_un_answer: 未回复回答
+admin.homepage.todays_data.thread_un_answer: 未回复回答
+admin.homepage.statistic.week: 最近7天
+admin.homepage.statistic.month: 最近30天
+admin.homepage.order_statistic_title: 订单统计
+admin.homepage.order_statistic.tips: >
+  <div class="popover-content hidden">
+    <div class="popover-item">`
+      <div class="title">新增订单</div>
+      <div class="content">平台当日产生的所有订单，包括免费和付费</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">付费订单</div>
+      <div class="content">平台当日产生的订单价格大于0元的订单</div>
+    </div>
+  </div>
+admin.homepage.pay_order_statistic_title: 付费订单统计
+admin.homepage.task_finish_statistic_title: 任务完成数
+admin.homepage.task_finish_statistic.tips: >
+  <div class="content">点击"学过了"的任务数量</div>
+admin.homepage.course_ranking_title: 课程排行榜
+admin.homepage.latest_question_title: 最新问答
+admin.homepage.latest_question.tr.question_th: 问题
+admin.homepage.latest_question.tr.view_count_th: 查看数
+admin.homepage.latest_question.tr.operation_th: 操作
+admin.homepage.latest_question.empty: 暂无最新未回复问答
+admin.homepage.latest_question.remind_teacher_btn: 提醒教师
+admin.homepage.latest_review_title: 最新评价
+admin.homepage.latest_review.review_content_th: 评价内容
+admin.homepage.latest_review.review_rating_th: 评分
+admin.homepage.latest_review.operation_th: 操作
+admin.homepage.latest_review.rating_start: 星
+admin.homepage.latest_review.view_btn: 查看
+admin.homepage.latest_review.empty: 暂无评价
+admin.homepage.top_search_title: 热门搜索
+admin.homepage.top_search.keyword_th: 关键词
+admin.homepage.top_search.search_number_th: 搜索次数
+admin.homepage.top_search.empty: 暂无搜索数据
+admin.homepage.free_access_edu_cloud_search_btn: 免费接入云搜索获取热门搜索关键词
+
 # 话题
 thread: 话题
 thread.reply: 回复
@@ -670,7 +841,7 @@ thread.status.stick: 置顶
 thread.status.essence: 精华
 thread.status.reward: 奖
 thread.create: 发起了话题
-article.last_reply: 最后回复
+thread.last_reply: 最后回复
 
 # 咨询
 article: 资讯
@@ -803,3 +974,59 @@ admin.course_review.completed_progress_th: 完成进度
 
 
 
+
+# 移动端
+mobile.page_title: 移动学习
+mobile.app_name: 阔知学堂
+mobile.app_tips: 将学校装进口袋，移动学习，随时随地。
+mobile.app_download_btn: 下载APP
+mobile.app_download_tips: >
+  <p class="main-slogan">更好的移动端学习</p>
+  <p class="sub-slogan">好好学习，天天向上</p>
+mobile.app_login_btn: 登录网校
+mobile.app_login_tips: 扫一扫登录客户端
+mobile.step_one: >
+  <span class="member">1</span>第一步:
+mobile.step_one_tips: 扫描二维码，下载手机APP。
+mobile.Android_client: Android 客户端
+mobile.iPhone_client: iPhome客户端
+mobile.step_two: >
+  <span class="member">2</span>第二步: 打开阔知学堂APP，扫描网校二维码。
+
+# 客服
+customer_service.open_content_title: 查看在线客服
+customer_service.close_content_title: 关闭在线客服
+customer_service.open_btn: 展开
+customer_service.close_btn: 收缩
+customer_service.QQ: 客服QQ
+customer_service.mobile: 电话
+customer_service.customer_mobile: 客服电话
+customer_service.email: 邮件
+customer_service.customer_email: 反馈邮件
+
+# 我的教学
+my.teaching: 我的教学
+my.teaching.course_set_menu: 在教课程
+my.teaching.classroom_menu: 在教%classroom%
+my.teaching.question_menu: %student%问题
+my.teaching.discussion_menu: %student%话题
+my.teaching.testpaper_check_menu: 试卷批阅
+my.teaching.homework_check_menu: 作业批阅
+my.teaching.material_lib_menu: 教学资料库
+my.teaching.course_set.normal: 普通课程
+my.teaching.course_set.live: 普通课程
+my.teaching.course_set.classroom: %classroom%课程
+my.teaching.open_course.normal: 录播公开课
+my.teaching.open_course.live: 直播公开课
+
+# 我的学习
+my.learning: 我的学习
+my.learning.course_set_menu: 我的课程
+my.learning.classroom_menu: 我的%classroom%
+my.learning.live_menu: 我的直播
+my.learning.question_menu: 我的问答
+my.learning.discussion_menu: 我的话题
+my.learning.notebook_menu: 我的笔记
+my.learning.homework_menu: 我的作业
+my.learning.testpaper_menu: 我的考试
+my.learning.group_menu: 我的小组

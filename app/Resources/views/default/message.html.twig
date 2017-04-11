@@ -1,6 +1,6 @@
 {% extends 'old-layout.html.twig' %}
 
-{% set typeTitles = {info:'提示信息'|trans, warning:'警告信息'|trans, error: '错误提示'|trans} %}
+{% set typeTitles = {info:'site.message.info'|trans, warning:'site.message.warning'|trans, error: 'site.message.error'|trans} %}
 
 {% set title = title|default(typeTitles[type]) %}
 
