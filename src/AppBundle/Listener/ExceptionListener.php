@@ -2,15 +2,19 @@
 
 namespace AppBundle\Listener;
 
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 
-class AjaxExceptionListener
+class ExceptionListener
 {
     private $logger;
 
@@ -26,6 +30,14 @@ class AjaxExceptionListener
         $request = $event->getRequest();
 
         if (!$request->isXmlHttpRequest()) {
+            $event->setException(
+                new HttpException(
+                    $this->convertStateCode($exception),
+                    $exception->getMessage(),
+                    $exception->getPrevious()
+                )
+            );
+
             return;
         }
 
@@ -86,6 +98,21 @@ class AjaxExceptionListener
         return $user;
     }
 
+    private function convertStateCode($exception)
+    {
+        if ($exception instanceof AccessDeniedException) {
+            return Response::HTTP_FORBIDDEN;
+        }
+        if ($exception instanceof InvalidArgumentException) {
+            return Response::HTTP_FORBIDDEN;
+        }
+        if ($exception instanceof NotFoundException) {
+            return Response::HTTP_NOT_FOUND;
+        }
+
+        return Response::HTTP_INTERNAL_SERVER_ERROR;
+    }
+
     protected function getLogger()
     {
         if ($this->logger) {
@@ -93,7 +120,9 @@ class AjaxExceptionListener
         }
 
         $this->logger = new Logger('AjaxExceptionListener');
-        $this->logger->pushHandler(new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir').'/dev.log', Logger::DEBUG));
+        $this->logger->pushHandler(
+            new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir').'/dev.log', Logger::DEBUG)
+        );
 
         return $this->logger;
     }
