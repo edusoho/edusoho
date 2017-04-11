@@ -124,7 +124,6 @@ export default class Video {
     //字幕组件
     const subtitleDialog = new SubtitleDialog('.js-subtitle-list');
     const onSelectFile = file => {
-      console.log(file)
       this.displayFinishCondition(file.source);
       FileChooser.closeUI();
       if (file.length && file.length > 0) {
