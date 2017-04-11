@@ -9,6 +9,8 @@ site.dategrid.filter.last_one_week: 最近一周
 site.dategrid.filter.last_two_week: 最近两周
 site.dategrid.filter.last_one_month: 最近一个月
 site.dategrid.filter.last_three_month: 最近三个月
+site.default.classroom: 班级
+site.default.student: 学员
 
 # 用户通用
 user.fields.login_password: 登录密码
@@ -743,3 +745,30 @@ share.weixin_share: 分享到微信
 share.tsina_share: 分享到新浪微博
 share.qq_share: 分享到QQ好友
 share.qzone_share: 分享到QQ空间
+
+# 我的教学
+my.teaching: 我的教学
+my.teaching.course_set_menu: 在教课程
+my.teaching.classroom_menu: 在教%classroom%
+my.teaching.question_menu: %student%问题
+my.teaching.discussion_menu: %student%话题
+my.teaching.testpaper_check_menu: 试卷批阅
+my.teaching.homework_check_menu: 作业批阅
+my.teaching.material_lib_menu: 教学资料库
+my.teaching.course_set.normal: 普通课程
+my.teaching.course_set.live: 普通课程
+my.teaching.course_set.classroom: %classroom%课程
+my.teaching.open_course.normal: 录播公开课
+my.teaching.open_course.live: 直播公开课
+
+# 我的学习
+my.learning: 我的学习
+my.learning.course_set_menu: 我的课程
+my.learning.classroom_menu: 我的%classroom%
+my.learning.live_menu: 我的直播
+my.learning.question_menu: 我的问答
+my.learning.discussion_menu: 我的话题
+my.learning.notebook_menu: 我的笔记
+my.learning.homework_menu: 我的作业
+my.learning.testpaper_menu: 我的考试
+my.learning.group_menu: 我的小组
