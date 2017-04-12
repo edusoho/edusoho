@@ -129,7 +129,7 @@ class ResourceKernel
                 list($error, $httpCode) = ExceptionUtil::getErrorAndHttpCodeFromException($e, $this->isDebug());
                 $result[] = array(
                     'code' => $httpCode,
-                    'body' => $error
+                    'body' => array('error' => $error)
                 );
             }
 

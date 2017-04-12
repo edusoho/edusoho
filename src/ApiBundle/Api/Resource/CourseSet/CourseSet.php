@@ -42,7 +42,7 @@ class CourseSet extends Resource
         );
 
         $this->getOCUtil()->multiple($courseSets, array('creator', 'teacherIds'));
-        
+
         $total = $this->service('Course:CourseSetService')->countCourseSets($conditions);
 
         return $this->makePagingObject($courseSets, $total, $offset, $limit);
