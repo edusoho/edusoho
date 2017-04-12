@@ -2,9 +2,9 @@
 
 {% block title %}
   {% if side_nav in ['my-teaching-courses','my-teaching-classroom','my-teaching-questions','my-teaching-discussions','my-teaching-check','my-teaching-homework-check','material-lib'] %}
-    {{ 'my.teaching'|trans }} - {{ parent() }}
+    {{ 'my.teaching.menu_heading'|trans }} - {{ parent() }}
   {% else %}
-    {{ 'my.teaching'|trans }} - {{ parent() }}
+    {{ 'my.learning.menu_heading'|trans }} - {{ parent() }}
   {% endif %}
 {% endblock %}
 
@@ -26,7 +26,7 @@
         {% endif %}
         {% if app.user.isTeacher() %}
           <ul class="list-group">
-            <li class="list-group-heading">{{ 'my.teaching'|trans }}</li>
+            <li class="list-group-heading">{{ 'my.teaching.menu_heading'|trans }}</li>
             <li class="list-group-item {% if side_nav == 'my-teaching-courses' %} active {% endif %}">
               <a href="{{ path('my_teaching_course_sets') }}">{{ 'my.teaching.course_set_menu'|trans }}</a>
             </li>
@@ -62,7 +62,7 @@
         {% endif %}
 
         <ul class="list-group">
-          <li class="list-group-heading">{{ 'my.learning'|trans }}</li>
+          <li class="list-group-heading">{{ 'my.learning.menu_heading'|trans }}</li>
           <li class="list-group-item {% if side_nav == 'my-learning' %} active {% endif %}">
             <a href="{{ path('my_courses_learning') }}">{{ 'my.learning.course_set_menu'|trans }}</a>
           </li>
