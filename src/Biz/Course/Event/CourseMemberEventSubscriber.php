@@ -58,6 +58,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
 
     public function onCourseJoin(Event $event)
     {
+        file_put_contents('2.txt', 'join');
         $this->countStudentMember($event);
         $this->countIncome($event);
         $this->sendWelcomeMsg($event);
@@ -76,9 +77,9 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $users = $this->getUserService()->findUsersByIds($teacherIds);
         $users = ArrayToolkit::index($users, 'id');
 
-        list($activitys, $liveActivitys) = $this->findActivitysAndLiveActivitys($course);
+        list($activities, $liveActivities) = $this->findActivitiesAndLiveActivities($course);
 
-        foreach ($activitys as $mediaId => $activity) {
+        foreach ($activities as $mediaId => $activity) {
             $isPush = $this->canPushLiveMessage($activity);
             if (!$isPush) {
                 continue;
@@ -87,7 +88,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             foreach ($teacherIds as $userId) {
                 $result[] = $this->buildLiveMemberData($users[$userId], $teachers[$userId]);
             }
-            $this->pushJoinLiveCourseMember($result, $liveActivitys[$mediaId]['liveId']);
+            $this->pushJoinLiveCourseMember($result, $liveActivities[$mediaId]['liveId']);
         }
     }
 
@@ -96,34 +97,35 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $course = $event->getArgument('course');
 
         $teacherIds = $event->getSubJect();
-        list($activitys, $liveActivitys) = $this->findActivitysAndLiveActivitys($course);
-        foreach ($activitys as $mediaId => $activity) {
+        list($activities, $liveActivities) = $this->findActivitiesAndLiveActivities($course);
+        foreach ($activities as $mediaId => $activity) {
             $isPush = $this->canPushLiveMessage($activity);
             if (!$isPush) {
                 continue;
             }
 
             foreach ($teacherIds as $teacherId) {
-                $this->pushDeleteLiveCourseMember($teacherId, $liveActivitys[$mediaId]['liveId']);
+                $this->pushDeleteLiveCourseMember($teacherId, $liveActivities[$mediaId]['liveId']);
             }
         }
     }
 
     public function onLiveCourseJoin(Event $event)
     {
+        file_put_contents('1.txt', 'live');
         $course = $event->getSubject();
         $userId = $event->getArgument('userId');
         $user = $this->getUserService()->getUser($userId);
         $member = $event->getArgument('member');
 
-        list($activitys, $liveActivitys) = $this->findActivitysAndLiveActivitys($course);
-        foreach ($activitys as $mediaId => $activity) {
+        list($activities, $liveActivities) = $this->findActivitiesAndLiveActivities($course);
+        foreach ($activities as $mediaId => $activity) {
             $isPush = $this->canPushLiveMessage($activity);
             if (!$isPush) {
                 continue;
             }
             $result[] = $this->buildLiveMemberData($user, $member);
-            $this->pushJoinLiveCourseMember($result, $liveActivitys[$mediaId]['liveId']);
+            $this->pushJoinLiveCourseMember($result, $liveActivities[$mediaId]['liveId']);
         }
     }
 
@@ -137,14 +139,14 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             $course = $this->getCourseService()->getCourse($course['parentId']);
         }
 
-        list($activitys, $liveActivitys) = $this->findActivitysAndLiveActivitys($course);
-        foreach ($activitys as $mediaId => $activity) {
+        list($activities, $liveActivities) = $this->findActivitiesAndLiveActivities($course);
+        foreach ($activities as $mediaId => $activity) {
             $isPush = $this->canPushLiveMessage($activity);
             if (!$isPush) {
                 continue;
             }
             $result[] = $this->buildLiveMemberData($user, $member);
-            $this->pushJoinLiveCourseMember($result, $liveActivitys[$mediaId]['liveId']);
+            $this->pushJoinLiveCourseMember($result, $liveActivities[$mediaId]['liveId']);
         }
     }
 
@@ -220,9 +222,9 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $users = ArrayToolkit::index($users, 'id');
 
         $course = $event->getSubject();
-        list($activitys, $liveActivitys) = $this->findActivitysAndLiveActivitys($course);
+        list($activities, $liveActivities) = $this->findActivitiesAndLiveActivities($course);
 
-        foreach ($activitys as $mediaId => $activity) {
+        foreach ($activities as $mediaId => $activity) {
             $isPush = $this->canPushLiveMessage($activity);
             if (!$isPush) {
                 continue;
@@ -231,7 +233,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             foreach ($members as $userId => $member) {
                 $result[] = $this->buildLiveMemberData($users[$userId], $member);
             }
-            $this->pushJoinLiveCourseMember($result, $liveActivitys[$mediaId]['liveId']);
+            $this->pushJoinLiveCourseMember($result, $liveActivities[$mediaId]['liveId']);
         }
     }
 
@@ -334,13 +336,13 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         if ($course['locked']) {
             $course = $this->getCourseService()->getCourse($course['parentId']);
         }
-        list($activitys, $liveActivitys) = $this->findActivitysAndLiveActivitys($course);
-        foreach ($activitys as $mediaId => $activity) {
+        list($activities, $liveActivities) = $this->findActivitiesAndLiveActivities($course);
+        foreach ($activities as $mediaId => $activity) {
             $isPush = $this->canPushLiveMessage($activity);
             if (!$isPush) {
                 continue;
             }
-            $this->pushDeleteLiveCourseMember($userId, $liveActivitys[$mediaId]['liveId']);
+            $this->pushDeleteLiveCourseMember($userId, $liveActivities[$mediaId]['liveId']);
         }
     }
 
@@ -379,14 +381,14 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         return $welcomeMessageBody;
     }
 
-    protected function findActivitysAndLiveActivitys($course)
+    protected function findActivitiesAndLiveActivities($course)
     {
-        $activitys = $this->getActivityService()->findActivitiesByCourseIdAndType($course['id'], 'live');
-        $activitys = ArrayToolkit::index($activitys, 'mediaId');
-        $liveActivitys = $this->getLiveActivityService()->findLiveActivityByIds(ArrayToolkit::column($activitys, 'mediaId'));
-        $liveActivitys = ArrayToolkit::index($liveActivitys, 'id');
+        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($course['id'], 'live');
+        $activities = ArrayToolkit::index($activities, 'mediaId');
+        $liveActivities = $this->getLiveActivityService()->findLiveActivitiesByIds(ArrayToolkit::column($activities, 'mediaId'));
+        $liveActivities = ArrayToolkit::index($liveActivities, 'id');
 
-        return array($activitys, $liveActivitys);        
+        return array($activities, $liveActivities);
     }
 
     protected function simplifyCourse($course)
