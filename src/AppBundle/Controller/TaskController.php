@@ -74,6 +74,7 @@ class TaskController extends BaseController
             'task/show.html.twig',
             array(
                 'course' => $course,
+                'member' => $member,
                 'task' => $task,
                 'taskResult' => $taskResult,
                 'nextTask' => empty($nextTask) ? array() : $nextTask,
