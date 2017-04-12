@@ -18,7 +18,6 @@ class AppVersionChecker extends AbstractMigrate
     protected function getApps()
     {
         return array(
-            'main'=>'7.5.14',
             'vip'=>'1.6.5',
             'coupon'=>'2.1.5',
             'questionplus'=>'1.2.1',
