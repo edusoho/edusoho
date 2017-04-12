@@ -8,7 +8,7 @@ define(function (require, exports, module) {
       if ($btn.data('protocol') < 3) {
         alert('该主题暂不适配当前ES版本，请先升级');
         return false;
-      } else if (confirm(Translator.trans('真的要使用该s主题吗？'))) {
+      } else if (confirm(Translator.trans('真的要使用该主题吗？'))) {
 
         $.post($(this).data('url'), function (response) {
           if (response === false) {

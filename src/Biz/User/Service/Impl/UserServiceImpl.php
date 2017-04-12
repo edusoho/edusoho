@@ -194,6 +194,10 @@ class UserServiceImpl extends BaseService implements UserService
             $user = $this->getUserDao()->getByNickname($keyword);
         }
 
+        if (isset($user['type']) && $user['type'] == 'system') {
+            return null;
+        }
+
         return !$user ? null : UserSerialize::unserialize($user);
     }
 

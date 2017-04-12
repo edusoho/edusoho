@@ -39,7 +39,7 @@
             {% if currentTheme.uri == theme.uri %}
               <span class="text-success">{{'当前正在使用该主题'|trans}}</span>
             {% else %}
-              <button class="btn btn-default btn-sm use-theme-btn" data-protocol="{{ theme.protocol }}" data-url="{{ path('admin_setting_theme_change', {uri:theme.uri}) }}">{{'使用'|trans}}</button>
+              <button class="btn btn-default btn-sm use-theme-btn" data-protocol="{{ theme.protocol|default(2) }}" data-url="{{ path('admin_setting_theme_change', {uri:theme.uri}) }}">{{'使用'|trans}}</button>
             {% endif %}
             {% if theme.uri == 'jianmo' and currentTheme.uri == 'jianmo' %}
             <a href="{{ path('admin_theme_manage', {uri:theme.uri}) }}"class="btn btn-primary" >{{'管理'|trans}}</a>
