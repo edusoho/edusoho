@@ -836,6 +836,61 @@ admin.homepage.top_search.search_number_th: 搜索次数
 admin.homepage.top_search.empty: 暂无搜索数据
 admin.homepage.free_access_edu_cloud_search_btn: 免费接入云搜索获取热门搜索关键词
 
+# 站点设置
+admin.setting.site.name: 网站名称
+admin.setting.site.slogan: 网站副标题
+admin.setting.site.url: 网站域名
+admin.setting.site.url.help_block: 以"%http%://"开头
+admin.setting.site.logo: 网站LOGO
+admin.setting.site.logo.help_block: 请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过250*50。网校logo设置后显示顶部导航左上角,
+admin.setting.site.logo.view_btn: 点击查看
+admin.setting.site.favicon: 浏览器图标
+admin.setting.site.favicon.help_block: 请上传ico格式的图标文件, 建议大小16*16或者32*32。
+admin.setting.site.seo_keywords: SEO关键词
+admin.setting.site.seo_keywords.help_block: 设置多个关键词请用半角逗号","隔开。
+admin.setting.site.seo_description: SEO描述信息
+admin.setting.site.master_email: 管理员邮箱地址
+admin.setting.site.copyright: 课程内容版权方
+admin.setting.site.copyright.help_block: 您可以填写网站名称或公司名称。
+admin.setting.site.icp: ICP备案号
+admin.setting.site.website_statistics_analysis: 网站统计分析代码部署
+admin.setting.site.analytics: 统计分析代码
+admin.setting.site.analytics.help_block: >
+  <p class="help-block">统计代码是网站统计软件发布的一段代码，用以统计添加统计代码的网站的数据。</p>
+  <p class="help-block">包括网站的访客来源，从哪个网页跳转到此网站，搜索什么关键词到网站，一共有多少人访问，每天多少人多少IP，平均访问时间是多少等等数据。</p>
+  <p class="help-block">统计分析工具可以分析网校访问趋势，以及根据数据做推广调整，优化网校资源，建议使用<a href="http://tongji.baidu.com" target="_blank">百度统计</a>、<a href="http://ta.qq.com/" target="_blank">腾讯分析</a>或者<a target="_blank" href="http://www.umeng.com/">CNZZ。</a></p>
+admin.setting.site.website_status: 站点状态
+admin.setting.site.website_status.open: 开放
+admin.setting.site.website_status.closed: 关闭
+admin.setting.site.closed_note: 网站关闭公告
+admin.setting.site.closed_note.help_block: 网站处于关闭状态时，用户访问网站将显示此公告，支持HTML代码
+admin.setting.theme.name: 名称
+admin.setting.theme.version: 主题版本
+admin.setting.theme.author: 作者
+admin.setting.theme.operation: 操作
+admin.setting.theme.setting_btn: 设置
+admin.setting.theme.current_theme: 当前正在使用该主题
+admin.setting.theme.use_btn: 使用
+admin.setting.theme.manage_btn: 管理
+admin.setting.theme.manage.title: EduSoho主题编辑
+admin.setting.theme.manage.theme_edit: 主题编辑
+admin.setting.theme.manage.theme_cancel: 取消
+admin.setting.theme.manage.theme_ok: 应用
+admin.setting.theme.manage.components: 组件
+admin.setting.theme.manage.coloring_scheme_btn: 配色方案
+admin.setting.theme.manage.all_reset: 全部重置
+admin.setting.theme.manage.component_name: 挂件名称
+admin.setting.theme.manage.custom_name: 自定义名称
+admin.setting.theme.manage.main_color: 主色调
+admin.setting.theme.manage.navigation_color_scheme: 导航配色
+admin.setting.theme.manage.edit.setting_btn: 设置
+admin.setting.theme.manage.edit_btn: 编辑
+admin.setting.theme.manage.modal.edit: 编辑
+admin.setting.theme.manage.modal.subname: 副标题名称
+admin.setting.theme.manage.modal.setting_course_num: 课程数量设置
+admin.setting.theme.manage.modal.setting_custom_category_count: 课程分类数量设置
+admin.setting.theme.manage.modal.setting_custom_orderby: 排序设置
+
 # 话题
 thread: 话题
 thread.reply: 回复
