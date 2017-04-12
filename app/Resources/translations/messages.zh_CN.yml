@@ -21,6 +21,7 @@ site.message.error: 错误提示
 site.power_by: 好知网
 site.default.student: 学员
 site.org.belongs_to_org_th: 所属组织机构
+site.org.code: 编码：
 
 # 用户通用
 user.fields.login_password: 登录密码
@@ -128,6 +129,7 @@ form.field.privacy_public: 公开
 form.btn.modify: 修改
 form.btn.set: 设置
 form.btn.publish: 发布
+form.btn.save_and_publish: 直接发布
 form.btn.reset: 重置
 form.btn.view: 查看
 form.btn.bind: 绑定
@@ -139,6 +141,7 @@ form.btn.login: 登录
 form.btn.save: 保存
 form.btn.detail: 详情
 form.btn.close: 关闭
+form.btn.return: 返回
 form.btn.cancel: 取消
 form.btn.confirm: 确定
 form.btn.insert: 插入
@@ -153,7 +156,7 @@ form.btn.upload.submiting: 正在上传...
 form.btn.delete.submiting: 正在删除...
 form.btn.reply.submiting: 正在发表回复
 form.btn.save.submiting: 正在保存...
-form.btn.publish.submiting: 正在创建...
+form.btn.publish.submiting: 正在发布...
 form.btn.submit.submiting: 正在提交...
 form.btn.send.submiting: 正在发送...
 form.btn.modify.submiting: 正在修改...
@@ -921,7 +924,61 @@ admin.operation_invite.payingUserTotalPrice_th: 订单消费总额
 admin.operation_invite.coinAmountPrice_th: 订单虚拟币总额
 admin.operation_invite.amountPrice_th: 订单现金总额
 admin.operation_invite.detail_btn: 详细
+admin.operation_invite.modal.detail_title: 详情
+admin.operation_invite.modal.totalPrice_th: 消费订单总额
+admin.operation_invite.modal.coinAmountTotalPrice_th: 订单虚拟币总额
+admin.operation_invite.modal.amountTotalPrice_th: 订单现金总额
+admin.operation_invite.coupon.recieved_at: 领取时间：
+admin.operation_invite.coupon.start_time.placeholer: 开始时间
+admin.operation_invite.coupon.finished_time.placeholer: 结束时间
+admin.operation_invite.coupon.recieved_at_th: 领取时间
+admin.operation_invite.coupon.rate_th: 面值
+admin.operation_invite.coupon.use_status_th: 使用情况
+admin.operation_invite.coupon.use_status.unused: 未使用
+admin.operation_invite.coupon.use_status.receive: 已领取
+admin.operation_invite.coupon.use_status.used: 已使用
+admin.operation_invite.coupon.useTime_th: 使用时间
+admin.operation_invite.coupon.order_title_th: 订单信息
 
+# 网站公告管理
+admin.operation_announcement.content_th: 公告内容
+admin.operation_announcement.createTime_th: 发布时间
+admin.operation_announcement.endTime_th: 结束时间
+admin.operation_announcement.status_th: 状态
+admin.operation_announcement.status.readyStart: 即将开始
+admin.operation_announcement.status.finished: 已结束
+admin.operation_announcement.status.display: 显示中
+admin.operation_announcement.nickname_th: 发布人
+admin.operation_announcement.operation_th: 操作
+admin.operation_announcement.edit_btn: 编辑
+admin.operation_announcement.delete_btn: 删除
+admin.operation_announcement.modal.create: 新增
+admin.operation_announcement.modal.edit: 编辑
+admin.operation_announcement.modal.announcement: 公告
+admin.operation_announcement.modal.content: 公告内容
+admin.operation_announcement.modal.content_link: 公告内容
+admin.operation_announcement.modal.url_help_block: 以"http://"或"https://"开头
+admin.operation_announcement.modal.tips: >
+  <strong>1.公告将显示在网站首页顶部导航上方</strong>
+  <br>
+  <strong>2.最多可显示3条最新的进行中的通告</strong>
+
+# 全站站内通知
+admin.batch_notification.title: 站内信通知标题
+admin.batch_notification.sendedTime: 发布时间
+admin.batch_notification.createdTime: 创建时间
+admin.batch_notification.nickname: 发布人
+admin.batch_notification.status: 状态
+admin.batch_notification.status.published: 已发布
+admin.batch_notification.status.unpublished: 未发布
+admin.batch_notification.operation: 操作
+admin.batch_notification.edit_btn: 编辑
+admin.batch_notification.delete_btn: 删除
+admin.batch_notification.publish_btn: 发布
+admin.batch_notification.tips: 全站站内通知将以网校通知的形式发给所有用户
+admin.batch_notification.modal.title: 全全站站内通知
+admin.batch_notification.modal.title_field: 通知标题
+admin.batch_notification.modal.body_field: 正文
 
 # 话题
 thread: 话题
