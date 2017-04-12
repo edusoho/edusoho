@@ -942,6 +942,52 @@ admin.setting.mailer.senders_email_address.help_block: 正确格式应为
 admin.setting.mailer.senders_name: 发信人名称
 admin.setting.mailer.verifcation: 验证
 admin.setting.mailer.verifcation.tips: 验证时会给当前用户发送验证邮件，请确保当前用户邮箱为正确邮箱且邮箱服务器设置已提交保存。
+admin.setting.navigation.top: 顶部
+admin.setting.navigation.foot: 底部
+admin.setting.navigation.friendlyLink: 友情链接
+admin.setting.navigation.add_type_btn: 新增%types[type]%
+admin.setting.navigation.add_type_nav_btn: 新增%types[type]%导航
+admin.setting.navigation.foot.tips: >
+  清秋主题、默认主题A、默认主题B、雅致简洁之外的主题，请前往 
+  <a class="text-info" style="font-weight:bold;" href="%url%">
+  ［运营］－［编辑区管理</a> 
+  中进行编辑。
+admin.setting.navigation.friendlyLink.tips: >
+  如需在首页显示友情链接模块，请在对应
+  <a class="text-info" style="font-weight:bold;" href="%url%">
+  主题管理</a>
+  中添加相应模块，暂仅支持简墨主题。
+admin.setting.navigation.name: 名称
+admin.setting.navigation.new_windows: 新开窗口
+admin.setting.navigation.status: 状态
+admin.setting.navigation.operation: 操作
+admin.setting.navigation.tips: >
+  <p>会员专区：域名/vip</p>
+  <p>直播首页：域名/live</p>
+  <p>小组首页：域名/group</p>
+  <p>资讯首页：域名/article</p>
+  <p>师资力量：域名/teacher</p>
+  <p>移动端首页：域名/mobile</p>
+  <p>个人主页：域名/my/page/show</p>
+  <p>课程列表页：域名/course/explore</p>
+  <p>班级列表页：域名/classroom/explore</p>
+  <p>公开课列表页：域名/open/course/explore</p>
+  <p>课程分类：域名/course/explore/分类编码</p>
+  <p>资讯栏目：域名/article/栏目编码</p>
+admin.setting.navigation.top.add: 新增顶部导航
+admin.setting.navigation.top.edit: 编辑顶部导航
+admin.setting.navigation.foot.add: 新增底部导航
+admin.setting.navigation.foot.edit: 编辑底部导航
+admin.setting.navigation.friendlyLink.add: 新增友情链接
+admin.setting.navigation.friendlyLink.edit: 编辑友情链接
+admin.setting.navigation.parentNavigation: 上级导航
+admin.setting.navigation.parentNavigation.help_block: 请注意：增加子导航后，对应的上级导航链接将不起作用。
+admin.setting.navigation.url: 链接地址
+admin.setting.navigation.isNewWin.yes: 是
+admin.setting.navigation.isNewWin.no: 否
+admin.setting.navigation.status.open: 开启
+admin.setting.navigation.status.closed: 关闭
+
 
 # 话题
 thread: 话题
