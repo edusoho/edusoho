@@ -11,23 +11,6 @@ use AppBundle\Component\Echats\EchartsBuilder;
 
 class DefaultController extends BaseController
 {
-    // public function indexAction(Request $request)
-    // {
-    //     $permissions = $this->container->get('permission.twig.permission_extension')->getSubPermissions('admin');
-    //     if (empty($permissions)) {
-    //         return $this->render('PermissionBundle:Admin:permission-error.html.twig');
-    //     }
-
-    //     $permissionNames = ArrayToolkit::column($permissions, 'code');
-    //     if (in_array('admin_homepage', $permissionNames)) {
-    //         return $this->forward('AppBundle:Admin/admin/default/homepage');
-    //     }
-
-    //     return $this->forward('AppBundle:Admin/admin/default/renderCurrentAdminHomepage', array(
-    //         'permission' => $permissions[0]
-    //     ));
-    // }
-
     public function renderCurrentAdminHomepageAction($permission)
     {
         $tabMenu = $this->container->get('permission.twig.permission_extension')->getFirstChild($permission);

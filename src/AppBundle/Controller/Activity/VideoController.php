@@ -4,9 +4,9 @@ namespace AppBundle\Controller\Activity;
 
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
-use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\Activity\Service\ActivityLearnLogService;
 
 class VideoController extends BaseController implements ActivityActionInterface
 {
@@ -75,7 +75,6 @@ class VideoController extends BaseController implements ActivityActionInterface
      * 获取当前视频活动的文件来源.
      *
      * @param  $activity
-     *
      * @return mediaSource
      */
     protected function getMediaSource($activity)
