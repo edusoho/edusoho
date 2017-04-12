@@ -58,11 +58,18 @@ class ResourceKernel
     {
         $this->loadUserFromToken($request->headers->get('X-Auth-Token'));
 
-        if ($request->getPathInfo() == '/api/batch') {
+        if ($this->isBatchRequest($request)) {
             return $this->batchRequest($request);
         } else {
             return $this->singleRequest($request);
         }
+    }
+
+    private function isBatchRequest(Request $request)
+    {
+        $pathInfo = $request->getPathInfo();
+        $pathInfo = str_replace(ApiBundle::API_PREFIX, '', $pathInfo);
+        return $pathInfo == '/batch';
     }
 
     private function loadUserFromToken($token)
@@ -153,9 +160,12 @@ class ResourceKernel
 
     private function validateJsonRequests($jsonRequests)
     {
-        foreach ($jsonRequests as $jsonRequest)
-        {
-            if (empty($jsonRequest['method'] || empty($jsonRequest['relative_url']))) {
+        if (!is_array($jsonRequests)) {
+            throw new InvalidArgumentException('batch参数不正确');
+        }
+
+        foreach ($jsonRequests as $jsonRequest) {
+            if (empty($jsonRequest['method']) || empty($jsonRequest['relative_url'])) {
                 throw new InvalidArgumentException('batch参数不正确');
             }
         }

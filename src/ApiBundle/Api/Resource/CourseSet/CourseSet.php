@@ -30,6 +30,10 @@ class CourseSet extends Resource
      */
     public function search(ApiRequest $request)
     {
+        $conditions = $request->query->all();
+        $courseSets = $this->service('Course:CourseSetService')->searchCourseSets(
+            ''
+        );
 
     }
 
