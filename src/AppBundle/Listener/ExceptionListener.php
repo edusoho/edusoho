@@ -40,7 +40,6 @@ class ExceptionListener
                     $exception->getPrevious()
                 )
             );
-
             return;
         }
 
