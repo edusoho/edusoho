@@ -869,3 +869,26 @@ admin.user.message.empty_hint: 暂无私信记录
 admin.user.message.fields.check_all_label: 全选
 admin.user.message.delete_btn: 删除
 admin.user.message.delete_btn.data_name: 私信
+
+##教师管理模块
+admin.user.teacher.fields.nickname.input_placeholder: 用户名
+admin.user.teacher.basic_tab.fields.recent_login_label: 最近登录
+admin.user.teacher.basic_tab.fields.recommend_teacher_label: 推荐教师
+admin.user.teacher.basic_tab.teacher_empty_hint: 暂无教师记录
+admin.user.teacher.basic_tab.fields.forbid_label: 禁
+admin.user.teacher.basic_tab.fields.recommend_label: 荐:
+admin.user.teacher.basic_tab.fields.serial_num_label: 序号:
+admin.user.teacher.basic_tab.fields.deny_label: 否
+
+###教师管理设置推荐教师模块
+admin.user.teacher.basic_tab.promote.heading_title: 设置推荐教师
+admin.user.teacher.basic_tab.promote.fields.serial_num_label: 序号
+admin.user.teacher.basic_tab.promote.number_hint: 请输入0-10000的整数
+admin.user.teacher.basic_tab.promote.number_input_data_explain: 请输入0-10000的整数
+
+##教师推荐模块
+admin.user.teacher.promote_tab.fields.serial_num_label: 顺序号
+admin.user.teacher.promote_tab.fields.promote_time_label: 推荐时间
+admin.user.teacher.promote_tab.teacher_empty_hint: 暂无推荐老师
+admin.user.teacher.promote_tab.promote_cancel_btn: 取消推荐教师
+admin.user.teacher.promote_tab.promote_setting_btn: 设置序号
