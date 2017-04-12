@@ -31,6 +31,13 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->findInField('activityId', $activityIds);
     }
 
+    public function findByCourseSetId($courseSetId)
+    {
+        return $this->findByFields(array(
+            'fromCourseSetId' => $courseSetId,
+        ));
+    }
+
     public function findByIds($ids)
     {
         return $this->findInField('id', $ids);
