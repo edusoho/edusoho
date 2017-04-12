@@ -15,6 +15,11 @@ site.dategrid.filter.hotest: 最热
 site.dategrid.filter.recommended: 推荐
 site.dategrid.filter.category_more: 更多
 site.dategrid.filter.course_more: 更多课程
+site.dategrid.filter.all: 全部
+site.dategrid.filter.question: 问答
+site.dategrid.filter.essence: 精华
+site.dategrid.filter.last_reply: 最后回复
+site.dategrid.filter.latest_post: 最新发帖
 site.message.info: 提示信息
 site.message.warning: 警告信息
 site.message.error: 错误提示
@@ -119,9 +124,11 @@ course.students_count: >
 course.course_member_count: %studentsNum%人
 course.activity: 活动
 course.teaching_plan: 教学计划
+
 course.expiry_date: 学习有效期
 course.expiry_date.days_mode: >
   %expiryDays% 天（随到随学）
+course.expiry_date.days_mode.total_days: 共%expiryDays%天
 course.expiry_date.end_date_mode: >
   截止：%expiryEndDate%（随到随学）
 course.expiry_date.date_mode: >
@@ -130,10 +137,16 @@ course.expiry_date.date_mode: >
 course.expiry_date.forever_mode: 永久有效
 course.expiry_date.expiryStartDate: >
   课程将于%expiryStartDate%开始授课，请耐心等待
+course.expiry_date.overdue: （已到期）
+course.expiry_date.today_will_overdue: （今日过期）
+course.expiry_date.tomorrow_will_overdue: （明日过期）
+course.expiry_date.days_remaining: （剩余 %lastDays% 天）
+
 course.buy_expiry_date: 购买有效期
 course.buy_expiry_date.buy_expiry_time: >
   <span class="course-detail-title ">购买截止日期</span>
   <span class="gray-dark mrl">%buyExpiryTime% 23:59</span>
+
 course.showServices: 承诺服务
 course.showServices.empty: 暂未提供
 course.status.followed: 已收藏
@@ -161,7 +174,6 @@ course.catalogue.task.try_look_btn: 试看
 course.catalogue.task.join_btn: 加入
 course.catalogue.task.buy_btn: 购买
 course.catalogue.task.name: %name%任务
-course.catalogue.task.lock_tips: 需要解锁上一个任务才能学习
 course.catalogue.task_status.task: 任务%taskNumber%： %taskTitle%
 course.catalogue.task_status.free: 免费
 course.catalogue.task_status.try_lookable: 试看
@@ -191,11 +203,25 @@ course.students_dynamic.empty: 还没有动态
 course.note.expand_btn: [展开全文]
 course.note.mission_delete_tips: · 该任务已被删除
 course.note.empty: 暂无笔记
+course.task: 任务
+course.task.lock_tips: 需要解锁上一个任务才能学习
+course.thread: 讨论区
+course.thread.empty: >
+  还没有%thread%，赶快添加一个吧！
+course.thread.hit_times: %hitNum%次浏览
+course.thread.mission_seq: 任务%seq%
+course.thread.teacher_answer: 教师的答案
+course.material.unpublished_tips: 任务未发布，不能下载该资料
+course.material.links: 网络链接资料
+course.material.upload_time: 上传于%createdTime%
+course.material.empty: 课程暂无资料
 
 course.btn.learn: 去学习
 course.btn.join: 加入学习
 course.btn.buy: 购买课程
 course.btn.announcement: 公告
+course.btn.start_learning: 开始学习
+course.btn.continue_learning_btn: 继续学习
 
 #公开课
 open_course: 公开课
@@ -704,11 +730,6 @@ group.thread.created_time: 发表于%createdTime%
 group.thread.hit_num: %hitNum%次查看
 group.thread.wanted: 悬赏:%rewardCoin%%coin_name%
 group.thread.check_hide_content: 查看隐藏内容
-group.thread.edit_btn: 编辑
-group.thread.cancel_essence_btn: 取消加精
-group.thread.set_essence_btn: 加精
-group.thread.stick_cancel_btn: 取消置顶
-group.thread.stick_btn: 置顶
 group.thread.cancel_reward_btn: 取消悬赏
 group.thread.set_reward_btn: 悬赏
 group.thread.view_all_btn: 查看全部
@@ -719,7 +740,6 @@ group.thread.best_reply: 最佳回答
 group.thread.reply_numbers: %postNum%回复
 group.thread.desc_floor: %postCount%楼
 group.thread.asc_floor: %loop.index%楼
-group.thread.delete_btn: 删除
 group.thread.delete_tips: 确定删除这条回复
 group.thread.accept_btn: 采纳
 group.thread.accept_tips: 确定采纳这条回复
@@ -924,12 +944,36 @@ admin.homepage.free_access_edu_cloud_search_btn: 免费接入云搜索获取热�
 # 话题
 thread: 话题
 thread.reply: 回复
-thread.empty: 暂无话题！
+thread.answer: 答案
+thread.content: 内容
+thread.all_answer: 所有答案
+thread.add_btn: 添加
+thread.browse: 浏览
+thread.empty: 暂无话题
 thread.status.stick: 置顶
 thread.status.essence: 精华
 thread.status.reward: 奖
+thread.status.question: 问
+thread.hover_tips.question: 问答
+thread.hover_tips.activiy: 活动
+thread.hover_tips.thread: 话题
 thread.create: 发起了话题
+thread.create_thread: 发起了%dict_text%
 thread.last_reply: 最后回复
+thread.create_discussion_btn: 发话题
+thread.create_question_btn: 提问题
+thread.delete_btn: 删除
+thread.delete_confirm_message: 您真的要删除该帖吗？
+thread.edit_btn: 编辑
+thread.cancel_essence_btn: 取消加精
+thread.set_essence_btn: 加精
+thread.stick_cancel_btn: 取消置顶
+thread.stick_btn: 置顶
+thread.set_essence_confirm_message: 您真的要加精该帖吗？
+thread.stick_cancel_confirm_message: 您真的要取消置顶该帖吗？
+thread.cancel_essence_confirm_message: 您真的要取消加精该帖吗？
+thread.stick_confirm_message: 您真的要置顶该帖吗？
+thread.order: 排序：
 
 # 咨询
 article: 资讯
@@ -1058,3 +1102,14 @@ my.learning.notebook_menu: 我的笔记
 my.learning.homework_menu: 我的作业
 my.learning.testpaper_menu: 我的考试
 my.learning.group_menu: 我的小组
+
+
+my.course.refund_tips: 您的退款申请已提交，请等待管理员的处理。
+my.course.cancle_refund_btn: 取消退款，继续学习！
+my.course.free_mode_plan.task_finished: 已完成
+my.course.free_mode_plan.task_empty: 暂无学习任务
+my.course.free_mode_plan.next_task: 下一学习任务
+my.course.free_mode_plan.task_progress: 完成任务：
+my.course.lock_mode_plan.task_progress: 已完成%spanHtml%个任务
+my.course.lock_mode_plan.behind_plan: 落后计划
+my.course.lock_mode_plan.expiry_date: 学习有效期：
