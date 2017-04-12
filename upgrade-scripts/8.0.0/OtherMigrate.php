@@ -232,6 +232,13 @@ class OtherMigrate extends AbstractMigrate
         }
     }
 
+    private function migrate18(){
+
+        $this->exec("
+            ALTER TABLE subtitle CONVERT TO CHARACTER SET utf8;
+        ");
+    }
+
     private function getUserByType()
     {
         $sql = "select * from user where type='system' limit 1;";
