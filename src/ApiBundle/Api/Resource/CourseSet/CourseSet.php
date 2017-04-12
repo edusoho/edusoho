@@ -31,9 +31,17 @@ class CourseSet extends Resource
     public function search(ApiRequest $request)
     {
         $conditions = $request->query->all();
+        $conditions['status'] = 'published';
+
+        list($offset, $limit) = $this->getOffsetAndLimit($request);
         $courseSets = $this->service('Course:CourseSetService')->searchCourseSets(
-            ''
+            $conditions,
+            array('createdTime' => 'DESC'),
+            $offset,
+            $limit
         );
+
+        $total = $this->service('Course:CourseSetService');
 
     }
 
