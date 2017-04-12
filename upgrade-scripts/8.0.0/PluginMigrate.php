@@ -53,20 +53,18 @@ class PluginMigrate extends AbstractMigrate
 
     protected function getSettingService()
     {
-        try {
-            return ServiceKernel::instance()->createService('System.SettingService');
-        } catch (\Exception $e) {
+        if ($this->isX8()) {
             return ServiceKernel::instance()->createService('System:SettingService');
         }
+        return ServiceKernel::instance()->createService('System.SettingService');
     }
 
     protected function getCrontabService()
     {
-        try {
-            return ServiceKernel::instance()->createService('Crontab.CrontabService');
-        } catch (\Exception $e) {
+        if ($this->isX8()) {
             return ServiceKernel::instance()->createService('Crontab:CrontabService');
         }
+        return ServiceKernel::instance()->createService('Crontab.CrontabService');
     }
 
     protected function getPluginConfig()

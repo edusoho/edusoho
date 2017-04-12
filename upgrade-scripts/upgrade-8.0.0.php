@@ -250,13 +250,19 @@ class EduSohoUpgrade extends AbstractUpdater
         return empty($result) ? false : true;
     }
 
+    protected function isX8()
+    {
+        $sql = "select * from cloud_app where code='MAIN';";
+        $result = $this->getConnection()->fetchAssoc($sql);
+        return version_compare($result['fromVersion'], '7.5.14', '>');
+    }
+
     protected function getSettingService()
     {
-        try {
-            return ServiceKernel::instance()->createService('System.SettingService');
-        } catch (\Exception $e) {
+        if ($this->isX8()) {
             return ServiceKernel::instance()->createService('System:SettingService');
         }
+        return ServiceKernel::instance()->createService('System.SettingService');
     }
 
     protected function logger($version, $level, $message)

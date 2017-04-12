@@ -199,11 +199,10 @@ class FileMigrate extends AbstractMigrate
 
     protected function getSettingService()
     {
-        try {
-            return $this->kernel->createService('System.SettingService');
-        } catch (\Exception $e) {
-            return $this->kernel->createService('System:SettingService');
+        if ($this->isX8()) {
+            return ServiceKernel::instance()->createService('System:SettingService');
         }
+        return ServiceKernel::instance()->createService('System.SettingService');
     }
 
     private function rebuildCloudSearchIndex()

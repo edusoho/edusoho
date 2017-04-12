@@ -1,4 +1,5 @@
 <?php
+
 abstract class AbstractMigrate
 {
     protected $kernel;
@@ -55,6 +56,13 @@ abstract class AbstractMigrate
         $result = $this->getConnection()->fetchAssoc($sql);
 
         return empty($result) ? false : true;
+    }
+
+    protected function isX8()
+    {
+        $sql = "select * from cloud_app where code='MAIN';";
+        $result = $this->getConnection()->fetchAssoc($sql);
+        return version_compare($result['fromVersion'], '7.5.14', '>');
     }
 
     protected function isCrontabJobExist($code)
