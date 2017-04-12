@@ -229,7 +229,7 @@ class EduCloudController extends BaseController
 
         $smsInfo = $processor->getSmsInfo($targetId, $index, $smsType);
         $this->getLogService()->info('sms', 'sms-callback', 'url: '.$url, $smsInfo);
-        
+
         return $this->createJsonResponse($smsInfo);
     }
 
