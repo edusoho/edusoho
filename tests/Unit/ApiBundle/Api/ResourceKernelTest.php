@@ -43,7 +43,7 @@ class ResourceKernelTest extends ApiTestCase
         );
 
         $request = Request::create('http://test.com/batch', 'POST', array(
-            'batch' => 'aabbcc'
+            'batch' => 'aabbcc',
         ));
         $kernel->handle($request);
     }
@@ -58,10 +58,10 @@ class ResourceKernelTest extends ApiTestCase
         );
 
         $batchParam = array(
-            array('method' => 'GET')
+            array('method' => 'GET'),
         );
         $request = Request::create('http://test.com/batch', 'POST', array(
-            'batch' => json_encode($batchParam)
+            'batch' => json_encode($batchParam),
         ));
         $kernel->handle($request);
     }
@@ -74,10 +74,10 @@ class ResourceKernelTest extends ApiTestCase
 
         $batchParam = array(
             array('method' => 'GET', 'relative_url' => '/course_sets'),
-            array('method' => 'GET', 'relative_url' => '/courses')
+            array('method' => 'GET', 'relative_url' => '/courses'),
         );
         $request = Request::create('http://test.com/batch', 'POST', array(
-            'batch' => json_encode($batchParam)
+            'batch' => json_encode($batchParam),
         ));
         $result = $kernel->handle($request);
 
@@ -95,10 +95,10 @@ class ResourceKernelTest extends ApiTestCase
 
         $batchParam = array(
             array('method' => 'GET', 'relative_url' => '/course_sets'),
-            array('method' => 'POST', 'relative_url' => '/tokens', 'body' => 'username=admin&password=6fPHfubFUWCgaNjN')
+            array('method' => 'POST', 'relative_url' => '/tokens', 'body' => 'username=admin&password=6fPHfubFUWCgaNjN'),
         );
         $request = Request::create('http://test.com/batch', 'POST', array(
-            'batch' => json_encode($batchParam)
+            'batch' => json_encode($batchParam),
         ));
         $result = $kernel->handle($request);
 
