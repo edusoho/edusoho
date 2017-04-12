@@ -16,7 +16,7 @@ class OrderInfoFilter extends Filter
             'targetType' => $data['targetType'],
             'totalPrice' => $data['totalPrice'],
             'title' => $data[$data['targetType']]['title'],
-            'account' => empty($data['account']) ? array() : $data['account'],
+            'account' => empty($data['account']) ? new \stdClass() : $data['account'],
             'hasPayPassword' => empty($data['hasPayPassword']) ? 0 : 1,
             'verifiedMobile' => empty($data['verifiedMobile']) ? '' : $data['verifiedMobile'],
             'cashRate' => empty($data['cashRate']) ? 0 : $data['cashRate'],
