@@ -56,7 +56,7 @@ class AjaxExceptionListener
             $this->getLogger()->error($exception->__toString());
         }
 
-        if ($statusCode == 403) {
+        if ($statusCode === 403) {
             $user = $this->getUser($event);
             if ($user) {
                 $error = array('name' => 'AccessDenied', 'message' => $this->getServiceKernel()->trans('访问被拒绝！'));
@@ -86,6 +86,26 @@ class AjaxExceptionListener
         return $user;
     }
 
+
+    private function convertStateCode($exception)
+    {
+        if ($exception instanceof AccessDeniedException) {
+            return Response::HTTP_FORBIDDEN;
+        }
+        if ($exception instanceof InvalidArgumentException) {
+            return Response::HTTP_FORBIDDEN;
+        }
+        if ($exception instanceof NotFoundException) {
+            return Response::HTTP_NOT_FOUND;
+        }
+
+        if (array_key_exists($exception->getCode(), Response::$statusTexts)) {
+            return $exception->getCode();
+        }
+
+        return Response::HTTP_INTERNAL_SERVER_ERROR;
+    }
+
     protected function getLogger()
     {
         if ($this->logger) {
@@ -93,7 +113,9 @@ class AjaxExceptionListener
         }
 
         $this->logger = new Logger('AjaxExceptionListener');
-        $this->logger->pushHandler(new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir').'/dev.log', Logger::DEBUG));
+        $this->logger->pushHandler(
+            new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir').'/dev.log', Logger::DEBUG)
+        );
 
         return $this->logger;
     }
