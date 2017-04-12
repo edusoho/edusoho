@@ -17,7 +17,7 @@ class ResourceKernelTest extends ApiTestCase
         $request = Request::create('http://test.com/course_sets', 'GET');
         $result = $kernel->handle($request);
 
-        $this->assertNull($result);
+        $this->assertNotNull($result);
     }
 
     /**
