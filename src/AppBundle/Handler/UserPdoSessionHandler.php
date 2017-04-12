@@ -11,7 +11,6 @@
 
 namespace AppBundle\Handler;
 
-use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
@@ -193,9 +192,9 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      */
     public function __construct($pdoOrDsn = null, array $options = array(), TokenStorage $storage)
     {
-        $this->storage = $storage;
+        $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
 
-        if ($this->isUnCreatable()) {
+        if (strpos($userAgent, 'Baiduspider') > -1) {
             $this->createable = false;
         }
 
@@ -221,6 +220,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
         $this->connectionOptions = isset($options['db_connection_options']) ? $options['db_connection_options'] : $this->connectionOptions;
         $this->lockMode = isset($options['lock_mode']) ? $options['lock_mode'] : $this->lockMode;
 
+        $this->storage = $storage;
     }
 
     /**
@@ -759,12 +759,5 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
         }
 
         return $this->pdo;
-    }
-
-    private function isUnCreatable()
-    {
-        $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
-        $token = $this->storage->getToken();
-        return strpos($userAgent, 'Baiduspider') > -1 || ($token instanceof PreAuthenticatedToken && $token->getProviderKey() == 'api');
     }
 }

@@ -2,13 +2,14 @@
 
 namespace AppBundle\Listener;
 
+use ApiBundle\ApiBundle;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
-class KernelRequestListener extends AbstractSecurityDisabledListener
+class KernelRequestListener
 {
     /**
      * @var ContainerInterface
@@ -48,8 +49,7 @@ class KernelRequestListener extends AbstractSecurityDisabledListener
 
         if ($request->getMethod() === 'POST') {
 
-            if ($this->isSecurityDisabledRequest($this->container, $request))
-            {
+            if (stripos($request->getPathInfo(), ApiBundle::API_PREFIX) === 0) {
                 return;
             }
 
