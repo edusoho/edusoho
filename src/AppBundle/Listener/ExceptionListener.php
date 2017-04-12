@@ -68,7 +68,7 @@ class ExceptionListener
             $this->getLogger()->error($exception->__toString());
         }
 
-        if ($statusCode == 403) {
+        if ($statusCode === 403) {
             $user = $this->getUser($event);
             if ($user) {
                 $error = array('name' => 'AccessDenied', 'message' => $this->getServiceKernel()->trans('访问被拒绝！'));
@@ -108,6 +108,10 @@ class ExceptionListener
         }
         if ($exception instanceof NotFoundException) {
             return Response::HTTP_NOT_FOUND;
+        }
+
+        if (array_key_exists($exception->getCode(), Response::$statusTexts)) {
+            return $exception->getCode();
         }
 
         return Response::HTTP_INTERNAL_SERVER_ERROR;
