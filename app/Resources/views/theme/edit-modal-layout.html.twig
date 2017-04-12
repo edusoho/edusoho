@@ -69,20 +69,20 @@
 
       {% block custom_background_color %}
         <div class="form-group">
-          <label class="col-sm-3 control-label">{{'背景颜色设置'|trans}}</label>
+          <label class="col-sm-3 control-label">{{'admin.setting.theme.manage.modal.setting_ustom_background_color'|trans}}</label>
           <div class="col-sm-9 check-box">
           <input type="hidden"  name="background" value={{config.background|default("")}}>
             <label class="radio-inline">
               <input type="radio"  value="section-gray"{% if config.background|default("") == "section-gray"%} checked="checked"{% endif %}>
-              {{'灰色'|trans}}
+              {{'admin.setting.theme.manage.modal.color_gray'|trans}}
             </label>
             <label class="radio-inline" >
               <input type="radio"  value="section-wihte"{% if config.background|default("") == "section-wihte"%} checked="checked"{% endif %} >
-              {{'白色'|trans}}
+              {{'admin.setting.theme.manage.modal.color_wihte'|trans}}
             </label>
             <label class="radio-inline" >
               <input type="radio"  value=""{% if config.background|default("") == ""%} checked="checked"{% endif %} >
-              {{'默认'|trans}}
+              {{'admin.setting.theme.manage.modal.color_default'|trans}}
             </label>
           </div>
         </div>
@@ -91,7 +91,7 @@
 
 {% endblock %}
 {% block footer %}
-  <button data-submiting-text="{{'正在保存'|trans}}" class="btn btn-primary pull-right" data-form="#edit-left-course-form" id="save-btn">{{'确定'|trans}}</button>
-  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
+  <button data-submiting-text="{{'form.btn.save.submiting'|trans}}" class="btn btn-primary pull-right" data-form="#edit-left-course-form" id="save-btn">{{'form.btn.confirm'|trans}}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
   <script>app.load('topxiawebbundle/controller/theme/left-edit-modal')</script>
 {% endblock %}

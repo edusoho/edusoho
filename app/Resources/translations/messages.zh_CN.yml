@@ -890,6 +890,19 @@ admin.setting.theme.manage.modal.subname: 副标题名称
 admin.setting.theme.manage.modal.setting_course_num: 课程数量设置
 admin.setting.theme.manage.modal.setting_custom_category_count: 课程分类数量设置
 admin.setting.theme.manage.modal.setting_custom_orderby: 排序设置
+admin.setting.theme.manage.modal.setting_ustom_background_color: 背景颜色设置
+admin.setting.theme.manage.modal.color_gray: 灰色
+admin.setting.theme.manage.modal.color_wihte: 白色
+admin.setting.theme.manage.modal.color_default: 默认
+admin.setting.theme.manage.modal.setting_custom_category_count: 是否启用模块
+admin.setting.theme.manage.modal.hot_group: 热门小组
+admin.setting.theme.manage.modal.latest_article: 最新%article_name%
+admin.setting.theme.manage.modal.default_article: 资讯
+admin.setting.theme.manage.modal.student_comment: 学员评价
+admin.setting.theme.manage.modal.student_dynamic: 学员动态
+admin.setting.theme.manage.modal.setting_custom_classroom_count: 班级数量设置
+admin.setting.theme.manage.modal.setting_custom_teacher_count: 教师数量设置
+
 
 # 话题
 thread: 话题
