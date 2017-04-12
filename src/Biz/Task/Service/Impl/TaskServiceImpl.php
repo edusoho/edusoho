@@ -36,7 +36,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields = array_filter(
             $fields,
             function ($value) {
-                if (is_array($value) || ctype_digit((string) $value)) {
+                if (is_array($value) || ctype_digit((string)$value)) {
                     return true;
                 }
 
@@ -284,11 +284,14 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResults = $this->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
         $taskResults = ArrayToolkit::index($taskResults, 'courseTaskId');
 
+        array_walk(
+            $tasks,
+            function (&$task) use ($taskResults) {
+                $task['result'] = isset($taskResults[$task['id']]) ? $taskResults[$task['id']] : null;
+            }
+        );
         $isLock = false;
         foreach ($tasks as &$task) {
-            if (in_array($task['id'], array_keys($taskResults))) {
-                $task['result'] = $taskResults[$task['id']];
-            }
             $task = $this->setTaskLockStatus($tasks, $task);
             //设置第一个发布的任务为解锁的
             if ($task['status'] == 'published' && !$isLock) {
@@ -335,7 +338,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                 if (time() > $live['endTime']) {
                     $canLearnTask = true;
                 } else {
-                    $isTaskLearned = $this->isTaskLearned($preTask['id']);
+                    $isTaskLearned = empty($preTask['result']) ? ($preTask['status'] == 'finish') : false;
                     if ($isTaskLearned) {
                         $canLearnTask = true;
                     } else {
@@ -348,7 +351,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                 if (time() > $preTask['startTime'] + $testPaper['ext']['limitedTime'] * 60) {
                     $canLearnTask = true;
                 } else {
-                    $isTaskLearned = $this->isTaskLearned($preTask['id']);
+                    $isTaskLearned = empty($preTask['result']) ? ($preTask['status'] == 'finish') : false;
                     if ($isTaskLearned) {
                         $canLearnTask = true;
                     } else {
@@ -357,7 +360,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                     }
                 }
             } else {
-                $isTaskLearned = $this->isTaskLearned($preTask['id']);
+                $isTaskLearned = empty($preTask['result']) ? ($preTask['status'] == 'finish') : false;
                 if ($isTaskLearned) {
                     $canLearnTask = true;
                 } else {
@@ -1030,18 +1033,21 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         $taskIds = ArrayToolkit::column($toLearnTasks, 'id');
         $taskResults = $this->getTaskResultService()->findUserTaskResultsByTaskIds($taskIds);
+        $taskResults = ArrayToolkit::index($taskResults, 'courseTaskId');
+        //TODO 需要检查
+        array_walk(
+            $tasks,
+            function (&$task) use ($taskResults) {
+                $task['result'] = isset($taskResults[$task['id']]) ? $taskResults[$task['id']] : null;
+            }
+        );
 
         //设置任务是否解锁
-        foreach ($toLearnTasks as &$task) {
-            $task['activity'] = $activities[$task['activityId']];
-            foreach ($taskResults as $key => $result) {
-                if ($result['courseTaskId'] != $task['id']) {
-                    continue;
-                }
-                $task['result'] = $result;
-            }
+        foreach ($toLearnTasks as &$toLearnTask) {
+            $toLearnTask['activity'] = $activities[$toLearnTask['activityId']];
+            $toLearnTask['result'] = isset($taskResults[$toLearnTask['id']]) ? $taskResults[$toLearnTask['id']] : null;
             if ($course['learnMode'] == 'lockMode') {
-                $task = $this->setTaskLockStatus($tasks, $task);
+                $toLearnTask = $this->setTaskLockStatus($tasks, $toLearnTask);
             }
         }
 

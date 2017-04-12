@@ -10,6 +10,8 @@ interface TestpaperService
 
     public function getTestpaperByIdAndType($id, $type);
 
+    public function findTestpapersByIdsAndType($ids, $type);
+
     public function createTestpaper($fields);
 
     public function updateTestpaper($id, $fields);

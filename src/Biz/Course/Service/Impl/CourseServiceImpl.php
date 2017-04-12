@@ -518,7 +518,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($course)) {
             throw $this->createNotFoundException("Course#{$courseId} Not Found");
         }
-        $tasks = $this->findTasksByCourseId($course);
+       $tasks = $this->findTasksByCourseId($course);
 
         return $this->createCourseStrategy($course)->prepareCourseItems($courseId, $tasks, $limitNum);
     }

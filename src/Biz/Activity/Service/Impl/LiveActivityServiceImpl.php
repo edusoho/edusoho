@@ -3,6 +3,7 @@
 namespace Biz\Activity\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Dao\LiveActivityDao;
 use Biz\Activity\Service\LiveActivityService;
 use Biz\BaseService;
 use Biz\Course\Service\LiveReplayService;
@@ -18,6 +19,11 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     public function getLiveActivity($id)
     {
         return $this->getLiveActivityDao()->get($id);
+    }
+
+    public function findLiveActivitiesByIds($ids)
+    {
+        return $this->getLiveActivityDao()->findByIds($ids);
     }
 
     public function createLiveActivity($activity, $ignoreValidation = false)
@@ -90,7 +96,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             //直播开始后不更新开始时间和直播时长
             if ($fields['startTime'] > time()) {
                 $liveParams['startTime'] = $fields['startTime'];
-                $liveParams['endTime'] = (string) ($fields['startTime'] + $fields['length'] * 60);
+                $liveParams['endTime'] = (string)($fields['startTime'] + $fields['length'] * 60);
             }
 
             $this->getEdusohoLiveClient()->updateLive($liveParams);
@@ -126,6 +132,9 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         }
     }
 
+    /**
+     * @return LiveActivityDao
+     */
     protected function getLiveActivityDao()
     {
         return $this->createDao('Activity:LiveActivityDao');
@@ -185,16 +194,18 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $liveLogoUrl = $baseUrl.'/'.$liveLogo['live_logo'];
         }
 
-        $live = $this->getEdusohoLiveClient()->createLive(array(
-            'summary' => empty($activity['remark']) ? '' : $activity['remark'],
-            'title' => $activity['title'],
-            'speaker' => $speaker,
-            'startTime' => $activity['startTime'].'',
-            'endTime' => ($activity['startTime'] + $activity['length'] * 60).'',
-            'authUrl' => $baseUrl.'/live/auth',
-            'jumpUrl' => $baseUrl.'/live/jump?id='.$activity['fromCourseId'],
-            'liveLogoUrl' => $liveLogoUrl,
-        ));
+        $live = $this->getEdusohoLiveClient()->createLive(
+            array(
+                'summary' => empty($activity['remark']) ? '' : $activity['remark'],
+                'title' => $activity['title'],
+                'speaker' => $speaker,
+                'startTime' => $activity['startTime'].'',
+                'endTime' => ($activity['startTime'] + $activity['length'] * 60).'',
+                'authUrl' => $baseUrl.'/live/auth',
+                'jumpUrl' => $baseUrl.'/live/jump?id='.$activity['fromCourseId'],
+                'liveLogoUrl' => $liveLogoUrl,
+            )
+        );
 
         return $live;
     }

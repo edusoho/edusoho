@@ -7,6 +7,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Dao\FlashActivityDao;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\ActivityLearnLogService;
+use Biz\CloudPlatform\Client\CloudAPIIOException;
 
 class Flash extends Activity
 {
@@ -88,6 +89,35 @@ class Flash extends Activity
         $audioActivity['file'] = $this->getUploadFileService()->getFullFile($flashActivity['mediaId']);
 
         return $audioActivity;
+    }
+
+
+    public function find($targetIds)
+    {
+        $flashActivities = $this->getFlashActivityDao()->findByIds($targetIds);
+        $mediaIds = ArrayToolkit::column($flashActivities, 'mediaId');
+        try {
+            $files = $this->getUploadFileService()->findFilesByIds(
+                $mediaIds,
+                $showCloud = 1
+            );
+        } catch (CloudAPIIOException $e) {
+            $files = array();
+        }
+
+        if (empty($files)) {
+            return $flashActivities;
+        }
+        $files = ArrayToolkit::index($files, 'id');
+        array_walk(
+            $flashActivities,
+            function (&$videoActivity) use ($files) {
+                $videoActivity['file'] = isset($files[$videoActivity['mediaId']]) ? $files[$videoActivity['mediaId']] : null;
+            }
+        );
+
+        return $flashActivities;
+
     }
 
     /**

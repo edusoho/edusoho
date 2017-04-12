@@ -15,4 +15,11 @@ class VideoActivityDaoImpl extends GeneralDaoImpl implements VideoActivityDao
             'serializes' => array('media' => 'json'),
         );
     }
+
+    public function findByIds($ids)
+    {
+        return $this->findInField('id', $ids);
+    }
+
+
 }

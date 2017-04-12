@@ -30,7 +30,9 @@ class ExceptionListener
         $request = $event->getRequest();
 
         if (!$request->isXmlHttpRequest()) {
-
+            if ($exception instanceof HttpException) {
+                return;
+            }
             $event->setException(
                 new HttpException(
                     $this->convertStateCode($exception),

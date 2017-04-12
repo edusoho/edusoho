@@ -12,4 +12,9 @@ class PptActivityDaoImpl extends GeneralDaoImpl implements PptActivityDao
     public function declares()
     {
     }
+
+    public function findByIds($Ids)
+    {
+        return $this->findInField('id', $Ids);
+    }
 }

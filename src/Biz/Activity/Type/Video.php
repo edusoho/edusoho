@@ -2,6 +2,7 @@
 
 namespace Biz\Activity\Type;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\VideoActivityDao;
 use Biz\File\Service\UploadFileService;
@@ -106,6 +107,34 @@ class Video extends Activity
         }
 
         return $videoActivity;
+    }
+
+
+    public function find($ids)
+    {
+        $videoActivities = $this->getVideoActivityDao()->findByIds($ids);
+        $mediaIds = ArrayToolkit::column($videoActivities, 'mediaId');
+        try {
+            $files = $this->getUploadFileService()->findFilesByIds(
+                $mediaIds,
+                $showCloud = 1
+            );
+        } catch (CloudAPIIOException $e) {
+            $files = array();
+        }
+
+        if (empty($files)) {
+            return $videoActivities;
+        }
+        $files = ArrayToolkit::index($files, 'id');
+        array_walk(
+            $videoActivities,
+            function (&$videoActivity) use ($files) {
+                $videoActivity['file'] = isset($files[$videoActivity['mediaId']]) ? $files[$videoActivity['mediaId']] : null;
+            }
+        );
+
+        return $videoActivities;
     }
 
     public function delete($id)

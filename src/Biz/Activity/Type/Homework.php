@@ -21,6 +21,11 @@ class Homework extends Activity
         return $this->getTestpaperService()->getTestpaperByIdAndType($targetId, 'homework');
     }
 
+    public function find($targetIds)
+    {
+        return $this->getTestpaperService()->findTestpapersByIdsAndType($targetIds, 'homework');
+    }
+
     public function create($fields)
     {
         $fields = $this->filterFields($fields);
