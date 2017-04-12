@@ -8,10 +8,18 @@ class AppVersionChecker extends AbstractMigrate
     {
     	$apps = $this->getApps();
         $localApps = $this->getAppService()->findApps(0, 1000);
+
+        $errors = array();
+
         foreach ($localApps as $key => $localApp) {
             if (!empty($apps[strtolower($localApp['code'])]) && version_compare($localApp['version'], $apps[strtolower($localApp['code'])], '<')) {
-                throw new Exception("当前插件{$localApp['name']}版本过低，请先升级该插件", 1);
+                $errors[] = $localApp['name'];
             }
+        }
+
+        if(!empty($errors)){
+            $names = implode('、', $errors);
+            throw new Exception("当前以下插件{$names}版本过低，请先升级以上插件", 1);
         }
     }
 
