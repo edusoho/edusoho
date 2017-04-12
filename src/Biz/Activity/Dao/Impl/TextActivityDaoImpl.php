@@ -20,6 +20,4 @@ class TextActivityDaoImpl extends GeneralDaoImpl implements TextActivityDao
     {
         return $this->findInField('id', $Ids);
     }
-
-
 }

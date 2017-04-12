@@ -13,7 +13,6 @@ use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
-use Mockery\Exception;
 
 class TaskServiceImpl extends BaseService implements TaskService
 {
@@ -37,7 +36,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields = array_filter(
             $fields,
             function ($value) {
-                if (is_array($value) || ctype_digit((string)$value)) {
+                if (is_array($value) || ctype_digit((string) $value)) {
                     return true;
                 }
 

@@ -114,7 +114,6 @@ class Audio extends Activity
         return $audioActivities;
     }
 
-
     protected function registerListeners()
     {
         return array();

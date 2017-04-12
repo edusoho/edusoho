@@ -423,7 +423,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $activity;
     }
 
-
     public function fetchMedias($mediaType, $activities)
     {
         $activityConfig = $this->getActivityConfig($mediaType);
@@ -516,12 +515,15 @@ class ActivityServiceImpl extends BaseService implements ActivityService
      * @param $fetchMedia
      * @param $activities
      * @param $sortedActivities
+     *
      * @return mixed
      */
     protected function prepareActivities($fetchMedia, $activities)
     {
+        if (empty($activities)) {
+            return $activities;
+        }
         $activityGroups = ArrayToolkit::group($activities, 'mediaType');
-
         if ($fetchMedia) {
             foreach ($activityGroups as $mediaType => $activityGroup) {
                 $activityGroups[$mediaType] = $this->fetchMedias($mediaType, $activityGroup);

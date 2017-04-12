@@ -18,8 +18,8 @@ abstract class Activity
     }
 
     /**
-     * @param int $targetId
-     * @param array $fields fields to update
+     * @param int   $targetId
+     * @param array $fields   fields to update
      * @param array $activity existed activity
      */
     public function update($targetId, &$fields, $activity)
@@ -34,7 +34,7 @@ abstract class Activity
      * 实现Activity的复制，这里仅需要处理Activity的附属信息.
      *
      * @param array $activity 要复制的Activity
-     * @param array $config : newLiveroom => true/false // 是否新建直播教室（对于直播任务）
+     * @param array $config   : newLiveroom => true/false // 是否新建直播教室（对于直播任务）
      *
      * @return mixed
      */
@@ -47,7 +47,7 @@ abstract class Activity
      * 实现Activity附属信息的同步.
      *
      * @param array $sourceActivity 源activity
-     * @param array $activity 目标activity
+     * @param array $activity       目标activity
      *
      * @return mixed
      */

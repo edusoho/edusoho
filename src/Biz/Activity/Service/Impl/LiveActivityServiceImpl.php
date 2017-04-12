@@ -96,7 +96,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             //直播开始后不更新开始时间和直播时长
             if ($fields['startTime'] > time()) {
                 $liveParams['startTime'] = $fields['startTime'];
-                $liveParams['endTime'] = (string)($fields['startTime'] + $fields['length'] * 60);
+                $liveParams['endTime'] = (string) ($fields['startTime'] + $fields['length'] * 60);
             }
 
             $this->getEdusohoLiveClient()->updateLive($liveParams);

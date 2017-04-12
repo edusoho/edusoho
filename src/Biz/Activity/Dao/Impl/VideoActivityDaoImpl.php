@@ -20,6 +20,4 @@ class VideoActivityDaoImpl extends GeneralDaoImpl implements VideoActivityDao
     {
         return $this->findInField('id', $ids);
     }
-
-
 }

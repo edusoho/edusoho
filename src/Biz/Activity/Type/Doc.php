@@ -114,7 +114,6 @@ class Doc extends Activity
         return $activity;
     }
 
-
     public function find($targetIds)
     {
         $docActivities = $this->getDocActivityDao()->findByIds($targetIds);

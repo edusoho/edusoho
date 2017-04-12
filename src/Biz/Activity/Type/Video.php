@@ -109,7 +109,6 @@ class Video extends Activity
         return $videoActivity;
     }
 
-
     public function find($ids)
     {
         $videoActivities = $this->getVideoActivityDao()->findByIds($ids);

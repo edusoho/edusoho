@@ -91,7 +91,6 @@ class Flash extends Activity
         return $audioActivity;
     }
 
-
     public function find($targetIds)
     {
         $flashActivities = $this->getFlashActivityDao()->findByIds($targetIds);
@@ -117,7 +116,6 @@ class Flash extends Activity
         );
 
         return $flashActivities;
-
     }
 
     /**
