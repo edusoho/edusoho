@@ -249,7 +249,7 @@ class OtherMigrate extends AbstractMigrate
 
     public function update($page)
     {
-        if ($page > 17) {
+        if ($page > 18) {
             return;
         }
 
