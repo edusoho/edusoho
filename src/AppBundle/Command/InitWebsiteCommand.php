@@ -163,7 +163,7 @@ class InitWebsiteCommand extends BaseCommand
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return $this->getServiceKernel()->createService('System:SettingService');
     }
 
     protected function getAuthService()

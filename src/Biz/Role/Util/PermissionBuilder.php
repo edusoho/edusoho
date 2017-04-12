@@ -5,7 +5,6 @@ namespace Biz\Role\Util;
 use AppBundle\Common\Tree;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\Finder\Finder;
 use AppBundle\Common\PluginVersionToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -236,7 +235,7 @@ class PermissionBuilder
         $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
         $files = array(
             $rootDir.'/../src/AppBundle/Resources/config/menus_admin.yml',
-            $rootDir.'/../src/Custom/AdminBundle/Resources/config/menus_admin.yml'
+            $rootDir.'/../src/Custom/AdminBundle/Resources/config/menus_admin.yml',
         );
 
         foreach ($files as $filepath) {
@@ -262,12 +261,7 @@ class PermissionBuilder
             }
 
             $code = ucfirst($app['code']);
-
-            if (isset($app['protocol']) && $app['protocol'] == 3) {
-                $configPaths[] = "{$rootDir}/plugins/{$code}Plugin/Resources/config/menus_{$position}.yml";
-            } else {
-                $configPaths[] = "{$rootDir}/plugins/{$code}/{$code}Bundle/Resources/config/menus_{$position}.yml";
-            }
+            $configPaths[] = "{$rootDir}/../plugins/{$code}Plugin/Resources/config/menus_{$position}.yml";
         }
 
         return $configPaths;
@@ -280,7 +274,7 @@ class PermissionBuilder
      */
     public function getOriginPermissionTree($needDisable = false)
     {
-        $index = (int)$needDisable;
+        $index = (int) $needDisable;
         if (isset($this->cached['getOriginPermissionTree'][$index])) {
             return $this->cached['getOriginPermissionTree'][$index];
         }
@@ -310,7 +304,8 @@ class PermissionBuilder
         }
 
         $environment = ServiceKernel::instance()->getEnvironment();
-        $cacheFile = '../app/cache/'.$environment.'/menus_cache_'.$this->position.'.php';
+        $cacheDir = ServiceKernel::instance()->getParameter('kernel.cache_dir');
+        $cacheFile = $cacheDir.'/menus_cache_'.$this->position.'.php';
         if ($environment != 'dev' && file_exists($cacheFile)) {
             $this->cached['getOriginPermissions'] = include $cacheFile;
 
