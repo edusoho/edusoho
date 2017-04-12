@@ -129,7 +129,6 @@ class TaskServiceTest extends BaseTestCase
         $this->getActivityLearnLogService()->createLog($firstTask['activity'], 'text', array('task' => $firstTask, 'learnedTime' => 1));
         $this->getTaskService()->finishTask($firstTask['id']);
 
-
         $nextTask = $this->getTaskService()->getNextTask($firstTask['id']);
         $this->assertEquals($secondTask['id'], $nextTask['id']);
     }
