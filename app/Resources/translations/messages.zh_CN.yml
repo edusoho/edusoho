@@ -11,6 +11,7 @@ site.dategrid.filter.last_one_month: 最近一个月
 site.dategrid.filter.last_three_month: 最近三个月
 site.default.classroom: 班级
 site.default.student: 学员
+site.default.more: 更多
 
 # 用户通用
 user.fields.login_password: 登录密码
@@ -791,6 +792,21 @@ my.teaching.course_set.file_manage_btn: 文件管理
 my.teaching.course_set.live_empty_hint: 你还没有在教的直播课程哦, 赶快去创建吧!
 my.teaching.course_set.empty_hint: 你还没有在教的课程哦, 赶快去创建吧!
 
+my.teaching.open_course.title: 名称
+my.teaching.open_course.hit_num: 浏览数
+my.teaching.open_course.status: 状态
+my.teaching.open_course.actions: 操作
+my.teaching.open_course.live_label: 直播直播
+my.teaching.open_course.manage_btn: 管理
+my.teaching.open_course.view_btn: 查看
+my.teaching.open_course.view_btn: 查看
+my.teaching.open_course.lesson_manage_btn: 课时管理
+my.teaching.open_course.file_manage_btn: 文件管理
+my.teaching.open_course.student_manage_btn: %student%管理
+my.teaching.open_course.empty_hint: 你还没有在教的公开课哦, 赶快去创建吧!
+my.teaching.page_title: 在教课程
+my.teaching.course_set.create: 创建课程
+my.teaching.course_set.content_title: 在教课程
 
 # 我的学习
 my.learning.menu_heading: 我的学习
