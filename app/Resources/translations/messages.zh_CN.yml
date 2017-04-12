@@ -711,7 +711,6 @@ group.detail.new_group_members.empty: 还没有小组成员！
 group.detail.hot_group: 热门小组
 group.detail.hot_group_empty: 暂无小组信息！
 
-<<<<<<< HEAD
 # 课程管理
 #课程管理通用模块
 admin.course_manage.category_placeholder: 课程分类
@@ -1081,7 +1080,7 @@ admin.tag_manage.tag_group.classroom_filter_checkbox: 班级列表筛选
 admin.tag_manage.tag_group.course_filter_checkbox: 课程列表筛选
 admin.tag_manage.tag_group.contain_label: 包含标签
 admin.tag_manage.tag_group.contain_tips: 回车可添加标签，标签组内添加的标签也会添加到标签管理中
-=======
+
 #后台首页通用key
 unknown: 未知
 admin.homepage.more_btn: 更多
@@ -1203,7 +1202,6 @@ admin.homepage.top_search.keyword_th: 关键词
 admin.homepage.top_search.search_number_th: 搜索次数
 admin.homepage.top_search.empty: 暂无搜索数据
 admin.homepage.free_access_edu_cloud_search_btn: 免费接入云搜索获取热门搜索关键词
->>>>>>> feature/x8-i18n
 
 # 话题
 thread: 话题
