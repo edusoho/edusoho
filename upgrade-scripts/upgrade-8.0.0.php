@@ -36,6 +36,7 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getAllStep()
     {
         return array(
+            'AppVersionChecker',
             'TruncateTables',
             'CourseSetMigrate',
             'CourseMigrate',
