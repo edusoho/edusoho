@@ -41,8 +41,9 @@ class CourseSet extends Resource
             $limit
         );
 
-        $total = $this->service('Course:CourseSetService');
+        $total = $this->service('Course:CourseSetService')->countCourseSets($conditions);
 
+        return $this->makePagingObject($courseSets, $total, $offset, $limit);
     }
 
     public function add()

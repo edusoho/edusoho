@@ -117,22 +117,8 @@ class ResourceKernel
         $this->validateJsonRequests($jsonRequests);
 
         $result = array();
-        foreach ($jsonRequests as $jsonRequest)
-        {
-            $components = parse_url($jsonRequest['relative_url']);
-            $body = array();
-            if (!empty($jsonRequest['body'])) {
-                parse_str($jsonRequest['body'], $body);
-            }
-
-            $apiRequest = new ApiRequest(
-                ApiBundle::API_PREFIX.$components['path'],
-                $jsonRequest['method'],
-                $components['query'],
-                $body,
-                $request->headers
-            );
-
+        foreach ($jsonRequests as $jsonRequest) {
+            $apiRequest = $this->makeApiRequestFromJsonRequest($request, $jsonRequest);
             try {
                 $successResponse = $this->handleApiRequest($apiRequest);
                 $result[] = array(
@@ -217,5 +203,35 @@ class ResourceKernel
 
         $params = array_merge(array($apiRequest), $pathMeta->getSlugs());
         return call_user_func_array(array($resource, $resMethod), $params);
+    }
+
+    /**
+     * @param Request $request
+     * @param $jsonRequest
+     * @return ApiRequest
+     */
+    private function makeApiRequestFromJsonRequest(Request $request, $jsonRequest)
+    {
+        $components = parse_url($jsonRequest['relative_url']);
+        $body = array();
+        $query = array();
+
+        if (!empty($jsonRequest['body'])) {
+            parse_str($jsonRequest['body'], $body);
+        }
+
+        if (!empty($components['query'])) {
+            parse_str($components['query'], $query);
+        }
+
+        $apiRequest = new ApiRequest(
+            ApiBundle::API_PREFIX.$components['path'],
+            $jsonRequest['method'],
+            $query,
+            $body,
+            $request->headers
+        );
+
+        return $apiRequest;
     }
 }

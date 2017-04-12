@@ -25,6 +25,27 @@ class Course extends Resource
         return $course;
     }
 
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
+    public function search(ApiRequest $request)
+    {
+        $conditions = $request->query->all();
+        $conditions['status'] = 'published';
+
+        list($offset, $limit) = $this->getOffsetAndLimit($request);
+        $courses = $this->service('Course:CourseService')->searchCourses(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            $offset,
+            $limit
+        );
+
+        $total = $this->service('Course:CourseService')->searchCourseCount($conditions);
+
+        return $this->makePagingObject($courses, $total, $offset, $limit);
+    }
+
     public function add()
     {
 
