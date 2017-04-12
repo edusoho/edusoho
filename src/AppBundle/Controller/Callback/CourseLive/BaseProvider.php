@@ -61,8 +61,6 @@ abstract class BaseProvider extends BizAware
 
     protected function createService($alias)
     {
-        $biz = $this->getBiz();
-
-        return $biz->service($alias);
+        return $this->getBiz()->service($alias);
     }
 }

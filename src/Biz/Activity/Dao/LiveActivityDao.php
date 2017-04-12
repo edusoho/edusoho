@@ -6,5 +6,5 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface LiveActivityDao extends GeneralDaoInterface
 {
-    public function findLiveActivityByIds(array $ids);
+    public function findLiveActivitiesByIds(array $ids);
 }

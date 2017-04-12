@@ -20,7 +20,6 @@ class CourseMembers extends BaseProvider
         }
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 100);
-        $courseId = $request->query->get('courseId');
 
         $sourceCourseMembers = $this->getCourseMemberService()->searchMembers(
             array('courseId' => $courseId),
@@ -32,7 +31,7 @@ class CourseMembers extends BaseProvider
         $userIds = ArrayToolkit::column($sourceCourseMembers, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $result = $this->buildNeedCourseMemberFields($sourceCourseMembers, $users);
+        $result = $this->buildCourseMemberData($sourceCourseMembers, $users);
         if (empty($result)) {
             $result['data'] = array();
             $result['finish'] = true;
@@ -57,7 +56,7 @@ class CourseMembers extends BaseProvider
         }
     }
 
-    protected function buildNeedCourseMemberFields($sourceCourseMembers, $users)
+    protected function buildCourseMemberData($sourceCourseMembers, $users)
     {
         $result = array();
         $sourceCourseMembers = ArrayToolkit::index($sourceCourseMembers, 'userId');

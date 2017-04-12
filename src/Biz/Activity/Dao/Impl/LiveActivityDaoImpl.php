@@ -9,7 +9,7 @@ class LiveActivityDaoImpl extends GeneralDaoImpl implements LiveActivityDao
 {
     protected $table = 'activity_live';
 
-    public function findLiveActivityByIds(array $ids)
+    public function findLiveActivitiesByIds(array $ids)
     {
         return $this->findInField('id', $ids);
     }

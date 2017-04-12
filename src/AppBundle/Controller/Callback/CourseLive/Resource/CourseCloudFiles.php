@@ -4,7 +4,6 @@ namespace AppBundle\Controller\Callback\CourseLive\Resource;
 
 use AppBundle\Controller\Callback\CourseLive\BaseProvider;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\ArrayToolkit;
 
 class CourseCloudFiles extends BaseProvider
 {
@@ -30,7 +29,7 @@ class CourseCloudFiles extends BaseProvider
             $start,
             $limit
         );
-        $cloudFiles = $this->buildNeedCloudFileFields($sourceCourseFiles);
+        $cloudFiles = $this->buildCloudFileData($sourceCourseFiles);
 
         return $cloudFiles;
     }
@@ -44,7 +43,7 @@ class CourseCloudFiles extends BaseProvider
         }
     }
 
-    protected function buildNeedCloudFileFields($sourceCourseFiles)
+    protected function buildCloudFileData($sourceCourseFiles)
     {
         $cloudFiles = array();
         foreach ($sourceCourseFiles as $sourceCourseFile) {

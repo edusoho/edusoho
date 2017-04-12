@@ -14,5 +14,5 @@ interface LiveActivityService
 
     public function createLiveroom($activity);
 
-    public function findLiveActivityByIds(array $ids);
+    public function findLiveActivitiesByIds(array $ids);
 }
