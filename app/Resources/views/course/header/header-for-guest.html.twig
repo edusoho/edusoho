@@ -87,7 +87,9 @@
         <div class="mb15 hidden-xs">
           <span class="course-detail-title ">{{ 'course.expiry_date'|trans }}</span>
           {% if course.expiryMode == 'days'  %}
-            {{ 'course.expiry_date.days_mode'|trans({'%expiryDays%':course.expiryDays})|raw }}
+            <span class="gray-dark">
+              {{ 'course.expiry_date.days_mode'|trans({'%expiryDays%':course.expiryDays})|raw }}
+            </span>
           {% elseif course.expiryMode == 'end_date' %}
             <span class="gray-dark">
               {{ 'course.expiry_date.end_date_mode'|trans({'%expiryEndDate%':course.expiryEndDate|date('Y-m-d ')})|raw }}

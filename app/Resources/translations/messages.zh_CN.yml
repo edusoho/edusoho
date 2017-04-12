@@ -11,7 +11,7 @@ site.dategrid.filter.last_one_month: 最近一个月
 site.dategrid.filter.last_three_month: 最近三个月
 site.dategrid.filter.all_course: 全部课程
 site.dategrid.filter.latest: 最新
-site.dategrid.filter.topest: 最热
+site.dategrid.filter.hotest: 最热
 site.dategrid.filter.recommended: 推荐
 site.dategrid.filter.category_more: 更多
 site.dategrid.filter.course_more: 更多课程
@@ -49,8 +49,8 @@ user.btn.followed_btn: 已关注
 user.btn.send_message_btn: 私信
 user.not_login.tips: >
   你还没有登录，请先
-  <a href="%loginUrl%">登录或</a>
-  <a href="%registerUrl%">注册！</a>
+  %login%
+  %register%
 
 #财务通用
 finance.income: 收入
@@ -121,7 +121,7 @@ course.activity: 活动
 course.teaching_plan: 教学计划
 course.expiry_date: 学习有效期
 course.expiry_date.days_mode: >
-  <span class="gray-dark">%expiryDays% 天（随到随学）</span>
+  %expiryDays% 天（随到随学）
 course.expiry_date.end_date_mode: >
   截止：%expiryEndDate%（随到随学）
 course.expiry_date.date_mode: >
@@ -820,7 +820,7 @@ admin.homepage.cloud_notic.unknown_time: 未知时间
 admin.homepage.cloud_notice: >
   欢迎使用，试用将于<span style="color:#fed032;">%endTime%</span>到期,剩余<span style="color:#fed032;">%remainDays%</span>天。
   </br>
-  您可以联系销售人员购买授权版本，或者延长试用期限。电话：4008041114 或 
+  您可以联系销售人员购买授权版本，或者延长试用期限。电话：4008041114 或
   <a id="BizQQWPA" href="javascript:" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])" style='text-decoration:none;'>QQ：800023860 </a>。
 admin.homepage.admins_announcements_title: 站长公告
 admin.homepage.admins_announcements_empty: 暂无公告
@@ -875,9 +875,9 @@ admin.homepage.todays_data.tooltips: >
       <div class="content">到目前为止，未回答问题总数</div>
     </div>
   </div>
-admin.homepage.todays_data.login_users: 登录用户 
-admin.homepage.todays_data.login_users.online_total: 在线总数 
-admin.homepage.todays_data.new_registration: 新增注册 
+admin.homepage.todays_data.login_users: 登录用户
+admin.homepage.todays_data.login_users.online_total: 在线总数
+admin.homepage.todays_data.new_registration: 新增注册
 admin.homepage.todays_data.total: 总数
 admin.homepage.todays_data.new_students: 新增学员
 admin.homepage.todays_data.new_vip_members: 新增会员
