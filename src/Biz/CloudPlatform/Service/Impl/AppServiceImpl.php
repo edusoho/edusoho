@@ -293,8 +293,13 @@ class AppServiceImpl extends BaseService implements AppService
         try {
             $package = $this->getCenterPackageInfo($packageId);
             // $errors  = $this->checkPluginDepend($package);
+
             if (!version_compare(System::VERSION, $package['edusohoMinVersion'], '>=')) {
                 $errors[] = sprintf('EduSoho版本需大于等于%s，您的版本为%s，请先升级EduSoho', $package['edusohoMinVersion'], System::VERSION);
+            }
+
+            if ($package['edusohoMaxVersion'] != 'up' && version_compare($package['edusohoMaxVersion'], System::VERSION, '<')) {
+                $errors[] = sprintf('当前应用版本 (%s) 与主系统版本不匹配, 无法安装。', $package['toVersion']);
             }
         } catch (\Exception $e) {
             $errors[] = $e->getMessage();
@@ -527,6 +532,13 @@ class AppServiceImpl extends BaseService implements AppService
         }
 
         try {
+            $protocol = $this->tryGetProtocolFromFile($package, $packageDir);
+
+            if ($protocol < 3) {
+                $errors[] = sprintf('当前应用版本 (%s) 与主系统版本不匹配, 无法安装。', $package['toVersion']);
+                goto last;
+            }
+
             $info = $this->_execScriptForPackageUpdate($package, $packageDir, $type, $index);
 
             if (isset($info['index'])) {
@@ -681,19 +693,13 @@ class AppServiceImpl extends BaseService implements AppService
 
     protected function _execScriptForPackageUpdate($package, $packageDir, $type, $index = 0)
     {
-        $protocol = $this->tryGetProtocolFromFile($packageDir);
-
         if (!file_exists($packageDir.'/Upgrade.php')) {
             return;
         }
 
         include_once $packageDir.'/Upgrade.php';
 
-        if ($protocol == 3) {
-            $upgrade = new \EduSohoUpgrade($this->getKernel()->getBiz());
-        } else {
-            $upgrade = new \EduSohoUpgrade($this->getKernel());
-        }
+        $upgrade = new \EduSohoUpgrade($this->biz);
 
         if (method_exists($upgrade, 'setUpgradeType')) {
             $upgrade->setUpgradeType($type, $package['toVersion']);
@@ -708,13 +714,28 @@ class AppServiceImpl extends BaseService implements AppService
         return array();
     }
 
-    private function tryGetProtocolFromFile($packageDir)
+    private function tryGetProtocolFromFile($package, $packageDir)
     {
         $protocol = 2;
+
+        if ($package['product']['code'] == 'MAIN') {
+            return 3;
+        }
+
         $pluginJsonFile = $packageDir.'/plugin.json';
         if (file_exists($pluginJsonFile)) {
             $meta = json_decode(file_get_contents($pluginJsonFile), true);
             $protocol = !empty($meta['protocol']) ? intval($meta['protocol']) : 2;
+
+            return $protocol;
+        }
+
+        $themeJsonFile = $packageDir.'/theme.json';
+        if (file_exists($themeJsonFile)) {
+            $meta = json_decode(file_get_contents($themeJsonFile), true);
+            $protocol = !empty($meta['protocol']) ? intval($meta['protocol']) : 2;
+
+            return $protocol;
         }
 
         return $protocol;
@@ -850,12 +871,13 @@ class AppServiceImpl extends BaseService implements AppService
             'updatedTime' => time(),
         );
 
+        $protocol = $this->tryGetProtocolFromFile($package, $packageDir);
+        $newApp['protocol'] = $protocol;
+
         if (file_exists($packageDir.'/ThemeApp')) {
             $newApp['type'] = 'theme';
         } else {
             $newApp['type'] = 'plugin';
-            $protocol = $this->tryGetProtocolFromFile($packageDir);
-            $newApp['protocol'] = $protocol;
         }
 
         $app = $this->getAppDao()->getByCode($package['product']['code']);

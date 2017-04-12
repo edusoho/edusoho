@@ -25,10 +25,17 @@ class SmsSendOneHourJob implements Job
             try {
                 $api = CloudAPIFactory::create('leaf');
                 $result = $api->post('/sms/sendBatch', array('total' => $count, 'callbackUrls' => $callbackUrls));
+                $this->getLogService()->info('sms', 'sms-sendbatch', 'callbackUrls', $callbackUrls);
+                $this->getLogService()->info('sms', 'sms-sendbatch', 'result', empty($result) ? array() : $result);
             } catch (\RuntimeException $e) {
                 throw new \RuntimeException($this->getKernel()->trans('发送失败！'));
             }
         }
+    }
+
+    protected function getLogService()
+    {
+        return $this->getKernel()->createService('System:LogService');
     }
 
     protected function getSmsService()

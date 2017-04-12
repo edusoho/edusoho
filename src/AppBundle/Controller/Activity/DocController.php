@@ -79,7 +79,8 @@ class DocController extends BaseController implements ActivityActionInterface
 
     /**
      * @param  $doc
-     * @return array  result and error tuple
+     *
+     * @return array result and error tuple
      */
     protected function getDocFilePlayer($doc)
     {
@@ -87,6 +88,7 @@ class DocController extends BaseController implements ActivityActionInterface
 
         if (empty($file) || empty($file['globalId'])) {
             $error = array('code' => 'error', 'message' => '抱歉，文档文件不存在，暂时无法学习。');
+
             return array(array(), $error);
         }
 

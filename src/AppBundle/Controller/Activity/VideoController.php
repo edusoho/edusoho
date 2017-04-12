@@ -75,6 +75,7 @@ class VideoController extends BaseController implements ActivityActionInterface
      * 获取当前视频活动的文件来源.
      *
      * @param  $activity
+     *
      * @return mediaSource
      */
     protected function getMediaSource($activity)

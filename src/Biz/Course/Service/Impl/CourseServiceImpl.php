@@ -9,6 +9,7 @@ use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
+use Biz\System\Service\LogService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Copy\Impl\CourseCopy;
@@ -17,6 +18,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
 use Biz\Task\Strategy\StrategyContext;
+use Biz\System\Service\SettingService;
 use Biz\Course\Service\MaterialService;
 use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
@@ -308,8 +310,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $requireFields = array('isFree', 'buyable');
         $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
-        if ($courseSet['type'] == 'normal') {
+        if ($courseSet['type'] == 'normal' && $this->isCloudStorage()) {
             array_push($requireFields, 'tryLookable');
+        } else {
+            $fields['tryLookable'] = 0;
         }
 
         if (!ArrayToolkit::requireds($fields, $requireFields)) {
@@ -326,6 +330,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->dispatchEvent('course.marketing.update', array('oldCourse' => $oldCourse, 'newCourse' => $newCourse));
 
         return $newCourse;
+    }
+
+    protected function isCloudStorage()
+    {
+        $storage = $this->getSettingService()->get('storage', array());
+
+        return !empty($storage['upload_mode']) && $storage['upload_mode'] === 'cloud';
     }
 
     /**
@@ -1877,6 +1888,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 
     /**
