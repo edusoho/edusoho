@@ -2,7 +2,7 @@ import notify from 'common/notify';
 
 class ThreadShowWidget {
   constructor(prop) {
-    this.ele = $(prop.ele)
+    this.ele = $(prop.element);
     this.init();
   }
 
@@ -23,6 +23,8 @@ class ThreadShowWidget {
   initEvent() {
     const $node = this.ele;
 
+    console.log($node);
+
     $node.on('click', '.js-post-more', event => this.onClickPostMore(event));
     $node.on('click', '.js-reply', event => this.onClickReply(event));
     $node.on('click', '.js-post-delete', event => this.onPostDelete(event));
@@ -42,6 +44,7 @@ class ThreadShowWidget {
   }
 
   onClickReply(e) {
+      console.log('ok');
     e.stopPropagation();
     const $btn = $(e.currentTarget);
     const inSubpost = $btn.parents('.thread-subpost-list').length > 0;
@@ -231,7 +234,9 @@ class ThreadShowWidget {
     })
   }
 
-  
+  undelegateEvents(element,eventName) {
+    this.ele.off(element,eventName);
+  }
 }
 
 export default ThreadShowWidget

@@ -3,7 +3,7 @@ import ThreadShowWidget from 'app/js/thread/thread-show';
 let element = '#detail-content';
 
 let threadShowWidget = new ThreadShowWidget({
-  ele: element
+  element: element
 })
 
 $(element).on('click', '.js-article-like', function() {
