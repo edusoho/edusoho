@@ -2,7 +2,10 @@
 
 namespace Tests\Unit\ApiBundle\Api;
 
+use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\PathParser;
+use ApiBundle\Api\Resource\Course\Course;
+use ApiBundle\Api\Resource\Course\CourseReview;
 use Symfony\Component\HttpFoundation\Request;
 
 class PathParserTest extends \PHPUnit_Framework_TestCase
@@ -10,10 +13,10 @@ class PathParserTest extends \PHPUnit_Framework_TestCase
     public function testParseWithOneLevel()
     {
         $parser = new PathParser();
-        $request = Request::create('http://test.com/courses/1', 'GET');
+        $request = new ApiRequest('/courses/1', 'GET');
         $pathMeta = $parser->parse($request);
 
-        $this->assertEquals('ApiBundle\\Api\\Resource\\Course\\Course', $pathMeta->getResourceClassName());
+        $this->assertEquals(Course::class, $pathMeta->getResourceClassName());
         $this->assertEquals(array(1), $pathMeta->getSlugs());
         $this->assertEquals('get', $pathMeta->getResMethod());
     }
@@ -21,10 +24,10 @@ class PathParserTest extends \PHPUnit_Framework_TestCase
     public function testParseWithTwoLevel()
     {
         $parser = new PathParser();
-        $request = Request::create('http://test.com/courses/1/users/2', 'PATCH');
+        $request = new ApiRequest('/courses/1/reviews/2', 'PATCH');
         $pathMeta = $parser->parse($request);
 
-        $this->assertEquals('ApiBundle\\Api\\Resource\\Course\\CourseUser', $pathMeta->getResourceClassName());
+        $this->assertEquals(CourseReview::class, $pathMeta->getResourceClassName());
         $this->assertEquals(array(1, 2), $pathMeta->getSlugs());
         $this->assertEquals('update', $pathMeta->getResMethod());
     }
@@ -32,7 +35,7 @@ class PathParserTest extends \PHPUnit_Framework_TestCase
     public function testParseWithThreeLevel()
     {
         $parser = new PathParser();
-        $request = Request::create('http://test.com/courses/1/threads/2/posts/3', 'DELETE');
+        $request = new ApiRequest('/courses/1/threads/2/posts/3', 'DELETE');
         $pathMeta = $parser->parse($request);
 
         $this->assertEquals('ApiBundle\\Api\\Resource\\Course\\CourseThreadPost', $pathMeta->getResourceClassName());
@@ -43,7 +46,7 @@ class PathParserTest extends \PHPUnit_Framework_TestCase
     public function testParseWithPluginResourceName()
     {
         $parser = new PathParser();
-        $request = Request::create('http://test.com/plugins/vip/vip_levels', 'GET');
+        $request = new ApiRequest('/plugins/vip/vip_levels', 'GET');
         $pathMeta = $parser->parse($request);
 
         $this->assertEquals('VipPlugin\\Api\\Resource\\VipLevel\\VipLevel', $pathMeta->getResourceClassName());
@@ -54,7 +57,7 @@ class PathParserTest extends \PHPUnit_Framework_TestCase
     public function testParseWithPluginResourceNameTwoLevel()
     {
         $parser = new PathParser();
-        $request = Request::create('http://test.com/plugins/vip/vip_levels/1/members', 'GET');
+        $request = new ApiRequest('/plugins/vip/vip_levels/1/members', 'GET');
         $pathMeta = $parser->parse($request);
 
         $this->assertEquals('VipPlugin\\Api\\Resource\\VipLevel\\VipLevelMember', $pathMeta->getResourceClassName());
@@ -69,7 +72,7 @@ class PathParserTest extends \PHPUnit_Framework_TestCase
     public function testParseWithException()
     {
         $parser = new PathParser();
-        $request = Request::create('http://test.com');
+        $request = new ApiRequest('/', 'GET');
         $pathMeta = $parser->parse($request);
         $pathMeta->getResourceClassName();
     }

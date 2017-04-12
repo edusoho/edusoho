@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\ApiBundle\Api\Resource\Course;
 
+use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\Course\CourseMember;
 use ApiBundle\ApiTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +15,7 @@ class CourseMemberTest extends ApiTestCase
     public function testAddWithError()
     {
         $res = new CourseMember($this->getBiz());
-        $res->add(Request::create(''), 100000);
+        $res->add(new ApiRequest('', ''), 100000);
     }
 
     /**
@@ -33,7 +34,7 @@ class CourseMemberTest extends ApiTestCase
             array('functionName' => 'getCourse', 'runTimes' => 1, 'returnValue' => $fakeCourse)
         ));
         $res = new CourseMember($this->getBiz());
-        $res->add(Request::create(''), 100000);
+        $res->add(new ApiRequest('', ''), 100000);
     }
 
     public function testAddWithSuccess()
@@ -52,7 +53,7 @@ class CourseMemberTest extends ApiTestCase
             array('functionName' => 'becomeStudent', 'runTimes' => 1, 'returnValue' => 1)
         ));
         $res = new CourseMember($this->getBiz());
-        $resp = $res->add(Request::create(''), 100000);
+        $resp = $res->add(new ApiRequest('', ''), 100000);
 
         $this->assertEquals(array('success' => true), $resp);
     }

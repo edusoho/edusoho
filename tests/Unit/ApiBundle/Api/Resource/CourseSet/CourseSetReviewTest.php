@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\ApiBundle\Api\Resource\CourseSet;
 
+use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\CourseSet\CourseSetReview;
 use ApiBundle\ApiTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +15,7 @@ class CourseSetReviewTest extends ApiTestCase
     public function testSearchWithError()
     {
         $res = new CourseSetReview($this->getBiz());
-        $res->search(Request::create(''), 100000);
+        $res->search(new ApiRequest('', ''), 100000);
     }
 
     public function testSearchWithSuccess()
@@ -39,7 +40,7 @@ class CourseSetReviewTest extends ApiTestCase
             'total' => 100
         );
         $res = new CourseSetReview($this->getBiz());
-        $resp = $res->search(Request::create('', 'GET', $paging), 1);
+        $resp = $res->search(new ApiRequest('', '', array('offset' => 10, 'limit' => 20)), 1);
 
         $this->assertEquals($expected, $resp['data']);
         $this->assertEquals($paging, $resp['paging']);

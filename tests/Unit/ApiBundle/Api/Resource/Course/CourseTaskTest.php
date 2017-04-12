@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\ApiBundle\Api\Resource\Course;
 
+use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\Course\CourseTask;
 use ApiBundle\ApiTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +15,7 @@ class CourseTaskTest extends ApiTestCase
     public function testGetWithError()
     {
         $res = new CourseTask($this->getBiz());
-        $res->search(Request::create(''), 100000);
+        $res->search(new ApiRequest('', ''), 100000);
     }
 
     public function testWithSuccess()
@@ -33,7 +34,7 @@ class CourseTaskTest extends ApiTestCase
             array('functionName' => 'findTasksByCourseId', 'runTimes' => 1, 'returnValue' => $tasks)
         ));
         $res = new CourseTask($this->getBiz());
-        $resp = $res->search(Request::create(''), 100000);
+        $resp = $res->search(new ApiRequest('', ''), 100000);
 
         $this->assertEquals($tasks, $resp);
     }

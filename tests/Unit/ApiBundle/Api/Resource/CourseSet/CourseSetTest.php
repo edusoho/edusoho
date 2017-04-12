@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\ApiBundle\Api\Resource\CourseSet;
 
+use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\CourseSet\CourseSet;
 use ApiBundle\ApiTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +27,7 @@ class CourseSetTest extends ApiTestCase
         ));
 
         $res = new CourseSet($this->getBiz());
-        $resp = $res->get(Request::create(''), 1);
+        $resp = $res->get(new ApiRequest('', ''), 1);
 
         $this->assertEquals($fakeCourseSet, $resp);
     }

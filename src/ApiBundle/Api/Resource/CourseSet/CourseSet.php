@@ -25,6 +25,14 @@ class CourseSet extends Resource
         return $courseSet;
     }
 
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
+    public function search(ApiRequest $request)
+    {
+
+    }
+
     public function add()
     {
 
