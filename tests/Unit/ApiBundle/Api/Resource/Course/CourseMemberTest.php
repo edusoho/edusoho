@@ -5,12 +5,11 @@ namespace Tests\Unit\ApiBundle\Api\Resource\Course;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\Course\CourseMember;
 use ApiBundle\ApiTestCase;
-use Symfony\Component\HttpFoundation\Request;
 
 class CourseMemberTest extends ApiTestCase
 {
     /**
-     * @expectedException ApiBundle\Api\Exception\ResourceNotFoundException
+     * @expectedException \ApiBundle\Api\Exception\ResourceNotFoundException
      */
     public function testAddWithError()
     {
@@ -19,19 +18,18 @@ class CourseMemberTest extends ApiTestCase
     }
 
     /**
-     * @expectedException ApiBundle\Api\Exception\InvalidArgumentException
+     * @expectedException \ApiBundle\Api\Exception\InvalidArgumentException
      */
     public function testAddWithCourseNorFree()
     {
-
         $fakeCourse = array(
             'id' => 1,
             'title' => 'hello bike',
             'price' => 100,
-            'createdTime' => time()
+            'createdTime' => time(),
         );
         $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'runTimes' => 1, 'returnValue' => $fakeCourse)
+            array('functionName' => 'getCourse', 'runTimes' => 1, 'returnValue' => $fakeCourse),
         ));
         $res = new CourseMember($this->getBiz());
         $res->add(new ApiRequest('', ''), 100000);
@@ -43,14 +41,14 @@ class CourseMemberTest extends ApiTestCase
             'id' => 1,
             'title' => 'hello bike',
             'price' => 0,
-            'createdTime' => time()
+            'createdTime' => time(),
         );
         $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'runTimes' => 1, 'returnValue' => $fakeCourse)
+            array('functionName' => 'getCourse', 'runTimes' => 1, 'returnValue' => $fakeCourse),
         ));
 
         $this->mockBiz('Course:MemberService', array(
-            array('functionName' => 'becomeStudent', 'runTimes' => 1, 'returnValue' => 1)
+            array('functionName' => 'becomeStudent', 'runTimes' => 1, 'returnValue' => 1),
         ));
         $res = new CourseMember($this->getBiz());
         $resp = $res->add(new ApiRequest('', ''), 100000);

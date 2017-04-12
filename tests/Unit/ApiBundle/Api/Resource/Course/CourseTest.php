@@ -5,12 +5,11 @@ namespace Tests\Unit\ApiBundle\Api\Resource\Course;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\Course\Course;
 use ApiBundle\ApiTestCase;
-use Symfony\Component\HttpFoundation\Request;
 
 class CourseTest extends ApiTestCase
 {
     /**
-     * @expectedException ApiBundle\Api\Exception\ResourceNotFoundException
+     * @expectedException \ApiBundle\Api\Exception\ResourceNotFoundException
      */
     public function testGetWithError()
     {
@@ -20,14 +19,13 @@ class CourseTest extends ApiTestCase
 
     public function testWithSuccess()
     {
-
         $fakeCourse = array(
             'id' => 1,
             'title' => 'hello bike',
-            'createdTime' => time()
+            'createdTime' => time(),
         );
-        $this->mockBiz('Course:CourseService',array(
-            array('functionName' => 'getCourse', 'runTimes' => 1, 'returnValue' => $fakeCourse)
+        $this->mockBiz('Course:CourseService', array(
+            array('functionName' => 'getCourse', 'runTimes' => 1, 'returnValue' => $fakeCourse),
         ));
         $courseRes = new Course($this->getBiz());
         $resp = $courseRes->get(new ApiRequest('', ''), 100000);

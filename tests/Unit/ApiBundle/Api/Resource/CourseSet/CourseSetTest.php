@@ -5,7 +5,6 @@ namespace Tests\Unit\ApiBundle\Api\Resource\CourseSet;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\CourseSet\CourseSet;
 use ApiBundle\ApiTestCase;
-use Symfony\Component\HttpFoundation\Request;
 
 class CourseSetTest extends ApiTestCase
 {
@@ -19,11 +18,11 @@ class CourseSetTest extends ApiTestCase
             'creator' => $this->getCurrentUser()->id,
             'createdTime' => $createdTime,
             'recommendedTime' => $createdTime,
-            'updatedTime' => $createdTime
+            'updatedTime' => $createdTime,
         );
 
-        $this->mockBiz('Course:CourseSetService',array(
-            array('functionName' => 'getCourseSet', 'runTimes' => 1, 'returnValue' => $fakeCourseSet)
+        $this->mockBiz('Course:CourseSetService', array(
+            array('functionName' => 'getCourseSet', 'runTimes' => 1, 'returnValue' => $fakeCourseSet),
         ));
 
         $res = new CourseSet($this->getBiz());

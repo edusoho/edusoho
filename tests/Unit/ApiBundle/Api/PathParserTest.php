@@ -6,7 +6,6 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\PathParser;
 use ApiBundle\Api\Resource\Course\Course;
 use ApiBundle\Api\Resource\Course\CourseReview;
-use Symfony\Component\HttpFoundation\Request;
 
 class PathParserTest extends \PHPUnit_Framework_TestCase
 {
@@ -65,9 +64,8 @@ class PathParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('search', $pathMeta->getResMethod());
     }
 
-
     /**
-     * @expectedException ApiBundle\Api\Exception\BadRequestException
+     * @expectedException \ApiBundle\Api\Exception\BadRequestException
      */
     public function testParseWithException()
     {
