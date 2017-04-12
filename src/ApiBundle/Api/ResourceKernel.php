@@ -93,9 +93,7 @@ class ResourceKernel
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
         $biz = $this->container->get('biz');
 
-        if (!$biz['user']) {
-            $biz['user'] = $currentUser;
-        }
+        $biz['user'] = $currentUser;
 
         return $currentUser;
     }
