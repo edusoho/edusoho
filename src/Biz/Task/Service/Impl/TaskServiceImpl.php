@@ -13,6 +13,7 @@ use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
+use Mockery\Exception;
 
 class TaskServiceImpl extends BaseService implements TaskService
 {
@@ -970,32 +971,37 @@ class TaskServiceImpl extends BaseService implements TaskService
      */
     protected function setTaskLockStatus($tasks, $task)
     {
-        $preTasks = $this->getPreTask($tasks, $task);
-
-        if (empty($preTasks)) {
+        try {
+            $this->getCourseService()->tryManageCourse($task['courseId'], $task['fromCourseSetId']);
             $task['lock'] = false;
-        }
+        } catch (\Exception $e) {
+            $preTasks = $this->getPreTask($tasks, $task);
 
-        $finish = $this->isPreTasksIsFinished($preTasks);
-        //当前任务未完成且前一个问题未完成则锁定
-        $task['lock'] = !$finish;
+            if (empty($preTasks)) {
+                $task['lock'] = false;
+            }
 
-        //选修任务不需要判断解锁条件
-        if ($task['isOptional']) {
-            $task['lock'] = false;
-        }
+            $finish = $this->isPreTasksIsFinished($preTasks);
+            //当前任务未完成且前一个问题未完成则锁定
+            $task['lock'] = !$finish;
 
-        if ($task['type'] == 'live') {
-            $task['lock'] = false;
-        }
+            //选修任务不需要判断解锁条件
+            if ($task['isOptional']) {
+                $task['lock'] = false;
+            }
 
-        if ($task['type'] == 'testpaper' && $task['startTime']) {
-            $task['lock'] = false;
-        }
+            if ($task['type'] == 'live') {
+                $task['lock'] = false;
+            }
 
-        //如果该任务已经完成则忽略其他的条件
-        if (isset($task['result']['status']) && ($task['result']['status'] == 'finish')) {
-            $task['lock'] = false;
+            if ($task['type'] == 'testpaper' && $task['startTime']) {
+                $task['lock'] = false;
+            }
+
+            //如果该任务已经完成则忽略其他的条件
+            if (isset($task['result']['status']) && ($task['result']['status'] == 'finish')) {
+                $task['lock'] = false;
+            }
         }
 
         return $task;
@@ -1034,7 +1040,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskIds = ArrayToolkit::column($toLearnTasks, 'id');
         $taskResults = $this->getTaskResultService()->findUserTaskResultsByTaskIds($taskIds);
         $taskResults = ArrayToolkit::index($taskResults, 'courseTaskId');
-        //TODO 需要检查
+
         array_walk(
             $tasks,
             function (&$task) use ($taskResults) {
