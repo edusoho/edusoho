@@ -457,10 +457,11 @@ class CourseManageController extends BaseController
             if (!empty($data['services'])) {
                 $data['services'] = json_decode($data['services'], true);
             }
+            
+            $freeTaskIds = ArrayToolkit::column($freeTasks, 'id');
+            $this->getTaskService()->updateTasks($freeTaskIds, array('isFree' => 0));
             if (!empty($data['freeTaskIds'])) {
                 $canFreeTaskIds = $data['freeTaskIds'];
-                $freeTaskIds = ArrayToolkit::column($freeTasks, 'id');
-                $this->getTaskService()->updateTasks($freeTaskIds, array('isFree' => 0));
                 $this->getTaskService()->updateTasks($canFreeTaskIds, array('isFree' => 1));
                 unset($data['freeTaskIds']);
             }
