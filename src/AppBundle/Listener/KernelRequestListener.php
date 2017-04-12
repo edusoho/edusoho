@@ -48,7 +48,6 @@ class KernelRequestListener
         }
 
         if ($request->getMethod() === 'POST') {
-
             if (stripos($request->getPathInfo(), ApiBundle::API_PREFIX) === 0) {
                 return;
             }
