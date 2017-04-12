@@ -20,7 +20,7 @@
     <br>
     <span class="text-muted text-sm">{{ 'admin.course_manage.manage.category'|trans }}：{{ category.name|default('--') }}</span>
     {% if courseSet.recommended %}
-      {{ 'admin.course_manage.manage.recommend'|trans({'%recommendedTime%': courseSet.recommendedTime|date('Y-m-d'), '%recommendedSeq%': courseSet.recommendedSeq})|raw }}
+      <span class="label label-default">{{ 'admin.course_manage.manage.recommend'|trans({'%recommendedTime%': courseSet.recommendedTime|date('Y-m-d'), '%recommendedSeq%': courseSet.recommendedSeq}) }}</span>
     {% endif %}
   </td>
   <td>{{ courseSet.minCoursePrice|default() }}</td>
@@ -55,7 +55,7 @@
         <td>{{ levels|first.name }}
           {% if length > 1 %}
             <br>
-            {{ 'admin.course_manage.manage.vip_grade_count'|trans({'%count%': length})|raw }}
+            <span class="text-muted text-sm">{{ 'admin.course_manage.manage.vip_grade_count'|trans({'%count%': length}) }}</span>
           {% endif %}
         </td>
       {% endif %}

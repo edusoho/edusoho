@@ -7,7 +7,7 @@
   {% if showStatusSelect|default(null) %}
     <div class="form-group">
       <select class="form-control" name="status">
-        {{ select_options(dict('courseStatus'), app.request.query.get('status'), 'admin.open_manage.manage.status_placeholder'|trans) }}
+        {{ select_options(dict('courseStatus'), app.request.query.get('status'), 'admin.open_manage.manage.status_option'|trans) }}
       </select>
     </div>
   {% endif %}
@@ -18,5 +18,5 @@
     <input class="form-control" type="text" placeholder="{{ 'admin.open_manage.creator_placeholer'|trans }}" name="creator" value="{{ app.request.get('creator') }}">
   </div>
   <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
-  {% include 'admin/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: 'admin.open_manage.manage.open_tips'|trans|raw, placement: 'left'} %}
+  {% include 'admin/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: 'admin.open_manage.open_tips'|trans|raw, placement: 'left'} %}
 </form>

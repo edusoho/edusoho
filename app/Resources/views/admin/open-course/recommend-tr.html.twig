@@ -10,7 +10,7 @@
   <td>
     <a href="{{ showUrl }}" target="_blank"><strong>{{ course.title }}</strong></a>
     <br>
-    <span class="text-muted text-sm">{{'admin.open_manage.recommend.category'|trans}}：{{ category.name|default('--') }}</span>
+    <span class="text-muted text-sm">{{ 'admin.open_manage.category'|trans({'%categoryName%': category.name|default('--')}) }}</span>
   </td>
   <td>
     {{ admin_macro.user_link(user) }}

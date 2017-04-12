@@ -11,9 +11,9 @@
     {% endif %}
 
     <br>
-    <span class="text-muted text-sm">{{ 'admin.open_manage.manage.category'|trans }}：{{ category.name|default('--') }}</span> 
+    <span class="text-muted text-sm">{{ 'admin.open_manage.category'|trans({'%categoryName%': category.name|default('--')}) }}</span> 
     {% if course.recommended %}
-      {{ 'admin.open_manage.manage.recommend'|trans({'%recommendedTime%': course.recommendedTime|date('Y-m-d'), '%recommendedSeq%': course.recommendedSeq})|raw }}
+      <span class="label label-default">{{ 'admin.open_manage.manage.recommend'|trans({'%recommendedTime%': course.recommendedTime|date('Y-m-d'), '%recommendedSeq%': course.recommendedSeq}) }}</span>
     {% endif %}
   </td>
     
@@ -33,26 +33,26 @@
       <ul class="dropdown-menu pull-right">
     
         {% if not course.recommended %}
-          <li><a class="recommend-course" href="#modal" data-toggle="modal" data-url="{{ path('admin_open_course_recommend', {id:course.id, ref:'courseList', filter:filter}) }}"><span class="glyphicon glyphicon-hand-up"></span> {{ 'admin.open_manage.manage.recommend_course'|trans }}</a></li>
+          <li><a class="recommend-course" href="#modal" data-toggle="modal" data-url="{{ path('admin_open_course_recommend', {id:course.id, ref:'courseList', filter:filter}) }}"><span class="glyphicon glyphicon-hand-up"></span> {{ 'admin.open_manage.manage.recommend_course_btn'|trans }}</a></li>
         {% endif %}
 
         {% if course.recommended %}
-          <li><a class="cancel-recommend-course" href="javascript:" data-url="{{ path('admin_open_course_cancel_recommend', {id:course.id, filter:filter,target:target}) }}"><span class="glyphicon glyphicon-hand-right"></span> {{ 'admin.open_manage.manage.cancel_recommend'|trans }}</a></li>
+          <li><a class="cancel-recommend-course" href="javascript:" data-url="{{ path('admin_open_course_cancel_recommend', {id:course.id, filter:filter,target:target}) }}"><span class="glyphicon glyphicon-hand-right"></span> {{ 'admin.open_manage.cancel_recommend_btn'|trans }}</a></li>
         {% endif %}
 
         {% if course.status == 'published' %}
           <li class="divider"></li>
-          <li><a class="close-course" href="javascript:" data-url="{{ path('admin_open_course_close', {id:course.id, filter:filter}) }}" data-user="{{default.user_name|default('admin.open_manage.manage.student'|trans)}}"><span class="glyphicon glyphicon-ban-circle"></span> {{ 'admin.open_manage.manage.closed_course'|trans }}</a></li>
+          <li><a class="close-course" href="javascript:" data-url="{{ path('admin_open_course_close', {id:course.id, filter:filter}) }}" data-user="{{default.user_name|default('admin.open_manage.manage.student'|trans)}}"><span class="glyphicon glyphicon-ban-circle"></span> {{ 'admin.open_manage.manage.closed_course_btn'|trans }}</a></li>
         {% endif %}
 
         {% if course.status != 'published' %}
           <li class="divider"></li>
-          <li><a class="publish-course" href="javascript:" data-url="{{ path('admin_open_course_publish', {id:course.id, filter:filter}) }}"><span class="glyphicon glyphicon-ok-circle"></span> {{ 'admin.open_manage.manage.published_course'|trans }}</a></li>
+          <li><a class="publish-course" href="javascript:" data-url="{{ path('admin_open_course_publish', {id:course.id, filter:filter}) }}"><span class="glyphicon glyphicon-ok-circle"></span> {{ 'admin.open_manage.manage.publish_course_btn'|trans }}</a></li>
         {% endif %}
 
         {% if course.status != 'published' and app.user.isSuperAdmin() %}
           <li class="divider"></li>
-          <li><a class="delete-course" href="javascript:;" data-url="{{ path('admin_open_course_delete', {courseId:course.id,type:'',filter:filter}) }}"  data-chapter="{{default.chapter_name|default('admin.open_manage.manage.chapter'|trans)}}" data-part="{{default.part_name|default('admin.open_manage.manage.section'|trans)}}" data-user="{{default.user_name|default('admin.open_manage.manage.student'|trans)}}"><span class="glyphicon glyphicon-trash"></span>{{ 'admin.open_manage.manage.delete_course'|trans }}</a></li>
+          <li><a class="delete-course" href="javascript:;" data-url="{{ path('admin_open_course_delete', {courseId:course.id,type:'',filter:filter}) }}"  data-chapter="{{default.chapter_name|default('admin.open_manage.chapter'|trans)}}" data-part="{{default.part_name|default('admin.open_manage.section'|trans)}}" data-user="{{default.user_name|default('admin.open_manage.student'|trans)}}"><span class="glyphicon glyphicon-trash"></span>{{ 'admin.open_manage.manage.delete_course_btn'|trans }}</a></li>
         {% endif %}
       </ul>
     </div>
