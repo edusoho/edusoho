@@ -231,21 +231,23 @@ class LiveController extends BaseController implements ActivityActionInterface
     protected function _getLiveReplays($activity, $ssl = false)
     {
         if ($activity['ext']['replayStatus'] === LiveReplayService::REPLAY_GENERATE_STATUS) {
-            $lessonId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
-            $replays = $this->getLiveReplayService()->findReplayByLessonId($lessonId);
+            $copyId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
+            $sourceActivity = $this->getActivityService()->getActivity($copyId, true);
+            
+            $replays = $this->getLiveReplayService()->findReplayByLessonId($copyId);
 
             $service = $this->getLiveReplayService();
             $fileService = $this->getUploadFileService();
             $self = $this;
-            $replays = array_map(function ($replay) use ($service, $activity, $ssl, $self, $fileService) {
-                $result = $service->entryReplay($replay['id'], $activity['ext']['liveId'], $activity['ext']['liveProvider'], $ssl);
+            $replays = array_map(function ($replay) use ($service, $sourceActivity, $ssl, $self, $fileService) {
+                $result = $service->entryReplay($replay['id'], $sourceActivity['ext']['liveId'], $sourceActivity['ext']['liveProvider'], $ssl);
 
                 if (!empty($result) && !empty($result['resourceNo'])) {
                     $replay['url'] = $self->generateUrl('es_live_room_replay_show', array(
                         'targetType' => LiveroomController::LIVE_COURSE_TYPE,
-                        'targetId' => $activity['fromCourseId'],
+                        'targetId' => $sourceActivity['fromCourseId'],
                         'replayId' => $replay['id'],
-                        'lessonId' => $activity['id'],
+                        'lessonId' => $sourceActivity['id'],
                     ));
                 } elseif (!empty($result['url'])) {
                     // Other Live
@@ -254,6 +256,7 @@ class LiveController extends BaseController implements ActivityActionInterface
 
                 return $replay;
             }, $replays);
+
         } else {
             $replays = array();
         }
