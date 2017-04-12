@@ -319,7 +319,7 @@ class CourseController extends CourseBaseController
         }
 
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->getReviewService()->searchReviewsCount($conditions),
             20
         );
@@ -351,6 +351,7 @@ class CourseController extends CourseBaseController
             'course/tabs/reviews.html.twig',
             array(
                 'courseSet' => $courseSet,
+                'paginator' => $paginator,
                 'selectedCourseId' => $selectedCourseId,
                 'courses' => $courses,
                 'courseMap' => ArrayToolkit::index($courses, 'id'),
