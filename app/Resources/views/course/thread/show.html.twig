@@ -1,8 +1,6 @@
 {% extends 'course/course-show.html.twig' %}
-
 {% block title %} {{thread.title}} - {{ parent() }}{% endblock %}
-
-{% do load_script('course/thread-show') %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/course/thread-show/index.js'])%}
 
 {% set nav = 'threads' %}
 

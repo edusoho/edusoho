@@ -1,4 +1,5 @@
 import Sign from 'app/common/widget/sign';
+import 'app/common/widget/qrcode';
 
 let buy_btn = false;
 

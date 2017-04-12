@@ -19,7 +19,8 @@ const config = {
     'iframe-resizer-contentWindow':['libs/js/iframe-resizer-contentWindow.js'],
     'jquery-timer':['libs/js/jquery-timer.js'],
     'echo-js': ['echo-js'],
-    'jquery-waypoints': ['jquery-waypoints']
+    'jquery-waypoints': ['jquery-waypoints'],
+    'jquery-countdown': ['jquery.countdown'],
   },
   noParseDeps: [ //these node modules will use a dist version to speed up compilation
     'jquery/dist/jquery.js',
