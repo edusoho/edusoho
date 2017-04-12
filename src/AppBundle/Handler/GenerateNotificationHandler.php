@@ -42,10 +42,6 @@ class GenerateNotificationHandler
     {
         $user = $this->biz['user'];
 
-        if (!$user->isLogin()) {
-            return;
-        }
-
         $this->sendCoursesOverdueNotification($user);
 
         $this->sendClassroomsOverdueNotification($user);
