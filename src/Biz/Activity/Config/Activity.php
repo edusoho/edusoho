@@ -71,6 +71,11 @@ abstract class Activity
         return array();
     }
 
+    public function find($targetIds)
+    {
+        return array();
+    }
+
     final public function __construct(Biz $biz)
     {
         $this->biz = $biz;
