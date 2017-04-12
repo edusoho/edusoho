@@ -10,7 +10,7 @@
 
     <div class="form-group">
       <select class="form-control" name="rating">
-        {{ select_options({1:'1'~'admin.course_review.start'|trans, 2:'2'~'admin.course_review.start'|trans, 3:'3'~'admin.course_review.start'|trans, 4:'4'~'admin.course_review.start'|trans, 5:'5'~'admin.course_review.start'|trans}, app.request.get('rating'), 'admin.course_review.rate_option'|trans) }}
+        {{ select_options({1:'1'~'admin.course_review.star'|trans, 2:'2'~'admin.course_review.star'|trans, 3:'3'~'admin.course_review.star'|trans, 4:'4'~'admin.course_review.star'|trans, 5:'5'~'admin.course_review.star'|trans}, app.request.get('rating'), 'admin.course_review.rate_option'|trans) }}
       </select>
     </div>
 
@@ -61,7 +61,7 @@
                 {% endif %}
               </div>
             </td>
-            <td>{{ review.rating }}{{'admin.course_review.start'|trans}}</td>
+            <td>{{ review.rating }}{{'admin.course_review.star'|trans}}</td>
             <td>
               {{ admin_macro.user_link(author) }}<br>
               <span class="color-gray">{{review.createdTime|date('Y-n-d H:i')}}</span>

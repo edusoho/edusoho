@@ -955,12 +955,12 @@ admin.course_note.content_th: 内容
 admin.course_note.note: 笔记
 
 #评价管理通用key
-admin.course_review.start: 星
-admin.course_review.one_start: 1星
-admin.course_review.two_starts: 2星
-admin.course_review.three_starts: 3星
-admin.course_review.four_starts: 4星
-admin.course_review.five_starts: 5星
+admin.course_review.star: 星
+admin.course_review.one_star: 1星
+admin.course_review.two_stars: 2星
+admin.course_review.three_stars: 3星
+admin.course_review.four_stars: 4星
+admin.course_review.five_stars: 5星
 admin.course_review.rate_option: 评分
 admin.course_review.form.input.courseTitle.placeholer: 课程名
 admin.course_review.form.input.content.placeholer: 评价内容关键词
