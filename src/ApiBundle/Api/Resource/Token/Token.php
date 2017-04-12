@@ -26,7 +26,7 @@ class Token extends Resource
 
         $args = array(
             'userId' => $user['id'],
-            'device' => $this->getDevice()
+            'device' => $this->getDevice($request)
         );
 
         $token = $this->getTokenService()->makeApiAuthToken($args);
@@ -57,9 +57,9 @@ class Token extends Resource
         return $user;
     }
 
-    private function getDevice()
+    private function getDevice(ApiRequest $request)
     {
-        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        $userAgent = $request->headers->get('User-Agent');
         preg_match("/(alcatel|amoi|android|avantgo|blackberry|benq|cell|cricket|docomo|elaine|htc|
                     iemobile|iphone|ipad|ipaq|ipod|j2me|java|midp|mini|mmp|mobi|motorola|nec-|nokia|palm|panasonic|
                     philips|phone|playbook|sagem|sharp|sie-|silk|smartphone|sony|symbian|t-mobile|telus|up\.browser|

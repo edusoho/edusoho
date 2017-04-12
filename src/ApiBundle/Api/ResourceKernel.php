@@ -122,7 +122,8 @@ class ResourceKernel
                 ApiBundle::API_PREFIX.$components['path'],
                 $jsonRequest['method'],
                 $components['query'],
-                $body
+                $body,
+                $request->headers
             );
 
             try {
@@ -162,7 +163,7 @@ class ResourceKernel
 
     private function singleRequest(Request $request)
     {
-        $apiRequest = new ApiRequest($request->getPathInfo(), $request->getMethod(), $request->query, $request->request);
+        $apiRequest = new ApiRequest($request->getPathInfo(), $request->getMethod(), $request->query, $request->request, $request->headers);
         return $this->handleApiRequest($apiRequest);
     }
 

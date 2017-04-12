@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api;
 
+use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 class ApiRequest
@@ -16,14 +17,20 @@ class ApiRequest
      */
     public $request;
 
+    /**
+     * @var HeaderBag
+     */
+    public $headers;
+
     private $pathInfo;
 
     private $method;
 
-    public function __construct($pathInfo, $method, $query = array(), $request = array())
+    public function __construct($pathInfo, $method, $query = array(), $request = array(), $headers = null)
     {
         $this->pathInfo = $pathInfo;
         $this->method = $method;
+        $this->headers = $headers;
 
         if ($query instanceof ParameterBag) {
             $this->query = $query;
