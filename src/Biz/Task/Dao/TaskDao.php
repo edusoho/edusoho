@@ -14,6 +14,8 @@ interface TaskDao extends GeneralDaoInterface
 
     public function findByActivityIds($activityIds);
 
+    public function findByCourseSetId($courseSetId);
+
     public function findByIds($ids);
 
     public function findByCourseIdAndCategoryId($courseId, $categoryId);

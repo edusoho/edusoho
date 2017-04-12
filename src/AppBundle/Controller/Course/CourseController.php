@@ -228,28 +228,58 @@ class CourseController extends CourseBaseController
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
+        $selectedTaskId = $request->query->get('task', 0);
+
+        $sort = $request->query->get('sort', 'latest');
+
+        $conditions = array(
+            'status' => CourseNoteService::PUBLIC_STATUS,
+        );
+
         if ($request->query->has('selectedCourse')) {
             $selectedCourseId = $request->query->get('selectedCourse');
             if (empty($selectedCourseId)) {
-                $notes = $this->getCourseNoteService()->findPublicNotesByCourseSetId($courseSet['id']);
+                $conditions['courseSetId'] = $courseSet['id'];
             } else {
-                $notes = $this->getCourseNoteService()->findPublicNotesByCourseId($selectedCourseId);
+                $conditions['courseId'] = $selectedCourseId;
             }
         } else {
             if (empty($member)) {
-                $notes = $this->getCourseNoteService()->findPublicNotesByCourseSetId($courseSet['id']);
+                $conditions['courseSetId'] = $courseSet['id'];
                 $selectedCourseId = 0;
             } else {
-                $notes = $this->getCourseNoteService()->findPublicNotesByCourseId($course['id']);
+                $conditions['courseId'] = $course['id'];
                 $selectedCourseId = $member['courseId'];
             }
         }
 
+        if (empty($selectedCourseId)) {
+            $tasks = $this->getTaskService()->findTasksByCourseSetId($courseSet['id']);
+        } else {
+            $tasks = $this->getTaskService()->findTasksByCourseId($selectedCourseId);
+        }
+
+        $tasks = ArrayToolkit::index($tasks, 'id');
+
+        if (!empty($selectedTaskId)) {
+            $conditions['taskId'] = $selectedTaskId;
+        }
+
+        $paginator = new Paginator(
+            $request,
+            $this->getCourseNoteService()->countCourseNotes($conditions),
+            20
+        );
+
+        $notes = $this->getCourseNoteService()->searchNotes(
+            $conditions,
+            $this->getNoteOrdersBySort($sort),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($notes, 'userId'));
         $users = ArrayToolkit::index($users, 'id');
-
-        $tasks = $this->getTaskService()->findTasksByIds(ArrayToolkit::column($notes, 'taskId'));
-        $tasks = ArrayToolkit::index($tasks, 'id');
 
         $currentUser = $this->getCurrentUser();
         $likes = $this->getCourseNoteService()->findNoteLikesByUserId($currentUser['id']);
@@ -261,6 +291,8 @@ class CourseController extends CourseBaseController
             'course/tabs/notes.html.twig',
             array(
                 'course' => $course,
+                'currentRequest' => $request,
+                'paginator' => $paginator,
                 'courses' => $courses,
                 'selectedCourseId' => $selectedCourseId,
                 'courseSet' => $courseSet,
@@ -287,7 +319,7 @@ class CourseController extends CourseBaseController
         }
 
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->getReviewService()->searchReviewsCount($conditions),
             20
         );
@@ -319,6 +351,7 @@ class CourseController extends CourseBaseController
             'course/tabs/reviews.html.twig',
             array(
                 'courseSet' => $courseSet,
+                'paginator' => $paginator,
                 'selectedCourseId' => $selectedCourseId,
                 'courses' => $courses,
                 'courseMap' => ArrayToolkit::index($courses, 'id'),
@@ -540,6 +573,20 @@ class CourseController extends CourseBaseController
         $this->getMemberService()->removeStudent($course['id'], $user['id']);
 
         return $this->createJsonResponse(true);
+    }
+
+    protected function getNoteOrdersBySort($sort)
+    {
+        switch ($sort) {
+            case 'latest':
+                return array('createdTime' => 'DESC');
+            case 'like':
+                return array('likeNum' => 'DESC');
+            default:
+                break;
+        }
+
+        return array('createdTime' => 'DESC');
     }
 
     /**
