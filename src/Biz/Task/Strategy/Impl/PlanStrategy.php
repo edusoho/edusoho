@@ -96,8 +96,6 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
             }
         );
 
-        var_dump($preTasks);
-
         return $this->getTaskService()->isPreTasksIsFinished($preTasks);
     }
 
