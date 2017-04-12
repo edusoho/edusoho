@@ -52,6 +52,7 @@ class ThemeController extends BaseController
         if ($theme['protocol'] < 3 || version_compare(array_shift($supportVersion), array_shift($EsVerson), '<')) {
             return false;
         }
+
         return true;
     }
 
