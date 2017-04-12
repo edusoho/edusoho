@@ -233,7 +233,7 @@ class LiveController extends BaseController implements ActivityActionInterface
         if ($activity['ext']['replayStatus'] === LiveReplayService::REPLAY_GENERATE_STATUS) {
             $copyId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
             $sourceActivity = $this->getActivityService()->getActivity($copyId, true);
-            
+
             $replays = $this->getLiveReplayService()->findReplayByLessonId($copyId);
 
             $service = $this->getLiveReplayService();
@@ -256,7 +256,6 @@ class LiveController extends BaseController implements ActivityActionInterface
 
                 return $replay;
             }, $replays);
-
         } else {
             $replays = array();
         }
