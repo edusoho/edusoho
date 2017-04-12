@@ -17,8 +17,7 @@ class TokenTest extends ApiTestCase
     public function testAddWithUserNameError()
     {
         $kernel = new ResourceKernel(
-            new PathParser(),
-            new ResourceManager($this->getBiz())
+            $this->getContainer()
         );
         $kernel->handle(Request::create('http://test.com/tokens', 'POST', array('username' => 'xxx')));
     }
@@ -29,8 +28,7 @@ class TokenTest extends ApiTestCase
     public function testAddWithPasswordError()
     {
         $kernel = new ResourceKernel(
-            new PathParser(),
-            new ResourceManager($this->getBiz())
+            $this->getContainer()
         );
         $kernel->handle(Request::create('http://test.com/tokens', 'POST', array('username' => 'admin@admin.com', 'password' => 'xxx')));
     }
@@ -51,21 +49,21 @@ class TokenTest extends ApiTestCase
         $this->mockBiz('User:UserService',array(
             array('functionName' => 'getUserByLoginField', 'runTimes' => 1, 'returnValue' => $fakeUser),
             array('functionName' => 'verifyPassword', 'runTimes' => 1, 'returnValue' => 1),
+            array('functionName' => 'getToken', 'runTimes' => 1, 'returnValue' => 1),
+            array('functionName' => 'getUser', 'runTimes' => 1, 'returnValue' => $this->getCurrentUser()->toArray()),
         ));
         $kernel = new ResourceKernel(
-            new PathParser(),
-            new ResourceManager($this->getBiz())
+            $this->getContainer()
         );
-        $kernel->handle(Request::create('http://test.com/tokens', 'POST', array('username' => 'admin@admin.com', 'password' => 'zpeh2fmD8mhGqcdP')));
+        $kernel->handle(Request::create('http://test.com/tokens', 'POST', array('username' => 'admin@admin.com', 'password' => '6fPHfubFUWCgaNjN')));
     }
 
     public function testAddWithSuccess()
     {
         $kernel = new ResourceKernel(
-            new PathParser(),
-            new ResourceManager($this->getBiz())
+            $this->getContainer()
         );
-        $token = $kernel->handle(Request::create('http://test.com/tokens', 'POST', array('username' => 'admin@admin.com', 'password' => 'zpeh2fmD8mhGqcdP')));
+        $token = $kernel->handle(Request::create('http://test.com/tokens', 'POST', array('username' => 'admin@admin.com', 'password' => '6fPHfubFUWCgaNjN')));
         $this->assertArrayHasKey('token', $token);
         $user = $this->getCurrentUser();
         $this->assertEquals($user['id'], $token['userId']);

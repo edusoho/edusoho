@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\Token;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\BannedCredentialException;
 use ApiBundle\Api\Exception\InvalidArgumentException;
@@ -13,12 +14,14 @@ use Biz\User\Service\TokenService;
 
 class Token extends Resource
 {
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function add(ApiRequest $request)
     {
         $username = $request->request->get('username');
         $password =  $request->request->get('password');
         $password = EncryptionToolkit::XXTEADecrypt(base64_decode($password), 'edusoho');
-
         $user = $this->checkParams($username, $password);
 
         $args = array(
@@ -56,7 +59,6 @@ class Token extends Resource
 
     private function getDevice()
     {
-
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
         preg_match("/(alcatel|amoi|android|avantgo|blackberry|benq|cell|cricket|docomo|elaine|htc|
                     iemobile|iphone|ipad|ipaq|ipod|j2me|java|midp|mini|mmp|mobi|motorola|nec-|nokia|palm|panasonic|

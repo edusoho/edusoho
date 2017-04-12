@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\Course;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\InvalidArgumentException;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
@@ -9,6 +10,9 @@ use ApiBundle\Api\Resource\Resource;
 
 class CourseMember extends Resource
 {
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function search(ApiRequest $request, $courseId)
     {
         $conditions = $request->query->all();
@@ -30,6 +34,9 @@ class CourseMember extends Resource
         return $this->makePagingObject($members, $total, $offset, $limit);
     }
 
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function get(ApiRequest $request, $courseId, $userId)
     {
         $courseMember = $this->service('Course:MemberService')->getCourseMember($courseId, $userId);

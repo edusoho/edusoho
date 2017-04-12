@@ -2,11 +2,15 @@
 
 namespace ApiBundle\Api\Resource\CourseSet;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\Resource;
 
 class CourseSetMember extends Resource
 {
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function search(ApiRequest $request, $courseSetId)
     {
         $conditions = $request->query->all();

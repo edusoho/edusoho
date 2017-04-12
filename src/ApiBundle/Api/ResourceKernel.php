@@ -89,11 +89,13 @@ class ResourceKernel
         }
 
         $user['currentIp'] = $this->container->get('request')->getClientIp();
-        $user['roles'][] = 'API_USER';
         $currentUser->fromArray($user);
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
         $biz = $this->container->get('biz');
-        $biz['user'] = $currentUser;
+
+        if (!$biz['user']) {
+            $biz['user'] = $currentUser;
+        }
 
         return $currentUser;
     }
