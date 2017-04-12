@@ -227,7 +227,10 @@ class EduCloudController extends BaseController
 
         $processor = SmsProcessorFactory::create($targetType);
 
-        return $this->createJsonResponse($processor->getSmsInfo($targetId, $index, $smsType));
+        $smsInfo = $processor->getSmsInfo($targetId, $index, $smsType);
+        $this->getLogService()->info('sms', 'sms-callback', 'url: '.$url, $smsInfo);
+        
+        return $this->createJsonResponse($smsInfo);
     }
 
     public function searchCallBackAction(Request $request)
