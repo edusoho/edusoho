@@ -31,7 +31,7 @@
   <div class="form-group">
     <div class="col-sm-2 control-label"><label for="length">{{'考试时长'|trans}}</label></div>
     <div class="col-sm-10 controls radios">
-      <input id="length" class="form-control inline-block width-150" type="text" name="length" value="{{ activity.length|default(0) }}"> {{'分'|trans}}
+      <input id="length" class="form-control inline-block width-150" type="text" name="length" value="{% if activity.length > 0 %}{{ activity.length|default(0)}}{% else %}{{ activity.limitedTime|default(0) }}{% endif %}"> {{'分'|trans}}
       <div class="help-block">{{'0分钟，表示无限制。'|trans}}</div>
     </div>
   </div>
