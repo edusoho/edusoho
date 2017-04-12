@@ -42,7 +42,7 @@ class Lesson2TestpaperActivityMigrate extends AbstractMigrate
 
         $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE  `activity` AS ay ,`activity_testpaper` AS ty SET ay.`mediaId` = ty.id WHERE ay.migrateLessonId = ty.migrateLessonId   AND ay.`mediaType` = 'testpaper'";
+        $sql = "UPDATE  `activity` AS ay ,`activity_testpaper` AS ty SET ay.`mediaId` = ty.id, ay.length = ty.limitedTime WHERE ay.migrateLessonId = ty.migrateLessonId   AND ay.`mediaType` = 'testpaper'";
         $this->getConnection()->exec($sql);
     }
 
