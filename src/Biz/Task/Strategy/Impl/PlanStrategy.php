@@ -2,6 +2,7 @@
 
 namespace Biz\Task\Strategy\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
@@ -84,6 +85,19 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
             return true;
         }
 
+        $taskIds = ArrayToolkit::column($preTasks, 'id');
+
+        $taskResults = $this->getTaskResultService()->findUserTaskResultsByTaskIds($taskIds);
+        $taskResults = ArrayToolkit::index($taskResults, 'courseTaskId');
+        array_walk(
+            $preTasks,
+            function (&$task) use ($taskResults) {
+                $task['result'] = isset($taskResults[$task['id']]) ? $taskResults[$task['id']] : null;
+            }
+        );
+
+        var_dump($preTasks);
+
         return $this->getTaskService()->isPreTasksIsFinished($preTasks);
     }
 
@@ -101,9 +115,12 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
             $items["chapter-{$chapter['id']}"] = $chapter;
         }
 
-        uasort($items, function ($item1, $item2) {
-            return $item1['seq'] > $item2['seq'];
-        });
+        uasort(
+            $items,
+            function ($item1, $item2) {
+                return $item1['seq'] > $item2['seq'];
+            }
+        );
 
         if (empty($limitNum)) {
             return $items;
@@ -182,11 +199,14 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
                 $categoryId = empty($chapter) ? 0 : $chapter['id'];
                 $id = str_replace('task-', '', $id);
                 ++$taskNumber;
-                $this->getTaskService()->updateSeq($id, array(
-                    'seq' => $key,
-                    'categoryId' => $categoryId,
-                    'number' => $taskNumber,
-                ));
+                $this->getTaskService()->updateSeq(
+                    $id,
+                    array(
+                        'seq' => $key,
+                        'categoryId' => $categoryId,
+                        'number' => $taskNumber,
+                    )
+                );
             }
         }
     }

@@ -338,7 +338,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                 if (time() > $live['endTime']) {
                     $canLearnTask = true;
                 } else {
-                    $isTaskLearned = empty($preTask['result']) ? ($preTask['status'] == 'finish') : false;
+                    $isTaskLearned = empty($preTask['result']) ? false : ($preTask['result']['status'] == 'finish');
                     if ($isTaskLearned) {
                         $canLearnTask = true;
                     } else {
@@ -351,7 +351,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                 if (time() > $preTask['startTime'] + $testPaper['ext']['limitedTime'] * 60) {
                     $canLearnTask = true;
                 } else {
-                    $isTaskLearned = empty($preTask['result']) ? ($preTask['status'] == 'finish') : false;
+                    $isTaskLearned = empty($preTask['result']) ? false : ($preTask['result']['status'] == 'finish');
                     if ($isTaskLearned) {
                         $canLearnTask = true;
                     } else {
@@ -360,7 +360,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                     }
                 }
             } else {
-                $isTaskLearned = empty($preTask['result']) ? ($preTask['status'] == 'finish') : false;
+                $isTaskLearned = empty($preTask['result']) ? false : ($preTask['result']['status'] == 'finish');
                 if ($isTaskLearned) {
                     $canLearnTask = true;
                 } else {
@@ -627,7 +627,6 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function getNextTask($taskId)
     {
         $task = $this->getTask($taskId);
-
         //取得下一个发布的课时
         $conditions = array(
             'courseId' => $task['courseId'],
@@ -635,6 +634,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             'seq_GT' => $task['seq'],
         );
         $nextTasks = $this->getTaskDao()->search($conditions, array('seq' => 'ASC'), 0, 1);
+
         if (empty($nextTasks)) {
             return array();
         }
@@ -661,7 +661,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         } elseif ($this->getCourseService()->canTakeCourse($task['courseId'])) {
             $isAllowed = true;
         }
-
         if ($isAllowed) {
             return $this->createCourseStrategy($task['courseId'])->canLearnTask($task);
         }
