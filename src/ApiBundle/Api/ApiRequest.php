@@ -20,7 +20,7 @@ class ApiRequest
 
     private $method;
 
-    public function __construct($pathInfo, $method, $query, $request)
+    public function __construct($pathInfo, $method, $query = array(), $request = array())
     {
         $this->pathInfo = $pathInfo;
         $this->method = $method;

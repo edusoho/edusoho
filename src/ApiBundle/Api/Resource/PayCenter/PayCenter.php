@@ -2,16 +2,16 @@
 
 namespace ApiBundle\Api\Resource\PayCenter;
 
+use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ApiException;
 use ApiBundle\Api\Exception\InvalidArgumentException;
 use ApiBundle\Api\Resource\Resource;
 use AppBundle\Component\Payment\Payment;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
-use Symfony\Component\HttpFoundation\Request;
 
 class PayCenter extends Resource
 {
-    public function add(Request $request)
+    public function add(ApiRequest $request)
     {
         $params = $request->request->all();
         if (empty($params['orderId'])

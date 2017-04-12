@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\Token;
 
+use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\BannedCredentialException;
 use ApiBundle\Api\Exception\InvalidArgumentException;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
@@ -9,11 +10,10 @@ use ApiBundle\Api\Resource\Resource;
 use ApiBundle\Api\Util\BrowserDetectionUtil;
 use AppBundle\Common\EncryptionToolkit;
 use Biz\User\Service\TokenService;
-use Symfony\Component\HttpFoundation\Request;
 
 class Token extends Resource
 {
-    public function add(Request $request)
+    public function add(ApiRequest $request)
     {
         $username = $request->request->get('username');
         $password =  $request->request->get('password');
@@ -23,7 +23,7 @@ class Token extends Resource
 
         $args = array(
             'userId' => $user['id'],
-            'device' => $this->getDevice($request)
+            'device' => $this->getDevice()
         );
 
         $token = $this->getTokenService()->makeApiAuthToken($args);
@@ -54,10 +54,10 @@ class Token extends Resource
         return $user;
     }
 
-    private function getDevice(Request $request)
+    private function getDevice()
     {
 
-        $userAgent = $request->headers->get('User-Agent');
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
         preg_match("/(alcatel|amoi|android|avantgo|blackberry|benq|cell|cricket|docomo|elaine|htc|
                     iemobile|iphone|ipad|ipaq|ipod|j2me|java|midp|mini|mmp|mobi|motorola|nec-|nokia|palm|panasonic|
                     philips|phone|playbook|sagem|sharp|sie-|silk|smartphone|sony|symbian|t-mobile|telus|up\.browser|

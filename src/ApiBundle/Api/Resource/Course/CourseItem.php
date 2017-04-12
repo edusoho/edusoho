@@ -2,13 +2,13 @@
 
 namespace ApiBundle\Api\Resource\Course;
 
+use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
 use ApiBundle\Api\Resource\Resource;
-use Symfony\Component\HttpFoundation\Request;
 
 class CourseItem extends Resource
 {
-    public function search(Request $request, $courseId)
+    public function search(ApiRequest $apiRequest, $courseId)
     {
         $course = $this->service('Course:CourseService')->getCourse($courseId);
 

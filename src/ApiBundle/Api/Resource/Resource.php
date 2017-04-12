@@ -2,12 +2,12 @@
 
 namespace ApiBundle\Api\Resource;
 
+use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\InvalidArgumentException;
 use ApiBundle\Api\Util\ObjectCombinationUtil;
 use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -89,7 +89,7 @@ abstract class Resource
         return $requestData;
     }
 
-    protected function getOffsetAndLimit(Request $request)
+    protected function getOffsetAndLimit(ApiRequest $request)
     {
         $offset = $request->query->get('offset');
         $limit = $request->query->get('limit');

@@ -2,12 +2,12 @@
 
 namespace ApiBundle\Api\Resource\CourseSet;
 
+use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\Resource;
-use Symfony\Component\HttpFoundation\Request;
 
 class CourseSetMember extends Resource
 {
-    public function search(Request $request, $courseSetId)
+    public function search(ApiRequest $request, $courseSetId)
     {
         $conditions = $request->query->all();
         $conditions['courseSetId'] = $courseSetId;

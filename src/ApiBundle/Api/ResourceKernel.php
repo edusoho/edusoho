@@ -2,10 +2,14 @@
 
 namespace ApiBundle\Api;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\Exception\ApiNotFoundException;
+use ApiBundle\Api\Exception\InvalidArgumentException;
 use ApiBundle\Api\Exception\InvalidCredentialException;
 use ApiBundle\Api\Resource\ResourceManager;
 use ApiBundle\Api\Resource\ResourceProxy;
+use ApiBundle\Api\Util\ExceptionUtil;
+use ApiBundle\ApiBundle;
 use Biz\Role\Util\PermissionBuilder;
 use Biz\User\CurrentUser;
 use Biz\User\Service\TokenService;
@@ -96,8 +100,64 @@ class ResourceKernel
 
     private function batchRequest(Request $request)
     {
-        $apiRequest = new ApiRequest($request->getPathInfo(), $request->getMethod(), $request->query, $request->request);
-        return $this->handleApiRequest($apiRequest);
+        $batchArgsRaw = $request->request->get('batch');
+
+        if (!$batchArgsRaw) {
+            throw new InvalidArgumentException('缺少参数');
+        }
+
+        $jsonRequests = json_decode($batchArgsRaw, true);
+        $this->validateJsonRequests($jsonRequests);
+
+        $result = array();
+        foreach ($jsonRequests as $jsonRequest)
+        {
+            $components = parse_url($jsonRequest['relative_url']);
+            $body = array();
+            if (!empty($jsonRequest['body'])) {
+                parse_str($jsonRequest['body'], $body);
+            }
+
+            $apiRequest = new ApiRequest(
+                ApiBundle::API_PREFIX.$components['path'],
+                $jsonRequest['method'],
+                $components['query'],
+                $body
+            );
+
+            try {
+                $successResponse = $this->handleApiRequest($apiRequest);
+                $result[] = array(
+                    'code' => 200,
+                    'body' => $successResponse
+                );
+            } catch (\Exception $e) {
+                list($error, $httpCode) = ExceptionUtil::getErrorAndHttpCodeFromException($e, $this->isDebug());
+                $result[] = array(
+                    'code' => $httpCode,
+                    'body' => $error
+                );
+            }
+
+        }
+
+        return $result;
+    }
+
+    private function isDebug()
+    {
+        $env = $this->container->get( 'kernel' )->getEnvironment();
+        return $env == 'dev';
+    }
+
+    private function validateJsonRequests($jsonRequests)
+    {
+        foreach ($jsonRequests as $jsonRequest)
+        {
+            if (empty($jsonRequest['method'] || empty($jsonRequest['relative_url']))) {
+                throw new InvalidArgumentException('batch参数不正确');
+            }
+        }
     }
 
     private function singleRequest(Request $request)
@@ -120,7 +180,7 @@ class ResourceKernel
     {
         $annotation = $this->annotationReader->getMethodAnnotation(
             new \ReflectionMethod(get_class($resourceProxy->getResource()), $method),
-            'ApiBundle\Api\Annotation\ApiConf'
+            ApiConf::class
         );
 
         if ($annotation && !$annotation->getIsRequiredAuth()) {
@@ -133,7 +193,7 @@ class ResourceKernel
             return;
         }
 
-        throw new InvalidCredentialException('需要登陆才能访问接口');
+        throw new InvalidCredentialException('token不存在或者token已经失效');
     }
 
     private function invoke($apiRequest, $resource, PathMeta $pathMeta)

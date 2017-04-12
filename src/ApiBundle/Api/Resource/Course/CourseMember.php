@@ -2,14 +2,14 @@
 
 namespace ApiBundle\Api\Resource\Course;
 
+use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\InvalidArgumentException;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
 use ApiBundle\Api\Resource\Resource;
-use Symfony\Component\HttpFoundation\Request;
 
 class CourseMember extends Resource
 {
-    public function search(Request $request, $courseId)
+    public function search(ApiRequest $request, $courseId)
     {
         $conditions = $request->query->all();
         $conditions['courseId'] = $courseId;
@@ -30,14 +30,14 @@ class CourseMember extends Resource
         return $this->makePagingObject($members, $total, $offset, $limit);
     }
 
-    public function get(Request $request, $courseId, $userId)
+    public function get(ApiRequest $request, $courseId, $userId)
     {
         $courseMember = $this->service('Course:MemberService')->getCourseMember($courseId, $userId);
         $this->getOCUtil()->single($courseMember, array('userId'));
         return $courseMember;
     }
 
-    public function add(Request $request, $courseId)
+    public function add(ApiRequest $request, $courseId)
     {
         $course = $this->service('Course:CourseService')->getCourse($courseId);
 
