@@ -126,6 +126,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     {
         $cashAccount = $this->getCashAccountService()->getAccountByUserId($userId, true);
         $remainCash = empty($cashAccount['cash']) ? 0 : $cashAccount['cash'];
+
         return $remainCash >= $coinPayAmount;
     }
 
