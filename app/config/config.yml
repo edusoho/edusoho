@@ -10,7 +10,6 @@ imports:
     - { resource: session_redis.yml, ignore_errors: true }
     - { resource: sentry.yml, ignore_errors: true }
     - { resource: theme_jianmo_parameters.yml }
-    - { resource: "@AppBundle/Resources/config/services.yml" }
     - { resource: "@ApiBundle/Resources/config/services.yml" }
 
 
