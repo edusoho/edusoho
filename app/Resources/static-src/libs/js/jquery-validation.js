@@ -379,6 +379,9 @@ $.validator.addMethod("chinese_alphanumeric", function (value, element, params) 
   return this.optional(element) || /^([\u4E00-\uFA29]|[a-zA-Z0-9_.·])*$/i.test(value)
 }, jQuery.validator.format('支持中文字、英文字母、数字及_ . ·'));
 
+$.validator.addMethod("alphanumeric", function (value, element, params) {
+  return this.optional(element) ||  /^[a-zA-Z0-9_]+$/i.test(value)
+}, jQuery.validator.format('必须是英文字母、数字及下划线组成'));
 
 $.validator.addMethod("nickname", function (value, element, params) {
 
