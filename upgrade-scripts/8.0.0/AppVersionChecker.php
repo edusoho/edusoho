@@ -10,7 +10,7 @@ class AppVersionChecker extends AbstractMigrate
         $localApps = $this->getAppService()->findApps(0, 1000);
         foreach ($localApps as $key => $localApp) {
             if (!empty($apps[strtolower($localApp['code'])]) && version_compare($localApp['version'], $apps[strtolower($localApp['code'])], '<')) {
-                throw new Exception("插件{$localApp['name']}版本太低，请先升级", 1);
+                throw new Exception("当前插件{$localApp['name']}版本过低，请先升级该插件", 1);
             }
         }
     }
@@ -23,7 +23,6 @@ class AppVersionChecker extends AbstractMigrate
             'questionplus'=>'1.2.1',
             'gracefultheme'=>'1.4.23',
             'userimporter'=>'2.1.5',
-            'k12main'=>'1.4.8',
             'homework'=>'1.5.5',
             'chargecoin'=>'1.2.5',
             'moneycard'=>'2.0.4',
@@ -32,14 +31,8 @@ class AppVersionChecker extends AbstractMigrate
             'discount'=>'1.1.7',
             'language'=>'1.0.8',
             'turing'=>'1.1.11',
-            'moocmain'=>'1.6.6',
-            'userimporter'=>'1.1.1',
-            'questionplus'=>'1.1.1',
-            'homework'=>'1.2.0',
             'fileshare'=>'1.0.4',
-            'coursedatastatistics'=>'1.0.1',
             'groupsell'=>'1.0.2',
-            'howzhipopad'=>'1.0.1',
             'exam'=>'1.2.3',
             'lighttheme'=>'2.2.0',
             'crm'=>'1.0.1',
