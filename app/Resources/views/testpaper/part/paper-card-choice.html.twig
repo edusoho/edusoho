@@ -2,7 +2,7 @@
   {% if paperResult.status|default('null') == 'reviewing' and question.type == 'essay' %}
     bg-warning js-answer-notwrong
   {% elseif paperResult.status|default('null') == 'doing' and question.testResult|default(null) %}
-    lump-card done js-answer-notwrong
+    lump-card  js-answer-notwrong
   {% elseif question.testResult.status|default('noAnswer') == 'right' %}
     bg-success js-answer-notwrong
   {% elseif question.testResult.status|default('noAnswer') == 'noAnswer' %}

@@ -55,7 +55,7 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
 
     private function syncCourseStudents($classroom, $userId)
     {
-        $courses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
+        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
         if (empty($courses)) {
             return;
         }

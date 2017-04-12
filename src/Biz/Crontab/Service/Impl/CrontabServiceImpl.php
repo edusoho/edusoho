@@ -173,6 +173,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
     {
         $conditions = array(
             'executing' => 0,
+            'enabled' => 1,
             'nextExcutedTime' => time(),
         );
         $job = $this->getJobDao()->search($conditions, array('nextExcutedTime' => 'ASC'), 0, 1);

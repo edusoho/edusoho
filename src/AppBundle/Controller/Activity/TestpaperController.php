@@ -134,16 +134,15 @@ class TestpaperController extends BaseController implements ActivityActionInterf
 
     protected function findCourseTestpapers($course)
     {
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $conditions = array(
             'courseSetId' => $course['courseSetId'],
             'status' => 'open',
             'type' => 'testpaper',
         );
 
-        if ($course['parentId'] > 0) {
+        if ($courseSet['parentId'] > 0 && $courseSet['locked']) {
             $conditions['copyIdGT'] = 0;
-        } else {
-            $conditions['copyId'] = 0;
         }
 
         $testpapers = $this->getTestpaperService()->searchTestpapers(
@@ -192,6 +191,11 @@ class TestpaperController extends BaseController implements ActivityActionInterf
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     /**

@@ -50,9 +50,18 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
                 throw $this->createServiceException('参数不正确');
             }
 
-            if (isset($fields['coinPayAmount'])
+            if (!empty($fields['coinPayAmount']) && $fields['coinPayAmount'] < 0) {
+                throw $this->createServiceException('参数不正确');
+            }
+
+            if (!empty($fields['coinPayAmount'])
                 && !$this->canUseCoinPay($fields['coinPayAmount'], $this->getCurrentUser()->getId())) {
                 throw new ServiceException('当前使用的账户金额大于账户余额', 2001);
+            }
+
+            if (!empty($fields['coinPayAmount'])
+             && (empty($fields['payPassword']) || !$this->isCorrectPayPassword($fields['payPassword'], $this->getCurrentUser()->getId()))) {
+                throw new ServiceException('支付密码不正确', 2002);
             }
 
             $priceType = 'RMB';
@@ -116,8 +125,14 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     private function canUseCoinPay($coinPayAmount, $userId)
     {
         $cashAccount = $this->getCashAccountService()->getAccountByUserId($userId, true);
+        $remainCash = empty($cashAccount['cash']) ? 0 : $cashAccount['cash'];
 
-        return !($coinPayAmount > $cashAccount['cash']);
+        return $remainCash >= $coinPayAmount;
+    }
+
+    private function isCorrectPayPassword($payPassword, $userId)
+    {
+        return $this->getAuthService()->checkPayPassword($userId, $payPassword);
     }
 
     private function getCashAccountService()
@@ -128,5 +143,10 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     private function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    private function getAuthService()
+    {
+        return $this->createService('User:AuthService');
     }
 }
