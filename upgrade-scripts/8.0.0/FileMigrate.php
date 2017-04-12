@@ -1,5 +1,7 @@
 <?php
 
+use Topxia\Service\Common\ServiceKernel;
+
 class FileMigrate extends AbstractMigrate
 {
     public function update($page)
