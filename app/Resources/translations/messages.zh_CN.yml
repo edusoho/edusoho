@@ -902,7 +902,46 @@ admin.setting.theme.manage.modal.student_comment: 学员评价
 admin.setting.theme.manage.modal.student_dynamic: 学员动态
 admin.setting.theme.manage.modal.setting_custom_classroom_count: 班级数量设置
 admin.setting.theme.manage.modal.setting_custom_teacher_count: 教师数量设置
-
+admin.setting.mailer.is_trial.tips: >
+  当前版本为试⽤版,不能进⾏邮件服务设置。如需购买授权版,请联系销售人员。
+  电话：4008041114 或
+admin.setting.mailer.cloud_email_crm: 云邮件
+admin.setting.mailer.cloud_email_crm.status.open: 已启用
+admin.setting.mailer.cloud_email_crm.status.help_block: >
+  邮件营销，本应如此简单。<a href="%url%">点击这里</a>查看云邮件使用情况
+admin.setting.mailer.use_cloud_email_crm: 使用云邮件
+admin.setting.mailer.understand_cloud_email_crm_advantage: 了解云邮件优势
+admin.setting.mailer.cloud_email_crm.help_block: >
+  <p class="help-block">
+    不限制每日邮件发送量，想发多少发多少。
+  </p>
+  <p class="help-block">
+    99%到达率，毫秒级响应，让你快速安全的与学员保持沟通。
+  </p>
+  <p class="help-block">
+    完善的数据分析能力，让您更从容地管理邮件。
+  </p>
+  <p class="help-block">
+    与EduSoho无缝整合，无需技术对接即可享受高质量的EDM服务。
+  </p>
+admin.setting.mailer.send_email: 邮件发送
+admin.setting.mailer.send_email.status.open: 开启
+admin.setting.mailer.send_email.status.closed: 关闭
+admin.setting.mailer.send_email.help_block: 需要登录邮箱，并在邮箱设置中开启smtp服务才能发送验证邮件
+admin.setting.mailer.server_address: 服务器地址
+admin.setting.mailer.server_address.help_block: 每种邮箱的地址都不相同，请根据使用的邮箱类型，查找邮箱服务器地址，如：smtp.yourmail.com
+admin.setting.mailer.commonly_document: 常用邮箱配置文档
+admin.setting.mailer.SMTP_Port_number: SMTP端口号
+admin.setting.mailer.SMTP_Port_number.help_block: 通常端口号为
+admin.setting.mailer.SMTP_user_name: SMTP用户名
+admin.setting.mailer.SMTP_user_name.help_block: 正确格式应为
+admin.setting.mailer.SMTP_password: SMTP密码
+admin.setting.mailer.SMTP_password.help_block: smtp密码：即邮箱密码/客户端授权密码
+admin.setting.mailer.senders_email_address: 发信人地址
+admin.setting.mailer.senders_email_address.help_block: 正确格式应为
+admin.setting.mailer.senders_name: 发信人名称
+admin.setting.mailer.verifcation: 验证
+admin.setting.mailer.verifcation.tips: 验证时会给当前用户发送验证邮件，请确保当前用户邮箱为正确邮箱且邮箱服务器设置已提交保存。
 
 # 话题
 thread: 话题
