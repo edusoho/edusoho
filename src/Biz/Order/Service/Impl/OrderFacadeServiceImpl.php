@@ -142,6 +142,6 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
     private function getAuthService()
     {
-        return $this->getBiz()->service('User:AuthService');
+        return $this->createService('User:AuthService');
     }
 }
