@@ -2,17 +2,14 @@
 
 namespace Tests\Unit\ApiBundle\Api\Resource;
 
-use ApiBundle\Api\PathParser;
-use ApiBundle\Api\Resource\ResourceManager;
 use ApiBundle\Api\ResourceKernel;
 use ApiBundle\ApiTestCase;
-use Biz\BaseTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 class TokenTest extends ApiTestCase
 {
     /**
-     * @expectedException ApiBundle\Api\Exception\ResourceNotFoundException
+     * @expectedException \ApiBundle\Api\Exception\ResourceNotFoundException
      */
     public function testAddWithUserNameError()
     {
@@ -23,7 +20,7 @@ class TokenTest extends ApiTestCase
     }
 
     /**
-     * @expectedException ApiBundle\Api\Exception\InvalidArgumentException
+     * @expectedException \ApiBundle\Api\Exception\InvalidArgumentException
      */
     public function testAddWithPasswordError()
     {
@@ -34,19 +31,18 @@ class TokenTest extends ApiTestCase
     }
 
     /**
-     * @expectedException ApiBundle\Api\Exception\BannedCredentialException
+     * @expectedException \ApiBundle\Api\Exception\BannedCredentialException
      */
     public function testUserLocked()
     {
-
         $fakeUser = array(
             'id' => 1,
             'username' => 'user',
             'password' => 'blablabla...',
-            'locked' => 1
+            'locked' => 1,
         );
 
-        $this->mockBiz('User:UserService',array(
+        $this->mockBiz('User:UserService', array(
             array('functionName' => 'getUserByLoginField', 'runTimes' => 1, 'returnValue' => $fakeUser),
             array('functionName' => 'verifyPassword', 'runTimes' => 1, 'returnValue' => 1),
             array('functionName' => 'getToken', 'runTimes' => 1, 'returnValue' => 1),

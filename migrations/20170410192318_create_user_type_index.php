@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class CreateUserTypeIndex extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -14,12 +14,11 @@ class CreateUserTypeIndex extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
         $db = $this->getContainer()->offsetGet('db');
         $db->exec('DROP INDEX user_type_index ON user;');
-
     }
 }
