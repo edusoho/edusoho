@@ -26,7 +26,7 @@ $(document).ajaxError(function (event, jqxhr, settings, exception) {
 
   if (error.name === 'Unlogin') {
     let ua = navigator.userAgent.toLowerCase();
-    if (ua.match(/MicroMessenger/i) == "MicroMessenger" && $('meta[name=is-open]').attr('content') !== 0) {
+    if (ua.match(/micromessenger/i) == "micromessenger" && $('meta[name=is-open]').attr('content') !== 0) {
       window.location.href = '/login/bind/weixinmob?_target_path=' + location.href;
     } else {
       let $loginModal = $("#login-modal");
