@@ -1731,7 +1731,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->wave(array($courseId), array('hitNum' => 1));
     }
 
-    public function getUserLearnProcess($courseId, $userId)
+    public function getUserLearningProcess($courseId, $userId)
     {
         $course = $this->getCourse($courseId);
 
