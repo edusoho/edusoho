@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\System;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -32,11 +33,27 @@ class ThemeController extends BaseController
             return $this->createJsonResponse(false);
         }
 
+        if (!$this->isThemeSupportEs($theme)) {
+            return $this->createJsonResponse(false);
+        }
+
         $this->get('kernel')->getPluginConfigurationManager()->setActiveThemeName($themeUri)->save();
 
         $this->getSettingService()->set('theme', $theme);
 
         return $this->createJsonResponse(true);
+    }
+
+    private function isThemeSupportEs($theme)
+    {
+        $supportVersion = explode('.', $theme['support_version']);
+        $EsVerson = explode('.', System::VERSION);
+
+        if ($theme['protocol'] < 3 || version_compare(array_shift($supportVersion), array_shift($EsVerson), '<')) {
+            return false;
+        }
+
+        return true;
     }
 
     public function saveConfigAction(Request $request, $uri)

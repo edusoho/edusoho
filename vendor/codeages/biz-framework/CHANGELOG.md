@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.3.7
+
+  * `create`方法不更新`update`Field
+
 ## v0.2.13
 
   * 替换一致性哈希库

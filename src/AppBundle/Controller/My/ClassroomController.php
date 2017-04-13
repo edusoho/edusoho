@@ -6,6 +6,7 @@ use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
 use Biz\Thread\Service\ThreadService;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
@@ -101,19 +102,23 @@ class ClassroomController extends BaseController
     private function calculateUserLearnProgress($classroom, $userId)
     {
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
-        $courseIds = ArrayToolkit::column($courses, 'id');
-        $findLearnedCourses = array();
+        $coursesCount = count($courses);
+        $learnedCoursesCount = 0;
 
-        foreach ($courseIds as $key => $value) {
-            $learnedCourses = $this->getCourseService()->findLearnedCoursesByCourseIdAndUserId($value, $userId);
-
-            if (!empty($learnedCourses)) {
-                $findLearnedCourses[] = $learnedCourses;
+        foreach ($courses as $course) {
+            $taskCount = $this->getTaskService()->countTasks(array(
+                'courseId' => $course['id'],
+                'status' => 'published',
+            ));
+            $finishedTaskCount = $this->getTaskResultService()->countTaskResults(array(
+                'courseId' => $course['id'],
+                'userId' => $userId,
+                'status' => 'finish',
+            ));
+            if ($taskCount > 0 && $finishedTaskCount >= $taskCount) {
+                ++$learnedCoursesCount;
             }
         }
-
-        $learnedCoursesCount = count($findLearnedCourses);
-        $coursesCount = count($courses);
 
         if ($coursesCount == 0) {
             return array('percent' => '0%', 'number' => 0, 'total' => 0);
@@ -192,6 +197,14 @@ class ClassroomController extends BaseController
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 
     /**

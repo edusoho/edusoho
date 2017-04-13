@@ -1,8 +1,9 @@
-{% extends 'old-layout.html.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% block title %}{{'search.content_title'|trans}}{% if keywords %}{{ keywords }}{% else %}{{'search.all_courses'|trans}}{% endif %} - {{ parent() }}{% endblock %}
 {% set bodyClass = 'bg-blank' %}
-{% do load_script('search/search') %}
+
+{% do script(['libs/echo-js.js','app/js/search/index.js']) %}
 
 {% block top_content %}
   <div class="course-banner es-banner">

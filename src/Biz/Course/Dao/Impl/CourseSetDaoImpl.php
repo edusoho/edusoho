@@ -54,6 +54,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'status = :status',
                 'isVip = :isVip',
                 'categoryId = :categoryId',
+                'categoryId IN (:categoryIds)',
                 'title LIKE :title',
                 'creator LIKE :creator',
                 'type = :type',

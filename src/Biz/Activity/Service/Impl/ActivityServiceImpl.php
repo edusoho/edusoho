@@ -121,7 +121,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     protected function triggerActivityLearnLogListener($activity, $eventName, $data)
     {
         $logListener = new ActivityLearnLogListener($this->biz);
-
         $logData = $this->extractLogData($eventName, $data);
         $logListener->handle($activity, $logData);
     }
@@ -129,7 +128,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     protected function triggerExtendListener($activity, $eventName, $data)
     {
         $activityListener = $this->getActivityConfig($activity['mediaType'])->getListener($eventName);
-        if (!is_null($activityListener)) {
+        if (null !== $activityListener) {
             $activityListener->handle($activity, $data);
         }
     }
