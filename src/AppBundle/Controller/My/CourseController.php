@@ -161,7 +161,6 @@ class CourseController extends CourseBaseController
         if ($course['parentId'] > 0) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
         }
-
         $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
 
         return $this->render(
