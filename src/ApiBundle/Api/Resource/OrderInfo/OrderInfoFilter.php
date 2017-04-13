@@ -20,6 +20,7 @@ class OrderInfoFilter extends Filter
             'account' => empty($data['account']) ? new \stdClass() : $data['account'],
             'hasPayPassword' => empty($data['hasPayPassword']) ? 0 : 1,
             'verifiedMobile' => empty($data['verifiedMobile']) ? '' : $data['verifiedMobile'],
+            'coinName' => $data['coinName'],
             'cashRate' => empty($data['cashRate']) ? 0 : $data['cashRate'],
             'priceType' => empty($data['priceType']) ? 'RMB' : $data['priceType'],
             'coinPayAmount' => empty($data['coinPayAmount']) ? 0 : $data['coinPayAmount'],
