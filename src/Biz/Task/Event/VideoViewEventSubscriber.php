@@ -31,7 +31,7 @@ class VideoViewEventSubscriber extends EventSubscriber implements EventSubscribe
         if (empty($activityExt['file'])) {
             return false;
         }
-        
+
         $file = $activityExt['file'];
 
         $taskViewLog = array(
