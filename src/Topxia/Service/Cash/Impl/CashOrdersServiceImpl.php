@@ -25,8 +25,19 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
         $order['status']      = "created";
         $order['title']       = $this->getKernel()->trans('充值购买').$coin.$coinSetting['coin_name'];
         $order['createdTime'] = time();
+        $order['token'] = $this->makeToken($order['sn']);
 
         return $this->getOrderDao()->addOrder($order);
+    }
+
+    private function makeToken($sn)
+    {
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $value = '';
+        for ($i = 0; $i < 5; $i++) {
+            $value .= $chars[mt_rand(0, strlen($chars) - 1)];
+        }
+        return $sn.$value;
     }
 
     public function getOrderBySn($sn, $lock = false)
