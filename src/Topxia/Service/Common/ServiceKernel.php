@@ -3,7 +3,6 @@
 namespace Topxia\Service\Common;
 
 use Biz\User\CurrentUser;
-use Symfony\Component\Finder\Finder;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Dao\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -109,45 +108,6 @@ class ServiceKernel
         }
 
         $this->booted = true;
-
-        $moduleConfigCacheFile = $this->getParameter('kernel.root_dir').'/cache/'.$this->environment.'/modules_config.php';
-
-        if (file_exists($moduleConfigCacheFile)) {
-            $this->_moduleConfig = include $moduleConfigCacheFile;
-        } else {
-            $finder = new Finder();
-            $finder->directories()->depth('== 0');
-
-            foreach ($this->_moduleDirectories as $dir) {
-                if (glob($dir.'/*/Service', GLOB_ONLYDIR)) {
-                    $finder->in($dir.'/*/Service');
-                }
-            }
-
-            foreach ($finder as $dir) {
-                $filepath = $dir->getRealPath().'/module_config.php';
-
-                if (file_exists($filepath)) {
-                    $this->_moduleConfig = array_merge_recursive($this->_moduleConfig, include $filepath);
-                }
-            }
-
-            if (!$this->debug) {
-                $cache = "<?php \nreturn ".var_export($this->_moduleConfig, true).';';
-                file_put_contents($moduleConfigCacheFile, $cache);
-            }
-        }
-
-        $subscribers = empty($this->_moduleConfig['event_subscriber']) ? array() : $this->_moduleConfig['event_subscriber'];
-
-        foreach ($subscribers as $subscriber) {
-            //@ TODO 新的事件机制通过Symfony Tag形式注入，但是APP接口并没有使用Symfony, 重构接口时去掉判断
-            if (defined('RUNTIME_ENV') && RUNTIME_ENV === 'API') {
-                $this->dispatcher()->addSubscriber(new $subscriber());
-            } else {
-                $this->biz['subscribers'][] = $subscriber;
-            }
-        }
     }
 
     public function setParameterBag($parameterBag)

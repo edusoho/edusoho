@@ -74,6 +74,7 @@ class TaskController extends BaseController
             'task/show.html.twig',
             array(
                 'course' => $course,
+                'member' => $member,
                 'task' => $task,
                 'taskResult' => $taskResult,
                 'nextTask' => empty($nextTask) ? array() : $nextTask,
@@ -116,7 +117,13 @@ class TaskController extends BaseController
         // 1. 有时间限制设置
         // 2. 课时为视频课时
         // 3. 视频课时非优酷等外链视频时提示购买
-        $taskCanTryLook = $course['tryLookable'] && $task['type'] == 'video' && $task['mediaSource'] == 'self';
+        $taskCanTryLook = false;
+        if ($course['tryLookable'] && $task['type'] == 'video') {
+            $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+            if (!empty($activity['ext']) && !empty($activity['ext']['file']) && $activity['ext']['file']['storage'] === 'cloud') {
+                $taskCanTryLook = true;
+            }
+        }
 
         if (empty($task['isFree']) && !$taskCanTryLook) {
             if (!$user->isLogin()) {
@@ -430,7 +437,11 @@ class TaskController extends BaseController
                 throw $this->createNotFoundException('you can not preview this task ');
             }
         } else {
-            $task = $this->getTaskService()->tryTakeTask($taskId);
+            if ($this->getCourseService()->hasCourseManagerRole($courseId)) {
+                $task = $this->getTaskService()->getTask($taskId);
+            } else {
+                $task = $this->getTaskService()->tryTakeTask($taskId);
+            }
         }
         if (empty($task)) {
             throw $this->createNotFoundException(sprintf('task not found #%d', $taskId));

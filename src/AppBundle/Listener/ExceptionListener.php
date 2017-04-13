@@ -2,15 +2,19 @@
 
 namespace AppBundle\Listener;
 
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 
-class AjaxExceptionListener
+class ExceptionListener
 {
     private $logger;
 
@@ -24,8 +28,19 @@ class AjaxExceptionListener
         $problem = $this->container->get('Topxia.RepairProblem', ContainerInterface::NULL_ON_INVALID_REFERENCE);
         $exception = $event->getException();
         $request = $event->getRequest();
-
+        $statusCode = $this->convertStateCode($exception);
         if (!$request->isXmlHttpRequest()) {
+            if ($exception instanceof HttpException || $this->container->get('kernel')->isDebug()) {
+                return;
+            }
+            $event->setException(
+                new HttpException(
+                    $statusCode,
+                    $exception->getMessage(),
+                    $exception->getPrevious()
+                )
+            );
+
             return;
         }
 
@@ -39,12 +54,6 @@ class AjaxExceptionListener
             return;
         }
 
-        $statusCode = $exception->getCode();
-
-        if (!array_key_exists($statusCode, Response::$statusTexts)) {
-            $statusCode = 500;
-        }
-
         $error = array('name' => 'Error', 'message' => $exception->getMessage());
         if (!$this->container->get('kernel')->isDebug()) {
             $message = $exception->__toString();
@@ -56,7 +65,7 @@ class AjaxExceptionListener
             $this->getLogger()->error($exception->__toString());
         }
 
-        if ($statusCode == 403) {
+        if ($statusCode === 403) {
             $user = $this->getUser($event);
             if ($user) {
                 $error = array('name' => 'AccessDenied', 'message' => $this->getServiceKernel()->trans('访问被拒绝！'));
@@ -86,6 +95,25 @@ class AjaxExceptionListener
         return $user;
     }
 
+    private function convertStateCode($exception)
+    {
+        if ($exception instanceof AccessDeniedException) {
+            return Response::HTTP_FORBIDDEN;
+        }
+        if ($exception instanceof InvalidArgumentException) {
+            return Response::HTTP_FORBIDDEN;
+        }
+        if ($exception instanceof NotFoundException) {
+            return Response::HTTP_NOT_FOUND;
+        }
+
+        if (array_key_exists($exception->getCode(), Response::$statusTexts)) {
+            return $exception->getCode();
+        }
+
+        return Response::HTTP_INTERNAL_SERVER_ERROR;
+    }
+
     protected function getLogger()
     {
         if ($this->logger) {
@@ -93,7 +121,9 @@ class AjaxExceptionListener
         }
 
         $this->logger = new Logger('AjaxExceptionListener');
-        $this->logger->pushHandler(new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir').'/dev.log', Logger::DEBUG));
+        $this->logger->pushHandler(
+            new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir').'/dev.log', Logger::DEBUG)
+        );
 
         return $this->logger;
     }

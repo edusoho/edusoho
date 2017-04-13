@@ -197,13 +197,22 @@ class WebExtension extends \Twig_Extension
         $count = $this->getAppService()->findAppCount();
         $apps = $this->getAppService()->findApps(0, $count);
 
-        $notifies = array_reduce($apps, function ($notifies, $app) {
-            if ($app['type'] === 'plugin' && !PluginVersionToolkit::dependencyVersion($app['code'], $app['version'])) {
-                $notifies[] = $app['name'];
-            }
+        $apps = array_filter($apps, function ($app) {
+            return $app['developerName'] == 'EduSoho官方';
+        });
+        $notifies = array_reduce(
+            $apps,
+            function ($notifies, $app) {
+                if (!PluginVersionToolkit::dependencyVersion($app['code'], $app['version'])) {
+                    $notifies[$app['type']][] = $app['name'];
+                } elseif ($app['code'] !== 'MAIN' && $app['protocol'] < 3) {
+                    $notifies[$app['type']][] = $app['name'];
+                }
 
-            return $notifies;
-        }, array());
+                return $notifies;
+            },
+            array()
+        );
 
         return $notifies;
     }
@@ -380,9 +389,11 @@ class WebExtension extends \Twig_Extension
         $profile = $this->getUserService()->getUserProfile($user['id']);
 
         $values = array_merge($user, $profile);
-        $values = array_filter($values, function ($value) {
-            return !is_array($value);
-        }
+        $values = array_filter(
+            $values,
+            function ($value) {
+                return !is_array($value);
+            }
         );
 
         return $this->simpleTemplateFilter($pattern, $values);
@@ -472,7 +483,9 @@ class WebExtension extends \Twig_Extension
     public function getThemeGlobalScript()
     {
         $theme = $this->getSetting('theme.uri', 'default');
-        $filePath = realpath($this->container->getParameter('kernel.root_dir')."/../web/themes/{$theme}/js/global-script.js");
+        $filePath = realpath(
+            $this->container->getParameter('kernel.root_dir')."/../web/themes/{$theme}/js/global-script.js"
+        );
 
         if ($filePath) {
             return 'theme/global-script';
@@ -572,8 +585,13 @@ class WebExtension extends \Twig_Extension
 
         foreach ($keys as $key) {
             if (!isset($value[$key])) {
-                throw new \InvalidArgumentException(sprintf('Key `%s` is not in context with %s', $key,
-                    implode(array_keys($context), ', ')));
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        'Key `%s` is not in context with %s',
+                        $key,
+                        implode(array_keys($context), ', ')
+                    )
+                );
             }
 
             $value = $value[$key];
@@ -584,7 +602,9 @@ class WebExtension extends \Twig_Extension
 
     public function isFeatureEnabled($feature)
     {
-        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter(
+            'enabled_features'
+        ) : array();
 
         return in_array($feature, $features);
     }
@@ -735,7 +755,7 @@ class WebExtension extends \Twig_Extension
             return $seconds.'秒';
         }
 
-        return printf('%s分钟%s秒', $minutes, $seconds);
+        return sprintf('%s分钟%s秒', $minutes, $seconds);
     }
 
     public function timeRangeFilter($start, $end)
@@ -1051,10 +1071,14 @@ class WebExtension extends \Twig_Extension
         if (empty($path)) {
             $defaultSetting = $this->getSetting('default', array());
 
-            if ((($defaultKey == 'course.png' && array_key_exists('defaultCoursePicture',
-                            $defaultSetting) && $defaultSetting['defaultCoursePicture'] == 1)
-                    || ($defaultKey == 'avatar.png' && array_key_exists('defaultAvatar',
-                            $defaultSetting) && $defaultSetting['defaultAvatar'] == 1))
+            if ((($defaultKey == 'course.png' && array_key_exists(
+                            'defaultCoursePicture',
+                            $defaultSetting
+                        ) && $defaultSetting['defaultCoursePicture'] == 1)
+                    || ($defaultKey == 'avatar.png' && array_key_exists(
+                            'defaultAvatar',
+                            $defaultSetting
+                        ) && $defaultSetting['defaultAvatar'] == 1))
                 && (array_key_exists($defaultKey, $defaultSetting)
                     && $defaultSetting[$defaultKey])
             ) {
@@ -1222,15 +1246,23 @@ class WebExtension extends \Twig_Extension
     {
         $ext = $this;
 
-        $bbCode = preg_replace_callback('/\[image\](.*?)\[\/image\]/i', function ($matches) use ($ext) {
-            $src = $ext->getFileUrl($matches[1]);
+        $bbCode = preg_replace_callback(
+            '/\[image\](.*?)\[\/image\]/i',
+            function ($matches) use ($ext) {
+                $src = $ext->getFileUrl($matches[1]);
 
-            return "<img src='{$src}' />";
-        }, $bbCode);
+                return "<img src='{$src}' />";
+            },
+            $bbCode
+        );
 
-        $bbCode = preg_replace_callback('/\[audio.*?id="(\d+)"\](.*?)\[\/audio\]/i', function ($matches) {
-            return "<span class='audio-play-trigger' href='javascript:;' data-file-id=\"{$matches[1]}\" data-file-type=\"audio\"></span>";
-        }, $bbCode);
+        $bbCode = preg_replace_callback(
+            '/\[audio.*?id="(\d+)"\](.*?)\[\/audio\]/i',
+            function ($matches) {
+                return "<span class='audio-play-trigger' href='javascript:;' data-file-id=\"{$matches[1]}\" data-file-type=\"audio\"></span>";
+            },
+            $bbCode
+        );
 
         return $bbCode;
     }
@@ -1263,11 +1295,15 @@ class WebExtension extends \Twig_Extension
     public function fillQuestionStemHtmlFilter($stem)
     {
         $index = 0;
-        $stem = preg_replace_callback('/\[\[.+?\]\]/', function ($matches) use (&$index) {
-            ++$index;
+        $stem = preg_replace_callback(
+            '/\[\[.+?\]\]/',
+            function ($matches) use (&$index) {
+                ++$index;
 
-            return "<span class='question-stem-fill-blank'>({$index})</span>";
-        }, $stem);
+                return "<span class='question-stem-fill-blank'>({$index})</span>";
+            },
+            $stem
+        );
 
         return $stem;
     }

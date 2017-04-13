@@ -13,4 +13,9 @@ class DocActivityDaoImpl extends GeneralDaoImpl implements DocActivityDao
     {
         return array('timestamps' => array('createdTime', 'updatedTime'));
     }
+
+    public function findByIds($Ids)
+    {
+        return $this->findInField('id', $Ids);
+    }
 }

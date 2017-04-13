@@ -52,7 +52,7 @@ class LiveroomController extends BaseController
             return $this->forward('AppBundle:MaterialLib/GlobalFilePlayer:player', array('globalId' => $replay['globalId']));
         }
 
-        return $this->createNotFoundException();
+        throw $this->createNotFoundException();
     }
 
     public function ticketAction(Request $request, $roomId)

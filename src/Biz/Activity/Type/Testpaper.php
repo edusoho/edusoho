@@ -23,6 +23,11 @@ class Testpaper extends Activity
         return $this->getTestpaperActivityService()->getActivity($targetId);
     }
 
+    public function find($ids)
+    {
+        return $this->getTestpaperActivityService()->findActivitiesByIds($ids);
+    }
+
     public function create($fields)
     {
         $fields = $this->filterFields($fields);
@@ -57,7 +62,10 @@ class Testpaper extends Activity
         $sourceExt = $this->getTestpaperActivityService()->getActivity($sourceActivity['mediaId']);
         $ext = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
-        $testPaper = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId($sourceExt['mediaId'], $activity['fromCourseSetId']);
+        $testPaper = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId(
+            $sourceExt['mediaId'],
+            $activity['fromCourseSetId']
+        );
 
         $ext['mediaId'] = $testPaper['id'];
         $ext['redoInterval'] = $sourceExt['redoInterval'];
@@ -101,17 +109,31 @@ class Testpaper extends Activity
         $activity = $this->getActivityService()->getActivity($activityId);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
-        $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaperActivity['mediaId'], $activity['fromCourseId'], $activity['id'], 'testpaper');
+        $result = $this->getTestpaperService()->getUserLatelyResultByTestId(
+            $user['id'],
+            $testpaperActivity['mediaId'],
+            $activity['fromCourseId'],
+            $activity['id'],
+            'testpaper'
+        );
 
         if (!$result || empty($testpaperActivity['finishCondition'])) {
             return false;
         }
 
-        if (in_array($result['status'], array('reviewing', 'finished')) && $testpaperActivity['finishCondition']['type'] == 'submit') {
+        if (in_array(
+                $result['status'],
+                array('reviewing', 'finished')
+            ) && $testpaperActivity['finishCondition']['type'] == 'submit'
+        ) {
             return true;
         }
 
-        if (in_array($result['status'], array('reviewing', 'finished')) && $testpaperActivity['finishCondition']['type'] == 'score' && $result['score'] >= $testpaperActivity['finishCondition']['finishScore']) {
+        if (in_array(
+                $result['status'],
+                array('reviewing', 'finished')
+            ) && $testpaperActivity['finishCondition']['type'] == 'score' && $result['score'] >= $testpaperActivity['finishCondition']['finishScore']
+        ) {
             return true;
         }
 
@@ -125,19 +147,22 @@ class Testpaper extends Activity
 
     protected function filterFields($fields)
     {
-        $filterFields = ArrayToolkit::parts($fields, array(
-            'mediaId',
-            'doTimes',
-            'redoInterval',
-            'length',
-            'limitedTime',
-            'checkType',
-            'finishCondition',
-            'condition',
-            'finishScore',
-            'requireCredit',
-            'testMode',
-        ));
+        $filterFields = ArrayToolkit::parts(
+            $fields,
+            array(
+                'mediaId',
+                'doTimes',
+                'redoInterval',
+                'length',
+                'limitedTime',
+                'checkType',
+                'finishCondition',
+                'condition',
+                'finishScore',
+                'requireCredit',
+                'testMode',
+            )
+        );
 
         $finishCondition = array();
 
