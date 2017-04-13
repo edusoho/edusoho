@@ -765,6 +765,7 @@ class CourseController extends CourseBaseController
     /**
      * @param $course
      * @param $courseItems
+     *
      * @return array
      */
     protected function extractTaskFromCourseItems($course, $courseItems)
