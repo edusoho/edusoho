@@ -20,15 +20,15 @@
 
         </div>
         <span class="course-label">
-          {% if courseSet.status == 'draft' %}
+          {% if courseSet.status == constant('Biz\\Course\\Service\\CourseSetService::DRAFT_STATUS') %}
             <span class="label  label-warning">{{'未发布'|trans}}</span>
-          {% elseif courseSet.status == 'closed' %}
+          {% elseif courseSet.status == constant('Biz\\Course\\Service\\CourseSetService::CLOSE_STATUS') %}
             <span class="label label-danger">{{'已关闭'|trans}}</span>
           {% endif %}
-          {% if courseSet.status != 'closed' %}
-            {% if courseSet.serializeMode=='serialize' %}
+          {% if courseSet.status != constant('Biz\\Course\\Service\\CourseSetService::CLOSE_STATUS') %}
+            {% if courseSet.serializeMode == constant('Biz\\Course\\Service\\CourseSetService::SERIALIZE_SERIALIZE_MODE') %}
               <span class="label label-success">{{'更新中'|trans}}</span>
-            {% elseif courseSet.serializeMode=='finished' %}
+            {% elseif courseSet.serializeMode == constant('Biz\\Course\\Service\\CourseSetService::FINISH_SERIALIZE_MODE') %}
               <span class="label label-warning">{{'已完结'|trans}}</span>
             {% endif %}
           {% endif %}

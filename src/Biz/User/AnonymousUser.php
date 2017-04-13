@@ -15,6 +15,9 @@ class AnonymousUser extends CurrentUser
             'currentIp' => $ip,
             'roles' => array(),
             'locked' => false,
+            'org' => array('id' => $this->rootOrgId, 'orgCode' => $this->rootOrgCode),
+            'orgId' => $this->rootOrgId,
+            'orgCode' => $this->rootOrgCode,
         );
     }
 
@@ -176,27 +179,27 @@ class AnonymousUser extends CurrentUser
 
     public function getOrg()
     {
-        return array();
+        return array('id' => $this->rootOrgId, 'orgCode' => $this->rootOrgCode);
     }
 
     public function getOrgCode()
     {
-        return null;
+        return $this->rootOrgCode;
     }
 
     public function getOrgId()
     {
-        return 0;
+        return $this->rootOrgId;
     }
 
     public function getSelectOrgCode()
     {
-        return null;
+        return $this->rootOrgCode;
     }
 
     public function getSelectOrgId()
     {
-        return 0;
+        return $this->rootOrgId;
     }
 
     public function fromArray(array $user)

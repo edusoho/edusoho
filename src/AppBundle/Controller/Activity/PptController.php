@@ -18,35 +18,37 @@ class PptController extends BaseController implements ActivityActionInterface
 
         $file = $this->getUploadFileService()->getFullFile($ppt['mediaId']);
 
-        if (empty($file) || $file['type'] !== 'ppt') {
-            throw $this->createAccessDeniedException('file type error');
-        }
-
         $error = array();
-        if (isset($file['convertStatus']) && $file['convertStatus'] != 'success') {
-            if ($file['convertStatus'] == 'error') {
-                $url = $this->generateUrl('course_set_manage_files', array('id' => $activity['fromCourseId']));
-                $message = sprintf('PPT文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
-                $error['code'] = 'error';
-                $error['message'] = $message;
-            } else {
-                $error['code'] = 'processing';
-                $error['message'] = 'PPT文档还在转换中，还不能查看，请稍等。';
+        if (empty($file) || $file['type'] !== 'ppt') {
+            $error = array('code' => 'error', 'message' => '抱歉，PPT文件不存在，暂时无法学习。');
+        }
+
+        if ($file) {
+            if (isset($file['convertStatus']) && $file['convertStatus'] != 'success') {
+                if ($file['convertStatus'] == 'error') {
+                    $url = $this->generateUrl('course_set_manage_files', array('id' => $activity['fromCourseId']));
+                    $message = sprintf('PPT文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
+                    $error['code'] = 'error';
+                    $error['message'] = $message;
+                } else {
+                    $error['code'] = 'processing';
+                    $error['message'] = 'PPT文档还在转换中，还不能查看，请稍等。';
+                }
             }
+
+            $result = $this->getMaterialLibService()->player($file['globalId']);
+
+            if (isset($result['error'])) {
+                $error['code'] = 'error';
+                $error['message'] = $result['error'];
+            }
+
+            $slides = isset($result['images']) ? $result['images'] : array();
         }
-
-        $result = $this->getMaterialLibService()->player($file['globalId']);
-
-        if (isset($result['error'])) {
-            $error['code'] = 'error';
-            $error['message'] = $result['error'];
-        }
-
-        $slides = isset($result['images']) ? $result['images'] : array();
 
         return $this->render('activity/ppt/show.html.twig', array(
             'ppt' => $ppt,
-            'slides' => $slides,
+            'slides' => empty($slides) ? array() : $slides,
             'error' => $error,
             'courseId' => $activity['fromCourseId'],
         ));

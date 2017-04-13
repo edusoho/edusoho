@@ -1,16 +1,25 @@
-define(function(require, exports, module) {
+define(function (require, exports, module) {
 
-    exports.run = function() {
+  exports.run = function () {
 
-        $("#theme-table").on('click', '.use-theme-btn', function(){
-            if (!confirm(Translator.trans('真的要使用该主题吗？'))) {
-                return false;
-            }
+    $("#theme-table").on('click', '.use-theme-btn', function () {
+      var $btn = $(this);
 
-            $.post($(this).data('url'), function(){
-                window.location.reload();
-            });
+      if ($btn.data('protocol') < 3) {
+        alert('该主题暂不适配当前ES版本，请先升级');
+        return false;
+      } else if (confirm(Translator.trans('真的要使用该主题吗？'))) {
+
+        $.post($(this).data('url'), function (response) {
+          if (response === false) {
+            alert('该主题暂不适配当前ES版本，请先升级');
+          } else {
+            window.location.reload();
+          }
         });
-    };
+      }
+    });
+
+  }
 
 });

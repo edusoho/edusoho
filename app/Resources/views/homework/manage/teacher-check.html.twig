@@ -6,7 +6,9 @@
 {% set showHeader = 1 %}
 {% set isIframeBody = 0 %}
 
-{% block paper_header %}{% endblock %}
+{% block paper_description %}
+  <div class="testpaper-description">{{ paper.description|bbCode2Html|raw }}</div>
+{% endblock %}
 
 {% block paper_body %}
   <form id='teacherCheckForm' autocomplete="off">
