@@ -90,9 +90,10 @@ class WxpayBillCommand extends BaseCommand
                 }
 
                 $this->getPayLogger()->addInfo("sn:".$order['sn']."，状态不一致，开始处理,".$j);
-                if($j == 1){
+                //正式执行的时候可以打开，观察第一条记录是否成功
+                // if($j == 1){
                   $this->processOrder($order,$out_trade_no);
-                }
+                // }
                 $j++;
                 
             }
