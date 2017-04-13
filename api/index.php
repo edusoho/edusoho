@@ -71,7 +71,12 @@ $app->error(function (\Exception $exception, Request $request, $code) use ($app)
         }
 
     }
-    return new \Symfony\Component\HttpFoundation\JsonResponse($error);
+
+    return $app->json($error);
+}, 100);
+
+$app->view(function (array $result, Request $request) use ($app) {
+    return $app->json($result);
 });
 
 $app->run();
