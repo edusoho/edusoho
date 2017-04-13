@@ -435,7 +435,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         array_walk(
             $activities,
             function (&$activity) use ($medias) {
-                $activity['ext'] = $medias[$activity['mediaId']];
+                //part of the activity have no extension table
+                $activity['ext'] = empty($medias[$activity['mediaId']]) ? array() : $medias[$activity['mediaId']];
             }
         );
 
