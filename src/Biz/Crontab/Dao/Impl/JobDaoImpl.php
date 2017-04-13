@@ -53,6 +53,7 @@ class JobDaoImpl extends GeneralDaoImpl implements JobDao
                 'cycle = :cycle',
                 'jobClass = :jobClass',
                 'executing = :executing',
+                'enabled = :enabled',
                 'nextExcutedTime <= :nextExcutedTime',
                 'nextExcutedTime <= :nextExcutedEndTime',
                 'nextExcutedTime >= :nextExcutedStartTime',

@@ -32,6 +32,7 @@
             </div>
           </td>
           <td>{{ theme.version }}</td>
+          <td>{{ theme.support_version|default('--') }}</td>
           <td>{{ theme.author }}</td>
           <td>
             {% if currentTheme.uri == theme.uri %}
