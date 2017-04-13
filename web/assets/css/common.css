@@ -1948,6 +1948,11 @@ tr.placeholder:before {
   background: #fff;
 }
 
+.audio-content .local-video-player .vjs-default-skin.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar {
+  visibility: visible;
+  opacity: 1;
+}
+
 .audio-content  .local-video-player .vjs-default-skin .vjs-big-play-button {
   left: 50%;
   margin-left: -60px;
