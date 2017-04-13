@@ -158,8 +158,7 @@ class PayCenterController extends BaseController
         if (!isset($fields['payment'])) {
             return $this->createMessageResponse('error', '支付方式未开启，请先开启');
         }
-        $token = $this->makeWxpayToken($fields['orderId']);
-        $order = OrderProcessorFactory::create($fields['targetType'])->updateOrder($fields['orderId'], array('payment' => $fields['payment'],'token' => $token['token']));
+        $order = OrderProcessorFactory::create($fields['targetType'])->updateOrder($fields['orderId'], array('payment' => $fields['payment']));
 
         if ($user['id'] != $order['userId']) {
             return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
@@ -176,10 +175,17 @@ class PayCenterController extends BaseController
         $paymentRequest = $this->createPaymentRequest($order, $requestParams);
 
         $returnArray = $paymentRequest->unifiedOrder($openid);
+        $gotoParameters['name'] = $fields['payment'];
+        $gotoParameters['sn'] = $order['sn'];
+        $gotoParameters['out_trade_no'] = $order['token'];
+
+        $goto = $this->generateUrl('pay_return',$gotoParameters);
+        
         if ($returnArray['return_code'] == 'SUCCESS') {
             return $this->render('TopxiaWebBundle:PayCenter:wxpay-h5.html.twig', array(
                 'order'           => $order,
-                'jsApiParameters' => $paymentRequest->getJsApiParameters($returnArray)
+                'jsApiParameters' => $paymentRequest->getJsApiParameters($returnArray),
+                'goto' => $goto
             ));
         }
         throw new \RuntimeException($returnArray['return_msg']);
@@ -245,7 +251,6 @@ class PayCenterController extends BaseController
 
         $requestParams['userAgent'] = $request->headers->get('User-Agent');
         $requestParams['isMobile']  = $this->isMobileClient();
-
         $paymentRequest = $this->createPaymentRequest($order, $requestParams);
         $formRequest    = $paymentRequest->form();
         $params         = $formRequest['params'];
@@ -260,7 +265,6 @@ class PayCenterController extends BaseController
                     'order' => $order
                 ));
             }
-            $order = $this->generateWxpayOrderToken($order);
             $returnArray = $paymentRequest->unifiedOrder();
 
             if ($returnArray['return_code'] == 'SUCCESS') {
@@ -379,6 +383,12 @@ class PayCenterController extends BaseController
 
         $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $returnArray);
 
+        if(!empty($returnArray['trade_type']) && $returnArray['trade_type'] == 'JSAPI'){
+            $order = $this->getOrderService()->getOrderByToken($returnArray['out_trade_no']);
+            $returnArray['sn'] = $order['sn'];
+            $returnArray['out_trade_no'] = $returnArray['out_trade_no'];
+        }
+
         $response = $this->createPaymentResponse($name, $returnArray);
 
         $payData = $response->getPayData();
@@ -480,8 +490,7 @@ class PayCenterController extends BaseController
                 $payData['payment']  = 'wxpay';
                 $payData['amount']   = $order['amount'];
                 $payData['paidTime'] = time();
-                $order = $this->getOrderService()->getOrderByToken($returnArray['out_trade_no']);
-                $payData['sn']       = $order['sn'];
+                $payData['sn']       = $returnArray['out_trade_no'];
 
                 list($success, $order) = OrderProcessorFactory::create($order['targetType'])->pay($payData);
                 if ($success) {
@@ -501,6 +510,9 @@ class PayCenterController extends BaseController
     protected function createPaymentRequest($order, $requestParams)
     {
         $options = $this->getPaymentOptions($order['payment']);
+        if(isset($options['isMicroMessenger']) && $options['isMicroMessenger'] ){
+            $options['out_trade_no'] = $order['token'];
+        }
 
         $request       = Payment::createRequest($order['payment'], $options);
         $processor     = OrderProcessorFactory::create($order['targetType']);
@@ -515,6 +527,9 @@ class PayCenterController extends BaseController
             'amount'      => $order['amount'],
             'targetType'  => $order['targetType']
         ));
+        if(isset($options['isMicroMessenger']) && $options['isMicroMessenger'] ){
+            $requestParams['out_trade_no'] = $order['token'];
+        }
 
         return $request->setParams($requestParams);
     }
@@ -538,15 +553,6 @@ class PayCenterController extends BaseController
         $order = $this->getOrderService()->getOrder($orderId);
         $token['token'] = $order['sn'].$value;
         return $token;
-    }
-
-    public function generateWxpayOrderToken($order)
-    {
-        $token = $this->makeWxpayToken($order['id']);
-        
-        $processor = OrderProcessorFactory::create($order['targetType']);
-        return $processor->updateOrder($order['id'], array('token' => $token['token']));
-    
     }
 
     public function generateOrderToken($order, $params)
@@ -629,7 +635,6 @@ class PayCenterController extends BaseController
     {
         $options  = $this->getPaymentOptions($name);
         $response = Payment::createResponse($name, $options);
-
         return $response->setParams($params);
     }
 

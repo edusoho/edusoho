@@ -96,12 +96,23 @@ class OrderServiceImpl extends BaseService implements OrderService
         }
 
         $order['status']      = 'created';
+        $order['token'] = $this->makeToken($order['sn']);
 
         $order = $this->getOrderDao()->addOrder($order);
 
         $this->_createLog($order['id'], 'created', $this->getKernel()->trans('创建订单'));
         $this->getDispatcher()->dispatch('order.service.created', new ServiceEvent($order));
         return $order;
+    }
+
+    private function makeToken($sn)
+    {
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $value = '';
+        for ($i = 0; $i < 5; $i++) {
+            $value .= $chars[mt_rand(0, strlen($chars) - 1)];
+        }
+        return $sn.$value;
     }
 
     public function payOrder($payData)
