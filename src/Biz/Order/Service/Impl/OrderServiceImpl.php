@@ -103,6 +103,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         }
 
         $order['status'] = 'created';
+        $order['updatedTime'] = 0;
         $order['token'] = $this->makeToken($order['sn']);
 
         $order = $this->getOrderDao()->create($order);
