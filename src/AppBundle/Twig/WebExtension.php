@@ -755,7 +755,7 @@ class WebExtension extends \Twig_Extension
             return $seconds.'秒';
         }
 
-        return printf('%s分钟%s秒', $minutes, $seconds);
+        return sprintf('%s分钟%s秒', $minutes, $seconds);
     }
 
     public function timeRangeFilter($start, $end)
