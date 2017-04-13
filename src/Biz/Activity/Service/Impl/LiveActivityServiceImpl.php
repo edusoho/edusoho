@@ -196,7 +196,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
         $live = $this->getEdusohoLiveClient()->createLive(
             array(
-                'summary' => empty($activity['remark']) ? '' : $activity['remark'],
+                'summary' => '',
                 'title' => $activity['title'],
                 'speaker' => $speaker,
                 'startTime' => $activity['startTime'].'',
