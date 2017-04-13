@@ -22,7 +22,7 @@
               </tr>
               {% else %}
               <tr class="danger">                   
-                    <td> {{'admin.operation_analysis.paid_course.empty'|trans}}</strong><br><span class="text-muted text-sm">{{'admin.operation_analysis.paid_course.order_num'|trans}}：{{data.sn}}</span></td>
+                    <td> {{'admin.operation_analysis.paid_course.empty'|trans}}</strong><br><span class="text-muted text-sm">{{'admin.operation_analysis.paid_course.order'|trans}}：{{data.sn}}</span></td>
                    <td>{{ admin_macro.user_link(users[data.userId]) }}</td>
                    <td class="text-danger">--</td>
                     <td class="text-danger">{{ data.amount }}</td>

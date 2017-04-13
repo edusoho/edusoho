@@ -16,9 +16,9 @@
                 <td>{{data.nickname}}</td>
                 <td>
                     {% if data.verifiedMobile %}
-                    {{ data.verifiedMobile }}<span class="text-success">({{'admin.operation_analysis.register.mobile_number_bind'|trans}})</span>
+                    {{ data.verifiedMobile }}<span class="text-success">({{'user.fields.mobile_label.bind'|trans}})</span>
                     {% elseif registerProfiles[data.id].mobile %}
-                    {{ registerProfiles[data.id].mobile }}<span class="text-danger">({{'admin.operation_analysis.register.mobile_number_no_bind'|trans}})</span>
+                    {{ registerProfiles[data.id].mobile }}<span class="text-danger">({{'user.fields.mobile_label.no_bind'|trans}})</span>
                     {% else %}
                     -- 
                     {% endif %}
