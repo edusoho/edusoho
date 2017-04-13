@@ -301,7 +301,7 @@ class CourseServiceTest extends BaseTestCase
                 'toLearnTasks' => 0,
                 'taskPerDay' => 0,
                 'planStudyTaskCount' => 0,
-                'planProgressProgress' => 0
+                'planProgressProgress' => 0,
             ),
             $result
         );
@@ -318,7 +318,7 @@ class CourseServiceTest extends BaseTestCase
 
         $createCourse1 = $this->getCourseService()->createCourse($course1);
         $this->mockBiz('Course:MemberService', array(
-            array('functionName' => 'getCourseMember', 'returnValue' => 1)
+            array('functionName' => 'getCourseMember', 'returnValue' => 1),
         ));
 
         $this->mockBiz('Task:TaskService', array(
@@ -340,7 +340,7 @@ class CourseServiceTest extends BaseTestCase
                 'toLearnTasks' => array(),
                 'taskPerDay' => 0,
                 'planStudyTaskCount' => 0,
-                'planProgressProgress' => 0
+                'planProgressProgress' => 0,
             ),
             $result
         );

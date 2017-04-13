@@ -106,7 +106,7 @@ class CourseController extends CourseBaseController
                 'toLearnTasks' => 0,
                 'taskPerDay' => 0,
                 'planStudyTaskCount' => 0,
-                'planProgressProgress' => 0
+                'planProgressProgress' => 0,
             );
         }
 
