@@ -29,7 +29,9 @@ define(function(require, exports, module) {
                     var circle3 = '<span style="display:inline-block;margin-right:5px;'
                         + 'border-radius:10px;width:9px;height:9px;background-color:#c23531' + '"></span>';
 
-                    var html = params[0].name + '</br>';
+                    var titles = $container.data('titles');
+                    var remarks = $container.data('remarks');
+                    var html = params[0].name + "：" + remarks[titles.indexOf(params[0].name)] + '</br>';
                     var val1 = isNaN(learnedNum)? '-' : learnedNum;
                     var val2 = isNaN(learningNum)? '-' : learningNum;
                     html += circle1+params[0].seriesName+' : '+val1+'</br>';
