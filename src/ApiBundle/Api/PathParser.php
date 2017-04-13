@@ -26,6 +26,11 @@ class PathParser
                 continue;
             }
 
+            if ($part == 'me') {
+                $pathMeta->addResName($part);
+                continue;
+            }
+
             if ($nextIsResName) {
                 $pathMeta->addResName($part);
                 $nextIsResName = 0;
