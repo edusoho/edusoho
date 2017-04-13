@@ -34,7 +34,7 @@ class FileMigrate extends AbstractMigrate
             exit(0);
         }
 
-        $filepath = 'http://ojc8jepus.bkt.clouddn.com/x8-package/v2-'.$page.'.zip';
+        $filepath = 'http://ojc8jepus.bkt.clouddn.com/x8-package/v3-'.$page.'.zip';
 
         $dir = $this->kernel->getParameter('kernel.root_dir').'/data/upgrade';
 
@@ -309,9 +309,9 @@ class FileMigrate extends AbstractMigrate
                 'level' => 'info',
                 'productId' => 1,
                 'productName' => 'EduSoho主程序',
-                'packageId' => 929,
+                'packageId' => 946,
                 'type' => 'install',
-                'fromVersion' => '7.5.14',
+                'fromVersion' => '7.5.15',
                 'toVersion' => '8.0.0',
                 'message' => '成功',
                 'data' => '',
@@ -329,9 +329,9 @@ class FileMigrate extends AbstractMigrate
     {
         $time = time();
         $user = $this->kernel->getCurrentUser();
-        $this->exec("UPDATE cloud_app SET version = '8.0.0', fromVersion = '7.5.14', protocol = 3, updatedTime = {$time} WHERE code = 'MAIN';");
+        $this->exec("UPDATE cloud_app SET version = '8.0.0', fromVersion = '7.5.15', protocol = 3, updatedTime = {$time} WHERE code = 'MAIN';");
         $this->exec("INSERT INTO `cloud_app_logs` (`code`, `name`, `fromVersion`, `toVersion`, `type`, `status`, `userId`, `ip`, `message`, `createdTime`)
-                               VALUES ('MAIN', 'EduSoho主系统', '7.5.14', '8.0.0', 'install', 'SUCCESS', {$user['id']}, '{$user['currentIp']}', '', {$time})");
+                               VALUES ('MAIN', 'EduSoho主系统', '7.5.15', '8.0.0', 'install', 'SUCCESS', {$user['id']}, '{$user['currentIp']}', '', {$time})");
     }
 }
 
