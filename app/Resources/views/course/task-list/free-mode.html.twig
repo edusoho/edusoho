@@ -20,7 +20,7 @@
           {% endif %}
 
 					{% set task_lock =  false %}
-					{% set file = files[task.activity.mediaId]|default(null) %}
+					{% set file = files[task.activity.id]|default(null) %}
 					<li class="task-item task-content mouse-control">
 						<i class="es-icon
               {% if task_lock %}

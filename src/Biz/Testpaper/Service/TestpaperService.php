@@ -16,7 +16,7 @@ interface TestpaperService
 
     public function updateTestpaper($id, $fields);
 
-    public function deleteTestpaper($id);
+    public function deleteTestpaper($id, $quietly = false);
 
     public function deleteTestpapers($ids);
 

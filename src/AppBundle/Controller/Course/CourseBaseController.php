@@ -122,9 +122,9 @@ abstract class CourseBaseController extends BaseController
     protected function findCourseSetTagsByCourseSetId($courseSetId)
     {
         $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course-set', 'ownerId' => $courseSetId));
-        $tagIds = ArrayToolkit::column($tags, 'id');
+        $tags = ArrayToolkit::index($tags, 'id');
 
-        return $this->getTagService()->findTagsByIds($tagIds);
+        return $tags;
     }
 
     /**

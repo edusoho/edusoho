@@ -53,7 +53,7 @@ class Homework extends Activity
 
     public function delete($targetId)
     {
-        return $this->getTestpaperService()->deleteTestpaper($targetId);
+        return $this->getTestpaperService()->deleteTestpaper($targetId, true);
     }
 
     public function isFinished($activityId)
