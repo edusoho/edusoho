@@ -40,7 +40,7 @@ class PathMeta
 
     public function getResMethod()
     {
-        if (count($this->resNames) == count($this->slugs)) {
+        if (($this->resNames[0] == 'me' && count($this->resNames) - 1 == count($this->slugs)) || (count($this->resNames) == count($this->slugs))) {
             return $this->singleMap[$this->httpMethod];
         } else {
             return $this->listMap[$this->httpMethod];
