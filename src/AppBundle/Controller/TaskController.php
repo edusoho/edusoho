@@ -437,17 +437,6 @@ class TaskController extends BaseController
         return $progress > 100 ? 100 : $progress;
     }
 
-    protected function isTeacherOrHeadTeacher($courseId)
-    {
-        $userId = $this->getUser()->getId();
-        $course = $this->getCourseService()->getCourse($courseId);
-        if ($course['creator'] === $userId) {
-            return true;
-        }
-
-        return $this->getCourseMemberService()->isCourseTeacher($courseId, $userId);
-    }
-
     protected function tryLearnTask($courseId, $taskId, $preview = false)
     {
         if ($preview) {
@@ -457,7 +446,8 @@ class TaskController extends BaseController
                 throw $this->createNotFoundException('you can not preview this task ');
             }
         } else {
-            if ($this->isTeacherOrHeadTeacher($courseId)) {
+            $isTeacher = $this->getCourseMemberService()->isCourseTeacher($courseId, $this->getUser()->getId());
+            if ($isTeacher) {
                 $task = $this->getTaskService()->getTask($taskId);
             } else {
                 $task = $this->getTaskService()->tryTakeTask($taskId);
