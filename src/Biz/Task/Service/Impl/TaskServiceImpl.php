@@ -339,8 +339,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             if ($preTask['isOptional']) {
                 $canLearnTask = true;
             } elseif ($preTask['type'] == 'live') {
-                $live = $this->getActivityService()->getActivity($preTask['activityId'], true);
-                if (time() > $live['endTime']) {
+                if (time() > $preTask['activity']['endTime']) {
                     $canLearnTask = true;
                 } else {
                     $isTaskLearned = empty($preTask['result']) ? false : ($preTask['result']['status'] == 'finish');
@@ -352,8 +351,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                     }
                 }
             } elseif ($preTask['type'] == 'testpaper' && $preTask['startTime']) {
-                $testPaper = $this->getActivityService()->getActivity($preTask['activityId'], true);
-                if (time() > $preTask['startTime'] + $testPaper['ext']['limitedTime'] * 60) {
+                if (time() > $preTask['startTime'] + $preTask['activity']['ext']['limitedTime'] * 60) {
                     $canLearnTask = true;
                 } else {
                     $isTaskLearned = empty($preTask['result']) ? false : ($preTask['result']['status'] == 'finish');
@@ -985,13 +983,13 @@ class TaskServiceImpl extends BaseService implements TaskService
             }
 
             $finish = $this->isPreTasksIsFinished($preTasks);
-            //当前任务未完成且前一个问题未完成则锁定
-            $task['lock'] = !$finish;
+        //当前任务未完成且前一个问题未完成则锁定
+        $task['lock'] = !$finish;
 
-            //选修任务不需要判断解锁条件
-            if ($task['isOptional']) {
-                $task['lock'] = false;
-            }
+        //选修任务不需要判断解锁条件
+        if ($task['isOptional']) {
+            $task['lock'] = false;
+        }
 
             if ($task['type'] == 'live') {
                 $task['lock'] = false;
@@ -1001,10 +999,10 @@ class TaskServiceImpl extends BaseService implements TaskService
                 $task['lock'] = false;
             }
 
-            //如果该任务已经完成则忽略其他的条件
-            if (isset($task['result']['status']) && ($task['result']['status'] == 'finish')) {
-                $task['lock'] = false;
-            }
+        //如果该任务已经完成则忽略其他的条件
+        if (isset($task['result']['status']) && ($task['result']['status'] == 'finish')) {
+            $task['lock'] = false;
+        }
         }
 
         return $task;
