@@ -16,7 +16,9 @@ class OrderInfo extends Resource
             throw new InvalidArgumentException("缺少参数");
         }
 
-        list($checkInfo, $orderInfo) = $this->service('Order:OrderFacadeService')->getOrderInfo($params['targetType'], $params['targetId'], array());
+        $this->convertParams($params);
+
+        list($checkInfo, $orderInfo) = $this->service('Order:OrderFacadeService')->getOrderInfo($params['targetType'], $params['targetId'], $params);
 
         if (isset($checkInfo['error'])) {
             throw new InvalidArgumentException($checkInfo['error']);
@@ -29,5 +31,10 @@ class OrderInfo extends Resource
         return $orderInfo;
     }
 
-
+    private function convertParams(&$params)
+    {
+        if (isset($params['unitType'])) {
+            $params['unit'] = $params['unitType'];
+        }
+    }
 }
