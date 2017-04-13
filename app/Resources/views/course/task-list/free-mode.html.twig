@@ -11,12 +11,12 @@
           <span class="title">第{{ item.number }}节: {{ item.title }}</span>
 				</li>
 			{% elseif  item.type|default(null)  == 'lesson' %}
+        {% set tasks = array_index(item.tasks, 'mode') %}
+        {% set taskIndex = tasks.lesson.number|default(null) %}
 
 				{% for task in item.tasks %}
           {% if  item.tasks|length > 1 %}
-            {% set taskIndex = item.number ~'-' ~ loop.index %}
-          {% else %}
-            {% set taskIndex = item.number  %}
+            {% set taskIndex = taskIndex ~'-' ~ loop.index %}
           {% endif %}
 
 					{% set task_lock =  false %}
