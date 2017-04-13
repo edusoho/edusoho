@@ -262,7 +262,7 @@ class CourseServiceTest extends BaseTestCase
      */
     public function testGetUserLearnProgressWithErrorCourse()
     {
-        $this->getCourseService()->getUserLearnProcess(999, 1);
+        $this->getCourseService()->getUserLearningProcess(999, 1);
     }
 
     /**
@@ -278,7 +278,7 @@ class CourseServiceTest extends BaseTestCase
         );
 
         $createCourse1 = $this->getCourseService()->createCourse($course1);
-        $this->getCourseService()->getUserLearnProcess($createCourse1['id'], 999);
+        $this->getCourseService()->getUserLearningProcess($createCourse1['id'], 999);
     }
 
     public function testGetUserLearnProgressWithNoTask()
@@ -291,7 +291,7 @@ class CourseServiceTest extends BaseTestCase
         );
 
         $createCourse1 = $this->getCourseService()->createCourse($course1);
-        $result = $this->getCourseService()->getUserLearnProcess($createCourse1['id'], $this->getCurrentUser()->getId());
+        $result = $this->getCourseService()->getUserLearningProcess($createCourse1['id'], $this->getCurrentUser()->getId());
 
         $this->assertEquals(
             array(
@@ -330,7 +330,7 @@ class CourseServiceTest extends BaseTestCase
             array('functionName' => 'countTaskResults', 'returnValue' => 10),
         ));
 
-        $result = $this->getCourseService()->getUserLearnProcess($createCourse1['id'], 123);
+        $result = $this->getCourseService()->getUserLearningProcess($createCourse1['id'], 123);
 
         $this->assertEquals(
             array(

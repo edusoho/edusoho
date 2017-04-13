@@ -97,7 +97,7 @@ class CourseController extends CourseBaseController
         $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($courseSet['categoryId']);
 
         if (empty($member['previewAs'])) {
-            $learnProgress = $this->getCourseService()->getUserLearnProcess($course['id'], $member['userId']);
+            $learnProgress = $this->getCourseService()->getUserLearningProcess($course['id'], $member['userId']);
         } else {
             $learnProgress = array(
                 'taskCount' => 0,
