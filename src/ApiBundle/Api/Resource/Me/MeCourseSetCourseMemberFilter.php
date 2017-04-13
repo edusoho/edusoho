@@ -5,7 +5,7 @@ namespace ApiBundle\Api\Resource\Me;
 use ApiBundle\Api\Resource\Course\CourseMemberFilter;
 use ApiBundle\Api\Resource\Filter;
 
-class MeJoinInCourseFilter extends Filter
+class MeCourseSetCourseMemberFilter extends Filter
 {
 
     protected function customFilter(&$data)

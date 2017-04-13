@@ -9,11 +9,10 @@ use ApiBundle\Api\Resource\Resource;
 use ApiBundle\Api\Annotation\ApiConf;
 use AppBundle\Common\ArrayToolkit;
 
-class MeJoinInCourse extends Resource
+class MeCourseSetCourseMember extends Resource
 {
-    public function search(ApiRequest $request)
+    public function search(ApiRequest $request, $courseSetId)
     {
-        $courseSetId = $request->query->get('courseSetId');
         $courseSet = $this->service('Course:CourseSetService')->getCourseSet($courseSetId);
 
         if (!$courseSet) {
