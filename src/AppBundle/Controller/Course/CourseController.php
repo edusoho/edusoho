@@ -98,12 +98,13 @@ class CourseController extends CourseBaseController
         }
         $tag = null;
         foreach ($tasks as $task) {
-            if ($task['type'] === 'video' && $course['tryLookable']) {
+            if (empty($tag) && $task['type'] === 'video' && $course['tryLookable']) {
                 $activity = $this->getActivityService()->getActivity($task['activityId'], true);
                 if (!empty($activity['ext']['file']) && $activity['ext']['file']['storage'] === 'cloud') {
                     $tag = '试看';
                 }
             }
+            //tag的权重：免费优先于试看
             if ($task['isFree']) {
                 return '免费';
             }
