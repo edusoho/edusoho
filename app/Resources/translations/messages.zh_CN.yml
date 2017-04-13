@@ -26,6 +26,8 @@ site.message.error: 错误提示
 site.power_by: 好知网
 site.default.classroom: 班级
 site.default.student: 学员
+site.org.belongs_to_org_th: 所属组织机构
+site.org.code: 编码：
 site.default.more: 更多
 
 # 用户通用
@@ -244,6 +246,7 @@ form.field.privacy_public: 公开
 form.btn.modify: 修改
 form.btn.set: 设置
 form.btn.publish: 发布
+form.btn.save_and_publish: 直接发布
 form.btn.reset: 重置
 form.btn.view: 查看
 form.btn.bind: 绑定
@@ -255,6 +258,7 @@ form.btn.login: 登录
 form.btn.save: 保存
 form.btn.detail: 详情
 form.btn.close: 关闭
+form.btn.return: 返回
 form.btn.cancel: 取消
 form.btn.confirm: 确定
 form.btn.insert: 插入
@@ -269,7 +273,7 @@ form.btn.upload.submiting: 正在上传...
 form.btn.delete.submiting: 正在删除...
 form.btn.reply.submiting: 正在发表...
 form.btn.save.submiting: 正在保存...
-form.btn.publish.submiting: 正在创建...
+form.btn.publish.submiting: 正在发布...
 form.btn.submit.submiting: 正在提交...
 form.btn.send.submiting: 正在发送...
 form.btn.modify.submiting: 正在修改...
@@ -822,32 +826,403 @@ group.detail.new_group_members.empty: 还没有小组成员！
 group.detail.hot_group: 热门小组
 group.detail.hot_group_empty: 暂无小组信息！
 
+# 课程管理
+#课程管理通用模块
+admin.course_manage.category_placeholder: 课程分类
+admin.course_manage.title_placeholder: 标题
+admin.course_manage.creator_placeholer: 创建者
+admin.course_manage.operater: 操作
+
+## 课程管理
+## 普通课程
+admin.course_manage.manage.normal_course: 普通课程
+admin.course_manage.manage.student_number: >
+  %student%数
+admin.course_manage.manage.income_RMB: 收入(元)
+
+## 班级课程
+admin.course_manage.manage.classroom_course_location: >
+  所在%classroom%
+admin.course_manage.manage.classroom_course_removed: 已移除
+
+## 会员课程
+admin.course_manage.manage.vip_course: 会员课程
+admin.course_manage.manage.vip_grade: 会员等级
+admin.course_manage.manage.vip_grade_removed: 该会员等级已删除
+admin.course_manage.manage.vip_grade_count: >
+  等%count%个会员等级
+
+## 直播课程
+admin.course_manage.manage.live_course: 直播课程
+
+## 课程管理通用模块
+admin.course_manage.manage.status_placeholder: 课程状态
+admin.course_manage.manage.course_tips: >
+  <div style='width:250px;'>
+    <span style='color:blue;'>课程说明</span><br>
+    1. 编号及排序无法修改；<br>
+    2. 课程地址规则：域名/course/课程编号；
+  </div>
+admin.course_manage.manage.count: >
+  课程：<strong class="inflow-num">%courseNum%</strong>个
+admin.course_manage.manage.published_count: >
+  已发布：<strong class="inflow-num">%publishedNum%</strong>个
+admin.course_manage.manage.closed_count: >
+  已关闭：<strong class="inflow-num">%closedNum%</strong>个
+admin.course_manage.manage.unpublish_count: >
+  未发布：<strong class="inflow-num">%unPublishedNum%</strong>个
+admin.course_manage.manage.number: 编号
+admin.course_manage.manage.name: 名称
+admin.course_manage.manage.price: 价格
+admin.course_manage.manage.serialize_mode: 连载状态
+admin.course_manage.manage.status: 状态
+admin.course_manage.manage.creator: 创建者
+admin.course_manage.manage.manage_btn: 管理
+admin.course_manage.manage.empty: 暂无课程记录
+admin.course_manage.manage.category: 分类
+admin.course_manage.manage.recommend: >
+  荐：%recommendedTime% / 序号：%recommendedSeq%
+admin.course_manage.manage.no_serialize: 非连载课程
+admin.course_manage.manage.serializing: 连载中
+admin.course_manage.manage.serialize_finished: 已完结
+
+## 课程推荐
+admin.course_manage.recommend.seq: 顺序号
+admin.course_manage.recommend.name: 课程名称
+admin.course_manage.recommend.creator: 创建者
+admin.course_manage.recommend.time: 推荐时间
+admin.course_manage.recommend.empty: 暂无推荐课程
+admin.course_manage.recommend.category: 分类
+admin.course_manage.recommend.set_seq_btn: 设置序号
+admin.course_manage.recommend.cancel_seq_btn: 取消推荐
+admin.course_manage.recommend.set_seq.modal_title: 设置推荐课程
+admin.course_manage.recommend.set_seq.seq_label: 序号
+admin.course_manage.recommend.set_seq.seq_tips: 请输入0-10000的整数
+
+## 课程统计
+admin.course_manage.statistics.name: 课程名
+admin.course_manage.statistics.classroom: >
+  所在%classroom%
+admin.course_manage.statistics.teach_plan_count: 教学计划数量
+admin.course_manage.statistics.task_count: 任务数量
+admin.course_manage.statistics.student: 学员
+admin.course_manage.statistics.student_number: >
+  %user_name%人数
+admin.course_manage.statistics.finished_number: 完成课程人数
+admin.course_manage.statistics.study_time_minute: 课程学习时长(分)
+admin.course_manage.statistics.income_RMB: 课程收入(元)
+admin.course_manage.statistics.no_introduce: 未引入
+admin.course_manage.statistics.watch_task: 查看任务
+
+## 任务统计数据
+admin.course_manage.statistics.modal_title: >
+  %title%课程的数据
+admin.course_manage.statistics.data.name: 任务名
+admin.course_manage.statistics.data.study_number: 学习人数
+admin.course_manage.statistics.data.finished_number: 完成人数
+admin.course_manage.statistics.data.average_study_time: 平均学习时长(分)
+admin.course_manage.statistics.data.video_and_music_study_time: 音视频时长(分)
+admin.course_manage.statistics.data.video_and_music_average_study_time: 音视频平均观看时长(分)
+admin.course_manage.statistics.data.average_score: 测试平均得分
+
+## 任务统计详细数据
+admin.course_manage.statistics.data_detail.name: 用户名
+admin.course_manage.statistics.data_detail.join_time: 加入课程时间
+admin.course_manage.statistics.data_detail.finished_time: 完成课程时间
+admin.course_manage.statistics.data_detail.study_days: 课程学习天数
+admin.course_manage.statistics.data_detail.study_time: 课程学习时长（分）
+admin.course_manage.statistics.data_detail.question_number: 提问数
+admin.course_manage.statistics.data_detail.note_number: 笔记数
+
+# 公开课管理
+## 公开课管理通用模块
+admin.open_manage.category_placeholder: 课程分类
+admin.open_manage.title_placeholder: 标题
+admin.open_manage.creator_placeholer: 创建者
+admin.open_manage.open_tips: >
+  <div style='width:250px;'>
+    <span style='color:blue;'>公开课说明</span><br>
+    1. 编号及排序无法修改；<br>
+  </div>
+admin.open_manage.empty: 暂无课程记录
+admin.open_manage.category: >
+  分类：%categoryName%
+admin.open_manage.cancel_recommend_btn: 取消推荐
+admin.open_manage.student: 学员
+admin.open_manage.chapter: 章
+admin.open_manage.section: 节
+
+## 公开课管理
+admin.open_manage.manage.status_option: 课程状态
+admin.open_manage.manage.open_cloud_sms_tips: 尚未开启云短信的直播通知开关，开启后直播公开课将支持短信提醒功能
+admin.open_manage.manage.open_cloud_sms: >
+  <a href="%cloudSmsUrl%">去开启</a>
+admin.open_manage.manage.number_th: 编号
+admin.open_manage.manage.name_th: 名称
+admin.open_manage.manage.status_th: 状态
+admin.open_manage.manage.creator_th: 创建者
+admin.open_manage.manage.operater_th: 操作
+admin.open_manage.manage.recommend: >
+  荐：%recommendedTime% / 序号：%recommendedSeq%
+admin.open_manage.manage.manage_btn: 管理
+admin.open_manage.manage.recommend_course_btn: 推荐课程
+admin.open_manage.manage.closed_course_btn: 关闭课程
+admin.open_manage.manage.publish_course_btn: 发布课程
+admin.open_manage.manage.delete_course_btn: 删除课程
+
+## 直播课管理
+admin.open_manage.manage.live_course: 直播
+admin.open_manage.manage.live_course_empty: 暂无直播课
+
+## 公开课推荐
+admin.open_manage.recommend.seq_th: 顺序号
+admin.open_manage.recommend.name_th: 课程名称
+admin.open_manage.recommend.creator_th: 创建者
+admin.open_manage.recommend.time_th: 推荐时间
+admin.open_manage.recommend.operater_th: 操作
+admin.open_manage.recommend.empty: 暂无推荐课程
+admin.open_manage.recommend.set_seq_btn: 设置序号
+admin.open_manage.recommend.cancel_btn: 取消推荐
+
+#### 设置推荐序号modal
+admin.open_manage.recommend.set_seq.modal_title: 设置推荐课程
+admin.open_manage.recommend.set_seq.seq_label: 序号
+admin.open_manage.recommend.set_seq.seq_tips: 请输入0-10000的整数
+
+### 公开课统计
+admin.open_manage.analysis.start_date_label: 起始日期
+admin.open_manage.analysis.end_date_label: 截止日期
+admin.open_manage.analysis.yesterday_btn: 昨天
+admin.open_manage.analysis.recent_seven_day_btn: 最近七天
+admin.open_manage.analysis.recent_thirty_day_btn: 最近30天
+
+admin.open_manage.analysis.referer_tab: 来源分析
+admin.open_manage.analysis.conversion_tab: 购买转化分析
+admin.open_manage.analysis.watch_tab: 观看统计
+
+admin.open_manage.analysis.footer_tips: 注：列表结果中，不会包含没有访问过的课程
+
+#### 公开课来源分析
+admin.open_manage.analysis.referer.referer_th: 来源
+admin.open_manage.analysis.referer.referer_number_th: 来源数
+admin.open_manage.analysis.referer.proportion_th: 占比
+admin.open_manage.analysis.referer.empty: 暂无记录
+
+admin.open_manage.analysis.referer.summary_list_tab: 明细
+admin.open_manage.analysis.referer.summary_tab: 汇总
+admin.open_manage.analysis.referer.summary_list.name_th: 公开课名称
+admin.open_manage.analysis.referer.summary_list.visit_number_th: 访问数
+admin.open_manage.analysis.referer.summary_list.detail_th: 详情
+admin.open_manage.analysis.referer.summary_list.visit_number: >
+  %visitNum%次
+admin.open_manage.analysis.referer.summary_list.detail_btn: 详情
+
+#### 公开课来源分析明细详情modal
+admin.open_manage.analysis.referer.summary_list.modal_title: >
+  %courseTItle%的转化详情(%startTime%到%endTime%)
+admin.open_manage.analysis.referer.summary_list.referer_url: 访问地址：
+
+#### 公开课购买转化分析
+admin.open_manage.analysis.conversion.name_th: 课程名称
+admin.open_manage.analysis.conversion.buy_num_th: 购买数
+admin.open_manage.analysis.conversion.visit_num_th: 访问数
+admin.open_manage.analysis.conversion.buy_rate_th: 购买数
+admin.open_manage.analysis.conversion.detail_th: 详情
+admin.open_manage.analysis.conversion.empty: 暂无记录
+admin.open_manage.analysis.conversion.detail_btn: 详情
+admin.open_manage.analysis.conversion.total_buy_conversion_rate: 总购买转化率
+#### 公开课购买转化分析结果modal
+admin.open_manage.analysis.conversion.result.modal_title: >
+  %title%查询结果&nbsp;&nbsp;(%startTime%到%endTime%)
+admin.open_manage.analysis.conversion.result.content_th: 内容
+admin.open_manage.analysis.conversion.result.type_th: 类型
+admin.open_manage.analysis.conversion.result.buy_num_th: 购买数
+admin.open_manage.analysis.conversion.result.price_th: 价格
+
+####公开课观看统计
+admin.open_manage.analysis.watch.all_tab: 全部
+admin.open_manage.analysis.watch.open_tab: 录播公开课
+admin.open_manage.analysis.watch.live_open_tab: 直播公开课
+admin.open_manage.analysis.watch.total_open_count: 公开课总数
+admin.open_manage.analysis.watch.total_visit_count: 总访问量
+admin.open_manage.analysis.watch.average_watch_count: 日均观看次数
+
+# 直播管理
+admin.live_manage.edu_cloud_closed: 尚未接入教育云，不能使用直播服务
+admin.live_manage.show_detail: 查看详情
+admin.live_manage.cloud_live_closed: 尚未启用云直播服务，不能创建直播课程
+admin.live_manage.now_start: 立即启用
+admin.live_manage.coming_live: 即将开始的
+admin.live_manage.underway_live: 当前进行中
+admin.live_manage.end_live: 已结束的
+admin.live_manage.name_option: 课程名
+admin.live_manage.task_option: 任务名
+admin.live_manage.keyword_placeholder: 关键词
+admin.live_manage.live_start_time_label: 直播开始时间
+admin.live_manage.live_start_time_placeholder: 开始时间
+admin.live_manage.live_end_time_placeholder: 结束时间
+admin.live_manage.task_th: 任务
+admin.live_manage.live_start_time_th: 直播开始时间
+admin.live_manage.live_time_long_th: 直播时长(分)
+admin.live_manage.max_participate_count_th: 最大参与人数
+admin.live_manage.empty: 暂无直播
+admin.live_manage.deleted: 课程已删除
+
+#班级管理
+## 管理模块
+admin.classroom_manage.manage.name_placeholder: >
+  %name%名称
+admin.classroom_manage.manage.describe_tips: >
+  <div style='width:250px;'>
+    <span style='color:blue;'>班级说明</span><br>
+    1. 编号及排序无法修改；<br>
+    2. 班级地址规则：域名/classroom/班级编号；
+  </div>
+admin.classroom_manage.manage.number_th: >
+  %title%编号
+admin.classroom_manage.manage.name_th: >
+  %name%名称
+admin.classroom_manage.manage.course_number_th: 课程数
+admin.classroom_manage.manage.student_number_th: 学员数
+admin.classroom_manage.manage.price_th: 价格
+admin.classroom_manage.manage.status_th: 状态
+admin.classroom_manage.manage.operate_th: 操作
+admin.classroom_manage.manage.empty: >
+  暂无%name%信息!
+admin.classroom_manage.manage.category: 分类
+admin.classroom_manage.manage.recommend: >
+  荐: %recommendedTime% / 序号: %recommendedSeq%
+admin.classroom_manage.manage.course_detail: 详情
+admin.classroom_manage.manage.price: >
+  %price%元
+admin.classroom_manage.manage.origin_price: >
+  原价 %priceAll%元
+admin.classroom_manage.manage.published: 已发布
+admin.classroom_manage.manage.closed: 已关闭
+admin.classroom_manage.manage.unpublished: 未发布
+admin.classroom_manage.manage.manage_btn: 管理
+
+##　班级推荐模块
+admin.classroom_manage.recommend.seq_th: 顺序号
+admin.classroom_manage.recommend.name_th: >
+  %name%名称
+admin.classroom_manage.recommend.create_time_th: 创建时间
+admin.classroom_manage.recommend.recommend_time_th: 推荐时间
+admin.classroom_manage.recommend.operate_th: 操作
+admin.classroom_manage.recommend.empty: >
+  暂无推荐%name%
+admin.classroom_manage.recommend.set_seq_btn: 设置序号
+admin.classroom_manage.recommend.cancel_recommend_classroom_btn: >
+  取消%name%推荐
+admin.classroom_manage.recommend.cancel_recommend_btn: 取消推荐
+
+##设置班级推荐序号modal
+admin.classroom_manage.recommend.set_seq.modal_title: >
+  设置推荐%name%
+admin.classroom_manage.recommend.set_seq.seq_label: 序号
+admin.classroom_manage.recommend.set_seq.help_tips: 请输入0-10000的整数(默认序号是100)
+
+##创建班级
+admin.classroom_manage.create: 创建
+admin.classroom_manage.create.title: >
+  创建%name%
+admin.classroom_manage.create.name_label: >
+  %name%名称
+admin.classroom_manage.create.show_label: >
+  %name%展示
+admin.classroom_manage.create.open_radio: 开启
+admin.classroom_manage.create.close_radio: 关闭
+admin.classroom_manage.create.show_tips: 关闭后，%name%将彻底隐藏，无法在前台查看到。
+admin.classroom_manage.create.buy_label: >
+  %name%购买
+admin.classroom_manage.create.buy_tips: 关闭后%name%将无法在线购买加入。
+
+#　分类管理
+admin.category_manage.name_th: 名称
+admin.category_manage.code_th: 编码
+admin.category_manage.operate_th: 操作
+admin.category_manage.empty: 暂无分类记录
+admin.category_manage.edit_btn: 编辑
+admin.category_manage.create_sub_category_btn: 添加子分类
+
+##　新增，编辑，删除分类modal
+admin.category_manage.edit_title:　编辑分类
+admin.category_manage.add_title: 添加分类
+admin.category_manage.name_label: 名称
+admin.category_manage.code_label: 编码
+admin.category_manage.code_placeholer: 必填，建议使用分类名称的英文单词或缩写作为编码。
+admin.category_manage.descripe_label: 分类描述
+admin.category_manage.descripe_tips: 非必填
+admin.category_manage.icon_label: 图标
+admin.category_manage.icon_tips: 允许上传的图标文件格式为
+
+#标签管理
+## 标签管理
+admin.tag_manage.tag.id_th: ID
+admin.tag_manage.tag.name_th: 名称
+admin.tag_manage.tag.group_th: 所属标签组
+admin.tag_manage.tag.create_time_th: 添加时间
+admin.tag_manage.tag.operate_th: 操作
+admin.tag_manage.tag.edit_btn: 编辑
+admin.tag_manage.tag.empty: 暂无标签记录
+admin.tag_manage.tag.footer_one_tips: 1.标签可用于课程和资讯；
+admin.tag_manage.tag.footer_two_tips: >
+  2.可<a target="_blank" href="%courseSet%">开启</a>根据标签在课程介绍页显示相关课程。
+
+## 新增，编辑标签modal
+admin.tag_manage.tag.create.modal_title: 新增标签
+admin.tag_manage.tag.edit.modal_title: 编辑标签
+admin.tag_manage.tag.name_label: 标签名称
+
+## 标签组管理
+admin.tag_manage.tag_group.id_th: ID
+admin.tag_manage.tag_group.name_th: 标签组名称
+admin.tag_manage.tag_group.apply_in_th: 应用于
+admin.tag_manage.tag_group.tag_count_th: 包含标签数量
+admin.tag_manage.tag_group.create_time_th: 标签组创建时间
+admin.tag_manage.tag_group.operate_th: 操作
+admin.tag_manage.tag_group.empty: 暂无标签组记录
+admin.tag_manage.tag_group.classroom_filter: 班级列表筛选
+admin.tag_manage.tag_group.course_filter: 课程列表筛选
+admin.tag_manage.tag_group.edit_btn: 编辑
+
+## 新增，编辑标签组modal
+admin.tag_manage.tag_group.create.modal_title: 添加标签组
+admin.tag_manage.tag_group.edit.modal_title: 编辑标签组
+admin.tag_manage.tag_group.name_label: 标签组名称
+admin.tag_manage.tag_group.apply_label: 用于
+admin.tag_manage.tag_group.classroom_filter_checkbox: 班级列表筛选
+admin.tag_manage.tag_group.course_filter_checkbox: 课程列表筛选
+admin.tag_manage.tag_group.contain_label: 包含标签
+admin.tag_manage.tag_group.contain_tips: 回车可添加标签，标签组内添加的标签也会添加到标签管理中
+
 #后台首页通用key
-unknown: 未知
+site.data.unknown: 未知
 admin.homepage.more_btn: 更多
-admin.homepage.loadig_date_tips: 正在载入数据，请稍等。
+admin.homepage.loadig_data_tips: 正在载入数据，请稍等。
+admin.homepage.statistic.week: 最近7天
+admin.homepage.statistic.month: 最近30天
 
 # 后台首页
 admin.navbar.header.console_btn: 管理后台
 admin.navbar.header.often_used_btn: 常用
-admin.navbar.header.often_used.dropdown_menu.add_current_page: 添加当前页面为常用功能
-admin.navbar.header.often_used.dropdown_menu.added_current_page: 当前页面已添加
-admin.navbar.header.often_used.dropdown_menu.delete_often_used_link_btn_title: 删除常用链接
+admin.navbar.header.often_used.add_current_page: 添加当前页面为常用功能
+admin.navbar.header.often_used.added_tips: 当前页面已添加
+admin.navbar.header.often_used.delete_tips: 删除常用链接
 admin.navbar.header.home_btn: 回首页
 admin.navbar.header.dropdown_menu.exit_btn: 退出
 admin.fixed_bar.product: 产品
 admin.fixed_bar.feedback: 反馈
 admin.hompage.html_head_title: 管理后台
 admin.homepage.setting_domain_btn: 设置
-admin.homepage.cloud_notic.unknown_time: 未知时间
+admin.homepage.cloud_notice.unknown_time: 未知时间
 admin.homepage.cloud_notice: >
-  欢迎使用，试用将于<span style="color:#fed032;">%endTime%</span>到期,剩余<span style="color:#fed032;">%remainDays%</span>天。
+  欢迎使用，试用将于 %endTime% 到期,剩余 %remainDays% 天。
   </br>
   您可以联系销售人员购买授权版本，或者延长试用期限。电话：4008041114 或
-  <a id="BizQQWPA" href="javascript:" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])" style='text-decoration:none;'>QQ：800023860 </a>。
 admin.homepage.admins_announcements_title: 站长公告
 admin.homepage.admins_announcements_empty: 暂无公告
-admin.homepage.status_bar_title: 状态栏
+admin.homepage.status_bar.content_title: 状态栏
 admin.homepage.status_bar.system_version_title: 系统版本
 admin.homepage.status_bar.system_version_status.have_update: 有更新
 admin.homepage.status_bar.school_app_title: 网校应用
@@ -905,9 +1280,6 @@ admin.homepage.todays_data.total: 总数
 admin.homepage.todays_data.new_students: 新增学员
 admin.homepage.todays_data.new_vip_members: 新增会员
 admin.homepage.todays_data.thread_un_answer: 未回复回答
-admin.homepage.todays_data.thread_un_answer: 未回复回答
-admin.homepage.statistic.week: 最近7天
-admin.homepage.statistic.month: 最近30天
 admin.homepage.order_statistic_title: 订单统计
 admin.homepage.order_statistic.tips: >
   <div class="popover-content hidden">
@@ -922,8 +1294,7 @@ admin.homepage.order_statistic.tips: >
   </div>
 admin.homepage.pay_order_statistic_title: 付费订单统计
 admin.homepage.task_finish_statistic_title: 任务完成数
-admin.homepage.task_finish_statistic.tips: >
-  <div class="content">点击"学过了"的任务数量</div>
+admin.homepage.task_finish_statistic.tips: 点击"学过了"的任务数量
 admin.homepage.course_ranking_title: 课程排行榜
 admin.homepage.latest_question_title: 最新问答
 admin.homepage.latest_question.tr.question_th: 问题
@@ -943,6 +1314,149 @@ admin.homepage.top_search.keyword_th: 关键词
 admin.homepage.top_search.search_number_th: 搜索次数
 admin.homepage.top_search.empty: 暂无搜索数据
 admin.homepage.free_access_edu_cloud_search_btn: 免费接入云搜索获取热门搜索关键词
+
+# 咨询管理
+admin.operation_article.category_option: --所属栏目--
+admin.operation_article.property_option: --属性--
+admin.operation_article.status_option: --发布状态--
+admin.operation_article.keywords.placeholer: 标题关键词
+admin.operation_article.article_title_th: 资讯标题
+admin.operation_article.category_th: 栏目
+admin.operation_article.updatedTime_th: 更新时间
+admin.operation_article.property_th: 属性
+admin.operation_article.article_property_tooltip: 资讯属性Tooltip
+admin.operation_article.status_th: 状态
+admin.operation_article.operation_th: 操作
+admin.operation_article.not_category: 未分类
+admin.operation_article.Headline: 头
+admin.operation_article.Headline.tips: 设置为头条
+admin.operation_article.recommend: 荐
+admin.operation_article.recommend.tips: 推荐该资讯
+admin.operation_article.Sticky: 顶
+admin.operation_article.Sticky.tips: 置顶该资讯
+admin.operation_article.edit_btn: 编辑
+admin.operation_article.publish_btn: 发布
+admin.operation_article.unpublish_btn: 取消发布
+admin.operation_article.trash_btn: 移至回收站
+admin.operation_article.delete_btn: 永久删除
+admin.operation_article.select_all: 全选
+admin.operation_article.article_title: 资讯
+admin.operation_article.category_title: 栏目名称
+admin.operation_article.category_addr: 栏目地址
+admin.operation_article.category_code: 编码
+admin.operation_article.add_child_category_btn: 添加子栏目
+
+# 小组话题管理
+admin.operation_group.groupstatus_option: 小组状态
+admin.operation_group.group_title.placeholer: 小组名
+admin.operation_group.ownerName.placeholer: 组长
+admin.operation_group.group_number_th: 编号
+admin.operation_group.group_name_th: 名称
+admin.operation_group.ownerName_th: 组长
+admin.operation_group.memberNum_th: 成员数
+admin.operation_group.threadNum_th: 话题数
+admin.operation_group.postNum_th: 回复数
+admin.operation_group.status_th: 状态
+admin.operation_group.operation_th: 操作
+admin.operation_group.group_status.close: 关闭
+admin.operation_group.group_status.open: 开启
+admin.operation_group.edit_btn: 编辑
+admin.operation_group.viewGroup_btn: 查看小组
+admin.operation_group.closeGroup_btn: 关闭小组
+admin.operation_group.openGroup_btn: 开启小组
+admin.operation_group.transferGroup_btn: 转移小组
+admin.operation_group.closeGroup_title: 关闭小组(%groupTitle%)
+admin.operation_group.openGroup_title: 开启小组(%groupTitle%)
+admin.operation_group.modal.enter_user_name: 请输入用户名
+admin.operation_group.modal.transfer_to: 转移给
+admin.operation_group.modal.user_name.data_display: 用户名
+admin.operation_group.modal.enter_user_name.placeholer: 请输入用户名
+admin.operation_group.modal.close_btn: 关闭
+admin.operation_group.modal.confirm_to_transfer_group_btn: 确认转移小组
+admin.operation_group.thread.status_option: 话题状态
+admin.operation_group.thread.threadType_option: 属性
+admin.operation_group.thread.groupName.placeholer: 所属小组
+admin.operation_group.thread.title.placeholer: 话题名称关键词
+admin.operation_group.thread.userName.placeholer: 创建者
+admin.operation_group.thread.thread_number_th: 编号
+admin.operation_group.thread.thread_title_th: 名称
+admin.operation_group.thread.thread_type_th: 属性
+admin.operation_group.thread.nickname_th: 创建者
+admin.operation_group.thread.group_title_th: 所属小组
+admin.operation_group.thread.thread_status.close: 关闭
+admin.operation_group.thread.thread_status.open: 开启
+admin.operation_group.thread.isElite: 精
+admin.operation_group.thread.isStick: 顶
+admin.operation_group.thread.view_btn: 查看
+admin.operation_group.thread.close_btn: 关闭话题
+admin.operation_group.thread.open_btn: 开启话题
+admin.operation_group.thread.delete_title: 永久删除话题
+admin.operation_group.thread.delete_btn: 永久删除
+
+# 邀请管理
+admin.operation_invite.nickname.placeholer: 用户名
+admin.operation_invite.nickname_th: 用户名
+admin.operation_invite.count_th: 邀请人数
+admin.operation_invite.payingUserCount_th: 付费用户数
+admin.operation_invite.payingUserTotalPrice_th: 订单消费总额
+admin.operation_invite.coinAmountPrice_th: 订单虚拟币总额
+admin.operation_invite.amountPrice_th: 订单现金总额
+admin.operation_invite.detail_btn: 详细
+admin.operation_invite.modal.detail_title: 详情
+admin.operation_invite.modal.totalPrice_th: 消费订单总额
+admin.operation_invite.modal.coinAmountTotalPrice_th: 订单虚拟币总额
+admin.operation_invite.modal.amountTotalPrice_th: 订单现金总额
+admin.operation_invite.coupon.recieved_at: 领取时间：
+admin.operation_invite.coupon.start_time.placeholer: 开始时间
+admin.operation_invite.coupon.finished_time.placeholer: 结束时间
+admin.operation_invite.coupon.recieved_at_th: 领取时间
+admin.operation_invite.coupon.rate_th: 面值
+admin.operation_invite.coupon.use_status_th: 使用情况
+admin.operation_invite.coupon.use_status.unused: 未使用
+admin.operation_invite.coupon.use_status.receive: 已领取
+admin.operation_invite.coupon.use_status.used: 已使用
+admin.operation_invite.coupon.useTime_th: 使用时间
+admin.operation_invite.coupon.order_title_th: 订单信息
+
+# 网站公告管理
+admin.operation_announcement.content_th: 公告内容
+admin.operation_announcement.createTime_th: 发布时间
+admin.operation_announcement.endTime_th: 结束时间
+admin.operation_announcement.status_th: 状态
+admin.operation_announcement.status.readyStart: 即将开始
+admin.operation_announcement.status.finished: 已结束
+admin.operation_announcement.status.display: 显示中
+admin.operation_announcement.nickname_th: 发布人
+admin.operation_announcement.operation_th: 操作
+admin.operation_announcement.edit_btn: 编辑
+admin.operation_announcement.delete_btn: 删除
+admin.operation_announcement.modal.create: 新增
+admin.operation_announcement.modal.edit: 编辑
+admin.operation_announcement.modal.announcement: 公告
+admin.operation_announcement.modal.content: 公告内容
+admin.operation_announcement.modal.content_link: 公告内容
+admin.operation_announcement.modal.url_help_block: 以"http://"或"https://"开头
+admin.operation_announcement.modal.tips: >
+  <strong>1.公告将显示在网站首页顶部导航上方</strong>
+  <br>
+  <strong>2.最多可显示3条最新的进行中的通告</strong>
+
+# 全站站内通知
+admin.batch_notification.title: 站内信通知标题
+admin.batch_notification.sendedTime: 发布时间
+admin.batch_notification.createdTime: 创建时间
+admin.batch_notification.nickname: 发布人
+admin.batch_notification.status: 状态
+admin.batch_notification.status.published: 已发布
+admin.batch_notification.status.unpublished: 未发布
+admin.batch_notification.operation: 操作
+admin.batch_notification.edit_btn: 编辑
+admin.batch_notification.delete_btn: 删除
+admin.batch_notification.publish_btn: 发布
+admin.batch_notification.tips: 全站站内通知将以网校通知的形式发给所有用户
+admin.batch_notification.modal.title: 全全站站内通知
+admin.batch_notification.modal.title_field: 通知标题
+admin.batch_notification.modal.body_field: 正文
 
 # 话题
 thread: 话题
@@ -1050,6 +1564,65 @@ share.tsina_share: 分享到新浪微博
 share.qq_share: 分享到QQ好友
 share.qzone_share: 分享到QQ空间
 
+# 话题管理通用key
+admin.classroom_default_name: 班级
+admin.course_thread.select_all_btn: 全选
+admin.course_thread.form.input.keyword.placeholer: 关键词
+admin.course_thread.form.input.author.placeholer: 作者
+admin.course_thread.post_th: 帖子
+admin.course_thread.replay_or_review_th: 回复/查看
+admin.course_thread.type_th: 属性
+admin.course_thread.author_th: 作者
+admin.course_thread.operation_th: 操作
+admin.course_thread.question_td_label: 问
+admin.course_thread.form.keyword_type.title_option: 标题
+admin.course_thread.form.keyword_type.content_option: 内容
+admin.course_thread.form.keyword_type.courseId_option: 课程编号
+admin.course_thread.form.keyword_type.courseTitle_option: 课程名
+admin.course_thread.expand_td: 展开
+admin.course_thread.collapse_td: 收起
+
+# 话题管理
+admin.course_thread.course_thread_manage_tab.form.type_option: 帖子类型
+admin.course_thread.course_thread_manage_tab.form.thread_type_option: 属性
+admin.course_thread.course_thread_manage_tab.form.thread_type.isStick_option: 置顶
+admin.course_thread.course_thread_manage_tab.form.thread_type.isElite_option: 加精
+admin.course_thread.course_thread_manage_tab.task_btn: 任务
+admin.course_thread.course_thread_manage_tab.isElite_btn: 精
+admin.course_thread.course_thread_manage_tab.isStick_btn: 顶
+
+# 问答管理通用key
+admin.course_question.question_th: 问答
+admin.course_question.view_th: 查看
+admin.course_question.createdTime_th: 创建时间
+admin.course_question.replay_or_review_th: 回复/查看
+admin.course_question.task_btn: 任务
+
+# 问答管理
+admin.course_question.td_operations.remind_teachers_btn: 提醒教师
+admin.course_question.td_operations.dropdown.delete_question_btn: 删除问答
+
+# 笔记管理
+admin.course_note.content_th: 内容
+admin.course_note.note: 笔记
+
+#评价管理通用key
+admin.course_review.star: 星
+admin.course_review.one_star: 1星
+admin.course_review.two_stars: 2星
+admin.course_review.three_stars: 3星
+admin.course_review.four_stars: 4星
+admin.course_review.five_stars: 5星
+admin.course_review.rate_option: 评分
+admin.course_review.form.input.courseTitle.placeholer: 课程名
+admin.course_review.form.input.content.placeholer: 评价内容关键词
+admin.course_review.content_th: 评价内容
+admin.course_review.content: 评价
+admin.course_review.rate_th: 评分
+admin.course_review.completed_progress_th: 完成进度
+admin.course_review.classroom_title.placeholer: %classroomName%名
+admin.course_review.classroom_deleted: %classroomName%已删除
+
 # 移动端
 mobile.page_title: 移动学习
 mobile.app_name: 阔知学堂
@@ -1100,7 +1673,7 @@ my.teaching.classroom.manage_btn: 管理%classroom%
 my.teaching.classroom.today_data_title: 今日新增
 my.teaching.classroom.today_data: >
   学员%allCount%  &nbsp;&nbsp;
-  话题%threadCount%  &nbsp;&nbsp; 
+  话题%threadCount%  &nbsp;&nbsp;
   任务完成学习%todayFinishedTaskNum%
 my.teaching.page_title: 在教课程
 my.teaching.course_set.create: 创建课程
