@@ -9,7 +9,6 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
-use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseController extends CourseBaseController
@@ -76,7 +75,7 @@ class CourseController extends CourseBaseController
                 $currentUser['id']
             );
 
-            $courses[$key]['learnTime'] = (int)($learnTime / 60).'小时'.($learnTime % 60).'分钟';
+            $courses[$key]['learnTime'] = (int) ($learnTime / 60).'小时'.($learnTime % 60).'分钟';
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 

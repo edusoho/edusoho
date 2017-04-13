@@ -4,9 +4,9 @@ namespace AppBundle\Controller\Activity;
 
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
-use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\Activity\Service\ActivityLearnLogService;
 
 class VideoController extends BaseController implements ActivityActionInterface
 {

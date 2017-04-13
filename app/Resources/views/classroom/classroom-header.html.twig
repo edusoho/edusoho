@@ -69,7 +69,7 @@
 
           <div class="fsxl hidden-sm mt5 mb10 ml20">
             {% if classroom.expiryMode == 'date' %}
-              <span class="mrm">班级有效期：</span><span>{{ classroom.expiryValue|date('Y-n-d') }}</span>
+              <span class="mrm">班级有效期：</span><span>{{ classroom.expiryValue|date('Y-m-d') }}</span>
             {% elseif classroom.expiryMode == 'days' %}
               <span class="mrm">班级有效天数：</span><span>{{ classroom.expiryValue }}天</span>
             {% endif %}

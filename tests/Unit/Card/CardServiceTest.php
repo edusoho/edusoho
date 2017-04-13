@@ -96,6 +96,13 @@ class CardServiceTest extends BaseTestCase
         $this->assertCount(2, $cardLists);
     }
 
+    public function testFindCurrentUserAvailableCouponForTargetTypeAndTargetId()
+    {
+        $result = $this->getCardService()->findCurrentUserAvailableCouponForTargetTypeAndTargetId('course', 1);
+
+        $this->assertEmpty($result);
+    }
+
     /**
      * @return CardService
      */

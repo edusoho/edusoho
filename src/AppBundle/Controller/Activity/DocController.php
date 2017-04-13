@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller\Activity;
 
-use AppBundle\Controller\BaseController;
-use Biz\Activity\Service\ActivityService;
 use Biz\File\Service\FileImplementor;
 use Biz\File\Service\UploadFileService;
-use Biz\MaterialLib\Service\MaterialLibService;
+use AppBundle\Controller\BaseController;
+use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\MaterialLib\Service\MaterialLibService;
 
 class DocController extends BaseController implements ActivityActionInterface
 {
@@ -78,7 +78,7 @@ class DocController extends BaseController implements ActivityActionInterface
     }
 
     /**
-     * @param $doc
+     * @param  $doc
      *
      * @return array result and error tuple
      */
@@ -86,12 +86,10 @@ class DocController extends BaseController implements ActivityActionInterface
     {
         $file = $this->getUploadFileService()->getFullFile($doc['mediaId']);
 
-        if (empty($file)) {
-            throw $this->createNotFoundException();
-        }
+        if (empty($file) || empty($file['globalId'])) {
+            $error = array('code' => 'error', 'message' => '抱歉，文档文件不存在，暂时无法学习。');
 
-        if (empty($file['globalId'])) {
-            throw $this->createNotFoundException();
+            return array(array(), $error);
         }
 
         if ($file['type'] != 'document') {
