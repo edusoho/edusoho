@@ -1588,7 +1588,3 @@ my.learning.notebook_menu: 我的笔记
 my.learning.homework_menu: 我的作业
 my.learning.testpaper_menu: 我的考试
 my.learning.group_menu: 我的小组
-
-#系统运营
-admin.article_setting.name: 频道名称
-admin.article_setting.pageNum: 列表每页资讯数
