@@ -29,13 +29,14 @@ class HomeworkItemMigrate extends AbstractMigrate
 
     private function insertHomeworkItem($page)
     {
-        $countSql = "SELECT count(id) FROM `homework_item` where `id` not in (select `migrateItemId` from `testpaper_item_v8` WHERE type = 'homework')";
+        $countSql = "SELECT count(id) FROM `homework_item` ";
         $count = $this->getConnection()->fetchColumn($countSql);
 
         if ($count == 0) {
             return;
         }
 
+        $start = $this->getStart($page);
         $sql = "INSERT INTO testpaper_item_v8 (
             testId,
             seq,
@@ -56,9 +57,14 @@ class HomeworkItemMigrate extends AbstractMigrate
             missScore,
             id,
             'homework' FROM homework_item
-            WHERE id NOT IN (SELECT `migrateItemId` FROM `testpaper_item_v8` WHERE type='homework') order by id limit 0, {$this->perPageCount};";
+             order by id limit {$start}, {$this->perPageCount};";
         $this->getConnection()->exec($sql);
 
-        return $page + 1;
+        $nextPage = $this->getNextPage($count, $page);
+        if (empty($nextPage)) {
+            return;
+        }
+
+        return $nextPage;
     }
 }
