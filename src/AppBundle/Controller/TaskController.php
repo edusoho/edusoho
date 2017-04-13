@@ -437,7 +437,11 @@ class TaskController extends BaseController
                 throw $this->createNotFoundException('you can not preview this task ');
             }
         } else {
-            $task = $this->getTaskService()->tryTakeTask($taskId);
+            if ($this->getCourseService()->hasCourseManagerRole($courseId)) {
+                $task = $this->getTaskService()->getTask($taskId);
+            }else{
+                $task = $this->getTaskService()->tryTakeTask($taskId);
+            }
         }
         if (empty($task)) {
             throw $this->createNotFoundException(sprintf('task not found #%d', $taskId));
