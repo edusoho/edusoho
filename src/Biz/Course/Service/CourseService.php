@@ -209,5 +209,5 @@ interface CourseService
 
     public function hitCourse($courseId);
 
-    public function getUserLearnProcess($courseId, $userId);
+    public function getUserLearningProcess($courseId, $userId);
 }
