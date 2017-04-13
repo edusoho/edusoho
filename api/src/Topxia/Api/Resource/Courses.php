@@ -60,7 +60,7 @@ class Courses extends BaseResource
             ),
         );
 
-        if (!empty($orderBy[$conditions['orderType']])) {
+        if (!empty($conditions['orderType']) && !empty($orderBy[$conditions['orderType']])) {
             $orderBy = $orderBy[$conditions['orderType']];
         } else {
             $orderBy = array('createdTime' => 'DESC');
@@ -72,10 +72,10 @@ class Courses extends BaseResource
     {
         $conditions['status'] = 'published';
         $conditions['parentId'] = 0;
-        if ($conditions['type'] != 'live') {
+        if (!empty($conditions['type']) && $conditions['type'] != 'live') {
             $conditions['type'] = 'normal';
         }
-        if ($conditions['orderType'] == 'recommend') {
+        if (!empty($conditions['orderType']) && $conditions['orderType'] == 'recommend') {
             $conditions['recommended'] = 1;
         }
         $conditions = ArrayToolkit::parts($conditions, array(
