@@ -715,31 +715,32 @@ group.detail.hot_group: 热门小组
 group.detail.hot_group_empty: 暂无小组信息！
 
 #后台首页通用key
-unknown: 未知
+site.data.unknown: 未知
 admin.homepage.more_btn: 更多
-admin.homepage.loadig_date_tips: 正在载入数据，请稍等。
+admin.homepage.loadig_data_tips: 正在载入数据，请稍等。
+admin.homepage.statistic.week: 最近7天
+admin.homepage.statistic.month: 最近30天
 
 # 后台首页
 admin.navbar.header.console_btn: 管理后台
 admin.navbar.header.often_used_btn: 常用
-admin.navbar.header.often_used.dropdown_menu.add_current_page: 添加当前页面为常用功能
-admin.navbar.header.often_used.dropdown_menu.added_current_page: 当前页面已添加
-admin.navbar.header.often_used.dropdown_menu.delete_often_used_link_btn_title: 删除常用链接
+admin.navbar.header.often_used.add_current_page: 添加当前页面为常用功能
+admin.navbar.header.often_used.added_tips: 当前页面已添加
+admin.navbar.header.often_used.delete_tips: 删除常用链接
 admin.navbar.header.home_btn: 回首页
 admin.navbar.header.dropdown_menu.exit_btn: 退出
 admin.fixed_bar.product: 产品
 admin.fixed_bar.feedback: 反馈
 admin.hompage.html_head_title: 管理后台
 admin.homepage.setting_domain_btn: 设置
-admin.homepage.cloud_notic.unknown_time: 未知时间
+admin.homepage.cloud_notice.unknown_time: 未知时间
 admin.homepage.cloud_notice: >
-  欢迎使用，试用将于<span style="color:#fed032;">%endTime%</span>到期,剩余<span style="color:#fed032;">%remainDays%</span>天。
+  欢迎使用，试用将于 %endTime% 到期,剩余 %remainDays% 天。
   </br>
   您可以联系销售人员购买授权版本，或者延长试用期限。电话：4008041114 或 
-  <a id="BizQQWPA" href="javascript:" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])" style='text-decoration:none;'>QQ：800023860 </a>。
 admin.homepage.admins_announcements_title: 站长公告
 admin.homepage.admins_announcements_empty: 暂无公告
-admin.homepage.status_bar_title: 状态栏
+admin.homepage.status_bar.content_title: 状态栏
 admin.homepage.status_bar.system_version_title: 系统版本
 admin.homepage.status_bar.system_version_status.have_update: 有更新
 admin.homepage.status_bar.school_app_title: 网校应用
@@ -797,9 +798,6 @@ admin.homepage.todays_data.total: 总数
 admin.homepage.todays_data.new_students: 新增学员
 admin.homepage.todays_data.new_vip_members: 新增会员
 admin.homepage.todays_data.thread_un_answer: 未回复回答
-admin.homepage.todays_data.thread_un_answer: 未回复回答
-admin.homepage.statistic.week: 最近7天
-admin.homepage.statistic.month: 最近30天
 admin.homepage.order_statistic_title: 订单统计
 admin.homepage.order_statistic.tips: >
   <div class="popover-content hidden">
@@ -814,8 +812,7 @@ admin.homepage.order_statistic.tips: >
   </div>
 admin.homepage.pay_order_statistic_title: 付费订单统计
 admin.homepage.task_finish_statistic_title: 任务完成数
-admin.homepage.task_finish_statistic.tips: >
-  <div class="content">点击"学过了"的任务数量</div>
+admin.homepage.task_finish_statistic.tips: 点击"学过了"的任务数量
 admin.homepage.course_ranking_title: 课程排行榜
 admin.homepage.latest_question_title: 最新问答
 admin.homepage.latest_question.tr.question_th: 问题
@@ -917,6 +914,65 @@ share.weixin_share: 分享到微信
 share.tsina_share: 分享到新浪微博
 share.qq_share: 分享到QQ好友
 share.qzone_share: 分享到QQ空间
+
+# 话题管理通用key
+admin.classroom_default_name: 班级
+admin.course_thread.select_all_btn: 全选
+admin.course_thread.form.input.keyword.placeholer: 关键词
+admin.course_thread.form.input.author.placeholer: 作者
+admin.course_thread.post_th: 帖子
+admin.course_thread.replay_or_review_th: 回复/查看
+admin.course_thread.type_th: 属性
+admin.course_thread.author_th: 作者
+admin.course_thread.operation_th: 操作
+admin.course_thread.question_td_label: 问
+admin.course_thread.form.keyword_type.title_option: 标题
+admin.course_thread.form.keyword_type.content_option: 内容
+admin.course_thread.form.keyword_type.courseId_option: 课程编号
+admin.course_thread.form.keyword_type.courseTitle_option: 课程名
+admin.course_thread.expand_td: 展开
+admin.course_thread.collapse_td: 收起
+
+# 话题管理
+admin.course_thread.course_thread_manage_tab.form.type_option: 帖子类型
+admin.course_thread.course_thread_manage_tab.form.thread_type_option: 属性
+admin.course_thread.course_thread_manage_tab.form.thread_type.isStick_option: 置顶
+admin.course_thread.course_thread_manage_tab.form.thread_type.isElite_option: 加精
+admin.course_thread.course_thread_manage_tab.task_btn: 任务
+admin.course_thread.course_thread_manage_tab.isElite_btn: 精
+admin.course_thread.course_thread_manage_tab.isStick_btn: 顶
+
+# 问答管理通用key
+admin.course_question.question_th: 问答
+admin.course_question.view_th: 查看
+admin.course_question.createdTime_th: 创建时间
+admin.course_question.replay_or_review_th: 回复/查看
+admin.course_question.task_btn: 任务
+
+# 问答管理
+admin.course_question.td_operations.remind_teachers_btn: 提醒教师
+admin.course_question.td_operations.dropdown.delete_question_btn: 删除问答
+
+# 笔记管理
+admin.course_note.content_th: 内容
+admin.course_note.note: 笔记
+
+#评价管理通用key
+admin.course_review.star: 星
+admin.course_review.one_star: 1星
+admin.course_review.two_stars: 2星
+admin.course_review.three_stars: 3星
+admin.course_review.four_stars: 4星
+admin.course_review.five_stars: 5星
+admin.course_review.rate_option: 评分
+admin.course_review.form.input.courseTitle.placeholer: 课程名
+admin.course_review.form.input.content.placeholer: 评价内容关键词
+admin.course_review.content_th: 评价内容
+admin.course_review.content: 评价
+admin.course_review.rate_th: 评分
+admin.course_review.completed_progress_th: 完成进度
+admin.course_review.classroom_title.placeholer: %classroomName%名
+admin.course_review.classroom_deleted: %classroomName%已删除
 
 # 移动端
 mobile.page_title: 移动学习
