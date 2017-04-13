@@ -35,7 +35,7 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
         if (empty($task)) {
             return;
         }
-        if( $time >0 ){
+        if ($time > 0) {
             $this->getTaskService()->doTask($task['id'], $time);
         }
 
