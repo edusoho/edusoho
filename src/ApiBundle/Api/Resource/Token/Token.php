@@ -14,6 +14,8 @@ use Biz\User\Service\TokenService;
 
 class Token extends Resource
 {
+    private $encryptionTypes = array('XXTEA');
+
     /**
      * @ApiConf(isRequiredAuth=false)
      */
@@ -21,7 +23,12 @@ class Token extends Resource
     {
         $username = $request->request->get('username');
         $password =  $request->request->get('password');
-        $password = EncryptionToolkit::XXTEADecrypt(base64_decode($password), 'edusoho');
+        $encryptionType = $request->request->get('encryptionType');
+
+        if ($encryptionType ) {
+            $password = $this->decryptPassword($password, $encryptionType);
+        }
+
         $user = $this->checkParams($username, $password);
 
         $args = array(
@@ -73,6 +80,15 @@ class Token extends Resource
             $browser = $bdu->getBrowser();
             return $browser ? : TokenService::DEVICE_UNKNOWN;
         }
+    }
+
+    private function decryptPassword($password, $encryptionType)
+    {
+        if (!in_array($encryptionType, $this->encryptionTypes)) {
+            throw new InvalidArgumentException('不正确的加密方式');
+        }
+
+        return EncryptionToolkit::XXTEADecrypt(base64_decode($password), 'edusoho');
     }
 
     private function getTokenService()
