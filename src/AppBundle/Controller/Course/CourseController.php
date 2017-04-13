@@ -92,18 +92,15 @@ class CourseController extends CourseBaseController
 
     private function calculateCategoryTag($course)
     {
-        if ($course['isFree']) {
-            return null;
-        }
         $tasks = $this->getTaskService()->findTasksByCourseId($course['id']);
         if (empty($tasks)) {
             return null;
         }
         $tag = null;
         foreach ($tasks as $task) {
-            if ($task['type'] == 'video' && $course['tryLookable']) {
+            if ($task['type'] === 'video' && $course['tryLookable']) {
                 $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-                if (!empty($activity['ext']['file']) && $activity['ext']['file']['storage'] == 'cloud') {
+                if (!empty($activity['ext']['file']) && $activity['ext']['file']['storage'] === 'cloud') {
                     $tag = '试看';
                 }
             }
@@ -119,14 +116,31 @@ class CourseController extends CourseBaseController
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
 
+        if ($course['parentId'] > 0) {
+            $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($course['courseSetId']);
+            if (!empty($classroomRef)) {
+                $user = $this->getCurrentUser();
+                $member = $this->getClassroomService()->getClassroomMember($classroomRef['classroomId'], $user['id']);
+                if ($member['deadline'] > 0 && $member['deadline'] < time()) {
+                    return $this->render(
+                        'course/member/classroom-course-expired.html.twig',
+                        array(
+                            'course' => $course,
+                            'member' => $member,
+                        )
+                    );
+                }
+
+                return $this->createJsonResponse(true);
+            }
+        }
+
         if ($this->getMemberService()->isMemberNonExpired($course, $member)) {
             return $this->createJsonResponse(true);
         }
 
-        $type = $course['parentId'] > 0 ? 'classroom' : 'normal';
-
         return $this->render(
-            "course/member/{$type}-course-expired.html.twig",
+            'course/member/normal-course-expired.html.twig',
             array(
                 'course' => $course,
                 'member' => $member,

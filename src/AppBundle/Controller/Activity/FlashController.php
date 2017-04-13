@@ -2,24 +2,27 @@
 
 namespace AppBundle\Controller\Activity;
 
+use Biz\File\Service\UploadFileService;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
-use Biz\File\Service\UploadFileService;
-use Biz\MaterialLib\Service\MaterialLibService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\MaterialLib\Service\MaterialLibService;
 
 class FlashController extends BaseController implements ActivityActionInterface
 {
     public function showAction(Request $request, $activity)
     {
         $flash = $this->getActivityService()->getActivityConfig('flash')->get($activity['mediaId']);
-        $file = $this->getUploadFileService()->getFullFile($flash['mediaId']);
-        $result = $this->getMaterialLibService()->player($file['globalId']);
-        $flashMedia['uri'] = $result['url'];
+
+        if (!empty($flash['file'])) {
+            $file = $flash['file'];
+            $result = $this->getMaterialLibService()->player($file['globalId']);
+            $flashMedia['uri'] = $result['url'];
+        }
 
         return $this->render('activity/flash/index.html.twig', array(
             'flash' => $flash,
-            'flashMedia' => $flashMedia,
+            'flashMedia' => empty($flashMedia) ? array() : $flashMedia,
         ));
     }
 

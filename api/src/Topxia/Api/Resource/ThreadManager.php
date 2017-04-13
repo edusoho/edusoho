@@ -55,7 +55,7 @@ class ThreadManager extends BaseResource
         $lessons = ArrayToolkit::index($lessons, 'id');
 
         foreach ($threads as $key => &$thread) {
-            $lesson = $lessons[$thread['taskId']];
+            $lesson = empty($lessons[$thread['taskId']]) ? array() : $lessons[$thread['taskId']];
             $lessonTitle = empty($lesson) ? '课程提问' : '课时:'.$lesson['number'].$lesson['title'];
             $thread['lessonTitle'] = $lessonTitle;
             $thread['isTeacherAnswer'] = $this->getCourseThreadService()->getPostCountByuserIdAndThreadId($user['id'], $thread['id']);

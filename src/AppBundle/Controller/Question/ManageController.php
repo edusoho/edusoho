@@ -298,7 +298,7 @@ class ManageController extends BaseController
         ));
     }
 
-    public function pickedQuestionAction(Request $request, $courseSetId, $questionId)
+    public function pickedQuestionAction(Request $request, $courseSetId)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 

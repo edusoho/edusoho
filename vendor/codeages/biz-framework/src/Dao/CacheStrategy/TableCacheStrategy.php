@@ -12,18 +12,16 @@ class TableCacheStrategy extends AbstractCacheStrategy implements CacheStrategy
 {
     private $redis;
 
-    private $logger;
-
-    private $versions;
+    private $storage;
 
     const LIFE_TIME = 3600;
 
     const MAX_WAVE_CACHEABLE_TIMES = 32;
 
-    public function __construct($redis, $logger)
+    public function __construct($redis, $storage)
     {
         $this->redis = $redis;
-        $this->logger = $logger;
+        $this->storage = $storage;
     }
 
     public function beforeGet(GeneralDaoInterface $dao, $method, $arguments)
@@ -140,16 +138,16 @@ class TableCacheStrategy extends AbstractCacheStrategy implements CacheStrategy
         $key = sprintf('dao:%s:v', $dao->table());
 
         // 跑单元测试时，因为每个test会flushdb，而TableCacheStrategy又是单例，这里还缓存着原来的结果，会有问题，暂时注释，待重构
-        // if (isset($this->versions[$key])) {
-        //     return $this->versions[$key];
-        // }
+        if (isset($this->storage[$key])) {
+            return $this->storage[$key];
+        }
 
         $version = $this->redis->get($key);
         if ($version === false) {
             $version = $this->redis->incr($key);
         }
 
-        $this->versions[$key] = $version;
+        $this->storage[$key] = $version;
 
         return $version;
     }
@@ -157,7 +155,7 @@ class TableCacheStrategy extends AbstractCacheStrategy implements CacheStrategy
     private function upTableVersion($dao)
     {
         $key = sprintf('dao:%s:v', $dao->table());
-        $version = $this->versions[$key] = $this->redis->incr($key);
+        $version = $this->storage[$key] = $this->redis->incr($key);
 
         return $version;
     }
