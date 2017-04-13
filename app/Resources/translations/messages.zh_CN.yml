@@ -987,6 +987,52 @@ admin.setting.navigation.isNewWin.yes: 是
 admin.setting.navigation.isNewWin.no: 否
 admin.setting.navigation.status.open: 开启
 admin.setting.navigation.status.closed: 关闭
+admin.setting.navigation.edit_btn: 编辑
+admin.setting.navigation.add_child_menu_btn: 添加二级导航
+admin.setting.consult.customer_service_function: 客服功能
+admin.setting.consult.floating_bar: 浮动条颜色
+admin.setting.consult.delete_btn: 删除
+admin.setting.consult.add_btn: 删除
+admin.setting.consult.customer_service_settings: 客服设置
+admin.setting.consult.get_online_service_link.tips: 如何获取在线咨询链接？
+admin.setting.consult.customer_service_settings.tips: >
+  1，登录 <a target="_blank" href="https://id.b.qq.com/login/index">https://id.b.qq.com/login/index</a>。
+  <br>
+  2，登录后，找到【营销QQ】-【在线代码生成】，选择【在论坛/微博发布在线咨询链接】。（包含“%http%://”）
+admin.setting.consult.QQ_customer_service_name.placeholer: QQ客服名称
+admin.setting.consult.QQ_number.placeholer: QQ号
+admin.setting.consult.enter_link_addr.placeholer: 若使用营销QQ，请填入在线咨询链接
+admin.setting.consult.QQ_group_setting: QQ群设置
+admin.setting.consult.QQ_group_setting.tips: >
+  访问<a target="_blank" href="http://qun.qq.com/join.html">http://qun.qq.com/join.html</a>获取QQ群直接加入网页代码。
+admin.setting.consult.QQ_group_name.placeholer: QQ群名称
+admin.setting.consult.QQ_group_number.placeholer: QQ群号
+admin.setting.consult.code_join_to_QQ_group.placeholer: QQ群直接加入网页代码(选填)
+admin.setting.consult.phone_setting: 联系电话设置
+admin.setting.consult.work_time: 工作时间
+admin.setting.consult.Contact: 联系人
+admin.setting.consult.phone: 联系电话
+admin.setting.consult.other_setting: 其他设置
+admin.setting.consult.WeChat_QR_code: 微信二维码
+admin.setting.consult.other_setting.help_block: 请上传png, gif, jpg格式的图片文件。
+admin.setting.consult.work_email: 工作邮箱
+admin.setting.es_bar.esbar_function: 侧边栏功能
+admin.setting.es_bar.esbar_function.open: 开启
+admin.setting.es_bar.esbar_function.closed: 关闭
+admin.setting.es_bar.help_block: 网校开启侧边栏后，客服的悬浮框会失效
+admin.setting.share.article_share_content: 资讯分享内容
+admin.setting.share.Variables.tips: 变量说明：
+admin.setting.share.as_article_title.tips: 为资讯标题
+admin.setting.share.as_online_school_name.tips: 为网校名称
+admin.setting.share.course_share_content: 课程分享内容
+admin.setting.share.as_course_name: 为课程名称
+admin.setting.share.group_share_content: 小组分享内容
+admin.setting.share.as_group_name: 为小组名称
+admin.setting.share.as_thread_name: 为话题名称
+admin.setting.share.classroom_share_content: 班级分享内容
+admin.setting.share.as_classroom_name: 为班级名称
+admin.setting.security.IFrame_white_domain: IFrame白名单域名
+admin.setting.security.help_block: 在课程简介、课时内容等区域允许添加iframe代码，以引入第三方网站的组件。为保障网校安全，只允许白名单域名范围内的iframe网址。一行一个域名，请不要添加http://前缀。
 
 
 # 话题
