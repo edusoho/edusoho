@@ -56,6 +56,11 @@ class Live extends Activity
         return $this->getLiveActivityService()->getLiveActivity($targetId);
     }
 
+    public function find($targetIds)
+    {
+        return $this->getLiveActivityService()->findLiveActivitiesByIds($targetIds);
+    }
+
     public function delete($targetId)
     {
         return $this->getLiveActivityService()->deleteLiveActivity($targetId);

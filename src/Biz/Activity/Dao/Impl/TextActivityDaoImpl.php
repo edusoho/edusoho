@@ -15,4 +15,9 @@ class TextActivityDaoImpl extends GeneralDaoImpl implements TextActivityDao
             'timestamps' => array('createdTime', 'updatedTime'),
         );
     }
+
+    public function findByIds($Ids)
+    {
+        return $this->findInField('id', $Ids);
+    }
 }

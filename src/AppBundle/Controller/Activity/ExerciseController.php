@@ -71,7 +71,7 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
         $activity = $this->getActivityService()->getActivity($id);
         $course = $this->getCourseService()->getCourse($courseId);
         $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
-
+        unset($exercise['id']);
         $activity = array_merge($activity, $exercise);
 
         $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes(array('courseSetId' => $course['courseSetId']));
@@ -165,13 +165,12 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
             }
 
             $conditions = array(
-                'categoryId' => $task['categoryId'],
+                'categoryId' => $task[0]['categoryId'],
                 'mode' => 'lesson',
             );
             $lessonTask = $this->getCourseTaskService()->searchTasks($conditions, null, 0, 1);
-
             if ($lessonTask) {
-                return array('courseId' => $lessonTask['courseId'], 'lessonId' => $lessonTask['id']);
+                return array('courseId' => $lessonTask[0]['courseId'], 'lessonId' => $lessonTask[0]['id']);
             }
 
             return $rangeDefault;

@@ -28,11 +28,15 @@ class ExceptionListener
         $problem = $this->container->get('Topxia.RepairProblem', ContainerInterface::NULL_ON_INVALID_REFERENCE);
         $exception = $event->getException();
         $request = $event->getRequest();
+        $statusCode = $this->convertStateCode($exception);
 
         if (!$request->isXmlHttpRequest()) {
+            if ($exception instanceof HttpException) {
+                return;
+            }
             $event->setException(
                 new HttpException(
-                    $this->convertStateCode($exception),
+                    $statusCode,
                     $exception->getMessage(),
                     $exception->getPrevious()
                 )
@@ -49,12 +53,6 @@ class ExceptionListener
             $event->setResponse(new JsonResponse(array('result' => $result)));
 
             return;
-        }
-
-        $statusCode = $exception->getCode();
-
-        if (!array_key_exists($statusCode, Response::$statusTexts)) {
-            $statusCode = 500;
         }
 
         $error = array('name' => 'Error', 'message' => $exception->getMessage());

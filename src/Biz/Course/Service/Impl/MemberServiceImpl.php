@@ -277,7 +277,12 @@ class MemberServiceImpl extends BaseService implements MemberService
             return false;
         }
 
-        $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']);
+        if (!empty($member['classroomId']) && $member['joinedType'] == 'classroom') {
+            $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
+            $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']);
+        } else {
+            $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']);
+        }
 
         return $status === 'ok';
     }
