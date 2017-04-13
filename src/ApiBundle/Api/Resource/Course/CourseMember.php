@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
+use ApiBundle\Api\Exception\ApiNotFoundException;
 use ApiBundle\Api\Exception\InvalidArgumentException;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
 use ApiBundle\Api\Resource\Resource;
@@ -52,17 +53,43 @@ class CourseMember extends Resource
             throw new ResourceNotFoundException('教学计划不存在');
         }
 
+        $joinWay = $request->request->get('joinWay', 'free');
+        $success = false;
+        if ($joinWay == 'free') {
+            $success = $this->freeJoin($course);
+        }
+
+        if ($joinWay == 'vip') {
+            $success = $this->vipJoin($course);
+        }
+
+        return array('success' => $success);
+    }
+
+    private function freeJoin($course)
+    {
         if ($course['price'] > 0) {
-            throw new InvalidArgumentException('不是免费课程,不能直接加入');
+            throw new ApiNotFoundException('不是免费课程,不能直接加入', 1001);
         }
 
         $member = $this->service('Course:MemberService')->becomeStudent($course['id'], $this->getCurrentUser()->id);
 
         if ($member) {
-            return array('success' => true);
+            return true;
         }
 
-        return array('success' => false);
+        return false;
+    }
+
+    private function vipJoin($course)
+    {
+        list($success, $message) = $this->service('VipPlugin:Vip:VipFacadeService')->joinCourse($course['id']);
+
+        if ($success) {
+            return true;
+        } else {
+            throw new ApiNotFoundException($message, 1002);
+        }
     }
 
 }
