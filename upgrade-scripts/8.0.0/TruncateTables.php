@@ -33,5 +33,9 @@ class TruncateTables extends AbstractMigrate
                 $this->exec("TRUNCATE TABLE {$table};");
             }
         }
+
+        $this->exec("
+            DELETE FROM `course_chapter` WHERE TYPE = 'lesson';
+        ");
     }
 }
