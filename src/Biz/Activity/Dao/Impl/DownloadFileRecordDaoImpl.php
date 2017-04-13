@@ -15,4 +15,9 @@ class DownloadFileRecordDaoImpl extends GeneralDaoImpl implements DownloadFileRe
             'timestamps' => array('createdTime'),
         );
     }
+
+    public function findByIds($Ids)
+    {
+        return $this->findInField('id', $Ids);
+    }
 }

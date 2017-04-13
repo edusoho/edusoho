@@ -5,6 +5,7 @@ namespace Biz\Activity\Type;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\DocActivityDao;
+use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\File\Service\UploadFileService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\ActivityLearnLogService;
@@ -111,6 +112,33 @@ class Doc extends Activity
         $activity['file'] = $this->getUploadFileService()->getFullFile($activity['mediaId']);
 
         return $activity;
+    }
+
+    public function find($targetIds)
+    {
+        $docActivities = $this->getDocActivityDao()->findByIds($targetIds);
+        $mediaIds = ArrayToolkit::column($docActivities, 'mediaId');
+        try {
+            $files = $this->getUploadFileService()->findFilesByIds(
+                $mediaIds,
+                $showCloud = 1
+            );
+        } catch (CloudAPIIOException $e) {
+            $files = array();
+        }
+
+        if (empty($files)) {
+            return $docActivities;
+        }
+        $files = ArrayToolkit::index($files, 'id');
+        array_walk(
+            $docActivities,
+            function (&$videoActivity) use ($files) {
+                $videoActivity['file'] = isset($files[$videoActivity['mediaId']]) ? $files[$videoActivity['mediaId']] : null;
+            }
+        );
+
+        return $docActivities;
     }
 
     /**

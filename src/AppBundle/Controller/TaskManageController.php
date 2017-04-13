@@ -177,6 +177,11 @@ class TaskManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $task = $request->request->all();
+
+            if (!isset($task['isOptional'])) {
+                $task['isOptional'] = 0;
+            }
+
             $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));
 
             return $this->createJsonResponse(array('append' => false, 'html' => ''));

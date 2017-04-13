@@ -34,7 +34,7 @@ class TestpaperActivityDaoTest extends BaseDaoTestCase
         $expectedResults = array($expectedActivity1, $expectedActivity2);
         $ids = array(1, 2);
 
-        $results = $this->getDao()->findActivitiesByIds($ids);
+        $results = $this->getDao()->findByIds($ids);
         foreach ($results as $key => $result) {
             $this->assertArrayEquals($result, $expectedResults[$key], $this->getCompareKeys());
         }
