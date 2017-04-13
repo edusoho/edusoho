@@ -16,12 +16,12 @@ class TestpaperActivityServiceImpl extends BaseService implements TestpaperActiv
 
     public function findActivitiesByIds($ids)
     {
-        return $this->getTestpaperActivityDao()->findActivitiesByIds($ids);
+        return $this->getTestpaperActivityDao()->findByIds($ids);
     }
 
     public function findActivitiesByMediaIds($mediaIds)
     {
-        $activities = $this->getTestpaperActivityDao()->findActivitiesByMediaIds($mediaIds);
+        $activities = $this->getTestpaperActivityDao()->findByMediaIds($mediaIds);
 
         return ArrayToolkit::index($activities, 'mediaId');
     }

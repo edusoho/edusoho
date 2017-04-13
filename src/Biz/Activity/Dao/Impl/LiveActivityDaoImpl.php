@@ -12,4 +12,9 @@ class LiveActivityDaoImpl extends GeneralDaoImpl implements LiveActivityDao
     public function declares()
     {
     }
+
+    public function findByIds($Ids)
+    {
+        return $this->findInField('id', $Ids);
+    }
 }
