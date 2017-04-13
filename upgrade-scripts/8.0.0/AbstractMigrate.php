@@ -62,7 +62,7 @@ abstract class AbstractMigrate
     {
         $sql = "select * from cloud_app where code='MAIN';";
         $result = $this->getConnection()->fetchAssoc($sql);
-        return version_compare($result['fromVersion'], '7.5.14', '>=');
+        return isset($result['protocol']) && $result['protocol'] == 3;
     }
 
     protected function isCrontabJobExist($code)

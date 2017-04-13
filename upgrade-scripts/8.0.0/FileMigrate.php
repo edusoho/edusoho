@@ -4,20 +4,24 @@ use Topxia\Service\Common\ServiceKernel;
 
 class FileMigrate extends AbstractMigrate
 {
+
+    private $end = 46;
+    private $start = 1;
+
     public function update($page)
     {
 
-        if($page == 25){
+        if($page == $this->end + 1){
             $this->extractUpgradeFiles();
             return $page + 1;
         }
 
-        if($page == 26){
+        if($page == $this->end + 2){
             $this->copyNoneSideEffectFiles();
             return $page + 1;
         }
 
-        if($page == 27){
+        if($page == $this->end + 3){
             $this->copyAndOverwriteUpgradeFiles();
             $this->rebuildCloudSearchIndex();
             $this->upgradeEduSohoApp();
@@ -30,7 +34,7 @@ class FileMigrate extends AbstractMigrate
             exit(0);
         }
 
-        $filepath = 'http://ojc8jepus.bkt.clouddn.com/x8-package/x8-'.$page.'.zip?' . mt_rand(0, mt_getrandmax());
+        $filepath = 'http://ojc8jepus.bkt.clouddn.com/x8-package/v2-'.$page.'.zip';
 
         $dir = $this->kernel->getParameter('kernel.root_dir').'/data/upgrade';
 
@@ -51,7 +55,7 @@ class FileMigrate extends AbstractMigrate
         $filesystem = new \Symfony\Component\Filesystem\Filesystem();
         $tmpUnzipDir = $this->kernel->getParameter('kernel.root_dir').'/data/upgrade/es-8.0';
 
-        foreach (range(1, 24) as $page) {
+        foreach (range($this->start, $this->end) as $page) {
             $zip = new \ZipArchive;
             $filepath = $this->kernel->getParameter('kernel.root_dir').'/data/upgrade/upgrade-' . $page . '.zip';
 
@@ -86,6 +90,7 @@ class FileMigrate extends AbstractMigrate
 
         $filesystem->mirror($sourceDir.'/web/static-dist', $edusohoDir.'/web/static-dist', null, array(
             'override' => true,
+            'delete' => true,
             'copy_on_windows' => true,
         ));
 
@@ -120,6 +125,7 @@ class FileMigrate extends AbstractMigrate
 
         $filesystem->mirror($sourceDir.'/vendor', $edusohoDir.'/vendor', null, array(
             'override' => true,
+            'delete' => true,
             'copy_on_windows' => true,
         ));
 
