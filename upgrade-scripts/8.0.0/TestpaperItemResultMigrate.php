@@ -48,13 +48,14 @@ class TestpaperItemResultMigrate extends AbstractMigrate
 
     private function insertTestpaperItemResult($page)
     {
-        $countSql = 'SELECT count(id) FROM `testpaper_item_result` where `id` not in (select `id` from `testpaper_item_result_v8`);';
+        $countSql = 'SELECT count(id) FROM `testpaper_item_result`';
         $count = $this->getConnection()->fetchColumn($countSql);
 
         if ($count == 0) {
             return;
         }
 
+        $start = $this->getStart($page);
         $sql = "INSERT INTO testpaper_item_result_v8 (
             id,
             itemId,
@@ -83,9 +84,14 @@ class TestpaperItemResultMigrate extends AbstractMigrate
             pId,
             id,
             'testpaper'
-            FROM testpaper_item_result WHERE id NOT IN (SELECT id FROM testpaper_item_result_v8 WHERE type = 'testpaper') order by id limit 0, {$this->perPageCount};";
+            FROM testpaper_item_result order by id limit {$start}, {$this->perPageCount};";
         $this->getConnection()->exec($sql);
 
-        return $page + 1;
+        $nextPage = $this->getNextPage($count, $page);
+        if (empty($nextPage)) {
+            return;
+        }
+
+        return $nextPage;
     }
 }
