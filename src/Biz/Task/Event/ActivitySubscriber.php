@@ -26,18 +26,17 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
     public function onActivityDoing(Event $event)
     {
         $task = $event->getArgument('task');
-        $data = $event->getArgument('data');
-        $data['timeStep'] = time() - $data['lastTime'];
-
-        if ($data['timeStep'] >= TaskService::LEARN_TIME_STEP) {
-            $data['timeStep'] = TaskService::LEARN_TIME_STEP;
+        $lastTime = $event->getArgument('lastTime');
+        $time = time() - $lastTime;
+        if ($time >= TaskService::LEARN_TIME_STEP) {
+            $time = TaskService::LEARN_TIME_STEP;
         }
 
         if (empty($task)) {
             return;
         }
-        if( $data['timeStep'] >0 ){
-            $this->getTaskService()->doTask($task['id'], $data['timeStep']);
+        if( $time >0 ){
+            $this->getTaskService()->doTask($task['id'], $time);
         }
 
         if ($this->getTaskService()->isFinished($task['id'])) {
