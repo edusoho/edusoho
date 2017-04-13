@@ -36,7 +36,7 @@ class OrderInfo extends Resource
             $vipSetting = $this->service('System:SettingService')->get('vip');
             $defaultUnitType = 'month';
             $defaultDuration = 3;
-            if ($vipSetting) {
+            if ($vipSetting && !empty($vipSetting['buyType'])) {
                 if ($vipSetting['buyType'] == '10') {
                     $defaultDuration = $vipSetting['default_buy_months10'];
                     //按年
