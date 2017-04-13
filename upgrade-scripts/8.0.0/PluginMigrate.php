@@ -23,7 +23,7 @@ class PluginMigrate extends AbstractMigrate
         $pluginFile = $this->getPluginConfig();
         $pluginFile = realpath($pluginFile);
         if (!empty($pluginFile)) {
-            $config = require_once $pluginFile;
+            $config = require $pluginFile;
 
             foreach (array('Homework', 'Crm') as $key => $value) {
                 if (isset($config['installed_plugins'][$value])) {
@@ -77,6 +77,10 @@ class PluginMigrate extends AbstractMigrate
         $file = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/config/routing_plugins.yml';
         $targetFile = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/config/old_routing_plugins.yml';
         $filesystem = new Filesystem();
+
+        if(file_exists($targetFile)){
+            return;
+        }
 
         if ($filesystem->exists($file)) {
             $filesystem->copy($file, $targetFile, true);
