@@ -12,9 +12,9 @@
   </div>
     <div class="testpaper-question-stem">
       {% if question.type == 'fill' %}
-        {{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
+        {{ question.stem|fill_question_stem_html|bbCode2Html|raw|nl2br }}
       {% else %}
-        {{ question.stem|bbCode2Html|raw }}
+        {{ question.stem|bbCode2Html|raw|nl2br }}
       {% endif %}
     	
       {% include 'attachment/widget/list.html.twig' with {targetType:'question.stem', targetId:question.id|default(null)  } %}

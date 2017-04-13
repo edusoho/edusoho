@@ -6,9 +6,9 @@
   <table class="table table-hover" style="word-break:break-all;">
     <thead>
       <tr>
-        <th width="60%">公开课名称</th>
-        <th width="20%">访问数</th>
-        <th width="20%">详情</th>
+        <th width="60%">{{ 'admin.open_manage.analysis.referer.summary_list.name_th'|trans }}</th>
+        <th width="20%">{{ 'admin.open_manage.analysis.referer.summary_list.visit_number_th'|trans }}</th>
+        <th width="20%">{{ 'admin.open_manage.analysis.referer.summary_list.detail_th'|trans }}</th>
       </tr>
     </thead>
     <tbody>
@@ -28,32 +28,32 @@
             {% if openCourse %}
               <a href="{{ path('open_course_show', {courseId:openCourse.id}) }}" target="_blank"><strong>{{ openCourse.title }}</strong></a>
               {% if openCourse.type == 'live' or openCourse.type == 'liveOpen' %}
-                <span class="label label-success live-label mls">{{ '直播'|trans }}</span>
+                <span class="label label-success live-label mls">{{ 'admin.open_manage.manage.live_course'|trans }}</span>
               {% endif %}
             {% else %}
-              该课程已删除
+              {{ 'admin.open_manage.manage.live_course_empty'|trans }}
             {% endif %}
           </th>
           <th>
-            {{ hitNum }} 次
+            {{ 'admin.open_manage.analysis.referer.summary_list.visit_number'|trans({'%visitNum%': hitNum})}}
           </th>
           <th>
             {% if openCourse %}
               <a href="javascript:;" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal"
-               data-url="{{ path('admin_opencourse_analysis_referer_detail',{id:refererLog.targetId, startTime:dateRange.startTime,endTime:dateRange.endTime}) }}">详情</a>
+               data-url="{{ path('admin_opencourse_analysis_referer_detail',{id:refererLog.targetId, startTime:dateRange.startTime,endTime:dateRange.endTime}) }}">{{ 'admin.open_manage.analysis.referer.summary_list.detail_btn'|trans }}</a>
             {% endif %}
           </th>
         </tr>
       {% else %}
         <tr>
           <td colspan="20">
-            <div class="empty">暂无记录</div>
+            <div class="empty">{{ 'admin.open_manage.analysis.referer.summary_list.empty'|trans }}</div>
           </td>
         </tr>
       {% endfor %}
       </tbody>
     </table>
 
-    <span>注：列表结果中，不会包含没有访问过的课程</span>
+    <span>{{ 'admin.open_manage.analysis.footer_tips'|trans }}</span>
     {{ web_macro.paginator(paginator) }}
 {% endblock %}

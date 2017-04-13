@@ -11,11 +11,11 @@
 
       <li {% if m.code == menu|default(null) %}class="active"{% endif %}>
         <a
-            title="{{ m.name|trans }}"
+            title="{{ m.name|trans({}, 'menu') }}"
             class="{{ m.class|default('') }}"
             href="{{ path }}"
         >
-          {{ m.name|trans }}
+          {{ m.name|trans({}, 'menu') }}
         </a>
       </li>
 
