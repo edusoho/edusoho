@@ -42,6 +42,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         parent::emptyDatabaseQuickly();
         if (isset($biz['redis'])) {
             $biz['redis']->flushDb();
+            $biz['dao.cache.shared_storage']->flush();
         }
         $this
             ->flushPool()

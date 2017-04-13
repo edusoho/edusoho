@@ -15,7 +15,7 @@
       {% if date('now').timestamp > member.deadline %}
         <span class="color-danger text-12">{{ 'course.expiry_date.overdue'|trans }}</span>
       {% else %}
-        {% set lastDays = (date(course.expiryEndDate|date('Y-m-d'))).timestamp|time_diff %}
+        {% set lastDays = course.expiryEndDate|time_diff %}
         {% if lastDays == 0 %}
           <span class="color-warning text-12">{{ 'course.expiry_date.today_will_overdue'|trans }}</span>
         {% elseif lastDays == 1 %}

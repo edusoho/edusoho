@@ -457,10 +457,11 @@ class CourseManageController extends BaseController
             if (!empty($data['services'])) {
                 $data['services'] = json_decode($data['services'], true);
             }
+
+            $freeTaskIds = ArrayToolkit::column($freeTasks, 'id');
+            $this->getTaskService()->updateTasks($freeTaskIds, array('isFree' => 0));
             if (!empty($data['freeTaskIds'])) {
                 $canFreeTaskIds = $data['freeTaskIds'];
-                $freeTaskIds = ArrayToolkit::column($freeTasks, 'id');
-                $this->getTaskService()->updateTasks($freeTaskIds, array('isFree' => 0));
                 $this->getTaskService()->updateTasks($canFreeTaskIds, array('isFree' => 1));
                 unset($data['freeTaskIds']);
             }
@@ -495,8 +496,7 @@ class CourseManageController extends BaseController
             'types' => array('text', 'video', 'audio', 'flash', 'doc', 'ppt'),
         );
 
-        $canFreeTaskCount = $this->getTaskService()->countTasks($conditions);
-        $canFreeTasks = $this->getTaskService()->searchTasks($conditions, array('seq' => 'ASC'), 0, $canFreeTaskCount);
+        $items = $this->processTaskNumberForList($courseId, $conditions, $course);
 
         //prepare form data
         if ($course['expiryMode'] == 'end_date') {
@@ -509,10 +509,35 @@ class CourseManageController extends BaseController
             array(
                 'courseSet' => $courseSet,
                 'course' => $this->formatCourseDate($course),
-                'canFreeTasks' => $canFreeTasks,
+                'canFreeTasks' => $items,
                 'freeTasks' => $freeTasks,
             )
         );
+    }
+
+    protected function sortTasks($tasks)
+    {
+        $tasks = ArrayToolkit::group($tasks, 'categoryId');
+        $modes = array(
+            'preparation' => 0,
+            'lesson' => 1,
+            'exercise' => 2,
+            'homework' => 3,
+            'extraClass' => 4,
+        );
+
+        foreach ($tasks as $key => $taskGroups) {
+            uasort(
+                $taskGroups,
+                function ($item1, $item2) use ($modes) {
+                    return $modes[$item1['mode']] > $modes[$item2['mode']];
+                }
+            );
+
+            $tasks[$key] = $taskGroups;
+        }
+
+        return $tasks;
     }
 
     public function teachersAction(Request $request, $courseSetId, $courseId)
@@ -719,7 +744,7 @@ class CourseManageController extends BaseController
 
         foreach ($orders as $index => $expiredOrderToBeUpdated) {
             if ((($expiredOrderToBeUpdated['createdTime'] + 48 * 60 * 60) < time())
-            && ($expiredOrderToBeUpdated['status'] == 'created')
+                && ($expiredOrderToBeUpdated['status'] == 'created')
             ) {
                 $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
                 $orders[$index]['status'] = 'cancelled';
@@ -749,7 +774,7 @@ class CourseManageController extends BaseController
         $courseSetting = $this->setting('course');
 
         if (!$this->getCurrentUser()->isAdmin()
-           && (empty($courseSetting['teacher_search_order']) || $courseSetting['teacher_search_order'] != 1)
+            && (empty($courseSetting['teacher_search_order']) || $courseSetting['teacher_search_order'] != 1)
         ) {
             throw $this->createAccessDeniedException('查询订单已关闭，请联系管理员');
         }
@@ -929,6 +954,53 @@ class CourseManageController extends BaseController
                 'students' => $students,
             )
         );
+    }
+
+    /**
+     * @param $courseId
+     * @param $conditions
+     * @param $course
+     *
+     * @return array
+     */
+    protected function processTaskNumberForList($courseId, $conditions, $course)
+    {
+        $canFreeTaskCount = $this->getTaskService()->countTasks($conditions);
+        $canFreeTasks = $this->getTaskService()->searchTasks($conditions, array('seq' => 'ASC'), 0, $canFreeTaskCount);
+
+        $items = array();
+        if ($course['isDefault']) {
+            $tasks = $this->sortTasks($canFreeTasks);
+            $chapters = $this->getCourseService()->findChaptersByCourseId($courseId);
+            foreach ($chapters as $chapter) {
+                $chapter['itemType'] = 'chapter';
+                $items["chapter-{$chapter['id']}"] = $chapter;
+            }
+
+            uasort(
+                $items,
+                function ($item1, $item2) {
+                    return $item1['seq'] > $item2['seq'];
+                }
+            );
+
+            foreach ($items as $key => $item) {
+                if ($item['type'] != 'lesson') {
+                    unset($items[$key]);
+                    continue;
+                }
+
+                if (!empty($tasks[$item['id']])) {
+                    $items[$key]['tasks'] = $tasks[$item['id']];
+                } else {
+                    unset($items[$key]);
+                }
+            }
+        } else {
+            $items = $canFreeTasks;
+        }
+
+        return $items;
     }
 
     private function _canRecord($liveId)

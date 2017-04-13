@@ -98,6 +98,8 @@ class CourseServiceTest extends BaseTestCase
 
     public function testUpdateCourseMarketing()
     {
+        $this->saveStorage();
+
         $courseSet = $this->createNewCourseSet();
         $course = array(
             'title' => '第一个教学计划',
@@ -125,6 +127,11 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals($result['tryLookLength'], $updated['tryLookLength']);
         $this->assertEquals($result['watchLimit'], $updated['watchLimit']);
         $this->assertEquals($result['services'], $updated['services']);
+    }
+
+    protected function saveStorage()
+    {
+        $this->getSettingService()->set('storage', array('upload_mode' => 'cloud'));
     }
 
     public function testDelete()
@@ -329,6 +336,11 @@ class CourseServiceTest extends BaseTestCase
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 
     /**

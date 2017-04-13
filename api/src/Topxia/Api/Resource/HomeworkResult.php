@@ -95,6 +95,9 @@ class HomeworkResult extends BaseResource
         $homeworkResult['items'] = $this->filterItem($itemSetResults);
         $homeworkResult['homeworkId'] = $homeworkResult['testId'];
 
+        //只为做兼容，app端course2.0需改
+        $homeworkResult['lessonId'] = $lessonId;
+
         return $this->filter($homeworkResult);
     }
 
