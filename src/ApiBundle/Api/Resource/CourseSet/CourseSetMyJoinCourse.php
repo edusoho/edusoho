@@ -28,4 +28,5 @@ class CourseSetMyJoinCourse extends Resource
 
         return $courses;
     }
+
 }
