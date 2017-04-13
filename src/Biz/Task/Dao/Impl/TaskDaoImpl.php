@@ -219,7 +219,6 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'endTime <= :endTime_GE',
                 'categoryId = :categoryId',
                 'activityId = :activityId',
-                'categoryId = :categoryId',
                 'mode = :mode',
             ),
         );

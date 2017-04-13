@@ -55,6 +55,49 @@ class CardServiceImpl extends BaseService implements CardService
         return $this->getCardDao()->search($conditions, $orderBy, $start, $limit);
     }
 
+    public function findCurrentUserAvailableCouponForTargetTypeAndTargetId($targetType, $targetId)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        if (!$currentUser->isLogin()) {
+            return array();
+        }
+
+        $myAvailableCards = $this->getCardDao()->findByUserIdAndCardTypeAndStatus(
+            $currentUser['id'],
+            CardService::TYPE_COUPON,
+            CardService::STATUS_RECEIVE
+        );
+
+        $coupons = $this->findCardDetailsByCardTypeAndCardIds(
+            CardService::TYPE_COUPON,
+            array_column($myAvailableCards, 'cardId')
+        );
+
+        foreach ($coupons as $index => $coupon) {
+            if (!$this->isAvailable($coupon, $targetType, $targetId)) {
+                unset($coupons[$index]);
+            }
+        }
+
+        return $coupons;
+    }
+
+    private function isAvailable($coupon, $targetType, $targetId)
+    {
+        if ($coupon['deadline'] + 86400 < time()) {
+            return false;
+        }
+
+        if ($coupon['targetType'] == 'all' || $coupon['targetType'] == 'fullDiscount') {
+            return true;
+        }
+
+        if ($coupon['targetType'] == $targetType && ($coupon['targetId'] == 0 || $coupon['targetId'] == $targetId)) {
+            return true;
+        }
+    }
+
     public function findCardsByUserIdAndCardType($userId, $cardType)
     {
         if (empty($cardType)) {

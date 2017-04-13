@@ -64,10 +64,26 @@ class ExerciseBuilder implements TestpaperBuilderInterface
             if (!empty($exercise['metas']['difficulty'])) {
                 $conditions['difficulty'] = $exercise['metas']['difficulty'];
             }
-
             //兼容course1.0 start
             if (!empty($exercise['metas']['range']) && $exercise['metas']['range'] == 'lesson') {
-                $conditions['lessonId'] = $exercise['lessonId'];
+                $conditions = array(
+                    'activityId' => $exercise['lessonId'],
+                    'type' => 'exercise',
+                    'courseId' => $exercise['courseId'],
+                );
+                $task = $this->getCourseTaskService()->searchTasks($conditions, null, 0, 1);
+                if (!$task) {
+                    break;
+                }
+
+                $conditions = array(
+                    'categoryId' => $task[0]['categoryId'],
+                    'mode' => 'lesson',
+                );
+                $lessonTask = $this->getCourseTaskService()->searchTasks($conditions, null, 0, 1);
+                if ($lessonTask) {
+                    $conditions['lessonId'] = $lessonTask[0]['id'];
+                }
             }
             //兼容course1.0 end
 
@@ -226,5 +242,10 @@ class ExerciseBuilder implements TestpaperBuilderInterface
     protected function getTestpaperService()
     {
         return $this->biz->service('Testpaper:TestpaperService');
+    }
+
+    protected function getCourseTaskService()
+    {
+        return $this->biz->service('Task:TaskService');
     }
 }

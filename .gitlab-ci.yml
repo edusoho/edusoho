@@ -14,7 +14,6 @@ before_script:
   - "echo '    redis_timeout: 1' >> app/config/parameters_test.yml"
   - "echo '    redis_reserved: null' >> app/config/parameters_test.yml"
   - "echo '    redis_retry_interval: 100' >> app/config/parameters_test.yml"
-  - cat app/config/parameters_test.yml
   - mkdir web/files
   - mkdir -p app/data/private_files
   - touch app/config/routing_plugins.yml

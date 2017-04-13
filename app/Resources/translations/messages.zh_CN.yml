@@ -19,7 +19,9 @@ site.message.info: 提示信息
 site.message.warning: 警告信息
 site.message.error: 错误提示
 site.power_by: 好知网
+site.default.classroom: 班级
 site.default.student: 学员
+site.default.more: 更多
 
 # 用户通用
 user.fields.login_password: 登录密码
@@ -116,10 +118,11 @@ open_course.status.live: 正在直播
 open_course.status.living: 即将直播
 
 # 班级
-classroom: 班级
-classroom.courses_count: 共%courseNum%门课程
+classroom.courses_count: 共%courseNum%课
 classroom.continue_learning_btn: 继续学习
 classroom.join_btn: 立即加入
+classroom.status.unpublish: 未发布
+classroom.status.closed: 已关闭
 
 # 表单通用
 form.field.optional: 选填
@@ -1094,7 +1097,7 @@ customer_service.email: 邮件
 customer_service.customer_email: 反馈邮件
 
 # 我的教学
-my.teaching: 我的教学
+my.teaching.menu_heading: 我的教学
 my.teaching.course_set_menu: 在教课程
 my.teaching.classroom_menu: 在教%classroom%
 my.teaching.question_menu: %student%问题
@@ -1103,13 +1106,55 @@ my.teaching.testpaper_check_menu: 试卷批阅
 my.teaching.homework_check_menu: 作业批阅
 my.teaching.material_lib_menu: 教学资料库
 my.teaching.course_set.normal: 普通课程
-my.teaching.course_set.live: 普通课程
+my.teaching.course_set.live: 直播课程
 my.teaching.course_set.classroom: %classroom%课程
 my.teaching.open_course.normal: 录播公开课
 my.teaching.open_course.live: 直播公开课
+my.teaching.threads_discussion: 课程%student%话题
+my.teaching.classroom.threads_discussion: %classroom%%student%话题
+my.teaching.classroom: 所教%classroom%
+my.teaching.classroom.manage_btn: 管理%classroom%
+my.teaching.classroom.today_data_title: 今日新增
+my.teaching.classroom.today_data: >
+  学员%allCount%  &nbsp;&nbsp;
+  话题%threadCount%  &nbsp;&nbsp; 
+  任务完成学习%todayFinishedTaskNum%
+my.teaching.page_title: 在教课程
+my.teaching.course_set.create: 创建课程
+my.teaching.course_set.content_title: 在教课程
+my.teaching.course_set.title: 名称
+my.teaching.course_set.classroom: 所属%classroom%
+my.teaching.course_set.student_count: %student%数
+my.teaching.course_set.price: 价格(元)
+my.teaching.course_set.status: 状态
+my.teaching.course_set.actions: 操作
+my.teaching.course_set.courseSetCount: %courseSetCount%个教学计划
+my.teaching.course_set.live_label: 直播
+my.teaching.course_set.classrooms_not_found_label: 已移除
+my.teaching.course_set.manage_btn: 管理
+my.teaching.course_set.course_manage_btn: 计划管理
+my.teaching.course_set.file_manage_btn: 文件管理
+my.teaching.course_set.live_empty_hint: 你还没有在教的直播课程哦, 赶快去创建吧!
+my.teaching.course_set.empty_hint: 你还没有在教的课程哦, 赶快去创建吧!
+
+my.teaching.open_course.title: 名称
+my.teaching.open_course.hit_num: 浏览数
+my.teaching.open_course.status: 状态
+my.teaching.open_course.actions: 操作
+my.teaching.open_course.live_label: 直播直播
+my.teaching.open_course.manage_btn: 管理
+my.teaching.open_course.view_btn: 查看
+my.teaching.open_course.view_btn: 查看
+my.teaching.open_course.lesson_manage_btn: 课时管理
+my.teaching.open_course.file_manage_btn: 文件管理
+my.teaching.open_course.student_manage_btn: %student%管理
+my.teaching.open_course.empty_hint: 你还没有在教的公开课哦, 赶快去创建吧!
+my.teaching.page_title: 在教课程
+my.teaching.course_set.create: 创建课程
+my.teaching.course_set.content_title: 在教课程
 
 # 我的学习
-my.learning: 我的学习
+my.learning.menu_heading: 我的学习
 my.learning.course_set_menu: 我的课程
 my.learning.classroom_menu: 我的%classroom%
 my.learning.live_menu: 我的直播
