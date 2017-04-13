@@ -1041,6 +1041,7 @@ class CourseManageController extends BaseController
             array(
                 'courseSet' => $courseSet,
                 'course' => $course,
+                'taskRemarks' => ArrayToolkit::column($taskStat, 'title'),
                 'taskTitles' => ArrayToolkit::column($taskStat, 'alias'),
                 'finishedRate' => ArrayToolkit::column($taskStat, 'finishedRate'),
                 'finishedNum' => ArrayToolkit::column($taskStat, 'finishedNum'),
