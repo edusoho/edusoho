@@ -58,7 +58,6 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
 
     public function onCourseJoin(Event $event)
     {
-        file_put_contents('2.txt', 'join');
         $this->countStudentMember($event);
         $this->countIncome($event);
         $this->sendWelcomeMsg($event);
@@ -112,7 +111,6 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
 
     public function onLiveCourseJoin(Event $event)
     {
-        file_put_contents('1.txt', 'live');
         $course = $event->getSubject();
         $userId = $event->getArgument('userId');
         $user = $this->getUserService()->getUser($userId);
