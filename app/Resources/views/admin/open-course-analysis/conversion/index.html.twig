@@ -20,15 +20,15 @@
       {% else %}
         <tr>
           <td colspan="20">
-            <div class="empty">{{ '暂无记录'|trans }}</div>
+            <div class="empty">{{ 'admin.open_manage.analysis.conversion.empty'|trans }}</div>
           </td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
-  <span>注：列表结果中，不会包含没有访问过的课程</span>
+  <span>{{ 'admin.open_manage.analysis.footer_tips'|trans }}</span>
   <div>
-    总购买转化率：
+    {{ 'admin.open_manage.analysis.conversion.total_buy_conversion_rate'|trans }}：
     {% if totalData.orderCount and totalData.visitCount %}
       {{ (totalData.orderCount / totalData.visitCount * 100 )|number_format(2,'.') }} %
     {% else %}
