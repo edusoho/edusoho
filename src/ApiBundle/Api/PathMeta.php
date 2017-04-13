@@ -40,10 +40,14 @@ class PathMeta
 
     public function getResMethod()
     {
-        if (($this->resNames[0] == 'me' && count($this->resNames) - 1 == count($this->slugs)) || (count($this->resNames) == count($this->slugs))) {
-            return $this->singleMap[$this->httpMethod];
-        } else {
-            return $this->listMap[$this->httpMethod];
+        try {
+            if (($this->resNames[0] == 'me' && count($this->resNames) - 1 == count($this->slugs)) || (count($this->resNames) == count($this->slugs))) {
+                return $this->singleMap[$this->httpMethod];
+            } else {
+                return $this->listMap[$this->httpMethod];
+            }
+        } catch (\Exception $e) {
+            throw new BadRequestException('Method is not exist');
         }
     }
 
