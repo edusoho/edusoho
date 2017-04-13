@@ -27,7 +27,7 @@ class CourseController extends CourseBaseController
         $courseItems = $files = array();
         if ($isMarketingPage) {
             $courseItems = $this->getCourseService()->findCourseItems($course['id'], $limitNum = 6);
-            $files = $this->findFiles($course['id']);
+            $files = $this->extractFilesFromCourseItems($course, $courseItems);
         }
 
         $course['courseNum'] = $this->getCourseNumInCourseSet($course['courseSetId']);
@@ -398,7 +398,7 @@ class CourseController extends CourseBaseController
     {
         $courseItems = $this->getCourseService()->findCourseItems($course['id']);
 
-        $files = $this->findFiles($course['id']);
+        $files = $this->extractFilesFromCourseItems($course, $courseItems);
 
         list($isMarketingPage, $member) = $this->isMarketingPage($course['id'], $member);
 
@@ -691,26 +691,20 @@ class CourseController extends CourseBaseController
         return $this->createService('File:UploadFileService');
     }
 
-    protected function findFiles($courseId)
+    protected function extractFilesFromCourseItems($course, $courseItems)
     {
-        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
-        $activities = ArrayToolkit::column($tasks, 'activity');
-        //获取视频的源数据
-        $activityIds = array();
-        array_walk(
-            $activities,
-            function ($activity) use (&$activityIds) {
-                if ($activity['mediaType'] == 'video') {
-                    array_push($activityIds, $activity['id']);
-                }
-            }
-        );
-        $fullActivities = $this->getActivityService()->findActivities($activityIds, $fetchMedia = true);
+        $tasks = $this->extractTaskFromCourseItems($course, $courseItems);
+        if (empty($tasks)) {
+            return array();
+        }
+        $fullActivities = ArrayToolkit::column($tasks, 'activity');
         $files = array();
         array_walk(
             $fullActivities,
             function ($activity) use (&$files) {
-                $files[$activity['mediaId']] = empty($activity['ext']['file']) ? null : $activity['ext']['file'];
+                if (!empty($activity['ext']['file'])) {
+                    $files[$activity['id']] = $activity['ext']['file'];
+                }
             }
         );
 
@@ -766,5 +760,37 @@ class CourseController extends CourseBaseController
         }
 
         return 1;
+    }
+
+    /**
+     * @param $course
+     * @param $courseItems
+     *
+     * @return array
+     */
+    protected function extractTaskFromCourseItems($course, $courseItems)
+    {
+        $tasks = array();
+        if (empty($course['isDefault'])) {
+            array_walk(
+                $courseItems,
+                function ($item) use (&$tasks) {
+                    if (isset($item['activity'])) {
+                        $tasks[] = $item;
+                    }
+                }
+            );
+        } else {
+            array_walk(
+                $courseItems,
+                function ($item) use (&$tasks) {
+                    if ($item['type'] === 'lesson') {
+                        $tasks = array_merge($tasks, $item['tasks']);
+                    }
+                }
+            );
+        }
+
+        return $tasks;
     }
 }
