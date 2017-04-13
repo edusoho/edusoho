@@ -4,6 +4,7 @@ namespace ApiBundle\Api;
 
 use ApiBundle\Api\Exception\BadRequestException;
 use ApiBundle\Api\Resource\Resource;
+use Doctrine\Common\Inflector\Inflector;
 
 class PathMeta
 {
@@ -68,9 +69,9 @@ class PathMeta
 
     private function getNormalResClass()
     {
-        $qualifiedResName = $this->convert($this->resNames[0]).'\\';
+        $qualifiedResName = $this->convertToSingular($this->resNames[0]).'\\';
         foreach ($this->resNames as $resName) {
-            $qualifiedResName .= $this->convert($resName);
+            $qualifiedResName .= $this->convertToSingular($resName);
         }
 
         return 'ApiBundle\\Api\\Resource\\'.$qualifiedResName;
@@ -78,27 +79,21 @@ class PathMeta
 
     private function getPluginResClass()
     {
-        $resClassName = $this->convert($this->slugs[0]).'Plugin\\Api\\Resource\\';
+        $resClassName = $this->convertToSingular($this->slugs[0]).'Plugin\\Api\\Resource\\';
         //去除/plugins/{pluginName}这部分url
         array_splice($this->slugs, 0, 1);
         array_splice($this->resNames, 0, 1);
 
-        $resClassName .= $this->convert($this->resNames[0]).'\\';
+        $resClassName .= $this->convertToSingular($this->resNames[0]).'\\';
         foreach ($this->resNames as $resName) {
-            $resClassName .= $this->convert($resName);
+            $resClassName .= $this->convertToSingular($resName);
         }
 
         return $resClassName;
     }
 
-    private function convert($string)
+    private function convertToSingular($string)
     {
-        $result = '';
-        $words = explode('_', $string);
-        foreach ($words as $word) {
-            $result .= ucfirst(rtrim($word, 's'));
-        }
-
-        return $result;
+        return Inflector::singularize(Inflector::classify($string));
     }
 }

@@ -11,13 +11,6 @@ class CourseLearningProgress extends Resource
 {
     public function search(ApiRequest $request, $courseId)
     {
-        $this->service('Course:CourseService')->
-        return $this->makePagingObject($courses, $total, $offset, $limit);
+        return $this->service('Course:CourseService')->getUserLearningProcess($courseId, $this->getCurrentUser()->getId());
     }
-
-    public function add()
-    {
-
-    }
-
 }

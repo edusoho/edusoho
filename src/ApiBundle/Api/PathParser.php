@@ -18,7 +18,6 @@ class PathParser
 
     private function parsePathInfo($pathMeta, $pathInfo)
     {
-
         $pathExplode = explode('/', str_replace(ApiBundle::API_PREFIX, '', $pathInfo));
         //默认第一个是资源名称
         $nextIsResName = 1;

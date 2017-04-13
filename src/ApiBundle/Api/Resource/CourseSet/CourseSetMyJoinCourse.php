@@ -26,7 +26,7 @@ class CourseSetMyJoinCourse extends Resource
 
         $courses = $this->service('Course:CourseService')->findCoursesByIds($courseIds);
 
-        return $courses;
+        return array_values($courses);
     }
 
 }
