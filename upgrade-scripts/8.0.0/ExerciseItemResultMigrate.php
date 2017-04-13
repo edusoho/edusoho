@@ -29,13 +29,14 @@ class ExerciseItemResultMigrate extends AbstractMigrate
 
     private function insertExerciseItemResult($page)
     {
-        $countSql = "SELECT count(id) FROM `exercise_item_result` where `id` not in (select `migrateItemResultId` from `testpaper_item_result_v8` where type = 'exercise');";
+        $countSql = "SELECT count(id) FROM `exercise_item_result`";
         $count = $this->getConnection()->fetchColumn($countSql);
 
         if ($count == 0) {
             return;
         }
 
+        $start = $this->getStart($page);
         $sql = "INSERT INTO testpaper_item_result_v8 (
             testId,
             resultId,
@@ -55,9 +56,14 @@ class ExerciseItemResultMigrate extends AbstractMigrate
             answer,
             teacherSay,
             id AS migrateItemResultId,
-            'exercise' FROM exercise_item_result WHERE id NOT IN (SELECT migrateItemResultId FROM testpaper_item_result_v8 WHERE type = 'exercise') order by id limit 0, {$this->perPageCount};";
+            'exercise' FROM exercise_item_result order by id limit {$start}, {$this->perPageCount};";
         $this->getConnection()->exec($sql);
 
-        return $page + 1;
+        $nextPage = $this->getNextPage($count, $page);
+        if (empty($nextPage)) {
+            return;
+        }
+
+        return $nextPage;
     }
 }

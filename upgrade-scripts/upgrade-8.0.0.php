@@ -41,7 +41,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'CourseSetMigrate',
             'CourseMigrate',
 
-            'ClassroomCourseMigrate',
+            //'ClassroomCourseMigrate',
 
             'Lesson2CourseTaskMigrate',
             'Lesson2CourseChapterMigrate',
