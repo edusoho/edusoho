@@ -67,10 +67,14 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $testpaper;
     }
 
-    public function deleteTestpaper($id)
+    public function deleteTestpaper($id, $quietly = false)
     {
         $testpaper = $this->getTestpaper($id);
         if (!$testpaper) {
+            if ($quietly) {
+                return 0;
+            }
+
             throw $this->createServiceException("Testpaper #{$id} is not found, delete testpaper failure.");
         }
 
