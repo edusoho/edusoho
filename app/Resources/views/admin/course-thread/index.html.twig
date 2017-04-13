@@ -10,7 +10,7 @@
   <form class="form-inline">
     <div class="form-group">
       <select class="form-control" name="type">
-        {{ select_options(dict('threadType'), app.request.get('type'), '帖子类型'|trans) }}
+        {{ select_options(dict('threadType'), app.request.get('type'), 'admin.course_thread.course_thread_manage_tab.form.type_option'|trans) }}
       </select>
     </div>
     
@@ -18,7 +18,7 @@
 
     <div class="form-group">
       <select class="form-control" name="threadType">
-        {{ select_options({isStick:'置顶'|trans, isElite: '加精'|trans}, app.request.get('threadType'), '属性'|trans) }}
+        {{ select_options({isStick:'admin.course_thread.course_thread_manage_tab.form.thread_type.isStick_option'|trans, isElite: 'admin.course_thread.course_thread_manage_tab.form.thread_type.isElite_option'|trans}, app.request.get('threadType'), 'admin.course_thread.course_thread_manage_tab.form.thread_type_option'|trans) }}
       </select>
     </div>
 
@@ -26,19 +26,19 @@
 
     <div class="form-group">
       <select class="form-control" name="keywordType">
-        {{ select_options({title:'标题'|trans, content: '内容'|trans, courseId:'课程编号'|trans, courseTitle:'课程名'|trans}, app.request.get('keywordType')) }}
+        {{ select_options({title:'admin.course_thread.form.keyword_type.title_option'|trans, content: 'admin.course_thread.form.keyword_type.content_option'|trans, courseId:'admin.course_thread.form.keyword_type.courseId_option'|trans, courseTitle:'admin.course_thread.form.keyword_type.courseTitle_option'|trans}, app.request.get('keywordType')) }}
       </select>
     </div>
 
     <div class="form-group">
-      <input class="form-control" type="text" placeholder="{{'关键词'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
+      <input class="form-control" type="text" placeholder="{{'admin.course_thread.form.input.keyword.placeholer'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
     </div>
 
     <div class="form-group">
-      <input class="form-control" type="text" placeholder="{{'作者'|trans}}" name="author" value="{{ app.request.get('author') }}">
+      <input class="form-control" type="text" placeholder="{{'admin.course_thread.form.input.author.placeholer'|trans}}" name="author" value="{{ app.request.get('author') }}">
     </div>
 
-    <button class="btn btn-primary" type="submit">{{'搜索'|trans}}</button>
+    <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
   </form>
 </div>
 
@@ -47,11 +47,11 @@
       <thead>
         <tr>
           <th width="5%"><input type="checkbox" data-role="batch-select"></th>
-          <th width="50%">{{'帖子'|trans}}</th>
-          <th width="10%">{{'回复/查看'|trans}}</th>
-          <th width="10%">{{'属性'|trans}}</th>
-          <th width="15%">{{'作者'|trans}}</th>
-          <th width="10%">{{'操作'|trans}}</th>
+          <th width="50%">{{'admin.course_thread.post_th'|trans}}</th>
+          <th width="10%">{{'admin.course_thread.replay_or_review_th'|trans}}</th>
+          <th width="10%">{{'admin.course_thread.type_th'|trans}}</th>
+          <th width="15%">{{'admin.course_thread.author_th'|trans}}</th>
+          <th width="10%">{{'admin.course_thread.operation_th'|trans}}</th>
         </tr>
       </thead>
       <body>
@@ -64,14 +64,14 @@
             <td><input value="{{thread.id}}" type="checkbox" data-role="batch-item"> </td>
             <td>
               {% if thread.type == 'question' %}
-                <span class="label label-info">{{'问'|trans}}</span>
+                <span class="label label-info">{{'admin.course_thread.question_td_label'|trans}}</span>
               {% endif %}
 
               <a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" target="_blank"><strong>{{ thread.title }}</strong></a>
 
               <div class="short-long-text">
-                <div class="short-text text-sm text-muted">{{ thread.content|plain_text(60) }} <span class="trigger">({{'展开'|trans}})</span></div>
-                <div class="long-text">{{ thread.content|raw }} <span class="trigger">({{'收起'|trans}})</span></div>
+                <div class="short-text text-sm text-muted">{{ thread.content|plain_text(60) }} <span class="trigger">({{'admin.course_thread.expand_td'|trans}})</span></div>
+                <div class="long-text">{{ thread.content|raw }} <span class="trigger">({{'admin.course_thread.collapse_td'|trans}})</span></div>
               </div>
               
               <div class="text-sm mts">
@@ -86,7 +86,7 @@
 
                 {% if task %}
                   <span class="text-muted mhs">&raquo;</span>
-                  <a class="text-success"  href="{{ path('course_task_show', {courseId:thread.courseId, id:task.id}) }}" target="_blank">{{'任务'|trans}}{{task.number}}：{{ task.title }}</a>
+                  <a class="text-success"  href="{{ path('course_task_show', {courseId:thread.courseId, id:task.id}) }}" target="_blank">{{'admin.course_thread.course_thread_manage_tab.task_btn'|trans}}{{task.number}}：{{ task.title }}</a>
                 {% endif %}
               </div>
             </td>
@@ -94,11 +94,11 @@
             <td>
               {% if course %}
                 <a href="javascript:;" data-set-url="{{ path('course_thread_elite', {courseId:course.id, threadId:thread.id}) }}" data-cancel-url="{{ path('course_thread_unelite', {courseId:course.id, threadId:thread.id}) }}" class="promoted-label">
-                  <span class="label {% if thread.isElite %}label-success{% else %}label-default{% endif %}">{{'精'|trans}}</span>
+                  <span class="label {% if thread.isElite %}label-success{% else %}label-default{% endif %}">{{'admin.course_thread.course_thread_manage_tab.isElite_btn'|trans}}</span>
                 </a>
               
                 <a href="javascript:;" data-set-url="{{ path('course_thread_stick', {courseId:course.id, threadId:thread.id}) }}" data-cancel-url="{{ path('course_thread_unstick', {courseId:course.id, threadId:thread.id}) }}" class="promoted-label">
-                  <span class="label {% if thread.isStick %}label-success{% else %}label-default{% endif %}">{{'顶'|trans}}</span>
+                  <span class="label {% if thread.isStick %}label-success{% else %}label-default{% endif %}">{{'admin.course_thread.course_thread_manage_tab.isStick_btn'|trans}}</span>
                 </a>
               {% endif %}
             </td>
@@ -109,19 +109,19 @@
             <td>
               <div class="btn-group">
                 <a href="javascript:;" data-role="item-delete" data-url="{{ path('admin_thread_delete', {id:thread.id}) }}" class="btn btn-default btn-sm" 
-                data-name="{{'帖子'|trans}}" >{{'删除'|trans}}</a>
+                data-name="{{'admin.course_thread.post_th'|trans}}" >{{'form.btn.delete'|trans}}</a>
               </div>
             </td>
           </tr>
         {% else %}
-          <tr><td colspan="20"><div class="empty">{{'暂无帖子记录'|trans}}</div></td></tr>
+          <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
         {% endfor %}
       </body>
     </table>
 
     <div class="mbm">
-        <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'全选'|trans}}</label>
-        <button class="btn btn-default btn-sm mlm" data-role="batch-delete" data-name="{{'帖子'|trans}}" data-url="{{ path('admin_thread_batch_delete') }}">{{'删除'|trans}}</button>
+        <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'admin.course_thread.select_all_btn'|trans}}</label>
+        <button class="btn btn-default btn-sm mlm" data-role="batch-delete" data-name="{{'admin.course_thread.post_th'|trans}}" data-url="{{ path('admin_thread_batch_delete') }}">{{'form.btn.delete'|trans}}</button>
     </div>
 
   </div>

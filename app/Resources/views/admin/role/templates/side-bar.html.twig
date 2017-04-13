@@ -9,11 +9,11 @@
       {% endif %}
 
       <a
-          title="{{ m.name|trans }}"
+          title="{{ m.name|trans({}, 'menu') }}"
           class="{{ menuClass }}"
           href="{{ permission_path(tabMenu) }}"
       >
-        {{ m.name|trans }}
+        {{ m.name|trans({}, 'menu') }}
       </a>
     {% endfor %}
   </div>
