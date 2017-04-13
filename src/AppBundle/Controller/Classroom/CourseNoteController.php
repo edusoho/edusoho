@@ -18,6 +18,9 @@ class CourseNoteController extends BaseController
         $courseIds = ArrayToolkit::column($classroomCourses, 'id');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
+        $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+
         $user = $this->getCurrentUser();
 
         $classroomSetting = $this->setting('classroom', array());
@@ -51,6 +54,7 @@ class CourseNoteController extends BaseController
             'courses' => $courses,
             'member' => $member,
             'classroomDescription' => $classroomDescription,
+            'courseSets' => $courseSets,
         ));
     }
 
@@ -82,5 +86,10 @@ class CourseNoteController extends BaseController
     private function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    private function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 }

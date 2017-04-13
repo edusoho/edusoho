@@ -4,6 +4,7 @@ namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\AudioActivityDao;
+use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\File\Service\UploadFileService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\ActivityLearnLogService;
@@ -84,6 +85,33 @@ class Audio extends Activity
         $audioActivity['file'] = $this->getUploadFileService()->getFullFile($audioActivity['mediaId']);
 
         return $audioActivity;
+    }
+
+    public function find($targetIds)
+    {
+        $audioActivities = $this->getAudioActivityDao()->findByIds($targetIds);
+        $mediaIds = ArrayToolkit::column($audioActivities, 'mediaId');
+        try {
+            $files = $this->getUploadFileService()->findFilesByIds(
+                $mediaIds,
+                $showCloud = 1
+            );
+        } catch (CloudAPIIOException $e) {
+            $files = array();
+        }
+
+        if (empty($files)) {
+            return $audioActivities;
+        }
+        $files = ArrayToolkit::index($files, 'id');
+        array_walk(
+            $audioActivities,
+            function (&$videoActivity) use ($files) {
+                $videoActivity['file'] = isset($files[$videoActivity['mediaId']]) ? $files[$videoActivity['mediaId']] : null;
+            }
+        );
+
+        return $audioActivities;
     }
 
     protected function registerListeners()

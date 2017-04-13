@@ -20,6 +20,11 @@ class Exercise extends Activity
         return $this->getTestpaperService()->getTestpaperByIdAndType($targetId, 'exercise');
     }
 
+    public function find($targetIds)
+    {
+        return $this->getTestpaperService()->findTestpapersByIdsAndType($targetIds, 'exercise');
+    }
+
     public function create($fields)
     {
         $fields = $this->filterFields($fields);

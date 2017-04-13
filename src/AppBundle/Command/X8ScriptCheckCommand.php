@@ -184,7 +184,7 @@ class X8ScriptCheckCommand extends BaseCommand
 
         // 课时：
         $c1 = $connection->fetchColumn('select count(*) from course_lesson;');
-        $c2 = $connection->fetchColumn("select count(*) from course_chapter where type = 'lesson';");
+        $c2 = $connection->fetchColumn("select count(*) from course_chapter where type = 'lesson' and migrateLessonId <>0;");
         if ($c1 == $c2) {
             $output->writeln("<info> 课时 数据验证通过，{$c1} {$c2}.</info>");
         } else {

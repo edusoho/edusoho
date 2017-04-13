@@ -30,6 +30,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperDao()->getByIdAndType($id, $type);
     }
 
+    public function findTestpapersByIdsAndType($ids, $type)
+    {
+        return $this->getTestpaperDao()->findTestpapersByIdsAndType($ids, $type);
+    }
+
     public function createTestpaper($fields)
     {
         $user = $this->getCurrentUser();
@@ -127,16 +132,19 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function createItem($fields)
     {
-        $fields = ArrayToolkit::parts($fields, array(
-            'testId',
-            'seq',
-            'questionId',
-            'questionType',
-            'parentId',
-            'score',
-            'missScore',
-            'type',
-        ));
+        $fields = ArrayToolkit::parts(
+            $fields,
+            array(
+                'testId',
+                'seq',
+                'questionId',
+                'questionType',
+                'parentId',
+                'score',
+                'missScore',
+                'type',
+            )
+        );
 
         return $this->getItemDao()->create($fields);
     }
@@ -262,7 +270,13 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function getUserLatelyResultByTestId($userId, $testId, $courseId, $activityId, $type)
     {
-        return $this->getTestpaperResultDao()->getUserLatelyResultByTestId($userId, $testId, $courseId, $activityId, $type);
+        return $this->getTestpaperResultDao()->getUserLatelyResultByTestId(
+            $userId,
+            $testId,
+            $courseId,
+            $activityId,
+            $type
+        );
     }
 
     public function findPaperResultsStatusNumGroupByStatus($testId, $courseIds)
@@ -340,7 +354,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $this->submitAnswers($result['id'], $answers);
 
-        $paperResult = $this->getTestpaperBuilder($result['type'])->updateSubmitedResult($result['id'], $formData['usedTime']);
+        $paperResult = $this->getTestpaperBuilder($result['type'])->updateSubmitedResult(
+            $result['id'],
+            $formData['usedTime']
+        );
 
         $this->dispatchEvent('exam.finish', new Event($paperResult));
 
@@ -358,7 +375,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         foreach ($testpaper['metas']['counts'] as $type => $count) {
             $total[$type]['score'] = empty($items[$type]) ? 0 : array_sum(ArrayToolkit::column($items[$type], 'score'));
             $total[$type]['number'] = empty($items[$type]) ? 0 : count($items[$type]);
-            $total[$type]['missScore'] = empty($items[$type]) ? 0 : array_sum(ArrayToolkit::column($items[$type], 'missScore'));
+            $total[$type]['missScore'] = empty($items[$type]) ? 0 : array_sum(
+                ArrayToolkit::column($items[$type], 'missScore')
+            );
         }
 
         return $total;
@@ -380,7 +399,13 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testpaper = $this->getTestpaper($id);
         $user = $this->getCurrentUser();
 
-        $testpaperResult = $this->getUserUnfinishResult($testpaper['id'], $fields['courseId'], $fields['lessonId'], $testpaper['type'], $user['id']);
+        $testpaperResult = $this->getUserUnfinishResult(
+            $testpaper['id'],
+            $fields['courseId'],
+            $fields['lessonId'],
+            $testpaper['type'],
+            $user['id']
+        );
 
         if (!$testpaperResult) {
             $fields = array(
