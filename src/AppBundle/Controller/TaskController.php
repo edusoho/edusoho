@@ -439,7 +439,7 @@ class TaskController extends BaseController
         } else {
             if ($this->getCourseService()->hasCourseManagerRole($courseId)) {
                 $task = $this->getTaskService()->getTask($taskId);
-            }else{
+            } else {
                 $task = $this->getTaskService()->tryTakeTask($taskId);
             }
         }
