@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\InvalidArgumentException;
 use ApiBundle\Api\Util\ObjectCombinationUtil;
+use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -137,6 +138,9 @@ abstract class Resource
         );
     }
 
+    /**
+     * @return CurrentUser
+     */
     protected function getCurrentUser()
     {
         $biz = $this->getBiz();

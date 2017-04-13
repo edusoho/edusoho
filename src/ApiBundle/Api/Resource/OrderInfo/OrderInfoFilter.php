@@ -9,8 +9,10 @@ class OrderInfoFilter extends Filter
 {
     protected function customFilter(&$data)
     {
+        $data['availableCoupons'] = array_values($data['availableCoupons']);
         $couponFilter = new CouponFilter();
         $couponFilter->filters($data['availableCoupons']);
+
         $orderInfo = array(
             'targetId' => $data['targetId'],
             'targetType' => $data['targetType'],
