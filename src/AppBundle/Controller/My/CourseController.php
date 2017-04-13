@@ -75,7 +75,7 @@ class CourseController extends CourseBaseController
                 $currentUser['id']
             );
 
-            $courses[$key]['learnTime'] = (int) ($learnTime / 60).'小时'.($learnTime % 60).'分钟';
+            $courses[$key]['learnTime'] = (int)($learnTime / 60).'小时'.($learnTime % 60).'分钟';
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 
@@ -161,7 +161,6 @@ class CourseController extends CourseBaseController
         if ($course['parentId'] > 0) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
         }
-
         $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
 
         return $this->render(
