@@ -576,7 +576,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
                 $questions[$item['questionId']] = array(
                     'id' => $item['questionId'],
                     'isDeleted' => true,
-                    'stem' => $this->getKernel()->trans('此题已删除'),
+                    'stem' => '此题已删除',
                     'score' => 0,
                     'answer' => '',
                     'type' => $item['questionType'],

@@ -29,9 +29,8 @@ class ExceptionListener
         $exception = $event->getException();
         $request = $event->getRequest();
         $statusCode = $this->convertStateCode($exception);
-
         if (!$request->isXmlHttpRequest()) {
-            if ($exception instanceof HttpException) {
+            if ($exception instanceof HttpException || $this->container->get('kernel')->isDebug()) {
                 return;
             }
             $event->setException(

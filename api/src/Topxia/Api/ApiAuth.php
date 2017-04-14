@@ -51,19 +51,19 @@ class ApiAuth
             }
 
             if (!$inWhiteList && empty($token)) {
-                throw new \RuntimeException('API Token不存在！');
+                throw new \RuntimeException('API Token不存在！', 4);
             }
 
             $token = $this->getUserService()->getToken('mobile_login', $token);
 
             if (!$inWhiteList && empty($token['userId'])) {
-                throw new \RuntimeException('API Token不正确！');
+                throw new \RuntimeException('API Token不正确！', 4);
             }
 
             $user = $this->getUserService()->getUser($token['userId']);
 
             if (!$inWhiteList && empty($user)) {
-                throw new \RuntimeException('登录用户不存在！');
+                throw new \RuntimeException('登录用户不存在！', 10);
             }
 
             if ($user) {

@@ -46,7 +46,7 @@
     <div class="course-detail-info">
 
       {#确认下判断是否有误#}
-      {% if course.price > 0 and course.price < course.originPrice  %} 
+      {% if course.price > 0 and course.price < course.originPrice  and is_plugin_installed('Discount') %}
         {% set onDiscount =  true %}
       {% else %}
         {% set onDiscount =  false %}
