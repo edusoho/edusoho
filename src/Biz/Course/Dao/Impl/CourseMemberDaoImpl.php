@@ -12,6 +12,11 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     protected $table = 'course_member';
     protected $alias = 'm';
 
+    public function findByIds($ids)
+    {
+        return $this->findInField('id', $ids);
+    }
+
     public function findByCourseId($courseId)
     {
         return $this->findByFields(array(
@@ -173,7 +178,15 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
         $wherePart = '('.implode(') '.'AND'.' (', $fields).')';
 
-        $sql = "SELECT *,userId FROM {$this->table} WHERE {$wherePart} GROUP BY userId";
+        $declares = $this->declares();
+        $selectFields = array_merge(array('id'), $declares['orderbys']);
+        array_walk($selectFields, function(&$value){
+            $value = 'MAX('.$value.') AS '.$value;
+        });
+
+        $selectList = implode(',', $selectFields);
+
+        $sql = "SELECT {$selectList} FROM {$this->table} WHERE {$wherePart} GROUP BY UserId";
 
         return $this->db()->fetchAll($this->sql($sql, $orderBy, $offset, $limit), array_values($conditions));
     }

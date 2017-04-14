@@ -300,7 +300,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function findLatestStudentsByCourseSetId($courseSetId, $offset, $limit)
     {
-        return $this->getMemberDao()->findByConditionsGroupByUserId(
+        $result = $this->getMemberDao()->findByConditionsGroupByUserId(
             array(
                 'role' => 'student',
                 'courseSetId' => $courseSetId,
@@ -310,6 +310,10 @@ class MemberServiceImpl extends BaseService implements MemberService
             $offset,
             $limit
         );
+
+        $memberIds = array_column($result, 'id');
+
+        return $this->getMemberDao()->findByIds($memberIds);
     }
 
     public function getCourseStudentCount($courseId)
