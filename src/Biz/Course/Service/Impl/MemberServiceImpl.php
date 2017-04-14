@@ -313,7 +313,16 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $memberIds = array_column($result, 'id');
 
-        return $this->getMemberDao()->findByIds($memberIds);
+        $members = $this->getMemberDao()->findByIds($memberIds);
+        $members = ArrayToolkit::index($members, 'id');
+
+        $sortedMembers = array();
+
+        foreach ($memberIds as $memberId) {
+            $sortedMembers[] = $members[$memberId];
+        }
+
+        return $sortedMembers;
     }
 
     public function getCourseStudentCount($courseId)
