@@ -756,8 +756,6 @@ class CourseManageController extends BaseController
             array(
                 'courseSet' => $courseSet,
                 'course' => $course,
-                'courseSets' => array($courseSet['id'] => $courseSet),
-                'courses' => array($course['id'] => $course),
                 'request' => $request,
                 'orders' => $orders,
                 'users' => $users,

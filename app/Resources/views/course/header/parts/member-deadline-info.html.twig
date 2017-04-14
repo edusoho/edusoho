@@ -8,7 +8,7 @@
       {{ course.expiryEndDate|date('Y-m-d') }}
     {% endif %}
   {% else %}
-    {% if course.expiryMode == 'forever' %}
+    {% if course.expiryMode == 'forever' or member.deadline == 0 %}
       {{ '永久有效'|trans }}
     {% elseif course.expiryMode in ['end_date', 'date'] %}
       {{ course.expiryEndDate|date('Y-m-d') }}

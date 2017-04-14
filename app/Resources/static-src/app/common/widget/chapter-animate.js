@@ -1,4 +1,4 @@
-export let chapterAnimate = (delegateTarget = 'body', target ='.js-task-chapter') => {
+export let chapterAnimate = (delegateTarget = 'body', target = '.js-task-chapter') => {
   $(delegateTarget).on('click', target, (event) => {
     let $this = $(event.currentTarget);
     $this.nextUntil(".js-task-chapter").animate({ height: 'toggle', opacity: 'toggle' }, "normal");

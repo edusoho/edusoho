@@ -44,6 +44,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('time_range', array($this, 'timeRangeFilter')),
             new \Twig_SimpleFilter('time_diff', array($this, 'timeDiffFilter')),
             new \Twig_SimpleFilter('remain_time', array($this, 'remainTimeFilter')),
+            new \Twig_SimpleFilter('time_formatter', array($this, 'timeFormatterFilter')),
             new \Twig_SimpleFilter('location_text', array($this, 'locationTextFilter')),
             new \Twig_SimpleFilter('tags_html', array($this, 'tagsHtmlFilter'), array('is_safe' => array('html'))),
             new \Twig_SimpleFilter('file_size', array($this, 'fileSizeFilter')),
@@ -190,6 +191,19 @@ class WebExtension extends \Twig_Extension
     public function arrayIndex($array, $key)
     {
         return ArrayToolkit::index($array, $key);
+    }
+
+    public function timeFormatterFilter($time)
+    {
+        if ($time < 60) {
+            return '0分';
+        }
+
+        if ($time < 3600) {
+            return round($time / 60).'分';
+        }
+
+        return round($time / 3600).'小时'.round($time % 3600 / 60).'分';
     }
 
     public function pluginUpdateNotify()
