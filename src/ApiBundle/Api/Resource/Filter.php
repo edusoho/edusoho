@@ -24,13 +24,6 @@ abstract class Filter
 
     protected $mode = self::PUBLIC_MODE;
 
-    protected $fieldProperties;
-
-    public function __construct()
-    {
-        $this->getFieldProperties();
-    }
-
     public function setMode($mode)
     {
         $this->mode = $mode;
@@ -44,9 +37,10 @@ abstract class Filter
 
         $this->defaultTimeFilter($data);
 
-        if ($this->fieldProperties) {
-            $filteredData = array();
-            foreach ($this->fieldProperties as $property) {
+        $filteredData = array();
+        foreach (array(self::SIMPLE_MODE, self::PUBLIC_MODE, self::AUTHENTICATED_MODE) as $mode) {
+            $property = $mode.'Fields';
+            if (property_exists($this, $property) && $this->{$property}) {
                 $partData = ArrayToolkit::parts($data, $this->$property);
                 if (method_exists($this, $property)) {
                     $this->$property($partData);
@@ -57,9 +51,12 @@ abstract class Filter
                     break;
                 }
             }
+        }
 
+        if ($filteredData) {
             $data = $filteredData;
         }
+
     }
 
     private function isFieldsProperty(\ReflectionProperty $property)
@@ -104,19 +101,5 @@ abstract class Filter
 
         return $html;
 
-    }
-
-    private function getFieldProperties()
-    {
-        $reflectionClass = new \ReflectionClass(static::class);
-        $reflectionProperties = $reflectionClass->getProperties();
-        $actualFieldsProperties = array();
-        foreach ($reflectionProperties as $key => $property) {
-            if ($this->isFieldsProperty($property)) {
-                $actualFieldsProperties[] = $property->getName();
-            }
-        }
-
-        $this->fieldProperties = $actualFieldsProperties;
     }
 }

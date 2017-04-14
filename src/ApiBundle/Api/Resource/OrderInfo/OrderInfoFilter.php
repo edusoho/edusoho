@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\Filter;
 
 class OrderInfoFilter extends Filter
 {
-    protected function customFilter(&$data)
+    public function filter(&$data)
     {
         $data['availableCoupons'] = array_values($data['availableCoupons']);
         $couponFilter = new CouponFilter();

@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\Filter;
 
 class CourseSetLatestMemberFilter extends Filter
 {
-    protected function customFilter(&$data)
+    public function filter(&$data)
     {
         $courseMember = new CourseMemberFilter();
         $courseMember->filter($data);

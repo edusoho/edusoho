@@ -9,8 +9,4 @@ class PayCenterFilter extends Filter
     protected $publicFields = array(
         'id', 'sn', 'status', 'paymentForm', 'paymentHtml'
     );
-
-    protected function customFilter(&$data)
-    {
-    }
 }

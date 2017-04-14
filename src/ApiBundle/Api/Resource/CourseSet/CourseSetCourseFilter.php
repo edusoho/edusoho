@@ -7,9 +7,7 @@ use ApiBundle\Api\Resource\Filter;
 
 class CourseSetCourseFilter extends Filter
 {
-    protected $publicFields = array();
-
-    public function publicFields(&$data)
+    public function filter(&$data)
     {
         $courseFilter = new CourseFilter();
         $courseFilter->filter($data);
