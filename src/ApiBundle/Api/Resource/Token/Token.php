@@ -10,6 +10,7 @@ use ApiBundle\Api\Exception\ResourceNotFoundException;
 use ApiBundle\Api\Resource\Resource;
 use ApiBundle\Api\Util\BrowserDetectionUtil;
 use AppBundle\Common\EncryptionToolkit;
+use Biz\User\Service\TokenService;
 
 class Token extends Resource
 {
