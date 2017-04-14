@@ -137,7 +137,7 @@ class Editor {
         if (errorResponse.error && errorResponse.error.message) {
           msg = errorResponse.error.message;
         }
-        notify('warning', '保存出错: ' + msg);
+        notify('warning', Translator.trans('保存出错') + ':' + msg);
         $("#course-tasks-submit").attr('disabled', null);
       });
   }
@@ -164,19 +164,19 @@ class Editor {
     if (url === undefined) {
       return;
     }
-    if (!confirm(Translator.trans('是否确定删除该任务吗？'))) {
+    if (!confirm(Translator.trans(Translator.trans('是否确定删除该任务吗？')))) {
       return;
     }
     $.post(url)
       .then((response) => {
-        notify('success', '删除成功');
+        notify('success', Translator.trans('删除成功'));
         this.$element.modal('hide');
 
 
         document.location.reload();
       })
       .fail(error => {
-        notify('warning', '删除失败~~');
+        notify('warning', Translator.trans('删除失败'));
       })
   }
 

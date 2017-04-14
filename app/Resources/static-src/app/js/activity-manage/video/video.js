@@ -49,13 +49,13 @@ export default class Video {
       },
       messages: {
         minute: {
-          required: '请输入时长',
+          required: Translator.trans('请输入时长'),
         },
         second: {
-          required: '请输入时长',
-          second_range: '秒数只能在0-59之间',
+          required: Translator.trans('请输入时长'),
+          second_range: Translator.trans('秒数只能在0-59之间'),
         },
-        'ext[mediaSource]': "请上传或选择%display%",
+        'ext[mediaSource]': Translator.trans("请上传或选择%display%"),
       }
     });
     $step2_form.data('validator', validator);
@@ -75,7 +75,7 @@ export default class Video {
       },
       messages: {
         'ext[finishDetail]': {
-          required: '请输入时长',
+          required: Translator.trans('请输入时长'),
         }
       }
     });

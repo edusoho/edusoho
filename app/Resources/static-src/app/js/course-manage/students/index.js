@@ -24,10 +24,10 @@ class Students {
       }
       $.post($(evt.target).data('url'), function(data) {
         if (data.success) {
-          notify('success', '移除成功');
+          notify('success', Translator.trans('移除成功'));
           location.reload();
         } else {
-          notify('danger', '移除失败：' + data.message);
+          notify('danger', Translator.trans('移除失败：') + data.message);
         }
       });
     });
@@ -40,10 +40,10 @@ class Students {
             $this.hide();
             if ($this.hasClass('follow-student-btn')) {
                 $this.parent().find('.unfollow-student-btn').show();
-                notify('success', '关注成功');
+                notify('success', Translator.trans('关注成功'));
             } else {
                 $this.parent().find('.follow-student-btn').show();
-                notify('success', '取消关注成功');
+                notify('success', Translator.trans('取消关注成功'));
             }
         });
         

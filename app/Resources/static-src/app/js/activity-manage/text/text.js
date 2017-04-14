@@ -59,7 +59,7 @@ export default class Text {
       .done(() => {
         const date = new Date(); //日期对象
         const $title = $('#modal .modal-title', parent.document);
-        const now = `${date.getHours() + Translator.trans('时')}${date.getMinutes() + Translator.trans('分')}${date.getSeconds() + Translator.trans('秒')}`;
+        const now = Translator.trans('site.date_format_his', {'hours': date.getHours(), 'minutes': date.getMinutes(), 'seconds': date.getSeconds()});
         $title.text(this._originTitle + Translator.trans('(草稿已于%createdTime%保存)', { createdTime: now }));
         this._contentCache = content;
       });
@@ -78,7 +78,7 @@ export default class Text {
       },
       messages: {
         finishDetail: {
-          required: '请输入至少观看多少分钟',
+          required: Translator.trans('请输入至少观看多少分钟'),
         },
       },
     });

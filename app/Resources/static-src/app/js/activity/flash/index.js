@@ -8,7 +8,7 @@ if (!swfobject.hasFlashPlayerVersion('11')) {
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">×</span>
       </button>
-      ${Translator.trans('您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器。')}<a target="_blank" href="http://www.adobe.com/go/getflashplayer">${Translator.trans('点击安装')}</a>
+      ${Translator.trans('site.flash_not_install_hint')}
     </div>`;
   $el.html(html);
   $el.show();

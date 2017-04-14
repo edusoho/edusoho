@@ -170,7 +170,7 @@ new courseInfo();
 
 jQuery.validator.addMethod("max_year", function (value, element) {
   return this.optional(element) || value < 100000;
-}, "有效期最大值不能超过99,999天");
+}, Translator.trans("有效期最大值不能超过99,999天"));
 
 jQuery.validator.addMethod("live_capacity", function (value, element) {
   const maxCapacity = parseInt($(element).data('liveCapacity'));
@@ -183,5 +183,3 @@ jQuery.validator.addMethod("live_capacity", function (value, element) {
 
   return true;
 });
-
-

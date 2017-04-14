@@ -144,11 +144,11 @@ class TestpaperForm {
         }
       },
       messages: {
-        questioncount: "请选择题目",
-        name: "请输入试卷名称",
-        description: "请输入试卷描述",
-        mode: "请选择生成方式",
-        range: "请选择出题范围"
+        questioncount: Translator.trans("请选择题目"),
+        name: Translator.trans("请输入试卷名称"),
+        description: Translator.trans("请输入试卷描述"),
+        mode: Translator.trans("请选择生成方式"),
+        range: Translator.trans("请选择出题范围")
       }
     });
     this.$form.find('.testpaper-question-option-item').each(function () {
@@ -196,7 +196,7 @@ class TestpaperForm {
     if (status) {
       $.post($target.data('checkUrl'),this.$form.serialize(),result => {
         if (result.status == 'no') {
-          $('.js-build-check').html('该范围内题目数量不足');
+          $('.js-build-check').html(Translator.trans('该范围内题目数量不足'));
         } else {
           $('.js-build-check').html('');
           
@@ -234,5 +234,3 @@ function checkQuestionNum(url) {
     });
   })
 }
-
-

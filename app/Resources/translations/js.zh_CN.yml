@@ -1,0 +1,29 @@
+site.flash_not_install_hint: 您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器。<a target="_blank" href="http://www.adobe.com/go/getflashplayer">点击安装%test%</a>
+site.date_format_dhis: %days%天%hours%小时%minutes%分钟%seconds%秒
+site.date_format_his: %hours%小时%minutes%分钟%seconds%秒
+site.date_format_is: %minutes%分钟%seconds%秒
+site.date_format_s: %seconds%秒
+
+activity.live.replay_guid_1: >
+  老师们：录制直播课程时，需在直播课程间点击
+  <span class='color-info'>录制面板</span>，录制完成后点击
+  <span class='color-info'>暂停</span>结束录播，录播结束后在
+  <span class='color-info'>录播管理</span>界面生成回放。
+activity.live.replay_guid: >
+  老师们：直播平台
+  <span class='color-info'>下课后</span>且
+  <span class='color-info'>直播时间</span>结束后，在课时管理的
+  <span class='color-info'>录播管理</span>点击生成回放。
+activity.live.notice_title: 直播时间
+activity.live.default_notice: >
+  <p>直播将于%startTimeFormat%开始，于%endTimeFormat%结束<p>
+  (请在课前10分钟内提早进入)
+activity.live.started_notice: 直播已经开始，直播将于%endTimeFormat%结束。
+activity.live.ended_notice: 直播已经结束
+activity.live.content_title: 直播说明
+activity.live.entry_live_room: 进入直播教室
+activity.live.count_down_title: 倒计时
+
+course_set.show.count_down_format: 剩余 <span>%D</span>天 <span>%H</span>时 <span>%M</span>分 <span>%S</span>秒
+course_set.live_room.entry_error_hint: 进入直播教室错误，请联系管理员，<a href='javascript:window.location.reload()'>重试</a>或<a href='javascript:window.close();'>关闭</a>;
+course_set.live_room.entry_error_with_message: 进入直播教室错误，%message%，<a href='javascript:window.location.reload()'>重试</a>或<a href='javascript:window.close();'>关闭</a>;

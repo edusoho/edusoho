@@ -7,10 +7,10 @@ export const publishCourseSet = () => {
     }
     $.post($(evt.target).data('url'), function(data) {
       if (data.success) {
-        notify('success', '课程发布成功');
+        notify('success', Translator.trans('课程发布成功'));
         location.reload();
       } else {
-        notify('danger','课程发布失败：' + data.message,5000);
+        notify('danger',Translator.trans('课程发布失败') + ':' + data.message,5000);
       }
     });
   });

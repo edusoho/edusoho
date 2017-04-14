@@ -71,8 +71,8 @@ class Marketing {
       },
       messages: {
         buyExpiryTime: {
-          required: '请选择有效的加入截止日期',
-          date: '请选择有效的加入截止日期'
+          required: Translator.trans('请选择有效的加入截止日期'),
+          date: Translator.trans('请选择有效的加入截止日期')
         },
       }
     });
@@ -270,7 +270,7 @@ class Marketing {
       positive_integer: true,
       max_year: true,
       messages: {
-        required: Translator.trans('请输入有效期天数')
+        required: Translator.trans(Translator.trans('请输入有效期天数'))
       }
     }
   }

@@ -30,15 +30,15 @@ export default class Audio {
       },
       messages: {
         minute: {
-          required: '请输入时长',
-          unsigned_integer: '时长必须大于0'
+          required: Translator.trans('请输入时长'),
+          unsigned_integer: Translator.trans('时长必须大于0')
         },
         second: {
-          required: '请输入时长',
-          second_range: '秒只能在0-59之间',
-          unsigned_integer: '时长必须大于0'
+          required: Translator.trans('请输入时长'),
+          second_range: Translator.trans('秒只能在0-59之间'),
+          unsigned_integer: Translator.trans('时长必须大于0')
         },
-        'ext[mediaId]': '请上传或选择%display%'
+        'ext[mediaId]': Translator.trans('请上传或选择%display%')
       }
     });
 

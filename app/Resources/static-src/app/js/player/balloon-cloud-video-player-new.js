@@ -54,7 +54,7 @@ class BalloonCloudVideoPlayer extends Emitter {
       extConfig = Object.assign(extConfig, {
         pluck: {
           timelimit: self.options.timelimit,
-          text: "免费试看结束，购买后可完整观看",
+          text: Translator.trans("免费试看结束，购买后可完整观看"),
           display: true
         }
       })

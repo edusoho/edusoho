@@ -27,7 +27,7 @@ class SubtitleDialog {
       let $elem = $(this);
       $.post($elem.data('subtitleDeleteUrl'), function (data) {
         if (data) {
-          notify('success', '删除字幕成功');
+          notify('success', Translator.trans('删除字幕成功'));
           $elem.parent().remove();
           $('#' + self.upload_id).show();
         }
@@ -90,11 +90,11 @@ class SubtitleDialog {
         "mediaId": mediaId
       }).success(function (data) {
         let convertStatus = {
-          waiting: '等待转码',
-          doing: '正在转码',
-          success: '转码成功',
-          error: '转码失败',
-          none: '等待转码'
+          waiting: Translator.trans('等待转码'),
+          doing: Translator.trans('正在转码'),
+          success: Translator.trans('转码成功'),
+          error: Translator.trans('转码失败'),
+          none: Translator.trans('等待转码')
         };
         $('.js-media-subtitle-list').append('<li class="pvs">' +
           '<span class="subtitle-name prl">' + data.name + '</span>' +

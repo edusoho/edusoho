@@ -52,8 +52,8 @@ class QuestionFormBase {
         }
       },
       messages: {
-        '[data-role="target"]': "请选择从属",
-        difficulty: "请选择难度"
+        '[data-role="target"]': Translator.trans("请选择从属"),
+        difficulty: Translator.trans("请选择难度")
       }
     });
     this.validator = validator;

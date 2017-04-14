@@ -24,8 +24,8 @@ export default class DownLoad {
         materials: 'required',
       },
       messages: {
-        link: "链接地址不正确",
-        materials: '请上传或选择%display%'
+        link: Translator.trans("链接地址不正确"),
+        materials: Translator.trans('请上传或选择%display%')
       }
     });
     this.$form.data('validator', validator2);
@@ -158,7 +158,7 @@ export default class DownLoad {
       item_tpl = `
     <li class="download-item " data-id="${media.link}">
         <a class="gray-primary" href="${ media.link}" target="_blank">${media.name}</a>
-        <a class="gray-primary phm btn-delete  js-btn-delete"  href="javascript:;"  data-url="" data-toggle="tooltip" data-placement="top" title="{{ '删除'|trans }}"><i class="es-icon es-icon-delete"></i></a>
+        <a class="gray-primary phm btn-delete  js-btn-delete"  href="javascript:;"  data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('删除')}"><i class="es-icon es-icon-delete"></i></a>
         <span class="glyphicon glyphicon-new-window text-muted text-sm" title="${Translator.trans('删除')}"></span>
     </li>
   `;

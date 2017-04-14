@@ -78,18 +78,18 @@ class Exercise {
         }
       },
       messages: {
-        required: "请填写标题",
-        range: "题目来源",
+        required: Translator.trans("请填写标题"),
+        range: Translator.trans("题目来源"),
         itemCount: {
-          required: '请填写题目个数',
-          positiveInteger: '请输入正整数',
-          min: '题目个数无效',
-          max: '题目个数过大'
+          required: Translator.trans('请填写题目个数'),
+          positiveInteger: Translator.trans('请输入正整数'),
+          min: Translator.trans('题目个数无效'),
+          max: Translator.trans('题目个数过大')
         },
-        difficulty: "请选择难易程度",
+        difficulty: Translator.trans("请选择难易程度"),
         'questionTypes[]': {
-          required: "请选择题型",
-          remote: "题目数量不足"
+          required: Translator.trans("请选择题型"),
+          remote: Translator.trans("题目数量不足")
         },
       }
     });
@@ -107,7 +107,7 @@ class Exercise {
         },
       },
       messages: {
-        finishCondition: "请输完成条件",
+        finishCondition: Translator.trans("请输完成条件"),
       }
     });
     $step3_form.data('validator', validator);
@@ -116,7 +116,7 @@ class Exercise {
   _setValidateRule() {
     $.validator.addMethod("positiveInteger", function (value, element) {
       return this.optional(element) || /^[1-9]\d*$/.test(value);
-    }, $.validator.format("必须为正整数"));
+    }, $.validator.format(Translator.trans("必须为正整数")));
 
   }
 
