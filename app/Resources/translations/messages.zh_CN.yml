@@ -12,7 +12,7 @@ site.datagrid.filter.last_two_month: 最近两个月
 site.datagrid.filter.last_three_month: 最近三个月
 site.datagrid.filter.all_course: 全部课程
 site.datagrid.filter.latest: 最新
-site.datagrid.filter.topest: 最热
+site.datagrid.filter.hotest: 最热
 site.datagrid.filter.recommended: 推荐
 site.datagrid.filter.category_more: 更多
 site.datagrid.filter.course_more: 更多课程
