@@ -4,17 +4,18 @@ site.currency.RMB: 元
 site.date.month: 月
 site.data.empty: 无
 site.datagrid.empty: 暂无记录
-site.dategrid.filter.all_records: 全部记录
-site.dategrid.filter.last_one_week: 最近一周
-site.dategrid.filter.last_two_week: 最近两周
-site.dategrid.filter.last_one_month: 最近一个月
-site.dategrid.filter.last_three_month: 最近三个月
-site.dategrid.filter.all_course: 全部课程
-site.dategrid.filter.latest: 最新
-site.dategrid.filter.topest: 最热
-site.dategrid.filter.recommended: 推荐
-site.dategrid.filter.category_more: 更多
-site.dategrid.filter.course_more: 更多课程
+site.datagrid.filter.all_records: 全部记录
+site.datagrid.filter.last_one_week: 最近一周
+site.datagrid.filter.last_two_week: 最近两周
+site.datagrid.filter.last_one_month: 最近一个月
+site.datagrid.filter.last_two_month: 最近两个月
+site.datagrid.filter.last_three_month: 最近三个月
+site.datagrid.filter.all_course: 全部课程
+site.datagrid.filter.latest: 最新
+site.datagrid.filter.topest: 最热
+site.datagrid.filter.recommended: 推荐
+site.datagrid.filter.category_more: 更多
+site.datagrid.filter.course_more: 更多课程
 site.message.info: 提示信息
 site.message.warning: 警告信息
 site.message.error: 错误提示
@@ -25,7 +26,17 @@ site.org.belongs_to_org_th: 所属组织机构
 site.org.code: 编码：
 site.default.more: 更多
 
+status: 状态
+price: 价格
+name: 名称
+time: 时间
+type: 类型
+
+#会员
+vip: 会员
+
 # 用户通用
+user: 用户
 user.fields.login_password: 登录密码
 user.fields.pay_password: 支付密码
 user.fileds.microblog: 微博
@@ -62,6 +73,12 @@ finance.expense: 支出
 finance.income_expense: 收支
 finance.coin: 虚拟币
 finance.balance: 账户余额
+finance.use_deduction: 用于抵扣
+finance.user_currency: 用于标价
+finance.RMB_price: 人民币价格
+finance.max_deduction_rate: 最大可抵扣比率
+finance.max_deduction_money: 最大可抵扣金额
+finance.max_can_use_coin: 最大可用%coinName%
 
 #插件
 plugin.charge_coin.recharge: 充 值
@@ -70,6 +87,19 @@ plugin.money_card.use: 使用学习卡
 plugin.coupon: 优惠码
 plugin.coupon.code: 优惠码
 plugin.coupon.amount: 优惠金额
+
+#虚拟币通用
+coin.online_school_balance: 网校余额
+coin.recharge: 充值
+coin.consume: 消费
+coin.sn: 流水号
+coin.name: 虚拟币名称
+coin.picture: 虚拟币图片
+coin.paid_time: 成交时间
+coin.income_expense: 收支
+coin.order_sn: 订单号
+coin.balance: 虚拟币余额
+coin.rate: 汇率
 
 #订单通用
 order.name: 订单名称
@@ -100,6 +130,11 @@ order.payment_pattern.quickpay: 快捷支付
 order.payment_pattern.llpay: 连连支付
 order.payment_pattern.cash: 现金支付
 order.payment_pattern.other: 其他支付
+order.tips: <div>站外支付为该笔订单是通过导入或者手动添加的方式产生的，故为站外支付</div>
+order.content_title: 订单详情
+order.detail: 详情
+order.log: 日志
+order.coin.empty_hint: 暂无虚拟币订单记录
 
 # 上传模块
 upload.titile: 上传附件
@@ -112,6 +147,9 @@ course.origin_price.RMB: %originPrice%元
 course.price.free: 免费
 course.price.limited_time_free: 限免
 course.price.discount: %discount%折
+course.name: 课程名称
+course.id: 课程编号
+course.price_setting: 课程价格设置
 
 #公开课
 open_course: 公开课
@@ -120,6 +158,7 @@ open_course.status.live: 正在直播
 open_course.status.living: 即将直播
 
 # 班级
+classroom: 班级
 classroom.courses_count: 共%courseNum%课
 classroom.continue_learning_btn: 继续学习
 classroom.join_btn: 立即加入
@@ -127,8 +166,12 @@ classroom.status.unpublish: 未发布
 classroom.status.closed: 已关闭
 
 # 表单通用
+form.btn.finish: 完成
 form.field.optional: 选填
 form.field.privacy_public: 公开
+form.field.create: 添加
+form.field.amount: 数量
+form.field.cut: 扣除
 form.btn.modify: 修改
 form.btn.set: 设置
 form.btn.publish: 发布
@@ -166,6 +209,15 @@ form.btn.modify.submiting: 正在修改...
 form.checkbox.public: 公开
 form.placeholder.max_int: 最大值为9位整数
 form.placeholer.two_decimal_places: 保留到2位小数
+form.placeholder.start_date: 起始时间
+form.placeholder.end_date: 结束时间
+form.placeholder.keyword: 关键词
+form.btn.export_result: 导出结果
+form.placeholder.nickname: 用户名
+form.radio_btn.pass: 同意
+form.radio_btn.unpass: 不同意
+form.btn.next: 下一步
+form.btn.back: 上一步
 
 # 用户登录
 user.login.page_title: 登录账号
@@ -1701,3 +1753,156 @@ my.learning.notebook_menu: 我的笔记
 my.learning.homework_menu: 我的作业
 my.learning.testpaper_menu: 我的考试
 my.learning.group_menu: 我的小组
+
+# 订单模块
+admin.order.paid_time_range.input_placeholder: 付款时间段
+admin.order.keyword: 关键词:
+admin.order.buyer: 购买者用户名
+admin.order.screen_condition: 筛选条件:
+admin.order.target_name: 名
+admin.order.buyer_mobile: 购买者绑定手机号
+admin.order.buyer_email: 购买者邮箱
+admin.order.target_id: 编号
+admin.order.tips: 站外支付为该笔订单是通过导入或者手动添加的方式产生的，故为站外支付
+admin.order.paid: 已支付
+admin.order.created: 未付款
+admin.order.cancelled: 已关闭
+admin.order.coin_order_type.default: --选择类型--
+
+#账单管理
+admin.bill.time_option.default: 全部记录
+admin.bill.time_option.last_one_week: 最近一周
+admin.bill.time_option.last_two_week: 最近两周
+admin.bill.time_option.last_one_month: 最近一个月
+admin.bill.time_option.last_two_month: 最近两个月
+admin.bill.time_option.last_three_month: 最近三个月
+
+#虚拟币模块
+admin.coin.type_option.default: 全部记录
+admin.coin.type_option.inflow: 充值记录
+admin.coin.type_option.outflow: 消费记录
+
+admin.coin.created_time_option.all: 全部记录
+admin.coin.created_time_option.oneWeek: 最近一周
+admin.coin.created_time_option.oneMonth: 最近一个月
+admin.coin.created_time_option.threeMonths: 最近三个月
+
+admin.coin.keyword_type_option.default: --选择类型--
+admin.coin.search_type_option.nickname: 用户名
+admin.coin.search_type_option.email: 邮件地址
+
+admin.coin.datagrid.filter.oneWeek: 本周
+admin.coin.datagrid.filter.oneMonth: 本月
+admin.coin.datagrid.filter.threeMonths: 三个月
+admin.coin.datagrid.filter.all_history: 全部历史
+
+admin.coin.datagrid.filter.default: 默认
+admin.coin.datagrid.filter.consume: 消费
+admin.coin.datagrid.filter.recharge: 充值
+
+admin.coin.datagrid.filter.asc: 升序
+admin.coin.datagrid.filter.desc: 降序
+admin.coin.operation: 操作
+admin.coin.sort: 排序
+admin.coin.content_title: 虚拟币管理
+admin.coin.give_btn: 发放虚拟币
+admin.coin.manage: 虚拟币管理
+admin.coin.nickname.input_placeholder: 请输入用户名
+admin.coin.edit_btn: 修改
+admin.coin.tips: 注：虚拟币记录只有在进入虚拟币页面时才会记录
+admin.coin.setting: 虚拟币设置 
+admin.coin.model_setting: 使用方式设置
+admin.coin.recharge_orders: 充值订单
+admin.coin.user_coin: 用户虚拟币
+admin.coin_edit.content_title: 修改
+admin.coin_give.content_title: 发放虚拟币
+admin.coin_give.nickname_check_hint: 只能选择系统中已注册的用户
+admin.coin_flow_detail.content_title: %nickname%的%coin_name%明细
+admin.coin.model: 使用方式
+admin.coin_setting.description: 说明
+admin.coin_setting.description_hint: 虚拟币是可以在网校内进行支付消费的虚拟货币
+admin.coin_setting.promotion_proposal: 推广建议
+admin.coin_setting.promotion_proposal_hint: >
+  1、 建议网校使用虚拟币对网校内课程进行标价；<br>
+  2、 网校可鼓励%user_name%充值，可提升用户忠诚度；<br>
+  3、 建议配合使用学习卡（商业应用），给予一定优惠；<br>
+admin.coin_setting.upload_hint: >
+  请上传png, gif, jpg格式的大于等于50*50的<span class="text-danger">等比例</span>图片，否则无法上传
+admin.coin_setting.coin_description: 虚拟币说明
+admin.coin_setting.content_hint: 虚拟币说明可用于描述虚拟币特点，用途，获得的途径等虚拟币的相关内容
+admin.coin_setting.update_submit_btn: 提交更新
+admin.coin_setting.tips: >
+  <p><strong>1.虚拟币设置的名称，图片，虚拟币说明都会在学生的【账户中心】展现/提示</strong></p>
+  <p><strong>2.虚拟币图片和说明设置后，会显示在用户的账户中心</strong></p>
+admin.coin_model.datagrid.none: 不使用
+admin.coin_model.datagrid.deduction: 用于抵扣
+admin.coin_model.datagrid.currency: 用于标价
+admin.coin_model.coin_rate_setting: 虚拟币汇率设置
+admin.coin_model.rate_setting_hint: >
+  在此设置1元可换取的虚拟币数量，<span class="text text-danger">建议汇率设置后不要进行改动</span>
+admin.coin_model.tips: >
+  1、暂无手动修改用户虚拟币余额的功能
+  <br>
+  2、充值虚拟币，需安装<a href="%appCenterUrl%">学习卡</a>或<a href="%appCenterUrl%">账户充值</a>插件
+  <br>
+
+admin.coin_model.deduction_tips: >
+  1、暂无手动修改用户虚拟币余额的功能
+  <br>
+  2、充值虚拟币，需安装<a href="%appCenterUrl%">学习卡</a>或<a href="%appCenterUrl%">账户充值</a>插件
+  <br>
+  3、虚拟币用于抵扣：网校以人民币作为支付货币，并可以使用虚拟币进行按比例抵扣(虚拟币类似于淘金币）
+  <br>
+  4、使用方式一旦保存（使用方式和汇率），请勿随意改动
+  <br>
+  5、使用方式的切换会使课程价格根据汇率变动
+  <br>
+  6、如有参加促销活动的课程，修改价格都将有相应的折扣  
+
+admin.coin_model.currency_tips: >
+  1、暂无手动修改用户虚拟币余额的功能
+  <br>
+  2、充值虚拟币，需安装<a href="%appCenterUrl%">学习卡</a>或<a href="%appCenterUrl%">账户充值</a>插件
+  <br>
+  3、虚拟币用于标价：网校以虚拟币作为支付货币，课程和会员以虚拟币标价和结算
+  <br>
+  4、虚拟币用于标价后，移动端仍显示人民币价格（移动端暂不支持虚拟币支付）
+  <br>
+  5、使用方式一旦保存（使用方式和汇率），请勿随意改动
+  <br>
+  6、使用方式的切换会使课程价格会根据汇率变动
+  <br>
+  7、如有参加促销活动的课程，修改价格都将有相应的折扣
+
+admin.coin_course_set.tips: >
+  1元人民币兑换<strong class="text-info">%cashRate%</strong>%coinName%
+admin.coin_setting.price_set_tips: 请设置正确的价格
+
+#退款管理
+admin.order_refund.status.default: 退款状态
+admin.order_refund.nickname.input_placeholder: 退款人用户名
+admin.order_refund.title.type_course_input_placeholder: 课程名
+admin.order_refund.title.type_classroom_input_placeholder: 班级名
+admin.order_refund.title: 退款订单
+admin.order_refund.order_amount: 订单成交金额
+admin.order_refund.refund_person: 退款人
+admin.order_refund.refund_status: 退款状态
+admin.order_refund.operator: 操作人
+admin.order_refund.operation: 操作
+admin.order_refund.reason: 退款理由
+admin.order_refund.time: 退款时间
+admin.order_refund.refund_actual_amount: 实退%actualAmount%元
+admin.order_refund.empty_hint: 暂无退款记录
+admin.order_refund.approve.content_title: 审核退款申请
+admin.order_refund.audit_refund_btn: 审核
+admin.order_refund.audit.content_title: 审核退款申请
+admin.order_refund.audit.result: 审核结果
+admin.order_refund.audit.refund_actual_amount: 实际退款金额
+admin.order_refund.audit.description: 审核说明
+admin.order_refund.audit.tips: 系统没有自动退款功能，此处仅是退款申请记录，审核通过的退款申请，需要网校线下退款。
+
+admin.order.logs.content_title: 订单详情
+admin.order.logs.info: 日志信息
+admin.order.logs.operator: 操作人
+admin.order.logs.created_time: 创建时间
+admin.order.logs.empty_hint: 暂无交易日志!
