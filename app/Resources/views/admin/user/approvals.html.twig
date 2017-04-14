@@ -7,31 +7,31 @@
 {% block main %}
   <div class="btn-group">
     <a type="button" class="btn btn-default btn-sm {% if approvalStatus == 'approving' %}btn-primary{% endif %}"
-       href="{{ path('admin_approval_approvals',{approvalStatus: 'approving'}) }}">{{ '审核中'|trans }}</a>
+       href="{{ path('admin_approval_approvals',{approvalStatus: 'approving'}) }}">{{ 'admin.user.approval.approving_tab'|trans }}</a>
     <a type="button" class="btn btn-default btn-sm {% if approvalStatus == 'approved' %}btn-primary{% endif %}"
-       href="{{ path('admin_approval_approvals',{approvalStatus: 'approved'}) }}">{{ '审核成功'|trans }}</a>
+       href="{{ path('admin_approval_approvals',{approvalStatus: 'approved'}) }}">{{ 'admin.user.approval.approved_tab'|trans }}</a>
   </div>
   <form id="user-search-form" class="form-inline well well-sm mtl" action="" method="get" novalidate>
    {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
   
     <div class="form-group">
       <select class="form-control" name="keywordType">
-        {{ select_options({'':'--查询条件--'|trans,nickname:'用户名'|trans,email:'邮箱'|trans,truename:'真实姓名'|trans,idcard:'身份证号码'|trans}, app.request.get('keywordType')) }}
+        {{ select_options({'':'admin.user.approval.form.keyword_type_option.default'|trans,nickname:'user.fields.username_label'|trans,email:'admin.user.fields.email'|trans,truename:'user.fileds.realname'|trans,idcard:'admin.user.fields.idcard'|trans}, app.request.get('keywordType')) }}
       </select>
     </div>
     <div class="form-group">
       <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}"
-             placeholder="{{ '关键词'|trans }}">
+             placeholder="{{ 'admin.user.form.input_placeholder.keyword'|trans }}">
     </div>
     <div class="form-group">
-      {{ '申请时间:'|trans }}
+      {{ 'admin.user.approval.fields.application_date_label'|trans }}
       <input class="form-control" type="text" id="startDate" name="startDateTime"
-             value="{{ app.request.query.get('startDateTime') }}" placeholder="{{ '起始时间'|trans }}">
+             value="{{ app.request.query.get('startDateTime') }}" placeholder="{{ 'admin.user.form.input_placeholder.startDate'|trans }}">
       -
       <input class="form-control" type="text" id="endDate" name="endDateTime"
-             value="{{ app.request.query.get('endDateTime') }}" placeholder="{{ '结束时间'|trans }}">
+             value="{{ app.request.query.get('endDateTime') }}" placeholder="{{ 'admin.user.form.input_placeholder.endDate'|trans }}">
     </div>
-    <button class="btn btn-primary">{{ '搜索'|trans }}</button>
+    <button class="btn btn-primary">{{ 'admin.user.form.btn.search_submit_btn'|trans }}</button>
   </form>
 
   {% if users %}
@@ -39,13 +39,13 @@
       <thead>
       <tr>
         <th>ID</th>
-        <th>{{ '用户名'|trans }}</th>
+        <th>{{ 'user.fields.username_label'|trans }}</th>
         {% include 'org/parts/table-thead-tr.html.twig' %}
-        <th>{{ '真实姓名'|trans }}</th>
-        <th>{{ '身份证号码'|trans }}</th>
-        <th>{{ '邮件'|trans }}</th>
-        <th>{{ '申请时间'|trans }}</th>
-        <th>{{ '操作'|trans }}</th>
+        <th>{{ 'user.fileds.realname'|trans }}</th>
+        <th>{{ 'admin.user.fields.idcard'|trans }}</th>
+        <th>{{ 'admin.user.approval.fields.email'|trans }}</th>
+        <th>{{ 'admin.user.approval.fields.application_date_label'|trans }}</th>
+        <th>{{ 'admin.user.fields.operation_label'|trans }}</th>
       </tr>
       </thead>
       <tbody>
@@ -62,12 +62,12 @@
             {% if approvalStatus == 'approved' %}
               <div class="btn-group">
                 <a href="#modal" data-toggle="modal" data-url="{{ path('admin_approval_info_view', {id:user.id}) }}"
-                   class="btn btn-default btn-sm">{{ '查看'|trans }}</a>
+                   class="btn btn-default btn-sm">{{ 'admin.user.btn.show_btn'|trans }}</a>
                 {% include 'admin/role/templates/group-button.html.twig' with {parentCode: 'admin_approval_approvals', group:'groupButton', user: user} %}
               </div>
             {% elseif approvalStatus == 'approving' %}
               <a href="#modal" data-toggle="modal" data-url="{{ path('admin_approval_approve', {id:user.id}) }}"
-                 class="btn btn-default btn-sm">{{ '审核'|trans }}</a>
+                 class="btn btn-default btn-sm">{{ 'admin.user.approval.approve_submit_btn'|trans }}</a>
             {% endif %}
           </td>
         </tr>
@@ -78,9 +78,9 @@
     {{ admin_macro.paginator(paginator) }}
   {% else %}
     {% if approvalStatus == 'approved' %}
-      <div class="empty">{{ '暂无已经审核成功的实名认证用户'|trans }}</div>
+      <div class="empty">{{ 'admin.user.approval.approved_empty_hint'|trans }}</div>
     {% elseif approvalStatus == 'approving' %}
-      <div class="empty">{{ '暂无需要审核中的实名认证用户'|trans }}</div>
+      <div class="empty">{{ 'admin.user.approval.approving_empty_hint'|trans }}</div>
     {% endif %}
   {% endif %}
 
