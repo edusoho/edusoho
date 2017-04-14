@@ -4,23 +4,23 @@
 
 {% set menu = 'admin_setting_user_fields' %}
 {% block page_buttons %}
-<button type="button" class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#myModal">{{'添加字段'|trans}}</button>
+<button type="button" class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#myModal">{{'admin.user_fields.add_field_btn'|trans}}</button>
 {% endblock %}
 {% block main %}
 
 {{ web_macro.flash_messages() }}
 <form action="" class="form-horizontal" method="post">
   <fieldset>
-    <legend>{{'自定义字段设置'|trans}}</legend>
+    <legend>{{'admin.user_fields.customer_fields_setting'|trans}}</legend>
     <table class="table table-striped table-hover" id="course-table">
       <thead>
       <tr>
-        <th>{{'字段名称'|trans}}</th>
-        <th>{{'类型'|trans}}</th>
-        <th>{{'是否显示'|trans}}</th>
-        <th>{{'显示序号'|trans}}</th>
+        <th>{{'admin.user_fields.fields_title'|trans}}</th>
+        <th>{{'admin.user_fields.fields_fieldName'|trans}}</th>
+        <th>{{'admin.user_fields.fields_enabled'|trans}}</th>
+        <th>{{'admin.user_fields.fields_seq'|trans}}</th>
         <!-- <th>创建时间</th> -->
-        <th>{{'操作'|trans}}</th>
+        <th>{{'admin.user_fields.operation'|trans}}</th>
       </tr>
       </thead>
       <tbody>
@@ -31,17 +31,17 @@
   
   
   <fieldset>
-    <legend>{{'个人资料设置'|trans}}</legend>
+    <legend>{{'admin.user_fields.Personal_info_configiration'|trans}}</legend>
 
     {% set commonFields = dict('userInfoFields')|default(null) %}
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >{{'购买课程或班级时填写个人资料'|trans}}</label>
+        <label >{{'admin.user_fields.Require_personal'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('buy_fill_userinfo', {1:'开启'|trans, 0:'关闭'|trans}, courseSetting.buy_fill_userinfo|default(0)) }}
-        <p class="help-block">{{'开启后，'|trans}}{% if setting('default.user_name') %}{{'%user_name%购买课程时，需填写个人资料'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}{% endif %}</p>
+        {{ radios('buy_fill_userinfo', {1:'admin.user_fields.Personal_info_configiration.open'|trans, 0:'admin.user_fields.Personal_info_configiration.closed'|trans}, courseSetting.buy_fill_userinfo|default(0)) }}
+        <p class="help-block">{{ 'admin.user_fields.Personal_info_configiration.help_block'|trans({'%user_name%': setting('default.user_name')|default('site.default.student'|trans)}) }}</p>
       </div>
 
       <div class="controls col-md-8 col-md-offset-3" id="show-list">
@@ -62,7 +62,7 @@
         </div>
           
         <div class="pull-right ">
-          <a href="javascript:" id="show-list-btn">{{'编辑'|trans}} 
+          <a href="javascript:" id="show-list-btn">{{'admin.user_fields.edit_btn'|trans}} 
             <span class="glyphicon glyphicon-chevron-down"></span>
           </a>
         </div>
@@ -78,7 +78,7 @@
                 <input type="checkbox" name="userinfoFields[]" value="{{ key }}" {% if key in checkedFieldsKeys %}checked=true{% endif %} />
                 <input type="hidden"  name="userinfoFieldNameArray[]" value="{{ key }}" /> 
                 {{ field }}
-                {% if key == 'email' or key == 'mobile' %}<span class="text-muted">  ({{'带格式校检'|trans}})</span>{% endif %}
+                {% if key == 'email' or key == 'mobile' %}<span class="text-muted">  ({{'admin.user_fields.Formart_verifcation'|trans}})</span>{% endif %}
               </li>
             {% endfor %}
 
@@ -91,11 +91,11 @@
             {% endfor %}
           </ul>
 
-          <div class="help-block col-md-12"><span class="text-success">{{'可拖动调整次序。酌情勾选需要收集的字段，若需要新的字段，请在［自定义字段设置］中添加。'|trans}}</span></div>
+          <div class="help-block col-md-12"><span class="text-success">{{'admin.user_fields.Formart_verifcation.help_block'|trans}}</span></div>
 
         </div>
         <div class="mbl" style="text-align:center;">
-          <a href="javascript:" id="hide-list-btn">{{'收起 '|trans}}
+          <a href="javascript:" id="hide-list-btn">{{'admin.user_fields.Formart_verifcation.hide '|trans}}
             <span class="glyphicon glyphicon-chevron-up"></span>
           </a>
         </div>
@@ -104,11 +104,11 @@
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >{{'登录后填写个人资料'|trans}}</label>
+        <label >{{'admin.user_fields.Require_personal_information'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('fill_userinfo_after_login', {1:'开启'|trans, 0:'关闭'|trans}, setting('auth.fill_userinfo_after_login')|default(0)) }}
-        <p class="help-block">{{'开启后，'|trans}}{% if setting('default.user_name') %}{{'%user_name%登录后需填写个人资料'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}{% endif %}</p>
+        {{ radios('fill_userinfo_after_login', {1:'admin.login_connect.open'|trans, 0:'admin.login_connect.closed'|trans}, setting('auth.fill_userinfo_after_login')|default(0)) }}
+        <p class="help-block">{{ 'admin.user_fields.Require_personal_information.help_block'|trans({'%user_name%': setting('default.user_name')|default('site.default.student'|trans)}) }}</p>
       </div>
 
       <div class="controls col-md-8 col-md-offset-3" id="show-checked-fields-list">
@@ -130,7 +130,7 @@
         </div>
           
         <div class="pull-right ">
-          <a href="javascript:" id="show-fields-list-btn">{{'编辑 '|trans}}
+          <a href="javascript:" id="show-fields-list-btn">{{'admin.user_fields.edit_btn '|trans}}
             <span class="glyphicon glyphicon-chevron-down"></span>
           </a>
         </div>
@@ -147,7 +147,7 @@
                 <input type="checkbox" name="registerSort[]" value="{{ key }}" {% if key in checkedUserFieldsKeys %}checked=true{% endif %} />
                 <input type="hidden"  name="registerFieldNameArray[]" value="{{ key }}" /> 
                 {{ field }}
-                {% if key == 'email' or key == 'mobile' %}<span class="text-muted">  ({{'带格式校检'|trans}})</span>{% endif %}
+                {% if key == 'email' or key == 'mobile' %}<span class="text-muted">  ({{'admin.user_fields.Formart_verifcation'|trans}})</span>{% endif %}
               </li>
             {% endfor %}
 
@@ -160,11 +160,11 @@
             {% endfor %}
           </ul>
 
-          <div class="help-block col-md-12"><span class="text-success">{{'可拖动调整次序。酌情勾选需要收集的字段，若需要新的字段，请在［自定义字段设置］中添加。'|trans}}</span></div>
+          <div class="help-block col-md-12"><span class="text-success">{{'admin.user_fields.Formart_verifcation.help_block'|trans}}</span></div>
 
         </div>
         <div class="mbl" style="text-align:center;">
-          <a href="javascript:" id="hide-fields-list-btn">{{'收起 '|trans}}
+          <a href="javascript:" id="hide-fields-list-btn">{{'admin.user_fields.Formart_verifcation.hide '|trans}}
             <span class="glyphicon glyphicon-chevron-up"></span>
           </a>
         </div>
@@ -173,21 +173,21 @@
   </fieldset>
 
   <fieldset>
-    <legend>{{'其它设置'|trans}}</legend>
+    <legend>{{'admin.user_fields.other_setting'|trans}}</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label>{{'加入免费课程要求设置头像'|trans}}</label>
+        <label>{{'admin.user_fields.other_setting.avatar'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('avatar_alert', {'open':'开启'|trans, 'close':'关闭'|trans}, setting('user_partner.avatar_alert')|default('close')) }}
+        {{ radios('avatar_alert', {'open':'admin.login_connect.open'|trans, 'close':'admin.login_connect.closed'|trans}, setting('user_partner.avatar_alert')|default('close')) }}
       </div>
     </div>
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label>{{'用户修改用户名'|trans}}</label>
+        <label>{{'admin.user_fields.other_setting.edit_user_name'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('nickname_enabled', {1:'开启'|trans, 0:'关闭'|trans}, setting('user_partner.nickname_enabled')|default(0)) }}
+        {{ radios('nickname_enabled', {1:'admin.login_connect.open'|trans, 0:'admin.login_connect.closed'|trans}, setting('user_partner.nickname_enabled')|default(0)) }}
       </div>
     </div>
   </fieldset>
@@ -195,7 +195,7 @@
   <div class="form-group">
     <div class="col-md-3 control-label"></div>
     <div class="controls col-md-8">
-      <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>  
+      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>  
     </div>
   </div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

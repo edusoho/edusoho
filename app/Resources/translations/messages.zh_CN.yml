@@ -24,6 +24,7 @@ site.default.student: 学员
 site.org.belongs_to_org_th: 所属组织机构
 site.org.code: 编码：
 site.default.more: 更多
+site.default.none: 无
 
 # 用户通用
 user.fields.login_password: 登录密码
@@ -1490,6 +1491,153 @@ admin.course_review.rate_th: 评分
 admin.course_review.completed_progress_th: 完成进度
 admin.course_review.classroom_title.placeholer: %classroomName%名
 admin.course_review.classroom_deleted: %classroomName%已删除
+
+# 用户设置
+admin.user_auth.sign_up_settings: 注册设置
+admin.user_auth.User_sign_up_type: 用户注册模式
+admin.user_auth.email: 邮箱注册
+admin.user_auth.phone: 手机注册
+admin.user_auth.email_or_mobile: 邮箱或手机注册
+admin.user_auth.closed: 关闭
+admin.user_auth.User_sign_up_type.help_block: 开启云短信后，才可使用“手机注册”或“邮箱或手机注册”
+admin.user_auth.Email_verification_sign: 邮箱验证登录
+admin.user_auth.Email_verification_sign.open: 开启
+admin.user_auth.Email_verification_sign.closed: 关闭
+admin.user_auth.Verify_email_address_btn: 检测邮箱服务
+admin.user_auth.Verifying: 正在检测.....
+admin.user_auth.Verify_email_address_btn.help_block: 开启后,邮箱未验证的用户将无法登录,请先保证邮件服务器已设置
+admin.user_auth.active_email_title: 新用户激活邮件标题
+admin.user_auth.active_email_content: 新用户激活邮件内容
+admin.user_auth.active_email_content.Variables: 变量说明：
+admin.user_auth.active_email_content.Nickname_of_recipient: 为接收方用户昵称
+admin.user_auth.active_email_content.as_site_name: 为网站名称
+admin.user_auth.active_email_content.as_site_url: 为网站的地址
+admin.user_auth.active_email_content.as_verify_url: 为邮箱验证地址
+admin.user_auth.Protection: 注册防护机制
+admin.user_auth.Protection.none: 无
+admin.user_auth.Protection.low: 低
+admin.user_auth.Protection.middle: 中
+admin.user_auth.Protection.high: 高
+admin.user_auth.Protection.low.Explanation: 方案说明：
+admin.user_auth.Protection.low.Verification_code: 注册时需填写验证码。
+admin.user_auth.Protection.low.30_times: 同一IP24小时內只能注册30次。
+admin.user_auth.Protection.low.10_times: 同一IP24小时內只能注册10次。
+admin.user_auth.Protection.low.sign_up_count: 同一IP1小时內只能注册1个账号。
+admin.user_auth.Setup_welcome_message: 欢迎信息设置
+admin.user_auth.Setup_welcome_message.send: 发送欢迎信息
+admin.user_auth.Setup_welcome_message.send.help_block: 欢迎信以站内私信的方式，发送给新用户。
+admin.user_auth.Setup_welcome_message.send.open: 关闭
+admin.user_auth.Setup_welcome_message.send.closed: 开启
+admin.user_auth.Setup_welcome_message.In_site_message: 站内私信
+admin.user_auth.Setup_welcome_message.email: 电子邮件
+admin.user_auth.Setup_welcome_message.help_block: 新用户邮件激活开启时，电子邮件的发送欢迎信息方式无效
+admin.user_auth.Setup_welcome_message.sender: 欢迎信息发送方
+admin.user_auth.Setup_welcome_message.sender.help_block: 通常为这个网站的管理员，请输入用户用户名。
+admin.user_auth.Setup_welcome_message.title: 欢迎信息标题
+admin.user_auth.Setup_welcome_message.content: 欢迎信息内容
+admin.user_auth.Setup_welcome_message.warning.help_block: 注意： 私信长度不能超过1000个字符
+admin.user_auth.Setup_welcome_message.as_recipient.help_block: 为接收方用户用户名
+admin.user_auth.Term_service_settings: 服务条款设置
+admin.user_auth.Term_service_settings.Enable: 是否开启服务条款
+admin.user_auth.Term_service_settings.open: 开启
+admin.user_auth.Term_service_settings.closed: 关闭
+admin.user_auth.Term_service_settings.Enable.help_block: 开启后用户注册时必须同意条款才能注册
+admin.user_auth.Term_service_settings.details: 条款内容
+admin.user_auth.Name_setting: 名称设置
+admin.user_auth.Name_setting.user_name: 用户名称
+admin.user_auth.Name_setting.help_block: 注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称
+admin.login_connect.User_login_restrictions: 用户登录限制
+admin.login_connect.open: 开启
+admin.login_connect.closed: 关闭
+admin.login_connect.User_login_restrictions.help_block: 开启后同一账号只能在一处（同一IP下使用一个浏览器）进行登录
+admin.login_connect.Third_party_login: 第三方登录
+admin.login_connect.Third_party_login.help_block: 开启后，登录时用户连续多次输入错误密码时暂时封禁用户,此功能不影响admin手动永久封禁用户
+admin.login_connect.User_login_protection: 用户登录保护
+admin.login_connect.User_login_protection.enter_wrong_password: 用户连续输入错误密码
+admin.login_connect.User_login_protection.enter_wrong_password.banned: 次，将暂时封禁用户
+admin.login_connect.User_login_protection.some_IP_enter_wrong_password: 同一IP连续输入错误密码
+admin.login_connect.User_login_protection.some_IP_enter_wrong_password.banned: 次，将暂时封禁IP
+admin.login_connect.User_login_protection.after: 经过
+admin.login_connect.User_login_protection.after.unblock: 分钟后，解锁用户/IP
+admin.login_connect.weixinmob.frist.help_block: 开通后，支持使用微信号在手机端微信APP内快捷注册或登录网站。
+admin.login_connect.weixinmob.help_block: >
+    如何开通：
+    1.一个已认证的<a target="_blank" href="https://mp.weixin.qq.com">微信服务号</a>；
+    2.一个已认证的<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>账号；
+    3.服务号绑定到<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>。
+admin.login_connect.weixin.help_block: >
+  请先到
+  <a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>
+  申请<a target="_blank" href="https://open.weixin.qq.com/cgi-bin/frame?t=home/web_tmpl&lang=zh_CN">网站应用开发</a>，开通后，网站PC端将支持微信扫码登录；
+admin.login_connect.weixin.frist.help_block: 申请条件：在微信开放平台注册并且完成实名认证。
+admin.login_connect.other.apply_btn: 申请
+admin.login_connect.other.qq.help_btn: 接入帮助
+admin.login_connect.other.qq.help_title: 接入帮助：
+admin.login_connect.other.qq.data_content: >
+  1.你的QQ开放平台账号认证度（个人信息完善）要达到75%，才能创建应用在网站设置第三方登录；<br>
+  2.需填写的回调地址为：<br><a><span class='text-danger'>XXX</span>/login/bind/qq/callback;<span class='text-danger'>XXX</span>/settings/bind/qq/callback</a><br>，<span class='text-danger'>XXX</span>为你的ES系统网址。例如，气球鱼学院的回调地址填写为：http://www.qiqiuyu.com/login/bind/qq/callback;http://www.qiqiuyu.com/settings<br>/bind/qq/callback；网址一定要有www哦；<br>
+  3.QQ的按钮，在开放平台你的个人信息中，找到ID和key，填写到edusoho后台，开启ID上方的QQ登录。<br>{{ '如果QQ接入审核失败，提示“登录按钮位置不对”，请检查ES后台【系统】【用户设置】【登录】，开启第三方登录以及开启QQ登录。
+admin.login_connect.type.weixinweb.help_block: >
+  APP ID和APP Secret来自<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>创建的网站应用
+admin.login_connect.type.weixinmob.help_block: >
+  APP ID和APP Secret来自<a target="_blank" href="https://mp.weixin.qq.com/">微信公众平台</a>服务号内，在左侧栏【开发】-【基本配置】-【开发者ID】中。
+admin.login_connect.type.weixinmob.MP_verify.help_block: 请填写微信提供的MP_verify文件中的内容
+admin.login_connect.required_email: 登录时必须设置邮箱
+admin.login_connect.required_email.help_block: 在%admin_name%官方审核通过您的接入申请以前，请不要开启此选项，否则可能审核将无法通过
+admin.login_connect.type.weibo.help_block: 最后一步,请在底部输入登录接口验证代码
+admin.login_connect.verifcation_loging_interface: 登录接口验证代码
+admin.login_connect.verifcation_code: 验证代码
+admin.login_connect.verifcation_code.help_block: 在申请第三方登录接口时，会要求验证您的网站域名。请把相关验证代码粘到此处，然后提交保存。
+admin.user_center.admin_sync_btn: 管理员帐号同步
+admin.user_center.user_center.title: 用户中心
+admin.user_center.user_center.help_block: 支持Discuz X2.5/X3.0/X3.1的用户中心
+admin.user_center.Configration: 配置
+admin.user_center.Configration.help_block: 如何配置？
+admin.user_center.WindId_Configration: WindId配置
+admin.user_center.WindId_Configration.help_block: 如使用phpwind (WindID)的用户中心，请填写此项配置。
+admin.user_center.filtr_email_list: 过滤邮箱地址清单
+admin.user_center.filtr_email_list.help_block: 每行输入一个邮箱地址。名单中的邮箱地址如果出现在第三方登录的过程中，则会给该用户随机生成一个邮箱
+admin.user_center.tips: >
+  <p>1.若通讯失败，注册和登录将提示<strong class="user-center-copys-darken">输入不合法</strong>或通讯失败需管理员配置。</p>
+  <p>2.通讯成功，Discuz<strong class="user-center-copys-darken">所有注册用户</strong>，用户的用户名（需满足ES注册规则，否则无法同步）、密码、邮箱信息，无论通讯前还是通讯后注册都可以登录并同步到网站。</p>
+  <p>3.通讯成功，只有<strong class="user-center-copys-darken">通讯之后</strong>在ES注册的新用户，<strong class="user-center-copys-darken">才能</strong>登录并同步到Discuz，<strong class="user-center-copys-darken">通讯之前</strong>的注册用户，<strong class="user-center-copys-darken">不能</strong>登录和同步。</p>
+  <p>4.由于<strong class="user-center-copys-darken">密码加密机制</strong>不同，Discuz的注册用户，无法批量导入到网站；网站的注册用户，也无法批量导入到Discuz。</p>
+admin.user_fields.add_field_btn: 添加字段
+admin.user_fields.customer_fields_setting: 自定义字段设置
+admin.user_fields.fields_title: 字段名称
+admin.user_fields.fields_fieldName: 类型
+admin.user_fields.fields_enabled: 是否显示
+admin.user_fields.fields_enabled.yes: 是
+admin.user_fields.fields_enabled.no: 否
+admin.user_fields.fields_seq: 显示序号
+admin.user_fields.operation: 操作
+admin.user_fields.edit_btn: 编辑
+admin.user_fields.Personal_info_configiration: 个人资料设置
+admin.user_fields.Require_personal: 购买课程或班级时填写个人资料
+admin.user_fields.Personal_info_configiration.open: 开启
+admin.user_fields.Personal_info_configiration.closed: 关闭
+admin.user_fields.Personal_info_configiration.help_block: 开启后，%user_name%购买课程时，需填写个人资料
+admin.user_fields.Formart_verifcation.help_block: 可拖动调整次序。酌情勾选需要收集的字段，若需要新的字段，请在［自定义字段设置］中添加。
+admin.user_fields.Formart_verifcation.hide: 收起
+admin.user_fields.Require_personal_information: 登录后填写个人资料
+admin.user_fields.Require_personal_information.help_block: 开启后，%user_name%登录后需填写个人资料
+admin.user_fields.other_setting: 其它设置
+admin.user_fields.other_setting.avatar: 加入免费课程要求设置头像
+admin.user_fields.other_setting.edit_user_name: 用户修改用户名
+admin.user_fields.modal.select_fields: 请选择
+admin.user_fields.modal.varchar_fields: 文本
+admin.user_fields.modal.varchar_fields.tips: 还可以添加%varcharCount%个字段
+admin.user_fields.modal.varchar_fields.disabled.tips: 已满10个
+admin.user_fields.modal.text_fields: 多行文本
+admin.user_fields.modal.text_fields.tips: 还可以添加%textCount%个字段
+admin.user_fields.modal.text_fields.disabled.tips: 已满10个
+admin.user_fields.modal.init_fields: 整数
+admin.user_fields.modal.init_fields.tips: 还可以添加%intCount%个字段,最大值为9位整数
+admin.user_fields.modal.init_fields.disabled.tips: 已满5个
+admin.user_fields.modal.float_fields: 小数
+admin.user_fields.modal.float_fields.tips: 还可以添加%floatCount%个字段,保留到两位小数
+admin.user_fields.modal.date_fields: 日期
+admin.user_fields.modal.date_fields.tips: 还可以添加{{5-dateCount}}个字段
 
 # 移动端
 mobile.page_title: 移动学习
