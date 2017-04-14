@@ -3,16 +3,37 @@
 namespace ApiBundle\Api\Resource;
 
 use ApiBundle\Api\Util\RequestUtil;
+use AppBundle\Common\ArrayToolkit;
 
 abstract class Filter
 {
-    protected $publicFields;
+    /**
+     * 简化模式,只返回少量的非隐私字段
+     */
+    const SIMPLE_MODE = 'simple';
 
-    protected $fieldMode = 'public';
+    /**
+     * 公开模式,返回未登录用户可访问的字段
+     */
+    const PUBLIC_MODE = 'public';
 
-    public function setFieldMode($fieldMode)
+    /**
+     * 认证模式,返回用户登录后可访问的字段
+     */
+    const AUTHENTICATED_MODE = 'authenticated';
+
+    protected $mode = self::PUBLIC_MODE;
+
+    protected $fieldProperties;
+
+    public function __construct()
     {
-        $this->fieldMode = $fieldMode;
+        $this->getFieldProperties();
+    }
+
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
     }
 
     public function filter(&$data)
@@ -21,14 +42,28 @@ abstract class Filter
             return null;
         }
 
-        $this->defaultFieldsFilter($data);
+        if ($this->fieldProperties) {
+            $filteredData = array();
+            foreach ($this->fieldProperties as $property) {
+                $partData = ArrayToolkit::parts($data, $this->$property);
+                if (method_exists($this, $property)) {
+                    $this->$property($partData);
+                }
 
-        $this->defaultTimeFilter($data);
+                $filteredData += $partData;
+                if ($this->mode == str_replace('Fields', '', $property)) {
+                    break;
+                }
+            }
 
-        static::customFilter($data);
+            $data = $filteredData;
+        }
     }
 
-    abstract protected function customFilter(&$data);
+    private function isFieldsProperty(\ReflectionProperty $property)
+    {
+        return strpos($property->getName(), 'Fields') > 0;
+    }
 
     public function filters(&$dataSet)
     {
@@ -43,18 +78,6 @@ abstract class Filter
         } else {
             foreach($dataSet as &$data) {
                 $this->filter($data);
-            }
-        }
-    }
-
-    private function defaultFieldsFilter(&$data)
-    {
-        $filterFields = $this->fieldMode.'Fields';
-        if ($this->$filterFields) {
-            foreach (array_keys($data) as $field) {
-                if (!in_array($field, $this->$filterFields)) {
-                    unset($data[$field]);
-                }
             }
         }
     }
@@ -79,5 +102,19 @@ abstract class Filter
 
         return $html;
 
+    }
+
+    private function getFieldProperties()
+    {
+        $reflectionClass = new \ReflectionClass(static::class);
+        $reflectionProperties = $reflectionClass->getProperties();
+        $actualFieldsProperties = array();
+        foreach ($reflectionProperties as $key => $property) {
+            if ($this->isFieldsProperty($property)) {
+                $actualFieldsProperties[] = $property->getName();
+            }
+        }
+
+        $this->fieldProperties = $actualFieldsProperties;
     }
 }

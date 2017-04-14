@@ -7,31 +7,27 @@ use ApiBundle\Api\Util\RequestUtil;
 
 class UserFilter extends Filter
 {
-    protected $tokenFields = array(
-        'id', 'email', 'locale', 'uri', 'nickname', 'title', 'type', 'smallAvatar', 'mediumAvatar', 'largeAvatar',
-        'roles', 'promotedSeq', 'locked', 'currentIp', 'gender', 'iam', 'city', 'qq', 'signature', 'about', 'company',
-        'job', 'school', 'class', 'weibo', 'weixin', 'isQQPublic', 'isWeixinPublic', 'isWeiboPublic', 'following',
-        'follower', 'verifiedMobile', 'promotedTime', 'lastPasswordFailTime', 'loginTime', 'approvalTime', 'vip'
-    );
-
-    protected $publicFields = array(
+    protected $simpleFields = array(
         'id', 'nickname', 'title', 'smallAvatar', 'mediumAvatar', 'largeAvatar'
     );
 
-    protected function customFilter(&$data)
+    protected $publicFields = array(
+    );
+
+    protected $authenticatedFields = array(
+        'email', 'locale', 'uri', 'type', 'roles', 'promotedSeq', 'locked', 'currentIp', 'gender', 'iam', 'city', 'qq', 'signature', 'about', 'company',
+        'job', 'school', 'class', 'weibo', 'weixin', 'isQQPublic', 'isWeixinPublic', 'isWeiboPublic', 'following', 'follower', 'verifiedMobile', 'promotedTime', 'lastPasswordFailTime', 'loginTime', 'approvalTime', 'vip'
+    );
+
+    protected function simpleFields(&$data)
     {
-        $filterMethod = $this->fieldMode.'Filter';
-        $this->$filterMethod($data);
+        $data['smallAvatar'] = RequestUtil::asset($data['smallAvatar']);
+        $data['mediumAvatar'] = RequestUtil::asset($data['mediumAvatar']);
+        $data['largeAvatar'] = RequestUtil::asset($data['largeAvatar']);
     }
 
-    private function publicFilter(&$data)
+    protected function authenticatedFields(&$data)
     {
-        $this->convertAvatar($data);
-    }
-
-    private function tokenFilter(&$data)
-    {
-        $this->convertAvatar($data);
         $data['about'] = $this->convertAbsoluteUrl($data['about']);
 
         $data['promotedTime'] = date('c', $data['promotedTime']);
@@ -44,12 +40,5 @@ class UserFilter extends Filter
         } else {
             unset($data['verifiedMobile']);
         }
-    }
-
-    private function convertAvatar(&$data)
-    {
-        $data['smallAvatar'] = RequestUtil::asset($data['smallAvatar']);
-        $data['mediumAvatar'] = RequestUtil::asset($data['mediumAvatar']);
-        $data['largeAvatar'] = RequestUtil::asset($data['largeAvatar']);
     }
 }

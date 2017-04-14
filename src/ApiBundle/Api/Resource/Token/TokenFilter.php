@@ -7,10 +7,14 @@ use ApiBundle\Api\Resource\User\UserFilter;
 
 class TokenFilter extends Filter
 {
-    protected function customFilter(&$data)
+    protected $publicFields = array(
+        'token', 'user'
+    );
+
+    protected function publicFields(&$data)
     {
         $userFilter = new UserFilter();
-        $userFilter->setFieldMode('token');
+        $userFilter->setMode(Filter::AUTHENTICATED_MODE);
         $userFilter->filter($data['user']);
     }
 }
