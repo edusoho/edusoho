@@ -1,13 +1,10 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
+
 {% block title %}
-  {% if setting('default.user_name') %}
-    {{ setting('default.user_name')|default('学员'|trans) }}
-  {% else %}
-    {{'学员'|trans}}
-  {% endif %}
-  {{'备注'|trans}}
+  {% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{'学员'|trans}}{% endif %}{{'备注'|trans}}
 {% endblock %}
-{% do script(['libs/jquery-validation.js','app/js/classroom/student-remark/index.js'])%}
+
+{% do script(['libs/jquery-validation.js','app/js/course-manage/student-remark/index.js'])%}
 {% set modalSize = 'large' %}
 
 {% block body %}
