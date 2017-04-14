@@ -38,6 +38,7 @@ class EduSohoUpgrade extends AbstractUpdater
         return array(
             'AppVersionChecker',
             'TruncateTables',
+            'DownloadUpgradeFile',
             'CourseSetMigrate',
             'CourseMigrate',
 
