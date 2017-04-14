@@ -40,12 +40,10 @@ $btn.click(() => {
       $table.find('tr.empty').remove();
       $(html).prependTo($table.find('tbody'));
       $modal.modal('hide');
-      let user_name = $('#student-create-form-submit').data('user');
-      notify('success', Translator.trans('添加%username%操作成功!', { username: user_name }));
+      notify('success', Translator.trans('添加成功!'));
       window.location.reload();
     }).error(function () {
-      let user_name = $('#student-create-form-submit').data('user');
-      notify('danger', Translator.trans('添加%username%操作失败!', { username: user_name }));
+      notify('danger', Translator.trans('添加失败!'));
       $btn.button('reset').removeClass('disabled');
     });
   }
