@@ -48,14 +48,14 @@
           {% endif %}
         </li>
         <hr class="mv5 mh10 bg-border-color"/>
-        <li class="list-group-item {% if side_nav == 'question' %}active{% endif %}">
+        <li class="list-group-item {% if side_nav == 'files' %}active{% endif %}">
           {% if courseSet.locked %}
-            <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'question'}) }}">
-              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ '题目管理'|trans }}
+            <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'files'}) }}">
+              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ '课程文件'|trans }}
             </a>
           {% else %}
-            <a href="{{ path('course_set_manage_question', {id: courseSet.id}) }}">
-              {{ '题目管理'|trans }}
+            <a href="{{ path('course_set_manage_files', {id: courseSet.id}) }}">
+              {{ '课程文件'|trans }}
             </a>
           {% endif %}
         </li>
@@ -70,14 +70,14 @@
             </a>
           {% endif %}
         </li>
-        <li class="list-group-item {% if side_nav == 'files' %}active{% endif %}">
+        <li class="list-group-item {% if side_nav == 'question' %}active{% endif %}">
           {% if courseSet.locked %}
-            <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'files'}) }}">
-              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ '课程文件'|trans }}
+            <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'question'}) }}">
+              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ '题目管理'|trans }}
             </a>
           {% else %}
-            <a href="{{ path('course_set_manage_files', {id: courseSet.id}) }}">
-              {{ '课程文件'|trans }}
+            <a href="{{ path('course_set_manage_question', {id: courseSet.id}) }}">
+              {{ '题目管理'|trans }}
             </a>
           {% endif %}
         </li>
