@@ -59,11 +59,6 @@ abstract class Filter
 
     }
 
-    private function isFieldsProperty(\ReflectionProperty $property)
-    {
-        return strpos($property->getName(), 'Fields') > 0;
-    }
-
     public function filters(&$dataSet)
     {
         if (!$dataSet) {
