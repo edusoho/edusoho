@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Course;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ApiNotFoundException;
+use ApiBundle\Api\Exception\BadRequestException;
 use ApiBundle\Api\Exception\InvalidArgumentException;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
 use ApiBundle\Api\Resource\Resource;
@@ -63,13 +64,17 @@ class CourseMember extends Resource
             $success = $this->vipJoin($course);
         }
 
-        return array('success' => $success);
+        if ($success) {
+            return $this->service('Course:MemberService')->getCourseMember($courseId, $this->getCurrentUser()->getId());
+        }
+
+        return array();
     }
 
     private function freeJoin($course)
     {
         if ($course['price'] > 0) {
-            throw new ApiNotFoundException('不是免费课程,不能直接加入', 1001);
+            throw new BadRequestException('不是免费课程,不能直接加入', 101);
         }
 
         $member = $this->service('Course:MemberService')->becomeStudent($course['id'], $this->getCurrentUser()->id);
@@ -88,7 +93,7 @@ class CourseMember extends Resource
         if ($success) {
             return true;
         } else {
-            throw new ApiNotFoundException($message, 1002);
+            throw new BadRequestException($message, 102);
         }
     }
 
