@@ -316,10 +316,10 @@ class MemberServiceImpl extends BaseService implements MemberService
         $members = $this->getMemberDao()->findByIds($memberIds);
         $members = ArrayToolkit::index($members, 'id');
 
-        $sortedMembers = array() ;
+        $sortedMembers = array();
 
         foreach ($memberIds as $memberId) {
-            $sortedMembers[] = $members[$memberId] ;
+            $sortedMembers[] = $members[$memberId];
         }
 
         return $sortedMembers;
