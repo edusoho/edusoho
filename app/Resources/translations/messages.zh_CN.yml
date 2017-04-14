@@ -4,17 +4,18 @@ site.currency.RMB: 元
 site.date.month: 月
 site.data.empty: 无
 site.datagrid.empty: 暂无记录
-site.dategrid.filter.all_records: 全部记录
-site.dategrid.filter.last_one_week: 最近一周
-site.dategrid.filter.last_two_week: 最近两周
-site.dategrid.filter.last_one_month: 最近一个月
-site.dategrid.filter.last_three_month: 最近三个月
-site.dategrid.filter.all_course: 全部课程
-site.dategrid.filter.latest: 最新
-site.dategrid.filter.topest: 最热
-site.dategrid.filter.recommended: 推荐
-site.dategrid.filter.category_more: 更多
-site.dategrid.filter.course_more: 更多课程
+site.datagrid.filter.all_records: 全部记录
+site.datagrid.filter.last_one_week: 最近一周
+site.datagrid.filter.last_two_week: 最近两周
+site.datagrid.filter.last_one_month: 最近一个月
+site.datagrid.filter.last_two_month: 最近两个月
+site.datagrid.filter.last_three_month: 最近三个月
+site.datagrid.filter.all_course: 全部课程
+site.datagrid.filter.latest: 最新
+site.datagrid.filter.topest: 最热
+site.datagrid.filter.recommended: 推荐
+site.datagrid.filter.category_more: 更多
+site.datagrid.filter.course_more: 更多课程
 site.message.info: 提示信息
 site.message.warning: 警告信息
 site.message.error: 错误提示
@@ -26,7 +27,17 @@ site.org.code: 编码：
 site.default.more: 更多
 site.default.none: 无
 
+status: 状态
+price: 价格
+name: 名称
+time: 时间
+type: 类型
+
+#会员
+vip: 会员
+
 # 用户通用
+user: 用户
 user.fields.login_password: 登录密码
 user.fields.pay_password: 支付密码
 user.fileds.microblog: 微博
@@ -63,6 +74,12 @@ finance.expense: 支出
 finance.income_expense: 收支
 finance.coin: 虚拟币
 finance.balance: 账户余额
+finance.use_deduction: 用于抵扣
+finance.user_currency: 用于标价
+finance.RMB_price: 人民币价格
+finance.max_deduction_rate: 最大可抵扣比率
+finance.max_deduction_money: 最大可抵扣金额
+finance.max_can_use_coin: 最大可用%coinName%
 
 #插件
 plugin.charge_coin.recharge: 充 值
@@ -71,6 +88,19 @@ plugin.money_card.use: 使用学习卡
 plugin.coupon: 优惠码
 plugin.coupon.code: 优惠码
 plugin.coupon.amount: 优惠金额
+
+#虚拟币通用
+coin.online_school_balance: 网校余额
+coin.recharge: 充值
+coin.consume: 消费
+coin.sn: 流水号
+coin.name: 虚拟币名称
+coin.picture: 虚拟币图片
+coin.paid_time: 成交时间
+coin.income_expense: 收支
+coin.order_sn: 订单号
+coin.balance: 虚拟币余额
+coin.rate: 汇率
 
 #订单通用
 order.name: 订单名称
@@ -101,6 +131,11 @@ order.payment_pattern.quickpay: 快捷支付
 order.payment_pattern.llpay: 连连支付
 order.payment_pattern.cash: 现金支付
 order.payment_pattern.other: 其他支付
+order.tips: <div>站外支付为该笔订单是通过导入或者手动添加的方式产生的，故为站外支付</div>
+order.content_title: 订单详情
+order.detail: 详情
+order.log: 日志
+order.coin.empty_hint: 暂无虚拟币订单记录
 
 # 上传模块
 upload.titile: 上传附件
@@ -113,6 +148,9 @@ course.origin_price.RMB: %originPrice%元
 course.price.free: 免费
 course.price.limited_time_free: 限免
 course.price.discount: %discount%折
+course.name: 课程名称
+course.id: 课程编号
+course.price_setting: 课程价格设置
 
 #公开课
 open_course: 公开课
@@ -121,6 +159,7 @@ open_course.status.live: 正在直播
 open_course.status.living: 即将直播
 
 # 班级
+classroom: 班级
 classroom.courses_count: 共%courseNum%课
 classroom.continue_learning_btn: 继续学习
 classroom.join_btn: 立即加入
@@ -128,8 +167,12 @@ classroom.status.unpublish: 未发布
 classroom.status.closed: 已关闭
 
 # 表单通用
+form.btn.finish: 完成
 form.field.optional: 选填
 form.field.privacy_public: 公开
+form.field.create: 添加
+form.field.amount: 数量
+form.field.cut: 扣除
 form.btn.modify: 修改
 form.btn.set: 设置
 form.btn.publish: 发布
@@ -167,6 +210,15 @@ form.btn.modify.submiting: 正在修改...
 form.checkbox.public: 公开
 form.placeholder.max_int: 最大值为9位整数
 form.placeholer.two_decimal_places: 保留到2位小数
+form.placeholder.start_date: 起始时间
+form.placeholder.end_date: 结束时间
+form.placeholder.keyword: 关键词
+form.btn.export_result: 导出结果
+form.placeholder.nickname: 用户名
+form.radio_btn.pass: 同意
+form.radio_btn.unpass: 不同意
+form.btn.next: 下一步
+form.btn.back: 上一步
 
 # 用户登录
 user.login.page_title: 登录账号
@@ -1112,7 +1164,7 @@ admin.homepage.cloud_notice.unknown_time: 未知时间
 admin.homepage.cloud_notice: >
   欢迎使用，试用将于 %endTime% 到期,剩余 %remainDays% 天。
   </br>
-  您可以联系销售人员购买授权版本，或者延长试用期限。电话：4008041114 或 
+  您可以联系销售人员购买授权版本，或者延长试用期限。电话：4008041114 或
 admin.homepage.admins_announcements_title: 站长公告
 admin.homepage.admins_announcements_empty: 暂无公告
 admin.homepage.status_bar.content_title: 状态栏
@@ -1166,9 +1218,9 @@ admin.homepage.todays_data.tooltips: >
       <div class="content">到目前为止，未回答问题总数</div>
     </div>
   </div>
-admin.homepage.todays_data.login_users: 登录用户 
-admin.homepage.todays_data.login_users.online_total: 在线总数 
-admin.homepage.todays_data.new_registration: 新增注册 
+admin.homepage.todays_data.login_users: 登录用户
+admin.homepage.todays_data.login_users.online_total: 在线总数
+admin.homepage.todays_data.new_registration: 新增注册
 admin.homepage.todays_data.total: 总数
 admin.homepage.todays_data.new_students: 新增学员
 admin.homepage.todays_data.new_vip_members: 新增会员
@@ -1208,6 +1260,291 @@ admin.homepage.top_search.search_number_th: 搜索次数
 admin.homepage.top_search.empty: 暂无搜索数据
 admin.homepage.free_access_edu_cloud_search_btn: 免费接入云搜索获取热门搜索关键词
 
+# 运营模块
+# 编辑区管理
+admin.block_manage.all: 所有
+admin.block_manage.current_theme: 当前主题
+admin.block_manage.system: 系统
+admin.block_manage.search_block_placeholder: 搜索编辑区
+admin.block_manage.title: 标题
+admin.block_manage.latest_update: 最近更新
+admin.block_manage.operation: 操作
+admin.block_manage.empty: 暂无编辑区记录
+admin.block_manage.code: >
+  编码：%code%
+admin.block_manage.no_edit: 未编辑
+admin.block_manage.edit_html: 编辑html
+admin.block_manage.edit_content: 编辑内容
+admin.block_manage.set_up: 设置
+admin.block_manage.delete: 删除
+admin.block_manage.create: 新增
+admin.block_manage.set_up: 设置
+admin.block_manage.edit_block: 编辑区
+admin.block_manage.code_label: 编号
+admin.block_manage.title_label: 标题
+admin.block_manage.edit_mode_label: 编辑模式
+admin.block_manage.mode_html_radio: HTML
+admin.block_manage.mode_template_radio: 模板
+admin.block_manage.template_content: 模板内容
+admin.block_manage.template_tips: 目前提供３种模板内容占位符，占位符在内容编辑时，会转换为编辑框，方便网站运营编辑
+admin.block_manage.template_link_tips: >
+  ((占位符名:a)) - 举例：&lt;a href="((链接一:a))"&gt;这个是链接&lt;/a&gt;
+admin.block_manage.template_text_tips: >
+  ((占位符名:text)) - 举例：&lt;a href="#"&gt;((文本一:text ))&lt;/a&gt;
+admin.block_manage.template_img_tips: >
+  ((占位符名:img)) - 举例：&lt;img src="((图片一:img))" /&gt;
+admin.block_manage.edit_content_help: 内容编辑帮助
+admin.block_manage.edit_content_help_tips: 填写内容编辑时的帮助信息
+admin.block_manage.visual_edit: 编辑
+admin.block_manage.visual_edit_history: 历史记录
+admin.block_manage.visual_edit.title: 编辑内容
+admin.block_manage.visual_edit.name: 编辑区名称：
+admin.block_manage.visual_edit.upload_img: 上传图片
+admin.block_manage.visual_edit.help_tips: 编辑帮助
+admin.block_manage.visual_edit.history: 变更记录
+admin.block_manage.visual_edit.watch_json_config: 查看JSON配置
+admin.block_manage.visual_edit.panel_expand: 展开
+admin.block_manage.visual_edit.panel_delete: 删除
+admin.block_manage.visual_edit.tag_text: 文本
+admin.block_manage.visual_edit.tag_content: 内容
+admin.block_manage.visual_edit.tag_link_text: 链接文本
+admin.block_manage.visual_edit.tag_link_url: 链接地址
+admin.block_manage.visual_edit.tag_img: 图片
+admin.block_manage.visual_edit.tag_img_describe: 图片描述
+admin.block_manage.visual_edit.tag_img_link: 图片链接
+admin.block_manage.visual_edit.tag_img_background_color: 背景色填充
+admin.block_manage.visual_edit.tag_img_upload: 上传
+admin.block_manage.visual_edit.tag_open_new_window: 打开新窗口
+admin.block_manage.visual_edit.tag_yes_radio: 是
+admin.block_manage.visual_edit.tag_no_radio: 否
+admin.block_manage.visual_edit.add_panel: +新增
+admin.block_manage.visual_edit.save: 保存设置
+admin.block_manage.visual_edit.poster_open_btn: 是否开启
+admin.block_manage.visual_edit.poster_open_radio: 开启
+admin.block_manage.visual_edit.poster_closed_radio: 关闭
+admin.block_manage.visual_edit.poster_layout_mode: 布局模式
+admin.block_manage.visual_edit.poster_width_center_radio: 限宽居中
+admin.block_manage.visual_edit.poster_tile_center_radio: 平铺居中
+admin.block_manage.visual_edit.poster_edit_mode: 编辑模式
+admin.block_manage.visual_edit.poster_img_mode_radio: 图片模式
+admin.block_manage.visual_edit.poster_html_mode_radio: HTML模式
+admin.block_manage.visual_edit.poster_select_img: 选择图片
+admin.block_manage.visual_edit.poster_img_upload: 上传
+admin.block_manage.visual_edit.poster_live_top_banner_tips: >
+  [ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：300px<br>
+  [ 平铺居中 ] 图片推荐尺寸 宽：1920px，高：450px<br>
+  建议所有海报 [ 布局模式 ] 、 [ 海报尺寸 ] 保持一致。
+admin.block_manage.visual_edit.poster_cloud_search_banner_tips: >
+  [ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：200px<br>
+  [ 平铺居中 ] 图片推荐尺寸 宽：1440px，高：200px<br>
+admin.block_manage.visual_edit.poster_other_tips: >
+  [ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：450px<br>
+  [ 平铺居中 ] 图片推荐尺寸 宽：1920px，高：600px<br>
+  建议所有海报 [ 布局模式 ] 、 [ 海报尺寸 ] 保持一致。
+admin.block_manage.visual_edit.poster_link_url: 海报链接地址
+admin.block_manage.visual_edit_history.edit_time: 修改时间
+admin.block_manage.visual_edit_history.edit_user: 修改用户
+admin.block_manage.visual_edit_history.operation: 操作
+admin.block_manage.visual_edit_history.user_deleted: 用户已删除
+admin.block_manage.visual_edit_history.preview: 预览
+admin.block_manage.visual_edit_history.recovery_content: 恢复此内容
+admin.block_manage.visual_edit_history.empty: 暂无记录
+
+#自定义页面管理
+admin.custom_page_manage.top_button: 添加
+admin.custom_page_manage.all_status_placeholder: --所有状态--
+admin.custom_page_manage.keyword_placeholder: 关键词
+admin.custom_page_manage.table_title: 标题
+admin.custom_page_manage.table_page_url: 页面地址
+admin.custom_page_manage.table_type: 类型
+admin.custom_page_manage.table_status: 状态
+admin.custom_page_manage.table_publish_time_or_user: 发布时间/人
+admin.custom_page_manage.table_operation: 操作
+admin.custom_page_manage.empty: 暂无记录
+admin.custom_page_manage.title_url: 地址：
+admin.custom_page_manage.title_category: 分类
+admin.custom_page_manage.edit_btn: 编辑
+admin.custom_page_manage.menu_publish: 发布
+admin.custom_page_manage.menu_trash: 移至回收站
+admin.custom_page_manage.menu_delete: 永久删除
+admin.custom_page_manage.create_custom_page: 添加页面
+admin.custom_page_manage.custom_page_title: 标题
+admin.custom_page_manage.custom_page_editor_type: 编辑器类型
+admin.custom_page_manage.custom_page_richeditor_radio: 可视化编辑器
+admin.custom_page_manage.custom_page_htmleditor_radio: HTML编辑器
+admin.custom_page_manage.custom_page_content: 正文
+admin.custom_page_manage.custom_page_start_time_label: 开始时间
+admin.custom_page_manage.custom_page_end_time_label: 结束时间
+admin.custom_page_manage.custom_page_location_label: 地点
+admin.custom_page_manage.custom_page_url: URL路径
+admin.custom_page_manage.custom_page_url_tips: 页面地址：域名/page/URL路径（编号）
+admin.custom_page_manage.custom_page_category_option: 请选择分类
+admin.custom_page_manage.custom_page_tag: 标签
+admin.custom_page_manage.custom_page_template: 模版
+admin.custom_page_manage.custom_page_default_template: 默认模版
+admin.custom_page_manage.custom_page_no_nav_template: 无导航栏
+
+# 移动端内容管理
+admin.mobile_manage.open_tips: >
+  移动端未开启，请先在<a href="%openUrl%">系统-课程设置-移动端设置</a>中设置开启
+admin.mobile_manage.head_tips: 客户端显示的轮播图。最多5张，建议图片大小为750*300，格式支持jpg、png。
+admin.mobile_manage.banner_one_label: 轮播图1
+admin.mobile_manage.banner_two_label: 轮播图2
+admin.mobile_manage.banner_three_label: 轮播图3
+admin.mobile_manage.banner_four_label: 轮播图4
+admin.mobile_manage.banner_five_label: 轮播图5
+admin.mobile_manage.upload_btn: 上传
+admin.mobile_manage.delete_btn: 删除
+admin.mobile_manage.img_tips: 请上传png, gif, jpg格式的图片文件。
+admin.mobile_manage.default_click_radio: 默认（无触发动作）
+admin.mobile_manage.goto_link_radio: 跳转到连接地址
+admin.mobile_manage.goto_inside_course_radio: 跳转到内部课程
+admin.mobile_manage.selete_course_btn: 选课
+admin.mobile_manage.link_url_placeholder: 请填写连接地址
+admin.mobile_manage.inside_course_id_placeholder: 请填写内部课程Id
+admin.mobile_manage.week_select_tips: 所选择的课程将会在客户端【每周精选】栏目中显示，最多选择三门。
+admin.mobile_manage.discovery_column.column_name: 栏目名称
+admin.mobile_manage.discovery_column.column_tips: 栏目名称控制在十个字符之内。
+admin.mobile_manage.discovery_column.content_type: 内容类型
+admin.mobile_manage.discovery_column.sort_type: 排序方式
+admin.mobile_manage.discovery_column.set_show_count: 设置展示数量
+admin.mobile_manage.discovery_column.set_show_tips: 提示：一个模块最多显示六门课程。如果有更多的显示要求可以进入更多选项查看更多的课程。
+admin.mobile_manage.discovery_column.real_show_count: 实际展示数量
+admin.mobile_manage.discovery_column.add_column: 添加栏目
+admin.mobile_manage.discovery_column.edit_column: 编辑栏目
+admin.mobile_manage.discovery_column.operation: 操作
+admin.mobile_manage.discovery_column.type: 类型
+admin.mobile_manage.discovery_column.category: 分类
+admin.mobile_manage.discovery_column.classroom: 班级
+admin.mobile_manage.discovery_column.normal_course: 普通课程
+admin.mobile_manage.discovery_column.live_course: 直播课程
+admin.mobile_manage.discovery_column.recommend: 推荐
+admin.mobile_manage.discovery_column.hot: 最热
+admin.mobile_manage.discovery_column.new: 最新
+admin.mobile_manage.discovery_column.edit_btn: 编辑
+admin.mobile_manage.discovery_column.delete_btn: 删除
+admin.mobile_manage.discovery_column.empty: 暂无分类记录
+
+# 数据统计
+admin.operation_analysis.data_type_placeholder: --选择数据类型--
+admin.operation_analysis.this_month: 本月
+admin.operation_analysis.last_month: 上月
+admin.operation_analysis.recent_three_month: 近三月
+admin.operation_analysis.start_time: 起始日期
+admin.operation_analysis.end_time: 截止日期
+admin.operation_analysis.search: 查询
+admin.operation_analysis.help_tips: 视频观看数，将从数据统计功能更新启用之日起开始记录
+admin.operation_analysis.total_count: 总数
+admin.operation_analysis.thrend: 趋势
+admin.operation_analysis.detail: 明细
+admin.operation_analysis.register.username: 用户名
+admin.operation_analysis.register.mobile_number: 手机号
+admin.operation_analysis.register.email: 注册邮箱
+admin.operation_analysis.register.target: 注册来源
+admin.operation_analysis.register.ip: IP地址
+admin.operation_analysis.register.time: 注册时间
+admin.operation_analysis.register.no_email: 暂无
+admin.operation_analysis.register.website: 网站注册
+admin.operation_analysis.register.web_mobile: 网站手机注册
+admin.operation_analysis.register.web_email: 网站邮箱注册
+admin.operation_analysis.register.weibo: 新浪微博
+admin.operation_analysis.register.qq: QQ
+admin.operation_analysis.register.renren: 人人
+admin.operation_analysis.register.discuz: discuz
+admin.operation_analysis.register.phpwind: phpwind
+admin.operation_analysis.register.weixin: 微信
+admin.operation_analysis.register.import: 手动导入
+admin.operation_analysis.register.other: 其他
+admin.operation_analysis.login.username: 用户名
+admin.operation_analysis.login.ip: IP地址
+admin.operation_analysis.login.time: 登录时间
+admin.operation_analysis.course.name: 课程
+admin.operation_analysis.course.creator: 创建者
+admin.operation_analysis.course.student_unit: 数
+admin.operation_analysis.course.category: 分类
+admin.operation_analysis.course.empty: 暂无课程明细
+admin.operation_analysis.task: 任务
+admin.operation_analysis.task.study_task: 学习任务
+admin.operation_analysis.task.type: 任务类型
+admin.operation_analysis.task.creator: 创建者
+admin.operation_analysis.task.belong_to_course: >
+  属于课程：%courseTitle%
+admin.operation_analysis.task.text: 图文
+admin.operation_analysis.task.video: 视频
+admin.operation_analysis.task.audio: 音频
+admin.operation_analysis.task.ppt: PPT
+admin.operation_analysis.task.testpaper: 试卷
+admin.operation_analysis.task.live: 直播
+admin.operation_analysis.task.flash: Flash
+admin.operation_analysis.task.doc: 文档
+admin.operation_analysis.task.empty: 此任务已删除
+admin.operation_analysis.join_lesson: 加入课程
+admin.operation_analysis.join_lesson.username: 用户名
+admin.operation_analysis.join_lesson.time: 加入时间
+admin.operation_analysis.join_lesson.price: 课程价格
+admin.operation_analysis.join_lesson.free: 免费
+admin.operation_analysis.join_lesson.empty: 此课程已不存在
+admin.operation_analysis.paid_course.name: 课程
+admin.operation_analysis.paid_course.classroom: 班级
+admin.operation_analysis.paid_course.user: 购买者
+admin.operation_analysis.paid_course.course_prince: 课程价格
+admin.operation_analysis.paid_course.paid_prince: 购买价格
+admin.operation_analysis.paid_course.paid_time: 下单&付款时间
+admin.operation_analysis.paid_course.empty: 此课程已不存在
+admin.operation_analysis.paid_course.order: 订单号
+admin.operation_analysis.video.username: 用户名
+admin.operation_analysis.video.task: 任务
+admin.operation_analysis.video.watch_time: 观看时间
+admin.operation_analysis.video.type: 视频类型
+admin.operation_analysis.income.course: 课程
+admin.operation_analysis.income.paid: 实付
+admin.operation_analysis.income.price: 价格
+admin.operation_analysis.income.discount: 优惠
+admin.operation_analysis.income.buyer: 购买者
+admin.operation_analysis.income.buy_time: 下单&支付时间
+admin.operation_analysis.income.discount_code: 优惠码
+admin.operation_analysis.teach_plan: 教学计划
+admin.operation_analysis.teach_plan.creator: 创建者
+admin.operation_analysis.teach_plan.empty: 暂无教学计划明细
+admin.operation_analysis.user.username: 用户名
+admin.operation_analysis.user.mobile: 手机号
+admin.operation_analysis.user.email: 注册邮箱
+admin.operation_analysis.user.source: 注册来源
+admin.operation_analysis.user.ip: IP地址
+admin.operation_analysis.user.register_time: 注册时间
+admin.operation_analysis.exit_lesson: 退出课程
+admin.operation_analysis.exit_lesson.time: 退出时间
+admin.operation_analysis.exit_lesson.reason: 退出理由
+admin.operation_analysis.exit_lesson.username: 用户名
+
+# 敏感词管理
+admin.sensitive_manage.all_state_placeholder: 所有类型
+admin.sensitive_manage.search_keyword_placeholder: 搜索关键字
+admin.sensitive_manage.num: 编号
+admin.sensitive_manage.user: 用户
+admin.sensitive_manage.ip: IP地址
+admin.sensitive_manage.hit_sensitive: 命中敏感词
+admin.sensitive_manage.sensitive: 敏感词
+admin.sensitive_manage.type: 类型
+admin.sensitive_manage.shield_times: 屏蔽次数
+admin.sensitive_manage.add_time: 添加时间
+admin.sensitive_manage.operation: 操作
+admin.sensitive_manage.empty: 暂无敏感词信息!
+admin.sensitive_manage.banned: 禁用
+admin.sensitive_manage.banned_tips: 选择禁用，将无法保存。
+admin.sensitive_manage.replaced: 屏蔽
+admin.sensitive_manage.replaced_empty: 暂无屏蔽记录!
+admin.sensitive_manage.replaced_text: 屏蔽文本
+admin.sensitive_manage.replaced_time: 屏蔽时间
+admin.sensitive_manage.replaced_tips: 选择屏蔽，会将指定敏感词替换为"*"。
+admin.sensitive_manage.delete_btn: 删除
+admin.sensitive_manage.change_banned: 更改为屏蔽
+admin.sensitive_manage.change_disabled: 更改为禁用
+admin.sensitive_manage.add_sensitive: 添加敏感词
+admin.sensitive_manage.add_sensitive_tips: 换行可一次添加多个敏感词
+admin.sensitive_manage.sensitive_type: 敏感词类型
+admin.sensitive_manage.add_sensitive_btn: 添加
+
 # 咨询管理
 admin.operation_article.category_option: --所属栏目--
 admin.operation_article.property_option: --属性--
@@ -1240,8 +1577,8 @@ admin.operation_article.category_code: 编码
 admin.operation_article.add_child_category_btn: 添加子栏目
 
 # 小组话题管理
-admin.operation_group.groupstatus_option: 小组状态 
-admin.operation_group.group_title.placeholer: 小组名 
+admin.operation_group.groupstatus_option: 小组状态
+admin.operation_group.group_title.placeholer: 小组名
 admin.operation_group.ownerName.placeholer: 组长
 admin.operation_group.group_number_th: 编号
 admin.operation_group.group_name_th: 名称
@@ -1286,7 +1623,7 @@ admin.operation_group.thread.open_btn: 开启话题
 admin.operation_group.thread.delete_title: 永久删除话题
 admin.operation_group.thread.delete_btn: 永久删除
 
-# 邀请管理 
+# 邀请管理
 admin.operation_invite.nickname.placeholer: 用户名
 admin.operation_invite.nickname_th: 用户名
 admin.operation_invite.count_th: 邀请人数
@@ -1432,6 +1769,155 @@ share.weixin_share: 分享到微信
 share.tsina_share: 分享到新浪微博
 share.qq_share: 分享到QQ好友
 share.qzone_share: 分享到QQ空间
+
+# 学员
+role.student: 学员
+# 教师
+role.teacher: 教师
+
+#后台用户模块
+##用户模块通用字段
+admin.user.fields.register_date_label: 注册时间
+admin.user.fields.operation_label: 操作
+admin.user.fields.empty: 暂无
+admin.user.form.input_placeholder.startDate: 起始时间
+admin.user.form.input_placeholder.endDate: 结束时间
+admin.user.form.input_placeholder.keyword: 关键词
+admin.user.fields.job_label: 职业
+admin.user.fields.title_label: 头衔
+admin.user.fields.signature_label: 个人签名
+admin.user.fields.about_label: 自我介绍
+admin.user.fields.personal_menu_label: 个人主页
+admin.user.fields.user_email: 用户邮箱
+admin.user.fields.password_hint: 5-20位英文、数字、符号，区分大小写
+admin.user.fields.confirm_password_label: 确认密码
+admin.user.fields.confirm_password_hint: 再输入一次密码
+admin.user.fields.password_label: 密码
+admin.user.fields.role_label: 用户权限
+admin.user.fields.email: 邮箱
+admin.user.fields.idcard: 身份证号码
+
+##用户模块通用按钮
+admin.user.form.btn.search_submit_btn: 搜索
+admin.user.btn.show_btn: 查看
+
+##用户管理模块
+admin.user.manage.form.time_option.login: 登录时间
+admin.user.manage.form.time_option.register: 注册时间
+admin.user.manage.form.time_option.default: --时间类型--
+admin.user.manage.form.role_option.default: --所有角色--
+admin.user.manage.form.user_type_option.default: --注册来源--
+plugin.admin.user.manage.form.user_export_btn: 导出搜索结果
+admin.user.manage.fields.mobile_label: 手机号
+admin.user.manage.fields.recent_login_label: 最近登录
+admin.user.manage.fields.user_total_num_label: 用户总数：
+admin.user.manage.fields.forbid_label: 禁
+admin.user.manage.fields.verified_label: 已验证
+admin.user.manage.label.email_verified_hint: 该Email地址已验证
+admin.user.manage.user_show.fields.user_org_label: 所属组织机构
+admin.user.manage.user_show.fields.user_role_label: 用户组
+admin.user.manage.user_show.fields.recent_login_date_and_ip_label: 最近登录时间/IP
+admin.user.manage.user_show.fields.heading_title: 个人详细信息
+admin.user.manage.user_show.fields.gender_male_label: 男性
+admin.user.manage.user_show.fields.gender_female_label: 女性
+admin.user.manage.user_show.fields.gender_secret_label: 秘密
+admin.user.manage.user_show.fields.personal_website_label: 个人网站
+
+admin.user.manage.user_edit.fields.heading_title: 编辑用户信息
+
+admin.user.manage.user_role.fields.heading_title: 设置用户组
+
+admin.user.manage.user_avatar.fields.heading_title: 设置用户头像
+admin.user.manage.user_avatar.fields.current_avatar: 当前头像
+admin.user.manage.user_avatar.upload_hint: 你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过
+admin.user.manage.user_avatar.upload_btn: 上传新头像
+admin.user.manage.user_avatar.fields.partner_avatar: 论坛头像
+admin.user.manage.user_avatar.using_current_avatar_btn: 使用该头像
+
+admin.user.manage.change_password.heading_title: 重置用户%nickname%的密码
+admin.user.manage.change_password.new_password_label: 新密码
+admin.user.manage.change_password.input_data_explain.confirm_password: 再输入一次密码
+
+admin.user.manage.create.heading_title: 添加新用户
+admin.user.manage.create.email_label: 邮箱地址
+
+admin.user.manage.avatar_crop.heading_title: 头像设置
+admin.user.manage.avatar_crop.crop_hint: 提示：请选择图片裁剪区域。
+
+admin.user.manage.create_by_mobile.heading_title: 添加新用户
+admin.user.manage.create_by_mobile.mobile.input_placeholder: 手机号码
+admin.user.manage.create_by_mobile.nickname.input_placeholder: 不填将自动生成
+
+admin.user.manage.create_by_mobile_or_email.heading_title: 添加新用户
+admin.user.manage.create_by_mobile_or_email.email_or_mobile_label: 邮箱/手机
+admin.user.manage.create_by_mobile_or_email.email_or_mobile.input_placeholder: 邮箱地址/手机号码
+admin.user.manage.create_by_mobile_or_email.nickname.input_placeholder: 不填将自动生成
+
+##用户登陆日志模块
+admin.user.login_record.fields.login_time_and_ip_label: 登录时间IP
+admin.user.login_record.fields.login_address_label: 登录地点
+admin.user.login_record.fields.view_record_label: 查看记录
+admin.user.login_record.detail.heading_title: 登录日志
+admin.user.login_record.detail.fields.login_time: 登录时间
+admin.user.login_record.detail.fields.login_ip: 登录IP
+admin.user.login_record.detail.fields.login_address: 登录地点
+
+##实名认证管理
+admin.user.approval.approving_tab: 审核中
+admin.user.approval.approved_tab: 审核成功
+
+admin.user.approval.form.keyword_type_option.default: --查询条件--
+admin.user.approval.fields.application_date_label: 申请时间:
+admin.user.approval.fields.email: 邮件
+admin.user.approval.approve_submit_btn: 审核
+admin.user.approval.approved_empty_hint: 暂无已经审核成功的实名认证用户
+admin.user.approval.approving_empty_hint: 暂无需要审核中的实名认证用户
+admin.user.approval.fields.idcard_face_img_label: 身份证正面照
+admin.user.approval.fields.idcard_back_img_label: 身份证反面照
+
+admin.user.approval.approving_tab.approve.heading_title: 用户认证审核
+admin.user.approval.approving_tab.approve.fields.rejection_reason_label: 驳回原因
+admin.user.approval.approving_tab.approve.failed_btn: 审核驳回
+admin.user.approval.approving_tab.approve.success_btn: 审核通过
+
+admin.user.approval.approved_tab.approval_info.heading_title: 用户认证查看
+
+##私信管理模块
+admin.user.message.nickname.input_placeholder: 发信人用户名
+admin.user.message.content.input_placeholder: 私信内容关键词
+admin.user.message.fields.sender_label: 发信人
+admin.user.message.fields.receiver_label: 收信人
+admin.user.message.fields.content_label: 内容
+admin.user.message.fields.send_time_label: 发送时间
+admin.user.message.fields.content_spread_label: (展开)
+admin.user.message.fields.content_retract_label: (收起)
+admin.user.message.empty_hint: 暂无私信记录
+admin.user.message.fields.check_all_label: 全选
+admin.user.message.delete_btn: 删除
+admin.user.message.delete_btn.data_name: 私信
+
+##教师管理模块
+admin.user.teacher.fields.nickname.input_placeholder: 用户名
+admin.user.teacher.basic_tab.fields.recent_login_label: 最近登录
+admin.user.teacher.basic_tab.fields.recommend_teacher_label: 推荐教师
+admin.user.teacher.basic_tab.teacher_empty_hint: 暂无教师记录
+admin.user.teacher.basic_tab.fields.forbid_label: 禁
+admin.user.teacher.basic_tab.fields.recommend_label: 荐:
+admin.user.teacher.basic_tab.fields.serial_num_label: 序号:
+admin.user.teacher.basic_tab.fields.deny_label: 否
+
+###教师管理设置推荐教师模块
+admin.user.teacher.basic_tab.promote.heading_title: 设置推荐教师
+admin.user.teacher.basic_tab.promote.fields.serial_num_label: 序号
+admin.user.teacher.basic_tab.promote.number_hint: 请输入0-10000的整数
+admin.user.teacher.basic_tab.promote.number_input_data_explain: 请输入0-10000的整数
+
+##教师推荐模块
+admin.user.teacher.promote_tab.fields.serial_num_label: 顺序号
+admin.user.teacher.promote_tab.fields.promote_time_label: 推荐时间
+admin.user.teacher.promote_tab.teacher_empty_hint: 暂无推荐老师
+admin.user.teacher.promote_tab.promote_cancel_btn: 取消推荐教师
+admin.user.teacher.promote_tab.promote_setting_btn: 设置序号
 
 # 话题管理通用key
 admin.classroom_default_name: 班级
@@ -1666,7 +2152,7 @@ admin.role_manage.modal.role_tree: 权限
 admin.role_manage.modal.name.placeholer: 管理员
 admin.role_manage.modal.add_btn: 添加
 
-# 课程规则
+# 课程设置
 admin.setting_course.course_rule: 课程规则
 admin.setting_course.send_welcome_messages: 给新%user_name%发送欢迎私信
 admin.setting_course.open: 开启
@@ -1717,7 +2203,121 @@ admin.setting_course.classroom.setting_classroom_name.tips: 请注意：以下�
 admin.setting_course.classroom.course_discount: 课程重合时抵扣购买
 admin.setting_course.classroom.course_discount.help_block: 购买班级时，如果已经购买过其中的课程，支付金额中将会扣除该课程的当前价格。反之，支付金额不受影响，以班级原价购买。
 admin.setting_course.classroom.classroom_list_default_seq: 班级列表页默认排序
+admin.setting_course.classroom.classroom_list.help_block: 班级列表页
+admin.setting_course.classroom.classroom_list_default_seq.help_block: 地址：域名/classroom/explore,任何人都可在此页面查看网站所有已发布班级,如需设置网站首页班级排序，请到【站点设置】-【主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
 
+# 系统
+# 系统优化
+admin.system_optimize.refresh_cache: 刷新缓存
+admin.system_optimize.refresh_cache_tips: 刷新并重建缓存,让系统保持最优的状态。
+admin.system_optimize.optimize_disk_space: 优化磁盘空间
+admin.system_optimize.optimize_disk_space_tips: 移除系统的临时数据，释放出更多磁盘空间。
+admin.system_optimize.db_backup_and_download: 数据库备份和下载
+admin.system_optimize.db_download: 下载数据库备份
+admin.system_optimize.db_backup_and_download_tips: 备份数据库，并下载备份文件。下载完成后请
+admin.system_optimize.prudent_operate_area: 谨慎操作区域
+admin.system_optimize.empty_system_backup_data: 清空系统备份数据
+admin.system_optimize.system_upgrade_tips: 慎重：请确保当前系统已经升级成功。当系统升级过程中发生意外，备份的系统文件和数据库可用于恢复。
+admin.system_optimize.empty_system_backup_data_tips: 清空系统升级过程中备份的系统文件和备数据库。通过清空系统备份数据，可以让系统释放出更多的磁盘空间
+admin.system_optimize.optimize_course: 优化课程文件
+admin.system_optimize.optimize_video_and_data: 优化课程视频和相关资料文件
+admin.system_optimize.optimize_video_and_data_careful_tips: 注意：该功能慎用。请仔细阅读下列说明：
+admin.system_optimize.optimize_video_and_data_tips: 优化课程文件，将已经不存在系统中的课程相关上传文件移除。假如您希望保留这些数据，请不要执行该功能。
+
+# 定时任务
+admin.crontab_job.task: 任务
+admin.crontab_job.next_implement_start_time_placeholder: 下一次执行开始时间
+admin.crontab_job.next_implement_end_time_placeholder: 下一次执行截止时间
+admin.crontab_job.task_name_placeholder: 任务名称
+admin.crontab_job.task_cycle_placeholder: --执行周期--
+admin.crontab_job.task_tips: 定时任务是系统为了保证系统业务的正常进行自动生成系统级任务,不需要进行任何手动操作
+admin.crontab_job.task_num: 编号
+admin.crontab_job.task_name: 任务名称
+admin.crontab_job.task_object: 任务对象
+admin.crontab_job.task_cycle: 执行周期
+admin.crontab_job.next_implement_start_time: 下一次执行时间
+admin.crontab_job.create_task_time: 创建时间
+admin.crontab_job.task_object_course: 课程
+admin.crontab_job.task_object_classroom: 班级
+admin.crontab_job.task_object_open_course: 公开课
+admin.crontab_job.task_object_lesson: 课时
+admin.crontab_job.empty: 无定时任务记录
+
+#　ip黑名单
+admin.ip_black_list.titile: IP黑名单
+admin.ip_black_list.tips: 一行一个IP，被加入黑名单的IP将被禁止访问！可使用通配符，例如：202.101.20.*。
+
+# 发帖限制设置
+admin.post_num_rules.same_ip_rule: 同一IP，5分钟内最多发帖次数（包含回复数）
+admin.post_num_rules.post_num: 发帖次数
+admin.post_num_rules.post_num_tips: 发帖次数必须大于或者等于0的整数，0表示不限制
+admin.post_num_rules.same_user_rule: 同一用户，5分钟内最多发帖次数（包含回复数）
+
+# 系统自检
+admin.reports_status.environmental_detection: 环境检测
+admin.reports_status.recommend_config: 推荐配置
+admin.reports_status.current_status: 当前状态
+admin.reports_status.need_status: 所需状态
+admin.reports_status.min_require: 最低要求
+admin.reports_status.operate_system: 操作系统
+admin.reports_status.php_version: PHP版本
+admin.reports_status.more_info: 更多信息
+admin.reports_status.php_run_user: PHP运行用户
+admin.reports_status.safe_mode: 安全模式
+admin.reports_status.open: 开启
+admin.reports_status.closed: 关闭
+admin.reports_status.must: 必须
+admin.reports_status.alerday_install: 已安装
+admin.reports_status.no_install: 尚未安装
+admin.reports_status.no_install_mysql_pdo: 尚未安装MySQL_PDO
+admin.reports_status.upload_file_size: 文件上传大小
+admin.reports_status.upload_file_size_tips: 该值决定可以上传视频的最大大小
+admin.reports_status.upload_file_size_greater_than_200m: 大于200M
+admin.reports_status.form_data_size: 表单数据大小
+admin.reports_status.form_data_size_tips: 该值不能小于文件上传大小的值
+admin.reports_status.php_max_run_time: PHP脚本最大执行时间
+admin.reports_status.php_max_run_time_tips: 该值决定上传视频时，最长可使用的时间
+admin.reports_status.php_max_execution_time: >
+  %maxExecutionTime%秒'
+admin.reports_status.upload_file_size_greater_than_300m: 大于300M
+admin.reports_status.upload_file_execution_time_30s: 30秒
+admin.reports_status.php_extend: PHP扩展
+admin.reports_status.php__mbstring_extend_tips: 该扩展用于处理中文字符
+admin.reports_status.php__curl_extend_tips: 该扩展用于远程读取文件
+admin.reports_status.php__gd_extend_tips: 该扩展用于处理图片
+admin.reports_status.system_communication: 通信情况
+admin.reports_status.system_status: 状态
+admin.reports_status.system_communication_with_discuz: 与Discuz Ucenter的连接
+admin.reports_status.system_checking: 正在检测.....
+admin.reports_status.system_email_send: 邮件发送
+admin.reports_status.system_email_send_tips: 每次检测，都会向当前用户发一封测试邮件，请保证当前用户的邮箱正确,邮件异常请到系统日志查看
+admin.reports_status.system_file_and_catalog_authority: 系统文件、目录权限检查
+admin.reports_status.system_file_and_catalog_authority_available: 文件目录权限正常
+admin.reports_status.system_scanning_file: 正常扫描文件......
+admin.reports_status.system_space_occupancy: 系统空间占用
+admin.reports_status.system_available_space: 可用
+admin.reports_status.system_total_space: 总共
+admin.reports_status.system_surplus_space: 剩余
+admin.reports_status.system_can_write: 可写
+admin.reports_status.system_no_can_write: 不可写
+
+#　系统日志
+admin.system_log.syatem_operation_log: 系统操作日志
+admin.system_log.code_run_log: 程序运行日志
+admin.system_log.all_log_level_option: --所有等级--
+admin.system_log.all_module_option: --所有模块--
+admin.system_log.all_operation_option: --所有操作--
+admin.system_log.start_time_placeholder: 起始时间
+admin.system_log.end_time_placeholder: 结束时间
+admin.system_log.username_placeholder: 用户名
+admin.system_log.username: 用户
+admin.system_log.operation: 操作
+admin.system_log.log_lenvel: 日志等级
+admin.system_log.time_and_ip: 时间/IP
+admin.system_log.show_data: 查看数据
+admin.system_log.hide_data: 隐藏数据
+admin.system_log.empty: 无日志记录
+admin.system_log.code_run_log.show_rencent_data_tips: 显示最近的2000条日志信息。
 
 # 移动端
 mobile.page_title: 移动学习
@@ -1769,7 +2369,7 @@ my.teaching.classroom.manage_btn: 管理%classroom%
 my.teaching.classroom.today_data_title: 今日新增
 my.teaching.classroom.today_data: >
   学员%allCount%  &nbsp;&nbsp;
-  话题%threadCount%  &nbsp;&nbsp; 
+  话题%threadCount%  &nbsp;&nbsp;
   任务完成学习%todayFinishedTaskNum%
 my.teaching.page_title: 在教课程
 my.teaching.course_set.create: 创建课程
@@ -1816,3 +2416,156 @@ my.learning.notebook_menu: 我的笔记
 my.learning.homework_menu: 我的作业
 my.learning.testpaper_menu: 我的考试
 my.learning.group_menu: 我的小组
+
+# 订单模块
+admin.order.paid_time_range.input_placeholder: 付款时间段
+admin.order.keyword: 关键词:
+admin.order.buyer: 购买者用户名
+admin.order.screen_condition: 筛选条件:
+admin.order.target_name: 名
+admin.order.buyer_mobile: 购买者绑定手机号
+admin.order.buyer_email: 购买者邮箱
+admin.order.target_id: 编号
+admin.order.tips: 站外支付为该笔订单是通过导入或者手动添加的方式产生的，故为站外支付
+admin.order.paid: 已支付
+admin.order.created: 未付款
+admin.order.cancelled: 已关闭
+admin.order.coin_order_type.default: --选择类型--
+
+#账单管理
+admin.bill.time_option.default: 全部记录
+admin.bill.time_option.last_one_week: 最近一周
+admin.bill.time_option.last_two_week: 最近两周
+admin.bill.time_option.last_one_month: 最近一个月
+admin.bill.time_option.last_two_month: 最近两个月
+admin.bill.time_option.last_three_month: 最近三个月
+
+#虚拟币模块
+admin.coin.type_option.default: 全部记录
+admin.coin.type_option.inflow: 充值记录
+admin.coin.type_option.outflow: 消费记录
+
+admin.coin.created_time_option.all: 全部记录
+admin.coin.created_time_option.oneWeek: 最近一周
+admin.coin.created_time_option.oneMonth: 最近一个月
+admin.coin.created_time_option.threeMonths: 最近三个月
+
+admin.coin.keyword_type_option.default: --选择类型--
+admin.coin.search_type_option.nickname: 用户名
+admin.coin.search_type_option.email: 邮件地址
+
+admin.coin.datagrid.filter.oneWeek: 本周
+admin.coin.datagrid.filter.oneMonth: 本月
+admin.coin.datagrid.filter.threeMonths: 三个月
+admin.coin.datagrid.filter.all_history: 全部历史
+
+admin.coin.datagrid.filter.default: 默认
+admin.coin.datagrid.filter.consume: 消费
+admin.coin.datagrid.filter.recharge: 充值
+
+admin.coin.datagrid.filter.asc: 升序
+admin.coin.datagrid.filter.desc: 降序
+admin.coin.operation: 操作
+admin.coin.sort: 排序
+admin.coin.content_title: 虚拟币管理
+admin.coin.give_btn: 发放虚拟币
+admin.coin.manage: 虚拟币管理
+admin.coin.nickname.input_placeholder: 请输入用户名
+admin.coin.edit_btn: 修改
+admin.coin.tips: 注：虚拟币记录只有在进入虚拟币页面时才会记录
+admin.coin.setting: 虚拟币设置
+admin.coin.model_setting: 使用方式设置
+admin.coin.recharge_orders: 充值订单
+admin.coin.user_coin: 用户虚拟币
+admin.coin_edit.content_title: 修改
+admin.coin_give.content_title: 发放虚拟币
+admin.coin_give.nickname_check_hint: 只能选择系统中已注册的用户
+admin.coin_flow_detail.content_title: %nickname%的%coin_name%明细
+admin.coin.model: 使用方式
+admin.coin_setting.description: 说明
+admin.coin_setting.description_hint: 虚拟币是可以在网校内进行支付消费的虚拟货币
+admin.coin_setting.promotion_proposal: 推广建议
+admin.coin_setting.promotion_proposal_hint: >
+  1、 建议网校使用虚拟币对网校内课程进行标价；<br>
+  2、 网校可鼓励%user_name%充值，可提升用户忠诚度；<br>
+  3、 建议配合使用学习卡（商业应用），给予一定优惠；<br>
+admin.coin_setting.upload_hint: >
+  请上传png, gif, jpg格式的大于等于50*50的<span class="text-danger">等比例</span>图片，否则无法上传
+admin.coin_setting.coin_description: 虚拟币说明
+admin.coin_setting.content_hint: 虚拟币说明可用于描述虚拟币特点，用途，获得的途径等虚拟币的相关内容
+admin.coin_setting.update_submit_btn: 提交更新
+admin.coin_setting.tips: >
+  <p><strong>1.虚拟币设置的名称，图片，虚拟币说明都会在学生的【账户中心】展现/提示</strong></p>
+  <p><strong>2.虚拟币图片和说明设置后，会显示在用户的账户中心</strong></p>
+admin.coin_model.datagrid.none: 不使用
+admin.coin_model.datagrid.deduction: 用于抵扣
+admin.coin_model.datagrid.currency: 用于标价
+admin.coin_model.coin_rate_setting: 虚拟币汇率设置
+admin.coin_model.rate_setting_hint: >
+  在此设置1元可换取的虚拟币数量，<span class="text text-danger">建议汇率设置后不要进行改动</span>
+admin.coin_model.tips: >
+  1、暂无手动修改用户虚拟币余额的功能
+  <br>
+  2、充值虚拟币，需安装<a href="%appCenterUrl%">学习卡</a>或<a href="%appCenterUrl%">账户充值</a>插件
+  <br>
+
+admin.coin_model.deduction_tips: >
+  1、暂无手动修改用户虚拟币余额的功能
+  <br>
+  2、充值虚拟币，需安装<a href="%appCenterUrl%">学习卡</a>或<a href="%appCenterUrl%">账户充值</a>插件
+  <br>
+  3、虚拟币用于抵扣：网校以人民币作为支付货币，并可以使用虚拟币进行按比例抵扣(虚拟币类似于淘金币）
+  <br>
+  4、使用方式一旦保存（使用方式和汇率），请勿随意改动
+  <br>
+  5、使用方式的切换会使课程价格根据汇率变动
+  <br>
+  6、如有参加促销活动的课程，修改价格都将有相应的折扣
+
+admin.coin_model.currency_tips: >
+  1、暂无手动修改用户虚拟币余额的功能
+  <br>
+  2、充值虚拟币，需安装<a href="%appCenterUrl%">学习卡</a>或<a href="%appCenterUrl%">账户充值</a>插件
+  <br>
+  3、虚拟币用于标价：网校以虚拟币作为支付货币，课程和会员以虚拟币标价和结算
+  <br>
+  4、虚拟币用于标价后，移动端仍显示人民币价格（移动端暂不支持虚拟币支付）
+  <br>
+  5、使用方式一旦保存（使用方式和汇率），请勿随意改动
+  <br>
+  6、使用方式的切换会使课程价格会根据汇率变动
+  <br>
+  7、如有参加促销活动的课程，修改价格都将有相应的折扣
+
+admin.coin_course_set.tips: >
+  1元人民币兑换<strong class="text-info">%cashRate%</strong>%coinName%
+admin.coin_setting.price_set_tips: 请设置正确的价格
+
+#退款管理
+admin.order_refund.status.default: 退款状态
+admin.order_refund.nickname.input_placeholder: 退款人用户名
+admin.order_refund.title.type_course_input_placeholder: 课程名
+admin.order_refund.title.type_classroom_input_placeholder: 班级名
+admin.order_refund.title: 退款订单
+admin.order_refund.order_amount: 订单成交金额
+admin.order_refund.refund_person: 退款人
+admin.order_refund.refund_status: 退款状态
+admin.order_refund.operator: 操作人
+admin.order_refund.operation: 操作
+admin.order_refund.reason: 退款理由
+admin.order_refund.time: 退款时间
+admin.order_refund.refund_actual_amount: 实退%actualAmount%元
+admin.order_refund.empty_hint: 暂无退款记录
+admin.order_refund.approve.content_title: 审核退款申请
+admin.order_refund.audit_refund_btn: 审核
+admin.order_refund.audit.content_title: 审核退款申请
+admin.order_refund.audit.result: 审核结果
+admin.order_refund.audit.refund_actual_amount: 实际退款金额
+admin.order_refund.audit.description: 审核说明
+admin.order_refund.audit.tips: 系统没有自动退款功能，此处仅是退款申请记录，审核通过的退款申请，需要网校线下退款。
+
+admin.order.logs.content_title: 订单详情
+admin.order.logs.info: 日志信息
+admin.order.logs.operator: 操作人
+admin.order.logs.created_time: 创建时间
+admin.order.logs.empty_hint: 暂无交易日志!

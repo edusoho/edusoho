@@ -49,7 +49,7 @@
         <label>{{'admin.setting_course.course_detail_show_relevant_course'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('relatedCourses', {1:'admin.setting_course.open', 0:'admin.setting_course.closed'}, courseSetting.relatedCourses) }}
+        {{ radios('relatedCourses', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, courseSetting.relatedCourses) }}
         <div class="help-block">{{'admin.setting_course.course_detail_show_relevant_course.help_block'|trans}}</div>
       </div>
     </div>
