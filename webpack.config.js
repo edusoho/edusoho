@@ -26,6 +26,7 @@ const options = {
     'jquery-blurr':['jquery-blurr'],
     'jquery-waypoints': ['jquery-waypoints'],
     'jquery-raty': ['libs/js/jquery-raty/jquery-raty.js'],
+    'echarts':['echarts'],
 
     // 样式
     'app-bootstrap': ['libs/app-bootstrap/less/bootstrap.less']
