@@ -1,6 +1,6 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 {% block title %}{{'增加'|trans}}{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{'学员'|trans}}{% endif %}{{'课程有效期'|trans}}{% endblock %}
-{% do script(['libs/jquery-validation.js','app/js/course-manage/set-expiryday-modal/index.js'])%}
+{% do script(['libs/jquery-validation.js','app/js/course-manage/student-expiryday/index.js'])%}
 
 {% block body %}
 <form id="expiryday-set-form" class="form-horizontal" method="post" action="{{ path('course_set_manage_course_students_expiryday', { courseSetId: course.courseSetId, courseId:course.id, userId:user.id }) }}">
