@@ -298,6 +298,24 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->findByCourseIds($courseIds);
     }
 
+    public function findLatestStudentsByCourseSetId($courseSetId, $offset, $limit)
+    {
+        $result = $this->getMemberDao()->findByConditionsGroupByUserId(
+            array(
+                'role' => 'student',
+                'courseSetId' => $courseSetId,
+                'locked' => 0,
+            ),
+            array('createdTime' => 'DESC'),
+            $offset,
+            $limit
+        );
+
+        $memberIds = array_column($result, 'id');
+
+        return $this->getMemberDao()->findByIds($memberIds);
+    }
+
     public function getCourseStudentCount($courseId)
     {
         $conditions = array(
