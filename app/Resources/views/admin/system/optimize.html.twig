@@ -7,73 +7,69 @@
 {% block main %}
 
 	{{ web_macro.flash_messages() }}
-
-
-
-
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title">{{'刷新缓存'|trans}}</h3>
+    <h3 class="panel-title">{{'admin.system_optimize.refresh_cache'|trans}}</h3>
   </div>
   <div class="panel-body">
   	<p>
-      {{'刷新并重建缓存,让系统保持最优的状态。'|trans}} 
+      {{'admin.system_optimize.refresh_cache_tips'|trans}} 
     </p>
     <p >
-  		<button id="removecache" class="btn btn-primary fr " data-url="{{ url('admin_optimize_remove_cache') }}">{{'刷新缓存'|trans}}</button>
+  		<button id="removecache" class="btn btn-primary fr " data-url="{{ url('admin_optimize_remove_cache') }}">{{'admin.system_optimize.refresh_cache'|trans}}</button>
   	</p>
   </div>
 </div>
 
 	<div class="panel panel-default">
 	  <div class="panel-heading">
-	    <h3 class="panel-title">{{'优化磁盘空间'|trans}}</h3>
+	    <h3 class="panel-title">{{'admin.system_optimize.optimize_disk_space'|trans}}</h3>
 	  </div>
 	  <div class="panel-body">
 	   	<p>
-	       {{'移除系统的临时数据，释放出更多磁盘空间。'|trans}}
+	       {{'admin.system_optimize.optimize_disk_space_tips'|trans}}
 	    </p>
 	    <p >
-	  		<button id="removeTmp" class="btn btn-primary fr" data-url="{{ url('admin_optimize_remove_tmp') }}">{{'优化磁盘空间'|trans}}</button>
+	  		<button id="removeTmp" class="btn btn-primary fr" data-url="{{ url('admin_optimize_remove_tmp') }}">{{'admin.system_optimize.optimize_disk_space'|trans}}</button>
 	  	</p>
 	  </div>
 	</div>
 
 
-<div class="panel panel-default" style="display: none">
+<div class="panel panel-default" style="display:none">
   <div class="panel-heading">
-    <h3 class="panel-title">{{'数据库备份和下载'|trans}}</h3>
+    <h3 class="panel-title">{{'admin.system_optimize.db_backup_and_download'|trans}}</h3>
   </div>
   <div class="panel-body">
    	<p>
-       {{'备份数据库，并下载备份文件'|trans}}。 {{'下载完成后请'|trans}}<span class="text-info">{{'优化磁盘空间'|trans}}</span>。
+       {{'admin.system_optimize.db_backup_and_download_tips'|trans}}<span class="text-info">{{'admin.system_optimize.optimize_disk_space'|trans}}</span>。
     </p>
     <p>
-  		<button id="backupDatabase" class="btn btn-primary fr" data-url="{{ url('admin_optimize_backupdb') }}">{{'数据库备份和下载'|trans}}</button>
+  		<button id="backupDatabase" class="btn btn-primary fr" data-url="{{ url('admin_optimize_backupdb') }}">{{'admin.system_optimize.db_backup_and_download'|trans}}</button>
   	</p>
   	<p>
-  		<span id="dbbackup" class="glyphicon glyphicon-download-alt hide"><a id="dbdownload" href="#" target="_blank">{{'下载数据库备份'|trans}}</a></span>
+  		<span id="dbbackup" class="glyphicon glyphicon-download-alt hide"><a id="dbdownload" href="#" target="_blank">{{'admin.system_optimize.db_download'|trans}}</a></span>
   	</p>
   </div>
 </div>
 
 <hr/>
-<h1><small>{{'谨慎操作区域'|trans}}</small></h1>
+<h1><small>{{'admin.system_optimize.prudent_operate_area'|trans}}</small></h1>
 <hr/>
 
 <div class="panel panel-default">
   <div class="panel-heading ">
-    <h3 class="panel-title text-warning">{{'清空系统备份数据'|trans}}</h3>
+    <h3 class="panel-title text-warning">{{'admin.system_optimize.empty_system_backup_data'|trans}}</h3>
   </div>
   <div class="panel-body">
    	<p class="text-warning">
-       {{'慎重：请确保当前系统已经升级成功。当系统升级过程中发生意外，备份的系统文件和数据库可用于恢复。'|trans}}
+       {{'admin.system_optimize.system_upgrade_tips'|trans}}
     </p>   	
     <p>
-       {{'清空系统升级过程中备份的系统文件和备数据库。通过清空系统备份数据，可以让系统释放出更多的磁盘空间'|trans}}
+       {{'admin.system_optimize.empty_system_backup_data_tips'|trans}}
     <p/>
     <p >
-  		<button id="removeBackup" class="btn btn-warning fr" data-url="{{ url('admin_optimize_remove_backup') }}">{{ '清空系统备份数据'|trans }}</button>
+  		<button id="removeBackup" class="btn btn-warning fr" data-url="{{ url('admin_optimize_remove_backup') }}">{{ 'admin.system_optimize.empty_system_backup_data'|trans }}</button>
   	</p>
   </div>
 </div>
@@ -81,18 +77,17 @@
 
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title text-warning">{{'优化课程视频和相关资料文件'|trans}}</h3>
+    <h3 class="panel-title text-warning">{{'admin.system_optimize.optimize_video_and_data'|trans}}</h3>
   </div>
   <div class="panel-body">
    	<p class="text-warning">
-       {{'注意：该功能慎用。请仔细阅读下列说明：'|trans}} 
+       {{'admin.system_optimize.optimize_video_and_data_careful_tips'|trans}} 
     </p>
      <p>
-       {{'优化课程文件，将已经不存在系统中的课程相关上传文件移除。假如您希望保留这些数据，
-       请不要执行该功能。'|trans}}
+       {{'admin.system_optimize.optimize_video_and_data_tips'|trans}}
     </p>
     <p>
-  		<a id="optimizeFile" class="btn btn-danger fr" type="button" href="#modal" data-toggle="modal" data-url="{{ url('admin_optimize_remove_show_progressbar') }}">{{'优化课程文件'|trans}}</a>
+  		<a id="optimizeFile" class="btn btn-danger fr" type="button" href="#modal" data-toggle="modal" data-url="{{ url('admin_optimize_remove_show_progressbar') }}">{{'admin.system_optimize.optimize_course'|trans}}</a>
   	</p>
   </div>
 </div>
