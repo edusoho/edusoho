@@ -5,7 +5,7 @@
 {% endif %}
 {% extends layout %}
 
-{% block title %}{{'课程文件'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'my.teaching.open_course.files'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'files' %}
 {% set tab = 'courseLesson' %}
@@ -28,9 +28,9 @@
         data-toggle="modal" data-target="#modal"
         data-url="{{path('uploader_batch_upload', {token:uploader_token(targetType, courseSet.id, 'private')}) }}"
       >
-        <i class="glyphicon glyphicon-cloud-upload"></i>{{'添加课程文件'|trans}}
+        <i class="glyphicon glyphicon-cloud-upload"></i>{{'my.teaching.open_course.files.add_btn'|trans}}
       </a>
-      {{'课程文件'|trans}}
+      {{'my.teaching.open_course.files'|trans}}
     </div>
 
     <div class="panel-body" id="file-manage-panel" data-file-status-url="{{path('course_set_manage_file_status')}}">
@@ -38,12 +38,12 @@
         <thead>
           <tr>
             <th width="5%"><input type="checkbox"  data-role="batch-select"></th>
-            <th width="30%">{{'文件名'|trans}}</th>
-            <th>{{'类型'|trans}}</th>
-            <th>{{'大小'|trans}}</th>
-            <th>{{'使用'|trans}}</th>
-            <th>{{'最后更新'|trans}}</th>
-            <th>{{'操作'|trans}}</th>
+            <th width="30%">{{'my.teaching.open_course.files.file_name'|trans}}</th>
+            <th>{{'my.teaching.open_course.files.type'|trans}}</th>
+            <th>{{'my.teaching.open_course.files.size'|trans}}</th>
+            <th>{{'my.teaching.open_course.files.use_status'|trans}}</th>
+            <th>{{'my.teaching.open_course.files.latest_update'|trans}}</th>
+            <th>{{'my.teaching.open_course.files.operation'|trans}}</th>
           </tr>
         </thead>
         <tbody>
@@ -51,22 +51,22 @@
           {% for uploadFile in files if uploadFile %}
             {% include 'courseset-manage/file/tbody-tr.html.twig' %}
           {% else %}
-            <tr class="empty"><td colspan="20">{{'无文件记录'|trans}}</td></tr>
+            <tr class="empty"><td colspan="20">{{'site.datagrid.empty'|trans}}</td></tr>
           {% endfor %}
           
         </tbody>
       </table>
 
-      <label class="checkbox-inline mrm mbm"><input type="checkbox" data-role="batch-select"> {{'全选'|trans}}</label>
+      <label class="checkbox-inline mrm mbm"><input type="checkbox" data-role="batch-select"> {{'my.teaching.open_course.files.select_all'|trans}}</label>
 
       <div class="btn-group mbm">
         {% if courseSet.type == 'normal' or courseSet.type =='live'  %}
-          <button class="btn btn-danger btn-sm" data-role="batch-delete" data-name="{{'文件记录'|trans}}" data-url="{{ path('course_set_manage_delete_materials_show', {id:courseSet.id, type:tab}) }}">
+          <button class="btn btn-danger btn-sm" data-role="batch-delete" data-name="{{'my.teaching.open_course.files.file_record'|trans}}" data-url="{{ path('course_set_manage_delete_materials_show', {id:courseSet.id, type:tab}) }}">
         {% elseif courseSet.type == 'open' or courseSet.type == 'liveOpen' %}
-          <button class="btn btn-danger btn-sm" data-role="batch-delete" data-name="{{'文件记录'|trans}}" data-url="{{ path('open_course_manage_delete_materials_show', {id:courseSet.id, type:tab}) }}">
+          <button class="btn btn-danger btn-sm" data-role="batch-delete" data-name="{{'my.teaching.open_course.files.file_record'|trans}}" data-url="{{ path('open_course_manage_delete_materials_show', {id:courseSet.id, type:tab}) }}">
         {% endif %}
         <i class="glyphicon glyphicon-trash"></i>
-        {{'移除'|trans}}</button>
+        {{'my.teaching.open_course.files.remove_btn'|trans}}</button>
       </div>
 
       <nav class="text-center">

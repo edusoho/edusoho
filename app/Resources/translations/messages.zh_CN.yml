@@ -2903,6 +2903,31 @@ my.teaching.open_course.lesson.flash_chooser.tips: >
     Flash将上传到<strong>云服务器</strong>
   </li>
 my.teaching.open_course.lesson.flash_chooser.flash.empty: 暂无Flash，请先上传。
+my.teaching.open_course.files: 课程文件
+my.teaching.open_course.files.add_btn: 添加课程文件
+my.teaching.open_course.files.file_name: 文件名
+my.teaching.open_course.files.type: 类型
+my.teaching.open_course.files.size: 大小
+my.teaching.open_course.files.use_status: 使用
+my.teaching.open_course.files.use_status.unused: 使用中
+my.teaching.open_course.files.use_status.used: 未使用
+my.teaching.open_course.files.latest_update: 最后更新
+my.teaching.open_course.files.operation: 操作
+my.teaching.open_course.files.select_all: 全选
+my.teaching.open_course.files.remove_btn: 移除
+my.teaching.open_course.files.file_record: 文件记录
+my.teaching.open_course.files.cloud_file: 云文件
+my.teaching.open_course.files.dev_mode_btn: 重新转换(调试模式)
+my.teaching.open_course.files.media_subtitle_btn: 字幕管理
+my.teaching.open_course.recommend_setting.title: 推荐设置
+my.teaching.open_course.recommend_setting.add_course_btn: 添加课程
+my.teaching.open_course.recommend_setting.add_course_btn: 添加课程
+my.teaching.open_course.recommend_setting.serializeMode.live: 更新中
+my.teaching.open_course.recommend_setting.serializeMode.finished: 已完结
+my.teaching.open_course.recommend_setting.onlive: 正在直播中
+my.teaching.open_course.recommend_setting.live: 直播
+my.teaching.open_course.recommend_setting.task_number: 第%task_number%任务
+
 
 
 

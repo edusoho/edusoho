@@ -13,12 +13,12 @@
   <td>
     <a class="link-dark" href="{{ fileShowUrl }}" target="_blank" rel="tooltip" title data-original-title="{{ uploadFile.filename }}"  >
       {% if uploadFile.storage == 'cloud' %}
-        <i class="glyphicon glyphicon-cloud color-gray" title="{{'云文件'|trans}}"></i>
+        <i class="glyphicon glyphicon-cloud color-gray" title="{{'my.teaching.open_course.files.cloud_file'|trans}}"></i>
       {% endif %}
       {{ uploadFile.filename|sub_text(30) }}
     </a>
     {% if setting('developer.debug') and uploadFile.storage == 'cloud' and uploadFile.type in ['video', 'ppt', 'document'] %}
-      <a href="javascript:;" data-url="{{ convertUrl }}" class="convert-file-btn ml5">{{'重新转换(调试模式)'|trans}}</a>
+      <a href="javascript:;" data-url="{{ convertUrl }}" class="convert-file-btn ml5">{{'my.teaching.open_course.files.dev_mode_btn'|trans}}</a>
     {% endif %}
     <br>
   </td>
@@ -46,9 +46,9 @@
 
     {# 暂时只需要区分使用和未使用 #}
     {% if not fileQuotes %}
-      <span class="label label-default tip">{{'未使用'|trans}}</span>
+      <span class="label label-default tip">{{'my.teaching.open_course.files.use_status.used'|trans}}</span>
     {% else %}
-      <span class="label label-success tip">{{'使用中'|trans}}</span>
+      <span class="label label-success tip">{{'my.teaching.open_course.files.use_status.unused'|trans}}</span>
     {% endif %}
   </td>
   <td>
@@ -69,7 +69,7 @@
       {% else %}
         {% set goto = path('course_set_manage_files', {id:courseSet.id}) %}
       {% endif %}
-    <a href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id, goto:goto}) }}">字幕管理</a>
+    <a href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id, goto:goto}) }}">{{ 'my.teaching.open_course.files.media_subtitle_btn'|trans }}</a>
     {% endif %}
   </td>
 
