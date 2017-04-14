@@ -51,6 +51,20 @@ class BuildX8PackageCommand extends ContainerAwareCommand
 
         $filesystem->remove($buildDir.'/x8.zip');
 
+        chdir($this->getContainer()->get('kernel')->getRootDir().'/../');
+
+        exec('rm -rf ./build/EduSoho_8.0.0/source/vendor');
+        exec('rm -rf ./build/EduSoho_8.0.0/source/web/static-dist');
+
+        exec('cp -r ./vendor ./build/EduSoho_8.0.0/source');
+        exec('mkdir ./build/EduSoho_8.0.0/source/web/static-dist');
+        exec('cp -r ./web/static-dist/app ./build/EduSoho_8.0.0/source/web/static-dist');
+        exec('cp -r ./web/static-dist/autumntheme ./build/EduSoho_8.0.0/source/web/static-dist');
+        exec('cp -r ./web/static-dist/defaulttheme ./build/EduSoho_8.0.0/source/web/static-dist');
+        exec('cp -r ./web/static-dist/defaultbtheme ./build/EduSoho_8.0.0/source/web/static-dist');
+        exec('cp -r ./web/static-dist/jianmotheme ./build/EduSoho_8.0.0/source/web/static-dist');
+        exec('cp -r ./web/static-dist/libs ./build/EduSoho_8.0.0/source/web/static-dist');
+
         chdir($x8PackageDir);
         $command = 'zip -r ./../x8.zip source/';
         exec($command);
