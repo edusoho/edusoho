@@ -88,13 +88,16 @@ export default class TaskSidebar extends Emitter {
     if ($btn.hasClass('active')) {
       this.foldContent();
       $btn.removeClass('active');
+      $('.dashboard-sidebar').removeClass('spread');
     } else {
       this.element.find('#dashboard-toolbar-nav li').removeClass('active');
       $btn.addClass('active');
       this.element.find('[data-pane]').hide();
       this.element.find(`[data-pane="${$btn.data('plugin')}"]`).show();
       this.popupContent();
+      $('.dashboard-sidebar').addClass('spread');
     }
+    
   }
 
   popupContent(time = 500) {
