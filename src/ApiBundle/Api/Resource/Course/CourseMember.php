@@ -65,7 +65,9 @@ class CourseMember extends Resource
         }
 
         if ($success) {
-            return $this->service('Course:MemberService')->getCourseMember($courseId, $this->getCurrentUser()->getId());
+            $member = $this->service('Course:MemberService')->getCourseMember($courseId, $this->getCurrentUser()->getId());
+            $this->getOCUtil()->single($member, array('userId'));
+            return $member;
         }
 
         return array();
