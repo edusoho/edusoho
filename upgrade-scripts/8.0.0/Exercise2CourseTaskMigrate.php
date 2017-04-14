@@ -109,7 +109,7 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
             `chapterId`,
             `seq`,
             CONCAT(`title`,'的练习'),
-            `free`,
+            0,
             `startTime`,
             `endTime`,
             `status`,

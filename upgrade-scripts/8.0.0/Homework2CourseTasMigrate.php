@@ -110,7 +110,7 @@ class Homework2CourseTasMigrate extends AbstractMigrate
             `chapterId`,
             `seq`,
             CONCAT(`title`,'的作业'),
-            `free`,
+            0,
             `startTime`,
             `endTime`,
             `status`,
