@@ -8,9 +8,9 @@
 <table id="block-table" class="table table-striped">
   <thead>
     <tr>
-      <th width="50%">{{'标题'|trans}}</th>
-      <th width="25%">{{'最近更新'|trans}}</th>
-      <th width="25%">{{'操作'|trans}}</th>
+      <th width="50%">{{'admin.block_manage.title'|trans}}</th>
+      <th width="25%">{{'admin.block_manage.latest_update'|trans}}</th>
+      <th width="25%">{{'admin.block_manage.operation'|trans}}</th>
     </tr>
   </thead>
   <tbody>
@@ -19,10 +19,9 @@
         {% set latestHistory = latestHistories[blockTemplate.id]|default(null) %}
         {% set latestUpdateUser = users[latestHistory.userId|default(null)]|default(null) %}
         {% include 'admin/block/list-tr.html.twig' %}
-        
       {% endfor %}
   {% else %}
-        <tr><td colspan="20"><div class="empty">{{'暂无编辑区记录'|trans}}</div></td></tr>
+        <tr><td colspan="20"><div class="empty">{{'admin.block_manage.empty'|trans}}</div></td></tr>
   {% endif %}
    </tbody>
 </table>
