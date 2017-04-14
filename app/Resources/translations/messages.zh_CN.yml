@@ -26,6 +26,9 @@ site.org.belongs_to_org_th: 所属组织机构
 site.org.code: 编码：
 site.default.more: 更多
 site.default.none: 无
+site.default.or: 或
+site.default.minute: 分
+site.default.second: 秒
 
 status: 状态
 price: 价格
@@ -176,6 +179,7 @@ form.field.cut: 扣除
 form.btn.modify: 修改
 form.btn.set: 设置
 form.btn.publish: 发布
+form.btn.cancel_publish: 取消发布
 form.btn.save_and_publish: 直接发布
 form.btn.reset: 重置
 form.btn.view: 查看
@@ -193,10 +197,12 @@ form.btn.cancel: 取消
 form.btn.confirm: 确定
 form.btn.insert: 插入
 form.btn.delete: 删除
+form.btn.create: 创建
 form.btn.submit_disabled: 已提交
 form.btn.reset_password: 重设密码
 form.btn.send: 发送
 form.btn.upload: 上传
+form.btn.picture_crop: 选择要上传的图片
 form.btn.comment: 发表评论
 form.btn.comment.submiting: 正在评论...
 form.btn.upload.submiting: 正在上传...
@@ -207,6 +213,7 @@ form.btn.publish.submiting: 正在发布...
 form.btn.submit.submiting: 正在提交...
 form.btn.send.submiting: 正在发送...
 form.btn.modify.submiting: 正在修改...
+form.btn.create.submiting: 正在创建...
 form.checkbox.public: 公开
 form.placeholder.max_int: 最大值为9位整数
 form.placeholer.two_decimal_places: 保留到2位小数
@@ -2357,7 +2364,7 @@ admin.login_connect.other.qq.help_title: 接入帮助：
 admin.login_connect.other.qq.data_content: >
   1.你的QQ开放平台账号认证度（个人信息完善）要达到75%，才能创建应用在网站设置第三方登录；<br>
   2.需填写的回调地址为：<br><a><span class='text-danger'>XXX</span>/login/bind/qq/callback;<span class='text-danger'>XXX</span>/settings/bind/qq/callback</a><br>，<span class='text-danger'>XXX</span>为你的ES系统网址。例如，气球鱼学院的回调地址填写为：http://www.qiqiuyu.com/login/bind/qq/callback;http://www.qiqiuyu.com/settings<br>/bind/qq/callback；网址一定要有www哦；<br>
-  3.QQ的按钮，在开放平台你的个人信息中，找到ID和key，填写到edusoho后台，开启ID上方的QQ登录。<br>{{ '如果QQ接入审核失败，提示“登录按钮位置不对”，请检查ES后台【系统】【用户设置】【登录】，开启第三方登录以及开启QQ登录。
+  3.QQ的按钮，在开放平台你的个人信息中，找到ID和key，填写到edusoho后台，开启ID上方的QQ登录。<br>如果QQ接入审核失败，提示“登录按钮位置不对”，请检查ES后台【系统】【用户设置】【登录】，开启第三方登录以及开启QQ登录。
 admin.login_connect.type.weixinweb.help_block: >
   APP ID和APP Secret来自<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>创建的网站应用
 admin.login_connect.type.weixinmob.help_block: >
@@ -2419,7 +2426,7 @@ admin.user_fields.modal.init_fields.disabled.tips: 已满5个
 admin.user_fields.modal.float_fields: 小数
 admin.user_fields.modal.float_fields.tips: 还可以添加%floatCount%个字段,保留到两位小数
 admin.user_fields.modal.date_fields: 日期
-admin.user_fields.modal.date_fields.tips: 还可以添加{{5-dateCount}}个字段
+admin.user_fields.modal.date_fields.tips: 还可以添加%5-dateCount%个字段
 admin.user_avatar.customer_default_avatar: 自定义默认头像
 admin.user_avatar.customer_default_avatar.help_block: 你可以上传JPG、GIF或PNG格式的文件
 admin.user_avatar.system_default_avatar: 系统默认头像
@@ -2766,3 +2773,137 @@ admin.order.logs.info: 日志信息
 admin.order.logs.operator: 操作人
 admin.order.logs.created_time: 创建时间
 admin.order.logs.empty_hint: 暂无交易日志!
+
+# 创建课程
+my.teaching.course_set.create_btn: 创建课程
+my.teaching.course_set.select_type: 选择类型
+my.teaching.course_set.select_type.course: 普通课程
+my.teaching.course_set.select_type.course.tips: 支持视频、图文、PPT等各种形式，支持作业、笔记等多个学习工具的课程
+my.teaching.course_set.select_type.live_course: 直播课程
+my.teaching.course_set.select_type.live_course_enabled: 云直播开启后可用
+my.teaching.course_set.select_type.live_course.tips: 以直播为教学形式的，支持多个学习工具的课程
+my.teaching.course_set.select_type.record_open_course: 录播公开课
+my.teaching.course_set.select_type.record_open_course.tips: 免费、无门槛观看的视频课程，主要用于营销推广
+my.teaching.course_set.select_type.live_open_course: 直播公开课
+my.teaching.course_set.select_type.live_open_course.tips: 免费、无门槛参与的直播课程，主要用于营销推广
+my.teaching.course_set.select_type.course_title: 课程标题
+my.teaching.course_set.select_type.how_do_create: 如何创建课程？
+
+# 录播公开课
+my.teaching.open_course.Basic_Info: 基本信息
+my.teaching.open_course.Basic_Info.title: 标题
+my.teaching.open_course.Basic_Info.subtitle: 副标题
+my.teaching.open_course.Basic_Info.tags: 标签
+my.teaching.open_course.Basic_Info.tags.explain: 将会应用于按标签搜索课程、相关课程的提取等
+my.teaching.open_course.Basic_Info.tags.help_block: 将会应用于按标签搜索课程、相关课程的提取等
+my.teaching.open_course.Basic_Info.category: 分类
+my.teaching.open_course.Basic_Info.about: 课程简介
+my.teaching.open_course.Basic_Info.about.help_block: 为正常使用IFrame，请在【管理后台】-【系统】-【安全设置】-【IFrame白名单】中进行设置
+my.teaching.open_course.course_picture.title: 课程图片
+my.teaching.open_course.course_picture.title.help_block: >
+  你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过
+my.teaching.open_course.lesson.add_btn: 课时
+my.teaching.open_course.lesson.tips: 公开课当前仅支持添加一个课时！
+my.teaching.open_course.lesson.manage: 课时管理
+my.teaching.open_course.lesson.lesson_file_deleted: 课时文件已删除
+my.teaching.open_course.lesson.invalid_lesson: 无效课时
+my.teaching.open_course.lesson.video: 视频
+my.teaching.open_course.lesson.audio: 音频
+my.teaching.open_course.lesson.file: 文件
+my.teaching.open_course.lesson.document: 文档
+my.teaching.open_course.lesson.mediaStatus.waiting: (正在等待%mediaTypeName%格式转换)
+my.teaching.open_course.lesson.mediaStatus.doing: (正在转换%mediaTypeName%格式)
+my.teaching.open_course.lesson.mediaStatus.error: (%mediaTypeName%格式转换失败)
+my.teaching.open_course.lesson.status.unpublished: 未发布
+my.teaching.open_course.lesson.material: 资料
+my.teaching.open_course.lesson.add_material_btn: 添加资料
+my.teaching.open_course.lesson.edit_btn: 编辑
+my.teaching.open_course.lesson.more_btn: 更多
+my.teaching.open_course.lesson.modal.edit: 编辑课时
+my.teaching.open_course.lesson.modal.add: 添加课时
+my.teaching.open_course.lesson.modal.lesson_type: 类型
+my.teaching.open_course.lesson.modal.lesson_title: 标题
+my.teaching.open_course.lesson.modal.lesson_content: 内容
+my.teaching.open_course.lesson.modal.lesson_content.tips: 您有一段自动保存内容，继续编辑请点击
+my.teaching.open_course.lesson.modal.media_dialog: 视频字幕
+my.teaching.open_course.lesson.modal.media_dialog.help_block: >
+  字幕文件暂时仅支持UTF-8编码的srt文件，点击<a href="http://www.qiqiuyu.com/article/883" target="__blank">查看</a>编码转换说明。
+my.teaching.open_course.lesson.modal.upload.tips: 请等待视频上传完之后再添加字幕
+my.teaching.open_course.lesson.modal.video_length: 视频时长
+my.teaching.open_course.lesson.modal.audio_length: 音频时长
+my.teaching.open_course.lesson.modal.lesson_length.help_block: 时长必须为非负整数
+my.teaching.open_course.lesson.video_chooser.edit_btn: 编辑
+my.teaching.open_course.lesson.video_chooser.upload_btn: 上传视频
+my.teaching.open_course.lesson.video_chooser.upload_form_material_btn: 从资料库中选择
+my.teaching.open_course.lesson.video_chooser.upload_form_course_file_btn: 从课程文件中选择
+my.teaching.open_course.lesson.video_chooser.import_online_video_btn: 导入网络视频
+my.teaching.open_course.lesson.video_chooser.tips: >
+  正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。<br/>转换完成后将以站内消息通知您。
+my.teaching.open_course.lesson.video_chooser.upload_mode.cloud.tips: >
+  <li>支持<strong>mp4, avi, flv, wmv, mov, m4v</strong>格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。</li>
+  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+  <li>视频将上传到 <strong>云视频服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>
+my.teaching.open_course.lesson.video_chooser.upload_mode.no_cloud.tips: >
+  <li>
+    支持<strong>mp4</strong>
+    格式的视频文件上传，文件大小不能超过
+    <strong>%upload_max_filesize%</strong>
+    。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。
+  </li>
+  <li>
+    视频将上传到
+    <strong>网站服务器</strong>
+    。如需使用%Edusoho%云视频,点击
+    <a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>
+    了解详情,%Edusoho%云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。
+  </li> 
+my.teaching.open_course.lesson.video_chooser.upload_validate_empty: 暂无视频文件，请先上传。
+my.teaching.open_course.lesson.video_chooser.placeholer: 支持优酷、土豆、腾讯、网易公开课的视频页面地址导入
+my.teaching.open_course.lesson.video_chooser.origin_url: 原地址：
+my.teaching.open_course.lesson.video_chooser.impor_loading: 正在导入，请稍等
+my.teaching.open_course.lesson.video_chooser.import_btn: 导入
+my.teaching.open_course.lesson.video_chooser.import.tips: 腾讯和网易的视频不支持手机端播放
+my.teaching.open_course.lesson.audio_chooser.upload_audio_btn: 上传音频
+my.teaching.open_course.lesson.audio_chooser.tips: >
+  支持<strong>mp3</strong>格式的音频文件上传，且文件大小不能超过
+my.teaching.open_course.lesson.audio_chooser.upload_mode.cloud.tips: >
+  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+  <li>音频将上传到<strong>云服务器</strong></li>
+my.teaching.open_course.lesson.audio_chooser.upload_mode.not_cloud.tips: >
+  <li>
+    音频将上传到<strong>网站服务器</strong>
+    ，如需使用%EduSoho%云视频,
+    <a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。
+  </li>
+my.teaching.open_course.lesson.audio_chooser.audio.empty: 暂无音频文件，请先上传。
+my.teaching.open_course.lesson.ppt_chooser.upload_btn: 上传PPT
+my.teaching.open_course.lesson.ppt_chooser.tips: >
+  <li>
+    支持<strong>ppt, pptx</strong>格式的PPT文件上传，且文件大小不能超过<strong>100 MB</strong>。
+  </li>
+  <li>
+    PPT将上传到<strong>云服务器</strong>
+  </li>
+my.teaching.open_course.lesson.ppt_chooser.audio.empty: 暂无PPT文件，请先上传。
+my.teaching.open_course.lesson.document_chooser.upload_btn: 上传文档
+my.teaching.open_course.lesson.document_chooser.tips: >
+  <li>
+    支持<strong>pdf,doc,docx,xls,xlsx</strong>格式的文档上传，且文件大小不能超过<strong>100 MB</strong>。
+  </li>
+  <li>
+    文档将上传到<strong>云服务器</strong>
+  </li>
+my.teaching.open_course.lesson.document_chooser.document.empty: 暂无文档，请先上传。
+my.teaching.open_course.lesson.flash_chooser.upload_btn: 上传Flash
+my.teaching.open_course.lesson.flash_chooser.tips: >
+  <li>
+    支持<strong>swf</strong>格式的文件上传，且文件大小不能超过<strong>100 MB</strong>。
+  </li>
+  <li>
+    Flash将上传到<strong>云服务器</strong>
+  </li>
+my.teaching.open_course.lesson.flash_chooser.flash.empty: 暂无Flash，请先上传。
+
+
+
+
