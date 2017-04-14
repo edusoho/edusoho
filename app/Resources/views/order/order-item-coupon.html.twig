@@ -72,10 +72,10 @@
 
   <div class="order-item-price" role="coupon-price">
     <span class="mrs">{{'抵扣'|trans}}</span>
-    {% if priceType|default("RMB") == "RMB" %}<span>￥</span>{% endif %}
+
     <span role="price" style="font-size: 24px">0.00</span>
     <span>
-      {% if priceType|default("RMB") == "RMB" %} {% else %} {{ setting("coin.coin_name") }} {% endif %}
+    
     </span>
   </div>
 </div>
