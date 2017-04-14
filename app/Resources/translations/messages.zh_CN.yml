@@ -1690,6 +1690,33 @@ admin.setting_course.allow_teacher_export_material: 允许教师导出%user_name
 admin.setting_course.allow_user_download_audio: 允许%user_name%下载任务的音视频
 admin.setting_course.allow_user_download_audio.help_block: 开启此项设置后，%user_name%可在任务学习界面侧栏的"资料"面板中下载。
 admin.setting_course.course_list_page_seq: 课程列表页默认排序
+admin.setting_course.course_list_page.help_block: 课程列表页
+admin.setting_course.course_list_page_seq.help_block: 地址：域名/course/explore,任何人都可在此页面查看网站所有已发布课程,如需设置网站首页课程排序，请到【站点设置】-【主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
+admin.setting_course.Prevent_copying_rich_text_doc: 图文、文档任务防复制
+admin.setting_course.Prevent_copying_test_paper: 试卷防复制
+admin.setting_course.course_operation_mode: 课程运营模式
+admin.setting_course.course_operation_mode.free_try_view: 免费试看/免费任务允许未登录用户观看
+admin.setting_course.course_operation_mode.free_try_view.help_block: 如果允许此项设置，未登录用户（游客）可观看免费试看/免费任务
+admin.setting_course.course_operation_mode.allow_show_user_count: 课程中允许显示%user_name%人数
+admin.setting_course.customer_chapter_section_name: 章节名称自定义
+admin.setting_course.customer_chapter_section_name.tips: 注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称
+admin.setting_course.task_chapter_name: 任务章名称
+admin.setting_course.chapter: 章
+admin.setting_course.task_section_name: 任务节名称
+admin.setting_course.section: 节
+admin.setting_course.questions_setting: 交卷后答案以及解析的显示
+admin.setting_course.questions_setting.hide: 不显示
+admin.setting_course.questions_setting.reviewed: 全部批阅完成后一起显示
+admin.setting_course.questions_setting.submitted: 交卷后显示答案和解析
+admin.setting_course.course_avatar.customer_default_avatar: 自定义默认课程图片
+admin.setting_course.course_avatar.system_default_avatar: 系统默认课程图片
+admin.setting_course.course_avatar.tips: 支持jpg、gif、png格式的图片，建议尺寸：480*270px.
+admin.setting_course.classroom.setting_classroom_name: 班级称谓设置
+admin.setting_course.classroom.setting_classroom_name.help_block: 用户所能看到的是这里设置的称谓
+admin.setting_course.classroom.setting_classroom_name.tips: 请注意：以下设置涉及到班级的基本运作模式，请谨慎设置，且不要经常性变更！
+admin.setting_course.classroom.course_discount: 课程重合时抵扣购买
+admin.setting_course.classroom.course_discount.help_block: 购买班级时，如果已经购买过其中的课程，支付金额中将会扣除该课程的当前价格。反之，支付金额不受影响，以班级原价购买。
+admin.setting_course.classroom.classroom_list_default_seq: 班级列表页默认排序
 
 
 # 移动端
