@@ -125,6 +125,12 @@ abstract class Resource
         $biz = $this->getBiz();
         return $biz['api.util.oc'];
     }
+
+    public function isPluginInstalled($code)
+    {
+        $biz = $this->getBiz();
+        return $biz['api.plugin.config.manager']->isPluginInstalled($code);
+    }
     
     protected function makePagingObject($objects, $total, $offset, $limit)
     {

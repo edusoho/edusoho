@@ -11,6 +11,7 @@ use ApiBundle\Api\Resource\Resource;
 use ApiBundle\Api\Util\BrowserDetectionUtil;
 use AppBundle\Common\EncryptionToolkit;
 use Biz\User\Service\TokenService;
+use Biz\User\Service\UserService;
 
 class Token extends Resource
 {
@@ -38,8 +39,8 @@ class Token extends Resource
 
         $token = $this->getTokenService()->makeApiAuthToken($args);
 
-        $profile = $this->getUserService()->getUserProfile($user['id']);
-        $user = array_merge($profile, $user);
+        $this->appendUser($user);
+
         return array(
             'token' => $token['token'],
             'user' => $user
@@ -78,7 +79,8 @@ class Token extends Resource
             $bdu = new BrowserDetectionUtil($userAgent);
             $bdu->detect();
             $browser = $bdu->getBrowser();
-            return $browser ? : TokenService::DEVICE_UNKNOWN;
+
+            return $browser ? $browser : TokenService::DEVICE_UNKNOWN;
         }
     }
 
@@ -91,11 +93,42 @@ class Token extends Resource
         return EncryptionToolkit::XXTEADecrypt(base64_decode($password), 'edusoho');
     }
 
+    private function appendUser(&$user)
+    {
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+        $user = array_merge($profile, $user);
+
+        if ($this->isPluginInstalled('vip')) {
+            $vip = $this->service('VipPlugin:Vip:VipService')->getMemberByUserId($user['id']);
+            $level = $this->service('VipPlugin:Vip:LevelService')->getLevel($vip['levelId']);
+
+            if ($vip) {
+                $user['vip'] = array(
+                    'levelId' => $vip['levelId'],
+                    'vipName' => $level['name'],
+                    'deadline' => date('c', $vip['deadline']),
+                    'seq' => $level['seq']
+                );
+            } else {
+                $user['vip'] = array();
+            }
+
+        }
+
+        return $user;
+    }
+
+    /**
+     * @return TokenService
+     */
     private function getTokenService()
     {
         return $this->service('User:TokenService');
     }
 
+    /**
+     * @return UserService
+     */
     private function getUserService()
     {
         return $this->service('User:UserService');

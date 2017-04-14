@@ -151,6 +151,7 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function searchMembers($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->prepareConditions($conditions);
+
         return $this->getMemberDao()->search($conditions, $orderBy, $start, $limit);
     }
 

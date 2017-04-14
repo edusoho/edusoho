@@ -11,7 +11,7 @@ class UserFilter extends Filter
         'id', 'email', 'locale', 'uri', 'nickname', 'title', 'type', 'smallAvatar', 'mediumAvatar', 'largeAvatar',
         'roles', 'promotedSeq', 'locked', 'currentIp', 'gender', 'iam', 'city', 'qq', 'signature', 'about', 'company',
         'job', 'school', 'class', 'weibo', 'weixin', 'isQQPublic', 'isWeixinPublic', 'isWeiboPublic', 'following',
-        'follower', 'verifiedMobile', 'promotedTime', 'lastPasswordFailTime', 'loginTime', 'approvalTime'
+        'follower', 'verifiedMobile', 'promotedTime', 'lastPasswordFailTime', 'loginTime', 'approvalTime', 'vip'
     );
 
     protected $publicFields = array(
