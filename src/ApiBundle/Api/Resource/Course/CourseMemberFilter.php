@@ -13,7 +13,7 @@ class CourseMemberFilter extends Filter
         'lastLearnTime', 'lastViewTime', 'courseSetId'
     );
 
-    protected function customFilter(&$data)
+    protected function publicFields(&$data)
     {
         if ($data['deadline']) {
             $data['deadline'] = date('c', $data['deadline']);

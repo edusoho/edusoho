@@ -10,7 +10,7 @@ class CouponFilter extends Filter
         'id', 'code', 'type', 'status', 'rate', 'userId', 'deadline', 'targetType', 'targetId'
     );
 
-    protected function customFilter(&$data)
+    protected function publicFields(&$data)
     {
         $data['deadline'] = date('c', $data['deadline']);
     }

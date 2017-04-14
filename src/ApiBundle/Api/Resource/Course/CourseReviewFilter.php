@@ -13,12 +13,14 @@ class CourseReviewFilter extends Filter
         'updatedTime', 'courseSetId', 'user', 'course'
     );
 
-    protected function customFilter(&$data)
+    protected function publicFields(&$data)
     {
         //评价的用户
         $userFilter = new UserFilter();
         $userFilter->filter($data['user']);
 
-        $data['course'] = ArrayToolkit::parts($data['course'], array('title', 'id'));
+        $courseFilter = new CourseFilter();
+        $courseFilter->setMode(Filter::SIMPLE_MODE);
+        $courseFilter->filter($data['course']);
     }
 }

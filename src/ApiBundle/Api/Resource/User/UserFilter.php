@@ -19,6 +19,8 @@ class UserFilter extends Filter
         'job', 'school', 'class', 'weibo', 'weixin', 'isQQPublic', 'isWeixinPublic', 'isWeiboPublic', 'following', 'follower', 'verifiedMobile', 'promotedTime', 'lastPasswordFailTime', 'loginTime', 'approvalTime', 'vip'
     );
 
+    protected $mode = self::SIMPLE_MODE;
+
     protected function simpleFields(&$data)
     {
         $data['smallAvatar'] = RequestUtil::asset($data['smallAvatar']);

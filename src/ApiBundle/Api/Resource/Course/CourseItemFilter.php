@@ -8,7 +8,4 @@ use AppBundle\Common\ServiceToolkit;
 
 class CourseItemFilter extends Filter
 {
-    protected function customFilter(&$data)
-    {
-    }
 }

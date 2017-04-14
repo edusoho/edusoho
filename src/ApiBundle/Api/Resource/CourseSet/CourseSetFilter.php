@@ -16,7 +16,7 @@ class CourseSetFilter extends Filter
         'minCoursePrice', 'teachers', 'creator', 'createdTime', 'updatedTime'
     );
 
-    protected function customFilter(&$data)
+    protected function publicFields(&$data)
     {
         $data['summary'] = $this->convertAbsoluteUrl($data['summary']);
 

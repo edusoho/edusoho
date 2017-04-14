@@ -42,6 +42,8 @@ abstract class Filter
             return null;
         }
 
+        $this->defaultTimeFilter($data);
+
         if ($this->fieldProperties) {
             $filteredData = array();
             foreach ($this->fieldProperties as $property) {

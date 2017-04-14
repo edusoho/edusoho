@@ -8,18 +8,23 @@ use AppBundle\Common\ServiceToolkit;
 
 class CourseFilter extends Filter
 {
+    protected $simpleFields = array(
+        'id', 'title'
+    );
+
     protected $publicFields = array(
-        'id', 'courseSetId', 'title', 'learnMode', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'summary',
+        'courseSetId', 'learnMode', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'summary',
         'goals', 'audiences', 'isDefault', 'maxStudentNum', 'status', 'creator', 'isFree', 'price', 'originPrice',
         'vipLevelId', 'buyable', 'tryLookable', 'tryLookLength', 'watchLimit', 'services', 'ratingNum', 'rating',
         'taskNum', 'publishedTaskNum', 'studentNum', 'teachers', 'parentId', 'createdTime', 'updatedTime', 'enableFinish'
     );
 
-    protected function customFilter(&$data)
+    protected function publicFields(&$data)
     {
         $data['services'] = ServiceToolkit::getServicesByCodes($data['services']);
 
         $userFilter = new UserFilter();
+        $userFilter->setMode(Filter::SIMPLE_MODE);
         $userFilter->filter($data['creator']);
         $userFilter->filters($data['teachers']);
     }
