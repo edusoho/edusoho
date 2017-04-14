@@ -180,7 +180,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
         $declares = $this->declares();
         $selectFields = array_merge(array('id'), $declares['orderbys']);
-        array_walk($selectFields, function(&$value){
+        array_walk($selectFields, function (&$value) {
             $value = 'MAX('.$value.') AS '.$value;
         });
 
