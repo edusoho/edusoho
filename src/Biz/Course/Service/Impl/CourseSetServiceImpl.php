@@ -862,16 +862,13 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     protected function prepareConditions($conditions)
     {
-        array_filter(
-            $conditions,
-            function ($value) {
-                if (is_numeric($value)) {
-                    return true;
-                }
-
-                return !empty($value);
+        $conditions = array_filter($conditions, function ($value) {
+            if (is_numeric($value)) {
+                return true;
             }
-        );
+
+            return !empty($value);
+        });
 
         if (!empty($conditions['creatorName'])) {
             $user = $this->getUserService()->getUserByNickname($conditions['creatorName']);

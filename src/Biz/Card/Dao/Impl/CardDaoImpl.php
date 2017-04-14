@@ -45,6 +45,13 @@ class CardDaoImpl extends GeneralDaoImpl implements CardDao
         return $this->db()->fetchAll($sql, array($userId, $cardType)) ?: array();
     }
 
+    public function findByUserIdAndCardTypeAndStatus($userId, $cardType, $status)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND cardType =? AND status = ?";
+
+        return $this->db()->fetchAll($sql, array($userId, $cardType, $status)) ?: array();
+    }
+
     public function findByCardIds(array $cardIds)
     {
         return $this->findInField('cardId', $cardIds);

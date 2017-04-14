@@ -2,8 +2,8 @@
 
 namespace Biz\Activity\Type;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Dao\FlashActivityDao;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\ActivityLearnLogService;
@@ -84,7 +84,10 @@ class Flash extends Activity
 
     public function get($targetId)
     {
-        return $this->getFlashActivityDao()->get($targetId);
+        $flashActivity = $this->getFlashActivityDao()->get($targetId);
+        $audioActivity['file'] = $this->getUploadFileService()->getFullFile($flashActivity['mediaId']);
+
+        return $audioActivity;
     }
 
     /**
@@ -109,5 +112,10 @@ class Flash extends Activity
     protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->getBiz()->service('File:UploadFileService');
     }
 }

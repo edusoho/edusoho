@@ -1934,3 +1934,23 @@ tr.placeholder:before {
 .form-group .select2-search input, .form-group .select2-search-choice-close, .form-group .select2-container .select2-choice abbr, .form-group .select2-container .select2-choice .select2-arrow b {
   background-size: 60px 50px!important;
 }
+
+/*临时对音频的修改*/
+.audio-content  .local-video-player .vjs-default-skin .vjs-control-bar {
+  display: block;
+  left: 10%;
+  top: 50%;
+  right: 10%;
+  margin-top: -25px;
+}
+
+.audio-content .local-video-player .video-js {
+  background: #fff;
+}
+
+.audio-content  .local-video-player .vjs-default-skin .vjs-big-play-button {
+  left: 50%;
+  margin-left: -60px;
+  top: 40%;
+  margin-top: -60px;
+}

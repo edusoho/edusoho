@@ -22,7 +22,7 @@
   <title>
 
     {% block title %}
-      {{ currentMenu.name|trans }} - {{ menu|parent_permission.name|trans }} - {{ menu|parent_permission.code|parent_permission.name|trans  }}
+      {{ currentMenu.name|trans({}, 'menu') }} - {{ menu|parent_permission.name|trans({}, 'menu') }} - {{ menu|parent_permission.code|parent_permission.name|trans({}, 'menu')  }}
     {% endblock %}
     {% if not setting('copyright.owned') %} | EduSoho{% endif %}
   </title>
@@ -109,7 +109,7 @@
               {% endblock %}
               <h1 class="pull-left">
                 {% block page_title %}
-                  {{ currentMenu.code|parent_permission.name|trans }}
+                  {{ currentMenu.code|parent_permission.name|trans({}, 'menu') }}
                 {% endblock %}
               </h1>
               <div class="pull-right">
@@ -178,5 +178,5 @@
   {% if menu.blank|default(false) %}
     target="blank"
   {% endif %}
-  >{{ menu.name|trans }}</a>
+  >{{ menu.name|trans({}, 'menu') }}</a>
 {% endmacro %}
