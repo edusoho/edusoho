@@ -770,6 +770,191 @@ group.detail.new_group_members.empty: 还没有小组成员！
 group.detail.hot_group: 热门小组
 group.detail.hot_group_empty: 暂无小组信息！
 
+# 话题
+thread: 话题
+thread.reply: 回复
+thread.empty: 暂无话题！
+thread.status.stick: 置顶
+thread.status.essence: 精华
+thread.status.reward: 奖
+thread.create: 发起了话题
+thread.last_reply: 最后回复
+
+# 咨询
+article: 资讯
+article.channel: %article_name%频道
+article.banner_tips: >
+  头条大图轮播功能需先在后台资讯管理页面设置缩略图以及添加头条属性<a class="mls alert-link" href="%articleUrl%">前往设置</a>
+article.empty: 还没有任何资讯
+article.popular_article: 热门资讯
+article.popular_article_mpty: 暂无热门资讯
+article.popular_comments: 热门评论
+article.popular_comments_empty: 一个评论都没有！
+article.comment_target: 评论于
+article.recommend_article: 推荐%article_name%
+article.recommend_article_empty: 暂无推荐%article_name%
+article.detail.text: 正文
+article.detail.source: 文章来源
+article.detail.source_url: 原文链接
+article.detail.tag: 标签：
+article.detail.post_num: >
+  文章评论<span class="badge badge-primary thread-post-num">%postNum%</span>
+article.detail.input_placeholder: 您的想法
+article.detail.comment_empty: 还没有人评论，欢迎说说您的想法！
+article.tag: 标签：%name%
+
+# 标签
+tag: 标签
+tag.popular_tag: 热门标签
+
+# 分类
+category: 分类
+category.all_category: 全部
+
+# 附件
+attachments: 附件
+attachments.preview: 预览
+attachments.preview.preview_btn: 预览
+attachments.preview.success_tips: 转码中请稍后预览
+attachments.preview.failed_tips: 文件类型暂不支持预览
+attachments.upload: 上传附件
+attachments.upload.upload_btn: 上传
+attachments.upload.upload_tips: >
+  <span> (大小不能超过
+  <span style="color:red;">2</span>
+  MB，文件类型支持png ,jpg ,gif ,doc ,xls ,txt ,rar ,zip .)
+  </span>
+attachments.upload.file_name: 文件名
+attachments.upload.description: 描述
+attachments.upload.operations: 操作
+attachments.upload.delete_btn: 删除
+attachments.upload.tips: 用户下载附件扣除的%name%会在扣除50%之后添加到您的账户
+attachments.download: 附件下载
+attachments.download.description: 描述：%description%
+attachments.download.upload_time: 上传于 %createdTime%
+attachments.download.price: 售价:%coin%%coin_name%
+attachments.download.free: 免费
+attachments.download.times: 下载次数：%hitNum%
+attachments.download.download_btn: 下载
+attachments.download.delete_btn: 删除
+attachments.download.delete_warning: 确定删除此附件
+
+# 分享
+share.course_set_message: 我正在学习《%course%》，收获巨大哦，一起来学习吧！
+share.classroom_message: 我正在学习「%classroom%」，收获巨大哦，一起来学习吧！
+share.article_message: 我正在看「%articletitle%」，关注「%sitename%」，分享知识，成就未来。
+share.group_thread_message: 我正在「%groupname%」小组，看到「%threadname%」，很不错哦，一起来看看吧！
+share.course_message: 我正在学习《%course%》，收获巨大哦，一起来学习吧！
+share.open_course_message: 我正在学习《%course%》，收获巨大哦，一起来学习吧！
+share.task_message: 我正在学习《%course%》，收获巨大哦，一起来学习吧！
+share.weixin_share: 分享到微信
+share.tsina_share: 分享到新浪微博
+share.qq_share: 分享到QQ好友
+share.qzone_share: 分享到QQ空间
+
+# 移动端
+mobile.page_title: 移动学习
+mobile.app_name: 阔知学堂
+mobile.app_tips: 将学校装进口袋，移动学习，随时随地。
+mobile.app_download_btn: 下载APP
+mobile.app_download_tips: >
+  <p class="main-slogan">更好的移动端学习</p>
+  <p class="sub-slogan">好好学习，天天向上</p>
+mobile.app_login_btn: 登录网校
+mobile.app_login_tips: 扫一扫登录客户端
+mobile.step_one: >
+  <span class="member">1</span>第一步:
+mobile.step_one_tips: 扫描二维码，下载手机APP。
+mobile.Android_client: Android 客户端
+mobile.iPhone_client: iPhome客户端
+mobile.step_two: >
+  <span class="member">2</span>第二步: 打开阔知学堂APP，扫描网校二维码。
+
+# 客服
+customer_service.open_content_title: 查看在线客服
+customer_service.close_content_title: 关闭在线客服
+customer_service.open_btn: 展开
+customer_service.close_btn: 收缩
+customer_service.QQ: 客服QQ
+customer_service.mobile: 电话
+customer_service.customer_mobile: 客服电话
+customer_service.email: 邮件
+customer_service.customer_email: 反馈邮件
+
+# 我的教学
+my.teaching.menu_heading: 我的教学
+my.teaching.course_set_menu: 在教课程
+my.teaching.classroom_menu: 在教%classroom%
+my.teaching.question_menu: %student%问题
+my.teaching.discussion_menu: %student%话题
+my.teaching.testpaper_check_menu: 试卷批阅
+my.teaching.homework_check_menu: 作业批阅
+my.teaching.material_lib_menu: 教学资料库
+my.teaching.course_set.normal: 普通课程
+my.teaching.course_set.live: 直播课程
+my.teaching.course_set.classroom: %classroom%课程
+my.teaching.open_course.normal: 录播公开课
+my.teaching.open_course.live: 直播公开课
+my.teaching.threads_discussion: 课程%student%话题
+my.teaching.classroom.threads_discussion: %classroom%%student%话题
+my.teaching.classroom: 所教%classroom%
+my.teaching.classroom.manage_btn: 管理%classroom%
+my.teaching.classroom.today_data_title: 今日新增
+my.teaching.classroom.today_data: >
+  学员%allCount%  &nbsp;&nbsp;
+  话题%threadCount%  &nbsp;&nbsp;
+  任务完成学习%todayFinishedTaskNum%
+my.teaching.page_title: 在教课程
+my.teaching.course_set.create: 创建课程
+my.teaching.course_set.content_title: 在教课程
+my.teaching.course_set.title: 名称
+my.teaching.course_set.classroom: 所属%classroom%
+my.teaching.course_set.student_count: %student%数
+my.teaching.course_set.price: 价格(元)
+my.teaching.course_set.status: 状态
+my.teaching.course_set.actions: 操作
+my.teaching.course_set.courseSetCount: %courseSetCount%个教学计划
+my.teaching.course_set.live_label: 直播
+my.teaching.course_set.classrooms_not_found_label: 已移除
+my.teaching.course_set.manage_btn: 管理
+my.teaching.course_set.course_manage_btn: 计划管理
+my.teaching.course_set.file_manage_btn: 文件管理
+my.teaching.course_set.live_empty_hint: 你还没有在教的直播课程哦, 赶快去创建吧!
+my.teaching.course_set.empty_hint: 你还没有在教的课程哦, 赶快去创建吧!
+
+my.teaching.open_course.title: 名称
+my.teaching.open_course.hit_num: 浏览数
+my.teaching.open_course.status: 状态
+my.teaching.open_course.actions: 操作
+my.teaching.open_course.live_label: 直播直播
+my.teaching.open_course.manage_btn: 管理
+my.teaching.open_course.view_btn: 查看
+my.teaching.open_course.view_btn: 查看
+my.teaching.open_course.lesson_manage_btn: 课时管理
+my.teaching.open_course.file_manage_btn: 文件管理
+my.teaching.open_course.student_manage_btn: %student%管理
+my.teaching.open_course.empty_hint: 你还没有在教的公开课哦, 赶快去创建吧!
+my.teaching.page_title: 在教课程
+my.teaching.course_set.create: 创建课程
+my.teaching.course_set.content_title: 在教课程
+
+# 我的学习
+my.learning.menu_heading: 我的学习
+my.learning.course_set_menu: 我的课程
+my.learning.classroom_menu: 我的%classroom%
+my.learning.live_menu: 我的直播
+my.learning.question_menu: 我的问答
+my.learning.discussion_menu: 我的话题
+my.learning.notebook_menu: 我的笔记
+my.learning.homework_menu: 我的作业
+my.learning.testpaper_menu: 我的考试
+my.learning.group_menu: 我的小组
+
+# 学员
+role.student: 学员
+# 教师
+role.teacher: 教师
+
 # 课程管理
 #课程管理通用模块
 admin.course_manage.category_placeholder: 课程分类
@@ -1259,6 +1444,203 @@ admin.homepage.top_search.search_number_th: 搜索次数
 admin.homepage.top_search.empty: 暂无搜索数据
 admin.homepage.free_access_edu_cloud_search_btn: 免费接入云搜索获取热门搜索关键词
 
+# 站点设置
+admin.setting.site.name: 网站名称
+admin.setting.site.slogan: 网站副标题
+admin.setting.site.url: 网站域名
+admin.setting.site.url.help_block: 以"%http%://"开头
+admin.setting.site.logo: 网站LOGO
+admin.setting.site.logo.help_block: 请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过250*50。网校logo设置后显示顶部导航左上角,
+admin.setting.site.logo.view_btn: 点击查看
+admin.setting.site.favicon: 浏览器图标
+admin.setting.site.favicon.help_block: 请上传ico格式的图标文件, 建议大小16*16或者32*32。
+admin.setting.site.seo_keywords: SEO关键词
+admin.setting.site.seo_keywords.help_block: 设置多个关键词请用半角逗号","隔开。
+admin.setting.site.seo_description: SEO描述信息
+admin.setting.site.master_email: 管理员邮箱地址
+admin.setting.site.copyright: 课程内容版权方
+admin.setting.site.copyright.help_block: 您可以填写网站名称或公司名称。
+admin.setting.site.icp: ICP备案号
+admin.setting.site.website_statistics_analysis: 网站统计分析代码部署
+admin.setting.site.analytics: 统计分析代码
+admin.setting.site.analytics.help_block: >
+  <p class="help-block">统计代码是网站统计软件发布的一段代码，用以统计添加统计代码的网站的数据。</p>
+  <p class="help-block">包括网站的访客来源，从哪个网页跳转到此网站，搜索什么关键词到网站，一共有多少人访问，每天多少人多少IP，平均访问时间是多少等等数据。</p>
+  <p class="help-block">统计分析工具可以分析网校访问趋势，以及根据数据做推广调整，优化网校资源，建议使用<a href="http://tongji.baidu.com" target="_blank">百度统计</a>、<a href="http://ta.qq.com/" target="_blank">腾讯分析</a>或者<a target="_blank" href="http://www.umeng.com/">CNZZ。</a></p>
+admin.setting.site.website_status: 站点状态
+admin.setting.site.website_status.open: 开放
+admin.setting.site.website_status.closed: 关闭
+admin.setting.site.closed_note: 网站关闭公告
+admin.setting.site.closed_note.help_block: 网站处于关闭状态时，用户访问网站将显示此公告，支持HTML代码
+admin.setting.theme.name: 名称
+admin.setting.theme.version: 主题版本
+admin.setting.theme.author: 作者
+admin.setting.theme.operation: 操作
+admin.setting.theme.setting_btn: 设置
+admin.setting.theme.current_theme: 当前正在使用该主题
+admin.setting.theme.use_btn: 使用
+admin.setting.theme.manage_btn: 管理
+admin.setting.theme.manage.title: EduSoho主题编辑
+admin.setting.theme.manage.theme_edit: 主题编辑
+admin.setting.theme.manage.theme_cancel: 取消
+admin.setting.theme.manage.theme_ok: 应用
+admin.setting.theme.manage.components: 组件
+admin.setting.theme.manage.coloring_scheme_btn: 配色方案
+admin.setting.theme.manage.all_reset: 全部重置
+admin.setting.theme.manage.component_name: 挂件名称
+admin.setting.theme.manage.custom_name: 自定义名称
+admin.setting.theme.manage.main_color: 主色调
+admin.setting.theme.manage.navigation_color_scheme: 导航配色
+admin.setting.theme.manage.edit.setting_btn: 设置
+admin.setting.theme.manage.edit_btn: 编辑
+admin.setting.theme.manage.modal.edit: 编辑
+admin.setting.theme.manage.modal.subname: 副标题名称
+admin.setting.theme.manage.modal.setting_course_num: 课程数量设置
+admin.setting.theme.manage.modal.setting_custom_category_count: 课程分类数量设置
+admin.setting.theme.manage.modal.setting_custom_orderby: 排序设置
+admin.setting.theme.manage.modal.setting_ustom_background_color: 背景颜色设置
+admin.setting.theme.manage.modal.color_gray: 灰色
+admin.setting.theme.manage.modal.color_wihte: 白色
+admin.setting.theme.manage.modal.color_default: 默认
+admin.setting.theme.manage.modal.setting_custom_category_count: 是否启用模块
+admin.setting.theme.manage.modal.hot_group: 热门小组
+admin.setting.theme.manage.modal.latest_article: 最新%article_name%
+admin.setting.theme.manage.modal.default_article: 资讯
+admin.setting.theme.manage.modal.student_comment: 学员评价
+admin.setting.theme.manage.modal.student_dynamic: 学员动态
+admin.setting.theme.manage.modal.setting_custom_classroom_count: 班级数量设置
+admin.setting.theme.manage.modal.setting_custom_teacher_count: 教师数量设置
+admin.setting.mailer.is_trial.tips: >
+  当前版本为试⽤版,不能进⾏邮件服务设置。如需购买授权版,请联系销售人员。
+  电话：4008041114 或
+admin.setting.mailer.cloud_email_crm: 云邮件
+admin.setting.mailer.cloud_email_crm.status.open: 已启用
+admin.setting.mailer.cloud_email_crm.status.help_block: >
+  邮件营销，本应如此简单。<a href="%url%">点击这里</a>查看云邮件使用情况
+admin.setting.mailer.use_cloud_email_crm: 使用云邮件
+admin.setting.mailer.understand_cloud_email_crm_advantage: 了解云邮件优势
+admin.setting.mailer.cloud_email_crm.help_block: >
+  <p class="help-block">
+    不限制每日邮件发送量，想发多少发多少。
+  </p>
+  <p class="help-block">
+    99%到达率，毫秒级响应，让你快速安全的与学员保持沟通。
+  </p>
+  <p class="help-block">
+    完善的数据分析能力，让您更从容地管理邮件。
+  </p>
+  <p class="help-block">
+    与EduSoho无缝整合，无需技术对接即可享受高质量的EDM服务。
+  </p>
+admin.setting.mailer.send_email: 邮件发送
+admin.setting.mailer.send_email.status.open: 开启
+admin.setting.mailer.send_email.status.closed: 关闭
+admin.setting.mailer.send_email.help_block: 需要登录邮箱，并在邮箱设置中开启smtp服务才能发送验证邮件
+admin.setting.mailer.server_address: 服务器地址
+admin.setting.mailer.server_address.help_block: 每种邮箱的地址都不相同，请根据使用的邮箱类型，查找邮箱服务器地址，如：smtp.yourmail.com
+admin.setting.mailer.commonly_document: 常用邮箱配置文档
+admin.setting.mailer.SMTP_Port_number: SMTP端口号
+admin.setting.mailer.SMTP_Port_number.help_block: 通常端口号为
+admin.setting.mailer.SMTP_user_name: SMTP用户名
+admin.setting.mailer.SMTP_user_name.help_block: 正确格式应为
+admin.setting.mailer.SMTP_password: SMTP密码
+admin.setting.mailer.SMTP_password.help_block: smtp密码：即邮箱密码/客户端授权密码
+admin.setting.mailer.senders_email_address: 发信人地址
+admin.setting.mailer.senders_email_address.help_block: 正确格式应为
+admin.setting.mailer.senders_name: 发信人名称
+admin.setting.mailer.verifcation: 验证
+admin.setting.mailer.verifcation.tips: 验证时会给当前用户发送验证邮件，请确保当前用户邮箱为正确邮箱且邮箱服务器设置已提交保存。
+admin.setting.navigation.top: 顶部
+admin.setting.navigation.foot: 底部
+admin.setting.navigation.friendlyLink: 友情链接
+admin.setting.navigation.add_type_btn: 新增%types[type]%
+admin.setting.navigation.add_type_nav_btn: 新增%types[type]%导航
+admin.setting.navigation.foot.tips: >
+  清秋主题、默认主题A、默认主题B、雅致简洁之外的主题，请前往
+  <a class="text-info" style="font-weight:bold;" href="%url%">
+  ［运营］－［编辑区管理</a>
+  中进行编辑。
+admin.setting.navigation.friendlyLink.tips: >
+  如需在首页显示友情链接模块，请在对应
+  <a class="text-info" style="font-weight:bold;" href="%url%">
+  主题管理</a>
+  中添加相应模块，暂仅支持简墨主题。
+admin.setting.navigation.name: 名称
+admin.setting.navigation.new_windows: 新开窗口
+admin.setting.navigation.status: 状态
+admin.setting.navigation.operation: 操作
+admin.setting.navigation.tips: >
+  <p>会员专区：域名/vip</p>
+  <p>直播首页：域名/live</p>
+  <p>小组首页：域名/group</p>
+  <p>资讯首页：域名/article</p>
+  <p>师资力量：域名/teacher</p>
+  <p>移动端首页：域名/mobile</p>
+  <p>个人主页：域名/my/page/show</p>
+  <p>课程列表页：域名/course/explore</p>
+  <p>班级列表页：域名/classroom/explore</p>
+  <p>公开课列表页：域名/open/course/explore</p>
+  <p>课程分类：域名/course/explore/分类编码</p>
+  <p>资讯栏目：域名/article/栏目编码</p>
+admin.setting.navigation.top.add: 新增顶部导航
+admin.setting.navigation.top.edit: 编辑顶部导航
+admin.setting.navigation.foot.add: 新增底部导航
+admin.setting.navigation.foot.edit: 编辑底部导航
+admin.setting.navigation.friendlyLink.add: 新增友情链接
+admin.setting.navigation.friendlyLink.edit: 编辑友情链接
+admin.setting.navigation.parentNavigation: 上级导航
+admin.setting.navigation.parentNavigation.help_block: 请注意：增加子导航后，对应的上级导航链接将不起作用。
+admin.setting.navigation.url: 链接地址
+admin.setting.navigation.isNewWin.yes: 是
+admin.setting.navigation.isNewWin.no: 否
+admin.setting.navigation.status.open: 开启
+admin.setting.navigation.status.closed: 关闭
+admin.setting.navigation.edit_btn: 编辑
+admin.setting.navigation.add_child_menu_btn: 添加二级导航
+admin.setting.consult.customer_service_function: 客服功能
+admin.setting.consult.floating_bar: 浮动条颜色
+admin.setting.consult.delete_btn: 删除
+admin.setting.consult.add_btn: 删除
+admin.setting.consult.customer_service_settings: 客服设置
+admin.setting.consult.get_online_service_link.tips: 如何获取在线咨询链接？
+admin.setting.consult.customer_service_settings.tips: >
+  1，登录 <a target="_blank" href="https://id.b.qq.com/login/index">https://id.b.qq.com/login/index</a>。
+  <br>
+  2，登录后，找到【营销QQ】-【在线代码生成】，选择【在论坛/微博发布在线咨询链接】。（包含“%http%://”）
+admin.setting.consult.QQ_customer_service_name.placeholer: QQ客服名称
+admin.setting.consult.QQ_number.placeholer: QQ号
+admin.setting.consult.enter_link_addr.placeholer: 若使用营销QQ，请填入在线咨询链接
+admin.setting.consult.QQ_group_setting: QQ群设置
+admin.setting.consult.QQ_group_setting.tips: >
+  访问<a target="_blank" href="http://qun.qq.com/join.html">http://qun.qq.com/join.html</a>获取QQ群直接加入网页代码。
+admin.setting.consult.QQ_group_name.placeholer: QQ群名称
+admin.setting.consult.QQ_group_number.placeholer: QQ群号
+admin.setting.consult.code_join_to_QQ_group.placeholer: QQ群直接加入网页代码(选填)
+admin.setting.consult.phone_setting: 联系电话设置
+admin.setting.consult.work_time: 工作时间
+admin.setting.consult.Contact: 联系人
+admin.setting.consult.phone: 联系电话
+admin.setting.consult.other_setting: 其他设置
+admin.setting.consult.WeChat_QR_code: 微信二维码
+admin.setting.consult.other_setting.help_block: 请上传png, gif, jpg格式的图片文件。
+admin.setting.consult.work_email: 工作邮箱
+admin.setting.es_bar.esbar_function: 侧边栏功能
+admin.setting.es_bar.esbar_function.open: 开启
+admin.setting.es_bar.esbar_function.closed: 关闭
+admin.setting.es_bar.help_block: 网校开启侧边栏后，客服的悬浮框会失效
+admin.setting.share.article_share_content: 资讯分享内容
+admin.setting.share.Variables.tips: 变量说明：
+admin.setting.share.as_article_title.tips: 为资讯标题
+admin.setting.share.as_online_school_name.tips: 为网校名称
+admin.setting.share.course_share_content: 课程分享内容
+admin.setting.share.as_course_name: 为课程名称
+admin.setting.share.group_share_content: 小组分享内容
+admin.setting.share.as_group_name: 为小组名称
+admin.setting.share.as_thread_name: 为话题名称
+admin.setting.share.classroom_share_content: 班级分享内容
+admin.setting.share.as_classroom_name: 为班级名称
+admin.setting.security.IFrame_white_domain: IFrame白名单域名
+admin.setting.security.help_block: 在课程简介、课时内容等区域允许添加iframe代码，以引入第三方网站的组件。为保障网校安全，只允许白名单域名范围内的iframe网址。一行一个域名，请不要添加http://前缀。
 # 运营模块
 # 编辑区管理
 admin.block_manage.all: 所有
@@ -1687,93 +2069,6 @@ admin.batch_notification.modal.title: 全全站站内通知
 admin.batch_notification.modal.title_field: 通知标题
 admin.batch_notification.modal.body_field: 正文
 
-# 话题
-thread: 话题
-thread.reply: 回复
-thread.empty: 暂无话题！
-thread.status.stick: 置顶
-thread.status.essence: 精华
-thread.status.reward: 奖
-thread.create: 发起了话题
-thread.last_reply: 最后回复
-
-# 咨询
-article: 资讯
-article.channel: %article_name%频道
-article.banner_tips: >
-  头条大图轮播功能需先在后台资讯管理页面设置缩略图以及添加头条属性<a class="mls alert-link" href="%articleUrl%">前往设置</a>
-article.empty: 还没有任何资讯
-article.popular_article: 热门资讯
-article.popular_article_mpty: 暂无热门资讯
-article.popular_comments: 热门评论
-article.popular_comments_empty: 一个评论都没有！
-article.comment_target: 评论于
-article.recommend_article: 推荐%article_name%
-article.recommend_article_empty: 暂无推荐%article_name%
-article.detail.text: 正文
-article.detail.source: 文章来源
-article.detail.source_url: 原文链接
-article.detail.tag: 标签：
-article.detail.post_num: >
-  文章评论<span class="badge badge-primary thread-post-num">%postNum%</span>
-article.detail.input_placeholder: 您的想法
-article.detail.comment_empty: 还没有人评论，欢迎说说您的想法！
-article.tag: 标签：%name%
-
-# 标签
-tag: 标签
-tag.popular_tag: 热门标签
-
-# 分类
-category: 分类
-category.all_category: 全部
-
-# 附件
-attachments: 附件
-attachments.preview: 预览
-attachments.preview.preview_btn: 预览
-attachments.preview.success_tips: 转码中请稍后预览
-attachments.preview.failed_tips: 文件类型暂不支持预览
-attachments.upload: 上传附件
-attachments.upload.upload_btn: 上传
-attachments.upload.upload_tips: >
-  <span> (大小不能超过
-  <span style="color:red;">2</span>
-  MB，文件类型支持png ,jpg ,gif ,doc ,xls ,txt ,rar ,zip .)
-  </span>
-attachments.upload.file_name: 文件名
-attachments.upload.description: 描述
-attachments.upload.operations: 操作
-attachments.upload.delete_btn: 删除
-attachments.upload.tips: 用户下载附件扣除的%name%会在扣除50%之后添加到您的账户
-attachments.download: 附件下载
-attachments.download.description: 描述：%description%
-attachments.download.upload_time: 上传于 %createdTime%
-attachments.download.price: 售价:%coin%%coin_name%
-attachments.download.free: 免费
-attachments.download.times: 下载次数：%hitNum%
-attachments.download.download_btn: 下载
-attachments.download.delete_btn: 删除
-attachments.download.delete_warning: 确定删除此附件
-
-# 分享
-share.course_set_message: 我正在学习《%course%》，收获巨大哦，一起来学习吧！
-share.classroom_message: 我正在学习「%classroom%」，收获巨大哦，一起来学习吧！
-share.article_message: 我正在看「%articletitle%」，关注「%sitename%」，分享知识，成就未来。
-share.group_thread_message: 我正在「%groupname%」小组，看到「%threadname%」，很不错哦，一起来看看吧！
-share.course_message: 我正在学习《%course%》，收获巨大哦，一起来学习吧！
-share.open_course_message: 我正在学习《%course%》，收获巨大哦，一起来学习吧！
-share.task_message: 我正在学习《%course%》，收获巨大哦，一起来学习吧！
-share.weixin_share: 分享到微信
-share.tsina_share: 分享到新浪微博
-share.qq_share: 分享到QQ好友
-share.qzone_share: 分享到QQ空间
-
-# 学员
-role.student: 学员
-# 教师
-role.teacher: 教师
-
 #后台用户模块
 ##用户模块通用字段
 admin.user.fields.register_date_label: 注册时间
@@ -2089,104 +2384,6 @@ admin.system_log.show_data: 查看数据
 admin.system_log.hide_data: 隐藏数据
 admin.system_log.empty: 无日志记录
 admin.system_log.code_run_log.show_rencent_data_tips: 显示最近的2000条日志信息。
-
-# 移动端
-mobile.page_title: 移动学习
-mobile.app_name: 阔知学堂
-mobile.app_tips: 将学校装进口袋，移动学习，随时随地。
-mobile.app_download_btn: 下载APP
-mobile.app_download_tips: >
-  <p class="main-slogan">更好的移动端学习</p>
-  <p class="sub-slogan">好好学习，天天向上</p>
-mobile.app_login_btn: 登录网校
-mobile.app_login_tips: 扫一扫登录客户端
-mobile.step_one: >
-  <span class="member">1</span>第一步:
-mobile.step_one_tips: 扫描二维码，下载手机APP。
-mobile.Android_client: Android 客户端
-mobile.iPhone_client: iPhome客户端
-mobile.step_two: >
-  <span class="member">2</span>第二步: 打开阔知学堂APP，扫描网校二维码。
-
-# 客服
-customer_service.open_content_title: 查看在线客服
-customer_service.close_content_title: 关闭在线客服
-customer_service.open_btn: 展开
-customer_service.close_btn: 收缩
-customer_service.QQ: 客服QQ
-customer_service.mobile: 电话
-customer_service.customer_mobile: 客服电话
-customer_service.email: 邮件
-customer_service.customer_email: 反馈邮件
-
-# 我的教学
-my.teaching.menu_heading: 我的教学
-my.teaching.course_set_menu: 在教课程
-my.teaching.classroom_menu: 在教%classroom%
-my.teaching.question_menu: %student%问题
-my.teaching.discussion_menu: %student%话题
-my.teaching.testpaper_check_menu: 试卷批阅
-my.teaching.homework_check_menu: 作业批阅
-my.teaching.material_lib_menu: 教学资料库
-my.teaching.course_set.normal: 普通课程
-my.teaching.course_set.live: 直播课程
-my.teaching.course_set.classroom: %classroom%课程
-my.teaching.open_course.normal: 录播公开课
-my.teaching.open_course.live: 直播公开课
-my.teaching.threads_discussion: 课程%student%话题
-my.teaching.classroom.threads_discussion: %classroom%%student%话题
-my.teaching.classroom: 所教%classroom%
-my.teaching.classroom.manage_btn: 管理%classroom%
-my.teaching.classroom.today_data_title: 今日新增
-my.teaching.classroom.today_data: >
-  学员%allCount%  &nbsp;&nbsp;
-  话题%threadCount%  &nbsp;&nbsp;
-  任务完成学习%todayFinishedTaskNum%
-my.teaching.page_title: 在教课程
-my.teaching.course_set.create: 创建课程
-my.teaching.course_set.content_title: 在教课程
-my.teaching.course_set.title: 名称
-my.teaching.course_set.classroom: 所属%classroom%
-my.teaching.course_set.student_count: %student%数
-my.teaching.course_set.price: 价格(元)
-my.teaching.course_set.status: 状态
-my.teaching.course_set.actions: 操作
-my.teaching.course_set.courseSetCount: %courseSetCount%个教学计划
-my.teaching.course_set.live_label: 直播
-my.teaching.course_set.classrooms_not_found_label: 已移除
-my.teaching.course_set.manage_btn: 管理
-my.teaching.course_set.course_manage_btn: 计划管理
-my.teaching.course_set.file_manage_btn: 文件管理
-my.teaching.course_set.live_empty_hint: 你还没有在教的直播课程哦, 赶快去创建吧!
-my.teaching.course_set.empty_hint: 你还没有在教的课程哦, 赶快去创建吧!
-
-my.teaching.open_course.title: 名称
-my.teaching.open_course.hit_num: 浏览数
-my.teaching.open_course.status: 状态
-my.teaching.open_course.actions: 操作
-my.teaching.open_course.live_label: 直播直播
-my.teaching.open_course.manage_btn: 管理
-my.teaching.open_course.view_btn: 查看
-my.teaching.open_course.view_btn: 查看
-my.teaching.open_course.lesson_manage_btn: 课时管理
-my.teaching.open_course.file_manage_btn: 文件管理
-my.teaching.open_course.student_manage_btn: %student%管理
-my.teaching.open_course.empty_hint: 你还没有在教的公开课哦, 赶快去创建吧!
-my.teaching.page_title: 在教课程
-my.teaching.course_set.create: 创建课程
-my.teaching.course_set.content_title: 在教课程
-
-# 我的学习
-my.learning.menu_heading: 我的学习
-my.learning.course_set_menu: 我的课程
-my.learning.classroom_menu: 我的%classroom%
-my.learning.live_menu: 我的直播
-my.learning.question_menu: 我的问答
-my.learning.discussion_menu: 我的话题
-my.learning.notebook_menu: 我的笔记
-my.learning.homework_menu: 我的作业
-my.learning.testpaper_menu: 我的考试
-my.learning.group_menu: 我的小组
 
 # 订单模块
 admin.order.paid_time_range.input_placeholder: 付款时间段
