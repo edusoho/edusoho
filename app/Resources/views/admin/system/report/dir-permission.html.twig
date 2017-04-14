@@ -2,13 +2,13 @@
   <tr>
     <td>{{ path }}</td>
     <td>
-      <span class="text-danger">X {{'不可写'|trans}}</span>
+      <span class="text-danger">X {{'admin.reports_status.system_no_can_write'|trans}}</span>
     </td>
-    <td>{{ '可写'|trans }}</td>
+    <td>{{ 'admin.reports_status.system_can_write'|trans }}</td>
     
   </tr>
 {% else %}
 <tr>
-  <td colspan="6" style="text-align: center;color: #c1c1c1;padding: 50px;">{{'文件目录权限正常'|trans}}</td>
+  <td colspan="6" style="text-align: center;color: #c1c1c1;padding: 50px;">{{'admin.reports_status.system_file_and_catalog_authority_available'|trans}}</td>
 </tr>
 {% endfor %}
