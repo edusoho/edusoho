@@ -61,6 +61,8 @@ interface CourseMemberDao extends GeneralDaoInterface
      */
     public function findByUserIdAndCourseSetIdAndRole($userId, $courseSetId, $role);
 
+    public function findByConditionsGroupByUserId($conditions, $orderBy, $offset, $limit);
+
     /**
      * @before findMembersByUserIdAndRole
      *
