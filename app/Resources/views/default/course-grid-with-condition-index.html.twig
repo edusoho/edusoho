@@ -23,7 +23,7 @@
       <ul class="nav nav-pills hidden-xs" role="tablist">
         <li role="presentation" class="{% if (categoryId|default(0) == 0) %}active {% endif %} js-course-filter"
             data-url="{{ path('homepage_category',{orderBy : orderBy|default('latest')}) }}" data-type="course"><a
-              href="javascript:;">{{ 'site.dategrid.filter.all_course'|trans }}</a></li>
+              href="javascript:;">{{ 'site.datagrid.filter.all_course'|trans }}</a></li>
         {% if categoriesFirst %}
           {% for category in categoriesFirst %}
             {% if ( loop.index0 < config.categoryCount|default(4) ) %}
@@ -52,11 +52,11 @@
       </ul>
       <div class="btn-group visible-xs">
         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
-                aria-expanded="false">{{ 'site.dategrid.filter.all_course'|trans }} <span class="caret"></span></button>
+                aria-expanded="false">{{ 'site.datagrid.filter.all_course'|trans }} <span class="caret"></span></button>
         <ul class="dropdown-menu" role="menu">
           <li role="presentation" class="js-course-filter {% if (categoryId|default(0) == 0) %}active {% endif %}"
               data-url="{{ path('homepage_category',{orderBy : orderBy|default('latest')}) }}" data-type="course"><a
-                href="javascript:;">{{ 'site.dategrid.filter.all_course'|trans }}</a></li>
+                href="javascript:;">{{ 'site.datagrid.filter.all_course'|trans }}</a></li>
           {% if categoriesFirst %}
             {% for category in categoriesFirst  if (category.parentId == 0) %}
               {% if ( loop.index0 < config.categoryCount|default(4) ) %}
@@ -68,7 +68,7 @@
             {% endfor %}
             {% if  moreCategories %}
               <li role="presentation" class="js-course-filteractive" data-type="course"><a
-                    href="{{ path('course_set_explore') }}">{{ 'site.dategrid.filter.category_more'|trans }}</a></li>
+                    href="{{ path('course_set_explore') }}">{{ 'site.datagrid.filter.category_more'|trans }}</a></li>
             {% endif %}
           {% endif %}
         </ul>
@@ -78,19 +78,19 @@
            class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'latest') %} active {% endif %}js-course-filter"
            data-url="{{ path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'latest'}) }}"
            data-type='course'>
-          {{ 'site.dategrid.filter.latest'|trans }}
+          {{ 'site.datagrid.filter.latest'|trans }}
         </a>
         <a href="javascript:;"
            class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'studentNum') %} active {% endif %}js-course-filter"
            data-url="{{ path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'studentNum'}) }}"
            data-type='course'>
-          {{ 'site.dategrid.filter.hotest'|trans }}
+          {{ 'site.datagrid.filter.hotest'|trans }}
         </a>
         <a href="javascript:;"
            class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'recommendedSeq') %} active {% endif %}js-course-filter"
            data-url="{{ path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'recommendedSeq'}) }}"
            data-type='course'>
-          {{ 'site.dategrid.filter.recommended'|trans }}
+          {{ 'site.datagrid.filter.recommended'|trans }}
         </a>
       </div>
     </div>
@@ -105,7 +105,7 @@
     </div>
     <div class="section-more-btn">
       <a href="{{ path('course_set_explore') }}" class="btn btn-default btn-lg">
-        {{ 'site.dategrid.filter.course_more'|trans }} <i class="mrs-o es-icon es-icon-chevronright"></i>
+        {{ 'site.datagrid.filter.course_more'|trans }} <i class="mrs-o es-icon es-icon-chevronright"></i>
       </a>
     </div>
   </div>
