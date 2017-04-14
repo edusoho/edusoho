@@ -164,6 +164,20 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         ));
     }
 
+    public function findByConditionsGroupByUserId($conditions, $orderBy, $offset, $limit)
+    {
+        $fields = array_keys($conditions);
+        array_walk($fields, function(&$value) {
+            $value = $value.' = ? ';
+        });
+
+        $wherePart = '(' . implode(') ' . 'AND' . ' (', $fields) . ')';
+
+        $sql = "SELECT *,userId FROM {$this->table} WHERE {$wherePart} GROUP BY userId";
+
+        return $this->db()->fetchAll($this->sql($sql, $orderBy, $offset, $limit), array_values($conditions));
+    }
+
     public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true)
     {
         $sql = "SELECT m.* FROM {$this->table} m ";
