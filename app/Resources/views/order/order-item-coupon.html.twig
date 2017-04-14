@@ -3,8 +3,13 @@
     <i class="es-icon es-icon-localplay">
     </i>
     <span class="title">{{'优惠券'|trans}}</span>
-    <span role="no-use-coupon-code">（{{'没有使用优惠券'|trans}}）</span>
+
+      <span role="no-use-coupon-code">
+      （{{'没有使用优惠券'|trans}}）</span>
+
   </div>
+
+
 
   <div class="order-item-detail  coupon-detail">
   {% if true %}
@@ -27,22 +32,6 @@
         {% endif %}
       </div>
 
-    <div role="null-coupon-code">
-      {% if coupons is not null %}
-        <select class="form-control width-input width-input-large" id="coupon-select" name="couponCode">
-          {% for coupon in coupons %}
-            {% if coupon.type == 'minus' %}
-              <option data-target-type="{{targetType}}" data-target-id="{{targetId|default(0) }}" data-amount="{{ totalPrice }}" data-code="{{ coupon.code }}" value="{{ coupon.code }}">{{'优惠券 抵扣%rate%元'|trans({'%rate%':coupon.rate})}}</option>
-            {% endif %}
-            {% if coupon.type == 'discount' %}
-              <option data-target-type="{{targetType}}" data-target-id="{{targetId|default(0) }}" data-amount="{{ totalPrice }}" data-code="{{ coupon.code }}" value="{{ coupon.code }}">{{'优惠券 抵价%rate%折'|trans({'%rate%':coupon.rate})}}</option>
-            {% endif %}
-          {% endfor %}
-          <option data-code="" value="">{{'不使用优惠券'|trans}}</option>
-        </select>
-      {% endif %}
-      <a id="coupon-code-btn" class="btn btn-primary" href="javascript:;">{{'使用优惠券'|trans}}</a>
-    </div>
 
     {% if targetType in ['course','vip','classroom'] %}
       <div role="coupon-code" class="input-group" style="display: none;">
@@ -66,16 +55,15 @@
           <a href="javascript:;" class="btn btn-link" role="cancel-coupon">{{'取消'|trans}}</a>
       </div>
     {% endif %}
-
+  {% endif %}
     <div role="code-notify" class="alert alert-success alert-xs mtm" style="display:none;line-height:20px;"></div>
   </div>
-
   <div class="order-item-price" role="coupon-price">
     <span class="mrs">{{'抵扣'|trans}}</span>
-
+    {% if priceType|default("RMB") == "RMB" %}<span>￥</span>{% endif %}
     <span role="price" style="font-size: 24px">0.00</span>
     <span>
-    
+      {% if priceType|default("RMB") == "RMB" %} {% else %} {{ setting("coin.coin_name") }} {% endif %}
     </span>
   </div>
 </div>
