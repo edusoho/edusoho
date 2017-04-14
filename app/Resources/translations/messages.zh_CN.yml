@@ -1617,6 +1617,7 @@ admin.user_fields.Require_personal: 购买课程或班级时填写个人资料
 admin.user_fields.Personal_info_configiration.open: 开启
 admin.user_fields.Personal_info_configiration.closed: 关闭
 admin.user_fields.Personal_info_configiration.help_block: 开启后，%user_name%购买课程时，需填写个人资料
+admin.user_fields.Formart_verifcation: 带格式校检
 admin.user_fields.Formart_verifcation.help_block: 可拖动调整次序。酌情勾选需要收集的字段，若需要新的字段，请在［自定义字段设置］中添加。
 admin.user_fields.Formart_verifcation.hide: 收起
 admin.user_fields.Require_personal_information: 登录后填写个人资料
