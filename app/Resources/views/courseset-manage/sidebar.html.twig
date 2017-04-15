@@ -17,33 +17,33 @@
         <li class="list-group-item {% if side_nav == 'base' %}active{% endif %}">
           {% if courseSet.locked %}
             <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'base'}) }}">
-              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ '基本信息'|trans }}
+              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.base'|trans }}
             </a>
           {% else %}
             <a href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">
-              {{ '基本信息'|trans }}
+              {{ 'course.base'|trans }}
             </a>
           {% endif %}
         </li>
         <li class="list-group-item {% if side_nav == 'detail' %}active{% endif %}">
           {% if courseSet.locked %}
             <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'detail'}) }}">
-              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ '详细信息'|trans }}
+              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.detail'|trans }}
             </a>
           {% else %}
             <a href="{{ path('course_set_manage_detail', {id: courseSet.id}) }}">
-              {{ '详细信息'|trans }}
+              {{ 'course.detail'|trans }}
             </a>
           {% endif %}
         </li>
         <li class="list-group-item {% if side_nav == 'cover' %}active{% endif %}">
           {% if courseSet.locked %}
             <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'cover'}) }}">
-              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ '课程封面'|trans }}
+              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.cover'|trans }}
             </a>
           {% else %}
             <a href="{{ path('course_set_manage_cover', {id: courseSet.id}) }}">
-              {{ '封面图片'|trans }}
+              {{ 'course.cover_image'|trans }}
             </a>
           {% endif %}
         </li>
@@ -51,33 +51,33 @@
         <li class="list-group-item {% if side_nav == 'question' %}active{% endif %}">
           {% if courseSet.locked %}
             <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'question'}) }}">
-              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ '题目管理'|trans }}
+              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.question_manage'|trans }}
             </a>
           {% else %}
             <a href="{{ path('course_set_manage_question', {id: courseSet.id}) }}">
-              {{ '题目管理'|trans }}
+              {{ 'course.question_manage'|trans }}
             </a>
           {% endif %}
         </li>
         <li class="list-group-item {% if side_nav == 'testpaper' %}active{% endif %}">
           {% if courseSet.locked %}
             <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'testpaper'}) }}">
-              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ '试卷管理'|trans }}
+              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.testpaper_manage'|trans }}
             </a>
           {% else %}
             <a href="{{ path('course_set_manage_testpaper', {id: courseSet.id}) }}">
-              {{ '试卷管理'|trans }}
+              {{ 'course.testpaper_manage'|trans }}
             </a>
           {% endif %}
         </li>
         <li class="list-group-item {% if side_nav == 'files' %}active{% endif %}">
           {% if courseSet.locked %}
             <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'files'}) }}">
-              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ '课程文件'|trans }}
+              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.course_files'|trans }}
             </a>
           {% else %}
             <a href="{{ path('course_set_manage_files', {id: courseSet.id}) }}">
-              {{ '课程文件'|trans }}
+              {{ 'course.course_files'|trans }}
             </a>
           {% endif %}
         </li>
@@ -96,22 +96,22 @@
         <li class="list-group-item {% if side_nav == 'tasks' %}active{% endif %}" id="step-1">
           {% if courseSet.locked %}
             <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'tasks'}) }}">
-              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ '计划任务'|trans }}
+              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.plan_task'|trans }}
             </a>
           {% else %}
             <a href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-              {{ '计划任务'|trans }}
+              {{ 'course.plan_task'|trans }}
             </a>
           {% endif %}
         </li>
         <li class="list-group-item {% if side_nav == 'info' %}active{% endif %}">
           {% if courseSet.locked %}
             <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'info'}) }}">
-              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ '计划设置'|trans }}
+              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.plan_setup'|trans }}
             </a>
           {% else %}
             <a href="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-              {{ '计划设置'|trans }}
+              {{ 'course.plan_setup'|trans }}
             </a>
           {% endif %}
         </li>
@@ -119,11 +119,11 @@
           <li class="list-group-item {% if side_nav == 'replay' %}active{% endif %}">
           {% if courseSet.locked %}
             <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'replay'}) }}">
-              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ '录播管理'|trans }}
+              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.replay_manage'|trans }}
             </a>
           {% else %}
             <a href="{{ path('course_set_manage_course_replay', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-              {{ '录播管理'|trans }}
+              {{ 'course.replay_manage'|trans }}
             </a>
           {% endif %}
         {% endif %}
@@ -131,47 +131,47 @@
         <li class="list-group-item {% if side_nav == 'marketing' %}active{% endif %}" id="step-2">
           {% if courseSet.locked %}
             <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'marketing'}) }}">
-              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ '营销设置'|trans }}
+              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.marketing_setup'|trans }}
             </a>
           {% else %}
             <a href="{{ path('course_set_manage_course_marketing', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-              {{ '营销设置'|trans }}
+              {{ 'course.marketing_setup'|trans }}
             </a>
           {% endif %}
         </li>
         <li class="list-group-item {% if side_nav == 'teachers' %}active{% endif %}">
           {% if courseSet.locked %}
             <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'teachers'}) }}">
-              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ '教师设置'|trans }}
+              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.teacher_setup'|trans }}
             </a>
           {% else %}
             <a href="{{ path('course_set_manage_course_teachers', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-              {{ '教师设置'|trans }}
+              {{ 'course.teacher_setup'|trans }}
             </a>
           {% endif %}
         </li>
         <li class="list-group-item {% if side_nav == 'students' %}active{% endif %}">
           <a href="{{ path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-            {{ setting('default.user_name')|default('学员'|trans) }}{{ '管理'|trans }}
+            {{ setting('default.user_name')|default('site.default.student'|trans) }}{{ 'site.default.manage'|trans }}
           </a>
         </li>
         <hr class="mv5 mh10 bg-border-color"/>
         <li class="list-group-item {% if side_nav == 'testpaper-check' %}active{% endif %}">
-          <a href="{{ path('course_manage_testpaper_check_list', {id: curCourse.id}) }}">{{ '试卷批阅'|trans }}
+          <a href="{{ path('course_manage_testpaper_check_list', {id: curCourse.id}) }}">{{ 'course.testpaper_check'|trans }}
           </a>
         </li>
         <li class="list-group-item {% if side_nav == 'homework-check' %}active{% endif %}">
-          <a href="{{ path('course_manage_homework_check_list', {id: curCourse.id}) }}">{{ '作业批阅'|trans }}
+          <a href="{{ path('course_manage_homework_check_list', {id: curCourse.id}) }}">{{ 'course.homework_check'|trans }}
           </a>
         </li>
         <hr class="mv5 mh10 bg-border-color"/>
         <li class="list-group-item {% if side_nav == 'dashboard' %}active{% endif %}">
           <a href="{{ path('course_set_manage_course_dashboard',{courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-            {{ '学习数据'|trans }}</a>
+            {{ 'course.dashboard'|trans }}</a>
         </li>
         {% if app.user.isAdmin() or setting('course.teacher_search_order') == 1 %}
           <li class="list-group-item {% if side_nav == 'orders' %}active{% endif %}">
-            <a href="{{ path('course_set_manage_course_orders', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">{{ '订单查询'|trans }}
+            <a href="{{ path('course_set_manage_course_orders', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">{{ 'course.order'|trans }}
             </a>
           </li>
         {% endif %}
@@ -183,7 +183,7 @@
           <hr class="mv5 mh10 bg-border-color"/>
           <li class="list-group-item {% if side_nav == 'plan' %}active{% endif %}">
             <a href="{{ path('course_set_manage_courses', {courseSetId: courseSet.id}) }}">
-              {{ '教学计划管理'|trans }}
+              {{ 'course.teach_plan_manage'|trans }}
             </a>
           </li>
         </div>
