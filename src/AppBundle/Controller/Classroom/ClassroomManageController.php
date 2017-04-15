@@ -1167,7 +1167,7 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testpaperId, 'testpaper');
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
         if (!$testpaper) {
             throw $this->createResourceNotFoundException('testpaper', $testpaperId);

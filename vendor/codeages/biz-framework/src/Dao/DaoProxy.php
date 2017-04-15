@@ -146,10 +146,6 @@ class DaoProxy
             $arguments[0][$declares['timestamps'][0]] = time();
         }
 
-        if (isset($declares['timestamps'][1])) {
-            $arguments[0][$declares['timestamps'][1]] = time();
-        }
-
         $this->serialize($arguments[0]);
         $row = $this->callRealDao($method, $arguments);
         $this->unserialize($row);

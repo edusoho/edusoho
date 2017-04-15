@@ -46,7 +46,7 @@
     <div class="course-detail-info">
 
       {#确认下判断是否有误#}
-      {% if course.price > 0 and course.price < course.originPrice  %} 
+      {% if courseSet.discountId > 0  and course.price < course.originPrice  and is_plugin_installed('Discount') %}
         {% set onDiscount =  true %}
       {% else %}
         {% set onDiscount =  false %}
@@ -119,9 +119,9 @@
               data-trigger="hover"
               data-placement="top"
               data-toggle="popover"
-              title="{{ tag.full_name }}{% if not tag.active %}<span class='text-12 color-gray'>(暂未提供)</span>{% endif %}"
+              title="{{ tag.fullName }}{% if not tag.active %}<span class='text-12 color-gray'>(暂未提供)</span>{% endif %}"
               data-content="{{ tag.summary }}">
-              {{ tag.short_name }}
+              {{ tag.shortName }}
             </span>
           {% endfor %}
         {% endif %}

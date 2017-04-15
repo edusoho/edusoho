@@ -257,6 +257,95 @@ class CourseServiceTest extends BaseTestCase
         // $this->assertCount(1, $result);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testGetUserLearnProgressWithErrorCourse()
+    {
+        $this->getCourseService()->getUserLearningProcess(999, 1);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testGetUserLearnProgressWithNotJoinCourse()
+    {
+        $course1 = array(
+            'title' => 'test course 1',
+            'courseSetId' => 1,
+            'expiryMode' => 'forever',
+            'learnMode' => 'lockMode',
+        );
+
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $this->getCourseService()->getUserLearningProcess($createCourse1['id'], 999);
+    }
+
+    public function testGetUserLearnProgressWithNoTask()
+    {
+        $course1 = array(
+            'title' => 'test course 1',
+            'courseSetId' => 1,
+            'expiryMode' => 'forever',
+            'learnMode' => 'lockMode',
+        );
+
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $result = $this->getCourseService()->getUserLearningProcess($createCourse1['id'], $this->getCurrentUser()->getId());
+
+        $this->assertEquals(
+            array(
+                'taskCount' => 0,
+                'progress' => 0,
+                'taskResultCount' => 0,
+                'toLearnTasks' => 0,
+                'taskPerDay' => 0,
+                'planStudyTaskCount' => 0,
+                'planProgressProgress' => 0,
+            ),
+            $result
+        );
+    }
+
+    public function testGetUserLearnProgress()
+    {
+        $course1 = array(
+            'title' => 'test course 1',
+            'courseSetId' => 1,
+            'expiryMode' => 'forever',
+            'learnMode' => 'lockMode',
+        );
+
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $this->mockBiz('Course:MemberService', array(
+            array('functionName' => 'getCourseMember', 'returnValue' => 1),
+        ));
+
+        $this->mockBiz('Task:TaskService', array(
+            array('functionName' => 'countTasks', 'returnValue' => 100),
+            array('functionName' => 'findToLearnTasksByCourseId', 'returnValue' => array()),
+        ));
+
+        $this->mockBiz('Task:TaskResultService', array(
+            array('functionName' => 'countTaskResults', 'returnValue' => 10),
+        ));
+
+        $result = $this->getCourseService()->getUserLearningProcess($createCourse1['id'], 123);
+
+        $this->assertEquals(
+            array(
+                'taskCount' => 100,
+                'progress' => 10,
+                'taskResultCount' => 10,
+                'toLearnTasks' => array(),
+                'taskPerDay' => 0,
+                'planStudyTaskCount' => 0,
+                'planProgressProgress' => 0,
+            ),
+            $result
+        );
+    }
+
     protected function createNewCourseSet()
     {
         $courseSetFields = array(

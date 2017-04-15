@@ -21,6 +21,11 @@ class Text extends Activity
         return $this->getTextActivityDao()->get($targetId);
     }
 
+    public function find($ids)
+    {
+        return $this->getTextActivityDao()->findByIds($ids);
+    }
+
     public function copy($activity, $config = array())
     {
         $biz = $this->getBiz();
@@ -46,15 +51,21 @@ class Text extends Activity
 
     public function update($targetId, &$fields, $activity)
     {
-        $text = ArrayToolkit::parts($fields, array(
-            'finishType',
-            'finishDetail',
-        ));
+        $text = ArrayToolkit::parts(
+            $fields,
+            array(
+                'finishType',
+                'finishDetail',
+            )
+        );
 
         $biz = $this->getBiz();
         $text['createdUserId'] = $biz['user']['id'];
-        $this->getCourseDraftService()->deleteCourseDrafts($activity['fromCourseId'], $activity['id'],
-            $biz['user']['id']);
+        $this->getCourseDraftService()->deleteCourseDrafts(
+            $activity['fromCourseId'],
+            $activity['id'],
+            $biz['user']['id']
+        );
 
         return $this->getTextActivityDao()->update($targetId, $text);
     }
@@ -77,10 +88,13 @@ class Text extends Activity
 
     public function create($fields)
     {
-        $text = ArrayToolkit::parts($fields, array(
-            'finishType',
-            'finishDetail',
-        ));
+        $text = ArrayToolkit::parts(
+            $fields,
+            array(
+                'finishType',
+                'finishDetail',
+            )
+        );
         $biz = $this->getBiz();
         $text['createdUserId'] = $biz['user']['id'];
 
