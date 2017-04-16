@@ -1,5 +1,10 @@
 # 全站
 # 整站导航
+<<<<<<< HEAD
+site.alipay: 支付宝
+site.btn.share: 分享
+=======
+>>>>>>> feature/x8-i18n
 site.online_school_name: 网校名称
 site.online_school_about: 网校简介
 site.online_school_logo: 网校LOGO
@@ -42,7 +47,6 @@ site.message.error: 错误提示
 site.power_by: 好知网
 site.default.classroom: 班级
 site.default.more: 更多
-site.default.student: 学员
 site.default.manage: 管理
 site.default.none: 无
 site.default.or: 或
@@ -73,9 +77,17 @@ operation: 操作
 #会员
 vip: 会员
 
+<<<<<<< HEAD
+#日期通用
+date.year: 年
+date.month: 月
+date.day: 日
+
+=======
 #分页
 paginator.firstPage: 首页
 paginator.lastPage: 尾页
+>>>>>>> feature/x8-i18n
 # 用户通用
 user: 用户
 user.fields.login_password: 登录密码
@@ -157,6 +169,7 @@ coin.balance: 虚拟币余额
 coin.rate: 汇率
 
 #订单通用
+order.charge: 收费
 order.name: 订单名称
 order.createdTime: 创建时间
 order.pay_time: 付款时间
@@ -238,6 +251,12 @@ import.user_import.remark_tips: 选填
 
 # 课程
 course: 课程
+coruse.member_buyed: 已购买
+course.member_learn_status.none: 未学
+course.member_learn_status.learned: 已学完
+coruse.member_learn_status.learning: 学习中
+course.lesson_num: %lessonNum%课时
+course.content_empty: 暂无课程内容
 course.create.tips: 请先完成以下设置，才能创建课程：
 course.create.setup_avatar: 设置头像。
 course.create.setup_introduction: 设置头衔 、自我介绍。
@@ -1122,7 +1141,7 @@ testpaper.answer.pause_btn: 暂停
 testpaper.answer.pause_tips: 考试已暂停，请尽快回来哦！
 testpaper.answer.resume_btn: 继续考试
 testpaper.answer.submit_btn: 提交练习
-testpaper.result.true: 正确
+testpaper.result.true: 正确重新加入
 testpaper.result.wrong: 错误
 testpaper.result.not_read: 待批阅
 testpaper.result.not_done: 未做
@@ -1137,6 +1156,37 @@ open_course.status.living: 即将直播
 
 # 班级
 classroom: 班级
+classroom.buy_classroom.purchase_timeout_tips: 注意：请在30分钟内完成支付，否则订单将会过期失效
+classroom.buy_classroom.no_avatar_tips: >
+  您还没有头像，设置以后才能加入学习<br />拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="%avatarSettingUrl%" class="alert-link" target="_blank">点击设置</a>
+classroom.buy_classroom.classroom_free_tips: 此%name%为免费%classroomName%，无需购买，可直接加入学习。
+classroom.buy_classroom.payments_disabled_tips: 尚未开启支付模块，无法购买课程。
+classroom.classroom_name: %name%名称
+classroom.buy_classroom: 购买%name%
+classroom.buy_classroom.join: 加入学习
+classroom.buy_classroom.join_submiting: 正在加入...
+classroom.buy_classroom.to_pay: 去支付
+classroom.buy_classroom.pay_submiting: 正在创建订单...
+classroom.preview.buy_classroom_tips: 预览模式无法支付%role%
+classroom.buy_classroom.tips: 
+classroom.showServices: 承诺服务
+classroom.price: 价格
+classroom.buy_classroom.vip_free: 会员免费
+classroom.block_content_title: 所属%name%
+classroom.expiryDays: 班级有效期
+classroom.vip_checked_fail_tips: >
+  该 ~ %classroomName% ~ 已不支持会员免费学，
+classroom.not_vip_member_tips: >
+  您已经不是会员，不能学习此 ~ %classroomName% ~ ！
+classroom.exit: 退出
+classroom.not_vip_member_and_become_vip_tips: >
+  请重新<a class="alert-link" href="%vipUrl%" target="_blank">开通会员</a>
+classroom.vip_member_expired_tips: >
+  您的会员已过期，不能学习此 ~ %classroomName% ~ ，请先<a class="alert-link" href="%vipRenewUrl%" target="_blank">续费</a>。
+classroom.vip_member_level_low_tips: >
+  会员等级不够，不能学习此' ~ %classroomName% ~ '。请先<a class="alert-link" href="%vipUpgrade%" target="_blank">升级会员</a>。
+classroom.refund_tips: 您的退款申请已提交，请等待管理员的处理。
+classroom.cancle_refund_btn: 取消退款，继续学习！
 classroom.courses_count: 共%courseNum%课
 classroom.continue_learning_btn: 继续学习
 classroom.join_btn: 立即加入
@@ -1150,6 +1200,112 @@ classroom.course.content: >
 classroom.course.unlock_tips: >
     如需解除同步单独编辑本课程，可点击下方按钮解除同步。
     <font color="#e83d2c">注意：本操作不可逆！</font>
+<<<<<<< HEAD
+
+classroom.member_sign: 签到
+classroom.member_signed: 已签到
+classroom.sign_keep_days: 连续%keepDays%天
+classroom.sign_canlerdar.mon: 一
+classroom.sign_canlerdar.tue: 二
+classroom.sign_canlerdar.wed: 三
+classroom.sign_canlerdar.thu: 四
+classroom.sign_canlerdar.fri: 五
+classroom.sign_canlerdar.sat: 六
+classroom.sign_canlerdar.sun: 日
+classroom.today_sign_num: 今日签到人数
+classroom.sign_rank_tips: >
+  签到排名：今日第<span class="today-rank">%signRank%</span>个签到
+classroom.sign_keep_days_tips: >
+  连续签到：<span class="keep-days">%keepDays%</span>天
+classroom.headmaster: 班主任
+classroom.teacher: 教师
+classroom.assistant: 助教
+classroom.teacher_title_empty: 暂无头衔
+classroom.teacher_about_empty: 暂无简介
+classroom.headmaster_title_not_set_tips: 还没有头衔
+classroom.not_set_headmaster_tips: 该%name%尚未设置班主任
+classroom.not_join_tips: >
+  您现在是 <span>旁听生</span>，只能有限参与，购买成为正式学员后即可完整学习
+classroom.not_join_tips_for_free: >
+  您现在是 <span>旁听生</span>，只能有限参与，成为正式学员后即可完整学习
+classroom.price_free: 免费
+classroom.member_level_study_tips: %memberLevel%，免费学
+classroom.buy_btn: 加入购买
+classroom.free_join_btn: 免费加入
+classroom.member_question: %username%问答
+classroom.member_discussion: %username%话题
+classroom.question: 问答帖
+classroom.question_label: 问
+classroom.nice_thread: 精华帖
+classroom.nice_thread_label: 精
+classroom.member_question_empty_tips: 你还没提过问题
+classroom.member_discussion_empty_tips: 你还没发表过话题
+classroom.thread_browse: 浏览
+classroom.last_post: 最后回复
+classroom.thread_post: 发表于%name%
+classroom.deleted_tips: %name%已删除
+classroom.member_question_post_empty_tips: 您的%name%中还没有%username%提问过... 
+classroom.member_discussion_post_empty_tips: 您的%name%中还没有%username%话题...
+classroom.latest_join_member: 新加学员
+classroom.description_empty_tips: 暂无介绍！
+classroom.description: 介绍
+classroom.teachers: 师资
+classroom.reviews: 评价
+classroom.note: 笔记
+classroom.expiry_date_tips: 班级有效期： 
+classroom.expiry_day_tips: >
+  <span class="mrm">班级有效天数：</span><span>%expiryValue%天</span>
+classroom.classroom_manage: %name%管理
+classroom.vip_classroom: 会员%name%
+classroom.auditor_join_tips: 
+  您现在是<span class="color-warning">旁听生</span>，不能完整学习
+classroom.auditor_and_member_different_tips: 旁听生只能参与话题讨论，正式学员可以完整地学习所有内容，享受所有教学服务
+classroom.over_expiry_date_tips: 你的班级已过有效期，无法继续学习
+classroom.over_expiry_day_and_buyable_tips: 你的班级已过有效期，无法继续学习，请重新购买
+classroom.over_expiry_day_and_not_buyable_tips: 你的班级已过有效期，无法继续学习，请重新加入
+#公告
+announcement: 公告
+
+classroom.manage.setting: 设置
+classroom.manage.unSetting: 未设置
+classroom.manage.introduction: 简介
+classroom.manage.picture: 图片
+classroom.manage.price: 价格
+classroom.manage.course: 课程
+classroom.manage.courses_count: 课程
+classroom.manage.tasks_count: 任务数
+classroom.manage.student: 学员
+classroom.manage.student_number: 学员数
+classroom.manage.auditor_num: 旁听生数
+classroom.manage.user_learn_status: %name%学习情况
+classroom.manage.Yesterday: 昨日
+classroom.manage.today: 今日
+classroom.manage.all_student_number: 全部学员数
+classroom.manage.full_student_number: 正式学员数
+classroom.manage.finished_task_number: 任务完成学习数
+classroom.manage.thread_count: 新增话题数
+classroom.manage.latest_reviews: 最新评价
+classroom.manage.reviews.empty: 该%name%尚无评价
+classroom.manage.set_info: 基本信息
+classroom.manage.set_info.name: 名称
+classroom.manage.set_info.introduction: 简介
+classroom.manage.set_info.introduction.help_block: 为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
+classroom.manage.set_info.tags: 标签
+classroom.manage.set_info.tags.explain: 用于按标签检索班级等，由网校管理员后台统一管理
+classroom.manage.set_info.tags.help_block: 用于按标签检索班级等，由网校管理员后台统一管理
+classroom.manage.set_info.show_label: %name%展示
+classroom.manage.set_info.show_label.help_block: 关闭后，%name%将彻底隐藏，无法在前台查看到。
+classroom.manage.set_info.buy: 购买
+classroom.manage.set_info.buy.help_block: 关闭后%name%将无法在线购买加入。
+classroom.manage.set_info.classroom_period: 班级有效期
+classroom.manage.set_info.classroom_period.end_date: 截止日期
+classroom.manage.set_info.classroom_period.days: 有效期天数
+classroom.manage.set_info.classroom_period.forever: 永久有效
+classroom.manage.set_info.date_help: 设置该值后，%user_name%只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。
+classroom.manage.set_info.days_help: 设置该值后，%user_name%只能在有效天数内进行课程的学习，系统默认会在有效期前10天提醒学员。
+classroom.manage.set_info.view_period_rules: 查看有效期规则
+=======
+>>>>>>> feature/x8-i18n
 classroom.status.expired: 当前班级已过有效期
 classroom.thread.send_btn: 发话题
 classroom.thread.question_btn: 提问题

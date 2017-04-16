@@ -3,7 +3,7 @@
     {{ render(controller('AppBundle:Classroom/Classroom:dashboard',{classroom:classroom, nav:nav, member:member})) }}
     {% if courses is empty %}
       <ul class="media-list">
-        <li class="mvl tac color-gray">{{'暂无课程内容'|trans}}</li>
+        <li class="mvl tac color-gray">{{'course.content_empty'|trans}}</li>
       </ul>
     {% else %}
       <div class="class-content">
@@ -23,37 +23,37 @@
                 <a href="{{path('course_show',{id:course.id})}}" target="_blank">{{course.title}}</a>
               </h4>
               <div class="metas">
-                <span class="period">{{'%lessonNum%课时'|trans({'%lessonNum%':course.lessonNum})}}</span>
+                <span class="period">{{'course.lesson_num'|trans({'%lessonNum%':course.lessonNum})}}</span>
                 <span class="price">
                 {% if courseMembers[course.id] and not member and setting('classroom.discount_buy') %}
-                {{'已购买'|trans}}
+                {{'coruse.member_buyed'|trans}}
                 {% else %}
                   {% if member and not 'auditor' in member.role %}
                     {% if courseMembers[course.id] and courseMembers[course.id].learnedNum == 0 %}
-                    {{'未学'|trans}}
+                    {{'course.member_learn_status.none'|trans}}
                     {% elseif courseMembers[course.id] and courseMembers[course.id].learnedNum == course.lessonNum %}
-                    <span class="color-success">{{'已学完'|trans}}</span>
+                    <span class="color-success">{{'course.member_learn_status.learned'|trans}}</span>
                     {% elseif courseMembers[course.id] and courseMembers[course.id].learnedNum < course.lessonNum %}
-                    <span class="text-info">{{'学习中'|trans}}</span>
+                    <span class="text-info">{{'coruse.member_learn_status.learning'|trans}}</span>
                     {% else %}
-                    {{'未学'|trans}}
+                    {{'course.member_learn_status.none'|trans}}
                     {% endif %} 
 
 
                   {% elseif courseMembers[course.id] and member and 'auditor' in member.role  and setting('classroom.discount_buy') %}
-                  {{'已购买'|trans}}
+                  {{'coruse.member_buyed'|trans}}
                   {% else %}
                       {% if setting('coin.coin_enabled') and setting('coin. price_type') == 'Coin' %}
 
                         {% if course.price * setting('coin.cash_rate') > 0 %}
                         {{course.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}} 
-                        {% else %}{{'免费'|trans}}{% endif %}
+                        {% else %}{{'course.price.free'|trans}}{% endif %}
 
                       {% else %}
 
                         {% if course.price > 0 %}
-                           {{ course.price }}{{'元'|trans}} 
-                        {% else %}{{'免费'|trans}}{% endif %}
+                           {{ course.price }}{{'site.currency.RMB'|trans}} 
+                        {% else %}{{'course.price.free'|trans}}{% endif %}
 
                       {% endif %}
 
