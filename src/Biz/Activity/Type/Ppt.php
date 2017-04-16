@@ -100,6 +100,11 @@ class Ppt extends Activity
         return $this->getPptActivityDao()->get($targetId);
     }
 
+    public function find($targetIds)
+    {
+        return $this->getPptActivityDao()->findByIds($targetIds);
+    }
+
     /**
      * @return PptActivityDao
      */

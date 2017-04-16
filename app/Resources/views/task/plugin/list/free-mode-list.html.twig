@@ -11,12 +11,16 @@
         <span class="title">第{{ item.number }}节: {{ item.title }}</span>
       </li>
     {% elseif  item.type == 'lesson' %}
+      {% set tasks = array_index(item.tasks, 'mode') %}
+      {% set index = tasks.lesson.number|default(null) %}
+
       {% for task in item.tasks %}
         {% if  item.tasks|length > 1 %}
-          {% set taskIndex = item.number ~'-' ~ loop.index %}
+          {% set taskIndex = index ~'-' ~ loop.index %}
         {% else %}
-          {% set taskIndex = item.number  %}
+          {% set taskIndex =  index %}
         {% endif %}
+
         {% set task_lock =  (course.learnMode  == 'lockMode')  and (task.lock  and   task.number != 1) %}
         <li class="task-item task-content {% if task.activityId == activity.id %} active {% endif %} mouse-control">
           <i class="es-icon
@@ -33,13 +37,13 @@
 
           {% if not task_lock  and   task.status == 'published' %}
             <a class="title"
-               href="{{ path('course_task_show', {id:task.id,courseId:task.courseId}) }}">
+              href="{{ path('course_task_show', {id:task.id,courseId:task.courseId}) }}">
               {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}任务{{ taskIndex }}: {{ task.title }}
             </a>
           {% else %}
             <div class="title"
-                 data-url="{{ path('course_task_show', {id:task.id,courseId:task.courseId}) }}">
-              {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}任务{{ taskIndex}}: {{ task.title }}
+              data-url="{{ path('course_task_show', {id:task.id,courseId:task.courseId}) }}">
+              {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}任务{{ taskIndex }}: {{ task.title }}
             </div>
           {% endif %}
 
@@ -56,7 +60,7 @@
           {% else %}
             <span class="right-menu">{{ task.activity.length|activity_length_format }}
               <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} ml5" data-toggle="tooltip"
-                 data-placement="top" title="{{ activity_metas(task.activity.mediaType).name }}任务"></i></span>
+                data-placement="top" title="{{ activity_metas(task.activity.mediaType).name }}任务"></i></span>
           {% endif %}
         </li>
 

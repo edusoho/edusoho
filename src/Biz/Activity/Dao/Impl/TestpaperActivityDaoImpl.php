@@ -9,12 +9,12 @@ class TestpaperActivityDaoImpl extends GeneralDaoImpl implements TestpaperActivi
 {
     protected $table = 'activity_testpaper';
 
-    public function findActivitiesByIds($ids)
+    public function findByIds($ids)
     {
         return $this->findInField('id', $ids);
     }
 
-    public function findActivitiesByMediaIds($mediaIds)
+    public function findByMediaIds($mediaIds)
     {
         return $this->findInField('mediaId', $mediaIds);
     }

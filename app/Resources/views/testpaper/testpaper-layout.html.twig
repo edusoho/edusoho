@@ -36,7 +36,9 @@
                       {% if paperResult.status|default('doing') in ['reviewing','finished'] %}
                         {{'testpaper.answer.student'|trans}}{{ student.nickname }}
                         {{'testpaper.answer.endtime'|trans}}{{ paperResult.endTime|date('Y-n-d H:i') }}
-                        {{'testpaper.answer.used_time'|trans}}{{ paperResult.usedTime|duration }}
+                        {% if paperResult.beginTime != paperResult.usedTime %}
+                          {{'testpaper.answer.used_time'|trans}}{{ paperResult.usedTime|duration_text }}
+                        {% endif %}
                       {% endif %}
                     </small>
                   </h1>

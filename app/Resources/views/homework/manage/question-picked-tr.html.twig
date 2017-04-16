@@ -1,4 +1,4 @@
-{% set questionTypesDict = getQuestionTypes() %} 
+{% set questionTypesDict = getQuestionTypes() %}
 
 <tr id="testpaper-item-{{ question.id }}" data-id="{{ question.id }}" data-type="{{ question.type }}" {% if question.parentId >0 %}data-parent-id="{{ question.parentId }}"{% endif %} class="{% if question.subCount > 0 %} have-sub-questions{% endif %}{% if question.parentId > 0 %} is-sub-question{% else %} is-question{% endif %}">
   <td>{% if not question.parentId %}<span class="glyphicon glyphicon-resize-vertical sort-handle"></span>{% endif %}</td>
@@ -10,11 +10,11 @@
   <td>
     {% if question.includeImg|default('') %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
     {{question['stem']|plain_text(40) }}
-    
+
     <div>
       {% include 'question-manage/part/belong.html.twig' with {question:question,courses:courses,courseTasks:courseTasks} %}
     </div>
-    
+
   </td>
   <td>{{ questionTypesDict[question.type]|default('--') }}</td>
   <td>{{ dict_text('difficulty', question.difficulty)}}</td>
@@ -22,9 +22,9 @@
   <td>
     <div class="btn-group">
       {% if question.parentId == 0 %}
-        <a class="mrm" data-role="preview-btn" href="javascript:" data-url="{{ path('course_set_manage_question_preview', {courseSetId:courseSet.id, questionId:question.id, isNew:true }) }}" >{{'预览'|trans}}</a>
-        <a class="mrm" data-role="replace-item"  href="javascript:"  data-url="{{ path('course_set_manage_homework_question_picker', {id:courseSet.id, replace: question.id }) }}" >{{'替换'|trans}}</a>
-        <a class="" data-role="item-delete-btn" href="javascript:" >{{'删除'|trans}}</a>
+        <a class="mrm" data-role="preview-btn" href="javascript:" data-url="{{ path('course_set_manage_question_preview', {courseSetId:courseSet.id, questionId:question.id, isNew:true }) }}" >{{'course.testpaper_manage.question.operation.preview_btn'|trans}}</a>
+        <a class="mrm" data-role="replace-item"  href="javascript:"  data-url="{{ path('course_set_manage_homework_question_picker', {id:courseSet.id, replace: question.id }) }}" >{{'course.testpaper_manage.question.operation.replace_btn'|trans}}</a>
+        <a class="" data-role="item-delete-btn" href="javascript:" >{{'course.testpaper_manage.question.operation.delete_btn'|trans}}</a>
       {% endif %}
     </div>
   </td>

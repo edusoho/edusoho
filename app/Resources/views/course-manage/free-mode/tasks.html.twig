@@ -20,7 +20,7 @@
             disabled
             {% endif %}"
             {% if not (courseSet.type|default('') =='normal' and setting('storage.upload_mode', 'local') != 'local' )%}
-              data-toggle="popover" data-placement="top" data-trigger="hover"
+              data-toggle="popover" data-placement="top" data-trigger="hover" data-container=".js-batch-add"
               data-content='{{'course.plan_task.batch_create_tips'|trans}}'
             {% else %}
               data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
