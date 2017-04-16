@@ -3106,3 +3106,9 @@ my.teaching.open_course.liveTimeSet.recommend_setting: 推荐设置
 my.teaching.open_course.course_manage: 课程管理
 my.teaching.open_course.course_info: 课程信息
 my.teaching.open_course.live_manage: 录播管理
+explore.course.list: 课程列表
+explore.course.view_name_btn: 查看%name%
+explore.view_open_course_btn: 查看公开课
+explore.course.empty: 该分类下无课程
+explore.course.search.placeholer: 请输入关键字搜索
+explore.course.category.all: 所有分类：
