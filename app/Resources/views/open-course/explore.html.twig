@@ -5,19 +5,19 @@
 {% set siteNav = 'open/course/explore' %}
 {% set script_controller = 'open-course/open-course-explore' %}
 
-{% block title %} 公开课 - {{ parent() }}{% endblock %}
+{% block title %} {{'explore.open_course.title'|trans}} - {{ parent() }}{% endblock %}
 {% block top_content %}
   <div class="es-banner">
     <div class="container">
       <div class="title">
-        公开课列表
+        {{ 'explore.open_course.list'|trans }}
       </div>
       <div class="more">
         <a class="btn btn-primary btn-lg" href="{{ path('course_set_explore') }}">
-          {{ '查看课程'|trans }}
+          {{ 'explore.view_course_btn'|trans }}
         </a>
         <a class="btn btn-primary btn-lg" href="{{ path('classroom_explore') }}">
-          {{ '查看班级'|trans }}
+          {{ 'explore.view_classroom_btn'|trans }}
         </a>
       </div>
     </div>
@@ -46,9 +46,9 @@
               {% if course.type == 'liveOpen' and lessons %}
                 <div class="mask">
                   {% if lessons[0].startTime|date('Y-m-d') == "now"|date('Y-m-d') %}
-                    <i class="es-icon es-icon-videocam prs hidden-xs"></i>{{ lessons[0].startTime|date('H:i') }} 直播
+                    <i class="es-icon es-icon-videocam prs hidden-xs"></i>{{ lessons[0].startTime|date('H:i') }} {{ 'explore.open_course.live'|trans }}
                   {% else %}
-                    <i class="es-icon es-icon-videocam prs hidden-xs"></i>{{ lessons[0].startTime|date('Y-m-d H:i') }} 直播
+                    <i class="es-icon es-icon-videocam prs hidden-xs"></i>{{ lessons[0].startTime|date('Y-m-d H:i') }} {{ 'explore.open_course.live'|trans }}
                   {% endif %}
                 </div>
               {% endif %}
@@ -69,7 +69,7 @@
           </div>
         </div>
       {% else %}
-        <div class="empty">{{ '暂无公开课'|trans }}</div>
+        <div class="empty">{{ 'explore.open_course.empty'|trans }}</div>
       {% endfor %}
     </div>
     {% if not mobile %}

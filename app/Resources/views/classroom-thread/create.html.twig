@@ -2,7 +2,7 @@
 
 {% set thread = thread|default(null) %}
 
-{% block title %}{% if thread %}{{'编辑'|trans}}{{ dict_text('threadType', type) }}{% else %}{{'发表'|trans}}{{ dict_text('threadType', type) }}{% endif %} - {{ parent() }}{% endblock %}
+{% block title %}{% if thread %}{{'classroom.thread.create.edit_btn'|trans}}{{ dict_text('threadType', type) }}{% else %}{{'classroom.thread.create.publish_btn'|trans}}{{ dict_text('threadType', type) }}{% endif %} - {{ parent() }}{% endblock %}
 
 {% do load_script('thread/thread-form') %}
 {% set nav = 'thread' %}
