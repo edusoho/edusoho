@@ -5,9 +5,9 @@
 {% set siteNav = 'course/explore' %}
 {% set script_controller = 'course/explore' %}
 
-{% block keywords %}{% if categoryArray %}{{ categoryArray.name }}{% if categoryParent %}{{ ',' }}{{ categoryParent.name|default('') }}{% endif %}{% else %}{{ '全部' }}{% endif %}{% endblock %}
+{% block keywords %}{% if categoryArray %}{{ categoryArray.name }}{% if categoryParent %}{{ ',' }}{{ categoryParent.name|default('') }}{% endif %}{% else %}{{ 'category.all_category' }}{% endif %}{% endblock %}
   {% block description %}{{ categoryArrayDescription|default('')|plain_text(100) }}{% endblock %}
-    {% block title %}{{ categoryArray.name|default('全部'|trans) }} - {{ setting('site.name') }}{% if setting('site.slogan') %}{{ ' - ' }}{{ setting('site.slogan') }}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
+    {% block title %}{{ categoryArray.name|default('category.all_category'|trans) }} - {{ setting('site.name') }}{% if setting('site.slogan') %}{{ ' - ' }}{{ setting('site.slogan') }}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
     {% endblock %}
 
 {% block top_content %}
@@ -15,18 +15,18 @@
     <div class="container">
       <div class="title">
         <i class="es-icon es-icon-viewcomfy"></i>
-        {{ '课程列表'|trans }}
+        {{ 'explore.course.list'|trans }}
       </div>
 
       {% set classrooms = data('Classrooms',{count:1}) %}
       <div class="more">
         {% if classrooms|default(null) %}
           <a class="btn btn-primary btn-lg" href="{{ path('classroom_explore') }}">
-            {{ '查看%name%'|trans({'%name%': setting('classroom.name')|default('班级'|trans)}) }}
+            {{ 'explore.course.view_name_btn'|trans({'%name%': setting('classroom.name')|default('classroom'|trans)}) }}
           </a>
         {% endif %}
         <a class="btn btn-primary btn-lg" href="{{ path('open_course_explore') }}">
-          {{ '查看公开课'|trans }}
+          {{ 'explore.view_open_course_btn'|trans }}
         </a>
       </div>
     </div>
@@ -52,21 +52,21 @@
         <a
           href="{{ path('course_set_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'latest'}) }}"
           class="{% if (orderBy == 'latest') %}active{% endif %}">
-          {{ '最新'|trans }}
+          {{ 'site.datagrid.filter.latest'|trans }}
         </a>
       </li>
       <li>
         <a
           href="{{ path('course_set_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'studentNum'}) }}"
           class="{% if (orderBy == 'studentNum') %}active{% endif %}">
-          {{ '最热'|trans }}
+          {{ 'site.datagrid.filter.hotest'|trans }}
         </a>
       </li>
       <li>
         <a
           href="{{ path('course_set_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'recommendedSeq'}) }}"
           class="{% if (orderBy == 'recommendedSeq') %}active{% endif %}">
-          {{ '推荐'|trans }}
+          {{ 'site.datagrid.filter.recommended'|trans }}
         </a>
       </li>
     </ul>
@@ -75,12 +75,12 @@
         <div class="btn-group">
           <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
               class="es-icon es-icon-crown text-warning"></i>
-            {% if (currentLevelId == 'all') %}{{ '会员课程'|trans }}{% endif %}
+            {% if (currentLevelId == 'all') %}{{ 'search.vip_courses'|trans }}{% endif %}
             {% for level in levels %}{% if (level.id == currentLevelId) %}{{ level.name|sub_text(4) }}{% endif %}{% endfor %}
           </button>
           <ul class="dropdown-menu" role="menu">
             <li role="presentation" class="{% if (currentLevelId == 'all') %}active {% endif %}"><a
-                href="{{ path('course_set_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags},  filter: {type: type,price: price,currentLevelId: 'all'},orderBy: orderBy}) }}">{{ '全部'|trans }}</a>
+                href="{{ path('course_set_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags},  filter: {type: type,price: price,currentLevelId: 'all'},orderBy: orderBy}) }}">{{ 'category.all_category'|trans }}</a>
             </li>
             {% for level in levels %}
               <li role="presentation" class="{% if (level.id == currentLevelId) %}active {% endif %}"><a
@@ -96,7 +96,7 @@
           {{ path('course_set_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {type: 'live',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
         {% else %}
           {{ path('course_set_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {type: 'all',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
-        {% endif %}"> {{ '直播课程'|trans }}
+        {% endif %}"> {{ 'search.live_courses'|trans }}
       </label>
       <label class="checkbox-inline">
         <input type="checkbox" {% if price == 'free' %}checked="true" {% endif %} id="free" value="
@@ -105,7 +105,7 @@
         {% else %}
           {{ path('course_set_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {type: type,price: 'all',currentLevelId: currentLevelId},orderBy: orderBy}) }}
         {% endif %}
-        "> {{ '免费课程'|trans }}
+        "> {{ 'search.free_courses'|trans }}
       </label>
     </div>
   </div>
@@ -119,7 +119,7 @@
           </div>
         {% endfor %}
       {% else %}
-        <div class="empty">{{ '该分类下无课程'|trans }}</div>
+        <div class="empty">{{ 'explore.course.empty'|trans }}</div>
       {% endif %}
     </div>
   </div>

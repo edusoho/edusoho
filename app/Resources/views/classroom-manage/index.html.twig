@@ -1,5 +1,7 @@
 {% extends 'classroom-manage/layout.html.twig' %}
-{% block title %}{{ setting('classroom.name')|default("classroom"|trans) }}{{'classroom.manage'|trans}} - {{ parent() }}{% endblock %}
+
+{% block title %}{{ setting('classroom.name')|default("site.default.classroom"|trans) }}{{'classroom.manage'|trans}} - {{ parent() }}{% endblock %}
+
 {% set side_nav = 'main' %}
 
 {% block main %}
@@ -157,7 +159,7 @@
                   <div class="media-body">
                     <div class="stars-{{ (review.rating)|number_format }}"></div>
                     &nbsp;&nbsp;&nbsp;&nbsp;<time>{{review.createdTime|smart_time}}</time>                                                    
-                    <button class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:reviewUsers[review.userId].id})}}" style="float:right;">{{'私信'|trans}}</button>
+                    <button class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:reviewUsers[review.userId].id})}}" style="float:right;">{{'message'|trans}}</button>
                   </div>
                   <p>{{ review.content|plain_text(40) }}</p>
                 </div>
