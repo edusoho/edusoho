@@ -113,7 +113,7 @@
                     <div class="course-metas">  
 
                       {% if setting('course.show_student_num_enabled', '1') == 1  %}
-                        <span class="color-gray text-sm">{{ courseSet.studentNum }}{{setting('default.user_name', '学员')}}</span>
+                        <span class="color-gray text-sm">{{ courseSet.studentNum }}{{setting('default.user_name', 'site.default.student'|trans)}}</span>
                         {#<span class="divider"></span>#}
                       {% endif %}  
 
@@ -148,11 +148,11 @@
       {% if courseSets %}
         <div class="form-group">
           <div class="col-md-offset-9 col-md-3 controls">
-            <button type="submit" class="btn btn-fat btn-primary pull-right">保存修改</button>
+            <button type="submit" class="btn btn-fat btn-primary pull-right">{{ 'my.teaching.open_course.recommend_setting.save_btn'|trans }}</button>
           </div>  
         </div>
       {% else %}
-        <div class="empty">赶紧添加课程吧！</div>
+        <div class="empty">{{ 'my.teaching.open_course.recommend_setting.course_empty'|trans }}</div>
       {% endif %}
 
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

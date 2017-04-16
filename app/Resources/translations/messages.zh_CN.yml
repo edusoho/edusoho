@@ -2927,8 +2927,37 @@ my.teaching.open_course.recommend_setting.serializeMode.finished: 已完结
 my.teaching.open_course.recommend_setting.onlive: 正在直播中
 my.teaching.open_course.recommend_setting.live: 直播
 my.teaching.open_course.recommend_setting.task_number: 第%task_number%任务
-
-
+my.teaching.open_course.recommend_setting.save_btn: 保存修改
+my.teaching.open_course.recommend_setting.course_empty: 赶紧添加课程吧！
+my.teaching.open_course.teachers_setting.title: 教师设置
+my.teaching.open_course.teachers_setting.is_added: 已添加教师
+my.teaching.open_course.teachers_setting.allow_add_ADMIN_TEACHER: 只能添加有教师权限的用户
+my.teaching.open_course.student_setting.manage_btn: 管理
+my.teaching.open_course.student_setting.login: 已登录
+my.teaching.open_course.student_setting.unLogin: 未登录
+my.teaching.open_course.student_setting.all_student: 全部学员
+my.teaching.open_course.student_setting.setting_remind_student: 设置提醒的学员
+my.teaching.open_course.student_setting.recent_login: 最近进入
+my.teaching.open_course.student_setting.phone_number: 手机号
+my.teaching.open_course.student_setting.whether_remind: 是否提醒
+my.teaching.open_course.student_setting.whether_remind.yes: 已设置提醒
+my.teaching.open_course.student_setting.whether_remind.no: 未设置
+my.teaching.open_course.student_setting.enter_user_name: 请输入用户名
+my.teaching.open_course.student_setting.operation: 操作
+my.teaching.open_course.student_setting.join_time: 加入时间：
+my.teaching.open_course.student_setting.send_message_btn: 发私信
+my.teaching.open_course.student_setting.view_detail_btn: 查看资料
+my.teaching.open_course.liveTimeSet.title: 直播时间设置
+my.teaching.open_course.liveTimeSet.start_time: 直播开始时间
+my.teaching.open_course.liveTimeSet.start_time.help_block: 教师可在直播开始前1小时内进入直播教室，以准备相关教学资料。
+my.teaching.open_course.liveTimeSet.live_length: 直播时长
+my.teaching.open_course.liveTimeSet.live_length.placeholer: 时长
+my.teaching.open_course.liveTimeSet.live_length.minute: 分钟
+my.teaching.open_course.liveTimeSet.course_setting: 课程设置
+my.teaching.open_course.liveTimeSet.recommend_setting: 推荐设置
+my.teaching.open_course.course_manage: 课程管理
+my.teaching.open_course.course_info: 课程信息
+my.teaching.open_course.live_manage: 录播管理
 
 
 
