@@ -13,6 +13,7 @@ site.date.day: 天
 site.date.hour: 时
 site.date.minute: 分
 site.date.second: 秒
+site.data.people: 人
 site.data.empty: 无
 site.data.chapter: 章
 site.data.task: 任务
@@ -32,12 +33,15 @@ site.datagrid.filter.hotest: 最热
 site.datagrid.filter.recommended: 推荐
 site.datagrid.filter.category_more: 更多
 site.datagrid.filter.course_more: 更多课程
+site.datagrid.radios.open: 开启
+site.datagrid.radios.close: 关闭
+site.datagrid.radios.yes: 是
+site.datagrid.radios.no: 否
 site.message.info: 提示信息
 site.message.warning: 警告信息
 site.message.error: 错误提示
 site.power_by: 好知网
 site.default.classroom: 班级
-site.default.student: 学员
 site.default.more: 更多
 site.default.student: 学员
 site.default.manage: 管理
@@ -53,6 +57,8 @@ site.validate_rules.max_int: 最大值为9位整数
 site.validate_rules.two_decimal_places: 保留到2位小数
 site.btn.expand: 展开
 site.btn.collapse: 收起
+site.price: 价格
+site.org: 组织机构
 
 # TODO 命名有问题
 status: 状态
@@ -69,18 +75,27 @@ user: 用户
 user.fields.login_password: 登录密码
 user.fields.pay_password: 支付密码
 user.fileds.microblog: 微博
-user.fileds.wechat: 微信
-user.fileds.qq: QQ
+
 user.fields.username_label: 用户名
+user.fields.email_label: Email
 user.fields.truename_label: 姓名
 user.fields.gender_label: 性别
+user.fields.company_label: 公司
+user.fields.career_label: 职业
+user.fields.title_label: 头衔
+user.fields.phone_label: 电话
+user.fields.sign_label: 个人签名
+user.fields.introduction_label: 自我介绍
+user.fields.web_site_label: 个人网站
+user.fileds.wechat: 微信
+user.fileds.qq: QQ
+
 user.fields.gender.male: 男
 user.fields.gender.female: 女
 user.fields.idcard_label: 身份证号
 user.fields.mobile_label: 手机号码
 user.fields.mobile_label.bind: 已绑定
 user.fields.mobile_label.no_bind: 未绑定
-user.fields.company_label: 公司
 user.fileds.realname: 真实姓名
 user.fileds.me: 我
 user.fields.following: 关注
@@ -90,6 +105,7 @@ user.fields.no_sign: 暂无签名
 user.fields.no_introduction: 暂无简介
 user.btn.following_btn: 关注
 user.btn.followed_btn: 已关注
+user.btn.homepage_btn: 个人主页
 user.btn.send_message_btn: 私信
 user.not_login.tips: >
   你还没有登录，请先
@@ -168,6 +184,7 @@ order.content_title: 订单详情
 order.detail: 详情
 order.log: 日志
 order.coin.empty_hint: 暂无虚拟币订单记录
+order.export_btn: 导出订单
 
 # 上传模块
 upload.content_title: 上传文件
@@ -199,8 +216,33 @@ upload.video_quality_switcher.audio_quality.low: 流畅
 upload.video_quality_switcher.audio_quality.normal: 标准
 upload.video_quality_switcher.audio_quality.high: 高品
 
+# 导入
+import.step_one: 步骤1
+import.check_datas: 开始校验数据
+import.user_import: 批量添加新用户
+import.user_import.content_title: 批量添加学员
+import.user_import.choose_file: 选择要导入的文件
+import.user_import.browser_btn: 浏览...
+import.user_import.download_example_btn: 点击下载示例说明文件
+import.user_import.download_example_tips: 支持从Excel文件导入
+import.user_import.price: 购买价格
+import.user_import.price_tips: 本课程的价格为
+import.user_import.remark_btn: 备注
+import.user_import.remark_tips: 选填
+
 # 课程
 course: 课程
+course.create.tips: 请先完成以下设置，才能创建课程：
+course.create.setup_avatar: 设置头像。
+course.create.setup_introduction: 设置头衔 、自我介绍。
+course.create.finish: 已完成
+course.create.unfinish: 未完成
+course.create.user_avatar: 用户头像
+course.create.upload_tips: >
+  <p class="help-block">你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。</p>
+course.create.upload_btn: 上传新头像
+course.create.rank: 头衔
+course.create.introduction: 自我介绍
 course.id: 课程编号
 course.price_setting: 课程价格设置
 course.is_student_tips: 您已经是该教学计划的学员了！
@@ -230,6 +272,220 @@ course.students_count: >
 course.course_member_count: %studentsNum%人
 course.activity: 活动
 course.teaching_plan: 教学计划
+
+course.plan_setup: 计划设置
+course.plan_setup.name: 计划名称
+course.plan_setup.mode: 学习模式
+course.plan_setup.mode.free: 自由式学习
+course.plan_setup.mode.locked: 解锁式学习
+course.plan_setup.mode.locked_tips: 根据既定顺序逐个解锁学习
+course.plan_setup.mode.free_tips: 学习过程自由安排
+course.plan_setup.finish_rule: 任务完成规则
+course.plan_setup.finish_rule.depend_on_finish_condition: 由任务完成条件决定
+course.plan_setup.finish_rule.depend_on_finish_condition_tips: 必须达到完成条件，任务才算完成
+course.plan_setup.finish_rule.nothing: 无限制
+course.plan_setup.member_numbers: 课程人数
+course.plan_setup.member_numbers.view_rule_btn: 【查看直播课程细则】
+course.plan_setup.summary: 计划简介
+course.plan_setup.target: 课程目标
+course.plan_setup.audiences: 适应人群
+
+course.marketing_setup: 营销设置
+course.marketing_setup.setup: 加入设置
+course.marketing_setup.setup.can_join: 可加入
+course.marketing_setup.setup.can_join.tips: 关闭后，前台显示为“限制课程”，学员自己无法加入，需要由老师手动添加学员。常用于封闭型教学。
+course.marketing_setup.price.free: 免费
+course.marketing_setup.price.not_free: 收费
+course.marketing_setup.for_show_tips: 仅作展示用
+course.marketing_setup.expiry_date: 加入截止日期
+course.marketing_setup.expiry_date.custom: 自定义
+course.marketing_setup.expiry_date.anytime: 不限时间
+course.marketing_setup.expiry_date_tips: 在此日期前，学员可加入。
+course.marketing_setup.approval: 实名认证
+course.marketing_setup.approval_tips: 设置该值后，学员购买课程前，必须先去申请实名认证。
+course.marketing_setup.rule: 学习规则
+course.marketing_setup.rule.expiry_date: 学习有效期
+course.marketing_setup.rule.expiry_date_tips: 在此日期前，学员可进行学习。
+course.marketing_setup.rule.expiry_date.publish_tips: 从加入当天起，在几天内可进行学习。
+course.marketing_setup.rule.expiry_date.first_publish_tips: 教学计划首次发布后“学习有效期”不能再修改。
+course.marketing_setup.rule.watch_time_limit: 视频观看时长限制
+course.marketing_setup.rule.watch_time_limit.watch_limit: 倍总时长
+course.marketing_setup.rule.watch_time_limit.watch_limit_tips: >
+  例：课程视频总时长为100分钟，设置为5倍，则学员总共可观看500分钟，超出时长将提示不能学习。0表示无限制。<br/>
+  对于手动上传的回放视频，可限制其观看时长。但对于直接录制、跳转到第三方直播平台回放的视频，无法限制。
+course.marketing_setup.preview: 预览试看
+course.marketing_setup.preview.set_task: 设置免费学习任务
+course.marketing_setup.preview.set_task.task: 任务
+course.marketing_setup.preview.set_task.task_name: %name%任务
+course.marketing_setup.preview.set_task.free: 免费
+course.marketing_setup.preview.set_task.free_tips: 免费任务仅支持图文、视频、音频、flash、文档、PPT
+course.marketing_setup.preview.try_watch: 视频试看
+course.marketing_setup.preview.try_watch_tips: 常用于收费视频内容的前几分钟免费试看
+course.marketing_setup.services: 增值服务
+course.marketing_setup.services.show_services: 展示承诺服务
+course.marketing_setup.services.provide_services: 承诺提供服务
+course.marketing_setup.no_permission_tips: 抱歉，您无权管理课程营销，如有需要请联系网站管理员！
+
+course.teacher_setup: 教师设置
+course.teacher_setup.exist_teacher: 已添加教师
+course.teacher_setup.exist_teacher.add_tips: 只能添加有教师权限的用户
+
+course.members_manage: 学员管理
+course.members_manage.official_student: 正式学员
+course.members_manage.official_student.search: 搜索
+course.members_manage.official_student.input_placeholder: 请输入用户名/邮箱/手机号
+course.members_manage.official_student.progress: 学习进度
+course.members_manage.official_student.operation: 操作
+course.members_manage.official_student.detail: （查看详情）
+course.members_manage.official_student.show: 查看资料
+course.members_manage.official_student.more: 更多
+course.members_manage.official_student.send_message_btn: 发私信
+course.members_manage.official_student.remark: 备注
+course.members_manage.official_student.follow_btn: 关注
+course.members_manage.official_student.cancel_follow_btn: 取消关注
+course.members_manage.official_student.add_expiry_day_btn: 增加有效期
+course.members_manage.official_student.remove_btn: 移除
+course.members_manage.official_student.join_time: 加入时间：%createdTime%
+course.members_manage.official_student.expiry_date: 有效期至：%deadline%
+course.members_manage.official_student.empty: 暂无学员记录
+course.members_manage.official_student.add: 添加
+course.members_manage.official_student.add_tips: 只能添加系统中已注册的用户
+course.members_manage.official_student.add.input_placeholder: 邮箱/手机/用户名
+course.members_manage.official_student.add.price: 购买价格
+course.members_manage.official_student.add.price_tips: 本课程的价格为
+course.members_manage.official_student.add.remark: 备注
+course.members_manage.official_student.add.remark_tips: 选填
+course.members_manage.official_student.add.failed_tips: 课程不能添加
+course.members_manage.official_student.add.publish_tips: 请课程发布后再添加。
+course.members_manage.official_student.detail.study_process: 的学习情况
+course.members_manage.official_student.detail.process: 学习进度
+course.members_manage.official_student.detail.datas: 学习数据
+course.members_manage.official_student.detail.total_hours: %learnedTime%小时
+course.members_manage.official_student.detail.per_day_hours: %learnedTimePerDay%小时
+course.members_manage.official_student.detail.days: %daysCount%天
+course.members_manage.official_student.detail.total_days: 累计学习天数
+course.members_manage.official_student.detail.total_time: 学习时长
+course.members_manage.official_student.detail.per_day_time: 日均学习时长
+course.members_manage.official_student.detail.create_question: 发起提问
+course.members_manage.official_student.detail.join_activity: 参加活动
+course.members_manage.official_student.detail.create_article: 发起话题
+course.members_manage.official_student.detail.reply_article: 回复话题
+course.members_manage.official_student.send_message.receiver: 收件人
+course.members_manage.official_student.send_message.content: 内容
+course.members_manage.official_student.show.content_title: 个人详细信息
+course.members_manage.official_student.remark.tips: >
+  请填写
+  %student%的备注信息
+course.members_manage.official_student.add_expiry_day.add: 增加
+course.members_manage.official_student.add_expiry_day.course_expiry_date: 课程有效期
+course.members_manage.official_student.add_expiry_day.title: 课程标题
+course.members_manage.official_student.add_expiry_day.username: 用户名
+course.members_manage.official_student.add_expiry_day.days: 增加天数
+course.members_manage.official_student.add_expiry_day.failed_tips: 课程不能增加
+course.members_manage.official_student.add_expiry_day.publish_tips: 有效期，请课程发布后再增加。
+course.members_manage.quit_records: 退出记录
+course.members_manage.quit_records.content_title: 学员管理
+course.members_manage.quit_records.name: 学员名称
+course.members_manage.quit_records.reason: 退出原因
+course.members_manage.quit_records.status: 退款状态
+course.members_manage.quit_records.cash_count: 退款金额
+course.members_manage.quit_records.date: 退出日期
+course.members_manage.quit_records.tips: >
+  <li class="mt10 mb10">
+    仅显示通过现金购买加入的学员退款记录
+  </li>
+  <li>
+    班级教学计划退款情况请在班级管理中查看
+  </li>
+course.members_manage.quit_records.empty: 无学员记录
+course.members_manage.quit_records.join_time: 加入课程时间：
+course.members_manage.quit_records.success: 退款成功
+course.members_manage.quit_records.failed: 退款失败
+course.members_manage.quit_records.cancel: 退款取消
+
+course.testpaper_check: 试卷批阅
+course.testpaper_check.no_permission_tips: 当前用户不是本课程教师，没有批阅试卷的权限。
+course.testpaper_check.empty: 暂无数据
+course.testpaper_check.start_date: 开始日期
+course.testpaper_check.status.check: 已批
+course.testpaper_check.status.not_check: 未批
+course.testpaper_check.status.not_submit: 未交
+
+course.homework_check: 作业批阅
+course.homework_check.no_permission_tips: 当前用户不是本课程教师，没有批阅作业的权限。
+
+course.dashboard: 学习数据
+course.dashboard.content_title: 课程学习数据
+course.dashboard.course_dashboard: 数据概览
+course.dashboard.success_rate: 任务完成率
+course.dashboard.study_detail: 任务学习详情
+course.dashboard.study_detail.name: 任务名
+course.dashboard.study_detail.per_study_time: 平均学习时长(分)
+course.dashboard.study_detail.per_study_time_tips: 任务学习时长：从任务开始到任务完成的耗时，任务平均学习时长：每个学员的任务学习时长的平均数
+course.dashboard.study_detail.audio_time: 音视频时长(分)
+course.dashboard.study_detail.audio_time_tips: 音视频的实际时长，仅支持云视频和本地音视频
+course.dashboard.study_detail.per_audio_time: 音视频平均观看时长(分)
+course.dashboard.study_detail.per_audio_time_tips: 每个学员的实际观看时长的平均数
+course.dashboard.study_detail.per_score: 测试平均得分
+course.dashboard.study_detail.per_score_tips: 每个学员测试得分的平均数
+course.dashboard.study_detail.detail: 学员学习详情
+course.dashboard.study_detail.detail_btn: 查看
+course.dashboard.study_detail.tips: 注：网络视频的观看时长无法获取
+course.dashboard.study_detail.text: （图文）
+course.dashboard.study_detail.video: （视频）
+course.dashboard.study_detail.audio: （音频）
+course.dashboard.study_detail.testpaper: （试卷）
+course.dashboard.study_detail.ppt: （ppt）
+course.dashboard.study_detail.detail.username: 用户名
+course.dashboard.study_detail.detail.join_time: 加入任务时间
+course.dashboard.study_detail.detail.finish_time: 完成任务时间
+course.dashboard.study_detail.detail.task_learn_time: 任务学习时长（分）
+course.dashboard.study_detail.detail.audio_learn_time: 音视频学习时长（分）
+course.dashboard.study_detail.detail.score: 最近考试得分
+course.dashboard.stunents_numbers: 学员数
+course.dashboard.finished_numbers: 完成人数
+course.dashboard.finished_course_rate: 完课率
+course.dashboard.finished_course_rate_tips: 学完整个教学计划的人数 ÷ 该教学计划学员总数
+course.dashboard.notes_numbers: 笔记数
+course.dashboard.questions_numbers: 提问数
+course.dashboard.discussions_numbers: 话题数
+
+
+course.members_manage.add_btn: 添加学员
+course.members_manage.batch_import_btn: 批量导入
+course.members_manage.import_failed_tips: 课程未发布,不可导入学员
+course.order: 订单查询
+course.order.content_title: 课程订单查询
+course.order.create_time: 创建时间
+course.order.conditions: 筛选条件
+course.order.status: 订单状态
+course.order.status: 起始时间
+course.order.status: 结束时间
+
+course.replay_manage: 录播管理
+course.replay_manage.content_title: 录播管理
+course.replay_manage.empty: 暂无直播内容！
+course.replay_manage.tips: 提示：上传录像文件后无法再生成在线录像!
+course.replay_manage.unpublished: 未发布
+course.replay_manage.live_not_stop: 直播未结束
+course.replay_manage.ungenerated: 未录制回放
+course.replay_manage.generated: 已录制回放
+course.replay_manage.video_generated.file_exsist: 已上传录像
+course.replay_manage.video_generated.file_not_exsist: 回放视频文件已删除
+course.replay_manage.record: 录制
+course.replay_manage.record_again: 重新录制
+course.replay_manage.replay: 上传回放
+course.replay_manage.preview_btn: 预览
+course.replay_manage.edit_btn: 编辑
+
+course.teach_plan_manage: 教学计划管理
+
+course.cover: 课程封面
+course.cover_image: 封面图片
+course.cover_image.content_title: 封面图片
+course.cover_image.upload_tips: >
+  你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过<strong>2M</strong>。
+course.cover_image.upload_btn: 选择要上传的图片
 
 course.expiry_date: 学习有效期
 course.expiry_date.days_mode: >
@@ -542,6 +798,48 @@ course.course_files.select_all_btn: 全选
 course.course_files.record: 文件记录
 
 course.plan_task: 计划任务
+course.plan_task.deadline_learn_tips: >
+  在
+  <input class="form-control width-150" id="deadline" name="deadline" value="">
+  前，学员可进行学习。
+
+course.plan_task.expiry_days_learn_tips: >
+  从加入当天起，在
+  <input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays"
+  value="1">
+  天内可进行学习。
+course.plan_task.start_time: 开始日期
+course.plan_task.end_time: 结束日期
+course.plan_task.manage_btn: 管理
+course.plan_task.free: 自由式学习
+course.plan_task.locked: 解锁式学习
+course.plan_task.create: 创建教学计划
+course.plan_task.create.create_tips: 教学计划创建后“学习模式”将不能修改。
+course.plan_task.create.name: 名称
+course.plan_task.create.mode: 学习模式
+course.plan_task.create.mode.free: >
+  <li class='mb10'><b>自由式学习：</b>学员自由安排学习过程</li>
+course.plan_task.create.mode.limit: >
+  <li><b>解锁式学习：</b>学员根据既定顺序逐个解锁学习</li>
+course.plan_task.create.task_numbers: 任务数
+course.plan_task.create.student: 学员
+course.plan_task.create.price: 价格（元）
+course.plan_task.create.status: 状态
+course.plan_task.create.operation: 操作
+course.plan_task.edit.copy: 复制%title%为一个新的教学计划
+course.plan_task.expiry_date: 学习有效期
+course.plan_task.expiry_date.not_change_tips: 教学计划首次发布后“学习有效期”不能再修改。
+course.plan_task.expiry_date.anytime: >
+  <b>随到随学：</b>有效期从学员加入的当天开始算起，截至到期当天的晚上24点整
+course.plan_task.expiry_date.real_time: >
+  <b>固定周期：</b>有固定的学习开始日期和结束日期
+course.plan_task.expiry_date.overdue_tips: 过期后无法继续学习，系统会在到期前10天提醒学员。
+course.plan_task.expiry_date.forever_mode: 永久有效
+course.plan_task.expiry_date.anywhere_mode: 随到随学
+course.plan_task.expiry_date.date_mode: 固定周期
+course.plan_task.expiry_date.end_date_mode: 按截止日期
+course.plan_task.expiry_date.days_mode: 按有效天数
+
 course.plan_task.publish_btn: 发布计划
 course.plan_task.manage: 教训计划管理
 course.plan_task.content_title: 计划任务
@@ -565,6 +863,7 @@ course.plan_task.preview_btn: 预览
 course.plan_task.more_btn: 更多
 course.plan_task.lesson-marker_btn: 弹题管理
 course.plan_task.publish_btn: 发布
+course.plan_task.copy_btn: 复制为
 course.plan_task.unpublish_btn: 取消发布
 course.plan_task.delete_btn: 删除
 course.plan_task.preparation_tips: 学员可通过看视频、阅读资料等预习任务，导入学习。
@@ -787,22 +1086,6 @@ file_chooser.upload_file.upload_doc_tips: >
 file_chooser.upload_file.upload_ppt_tips: >
   支持ppt, pptx格式的PPT文件上传，且文件大小不能超过100 MB。<br/>PPT将上传到云服务器
 
-course.plan_setup: 计划设置
-course.replay_manage: 录播管理
-course.marketing_setup: 营销设置
-course.teacher_setup: 教师设置
-course.testpaper_check: 试卷批阅
-course.homework_check: 作业批阅
-course.dashboard: 学习数据
-course.order: 订单查询
-course.teach_plan_manage: 教学计划管理
-course.cover: 课程封面
-course.cover_image: 封面图片
-course.cover_image.content_title: 封面图片
-course.cover_image.upload_tips: >
-  你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过<strong>2M</strong>。
-course.cover_image.upload_btn: 选择要上传的图片
-
 # 答卷
 testpaper.answer.count_donw_timer: 倒计时
 testpaper.answer.answer_card: 答题卡
@@ -948,6 +1231,7 @@ form.field.privacy_public: 公开
 form.field.create: 添加
 form.field.amount: 数量
 form.field.cut: 扣除
+form.btn.create: 创建
 form.btn.select: 选择
 form.btn.modify: 修改
 form.btn.finish: 完成
@@ -986,6 +1270,8 @@ form.btn.unlock: 解除同步
 form.btn.next: 下一步
 form.btn.back: 上一步
 form.btn.add: 添加
+form.btn.export: 导出
+form.btn.create.submiting: 正在创建...
 form.btn.import.submiting: 正在导入，请稍等
 form.btn.search.submiting: 正在加载，请稍等
 form.btn.pay.submiting: 正在创建订单...
@@ -998,7 +1284,7 @@ form.btn.publish.submiting: 正在发布...
 form.btn.submit.submiting: 正在提交...
 form.btn.send.submiting: 正在发送...
 form.btn.modify.submiting: 正在修改...
-form.btn.create.submiting: 正在创建...
+form.btn.export.submiting: 正在导出...
 form.btn.export_result: 导出结果
 form.btn.hand_in.submiting: 正在交卷, 请稍等
 form.checkbox.public: 公开
@@ -1727,10 +2013,7 @@ my.teaching.course_set.courseSetCount: %courseSetCount%个教学计划
 my.teaching.course_set.live_label: 直播
 my.teaching.course_set.classrooms_not_found_label: 已移除
 my.teaching.course_set.manage_btn: 管理
-my.teaching.course_set.course_manage_btn: 计划管理
-my.teaching.course_set.file_manage_btn: 文件管理
-my.teaching.course_set.live_empty_hint: 你还没有在教的直播课程哦, 赶快去创建吧!
-my.teaching.course_set.empty_hint: 你还没有在教的课程哦, 赶快去创建吧!
+my.teaching.course_set.more_btn: 更多
 
 my.teaching.open_course.title: 名称
 my.teaching.open_course.hit_num: 浏览数
@@ -1747,6 +2030,218 @@ my.teaching.open_course.empty_hint: 你还没有在教的公开课哦, 赶快去
 my.teaching.page_title: 在教课程
 my.teaching.course_set.create: 创建课程
 my.teaching.course_set.content_title: 在教课程
+my.teaching.course_set.course_manage_btn: 计划管理
+my.teaching.course_set.file_manage_btn: 文件管理
+my.teaching.course_set.live_empty_hint: 你还没有在教的直播课程哦, 赶快去创建吧!
+my.teaching.course_set.empty_hint: 你还没有在教的课程哦, 赶快去创建吧!
+# 创建课程
+my.teaching.course_set.create_btn: 创建课程
+my.teaching.course_set.select_type: 选择类型
+my.teaching.course_set.select_type.course: 普通课程
+my.teaching.course_set.select_type.course.tips: 支持视频、图文、PPT等各种形式，支持作业、笔记等多个学习工具的课程
+my.teaching.course_set.select_type.live_course: 直播课程
+my.teaching.course_set.select_type.live_course_enabled: 云直播开启后可用
+my.teaching.course_set.select_type.live_course.tips: 以直播为教学形式的，支持多个学习工具的课程
+my.teaching.course_set.select_type.record_open_course: 录播公开课
+my.teaching.course_set.select_type.record_open_course.tips: 免费、无门槛观看的视频课程，主要用于营销推广
+my.teaching.course_set.select_type.live_open_course: 直播公开课
+my.teaching.course_set.select_type.live_open_course.tips: 免费、无门槛参与的直播课程，主要用于营销推广
+my.teaching.course_set.select_type.course_title: 课程标题
+my.teaching.course_set.select_type.how_do_create: 如何创建课程？
+
+# 录播公开课
+my.teaching.open_course.Basic_Info: 基本信息
+my.teaching.open_course.Basic_Info.title: 标题
+my.teaching.open_course.Basic_Info.subtitle: 副标题
+my.teaching.open_course.Basic_Info.tags: 标签
+my.teaching.open_course.Basic_Info.tags.explain: 将会应用于按标签搜索课程、相关课程的提取等
+my.teaching.open_course.Basic_Info.tags.help_block: 将会应用于按标签搜索课程、相关课程的提取等
+my.teaching.open_course.Basic_Info.category: 分类
+my.teaching.open_course.Basic_Info.about: 课程简介
+my.teaching.open_course.Basic_Info.about.help_block: 为正常使用IFrame，请在【管理后台】-【系统】-【安全设置】-【IFrame白名单】中进行设置
+my.teaching.open_course.course_picture.title: 课程图片
+my.teaching.open_course.course_picture.title.help_block: >
+  你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过
+my.teaching.open_course.lesson.add_btn: 课时
+my.teaching.open_course.lesson.tips: 公开课当前仅支持添加一个课时！
+my.teaching.open_course.lesson.manage: 课时管理
+my.teaching.open_course.lesson.lesson_file_deleted: 课时文件已删除
+my.teaching.open_course.lesson.invalid_lesson: 无效课时
+my.teaching.open_course.lesson.video: 视频
+my.teaching.open_course.lesson.audio: 音频
+my.teaching.open_course.lesson.file: 文件
+my.teaching.open_course.lesson.document: 文档
+my.teaching.open_course.lesson.mediaStatus.waiting: (正在等待%mediaTypeName%格式转换)
+my.teaching.open_course.lesson.mediaStatus.doing: (正在转换%mediaTypeName%格式)
+my.teaching.open_course.lesson.mediaStatus.error: (%mediaTypeName%格式转换失败)
+my.teaching.open_course.lesson.status.unpublished: 未发布
+my.teaching.open_course.lesson.material: 资料
+my.teaching.open_course.lesson.add_material_btn: 添加资料
+my.teaching.open_course.lesson.edit_btn: 编辑
+my.teaching.open_course.lesson.more_btn: 更多
+my.teaching.open_course.lesson.modal.edit: 编辑课时
+my.teaching.open_course.lesson.modal.add: 添加课时
+my.teaching.open_course.lesson.modal.lesson_type: 类型
+my.teaching.open_course.lesson.modal.lesson_title: 标题
+my.teaching.open_course.lesson.modal.lesson_content: 内容
+my.teaching.open_course.lesson.modal.lesson_content.tips: 您有一段自动保存内容，继续编辑请点击
+my.teaching.open_course.lesson.modal.media_dialog: 视频字幕
+my.teaching.open_course.lesson.modal.media_dialog.help_block: >
+  字幕文件暂时仅支持UTF-8编码的srt文件，点击<a href="http://www.qiqiuyu.com/article/883" target="__blank">查看</a>编码转换说明。
+my.teaching.open_course.lesson.modal.upload.tips: 请等待视频上传完之后再添加字幕
+my.teaching.open_course.lesson.modal.video_length: 视频时长
+my.teaching.open_course.lesson.modal.audio_length: 音频时长
+my.teaching.open_course.lesson.modal.lesson_length.help_block: 时长必须为非负整数
+my.teaching.open_course.lesson.video_chooser.edit_btn: 编辑
+my.teaching.open_course.lesson.video_chooser.upload_btn: 上传视频
+my.teaching.open_course.lesson.video_chooser.upload_form_material_btn: 从资料库中选择
+my.teaching.open_course.lesson.video_chooser.upload_form_course_file_btn: 从课程文件中选择
+my.teaching.open_course.lesson.video_chooser.import_online_video_btn: 导入网络视频
+my.teaching.open_course.lesson.video_chooser.tips: >
+  正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。<br/>转换完成后将以站内消息通知您。
+my.teaching.open_course.lesson.video_chooser.upload_mode.cloud.tips: >
+  <li>支持<strong>mp4, avi, flv, wmv, mov, m4v</strong>格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。</li>
+  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+  <li>视频将上传到 <strong>云视频服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>
+my.teaching.open_course.lesson.video_chooser.upload_mode.no_cloud.tips: >
+  <li>
+    支持<strong>mp4</strong>
+    格式的视频文件上传，文件大小不能超过
+    <strong>%upload_max_filesize%</strong>
+    。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。
+  </li>
+  <li>
+    视频将上传到
+    <strong>网站服务器</strong>
+    。如需使用%Edusoho%云视频,点击
+    <a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>
+    了解详情,%Edusoho%云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。
+  </li>
+my.teaching.open_course.lesson.video_chooser.upload_validate_empty: 暂无视频文件，请先上传。
+my.teaching.open_course.lesson.video_chooser.placeholer: 支持优酷、土豆、腾讯、网易公开课的视频页面地址导入
+my.teaching.open_course.lesson.video_chooser.origin_url: 原地址：
+my.teaching.open_course.lesson.video_chooser.impor_loading: 正在导入，请稍等
+my.teaching.open_course.lesson.video_chooser.import_btn: 导入
+my.teaching.open_course.lesson.video_chooser.import.tips: 腾讯和网易的视频不支持手机端播放
+my.teaching.open_course.lesson.audio_chooser.upload_audio_btn: 上传音频
+my.teaching.open_course.lesson.audio_chooser.tips: >
+  支持<strong>mp3</strong>格式的音频文件上传，且文件大小不能超过
+my.teaching.open_course.lesson.audio_chooser.upload_mode.cloud.tips: >
+  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+  <li>音频将上传到<strong>云服务器</strong></li>
+my.teaching.open_course.lesson.audio_chooser.upload_mode.not_cloud.tips: >
+  <li>
+    音频将上传到<strong>网站服务器</strong>
+    ，如需使用%EduSoho%云视频,
+    <a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。
+  </li>
+my.teaching.open_course.lesson.audio_chooser.audio.empty: 暂无音频文件，请先上传。
+my.teaching.open_course.lesson.ppt_chooser.upload_btn: 上传PPT
+my.teaching.open_course.lesson.ppt_chooser.tips: >
+  <li>
+    支持<strong>ppt, pptx</strong>格式的PPT文件上传，且文件大小不能超过<strong>100 MB</strong>。
+  </li>
+  <li>
+    PPT将上传到<strong>云服务器</strong>
+  </li>
+my.teaching.open_course.lesson.ppt_chooser.audio.empty: 暂无PPT文件，请先上传。
+my.teaching.open_course.lesson.document_chooser.upload_btn: 上传文档
+my.teaching.open_course.lesson.document_chooser.tips: >
+  <li>
+    支持<strong>pdf,doc,docx,xls,xlsx</strong>格式的文档上传，且文件大小不能超过<strong>100 MB</strong>。
+  </li>
+  <li>
+    文档将上传到<strong>云服务器</strong>
+  </li>
+my.teaching.open_course.lesson.document_chooser.document.empty: 暂无文档，请先上传。
+my.teaching.open_course.lesson.flash_chooser.upload_btn: 上传Flash
+my.teaching.open_course.lesson.flash_chooser.tips: >
+  <li>
+    支持<strong>swf</strong>格式的文件上传，且文件大小不能超过<strong>100 MB</strong>。
+  </li>
+  <li>
+    Flash将上传到<strong>云服务器</strong>
+  </li>
+my.teaching.open_course.lesson.flash_chooser.flash.empty: 暂无Flash，请先上传。
+my.teaching.open_course.files: 课程文件
+my.teaching.open_course.files.add_btn: 添加课程文件
+my.teaching.open_course.files.file_name: 文件名
+my.teaching.open_course.files.type: 类型
+my.teaching.open_course.files.size: 大小
+my.teaching.open_course.files.use_status: 使用
+my.teaching.open_course.files.use_status.unused: 使用中
+my.teaching.open_course.files.use_status.used: 未使用
+my.teaching.open_course.files.latest_update: 最后更新
+my.teaching.open_course.files.operation: 操作
+my.teaching.open_course.files.select_all: 全选
+my.teaching.open_course.files.remove_btn: 移除
+my.teaching.open_course.files.file_record: 文件记录
+my.teaching.open_course.files.cloud_file: 云文件
+my.teaching.open_course.files.dev_mode_btn: 重新转换(调试模式)
+my.teaching.open_course.files.media_subtitle_btn: 字幕管理
+my.teaching.open_course.recommend_setting.title: 推荐设置
+my.teaching.open_course.recommend_setting.add_course_btn: 添加课程
+my.teaching.open_course.recommend_setting.add_course_btn: 添加课程
+my.teaching.open_course.recommend_setting.serializeMode.live: 更新中
+my.teaching.open_course.recommend_setting.serializeMode.finished: 已完结
+my.teaching.open_course.recommend_setting.onlive: 正在直播中
+my.teaching.open_course.recommend_setting.live: 直播
+my.teaching.open_course.recommend_setting.task_number: 第%task_number%任务
+my.teaching.open_course.recommend_setting.save_btn: 保存修改
+my.teaching.open_course.recommend_setting.course_empty: 赶紧添加课程吧！
+my.teaching.open_course.teachers_setting.title: 教师设置
+my.teaching.open_course.teachers_setting.is_added: 已添加教师
+my.teaching.open_course.teachers_setting.allow_add_ADMIN_TEACHER: 只能添加有教师权限的用户
+my.teaching.open_course.student_setting.manage_btn: 管理
+my.teaching.open_course.student_setting.login: 已登录
+my.teaching.open_course.student_setting.unLogin: 未登录
+my.teaching.open_course.student_setting.all_student: 全部学员
+my.teaching.open_course.student_setting.setting_remind_student: 设置提醒的学员
+my.teaching.open_course.student_setting.recent_login: 最近进入
+my.teaching.open_course.student_setting.phone_number: 手机号
+my.teaching.open_course.student_setting.whether_remind: 是否提醒
+my.teaching.open_course.student_setting.whether_remind.yes: 已设置提醒
+my.teaching.open_course.student_setting.whether_remind.no: 未设置
+my.teaching.open_course.student_setting.enter_user_name: 请输入用户名
+my.teaching.open_course.student_setting.operation: 操作
+my.teaching.open_course.student_setting.join_time: 加入时间：
+my.teaching.open_course.student_setting.send_message_btn: 发私信
+my.teaching.open_course.student_setting.view_detail_btn: 查看资料
+my.teaching.open_course.liveTimeSet.title: 直播时间设置
+my.teaching.open_course.liveTimeSet.start_time: 直播开始时间
+my.teaching.open_course.liveTimeSet.start_time.help_block: 教师可在直播开始前1小时内进入直播教室，以准备相关教学资料。
+my.teaching.open_course.liveTimeSet.live_length: 直播时长
+my.teaching.open_course.liveTimeSet.live_length.placeholer: 时长
+my.teaching.open_course.liveTimeSet.live_length.minute: 分钟
+my.teaching.open_course.liveTimeSet.course_setting: 课程设置
+my.teaching.open_course.liveTimeSet.recommend_setting: 推荐设置
+my.teaching.open_course.course_manage: 课程管理
+my.teaching.open_course.course_info: 课程信息
+my.teaching.open_course.live_manage: 录播管理
+
+# 搜索列表
+explore.course.list: 课程列表
+explore.course.view_name_btn: 查看%name%
+explore.view_open_course_btn: 查看公开课
+explore.course.empty: 该分类下无课程
+explore.course.search.placeholer: 请输入关键字搜索
+explore.course.category.all: 所有分类：
+explore.view_course_btn: 查看课程
+explore.view_classroom_btn: 查看班级
+explore.classroom.list: %name%列表
+explore.classroom.vip_name: 会员%name%
+explore.classroom.free_name: 免费%name%
+explore.classroom.empty: 目前暂时无%name%
+explore.classroom.service_empty: 暂未提供
+explore.open_course.title: 公开课
+explore.open_course.list: 公开课列表
+explore.open_course.live: 直播
+explore.open_course.empty: 暂无公开课
+
+#课程存档
+archive.course.title: 课程存档
+archive.course.tags: 标签：
+archive.course.empty: 目前暂时无课程
 
 # 学员
 role.student: 学员
@@ -3073,76 +3568,6 @@ admin.course_review.completed_progress_th: 完成进度
 admin.course_review.classroom_title.placeholer: %classroomName%名
 admin.course_review.classroom_deleted: %classroomName%已删除
 
-# 移动端
-mobile.page_title: 移动学习
-mobile.app_name: 阔知学堂
-mobile.app_tips: 将学校装进口袋，移动学习，随时随地。
-mobile.app_download_btn: 下载APP
-mobile.app_download_tips: >
-  <p class="main-slogan">更好的移动端学习</p>
-  <p class="sub-slogan">好好学习，天天向上</p>
-mobile.app_login_btn: 登录网校
-mobile.app_login_tips: 扫一扫登录客户端
-mobile.step_one: >
-  <span class="member">1</span>第一步:
-mobile.step_one_tips: 扫描二维码，下载手机APP。
-mobile.Android_client: Android 客户端
-mobile.iPhone_client: iPhome客户端
-mobile.step_two: >
-  <span class="member">2</span>第二步: 打开阔知学堂APP，扫描网校二维码。
-
-# 客服
-customer_service.open_content_title: 查看在线客服
-customer_service.close_content_title: 关闭在线客服
-customer_service.open_btn: 展开
-customer_service.close_btn: 收缩
-customer_service.QQ: 客服QQ
-customer_service.mobile: 电话
-customer_service.customer_mobile: 客服电话
-customer_service.email: 邮件
-customer_service.customer_email: 反馈邮件
-
-# 我的教学
-my.teaching.menu_heading: 我的教学
-my.teaching.course_set_menu: 在教课程
-my.teaching.classroom_menu: 在教%classroom%
-my.teaching.question_menu: %student%问题
-my.teaching.discussion_menu: %student%话题
-my.teaching.testpaper_check_menu: 试卷批阅
-my.teaching.homework_check_menu: 作业批阅
-my.teaching.material_lib_menu: 教学资料库
-my.teaching.course_set.normal: 普通课程
-my.teaching.course_set.live: 直播课程
-my.teaching.course_set.classroom: %classroom%课程
-my.teaching.open_course.normal: 录播公开课
-my.teaching.open_course.live: 直播公开课
-my.teaching.threads_discussion: 课程%student%话题
-my.teaching.classroom.threads_discussion: %classroom%%student%话题
-my.teaching.classroom: 所教%classroom%
-my.teaching.classroom.manage_btn: 管理%classroom%
-my.teaching.classroom.today_data_title: 今日新增
-my.teaching.classroom.today_data: >
-  学员%allCount%  &nbsp;&nbsp;
-  话题%threadCount%  &nbsp;&nbsp;
-  任务完成学习%todayFinishedTaskNum%
-my.teaching.page_title: 在教课程
-my.teaching.course_set.create: 创建课程
-my.teaching.course_set.content_title: 在教课程
-my.teaching.course_set.title: 名称
-my.teaching.course_set.classroom: 所属%classroom%
-my.teaching.course_set.student_count: %student%数
-my.teaching.course_set.price: 价格(元)
-my.teaching.course_set.status: 状态
-my.teaching.course_set.actions: 操作
-my.teaching.course_set.courseSetCount: %courseSetCount%个教学计划
-my.teaching.course_set.live_label: 直播
-my.teaching.course_set.classrooms_not_found_label: 已移除
-my.teaching.course_set.manage_btn: 管理
-my.teaching.course_set.course_manage_btn: 计划管理
-my.teaching.course_set.file_manage_btn: 文件管理
-my.teaching.course_set.live_empty_hint: 你还没有在教的直播课程哦, 赶快去创建吧!
-my.teaching.course_set.empty_hint: 你还没有在教的课程哦, 赶快去创建吧!
-
 # 用户设置
 admin.user_auth.sign_up_settings: 注册设置
 admin.user_auth.User_sign_up_type: 用户注册模式
@@ -3775,208 +4200,3 @@ admin.order.logs.info: 日志信息
 admin.order.logs.operator: 操作人
 admin.order.logs.created_time: 创建时间
 admin.order.logs.empty_hint: 暂无交易日志!
-
-# 创建课程
-my.teaching.course_set.create_btn: 创建课程
-my.teaching.course_set.select_type: 选择类型
-my.teaching.course_set.select_type.course: 普通课程
-my.teaching.course_set.select_type.course.tips: 支持视频、图文、PPT等各种形式，支持作业、笔记等多个学习工具的课程
-my.teaching.course_set.select_type.live_course: 直播课程
-my.teaching.course_set.select_type.live_course_enabled: 云直播开启后可用
-my.teaching.course_set.select_type.live_course.tips: 以直播为教学形式的，支持多个学习工具的课程
-my.teaching.course_set.select_type.record_open_course: 录播公开课
-my.teaching.course_set.select_type.record_open_course.tips: 免费、无门槛观看的视频课程，主要用于营销推广
-my.teaching.course_set.select_type.live_open_course: 直播公开课
-my.teaching.course_set.select_type.live_open_course.tips: 免费、无门槛参与的直播课程，主要用于营销推广
-my.teaching.course_set.select_type.course_title: 课程标题
-my.teaching.course_set.select_type.how_do_create: 如何创建课程？
-
-# 录播公开课
-my.teaching.open_course.Basic_Info: 基本信息
-my.teaching.open_course.Basic_Info.title: 标题
-my.teaching.open_course.Basic_Info.subtitle: 副标题
-my.teaching.open_course.Basic_Info.tags: 标签
-my.teaching.open_course.Basic_Info.tags.explain: 将会应用于按标签搜索课程、相关课程的提取等
-my.teaching.open_course.Basic_Info.tags.help_block: 将会应用于按标签搜索课程、相关课程的提取等
-my.teaching.open_course.Basic_Info.category: 分类
-my.teaching.open_course.Basic_Info.about: 课程简介
-my.teaching.open_course.Basic_Info.about.help_block: 为正常使用IFrame，请在【管理后台】-【系统】-【安全设置】-【IFrame白名单】中进行设置
-my.teaching.open_course.course_picture.title: 课程图片
-my.teaching.open_course.course_picture.title.help_block: >
-  你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过
-my.teaching.open_course.lesson.add_btn: 课时
-my.teaching.open_course.lesson.tips: 公开课当前仅支持添加一个课时！
-my.teaching.open_course.lesson.manage: 课时管理
-my.teaching.open_course.lesson.lesson_file_deleted: 课时文件已删除
-my.teaching.open_course.lesson.invalid_lesson: 无效课时
-my.teaching.open_course.lesson.video: 视频
-my.teaching.open_course.lesson.audio: 音频
-my.teaching.open_course.lesson.file: 文件
-my.teaching.open_course.lesson.document: 文档
-my.teaching.open_course.lesson.mediaStatus.waiting: (正在等待%mediaTypeName%格式转换)
-my.teaching.open_course.lesson.mediaStatus.doing: (正在转换%mediaTypeName%格式)
-my.teaching.open_course.lesson.mediaStatus.error: (%mediaTypeName%格式转换失败)
-my.teaching.open_course.lesson.status.unpublished: 未发布
-my.teaching.open_course.lesson.material: 资料
-my.teaching.open_course.lesson.add_material_btn: 添加资料
-my.teaching.open_course.lesson.edit_btn: 编辑
-my.teaching.open_course.lesson.more_btn: 更多
-my.teaching.open_course.lesson.modal.edit: 编辑课时
-my.teaching.open_course.lesson.modal.add: 添加课时
-my.teaching.open_course.lesson.modal.lesson_type: 类型
-my.teaching.open_course.lesson.modal.lesson_title: 标题
-my.teaching.open_course.lesson.modal.lesson_content: 内容
-my.teaching.open_course.lesson.modal.lesson_content.tips: 您有一段自动保存内容，继续编辑请点击
-my.teaching.open_course.lesson.modal.media_dialog: 视频字幕
-my.teaching.open_course.lesson.modal.media_dialog.help_block: >
-  字幕文件暂时仅支持UTF-8编码的srt文件，点击<a href="http://www.qiqiuyu.com/article/883" target="__blank">查看</a>编码转换说明。
-my.teaching.open_course.lesson.modal.upload.tips: 请等待视频上传完之后再添加字幕
-my.teaching.open_course.lesson.modal.video_length: 视频时长
-my.teaching.open_course.lesson.modal.audio_length: 音频时长
-my.teaching.open_course.lesson.modal.lesson_length.help_block: 时长必须为非负整数
-my.teaching.open_course.lesson.video_chooser.edit_btn: 编辑
-my.teaching.open_course.lesson.video_chooser.upload_btn: 上传视频
-my.teaching.open_course.lesson.video_chooser.upload_form_material_btn: 从资料库中选择
-my.teaching.open_course.lesson.video_chooser.upload_form_course_file_btn: 从课程文件中选择
-my.teaching.open_course.lesson.video_chooser.import_online_video_btn: 导入网络视频
-my.teaching.open_course.lesson.video_chooser.tips: >
-  正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。<br/>转换完成后将以站内消息通知您。
-my.teaching.open_course.lesson.video_chooser.upload_mode.cloud.tips: >
-  <li>支持<strong>mp4, avi, flv, wmv, mov, m4v</strong>格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。</li>
-  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
-  <li>视频将上传到 <strong>云视频服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>
-my.teaching.open_course.lesson.video_chooser.upload_mode.no_cloud.tips: >
-  <li>
-    支持<strong>mp4</strong>
-    格式的视频文件上传，文件大小不能超过
-    <strong>%upload_max_filesize%</strong>
-    。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。
-  </li>
-  <li>
-    视频将上传到
-    <strong>网站服务器</strong>
-    。如需使用%Edusoho%云视频,点击
-    <a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>
-    了解详情,%Edusoho%云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。
-  </li> 
-my.teaching.open_course.lesson.video_chooser.upload_validate_empty: 暂无视频文件，请先上传。
-my.teaching.open_course.lesson.video_chooser.placeholer: 支持优酷、土豆、腾讯、网易公开课的视频页面地址导入
-my.teaching.open_course.lesson.video_chooser.origin_url: 原地址：
-my.teaching.open_course.lesson.video_chooser.impor_loading: 正在导入，请稍等
-my.teaching.open_course.lesson.video_chooser.import_btn: 导入
-my.teaching.open_course.lesson.video_chooser.import.tips: 腾讯和网易的视频不支持手机端播放
-my.teaching.open_course.lesson.audio_chooser.upload_audio_btn: 上传音频
-my.teaching.open_course.lesson.audio_chooser.tips: >
-  支持<strong>mp3</strong>格式的音频文件上传，且文件大小不能超过
-my.teaching.open_course.lesson.audio_chooser.upload_mode.cloud.tips: >
-  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
-  <li>音频将上传到<strong>云服务器</strong></li>
-my.teaching.open_course.lesson.audio_chooser.upload_mode.not_cloud.tips: >
-  <li>
-    音频将上传到<strong>网站服务器</strong>
-    ，如需使用%EduSoho%云视频,
-    <a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。
-  </li>
-my.teaching.open_course.lesson.audio_chooser.audio.empty: 暂无音频文件，请先上传。
-my.teaching.open_course.lesson.ppt_chooser.upload_btn: 上传PPT
-my.teaching.open_course.lesson.ppt_chooser.tips: >
-  <li>
-    支持<strong>ppt, pptx</strong>格式的PPT文件上传，且文件大小不能超过<strong>100 MB</strong>。
-  </li>
-  <li>
-    PPT将上传到<strong>云服务器</strong>
-  </li>
-my.teaching.open_course.lesson.ppt_chooser.audio.empty: 暂无PPT文件，请先上传。
-my.teaching.open_course.lesson.document_chooser.upload_btn: 上传文档
-my.teaching.open_course.lesson.document_chooser.tips: >
-  <li>
-    支持<strong>pdf,doc,docx,xls,xlsx</strong>格式的文档上传，且文件大小不能超过<strong>100 MB</strong>。
-  </li>
-  <li>
-    文档将上传到<strong>云服务器</strong>
-  </li>
-my.teaching.open_course.lesson.document_chooser.document.empty: 暂无文档，请先上传。
-my.teaching.open_course.lesson.flash_chooser.upload_btn: 上传Flash
-my.teaching.open_course.lesson.flash_chooser.tips: >
-  <li>
-    支持<strong>swf</strong>格式的文件上传，且文件大小不能超过<strong>100 MB</strong>。
-  </li>
-  <li>
-    Flash将上传到<strong>云服务器</strong>
-  </li>
-my.teaching.open_course.lesson.flash_chooser.flash.empty: 暂无Flash，请先上传。
-my.teaching.open_course.files: 课程文件
-my.teaching.open_course.files.add_btn: 添加课程文件
-my.teaching.open_course.files.file_name: 文件名
-my.teaching.open_course.files.type: 类型
-my.teaching.open_course.files.size: 大小
-my.teaching.open_course.files.use_status: 使用
-my.teaching.open_course.files.use_status.unused: 使用中
-my.teaching.open_course.files.use_status.used: 未使用
-my.teaching.open_course.files.latest_update: 最后更新
-my.teaching.open_course.files.operation: 操作
-my.teaching.open_course.files.select_all: 全选
-my.teaching.open_course.files.remove_btn: 移除
-my.teaching.open_course.files.file_record: 文件记录
-my.teaching.open_course.files.cloud_file: 云文件
-my.teaching.open_course.files.dev_mode_btn: 重新转换(调试模式)
-my.teaching.open_course.files.media_subtitle_btn: 字幕管理
-my.teaching.open_course.recommend_setting.title: 推荐设置
-my.teaching.open_course.recommend_setting.add_course_btn: 添加课程
-my.teaching.open_course.recommend_setting.add_course_btn: 添加课程
-my.teaching.open_course.recommend_setting.serializeMode.live: 更新中
-my.teaching.open_course.recommend_setting.serializeMode.finished: 已完结
-my.teaching.open_course.recommend_setting.onlive: 正在直播中
-my.teaching.open_course.recommend_setting.live: 直播
-my.teaching.open_course.recommend_setting.task_number: 第%task_number%任务
-my.teaching.open_course.recommend_setting.save_btn: 保存修改
-my.teaching.open_course.recommend_setting.course_empty: 赶紧添加课程吧！
-my.teaching.open_course.teachers_setting.title: 教师设置
-my.teaching.open_course.teachers_setting.is_added: 已添加教师
-my.teaching.open_course.teachers_setting.allow_add_ADMIN_TEACHER: 只能添加有教师权限的用户
-my.teaching.open_course.student_setting.manage_btn: 管理
-my.teaching.open_course.student_setting.login: 已登录
-my.teaching.open_course.student_setting.unLogin: 未登录
-my.teaching.open_course.student_setting.all_student: 全部学员
-my.teaching.open_course.student_setting.setting_remind_student: 设置提醒的学员
-my.teaching.open_course.student_setting.recent_login: 最近进入
-my.teaching.open_course.student_setting.phone_number: 手机号
-my.teaching.open_course.student_setting.whether_remind: 是否提醒
-my.teaching.open_course.student_setting.whether_remind.yes: 已设置提醒
-my.teaching.open_course.student_setting.whether_remind.no: 未设置
-my.teaching.open_course.student_setting.enter_user_name: 请输入用户名
-my.teaching.open_course.student_setting.operation: 操作
-my.teaching.open_course.student_setting.join_time: 加入时间：
-my.teaching.open_course.student_setting.send_message_btn: 发私信
-my.teaching.open_course.student_setting.view_detail_btn: 查看资料
-my.teaching.open_course.liveTimeSet.title: 直播时间设置
-my.teaching.open_course.liveTimeSet.start_time: 直播开始时间
-my.teaching.open_course.liveTimeSet.start_time.help_block: 教师可在直播开始前1小时内进入直播教室，以准备相关教学资料。
-my.teaching.open_course.liveTimeSet.live_length: 直播时长
-my.teaching.open_course.liveTimeSet.live_length.placeholer: 时长
-my.teaching.open_course.liveTimeSet.live_length.minute: 分钟
-my.teaching.open_course.liveTimeSet.course_setting: 课程设置
-my.teaching.open_course.liveTimeSet.recommend_setting: 推荐设置
-my.teaching.open_course.course_manage: 课程管理
-my.teaching.open_course.course_info: 课程信息
-my.teaching.open_course.live_manage: 录播管理
-explore.course.list: 课程列表
-explore.course.view_name_btn: 查看%name%
-explore.view_open_course_btn: 查看公开课
-explore.course.empty: 该分类下无课程
-explore.course.search.placeholer: 请输入关键字搜索
-explore.course.category.all: 所有分类：
-explore.view_course_btn: 查看课程
-explore.view_classroom_btn: 查看班级
-explore.classroom.list: %name%列表
-explore.classroom.vip_name: 会员%name%
-explore.classroom.free_name: 免费%name%
-explore.classroom.empty: 目前暂时无%name%
-explore.classroom.service_empty: 暂未提供
-explore.open_course.title: 公开课
-explore.open_course.list: 公开课列表
-explore.open_course.live: 直播
-explore.open_course.empty: 暂无公开课
-archive.course.title: 课程存档
-archive.course.tags: 标签：
-archive.course.empty: 目前暂时无课程
