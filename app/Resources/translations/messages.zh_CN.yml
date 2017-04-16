@@ -3568,6 +3568,450 @@ admin.course_review.completed_progress_th: 完成进度
 admin.course_review.classroom_title.placeholer: %classroomName%名
 admin.course_review.classroom_deleted: %classroomName%已删除
 
+# 教育云
+admin.edu_cloud.overview.locked_tips: 您的教育云服务已被锁定，请联系客服人员
+admin.edu_cloud.overview.disabled_tips: 您的教育云服务已被禁用
+admin.edu_cloud.overview.disabled_contact_tips: 若有疑问，请联系客服人员：4008041114
+admin.edu_cloud.overview.balance: 余额
+admin.edu_cloud.overview.recharge: 充值
+admin.edu_cloud.overview.cost_center: 费用中心
+admin.edu_cloud.overview.cash_coupon: 代金券
+admin.edu_cloud.overview.cash_coupon_manage: 代金券管理
+admin.edu_cloud.overview.open_service: 已开通服务
+admin.edu_cloud.overview.cloud_video: 云视频
+admin.edu_cloud.overview.cloud_search: 云搜索
+admin.edu_cloud.overview.cloud_live: 云直播
+admin.edu_cloud.overview.cloud_sms: 云短信
+admin.edu_cloud.overview.cloud_eamil: 云邮件
+admin.edu_cloud.overview.cloud_Q&A: 云问答
+admin.edu_cloud.overview.need_open_and_charge_tips: 需要开通/购买的服务
+admin.edu_cloud.overview.product_update_log: 产品更新日志
+admin.edu_cloud.overview.immediate_access: 立即接入
+admin.edu_cloud.overview.create_online_video_tips: >
+  让您<span class="text-primary">轻松</span>创建在线视频课程
+admin.edu_cloud.overview.experience_tips: >
+  安全<span class="phs">•</span>高性价比<span class="phs">•</span>优质视听体验
+admin.edu_cloud.overview.further_understand_cloud_video: 进一步了解 云视频
+admin.edu_cloud.overview.live_course_tips: >
+  让直播课堂更<span class="text-primary">精彩
+admin.edu_cloud.overview.live_open_course_tips: >
+  直播公开课<span class="phs">•</span>小班互动课<span class="phs">•</span>一对一辅导课
+admin.edu_cloud.overview.further_understand_cloud_live: 进一步了解 云直播
+admin.edu_cloud.overview.teach_info_fast_arrival_one_tips: >
+  让你的教学资讯<span class="text-primary">快速</span>送达
+admin.edu_cloud.overview.teach_info_fast_arrival_two_tips: >
+  教学资讯<span class="phs">•</span>极速送达<span class="phs">•</span>尽在掌握
+admin.edu_cloud.overview.further_understand_cloud_sms: 进一步了解 云短信
+admin.edu_cloud.overview.search_teach_resources_tips: >
+  让您<span class="text-primary">一处</span>搜齐教学资源
+admin.edu_cloud.overview.search_more_tips: >
+  搜课程<span class="phs">•</span>搜老师<span class="phs">•</span>搜话题<span class="phs">•</span>搜资讯
+admin.edu_cloud.overview.further_understand_cloud_search: 进一步了解 云搜索
+
+# 云视频
+admin.edu_cloud.edu_video.locked_tips: 您的教育云服务已被锁定，请联系客服人员：4008041114。
+admin.edu_cloud.edu_video.stoped_tips: 您的云视频服务已被暂停，不能使用，请联系客服人员：4008041114。
+admin.edu_cloud.edu_video.storage_space_trend: >
+  存储空间使用趋势<span class="text-muted">（最近7个月）
+admin.edu_cloud.edu_video.more: 更多
+admin.edu_cloud.edu_video.flow_use_trend: >
+  流量使用趋势<span class="text-muted">（最近7个月）
+admin.edu_cloud.edu_video.switch: 云视频开关
+admin.edu_cloud.edu_video.open: 启用云视频
+admin.edu_cloud.edu_video.open_btn: 已启用
+admin.edu_cloud.edu_video.close_btn: 关闭
+admin.edu_cloud.edu_video.switch_tips: >
+  云视频为您提供安全、高性价比、以及优质的视听体验的视频服务，让您轻松创建在线视频课程。点击<a href="%cloudShow%" target="_blank">这里</a>了解详情
+admin.edu_cloud.edu_video.base_setting: 基本设置
+admin.edu_cloud.edu_video.support_mobile: 手机浏览器MP4视频
+admin.edu_cloud.edu_video.open_radio: 开启
+admin.edu_cloud.edu_video.close_radio: 关闭
+admin.edu_cloud.edu_video.support_mobile_tips: >
+  MP4文件较适合在不同手机机型下使用不同手机浏览器进行视频播放；<br/>开启后，新上传视频文件会生成一个MP4格式视频，并且在手机浏览器下默认使用MP4播放；<br/><span style="color: red">注：MP4视频防盗性较差，且已生成MP4的文件关闭后也会存在，请慎重考虑。</span>
+admin.edu_cloud.edu_video.transcode_quality: 视频转码画质
+admin.edu_cloud.edu_video.transcode_quality_low: >
+  流畅 %<span class="text-muted">%(适合PPT讲解)%</span>%
+admin.edu_cloud.edu_video.transcode_quality_normal: >
+  标准 %<span class="text-muted">%(适合屏幕录制、摄像头拍摄)%</span>%
+admin.edu_cloud.edu_video.transcode_quality_high: >
+  精细 %<span class="text-muted">%(适合动态电影)%</span>%
+admin.edu_cloud.edu_video.audio_transcode_quality: 视频转码音质
+admin.edu_cloud.edu_video.low: 流畅
+admin.edu_cloud.edu_video.normal: 标准
+admin.edu_cloud.edu_video.high: 高品质
+admin.edu_cloud.edu_video.play_speed: 倍速播放
+admin.edu_cloud.edu_video.play_speed_tips: 开启后，云视频任务支持倍速播放。注意：仅支持高版本Chrome、火狐以及QQ浏览器（极速模式）。
+admin.edu_cloud.edu_video.auto_play: 云视频自动播放
+admin.edu_cloud.edu_video.video_header: 云视频片头
+admin.edu_cloud.edu_video.video_header_edit_btn: 编辑
+admin.edu_cloud.edu_video.video_header_tips: >
+  正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。<br/>转换完成后将以站内消息通知您。
+admin.edu_cloud.edu_video.upload_video_tips: >
+  <li>支持<strong>mp4, avi, flv, f4v, wmv, mov, rmvb, mkv, m4v, mpg</strong>格式的视频文件上传，文件大小不能超过<strong>10 MB</strong>。</li>
+  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+  <li>视频将上传到<strong>云视频服务器</strong>，上传后会对视频进行格式转换，转换过程需要一定的时间。</li>
+admin.edu_cloud.edu_video.security_setting: 安全设置
+admin.edu_cloud.edu_video.water_mark: 视频水印
+admin.edu_cloud.edu_video.play_water_mark_tips: >
+  播放时水印将会覆盖在视频上，可随时更换；已经通过系统使用了内嵌水印的视频，将不会显示播放器水印。
+admin.edu_cloud.edu_video.open_play_water_mark: 开启播放器水印
+admin.edu_cloud.edu_video.open_embed_watermark: 开启内嵌水印
+admin.edu_cloud.edu_video.open_embed_watermark_tips: >
+  能够更好的保护视频版权；上传时将水印嵌入视频编码中，不可删改；未嵌入水印的视频在播放时将会显示播放器水印。
+admin.edu_cloud.edu_video.play_water_mark_picture: 播放器水印图片：
+admin.edu_cloud.edu_video.play_water_mark_picture_tips: 支持png、gif、jpg格式图片，建议使用半透明的png图片，推荐尺寸150×50。
+admin.edu_cloud.edu_video.picture_upload_btn: 点击上传
+admin.edu_cloud.edu_video.picture_delete_btn: 删除
+admin.edu_cloud.edu_video.play_embed_watermark: 视频内嵌水印图片
+admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 支持png、gif、jpg格式图片，建议使用半透明的png图片，推荐尺寸270×90。
+admin.edu_cloud.edu_video.video_embed_watermark_picture: 视频内嵌水印图片
+admin.edu_cloud.edu_video.video_embed_watermark_picture_tips: >
+  开启后，将在视频播放中随机时间、随机位置显示当前网站域名及%userName%的用户名．
+admin.edu_cloud.edu_video.finger_print_time_label: 云视频指纹显示时长
+admin.edu_cloud.edu_video.finger_print_time_tips: 建议时长在0.5 - 1.5秒之间
+admin.edu_cloud.edu_video.finger_print_time: 秒
+admin.edu_cloud.edu_video.enable_hls_encryption_plus: 云视频防盗增强
+admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 开启后，云视频防盗效果进一步提升，但视频将无法在手机浏览器中播放，系统会引导用户使用App观看。
+admin.edu_cloud.edu_video.buy_flow_tips: >
+  开通流量年包，视频流量更划算。<a class="" href="%bugUrl%" target="_blank">什么是流量年包？</a>
+admin.edu_cloud.edu_video.start_buy: >
+  联系官方立即开通 : <span class="text-primary">4008041114</span>
+admin.edu_cloud.edu_video.buy_year_flow: 流量年包
+admin.edu_cloud.edu_video.what_year_flow: 流量年包是什么？
+admin.edu_cloud.edu_video.flow: 流量
+admin.edu_cloud.edu_video.surplus_flow: >
+  （剩余%amount%GB）
+admin.edu_cloud.edu_video.service_time: 服务期限
+admin.edu_cloud.edu_video.video_service_provider: 视频托管服务由EduSoho教育云提供
+admin.edu_cloud.edu_video.know_detail: 了解详情
+admin.edu_cloud.edu_video.cloud_buy_tips: >
+  <a class="" href="%buyUrl%" target="_blank">购买</a>云视频包，享受更优惠的视频托管服务
+admin.edu_cloud.edu_video.buy_prince: 最低 ￥7.2/GB/年
+admin.edu_cloud.edu_video.upgrade: 升级
+admin.edu_cloud.edu_video.renew: 续费
+admin.edu_cloud.edu_video.renewed: 已续费
+admin.edu_cloud.edu_video.storage_space: 存储空间
+admin.edu_cloud.edu_video.over_use_space: >
+  超额%overUsedSpace%GB
+admin.edu_cloud.edu_video.month_flow: 本月流量
+admin.edu_cloud.edu_video.no_enable: 尚未启用云视频
+admin.edu_cloud.edu_video.enable: 立即启用
+admin.edu_cloud.edu_video.enable_tips: >
+  <p>1.专注教育——提供视频随堂练习、视频字幕、视频弹幕等多项针对在线教育的视频教学手段，让视频教学更有乐趣。</p>
+  <p>2.稳定安全——提供视频水印、视频指纹等多项安全措施，防止视频盗录，有效阻止视频盗播和恶意下载。稳定可靠的视频云存储服务，保障数据安全，防止物理丢失。</p>
+  <p>3.高性价比——针对在线教育的视频动态转码技术，以及浏览器缓存播放、移动端离线播放等多项功能，大大压缩视频流量成本。</p>
+  <p>4.优质视听体验——采用CDN（内容分发网络）技术，200多个国内外优质节点，保障高清流畅的视听体验。多种清晰度自由切换，不同的网络环境都能流畅观看。多终端全平台完美支持，随时随地观看精彩视频。</p>
+  <p>5.单价￥0.8/GB，购买云视频包享受更多优惠，立即 <a href="%url%" target="_blank"> 了解详情</a>。</p>
+
+# 云直播
+admin.edu_cloud.edu_live.locked_tips: 您的教育云服务已被锁定，请联系客服人员
+admin.edu_cloud.edu_live.service_suspend: 您的云直播服务已被暂停，不能使用，请联系客服人员
+admin.edu_cloud.edu_live.switch_title: 云直播开关
+admin.edu_cloud.edu_live.edu_live_enable: 启用云直播
+admin.edu_cloud.edu_live.edu_live_enable_btn: 已启用
+admin.edu_cloud.edu_live.edu_live_close_btn: 关闭
+admin.edu_cloud.edu_live.edu_live_tips: >
+  大班课、小班课、一对一辅导课，云直播让直播课堂更精彩。<a href="%showUrl%" target="_blank">点击这里</a>了解详情。
+admin.edu_cloud.edu_live.base_setting: 基本设置
+admin.edu_cloud.edu_live.live_logo: 直播LOGO
+admin.edu_cloud.edu_live.upload_btn: 上传
+admin.edu_cloud.edu_live.delete_btn: 删除
+admin.edu_cloud.edu_live.upload_tips: >
+  <b>只针对直播新方案。</b><br>请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过100*23。
+admin.edu_cloud.edu_live.upgrade: 升级
+admin.edu_cloud.edu_live.renew: 续费
+admin.edu_cloud.edu_live.renewed: 已续费
+admin.edu_cloud.edu_live.classroom_capacity: 教室容量
+admin.edu_cloud.edu_live.service_time: 服务期限
+admin.edu_cloud.edu_live.live_count_trend: 直播峰值趋势
+admin.edu_cloud.edu_live.recent_one_month: （最近1个月）
+admin.edu_cloud.edu_live.more_btn: 更多
+admin.edu_cloud.edu_live.live_service_provider: 云直播托管服务由EduSoho教育云提供
+admin.edu_cloud.edu_live.know_detail: 了解详情
+admin.edu_cloud.edu_live.no_enable: 尚未启用云直播
+admin.edu_cloud.edu_live.buy_live_tips: >
+  尚未购买云直播服务，不能启用，<a href="%buyUrl%" target="_blank">立即购买</a> 或 <a href="%showUrl%" target="_blank">了解详情</a>。
+admin.edu_cloud.edu_live.now_start: 立即启用
+
+# 云短信
+admin.edu_cloud.edu_sms.locked_tips: 您的教育云服务已被锁定，请联系客服人员
+admin.edu_cloud.edu_sms.service_suspend_tips: 您的云短信服务已被暂停，不能使用，请联系客服人员
+admin.edu_cloud.edu_sms.basic_info: 基本信息
+admin.edu_cloud.edu_sms.sms_balance: 短信余额
+admin.edu_cloud.edu_sms.remain_count: >
+  今日发送：%span_first%%remainCount%条%span_last%
+admin.edu_cloud.edu_sms.send_record_btn: 发送记录
+admin.edu_cloud.edu_sms.send_detail_btn: 发送明细
+admin.edu_cloud.edu_sms.sms_send_trend: 短信发送趋势
+admin.edu_cloud.edu_sms.rencent_week: （最近1个星期）
+admin.edu_cloud.edu_sms.more_btn: 更多
+admin.edu_cloud.edu_sms.sms_send_tips: >
+  短信发送服务由EduSoho教育云提供 <a href="%url%"  target="_blank">了解详情</a>
+admin.edu_cloud.edu_sms.sms_auth_tips: >
+  当前版本为试⽤版, 不能进行短信服务设置。如需购买授权版,请联系销售人员。 电话：4008041114或%span_first%QQ：800023860%span_last%
+admin.edu_cloud.edu_sms.no_enabled_sms: 尚未启用云短信
+admin.edu_cloud.edu_sms.start_enabled_sms:
+  尚未购买云短信，不能启用，<a href="%smsBuyUrl%" target="_blank">立即购买</a> 或 <a href="%smsShowUrl%" target="_blank">了解详情</a>。
+admin.edu_cloud.edu_sms.start_enabled_sms_btn: 立即启用
+admin.edu_cloud.edu_sms.switch_title: 云短信开关
+admin.edu_cloud.edu_sms.enable: 启用云短信
+admin.edu_cloud.edu_sms.enable_btn: 已启用
+admin.edu_cloud.edu_sms.close_btn: 关闭
+admin.edu_cloud.edu_sms.enable_tips: >
+  教学资讯，极速送达，尽在掌握。<a href="%showUrl%" target="_blank">点击这里</a>了解详情。
+admin.edu_cloud.edu_sms.base_setting: 基本设置
+admin.edu_cloud.edu_sms.sms_sign: 短信签名
+admin.edu_cloud.edu_sms.to_set: 去设置
+admin.edu_cloud.edu_sms.sms_sign_tips: 签名显示在短信内容的最前面，显示这条短信来自哪家公司/产品/网站。
+admin.edu_cloud.edu_sms.warn_setting: 预警设置
+admin.edu_cloud.edu_sms.singel_day_send_max_count: 单日短信发送阈值
+admin.edu_cloud.edu_sms.no_set: 未设置
+admin.edu_cloud.edu_sms.goto_set: 去设置
+admin.edu_cloud.edu_sms.goto_set: 去设置
+admin.edu_cloud.edu_sms.singel_day_send_max_count_tips: 单日短信发送量超过此阈值时，发送通知。
+admin.edu_cloud.edu_sms.template_setting: 模板设置
+admin.edu_cloud.edu_sms.sms_type: 短信类型
+admin.edu_cloud.edu_sms.application_scenarios: 应用场景
+admin.edu_cloud.edu_sms.content: 内容示例
+admin.edu_cloud.edu_sms.send_object: 发送对象
+admin.edu_cloud.edu_sms.send_way: 发送方式
+admin.edu_cloud.edu_sms.operation: 操作
+admin.edu_cloud.edu_sms.validation_type: 验证类
+admin.edu_cloud.edu_sms.bind_mobile: 手机绑定
+admin.edu_cloud.edu_sms.verification_code_tips: 您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。
+admin.edu_cloud.edu_sms.singel_user: 单个用户
+admin.edu_cloud.edu_sms.auto_singel_send: 自动单发
+admin.edu_cloud.edu_sms.default_open: 默认开启
+admin.edu_cloud.edu_sms.open_radio: 开启
+admin.edu_cloud.edu_sms.close_radio: 关闭
+admin.edu_cloud.edu_sms.login_password_reset: 登录密码重置
+admin.edu_cloud.edu_sms.pay_password_reset: 支付密码重置
+admin.edu_cloud.edu_sms.website_balance_pay: 使用网站余额支付
+admin.edu_cloud.edu_sms.notify_type: 通知类
+admin.edu_cloud.edu_sms.classroom_publish: 新班级发布
+admin.edu_cloud.edu_sms.course_publish: 新课程发布
+admin.edu_cloud.edu_sms.register_classroom_tips: >
+  同学们，%classrommName%：《班级名称》现已开始报名！链接地址
+admin.edu_cloud.edu_sms.register_course_tips: 同学们，课程：《课程名称》现已开始报名！链接地址
+admin.edu_cloud.edu_sms.manual_send: 手动群发
+admin.edu_cloud.edu_sms.auto_mass_send: 自动群发
+admin.edu_cloud.edu_sms.all_user: 所有用户
+admin.edu_cloud.edu_sms.course_user: 课程用户
+admin.edu_cloud.edu_sms.study_task_tips: 您的课程：《课程名称》－学习任务：《学习任务名称》已发布！链接地址
+admin.edu_cloud.edu_sms.study_task_notify_live: 学习任务发布通知（直播）
+admin.edu_cloud.edu_sms.study_task_notify_normal_course: 学习任务发布通知（普通课程）-
+admin.edu_cloud.edu_sms.study_task_notify_tips: 课程：《课程名称》－学习任务：《学习任务名称》将在［开播时间］开播！链接地址
+admin.edu_cloud.edu_sms.live_broadcast_advance_one_day_notify: 直播开播前通知（提前1天）
+admin.edu_cloud.edu_sms.live_broadcast_advance_one_hour_notify: 直播开播前通知（提前1小时）
+admin.edu_cloud.edu_sms.live_broadcast_notify_tips: 课程：《课程名称》－学习任务：《学习任务名称》将在［开播时间］开播！链接地址
+admin.edu_cloud.edu_sms.homework_checked: 作业完成批阅
+admin.edu_cloud.edu_sms.homework_checked_tips: 您的课程：《课程名称》-《学习任务名称》的作业已被老师批阅，快来看看吧!
+admin.edu_cloud.edu_sms.testpaper_checked: 试卷完成批阅
+admin.edu_cloud.edu_sms.testpaper_checked_tips: 您的课程：《课程名称》-《学习任务名称》的试卷已被老师批阅，快来看看吧!
+admin.edu_cloud.edu_sms.receipt_type: 回执类
+admin.edu_cloud.edu_sms.course_buy_receipt: 课程购买回执
+admin.edu_cloud.edu_sms.course_buy_receipt_tips: 你已成功购买课程《课程名称》- 教学计划名称，支付［订单金额］。
+admin.edu_cloud.edu_sms.classroom_buy_receipt: 班级购买回执
+admin.edu_cloud.edu_sms.classroom_buy_receipt_tips: 你已成功购买班级《班级名称》，支付［订单金额］。
+admin.edu_cloud.edu_sms.vip_buy_receipt: 会员购买回执
+admin.edu_cloud.edu_sms.vip_buy_receipt_tips: 你已成功购买《会员名称》，支付［订单金额］。
+admin.edu_cloud.edu_sms.virtual_money_buy_receipt: 虚拟币充值回执
+admin.edu_cloud.edu_sms.virtual_money_buy_receipt_tips: 你已成功购买《虚拟币面值》《单位》，支付［订单金额］。
+
+# 云邮件
+admin.edu_cloud.edu_email.locked_tips: 您的教育云服务已被锁定，请联系客服人员
+admin.edu_cloud.edu_email.service_suspend_tips: 您的云邮件服务已被暂停，不能使用，请联系客服人员
+admin.edu_cloud.edu_email.basic_info: 基本信息
+admin.edu_cloud.edu_email.email_balance: 邮件余额
+admin.edu_cloud.edu_email.remain_count: >
+  %span_first%%remainCount%%span_last%条
+admin.edu_cloud.edu_email.email_buy_btn: >
+  <a href="%buyUrl%" class="btn btn-sm btn-primary" target="_blank">购买</a>
+admin.edu_cloud.edu_email.today_send_count: >
+  今日发送：%span_first%%todayCount%条%span_last%
+admin.edu_cloud.edu_email.email_send_record: >
+  <a href="%listUrl%" target="_blank">发送记录</a>
+admin.edu_cloud.edu_email.email_send_trend: >
+  邮件发送趋势%span_first%（最近1个月）%span_last%
+admin.edu_cloud.edu_email.more_btn: 更多
+admin.edu_cloud.edu_email.email_service_provider: >
+  云邮件托管服务由EduSoho教育云提供 <a href="%detailUrl%" target="_blank">了解详情</a>
+admin.edu_cloud.edu_email.no_enabled_email: 尚未启用云邮件
+admin.edu_cloud.edu_email.start_enabled_email: >
+  尚未购买云邮件，不能启用，<a href="%buyUrl%" target="_blank">立即购买</a> 或 <a href="%showUrl%" target="_blank">了解详情</a>。
+admin.edu_cloud.edu_email.email_provider_service_tips: 云邮件为CRM、用户登录注册、找回密码等提供需要邮件服务的地方提供服务
+admin.edu_cloud.edu_email.email_limit_provider_tips: 邮箱发件地址因供应商限制为hi@newsletter.qiqiuyun.cn。
+admin.edu_cloud.edu_email.start_enabled_email_btn: 立即启用
+admin.edu_cloud.edu_email.switch_title: 云邮件开关
+admin.edu_cloud.edu_email.email_enable_btn: 启用云邮件
+admin.edu_cloud.edu_email.email_enabled: 已启用
+admin.edu_cloud.edu_email.email_close: 关闭
+admin.edu_cloud.edu_email.email_enable_tips: >
+  邮件营销，本应如此简单。<a href="%showUrl%" target="_blank">点击这里</a>了解云邮件。
+admin.edu_cloud.edu_email.addressee_name: 发件人名称
+admin.edu_cloud.edu_email.no_set_addressee: 尚未设置
+admin.edu_cloud.edu_email.set_addressee:
+  <a href="%addresseeName%" target="_blank">点击这里</a>设置发件人名称。
+
+# 云搜索
+admin.edu_cloud.edu_search.locked_tips: 您的教育云服务已被锁定，请联系客服人员
+admin.edu_cloud.edu_search.switch_title: 云搜索开关
+admin.edu_cloud.edu_search.enable_cloud_search: 启用云搜索
+admin.edu_cloud.edu_search.search_enabled: 已启用
+admin.edu_cloud.edu_search.search_close: 关闭
+admin.edu_cloud.edu_search.init_search_tips: 正创建索引，预计需要 1 ~ 3 天，请耐心等待...
+admin.edu_cloud.edu_search.search_tips: >
+  多姿多彩的教学资源，一处搜齐。<a href="%searchUrl%" target="_blank">点击这里</a>了解详情。
+admin.edu_cloud.edu_search.base_setting: 基本设置
+admin.edu_cloud.edu_search.rebuild_index: 重建索引
+admin.edu_cloud.edu_search.rebuild_index_tips: >
+  警告:<li>1.如果无法通过云搜索搜索某一课程，请尝试更新课程信息后10分钟再搜索。</li>
+  <li>2.如果按照1操作后仍无法搜索该课程，再考虑使用重建索引。</li>
+  <li>3.请勿频繁使用重建索引功能</li>
+admin.edu_cloud.edu_search.rebuild_search_data: 用于重新构建云搜索的索引数据。
+admin.edu_cloud.edu_search.search_type: 所需类型
+admin.edu_cloud.edu_search.search_type_tips: 勾选所需类型后，学员搜索时可以查看对应类型搜索结果，可以根据网校实际业务情况进行配置。
+admin.edu_cloud.edu_search.basic_info: 基本信息
+admin.edu_cloud.edu_search.total_count: 累计搜索次数
+admin.edu_cloud.edu_search.today_count: 今日搜索次数
+admin.edu_cloud.edu_search.search_trend: >
+  搜索行为趋势<span class="text-muted">（最近1个月）</span>
+admin.edu_cloud.edu_search.more_btn:　更多
+admin.edu_cloud.edu_search.search_service_provider: >
+  云搜索托管服务由EduSoho教育云提供 <a href="%url%" target="_blank">了解详情</a>
+admin.edu_cloud.edu_search.no_enabled_search: 尚未启用云搜索
+admin.edu_cloud.edu_search.search_tips: 云搜索提供强大的全文搜索引擎，帮助学员轻松、精确的搜索课程、老师、小组话题、资讯。
+admin.edu_cloud.edu_search.unbinded_url_tips: >
+  未绑定授权域名不能开通云搜索！<a href="%setUrl%">立即设置</a>
+admin.edu_cloud.edu_search.start_enabled_btn: 立即启用
+admin.edu_cloud.edu_search.binded_error_url_tips: >
+  当前域名与授权域名不符，不能开通云搜索！<a href="%setUrl%" target="_blank">立即设置
+admin.edu_cloud.edu_search.search_range_describe: 搜索范围说明
+admin.edu_cloud.edu_search.search_range_tips: >
+  <p>－课程：包括课程标题、课程简介、课时标题等内容关键词全文搜索。</p>
+  <p>－教师：教师姓名、教师头衔。</p>
+  <p>－小组话题：包括话题标题、正文等关键词全文搜索。</p>
+  <p>－资讯：包括资讯标题、正文等关键词全文搜索。</p>
+  <p>－公开课：包括课程标题、课程简介等内容关键词全文搜索。</p>
+
+# 即时聊天设置
+admin.edu_cloud.edu_im.instant_chat_status: 即时聊天状态
+admin.edu_cloud.edu_im.enabled_instant_chat: 已开启
+admin.edu_cloud.edu_im.send_im_total: >
+  截止目前共发送：%count% 条
+admin.edu_cloud.edu_im.disenabled_instant_chat: 未开启
+admin.edu_cloud.edu_im.rencent_seven_day_status: 即时聊天使用情况（最近7天）
+admin.edu_cloud.edu_im.start_open_instant_chat: >
+  您的即时聊天服务未开启，去<a href="%openUrl%">开启</a>
+admin.edu_cloud.edu_im.im_service_provider: >
+  即时聊天服务由EduSoho教育云提供 <a href="%url%" target="_blank">了解详情</a>
+admin.edu_cloud.edu_im.enabled_instant_chat_btn: 开启即时聊天
+admin.edu_cloud.edu_im.disenabled_link_edu_cloud_tips: 抱歉，您尚未接入教育云，不能使用即时聊天服务！
+admin.edu_cloud.edu_im.start_link: 立即接入
+admin.edu_cloud.edu_im.disenabled_bind_edu_cloud_tips: 未绑定授权域名不能开通即时聊天！
+admin.edu_cloud.edu_im.start_set: 立即设置
+admin.edu_cloud.edu_im.domain_mismatch_tips: 当前域名与授权域名不符，不能开通即时聊天！
+admin.edu_cloud.edu_im.start_uping: 正在启动...
+admin.edu_cloud.edu_im.start_closeing: 正在关闭...
+admin.edu_cloud.edu_im.close: 关闭
+admin.edu_cloud.edu_im.im_describe: IM功能说明
+admin.edu_cloud.edu_im.im_describe_tips: >
+  当前功能仅支持阔知学堂3.6及以上版本；<br>
+  开启后，课程和班级会生成相应即时聊天讨论组和使用个人聊天功能；<br>
+  利于老师发布课程、班级的相关信息并且及时、有效的通知到学生；<br>
+  利于师生无障碍的针对课程、班级的内容进行沟通和交流；<br>
+  利于促进学生之间的交流，提高网校活跃度；<br>
+
+# 云附件设置
+admin.edu_cloud.edu_attachment.attachment_tips: >
+  <h4>您尚未开通云视频服务，无法使用云附件管理功能，<a href="%videoUrl%">立即开通</a>
+  或<a href="%detailUrl%" target="_blank">了解云视频</a>
+  </h4><p>“云附件管理”提供完善的附件资源管理功能，您可以从附件的使用途径、上传时间、资源类型等多个维度对资源进行管理，
+  帮助您轻松掌控全站的附件资源，再也不用担心过期资源占用存储空间了</p>
+admin.edu_cloud.edu_attachment.function: 附件功能
+admin.edu_cloud.edu_attachment.open_radio: 开启
+admin.edu_cloud.edu_attachment.close_radio: 关闭
+admin.edu_cloud.edu_attachment.service_setting: 业务设置
+admin.edu_cloud.edu_attachment.article: 资讯
+admin.edu_cloud.edu_attachment.course: 课程讨论区
+admin.edu_cloud.edu_attachment.clssroom: 班级话题
+admin.edu_cloud.edu_attachment.group: 小组
+admin.edu_cloud.edu_attachment.testpaper: 试题
+admin.edu_cloud.edu_attachment.size: 附件大小
+admin.edu_cloud.edu_attachment.size_tips: 当前服务器附件大小上限为2048MB
+
+
+
+# 移动
+mobile.page_title: 移动学习
+mobile.app_name: 阔知学堂
+mobile.app_tips: 将学校装进口袋，移动学习，随时随地。
+mobile.app_download_btn: 下载APP
+mobile.app_download_tips: >
+  <p class="main-slogan">更好的移动端学习</p>
+  <p class="sub-slogan">好好学习，天天向上</p>
+mobile.app_login_btn: 登录网校
+mobile.app_login_tips: 扫一扫登录客户端
+mobile.step_one: >
+  <span class="member">1</span>第一步:
+mobile.step_one_tips: 扫描二维码，下载手机APP。
+mobile.Android_client: Android 客户端
+mobile.iPhone_client: iPhome客户端
+mobile.step_two: >
+  <span class="member">2</span>第二步: 打开阔知学堂APP，扫描网校二维码。
+
+# 客服
+customer_service.open_content_title: 查看在线客服
+customer_service.close_content_title: 关闭在线客服
+customer_service.open_btn: 展开
+customer_service.close_btn: 收缩
+customer_service.QQ: 客服QQ
+customer_service.mobile: 电话
+customer_service.customer_mobile: 客服电话
+customer_service.email: 邮件
+customer_service.customer_email: 反馈邮件
+
+# 我的教学
+my.teaching.menu_heading: 我的教学
+my.teaching.course_set_menu: 在教课程
+my.teaching.classroom_menu: 在教%classroom%
+my.teaching.question_menu: %student%问题
+my.teaching.discussion_menu: %student%话题
+my.teaching.testpaper_check_menu: 试卷批阅
+my.teaching.homework_check_menu: 作业批阅
+my.teaching.material_lib_menu: 教学资料库
+my.teaching.course_set.normal: 普通课程
+my.teaching.course_set.live: 直播课程
+my.teaching.course_set.classroom: %classroom%课程
+my.teaching.open_course.normal: 录播公开课
+my.teaching.open_course.live: 直播公开课
+my.teaching.threads_discussion: 课程%student%话题
+my.teaching.classroom.threads_discussion: %classroom%%student%话题
+my.teaching.classroom: 所教%classroom%
+my.teaching.classroom.manage_btn: 管理%classroom%
+my.teaching.classroom.today_data_title: 今日新增
+my.teaching.classroom.today_data: >
+  学员%allCount%  &nbsp;&nbsp;
+  话题%threadCount%  &nbsp;&nbsp;
+  任务完成学习%todayFinishedTaskNum%
+my.teaching.page_title: 在教课程
+my.teaching.course_set.create: 创建课程
+my.teaching.course_set.content_title: 在教课程
+my.teaching.course_set.title: 名称
+my.teaching.course_set.classroom: 所属%classroom%
+my.teaching.course_set.student_count: %student%数
+my.teaching.course_set.price: 价格(元)
+my.teaching.course_set.status: 状态
+my.teaching.course_set.actions: 操作
+my.teaching.course_set.courseSetCount: %courseSetCount%个教学计划
+my.teaching.course_set.live_label: 直播
+my.teaching.course_set.classrooms_not_found_label: 已移除
+my.teaching.course_set.manage_btn: 管理
+my.teaching.course_set.course_manage_btn: 计划管理
+my.teaching.course_set.file_manage_btn: 文件管理
+my.teaching.course_set.live_empty_hint: 你还没有在教的直播课程哦, 赶快去创建吧!
+my.teaching.course_set.empty_hint: 你还没有在教的课程哦, 赶快去创建吧!
+
 # 用户设置
 admin.user_auth.sign_up_settings: 注册设置
 admin.user_auth.User_sign_up_type: 用户注册模式

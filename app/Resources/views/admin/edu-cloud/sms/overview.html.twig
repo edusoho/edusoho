@@ -8,11 +8,11 @@
 {% endblock %}
 {% block page_title %}
   {% if setting('cloud_status.locked') == true %}
-    <div class="alert alert-warning" role="alert">{{'您的教育云服务已被锁定，请联系客服人员：'|trans}}4008041114。</div>
+    <div class="alert alert-warning" role="alert">{{'admin.edu_cloud.edu_sms.locked_tips'|trans}}：4008041114。</div>
     {{ currentMenu.code|parent_permission.name|trans }}
   {% elseif smsInfo.status == 'stoped' %}
     <div class="alert alert-warning" role="alert">{{'
-    您的云短信服务已被暂停，不能使用，请联系客服人员：'|trans}}4008041114。</div>
+    admin.edu_cloud.edu_sms.service_suspend_tips'|trans}}：4008041114。</div>
     {{ currentMenu.code|parent_permission.name|trans }}
   {% else %}
     {{ parent() }}
@@ -22,11 +22,11 @@
 {% block main %}
 <div class="panel panel-default">
   <div class="panel-heading">
-    基本信息 
+    {{'admin.edu_cloud.edu_sms.basic_info'|trans}} 
   </div>
   <div class="panel-body">
     <div class="pll pbl">
-      短信余额：
+      {{'admin.edu_cloud.edu_sms.sms_balance'|trans}}：
       <span class="h3 text-primary plm prs">{{account.remainCount}}</span>条
       <span class="color-gray">（信用额度剩余: {{account.creditLimit}}条）</span>
       <a href="{{ path('admin_cloud_buy', {type:'sms'}) }}" target="_blank" class="btn btn-sm btn-primary">购买</a>
@@ -35,17 +35,16 @@
       </div>
     </div>
     <div class="pll pbm">
-      今日发送：
-      <span class="color-gray phm text-md">{{account.todayUsed}} 条</span>
-      <a href="{{path('admin_cloud_sms_account')}}" target="_blank">发送记录</a>｜<a href="{{path('admin_cloud_sms_detail')}}" target="_blank">发送明细</a> 
+      {{'admin.edu_cloud.edu_sms.remain_count'|trans({'%span_first%': '<span class="color-gray phm text-md">','%remainCount%': account.todayUsed, '%span_last%': '</span>'})|raw }}
+      <a href="{{path('admin_cloud_sms_account')}}" target="_blank">{{'admin.edu_cloud.edu_sms.send_record_btn'|trans}}</a>｜<a href="{{path('admin_cloud_sms_detail')}}" target="_blank">{{'admin.edu_cloud.edu_sms.send_detail_btn'|trans}}</a> 
     </div>
   </div>
 </div>
 <div class="panel panel-default panel-chart">
   <div class="panel-heading">
-    短信发送趋势
-    <span class="text-muted">（最近1个星期）</span>
-    <a class="pull-right" href="{{path('admin_cloud_sms_statistics')}}" target="_blank">更多&ensp;></a>
+    {{'admin.edu_cloud.edu_sms.sms_send_trend'|trans}}
+    <span class="text-muted">{{'admin.edu_cloud.edu_sms.rencent_week'|trans}}</span>
+    <a class="pull-right" href="{{path('admin_cloud_sms_statistics')}}" target="_blank">{{'admin.edu_cloud.edu_sms.more_btn'|trans}}&ensp;></a>
   </div>
   <div class="panel-body">
     <div id="smsSendChart" style="width: 100%;height:400px;"></div>
