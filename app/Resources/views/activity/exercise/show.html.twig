@@ -7,11 +7,11 @@
       <div class="modal-body task-state-modal">
         <div class="title font-blod">
           <i class="es-icon es-icon-xinxi color-info"></i>
-          {{'练习说明'|trans}}
+          {{'course.plan_task.exercise.info'|trans}}
         </div>
         <div class="content">
           <div class="text-16">
-            本次练习随机生成<span class="color-success">{{ exercise.itemCount }}题</span>
+            {{'course.plan_task.exercise.info_tips'|trans({'%itemCount%':exercise.itemCount})|raw}}
           </div>
         </div>
         <div class="text-right mt20">

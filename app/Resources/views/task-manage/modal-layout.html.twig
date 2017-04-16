@@ -3,9 +3,9 @@
 
 {% block title %}
   {% if task|default(false) %}
-    {{ '修改任务'|trans }}
+    {{ 'course.plan_task.activity_manage.modify'|trans }}
   {% else %}
-    {{ '添加任务'|trans }}
+    {{ 'course.plan_task.activity_manage.create'|trans }}
   {% endif %}
 {% endblock %}
 
@@ -13,16 +13,13 @@
   <div class="task-create-editor" id="task-create-editor">
     <ul class="es-step es-step-3 clearfix" id="task-create-step">
       <li class="doing">
-        <span class="number">1</span>
-        选择教学手段
+        {{'course.plan_task.activity_manage.choose_teach_way'|trans|raw }}
       </li>
       <li>
-        <span class="number">2</span>
-        设置内容
+        {{'course.plan_task.activity_manage.setup_content'|trans|raw }}
       </li>
       <li>
-        <span class="number">3</span>
-        设置完成条件
+        {{'course.plan_task.activity_manage.setup_finish_condition'|trans|raw }}
       </li>
     </ul>
     {% block task_create_type %}{% endblock %}
@@ -33,10 +30,10 @@
   {% if task|default(false) and taskMode|default('') and taskMode != 'lesson' %}
     <button id="course-tasks-delete" type="submit" class="btn btn-danger pull-left delete-task"
             data-url="{{ path('course_manage_task_delete', {taskId:task.id, courseId:task.courseId}) }}">
-      <i class="es-icon es-icon-delete"></i>{{ '删除'|trans }}</button>
+      <i class="es-icon es-icon-delete"></i>{{ 'form.btn.delete'|trans }}</button>
   {% endif %}
-  <button id="course-tasks-prev" type="submit" class="btn btn-default hidden">{{ '上一步'|trans }}</button>
-  <button id="course-tasks-next" type="submit" class="btn btn-primary hidden">{{ '下一步'|trans }}</button>
+  <button id="course-tasks-prev" type="submit" class="btn btn-default hidden">{{ 'form.btn.back'|trans }}</button>
+  <button id="course-tasks-next" type="submit" class="btn btn-primary hidden">{{ 'form.btn.next'|trans }}</button>
   <button id="course-tasks-submit" type="submit" class="btn btn-info hidden"
-          data-submiting-text="{{ '正在保存...'|trans }}">{{ '保存'|trans }}</button>
+          data-submiting-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
 {% endblock %}
