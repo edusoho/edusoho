@@ -7,12 +7,12 @@
       {% if item.itemType == 'chapter' and item.type == 'chapter' %}
         <li class="task-item bg-gray-lighter js-task-chapter">
           <i class="es-icon es-icon-menu left-menu"></i>
-          <a href="javascript:void(0);" class="title gray-dark">第{{ item.number }}章: {{ item.title }}</a>
+          <a href="javascript:void(0);" class="title gray-dark">{{ 'course.chapter'|trans({'%number%':item.number, '%title%':item.title}) }}</a>
           <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
         </li>
       {% elseif item.itemType == 'chapter' and item.type == 'unit' %}
         <li class="task-item color-gray bg-gray-lighter">
-          <span class="title">第{{ item.number }}节: {{ item.title }}</span>
+          <span class="title">{{ 'course.unit'|trans({'%number%':item.number, '%title%':item.title}) }}</span>
         </li>
       {% elseif item.itemType == 'task' %}
         {% set task = item %}
@@ -36,7 +36,7 @@
               {% endif %}
               left-menu"
             {% if  task_lock %}
-              data-toggle="tooltip" data-trigger="hover" data-placement="top" title="需要解锁上一个任务才能学习"
+              data-toggle="tooltip" data-trigger="hover" data-placement="top" title="{{ 'course.task.lock_tips'|trans }}"
             {% endif %} ></i>
           {% if course.status == 'published' and task.status == 'published' %}
 
@@ -59,10 +59,10 @@
               <span class="right-menu mouse-enter">
                 {% if task.isFree %}
                   <a class="btn btn-primary" href="#modal" data-toggle="modal"
-                    data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" style="margin-top:-8px">预览</a>
+                    data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" style="margin-top:-8px">{{ 'course.catalogue.task.preview_btn'|trans }}</a>
                 {% elseif course.tryLookable and task.type == 'video' and file.storage | default('') == 'cloud' %}
                   <a class="btn btn-warning" href="#modal" data-toggle="modal"
-                    data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" style="margin-top:-8px">试看</a>
+                    data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" style="margin-top:-8px">{{ 'course.catalogue.task.try_look_btn'|trans }}</a>
                 {% elseif (not task.isFree) and course.parentId | default(0) == 0 %}
                   {% if course.isFree %}
                     <a
@@ -74,11 +74,11 @@
                       data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
                     {% else %}
                       href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
-                      {% endif %}>加入
+                      {% endif %}>{{ 'course.catalogue.task.join_btn'|trans }}
                     </a>
                   {% else %}
                     <a class="btn btn-primary" href="#modal" data-toggle="modal"
-                      data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" style="margin-top:-8px">购买</a>
+                      data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" style="margin-top:-8px">{{ 'course.catalogue.task.buy_btn'|trans }}</a>
                   {% endif %}
                 {% endif %}
                 </span>
@@ -87,7 +87,7 @@
                 {% set meta = activity_meta(task.activity.mediaType) %}
               {{ task.activity.length|default(0)|activity_length_format }}
               <i class="es-icon es-icon {{ meta.icon }} ml20" data-toggle="tooltip" data-placement="top" title=""
-                data-original-title="{{ meta.name }}任务" data-container="body"></i>
+                data-original-title="{{ 'course.catalogue.task.name'|trans({'%name%':meta.name}) }}" data-container="body"></i>
               </span>
           {% else %}
             {#not published#}
@@ -95,7 +95,7 @@
                 {% include 'course/task-list/parts/list-li-title.html.twig' %}
               </span>
             <span class="right-menu">
-                敬请期待
+                {{ 'course.catalogue.task_status.looking_forward'|trans }}
               </span>
           {% endif %}
         </li>
@@ -146,13 +146,13 @@
 						{% endif %}
 						{% set meta =  activity_meta(task.activity.mediaType) %}
 						<span class="es-icon es-icon {{ meta.icon }} right-menu task-type-icon" data-toggle="tooltip"
-						      data-placement="top" title="" data-original-title="{{ meta.name }}任务"></span>
+						      data-placement="top" title="" data-original-title="{{ 'course.catalogue.task.name'|trans({'%name%':meta.name}) }}"></span>
 					{% else %}
 						<span class="title">
               {% include 'course/task-list/parts/list-li-title.html.twig' %}
             </span>
 						<span class="right-menu">
-                敬请期待
+                {{ 'course.catalogue.task_status.looking_forward'|trans }}
               </span>
 					{% endif %}
 				</li>

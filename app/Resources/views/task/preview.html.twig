@@ -3,7 +3,7 @@
 
 {% set modal_class = 'modal-lg' %}
 
-{% block title %}<span class="color-gray">{{ '任务预览'|trans }}:</span> {{ task.title }}{% endblock %}
+{% block title %}<span class="color-gray">{{ 'course.task.preview.content_title'|trans }}:</span> {{ task.title }}{% endblock %}
 
 {% do script(['app/js/task/preview/index.js']) %}
 
@@ -18,8 +18,7 @@
     <i class="es-icon es-icon-qrcode"></i>
     <span class="qrcode-popover">
       <img src="" alt="">
-      {{ '扫二维码继续学习'|trans }}
-      {{ '二维码时效为半小时'|trans }}
+      {{ 'site.tips.scan_qrcode_tips'|trans }}
     </span>
   </span>
   {% if course.buyable %}
@@ -37,9 +36,9 @@
 
         >
           {% if user.id|default(null) %}
-            {{ '免费加入学习'|trans }}
+            {{ 'course.task.preview.free_join_tips'|trans }}
           {% else %}
-            {{ '登录后加入学习'|trans }}
+            {{ 'course.task.preview.login_tips'|trans }}
           {% endif %}
         </a>
       {% else %}
@@ -54,16 +53,15 @@
         >
           {% if user.id|default(null) %}
             {% if vipStatus|default(null) == 'ok' %}
-              {{ '觉得不错？点击加入此课程'|trans }}
+              {{ 'course.task.preview.free_join_tips'|trans }}
             {% else %}
-              {{ '觉得不错？点击购买此课程'|trans }}（{{ '%price%元'|trans({'%price%': course.price }) }}）
+              {{ 'course.task.preview.buy_tips'|trans({'%price%':course.price}) }}
             {% endif %}
           {% else %}
-            {{ '登录后购买学习完整的课程'|trans }}
+            {{ 'course.task.preview.login_and_buy_tips'|trans }}
           {% endif %}
         </a>
       {% endif %}
     {% endif %}
   {% endif %}
 {% endblock %}
-

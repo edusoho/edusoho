@@ -18,7 +18,7 @@
       {% endif %}
       <th>{{'order.payment_pattern'|trans}}
       <span data-toggle="popover" data-trigger="hover" data-placement="bottom" data-container="body" data-content="
-       <div>站外支付为该笔订单是通过导入或者手动添加的方式产生的，故为站外支付</div>" class="glyphicon glyphicon-question-sign color-gray text-sm js-pay-way-popover"></span>
+       {{ 'order.tips'|trans }}" class="glyphicon glyphicon-question-sign color-gray text-sm js-pay-way-popover"></span>
       </th>
       <th style="min-width:100px">{{'user.orders.operation'|trans}}</th>
     </tr>
@@ -39,7 +39,7 @@
             {% endif %}
             <br>
             <span class="color-gray text-sm">{{'user.orders.order_id'|trans({'%sn%':order.sn})}}</span>
-            {% if order.targetType == 'course' %}
+            {# {% if order.targetType == 'course' %}
               <br>
               <span class="color-gray text-sm">
                 {% if courses[order.targetId]|default(false) and courseSets[courses[order.targetId].courseSetId]|default(false) %}
@@ -49,7 +49,7 @@
                   {{'user.orders.target_course_deleted'|trans}}
                 {% endif %}
               </span>
-            {% endif %}
+            {% endif %} #}
           </td>
           <td><span class="color-gray text-sm">{{ order.createdTime|date('Y-n-d H:i:s') }}</span></td>
           <td>{{ dict_macro.orderStatus(order.status) }}</td>

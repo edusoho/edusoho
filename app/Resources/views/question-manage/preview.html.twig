@@ -10,9 +10,10 @@
 
     {% set questionTemplate = getQuestionTypeTemplate(question.type,'do') %}
     {% if questionTemplate %}
+    {{dump(questionTemplate)}}
       {% include questionTemplate %}
     {% endif %}
-  
+
   </div>
   <div id="attachment-modal" class="modal"></div>
 {% endblock %}

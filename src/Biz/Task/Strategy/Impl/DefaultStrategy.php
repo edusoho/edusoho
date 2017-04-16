@@ -106,10 +106,10 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
         $taskCount = 1;
         foreach ($items as $key => $item) {
-            if ($limitNum and $taskCount >= $limitNum) {
+            if ($limitNum && $taskCount > $limitNum) {
                 unset($items[$key]);
             }
-            if ($item['type'] != 'lesson') {
+            if ($item['type'] !== 'lesson') {
                 continue;
             }
 
