@@ -11,4 +11,5 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface DownloadActivityDao extends GeneralDaoInterface
 {
+    public function findByIds($Ids);
 }

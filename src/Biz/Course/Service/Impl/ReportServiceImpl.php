@@ -81,7 +81,7 @@ class ReportServiceImpl extends BaseService implements ReportService
             if ($task['status'] !== 'published') {
                 continue;
             }
-
+            $task['title'] = $task['title'];
             $task['alias'] = '任务'.$index;
             ++$index;
 

@@ -3,22 +3,22 @@
   <div class="item-line"></div>
   <div class="item-content  js-item-content text-overflow">
     <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mrm" data-role="task"></i>
-    {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}
-    任务<span class="number">{{ task.number }}</span>： {{ task.title|sub_text(30) }}
+    {% if task.isOptional %}<span class="label label-success mrm">{{'course.plan_task.is_optional_task'|trans}}</span>{% endif %}
+    {{'course.plan_task.task'|trans}}<span class="number">{{ task.number }}</span>： {{ task.title|sub_text(30) }}
     <span class="color-warning publish-status {% if task.status == 'published' %}
-      hidden {% endif %}">(未发布)</span>
+      hidden {% endif %}">{{'course.plan_task.task_unpublished'|trans}}</span>
 
     {% if file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}
-      <span class="label label-danger ml5">转码失败</span>
+      <span class="label label-danger ml5">{{'course.plan_task.convert_failed'|trans}}</span>
     {% elseif file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus != 'success' %}
-      <span class="label label-warning ml5">转码中</span>
+      <span class="label label-warning ml5">{{'course.plan_task.converting'|trans}}</span>
     {% endif %}
 
     {% if task.activity.mediaType is same as('live') %}
       {% if not task.activity.ext.roomCreated|default(true) %}
-        <span class="color-warning">{{ '编辑以创建直播教室'|trans }}</span>
+        <span class="color-warning">{{ 'course.plan_task.edit_tips'|trans }}</span>
       {% elseif task.activity.endTime < date().timestamp %}
-        <span class="color-gray">{{ '直播已经结束'|trans }}</span>
+        <span class="color-gray">{{ 'course.plan_task.live_finish_tips'|trans }}</span>
       {% else %}
         <span class="color-success mls">
         {{ task.activity.startTime|date('Y-n-j H:i')|trans }} ~ {{ task.activity.endTime|date('H:i')|trans }}</span>
@@ -31,13 +31,13 @@
   <div class="item-actions">
     <a class="btn gray-darker" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal"
       data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId}) }}"><i
-        class="es-icon es-icon-edit mrs"></i>编辑</a>
+        class="es-icon es-icon-edit mrs"></i>{{'course.plan_task.edit_btn'|trans}}</a>
     <a class="btn gray-darker" href="{{ path('course_task_show', {id:task.id,courseId:task.courseId,preview:1}) }}"
-      target="_blank"><i class="es-icon es-icon-removeredeye mrs"></i>预览</a>
+      target="_blank"><i class="es-icon es-icon-removeredeye mrs"></i>{{'course.plan_task.preview_btn'|trans}}</a>
     <span class="dropdown">
       <a class="dropdown-toggle dropdown-more btn gray-darker" id="dropdown-more" data-toggle="dropdown" href="#"><i
           class="es-icon es-icon-keyboardarrowdown mrs" aria-haspopup="true"
-          aria-expanded="false"></i>{{ '更多'|trans }}
+          aria-expanded="false"></i>{{ 'course.plan_task.more_btn'|trans }}
       </a>
       <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px"
         aria-labelledby="dLabel" style="display:none;">
@@ -47,7 +47,7 @@
           {% if  file.storage|default(null) == 'cloud' %}
           <li class="mark-manage" >
           <a href="{{ path('course_task_marker_manage', {courseId:course.id, taskId:task.id}) }}" target="_blank" class="manage-lesson-marker-btn" >
-          <span class="glyphicon glyphicon-list prs"></span>{{'弹题管理'|trans}}
+          <span class="glyphicon glyphicon-list prs"></span>{{'course.plan_task.lesson-marker_btn'|trans}}
           </a>
           </li>
           <li class="divider mark-manage-divider" style="display:none;"></li>
@@ -62,20 +62,20 @@
           <li>
             <a class='publish-item {% if status == 1 %}hidden{% endif %}' href="javascript:;" data-type="task"
               data-url="{{ path('course_manage_task_publish', {id:task.id,courseId:task.courseId}) }}">
-              <i class="es-icon es-icon--check-circle mrs"></i>发布
+              <i class="es-icon es-icon--check-circle mrs"></i>{{'course.plan_task.publish_btn'|trans}}
             </a>
           </li>
           <li>
             <a class='delete-item {% if status == 1 %}hidden{% endif %}' href="javascript:;" data-type="task"
               data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}">
               <i class="es-icon es-icon-delete mrs"></i>
-              删除
+              {{'course.plan_task.delete_btn'|trans}}
             </a>
           </li>
           <li>
             <a class='unpublish-item {% if status != 1 %}hidden{% endif %}' href="javascript:;" data-type="task"
               data-url="{{ path('course_manage_task_unpublish', {id:task.id,courseId:task.courseId}) }}">
-              <i class="es-icon es-icon-close01 mrm"></i>取消发布
+              <i class="es-icon es-icon-close01 mrm"></i>{{'course.plan_task.unpublish_btn'|trans}}
             </a>
           </li>
       </ul>
