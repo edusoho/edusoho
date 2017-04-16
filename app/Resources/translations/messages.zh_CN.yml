@@ -861,6 +861,44 @@ classroom.course.content: >
 classroom.course.unlock_tips: >
     如需解除同步单独编辑本课程，可点击下方按钮解除同步。
     <font color="#e83d2c">注意：本操作不可逆！</font>
+classroom.manage.setting: 设置
+classroom.manage.unSetting: 未设置
+classroom.manage.introduction: 简介
+classroom.manage.picture: 图片
+classroom.manage.price: 价格
+classroom.manage.course: 课程
+classroom.manage.courses_count: 课程
+classroom.manage.tasks_count: 任务数
+classroom.manage.student: 学员
+classroom.manage.student_number: 学员数
+classroom.manage.auditor_num: 旁听生数
+classroom.manage.user_learn_status: %name%学习情况
+classroom.manage.Yesterday: 昨日
+classroom.manage.today: 今日
+classroom.manage.all_student_number: 全部学员数
+classroom.manage.full_student_number: 正式学员数
+classroom.manage.finished_task_number: 任务完成学习数
+classroom.manage.thread_count: 新增话题数
+classroom.manage.latest_reviews: 最新评价
+classroom.manage.reviews.empty: 该%name%尚无评价
+classroom.manage.set_info: 基本信息
+classroom.manage.set_info.name: 名称
+classroom.manage.set_info.introduction: 简介
+classroom.manage.set_info.introduction.help_block: 为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
+classroom.manage.set_info.tags: 标签
+classroom.manage.set_info.tags.explain: 用于按标签检索班级等，由网校管理员后台统一管理
+classroom.manage.set_info.tags.help_block: 用于按标签检索班级等，由网校管理员后台统一管理
+classroom.manage.set_info.show_label: %name%展示
+classroom.manage.set_info.show_label.help_block: 关闭后，%name%将彻底隐藏，无法在前台查看到。
+classroom.manage.set_info.buy: 购买
+classroom.manage.set_info.buy.help_block: 关闭后%name%将无法在线购买加入。
+classroom.manage.set_info.classroom_period: 班级有效期
+classroom.manage.set_info.classroom_period.end_date: 截止日期
+classroom.manage.set_info.classroom_period.days: 有效期天数
+classroom.manage.set_info.classroom_period.forever: 永久有效
+classroom.manage.set_info.date_help: 设置该值后，%user_name%只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。
+classroom.manage.set_info.days_help: 设置该值后，%user_name%只能在有效天数内进行课程的学习，系统默认会在有效期前10天提醒学员。
+classroom.manage.set_info.view_period_rules: 查看有效期规则
 
 # 表单通用
 form.radio_btn.true: 是
@@ -3907,5 +3945,6 @@ explore.open_course.title: 公开课
 explore.open_course.list: 公开课列表
 explore.open_course.live: 直播
 explore.open_course.empty: 暂无公开课
-
-
+archive.course.title: 课程存档
+archive.course.tags: 标签：
+archive.course.empty: 目前暂时无课程
