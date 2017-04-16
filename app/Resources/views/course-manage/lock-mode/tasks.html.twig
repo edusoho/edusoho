@@ -20,7 +20,7 @@
             disabled
             {% endif %}" 
             {% if not (courseSet.type|default('') =='normal' and setting('storage.upload_mode', 'local') != 'local' )%}
-              data-toggle="popover" data-placement="top" data-trigger="hover"  data-container=".js-batch-add"
+              data-toggle="popover" data-placement="top" data-trigger="hover" data-container=".js-batch-add"
               data-content='批量创建课时需要开通云视频服务，点击<a target="__blank" href="http://open.edusoho.com/show/cloud/video">这里</a>了解详情'
             {% else %}
               data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" 
