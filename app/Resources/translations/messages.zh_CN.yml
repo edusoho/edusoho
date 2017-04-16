@@ -5,10 +5,20 @@ site.online_school_name: 网校名称
 site.online_school_about: 网校简介
 site.online_school_logo: 网校LOGO
 site.register_link_url: 注册链接的地址
+site.not_support_cloud_video: >
+  <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请前往<a href="%mobileUrl%" target="parent">下载App</a>。
 site.currency.RMB: 元
 site.date.month: 月
 site.date.day: 天
+site.date.hour: 时
+site.date.minute: 分
+site.date.second: 秒
 site.data.empty: 无
+site.data.chapter: 章
+site.data.task: 任务
+site.data.part: 节
+site.data.title: 标题
+site.data.score: 分
 site.datagrid.empty: 暂无记录
 site.datagrid.filter.all_records: 全部记录
 site.datagrid.filter.last_one_week: 最近一周
@@ -28,14 +38,23 @@ site.message.error: 错误提示
 site.power_by: 好知网
 site.default.classroom: 班级
 site.default.student: 学员
-site.org.belongs_to_org_th: 所属组织机构
-site.org.code: 编码：
 site.default.more: 更多
+site.default.student: 学员
+site.default.manage: 管理
 site.default.none: 无
 site.default.or: 或
 site.default.minute: 分
 site.default.second: 秒
+site.org.belongs_to_org_th: 所属组织机构
+site.org.code: 编码：
+site.tips: 提示
+site.tips.scan_qrcode_tips: 扫二维码继续学习二维码时效为半小时
+site.validate_rules.max_int: 最大值为9位整数
+site.validate_rules.two_decimal_places: 保留到2位小数
+site.btn.expand: 展开
+site.btn.collapse: 收起
 
+# TODO 命名有问题
 status: 状态
 price: 价格
 name: 名称
@@ -74,8 +93,12 @@ user.btn.followed_btn: 已关注
 user.btn.send_message_btn: 私信
 user.not_login.tips: >
   你还没有登录，请先
-  <a href="%loginUrl%">登录或</a>
-  <a href="%registerUrl%">注册！</a>
+  %login%
+  %register%
+user.approve_tips: 温情提示：如果您的资料有变更，请在此修改，以便更好的为您服务！
+user.approved: 已认证
+user.approving: 实名认证中
+user.mobile_bind: 已绑定
 
 #财务通用
 finance.income: 收入
@@ -147,19 +170,675 @@ order.log: 日志
 order.coin.empty_hint: 暂无虚拟币订单记录
 
 # 上传模块
-upload.titile: 上传附件
+upload.content_title: 上传文件
+upload.upload_tips: 请将文件拖到这里，或点击添加文件按钮
+upload.cloud_upload_tips: >
+  <li>资料库支持多种文件格式上传分享下载，单个文件大小上限<strong>2GB</strong>。</li>
+  <li>视频将上传到<strong>云视频服务器</strong>，并转换为云视频为创建ES视频课时备用，如需修改云视频转码类型，请先设置转码类型后再进行上传视频。转换过程需要等待，转换过程中视频将无法播放。</li>
+  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+upload.normal_upload_tips: >
+  <li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>2.0GB</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
+  <li>视频将上传到<strong>网站服务器</strong>，如需使用云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
 
+upload.file.name: 文件名
+upload.file.size: 大小
+upload.file.status: 状态
+upload.file.operation: 操作
+upload.create_files_btn: 添加文件
+upload.upload_files_btn: 开始上传
+upload.video_quality_switcher.type: 视频转码类型：
+upload.video_quality_switcher.setup: 设置
+upload.video_quality_switcher.video_quality: 画质：
+upload.video_quality_switcher.video_quality.low: >
+  流畅 <span class="color-gray">(适合PPT讲解)</span>
+upload.video_quality_switcher.video_quality.normal: >
+  标准 <span class="color-gray">(适合屏幕录制、摄像头拍摄)</span>
+upload.video_quality_switcher.video_quality.high: >
+  精细 <span class="color-gray">(适合动态电影)</span>
+upload.video_quality_switcher.audio_quality.low: 流畅
+upload.video_quality_switcher.audio_quality.normal: 标准
+upload.video_quality_switcher.audio_quality.high: 高品
 
 # 课程
 course: 课程
+course.id: 课程编号
+course.price_setting: 课程价格设置
+course.is_student_tips: 您已经是该教学计划的学员了！
+course.payments_disabled_tips: 尚未开启支付模块，无法购买课程。
+course.delete_from_classroom_tips: 课程已从%classroomName%中移除
+course.not_member_in_classroom_tips: >
+  还不是%classroomName%成员,请先<a href="%classroomUrl%">加入%classroomName%</a>
+course.approve_tips: 购买该课程需要通过实名认证，您还没有完成实名认证，赶快去认证吧~
+course.buy_failed_tips: 真不巧，已经有人抢在你前面下单了，请继续关注
+course.no_avatar_tips: >
+  您还没有头像，设置以后才能加入学习<br/>拥有一个独有的头像，老师和同学们能更容易关注到你哦～～
+course.remove_students_tips: 课程已关闭，在有效期内的学员仍可正常学习，若不希望学员继续学习，需在【学员管理】中移除学员。
+course.name: 课程名称
+course.price: 价格
 course.price.RMB: %price%元
 course.origin_price.RMB: %originPrice%元
 course.price.free: 免费
 course.price.limited_time_free: 限免
 course.price.discount: %discount%折
-course.name: 课程名称
-course.id: 课程编号
-course.price_setting: 课程价格设置
+course.chapter: 第%number%章: %title%
+course.unit: 第%number%节: %title%
+course.course_manage: 课程管理
+course.announcement.default_content: >
+  <span class="text-warning">(请点击查看)</span>
+course.students_count: >
+  <span class="mhs">%studentsNum%</span>人加入学习
+course.course_member_count: %studentsNum%人
+course.activity: 活动
+course.teaching_plan: 教学计划
+
+course.expiry_date: 学习有效期
+course.expiry_date.days_mode: >
+  %expiryDays% 天（随到随学）
+course.expiry_date.days_mode.total_days: 共%expiryDays%天
+course.expiry_date.end_date_mode: >
+  截止：%expiryEndDate%（随到随学）
+course.expiry_date.date_mode: >
+  开始：%expiryStartDate% &nbsp;
+  截止：%expiryEndDate%
+course.expiry_date.forever_mode: 永久有效
+course.expiry_date.expiryStartDate: >
+  课程将于%expiryStartDate%开始授课，请耐心等待
+course.expiry_date.overdue: （已到期）
+course.expiry_date.today_will_overdue: （今日过期）
+course.expiry_date.tomorrow_will_overdue: （明日过期）
+course.expiry_date.days_remaining: （剩余 %lastDays% 天）
+
+course.buy_expiry_date: 购买有效期
+course.buy_expiry_date.buy_expiry_time: >
+  <span class="course-detail-title ">购买截止日期</span>
+  <span class="gray-dark mrl">%buyExpiryTime% 23:59</span>
+
+course.showServices: 承诺服务
+course.showServices.empty: 暂未提供
+course.status.followed: 已收藏
+course.status.follow: 收藏
+course.status.closed: 已关闭
+course.status.unpublished: 未发布
+course.status.serialized: 更新中
+course.status.finished: 已完结
+course.status.published: 已发布
+course.share: 分享
+course.belong_to_classroom_tips: >
+  该课程属于
+  <a href="%classroomUrl%">%classroomTitle%</a>
+  请加入后再学习
+course.course_limited_tips: 抱歉，该课程为限制课程，请联系客服
+course.course_closed_tips: 抱歉，课程%title%已关闭！
+course.unbuyable.unpublished_tips: 课程还未发布，不允许加入和购买
+course.unbuyable.over_buy_expiry_time_tips: 超过加入截止日期，不允许加入和购买
+course.unbuyable.over_expiry_end_date_tips: 超过学习截止日期，不允许加入和购买
+course.introduction: 介绍
+course.introduction.more_teaching_plan: >
+  想查看更多教学计划？<a href="%courseUrl%">返回课程宣传页</a>
+course.introduction.course_introduction: 课程介绍
+course.introduction.course_target: 课程目标
+course.introduction.course_target_empty: 为设置目标
+course.introduction.audiences: 适合人群
+course.introduction.audiences_empty: 为设置目标
+course.catalogue.content_title: 目录
+course.catalogue.task.preview_btn: 预览
+course.catalogue.task.try_look_btn: 试看
+course.catalogue.task.join_btn: 加入
+course.catalogue.task.buy_btn: 购买
+course.catalogue.task.name: %name%任务
+course.catalogue.task_status.task: 任务%taskNumber%： %taskTitle%
+course.catalogue.task_status.free: 免费
+course.catalogue.task_status.try_lookable: 试看
+course.catalogue.task_status.is_optional: 选修
+course.catalogue.task_status.looking_forward: 敬请期待
+course.catalogue.view_all_btn: 查看全部  &gt;
+course.reviews.teaching_plan: 教学计划
+course.reviews.additional_reviews_btn: 追评
+course.reviews.expand_btn: 展开全文
+course.reviews.reply_btn: 回复
+course.reviews.content: 内容
+course.reviews.delete_btn: 删除
+course.reviews.cancel_reply_btn: 收起
+course.reviews.collapse_btn: 收起全文
+course.reviews.teaching_plan_progress: 完成进度
+course.reviews.all_catagory: 全部
+course.reviews.review_again: 重新评价
+course.reviews.mark: 请打分：
+course.reviews.detail: 评价详细内容
+course.reviews.success_tips: 评价已保存！
+course.reviews.empty: 暂无评价
+course.teacher: 教师：
+course.teacher.content_title: 授课教师
+course.characteristic.content_title: 课程特色
+course.newest_students.content_title: 最新学员
+course.students_dynamic.content_title: 学员动态
+course.students_dynamic.empty: 还没有动态
+course.note.expand_btn: [展开全文]
+course.note.mission_delete_tips: · 该任务已被删除
+course.note.empty: 暂无笔记
+course.task: 任务
+course.task.lock_tips: 需要解锁上一个任务才能学习
+course.task.learning: 任务学习
+course.task.learning.back_course_btn: 返回课程
+course.task.learning.finish_condition: 任务完成条件
+course.task.learning.finish_btn: 任务完成
+course.task.learning.learned_btn: 学过了
+course.task.preview.content_title: 任务预览
+course.task.preview.login_and_learn_tips: 登录后加入学习
+course.task.preview.login_and_buy_tips: 登录后购买学习完整的课程
+course.task.preview.free_join_tips: 觉得不错？点击加入此课程
+course.task.preview.buy_tips: 觉得不错？点击购买此课程（%price%）元
+course.task.preview.free_learn_tips: 免费加入学习
+course.thread: 讨论区
+course.thread.empty: >
+  还没有%thread%，赶快添加一个吧！
+course.thread.hit_times: %hitNum%次浏览
+course.thread.mission_seq: 任务%seq%
+course.thread.teacher_answer: 教师的答案
+course.material.unpublished_tips: 任务未发布，不能下载该资料
+course.material.links: 网络链接资料
+course.material.upload_time: 上传于%createdTime%
+course.material.empty: 课程暂无资料
+course.btn.learn: 去学习
+course.btn.join: 加入学习
+course.btn.free_join: 免费加入
+course.btn.pay: 去支付
+course.btn.buy: 购买课程
+course.btn.announcement: 公告
+course.btn.start_learning: 开始学习
+course.btn.continue_learning_btn: 继续学习
+course.btn.edit_help_btn: 编辑帮助
+course.btn.back_course_homepage: 返回课程主页
+course.btn.back_course_edit: 返回课程编辑
+course.btn.preview: 预览
+course.btn.more: 更多
+course.btn.publish: 发布课程
+course.btn.publish_task: 发布教学计划
+course.base: 基本信息
+course.base.content_title: 基础信息
+course.base.title: 标题
+course.base.sub_title: 副标题
+course.base.tag: 标签
+course.base.tag_tips: 用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理
+course.base.category: 分类
+course.base.serialize_mode: 连载状态
+course.base.serialize_mode.none: 非连载课程
+course.base.serialize_mode.serialized: 更新中
+course.base.serialize_mode.finished: 已完结
+
+course.detail: 详细信息
+course.detail.content_title: 详细信息
+course.detail.summary: 课程简介
+course.detail.target: 课程目标
+course.detail.intended-students: 适应人群
+course.question_manage: 题目管理
+course.question_manage.preview_btn: 预览
+course.question_manage.more_btn: 更多
+course.question_manage.content_title: 题目管理
+course.question_manage.bread_crumbs: >
+  <li><a href="{{ %questionUrl% }}">题目管理</a></li>
+  <li class="active">材料题</li>
+course.question_manage.filter.question_type: --按题型--
+course.question_manage.filter.course: 按课程
+course.question_manage.filter.keywords: 关键字
+course.question_manage.filter.select: 请选择
+course.question_manage.stem: 题干
+course.question_manage.type: 类型
+course.question_manage.update: 最后更新
+course.question_manage.operation: 操作
+course.question_manage.empty: 一道题都没有，请点击右上角按钮，按不同的题型录入题目
+course.question_manage.select_all: 全选
+course.question_manage.question: 题目
+course.question_manage.question.edit_btn: 编辑
+course.question_manage.question.manage_sub_btn: 管理子题
+course.question_manage.question.delete_btn: 删除
+course.question_manage.question.include_sub: 含子题
+course.question_manage.question.unfinished: 未完成
+course.question_manage.question.sub_question: 子题
+course.question_manage.question.belong: 从属于
+course.question_manage.question.course: 本课程
+course.question_manage.question.score: 得分：%testResult.score%分
+course.question_manage.question.true_answer: 正确答案是
+course.question_manage.question.your_answer: 你的答案是
+course.question_manage.question.answer_right: 回答正确
+course.question_manage.question.answer_wrong: 你答错了
+course.question_manage.question.answer_empty: 你未答题
+course.question_manage.question.mark_btn: 标记
+course.question_manage.question.cancel_mark_btn: 取消标记
+course.question_manage.question.favorite_btn: 收藏
+course.question_manage.question.cancel_favorite_btn: 取消收藏
+course.question_manage.question.analysis.empty: 无解析
+course.question_manage.question.analysis_expand_btn: 展开解析
+course.question_manage.question.analysis_collapse_btn: 收起解析
+course.question_manage.question.answer_part_right: >
+  你的答案是 <strong class="color-danger">%keyAnswer%</strong>
+  。回答部分正确。
+course.question_manage.count: 共%getItemCount()%题
+course.question_manage.preview: 题目预览
+course.question_manage.manage: 添加题目
+course.question_manage.manage.answer: 答案
+course.question_manage.manage.true: 正确
+course.question_manage.manage.fault: 错误
+course.question_manage.manage.belong: 从属
+course.question_manage.manage.default_belong: 本课程
+course.question_manage.manage.choose: 请选择
+course.question_manage.manage.belong_tips: 可以针对本课程、某个教学计划或者某个学习任务出题
+course.question_manage.manage.difficulty: 难度
+course.question_manage.manage.easy_difficulty: 简单
+course.question_manage.manage.normal_difficulty: 一般
+course.question_manage.manage.hard_difficulty: 困难
+course.question_manage.manage.stem: 题干
+course.question_manage.manage.analysis: 解析
+course.question_manage.manage.advanced_options: 显示/隐藏 高级选项
+course.question_manage.manage.score: 分值
+course.question_manage.manage.steom_tips: >
+  点击编辑器按钮 <span style="color:red">[ ]</span>  可以插入填空项；也可手工输入，例如“今年是[[2014|马]]年”，回答“2014”或者“马”都算答对
+course.question_manage.manage.material: 材料
+course.question_manage.edit: 编辑题目
+
+course.testpaper_manage: 试卷管理
+course.testpaper_manage.testpaper: 试卷
+course.testpaper_manage.content_title: 试卷管理
+course.testpaper_manage.create_btn: 创建试卷
+course.testpaper_manage.name: 名称
+course.testpaper_manage.status: 状态
+course.testpaper_manage.statistics: 题目统计
+course.testpaper_manage.time_limit: 时间限制
+course.testpaper_manage.update: 更新人/时间
+course.testpaper_manage.operation: 操作
+course.testpaper_manage.empty: >
+  <div class="empty">还没有试卷，请点击右上角按钮，
+    <a class="link-primary" href="%createUrl%">创建一个新试卷</a>
+  </div>
+course.testpaper_manage.delete_btn: 删除
+course.testpaper_manage.tips: >
+  提示：试卷一旦发布不能修改，发布后的试卷需要
+  <strong class="color-warning">添加到任务</strong>
+  中才能正常使用。
+course.testpaper_manage.score: %score%分
+course.testpaper_manage.passed_condition: 及格%passedCondition%分
+course.testpaper_manage.limited_time: %limitedTime%分钟
+course.testpaper_manage.unlimited: 无限制
+course.testpaper_manage.count: %itemCount%题
+course.testpaper_manage.testpaper_status.draft: 草稿
+course.testpaper_manage.testpaper_status.open: 已发布
+course.testpaper_manage.testpaper_status.closed: 已关闭
+course.testpaper_manage.publish_btn: 发布试卷
+course.testpaper_manage.publish_tips: 真的要发布%name%吗？ 试卷发布后无论是否关闭都将无法修改。
+course.testpaper_manage.close_btn: 关闭试卷
+course.testpaper_manage.close_tips: 真的要关闭试卷%name%吗？
+course.testpaper_manage.testpaper_quoted_close_tips: 该试卷已被任务引用，真的要关闭吗？
+course.testpaper_manage.edit_btn: 编辑试卷信息
+course.testpaper_manage.manage_btn: 管理题目
+course.testpaper_manage.repead_btn: 重新生成题目
+course.testpaper_manage.delete_btn: 删除试卷
+course.testpaper_manage.create: 创建试卷
+course.testpaper_manage.create.bread_crumbs: >
+  <li><a href="%testpaperManageUrl%">试卷管理</a></li>
+  <li class="active">%name%</li>
+course.testpaper_manage.create.content_title: 创建试卷
+course.testpaper_manage.create.name: 试卷名称
+course.testpaper_manage.create.description: 试卷说明
+course.testpaper_manage.create.build_mode: 生成方式
+course.testpaper_manage.create.build_mode.rand: 随机生成
+course.testpaper_manage.create.build_mode.difficulty: 按难易程度
+course.testpaper_manage.create.difficulty: 试卷难度
+course.testpaper_manage.create.difficulty.tips: 如果某个难度的题目数不够，将会随机选择题目来补充。
+course.testpaper_manage.create.range: 出题范围
+course.testpaper_manage.create.range.course: 按课程
+course.testpaper_manage.create.range.choose: 请选择
+course.testpaper_manage.create.questions_setup: 题目设置
+course.testpaper_manage.create.questions_setup.number: 题目数量
+course.testpaper_manage.create.questions_setup.score: 题目分值
+course.testpaper_manage.create.questions_setup.missing_score: 漏选分值
+course.testpaper_manage.create.questions_setup.save_btn: 保存，下一步
+course.testpaper_manage.question: 试卷题目管理
+course.testpaper_manage.question.create_btn: 新增试题
+course.testpaper_manage.question.seq: 题号
+course.testpaper_manage.question.stem: 题干
+course.testpaper_manage.question.type: 类型
+course.testpaper_manage.question.score: 分值
+course.testpaper_manage.question.operation: 操作
+course.testpaper_manage.question.difficulty: 难度
+course.testpaper_manage.question.content: 题目
+course.testpaper_manage.question.select_all: 全选
+course.testpaper_manage.question.operation.delete_btn: 删除
+course.testpaper_manage.question.operation.preview_btn: 预览
+course.testpaper_manage.question.operation.replace_btn: 替换
+course.testpaper_manage.question.subjective_remask_tips: >
+  这是一份纯客观题的试卷, 达到<input type="text" name="passedScore" class="form-control width-150 mhs" value="%passedScoreDefault%" data-score-total="0" />'分（含）可以自动审阅通过考试。
+course.testpaper_manage.question.save_btn: 保存试卷
+course.testpaper_manage.question.save_modal.content_title: 确认试卷题目信息
+course.testpaper_manage.question.save_modal.type: 题目类型
+course.testpaper_manage.question.save_modal.number: 题目数量
+course.testpaper_manage.question.save_modal.total_score: 总分值
+course.testpaper_manage.question.replace_modal.replace: 替换题目
+course.testpaper_manage.question.replace_modal.select: 选择题目
+course.testpaper_manage.question.replace_modal.empty: 无题目记录,请先去
+course.testpaper_manage.question.replace_modal.create_btn: 创建题目
+course.testpaper_manage.question.replace_modal.select_all_btn: 全选
+course.testpaper_manage.question.replace_modal.select_btn: 请选择题目
+
+course.course_files: 课程文件
+course.course_files.content_title: 课程文件
+course.course_files.create_btn: 添加课程文件
+course.course_files.name: 文件名
+course.course_files.type: 类型
+course.course_files.size: 大小
+course.course_files.use_status: 使用
+course.course_files.use_status.using: 使用中
+course.course_files.use_status.unused: 未使用
+course.course_files.subtitle_manage_btn: 字幕管理
+course.course_files.subtitle_manage.content_title: 字幕管理
+course.course_files.subtitle_manage.subtitle: 字幕
+course.course_files.subtitle_manage.preview_btn: 预览
+course.course_files.subtitle_manage.add_tips: 目前仅支持srt字幕，最多上传4个字幕
+course.course_files.last_update: 最后更新
+course.course_files.operation: 操作
+course.course_files.empty: 无文件记录
+course.course_files.cloud_file: 云文件
+course.course_files.reconvert_btn: 重新转换(调试模式)
+course.course_files.select_all_btn: 全选
+course.course_files.record: 文件记录
+
+course.plan_task: 计划任务
+course.plan_task.publish_btn: 发布计划
+course.plan_task.manage: 教训计划管理
+course.plan_task.content_title: 计划任务
+course.plan_task.task: 任务学习
+course.plan_task.practice: 练习
+course.plan_task.practice_tips: 练习的设置包括做题在内的多种形式。
+course.plan_task.homework: 作业
+course.plan_task.homework_tips: 作业的设置包括做题在内的多种形式。
+course.plan_task.extra_class: 课外
+course.plan_task.extra_class_tips: 学员可通过课外阅读、课外作业等，扩展学习。
+course.plan_task.preparation: 预习
+course.plan_task.total_tasks: 任务总数：
+course.plan_task.everyday_finish_tasks: >
+  日均约需完成：<span class="color-warning">%taskPerDay%</span> 个任务
+course.plan_task.create_btn: 任务
+course.plan_task.batch_create_btn: 批量添加
+course.plan_task.add_chapter_btn: 添加%chapter_name%
+course.plan_task.add_part_btn: 添加%part_name%
+course.plan_task.edit_btn: 编辑
+course.plan_task.preview_btn: 预览
+course.plan_task.more_btn: 更多
+course.plan_task.lesson-marker_btn: 弹题管理
+course.plan_task.publish_btn: 发布
+course.plan_task.unpublish_btn: 取消发布
+course.plan_task.delete_btn: 删除
+course.plan_task.preparation_tips: 学员可通过看视频、阅读资料等预习任务，导入学习。
+course.plan_task.batch_create_tips: >
+  批量创建课时需要开通云视频服务，点击<a target="__blank" href="http://open.edusoho.com/show/cloud/video">这里</a>了解详情
+course.plan_task.empty: 什么都没有，快去添加一个学习任务!
+course.plan_task.task: 任务
+course.plan_task.task_unpublished: （未发布）
+course.plan_task.is_optional_task: 选修
+course.plan_task.edit_tips: 编辑以创建直播教室
+course.plan_task.live_finish_tips: 直播已经结束
+course.plan_task.converting: 转码中
+course.plan_task.convert_failed: 转码失败
+course.plan_task.which_chapter: >
+  </i>第<span class="number">%chapterNumber%</span>%chapter%：%title%
+course.plan_task.which_part: >
+  </i>第<span class="number">%chapterNumber%</span>%part%：%title%
+course.plan_task.which_task: >
+  </i>第<span class="number">%chapterNumber%</span>%task%：%title%
+course.plan_task.create_btn: 添加
+course.plan_task.create_part: >
+  添加%partName%
+course.plan_task.create_task: >
+  添加任务
+
+course.plan_task.activity_manage.activity_file_empty: 抱歉，%file%文件不存在，暂时无法学习。
+course.plan_task.activity_manage.preview_failed_tips: 当前任务不支持预览，请加入教学计划进行学习。
+course.plan_task.activity_manage.title_name: 标题名称
+course.plan_task.activity_manage.setup_is_option: 设为选修
+course.plan_task.activity_manage.setup_is_option_tips: 学习结果将不会计入学习进度、学习统计中，并且不会影响下一任务的解锁
+course.plan_task.activity_manage.choose_teach_way: >
+  <span class="number">1</span>
+  选择教学手段
+course.plan_task.activity_manage.setup_content: >
+  <span class="number">2</span>
+  设置内容
+course.plan_task.activity_manage.setup_finish_condition:  >
+  <span class="number">3</span>
+  设置完成条件
+course.plan_task.activity_manage.create: 添加任务
+course.plan_task.activity_manage.modify: 修改任务
+
+# activity-活动
+course.plan_task.activity_manage.finished_condition: 完成条件
+course.plan_task.activity_manage.audio: 音频
+course.plan_task.activity_manage.audio.converting: 正在转码，请稍后尝试。
+course.plan_task.activity_manage.audio.convert_failed: 转码失败，请联系管理员。
+course.plan_task.activity_manage.audio.finish: 听完音频
+course.plan_task.activity_manage.audio.finished_condition_tips: >
+  <p class="gray-darker mbs">满足以下条件:</p>听完音频。
+course.plan_task.activity_manage.audio.time: 音频时长
+course.plan_task.activity_manage.discuss: 说明
+course.plan_task.activity_manage.discuss.finished_condition_tips: >
+  <p class="gray-darker mbs">满足以下条件:</p>发表或者回复一个话题
+course.plan_task.activity_manage.discuss.publish_article_tips: 在本课程下发表或者回复一个话题
+course.plan_task.activity_manage.discuss.content: 讨论主题
+course.plan_task.activity_manage.doc: 文档
+course.plan_task.activity_manage.doc.watch_time: 观看时长
+course.plan_task.activity_manage.doc.watch_time_at_least: 至少观看
+course.plan_task.activity_manage.doc.finished_condition_tips: >
+  <p class="gray-darker mbs">满足以下条件:</p>至少观看%finishDetail%分钟。
+course.plan_task.activity_manage.download: 下载资料
+course.plan_task.activity_manage.download.choose_file: 选择资料
+course.plan_task.activity_manage.download.link_file: 网络链接资料
+course.plan_task.activity_manage.download.delete_btn: 删除
+course.plan_task.activity_manage.download.file_tips: 注意：资料文件在移动端上无法被下载!
+course.plan_task.activity_manage.download.downloaded_tips: 下载过资料
+course.plan_task.activity_manage.download.edit: 编辑
+course.plan_task.activity_manage.download.converting_tips: >
+  正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。<br/>转换完成后将以站内消息通知您。
+course.plan_task.activity_manage.download.upload_files: 上传资料
+course.plan_task.activity_manage.download.chooser_from_material: 从资料库中选择
+course.plan_task.activity_manage.download.chooser_from_course: 从课程中选择文件
+course.plan_task.activity_manage.download.import_video: 导入网络视频
+course.plan_task.activity_manage.download.link: 网络连接
+course.plan_task.activity_manage.download.file_name: 资料名称：
+course.plan_task.activity_manage.download.upload_btn: (请上传或选择资料)
+course.plan_task.activity_manage.download.input_placeholder: 填写资料简介（可选）
+course.plan_task.activity_manage.download.add_btn: 添加资料
+course.plan_task.activity_manage.download.finished_condition_tips: >
+  <p class="gray-darker mbs">满足以下条件:</p>下载过资料。
+course.plan_task.activity_manage.download.delete_btn: 删除
+course.plan_task.activity_manage.exercise.finished_condition_tips: >
+  <p class="gray-darker mbs">满足以下条件:</p>提交练习
+course.plan_task.activity_manage.exercise.question_numbers: 题目个数
+course.plan_task.activity_manage.exercise.question_sourse: 题目来源
+course.plan_task.activity_manage.exercise.question_sourse.course: 按课程
+course.plan_task.activity_manage.exercise.question_sourse.choose: 请选择
+course.plan_task.activity_manage.exercise.difficulty: 难度
+course.plan_task.activity_manage.exercise.default_difficulty: 不限
+course.plan_task.activity_manage.exercise.question_type_range: 题型范围
+course.plan_task.activity_manage.exercise.question_type_range_tips: 提示：练习为随机出题，只需填写题目个数和选择题型范围即可。
+course.plan_task.activity_manage.exercise.submit_btn: 提交练习
+course.plan_task.activity_manage.exercise.info: 练习说明
+course.plan_task.activity_manage.exercise.info_tips: >
+  本次练习随机生成<span class="color-success">%itemCount%题</span>
+course.plan_task.activity_manage.exercise.total_questions: 共%itemCount%题
+course.plan_task.activity_manage.exercise.confirm_submit: 确认提交
+course.plan_task.activity_manage.exercise.confirm_submit_tips: 您真的要提交吗？
+course.plan_task.activity_manageflash.play_tips: 注意：Flash在移动端上无法播放!
+course.plan_task.activity_manage.homework.finished_condition_tips: >
+  <p class="gray-darker mbs">满足以下条件:</p>提交作业
+course.plan_task.activity_manage.homework.info: 作业说明
+course.plan_task.activity_manage.homework.total: >
+  本次作业<span class="color-primary">%itemCount%题</span>
+course.plan_task.activity_manage.homework.choose_question: 选择题目
+course.plan_task.activity_manage.homework.save_tips: 提示：保存后题目将不能再添加或移除。
+course.plan_task.activity_manage.homework.submit: 提交作业
+course.plan_task.activity_manage.homework.start_btn: 开始做题
+course.plan_task.activity_manage.homework.reviewing_tips: 老师正在批阅作业，批阅完成后会以站内私信通知您批阅结果，请稍等。
+course.plan_task.activity_manage.homework.teacher_say: 评语：
+course.plan_task.activity_manage.homework.question_total: >
+  作业题目<small class="color-gray">共%itemCount%题</small>
+course.plan_task.activity_manage.live.finished_condition_tips: >
+  <p class="gray-darker mbs">满足以下条件:</p>进入参加过直播。
+course.plan_task.activity_manage.live.start_time: 直播开始时间
+course.plan_task.activity_manage.live.create_tips: 请选择有效的开始时间以便创建直播教室。
+course.plan_task.activity_manage.live.live_time: 直播时长
+course.plan_task.activity_manage.live.info: 直播说明
+course.plan_task.activity_manage.live.expiry_tips: 提示：本计划的学习加入方式为“随到随学”，加入直播活动可能会导致后来的学员无法参加，只能观看回放。
+course.plan_task.activity_manage.live.join_tips: 进入参加过直播
+course.plan_task.activity_manage.ppt.learn_to_last_page_tips: 学习到最后一页
+course.plan_task.activity_manage.ppt.time: 学习时长
+course.plan_task.activity_manage.ppt.lear_at_least_time: 至少学习
+course.plan_task.activity_manage.ppt.finished_condition_tips.time: >
+  <p class="gray-darker mbs">满足以下条件:</p>至少学习%finishDetail%分钟。
+course.plan_task.activity_manage.ppt.finished_condition_tips.end: >
+  <p class="gray-darker mbs">满足以下条件:</p>需要学习到最后一页。
+course.plan_task.activity_manage.testpaper.finished_condition_tips: >
+  <p class="gray-darker mbs">满足以下条件:</p>
+course.plan_task.activity_manage.testpaper.finish_score: 考试分数通过%finishScore%分
+course.plan_task.activity_manage.testpaper.submit: 提交试卷
+course.plan_task.activity_manage.testpaper: 试卷
+course.plan_task.activity_manage.testpaper.info: 考试说明
+course.plan_task.activity_manage.testpaper.choose: 请选择试卷
+course.plan_task.activity_manage.testpaper.create: >
+  还没有试卷，请先去<a href="%testpaperUrl%" target="_parent">创建</a>
+course.plan_task.activity_manage.testpaper.empty_tips: 如果找不到试卷，请先确定该试卷已经发布
+course.plan_task.activity_manage.testpaper.time_limit: 考试时长
+course.plan_task.activity_manage.testpaper.time_limit_tips: 0分钟，表示无限制。
+course.plan_task.activity_manage.testpaper.times: 考试次数
+course.plan_task.activity_manage.testpaper.start_time: 考试开始时间
+course.plan_task.activity_manage.testpaper.times.once: 单次
+course.plan_task.activity_manage.testpaper.times.always: 不限
+course.plan_task.activity_manage.testpaper.redo_interval: 重考间隔
+course.plan_task.activity_manage.testpaper.redo_interval_tips: 重考时间间隔：完成批阅后开始计时，计时结束后才可再次考试。
+course.plan_task.activity_manage.testpaper.time_limit_tips: 0小时，表示无限制。
+course.plan_task.activity_manage.testpaper.time: 考试时间
+course.plan_task.activity_manage.testpaper.time_tips: 学员只能在时间范围内参加考试！
+course.plan_task.activity_manage.testpaper.mode.always: 不限
+course.plan_task.activity_manage.testpaper.mode.realTime: 指定
+course.plan_task.activity_manage.testpaper.mode.require_credit: 限制学分
+course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 参加此次考试所需的学分，０分则不限制。
+course.plan_task.activity_manage.testpaper.pass: 分数达标
+course.plan_task.activity_manage.testpaper.submit: 提交答卷
+course.plan_task.activity_manage.testpaper.empty_tips: 试卷已被删除
+course.plan_task.activity_manage.testpaper.will_begin_tips: 考试未开始，请在%startTime%之后再来
+course.plan_task.activity_manage.testpaper.total_question: >
+  本次考试共<span class="color-primary">%itemCount%题</span>，总分<span class="color-primary">%score%分</span>
+course.plan_task.activity_manage.testpaper.pass_score: >
+  ，及格为<span class="color-primary">%finishScore%分</span>
+course.plan_task.activity_manage.testpaper.answer: >
+  请在<span class="color-primary">%limitedTime%分钟</span>内作答。
+course.plan_task.activity_manage.testpaper.once_trance: >
+  仅有<span class="color-danger">一次</span>考试机会。
+course.plan_task.activity_manage.testpaper.start_exam: 开始考试
+course.plan_task.activity_manage.testpaper.close_tips: 该考试已关闭，请联系教师！
+course.plan_task.activity_manage.text: 内容
+course.plan_task.activity_manage.text_tips: 您有一段自动保存内容，请点击继续编辑
+course.plan_task.activity_manage.video: 视频
+course.plan_task.activity_manage.video.time: 视频时长
+course.plan_task.activity_manage.video.subtitle: 视频字幕
+course.plan_task.activity_manage.video.add_subtitle_tips: 请等待视频上传完之后再添加字幕
+course.plan_task.activity_manage.video.code_convert_tips: >
+  字幕文件暂时仅支持UTF-8编码的srt文件，点击<a href="http://www.qiqiuyu.com/article/883" target="__blank">查看</a>编码转换说明。
+course.plan_task.activity_manage.video.time_finish_tips: >
+  <p class="gray-darker mbs">满足以下条件:</p>至少学习%finishDetail%分钟。
+course.plan_task.activity_manage.video.last_finish_tips: >
+  <p class="gray-darker mbs">满足以下条件:</p>学习到最后。
+course.plan_task.activity_manage.video.failed_tips: 您的视频观看时长已达限制，无法继续观看！
+course.plan_task.activity_manage.video.last: 学习到最后
+course.plan_task.activity_manage.video.learn_time: 学习时长
+course.plan_task.activity_manage.video.buy_tips: 立刻购买本课程，即可获得全部完整学习内容。
+course.plan_task.activity_manage.video.try_watch_tips: 您可以免费试看前%tryLookLength%分钟,购买后可完整观看。
+
+file_chooser.empty: 没有资源...
+file_chooser.course_file.input_placeholder: 输入%placeholder%标题关键字
+file_chooser.course_file.search_btn: 搜索
+file_chooser.course_file.search_btn_submiting: 正在加载，请稍等
+file_chooser.import_link.intpu_placeholder: 链接地址
+file_chooser.import_link.import_btn: 导入
+file_chooser.import_link.import_btn_submiting: 正在导入，请稍等
+file_chooser.import_video.mediaUri: 原地址：
+file_chooser.import_video.input_placeholder: 支持优酷、土豆、腾讯、网易公开课的视频页面地址导入
+file_chooser.import_video.not_support_tips: 腾讯和网易的视频不支持手机端播放
+file_chooser.materiallib_choose.from_upload: 来自上传
+file_chooser.materiallib_choose.from_share: 来自分享
+file_chooser.materiallib_choose.from_public: 公共资料
+file_chooser.materiallib_choose.choose_teacher: 请选择老师
+file_chooser.materiallib_choose.wating: 资源加载中...
+file_chooser.upload_file.video_quality: 转码画质
+file_chooser.upload_file.video_quality.low: 流畅
+file_chooser.upload_file.video_quality.normal: 标准
+file_chooser.upload_file.video_quality.high: 精细
+file_chooser.upload_file.audio_quality: 转码音质
+file_chooser.upload_file.audio_quality.low: 流畅
+file_chooser.upload_file.audio_quality.normal: 标准
+file_chooser.upload_file.audio_quality.high: 高品
+file_chooser.upload_file.convert: 什么是转码
+file_chooser.upload_file.upload_tips: 上传说明
+file_chooser.upload_file.convert_tips: 上传后将会自动转码成兼容性更好的格式，以便学员观看，建议您在转码完成后再发布相应的课时。
+file_chooser.upload_file.suopprt_audio_tips: >
+  支持mp4, avi, flv, wmv, mov, m4v格式的视频文件上传，文件大小不能超过2GB。<br/>支持断点续传（仅在Chrome、IE9及以上等支持HTML5的浏览器中可用）。
+file_chooser.upload_file.upload_audio_tips: >
+  支持mp3格式的音频文件上传，且文件大小不能超过 500M 。</br>支持断点续传（仅支持HTML5浏览器）。</br>音频将上传到云服务器
+file_chooser.upload_file.upload_flash_tips: >
+  支持swf格式的文件上传，且文件大小不能超过 100 MB。<br/>Flash将上传到云服务器
+file_chooser.upload_file.upload_doc_tips: >
+  支持pdf,doc,docx,xls,xlsx格式的文档上传，且文件大小不能超过 100 MB。<br/>文档将上传到云服务器
+file_chooser.upload_file.upload_ppt_tips: >
+  支持ppt, pptx格式的PPT文件上传，且文件大小不能超过100 MB。<br/>PPT将上传到云服务器
+
+course.plan_setup: 计划设置
+course.replay_manage: 录播管理
+course.marketing_setup: 营销设置
+course.teacher_setup: 教师设置
+course.testpaper_check: 试卷批阅
+course.homework_check: 作业批阅
+course.dashboard: 学习数据
+course.order: 订单查询
+course.teach_plan_manage: 教学计划管理
+course.cover: 课程封面
+course.cover_image: 封面图片
+course.cover_image.content_title: 封面图片
+course.cover_image.upload_tips: >
+  你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过<strong>2M</strong>。
+course.cover_image.upload_btn: 选择要上传的图片
+
+# 答卷
+testpaper.answer.count_donw_timer: 倒计时
+testpaper.answer.answer_card: 答题卡
+testpaper.answer.answer_card.do_agagin_tips: 再做%itemCount%题
+testpaper.answer.answer_card.one_chance_tips: 本次考试仅一次机会
+testpaper.answer.answer_card.exam_tips: >
+  <div>本次考试共<span class="color-primary">%itemCount%题</span>，总分<span class="color-primary">%score%分</span>。
+testpaper.answer.answer_card.exam_with_pass_score_tips: >
+  <div>本次考试共<span class="color-primary">%itemCount%题</span>，总分<span class="color-primary">%score%分</span>，及格为<span class="color-primary">%finishScore%</span>分
+testpaper.answer.answer_card.limited_time_tips: >
+  请在<span class="color-primary">%limitedTime%分钟</span>内作答。
+testpaper.answer.answer_card.submit_btn: 马上交卷
+testpaper.answer.student: 答题人：
+testpaper.answer.endtime: 交卷时间：
+testpaper.answer.used_time: 用时：
+testpaper.answer.status.dong: 答题中
+testpaper.answer.status.reviewing: 批阅中
+testpaper.answer.status.finish: 批阅完成
+testpaper.answer.question_score_total_tips: 共%number%题，共%score%分
+testpaper.answer.missing_score_tips: 共%number%题，共%score%分，漏选得%missScore%分
+testpaper.answer.question_delete_tips: 该题目已删除
+testpaper.answer.confirm_hand_in_btn: 确认交卷
+testpaper.answer.confirm_hand_in_tips: 您真的要交卷吗？
+testpaper.answer.view_result_tips: 考试已结束，您的试卷已提交，请点击下面的按钮查看结果！
+testpaper.answer.view_result_btn: 查看结果
+testpaper.answer.finish: 考试结束
+testpaper.answer.pause_btn: 暂停
+testpaper.answer.pause_tips: 考试已暂停，请尽快回来哦！
+testpaper.answer.resume_btn: 继续考试
+testpaper.answer.submit_btn: 提交练习
+testpaper.result.true: 正确
+testpaper.result.wrong: 错误
+testpaper.result.not_read: 待批阅
+testpaper.result.not_done: 未做
+testpaper.result.finish_reviewing: 完成批阅
+testpaper.result.wrong_onl: 只看错题
 
 #公开课
 open_course: 公开课
@@ -174,6 +853,14 @@ classroom.continue_learning_btn: 继续学习
 classroom.join_btn: 立即加入
 classroom.status.unpublish: 未发布
 classroom.status.closed: 已关闭
+classroom.course.base: 课程基本信息
+classroom.course.content: >
+  本课程内容与原课程
+  <a href="%menuPath%" target="_blank">&nbsp;&nbsp;《courseTitle》&nbsp;&nbsp;</a>
+  实时同步中。如需更改内容可以选择对原课程进行更改。
+classroom.course.unlock_tips: >
+    如需解除同步单独编辑本课程，可点击下方按钮解除同步。
+    <font color="#e83d2c">注意：本操作不可逆！</font>
 
 # 表单通用
 form.radio_btn.true: 是
@@ -186,17 +873,19 @@ form.radio_btn.one_day: 天
 form.radio_btn.one_week: 周
 form.radio_btn.two_week: 两周
 form.radio_btn.one_month: 月
-form.btn.finish: 完成
 form.field.optional: 选填
 form.field.privacy_public: 公开
 form.field.create: 添加
 form.field.amount: 数量
 form.field.cut: 扣除
+form.btn.select: 选择
 form.btn.modify: 修改
+form.btn.finish: 完成
 form.btn.set: 设置
 form.btn.publish: 发布
 form.btn.cancel_publish: 取消发布
 form.btn.save_and_publish: 直接发布
+form.btn.save_and_continue_add: 保存并继续添加
 form.btn.reset: 重置
 form.btn.view: 查看
 form.btn.bind: 绑定
@@ -214,34 +903,43 @@ form.btn.confirm: 确定
 form.btn.insert: 插入
 form.btn.delete: 删除
 form.btn.create: 创建
+form.btn.import: 导入
 form.btn.submit_disabled: 已提交
 form.btn.reset_password: 重设密码
 form.btn.send: 发送
 form.btn.upload: 上传
 form.btn.picture_crop: 选择要上传的图片
+form.btn.remove: 移除
 form.btn.comment: 发表评论
+form.btn.approve: 去认证
+form.btn.unlock: 解除同步
+form.btn.next: 下一步
+form.btn.back: 上一步
+form.btn.add: 添加
+form.btn.import.submiting: 正在导入，请稍等
+form.btn.search.submiting: 正在加载，请稍等
+form.btn.pay.submiting: 正在创建订单...
 form.btn.comment.submiting: 正在评论...
 form.btn.upload.submiting: 正在上传...
 form.btn.delete.submiting: 正在删除...
-form.btn.reply.submiting: 正在发表回复
+form.btn.reply.submiting: 正在发表...
 form.btn.save.submiting: 正在保存...
 form.btn.publish.submiting: 正在发布...
 form.btn.submit.submiting: 正在提交...
 form.btn.send.submiting: 正在发送...
 form.btn.modify.submiting: 正在修改...
 form.btn.create.submiting: 正在创建...
+form.btn.export_result: 导出结果
+form.btn.hand_in.submiting: 正在交卷, 请稍等
 form.checkbox.public: 公开
 form.placeholder.max_int: 最大值为9位整数
 form.placeholer.two_decimal_places: 保留到2位小数
 form.placeholder.start_date: 起始时间
 form.placeholder.end_date: 结束时间
-form.placeholder.keyword: 关键词
-form.btn.export_result: 导出结果
 form.placeholder.nickname: 用户名
+form.placeholder.keyword: 关键词
 form.radio_btn.pass: 同意
 form.radio_btn.unpass: 不同意
-form.btn.next: 下一步
-form.btn.back: 上一步
 
 # 用户登录
 user.login.page_title: 登录账号
@@ -699,11 +1397,6 @@ group.thread.created_time: 发表于%createdTime%
 group.thread.hit_num: %hitNum%次查看
 group.thread.wanted: 悬赏:%rewardCoin%%coin_name%
 group.thread.check_hide_content: 查看隐藏内容
-group.thread.edit_btn: 编辑
-group.thread.cancel_essence_btn: 取消加精
-group.thread.set_essence_btn: 加精
-group.thread.stick_cancel_btn: 取消置顶
-group.thread.stick_btn: 置顶
 group.thread.cancel_reward_btn: 取消悬赏
 group.thread.set_reward_btn: 悬赏
 group.thread.view_all_btn: 查看全部
@@ -714,7 +1407,6 @@ group.thread.best_reply: 最佳回答
 group.thread.reply_numbers: %postNum%回复
 group.thread.desc_floor: %postCount%楼
 group.thread.asc_floor: %loop.index%楼
-group.thread.delete_btn: 删除
 group.thread.delete_tips: 确定删除这条回复
 group.thread.accept_btn: 采纳
 group.thread.accept_tips: 确定采纳这条回复
@@ -794,16 +1486,6 @@ group.detail.new_group_members.empty: 还没有小组成员！
 group.detail.hot_group: 热门小组
 group.detail.hot_group_empty: 暂无小组信息！
 
-# 话题
-thread: 话题
-thread.reply: 回复
-thread.empty: 暂无话题！
-thread.status.stick: 置顶
-thread.status.essence: 精华
-thread.status.reward: 奖
-thread.create: 发起了话题
-thread.last_reply: 最后回复
-
 # 咨询
 article: 资讯
 article.channel: %article_name%频道
@@ -827,13 +1509,43 @@ article.detail.input_placeholder: 您的想法
 article.detail.comment_empty: 还没有人评论，欢迎说说您的想法！
 article.tag: 标签：%name%
 
+# 话题
+thread: 话题
+thread.reply: 回复
+thread.answer: 答案
+thread.content: 内容
+thread.all_answer: 所有答案
+thread.add_btn: 添加
+thread.browse: 浏览
+thread.empty: 暂无话题
+thread.status.stick: 置顶
+thread.status.essence: 精华
+thread.status.reward: 奖
+thread.status.question: 问
+thread.hover_tips.question: 问答
+thread.hover_tips.activiy: 活动
+thread.hover_tips.thread: 话题
+thread.create: 发起了话题
+thread.create_thread: 发起了%dict_text%
+thread.last_reply: 最后回复
+thread.create_discussion_btn: 发话题
+thread.create_question_btn: 提问题
+thread.delete_btn: 删除
+thread.delete_confirm_message: 您真的要删除该帖吗？
+thread.edit_btn: 编辑
+thread.cancel_essence_btn: 取消加精
+thread.set_essence_btn: 加精
+thread.stick_cancel_btn: 取消置顶
+thread.stick_btn: 置顶
+thread.set_essence_confirm_message: 您真的要加精该帖吗？
+thread.stick_cancel_confirm_message: 您真的要取消置顶该帖吗？
+thread.cancel_essence_confirm_message: 您真的要取消加精该帖吗？
+thread.stick_confirm_message: 您真的要置顶该帖吗？
+thread.order: 排序：
+
 # 标签
 tag: 标签
 tag.popular_tag: 热门标签
-
-# 分类
-category: 分类
-category.all_category: 全部
 
 # 附件
 attachments: 附件
@@ -862,6 +1574,10 @@ attachments.download.times: 下载次数：%hitNum%
 attachments.download.download_btn: 下载
 attachments.download.delete_btn: 删除
 attachments.download.delete_warning: 确定删除此附件
+
+# 分类
+category: 分类
+category.all_category: 全部
 
 # 分享
 share.course_set_message: 我正在学习《%course%》，收获巨大哦，一起来学习吧！
@@ -961,18 +1677,6 @@ my.teaching.open_course.empty_hint: 你还没有在教的公开课哦, 赶快去
 my.teaching.page_title: 在教课程
 my.teaching.course_set.create: 创建课程
 my.teaching.course_set.content_title: 在教课程
-
-# 我的学习
-my.learning.menu_heading: 我的学习
-my.learning.course_set_menu: 我的课程
-my.learning.classroom_menu: 我的%classroom%
-my.learning.live_menu: 我的直播
-my.learning.question_menu: 我的问答
-my.learning.discussion_menu: 我的话题
-my.learning.notebook_menu: 我的笔记
-my.learning.homework_menu: 我的作业
-my.learning.testpaper_menu: 我的考试
-my.learning.group_menu: 我的小组
 
 # 学员
 role.student: 学员
@@ -2299,6 +3003,76 @@ admin.course_review.completed_progress_th: 完成进度
 admin.course_review.classroom_title.placeholer: %classroomName%名
 admin.course_review.classroom_deleted: %classroomName%已删除
 
+# 移动端
+mobile.page_title: 移动学习
+mobile.app_name: 阔知学堂
+mobile.app_tips: 将学校装进口袋，移动学习，随时随地。
+mobile.app_download_btn: 下载APP
+mobile.app_download_tips: >
+  <p class="main-slogan">更好的移动端学习</p>
+  <p class="sub-slogan">好好学习，天天向上</p>
+mobile.app_login_btn: 登录网校
+mobile.app_login_tips: 扫一扫登录客户端
+mobile.step_one: >
+  <span class="member">1</span>第一步:
+mobile.step_one_tips: 扫描二维码，下载手机APP。
+mobile.Android_client: Android 客户端
+mobile.iPhone_client: iPhome客户端
+mobile.step_two: >
+  <span class="member">2</span>第二步: 打开阔知学堂APP，扫描网校二维码。
+
+# 客服
+customer_service.open_content_title: 查看在线客服
+customer_service.close_content_title: 关闭在线客服
+customer_service.open_btn: 展开
+customer_service.close_btn: 收缩
+customer_service.QQ: 客服QQ
+customer_service.mobile: 电话
+customer_service.customer_mobile: 客服电话
+customer_service.email: 邮件
+customer_service.customer_email: 反馈邮件
+
+# 我的教学
+my.teaching.menu_heading: 我的教学
+my.teaching.course_set_menu: 在教课程
+my.teaching.classroom_menu: 在教%classroom%
+my.teaching.question_menu: %student%问题
+my.teaching.discussion_menu: %student%话题
+my.teaching.testpaper_check_menu: 试卷批阅
+my.teaching.homework_check_menu: 作业批阅
+my.teaching.material_lib_menu: 教学资料库
+my.teaching.course_set.normal: 普通课程
+my.teaching.course_set.live: 直播课程
+my.teaching.course_set.classroom: %classroom%课程
+my.teaching.open_course.normal: 录播公开课
+my.teaching.open_course.live: 直播公开课
+my.teaching.threads_discussion: 课程%student%话题
+my.teaching.classroom.threads_discussion: %classroom%%student%话题
+my.teaching.classroom: 所教%classroom%
+my.teaching.classroom.manage_btn: 管理%classroom%
+my.teaching.classroom.today_data_title: 今日新增
+my.teaching.classroom.today_data: >
+  学员%allCount%  &nbsp;&nbsp;
+  话题%threadCount%  &nbsp;&nbsp;
+  任务完成学习%todayFinishedTaskNum%
+my.teaching.page_title: 在教课程
+my.teaching.course_set.create: 创建课程
+my.teaching.course_set.content_title: 在教课程
+my.teaching.course_set.title: 名称
+my.teaching.course_set.classroom: 所属%classroom%
+my.teaching.course_set.student_count: %student%数
+my.teaching.course_set.price: 价格(元)
+my.teaching.course_set.status: 状态
+my.teaching.course_set.actions: 操作
+my.teaching.course_set.courseSetCount: %courseSetCount%个教学计划
+my.teaching.course_set.live_label: 直播
+my.teaching.course_set.classrooms_not_found_label: 已移除
+my.teaching.course_set.manage_btn: 管理
+my.teaching.course_set.course_manage_btn: 计划管理
+my.teaching.course_set.file_manage_btn: 文件管理
+my.teaching.course_set.live_empty_hint: 你还没有在教的直播课程哦, 赶快去创建吧!
+my.teaching.course_set.empty_hint: 你还没有在教的课程哦, 赶快去创建吧!
+
 # 用户设置
 admin.user_auth.sign_up_settings: 注册设置
 admin.user_auth.User_sign_up_type: 用户注册模式
@@ -2757,6 +3531,16 @@ my.learning.homework_menu: 我的作业
 my.learning.testpaper_menu: 我的考试
 my.learning.group_menu: 我的小组
 
+my.course.refund_tips: 您的退款申请已提交，请等待管理员的处理。
+my.course.cancle_refund_btn: 取消退款，继续学习！
+my.course.free_mode_plan.task_finished: 已完成
+my.course.free_mode_plan.task_empty: 暂无学习任务
+my.course.free_mode_plan.next_task: 下一学习任务
+my.course.free_mode_plan.task_progress: 完成任务：
+my.course.lock_mode_plan.task_progress: 已完成%spanHtml%个任务
+my.course.lock_mode_plan.behind_plan: 落后计划
+my.course.lock_mode_plan.expiry_date: 学习有效期：
+
 #系统后台运营
 admin.article_setting.name: 频道名称
 admin.article_setting.pageNum: 列表每页资讯数
@@ -3112,3 +3896,4 @@ explore.view_open_course_btn: 查看公开课
 explore.course.empty: 该分类下无课程
 explore.course.search.placeholer: 请输入关键字搜索
 explore.course.category.all: 所有分类：
+

@@ -1,1 +1,5 @@
-<p class="gray-darker mbs">满足以下条件:</p> {% if video.finishType == 'time' %} 至少学习{{video.finishDetail|default(0)}}分钟。 {% else %} 学习到最后。{% endif %}
+{% if video.finishType == 'time' %}
+  {{'course.plan_task.activity_manage.video.time_finish_tips'|trans({'%finishDetail%':video.finishDetail|default(0)})|raw}}
+{% else %}
+  {{'course.plan_task.activity_manage.video.last_finish_tips'|trans|raw}}
+{% endif %}
