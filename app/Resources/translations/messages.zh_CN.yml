@@ -3896,4 +3896,16 @@ explore.view_open_course_btn: 查看公开课
 explore.course.empty: 该分类下无课程
 explore.course.search.placeholer: 请输入关键字搜索
 explore.course.category.all: 所有分类：
+explore.view_course_btn: 查看课程
+explore.view_classroom_btn: 查看班级
+explore.classroom.list: %name%列表
+explore.classroom.vip_name: 会员%name%
+explore.classroom.free_name: 免费%name%
+explore.classroom.empty: 目前暂时无%name%
+explore.classroom.service_empty: 暂未提供
+explore.open_course.title: 公开课
+explore.open_course.list: 公开课列表
+explore.open_course.live: 直播
+explore.open_course.empty: 暂无公开课
+
 
