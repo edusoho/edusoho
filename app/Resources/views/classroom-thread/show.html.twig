@@ -6,7 +6,7 @@
 {% block main %}
   <input type="hidden" id="isTeachersUrl" value="{{ path('classroom_teacherIds_catch',{'classroomId':classroom.id}) }}" >
   <div class="hidden js-only-teacher-div">
-    <button data-url="{{ path('classroom_thread_show',{classroomId:classroom.id,threadId:thread.id}) }}" class='js-only-teacher pull-right btn btn-link btn-xs {% if filter.adopted|default(0) %}active{% endif %}'>{% if filter.adopted|default(0) %}{{'查看全部'|trans}}{% else %}{{'只看老师'|trans}}{% endif %}</button>
+    <button data-url="{{ path('classroom_thread_show',{classroomId:classroom.id,threadId:thread.id}) }}" class='js-only-teacher pull-right btn btn-link btn-xs {% if filter.adopted|default(0) %}active{% endif %}'>{% if filter.adopted|default(0) %}{{'classroom.thread.view_all_btn'|trans}}{% else %}{{'classroom.thread.allow_view_teacher_btn'|trans}}{% endif %}</button>
   </div>
   {% do load_script('topxiawebbundle/controller/classroom/thread-show') %}
 {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
