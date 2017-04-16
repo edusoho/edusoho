@@ -2,7 +2,7 @@
 
 {% set modal_class = 'modal-lg' %}
 
-{% block title %}批量添加新用户{% endblock %}
+{% block title %}{{'import.user_import'|trans}}{% endblock %}
 
 {% block body %}
   <div id="importer-app"
@@ -18,7 +18,7 @@
     </div>
 
     <div class="page-header clearfix">
-      <h1 class="pull-left">步骤1</h1>
+      <h1 class="pull-left">{{'import.step_one'|trans}}</h1>
     </div>
 
     <div class="row">
@@ -29,7 +29,7 @@
         <div class="form-group">
           <div class="col-md-3 col-md-offset-1"></div>
           <div class="col-md-8 controls">
-            <button type="submit" class="btn btn-primary" id="start-import-btn">开始校验数据</button>
+            <button type="submit" class="btn btn-primary" id="start-import-btn">{{'import.check_datas'|trans}}</button>
           </div>
         </div>
 
