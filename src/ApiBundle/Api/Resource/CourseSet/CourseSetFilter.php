@@ -25,6 +25,11 @@ class CourseSetFilter extends Filter
         foreach ($data['cover'] as $size => $imagePath) {
             $data['cover'][$size] = RequestUtil::asset($imagePath);
         }
+
+        if (empty($data['cover'])) {
+            $data['cover'] = new \stdClass();
+        }
+
         $userFilter = new UserFilter();
         $userFilter->filter($data['creator']);
         $userFilter->filters($data['teachers']);
