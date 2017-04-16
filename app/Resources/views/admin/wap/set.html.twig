@@ -9,20 +9,19 @@
   <form class="form-horizontal" method="post" id="wap-setting-form" novalidate>
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label >{{'手机微网校'|trans}}</label>
+        <label >{{'admin.wap_setting'|trans}}</label>
 
       </div>
       <div class="controls col-md-7 radios">
-        {{ radios('enabled', {1:'开启'|trans, 0:'关闭'|trans}, wapSetting.enabled) }}
-        <p class="help-block">{{'开启后，网校在手机浏览器和微信上默认使用微网校进行显示'|trans}}</p>
-        <p class="help-block">{{'关闭后，使用网页响应式的方式进行显示'|trans}}</p>
+        {{ radios('enabled', {1:'form.radio_btn.open'|trans, 0:'form.radio_btn.close'|trans}, wapSetting.enabled) }}
+        {{ 'admin.wap_setting.hint'|trans|raw }}
       </div>
     </div>
 
     <div class="row form-group">
       <div class="col-md-3 control-label"></div>
       <div class="controls col-md-8">
-        <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>
+        <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
       </div>
     </div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

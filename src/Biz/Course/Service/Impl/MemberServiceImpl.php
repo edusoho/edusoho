@@ -278,7 +278,12 @@ class MemberServiceImpl extends BaseService implements MemberService
             return false;
         }
 
-        $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']);
+        if (!empty($member['classroomId']) && $member['joinedType'] == 'classroom') {
+            $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
+            $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']);
+        } else {
+            $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']);
+        }
 
         return $status === 'ok';
     }
@@ -291,6 +296,33 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function findCourseStudentsByCourseIds($courseIds)
     {
         return $this->getMemberDao()->findByCourseIds($courseIds);
+    }
+
+    public function findLatestStudentsByCourseSetId($courseSetId, $offset, $limit)
+    {
+        $result = $this->getMemberDao()->findByConditionsGroupByUserId(
+            array(
+                'role' => 'student',
+                'courseSetId' => $courseSetId,
+                'locked' => 0,
+            ),
+            array('createdTime' => 'DESC'),
+            $offset,
+            $limit
+        );
+
+        $memberIds = array_column($result, 'id');
+
+        $members = $this->getMemberDao()->findByIds($memberIds);
+        $members = ArrayToolkit::index($members, 'id');
+
+        $sortedMembers = array();
+
+        foreach ($memberIds as $memberId) {
+            $sortedMembers[] = $members[$memberId];
+        }
+
+        return $sortedMembers;
     }
 
     public function getCourseStudentCount($courseId)

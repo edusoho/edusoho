@@ -86,6 +86,11 @@ class Download extends Activity
         return $this->getDownloadActivityDao()->get($id);
     }
 
+    public function find($ids)
+    {
+        return $this->getDownloadActivityDao()->findByIds($ids);
+    }
+
     /**
      * @return DownloadActivityDao
      */

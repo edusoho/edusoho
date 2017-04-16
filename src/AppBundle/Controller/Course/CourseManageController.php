@@ -756,8 +756,6 @@ class CourseManageController extends BaseController
             array(
                 'courseSet' => $courseSet,
                 'course' => $course,
-                'courseSets' => array($courseSet['id'] => $courseSet),
-                'courses' => array($course['id'] => $course),
                 'request' => $request,
                 'orders' => $orders,
                 'users' => $users,
@@ -1041,6 +1039,7 @@ class CourseManageController extends BaseController
             array(
                 'courseSet' => $courseSet,
                 'course' => $course,
+                'taskRemarks' => ArrayToolkit::column($taskStat, 'title'),
                 'taskTitles' => ArrayToolkit::column($taskStat, 'alias'),
                 'finishedRate' => ArrayToolkit::column($taskStat, 'finishedRate'),
                 'finishedNum' => ArrayToolkit::column($taskStat, 'finishedNum'),

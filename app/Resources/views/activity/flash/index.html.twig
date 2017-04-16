@@ -4,7 +4,7 @@
 
 {% block body %}
   <div class="iframe-parent-content iframe-parent-full">
-    {% if file.file|default(null) %}
+    {% if flash.file|default(null) %}
       <div  id="flash-player" data-uri="{{ flashMedia.uri }}" data-finish-type="{{ flash.finishType }}" data-finish-detail="{{ flash.finishDetail }}">
       </div>
     {% else %}

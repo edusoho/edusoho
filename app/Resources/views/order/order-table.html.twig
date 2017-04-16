@@ -39,7 +39,7 @@
             {% endif %}
             <br>
             <span class="color-gray text-sm">{{'user.orders.order_id'|trans({'%sn%':order.sn})}}</span>
-            {% if order.targetType == 'course' %}
+            {# {% if order.targetType == 'course' %}
               <br>
               <span class="color-gray text-sm">
                 {% if courses[order.targetId]|default(false) and courseSets[courses[order.targetId].courseSetId]|default(false) %}
@@ -49,7 +49,7 @@
                   {{'user.orders.target_course_deleted'|trans}}
                 {% endif %}
               </span>
-            {% endif %}
+            {% endif %} #}
           </td>
           <td><span class="color-gray text-sm">{{ order.createdTime|date('Y-n-d H:i:s') }}</span></td>
           <td>{{ dict_macro.orderStatus(order.status) }}</td>

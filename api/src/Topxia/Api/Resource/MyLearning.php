@@ -62,6 +62,9 @@ class MyLearning extends BaseResource
         }
 
         foreach ($members as $key => $member) {
+            if (empty($courses[$member['courseId']])) {
+                continue;
+            }
             $course = $courses[$member['courseId']];
             $learningData[$key] = $course;
 
