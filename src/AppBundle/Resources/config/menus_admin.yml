@@ -472,7 +472,7 @@ admin:
                                     mode: modal
                                     group: topBtn
                 admin_operation_group:
-                    name: 小组话题管理
+                    name: 小组管理
                     children:
                         admin_operation_group_manage:
                             name: 小组管理
