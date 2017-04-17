@@ -5,11 +5,11 @@ namespace ApiBundle\Api\Resource\PayCenter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ApiException;
 use ApiBundle\Api\Exception\InvalidArgumentException;
-use ApiBundle\Api\Resource\Resource;
+use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Component\Payment\Payment;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
 
-class PayCenter extends Resource
+class PayCenter extends AbstractResource
 {
     public function add(ApiRequest $request)
     {

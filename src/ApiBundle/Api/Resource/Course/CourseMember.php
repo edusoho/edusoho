@@ -8,9 +8,9 @@ use ApiBundle\Api\Exception\ApiNotFoundException;
 use ApiBundle\Api\Exception\BadRequestException;
 use ApiBundle\Api\Exception\InvalidArgumentException;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
-use ApiBundle\Api\Resource\Resource;
+use ApiBundle\Api\Resource\AbstractResource;
 
-class CourseMember extends Resource
+class CourseMember extends AbstractResource
 {
     /**
      * @ApiConf(isRequiredAuth=false)

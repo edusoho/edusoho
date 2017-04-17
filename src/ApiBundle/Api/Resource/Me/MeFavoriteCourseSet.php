@@ -4,9 +4,9 @@ namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Resource\Resource;
+use ApiBundle\Api\Resource\AbstractResource;
 
-class MeFavoriteCourseSet extends Resource
+class MeFavoriteCourseSet extends AbstractResource
 {
     /**
      * @ApiConf(filter=ApiBundle\Api\Resource\CourseSet\CourseSetFilter)

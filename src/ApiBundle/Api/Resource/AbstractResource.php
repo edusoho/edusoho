@@ -12,7 +12,7 @@ use Monolog\Handler\StreamHandler;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Topxia\Service\Common\ServiceKernel;
 
-abstract class Resource
+abstract class AbstractResource
 {
     private $logger;
 

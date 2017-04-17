@@ -3,7 +3,7 @@
 namespace ApiBundle\Api;
 
 use ApiBundle\Api\Exception\BadRequestException;
-use ApiBundle\Api\Resource\Resource;
+use ApiBundle\Api\Resource\AbstractResource;
 use Doctrine\Common\Inflector\Inflector;
 
 class PathMeta
@@ -15,14 +15,14 @@ class PathMeta
     private $slugs = array();
 
     private $singleMap = array(
-        'GET' => Resource::METHOD_GET,
-        'PATCH' => Resource::METHOD_UPDATE,
-        'DELETE' => Resource::METHOD_REMOVE
+        'GET' => AbstractResource::METHOD_GET,
+        'PATCH' => AbstractResource::METHOD_UPDATE,
+        'DELETE' => AbstractResource::METHOD_REMOVE
     );
 
     private $listMap = array(
-        'GET' => Resource::METHOD_SEARCH,
-        'POST' => Resource::METHOD_ADD
+        'GET' => AbstractResource::METHOD_SEARCH,
+        'POST' => AbstractResource::METHOD_ADD
     );
 
     public function getResourceClassName()

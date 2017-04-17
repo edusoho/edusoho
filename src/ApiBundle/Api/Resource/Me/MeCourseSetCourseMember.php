@@ -5,11 +5,11 @@ namespace ApiBundle\Api\Resource\Me;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ApiNotFoundException;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
-use ApiBundle\Api\Resource\Resource;
+use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ApiConf;
 use AppBundle\Common\ArrayToolkit;
 
-class MeCourseSetCourseMember extends Resource
+class MeCourseSetCourseMember extends AbstractResource
 {
     public function search(ApiRequest $request, $courseSetId)
     {

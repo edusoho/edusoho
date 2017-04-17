@@ -4,9 +4,9 @@ namespace ApiBundle\Api\Resource\OrderInfo;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\InvalidArgumentException;
-use ApiBundle\Api\Resource\Resource;
+use ApiBundle\Api\Resource\AbstractResource;
 
-class OrderInfo extends Resource
+class OrderInfo extends AbstractResource
 {
     public function add(ApiRequest $request)
     {

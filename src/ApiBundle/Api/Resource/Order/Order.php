@@ -5,9 +5,9 @@ namespace ApiBundle\Api\Resource\Order;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\InvalidArgumentException;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
-use ApiBundle\Api\Resource\Resource;
+use ApiBundle\Api\Resource\AbstractResource;
 
-class Order extends Resource
+class Order extends AbstractResource
 {
     public function add(ApiRequest $request)
     {

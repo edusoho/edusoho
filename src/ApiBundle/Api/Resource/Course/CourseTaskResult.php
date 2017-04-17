@@ -4,9 +4,9 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
-use ApiBundle\Api\Resource\Resource;
+use ApiBundle\Api\Resource\AbstractResource;
 
-class CourseTaskResult extends Resource
+class CourseTaskResult extends AbstractResource
 {
     public function search(ApiRequest $request, $courseId)
     {

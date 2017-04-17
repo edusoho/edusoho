@@ -6,14 +6,11 @@ use ApiBundle\Api\FieldFilterFactory;
 
 class ResourceProxy
 {
-    /**
-     * @var ApiBundle\Api\Resource\Resource
-     */
     private $resource;
 
     private $fieldFilters;
 
-    public function __construct(ApiBundle\Api\Resource\Resource $resource)
+    public function __construct(AbstractResource $resource)
     {
         $this->resource = $resource;
     }
@@ -46,9 +43,6 @@ class ResourceProxy
         return $biz['api.field.filter.factory'];
     }
 
-    /**
-     * @var ApiBundle\Api\Resource\Resource
-     */
     public function getResource()
     {
         return $this->resource;
@@ -56,7 +50,7 @@ class ResourceProxy
 
     private function filterResult($method, &$result)
     {
-        if ($method == Resource::METHOD_SEARCH) {
+        if ($method == AbstractResource::METHOD_SEARCH) {
             $this->getFieldFilter($method)->filters($result);
         } else {
             $this->getFieldFilter($method)->filter($result);

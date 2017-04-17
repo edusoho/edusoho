@@ -4,9 +4,9 @@ namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ApiNotFoundException;
-use ApiBundle\Api\Resource\Resource;
+use ApiBundle\Api\Resource\AbstractResource;
 
-class MeCourseLearningProgress extends Resource
+class MeCourseLearningProgress extends AbstractResource
 {
     public function get(ApiRequest $request, $courseId)
     {

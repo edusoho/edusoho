@@ -4,9 +4,9 @@ namespace ApiBundle\Api\Resource\CourseSet;
 
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Resource\Resource;
+use ApiBundle\Api\Resource\AbstractResource;
 
-class CourseSetLatestMember extends Resource
+class CourseSetLatestMember extends AbstractResource
 {
     /**
      * @ApiConf(isRequiredAuth=false)

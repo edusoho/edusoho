@@ -49,6 +49,7 @@ class CourseMemberTest extends ApiTestCase
 
         $this->mockBiz('Course:MemberService', array(
             array('functionName' => 'becomeStudent', 'runTimes' => 1, 'returnValue' => 1),
+            array('functionName' => 'getCourseMember', 'runTimes' => 1, 'returnValue' => 1),
         ));
         $res = new CourseMember($this->getBiz());
         $resp = $res->add(new ApiRequest('', ''), 100000);

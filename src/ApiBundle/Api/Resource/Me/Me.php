@@ -3,9 +3,9 @@
 namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Resource\Resource;
+use ApiBundle\Api\Resource\AbstractResource;
 
-class Me extends Resource
+class Me extends AbstractResource
 {
     public function get(ApiRequest $request)
     {

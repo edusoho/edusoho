@@ -7,13 +7,13 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\BannedCredentialException;
 use ApiBundle\Api\Exception\InvalidArgumentException;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
-use ApiBundle\Api\Resource\Resource;
+use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Util\BrowserDetectionUtil;
 use AppBundle\Common\EncryptionToolkit;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 
-class Token extends Resource
+class Token extends AbstractResource
 {
     private $encryptionTypes = array('XXTEA');
 

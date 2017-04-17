@@ -4,10 +4,10 @@ namespace ApiBundle\Api\Resource\CourseSet;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
-use ApiBundle\Api\Resource\Resource;
+use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ApiConf;
 
-class CourseSet extends Resource
+class CourseSet extends AbstractResource
 {
     /**
      * @ApiConf(isRequiredAuth=false)
