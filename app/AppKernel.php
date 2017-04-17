@@ -79,8 +79,11 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new Codeages\PluginBundle\CodeagesPluginBundle(),
             new AppBundle\AppBundle(),
             new ApiBundle\ApiBundle(),
-            new Sentry\SentryBundle\SentryBundle()
         );
+
+        if($this->getEnvironment() === 'prod'){
+            $bundles[] = new Sentry\SentryBundle\SentryBundle();
+        }
 
         if ($this->getEnvironment() !== 'test') {
             $plugins = $this->pluginConfigurationManager->getInstalledPlugins();
