@@ -20,11 +20,6 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $this->getLiveActivityDao()->get($id);
     }
 
-    public function findLiveActivitiesByIds(array $ids)
-    {
-        return $this->getLiveActivityDao()->findLiveActivitiesByIds($ids);
-    }
-
     public function createLiveActivity($activity, $ignoreValidation = false)
     {
         if (!$ignoreValidation && (empty($activity['startTime'])
