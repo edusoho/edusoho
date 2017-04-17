@@ -137,36 +137,37 @@ class CourseExtension extends Extension implements ServiceProviderInterface
     protected function registerCourseCopyChain($container)
     {
         $chains = array(
-            'root' => array(
-                'classroom-course' => array(
-                    'clz' => 'Biz\Course\Copy\Impl\ClassroomCourseCopy',
-                    'children' => array(
-                        'material' => array(
-                            'clz' => 'Biz\Course\Copy\Impl\CourseMaterialCopy',
-                        ),
-                        'course-member' => array(
-                            'clz' => 'Biz\Course\Copy\Impl\CourseMemberCopy',
-                        ),
-                        'classroom-teacher' => array(
-                            'clz' => 'Biz\Course\Copy\Impl\ClassroomTeacherCopy',
-                        ),
-                        'courseset-question' => array(
-                            'clz' => 'Biz\Course\Copy\Impl\CourseSetQuestionCopy',
-                        ),
-                        'courseset-testpaper' => array(
-                            'clz' => 'Biz\Course\Copy\Impl\CourseSetTestpaperCopy',
-                        ),
-                        'task' => array(
-                            'clz' => 'Biz\Course\Copy\Impl\TaskCopy',
-                        ),
+            'classroom-course' => array(
+                'clz' => 'Biz\Course\Copy\Impl\ClassroomCourseCopy',
+                'children' => array(
+                    'material' => array(
+                        'clz' => 'Biz\Course\Copy\Impl\CourseMaterialCopy',
+                    ),
+                    'course-member' => array(
+                        'clz' => 'Biz\Course\Copy\Impl\CourseMemberCopy',
+                    ),
+                    'classroom-teacher' => array(
+                        'clz' => 'Biz\Course\Copy\Impl\ClassroomTeacherCopy',
+                    ),
+                    'courseset-question' => array(
+                        'clz' => 'Biz\Course\Copy\Impl\CourseSetQuestionCopy',
+                    ),
+                    'courseset-testpaper' => array(
+                        'clz' => 'Biz\Course\Copy\Impl\CourseSetTestpaperCopy',
+                    ),
+                    'task' => array(
+                        'clz' => 'Biz\Course\Copy\Impl\TaskCopy',
                     ),
                 ),
-                'course' => array(
-                    'clz' => 'Biz\Course\Copy\Impl\CourseCopy',
-                    'children' => array(
-                        'task' => array(
-                            'clz' => 'Biz\Course\Copy\Impl\TaskCopy',
-                        ),
+            ),
+            'course' => array(
+                'clz' => 'Biz\Course\Copy\Impl\CourseCopy',
+                'children' => array(
+                    'course-member' => array(
+                        'clz' => 'Biz\Course\Copy\Impl\CourseMemberCopy',
+                    ),
+                    'task' => array(
+                        'clz' => 'Biz\Course\Copy\Impl\TaskCopy',
                     ),
                 ),
             ),
