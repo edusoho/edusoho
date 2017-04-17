@@ -23,7 +23,6 @@ class PushMessageEventSubscriber extends EventSubscriber
 
             'classroom.join' => 'onClassroomJoin',
             'classroom.quit' => 'onClassroomQuit',
-            'classroom.course.join' => 'onClassroomLiveCourseJoin',
 
             'article.create' => 'onArticleCreate',
             //资讯在创建的时候状态就是已发布的
@@ -65,19 +64,14 @@ class PushMessageEventSubscriber extends EventSubscriber
             'course-set.close' => 'onCourseDelete',
 
             //教学计划购买
-            'course.join' => array('onCourseJoin', 'onLiveCourseJoin'),
-            'course.quit' => array('onCourseQuit', 'onLiveMemberDelete'),
+            'course.join' => 'onCourseJoin',
+            'course.quit' => 'onCourseQuit',
 
             //兼容模式，task映射到lesson
             'course.task.publish' => 'onCourseLessonCreate',
             'course.task.unpublish' => 'onCourseLessonDelete',
             'course.task.update' => 'onCourseLessonUpdate',
             'course.task.delete' => 'onCourseLessonDelete',
-
-            'course.teachers.create' =>'onCourseTeachersCreate',
-            'course.teachers.delete' =>'onCourseTeachersDelete',
-
-            'course.member.import' =>'onCourseMemberImport',
         );
     }
 
@@ -184,42 +178,6 @@ class PushMessageEventSubscriber extends EventSubscriber
         $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
 
         $this->pushCloud('course.join', $member, 'important');
-    }
-
-    public function onLiveCourseJoin(Event $event)
-    {
-        $course = $event->getSubject();
-        $userId = $event->getArgument('userId');
-        $user = $this->getUserService()->getUser($userId);
-        $member = $event->getArgument('member');
-
-        list($activities, $liveActivities) = $this->findActivitiesAndLiveActivities($course);
-        foreach ($activities as $mediaId => $activity) {
-            $isPush = $this->canPushLiveMessage($activity);
-            if (!$isPush) {
-                continue;
-            }
-            $result[] = $this->buildLiveMemberData($user, $member);
-            $this->pushJoinLiveCourseMember($result, $liveActivities[$mediaId]['liveId']);
-        }
-    }
-
-    public function onLiveMemberDelete(Event $event)
-    {
-        $course = $event->getSubject();
-        $userId = $event->getArgument('userId');
-
-        if ($course['locked']) {
-            $course = $this->getCourseService()->getCourse($course['parentId']);
-        }
-        list($activities, $liveActivities) = $this->findActivitiesAndLiveActivities($course);
-        foreach ($activities as $mediaId => $activity) {
-            $isPush = $this->canPushLiveMessage($activity);
-            if (!$isPush) {
-                continue;
-            }
-            $this->pushDeleteLiveCourseMember($userId, $liveActivities[$mediaId]['liveId']);
-        }
     }
 
     public function onCourseQuit(Event $event)
@@ -338,27 +296,6 @@ class PushMessageEventSubscriber extends EventSubscriber
         $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
 
         $this->pushCloud('classroom.join', $member, 'important');
-    }
-
-    public function onClassroomLiveCourseJoin(Event $event)
-    {
-        $course = $event->getSubject();
-        $member = $event->getArgument('member');
-        $user = $this->getUserService()->getUser($member['userId']);
-
-        if ($course['locked']) {
-            $course = $this->getCourseService()->getCourse($course['parentId']);
-        }
-
-        list($activities, $liveActivities) = $this->findActivitiesAndLiveActivities($course);
-        foreach ($activities as $mediaId => $activity) {
-            $isPush = $this->canPushLiveMessage($activity);
-            if (!$isPush) {
-                continue;
-            }
-            $result[] = $this->buildLiveMemberData($user, $member);
-            $this->pushJoinLiveCourseMember($result, $liveActivities[$mediaId]['liveId']);
-        }
     }
 
     public function onClassroomQuit(Event $event)
@@ -669,86 +606,6 @@ class PushMessageEventSubscriber extends EventSubscriber
         $this->pushCloud('thread_post.delete', $this->convertThreadPost($threadPost, 'group.thread.post.delete'));
     }
 
-    public function onCourseTeachersCreate(Event $event)
-    {
-        $course = $event->getArgument('course');
-
-        $teachers = $this->getCourseMemberService()->findCourseTeachers($course['id']);
-        $teachers = ArrayToolkit::index($teachers, 'userId');
-
-        $teacherIds = $event->getSubJect();
-        $teacherIds = array_values($teacherIds);
-        $users = $this->getUserService()->findUsersByIds($teacherIds);
-        $users = ArrayToolkit::index($users, 'id');
-
-        list($activities, $liveActivities) = $this->findActivitiesAndLiveActivities($course);
-
-        foreach ($activities as $mediaId => $activity) {
-            $isPush = $this->canPushLiveMessage($activity);
-            if (!$isPush) {
-                continue;
-            }
-
-            foreach ($teacherIds as $userId) {
-                $result[] = $this->buildLiveMemberData($users[$userId], $teachers[$userId]);
-            }
-            $this->pushJoinLiveCourseMember($result, $liveActivities[$mediaId]['liveId']);
-        }
-    }
-
-    public function onCourseTeachersDelete(Event $event)
-    {
-        $course = $event->getArgument('course');
-
-        $teacherIds = $event->getSubJect();
-        list($activities, $liveActivities) = $this->findActivitiesAndLiveActivities($course);
-        foreach ($activities as $mediaId => $activity) {
-            $isPush = $this->canPushLiveMessage($activity);
-            if (!$isPush) {
-                continue;
-            }
-
-            foreach ($teacherIds as $teacherId) {
-                $this->pushDeleteLiveCourseMember($teacherId, $liveActivities[$mediaId]['liveId']);
-            }
-        }
-    }
-
-    public function onCourseMemberImport(Event $event)
-    {
-        $members = $event->getArgument('members');
-        $members = ArrayToolkit::index($members, 'userId');
-        $userIds = ArrayToolkit::column($members, 'userId');
-
-        $users = $this->getUserService()->findUsersByIds($userIds);
-        $users = ArrayToolkit::index($users, 'id');
-
-        $course = $event->getSubject();
-        list($activities, $liveActivities) = $this->findActivitiesAndLiveActivities($course);
-
-        foreach ($activities as $mediaId => $activity) {
-            $isPush = $this->canPushLiveMessage($activity);
-            if (!$isPush) {
-                continue;
-            }
-
-            foreach ($members as $userId => $member) {
-                $result[] = $this->buildLiveMemberData($users[$userId], $member);
-            }
-            $this->pushJoinLiveCourseMember($result, $liveActivities[$mediaId]['liveId']);
-        }
-    }
-
-    protected function findActivitiesAndLiveActivities($course)
-    {
-        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($course['id'], 'live');
-        $activities = ArrayToolkit::index($activities, 'mediaId');
-        $liveActivities = $this->getLiveActivityService()->findLiveActivitiesByIds(ArrayToolkit::column($activities, 'mediaId'));
-        $liveActivities = ArrayToolkit::index($liveActivities, 'id');
-
-        return array($activities, $liveActivities);
-    }
-
     protected function convertThreadPost($threadPost, $eventName)
     {
         if (strpos($eventName, 'course') === 0) {
@@ -953,47 +810,6 @@ class PushMessageEventSubscriber extends EventSubscriber
         return $path;
     }
 
-    protected function canPushLiveMessage($activity)
-    {
-        if ($activity['mediaType'] != 'live') {
-            return false;
-        }
-        if (time() > $activity['endTime']) {
-            return false;
-        }
-        return true;
-    }
-
-    protected function buildLiveMemberData($user, $member)
-    {
-        $result['clientName'] = $user['nickname'];
-        $result['clientId'] = $user['id'];
-        $result['avatar'] = $this->getFileUrl($user['smallAvatar']);
-        $result['role'] = $member['role'];
-        
-        return $result;
-    }
-
-    protected function pushJoinLiveCourseMember($result, $liveId)
-    {
-        try {
-            $api = CloudAPIFactory::create('root');
-            $result = $api->post("/lives/{$liveId}/room_members", array('members' => $result));
-        } catch (\RuntimeException $e) {
-            throw new \RuntimeException(ServiceKernel::instance()->trans('发送失败！'));
-        }
-    }
-
-    public function pushDeleteLiveCourseMember($userId, $liveId)
-    {
-        try {
-            $api = CloudAPIFactory::create('root');
-            $result = $api->delete("/lives/{$liveId}/room_members", array('clientId' => $userId));
-        } catch (\RuntimeException $e) {
-            throw new \RuntimeException(ServiceKernel::instance()->trans('发送失败！'));
-        }
-    }
-
     protected function getAssetUrl($path)
     {
         if (empty($path)) {
@@ -1148,16 +964,6 @@ class PushMessageEventSubscriber extends EventSubscriber
         return $this->createService('Group:GroupService');
     }
 
-    protected function getActivityService()
-    {
-        return $this->createService('Activity:ActivityService');
-    }
-
-   protected function getLiveActivityService()
-   {
-        return $this->createService('Activity:LiveActivityService');
-    }
-    
     protected function getConversationService()
     {
         return $this->createService('IM:ConversationService');

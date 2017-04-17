@@ -70,8 +70,6 @@ interface MemberService
      */
     public function becomeStudent($courseId, $userId, $info = array());
 
-    public function doBecomeStudent($courseId, $userId, $info = array());
-
     /**
      * 退学.
      */

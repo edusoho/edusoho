@@ -229,11 +229,6 @@ class MemberServiceImpl extends BaseService implements MemberService
         return ArrayToolkit::column($members, 'userId');
     }
 
-    public function findMembersByCourseId($courseId)
-    {
-        return $this->getMemberDao()->findByCourseId($courseId);
-    }
-
     public function updateMember($id, $fields)
     {
         return $this->getMemberDao()->update($id, $fields);
@@ -393,17 +388,6 @@ class MemberServiceImpl extends BaseService implements MemberService
                 $visibleTeacherIds[] = $member['userId'];
             }
         }
-        $existTeacherIds = ArrayToolkit::column($existTeacherMembers, 'userId');
-        $teacherIds = ArrayToolkit::column($teacherMembers, 'userId');
-        $newTeacherIds = array_diff($teacherIds, $existTeacherIds);
-        if ($newTeacherIds) {
-            $this->dispatchEvent('course.teachers.create', new Event($newTeacherIds, array('course' => $course)));
-        }
-
-        $deleteTeacherIds = array_diff($existTeacherIds, $teacherIds);
-        if ($deleteTeacherIds) {
-            $this->dispatchEvent('course.teachers.delete', new Event($deleteTeacherIds, array('course' => $course)));
-        }
 
         $this->getLogService()->info('course', 'update_teacher', "更新教学计划#{$courseId}的教师", $teacherMembers);
 
@@ -528,20 +512,6 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function becomeStudent($courseId, $userId, $info = array())
     {
         $course = $this->getCourseService()->getCourse($courseId);
-        $member = $this->doBecomeStudent($course['id'], $userId, $info);
-
-        $this->dispatchEvent(
-            'course.join',
-            $course,
-            array('userId' => $member['userId'], 'member' => $member)
-        );
-
-        return $member;
-    }
-
-    public function doBecomeStudent($courseId, $userId, $info = array())
-    {
-        $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
             throw $this->createNotFoundException();
@@ -613,6 +583,12 @@ class MemberServiceImpl extends BaseService implements MemberService
         $member = $this->getMemberDao()->create($fields);
 
         $this->refreshMemberNoteNumber($courseId, $userId);
+
+        $this->dispatchEvent(
+            'course.join',
+            $course,
+            array('userId' => $member['userId'], 'member' => $member)
+        );
 
         return $member;
     }

@@ -69,46 +69,6 @@ class LiveActivityServiceTest extends BaseTestCase
         $this->assertNull($result);
     }
 
-    public function testFindLiveActivitiesByIds()
-    {
-        $live = array(
-            'title' => 'test live activity',
-            'remark' => 'remark ...',
-            'mediaType' => 'live',
-            'fromCourseId' => 1,
-            'fromCourseSetId' => 1,
-            'fromUserId' => '1',
-            'startTime' => time() + 1000,
-            'endTime' => time() + 3000,
-            'length' => 2000,
-            '_base_url' => 'url...',
-        );
-        $live1 = array(
-            'title' => 'test live activity',
-            'remark' => 'remark ...',
-            'mediaType' => 'live',
-            'fromCourseId' => 1,
-            'fromCourseSetId' => 1,
-            'fromUserId' => '1',
-            'startTime' => time() + 1000,
-            'endTime' => time() + 3000,
-            'length' => 2000,
-            '_base_url' => 'url...',
-        );
-        $savedActivity = $this->getLiveActivityService()->createLiveActivity($live);
-        $this->assertNotNull($savedActivity['id']);
-        $this->assertNotNull($savedActivity['liveId']);
-        $this->assertNotNull($savedActivity['liveProvider']);
-
-        $savedActivity1 = $this->getLiveActivityService()->createLiveActivity($live1);
-        $this->assertNotNull($savedActivity['id']);
-        $this->assertNotNull($savedActivity['liveId']);
-        $this->assertNotNull($savedActivity['liveProvider']);
-
-        $liveActivities = $this->getLiveActivityService()->findLiveActivitiesByIds(array($savedActivity['id'], $savedActivity1['id']));
-        $this->assertEquals(2, count($liveActivities));
-    }
-
     /**
      * @return LiveActivityService
      */
