@@ -19,36 +19,6 @@ let validator = $form.validate({
   }
 });
 
-console.log(validator);
-
-
-// let validator = new Validator({
-//   element: $form,
-//   autoSubmit: false
-// });
-
-// validator.addItem({
-//   element: $form.find('[name=rating]'),
-//   required: true,
-//   rule: 'star',
-//   errormessageRequired: Translator.trans('请打分')
-// });
-
-// validator.addItem({
-//   element: $form.find('[name=content]'),
-//   required: true
-// });
-
-
-
-
-
-
-
-
-// Validator.addRule('star', /^[1-5]$/, Translator.trans('请打分'));
-
-
 if ($form.length > 0) {
   $form.find('.rating-btn').raty({
     path: $form.find('.rating-btn').data('imgPath'),
