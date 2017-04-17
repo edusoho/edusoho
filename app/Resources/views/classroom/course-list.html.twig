@@ -26,7 +26,7 @@
                 <span class="period">{{'course.lesson_num'|trans({'%lessonNum%':course.lessonNum})}}</span>
                 <span class="price">
                 {% if courseMembers[course.id] and not member and setting('classroom.discount_buy') %}
-                {{'coruse.member_buyed'|trans}}
+                {{'course.member_buyed'|trans}}
                 {% else %}
                   {% if member and not 'auditor' in member.role %}
                     {% if courseMembers[course.id] and courseMembers[course.id].learnedNum == 0 %}
@@ -34,14 +34,14 @@
                     {% elseif courseMembers[course.id] and courseMembers[course.id].learnedNum == course.lessonNum %}
                     <span class="color-success">{{'course.member_learn_status.learned'|trans}}</span>
                     {% elseif courseMembers[course.id] and courseMembers[course.id].learnedNum < course.lessonNum %}
-                    <span class="text-info">{{'coruse.member_learn_status.learning'|trans}}</span>
+                    <span class="text-info">{{'course.member_learn_status.learning'|trans}}</span>
                     {% else %}
                     {{'course.member_learn_status.none'|trans}}
                     {% endif %} 
 
 
                   {% elseif courseMembers[course.id] and member and 'auditor' in member.role  and setting('classroom.discount_buy') %}
-                  {{'coruse.member_buyed'|trans}}
+                  {{'course.member_buyed'|trans}}
                   {% else %}
                       {% if setting('coin.coin_enabled') and setting('coin. price_type') == 'Coin' %}
 

@@ -42,6 +42,7 @@ site.message.info: 提示信息
 site.message.warning: 警告信息
 site.message.error: 错误提示
 site.power_by: 好知网
+site.default.student: 学员
 site.default.classroom: 班级
 site.default.more: 更多
 site.default.manage: 管理
@@ -59,6 +60,36 @@ site.btn.expand: 展开
 site.btn.collapse: 收起
 site.price: 价格
 site.org: 组织机构
+
+#es_bar
+es_bar.mobile: 手机端
+es_bar.go_top: 回到顶端
+es_bar.study_place.content_title: 我的课程/%name%
+es_bar.study_center.content_title: 学习中心
+es_bar.study_center.study_mission: 学习任务
+es_bar.study_center.mission_number_and_title: 任务%number%-%title%
+es_bar.study_center.course_title: 课程:%title%
+es_bar.study_center.mission_empty_tips: >
+  暂未发现还有未学习任务。<a href="%courseSetExplore%">去逛逛
+es_bar.study_center.recent_live_tasks: 预告板
+es_bar.study_place.classroom_course_num: 共%courseNum%门课程
+es_bar.study_place.empty_classroom_tips: 暂无%name%
+es_bar.practice.content_title: 我的考试/作业
+es_bar.practice.practice_finished: 已批阅
+es_bar.practice.practice_reviewing: 已提交
+es_bar.practice.testpaper: 考试
+es_bar.practice.testpaper_empty_tips: 暂无考试
+es_bar.practice.homework: 作业
+es_bar.practice.homework_empty_tips: 暂无作业
+es_bar.notification.empty_tips: 暂无通知
+es_bar.notification.content_title: 通知
+es_bar.consult.click_to_send_msg_tips: 点击这里给我发消息
+es_bar.consult.work_time: 工作时间：%worktime% 
+es_bar.consult.email: 邮箱：
+es_bar.study_center: 学<br>习<br>中<br>心
+es_bar.qq_consult: QQ客服及QQ群
+es_bar.phone_consult: 电话客服
+es_bar.notification: 通知
 
 # TODO 命名有问题
 status: 状态
@@ -81,7 +112,10 @@ date.day: 日
 
 #分页
 paginator.firstPage: 首页
-paginator.lastPage: 尾页
+paginator.endPage: 尾页
+paginator.nextPage: 下一页
+paginator.lastPage: 上一页
+
 # 用户通用
 user: 用户
 user.fields.login_password: 登录密码
@@ -121,8 +155,8 @@ user.btn.homepage_btn: 个人主页
 user.btn.send_message_btn: 私信
 user.not_login.tips: >
   你还没有登录，请先
-  %login%
-  %register%
+  <a href='%login%'>登录或</a>
+  <a href='%register%'>注册！</a>
 user.approve_tips: 温情提示：如果您的资料有变更，请在此修改，以便更好的为您服务！
 user.approved: 已认证
 user.approving: 实名认证中
@@ -245,10 +279,11 @@ import.user_import.remark_tips: 选填
 
 # 课程
 course: 课程
-coruse.member_buyed: 已购买
+course.empty_tips: 暂无课程
+course.member_buyed: 已购买
 course.member_learn_status.none: 未学
 course.member_learn_status.learned: 已学完
-coruse.member_learn_status.learning: 学习中
+course.member_learn_status.learning: 学习中
 course.lesson_num: %lessonNum%课时
 course.content_empty: 暂无课程内容
 course.create.tips: 请先完成以下设置，才能创建课程：
@@ -1985,6 +2020,10 @@ user.homepage.following_fan.fan_empty: 无粉丝
 
 # 主页模块-头部
 homepage: 首页
+homepage.student_evaluate: %studentName%评价
+homepage.reviewer_comment_course: 说：
+homepage.switch_language.chinese: 中文
+homepage.switch_language.english: English
 homepage.header.search: 搜索
 homepage.header.login: 登录
 homepage.header.logout: 退出登录
@@ -2149,6 +2188,8 @@ group.search.homepage: 小组主页
 group.search.search_group_name: 搜索小组
 group.search.content_title: 所有小组
 
+group.logo.crop_hint: 提示：请选择图片裁剪区域。
+
 group.thread.title: 标题
 group.thread.stick_label: 置顶
 group.thread.essence_label: 精华
@@ -2181,6 +2222,8 @@ group.thread.collapse_btn: 收起
 group.thread.content: 内容
 group.thread.owner: 话题作者
 group.thread.owner.empty: 无
+group.thread.reply_too_btn: 我也要说
+
 
 group.thread.insert_hide_content: 插入隐藏内容
 group.thread.insert_hide_content_title: 请输入要隐藏的内容
