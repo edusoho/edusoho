@@ -80,7 +80,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new AppBundle\AppBundle(),
         );
 
-        if($this->getEnvironment() === 'prod'){
+        if(is_file($this->getRootDir() . '/config/sentry.yml')){
             $bundles[] = new Sentry\SentryBundle\SentryBundle();
         }
 
