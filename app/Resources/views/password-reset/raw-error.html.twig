@@ -31,10 +31,10 @@
       <i class="es-icon es-icon-cuowu color-danger"></i>
     </div>
     <div class="reset-pwd-mes-body">
-      重置密码失败
+      {{'user.settings.password_reset.failed'|trans}}
     </div>
     <div class="reset-pwd-mes-footer">
-      <a class="btn btn-danger btn-lg" href="{{ path('password_reset') }}"> 找回密码</a>
+      <a class="btn btn-danger btn-lg" href="{{ path('password_reset') }}"> {{'user.settings.password_reset.find_password_btn'|trans}}</a>
     </div>
   </div>
 {% endblock %}

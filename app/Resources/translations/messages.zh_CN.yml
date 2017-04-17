@@ -1,7 +1,14 @@
 # 全站
 # 整站导航
+site.customer_service.qq_customer_service: QQ客服
+site.customer_service.qq_group: QQ群
+site.customer_service.mobile_group: 电话客服
+site.customer_service.weixin-content: 微信公众号
+site.customer_service.email: 电子邮箱
+site.customer_service.time: 服务时间：
+site.customer_service.send_message: 点击这里给我发消息
+
 site.alipay: 支付宝
-site.btn.share: 分享
 site.online_school_name: 网校名称
 site.online_school_about: 网校简介
 site.online_school_logo: 网校LOGO
@@ -9,9 +16,11 @@ site.register_link_url: 注册链接的地址
 site.not_support_cloud_video: >
   <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请前往<a href="%mobileUrl%" target="parent">下载App</a>。
 site.currency.RMB: 元
+site.date.year: 年
 site.date.month: 月
 site.date.day: 天
 site.date.hour: 时
+site.date.week: 周
 site.date.minute: 分
 site.date.second: 秒
 site.data.people: 人
@@ -43,12 +52,19 @@ site.message.warning: 警告信息
 site.message.error: 错误提示
 site.power_by: 好知网
 site.default.classroom: 班级
+site.default.reviewing: 已批阅
+site.default.unreviewing: 未批阅
+site.default.doing: 进行中
+site.default.all: 所有
+site.default.user: 用户
+site.default.course: 课程
 site.default.more: 更多
 site.default.manage: 管理
 site.default.none: 无
 site.default.or: 或
 site.default.minute: 分
 site.default.second: 秒
+site.default.bar: 条
 site.org.belongs_to_org_th: 所属组织机构
 site.org.code: 编码：
 site.tips: 提示
@@ -56,9 +72,65 @@ site.tips.scan_qrcode_tips: 扫二维码继续学习二维码时效为半小时
 site.validate_rules.max_int: 最大值为9位整数
 site.validate_rules.two_decimal_places: 保留到2位小数
 site.btn.expand: 展开
+site.btn.setup: 现在就去设置
 site.btn.collapse: 收起
+site.btn.share: 分享
+site.btn.all_select: 全选
 site.price: 价格
 site.org: 组织机构
+site.org.setup: 设置组织机构
+site.org.modify_tips: 你不能更改自己的所属组织机构，你的账号已取消勾选
+
+# email 模板
+email.password_reset: >
+  亲爱的%nickname%
+
+  为了使您的密码能够成功更改。请点击以下链接使您修改密码的操作生效：
+
+  %verifyurl%
+  如果您的email程序不支持链接点击，请将上面的地址拷贝至您的浏览器(例如IE)的地址栏进入%sitename%。
+
+  %sitename %siteurl
+
+  (这是一封自动产生的email，请勿回复。)
+email.input_new_password: >
+  亲爱的%nickname%：
+
+  您的密码重设要求已经得到验证。请点击以下链接输入您新的密码：
+
+  %verifyurl%
+  如果您的email程序不支持链接点击，请将上面的地址拷贝至您的浏览器(例如IE)的地址栏进入%sitename%。
+
+  %sitename% %siteurl%
+
+  (这是一封自动产生的email，请勿回复。)
+email.email_change: >
+  Hi, %nickname%
+
+  您的登录邮箱重设要求已经收到。请点击以下链接进行验证：
+
+  %verifyurl%
+
+  如果以上链接无法点击，请将上面的地址复制到你的浏览器(如IE)的地址栏中打开，该链接地址24小时内打开有效。
+
+  %sitename% %siteurl%
+
+  (这是一封自动产生的email，请勿回复。)
+email.email_verify: >
+  Hi, %nickname%
+
+  请点击下面的链接完成邮箱的验证：
+
+  %verifyurl%
+
+  如果以上链接无法点击，请将上面的地址复制到你的浏览器(如IE)的地址栏中打开，该链接地址24小时内打开有效。
+
+  感谢对%sitename%的支持！
+
+  %sitename% %siteurl%
+
+  (这是一封自动产生的email，请勿回复。)
+
 
 # TODO 命名有问题
 status: 状态
@@ -71,9 +143,6 @@ size: 大小
 file: 文件
 operation: 操作
 
-#会员
-vip: 会员
-
 #日期通用
 date.year: 年
 date.month: 月
@@ -84,10 +153,10 @@ paginator.firstPage: 首页
 paginator.lastPage: 尾页
 # 用户通用
 user: 用户
+user.not_exist: 用户不存在
 user.fields.login_password: 登录密码
 user.fields.pay_password: 支付密码
 user.fileds.microblog: 微博
-
 user.fields.username_label: 用户名
 user.fields.email_label: Email
 user.fields.truename_label: 姓名
@@ -101,7 +170,6 @@ user.fields.introduction_label: 自我介绍
 user.fields.web_site_label: 个人网站
 user.fileds.wechat: 微信
 user.fileds.qq: QQ
-
 user.fields.gender.male: 男
 user.fields.gender.female: 女
 user.fields.idcard_label: 身份证号
@@ -115,15 +183,17 @@ user.fields.fan: 粉丝
 user.fields.no_title: 暂无头衔
 user.fields.no_sign: 暂无签名
 user.fields.no_introduction: 暂无简介
-user.btn.following_btn: 关注
-user.btn.followed_btn: 已关注
-user.btn.homepage_btn: 个人主页
-user.btn.send_message_btn: 私信
+user.btn.following: 关注
+user.btn.followed: 已关注
+user.btn.homepage: 个人主页
+user.btn.send_message: 私信
+user.btn.confirm_login_password: 确认登录密码
 user.not_login.tips: >
   你还没有登录，请先
   %login%
   %register%
 user.approve_tips: 温情提示：如果您的资料有变更，请在此修改，以便更好的为您服务！
+user.email_tips: 为了帐号的安全，以及更好的使用体验，请设置您的Email地址。
 user.approved: 已认证
 user.approving: 实名认证中
 user.mobile_bind: 已绑定
@@ -141,11 +211,23 @@ finance.max_deduction_rate: 最大可抵扣比率
 finance.max_deduction_money: 最大可抵扣金额
 finance.max_can_use_coin: 最大可用%coinName%
 
+
 #插件
+vip: 会员
 plugin.charge_coin.recharge: 充 值
 plugin.money_card: 学习卡
 plugin.money_card.use: 使用学习卡
+
 plugin.coupon: 优惠码
+plugin.coupon.minus: 抵扣
+plugin.coupon.minus_tips: 优惠券 抵扣%rate%元
+plugin.coupon.discount_tips: 优惠券 抵价%rate%折
+plugin.coupon.no_use_option: 不使用优惠券
+plugin.coupon.change_btn: 更换优惠券
+plugin.coupon.use_btn: 使用优惠券
+plugin.coupon.choose_btn: 输入优惠券
+plugin.coupon.use.input_placeholder: 请输入优惠券
+
 plugin.coupon.code: 优惠码
 plugin.coupon.amount: 优惠金额
 
@@ -199,6 +281,90 @@ order.log: 日志
 order.coin.empty_hint: 暂无虚拟币订单记录
 order.export_btn: 导出订单
 
+order.confirm: 订单确认
+order.confirm.pay_rmb: 应付金额：
+order.confirm.cal_formula: %coin_name% ÷ 汇率(%cashRate%) =
+order.confirm.submit_btn: 提交订单
+order.confirm.coupon: 优惠券
+order.confirm.coupon.empty: 没有使用优惠券
+order.confirm.exchange_rate: 1元 = %cashRate%%coin_name%）
+order.confirm.use_tips: 本次使用
+order.confirm.account_cash: 账户余额：
+order.confirm.safety_tips: 为了保障账户资金安全，请先
+order.confirm.setup_pay_password_tips: >
+  为了保障账户资金安全，请先<a class="alert-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%">设置支付密码</a>
+order.confirm.setup_login_password_tips: >
+  为了保障账户资金安全，请先<a class="alert-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%">设置登录密码</a>
+order.confirm.forget_password_btn: 忘记密码？
+order.confirm.input_pay_password_tips: 请输入支付密码
+order.confirm.top_use_tips: 本订单最高可以使用
+order.confirm.sms_code: 短信验证码
+order.confirm.sms_code.bind_mobile_tips: 已绑定手机号码%blur_phone_number%
+order.confirm.sms_code.change_mobile_btn: 修改手机号码
+order.confirm.sms_code.input_placeholder: 输入短信验证码
+order.confirm.sms_code.get_code_btn: 获取短信验证码
+order.confirm.sms_code.not_bind_mobile_tips: 您还未绑定手机号
+order.confirm.sms_code.bind_btn: 去绑定
+order.paid_course.content_title: 您已购买过：
+order.paid_course.minus: 抵扣：
+
+order.refund: 退出学习
+order.refund.reason: 退出原因
+order.refund.reason_tips: 请输入您的退学原因
+order.refund.apply_for_btn: 申请退款
+order.refund.buy_price: （购买时的价格：%amount%元）
+order.refund.failed_tips: 已经超出了退款期限%maxRefundDays%天，不能申请退款。
+order.refund.quit_study_btn: 退出学习
+order.refund.quit_study_btn.submiting: 正在退出...
+
+order.vip_order.total_months: 个月
+order.vip_order.level_up_tips: 会员升级为：%level.name%
+order.vip_order.renew_tips: %level.name% 会员续费 x %duration%
+order.vip_order.buy_tips: 购买 %level.name%会员 x %duration%
+
+order.pay: 订单支付
+order.success: 订单完成
+
+# 支付中心
+pay_center: 支付中心
+pay_center.confirm: 订单确认
+pay_center.pay: 订单支付
+pay_center.pay.submit_tips: 订单已提交，请在４８小时内完成支付！逾期订单将被取消。
+pay_center.pay.mode: 支付方式
+pay_center.pay.cash_card: 储蓄卡
+pay_center.pay.credit_card: 信用卡
+pay_center.pay.use_new_card: 使用新的银行卡
+pay_center.pay.weixin_browse_tips: 您正在使用微信浏览，暂不支持其他支付方式
+pay_center.pay.online_banking_tips: 若需使用网银支付，请使用IE浏览器
+pay_center.pay.not_support_weixin_pay_tips: 您正在使用手机浏览，暂不支持微信支付方式
+pay_center.pay.pay_rmb: 应付金额：
+pay_center.pay.confirm_pay_btn: 确认支付
+pay_center.pay.weixin_pay: 微信支付
+pay_center.pay.weixin_pay.content_title: 支付信息
+pay_center.pay.weixin_pay.pay_btn: 立即支付
+pay_center.pay.weixin_pay.scan_qcode_pay_tips: >
+    请使用微信扫一扫<br>扫描二维码支付
+pay_center.pay.weixin_pay.press_qcode_pay_tips: 请长按二维码支付
+pay_center.pay.choose_other_way_btn: 选择其他支付方式
+pay_center.finish: 订单完成
+pay_center.finish.jump_tips: 正在跳转到支付网关...
+pay_center.finish_tips: >
+  订单支付成功，将在 <span class="js-countdown">3</span> 秒后跳转</p>
+pay_center.fee: 收费
+pay_center.remind: 支付提醒
+pay_center.remind.content_title: 支付提醒
+pay_center.remind.pay_in_alipay_btn: 点击进入支付宝
+pay_center.remind.school_escow_tips: 由于网校使用的为“担保交易”，因此需要您去支付宝网站对本次购买做“确认收货”操作（系统已自动完成虚拟发货），确认后即支付成功，即可进入课程学习。
+pay_center.remind.person_escow_tips: 由于您在支付时选择的交易方式是“担保交易”，因此需要您去支付宝网站对本次购买做“确认收货”操作（系统已自动完成虚拟发货），确认后即支付成功，即可进入课程学习。
+pay_center.remind.: 点击进入支付宝
+pay_center.order.title: 订单名称：%title%
+pay_center.order.id: 订单号：%sn%
+pay_center.order.price: 订单价格：
+pay_center.order.detail: 订单详情：%title%
+pay_center.verify_mobile: 核实银行预留手机
+pay_center.verify_mobile.mobile: 银行预留手机号
+pay_center.verify_mobile.input_placeholder: 手机号码
+
 # 上传模块
 upload.content_title: 上传文件
 upload.upload_tips: 请将文件拖到这里，或点击添加文件按钮
@@ -209,7 +375,6 @@ upload.cloud_upload_tips: >
 upload.normal_upload_tips: >
   <li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>2.0GB</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
   <li>视频将上传到<strong>网站服务器</strong>，如需使用云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
-
 upload.file.name: 文件名
 upload.file.size: 大小
 upload.file.status: 状态
@@ -242,6 +407,89 @@ import.user_import.price: 购买价格
 import.user_import.price_tips: 本课程的价格为
 import.user_import.remark_btn: 备注
 import.user_import.remark_tips: 选填
+
+# 问题
+question.no_answer: 。你未回答
+question.your_answer: 。你的答案
+question.score: 本题得分：%testResult.score%分。
+question.answer: ，你的答案
+question.answer.true: 回答正确。
+question.answer.part_true: 回答部分正确。
+question.answer.wrong: 回答错误。
+question.multiple_choice.answer: 填空(%index%)： 正确答案
+question.multiple_choice.check_answer: 填空(%input_index%)答案，请填在这里
+question.btn.preview: 预览
+question.btn.replace: 替换
+question.btn.choose: 选择
+question.type.single_choice: 单选题
+question.type.multiple_choice: 多选题
+question.type.uncertain_choice: 不定向选择题
+question.type.fill: 填空题
+question.type.determine: 判断题
+question.type.essay: 问答题
+question.type.material: 材料题
+question.nums: 题数
+question.score: 分数
+
+# 注册
+register: 注册
+register.sms.sms_send: 短信推送
+register.sms.sms_send_to: 发送对象
+register.sms.in_classroom: %classroom.name%内
+register.sms.send_sms_nums: 预计发送量
+register.sms.send_content: 发送内容
+register.sms.start_regist: 现已开始报名
+register.sms.link_address: 链接地址
+register.sms.prepare_sending: 短信发送准备中...
+register.sms.cloud_sms_open_tips: 请联系超级管理员，开启云短信相关设置。
+register.sms.not_close_window_tips: 正在发送，请不要关闭当前窗口...
+register.sms.wait_tips: 正在发送, 请稍等...
+register.sms.send_success: 发送完成
+register.last_step: 注册还需一步
+register.last_step_tips: 仅需一步，完善资料，让我们更好的为你服务！
+register.email_sending: 正在发送注册验证邮件，请稍等...
+register.verify_email: >
+  注册确认信已经发到你的邮箱<strong>%email%</strong>，你需要点击邮件中的确认链接来完成邮箱验证，验证后才可以登录．
+register.success: 注册成功
+register.send_email_tips: 正在发送注册验证邮件，请稍等...
+register.email_verify_tips: >
+  注册确认信已经发到你的邮箱<strong>%email%</strong>，你需要点击邮件中的确认链接来完成邮箱验证。
+register.email_verify.failed: 邮箱验证失败
+register.email_verify.address_overdue: 验证地址已过期！
+register.email_verify.success: 邮箱验证成功
+register.email_verify.jump_tips: >
+  正在跳转到首页...<a id="jump-btn" href="%homepage%" class="mll"> &raquo; 点此直接进入</a>
+register.receive_email_btn: 登录邮箱查收邮件
+register.not_receive_email_tips: >
+  <h5>没有收到确认信怎么办？</h5>
+  <ul>
+    <li>检查一下上面Email地址是否正确，错了就重新<a class="color-gray" href="%logout%">注册</a>一次吧 :)</li>
+    <li>看看是否在邮箱的垃圾箱里?</li>
+    <li>稍等几分钟，若仍旧没收到确认信，那就<a id="resend-email" class="color-gray" href="javascript:" data-url="%send%">重发</a>一封吧！</li>
+  </ul>
+register.verify_success_tips: >
+  完成验证后，你还可以：
+  <ul>
+    <li><a href="%path%">返回原页面</a></li>
+    <li><a href="%homepage%">浏览首页</a></li>
+  </ul>
+register.emaill_not_useful_tips: >
+  <h5>原邮箱已失效？</h5>
+  <a class="btn btn-primary" href="%resetEmail%">重新绑定</a>
+register.service_protocol: 服务协议
+register.reset_email: 重置邮箱
+register.reset_email.origin_email: 原邮箱地址:
+register.reset_email.school_login_password: 网校密码：
+register.reset_email.input_placeholder: 请输入网校密码
+register.reset_email.display: 网校密码
+register.reset_email.new_email: 新邮箱地址:
+register.reset_email.new_email_tips: 请输入新的邮箱地址
+register.login_account: 登录账号
+register.register_account: 注册账号
+register.system_close_tips: 系统暂时关闭注册，请联系管理员
+register.register_through_inviter: >
+  您正在通过<span class="color-gray mhs">%inviteUser%</span>的邀请注册。
+register.input_sms_code_tips: 请输入验证码
 
 # 课程
 course: 课程
@@ -432,6 +680,26 @@ course.testpaper_check.status.not_submit: 未交
 
 course.homework_check: 作业批阅
 course.homework_check.no_permission_tips: 当前用户不是本课程教师，没有批阅作业的权限。
+course.homework_check.review_btn: 批阅
+course.homework_check.review.empty: 暂无数据
+course.homework_check.review.name: 姓名
+course.homework_check.review.score: 成绩
+course.homework_check.review.submit_time: 提交时间
+course.homework_check.review.status: 状态
+course.homework_check.review.reviewer: 批阅人
+course.homework_check.review.operation: 操作
+course.homework_check.review.system_review: 系统批阅
+course.homework_check.review.view_result_btn: 查看结果
+course.homework_check.review.teacher_check_tips: 请完成以下题目的批阅。
+course.homework_check.review.input_comment: 请输入评语
+course.homework_check.review.common_comments: >
+  <option value="">---常用评语---</option>
+  <option value="1">继续努力，继续进步！</option>
+  <option value="2">不错，有进步，再努力些就会更棒！</option>
+  <option value="3">你真棒！我为你骄傲！</option>
+  <option value="4">有点松懈了吧？继续加油吧！</option>
+  <option value="5">用心、专注、坚持，你能做的更好的！</option>
+course.homework_check.review.score: 试卷得分
 
 course.dashboard: 学习数据
 course.dashboard.content_title: 课程学习数据
@@ -647,6 +915,17 @@ course.detail.summary: 课程简介
 course.detail.target: 课程目标
 course.detail.intended-students: 适应人群
 course.question_manage: 题目管理
+course.question_manage.your_answer: 你的回答：
+course.question_manage.you_no_answer: 未回答
+course.question_manage.you_no_answer_with_html: >
+  <span class="color-gray">未回答</span>
+course.question_manage.teacher_reviewing: 老师正在批阅！
+course.question_manage.finial_answer: 回答
+course.question_manage.right: 你答对了
+course.question_manage.wrong: >
+  你<strong class="color-danger">答错</strong>了
+course.question_manage.no_answer: 你未答题
+course.question_manage.answer: 正确答案是
 course.question_manage.preview_btn: 预览
 course.question_manage.more_btn: 更多
 course.question_manage.content_title: 题目管理
@@ -658,6 +937,9 @@ course.question_manage.filter.course: 按课程
 course.question_manage.filter.keywords: 关键字
 course.question_manage.filter.select: 请选择
 course.question_manage.stem: 题干
+course.question_manage.score: 得分
+course.question_manage.testpaper_score: %testResult.score% 分
+course.question_manage.comment: 评语
 course.question_manage.type: 类型
 course.question_manage.update: 最后更新
 course.question_manage.operation: 操作
@@ -691,7 +973,9 @@ course.question_manage.question.answer_part_right: >
 course.question_manage.count: 共%getItemCount()%题
 course.question_manage.preview: 题目预览
 course.question_manage.manage: 添加题目
+course.question_manage.manage.right_answer: 正确答案是
 course.question_manage.manage.answer: 答案
+course.question_manage.manage.refer_answer: 参考答案
 course.question_manage.manage.true: 正确
 course.question_manage.manage.fault: 错误
 course.question_manage.manage.belong: 从属
@@ -1106,6 +1390,8 @@ file_chooser.upload_file.upload_ppt_tips: >
   支持ppt, pptx格式的PPT文件上传，且文件大小不能超过100 MB。<br/>PPT将上传到云服务器
 
 # 答卷
+testpaper.edit: 编辑试卷信息
+testpaper.edit.content_title: 编辑试卷信息
 testpaper.answer.count_donw_timer: 倒计时
 testpaper.answer.answer_card: 答题卡
 testpaper.answer.answer_card.do_agagin_tips: 再做%itemCount%题
@@ -1135,12 +1421,26 @@ testpaper.answer.pause_btn: 暂停
 testpaper.answer.pause_tips: 考试已暂停，请尽快回来哦！
 testpaper.answer.resume_btn: 继续考试
 testpaper.answer.submit_btn: 提交练习
+testpaper.result.score: 得分
+testpaper.result.missing: （其中有testpaper.result.question_num漏选）
+testpaper.result.not_answer: 未答
+testpaper.result.total_score: 总分%score%分
+testpaper.result.question_num: 道
 testpaper.result.true: 正确重新加入
 testpaper.result.wrong: 错误
+testpaper.result.wrong_answer: 答错
+testpaper.result.true_answer: 答对
 testpaper.result.not_read: 待批阅
 testpaper.result.not_done: 未做
 testpaper.result.finish_reviewing: 完成批阅
-testpaper.result.wrong_onl: 只看错题
+testpaper.result.wrong_only: 只看错题
+testpaper.result.teacher_reviewing: 老师正在批阅试卷，批阅完成后会以站内私信通知您批阅结果，请稍等。
+testpaper.result.teacher_comments: 评语：
+testpaper.result.failed: 您未通过考试
+testpaper.result.revise_tips: 您未通过考试，%countTime%后可重考，请复习
+testpaper.result.study_again_tips: >
+  您未通过考试，请<a href="%testpaper%">重新参加考试</a>，或者重新学习课程。
+testpaper.result.pass: 恭喜您已通过本次考试。
 
 #公开课
 open_course: 公开课
@@ -1162,7 +1462,7 @@ classroom.buy_classroom.join_submiting: 正在加入...
 classroom.buy_classroom.to_pay: 去支付
 classroom.buy_classroom.pay_submiting: 正在创建订单...
 classroom.preview.buy_classroom_tips: 预览模式无法支付%role%
-classroom.buy_classroom.tips: 
+classroom.buy_classroom.tips:
 classroom.showServices: 承诺服务
 classroom.price: 价格
 classroom.buy_classroom.vip_free: 会员免费
@@ -1236,7 +1536,7 @@ classroom.thread_browse: 浏览
 classroom.last_post: 最后回复
 classroom.thread_post: 发表于%name%
 classroom.deleted_tips: %name%已删除
-classroom.member_question_post_empty_tips: 您的%name%中还没有%username%提问过... 
+classroom.member_question_post_empty_tips: 您的%name%中还没有%username%提问过...
 classroom.member_discussion_post_empty_tips: 您的%name%中还没有%username%话题...
 classroom.latest_join_member: 新加学员
 classroom.description_empty_tips: 暂无介绍！
@@ -1244,12 +1544,12 @@ classroom.description: 介绍
 classroom.teachers: 师资
 classroom.reviews: 评价
 classroom.note: 笔记
-classroom.expiry_date_tips: 班级有效期： 
+classroom.expiry_date_tips: 班级有效期：
 classroom.expiry_day_tips: >
   <span class="mrm">班级有效天数：</span><span>%expiryValue%天</span>
 classroom.classroom_manage: %name%管理
 classroom.vip_classroom: 会员%name%
-classroom.auditor_join_tips: 
+classroom.auditor_join_tips:
   您现在是<span class="color-warning">旁听生</span>，不能完整学习
 classroom.auditor_and_member_different_tips: 旁听生只能参与话题讨论，正式学员可以完整地学习所有内容，享受所有教学服务
 classroom.over_expiry_date_tips: 你的班级已过有效期，无法继续学习
@@ -1340,7 +1640,7 @@ classroom.note_empty: 暂无笔记记录
 classroom.unpublish_tips: 班级还未发布，不允许加入和购买
 classroom.expiry_day_not_buy: 已超过有效期，无法购买
 classroom.expiry_day_not_join: 已超过有效期，无法加入
-classroom.free_study: > 
+classroom.free_study: >
   %memberLevel%，免费学
 classroom.go_inside: 进去逛逛
 classroom.join_buy: 加入购买
@@ -1415,7 +1715,7 @@ classroom.homework: 作业
 classroom.testpaper_check_tips: >
   当前用户不是本班级教师或助教，没有批阅%typeName%的权限。
 classroom.homework_check: 作业批阅
-classroom.homework_check_tips: 当前用户不是本班级教师或助教，没有批阅作业的权限。 
+classroom.homework_check_tips: 当前用户不是本班级教师或助教，没有批阅作业的权限。
 classroom.yesterday: 昨天
 classroom.today: 今天
 classroom.name_label: 名称
@@ -1595,6 +1895,9 @@ form.field.create: 添加
 form.field.amount: 数量
 form.field.cut: 扣除
 form.btn.create: 创建
+form.btn.back_to_homepage: 返回首页
+form.btn.register: 注册
+form.btn.verify: 验证
 form.btn.select: 选择
 form.btn.modify: 修改
 form.btn.finish: 完成
@@ -1607,6 +1910,7 @@ form.btn.reset: 重置
 form.btn.view: 查看
 form.btn.bind: 绑定
 form.btn.search: 搜索
+form.btn.use: 使用
 form.btn.reply: 发表
 form.btn.bind_cancel: 取消绑定
 form.btn.submit: 提交
@@ -1634,6 +1938,7 @@ form.btn.next: 下一步
 form.btn.back: 上一步
 form.btn.add: 添加
 form.btn.export: 导出
+form.btn.loading.submiting: 正在载入视频...
 form.btn.create.submiting: 正在创建...
 form.btn.import.submiting: 正在导入，请稍等
 form.btn.search.submiting: 正在加载，请稍等
@@ -1676,10 +1981,11 @@ user.login.go_register: 立即注册
 
 # 用户注册
 user.register.page_title: 注册帐号
-user.register.account_with_email_label: 手机
+user.register.account_with_email_label: 邮箱
+user.register.account_with_sms_code_label: 验证码
 user.register.account_with_email_placeholder: 填写你常用的邮箱作为登录帐号
 user.register.account_with_mobile_label: 手机
-user.register.account_with_mobile_placeholder: 填写你常用的邮箱作为登录帐号
+user.register.account_with_mobile_placeholder: 填写你常用的手机号码作为登录帐号
 user.register.account_with_mobile_or_email_label: 手机/邮箱
 user.register.account_with_mobile_or_email_placeholder: 填写你常用的邮箱或手机号码作为登录帐号
 user.register.username_label: 用户名
@@ -1709,13 +2015,27 @@ user.settings.profile.no_bind_mobile_tips: 还没绑定手机号码，
 user.settings.profile.bind_mobile_btn: 前去绑定
 
 # 个人设置模块-安全设置
+user.settings.security.setup_account: 设置帐号
+user.settings.security.save_username_tips: 用户名一旦保存，就不能再修改了
+user.settings.security.setup_login_password: 设置登录密码
+user.settings.security.safety_tips: 为了帐号的安全以及更好的使用体验，请设置以下信息。
+user.settings.security.no_more_setup_tips: 该帐号已经设置过Email地址和用户名，不能再次设置！
+user.settings.security.setup_login_password.failed_tips: 该帐号已经设置过密码，不能再次设置！
 user.settings.security.sms_code: 短信验证码
 user.settings.security.sms_code_tips: 输入短信验证码
 user.settings.security.get_sms_code_btn: 获取短信验证码
+user.settings.security.input_sms_code: 填写你的短信验证码
+user.settings.security.change_captcha_code: 看不清，点击换一张
 user.settings.security.mobile: 手机号码
 user.settings.security.bind_mobile: 已绑定手机号
 user.settings.security.login_password: 您的登录密码
 user.settings.security.content_title: 安全设置
+user.settings.security.reset_pay_password: 重设支付密码
+user.settings.security.reset_pay_password_success: 重设支付密码成功
+user.settings.security.set_pay_password_success: 新支付密码设置成功。
+user.settings.security.return_btn: 返回安全设置
+user.settings.security.scene_not_open: 场景未开启
+user.settings.security.use_scene_not_open: 该使用场景未开启
 user.settings.security.high_level: 安全等级：高
 user.settings.security.middle_level: 安全等级：中
 user.settings.security.low_level: 安全等级：低
@@ -1733,7 +2053,7 @@ user.settings.security.password_modify.bread_crumbs: >
 user.settings.security.password_modify.current_password: 当前密码
 user.settings.security.password_modify.new_password: 新密码
 user.settings.security.password_modify.confirm_password: 确认密码
-
+user.settings.security.password_modify.input_password_tips: 请再输入一次密码
 
 user.settings.security.no_password_tips: >
   <p>当前帐号从第三方帐号直接登录时创建，尚未设置密码。</p>
@@ -1754,14 +2074,18 @@ user.settings.security.password_reset.success.content_title: 重设密码成功
 user.settings.security.password_reset.success.tips: 新密码设置成功，请重新登录。
 
 user.settings.security.pay_password_set: 设置支付密码
+user.settings.security.pay_password_set.find_pay_password: 找回支付密码
 user.settings.security.pay_password_set.password_forget: 忘记支付密码？
 user.settings.security.pay_password_set.content_title: 安全设置
 user.settings.security.pay_password_set.bread_crumbs: >
   <li><a href="%settingSecurityUrl%">安全设置</a></li>
   <li class="active">设置支付密码</li>
+user.settings.security.pay_password_set.input_login_password: 请输入用户登录密码
 user.settings.security.pay_password_set.new_pay_password: 新支付密码
+user.settings.security.pay_password_set.user_login_password: 用户登录密码
 user.settings.security.pay_password_set.old_pay_password: 旧的支付密码
 user.settings.security.pay_password_set.confirm_pay_password: 确认支付密码
+user.settings.security.pay_password_set.input_pay_password_again: 请再输入一次支付密码
 user.settings.security.pay_password_find.content_title: 安全设置
 user.settings.security.pay_password_find.bread_crumbs: >
   <li><a href="%settingSecurityUrl%">安全设置</a></li>
@@ -1803,6 +2127,7 @@ user.settings.basic_info.alter_description: 设置头衔、自我介绍并保存
 
 # 个人设置模块-实名认证
 user.settings.verification: 实名认证
+user.settings.verification.username_modify: 用户名修改
 user.settings.verification.content_title: 实名认证
 user.settings.verification.photo_require: 照片要求
 user.settings.verification.photo_require_tips: 证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。图片格式支持jpg、gif、png，每张图片文件大小不能超过2M
@@ -1844,6 +2169,15 @@ user.settings.email.verify_password_tips: 设置新的登录邮箱，需要校�
 user.settings.oauth: 第三方登录
 user.settings.oauth.content_title: 第三方登录
 user.settings.oauth.weixin: 微信登录
+
+# 个人设置-unknown模块
+user.settings.password_reset.failed: 密码重设失败
+user.settings.password_reset.failed_tips: 密码重设地址无效或已过期，请重试。
+user.settings.password_reset.success_tips: 重置密码成功
+user.settings.password_reset.login_btn: 立即登录
+user.settings.password_reset.reset_btn: 重设密码
+user.settings.password_reset.find_password_btn: 找回密码
+
 
 # 账户中心模块
 user.account_center: 账户中心
@@ -2175,7 +2509,7 @@ group.thread.accept_btn: 采纳
 group.thread.accept_tips: 确定采纳这条回复
 group.thread.reply_btn: 回复
 group.thread.reply: 发表回复
-group.thread.eply.content_title: 回复内容
+group.thread.reply.content_title: 回复内容
 group.thread.reply_content: 回复内容
 group.thread.collapse_btn: 收起
 group.thread.content: 内容
@@ -2249,7 +2583,7 @@ group.detail.new_group_members.empty: 还没有小组成员！
 group.detail.hot_group: 热门小组
 group.detail.hot_group_empty: 暂无小组信息！
 
-# 咨询
+# 资讯
 article: 资讯
 article.channel: %article_name%频道
 article.banner_tips: >
@@ -2271,10 +2605,26 @@ article.detail.post_num: >
 article.detail.input_placeholder: 您的想法
 article.detail.comment_empty: 还没有人评论，欢迎说说您的想法！
 article.tag: 标签：%name%
+article.reply_tips: >
+  在资讯<a href="%jumpUrl%" target="_blank">%title%</a>的回复了你。
+article.mention_tips: >
+  在资讯<a href="%jumpUrl%" target="_blank">%title%</a>的回复中提到了你。
 
 # 话题
 thread: 话题
+thread.not_reply_thread: 未回复的话题
+thread.writer_other_thread: 作者其他话题
+thread.stick: 置顶帖
+thread.essence: 精华帖
 thread.reply: 回复
+thread.reply.student_allowed_tips: 只有学员才能回复！
+thread.replying: 正在回复
+thread.reply.content: 回复内容
+thread.reply.all_reply: 所有回复
+thread.reply.publish: 发表回复
+thread.reply.empty: 一个回复都没有！
+thread.brilliant_reply: 精彩回复
+thread.brilliant_reply.empty: 一个精彩回复都没有！
 thread.answer: 答案
 thread.content: 内容
 thread.all_answer: 所有答案
@@ -2288,12 +2638,16 @@ thread.status.question: 问
 thread.hover_tips.question: 问答
 thread.hover_tips.activiy: 活动
 thread.hover_tips.thread: 话题
+thread.post.create: 我也说一句
+thread.post.reply_remain: 还有%post.subposts%条回复，
+thread.post.view_btn: 点击查看
 thread.create: 发起了话题
 thread.create_thread: 发起了%dict_text%
 thread.last_reply: 最后回复
 thread.create_discussion_btn: 发话题
 thread.create_question_btn: 提问题
 thread.delete_btn: 删除
+thread.export_btn: 导出成员
 thread.delete_confirm_message: 您真的要删除该帖吗？
 thread.edit_btn: 编辑
 thread.cancel_essence_btn: 取消加精
@@ -2305,11 +2659,32 @@ thread.stick_cancel_confirm_message: 您真的要取消置顶该帖吗？
 thread.cancel_essence_confirm_message: 您真的要取消加精该帖吗？
 thread.stick_confirm_message: 您真的要置顶该帖吗？
 thread.order: 排序：
+thread.other_event: 其他活动
+thread.other_event.join: 加入活动
+thread.other_event.apply: %memberNum%人报名
+thread.other_event.apply.time: 时间
+thread.other_event.apply.location: 地点：
+thread.other_event.apply.people_number: 报名人数
+thread.other_event.apply.people_number.no_limit: %memberNum% 人 (名额不限)
+thread.other_event.apply.people_number.less: %memberNum% 人 (剩余 %num%人)
+thread.other_event.apply.people_number.full: 名额已满
+thread.other_event.apply.people_number.applyed_btn: 已报名
+thread.other_event.apply.people_number.apply_btn: 我要报名
+thread.other_event.apply.people_number.cancel_apply_btn: 取消报名
+thread.other_event.my_friends: 好友在参加
+thread.other_event.my_friends.newest_member: 最新成员(%membersCount%)
 
 # 标签
 tag: 标签
+tag.empty: 当前还没有标签!
+tag.not_exist: 标签不存在，请重新输入！
+tag.change_tag: 没有搜到相关课程，请换个标签试试！
 tag.popular_tag: 热门标签
 tag.setting: 标签设置
+
+# 分类
+category: 分类
+category.all_category: 全部
 
 # 附件
 attachments: 附件
@@ -2338,10 +2713,6 @@ attachments.download.times: 下载次数：%hitNum%
 attachments.download.download_btn: 下载
 attachments.download.delete_btn: 删除
 attachments.download.delete_warning: 确定删除此附件
-
-# 分类
-category: 分类
-category.all_category: 全部
 
 # 分享
 share.course_set_message: 我正在学习《%course%》，收获巨大哦，一起来学习吧！
@@ -5093,8 +5464,8 @@ admin.cloud_file.detail_not_found_tips: 该文件不是云文件，或者对应�
 
 admin.cloud_file.detail.content_title: 资源详情
 admin.cloud_file.detail.basic_info: 基本信息
-admin.cloud_file.detail.cover_img: 封面图片 
-admin.cloud_file.current_cover_img: 当前封面 
+admin.cloud_file.detail.cover_img: 封面图片
+admin.cloud_file.current_cover_img: 当前封面
 admin.cloud_file.cover_img_setting: 封面设置
 admin.cloud_file.thumbnails_select_default: 默认
 admin.cloud_file.thumbnails_select_self: 自选
@@ -5145,7 +5516,7 @@ admin.app_center.business_edition: 商业版
 admin.app_center.author: 作者
 admin.app_center.description_open: 展开
 admin.app_center.description_close: 收起
-admin.app_center.app_manage_btn: 管理 
+admin.app_center.app_manage_btn: 管理
 admin.app_center.app_uninstall_btn: 卸载
 admin.app_center.version: 版本：
 admin.app_center.latest_update_time: 最后更新：
@@ -5159,12 +5530,12 @@ admin.app_logs.show_detail_btn: 详情
 admin.app_logs.log_type.install: 安装
 admin.app_logs.log_type.upgrade: 升级
 admin.app_logs.version: 版本：
-admin.app_logs.need_roll_back_tips: 需要回滚 
+admin.app_logs.need_roll_back_tips: 需要回滚
 admin.app_logs.update_failed_tips: 更新失败
 admin.app_logs.update_successed_tips: 更新成功
 admin.app_logs.recovered_tips: 已恢复
 admin.app_upgrades.tips: 您好，为了保证网站升级顺利进行，升级过程中会出现短暂（2分钟内）网站无法访问的情况，请在学员访问少的时候进行系统升级，给您带来了不便，还望理解
-admin.app_upgrades.count_tips: %appUpgradesCount%个可用更新 
+admin.app_upgrades.count_tips: %appUpgradesCount%个可用更新
 admin.app_upgrades.accessKey_or_secretKey_error_tips: >
   AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，<a href="%settingCloudUrl%">请修改设置。</a>
 admin.app_upgrades.low_version_tips: 需要主系统%edusohoMinVersion%及更高版本
