@@ -71,8 +71,8 @@ class Marketing {
       },
       messages: {
         buyExpiryTime: {
-          required: Translator.trans('请选择有效的加入截止日期'),
-          date: Translator.trans('请选择有效的加入截止日期')
+          required: Translator.trans('course.manage.buy_expiry_time_error_hint'),
+          date: Translator.trans('course.manage.buy_expiry_time_error_hint')
         },
       }
     });
@@ -237,7 +237,7 @@ class Marketing {
     return {
       required: true,
       messages: {
-        required: Translator.trans('请输入加入截止日期!')
+        required: Translator.trans('course.manage.buy_expiry_time_required_error_hint')
       }
     };
   }
@@ -248,7 +248,7 @@ class Marketing {
       date: true,
       after_date: '#expiryStartDate',
       messages: {
-        required: Translator.trans('请输入结束日期!')
+        required: Translator.trans('course.manage.expiry_end_date_error_hint')
       }
     }
   }
@@ -259,7 +259,7 @@ class Marketing {
       date: true,
       before_date: '#expiryEndDate',
       messages: {
-        required: Translator.trans('请输入开始日期!')
+        required: Translator.trans('course.manage.expiry_start_date_error_hint')
       }
     }
   }
@@ -270,7 +270,7 @@ class Marketing {
       positive_integer: true,
       max_year: true,
       messages: {
-        required: Translator.trans(Translator.trans('请输入有效期天数'))
+        required: Translator.trans(Translator.trans('course.manage.expiry_days_error_hint'))
       }
     }
   }
@@ -280,7 +280,7 @@ class Marketing {
       required: true,
       date: true,
       messages: {
-        required: Translator.trans('请输入截至日期!')
+        required: Translator.trans('course.manage.deadline_end_date_error_hint')
       }
     }
   }

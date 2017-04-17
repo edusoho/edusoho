@@ -44,7 +44,7 @@ export default class Intro {
     let doneLabel = '<i class="es-icon es-icon-close01"></i>';
     this.intro = introJs();
     if(steps.length < 2) {
-       doneLabel= Translator.trans('我知道了');
+       doneLabel= Translator.trans('course_set.manage.done_label');
        this.customClass = "es-intro-help";
     }else {
        this.customClass = "es-intro-help multistep";
@@ -55,8 +55,8 @@ export default class Intro {
     this.intro.setOptions({
       steps: steps,
       skipLabel: doneLabel,
-      nextLabel: Translator.trans('继续了解'),
-      prevLabel: Translator.trans('上一步'),
+      nextLabel: Translator.trans('course_set.manage.next_label'),
+      prevLabel: Translator.trans('course_set.manage.prev_label'),
       doneLabel: doneLabel,
       showBullets: false,
       tooltipPosition: 'auto',

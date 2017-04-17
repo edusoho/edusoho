@@ -32,9 +32,9 @@ export default class Video {
     console.log(source);
     if (source === 'self') {
       $("#finish-condition option[value=end]").removeAttr('disabled');
-      $("#finish-condition option[value=end]").text(Translator.trans('学习到最后'));
+      $("#finish-condition option[value=end]").text(Translator.trans('activity.video_manage.finish_detail'));
     } else {
-      $("#finish-condition option[value=end]").text(Translator.trans('学习到最后(不支持网络视频)'));
+      $("#finish-condition option[value=end]").text(Translator.trans('activity.video_manage.other_finish_detail'));
       $("#finish-condition option[value=end]").attr('disabled', 'disabled');
       $("#finish-condition option[value=time]").attr('selected', false);
       $("#finish-condition option[value=time]").attr('selected', true);
@@ -64,13 +64,13 @@ export default class Video {
       },
       messages: {
         minute: {
-          required: Translator.trans('请输入时长'),
+          required: Translator.trans('activity.video_manage.length_required_error_hint'),
         },
         second: {
-          required: Translator.trans('请输入时长'),
-          second_range: Translator.trans('秒数只能在0-59之间'),
+          required: Translator.trans('activity.video_manage.length_unsigned_integer_error_hint'),
+          second_range: Translator.trans('activity.video_manage.second_range_error_hint'),
         },
-        'ext[mediaSource]': Translator.trans("请上传或选择%display%"),
+        'ext[mediaSource]': Translator.trans("activity.video_manage.media_error_hint"),
       }
     });
     $step2_form.data('validator', validator);
@@ -90,7 +90,7 @@ export default class Video {
       },
       messages: {
         'ext[finishDetail]': {
-          required: Translator.trans('请输入时长'),
+          required: Translator.trans('activity.video_manage.length_required_error_hint'),
         }
       }
     });

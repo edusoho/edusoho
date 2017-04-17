@@ -30,15 +30,15 @@ export default class Audio {
       },
       messages: {
         minute: {
-          required: Translator.trans('请输入时长'),
-          unsigned_integer: Translator.trans('时长必须大于0')
+          required: Translator.trans('activity.audio_manage.length_required_error_hint'),
+          unsigned_integer: Translator.trans('activity.audio_manage.length_unsigned_integer_error_hint')
         },
         second: {
-          required: Translator.trans('请输入时长'),
-          second_range: Translator.trans('秒只能在0-59之间'),
-          unsigned_integer: Translator.trans('时长必须大于0')
+          required: Translator.trans('activity.audio_manage.length_required_error_hint'),
+          second_range: Translator.trans('activity.audio_manage.second_range_error_hint'),
+          unsigned_integer: Translator.trans('activity.audio_manage.length_unsigned_integer_error_hint')
         },
-        'ext[mediaId]': Translator.trans('请上传或选择%display%')
+        'ext[mediaId]': Translator.trans('activity.audio_manage.media_error_hint')
       }
     });
 

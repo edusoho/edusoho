@@ -41,7 +41,7 @@ $("body").on("click",".es-qrcode", (event) => {
 })
 
 $(".cancel-refund").on('click', function(){
-    if (!confirm('真的要取消退款吗？')) {
+    if (!confirm('course_set.refund_cancel_hint')) {
         return false;
     }
 

@@ -8,60 +8,62 @@ class Students {
     this.initExportActions();
   }
 
-  initTooltips(){
+  initTooltips() {
     $("#refund-coin-tips").popover({
-        html: true,
-        trigger: 'hover',//'hover','click'
-        placement: 'left',//'bottom',
-        content: $("#refund-coin-tips-html").html()
+      html: true,
+      trigger: 'hover', //'hover','click'
+      placement: 'left', //'bottom',
+      content: $("#refund-coin-tips-html").html()
     });
   }
 
-  initDeleteActions(){
+  initDeleteActions() {
     $('body').on('click', '.js-remove-student', function(evt) {
-      if (!confirm(Translator.trans('是否确定删除该学员？'))) {
+      if (!confirm(Translator.trans('course.manage.student_delete_hint'))) {
         return;
       }
       $.post($(evt.target).data('url'), function(data) {
         if (data.success) {
-          notify('success', Translator.trans('移除成功'));
+          notify('success', Translator.trans('site.delete_success_hint'));
           location.reload();
         } else {
-          notify('danger', Translator.trans('移除失败：') + data.message);
+          notify('danger', Translator.trans('site.delete_fail_hint') + ':' + data.message);
         }
       });
     });
   }
 
-  initFollowActions(){
+  initFollowActions() {
     $("#course-student-list").on('click', '.follow-student-btn, .unfollow-student-btn', function() {
-        var $this = $(this);
-        $.post($this.data('url'), function(){
-            $this.hide();
-            if ($this.hasClass('follow-student-btn')) {
-                $this.parent().find('.unfollow-student-btn').show();
-                notify('success', Translator.trans('关注成功'));
-            } else {
-                $this.parent().find('.follow-student-btn').show();
-                notify('success', Translator.trans('取消关注成功'));
-            }
-        });
-        
+      var $this = $(this);
+      $.post($this.data('url'), function() {
+        $this.hide();
+        if ($this.hasClass('follow-student-btn')) {
+          $this.parent().find('.unfollow-student-btn').show();
+          notify('success', Translator.trans('user.follow_success_hint'));
+        } else {
+          $this.parent().find('.follow-student-btn').show();
+          notify('success', Translator.trans('user.unfollow_success_hint'));
+        }
+      });
+
     });
   }
 
-  initExportActions(){
-    $('#export-students-btn').on('click', function(){
-        $(this).button('loading');
-        var self = $(this);
-        $.get($(this).data('datasUrl'), {start:0}, function(response) {
-            if (response.status === 'getData') {
-                exportStudents(response.start, response.fileName);
-            } else {
-                self.button('reset');
-                location.href = self.data('url')+'?fileName='+response.fileName;
-            }
-        });
+  initExportActions() {
+    $('#export-students-btn').on('click', function() {
+      $(this).button('loading');
+      var self = $(this);
+      $.get($(this).data('datasUrl'), {
+        start: 0
+      }, function(response) {
+        if (response.status === 'getData') {
+          exportStudents(response.start, response.fileName);
+        } else {
+          self.button('reset');
+          location.href = self.data('url') + '?fileName=' + response.fileName;
+        }
+      });
     });
   }
 }

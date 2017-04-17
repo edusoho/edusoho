@@ -6,7 +6,7 @@ $('.js-generate-replay').on('click', (event) => {
   if (!url) return;
   Promise.resolve($.post(url))
     .then(success => {
-      notify('success', Translator.trans('生成录制回放成功'));
+      notify('success', Translator.trans('course.manage.live_replay_generate_success'));
       window.location.reload();
     })
     .catch(response => {

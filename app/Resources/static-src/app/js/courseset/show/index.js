@@ -28,7 +28,7 @@ function initTaskLearnChart() {
       if (Math.round(percent) == 100) {
         $(this.el).addClass('done');
       }
-      $(this.el).find('.percent').html(Translator.trans('学习进度') + '<br><span class="num">' + Math.round(percent) + '%</span>');
+      $(this.el).find('.percent').html(Translator.trans('course_set.learn_progress') + '<br><span class="num">' + Math.round(percent) + '%</span>');
     }
   });
 
@@ -54,7 +54,7 @@ function initTaskLearnChart() {
       if (Math.round(percent) == 100) {
         $(this.el).addClass('done');
       }
-      $(this.el).find('.percent').html(Translator.trans('学习进度') + '<br><span class="num">' + Math.round(percent) + '%</span>');
+      $(this.el).find('.percent').html(Translator.trans('course_set.learn_progress') + '<br><span class="num">' + Math.round(percent) + '%</span>');
     }
   });
 }

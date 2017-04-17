@@ -2,15 +2,15 @@ import notify from 'common/notify';
 
 export const publishCourseSet = () => {
   $('body').on('click', '.course-publish-btn', function(evt) {
-    if (!confirm(Translator.trans('是否确定发布该课程？'))) {
+    if (!confirm(Translator.trans('course_set.manage.publish_hint'))) {
       return;
     }
     $.post($(evt.target).data('url'), function(data) {
       if (data.success) {
-        notify('success', Translator.trans('课程发布成功'));
+        notify('success', Translator.trans('course_set.manage.publish_success_hint'));
         location.reload();
       } else {
-        notify('danger',Translator.trans('课程发布失败') + ':' + data.message,5000);
+        notify('danger',Translator.trans('course_set.manage.publish_fail_hint') + ':' + data.message,5000);
       }
     });
   });

@@ -51,7 +51,7 @@ $('#course-chapter-btn').on('click', function () {
 
       if ($item.length) {
         $item.replaceWith(html);
-        notify('success', Translator.trans('信息已保存'));
+        notify('success', Translator.trans('site.save_success_hint'));
       } else {
         let $parent = $('#' + $form.data('parentid'));
         if ($parent.length) {

@@ -22,6 +22,6 @@ $form.validate({
     }
   },
   messages: {
-    fileId: Translator.trans('请上传录像文件')
+    fileId: Translator.trans('course.manage.live_replay_upload_error_hint')
   }
 });
