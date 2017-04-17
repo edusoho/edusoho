@@ -1,13 +1,5 @@
 # 全站
 # 整站导航
-site.customer_service.qq_customer_service: QQ客服
-site.customer_service.qq_group: QQ群
-site.customer_service.mobile_group: 电话客服
-site.customer_service.weixin-content: 微信公众号
-site.customer_service.email: 电子邮箱
-site.customer_service.time: 服务时间：
-site.customer_service.send_message: 点击这里给我发消息
-
 site.alipay: 支付宝
 site.online_school_name: 网校名称
 site.online_school_about: 网校简介
@@ -76,6 +68,8 @@ site.btn.setup: 现在就去设置
 site.btn.collapse: 收起
 site.btn.share: 分享
 site.btn.all_select: 全选
+site.btn.previous_page: 上一页
+site.btn.next_page: 下一页
 site.price: 价格
 site.org: 组织机构
 site.org.setup: 设置组织机构
@@ -1117,6 +1111,7 @@ course.plan_task.manage_btn: 管理
 course.plan_task.free: 自由式学习
 course.plan_task.locked: 解锁式学习
 course.plan_task.create: 创建教学计划
+course.plan_task.create.new_plan_name: 新计划名称
 course.plan_task.create.create_tips: 教学计划创建后“学习模式”将不能修改。
 course.plan_task.create.name: 名称
 course.plan_task.create.mode: 学习模式
@@ -1555,6 +1550,7 @@ classroom.auditor_and_member_different_tips: 旁听生只能参与话题讨论�
 classroom.over_expiry_date_tips: 你的班级已过有效期，无法继续学习
 classroom.over_expiry_day_and_buyable_tips: 你的班级已过有效期，无法继续学习，请重新购买
 classroom.over_expiry_day_and_not_buyable_tips: 你的班级已过有效期，无法继续学习，请重新加入
+
 #公告
 announcement: 公告
 
@@ -1596,6 +1592,7 @@ classroom.manage.set_info.classroom_period.forever: 永久有效
 classroom.manage.set_info.date_help: 设置该值后，%user_name%只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。
 classroom.manage.set_info.days_help: 设置该值后，%user_name%只能在有效天数内进行课程的学习，系统默认会在有效期前10天提醒学员。
 classroom.manage.set_info.view_period_rules: 查看有效期规则
+
 classroom.status.expired: 当前班级已过有效期
 classroom.thread.send_btn: 发话题
 classroom.thread.question_btn: 提问题
@@ -2755,6 +2752,13 @@ customer_service.mobile: 电话
 customer_service.customer_mobile: 客服电话
 customer_service.email: 邮件
 customer_service.customer_email: 反馈邮件
+customer_service.qq_customer_service: QQ客服
+customer_service.qq_group: QQ群
+customer_service.mobile_group: 电话客服
+customer_service.weixin-content: 微信公众号
+customer_service.email: 电子邮箱
+customer_service.time: 服务时间：
+customer_service.send_message: 点击这里给我发消息
 
 # 我的教学
 my.teaching.menu_heading: 我的教学
@@ -2997,6 +3001,27 @@ my.teaching.open_course.liveTimeSet.recommend_setting: 推荐设置
 my.teaching.open_course.course_manage: 课程管理
 my.teaching.open_course.course_info: 课程信息
 my.teaching.open_course.live_manage: 录播管理
+
+my.learning.menu_heading: 我的学习
+my.learning.course_set_menu: 我的课程
+my.learning.classroom_menu: 我的%classroom%
+my.learning.live_menu: 我的直播
+my.learning.question_menu: 我的问答
+my.learning.discussion_menu: 我的话题
+my.learning.notebook_menu: 我的笔记
+my.learning.homework_menu: 我的作业
+my.learning.testpaper_menu: 我的考试
+my.learning.group_menu: 我的小组
+
+my.course.refund_tips: 您的退款申请已提交，请等待管理员的处理。
+my.course.cancle_refund_btn: 取消退款，继续学习！
+my.course.free_mode_plan.task_finished: 已完成
+my.course.free_mode_plan.task_empty: 暂无学习任务
+my.course.free_mode_plan.next_task: 下一学习任务
+my.course.free_mode_plan.task_progress: 完成任务：
+my.course.lock_mode_plan.task_progress: 已完成%spanHtml%个任务
+my.course.lock_mode_plan.behind_plan: 落后计划
+my.course.lock_mode_plan.expiry_date: 学习有效期：
 
 # 搜索列表
 explore.course.list: 课程列表
@@ -5236,28 +5261,6 @@ admin.coin_model.deduction_tips: >
   5、使用方式的切换会使课程价格根据汇率变动
   <br>
   6、如有参加促销活动的课程，修改价格都将有相应的折扣
-
-# 我的学习
-my.learning.menu_heading: 我的学习
-my.learning.course_set_menu: 我的课程
-my.learning.classroom_menu: 我的%classroom%
-my.learning.live_menu: 我的直播
-my.learning.question_menu: 我的问答
-my.learning.discussion_menu: 我的话题
-my.learning.notebook_menu: 我的笔记
-my.learning.homework_menu: 我的作业
-my.learning.testpaper_menu: 我的考试
-my.learning.group_menu: 我的小组
-
-my.course.refund_tips: 您的退款申请已提交，请等待管理员的处理。
-my.course.cancle_refund_btn: 取消退款，继续学习！
-my.course.free_mode_plan.task_finished: 已完成
-my.course.free_mode_plan.task_empty: 暂无学习任务
-my.course.free_mode_plan.next_task: 下一学习任务
-my.course.free_mode_plan.task_progress: 完成任务：
-my.course.lock_mode_plan.task_progress: 已完成%spanHtml%个任务
-my.course.lock_mode_plan.behind_plan: 落后计划
-my.course.lock_mode_plan.expiry_date: 学习有效期：
 
 #系统后台运营
 admin.article_setting.name: 频道名称
