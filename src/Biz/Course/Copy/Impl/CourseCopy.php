@@ -50,21 +50,21 @@ class CourseCopy extends AbstractEntityCopy
             $new['title'] = $config['title'];
         }
         if (!empty($config['learnMode'])) {
-            //todo 如果learnMode改变了，则任务列表需按照新的learnMode构建
+            //如果learnMode改变了，则任务列表需按照新的learnMode构建
             $new['learnMode'] = $config['learnMode'];
         }
 
         if (!empty($config['expiryMode'])) {
             $new['expiryMode'] = $config['expiryMode'];
-            if ($config['expiryMode'] == 'days') {
+            if ($config['expiryMode'] === 'days') {
                 $new['expiryDays'] = $config['expiryDays'];
                 $new['expiryStartDate'] = 0;
                 $new['expiryEndDate'] = 0;
-            } elseif ($config['expiryMode'] == 'end_date') {
+            } elseif ($config['expiryMode'] === 'end_date') {
                 $new['expiryStartDate'] = 0;
                 $new['expiryDays'] = 0;
                 $new['expiryEndDate'] = $config['expiryEndDate'];
-            } elseif ($config['expiryMode'] == 'date') {
+            } elseif ($config['expiryMode'] === 'date') {
                 $new['expiryDays'] = 0;
                 $new['expiryStartDate'] = $config['expiryStartDate'];
                 $new['expiryEndDate'] = $config['expiryEndDate'];
@@ -76,7 +76,7 @@ class CourseCopy extends AbstractEntityCopy
         }
 
         $new = $this->getCourseDao()->create($new);
-        $this->doCopyCourseMember($source, $new);
+        // $this->doCopyCourseMember($source, $new);
         $this->childrenCopy($source, array('newCourse' => $new, 'modeChange' => $modeChange, 'isCopy' => false));
 
         return $new;

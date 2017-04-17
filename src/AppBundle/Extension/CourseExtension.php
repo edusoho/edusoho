@@ -137,23 +137,41 @@ class CourseExtension extends Extension implements ServiceProviderInterface
     protected function registerCourseCopyChain($container)
     {
         $chains = array(
-            'course-set' => array(
-                'clz' => 'Biz\Course\Copy\Impl\CourseSetCopy',
-                'children' => array(
-                    'course-set-testpaper' => array(
-                        'clz' => 'Biz\Course\Copy\Impl\CourseSetTestpaperCopy',
+            'root' => array(
+                'classroom-course' => array(
+                    'clz' => 'Biz\Course\Copy\Impl\ClassroomCourseCopy',
+                    'children' => array(
+                        'material' => array(
+                            'clz' => 'Biz\Course\Copy\Impl\CourseMaterialCopy',
+                        ),
+                        'course-member' => array(
+                            'clz' => 'Biz\Course\Copy\Impl\CourseMemberCopy',
+                        ),
+                        'classroom-teacher' => array(
+                            'clz' => 'Biz\Course\Copy\Impl\ClassroomTeacherCopy',
+                        ),
+                        'courseset-question' => array(
+                            'clz' => 'Biz\Course\Copy\Impl\CourseSetQuestionCopy',
+                        ),
+                        'courseset-testpaper' => array(
+                            'clz' => 'Biz\Course\Copy\Impl\CourseSetTestpaperCopy',
+                        ),
+                        'task' => array(
+                            'clz' => 'Biz\Course\Copy\Impl\TaskCopy',
+                        ),
                     ),
-                    'course' => array(
-                        'clz' => 'Biz\Course\Copy\Impl\CourseCopy',
-                        'children' => array(
-                            'task' => array(
-                                'clz' => 'Biz\Course\Copy\Impl\TaskCopy',
-                            ),
+                ),
+                'course' => array(
+                    'clz' => 'Biz\Course\Copy\Impl\CourseCopy',
+                    'children' => array(
+                        'task' => array(
+                            'clz' => 'Biz\Course\Copy\Impl\TaskCopy',
                         ),
                     ),
                 ),
             ),
         );
+
         $that = $this;
         //used for course/courseSet copy
         $container['course_copy.chains'] = function ($node) use ($that, $chains) {
