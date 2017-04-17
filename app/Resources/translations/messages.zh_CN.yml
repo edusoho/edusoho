@@ -1011,6 +1011,8 @@ course.plan_task.activity_manage.exercise.default_difficulty: 不限
 course.plan_task.activity_manage.exercise.question_type_range: 题型范围
 course.plan_task.activity_manage.exercise.question_type_range_tips: 提示：练习为随机出题，只需填写题目个数和选择题型范围即可。
 course.plan_task.activity_manage.exercise.submit_btn: 提交练习
+course.plan_task.activity_manage.exercise.questionNum: 题
+course.plan_task.activity_manage.exercise.start_btn: 开始做题
 course.plan_task.activity_manage.exercise.info: 练习说明
 course.plan_task.activity_manage.exercise.info_tips: >
   本次练习随机生成<span class="color-success">%itemCount%题</span>
@@ -1102,6 +1104,7 @@ course.plan_task.activity_manage.video.last: 学习到最后
 course.plan_task.activity_manage.video.learn_time: 学习时长
 course.plan_task.activity_manage.video.buy_tips: 立刻购买本课程，即可获得全部完整学习内容。
 course.plan_task.activity_manage.video.try_watch_tips: 您可以免费试看前%tryLookLength%分钟,购买后可完整观看。
+course.plan_task.activity_manage.create_btn: 前往课程讨论区
 
 file_chooser.empty: 没有资源...
 file_chooser.course_file.input_placeholder: 输入%placeholder%标题关键字
@@ -2669,6 +2672,59 @@ my.teaching.open_course.liveTimeSet.recommend_setting: 推荐设置
 my.teaching.open_course.course_manage: 课程管理
 my.teaching.open_course.course_info: 课程信息
 my.teaching.open_course.live_manage: 录播管理
+my.teaching.open_course.show.edusoho_school: EduSoho网校
+my.teaching.open_course.show.tips: >
+  二维码只用于微信扫一<br>扫预览，不可用于分享
+my.teaching.open_course.show.recommend_course: 推荐课程
+my.teaching.open_course.show.about_empty: 暂无简介
+my.teaching.open_course.header.tips: 快分享给你的微信小伙伴吧！
+my.teaching.open_course.header.understand_btn: 知道了
+my.teaching.open_course.header.not_lesson.tips: 视频编辑中，请稍后再试
+my.teaching.open_course.header.lesson.tips: 该课时资源文件被删除
+my.teaching.open_course.lesson.empty: 暂未发布直播
+my.teaching.open_course.lesson.content.tips: 直播将于
+my.teaching.open_course.lesson.content.statrt.tips: 开始
+my.teaching.open_course.lesson.header.live_open_course_play_btn: 进入直播教室
+my.teaching.open_course.lesson.header.remind_btn: 已设置提醒
+my.teaching.open_course.lesson.header.remind_me_btn: 提醒我参加
+my.teaching.open_course.lesson.header.remind.tips: >
+  已有<span class="member-num">%notifyNum%</span>人设置了提醒
+my.teaching.open_course.lesson.header.content.tips: 直播已经开始，直播将于
+my.teaching.open_course.lesson.header.content.end.tips: 结束
+my.teaching.open_course.lesson.header.live_course_end: 直播已经结束
+my.teaching.open_course.lesson.header.view_replay_btn: 查看回放
+my.teaching.open_course.lesson.header.view_replay.tips: 回放生成中，请稍候再来：
+my.teaching.open_course.lesson.header.lesson_finished: 课时学习完成
+my.teaching.open_course.lesson.header.lesson_share: 如果喜欢课程内容，赶紧分享给好友吧
+my.teaching.open_course.lesson.header.lesson_share_btn: 分享
+my.teaching.open_course.lesson.header.reply_btn: 重播
+my.teaching.open_course.lesson.recommend.empty: 暂无推荐课程
+my.teaching.open_course.lesson.recommend.learning_num: 人在学习
+my.teaching.open_course.infobar.share_btn: 分享
+my.teaching.open_course.infobar.Favorited: 已收藏
+my.teaching.open_course.infobar.Favorite: 收藏
+my.teaching.open_course.infobar.WeChat_QR_code: 二维码
+my.teaching.open_course.infobar.course_manage_btn: 课程管理
+my.teaching.open_course.infobar.WeChat_QR_code_lerarn_course: >
+  扫二维码继续学习<br />二维码时效为半小时
+my.teaching.open_course.comment.user_comment: 用户评论
+my.teaching.open_course.comment.placeholder: 我来说几句...
+my.teaching.open_course.comment.un_login.tips: >
+  你还没有登录，请先<a href="%loginUrl%">登录</a>或<a href="%registerUrl%">注册</a>！
+my.teaching.open_course.comment.empty: 还没有人评论，欢迎说说您的想法！
+my.teaching.open_course.comment.posted_btn: 我也说一句
+my.teaching.open_course.comment.posted_nun: 还有%post.subposts%条回复，
+my.teaching.open_course.comment.view_post_btn: 点击查看
+my.teaching.open_course.comment.content: 内容
+my.teaching.open_course.comment.title: 评论
+my.teaching.open_course.comment.content.placeholder: 您的想法
+my.teaching.open_course.teacher.course_teacher: 课程教师
+my.teaching.open_course.teacher.course_teacher.empty: 暂无教师
+my.teaching.open_course.material.title: 课程资料下载
+my.teaching.open_course.material.tips: 课时未发布，不能下载该资料
+my.teaching.open_course.material.web_connect: 网络链接资料
+my.teaching.open_course.material.lesson: 课时
+my.teaching.open_course.material.upload_time: 上传于
 
 # 搜索列表
 explore.course.list: 课程列表
@@ -3187,6 +3243,10 @@ admin.homepage.top_search.keyword_th: 关键词
 admin.homepage.top_search.search_number_th: 搜索次数
 admin.homepage.top_search.empty: 暂无搜索数据
 admin.homepage.free_access_edu_cloud_search_btn: 免费接入云搜索获取热门搜索关键词
+admin.homepage.buy.tips: >
+  ES应用由EduSoho官方提供,授权版⽤户可以通过<a href="http://open.edusoho.com" target="_blank">EduSoho开放云平台</a>购买
+admin.homepage.contact.tips: >
+  如需购买授权版，请联系销售人员。电话：4008041114 或
 
 # 站点设置
 admin.setting.site.name: 网站名称
