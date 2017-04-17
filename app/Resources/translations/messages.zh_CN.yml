@@ -43,6 +43,7 @@ site.message.warning: 警告信息
 site.message.error: 错误提示
 site.power_by: 好知网
 site.default.classroom: 班级
+site.default.student: 学员
 site.default.more: 更多
 site.default.manage: 管理
 site.default.none: 无
@@ -164,6 +165,13 @@ coin.income_expense: 收支
 coin.order_sn: 订单号
 coin.balance: 虚拟币余额
 coin.rate: 汇率
+coin.description: 说明
+coin.coin_name.description: %coin_name%说明
+coin.not_coinSetting: 当前页面尚未编辑内容，请在管理后台编辑。
+coin.pay_remind: 支付提醒
+coin.alipay.tips: 由于您在支付时选择的交易方式是“担保交易”，因此需要您去支付宝网站对本次购买做“确认收货”操作（系统已自动完成虚拟发货），确认后即支付成功。
+coin.redirect_alipay_btn: 点击进入支付宝
+coin.pay.submit.request: 正在跳转到支付网关
 
 #订单通用
 order.charge: 收费
@@ -1325,6 +1333,7 @@ classroom.manage.set_info.classroom_period.forever: 永久有效
 classroom.manage.set_info.date_help: 设置该值后，%user_name%只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。
 classroom.manage.set_info.days_help: 设置该值后，%user_name%只能在有效天数内进行课程的学习，系统默认会在有效期前10天提醒学员。
 classroom.manage.set_info.view_period_rules: 查看有效期规则
+classroom.manage.teacher_info.empty: 教师不存在
 classroom.status.expired: 当前班级已过有效期
 classroom.thread.send_btn: 发话题
 classroom.thread.question_btn: 提问题
@@ -1357,6 +1366,8 @@ classroom.thread.create.Discussion: 讨论区
 classroom.thread.create.publish: 发
 classroom.thread.allow_view_teacher_btn: 只看老师
 classroom.thread.view_all_btn: 查看全部
+classroom.thread.edit_btn: 编辑帖子
+classroom.thread.post_btn: 编辑帖子
 
 # 班级展示页面
 classroom.origin_price: 原价
@@ -2443,6 +2454,9 @@ my.teaching.open_course.normal: 录播公开课
 my.teaching.open_course.live: 直播公开课
 my.teaching.threads_discussion: 课程%student%话题
 my.teaching.classroom.threads_discussion: %classroom%%student%话题
+my.teaching.classroom.threads_discussion.nickname: 话题作者
+my.teaching.classroom.threads_event.nickname: 活动发起人
+my.teaching.classroom.threads_question.nickname: 话题作者
 my.teaching.classroom: 所教%classroom%
 my.teaching.classroom.manage_btn: 管理%classroom%
 my.teaching.classroom.today_data_title: 今日新增
@@ -5346,6 +5360,52 @@ card.receive.login_view_btn: 登录查看
 # 更新日志
 change_log.edusoho_title: EduSoho更新日志
 change_log: 更新日志
+
+# common
+common.courseStatus.draft: 未发布
+common.courseStatus.published: 已发布
+common.courseStatus.closed: 已关闭
+common.fileType.video: 视频
+common.fileType.audio: 音频
+common.fileType.document: 文档
+common.fileType.image: 图片
+common.fileType.other: 其他
+common.orderStatus.created: 未付款
+common.orderStatus.paid: 已付款
+common.orderStatus.refunding: 退款中
+common.orderStatus.refunded: 已退款
+common.orderStatus.cancelled: 已关闭
+common.refundStatus.created: 已申请
+common.refundStatus.success: 退款成功
+common.refundStatus.failed: 退款失败
+common.refundStatus.cancelled: 已取消
+common.logLevel.info: 提示
+common.logLevel.warning: 警告
+common.logLevel.error: 错误
+common.contentStatus.published: 已发布
+common.contentStatus.unpublished: 未发布
+common.contentStatus.trash: 回收站
+common.articleStatus.published: 已发布
+common.articleStatus.unpublished: 未发布
+common.articleStatus.trash: 回收站
+common.discountStatus.unstart: 未开始
+common.discountStatus.running: 进行中
+common.discountStatus.finished: 已结束
+common.video_quality.low: 流畅
+common.video_quality.low.tips: 适合PPT讲解
+common.video_quality.normal: 标准
+common.video_quality.normal.tips: 适合屏幕录制、摄像头拍摄
+common.video_quality.high: 精细
+common.video_quality.high.tips: 适合动态电影
+ 
+# content
+contetn.active_list.create_template: 请创建模版文件
+contetn.active_list.custom_template: 自定义
+contetn.article_list.latest_articel: 最新文章
+contetn.article_list.category: 分类
+contetn.article_list.contentCategory: >
+  <span class="color-gray">发布于 %publishedTime%</span>
+  <span>, 属于 <a href="#" class="color-gray">%contentCategoryname%</a> 分类</span>
 
 
 
