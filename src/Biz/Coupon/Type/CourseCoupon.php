@@ -21,6 +21,6 @@ class CourseCoupon extends BaseCoupon
      */
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->biz->service('Course:CourseService');
     }
 }
