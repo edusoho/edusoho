@@ -75,7 +75,7 @@ class CourseMember extends AbstractResource
 
     private function freeJoin($course)
     {
-        if ($course['price'] > 0) {
+        if ($course['isFree'] == 0) {
             throw new BadRequestException('不是免费课程,不能直接加入', 101);
         }
 
