@@ -82,6 +82,9 @@ date.day: 日
 #分页
 paginator.firstPage: 首页
 paginator.lastPage: 尾页
+paginator.PreviousPage: 上一页
+paginator.NextPage: 下一页
+
 # 用户通用
 user: 用户
 user.fields.login_password: 登录密码
@@ -2355,6 +2358,19 @@ attachments.upload.description: 描述
 attachments.upload.operations: 操作
 attachments.upload.delete_btn: 删除
 attachments.upload.tips: 用户下载附件扣除的%name%会在扣除50%之后添加到您的账户
+attachments.modal.upload_file: 上传文件
+attachments.modal.upload.edit_btn: 编辑
+attachments.modal.upload.tips: >
+  正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。<br/>转换完成后将以站内消息通知您。
+attachments.modal.upload.close_btn: 关闭
+attachments.modal.uploader.tips: >
+  <li>
+    支持PPT/PPTX,DOC/DOCX,XLS/XLSX、MP3/MP4/FLV、PDF、RAR格式的文件上传，单个文件大小不能超过
+    <strong>%fileSize%</strong>。
+  </li>
+  <li>
+    支持断点续传（仅在Chrome、IE9及以上等支持HTML5的浏览器中可用）。
+  </li>
 attachments.download: 附件下载
 attachments.download.description: 描述：%description%
 attachments.download.upload_time: 上传于 %createdTime%
@@ -5276,3 +5292,67 @@ admin.cloud_combo.service_over_deadline: >
   套餐服务已到期，尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>！
 admin.cloud_combo.service_deadline_tips: >
   套餐服务将于%packageDate%天后到期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>，以免影响正常使用
+
+# 邮箱验证
+auth.email-change.title: 设置新邮箱
+auth.email-change.new_email: 新邮箱
+auth.email-change.password_field: 网站登录密码
+auth.email-change.password_field.help_block: 设置新的登录邮箱，需要校验当前的网站登录密码
+auth.email-change.error: 邮箱地址验证失败
+auth.email-change.error.tips: 邮箱地址验证失败，请重试。
+auth.email-change.error.return_homepage_btn: 返回首页
+
+# 升级
+upgrade.browser.title: 升级您的浏览器
+upgrade.browser.message: 您的浏览器版本过低，请升级您的浏览器后，再访问%name%。
+upgrade.browser.recommend_browsers: 推荐使用以下浏览器：
+
+# 优惠券
+coupon: 优惠券
+coupon.for_any_course: 可用于抵扣全站课程
+coupon.for_specified_courses: 用于抵扣指定课程
+coupon.for_any_classroom: 可用于抵扣全站班级
+coupon.for_specified_classrooms: 可用于抵扣指定班级
+coupon.for_any_level_of_VIP_membership: 可用于抵扣全站会员
+coupon.for_specified_level_of_VIP_membership: 用于抵扣指定会员
+coupon.for_any_purchase_on_our_web_site: 可用于抵扣全站所有类型消费
+coupon.expired_on: 有效期截止：
+coupon.deadline_year: %deadline%年
+coupon.deadline_month: %deadline%月
+coupon.deadline_day: %deadline%日
+coupon.Requirements: >
+  使用条件：<span>满%fullDiscountPrice%'</span>
+coupon.Accessible: 可用
+coupon.discount: 折
+coupon.buy_course_btn: 去购买课程
+coupon.buy_classroom_btn: 去购买班级
+coupon.buy_VIP_btn: 去开通会员
+coupon.buy_something_btn: 去消费
+coupon.used_status.course: 此课程优惠券已使用
+coupon.used_status.classroom: 此班级优惠券已使用
+coupon.used_status.vip: 此会员优惠券已使用
+coupon.used_status.all: 此抵价优惠券已使用
+
+# 学习卡
+card.info.moneycard: 学习卡
+card.info.moneycard.tips: 学习卡可以用于账户充值
+card.info.moneycard.date_style: Y年n月d日
+card.info.moneycard.use_btn: 立即使用
+card.isLogin.type.coupon.tips: 您领取了一张优惠券，已添加至“我的卡包“
+card.isLogin.type.moneyCard.tips: 您领取了一张学习卡，已充值到我的账户
+card.notLogin.receive.tips: 还没有登录，请在登录后领取。
+card.receive.login_view_btn: 登录查看
+
+# 更新日志
+change_log.edusoho_title: EduSoho更新日志
+change_log: 更新日志
+
+
+
+
+
+
+
+
+
+

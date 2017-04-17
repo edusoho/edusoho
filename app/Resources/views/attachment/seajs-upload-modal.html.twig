@@ -1,6 +1,6 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 {% set modal_class = 'modal-lg' %}
-{% block title %}上传文件{% endblock %}
+{% block title %}{{ 'attachments.modal.upload_file'|trans }}{% endblock %}
 
 {% block body %}
 
@@ -9,9 +9,9 @@
   <div class="file-chooser-bar {% if not  file|default(null) %}hidden {% endif %}">
     <span data-role="placeholder">{{ file.filename|default(null) }}</span>
     <button class="btn btn-link btn-sm js-choose-trigger" type="button"><i
-          class="glyphicon glyphicon-edit"></i> {{ '编辑'|trans }}</button>
+          class="glyphicon glyphicon-edit"></i> {{ 'attachments.modal.upload.edit_btn'|trans }}</button>
     <div class="alert alert-warning" data-role="waiting-tip"
-         style="display:none;">{{ '正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。'|trans }}<br/>{{ '转换完成后将以站内消息通知您。'|trans }}
+         style="display:none;">{{ '正attachments.modal.upload.tips'|trans|raw }}
     </div>
   </div>
 
@@ -29,16 +29,12 @@
       </div>
       <div class="uploader-bottom">
         <ul>
-          <li>支持PPT/PPTX,DOC/DOCX,XLS/XLSX、MP3/MP4/FLV、PDF、RAR格式的文件上传，单个文件大小不能超过
-            <strong>
-              {% if fileSize > 1024 %}
-                {{ fileSize / 1024 }}GB
-              {% else %}
-                {{ fileSize }}MB
-              {% endif %}
-            </strong>。
-          </li>
-          <li>支持断点续传（仅在Chrome、IE9及以上等支持HTML5的浏览器中可用）。</li>
+          {% if fileSize > 1024 %}
+            {% set fileSize = fileSize / 1024 ~ 'GB'  %}
+          {% else %}
+            {% set fileSize = fileSize ~ 'MB' %}
+          {% endif %}
+          {{ 'attachments.modal.uploader.tips'|trans({'%fileSize%':fileSize})|raw }}
         </ul>
       </div>
     </div>
@@ -52,7 +48,7 @@
 
 {% endblock %}
 {% block footer %}
-  <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+  <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'attachments.modal.upload.close_btn'|trans }}</button>
   <script>app.load('topxiawebbundle/controller/attachment/sdk-upload-modal')</script>
 {% endblock %}
 
