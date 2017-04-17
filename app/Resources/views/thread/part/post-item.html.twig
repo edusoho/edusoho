@@ -23,9 +23,9 @@
       </div>
       <div class="thread-subpost-morebar clearfix {% if not post.subposts %}hide{% endif %}">
         {% if service.canAccess('post.create', post) %}
-          <button class="btn btn-default btn-xs pull-right js-toggle-subpost-form">{{'thread.post.create'|trans}}</button>
+          <button class="btn btn-default btn-xs pull-right js-toggle-subpost-form">{{'my.teaching.open_course.comment.posted_btn'|trans}}</button>
         {% endif %}
-        <span class="thread-subpost-moretext {% if post.subposts <= 5 %}hide{% endif %}"><span class="color-gray">{{'thread.post.reply_remain'|trans({'%post.subposts%': post.subposts - 5})}}</span><a href="javascript:;" class="js-post-more">{{'thread.post.view_btn'|trans}}</a></span>
+        <span class="thread-subpost-moretext {% if post.subposts <= 5 %}hide{% endif %}"><span class="color-gray">{{'my.teaching.open_course.comment.posted_nun'|trans({'%post.subposts%': post.subposts - 5})}}</span><a href="javascript:;" class="js-post-more">{{'my.teaching.open_course.comment.view_post_btn'|trans}}</a></span>
       </div>
 
       {% set goto = goto|default(path('homepage')) %}
@@ -35,7 +35,7 @@
         <form method="post" action="{{ postReplyUrl }}" class="thread-subpost-form {% if post.subposts %}hide{% endif %}">
           <div class="form-group">
             <div class="controls">
-              <textarea class="form-control" name="content" data-display="{{'thread.content'|trans}}"></textarea>
+              <textarea class="form-control" name="content" data-display="{{'my.teaching.open_course.comment.content'|trans}}"></textarea>
             </div>
           </div>
           <div class="form-group">
@@ -45,10 +45,11 @@
         </form>
       {% else %}
         <div class="empty">
-          {{ 'user.not_login.tips'|trans({'%login%':"<a href='{{ path('login',{goto:goto}) }}'>登录或</a>", '%register%':"<a href='{{ path('register',{goto:goto}) }) }}'>注册！</a>" })|raw }}
+          {% set loginUrl = path('login',{goto:goto}) %}
+          {% set registerUrl = path('register',{goto:goto}) %}
+          {{ 'my.teaching.open_course.comment.un_login.tips'|trans({'%loginUrl%':loginUrl,'%registerUrl%':registerUrl})|raw }}
         </div>
       {% endif %}
-
     </div>
   </div>
 </li>
