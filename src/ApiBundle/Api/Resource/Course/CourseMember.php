@@ -9,6 +9,9 @@ use ApiBundle\Api\Exception\BadRequestException;
 use ApiBundle\Api\Exception\InvalidArgumentException;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\MemberService;
+use Biz\Order\Service\OrderService;
 
 class CourseMember extends AbstractResource
 {
@@ -81,6 +84,24 @@ class CourseMember extends AbstractResource
 
         $member = $this->service('Course:MemberService')->becomeStudent($course['id'], $this->getCurrentUser()->id);
 
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
+        $systemOrder = array(
+            'userId' => $this->getCurrentUser()->id,
+            'title' => "购买课程《{$courseSet['title']}》- {$course['title']}",
+            'targetType' => OrderService::TARGETTYPE_COURSE,
+            'targetId' => $course['id'],
+            'amount' => 0,
+            'totalPrice' => $course['price'],
+            'snPrefix' => OrderService::SNPREFIX_C,
+            'payment' => '',
+        );
+
+        $order = $this->getOrderService()->createSystemOrder($systemOrder);
+        $this->getMemberService()->updateMember($member['id'], array(
+            'orderId' => $order['id']
+        ));
+
         if ($member) {
             return true;
         }
@@ -99,4 +120,27 @@ class CourseMember extends AbstractResource
         }
     }
 
+    /**
+     * @return MemberService
+     */
+    private function getMemberService()
+    {
+        return $this->service('Course:MemberService');
+    }
+
+    /**
+     * @return OrderService
+     */
+    private function getOrderService()
+    {
+        return $this->service('Order:OrderService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    private function getCourseSetService()
+    {
+        return $this->service('Course:CourseSetService');
+    }
 }

@@ -22,7 +22,8 @@ class PathMeta
 
     private $listMap = array(
         'GET' => AbstractResource::METHOD_SEARCH,
-        'POST' => AbstractResource::METHOD_ADD
+        'POST' => AbstractResource::METHOD_ADD,
+        'DELETE' => AbstractResource::METHOD_REMOVE
     );
 
     public function getResourceClassName()
