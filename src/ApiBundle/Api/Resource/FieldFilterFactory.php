@@ -2,7 +2,7 @@
 
 namespace ApiBundle\Api\Resource;
 
-use ApiBundle\Api\Annotation\ApiConf;
+use ApiBundle\Api\Annotation\ApiFilter;
 use Doctrine\Common\Annotations\CachedReader;
 use Doctrine\Common\Annotations\Reader;
 
@@ -20,13 +20,18 @@ class FieldFilterFactory
 
     public function createFilter($resource, $method)
     {
-        $annotation = $this->annotationReader->getMethodAnnotation(
+        $apiFilterAnnotation = $this->annotationReader->getMethodAnnotation(
             new \ReflectionMethod(get_class($resource), $method),
-            ApiConf::class
+            ApiFilter::class
         );
-
-        if ($annotation->getFilter() && class_exists($annotation->getFilter())) {
-            return new $annotation->getFilter();
+        if ($apiFilterAnnotation && $apiFilterAnnotation->getClass() && class_exists($apiFilterAnnotation->getClass())) {
+            $class = $apiFilterAnnotation->getClass();
+            $fieldFilter = new $class();
+            $mode = $apiFilterAnnotation->getMode();
+            if ($mode) {
+                $fieldFilter->setMode($mode);
+            }
+            return $fieldFilter;
         }
 
        $filterClass = get_class($resource).'Filter';
