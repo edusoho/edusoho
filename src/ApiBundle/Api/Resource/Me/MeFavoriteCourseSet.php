@@ -8,6 +8,14 @@ use ApiBundle\Api\Resource\Resource;
 
 class MeFavoriteCourseSet extends Resource
 {
+    /**
+     * @ApiConf(filter=ApiBundle\Api\Resource\CourseSet\CourseSetFilter)
+     */
+    public function search(ApiRequest $request)
+    {
+
+    }
+
     public function get(ApiRequest $request, $courseSetId)
     {
         $isFavorite = $this->service('Course:CourseSetService')->isUserFavorite($this->getCurrentUser()->getId(), $courseSetId);

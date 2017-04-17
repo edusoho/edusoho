@@ -21,11 +21,6 @@ abstract class Resource
      */
     private $biz;
 
-    /**
-     * @var Filter
-     */
-    private $filter = null;
-
     const METHOD_SEARCH = 'search';
     const METHOD_GET = 'get';
     const METHOD_ADD = 'add';
@@ -38,11 +33,6 @@ abstract class Resource
     public function __construct(Biz $biz)
     {
         $this->biz = $biz;
-
-        $filterClass = $filterClass = get_class($this).'Filter';
-        if (class_exists($filterClass)) {
-            $this->filter = new $filterClass();
-        }
     }
 
     public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
@@ -60,7 +50,7 @@ abstract class Resource
     /**
      * @return Biz
      */
-    final protected function getBiz()
+    final public function getBiz()
     {
         return $this->biz;
     }
@@ -68,11 +58,6 @@ abstract class Resource
     final protected function service($service)
     {
         return $this->getBiz()->service($service);
-    }
-
-    public function getFilter()
-    {
-        return $this->filter;
     }
 
     /**

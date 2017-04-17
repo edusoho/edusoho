@@ -8,7 +8,15 @@ namespace ApiBundle\Api\Annotation;
  */
 class ApiConf
 {
+    /**
+     * @var boolean
+     */
     private $isRequiredAuth;
+
+    /**
+     * @var string
+     */
+    private $filter;
 
     public function __construct(array $data)
     {
@@ -29,5 +37,15 @@ class ApiConf
     public function setIsRequiredAuth($isRequiredAuth)
     {
         $this->isRequiredAuth = $isRequiredAuth;
+    }
+
+    public function getFilter()
+    {
+        return $this->filter;
+    }
+
+    public function setFilter($filter)
+    {
+        $this->filter = $filter;
     }
 }

@@ -8,20 +8,18 @@ use ApiBundle\Api\Util\RequestUtil;
 
 class CourseSetFilter extends Filter
 {
-    protected $publicFields = array(
-        'id', 'title', 'subtitle', 'type', 'tags', 'category', 'serializeMode', 'status',
-        'summary', 'goals', 'audiences', 'cover', 'ratingNum', 'rating', 'noteNum', 'studentNum',
-        'recommended', 'recommendedSeq', 'recommendedTime', 'orgId', 'orgCode', 'discountId',
-        'discount', 'maxRate', 'hitNum', 'materialNum', 'parentId', 'locked', 'maxCoursePrice',
-        'minCoursePrice', 'teachers', 'creator', 'createdTime', 'updatedTime'
+    protected $simpleFields = array(
+        'id', 'title', 'subtitle', 'type', 'cover', 'studentNum', 'maxCoursePrice', 'minCoursePrice', 'discount'
     );
 
-    protected function publicFields(&$data)
+    protected $publicFields = array(
+        'tags', 'category', 'serializeMode', 'status', 'summary', 'goals', 'audiences', 'ratingNum', 'rating', 'noteNum',
+        'recommended', 'recommendedSeq', 'recommendedTime', 'orgId', 'orgCode', 'discountId',
+        'discount', 'maxRate', 'hitNum', 'materialNum', 'parentId', 'locked', 'maxCoursePrice', 'minCoursePrice', 'teachers', 'creator', 'createdTime', 'updatedTime'
+    );
+
+    protected function simpleFields(&$data)
     {
-        $data['summary'] = $this->convertAbsoluteUrl($data['summary']);
-
-        $data['recommendedTime'] = date('c', $data['recommendedTime']);
-
         foreach ($data['cover'] as $size => $imagePath) {
             $data['cover'][$size] = RequestUtil::asset($imagePath);
         }
@@ -29,6 +27,13 @@ class CourseSetFilter extends Filter
         if (empty($data['cover'])) {
             $data['cover'] = new \stdClass();
         }
+    }
+
+    protected function publicFields(&$data)
+    {
+        $data['summary'] = $this->convertAbsoluteUrl($data['summary']);
+
+        $data['recommendedTime'] = date('c', $data['recommendedTime']);
 
         $userFilter = new UserFilter();
         $userFilter->filter($data['creator']);

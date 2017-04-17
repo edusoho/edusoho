@@ -2,6 +2,7 @@
 
 namespace ApiBundle;
 
+use ApiBundle\Api\FieldFilterFactory;
 use ApiBundle\Api\PathParser;
 use ApiBundle\Api\Resource\ResourceManager;
 use ApiBundle\Api\ResourceKernel;
@@ -36,6 +37,10 @@ class ApiBundle extends Bundle
 
         $biz['api.plugin.config.manager'] = function ($biz) use ($container) {
             return new PluginConfigurationManager($container->getParameter('kernel.root_dir'));
+        };
+
+        $biz['api.field.filter.factory'] = function ($biz) use ($container) {
+            return new FieldFilterFactory($container->get('annotation_reader'));
         };
     }
 }
