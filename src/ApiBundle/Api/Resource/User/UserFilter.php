@@ -23,9 +23,9 @@ class UserFilter extends Filter
 
     protected function simpleFields(&$data)
     {
-        $data['smallAvatar'] = RequestUtil::asset($data['smallAvatar']);
-        $data['mediumAvatar'] = RequestUtil::asset($data['mediumAvatar']);
-        $data['largeAvatar'] = RequestUtil::asset($data['largeAvatar']);
+        $data['smallAvatar'] = RequestUtil::getUriForPath($data['smallAvatar']);
+        $data['mediumAvatar'] = RequestUtil::getUriForPath($data['mediumAvatar']);
+        $data['largeAvatar'] = RequestUtil::getUriForPath($data['largeAvatar']);
     }
 
     protected function authenticatedFields(&$data)

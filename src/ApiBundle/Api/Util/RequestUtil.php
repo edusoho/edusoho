@@ -16,7 +16,7 @@ class RequestUtil
         self::$request = $request;
     }
 
-    public static function asset($path)
+    public static function getUriForPath($path)
     {
         if (empty($path)) {
             return '';
@@ -30,6 +30,6 @@ class RequestUtil
             $path = '/files/'.str_replace('public://', '', $path);
         }
 
-        return self::$request->getSchemeAndHttpHost().'/'.ltrim($path, '/');
+        return self::$request->getUriForPath('/'.ltrim($path, '/'));
     }
 }
