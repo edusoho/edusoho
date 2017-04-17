@@ -380,7 +380,7 @@ $.validator.addMethod("chinese_alphanumeric", function (value, element, params) 
 }, jQuery.validator.format('支持中文字、英文字母、数字及_ . ·'));
 
 $.validator.addMethod("alphanumeric", function (value, element, params) {
-  return this.optional(element) ||  /^[a-zA-Z0-9_]+$/i.test(value)
+  return this.optional(element) || /^[a-zA-Z0-9_]+$/i.test(value)
 }, jQuery.validator.format('必须是英文字母、数字及下划线组成'));
 
 $.validator.addMethod("nickname", function (value, element, params) {
@@ -404,9 +404,7 @@ $.validator.addMethod("nickname_remote", function (value, element, params) {
     .success(function (response) {
       isSuccess = response.success;
     })
-
   return this.optional(element) || isSuccess;
-
 }, jQuery.validator.format('该用户名已存在'))
 
 // Validator.addRule(
@@ -423,6 +421,6 @@ $.validator.addMethod('reg_inviteCode', function (value, element) {
   return this.optional(element) || /^[a-z0-9A-Z]{5}$/.test(value);
 }, Translator.trans('必须是5位数字、英文字母组成'));
 
-'reg_inviteCode',
-            /^[a-z0-9A-Z]{5}$/,
-            Translator.trans('%display%必须是5位数字、英文字母组成', {display: '{{display}}'})
+$.validator.addMethod('phone', function (value, element) {
+  return this.optional(element) ||   /^1\d{10}$/.test(value);
+},  $.validator.format("请输入有效手机号码(仅仅支持中国大陆手机号码)"));
