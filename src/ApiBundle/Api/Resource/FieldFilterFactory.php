@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiBundle\Api;
+namespace ApiBundle\Api\Resource;
 
 use ApiBundle\Api\Annotation\ApiConf;
 use Doctrine\Common\Annotations\CachedReader;

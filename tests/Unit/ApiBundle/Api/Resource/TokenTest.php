@@ -51,15 +51,22 @@ class TokenTest extends ApiTestCase
         $kernel = new ResourceKernel(
             $this->getContainer()
         );
-        $kernel->handle(Request::create('http://test.com/tokens', 'POST', array('username' => 'admin@admin.com', 'password' => '6fPHfubFUWCgaNjN')));
+        $kernel->handle(Request::create('http://test.com/tokens', 'POST', array('username' => 'admin@admin.com', 'password' => 'admin')));
     }
 
     public function testAddWithSuccess()
     {
+        $this->mockBiz('VipPlugin:Vip:VipService', array(
+            array('functionName' => 'getMemberByUserId', 'returnValue' => array('levelId' => 1, 'deadline' => 1))
+        ));
+        $this->mockBiz('VipPlugin:Vip:LevelService', array(
+            array('functionName' => 'getLevel', 'returnValue' => array('name' => 1, 'seq' => 1))
+        ));
+
         $kernel = new ResourceKernel(
             $this->getContainer()
         );
-        $token = $kernel->handle(Request::create('http://test.com/tokens', 'POST', array('username' => 'admin@admin.com', 'password' => '6fPHfubFUWCgaNjN')));
+        $token = $kernel->handle(Request::create('http://test.com/tokens', 'POST', array('username' => 'admin@admin.com', 'password' => 'admin')));
         $this->assertArrayHasKey('token', $token);
         $user = $this->getCurrentUser();
         $this->assertEquals($user['id'], $token['user']['id']);

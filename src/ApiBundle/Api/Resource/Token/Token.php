@@ -101,7 +101,6 @@ class Token extends AbstractResource
         if ($this->isPluginInstalled('vip')) {
             $vip = $this->service('VipPlugin:Vip:VipService')->getMemberByUserId($user['id']);
             $level = $this->service('VipPlugin:Vip:LevelService')->getLevel($vip['levelId']);
-
             if ($vip) {
                 $user['vip'] = array(
                     'levelId' => $vip['levelId'],

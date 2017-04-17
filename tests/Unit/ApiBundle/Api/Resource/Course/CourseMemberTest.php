@@ -18,7 +18,7 @@ class CourseMemberTest extends ApiTestCase
     }
 
     /**
-     * @expectedException \ApiBundle\Api\Exception\InvalidArgumentException
+     * @expectedException \ApiBundle\Api\Exception\BadRequestException
      */
     public function testAddWithCourseNorFree()
     {
@@ -54,6 +54,6 @@ class CourseMemberTest extends ApiTestCase
         $res = new CourseMember($this->getBiz());
         $resp = $res->add(new ApiRequest('', ''), 100000);
 
-        $this->assertEquals(array('success' => true), $resp);
+        $this->assertEquals(1, $resp);
     }
 }

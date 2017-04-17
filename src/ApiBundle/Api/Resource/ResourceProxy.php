@@ -2,8 +2,6 @@
 
 namespace ApiBundle\Api\Resource;
 
-use ApiBundle\Api\FieldFilterFactory;
-
 class ResourceProxy
 {
     private $resource;

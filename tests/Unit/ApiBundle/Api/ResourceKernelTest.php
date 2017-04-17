@@ -95,10 +95,17 @@ class ResourceKernelTest extends ApiTestCase
 
         $batchParam = array(
             array('method' => 'GET', 'relative_url' => '/course_sets'),
-            array('method' => 'POST', 'relative_url' => '/tokens', 'body' => 'username=admin&password=6fPHfubFUWCgaNjN'),
+            array('method' => 'POST', 'relative_url' => '/tokens', 'body' => 'username=admin@admin.com&password=admin'),
         );
         $request = Request::create('http://test.com/batch', 'POST', array(
             'batch' => json_encode($batchParam),
+        ));
+
+        $this->mockBiz('VipPlugin:Vip:VipService', array(
+            array('functionName' => 'getMemberByUserId', 'returnValue' => array('levelId' => 1, 'deadline' => 1))
+        ));
+        $this->mockBiz('VipPlugin:Vip:LevelService', array(
+            array('functionName' => 'getLevel', 'returnValue' => array('name' => 1, 'seq' => 1))
         ));
         $result = $kernel->handle($request);
 

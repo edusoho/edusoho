@@ -2,8 +2,8 @@
 
 namespace ApiBundle;
 
-use ApiBundle\Api\FieldFilterFactory;
 use ApiBundle\Api\PathParser;
+use ApiBundle\Api\Resource\FieldFilterFactory;
 use ApiBundle\Api\Resource\ResourceManager;
 use ApiBundle\Api\ResourceKernel;
 use ApiBundle\Api\Util\ObjectCombinationUtil;
