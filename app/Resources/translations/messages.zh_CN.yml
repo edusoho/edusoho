@@ -1,10 +1,7 @@
 # 全站
 # 整站导航
-<<<<<<< HEAD
 site.alipay: 支付宝
 site.btn.share: 分享
-=======
->>>>>>> feature/x8-i18n
 site.online_school_name: 网校名称
 site.online_school_about: 网校简介
 site.online_school_logo: 网校LOGO
@@ -77,17 +74,14 @@ operation: 操作
 #会员
 vip: 会员
 
-<<<<<<< HEAD
 #日期通用
 date.year: 年
 date.month: 月
 date.day: 日
 
-=======
 #分页
 paginator.firstPage: 首页
 paginator.lastPage: 尾页
->>>>>>> feature/x8-i18n
 # 用户通用
 user: 用户
 user.fields.login_password: 登录密码
@@ -1200,8 +1194,6 @@ classroom.course.content: >
 classroom.course.unlock_tips: >
     如需解除同步单独编辑本课程，可点击下方按钮解除同步。
     <font color="#e83d2c">注意：本操作不可逆！</font>
-<<<<<<< HEAD
-
 classroom.member_sign: 签到
 classroom.member_signed: 已签到
 classroom.sign_keep_days: 连续%keepDays%天
@@ -1304,8 +1296,6 @@ classroom.manage.set_info.classroom_period.forever: 永久有效
 classroom.manage.set_info.date_help: 设置该值后，%user_name%只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。
 classroom.manage.set_info.days_help: 设置该值后，%user_name%只能在有效天数内进行课程的学习，系统默认会在有效期前10天提醒学员。
 classroom.manage.set_info.view_period_rules: 查看有效期规则
-=======
->>>>>>> feature/x8-i18n
 classroom.status.expired: 当前班级已过有效期
 classroom.thread.send_btn: 发话题
 classroom.thread.question_btn: 提问题
