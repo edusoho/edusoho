@@ -17,9 +17,8 @@ class MeFavoriteCourseSet extends AbstractResource
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $favorites = $this->getCourseSetService()->searchUserFavorites($this->getCurrentUser()->getId(),$offset, $limit);
         $total = $this->getCourseSetService()->countUserFavorites($this->getCurrentUser()->getId());
-        $courseSets = $this->getCourseSetService()->findCourseSetsByIds(array_column($favorites, 'id'));
-
-        return $this->makePagingObject($courseSets, $total, $offset, $limit);
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds(array_column($favorites, 'courseSetId'));
+        return $this->makePagingObject(array_values($courseSets), $total, $offset, $limit);
     }
 
     public function get(ApiRequest $request, $courseSetId)
