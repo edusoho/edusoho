@@ -1260,6 +1260,29 @@ classroom.over_expiry_day_and_buyable_tips: 你的班级已过有效期，无法
 classroom.over_expiry_day_and_not_buyable_tips: 你的班级已过有效期，无法继续学习，请重新加入
 #公告
 announcement: 公告
+announcement.empty: 暂无公告
+announcement.view_btn: (请点击查看)
+announcement.modal.classroom_nojoin.title: 提示
+announcement.modal.classroom_nojoin.tips: 您尚未成为%classroomName%成员,请先成为%classroomName%成员
+announcement.modal.classroom_nojoin.become_auditor_btn: 加入旁听生
+announcement.modal.course_nojoin.tips: 您尚未成为%courseTitle%学员,请先成为%courseTitle%学员
+announcement.modal.global.publish_time: 发表于%createdTime%
+announcement.modal.edit_btn: 编辑
+announcement.modal.delete_btn: 删除
+announcement.modal.view_all.title: 查看本课程的所有公告
+announcement.modal.view_all.user_name: 创建者
+announcement.modal.view_all.content: 公告内容
+announcement.modal.view_all.createdTime: 创建时间
+announcement.modal.view_all.updatedTime: 更新时间
+announcement.modal.view_all.notUpdate: 尚未更新
+announcement.modal.view_all.quit_btn: 退出
+announcement.modal_layout.announcement_manage: 公告管理
+announcement.modal_layout.announcement_manage.edit_btn: 编辑公告
+announcement.modal_layout.announcement_manage.add_btn: 添加公告
+announcement.modal_layout.announcement_manage.history_btn: 历史公告
+announcement.modal.write.startTime: 发布时间
+announcement.modal.write.endTime: 结束时间
+announcement.modal.write.send_notify_to_user: 给%user_name%发送系统通知
 
 classroom.manage.setting: 设置
 classroom.manage.unSetting: 未设置
