@@ -451,11 +451,12 @@ class AnalysisController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $count = count($taskDetail);
+
+        $count = 0;
         if ($tab == 'trend') {
             $taskData = $this->getTaskService()->analysisTaskDataByTime($timeRange['startTime'], $timeRange['endTime']);
             $data = $this->fillAnalysisData($condition, $taskData);
-            $this->sumTrendDataCount($taskData);
+            $count = $this->sumTrendDataCount($taskData);
         }
 
         $courseIds = ArrayToolkit::column($taskDetail, 'courseId');
