@@ -844,9 +844,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if (empty($course)) {
             throw $this->createNotFoundException('No Avaliable Course in CourseSet#{$id}');
         }
-        $this->getCourseSetDao()->update($id, array('defaultCourseId'=>$course['id']));
+        $this->getCourseSetDao()->update($id, array('defaultCourseId' => $course['id']));
     }
-
 
     public function updateMaxRate($id, $maxRate)
     {
