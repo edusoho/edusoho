@@ -20,7 +20,7 @@ class OrgControllerListener
         if ($event->getRequestType() != HttpKernelInterface::MASTER_REQUEST) {
             return;
         }
-        
+
         $request = $event->getRequest();
         $urlPath = $request->getPathInfo();
         $this->_parseUrlAndProcess($urlPath);

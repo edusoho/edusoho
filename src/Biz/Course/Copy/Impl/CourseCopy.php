@@ -3,7 +3,6 @@
 namespace Biz\Course\Copy\Impl;
 
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Copy\AbstractEntityCopy;
 
 class CourseCopy extends AbstractEntityCopy
@@ -38,7 +37,7 @@ class CourseCopy extends AbstractEntityCopy
         $new['isDefault'] = $courseSetId == $source['courseSetId'] ? 0 : $source['isDefault'];
         //标记是否是从默认教学计划转成非默认的，如果是则需要对chapter-task结构进行调整
         $modeChange = $new['isDefault'] != $source['isDefault'];
-        $new['parentId'] = 0;
+        $new['parentId'] = $source['id'];
         $new['locked'] = 0;
         $new['courseSetId'] = $courseSetId;
         $new['creator'] = $user['id'];
@@ -50,21 +49,21 @@ class CourseCopy extends AbstractEntityCopy
             $new['title'] = $config['title'];
         }
         if (!empty($config['learnMode'])) {
-            //todo 如果learnMode改变了，则任务列表需按照新的learnMode构建
+            //如果learnMode改变了，则任务列表需按照新的learnMode构建
             $new['learnMode'] = $config['learnMode'];
         }
 
         if (!empty($config['expiryMode'])) {
             $new['expiryMode'] = $config['expiryMode'];
-            if ($config['expiryMode'] == 'days') {
+            if ($config['expiryMode'] === 'days') {
                 $new['expiryDays'] = $config['expiryDays'];
                 $new['expiryStartDate'] = 0;
                 $new['expiryEndDate'] = 0;
-            } elseif ($config['expiryMode'] == 'end_date') {
+            } elseif ($config['expiryMode'] === 'end_date') {
                 $new['expiryStartDate'] = 0;
                 $new['expiryDays'] = 0;
                 $new['expiryEndDate'] = $config['expiryEndDate'];
-            } elseif ($config['expiryMode'] == 'date') {
+            } elseif ($config['expiryMode'] === 'date') {
                 $new['expiryDays'] = 0;
                 $new['expiryStartDate'] = $config['expiryStartDate'];
                 $new['expiryEndDate'] = $config['expiryEndDate'];
@@ -76,7 +75,6 @@ class CourseCopy extends AbstractEntityCopy
         }
 
         $new = $this->getCourseDao()->create($new);
-        $this->doCopyCourseMember($source, $new);
         $this->childrenCopy($source, array('newCourse' => $new, 'modeChange' => $modeChange, 'isCopy' => false));
 
         return $new;
@@ -140,47 +138,11 @@ class CourseCopy extends AbstractEntityCopy
         return $new;
     }
 
-    protected function doCopyCourseMember($oldCourse, $newCourse)
-    {
-        $members = $this->getMemberDao()->findByCourseIdAndRole($oldCourse['id'], 'teacher');
-        if (!empty($members)) {
-            $teacherIds = array();
-            foreach ($members as $member) {
-                $member = array(
-                    'courseId' => $newCourse['id'],
-                    'courseSetId' => $newCourse['courseSetId'],
-                    'userId' => $member['userId'],
-                    'role' => 'teacher',
-                    'seq' => $member['seq'],
-                    'isVisible' => $member['isVisible'],
-                    'remark' => $member['remark'],
-                    'deadline' => $member['deadline'],
-                    'deadlineNotified' => $member['deadlineNotified'],
-                );
-                if ($member['isVisible']) {
-                    $teacherIds[] = $member['userId'];
-                }
-                $this->getMemberDao()->create($member);
-            }
-            if (!empty($teacherIds)) {
-                $this->getCourseDao()->update($newCourse['id'], array('teacherIds' => $teacherIds));
-            }
-        }
-    }
-
     /**
      * @return CourseDao
      */
     protected function getCourseDao()
     {
         return $this->biz->dao('Course:CourseDao');
-    }
-
-    /**
-     * @return CourseMemberDao
-     */
-    protected function getMemberDao()
-    {
-        return $this->biz->dao('Course:CourseMemberDao');
     }
 }

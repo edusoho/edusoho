@@ -17,7 +17,7 @@
   {% for courseSet in courseSets if courseSet %}
 
     <li class="course-item clearfix"   data-id="{{courseSet.id}}" >
-      <a class="course-picture-link" href="{{ path('course_set_show',{id:courseSet.id}) }}" target="_blank">
+      <a class="course-picture-link" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank">
         <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'course.png') }}" alt="{{ courseSet.title }}">
       </a>
       <div class="course-body">
@@ -31,7 +31,7 @@
 
         </div>
 
-        <h4 class="course-title"><a href="{{ path('course_set_show',{id: courseSet.id}) }}" target="_blank">{{ courseSet.title }}</a>
+        <h4 class="course-title"><a href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank">{{ courseSet.title }}</a>
         {% if courseSet.serializeMode=='serialize' %}
           <span class="label label-success ">{{'更新中'|trans}}</span>
         {% elseif courseSet.serializeMode=='finished' %}

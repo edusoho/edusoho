@@ -1,6 +1,8 @@
 {% cache 'announcements-block/targetType/' ~ targetType ~ '/targetId/' ~ targetId 600 %}
+  {% do script(['app/js/announcement/announcement-swiper-slide/index.js']) %}
   {% set announcements = data('Announcements',{targetType:targetType, targetId:targetId, count:10}) %}
   {% if announcements %}
+
     <div class="alert alert-warning announcements aside-notice" role="alert">
       <div class="swiper-container">
         <div class="swiper-wrapper">
@@ -14,10 +16,6 @@
         </div>
       </div>
     </div>
-
-    {% do load_script('announcement/announcement-swiper-slide') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-
   {% endif %}
 {% endcache %}
 
