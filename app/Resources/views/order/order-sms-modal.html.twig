@@ -35,7 +35,7 @@
       </div>
     </form>
 {% else %}
-  <span>&nbsp;&nbsp;{{'您还未绑定手机号'|trans}}<a class="btn btn-link" href="{{path('settings_bind_mobile')}}" target="_blank">{{'去绑定'|trans}}</a></span>
+  <p class="mt20 mb20 text-center">{{'您还未绑定手机号'|trans}}<a class="btn btn-primary ml10" href="{{path('settings_bind_mobile')}}" target="_blank">{{'去绑定'|trans}}</a></p>
 {% endif %}
 
 {% endblock %}

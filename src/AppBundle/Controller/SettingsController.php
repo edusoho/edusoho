@@ -779,17 +779,14 @@ class SettingsController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
         $password = $request->request->get('value');
-
+        $response = true;
         if (strlen($password) > 0) {
             $passwordRight = $this->getUserService()->verifyPassword($currentUser['id'], $password);
-
-            if ($passwordRight) {
-                $response = array('success' => true, 'message' => '密码正确');
-            } else {
-                $response = array('success' => false, 'message' => '密码错误');
+            if (!$passwordRight) {
+                $response = '密码错误';
             }
         } else {
-            $response = array('success' => false, 'message' => '密码不能为空');
+            $response = '密码不能为空';
         }
 
         return $this->createJsonResponse($response);

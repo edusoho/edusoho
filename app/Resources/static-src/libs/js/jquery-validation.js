@@ -391,9 +391,7 @@ $.validator.addMethod("nickname", function (value, element, params) {
 
 $.validator.addMethod("nickname_remote", function (value, element, params) {
   let isSuccess = 0;
-
   let url = $(element).data('url') ? $(element).data('url') : null;
-
   $.ajax({
     url: url,
     type: 'GET',
@@ -422,5 +420,5 @@ $.validator.addMethod('reg_inviteCode', function (value, element) {
 }, Translator.trans('必须是5位数字、英文字母组成'));
 
 $.validator.addMethod('phone', function (value, element) {
-  return this.optional(element) ||   /^1\d{10}$/.test(value);
-},  $.validator.format("请输入有效手机号码(仅仅支持中国大陆手机号码)"));
+  return this.optional(element) || /^1\d{10}$/.test(value);
+}, $.validator.format("请输入有效手机号码(仅仅支持中国大陆手机号码)"));

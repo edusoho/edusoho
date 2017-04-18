@@ -1,4 +1,4 @@
-import notify from 'notify';
+import notify from 'common/notify';
 
 export default class SmsSender {
   constructor($element) {
@@ -10,26 +10,23 @@ export default class SmsSender {
     this.captcha = false;
     this.captchaValidated = false;
     this.captchaNum = 'captcha_num';
-
     this.initEvent();
     this.setup();
   }
 
   initEvent() {
-    this.$element.click(() => this.smsSend());
+    // console.log(this.$element);
+    // this.$element.click(() => this.smsSend());
   }
 
-  get getPostData(data) {
-    return data;
-  }
-
-  get preSmsSend() {
+  preSmsSend() {
     return true;
   }
 
   setup() {
     if (this.captcha) {
       this.smsSend();
+      console.log('smsSend');
     }
   }
   postData(url, data) {
@@ -66,6 +63,7 @@ export default class SmsSender {
   }
 
   smsSend() {
+    console.log('smsSend...');
     var leftTime = $('#js-time-left').html();
     if (leftTime.length > 0) {
       return false;
@@ -73,14 +71,14 @@ export default class SmsSender {
     var url = this.url;
     var data = {};
     data.to = $('[name="' + this.dataTo + '"]').val();
-    data.sms_type = smsType;
+    data.sms_type = this.smsType;
     if (this.captcha) {
       data.captcha_num = $('[name="' + this.captchaNum + '"]').val();
       if (!this.captchaValidated) {
         return false;
       }
     }
-    data = $.extend(data, this.getPostData(data));
+    data = $.extend(data, data);
     if (this.preSmsSend()) {
       this.postData(url, data);
     }
