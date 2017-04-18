@@ -33,6 +33,10 @@ $.validator.setDefaults({
   submitSuccess: function (data) {
     console.log('submitSuccess');
   },
+  invalidHandler: function(data,data2) {
+    console.log(data);
+    console.log(data2);
+  },
   submitHandler: function (form) {
     console.log('submitHandler');
 
@@ -437,4 +441,21 @@ $.validator.addMethod("nickname_remote", function (value, element, params) {
       isSuccess = response.success;
     })
   return this.optional(element) || isSuccess;
-}, jQuery.validator.format('该用户名已存在'))
+}, jQuery.validator.format('该用户名已存在'));
+
+$.validator.addMethod('smsCode', function (value, element) {
+  let url = $(element).data('url') ? $(element).data('url') : null;
+  let type = $(element).data('type') ? $(element).data('type') : 'POST';
+  let isSuccess = 0;
+  $.ajax({
+    url: url,
+    type: type,
+    async: false,
+    data: { value: value },
+    dataType: 'json'
+  })
+    .success(function (response) {
+      isSuccess = response.success;
+    })
+  return this.optional(element) || isSuccess
+}, Translator.trans('验证码错误'));

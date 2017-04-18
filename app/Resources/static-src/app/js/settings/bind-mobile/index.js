@@ -34,10 +34,9 @@ let validator = $form.validate({
       }
     }
   },
-
 });
 
-$form.on('focusout.validate', (data, data2) => {
+$('#submit-btn').click(() => {
   if (!isSmsCode&& validator.form()) {
     $smsCode.removeClass('disabled');
     iniSmsCode();
@@ -47,30 +46,12 @@ $form.on('focusout.validate', (data, data2) => {
   }
 })
 
-console.log(validator);
-
-$('#submit-btn').click(() => {
-  console.log(validator);
-  if (isSmsCode && validator.form()) {
-    $form.submit();
-  }
-})
-
 
 function iniSmsCode() {
   $('#sms-code').rules('add', {
     required: true,
     unsigned_integer: true,
-    remote: {
-      url: $('#sms-code').data('url'),
-      type: 'get',
-      async: false,
-      data: {
-        'value': function () {
-          return $('#sms-code').val();
-        }
-      }
-    },
+    smsCode: true,
     messages: {
       required: Translator.trans('请输入验证码'),
     }
