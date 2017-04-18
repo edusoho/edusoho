@@ -28,7 +28,7 @@
 		<strong>{{ cardDetail.rate }}</strong>
 		{% if cardDetail.type == "discount" %}{{ '折'|trans }}{% endif %}
 		{% if cardDetail.targetType == "course" and cardDetail.targetId != 0 %}
-			{% set courseSet = data('CourseSet', { id : cardDetail.targetId }) %}
+			{% set courseSet = data('CourseSet', id : cardDetail.targetId) %}
 			<a href="{{ path('course_show',{ id : courseSet.defaultCourseId }) }}">{{ '去购买课程'|trans }}
 				></a>
 		{% elseif cardDetail.targetType == "course" and cardDetail.targetId == 0 %}
