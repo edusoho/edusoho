@@ -39,6 +39,7 @@ site.datagrid.radios.open: 开启
 site.datagrid.radios.close: 关闭
 site.datagrid.radios.yes: 是
 site.datagrid.radios.no: 否
+site.datagrid.radios.all: 全选
 site.message.info: 提示信息
 site.message.warning: 警告信息
 site.message.error: 错误提示
@@ -576,6 +577,100 @@ question.marker_question.add_practice_tips: >
   <p class="title">添加随堂练习，只需一步操作</p>
   <p class="text-md">将题目拖拽到<span class='color-warning'>「视频编辑区域」</p>
 question.marker_question.video_edit_block: 视频编辑区域
+
+# 教学资料库
+material_lib: 教学资料库material_lib.my: 我的资料
+material_lib.content_title: 教学资料库
+material_lib.my: 我的资料
+material_lib.public: 公共资料
+material_lib.favorite: 收藏夹
+material_lib.sharing: 来自分享
+material_lib.search.search_btn: 搜索
+material_lib.search.input_placeholder: 输入标题关键字
+material_lib.search.tags: 标签：
+material_lib.search.conditions: 筛选：
+material_lib.search.conditions.start_time: 起始时间
+material_lib.search.conditions.finish_time: 结束时间
+material_lib.search.conditions.convert_status: 转码状态
+material_lib.search.conditions.convert_status.success: 转码成功
+material_lib.search.conditions.convert_status.doing: 转码中
+material_lib.search.conditions.convert_status.error: 转码失败
+material_lib.search.conditions.use_status: 使用状态
+material_lib.search.conditions.use_status.using: 未使用
+material_lib.search.conditions.use_status.used: 已使用
+material_lib.tag_manage: 标签设置
+material_lib.tag_manage.tag: 标签
+material_lib.tag_manage.input_placeholder: 标签
+material_lib.tag_manage.tag_tips: 标签来自网校课程标签，由网校管理员统一管理。
+material_lib.tag_manage.tag_explain: 用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理
+material_lib.preview.content_title: 资料预览
+material_lib.preview.not_support_tips: 该文件暂不支持预览
+material_lib.preview.local_file_not_support_tips: 本地文件暂不支持预览
+material_lib.detail.content_title: 资源详情
+material_lib.detail.base_info: 基本信息
+material_lib.detail.cover_image: 封面
+material_lib.detail.converting_tips: 视频还没有转码完成，请等待转码完成......
+material_lib.detail.title: 标题
+material_lib.detail.tag: 标签
+material_lib.detail.tag_tips: 标签来自网校课程标签，由网校管理员统一管理。
+material_lib.detail.description: 简介
+material_lib.detail.share: 分享
+material_lib.detail.share.share_to_public: 共享到公共资料
+material_lib.detail.share.share_to_public_tips: （其他老师可以查看、预览、引用该资料）
+material_lib.detail.share.only_myself: 仅自己可见
+
+material_lib.delete.content_title: 文件删除
+material_lib.delete.confirm_delete_tips: 是否确认删除资源？
+material_lib.delete.delete_tips: 文件若被引用，删除会引起引用课时无法正常使用
+
+material_lib.upload_file.creator: 作者：
+material_lib.upload_file.empty: 无文件记录
+material_lib.upload_file.time: 时间：
+material_lib.upload_file.not_used: 未使用
+material_lib.upload_file.convert_status.error: 转码失败
+material_lib.upload_file.convert_status.doing: 转码中
+material_lib.sharing_history: 我的分享历史
+material_lib.sharing_history.share_to: 分享资料给
+material_lib.sharing_history.share_to.input_placeholder: 输入用户名
+material_lib.sharing_history.time: 时间
+material_lib.sharing_history.nickname: 昵称
+material_lib.sharing_history.operation: 操作
+material_lib.sharing_history.description: 描述
+material_lib.sharing_history.share_with_friend: 分享给%nickname%
+material_lib.sharing_history.cancel_share_with_friend: 取消与%nickname%的分享
+material_lib.sharing_history.share_with_teacher: 将资料分享给%nickname%老师。
+material_lib.sharing_history.cancel_share_with_teacher: 取消分享
+material_lib.sharing_history.empty: 无资料分享记录
+material_lib.sharing_history.history_btn: 我的分享
+material_lib.sharing_history.share_user_btn: 分享用户
+material_lib.sharing_history.history_detail_btn: 历史记录
+material_lib.my_sharing: 分享资料
+material_lib.my_sharing.share_to: 分享资料给
+material_lib.my_sharing.share_to.input_placeholder: 输入用户名
+material_lib.my_sharing.my_btn: 分享资料
+material_lib.type: 类型：
+material_lib.type.all: 全部
+material_lib.type.video: 视频
+material_lib.type.audio: 音频
+material_lib.type.image: 图片
+material_lib.type.doc: 文档
+material_lib.type.other: 其它
+material_lib.btn.collect: 收藏
+material_lib.btn.edit: 编辑
+material_lib.btn.view: 查看
+material_lib.btn.subtitle_manage: 字幕管理
+material_lib.btn.download: 下载
+material_lib.btn.cancel_share: 取消共享
+material_lib.btn.share: 共享
+material_lib.btn.delete: 删除
+material_lib.btn.preview: 资料预览
+material_lib.btn.convert_again: 重新转码
+material_lib.btn.upload_files: 上传资料
+material_lib.btn.batch_manage: 批量管理
+material_lib.btn.add_tag: 添加标签
+material_lib.btn.share: 共享
+material_lib.btn.delete: 删除
+material_lib.btn.back: 返回列表
 
 # 课程
 course: 课程
@@ -5089,78 +5184,6 @@ admin.edu_cloud.edu_attachment.group: 小组
 admin.edu_cloud.edu_attachment.testpaper: 试题
 admin.edu_cloud.edu_attachment.size: 附件大小
 admin.edu_cloud.edu_attachment.size_tips: 当前服务器附件大小上限为2048MB
-
-
-
-# 移动
-mobile.page_title: 移动学习
-mobile.app_name: 阔知学堂
-mobile.app_tips: 将学校装进口袋，移动学习，随时随地。
-mobile.app_download_btn: 下载APP
-mobile.app_download_tips: >
-  <p class="main-slogan">更好的移动端学习</p>
-  <p class="sub-slogan">好好学习，天天向上</p>
-mobile.app_login_btn: 登录网校
-mobile.app_login_tips: 扫一扫登录客户端
-mobile.step_one: >
-  <span class="member">1</span>第一步:
-mobile.step_one_tips: 扫描二维码，下载手机APP。
-mobile.Android_client: Android 客户端
-mobile.iPhone_client: iPhome客户端
-mobile.step_two: >
-  <span class="member">2</span>第二步: 打开阔知学堂APP，扫描网校二维码。
-
-# 客服
-customer_service.open_content_title: 查看在线客服
-customer_service.close_content_title: 关闭在线客服
-customer_service.open_btn: 展开
-customer_service.close_btn: 收缩
-customer_service.QQ: 客服QQ
-customer_service.mobile: 电话
-customer_service.customer_mobile: 客服电话
-customer_service.email: 邮件
-customer_service.customer_email: 反馈邮件
-
-# 我的教学
-my.teaching.menu_heading: 我的教学
-my.teaching.course_set_menu: 在教课程
-my.teaching.classroom_menu: 在教%classroom%
-my.teaching.question_menu: %student%问题
-my.teaching.discussion_menu: %student%话题
-my.teaching.testpaper_check_menu: 试卷批阅
-my.teaching.homework_check_menu: 作业批阅
-my.teaching.material_lib_menu: 教学资料库
-my.teaching.course_set.normal: 普通课程
-my.teaching.course_set.live: 直播课程
-my.teaching.course_set.classroom: %classroom%课程
-my.teaching.open_course.normal: 录播公开课
-my.teaching.open_course.live: 直播公开课
-my.teaching.threads_discussion: 课程%student%话题
-my.teaching.classroom.threads_discussion: %classroom%%student%话题
-my.teaching.classroom: 所教%classroom%
-my.teaching.classroom.manage_btn: 管理%classroom%
-my.teaching.classroom.today_data_title: 今日新增
-my.teaching.classroom.today_data: >
-  学员%allCount%  &nbsp;&nbsp;
-  话题%threadCount%  &nbsp;&nbsp;
-  任务完成学习%todayFinishedTaskNum%
-my.teaching.page_title: 在教课程
-my.teaching.course_set.create: 创建课程
-my.teaching.course_set.content_title: 在教课程
-my.teaching.course_set.title: 名称
-my.teaching.course_set.classroom: 所属%classroom%
-my.teaching.course_set.student_count: %student%数
-my.teaching.course_set.price: 价格(元)
-my.teaching.course_set.status: 状态
-my.teaching.course_set.actions: 操作
-my.teaching.course_set.courseSetCount: %courseSetCount%个教学计划
-my.teaching.course_set.live_label: 直播
-my.teaching.course_set.classrooms_not_found_label: 已移除
-my.teaching.course_set.manage_btn: 管理
-my.teaching.course_set.course_manage_btn: 计划管理
-my.teaching.course_set.file_manage_btn: 文件管理
-my.teaching.course_set.live_empty_hint: 你还没有在教的直播课程哦, 赶快去创建吧!
-my.teaching.course_set.empty_hint: 你还没有在教的课程哦, 赶快去创建吧!
 
 # 用户设置
 admin.user_auth.sign_up_settings: 注册设置
