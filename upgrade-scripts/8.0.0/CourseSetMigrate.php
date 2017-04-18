@@ -41,6 +41,7 @@ class CourseSetMigrate extends AbstractMigrate
                   `minCoursePrice` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '已发布教学计划的最低价格',
                   `maxCoursePrice` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '已发布教学计划的最高价格',
                   `teacherIds` varchar(1024) DEFAULT null,
+                  `defaultCourseId` int(11) unsigned DEFAULT 0 COMMENT '默认的计划ID',
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
 
@@ -52,16 +53,6 @@ class CourseSetMigrate extends AbstractMigrate
             return $nextPage;
         }
 
-        $this->updateCourseSet();
-    }
-
-    private function updateCourseSet()
-    {
-        $sql = "UPDATE `course_set_v8` ce, (SELECT count(id) AS num , courseId FROM `course_material` WHERE  source ='coursematerial' AND lessonId >0 GROUP BY courseId) cm  SET ce.`materialNum` = cm.`num`  WHERE ce.`id` = cm.`courseId`;";
-        $result = $this->getConnection()->exec($sql);
-
-        $sql = 'UPDATE `course_set_v8` cs, `course` c SET cs.`minCoursePrice` = c.`price`, cs.`maxCoursePrice` = c.`price` where cs.`id` = c.`id`';
-        $result = $this->getConnection()->exec($sql);
     }
 
     private function insertCourseSet($page)
@@ -105,6 +96,9 @@ class CourseSetMigrate extends AbstractMigrate
             ,`creator`
             ,`summary`
             ,`teacherIds`
+            ,`defaultCourseId`
+            ,`minCoursePrice`
+            ,`maxCoursePrice`
         ) SELECT
             `id`
             ,`title`
@@ -138,6 +132,9 @@ class CourseSetMigrate extends AbstractMigrate
             ,`userId`
             ,`about`
             ,`teacherIds`
+            ,`id`
+            ,`price`
+            ,`price`
         FROM `course` where `id` not in (select `id` from `course_set_v8`) order by id limit 0, {$this->perPageCount};";
 
         $result = $this->getConnection()->exec($sql);
