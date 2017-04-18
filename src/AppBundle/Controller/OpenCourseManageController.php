@@ -430,6 +430,9 @@ class OpenCourseManageController extends BaseController
 
         $userIds = call_user_func_array('array_merge', $teachers);
 
+        $creators = ArrayToolkit::column($courses, 'creator');
+        $userIds = array_merge($userIds, $creators);
+
         return $this->getUserService()->findUsersByIds($userIds);
     }
 
