@@ -1,5 +1,5 @@
-{% set minPrice = coursesPrice[courseSet.id].minPrice|default(0)|currency %}
-{% set maxPrice = coursesPrice[courseSet.id].maxPrice|default(0)|currency %}
+{% set minPrice = courseSet.minCoursePrice|currency %}
+{% set maxPrice = courseSet.maxCoursePrice|currency %}
 
 {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
   <span class="course-price course-price-{{courseSet.id}}" style="display:inline">
