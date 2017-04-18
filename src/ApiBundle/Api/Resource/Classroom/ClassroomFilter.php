@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Classroom;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
 use ApiBundle\Api\Util\Converter;
+use ApiBundle\Api\Util\RequestUtil;
 use AppBundle\Common\ServiceToolkit;
 
 class ClassroomFilter extends Filter
@@ -19,6 +20,13 @@ class ClassroomFilter extends Filter
         'recommendedSeq', 'rating', 'ratingNum', 'maxRate', 'showable', 'buyable', 'expiryMode', 'expiryValue',
         'createdTime', 'updatedTime', 'creator'
     );
+
+    protected function simpleFields(&$data)
+    {
+        $data['smallPicture'] = RequestUtil::getUriForPath($data['smallPicture']);
+        $data['middlePicture'] = RequestUtil::getUriForPath($data['middlePicture']);
+        $data['largePicture'] = RequestUtil::getUriForPath($data['largePicture']);
+    }
 
     protected function publicFields(&$data)
     {
