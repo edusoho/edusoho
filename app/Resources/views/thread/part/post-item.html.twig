@@ -30,7 +30,7 @@
 
       {% set goto = goto|default(path('homepage')) %}
       {% if service.canAccess('post.create', post) and app.user %}
-      
+
         {% set postReplyUrl =  postReplyUrl|default(path('thread_post_reply', {threadId:post.threadId, postId:post.id})) %}
         <form method="post" action="{{ postReplyUrl }}" class="thread-subpost-form {% if post.subposts %}hide{% endif %}">
           <div class="form-group">
@@ -50,7 +50,6 @@
           {{ 'my.teaching.open_course.comment.un_login.tips'|trans({'%loginUrl%':loginUrl,'%registerUrl%':registerUrl})|raw }}
         </div>
       {% endif %}
-
     </div>
   </div>
 </li>

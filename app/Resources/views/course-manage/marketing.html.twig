@@ -60,7 +60,7 @@ script(['libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstra
                   <label class="control-label-required">{{ 'course.marketing_setup.expiry_date'|trans }}</label>
                 </div>
                 <div class="col-sm-8 radios">
-                  {{ radios('enableBuyExpiryTime', {'1': 'course.marketing_setup.expiry_date.custom', '0': 'course.marketing_setup.expiry_date.anytime'}, course.buyExpiryTime|default(0) > 0 ? 1 : 0 ) }}
+                  {{ radios('enableBuyExpiryTime', {'1': 'course.marketing_setup.expiry_date.custom'|trans, '0': 'course.marketing_setup.expiry_date.anytime'|trans}, course.buyExpiryTime|default(0) > 0 ? 1 : 0 ) }}
                 </div>
               </div>
               <div class="form-group {% if course.buyExpiryTime == 0 %}hidden{% endif %} " id="buyExpiryTime">
@@ -74,7 +74,7 @@ script(['libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstra
               {% if setting('magic.buy_before_approval') %}
                 <div class="form-group">
                   <label class="col-sm-2 control-label">
-                    {{ 'course.marketing_setup.'|trans }}
+                    {{ 'course.marketing_setup.approval'|trans }}
                     <a class="es-icon es-icon-help text-normal link-gray"
                        data-container="body" data-toggle="popover" data-trigger="hover"
                        data-placement="top" data-content="{{ 'course.marketing_setup.approval_tips'|trans }}"></a></label>
@@ -243,7 +243,7 @@ script(['libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstra
 
 
           <div class="es-piece">
-            <div class="piece-header">{{'course.marketing_setup.'|trans}}</div>
+            <div class="piece-header">{{'course.marketing_setup.services'|trans}}</div>
             <div class="form-group">
               <label class="col-sm-2 control-label">{{ 'course.marketing_setup.services.show_services'|trans }}</label>
               <div class="col-sm-8 radios">

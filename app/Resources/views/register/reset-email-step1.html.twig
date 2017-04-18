@@ -2,7 +2,7 @@
 
 {% set script_controller = 'user/email-reset' %}
 
-{% block title %}{{ '重置邮箱'|trans }} - {{ parent() }}{% endblock %}
+{% block title %}{{ 'register.reset_email'|trans }} - {{ parent() }}{% endblock %}
 
 {% block content %}
   <div class="es-section login-section">
@@ -11,7 +11,7 @@
         <form id="reset-email-form" method="post" action="{{ path('register_reset_email', {id: id, hash: hash}) }}">
           {{ web_macro.flash_messages() }}
           <div class="form-group mbl">
-            <label class="control-label required" for="register_email">{{ '原邮箱地址:'|trans }}</label>
+            <label class="control-label required" for="register_email">{{ 'register.reset_email.origin_email'|trans }}</label>
             <div class="controls">
               <input type="email" id="reset_email" name="email" autocomplete="off" required="required" class="form-control input-lg"
                      data-url="{{ path('register_reset_email_check') }}" readonly value="{{ user.email }}" data-display="Email">
@@ -20,26 +20,26 @@
           </div>
 
           <div class="form-group mbl">
-            <label class="control-label required" for="register_password">{{ '网校密码:'|trans }}</label>
+            <label class="control-label required" for="register_password">{{ 'register.reset_email.school_login_password'|trans }}</label>
             <div class="controls">
               <input type="password" id="password" name="password" required="required" autocomplete="off"
-                     class="form-control input-lg" placeholder="{{ '请输入网校密码'|trans }}" data-display="网校密码">
+                     class="form-control input-lg" placeholder="{{ 'register.reset_email.input_placeholder'|trans }}" data-display="{{'register.reset_email.display'|trans}}">
               <p class="help-block"></p>
             </div>
           </div>
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
           <div class="form-group mbl">
             <div class="controls text-right">
-              <a href="{{ path('register_submited', {id: id, hash: hash}) }}" class="btn btn-link btn-lg">{{ '上一步'|trans }}</a>
-              <button type="submit" id="next-btn" data-submiting-text="{{ '正在提交'|trans }}"
-                      class="btn btn-primary btn-lg">{{ '下一步'|trans }}</button>
+              <a href="{{ path('register_submited', {id: id, hash: hash}) }}" class="btn btn-link btn-lg">{{ 'form.btn.back'|trans }}</a>
+              <button type="submit" id="next-btn" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}"
+                      class="btn btn-primary btn-lg">{{ 'form.btn.next'|trans }}</button>
             </div>
           </div>
         </form>
       </div>
     {% else %}
       <div class="alert alert-danger">
-        {{'管理员尚未设置邮件服务器，不能重置邮箱地址。'|trans}}
+        {{'register.reset_email.no_change_email_tips'|trans}}
       </div>
     {% endif %}
   </div>

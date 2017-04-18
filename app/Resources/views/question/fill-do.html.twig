@@ -12,30 +12,30 @@
 		      {% for index, answer in question.answer %}
 		        {% set userAnswer = question.testResult.answer[index]|default(null) %}
 			    	<li>
-			    		{{'填空(%index%)： 正确答案'|trans({'%index%': index+1})}} <strong class="color-success">{{ answer|join(' 或 '|trans) }}</strong>
+			    		{{'question.multiple_choice.answer'|trans({'%index%': index+1})}} <strong class="color-success">{{ answer|join('site.default.or'|trans) }}</strong>
 			    	  {% if userAnswer == '' %}
-			    	  	{{'。你未回答'|trans}}
+			    	  	{{'question.your_answer'|trans}}
 			    	  {% elseif question.testResult.status|default('noAnswer') == "right" %}
-			    	  	{{'，你的答案'|trans}}　<strong class="color-success">{{ userAnswer }}</strong>。
+			    	  	{{'question.answer'|trans}}　<strong class="color-success">{{ userAnswer }}</strong>。
 			    	  {% elseif question.testResult.status|default('noAnswer') == "partRight" %}
-			    	  	{{'，你的答案'|trans}}　<strong class="text-warning">{{ userAnswer }}</strong>。
+			    	  	{{'question.answer'|trans}}　<strong class="text-warning">{{ userAnswer }}</strong>。
 			    	  {% else %}
-			    	  	{{'，你的答案'|trans}}　<strong class="color-danger">{{ userAnswer }}</strong>。
+			    	  	{{'question.answer'|trans}}　<strong class="color-danger">{{ userAnswer }}</strong>。
 			    	  {% endif %}
 			    	</li>
 		    	{% endfor %}
 		    </ul>
 
 		    {% if question.testResult.status|default('noAnswer') == "right" %}
-			    <p class="color-success">{{'回答正确。'|trans}}</p>
+			    <p class="color-success">{{'question.answer.part_true'|trans}}</p>
 			  {% elseif question.testResult.status|default('noAnswer') == "partRight" %}
-			    <p class="text-warning">{{'回答部分正确。'|trans}}
+			    <p class="text-warning">{{'question.answer.part_true'|trans}}
 				    {% if showScore|default(1) %}
-							{{'本题得分：%testResult.score%分。'|trans({'%testResult.score%': question.testResult.score|default(0)})}}
+							{{'question.score'|trans({'%testResult.score%': question.testResult.score|default(0)})}}
 				    {% endif %}
 			    </p>
 			  {% else %}
-			    <p class="color-danger">{{'回答错误。'|trans}}</p>
+			    <p class="color-danger">{{'question.answer.wrong'|trans}}</p>
 			  {% endif %}
 			</div>
 
@@ -50,7 +50,7 @@
 		  <div class="testpaper-question-fill-inputs">
 				{% set input_index = 1 %}
 				{% for answer in question.answer %}
-					<input class="form-control " type="text" data-type="fill" name="{{ question.id }}" placeholder="{{'填空(%input_index%)答案，请填在这里'|trans({'%input_index%': input_index})}}" {% if question.testResult.answer[input_index - 1]|default(null) %}value="{{ question.testResult.answer[input_index - 1] }}"{% endif %} />
+					<input class="form-control " type="text" data-type="fill" name="{{ question.id }}" placeholder="{{'question.multiple_choice.check_answer'|trans({'%input_index%': input_index})}}" {% if question.testResult.answer[input_index - 1]|default(null) %}value="{{ question.testResult.answer[input_index - 1] }}"{% endif %} />
 					{% set input_index = input_index + 1 %}
 				{% endfor %}
 			</div>
@@ -66,7 +66,7 @@
 			    <ul>
 			      {% for index, answer in question.answer %}
 			    	<li>
-			    		{{'填空(%index%)： 正确答案'|trans({'%index%': index+1})}} <strong class="color-success">{{ answer|join(' 或 '|trans) }}</strong>
+			    		{{'question.multiple_choice.answer'|trans({'%index%': index+1})}} <strong class="color-success">{{ answer|join('site.default.or'|trans) }}</strong>
 			    	</li>
 			      {% endfor %}
 			    </ul>

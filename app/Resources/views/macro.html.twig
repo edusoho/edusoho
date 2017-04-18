@@ -1,7 +1,7 @@
 {# user_avater 已废弃，请勿使用 #}
 {%- macro user_avatar(user, class, imgClass, card = true) -%}
   {% if user %}
-  <a class="{{ class }} {% if card %}js-user-card{% endif %}" href="{{ path('user_show', {id:user.id}) }}" data-card-url="{{ path('user_card_show', {userId:user.id}) }}" data-user-id="{{ user.id }}">
+   0<a class="{{ class }} {% if card %}js-user-card{% endif %}" href="{{ path('user_show', {id:user.id}) }}" data-card-url="{{ path('user_card_show', {userId:user.id}) }}" data-user-id="{{ user.id }}">
     {% if imgClass == 'avatar-md' %}
       {% set avatarType = 'medium' %}
     {% elseif imgClass == 'avatar-lg' %}
@@ -59,7 +59,7 @@
   {% if user %}
     <a class="link-dark {{ class }}" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
   {% else %}
-    <a class="link-dark {{ class }}" href="javascript:;"><del>{{'用户不存在'|trans}}</del></a>
+    <a class="link-dark {{ class }}" href="javascript:;"><del>{{'user.not_exist'|trans}}</del></a>
   {% endif %}
 {%- endmacro -%}
 
@@ -73,7 +73,7 @@
 
 {% macro bytesToSize(bytes) %}
   {% spaceless %}
-      
+
       {% set kilobyte = 1024 %}
       {% set megabyte = kilobyte * 1024 %}
       {% set gigabyte = megabyte * 1024 %}
@@ -99,7 +99,7 @@
     <nav class=" {{ class|default('text-center') }}">
       <ul class="pagination">
         {% if paginator.currentPage != paginator.firstPage %}
-          <li><a  href="{{ paginator.getPageUrl(paginator.firstPage) }}">{{'首页'|trans}}</a></li>
+          <li><a  href="{{ paginator.getPageUrl(paginator.firstPage) }}">{{'paginator.firstPage'|trans}}</a></li>
           <li><a  href="{{ paginator.getPageUrl(paginator.previousPage) }}"><i class="es-icon es-icon-chevronleft"></i></a></li>
         {% endif %}
         {% for page in paginator.pages %}
@@ -108,7 +108,7 @@
 
         {% if paginator.currentPage != paginator.lastPage %}
           <li><a  href="{{ paginator.getPageUrl(paginator.nextPage) }}"><i class="es-icon es-icon-chevronright"></i></a></li>
-          <li><a  href="{{ paginator.getPageUrl(paginator.getLastPage()) }}">{{'尾页'|trans}}</a></li>
+          <li><a  href="{{ paginator.getPageUrl(paginator.getLastPage()) }}">{{'paginator.lastPage'|trans}}</a></li>
         {% endif %}
       </ul>
     </nav>
@@ -144,7 +144,7 @@
     <nav class=" {{ class|default('text-center') }}">
       <ul class="pagination">
         {% if paginator.currentPage != paginator.firstPage %}
-          <li data-url="{{ paginator.getPageUrl(paginator.firstPage) }}"><a href="javascript:;">{{'首页'|trans}}</a></li>
+          <li data-url="{{ paginator.getPageUrl(paginator.firstPage) }}"><a href="javascript:;">{{'paginator.firstPage'|trans}}</a></li>
           <li data-url="{{ paginator.getPageUrl(paginator.previousPage) }}"><a  href="javascript:;"><i class="es-icon es-icon-chevronleft"></i></a></li>
         {% endif %}
         {% for page in paginator.pages %}
@@ -153,7 +153,7 @@
 
         {% if paginator.currentPage != paginator.lastPage %}
           <li data-url="{{ paginator.getPageUrl(paginator.nextPage) }}"><a  href="javascript:;"><i class="es-icon es-icon-chevronright"></i></a></li>
-          <li data-url="{{ paginator.getPageUrl(paginator.getLastPage) }}"><a  href="javascript:;">{{'尾页'|trans}}</a></li>
+          <li data-url="{{ paginator.getPageUrl(paginator.getLastPage) }}"><a  href="javascript:;">{{'paginator.lastPage'|trans}}</a></li>
         {% endif %}
       </ul>
     </nav>
