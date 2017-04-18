@@ -279,6 +279,8 @@ import.user_import.remark_tips: 选填
 
 # 课程
 course: 课程
+course.lesson: 课时
+course.preview: 预览
 course.empty_tips: 暂无课程
 course.member_buyed: 已购买
 course.member_learn_status.none: 未学
@@ -465,8 +467,21 @@ course.testpaper_check.status.check: 已批
 course.testpaper_check.status.not_check: 未批
 course.testpaper_check.status.not_submit: 未交
 
+course.homepage.re_try_btn: 再次尝试
 course.homework_check: 作业批阅
 course.homework_check.no_permission_tips: 当前用户不是本课程教师，没有批阅作业的权限。
+
+course.homework_check.teacher_say.default: 常用评语
+course.homework_check.teacher_say.option_one: 继续努力，继续进步！
+course.homework_check.teacher_say.option_two: 不错，有进步，再努力些就会更棒！
+course.homework_check.teacher_say.option_three: 你真棒！我为你骄傲！
+course.homework_check.teacher_say.option_four: 有点松懈了吧？继续加油吧！
+course.homework_check.teacher_say.option_five: 用心、专注、坚持，你能做的更好的！
+course.homework_check.finish_check: 完成批阅
+course.homework_check.finish_check_submiting: 正在提交, 请稍等
+course.homework_check.teacher_say.input_placeholder: 请输入评语
+course.homework_check.need_check_item: >
+  待批阅题目 <small class="color-gray">共%itemCount%题</small>
 
 course.dashboard: 学习数据
 course.dashboard.content_title: 课程学习数据
@@ -1105,6 +1120,58 @@ course.plan_task.activity_manage.video.learn_time: 学习时长
 course.plan_task.activity_manage.video.buy_tips: 立刻购买本课程，即可获得全部完整学习内容。
 course.plan_task.activity_manage.video.try_watch_tips: 您可以免费试看前%tryLookLength%分钟,购买后可完整观看。
 course.plan_task.activity_manage.create_btn: 前往课程讨论区
+course.recommend_course.content_title: 推荐课程
+course.recommend_course.empty_tips: 暂无推荐课程
+
+course.live.enter_classroom_tips: 正在打开教室，请稍后
+course.live_lesson_manage.content_title.create: 新增直播课时
+course.live_lesson_manage.content_title.edit: 编辑直播课时 
+course.live_lesson_manage.title: 标题
+course.live_lesson_manage.live_start_time: 直播开始时间
+course.live_lesson_manage.live_start_time_hint: 教师可在直播开始前1小时内进入直播教室，以准备相关教学资料。
+course.live_lesson_manage.live_length: 直播时长
+course.live_lesson_manage.live_about: 直播说明
+course.live_lesson_manage.live_length.input_placeholder: 时长
+course.live_lesson_manage.live_length.minutes: 分钟
+
+course.live.replay_manage.chapter: >
+  第 <span class="number">%chapterName%</span>
+course.live.replay_manage.file_edit_btn: 编辑
+course.live.replay_manage.file_chooser_tips: >
+  正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。<br />转换完成后将以站内消息通知您。
+course.live.replay_manage.file_upload: 上传视频
+course.live.replay_manage.upload_form_material: 从资料库中选择
+course.live.replay_manage.upload_form_course_file: 从课程文件中选择
+course.live.replay_manage.upload_mode_cloud_tips: >
+  <li>支持<strong>mp4, avi, flv, f4v, wmv, mov, rmvb, mkv, m4v</strong>格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。</li>
+  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+  <li>视频将上传到<strong>云视频服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li> 
+course.live.replay_manage.upload_mode_not_cloud_tips: >
+  <li>支持<strong>mp4</strong>格式的视频文件上传，文件大小不能超过<strong>%uploadMaxFileSize% </strong>。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
+  <li>
+    视频将上传到<strong>网站服务器</strong>。如需使用%edusoho%云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情,%edusoho%云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验
+  </li>
+course.live.replay_manage.file_empty_tips: 暂无视频文件，请先上传。
+course.live.replay_manage.content_title: 录播管理
+course.live.replay_manage.lesson_empty_tips: 暂无课时内容！
+course.live.replay_manage.upload_tips: 提示：上传录像文件后 <b>无法再生成</b> 在线录像
+course.live.replay_manage.lesson_status.unpublished: 未发布
+course.live.replay_manage.lesson_status.published: 直播未结束
+course.live.replay_manage.lesson_replay_status.ungenerated: 未录制回放
+course.live.replay_manage.lesson_replay_status.generated: 已录制回放
+course.live.replay_manage.lesson_replay_status.videoGenerated: 已上传录像
+course.live.replay_manage.lesson_replay_status.videoGenerated_and_file_empty: 回放视频文件已删除
+course.live.replay_manage.lesson_edit_btn: 编辑
+course.live.replay_manage.upload_btn: 上传回放
+course.live.replay_manage.record: 录制
+course.live.replay_manage.re_record: 重新录制 
+course.live.replay_manage.replay_lesson.content_title: 录播显示编辑
+course.live.replay_manage.lesson_edit_content_title: 编辑回放视频
+course.live.replay_manage.lesson_add_content_title: 添加回放视频
+course.live.replay_manage.lesson_add_btn: 添加
+
+course.liveroom.content_title: 直播教室
+course.liveroom.open_liveroom_tips: 正在打开教室，请稍后
 
 file_chooser.empty: 没有资源...
 file_chooser.course_file.input_placeholder: 输入%placeholder%标题关键字
@@ -1672,6 +1739,8 @@ form.btn.next: 下一步
 form.btn.back: 上一步
 form.btn.add: 添加
 form.btn.export: 导出
+form.btn.login.submiting: 正在登录...
+form.btn.reply_publish.submiting: 正在发表回复...
 form.btn.create.submiting: 正在创建...
 form.btn.import.submiting: 正在导入，请稍等
 form.btn.search.submiting: 正在加载，请稍等
@@ -1701,6 +1770,8 @@ form.btn.restore: 还原
 form.btn.back_to_list: 返回列表
 
 # 用户登录
+user.login.account_type_label: 邮箱/手机/用户名
+user.login.content_title: 登陆
 user.login.page_title: 登录账号
 user.login.account_label: 账号
 user.login.account_placeholder: 邮箱/手机/用户名
@@ -1711,9 +1782,22 @@ user.login.submit_button: 登录
 user.login.find_password: 找回密码
 user.login.ask_register: 还没有注册帐号？
 user.login.go_register: 立即注册
+user.login.login_account: 登录账号
+
+#用户绑定
+user.bind.bind_choose_btn: 绑定新帐号
+user.bind.confirm_bind_btn: 确认绑定
+user.bind.email_or_mobile_hint: 请填写在%name%注册时填写的Email地址/手机号码
+user.bind.email_hint: 请填写在%name%注册时填写的Email地址
+user.bind.email: Email地址
+user.bind.email_or_mobile: Email / 手机
+user.bind.bind_change_btn: 绑定已有帐号
+user.bind.password_label: 密码
+user.bind.bind_change_label: 绑定已有帐号
 
 # 用户注册
 user.register.page_title: 注册帐号
+user.register.register_account: 注册帐号
 user.register.account_with_email_label: 手机
 user.register.account_with_email_placeholder: 填写你常用的邮箱作为登录帐号
 user.register.account_with_mobile_label: 手机
@@ -1729,6 +1813,12 @@ user.register.invite_code_placeholder: 如果您有邀请码，请填写您的�
 user.register.i_agree: 我已阅读并同意
 user.register.terms: 服务协议
 user.register.submit_button: 注册
+user.register.register_btn: 注册帐号
+user.register.nickname_hint: 用户名最长18个英文或者9个汉字
+user.register.email_label: 邮箱地址
+user.register.get_user_avatar_tips: 自动获取头像失败，请稍后在自行上传头像
+user.register.avatar_label: 头像
+user.register.invite_register_tips: 您正在通过<span class="color-gray mhs">%inviteUser%</span>的邀请注册。
 
 # 用户个人设置
 user.settings: 个人设置
@@ -2176,6 +2266,8 @@ cloud_search.article.result: >
 
 # 小组
 group: 小组频道
+group.name: 小组名称
+group.about: 小组介绍
 group.page_title: 小组
 group.homepage: 小组主页
 group.input_placeholder: 小组搜索
@@ -2190,9 +2282,20 @@ group.search: 搜索
 group.search.homepage: 小组主页
 group.search.search_group_name: 搜索小组
 group.search.content_title: 所有小组
+group.joined_group: 加入的小组
+group.managed_group: 管理的小组
 
 group.logo.crop_hint: 提示：请选择图片裁剪区域。
 
+group.thread.post_reply: 回复了话题
+group.thread.require_coin_name: 所需%coin_name%
+group.thread.view_hide_btn: 立即查看
+group.thread.thread_hide_content_title: 查看隐藏帖
+group.thread.empty_tips: 暂无话题信息！
+group.thread.view_post_btn: 点击查看
+group.thread.post_reply_num: 还有%postReplyCount%条回复
+group.thread.reward_content_title: 悬赏
+group.thread.reward_amout: 悬赏额
 group.thread.title: 标题
 group.thread.stick_label: 置顶
 group.thread.essence_label: 精华
@@ -2294,6 +2397,24 @@ group.detail.new_group_members: 新加组员
 group.detail.new_group_members.empty: 还没有小组成员！
 group.detail.hot_group: 热门小组
 group.detail.hot_group_empty: 暂无小组信息！
+
+group.add.content_title: 创建小组
+
+group.search.content_title: %title%小组
+group.search: 话题搜索
+group.search.keyword.input_placeholder: 组内搜索
+
+group.member_center.content_title: 我的小组
+group.member_center.my_join: 我加入的小组
+group.member_center.my_thread: 我发起的话题
+group.member_center.my_reply_thread: 回复的话题
+group.member_center.my_collect_thread: 收藏的话题
+
+group.buy_attach.download_btn: 立即下载
+group.buy_attach.buy_btn: 购买
+group.buy_attach.content_title: 下载附件
+group.buy_attach.require_coin_name: 所需%name%
+group.buy_attach.purchased_tips: 您已购买该附件
 
 # 咨询
 article: 资讯
@@ -3244,7 +3365,7 @@ admin.homepage.top_search.search_number_th: 搜索次数
 admin.homepage.top_search.empty: 暂无搜索数据
 admin.homepage.free_access_edu_cloud_search_btn: 免费接入云搜索获取热门搜索关键词
 admin.homepage.buy.tips: >
-  ES应用由EduSoho官方提供,授权版⽤户可以通过<a href="http://open.edusoho.com" target="_blank">EduSoho开放云平台</a>购买
+  ES应用由EduSoho官方提供,授权版用户可以通过<a href="http://open.edusoho.com" target="_blank">EduSoho开放云平台</a>购买
 admin.homepage.contact.tips: >
   如需购买授权版，请联系销售人员。电话：4008041114 或
 
