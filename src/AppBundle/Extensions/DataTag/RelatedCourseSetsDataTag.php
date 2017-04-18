@@ -22,6 +22,10 @@ class RelatedCourseSetsDataTag extends CourseBaseDataTag implements DataTag
         $courseSetTags = array_filter($courseSetTags, function ($value) use ($courseSetId) {
             return $value['ownerId'] != $courseSetId;
         });
+        if (empty($courseSetTags)) {
+            return array();
+        }
+
         //按标签相关度排序
         $courseSetIds = array();
         foreach ($courseSetTags as $tag) {
