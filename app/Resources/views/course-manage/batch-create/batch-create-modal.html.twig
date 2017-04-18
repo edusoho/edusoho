@@ -3,7 +3,7 @@
 {% set modal_class = 'modal-lg' %}
 
 {% block title %}
-    {{'批量添加任务'|trans}}
+    {{'批量添加任务1'|trans}}
 {% endblock %}
 
 {% block body %}
@@ -227,8 +227,12 @@
             <li>{{'支持<strong>断点续传</strong>（仅支持HTML5浏览器）。'|trans|raw}}</li>
         </ul>
     </div>
-
-    <script>app.load('course-manage/lesson/batch-create-modal')</script>
+    {% include 'seajs_loader_compatible.html.twig' with { topxiawebbundle: true } %}
+    <script>
+        app.lazyLoad = function() {
+        app.load('course-manage/lesson/batch-create-modal');
+        };
+    </script>
 {% endblock %}
 {% block footer %}
     <button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
