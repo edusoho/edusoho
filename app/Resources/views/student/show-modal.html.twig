@@ -8,13 +8,13 @@
 	<tr>
 		<th width="25%">{{'user.fields.username_label'|trans}}</th>
 		<td width="75%">
-			<a class="pull-right link-primary" href="{{ path('user_show', {id:user.id}) }}" target="_blank">{{'user.btn.homepage_btn'|trans}}</a>
+			<a class="pull-right link-primary" href="{{ path('user_show', {id:user.id}) }}" target="_blank">{{'user.btn.homepage'|trans}}</a>
 			{{ user.nickname }}
 		</td>
 	</tr>
 
 	<tr>
-		<th>user.fields.email_label</th>
+		<th>{{'user.fields.email_label'|trans}}</th>
 		<td>
 		  {% set emailArr = user.email|split('@') %}
 	      {% if emailArr[1] != 'edusoho.net' %}
@@ -129,7 +129,7 @@
 	</tr>
 
 	<tr>
-		<th>{{'微博'|trans}}</th>
+		<th>{{'user.fileds.microblog'|trans}}</th>
 		<td>
 			{% if profile.weibo %}
 				{{ profile.weibo }}
@@ -151,7 +151,7 @@
 	</tr>
 
 	<tr>
-		<th>user.fileds.qq</th>
+		<th>{{'user.fileds.qq'|trans}}</th>
 		<td>
 			{% if profile.qq %}
 				{{ profile.qq }}

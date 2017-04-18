@@ -1,16 +1,16 @@
 <table class="table table-bordered mb0">
   <th>
 
-    <td>{{'单选题'|trans}}</td>
-    <td>{{'多选题'|trans}}</td>
-    <td>{{'不定向选择题'|trans}}</td>
-    <td>{{'填空题'|trans}}</td>
-    <td>{{'判断题'|trans}}</td>
-    <td>{{'问答题'|trans}}</td>
-    <td>{{'材料题'|trans}}</td>
+    <td>{{'question.type.single_choice'|trans}}</td>
+    <td>{{'question.type.multiple_choice'|trans}}</td>
+    <td>{{'question.type.uncertain_choice'|trans}}</td>
+    <td>{{'question.type.fill'|trans}}</td>
+    <td>{{'question.type.determine'|trans}}</td>
+    <td>{{'question.type.essay'|trans}}</td>
+    <td>{{'question.type.material'|trans}}</td>
   </th>
   <tr>
-    <td>{{'题数'|trans}}</td>
+    <td>{{'question.nums'|trans}}</td>
     <td class="single_choice_num">{{ items.single_choice.num|default(0) }}</td>
     <td class="choice_num">{{ items.choice.num|default(0) }}</td>
     <td class="uncertain_choice_num">{{ items.uncertain_choice.num|default(0) }}</td>
@@ -20,7 +20,7 @@
     <td class="material_num">{{ items.material.num|default(0) }}</td>
   </tr>
   <tr>
-    <td>{{'分数'|trans}}</td>
+    <td>{{'question.score'|trans}}</td>
     <td>{{ items.single_choice.score|default(0) }}</td>
     <td>{{ items.choice.score|default(0) }}</td>
     <td>{{ items.uncertain_choice.score|default(0) }}</td>
