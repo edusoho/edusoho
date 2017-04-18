@@ -1,6 +1,6 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 {% set modalSize = 'large' %}
-{% block title %}{% if setting('default.user_name') %}{{ setting('default.user_name')|default('site.default.student'|trans) }}{% else %}{{'site.default.student'|trans}}{% endif %}{{'备注'|trans}}{% endblock %}
+{% block title %}{% if setting('default.user_name') %}{{ setting('default.user_name')|default('site.default.student'|trans) }}{% else %}{{'site.default.student'|trans}}{% endif %}{{'course.members_manage.official_student.remark'|trans}}{% endblock %}
 {% block body %}
 <form id="student-remark-form" method="post" action="{{ path('course_set_manage_course_students_remark', {courseSetId: course.courseSetId, courseId:course.id, userId:user.id}) }}" data-user="{{ default.user_name|default('site.default.student'|trans) }}">
   <div class="form-group">

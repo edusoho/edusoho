@@ -4,16 +4,16 @@
 
 {% set post = post|default(null) %}
 
-{% block title %}{% if post %}{{'编辑帖子'|trans}}{% else %}{{'回复帖子'|trans}}{% endif %} - {{ parent() }}{% endblock %}
+{% block title %}{% if post %}{{'course.thread.post_form.edit'|trans}}{% else %}{{'course.thread.post_form.post'|trans}}{% endif %} - {{ parent() }}{% endblock %}
 
 {% do load_script('course/thread-post-form') %}
 
 {% block detail_content %}
 
 <ul class="breadcrumb">
-  <li><a href="{{ path('my_course_show', {id: course.id, tab: 'threads'}) }}">{{'讨论区'|trans}}</a></li>
+  <li><a href="{{ path('my_course_show', {id: course.id, tab: 'threads'}) }}">{{'course.thread'|trans}}</a></li>
   <li><a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}">{{ thread.title|plain_text(10) }}</a></li>
-  <li class="active">{{'编辑帖子'|trans}}</li>
+  <li class="active">{{'course.thread.post_form.edit_btn'|trans}}</li>
 </ul>
 
 <form id="thread-post-form" method="post"
@@ -31,7 +31,7 @@
             attr:{
               class:'form-control',
               rows:15,
-              'data-display':'内容'|trans,
+              'data-display':'course.thread.post_form.content'|trans,
               'data-image-upload-url': path(
                 'editor_upload', {
                   token:upload_token('course')
@@ -54,8 +54,8 @@
   <div class="form-group">
     <div class="controls clearfix">
       {{ form_rest(form) }}
-      <button type="submit" class="btn btn-primary pull-right">{{'发表'|trans}}</button>
-      <a href="{{ path('my_course_show', {id: course.id, tab: 'threads'}) }}" class="btn btn-link pull-right">{{'取消'|trans}}</a>
+      <button type="submit" class="btn btn-primary pull-right">{{'form.btn.reply'|trans}}</button>
+      <a href="{{ path('my_course_show', {id: course.id, tab: 'threads'}) }}" class="btn btn-link pull-right">{{'form.btn.cancel'|trans}}</a>
     </div>
   </div>
 
