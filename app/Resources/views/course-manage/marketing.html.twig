@@ -95,16 +95,16 @@ script(['libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstra
                 <a class="es-icon es-icon-help ml5 link-gray text-normal" data-trigger="hover" data-toggle="popover"
                    data-container="body" data-placement="top"
                    data-content="<ul class='pl10 ul-list-none'>
-                  <li class='mb10'>{{ 'course.plan_task.expiry_date.anytime'|trans|raw }}</li>
-                  <li class='mb10'>{{ 'course.plan_task.expiry_date.real_time'|trans|raw }}</li>
-                  <li>{{ 'course.plan_task.expiry_date.overdue_tips'|trans }}</li>
+                  <li class='mb10'>{{ 'course.teaching_plan.expiry_date.anytime'|trans|raw }}</li>
+                  <li class='mb10'>{{ 'course.teaching_plan.expiry_date.real_time'|trans|raw }}</li>
+                  <li>{{ 'course.teaching_plan.expiry_date.overdue_tips'|trans }}</li>
                 </ul>">
                 </a>
               </label>
               <div class="col-sm-8 radios">
                 {% set coursePublished = course.status|default('draft') == 'published' or course.status|default('draft') == 'closed' %}
                 {{ radios('expiryMode',
-                { 'days': 'course.plan_task.expiry_date.anywhere_mode'|trans, 'date': 'course.plan_task.expiry_date.date_mode'|trans,'forever':'course.plan_task.expiry_date.forever_mode'|trans },
+                { 'days': 'course.teaching_plan.expiry_date.anywhere_mode'|trans, 'date': 'course.teaching_plan.expiry_date.date_mode'|trans,'forever':'course.teaching_plan.expiry_date.forever_mode'|trans },
                 course.expiryMode|default('days'), coursePublished ? 'disabled' : ''
                 ) }}
                 {#随到随学#}
@@ -113,7 +113,7 @@ script(['libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstra
                   id="expiry-days">
                   {{ radios(
                   'deadlineType',
-                  { 'end_date': 'course.plan_task.expiry_date.end_date_mode'|trans, 'days': 'course.plan_task.expiry_date.days_mode'|trans},
+                  { 'end_date': 'course.teaching_plan.expiry_date.end_date_mode'|trans, 'days': 'course.teaching_plan.expiry_date.days_mode'|trans},
                   course.deadlineType|default('days'),  coursePublished ? 'disabled' : ''
                   ) }}
                   <div class="mb20 mt20 {% if course.deadlineType|default('days') != 'end_date' %}hidden{% endif %}"
