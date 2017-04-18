@@ -48,7 +48,6 @@ class StudyCenterMissionsDataTag extends BaseDataTag implements DataTag
 
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         usort($courses, function ($c1, $c2) use ($courseIds) {
-            //todo 班级和课程排序应按照加入时间（member.createdTime）倒序排列
             if (($c1['parentId'] > 0 && $c2['parentId'] > 0) || ($c1['parentId'] == 0 && $c2['parentId'] == 0)) {
                 return array_search($c1['id'], $courseIds) > array_search($c2['id'], $courseIds);
             }
