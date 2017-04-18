@@ -12,7 +12,7 @@ class RelatedCourseSetsDataTag extends CourseBaseDataTag implements DataTag
         $count = $arguments['count'];
 
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        
+
         if (empty($courseSet)) {
             return array();
         }
@@ -32,10 +32,10 @@ class RelatedCourseSetsDataTag extends CourseBaseDataTag implements DataTag
             }
         }
         arsort($courseSetIds);
-        
+
         $courseSetIds = array_keys($courseSetIds);
 
-        $courseSets = $this->getCourseSetService()->searchCourseSets(array('ids' => $courseSetIds, 'status' =>'published', 'parentId' => 0), array(), 0, PHP_INT_MAX);
+        $courseSets = $this->getCourseSetService()->searchCourseSets(array('ids' => $courseSetIds, 'status' => 'published', 'parentId' => 0), array(), 0, PHP_INT_MAX);
 
         uksort($courseSets, function ($c1, $c2) use ($courseSetIds) {
             return array_search($c1, $courseSetIds) > array_search($c2, $courseSetIds);
