@@ -469,9 +469,8 @@ class CourseSetController extends BaseController
             if (in_array($task['type'], array('video', 'audio')) && !empty($task['activity'])) {
                 $activity = $task['activity'];
                 $task['length'] = $activity['length'];
-                $task['watchTime'] = $this->getTaskResultService()->getWatchTimeByCourseIdGroupByCourseTaskId(
-                    $task['id']
-                );
+                $watchTime = $this->getTaskResultService()->getWatchTimeByCourseIdGroupByCourseTaskId($task['id']);
+                $task['watchTime'] = round($watchTime / 60);
             }
 
             if ($task['type'] == 'testpaper' && !empty($task['activity'])) {
