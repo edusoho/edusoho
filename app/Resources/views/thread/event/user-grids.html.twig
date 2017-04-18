@@ -1,6 +1,6 @@
 {% if myFriends|default(null) %}
   <div class="topic-num">
-    <div class="page-header">{{'好友在参加'|trans}}</div>
+    <div class="page-header">{{'thread.other_event.my_friends'|trans}}</div>
     <div class="num-list">
       {% include 'thread/event/user-grids-li.html.twig' with {members:myFriends} %}
     </div>
@@ -12,7 +12,7 @@
 {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <div class = "topic-num">
   <div class="joined-users" data-sum="{{ membersCount|default(0) }}">
-    <div class="page-header">{{'最新成员(%membersCount%)'|trans({'%membersCount%':membersCount|default(0)})}}</div>
+    <div class="page-header">{{'thread.other_event.my_friends.newest_member'|trans({'%membersCount%':membersCount|default(0)})}}</div>
     <div class="num-list join-members">
       {% include 'thread/event/user-grids-li.html.twig' %}
     </div>
