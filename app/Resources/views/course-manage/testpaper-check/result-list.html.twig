@@ -6,10 +6,10 @@
 {% set side_nav = 'testpaper-check' %}
 {% if testpaper.type == 'homework' %}
   {% set side_nav = 'homework-check' %}
-  {% set typeName = '作业' %}
+  {% set typeName = 'testpaper.check.homework'|trans %}
 {% else %}
   {% set side_nav = 'testpaper-check' %}
-  {% set typeName = '试卷' %}
+  {% set typeName = 'testpaper.check.testpaper'|trans %}
 {% endif %}
 
 {% block main %}
@@ -19,7 +19,7 @@
       {% if course.status != 'published' %}
         <button class="btn btn-success btn-sm pull-right js-publish-course" 
           data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">
-          {{ '发布计划'|trans }}
+          {{ 'testpaper.check.course.publish_btn'|trans }}
         </button>
       {% endif %}
       {#{% if course_count(course.courseSetId) > 1 %}
@@ -28,7 +28,7 @@
     </div>
     <div class="panel-body">
       {% if isTeacher is defined and not isTeacher %}
-        <span class="color-danger">{{'当前用户不是本课程教师，没有批阅%typeName%的权限。'|trans({'%typeName%':typeName}) }}</span>
+        <span class="color-danger">{{'testpaper.check.not_isTeacher.tips'|trans({'%typeName%':typeName}) }}</span>
       {% endif %}
       {{ render(controller('AppBundle:Testpaper/Manage:resultList',{request:app.request,testpaperId:testpaper.id,source:'course',targetId:course.id})) }}
     </div>

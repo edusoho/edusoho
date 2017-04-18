@@ -4,7 +4,7 @@
 
 {% do script(['app/js/courseset-manage/unlock/index.js']) %}
 
-{% block title %}{{'解除确认'|trans}}{% endblock %}
+{% block title %}{{'courseset_manage.unlock_confrim'|trans}}{% endblock %}
 {% block body %}
 <style>
   .courseSync-text{
@@ -18,7 +18,7 @@
 	</div>
     <h5>
     	<p class="courseSync-text">
-    		<font color="#e83d2c">{{'解除后本课程将停止同步更新,本操作不可逆！'|trans}}</font>
+    		<font color="#e83d2c">{{'courseset_manage.unlock_confrim.tips'|trans}}</font>
     	</p>
     </h5>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
@@ -27,6 +27,6 @@
   </form>
 {% endblock %}
 {% block footer %}
-    <button id="courseSync-btn" type="button" class="btn btn-primary pull-right" >{{'确认'|trans}}</button>
-    <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
+    <button id="courseSync-btn" type="button" class="btn btn-primary pull-right" >{{'form.btn.confirm'|trans}}</button>
+    <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
 {% endblock %}

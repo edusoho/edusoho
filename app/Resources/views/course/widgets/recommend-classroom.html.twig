@@ -19,7 +19,7 @@
       <h3>
         <a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{classroom.title}}</a>
       </h3>
-      <div class="metas">共有{{classroom.courseNum}}门课程</div>
+      <div class="metas"> {{ 'course.widgets.recommend_classroom.tips'|trans({'%courseNum%':classroom.courseNum}) }}</div>
     </div>
   </div>
 </div>

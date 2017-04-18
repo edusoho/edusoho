@@ -45,6 +45,7 @@ site.message.warning: 警告信息
 site.message.error: 错误提示
 site.power_by: 好知网
 site.default.classroom: 班级
+site.default.student: 学员
 site.default.reviewing: 已批阅
 site.default.unreviewing: 未批阅
 site.default.doing: 进行中
@@ -142,10 +143,13 @@ operation: 操作
 date.year: 年
 date.month: 月
 date.day: 日
+date.format: Y年m月d日
 
 #分页
 paginator.firstPage: 首页
 paginator.lastPage: 尾页
+paginator.PreviousPage: 上一页
+paginator.NextPage: 下一页
 
 # 用户通用
 user: 用户
@@ -326,6 +330,13 @@ coin.income_expense: 收支
 coin.order_sn: 订单号
 coin.balance: 虚拟币余额
 coin.rate: 汇率
+coin.description: 说明
+coin.coin_name.description: %coin_name%说明
+coin.not_coinSetting: 当前页面尚未编辑内容，请在管理后台编辑。
+coin.pay_remind: 支付提醒
+coin.alipay.tips: 由于您在支付时选择的交易方式是“担保交易”，因此需要您去支付宝网站对本次购买做“确认收货”操作（系统已自动完成虚拟发货），确认后即支付成功。
+coin.redirect_alipay_btn: 点击进入支付宝
+coin.pay.submit.request: 正在跳转到支付网关
 
 #订单通用
 order.charge: 收费
@@ -786,6 +797,11 @@ course.members_manage.official_student.detail.create_question: 发起提问
 course.members_manage.official_student.detail.join_activity: 参加活动
 course.members_manage.official_student.detail.create_article: 发起话题
 course.members_manage.official_student.detail.reply_article: 回复话题
+course.members_manage.official_student.detail.status.unfinished: 未完成
+course.members_manage.official_student.detail.status.finished: 准时完成
+course.members_manage.official_student.detail.status.overdue: 逾期
+course.members_manage.official_student.detail.status.serious_overdue: 严重逾期
+course.members_manage.official_student.detail.task_sleep: 任务 :都睡觉
 course.members_manage.official_student.send_message.receiver: 收件人
 course.members_manage.official_student.send_message.content: 内容
 course.members_manage.official_student.show.content_title: 个人详细信息
@@ -913,6 +929,171 @@ course.replay_manage.record_again: 重新录制
 course.replay_manage.replay: 上传回放
 course.replay_manage.preview_btn: 预览
 course.replay_manage.edit_btn: 编辑
+course.replay_manage.live_show.edit: 录播显示编辑
+course.replay_manage.upload_modal.edit_replay: 编辑回放视频
+course.replay_manage.upload_modal.add_replay: 添加回放视频
+
+course.teach_plan_manage: 教学计划管理
+
+course.cover: 课程封面
+course.cover_image: 封面图片
+course.cover_image.content_title: 封面图片
+course.cover_image.upload_tips: >
+  你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过<strong>2M</strong>。
+course.cover_image.upload_btn: 选择要上传的图片
+
+course.expiry_date: 学习有效期
+course.expiry_date.days_mode: >
+  %expiryDays% 天（随到随学）
+course.expiry_date.days_mode.total_days: 共%expiryDays%天
+course.expiry_date.end_date_mode: >
+  截止：%expiryEndDate%（随到随学）
+course.expiry_date.date_mode: >
+  开始：%expiryStartDate% &nbsp;
+  截止：%expiryEndDate%
+course.expiry_date.forever_mode: 永久有效
+course.expiry_date.expiryStartDate: >
+  课程将于%expiryStartDate%开始授课，请耐心等待
+course.expiry_date.overdue: （已到期）
+course.expiry_date.today_will_overdue: （今日过期）
+course.expiry_date.tomorrow_will_overdue: （明日过期）
+course.expiry_date.days_remaining: （剩余 %lastDays% 天）
+
+course.buy_expiry_date: 购买有效期
+course.buy_expiry_date.buy_expiry_time: >
+  <span class="course-detail-title ">购买截止日期</span>
+  <span class="gray-dark mrl">%buyExpiryTime% 23:59</span>
+
+course.showServices: 承诺服务
+course.showServices.empty: 暂未提供
+course.status.followed: 已收藏
+course.status.follow: 收藏
+course.status.closed: 已关闭
+course.status.unpublished: 未发布
+course.status.serialized: 更新中
+course.status.finished: 已完结
+course.status.published: 已发布
+course.share: 分享
+course.belong_to_classroom_tips: >
+  该课程属于
+  <a href="%classroomUrl%">%classroomTitle%</a>
+  请加入后再学习
+course.course_limited_tips: 抱歉，该课程为限制课程，请联系客服
+course.course_closed_tips: 抱歉，课程%title%已关闭！
+course.unbuyable.unpublished_tips: 课程还未发布，不允许加入和购买
+course.unbuyable.over_buy_expiry_time_tips: 超过加入截止日期，不允许加入和购买
+course.unbuyable.over_expiry_end_date_tips: 超过学习截止日期，不允许加入和购买
+course.introduction: 介绍
+course.introduction.more_teaching_plan: >
+  想查看更多教学计划？<a href="%courseUrl%">返回课程宣传页</a>
+course.introduction.course_introduction: 课程介绍
+course.introduction.course_target: 课程目标
+course.introduction.course_target_empty: 为设置目标
+course.introduction.audiences: 适合人群
+course.introduction.audiences_empty: 为设置目标
+course.catalogue.content_title: 目录
+course.catalogue.task.preview_btn: 预览
+course.catalogue.task.try_look_btn: 试看
+course.catalogue.task.join_btn: 加入
+course.catalogue.task.buy_btn: 购买
+course.catalogue.task.name: %name%任务
+course.catalogue.task_status.task: 任务%taskNumber%： %taskTitle%
+course.catalogue.task_status.free: 免费
+course.catalogue.task_status.try_lookable: 试看
+course.catalogue.task_status.is_optional: 选修
+course.catalogue.task_status.looking_forward: 敬请期待
+course.catalogue.view_all_btn: 查看全部  &gt;
+course.reviews.teaching_plan: 教学计划
+course.reviews.additional_reviews_btn: 追评
+course.reviews.expand_btn: 展开全文
+course.reviews.reply_btn: 回复
+course.reviews.content: 内容
+course.reviews.delete_btn: 删除
+course.reviews.cancel_reply_btn: 收起
+course.reviews.collapse_btn: 收起全文
+course.reviews.teaching_plan_progress: 完成进度
+course.reviews.all_catagory: 全部
+course.reviews.review_again: 重新评价
+course.reviews.mark: 请打分：
+course.reviews.detail: 评价详细内容
+course.reviews.success_tips: 评价已保存！
+course.reviews.empty: 暂无评价
+course.teacher: 教师：
+course.teacher.content_title: 授课教师
+course.characteristic.content_title: 课程特色
+course.newest_students.content_title: 最新学员
+course.students_dynamic.content_title: 学员动态
+course.students_dynamic.empty: 还没有动态
+course.note.expand_btn: [展开全文]
+course.note.mission_delete_tips: · 该任务已被删除
+course.note.empty: 暂无笔记
+course.note.all_task: 全部任务
+course.note.seq: 排序：
+course.note.latest: 最新笔记
+course.note.not_latest: 点赞最多
+course.task: 任务
+course.task.lock_tips: 需要解锁上一个任务才能学习
+course.task.learning: 任务学习
+course.task.learning.back_course_btn: 返回课程
+course.task.learning.finish_condition: 任务完成条件
+course.task.learning.finish_btn: 任务完成
+course.task.learning.learned_btn: 学过了
+course.task.preview.content_title: 任务预览
+course.task.preview.login_and_learn_tips: 登录后加入学习
+course.task.preview.login_and_buy_tips: 登录后购买学习完整的课程
+course.task.preview.free_join_tips: 觉得不错？点击加入此课程
+course.task.preview.buy_tips: 觉得不错？点击购买此课程（%price%）元
+course.task.preview.free_learn_tips: 免费加入学习
+course.thread: 讨论区
+course.thread.empty: >
+  还没有%thread%，赶快添加一个吧！
+course.thread.hit_times: %hitNum%次浏览
+course.thread.mission_seq: 任务%seq%
+course.thread.teacher_answer: 教师的答案
+course.thread.form.edit: 编辑话题
+course.thread.form.create: 发表话题
+course.thread.form.edit_btn: 编辑话题
+course.thread.form.create_btn: 发表话题
+course.thread.form.question.edit_btn: 编辑问题
+course.thread.form.question.create_btn: 提问题
+course.thread.form.placeholder: 标题
+course.thread.form.question.placeholder: 标题，用一句话说清你的问题
+course.thread.form.content: 内容
+course.thread.post_form.edit: 编辑帖子
+course.thread.post_form.post: 回复帖子
+course.thread.post_form.edit_btn: 编辑帖子
+course.thread.post_form.content: 内容
+course.material.unpublished_tips: 任务未发布，不能下载该资料
+course.material.links: 网络链接资料
+course.material.upload_time: 上传于%createdTime%
+course.material.empty: 课程暂无资料
+course.btn.learn: 去学习
+course.btn.join: 加入学习
+course.btn.free_join: 免费加入
+course.btn.pay: 去支付
+course.btn.buy: 购买课程
+course.btn.announcement: 公告
+course.btn.start_learning: 开始学习
+course.btn.continue_learning_btn: 继续学习
+course.btn.edit_help_btn: 编辑帮助
+course.btn.back_course_homepage: 返回课程主页
+course.btn.back_course_edit: 返回课程编辑
+course.btn.preview: 预览
+course.btn.more: 更多
+course.btn.publish: 发布课程
+course.btn.publish_task: 发布教学计划
+course.base: 基本信息
+course.base.content_title: 基础信息
+course.base.title: 标题
+course.base.sub_title: 副标题
+course.base.tag: 标签
+course.base.tag_tips: 用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理
+course.base.category: 分类
+course.base.serialize_mode: 连载状态
+course.base.serialize_mode.none: 非连载课程
+course.base.serialize_mode.serialized: 更新中
+course.base.serialize_mode.finished: 已完结
+
 course.teach_plan_manage: 教学计划管理
 
 course.detail: 详细信息
@@ -1167,6 +1348,7 @@ course.plan_task.create_part: >
   添加%partName%
 course.plan_task.create_task: >
   添加任务
+course.plan_task.new_task_name: 新计划名称
 course.plan_task.activity_manage.activity_file_empty: 抱歉，%file%文件不存在，暂时无法学习。
 course.plan_task.activity_manage.preview_failed_tips: 当前任务不支持预览，请加入教学计划进行学习。
 course.plan_task.activity_manage.title_name: 标题名称
@@ -1672,6 +1854,11 @@ classroom.expiry_day_tips: >
   <span class="mrm">班级有效天数：</span><span>%expiryValue%天</span>
 classroom.classroom_manage: %name%管理
 classroom.vip_classroom: 会员%name%
+classroom.classroom_manage.course_select.courseTitle: 课程名称
+classroom.classroom_manage.course_select.teach_plan: 教学计划名称
+classroom.classroom_manage.course_select.teacher_name: 教师名称
+classroom.classroom_manage.course_select.price: 价格
+classroom.classroom_manage.course_select.tips: 课程下包含多个教学计划，请选择其中某个教学计划。
 classroom.auditor_join_tips:
   您现在是<span class="color-warning">旁听生</span>，不能完整学习
 classroom.auditor_and_member_different_tips: 旁听生只能参与话题讨论，正式学员可以完整地学习所有内容，享受所有教学服务
@@ -1681,6 +1868,30 @@ classroom.over_expiry_day_and_not_buyable_tips: 你的班级已过有效期，�
 
 #公告
 announcement: 公告
+announcement.empty: 暂无公告
+announcement.view_btn: (请点击查看)
+announcement.modal.classroom_nojoin.title: 提示
+announcement.modal.classroom_nojoin.tips: 您尚未成为%classroomName%成员,请先成为%classroomName%成员
+announcement.modal.classroom_nojoin.become_auditor_btn: 加入旁听生
+announcement.modal.course_nojoin.tips: 您尚未成为%courseTitle%学员,请先成为%courseTitle%学员
+announcement.modal.global.publish_time: 发表于%createdTime%
+announcement.modal.edit_btn: 编辑
+announcement.modal.delete_btn: 删除
+announcement.modal.view_all.title: 查看本课程的所有公告
+announcement.modal.view_all.user_name: 创建者
+announcement.modal.view_all.content: 公告内容
+announcement.modal.view_all.createdTime: 创建时间
+announcement.modal.view_all.updatedTime: 更新时间
+announcement.modal.view_all.notUpdate: 尚未更新
+announcement.modal.view_all.quit_btn: 退出
+announcement.modal_layout.announcement_manage: 公告管理
+announcement.modal_layout.announcement_manage.edit_btn: 编辑公告
+announcement.modal_layout.announcement_manage.add_btn: 添加公告
+announcement.modal_layout.announcement_manage.history_btn: 历史公告
+announcement.modal.write.startTime: 发布时间
+announcement.modal.write.endTime: 结束时间
+announcement.modal.write.send_notify_to_user: 给%user_name%发送系统通知
+announcement.modal.write.select_plan: 选择计划
 
 classroom.manage.setting: 设置
 classroom.manage.unSetting: 未设置
@@ -1720,7 +1931,7 @@ classroom.manage.set_info.classroom_period.forever: 永久有效
 classroom.manage.set_info.date_help: 设置该值后，%user_name%只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。
 classroom.manage.set_info.days_help: 设置该值后，%user_name%只能在有效天数内进行课程的学习，系统默认会在有效期前10天提醒学员。
 classroom.manage.set_info.view_period_rules: 查看有效期规则
-
+classroom.manage.teacher_info.empty: 教师不存在
 classroom.status.expired: 当前班级已过有效期
 classroom.thread.send_btn: 发话题
 classroom.thread.question_btn: 提问题
@@ -1753,6 +1964,8 @@ classroom.thread.create.Discussion: 讨论区
 classroom.thread.create.publish: 发
 classroom.thread.allow_view_teacher_btn: 只看老师
 classroom.thread.view_all_btn: 查看全部
+classroom.thread.edit_btn: 编辑帖子
+classroom.thread.post_btn: 编辑帖子
 
 # 班级展示页面
 classroom.origin_price: 原价
@@ -2796,6 +3009,19 @@ attachments.upload.description: 描述
 attachments.upload.operations: 操作
 attachments.upload.delete_btn: 删除
 attachments.upload.tips: 用户下载附件扣除的%name%会在扣除50%之后添加到您的账户
+attachments.modal.upload_file: 上传文件
+attachments.modal.upload.edit_btn: 编辑
+attachments.modal.upload.tips: >
+  正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。<br/>转换完成后将以站内消息通知您。
+attachments.modal.upload.close_btn: 关闭
+attachments.modal.uploader.tips: >
+  <li>
+    支持PPT/PPTX,DOC/DOCX,XLS/XLSX、MP3/MP4/FLV、PDF、RAR格式的文件上传，单个文件大小不能超过
+    <strong>%fileSize%</strong>。
+  </li>
+  <li>
+    支持断点续传（仅在Chrome、IE9及以上等支持HTML5的浏览器中可用）。
+  </li>
 attachments.download: 附件下载
 attachments.download.description: 描述：%description%
 attachments.download.upload_time: 上传于 %createdTime%
@@ -2871,6 +3097,9 @@ my.teaching.open_course.normal: 录播公开课
 my.teaching.open_course.live: 直播公开课
 my.teaching.threads_discussion: 课程%student%话题
 my.teaching.classroom.threads_discussion: %classroom%%student%话题
+my.teaching.classroom.threads_discussion.nickname: 话题作者
+my.teaching.classroom.threads_event.nickname: 活动发起人
+my.teaching.classroom.threads_question.nickname: 话题作者
 my.teaching.classroom: 所教%classroom%
 my.teaching.classroom.manage_btn: 管理%classroom%
 my.teaching.classroom.today_data_title: 今日新增
@@ -5647,3 +5876,294 @@ admin.cloud_combo.service_over_deadline: >
   套餐服务已到期，尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>！
 admin.cloud_combo.service_deadline_tips: >
   套餐服务将于%packageDate%天后到期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>，以免影响正常使用
+
+# 邮箱验证
+auth.email-change.title: 设置新邮箱
+auth.email-change.new_email: 新邮箱
+auth.email-change.password_field: 网站登录密码
+auth.email-change.password_field.help_block: 设置新的登录邮箱，需要校验当前的网站登录密码
+auth.email-change.error: 邮箱地址验证失败
+auth.email-change.error.tips: 邮箱地址验证失败，请重试。
+auth.email-change.error.return_homepage_btn: 返回首页
+
+# 升级
+upgrade.browser.title: 升级您的浏览器
+upgrade.browser.message: 您的浏览器版本过低，请升级您的浏览器后，再访问%name%。
+upgrade.browser.recommend_browsers: 推荐使用以下浏览器：
+
+# 优惠券
+coupon: 优惠券
+coupon.for_any_course: 可用于抵扣全站课程
+coupon.for_specified_courses: 用于抵扣指定课程
+coupon.for_any_classroom: 可用于抵扣全站班级
+coupon.for_specified_classrooms: 可用于抵扣指定班级
+coupon.for_any_level_of_VIP_membership: 可用于抵扣全站会员
+coupon.for_specified_level_of_VIP_membership: 用于抵扣指定会员
+coupon.for_any_purchase_on_our_web_site: 可用于抵扣全站所有类型消费
+coupon.expired_on: 有效期截止：
+coupon.deadline_year: %deadline%年
+coupon.deadline_month: %deadline%月
+coupon.deadline_day: %deadline%日
+coupon.Requirements: >
+  使用条件：<span>满%fullDiscountPrice%'</span>
+coupon.Accessible: 可用
+coupon.discount: 折
+coupon.buy_course_btn: 去购买课程
+coupon.buy_classroom_btn: 去购买班级
+coupon.buy_VIP_btn: 去开通会员
+coupon.buy_something_btn: 去消费
+coupon.used_status.course: 此课程优惠券已使用
+coupon.used_status.classroom: 此班级优惠券已使用
+coupon.used_status.vip: 此会员优惠券已使用
+coupon.used_status.all: 此抵价优惠券已使用
+
+# 学习卡
+card.info.moneycard: 学习卡
+card.info.moneycard.tips: 学习卡可以用于账户充值
+card.info.moneycard.date_format: Y年n月d日
+card.info.moneycard.use_btn: 立即使用
+card.isLogin.type.coupon.tips: 您领取了一张优惠券，已添加至“我的卡包“
+card.isLogin.type.moneyCard.tips: 您领取了一张学习卡，已充值到我的账户
+card.notLogin.receive.tips: 还没有登录，请在登录后领取。
+card.receive.login_view_btn: 登录查看
+
+# 更新日志
+change_log.edusoho_title: EduSoho更新日志
+change_log: 更新日志
+
+# common
+common.courseStatus.draft: 未发布
+common.courseStatus.published: 已发布
+common.courseStatus.closed: 已关闭
+common.fileType.video: 视频
+common.fileType.audio: 音频
+common.fileType.document: 文档
+common.fileType.image: 图片
+common.fileType.other: 其他
+common.orderStatus.created: 未付款
+common.orderStatus.paid: 已付款
+common.orderStatus.refunding: 退款中
+common.orderStatus.refunded: 已退款
+common.orderStatus.cancelled: 已关闭
+common.refundStatus.created: 已申请
+common.refundStatus.success: 退款成功
+common.refundStatus.failed: 退款失败
+common.refundStatus.cancelled: 已取消
+common.logLevel.info: 提示
+common.logLevel.warning: 警告
+common.logLevel.error: 错误
+common.contentStatus.published: 已发布
+common.contentStatus.unpublished: 未发布
+common.contentStatus.trash: 回收站
+common.articleStatus.published: 已发布
+common.articleStatus.unpublished: 未发布
+common.articleStatus.trash: 回收站
+common.discountStatus.unstart: 未开始
+common.discountStatus.running: 进行中
+common.discountStatus.finished: 已结束
+common.video_quality.low: 流畅
+common.video_quality.low.tips: 适合PPT讲解
+common.video_quality.normal: 标准
+common.video_quality.normal.tips: 适合屏幕录制、摄像头拍摄
+common.video_quality.high: 精细
+common.video_quality.high.tips: 适合动态电影
+ 
+# content
+contetn.active_list.create_template: 请创建模版文件
+contetn.active_list.custom_template: 自定义
+contetn.article_list.latest_articel: 最新文章
+contetn.article_list.category: 分类
+contetn.article_list.contentCategory: >
+  <span class="color-gray">发布于 %publishedTime%</span>
+  <span>, 属于 <a href="#" class="color-gray">%contentCategoryname%</a> 分类</span>
+
+# course/block
+course.block_grid.view_course_btn: 查看课程
+course.block_grid.countinue_learn_btn: 继续学习
+course.block_grid.DRAFT_STATUS: 未发布
+course.block_grid.CLOSE_STATUS: 已关闭
+course.block_grid.SERIALIZE_SERIALIZE_MODE: 更新中
+course.block_grid.FINISH_SERIALIZE_MODE: 已完结
+course.block_grid.live: 直播
+course.block_grid.onlive: 正在直播中
+course.block_grid.date_format: n月j日 H:i
+course.block_grid.taskNumber: 第%number%任务
+course.block_grid.price: 价格
+course.block_grid.price_free: 免费
+course.block_grid.review: 评价
+course.block_grid.not_review: 无评价
+course.block_grid.equal: 等
+course.block_grid.learn_time: 学习总时长：%learnTime%
+
+# course/header
+course.header.vip: 会员
+course.header.vip_name: 免费学
+course.header.upgrade_VIP: <a href="%href%" target="_blank">升级会员</a>
+course.header.become_a_VIP: <a href="%href%" target="_blank">加入会员</a>
+
+# course/member
+course.member.tips.title: 提示
+course.member.classroom.tips: 您购买的班级已到期，无法学习任务、提问等。如有疑问请联系老师。
+course.member.course.tips: 您购买的课程已到期，无法学习任务、提问等。如有疑问请联系老师。
+course.member.course.allow_buy.tips: 您购买的课程已到期，无法学习任务、提问等。如有疑问请联系老师，或点击 重新加入 。
+course.member.course.join_btn: 退出并重新加入
+
+# course/widgets
+course.widgets.belong_classroom.title: 所属%name%
+course.widgets.classroom_price.price: 价格：
+course.widgets.classroom_price.not_free: >
+  价格 : %price%元
+course.widgets.classroom_price.free: 免费
+course.widgets.classroom_price.free: 免费
+course.widgets.course_order.not_free: 收费
+course.widgets.course_order.order_title: 订单名称：%title%
+course.widgets.course_order.order_sn: 订单号：%sn%
+course.widgets.course_order.order_price: 订单价格：
+course.widgets.recommend_classroom.tips: 共有%courseNum%门课程
+# course-manage
+course_manage.batch_create.title: 批量添加任务
+course_manage.batch_create.upload_btn: 上传文件
+course_manage.batch_create.balloon-nofile.tips: 请将文件拖到这里，或点击添加文件按钮
+course_manage.batch_create.file_name: 文件名
+course_manage.batch_create.file_size: 大小
+course_manage.batch_create.file_status: 状态
+course_manage.batch_create.add_file_btn: 添加文件
+course_manage.batch_create.start_upload_btn: 开始上传
+course_manage.batch_create.upload.tips: >
+  <li>批量添加支持上传视频、音频、PPT、Flash、DOC、PDF的文件格式，单个文件大小上限<strong>2GB</strong>。</li>
+  <li>视频将上传到<strong>云视频服务器</strong>，并转换为云视频为创建ES视频课时备用，如需修改云视频转码类型，请先设置转码类型后再进行上传视频。转换过程需要等待，转换过程中视频将无法播放。</li>
+  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+course_manage.batch_create.upload.upload_loading: 正在创建课时,请不要关闭窗口
+
+# student个人详细信息
+student.profile: 个人详细信息
+student.profile.field.empty: 暂无
+student.profile.truename: 姓名
+student.profile.gender: 性别
+student.profile.gender.male: 男
+student.profile.gender.female: 女
+student.profile.job: 职业
+student.profile.company: 公司
+student.profile.mobile: 手机号码
+student.profile.title: 头衔
+student.profile.signature: 个人签名
+student.profile.about: 自我介绍
+student.profile.weibo: 微博
+student.profile.weixin: 微信
+student.profile.site: 个人网站
+student.user_name: 用户名
+student.user_show: 个人主页
+
+# student成绩单
+student.report_card.title: 成绩单
+student.report_card.homework: 作业
+student.report_card.testpaper: 考试
+student.report_card.teacherSay.empty: 暂无评语
+student.report_card.empty: 暂无数据
+student.report_card.teacherSay: 评语
+student.report_card.review: 待批阅
+student.report_card.loop_index: 第 %loopIndex% 次%typeName%
+
+course_manage.student.created_time: 加入时间：%createdTime%
+course_manage.student.deadline: 有效期至：%deadline%
+course_manage.student.views_detail_btn: （查看详情）
+course_manage.student.send_message_btn: 发私信
+course_manage.student.view_material_btn: 查看资料
+course_manage.student.remark_btn: 备注
+course_manage.student.unfollow_btn: 取消关注
+course_manage.student.follow_btn: 关注
+course_manage.student.expiryday_btn: 增加有效期
+course_manage.student.remove_btn: 移除
+
+testpaper.check.homework: 作业
+testpaper.check.testpaper: 试卷
+testpaper.check.course.publish_btn: 发布计划
+testpaper.check.not_isTeacher.tips: 当前用户不是本课程教师，没有批阅%typeName%的权限。
+testpaper.course.rule: 课程规则
+testpaper.course.rule.tips: >
+  【普通课程规则】
+    <br>
+    1.免费课程：即免费的课程，必须要登录才能加入学习。<br>
+    2.免费任务：即勾选了任务标题旁【免费任务】的任务，任务标题前，有“免费”标签。<br>
+    3.免费试看：即设置了试看时长并且有“试看”标签的任务，目前只有云视频支持试看。<br>
+    4.管理员可在【管理后台】-【系统】-【课程设置】-【课程】中开启【免费任务允许未登录用户观看】。<br>
+    <br>
+    【直播课程规则】<br>
+    1.直播课程，必须设置课程人数才能发布，否则用户无法加入/购买课程。<br>
+    2.课程人数≠购买的直播人数，每场直播参与的最大人数≤购买的直播人数。<br>
+    3.若课程人数＞购买的直播人数，可能会出现部分用户无法进入直播教室的情况。<br>
+    4.若直播有回放视频，未参与直播过程的用户，只要加入课程，也可观看回放。<br>
+
+course_set.course.about: 简介
+course_set.course.category: 分类
+course_set.course.goals: 课程目标
+course_set.course.audiences: 适合人群
+course_set.course.tags: 课程标签：
+course_set.course.show_btn: 查看课程
+course_set.course.task_list: 任务列表
+course_set.course.empty: 课程暂无相关课时
+course_set.course.taskNumber: >
+  第%number%任务: %title%
+course_set.task.taskNumber: 第%taskNumber%任务： %taskTitle%
+course_set.task.empty: 课程暂无任务
+course_set.live.category: 课程分类
+course_set.live.vip_category: 会员课程
+course_set.live.on_live_today: 正在直播 今天
+course_set.live.on_live_soon: 即将直播
+course_set.live.live_preview: 直播预告
+course_set.live.course_task_show_btn: 进入直播
+course_set.live.view_replay_btn: 查看回放
+course_set.live.empty: 暂无直播课程
+course_set.live.title: 直播
+course_set.live.recommend.course: 推荐课程
+course_set.live.recommend.course.empty: 暂无推荐课程
+course_set.live.reply.title: 直播回放
+course_set.live.reply.empty: 暂无回放直播
+course_set.live.today_live: 今日直播
+course_set.live.today_live.empty: 今日暂无直播
+course_set.live.status.onlive: 正在直播
+course_set.live.status.live_soon: 即将直播
+
+#courseset-manage
+courseset_manage.batch_upload.upload_courseLesson_file: 上传任务文件
+courseset_manage.batch_upload.upload_material_file: 上传资料文件
+courseset_manage.batch_upload.upload_materiallib_file: 上传文件到教学资料库
+courseset_manage.batch_upload.add_wait_upload_file_btn: 添加待上传文件
+courseset_manage.batch_upload.upload_btn: 上传
+courseset_manage.batch_upload.file_name: 文件名称
+courseset_manage.batch_upload.file_size: 文件大小
+courseset_manage.batch_upload.status: 进度
+courseset_manage.batch_upload.tips: >
+  <li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>%upload_max_filesize%</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
+  <li>视频将上传到<strong>网站服务器</strong>，如需使用%EduSoho%云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
+courseset_manage.batch_upload.cloud.tips: >
+  <li>资料库支持多种文件格式上传分享下载，单个文件大小上限<strong>2GB</strong>。</li>
+  <li>视频将上传到<strong>云视频服务器</strong>，并转换为云视频为创建ES视频任务备用，如需修改云视频转码类型，请先设置下方转码类型后再进行上传视频。转换过程需要等待，转换过程中视频将无法播放。</li>
+  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+courseset_manage.batch_upload.cloud.video_transcoding_type: 视频转码类型
+courseset_manage.batch_upload.cloud.setting_btn: 设置
+courseset_manage.batch_upload.cloud.video-quality: 画质：
+courseset_manage.batch_upload.cloud.video-quality.low: 流畅 <span class="color-gray">(适合PPT讲解)</span>
+courseset_manage.batch_upload.cloud.video-quality.normal: 标准 <span class="color-gray">(适合屏幕录制、摄像头拍摄)</span>
+courseset_manage.batch_upload.cloud.video-quality.high: 精细 <span class="color-gray">(适合动态电影)</span>
+courseset_manage.batch_upload.cloud.audio-quality: 音质：
+courseset_manage.batch_upload.cloud.audio-quality.low: 流畅
+courseset_manage.batch_upload.cloud.audio-quality.normal: 标准
+courseset_manage.batch_upload.cloud.audio-quality.high: 高品
+courseset_manage.batch_upload.coursematerial.tips: >
+  支持常见文档、图片、音视频、压缩包文件格式。%text%<strong>%max_file_size%</strong>。
+courseset_manage.batch_upload.coursematerial.cloud.tips: >
+  <li>文件将上传到<strong>云服务器</strong>。</li>
+  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+courseset_manage.batch_upload.coursematerial.not_cloud.tips: >
+  <li>视频将上传到<strong>网站服务器</strong>，如需使用%EduSoho%云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
+courseset_manage.batch_upload.coursematerial.cloud.max_file_size_text.tips: 且文件大小不能超过
+courseset_manage.cover_img: 封面图片
+courseset_manage.cover_img.tips: 提示：请选择图片裁剪区域。
+courseset_manage.cover_img.again_select_picture_btn: 重新选择图片
+courseset_manage.unlock_confrim: 解除确认
+courseset_manage.unlock_confrim.tips: 解除后本课程将停止同步更新,本操作不可逆！
+
+
+
+
