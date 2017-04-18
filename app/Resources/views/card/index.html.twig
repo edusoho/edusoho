@@ -1,7 +1,6 @@
 {% extends 'card/layout.html.twig' %}
-
+{% do script(['app/js/card/index/index.js']) %}
 {% set main_nav = 'cards' %}
-{% set script_controller = 'topxiawebbundle/controller/card/index' %}
 
 {% block main_body %}
   {% if app.request.cookies.get('modalOpened') == 1 %}

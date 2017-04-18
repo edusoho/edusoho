@@ -1,7 +1,7 @@
 import DocPlayer from '../../../common/doc-player';
+
 let $element = $('#document-content');
 let watermarkUrl = $element.data('watermark-url');
-
 console.log(watermarkUrl);
 
 if(watermarkUrl) {

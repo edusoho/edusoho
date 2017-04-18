@@ -1,7 +1,5 @@
 {% import "macro.html.twig" as web_macro %}
-
-{% do load_script('topxiawebbundle/controller/classroom/teachers') %}
-{% include 'seajs_loader_compatible.html.twig' with {'topxiawebbundle':true} %}
+{% do script(['app/js/classroom/teachers/index.js'])%}
 
 <div class="panel panel-default" id="class-teacher-column">
   <div class="panel-heading">

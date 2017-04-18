@@ -1,8 +1,12 @@
-{% extends 'announcement/announcement-modal-layout.html.twig' %}
-
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% do script(['app/js/announcement/announcement/index.js'])%}
 {% set tab="list" %}
 
-{% block content %}
+{% block title %}
+{{'公告管理'|trans}}
+{% endblock %}
+
+{% block body %}
 	<div class="announcement-list">
 	{% if announcements %}
 		{% for announcement in announcements %}
@@ -34,10 +38,5 @@
 		<div class="alert alert-edit">{{'暂无公告'|trans}}</div>
 	{% endif %}
   </div>
-  
-	{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-  <script>
-		app.lazyLoad = function() { app.load('announcement/announcement'); };
-	</script>
 
 {% endblock %}

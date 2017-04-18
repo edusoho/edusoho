@@ -1,6 +1,5 @@
 {% extends 'my-order/layout.html.twig' %}
-
-{% set script_controller = 'my/orders' %}
+{% do script(['app/js/my/order/index.js']) %}
 
 {% set main_nav = 'orders' %}
 
