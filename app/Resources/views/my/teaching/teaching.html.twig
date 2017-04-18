@@ -1,7 +1,7 @@
 {% import "common/data-dict-macro.html.twig" as dict_macro %}
 {% extends 'my/layout.html.twig' %}
 
-{% block title %}{{ '在教课程'|trans }} - {{ parent() }}{% endblock %}
+{% block title %}{{ 'my.teaching.page_title'|trans }} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-teaching-courses' %}
 
@@ -12,9 +12,9 @@
     <div class="panel-heading">
       <span class="pull-right">
         <a id="create-course" href="{{ path('course_set_manage_create') }}" class="btn btn-info btn-sm">
-        <span class="es-icon es-icon-anonymous-iconfont"></span> {{ '创建课程'|trans }}</a>
+        <span class="es-icon es-icon-anonymous-iconfont"></span> {{ 'my.teaching.course_set.create'|trans }}</a>
       </span>
-      {{ '在教课程'|trans }}
+      {{ 'my.teaching.course_set.content_title'|trans }}
     </div>
 
     <div class="panel-body">
@@ -22,15 +22,15 @@
       <table class="table table-striped" id="course-table" style="word-break:break-all;">
         <thead>
         <tr>
-          <th width="45%">{{ '名称'|trans }}</th>
+          <th width="45%">{{ 'my.teaching.course_set.title'|trans }}</th>
           {% if filter == 'classroom' %}
-            <th>{{ '所属%name%'|trans({'%name%':setting("classroom.name")|default('班级'|trans)}) }}</th>
+            <th>{{ 'my.teaching.course_set.classroom'|trans({'%classroom%':setting("classroom.name")|default('classroom'|trans)}) }}</th>
           {% else %}
-            <th>{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{ '学员'|trans }}{% endif %}{{ '数'|trans }}</th>
-            <th>{{ '价格(元)'|trans }}</th>
+            <th>{% if setting('default.user_name') %}{{ setting('default.user_name')|default('role.student'|trans) }}{% else %}{{ 'role.student'|trans }}{% endif %}{{ '数'|trans }}</th>
+            <th>{{ 'my.teaching.course_set.price'|trans }}</th>
           {% endif %}
-          <th>{{ '状态'|trans }}</th>
-          <th width="20%">{{ '操作'|trans }}</th>
+          <th>{{ 'my.teaching.course_set.status'|trans }}</th>
+          <th width="20%">{{ 'my.teaching.course_set.actions'|trans }}</th>
         </tr>
         </thead>
         <tbody>
@@ -47,7 +47,7 @@
                 <a class="link-primary" href="{{ path('course_set_show', {id: courseSet.id}) }}">{{ courseSet.title }}</a>
 
                 {% if courseSet.type == 'live' %}
-                  <span class="label label-success live-label">{{ '直播'|trans }}</span>
+                  <span class="label label-success live-label">{{ 'my.teaching.course_set.live_label'|trans }}</span>
                 {% endif %}
 
                 {#{% if filter == 'classroom' %}
@@ -75,22 +75,22 @@
             <td>
               <div class="btn-group">
                 <a class="mr10 link-primary" target="_blank" href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id }) }}">
-                  {{ '管理'|trans }}
+                  {{ 'my.teaching.course_set.manage_btn'|trans }}
                 </a>
                 {% if courseSet.canManage|default(false) %}
                   <a href="#" type="button" class="link-primary dropdown-toggle ml10" data-toggle="dropdown">
-                    更多
+                    {{'my.teaching.course_set.more_btn'|trans}}
                     <i class="es-icon es-icon-arrowdropdown"></i>
                   </a>
                   <ul class="dropdown-menu pull-right">
                     <li>
                       <a href="{{ path('course_set_manage', {id: courseSet.id}) }}">
-                        {{ '计划管理'|trans }}
+                        {{ 'my.teaching.course_set.course_manage_btn'|trans }}
                       </a>
                     </li>
                     <li>
                       <a href="{{ path('course_set_manage_files', {id:courseSet.id}) }}">
-                        {{ '文件管理'|trans }}
+                        {{ 'my.teaching.course_set.file_manage_btn'|trans }}
                       </a>
                     </li>
                   </ul>
@@ -103,9 +103,9 @@
             <td class="text-center" colspan="20">
               <a href="{{ path('course_set_manage_create') }}" target="_blank">
                 {% if filter|default('normal') == 'live' %}
-                  {{ '你还没有在教的直播课程哦, 赶快去创建吧!'|trans }}
+                  {{ 'my.teaching.course_set.live_empty_hint'|trans }}
                 {% else %}
-                  {{ '你还没有在教的课程哦, 赶快去创建吧!'|trans }}
+                  {{ 'my.teaching.course_set.empty_hint'|trans }}
                 {% endif %}
               </a>
             </td>
