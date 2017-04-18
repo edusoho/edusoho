@@ -30,10 +30,7 @@ abstract class AbstractResource
     const DEFAULT_PAGING_LIMIT = 10;
     const DEFAULT_PAGING_OFFSET = 0;
 
-    const PREFIX_SORT_DESC = '+';
-    const PREFIX_SORT_ASC = '-';
-
-
+    const PREFIX_SORT_DESC = '-';
 
     public function __construct(Biz $biz)
     {
@@ -106,12 +103,10 @@ abstract class AbstractResource
             $sort = array();
             foreach ($explodeSort as $part) {
                 $prefix = substr($part, 0, 1);
-                $field = substr($part, 1, strlen($part) - 1);
+                $field = str_replace(self::PREFIX_SORT_DESC, '', $part);
                 if ($prefix == self::PREFIX_SORT_DESC) {
                     $sort[$field] = 'DESC';
-                }
-
-                if ($prefix == self::PREFIX_SORT_ASC) {
+                } else {
                     $sort[$field] = 'ASC';
                 }
             }

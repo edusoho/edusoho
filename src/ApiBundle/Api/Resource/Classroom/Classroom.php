@@ -21,7 +21,7 @@ class Classroom extends AbstractResource
             throw new ResourceNotFoundException('班级不存在');
         }
 
-        $this->getOCUtil()->single($classroom, array('creator', 'teacherIds', 'assistantIds'));
+        $this->getOCUtil()->single($classroom, array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
 
         return $classroom;
     }
@@ -44,7 +44,7 @@ class Classroom extends AbstractResource
 
         $this->getOCUtil()->multiple($classrooms, array('creator', 'teacherIds', 'headTeacherId', 'assistantIds'));
 
-        $total = $this->getClassroomService()->searchMemberCount($conditions);
+        $total = $this->getClassroomService()->countClassrooms($conditions);
 
         return $this->makePagingObject($classrooms, $total, $offset, $limit);
     }

@@ -91,10 +91,17 @@ class ObjectCombinationUtil
 
             if (is_array($targetIdValue)) {
                 foreach ($targetIdValue as $targetId) {
-                    array_push($sourceObj[$newField], $targetObjects[$targetId]);
+                    if (isset($targetObjects[$targetId])) {
+                        array_push($sourceObj[$newField], $targetObjects[$targetId]);
+                    }
                 }
             } else {
-                $sourceObj[$newField] = $targetObjects[$targetIdValue];
+                if (isset($targetObjects[$targetIdValue])) {
+                    $sourceObj[$newField] = $targetObjects[$targetIdValue];
+                } else {
+                    $sourceObj[$newField] = null;
+                }
+
             }
 
             if ($targetIdField !== $newField) {
