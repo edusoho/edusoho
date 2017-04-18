@@ -119,8 +119,10 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
               `createdTime`,
               `copyId`,
               `type`
-           FROM `course_material` WHERE  id NOT IN (SELECT id FROM  `course_material_v8`);
-        ');
+           FROM `course_material` WHERE  id NOT IN (SELECT id FROM  `course_material_v8`) AND 
+           fileId in (SELECT id FROM upload_files);
+        '
+        );
     }
 
     protected function proccessDownloadActivity()
