@@ -5,7 +5,8 @@
 	{% if course.type == 'open' or course.type == 'liveOpen' %}
 		{% set showUrl = path('open_course_show',{courseId:course.id}) %}
 	{% else %}
-		{% set showUrl = path('course_set_show',{id:course.id}) %}
+		{% set courseSet =  course %}
+		{% set showUrl = path('course_set_show',{id:courseSet.defaultCourseId}) %}
 	{% endif %}
 
 	<li class="tab-recommand clearfix">
