@@ -24,7 +24,9 @@
                           <span class="tag-live"></span>
                         </span>
                       {% endif %}
+                      {# todo @wuli 延迟加载无效果 #}
                       {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'img-responsive', courseSet.title) }}
+                      {# <img class="img-responsive" src="{{filepath(course_set_cover(courseSet, 'large'), 'courseSet.png')}}" alt="{{courseSet.title}}"> #}
                     </a>
                   </div>
                   <div class="course-info">
@@ -38,8 +40,8 @@
                         <span class="num"><i class="es-icon es-icon-people"></i>{{ courseSet.studentNum }}</span>
                       {% endif %}
                       <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ courseSet.ratingNum }}</span>
-                      {% set course = courseSet.course %}
-                        {% if course|default() %}
+                      {% set course = courseSet.course|default(null) %}
+                        {% if course %}
                           {% include 'course/widgets/price.html.twig' with {shows:'price'} %}
                         {% endif %}
                     </div>
