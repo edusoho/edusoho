@@ -6,7 +6,7 @@ export default class CaptchaModal {
     this.dataTo = dataTo;
     this.smsType = smsType;
     this.captchaNum = captchaNum;
-    this.validator = null;
+    this.CaptchaValidator = null;
     this.init();
   }
   init() {
@@ -21,8 +21,8 @@ export default class CaptchaModal {
   }
 
   submitForm() {
-    console.log(this.validator);
-    if (this.validator.form()) {
+    console.log(this.CaptchaValidator);
+    if (this.CaptchaValidator.form()) {
       $.get(this.$element.attr('action'), { value: $('#captcha_num_modal').val() }, (response) => {
         console.log(response);
         if (response.success) {
@@ -31,19 +31,17 @@ export default class CaptchaModal {
           var smsSender = new SmsSender({
             element: '.js-sms-send',
             url: $('.js-sms-send').data('smsUrl'),
-            smsType: self.get('smsType'),
-            dataTo: self.get('dataTo'),
-            captchaNum: self.get('captchaNum'),
+            smsType: this.smsType,
+            dataTo: this.dataTo,
+            captchaNum: this.captchaNum,
             captcha: true,
             captchaValidated: this._captchaValidated,
             preSmsSend: function () {
               var couldSender = true;
-
               return couldSender;
             }
           });
-          smsSender.undelegateEvents('.js-sms-send', 'click');
-
+          $('.js-sms-send').off('click');
         } else {
           this._captchaValidated = false;
           this.$element.find('#getcode_num').attr("src", $("#getcode_num").data("url") + "?" + Math.random());
@@ -56,7 +54,7 @@ export default class CaptchaModal {
 
   initValidator() {
     this._captchaValidated = false;
-    this.validator = this.$element.validate({
+    this.CaptchaValidator = this.$element.validate({
       rules: {
         captcha_num: {
           required: true,

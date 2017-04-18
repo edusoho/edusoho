@@ -2,6 +2,7 @@ import SmsSender from 'app/common/widget/sms-sender';
 let $form = $('#bind-mobile-form');
 let smsSender = new SmsSender($form);
 let $smsCode = $('.js-sms-send');
+let isSmsCode = false;
 
 let validator = $form.validate({
   rules: {
@@ -36,49 +37,44 @@ let validator = $form.validate({
 
 });
 
+$form.on('focusout.validate', (data, data2) => {
+  if (!isSmsCode&& validator.form()) {
+    $smsCode.removeClass('disabled');
+    iniSmsCode();
+    isSmsCode = false;
+  } else if ( validator.form()) {
+    isSmsCode = true;
+  }
+})
+
+console.log(validator);
+
+$('#submit-btn').click(() => {
+  console.log(validator);
+  if (isSmsCode && validator.form()) {
+    $form.submit();
+  }
+})
+
+
 function iniSmsCode() {
   $('#sms-code').rules('add', {
     required: true,
     unsigned_integer: true,
     remote: {
-      url: $('#sms_code').data('url'),
+      url: $('#sms-code').data('url'),
       type: 'get',
       async: false,
       data: {
         'value': function () {
-          return $('#sms_code').val();
+          return $('#sms-code').val();
         }
       }
     },
     messages: {
-      required: Translator.trans('请输入短信验证码')
+      required: Translator.trans('请输入验证码'),
     }
   })
 }
 
 
-$form.on('focusout.validate', (data, data2) => {
-  if ($smsCode.hasClass('disabled') && validator.form()) {
-    $smsCode.removeClass('disabled');
-    iniSmsCode();
-  }else {
-    $smsCode.addClass('disabled');
-    $('#sms-code').rules('remove');
-  }
-})
-
-$('.js-sms-send').click(() => {
-  if ($form.valid()) {
-    console.log('valid');
-  }
-})
-
-
-$('#submit-btn').click(() => {
-  if ($smsCode.hasClass('disabled') && validator.form()) {
-    $smsCode.removeClass('disabled');
-    iniSmsCode();
-  } else if (validator.form()) {
-    $form.submit();
-  }
-})

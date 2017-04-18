@@ -1,15 +1,15 @@
 import notify from 'common/notify';
 
 export default class SmsSender {
-  constructor($element) {
-    this.$element = $element;
+  constructor(option) {
+    this.$element = $(option.element);
     this.validator = 0;
-    this.url = '';
-    this.smsType = '';
+    this.url = option.url ? option.url : '';
+    this.smsType = option.smsType ? option.smsType : '';
+    this.captchaNum = option.captchaNum ? option.captchaNum : '';
+    this.captcha = option.captcha;
+    this.captchaValidated = option.captchaValidated;
     this.dataTo = 'mobile';
-    this.captcha = false;
-    this.captchaValidated = false;
-    this.captchaNum = 'captcha_num';
     this.initEvent();
     this.setup();
   }
@@ -31,6 +31,7 @@ export default class SmsSender {
   }
   postData(url, data) {
     var self = this;
+    console.log(this.$element);
     var refreshTimeLeft = function () {
       var leftTime = $('#js-time-left').html();
       $('#js-time-left').html(leftTime - 1);
@@ -43,19 +44,21 @@ export default class SmsSender {
       }
     };
 
+    console.log(self.$element);
+
     self.$element.addClass('disabled');
     $.post(url, data, function (response) {
       if (("undefined" != typeof response['ACK']) && (response['ACK'] == 'ok')) {
         $('#js-time-left').html('120');
         $('#js-fetch-btn-text').html(Translator.trans('秒后重新获取'));
-        notify('success',Translator.trans('发送短信成功'));
+        notify('success', Translator.trans('发送短信成功'));
 
         refreshTimeLeft();
       } else {
         if ("undefined" != typeof response['error']) {
-          notify('danger',response['error']);
+          notify('danger', response['error']);
         } else {
-          notify('danger',Translator.trans('发送短信失败，请联系管理员'));
+          notify('danger', Translator.trans('发送短信失败，请联系管理员'));
         }
       }
     });
