@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
+use Biz\Course\Service\CourseSetService;
 use Biz\Util\EdusohoLiveClient;
 use AppBundle\Common\ExportHelp;
 use AppBundle\Common\ArrayToolkit;
@@ -374,7 +375,6 @@ class OpenCourseManageController extends BaseController
             $recommendedCourses[$recommend['id']] = $commendedCourseSets[$recommend['recommendCourseId']];
         }
 
-        $coursesPrice = $this->_findCoursesPriceInterval($courseSetIds);
         $users = $this->_getTeacherUsers($commendedCourseSets);
 
         return $this->render(
@@ -383,7 +383,6 @@ class OpenCourseManageController extends BaseController
                 'courseSets' => $recommendedCourses,
                 'users' => $users,
                 'course' => $course,
-                'coursesPrice' => $coursesPrice,
             )
         );
     }
