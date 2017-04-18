@@ -1,5 +1,4 @@
 import ActivityEmitter from "../activity-emitter";
-
 class LiveShow {
 
   constructor() {
@@ -7,7 +6,7 @@ class LiveShow {
   }
 
   init() {
-    let activityData = JSON.parse($('#activity-data').text());
+    let activityData = JSON.parse($('#activity-data').html());
     let startTime = parseInt(activityData.startTime);
     let endTime = parseInt(activityData.endTime);
     let nowDate = parseInt(activityData.nowDate);
@@ -96,7 +95,7 @@ class LiveShow {
           (请在课前10分钟内提早进入)
          </div>`
       $btn = `<div class='live-show-item'>
-          <a class='btn btn-primary js-start-live' href='javascript:;' 
+          <a class='btn btn-primary js-start-live' href='javascript:;'
             onclick='$(liveShow.entryLiveRoom())'>
             ${ Translator.trans('进入直播教室')}
           </a>
@@ -113,7 +112,7 @@ class LiveShow {
           直播已经开始，直播将于${this.liveEndTimeFormat}结束。
         </div>`;
       $btn = `<div class='live-show-item'>
-          <a class='btn btn-primary js-start-live' href='javascript:;' 
+          <a class='btn btn-primary js-start-live' href='javascript:;'
             onclick='$(liveShow.entryLiveRoom())'>
             ${ Translator.trans('进入直播教室')}
           </a>
@@ -159,3 +158,5 @@ class LiveShow {
     return content;
   }
 }
+
+export default  LiveShow;
