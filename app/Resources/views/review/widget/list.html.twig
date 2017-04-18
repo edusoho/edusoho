@@ -33,10 +33,10 @@
         </div>
         <div class="content">
           <div class="short-content">{{ review.content|sub_text(100) }}
-            {% if review.updatedTime %}<span class="label label-success">{{'追评'|trans}}</span>{% endif %}
+            {% if review.updatedTime != review.createdTime and review.updatedTime is not null %}<span class="label label-success">{{'追评'|trans}}</span>{% endif %}
           </div>
           <div class="full-content" style="display:none;">{{ review.content|nl2br }}
-            {% if review.updatedTime %}<span class="label label-success">{{'追评'|trans}}</span>{% endif %}
+            {% if review.updatedTime != review.createdTime and review.updatedTime is not null %}<span class="label label-success">{{'追评'|trans}}</span>{% endif %}
           </div>
         </div>
         <div class="actions clearfix">

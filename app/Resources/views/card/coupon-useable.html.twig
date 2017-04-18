@@ -1,4 +1,4 @@
-<div class="card-pack-item coupon-item">
+\<div class="card-pack-item coupon-item">
 	{% if cardDetail.targetType == "course" %}
 		{% if cardDetail.targetId == 0 %}
 			<p class="title">{{ '可用于抵扣全站课程'|trans }}</p>
@@ -28,8 +28,8 @@
 		<strong>{{ cardDetail.rate }}</strong>
 		{% if cardDetail.type == "discount" %}{{ '折'|trans }}{% endif %}
 		{% if cardDetail.targetType == "course" and cardDetail.targetId != 0 %}
-			{% set courseSet = data('CourseSet', id : cardDetail.targetId) %}
-			<a href="{{ path('course_set_show',{ id : courseSet.defaultCourseId }) }}">{{ '去购买课程'|trans }}
+			{% set courseSet = data('CourseSet', { id : cardDetail.targetId }) %}
+			<a href="{{ path('course_show',{ id : courseSet.defaultCourseId }) }}">{{ '去购买课程'|trans }}
 				></a>
 		{% elseif cardDetail.targetType == "course" and cardDetail.targetId == 0 %}
 			<a href="{{ path('course_set_explore') }}">{{ '去购买课程'|trans }}
