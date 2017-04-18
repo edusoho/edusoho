@@ -1,11 +1,12 @@
 echo.init();
 
 $('#live, #free').on('click', event => {
-  $('input:checkbox').attr('checked',false);
-  $(this).attr('checked',true);
+  const $this = $(event.currentTarget);
+  $('input:checkbox').attr('checked', false);
+  $this.attr('checked',true);
 
-  window.location.href = $(this).val();
-})
+  window.location.href = $this.val();
+});
 
 $(".open-course-list").on('click','.section-more-btn a', event => {
   const url = $(this).attr('data-url');
