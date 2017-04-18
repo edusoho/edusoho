@@ -48,7 +48,7 @@ class CourseSearchAdapter extends AbstractSearchAdapter
             $course['studentNum'] = $courseLocal['studentNum'];
             $course['middlePicture'] = isset($courseLocal['cover']['middle']) ? $courseLocal['cover']['middle'] : '';
             $course['learning'] = in_array($course['courseId'], $learningCourseIds);
-            $course['id'] = $courseLocal['id'];
+            $course['id'] = $courseLocal['defaultCourseId'];
             $course['lessons'] = isset($tasks[$course['courseId']]) ? $tasks[$course['courseId']] : array();
         } else {
             $course['rating'] = 0;

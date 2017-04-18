@@ -6,7 +6,7 @@
 		{% set showUrl = path('open_course_show',{courseId:course.id}) %}
 	{% else %}
 		{% set courseSet =  course %}
-		{% set showUrl = path('course_set_show',{id:courseSet.defaultCourseId}) %}
+		{% set showUrl = path('course_show',{id:courseSet.defaultCourseId}) %}
 	{% endif %}
 
 	<li class="tab-recommand clearfix">
