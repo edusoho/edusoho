@@ -3,12 +3,12 @@
     {% if item.itemType == 'chapter' and item.type == 'chapter' %}
       <li class="task-item bg-gray-lighter js-task-chapter">
         <i class="es-icon es-icon-menu left-menu">
-        </i><span class="title">第{{ item.number }}章: {{ item.title }}</span>
+        </i><span class="title">{{'course.plan_task.course_chapter'|trans({'%number%': item.number, '%chapterTitle%': item.title})}}</span>
         <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
       </li>
     {% elseif item.itemType == 'chapter'  and item.type == 'unit' %}
       <li class="task-item color-gray bg-gray-lighter">
-        <span class="title">第{{ item.number }}节: {{ item.title }}</span>
+        <span class="title">{{'course.plan_task.course_unit'|trans({'%number%': item.number, '%unitTitle%': item.title})}}</span>
       </li>
     {% elseif  item.itemType == 'task' %}
       {% set task = item %}
@@ -31,25 +31,25 @@
         {% if not task_lock and task.status == 'published' %}
           <a class="title"
              href="{{ path('course_task_show', {id:task.id,courseId:task.courseId}) }}">
-            {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}任务{{ task.number }}: {{ task.title }}
+            {% if task.isOptional %}<span class="label label-success mrm">{{'course.plan_task.elective_task'|trans}}</span>{% endif %}{{'course.plan_task.task_index_title'|trans({'%index%': task.number, '%taskTitle%': task.title})}}
           </a>
         {% else %}
           <div class="title"
                data-url="{{ path('course_task_show', {id:task.id,courseId:task.courseId}) }}">
-            {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}任务{{ task.number }}: {{ task.title }}
+            {% if task.isOptional %}<span class="label label-success mrm">{{'course.plan_task.elective_task'|trans}}</span>{% endif %}{{'course.plan_task.task_index_title'|trans({'%index%': task.number, '%taskTitle%': task.title})}}
           </div>
         {% endif %}
         {% if task.status != 'published' %}
-          <span class="right-menu ">敬请期待</span>
+          <span class="right-menu ">{{'course.plan_task.coming_soon'|trans}}</span>
         {% elseif task_lock %}
           <span class="right-menu mouse-leave">{{ task.activity.length|activity_length_format }}
             <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} ml5"></i>
           </span>
-          <span class="right-menu mouse-enter color-warning">任务未解锁</span>
+          <span class="right-menu mouse-enter color-warning">{{'course.plan_task.unlock'|trans}}</span>
         {% else %}
           <span class="right-menu">{{ task.activity.length|activity_length_format }}
             <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} ml5" data-toggle="tooltip"
-               data-placement="top" title="{{ activity_metas(task.activity.mediaType).name }}任务"></i></span>
+               data-placement="top" title="{{ activity_metas(task.activity.mediaType).name }}{{'course.plan_task.task'|trans}}"></i></span>
         {% endif %}
       </li>
     {% endif %}

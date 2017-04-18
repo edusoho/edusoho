@@ -6,11 +6,11 @@
 {% block main %}
   {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <div class="panel panel-default panel-col">
-    <div class="panel-heading">我的考试</span></div>
+    <div class="panel-heading">{{'my.learning.testpaper'|trans}}</span></div>
     <div class="panel-body">
       <ul class="nav nav-pills mb15">
-        <li class="{% if nav == 'testpaper' %}active{% endif %}"><a href="{{ path('my_testpaper_list') }}">考试记录</a></li>
-        <li class="{% if nav == 'questionFavorite'%}active{% endif %}"><a href="{{ path('my_favorite_question_list') }}">收藏的题目</a></li>
+        <li class="{% if nav == 'testpaper' %}active{% endif %}"><a href="{{ path('my_testpaper_list') }}">{{'my.learning.testpaper.record'|trans}}</a></li>
+        <li class="{% if nav == 'questionFavorite'%}active{% endif %}"><a href="{{ path('my_favorite_question_list') }}">{{'my.learning.testpaper.favorit_question'|trans}}</a></li>
       </ul>
 
       {% if favoriteQuestions %}
@@ -25,14 +25,14 @@
                 <a class="link-primary" href="#modal" data-toggle="modal" data-url="{{ path('my_favorite_question_preview', {id:question.id}) }}">{{ question.stem|plain_text(40) }}</a>
                 <div class="color-gray">
                   {% if paper.id|default(0) > 0  %}
-                    <small>{{'来自试卷《%name%》'|trans({'%name%':paper.name })}}</small>
+                    <small>{{'my.learning.testpaper.target_testpaper'|trans({'%name%':paper.name })}}</small>
                     <small class="mhs">•</small>
                   {% endif %}
-                  <small>{{'收藏于'|trans}} {{ favoriteQuestion.createdTime|date('Y-n-d H:i:s') }}</small>
+                  <small>{{'my.learning.testpaper.favorite_time'|trans({'%time%': favoriteQuestion.createdTime|date('Y-n-d H:i:s')})}}</small>
                 </div>
               </td>
               <td>
-                <button data-url="{{ path('my_question_unfavorite', {id:favoriteQuestion.id}) }}" class="btn btn-default btn-sm pull-right unfavorite-btn"><span class="glyphicon glyphicon-star-empty"></span> {{'取消收藏'|trans}}</button>
+                <button data-url="{{ path('my_question_unfavorite', {id:favoriteQuestion.id}) }}" class="btn btn-default btn-sm pull-right unfavorite-btn"><span class="glyphicon glyphicon-star-empty"></span> {{'my.learning.testpaper.cancel_favorite_btn'|trans}}</button>
               </td>
             </tr>
 
@@ -41,7 +41,7 @@
         </table>
         {{ web_macro.paginator(paginator) }}
       {% else %}
-        <div class="empty">{{'还没有收藏的题目'|trans}}</div>
+        <div class="empty">{{'my.learning.testpaper,favorit_empty'|trans}}</div>
       {% endif %}
 
     </div>

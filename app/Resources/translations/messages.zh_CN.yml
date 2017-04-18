@@ -907,7 +907,42 @@ course.plan_task.create_part: >
   添加%partName%
 course.plan_task.create_task: >
   添加任务
-
+course.plan_task.course_chapter: >
+  第%number%章: %chapterTitle%
+course.plan_task.course_unit: >
+  第%number%节: %unitTitle%
+course.plan_task.elective_task: 选修
+course.plan_task.task_index_title: >
+  任务%index%: %taskTitle%
+course.plan_task.coming_soon: 敬请期待
+course.plan_task.unlock: 任务未解锁
+course.plan_task.question_placeholder: 我要提问
+course.plan_task.question_title: 标题
+course.plan_task.question_describe: 详细描述你的问题
+course.plan_task.put_question: 提问
+course.plan_task.post_time: 发表于%createdTime%
+course.plan_task.post_num: >
+  %postNum%回答
+course.plan_task.course_teacher: 老师
+course.plan_task.go_back_btn: 返回
+course.plan_task.question_author: >
+  %nickname%<i>问...</i>
+course.plan_task.question_answer: 回答
+course.plan_task.question_content: 内容
+course.plan_task.add_answer_btn: 添加答案
+course.plan_task.save_note_btn: 保存笔记
+course.plan_task.share_note_btn: 分享笔记
+course.plan_task.finish_task_title: 完成任务
+course.plan_task.congratulation_finish: 恭喜完成
+course.plan_task.finish_all_course: 已学完整个课程，给你点赞！
+course.plan_task.finish_rate_course: >
+  已完成了整个课程的%finishedRate%，加油吧！
+course.plan_task.share: 分享
+course.plan_task.next_task: 下一任务
+course.plan_task.task_edit_tips: 当前任务正在编辑中，暂时无法观看。
+course.plan_task.task_title: >
+  《 任务：%taskTitle% 》
+course.plan_task.study_rate: 学习进度
 course.plan_task.activity_manage.activity_file_empty: 抱歉，%file%文件不存在，暂时无法学习。
 course.plan_task.activity_manage.preview_failed_tips: 当前任务不支持预览，请加入教学计划进行学习。
 course.plan_task.activity_manage.title_name: 标题名称
@@ -1706,6 +1741,8 @@ user.settings.security_menu: 安全设置
 user.settings.email_menu: 邮箱设置
 user.settings.teachers_qualification_menu: 教师资格申请
 user.settings.oauth_menu: 第三方登录
+user.settings.avatar: >
+  <strong>您还没有头像</strong>。拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="%setAvatar%" class="alert-link" target="_blank">点击设置</a>
 
 # 个人设置模块-基础信息
 user.settings.profile.no_bind_mobile_tips: 还没绑定手机号码，
@@ -1905,6 +1942,12 @@ user.orders.detail.log_info: 日志信息
 user.orders.detail.operator: 操作人
 user.orders.detail.log_createdTime: 创建时间
 user.orders.detail.empty: 暂无交易日志
+user.orders.refund_record_title: 退款记录
+user.orders.refund_order: 退款订单
+user.orders.refund_apply_time: 退款申请时间
+user.orders.refund_status: 退款状态
+user.orders.refund_id: 订单号：%sn%
+user.orders.refund_empty: 没有退款记录
 
 # 账户中心模块-我的卡包
 user.cards: 我的卡包
@@ -2425,6 +2468,43 @@ my.teaching.course_set.live_label: 直播
 my.teaching.course_set.classrooms_not_found_label: 已移除
 my.teaching.course_set.manage_btn: 管理
 my.teaching.course_set.more_btn: 更多
+my.teaching.course_set.question: 问答
+my.teaching.course_set.threasd: 话题
+my.teaching.course_set.question_empty: >
+  您的课程中还没有%defaultName%提问过...
+my.teaching.course_set.thread_empty: >
+  您的课程中还没有%defaultName%发表话题...
+
+my.teaching.testpaper.target_course: >
+  来自课程<a class="color-primary" href="%showUrl%">《%courseTitle%》</a> •
+my.teaching.testpaper.course_task: 计划 
+my.teaching.testpaper.start_test_time: 开始考试时间
+my.teaching.testpaper.checking: 正在批阅
+my.teaching.testpaper.check_total_score: >
+  得分<strong class="color-warning">%totalScore%</strong>分
+my.teaching.testpaper.check_right_count: >
+  做对<strong>%rightCount%</strong>题
+my.teaching.testpaper.check_total_count: >
+  / 共<strong>%totalCount%</strong>题
+my.teaching.testpaper.unsubmit: 未交卷
+my.teaching.testpaper.continue_do: 继续考试
+my.teaching.testpaper.watch_result: 查看结果
+my.teaching.testpaper.deleted: 该试卷已删除
+my.teaching.testpaper.not_participate_test: 还没有参加过任何考试
+my.teaching.testpaper.detail: 共%score%分 / %itemCount%道题
+my.teaching.testpaper.submit: 交卷
+my.teaching.testpaper.check: 批阅
+my.teaching.testpaper.answer_detail: >
+  总分 <strong>%totalCount%</strong> 分 </div>
+  <div class="color-gray"><small>客观题%objectiveScore%分 / 主观题%subjectiveScore%分</small></div>
+  <div class="color-success"><small>%teacherName% 批于%checkTime%</small>
+my.teaching.testpaper.default_teacher: 系统
+my.teaching.testpaper.check_title: 试卷批阅
+my.teaching.testpaper.uncheck: 未批阅
+my.teaching.testpaper.check_finished: 已批阅
+my.teaching.testpaper.reviewing_empty: 还没有等待批阅的试卷
+my.teaching.testpaper.check_finished_empty: 还没有已经批阅的试卷
+my.teaching.testpaper.test_record: 我的考试记录
 
 my.teaching.open_course.title: 名称
 my.teaching.open_course.hit_num: 浏览数
@@ -2432,7 +2512,6 @@ my.teaching.open_course.status: 状态
 my.teaching.open_course.actions: 操作
 my.teaching.open_course.live_label: 直播直播
 my.teaching.open_course.manage_btn: 管理
-my.teaching.open_course.view_btn: 查看
 my.teaching.open_course.view_btn: 查看
 my.teaching.open_course.lesson_manage_btn: 课时管理
 my.teaching.open_course.file_manage_btn: 文件管理
@@ -2445,6 +2524,7 @@ my.teaching.course_set.course_manage_btn: 计划管理
 my.teaching.course_set.file_manage_btn: 文件管理
 my.teaching.course_set.live_empty_hint: 你还没有在教的直播课程哦, 赶快去创建吧!
 my.teaching.course_set.empty_hint: 你还没有在教的课程哦, 赶快去创建吧!
+
 # 创建课程
 my.teaching.course_set.create_btn: 创建课程
 my.teaching.course_set.select_type: 选择类型
@@ -4427,6 +4507,7 @@ mobile.Android_client: Android 客户端
 mobile.iPhone_client: iPhome客户端
 mobile.step_two: >
   <span class="member">2</span>第二步: 打开阔知学堂APP，扫描网校二维码。
+mobile.vip_free_study: 会员免费买
 
 # 客服
 customer_service.open_content_title: 查看在线客服
@@ -4947,6 +5028,141 @@ my.course.free_mode_plan.task_progress: 完成任务：
 my.course.lock_mode_plan.task_progress: 已完成%spanHtml%个任务
 my.course.lock_mode_plan.behind_plan: 落后计划
 my.course.lock_mode_plan.expiry_date: 学习有效期：
+
+my.task.title: 我的任务
+my.task.calendar: 我的任务日历
+
+# 我的作业
+my.learning.homework: 我的作业
+my.learning.homework.check_title: 作业批阅
+my.learning.homework.uncheck: 未批阅
+my.learning.homework.check_finish: 已批阅 
+my.learning.homework.check_reviewing: 批阅中
+my.learning.homework.target_course: >
+  来自课程<a class="link-primary" href="%showUrl%" target="_blank">《%courseTitle%》</a>
+my.learning.homework.course_plan: 计划
+my.learning.homework.begin_time: 开始时间
+my.learning.homework.checking: 正在批阅
+my.learning.homework.right_question_count: >
+  做对<strong>%rightItemCount%</strong>题
+my.learning.homework.total_questions_count: >
+  / 共<strong>%itemCount%</strong>题
+my.learning.homework.uncommit: 未提交
+my.learning.homework.continue_do: 继续做题
+my.learning.homework.show_result: 查看结果
+my.learning.homework.deleted: 该作业已删除
+my.learning.homework.empty: 还没有做过任何作业
+my.learning.homework.submit_paper: 交卷
+my.learning.homework.check_paper: 批阅
+my.learning.homework.watch_paper: 查看
+my.learning.homework.reviewing_empty: 没有需要批阅的作业
+my.learning.homework.check_finished_empty: 没有已批阅的作业
+
+# 我的班级
+my.learning.classroom: 我的%name%
+my.learning.classroom.unpublish: 未发布
+my.learning.classroom.closed: 已关闭
+my.learning.classroom.study_days: 已学了%day%天
+my.learning.classroom.contiune_study: 继续学习
+my.learning.classroom.auditor: 旁听生
+my.learning.classroom.join_classroom: 进入%name%
+my.learning.classroom.study_course_count: 已学%number%课程
+my.learning.classroom.total_course_count: 共%Count%课
+my.learning.classroom.not_join_classroom: 还没有加入%name%！
+
+# 我的话题
+my.learning.thread: 我的话题
+my.learning.thread.question: 问
+my.learning.thread.question_tips: 问答帖
+my.learning.thread.essence: 精
+my.learning.thread.essence_tips: 精华帖
+my.learning.thread.target_classroom: 发表于%name%
+my.learning.thread.deleted: 已删除
+my.learning.thread.last_post: 最后回复
+my.learning.thread.browse: 浏览
+my.learning.thread.question_empty: 你还没提过问题
+my.learning.thread.empty: 你还没有发表过话题
+my.learning.thread.task_id: 课时%taskId%
+my.learning.thread.target_course: >
+ 来自<a href="%showUrl%" class="link-primary">%courseTitle%</a>
+my.learning.thread.target_course_deleted: 课程已删除
+
+# 我的课程
+my.learning.course: 我的课程
+my.learning.course.learning: 学习中
+my.learning.course.learned: 已学完
+my.learning.course.favorite: 收藏
+my.learning.course.favorited: 已收藏
+my.learning.course.favorite_empty: 暂无已收藏的课程
+my.learning.course.learned_empty: 暂无已学完的课程
+my.learning.course.finish_task: 完成任务
+my.learning.course.contiune_study: 继续学习
+my.learning.course.learning_empty: 暂无学习中的课程
+my.learning.course.lesson_num: 第%num%课时
+my.learning.course.total_learn_time: 学习总时长
+my.learning.course.watch: 查看课程
+
+# 我的直播
+my.learning.live: 我的直播
+my.learning.live.course_updating: 更新中
+my.learning.live.course_finished: 已完结
+my.learning.live.course_number: 第%number%课时
+my.learning.live.empty: 没有等待开始的直播课
+
+# 我的小组
+my.learning.group: 我的小组
+my.learning.group.homepage: 小组主页
+my.learning.group.join: 加入的小组
+my.learning.group.post_thread: 发起的话题
+my.learning.group.joined: 我加入的小组
+my.learning.group.post_thread: 我发起的话题
+my.learning.gruop.answer_thread: 回复的话题
+my.learning.group.favorit_thread: 收藏的话题
+my.learning.group.manage_group: 我管理的小组
+
+# 我的笔记
+my.learning.note: 我的笔记
+my.learning.note.total_number: 共 %noteNum% 篇笔记
+my.learning.note.last_update_time: 最后更新%noteLastUpdateTime%
+my.learning.note.watch_link: 查看笔记 
+my.learning.note.empty: 你还没有写过笔记
+my.learning.note.go_back: 返回
+my.learning.note.target_course: 《%title%》的笔记
+my.learning.note.course_task_number: 任务%number%
+my.learning.note.course_task_empty: 该任务已删除
+my.learning.note.total_length: 共%length%字
+my.learning.note.delete: 删除笔记 
+
+# 我的问答
+my.learning.question: 我的问答
+my.learning.question.empty: 暂无提问的记录
+my.learning.question.course_thread: 课程话题
+my.learning.question.classroom_thread: %classroomName%话题
+
+# 我的考试
+my.learning.testpaper: 我的考试
+my.learning.testpaper.record: 考试记录
+my.learning.testpaper.favorit_question: 收藏的题目
+my.learning.testpaper.target_testpaper: 来自试卷《%name%》
+my.learning.testpaper.favorite_time: 收藏于%time%
+my.learning.testpaper.cancel_favorite_btn: 取消收藏
+my.learning.testpaper,favorit_empty: 还没有收藏的题目
+
+
+# 充值记录
+my.money_record.recharge: 充值记录 
+my.money_record.payout_record: 消费记录
+my.money_record.money: 金额
+my.money_record.recharge_mode: 充值方式
+my.money_record.transaction_num: 交易号
+my.money_record.recharge_time: 充值时间
+my.money_record.empty: 无充值记录
+my.money_record.start_recharge: 立即充值
+my.money_record.recharge_help: 充值帮助
+my.money_record.payout_name: 名称
+my.money_record.payout_money: 消费金额
+my.money_record.payout_time: 消费时间
+my.money_record.payout_empty: 无消费记录
 
 #系统后台运营
 admin.article_setting.name: 频道名称
