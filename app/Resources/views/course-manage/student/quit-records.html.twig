@@ -14,7 +14,7 @@
           {% if course.status != 'published' %}
             <button class="btn btn-success btn-sm js-publish-course"
               data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">
-              {{ 'course.plan_task.publish_btn'|trans }}
+              {{ 'course.members_manage.publish_btn'|trans }}
             </button>
           {% endif %}
           {% if course.status == 'published' %}

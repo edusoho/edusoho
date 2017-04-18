@@ -11,26 +11,26 @@
       {{ 'course.teach_plan_manage'|trans }}
       <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#modal"
         data-url="{{ path('course_set_manage_course_create', {courseSetId: courseSet.id}) }}"><i
-          class="es-icon es-icon-anonymous-iconfont"></i>{{ 'course.plan_task.create'|trans }}</button>
+          class="es-icon es-icon-anonymous-iconfont"></i>{{ 'course.teaching_plan.create'|trans }}</button>
     </div>
     <div class="panel-body">
       <table id="courses-list-table" class="table table-striped">
       	<thead>
-      	  <th width="30%">{{'course.plan_task.create.name'|trans}}</th>
+      	  <th width="30%">{{'course.teaching_plan.create.name'|trans}}</th>
           <th>
-            {{'course.plan_task.create.mode'|trans}}
+            {{'course.teaching_plan.create.mode'|trans}}
             <a class="link-medium es-icon es-icon-help ml5 text-normal"
               data-container="body" data-toggle="popover" data-trigger="hover"
               data-placement="top" data-content="<ul class='pl20 ul-list-none'>
-              {{'course.plan_task.create.mode.free'|trans|raw}}
-              {{'course.plan_task.create.mode.limit'|trans|raw}}</ul>">
+              {{'course.teaching_plan.create.mode.free'|trans|raw}}
+              {{'course.teaching_plan.create.mode.limit'|trans|raw}}</ul>">
             </a>
           </th>
-          <th>{{'course.plan_task.create.task_numbers'|trans}}</th>
-          <th>{{'course.plan_task.create.student'|trans}}</th>
-          <th width="15%">{{'course.plan_task.create.price'|trans}}</th>
-          <th>{{'course.plan_task.create.status'|trans}}</th>
-          <th>{{'course.plan_task.create.operation'|trans}}</th>
+          <th>{{'course.teaching_plan.create.task_numbers'|trans}}</th>
+          <th>{{'course.teaching_plan.create.student'|trans}}</th>
+          <th width="15%">{{'course.teaching_plan.create.price'|trans}}</th>
+          <th>{{'course.teaching_plan.create.status'|trans}}</th>
+          <th>{{'course.teaching_plan.create.operation'|trans}}</th>
       	</thead>
       	<tbody>
       		{% for course in courses %}
@@ -38,9 +38,9 @@
       			<td><a class="link-primary" href="{{ path('my_course_show', { id: course.id, previewAs: 'member' }) }}" target="_blank">{{course.title}}</a></td>
             <td>
               {% if course.learnMode|default('freeMode') == 'freeMode' %}
-                {{'course.plan_task.free'|trans}}
+                {{'course.teaching_plan.free'|trans}}
               {% else %}
-                {{'course.plan_task.locked'|trans}}
+                {{'course.teaching_plan.locked'|trans}}
               {% endif %}
             </td>
       			<td>{{course.taskNum|default(0)}}</td>
@@ -61,23 +61,23 @@
             <td>
               <div class="btn-group">
                 <a class="mr10 link-primary"
-                  href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id}) }}">{{ 'course.plan_task.manage_btn'|trans }}</a>
+                  href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id}) }}">{{ 'course.teaching_plan.manage_btn'|trans }}</a>
                 <a class="dropdown-toggle link-primary" href="javascript:;"  data-toggle="dropdown">
-                  {{'course.plan_task.more_btn'|trans}}
+                  {{'course.teaching_plan.more_btn'|trans}}
                   <i class="es-icon es-icon-arrowdropdown"></i>
                 </a>
                 <ul class="dropdown-menu pull-right">
                   <li>
                     <a href="{{ path('my_course_show', { id: course.id, previewAs: 'member' }) }}" target="_blank">
                       <i class="es-icon es-icon-removeredeye mrm"></i>
-                      {{ 'course.plan_task.preview_btn'|trans }}
+                      {{ 'course.teaching_plan.preview_btn'|trans }}
                     </a>
                   </li>
                   <li>
                     <a href="javascript:;" data-toggle="modal" data-target="#modal"
                       data-url="{{ path('course_set_manage_course_copy', {courseSetId: courseSet.id, courseId: course.id}) }}">
                       <i class="es-icon es-icon-contentcopy mrm"></i>
-                      {{ 'course.plan_task.copy_btn'|trans }}
+                      {{ 'course.teaching_plan.copy_btn'|trans }}
                     </a>
                   </li>
                   {% if course.status|default('') == 'published' %}
@@ -94,12 +94,12 @@
                     <li>
                       <a href="javascript:;"
                         data-url="{{ path('course_set_manage_course_delete', {courseSetId: courseSet.id, courseId: course.id}) }}"
-                        class="js-delete-course"><i class="es-icon es-icon-delete mrm"></i>{{ 'course.plan_task.delete_btn'|trans }}</a>
+                        class="js-delete-course"><i class="es-icon es-icon-delete mrm"></i>{{ 'course.teaching_plan.delete_btn'|trans }}</a>
                     </li>
                     <li>
                       <a href="javascript:;"
                         data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}"
-                        class="js-publish-course"><i class="es-icon es-icon--check-circle mrm"></i>{{ 'course.plan_task.publish_btn'|trans }}</a><!-- 已发布的不能删除，可关闭 -->
+                        class="js-publish-course"><i class="es-icon es-icon--check-circle mrm"></i>{{ 'course.teaching_plan.publish_btn'|trans }}</a><!-- 已发布的不能删除，可关闭 -->
                     </li>
                   {% endif %}
                 </ul>
