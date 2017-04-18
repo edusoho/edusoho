@@ -5,9 +5,9 @@
 
 {% block title %}
   {% if course|default(false) %}
-    {{'course.plan_task.edit.copy'|trans({'%title%':'"' ~ course.title ~ '"'})}}
+    {{'course.teaching_plan.edit.copy'|trans({'%title%':'"' ~ course.title ~ '"'})}}
   {% else %}
-    {{ 'course.plan_task.create'|trans }}
+    {{ 'course.teaching_plan.create'|trans }}
   {% endif %}
 {% endblock %}
 
@@ -22,7 +22,7 @@
         method="post">
         <div class="form-group">
           <div class="col-sm-2 control-label">
-            <label for="title" class="control-label-required">{{'course.plan_task.create.new_plan_name'|trans}}</label>
+            <label for="title" class="control-label-required">{{'course.teaching_plan.create.new_plan_name'|trans}}</label>
           </div>
           <div class="col-sm-8">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
@@ -34,28 +34,28 @@
         </div>
         <div class="form-group">
           <label for="learnMode" class="col-sm-2 control-label">
-            {{'course.plan_task.create.mode'|trans}}
+            {{'course.teaching_plan.create.mode'|trans}}
             <a class="es-icon es-icon-help ml5 link-gray text-normal" data-trigger="hover"
               data-toggle="popover" data-container="body" data-placement="top"
               data-content="<ul class='pl10 ul-list-none'>
-              {{'course.plan_task.create.mode.free'|trans|raw}}
-              {{'course.plan_task.create.mode.limit'|trans|raw}}</ul>">
+              {{'course.teaching_plan.create.mode.free'|trans|raw}}
+              {{'course.teaching_plan.create.mode.limit'|trans|raw}}</ul>">
             </a>
           </label>
           <div class="col-sm-8 radios">
-            {{ radios('learnMode', { 'freeMode': 'course.plan_task.free'|trans, 'lockMode': 'course.plan_task.locked'|trans }, course.learnMode|default('freeMode')) }}
-            <div class="color-warning">{{'course.plan_task.create.create_tips'|trans}}</div>
+            {{ radios('learnMode', { 'freeMode': 'course.teaching_plan.free'|trans, 'lockMode': 'course.teaching_plan.locked'|trans }, course.learnMode|default('freeMode')) }}
+            <div class="color-warning">{{'course.teaching_plan.create.create_tips'|trans}}</div>
           </div>
         </div>
 
         <div class="form-group">
             <label class="col-sm-2 control-label">
-              {{'course.plan_task.expiry_date'|trans}}
+              {{'course.teaching_plan.expiry_date'|trans}}
               <a class="es-icon es-icon-help ml5 link-gray text-normal" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top"
                 data-content="<ul class='pl10 ul-list-none'>
-                  <li class='mb10'>{{'course.plan_task.expiry_date.anytime'|trans|raw}}</li>
-                  <li class='mb10'>{{'course.plan_task.expiry_date.real_time'|trans|raw}}</li>
-                  <li>{{'course.plan_task.expiry_date.overdue_tips'|trans}}</li>
+                  <li class='mb10'>{{'course.teaching_plan.expiry_date.anytime'|trans|raw}}</li>
+                  <li class='mb10'>{{'course.teaching_plan.expiry_date.real_time'|trans|raw}}</li>
+                  <li>{{'course.teaching_plan.expiry_date.overdue_tips'|trans}}</li>
                 </ul>">
               </a>
             </label>
@@ -63,7 +63,7 @@
                 {{
                   radios(
                     'expiryMode',
-                    { 'forever':'course.plan_task.expiry_date.forever_mode'|trans, 'days': 'course.plan_task.expiry_date.anywhere_mode'|trans, 'date': 'course.plan_task.expiry_date.date_mode'|trans },
+                    { 'forever':'course.teaching_plan.expiry_date.forever_mode'|trans, 'days': 'course.teaching_plan.expiry_date.anywhere_mode'|trans, 'date': 'course.teaching_plan.expiry_date.date_mode'|trans },
                     'forever'
                   )
                 }}
@@ -72,7 +72,7 @@
                   {{
                     radios(
                       'deadlineType',
-                      { 'end_date': 'course.plan_task.expiry_date.end_date_mode'|trans, 'days': 'course.plan_task.expiry_date.days_mode'|trans}
+                      { 'end_date': 'course.teaching_plan.expiry_date.end_date_mode'|trans, 'days': 'course.teaching_plan.expiry_date.days_mode'|trans}
                     )
                   }}
                   <div class="mb20 mt20 hidden" id="deadlineType-date">
@@ -90,7 +90,7 @@
                   <input class="form-control ml5 width-150 " type="text" id="expiryEndDate" name="expiryEndDate"
                   value="">
                 </div>
-                <div class="color-warning">{{'course.plan_task.expiry_date.not_change_tips'|trans}}</div>
+                <div class="color-warning">{{'course.teaching_plan.expiry_date.not_change_tips'|trans}}</div>
             </div>
           </div>
       </form>
