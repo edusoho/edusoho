@@ -51,7 +51,7 @@
           {% endif %}
         </div>
         <div class="col-md-12">
-          {% if tab == "trend" and dataInfo.analysisDateType != 'courseSetSum' and dataInfo.analysisDateType != 'userSum' %}
+          {% if tab == "trend" and not dataInfo.analysisDateType in ['courseSetSum', 'userSum', 'course-sum'] %}
             <p class="text-muted">
               <span class="mrl">{{ '总数：'|trans }}<strong class="inflow-num">{{ count|default(0) }}</strong></span>
             </p>
