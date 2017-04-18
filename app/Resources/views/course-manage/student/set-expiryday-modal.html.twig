@@ -1,5 +1,7 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 {% block title %}{{'增加'|trans}}{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{'学员'|trans}}{% endif %}{{'课程有效期'|trans}}{% endblock %}
+{% do script(['libs/jquery-validation.js','app/js/course-manage/student-expiryday/index.js'])%}
+
 {% block body %}
 <form id="expiryday-set-form" class="form-horizontal" method="post" action="{{ path('course_set_manage_course_students_expiryday', { courseSetId: course.courseSetId, courseId:course.id, userId:user.id }) }}">
   {% if course.status == 'published' %}
@@ -37,10 +39,10 @@
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
 {% endblock %}
+
 {% block footer %}
   {% if course.status == 'published' %}
-    <button type="submit" id="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#expiryday-set-form" data-user="{{ setting('default.user_name')|default('学员'|trans) }}">{{'保存'|trans}}</button>
+    <button type="button" id="submit" class="btn btn-primary pull-right js-save-expiryday-set-form" data-target="#expiryday-set-form" data-user="{{ setting('default.user_name')|default('学员'|trans) }}">{{'保存'|trans}}</button>
   {% endif %}
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
-  <script>app.load('course-manage/set-expiryday-modal')</script>
 {% endblock %}

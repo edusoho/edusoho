@@ -1,10 +1,9 @@
-{% extends 'old-bootstrap-modal-layout.html.twig' %}
-
+{% extends 'bootstrap-modal-layout.html.twig' %}
 {% block title %}{{'退出学习'|trans}}{% endblock %}
+{% do script(['app/js/order-refund/order-refund-modal/index.js'])%}
+
 {% block body %}
-
   <form id="refund-form" class="form-horizontal" method="post" action="{{ path('order_refund', {id:target.id, targetType:targetType}) }}" data-goto="{{ path(targetType ~ '_show', {id:target.id}) }}">
-
     <div class="form-group">
       <div class="col-md-3 control-label">{{'退学原因'|trans}}</div>
       <div class="col-md-8 controls">
@@ -18,7 +17,6 @@
       </div>
     </div>
     {% if order.payment != 'coin' and maxRefundDays > 0 and (order.amount * 100) > 0 %}
-
       <div class="form-group">
         <div class="col-md-8 col-md-offset-3">
           <div class="checkbox">
@@ -29,16 +27,11 @@
           {% endif %}
         </div>
       </div>
-
     {% endif %}
-
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-
   </form>
 {% endblock %}
 
 {% block footer %}
   <button class="btn btn-danger refund-btn" type="submit" data-toggle="form-submit" data-target="#refund-form" data-loading-text="{{'正在退出'|trans}}...">{{'退出学习'|trans}}</button>
-  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-  <script>app.lazyLoad = function() {app.load('order-refund/order-refund-modal')}</script>
 {% endblock %}

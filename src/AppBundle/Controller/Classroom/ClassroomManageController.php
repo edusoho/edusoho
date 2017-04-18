@@ -484,22 +484,21 @@ class ClassroomManageController extends BaseController
         );
     }
 
+
     public function checkStudentAction(Request $request, $id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
 
         $keyWord = $request->query->get('value');
         $user = $this->getUserService()->getUserByLoginField($keyWord);
-
+        $response = true;
         if (!$user) {
-            $response = array('success' => false, 'message' => '该用户不存在');
+            $response = '该用户不存在';
         } else {
             $isClassroomStudent = $this->getClassroomService()->isClassroomStudent($id, $user['id']);
 
             if ($isClassroomStudent) {
-                $response = array('success' => false, 'message' => '该用户已是本班级的学员了');
-            } else {
-                $response = array('success' => true, 'message' => '');
+                $response = '该用户已是本班级的学员了';
             }
         }
 
