@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ApiConf;
+use Biz\Course\Service\CourseSetService;
 
 class CourseSet extends AbstractResource
 {
@@ -14,7 +15,7 @@ class CourseSet extends AbstractResource
      */
     public function get(ApiRequest $request, $courseSetId)
     {
-        $courseSet = $this->service('Course:CourseSetService')->getCourseSet($courseSetId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
 
         if (empty($courseSet)) {
             throw new ResourceNotFoundException('课程不存在');
@@ -34,23 +35,25 @@ class CourseSet extends AbstractResource
         $conditions['status'] = 'published';
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $courseSets = $this->service('Course:CourseSetService')->searchCourseSets(
+        $courseSets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
-            array('createdTime' => 'DESC'),
+            $this->getSort($request),
             $offset,
             $limit
         );
 
         $this->getOCUtil()->multiple($courseSets, array('creator', 'teacherIds'));
 
-        $total = $this->service('Course:CourseSetService')->countCourseSets($conditions);
+        $total = $this->getCourseSetService()->countCourseSets($conditions);
 
         return $this->makePagingObject($courseSets, $total, $offset, $limit);
     }
 
-    public function add()
+    /**
+     * @return CourseSetService
+     */
+    private function getCourseSetService()
     {
-
+       return $this->service('Course:CourseSetService');
     }
-
 }
