@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
+use Biz\Taxonomy\TagOwnerManager;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
@@ -1055,10 +1056,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $fields,
             function ($value) {
                 if ($value === '' || $value === null) {
-                    return false;
-                }
-
-                if (is_array($value) && empty($value)) {
                     return false;
                 }
 
