@@ -32,7 +32,7 @@
                   {{ course.title }}
                 </a>
                 -
-                <a href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" class="link-primary">
+                <a href="{{ path('course_show',{id: courseSets[course.courseSetId].id}) }}" class="link-primary">
                   {{ courseSets[course.courseSetId].title }}
                 </a>
               </span>
