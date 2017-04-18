@@ -31,15 +31,16 @@ class RelatedCourseSetsDataTag extends CourseBaseDataTag implements DataTag
         //对值按从大到小排序
         arsort($courseSetIds);
         $courseSetIds = array_keys($courseSetIds);
-        if (count($courseSetIds) > $count) {
-            $courseSetIds = array_slice($courseSetIds, 0, $count);
-        }
 
-        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        $courseSets = $this->getCourseSetService()->searchCourseSets(array('ids' => $courseSetIds, 'parentId' => 0), array(), 0, PHP_INT_MAX);
 
         uksort($courseSets, function ($c1, $c2) use ($courseSetIds) {
             return array_search($c1, $courseSetIds) > array_search($c2, $courseSetIds);
         });
+
+        if (count($courseSets) > $count) {
+            return array_slice($courseSets, 0, $count);
+        }
 
         return $courseSets;
     }
