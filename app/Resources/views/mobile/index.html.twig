@@ -1,9 +1,9 @@
-{% extends 'old-layout.html.twig' %}
-
-{% set script_controller = 'mobile/index' %}
+{% extends 'layout.html.twig' %}
+{% block title %}{{'移动学习'|trans}} - {{ parent() }}{% endblock %}
 {% set isEsApp = (mobileCode == 'edusohov3') %}
 
-{% block title %}{{'移动学习'|trans}} - {{ parent() }}{% endblock %}
+{% do script(['libs/jquery-waypoints.js','app/js/mobile/index.js']) %}
+
 
 {% block full_content %}
   <div class="es-mobile">

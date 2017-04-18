@@ -1,6 +1,7 @@
-{% extends 'old-layout.html.twig' %}
+{% extends 'layout.html.twig' %}
 {% block title %} {{'订单确认'|trans}} - {{ parent() }}{% endblock %}
-{% set script_controller = 'order/create' %}
+
+{% do script(['libs/jquery-validation.js', 'app/js/order/create/index.js']) %}
 
 {% block esBar %}{% endblock %}
 
@@ -72,7 +73,7 @@
           {% if ((setting('cloud_sms.sms_enabled')|default('')) == '1') and ((setting('cloud_sms.sms_user_pay')|default('')) == 'on') %}
             <a class="btn btn-primary" id="js-order-create-sms-btn" data-toggle="modal" data-target="#modal" data-url="{{path('order_pay_sms_verification')}}" >{{'提交订单'|trans}}</a>
           {% else %}
-            <button class="btn btn-primary" id="order-create-btn" type="submit">{{'提交订单'|trans}}</button>
+            <button class="btn btn-primary" id="order-create-btn" type="button" data-loading-text="{{ '正在提交...'|trans }}">{{'提交订单'|trans}}</button>
           {% endif %}
         </div>
       </form>

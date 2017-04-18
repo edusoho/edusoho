@@ -1,4 +1,4 @@
-{% extends 'old-layout.html.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% block title %}{{setting('coin.coin_name')}}{{'说明'|trans}} - {{ parent() }}{% endblock %}
 {% block description %}{{ coinSetting.coin_content|plain_text(100) }}{% endblock %}

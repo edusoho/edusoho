@@ -1,6 +1,8 @@
-{% do load_script('review/list') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 {% import "macro.html.twig" as web_macro %}
+{% do script(['libs/jquery-raty.js','libs/jquery-validation.js','app/js/review/list/index.js'])%}
+
+{#{% do load_script('review/list') %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}#}
 
 {% if member|default(false) and not ('auditor' in member.role) %}
   <div class="clearfix">
@@ -31,10 +33,10 @@
         </div>
         <div class="content">
           <div class="short-content">{{ review.content|sub_text(100) }}
-            {% if review.updatedTime %}<span class="label label-success">{{'追评'|trans}}</span>{% endif %}
+            {% if review.updatedTime != review.createdTime and review.updatedTime is not null %}<span class="label label-success">{{'追评'|trans}}</span>{% endif %}
           </div>
           <div class="full-content" style="display:none;">{{ review.content|nl2br }}
-            {% if review.updatedTime %}<span class="label label-success">{{'追评'|trans}}</span>{% endif %}
+            {% if review.updatedTime != review.createdTime and review.updatedTime is not null %}<span class="label label-success">{{'追评'|trans}}</span>{% endif %}
           </div>
         </div>
         <div class="actions clearfix">

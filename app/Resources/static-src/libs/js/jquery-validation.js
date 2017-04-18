@@ -44,11 +44,12 @@ $.validator.setDefaults({
       $.post($form.attr('action'), $form.serializeArray(), (data) => {
         settings.submitSuccess(data);
       }).error(() => {
-        settings.currentDom ? settings.currentDom.button('reset') : '';
+        settings.currentDom ? $(settings.currentDom).button('reset') : '';
         settings.submitError();
       });
     } else {
       form.submit();
+      settings.currentDom ? $(settings.currentDom).button('reset') : '';
     }
   }
 });
@@ -86,7 +87,7 @@ $.extend($.validator.prototype, {
         }
       }
 
-      name = $(element).attr("name");
+      name = $(element).data('display') || $(element).attr("name");
       message = message.replace(displayregex, labeltext || name)
     }
 
@@ -120,6 +121,20 @@ $.validator.addMethod("DateAndTime", function (value, element) {
   let reg = /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}$/;
   return this.optional(element) || reg.test(value);
 }, $.validator.format("请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm"));
+
+function strlen(str) {
+  let len = 0;
+  for (let i = 0; i < str.length; i++) {
+    let chars = str.charCodeAt(i);
+    //单字节加1   
+    if ((chars >= 0x0001 && chars <= 0x007e) || (0xff60 <= chars && chars <= 0xff9f)) {
+      len++;
+    } else {
+      len += 2;
+    }
+  }
+  return len;
+}
 
 $.validator.addMethod("trim", function (value, element, params) {
   return $.trim(value).length > 0;
@@ -178,6 +193,7 @@ $.validator.addMethod('positive_integer', function (value, element, params = tru
   return this.optional(element) || /^\+?[1-9][0-9]*$/.test(value);
 }, jQuery.validator.format("请输入正整数"));
 
+
 $.validator.addMethod('unsigned_integer', function (value, element) {
   return this.optional(element) || /^\+?[0-9][0-9]*$/.test(value);
 }, jQuery.validator.format("请输入非负整数"));
@@ -193,6 +209,14 @@ jQuery.validator.addMethod("second_range", function (value, element) {
 $.validator.addMethod("course_title", function (value, element, params) {
   return this.optional(element) || /^[^<|>]*$/.test(value);
 }, Translator.trans('不支持输入<、>字符'));
+
+$.validator.addMethod('float', function (value, element) {
+  return this.optional(element) || /^(([+-]?[1-9]{1}\d*)|([+-]?[0]{1}))(\.(\d){1,2})?$/i.test(value);
+}, jQuery.validator.format("请输入正确的小数,只保留到两位小数"));
+
+$.validator.addMethod('date', function (value, element) {
+  return this.optional(element) || /^\d{4}\-[01]?\d\-[0-3]?\d$|^[01]\d\/[0-3]\d\/\d{4}$|^\d{4}年[01]?\d月[0-3]?\d[日号]$/.test(value);
+}, jQuery.validator.format("请输入正确的日期"));
 
 $.validator.addMethod("open_live_course_title", function (value, element, params) {
   return this.optional(element) || /^[^<|>|'|"|&|‘|’|”|“]*$/.test(value);
@@ -264,6 +288,141 @@ $.validator.addMethod("feature", function (value, element, params) {
   Translator.trans('购买截止时间需在当前时间之后')
 );
 
-// jQuery.validator.addMethod("url", function (value, element) {
-//   return this.optional(element) || /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/.test(value);
-// }, "URL的格式不正确");
+$.validator.addMethod('qq', function (value, element) {
+  return this.optional(element) || /^[1-9]\d{4,}$/.test(value);
+}, jQuery.validator.format('请输入正确的QQ号'));
+
+$.validator.addMethod('mobile', function (value, element) {
+  return this.optional(element) || /^1\d{10}$/.test(value);
+}, jQuery.validator.format('请输入正确的手机号'));
+
+$.validator.addMethod('url', function (value, element) {
+  return this.optional(element) || /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/.test(value)
+}, jQuery.validator.format('地址不正确，须以http://或者https://开头。'));
+
+$.validator.addMethod('passwordCheck', function (value, element) {
+  let url = $(element).data('url') ? $(element).data('url') : null;
+  let type = $(element).data('type') ? $(element).data('type') : 'POST';
+  let isSuccess = 0;
+  $.ajax({
+    url: url,
+    type: type,
+    async: false,
+    data: { value: value },
+    dataType: 'json'
+  })
+    .success(function (response) {
+      isSuccess = response.success;
+    })
+  return this.optional(element) || isSuccess
+}, Translator.trans('密码错误'))
+
+$.validator.addMethod('chinese', function (value, element) {
+  return this.optional(element) || /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3])*$/i.test(value);
+}, jQuery.validator.format('必须是中文字'));
+
+$.validator.addMethod('chinese_limit', function (value, element, params) {
+  let l = strlen(value);
+  console.log('params', params)
+  return this.optional(element) || l <= Number(params);
+}, jQuery.validator.format('长度必须小于等于 {0} 字符,一个中文为2个字符'));
+
+$.validator.addMethod('isImage', function (value, element) {
+
+  if (navigator.userAgent.toLowerCase().indexOf('msie') > 0) {
+    return this.optional(element) || true;
+  }
+
+  const imgType = ['jpg', 'JPG', 'jpeg', 'JPEG', 'bmp', 'BMP', 'gif', 'GIF', 'png', 'PNG'];
+
+  // imgType = $(element).attr('accept').replace(/image\//g,"").split(',');
+
+  for (let i = 0; i < imgType.length; i++) {
+    if (value.indexOf(imgType[i]) > 0) {
+      return this.optional(element) || true;
+    }
+  }
+
+}, jQuery.validator.format('只能上传图片'));
+
+$.validator.addMethod('limitSize', function (value, element) {
+  if (navigator.userAgent.toLowerCase().indexOf('msie') > 0) {
+    return this.optional(element) || true;
+  }
+
+  const fileSize = $(element)[0]['files'][0].size;
+
+  return this.optional(element) || fileSize / 1024 <= 2048;
+
+}, jQuery.validator.format('大小不能超过2M'));
+
+
+jQuery.validator.addMethod("max_year", function (value, element) {
+  return this.optional(element) || value < 100000;
+}, "有效期最大值不能超过99,999天");
+
+$.validator.addMethod("feature", function (value, element, params) {
+  return value && (new Date(value).getTime()) > Date.now();
+},
+  Translator.trans('购买截止时间需在当前时间之后')
+);
+
+$.validator.addMethod("next_day", function (value, element, params) {
+  let now = new Date();
+  let next = new Date(now + 86400 * 1000);
+  return value && next <= new Date(value);
+},
+  Translator.trans('开始时间应晚于当前时间')
+);
+
+$.validator.addMethod("chinese_alphanumeric", function (value, element, params) {
+  return this.optional(element) || /^([\u4E00-\uFA29]|[a-zA-Z0-9_.·])*$/i.test(value)
+}, jQuery.validator.format('支持中文字、英文字母、数字及_ . ·'));
+
+$.validator.addMethod("alphanumeric", function (value, element, params) {
+  return this.optional(element) ||  /^[a-zA-Z0-9_]+$/i.test(value)
+}, jQuery.validator.format('必须是英文字母、数字及下划线组成'));
+
+$.validator.addMethod("nickname", function (value, element, params) {
+
+  return this.optional(element) || ! /^1\d{10}$/.test(value)
+}, jQuery.validator.format('不允许以1开头的11位纯数字'));
+
+
+$.validator.addMethod("nickname_remote", function (value, element, params) {
+  let isSuccess = 0;
+
+  let url = $(element).data('url') ? $(element).data('url') : null;
+
+  $.ajax({
+    url: url,
+    type: 'GET',
+    async: false,
+    data: { value: value },
+    dataType: 'json'
+  })
+    .success(function (response) {
+      isSuccess = response.success;
+    })
+
+  return this.optional(element) || isSuccess;
+
+}, jQuery.validator.format('该用户名已存在'))
+
+// Validator.addRule(
+//   'time_check',
+//   /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}$/,
+//   Translator.trans('请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm')
+// );
+
+$.validator.addMethod('raty_star', function (value, element) {
+  return this.optional(element) || /^[1-5]$/.test(value);
+}, Translator.trans('请打分'));
+
+$.validator.addMethod('reg_inviteCode', function (value, element) {
+  return this.optional(element) || /^[a-z0-9A-Z]{5}$/.test(value);
+}, Translator.trans('必须是5位数字、英文字母组成'));
+
+'reg_inviteCode',
+            /^[a-z0-9A-Z]{5}$/,
+            Translator.trans('%display%必须是5位数字、英文字母组成', {display: '{{display}}'})
