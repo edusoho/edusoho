@@ -144,6 +144,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $course = $this->validateExpiryMode($course);
 
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $course['maxRate'] = $courseSet['maxRate'];
+
         $course['status'] = 'draft';
         $course['creator'] = $this->getCurrentUser()->getId();
         try {

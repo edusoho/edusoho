@@ -372,6 +372,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
 
         $courseSet['status'] = 'draft';
+
+        $coinSetting = $this->getSettingService()->get('coin', array());
+        if (!empty($coinSetting['coin_enabled']) && (bool) $coinSetting['coin_enabled']) {
+            $courseSet['maxRate'] = 100;
+        }
+
         $courseSet['creator'] = $this->getCurrentUser()->getId();
         $created = $this->getCourseSetDao()->create($courseSet);
 
@@ -1017,6 +1023,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return \Biz\System\Service\SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 
     protected function generateDefaultCourse($created)
