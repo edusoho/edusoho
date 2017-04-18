@@ -1,6 +1,6 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{{'发送私信'|trans}}{% endblock %}
+{% block title %}{{'message.create.content_title'|trans}}{% endblock %}
 
 {% block body %}
   <form id="message-create-form" class="form-horizontal" method="post" action="{{ path('message_create', {toId:userId}) }}">

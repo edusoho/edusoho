@@ -44,6 +44,7 @@ site.message.info: 提示信息
 site.message.warning: 警告信息
 site.message.error: 错误提示
 site.power_by: 好知网
+site.default.student: 学员
 site.default.classroom: 班级
 site.default.student: 学员
 site.default.reviewing: 已批阅
@@ -128,6 +129,36 @@ email.email_verify: >
   (这是一封自动产生的email，请勿回复。)
 
 
+#es_bar
+es_bar.mobile: 手机端
+es_bar.go_top: 回到顶端
+es_bar.study_place.content_title: 我的课程/%name%
+es_bar.study_center.content_title: 学习中心
+es_bar.study_center.study_mission: 学习任务
+es_bar.study_center.mission_number_and_title: 任务%number%-%title%
+es_bar.study_center.course_title: 课程:%title%
+es_bar.study_center.mission_empty_tips: >
+  暂未发现还有未学习任务。<a href="%courseSetExplore%">去逛逛
+es_bar.study_center.recent_live_tasks: 预告板
+es_bar.study_place.classroom_course_num: 共%courseNum%门课程
+es_bar.study_place.empty_classroom_tips: 暂无%name%
+es_bar.practice.content_title: 我的考试/作业
+es_bar.practice.practice_finished: 已批阅
+es_bar.practice.practice_reviewing: 已提交
+es_bar.practice.testpaper: 考试
+es_bar.practice.testpaper_empty_tips: 暂无考试
+es_bar.practice.homework: 作业
+es_bar.practice.homework_empty_tips: 暂无作业
+es_bar.notification.empty_tips: 暂无通知
+es_bar.notification.content_title: 通知
+es_bar.consult.click_to_send_msg_tips: 点击这里给我发消息
+es_bar.consult.work_time: 工作时间：%worktime% 
+es_bar.consult.email: 邮箱：
+es_bar.study_center: 学<br>习<br>中<br>心
+es_bar.qq_consult: QQ客服及QQ群
+es_bar.phone_consult: 电话客服
+es_bar.notification: 通知
+
 # TODO 命名有问题
 status: 状态
 price: 价格
@@ -147,9 +178,10 @@ date.format: Y年m月d日
 
 #分页
 paginator.firstPage: 首页
-paginator.lastPage: 尾页
-paginator.PreviousPage: 上一页
-paginator.NextPage: 下一页
+paginator.endPage: 尾页
+paginator.nextPage: 下一页
+paginator.lastPage: 上一页
+
 
 # 用户通用
 user: 用户
@@ -190,8 +222,8 @@ user.btn.send_message: 私信
 user.btn.confirm_login_password: 确认登录密码
 user.not_login.tips: >
   你还没有登录，请先
-  %login%
-  %register%
+  <a href='%login%'>登录或</a>
+  <a href='%register%'>注册！</a>
 user.approve_tips: 温情提示：如果您的资料有变更，请在此修改，以便更好的为您服务！
 user.email_tips: 为了帐号的安全，以及更好的使用体验，请设置您的Email地址。
 user.approved: 已认证
@@ -520,6 +552,41 @@ question.type.essay: 问答题
 question.type.material: 材料题
 question.nums: 题数
 question.score: 分数
+question.choice.content_title: 选择选题
+question.no_analysis: 无解析
+question.view_analysis_btn: 查看解析
+question.correct_answer: 正确答案是
+question.determine.content_title: 判断题
+question.answer_correct: 正确
+question.answer_wrong: 错误
+question.fill.content_title: 填空题
+question.correct_answer_tips: 正确答案
+question.fill_correct_answer: 填空(%index%):正确答案
+question.compelete: 完成
+question.next: 下一题
+question.fill.input_placeholder: 填空(%index%)答案，请填在这里
+question.submit_btn: 提 交
+question.marker_manage.content_title: 弹题管理
+question.marker_manage.practice: 随堂练习
+question.marker_manage.tips: 为保险起见，所有对视频的编辑操作都将实时保存。
+question.marker_manage.understand_btn: 知道了
+question.marker_manage.preview_btn: 预览
+question.marker_preview.content_title: 弹题管理
+question.marker_preview.video_preview: 视频预览
+question.marker_manage.return: 返回
+question.marker_search.empty_tips: 暂无题目
+question.marker_search.more_questions: 更多题目
+question.marker_search.submiting: 正在加载...
+question.marker_question.difficulty_control_tips: 学习过程控制强度：
+question.marker_question.difficulty.strong: 强
+question.marker_question.difficulty.middle: 中
+question.marker_question.difficulty.weak: 弱
+question.marker_question.select_tips: 仅支持选择题、填空、判断题三类题型。
+question.marker_question.understand_btn: 知道了
+question.marker_question.add_practice_tips: >
+  <p class="title">添加随堂练习，只需一步操作</p>
+  <p class="text-md">将题目拖拽到<span class='color-warning'>「视频编辑区域」</p>
+question.marker_question.video_edit_block: 视频编辑区域
 
 # 教学资料库
 material_lib: 教学资料库material_lib.my: 我的资料
@@ -617,10 +684,13 @@ material_lib.btn.back: 返回列表
 
 # 课程
 course: 课程
-coruse.member_buyed: 已购买
+course.lesson: 课时
+course.preview: 预览
+course.empty_tips: 暂无课程
+course.member_buyed: 已购买
 course.member_learn_status.none: 未学
 course.member_learn_status.learned: 已学完
-coruse.member_learn_status.learning: 学习中
+course.member_learn_status.learning: 学习中
 course.lesson_num: %lessonNum%课时
 course.content_empty: 暂无课程内容
 course.create.tips: 请先完成以下设置，才能创建课程：
@@ -844,6 +914,7 @@ course.testpaper_check.status.check: 已批
 course.testpaper_check.status.not_check: 未批
 course.testpaper_check.status.not_submit: 未交
 
+course.homepage.re_try_btn: 再次尝试
 course.homework_check: 作业批阅
 course.homework_check.no_permission_tips: 当前用户不是本课程教师，没有批阅作业的权限。
 course.homework_check.review_btn: 批阅
@@ -866,6 +937,18 @@ course.homework_check.review.common_comments: >
   <option value="4">有点松懈了吧？继续加油吧！</option>
   <option value="5">用心、专注、坚持，你能做的更好的！</option>
 course.homework_check.review.score: 试卷得分
+
+course.homework_check.teacher_say.default: 常用评语
+course.homework_check.teacher_say.option_one: 继续努力，继续进步！
+course.homework_check.teacher_say.option_two: 不错，有进步，再努力些就会更棒！
+course.homework_check.teacher_say.option_three: 你真棒！我为你骄傲！
+course.homework_check.teacher_say.option_four: 有点松懈了吧？继续加油吧！
+course.homework_check.teacher_say.option_five: 用心、专注、坚持，你能做的更好的！
+course.homework_check.finish_check: 完成批阅
+course.homework_check.finish_check_submiting: 正在提交, 请稍等
+course.homework_check.teacher_say.input_placeholder: 请输入评语
+course.homework_check.need_check_item: >
+  待批阅题目 <small class="color-gray">共%itemCount%题</small>
 
 course.dashboard: 学习数据
 course.dashboard.content_title: 课程学习数据
@@ -1279,6 +1362,8 @@ course.course_files.subtitle_manage.content_title: 字幕管理
 course.course_files.subtitle_manage.subtitle: 字幕
 course.course_files.subtitle_manage.preview_btn: 预览
 course.course_files.subtitle_manage.add_tips: 目前仅支持srt字幕，最多上传4个字幕
+course.course_files.subtitle_dialog.delete_btn: 删除
+course.course_files.subtitle_preview.content_title: 视频预览 
 course.course_files.last_update: 最后更新
 course.course_files.operation: 操作
 course.course_files.empty: 无文件记录
@@ -1511,6 +1596,58 @@ course.plan_task.activity_manage.video.learn_time: 学习时长
 course.plan_task.activity_manage.video.buy_tips: 立刻购买本课程，即可获得全部完整学习内容。
 course.plan_task.activity_manage.video.try_watch_tips: 您可以免费试看前%tryLookLength%分钟,购买后可完整观看。
 course.plan_task.activity_manage.create_btn: 前往课程讨论区
+course.recommend_course.content_title: 推荐课程
+course.recommend_course.empty_tips: 暂无推荐课程
+
+course.live.enter_classroom_tips: 正在打开教室，请稍后
+course.live_lesson_manage.content_title.create: 新增直播课时
+course.live_lesson_manage.content_title.edit: 编辑直播课时 
+course.live_lesson_manage.title: 标题
+course.live_lesson_manage.live_start_time: 直播开始时间
+course.live_lesson_manage.live_start_time_hint: 教师可在直播开始前1小时内进入直播教室，以准备相关教学资料。
+course.live_lesson_manage.live_length: 直播时长
+course.live_lesson_manage.live_about: 直播说明
+course.live_lesson_manage.live_length.input_placeholder: 时长
+course.live_lesson_manage.live_length.minutes: 分钟
+
+course.live.replay_manage.chapter: >
+  第 <span class="number">%chapterName%</span>
+course.live.replay_manage.file_edit_btn: 编辑
+course.live.replay_manage.file_chooser_tips: >
+  正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。<br />转换完成后将以站内消息通知您。
+course.live.replay_manage.file_upload: 上传视频
+course.live.replay_manage.upload_form_material: 从资料库中选择
+course.live.replay_manage.upload_form_course_file: 从课程文件中选择
+course.live.replay_manage.upload_mode_cloud_tips: >
+  <li>支持<strong>mp4, avi, flv, f4v, wmv, mov, rmvb, mkv, m4v</strong>格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。</li>
+  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+  <li>视频将上传到<strong>云视频服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li> 
+course.live.replay_manage.upload_mode_not_cloud_tips: >
+  <li>支持<strong>mp4</strong>格式的视频文件上传，文件大小不能超过<strong>%uploadMaxFileSize% </strong>。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
+  <li>
+    视频将上传到<strong>网站服务器</strong>。如需使用%edusoho%云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情,%edusoho%云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验
+  </li>
+course.live.replay_manage.file_empty_tips: 暂无视频文件，请先上传。
+course.live.replay_manage.content_title: 录播管理
+course.live.replay_manage.lesson_empty_tips: 暂无课时内容！
+course.live.replay_manage.upload_tips: 提示：上传录像文件后 <b>无法再生成</b> 在线录像
+course.live.replay_manage.lesson_status.unpublished: 未发布
+course.live.replay_manage.lesson_status.published: 直播未结束
+course.live.replay_manage.lesson_replay_status.ungenerated: 未录制回放
+course.live.replay_manage.lesson_replay_status.generated: 已录制回放
+course.live.replay_manage.lesson_replay_status.videoGenerated: 已上传录像
+course.live.replay_manage.lesson_replay_status.videoGenerated_and_file_empty: 回放视频文件已删除
+course.live.replay_manage.lesson_edit_btn: 编辑
+course.live.replay_manage.upload_btn: 上传回放
+course.live.replay_manage.record: 录制
+course.live.replay_manage.re_record: 重新录制 
+course.live.replay_manage.replay_lesson.content_title: 录播显示编辑
+course.live.replay_manage.lesson_edit_content_title: 编辑回放视频
+course.live.replay_manage.lesson_add_content_title: 添加回放视频
+course.live.replay_manage.lesson_add_btn: 添加
+
+course.liveroom.content_title: 直播教室
+course.liveroom.open_liveroom_tips: 正在打开教室，请稍后
 
 course.cover: 课程封面
 course.cover_image: 封面图片
@@ -2215,7 +2352,97 @@ classroom.watch_data: 查看资料
 classroom.manage_btn: 管理
 classroom.remove: 移除
 
+# 表单通用
+form.field.filter: 筛选
+form.radio_btn.true: 是
+form.radio_btn.false: 否
+form.radio_btn.open: 开启
+form.radio_btn.close: 关闭
+form.radio_btn.show: 显示
+form.radio_btn.hidden: 不显示
+form.radio_btn.one_day: 天
+form.radio_btn.one_week: 周
+form.radio_btn.two_week: 两周
+form.radio_btn.one_month: 月
+form.field.optional: 选填
+form.field.privacy_public: 公开
+form.field.create: 添加
+form.field.amount: 数量
+form.field.cut: 扣除
+form.btn.create: 创建
+form.btn.select: 选择
+form.btn.modify: 修改
+form.btn.finish: 完成
+form.btn.set: 设置
+form.btn.publish: 发布
+form.btn.cancel_publish: 取消发布
+form.btn.save_and_publish: 直接发布
+form.btn.save_and_continue_add: 保存并继续添加
+form.btn.reset: 重置
+form.btn.view: 查看
+form.btn.bind: 绑定
+form.btn.search: 搜索
+form.btn.reply: 发表
+form.btn.bind_cancel: 取消绑定
+form.btn.submit: 提交
+form.btn.login: 登录
+form.btn.save: 保存
+form.btn.detail: 详情
+form.btn.close: 关闭
+form.btn.return: 返回
+form.btn.cancel: 取消
+form.btn.confirm: 确定
+form.btn.insert: 插入
+form.btn.delete: 删除
+form.btn.create: 创建
+form.btn.import: 导入
+form.btn.submit_disabled: 已提交
+form.btn.reset_password: 重设密码
+form.btn.send: 发送
+form.btn.upload: 上传
+form.btn.picture_crop: 选择要上传的图片
+form.btn.remove: 移除
+form.btn.comment: 发表评论
+form.btn.approve: 去认证
+form.btn.unlock: 解除同步
+form.btn.next: 下一步
+form.btn.back: 上一步
+form.btn.add: 添加
+form.btn.export: 导出
+form.btn.login.submiting: 正在登录...
+form.btn.reply_publish.submiting: 正在发表回复...
+form.btn.create.submiting: 正在创建...
+form.btn.import.submiting: 正在导入，请稍等
+form.btn.search.submiting: 正在加载，请稍等
+form.btn.pay.submiting: 正在创建订单...
+form.btn.comment.submiting: 正在评论...
+form.btn.upload.submiting: 正在上传...
+form.btn.delete.submiting: 正在删除...
+form.btn.reply.submiting: 正在发表...
+form.btn.save.submiting: 正在保存...
+form.btn.publish.submiting: 正在发布...
+form.btn.submit.submiting: 正在提交...
+form.btn.send.submiting: 正在发送...
+form.btn.modify.submiting: 正在修改...
+form.btn.export.submiting: 正在导出...
+form.btn.export_result: 导出结果
+form.btn.hand_in.submiting: 正在交卷, 请稍等
+form.checkbox.public: 公开
+form.placeholder.max_int: 最大值为9位整数
+form.placeholer.two_decimal_places: 保留到2位小数
+form.placeholder.start_date: 起始时间
+form.placeholder.end_date: 结束时间
+form.placeholder.nickname: 用户名
+form.placeholder.keyword: 关键词
+form.radio_btn.pass: 同意
+form.radio_btn.unpass: 不同意
+form.btn.restore: 还原
+form.btn.back_to_list: 返回列表
+form.placeholder.search_keyword: 请输入搜索关键词...
+
 # 用户登录
+user.login.account_type_label: 邮箱/手机/用户名
+user.login.content_title: 登陆
 user.login.page_title: 登录账号
 user.login.account_label: 账号
 user.login.account_placeholder: 邮箱/手机/用户名
@@ -2226,6 +2453,18 @@ user.login.submit_button: 登录
 user.login.find_password: 找回密码
 user.login.ask_register: 还没有注册帐号？
 user.login.go_register: 立即注册
+user.login.login_account: 登录账号
+
+#用户绑定
+user.bind.bind_choose_btn: 绑定新帐号
+user.bind.confirm_bind_btn: 确认绑定
+user.bind.email_or_mobile_hint: 请填写在%name%注册时填写的Email地址/手机号码
+user.bind.email_hint: 请填写在%name%注册时填写的Email地址
+user.bind.email: Email地址
+user.bind.email_or_mobile: Email / 手机
+user.bind.bind_change_btn: 绑定已有帐号
+user.bind.password_label: 密码
+user.bind.bind_change_label: 绑定已有帐号
 
 # 用户注册
 user.register: 注册
@@ -2287,6 +2526,7 @@ user.register.register_through_inviter: >
   您正在通过<span class="color-gray mhs">%inviteUser%</span>的邀请注册。
 user.register.input_sms_code_tips: 请输入验证码
 user.register.page_title: 注册帐号
+user.register.register_account: 注册帐号
 user.register.account_with_email_label: 邮箱
 user.register.account_with_sms_code_label: 验证码
 user.register.account_with_email_placeholder: 填写你常用的邮箱作为登录帐号
@@ -2303,6 +2543,12 @@ user.register.invite_code_placeholder: 如果您有邀请码，请填写您的�
 user.register.i_agree: 我已阅读并同意
 user.register.terms: 服务协议
 user.register.submit_button: 注册
+user.register.register_btn: 注册帐号
+user.register.nickname_hint: 用户名最长18个英文或者9个汉字
+user.register.email_label: 邮箱地址
+user.register.get_user_avatar_tips: 自动获取头像失败，请稍后在自行上传头像
+user.register.avatar_label: 头像
+user.register.invite_register_tips: 您正在通过<span class="color-gray mhs">%inviteUser%</span>的邀请注册。
 
 # 用户个人设置
 user.settings: 个人设置
@@ -2565,12 +2811,14 @@ notification.site_notification.empty: 通知已经被管理员删除
 message: 私信
 message.content_title: 私信
 message.empty: 暂无私信
+message.create.content_title: 发送私信
 
 #用户写私信模块
 message.send: 写私信
 message.send.content_title: 写私信
 message.send.receiver_name: 收信人用户名
 message.send.message_content: 想要说的话
+message.send.to_user: 发给
 
 #用户私信对话模块
 message.chat: 私信
@@ -2579,6 +2827,7 @@ message.chat.content_tips: 请输入私信内容
 message.chat.send_for: 发给
 message.chat.unread_number: %unreadNum%条未读
 message.chat.total_number: 共%messageNum%条
+message.chat.total_unread_number: 共%messageNum%条
 
 #私信模块通用button
 message.btn.delete: 删除
@@ -2625,6 +2874,10 @@ user.homepage.following_fan.fan_empty: 无粉丝
 
 # 主页模块-头部
 homepage: 首页
+homepage.student_evaluate: %studentName%评价
+homepage.reviewer_comment_course: 说：
+homepage.switch_language.chinese: 中文
+homepage.switch_language.english: English
 homepage.header.search: 搜索
 homepage.header.login: 登录
 homepage.header.logout: 退出登录
@@ -2774,6 +3027,8 @@ cloud_search.article.result: >
 
 # 小组
 group: 小组频道
+group.name: 小组名称
+group.about: 小组介绍
 group.page_title: 小组
 group.homepage: 小组主页
 group.input_placeholder: 小组搜索
@@ -2788,7 +3043,20 @@ group.search: 搜索
 group.search.homepage: 小组主页
 group.search.search_group_name: 搜索小组
 group.search.content_title: 所有小组
+group.joined_group: 加入的小组
+group.managed_group: 管理的小组
 
+group.logo.crop_hint: 提示：请选择图片裁剪区域。
+
+group.thread.post_reply: 回复了话题
+group.thread.require_coin_name: 所需%coin_name%
+group.thread.view_hide_btn: 立即查看
+group.thread.thread_hide_content_title: 查看隐藏帖
+group.thread.empty_tips: 暂无话题信息！
+group.thread.view_post_btn: 点击查看
+group.thread.post_reply_num: 还有%postReplyCount%条回复
+group.thread.reward_content_title: 悬赏
+group.thread.reward_amout: 悬赏额
 group.thread.title: 标题
 group.thread.stick_label: 置顶
 group.thread.essence_label: 精华
@@ -2821,6 +3089,8 @@ group.thread.collapse_btn: 收起
 group.thread.content: 内容
 group.thread.owner: 话题作者
 group.thread.owner.empty: 无
+group.thread.reply_too_btn: 我也要说
+
 
 group.thread.insert_hide_content: 插入隐藏内容
 group.thread.insert_hide_content_title: 请输入要隐藏的内容
@@ -2888,6 +3158,24 @@ group.detail.new_group_members: 新加组员
 group.detail.new_group_members.empty: 还没有小组成员！
 group.detail.hot_group: 热门小组
 group.detail.hot_group_empty: 暂无小组信息！
+
+group.add.content_title: 创建小组
+
+group.search.content_title: %title%小组
+group.search: 话题搜索
+group.search.keyword.input_placeholder: 组内搜索
+
+group.member_center.content_title: 我的小组
+group.member_center.my_join: 我加入的小组
+group.member_center.my_thread: 我发起的话题
+group.member_center.my_reply_thread: 回复的话题
+group.member_center.my_collect_thread: 收藏的话题
+
+group.buy_attach.download_btn: 立即下载
+group.buy_attach.buy_btn: 购买
+group.buy_attach.content_title: 下载附件
+group.buy_attach.require_coin_name: 所需%name%
+group.buy_attach.purchased_tips: 您已购买该附件
 
 # 资讯
 article: 资讯
@@ -3918,7 +4206,7 @@ admin.homepage.top_search.search_number_th: 搜索次数
 admin.homepage.top_search.empty: 暂无搜索数据
 admin.homepage.free_access_edu_cloud_search_btn: 免费接入云搜索获取热门搜索关键词
 admin.homepage.buy.tips: >
-  ES应用由EduSoho官方提供,授权版⽤户可以通过<a href="http://open.edusoho.com" target="_blank">EduSoho开放云平台</a>购买
+  ES应用由EduSoho官方提供,授权版用户可以通过<a href="http://open.edusoho.com" target="_blank">EduSoho开放云平台</a>购买
 admin.homepage.contact.tips: >
   如需购买授权版，请联系销售人员。电话：4008041114 或
 

@@ -1,6 +1,6 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{{'登录%name%'|trans({'%name%':setting('site.name')})}}{% endblock %}
+{% block title %}{{ 'user.login_bind_exist.content_title'|trans }}{{ setting('site.name') }}{% endblock %}
 {% set modal_class = 'login-modal' %}
 {% block body %}
 
@@ -9,25 +9,25 @@
   <div class="alert alert-danger" style="display:none;"></div>
 
   <div class="form-group mbl">
-    <label class="control-label hidden" for="ajax-username">{{'邮箱/手机/用户名'|trans}}</label>
+    <label class="control-label hidden" for="ajax-username">{{'user.login.account_type_label'|trans}}</label>
     <div class="controls">
-      <input class="form-control input-lg" type="text" id="ajax-username" name="_username" placeholder="{{'邮箱/手机/用户名'|trans}}" />
+      <input class="form-control input-lg" type="text" id="ajax-username" name="_username" placeholder="{{'user.login.account_placeholder'|trans}}" />
     </div>
   </div>
 
   <div class="form-group mbl">
-    <label class="control-label hidden" for="ajax-password">{{'密码'|trans}}</label>
+    <label class="control-label hidden" for="ajax-password">{{'user.login.password_label'|trans}}</label>
     <div class="controls">
-      <input class="form-control input-lg" type="password" id="ajax-password" name="_password" placeholder="{{'密码'|trans}}" />
+      <input class="form-control input-lg" type="password" id="ajax-password" name="_password" placeholder="{{'user.login.password_placeholder'|trans}}" />
     </div>
   </div>
 
   <div class="form-group mbl color-gray">
-    <input type="checkbox" name="_remember_me" checked="checked"> {{'记住密码'|trans}}
+    <input type="checkbox" name="_remember_me" checked="checked"> {{'user.login.remember_me'|trans}}
   </div>
 
   <div class="form-group">
-    <button type="submit" class="btn btn-primary btn-lg btn-block">{{'登录'|trans}}</button>
+    <button type="submit" class="btn btn-primary btn-lg btn-block">{{'user.login.submit_button'|trans}}</button>
   </div>
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
@@ -42,10 +42,10 @@
 
 {% block footer %}
 <div class="text-left text-sm">
-  <a class="link-primary" href="{{ path('password_reset') }}">{{'找回密码'|trans}}</a>
+  <a class="link-primary" href="{{ path('password_reset') }}">{{'user.login.find_password'|trans}}</a>
   <span class="color-gray mhs">|</span>
-  <span class="color-gray">{{'还没有注册帐号？'|trans}}</span>
-  <a class="link-primary" href="{{ path('register', {goto:_target_path}) }}">{{'立即注册'|trans}}</a>
+  <span class="color-gray">{{'user.login.ask_register'|trans}}</span>
+  <a class="link-primary" href="{{ path('register', {goto:_target_path}) }}">{{'user.login.go_register'|trans}}</a>
 </div>
 
 {% if setting('login_bind.enabled') %}
