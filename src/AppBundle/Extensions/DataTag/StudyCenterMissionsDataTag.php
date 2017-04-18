@@ -39,7 +39,7 @@ class StudyCenterMissionsDataTag extends BaseDataTag implements DataTag
         //2. 对courses按照classroom排序，分离出classroom的courses
         //3. 遍历courses，判断courses是否已学完，如果未学完，则查询出要学的missionCount个任务
         //4. 交给前端展示
-        $members = $this->getCourseMemberService()->searchMembers(array('userId' => $userId), array('classroomId' => 'DESC', 'createdTime' => 'DESC'), 0, PHP_INT_MAX);
+        $members = $this->getCourseMemberService()->searchMembers(array('userId' => $userId, 'role' => 'student'), array('classroomId' => 'DESC', 'createdTime' => 'DESC'), 0, PHP_INT_MAX);
         if (empty($members)) {
             return $sortedCourses;
         }
@@ -47,7 +47,12 @@ class StudyCenterMissionsDataTag extends BaseDataTag implements DataTag
         $courseIds = ArrayToolkit::column($members, 'courseId');
 
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-        usort($courses, function ($c1, $c2) {
+        usort($courses, function ($c1, $c2) use ($courseIds) {
+            //todo 班级和课程排序应按照加入时间（member.createdTime）倒序排列
+            if (($c1['parentId'] > 0 && $c2['parentId'] > 0) || ($c1['parentId'] == 0 && $c2['parentId'] == 0)) {
+                return array_search($c1['id'], $courseIds) > array_search($c2['id'], $courseIds);
+            }
+
             return $c1['parentId'] < $c2['parentId'];
         });
         $classroomRefs = $this->getClassroomService()->findClassroomsByCoursesIds($courseIds);
