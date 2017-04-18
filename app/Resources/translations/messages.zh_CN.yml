@@ -79,6 +79,7 @@ vip: 会员
 date.year: 年
 date.month: 月
 date.day: 日
+date.format: Y年m月d日
 
 #分页
 paginator.firstPage: 首页
@@ -400,6 +401,11 @@ course.members_manage.official_student.detail.create_question: 发起提问
 course.members_manage.official_student.detail.join_activity: 参加活动
 course.members_manage.official_student.detail.create_article: 发起话题
 course.members_manage.official_student.detail.reply_article: 回复话题
+course.members_manage.official_student.detail.status.unfinished: 未完成
+course.members_manage.official_student.detail.status.finished: 准时完成
+course.members_manage.official_student.detail.status.overdue: 逾期
+course.members_manage.official_student.detail.status.serious_overdue: 严重逾期
+course.members_manage.official_student.detail.task_sleep: 任务 :都睡觉
 course.members_manage.official_student.send_message.receiver: 收件人
 course.members_manage.official_student.send_message.content: 内容
 course.members_manage.official_student.show.content_title: 个人详细信息
@@ -507,6 +513,9 @@ course.replay_manage.record_again: 重新录制
 course.replay_manage.replay: 上传回放
 course.replay_manage.preview_btn: 预览
 course.replay_manage.edit_btn: 编辑
+course.replay_manage.live_show.edit: 录播显示编辑
+course.replay_manage.upload_modal.edit_replay: 编辑回放视频
+course.replay_manage.upload_modal.add_replay: 添加回放视频
 
 course.teach_plan_manage: 教学计划管理
 
@@ -602,6 +611,10 @@ course.students_dynamic.empty: 还没有动态
 course.note.expand_btn: [展开全文]
 course.note.mission_delete_tips: · 该任务已被删除
 course.note.empty: 暂无笔记
+course.note.all_task: 全部任务
+course.note.seq: 排序：
+course.note.latest: 最新笔记
+course.note.not_latest: 点赞最多
 course.task: 任务
 course.task.lock_tips: 需要解锁上一个任务才能学习
 course.task.learning: 任务学习
@@ -621,6 +634,19 @@ course.thread.empty: >
 course.thread.hit_times: %hitNum%次浏览
 course.thread.mission_seq: 任务%seq%
 course.thread.teacher_answer: 教师的答案
+course.thread.form.edit: 编辑话题
+course.thread.form.create: 发表话题
+course.thread.form.edit_btn: 编辑话题
+course.thread.form.create_btn: 发表话题
+course.thread.form.question.edit_btn: 编辑问题
+course.thread.form.question.create_btn: 提问题
+course.thread.form.placeholder: 标题
+course.thread.form.question.placeholder: 标题，用一句话说清你的问题
+course.thread.form.content: 内容
+course.thread.post_form.edit: 编辑帖子
+course.thread.post_form.post: 回复帖子
+course.thread.post_form.edit_btn: 编辑帖子
+course.thread.post_form.content: 内容
 course.material.unpublished_tips: 任务未发布，不能下载该资料
 course.material.links: 网络链接资料
 course.material.upload_time: 上传于%createdTime%
@@ -1263,6 +1289,11 @@ classroom.expiry_day_tips: >
   <span class="mrm">班级有效天数：</span><span>%expiryValue%天</span>
 classroom.classroom_manage: %name%管理
 classroom.vip_classroom: 会员%name%
+classroom.classroom_manage.course_select.courseTitle: 课程名称
+classroom.classroom_manage.course_select.teach_plan: 教学计划名称
+classroom.classroom_manage.course_select.teacher_name: 教师名称
+classroom.classroom_manage.course_select.price: 价格
+classroom.classroom_manage.course_select.tips: 课程下包含多个教学计划，请选择其中某个教学计划。
 classroom.auditor_join_tips: 
   您现在是<span class="color-warning">旁听生</span>，不能完整学习
 classroom.auditor_and_member_different_tips: 旁听生只能参与话题讨论，正式学员可以完整地学习所有内容，享受所有教学服务
@@ -1294,6 +1325,7 @@ announcement.modal_layout.announcement_manage.history_btn: 历史公告
 announcement.modal.write.startTime: 发布时间
 announcement.modal.write.endTime: 结束时间
 announcement.modal.write.send_notify_to_user: 给%user_name%发送系统通知
+announcement.modal.write.select_plan: 选择计划
 
 classroom.manage.setting: 设置
 classroom.manage.unSetting: 未设置
@@ -5350,7 +5382,7 @@ coupon.used_status.all: 此抵价优惠券已使用
 # 学习卡
 card.info.moneycard: 学习卡
 card.info.moneycard.tips: 学习卡可以用于账户充值
-card.info.moneycard.date_style: Y年n月d日
+card.info.moneycard.date_format: Y年n月d日
 card.info.moneycard.use_btn: 立即使用
 card.isLogin.type.coupon.tips: 您领取了一张优惠券，已添加至“我的卡包“
 card.isLogin.type.moneyCard.tips: 您领取了一张学习卡，已充值到我的账户
@@ -5406,6 +5438,98 @@ contetn.article_list.category: 分类
 contetn.article_list.contentCategory: >
   <span class="color-gray">发布于 %publishedTime%</span>
   <span>, 属于 <a href="#" class="color-gray">%contentCategoryname%</a> 分类</span>
+
+# course/block
+course.block_grid.view_course_btn: 查看课程
+course.block_grid.countinue_learn_btn: 继续学习
+course.block_grid.DRAFT_STATUS: 未发布
+course.block_grid.CLOSE_STATUS: 已关闭
+course.block_grid.SERIALIZE_SERIALIZE_MODE: 更新中
+course.block_grid.FINISH_SERIALIZE_MODE: 已完结
+course.block_grid.live: 直播
+course.block_grid.onlive: 正在直播中
+course.block_grid.date_format: n月j日 H:i
+course.block_grid.taskNumber: 第%number%任务
+course.block_grid.price: 价格
+course.block_grid.price_free: 免费
+course.block_grid.review: 评价
+course.block_grid.not_review: 无评价
+course.block_grid.equal: 等
+course.block_grid.learn_time: 学习总时长：%learnTime%
+
+# course/header
+course.header.vip: 会员
+course.header.vip_name: 免费学
+course.header.upgrade_VIP: <a href="%href%" target="_blank">升级会员</a>
+course.header.become_a_VIP: <a href="%href%" target="_blank">加入会员</a>
+
+# course/member
+course.member.tips.title: 提示
+course.member.classroom.tips: 您购买的班级已到期，无法学习任务、提问等。如有疑问请联系老师。
+course.member.course.tips: 您购买的课程已到期，无法学习任务、提问等。如有疑问请联系老师。
+course.member.course.allow_buy.tips: 您购买的课程已到期，无法学习任务、提问等。如有疑问请联系老师，或点击 重新加入 。
+course.member.course.join_btn: 退出并重新加入
+
+# course/widgets
+course.widgets.belong_classroom.title: 所属%name%
+course.widgets.classroom_price.price: 价格：
+course.widgets.classroom_price.not_free: >
+  价格 : %price%元
+course.widgets.classroom_price.free: 免费
+course.widgets.classroom_price.free: 免费
+course.widgets.course_order.not_free: 收费
+course.widgets.course_order.order_title: 订单名称：%title%
+course.widgets.course_order.order_sn: 订单号：%sn%
+course.widgets.course_order.order_price: 订单价格：
+course.widgets.recommend_classroom.tips: 共有%courseNum%门课程
+# course-manage
+course_manage.batch_create.title: 批量添加任务
+course_manage.batch_create.upload_btn: 上传文件
+course_manage.batch_create.balloon-nofile.tips: 请将文件拖到这里，或点击添加文件按钮
+course_manage.batch_create.file_name: 文件名
+course_manage.batch_create.file_size: 大小
+course_manage.batch_create.file_status: 状态
+course_manage.batch_create.add_file_btn: 添加文件
+course_manage.batch_create.start_upload_btn: 开始上传
+course_manage.batch_create.upload.tips: >
+  <li>批量添加支持上传视频、音频、PPT、Flash、DOC、PDF的文件格式，单个文件大小上限<strong>2GB</strong>。</li>
+  <li>视频将上传到<strong>云视频服务器</strong>，并转换为云视频为创建ES视频课时备用，如需修改云视频转码类型，请先设置转码类型后再进行上传视频。转换过程需要等待，转换过程中视频将无法播放。</li>
+  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+course_manage.batch_create.upload.upload_loading: 正在创建课时,请不要关闭窗口
+
+# student个人详细信息
+student.profile: 个人详细信息
+student.profile.field.empty: 暂无
+student.profile.truename: 姓名
+student.profile.gender: 性别
+student.profile.gender.male: 男
+student.profile.gender.female: 女
+student.profile.job: 职业
+student.profile.company: 公司
+student.profile.mobile: 手机号码
+student.profile.title: 头衔
+student.profile.signature: 个人签名
+student.profile.about: 自我介绍
+student.profile.weibo: 微博
+student.profile.weixin: 微信
+student.profile.weixin: 微信
+
+
+# student成绩单
+student.report_card.title: 成绩单
+student.report_card.homework: 作业
+student.report_card.testpaper: 考试
+student.report_card.teacherSay.empty: 暂无评语
+student.report_card.empty: 暂无数据
+student.report_card.teacherSay: 评语
+student.report_card.review: 待批阅
+student.report_card.loop_index: 第 %loopIndex% 次%typeName%
+
+
+
+
+
+
 
 
 
