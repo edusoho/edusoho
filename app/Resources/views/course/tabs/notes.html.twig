@@ -19,7 +19,7 @@
       <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
         {% set task = tasks[selectedTaskId]|default(null) %}
         {% if task is empty %}
-          {{ '全部任务'|trans }}
+          {{ 'course.note.all_task'|trans }}
         {% else %}
           {{ task.title }}
         {% endif %}
@@ -41,23 +41,23 @@
     <ul class="nav nav-pills nav-pills-sm">
       <li class="dropdown hidden-xs">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-          <span>排序：</span>
+          <span>{{'course.note.seq'|trans}}</span>
           {% if sort == 'latest' %}
-            {{ '最新笔记'|trans }}
+            {{ 'course.note.latest'|trans }}
           {% else %}
-            {{ '点赞最多'|trans }}
+            {{ 'course.note.not_latest'|trans }}
           {% endif %}
           <span class="caret"></span>
         </a>
         <ul class="dropdown-menu hidden-xs">
           <li class="{% if sort == 'latest' %}active{% endif %}">
             <a href="{{ path('course_show', {id: course.id, tab: 'notes', sort: 'latest', task: selectedTaskId, selectedCourse: selectedCourseId }) }}#notes">
-              {{ '最新笔记'|trans }}
+              {{ 'course.note.latest'|trans }}
             </a>
           </li>
           <li class="{% if sort == 'like' %}active{% endif %}">
             <a href="{{ path('course_show', {id: course.id, tab: 'notes', sort: 'like', task: selectedTaskId, selectedCourse: selectedCourseId }) }}#notes">
-              {{ '点赞最多'|trans }}
+              {{ 'course.note.not_latest'|trans }}
             </a>
           </li>
         </ul>

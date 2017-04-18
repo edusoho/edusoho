@@ -1,12 +1,12 @@
 {% extends 'old-layout.html.twig' %}
 
-{% block title %}{{'课程'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'course'|trans}} - {{ parent() }}{% endblock %}
 {% set nav = 'course' %}
 
 {% set bodyClass = 'homepage' %}
 
 {% block content %}
-  <p>{{'请创建模版文件'|trans}}customize/content/{{ type }}/list.html.twig，{{'自定义'|trans}}。</p>
+  <p>{{'contetn.active_list.create_template'|trans}}customize/content/{{ type }}/list.html.twig，{{'contetn.active_list.custom_template'|trans}}。</p>
   <div class="row es-row-light">
 
 
@@ -14,7 +14,7 @@
     <div class="col-md-8">
 
       <div class="panel panel-default panel-primary">
-        <div class="panel-heading"><h2>{{'最新文章'|trans}}</h2></div>
+        <div class="panel-heading"><h2>{{'contetn.article_list.latest_articel'|trans}}</h2></div>
 
         <ul class="media-list content-list article-list">
           {% for content in contents %}
@@ -29,10 +29,10 @@
                 <h4 class="media-heading"><a href="{{ path('content_article_show', {alias:content.alias|default(content.id)}) }}">{{ content.title }}</a></h4>
                 {{ content.body|plain_text(120) }}
                 <div class="color-gray">
-                  <span class="color-gray">{{'发布于'|trans}} {{ content.publishedTime|date('Y-n-d') }}</span>
                   {% if contentCategory %}
-                    <span>, {{'属于'|trans}} <a href="#" class="color-gray">{{ contentCategory.name }}</a> {{'分类'|trans}}</span>
+                    {% set contentCategoryname = contentCategory.name %}
                   {% endif %}
+                  {{ 'contetn.article_list.contentCategory'|trans({'%publishedTime%':content.publishedTime|date('Y-n-d'), '%contentCategoryname%':contentCategory.name})|raw }}
                 </div>
               </div>
             </li>
@@ -46,7 +46,7 @@
 
     <div class="col-md-4">
       <div class="panel panel-default">
-        <div class="panel-heading">{{'分类'|trans}}</div>
+        <div class="panel-heading">{{'contetn.article_list.category'|trans}}</div>
 
           <div class="list-group list-group-flush">
             {% for category in categoryTree %}
