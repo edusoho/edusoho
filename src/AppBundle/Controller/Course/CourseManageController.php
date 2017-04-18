@@ -975,6 +975,7 @@ class CourseManageController extends BaseController
      * @param  $courseId
      * @param  $conditions
      * @param  $course
+     *
      * @return array
      */
     protected function processTaskNumberForList($courseId, $conditions, $course)
