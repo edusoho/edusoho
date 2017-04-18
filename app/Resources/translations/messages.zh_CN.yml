@@ -6083,8 +6083,63 @@ course_set.course.taskNumber: >
   第%number%任务: %title%
 course_set.task.taskNumber: 第%taskNumber%任务： %taskTitle%
 course_set.task.empty: 课程暂无任务
+course_set.live.category: 课程分类
+course_set.live.vip_category: 会员课程
+course_set.live.on_live_today: 正在直播 今天
+course_set.live.on_live_soon: 即将直播
+course_set.live.live_preview: 直播预告
+course_set.live.course_task_show_btn: 进入直播
+course_set.live.view_replay_btn: 查看回放
+course_set.live.empty: 暂无直播课程
+course_set.live.title: 直播
+course_set.live.recommend.course: 推荐课程
+course_set.live.recommend.course.empty: 暂无推荐课程
+course_set.live.reply.title: 直播回放
+course_set.live.reply.empty: 暂无回放直播
+course_set.live.today_live: 今日直播
+course_set.live.today_live.empty: 今日暂无直播
+course_set.live.status.onlive: 正在直播
+course_set.live.status.live_soon: 即将直播
 
-
+#courseset-manage
+courseset_manage.batch_upload.upload_courseLesson_file: 上传任务文件
+courseset_manage.batch_upload.upload_material_file: 上传资料文件
+courseset_manage.batch_upload.upload_materiallib_file: 上传文件到教学资料库
+courseset_manage.batch_upload.add_wait_upload_file_btn: 添加待上传文件
+courseset_manage.batch_upload.upload_btn: 上传
+courseset_manage.batch_upload.file_name: 文件名称
+courseset_manage.batch_upload.file_size: 文件大小
+courseset_manage.batch_upload.status: 进度
+courseset_manage.batch_upload.tips: >
+  <li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>%upload_max_filesize%</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
+  <li>视频将上传到<strong>网站服务器</strong>，如需使用%EduSoho%云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
+courseset_manage.batch_upload.cloud.tips: >
+  <li>资料库支持多种文件格式上传分享下载，单个文件大小上限<strong>2GB</strong>。</li>
+  <li>视频将上传到<strong>云视频服务器</strong>，并转换为云视频为创建ES视频任务备用，如需修改云视频转码类型，请先设置下方转码类型后再进行上传视频。转换过程需要等待，转换过程中视频将无法播放。</li>
+  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+courseset_manage.batch_upload.cloud.video_transcoding_type: 视频转码类型
+courseset_manage.batch_upload.cloud.setting_btn: 设置
+courseset_manage.batch_upload.cloud.video-quality: 画质：
+courseset_manage.batch_upload.cloud.video-quality.low: 流畅 <span class="color-gray">(适合PPT讲解)</span>
+courseset_manage.batch_upload.cloud.video-quality.normal: 标准 <span class="color-gray">(适合屏幕录制、摄像头拍摄)</span>
+courseset_manage.batch_upload.cloud.video-quality.high: 精细 <span class="color-gray">(适合动态电影)</span>
+courseset_manage.batch_upload.cloud.audio-quality: 音质：
+courseset_manage.batch_upload.cloud.audio-quality.low: 流畅
+courseset_manage.batch_upload.cloud.audio-quality.normal: 标准
+courseset_manage.batch_upload.cloud.audio-quality.high: 高品
+courseset_manage.batch_upload.coursematerial.tips: >
+  支持常见文档、图片、音视频、压缩包文件格式。%text%<strong>%max_file_size%</strong>。
+courseset_manage.batch_upload.coursematerial.cloud.tips: >
+  <li>文件将上传到<strong>云服务器</strong>。</li>
+  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+courseset_manage.batch_upload.coursematerial.not_cloud.tips: >
+  <li>视频将上传到<strong>网站服务器</strong>，如需使用%EduSoho%云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
+courseset_manage.batch_upload.coursematerial.cloud.max_file_size_text.tips: 且文件大小不能超过
+courseset_manage.cover_img: 封面图片
+courseset_manage.cover_img.tips: 提示：请选择图片裁剪区域。
+courseset_manage.cover_img.again_select_picture_btn: 重新选择图片
+courseset_manage.unlock_confrim: 解除确认
+courseset_manage.unlock_confrim.tips: 解除后本课程将停止同步更新,本操作不可逆！
 
 
 
