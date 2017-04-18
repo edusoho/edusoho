@@ -2,7 +2,7 @@
 
 {% set script_controller = 'user/email-reset' %}
 
-{% block title %}{{ 'register.reset_email'|trans }} - {{ parent() }}{% endblock %}
+{% block title %}{{ 'user.register.reset_email'|trans }} - {{ parent() }}{% endblock %}
 
 {% block content %}
   <div class="es-section login-section">
@@ -10,10 +10,10 @@
       <form id="reset-email-form" method="post" action="{{ path('register_reset_email_verify') }}">
         {{ web_macro.flash_messages() }}
         <div class="form-group mbl">
-          <label class="control-label required" for="reset_email">{{ 'register.reset_email.new_email'|trans }}</label>
+          <label class="control-label required" for="reset_email">{{ 'user.register.reset_email.new_email'|trans }}</label>
           <div class="controls">
             <input type="email" id="reset_email" name="email" autocomplete="off" required="required" class="form-control input-lg"
-                   data-url="{{ path('register_email_check') }}" placeholder="{{ 'register.reset_email.new_email_tips'|trans }}" data-display="Email">
+                   data-url="{{ path('register_email_check') }}" placeholder="{{ 'user.register.reset_email.new_email_tips'|trans }}" data-display="Email">
             <p class="help-block"></p>
           </div>
         </div>

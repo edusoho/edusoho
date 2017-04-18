@@ -1,6 +1,6 @@
 {% extends 'old-layout.html.twig' %}
 
-{% block title %}{{'register'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'user.register'|trans}} - {{ parent() }}{% endblock %}
 {% set script_controller = 'auth/register' %}
 {% set bodyClass = 'register' %}
 
@@ -9,8 +9,8 @@
 
 <div class="es-section login-section">
   <div class="logon-tab clearfix">
-    <a href="{{ path('login', {goto:_target_path}) }}">{{'register.login_account'|trans}}</a>
-    <a class="active">{{'register.register_account'|trans}}</a>
+    <a href="{{ path('login', {goto:_target_path}) }}">{{'user.register.login_account'|trans}}</a>
+    <a class="active">{{'user.register.register_account'|trans}}</a>
   </div>
   <div class="login-main">
     {% if isRegisterEnabled %}
@@ -18,7 +18,7 @@
         {{ web_macro.flash_messages() }}
 
         {% if inviteCode != null  %}
-          <div class="alert alert-info alert-sm">{{'register.register_through_inviter'|trans({'%inviteUser%': inviteUser.nickname})|raw}}</div>
+          <div class="alert alert-info alert-sm">{{'user.register.register_through_inviter'|trans({'%inviteUser%': inviteUser.nickname})|raw}}</div>
         {% endif %}
 
         {% if setting('auth.register_mode') == 'email' %}
@@ -135,7 +135,7 @@
         </div>
       {% endif %}
     {% else %}
-      <div class="empty">{{'register.system_close_tips'|trans}}</div>
+      <div class="empty">{{'user.register.system_close_tips'|trans}}</div>
     {% endif %}
   </div>
 </div>

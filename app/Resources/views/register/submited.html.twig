@@ -1,30 +1,30 @@
 {% extends 'old-layout.html.twig' %}
 
-{% block title %}{{'register'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'user.register'|trans}} - {{ parent() }}{% endblock %}
 {% set script_controller = 'auth/register-submited' %}
 
 {% block content %}
 <div class="row">
   <div class="col-md-6 col-md-offset-3 ptl">
     <div class="panel panel-default panel-page">
-      <div class="panel-heading"><h2>{{'register.success'|trans}}</h2></div>
+      <div class="panel-heading"><h2>{{'user.register.success'|trans}}</h2></div>
 
-      <div id="email-sending" class="alert alert-info" style="display:none;">{{'register.send_email_tips'|trans}}</div>
+      <div id="email-sending" class="alert alert-info" style="display:none;">{{'user.register.send_email_tips'|trans}}</div>
 
       <div id="email-send-success">
         <p class="color-success">
-          {{ 'register.email_verify_tips'|trans({'%email%':user.email})|trans }}
+          {{ 'user.register.email_verify_tips'|trans({'%email%':user.email})|trans }}
         </p>
 
         <p class="mvl">
-          <a class="btn btn-primary" href="{{ emailLoginUrl }}" target="_blank">{{'register.receive_email_btn'|trans}}</a>
+          <a class="btn btn-primary" href="{{ emailLoginUrl }}" target="_blank">{{'user.register.receive_email_btn'|trans}}</a>
         </p>
 
         <div class="alert">
-          {{'register.not_receive_email_tips'|trans({'%logout%':path('logout',{goto:'register'}), '%send%':path('register_email_send', {id:user.id, hash:hash})})|raw}}
+          {{'user.register.not_receive_email_tips'|trans({'%logout%':path('logout',{goto:'register'}), '%send%':path('register_email_send', {id:user.id, hash:hash})})|raw}}
         </div>
         <p class="mtl">
-          {{'register.verify_success_tips'|trans({'%path%':_target_path, '%homepage%':path('homepage')})|raw}}
+          {{'user.register.verify_success_tips'|trans({'%path%':_target_path, '%homepage%':path('homepage')})|raw}}
         </p>
       </div>
 

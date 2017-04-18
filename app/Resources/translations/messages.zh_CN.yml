@@ -425,66 +425,6 @@ question.type.material: 材料题
 question.nums: 题数
 question.score: 分数
 
-# 注册
-register: 注册
-register.sms.sms_send: 短信推送
-register.sms.sms_send_to: 发送对象
-register.sms.in_classroom: %classroom.name%内
-register.sms.send_sms_nums: 预计发送量
-register.sms.send_content: 发送内容
-register.sms.start_regist: 现已开始报名
-register.sms.link_address: 链接地址
-register.sms.prepare_sending: 短信发送准备中...
-register.sms.cloud_sms_open_tips: 请联系超级管理员，开启云短信相关设置。
-register.sms.not_close_window_tips: 正在发送，请不要关闭当前窗口...
-register.sms.wait_tips: 正在发送, 请稍等...
-register.sms.send_success: 发送完成
-register.last_step: 注册还需一步
-register.last_step_tips: 仅需一步，完善资料，让我们更好的为你服务！
-register.email_sending: 正在发送注册验证邮件，请稍等...
-register.verify_email: >
-  注册确认信已经发到你的邮箱<strong>%email%</strong>，你需要点击邮件中的确认链接来完成邮箱验证，验证后才可以登录．
-register.success: 注册成功
-register.send_email_tips: 正在发送注册验证邮件，请稍等...
-register.email_verify_tips: >
-  注册确认信已经发到你的邮箱<strong>%email%</strong>，你需要点击邮件中的确认链接来完成邮箱验证。
-register.email_verify.failed: 邮箱验证失败
-register.email_verify.address_overdue: 验证地址已过期！
-register.email_verify.success: 邮箱验证成功
-register.email_verify.jump_tips: >
-  正在跳转到首页...<a id="jump-btn" href="%homepage%" class="mll"> &raquo; 点此直接进入</a>
-register.receive_email_btn: 登录邮箱查收邮件
-register.not_receive_email_tips: >
-  <h5>没有收到确认信怎么办？</h5>
-  <ul>
-    <li>检查一下上面Email地址是否正确，错了就重新<a class="color-gray" href="%logout%">注册</a>一次吧 :)</li>
-    <li>看看是否在邮箱的垃圾箱里?</li>
-    <li>稍等几分钟，若仍旧没收到确认信，那就<a id="resend-email" class="color-gray" href="javascript:" data-url="%send%">重发</a>一封吧！</li>
-  </ul>
-register.verify_success_tips: >
-  完成验证后，你还可以：
-  <ul>
-    <li><a href="%path%">返回原页面</a></li>
-    <li><a href="%homepage%">浏览首页</a></li>
-  </ul>
-register.emaill_not_useful_tips: >
-  <h5>原邮箱已失效？</h5>
-  <a class="btn btn-primary" href="%resetEmail%">重新绑定</a>
-register.service_protocol: 服务协议
-register.reset_email: 重置邮箱
-register.reset_email.origin_email: 原邮箱地址:
-register.reset_email.school_login_password: 网校密码：
-register.reset_email.input_placeholder: 请输入网校密码
-register.reset_email.display: 网校密码
-register.reset_email.new_email: 新邮箱地址:
-register.reset_email.new_email_tips: 请输入新的邮箱地址
-register.login_account: 登录账号
-register.register_account: 注册账号
-register.system_close_tips: 系统暂时关闭注册，请联系管理员
-register.register_through_inviter: >
-  您正在通过<span class="color-gray mhs">%inviteUser%</span>的邀请注册。
-register.input_sms_code_tips: 请输入验证码
-
 # 课程
 course: 课程
 coruse.member_buyed: 已购买
@@ -1984,6 +1924,64 @@ user.login.ask_register: 还没有注册帐号？
 user.login.go_register: 立即注册
 
 # 用户注册
+user.register: 注册
+user.register.sms.sms_send: 短信推送
+user.register.sms.sms_send_to: 发送对象
+user.register.sms.in_classroom: %classroom.name%内
+user.register.sms.send_sms_nums: 预计发送量
+user.register.sms.send_content: 发送内容
+user.register.sms.start_regist: 现已开始报名
+user.register.sms.link_address: 链接地址
+user.register.sms.prepare_sending: 短信发送准备中...
+user.register.sms.cloud_sms_open_tips: 请联系超级管理员，开启云短信相关设置。
+user.register.sms.not_close_window_tips: 正在发送，请不要关闭当前窗口...
+user.register.sms.wait_tips: 正在发送, 请稍等...
+user.register.sms.send_success: 发送完成
+user.register.last_step: 注册还需一步
+user.register.last_step_tips: 仅需一步，完善资料，让我们更好的为你服务！
+user.register.email_sending: 正在发送注册验证邮件，请稍等...
+user.register.verify_email: >
+  注册确认信已经发到你的邮箱<strong>%email%</strong>，你需要点击邮件中的确认链接来完成邮箱验证，验证后才可以登录．
+user.register.success: 注册成功
+user.register.send_email_tips: 正在发送注册验证邮件，请稍等...
+user.register.email_verify_tips: >
+  注册确认信已经发到你的邮箱<strong>%email%</strong>，你需要点击邮件中的确认链接来完成邮箱验证。
+user.register.email_verify.failed: 邮箱验证失败
+user.register.email_verify.address_overdue: 验证地址已过期！
+user.register.email_verify.success: 邮箱验证成功
+user.register.email_verify.jump_tips: >
+  正在跳转到首页...<a id="jump-btn" href="%homepage%" class="mll"> &raquo; 点此直接进入</a>
+user.register.receive_email_btn: 登录邮箱查收邮件
+user.register.not_receive_email_tips: >
+  <h5>没有收到确认信怎么办？</h5>
+  <ul>
+    <li>检查一下上面Email地址是否正确，错了就重新<a class="color-gray" href="%logout%">注册</a>一次吧 :)</li>
+    <li>看看是否在邮箱的垃圾箱里?</li>
+    <li>稍等几分钟，若仍旧没收到确认信，那就<a id="resend-email" class="color-gray" href="javascript:" data-url="%send%">重发</a>一封吧！</li>
+  </ul>
+user.register.verify_success_tips: >
+  完成验证后，你还可以：
+  <ul>
+    <li><a href="%path%">返回原页面</a></li>
+    <li><a href="%homepage%">浏览首页</a></li>
+  </ul>
+user.register.emaill_not_useful_tips: >
+  <h5>原邮箱已失效？</h5>
+  <a class="btn btn-primary" href="%resetEmail%">重新绑定</a>
+user.register.service_protocol: 服务协议
+user.register.reset_email: 重置邮箱
+user.register.reset_email.origin_email: 原邮箱地址:
+user.register.reset_email.school_login_password: 网校密码：
+user.register.reset_email.input_placeholder: 请输入网校密码
+user.register.reset_email.display: 网校密码
+user.register.reset_email.new_email: 新邮箱地址:
+user.register.reset_email.new_email_tips: 请输入新的邮箱地址
+user.register.login_account: 登录账号
+user.register.register_account: 注册账号
+user.register.system_close_tips: 系统暂时关闭注册，请联系管理员
+user.register.register_through_inviter: >
+  您正在通过<span class="color-gray mhs">%inviteUser%</span>的邀请注册。
+user.register.input_sms_code_tips: 请输入验证码
 user.register.page_title: 注册帐号
 user.register.account_with_email_label: 邮箱
 user.register.account_with_sms_code_label: 验证码
