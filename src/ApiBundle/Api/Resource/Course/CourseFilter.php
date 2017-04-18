@@ -21,6 +21,14 @@ class CourseFilter extends Filter
 
     protected function publicFields(&$data)
     {
+        if ($data['expiryStartDate']) {
+            $data['expiryStartDate'] = date('c', $data['expiryStartDate']);
+        }
+
+        if ($data['expiryEndDate']) {
+            $data['expiryEndDate'] = date('c', $data['expiryEndDate']);
+        }
+
         $data['services'] = ServiceToolkit::getServicesByCodes($data['services']);
 
         $userFilter = new UserFilter();
