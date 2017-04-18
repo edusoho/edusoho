@@ -1,7 +1,7 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 {% set showSms = ( verifiedMobile|length > 0) %}
 
-{% block title %} {{'短信验证码'|trans}} {% endblock %}
+{% block title %} {{'order.confirm.sms_code'|trans}} {% endblock %}
 
 {% block body %}
 {% if showSms %}
@@ -10,21 +10,21 @@
       <div class = "form-group">
         <div class = "controls row" >
           <div class = "col-md-5 col-md-offset-2" >
-            <label class="control-label">{{'已绑定手机号码%blur_phone_number%'|trans({'%blur_phone_number%':blur_phone_number(verifiedMobile)})}} </label>
+            <label class="control-label">{{'order.confirm.sms_code.bind_mobile_tips'|trans({'%blur_phone_number%':blur_phone_number(verifiedMobile)})}} </label>
           </div>
           <div class = "col-md-3" >
-            <a class="text-sm color-gray" href="{{path('settings_bind_mobile')}}" target="_blank">{{'修改手机号码'|trans}}</a>
+            <a class="text-sm color-gray" href="{{path('settings_bind_mobile')}}" target="_blank">{{'order.confirm.sms_code.change_mobile_btn'|trans}}</a>
           </div>
         </div>
         <br>
         <div class="controls row" >
           <div class = "col-md-5 col-md-offset-2" >
-            <input type="text" class="form-control" id="sms-code-modal" name="sms_code_modal" {# data-explain="输入短信验证码" #} required="required" placeholder="{{'输入短信验证码'|trans}}" data-url="{{path('edu_cloud_sms_check',{type:'sms_user_pay'})}}">
+            <input type="text" class="form-control" id="sms-code-modal" name="sms_code_modal" {# data-explain="输入短信验证码" #} required="required" placeholder="{{'order.confirm.sms_code.input_placeholder'|trans}}" data-url="{{path('edu_cloud_sms_check',{type:'sms_user_pay'})}}">
           </div>
           <div class="col-md-5">
             <span class="btn btn-default btn-sm js-sms-send" data-url="{{ path('edu_cloud_sms_send') }}">
               <span id="js-time-left"></span>
-              <span id="js-fetch-btn-text">{{'获取短信验证码'|trans}}{# 秒后重新获取 #}</span>
+              <span id="js-fetch-btn-text">{{'order.confirm.sms_code.get_code_btn'|trans}}{# 秒后重新获取 #}</span>
            </span>
           </div>
           <div class="col-md-12 col-md-offset-2">
@@ -35,14 +35,14 @@
       </div>
     </form>
 {% else %}
-  <span>&nbsp;&nbsp;{{'您还未绑定手机号'|trans}}<a class="btn btn-link" href="{{path('settings_bind_mobile')}}" target="_blank">{{'去绑定'|trans}}</a></span>
+  <span>&nbsp;&nbsp;{{'order.confirm.sms_code.not_bind_mobile_tips'|trans}}<a class="btn btn-link" href="{{path('settings_bind_mobile')}}" target="_blank">{{'order.confirm.sms_code.bind_btn'|trans}}</a></span>
 {% endif %}
 
 {% endblock %}
 
 {% block footer %}
   {% if showSms %}
-     <button class="btn btn-primary pull-right js-confirm">{{'确定'|trans}}</button>
+     <button class="btn btn-primary pull-right js-confirm">{{'form.btn.confirm'|trans}}</button>
      <script>app.load('order/order-create-sms');</script>
   {% endif %}
 {% endblock %}
