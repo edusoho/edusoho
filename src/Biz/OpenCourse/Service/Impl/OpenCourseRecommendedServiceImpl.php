@@ -70,7 +70,7 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
     protected function refreshCoursesSeq($openCourseId, $recommendIds)
     {
         $existingRecommended = $this->findRecommendedCoursesByOpenCourseId($openCourseId);
-        $existingRecommended = ArrayToolkit::index($existingRecommended, 'recommendCourseId');
+        $existingRecommended = ArrayToolkit::index($existingRecommended, 'id');
 
         $seq = 1;
 
@@ -137,7 +137,16 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         $courseIds = ArrayToolkit::column($recommendCourses, 'recommendCourseId');
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseIds);
 
-        return empty($courseSets) ? array() : $courseSets;
+        $courses = array();
+        foreach ($recommendCourses as $key => $recommend) {
+            $course = empty($courseSets[$recommend['recommendCourseId']]) ? array() : $courseSets[$recommend['recommendCourseId']];
+
+            if ($course) {
+                $courses[$course['id']] = $course;
+            }
+        }
+
+        return $courses;
     }
 
     public function findRandomRecommendCourses($courseId, $num = 3)
