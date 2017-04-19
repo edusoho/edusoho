@@ -251,7 +251,8 @@ CREATE TABLE `cash_orders` (
   `targetType` varchar(64) NOT NULL DEFAULT 'coin' COMMENT '订单类型',
   `token` varchar(50) DEFAULT NULL COMMENT '令牌',
   `data` text COMMENT '订单业务数据',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sn` (`sn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `cash_orders_log`;
