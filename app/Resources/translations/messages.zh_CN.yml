@@ -44,6 +44,7 @@ site.message.info: 提示信息
 site.message.warning: 警告信息
 site.message.error: 错误提示
 site.power_by: 好知网
+site.default.must: 必须
 site.default.student: 学员
 site.default.classroom: 班级
 site.default.reviewing: 已批阅
@@ -59,6 +60,7 @@ site.default.or: 或
 site.default.minute: 分
 site.default.second: 秒
 site.default.bar: 条
+site.default.times: 次
 site.org.belongs_to_org_th: 所属组织机构
 site.org.code: 编码：
 site.tips: 提示
@@ -2665,8 +2667,8 @@ user.settings.security.pay_password_set.bread_crumbs: >
 user.settings.security.pay_password_set.input_login_password: 请输入用户登录密码
 user.settings.security.pay_password_set.new_pay_password: 新支付密码
 user.settings.security.pay_password_set.user_login_password: 用户登录密码
-user.settings.security.pay_password_set.old_pay_password: 旧的支付密码
 user.settings.security.pay_password_set.confirm_pay_password: 确认支付密码
+user.settings.security.pay_password_set.old_pay_password: 旧的支付密码
 user.settings.security.pay_password_set.input_pay_password_again: 请再输入一次支付密码
 user.settings.security.pay_password_find.content_title: 安全设置
 user.settings.security.pay_password_find.bread_crumbs: >
@@ -3263,6 +3265,8 @@ thread.browse: 浏览
 thread.empty: 暂无话题
 thread.status.stick: 置顶
 thread.status.essence: 精华
+thread.status.top: 头条
+thread.status.recommend: 推荐
 thread.status.reward: 奖
 thread.status.question: 问
 thread.hover_tips.question: 问答
@@ -3388,6 +3392,10 @@ mobile.step_two: >
   <span class="member">2</span>第二步: 打开阔知学堂APP，扫描网校二维码。
 
 # 客服
+customer_service: 在线客户服务
+customer_service.status: 在线客户服务
+customer_service.status.open: 开启
+customer_service.status.close: 关闭
 customer_service.open_content_title: 查看在线客服
 customer_service.close_content_title: 关闭在线客服
 customer_service.open_btn: 展开
@@ -3396,7 +3404,8 @@ customer_service.QQ: 客服QQ
 customer_service.mobile: 电话
 customer_service.customer_mobile: 客服电话
 customer_service.email: 邮件
-customer_service.customer_email: 反馈邮件
+customer_service.customer_email: 客服Mail
+customer_service.feedback_email: 反馈邮件
 customer_service.qq_customer_service: QQ客服
 customer_service.qq_group: QQ群
 customer_service.mobile_group: 电话客服
@@ -3790,6 +3799,13 @@ role.student: 学员
 # 教师
 role.teacher: 教师
 
+# 后台
+admin.process_bar: 优化课程文件
+admin.process_bar.finish_btn: 完成优化
+admin.process_bar.keep_window_tips: 正在优化课程文件，请不要关闭当前窗口...
+admin.process_bar.wait_tips: 正在优化, 请稍等...
+
+
 # 课程管理
 #课程管理通用模块
 admin.course_manage.category_placeholder: 课程分类
@@ -4019,6 +4035,13 @@ admin.open_manage.analysis.watch.total_visit_count: 总访问量
 admin.open_manage.analysis.watch.average_watch_count: 日均观看次数
 
 # 直播管理
+admin.live_manage.status: 开启状态
+admin.live_manage.logo: 直播LOGO
+admin.live_manage.live_student_limit: 同时在线人数上限
+admin.live_manage.live_student_limit_tips: 扩充在线人数，请联系客服：4008041114
+admin.live_manage.logo_tips: >
+  <b>只针对直播新方案。</b><br>
+  请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过100*23。
 admin.live_manage.edu_cloud_closed: 尚未接入教育云，不能使用直播服务
 admin.live_manage.show_detail: 查看详情
 admin.live_manage.cloud_live_closed: 尚未启用云直播服务，不能创建直播课程
@@ -4038,6 +4061,20 @@ admin.live_manage.live_time_long_th: 直播时长(分)
 admin.live_manage.max_participate_count_th: 最大参与人数
 admin.live_manage.empty: 暂无直播
 admin.live_manage.deleted: 课程已删除
+
+# mobile-iap 商品
+admin.iap_product.id: IAP后台的商品ID
+admin.iap_product.id_tips: IAP后台的商品ID
+admin.iap_product.name: 商品名
+admin.iap_product.name_tips: 商品名
+admin.iap_product.price: 商品单价(元)
+admin.iap_product.price_tips: 商品单价(元)
+admin.iap_product.add_btn: 新增商品
+admin.iap_product.operation: 操作
+admin.iap_product.empty: 暂无记录
+
+# 页面静态化
+admin.performance_setting.content_title: 页面静态化
 
 #班级管理
 ## 管理模块
@@ -5006,6 +5043,7 @@ admin.user.manage.create.email_label: 邮箱地址
 
 admin.user.manage.avatar_crop.heading_title: 头像设置
 admin.user.manage.avatar_crop.crop_hint: 提示：请选择图片裁剪区域。
+admin.user.manage.avatar_crop.select_again_btn: 重新选择图片
 
 admin.user.manage.create_by_mobile.heading_title: 添加新用户
 admin.user.manage.create_by_mobile.mobile.input_placeholder: 手机号码
@@ -5145,6 +5183,19 @@ admin.course_review.classroom_title.placeholer: %classroomName%名
 admin.course_review.classroom_deleted: %classroomName%已删除
 
 # 教育云
+admin.edu_cloud.connect_failed_tips: 网络问题，无法连接%Edusoho%开放云平台
+admin.edu_cloud.side_bar.introduction: 概览
+admin.edu_cloud.side_bar.setup: 设置
+
+# 账户
+admin.edu_cloud.account.content_title: 账户余额
+admin.edu_cloud.account.recharge_btn: 充值
+admin.edu_cloud.account.coupon_balance: 代金券余额：
+admin.edu_cloud.account.active_ben: 激活代金券
+admin.edu_cloud.account.cloud_wiil_stop_tips: 您已欠费，教育云将于%arrearageDays% 天后暂停，请尽快充值，以免影响正常使用
+admin.edu_cloud.account.arrears_tips: 您已欠费%arrearageDays%天，教育云服务已暂停，请尽快充值
+admin.edu_cloud.account.balance_not_enough: 你的余额不足50元，请尽快充值，以免影响正常使用。
+
 admin.edu_cloud.overview.locked_tips: 您的教育云服务已被锁定，请联系客服人员
 admin.edu_cloud.overview.disabled_tips: 您的教育云服务已被禁用
 admin.edu_cloud.overview.disabled_contact_tips: 若有疑问，请联系客服人员：4008041114
@@ -5280,8 +5331,9 @@ admin.edu_cloud.edu_video.enable_tips: >
   <p>5.单价￥0.8/GB，购买云视频包享受更多优惠，立即 <a href="%url%" target="_blank"> 了解详情</a>。</p>
 
 # 云直播
-admin.edu_cloud.edu_live.locked_tips: 您的教育云服务已被锁定，请联系客服人员
-admin.edu_cloud.edu_live.service_suspend: 您的云直播服务已被暂停，不能使用，请联系客服人员
+admin.edu_cloud.edu_live.student_num: 参与直播人数（最近7天）
+admin.edu_cloud.edu_live.locked_tips: 您的教育云服务已被锁定，请联系客服人员：4008041114。
+admin.edu_cloud.edu_live.service_suspend: 您的云直播服务已被暂停，不能使用，请联系客服人员：4008041114。
 admin.edu_cloud.edu_live.switch_title: 云直播开关
 admin.edu_cloud.edu_live.edu_live_enable: 启用云直播
 admin.edu_cloud.edu_live.edu_live_enable_btn: 已启用
@@ -5308,25 +5360,42 @@ admin.edu_cloud.edu_live.no_enable: 尚未启用云直播
 admin.edu_cloud.edu_live.buy_live_tips: >
   尚未购买云直播服务，不能启用，<a href="%buyUrl%" target="_blank">立即购买</a> 或 <a href="%showUrl%" target="_blank">了解详情</a>。
 admin.edu_cloud.edu_live.now_start: 立即启用
+admin.edu_cloud.edu_live.status: 云直播状态
+admin.edu_cloud.edu_live.buy_btn: >
+  <a class="mhm" href="%live%" target="_blank">购买</a>云直播服务，轻松创建直播课堂
+admin.edu_cloud.edu_live.renew_btn: 续费
+admin.edu_cloud.edu_live.classroom_capacity: 教室容量：%capacity%人/月
+admin.edu_cloud.edu_live.expiry_date: 有效期至：
+admin.edu_cloud.edu_live.overdue_tips: 您的云直播服务已到期，请尽快续费
+admin.edu_cloud.edu_live.renew_tips: 您的云直播服务将于%remaining%天后到期，请尽快续费
 
 # 云短信
-admin.edu_cloud.edu_sms.locked_tips: 您的教育云服务已被锁定，请联系客服人员
-admin.edu_cloud.edu_sms.service_suspend_tips: 您的云短信服务已被暂停，不能使用，请联系客服人员
+admin.edu_cloud.edu_sms.apply.content_title: 申请云短信
+admin.edu_cloud.edu_sms.apply.remind: 提醒
+admin.edu_cloud.edu_sms.apply.first_open_tips: 初次开启，需填写网校名称，审核需1到3个工作日，开启成功后，短信最低￥0.055/条
+admin.edu_cloud.edu_sms.apply.verify_tips: 审核需1到3个工作日，期间短信验证功能仍可以正常使用
+admin.edu_cloud.edu_sms.apply.school_name: 网校名称
+admin.edu_cloud.edu_sms.apply.sms_content: >
+  短信内容：“【<span id="js-school-name"></span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效”
+admin.edu_cloud.edu_sms.locked_tips: 您的教育云服务已被锁定，请联系客服人员：4008041114。
+admin.edu_cloud.edu_sms.service_suspend_tips: 您的云短信服务已被暂停，不能使用，请联系客服人员：4008041114。
 admin.edu_cloud.edu_sms.basic_info: 基本信息
 admin.edu_cloud.edu_sms.sms_balance: 短信余额
 admin.edu_cloud.edu_sms.remain_count: >
   今日发送：%span_first%%remainCount%条%span_last%
+admin.edu_cloud.edu_sms.buy_btn: 购买
 admin.edu_cloud.edu_sms.send_record_btn: 发送记录
 admin.edu_cloud.edu_sms.send_detail_btn: 发送明细
 admin.edu_cloud.edu_sms.sms_send_trend: 短信发送趋势
 admin.edu_cloud.edu_sms.rencent_week: （最近1个星期）
 admin.edu_cloud.edu_sms.more_btn: 更多
+admin.edu_cloud.edu_sms.sms_remaining: （信用额度剩余: %creditLimit%条）
 admin.edu_cloud.edu_sms.sms_send_tips: >
   短信发送服务由EduSoho教育云提供 <a href="%url%"  target="_blank">了解详情</a>
 admin.edu_cloud.edu_sms.sms_auth_tips: >
   当前版本为试⽤版, 不能进行短信服务设置。如需购买授权版,请联系销售人员。 电话：4008041114或%span_first%QQ：800023860%span_last%
 admin.edu_cloud.edu_sms.no_enabled_sms: 尚未启用云短信
-admin.edu_cloud.edu_sms.start_enabled_sms:
+admin.edu_cloud.edu_sms.start_enabled_sms: >
   尚未购买云短信，不能启用，<a href="%smsBuyUrl%" target="_blank">立即购买</a> 或 <a href="%smsShowUrl%" target="_blank">了解详情</a>。
 admin.edu_cloud.edu_sms.start_enabled_sms_btn: 立即启用
 admin.edu_cloud.edu_sms.switch_title: 云短信开关
@@ -5428,18 +5497,101 @@ admin.edu_cloud.edu_email.addressee_name: 发件人名称
 admin.edu_cloud.edu_email.no_set_addressee: 尚未设置
 admin.edu_cloud.edu_email.set_addressee:
   <a href="%addresseeName%" target="_blank">点击这里</a>设置发件人名称。
+admin.edu_cloud.edu_email.use_info: 云邮件使用情况（最近7天）
+admin.edu_cloud.edu_email.forbidden_tips: >
+  <p class="text-danger">您的云邮件服务已被禁用</p>
+  <p class="text-danger">请联系客服人员：4008041114</p>
+admin.edu_cloud.edu_email.open_btn: 开启
+admin.edu_cloud.edu_email.open_tips: 云邮件，享受优质的邮件发送服务
 
 # 云搜索
-admin.edu_cloud.edu_search.locked_tips: 您的教育云服务已被锁定，请联系客服人员
+admin.edu_cloud.edu_search.base_info: 基本信息
+admin.edu_cloud.edu_search.total_search_times: 累计搜索次数：
+admin.edu_cloud.edu_search.today_total_search_times: 今日搜索次数：
+admin.edu_cloud.edu_search.flow_item: 搜索行为趋势
+admin.edu_cloud.edu_search.flow_item.more_btn: 更多
+admin.edu_cloud.edu_search.clause: 云搜索条款
+admin.edu_cloud.edu_search.clause_content: >
+  <h3 class="text-center">EduSoho云搜索服务使用条款</h3>
+  <p>本服务条款作为《EduSoho开放云服务条款》的补充条款，是EduSoho开放云平台（open.edusoho.com）的经营者杭州阔知网络科技有限公司（以下简称为“阔知网络”），与用户（下称为“您”），共同缔结的对双方具有约束力的有效契约。
+  EduSoho云搜索服务（下简称“云搜索服务”、“本服务”）由EduSoho开放云提供，并将不断更新服务内容。</p>
+  <h5>1.总则</h5>
+  <p>1.1您确认：您在使用本服务之前，已经充分阅读、理解并接受本服务条款的全部内容（特别是以加粗及/或下划线标注的内容），一旦您选择“同意”并开通、使用本服务，即表示您同意遵循本服务条款之所有约定。</p>
+  <p>1.2您同意：EduSoho开放云有权随时对本服务条款及相应的服务规则内容进行单方面的变更，并有权以消息推送、网页公告等方式予以公布，而无需另行单独通知您；若您在本服务条款内容公告变更后继续使用本服务的，表示您已充分阅读、理解并接受修改后的协议内容，也将遵循修改后的条款内容使用本服务；若您不同意修改后的服务条款，您应立即停止使用本服务。</p>
+  <h5>2.服务内容</h5>
+  <p>2.1本服务为您的EduSoho网校提供以下内容的搜索功能：</p>
+  <p>（一）课程相关信息；</p>
+  <p>（二）老师相关信息；</p>
+  <p>（三）小组话题和班级话题相关信息；</p>
+  <p>（四）网校资讯相关信息。</p>
+  <p>您的学员可以通过本服务在您的EduSoho网校内搜索上述四类信息。</p>
+  <h5>3.您的权利和义务</h5>
+  <p>3.1您理解并同意，EduSoho开放云收集您网校内以下信息：</p>
+  <p>（一）课程相关信息（包括：课程标题、课程副标题、课程简介、适合人群、课程目标、课时标题、课时摘要等信息）；</p>
+  <p>（二）老师相关信息（包括：老师昵称、老师简介等信息）； </p>
+  <p>（三）小组话题和班级话题相关信息（包括：话题标题、话题内容、话题发布时间等信息）；</p>
+  <p>（四）网校资讯相关信息（包括：资讯标题、资讯内容、资讯发布时间等信息）。</p>
+  <p>上述四类信息仅用于为您的EduSoho网校提供搜索服务。</p>
+  <h5>4.EduSoho开放云的权利和义务</h5>
+  <p>4.1EduSoho开放云承诺对您网校的课程相关信息、老师相关信息、小组话题和班级话题相关、资讯相关信息采取对外保密措施，不向第三方披露这些信息，不授权第三方使用这些信息，除非：</p>
+  <p>4.1.1依据本服务条款或者您与EduSoho开放云之间其他服务协议、合同、在线条款等规定可以提供；</p>
+  <p>4.1.2依据法律法规的规定应当提供；</p>
+  <p>4.1.3行政、司法等职权部门要求EduSoho开放云提供；</p>
+  <p>4.1.4您同意EduSoho开放云向第三方提供；</p>
+  <p>4.1.5EduSoho开放云解决举报事件、提起诉讼而提交的；</p>
+  <p>4.1.6EduSoho开放云为防止严重违法行为或涉嫌犯罪行为发生而采取必要合理行动所必须提交的；</p>
+  <p>4.1.7EduSoho开放云为向您提供产品、服务、信息而向第三方提供的，包括EduSoho开放云通过第三方的技术及服务向您提供产品、服务、信息的情况。</p>
+  <h5>5.责任范围及责任限制</h5>
+  <p>5.1EduSoho开放云对本服务条款中列明的责任承担范围负责。</p>
+  <h5>6.完整协议</h5>
+  <p>6.1本服务条款作为《EduSoho开放云服务条款》的补充条款，除另外说明，相关名词与《EduSoho开放云服务条款》的定义相同。</p>
+  <p>6.2一旦您同意本服务条款或使用本服务，本服务条款即成为《EduSoho开放云服务条款》不可分割的组成部分，与《EduSoho开放云服务条款》具有同等的法律效力。</p>
+  <p>6.3除本服务条款中明确所作修改的条款之外，《EduSoho开放云服务条款》中的其余部分应完全继续有效。</p>
+  <p>6.4本服务条款与《EduSoho开放云服务条款》有相互冲突时，以本服务条款为准。</p>
+  <p>6.5本服务条款的章节标题仅为行文方便而设，不具有法律或合同效力。</p>
+  <p>6.6您对本服务条款理解和认同，您即对本服务条款所有组成部分的内容理解并认同，一旦您使用本服务，您和EduSoho开放云即受本服务条款所有组成部分的约束。</p>
+  <p>6.7本服务条款部分内容被有管辖权的法院认定为违法的，不因此影响其他内容的效力。</p>
+  <h5>7.法律适用与管辖</h5>
+  <p>本服务条款之效力、解释、变更、执行与争议解决均适用中华人民共和国法律。因本服务条款产生之争议，均应依照中华人民共和国法律予以处理，并提交浙江省杭州市滨江区人民法院仲裁。</p>
+admin.edu_cloud.edu_search.agree_btn: 同意
+admin.edu_cloud.edu_search.locked_tips: 您的教育云服务已被锁定，请联系客服人员：4008041114。
 admin.edu_cloud.edu_search.switch_title: 云搜索开关
 admin.edu_cloud.edu_search.enable_cloud_search: 启用云搜索
 admin.edu_cloud.edu_search.search_enabled: 已启用
 admin.edu_cloud.edu_search.search_close: 关闭
 admin.edu_cloud.edu_search.init_search_tips: 正创建索引，预计需要 1 ~ 3 天，请耐心等待...
+admin.edu_cloud.edu_search.index.index_tips: 正在索引数据，预计1～3天完成
 admin.edu_cloud.edu_search.search_tips: >
   多姿多彩的教学资源，一处搜齐。<a href="%searchUrl%" target="_blank">点击这里</a>了解详情。
+admin.edu_cloud.edu_search.rage_introduction: 搜索范围说明
+admin.edu_cloud.edu_search.rage_introduction_content: >
+  －课程：包括课程标题、课程简介、课时标题等内容关键词全文搜索。<br>
+  －教师：教师姓名、教师头衔。<br>
+  －小组话题：包括话题标题、正文等关键词全文搜索。<br>
+  －资讯：包括资讯标题、正文等关键词全文搜索。<br>
+  －公开课：包括课程标题、课程简介等内容关键词全文搜索。<br>
 admin.edu_cloud.edu_search.base_setting: 基本设置
+admin.edu_cloud.edu_search.power_by: >
+  云搜索服务由EduSoho教育云提供 <a href="http://open.edusoho.com/educloud" target="_blank">了解详情</a>
+admin.edu_cloud.edu_search.connect_failed_tips: 网络问题，无法连接%edusoho%开放云平台
 admin.edu_cloud.edu_search.rebuild_index: 重建索引
+admin.edu_cloud.edu_search.rebuild_index.rebuild_btn: 重建索引
+admin.edu_cloud.edu_search.rebuild_index.sure_tips: 确定重建索引？
+admin.edu_cloud.edu_search.rebuild_index.rebuild_tips: >
+  1.重建索引完成后会覆盖之前的搜索数据；<br>
+  2.索引在重建时需要大约30分钟的时间；<br>
+  3.在重建索引期间不影响云搜索功能正常使用；
+admin.edu_cloud.edu_search.rebuild_index.modal.content_title: 风险提示
+admin.edu_cloud.edu_search.rebuild_index.modal.tips: >
+  <li class="pvs color-gray">
+    1. 重建索引后，之前的索引数据会被全部覆盖。
+  </li>
+  <li class="pvs color-gray">
+    2. 重建索引需要大约30分钟。
+  </li>
+  <li class="pvs color-gray">
+    3. 重建索引期间不影响云搜索功能的正常使用。
+  </li>
 admin.edu_cloud.edu_search.rebuild_index_tips: >
   警告:<li>1.如果无法通过云搜索搜索某一课程，请尝试更新课程信息后10分钟再搜索。</li>
   <li>2.如果按照1操作后仍无法搜索该课程，再考虑使用重建索引。</li>
@@ -5460,6 +5612,11 @@ admin.edu_cloud.edu_search.search_tips: 云搜索提供强大的全文搜索引�
 admin.edu_cloud.edu_search.unbinded_url_tips: >
   未绑定授权域名不能开通云搜索！<a href="%setUrl%">立即设置</a>
 admin.edu_cloud.edu_search.start_enabled_btn: 立即启用
+admin.edu_cloud.edu_search.connect_btn: 立即接入
+admin.edu_cloud.edu_search.start_setup: 立即设置
+admin.edu_cloud.edu_search.unbind_url_tips: 未绑定授权域名不能开通云搜索！
+admin.edu_cloud.edu_search.unmatch_url_tips: 当前域名与授权域名不符，不能开通云搜索！
+admin.edu_cloud.edu_search.use_failed_tips: 抱歉，您尚未接入教育云，不能使用云搜索服务！
 admin.edu_cloud.edu_search.binded_error_url_tips: >
   当前域名与授权域名不符，不能开通云搜索！<a href="%setUrl%" target="_blank">立即设置
 admin.edu_cloud.edu_search.search_range_describe: 搜索范围说明
@@ -5469,6 +5626,8 @@ admin.edu_cloud.edu_search.search_range_tips: >
   <p>－小组话题：包括话题标题、正文等关键词全文搜索。</p>
   <p>－资讯：包括资讯标题、正文等关键词全文搜索。</p>
   <p>－公开课：包括课程标题、课程简介等内容关键词全文搜索。</p>
+
+
 
 # 即时聊天设置
 admin.edu_cloud.edu_im.instant_chat_status: 即时聊天状态
@@ -5720,6 +5879,18 @@ admin.user_fields.Require_personal_information.help_block: 开启后，%user_nam
 admin.user_fields.other_setting: 其它设置
 admin.user_fields.other_setting.avatar: 加入免费课程要求设置头像
 admin.user_fields.other_setting.edit_user_name: 用户修改用户名
+
+admin.user_fields.modal.delete_field: 删除字段
+admin.user_fields.modal.delete_field_tips: >
+  确定要删除 <b style="color:red;">%title%</b>字段吗？<br><b style="color:red;">所有该字段的历史数据都将一起删除！</b><br>如要保留历史数据，请隐藏该字段
+admin.user_fields.modal.confirm_delete_btn: 确定删除
+admin.user_fields.modal.edit_field: 编辑字段
+admin.user_fields.modal.field_name: 字段名称
+admin.user_fields.modal.field_tyoe: 字段类型
+admin.user_fields.modal.field_seq: 字段序号
+admin.user_fields.modal.show_field_seq: 显示序号
+admin.user_fields.modal.enable: 是否启用、显示
+
 admin.user_fields.modal.select_fields: 请选择
 admin.user_fields.modal.varchar_fields: 文本
 admin.user_fields.modal.varchar_fields.tips: 还可以添加%varcharCount%个字段
@@ -6004,6 +6175,23 @@ admin.system_log.hide_data: 隐藏数据
 admin.system_log.empty: 无日志记录
 admin.system_log.code_run_log.show_rencent_data_tips: 显示最近的2000条日志信息。
 
+# 管理员账号同步
+admin.admin_sync.content_title: 管理员帐号同步
+admin.admin_sync.tips: >
+  <p><strong>注意事项：</strong></p>
+  <p>同步管理帐号，是将用户中心%centerName%的管理员帐号的用户名、Email、密码，覆盖掉EduoSoho中您<strong>当前登录</strong>的管理帐号。<br>每个帐号只能同步一次。</p>
+admin.admin_sync.username: 管理员用户名
+admin.admin_sync.password: 管理员密码
+admin.admin_sync.sync_btn: 同步
+admin.admin_sync.sync_tips: 该管理员帐号已同步，无需再同步。
+
+# CDN
+admin.cdn.content_title: 设置
+admin.cdn.status: 状态
+admin.cdn.status.open: 启用
+admin.cdn.status.close: 关闭
+admin.cdn.input_placeholder: 不填将默认是URL
+
 # 订单模块
 admin.order.paid_time_range.input_placeholder: 付款时间段
 admin.order.keyword: 关键词:
@@ -6268,6 +6456,44 @@ my.money_record.payout_empty: 无消费记录
 #系统后台运营
 admin.article_setting.name: 频道名称
 admin.article_setting.pageNum: 列表每页资讯数
+admin.article_setting.edit: 编辑资讯
+admin.article_setting.title: 资讯标题
+admin.article_setting.category: 所属栏目
+
+admin.article_setting.category.name: 栏目名称
+admin.article_setting.category.code: 栏目编码
+admin.article_setting.category.code.tips: 生成列表、资讯时使用，例如news、bbs等
+admin.article_setting.category.choose: 选择栏目
+admin.article_setting.category.allow_publish: 允许发布资讯
+admin.article_setting.category.seo_title: SEO标题
+admin.article_setting.category.seo_keywords: SEO关键字
+admin.article_setting.category.seo_description: SEO描述
+admin.article_setting.category.parent_category: 父栏目
+admin.article_setting.category.publish: 启用
+admin.article_setting.category.publish.tips: 建议等栏目内容整理编辑完毕后再启用
+admin.article_setting.category.edit: 编辑栏目
+admin.article_setting.category.create: 添加栏目
+
+admin.article_setting.choose_category: 选择所属栏目
+admin.article_setting.tag: TAG标签
+admin.article_setting.content: 正文
+admin.article_setting.property: 资讯属性
+admin.article_setting.property_tooltip: 资讯属性Tooltip
+admin.article_setting.source_setting: 来源设置
+admin.article_setting.source_name: 来源名称
+admin.article_setting.source_address: 来源地址
+admin.article_setting.thumb_setting: 设置缩略图
+admin.article_setting.thumb_setting.upload_btn: 上传
+admin.article_setting.thumb_setting.upload_tips: >
+  <p class="help-block">请上传png, gif, jpg格式的图片文件</p>
+  <p class="help-block mbs">请推荐尺寸754*424px。
+admin.article_setting.publish_time: 发布时间
+admin.article_setting.publish_time_tips: 内容条目默认按发布时间的倒序显示
+admin.article_setting.image.content_title: 设置资讯图片
+admin.article_setting.image: 资讯图片
+admin.article_setting.image.tips: 提示：请选择图片裁剪区域。
+admin.article_setting.image.upload_tips: 你可以上传JPG、GIF或PNG格式的文件,推荐尺寸754*424px,文件大小不能超过2M。
+admin.article_setting.image.choose_btn: 选择上传的文件
 
 admin.group_settings.homepage_show_group: 首页显示小组信息
 admin.group_settings.homepage_show_group_hint: 此功能开关只针对默认主题、默认主题B、清秋主题。

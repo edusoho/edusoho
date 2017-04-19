@@ -1,6 +1,6 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{{'优化课程文件'|trans}}{% endblock %}
+{% block title %}{{'admin.process_bar'|trans}}{% endblock %}
 
 {% block body %}
   <div id="optimize-files-progress" class="optimize-files-progress" style="display:none;">
@@ -13,8 +13,8 @@
 {% endblock %}
 
 {% block footer %}
-   <strong class="text text-danger" id="optimize-hint">{{'正在优化课程文件，请不要关闭当前窗口...'|trans}}</strong>
-  <button id="finish-optimize-btn" data-loading-text="{{'正在优化, 请稍等...'|trans}}" class="btn btn-primary" style="display:none;"data-dismiss="modal">{{'完成优化'|trans}}</button>
-  
+   <strong class="text text-danger" id="optimize-hint">{{'admin.process_bar.keep_window_tips'|trans}}</strong>
+  <button id="finish-optimize-btn" data-loading-text="{{'admin.process_bar.wait_tips'|trans}}" class="btn btn-primary" style="display:none;"data-dismiss="modal">{{'admin.process_bar.finish_btn'|trans}}</button>
+
   <script>app.load('optimize/optimize-modal');</script>
 {% endblock %}
