@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
+use ApiBundle\Api\Util\Converter;
 use AppBundle\Common\ServiceToolkit;
 
 class CourseFilter extends Filter
@@ -21,13 +22,8 @@ class CourseFilter extends Filter
 
     protected function publicFields(&$data)
     {
-        if ($data['expiryStartDate']) {
-            $data['expiryStartDate'] = date('c', $data['expiryStartDate']);
-        }
-
-        if ($data['expiryEndDate']) {
-            $data['expiryEndDate'] = date('c', $data['expiryEndDate']);
-        }
+        Converter::timestampToDate($data['expiryStartDate']);
+        Converter::timestampToDate($data['expiryEndDate']);
 
         $data['services'] = ServiceToolkit::getServicesByCodes($data['services']);
 

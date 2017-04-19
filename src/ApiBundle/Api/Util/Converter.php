@@ -7,6 +7,8 @@ class Converter
     {
         if ($timestamp) {
             $timestamp = date($timestamp, 'c');
+        } else {
+            $timestamp = '0';
         }
     }
 }
