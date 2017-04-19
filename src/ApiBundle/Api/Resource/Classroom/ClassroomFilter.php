@@ -23,9 +23,7 @@ class ClassroomFilter extends Filter
 
     protected function simpleFields(&$data)
     {
-        $data['smallPicture'] = AssetHelper::getFurl($data['smallPicture'], 'classroom.png');
-        $data['middlePicture'] = AssetHelper::getFurl($data['middlePicture'], 'classroom.png');
-        $data['largePicture'] = AssetHelper::getFurl($data['largePicture'], 'classroom.png');
+        $this->transformCover($data);
     }
 
     protected function publicFields(&$data)
@@ -42,5 +40,21 @@ class ClassroomFilter extends Filter
         $userFilter->filter($data['headTeacher']);
         $userFilter->filters($data['teachers']);
         $userFilter->filters($data['assistants']);
+    }
+
+    private function transformCover(&$data)
+    {
+        $data['smallPicture'] = AssetHelper::getFurl($data['smallPicture'], 'classroom.png');
+        $data['middlePicture'] = AssetHelper::getFurl($data['middlePicture'], 'classroom.png');
+        $data['largePicture'] = AssetHelper::getFurl($data['largePicture'], 'classroom.png');
+        $data['cover'] = array(
+            'small' => $data['smallPicture'],
+            'middle' => $data['middlePicture'],
+            'large' => $data['largePicture']
+        );
+
+        unset($data['smallPicture']);
+        unset($data['middlePicture']);
+        unset($data['largePicture']);
     }
 }

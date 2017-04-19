@@ -20,9 +20,7 @@ class CourseSetFilter extends Filter
 
     protected function simpleFields(&$data)
     {
-        foreach ($data['cover'] as $size => $imagePath) {
-            $data['cover'][$size] = AssetHelper::getFurl($imagePath, 'course.png');
-        }
+        $this->transformCover($data['cover']);
     }
 
     protected function publicFields(&$data)
@@ -34,5 +32,12 @@ class CourseSetFilter extends Filter
         $userFilter = new UserFilter();
         $userFilter->filter($data['creator']);
         $userFilter->filters($data['teachers']);
+    }
+
+    private function transformCover(&$cover)
+    {
+        $cover['small'] = AssetHelper::getFurl(empty($cover['small']) ? '':$cover['small'], 'course.png');
+        $cover['middle'] = AssetHelper::getFurl(empty($cover['middle']) ? '':$cover['middle'], 'course.png');
+        $cover['large'] = AssetHelper::getFurl(empty($cover['large']) ? '':$cover['large'], 'course.png');
     }
 }
