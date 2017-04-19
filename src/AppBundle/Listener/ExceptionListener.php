@@ -32,12 +32,11 @@ class ExceptionListener
         $request = $event->getRequest();
         $statusCode = $this->convertStateCode($exception);
         if (!$request->isXmlHttpRequest()) {
-
-            if ($exception instanceof HttpExceptionInterface  || $this->container->get('kernel')->isDebug()) {
+            if ($exception instanceof HttpExceptionInterface || $this->container->get('kernel')->isDebug()) {
                 return;
             }
 
-            if(empty($this->getUser())){
+            if (empty($this->getUser())) {
                 return new RedirectResponse($this->container->get('router')->generate('login'));
             }
             $event->setException(
