@@ -3,16 +3,18 @@
 namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\Annotation\ApiConf;
+use ApiBundle\Api\Annotation\ApiFilter;
 use ApiBundle\Api\ApiRequest;
+use ApiBundle\Api\Exception\InvalidArgumentException;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
 use ApiBundle\Api\Resource\AbstractResource;
 
-class CourseTrialVideo extends AbstractResource
+class CourseTrialTask extends AbstractResource
 {
     /**
      * @ApiConf(isRequiredAuth=false)
      */
-    public function search(ApiRequest $request, $courseId)
+    public function get(ApiRequest $request, $courseId, $indicator)
     {
         $course = $this->service('Course:CourseService')->getCourse($courseId);
 
@@ -20,13 +22,17 @@ class CourseTrialVideo extends AbstractResource
             throw new ResourceNotFoundException('教学计划不存在');
         }
 
-        $result = array(
-            'trailVideos' => array(),
-            'maxWatchLength' => $course['tryLookLength']
-        );
+        if ($indicator == 'first') {
+            return $this->getFirstTrailTask($course);
+        } else {
+            throw new InvalidArgumentException();
+        }
+    }
 
+    private function getFirstTrailTask($course)
+    {
         $freeVideoTasks = $this->service('Task:TaskService')->searchTasks(
-            array('courseId' => $course['id'], 'type' => 'video', 'isFree' => '1'),
+            array('courseId' => $course['id'], 'isFree' => '1'),
             array('seq' => 'ASC'),
             0,
             1
@@ -39,11 +45,11 @@ class CourseTrialVideo extends AbstractResource
                 0,
                 1
             );
-            $result['trailVideos'] = $trialVideoTasks;
+            $firstTrailTask = array_pop($trialVideoTasks);
         } else {
-            $result['trailVideos'] = $freeVideoTasks;
+            $firstTrailTask = array_pop($freeVideoTasks);
         }
 
-        return $result;
+        return $firstTrailTask;
     }
 }
