@@ -54,7 +54,7 @@
 
   <div class="navbar navbar-inverse navbar-fixed-top">
   {% if cloudSmsInfo %}
-    <div class="alert alert-danger es-admin-alert" role="alert"><div class="text-center"><strong>您好，ES云短信发送机制升级优化，网站目前短信剩余{{cloudSmsInfo.remainCount|default(0)}}条，为保证继续使用，请开通教育云，点击 <a href="http://open.edusoho.com/cloud/access" target="_blank"> 立即开通</a></strong></div></div>
+    <div class="alert alert-danger es-admin-alert" role="alert"><div class="text-center"><strong>{{ 'admin.new_layout.cloudSmsInfo.tips'|trans({'%remainCount%':cloudSmsInfo.remainCount|default(0)}) }}</strong></div></div>
   {% endif %}
     <div class="container">
       <div class="navbar-header">
@@ -156,7 +156,7 @@
     <div class="fixed-bar">
       <a href="{{path('admin_feedback')}}"  target='_blank' class="icon-question-text feedback">
         <i class="es-icon es-icon-help"></i>
-        <span>{{'admin.fixed_bar.product'|trans}}<br/>{{'admin.fixed_bar.feedback'|trans}}</span>
+        <span>{{ 'admin.fixed_bar.product_feedback'|trans|raw }}</span>
       </a>
     </div>
   {% endif %}
