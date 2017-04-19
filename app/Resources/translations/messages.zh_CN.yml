@@ -3796,26 +3796,26 @@ admin.course_manage.operater: 操作
 ## 课程管理
 ## 普通课程
 admin.course_manage.manage.normal_course: 普通课程
-admin.course_manage.manage.student_number: >
-  %student%数
+admin.course_manage.manage.student_number: %student%数
 admin.course_manage.manage.income_RMB: 收入(元)
 
 ## 班级课程
-admin.course_manage.manage.classroom_course_location: >
-  所在%classroom%
+admin.course_manage.manage.classroom_course: %classroomName%课程
+admin.course_manage.manage.classroom_course_location: 所在%classroom%
 admin.course_manage.manage.classroom_course_removed: 已移除
 
 ## 会员课程
 admin.course_manage.manage.vip_course: 会员课程
 admin.course_manage.manage.vip_grade: 会员等级
 admin.course_manage.manage.vip_grade_removed: 该会员等级已删除
-admin.course_manage.manage.vip_grade_count: >
-  等%count%个会员等级
+admin.course_manage.manage.vip_grade_count: 等%count%个会员等级
 
 ## 直播课程
+admin.course_manage.manage.live: 直播
 admin.course_manage.manage.live_course: 直播课程
 
-## 课程管理通用模块
+## 课程管理模块
+admin.course_manage.manage.course_name_placeholder: 课程名称
 admin.course_manage.manage.status_placeholder: 课程状态
 admin.course_manage.manage.course_tips: >
   <div style='width:250px;'>
@@ -3840,11 +3840,70 @@ admin.course_manage.manage.creator: 创建者
 admin.course_manage.manage.manage_btn: 管理
 admin.course_manage.manage.empty: 暂无课程记录
 admin.course_manage.manage.category: 分类
-admin.course_manage.manage.recommend: >
-  荐：%recommendedTime% / 序号：%recommendedSeq%
+admin.course_manage.manage.removed: 已移除
+admin.course_manage.manage.recommend: 荐：%recommendedTime% / 序号：%recommendedSeq%
+admin.course_manage.manage.free_course: 免费课程
+admin.course_manage.manage.charge_course: 收费课程
+admin.course_manage.manage.charge_status: 收费状态
 admin.course_manage.manage.no_serialize: 非连载课程
 admin.course_manage.manage.serializing: 连载中
 admin.course_manage.manage.serialize_finished: 已完结
+admin.course_manage.manage.not_select_course: 还没有选择课程
+admin.course_manage.manage.not_select_plan: 还没有选择教学计划
+admin.course_manage.manage.auth_user: 核实用户
+admin.course_manage.manage.user_passwd: 用户密码
+admin.course_manage.manage.input_passwd_placeholder: 请输入你的登录密码
+admin.course_manage.manage.week_excellent_courses: 每周精品课程
+
+# 文件管理
+admin.course_manage.file.name_title: 文件管理
+admin.course_manage.file.type_option: 文件类型
+admin.course_manage.file.creator_placeholer: 创建人
+admin.course_manage.file.name_placeholder: 文件名称
+admin.course_manage.file.name: 名称
+admin.course_manage.file.size: 大小
+admin.course_manage.file.type: 类型
+admin.course_manage.file.storage_mode: 存储方式
+admin.course_manage.file.creator: 创建人
+admin.course_manage.file.create_time: 创建时间
+admin.course_manage.file.operation: 操作
+admin.course_manage.file.empty: 无课程文件
+admin.course_manage.file.all_select: 全选
+admin.course_manage.file.data_name: 文件
+admin.course_manage.file.delete_btn: 删除
+admin.course_manage.file.local_storage: 本地存储
+admin.course_manage.file.cloud_storage: 云视频
+admin.course_manage.file.create_time: 创建时间
+
+## 指定课程
+admin.course_manage.chooser.title: 指定课程
+admin.course_manage.chooser.course_title: 选课
+admin.course_manage.chooser.course_name_placeholder: 课程名称
+admin.course_manage.chooser.course_category: 课程分类
+admin.course_manage.chooser.course_status: 课程状态
+admin.course_manage.chooser.num: 编号
+admin.course_manage.chooser.name: 名称
+admin.course_manage.chooser.student_num: %user_name%数
+admin.course_manage.chooser.status: 状态
+admin.course_manage.chooser.creator: 创建者
+admin.course_manage.chooser.operation: 操作
+admin.course_manage.chooser.select_btn: 选择
+admin.course_manage.chooser.empty: 暂无课程记录
+
+# 课时数据统计
+admin.course_manage.lesson.name: 课时名
+admin.course_manage.lesson.study_num: 课时学习人数
+admin.course_manage.lesson.finish_num: 课时完成人数
+admin.course_manage.lesson.average_study_time: 课时平均学习时长(分)
+admin.course_manage.lesson.video_audio_study_time: 音视频时长(分)
+admin.course_manage.lesson.video_audio_average_study_time: 音视频平均观看时长(分)
+admin.course_manage.lesson.average_test_score: 测试平均得分
+admin.course_manage.lesson.text: 图文
+admin.course_manage.lesson.video: 视频
+admin.course_manage.lesson.audio: 音频
+admin.course_manage.lesson.testpaper: 试卷
+admin.course_manage.lesson.ppt: (ppt)
+admin.course_manage.lesson.watch_time_empty: 无
 
 ## 课程推荐
 admin.course_manage.recommend.seq: 顺序号
@@ -3861,22 +3920,20 @@ admin.course_manage.recommend.set_seq.seq_tips: 请输入0-10000的整数
 
 ## 课程统计
 admin.course_manage.statistics.name: 课程名
-admin.course_manage.statistics.classroom: >
-  所在%classroom%
+admin.course_manage.statistics.classroom: 所在%classroom%
 admin.course_manage.statistics.teach_plan_count: 教学计划数量
 admin.course_manage.statistics.task_count: 任务数量
 admin.course_manage.statistics.student: 学员
-admin.course_manage.statistics.student_number: >
-  %user_name%人数
+admin.course_manage.statistics.student_number: %user_name%人数
 admin.course_manage.statistics.finished_number: 完成课程人数
 admin.course_manage.statistics.study_time_minute: 课程学习时长(分)
 admin.course_manage.statistics.income_RMB: 课程收入(元)
 admin.course_manage.statistics.no_introduce: 未引入
 admin.course_manage.statistics.watch_task: 查看任务
+admin.course_manage.statistics.watch_course_data: 查看课时数据
 
 ## 任务统计数据
-admin.course_manage.statistics.modal_title: >
-  %title%课程的数据
+admin.course_manage.statistics.modal_title: %title%课程的数据
 admin.course_manage.statistics.data.name: 任务名
 admin.course_manage.statistics.data.study_number: 学习人数
 admin.course_manage.statistics.data.finished_number: 完成人数
@@ -3893,6 +3950,18 @@ admin.course_manage.statistics.data_detail.study_days: 课程学习天数
 admin.course_manage.statistics.data_detail.study_time: 课程学习时长（分）
 admin.course_manage.statistics.data_detail.question_number: 提问数
 admin.course_manage.statistics.data_detail.note_number: 笔记数
+
+## 评论管理
+admin.comment_manage.title: 评论管理
+admin.comment_manage.monitor: 评论监控
+admin.comment_manage.id: ID
+admin.comment_manage.object: 评论对象
+admin.comment_manage.content: 评论对象
+admin.comment_manage.speaker: 发言人
+admin.comment_manage.speaker_time: 发言时间
+admin.comment_manage.operation: 操作
+admin.comment_manage.course: 课程
+admin.comment_manage.delete_btn: 删除
 
 # 公开课管理
 ## 公开课管理通用模块
@@ -4030,33 +4099,26 @@ admin.live_manage.deleted: 课程已删除
 
 #班级管理
 ## 管理模块
-admin.classroom_manage.manage.name_placeholder: >
-  %name%名称
+admin.classroom_manage.manage.name_placeholder: %name%名称
 admin.classroom_manage.manage.describe_tips: >
   <div style='width:250px;'>
     <span style='color:blue;'>班级说明</span><br>
     1. 编号及排序无法修改；<br>
     2. 班级地址规则：域名/classroom/班级编号；
   </div>
-admin.classroom_manage.manage.number_th: >
-  %title%编号
-admin.classroom_manage.manage.name_th: >
-  %name%名称
+admin.classroom_manage.manage.number_th: %title%编号
+admin.classroom_manage.manage.name_th: %name%名称
 admin.classroom_manage.manage.course_number_th: 课程数
 admin.classroom_manage.manage.student_number_th: 学员数
 admin.classroom_manage.manage.price_th: 价格
 admin.classroom_manage.manage.status_th: 状态
 admin.classroom_manage.manage.operate_th: 操作
-admin.classroom_manage.manage.empty: >
-  暂无%name%信息!
+admin.classroom_manage.manage.empty: 暂无%name%信息!
 admin.classroom_manage.manage.category: 分类
-admin.classroom_manage.manage.recommend: >
-  荐: %recommendedTime% / 序号: %recommendedSeq%
+admin.classroom_manage.manage.recommend: 荐: %recommendedTime% / 序号: %recommendedSeq%
 admin.classroom_manage.manage.course_detail: 详情
-admin.classroom_manage.manage.price: >
-  %price%元
-admin.classroom_manage.manage.origin_price: >
-  原价 %priceAll%元
+admin.classroom_manage.manage.price: %price%元
+admin.classroom_manage.manage.origin_price: 原价 %priceAll%元
 admin.classroom_manage.manage.published: 已发布
 admin.classroom_manage.manage.closed: 已关闭
 admin.classroom_manage.manage.unpublished: 未发布
@@ -4064,38 +4126,46 @@ admin.classroom_manage.manage.manage_btn: 管理
 
 ##　班级推荐模块
 admin.classroom_manage.recommend.seq_th: 顺序号
-admin.classroom_manage.recommend.name_th: >
-  %name%名称
+admin.classroom_manage.recommend.name_th: %name%名称
 admin.classroom_manage.recommend.create_time_th: 创建时间
 admin.classroom_manage.recommend.recommend_time_th: 推荐时间
 admin.classroom_manage.recommend.operate_th: 操作
-admin.classroom_manage.recommend.empty: >
-  暂无推荐%name%
+admin.classroom_manage.recommend.empty: 暂无推荐%name%
 admin.classroom_manage.recommend.set_seq_btn: 设置序号
-admin.classroom_manage.recommend.cancel_recommend_classroom_btn: >
-  取消%name%推荐
+admin.classroom_manage.recommend.cancel_recommend_classroom_btn: 取消%name%推荐
 admin.classroom_manage.recommend.cancel_recommend_btn: 取消推荐
 
 ##设置班级推荐序号modal
-admin.classroom_manage.recommend.set_seq.modal_title: >
-  设置推荐%name%
+admin.classroom_manage.recommend.set_seq.modal_title: 设置推荐%name%
 admin.classroom_manage.recommend.set_seq.seq_label: 序号
 admin.classroom_manage.recommend.set_seq.help_tips: 请输入0-10000的整数(默认序号是100)
 
 ##创建班级
 admin.classroom_manage.create: 创建
-admin.classroom_manage.create.title: >
-  创建%name%
-admin.classroom_manage.create.name_label: >
-  %name%名称
-admin.classroom_manage.create.show_label: >
-  %name%展示
+admin.classroom_manage.create.title: 创建%name%
+admin.classroom_manage.create.name_label: %name%名称
+admin.classroom_manage.create.show_label: %name%展示
 admin.classroom_manage.create.open_radio: 开启
 admin.classroom_manage.create.close_radio: 关闭
 admin.classroom_manage.create.show_tips: 关闭后，%name%将彻底隐藏，无法在前台查看到。
-admin.classroom_manage.create.buy_label: >
-  %name%购买
+admin.classroom_manage.create.buy_label: %name%购买
 admin.classroom_manage.create.buy_tips: 关闭后%name%将无法在线购买加入。
+
+## 班级选择
+admin.classroom_manage.chooser.classroom: 指定班级
+admin.classroom_manage.chooser.category: 班级分类
+admin.classroom_manage.chooser.status: 班级状态
+admin.classroom_manage.chooser.title_placeholder: 标题
+admin.classroom_manage.chooser.num: 编号
+admin.classroom_manage.chooser.name: 名称
+admin.classroom_manage.chooser.student_num: %name%数
+admin.classroom_manage.chooser.price: 价格
+admin.classroom_manage.chooser.status: 状态
+admin.classroom_manage.chooser.operation: 操作
+admin.classroom_manage.chooser.recommend: 荐
+admin.classroom_manage.chooser.free: 免费
+admin.classroom_manage.chooser.select_btn: 选择
+admin.classroom_manage.chooser.empty: 暂无%classroomName%记录
 
 #　分类管理
 admin.category_manage.name_th: 名称
@@ -5057,7 +5127,9 @@ admin.course_thread.select_all_btn: 全选
 admin.course_thread.form.input.keyword.placeholer: 关键词
 admin.course_thread.form.input.author.placeholer: 作者
 admin.course_thread.post_th: 帖子
-admin.course_thread.replay_or_review_th: 回复/查看
+admin.course_thread.all_answer: 所有
+admin.course_thread.not_answer: 未回复
+admin.course_thread.reply_or_review_th: 回复/查看
 admin.course_thread.type_th: 属性
 admin.course_thread.author_th: 作者
 admin.course_thread.operation_th: 操作
