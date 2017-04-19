@@ -63,6 +63,7 @@ site.default.minute: 分
 site.default.second: 秒
 site.default.bar: 条
 site.default.times: 次
+site.default.detail: 明细
 site.org.belongs_to_org_th: 所属组织机构
 site.org.code: 编码：
 site.tips: 提示
@@ -5231,12 +5232,19 @@ admin.course_review.classroom_title.placeholer: %classroomName%名
 admin.course_review.classroom_deleted: %classroomName%已删除
 
 # 教育云
+admin.edu_cloud: 教育云
+admin.edu_cloud.register: 没有帐号? 去注册
+admin.edu_cloud.project: 项目
+admin.edu_cloud.content: 内容
+admin.edu_cloud.operation: 操作
 admin.edu_cloud.connect_failed_tips: 网络问题，无法连接%Edusoho%开放云平台
+admin.edu_cloud.locked_tips: 您的教育云服务已被锁定，请联系客服人员
 admin.edu_cloud.side_bar.introduction: 概览
 admin.edu_cloud.side_bar.setup: 设置
 
 # 账户
 admin.edu_cloud.account.content_title: 账户余额
+admin.edu_cloud.account.recharge_btn: 去充值
 admin.edu_cloud.account.recharge_btn: 充值
 admin.edu_cloud.account.coupon_balance: 代金券余额：
 admin.edu_cloud.account.active_ben: 激活代金券
@@ -5284,6 +5292,24 @@ admin.edu_cloud.overview.search_more_tips: >
 admin.edu_cloud.overview.further_understand_cloud_search: 进一步了解 云搜索
 
 # 云视频
+admin.edu_cloud.edu_video.package.content_title: 云视频包状态
+admin.edu_cloud.edu_video.package.storage: 存储空间:
+admin.edu_cloud.edu_video.package.storage.free_transfer: 流量:
+admin.edu_cloud.edu_video.package.storage.service_deadline: 服务期限:
+admin.edu_cloud.edu_video.package.storage.upgrade_btn: 升级
+admin.edu_cloud.edu_video.package.storage.renew_btn: 续费
+admin.edu_cloud.edu_video.package.storage.will_overdue_tips: 您的云视频包将于%remaining%天后到期，请尽快续费
+admin.edu_cloud.edu_video.package.storage.overdued_tips: 您的云视频包已到期，请尽快续费
+admin.edu_cloud.edu_video.package.storage.renew_success_tips: 已续费 将于%effectiveDate%生效
+admin.edu_cloud.edu_video.package.buy_btn: >
+  <a class="mhm" href="%buy%" target="_blank">购买</a>云视频包，享受更优惠的视频托管服务</div>
+admin.edu_cloud.edu_video.use_info: 云视频使用情况（最近7个月）
+admin.edu_cloud.edu_video.tlp_is_open: 已开通tlp加固服务
+admin.edu_cloud.edu_video.open_tips: >
+  尚未启用云视频服务，
+  <a href="%overview%">立即启用</a>
+admin.edu_cloud.edu_video.tlp_tips: >
+  TLP安全加固服务，防盗播、防恶意下载，<a href="%tlp%" target="_blank">了解详情</a>
 admin.edu_cloud.edu_video.locked_tips: 您的教育云服务已被锁定，请联系客服人员：4008041114。
 admin.edu_cloud.edu_video.stoped_tips: 您的云视频服务已被暂停，不能使用，请联系客服人员：4008041114。
 admin.edu_cloud.edu_video.storage_space_trend: >
@@ -5418,6 +5444,25 @@ admin.edu_cloud.edu_live.overdue_tips: 您的云直播服务已到期，请尽�
 admin.edu_cloud.edu_live.renew_tips: 您的云直播服务将于%remaining%天后到期，请尽快续费
 
 # 云短信
+admin.edu_cloud.edu_sms: 云短信
+admin.edu_cloud.edu_sms.apply_btn: 申请开通云短信
+admin.edu_cloud.edu_sms.status: 云短信状态
+admin.edu_cloud.edu_sms.status.auditing: 审核中
+admin.edu_cloud.edu_sms.status.failed: 未通过
+admin.edu_cloud.edu_sms.status.pass: 已通过
+admin.edu_cloud.edu_sms.package_status: 云短信包状态
+admin.edu_cloud.edu_sms.sms_remain_count: 剩余短信:%remainCount%条
+admin.edu_cloud.edu_sms.package_renew_tips: 您的云短信包剩余不足100条短信，请尽快续购
+admin.edu_cloud.edu_sms.package_none_renew_tips: 您的云短信包已用完，请尽快续购
+admin.edu_cloud.edu_sms.buy_package: >
+  <a class="mhm" href="%buy%" target="_blank">购买</a>云短信包，享受更优惠的短信服务
+admin.edu_cloud.edu_sms.service_forbidden_tips: >
+  <p class="text-danger">您的云短信服务已被禁用</p>
+  <p class="text-danger">请联系客服人员：4008041114</p>
+admin.edu_cloud.edu_sms.use_info: 云短信使用情况（最近7天）
+admin.edu_cloud.edu_sms.open_btn: >
+  <a href="%sms">开启</a>
+  云短信，享受优质的短信发送服务
 admin.edu_cloud.edu_sms.apply.content_title: 申请云短信
 admin.edu_cloud.edu_sms.apply.remind: 提醒
 admin.edu_cloud.edu_sms.apply.first_open_tips: 初次开启，需填写网校名称，审核需1到3个工作日，开启成功后，短信最低￥0.055/条
@@ -5512,7 +5557,18 @@ admin.edu_cloud.edu_sms.virtual_money_buy_receipt: 虚拟币充值回执
 admin.edu_cloud.edu_sms.virtual_money_buy_receipt_tips: 你已成功购买《虚拟币面值》《单位》，支付［订单金额］。
 
 # 云邮件
-admin.edu_cloud.edu_email.locked_tips: 您的教育云服务已被锁定，请联系客服人员
+admin.edu_cloud.edu_email: 云邮件
+admin.edu_cloud.edu_email.application: 邮件应用场景
+admin.edu_cloud.edu_email.application.id: 编号
+admin.edu_cloud.edu_email.application.where: 应用场景
+admin.edu_cloud.edu_email.application.send_way: 发送方式
+admin.edu_cloud.edu_email.application.status: 状态
+admin.edu_cloud.edu_email.email_verify: 邮箱验证
+admin.edu_cloud.edu_email.password_reset: 重置密码
+admin.edu_cloud.edu_email.auto_single_send: 自动单发
+admin.edu_cloud.edu_email.default_open: 默认开启
+admin.edu_cloud.edu_email.locked_tips: 您的云邮件已被锁定，请联系客服人员：4008041114。
+admin.edu_cloud.edu_email.stop_tips: 您的云邮件已被禁用，请联系客服人员：4008041114。
 admin.edu_cloud.edu_email.service_suspend_tips: 您的云邮件服务已被暂停，不能使用，请联系客服人员
 admin.edu_cloud.edu_email.basic_info: 基本信息
 admin.edu_cloud.edu_email.email_balance: 邮件余额
@@ -5550,9 +5606,19 @@ admin.edu_cloud.edu_email.forbidden_tips: >
   <p class="text-danger">您的云邮件服务已被禁用</p>
   <p class="text-danger">请联系客服人员：4008041114</p>
 admin.edu_cloud.edu_email.open_btn: 开启
+admin.edu_cloud.edu_email.edit_btn: 修改
 admin.edu_cloud.edu_email.open_tips: 云邮件，享受优质的邮件发送服务
+admin.edu_cloud.edu_email.sign_tips: 签名3-8字，建议使用汉字
+admin.edu_cloud.edu_email.sms_tips: 提供优质的邮件发送通道，保证邮件发送的稳定可靠；无复杂配置；无每日发送数量限制。
+admin.edu_cloud.edu_email.connect_tips: >
+  <span class="text-danger text-sm" >抱歉，您尚未接入教育云，不能使用云邮件服务！</span>
+  <p><a href="http://open.edusoho.com/educloud" target="_blank">立即接入</a></p>
 
 # 云搜索
+admin.edu_cloud.edu_search.search_rank: 搜索排行榜
+admin.edu_cloud.edu_search.hot_words_rank: 热词排行榜
+admin.edu_cloud.edu_search.hot_courses_rank: 搜索课程落地排行榜
+admin.edu_cloud.edu_search.enable: 云搜索开关
 admin.edu_cloud.edu_search.base_info: 基本信息
 admin.edu_cloud.edu_search.total_search_times: 累计搜索次数：
 admin.edu_cloud.edu_search.today_total_search_times: 今日搜索次数：
