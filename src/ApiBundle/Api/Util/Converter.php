@@ -6,7 +6,7 @@ class Converter
     public static function timestampToDate(&$timestamp, $format = 'c')
     {
         if ($timestamp) {
-            $timestamp = date($timestamp, 'c');
+            $timestamp = date('c', $timestamp);
         } else {
             $timestamp = '0';
         }
