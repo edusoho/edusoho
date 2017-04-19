@@ -80,7 +80,7 @@ site.org.setup: 设置组织机构
 site.org.modify_tips: 你不能更改自己的所属组织机构，你的账号已取消勾选
 site.tips.weixin_scan: 微信扫一扫 分享我的网校
 site.btn.upgrade_info: 查看升级详情
-
+site.edu_cloud.link_error_tips: 网络问题，无法连接%EduSoho%开放云平台
 
 # email 模板
 email.password_reset: >
@@ -5366,17 +5366,25 @@ admin.edu_cloud.edu_live.buy_btn: >
 admin.edu_cloud.edu_live.renew_btn: 续费
 admin.edu_cloud.edu_live.classroom_capacity: 教室容量：%capacity%人/月
 admin.edu_cloud.edu_live.expiry_date: 有效期至：
-admin.edu_cloud.edu_live.overdue_tips: 您的云直播服务已到期，请尽快续费
+admin.edu_cloud.edu_live.overdue_tips: 您的云直播服务已到期，请尽快续费，以免影响正常使用
 admin.edu_cloud.edu_live.renew_tips: 您的云直播服务将于%remaining%天后到期，请尽快续费
 
 # 云短信
+admin,edu_cloud.edu_sms.sms_balance_count: <span class="h3 text-primary plm prs">%sms_balance_count%</span>条
+admin.edu_cloud.edu_sms.sms_rest_tips: 您的短信余额剩余%sms_rest%条，请尽快续购，以免影响正常使用。
+admin.edu_cloud.edu_sms.identity_check: 身份验证
+admin.edu_cloud.edu_sms.normal_course_publish: 新课时发布通知（普通课程）
+admin.edu_cloud.edu_sms.your_course_publish_tips: 您的课程：《课程名称》－课时：《课时名》已发布！%smsSchoolName%链接地址
+admin.edu_cloud.edu_sms.sms_content: 短信内容
+admin.edu_cloud.edu_sms.sms_school_notify: 网校通知
+admin.edu_cloud.sms_school_name.input_placeholder: 签名3-8字，建议使用汉字
 admin.edu_cloud.edu_sms.apply.content_title: 申请云短信
 admin.edu_cloud.edu_sms.apply.remind: 提醒
 admin.edu_cloud.edu_sms.apply.first_open_tips: 初次开启，需填写网校名称，审核需1到3个工作日，开启成功后，短信最低￥0.055/条
 admin.edu_cloud.edu_sms.apply.verify_tips: 审核需1到3个工作日，期间短信验证功能仍可以正常使用
 admin.edu_cloud.edu_sms.apply.school_name: 网校名称
 admin.edu_cloud.edu_sms.apply.sms_content: >
-  短信内容：“【<span id="js-school-name"></span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效”
+  <span style="color:blue;">短信内容:“</span><br>【<span id="js-school-name">网校通知</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效%sms_school_name%”
 admin.edu_cloud.edu_sms.locked_tips: 您的教育云服务已被锁定，请联系客服人员：4008041114。
 admin.edu_cloud.edu_sms.service_suspend_tips: 您的云短信服务已被暂停，不能使用，请联系客服人员：4008041114。
 admin.edu_cloud.edu_sms.basic_info: 基本信息
@@ -5416,10 +5424,12 @@ admin.edu_cloud.edu_sms.goto_set: 去设置
 admin.edu_cloud.edu_sms.singel_day_send_max_count_tips: 单日短信发送量超过此阈值时，发送通知。
 admin.edu_cloud.edu_sms.template_setting: 模板设置
 admin.edu_cloud.edu_sms.sms_type: 短信类型
-admin.edu_cloud.edu_sms.application_scenarios: 应用场景
+admin.edu_cloud.edu_sms.type_id: 类型编号
+admin.edu_cloud.edu_sms.application_scenarios: 短信应用场景
 admin.edu_cloud.edu_sms.content: 内容示例
 admin.edu_cloud.edu_sms.send_object: 发送对象
 admin.edu_cloud.edu_sms.send_way: 发送方式
+admin.edu_cloud.edu_sms.enable_status: 启用状态
 admin.edu_cloud.edu_sms.operation: 操作
 admin.edu_cloud.edu_sms.validation_type: 验证类
 admin.edu_cloud.edu_sms.bind_mobile: 手机绑定
@@ -5438,6 +5448,7 @@ admin.edu_cloud.edu_sms.course_publish: 新课程发布
 admin.edu_cloud.edu_sms.register_classroom_tips: >
   同学们，%classrommName%：《班级名称》现已开始报名！链接地址
 admin.edu_cloud.edu_sms.register_course_tips: 同学们，课程：《课程名称》现已开始报名！链接地址
+admin.edu_cloud.edu_sms.join_course_tips: 同学们，课程：《课程名称》现已开始报名！%smsSchoolName%链接地址
 admin.edu_cloud.edu_sms.manual_send: 手动群发
 admin.edu_cloud.edu_sms.auto_mass_send: 自动群发
 admin.edu_cloud.edu_sms.all_user: 所有用户
@@ -5462,6 +5473,17 @@ admin.edu_cloud.edu_sms.vip_buy_receipt: 会员购买回执
 admin.edu_cloud.edu_sms.vip_buy_receipt_tips: 你已成功购买《会员名称》，支付［订单金额］。
 admin.edu_cloud.edu_sms.virtual_money_buy_receipt: 虚拟币充值回执
 admin.edu_cloud.edu_sms.virtual_money_buy_receipt_tips: 你已成功购买《虚拟币面值》《单位》，支付［订单金额］。
+admin.edu_cloud.edu_sms.signature_not_allow_tips: >
+  <span style="color:blue;"> 哪些签名不允许：</span><br>
+  1.含有特殊字符（如$@^等）的签名 <br>
+  2.与公司，商标和网站名无关的签名
+admin.edu_cloud.edu_sms.use_failed_tips: 抱歉，您尚未接入教育云，不能使用云短信服务！
+admin.edu_cloud.edu_sms.connect_btn: 立即接入
+admin.edu_cloud.edu_sms.disabled_tips: >
+  云短信提供高效、可靠的短信发送服务，低至0.055元/条，点击<a href="http://open.edusoho.com/show/cloud/sms" target="_blank">这里</a>了解详情
+admin.edu_cloud.edu_sms.educational_notice: 教务通知
+admin.edu_cloud.edu_sms.new_classroom_publish: 新%classroomName%发布
+admin.edu_cloud.edu_sms.classroom_sms_send_hint: 进入后台班级列表页中的［操作］列中进行手动发送。
 
 # 云邮件
 admin.edu_cloud.edu_email.locked_tips: 您的教育云服务已被锁定，请联系客服人员
@@ -5674,6 +5696,30 @@ admin.edu_cloud.edu_attachment.group: 小组
 admin.edu_cloud.edu_attachment.testpaper: 试题
 admin.edu_cloud.edu_attachment.size: 附件大小
 admin.edu_cloud.edu_attachment.size_tips: 当前服务器附件大小上限为2048MB
+
+admin.edu_cloud.key_info.key_error_tips: 授权码不正确，请重新设置！如您是商业用户，请联系EduSoho官方。
+admin.edu_cloud.key_info.license_domain: 授权域名
+admin.edu_cloud.key_info.not_license_tips: 尚未授权
+admin.edu_cloud.key_info.domain_bind_tips: 域名绑定后，才能在应用中心购买应用；域名一旦绑定后，就不可更改！
+admin.edu_cloud.key_info.domain_bind: 绑定授权域名
+admin.edu_cloud.key_info.domain_bind.submiting: 正在绑定域名，请稍等...
+admin.edu_cloud.key_info.license_info: 授权信息
+admin.edu_cloud.key_info.licese_domain_not_match_tips: 当前域名 %currentHost% 与授权域名不符，将会影响%EduSoho%系统功能的使用；请使用授权域名访问此系统。
+admin.edu_cloud.key_info.copyright_name: 版权名称
+admin.edu_cloud.key_info.copyright_name_hint: 填写版权名称后，网站前台页面底部将会显示“Powered By 你的版权名称”，为空则不显示版权信息。
+admin.edu_cloud.key_info.copyright_save_btn: 保存版权名称
+admin.edu_cloud.key_info.copyright_save.submiting: 正在保存...
+admin.edu_cloud.key_info.copyright_info: 版权信息
+admin.edu_cloud.key_info.copyright_not_remove_hint: 未去除版权信息
+
+admin.edu_cloud.key_update.content_title: 云平台设置
+admin.edu_cloud.key_update.authorization_code: 授权码
+admin.edu_cloud.key_update.access_key_hint: 在线升级EduSoho系统、购买EduSoho应用、使用EduSoho云服务，都需使用此Key。
+admin.edu_cloud.key_update.key_save.submiting: 正在保存，请稍等
+admin.edu_cloud.key_update.key_update_hint: 请谨慎更换授权码。如有疑问请联系官方客服
+admin.edu_cloud.key_update.ask_apply_key: 还没有授权码?
+admin.edu_cloud.key_update.key_apply_btn: 申请授权码
+admin.edu_cloud.key_update.key_apply.submiting: 正在申请授权码，请稍等...
 
 # 移动
 mobile.page_title: 移动学习

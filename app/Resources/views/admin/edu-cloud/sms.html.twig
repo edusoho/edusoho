@@ -10,9 +10,9 @@
 <div class="panel panel-default notice-panel">
   <div class="panel-body">
     <i class="es-icon es-icon-infooutline text-primary"></i>
-    <div class="text-md mbl">尚未启用云短信</div>
-    <div class="color-gray notice-desc">尚未购买云短信，不能启用，<a href="">立即购买</a> 或 <a href="">了解详情</a>。</div>
-    <a href="" class="btn btn-primary btn-lg notice-btn">立即启用</a>
+    <div class="text-md mbl">{{ 'admin.edu_cloud.edu_sms.no_enabled_sms'|trans }}</div>
+    <div class="color-gray notice-desc">{{ 'admin.edu_cloud.edu_sms.start_enabled_sms'|trans({'%smsBuyUrl%': '', '%smsShowUrl%': ''})|raw }}</div>
+    <a href="" class="btn btn-primary btn-lg notice-btn">{{ 'admin.edu_cloud.edu_sms.start_enabled_sms_btn'|trans }}</a>
   </div>
 </div>
 
@@ -20,22 +20,21 @@
 
 <div class="panel panel-default">
   <div class="panel-heading">
-    基本信息 
+    {{ 'admin.edu_cloud.edu_sms.basic_info'|trans }} 
   </div>
   <div class="panel-body">
     <div class="pll pbl">
-      短信余额：
-      <span class="h3 text-primary plm prs">12345</span>条
-      <span class="color-gray">（信用额度剩余: 300条）</span>
-      <a href="" class="btn btn-sm btn-primary">购买</a>
+      {{ 'admin.edu_cloud.edu_sms.sms_balance'|trans }}：
+      {{ 'admin,edu_cloud.edu_sms.sms_balance_count'|trans({'%sms_balance_count%': '12345'})|raw }}
+      <span class="color-gray">{{ 'admin.edu_cloud.edu_sms.sms_remaining'|trans({'%creditLimit%': '300'}) }}</span>
+      <a href="" class="btn btn-sm btn-primary">{{ 'admin.edu_cloud.edu_sms.buy_btn'|trans }}</a>
       <div class="text-danger pts">
-        您的短信余额剩余300条，请尽快续购，以免影响正常使用。
+        {{ 'admin.edu_cloud.edu_sms.sms_rest_tips'|trans({'%sms_rest%': '300'}) }}
       </div>
     </div>
     <div class="pll pbm">
-      今日发送：
-      <span class="color-gray phm text-md">1700 条</span>
-      <a href="">发送记录</a>｜<a href="">发送明细</a> 
+      {{ 'admin.edu_cloud.edu_sms.remain_count'|trans({'%span_first%': '<span class="color-gray phm text-md">', '%remainCount%': '1700', '%span_last%': '</span>'})|raw }}
+      <a href="">{{ 'admin.edu_cloud.edu_sms.send_record_btn'|trans }}</a>｜<a href="">{{ 'admin.edu_cloud.edu_sms.send_record_btn'|trans }}</a> 
     </div>
   </div>
 </div>
@@ -43,9 +42,9 @@
 <div class="panel panel-default panel-chart">
   <input id="flowItemData" type="hidden" value="{{flowItem|default('')}}"/>
   <div class="panel-heading">
-    短信发送趋势
-    <span class="text-muted">（最近1个月）</span>
-    <a class="pull-right" href="">更多&ensp;></a>
+    {{ 'admin.edu_cloud.edu_sms.sms_send_trend'|trans }}
+    <span class="text-muted">{{ 'admin.edu_cloud.edu_sms.rencent_week'|trans }}</span>
+    <a class="pull-right" href="">{{ 'admin.edu_cloud.edu_sms.more_btn'|trans }}&ensp;></a>
   </div>
   <div class="panel-body">
     <div id="smsSendChart" style="width: 100%;height:400px;"></div>
@@ -61,14 +60,11 @@
         </script>
         <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
         <p style="text-align: center;font-size:16px">
-          {{'短信发送服务由EduSoho教育云提供'|trans}} <a href="http://open.edusoho.com/educloud"  target="_blank">{{'了解详情'|trans}}</a>
+          {{ 'admin.edu_cloud.edu_sms.sms_send_tips'|trans({'%url%': 'http://open.edusoho.com/educloud'})|raw }}
         </p>
 
         <p style="text-align:center;font-size:16px">
-          {{'当前版本为试⽤版, 不能进行短信服务设置。如需购买授权版,请联系销售人员。 电话：'|trans}}4008041114 {{'或'|trans}}
-          <span id="BizQQWPA" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])">
-            <a id="BizQQWPA"  href="javascript:" style='text-decoration:none;'>QQ：800023860 </a>。
-          </span>
+          {{ 'admin.edu_cloud.edu_sms.sms_auth_tips'|trans({'%span_first%': '<span id="BizQQWPA" onclick="_hmt.push(["_trackEvent", "advisory", "click", "qq"])"><a id="BizQQWPA"  href="javascript:" style="text-decoration:none;">', '%span_last%': '</a>。</span>'})|raw }}
         </p>
 
         <script type="text/javascript">
@@ -80,10 +76,10 @@
   {% else %}
     {{ web_macro.flash_messages() }}
     {% if locked|default(0) == 1 %}
-      <div class="alert alert-warning" role="alert">{{'您的云短信已被锁定，请联系客服人员：'|trans}}4008041114。</div>
+      <div class="alert alert-warning" role="alert">{{ 'admin.edu_cloud.edu_sms.locked_tips'|trans }}</div>
     {% endif %}
     {% if enabled|default(1) == 0 or smsStatus.status|default(null) == 'stoped' %}
-      <div class="alert alert-danger" role="alert">{{'您的云短信已被禁用，请联系客服人员：'|trans}}4008041114。</div>
+      <div class="alert alert-danger" role="alert">{{ 'admin.edu_cloud.edu_sms.service_suspend_tips'|trans }}</div>
     {% endif %}
     <div class="eduyun-main">
       {% if enabled|default(1) == 0 or smsStatus.status|default(null) == 'stoped' %}
@@ -98,48 +94,46 @@
                   id="sms-controller-form" novalidate="">
 
               {% if (smsStatus.sms_enabled|default('0') == '0' or smsStatus.status|default('error') == 'error') and accessCloud|default(0) != 0 %}
-                <span>{{'短信签名：'|trans}}
+                <span>{{'admin.edu_cloud.edu_sms.sms_sign'|trans}}：
                   {% if not smsStatus.sms_school_name|default(null) %}
-                    <input class="form-control" type="text" name="sms_school_name" placeholder="{{'签名3-8字，建议使用汉字'|trans}}">
+                    <input class="form-control" type="text" name="sms_school_name" placeholder="{{'admin.edu_cloud.sms_school_name.input_placeholder'|trans}}">
                   {% else %}
                     {{ smsStatus.sms_school_name }}
                   {% endif %}
                  </span>
-                <button name="sms-open" class="btn btn-primary">{{'启用云短信'|trans}}</button>
+                <button name="sms-open" class="btn btn-primary">{{'admin.edu_cloud.edu_sms.enable'|trans}}</button>
               {% elseif smsStatus.sms_enabled|default('0') == '1' and smsStatus.sms_school_name|default(null) != "" and  smsStatus.status != 'error' %}
                 <div name="status">
-                  <span class="text-success">{{'已启用'|trans}}</span>
+                  <span class="text-success">{{'admin.edu_cloud.edu_sms.enable_btn'|trans}}</span>
                   <button class="btn btn-default btn-sm mlm" name="sms-close">
-                    <span class="text-muted">{{'关闭'|trans}}</span>
+                    <span class="text-muted">{{'admin.edu_cloud.edu_sms.close_btn'|trans}}</span>
                   </button>
-                  <p><span>{{'短信签名：'|trans}}{{ smsStatus.sms_school_name }}</span> <a href="javascript:;" name="sign-update">{{'修改'|trans}}</a></p>
+                  <p><span>{{'admin.edu_cloud.edu_sms.sms_sign'|trans}}：{{ smsStatus.sms_school_name }}</span> <a href="javascript:;" name="sign-update">{{'form.btn.modify'|trans}}</a></p>
                 </div>
                 <div name="submit-sign" hidden="hidden">
                 <span>
-                  {{'短信签名：'|trans}}
-                  <input class="form-control" type="text" name="sms_school_name" placeholder="{{'签名3-8字，建议使用汉字'|trans}}"
+                  {{'admin.edu_cloud.edu_sms.sms_sign'|trans}}：
+                  <input class="form-control" type="text" name="sms_school_name" placeholder="{{'admin.edu_cloud.sms_school_name.input_placeholder'|trans}}"
                          style="width:250px">
                 </span>
-                  <button class="btn btn-primary mlm mrm">{{'提交'|trans}}</button>
-                  <span><a href="{{ path('admin_edu_cloud_sms') }}">{{'取消'|trans}}</a></span>
+                  <button class="btn btn-primary mlm mrm">{{'form.btn.submit'|trans}}</button>
+                  <span><a href="{{ path('admin_edu_cloud_sms') }}">{{'form.btn.cancel'|trans}}</a></span>
                   <span class="glyphicon glyphicon-question-sign text-muted" id="article-property-tips17"
                         data-toggle="tooltip" data-placement="bottom" href="javascript:" data-original-title=""></span>
                   <div id="article-property-tips17-html" style="display:none;">
                     <div style="width:250px;font-size:14px;">
-                      <span style="color:blue;"> {{'哪些签名不允许：'|trans}}</span><br>
-                      {{'1.含有特殊字符（如$@^等）的签名'|trans}} <br>
-                      {{'2.与公司，商标和网站名无关的签名'|trans}}
+                      {{ 'admin.edu_cloud.edu_sms.signature_not_allow_tips'|trans|raw }}
                     </div>
                   </div>
                 </div>
               {% elseif smsStatus.status|default(null) == 'error' or accessCloud|default(0) == 0 %}
                 <div class="row">
                   <div class="col-md-2">
-                    <button name="email-open" class="btn btn-primary" disabled="disabled">{{'启用云短信'|trans}}</button>
+                    <button name="email-open" class="btn btn-primary" disabled="disabled">{{'admin.edu_cloud.edu_sms.enable'|trans}}</button>
                   </div>
                   <div class="col-md-10">
-                    <span class="text-danger text-sm">{{'抱歉，您尚未接入教育云，不能使用云短信服务！'|trans}}</span>
-                    <p><a href="http://open.edusoho.com/educloud" target="_blank">{{'立即接入'|trans}}</a></p>
+                    <span class="text-danger text-sm">{{'admin.edu_cloud.edu_sms.use_failed_tips'|trans}}</span>
+                    <p><a href="http://open.edusoho.com/educloud" target="_blank">{{'admin.edu_cloud.edu_sms.connect_btn'|trans}}</a></p>
                   </div>
                 </div>
               {% endif %}
@@ -147,7 +141,7 @@
             </form>
             {% if smsStatus.sms_enabled|default('0') != '1' %}
               <div class="help-block">
-                {{'云短信提供高效、可靠的短信发送服务，低至0.055元/条，点击'|trans}}<a href="http://open.edusoho.com/show/cloud/sms" target="_blank">{{'这里'|trans}}</a>{{'了解详情'|trans}}
+                {{ 'admin.edu_cloud.edu_sms.disabled_tips'|trans|raw }}
               </div>
             {% endif %}
           </div>
@@ -241,26 +235,26 @@
             #}
           {% if hasSchoolName and accessCloud|default(0) != 0 and enabled|default(1) != 0 and smsStatus.sms_enabled|default('0') == '1' %}
             <div class="page-header clearfix">
-              <h1 class="pull-left">{{'短信应用场景'|trans}}</h1>
+              <h1 class="pull-left">{{'admin.edu_cloud.edu_sms.application_scenarios'|trans}}</h1>
             </div>
             <div class="js-usage">
               <table class="table table-bordered">
                 <thead>
                 <tr>
                   <th style="width:20%"></th>
-                  <th style="width:30%">{{ '短信类型'|trans }}</th>
-                  <th style="width:10%">{{ '类型编号'|trans }}</th>
-                  <th style="width:20%">{{ '发送方式'|trans }}</th>
-                  <th style="width:20%">{{ '启用状态'|trans }}</th>
+                  <th style="width:30%">{{ 'admin.edu_cloud.edu_sms.sms_type'|trans }}</th>
+                  <th style="width:10%">{{ 'admin.edu_cloud.edu_sms.type_id'|trans }}</th>
+                  <th style="width:20%">{{ 'admin.edu_cloud.edu_sms.send_way'|trans }}</th>
+                  <th style="width:20%">{{ 'admin.edu_cloud.edu_sms.enable_status'|trans }}</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
                 </tr>
                 <tr>
-                  <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">{{ '身份验证'|trans }}
+                  <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">{{ 'admin.edu_cloud.edu_sms.identity_check'|trans }}
                   </td>
-                  <td>{{ '手机绑定'|trans }}</td>
+                  <td>{{ 'admin.edu_cloud.edu_sms.bind_mobile'|trans }}</td>
                   <td>
                     1
                     <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips1"
@@ -268,26 +262,24 @@
                           data-original-title=""></span>
                     <div id="article-property-tips1-html" style="display:none;">
                       <div style="width:250px;font-size:14px;">
-                        <span style="color:blue;"> {{ '短信内容:'|trans }}</span><br>
-                        <span
-                            id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}{{ setting('cloud_sms.sms_school_name')|default('') }}
-                        ”<br>
-                        <span style="color:blue;"> {{ '发送对象:'|trans }}</span><br>
-                        {{ '单个用户'|trans }}
+                        {{ 'admin.edu_cloud.edu_sms.apply.sms_content'|trans({'%sms_school_name%': setting('cloud_sms.sms_school_name')|default('')})|raw }}
+                        <br>
+                        <span style="color:blue;"> {{ 'admin.edu_cloud.edu_sms.send_object'|trans }}:</span><br>
+                        {{ 'admin.edu_cloud.edu_sms.singel_user'|trans }}
                         <br>
                       </div>
                     </div>
                   </td>
-                  <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">{{ '自动单发'|trans }}
+                  <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">{{ 'admin.edu_cloud.edu_sms.auto_singel_send'|trans }}
                   <td class="radios" style="text-align:center;">
                     <label>
-                      <input type="hidden" name="sms_bind" value="on">{{ '默认开启'|trans }}
+                      <input type="hidden" name="sms_bind" value="on">{{ 'admin.edu_cloud.edu_sms.default_open'|trans }}
                     </label>
                   </td>
                   </td>
                 </tr>
                 <tr>
-                  <td>{{ '登录密码重置'|trans }}</td>
+                  <td>{{ 'admin.edu_cloud.edu_sms.login_password_reset'|trans }}</td>
                   <td>
                     2
                     <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips2"
@@ -295,24 +287,22 @@
                           data-original-title=""></span>
                     <div id="article-property-tips2-html" style="display:none;">
                       <div style="width:250px;font-size:14px;">
-                        <span style="color:blue;"> {{ '短信内容:'|trans }}</span><br>
-                        “【<span
-                            id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}{{ setting('cloud_sms.sms_school_name')|default('') }}
-                        ”<br>
-                        <span style="color:blue;"> {{ '发送对象:'|trans }}</span><br>
-                        {{ '单个用户'|trans }}
+                        {{ 'admin.edu_cloud.edu_sms.apply.sms_content'|trans({'%sms_school_name%': setting('cloud_sms.sms_school_name')|default('')})|raw }}
+                        <br>
+                        <span style="color:blue;"> {{ 'admin.edu_cloud.edu_sms.send_object'|trans }}:</span><br>
+                        {{ 'admin.edu_cloud.edu_sms.singel_user'|trans }}
                         <br>
                       </div>
                     </div>
                   </td>
                   <td class="radios" style="text-align:center;">
                     <label>
-                      <input type="hidden" name="sms_forget_password" value="on"> {{ '默认开启'|trans }}
+                      <input type="hidden" name="sms_forget_password" value="on"> {{ 'admin.edu_cloud.edu_sms.default_open'|trans }}
                     </label>
                   </td>
                 </tr>
                 <tr>
-                  <td>{{ '支付密码重置'|trans }}</td>
+                  <td>{{ 'admin.edu_cloud.edu_sms.pay_password_reset'|trans }}</td>
                   <td>
                     3
                     <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips3"
@@ -320,24 +310,22 @@
                           data-original-title=""></span>
                     <div id="article-property-tips3-html" style="display:none;">
                       <div style="width:250px;font-size:14px;">
-                        <span style="color:blue;"> {{ '短信内容:'|trans }}</span><br>
-                        “【<span
-                            id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}{{ setting('cloud_sms.sms_school_name')|default('') }}
-                        ”<br>
-                        <span style="color:blue;"> {{ '发送对象:'|trans }}</span><br>
-                        {{ '单个用户'|trans }}
+                        {{ 'admin.edu_cloud.edu_sms.apply.sms_content'|trans({'%sms_school_name%': setting('cloud_sms.sms_school_name')|default('')})|raw }}
+                        <br>
+                        <span style="color:blue;"> {{ 'admin.edu_cloud.edu_sms.send_object'|trans }}:</span><br>
+                        {{ 'admin.edu_cloud.edu_sms.singel_user'|trans }}
                         <br>
                       </div>
                     </div>
                   </td>
                   <td class="radios" style="text-align:center;">
                     <label>
-                      <input type="hidden" name="sms_forget_pay_password" value="on"> {{ '默认开启'|trans }}
+                      <input type="hidden" name="sms_forget_pay_password" value="on"> {{ 'admin.edu_cloud.edu_sms.default_open'|trans }}
                     </label>
                   </td>
                 </tr>
                 <tr>
-                  <td>{{ '使用网站余额支付'|trans }}</td>
+                  <td>{{ 'admin.edu_cloud.edu_sms.website_balance_pay'|trans }}</td>
                   <td>
                     4
                     <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips4"
@@ -345,19 +333,17 @@
                           data-original-title=""></span>
                     <div id="article-property-tips4-html" style="display:none;">
                       <div style="width:250px;font-size:14px;">
-                        <span style="color:blue;"> {{ '短信内容:'|trans }}</span><br>
-                        “【<span
-                            id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}{{ setting('cloud_sms.sms_school_name')|default('') }}
-                        ”<br>
-                        <span style="color:blue;"> {{ '发送对象:'|trans }}</span><br>
-                        {{ '单个用户'|trans }}
+                        {{ 'admin.edu_cloud.edu_sms.apply.sms_content'|trans({'%sms_school_name%': setting('cloud_sms.sms_school_name')|default('')})|raw }}
+                        <br>
+                        <span style="color:blue;"> {{ 'admin.edu_cloud.edu_sms.send_object'|trans }}:</span><br>
+                        {{ 'admin.edu_cloud.edu_sms.singel_user'|trans }}
                         <br>
                       </div>
                     </div>
                   </td>
                   <td class="radios" style="text-align:center;">
                     <label>
-                      <input type="hidden" name="sms_user_pay" value="on"> {{ '默认开启'|trans }}
+                      <input type="hidden" name="sms_user_pay" value="on"> {{ 'admin.edu_cloud.edu_sms.default_open'|trans }}
                     </label>
                   </td>
                 </tr>
@@ -367,19 +353,19 @@
                 <thead>
                 <tr>
                   <th style="width:20%"></th>
-                  <th style="width:30%">{{ '短信类型'|trans }}</th>
-                  <th style="width:10%">{{ '类型编号'|trans }}</th>
-                  <th style="width:20%">{{ '发送方式'|trans }}</th>
-                  <th style="width:20%">{{ '启用状态'|trans }}</th>
+                  <th style="width:30%">{{ 'admin.edu_cloud.edu_sms.sms_type'|trans }}</th>
+                  <th style="width:10%">{{ 'admin.edu_cloud.edu_sms.type_id'|trans }}</th>
+                  <th style="width:20%">{{ 'admin.edu_cloud.edu_sms.send_way'|trans }}</th>
+                  <th style="width:20%">{{ 'admin.edu_cloud.edu_sms.enable_status'|trans }}</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
                 </tr>
                 <tr>
-                  <td rowspan="9" style="text-align:center;vertical-align:middle;font-size:18px;">{{ '教务通知'|trans }}
+                  <td rowspan="9" style="text-align:center;vertical-align:middle;font-size:18px;">{{ 'admin.edu_cloud.edu_sms.educational_notice'|trans }}
                   </td>
-                  <td>{{ '新%classroomName%发布'|trans({'%classroomName%': setting('classroom.name')|default('班级'|trans)}) }}</td>
+                  <td>{{ 'admin.edu_cloud.edu_sms.new_classroom_publish'|trans({'%classroomName%': setting('classroom.name')|default('classroom'|trans)}) }}</td>
                   <td>
                     5
                     <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips5"
@@ -387,38 +373,37 @@
                           data-original-title=""></span>
                     <div id="article-property-tips5-html" style="display:none;">
                       <div style="width:250px;font-size:14px;">
-                        <span style="color:blue;"> {{ '短信内容:'|trans }}</span><br>
-                        “【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '同学们，%classrommName%
-                        ：《班级名称》现已开始报名！%smsSchoolName% 链接地址'|trans({'%classrommName%': setting('classroom.name')|default('班级'|trans),'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') }) }}”<br>
-                        <span style="color:blue;"> {{ '发送对象:'|trans }}</span><br>
-                        {{ '所有用户'|trans }}
+                        <span style="color:blue;"> {{ 'admin.edu_cloud.edu_sms.sms_content'|trans }}:</span><br>
+                        “【<span id="js-sms-school-name">{{ 'admin.edu_cloud.edu_sms.sms_school_notify'|trans }}</span>】{{ 'admin.edu_cloud.edu_sms.register_classroom_tips'|trans({'%classrommName%': setting('classroom.name')|default('classroom'|trans),'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') }) }}”<br>
+                        <span style="color:blue;"> {{ 'admin.edu_cloud.edu_sms.send_object'|trans }}:</span><br>
+                        {{ 'admin.edu_cloud.edu_sms.all_user'|trans }}
                         <br>
-                        <span style="color:blue;"> {{ '发送方式:'|trans }}</span><br>
-                        {{ '进入后台班级列表页中的［操作］列中进行手动发送。'|trans }}
+                        <span style="color:blue;"> {{ 'admin.edu_cloud.edu_sms.send_way'|trans }}:</span><br>
+                        {{ 'admin.edu_cloud.edu_sms.classroom_sms_send_hint'|trans }}
                         <br>
                       </div>
                     </div>
                   </td>
                   <td rowspan="2" style="text-align:center;vertical-align:middle;font-size:18px;">
-                    {{ '手动群发'|trans }}
+                    {{ 'admin.edu_cloud.edu_sms.manual_send'|trans }}
                   </td>
                   <td class="radios">
                     <label>
                       <input type="radio" name="sms_classroom_publish" value="on"
                           {% if (setting('cloud_sms.sms_classroom_publish')|default('off')) == 'on' %}
                         checked="checked"
-                          {% endif %}> {{ '开启'|trans }}
+                          {% endif %}> {{ 'admin.edu_cloud.edu_sms.open_radio'|trans }}
                     </label>
                     <label>
                       <input type="radio" name="sms_classroom_publish" value="off"
                           {% if (setting('cloud_sms.sms_classroom_publish')|default('off')) != 'on' %}
                         checked="checked"
-                          {% endif %}> {{ '关闭'|trans }}
+                          {% endif %}> {{ 'admin.edu_cloud.edu_sms.close_radio'|trans }}
                     </label>
                   </td>
                 </tr>
                 <tr>
-                  <td>{{ '新课程发布'|trans }}</td>
+                  <td>{{ 'admin.edu_cloud.edu_sms.course_publish'|trans }}</td>
                   <td>
                     6
                     <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips6"
@@ -426,15 +411,15 @@
                           data-original-title=""></span>
                     <div id="article-property-tips6-html" style="display:none;">
                       <div style="width:250px;font-size:14px;">
-                        <span style="color:blue;"> {{ '短信内容:'|trans }}</span><br>
+                        <span style="color:blue;"> {{ 'admin.edu_cloud.edu_sms.sms_content'|trans }}:</span><br>
                         “【<span
-                            id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '同学们，课程：《课程名称》现已开始报名！%smsSchoolName%链接地址'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('')}) }}
+                            id="js-sms-school-name">{{ 'admin.edu_cloud.edu_sms.sms_school_notify'|trans }}</span>】{{ 'admin.edu_cloud.edu_sms.join_course_tips'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('')}) }}
                         ”<br>
-                        <span style="color:blue;"> {{ '发送对象:'|trans }}</span><br>
-                        {{ '所有用户'|trans }}
+                        <span style="color:blue;"> {{ 'admin.edu_cloud.edu_sms.send_object'|trans }}:</span><br>
+                        {{ 'admin.edu_cloud.edu_sms.all_user'|trans }}
                         <br>
-                        <span style="color:blue;"> {{ '发送方式:'|trans }}</span><br>
-                        {{ '进入后台课程列表页中的［操作］列中进行手动发送。'|trans }}
+                        <span style="color:blue;"> {{ 'admin.edu_cloud.edu_sms.send_way'|trans }}:</span><br>
+                        {{ 'admin.edu_cloud.edu_sms.classroom_sms_send_hint'|trans }}
                         <br>
                       </div>
                     </div>
@@ -444,18 +429,18 @@
                       <input type="radio" name="sms_course_publish" value="on"
                           {% if (setting('cloud_sms.sms_course_publish')|default('off')) == 'on' %}
                         checked="checked"
-                          {% endif %}> {{ '开启'|trans }}
+                          {% endif %}> {{ 'admin.edu_cloud.edu_sms.open_radio'|trans }}
                     </label>
                     <label>
                       <input type="radio" name="sms_course_publish" value="off"
                           {% if (setting('cloud_sms.sms_course_publish')|default('off')) != 'on' %}
                         checked="checked"
-                          {% endif %}> {{ '关闭'|trans }}
+                          {% endif %}> {{ 'admin.edu_cloud.edu_sms.close_radio'|trans }}
                     </label>
                   </td>
                 </tr>
                 <tr>
-                  <td>{{ '新课时发布通知（普通课程）'|trans }}</td>
+                  <td>{{ 'admin.edu_cloud.edu_sms.normal_course_publish'|trans }}</td>
                   <td>
                     7
                     <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips7"
@@ -463,30 +448,30 @@
                           data-original-title=""></span>
                     <div id="article-property-tips7-html" style="display:none;">
                       <div style="width:250px;font-size:14px;">
-                        <span style="color:blue;"> {{ '短信内容:'|trans }}</span><br>
+                        <span style="color:blue;"> {{ 'admin.edu_cloud.edu_sms.sms_content'|trans }}:</span><br>
                         “【<span
-                            id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '您的课程：《课程名称》－课时：《课时名》已发布！%smsSchoolName%链接地址'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('')}) }}
-                        ”<br> <span style="color:blue;"> {{ '发送对象:'|trans }}</span><br>
-                        {{ '课程用户'|trans }}
+                            id="js-sms-school-name">{{ 'admin.edu_cloud.edu_sms.sms_school_notify'|trans }}</span>】{{ 'admin.edu_cloud.edu_sms.your_course_publish_tips'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('')}) }}
+                        ”<br> <span style="color:blue;"> {{ 'admin.edu_cloud.edu_sms.send_object'|trans }}:</span><br>
+                        {{ 'admin.edu_cloud.edu_sms.course_user'|trans }}
                         <br>
                       </div>
                     </div>
                   </td>
                   <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">
-                    {{ '自动群发'|trans }}
+                    {{ 'admin.edu_cloud.edu_sms.auto_mass_send'|trans }}
                   </td>
                   <td class="radios">
                     <label>
                       <input type="radio" name="sms_normal_lesson_publish" value="on"
                           {% if (setting('cloud_sms.sms_normal_lesson_publish')|default('off')) == 'on' %}
                         checked="checked"
-                          {% endif %}> {{ '开启'|trans }}
+                          {% endif %}> {{ 'admin.edu_cloud.edu_sms.open_radio'|trans }}
                     </label>
                     <label>
                       <input type="radio" name="sms_normal_lesson_publish" value="off"
                           {% if (setting('cloud_sms.sms_normal_lesson_publish')|default('off')) != 'on' %}
                         checked="checked"
-                          {% endif %}> {{ '关闭'|trans }}
+                          {% endif %}> {{ 'admin.edu_cloud.edu_sms.close_radio'|trans }}
                     </label>
                   </td>
                 </tr>
