@@ -6,17 +6,11 @@ export default class SmsSender {
     this.validator = 0;
     this.url = option.url ? option.url : '';
     this.smsType = option.smsType ? option.smsType : '';
-    this.captchaNum = option.captchaNum ? option.captchaNum : '';
-    this.captcha = option.captcha;
-    this.captchaValidated = option.captchaValidated;
-    this.dataTo = 'mobile';
-    this.initEvent();
+    this.captchaNum = option.captchaNum ? option.captchaNum : 'captcha_num';
+    this.captcha = option.captcha ? option.captcha : false;
+    this.captchaValidated = option.captchaValidated ? option.captchaValidated :false ;
+    this.dataTo = option.dataTo ?option.dataTo :  'mobile';
     this.setup();
-  }
-
-  initEvent() {
-    // console.log(this.$element);
-    // this.$element.click(() => this.smsSend());
   }
 
   preSmsSend() {

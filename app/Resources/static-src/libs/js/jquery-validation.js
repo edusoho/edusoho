@@ -33,7 +33,7 @@ $.validator.setDefaults({
   submitSuccess: function (data) {
     console.log('submitSuccess');
   },
-  invalidHandler: function(data,data2) {
+  invalidHandler: function (data, data2) {
     console.log(data);
     console.log(data2);
   },
@@ -304,23 +304,6 @@ $.validator.addMethod('url', function (value, element) {
   return this.optional(element) || /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/.test(value)
 }, jQuery.validator.format('地址不正确，须以http://或者https://开头。'));
 
-$.validator.addMethod('passwordCheck', function (value, element) {
-  let url = $(element).data('url') ? $(element).data('url') : null;
-  let type = $(element).data('type') ? $(element).data('type') : 'POST';
-  let isSuccess = 0;
-  $.ajax({
-    url: url,
-    type: type,
-    async: false,
-    data: { value: value },
-    dataType: 'json'
-  })
-    .success(function (response) {
-      isSuccess = response.success;
-    })
-  return this.optional(element) || isSuccess
-}, Translator.trans('密码错误'))
-
 $.validator.addMethod('chinese', function (value, element) {
   return this.optional(element) || /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3])*$/i.test(value);
 }, jQuery.validator.format('必须是中文字'));
@@ -392,23 +375,6 @@ $.validator.addMethod("nickname", function (value, element, params) {
   return this.optional(element) || ! /^1\d{10}$/.test(value)
 }, jQuery.validator.format('不允许以1开头的11位纯数字'));
 
-
-$.validator.addMethod("nickname_remote", function (value, element, params) {
-  let isSuccess = 0;
-  let url = $(element).data('url') ? $(element).data('url') : null;
-  $.ajax({
-    url: url,
-    type: 'GET',
-    async: false,
-    data: { value: value },
-    dataType: 'json'
-  })
-    .success(function (response) {
-      isSuccess = response.success;
-    })
-  return this.optional(element) || isSuccess;
-}, jQuery.validator.format('该用户名已存在'))
-
 // Validator.addRule(
 //   'time_check',
 //   /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}$/,
@@ -427,6 +393,40 @@ $.validator.addMethod('phone', function (value, element) {
   return this.optional(element) || /^1\d{10}$/.test(value);
 }, $.validator.format("请输入有效手机号码(仅仅支持中国大陆手机号码)"));
 
+
+$.validator.addMethod("nickname_remote", function (value, element, params) {
+  let isSuccess = 0;
+  let url = $(element).data('url') ? $(element).data('url') : null;
+  $.ajax({
+    url: url,
+    type: 'GET',
+    async: false,
+    data: { value: value },
+    dataType: 'json'
+  })
+    .success(function (response) {
+      isSuccess = response.success;
+    })
+  return this.optional(element) || isSuccess;
+}, jQuery.validator.format('该用户名已存在'))
+
+$.validator.addMethod('passwordCheck', function (value, element) {
+  let url = $(element).data('url') ? $(element).data('url') : null;
+  let type = $(element).data('type') ? $(element).data('type') : 'POST';
+  let isSuccess = 0;
+  $.ajax({
+    url: url,
+    type: type,
+    async: false,
+    data: { value: value },
+    dataType: 'json'
+  })
+    .success(function (response) {
+      isSuccess = response.success;
+    })
+  return this.optional(element) || isSuccess
+}, Translator.trans('密码错误'))
+
 $.validator.addMethod("nickname_remote", function (value, element, params) {
   let isSuccess = 0;
   let url = $(element).data('url') ? $(element).data('url') : null;
@@ -444,18 +444,17 @@ $.validator.addMethod("nickname_remote", function (value, element, params) {
 }, jQuery.validator.format('该用户名已存在'));
 
 $.validator.addMethod('smsCode', function (value, element) {
-  let url = $(element).data('url') ? $(element).data('url') : null;
-  let type = $(element).data('type') ? $(element).data('type') : 'POST';
+  let url = $(element).data('url');
   let isSuccess = 0;
   $.ajax({
     url: url,
-    type: type,
+    type: 'get',
     async: false,
-    data: { value: value },
+    data: { value: $(element).val() },
     dataType: 'json'
   })
-    .success(function (response) {
-      isSuccess = response.success;
-    })
+  .success(function (response) {
+    isSuccess = response.success;
+  })
   return this.optional(element) || isSuccess
 }, Translator.trans('验证码错误'));

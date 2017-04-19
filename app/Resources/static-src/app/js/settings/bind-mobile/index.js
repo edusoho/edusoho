@@ -2,7 +2,7 @@ import SmsSender from 'app/common/widget/sms-sender';
 let $form = $('#bind-mobile-form');
 let smsSender = new SmsSender($form);
 let $smsCode = $('.js-sms-send');
-let isSmsCode = false;
+let isOpenCode = false;
 
 let validator = $form.validate({
   rules: {
@@ -36,18 +36,25 @@ let validator = $form.validate({
   },
 });
 
-$('#submit-btn').click(() => {
-  if (!isSmsCode&& validator.form()) {
+$form.on('focusout.validate',()=> {
+  if($form.validate().element($("#mobile"))) {
+    isOpenCode = true;
     $smsCode.removeClass('disabled');
-    iniSmsCode();
-    isSmsCode = false;
-  } else if ( validator.form()) {
-    isSmsCode = true;
+    initSmsCode();
+  }else {
+    isOpenCode = false;
+    $('#sms-code').rules('remove');
   }
 })
 
+$('#submit-btn').click(() => {
+  if(isOpenCode && validator.form()) {
+    $form.submit();
+  }
+})
 
-function iniSmsCode() {
+function initSmsCode() {
+  $('#sms-code').rules('remove');
   $('#sms-code').rules('add', {
     required: true,
     unsigned_integer: true,
@@ -57,5 +64,3 @@ function iniSmsCode() {
     }
   })
 }
-
-

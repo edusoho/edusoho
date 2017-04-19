@@ -37,10 +37,10 @@ define(function(require, exports, module) {
             rule: 'phone email_or_mobile_remote',
             onItemValidated: function(error, message, eleme) {
                 if (error) {
-                    $('.js-sms-send').addClass('disabled');
+                    $('.js-sms-send').addClass('disabled').addClass('sending');
                     return;
                 } else {
-                    $('.js-sms-send').removeClass('disabled');
+                    $('.js-sms-send').removeClass('disabled').removeClass('sending');
                 }
             }            
         });
