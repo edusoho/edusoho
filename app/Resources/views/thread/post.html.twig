@@ -23,6 +23,6 @@
   {% endif %}
 {% else %}
   <div class="empty">
-    {{ 'user.not_login.tips'|trans({'%login%':"<a href='{{ path('login') }}'>登录或</a>", '%register%':"<a href='{{ path('register') }) }}'>注册！</a>" })|raw }}
+    {{ 'user.not_login.tips'|trans({'%login%':path('login', {goto:app.request.server.get('REQUEST_URI')}), '%register%': path('register', {goto:app.request.server.get('REQUEST_URI') }) })|raw }}
   </div>
 {% endif %}
