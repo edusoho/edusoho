@@ -2,25 +2,30 @@
 
 namespace ApiBundle\Api\Util;
 
-use AppBundle\Twig\WebExtension;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class AssetHelper
 {
     /**
-     * @var WebExtension
+     * @var ContainerInterface
      */
-    private static $webExtension;
+    private static $container;
 
     public static function getFurl($path, $defaultKey = false)
     {
-        return self::$webExtension->getFurl($path, $defaultKey);
+        return self::$container->get('web.twig.extension')->getFurl($path, $defaultKey);
+    }
+
+    public static function uriForPath($path)
+    {
+        return self::$container->get('request')->getUriForPath($path);
     }
 
     /**
-     * @param WebExtension $webExtension
+     * @param ContainerInterface $container
      */
-    public static function setWebExtension(\Twig_Extension $webExtension)
+    public static function setContainer(ContainerInterface $container)
     {
-        self::$webExtension = $webExtension;
+        self::$container = $container;
     }
 }

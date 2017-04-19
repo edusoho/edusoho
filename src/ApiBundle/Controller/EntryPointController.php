@@ -29,6 +29,6 @@ class EntryPointController extends Controller
 
     private function initEnv()
     {
-        AssetHelper::setWebExtension($this->container->get('web.twig.extension'));
+        AssetHelper::setContainer($this->container);
     }
 }

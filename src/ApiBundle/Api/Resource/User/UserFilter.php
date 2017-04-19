@@ -23,9 +23,9 @@ class UserFilter extends Filter
 
     protected function simpleFields(&$data)
     {
-        $data['smallAvatar'] = AssetHelper::getFurl($data['smallAvatar'], 'user.png');
-        $data['mediumAvatar'] = AssetHelper::getFurl($data['mediumAvatar'], 'user.png');
-        $data['largeAvatar'] = AssetHelper::getFurl($data['largeAvatar'], 'user.png');
+        $data['smallAvatar'] = AssetHelper::getFurl($data['smallAvatar'], 'avatar.png');
+        $data['mediumAvatar'] = AssetHelper::getFurl($data['mediumAvatar'], 'avatar.png');
+        $data['largeAvatar'] = AssetHelper::getFurl($data['largeAvatar'], 'avatar.png');
     }
 
     protected function authenticatedFields(&$data)
