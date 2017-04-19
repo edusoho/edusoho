@@ -1,6 +1,4 @@
-import SmsSender from 'app/common/widget/sms-sender';
 let $form = $('#bind-mobile-form');
-let smsSender = new SmsSender($form);
 let $smsCode = $('.js-sms-send');
 let isOpenCode = false;
 

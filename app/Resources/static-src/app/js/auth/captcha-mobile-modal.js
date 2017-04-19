@@ -45,7 +45,7 @@ export default class CaptchaModal {
         } else {
           this._captchaValidated = false;
           this.$element.find('#getcode_num').attr("src", $("#getcode_num").data("url") + "?" + Math.random());
-          this.$element.find('.help-block').html('<span class="text-danger">' + Translator.trans('验证码错误') + '</span>');
+          this.$element.find('.help-block').html('<span class="color-danger">' + Translator.trans('验证码错误') + '</span>');
           this.$element.find('.help-block').show();
         }
       }, 'json');
@@ -59,6 +59,11 @@ export default class CaptchaModal {
         captcha_num: {
           required: true,
           alphanumeric: true,
+        }
+      },
+      messages: {
+        captcha_num: {
+          required: Translator.trans('请输入验证码'),
         }
       }
     });

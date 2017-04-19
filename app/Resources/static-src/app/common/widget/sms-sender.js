@@ -30,6 +30,8 @@ export default class SmsSender {
       var leftTime = $('#js-time-left').html();
       $('#js-time-left').html(leftTime - 1);
       if (leftTime - 1 > 0) {
+        self.$element.removeClass('disabled');
+        self.$element.addClass('disabled');
         setTimeout(refreshTimeLeft, 1000);
       } else {
         $('#js-time-left').html('');
@@ -37,9 +39,6 @@ export default class SmsSender {
         self.$element.removeClass('disabled');
       }
     };
-
-    console.log(self.$element);
-
     self.$element.addClass('disabled');
     $.post(url, data, function (response) {
       if (("undefined" != typeof response['ACK']) && (response['ACK'] == 'ok')) {
