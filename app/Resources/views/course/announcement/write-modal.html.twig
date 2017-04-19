@@ -1,9 +1,9 @@
 {% extends 'announcement/announcement-modal-layout.html.twig' %}
-
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','libs/bootstrap-datetimepicker.js', 'app/js/announcement/announcement-write/index.js']) %}
 {% set tab="manage" %}
 
 {% block content %}
-  <form id="announcement-write-form" class="form-horizontal" method="post"
+  <form id="announcement-write-form" class="form-horizontal"
     {% if announcement.id %}
       action="{{ path('announcement_update',{id:announcement.id, targetType:targetType,targetId:targetObject.id, }) }}"
     {% else %}
@@ -69,15 +69,10 @@
     </div>
     {% endif %}
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-
   </form>
-  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-  <script>
-    app.lazyLoad = function() { app.load('announcement/announcement-write'); };
-  </script>
 
 {% endblock %}
 {% block footer %}
   <button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
-  <button type="submit" class="btn btn-primary pull-right js-save-btn" data-toggle="form-submit" data-target="#announcement-write-form" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.submit'|trans}}</button>
+  <button type="button" class="btn btn-primary pull-right js-save-btn" data-toggle="form-submit" data-target="#announcement-write-form" data-loading-text="{{'form.btn.save.submitin'|trans}}">{{'form.btn.submit'|trans}}</button>
 {% endblock %}

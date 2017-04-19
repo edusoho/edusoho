@@ -1,5 +1,7 @@
 {% import 'macro.html.twig' as web_macro %}
 {% set memberDeadline = member.deadline|default(0) %}
+{% do script(['app/js/classroom/join-header/index.js'])%}
+
 <section class="class-header after {% if 'auditor' in member.role %} auditor{% endif %}">
   <div class="container">
 
@@ -198,9 +200,6 @@
   </div>
 </section>
 
-
-{% do load_script('topxiawebbundle/controller/classroom/join-header') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 
 {# {% if is_plugin_installed('ClassroomPlan') %}
   {{ render(controller('ClassroomPlanBundle:ClassroomPlan:joinPlanBlock',{classroomId:classroom.id})) }}

@@ -4,7 +4,7 @@
     <br>
     <small class="color-gray">
       {% if courseSet|default(null) %}
-        {{'my.teaching.testpaper.target_course'|trans({'%showUrl%': path('course_set_show',{id:courseSet.id}), '%courseTitle%': courseSet.title|default('')})|raw}}
+        {{ 'my.teaching.testpaper.target_course'|trans }}<a class="color-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">《{{courseSet.title|default('')}}》</a> •
       {% endif %}
       {% if course|default(null) %}
         {{ 'my.teaching.testpaper.course_task'|trans }}<a class="color-primary" href="{{ path('course_show',{id:course.id}) }}">《{{ course.title|default('') }}》</a>

@@ -152,7 +152,7 @@ es_bar.practice.homework_empty_tips: 暂无作业
 es_bar.notification.empty_tips: 暂无通知
 es_bar.notification.content_title: 通知
 es_bar.consult.click_to_send_msg_tips: 点击这里给我发消息
-es_bar.consult.work_time: 工作时间：%worktime% 
+es_bar.consult.work_time: 工作时间：%worktime%
 es_bar.consult.email: 邮箱：
 es_bar.study_center: 学<br>习<br>中<br>心
 es_bar.qq_consult: QQ客服及QQ群
@@ -421,6 +421,7 @@ order.confirm.setup_pay_password_tips: >
 order.confirm.setup_login_password_tips: >
   为了保障账户资金安全，请先<a class="alert-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%">设置登录密码</a>
 order.confirm.forget_password_btn: 忘记密码？
+order.confirm.forget_password_tips: 支付密码
 order.confirm.input_pay_password_tips: 请输入支付密码
 order.confirm.top_use_tips: 本订单最高可以使用
 order.confirm.sms_code: 短信验证码
@@ -489,6 +490,7 @@ pay_center.verify_mobile.input_placeholder: 手机号码
 
 # 上传模块
 upload.content_title: 上传文件
+upload.content_title.uploading_tips: 正在创建课时,请不要关闭窗口
 upload.upload_tips: 请将文件拖到这里，或点击添加文件按钮
 upload.cloud_upload_tips: >
   <li>资料库支持多种文件格式上传分享下载，单个文件大小上限<strong>2GB</strong>。</li>
@@ -1137,8 +1139,8 @@ course.thread.form.edit: 编辑话题
 course.thread.form.create: 发表话题
 course.thread.form.edit_btn: 编辑话题
 course.thread.form.create_btn: 发表话题
-course.thread.form.question.edit_btn: 编辑问题
 course.thread.form.question.create_btn: 提问题
+course.thread.form.question.edit_btn: 编辑问题
 course.thread.form.placeholder: 标题
 course.thread.form.question.placeholder: 标题，用一句话说清你的问题
 course.thread.form.content: 内容
@@ -1363,7 +1365,7 @@ course.course_files.subtitle_manage.subtitle: 字幕
 course.course_files.subtitle_manage.preview_btn: 预览
 course.course_files.subtitle_manage.add_tips: 目前仅支持srt字幕，最多上传4个字幕
 course.course_files.subtitle_dialog.delete_btn: 删除
-course.course_files.subtitle_preview.content_title: 视频预览 
+course.course_files.subtitle_preview.content_title: 视频预览
 course.course_files.last_update: 最后更新
 course.course_files.operation: 操作
 course.course_files.empty: 无文件记录
@@ -1623,7 +1625,7 @@ course.recommend_course.empty_tips: 暂无推荐课程
 
 course.live.enter_classroom_tips: 正在打开教室，请稍后
 course.live_lesson_manage.content_title.create: 新增直播课时
-course.live_lesson_manage.content_title.edit: 编辑直播课时 
+course.live_lesson_manage.content_title.edit: 编辑直播课时
 course.live_lesson_manage.title: 标题
 course.live_lesson_manage.live_start_time: 直播开始时间
 course.live_lesson_manage.live_start_time_hint: 教师可在直播开始前1小时内进入直播教室，以准备相关教学资料。
@@ -1643,7 +1645,7 @@ course.live.replay_manage.upload_form_course_file: 从课程文件中选择
 course.live.replay_manage.upload_mode_cloud_tips: >
   <li>支持<strong>mp4, avi, flv, f4v, wmv, mov, rmvb, mkv, m4v</strong>格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。</li>
   <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
-  <li>视频将上传到<strong>云视频服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li> 
+  <li>视频将上传到<strong>云视频服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>
 course.live.replay_manage.upload_mode_not_cloud_tips: >
   <li>支持<strong>mp4</strong>格式的视频文件上传，文件大小不能超过<strong>%uploadMaxFileSize% </strong>。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
   <li>
@@ -1662,7 +1664,7 @@ course.live.replay_manage.lesson_replay_status.videoGenerated_and_file_empty: �
 course.live.replay_manage.lesson_edit_btn: 编辑
 course.live.replay_manage.upload_btn: 上传回放
 course.live.replay_manage.record: 录制
-course.live.replay_manage.re_record: 重新录制 
+course.live.replay_manage.re_record: 重新录制
 course.live.replay_manage.replay_lesson.content_title: 录播显示编辑
 course.live.replay_manage.lesson_edit_content_title: 编辑回放视频
 course.live.replay_manage.lesson_add_content_title: 添加回放视频
@@ -3448,7 +3450,7 @@ my.teaching.course_set.thread_empty: >
 
 my.teaching.testpaper.target_course: >
   来自课程<a class="color-primary" href="%showUrl%">《%courseTitle%》</a> •
-my.teaching.testpaper.course_task: 计划 
+my.teaching.testpaper.course_task: 计划
 my.teaching.testpaper.start_test_time: 开始考试时间
 my.teaching.testpaper.checking: 正在批阅
 my.teaching.testpaper.check_total_score: >
@@ -6026,7 +6028,7 @@ my.task.calendar: 我的任务日历
 my.learning.homework: 我的作业
 my.learning.homework.check_title: 作业批阅
 my.learning.homework.uncheck: 未批阅
-my.learning.homework.check_finish: 已批阅 
+my.learning.homework.check_finish: 已批阅
 my.learning.homework.check_reviewing: 批阅中
 my.learning.homework.target_course: >
   来自课程<a class="link-primary" href="%showUrl%" target="_blank">《%courseTitle%》</a>
@@ -6114,14 +6116,14 @@ my.learning.group.manage_group: 我管理的小组
 my.learning.note: 我的笔记
 my.learning.note.total_number: 共 %noteNum% 篇笔记
 my.learning.note.last_update_time: 最后更新%noteLastUpdateTime%
-my.learning.note.watch_link: 查看笔记 
+my.learning.note.watch_link: 查看笔记
 my.learning.note.empty: 你还没有写过笔记
 my.learning.note.go_back: 返回
 my.learning.note.target_course: 《%title%》的笔记
 my.learning.note.course_task_number: 任务%number%
 my.learning.note.course_task_empty: 该任务已删除
 my.learning.note.total_length: 共%length%字
-my.learning.note.delete: 删除笔记 
+my.learning.note.delete: 删除笔记
 
 # 我的问答
 my.learning.question: 我的问答
@@ -6139,7 +6141,7 @@ my.learning.testpaper.cancel_favorite_btn: 取消收藏
 my.learning.testpaper,favorit_empty: 还没有收藏的题目
 
 # 充值记录
-my.money_record.recharge: 充值记录 
+my.money_record.recharge: 充值记录
 my.money_record.payout_record: 消费记录
 my.money_record.money: 金额
 my.money_record.recharge_mode: 充值方式
@@ -6549,7 +6551,7 @@ common.video_quality.normal: 标准
 common.video_quality.normal.tips: 适合屏幕录制、摄像头拍摄
 common.video_quality.high: 精细
 common.video_quality.high.tips: 适合动态电影
- 
+
 # content
 contetn.active_list.create_template: 请创建模版文件
 contetn.active_list.custom_template: 自定义
@@ -6745,7 +6747,3 @@ courseset_manage.cover_img.tips: 提示：请选择图片裁剪区域。
 courseset_manage.cover_img.again_select_picture_btn: 重新选择图片
 courseset_manage.unlock_confrim: 解除确认
 courseset_manage.unlock_confrim.tips: 解除后本课程将停止同步更新,本操作不可逆！
-
-
-
-

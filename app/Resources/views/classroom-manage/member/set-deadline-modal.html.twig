@@ -1,5 +1,5 @@
-{% extends 'old-bootstrap-modal-layout.html.twig' %}
-
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% do script(['libs/bootstrap-datetimepicker.js','libs/jquery-validation.js','app/js/classroom-manage/student-expiryday/index.js'])%}
 {% set modalSize = 'large' %}
 
 {% block title %}{{'classroom.edit_expiry_mode'|trans}}{% endblock %}
@@ -49,7 +49,6 @@
 {% endblock %}
 
 {% block footer %}
-  <button type="submit" id="student-save" data-loading-text="{{'form.btn.save.submiting'|trans}}"class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#expiryday-set-form">{{'form.btn.save'|trans}}</button>
+  <button class="btn btn-primary pull-right" type="button" id="student-save" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.save'|trans}}</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
-<script>app.load('classroombundle/controller/classroom/student/expiry-date')</script>
 {% endblock %}

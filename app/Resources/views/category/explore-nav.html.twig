@@ -1,10 +1,6 @@
-{% do load_script('category/nav') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-
 {% set tagMarks = data('TagMarks', {tags:tags}) %}
 {% set categoryMarks = data('CategoryMarks', {selectedCategory:selectedCategory, selectedSubCategory:selectedSubCategory, selectedthirdLevelCategory:selectedthirdLevelCategory}) %}
 {% set selectedTagGroups = data('SelectedTagGroups', {tags:tags}) %}
-
 
 <div class="tabs-wrapper">
   <div class="tabs-mark-group plm ptm">

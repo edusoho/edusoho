@@ -1,5 +1,8 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
-{% block title %}{{'course.members_manage.official_student.add_expiry_day.add'|trans}}{{ setting('default.user_name')|default('site.default.student'|trans) }}{{'course.members_manage.official_student.add_expiry_day.course_expiry_date'|trans}}{% endblock %}
+
+{% block title %}{{'course.members_manage.official_student.add_expiry_day.add'|trans}}{% if setting('default.user_name') %}{{ setting('default.user_name')|default('site.default.student'|trans) }}{% else %}{{'site.default.student'|trans}}{% endif %}{{'course.members_manage.official_student.add_expiry_day.course_expiry_date'|trans}}{% endblock %}
+{% do script(['libs/jquery-validation.js','app/js/course-manage/student-expiryday/index.js'])%}
+
 {% block body %}
 <form id="expiryday-set-form" class="form-horizontal" method="post" action="{{ path('course_set_manage_course_students_expiryday', { courseSetId: course.courseSetId, courseId:course.id, userId:user.id }) }}">
   {% if course.status == 'published' %}
@@ -37,10 +40,10 @@
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
 {% endblock %}
+
 {% block footer %}
   {% if course.status == 'published' %}
-    <button type="submit" id="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#expiryday-set-form" data-user="{{ setting('default.user_name')|default('site.default.student'|trans) }}">{{'form.btn.save'|trans}}</button>
+    <button type="button" id="submit" class="btn btn-primary pull-right js-save-expiryday-set-form" data-target="#expiryday-set-form" data-user="{{ setting('default.user_name')|default('site.default.student'|trans) }}">{{'form.btn.save'|trans}}</button>
   {% endif %}
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
-  <script>app.load('course-manage/set-expiryday-modal')</script>
 {% endblock %}

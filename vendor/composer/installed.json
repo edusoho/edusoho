@@ -2728,7 +2728,7 @@
         "version_normalized": "0.9.9.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/padraic/mockery.git",
+            "url": "https://github.com/mockery/mockery.git",
             "reference": "6fdb61243844dc924071d3404bb23994ea0b6856"
         },
         "dist": {
@@ -4931,17 +4931,17 @@
     },
     {
         "name": "codeages/biz-framework",
-        "version": "v0.3.8",
-        "version_normalized": "0.3.8.0",
+        "version": "v0.3.9",
+        "version_normalized": "0.3.9.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "a8177f77587b1ece779af2dc6563507c5f4c9ba8"
+            "reference": "0d4a44d09cab8a965dbc3302a2b864704c9f9e98"
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/biz-framework/a8177f77587b1ece779af2dc6563507c5f4c9ba8.zip",
-            "reference": "a8177f77587b1ece779af2dc6563507c5f4c9ba8",
+            "url": "https://files.phpcomposer.com/files/codeages/biz-framework/0d4a44d09cab8a965dbc3302a2b864704c9f9e98.zip",
+            "reference": "0d4a44d09cab8a965dbc3302a2b864704c9f9e98",
             "shasum": ""
         },
         "require": {
@@ -4955,7 +4955,7 @@
         "require-dev": {
             "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
         },
-        "time": "2017-04-12T09:10:30+00:00",
+        "time": "2017-04-18T09:20:44+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
+use Biz\Taxonomy\TagOwnerManager;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
@@ -834,6 +835,19 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
     }
 
+    public function updateCourseSetDefaultCourseId($id)
+    {
+        $course = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($id);
+        //如果计划都尚未发布，则获取第一个创建的
+        if (empty($course)) {
+            $course = $this->getCourseService()->getFirstCourseByCourseSetId($id);
+        }
+        if (empty($course)) {
+            throw $this->createNotFoundException('No Avaliable Course in CourseSet#{$id}');
+        }
+        $this->getCourseSetDao()->update($id, array('defaultCourseId' => $course['id']));
+    }
+
     public function updateMaxRate($id, $maxRate)
     {
         $courseSet = $this->getCourseSetDao()->update($id, array('maxRate' => $maxRate));
@@ -1042,10 +1056,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $fields,
             function ($value) {
                 if ($value === '' || $value === null) {
-                    return false;
-                }
-
-                if (is_array($value) && empty($value)) {
                     return false;
                 }
 

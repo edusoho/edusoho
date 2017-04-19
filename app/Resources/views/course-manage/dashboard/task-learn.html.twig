@@ -1,10 +1,8 @@
 {% extends 'course-manage/dashboard/layout.html.twig' %}
-
-{% do load_script('course-manage/dashboard/lesson-detail.js') %}
+{% do script(['app/js/course-manage/dashboard/lesson-detail/index.js'])%}
 {% set submenu = 'task_learn_dashboard' %}
 
 {% block dashboard %}
-
   <div class="table-responsive">
     <table class="table table-bordered" id="learning-data-table" style="word-break:break-all;text-align:center;">
       <tr class="active">
@@ -105,5 +103,4 @@
     </table>
     <p class="color-success">{{ 'course.dashboard.study_detail.tips'|trans }}</p>
   </div>
-
 {% endblock %}

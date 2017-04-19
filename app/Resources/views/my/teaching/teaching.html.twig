@@ -38,13 +38,13 @@
           {% set course = courseSet.courses|first %}
           <tr>
             <td>
-              <a class="pull-left mrm link-primary" href="{{ path('course_set_show', {id: courseSet.id}) }}">
+              <a class="pull-left mrm link-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">
                 <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}"
                      alt="{{ courseSet.title }}" width="100">
               </a>
 
               <div class="mlm">
-                <a class="link-primary" href="{{ path('course_set_show', {id: courseSet.id}) }}">{{ courseSet.title }}</a>
+                <a class="link-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
 
                 {% if courseSet.type == 'live' %}
                   <span class="label label-success live-label">{{ 'my.teaching.course_set.live_label'|trans }}</span>

@@ -1,4 +1,4 @@
-{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% extends 'bootstrap-modal-layout.html.twig' %}
 
 {% block title %}
 {{'announcement.modal_layout.announcement_manage'|trans}}
@@ -13,6 +13,8 @@
 		<a href="javascript:;" data-role="announcement-modal" data-url="{{path('announcement_list',{targetType:targetType, targetId:targetId})}}">{{'announcement.modal_layout.announcement_manage.history_btn'|trans}}</a>
 	</li>
 </ul>
-{% block content %}{% endblock %}
+{% block content %}
+	
+{% endblock %}
 
 {% endblock %}

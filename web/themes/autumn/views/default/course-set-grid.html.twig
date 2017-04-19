@@ -1,7 +1,7 @@
 {% set course = data('PublishedCourseByCourseSet', {courseSetId: courseSet.id }) %}
 {% if course %}
  <li class="autumn-grid autumn-course-grid">
-  <a href="{{ path('course_set_show', {id: courseSet.id}) }}" class="course-picture">
+  <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" class="course-picture">
     {{ lazy_img(filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png'), 'img-responsive', '') }}
     <div class="course-label">
     {% if courseSet.status == 'draft' %}
@@ -27,7 +27,7 @@
     </div>
   </a>
   <div class="course-body">
-    <h3 class="course-name"><a href="{{ path('course_set_show', {id:courseSet.id}) }}">{{ courseSet.title }}</a></h3>
+    <h3 class="course-name"><a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a></h3>
     <div class="course-about">{{ course.about|plain_text(60) }}</div>
     
     <div class="course-price-info">  

@@ -3,8 +3,6 @@
 {% block title %}{{'classroom.auditor_manage'|trans}} - {{ parent() }}{% endblock %}
 
 {% set submenu = 'aduitor' %}
-
-{# {% set script_controller = 'topxiawebbundle/controller/classroom-manage/students' %} #}
 {% do script(['app/js/classroom-manage/students-manage/index.js']) %}
 
 {% block maincontent %}
@@ -17,7 +15,7 @@
     </div>
     <div class="clearfix"></div>
   </form>
-  
+
   <table class="table table-striped" id="course-student-list">
     <thead>
       <tr>

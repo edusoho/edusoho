@@ -4,7 +4,7 @@
   {% if is_open_course %}
     {% set course_show_url = path('open_course_show', { courseId: course.id }) %}
   {% else %}
-    {% set course_show_url = path('course_set_show',{id : course.courseId}) %}
+    {% set course_show_url = path('course_show',{id : course.id}) %}
   {% endif %}
 
   <div class="course-img">

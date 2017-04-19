@@ -3,7 +3,8 @@
 {% block title %}{{'user.settings.avatar.crop'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'avatar' %}
-{% set script_controller = 'settings/avatar-crop' %}
+{% do script(['app/js/settings/avatar-crop/index.js']) %}
+
 {% block main %}
 
 <div class="panel panel-default panel-col">
@@ -30,7 +31,7 @@
           data-url="{{path('settings_avatar_crop')}}"
           data-goto-url="{% if goto %}{{ goto }}{% else %}{{path('settings_avatar')}}{% endif %}"
           >{{'form.btn.save'|trans}}</a>
-          <a href="javascript:;" class="go-back btn btn-link">{{'user.settings.avatar.reselect'|trans}}</a>
+          <a href="javascript:;" class="js-go-back btn btn-link" data-goto-url="{% if goto %}{{ goto }}{% else %}{{path('settings_avatar')}}{% endif %}">{{'user.settings.avatar.reselect'|trans}}</a>
         </div>
       </div>
 

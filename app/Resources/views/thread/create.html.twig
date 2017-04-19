@@ -5,14 +5,14 @@
 
 {% include 'thread/part/thread-crumbs.html.twig' with {target:target, thread:thread,type:type, isUpdate:isUpdate} %}
 
-<form id="thread-form" class="form-horizontal" method="post" 
+<form id="thread-form" class="form-horizontal" method="post"
   {% if thread %}
     action="{{ path(target.type ~ '_thread_update', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"
   {% else %}
     action="{{ path(target.type ~ '_thread_create', {(target.type ~ 'Id'): target.id, type:type}) }}"
     {% endif %}
   >
-  
+
   {% if type =='question' %}
     <div class="form-group">
       <div class="col-md-12">
@@ -20,7 +20,7 @@
         </div>
     </div>
   {% endif %}
-  
+
   {% if type =='discussion' %}
     <div class="form-group">
         {# <label for="title" class="col-sm-2 control-label">话题标题</label> #}
@@ -78,22 +78,23 @@
       </div>
     </div>
   {% endif %}
- 
+
   <div class="form-group">
     {% if type == 'event' %}
         <div class="controls col-md-2"></div>
         <div class="controls col-md-7">
-          <textarea id="thread-content-field" class="form-control" rows="15" data-display="{{'classroom.thread.create.content'|trans}}" name="content"
+          <textarea id="thread_content" class="form-control" rows="15" data-display="{{'classroom.thread.create.content'|trans}}" name="content"
+
             data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ thread.content|default('') }}</textarea>
         </div>
     {% else %}
         {# <div class="controls col-md-2"></div> #}
         <div class="controls col-md-12">
-          <textarea id="thread-content-field" class="form-control" rows="15" data-display="{{'classroom.thread.create.content'|trans}}" name="content"
+          <textarea id="thread_content" class="form-control" rows="15" data-display="{{'classroom.thread.create.content'|trans}}" name="content"
             data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ thread.content|default('') }}</textarea>
         </div>
     {% endif %}
-    
+
   </div>
    {% if type != 'event' %}
       {{ render(controller('AppBundle:File/Attachment:formFields', {targetType: 'classroom.thread', targetId: thread.id|default(0)}, {'showLabel':false})) }}

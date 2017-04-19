@@ -142,8 +142,15 @@ class DaoProxy
     protected function create($method, $arguments)
     {
         $declares = $this->dao->declares();
+
+        $time = time();
+
         if (isset($declares['timestamps'][0])) {
-            $arguments[0][$declares['timestamps'][0]] = time();
+            $arguments[0][$declares['timestamps'][0]] = $time;
+        }
+
+        if (isset($declares['timestamps'][1])) {
+            $arguments[0][$declares['timestamps'][1]] = $time;
         }
 
         $this->serialize($arguments[0]);

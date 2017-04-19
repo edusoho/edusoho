@@ -8,14 +8,14 @@
 		{% set course = data('PublishedCourseByCourseSet',{ courseSetId: courseSet.id } ) %}
 	    <div class="media">
 	      <div class="media-left">
-			  <a href="{{ path('course_set_show',{id:courseSet.id}) }}" title="{{ courseSet.title }}" target="_blank">
+			  <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" title="{{ courseSet.title }}" target="_blank">
                   {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'img-responsive', courseSet.title) }}
 			  </a>
 	        
 	      </div>
 	      <div class="media-body">
 	        <div class="title">
-			  <a href="{{ path('course_set_show',{id:courseSet.id}) }}" class="gray-darker" title="{{ courseSet.title }}" target="_blank">{{ courseSet.title|plain_text(20) }}</a>
+			  <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" class="gray-darker" title="{{ courseSet.title }}" target="_blank">{{ courseSet.title|plain_text(20) }}</a>
 	        </div>
 	        <div class="metas">
                 {% include 'course/widgets/course-set-price.html.twig' with {shows: 'price'} %}

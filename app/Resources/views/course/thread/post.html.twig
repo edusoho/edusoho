@@ -30,7 +30,7 @@
   <div class="form-group">
     <div class="controls clearfix">
       {{ form_rest(form) }}
-      <button type="submit" class="btn btn-primary pull-right">{{'thread.add_btn'|trans}}{% if thread.type == 'question' %}{{'thread.answer'|trans}}{% else %}{{'thread.reply'|trans}}{% endif %}</button>
+      <button type="button" class="btn btn-primary pull-right js-btn-thread-post-form-save">{{'thread.add_btn'|trans}}{% if thread.type == 'question' %}{{'thread.answer'|trans}}{% else %}{{'thread.reply'|trans}}{% endif %}</button>
     </div>
   </div>
 

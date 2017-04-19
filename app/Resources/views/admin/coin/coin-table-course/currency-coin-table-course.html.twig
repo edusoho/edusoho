@@ -11,7 +11,7 @@
                     <td>
                         <div class="clearfix">
                             <img class="pull-left mrl" src="{{ filepath(item.conver.small|default(''),'course.png') }}" style="width:100px;"/>
-                            <a class="pull-left" href="{{ path('course_set_show', {id:item.id}) }}" target="_blank" >{{item.title}}
+                            <a class="pull-left" href="{{ path('course_show', {id: item.defaultCourseId}) }}" target="_blank" >{{item.title}}
                             </a>
                         </div>
                     </td>

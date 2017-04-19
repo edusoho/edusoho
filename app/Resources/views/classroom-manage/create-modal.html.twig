@@ -1,6 +1,5 @@
-{% extends 'old-bootstrap-modal-layout.html.twig' %}
-
-
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% do script(['libs/jquery-validation.js','app/js/classroom-manage/students-create/index.js'])%}
 {% set modalSize = 'large' %}
 
 {% block title %}{{'classroom.add_student_title'|trans}}{% endblock %}
@@ -13,7 +12,7 @@
         <label for="student-nickname">{{'classroom.student'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
-        <input type="text" id="student-nickname" name="queryfield" class="form-control" 
+        <input type="text" id="student-nickname" name="queryfield" class="form-control"
         data-url="{{ path('classroom_manage_student_check',{id:classroom.id})}}" placeholder="{{'classroom.student_placeholder'|trans}}" >
       	<div class="help-block">{{'classroom.add_student_tips'|trans}}</div>
     	</div>
@@ -62,9 +61,7 @@
 
 {% block footer %}
   {% if classroom.status == 'published' %}
-    <button id="student-create-form-submit" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#student-create-form" data-submiting-text="{{'form.btn.save.submiting'|trans}}" data-user="{{default.user_name|default('site.default.student'|trans)}}">{{'form.btn.save'|trans}}</button>
+    <button id="student-create-form-submit" type="button" class="btn btn-primary pull-right">{{'form.btn.save'|trans}}</button>
   {% endif %}
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
-  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-  <script>app.lazyLoad = function() { app.load('topxiawebbundle/controller/classroom/student-create') };</script>
 {% endblock %}

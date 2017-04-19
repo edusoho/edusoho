@@ -354,7 +354,7 @@
                 {% for courseSet in courseSetsRank %}
                   {% if courseSet %}
                     <li class="media">
-                      <a href="{{ path('course_set_show', {id:courseSet.id}) }}">
+                      <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">
                         <div class="course-item">
                           <img src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" class="img-responsive thumb pull-left">
                           <div class="course-title">{{ courseSet.title }}</div>
@@ -436,7 +436,7 @@
         {% set course = data('PublishedCourseByCourseSet', {'courseSetId':courseSet.id}) %}
         {% if course %}
           <li class="course-grid">
-            <a href="{{ path('course_set_show', {id:courseSet.id}) }}" class="grid-body">
+            <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" class="grid-body">
               {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'img-responsive thumb', '') }}
               {% if courseSet.status == 'draft' %}
                 <span class="label  label-warning course-status">{{ '未发布'|trans }}</span>

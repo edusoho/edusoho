@@ -29,12 +29,12 @@
                     {% endif %}
                     <div>
                       {% if courseSet|default(null) %}
-                        <small class="color-gray">{{'my.teaching.testpaper.target_course'|trans({'%showUrl%': path('course_set_show',{id:courseSet.id}), '%courseTitle%': courseSet.title})|raw}}</small>
+                        <small class="color-gray">{{'my.teaching.testpaper.target_course'|trans}}<a class="color-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank">《{{ courseSet.title }}》</a></small>
                       {% endif %}
                       {% if course|default(null) %}
                         <small class="color-gray">{{'my.teaching.testpaper.course_task'|trans}}<a class="color-primary" href="{{ path('course_show',{id:course.id}) }}" target="_blank">《{{ course.title|default(null) }}》</a></small>
                       {% endif %}
-                      
+
                       <small class="color-gray mhs">•</small>
                       <small class="color-gray" title="{{'my.teaching.testpaper.start_test_time'|trans}}">{{ paperResult.beginTime|date('Y年n月d日 H:i:s'|trans) }}</small>
                     </div>

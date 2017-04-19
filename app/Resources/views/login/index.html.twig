@@ -1,6 +1,5 @@
-{% extends 'old-layout.html.twig' %}
-
-{% set script_controller = 'auth/login' %}
+{% extends 'layout.html.twig' %}
+{% do script(['libs/jquery-validation.js','app/js/auth/login/index.js']) %}
 {% set bodyClass = 'login' %}
 
 {% block title %}{{ 'user.login.content_title'|trans }} - {{ parent() }}{% endblock %}
@@ -44,7 +43,7 @@
           </div>
         </div>
         <div class="form-group mbl">
-          <button type="submit" class="btn btn-primary btn-lg btn-block">{{ 'user.login.submit_button'|trans }}</button>
+          <button type="button" class="btn btn-primary btn-lg btn-block js-btn-login">{{ 'user.login.submit_button'|trans }}</button>
         </div>
 
         <input type="hidden" name="_target_path" value="{{ _target_path }}">

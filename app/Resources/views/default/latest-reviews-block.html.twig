@@ -19,7 +19,7 @@
 			  	<div class="review-content">{{ review.content|plain_text(50) }}</div>
 
 				  <div class="review-footer">
-					  <a href="{{ path('course_set_show', {id: courseSet.id}) }}" class="course-title"> 《 {{ courseSet.title }} 》</a>
+					  <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" class="course-title"> 《 {{ courseSet.title }} 》</a>
 					  <span class="divider"></span>
 					  <span class="stars-{{ review.rating }}">&nbsp;</span>
 				  </div>

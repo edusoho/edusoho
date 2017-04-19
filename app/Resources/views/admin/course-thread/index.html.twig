@@ -76,7 +76,7 @@
               
               <div class="text-sm mts">
                 {% if courseSet %}
-                  <a href="{{ path('course_set_show', {id:courseSet.id}) }}" class="text-success" target="_blank">{{ courseSet.title }}</a>
+                  <a href="{{ path('course_show', {id:courseSet.defaultCourseId}) }}" class="text-success" target="_blank">{{ courseSet.title }}</a>
                 {% endif %}
 
                 {% if course %}
