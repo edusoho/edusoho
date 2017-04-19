@@ -81,7 +81,7 @@ class DiscoveryColumnServiceImpl extends BaseService implements DiscoveryColumnS
         $conditions = array(
             'status' => 'published',
             'parentId' => 0,
-            'showable' => 1
+            'showable' => 1,
         );
 
         if (!empty($column['categoryId'])) {

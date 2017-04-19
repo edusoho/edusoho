@@ -36,6 +36,7 @@ class DiscoveryColumnController extends BaseController
     public function indexAction(Request $request)
     {
         $discoveryColumns = $this->getDiscoveryColumnService()->getDisplayData();
+
         return $this->render('admin/discovery-column/index.html.twig', array(
             'discoveryColumns' => $discoveryColumns,
         ));

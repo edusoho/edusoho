@@ -91,10 +91,10 @@ class DiscoveryColumnServiceTest extends BaseTestCase
         $this->createDiscoveryColumn();
         $fakeCourseSets = array(
             array('id' => 1, 'title' => '123'),
-            array('id' => 2, 'title' => '456')
+            array('id' => 2, 'title' => '456'),
         );
         $this->mockBiz('Course:CourseSetService', array(
-            array('functionName' => 'searchCourseSets', 'returnValue' => $fakeCourseSets)
+            array('functionName' => 'searchCourseSets', 'returnValue' => $fakeCourseSets),
         ));
         $columns = $this->getDiscoveryColumnService()->getDisplayData();
 
