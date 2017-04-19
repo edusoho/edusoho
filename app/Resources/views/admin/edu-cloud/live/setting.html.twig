@@ -5,10 +5,10 @@
 
 {% block page_title %}
   {% if setting('cloud_status.locked') == true %}
-    <div class="alert alert-warning" role="alert">{{'admin.edu_cloud.edu_live.locked_tips'|trans}}：4008041114。</div>
+    <div class="alert alert-warning" role="alert">{{'admin.edu_cloud.edu_live.locked_tips'|trans}}</div>
     {{ currentMenu.code|parent_permission.name|trans }}
   {% elseif account.status|default() == 'none' %}
-    <div class="alert alert-warning" role="alert">{{'admin.edu_cloud.edu_live.service_suspend'|trans}}：4008041114。</div>
+    <div class="alert alert-warning" role="alert">{{'admin.edu_cloud.edu_live.service_suspend'|trans}}</div>
     {{ currentMenu.code|parent_permission.name|trans }}
   {% else %}
     {{ parent() }}
