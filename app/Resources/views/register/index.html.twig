@@ -75,7 +75,7 @@
           </div>
         {% endif %}
         {% if setting('auth.register_mode') == 'email_or_mobile' or setting('auth.register_mode') == 'mobile' %}
-          <div class="form-group mbl email_mobile_msg">
+          {#<div class="form-group mbl {% if setting('auth.register_mode') != 'mobile' %}hidden{% endif %} email_mobile_msg">
             <label class="control-label required" for="sms_code">{{'短信验证码'|trans}}</label>
             <div class="controls row" >
               <div class = "col-xs-7" >
@@ -89,7 +89,7 @@
                </a>
               </div>
             </div>
-          </div>
+          </div>#}
         {% endif %}
         {% if (setting('invite.invite_code_setting')|default(0) == 1) and  inviteCode == null  %}
         <div class="form-group mbl">

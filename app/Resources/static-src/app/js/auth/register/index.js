@@ -142,12 +142,12 @@ function emSmsCodeValidate(mobile, $form) {
   var reg_mobile = /^1\d{10}$/;
   var isMobile = reg_mobile.test(mobile);
   if (isMobile) {
-    $('[name="sms_code"]').rules('add', {
-      required: true,
-      integer: true,
-      rangelength: [5, 7],
-      es_remote: true,
-    })
+    // $('[name="sms_code"]').rules('add', {
+    //   required: true,
+    //   integer: true,
+    //   rangelength: [5, 7],
+    //   es_remote: true,
+    // })
     $('[name="captcha_code"]').rules('remove');
 
     $form.on('click', '.js-sms-send', function (e) {
