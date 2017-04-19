@@ -22,6 +22,7 @@ site.data.task: 任务
 site.data.part: 节
 site.data.title: 标题
 site.data.score: 分
+site.data.count: 数
 site.datagrid.empty: 暂无记录
 site.datagrid.filter.all_records: 全部记录
 site.datagrid.filter.last_one_week: 最近一周
@@ -3927,6 +3928,11 @@ admin.open_manage.cancel_recommend_btn: 取消推荐
 admin.open_manage.student: 学员
 admin.open_manage.chapter: 章
 admin.open_manage.section: 节
+admin.open_manage.delete.check_password: 核实用户密码
+admin.open_manage.delete.user_password: 用户密码
+admin.open_manage.delete.delete.tips: 正在删除，请不要关闭当前窗口...
+admin.open_manage.delete.delete_finish_weating.tips: 正在完成删除, 请稍等...
+admin.open_manage.delete.delete_finished_btn: 完成删除
 
 ## 公开课管理
 admin.open_manage.manage.status_option: 课程状态
@@ -4002,7 +4008,7 @@ admin.open_manage.analysis.referer.summary_list.referer_url: 访问地址：
 admin.open_manage.analysis.conversion.name_th: 课程名称
 admin.open_manage.analysis.conversion.buy_num_th: 购买数
 admin.open_manage.analysis.conversion.visit_num_th: 访问数
-admin.open_manage.analysis.conversion.buy_rate_th: 购买数
+admin.open_manage.analysis.conversion.buy_rate_th: 购买率
 admin.open_manage.analysis.conversion.detail_th: 详情
 admin.open_manage.analysis.conversion.empty: 暂无记录
 admin.open_manage.analysis.conversion.detail_btn: 详情
@@ -4014,6 +4020,7 @@ admin.open_manage.analysis.conversion.result.content_th: 内容
 admin.open_manage.analysis.conversion.result.type_th: 类型
 admin.open_manage.analysis.conversion.result.buy_num_th: 购买数
 admin.open_manage.analysis.conversion.result.price_th: 价格
+admin.open_manage.analysis.conversion.course_empty: 该课程已删除
 
 ####公开课观看统计
 admin.open_manage.analysis.watch.all_tab: 全部
@@ -4208,8 +4215,8 @@ admin.navbar.header.often_used.added_tips: 当前页面已添加
 admin.navbar.header.often_used.delete_tips: 删除常用链接
 admin.navbar.header.home_btn: 回首页
 admin.navbar.header.dropdown_menu.exit_btn: 退出
-admin.fixed_bar.product: 产品
-admin.fixed_bar.feedback: 反馈
+admin.fixed_bar.product_feedback: >
+  产品<br/>反馈
 admin.hompage.html_head_title: 管理后台
 admin.homepage.setting_domain_btn: 设置
 admin.homepage.cloud_notice.unknown_time: 未知时间
@@ -4797,6 +4804,9 @@ admin.sensitive_manage.add_sensitive: 添加敏感词
 admin.sensitive_manage.add_sensitive_tips: 换行可一次添加多个敏感词
 admin.sensitive_manage.sensitive_type: 敏感词类型
 admin.sensitive_manage.add_sensitive_btn: 添加
+admin.sensitive_manage.error: 错误
+admin.sensitive_manage.prompt: 提示
+admin.sensitive_manage.prompt.tips: 当前用户没有查看此菜单的权限
 
 # 咨询管理
 admin.operation_article.category_option: --所属栏目--
@@ -6973,3 +6983,82 @@ courseset_manage.cover_img.tips: 提示：请选择图片裁剪区域。
 courseset_manage.cover_img.again_select_picture_btn: 重新选择图片
 courseset_manage.unlock_confrim: 解除确认
 courseset_manage.unlock_confrim.tips: 解除后本课程将停止同步更新,本操作不可逆！
+
+# 账务中心
+admin.account_center.this_week_data: 本周数据
+admin.account_center.income_unit: 收入单位
+admin.account_center.RMB: 元
+admin.account_center.loading_data: 正在载入数据，请稍等。。。
+admin.account_center.month: 本月
+admin.account_center.quarter: 本季
+admin.account_center.year: 本年
+admin.account_center.financial_statistics: 财务统计
+admin.account_center.cash_this_month_btn: 本月用户现金消费top10
+admin.account_center.coin_this_month_btn: 本月用户虚拟币消费top10
+admin.account_center.top10_this_month_btn: 本月top10
+admin.account_center.top10_this_course_btn: 课程top10
+admin.account_center.top10_this_classroom_btn: 班级top10
+admin.account_center.top10_this_vip_btn: 会员top10
+admin.account_center.rank.analysisAmountTitle: 商品名称
+admin.account_center.rank.analysisAmountCount: 收入金额
+admin.account_center.rank.analysisAmount.empty: 暂无商品
+admin.account_center.payment.user_name: 用户名
+admin.account_center.payment.amount_count: 现金支出
+admin.account_center.payment.amount.empty: 暂无消费
+admin.account_center.dashboard.this_week_cash_income: 本周现金收入
+admin.account_center.dashboard.this_week_coin_income: 本周虚拟币收入
+admin.account_center.dashboard.this_week_course_income: 本周课程收入
+admin.account_center.dashboard.this_week_classroom_income: 本周班级收入
+admin.account_center.dashboard.this_week_vip_income: 本周会员收入
+
+admin.cloud.app.upgrades.upgrade: 升级
+admin.cloud.app.upgrades.install: 安装
+admin.cloud.app.upgrades.app: 应用
+admin.cloud.app.upgrades.tips: 您好，为了保证网站升级顺利进行，升级过程中会出现短暂（2分钟内）网站无法访问的情况，请在学员访问少的时候进行系统升级，给您带来了不便，还望理解
+admin.cloud.app.upgrades.app_name: 应用名称
+admin.cloud.app.upgrades.app_version: 应用名称
+admin.cloud.app.upgrades.backupDB: 备份数据库
+admin.cloud.app.upgrades.backupFile: 备份文件
+admin.cloud.app.upgrades.backupStatus.yes: 是
+admin.cloud.app.upgrades.backupStatus.no: 否
+admin.cloud.app.upgrades.startUpdate_btn: 开始
+admin.cloud.app.upgrades.updating.tips: 正在安装，请不要关闭当前窗口...
+admin.cloud.app.upgrades.finish_update.tips: 正在完成安装/升级, 请稍等...
+admin.cloud.app.upgrades.finish_update_btn: 完成安装/升级
+admin.cloud.app.layout.task_manage: 任务管理
+
+admin.plugin.upgrades.plugin: 应用
+admin.plugin.upgrades.theme: 主题
+admin.plugin.upgrades.upgrade_guide: 升级引导
+admin.plugin.upgrades.upgrade.tips: 请即刻升级以下%displayType%，否则会影响到网站的正常使用
+admin.plugin.upgrades.not_upgrade.tips: 非官方应用暂不支持8.0，请等待第三方开发者升级
+admin.plugin.upgrades_btn: 去升级
+admin.new_layout.cloudSmsInfo.tips: >
+  您好，ES云短信发送机制升级优化，网站目前短信剩余%remainCount%条，为保证继续使用，请开通教育云，点击 <a href="http://open.edusoho.com/cloud/access" target="_blank"> 立即开通</a>
+admin.new_layout.notifies.empty: >
+  【重要】网站升级v7.2.0后，为保证正常使用，请务必及时升级插件（%notifies%）至最新版！请立即升级！
+admin.new_layout.notifies.view_detail_btn: 查看详情
+admin.macro.user_link.user_empty: 用户已删除
+admin.user.org.edit: 编辑用户所属组织
+admin.operation.statistic.navbar_manage: 导航管理
+admin.operation.statistic.access_detailed_btn: 访问明细
+admin.operation.statistic.income_detailed_btn: 收入明细
+
+# 组织机构管理
+admin.org_manage.org_name: 名称
+admin.org_manage.org_code: 编码
+admin.org_manage.org_childrenNum: 辖下机构数
+admin.org_manage.org_nickname: 创建者
+admin.org_manage.org_createdTime: 创建时间
+admin.org_manage.operation: 操作
+admin.org_manage.org_empty: 暂无分类记录
+admin.org_manage.edit_btn: 编辑
+admin.org_manage.add_btn: 添加
+admin.org_manage.modal.edit_org: 编辑组织机构
+admin.org_manage.modal.add_org: 添加组织机构
+admin.org_manage.modal.org_name: 名称
+admin.org_manage.modal.org_code: 编码
+admin.org_manage.modal.org_code.help_block: 必填，建议使用分类名称的英文单词或缩写作为编码。
+admin.org_manage.modal.org_description: 描述
+admin.org_manage.modal.org_description.help_block: 非必填
+admin.org_manage.modal.delete.tips: 会同时删除下辖组织机构
