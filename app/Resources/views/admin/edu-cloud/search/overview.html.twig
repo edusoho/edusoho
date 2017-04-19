@@ -6,7 +6,7 @@
 
 {% block page_title %}
   {% if setting('cloud_status.locked') == true %}
-    <div class="alert alert-warning" role="alert">{{'admin.edu_cloud.edu_search.locked_tips'|trans}}：4008041114。</div>
+    <div class="alert alert-warning" role="alert">{{'admin.edu_cloud.edu_search.locked_tips'|trans}}</div>
     {{ currentMenu.code|parent_permission.name|trans }}
   {% else %}
     {{ parent() }}
@@ -16,16 +16,16 @@
 {% block main %}
 <div class="panel panel-default">
   <div class="panel-heading">
-    {{'admin.edu_cloud.edu_search.basic_info'|trans}} 
+    {{'admin.edu_cloud.edu_search.basic_info'|trans}}
   </div>
   <div class="panel-body">
     <div class="pll pbl">
       {{'admin.edu_cloud.edu_search.total_count'|trans}}
-      <span class="h3 text-primary plm prs">{{searchOverview.total}}</span>次
+      <span class="h3 text-primary plm prs">{{searchOverview.total}}</span>{{'site.default.times'|trans}}
     </div>
     <div class="pll pbm">
       {{'admin.edu_cloud.edu_search.today_count'|trans}}
-      <span class="color-gray phm text-md">{{searchOverview.todayUsed}} 条</span>
+      <span class="color-gray phm text-md">{{searchOverview.todayUsed}} {{'site.default.bar'|trans}}</span>
     </div>
   </div>
 </div>
