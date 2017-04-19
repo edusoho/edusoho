@@ -18,6 +18,7 @@ return PhpCsFixer\Config::create()
     ->setCacheFile(__DIR__.'/.php_cs.cache')
     ->setRules(array(
         '@Symfony' => true,
+        'phpdoc_summary' => false,
     ))
     ->setFinder($finder)
 ;

@@ -379,6 +379,7 @@ class RegisterController extends BaseController
         if ($result != 'success') {
             $response = $message;
         }
+
         return $this->createJsonResponse($response);
     }
 
