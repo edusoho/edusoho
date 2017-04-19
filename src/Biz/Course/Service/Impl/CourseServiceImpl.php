@@ -795,7 +795,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return array();
     }
 
-    // Refactor: countLearningCourses
     public function countUserLearningCourses($userId, $filters = array())
     {
         $conditions = $this->prepareUserLearnCondition($userId, $filters);
@@ -803,7 +802,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->countLearningMembers($conditions);
     }
 
-    // Refactor: findLearningCourses
     public function findUserLearningCourses($userId, $start, $limit, $filters = array())
     {
         $conditions = $this->prepareUserLearnCondition($userId, $filters);

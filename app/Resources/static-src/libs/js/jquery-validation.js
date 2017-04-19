@@ -422,7 +422,3 @@ $.validator.addMethod('raty_star', function (value, element) {
 $.validator.addMethod('reg_inviteCode', function (value, element) {
   return this.optional(element) || /^[a-z0-9A-Z]{5}$/.test(value);
 }, Translator.trans('必须是5位数字、英文字母组成'));
-
-'reg_inviteCode',
-            /^[a-z0-9A-Z]{5}$/,
-            Translator.trans('%display%必须是5位数字、英文字母组成', {display: '{{display}}'})
