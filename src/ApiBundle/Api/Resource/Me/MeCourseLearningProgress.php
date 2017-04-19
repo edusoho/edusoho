@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Me;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ApiNotFoundException;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Course\Service\CourseService;
 
 class MeCourseLearningProgress extends AbstractResource
 {
@@ -16,7 +17,14 @@ class MeCourseLearningProgress extends AbstractResource
             throw new ApiNotFoundException('计划不存在');
         }
 
-        return $this->service('Course:CourseService')->getUserLearningProcess($courseId, $this->getCurrentUser()->getId());
+        return $this->getCourseService()->getUserLearningProcess($courseId, $this->getCurrentUser()->getId());
     }
 
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->service('Course:CourseService');
+    }
 }
