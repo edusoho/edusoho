@@ -11,11 +11,11 @@
         </div>
       </div>
     {% else %}
-      <p class="text-muted">{{'admin.edu_cloud.edu_sms.sms_remain_count  '|trans({'%remainCount%': overview.service.sms.remainCount|default(0) })}}
+      <p class="text-muted">{{'admin.edu_cloud.edu_sms.sms_remain_count'|trans({'%remainCount%': overview.service.sms.remainCount|default(0) })}}
         <a href="{{ path('admin_cloud_buy',{type:'sms'}) }}" target="_blank" style="margin-left:20px">{{'admin.edu_cloud.edu_sms.buy_btn'|trans}}</a>
       </p>
       {% if overview.service.sms.status|default(null) == 'used' and 0 < overview.service.sms.remainCount and  overview.service.sms.remainCount < 100 %}
-        <p class="text-warning text-sm">{{'admin.edu_cloud.edu_sms.package_renew'|trans}}</p>
+        <p class="text-warning text-sm">{{'admin.edu_cloud.edu_sms.package_renew_tips'|trans}}</p>
       {% endif %}
       {% if overview.service.sms.status|default(null) == 'used' and overview.service.sms.remainCount <= 0 %}
         <p class="text-danger text-sm">{{'admin.edu_cloud.edu_sms.package_none_renew_tips'|trans}}</p>
