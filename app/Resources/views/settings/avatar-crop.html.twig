@@ -1,12 +1,9 @@
 {% extends 'settings/layout.html.twig' %}
-
 {% block title %}{{'头像图片'|trans}} - {{ parent() }}{% endblock %}
-
 {% set side_nav = 'avatar' %}
 {% do script(['app/js/settings/avatar-crop/index.js']) %}
 
 {% block main %}
-
 <div class="panel panel-default panel-col">
   <div class="panel-heading">
     {{'头像设置'|trans}}
@@ -39,6 +36,5 @@
 
   </div>
 </div>
-
 {% endblock %}
 
