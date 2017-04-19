@@ -19,11 +19,14 @@ class CourseSetEventSubscriber extends EventSubscriber implements EventSubscribe
     public function onCourseSetUpdate(Event $event)
     {
         $courseSet = $event->getSubject();
+        $ownerManager = new TagOwnerManager('course-set', $courseSet['id'], $courseSet['tags'], $courseSet['creator']);
+
         if (empty($courseSet['tags'])) {
+            $ownerManager->delete();
             return;
         }
 
-        $ownerManager = new TagOwnerManager('course-set', $courseSet['id'], $courseSet['tags'], $courseSet['creator']);
+
         $ownerManager->update();
     }
 }

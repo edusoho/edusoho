@@ -1,0 +1,9 @@
+{
+  "watch": [
+    "webpack.config.js",
+    "nodemon.json"
+  ],
+  "events": {
+    "restart": "osascript -e 'display notification \"Node restart\" with title \"nodemon\"'"
+  }
+}

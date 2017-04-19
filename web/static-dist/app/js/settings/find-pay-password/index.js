@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/settings/find-pay-password/index"],[function(n,s){"use strict";var t=$("#settings-find-pay-password-form").validate({rules:{answer:{required:!0,maxlength:20}}});$("#answer-question-btn").on("click",function(n){var s=$(n.currentTarget);t.form()&&(s.button("loading"),$("#settings-find-pay-password-form").submit())})}]);

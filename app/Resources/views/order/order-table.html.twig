@@ -44,7 +44,7 @@
               <span class="color-gray text-sm">
                 {% if courses[order.targetId]|default(false) and courseSets[courses[order.targetId].courseSetId]|default(false) %}
                   {% set courseSet = courseSets[courses[order.targetId].courseSetId] %}
-                  {{'所属课程:'|trans}}<a class="link-primary" href="{{ path('course_set_show', {id:courseSet.id}) }}">{{ courseSet.title }}</a>
+                  {{'所属课程:'|trans}}<a class="link-primary" href="{{ path('course_show', {id:courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
                 {% else %}
                   该课程已被删除
                 {% endif %}

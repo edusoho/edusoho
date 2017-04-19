@@ -484,7 +484,6 @@ class ClassroomManageController extends BaseController
         );
     }
 
-
     public function checkStudentAction(Request $request, $id)
     {
         $this->getClassroomService()->tryManageClassroom($id);

@@ -14,11 +14,11 @@
           {% for courseSet in courseSets %}
             {% set task = courseSet['task'] %}
             <li class="course-item clearfix">
-              <a class="course-picture-link" href="{{ path('course_set_show', {id:courseSet.id}) }}">
+              <a class="course-picture-link" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">
                 <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}" alt="{{ courseSet.title }}">
               </a>
               <div class="course-body">
-                <h4 class="course-title"><a href="{{ path('course_set_show', {id:courseSet.id}) }}">{{ courseSet.title }}</a>
+                <h4 class="course-title"><a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
                   {% if courseSet.serializeMode=='serialize' %}
                     <span class="label label-success ">{{'更新中'|trans}}</span>
                   {% elseif courseSet.serializeMode=='finished' %}
