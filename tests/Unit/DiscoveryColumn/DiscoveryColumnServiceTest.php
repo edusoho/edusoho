@@ -86,6 +86,22 @@ class DiscoveryColumnServiceTest extends BaseTestCase
         $this->assertArrayEquals($result, array($sortedColumn2, $sortedColumn1));
     }
 
+    public function getDisplayData()
+    {
+        $this->createDiscoveryColumn();
+        $fakeCourseSets = array(
+            array('id' => 1, 'title' => '123'),
+            array('id' => 2, 'title' => '456'),
+        );
+        $this->mockBiz('Course:CourseSetService', array(
+            array('functionName' => 'searchCourseSets', 'returnValue' => $fakeCourseSets),
+        ));
+        $columns = $this->getDiscoveryColumnService()->getDisplayData();
+
+        $this->assertEquals($fakeCourseSets, $columns[0]['data']);
+        $this->assertEquals(1, $columns[0]['actualCount']);
+    }
+
     private function createDiscoveryColumn()
     {
         $fields = array(

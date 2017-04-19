@@ -276,13 +276,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function updateClassroom($id, $fields)
     {
         $user = $this->getCurrentUser();
-
-        if (isset($fields['tagIds'])) {
-            $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
-        }
+        $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
 
         $classroom = $this->getClassroom($id);
 
+        unset($fields['tagIds']);
         $fields = $this->filterClassroomFields($fields);
 
         if (empty($fields)) {
@@ -302,6 +300,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $fields = $this->fillOrgId($fields);
+
         $classroom = $this->getClassroomDao()->update($id, $fields);
 
         $arguments = $fields;
@@ -316,9 +315,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             $this->updateMembersDeadlineByClassroomId($id, $deadline);
         }
-        if (!empty($tagIds)) {
-            $arguments['tagIds'] = $tagIds;
-        }
+
+        $arguments['tagIds'] = $tagIds;
 
         $this->getLogService()->info('classroom', 'update', "更新班级《{$classroom['title']}》(#{$classroom['id']})");
         $this->dispatchEvent('classroom.update', new Event(array(
@@ -399,6 +397,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'orgId',
             'expiryMode',
             'expiryValue',
+            'tagIds',
         ));
 
         if (isset($fields['expiryMode']) && $fields['expiryMode'] == 'date') {
