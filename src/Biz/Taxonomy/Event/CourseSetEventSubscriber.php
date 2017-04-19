@@ -23,6 +23,7 @@ class CourseSetEventSubscriber extends EventSubscriber implements EventSubscribe
 
         if (empty($courseSet['tags'])) {
             $ownerManager->delete();
+
             return;
         }
 
