@@ -135,7 +135,7 @@ class OrderCreate {
     } else { 
       $('[role=no-use-coupon-code]').hide();
     }
-    couponCode = $('[role="coupon-code-input"]');
+    let couponCode = $('[role="coupon-code-input"]');
     couponCode.val(coupon.data('code'));
     $('button[role="coupon-use"]').trigger('click');
     $('[role="code-notify"]').removeClass('alert-success');

@@ -1,9 +1,7 @@
-{% extends 'old-layout.html.twig' %}
-
+{% extends 'layout.html.twig' %}
 {% block title %}{{'设置帐号'|trans}} - {{ parent() }}{% endblock %}
-{% set script_controller = 'settings/setup' %}
-
 {% set hideSetupHint = true %}
+{% do script(['libs/jquery-validation.js','app/js/settings/setup/index.js'])%}
 
 {% block content %}
 <div class="row row-6">
@@ -35,7 +33,7 @@
 
           <div class="form-group">
             <div class="controls">
-              <button type="submit" class="btn btn-fat btn-primary btn-large" data-loading-text="{{'正在保存'|trans}}..." data-goto="{{ path('homepage') }}">{{'保存'|trans}}</button>
+              <button type="button" class="btn btn-fat btn-primary btn-large js-submit-setup-form" data-loading-text="{{'正在保存'|trans}}..." data-goto="{{ path('homepage') }}">{{'保存'|trans}}</button>
             </div>
           </div>
 

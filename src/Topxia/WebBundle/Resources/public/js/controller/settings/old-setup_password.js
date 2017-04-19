@@ -1,7 +1,6 @@
 define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-
     exports.run = function() {
         var validator = new Validator({
             element: '#setup-password-form',
@@ -12,7 +11,6 @@ define(function(require, exports, module) {
                 $('#password-save-btn').button('submiting').addClass('disabled');
             }
         });
-
         validator.addItem({
             element: '[name="form[newPassword]"]',
             required: true,
@@ -25,5 +23,4 @@ define(function(require, exports, module) {
             rule: 'confirmation{target:#form_newPassword}'
         });
     };
-
 });
