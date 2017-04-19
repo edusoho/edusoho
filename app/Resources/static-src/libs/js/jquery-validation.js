@@ -458,3 +458,23 @@ $.validator.addMethod('smsCode', function (value, element) {
   })
   return this.optional(element) || isSuccess
 }, Translator.trans('验证码错误'));
+
+
+let remoteReturnArrayMessage = Translator.trans('验证失败');
+$.validator.addMethod('remote_return_array', function (value, element) {
+  let url = $(element).data('url') ? $(element).data('url') : null;
+  let type = $(element).data('type') ? $(element).data('type') : 'POST';
+  let isSuccess = 0;
+  $.ajax({
+    url: url,
+    type: type,
+    async: false,
+    data: { value: value },
+    dataType: 'json'
+  })
+    .success(function (response) {
+      isSuccess = response.success;
+      remoteReturnArrayMessage = response.message;
+    })
+  return this.optional(element) || isSuccess
+}, remoteReturnArrayMessage)
