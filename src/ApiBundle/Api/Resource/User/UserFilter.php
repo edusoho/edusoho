@@ -23,9 +23,7 @@ class UserFilter extends Filter
 
     protected function simpleFields(&$data)
     {
-        $data['smallAvatar'] = AssetHelper::getFurl($data['smallAvatar'], 'avatar.png');
-        $data['mediumAvatar'] = AssetHelper::getFurl($data['mediumAvatar'], 'avatar.png');
-        $data['largeAvatar'] = AssetHelper::getFurl($data['largeAvatar'], 'avatar.png');
+        $this->transformAvatar($data);
     }
 
     protected function authenticatedFields(&$data)
@@ -42,5 +40,21 @@ class UserFilter extends Filter
         } else {
             unset($data['verifiedMobile']);
         }
+    }
+
+    private function transformAvatar(&$data)
+    {
+        $data['smallAvatar'] = AssetHelper::getFurl($data['smallAvatar'], 'avatar.png');
+        $data['mediumAvatar'] = AssetHelper::getFurl($data['mediumAvatar'], 'avatar.png');
+        $data['largeAvatar'] = AssetHelper::getFurl($data['largeAvatar'], 'avatar.png');
+        $data['avatar'] = array(
+            'small' => $data['smallAvatar'],
+            'medium' => $data['mediumAvatar'],
+            'large' => $data['largeAvatar'],
+        );
+
+        unset($data['smallAvatar']);
+        unset($data['mediumAvatar']);
+        unset($data['largeAvatar']);
     }
 }
