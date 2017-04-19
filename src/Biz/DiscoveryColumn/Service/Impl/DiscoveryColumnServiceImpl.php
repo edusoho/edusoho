@@ -88,8 +88,12 @@ class DiscoveryColumnServiceImpl extends BaseService implements DiscoveryColumnS
             $conditions['categoryId'] = $column['categoryId'];
         }
 
-        if ($column['type'] == 'live' || $column['type'] == 'normal') {
-            $conditions['type'] = $column['type'];
+        if ($column['type'] == 'live') {
+            $conditions['type'] = 'live';
+        }
+
+        if ($column['type'] == 'course') {
+            $conditions['type'] = 'normal';
         }
 
         if ($column['orderType'] == 'recommend') {
