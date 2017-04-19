@@ -6,7 +6,7 @@
 
 {% block page_title %}
   {% if setting('cloud_status.locked') == true %}
-    <div class="alert alert-warning" role="alert">{{'admin.edu_cloud.edu_email.locked_tips'|trans}}：4008041114。</div>
+    <div class="alert alert-warning" role="alert">{{'admin.edu_cloud.locked_tips'|trans}}：4008041114。</div>
     {{ currentMenu.code|parent_permission.name|trans }}
   {% elseif account.status|default() == 'disable' %}
     <div class="alert alert-warning" role="alert">{{'
