@@ -4,8 +4,8 @@ namespace ApiBundle\Api\Resource\Classroom;
 
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
+use ApiBundle\Api\Util\AssetHelper;
 use ApiBundle\Api\Util\Converter;
-use ApiBundle\Api\Util\RequestUtil;
 use AppBundle\Common\ServiceToolkit;
 
 class ClassroomFilter extends Filter
@@ -23,9 +23,9 @@ class ClassroomFilter extends Filter
 
     protected function simpleFields(&$data)
     {
-        $data['smallPicture'] = RequestUtil::getUriForPath($data['smallPicture']);
-        $data['middlePicture'] = RequestUtil::getUriForPath($data['middlePicture']);
-        $data['largePicture'] = RequestUtil::getUriForPath($data['largePicture']);
+        $data['smallPicture'] = AssetHelper::getFurl($data['smallPicture'], 'classroom.png');
+        $data['middlePicture'] = AssetHelper::getFurl($data['middlePicture'], 'classroom.png');
+        $data['largePicture'] = AssetHelper::getFurl($data['largePicture'], 'classroom.png');
     }
 
     protected function publicFields(&$data)

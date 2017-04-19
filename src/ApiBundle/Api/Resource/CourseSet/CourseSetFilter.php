@@ -4,7 +4,7 @@ namespace ApiBundle\Api\Resource\CourseSet;
 
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
-use ApiBundle\Api\Util\RequestUtil;
+use ApiBundle\Api\Util\AssetHelper;
 
 class CourseSetFilter extends Filter
 {
@@ -21,11 +21,7 @@ class CourseSetFilter extends Filter
     protected function simpleFields(&$data)
     {
         foreach ($data['cover'] as $size => $imagePath) {
-            $data['cover'][$size] = RequestUtil::getUriForPath($imagePath);
-        }
-
-        if (empty($data['cover'])) {
-            $data['cover'] = new \stdClass();
+            $data['cover'][$size] = AssetHelper::getFurl($imagePath, 'course.png');
         }
     }
 

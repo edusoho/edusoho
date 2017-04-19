@@ -3,7 +3,7 @@
 namespace ApiBundle\Api\Resource\User;
 
 use ApiBundle\Api\Resource\Filter;
-use ApiBundle\Api\Util\RequestUtil;
+use ApiBundle\Api\Util\AssetHelper;
 
 class UserFilter extends Filter
 {
@@ -23,9 +23,9 @@ class UserFilter extends Filter
 
     protected function simpleFields(&$data)
     {
-        $data['smallAvatar'] = RequestUtil::getUriForPath($data['smallAvatar']);
-        $data['mediumAvatar'] = RequestUtil::getUriForPath($data['mediumAvatar']);
-        $data['largeAvatar'] = RequestUtil::getUriForPath($data['largeAvatar']);
+        $data['smallAvatar'] = AssetHelper::getFurl($data['smallAvatar'], 'user.png');
+        $data['mediumAvatar'] = AssetHelper::getFurl($data['mediumAvatar'], 'user.png');
+        $data['largeAvatar'] = AssetHelper::getFurl($data['largeAvatar'], 'user.png');
     }
 
     protected function authenticatedFields(&$data)

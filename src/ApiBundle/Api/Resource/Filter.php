@@ -2,7 +2,7 @@
 
 namespace ApiBundle\Api\Resource;
 
-use ApiBundle\Api\Util\RequestUtil;
+use ApiBundle\Api\Util\AssetHelper;
 use AppBundle\Common\ArrayToolkit;
 
 abstract class Filter
@@ -90,7 +90,7 @@ abstract class Filter
     protected function convertAbsoluteUrl($html)
     {
         $html = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function($matches) {
-            $absoluteUrl = RequestUtil::getUriForPath($matches[1]);
+            $absoluteUrl = AssetHelper::getFurl($matches[1]);
             return "src=\"{$absoluteUrl}\"";
         }, $html);
 
