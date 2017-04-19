@@ -14,7 +14,7 @@ class NormalMail extends Mail
         $config = $this->setting('mailer', array());
 
         if (isset($config['enabled']) && $config['enabled'] == 1) {
-            $transport = \Swift_SmtpTransport::newInstance($config['host'], $config['port'], $config['encryption'])
+            $transport = \Swift_SmtpTransport::newInstance($config['host'], $config['port'])
                 ->setUsername($config['username'])
                 ->setPassword($config['password']);
 
