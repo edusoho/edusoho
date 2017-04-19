@@ -59,15 +59,15 @@
       </div>
       <div>  
         <label class="checkbox-inline">
-          <input type="checkbox" data-role="batch-select">{{'全选'|trans}}
+          <input type="checkbox" data-role="batch-select">{{'form.checkbox.batch_select'|trans}}
         </label>
         <input type="hidden" id="batchDeleteThread" value="{{path('admin_groupThread_batch_delete')}}">
-        <button id="thread-delete-btn" data-submiting-text="{{'正在删除'|trans}}" type="button" class="btn btn-default btn-sm mlm">{{'删除话题'|trans}}</button>
+        <button id="thread-delete-btn" data-submiting-text="{{'form.btn.delete.submiting'|trans}}" type="button" class="btn btn-default btn-sm mlm">{{'admin.operation_group.thread.thread_delete_btn'|trans}}</button>
       </div>
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
   {% else %}
-    <div class="empty">{{'暂无话题！'|trans}}</div>
+    <div class="empty">{{'admin.operation_group.thread.empty_tips'|trans}}</div>
   {% endif %}
   <div class="pull-right">
     {{ admin_macro.paginator(paginator) }}
