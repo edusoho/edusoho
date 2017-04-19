@@ -1,1 +1,0 @@
-webpackJsonp(["app/js/search/index"],[function(c,e){"use strict";echo.init()}]);
