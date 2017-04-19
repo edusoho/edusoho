@@ -5916,10 +5916,13 @@ admin.edu_cloud.edu_sms.warn_setting: 预警设置
 admin.edu_cloud.edu_sms.singel_day_send_max_count: 单日短信发送阈值
 admin.edu_cloud.edu_sms.no_set: 未设置
 admin.edu_cloud.edu_sms.goto_set: 去设置
-admin.edu_cloud.edu_sms.goto_set: 去设置
 admin.edu_cloud.edu_sms.singel_day_send_max_count_tips: 单日短信发送量超过此阈值时，发送通知。
 admin.edu_cloud.edu_sms.template_setting: 模板设置
 admin.edu_cloud.edu_sms.sms_type: 短信类型
+admin.edu_cloud.edu_sms.sms_type_num: 类型编号
+admin.edu_cloud.edu_sms.sms_open_status: 启用状态
+admin.edu_cloud.edu_sms.sms_content: 短信内容
+admin.edu_cloud.edu_sms.sms_school_notify: 网校通知
 admin.edu_cloud.edu_sms.application_scenarios: 应用场景
 admin.edu_cloud.edu_sms.content: 内容示例
 admin.edu_cloud.edu_sms.send_object: 发送对象
@@ -5939,6 +5942,7 @@ admin.edu_cloud.edu_sms.website_balance_pay: 使用网站余额支付
 admin.edu_cloud.edu_sms.notify_type: 通知类
 admin.edu_cloud.edu_sms.classroom_publish: 新班级发布
 admin.edu_cloud.edu_sms.course_publish: 新课程发布
+admin.edu_cloud.edu_sms.live_course_publish_notify: 新课时发布通知（直播）
 admin.edu_cloud.edu_sms.register_classroom_tips: >
   同学们，%classrommName%：《班级名称》现已开始报名！链接地址
 admin.edu_cloud.edu_sms.register_course_tips: 同学们，课程：《课程名称》现已开始报名！链接地址
@@ -5958,14 +5962,27 @@ admin.edu_cloud.edu_sms.homework_checked_tips: 您的课程：《课程名称》
 admin.edu_cloud.edu_sms.testpaper_checked: 试卷完成批阅
 admin.edu_cloud.edu_sms.testpaper_checked_tips: 您的课程：《课程名称》-《学习任务名称》的试卷已被老师批阅，快来看看吧!
 admin.edu_cloud.edu_sms.receipt_type: 回执类
+admin.edu_cloud.edu_sms.pay_receipt_success: 支付成功回执
+admin.edu_cloud.edu_sms.course_buy: 课程购买
 admin.edu_cloud.edu_sms.course_buy_receipt: 课程购买回执
 admin.edu_cloud.edu_sms.course_buy_receipt_tips: 你已成功购买课程《课程名称》- 教学计划名称，支付［订单金额］。
 admin.edu_cloud.edu_sms.classroom_buy_receipt: 班级购买回执
+admin.edu_cloud.edu_sms.classroom_buy: 班级购买
 admin.edu_cloud.edu_sms.classroom_buy_receipt_tips: 你已成功购买班级《班级名称》，支付［订单金额］。
 admin.edu_cloud.edu_sms.vip_buy_receipt: 会员购买回执
+admin.edu_cloud.edu_sms.vip_buy: 会员购买
 admin.edu_cloud.edu_sms.vip_buy_receipt_tips: 你已成功购买《会员名称》，支付［订单金额］。
 admin.edu_cloud.edu_sms.virtual_money_buy_receipt: 虚拟币充值回执
+admin.edu_cloud.edu_sms.virtual_money_buy: 虚拟币充值
 admin.edu_cloud.edu_sms.virtual_money_buy_receipt_tips: 你已成功购买《虚拟币面值》《单位》，支付［订单金额］。
+admin.edu_cloud.edu_sms.sms_school_notify_tips: 课程：《课程名》－课时：《课时名》将在［开播时间］开播！%smsSchoolName%链接地址
+admin.edu_cloud.edu_sms.homework_checked_tips: 您的课程：《课程名》-作业：《课时名》的作业已被老师批阅，快来看看吧！%smsScoolName%
+admin.edu_cloud.edu_sms.first_install_homework_plugin: 请先安装作业插件！
+admin.edu_cloud.edu_sms.testpaper_checked_tips: 您的课程：《课程名》-试卷：《课时名》的试卷已被老师批阅，快来看看吧！%smsSchoolName%
+admin.edu_cloud.edu_sms.pay_course_order_tips: 你已成功购买课程《课程名称》，支付［订单金额］。%smsSchoolName%
+admin.edu_cloud.edu_sms.pay_classroom_order_tips: 你已成功购买班级《班级名称》，支付［订单金额］。%smsSchoolName%
+admin.edu_cloud.edu_sms.pay_vip_order_tips: 你已成功购买《会员名称》，支付［订单金额］。%smsSchoolName%
+admin.edu_cloud.edu_sms.pay_virtual_coin_order_tips: 你已成功购买《虚拟币面值》《单位》，支付［订单金额］。%smsSchoolName%
 
 # 云邮件
 admin.edu_cloud.edu_email: 云邮件
