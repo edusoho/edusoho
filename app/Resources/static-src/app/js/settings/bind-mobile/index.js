@@ -6,30 +6,16 @@ let validator = $form.validate({
   rules: {
     password: {
       required: true,
-      remote: {
-        url: $('#password').data('url'),
-        type: 'post',
-        async: false,
-        data: {
-          'value': function () {
-            return $('#password').val();
-          }
-        }
-      }
+      es_remote: {
+        type: 'post'
+      },
     },
     mobile: {
       required: true,
       phone: true,
-      remote: {
-        url: $('#mobile').data('url'),
-        type: 'get',
-        async: false,
-        data: {
-          'value': function () {
-            return $('#mobile').val();
-          }
-        }
-      }
+      es_remote: {
+         type: 'get'
+      },
     }
   },
 });

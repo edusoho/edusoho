@@ -1,12 +1,10 @@
-{% extends 'old-layout.html.twig' %}
-
+{% extends 'layout.html.twig' %}
 {% block title %}{{'注册'|trans}} - {{ parent() }}{% endblock %}
-{% set script_controller = 'auth/register' %}
 {% set bodyClass = 'register' %}
-
 {% set parameter = get_parameters_from_url(app.request.uri) %}
-{% block content %}
+{% do script(['libs/bootstrap-datetimepicker.js','libs/jquery-validation.js','app/js/auth/register/index.js'])%}
 
+{% block content %}
 <div class="es-section login-section">
   <div class="logon-tab clearfix">
     <a href="{{ path('login', {goto:_target_path}) }}">{{'登录帐号'|trans}}</a>
@@ -77,7 +75,7 @@
           </div>
         {% endif %}
         {% if setting('auth.register_mode') == 'email_or_mobile' or setting('auth.register_mode') == 'mobile' %}
-          <div class="form-group mbl {% if setting('auth.register_mode') != 'mobile' %}hidden{% endif %} email_mobile_msg">
+          <div class="form-group mbl email_mobile_msg">
             <label class="control-label required" for="sms_code">{{'短信验证码'|trans}}</label>
             <div class="controls row" >
               <div class = "col-xs-7" >
@@ -106,7 +104,7 @@
           <div class="form-group mbl">
             <div class="controls">
               <label>
-                <input type="checkbox" id="user_terms" checked="checked"> {{'我已阅读并同意'|trans}}<a href="{{ path('user_terms') }}" target="_blank">《{{'服务协议'|trans}}》</a>
+                <input type="checkbox" id="user_terms" checked="checked" name="userterms"> {{'我已阅读并同意'|trans}}<a href="{{ path('user_terms') }}" target="_blank">《{{'服务协议'|trans}}》</a>
               </label>
             </div>
           </div>
