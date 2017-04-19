@@ -20,6 +20,5 @@ class CreateUserTypeIndex extends Migration
     {
         $db = $this->getContainer()->offsetGet('db');
         $db->exec('DROP INDEX user_type_index ON user;');
-
     }
 }
