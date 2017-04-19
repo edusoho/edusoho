@@ -46,7 +46,6 @@ site.message.error: 错误提示
 site.power_by: 好知网
 site.default.student: 学员
 site.default.classroom: 班级
-site.default.student: 学员
 site.default.reviewing: 已批阅
 site.default.unreviewing: 未批阅
 site.default.doing: 进行中
@@ -77,6 +76,9 @@ site.price: 价格
 site.org: 组织机构
 site.org.setup: 设置组织机构
 site.org.modify_tips: 你不能更改自己的所属组织机构，你的账号已取消勾选
+site.tips.weixin_scan: 微信扫一扫 分享我的网校
+site.btn.upgrade_info: 查看升级详情
+
 
 # email 模板
 email.password_reset: >
@@ -2463,6 +2465,8 @@ form.radio_btn.unpass: 不同意
 form.btn.restore: 还原
 form.btn.back_to_list: 返回列表
 form.placeholder.search_keyword: 请输入搜索关键词...
+form.checkbox.batch_select: 全选
+
 
 # 用户登录
 user.login.account_type_label: 邮箱/手机/用户名
@@ -3793,6 +3797,13 @@ admin.course_manage.title_placeholder: 标题
 admin.course_manage.creator_placeholer: 创建者
 admin.course_manage.operater: 操作
 
+##受欢迎课程
+admin.course.popular_course.empty_tips: 暂无受欢迎课程
+admin.course.popular_course.name: 课程名称
+admin.course.popular_course.add_student_num: 新增学生人数
+admin.course.popular_course.total_student_num: 总学生人数
+admin.course.popular_course.add_income: 新增收入
+
 ## 课程管理
 ## 普通课程
 admin.course_manage.manage.normal_course: 普通课程
@@ -4238,6 +4249,7 @@ admin.homepage.todays_data.login_users.online_total: 在线总数
 admin.homepage.todays_data.new_registration: 新增注册
 admin.homepage.todays_data.total: 总数
 admin.homepage.todays_data.new_students: 新增学员
+admin.homepage.todays_data.total_number: 总人次 
 admin.homepage.todays_data.new_vip_members: 新增会员
 admin.homepage.todays_data.thread_un_answer: 未回复回答
 admin.homepage.order_statistic_title: 订单统计
@@ -4278,6 +4290,9 @@ admin.homepage.buy.tips: >
   ES应用由EduSoho官方提供,授权版用户可以通过<a href="http://open.edusoho.com" target="_blank">EduSoho开放云平台</a>购买
 admin.homepage.contact.tips: >
   如需购买授权版，请联系销售人员。电话：4008041114 或
+admin.homepage.course_explore.empty_tips: 暂无课程
+admin.homepage.course_explore.course_name: 课程名
+admin.homepage.course_explore.add_student_num: 新增学员
 
 # 站点设置
 admin.setting.site.name: 网站名称
@@ -4838,6 +4853,8 @@ admin.operation_group.thread.close_btn: 关闭话题
 admin.operation_group.thread.open_btn: 开启话题
 admin.operation_group.thread.delete_title: 永久删除话题
 admin.operation_group.thread.delete_btn: 永久删除
+admin.operation_group.thread.thread_delete_btn: 删除话题
+admin.operation_group.thread.empty_tips: 暂无话题！
 
 # 邀请管理
 admin.operation_invite.nickname.placeholer: 用户名
@@ -4863,6 +4880,22 @@ admin.operation_invite.coupon.use_status.receive: 已领取
 admin.operation_invite.coupon.use_status.used: 已使用
 admin.operation_invite.coupon.useTime_th: 使用时间
 admin.operation_invite.coupon.order_title_th: 订单信息
+admin.operation_invite.register_coupon: 注册奖励
+admin.operation_invite.invite_coupon: 邀请奖励
+
+#账户明细
+admin.money_records.content_title: 账户明细
+admin.money_records.transaction_no.input_placeholder: 交易号
+admin.money_records.nickname.input_placeholder: 交易人用户名
+admin.money_records.money_record_type.default: 交易类型
+admin.money_records.empty_tips: 暂无交易记录
+admin.money_records.id: 编号
+admin.money_records.amount: 金额(元)
+admin.money_records.name: 名称
+admin.money_records.money_record_type: 交易类型
+admin.money_records.person: 交易人
+admin.money_records.transaction_no: 交易号
+admin.money_records.transaction_time: 交易时间
 
 # 网站公告管理
 admin.operation_announcement.content_th: 公告内容
@@ -4903,6 +4936,7 @@ admin.batch_notification.tips: 全站站内通知将以网校通知的形式发�
 admin.batch_notification.modal.title: 全全站站内通知
 admin.batch_notification.modal.title_field: 通知标题
 admin.batch_notification.modal.body_field: 正文
+admin.batch_notification.empty_tips: 全站站内通知将以网校通知的形式发给所有用户
 
 #后台用户模块
 ##用户模块通用字段
@@ -5780,6 +5814,82 @@ admin.setting_course.classroom.course_discount.help_block: 购买班级时，如
 admin.setting_course.classroom.classroom_list_default_seq: 班级列表页默认排序
 admin.setting_course.classroom.classroom_list.help_block: 班级列表页
 admin.setting_course.classroom.classroom_list_default_seq.help_block: 地址：域名/classroom/explore,任何人都可在此页面查看网站所有已发布班级,如需设置网站首页班级排序，请到【站点设置】-【主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
+
+#开发者设置
+admin.developer_setting.content_title: 开发者设置
+admin.developer_setting.debug_label: 调试
+admin.developer_setting.app_center_api_address: 应用中心API地址
+admin.developer_setting.cloud_api_server_address: 云服务API地址
+admin.developer_setting.address: 地址
+admin.developer_setting.im_api_address: IMAPI地址
+admin.developer_setting.cloud_sdk_cdn_address: 气球云SDK的CDN地址
+admin.developer_setting.hls_encrypted: HLS加密视频
+admin.developer_setting.without_outer_network: 是否无外网
+admin.developer_setting.tips: >
+  <h4>注意事项</h4>
+  <ul>
+    <li>此页设置，仅供调试使用，请勿随意修改参数，不然将造成系统不可预知的错误。</li>
+    <li>请保持：<br>
+      「调试」：关闭<br>
+      「应用中心API地址」：空<br>
+      「云服务API地址」：　http://api.edusoho.net 或 空<br>
+      「IMAPI地址」：　http://imapi.edusoho.net/v1/ 或 空<br>
+      「HLS加密视频」：　开启
+    </li>
+  </ul>
+admin.magic_setting.need_careful_tips: 注意事项
+admin.magic_setting.developer_use_tips: 此功能，为开发人员调试时使用，请不要使用随意使用，不然将造成不可预知的后果！
+admin.magic_setting.video_fingerprint: 视频指纹
+admin.magic_setting.doc_watermark: 文档指纹
+admin.magic_setting.ppt_watermark: PPT指纹
+admin.magic_setting.testpaper_watermark: 试卷指纹
+admin.magic_setting.lesson_watch_limit: 视频任务观看次数
+admin.magic_setting.buy_before_approval: 购买课程前实名认证
+admin.magic_setting.disable_web_crontab: 是否开启web定时任务
+admin.magic_setting.cloud_search: 是否开启云搜索业务
+admin.magic_setting.ios_buy_disable: 是否关闭iOS购买功能
+admin.magic_setting.export_limit: 订单单次导出数量
+admin.magic_setting.export_allow_count: 订单导出允许的最大数量
+admin.magic_setting.enable_org: 是否开启组织机构
+admin.magic_setting.quick_pay: 是否显示快捷支付
+admin.magic_setting.uc_phpwind: 是否开启phpwind设置
+admin.magic_setting.login_limit: 帐号同时登陆下线设置
+admin.magic_setting.one_for_open: 1为启用
+admin.magic_setting.one_for_close: 1为关闭
+admin.magic_setting.zero_for_open: 0为启用
+admin.magic_setting.zero_for_close: 0为关闭
+admin.magic_setting.true_for_open: true为开启
+admin.magic_setting.false_for_close: false为关闭
+admin.magic_setting.export_max_limit_tips: 建议最大值不超过20000
+
+admin.redis_setting.need_careful_tips: 注意事项
+admin.redis_setting.redis_config_case: redis配置案例：
+admin.redis_setting.redis_cluster_config_case: redis集群配置案例：
+
+admin.version_setting.content_title: 应用版本修改
+admin.version_setting.need_careful_tips: 注意事项
+admin.version_setting.developer_use_tips: 注意事项
+admin.version_setting.roll_back_specified_version: 回滚到版本
+admin.version_setting.app: 应用
+
+#字典
+admin.dictionary.name: 名称
+admin.dictionary.serial_number: 显示序号
+admin.dictionary.operation: 操作
+admin.dictionary.create_btn: 添加
+admin.dictionary.edit_btn: 编辑
+admin.dictionary.delete_btn: 删除
+
+admin.dictionary_manage.create_content_title: 添加字典
+admin.dictionary_manage.update_content_title: 更新字典
+admin.dictionary_manage.serial_number_hint: 显示序号需为整数，分类按序号的顺序从小到大排序。
+
+admin.file_manage.content_title: 文件管理
+admin.file_manage.file: 文件
+admin.file_manage.search_btn: 检索
+admin.file_manage.delete_btn: 删除
+admin.file_manage.file_group_empty_tips: 文件组不存在
+admin.file_manage.student_empty_tips: %user_name%不存在
 
 # 系统
 # 系统优化

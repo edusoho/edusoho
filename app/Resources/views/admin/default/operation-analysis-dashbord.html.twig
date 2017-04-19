@@ -18,7 +18,7 @@
   <li>
     <div class="title">{{ 'admin.homepage.todays_data.new_students'|trans }}</div>
     <span class="number"> {{ todayCourseMemberNum + todayClassroomMemberNum }}</span>
-    <p>{{ '总人次'|trans }}: {{ totalCourseMemberNum + totalClassroomMemberNum }}</p>
+    <p>{{ 'admin.homepage.todays_data.total_number'|trans }}: {{ totalCourseMemberNum + totalClassroomMemberNum }}</p>
   </li>
   {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
     <li>

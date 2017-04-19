@@ -54,7 +54,7 @@
     <div class="empty">{{'site.datagrid.empty'|trans}}</div>
   {% endif %}
   <div class="alert alert-info text-center">
-    全站站内通知将以网校通知的形式发给所有用户
+    {{ 'admin.batch_notification.empty_tips'|trans }}
   </div>
 
   {{ admin_macro.paginator(paginator) }}
