@@ -1,10 +1,8 @@
-{% extends 'old-layout.html.twig' %}
-
+{% extends 'layout.html.twig' %}
 {% block title %}{{'邮箱验证成功'|trans}} - {{ parent() }}{% endblock %}
-{% set script_controller = 'auth/email-verify' %}
+{% do script(['app/js/auth/email-verify/index.js'])%}
 
 {% block content %}
-
 <div class="es-section login-section">
   <div class="section-header">
     <h3>{{'邮箱验证成功'|trans}}</h3>
