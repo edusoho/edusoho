@@ -24,6 +24,7 @@ class CourseFilter extends Filter
     protected function publicFields(&$data)
     {
         $this->learningExpiryDate($data);
+        $data['access'] = $this->getAccessCode($data);
         Converter::timestampToDate($data['buyExpiryTime']);
 
         $data['services'] = ServiceToolkit::getServicesByCodes($data['services']);
@@ -36,6 +37,23 @@ class CourseFilter extends Filter
         $courseSetFilter = new CourseSetFilter();
         $courseSetFilter->setMode(Filter::SIMPLE_MODE);
         $courseSetFilter->filter($data['courseSet']);
+    }
+
+    private function getAccessCode($data)
+    {
+        if ($data['status'] !== 'published') {
+            return 1;
+        }
+
+        if ($data['buyExpiryTime'] && $data['buyExpiryTime'] < time()) {
+            return 2;
+        }
+
+        if ($data['learningExpiryDate']['expired']) {
+            return 3;
+        }
+
+        return 0;
     }
 
     private function learningExpiryDate(&$data)
