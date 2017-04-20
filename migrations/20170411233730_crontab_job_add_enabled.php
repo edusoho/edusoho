@@ -16,9 +16,9 @@ class CrontabJobAddEnabled extends Migration
                 "ALTER TABLE crontab_job Add COLUMN enabled tinyint(1) default 1 COMMENT '是否启用';"
             );
 
-            $db->exec("
+            $db->exec('
                 UPDATE crontab_job SET `enabled` = 0;
-            ");
+            ');
         }
     }
 
@@ -26,7 +26,7 @@ class CrontabJobAddEnabled extends Migration
     {
         $biz = $this->getContainer();
         $db = $biz['db'];
-        
+
         $sql = "DESCRIBE `{$table}` `{$filedName}`;";
         $result = $db->fetchAssoc($sql);
 
@@ -38,6 +38,5 @@ class CrontabJobAddEnabled extends Migration
      */
     public function down()
     {
-
     }
 }
