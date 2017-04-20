@@ -53,13 +53,13 @@ define(function (require, exports, module) {
 
     var loadAjaxData = function () {
         systemStatusData()
-            .then(siteOverviewData);
-            //.then(usersStatistic);
+            .then(siteOverviewData)
+            .then(usersStatistic);
     }
 
     var registerSwitchEvent = function () {
 
-        // DataSwitchEvent('.js-user-switch-button', usersStatistic);
+        DataSwitchEvent('.js-user-switch-button', usersStatistic);
 
         DataSwitchEvent('.js-study-switch-button', studyCountStatistic);
 
