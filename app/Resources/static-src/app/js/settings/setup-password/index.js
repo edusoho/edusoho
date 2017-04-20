@@ -8,11 +8,11 @@ if ($form.length) {
         required: true,
         minlength: 5,
         maxlength: 20,
+      },
+      'form[confirmPassword]': {
+        required: true,
+        equalTo: '#form_newPassword',
       }
-    },
-    'form[confirmPassword]': {
-      required: true,
-      equalTo: '#form_newPassword',
     }
   });
 
