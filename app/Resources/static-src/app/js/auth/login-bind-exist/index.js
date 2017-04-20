@@ -18,7 +18,7 @@ $('[type="submit"]').click(() => {
 })
 
 $.validator.addMethod("email_or_mobile", function (value, element, params) {
-  var emailOrMobile = options.element.val();
+  var emailOrMobile = value;
   var reg_email = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
   var reg_mobile = /^1\d{10}$/;
   var result = false;
