@@ -684,7 +684,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 if (empty($classroomRef)) {
                     continue;
                 }
-                $this->getCourseSetService()->unlockCourseSet($classroomRef['courseSetId']);
+                $this->getCourseSetService()->unlockCourseSet($classroomRef['courseSetId'], true);
                 $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $courseId);
                 $this->dispatchEvent(
                     'classroom.course.delete',
