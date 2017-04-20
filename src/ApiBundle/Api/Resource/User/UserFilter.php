@@ -47,7 +47,7 @@ class UserFilter extends Filter
         $data['smallAvatar'] = AssetHelper::getFurl($data['smallAvatar'], 'avatar.png');
         $data['mediumAvatar'] = AssetHelper::getFurl($data['mediumAvatar'], 'avatar.png');
         $data['largeAvatar'] = AssetHelper::getFurl($data['largeAvatar'], 'avatar.png');
-        $data['avatar'] = array(
+        $data['userAvatar'] = array(
             'small' => $data['smallAvatar'],
             'medium' => $data['mediumAvatar'],
             'large' => $data['largeAvatar'],
