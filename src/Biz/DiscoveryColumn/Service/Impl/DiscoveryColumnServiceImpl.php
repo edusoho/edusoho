@@ -85,7 +85,8 @@ class DiscoveryColumnServiceImpl extends BaseService implements DiscoveryColumnS
         );
 
         if (!empty($column['categoryId'])) {
-            $conditions['categoryId'] = $column['categoryId'];
+            $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($column['categoryId']);
+            $conditions['categoryIds'] = array_merge(array($column['categoryId']), $childrenIds);
         }
 
         if ($column['type'] == 'live') {
@@ -151,5 +152,10 @@ class DiscoveryColumnServiceImpl extends BaseService implements DiscoveryColumnS
     private function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    protected function getCategoryService()
+    {
+        return $this->createService('Taxonomy:CategoryService');
     }
 }
