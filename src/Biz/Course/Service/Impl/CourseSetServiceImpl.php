@@ -372,6 +372,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
 
         $courseSet['status'] = 'draft';
+
+        $coinSetting = $this->getSettingService()->get('coin', array());
+        if (!empty($coinSetting['coin_enabled']) && (bool) $coinSetting['coin_enabled']) {
+            $courseSet['maxRate'] = 100;
+        }
+
         $courseSet['creator'] = $this->getCurrentUser()->getId();
         $created = $this->getCourseSetDao()->create($courseSet);
 
@@ -828,6 +834,19 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
     }
 
+    public function updateCourseSetDefaultCourseId($id)
+    {
+        $course = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($id);
+        //如果计划都尚未发布，则获取第一个创建的
+        if (empty($course)) {
+            $course = $this->getCourseService()->getFirstCourseByCourseSetId($id);
+        }
+        if (empty($course)) {
+            throw $this->createNotFoundException('No Avaliable Course in CourseSet#{$id}');
+        }
+        $this->getCourseSetDao()->update($id, array('defaultCourseId' => $course['id']));
+    }
+
     public function updateMaxRate($id, $maxRate)
     {
         $courseSet = $this->getCourseSetDao()->update($id, array('maxRate' => $maxRate));
@@ -1005,6 +1024,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return \Biz\System\Service\SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
+    }
+
     protected function generateDefaultCourse($created)
     {
         $defaultCourse = array(
@@ -1028,10 +1055,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $fields,
             function ($value) {
                 if ($value === '' || $value === null) {
-                    return false;
-                }
-
-                if (is_array($value) && empty($value)) {
                     return false;
                 }
 

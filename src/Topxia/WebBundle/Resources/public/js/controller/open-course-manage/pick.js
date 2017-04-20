@@ -38,7 +38,7 @@ define(function(require, exports, module) {
 
             $.get($searchForm.data('url'),$searchForm.serialize(),function(data){
 
-                $('#modal').html(data);
+                $('.courses-list').html(data);
             });
         });
 
@@ -46,7 +46,7 @@ define(function(require, exports, module) {
 
             if(event.keyCode == 13){
                 $.get($searchForm.data('url'),$searchForm.serialize(),function(data){
-                    $('#modal').html(data);
+                    $('.courses-list').html(data);
                 });
 
                return false;

@@ -6,7 +6,7 @@
       <h2>{{'在学课程'|trans}}</h2>
     </div>
     <div class="es-box-body user-learn clearfix">
-      <a href="{{ path('course_set_show', {id: courseSet.id}) }}">
+      <a href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">
         <img src="{{ filepath(course.cover.large|default(), 'course.png') }}"  class="img-responsive thumb pull-left">
       </a>
       <p>《{{ courseSet.title }}》</p>

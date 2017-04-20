@@ -4,7 +4,7 @@
     <br>
     <small class="color-gray">
       {% if courseSet|default(null) %}
-        {{ '来自课程'|trans }}<a class="color-primary" href="{{ path('course_set_show',{id:courseSet.id}) }}">《{{courseSet.title|default('')}}》</a> •
+        {{ '来自课程'|trans }}<a class="color-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">《{{courseSet.title|default('')}}》</a> •
       {% endif %}
       {% if course|default(null) %}
         {{ '计划'|trans }}<a class="color-primary" href="{{ path('course_show',{id:course.id}) }}">《{{ course.title|default('') }}》</a>

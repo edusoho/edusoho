@@ -1,11 +1,8 @@
 {% extends 'course-manage/dashboard/layout.html.twig' %}
-
+{% do script(['app/js/course-manage/dashboard/lesson/index.js'])%}
 {% set submenu = 'task_dashboard' %}
 
-{% do load_script('course-manage/dashboard/lesson') %}
-
 {% block dashboard %}
-
   <div id="lesson-dashboard-container"
   	data-lesson-num="{{ taskTitles|length }}"
   	data-titles="{{ taskTitles|json_encode }}"
@@ -14,5 +11,4 @@
   	data-finished-num="{{ finishedNum|json_encode }}"
   	data-finished-rate="{{ finishedRate|json_encode }}">
   </div>
-
 {% endblock %}

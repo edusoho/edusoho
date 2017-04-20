@@ -375,10 +375,9 @@ class RegisterController extends BaseController
 
     protected function validateResult($result, $message)
     {
-        if ($result == 'success') {
-            $response = array('success' => true, 'message' => '');
-        } else {
-            $response = array('success' => false, 'message' => $message);
+        $response = true;
+        if ($result != 'success') {
+            $response = $message;
         }
 
         return $this->createJsonResponse($response);
