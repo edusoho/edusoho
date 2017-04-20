@@ -1,7 +1,7 @@
 import notify from 'common/notify';
 
 let $form = $('#bind-exist-form');
-let $btn = $form.find('[type="submit"]');
+let $btn = $form.find('#set-bind-new-btn');
 let validator = $form.validate({
   rules: {
     emailOrMobile: {
