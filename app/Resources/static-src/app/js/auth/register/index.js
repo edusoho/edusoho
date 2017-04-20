@@ -24,6 +24,11 @@ let validator = $form.validate({
     userterms: {
       required: true,
     }
+  },
+  messages: {
+    emailOrMobile: {
+      required : Translator.trans('请输入手机/邮箱')
+    }
   }
 });
 
