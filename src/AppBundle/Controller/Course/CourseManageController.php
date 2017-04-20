@@ -944,7 +944,7 @@ class CourseManageController extends BaseController
             $students[$key]['startTime'] = $result['createdTime'];
             $students[$key]['finishedTime'] = $result['finishedTime'];
             $students[$key]['learnTime'] = round($result['time'] / 60);
-            $students[$key]['watchTime'] = round($result['time'] / 60);
+            $students[$key]['watchTime'] = round($result['watchTime'] / 60);
 
             if ($activity['mediaType'] == 'testpaper') {
                 $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
