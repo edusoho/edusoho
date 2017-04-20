@@ -7,15 +7,18 @@ if ($form.length) {
     email: {
       required: true,
       email: true,
-      remote_return_array: true,
+      es_remote: 'POST',
     },
     nickname: {
-      required: true,
-      chinese_alphanumeric: true,
-      maxlength: 18,
+      required:true,
       minlength: 4,
-      remote_return_array: true,
-    }
+      maxlength: 18,
+      nickname: true,
+      chinese_alphanumeric: true,
+      es_remote: {
+        type: 'get',
+      }
+    },
   })
 
   $btn.click(() => {

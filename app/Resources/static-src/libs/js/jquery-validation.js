@@ -1,4 +1,5 @@
 import 'jquery-validation';
+import axis from 'common/axis';
 
 $.validator.setDefaults({
   errorClass: 'form-error-message jq-validate-error',
@@ -100,7 +101,6 @@ $.extend($.validator.prototype, {
 
 });
 
-
 $.extend($.validator.messages, {
   required: "请输入%display%",
   remote: "请修正此字段",
@@ -142,7 +142,7 @@ function strlen(str) {
 
 $.validator.addMethod("trim", function (value, element, params) {
   return $.trim(value).length > 0;
-}, jQuery.validator.format("请输入%display%"));
+}, Translator.trans("请输入%display%"));
 
 $.validator.addMethod("idcardNumber", function (value, element, params) {
   let _check = function (idcardNumber) {
@@ -188,19 +188,19 @@ $.validator.addMethod("idcardNumber", function (value, element, params) {
 
 $.validator.addMethod("visible_character", function (value, element, params) {
   return this.optional(element) || $.trim(value).length > 0;
-}, jQuery.validator.format("请输入可见性字符"));
+}, Translator.trans("请输入可见性字符"));
 
 $.validator.addMethod('positive_integer', function (value, element, params = true) {
   if (!params) {
     return true;
   }
   return this.optional(element) || /^\+?[1-9][0-9]*$/.test(value);
-}, jQuery.validator.format("请输入正整数"));
+}, Translator.trans("请输入正整数"));
 
 
 $.validator.addMethod('unsigned_integer', function (value, element) {
   return this.optional(element) || /^\+?[0-9][0-9]*$/.test(value);
-}, jQuery.validator.format("请输入非负整数"));
+}, Translator.trans("请输入非负整数"));
 
 // jQuery.validator.addMethod("unsigned_integer", function (value, element) {
 //   return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
@@ -216,11 +216,11 @@ $.validator.addMethod("course_title", function (value, element, params) {
 
 $.validator.addMethod('float', function (value, element) {
   return this.optional(element) || /^(([+-]?[1-9]{1}\d*)|([+-]?[0]{1}))(\.(\d){1,2})?$/i.test(value);
-}, jQuery.validator.format("请输入正确的小数,只保留到两位小数"));
+}, Translator.trans("请输入正确的小数,只保留到两位小数"));
 
 $.validator.addMethod('date', function (value, element) {
   return this.optional(element) || /^\d{4}\-[01]?\d\-[0-3]?\d$|^[01]\d\/[0-3]\d\/\d{4}$|^\d{4}年[01]?\d月[0-3]?\d[日号]$/.test(value);
-}, jQuery.validator.format("请输入正确的日期"));
+}, Translator.trans("请输入正确的日期"));
 
 $.validator.addMethod("open_live_course_title", function (value, element, params) {
   return this.optional(element) || /^[^<|>|'|"|&|‘|’|”|“]*$/.test(value);
@@ -228,12 +228,12 @@ $.validator.addMethod("open_live_course_title", function (value, element, params
 
 $.validator.addMethod("currency", function (value, element, params) {
   return this.optional(element) || /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
-}, jQuery.validator.format('请输入有效价格，最多两位小数，整数位不超过8位！'));
+}, Translator.trans('请输入有效价格，最多两位小数，整数位不超过8位！'));
 
 //@TODO这里不应该判断大于0，应该用组合positive_currency:true，min:1，看到替换
 $.validator.addMethod("positive_currency", function (value, element, params) {
   return value > 0 && /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
-}, jQuery.validator.format('请输入大于0的有效价格，最多两位小数，整数位不超过8位！'));
+}, Translator.trans('请输入大于0的有效价格，最多两位小数，整数位不超过8位！'));
 
 jQuery.validator.addMethod("max_year", function (value, element) {
   return this.optional(element) || value < 100000;
@@ -294,25 +294,25 @@ $.validator.addMethod("feature", function (value, element, params) {
 
 $.validator.addMethod('qq', function (value, element) {
   return this.optional(element) || /^[1-9]\d{4,}$/.test(value);
-}, jQuery.validator.format('请输入正确的QQ号'));
+}, Translator.trans('请输入正确的QQ号'));
 
 $.validator.addMethod('mobile', function (value, element) {
   return this.optional(element) || /^1\d{10}$/.test(value);
-}, jQuery.validator.format('请输入正确的手机号'));
+}, Translator.trans('请输入正确的手机号'));
 
 $.validator.addMethod('url', function (value, element) {
   return this.optional(element) || /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/.test(value)
-}, jQuery.validator.format('地址不正确，须以http://或者https://开头。'));
+}, Translator.trans('地址不正确，须以http://或者https://开头。'));
 
 $.validator.addMethod('chinese', function (value, element) {
   return this.optional(element) || /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3])*$/i.test(value);
-}, jQuery.validator.format('必须是中文字'));
+}, Translator.trans('必须是中文字'));
 
 $.validator.addMethod('chinese_limit', function (value, element, params) {
   let l = strlen(value);
   console.log('params', params)
   return this.optional(element) || l <= Number(params);
-}, jQuery.validator.format('长度必须小于等于 {0} 字符,一个中文为2个字符'));
+}, Translator.trans('长度必须小于等于 {0} 字符,一个中文为2个字符'));
 
 $.validator.addMethod('isImage', function (value, element) {
 
@@ -330,7 +330,7 @@ $.validator.addMethod('isImage', function (value, element) {
     }
   }
 
-}, jQuery.validator.format('只能上传图片'));
+}, Translator.trans('只能上传图片'));
 
 $.validator.addMethod('limitSize', function (value, element) {
   if (navigator.userAgent.toLowerCase().indexOf('msie') > 0) {
@@ -341,7 +341,7 @@ $.validator.addMethod('limitSize', function (value, element) {
 
   return this.optional(element) || fileSize / 1024 <= 2048;
 
-}, jQuery.validator.format('大小不能超过2M'));
+}, Translator.trans('大小不能超过2M'));
 
 
 jQuery.validator.addMethod("max_year", function (value, element) {
@@ -364,22 +364,11 @@ $.validator.addMethod("next_day", function (value, element, params) {
 
 $.validator.addMethod("chinese_alphanumeric", function (value, element, params) {
   return this.optional(element) || /^([\u4E00-\uFA29]|[a-zA-Z0-9_.·])*$/i.test(value)
-}, jQuery.validator.format('支持中文字、英文字母、数字及_ . ·'));
+}, Translator.trans('只支持中文字、英文字母、数字及_ . ·'));
 
 $.validator.addMethod("alphanumeric", function (value, element, params) {
   return this.optional(element) || /^[a-zA-Z0-9_]+$/i.test(value)
-}, jQuery.validator.format('必须是英文字母、数字及下划线组成'));
-
-$.validator.addMethod("nickname", function (value, element, params) {
-
-  return this.optional(element) || ! /^1\d{10}$/.test(value)
-}, jQuery.validator.format('不允许以1开头的11位纯数字'));
-
-// Validator.addRule(
-//   'time_check',
-//   /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}$/,
-//   Translator.trans('请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm')
-// );
+}, Translator.trans('必须是英文字母、数字及下划线组成'));
 
 $.validator.addMethod('raty_star', function (value, element) {
   return this.optional(element) || /^[1-5]$/.test(value);
@@ -393,23 +382,11 @@ $.validator.addMethod('phone', function (value, element) {
   return this.optional(element) || /^1\d{10}$/.test(value);
 }, $.validator.format("请输入有效手机号码(仅仅支持中国大陆手机号码)"));
 
+$.validator.addMethod("nickname", function (value, element, params) {
+  return this.optional(element) || ! /^1\d{10}$/.test(value)
+}, Translator.trans('不允许以1开头的11位纯数字'));
 
-$.validator.addMethod("nickname_remote", function (value, element, params) {
-  let isSuccess = 0;
-  let url = $(element).data('url') ? $(element).data('url') : null;
-  $.ajax({
-    url: url,
-    type: 'GET',
-    async: false,
-    data: { value: value },
-    dataType: 'json'
-  })
-    .success(function (response) {
-      isSuccess = response.success;
-    })
-  return this.optional(element) || isSuccess;
-}, jQuery.validator.format('该用户名已存在'))
-
+//@TODO 确认用es_remote代替
 $.validator.addMethod('passwordCheck', function (value, element) {
   let url = $(element).data('url') ? $(element).data('url') : null;
   let type = $(element).data('type') ? $(element).data('type') : 'POST';
@@ -427,22 +404,7 @@ $.validator.addMethod('passwordCheck', function (value, element) {
   return this.optional(element) || isSuccess
 }, Translator.trans('密码错误'))
 
-$.validator.addMethod("nickname_remote", function (value, element, params) {
-  let isSuccess = 0;
-  let url = $(element).data('url') ? $(element).data('url') : null;
-  $.ajax({
-    url: url,
-    type: 'GET',
-    async: false,
-    data: { value: value },
-    dataType: 'json'
-  })
-    .success(function (response) {
-      isSuccess = response.success;
-    })
-  return this.optional(element) || isSuccess;
-}, jQuery.validator.format('该用户名已存在'));
-
+//@TODO 确认用es_remote代替
 $.validator.addMethod('smsCode', function (value, element) {
   let url = $(element).data('url');
   let isSuccess = 0;
@@ -453,28 +415,35 @@ $.validator.addMethod('smsCode', function (value, element) {
     data: { value: $(element).val() },
     dataType: 'json'
   })
-  .success(function (response) {
-    isSuccess = response.success;
-  })
+    .success(function (response) {
+      isSuccess = response.success;
+    })
   return this.optional(element) || isSuccess
 }, Translator.trans('验证码错误'));
 
-
-let remoteReturnArrayMessage = Translator.trans('验证失败');
-$.validator.addMethod('remote_return_array', function (value, element) {
+$.validator.addMethod('es_remote', function (value, element, params) {
+  let $element = $(element);
   let url = $(element).data('url') ? $(element).data('url') : null;
-  let type = $(element).data('type') ? $(element).data('type') : 'POST';
+  let type = params.type ? params.type : 'GET';
   let isSuccess = 0;
   $.ajax({
     url: url,
-    type: type,
     async: false,
+    type: type,
     data: { value: value },
     dataType: 'json'
   })
     .success(function (response) {
-      isSuccess = response.success;
-      remoteReturnArrayMessage = response.message;
+      console.log(response);
+      if (axis.isObject(response)) {
+        isSuccess = response.success;
+        $.validator.messages.es_remote = response.message;
+      } else if (axis.isString(response)) {
+        isSuccess = false;
+        $.validator.messages.es_remote = response;
+      } else if (axis.isBoolean(response)) {
+        isSuccess = response;
+      }
     })
   return this.optional(element) || isSuccess
-}, remoteReturnArrayMessage)
+}, Translator.trans('验证错误'))
