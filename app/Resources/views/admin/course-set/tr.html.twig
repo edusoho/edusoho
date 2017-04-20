@@ -6,7 +6,7 @@
   {% include 'org/parts/table-body-checkbox.html.twig' %}
   <td>{{ courseSet.id }}</td>
   <td>
-    <a href="{{ path('course_set_show', {id:courseSet.id}) }}"
+    <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}"
        target="_blank"><strong>{{ courseSet.title }}</strong></a>
     {% if filter == 'classroom' %}
       {% set classroom = classrooms[courseSet.id]|default(null) %}

@@ -29,7 +29,7 @@ class SmsController extends BaseController
             $url = $this->generateUrl('classroom_show', array('id' => $id));
         } elseif ($targetType == 'course') {
             $item = $this->getCourseSetService()->getCourseSet($id);
-            $url = $this->generateUrl('course_set_show', array('id' => $id));
+            $url = $this->generateUrl('course_show', array('id' => $item['defaultCourseId']));
 
             if ($item['parentId']) {
                 $classroomCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($item['id']);

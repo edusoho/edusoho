@@ -52,7 +52,7 @@
           <ul class="course-list-group sortable-list course-wide-list courses-selected" id="course-list-group" data-role="list" >
 
             {% for recommendId, courseSet in courseSets %}
-              {% set showUrl = path('course_set_show',{id: courseSet.id}) %}
+              {% set showUrl = path('course_show',{id: courseSet.defaultCourseId}) %}
 
               <li class="course-item item-{{courseSet.id}} clearfix" data-role="item" >
                 <input type="hidden" name="recommendIds[]" value="{{ recommendId }}" />
@@ -101,7 +101,7 @@
                   {% endif %}
 
                   <div class="course-footer clearfix">
-                    {% set teacher = users[courseSet.creator|first]|default(null) %}
+                    {% set teacher = users[courseSet.teacherIds|first|default(courseSet.creator)] %}
                     {% if teacher %}
                       <div class="teacher">
                         <a href="{{ path('user_show', {id:teacher.id}) }}" target="_blank"><img src="{{ filepath(teacher.smallAvatar, 'avatar.png') }}" class="teacher-avatar"></a>

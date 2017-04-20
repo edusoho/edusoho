@@ -8,7 +8,7 @@
   {% set title = courseSet.title %}
   {% set summary = courseSet.summary|plain_text(50) %}
   {% set message = setting('default.courseShareContent')|replace({'{{':'《%','}}':'%》'})|default('我正在学习《%course%》，收获巨大哦，一起来学习吧！')|trans({'%course%':courseSet.title}) %}
-  {% set url = url('course_set_show', {id:courseSet.id}) %}
+  {% set url = url('course_show', {id:courseSet.defaultCourseId}) %}
   {% set picture = filepath(courseSet.cover.large|default(null), 'course.png') %}
   {% set id = courseSet.id%}
 {% elseif type == 'classroom' %}

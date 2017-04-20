@@ -26,12 +26,14 @@ let option = {
     {
       name: '人数',
       type: 'value',
-      minInterval: 1
+      // minInterval: 1,
+      interval: 1
     },
     {
       name: '完课率',
       type: 'value',
       minInterval: 1,
+      min: 0,
       max: 100,
       axisLabel: {
         formatter: '{value}%'

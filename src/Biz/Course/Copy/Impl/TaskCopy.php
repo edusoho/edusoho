@@ -258,7 +258,7 @@ class TaskCopy extends AbstractEntityCopy
             $new['status'] = 'create';
         }
         foreach ($fields as $field) {
-            if (!empty($task[$field]) || $task[$field] == 0) {
+            if (isset($task[$field])) {
                 $new[$field] = $task[$field];
             }
         }
