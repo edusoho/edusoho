@@ -1,7 +1,6 @@
-{% extends 'old-layout.html.twig' %}
-
+{% extends 'layout.html.twig' %}
 {% block title %}{{'登录'|trans}} - {{ parent() }}{% endblock %}
-{% set script_controller = 'auth/login-bind-exist' %}
+{% do script(['libs/jquery-validation.js','app/js/auth/login-bind-exist/index.js'])%}
 
 {% block content %}
 <div class="es-section login-section login-section-weixin">
