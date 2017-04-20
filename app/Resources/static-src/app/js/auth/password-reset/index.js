@@ -79,39 +79,6 @@ function makeValidator(type) {
         $('.js-sms-send').addClass('disabled');
       }
     })
-
-    // validator = new Validator({
-    //   element: '#password-reset-by-mobile-form',
-    //   onFormValidated: function (err, results, form) {
-    //     if (err == false) {
-    //       $('#password-reset-by-monile-form').find("[type=submit]").button('loading');
-    //     } else {
-    //       $('#alertxx').hide();
-    //     };
-    //   }
-    // });
-
-    // validator.addItem({
-    //   element: '[name="mobile"]',
-    //   required: true,
-    //   rule: 'phone email_or_mobile_remote',
-    //   onItemValidated: function (error, message, eleme) {
-    //     if (error) {
-    //       $('.js-sms-send').addClass('disabled');
-    //       return;
-    //     } else {
-    //       $('.js-sms-send').removeClass('disabled');
-    //     }
-    //   }
-    // });
-
-    // validator.addItem({
-    //   element: '[name="sms_code"]',
-    //   required: true,
-    //   triggerType: 'submit',
-    //   rule: 'integer fixedLength{len:6} remote',
-    //   display: Translator.trans('短信验证码')
-    // });
   }
 
   $("[type='submit']").click((event)=>{
