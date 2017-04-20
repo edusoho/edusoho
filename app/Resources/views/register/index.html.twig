@@ -27,7 +27,7 @@
             <div class="form-group mbl">
               <label class="control-label required" for="register_email">{{'邮箱地址'|trans}}</label>
               <div class="controls">
-                <input type="email" id="register_email" name="email" required="required" class="form-control input-lg" data-url="{{path('register_email_check')}}" placeholder="{{'填写你常用的邮箱作为登录帐号'|trans}}">
+                <input type="email" id="register_email" name="email"  class="form-control input-lg" data-url="{{path('register_email_check')}}" placeholder="{{'填写你常用的邮箱作为登录帐号'|trans}}">
                 <p class="help-block"></p>
               </div>
             </div>
@@ -35,7 +35,7 @@
             <div class="form-group mbl">
               <label class="control-label required" for="register_mobile">{{'手机号码'|trans}}</label>
               <div class="controls">
-                <input type="number" id="register_mobile" name="verifiedMobile" required="required" class="form-control input-lg" data-url="{{path('register_mobile_check')}}" placeholder="{{'填写你常用的手机号码作为登录帐号'|trans}}">
+                <input type="number" id="register_mobile" name="verifiedMobile"  class="form-control input-lg" data-url="{{path('register_mobile_check')}}" placeholder="{{'填写你常用的手机号码作为登录帐号'|trans}}">
                 <p class="help-block"></p>
               </div>
             </div>
@@ -43,7 +43,7 @@
             <div class="form-group mbl">
               <label class="control-label required" for="register_emailOrmobile">{{'手机/邮箱'|trans}}</label>
               <div class="controls">
-                <input type="text" id="register_emailOrMobile" name="emailOrMobile" required="required" class="form-control input-lg" data-url="{{path('register_email_or_mobile_check')}}" placeholder="{{'填写你常用的邮箱或手机号码作为登录帐号'|trans}}">
+                <input type="text" id="register_emailOrMobile" name="emailOrMobile"  class="form-control input-lg" data-url="{{path('register_email_or_mobile_check')}}" placeholder="{{'填写你常用的邮箱或手机号码作为登录帐号'|trans}}">
                 <p class="help-block"></p>
               </div>
             </div>
@@ -56,6 +56,7 @@
               <p class="help-block"></p>
             </div>
           </div>
+
           <div class="form-group mbl">
             <label class="control-label required" for="register_password">{{'密码'|trans}}</label>
             <div class="controls">
@@ -79,7 +80,7 @@
             </div>
           {% endif %}
           {% if setting('auth.register_mode') == 'email_or_mobile' or setting('auth.register_mode') == 'mobile' %}
-            {#<div class="form-group mbl {% if setting('auth.register_mode') != 'mobile' %}hidden{% endif %} email_mobile_msg">
+            <div class="form-group mbl {% if setting('auth.register_mode') != 'mobile' %}hidden{% endif %} email_mobile_msg">
               <label class="control-label required" for="sms_code">{{'短信验证码'|trans}}</label>
               <div class="controls row" >
                 <div class = "col-xs-7" >
@@ -93,7 +94,7 @@
                 </a>
                 </div>
               </div>
-            </div>#}
+            </div>
           {% endif %}
           {% if (setting('invite.invite_code_setting')|default(0) == 1) and  inviteCode == null  %}
           <div class="form-group mbl">

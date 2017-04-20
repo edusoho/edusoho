@@ -1,12 +1,6 @@
 let $form = $('#register-form');
 let validator = $form.validate({
   rules: {
-    emailOrMobile: {
-      required: true,
-      es_remote: {
-        type: 'get',
-      }
-    },
     nickname: {
       required: true,
       minlength: 4,
@@ -25,29 +19,81 @@ let validator = $form.validate({
       required: true,
     }
   },
-  messages: {
-    emailOrMobile: {
-      required : Translator.trans('请输入手机/邮箱')
-    }
-  }
 });
 
 $("#register_emailOrMobile").blur(function () {
   var emailOrMobile = $("#register_emailOrMobile").val();
-  emSmsCodeValidate(emailOrMobile,$form);
+  emSmsCodeValidate(emailOrMobile, $form);
 });
 
 $("#register_mobile").blur(function () {
   var mobile = $("#register_mobile").val();
-  emSmsCodeValidate(mobile,$form);
+  emSmsCodeValidate(mobile, $form);
 });
 
 initDate();
-// initGetCodeNum($form);
-// initEmail();
-// initVerifiedMobile();
-// initEmailOrMobile();
-// initInvitecode();
+initRegisterType($form);
+initGetCodeNum($form);
+initInvitecode();
+
+function initRegisterType($form) {
+  let $email = $('input[name="email"]');
+  if ($email.length > 0) {
+    $email.rules('add', {
+      required: true,
+      email: true,
+      es_remote: {
+        type: 'get'
+      },
+      messages: {
+        required: Translator.trans('请输入邮箱'),
+      }
+    })
+  }
+
+  let $emailOrMobile = $('input[name="emailOrMobile"]');
+  if ($emailOrMobile.length > 0) {
+    $emailOrMobile.rules('add', {
+      required: true,
+      email_or_mobile_check: true,
+      es_remote: {
+        type: 'get'
+      },
+      messages: {
+        required: Translator.trans('请输入手机/邮箱')
+      }
+    });
+    $form.on('focusout.validate', () => {
+      if (!$form.validate().element('input[name="emailOrMobile"]')) {
+        $('.js-sms-send').addClass('disabled');
+      } else {
+        $('.js-sms-send').removeClass('disabled');
+      }
+    });
+  }
+
+  let $verifiedMobile = $('input[name="verifiedMobile"]');
+  if ($verifiedMobile.length > 0) {
+    $('.email_mobile_msg').removeClass('hidden');
+    $verifiedMobile.rules('add', {
+      required: true,
+      phone: true,
+      es_remote: {
+        type: 'get'
+      },
+      messages: {
+        required: Translator.trans('请输入手机')
+      }
+    })
+    $form.on('focusout.validate', () => {
+      if (!$form.validate().element('input[name="verifiedMobile"]')) {
+        $('.js-sms-send').addClass('disabled');
+      } else {
+        $('.js-sms-send').removeClass('disabled');
+      }
+    })
+  }
+}
 
 function initDate() {
   $(".date").datetimepicker({
@@ -78,58 +124,6 @@ function initGetCodeNum($form) {
   }
 }
 
-function initEmail() {
-  let $email = $('input[name="email"]');
-  if ($email.length > 0) {
-    $email.rules('add', {
-      required: true,
-      email: true,
-      es_remote: {
-        type: 'get'
-      }
-    })
-  }
-}
-
-function initVerifiedMobile() {
-  let $verifiedMobile = $('input[name="verifiedMobile"]');
-  if ($verifiedMobile.length > 0) {
-    $('.email_mobile_msg').removeClass('hidden');
-    $verifiedMobile.rules('add', {
-      required: true,
-      phone: true,
-      es_remote: {
-        type: 'get'
-      }
-    })
-    $form.on('focusout.validate', () => {
-      if (!$form.validate().element('input[name="verifiedMobile"]')) {
-        $('.js-sms-send').addClass('disabled');
-      } else {
-        $('.js-sms-send').removeClass('disabled');
-      }
-    })
-  }
-}
-
-function initEmailOrMobile() {
-  let $emailOrMobile = $('input[name="emailOrMobile"]');
-  if ($emailOrMobile.length > 0) {
-    $emailOrMobile.rules('add', {
-      required: true,
-      email_or_mobile_check: true,
-      es_remote: true,
-    });
-    $form.on('focusout.validate', () => {
-      if (!$form.validate().element('input[name="verifiedMobile"]')) {
-        $('.js-sms-send').addClass('disabled');
-      } else {
-        $('.js-sms-send').removeClass('disabled');
-      }
-    });
-  }
-}
-
 function initInvitecode() {
   let $invitecode = $('.invitecode');
   if ($invitecode.length > 0) {
@@ -156,12 +150,12 @@ function emSmsCodeValidate(mobile, $form) {
     $('[name="captcha_code"]').rules('remove');
 
     $form.on('click', '.js-sms-send', function (e) {
-    //   var $mobile_target = validator.query('[name="verifiedMobile"]') == null ? validator.query('[name="emailOrMobile"]') : validator.query('[name="verifiedMobile"]');
-    //   $mobile_target.execute(function (error, results, element) {
-    //     if (error) {
-    //       return;
-    //     }
-    //   });
+      //   var $mobile_target = validator.query('[name="verifiedMobile"]') == null ? validator.query('[name="emailOrMobile"]') : validator.query('[name="verifiedMobile"]');
+      //   $mobile_target.execute(function (error, results, element) {
+      //     if (error) {
+      //       return;
+      //     }
+      //   });
     })
 
   } else {
@@ -189,7 +183,7 @@ function emSmsCodeValidate(mobile, $form) {
 }
 
 $.validator.addMethod("email_or_mobile_check", function (value, element, params) {
-  var emailOrMobile = options.element.val();
+  var emailOrMobile = value;
   var reg_email = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
   var reg_mobile = /^1\d{10}$/;
   var result = false;
