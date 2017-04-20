@@ -23,12 +23,11 @@ $btn.click(() => {
       console.log(response);
       if (!response.success) {
         $("#bind-exist-form-error").html(response.message).show();
+         $form.find('[type=submit]').button('reset');
         return;
       }
       notify('success',Translator.trans('绑定帐号成功，正在跳转至首页！'));
-
-      // window.location.href = response._target_path;
-
+      window.location.href = response._target_path;
     }, 'json').fail(function () {
       notify('danger',Translator.trans('绑定失败，帐号或密码错误。'));
     }).always(function () {
