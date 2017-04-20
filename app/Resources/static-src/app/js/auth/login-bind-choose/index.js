@@ -30,7 +30,7 @@ $('#set-bind-new-btn').click(() => {
     notify('danger',Translator.trans('勾选同意此服务协议，才能继续注册！'));
     return;
   }
-  $form.find('[type=submit]').button('loading');
+ $('#set-bind-new-btn').button('loading');
   $("#bind-new-form-error").hide();
 
   $.post($form.attr('action'), $form.serialize(), function (response) {
