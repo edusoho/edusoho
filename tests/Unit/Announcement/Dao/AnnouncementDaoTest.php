@@ -26,6 +26,7 @@ class AnnouncementDaoTest extends BaseDaoTestCase
             ),
             array(
                 'condition' => array('targetType' => 'varchar'),
+                'orderBy' => array('createdTime' => 'desc'),
                 'expectedResults' => array($expected[0], $expected[1]),
                 'expectedCount' => 2,
             ),
