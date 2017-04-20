@@ -170,9 +170,6 @@ class BaseController extends Controller
             $targetPath = $request->getSession()->get('_target_path');
         } else {
             $targetPath = $request->headers->get('Referer');
-            if ($this->isSelfHost($request, $targetPath) === false) {
-                $targetPath = '';
-            }
         }
 
         if ($targetPath == $this->generateUrl('login', array(), true)) {
@@ -204,7 +201,7 @@ class BaseController extends Controller
             $targetPath = $this->generateUrl('homepage', array(), true);
         }
 
-        return $targetPath;
+        return $this->filterRedirectUrl($targetPath);
     }
 
     protected function setFlashMessage($level, $message)
@@ -289,19 +286,6 @@ class BaseController extends Controller
         return new ResourceNotFoundException($resourceType, $resourceId, $message);
     }
 
-    private function isSelfHost(Request $request, $url)
-    {
-        if (empty($url)) {
-            return true;
-        }
-
-        $host = $request->getHost();
-        preg_match("/^(http[s]:\/\/)?([^\/]+)/i", $url, $matches);
-        $ulrHost = empty($matches[2]) ? '' : $matches[2];
-
-        return $host === $ulrHost;
-    }
-
     /**
      * 安全的重定向
      *
@@ -324,7 +308,7 @@ class BaseController extends Controller
      *
      * 如果url不属于非本站域名下的，则返回本站首页地址。
      *
-     * @param $url 待过滤的$url
+     * @param $url string 待过滤的$url
      *
      * @return string
      */
