@@ -8,18 +8,12 @@ class DownloadUpgradeFile extends AbstractMigrate
 
     public function update($page)
     {
-
         if($page == $this->end + 1){
-            $this->extractUpgradeFiles();
-            return $page + 1;
-        }
-
-        if($page == $this->end + 2){
             $this->copyNoneSideEffectFiles();
             return 0;
         }
 
-        $filepath = 'http://ojc8jepus.bkt.clouddn.com/x8-package/v10-'.$page.'.zip';
+        $url = 'http://ojc8jepus.bkt.clouddn.com/x8-package/v10-'.$page.'.zip';
 
         $dir = $this->kernel->getParameter('kernel.root_dir').'/data/upgrade';
 
@@ -31,7 +25,19 @@ class DownloadUpgradeFile extends AbstractMigrate
 
         $targetPath = $dir.'/upgrade-'.$page.'.zip';
         touch($targetPath);
-        file_put_contents($targetPath, file_get_contents($filepath));
+        file_put_contents($targetPath, file_get_contents($url));
+
+        $zip = new \ZipArchive;
+
+        $tmpUnzipDir = $this->kernel->getParameter('kernel.root_dir').'/data/upgrade/es-8.0';
+        if ($zip->open($targetPath) === true) {
+            $zip->extractTo($tmpUnzipDir);
+            $zip->close();
+            $filesystem->remove($targetPath);
+        } else {
+            throw new \Exception('无法解压缩安装包！');
+        }
+
         return $page + 1;
     }
 
@@ -66,24 +72,5 @@ class DownloadUpgradeFile extends AbstractMigrate
             'override' => true,
             'copy_on_windows' => true,
         ));
-    }
-
-    private function extractUpgradeFiles()
-    {
-        $filesystem = new \Symfony\Component\Filesystem\Filesystem();
-        $tmpUnzipDir = $this->kernel->getParameter('kernel.root_dir').'/data/upgrade/es-8.0';
-
-        foreach (range($this->start, $this->end) as $page) {
-            $zip = new \ZipArchive;
-            $filepath = $this->kernel->getParameter('kernel.root_dir').'/data/upgrade/upgrade-' . $page . '.zip';
-
-            if ($zip->open($filepath) === true) {
-                $zip->extractTo($tmpUnzipDir);
-                $zip->close();
-                $filesystem->remove($filepath);
-            } else {
-                throw new \Exception('无法解压缩安装包！');
-            }
-        }
     }
 }
