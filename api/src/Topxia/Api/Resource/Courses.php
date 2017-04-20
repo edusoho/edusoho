@@ -93,17 +93,17 @@ class Courses extends BaseResource
         $courseIds = ArrayToolkit::column($courses, 'id');
         $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
 
+        $coursesFilter = array();
         foreach ($courses as $key => $course) {
             $courseSet = $courseSets[$course['courseSetId']];
             if ($courseSet['status'] == 'published') {
-                $courses[$key]['hitNum'] = $courseSet['hitNum'];
-                $courses[$key]['courseSet'] = $courseSet;
-            } else {
-                unset($courses[$key]);
+                $course['hitNum'] = $courseSet['hitNum'];
+                $course['courseSet'] = $courseSet;
+                $coursesFilter[] = $course;
             }
         }
 
-        return $this->multicallFilter('Course', $courses);
+        return $this->multicallFilter('Course', $coursesFilter);
     }
 
     public function post(Application $app, Request $request)
