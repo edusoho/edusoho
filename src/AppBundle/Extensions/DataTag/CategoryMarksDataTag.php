@@ -11,9 +11,9 @@ class CategoryMarksDataTag extends CourseBaseDataTag implements DataTag
         $selectedthirdLevelCategory = $arguments['selectedthirdLevelCategory'];
 
         return array(
-            0 => $this->getCategoryService()->getCategoryByCode($selectedCategory),
-            1 => $this->getCategoryService()->getCategoryByCode($selectedSubCategory),
-            2 => $this->getCategoryService()->getCategoryByCode($selectedthirdLevelCategory),
+            0 => empty($selectedCategory) ? array() : $this->getCategoryService()->getCategoryByCode($selectedCategory),
+            1 => empty($selectedSubCategory) ? array() : $this->getCategoryService()->getCategoryByCode($selectedSubCategory),
+            2 => empty($selectedthirdLevelCategory) ? array() : $this->getCategoryService()->getCategoryByCode($selectedthirdLevelCategory),
         );
     }
 
