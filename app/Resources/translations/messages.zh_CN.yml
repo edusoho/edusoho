@@ -3983,7 +3983,6 @@ card.isLogin.type.moneyCard.tips: 您领取了一张学习卡，已充值到我�
 card.notLogin.receive.tips: 还没有登录，请在登录后领取。
 card.receive.login_view_btn: 登录查看
 
-<<<<<<< HEAD
 ##受欢迎课程
 admin.course.popular_course.empty_tips: 暂无受欢迎课程
 admin.course.popular_course.name: 课程名称
@@ -3991,17 +3990,9 @@ admin.course.popular_course.add_student_num: 新增学生人数
 admin.course.popular_course.total_student_num: 总学生人数
 admin.course.popular_course.add_income: 新增收入
 
-## 课程管理
-## 普通课程
-admin.course_manage.manage.normal_course: 普通课程
-admin.course_manage.manage.student_number: >
-  %student%数
-admin.course_manage.manage.income_RMB: 收入(元)
-=======
 # 更新日志
 change_log.edusoho_title: EduSoho更新日志
 change_log: 更新日志
->>>>>>> feature/x8-i18n
 
 # common
 common.courseStatus.draft: 未发布
@@ -4796,7 +4787,7 @@ admin.homepage.todays_data.login_users.online_total: 在线总数
 admin.homepage.todays_data.new_registration: 新增注册
 admin.homepage.todays_data.total: 总数
 admin.homepage.todays_data.new_students: 新增学员
-admin.homepage.todays_data.total_number: 总人次 
+admin.homepage.todays_data.total_number: 总人次
 admin.homepage.todays_data.new_vip_members: 新增会员
 admin.homepage.todays_data.thread_un_answer: 未回复回答
 admin.homepage.order_statistic_title: 订单统计
@@ -5898,7 +5889,6 @@ admin.edu_cloud.edu_live.overdue_tips: 您的云直播服务已到期，请尽�
 admin.edu_cloud.edu_live.renew_tips: 您的云直播服务将于%remaining%天后到期，请尽快续费
 
 # 云短信
-<<<<<<< HEAD
 admin,edu_cloud.edu_sms.sms_balance_count: <span class="h3 text-primary plm prs">%sms_balance_count%</span>条
 admin.edu_cloud.edu_sms.sms_rest_tips: 您的短信余额剩余%sms_rest%条，请尽快续购，以免影响正常使用。
 admin.edu_cloud.edu_sms.identity_check: 身份验证
@@ -5907,7 +5897,6 @@ admin.edu_cloud.edu_sms.your_course_publish_tips: 您的课程：《课程名称
 admin.edu_cloud.edu_sms.sms_content: 短信内容
 admin.edu_cloud.edu_sms.sms_school_notify: 网校通知
 admin.edu_cloud.sms_school_name.input_placeholder: 签名3-8字，建议使用汉字
-=======
 admin.edu_cloud.edu_sms: 云短信
 admin.edu_cloud.edu_sms.apply_btn: 申请开通云短信
 admin.edu_cloud.edu_sms.status: 云短信状态
@@ -5927,7 +5916,6 @@ admin.edu_cloud.edu_sms.use_info: 云短信使用情况（最近7天）
 admin.edu_cloud.edu_sms.open_btn: >
   <a href="%sms">开启</a>
   云短信，享受优质的短信发送服务
->>>>>>> feature/x8-i18n
 admin.edu_cloud.edu_sms.apply.content_title: 申请云短信
 admin.edu_cloud.edu_sms.apply.remind: 提醒
 admin.edu_cloud.edu_sms.apply.first_open_tips: 初次开启，需填写网校名称，审核需1到3个工作日，开启成功后，短信最低￥0.055/条
@@ -5973,16 +5961,13 @@ admin.edu_cloud.edu_sms.goto_set: 去设置
 admin.edu_cloud.edu_sms.singel_day_send_max_count_tips: 单日短信发送量超过此阈值时，发送通知。
 admin.edu_cloud.edu_sms.template_setting: 模板设置
 admin.edu_cloud.edu_sms.sms_type: 短信类型
-<<<<<<< HEAD
 admin.edu_cloud.edu_sms.type_id: 类型编号
 admin.edu_cloud.edu_sms.application_scenarios: 短信应用场景
-=======
 admin.edu_cloud.edu_sms.sms_type_num: 类型编号
 admin.edu_cloud.edu_sms.sms_open_status: 启用状态
 admin.edu_cloud.edu_sms.sms_content: 短信内容
 admin.edu_cloud.edu_sms.sms_school_notify: 网校通知
 admin.edu_cloud.edu_sms.application_scenarios: 应用场景
->>>>>>> feature/x8-i18n
 admin.edu_cloud.edu_sms.content: 内容示例
 admin.edu_cloud.edu_sms.send_object: 发送对象
 admin.edu_cloud.edu_sms.send_way: 发送方式
@@ -6036,7 +6021,6 @@ admin.edu_cloud.edu_sms.vip_buy_receipt_tips: 你已成功购买《会员名称�
 admin.edu_cloud.edu_sms.virtual_money_buy_receipt: 虚拟币充值回执
 admin.edu_cloud.edu_sms.virtual_money_buy: 虚拟币充值
 admin.edu_cloud.edu_sms.virtual_money_buy_receipt_tips: 你已成功购买《虚拟币面值》《单位》，支付［订单金额］。
-<<<<<<< HEAD
 admin.edu_cloud.edu_sms.signature_not_allow_tips: >
   <span style="color:blue;"> 哪些签名不允许：</span><br>
   1.含有特殊字符（如$@^等）的签名 <br>
@@ -6048,7 +6032,6 @@ admin.edu_cloud.edu_sms.disabled_tips: >
 admin.edu_cloud.edu_sms.educational_notice: 教务通知
 admin.edu_cloud.edu_sms.new_classroom_publish: 新%classroomName%发布
 admin.edu_cloud.edu_sms.classroom_sms_send_hint: 进入后台班级列表页中的［操作］列中进行手动发送。
-=======
 admin.edu_cloud.edu_sms.sms_school_notify_tips: 课程：《课程名》－课时：《课时名》将在［开播时间］开播！%smsSchoolName%链接地址
 admin.edu_cloud.edu_sms.homework_checked_tips: 您的课程：《课程名》-作业：《课时名》的作业已被老师批阅，快来看看吧！%smsScoolName%
 admin.edu_cloud.edu_sms.first_install_homework_plugin: 请先安装作业插件！
@@ -6057,7 +6040,6 @@ admin.edu_cloud.edu_sms.pay_course_order_tips: 你已成功购买课程《课程
 admin.edu_cloud.edu_sms.pay_classroom_order_tips: 你已成功购买班级《班级名称》，支付［订单金额］。%smsSchoolName%
 admin.edu_cloud.edu_sms.pay_vip_order_tips: 你已成功购买《会员名称》，支付［订单金额］。%smsSchoolName%
 admin.edu_cloud.edu_sms.pay_virtual_coin_order_tips: 你已成功购买《虚拟币面值》《单位》，支付［订单金额］。%smsSchoolName%
->>>>>>> feature/x8-i18n
 
 # 云邮件
 admin.edu_cloud.edu_email: 云邮件
@@ -6292,7 +6274,6 @@ admin.edu_cloud.edu_attachment.testpaper: 试题
 admin.edu_cloud.edu_attachment.size: 附件大小
 admin.edu_cloud.edu_attachment.size_tips: 当前服务器附件大小上限为2048MB
 
-<<<<<<< HEAD
 admin.edu_cloud.key_info.key_error_tips: 授权码不正确，请重新设置！如您是商业用户，请联系EduSoho官方。
 admin.edu_cloud.key_info.license_domain: 授权域名
 admin.edu_cloud.key_info.not_license_tips: 尚未授权
@@ -6317,79 +6298,6 @@ admin.edu_cloud.key_update.ask_apply_key: 还没有授权码?
 admin.edu_cloud.key_update.key_apply_btn: 申请授权码
 admin.edu_cloud.key_update.key_apply.submiting: 正在申请授权码，请稍等...
 
-# 移动
-mobile.page_title: 移动学习
-mobile.app_name: 阔知学堂
-mobile.app_tips: 将学校装进口袋，移动学习，随时随地。
-mobile.app_download_btn: 下载APP
-mobile.app_download_tips: >
-  <p class="main-slogan">更好的移动端学习</p>
-  <p class="sub-slogan">好好学习，天天向上</p>
-mobile.app_login_btn: 登录网校
-mobile.app_login_tips: 扫一扫登录客户端
-mobile.step_one: >
-  <span class="member">1</span>第一步:
-mobile.step_one_tips: 扫描二维码，下载手机APP。
-mobile.Android_client: Android 客户端
-mobile.iPhone_client: iPhome客户端
-mobile.step_two: >
-  <span class="member">2</span>第二步: 打开阔知学堂APP，扫描网校二维码。
-mobile.vip_free_study: 会员免费买
-
-# 客服
-customer_service.open_content_title: 查看在线客服
-customer_service.close_content_title: 关闭在线客服
-customer_service.open_btn: 展开
-customer_service.close_btn: 收缩
-customer_service.QQ: 客服QQ
-customer_service.mobile: 电话
-customer_service.customer_mobile: 客服电话
-customer_service.email: 邮件
-customer_service.customer_email: 反馈邮件
-
-# 我的教学
-my.teaching.menu_heading: 我的教学
-my.teaching.course_set_menu: 在教课程
-my.teaching.classroom_menu: 在教%classroom%
-my.teaching.question_menu: %student%问题
-my.teaching.discussion_menu: %student%话题
-my.teaching.testpaper_check_menu: 试卷批阅
-my.teaching.homework_check_menu: 作业批阅
-my.teaching.material_lib_menu: 教学资料库
-my.teaching.course_set.normal: 普通课程
-my.teaching.course_set.live: 直播课程
-my.teaching.course_set.classroom: %classroom%课程
-my.teaching.open_course.normal: 录播公开课
-my.teaching.open_course.live: 直播公开课
-my.teaching.threads_discussion: 课程%student%话题
-my.teaching.classroom.threads_discussion: %classroom%%student%话题
-my.teaching.classroom: 所教%classroom%
-my.teaching.classroom.manage_btn: 管理%classroom%
-my.teaching.classroom.today_data_title: 今日新增
-my.teaching.classroom.today_data: >
-  学员%allCount%  &nbsp;&nbsp;
-  话题%threadCount%  &nbsp;&nbsp;
-  任务完成学习%todayFinishedTaskNum%
-my.teaching.page_title: 在教课程
-my.teaching.course_set.create: 创建课程
-my.teaching.course_set.content_title: 在教课程
-my.teaching.course_set.title: 名称
-my.teaching.course_set.classroom: 所属%classroom%
-my.teaching.course_set.student_count: %student%数
-my.teaching.course_set.price: 价格(元)
-my.teaching.course_set.status: 状态
-my.teaching.course_set.actions: 操作
-my.teaching.course_set.courseSetCount: %courseSetCount%个教学计划
-my.teaching.course_set.live_label: 直播
-my.teaching.course_set.classrooms_not_found_label: 已移除
-my.teaching.course_set.manage_btn: 管理
-my.teaching.course_set.course_manage_btn: 计划管理
-my.teaching.course_set.file_manage_btn: 文件管理
-my.teaching.course_set.live_empty_hint: 你还没有在教的直播课程哦, 赶快去创建吧!
-my.teaching.course_set.empty_hint: 你还没有在教的课程哦, 赶快去创建吧!
-
-=======
->>>>>>> feature/x8-i18n
 # 用户设置
 admin.user_auth.sign_up_settings: 注册设置
 admin.user_auth.User_sign_up_type: 用户注册模式
