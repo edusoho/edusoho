@@ -11,11 +11,12 @@
 
 namespace Symfony\Component\Form\Tests\Extension\Core\DataMapper;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormConfigBuilder;
 use Symfony\Component\Form\FormConfigInterface;
 use Symfony\Component\Form\Extension\Core\DataMapper\PropertyPathMapper;
 
-class PropertyPathMapperTest extends \PHPUnit_Framework_TestCase
+class PropertyPathMapperTest extends TestCase
 {
     /**
      * @var PropertyPathMapper
@@ -34,8 +35,8 @@ class PropertyPathMapperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
-        $this->propertyAccessor = $this->getMock('Symfony\Component\PropertyAccess\PropertyAccessorInterface');
+        $this->dispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $this->propertyAccessor = $this->getMockBuilder('Symfony\Component\PropertyAccess\PropertyAccessorInterface')->getMock();
         $this->mapper = new PropertyPathMapper($this->propertyAccessor);
     }
 

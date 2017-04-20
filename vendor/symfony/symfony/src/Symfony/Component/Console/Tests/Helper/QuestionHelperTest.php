@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Console\Tests\Helper;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -23,7 +24,7 @@ use Symfony\Component\Console\Question\Question;
 /**
  * @group tty
  */
-class QuestionHelperTest extends \PHPUnit_Framework_TestCase
+class QuestionHelperTest extends TestCase
 {
     public function testAskChoice()
     {
@@ -388,7 +389,7 @@ class QuestionHelperTest extends \PHPUnit_Framework_TestCase
             '  [<info>żółw  </info>] bar',
             '  [<info>łabądź</info>] baz',
         );
-        $output = $this->getMock('\Symfony\Component\Console\Output\OutputInterface');
+        $output = $this->getMockBuilder('\Symfony\Component\Console\Output\OutputInterface')->getMock();
         $output->method('getFormatter')->willReturn(new OutputFormatter());
 
         $dialog = new QuestionHelper();
@@ -400,6 +401,37 @@ class QuestionHelperTest extends \PHPUnit_Framework_TestCase
 
         $question = new ChoiceQuestion($question, $possibleChoices, 'foo');
         $dialog->ask($this->createInputInterfaceMock(), $output, $question);
+    }
+
+    /**
+     * @expectedException        \Symfony\Component\Console\Exception\RuntimeException
+     * @expectedExceptionMessage Aborted
+     */
+    public function testAskThrowsExceptionOnMissingInput()
+    {
+        $dialog = new QuestionHelper();
+        $dialog->setInputStream($this->getInputStream(''));
+
+        $dialog->ask($this->createInputInterfaceMock(), $this->createOutputInterface(), new Question('What\'s your name?'));
+    }
+
+    /**
+     * @expectedException        \Symfony\Component\Console\Exception\RuntimeException
+     * @expectedExceptionMessage Aborted
+     */
+    public function testAskThrowsExceptionOnMissingInputWithValidator()
+    {
+        $dialog = new QuestionHelper();
+        $dialog->setInputStream($this->getInputStream(''));
+
+        $question = new Question('What\'s your name?');
+        $question->setValidator(function () {
+            if (!$value) {
+                throw new \Exception('A value is required.');
+            }
+        });
+
+        $dialog->ask($this->createInputInterfaceMock(), $this->createOutputInterface(), $question);
     }
 
     protected function getInputStream($input)
@@ -418,7 +450,7 @@ class QuestionHelperTest extends \PHPUnit_Framework_TestCase
 
     protected function createInputInterfaceMock($interactive = true)
     {
-        $mock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
+        $mock = $this->getMockBuilder('Symfony\Component\Console\Input\InputInterface')->getMock();
         $mock->expects($this->any())
             ->method('isInteractive')
             ->will($this->returnValue($interactive));

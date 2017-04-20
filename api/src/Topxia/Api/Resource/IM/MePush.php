@@ -5,7 +5,7 @@ namespace Topxia\Api\Resource\IM;
 use Silex\Application;
 use Topxia\Api\Resource\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\CloudPlatform\IMAPIFactory;
+use Biz\CloudPlatform\IMAPIFactory;
 
 class MePush extends BaseResource
 {

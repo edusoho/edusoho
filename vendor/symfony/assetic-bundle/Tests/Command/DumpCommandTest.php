@@ -49,9 +49,9 @@ class DumpCommandTest extends \PHPUnit_Framework_TestCase
         $this->definition = $this->getMockBuilder('Symfony\\Component\\Console\\Input\\InputDefinition')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->kernel = $this->getMock('Symfony\\Component\\HttpKernel\\KernelInterface');
-        $this->helperSet = $this->getMock('Symfony\\Component\\Console\\Helper\\HelperSet');
-        $this->container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
+        $this->kernel = $this->getMockBuilder('Symfony\\Component\\HttpKernel\\KernelInterface')->getMock();
+        $this->helperSet = $this->getMockBuilder('Symfony\\Component\\Console\\Helper\\HelperSet')->getMock();
+        $this->container = $this->getMockBuilder('Symfony\\Component\\DependencyInjection\\ContainerInterface')->getMock();
         $this->am = $this->getMockBuilder('Assetic\\Factory\\LazyAssetManager')
             ->disableOriginalConstructor()
             ->getMock();
@@ -120,7 +120,7 @@ class DumpCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testDumpOne()
     {
-        $asset = $this->getMock('Assetic\\Asset\\AssetInterface');
+        $asset = $this->getMockBuilder('Assetic\\Asset\\AssetInterface')->getMock();
 
         $this->am->expects($this->once())
             ->method('getNames')
@@ -161,8 +161,8 @@ class DumpCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testDumpDebug()
     {
-        $asset = $this->getMock('Assetic\\Asset\\AssetCollection');
-        $leaf = $this->getMock('Assetic\\Asset\\AssetInterface');
+        $asset = $this->getMockBuilder('Assetic\\Asset\\AssetCollection')->getMock();
+        $leaf = $this->getMockBuilder('Assetic\\Asset\\AssetInterface')->getMock();
 
         $this->am->expects($this->once())
             ->method('getNames')

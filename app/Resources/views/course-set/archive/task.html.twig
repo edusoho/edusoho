@@ -1,0 +1,43 @@
+{% extends 'layout.html.twig' %}
+{% block title %}第{{ currentTask.number }}任务：{{ courseSet.title }} -{{ parent() }}{% endblock %}
+{% block keywords %}{{ courseSet.title }}{% endblock %}
+{% block description %}{{ course.about }}{% endblock %}
+{% block content %}
+  <div class="es-row-wrap container-gap">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="page-header"><h1>{{ courseSet.title }}</h1></div>
+      </div>
+    </div>
+    <div class="row article-row">
+      <div class="col-md-8 mbl">
+        {% if currentTask %}
+          <div class="color-success"><h4>第{{ currentTask.number }}任务： {{ currentTask.title }}</h4></div>
+        {% else %}
+          <div class="empty">课程暂无任务</div>
+        {% endif %}
+        <a class="btn btn-primary mtl nav-btn" href="{{ path('course_show',{id:course.id})}}"><span class="glyphicon glyphicon-play"></span> 查看课程</a>
+      </div>
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">任务列表</h3>
+          </div>
+          <div class="panel-body">
+            {% if tasks %}
+              <ul class="media-list">
+                {% for task in tasks %}
+                  <li class="media">
+                    <div class="media-body"><a href="{{ path('course_set_archive_task',{ courseSetId:courseSet.id,taskId:task.id })}}">第{{ task.number }}任务： {{ task.title }}</a></div>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <div class="empty">课程暂无相关任务</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

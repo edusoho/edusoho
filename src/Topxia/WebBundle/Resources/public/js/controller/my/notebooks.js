@@ -4,8 +4,5 @@ define(function(require, exports, module) {
     	$("#notebook-list").on('click', '.media', function(){
     		window.location.href = $(this).find('.notebook-go').attr('href');
     	});
-
-
     };
-
 });

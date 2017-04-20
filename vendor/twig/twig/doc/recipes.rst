@@ -30,7 +30,7 @@ catches deprecation notices, and return them.
 .. tip::
 
     If your templates are not stored on the filesystem, use the ``collect()``
-    method instead which takes an ``Iterator``; the iterator must return
+    method instead. ``collect()`` takes a ``Traversable`` which must return
     template names as keys and template contents as values (as done by
     ``Twig_Util_TemplateDirIterator``).
 
@@ -306,7 +306,7 @@ saving it. If the template code is stored in a `$template` variable, here is
 how you can do it::
 
     try {
-        $twig->parse($twig->tokenize($template));
+        $twig->parse($twig->tokenize(new Twig_Source($template)));
 
         // the $template is valid
     } catch (Twig_Error_Syntax $e) {
@@ -318,13 +318,17 @@ If you iterate over a set of files, you can pass the filename to the
 
     foreach ($files as $file) {
         try {
-            $twig->parse($twig->tokenize($template, $file));
+            $twig->parse($twig->tokenize(new Twig_Source($template, $file->getFilename(), $file)));
 
             // the $template is valid
         } catch (Twig_Error_Syntax $e) {
             // $template contains one or more syntax errors
         }
     }
+
+.. versionadded:: 1.27
+    ``Twig_Source`` was introduced in version 1.27, pass the source and the
+    identifier directly on previous versions.
 
 .. note::
 
@@ -413,7 +417,7 @@ We have created a simple ``templates`` table that hosts two templates:
 
 Now, let's define a loader able to use this database::
 
-    class DatabaseTwigLoader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
+    class DatabaseTwigLoader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface, Twig_SourceContextLoaderInterface
     {
         protected $dbh;
 
@@ -429,6 +433,16 @@ Now, let's define a loader able to use this database::
             }
 
             return $source;
+        }
+
+        // Twig_SourceContextLoaderInterface as of Twig 1.27
+        public function getSourceContext($name)
+        {
+            if (false === $source = $this->getValue('source', $name)) {
+                throw new Twig_Error_Loader(sprintf('Template "%s" does not exist.', $name));
+            }
+
+            return new Twig_Source($source, $name);
         }
 
         // Twig_ExistsLoaderInterface as of Twig 1.11
@@ -537,18 +551,18 @@ include in your templates:
     ``interpolateProvider`` service, for instance at the module initialization
     time:
 
-    ```js
-    angular.module('myApp', []).config(function($interpolateProvider) {
-        $interpolateProvider.startSymbol('{[').endSymbol(']}');
-    });
-    ```
+    ..  code-block:: javascript
+
+        angular.module('myApp', []).config(function($interpolateProvider) {
+            $interpolateProvider.startSymbol('{[').endSymbol(']}');
+        });
 
   * For Twig, change the delimiters via the ``tag_variable`` Lexer option:
 
-    ```php
-    $env->setLexer(new Twig_Lexer($env, array(
-        'tag_variable' => array('{[', ']}'),
-    )));
-    ```
+    ..  code-block:: php
+
+        $env->setLexer(new Twig_Lexer($env, array(
+            'tag_variable' => array('{[', ']}'),
+        )));
 
 .. _callback: http://www.php.net/manual/en/function.is-callable.php

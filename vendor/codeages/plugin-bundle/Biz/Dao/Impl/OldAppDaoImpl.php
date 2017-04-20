@@ -10,12 +10,12 @@ class OldAppDaoImpl extends GeneralDaoImpl implements AppDao
 
     public function getByCode($code)
     {
-        return $this->getByFields(['code' => $code]);
+        return $this->getByFields(array('code' => $code));
     }
 
     public function findByType($type, $start, $limit)
     {
-        return $this->search(['type' => $type], array('installedTime' => 'ASC'), $start, $limit);
+        return $this->search(array('type' => $type), array('installedTime' => 'ASC'), $start, $limit);
     }
 
     public function countByType($type)

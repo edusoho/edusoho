@@ -1,0 +1,18 @@
+{
+	"folders":
+	[
+		{
+			"folder_exclude_patterns":
+			[
+				".sonar",
+				".happypack",
+				"app/cache",
+				"app/logs",
+				"app/data",
+				"web/files",
+				"node_modules"
+			],
+			"path": "."
+		}
+	]
+}

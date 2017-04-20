@@ -1,0 +1,106 @@
+{% extends 'course-manage/dashboard/layout.html.twig' %}
+{% do script(['app/js/course-manage/dashboard/lesson-detail/index.js'])%}
+{% set submenu = 'task_learn_dashboard' %}
+
+{% block dashboard %}
+  <div class="table-responsive">
+    <table class="table table-bordered" id="learning-data-table" style="word-break:break-all;text-align:center;">
+      <tr class="active">
+        <td width="35%">{{ '任务名'|trans }}</td>
+
+        <td>{{ '平均学习时长(分)'|trans }}
+          <span class="link-medium es-icon es-icon-help ml5"
+                data-container="body"
+                data-toggle="popover"
+                data-trigger="hover"
+                data-placement="top"
+                data-content="任务学习时长：从任务开始到任务完成的耗时，任务平均学习时长：每个学员的任务学习时长的平均数">
+        </span>
+        </td>
+
+        <td>{{ '音视频时长(分)'|trans }}
+          <span class="link-medium es-icon es-icon-help ml5"
+                data-container="body"
+                data-toggle="popover"
+                data-trigger="hover"
+                data-placement="top"
+                data-content="音视频的实际时长，仅支持云视频和本地音视频">
+          </span>
+        </td>
+
+        <td>{{ '音视频平均观看时长(分)'|trans }}
+          <span class="link-medium es-icon es-icon-help ml5"
+                data-container="body"
+                data-toggle="popover"
+                data-trigger="hover"
+                data-placement="top"
+                data-content="每个学员的实际观看时长的平均数">
+          </span>
+        </td>
+
+        <td>{{ '测试平均得分'|trans }}
+          <span class="link-medium es-icon es-icon-help ml5"
+                data-container="body"
+                data-toggle="popover"
+                data-trigger="hover"
+                data-placement="top"
+                data-content="每个学员测试得分的平均数">
+          </span>
+        </td>
+
+        <td>{{ '学员学习详情'|trans }}</td>
+        {# <td>直播同时在线人数峰值</td> #}
+      </tr>
+      {% if tasks %}
+        {% for task in tasks %}
+          <tr>
+            <td>
+              {{ task.title }}
+              {% if task.type == "text" %}
+                {{ '（图文）'|trans }}
+              {% elseif task.type == 'video' %}
+                {{ '（视频）'|trans }}
+              {% elseif task.type == 'audio' %}
+                {{ '（音频）'|trans }}
+              {% elseif task.type == 'testpaper' %}
+                {{ '（试卷）'|trans }}
+              {% elseif task.type == 'ppt' %}
+                （ppt）
+              {% endif %}
+            </td>
+            <td>{{ (task.learnTime)|round(0, 'floor') }}</td>
+            <td>
+              {% if task.type =='audio' or task.type =='video' %}
+                {{ task.length }}
+              {% else %}
+                ----
+              {% endif %}
+            </td>
+            <td>
+              {% if task.mediaSource|default('') != 'self' and task.type == 'video' %}
+                {{ '无'|trans }}
+              {% elseif task.type =='audio' or task.type =='video' %}
+                {{ (task.watchTime)|round(0, 'floor') }}
+              {% else %}
+                ----
+              {% endif %}
+            </td>
+            <td>
+              {% if task.type =='testpaper' %}
+                {{ task.score|default(0) }}{# FIXME score ? #}
+              {% else %}
+                ----
+              {% endif %}
+            </td>
+            <td>
+              <a  class="link-primary" data-toggle="modal" data-target="#modal"
+                 data-url="{{ path('course_set_manage_course_dashboard_task_detail',{courseSetId: courseSet.id, courseId:task.courseId,taskId:task.id}) }}"
+                 href="javascript:">查看</a>
+            </td>
+          </tr>
+        {% endfor %}
+      {% endif %}
+    </table>
+    <p class="color-success">{{ '注：网络视频的观看时长无法获取'|trans }}</p>
+  </div>
+{% endblock %}

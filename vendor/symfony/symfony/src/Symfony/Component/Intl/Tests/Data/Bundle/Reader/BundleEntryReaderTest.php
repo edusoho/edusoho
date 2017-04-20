@@ -11,13 +11,14 @@
 
 namespace Symfony\Component\Intl\Tests\Data\Bundle\Reader;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Intl\Exception\ResourceBundleNotFoundException;
 use Symfony\Component\Intl\Data\Bundle\Reader\BundleEntryReader;
 
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-class BundleEntryReaderTest extends \PHPUnit_Framework_TestCase
+class BundleEntryReaderTest extends TestCase
 {
     const RES_DIR = '/res/dir';
 
@@ -62,7 +63,7 @@ class BundleEntryReaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->readerImpl = $this->getMock('Symfony\Component\Intl\Data\Bundle\Reader\BundleEntryReaderInterface');
+        $this->readerImpl = $this->getMockBuilder('Symfony\Component\Intl\Data\Bundle\Reader\BundleEntryReaderInterface')->getMock();
         $this->reader = new BundleEntryReader($this->readerImpl);
     }
 

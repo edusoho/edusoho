@@ -26,6 +26,10 @@ class LessonWatchTime extends BaseResource
             return $this->error('not_courseId', '课程不存在');
         }
 
+        if (!$this->getCourseService()->canTakeCourse($courseId)) {
+            return $this->error('403', '无权限查看');
+        }
+
         $lessonLearn = $this->getCourseService()->getLearnByUserIdAndLessonId($user['id'], $lessonId);
         if (empty($lessonLearn)) {
             return $this->error('not_lesson_learn', '课时学习数据不存在');

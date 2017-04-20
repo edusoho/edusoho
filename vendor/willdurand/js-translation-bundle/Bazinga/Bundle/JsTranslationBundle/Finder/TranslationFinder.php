@@ -2,26 +2,26 @@
 
 namespace Bazinga\Bundle\JsTranslationBundle\Finder;
 
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Finder\Finder;
 
 /**
  * @author William DURAND <william.durand1@gmail.com>
  * @author Markus Poerschke <markus@eluceo.de>
+ * @author Hugo MONTEIRO <hugo.monteiro@gmail.com>
  */
 class TranslationFinder
 {
     /**
-     * @var KernelInterface
+     * @var array list of translation files from the framework bundle
      */
-    protected $kernel;
+    private $translationFilesByLocale;
 
     /**
-     * @param KernelInterface $kernel The kernel.
+     * @param array $translationFilesByLocale all the translations whose index is the locale
      */
-    public function __construct(KernelInterface $kernel)
+    public function __construct(array $translationFilesByLocale)
     {
-        $this->kernel = $kernel;
+        $this->translationFilesByLocale = $translationFilesByLocale;
     }
 
     /**
@@ -35,13 +35,9 @@ class TranslationFinder
      */
     public function get($domain, $locale)
     {
-        $finder = new Finder();
+        $filteredFilenames = $this->getTranslationFilesFromConfiguration($domain, $locale);
 
-        return $finder
-            ->files()
-            ->name($domain . '.' . $locale . '.*')
-            ->followLinks()
-            ->in($this->getLocations());
+        return $filteredFilenames;
     }
 
     /**
@@ -51,62 +47,45 @@ class TranslationFinder
      */
     public function all()
     {
-        $finder = new Finder();
-        $finder
-            ->files()
-            ->in($this->getLocations())
-            ->followLinks();
+        $filteredFilenames = $this->getAllTranslationFilesFromConfiguration();
 
-        return $finder;
+        return $filteredFilenames;
     }
 
     /**
-     * Gets translation files location.
-     *
-     * @return array
+     * @return array all translation file names loaded from the FrameworkBundle
      */
-    protected function getLocations()
+    private function getAllTranslationFilesFromConfiguration()
     {
-        $locations = array();
+        $filteredFilenames = array();
 
-        if (class_exists('Symfony\Component\Validator\Validation')) {
-            $r = new \ReflectionClass('Symfony\Component\Validator\Validation');
-
-            $locations[] = dirname($r->getFilename()).'/Resources/translations';
-        }
-
-        if (class_exists('Symfony\Component\Form\Form')) {
-            $r = new \ReflectionClass('Symfony\Component\Form\Form');
-
-            $locations[] = dirname($r->getFilename()).'/Resources/translations';
-        }
-
-        if (class_exists('Symfony\Component\Security\Core\Exception\AuthenticationException')) {
-            $r = new \ReflectionClass('Symfony\Component\Security\Core\Exception\AuthenticationException');
-
-            if (file_exists($dir = dirname($r->getFilename()).'/../../Resources/translations')) {
-                $locations[] = $dir;
-            } else {
-                // Symfony 2.4 and above
-                $locations[] = dirname($r->getFilename()).'/../Resources/translations';
+        foreach ($this->translationFilesByLocale as $localeFromConfig => $resourceFilePaths) {
+            foreach ($resourceFilePaths as $filename) {
+                $filteredFilenames[] = $filename;
             }
         }
+        return $filteredFilenames;
+    }
 
-        $overridePath = $this->kernel->getRootDir() . '/Resources/%s/translations';
-        foreach ($this->kernel->getBundles() as $bundle => $class) {
-            $reflection = new \ReflectionClass($class);
-            if (is_dir($dir = dirname($reflection->getFilename()).'/Resources/translations')) {
-                $locations[] = $dir;
-            }
-            if (is_dir($dir = sprintf($overridePath, $bundle))) {
-                $locations[] = $dir;
+    /**
+     * @param string $domain
+     * @param string $locale
+     *
+     * @return array all translation file names loaded from the FrameworkBundle
+     */
+    private function getTranslationFilesFromConfiguration($domain, $locale)
+    {
+        $filteredFilenames = array();
+
+        foreach ($this->translationFilesByLocale as $localeFromConfig => $resourceFilePaths) {
+            foreach ($resourceFilePaths as $filename) {
+                list($currentDomain, $currentLocale) = explode('.', basename($filename), 3);
+
+                if ($currentDomain === $domain && $currentLocale === $locale) {
+                    $filteredFilenames[] = $filename;
+                }
             }
         }
-
-        if (is_dir($dir = $this->kernel->getRootDir() . '/Resources/translations')) {
-            $locations[] = $dir;
-        }
-
-        return $locations;
+        return $filteredFilenames;
     }
 }

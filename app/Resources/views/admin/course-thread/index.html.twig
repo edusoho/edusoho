@@ -1,0 +1,130 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set script_controller = 'course/threads' %}
+
+{% set menu = 'admin_course_thread_manage' %}
+
+{% block main %}
+
+<div class="well well-sm">
+  <form class="form-inline">
+    <div class="form-group">
+      <select class="form-control" name="type">
+        {{ select_options(dict('threadType'), app.request.get('type'), '帖子类型'|trans) }}
+      </select>
+    </div>
+    
+    <span class="divider"></span>
+
+    <div class="form-group">
+      <select class="form-control" name="threadType">
+        {{ select_options({isStick:'置顶'|trans, isElite: '加精'|trans}, app.request.get('threadType'), '属性'|trans) }}
+      </select>
+    </div>
+
+    <span class="divider"></span>
+
+    <div class="form-group">
+      <select class="form-control" name="keywordType">
+        {{ select_options({title:'标题'|trans, content: '内容'|trans, courseId:'课程编号'|trans, courseTitle:'课程名'|trans}, app.request.get('keywordType')) }}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="{{'关键词'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
+    </div>
+
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="{{'作者'|trans}}" name="author" value="{{ app.request.get('author') }}">
+    </div>
+
+    <button class="btn btn-primary" type="submit">{{'搜索'|trans}}</button>
+  </form>
+</div>
+
+  <div id="thread-table-container">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th width="5%"><input type="checkbox" data-role="batch-select"></th>
+          <th width="50%">{{'帖子'|trans}}</th>
+          <th width="10%">{{'回复/查看'|trans}}</th>
+          <th width="10%">{{'属性'|trans}}</th>
+          <th width="15%">{{'作者'|trans}}</th>
+          <th width="10%">{{'操作'|trans}}</th>
+        </tr>
+      </thead>
+      <body>
+        {% for thread in threads %}
+          {% set author = users[thread.userId]|default(null) %}
+          {% set courseSet = courseSets[thread.courseSetId]|default(null) %}
+          {% set course = courses[thread.courseId]|default(null) %}
+          {% set task = tasks[thread.taskId]|default(null) %}
+          <tr data-role="item">
+            <td><input value="{{thread.id}}" type="checkbox" data-role="batch-item"> </td>
+            <td>
+              {% if thread.type == 'question' %}
+                <span class="label label-info">{{'问'|trans}}</span>
+              {% endif %}
+
+              <a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" target="_blank"><strong>{{ thread.title }}</strong></a>
+
+              <div class="short-long-text">
+                <div class="short-text text-sm text-muted">{{ thread.content|plain_text(60) }} <span class="trigger">({{'展开'|trans}})</span></div>
+                <div class="long-text">{{ thread.content|raw }} <span class="trigger">({{'收起'|trans}})</span></div>
+              </div>
+              
+              <div class="text-sm mts">
+                {% if courseSet %}
+                  <a href="{{ path('course_show', {id:courseSet.defaultCourseId}) }}" class="text-success" target="_blank">{{ courseSet.title }}</a>
+                {% endif %}
+
+                {% if course %}
+                  <span class="text-muted mhs">&raquo;</span>
+                  <a href="{{ path('course_show', {id:course.id}) }}" class="text-success" target="_blank">{{ course.title }}</a>
+                {% endif %}
+
+                {% if task %}
+                  <span class="text-muted mhs">&raquo;</span>
+                  <a class="text-success"  href="{{ path('course_task_show', {courseId:thread.courseId, id:task.id}) }}" target="_blank">{{'任务'|trans}}{{task.number}}：{{ task.title }}</a>
+                {% endif %}
+              </div>
+            </td>
+            <td><span class="text-sm">{{ thread.postNum }} / {{ thread.hitNum }}</span></td>
+            <td>
+              {% if course %}
+                <a href="javascript:;" data-set-url="{{ path('course_thread_elite', {courseId:course.id, threadId:thread.id}) }}" data-cancel-url="{{ path('course_thread_unelite', {courseId:course.id, threadId:thread.id}) }}" class="promoted-label">
+                  <span class="label {% if thread.isElite %}label-success{% else %}label-default{% endif %}">{{'精'|trans}}</span>
+                </a>
+              
+                <a href="javascript:;" data-set-url="{{ path('course_thread_stick', {courseId:course.id, threadId:thread.id}) }}" data-cancel-url="{{ path('course_thread_unstick', {courseId:course.id, threadId:thread.id}) }}" class="promoted-label">
+                  <span class="label {% if thread.isStick %}label-success{% else %}label-default{% endif %}">{{'顶'|trans}}</span>
+                </a>
+              {% endif %}
+            </td>
+            <td>
+              {{ admin_macro.user_link(author) }} <br />
+              <span class="text-muted text-sm">{{ thread.createdTime|date('Y-n-d H:i:s') }}</span>
+            </td>
+            <td>
+              <div class="btn-group">
+                <a href="javascript:;" data-role="item-delete" data-url="{{ path('admin_thread_delete', {id:thread.id}) }}" class="btn btn-default btn-sm" 
+                data-name="{{'帖子'|trans}}" >{{'删除'|trans}}</a>
+              </div>
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="20"><div class="empty">{{'暂无帖子记录'|trans}}</div></td></tr>
+        {% endfor %}
+      </body>
+    </table>
+
+    <div class="mbm">
+        <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'全选'|trans}}</label>
+        <button class="btn btn-default btn-sm mlm" data-role="batch-delete" data-name="{{'帖子'|trans}}" data-url="{{ path('admin_thread_batch_delete') }}">{{'删除'|trans}}</button>
+    </div>
+
+  </div>
+    
+  {{ admin_macro.paginator(paginator) }}
+{% endblock %}

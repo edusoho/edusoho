@@ -11,12 +11,13 @@
 
 namespace Symfony\Bridge\Twig\Tests\Extension;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\MessageSelector;
 use Symfony\Component\Translation\Loader\ArrayLoader;
 
-class TranslationExtensionTest extends \PHPUnit_Framework_TestCase
+class TranslationExtensionTest extends TestCase
 {
     public function testEscaping()
     {
@@ -36,7 +37,7 @@ class TranslationExtensionTest extends \PHPUnit_Framework_TestCase
             $twig = new \Twig_Environment($loader, array('debug' => true, 'cache' => false));
             $twig->addExtension(new TranslationExtension(new Translator('en', new MessageSelector())));
 
-            echo $twig->compile($twig->parse($twig->tokenize($twig->getLoader()->getSource('index'), 'index')))."\n\n";
+            echo $twig->compile($twig->parse($twig->tokenize($twig->getLoader()->getSourceContext('index'))))."\n\n";
             $this->assertEquals($expected, $this->getTemplate($template)->render($variables));
         }
 

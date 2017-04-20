@@ -9,6 +9,8 @@
             "shared": true,
             "synchronized": false,
             "abstract": false,
+            "autowire": false,
+            "autowiring_types": [],
             "file": "\/path\/to\/file",
             "factory_service": "factory.service",
             "factory_method": "get",
@@ -28,19 +30,11 @@
                 },
                 {
                     "name": "tag2",
-                    "parameters": [
-
-                    ]
+                    "parameters": []
                 }
-            ],
-            "autowire": false,
-            "autowiring_types": []
+            ]
         }
     },
-    "aliases": [
-
-    ],
-    "services": [
-
-    ]
+    "aliases": [],
+    "services": []
 }

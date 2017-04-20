@@ -11,20 +11,27 @@
 
 namespace Symfony\Component\Security\Core\Tests\Authorization\Voter;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 /**
  * @group legacy
  */
-class AbstractVoterTest extends \PHPUnit_Framework_TestCase
+class AbstractVoterTest extends TestCase
 {
+    /**
+     * @var TokenInterface
+     */
     protected $token;
 
     protected function setUp()
     {
-        $this->token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $this->token = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')->getMock();
     }
 
+    /**
+     * @return array
+     */
     public function getTests()
     {
         return array(
@@ -54,5 +61,70 @@ class AbstractVoterTest extends \PHPUnit_Framework_TestCase
         $voter = new Fixtures\MyVoter();
 
         $this->assertEquals($expectedVote, $voter->vote($this->token, $object, $attributes), $message);
+    }
+
+    /**
+     * @return array
+     */
+    public function getSupportsAttributeData()
+    {
+        return array(
+            'positive_string_edit' => array(
+                'expected' => true,
+                'attribute' => 'EDIT',
+                'message' => 'expected TRUE given as attribute EDIT is supported',
+            ),
+            'positive_string_create' => array(
+                'expected' => true,
+                'attribute' => 'CREATE',
+                'message' => 'expected TRUE as given attribute CREATE is supported',
+            ),
+
+            'negative_string_read' => array(
+                'expected' => false,
+                'attribute' => 'READ',
+                'message' => 'expected FALSE as given attribute READ is not supported',
+            ),
+            'negative_string_random' => array(
+                'expected' => false,
+                'attribute' => 'random',
+                'message' => 'expected FALSE as given attribute "random" is not supported',
+            ),
+            'negative_string_0' => array(
+                'expected' => false,
+                'attribute' => '0',
+                'message' => 'expected FALSE as given attribute "0" is not supported',
+            ),
+            // this set of data gives false positive if in_array is not used with strict flag set to 'true'
+            'negative_int_0' => array(
+                'expected' => false,
+                'attribute' => 0,
+                'message' => 'expected FALSE as given attribute 0 is not string',
+            ),
+            'negative_int_1' => array(
+                'expected' => false,
+                'attribute' => 1,
+                'message' => 'expected FALSE as given attribute 1 is not string',
+            ),
+            'negative_int_7' => array(
+                'expected' => false,
+                'attribute' => 7,
+                'message' => 'expected FALSE as attribute 7 is not string',
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider getSupportsAttributeData
+     *
+     * @param bool   $expected
+     * @param string $attribute
+     * @param string $message
+     */
+    public function testSupportsAttribute($expected, $attribute, $message)
+    {
+        $voter = new Fixtures\MyVoter();
+
+        $this->assertEquals($expected, $voter->supportsAttribute($attribute), $message);
     }
 }

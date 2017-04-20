@@ -1,0 +1,133 @@
+imports:
+    - { resource: event_subscribers.yml }
+
+services:
+    extension.manager:
+        class: AppBundle\Extension\ExtensionManager
+
+    activity.extension:
+        class: AppBundle\Extension\ActivityExtension
+        calls:
+            - [setBiz, ['@biz']]
+        tags:
+            - { name: extension }
+
+    course.extension:
+        class: AppBundle\Extension\CourseExtension
+        calls:
+            - [setBiz, ['@biz']]
+        tags:
+            - { name: extension }
+            
+    question.extension:
+        class: AppBundle\Extension\QuestionExtension
+        calls:
+            - [setBiz, ['@biz']]
+        tags:
+            - { name: extension }
+    
+    callback.extension:
+        class: AppBundle\Extension\CallbackExtension
+        calls:
+            - [setBiz, ['@biz']]
+        tags:
+            - { name: extension }
+            
+    authentication_handler:
+        class: Biz\Common\LoginListener
+        arguments: ["@biz"]
+
+    biz.service_provider.collector:
+        class: Biz\ServiceProviderCollector
+
+    coupon_service_provider:
+        class: Biz\Coupon\CouponServiceProvider
+        calls:
+            - [setBiz, ['@biz']]
+        tags:
+            - { name: extension }
+
+    web.twig.question_type_extension:
+        class: AppBundle\Twig\QuestionTypeExtension
+        arguments:    ['@service_container', '@biz']
+        tags:
+            - { name: twig.extension }
+
+    web.twig.app_extension:
+        class: AppBundle\Twig\AppExtension
+        arguments: ['@biz']
+        tags:
+            - { name: twig.extension }
+
+    web.twig.activity_extension:
+        class: AppBundle\Twig\ActivityExtension
+        arguments:    ['@service_container', '@biz']
+        tags:
+            - { name: twig.extension }
+
+    web.twig.live_extension:
+        class: AppBundle\Twig\LiveExtension
+        tags:
+            - { name: twig.extension }
+
+    web.twig.extension:
+        class: AppBundle\Twig\WebExtension
+        arguments:    ['@service_container', '@biz']
+        tags:
+            - { name: twig.extension }
+
+    web.twig.html_extension:
+        class: AppBundle\Twig\HtmlExtension
+        arguments:    ['@service_container', '@biz']
+        tags:
+            - { name: twig.extension }
+
+    web.twig.dictionary_extension:
+        class: AppBundle\Twig\DictionaryExtension
+        arguments:    ['@service_container', '@biz']
+        tags:
+            - { name: twig.extension }
+
+    web.twig.data_extension:
+        class: AppBundle\Twig\DataExtension
+        arguments:    ['@service_container', '@biz']
+        tags:
+            - { name: twig.extension }
+
+    web.twig.block_extension:
+        class: AppBundle\Twig\BlockExtension
+        arguments:    ['@service_container', '@biz']
+        tags:
+            - { name: twig.extension }
+
+    web.twig.uploader_extension:
+        class: AppBundle\Twig\UploaderExtension
+        arguments:    ['@service_container']
+        tags:
+            - { name: twig.extension }
+
+    web.twig.theme_extension:
+        class: AppBundle\Twig\ThemeExtension
+        arguments:    ['@service_container', '@biz']
+        tags:
+            - { name: twig.extension }
+
+    web.twig.order_extension:
+        class: AppBundle\Twig\OrderExtension
+        arguments:    ['@service_container', '@biz']
+        tags:
+            - { name: twig.extension }
+
+    web.twig.course_extension:
+        class: AppBundle\Twig\CourseExtension
+        arguments:    ['@service_container', '@biz']
+        tags:
+            - { name: twig.extension }
+
+    topxia.timemachine:
+        class:			AppBundle\Common\TimeMachine
+        arguments:		['Asia/Shanghai']
+
+    topxia.target_helper:
+        class:          AppBundle\Util\TargetHelper
+        arguments:      ['@service_container']

@@ -1,0 +1,19 @@
+{% set resultStatus = resultStatus|default(null) %}
+{% set status = status|default('all') %}
+
+<form class="clearfix form-inline well well-sm testpaper-result-list-form" method="get">
+  <div class="form-group">
+    <input class="form-control " type="text" placeholder="{{'请输入用户名'|trans}}" name="keyword" value="{{ keyword}}">
+  </div>
+  <div class="form-group">
+    <select name="status" class="form-control" >
+      <option value="all" {% if status == 'all' %}selected='selected'{% endif %}>{{'全部'|trans}}</option>>
+      <option value="finished" {% if status == 'finished' %} selected='selected'{% endif %}>{{'已批阅'|trans}}</option>
+      <option value="reviewing" {% if status == 'reviewing' %} selected='selected'{% endif %}>{{'未批阅'|trans}}</option>
+      <option value="doing" {% if status == 'doing' %} selected='selected'{% endif %}>{{'进行中'|trans}}</option>
+    </select>
+  </div>
+
+  <button class="btn btn-primary">{{'搜索'|trans}}</button>
+
+</form>

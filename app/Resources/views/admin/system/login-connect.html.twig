@@ -1,0 +1,205 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set script_controller = 'system/login_bind' %}
+
+{% set menu = 'admin_setting_login_bind' %}
+
+{% block main %}
+
+  {{ web_macro.flash_messages() }}
+
+  <form class="form-horizontal" method="post" id="login_bind-form" novalidate>
+
+    <fieldset>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label>{{ '用户登录限制'|trans }}</label>
+        </div>
+        <div class="controls col-md-8 radios">
+          {{ radios('login_limit', {1:'开启'|trans, 0:'关闭'|trans}, loginConnect.login_limit) }}
+          <p class="help-block">{{ '开启后同一账号只能在一处（同一IP下使用一个浏览器）进行登录'|trans }}</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label>{{ '第三方登录'|trans }}</label>
+        </div>
+        <div class="controls col-md-8 radios">
+          {{ radios('enabled', {1:'开启'|trans, 0:'关闭'|trans}, loginConnect.enabled) }}
+        </div>
+      </div>
+    </fieldset>
+
+
+    <fieldset>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label>{{ '用户登录保护'|trans }}</label>
+        </div>
+        <div class="controls col-md-8 radios">
+          {{ radios('temporary_lock_enabled', {1:'开启'|trans, 0:'关闭'|trans}, loginConnect.temporary_lock_enabled) }}
+          <p class="help-block">{{ '开启后，登录时用户连续多次输入错误密码时暂时封禁用户,此功能不影响admin手动永久封禁用户'|trans }}</p>
+        </div>
+
+        <div id="times_and_minutes" class="col-md-8 col-md-offset-3"
+          {% if not loginConnect.temporary_lock_enabled|default(false) %}style="display:none"{% endif %}>
+          <div class="row">
+            <div class="col-md-4 lock-user-text-right">
+              {{ '用户连续输入错误密码'|trans }}
+            </div>
+            <div class="controls col-md-2 form-group">
+              <input type="text" id="temporary_lock_allowed_times" name="temporary_lock_allowed_times" class="form-control"
+                value="{{ loginConnect.temporary_lock_allowed_times }}">
+            </div>
+            <div class="col-md-3 lock-user-text-left">
+              {{ '次，将暂时封禁用户'|trans }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 lock-user-text-right">
+              {{ '同一IP连续输入错误密码'|trans }}
+            </div>
+            <div class="controls col-md-2 form-group">
+              <input type="text" id="temporary_lock_allowed_times" name="ip_temporary_lock_allowed_times" class="form-control"
+                value="{{ loginConnect.ip_temporary_lock_allowed_times }}">
+            </div>
+            <div class="col-md-3 lock-user-text-left">
+              {{ '次，将暂时封禁IP'|trans }}
+            </div>
+          </div>
+
+
+          <div class="row">
+            <div class="col-md-4 lock-user-text-right">
+              {{ '经过'|trans }}
+            </div>
+            <div class="controls col-md-2 form-group">
+              <input type="text" id="temporary_lock_minutes" name="temporary_lock_minutes" class="form-control"
+                value="{{ loginConnect.temporary_lock_minutes }}">
+            </div>
+            <div class="col-md-3 lock-user-text-left">
+              {{ '分钟后，解锁用户/IP'|trans }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+    <fieldset id="third_login" {% if loginConnect.enabled|default(null) == 0 %} style="display:none"{% endif %}>
+      {% for type, client in clients %}
+        <fieldset data-role="oauth2-setting" data-type="{{ type }}">
+          <legend>{{ client.admin_name }}</legend>
+          <div class="form-group">
+            <div class="col-md-3 control-label">
+              <label>{{ client.admin_name }}</label>
+            </div>
+            <div class="controls col-md-8 radios">
+              {{ radios( type ~ '_enabled', {1:'开启'|trans, 0:'关闭'|trans}, loginConnect[type ~ '_enabled']) }}
+              {% if client.apply_url|default(null) %}
+              {% if type =='weixinmob' %}
+              <div class="help-block">开通后，支持使用微信号在手机端微信APP内快捷注册或登录网站。</div>
+              <div class="help-block">
+                如何开通：1.一个已认证的<a target="_blank" href="https://mp.weixin.qq.com">微信服务号</a>；2.一个已认证的<a target="_blank"
+                  href="https://open.weixin.qq.com">微信开放平台</a>账号；3.服务号绑定到<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>。
+                {% elseif type == 'weixinweb' %}
+                <div class="help-block">请先到<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>申请<a target="_blank"
+                    href="https://open.weixin.qq.com/cgi-bin/frame?t=home/web_tmpl&lang=zh_CN">网站应用开发</a>，开通后，网站PC端将支持微信扫码登录；
+                </div>
+                <div class="help-block">
+                  申请条件：在微信开放平台注册并且完成实名认证。
+                  {% else %}
+                  <div class="help-block"><a href="{{ client.apply_url }}" target="_blank">{{ '申请'|trans }}{{ client.admin_name }}</a>
+                    {% endif %}
+                    {% if type == "qq" %}
+                      <a class="pll" href="javascript:;" id="help" data-toggle="popover" data-trigger="click" data-placement="top"
+                        title="{{ '接入帮助:'|trans }}" data-html="true"
+                        data-content="1.{{ '你的QQ开放平台账号认证度（个人信息完善）要达到75%，才能创建应用在网站设置第三方登录；'|trans }}<br>2.{{ '需填写的回调地址为：'|trans }}<br><a><span class='text-danger'>XXX</span>/login/bind/qq/callback;<span class='text-danger'>XXX</span>/settings/bind/qq/callback</a><br>，<span class='text-danger'>XXX</span>{{ '为你的ES系统网址。例如，气球鱼学院的回调地址填写为：'|trans }}http://www.qiqiuyu.com/login/bind/qq/callback;http://www.qiqiuyu.com/settings<br>/bind/qq/callback；{{ '网址一定要有www哦；'|trans }}<br>3.{{ 'QQ的按钮，在开放平台你的个人信息中，找到ID和key，填写到edusoho后台，开启ID上方的QQ登录。'|trans }}<br>{{ '如果QQ接入审核失败，提示“登录按钮位置不对”，请检查ES后台【系统】【用户设置】【登录】，开启第三方登录以及开启QQ登录。'|trans }}">{{ '接入帮助'|trans }}</a>
+                    {% endif %}
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-md-3 control-label">
+                  <label for="{{ type }}_key">{{ client.key_setting_label }}</label>
+                </div>
+                <div class="controls col-md-8">
+                  <input type="text" id="{{ type }}_key" name="{{ type }}_key" class="form-control" value="{{ loginConnect[type ~ '_key'] }}">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-md-3 control-label">
+                  <label for="{{ type }}_secret">{{ client.secret_setting_label }}</label>
+                </div>
+                <div class="controls col-md-8">
+                  <input type="text" id="{{ type }}_secret" name="{{ type }}_secret" class="form-control"
+                    value="{{ loginConnect[type ~ '_secret'] }}">
+                  {% if type =='weixinweb' %}
+                    <div class="help-block">APP ID和APP Secret来自<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>创建的网站应用</div>
+                  {% elseif type =='weixinmob' %}
+                    <div class="help-block">APP ID和APP Secret来自<a target="_blank" href="https://mp.weixin.qq.com/">微信公众平台</a>服务号内，在左侧栏【开发】-【基本配置】-【开发者ID】中。
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+              {% if type == 'weixinmob' %}
+                <div class="form-group">
+                  <div class="col-md-3 control-label">
+                    <label for="weixinmob_mp_secret">{{ client.mp_secret_setting_label }}</label>
+                  </div>
+                  <div class="controls col-md-8">
+                    <input type="text" id="weixinmob_mp_secret" name="weixinmob_mp_secret" class="form-control"
+                      value="{{ loginConnect['weixinmob_mp_secret'] }}">
+                    <p class="help-block">{{ '请填写微信提供的MP_verify文件中的内容'|trans }}</p>
+                  </div>
+                </div>
+              {% endif %}
+              <div class="form-group">
+                <div class="col-md-3 control-label">
+                  <label for="">{{ '登录时必须设置邮箱'|trans }}</label>
+                </div>
+                <div class="controls col-md-8 radios">
+                  {{ radios(type ~ '_set_fill_account' , {1:'开启'|trans, 0:'关闭'|trans}, loginConnect[type ~ '_set_fill_account']) }}
+                  <p class="help-block">{{ '在%admin_name%官方审核通过您的接入申请以前，请不要开启此选项，否则可能审核将无法通过'|trans({'%admin_name%': client.admin_name }) }}</p>
+                </div>
+              </div>
+              {% if type == 'weibo' %}
+                <div class="form-group">
+                  <div class="col-md-3 control-label">
+                    <label for=""></label>
+                  </div>
+                  <div class="controls col-md-8 radios">
+                    <div class="help-block"><a href="#port">{{ '最后一步,请在底部输入登录接口验证代码'|trans }}></a></div>
+                  </div>
+                </div>
+              {% endif %}
+        </fieldset>
+      {% endfor %}
+
+      <fieldset>
+        <legend id="port">{{ '登录接口验证代码'|trans }}</legend>
+        <div class="form-group">
+          <div class="col-md-3 control-label">
+            <label for="verify_code">{{ '验证代码'|trans }}</label>
+          </div>
+          <div class="controls col-md-8">
+            <textarea id="verify_code" name="verify_code" class="form-control" rows="5">{{ loginConnect.verify_code }}</textarea>
+            <div class="help-block">{{ '在申请第三方登录接口时，会要求验证您的网站域名。请把相关验证代码粘到此处，然后提交保存。'|trans }}</div>
+          </div>
+        </div>
+      </fieldset>
+    </fieldset>
+    <div class="form-group">
+      <div class="controls col-md-offset-3 col-md-8">
+        <button type="submit" class="btn btn-primary">{{ '提交'|trans }}</button>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+  </form>
+
+{% endblock %}

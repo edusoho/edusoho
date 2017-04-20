@@ -1,6 +1,8 @@
 language: php
 
 php:
+    - 5.3
+    - 5.4
     - 5.5
     - 5.6
     - 7.0
@@ -20,22 +22,14 @@ install:
     - composer install
 
 script:
-    - phpunit --coverage-text
+    - vendor/bin/phpunit --coverage-text
     - phantomjs Resources/js/run-qunit.js file://`pwd`/Resources/js/index.html
     - phantomjs Resources/js/run-qunit.js file://`pwd`/Resources/js/index-with-es5-shim.html
 
 matrix:
     fast_finish: true
     include:
-      - php: 5.3.3
-        env: COMPOSER_FLAGS='--prefer-lowest --prefer-stable'
-      - php: 5.6
-        env: SYMFONY_VERSION='~2.3.0'
-      - php: 5.6
-        env: SYMFONY_VERSION='~2.5.0'
       - php: 5.6
         env: SYMFONY_VERSION='~2.7.0'
       - php: 5.6
-        env: SYMFONY_VERSION='2.8.*@dev'
-      - php: 5.6
-        env: SYMFONY_VERSION='3.0.*@dev'
+        env: SYMFONY_VERSION='~2.8.0'

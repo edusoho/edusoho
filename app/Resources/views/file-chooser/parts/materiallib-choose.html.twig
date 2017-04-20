@@ -1,0 +1,57 @@
+<div class="chooser-content">
+	<div class="row ">
+		<div class="col-sm-6 radios">
+			<label class="js-material-type prm" data-type="my">
+				<input type="radio" name="file-browser-video-source" value="upload" checked="">
+				来自上传
+			</label>
+			<label class="js-material-type prm" data-type="sharing"
+			       data-sharing-contacts-url="{{ path('media_materiallib_contacts') }}">
+				<input type="radio" name="file-browser-video-source" value="shared">
+				来自分享
+			</label>
+			<label class="js-material-type prm" data-type="public">
+				<input type="radio" name="file-browser-video-source" value="public">
+				公共资料
+			</label>
+		</div>
+		<div class="col-sm-6 material-search-form hidden-xs">
+      <span class="input-group js-file-name-group">
+        <input name="file-filter-by-name" class="form-control  js-file-name" type="text"
+               placeholder="输入{{ placeholder|default(null) }}标题关键字">
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default js-browser-search"
+                  data-url="{{ path('media_materiallib_choose') }}" data-loading-text="正在加载，请稍等">搜索</button>
+        </span>
+      </span>
+		</div>
+		<div class="col-sm-6 material-search-form visible-xs mtm">
+      <span class="input-group js-file-name-group">
+        <input name="file-filter-by-name" class="form-control width-150 js-file-name" type="text"
+               placeholder="输入{{ placeholder|default(null) }}标题关键字">
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default js-browser-search mbm"
+                  data-url="{{ path('media_materiallib_choose') }}" data-loading-text="正在加载，请稍等">搜索</button>
+        </span>
+      </span>
+		</div>
+		<div class="js-file-owner-group col-sm-offset-6 col-sm-6 mtm hidden ">
+      <span class="file-filter-by-owner-container" style="">
+        <select name="file-filter-by-owner" class="js-file-owner form-control">
+          <option value="">请选择老师</option>
+        </select>
+      </span>
+		</div>
+	</div>
+</div>
+
+<div class="js-material-lib-search-form">
+	<input type="hidden" name="sourceFrom" value="my">
+	<input type="hidden" name="page" value="1">
+	<input type="hidden" name="currentUserId">
+	<input type="hidden" name="type" value="{{ fileType|default('') }}">
+	<input type="hidden" name="keyword">
+</div>
+<div class="js-material-list chooser-list-parent">
+	<div class="empty">资源加载中...</div>
+</div>

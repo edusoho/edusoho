@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Form\Tests\Extension\Validator\ViolationMapper;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Extension\Validator\ViolationMapper\ViolationMapper;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\CallbackTransformer;
@@ -25,7 +26,7 @@ use Symfony\Component\Validator\ConstraintViolationInterface;
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-class ViolationMapperTest extends \PHPUnit_Framework_TestCase
+class ViolationMapperTest extends TestCase
 {
     const LEVEL_0 = 0;
 
@@ -62,7 +63,7 @@ class ViolationMapperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $this->dispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $this->mapper = new ViolationMapper();
         $this->message = 'Message';
         $this->messageTemplate = 'Message template';
@@ -95,7 +96,7 @@ class ViolationMapperTest extends \PHPUnit_Framework_TestCase
      */
     private function getDataMapper()
     {
-        return $this->getMock('Symfony\Component\Form\DataMapperInterface');
+        return $this->getMockBuilder('Symfony\Component\Form\DataMapperInterface')->getMock();
     }
 
     /**

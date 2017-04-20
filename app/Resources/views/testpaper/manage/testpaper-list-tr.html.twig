@@ -1,0 +1,49 @@
+{% import 'macro.html.twig' as macro %}
+<tr data-role='item'>
+  <td><input value="{{ testpaper.id }}" type="checkbox" data-role="batch-item" ></td>
+  <td>
+    <a class="link-primary" href="{{ path('course_set_manage_testpaper_preivew', {courseSetId:courseSet.id,testpaperId:testpaper.id}) }}" target="_blank">{{ testpaper.name|plain_text(40) }}</a>
+  </td>
+  <td>
+    {% if testpaper.status == 'draft' %}{{'草稿'|trans}}{% endif %}
+    {% if testpaper.status == 'open' %}{{'已发布'|trans}}{% endif %}
+    {% if testpaper.status == 'closed' %}{{'已关闭'|trans}}{% endif %}
+  </td>
+  <td>
+    {{'%itemCount%题'|trans({'%itemCount%': testpaper.itemCount})}} <span class="color-gray">/</span> {{'%score%分'|trans({'%score%': testpaper.score})}}
+    {% if testpaper.passedCondition[0]|default(0) > 0 %}
+      <div class="color-gray"><small>{{'及格%passedCondition%分'|trans({'%passedCondition%': testpaper.passedCondition[0]|default(0) })}}</small></div>
+    {% endif %}
+  </td>
+  <td>
+    {% if testpaper.limitedTime > 0 %}{{'%limitedTime%分钟'|trans({'%limitedTime%': testpaper.limitedTime})}}{% else %}{{'无限制'|trans}}{% endif %}
+  </td>
+  <td>
+    {{ macro.user_link(user) }}
+    <br />
+    <span class="color-gray text-sm">{{testpaper.updatedTime | date('Y-n-d H:i:s')}}</span>
+  </td>
+  <td>
+    <div class="btn-group">
+      <a class="link-primary" href="{{ path('course_set_manage_testpaper_preivew', {courseSetId:courseSet.id,testpaperId:testpaper.id}) }}"  target="_blank">{{'预览'|trans}}</a>
+      <a class="ml10 link-primary" href="#" type="button" class="dropdown-toggle" data-toggle="dropdown">
+        更多<i class="es-icon es-icon-arrowdropdown"></i>
+      </a>
+      <ul class="dropdown-menu pull-right">
+        {% if testpaper.status in ['draft', 'closed'] %}
+          <li><a class="open-testpaper" href="javascript:" title="{{'真的要发布%name%吗？ 试卷发布后无论是否关闭都将无法修改。'|trans({'%name%': testpaper.name })}}" data-url="{{ path('course_set_manage_testpaper_publish', {courseSetId:courseSet.id, testpaperId:testpaper.id}) }}"><span class="es-icon es-icon--check-circle mrm"></span> {{'发布试卷'|trans}}</a></li>
+        {% endif %}
+        {% if testpaper.status == 'open' %}
+          <li><a class="close-testpaper" href="javascript:" title="{% if testpaperActivities[testpaper.id]|default(null) %}该试卷已被任务引用，真的要关闭吗？{% else %}{{'真的要关闭试卷%name%吗？'|trans({'%name%': testpaper.name })}}{% endif %}" data-url="{{ path('course_set_manage_testpaper_close', {courseSetId:courseSet.id, testpaperId:testpaper.id}) }}"><span class="es-icon es-icon-close01 mrm"></span> {{'关闭试卷'|trans}}</a></li>
+        {% endif %}
+
+        {% if testpaper.status == 'draft' %}
+          <li><a href="{{ path('course_set_manage_testpaper_update', {courseSetId:courseSet.id,testpaperId:testpaper.id}) }}"><span class="glyphicon glyphicon-edit mrm"></span> {{'编辑试卷信息'|trans}}</a></li>
+          <li><a href="{{ path('course_set_manage_testpaper_questions', {courseSetId:courseSet.id,testpaperId:testpaper.id}) }}"><span class="glyphicon glyphicon-list mrm"></span> {{'管理题目'|trans}}</a></li>
+          {#<li><a href="{{ path('course_manage_testpaper_items_reset', {courseId:courseSet.id, testpaperId:testpaper.id}) }}"><span class="glyphicon glyphicon-repeat"></span> {{'重新生成题目'|trans}}</a></li>#}
+          <li><a href="javascript:" data-name='{{'试卷'|trans}}' data-role='item-delete' data-url="{{ path('course_set_manage_testpaper_delete', {courseSetId:courseSet.id, testpaperId:testpaper.id}) }}"><span class="es-icon es-icon-delete mrm"></span> {{'删除试卷'|trans}}</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </td>
+</tr>

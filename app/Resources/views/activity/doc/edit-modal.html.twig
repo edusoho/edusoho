@@ -1,0 +1,46 @@
+{% extends 'activity/activity-form-layout.html.twig' %}
+
+{% do script(['//service-cdn.qiqiuyun.net/js-sdk/uploader/sdk-v1.js', 'app/js/activity-manage/doc/index.js']) %}
+
+{% block activity_content %}
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label for="mediaId" class="style control-label-required">文档</label>
+    </div>
+    <div class="col-sm-10">
+      {% include 'file-chooser/file-choose.html.twig' with {
+      mediaType: 'document',
+      fileType:'document',
+      file: doc.media|default(null),
+      placeholder: '文档'
+      } %}
+      <input type="hidden" value="{{ doc.mediaId|default(null) }}" name="mediaId" id="mediaId"/>
+      <div id="file-choose-type" class="hidden" data-type="doc"></div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block activity_finish %}
+  <div class=" form-group">
+    <div class="col-sm-2 control-label">
+      <label for="condition-select">{{ '完成条件'|trans }}</label>
+    </div>
+    <div class="col-xs-4 form-control-static">
+      观看时长
+      {#<select class="form-control" id="condition-select" name="finishType">
+        <option value="time" {% if doc.finishType|default('click') == 'time' %}selected{% endif %}>观看时长</option>
+      </select>#}
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label for="condition-detail">{{ '至少观看'|trans }}</label>
+    </div>
+    <div class="col-xs-4 controls">
+      <input id="condition-detail" class="form-control" type="text" name="finishDetail" value="{{ doc.finishDetail|default(1) }}">
+    </div>
+    <div class="col-xs-4 controls">
+      <p class="form-control-static">分钟</p>
+    </div>
+  </div>
+{% endblock %}

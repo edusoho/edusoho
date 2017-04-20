@@ -1,0 +1,121 @@
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+{% extends 'my/layout.html.twig' %}
+
+{% block title %}{{ '在教课程'|trans }} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-teaching-courses' %}
+
+{% set type="question" %}
+
+{% block main %}
+  <div class="panel panel-default" role="my-teaching-teaching">
+    <div class="panel-heading">
+      <span class="pull-right">
+        <a id="create-course" href="{{ path('course_set_manage_create') }}" class="btn btn-info btn-sm">
+        <span class="es-icon es-icon-anonymous-iconfont"></span> {{ '创建课程'|trans }}</a>
+      </span>
+      {{ '在教课程'|trans }}
+    </div>
+
+    <div class="panel-body">
+      {% include 'my/teaching/course-tab.html.twig' %}
+      <table class="table table-striped" id="course-table" style="word-break:break-all;">
+        <thead>
+        <tr>
+          <th width="45%">{{ '名称'|trans }}</th>
+          {% if filter == 'classroom' %}
+            <th>{{ '所属%name%'|trans({'%name%':setting("classroom.name")|default('班级'|trans)}) }}</th>
+          {% else %}
+            <th>{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{ '学员'|trans }}{% endif %}{{ '数'|trans }}</th>
+            <th>{{ '价格(元)'|trans }}</th>
+          {% endif %}
+          <th>{{ '状态'|trans }}</th>
+          <th width="20%">{{ '操作'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for courseSet in courseSets %}
+          {% set course = courseSet.courses|first %}
+          <tr>
+            <td>
+              <a class="pull-left mrm link-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">
+                <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}"
+                     alt="{{ courseSet.title }}" width="100">
+              </a>
+
+              <div class="mlm">
+                <a class="link-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
+
+                {% if courseSet.type == 'live' %}
+                  <span class="label label-success live-label">{{ '直播'|trans }}</span>
+                {% endif %}
+
+                {#{% if filter == 'classroom' %}
+                  {% set classroom = classrooms[course.id]|default(null) %}
+                  {% if not classroom %}
+                    <span class="label label-danger live-label mls">{{'已移除'|trans}}</span>
+                  {% endif %}
+                {% endif %}#}
+              </div>
+
+            </td>
+            {#{% if filter == 'classroom' %}
+            <td>
+              {% set classroom = classrooms[course.id]|default(null) %}
+              {% if classroom %}
+                <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
+              {% endif %}
+            </td>
+            {% else %}#}
+            <td>{{ courseSet.studentNum }}</td>
+            <td>{{ courseSet.courses[0].price|default(0) }}</td>
+            {#{% endif %}#}
+
+            <td> {{ dict_macro.courseStatus( courseSet.status) }}</td>
+            <td>
+              <div class="btn-group">
+                <a class="mr10 link-primary" target="_blank" href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id }) }}">
+                  {{ '管理'|trans }}
+                </a>
+                {% if courseSet.canManage|default(false) %}
+                  <a href="#" type="button" class="link-primary dropdown-toggle ml10" data-toggle="dropdown">
+                    更多
+                    <i class="es-icon es-icon-arrowdropdown"></i>
+                  </a>
+                  <ul class="dropdown-menu pull-right">
+                    <li>
+                      <a href="{{ path('course_set_manage', {id: courseSet.id}) }}">
+                        {{ '计划管理'|trans }}
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{ path('course_set_manage_files', {id:courseSet.id}) }}">
+                        {{ '文件管理'|trans }}
+                      </a>
+                    </li>
+                  </ul>
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+        {% else %}
+          <tr>
+            <td class="text-center" colspan="20">
+              <a href="{{ path('course_set_manage_create') }}" target="_blank">
+                {% if filter|default('normal') == 'live' %}
+                  {{ '你还没有在教的直播课程哦, 赶快去创建吧!'|trans }}
+                {% else %}
+                  {{ '你还没有在教的课程哦, 赶快去创建吧!'|trans }}
+                {% endif %}
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <nav class="text-center">
+        {{ web_macro.paginator(paginator) }}
+      </nav>
+    </div>
+  </div>
+{% endblock %}

@@ -42,8 +42,11 @@ define(function(require,exports,module){
         });
     });
     select.on('optionlimit',function(){
-        $subtitleUploaderElem.hide();
-    })
+      if($subtitleUploaderElem === undefined){
+        return;
+      }
+      $subtitleUploaderElem.hide();
+    });
     select.resetOptions(subtitleList);
     
     //上传实例

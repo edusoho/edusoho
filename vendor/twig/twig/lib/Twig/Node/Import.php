@@ -3,7 +3,7 @@
 /*
  * This file is part of Twig.
  *
- * (c) 2009 Fabien Potencier
+ * (c) Fabien Potencier
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -37,9 +37,9 @@ class Twig_Node_Import extends Twig_Node
                 ->raw('$this->loadTemplate(')
                 ->subcompile($this->getNode('expr'))
                 ->raw(', ')
-                ->repr($this->getFilename())
+                ->repr($this->getTemplateName())
                 ->raw(', ')
-                ->repr($this->getLine())
+                ->repr($this->getTemplateLine())
                 ->raw(')')
             ;
         }

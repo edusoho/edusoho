@@ -7,7 +7,6 @@ use Topxia\Service\Util\HTMLPurifier;
 
 class HTMLPurifierTest extends BaseTestCase
 {
-
     public function testPurifierWithTrusted()
     {
         $purifier = new HTMLPurifier(array(

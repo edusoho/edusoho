@@ -27,17 +27,17 @@ class AsseticControllerTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Assetic is not available.');
         }
 
-        $this->request = $this->getMock('Symfony\\Component\\HttpFoundation\\Request');
-        $this->headers = $this->getMock('Symfony\\Component\\HttpFoundation\\ParameterBag');
+        $this->request = $this->getMockBuilder('Symfony\\Component\\HttpFoundation\\Request')->setMethods(array('getETags', 'getMethod'))->getMock();
+        $this->headers = $this->getMockBuilder('Symfony\\Component\\HttpFoundation\\ParameterBag')->getMock();
         $this->request->headers = $this->headers;
         $this->am = $this->getMockBuilder('Assetic\\Factory\\LazyAssetManager')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cache = $this->getMock('Assetic\\Cache\\CacheInterface');
+        $this->cache = $this->getMockBuilder('Assetic\\Cache\\CacheInterface')->getMock();
 
         $this->request->expects($this->any())
-            ->method('isMethodSafe')
-            ->will($this->returnValue(true));
+            ->method('getMethod')
+            ->willReturn('GET');
 
         $this->controller = new AsseticController($this->am, $this->cache);
     }
@@ -58,7 +58,7 @@ class AsseticControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderLastModifiedFresh()
     {
-        $asset = $this->getMock('Assetic\\Asset\\AssetInterface');
+        $asset = $this->getMockBuilder('Assetic\\Asset\\AssetInterface')->getMock();
 
         $name = 'foo';
         $lastModified = strtotime('2010-10-10 10:10:10');
@@ -93,7 +93,7 @@ class AsseticControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderLastModifiedStale()
     {
-        $asset = $this->getMock('Assetic\\Asset\\AssetInterface');
+        $asset = $this->getMockBuilder('Assetic\\Asset\\AssetInterface')->getMock();
 
         $name = 'foo';
         $content = '==ASSET_CONTENT==';
@@ -135,7 +135,7 @@ class AsseticControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderETagFresh()
     {
-        $asset = $this->getMock('Assetic\\Asset\\AssetInterface');
+        $asset = $this->getMockBuilder('Assetic\\Asset\\AssetInterface')->getMock();
 
         $name = 'foo';
         $formula = array(array('js/core.js'), array(), array(''));
@@ -173,7 +173,7 @@ class AsseticControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderETagStale()
     {
-        $asset = $this->getMock('Assetic\\Asset\\AssetInterface');
+        $asset = $this->getMockBuilder('Assetic\\Asset\\AssetInterface')->getMock();
 
         $name = 'foo';
         $content = '==ASSET_CONTENT==';

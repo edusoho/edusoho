@@ -40,6 +40,7 @@ class AppKernel extends Kernel
             new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new \Symfony\Bundle\TwigBundle\TwigBundle(),
             new \Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),
+            new \Bazinga\Bundle\JsTranslationBundle\Tests\Fixtures\app\TestingPurposesBundle\TestingPurposesBundle()
         );
     }
 
@@ -60,7 +61,15 @@ class AppKernel extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(__DIR__.'/config/'.$this->environment.'.yml');
+        if (self::VERSION_ID < 20800) {
+            $loader->load(__DIR__.'/config/older_versions_config.yml');
+        } else {
+            $loader->load(__DIR__.'/config/'.$this->environment.'.yml');
+        }
+
+        if (self::VERSION_ID > 30200) {
+            $loader->load(__DIR__.'/config/disable_annotations.yml');
+        }
     }
 
     public function serialize()

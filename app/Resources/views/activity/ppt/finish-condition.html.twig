@@ -1,0 +1,7 @@
+{% if media.finishType|default(null) == 'time' %}
+	<p class="gray-darker mbs">满足以下条件:</p>至少学习{{media.finishDetail|default(0)}}分钟。
+{% endif %}
+
+{% if media.finishType|default(null) == 'end' %}
+	<p class="gray-darker mbs">满足以下条件:</p>{{ '需要学习到最后一页。'|trans }}
+{% endif %}

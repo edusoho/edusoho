@@ -11,12 +11,13 @@
 
 namespace Symfony\Component\DependencyInjection\Tests\Compiler;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Compiler\ResolveDefinitionTemplatesPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class ResolveDefinitionTemplatesPassTest extends \PHPUnit_Framework_TestCase
+class ResolveDefinitionTemplatesPassTest extends TestCase
 {
     public function testProcess()
     {
@@ -360,8 +361,11 @@ class ResolveDefinitionTemplatesPassTest extends \PHPUnit_Framework_TestCase
 
         $this->process($container);
 
-        $def = $container->getDefinition('child');
-        $this->assertEquals(array('Foo', 'Bar'), $def->getAutowiringTypes());
+        $childDef = $container->getDefinition('child');
+        $this->assertEquals(array('Foo', 'Bar'), $childDef->getAutowiringTypes());
+
+        $parentDef = $container->getDefinition('parent');
+        $this->assertSame(array('Foo'), $parentDef->getAutowiringTypes());
     }
 
     protected function process(ContainerBuilder $container)

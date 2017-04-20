@@ -48,8 +48,8 @@ fi
 cd /tmp/Symfony
 
 # cleanup
-rm -rf app/cache/* app/logs/* .git*
-chmod 777 app/cache app/logs
+rm -rf app/cache/* app/logs/* var/cache/* var/logs/*
+chmod 777 app/cache app/logs var/cache var/logs
 find . -name .DS_Store | xargs rm -rf -
 
 VERSION=`grep ' VERSION ' vendor/symfony/symfony/src/Symfony/Component/HttpKernel/Kernel.php | sed -E "s/.*'(.+)'.*/\1/g"`

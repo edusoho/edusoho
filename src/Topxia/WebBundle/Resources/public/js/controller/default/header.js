@@ -23,4 +23,4 @@ define(function(require, exports, module){
       location.href = '/';
     }
   })
-})
+});

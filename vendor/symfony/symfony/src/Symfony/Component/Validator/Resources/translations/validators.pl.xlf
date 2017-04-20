@@ -36,11 +36,11 @@
             </trans-unit>
             <trans-unit id="9">
                 <source>This field was not expected.</source>
-                <target>To pole nie spodziewano.</target>
+                <target>Tego pola się nie spodziewano.</target>
             </trans-unit>
             <trans-unit id="10">
                 <source>This field is missing.</source>
-                <target>To pole jest chybianie.</target>
+                <target>Tego pola brakuje.</target>
             </trans-unit>
             <trans-unit id="11">
                 <source>This value is not a valid date.</source>
@@ -192,7 +192,7 @@
             </trans-unit>
             <trans-unit id="51">
                 <source>No temporary folder was configured in php.ini.</source>
-                <target>Nie skonfigurowano folderu tymczasowego w php.ini.</target>
+                <target>Nie skonfigurowano folderu tymczasowego w php.ini, lub skonfigurowany folder nie istnieje.</target>
             </trans-unit>
             <trans-unit id="52">
                 <source>Cannot write temporary file to disk.</source>

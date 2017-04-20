@@ -11,6 +11,10 @@
 
 namespace Symfony\Bridge\PhpUnit\TextUI;
 
+if (!class_exists('PHPUnit_TextUI_Command')) {
+    return;
+}
+
 /**
  * {@inheritdoc}
  */
@@ -22,25 +26,5 @@ class Command extends \PHPUnit_TextUI_Command
     protected function createRunner()
     {
         return new TestRunner($this->arguments['loader']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function handleBootstrap($filename)
-    {
-        parent::handleBootstrap($filename);
-
-        // By default, we want PHPUnit's autoloader before Symfony's one
-        if (!getenv('SYMFONY_PHPUNIT_OVERLOAD')) {
-            $filename = realpath(stream_resolve_include_path($filename));
-            $symfonyLoader = realpath(dirname(PHPUNIT_COMPOSER_INSTALL).'/../../../vendor/autoload.php');
-
-            if ($filename === $symfonyLoader) {
-                $symfonyLoader = require $symfonyLoader;
-                $symfonyLoader->unregister();
-                $symfonyLoader->register(false);
-            }
-        }
     }
 }

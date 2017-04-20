@@ -1,0 +1,16 @@
+{% extends 'classroom/content-layout.html.twig' %}
+{% set nav = 'teachers' %}
+{% block description %}{{ classroomDescription|default('')|plain_text(100) }}{% endblock %}
+{% do script(['app/js/classroom/detail/teacher-list/index.js'])%}
+
+{% block main %}
+
+  <div class="teacher-list no-shadow row">
+  {% for teacher in teachers %}
+    {% set isFollowed = (teacher.id in Myfollowings)|default(false) %}
+    {% set member = members[teacher.id] %}
+    {% include 'classroom/teacher/item.html.twig' %}
+  {% endfor %}
+  </div>
+
+{% endblock %}

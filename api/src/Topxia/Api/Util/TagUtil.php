@@ -3,7 +3,7 @@
 namespace Topxia\Api\Util;
 
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class TagUtil
 {
@@ -27,7 +27,7 @@ class TagUtil
 
     protected static function getTagService()
     {
-        return self::getServiceKernel()->createService('Taxonomy.TagService');
+        return self::getServiceKernel()->createService('Taxonomy:TagService');
     }
 
     protected static function getServiceKernel()

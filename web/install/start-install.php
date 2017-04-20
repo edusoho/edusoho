@@ -19,7 +19,8 @@ $twig   = new Twig_Environment($loader, array(
     'cache' => false
 ));
 
-$twig->addGlobal('edusho_version', \Topxia\System::VERSION);
+$twig->addGlobal('edusho_version', \AppBundle\System::VERSION);
+
 $step         = intval(empty($_GET['step']) ? 0 : $_GET['step']);
 $init_data    = intval(empty($_GET['init_data']) ? 0 : $_GET['init_data']);
 $functionName = 'install_step' . $step;
@@ -168,7 +169,7 @@ function install_step3($init_data = 0)
         $biz['db']->beginTransaction();
         $installLogFd = @fopen($biz['log_directory'] . '/install.log', 'w');
         $output = new \Symfony\Component\Console\Output\StreamOutput($installLogFd);
-        $initializer = new \Topxia\Common\SystemInitializer($output);
+        $initializer = new \AppBundle\Common\SystemInitializer($output);
         try {
             if (!empty($init_data)) {
                 $biz['db']->exec("delete from `user` where id=1;");
@@ -180,7 +181,7 @@ function install_step3($init_data = 0)
                 $initializer->init();
                 _init_setting($admin);
             } else {
-                $service  = ServiceKernel::instance()->createService('System.SettingService');
+                $service  = ServiceKernel::instance()->createService('System:SettingService');
                 $settings = $service->get('storage', array());
                 if (!empty($settings['cloud_key_applied'])) {
                     unset($settings['cloud_access_key']);
@@ -507,7 +508,7 @@ EOD;
         )
     );
 
-    $service = ServiceKernel::instance()->createService('System.SettingService');
+    $service = ServiceKernel::instance()->createService('System:SettingService');
     foreach ($settings as $key => $value) {
         $setting = $service->get($key, array());
         $setting = array_merge($setting, $value);
@@ -518,7 +519,7 @@ EOD;
 
 function _initKey()
 {
-    $settingService = ServiceKernel::instance()->createService('System.SettingService');
+    $settingService = ServiceKernel::instance()->createService('System:SettingService');
 
     $settings = $settingService->get('storage', array());
 
@@ -529,9 +530,9 @@ function _initKey()
         );
     }
 
-    $applier = new \Topxia\Service\CloudPlatform\KeyApplier();
+    $applier = new \Biz\CloudPlatform\KeyApplier();
 
-    $userService = ServiceKernel::instance()->createService('User.UserService');
+    $userService = ServiceKernel::instance()->createService('User:UserService');
     $users = $userService->searchUsers(array('roles' => 'ROLE_SUPER_ADMIN'), array('createdTime', 'DESC'), 0, 1);
 
     if (empty($users) || empty($users[0])) {

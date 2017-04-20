@@ -11,12 +11,13 @@
 
 namespace Symfony\Component\Console\Tests\Input;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
-class ArrayInputTest extends \PHPUnit_Framework_TestCase
+class ArrayInputTest extends TestCase
 {
     public function testGetFirstArgument()
     {
@@ -99,7 +100,12 @@ class ArrayInputTest extends \PHPUnit_Framework_TestCase
      */
     public function testParseInvalidInput($parameters, $definition, $expectedExceptionMessage)
     {
-        $this->setExpectedException('InvalidArgumentException', $expectedExceptionMessage);
+        if (method_exists($this, 'expectException')) {
+            $this->expectException('InvalidArgumentException');
+            $this->expectExceptionMessage($expectedExceptionMessage);
+        } else {
+            $this->setExpectedException('InvalidArgumentException', $expectedExceptionMessage);
+        }
 
         new ArrayInput($parameters, $definition);
     }

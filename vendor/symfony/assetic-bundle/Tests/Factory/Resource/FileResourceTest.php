@@ -19,7 +19,7 @@ class FileResourceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->loader = $this->getMock('Symfony\\Component\\Templating\\Loader\\LoaderInterface');
+        $this->loader = $this->getMockBuilder('Symfony\\Component\\Templating\\Loader\\LoaderInterface')->getMock();
     }
 
     public function testCastAsString()

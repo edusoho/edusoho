@@ -8,6 +8,7 @@ define(function(require, exports, module) {
         var Notify = require('common/bootstrap-notify'); 
 
         $panel.on('click', '.convert-file-btn', function(){
+          console.log('re');
             $.post($(this).data('url'), function(response) {
                 if (response.status == 'error') {
                     alert(response.message);
@@ -79,29 +80,27 @@ define(function(require, exports, module) {
                 return ;
             }
 
-            console.log(data);
-
             for(var i=0; i<data.length; i++){
                 var file=data[i];
                 if($.inArray(file.type, ['video','ppt','document'])>-1){
                     if(file.convertStatus=='waiting'||file.convertStatus=='doing'){
-                        $("#upload-file-tr-"+file.id).find('a:first ~ br:first').after("<span class='text-warning text-sm'>"+Translator.trans('正在文件格式转换')+"</span><br/>");
+                        $("#upload-file-tr-"+file.id).find('a:first ~ br:first').after("<span class='text-warning mr5 text-sm'>"+Translator.trans('正在文件格式转换')+"</span><br/>");
                     }else if(file.convertStatus=='error'){
-                        $("#upload-file-tr-"+file.id).find('a:first ~ br:first').after("<span class='text-danger text-sm'>"+Translator.trans('文件格式转换失败')+"</span><br/>");
+                        $("#upload-file-tr-"+file.id).find('a:first ~ br:first').after("<span class='text-danger mr5 text-sm'>"+Translator.trans('文件格式转换失败')+"</span><br/>");
                     }else if(file.convertStatus=='none'){
-                        $("#upload-file-tr-"+file.id).find('a:first ~ br:last').after("<span class='label label-default tip'>"+Translator.trans('未转码')+"</span>");
+                        $("#upload-file-tr-"+file.id).find('a:first ~ br:last').after("<span class='label label-default mr5 tip'>"+Translator.trans('未转码')+"</span>");
                     }else if(file.convertStatus=='success'){
-                        $("#upload-file-tr-"+file.id).find('a:first ~ br:last').after("<span class='label label-success tip'>"+Translator.trans('已转码')+"</span>");
+                        $("#upload-file-tr-"+file.id).find('a:first ~ br:last').after("<span class='label label-success mr5 tip'>"+Translator.trans('已转码')+"</span>");
                     }
 
                 }
                 if(file.type == 'video' && file.metas2) {
                     if(file.metas2.shd) {
-                        $("#upload-file-tr-"+file.id).find('a:first ~ br:first').after('<span class="label label-info tip">'+Translator.trans('超清')+'</span>');
+                        $("#upload-file-tr-"+file.id).find('a:first ~ br:first').after('<span class="label label-info mr5 tip">'+Translator.trans('超清')+'</span>');
                     } else if(file.metas2.hd){
-                        $("#upload-file-tr-"+file.id).find('a:first ~ br:first').after('<span class="label label-info tip">'+Translator.trans('高清')+'</span>');
+                        $("#upload-file-tr-"+file.id).find('a:first ~ br:first').after('<span class="label label-info mr5 tip">'+Translator.trans('高清')+'</span>');
                     } else if(file.metas2.sd) {
-                        $("#upload-file-tr-"+file.id).find('a:first ~ br:first').after('<span class="label label-info tip">'+Translator.trans('标清')+'</span>');
+                        $("#upload-file-tr-"+file.id).find('a:first ~ br:first').after('<span class="label label-info mr5 tip">'+Translator.trans('标清')+'</span>');
                     }
                 }
 

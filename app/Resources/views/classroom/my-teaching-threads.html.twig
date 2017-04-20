@@ -1,0 +1,91 @@
+{% extends 'my/layout.html.twig' %}
+{% block title %}
+  {% if type == 'question' %}  
+    {{'%username%问答'|trans({'%username%':setting('default.user_name')|default('学员'|trans)})}}
+    {% set side_nav = 'my-teaching-questions' %}
+  {% elseif type == 'discussion' %}  
+    {{'%username%话题'|trans({'%username%':setting('default.user_name')|default('学员'|trans)})}}
+    {% set side_nav = 'my-teaching-discussions' %}
+  {% endif %}
+  - {{ parent() }}
+{% endblock %}
+{% if type == 'question' %}
+  {% set side_nav = 'my-teaching-questions' %}
+{% elseif type == 'discussion' %}
+  {% set side_nav = 'my-teaching-discussions' %}
+{% endif %}
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">
+      {% if type == 'question' %}  
+       {{'%username%问答'|trans({'%username%':setting('default.user_name')|default('学员'|trans)})}}
+      {% elseif type == 'discussion' %}   
+        {{'%username%话题'|trans({'%username%':setting('default.user_name')|default('学员'|trans)})}}
+      {% endif %}
+    </div>
+    <div class="panel-body">
+      {% include 'my/teaching/tab.html.twig'%}
+      {% if threads %}
+        
+        {% set type = type|default('discussion') %}
+        <ul class="media-list">
+          {% for thread in threads %}
+            {% if classrooms %}
+              {% set classroom = classrooms[thread.targetId]|default(null) %}
+              <li class="media">
+                <div class="media-body">
+                  {% if thread.postNum > 0 %}
+                    <span class="badge pull-right" style="margin-top:15px;">{{ thread.postNum }}</span>
+                  {% endif %}
+                  <div class="mbm">
+                    {% if thread.type == 'question' %}
+                      <span class="label label-info" title="{{'问答帖'|trans}}">{{'问'|trans}}</span>
+                    {% endif  %}
+                    <a href="{{ path('classroom_thread_show', {classroomId:thread.targetId, threadId:thread.id}) }}"><strong>{{ thread.title }}</strong></a>
+                    {% if thread.nice %}
+                      <span class="label label-warning" title="{{'精华帖'|trans}}">{{'精'|trans}}</span>
+                    {% endif %}
+                  </div>
+                  <div class="color-gray text-normal">
+                    {% if classroom %}
+                      <span>{{'发表于%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans) })}}<a href="{{ path('classroom_show', {id:classroom.id}) }}" class="link-primary">{{ classroom.title }}</a></span>
+                    {% else %}
+                      <span>{{'%name%已删除'|trans({'%name%':setting('classroom.name')|default('班级'|trans) })}}</span>
+                    {% endif %}
+                    <span class="bullet">•</span>
+                    {% if thread.postNum > 0 %}
+                      {% set poster = users[thread.lastPostUserId] %}
+                      <span>{{'最后回复'|trans}} {{ web_macro.user_link(poster, 'link-primary') }}</span>
+                      ,
+                      <span>{{ thread.lastPostTime|smart_time }}</span>
+                      <span class="bullet">•</span>
+                    {% endif %}
+                    <span>{{ thread.hitNum }}{{'浏览'|trans}}</span>
+                  </div>
+                </div>
+              </li>
+            {% else %}
+              {% if type == 'question' %}
+                <li class="empty">{{'你还没提过问题'|trans}}</li>
+              {% else %}
+                <li class="empty">{{'你还没发表过话题'|trans}}</li>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </ul>
+        <nav class="text-center">
+          {{ web_macro.paginator(paginator) }} 
+        </nav>
+        
+      {% else %}
+        
+        {% if type == 'question' %} 
+          <div class="empty">{{'您的%name%中还没有%username%提问过...'|trans({'%name%':setting('classroom.name')|default('班级'|trans),'%username%':setting('default.user_name')|default('学员'|trans)})}}</div>
+        {% elseif type == 'discussion' %}
+          <div class="empty">{{'您的%name%中还没有%username%话题...'|trans({'%name%':setting('classroom.name')|default('班级'|trans),'%username%':setting('default.user_name')|default('学员'|trans)})}}</div>
+        {% endif %}
+        
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

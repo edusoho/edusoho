@@ -1,13 +1,12 @@
 <?php
 
-abstract class Swift_Transport_StreamBuffer_AbstractStreamBufferAcceptanceTest
-    extends \PHPUnit_Framework_TestCase
+abstract class Swift_Transport_StreamBuffer_AbstractStreamBufferAcceptanceTest extends \PHPUnit_Framework_TestCase
 {
     protected $_buffer;
 
     abstract protected function _initializeBuffer();
 
-    public function setUp()
+    protected function setUp()
     {
         if (true == getenv('TRAVIS')) {
             $this->markTestSkipped(
@@ -17,7 +16,7 @@ abstract class Swift_Transport_StreamBuffer_AbstractStreamBufferAcceptanceTest
         }
 
         $this->_buffer = new Swift_Transport_StreamBuffer(
-            $this->getMock('Swift_ReplacementFilterFactory')
+            $this->getMockBuilder('Swift_ReplacementFilterFactory')->getMock()
         );
     }
 
@@ -125,10 +124,8 @@ abstract class Swift_Transport_StreamBuffer_AbstractStreamBufferAcceptanceTest
         $this->_buffer->write('y');
     }
 
-    // -- Creation Methods
-
     private function _createMockInputStream()
     {
-        return $this->getMock('Swift_InputByteStream');
+        return $this->getMockBuilder('Swift_InputByteStream')->getMock();
     }
 }

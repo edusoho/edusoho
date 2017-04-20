@@ -1,0 +1,122 @@
+{% extends 'courseset-manage/layout.html.twig' %}
+
+{% block title %}
+  {% if question|default(null) %}{{'编辑题目'|trans}}{% else %}{{'添加题目'|trans}}{% endif %} - {{ parent() }}
+{% endblock %}
+
+{% set side_nav = 'question' %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/question-manage/form/index.js']) %}
+
+{% block main %}
+
+{% set parentQuestion = parentQuestion|default(null) %}
+{% set questionTypesDict = getQuestionTypes() %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading clearfix">
+    {{'题目管理'|trans}}
+  </div>
+  <div class="panel-body">
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('course_set_manage_question',{id:courseSet.id}) }}">{{'题目管理'|trans}}</a></li>
+      {% if parentQuestion %}
+        <li><a href="{{ path('course_set_manage_question',{id:courseSet.id, parentId: parentQuestion.id}) }}">{{ questionTypesDict[parentQuestion.type] }}</a></li>
+      {% endif %}
+      <li>{% if question|default(null) %}{{'编辑题目'|trans}}{% else %}{{'添加题目'|trans}}{% endif %} </li>
+      <li class="active">{{ questionTypesDict[type] }}</li>
+    </ol>
+
+    <div id="question-creator-widget">
+      <form id="question-create-form" data-role="question-form" class="form-horizontal quiz-question" method="post" action="{% if question|default(null) %}{{ path('course_set_manage_question_update',{courseSetId:courseSet.id, questionId:question.id, goto:app.request.get('goto')}) }}{% else %}{{ path('course_set_manage_question_create',{id:courseSet.id, type:type, parentId:parentQuestion.id|default(0), goto:app.request.get('goto')}) }}{% endif %}">
+
+        {{ web_macro.flash_messages() }}
+
+        {% if not parentQuestion %}
+          <div class="form-group">
+            <div class="col-md-2 control-label"><label>{{'从属'|trans}}</label></div>
+            <div class="col-md-8 controls">
+              <select class="form-control width-150" name="courseId" data-role="courseId" data-url="{{ path('course_set_manage_show_tasks',{courseSetId:courseSet.id})}}">
+                <option value="0" {% if not question.courseId|default(0) %}selected{% endif %}>{{'本课程'|trans}}</option>
+                {% for course in courses if course %}
+                  <option value="{{ course.id }}" {% if question.courseId|default(0) == course.id %}selected{% endif %}>{{ course.title }}</option>
+                {% endfor %}
+              </select>
+              <select class="form-control width-150" {% if not question.id|default(0) > 0 or not question.courseId|default(0) %}style="display:none;"{% endif %} name="lessonId" data-role="lessonId">
+                <option value="0" {% if not question.lessonId|default(0) %}selected{% endif %}>{{'请选择'|trans}}</option>
+                {% for task in courseTasks|default([]) if task %}
+                  <option value="{{ task.id }}" {% if question.lessonId|default(0) == task.id %}selected{% endif %}>{{ task.title }}</option>
+                {% endfor %}
+              </select>
+              <div class="help-block">{{'可以针对本课程、某个教学计划或者某个学习任务出题'|trans}}</div>
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="form-group">
+          <div class="col-md-2 control-label"><label>{{'难度'|trans}}</label></div>
+          <div class="col-md-8 controls radios">
+            {{ radios('difficulty', {'simple':'简单'|trans, 'normal':'一般'|trans, 'difficulty':'困难'|trans}, question.difficulty|default('normal')) }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-2 control-label"><label for="question-stem-field" class="control-label-required">{{ question_stem_label|default('题干'|trans) }}</label></div>
+          <div class="col-md-8 controls">
+            <textarea class="form-control" id="question-stem-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"  data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" name="stem" style="height:180px;">{{question.stem | default('')}}</textarea>
+            {% set question_stem_help = question_stem_help|default('') %}
+            {% if question_stem_help %}<div class="help-block">{{ question_stem_help|raw }}</div>{% endif %}
+          </div>
+        </div>
+        {{ render(controller('AppBundle:File/Attachment:formFields',{targetType: 'question.stem', useType: true, targetId: question.id|default(0)},{ useType:true,})) }}
+
+
+        {% block question_extra_fields %}{% endblock %}
+
+        <div class="form-group">
+          <div class="col-md-8 col-md-offset-2 controls ">
+              <a href="javascript:;" data-toggle="collapse" data-role="advanced-collapse" data-target="#advanced-collapse" class="color-success collapsed">&raquo; {{'显示/隐藏 高级选项'|trans}} ...</a>
+          </div>
+        </div>
+
+        <div id="advanced-collapse" class="advanced-collapse collapse">
+          <div class="form-group">
+            <div class="col-md-2 control-label"><label for="question-analysis-field">{{'解析'|trans}}</label></div>
+            <div class="col-md-8 controls">
+                <textarea class="form-control" id="question-analysis-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" name="analysis" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ question.analysis|default('') }}</textarea>
+            </div>
+          </div>
+           {{ render(controller('AppBundle:File/Attachment:formFields',{targetType: 'question.analysis', targetId: question.id|default(0)},{ useType:true,})) }}
+          <div class="form-group">
+            <div class="col-md-2 control-label"><label for="question-score-field">{{'分值'|trans}}</label></div>
+            <div class="col-md-4 controls">
+              <input class="form-control" value="{{question.score|default(2)}}" type="text" id="question-score-field" name="score" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-8 col-md-offset-2 controls">
+            {% block question_buttons %}
+              {% if not question|default(null) %}
+                <button type="button" data-role="submit" class="btn btn-primary submit-btn" data-submission="continue" data-loading-text="{{'正在保存'|trans}}...">{{'保存并继续添加'|trans}}</button>
+              {% endif %}
+              <button type="button" data-role="submit" class="btn btn-primary submit-btn" data-submission="submit" data-loading-text="{{'正在保存'|trans}}...">{{'保存'|trans}}</button>
+            {% endblock %}
+            <a href="{{ path('course_set_manage_question', {id:courseSet.id, parentId:parentQuestion.id|default(0)}) }}" class="btn btn-link">{{'返回'|trans}}</a>
+          </div>
+        </div>
+
+        <input type="hidden" name="submission">
+        <input type="hidden" name="type" value="{{ type }}">
+        <input type="hidden" name="parentId" value="{{ parentQuestion.id|default(0) }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+      </form>
+    </div>
+
+  </div>
+</div>
+
+
+{% endblock %}

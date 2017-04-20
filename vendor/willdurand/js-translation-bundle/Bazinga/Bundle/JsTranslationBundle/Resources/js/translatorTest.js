@@ -52,7 +52,7 @@ test('trans()', function() {
 });
 
 test('transChoice()', function() {
-    expect(26);
+    expect(31);
 
     Translator.add('foo.plural', '{0} Nothing|[1,Inf[ Many things', 'Foo');
     Translator.add('foo.plural.with.args', '{0} Nothing|{1} One thing|[2,Inf[ %count% things', 'Foo');
@@ -61,6 +61,9 @@ test('transChoice()', function() {
     Translator.add('foo.plural.space.before.interval', ' {0} Nothing| [1,Inf[ Many things', 'Foo');
     Translator.add('foo.plural.without.space', '{0}Nothing|[1,Inf[Many things', 'Foo');
     Translator.add('foo.single', 'Things', 'Foo');
+    Translator.add('foo.count.parameter', '[0,1]%count% item|]1,Inf[%count% items', 'Foo');
+    Translator.add('foo.count.parameter.additional', '[0,Inf[%count% items of %foo%', 'Foo');
+    Translator.add('foo.count.parameter.overriden', '[0,Inf[%count% items', 'Foo');
 
     // Basic
     equal(Translator.transChoice('foo.plural', null, {}, 'Foo'), '{0} Nothing|[1,Inf[ Many things', 'Returns the correct message for the given key');
@@ -102,6 +105,17 @@ test('transChoice()', function() {
 
     // Message not in a domain with pluralization
     equal(Translator.transChoice('{0} Nothing|[1,Inf[ Many things', 0, {}), 'Nothing', 'number = 0 returns the {0} part of the message');
+
+    // Default count parameter
+    equal(Translator.transChoice('foo.count.parameter', 0, {}, 'Foo'), '0 item', 'number = 0 returns the [0, 1] part of the message');
+    equal(Translator.transChoice('foo.count.parameter', 1, {}, 'Foo'), '1 item', 'number = 1 returns the [0, 1] part of the message');
+    equal(Translator.transChoice('foo.count.parameter', 5, {}, 'Foo'), '5 items', 'number = 5 returns the ]1,Inf[ part of the message');
+
+    // Default count parameter with additional parameters
+    equal(Translator.transChoice('foo.count.parameter.additional', 10, {'foo': 'bar'}, 'Foo'), '10 items of bar', 'number = 10 returns the [0,Inf[ part of the message');
+
+    // Do not override given count parameter
+    equal(Translator.transChoice('foo.count.parameter.overriden', 10, { count: 5 }, 'Foo'), '5 items', 'number = 10 returns the [0,Inf[ part of the message');
 });
 
 test('guesses domains if not specified', function() {
@@ -270,4 +284,18 @@ test('works with given optional parameters', function() {
     equal(Translator.trans('symfony2.great'), 'I like Symfony2');
 
     equal(Translator.trans('symfony2.great', {}, 'messages', 'de_DE'), 'Symfony2 ist gigantisch');
+});
+
+test('searches in country fallback, if not exists in full domain', function() {
+    expect(1);
+
+    Translator.fromJSON({
+        "fallback": "en"
+    });
+
+    Translator.add('symfony2.great', 'I like Symfony2', 'messages', 'en');
+    Translator.add('symfony2.great', 'Symfony2 ist groß', 'messages', 'de');
+
+    Translator.locale = 'de_CH';
+    equal(Translator.trans('symfony2.great'), 'Symfony2 ist groß');
 });

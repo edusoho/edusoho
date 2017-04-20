@@ -1,0 +1,21 @@
+{% extends 'my/layout.html.twig' %}
+
+{% block title %}{{'我的话题'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-discussions' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">{{'我的话题'|trans}}</div>
+
+  <div class="panel-body">
+    {% include 'my/learning/thread/tab.html.twig'%}
+    {% if threads %}
+	    {% include 'my/learning/thread/thread-list.html.twig'  with {type: 'discussion'} %}
+	  {% else %}
+	    <div class="empty">{{'你还没有发表过话题'|trans}}</div>
+	  {% endif %}
+  </div>
+</div>
+{% endblock %}

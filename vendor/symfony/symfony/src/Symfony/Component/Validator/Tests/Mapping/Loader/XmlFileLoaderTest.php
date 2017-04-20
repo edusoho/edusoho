@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Validator\Tests\Mapping\Loader;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Choice;
@@ -19,13 +20,14 @@ use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\IsTrue;
+use Symfony\Component\Validator\Constraints\Traverse;
 use Symfony\Component\Validator\Exception\MappingException;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Mapping\Loader\XmlFileLoader;
 use Symfony\Component\Validator\Tests\Fixtures\ConstraintA;
 use Symfony\Component\Validator\Tests\Fixtures\ConstraintB;
 
-class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
+class XmlFileLoaderTest extends TestCase
 {
     public function testLoadClassMetadataReturnsTrueIfSuccessful()
     {
@@ -57,6 +59,7 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
         $expected->addConstraint(new Callback('validateMe'));
         $expected->addConstraint(new Callback('validateMeStatic'));
         $expected->addConstraint(new Callback(array('Symfony\Component\Validator\Tests\Fixtures\CallbackClass', 'callback')));
+        $expected->addConstraint(new Traverse(false));
         $expected->addPropertyConstraint('firstName', new NotNull());
         $expected->addPropertyConstraint('firstName', new Range(array('min' => 3)));
         $expected->addPropertyConstraint('firstName', new Choice(array('A', 'B')));
@@ -111,7 +114,7 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
         $loader = new XmlFileLoader(__DIR__.'/withdoctype.xml');
         $metadata = new ClassMetadata('Symfony\Component\Validator\Tests\Fixtures\Entity');
 
-        $this->setExpectedException('\Symfony\Component\Validator\Exception\MappingException');
+        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('\Symfony\Component\Validator\Exception\MappingException');
         $loader->loadClassMetadata($metadata);
     }
 
@@ -126,7 +129,7 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
         try {
             $loader->loadClassMetadata($metadata);
         } catch (MappingException $e) {
-            $this->setExpectedException('\Symfony\Component\Validator\Exception\MappingException');
+            $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('\Symfony\Component\Validator\Exception\MappingException');
             $loader->loadClassMetadata($metadata);
         }
     }

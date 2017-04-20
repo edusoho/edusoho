@@ -11,18 +11,19 @@
 
 namespace Symfony\Component\Form\Tests\Extension\Core\DataTransformer;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Extension\Core\DataTransformer\DataTransformerChain;
 
-class DataTransformerChainTest extends \PHPUnit_Framework_TestCase
+class DataTransformerChainTest extends TestCase
 {
     public function testTransform()
     {
-        $transformer1 = $this->getMock('Symfony\Component\Form\DataTransformerInterface');
+        $transformer1 = $this->getMockBuilder('Symfony\Component\Form\DataTransformerInterface')->getMock();
         $transformer1->expects($this->once())
                                  ->method('transform')
                                  ->with($this->identicalTo('foo'))
                                  ->will($this->returnValue('bar'));
-        $transformer2 = $this->getMock('Symfony\Component\Form\DataTransformerInterface');
+        $transformer2 = $this->getMockBuilder('Symfony\Component\Form\DataTransformerInterface')->getMock();
         $transformer2->expects($this->once())
                                  ->method('transform')
                                  ->with($this->identicalTo('bar'))
@@ -35,12 +36,12 @@ class DataTransformerChainTest extends \PHPUnit_Framework_TestCase
 
     public function testReverseTransform()
     {
-        $transformer2 = $this->getMock('Symfony\Component\Form\DataTransformerInterface');
+        $transformer2 = $this->getMockBuilder('Symfony\Component\Form\DataTransformerInterface')->getMock();
         $transformer2->expects($this->once())
                                  ->method('reverseTransform')
                                  ->with($this->identicalTo('foo'))
                                  ->will($this->returnValue('bar'));
-        $transformer1 = $this->getMock('Symfony\Component\Form\DataTransformerInterface');
+        $transformer1 = $this->getMockBuilder('Symfony\Component\Form\DataTransformerInterface')->getMock();
         $transformer1->expects($this->once())
                                  ->method('reverseTransform')
                                  ->with($this->identicalTo('bar'))

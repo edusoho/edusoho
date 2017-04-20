@@ -5,26 +5,45 @@ const config = {
     publicPath: '/static-dist/',    // 用于开发环境下的输出目录
   },
   libs: {
-    vendor: ['libs/vendor.js'], //可以是一个js文件
-    "fix-ie": ['console-polyfill','html5shiv', 'respond-js'], //也可以是一个npm依赖包
-    "jquery-validation": ['libs/js/jquery-validation.js'],
-    "jquery-insertAtCaret": ['libs/js/jquery-insertAtCaret.js'],
-    "jquery-form": ['jquery-form'],
+    'vendor': ['libs/vendor.js'], //可以是一个js文件
+    'fix-ie': ['console-polyfill','html5shiv', 'respond-js'], //也可以是一个npm依赖包
+    'jquery-insertAtCaret': ['libs/js/jquery-insertAtCaret.js'],
+    'jquery-form': ['jquery-form'],
+    'jquery-nouislider':['nouislider'],
+    'perfect-scrollbar':['perfect-scrollbar'],
+    'jquery-sortable':['jquery-sortable'],
+    'jquery-validation': ['libs/js/jquery-validation.js'],
+    'jquery-blurr': ['jquery-blurr'],
+    'bootstrap-datetimepicker':['libs/js/bootstrap-datetimepicker.js'],
+    'iframe-resizer':['libs/js/iframe-resizer.js'],
+    'iframe-resizer-contentWindow':['libs/js/iframe-resizer-contentWindow.js'],
+    'jquery-timer':['libs/js/jquery-timer.js'],
+    'echo-js': ['echo-js'],
+    'jquery-waypoints': ['jquery-waypoints'],
+    'jquery-countdown': ['jquery.countdown'],
   },
-  noParseDeps: [ //使用一个dist版本加快编译速度
+  noParseDeps: [ //these node modules will use a dist version to speed up compilation
     'jquery/dist/jquery.js',
     'bootstrap/dist/js/bootstrap.js',
-    // 'admin-lte/dist/js/app.js',
+    'admin-lte/dist/js/app.js',
     'jquery-validation/dist/jquery.validate.js',
+    'perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js',
     'jquery-form/jquery.form.js',
     'bootstrap-notify/bootstrap-notify.js',
-    // The `.` will auto be replaced to `-` for compatibility 
+    'store/store.js',
+    // The `.` will auto be replaced to `-` for compatibility
     'respond.js/dest/respond.src.js',
     'fetch-ie8/fetch.js',
     'console-polyfill/index.js',
     'html5shiv/dist/html5shiv.js',
     'bootstrap-daterangepicker/daterangepicker.js',
     'moment/moment.js',
+    'bootstrap-datetime-picker/js/bootstrap-datetimepicker.js',
+    'jquery-sortable/source/js/jquery-sortable.js',
+    'nouislider/distribute/nouislider.js',
+    'echo-js/dist/echo.js',
+    'jquery-blurr/dist/jquery.blurr.js',
+    'jquery-waypoints/waypoints.js'
   ],
   onlyCopys: [ //纯拷贝文件到输出的libs目录下
     {
@@ -33,7 +52,6 @@ const config = {
         '**/samples/**',
         '**/lang/!(zh-cn.js)',
         '**/kityformula/libs/**',
-        '**/kityformula/kityformula/src/**'
       ]
     },
     {
@@ -53,8 +71,32 @@ const config = {
     },
     {
       name: 'es5-shim/es5-sham.js'
+    },
+    {
+      name: 'easy-pie-chart',
+      ignore: [
+        '**/demo/**',
+        '**/docs/**',
+        '**/src/**',
+        '**/test/**',
+        '**/dist/angular.easypiechart.js',
+        '**/dist/angular.easypiechart.min.js',
+        '**/dist/easypiechart.js',
+        '**/dist/easypiechart.min.js',
+        '.editorconfig',
+        '.npmignore',
+        '.travis.yml',
+        'bower.json',
+        'Gruntfile.js',
+        'changelog.md',
+        'karma.conf.coffee',
+        'LICENSE',
+        'package.js',
+        'package.json',
+        'Readme.md',
+      ]
     }
-  ],
+  ]
 }
 
 export default config;

@@ -1,0 +1,13 @@
+{% import 'macro.html.twig' as web_macro %}
+
+{% for testpaper in testpapers if testpaper %}
+  {% set resultListRout = targetType|default('course') ~ '_manage_testpaper_result_list' %}
+
+  {% include 'testpaper/manage/check-list-item.html.twig' with {testpaper:testpaper,targetResultInfo:testpaper.resultStatusNum,targetId:targetId} %}
+{% else %}
+  <div class="empty">{{'暂无数据'|trans}}</div>
+{% endfor %}
+
+<nav class="text-center">
+  {{ web_macro.paginator(paginator) }}
+</nav>

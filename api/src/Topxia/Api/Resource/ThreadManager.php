@@ -3,8 +3,9 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
+use AppBundle\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
 
 class ThreadManager extends BaseResource
 {
@@ -19,7 +20,7 @@ class ThreadManager extends BaseResource
             return $this->error('error', '课程信息不存在!');
         }
 
-        if (!$this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
+        if (!$this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
             return $this->error('error', '您不是老师，不能查看此页面！!');
         }
 
@@ -50,9 +51,11 @@ class ThreadManager extends BaseResource
 
         $threads = $this->sortThreads($threads, $start);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
-        $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($threads, 'lessonId'));
+        $lessons = $this->getTaskService()->findTasksByIds(ArrayToolkit::column($threads, 'taskId'));
+        $lessons = ArrayToolkit::index($lessons, 'id');
+
         foreach ($threads as $key => &$thread) {
-            $lesson = $lessons[$thread['lessonId']];
+            $lesson = empty($lessons[$thread['taskId']]) ? array() : $lessons[$thread['taskId']];
             $lessonTitle = empty($lesson) ? '课程提问' : '课时:'.$lesson['number'].$lesson['title'];
             $thread['lessonTitle'] = $lessonTitle;
             $thread['isTeacherAnswer'] = $this->getCourseThreadService()->getPostCountByuserIdAndThreadId($user['id'], $thread['id']);
@@ -112,16 +115,26 @@ class ThreadManager extends BaseResource
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getCourseThreadService()
     {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
+        return $this->getServiceKernel()->createService('Course:ThreadService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->getServiceKernel()->createService('Task:TaskService');
     }
 }

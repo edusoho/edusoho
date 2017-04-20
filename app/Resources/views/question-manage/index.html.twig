@@ -1,0 +1,98 @@
+{% extends 'courseset-manage/layout.html.twig' %}
+{% import 'macro.html.twig' as macro %}
+
+{% block title %}{{'题目管理'|trans}} - {{ parent() }}{% endblock %}
+
+{% set parentId = parentQuestion.id|default(0) %}
+
+{% set side_nav = 'question' %}
+{% do script(['app/js/question-manage/index.js',]) %}
+
+{% block main %}
+
+ {% set questionTypes = getQuestionTypes() %}
+
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">
+      <div class="pull-right">
+        {% for type,name in questionTypes %}
+          {% if loop.index <= 3 %}
+            <a href="{{ path('course_set_manage_question_create',{id:courseSet.id,type:type,parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-info btn-sm"><span class="es-icon es-icon-anonymous-iconfont"></span> {{ name }}</a>
+          {% endif %}
+        {% endfor %}
+        <div class="btn-group">
+        <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+        <ul class="dropdown-menu pull-right">
+          {% for type,name in questionTypes %}
+            {% if loop.index > 3 and ((type == 'material' and not parentQuestion) or type != 'material') %}
+              <li><a href="{{ path('course_set_manage_question_create',{id:courseSet.id,type:type,parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}"><span class="es-icon es-icon-anonymous-iconfont"></span> {{ name }}</a></li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+
+      </div>
+      {{'题目管理'|trans}}
+    </div>
+
+    <div class="panel-body " id="quiz-table-container">
+
+      {% if parentQuestion %}
+        <ol class="breadcrumb">
+          <li><a href="{{ path('course_set_manage_question',{id:courseSet.id}) }}">{{'题目管理'|trans}}</a></li>
+          <li class="active">{{'材料题'|trans}}</li>
+        </ol>
+      {% endif %}
+
+      {{ web_macro.flash_messages() }}
+
+      {% if parentQuestion %}
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="well well-sm short-long-text">
+              <div class="short-text">{{ parentQuestion.stem|plain_text(100) }} <span class="trigger">({{'展开'|trans}})</span></div>
+              <div class="long-text">{{ parentQuestion.stem|raw }} <span class="trigger">({{'收起'|trans}})</span></div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if not parentQuestion %}
+        {% include 'question-manage/search-form.html.twig' %}
+      {% endif %}
+
+      <table class="table table-striped table-hover" id="quiz-table">
+        <thead>
+        <tr>
+          <th><input type="checkbox"  autocomplete="off"  data-role="batch-select"></th>
+          <th width="45%">{{'题干'|trans}}</th>
+          <th width="15%">{{'类型'|trans}}</th>
+          <th>{{'最后更新'|trans}}</th>
+          <th width="15%">{{'操作'|trans}}</th>
+        </tr>
+        </thead>
+        <tbody>
+          {% for question in questions %}
+            {% include 'question-manage/question-tr.html.twig' %}
+          {% else %}
+            <tr>
+              <td colspan="20"><div class="empty">{{'一道题都没有，请点击右上角按钮，按不同的题型录入题目'|trans}}</div></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div>
+        <label class="checkbox-inline"><input type="checkbox"  autocomplete="off" data-role="batch-select"> {{'全选'|trans}}</label>
+        <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="{{'题目'|trans}}" data-url="{{ path('course_set_manage_question_deletes',{courseSetId:courseSet.id}) }}" data-loading-text="正在删除...">{{'删除'|trans}}</button>
+        <span class="pull-right color-gray">{{'共%getItemCount()%题'|trans({'%getItemCount()%': paginator.getItemCount() })}}</span>
+      </div>
+      <nav class="text-center">
+        {{ web_macro.paginator(paginator) }}
+      </nav>
+    </div>
+  </div>
+
+{% endblock %}
+
+
+

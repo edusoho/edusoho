@@ -1,16 +1,17 @@
 <?php
+
 use Phpmig\Migration\Migration;
 
 class Init extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
         $container = $this->getContainer();
 
-        $container['db']->exec("DROP TABLE IF EXISTS `example`");
+        $container['db']->exec('DROP TABLE IF EXISTS `example`');
 
         $sql = "
             CREATE TABLE `example` (
@@ -30,11 +31,11 @@ class Init extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
         $container = $this->getContainer();
-        $container['db']->exec("DROP TABLE `example`");
+        $container['db']->exec('DROP TABLE `example`');
     }
 }

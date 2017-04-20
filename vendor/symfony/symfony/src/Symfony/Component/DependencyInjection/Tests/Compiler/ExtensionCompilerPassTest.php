@@ -11,19 +11,20 @@
 
 namespace Symfony\Component\DependencyInjection\Tests\Compiler;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Compiler\ExtensionCompilerPass;
 
 /**
  * @author Wouter J <wouter@wouterj.nl>
  */
-class ExtensionCompilerPassTest extends \PHPUnit_Framework_TestCase
+class ExtensionCompilerPassTest extends TestCase
 {
     private $container;
     private $pass;
 
     protected function setUp()
     {
-        $this->container = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
+        $this->container = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerBuilder')->getMock();
         $this->pass = new ExtensionCompilerPass();
     }
 
@@ -46,10 +47,10 @@ class ExtensionCompilerPassTest extends \PHPUnit_Framework_TestCase
 
     private function createExtensionMock($hasInlineCompile)
     {
-        return $this->getMock('Symfony\Component\DependencyInjection\\'.(
+        return $this->getMockBuilder('Symfony\Component\DependencyInjection\\'.(
             $hasInlineCompile
             ? 'Compiler\CompilerPassInterface'
             : 'Extension\ExtensionInterface'
-        ));
+        ))->getMock();
     }
 }

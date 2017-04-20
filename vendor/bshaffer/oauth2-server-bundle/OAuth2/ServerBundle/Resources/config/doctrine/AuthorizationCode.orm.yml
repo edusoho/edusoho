@@ -18,6 +18,10 @@ OAuth2\ServerBundle\Entity\AuthorizationCode:
             type:       string
             length:     255
             nullable:   true
+        id_token:
+            type:       string
+            length:     2000
+            nullable:   true
     manyToOne:
       client:
         targetEntity: OAuth2\ServerBundle\Entity\Client

@@ -1,0 +1,90 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_coin_user_records' %}
+
+{% block main %}
+
+  <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+
+    <input value="{{ condition.type }}" name="flowType" type="hidden"/>
+    <input value="{{ condition.timeType }}" name="timeType" type="hidden"/>
+    <div class="form-group">
+      <select class="form-control" name="searchType">
+        {% set options = {'nickname':'用户名'|trans,'email':'邮件地址'|trans} %}
+        {{ select_options(options, app.request.get('searchType')) }}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}"
+             placeholder="{{'关键词'|trans}}">
+    </div>
+
+    <button class="btn btn-primary">{{'搜索'|trans}}</button>
+  </form>
+
+  <div class="well">
+    <div>
+      {{'时间：'|trans}}
+      <a type="button"
+         class="btn btn-default btn-sm {% if condition.timeType != "threeMonths" and  condition.timeType != "oneMonth" and  condition.timeType != "all" %}btn-info{% endif %}"
+         href="{{ path('admin_coin_user_records',{timeType:"oneWeek",searchType:condition.searchType,keyword:condition.keyword}) }}">{{'本周'|trans}}</a>
+      <a type="button" class="btn btn-default btn-sm {% if condition.timeType == "oneMonth" %}btn-info{% endif %}"
+         href="{{ path('admin_coin_user_records',{timeType:"oneMonth",searchType:condition.searchType,keyword:condition.keyword}) }}">{{'本月'|trans}}</a>
+      <a type="button" class="btn btn-default btn-sm {% if condition.timeType == "threeMonths" %}btn-info{% endif %}"
+         href="{{ path('admin_coin_user_records',{timeType:"threeMonths",searchType:condition.searchType,keyword:condition.keyword}) }}">{{'三个月'|trans}}</a>
+      <a type="button" class="btn btn-default btn-sm {% if condition.timeType == "all" %}btn-info{% endif %}"
+         href="{{ path('admin_coin_user_records',{timeType:"all",searchType:condition.searchType,keyword:condition.keyword}) }}">{{'全部历史'|trans}}</a>
+      <span class="mll"></span>
+      {{'类型：'|trans}}
+      <a type="button"
+         class="btn btn-default btn-sm {% if condition.flowType != "out" and  condition.flowType != "in" %}btn-info{% endif %}"
+         href="{{ path('admin_coin_user_records',{flowType:"",timeType:condition.timeType,sort:condition.sort}) }}">{{'默认'|trans}}</a>
+      <a type="button" class="btn btn-default btn-sm {% if condition.flowType == "out" %}btn-info{% endif %}"
+         href="{{ path('admin_coin_user_records',{flowType:"out",timeType:condition.timeType,sort:condition.sort}) }}">{{'消费'|trans}}</a>
+      <a type="button" class="btn btn-default btn-sm {% if condition.flowType == "in" %}btn-info{% endif %}"
+         href="{{ path('admin_coin_user_records',{flowType:"in",timeType:condition.timeType,sort:condition.sort}) }}">{{'充值'|trans}}</a>
+      <span class="mll"></span>
+      {{'排序：'|trans}}
+      <a type="button" class="btn btn-default btn-sm {% if condition.sort == "up" %}btn-info{% endif %}"
+         href="{{ path('admin_coin_user_records',{flowType:condition.flowType,timeType:condition.timeType,sort:"up"}) }}">{{'升序'|trans}}</a>
+      <a type="button" class="btn btn-default btn-sm {% if condition.sort == "down" %}btn-info{% endif %}"
+         href="{{ path('admin_coin_user_records',{flowType:condition.flowType,timeType:condition.timeType,sort:"down"}) }}">{{'降序'|trans}}</a>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <tr>
+        <th width="30%">{{'用户'|trans}}</th>
+        <th>{{'充值'|trans}}</th>
+        <th>{{'消费'|trans}}</th>
+        <th>{{'账户余额'|trans}}</th>
+        <th>{{'操作'|trans}}</th>
+      </tr>
+
+      {% if userIds %}
+        {% for userId in userIds %}
+          <tr>
+            <td> {{ web_macro.user_link(users[userId] , 'link-muted') }}</td>
+            <td style="color:#1bb974;"> {{ userInCash(userId,condition.timeType)|default("0.00") }}</td>
+            <td style="color:#ff7b0e;"> {{ userOutCash(userId,condition.timeType)|default("0.00") }}</td>
+            <td style="color:blue;"> {{ userAccount(userId).cash|default(0) }}</td>
+            <td>
+              <a class= {% if userAccount(userId) %} "btn btn-default" {% else %} "btn btn-default disabled"  {% endif %}
+              data-toggle="modal" data-target="#modal"
+              data-url="{{ path('admin_coin_flow_detail',{userId:userId,timeType:condition.timeType}) }}"
+              href="javascript:;">{{'查看'|trans}}</a>
+            </td>
+          </tr>
+        {% endfor %}
+      {% endif %}
+
+    </table>
+    {% if not userIds %}
+      <div class="empty">{{'暂无记录'|trans}}</div>{% endif %}
+    {% if paginator|default(null) %}
+      {{ admin_macro.paginator(paginator) }}
+    {% endif %}
+  </div>
+{% endblock %}

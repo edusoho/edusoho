@@ -22,7 +22,7 @@ class SqlOci extends Sql {
 	public function __construct( \PDO $connection, $tableName ) {
 		parent::__construct( $connection, $tableName );
 		$driver = $this->connection->getAttribute( PDO::ATTR_DRIVER_NAME );
-		if ( ! in_array( $driver, array( 'oci' ) ) ) {
+		if ( ! in_array( $driver, array( 'oci', 'oci8' ) ) ) {
 			throw new \Exception( 'Please install OCI drivers for PDO!' );
 		}
 	}

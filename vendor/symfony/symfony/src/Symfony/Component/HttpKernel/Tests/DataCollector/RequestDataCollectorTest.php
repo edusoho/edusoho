@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\HttpKernel\Tests\DataCollector;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\DataCollector\RequestDataCollector;
@@ -20,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-class RequestDataCollectorTest extends \PHPUnit_Framework_TestCase
+class RequestDataCollectorTest extends TestCase
 {
     public function testCollect()
     {
@@ -31,7 +32,7 @@ class RequestDataCollectorTest extends \PHPUnit_Framework_TestCase
         $attributes = $c->getRequestAttributes();
 
         $this->assertSame('request', $c->getName());
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\HeaderBag', $c->getRequestHeaders());
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\ParameterBag', $c->getRequestHeaders());
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\ParameterBag', $c->getRequestServer());
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\ParameterBag', $c->getRequestCookies());
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\ParameterBag', $attributes);
@@ -45,7 +46,7 @@ class RequestDataCollectorTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp('/Resource\(stream#\d+\)/', $attributes->get('resource'));
         $this->assertSame('Object(stdClass)', $attributes->get('object'));
 
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\HeaderBag', $c->getResponseHeaders());
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\ParameterBag', $c->getResponseHeaders());
         $this->assertSame('OK', $c->getStatusText());
         $this->assertSame(200, $c->getStatusCode());
         $this->assertSame('application/json', $c->getContentType());
@@ -185,7 +186,7 @@ class RequestDataCollectorTest extends \PHPUnit_Framework_TestCase
      */
     protected function injectController($collector, $controller, $request)
     {
-        $resolver = $this->getMock('Symfony\\Component\\HttpKernel\\Controller\\ControllerResolverInterface');
+        $resolver = $this->getMockBuilder('Symfony\\Component\\HttpKernel\\Controller\\ControllerResolverInterface')->getMock();
         $httpKernel = new HttpKernel(new EventDispatcher(), $resolver);
         $event = new FilterControllerEvent($httpKernel, $controller, $request, HttpKernelInterface::MASTER_REQUEST);
         $collector->onKernelController($event);

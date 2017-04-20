@@ -4,8 +4,8 @@ framework:
     templating:    { engines: ['twig', 'php'] }
 
 twig:
-    debug:            %kernel.debug%
-    strict_variables: %kernel.debug%
+    debug:            '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
 
 assetic:
     use_controller: true
@@ -27,7 +27,7 @@ assetic:
         sass:
             apply_to: '\.sass$'
         yui_css:
-            jar: %kernel.root_dir/java/yui-compressor-2.4.6.jar
+            jar: '%kernel.root_dir/java/yui-compressor-2.4.6.jar'
     twig:
         functions:
             yui_css: { output: css/*.css }

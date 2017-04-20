@@ -12,11 +12,12 @@
 namespace Symfony\Bridge\Doctrine\Tests\DataCollector;
 
 use Doctrine\DBAL\Platforms\MySqlPlatform;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Doctrine\DataCollector\DoctrineDataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class DoctrineDataCollectorTest extends \PHPUnit_Framework_TestCase
+class DoctrineDataCollectorTest extends TestCase
 {
     public function testCollectConnections()
     {
@@ -139,7 +140,7 @@ class DoctrineDataCollectorTest extends \PHPUnit_Framework_TestCase
             ->method('getDatabasePlatform')
             ->will($this->returnValue(new MySqlPlatform()));
 
-        $registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $registry = $this->getMockBuilder('Doctrine\Common\Persistence\ManagerRegistry')->getMock();
         $registry
                 ->expects($this->any())
                 ->method('getConnectionNames')
@@ -152,7 +153,7 @@ class DoctrineDataCollectorTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->will($this->returnValue($connection));
 
-        $logger = $this->getMock('Doctrine\DBAL\Logging\DebugStack');
+        $logger = $this->getMockBuilder('Doctrine\DBAL\Logging\DebugStack')->getMock();
         $logger->queries = $queries;
 
         $collector = new DoctrineDataCollector($registry);

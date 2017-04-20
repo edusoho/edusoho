@@ -3,43 +3,100 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
 
 class HomeworkResult extends BaseResource
 {
     public function post(Application $app, Request $request, $homeworkId)
     {
+        //answer结构是否一致
         $answers = $request->request->all();
-        $answers = !empty($answers['data']) ? $answers['data'] : array();
-        $result = $this->getHomeworkService()->startHomework($homeworkId);
-        $this->getHomeworkService()->submitHomework($result['id'], $answers);
-        $res = array(
+        $answers['usedTime'] = 0;
+
+        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($homeworkId, 'homework');
+
+        $canTakeCourse = $this->getCourseService()->canTakeCourse($homework['courseId']);
+        if (!$canTakeCourse) {
+            return $this->error('500', '无权限访问!');
+        }
+
+        $conditions = array(
+            'mediaId' => $homework['id'],
+            'mediaType' => 'homework',
+            'fromCourseId' => $homework['courseId'],
+        );
+        $activities = $this->getActivityService()->search($conditions, null, 0, 1);
+
+        if (!$activities) {
+            return $this->error('404', '该作业任务不存在!');
+        }
+
+        //homework里获取不到activityId,只能间接获取
+        $lessonId = $activities[0]['id'];
+        $result = $this->getTestpaperService()->startTestpaper($homework['id'], array('lessonId' => $lessonId, 'courseId' => $homework['courseId']));
+
+        try {
+            $this->getTestpaperService()->finishTest($result['id'], $answers);
+        } catch (\Exception $e) {
+            return $this->error('500', $e->getMessage());
+        }
+
+        return array(
             'id' => $result['id'],
         );
-
-        return $res;
     }
 
     public function get(Application $app, Request $request, $lessonId)
     {
         $user = $this->getCurrentUser();
-        $homework = $this->getHomeworkService()->getHomeworkByLessonId($lessonId);
-        if (empty($homework)) {
-            return '';
+        $task = $this->getTaskService()->getTask($lessonId);
+
+        if ($task['type'] != 'homework') {
+            $conditions = array(
+                'categoryId' => $task['categoryId'],
+                'type' => 'homework',
+                'mode' => 'homework',
+            );
+            $tasks = $this->getTaskService()->searchTasks($conditions, null, 0, 1);
+            if (!$tasks) {
+                return $this->error('404', '该作业不存在!');
+            }
+
+            $task = array_shift($tasks);
         }
-        $homeworkResults = $this->getHomeworkService()->searchResults(
-            array('homeworkId' => $homework['id'], 'userId' => $user['id']), array('createdTime', 'DESC'), 0, 1);
+
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
+        if (empty($homework)) {
+            return $this->error('404', '该作业不存在!');
+        }
+
+        $canTakeCourse = $this->getCourseService()->canTakeCourse($homework['courseId']);
+        if (!$canTakeCourse) {
+            return $this->error('500', '无权限访问!');
+        }
+
+        $conditions = array(
+            'testId' => $homework['id'],
+            'userId' => $user['id'],
+        );
+        $homeworkResults = $this->getTestpaperService()->searchTestpaperResults($conditions, array('id' => 'desc'), 0, 1);
+
         if (empty($homeworkResults)) {
-            return '';
+            return $this->error('404', '该作业结果不存在!');
         }
         $homeworkResult = $homeworkResults[0];
-        $canLookHomeworkResult = $this->getHomeworkService()->canLookHomeworkResult($homeworkResult['id']);
-        if (!$canLookHomeworkResult) {
-            throw $this->createAccessDeniedException('无权查看作业！');
+        $canTakeCourse = $this->getTestpaperService()->canLookTestpaper($homeworkResult['id']);
+        if (!$canTakeCourse) {
+            return $this->error('500', '无权限访问!');
         }
-        $itemSetResults = $this->getHomeworkService()->findItemResultsbyHomeworkResultId($homeworkResult['id']);
+        $itemSetResults = $this->getTestpaperService()->findItemResultsByResultId($homeworkResult['id']);
         $homeworkResult['items'] = $this->filterItem($itemSetResults);
+        $homeworkResult['homeworkId'] = $homeworkResult['testId'];
+
+        //只为做兼容，app端course2.0需改
+        $homeworkResult['lessonId'] = $lessonId;
 
         return $this->filter($homeworkResult);
     }
@@ -82,20 +139,35 @@ class HomeworkResult extends BaseResource
 
     public function filter($res)
     {
-        $res['usedTime'] = date('c', $res['usedTime']);
-        $res['updatedTime'] = date('c', $res['updatedTime']);
-        $res['createdTime'] = date('c', $res['createdTime']);
+        $res['usedTime'] = $res['usedTime'];
+        $res['updatedTime'] = date('c', $res['updateTime']);
+        $res['createdTime'] = date('c', $res['beginTime']);
 
         return $res;
     }
 
-    protected function getHomeworkService()
+    protected function getTestpaperService()
     {
-        return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
+        return $this->getServiceKernel()->createService('Testpaper:TestpaperService');
     }
 
     protected function getQuestionService()
     {
-        return $this->getServiceKernel()->createService('Question.QuestionService');
+        return $this->getServiceKernel()->createService('Question:QuestionService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->getServiceKernel()->createService('Task:TaskService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    protected function getActivityService()
+    {
+        return $this->getServiceKernel()->createService('Activity:ActivityService');
     }
 }

@@ -11,6 +11,7 @@
 
 namespace Symfony\Bridge\Doctrine\Tests\Form\ChoiceList;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
 use Symfony\Bridge\Doctrine\Tests\Fixtures\GroupableEntity;
 use Symfony\Bridge\Doctrine\Tests\Fixtures\SingleIntIdEntity;
@@ -22,7 +23,7 @@ use Doctrine\ORM\Tools\SchemaTool;
 /**
  * @group legacy
  */
-class GenericEntityChoiceListTest extends \PHPUnit_Framework_TestCase
+class GenericEntityChoiceListTest extends TestCase
 {
     const SINGLE_INT_ID_CLASS = 'Symfony\Bridge\Doctrine\Tests\Fixtures\SingleIntIdEntity';
 

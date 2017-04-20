@@ -1,0 +1,28 @@
+{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
+
+{% block title %}{{ '录播管理'|trans }} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'replay' %}
+{% do script(['app/js/course-manage/live-replay/index.js']) %}
+
+{% block main %}
+  <div class="panel panel-default panel-col lesson-manage-panel">
+    <div class="panel-heading">
+      {{ '录播管理'|trans }}
+    </div>
+
+    {% if tasks is empty %}
+      <div class="empty">{{ '暂无直播内容！'|trans }}</div>
+    {% endif %}
+
+    <div class="panel-body">
+      <ul class="lesson-list sortable-list" id="course-item-list">
+        {% for task in tasks %}
+          {% include 'course-manage/live-replay/list-item.html.twig' with {course: course, task: task, activity: task.activity } %}
+        {% endfor %}
+      </ul>
+      <div class="color-warning">提示：上传录像文件后无法再生成在线录像!</div>
+    </div>
+  </div>
+
+{% endblock %}

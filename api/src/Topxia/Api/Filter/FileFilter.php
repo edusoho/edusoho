@@ -12,8 +12,8 @@ class FileFilter implements Filter
         unset($data['mime']);
         unset($data['status']);
         unset($data['file']);
-        $fileService = ServiceKernel::instance()->createService('Content.FileService');
-        $userService = ServiceKernel::instance()->createService('User.UserService');
+        $fileService = ServiceKernel::instance()->createService('Content:FileService');
+
         $data['createdTime'] = date('c', $data['createdTime']);
         $uri = empty($data['uri']) ? '' : $fileService->parseFileUri($data['uri']);
         $data['uri'] = empty($uri) ? '' : 'files/'.$uri['path'];

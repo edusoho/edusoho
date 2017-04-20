@@ -11,17 +11,20 @@
 
 namespace Symfony\Bundle\SecurityBundle\Tests\DependencyInjection;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-abstract class CompleteConfigurationTest extends \PHPUnit_Framework_TestCase
+abstract class CompleteConfigurationTest extends TestCase
 {
     private static $containerCache = array();
 
-    abstract protected function loadFromFile(ContainerBuilder $container, $file);
+    abstract protected function getLoader(ContainerBuilder $container);
+
+    abstract protected function getFileExtension();
 
     public function testRolesHierarchy()
     {
@@ -167,7 +170,7 @@ abstract class CompleteConfigurationTest extends \PHPUnit_Framework_TestCase
                 );
             } elseif (3 === $i) {
                 $this->assertEquals('IS_AUTHENTICATED_ANONYMOUSLY', $attributes[0]);
-                $expression = $container->getDefinition($attributes[1])->getArgument(0);
+                $expression = $container->getDefinition((string) $attributes[1])->getArgument(0);
                 $this->assertEquals("token.getUsername() matches '/^admin/'", $expression);
             }
         }
@@ -259,6 +262,8 @@ abstract class CompleteConfigurationTest extends \PHPUnit_Framework_TestCase
 
     protected function getContainer($file)
     {
+        $file = $file.'.'.$this->getFileExtension();
+
         if (isset(self::$containerCache[$file])) {
             return self::$containerCache[$file];
         }
@@ -268,7 +273,7 @@ abstract class CompleteConfigurationTest extends \PHPUnit_Framework_TestCase
 
         $bundle = new SecurityBundle();
         $bundle->build($container); // Attach all default factories
-        $this->loadFromFile($container, $file);
+        $this->getLoader($container)->load($file);
 
         $container->getCompilerPassConfig()->setOptimizationPasses(array());
         $container->getCompilerPassConfig()->setRemovingPasses(array());

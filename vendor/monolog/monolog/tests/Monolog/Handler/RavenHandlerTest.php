@@ -92,11 +92,13 @@ class RavenHandlerTest extends TestCase
 
         $checksum = '098f6bcd4621d373cade4e832627b4f6';
         $release = '05a671c66aefea124cc08b76ea6d30bb';
-        $record = $this->getRecord(Logger::INFO, 'test', array('checksum' => $checksum, 'release' => $release));
+        $eventId = '31423';
+        $record = $this->getRecord(Logger::INFO, 'test', array('checksum' => $checksum, 'release' => $release, 'event_id' => $eventId));
         $handler->handle($record);
 
         $this->assertEquals($checksum, $ravenClient->lastData['checksum']);
         $this->assertEquals($release, $ravenClient->lastData['release']);
+        $this->assertEquals($eventId, $ravenClient->lastData['event_id']);
     }
 
     public function testFingerprint()
@@ -192,6 +194,32 @@ class RavenHandlerTest extends TestCase
         $handler = $this->getMock('Monolog\Handler\RavenHandler', null, array($this->getRavenClient()));
         $handler->expects($this->never())->method('handle');
         $handler->setLevel(Logger::ERROR);
+        $handler->handleBatch($records);
+    }
+
+    public function testHandleBatchPicksProperMessage()
+    {
+        $records = array(
+            $this->getRecord(Logger::DEBUG, 'debug message 1'),
+            $this->getRecord(Logger::DEBUG, 'debug message 2'),
+            $this->getRecord(Logger::INFO, 'information 1'),
+            $this->getRecord(Logger::ERROR, 'error 1'),
+            $this->getRecord(Logger::WARNING, 'warning'),
+            $this->getRecord(Logger::ERROR, 'error 2'),
+            $this->getRecord(Logger::INFO, 'information 2'),
+        );
+
+        $logFormatter = $this->getMock('Monolog\\Formatter\\FormatterInterface');
+        $logFormatter->expects($this->once())->method('formatBatch');
+
+        $formatter = $this->getMock('Monolog\\Formatter\\FormatterInterface');
+        $formatter->expects($this->once())->method('format')->with($this->callback(function ($record) use ($records) {
+            return $record['message'] == 'error 1';
+        }));
+
+        $handler = $this->getHandler($this->getRavenClient());
+        $handler->setBatchFormatter($logFormatter);
+        $handler->setFormatter($formatter);
         $handler->handleBatch($records);
     }
 

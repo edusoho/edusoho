@@ -1,16 +1,15 @@
 <?php
-namespace Topxia\MobileBundleV2\Processor\Tests;
 
-use Topxia\MobileBundleV2\Processor\Tests\BaseProcessorTest;
+namespace Topxia\MobileBundleV2\Processor\Tests;
 
 class SchoolProcessorTest extends BaseProcessorTest
 {
-    protected $service = "School";
+    protected $service = 'School';
 
-	public function testGetSchoolSite()
+    public function testGetSchoolSite()
     {
         $requestData = array();
-        $jsonData = $this->getContent($requestData, $this->service, __FUNCTION__, "GET");
+        $jsonData = $this->getContent($requestData, $this->service, __FUNCTION__, 'GET');
 
         $this->assertNotNull($jsonData->site);
         $this->assertNotNull($jsonData->site->name);
@@ -22,9 +21,8 @@ class SchoolProcessorTest extends BaseProcessorTest
     public function testGetSchoolBanner()
     {
         $requestData = array();
-        $jsonData = $this->getContent($requestData, $this->service, __FUNCTION__, "GET");
+        $jsonData = $this->getContent($requestData, $this->service, __FUNCTION__, 'GET');
 
         $this->assertNotNull($jsonData);
     }
-
 }

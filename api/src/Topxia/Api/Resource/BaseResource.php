@@ -4,13 +4,37 @@ namespace Topxia\Api\Resource;
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Service\Common\ServiceKernel;
 
 abstract class BaseResource
 {
     private $logger;
 
+    /**
+     * @var Biz
+     */
+    private $biz;
+
+    public function __construct(Biz $biz)
+    {
+        $this->biz = $biz;
+    }
+
+    /**
+     * @return Biz
+     */
+    final protected function getBiz()
+    {
+        return $this->biz;
+    }
+
     abstract public function filter($res);
+
+    final protected function createService($service)
+    {
+        return $this->getBiz()->service($service);
+    }
 
     protected function callFilter($name, $res)
     {
@@ -81,8 +105,8 @@ abstract class BaseResource
     protected function error($code, $message)
     {
         return array('error' => array(
-            'code'    => $code,
-            'message' => $message
+            'code' => $code,
+            'message' => $message,
         ));
     }
 
@@ -109,11 +133,11 @@ abstract class BaseResource
     {
         $simple = array();
 
-        $simple['id']       = $user['id'];
+        $simple['id'] = $user['id'];
         $simple['nickname'] = $user['nickname'];
-        $simple['title']    = $user['title'];
-        $simple['roles']    = $user['roles'];
-        $simple['avatar']   = $this->getFileUrl($user['smallAvatar']);
+        $simple['title'] = $user['title'];
+        $simple['roles'] = $user['roles'];
+        $simple['avatar'] = $this->getFileUrl($user['smallAvatar']);
 
         return $simple;
     }
@@ -124,34 +148,34 @@ abstract class BaseResource
         if (empty($end)) {
             return array(
                 'cursor' => $currentCursor + 1,
-                'start'  => 0,
-                'limit'  => $currentLimit,
-                'eof'    => true
+                'start' => 0,
+                'limit' => $currentLimit,
+                'eof' => true,
             );
         }
 
         if (count($currentRows) < $currentLimit) {
             return array(
                 'cursor' => $end['updatedTime'] + 1,
-                'start'  => 0,
-                'limit'  => $currentLimit,
-                'eof'    => true
+                'start' => 0,
+                'limit' => $currentLimit,
+                'eof' => true,
             );
         }
 
         if ($end['updatedTime'] != $currentCursor) {
             $next = array(
                 'cursor' => $end['updatedTime'],
-                'start'  => 0,
-                'limit'  => $currentLimit,
-                'eof'    => false
+                'start' => 0,
+                'limit' => $currentLimit,
+                'eof' => false,
             );
         } else {
             $next = array(
                 'cursor' => $currentCursor,
-                'start'  => $currentStart + $currentLimit,
-                'limit'  => $currentLimit,
-                'eof'    => false
+                'start' => $currentStart + $currentLimit,
+                'limit' => $currentLimit,
+                'eof' => false,
             );
         }
 
@@ -171,11 +195,21 @@ abstract class BaseResource
         return $text;
     }
 
-    public function getFileUrl($path)
+    public function getFileUrl($path, $defaultKey = '')
     {
         if (empty($path)) {
-            return '';
+            if (empty($defaultKey)) {
+                return '';
+            }
+
+            $defaultSetting = $this->getSettingService()->get('default', array());
+            if (($defaultKey == 'course.png' && !empty($defaultSetting['defaultCoursePicture'])) || $defaultKey == 'avatar.png' && !empty($defaultSetting['defaultAvatar']) && empty($defaultSetting[$defaultKey])) {
+                $path = $defaultSetting[$defaultKey];
+            } else {
+                return $this->getHttpHost().'/assets/img/default/'.$defaultKey;
+            }
         }
+
         if (strpos($path, $this->getHttpHost()."://") !== false) {
             return $path;
         }
@@ -206,8 +240,8 @@ abstract class BaseResource
 
     protected function getSchema()
     {
-        $https = $_SERVER['HTTPS'];
-        if(!empty($https) && 'off' !== strtolower($https)) {
+        $https = empty($_SERVER['HTTPS']) ? '' : $_SERVER['HTTPS'];
+        if (!empty($https) && 'off' !== strtolower($https)) {
             return 'https';
         }
         return 'http';
@@ -227,12 +261,8 @@ abstract class BaseResource
 
     protected function getCurrentUser()
     {
-        return $this->getServiceKernel()->getCurrentUser();
-    }
-
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
+        $biz = $this->getBiz();
+        return $biz['user'];
     }
 
     protected function addError($logName, $message)
@@ -254,6 +284,11 @@ abstract class BaseResource
         $this->getLogger($logName)->debug($message);
     }
 
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
+
     protected function isDebug()
     {
         return 'dev' == $this->getServiceKernel()->getEnvironment();
@@ -266,8 +301,13 @@ abstract class BaseResource
         }
 
         $this->logger = new Logger($name);
-        $this->logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/service.log', Logger::DEBUG));
+        $this->logger->pushHandler(new StreamHandler($this->biz['log_directory'].'/service.log', Logger::DEBUG));
 
         return $this->logger;
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }

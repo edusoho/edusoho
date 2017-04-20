@@ -140,7 +140,7 @@ class Swift_Transport_EsmtpTransport extends Swift_Transport_AbstractSmtpTranspo
      */
     public function setEncryption($encryption)
     {
-        $encryption = strtolower($encryption);    
+        $encryption = strtolower($encryption);
         if ('tls' == $encryption) {
             $this->_params['protocol'] = 'tcp';
             $this->_params['tls'] = true;
@@ -270,8 +270,6 @@ class Swift_Transport_EsmtpTransport extends Swift_Transport_AbstractSmtpTranspo
         return parent::executeCommand($command, $codes, $failures);
     }
 
-    // -- Mixin invocation code
-
     /** Mixin handling method for ESMTP handlers */
     public function __call($method, $args)
     {
@@ -281,7 +279,7 @@ class Swift_Transport_EsmtpTransport extends Swift_Transport_AbstractSmtpTranspo
                 )) {
                 $return = call_user_func_array(array($handler, $method), $args);
                 // Allow fluid method calls
-                if (is_null($return) && substr($method, 0, 3) == 'set') {
+                if (null === $return && substr($method, 0, 3) == 'set') {
                     return $this;
                 } else {
                     return $return;

@@ -24,8 +24,8 @@ class FilterManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGet()
     {
-        $container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
-        $filter = $this->getMock('Assetic\\Filter\\FilterInterface');
+        $container = $this->getMockBuilder('Symfony\\Component\\DependencyInjection\\ContainerInterface')->getMock();
+        $filter = $this->getMockBuilder('Assetic\\Filter\\FilterInterface')->getMock();
 
         $container->expects($this->exactly(2))
             ->method('get')
@@ -40,7 +40,7 @@ class FilterManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testHas()
     {
-        $container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
+        $container = $this->getMockBuilder('Symfony\\Component\\DependencyInjection\\ContainerInterface')->getMock();
 
         $fm = new FilterManager($container, array('foo' => 'assetic.filter.bar'));
         $this->assertTrue($fm->has('foo'), '->has() returns true for lazily mapped filters');
@@ -48,8 +48,8 @@ class FilterManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetNames()
     {
-        $container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
-        $filter = $this->getMock('Assetic\\Filter\\FilterInterface');
+        $container = $this->getMockBuilder('Symfony\\Component\\DependencyInjection\\ContainerInterface')->getMock();
+        $filter = $this->getMockBuilder('Assetic\\Filter\\FilterInterface')->getMock();
 
         $fm = new FilterManager($container, array('foo' => 'assetic.filter.bar'));
         $fm->set('bar', $filter);

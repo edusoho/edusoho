@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/codeages/plugin-bundle.svg?branch=master)](https://github.com/codeages/plugin-bundle)
+
 # README
 
 ## 编写一个插件

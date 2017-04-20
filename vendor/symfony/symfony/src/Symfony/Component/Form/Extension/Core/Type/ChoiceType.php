@@ -40,6 +40,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class ChoiceType extends AbstractType
 {
     /**
+     * @internal To be removed in 3.0
+     */
+    const DEPRECATED_EMPTY_VALUE = '__deprecated_empty_value__';
+
+    /**
      * Caches created choice lists.
      *
      * @var ChoiceListFactoryInterface
@@ -155,6 +160,22 @@ class ChoiceType extends AbstractType
             // transformation is merged back into the original collection
             $builder->addEventSubscriber(new MergeCollectionListener(true, true));
         }
+
+        // To avoid issues when the submitted choices are arrays (i.e. array to string conversions),
+        // we have to ensure that all elements of the submitted choice data are strings or null.
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+            $data = $event->getData();
+
+            if (!is_array($data)) {
+                return;
+            }
+
+            foreach ($data as $v) {
+                if (null !== $v && !is_string($v)) {
+                    throw new TransformationFailedException('All choices submitted must be NULL or strings.');
+                }
+            }
+        }, 256);
     }
 
     /**
@@ -344,7 +365,7 @@ class ChoiceType extends AbstractType
         };
 
         $placeholderNormalizer = function (Options $options, $placeholder) use ($that) {
-            if (!is_object($options['empty_value']) || !$options['empty_value'] instanceof \Exception) {
+            if ($that::DEPRECATED_EMPTY_VALUE !== $options['empty_value']) {
                 @trigger_error(sprintf('The form option "empty_value" of the "%s" form type (%s) is deprecated since version 2.6 and will be removed in 3.0. Use "placeholder" instead.', $that->getName(), __CLASS__), E_USER_DEPRECATED);
 
                 if (null === $placeholder || '' === $placeholder) {
@@ -396,7 +417,7 @@ class ChoiceType extends AbstractType
             'preferred_choices' => array(),
             'group_by' => null,
             'empty_data' => $emptyData,
-            'empty_value' => new \Exception(), // deprecated
+            'empty_value' => self::DEPRECATED_EMPTY_VALUE,
             'placeholder' => $placeholder,
             'error_bubbling' => false,
             'compound' => $compound,
@@ -518,7 +539,7 @@ class ChoiceType extends AbstractType
      *
      * @param array|\Traversable $choices      The choice labels indexed by choices
      * @param object             $choiceLabels The object that receives the choice labels
-     *                                         indexed by generated keys.
+     *                                         indexed by generated keys
      * @param int                $nextKey      The next generated key
      *
      * @return array The choices in a normalized array with labels replaced by generated keys

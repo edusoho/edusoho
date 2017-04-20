@@ -1,0 +1,63 @@
+
+// .class-banner {
+//   background: url("@{img-src}class_banner.jpg") center center;
+// }
+
+.class-list {
+  .class-item {
+    background-color: #fff;
+    margin: 10px auto;
+    .border-radius;
+    .es-box-shadow;
+    .class-img {
+      position: relative;
+    }
+    h3 {
+      position: absolute;
+      display: block;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 10px;
+      font-size: 16px;
+      color: #fff;
+      z-index: 1;
+      .text-overflow;
+    }
+    .img-responsive {
+      width: 100%;
+      .border-top-left-radius();
+      .border-top-right-radius(); 
+    }
+    .class-data {
+      list-style-type: none;
+      padding: 15px 0;
+      margin-bottom: 0;
+      background-color: @gray-lighter;
+      .border-bottom-left-radius();
+      .border-bottom-right-radius(); 
+      >li {
+        float: left;
+        width: 33.33%;
+        text-align: center;
+        color: @gray;
+        line-height: 40px;
+        border-right: 1px solid @gray-light;
+        &:last-child {
+          border: none;
+        }
+        >i {
+          margin-right: 5px;
+        }
+      }
+    }
+    .class-serve {
+      margin-bottom: 0;
+      height: 70px;
+    }
+  }
+}
+
+.lt-ie9 .class-list .class-item {
+  border: 1px solid @gray-light;
+}

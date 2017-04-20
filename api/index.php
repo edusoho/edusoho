@@ -7,47 +7,36 @@ require_once __DIR__ . '/bootstrap.php';
 use Topxia\Api\ApiAuth;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 include __DIR__.'/src/functions.php';
 
 $app = new Silex\Application();
 
-include __DIR__ . '/config/' . API_ENV . '.php';
+$app['biz'] = function (){
+    global $kernel;
+    return $kernel->getContainer()->get('biz');
+};
 
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/templates',
 ));
 
-$app->view(function (array $result, Request $request) use ($app) {
-    // 兼容气球云搜索的接口
-    $documentType = $request->headers->get('X-Search-Document');
-    if ($documentType) {
-        $class = "Topxia\\Api\\SpecialResponse\\{$documentType}Response";
-        if (!class_exists($class)) {
-            throw new \RuntimeException("{$documentType}Response不存在！");
-        }
-
-        $obj = new $class();
-        $result = $obj->filter($result);
-    }
-    return new JsonResponse($result);
-});
+include __DIR__ . '/config/' . API_ENV . '.php';
 
 $app->before(function (Request $request) use ($app) {
     $auth = new ApiAuth(include __DIR__ . '/config/whitelist.php');
     $auth->auth($request);
 });
 
-$app->error(function (\Exception $exception, $code) use ($app) {
+$app->error(function (\Exception $exception, Request $request, $code) use ($app) {
     $error = array(
         'code' => $code,
-        'message' => $exception->getMessage(),
+        'message' => $exception->getCode() > 0 ? $exception->getMessage() : '服务器内部错误',
     );
 
     if ($app['debug']) {
-
+        $error['message'] = $exception->getMessage();
         if (!$exception instanceof FlattenException) {
             $exception = FlattenException::create($exception);
         }
@@ -83,8 +72,11 @@ $app->error(function (\Exception $exception, $code) use ($app) {
 
     }
 
-    return $error;
+    return $app->json($error);
+}, 100);
 
+$app->view(function (array $result, Request $request) use ($app) {
+    return $app->json($result);
 });
 
 $app->run();

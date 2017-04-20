@@ -11,13 +11,14 @@
 
 namespace Symfony\Bundle\SecurityBundle\Tests\DataCollector;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\DataCollector\SecurityDataCollector;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
 
-class SecurityDataCollectorTest extends \PHPUnit_Framework_TestCase
+class SecurityDataCollectorTest extends TestCase
 {
     public function testCollectWhenSecurityIsDisabled()
     {
@@ -54,7 +55,7 @@ class SecurityDataCollectorTest extends \PHPUnit_Framework_TestCase
      */
     public function testLegacyCollectWhenAuthenticationTokenIsNull()
     {
-        $tokenStorage = $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface');
+        $tokenStorage = $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContextInterface')->getMock();
         $collector = new SecurityDataCollector($tokenStorage, $this->getRoleHierarchy());
         $collector->collect($this->getRequest(), $this->getResponse());
 

@@ -4,7 +4,7 @@ class Swift_Mime_SimpleHeaderFactoryTest extends \PHPUnit_Framework_TestCase
 {
     private $_factory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_factory = $this->_createFactory();
     }
@@ -143,8 +143,6 @@ class Swift_Mime_SimpleHeaderFactoryTest extends \PHPUnit_Framework_TestCase
         $factory->charsetChanged('utf-8');
     }
 
-    // -- Creation methods
-
     private function _createFactory($encoder = null, $paramEncoder = null)
     {
         return new Swift_Mime_SimpleHeaderFactory(
@@ -158,11 +156,11 @@ class Swift_Mime_SimpleHeaderFactoryTest extends \PHPUnit_Framework_TestCase
 
     private function _createHeaderEncoder()
     {
-        return $this->getMock('Swift_Mime_HeaderEncoder');
+        return $this->getMockBuilder('Swift_Mime_HeaderEncoder')->getMock();
     }
 
     private function _createParamEncoder()
     {
-        return $this->getMock('Swift_Encoder');
+        return $this->getMockBuilder('Swift_Encoder')->getMock();
     }
 }

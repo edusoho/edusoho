@@ -14,6 +14,8 @@ guide](https://github.com/willdurand/BazingaJsTranslationBundle/blob/master/UPGR
 Installation
 ------------
 
+### Require via Composer
+
 Install the bundle:
 
     composer require "willdurand/js-translation-bundle"
@@ -44,14 +46,39 @@ Publish assets:
 
     php app/console assets:install --symlink web
 
+### Require via NPM (optional)
+
+Install the package:
+
+    npm install bazinga-translator --save
+
+This step is optional because the files exposed by the npm package are also part of the composer bundle.
+Normally you would do this if you prefer to keep all your front-end dependencies in one place, or if you wish to include the `Translator` object as a module dependency in your JS files.
+
+**Important**: it is strongly recommended that you use the same version of the composer bundle and the npm package.
+
 
 Usage
 -----
 
-First, add the following line to your template. It will load the JS `Translator`:
+To use the `Translator` object in your JS files you can either load it globally or `require` / `import` it as a module.
+
+* To load it globally add the following line to your template:
 
 ``` html
 <script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
+```
+
+* To load it as a module you must be using a module bundler, like `webpack` and it is recommended that you install the translator via `npm`. Then in your JS files you can do:
+
+``` js
+// ES2015
+import Translator from 'bazinga-translator';
+```
+
+``` js
+// ES5
+var Translator = require('bazinga-translator');
 ```
 
 Then add the current application's locale into your layout, by adding a `lang`
@@ -75,6 +102,35 @@ Loading translations is a matter of adding a new `script` tag as follows:
 
 This will use the current `locale` and will return the translated messages found
 in each `messages.CURRENT_LOCALE.*` files of your project.
+
+In case you do not want to expose an entire translation domain to your frontend,
+you can manually add translations to the translator collections. This simulates
+the way how the above script would add translations, but allows you to use any
+other renderer (like `Twig` or `php`) to make translations accessible
+
+```twig
+<script>
+/**
+ * Adds a translation entry.
+ *
+ * @param {String} id         The message id
+ * @param {String} message    The message to register for the given id
+ * @param {String} [domain]   The domain for the message or null to use the default
+ * @param {String} [locale]   The locale or null to use the default
+ * @return {Object}           Translator
+ * @api public
+ */
+Translator.add(
+    'translation_key',
+    '{{ 'translation_key'|trans }}',
+    'messages',
+    'en'
+);
+</script>
+```
+Manually adding single translations allows your translators to change the translation
+or placeholder ordering without the need of a separate translation domain, or without
+having to change the `Twig` or `js` view.
 
 #### Domains
 
@@ -110,7 +166,7 @@ file of your project.
 #### Loading via JSON
 
 Alternatively, you can load your translated messages via JSON (e.g. using
-jQuery's `ajax()` or RequireJS's text plugin). Just amend the above mentioned
+the `fetch` API, jQuery's `ajax()` or RequireJS's text plugin). Just amend the above mentioned
 URLs to also contain the `'_format': 'json'` parameter like so:
 
 ``` html
@@ -123,11 +179,17 @@ Then, feed the translator via `Translator.fromJSON(myRetrievedJSONString)`.
 
 This bundle provides a command to dump the translation files:
 
-    php app/console bazinga:js-translation:dump [target]
+    php app/console bazinga:js-translation:dump [target] [--format=js|json] [--merge-domains]
 
 The optional `target` argument allows you to override the target directory to
 dump JS translation files in. By default, it generates files in the `web/js/`
 directory.
+
+The `--format` option allows you to specify which formats must be included in the output.
+If you only need JSON files in your project you can do `--format=json`.
+
+The `--merge-domains` option when set will generate only one file per locale with all the domains in it.
+For cases where you prefer to load all language strings at once.
 
 You have to load a `config.js` file, which contains the configuration for the
 JS Translator, then you can load all translation files that have been dumped.
@@ -151,7 +213,7 @@ The command below is useful if you use
 In the example above, all translation files from your entire project will be
 loaded. Of course you can load specific domains: `js/translations/admin/*.js`.
 
-The default translation URLs let a controller dump the translations. If you 
+The default translation URLs let a controller dump the translations. If you
 make use of the Assetic, you need to manually dump the translations each time
 a translation changes because the Assetic links will point to a static file.
 
@@ -322,7 +384,7 @@ bazinga_js_translation:
 
 #### Active locales
 
-By default, all locales are dumped. 
+By default, all locales are dumped.
 You can define an array of active locales:
 
 ``` yaml
@@ -334,7 +396,7 @@ bazinga_js_translation:
 
 #### Active Domains
 
-By default, all domains are dumped. 
+By default, all domains are dumped.
 You can define an array of active domains:
 
 ``` yaml

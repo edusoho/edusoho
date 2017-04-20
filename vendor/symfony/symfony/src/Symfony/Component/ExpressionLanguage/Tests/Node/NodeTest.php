@@ -11,16 +11,17 @@
 
 namespace Symfony\Component\ExpressionLanguage\Tests\Node;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\ExpressionLanguage\Node\Node;
 use Symfony\Component\ExpressionLanguage\Node\ConstantNode;
 
-class NodeTest extends \PHPUnit_Framework_TestCase
+class NodeTest extends TestCase
 {
     public function testToString()
     {
         $node = new Node(array(new ConstantNode('foo')));
 
-        $this->assertEquals(<<<EOF
+        $this->assertEquals(<<<'EOF'
 Node(
     ConstantNode(value: 'foo')
 )

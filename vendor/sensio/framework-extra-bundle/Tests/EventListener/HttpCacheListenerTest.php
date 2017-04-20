@@ -101,15 +101,13 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($vary, $result, 'Vary header should not be changed');
     }
 
-    public function testResponseIsNeitherPrivateNorPublicIfConfigurationIsPublicNotSet()
+    public function testResponseIsPrivateIfConfigurationIsPublicNotSet()
     {
-        $request = $this->createRequest(new Cache(array(
-        )));
+        $request = $this->createRequest(new Cache(array()));
 
         $this->listener->onKernelResponse($this->createEventMock($request, $this->response));
 
         $this->assertFalse($this->response->headers->hasCacheControlDirective('public'));
-        $this->assertFalse($this->response->headers->hasCacheControlDirective('private'));
     }
 
     public function testConfigurationAttributesAreSetOnResponse()
@@ -223,7 +221,10 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
 
     private function createEventMock(Request $request, Response $response)
     {
-        $event = $this->getMock('Symfony\Component\HttpKernel\Event\FilterResponseEvent', array(), array(), '', null);
+        $event = $this
+            ->getMockBuilder('Symfony\Component\HttpKernel\Event\FilterResponseEvent')
+            ->disableOriginalConstructor()
+            ->getMock();
         $event
             ->expects($this->any())
             ->method('getRequest')
@@ -241,7 +242,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
 
     private function getKernel()
     {
-        return $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        return $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
     }
 }
 

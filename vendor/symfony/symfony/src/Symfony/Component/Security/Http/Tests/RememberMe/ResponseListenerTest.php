@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Security\Http\Tests\RememberMe;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Http\RememberMe\ResponseListener;
 use Symfony\Component\Security\Http\RememberMe\RememberMeServicesInterface;
@@ -19,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class ResponseListenerTest extends \PHPUnit_Framework_TestCase
+class ResponseListenerTest extends TestCase
 {
     public function testRememberMeCookieIsSentWithResponse()
     {
@@ -83,7 +84,7 @@ class ResponseListenerTest extends \PHPUnit_Framework_TestCase
     private function getResponse()
     {
         $response = new Response();
-        $response->headers = $this->getMock('Symfony\Component\HttpFoundation\ResponseHeaderBag');
+        $response->headers = $this->getMockBuilder('Symfony\Component\HttpFoundation\ResponseHeaderBag')->getMock();
 
         return $response;
     }

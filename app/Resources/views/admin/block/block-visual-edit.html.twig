@@ -1,0 +1,68 @@
+{% extends 'admin/block/block-visual-layout.html.twig' %}
+
+{% set menu = menu|default('admin_block') %}
+{% set currentPage = 'admin_block_visual_edit' %}
+
+{% block page_title %} {{'编辑内容'|trans}} {% endblock %}
+
+{% set script_controller = 'block/visual-edit' %}
+
+{% block blockVisual %}
+  <style type="text/css">
+    .sortable-list .placeholder {
+      margin: 10px 0;
+      width: 100%;
+      height: 40px;
+      background: #FCFFC0;
+      border: 1px dashed #ccc;
+      list-style: none;
+    }
+    .nav.sortable-list .placeholder {
+      width: 80px;
+      padding: 10px 15px;
+      background: #eee;
+      margin: 0;
+    }
+    #btn-tabs li {
+      width: 66px;
+    }
+    .nav.nav-pills .dragged{
+      position: absolute!important;
+    }
+  </style>
+  {% if app.debug %}
+    <a class="btn btn-default btn-sm pull-right" href="{{ path('admin_block_visual_view_data', {blockTemplateId:block.blockTemplateId}) }}" target="_blank">{{'查看JSON配置'|trans}}</a>
+  {% endif %}
+  {% if block.code != 'jianmo:home_top_banner' and block.code != 'live_top_banner' and block.code != 'open_course_top_banner' and block.code != 'cloud_search_banner' %}
+  <!-- <div class="col-md-6"> -->
+    <div>
+      <h4>{{ block.title }}</h4>
+      <form id="block-edit-form" class="visual-edit-form form-horizontal" method="POST" action="">
+        {{ web_macro.flash_messages() }}
+        {% include 'admin/block/block-visual-items.html.twig' %}
+        <input type="hidden" name="blockId" value="{{ block.blockId|default() }}">
+        <input type="hidden" name="code" value="{{ block.code|default() }}">
+        <input type="hidden" name="blockTemplateId" value="{{ block.blockTemplateId|default() }}">
+        <input type="hidden" name="templateName" value="{{ block.templateName|default() }}">
+        <input type="hidden" name="mode" value="{{ block.mode|default() }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+        <button id="block-save-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="btn btn-primary" data-toggle="block-edit-form" data-target="#block-edit-form">{{'保存'|trans}}</button>
+      </form>
+    </div>
+
+  {% else %}
+    <!-- 以下是简墨新版的样式 -->
+    <h4>{{ block.title }}</h4>
+    <form id="block-edit-form" class="visual-edit-form form-horizontal" method="POST" action="">
+      {{ web_macro.flash_messages() }}
+      {% include 'admin/block/block-visual-items.html.twig' %}
+    </form>
+    <!-- 以上是新版的样式 -->
+  {% endif %}
+
+  <!-- <div class="col-md-4">
+    {% include 'admin/block/affix-nav.html.twig' %}
+  </div> -->
+
+{% endblock %}

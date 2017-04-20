@@ -11,13 +11,14 @@
 
 namespace Symfony\Component\Translation\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Resource\SelfCheckingResourceInterface;
 use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\Loader\LoaderInterface;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\MessageCatalogue;
 
-class TranslatorCacheTest extends \PHPUnit_Framework_TestCase
+class TranslatorCacheTest extends TestCase
 {
     protected $tmpDir;
 
@@ -95,7 +96,7 @@ class TranslatorCacheTest extends \PHPUnit_Framework_TestCase
         $catalogue->addResource(new StaleResource()); // better use a helper class than a mock, because it gets serialized in the cache and re-loaded
 
         /** @var LoaderInterface|\PHPUnit_Framework_MockObject_MockObject $loader */
-        $loader = $this->getMock('Symfony\Component\Translation\Loader\LoaderInterface');
+        $loader = $this->getMockBuilder('Symfony\Component\Translation\Loader\LoaderInterface')->getMock();
         $loader
             ->expects($this->exactly(2))
             ->method('load')
@@ -228,8 +229,8 @@ class TranslatorCacheTest extends \PHPUnit_Framework_TestCase
 
     public function testRefreshCacheWhenResourcesAreNoLongerFresh()
     {
-        $resource = $this->getMock('Symfony\Component\Config\Resource\SelfCheckingResourceInterface');
-        $loader = $this->getMock('Symfony\Component\Translation\Loader\LoaderInterface');
+        $resource = $this->getMockBuilder('Symfony\Component\Config\Resource\SelfCheckingResourceInterface')->getMock();
+        $loader = $this->getMockBuilder('Symfony\Component\Translation\Loader\LoaderInterface')->getMock();
         $resource->method('isFresh')->will($this->returnValue(false));
         $loader
             ->expects($this->exactly(2))
@@ -272,7 +273,7 @@ class TranslatorCacheTest extends \PHPUnit_Framework_TestCase
      */
     private function createFailingLoader()
     {
-        $loader = $this->getMock('Symfony\Component\Translation\Loader\LoaderInterface');
+        $loader = $this->getMockBuilder('Symfony\Component\Translation\Loader\LoaderInterface')->getMock();
         $loader
             ->expects($this->never())
             ->method('load');

@@ -253,9 +253,7 @@ class ScriptHandler
             'Symfony\\Component\\HttpFoundation\\ServerBag',
             'Symfony\\Component\\HttpFoundation\\Request',
 
-            'Symfony\\Component\\HttpKernel\\Kernel',
             'Symfony\\Component\\ClassLoader\\ClassCollectionLoader',
-            'Symfony\\Component\\ClassLoader\\ApcClassLoader',
         );
 
         if (method_exists('Symfony\Component\ClassLoader\ClassCollectionLoader', 'inline')) {
@@ -395,6 +393,7 @@ EOF;
 
     protected static function getPhpArguments()
     {
+        $ini = null;
         $arguments = array();
 
         $phpFinder = new PhpExecutableFinder();
@@ -402,7 +401,14 @@ EOF;
             $arguments = $phpFinder->findArguments();
         }
 
-        if (false !== $ini = php_ini_loaded_file()) {
+        if ($env = strval(getenv('COMPOSER_ORIGINAL_INIS'))) {
+            $paths = explode(PATH_SEPARATOR, $env);
+            $ini = array_shift($paths);
+        } else {
+            $ini = php_ini_loaded_file();
+        }
+
+        if ($ini) {
             $arguments[] = '--php-ini='.$ini;
         }
 

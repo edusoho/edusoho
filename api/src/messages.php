@@ -3,7 +3,7 @@
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Api\Util\UserUtil;
 use Silex\Application;
 
@@ -40,11 +40,11 @@ $api->post('/', function (Request $request) {
     $content = $request->request->get('content');
     $type = $request->request->get('type','text');
     $sender = getCurrentUser();
-    $receiver = ServiceKernel::instance()->createService('User.UserService')->getUserByNickname($nickname); 
+    $receiver = ServiceKernel::instance()->createService('User:UserService')->getUserByNickname($nickname);
     if(empty($receiver)){
         throw $this->createNotFoundException("抱歉，该收信人尚未注册!");
     }
-    $message = ServiceKernel::instance()->createService('User.MessageService')->sendMessage($sender['id'], $receiver['id'], $content, $type);
+    $message = ServiceKernel::instance()->createService('User:MessageService')->sendMessage($sender['id'], $receiver['id'], $content, $type);
     return array(
         'success' => empty($message) ? 'flase' : 'true',
         'id' => empty($message) ? 0 : $message['id'],

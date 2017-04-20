@@ -1,7 +1,0 @@
-{% set props = status.properties %}
-
-{% if mode == 'simple' %}
-  {{'"%props%"的作业已被批阅'|trans({'%props%':props.lesson.title|sub_text(15) })}}  
-{% elseif mode == 'full' %}
-
-{% endif %}

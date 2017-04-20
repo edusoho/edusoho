@@ -2,24 +2,25 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
 
 class MyLearning extends BaseResource
 {
     public function get(Application $app, Request $request)
     {
         $user = $this->getCurrentUser();
+
         $beginTime = strtotime("-6 months");
         $conditions = array(
             'lastViewTime_GE' => $beginTime,
-            'userId'          => $user['id']
+            'userId' => $user['id'],
         );
 
-        $membersCount = $this->getCourseService()->searchMemberCount($conditions);
-        $members = $this->getCourseService()->searchMembers(
+        $membersCount = $this->getMemberService()->countMembers($conditions);
+        $members = $this->getMemberService()->searchMembers(
             $conditions,
-            array('lastViewTime', 'DESC', 'id', 'DESC'),
+            array('lastViewTime' => 'DESC', 'id' => 'DESC'),
             0,
             $membersCount
         );
@@ -27,7 +28,7 @@ class MyLearning extends BaseResource
         $learningData = $this->buildLearningData($members);
         $learningData = $this->filter($learningData);
 
-        return  $this->wrap($learningData, count($learningData));
+        return $this->wrap($learningData, count($learningData));
     }
 
     public function filter($learningData)
@@ -50,7 +51,10 @@ class MyLearning extends BaseResource
         $courseIds = ArrayToolkit::column($members, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
+        $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
+
         $groupMembers = ArrayToolkit::group($members, 'joinedType');
+
         if (!empty($groupMembers['classroom'])) {
             $classroomIds = ArrayToolkit::column($groupMembers['classroom'], 'classroomId');
             $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
@@ -58,34 +62,53 @@ class MyLearning extends BaseResource
         }
 
         foreach ($members as $key => $member) {
-            $learningData[$key] = $courses[$member['courseId']];
-            $learningData[$key]['lastViewTime'] = empty($member['lastViewTime']) ? 0 : date('c', $member['lastViewTime']);
-            $learningData[$key]['joinedType'] = $member['joinedType'];
-            if ('classroom' == $member['joinedType']) {
-                $learningData[$key]['classroomTitle'] = empty($classrooms[$member['classroomId']]) ? '' : $classrooms[$member['classroomId']]['title'];
+            if (empty($courses[$member['courseId']])) {
+                continue;
             }
-        }
+            $course = $courses[$member['courseId']];
 
+            $course['courseSet'] = $courseSets[$course['courseSetId']];
+            $course['lastViewTime'] = empty($member['lastViewTime']) ? 0 : date('c', $member['lastViewTime']);
+            $course['joinedType'] = $member['joinedType'];
+            if ('classroom' == $member['joinedType']) {
+                $course['classroomTitle'] = empty($classrooms[$member['classroomId']]) ? '' : $classrooms[$member['classroomId']]['title'];
+            }
+
+            $learningData[] = $course;
+        }
         return $learningData;
     }
 
     protected function findCoursesByIds(array $courseIds)
     {
-        return $this->getCourseService()->findCoursesByIds($courseIds);
+        return $this->findCoursesByIds($courseIds);
     }
 
     protected function findClassroomsByIds(array $classroomIds)
     {
-        return $this->getClassroomService()->findClassroomsByIds($classroomIds);
+        return $this->findClassroomsByIds($classroomIds);
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 }

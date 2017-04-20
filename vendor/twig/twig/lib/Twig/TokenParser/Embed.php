@@ -3,7 +3,7 @@
 /*
  * This file is part of Twig.
  *
- * (c) 2012 Fabien Potencier
+ * (c) Fabien Potencier
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,6 +11,8 @@
 
 /**
  * Embeds a template.
+ *
+ * @final
  */
 class Twig_TokenParser_Embed extends Twig_TokenParser_Include
 {
@@ -48,7 +50,7 @@ class Twig_TokenParser_Embed extends Twig_TokenParser_Include
 
         $stream->expect(Twig_Token::BLOCK_END_TYPE);
 
-        return new Twig_Node_Embed($module->getAttribute('filename'), $module->getAttribute('index'), $variables, $only, $ignoreMissing, $token->getLine(), $this->getTag());
+        return new Twig_Node_Embed($module->getTemplateName(), $module->getAttribute('index'), $variables, $only, $ignoreMissing, $token->getLine(), $this->getTag());
     }
 
     public function decideBlockEnd(Twig_Token $token)

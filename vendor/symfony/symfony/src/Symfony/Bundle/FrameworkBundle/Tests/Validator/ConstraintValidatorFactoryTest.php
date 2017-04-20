@@ -11,17 +11,18 @@
 
 namespace Symfony\Bundle\FrameworkBundle\Tests\Validator;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Validator\ConstraintValidatorFactory;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Validator\Constraints\Blank as BlankConstraint;
 
-class ConstraintValidatorFactoryTest extends \PHPUnit_Framework_TestCase
+class ConstraintValidatorFactoryTest extends TestCase
 {
     public function testGetInstanceCreatesValidator()
     {
         $class = get_class($this->getMockForAbstractClass('Symfony\\Component\\Validator\\ConstraintValidator'));
 
-        $constraint = $this->getMock('Symfony\\Component\\Validator\\Constraint');
+        $constraint = $this->getMockBuilder('Symfony\\Component\\Validator\\Constraint')->getMock();
         $constraint
             ->expects($this->once())
             ->method('validatedBy')
@@ -46,14 +47,14 @@ class ConstraintValidatorFactoryTest extends \PHPUnit_Framework_TestCase
         $validator = $this->getMockForAbstractClass('Symfony\\Component\\Validator\\ConstraintValidator');
 
         // mock ContainerBuilder b/c it implements TaggedContainerInterface
-        $container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerBuilder', array('get'));
+        $container = $this->getMockBuilder('Symfony\\Component\\DependencyInjection\\ContainerBuilder')->setMethods(array('get'))->getMock();
         $container
             ->expects($this->once())
             ->method('get')
             ->with($service)
             ->will($this->returnValue($validator));
 
-        $constraint = $this->getMock('Symfony\\Component\\Validator\\Constraint');
+        $constraint = $this->getMockBuilder('Symfony\\Component\\Validator\\Constraint')->getMock();
         $constraint
             ->expects($this->once())
             ->method('validatedBy')
@@ -68,7 +69,7 @@ class ConstraintValidatorFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetInstanceInvalidValidatorClass()
     {
-        $constraint = $this->getMock('Symfony\\Component\\Validator\\Constraint');
+        $constraint = $this->getMockBuilder('Symfony\\Component\\Validator\\Constraint')->getMock();
         $constraint
             ->expects($this->once())
             ->method('validatedBy')

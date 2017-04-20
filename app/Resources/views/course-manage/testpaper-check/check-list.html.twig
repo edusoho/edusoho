@@ -1,0 +1,16 @@
+{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
+
+{% block title %}{{'试卷批阅'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
+{% set side_nav = 'testpaper-check' %}
+
+{% block main %}
+  <div class="panel panel-default">
+    {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
+    <div class="panel-body">
+      {% if isTeacher is defined and not isTeacher %}
+        <span class="color-danger">{{'当前用户不是本课程教师，没有批阅试卷的权限。'|trans}}</span>
+      {% endif %}
+      {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:course.id,targetType:'course',type:'testpaper',testpaperIds:testpaperIds})) }}
+    </div>
+  </div>
+{% endblock %}

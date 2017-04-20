@@ -1,0 +1,7 @@
+{% set props = status.properties %}
+
+{% if mode == 'simple' %}
+{{'的作业 "%props%"已被批阅'|trans({'%props%':props.testpaper.name|sub_text(15)})}}
+{% elseif mode == 'full' %}
+
+{% endif %}

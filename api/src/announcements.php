@@ -45,7 +45,7 @@ $api->get('/', function (Request $request) {
     $start = $request->query->get('start',0);
     $limit = $request->query->get('limit',10);
 
-    $announcements = ServiceKernel::instance()->createService('Announcement.AnnouncementService')->searchAnnouncements(array('targetType'=>$targetType,'targetId'=>$targetId),array('createdTime','DESC'),$start,$limit);
+    $announcements = ServiceKernel::instance()->createService('Announcement:AnnouncementService')->searchAnnouncements(array('targetType'=>$targetType,'targetId'=>$targetId),array('createdTime','DESC'),$start,$limit);
     return $announcements;
 });
 

@@ -11,7 +11,8 @@ define(function(require, exports, module) {
                     if (result.msg == 'ok') {
                         Notify.success('附件已删除');
                         $this.parent().remove();
-                        $('.js-upload-file').removeClass('hidden');
+                        // $('.js-upload-file').removeClass('hidden');
+                        $('.js-upload-file').css('display', '');
                     } else {
                         Notify.danger('附件删除失败,请稍后再试');
                     }

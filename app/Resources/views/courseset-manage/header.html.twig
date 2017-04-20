@@ -1,0 +1,63 @@
+{% import "macro.html.twig" as web_macro %}
+{% do script(['app/js/courseset-manage/header/index.js']) %}
+{% set basepath = path('course_show', {id: courseSet.defaultCourseId}) %}
+
+
+<div class="es-section course-manage-header clearfix">
+    <a href="{{basepath}}">
+      <img class="picture" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" /> <!-- courseSet.largePicture -->
+    </a>
+  <h1 class="title">
+    {% if courseSet.type != 'normal' %}
+      [{{ dict('courseType')[courseSet.type] }}]
+    {% endif %}
+    <a class="link-dark" href="{{basepath}}">{{ courseSet.title }}</a>
+    {% if courseSet.status=='closed' %}
+      <span class="label label-danger ">{{'已关闭'|trans}}</span>
+    {% elseif courseSet.status=='draft' %}
+      <span class="label label-warning ">{{'未发布'|trans}}</span>
+    {% elseif courseSet.status=='published' %}
+      {% if courseSet.serializeMode=='serialized' %}
+        <span class="label label-success ">{{'更新中'|trans}}</span>
+      {% elseif courseSet.serializeMode=='finished' %}
+        <span class="label label-warning ">{{'已完结'|trans}}</span>
+      {% else %}
+        <span class="label label-success ">{{'已发布'|trans}}</span>
+      {% endif %}
+    {% endif %}
+  </h1>
+
+  <div class="teachers">
+    {% if courseSet.teacherIds|default(null) %}
+      {{'教师：'|trans}}
+      {% for id in courseSet.teacherIds %}
+        {% set user = users[id] %}
+        <a href="{{ path('user_show',  {id:user.id}) }}" >{{ user.nickname }}</a>
+      {% endfor %}
+    {% endif  %}
+  </div>
+
+  <div class="toolbar hidden-xs">
+    {% if course.courseSetId|default(null) and course_count(course.courseSetId)|default(0) > 1 %}
+        <a class="btn btn-default btn-sm " href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">返回课程编辑</a>
+    {% endif %}
+
+    {% if courseSet.status == 'published' %}
+      <div class="btn-group">
+        <a class="btn btn-default btn-sm" href="{{basepath}}">{{'返回课程主页'|trans}}</a>
+      </div>
+    {% endif %}
+    
+    {% if courseSet.status != 'published' %}
+      <div class="btn-group">
+        <a class="btn btn-default btn-sm" target="_blank" href="{{ path('course_show', {id: courseSet.defaultCourseId, 'previewAs':'guest'}) }}">{{'预览'|trans}}</a>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-success btn-sm course-publish-btn" data-url="{{ path('course_set_manage_publish', {id:courseSet.id}) }}">{{'发布课程'|trans}}</button>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% if courseSet.status == 'closed' %}
+<div class="alert alert-warning">课程已关闭，在有效期内的学员仍可正常学习，若不希望学员继续学习，需在【学员管理】中移除学员。</div>
+{% endif %}

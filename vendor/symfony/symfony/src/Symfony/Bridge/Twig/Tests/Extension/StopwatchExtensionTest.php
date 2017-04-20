@@ -11,9 +11,10 @@
 
 namespace Symfony\Bridge\Twig\Tests\Extension;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Twig\Extension\StopwatchExtension;
 
-class StopwatchExtensionTest extends \PHPUnit_Framework_TestCase
+class StopwatchExtensionTest extends TestCase
 {
     /**
      * @expectedException \Twig_Error_Syntax
@@ -53,7 +54,7 @@ class StopwatchExtensionTest extends \PHPUnit_Framework_TestCase
     protected function getStopwatch($events = array())
     {
         $events = is_array($events) ? $events : array($events);
-        $stopwatch = $this->getMock('Symfony\Component\Stopwatch\Stopwatch');
+        $stopwatch = $this->getMockBuilder('Symfony\Component\Stopwatch\Stopwatch')->getMock();
 
         $i = -1;
         foreach ($events as $eventName) {

@@ -11,14 +11,16 @@
 
 namespace Symfony\Component\ExpressionLanguage\Tests;
 
+use Symfony\Component\ExpressionLanguage\ExpressionFunction;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\ExpressionLanguage\Tests\Fixtures\TestProvider;
 
-class ExpressionLanguageTest extends \PHPUnit_Framework_TestCase
+class ExpressionLanguageTest extends TestCase
 {
     public function testCachedParse()
     {
-        $cacheMock = $this->getMock('Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheInterface');
+        $cacheMock = $this->getMockBuilder('Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheInterface')->getMock();
         $savedParsedExpression = null;
         $expressionLanguage = new ExpressionLanguage($cacheMock);
 
@@ -116,7 +118,7 @@ class ExpressionLanguageTest extends \PHPUnit_Framework_TestCase
 
     public function testCachingWithDifferentNamesOrder()
     {
-        $cacheMock = $this->getMock('Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheInterface');
+        $cacheMock = $this->getMockBuilder('Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheInterface')->getMock();
         $expressionLanguage = new ExpressionLanguage($cacheMock);
         $savedParsedExpressions = array();
         $cacheMock
@@ -137,5 +139,59 @@ class ExpressionLanguageTest extends \PHPUnit_Framework_TestCase
         $expression = 'a + b';
         $expressionLanguage->compile($expression, array('a', 'B' => 'b'));
         $expressionLanguage->compile($expression, array('B' => 'b', 'a'));
+    }
+
+    /**
+     * @dataProvider getRegisterCallbacks
+     * @expectedException \LogicException
+     */
+    public function testRegisterAfterParse($registerCallback)
+    {
+        $el = new ExpressionLanguage();
+        $el->parse('1 + 1', array());
+        $registerCallback($el);
+    }
+
+    /**
+     * @dataProvider getRegisterCallbacks
+     * @expectedException \LogicException
+     */
+    public function testRegisterAfterEval($registerCallback)
+    {
+        $el = new ExpressionLanguage();
+        $el->evaluate('1 + 1');
+        $registerCallback($el);
+    }
+
+    /**
+     * @dataProvider getRegisterCallbacks
+     * @expectedException \LogicException
+     */
+    public function testRegisterAfterCompile($registerCallback)
+    {
+        $el = new ExpressionLanguage();
+        $el->compile('1 + 1');
+        $registerCallback($el);
+    }
+
+    public function getRegisterCallbacks()
+    {
+        return array(
+            array(
+                function (ExpressionLanguage $el) {
+                    $el->register('fn', function () {}, function () {});
+                },
+            ),
+            array(
+                function (ExpressionLanguage $el) {
+                    $el->addFunction(new ExpressionFunction('fn', function () {}, function () {}));
+                },
+            ),
+            array(
+                function (ExpressionLanguage $el) {
+                    $el->registerProvider(new TestProvider());
+                },
+            ),
+        );
     }
 }

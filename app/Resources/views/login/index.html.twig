@@ -1,0 +1,75 @@
+{% extends 'layout.html.twig' %}
+{% do script(['libs/jquery-validation.js','app/js/auth/login/index.js']) %}
+{% set bodyClass = 'login' %}
+
+{% block title %}{{ '登录'|trans }} - {{ parent() }}{% endblock %}
+
+{% block content %}
+  {% if app.request.cookies.get('modalOpened') == 1 %}
+    <a href="#modal" class=" hidden" data-toggle="modal"
+      data-url="{{ path('card_info',{'cardType':app.request.query.get('cardType'),'cardId':app.request.query.get('cardId')}) }}" class="hidden"><span
+        class="receive-modal"></span></a>
+  {% endif %}
+  <div class="es-section login-section">
+    <div class="logon-tab clearfix">
+      <a class="active">{{ '登录帐号'|trans }}</a>
+      <a href="{{ path('register', {goto:_target_path}) }}">{{ '注册帐号'|trans }}</a>
+    </div>
+    <div class="login-main">
+      <form id="login-form" class="form-vertical" method="post" action="{{ path('login_check') }}">
+
+        {% if error %}
+          <div class="alert alert-danger">{{ error.message|trans }}</div>
+        {% endif %}
+        {{ web_macro.flash_messages() }}
+        <div class="form-group mbl">
+          <label class="control-label" for="login_username">{{ '帐号'|trans }}</label>
+          <div class="controls">
+            <input class="form-control input-lg" id="login_username" type="text" name="_username" value="{{ last_username }}" required
+              placeholder='{{ '邮箱/手机/用户名'|trans }}'/>
+            <div class="help-block"></div>
+          </div>
+        </div>
+        <div class="form-group mbl">
+          <label class="control-label" for="login_password">{{ '密码'|trans }}</label>
+          <div class="controls">
+            <input class="form-control input-lg" id="login_password" type="password" name="_password" required placeholder='{{ '密码'|trans }}'/>
+          </div>
+        </div>
+
+        <div class="form-group mbl">
+          <div class="controls">
+            <input type="checkbox" name="_remember_me" checked="checked"> {{ '记住密码'|trans }}
+          </div>
+        </div>
+        <div class="form-group mbl">
+          <button type="button" class="btn btn-primary btn-lg btn-block js-btn-login">{{ '登录'|trans }}</button>
+        </div>
+
+        <input type="hidden" name="_target_path" value="{{ _target_path }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+
+      <div class="mbl">
+        <a class="link-primary" href="{{ path('password_reset') }}">{{ '找回密码'|trans }}</a>
+        <span class="color-gray mhs">|</span>
+        <span class="color-gray">{{ '还没有注册帐号？'|trans }}</span>
+        <a class="link-primary" href="{{ path('register', {goto:_target_path}) }}">{{ '立即注册'|trans }}</a>
+      </div>
+
+      {% if setting('login_bind.enabled') %}
+        <div class="social-login">
+        <span>
+          {{ render(controller('AppBundle:Login:oauth2LoginsBlock', {targetPath:_target_path})) }}
+        </span>
+          <div class="line"></div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block bottom %}
+  {% include 'mobile/footer-tool-bar.html.twig' with { mobile_tool_bar: 'login' } %}
+{% endblock %}

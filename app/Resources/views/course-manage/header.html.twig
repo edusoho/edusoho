@@ -1,0 +1,47 @@
+{% import "macro.html.twig" as web_macro %}
+{% do script(['app/js/course-manage/header/index.js']) %}
+{% set basepath = path('course_show', {id: course.id}) %}
+
+<div class="es-section course-manage-header clearfix">
+  <h1 class="title">
+    <a class="link-dark" href="{{basepath}}">{{ courseSet.title ~ ' - ' ~ course.title }}</a>
+    {% if course.status=='closed' %}
+      <span class="label label-danger ">{{'已关闭'|trans}}</span>
+    {% elseif course.status=='draft' %}
+      <span class="label label-warning ">{{'未发布'|trans}}</span>
+    {% elseif course.status=='published' %}
+      <span class="label label-success ">{{'已发布'|trans}}</span>
+    {% endif %}
+  </h1>
+
+  <div class="teachers">
+    {% if course.teacherIds|default(null) %}
+      {{'教师：'|trans}}
+      {% for id in course.teacherIds %}
+        {% set user = users[id] %}
+        <a href="{{ path('user_show',  {id:user.id}) }}" >{{ user.nickname }}</a>
+      {% endfor %}
+    {% endif  %}
+  </div>
+
+  <div class="toolbar hidden-xs">
+    <a class="btn btn-default btn-sm " href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">
+      返回课程编辑
+    </a>
+
+    {% if course.status == 'published' %}
+      <div class="btn-group">
+        <a class="btn btn-default btn-sm" href="{{basepath}}">{{'返回课程主页'|trans}}</a>
+      </div>
+    {% endif %}
+    
+    {% if course.status != 'published' %}
+      <div class="btn-group">
+        <a class="btn btn-default btn-sm" target="_blank" href="{{ path('course_show', {id: course.id, 'previewAs':'guest'}) }}">{{'预览'|trans}}</a>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-success btn-sm course-publish-btn" data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">{{'发布教学计划'|trans}}</button>
+      </div>
+    {% endif %}
+  </div>
+</div>

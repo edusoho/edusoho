@@ -1,0 +1,17 @@
+{% extends 'settings/layout.html.twig' %}
+{% block title %}{{'场景未开启'|trans}} - {{'安全设置'|trans}} - {{ parent() }}{% endblock %}
+{% set side_nav = 'security' %}
+{% do script(['libs/jquery-validation.js','app/js/settings/bind-mobile/index.js'])%}
+
+{% block main %}
+ {% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
+    {% block heading %}{{'场景未开启'|trans}}{% endblock %}
+    {% block body %}
+
+		<div class="text-center">
+		  <h1 class="color-gray">{{'该使用场景未开启'|trans}}</h1>
+		</div>
+
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

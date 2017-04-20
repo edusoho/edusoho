@@ -1,0 +1,124 @@
+//此处为通用变量，用于各个bundle的饮用，只具有方法，不生成样式；
+
+
+
+@gray-base:             #000;
+@gray-darker:           #313131;
+@gray-dark:             #616161;
+@gray:                  #919191;
+@gray-medium:           #c1c1c1;
+@gray-light:            #e1e1e1;
+@gray-lighter:          #f5f5f5;
+@bg-color:              #fafafa;
+@bg-new-color:          #f5f8fa;
+@border-color:          #e4ecf3;
+
+@brand-primary:         #46c37b;
+// @brand-primary-darker:  #34a263;
+@brand-success:         #70d445;
+@brand-info:            #2db7f5;
+@brand-warning:         #ff8a0c;
+@brand-danger:          #e83d2c;
+
+/* =========================== media =========================== */
+
+@screen-xs-min:              480px;
+@screen-sm-min:              768px;
+@screen-md-min:              992px;
+@screen-lg-min:              1200px;
+
+@screen-xs-max:              (@screen-sm-min - 1);
+@screen-sm-max:              (@screen-md-min - 1);
+@screen-md-max:              (@screen-lg-min - 1);
+
+
+// 字符串截取 推荐用text-overflow
+.text-overflow() {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+
+// 透明度兼容
+.opacity(@opacity) {
+  opacity: @opacity;
+  // IE8 filter
+  @opacity-ie: (@opacity * 100);
+  filter: ~"alpha(opacity=@{opacity-ie})";
+}
+
+// 图片响应式
+.img-responsive(@display: block) {
+  display: @display;
+  max-width: 100%;
+  height: auto;
+}
+
+.img-full(@display: block) {
+  display: @display;
+  height: auto;
+  width: 100%;
+}
+
+// css3样式简写
+.es-transform(@x:1.1 , @y:1.1) {
+  -webkit-transform: scale(@x, @y);
+     -moz-transform: scale(@x, @y);
+      -ms-transform: scale(@x, @y);
+       -o-transform: scale(@x, @y);
+          transform: scale(@x, @y);
+}
+
+.es-transition(@property:all,@time:.3s) {
+  -webkit-transition: @property @time ease;
+     -moz-transition: @property @time ease;
+       -o-transition: @property @time ease;
+          transition: @property @time ease;
+}
+
+.box-shadow(@box-shadow:none) {
+  -webkit-box-shadow: @box-shadow;
+     -moz-box-shadow: @box-shadow;
+          box-shadow: @box-shadow;
+}
+
+.es-box-shadow {
+  -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+     -moz-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+          box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+}
+
+.border-radius(@border-radius:4px) {
+  -webkit-border-radius: @border-radius;
+     -moz-border-radius: @border-radius;
+          border-radius: @border-radius;
+}
+
+.border-top-left-radius(@border-radius:4px) {
+  border-top-left-radius: @border-radius;
+}
+.border-top-right-radius(@border-radius:4px) {
+  border-top-right-radius: @border-radius;
+}
+.border-bottom-left-radius(@border-radius:4px) {
+  border-bottom-left-radius: @border-radius;
+}
+.border-bottom-right-radius(@border-radius:4px) {
+  border-bottom-right-radius: @border-radius;
+}
+
+.animation(@animation) {
+  -webkit-animation: @animation;
+     -moz-animation: @animation;
+       -o-animation: @animation;
+          animation: @animation;
+}
+
+.transform(@transform) {
+  -webkit-transform: @transform;
+     -moz-transform: @transform;
+       -o-transform: @transform;
+          transform: @transform;
+}

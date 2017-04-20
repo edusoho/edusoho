@@ -1,0 +1,96 @@
+{% extends 'testpaper/testpaper-layout.html.twig' %}
+
+{% do script(['libs/jquery-validation.js','libs/es-ckeditor/ckeditor.js','app/js/testpaper-manage/check/index.js']) %}
+
+{% set role = 'teacher' %}
+{% set showHeader = 1 %}
+{% set isIframeBody = 0 %}
+{% set isTeacher = 1 %}
+
+{% block paper_result_bar %}
+  {% include 'testpaper/part/paper-result-objective.html.twig' %}
+{% endblock %}
+
+{% block paper_warning %}
+  <div class="alert alert-warning">{{'请完成以下题目的批阅。'|trans}}</div>
+{% endblock %}
+
+{% block paper_sidebar %}
+
+  <div class="testpaper-card {{testpaperCardClass|default('')}}" data-spy="affix" data-offset-top="200">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        {% for type in questionTypes|default([]) if questions[type] is defined %}
+
+          {% for question in questions[type] %}
+            {% if question.type == 'material' %}
+              {% for questionSub in question.subs|default([]) %}
+                <a href="javascript:;" data-anchor="#question{{ questionSub.id }}" class="js-btn-index color-lump lump-card">{{ questionSub.seq }}</a>
+              {% endfor %}
+            {% else %}
+              <a href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump lump-card">{{ question.seq }}</a>
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+        
+      </div>
+      <div class="panel-footer">
+        <button class="btn btn-success btn-block" data-role="check-submit">{{'完成批阅'|trans}}</button>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block testpaper_checked_dialog %}
+  <div id="testpaper-checked-dialog" class="modal in" aria-hidden="false" style="display: none;">
+    <div class="modal-dialog modal-dialog-small">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">{{'完成批阅'|trans}}</h4>
+        </div>
+        <div class="modal-body">
+
+          <div class="form-group">
+            <div class="controls">
+              <textarea class="form-control" rows='4' id="testpaper-teacherSay-input" placeholder="{{'请输入评语'|trans}}"></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="controls">
+              <select class="form-control" id="teacher-say-select" data-role="teacher-say">
+                <option value="">---{{'常用评语'|trans}}---</option>
+                <option value="1">{{'继续努力，继续进步！'|trans}}</option>
+                <option value="2">{{'不错，有进步，再努力些就会更棒！'|trans}}</option>
+                <option value="3">{{'你真棒！我为你骄傲！'|trans}}</option>
+                <option value="4">{{'有点松懈了吧？继续加油吧！'|trans}}</option>
+                <option value="5">{{'用心、专注、坚持，你能做的更好的！'|trans}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-4 controls">
+              {% if paperResult|default(null) %}
+                <input type="hidden" value="{{ paperResult.objectiveScore }}" name="objectiveScore" />
+                {{'试卷得分'|trans}}:<span id="totalScore">{{ paperResult.objectiveScore }}</span>
+              {% endif %}
+            </div>
+            <div class="col-md-8 controls radios">
+              {{ radios('passedStatus', dict('passedStatus'), 'passed' ) }}
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          {% if source|default('course') == 'classroom' %}
+            {% set postUrl = path('classroom_manage_testpaper_check', {id:targetId,resultId:paperResult.id}) %}
+          {% else %}
+            {% set postUrl = path('course_manage_testpaper_check', {id:targetId,resultId:paperResult.id}) %}
+          {% endif %}
+          <a href="javascript:;" class="btn btn-default" data-dismiss="modal">{{'取消'|trans}}</a>
+          <button type="button" class="btn btn-info" id="testpaper-teacher-say-btn" data-post-url="{{ postUrl }}" data-goto="{{ app.request.server.get('HTTP_REFERER') }}" data-role="finish-check" data-loading-text="{{'正在提交, 请稍等'|trans}}...">{{'完成批阅'|trans}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

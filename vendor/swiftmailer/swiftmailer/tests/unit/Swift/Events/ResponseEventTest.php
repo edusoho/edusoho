@@ -26,8 +26,6 @@ class Swift_Events_ResponseEventTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($transport, $ref);
     }
 
-    // -- Creation Methods
-
     private function _createEvent(Swift_Transport $source, $response, $result)
     {
         return new Swift_Events_ResponseEvent($source, $response, $result);
@@ -35,6 +33,6 @@ class Swift_Events_ResponseEventTest extends \PHPUnit_Framework_TestCase
 
     private function _createTransport()
     {
-        return $this->getMock('Swift_Transport');
+        return $this->getMockBuilder('Swift_Transport')->getMock();
     }
 }

@@ -1,0 +1,52 @@
+{% if canManage %}
+  <ul class="list-group">
+    <li class="list-group-item {% if side_nav == 'main' %}active{% endif %}">
+      <a href="{{ path('classroom_manage', {id:classroom.id}) }}">{{'管理首页'|trans}}</a>
+    </li>
+  </ul>
+  
+  <ul class="list-group">
+    <li class="list-group-heading">{{ setting('classroom.name')|default('班级'|trans) ~ '设置'|trans }}</li>
+    <li class="list-group-item {% if side_nav == 'base' %}active{% endif %}">
+      <a href="{{ path('classroom_manage_set_info', {id:classroom.id}) }}">{{'基本信息'|trans}} {% if classroom.about is empty %}<span class="label label-info">{{'未完善'|trans}}</span>{% endif %}</a>
+    </li>
+    <li class="list-group-item {% if side_nav == 'price' %}active{% endif %}">
+      <a href="{{ path('classroom_manage_set_price', {id:classroom.id}) }}">{{'价格设置'|trans}}</a>
+    </li>
+    <li class="list-group-item {% if side_nav == 'picture' %}active{% endif %}">
+    <a href="{{ path('classroom_manage_set_picture', {id:classroom.id}) }}">{{'封面图片'|trans}} {% if classroom.smallPicture is empty %}<span class="label label-info">{{'未设置'|trans}}</span>{% endif %}</a>
+    </li>
+    <li class="list-group-item {% if side_nav == 'service' %}active{% endif %}">
+      <a href="{{ path('classroom_manage_service', {id:classroom.id}) }}">{{'服务设置'|trans}}</a>
+    </li>
+    <li class="list-group-item {% if side_nav == 'headTeacher' %}active{% endif %}">
+      <a href="{{ path('classroom_manage_headteacher', {id:classroom.id}) }}">{{'班主任设置'|trans}}</a>
+    </li>
+    <li class="list-group-item {% if side_nav == 'teachers' %}active{% endif %}">
+      <a href="{{ path('classroom_manage_teachers', {id:classroom.id}) }}">{{'教师设置'|trans}}</a>
+    </li>
+    <li class="list-group-item {% if side_nav == 'assistant' %}active{% endif %}">
+      <a href="{{ path('classroom_manage_assistants', {id:classroom.id}) }}">{{'助教设置'|trans}}</a>
+    </li>
+  </ul>
+{% endif %}
+
+<ul class="list-group">
+  <li class="list-group-heading">{{ setting('classroom.name')|default('班级'|trans) ~ '管理'|trans }}</li>
+  {% if canManage %}
+    <li class="list-group-item {% if side_nav == 'courses' %}active{% endif %}"><a href="{{ path('classroom_manage_courses', {id:classroom.id}) }}">{{'课程管理'|trans}}</a></li>
+    <li class="list-group-item {% if side_nav == 'students' %}active{% endif %}">
+      <a href="{{ path('classroom_manage_students', {id:classroom.id}) }}">{{'学员管理'|trans}}</a>
+    </li>
+  {% endif %}
+
+  {% if canHandle %}
+    <li class="list-group-item {% if side_nav == 'testpaper-check' %} active {% endif %}">
+      <a href="{{ path('classroom_manage_testpaper', {id:classroom.id}) }}">{{'试卷批阅'|trans}}</a>
+    </li>
+   
+    <li class="list-group-item {% if side_nav == 'homework-check' %} active {% endif %}">
+      <a href="{{ path('classroom_manage_homework', {id:classroom.id}) }}">{{'作业批阅'|trans}}</a>
+    </li>
+  {% endif %}
+</ul>

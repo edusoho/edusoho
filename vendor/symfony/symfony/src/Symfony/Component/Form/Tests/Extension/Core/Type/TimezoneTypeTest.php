@@ -13,8 +13,10 @@ namespace Symfony\Component\Form\Tests\Extension\Core\Type;
 
 use Symfony\Component\Form\ChoiceList\View\ChoiceView;
 
-class TimezoneTypeTest extends \Symfony\Component\Form\Test\TypeTestCase
+class TimezoneTypeTest extends BaseTypeTest
 {
+    const TESTED_TYPE = 'Symfony\Component\Form\Extension\Core\Type\TimezoneType';
+
     /**
      * @group legacy
      */
@@ -27,14 +29,18 @@ class TimezoneTypeTest extends \Symfony\Component\Form\Test\TypeTestCase
 
     public function testTimezonesAreSelectable()
     {
-        $form = $this->factory->create('Symfony\Component\Form\Extension\Core\Type\TimezoneType');
-        $view = $form->createView();
-        $choices = $view->vars['choices'];
+        $choices = $this->factory->create(static::TESTED_TYPE)
+            ->createView()->vars['choices'];
 
         $this->assertArrayHasKey('Africa', $choices);
         $this->assertContains(new ChoiceView('Africa/Kinshasa', 'Africa/Kinshasa', 'Kinshasa'), $choices['Africa'], '', false, false);
 
         $this->assertArrayHasKey('America', $choices);
         $this->assertContains(new ChoiceView('America/New_York', 'America/New_York', 'New York'), $choices['America'], '', false, false);
+    }
+
+    public function testSubmitNull($expected = null, $norm = null, $view = null)
+    {
+        parent::testSubmitNull($expected, $norm, '');
     }
 }

@@ -11,14 +11,15 @@
 
 namespace Symfony\Component\Routing\Tests\Loader;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\Loader\PhpFileLoader;
 
-class PhpFileLoaderTest extends \PHPUnit_Framework_TestCase
+class PhpFileLoaderTest extends TestCase
 {
     public function testSupports()
     {
-        $loader = new PhpFileLoader($this->getMock('Symfony\Component\Config\FileLocator'));
+        $loader = new PhpFileLoader($this->getMockBuilder('Symfony\Component\Config\FileLocator')->getMock());
 
         $this->assertTrue($loader->supports('foo.php'), '->supports() returns true if the resource is loadable');
         $this->assertFalse($loader->supports('foo.foo'), '->supports() returns true if the resource is loadable');

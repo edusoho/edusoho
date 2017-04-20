@@ -17,7 +17,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 
-class NewCacheWamingTest extends \PHPUnit_Framework_TestCase
+class CacheWarmingTest extends TestCase
 {
     public function testCacheIsProperlyWarmedWhenTemplatingIsAvailable()
     {
@@ -28,7 +28,7 @@ class NewCacheWamingTest extends \PHPUnit_Framework_TestCase
         $warmer->enableOptionalWarmers();
         $warmer->warmUp($kernel->getCacheDir());
 
-        $this->assertTrue(file_exists($kernel->getCacheDir().'/twig'));
+        $this->assertFileExists($kernel->getCacheDir().'/twig');
     }
 
     public function testCacheIsProperlyWarmedWhenTemplatingIsDisabled()
@@ -40,7 +40,7 @@ class NewCacheWamingTest extends \PHPUnit_Framework_TestCase
         $warmer->enableOptionalWarmers();
         $warmer->warmUp($kernel->getCacheDir());
 
-        $this->assertTrue(file_exists($kernel->getCacheDir().'/twig'));
+        $this->assertFileExists($kernel->getCacheDir().'/twig');
     }
 
     protected function setUp()

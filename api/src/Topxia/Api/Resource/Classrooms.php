@@ -35,7 +35,7 @@ class Classrooms extends BaseResource
 
         $conditions['status']   = 'published';
         $conditions['showable'] = 1;
-        $classrooms             = $this->getClassroomService()->searchClassrooms($conditions, array($orderBy, 'desc'), 0, $result['showCount']);
+        $classrooms             = $this->getClassroomService()->searchClassrooms($conditions, array($orderBy=> 'DESC'), 0, $result['showCount']);
 
         $total      = count($classrooms);
         $classrooms = $this->filter($classrooms);
@@ -67,11 +67,11 @@ class Classrooms extends BaseResource
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 }

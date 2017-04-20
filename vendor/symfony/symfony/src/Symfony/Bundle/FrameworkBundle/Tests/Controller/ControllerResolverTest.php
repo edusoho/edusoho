@@ -141,7 +141,12 @@ class ControllerResolverTest extends BaseControllerResolverTest
      */
     public function testGetControllerOnNonUndefinedFunction($controller, $exceptionName = null, $exceptionMessage = null)
     {
-        $this->setExpectedException($exceptionName, $exceptionMessage);
+        if (method_exists($this, 'expectException')) {
+            $this->expectException($exceptionName);
+            $this->expectExceptionMessage($exceptionMessage);
+        } else {
+            $this->setExpectedException($exceptionName, $exceptionMessage);
+        }
 
         parent::testGetControllerOnNonUndefinedFunction($controller);
     }
@@ -175,12 +180,12 @@ class ControllerResolverTest extends BaseControllerResolverTest
 
     protected function createMockParser()
     {
-        return $this->getMock('Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser', array(), array(), '', false);
+        return $this->getMockBuilder('Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser')->disableOriginalConstructor()->getMock();
     }
 
     protected function createMockContainer()
     {
-        return $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        return $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerInterface')->getMock();
     }
 }
 

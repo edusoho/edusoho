@@ -8,5 +8,6 @@
 
     <swiftmailer:config
         transport="sendmail"
+        local-domain="local.example.org"
     />
 </container>

@@ -1,0 +1,76 @@
+{% extends 'activity/activity-form-layout.html.twig' %}
+
+{% do script(['//service-cdn.qiqiuyun.net/js-sdk/uploader/sdk-v1.js', 'libs/perfect-scrollbar.js','app/js/activity-manage/video/index.js']) %}
+
+{% block activity_content %}
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label for="ext_mediaSource" class="style control-label-required">{{ '视频'|trans }}</label>
+    </div>
+    <div class="col-sm-10">
+      {% include 'file-chooser/file-choose.html.twig' with {mediaType: 'video',fileType:'video', file: activity.ext.file|default(null), link: activity.ext.mediaSource|default(null) } %}
+      <input type="hidden" id="ext_mediaSource" name="ext[mediaSource]"
+             value="{{ activity.ext.mediaSource|default(null) }}">
+    </div>
+  </div>
+  <div class="form-group for-video-type" id="lesson-length-form-group">
+    <div class="col-sm-2 control-label for-video-type">
+      <label class="control-label-required">{{ '视频时长'|trans }}</label>
+    </div>
+    <div class="col-sm-10">
+      <input id="mediaId" class="form-control" type="hidden" name="mediaId" value={{ activity.mediaId|default(null) }}>
+      <input class="form-control width-150 js-length" id="minute" type="text" name="minute"
+             value="{{ activity.minute|default(null) }}"><span class="mhs">{{ '分'|trans }}</span><input
+          class="form-control width-150 js-length" id="second" type="text" name="second"
+          value="{{ activity.second|default(null) }}">{{ '秒'|trans }}
+      <input type="hidden" id="ext_mediaId" name="ext[mediaId]" value="{{ activity.ext.mediaId|default(null) }}">
+      <input type="hidden" id="ext_mediaUri" name="ext[mediaUri]" value="{{ activity.ext.mediaUri|default(null) }}">
+      <input type="hidden" id="length" name="length" value="{{ activity.length|default(0) }}">
+    </div>
+  </div>
+
+  {% if setting('storage.upload_mode', 'local') == 'cloud' and activity.ext.mediaSource|default('self') == 'self' %}
+    <div class="form-group for-video-subtitle" id="video-subtitle-form-group">
+      <div class="col-sm-2 control-label for-video-subtitle">
+        <label class="control-label">{{ '视频字幕'|trans }}</label>
+      </div>
+
+      <div class="col-sm-10 controls js-subtitle-list" data-dialog-url="{{ path('media_subtitle_manage_dialog') }}">
+        <p style="margin-top:6px;color:#a1a1a1">请等待视频上传完之后再添加字幕</p>
+      </div>
+      <div class="col-sm-offset-2 help-block">
+        <p style="margin-left:10px;">字幕文件暂时仅支持UTF-8编码的srt文件，点击<a href="http://www.qiqiuyu.com/article/883" target="__blank">查看</a>编码转换说明。</p>
+      </div>
+
+      <input id="ext_mediaId_for_subtitle" class="form-control" type="hidden" value={{ activity.ext.mediaId|default(null) }}>
+    </div>
+  {% endif %}
+
+{% endblock %}
+
+{% block activity_finish %}
+  <div class=" form-group">
+    <div class="col-sm-2 control-label">
+      <label>{{ '完成条件'|trans }}</label>
+    </div>
+    <div class="col-sm-4">
+      <select id="finish-condition" name="ext[finishType]" class="form-control">
+        {% set finishType = activity.ext.finishType|default('end') %}
+        <option value="end" {% if finishType == 'end' %} selected {% endif %}>学习到最后</option>
+        <option value="time" {% if finishType == 'time' %} selected {% endif %}>学习时长</option>
+      </select>
+    </div>
+  </div>
+
+  <div class=" form-group hidden viewLength">
+    <div class="col-sm-2 control-label">
+      <label>{{ '至少学习'|trans }}</label>
+    </div>
+    <div class="col-sm-4 controls">
+      <input id="condition-detail" class="form-control" type="text" name="ext[finishDetail]" value="{{ activity.ext.finishDetail|default(1) }}">
+    </div>
+    <div class="col-sm-4 controls">
+      <p class="form-control-static">分钟</p>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,147 @@
+@form-group-margin-bottom: 30px;
+@form-group-margin-bottom-min: 15px;
+@form-error-message-height:20px;
+
+input:-webkit-autofill, 
+textarea:-webkit-autofill, 
+select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 100px @bg-color inset;
+}
+
+textarea {
+  resize: none;
+}
+
+.help-block {
+  margin-bottom: 0;
+}
+
+.width-150 {
+  width: 150px !important;
+  display: inline-block;
+}
+
+.width-200 {
+  width: 200px;
+  display: inline-block;
+}
+
+.input-sm {
+  height: 30px;
+}
+
+// 弃用:等全局替换
+.width-input {
+  display: inline-block !important;
+  margin-right: 6px;
+  width: 150px;
+}
+.width-input-mini {width: 50px;}
+.width-input-small {width: 100px;}
+.width-input-large {width:200px;}
+.width-input-xlarge {width:300px;}
+.width-full {width:100%;}
+
+.radios,
+.checkboxs {
+  padding-top: 7px;
+  vertical-align: middle;
+}
+
+.radios label,
+.checkboxs label {
+  font-weight: normal;
+  padding: 0 20px 0 0px;
+}
+
+.control-label span.required {
+  color: @brand-warning;
+}
+
+.form-control {
+  color: @gray-dark;
+  border-color: @gray-light;
+  &.form-control-lg {
+    height: 40px;
+  }
+  &::-webkit-input-placeholder { 
+    color: @gray;
+  }
+  &:-moz-placeholder {
+    color: @gray;
+  }
+  &::-moz-placeholder {
+    color: @gray;
+  }
+  &:-ms-input-placeholder { 
+    color: @gray;
+  }
+}
+
+.form-horizontal {
+  .form-group {
+    margin-bottom: @form-group-margin-bottom;
+    @media (max-width: @screen-xs-max) {
+      margin-bottom: @form-group-margin-bottom-min;
+    }
+  }
+  .form-control {
+    @media (max-width: @screen-xs-max) {
+      margin-bottom: 10px;
+    }
+  }
+}
+
+
+.form-control-150 {
+  width: 150px;
+}
+
+.has-error.form-group {
+  margin-bottom: @form-group-margin-bottom - @form-error-message-height;
+  @media (max-width: @screen-xs-max) {
+    margin-bottom: @form-group-margin-bottom-min - @form-error-message-height;
+  }
+}
+
+.has-error .help-block,
+.has-error .control-label, 
+.has-error .radio, 
+.has-error .checkbox,
+.has-error .radio-inline,
+.has-error .checkbox-inline, 
+.has-error.radio label, 
+.has-error.checkbox label, 
+.has-error.radio-inline label, 
+.has-error.checkbox-inline label {
+  color: @brand-danger;
+}
+
+.has-error .form-control {
+  border-color: @brand-danger;
+  &:focus {
+    border-color: @gray-light;
+  }
+}
+
+.form-control-error {
+  border-color: @brand-danger !important;
+}
+
+.form-error-message {
+  height: @form-error-message-height ;
+  line-height: @form-error-message-height ;
+  margin-bottom: 0;
+  color: @brand-danger;
+}
+
+.control-label-required {
+  position: relative;
+  &:before {
+    content: "*";
+    color: @brand-warning;
+    position: absolute;
+    top: 4px;
+    left: -10px;
+  }
+}

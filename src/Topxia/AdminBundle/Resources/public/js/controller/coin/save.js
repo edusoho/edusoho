@@ -1,5 +1,5 @@
 define(function(require, exports, module) {
-    
+
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
 
@@ -117,7 +117,7 @@ define(function(require, exports, module) {
 
             var val=$(this).val();
             var id=$(this).data('id');
-            var rmb_price = $('#rmb'+id).html();
+            var rmb_price = $('#rmb'+id).data('val');
 
             $('#deRmb'+id).html((rmb_price*val/100).toFixed(2));
             $('#cash'+id).html((rmb_price*val/100*cash_rate).toFixed(2))

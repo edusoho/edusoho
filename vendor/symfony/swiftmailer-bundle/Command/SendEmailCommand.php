@@ -13,31 +13,34 @@ namespace Symfony\Bundle\SwiftmailerBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Send Emails from the spool.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Clément JOBEILI <clement.jobeili@gmail.com>
+ * @author Toni Uebernickel <tuebernickel@gmail.com>
  */
 class SendEmailCommand extends ContainerAwareCommand
 {
-    /**
-     * @see Command
-     */
+    /** @var SymfonyStyle */
+    private $io;
+
     protected function configure()
     {
         $this
             ->setName('swiftmailer:spool:send')
             ->setDescription('Sends emails from the spool')
-            ->addOption('message-limit', 0, InputOption::VALUE_OPTIONAL, 'The maximum number of messages to send.')
-            ->addOption('time-limit', 0, InputOption::VALUE_OPTIONAL, 'The time limit for sending messages (in seconds).')
-            ->addOption('recover-timeout', 0, InputOption::VALUE_OPTIONAL, 'The timeout for recovering messages that have taken too long to send (in seconds).')
-            ->addOption('mailer', null, InputOption::VALUE_OPTIONAL, 'The mailer name.')
+            ->addOption('message-limit', null, InputOption::VALUE_REQUIRED, 'The maximum number of messages to send.')
+            ->addOption('time-limit', null, InputOption::VALUE_REQUIRED, 'The time limit for sending messages (in seconds).')
+            ->addOption('recover-timeout', null, InputOption::VALUE_REQUIRED, 'The timeout for recovering messages that have taken too long to send (in seconds).')
+            ->addOption('mailer', null, InputOption::VALUE_REQUIRED, 'The mailer name.')
+            ->addOption('transport', null, InputOption::VALUE_REQUIRED, 'The service of the transport to use to send the messages.')
             ->setHelp(<<<EOF
-The <info>swiftmailer:spool:send</info> command sends all emails from the spool.
+The <info>%command.name%</info> command sends all emails from the spool.
 
 <info>php %command.full_name% --message-limit=10 --time-limit=10 --recover-timeout=900 --mailer=default</info>
 
@@ -46,11 +49,10 @@ EOF
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->io = new SymfonyStyle($input, $output);
+
         $name = $input->getOption('mailer');
         if ($name) {
             $this->processMailer($name, $input, $output);
@@ -62,35 +64,50 @@ EOF
         }
     }
 
-    private function processMailer($name, $input, $output)
+    private function processMailer($name, InputInterface $input, OutputInterface $output)
     {
         if (!$this->getContainer()->has(sprintf('swiftmailer.mailer.%s', $name))) {
             throw new \InvalidArgumentException(sprintf('The mailer "%s" does not exist.', $name));
         }
 
-        $output->write(sprintf('<info>[%s]</info> Processing <info>%s</info> mailer... ', date('Y-m-d H:i:s'), $name));
+        $this->io->text(sprintf('<info>[%s]</info> Processing <info>%s</info> mailer spool... ', date('Y-m-d H:i:s'), $name));
         if ($this->getContainer()->getParameter(sprintf('swiftmailer.mailer.%s.spool.enabled', $name))) {
             $mailer = $this->getContainer()->get(sprintf('swiftmailer.mailer.%s', $name));
             $transport = $mailer->getTransport();
-            if ($transport instanceof \Swift_Transport_SpoolTransport) {
-                $spool = $transport->getSpool();
-                if ($spool instanceof \Swift_ConfigurableSpool) {
-                    $spool->setMessageLimit($input->getOption('message-limit'));
-                    $spool->setTimeLimit($input->getOption('time-limit'));
-                }
-                if ($spool instanceof \Swift_FileSpool) {
-                    if (null !== $input->getOption('recover-timeout')) {
-                        $spool->recover($input->getOption('recover-timeout'));
-                    } else {
-                        $spool->recover();
-                    }
-                }
-                $sent = $spool->flushQueue($this->getContainer()->get(sprintf('swiftmailer.mailer.%s.transport.real', $name)));
 
-                $output->writeln(sprintf('<comment>%d</comment> emails sent', $sent));
+            if ($transport instanceof \Swift_Transport_LoadBalancedTransport) {
+                foreach ($transport->getTransports() as $eachTransport) {
+                    $this->recoverSpool($name, $eachTransport, $input, $output);
+                }
+            } else {
+                $this->recoverSpool($name, $transport, $input, $output);
             }
         } else {
-            $output->writeln('No email to send as the spool is disabled.');
+            $this->io->warning('There are no emails to send because the spool is disabled.');
+        }
+    }
+
+    private function recoverSpool($name, \Swift_Transport $transport, InputInterface $input, OutputInterface $output)
+    {
+        if ($transport instanceof \Swift_Transport_SpoolTransport) {
+            $spool = $transport->getSpool();
+            if ($spool instanceof \Swift_ConfigurableSpool) {
+                $spool->setMessageLimit($input->getOption('message-limit'));
+                $spool->setTimeLimit($input->getOption('time-limit'));
+            }
+
+            if ($spool instanceof \Swift_FileSpool) {
+                if (null !== $input->getOption('recover-timeout')) {
+                    $spool->recover($input->getOption('recover-timeout'));
+                } else {
+                    $spool->recover();
+                }
+            }
+
+            $transportService = $input->getOption('transport') ?: sprintf('swiftmailer.mailer.%s.transport.real', $name);
+            $sent = $spool->flushQueue($this->getContainer()->get($transportService));
+
+            $this->io->text(sprintf('<comment>%d</comment> emails sent', $sent));
         }
     }
 }

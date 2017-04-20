@@ -1,0 +1,9 @@
+<div class="alert alert-blank alert-sm">
+  {{'为您找到资讯结果约'|trans}} <span class="color-danger">{{counts}}</span>{{'个'|trans}}
+</div>
+{% for article in resultSet %}
+{% set category = article.category %}
+<div class="article-list">
+  {% include 'search/search-article-item.html.twig' %}
+</div>
+{% endfor %}

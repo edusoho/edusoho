@@ -1,0 +1,33 @@
+<tr>
+  <td>
+    <a class="link-primary" href="{% if status == 'reviewing' %}{{ path('course_manage_testpaper_check', {id:paperResult.courseId,resultId:paperResult.id}) }}{% elseif status == 'finished' %}{{ path('testpaper_result_show', {resultId:paperResult.id,source:source|default('course'),targetId:targetId|default(0)}) }}{% endif %}" target="_blank">{{ testpaper.name|plain_text(60) }}</a>
+    <br>
+    <small class="color-gray">
+      {% if courseSet|default(null) %}
+        {{ '来自课程'|trans }}<a class="color-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">《{{courseSet.title|default('')}}》</a> •
+      {% endif %}
+      {% if course|default(null) %}
+        {{ '计划'|trans }}<a class="color-primary" href="{{ path('course_show',{id:course.id}) }}">《{{ course.title|default('') }}》</a>
+      {% endif %}
+    </small>
+    <small class="color-gray mhs">•</small>
+    <small class="color-gray">{{'共%score%分 / %itemCount%道题'|trans({'%score%':testpaper.score,'%itemCount%':testpaper.itemCount})}}</small>
+  </td>
+  <td width="20%" class="vertical-middle">
+    {{ web_macro.user_link(student) }} <br>
+    <small class="color-gray">{{ paperResult.endTime|date("Y-n-d H:i") }} {{'交卷'|trans}}</small>
+  </td>
+  <td width="30%" class="vertical-middle">
+    {% if status == 'reviewing' and (not isTeacher is defined or isTeacher) %}
+      <a class="link-primary" href="{{ path('course_manage_testpaper_check', {id:paperResult.courseId,resultId:paperResult.id,source:source|default('course'),targetId:targetId|default(0)}) }}" target="_blank">{{'批阅'|trans}}</a>
+    {% endif %}
+
+    {% if status == 'finished' %}
+      <div>
+        <div class="text-warning">{{'总分'|trans}} <strong>{{ paperResult.score }}</strong> {{'分'|trans}}</div>
+        <div class="color-gray"><small>{{'客观题%objectiveScore%分 / 主观题%subjectiveScore%分'|trans({'%objectiveScore%':paperResult.objectiveScore,'%subjectiveScore%':paperResult.subjectiveScore})}}</small></div>
+        <div class="color-success"><small>{{ teacher.nickname|default('系统'|trans) }} {{'批于'|trans}}{{ paperResult.checkedTime|date('Y年n月d日 H:i'|trans) }}</small></div>
+      </div>
+    {% endif %}
+  </td>
+</tr>

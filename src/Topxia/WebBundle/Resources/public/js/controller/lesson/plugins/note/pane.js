@@ -18,11 +18,12 @@ define(function(require, exports, module) {
             this.get('plugin').toolbar.showPane(this.get('plugin').code);
             var pane = this,
                 toolbar = pane.get('plugin').toolbar;
-
+                console.log(pane.get('plugin').api.init);
             $.get(pane.get('plugin').api.init, {
                 courseId: toolbar.get('courseId'),
                 lessonId: toolbar.get('lessonId')
             }, function(html) {
+                console.log(html);
                 pane.element.html(html);
 
                 var editorHeight = $("#lesson-note-plugin-form .note-content").height() - 50;

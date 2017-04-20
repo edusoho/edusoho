@@ -1,11 +1,12 @@
 <?php
-namespace Codeages\Biz\Framework\Tests\DataStructure;
+
+namespace Tests;
 
 use Codeages\Biz\Framework\DataStructure\UniquePriorityQueue;
+use PHPUnit\Framework\TestCase;
 
-class UniquePriorityQueueTest extends \PHPUnit_Framework_TestCase
+class UniquePriorityQueueTest extends TestCase
 {
-
     public function testInsert()
     {
         $queue = new UniquePriorityQueue();
@@ -35,5 +36,4 @@ class UniquePriorityQueueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test 5.3', $items[5]);
         $this->assertEquals('test 3', $items[6]);
     }
-
 }

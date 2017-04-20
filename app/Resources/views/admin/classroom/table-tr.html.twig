@@ -1,0 +1,74 @@
+{% import 'admin/macro.html.twig' as admin_macro %}
+<tr id="classroom-table-tr-{{ classroom.id }}">
+    {% include 'org/parts/table-body-checkbox.html.twig' %}
+    <td>{{ classroom.id }}</td>
+
+    <td>
+    <strong>  
+      <a target="_blank" href="{{ path('classroom_manage', {id:classroom.id}) }}">{{ classroom.title}}</a>
+    </strong>
+    <br>
+    <span class="text-muted text-sm">{{'分类'|trans}}：{{ category.name|default('--') }}</span>
+    {% if classroom.recommended %}
+      <span class="label label-default">{{'荐'|trans}}:{{ classroom.recommendedTime|date('Y-m-d') }} / {{'序号'|trans}}:{{ classroom.recommendedSeq }}</span>
+    {% endif %}
+    </td>
+    {% include 'org/parts/table-body-td.html.twig' with {orgCode: classroom.orgCode}%}
+    <td>
+    {{ classroomCoursesNum[classroom.id] }}
+
+    {% if classroomCoursesNum[classroom.id] > 0 %}
+    <strong>  
+      <a target="_blank" href="{{ path('classroom_manage_courses', {id:classroom.id}) }}">{{'详情'|trans}}</a>
+    </strong>
+    {% endif %}
+    </td>
+
+    <td>
+    {{ classroom.studentNum }}
+    </td>
+
+    <td>
+    <span style="color: #F40; ">
+            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+               {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+            {% else %}
+                {{ classroom.price }}{{'元'|trans}}
+            {% endif %}
+     </span>
+    &nbsp;
+
+
+    <span style="font-size: 13px;color: #666;">
+      {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+        {{'原价 %coinPriceAll% %coinname%'|trans({'%coinPriceAll%':coinPriceAll[classroom.id|default(0)],'%coinname%':setting('coin.coin_name')})}}
+      {% else %}
+        {{'原价 %priceAll%元'|trans({'%priceAll%':priceAll[classroom.id|default(0)]})}}
+      {% endif %}
+    </span>
+
+
+    </td>
+
+    <td>
+    {% if classroom.status=='published' %}
+    <span class="text-success">{{'已发布'|trans}}</span>
+    {% elseif classroom.status=='closed'%}
+    
+    <span class="text-danger">{{'已关闭'|trans}}</span>
+    {% else %}
+    {{'未发布'|trans}}
+    {% endif %}
+    </td>
+
+    <td>
+
+  <div class="btn-group">
+      {% if has_permission('admin_classroom_content_manage') %}
+        <a href="{{ path('classroom_manage', {id:classroom.id}) }}" target="_blank" class="btn btn-default btn-sm">管理</a>
+      {% endif %}
+
+      {% include 'admin/role/templates/group-button.html.twig' with {parentCode: 'admin_classroom_manage', group:'groupButton', classroom: classroom} %}
+  </div>
+ </td>
+</tr>

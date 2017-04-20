@@ -1,0 +1,36 @@
+{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
+
+{% block title %}{{ testpaper.name }} - {{'试卷批阅'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
+{% import 'macro.html.twig' as macro %}
+
+{% set side_nav = 'testpaper-check' %}
+{% if testpaper.type == 'homework' %}
+  {% set side_nav = 'homework-check' %}
+  {% set typeName = '作业' %}
+{% else %}
+  {% set side_nav = 'testpaper-check' %}
+  {% set typeName = '试卷' %}
+{% endif %}
+
+{% block main %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      {{ course.title }}<span class="mh5">／</span>{{ testpaper.name }}
+      {% if course.status != 'published' %}
+        <button class="btn btn-success btn-sm pull-right js-publish-course" 
+          data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">
+          {{ '发布计划'|trans }}
+        </button>
+      {% endif %}
+      {#{% if course_count(course.courseSetId) > 1 %}
+        <a class="btn btn-default btn-sm pull-right ml5" href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">返回课程编辑</a>
+      {% endif %}#}
+    </div>
+    <div class="panel-body">
+      {% if isTeacher is defined and not isTeacher %}
+        <span class="color-danger">{{'当前用户不是本课程教师，没有批阅%typeName%的权限。'|trans({'%typeName%':typeName}) }}</span>
+      {% endif %}
+      {{ render(controller('AppBundle:Testpaper/Manage:resultList',{request:app.request,testpaperId:testpaper.id,source:'course',targetId:course.id})) }}
+    </div>
+  </div>
+{% endblock %}

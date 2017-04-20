@@ -1,0 +1,43 @@
+{#<li class="mll">#}
+  {% if member.role == 'teacher' %}
+    {% if course.expiryMode == 'forever' %}
+      {{ '永久有效'|trans }}
+    {% elseif course.expiryMode == 'days' %}
+      共{{ course.expiryDays }}天
+    {% else %}
+      {{ course.expiryEndDate|date('Y-m-d') }}
+    {% endif %}
+  {% else %}
+    {% if course.expiryMode == 'forever' or member.deadline == 0 %}
+      {{ '永久有效'|trans }}
+    {% elseif course.expiryMode in ['end_date', 'date'] %}
+      {{ course.expiryEndDate|date('Y-m-d') }}
+      {% if date('now').timestamp > member.deadline %}
+        <span class="color-danger text-12">（已到期）</span>
+      {% else %}
+        {% set lastDays = course.expiryEndDate|time_diff %}
+        {% if lastDays == 0 %}
+          <span class="color-warning text-12">（今日到期）</span>
+        {% elseif lastDays == 1 %}
+          <span class="color-warning text-12">（明日到期）</span>
+        {% elseif lastDays < 31 %}
+          <span class="color-warning text-12">（剩余 {{ lastDays }} 天）</span>
+        {% endif %}
+      {% endif %}
+    {% else %}
+      {{ member.deadline|date('Y-m-d') }}
+      {% if date('now').timestamp > member.deadline %}
+        <span class="color-danger text-12">（已到期）</span>
+      {% else %}
+        {% set lastDays = member.deadline|time_diff %}
+        {% if lastDays == 0 %}
+          <span class="color-warning text-12">（今日到期）</span>
+        {% elseif lastDays == 1 %}
+          <span class="color-warning text-12">（明日到期）</span>
+        {% elseif lastDays < 31 %}
+          <span class="color-warning text-12">（剩余 {{ lastDays }} 天）</span>
+        {% endif %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
+{#</li>#}

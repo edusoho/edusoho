@@ -3,8 +3,9 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
+use AppBundle\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
 
 class Users extends BaseResource
 {
@@ -26,15 +27,14 @@ class Users extends BaseResource
 
         if (isset($conditions['cursor'])) {
             $conditions['updatedTime_GE'] = $conditions['cursor'];
-            $users = $this->getUserService()->searchUsers($conditions, array('updatedTime', 'ASC'), $start, $limit);
+            $users = $this->getUserService()->searchUsers($conditions, array('updatedTime' => 'ASC'), $start, $limit);
             $next = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $users);
             return $this->wrap($this->filter($users), $next);
         } else {
-            $users = $this->getUserService()->searchUsers($conditions, array('createdTime','DESC'), $start, $limit);
-            $total = $this->getUserService()->searchUserCount($conditions);
+            $users = $this->getUserService()->searchUsers($conditions, array('createdTime' => 'DESC'), $start, $limit);
+            $total = $this->getUserService()->countUsers($conditions);
             return $this->wrap($this->filter($users), $total);
         }
-
     }
 
     public function post(Application $app, Request $request)
@@ -52,7 +52,7 @@ class Users extends BaseResource
         $ip = $request->getClientIp();
         $fields['createdIp'] = $ip;
 
-        $authSettings = $this->getServiceKernel()->createService('System.SettingService')->get('auth', array());
+        $authSettings = ServiceKernel::instance()->createService('System:SettingService')->get('auth', array());
 
         if (isset($authSettings['register_protective'])) {
             $type = $authSettings['register_protective'];
@@ -62,7 +62,7 @@ class Users extends BaseResource
                     $condition = array(
                         'startTime' => time() - 24 * 3600,
                         'createdIp' => $ip);
-                    $registerCount = $this->getUserService()->searchUserCount($condition);
+                    $registerCount = $this->getUserService()->countUsers($condition);
 
                     if ($registerCount > 30) {
                         goto failure;
@@ -74,13 +74,13 @@ class Users extends BaseResource
                     $condition = array(
                         'startTime' => time() - 24 * 3600,
                         'createdIp' => $ip);
-                    $registerCount = $this->getUserService()->searchUserCount($condition);
+                    $registerCount = $this->getUserService()->countUsers($condition);
 
                     if ($registerCount > 10) {
                         goto failure;
                     }
 
-                    $registerCount = $this->getUserService()->searchUserCount(array(
+                    $registerCount = $this->getUserService()->countUsers(array(
                         'startTime' => time() - 3600,
                         'createdIp' => $ip));
 
@@ -124,7 +124,7 @@ class Users extends BaseResource
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     /**
@@ -132,12 +132,12 @@ class Users extends BaseResource
      */
     private function matchUsers($q)
     {
-        $mobileProfiles = $this->getUserService()->searchUserProfiles(array('mobile' => $q), array('id', 'DESC'), 0, 5);
-        $qqProfiles = $this->getUserService()->searchUserProfiles(array('qq' => $q), array('id', 'DESC'), 0, 5);
+        $mobileProfiles = $this->getUserService()->searchUserProfiles(array('mobile' => $q), array('id' => 'DESC'), 0, 5);
+        $qqProfiles = $this->getUserService()->searchUserProfiles(array('qq' => $q), array('id' => 'DESC'), 0, 5);
 
         $mobileList = $this->getUserService()->findUsersByIds(ArrayToolkit::column($mobileProfiles, 'id'));
         $qqList = $this->getUserService()->findUsersByIds(ArrayToolkit::column($qqProfiles, 'id'));
-        $nicknameList = $this->getUserService()->searchUsers(array('nickname' => $q), array('nickname', 'ASC'), 0, 5);
+        $nicknameList = $this->getUserService()->searchUsers(array('nickname' => $q), array('nickname' => 'ASC'), 0, 5);
 
         return array(
             'mobile' => filters($mobileList, 'user'),

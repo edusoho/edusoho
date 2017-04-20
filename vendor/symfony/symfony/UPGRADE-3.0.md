@@ -1,6 +1,35 @@
 UPGRADE FROM 2.x to 3.0
 =======================
 
+# Table of Contents
+
+- [ClassLoader](#classloader)
+- [Config](#config)
+- [Console](#console)
+- [DependencyInjection](#dependencyinjection)
+- [DoctrineBridge](#doctrinebridge)
+- [DomCrawler](#domcrawler)
+- [EventDispatcher](#eventdispatcher)
+- [Form](#form)
+- [FrameworkBundle](#frameworkbundle)
+- [HttpFoundation](#httpfoundation)
+- [HttpKernel](#httpkernel)
+- [Locale](#locale)
+- [Monolog Bridge](#monolog-bridge)
+- [Process](#process)
+- [PropertyAccess](#propertyaccess)
+- [Routing](#routing)
+- [Security](#security)
+- [SecurityBundle](#securitybundle)
+- [Serializer](#serializer)
+- [Swiftmailer Bridge](#swiftmailer-bridge)
+- [Translator](#translator)
+- [Twig Bridge](#twig-bridge)
+- [TwigBundle](#twigbundle)
+- [Validator](#validator)
+- [WebProfiler](#webprofiler)
+- [Yaml](#yaml)
+
 ### ClassLoader
 
  * The `UniversalClassLoader` class has been removed in favor of
@@ -202,6 +231,9 @@ UPGRADE FROM 2.x to 3.0
    closures, but the closure is now resolved in the type instead of in the
    loader.
 
+ * Using the entity provider with a Doctrine repository implementing `UserProviderInterface` is not supported anymore.
+   You should make the repository implement `UserLoaderInterface` instead.
+
 ### EventDispatcher
 
  * The interface `Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcherInterface`
@@ -348,6 +380,58 @@ UPGRADE FROM 2.x to 3.0
    $form = $this->createForm(MyType::class);
    ```
 
+ * Passing custom data to forms now needs to be done 
+   through the options resolver. 
+
+    In the controller:
+
+    Before:
+    ```php
+    $form = $this->createForm(new MyType($variable), $entity, array(
+        'action' => $this->generateUrl('action_route'),
+        'method' => 'PUT',
+    ));
+    ```
+    After: 
+    ```php
+    $form = $this->createForm(MyType::class, $entity, array(
+        'action' => $this->generateUrl('action_route'),
+        'method' => 'PUT',
+        'custom_value' => $variable,
+    ));
+    ```
+    In the form type:
+    
+    Before:
+    ```php
+    class MyType extends AbstractType
+    {
+        private $value;
+    
+        public function __construct($variableValue)
+        {
+            $this->value = $value;
+        }
+        // ...
+    }
+    ```
+    
+    After:
+    ```php
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $value = $options['custom_value'];
+        // ...
+    }
+    
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'custom_value' => null,
+        ));
+    }
+    ```
+ 
  * The alias option of the `form.type_extension` tag was removed in favor of
    the `extended_type`/`extended-type` option.
 
@@ -1698,5 +1782,11 @@ UPGRADE FROM 2.x to 3.0
    After:
 
    ```php
-   $request->query->get('foo')[bar];
+   $request->query->get('foo')['bar'];
    ```
+### Monolog Bridge
+
+ * `Symfony\Bridge\Monolog\Logger::emerg()` was removed. Use `emergency()` which is PSR-3 compatible.
+ * `Symfony\Bridge\Monolog\Logger::crit()` was removed. Use `critical()` which is PSR-3 compatible.
+ * `Symfony\Bridge\Monolog\Logger::err()` was removed. Use `error()` which is PSR-3 compatible.
+ * `Symfony\Bridge\Monolog\Logger::warn()` was removed. Use `warning()` which is PSR-3 compatible.

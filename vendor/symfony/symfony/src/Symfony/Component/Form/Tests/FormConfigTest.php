@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Form\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\FormConfigBuilder;
 use Symfony\Component\Form\Exception\InvalidArgumentException;
@@ -18,7 +19,7 @@ use Symfony\Component\Form\Exception\InvalidArgumentException;
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-class FormConfigTest extends \PHPUnit_Framework_TestCase
+class FormConfigTest extends TestCase
 {
     public function getHtml4Ids()
     {
@@ -71,7 +72,7 @@ class FormConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testNameAcceptsOnlyNamesValidAsIdsInHtml4($name, $accepted)
     {
-        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $dispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
 
         try {
             new FormConfigBuilder($name, null, $dispatcher);
@@ -141,7 +142,7 @@ class FormConfigTest extends \PHPUnit_Framework_TestCase
 
     private function getConfigBuilder($name = 'name')
     {
-        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $dispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
 
         return new FormConfigBuilder($name, null, $dispatcher);
     }

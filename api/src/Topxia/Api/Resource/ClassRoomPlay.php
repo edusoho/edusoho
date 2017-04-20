@@ -3,7 +3,7 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 class ClassRoomPlay extends BaseResource
@@ -27,7 +27,7 @@ class ClassRoomPlay extends BaseResource
 		$searchLessonCount = $this->getCourseService()->searchLessonCount(array("courseIds"=>$courseIds));
 		$lessons = $this->getCourseService()->searchLessons(
 			array("courseIds"=>$courseIds), 
-			array('startTime', 'ASC'), 
+			array('startTime'=> 'ASC'), 
 			0, $searchLessonCount
 		);
 
@@ -72,11 +72,11 @@ class ClassRoomPlay extends BaseResource
 
 	protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 }

@@ -1,7 +1,0 @@
-{% set props = status.properties %}
-
-{% if mode == 'simple' %}
-  {{'试卷 "%props%"已被批阅'|trans({'%props%':props.testpaper.name|sub_text(15)})}}
-{% elseif mode == 'full' %}
-
-{% endif %}

@@ -1,0 +1,44 @@
+{% extends 'courseset-manage/layout.html.twig' %}
+
+{% block title %}{{ '封面图片'|trans }} - {{ parent() }}{% endblock %}
+{% set side_nav = 'cover' %}
+{% do script(['app/js/courseset-manage/cover/index.js']) %}
+{% set token = upload_token('tmp', 'image') %}
+{% block main %}
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">
+    {{'封面图片'|trans}}
+  </div>
+
+  <div class="panel-body">
+      {{ web_macro.flash_messages() }}
+
+      <div class="form-group clearfix">
+        <div class="col-md-offset-2 col-md-8 controls">
+          <img class="img-responsive" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" />
+        </div>
+      </div>
+      <div class="form-group clearfix">
+        <div class="col-md-offset-2 col-md-8 controls">
+          <p class="help-block upload-height">{{'你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。'|trans}}<br>{{'文件大小不能超过'|trans}}<strong>{{'2M'|trans}}</strong>。</p>
+        </div>
+      </div>
+
+      <div class="form-group clearfix">
+        <div class="col-md-offset-2 col-md-8 controls">
+          <a
+          id="upload-picture-btn"
+          class="upload-picture-btn btn btn-fat btn-primary"
+          data-upload-token="{{ upload_token('tmp', 'image') }}"
+          {% if courseSet.type == 'open' or courseSet.type == 'liveOpen' %}
+            data-goto-url="{{path('open_course_manage_picture_crop', {id:courseSet.id})}}"
+          {% else %}
+            data-goto-url="{{path('course_set_manage_cover_crop', {id:courseSet.id})}}"
+          {% endif %}
+          
+          >{{'选择要上传的图片'|trans}}</a>
+        </div>
+      </div>
+  </div>
+</div>
+{% endblock %}

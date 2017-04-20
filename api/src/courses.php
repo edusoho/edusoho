@@ -7,10 +7,10 @@ use Silex\Application;
 $api = $app['controllers_factory'];
 
 //根据id获取一个课程信息
-$api->get('/{id}', function ($id) {
-    $course = convert($id,'course');
-    return filter($course, 'course');
-});
+//$api->get('/{id}', function ($id) {
+//    $course = convert($id,'course');
+//    return filter($course, 'course');
+//});
 
 //收藏课程
 /*
@@ -32,9 +32,9 @@ $api->post('/{id}/favroite', function (Request $request, $id) {
     $course = convert($id,'course');
     $method = $request->request->get('method','post');
     if ($method == 'delete') {
-        $result = ServiceKernel::instance()->createService('Course.CourseService')->unFavoriteCourse($course['id']);
+        $result = ServiceKernel::instance()->createService('Course:CourseService')->unFavoriteCourse($course['id']);
     } else {
-        $result = ServiceKernel::instance()->createService('Course.CourseService')->favoriteCourse($course['id']);
+        $result = ServiceKernel::instance()->createService('Course:CourseService')->favoriteCourse($course['id']);
     }
     return array(
         'success' => $result

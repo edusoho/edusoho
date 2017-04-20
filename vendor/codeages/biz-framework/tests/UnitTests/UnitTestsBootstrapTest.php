@@ -1,12 +1,14 @@
 <?php
 
+namespace Tests;
+
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\UnitTests\UnitTestsBootstrap;
 use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
+use PHPUnit\Framework\TestCase;
 
-class UnitTestsBootstrapTest extends \PHPUnit_Framework_TestCase
+class UnitTestsBootstrapTest extends TestCase
 {
-
     public function testBoot()
     {
         $config = array(
@@ -21,7 +23,7 @@ class UnitTestsBootstrapTest extends \PHPUnit_Framework_TestCase
             ),
         );
         $biz = new Biz($config);
-        $biz['migration.directories'][] = dirname(__DIR__) . '/TestProject/migrations';
+        $biz['migration.directories'][] = dirname(__DIR__).'/TestProject/migrations';
         $biz->register(new DoctrineServiceProvider());
         $biz->boot();
 

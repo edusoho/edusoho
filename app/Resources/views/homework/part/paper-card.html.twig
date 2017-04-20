@@ -1,0 +1,48 @@
+<div class="testpaper-card {{testpaperCardClass|default('')}}">
+  {% if paperResult.status|default(null) == 'finished' and (app.user.id|default(0) == paperResult.userId ) %}
+    <div class="mbl">
+      <a href="{% if action|default('') is not empty and task|default(null) %}{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}{% else %}{{ path('homework_start_do',{lessonId:paperResult.lessonId,homeworkId:paperResult.testId}) }}{% endif %}" class="btn btn-primary btn-block btn-lg  border-radius-none">再次尝试</a>
+    </div>
+  {% endif %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      {{'答题卡'|trans}} 
+    </div>
+    <div class="panel-body">
+      {% for question in questions %}
+        {% if question.type == 'material' and question.subs > 0 %}
+          {% for subQuestion in question.subs|default([]) %}
+            {% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:subQuestion,seq:subQuestion.seq} %}
+          {% endfor %}
+        {% else %}
+          {% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:question,seq:question.seq} %}
+        {% endif %}
+      {% endfor %}
+
+      {% if paperResult.status|default(null) in ['reviewing','finished'] %}
+        {% include 'testpaper/part/card-choice-explain.html.twig' %}
+      {% endif %}
+    </div>
+
+    <div class="panel-footer text-right">
+      {% if paperResult.status|default(null) == 'reviewing' and isTeacher|default(false) %}
+        <a class="btn btn-success" data-role="check-submit">{{'完成批阅'|trans}}</a>
+      {% elseif paperResult.status|default(null) in ['reviewing','finished'] %}
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" id="showWrong" />
+            <span class="text-info">{{'只看错题'|trans}}</span>
+          </label>
+        </div>
+      {% else %}
+        {% if paperResult.id|default(0) > 0 and paperResult.status|default(null) == 'doing' %}
+          <a id="paper-finish" class="btn btn-success" data-toggle="modal" data-target="#testpaper-finished-dialog">{{'提交作业'|trans}}</a>
+          <input type="hidden" data-url="{{ path('testpaper_do_suspend', {resultId:paperResult.id}) }}" data-role="test-suspend">
+        {% else %}
+          <a id="paper-finish" class="btn btn-primary" disabled="disabled">{{'提交作业'|trans}}</a>
+        {% endif %}
+        
+      {% endif %}
+    </div>
+  </div>
+</div>

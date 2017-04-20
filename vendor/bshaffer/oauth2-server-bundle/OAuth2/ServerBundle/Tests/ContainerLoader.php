@@ -8,7 +8,7 @@ use Symfony\Component\Config\FileLocator;
 
 class ContainerLoader
 {
-    public static function buildTestContainer()
+    public static function buildTestContainer($configs = array())
     {
         if (!isset($_SERVER['CONTAINER_CONFIG'])) {
             throw new \Exception('Must set CONTAINER_CONFIG in phpunit.xml or environment variable');
@@ -19,6 +19,10 @@ class ContainerLoader
         $loader    = new XmlFileLoader($container, $locator);
 
         $loader->load($_SERVER['CONTAINER_CONFIG']);
+
+        foreach ($configs as $file) {
+            $loader->load($file);
+        }
 
         //  give the container some context
         $container->setParameter('bundle_root_dir', __DIR__.'/..');

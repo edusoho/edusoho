@@ -2,16 +2,18 @@
 
 namespace Symfony\Component\Console\Tests\Helper;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\SymfonyQuestionHelper;
 use Symfony\Component\Console\Output\StreamOutput;
+use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 
 /**
  * @group tty
  */
-class SymfonyQuestionHelperTest extends \PHPUnit_Framework_TestCase
+class SymfonyQuestionHelperTest extends TestCase
 {
     public function testAskChoice()
     {
@@ -73,6 +75,54 @@ class SymfonyQuestionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertOutputContains('What is your favorite superhero? [Superman, Batman]', $output);
     }
 
+    public function testAskReturnsNullIfValidatorAllowsIt()
+    {
+        $questionHelper = new SymfonyQuestionHelper();
+        $questionHelper->setInputStream($this->getInputStream("\n"));
+        $question = new Question('What is your favorite superhero?');
+        $question->setValidator(function ($value) { return $value; });
+        $this->assertNull($questionHelper->ask($this->createInputInterfaceMock(), $this->createOutputInterface(), $question));
+    }
+
+    public function testAskEscapeDefaultValue()
+    {
+        $helper = new SymfonyQuestionHelper();
+        $helper->setInputStream($this->getInputStream('\\'));
+        $helper->ask($this->createInputInterfaceMock(), $output = $this->createOutputInterface(), new Question('Can I have a backslash?', '\\'));
+
+        $this->assertOutputContains('Can I have a backslash? [\]', $output);
+    }
+
+    public function testAskEscapeAndFormatLabel()
+    {
+        $helper = new SymfonyQuestionHelper();
+        $helper->setInputStream($this->getInputStream('Foo\\Bar'));
+        $helper->ask($this->createInputInterfaceMock(), $output = $this->createOutputInterface(), new Question('Do you want to use Foo\\Bar <comment>or</comment> Foo\\Baz\\?', 'Foo\\Baz'));
+
+        $this->assertOutputContains('Do you want to use Foo\\Bar or Foo\\Baz\\? [Foo\\Baz]:', $output);
+    }
+
+    public function testLabelTrailingBackslash()
+    {
+        $helper = new SymfonyQuestionHelper();
+        $helper->setInputStream($this->getInputStream('sure'));
+        $helper->ask($this->createInputInterfaceMock(), $output = $this->createOutputInterface(), new Question('Question with a trailing \\'));
+
+        $this->assertOutputContains('Question with a trailing \\', $output);
+    }
+
+    /**
+     * @expectedException        \Symfony\Component\Console\Exception\RuntimeException
+     * @expectedExceptionMessage Aborted
+     */
+    public function testAskThrowsExceptionOnMissingInput()
+    {
+        $dialog = new SymfonyQuestionHelper();
+
+        $dialog->setInputStream($this->getInputStream(''));
+        $dialog->ask($this->createInputInterfaceMock(), $this->createOutputInterface(), new Question('What\'s your name?'));
+    }
+
     protected function getInputStream($input)
     {
         $stream = fopen('php://memory', 'r+', false);
@@ -92,7 +142,7 @@ class SymfonyQuestionHelperTest extends \PHPUnit_Framework_TestCase
 
     protected function createInputInterfaceMock($interactive = true)
     {
-        $mock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
+        $mock = $this->getMockBuilder('Symfony\Component\Console\Input\InputInterface')->getMock();
         $mock->expects($this->any())
             ->method('isInteractive')
             ->will($this->returnValue($interactive));

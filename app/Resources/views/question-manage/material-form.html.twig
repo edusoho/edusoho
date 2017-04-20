@@ -1,0 +1,12 @@
+{% extends 'question-manage/question-form-layout.html.twig' %}
+
+{% set question_stem_label = '材料'|trans %}
+
+{% block question_buttons %}
+  {% if not question|default(null) %}
+    <button type="button" data-role="submit" class="btn btn-primary" data-submission="continue_sub" data-loading-text="{{'正在保存'|trans}}...">{{'保存并添加子题'|trans}}</button>
+  {% else %}
+    <button type="button" data-role="submit" class="btn btn-primary" data-loading-text="{{'正在保存'|trans}}...">{{'保存'|trans}}</button>
+  {% endif %}
+
+{% endblock %}

@@ -4,22 +4,22 @@ namespace Codeages\Biz\Framework\Dao;
 
 class TestCaseConnection extends Connection
 {
-    private $_insertedTables = array();
+    private $insertedTables = array();
 
     public function insert($tableName, array $data, array $types = array())
     {
-        $this->_insertedTables[] = $tableName;
+        $this->insertedTables[] = $tableName;
 
         return parent::insert($tableName, $data, $types);
     }
 
     public function getInsertedTables()
     {
-        return $this->_insertedTables;
+        return $this->insertedTables;
     }
 
     public function resetInsertedTables()
     {
-        $this->_insertedTables = array();
+        $this->insertedTables = array();
     }
 }

@@ -7,6 +7,7 @@ define(function (require, exports, module) {
     var Messenger = require('../player/messenger');
     var Backbone = require('backbone');
     require('../../util/qrcode').run();
+
     var Course = Backbone.Model.extend({
         idAttribute: 'id'
     });

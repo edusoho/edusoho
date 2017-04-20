@@ -683,8 +683,8 @@
 }
 @font-face {
   font-family: "consultfont";
-  src: url('../fonts/consult-font.eot');
-  src: url('../fonts/consult-font.eot?#iefix') format('embedded-opentype'), url('../fonts/consult-font.woff') format('woff'), url('../fonts/consult-font.ttf') format('truetype'), url('../fonts/consult-font.svg#consultfont') format('svg');
+  src: url('/assets/v2/css/fonts/consult-font.eot');
+  src: url('/assets/v2/css/fonts/consult-font.eot?#iefix') format('embedded-opentype'), url('/assets/v2/css/fonts/consult-font.woff') format('woff'), url('/assets/v2/css/fonts/consult-font.ttf') format('truetype'), url('/assets/v2/css/fonts/consult-font.svg#consultfont') format('svg');
 }
 .float-consult .icon {
   font-family: "consultfont" !important;
@@ -3253,7 +3253,7 @@ Basic Swiper Styles
 .arrow-right {
   position: absolute;
   top: 50%;
-  margin-top: -24.99999999px;
+  margin-top: -25px;
   color: #dbdbdb;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -3977,21 +3977,41 @@ Pagination Styles
   visibility: visible;
   color: #999;
 }
+.testpaper-timer {
+  height: 46px;
+  line-height: 46px;
+  background-color: #fff;
+  margin-bottom: 20px;
+  padding-left: 20px;
+}
+.testpaper-timer .timer {
+  margin-left: 30px;
+  font-size: 18px;
+  color: #46c37b;
+}
+.testpaper-timer .btn-pause {
+  background-color: #46c37b;
+  padding: 0 15px;
+  float: right;
+  color: #fff;
+}
+.testpaper-timer .btn-pause .pause {
+  display: inline;
+}
+.testpaper-timer .btn-pause .play {
+  display: none;
+}
+.testpaper-timer .btn-pause.active .pause {
+  display: none;
+}
+.testpaper-timer .btn-pause.active .play {
+  display: inline;
+}
 .question-stem-fill-blank {
   padding-left: 15px;
   padding-right: 15px;
   border-bottom: 1px solid #999;
   color: #aaa;
-}
-.testpaper-titlebar {
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 20px;
-}
-.testpaper-title {
-  float: left;
-  font-size: 24px;
-  font-weight: bold;
-  color: #444;
 }
 .testpaper-status {
   margin-top: 20px;
@@ -4006,15 +4026,6 @@ Pagination Styles
   padding: 5px 25px;
   border-radius: 3px;
   font-size: 100%;
-}
-.testpaper-description {
-  color: #444;
-  font-size: 14px;
-}
-.testpaper-metas {
-  color: #666;
-  font-size: 12px;
-  margin-bottom: 20px;
 }
 .testpaper-result-total {
   width: 160px;
@@ -4164,7 +4175,7 @@ Pagination Styles
 }
 .testpaper-question-choice-right,
 .testpaper-question-choice-right .testpaper-question-choice-index {
-  color: #3c763d;
+  color: #70d445;
 }
 .question-text-success {
   color: #0B900D;
@@ -4252,6 +4263,9 @@ Pagination Styles
 .testpaper-question-analysis {
   margin-left: 50px;
 }
+.testpaper-question-footer {
+  margin-bottom: 20px;
+}
 .testpaper-question-analysis img {
   max-width: 100%;
 }
@@ -4303,7 +4317,7 @@ Pagination Styles
   }
   .testpaper-card.affix {
     position: fixed;
-    top: 60px;
+    top: 0;
   }
   .testpaper-card.affix-bottom {
     position: absolute;
@@ -5135,14 +5149,17 @@ a.homework-essay-textarea-pack-up {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 .panel-gray > .panel-heading {
-  background-color: #f5f5f5;
-  color: #919191;
+  background-color: #fafafa;
+  color: #313131;
 }
 .panel-gray > .panel-body {
   color: #919191;
   background: #fff;
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
+}
+.panel-gray > .panel-footer {
+  background-color: #fafafa;
 }
 .panel-page {
   padding: 45px 50px 50px;
@@ -7061,6 +7078,67 @@ textarea {
 }
 .tabs-wrapper .tabs-group + .tabs-group {
   border-top: 1px dashed #e4ecf3;
+}
+.color-lump {
+  display: inline-block;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  line-height: 22px;
+  text-align: center;
+  background-color: #f5f5f5;
+  border: 1px solid #d6d6d6;
+  color: #919191;
+}
+.color-lump.lump-md {
+  width: 30px;
+  height: 30px;
+}
+.color-lump.lump-sm {
+  width: 20px;
+  height: 20px;
+}
+.color-lump.lump-xs {
+  width: 10px;
+  height: 10px;
+}
+.color-lump.border-none {
+  border-color: #f5f5f5;
+}
+.color-lump.lump-primary-light {
+  background-color: #d2f2df;
+  color: #46c37b;
+  border-color: #46c37b;
+}
+.color-lump.lump-primary {
+  background-color: #46c37b;
+  border-color: #46c37b;
+}
+.color-lump.lump-success {
+  background-color: #70d445;
+  border-color: #70d445;
+}
+.color-lump.lump-danger {
+  background-color: #e83d2c;
+  border-color: #e83d2c;
+}
+.color-lump.lump-warning {
+  background-color: #ff8a0c;
+  border-color: #ff8a0c;
+}
+.color-lump.depth-1 {
+  background-color: #d6e685;
+}
+.color-lump.depth-2 {
+  background-color: #8cc665;
+}
+.color-lump.depth-3 {
+  background-color: #44a340;
+}
+.color-lump.depth-4 {
+  background-color: #1e6823;
 }
 .class-serve > ul {
   padding: 20px 10px;

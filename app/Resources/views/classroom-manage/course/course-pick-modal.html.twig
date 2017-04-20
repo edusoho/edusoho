@@ -1,0 +1,32 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% block title %}{{'选择课程'|trans}}{% endblock %}
+{% set modal_class= "modal-lg" %}
+{% do script(['app/js/classroom-manage/course-manage-pick/index.js']) %}
+
+{% block body %}
+<div class="alert alert-info" role="alert">{{'加入%name%的课程为选中的原课程复制生成，并与原课程实时同步更新。如需解除同步，请对该课程进行编辑。'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}
+</div>
+
+<form class="form-inline form-search" role="search-form">
+      <div class="form-group ">
+        <input type="text" class="form-control" name="key" id="enterSearch" value="" placeholder="{{'课程名称'|trans}}" data-url="{{path('classroom_course_search',{classroomId:classroomId})}}">
+      </div>
+      <button type="button" class="btn btn-primary"  id="search"  data-url="{{path('classroom_course_search',{classroomId:classroomId})}}">{{'搜索'|trans}}</button>
+      <a class="btn btn-primary" id="all-courses" data-url="{{path('classroom_courses_pick',{classroomId:classroomId})}}">{{'全部课程'|trans}}</a>
+</form>
+
+<div class="row mtl">
+    <div class="col-md-12">
+      <div class="courses-list">
+        {% include('course/course-select-list.html.twig') %}
+      </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+  <button id="sure" class="btn btn-primary pull-right" data-url="{{ path('classroom_courses_select', {id:classroomId})}}">{{'添加'|trans}}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
+  <p id="tip" class="color-danger pull-right mts mbs hide" >班级数据处理中，请耐心等待。</p>
+{% endblock %}

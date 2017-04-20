@@ -1,0 +1,17 @@
+{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
+
+{% block title %}{{'作业批阅'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
+{% set side_nav = 'homework-check' %}
+
+{% block main %}
+  <div class="panel panel-default">
+    {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
+    <div class="panel-body">
+      {% if isTeacher is defined and not isTeacher %}
+        <span class="color-danger">{{'当前用户不是本课程教师，没有批阅作业的权限。'|trans}}</span>
+      {% endif %}
+
+      {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:course.id, targetType: 'course',type:'homework',testpaperIds:homeworkIds})) }}
+    </div>
+  </div>
+{% endblock %}

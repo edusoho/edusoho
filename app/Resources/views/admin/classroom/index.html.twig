@@ -1,0 +1,56 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_classroom_manage' %}
+
+{% set script_controller='topxiaadminbundle/controller/classroom/classroom' %}
+{% block main %}
+
+  <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+    {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="{{'%name%名称'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}" name="titleLike" value="{{ app.request.get('titleLike') }}">
+    </div>
+
+    <button class="btn btn-primary">{{'搜索'|trans}}</button>
+    {% include 'admin/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: '班级说明Tooltip'|trans|raw, placement: 'left'} %}
+
+  </form>
+  {% if classroomInfo%}
+  <table class="table table-striped table-hover 111" id="classroom-table">
+    <thead>
+    <tr>
+      {% if setting('magic.enable_org','0') %}
+        <th><input type="checkbox"  data-role="batch-select"></th>
+      {% endif %}
+      <th>{{'%title%编号'|trans({'%title%':setting('calssroom.title')|default('班级'|trans)}) }}</th>
+      <th width="22%">{{'%name%名称'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</th>
+      {% include 'org/parts/table-thead-tr.html.twig' %}
+      <th>{{'课程数'|trans}}</th>
+      <th>{{'学员数'|trans}}</th>
+      <th width="12%">{{'价格'|trans}}</th>
+      <th>{{'状态'|trans}}</th>
+      <th>{{'操作'|trans}}</th>
+    </tr>
+    </thead>
+    <tbody>
+
+   {% for classroom in classroomInfo %}
+      {% set category = categories[classroom.categoryId]|default(null) %}
+      {% include 'admin/classroom/table-tr.html.twig' with {classroom:classroom,category:category} %}
+
+   {% endfor %}
+
+    </tbody>
+
+  </table>
+  {% else %}
+    <div class="empty">{{'暂无%name%信息!'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</div>
+  {% endif %}
+  {% include 'org/batch-update-org-btn.html.twig' with {module:'classroom', formId:'classroom-table'} %}
+  <div class="pull-right">
+   {{ web_macro.paginator(paginator) }}
+  </div>
+
+
+{% endblock %}

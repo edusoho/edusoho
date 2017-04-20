@@ -5,6 +5,7 @@ define(function(require, exports, module) {
 
 	require('bootstrap');
 	require('common/bootstrap-modal-hack2');
+  
 
 	var Notify = require('common/bootstrap-notify');
 
@@ -68,8 +69,12 @@ define(function(require, exports, module) {
 		}
 	});
 
-    if (app.scheduleCrontab) {
-        $.post(app.scheduleCrontab);
-    }	
+  if (app.scheduleCrontab) {
+      $.post(app.scheduleCrontab);
+  }	
+
+  if($('.js-update-modal').length) {
+    $('.js-update-modal').modal('show');
+  }
 
 });

@@ -14,6 +14,7 @@ namespace Symfony\Bridge\Doctrine\Tests\Form\ChoiceList;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Doctrine\Form\ChoiceList\DoctrineChoiceLoader;
 use Symfony\Bridge\Doctrine\Form\ChoiceList\EntityLoaderInterface;
 use Symfony\Bridge\Doctrine\Form\ChoiceList\IdReader;
@@ -23,7 +24,7 @@ use Symfony\Component\Form\ChoiceList\Factory\ChoiceListFactoryInterface;
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-class DoctrineChoiceLoaderTest extends \PHPUnit_Framework_TestCase
+class DoctrineChoiceLoaderTest extends TestCase
 {
     /**
      * @var ChoiceListFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -72,14 +73,14 @@ class DoctrineChoiceLoaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->factory = $this->getMock('Symfony\Component\Form\ChoiceList\Factory\ChoiceListFactoryInterface');
-        $this->om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $this->repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $this->factory = $this->getMockBuilder('Symfony\Component\Form\ChoiceList\Factory\ChoiceListFactoryInterface')->getMock();
+        $this->om = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
+        $this->repository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
         $this->class = 'stdClass';
         $this->idReader = $this->getMockBuilder('Symfony\Bridge\Doctrine\Form\ChoiceList\IdReader')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectLoader = $this->getMock('Symfony\Bridge\Doctrine\Form\ChoiceList\EntityLoaderInterface');
+        $this->objectLoader = $this->getMockBuilder('Symfony\Bridge\Doctrine\Form\ChoiceList\EntityLoaderInterface')->getMock();
         $this->obj1 = (object) array('name' => 'A');
         $this->obj2 = (object) array('name' => 'B');
         $this->obj3 = (object) array('name' => 'C');

@@ -13,7 +13,6 @@ namespace Symfony\Bundle\SwiftmailerBundle\EventListener;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\IntrospectableContainerInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -31,26 +30,27 @@ class EmailSenderListener implements EventSubscriberInterface
 
     private $logger;
 
-    /**
-     * Constructor.
-     *
-     * @param ContainerInterface $container A ContainerInterface instance
-     * @param LoggerInterface $logger A LoggerInterface instance
-     */
+    private $wasExceptionThrown = false;
+
     public function __construct(ContainerInterface $container, LoggerInterface $logger = null)
     {
         $this->container = $container;
         $this->logger = $logger;
     }
 
+    public function onException()
+    {
+        $this->wasExceptionThrown = true;
+    }
+
     public function onTerminate()
     {
-        if (!$this->container->has('mailer')) {
+        if (!$this->container->has('mailer') || $this->wasExceptionThrown) {
             return;
         }
         $mailers = array_keys($this->container->getParameter('swiftmailer.mailers'));
         foreach ($mailers as $name) {
-            if ($this->container instanceof IntrospectableContainerInterface ? $this->container->initialized(sprintf('swiftmailer.mailer.%s', $name)) : true) {
+            if (method_exists($this->container, 'initialized') ? $this->container->initialized(sprintf('swiftmailer.mailer.%s', $name)) : true) {
                 if ($this->container->getParameter(sprintf('swiftmailer.mailer.%s.spool.enabled', $name))) {
                     $mailer = $this->container->get(sprintf('swiftmailer.mailer.%s', $name));
                     $transport = $mailer->getTransport();
@@ -73,9 +73,13 @@ class EmailSenderListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        $listeners = array(KernelEvents::TERMINATE => 'onTerminate');
+        $listeners = array(
+            KernelEvents::EXCEPTION => 'onException',
+            KernelEvents::TERMINATE => 'onTerminate'
+        );
 
         if (class_exists('Symfony\Component\Console\ConsoleEvents')) {
+            $listeners[ConsoleEvents::EXCEPTION] = 'onException';
             $listeners[ConsoleEvents::TERMINATE] = 'onTerminate';
         }
 

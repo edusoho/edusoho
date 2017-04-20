@@ -1,0 +1,142 @@
+{% import 'macro.html.twig' as web_macro %}
+
+<section class="class-header before">
+  <div class="container">
+    {% if member.locked|default("0") == "1" %}
+      <div class="alert alert-warning">
+        {{ '您的退款申请已提交，请等待管理员的处理。'|trans }}
+        <button class="btn btn-warning btn-sm cancel-refund"
+          data-url="{{ path('order_cancel_refund', {id:classroom.id, targetType:"classroom"}) }}">{{ '取消退款，继续学习！'|trans }}</button>
+      </div>
+    {% endif %}
+
+    <ol class="breadcrumb breadcrumb-o">
+      <li><a href="{{ path('homepage') }}">{{ '首页'|trans }}</a></li>
+      {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ path('classroom_explore',{'category':breadcrumb.code}) }}">{{ breadcrumb.name }}</a></li>
+      {% endfor %}
+      <li class="active">{{ classroom.title }}</li>
+    </ol>
+
+    <div class="class-header-mian">
+      <div class="class-bg-layer"></div>
+      <div class="class-header-bg clearfix">
+        <div class="class-img">
+          <a href="{{ path('classroom_show',{id:classroom.id}) }}">
+            <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}"
+              href="{{ path('classroom_show',{id:classroom.id}) }}">
+          </a>
+          {% if classroom.status == 'closed' %}
+            <span class="label label-danger">{{ '已关闭'|trans }}</span>
+          {% endif %}
+        </div>
+        <div class="class-info">
+          <h2 class="title">
+            {{ classroom.title }}
+            <span class="es-qrcode top" data-url="{{ path('classroom_qrcode',{id: classroom.id}) }}">
+              <i class="es-icon es-icon-qrcode"></i>
+              <span class="qrcode-popover">
+                <img src="" alt="">
+                {{ '扫二维码继续学习'|trans }}
+                {{ '二维码时效为半小时'|trans }}
+              </span>
+            </span>
+          </h2>
+          <div class="metas">
+            <div class="score">
+              {{ web_macro.star(classroom.rating) }}
+              <span>({{ classroom.ratingNum }}{{ '评价'|trans }})</span>
+            </div>
+            <div class="price">
+              {{ '价格：'|trans }}
+              <span>
+                {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                  {% if classroom.price > 0 %}
+                    {{ classroom.price * setting('coin.cash_rate') }} {{ setting('coin.coin_name') }}
+                  {% else %}
+                    {{ '免费'|trans }}
+                  {% endif %}
+                {% else %}
+                  {% if classroom.price > 0 %}
+                    {{ classroom.price }}{{ '元'|trans }}
+                  {% else %}
+                    {{ '免费'|trans }}
+                  {% endif %}
+                {% endif %}
+              </span>
+            </div>
+          </div>
+
+          <div class="fsxl hidden-sm mt5 mb10 ml20">
+            {% if classroom.expiryMode == 'date' %}
+              <span class="mrm">班级有效期：</span><span>{{ classroom.expiryValue|date('Y-m-d') }}</span>
+            {% elseif classroom.expiryMode == 'days' %}
+              <span class="mrm">班级有效天数：</span><span>{{ classroom.expiryValue }}天</span>
+            {% endif %}
+          </div>
+
+          <ul class="class-data hidden-sm clearfix {% if classroomMemberLevel %}active{% endif %}">
+            <li>
+              <p><i class="es-icon es-icon-person"></i></p>
+              <p>{{ '学员'|trans }}({{ classroom.studentNum + classroom.auditorNum }})</p>
+            </li>
+            <li>
+              <p><i class="es-icon es-icon-book"></i></p>
+              <p>{{ '课程'|trans }}({{ classroom.courseNum }})</p>
+            </li>
+            <li>
+              <span class="es-share top">
+                <a class="dropdown-toggle" href="" data-toggle="dropdown" aria-labelledby="dropdownMenu1">
+                  <p><i class="es-icon es-icon-share"></i></p>
+                  <p>{{ '分享'|trans }}</p>
+                </a>
+                {% include 'common/share-dropdown.html.twig' with {type:'classroom'} %}
+              </span>
+            </li>
+            {% if classroomMemberLevel and  classroom.showable %}
+              <li
+                class="hidden-xs color-warning icon-vip"
+                title="{{ '会员%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)}) }}"
+                data-content="{% include 'course/header/parts/normal-header-vip.html.twig' with {courseVip:classroomMemberLevel,userVipStatus:checkMemberLevelResult} %}"
+                data-original-title="{{ '会员%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)}) }}"
+                title="{{ '会员%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)}) }}">
+                <i class="es-icon es-icon-crown"></i><br>
+                {% include 'course/header/parts/normal-header-vip-link.html.twig' with {userVipStatus:checkMemberLevelResult, level: classroomMemberLevel} %}
+              </li>
+            {% endif %}
+          </ul>
+
+          <div class="bottom-metas clearfix">
+            <div class="class-serve hidden-sm hidden-xs">
+              <div class="serve-frame">
+                {{ '承诺服务'|trans }}
+              </div>
+              {% include 'classroom/service-block.html.twig' with {'services':classroom.service } %}
+            </div>
+
+            {% if  classroom.showable and classroom.status != 'closed' %}
+              <div class="btn-buy">
+                {% include 'classroom/part/classroom-buy-btn.html.twig' %}
+
+              </div>
+            {% endif %}
+
+          </div>
+        </div>
+
+        {% if classroom_permit(classroom.id, 'Manage') and has_permission('admin_classroom_content_manage') %}
+          <a href="{{ path('classroom_manage',{id:classroom.id}) }}" class="btn btn-default setting hidden-xs hidden-sm"
+            title="{{ '%name%管理'|trans({'%name%':setting('classroom.name')|default('班级'|trans)}) }}">
+            <i class="es-icon es-icon-setting"></i>
+          </a>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{# {% if is_plugin_installed('ClassroomPlan') %}
+  {{ render(controller('ClassroomPlanBundle:ClassroomPlan:joinPlanBlock',{classroomId:classroom.id})) }}
+{% endif %}    
+ #}

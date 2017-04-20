@@ -3,7 +3,7 @@
 /*
  * This file is part of Twig.
  *
- * (c) 2009 Fabien Potencier
+ * (c) Fabien Potencier
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,7 +22,7 @@ class Twig_Node_Macro extends Twig_Node
     {
         foreach ($arguments as $argumentName => $argument) {
             if (self::VARARGS_NAME === $argumentName) {
-                throw new Twig_Error_Syntax(sprintf('The argument "%s" in macro "%s" cannot be defined because the variable "%s" is reserved for arbitrary arguments.', self::VARARGS_NAME, $name, self::VARARGS_NAME), $argument->getLine());
+                throw new Twig_Error_Syntax(sprintf('The argument "%s" in macro "%s" cannot be defined because the variable "%s" is reserved for arbitrary arguments.', self::VARARGS_NAME, $name, self::VARARGS_NAME), $argument->getTemplateLine());
             }
         }
 
@@ -70,7 +70,7 @@ class Twig_Node_Macro extends Twig_Node
 
         foreach ($this->getNode('arguments') as $name => $default) {
             $compiler
-                ->addIndentation()
+                ->write('')
                 ->string($name)
                 ->raw(' => $__'.$name.'__')
                 ->raw(",\n")
@@ -78,7 +78,7 @@ class Twig_Node_Macro extends Twig_Node
         }
 
         $compiler
-            ->addIndentation()
+            ->write('')
             ->string(self::VARARGS_NAME)
             ->raw(' => ')
         ;

@@ -8,8 +8,8 @@ class NotificationFilter implements Filter
     //查看权限,附带内容可以写在这里
     public function filter(array &$data)
     {
-        $userService = ServiceKernel::instance()->createService('User.UserService');
-        $fileService = ServiceKernel::instance()->createService('Content.FileService');
+        $userService = ServiceKernel::instance()->createService('User:UserService');
+        $fileService = ServiceKernel::instance()->createService('Content:FileService');
         unset($data['isRead']);
         $user = $userService->getUser($data['content']['userId']);
         $avatar = empty($user['largeAvatar']) ? '' : $fileService->parseFileUri($user['largeAvatar']);

@@ -1,0 +1,48 @@
+<?php
+namespace Topxia\Service\{{service}}\Impl;
+
+use Topxia\Service\Common\BaseService;
+use Topxia\Service\{{service}}\{{bigName}}Service;
+
+
+class {{bigName}}ServiceImpl extends BaseService  implements {{bigName}}Service
+{
+	public function get{{bigName}} ($id)
+    {
+		return $this->get{{bigName}}Dao()->get{{bigName}}($id);
+	}
+
+	// public function search{{bigName}}s (array $conditions, array $oderBy, $start, $limit)
+ //    {
+ //        return $this->get{{bigName}}Dao()->search{{bigName}}s($conditions, $oderBy, $start, $limit);
+ //    }
+
+ //    public function search{{bigName}}sCount(array $conditions)
+ //    {
+ //        return $this->get{{bigName}}Dao()->search{{bigName}}sCount($conditions);
+ //    }
+
+
+    public function add{{bigName}}(array ${{smallName}})
+    {
+        return $this->get{{bigName}}Dao()->add{{bigName}}(${{smallName}});
+    }
+
+    public function update{{bigName}}($id,${{smallName}})
+    {
+    	return $this->get{{bigName}}Dao()->update{{bigName}}($id,${{smallName}});
+    }
+
+
+    public function delete{{bigName}} ($id)
+    {
+        $this->get{{bigName}}Dao()->delete{{bigName}}($id);
+
+    }
+
+
+    private function get{{bigName}}Dao()
+    {
+        return $this->createDao('{{service}}:{{bigName}}Dao');
+    }
+}

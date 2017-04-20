@@ -11,24 +11,15 @@
 
 namespace Symfony\Component\HttpKernel\Tests\DependencyInjection;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\DependencyInjection\MergeExtensionConfigurationPass;
 
-class MergeExtensionConfigurationPassTest extends \PHPUnit_Framework_TestCase
+class MergeExtensionConfigurationPassTest extends TestCase
 {
     public function testAutoloadMainExtension()
     {
-        $container = $this->getMock(
-            'Symfony\\Component\\DependencyInjection\\ContainerBuilder',
-            array(
-                'getExtensionConfig',
-                'loadFromExtension',
-                'getParameterBag',
-                'getDefinitions',
-                'getAliases',
-                'getExtensions',
-            )
-        );
-        $params = $this->getMock('Symfony\\Component\\DependencyInjection\\ParameterBag\\ParameterBag');
+        $container = $this->getMockBuilder('Symfony\\Component\\DependencyInjection\\ContainerBuilder')->setMethods(array('getExtensionConfig', 'loadFromExtension', 'getParameterBag', 'getDefinitions', 'getAliases', 'getExtensions'))->getMock();
+        $params = $this->getMockBuilder('Symfony\\Component\\DependencyInjection\\ParameterBag\\ParameterBag')->getMock();
 
         $container->expects($this->at(0))
             ->method('getExtensionConfig')

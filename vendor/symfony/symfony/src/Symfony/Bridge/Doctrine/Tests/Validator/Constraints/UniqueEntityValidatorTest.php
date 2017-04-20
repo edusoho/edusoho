@@ -18,6 +18,7 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
 use Symfony\Bridge\Doctrine\Tests\Fixtures\SingleIntIdEntity;
 use Symfony\Bridge\Doctrine\Tests\Fixtures\DoubleNameEntity;
+use Symfony\Bridge\Doctrine\Tests\Fixtures\DoubleNullableNameEntity;
 use Symfony\Bridge\Doctrine\Tests\Fixtures\AssociationEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntityValidator;
@@ -63,7 +64,7 @@ class UniqueEntityValidatorTest extends AbstractConstraintValidatorTest
 
     protected function createRegistryMock(ObjectManager $em = null)
     {
-        $registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $registry = $this->getMockBuilder('Doctrine\Common\Persistence\ManagerRegistry')->getMock();
         $registry->expects($this->any())
                  ->method('getManager')
                  ->with($this->equalTo(self::EM_NAME))
@@ -92,7 +93,7 @@ class UniqueEntityValidatorTest extends AbstractConstraintValidatorTest
              ->will($this->returnValue($repositoryMock))
         ;
 
-        $classMetadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $classMetadata = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
         $classMetadata
             ->expects($this->any())
             ->method('hasField')
@@ -132,6 +133,7 @@ class UniqueEntityValidatorTest extends AbstractConstraintValidatorTest
         $schemaTool->createSchema(array(
             $em->getClassMetadata('Symfony\Bridge\Doctrine\Tests\Fixtures\SingleIntIdEntity'),
             $em->getClassMetadata('Symfony\Bridge\Doctrine\Tests\Fixtures\DoubleNameEntity'),
+            $em->getClassMetadata('Symfony\Bridge\Doctrine\Tests\Fixtures\DoubleNullableNameEntity'),
             $em->getClassMetadata('Symfony\Bridge\Doctrine\Tests\Fixtures\CompositeIntIdEntity'),
             $em->getClassMetadata('Symfony\Bridge\Doctrine\Tests\Fixtures\AssociationEntity'),
         ));
@@ -215,7 +217,7 @@ class UniqueEntityValidatorTest extends AbstractConstraintValidatorTest
         $this->assertNoViolation();
     }
 
-    public function testValidateUniquenessWithIgnoreNull()
+    public function testValidateUniquenessWithIgnoreNullDisabled()
     {
         $constraint = new UniqueEntity(array(
             'message' => 'myMessage',
@@ -245,6 +247,51 @@ class UniqueEntityValidatorTest extends AbstractConstraintValidatorTest
             ->setInvalidValue('Foo')
             ->setCode(UniqueEntity::NOT_UNIQUE_ERROR)
             ->assertRaised();
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Validator\Exception\ConstraintDefinitionException
+     */
+    public function testAllConfiguredFieldsAreCheckedOfBeingMappedByDoctrineWithIgnoreNullEnabled()
+    {
+        $constraint = new UniqueEntity(array(
+            'message' => 'myMessage',
+            'fields' => array('name', 'name2'),
+            'em' => self::EM_NAME,
+            'ignoreNull' => true,
+        ));
+
+        $entity1 = new SingleIntIdEntity(1, null);
+
+        $this->validator->validate($entity1, $constraint);
+    }
+
+    public function testNoValidationIfFirstFieldIsNullAndNullValuesAreIgnored()
+    {
+        $constraint = new UniqueEntity(array(
+            'message' => 'myMessage',
+            'fields' => array('name', 'name2'),
+            'em' => self::EM_NAME,
+            'ignoreNull' => true,
+        ));
+
+        $entity1 = new DoubleNullableNameEntity(1, null, 'Foo');
+        $entity2 = new DoubleNullableNameEntity(2, null, 'Foo');
+
+        $this->validator->validate($entity1, $constraint);
+
+        $this->assertNoViolation();
+
+        $this->em->persist($entity1);
+        $this->em->flush();
+
+        $this->validator->validate($entity1, $constraint);
+
+        $this->assertNoViolation();
+
+        $this->validator->validate($entity2, $constraint);
+
+        $this->assertNoViolation();
     }
 
     public function testValidateUniquenessWithValidCustomErrorPath()

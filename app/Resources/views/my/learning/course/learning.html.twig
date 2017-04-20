@@ -1,0 +1,33 @@
+{% extends 'my/learning/course/layout.html.twig' %}
+
+{% set mobile = is_show_mobile_page() %}
+{% set tab_nav = 'learning' %}
+
+{% block title %}{{ '学习中'|trans }} - {{ parent() }}{% endblock %}
+
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">{{ '我的课程'|trans }}</div>
+    <div class="panel-body">
+      {% include 'my/learning/course/nav-pill.html.twig' %}
+      {% if courses %}
+        {{ render(controller('AppBundle:Course/Course:coursesBlock', {courses:courses, view: 'grid', mode:'learn'})) }}
+        {{ web_macro.paginator(paginator) }}
+      {% else %}
+        <div class="empty">{{ '暂无学习中的课程'|trans }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block main_mobile %}
+  {% if mobile %}
+    {% include 'my/learning/course/learning-mobile.html.twig' %}
+  {% endif %}
+{% endblock %}
+
+{% block bottom %}
+  {% include 'mobile/footer-tool-bar.html.twig' with { mobile_tool_bar: 'learning' } %}
+{% endblock %}
+

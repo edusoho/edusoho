@@ -11,13 +11,14 @@
 
 namespace Symfony\Component\PropertyInfo\Tests\PhpDocExtractors;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\PropertyInfo\Type;
 
 /**
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
-class PhpDocExtractorTest extends \PHPUnit_Framework_TestCase
+class PhpDocExtractorTest extends TestCase
 {
     /**
      * @var PhpDocExtractor
@@ -68,6 +69,8 @@ class PhpDocExtractorTest extends \PHPUnit_Framework_TestCase
             array('e', array(new Type(Type::BUILTIN_TYPE_ARRAY, false, null, true, new Type(Type::BUILTIN_TYPE_INT), new Type(Type::BUILTIN_TYPE_RESOURCE))), null, null),
             array('f', array(new Type(Type::BUILTIN_TYPE_ARRAY, false, null, true, new Type(Type::BUILTIN_TYPE_INT), new Type(Type::BUILTIN_TYPE_OBJECT, false, 'DateTime'))), null, null),
             array('donotexist', null, null, null),
+            array('staticGetter', null, null, null),
+            array('staticSetter', null, null, null),
         );
     }
 }

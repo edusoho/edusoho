@@ -513,6 +513,22 @@ class SimpleFormTest extends AbstractFormTest
         $this->assertSame('default', $form->getData());
     }
 
+    public function testPreSetDataChangesDataIfDataIsLocked()
+    {
+        $config = new FormConfigBuilder('name', null, $this->dispatcher);
+        $config
+            ->setData('default')
+            ->setDataLocked(true)
+            ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+                $event->setData('foobar');
+            });
+        $form = new Form($config);
+
+        $this->assertSame('foobar', $form->getData());
+        $this->assertSame('foobar', $form->getNormData());
+        $this->assertSame('foobar', $form->getViewData());
+    }
+
     public function testSubmitConvertsEmptyToNullIfNoTransformer()
     {
         $form = $this->getBuilder()->getForm();
@@ -641,10 +657,10 @@ class SimpleFormTest extends AbstractFormTest
         $form = $this->getBuilder()
             ->setEmptyData('foo')
             ->addViewTransformer(new FixedDataTransformer(array(
-            '' => '',
-            // direction is reversed!
-            'bar' => 'foo',
-        )))
+                '' => '',
+                // direction is reversed!
+                'bar' => 'foo',
+            )))
             ->getForm();
 
         $form->submit('');
@@ -657,17 +673,17 @@ class SimpleFormTest extends AbstractFormTest
         $test = $this;
         $form = $this->getBuilder()
             ->setEmptyData(function ($form) use ($test) {
-            // the form instance is passed to the closure to allow use
-            // of form data when creating the empty value
-            $test->assertInstanceOf('Symfony\Component\Form\FormInterface', $form);
+                // the form instance is passed to the closure to allow use
+                // of form data when creating the empty value
+                $test->assertInstanceOf('Symfony\Component\Form\FormInterface', $form);
 
-            return 'foo';
-        })
+                return 'foo';
+            })
             ->addViewTransformer(new FixedDataTransformer(array(
-            '' => '',
-            // direction is reversed!
-            'bar' => 'foo',
-        )))
+                '' => '',
+                // direction is reversed!
+                'bar' => 'foo',
+            )))
             ->getForm();
 
         $form->submit('');
@@ -685,8 +701,8 @@ class SimpleFormTest extends AbstractFormTest
 
     public function testCreateView()
     {
-        $type = $this->getMock('Symfony\Component\Form\ResolvedFormTypeInterface');
-        $view = $this->getMock('Symfony\Component\Form\FormView');
+        $type = $this->getMockBuilder('Symfony\Component\Form\ResolvedFormTypeInterface')->getMock();
+        $view = $this->getMockBuilder('Symfony\Component\Form\FormView')->getMock();
         $form = $this->getBuilder()->setType($type)->getForm();
 
         $type->expects($this->once())
@@ -699,10 +715,10 @@ class SimpleFormTest extends AbstractFormTest
 
     public function testCreateViewWithParent()
     {
-        $type = $this->getMock('Symfony\Component\Form\ResolvedFormTypeInterface');
-        $view = $this->getMock('Symfony\Component\Form\FormView');
-        $parentForm = $this->getMock('Symfony\Component\Form\Test\FormInterface');
-        $parentView = $this->getMock('Symfony\Component\Form\FormView');
+        $type = $this->getMockBuilder('Symfony\Component\Form\ResolvedFormTypeInterface')->getMock();
+        $view = $this->getMockBuilder('Symfony\Component\Form\FormView')->getMock();
+        $parentForm = $this->getMockBuilder('Symfony\Component\Form\Test\FormInterface')->getMock();
+        $parentView = $this->getMockBuilder('Symfony\Component\Form\FormView')->getMock();
         $form = $this->getBuilder()->setType($type)->getForm();
         $form->setParent($parentForm);
 
@@ -720,9 +736,9 @@ class SimpleFormTest extends AbstractFormTest
 
     public function testCreateViewWithExplicitParent()
     {
-        $type = $this->getMock('Symfony\Component\Form\ResolvedFormTypeInterface');
-        $view = $this->getMock('Symfony\Component\Form\FormView');
-        $parentView = $this->getMock('Symfony\Component\Form\FormView');
+        $type = $this->getMockBuilder('Symfony\Component\Form\ResolvedFormTypeInterface')->getMock();
+        $view = $this->getMockBuilder('Symfony\Component\Form\FormView')->getMock();
+        $parentView = $this->getMockBuilder('Symfony\Component\Form\FormView')->getMock();
         $form = $this->getBuilder()->setType($type)->getForm();
 
         $type->expects($this->once())
@@ -857,7 +873,7 @@ class SimpleFormTest extends AbstractFormTest
 
     public function testViewDataMayBeArrayAccessIfDataClassIsNull()
     {
-        $arrayAccess = $this->getMock('\ArrayAccess');
+        $arrayAccess = $this->getMockBuilder('\ArrayAccess')->getMock();
         $config = new FormConfigBuilder('name', null, $this->dispatcher);
         $config->addViewTransformer(new FixedDataTransformer(array(
             '' => '',
@@ -921,7 +937,7 @@ class SimpleFormTest extends AbstractFormTest
 
     public function testHandleRequestForwardsToRequestHandler()
     {
-        $handler = $this->getMock('Symfony\Component\Form\RequestHandlerInterface');
+        $handler = $this->getMockBuilder('Symfony\Component\Form\RequestHandlerInterface')->getMock();
 
         $form = $this->getBuilder()
             ->setRequestHandler($handler)
@@ -1034,7 +1050,7 @@ class SimpleFormTest extends AbstractFormTest
     public function testInitializeSetsDefaultData()
     {
         $config = $this->getBuilder()->setData('DEFAULT')->getFormConfig();
-        $form = $this->getMock('Symfony\Component\Form\Form', array('setData'), array($config));
+        $form = $this->getMockBuilder('Symfony\Component\Form\Form')->setMethods(array('setData'))->setConstructorArgs(array($config))->getMock();
 
         $form->expects($this->once())
             ->method('setData')

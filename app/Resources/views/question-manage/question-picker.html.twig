@@ -1,0 +1,58 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% set replaceFor= replaceFor|default(null) %}
+
+{% do script(['app/js/question-manage/picker/index.js']) %}
+
+{% block title %}{% if replaceFor %}替换{% else %}选择{% endif %}题目{% endblock %}
+
+{% block body %}
+<div id="question-picker-body">
+  
+  {% include 'question-manage/picker-search-form.html.twig' %}
+
+  <table class="table table-condensed" id="item-picker-table">
+    <thead>
+    <tr>
+      {% if not replace|default(null) %}
+        <th><input type="checkbox" data-role="batch-select"></th>
+      {% endif %}
+      <th width="45%">{{'题干'|trans}}</th>
+      <th>{{'类型'|trans}}</th>
+      {% if targetType|default('testpaper') == 'testpaper' %}
+        <th>{{'分值'|trans}}</th>
+      {% endif %}
+      <th>{{'操作'|trans}}</th>
+    </tr>
+    </thead>
+    <tbody>
+      {% for question in questions if (question.type != 'material' or question.subCount > 0) %}
+        {% include 'question-manage/question-pick-tr.html.twig' %}
+      {% else %}
+        <tr>
+          <td colspan="20"><div class="empty">无题目记录,请先去<a class="link-primary" href="{{ path('course_set_manage_question',{id:courseSet.id}) }}">创建题目</a></div>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% if not replace %}
+    <div id="item-operate">
+      <label class="checkbox-inline">
+        <input type="checkbox" data-role="batch-select">{{'全选'|trans}}
+      </label>
+    </div>
+  {% endif %}
+  {{ web_macro.paginator(paginator) }}
+</div>
+
+{% endblock %}
+
+{% block footer %}
+    <span class="color-danger pull-left js-choice-notice" style="display:none;">请选择题目</span>
+    <button type="button" class="btn btn-primary" type="button" class="btn btn-primary pull-right" data-role="batch-select-save" data-toggle="form-submit" data-target="#block-form" data-url="{{ path('course_set_manage_question_picked', {courseSetId:courseSet.id }) }}">确定</button>
+
+    <button type="button" class="btn btn-link pull-right" data-dismiss="modal">关闭</button>
+{% endblock %}

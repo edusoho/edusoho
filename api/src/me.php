@@ -2,7 +2,6 @@
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 $api = $app['controllers_factory'];
 
@@ -38,7 +37,7 @@ $api->get('/', function (Request $request) {
  */
 $api->get('/followers', function (Request $request) {
     $user = getCurrentUser();
-    $follwers = ServiceKernel::instance()->createService('User.UserService')->findAllUserFollower($user['id']);
+    $follwers = ServiceKernel::instance()->createService('User:UserService')->findAllUserFollower($user['id']);
     return $follwers;
 }
 
@@ -58,7 +57,7 @@ $api->get('/followers', function (Request $request) {
  */
 $api->get('/followings', function (Request $request) {
     $user = getCurrentUser();
-    $follwings = ServiceKernel::instance()->createService('User.UserService')->findAllUserFollowing($user['id']);
+    $follwings = ServiceKernel::instance()->createService('User:UserService')->findAllUserFollowing($user['id']);
     return $follwings;
 }
 
@@ -67,7 +66,7 @@ $api->get('/followings', function (Request $request) {
 //获得当前用户虚拟币账户信息
 $api->get('/accounts', function () {
     $user = getCurrentUser();
-    $accounts = ServiceKernel::instance()->createService('Cash.CashAccountService')->getAccountByUserId($user['id']);
+    $accounts = ServiceKernel::instance()->createService('Cash:CashAccountService')->getAccountByUserId($user['id']);
 
     if (empty($accounts)) {
         throw new \Exception('accounts not found');
@@ -111,12 +110,12 @@ $api->get('/coursethreads', function (Request $request) {
     $type = $request->query->get('type', '');
     $conditions = empty($type) ? array() : array('type' => $type);
     $conditions['userId'] = $user['id'];
-    $total = ServiceKernel::instance()->createService('Course.ThreadService')->searchThreadCount($conditions);
-    $coursethreads = ServiceKernel::instance()->createService('Course.ThreadService')->searchThreads($conditions, 'created', $start, $limit);
+    $total = ServiceKernel::instance()->createService('Course:ThreadService')->searchThreadCount($conditions);
+    $coursethreads = ServiceKernel::instance()->createService('Course:ThreadService')->searchThreads($conditions, 'created', $start, $limit);
 
     return array(
-        'data'  => $coursethreads,
-        'total' => $total
+        'data' => $coursethreads,
+        'total' => $total,
     );
 }
 
@@ -148,69 +147,11 @@ userId:{blacklist-userId},
 
 $api->get('/blacklists', function () {
     $user = getCurrentUser();
-    $blacklists = ServiceKernel::instance()->createService('User.BlacklistService')->findBlacklistsByUserId($user['id']);
+    $blacklists = ServiceKernel::instance()->createService('User:BlacklistService')->findBlacklistsByUserId($user['id']);
     return filters($blacklists, 'blacklist');
 }
 
 );
-
-/*
-## 获取当前用户互粉用户
-GET /me/friends
-
-[支持分页](global-parameter.md)
-
- ** 响应 **
-
-```
-{
-"data": "{friend-list}"
-"total": "{totalCount}"
-}
-```
-
- */
-
-$api->get('/friends', function (Request $request) {
-    $user = getCurrentUser();
-    $start = $request->query->get('start', 0);
-    $limit = $request->query->get('limit', 10);
-    $friends = ServiceKernel::instance()->createService('User.UserService')->findFriends($user['id'], $start, $limit);
-    $count = ServiceKernel::instance()->createService('User.UserService')->findFriendCount($user['id']);
-    return array(
-        'data'  => filters($friends, 'user'),
-        'total' => $count
-    );
-}
-
-);
-
-/*
-## 获取当前用户通知
-GET /me/notifications
-
-[支持分页](global-parameter.md)
-
- ** 参数 **
-
-| 名称  | 类型  | 必需   | 说明 |
-| ---- | ----- | ----- | ---- |
-| type | string | 否 | 类型,未传则取全部类型 |
-
-`type`的值有：
-
- * user-follow : 关注好友
-
- ** 响应 **
-
-```
-{
-"data": "{friend-list}"
-"total": "{totalCount}"
-}
-```
-
- */
 
 $api->get('/notifications', function (Request $request) {
     $user = getCurrentUser();
@@ -223,16 +164,16 @@ $api->get('/notifications', function (Request $request) {
         $conditions['type'] = $type;
     }
 
-    $notifications = ServiceKernel::instance()->createService('User.NotificationService')->searchNotifications(
+    $notifications = ServiceKernel::instance()->createService('User:NotificationService')->searchNotifications(
         $conditions,
-        array('createdTime', 'DESC'),
+        array('createdTime' => 'DESC'),
         $start,
         $limit
     );
-    $count = ServiceKernel::instance()->createService('User.NotificationService')->searchNotificationCount($conditions);
+    $count = ServiceKernel::instance()->createService('User:NotificationService')->countNotifications($conditions);
     return array(
-        'data'  => filters($notifications, 'notification'),
-        'total' => $count
+        'data' => filters($notifications, 'notification'),
+        'total' => (string) $count,
     );
 }
 

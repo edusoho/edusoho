@@ -8,7 +8,7 @@ class Swift_Transport_StreamBuffer_SocketTimeoutTest extends \PHPUnit_Framework_
 
     protected $_server;
 
-    public function setUp()
+    protected function setUp()
     {
         if (!defined('SWIFT_SMTP_HOST')) {
             $this->markTestSkipped(
@@ -27,7 +27,7 @@ class Swift_Transport_StreamBuffer_SocketTimeoutTest extends \PHPUnit_Framework_
         }
 
         $this->_buffer = new Swift_Transport_StreamBuffer(
-            $this->getMock('Swift_ReplacementFilterFactory')
+            $this->getMockBuilder('Swift_ReplacementFilterFactory')->getMock()
         );
     }
 
@@ -58,7 +58,7 @@ class Swift_Transport_StreamBuffer_SocketTimeoutTest extends \PHPUnit_Framework_
         $this->assertRegExp('/Connection to .* Timed Out/', $e->getMessage());
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         if ($this->_server) {
             stream_socket_shutdown($this->_server, STREAM_SHUT_RDWR);

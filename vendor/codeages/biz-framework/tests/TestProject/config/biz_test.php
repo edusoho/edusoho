@@ -14,6 +14,6 @@ return array(
     ),
     'redis.options' => array(
         'host' => '127.0.0.1',
-        'port' => ''
-    )
+        'port' => '',
+    ),
 );

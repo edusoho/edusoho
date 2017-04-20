@@ -11,10 +11,11 @@
 
 namespace Symfony\Component\Security\Http\Tests\Firewall;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Firewall\RemoteUserAuthenticationListener;
 
-class RemoteUserAuthenticationListenerTest extends \PHPUnit_Framework_TestCase
+class RemoteUserAuthenticationListenerTest extends TestCase
 {
     public function testGetPreAuthenticatedData()
     {
@@ -24,9 +25,9 @@ class RemoteUserAuthenticationListenerTest extends \PHPUnit_Framework_TestCase
 
         $request = new Request(array(), array(), array(), array(), array(), $serverVars);
 
-        $tokenStorage = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface');
+        $tokenStorage = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')->getMock();
 
-        $authenticationManager = $this->getMock('Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface');
+        $authenticationManager = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface')->getMock();
 
         $listener = new RemoteUserAuthenticationListener(
             $tokenStorage,
@@ -48,9 +49,9 @@ class RemoteUserAuthenticationListenerTest extends \PHPUnit_Framework_TestCase
     {
         $request = new Request(array(), array(), array(), array(), array(), array());
 
-        $tokenStorage = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface');
+        $tokenStorage = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')->getMock();
 
-        $authenticationManager = $this->getMock('Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface');
+        $authenticationManager = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface')->getMock();
 
         $listener = new RemoteUserAuthenticationListener(
             $tokenStorage,
@@ -71,9 +72,9 @@ class RemoteUserAuthenticationListenerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(array(), array(), array(), array(), array(), array(
             'TheUserKey' => 'TheUser',
         ));
-        $tokenStorage = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface');
+        $tokenStorage = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')->getMock();
 
-        $authenticationManager = $this->getMock('Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface');
+        $authenticationManager = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface')->getMock();
 
         $listener = new RemoteUserAuthenticationListener(
             $tokenStorage,

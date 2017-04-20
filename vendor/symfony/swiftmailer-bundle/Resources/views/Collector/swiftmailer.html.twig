@@ -167,7 +167,7 @@
                         <div class="card-block">
                             <span class="label">Alternative part ({{ messagePart.contentType }})</span>
                             <pre>
-                                {%- if messagePart.charset %}
+                                {%- if messagePart.charset is defined and messagePart.charset %}
                                     {{- messagePart.body|convert_encoding('UTF-8', messagePart.charset) }}
                                 {%- else %}
                                     {{- messagePart.body }}
@@ -175,6 +175,28 @@
                             </pre>
                         </div>
                     {% endfor %}
+
+                    {% set attachments = collector.extractAttachments(message) %}
+                    {% if attachments %}
+                        <div class="card-block">
+                            <span class="label">
+                                {% if attachments|length > 1 %}
+                                    {{ attachments|length }} Attachments
+                                {% else %}
+                                    1 Attachment
+                                {% endif %}
+                            </span>
+
+                            <ol>
+                                {% for attachment in attachments %}
+                                    <li>
+                                        Filename:
+                                        {{ attachment.filename }}
+                                    </li>
+                                {% endfor %}
+                            </ol>
+                        </div>
+                    {% endif %}
                 </div>
             {% endfor %}
         {% endif %}

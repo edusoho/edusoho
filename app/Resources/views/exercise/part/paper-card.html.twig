@@ -1,0 +1,41 @@
+<div class="testpaper-card {{testpaperCardClass|default('')}}">
+  {% if paperResult.status|default(null) == 'finished' %}
+    <div class="mbl">
+      <a class="btn btn-primary btn-block btn-lg border-radius-none" href="{{ path('exercise_start_do',{lessonId:paperResult.lessonId|default(0),exerciseId:paperResult.testId|default(0)}) }}">{{'再做%itemCount%题'|trans({'%itemCount%':paper.itemCount })}}</a>
+    </div>
+  {% endif %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      {{'答题卡'|trans}} 
+    </div>
+    <div class="panel-body">
+      {% for question in questions %}
+        {% set loopIndex = loop.index %}
+        {% if question.type == 'material' %}
+          {% for subQuestion in question.subs|default(null) %}
+            {% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:subQuestion,seq:subQuestion.seq} %}
+          {% endfor %}
+        {% else %}
+          {% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:question,seq:question.seq} %}
+        {% endif %}
+        
+      {% endfor %}
+
+      {% if paperResult.status|default(null) in ['reviewing','finished'] %}
+        {% include 'testpaper/part/card-choice-explain.html.twig' %}
+      {% endif %}
+    </div>
+    
+    <div class="panel-footer text-right mt20">
+      {% if paperResult.id|default(0) > 0 %}
+        {% if paperResult.status == 'doing' %}
+          <a id="paper-finish" class="btn btn-primary" data-toggle="modal" data-target="#testpaper-finished-dialog">{{'提交练习'|trans}}</a>
+          <input type="hidden" data-url="{{ path('testpaper_do_suspend', {resultId:paperResult.id}) }}" data-role="test-suspend">
+        {% endif %}
+      {% else %}
+        <a id="paper-finish" class="btn btn-primary" disabled="disabled">{{'提交练习'|trans}}</a>
+      {% endif %}
+    </div>
+    
+  </div>
+</div>

@@ -22,6 +22,7 @@ class Mongo implements AuthorizationCodeInterface,
     UserCredentialsInterface,
     RefreshTokenInterface,
     JwtBearerInterface,
+    PublicKeyInterface,
     OpenIDAuthorizationCodeInterface
 {
     protected $db;
@@ -46,6 +47,7 @@ class Mongo implements AuthorizationCodeInterface,
             'refresh_token_table' => 'oauth_refresh_tokens',
             'code_table' => 'oauth_authorization_codes',
             'user_table' => 'oauth_users',
+            'key_table' => 'oauth_keys',
             'jwt_table' => 'oauth_jwt',
         ), $config);
     }
@@ -161,7 +163,11 @@ class Mongo implements AuthorizationCodeInterface,
 
     public function unsetAccessToken($access_token)
     {
-        $this->collection('access_token_table')->remove(array('access_token' => $access_token));
+        $result = $this->collection('access_token_table')->remove(array(
+            'access_token' => $access_token
+        ), array('w' => 1));
+
+        return $result['n'] > 0;
     }
 
 
@@ -254,9 +260,11 @@ class Mongo implements AuthorizationCodeInterface,
 
     public function unsetRefreshToken($refresh_token)
     {
-        $this->collection('refresh_token_table')->remove(array('refresh_token' => $refresh_token));
+        $result = $this->collection('refresh_token_table')->remove(array(
+            'refresh_token' => $refresh_token
+        ), array('w' => 1));
 
-        return true;
+        return $result['n'] > 0;
     }
 
     // plaintext passwords are bad!  Override this for your application
@@ -329,5 +337,56 @@ class Mongo implements AuthorizationCodeInterface,
     {
         //TODO: Needs mongodb implementation.
         throw new \Exception('setJti() for the MongoDB driver is currently unimplemented.');
+    }
+
+    public function getPublicKey($client_id = null)
+    {
+        if ($client_id) {
+            $result = $this->collection('key_table')->findOne(array(
+                'client_id' => $client_id
+            ));
+            if ($result) {
+                return $result['public_key'];
+            }
+        }
+
+        $result = $this->collection('key_table')->findOne(array(
+            'client_id' => null
+        ));
+        return is_null($result) ? false : $result['public_key'];
+    }
+
+    public function getPrivateKey($client_id = null)
+    {
+        if ($client_id) {
+            $result = $this->collection('key_table')->findOne(array(
+                'client_id' => $client_id
+            ));
+            if ($result) {
+                return $result['private_key'];
+            }
+        }
+
+        $result = $this->collection('key_table')->findOne(array(
+            'client_id' => null
+        ));
+        return is_null($result) ? false : $result['private_key'];
+    }
+
+    public function getEncryptionAlgorithm($client_id = null)
+    {
+        if ($client_id) {
+            $result = $this->collection('key_table')->findOne(array(
+                'client_id' => $client_id
+            ));
+            if ($result) {
+                return $result['encryption_algorithm'];
+            }
+        }
+
+        $result = $this->collection('key_table')->findOne(array(
+            'client_id' => null
+        ));
+        return is_null($result) ? 'RS256' : $result['encryption_algorithm'];
     }
 }

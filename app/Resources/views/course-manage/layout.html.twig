@@ -1,0 +1,26 @@
+{% extends 'courseset-manage/layout.html.twig' %} 
+{% block title %}{{ '教学计划管理'|trans }} - {{ parent() }}{% endblock %} {%
+do script(['app/js/course-manage/index.js']) %} 
+
+{% block course_header %}
+  {{ render(controller('AppBundle:Course/CourseManage:header', {courseSet:courseSet, course: course, manage: true})) }}
+{% endblock %}
+
+{% block main %}
+  <div class="panel panel-default">
+    {% if courseSet.type != 'live' %}
+      <div class="panel-heading">
+        {{ course.title }}
+        {% if course.status != 'published' %}
+          <button class="btn btn-success btn-sm pull-right js-publish-course" 
+            data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">
+            {{ '发布计划'|trans }}
+          </button>
+        {% endif %}
+      </div>
+    {% endif %}
+    <div class="panel-body">
+      {% block course %} {% endblock %}
+    </div>
+  </div>
+{% endblock %}

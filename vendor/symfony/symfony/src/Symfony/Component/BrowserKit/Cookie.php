@@ -121,7 +121,7 @@ class Cookie
      * @param string $cookie A Set-Cookie header value
      * @param string $url    The base URL
      *
-     * @return Cookie A Cookie instance
+     * @return static
      *
      * @throws \InvalidArgumentException
      */
@@ -213,8 +213,6 @@ class Cookie
         if (false !== $date = date_create($dateValue, new \DateTimeZone('GMT'))) {
             return $date->format('U');
         }
-
-        throw new \InvalidArgumentException(sprintf('Could not parse date "%s".', $dateValue));
     }
 
     /**

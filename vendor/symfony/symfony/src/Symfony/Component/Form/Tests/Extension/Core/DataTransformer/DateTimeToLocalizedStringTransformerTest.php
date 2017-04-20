@@ -24,7 +24,7 @@ class DateTimeToLocalizedStringTransformerTest extends DateTimeTestCase
         parent::setUp();
 
         // Since we test against "de_AT", we need the full implementation
-        IntlTestHelper::requireFullIntl($this);
+        IntlTestHelper::requireFullIntl($this, '57.1');
 
         \Locale::setDefault('de_AT');
 
@@ -190,7 +190,7 @@ class DateTimeToLocalizedStringTransformerTest extends DateTimeTestCase
 
         // HOW TO REPRODUCE?
 
-        //$this->setExpectedException('Symfony\Component\Form\Extension\Core\DataTransformer\TransformationFailedException');
+        //$this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('Symfony\Component\Form\Extension\Core\DataTransformer\TransformationFailedException');
 
         //$transformer->transform(1.5);
     }
@@ -238,6 +238,15 @@ class DateTimeToLocalizedStringTransformerTest extends DateTimeTestCase
         $dateTime->setTimezone(new \DateTimeZone('America/New_York'));
 
         $this->assertDateTimeEquals($dateTime, $transformer->reverseTransform('03.02.2010, 04:05'));
+    }
+
+    public function testReverseTransformOnlyDateWithDifferentTimezones()
+    {
+        $transformer = new DateTimeToLocalizedStringTransformer('Europe/Berlin', 'Pacific/Tahiti', \IntlDateFormatter::FULL, \IntlDateFormatter::FULL, \IntlDateFormatter::GREGORIAN, 'yyyy-MM-dd');
+
+        $dateTime = new \DateTime('2017-01-10 11:00', new \DateTimeZone('Europe/Berlin'));
+
+        $this->assertDateTimeEquals($dateTime, $transformer->reverseTransform('2017-01-10'));
     }
 
     public function testReverseTransformWithDifferentPatterns()

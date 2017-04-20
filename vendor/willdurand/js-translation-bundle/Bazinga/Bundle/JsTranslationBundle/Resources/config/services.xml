@@ -10,7 +10,7 @@
 
     <services>
         <service id="bazinga.jstranslation.translation_finder" class="%bazinga.jstranslation.translation_finder.class%">
-            <argument type="service" id="kernel" />
+            <argument type="collection"></argument> <!-- all resource files paths from the framework bundle -->
         </service>
         <service id="bazinga.jstranslation.translation_dumper" class="%bazinga.jstranslation.translation_dumper.class%">
             <argument type="service" id="templating" />

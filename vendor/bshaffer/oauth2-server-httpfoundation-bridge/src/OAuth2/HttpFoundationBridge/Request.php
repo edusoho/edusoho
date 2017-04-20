@@ -4,6 +4,7 @@ namespace OAuth2\HttpFoundationBridge;
 
 use Symfony\Component\HttpFoundation\Request as BaseRequest;
 use OAuth2\RequestInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  *
@@ -39,6 +40,12 @@ use OAuth2\RequestInterface;
     {
         return new static($request->query->all(), $request->request->all(), $request->attributes->all(), $request->cookies->all(), $request->files->all(), $request->server->all(), $request->getContent());
     }
+
+    public static function createFromRequestStack(RequestStack $request)
+    {
+        $request = $request->getCurrentRequest();
+        return self::createFromRequest($request);
+    }
     
     /**
      * Creates a new request with values from PHP's super globals. 
@@ -67,12 +74,11 @@ use OAuth2\RequestInterface;
      *
      * @param HeaderBag $headers
      */
-    private static function fixAuthHeader(\Symfony\Component\HttpFoundation\HeaderBag $headers)
+    protected static function fixAuthHeader(\Symfony\Component\HttpFoundation\HeaderBag $headers)
     {
         if (!$headers->has('Authorization') && function_exists('apache_request_headers')) {
             $all = apache_request_headers();
-            if (isset($all['Authorization']))
-            {
+            if (isset($all['Authorization'])) {
                 $headers->set('Authorization', $all['Authorization']);
             }
         }

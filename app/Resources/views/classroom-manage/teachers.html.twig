@@ -1,0 +1,37 @@
+{% extends 'classroom-manage/layout.html.twig' %}
+{% block title %}{{'教师管理'|trans}} - {{ parent() }}{% endblock %}
+{% set side_nav = 'teachers' %}
+{% do script(['app/js/classroom-manage/set-teachers/index.js']) %}
+{% block main %}
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">{{'教师设置'|trans}}</div>
+  <div class="panel-body">
+    <form id="teachers-form" class="form-horizontal" method="post">
+      {{ web_macro.flash_messages() }}
+      {% if teacherIds %}
+        <div class="form-group" id="teachers-form-group">
+          <label class="col-md-2 control-label">
+            {{'设置教师'|trans}}
+          </label>
+          <div class="col-md-8 controls">
+              <div id="classroom-manage-set-teachers" data-teachers={{ teacherItems|json_encode }}></div>
+              <p class="help-block">
+                <div>{{'相关页面中的老师列举将会按照这里设定的顺序显示。'|trans}}</div>
+                <div>{{'教学服务团队成员有权制订学习计划、答疑、批阅作业/试卷、发起活动。'|trans}}</div>
+                <div>{{'注：班级教师来源课程教师，无法主动添加'|trans}}</div>
+              </p>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-offset-2 col-md-8 controls">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+            <button type="submit" class="btn btn-fat btn-primary">{{'保存'|trans}}</button>
+          </div>
+        </div>
+      {% else %}
+      <div class="form-group empty">{{'还没有教师!赶紧去设置课程吧！'|trans}}</div>
+      {% endif %}
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -22,8 +22,6 @@ class Swift_Events_CommandEventTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($transport, $ref);
     }
 
-    // -- Creation Methods
-
     private function _createEvent(Swift_Transport $source, $command, $successCodes = array())
     {
         return new Swift_Events_CommandEvent($source, $command, $successCodes);
@@ -31,6 +29,6 @@ class Swift_Events_CommandEventTest extends \PHPUnit_Framework_TestCase
 
     private function _createTransport()
     {
-        return $this->getMock('Swift_Transport');
+        return $this->getMockBuilder('Swift_Transport')->getMock();
     }
 }

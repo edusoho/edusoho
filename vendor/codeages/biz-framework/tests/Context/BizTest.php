@@ -1,11 +1,14 @@
 <?php
 
+namespace Tests;
+
 use Codeages\Biz\Framework\Context\Biz;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Codeages\Biz\Framework\Provider\MonologServiceProvider;
+use PHPUnit\Framework\TestCase;
 
-class BizTest extends \PHPUnit_Framework_TestCase
+class BizTest extends TestCase
 {
     public function testConstruct()
     {
@@ -80,7 +83,6 @@ class BizTest extends \PHPUnit_Framework_TestCase
         $dao2 = $biz->dao('TestProject:Example:ExampleDao');
         $this->assertEquals($dao1, $dao2);
     }
-    
 }
 
 class BizTestServiceProvider1 implements ServiceProviderInterface

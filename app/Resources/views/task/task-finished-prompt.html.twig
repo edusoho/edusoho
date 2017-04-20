@@ -1,0 +1,23 @@
+<div class="task-state-modal task-state-modal-xs">
+  <div class="title">
+    <i class="es-icon es-icon-iccheckcircleblack24px color-success"></i>完成任务
+  </div>
+  <div class="content">
+    <div class="content-title">《 任务：{{task.title}} 》</div>
+    学习进度
+    <div class="content-progress">
+      <div class="progress progress-radius mts mb0">
+        <div class="progress-bar  progress-bar-success" role="progressbar" aria-valuenow="{{finishedRate}}" aria-valuemin="0" aria-valuemax="100" style="width:{{finishedRate}}%;min-width: 20%">{{finishedRate}}%</div>
+      </div>
+
+    </div>
+  </div>
+
+  {% if nextTask %}
+  <div class="text-right mt20">
+    <a class="btn btn-primary btn-sm"
+    href="{{path('course_task_show', {courseId: task.courseId, id: nextTask.id})}}"
+    >下一任务</a>
+  </div>
+  {% endif %}
+</div>

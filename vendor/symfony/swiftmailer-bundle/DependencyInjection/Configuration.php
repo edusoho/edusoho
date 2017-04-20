@@ -16,7 +16,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
- * This class contains the configuration information for the bundle
+ * This class contains the configuration information for the bundle.
  *
  * This information is solely responsible for how the different configuration
  * sections are normalized, and merged.
@@ -28,9 +28,7 @@ class Configuration implements ConfigurationInterface
     private $debug;
 
     /**
-     * Constructor.
-     *
-     * @param Boolean $debug The kernel.debug value
+     * @param bool $debug The kernel.debug value
      */
     public function __construct($debug)
     {
@@ -38,9 +36,7 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * Generates the configuration tree builder.
-     *
-     * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder The tree builder
+     * {@inheritdoc}
      */
     public function getConfigTreeBuilder()
     {
@@ -76,8 +72,6 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * Return the mailers node
-     *
      * @return ArrayNodeDefinition
      */
     private function getMailersNode()
@@ -92,7 +86,7 @@ class Configuration implements ConfigurationInterface
             // BC layer for "delivery_address: null" (the case of a string goes through the XML normalization too)
             ->beforeNormalization()
                 ->ifTrue(function ($v) {
-                    return array_key_exists('delivery_address', $v) && null === $v['delivery_address'];
+                    return is_array($v) && array_key_exists('delivery_address', $v) && null === $v['delivery_address'];
                 })
                 ->then(function ($v) {
                     @trigger_error('The swiftmailer.delivery_address configuration key is deprecated since version 2.3.10 and will be removed in 3.0. Use the swiftmailer.delivery_addresses configuration key instead (or remove the empty setting)', E_USER_DEPRECATED);
@@ -114,6 +108,36 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('port')->defaultNull()->end()
                 ->scalarNode('timeout')->defaultValue(30)->end()
                 ->scalarNode('source_ip')->defaultNull()->end()
+                ->scalarNode('local_domain')->defaultNull()->end()
+                ->arrayNode('stream_options')
+                    ->ignoreExtraKeys(false)
+                    ->normalizeKeys(false)
+                    ->beforeNormalization()
+                        ->ifTrue(function ($v) { return isset($v['stream-option']); })
+                        ->then(function ($v) {
+                             $recurse = function ($array) use (&$recurse) {
+                                if (isset($array['name'])) {
+                                    $array = array($array);
+                                }
+                                $n = array();
+                                foreach ($array as $v) {
+                                    $k = $v['name'];
+                                    if (isset($v['value'])) {
+                                        $n[$k] = $v['value'];
+                                    } elseif (isset($v['stream-option'])) {
+                                        $n[$k] = $recurse($v['stream-option']);
+                                    }
+                                }
+                                return $n;
+                            };
+                            return $recurse($v['stream-option']);
+                        })
+                    ->end()
+                    ->validate()
+                        ->ifTrue(function ($v) { return !method_exists('Swift_Transport_EsmtpTransport', 'setStreamOptions'); })
+                        ->thenInvalid('stream_options is only available in Swiftmailer 5.4.2 or later.')
+                    ->end()
+                ->end()
                 ->scalarNode('encryption')
                     ->defaultNull()
                     ->validate()

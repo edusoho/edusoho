@@ -1,0 +1,38 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{%  set modal_class ="modal-message task-state-modal modal-sm"%}
+
+{% block title %}
+  <i class="es-icon es-icon-iccheckcircleblack24px color-success mrs"></i>完成任务
+{% endblock %}
+
+{% block body %}
+  <div class="content">
+    <div class="content-title">
+      恭喜完成
+      <b class="mlm">《 {{task.title}} 》</b>
+    </div>
+    <div class="progress progress-radius progress-md content-progress">
+      <div class="progress-bar progress-bar-left progress-bar-success "  role="progressbar" aria-valuenow="{{finishedRate}}" aria-valuemin="0" aria-valuemax="100" style="width:{{finishedRate}}%;min-width: 15%;">{{finishedRate}}%</div>
+    </div>
+    <span class="color-success">
+      {% if finishedRate == 100 %}
+      已学完整个课程，给你点赞！
+      {% else %}
+      已完成了整个课程的{{finishedRate}}%，加油吧！
+      {% endif %}
+    </span>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <div class="es-share top">
+    <a class="btn btn-info dropdown-toggle" href="" data-toggle="dropdown">
+      <i class="es-icon es-icon-share mr5"></i>分享
+    </a>
+    {% set courseSet = data('CourseSet',{ id: task.fromCourseSetId })  %}
+    {% include 'common/share-dropdown.html.twig' with {type:'courseSet' , courseSet:courseSet} %}
+  </div>
+  {% if nextTask|default(false) %}
+  <a class="btn btn-primary" href="{{path('course_task_show', {courseId:nextTask.courseId, id:nextTask.id})}}">下一任务</a>
+  {% endif %}
+{% endblock %}

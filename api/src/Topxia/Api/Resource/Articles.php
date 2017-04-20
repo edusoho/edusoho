@@ -4,7 +4,7 @@ namespace Topxia\Api\Resource;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class Articles extends BaseResource
 {
@@ -15,19 +15,10 @@ class Articles extends BaseResource
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 20);
 
-        if (isset($conditions['cursor'])) {
-            $conditions['status'] = 'published';
-            $conditions['updatedTime_GE'] = $conditions['cursor'];
-            $articles = $this->getArticleService()->searchArticles($conditions, array('updatedTime', 'ASC'), $start, $limit);
-            $articles = $this->assemblyArticles($articles);
-            $next = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $articles);
-            return $this->wrap($this->filter($articles), $next);
-        } else {
-            $total = $this->getArticleService()->searchArticlesCount($conditions);
-            $articles = $this->getArticleService()->searchArticles($conditions, array('publishedTime', 'DESC'), $start, $limit);
-            $articles = $this->assemblyArticles($articles);
-            return $this->wrap($this->filter($articles), $total);
-        }
+        $total = $this->getArticleService()->countArticles($conditions);
+        $articles = $this->getArticleService()->searchArticles($conditions, array('publishedTime' => 'DESC'), $start, $limit);
+        $articles = $this->assemblyArticles($articles);
+        return $this->wrap($this->filter($articles), $total);
     }
 
     public function filter($res)
@@ -64,11 +55,16 @@ class Articles extends BaseResource
 
     protected function getArticleService()
     {
-        return $this->getServiceKernel()->createService('Article.ArticleService');
+        return $this->getServiceKernel()->createService('Article:ArticleService');
+    }
+
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy:TagService');
     }
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 }

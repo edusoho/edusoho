@@ -1,0 +1,11 @@
+<div class="tab-pane" id="video-chooser-import-pane">
+  <div class="import-content">
+    <div class="input-group">
+      <input class="form-control border-gray" id="link"  name="link" type="text" placeholder="{{ '链接地址'|trans }}">
+      <input class="form-control border-gray" id="verifyLink"  name="verifyLink" type="hidden" placeholder="{{ '链接地址'|trans }}">
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-default js-video-import" data-role="import" data-url="{{ path('media_video_import', {courseId:courseId}) }}" data-loading-text="{{ '正在导入，请稍等'|trans }}">{{ '导入'|trans }}</button>
+      </span>
+    </div>
+  </div>
+</div>

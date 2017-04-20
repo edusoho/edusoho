@@ -11,13 +11,14 @@
 
 namespace Symfony\Bundle\FrameworkBundle\Tests\Command;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Bundle\FrameworkBundle\Command\RouterDebugCommand;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-class RouterDebugCommandTest extends \PHPUnit_Framework_TestCase
+class RouterDebugCommandTest extends TestCase
 {
     public function testDebugAllRoutes()
     {
@@ -63,7 +64,7 @@ class RouterDebugCommandTest extends \PHPUnit_Framework_TestCase
     {
         $routeCollection = new RouteCollection();
         $routeCollection->add('foo', new Route('foo'));
-        $router = $this->getMock('Symfony\Component\Routing\RouterInterface');
+        $router = $this->getMockBuilder('Symfony\Component\Routing\RouterInterface')->getMock();
         $router
             ->expects($this->any())
             ->method('getRouteCollection')
@@ -74,7 +75,7 @@ class RouterDebugCommandTest extends \PHPUnit_Framework_TestCase
              ->disableOriginalConstructor()
              ->getMock();
 
-        $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $container = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerInterface')->getMock();
         $container
             ->expects($this->once())
             ->method('has')

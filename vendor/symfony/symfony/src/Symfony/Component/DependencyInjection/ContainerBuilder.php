@@ -201,7 +201,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
      *
      * @param ResourceInterface $resource A resource instance
      *
-     * @return ContainerBuilder The current instance
+     * @return $this
      */
     public function addResource(ResourceInterface $resource)
     {
@@ -219,7 +219,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
      *
      * @param ResourceInterface[] $resources An array of resources
      *
-     * @return ContainerBuilder The current instance
+     * @return $this
      */
     public function setResources(array $resources)
     {
@@ -237,7 +237,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
      *
      * @param object $object An object instance
      *
-     * @return ContainerBuilder The current instance
+     * @return $this
      */
     public function addObjectResource($object)
     {
@@ -253,7 +253,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
      *
      * @param \ReflectionClass $class
      *
-     * @return ContainerBuilder The current instance
+     * @return $this
      */
     public function addClassResource(\ReflectionClass $class)
     {
@@ -276,7 +276,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
      * @param string $extension The extension alias or namespace
      * @param array  $values    An array of values that customizes the extension
      *
-     * @return ContainerBuilder The current instance
+     * @return $this
      *
      * @throws BadMethodCallException When this ContainerBuilder is frozen
      * @throws \LogicException        if the container is frozen
@@ -300,7 +300,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
      * @param CompilerPassInterface $pass A compiler pass
      * @param string                $type The type of compiler pass
      *
-     * @return ContainerBuilder The current instance
+     * @return $this
      */
     public function addCompilerPass(CompilerPassInterface $pass, $type = PassConfig::TYPE_BEFORE_OPTIMIZATION)
     {
@@ -449,7 +449,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
         }
 
         if (!array_key_exists($id, $this->definitions) && isset($this->aliasDefinitions[$id])) {
-            return $this->get($this->aliasDefinitions[$id]);
+            return $this->get((string) $this->aliasDefinitions[$id], $invalidBehavior);
         }
 
         try {
@@ -859,6 +859,10 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
      */
     public function createService(Definition $definition, $id, $tryProxy = true)
     {
+        if ($definition instanceof DefinitionDecorator) {
+            throw new RuntimeException(sprintf('Constructing service "%s" from a parent definition is not supported at build time.', $id));
+        }
+
         if ($definition->isSynthetic()) {
             throw new RuntimeException(sprintf('You have requested a synthetic service ("%s"). The DIC does not know how to construct this service.', $id));
         }
@@ -933,13 +937,13 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
             $this->shareService($definition, $service, $id);
         }
 
-        foreach ($definition->getMethodCalls() as $call) {
-            $this->callMethod($service, $call);
-        }
-
         $properties = $this->resolveServices($parameterBag->unescapeValue($parameterBag->resolveValue($definition->getProperties())));
         foreach ($properties as $name => $value) {
             $service->$name = $value;
+        }
+
+        foreach ($definition->getMethodCalls() as $call) {
+            $this->callMethod($service, $call);
         }
 
         if ($callable = $definition->getConfigurator()) {
@@ -1141,15 +1145,15 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
     /**
      * Shares a given service in the container.
      *
-     * @param Definition $definition
-     * @param mixed      $service
-     * @param string     $id
+     * @param Definition  $definition
+     * @param mixed       $service
+     * @param string|null $id
      *
      * @throws InactiveScopeException
      */
     private function shareService(Definition $definition, $service, $id)
     {
-        if ($definition->isShared() && self::SCOPE_PROTOTYPE !== $scope = $definition->getScope(false)) {
+        if (null !== $id && $definition->isShared() && self::SCOPE_PROTOTYPE !== $scope = $definition->getScope(false)) {
             if (self::SCOPE_CONTAINER !== $scope && !isset($this->scopedServices[$scope])) {
                 throw new InactiveScopeException($id, $scope);
             }

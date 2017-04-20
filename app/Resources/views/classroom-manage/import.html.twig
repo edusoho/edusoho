@@ -1,0 +1,65 @@
+{% extends 'importer/importer-layout.html.twig' %}
+
+{% block title %}批量添加学员1{% endblock %}
+
+{% block form_data %}
+	<div class="form-group" id="teachers-form-group">
+		<label class="col-md-3 col-md-offset-1">
+			{{ '选择要导入的文件'|trans }}
+		</label>
+		<div class="col-md-8 controls">
+			<div class="uploader blue">
+				<input type="text" class="filename" readonly="readonly"/>
+				<input type="button" name="excel" class=" button" value="{{ '浏览'|trans }}..."/>
+				<input type="file" size="30" name="excel"/>
+			</div>
+			<br>
+			{{ '支持从Excel文件导入'|trans }}
+			<a href="{{ asset('bundles/topxiaweb/example/classmember_import_example.xls') }}">
+				{{ '点击下载示例说明文件'|trans }}
+			</a>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-md-3 col-md-offset-1">
+			<label for="buy-price">{{'购买价格'|trans}}</label>
+		</div>
+		<div class="col-md-4 controls">
+			<div class="input-group">
+				<input type="text" id="buy-price" name="price" value="{{ classroom.price }}" class="form-control">
+				<div class="input-group-addon">{{'元'|trans}}</div>
+			</div>
+			<div class="help-block">本{{ setting('classroom.name', '班级') }}的价格为{{classroom.price}}{{'元'|trans}}</div>
+		</div>
+	</div>
+
+	<div class="row form-group">
+		<div class="col-md-3 col-md-offset-1">
+			<label for="student-remark">{{'备注'|trans}}</label>
+		</div>
+		<div class="col-md-4 controls">
+			<input type="text" id="student-remark" name="remark" class="form-control">
+			<div class="help-block">{{'选填'|trans}}</div>
+		</div>
+	</div>
+
+	<input type="hidden" name="classroomId" value="{{ classroom.id }}">
+{% endblock %}
+
+{% block load_import_js %}
+	app.lazyLoad = function() { app.load('topxiawebbundle/controller/classroom/manage/student-import'); };
+{% endblock %}
+
+{% block stylesheet %}
+	<style>
+		.page-header {
+			padding-bottom: 12px;
+			margin: 0 0 20px 0;
+			padding: 0;
+			border-bottom-width: 2px;
+		}
+	</style>
+{% endblock %}
+
+

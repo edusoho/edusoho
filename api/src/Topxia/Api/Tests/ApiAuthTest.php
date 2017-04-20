@@ -2,7 +2,7 @@
 
 namespace Topxia\Api\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Api\ApiAuth;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
@@ -38,7 +38,7 @@ class ApiAuthTest extends BaseTestCase
 
     private function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
 

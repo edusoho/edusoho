@@ -22,11 +22,11 @@ class ImgCodeUtil
 
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->createService('User.TokenService');
+        return ServiceKernel::instance()->createService('User:TokenService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 }

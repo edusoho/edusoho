@@ -1,0 +1,58 @@
+.es-filter {
+  position: relative;
+  background-color: @bg-color;
+  .border-radius;
+  margin-bottom: 30px;
+  .nav-sort {
+    > li {
+      float: left;
+    }
+    > li > a {
+      height: 40px;
+      padding: 10px 15px;
+      color: @gray-dark;
+      .es-transition;
+      &:hover {
+        .es-transition;
+      }
+      &.active {
+        color: #fff;
+        &:hover {
+          color: #fff;
+        }
+      }
+    }
+  }
+      
+  .btn-group.open .dropdown-toggle {
+    .box-shadow(none);
+  }
+
+  .filter {
+    position: absolute;
+    text-align: right;
+    top: 0;
+    right: 15px;
+    width: 300px;
+    .btn {
+      background: none;
+      padding: 10px 0;
+      .es-transition;
+      &:hover {
+        .es-transition;
+      }
+      >i {
+        font-size: 18px;
+      }
+    }
+    label {
+      margin-left: 15px;
+      margin-top: 11px;
+      vertical-align: top;
+      .es-transition;
+      &:hover {
+        .es-transition;
+      }
+    }
+  }
+}

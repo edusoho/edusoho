@@ -46,7 +46,7 @@ class Swift_Transport_Esmtp_Auth_NTLMAuthenticator implements Swift_Transport_Es
         }
 
         if (!function_exists('bcmul')) {
-            throw new LogicException('The BCMatch functions must be enabled to use the NTLM authenticator.');
+            throw new LogicException('The BCMath functions must be enabled to use the NTLM authenticator.');
         }
 
         try {
@@ -296,9 +296,14 @@ class Swift_Transport_Esmtp_Auth_NTLMAuthenticator implements Swift_Transport_Es
             return explode('\\', $name);
         }
 
-        list($user, $domain) = explode('@', $name);
+        if (false !== strpos($name, '@')) {
+            list($user, $domain) = explode('@', $name);
 
-        return array($domain, $user);
+            return array($domain, $user);
+        }
+
+        // no domain passed
+        return array('', $name);
     }
 
     /**
@@ -459,6 +464,7 @@ class Swift_Transport_Esmtp_Auth_NTLMAuthenticator implements Swift_Transport_Es
     }
 
     /** HELPER FUNCTIONS */
+
     /**
      * Create our security buffer depending on length and offset.
      *
@@ -561,6 +567,7 @@ class Swift_Transport_Esmtp_Auth_NTLMAuthenticator implements Swift_Transport_Es
     }
 
     /** ENCRYPTION ALGORITHMS */
+
     /**
      * DES Encryption.
      *

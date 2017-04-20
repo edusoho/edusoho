@@ -40,7 +40,7 @@ class CallbackResolver
      *
      * @return callable
      *
-     * @throws \InvalidArgumentException In case the method does not exist.
+     * @throws \InvalidArgumentException in case the method does not exist
      */
     public function convertCallback($name)
     {
@@ -66,7 +66,7 @@ class CallbackResolver
      *
      * @return string|callable A callable value or the string passed in
      *
-     * @throws \InvalidArgumentException In case the method does not exist.
+     * @throws \InvalidArgumentException in case the method does not exist
      */
     public function resolveCallback($name)
     {

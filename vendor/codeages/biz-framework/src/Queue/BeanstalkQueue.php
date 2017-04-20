@@ -44,7 +44,7 @@ class BeanstalkQueue implements Queue
     public function push($queue, array $body, array $options = array())
     {
         if (empty($this->client)) {
-            throw new \RuntimeException('Queue is not connected, please connect first.');
+            throw new QueueException('Queue is not connected, please connect first.');
         }
         $options = $this->fillOptions($options);
         $this->client->useTube($queue);
@@ -55,7 +55,7 @@ class BeanstalkQueue implements Queue
     public function pushDelay($queue, array $body, $delay, array $options = array())
     {
         if (empty($this->client)) {
-            throw new \RuntimeException('Queue is not connected, please connect first.');
+            throw new QueueException('Queue is not connected, please connect first.');
         }
 
         $options = $this->fillOptions($options);
@@ -66,7 +66,7 @@ class BeanstalkQueue implements Queue
     public function pop($queue = null, $timeout = 0)
     {
         if (empty($this->client)) {
-            throw new \RuntimeException('Queue is not connected, please connect first.');
+            throw new QueueException('Queue is not connected, please connect first.');
         }
     }
 

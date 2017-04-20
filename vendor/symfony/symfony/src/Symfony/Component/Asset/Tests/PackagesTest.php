@@ -11,17 +11,18 @@
 
 namespace Symfony\Component\Asset\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Asset\Package;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Asset\VersionStrategy\StaticVersionStrategy;
 
-class PackagesTest extends \PHPUnit_Framework_TestCase
+class PackagesTest extends TestCase
 {
     public function testGetterSetters()
     {
         $packages = new Packages();
-        $packages->setDefaultPackage($default = $this->getMock('Symfony\Component\Asset\PackageInterface'));
-        $packages->addPackage('a', $a = $this->getMock('Symfony\Component\Asset\PackageInterface'));
+        $packages->setDefaultPackage($default = $this->getMockBuilder('Symfony\Component\Asset\PackageInterface')->getMock());
+        $packages->addPackage('a', $a = $this->getMockBuilder('Symfony\Component\Asset\PackageInterface')->getMock());
 
         $this->assertEquals($default, $packages->getPackage());
         $this->assertEquals($a, $packages->getPackage('a'));

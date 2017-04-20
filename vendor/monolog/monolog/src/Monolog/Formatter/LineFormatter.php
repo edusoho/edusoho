@@ -76,6 +76,7 @@ class LineFormatter extends NormalizerFormatter
             }
         }
 
+
         foreach ($vars['context'] as $var => $val) {
             if (false !== strpos($output, '%context.'.$var.'%')) {
                 $output = str_replace('%context.'.$var.'%', $this->stringify($val), $output);
@@ -99,6 +100,11 @@ class LineFormatter extends NormalizerFormatter
             if (false !== strpos($output, '%'.$var.'%')) {
                 $output = str_replace('%'.$var.'%', $this->stringify($val), $output);
             }
+        }
+
+        // remove leftover %extra.xxx% and %context.xxx% if any
+        if (false !== strpos($output, '%')) {
+            $output = preg_replace('/%(?:extra|context)\..+?%/', '', $output);
         }
 
         return $output;
@@ -135,7 +141,7 @@ class LineFormatter extends NormalizerFormatter
 
         $str = '[object] ('.get_class($e).'(code: '.$e->getCode().'): '.$e->getMessage().' at '.$e->getFile().':'.$e->getLine().$previousText.')';
         if ($this->includeStacktraces) {
-            $str .= "\n[stacktrace]\n".$e->getTraceAsString();
+            $str .= "\n[stacktrace]\n".$e->getTraceAsString()."\n";
         }
 
         return $str;
@@ -161,6 +167,10 @@ class LineFormatter extends NormalizerFormatter
     protected function replaceNewlines($str)
     {
         if ($this->allowInlineLineBreaks) {
+            if (0 === strpos($str, '{')) {
+                return str_replace(array('\r', '\n'), array("\r", "\n"), $str);
+            }
+
             return $str;
         }
 

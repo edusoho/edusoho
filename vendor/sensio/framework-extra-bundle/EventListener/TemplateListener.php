@@ -55,14 +55,8 @@ class TemplateListener implements EventSubscriberInterface
         $request = $event->getRequest();
         $template = $request->attributes->get('_template');
 
-        // no @Template present
-        if (null === $template) {
-            return;
-        }
-
-        // we need the @Template annotation object or we cannot continue
         if (!$template instanceof Template) {
-            throw new \InvalidArgumentException('Request attribute "_template" is reserved for @Template annotations.');
+            return;
         }
 
         $template->setOwner($controller = $event->getController());
@@ -86,7 +80,7 @@ class TemplateListener implements EventSubscriberInterface
         $request = $event->getRequest();
         $template = $request->attributes->get('_template');
 
-        if (null === $template) {
+        if (!$template instanceof Template) {
             return;
         }
 
@@ -143,14 +137,18 @@ class TemplateListener implements EventSubscriberInterface
 
             $arguments = array();
             foreach ($r->getMethod($action)->getParameters() as $param) {
-                $arguments[] = $param->getName();
+                $arguments[] = $param;
             }
         }
 
         // fetch the arguments of @Template.vars or everything if desired
         // and assign them to the designated template
         foreach ($arguments as $argument) {
-            $parameters[$argument] = $request->attributes->get($argument);
+            if ($argument instanceof \ReflectionParameter) {
+                $parameters[$name = $argument->getName()] = !$request->attributes->has($name) && $argument->isDefaultValueAvailable() ? $argument->getDefaultValue() : $request->attributes->get($name);
+            } else {
+                $parameters[$argument] = $request->attributes->get($argument);
+            }
         }
 
         return $parameters;

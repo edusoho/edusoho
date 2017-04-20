@@ -1,0 +1,108 @@
+{% extends 'testpaper/testpaper-layout.html.twig' %}
+
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/perfect-scrollbar.js','libs/jquery-timer.js','app/js/testpaper/result/index.js']) %}
+
+{% block paper_result_bar %}
+  {% include 'testpaper/part/paper-result-objective.html.twig' %}
+{% endblock %}
+
+{% set questionTypeDict = getQuestionTypes() %}
+{% if action|default('') is not empty %}
+  {% set showHeader = 1 %}
+  {% set isIframeBody = 0 %}
+{% else %}
+  {% set showHeader = 0 %}
+{% endif %}
+
+{% block paper_warning %}
+  {% if app.user and app.user.id == paperResult.userId %}
+    {% if paperResult.status == 'reviewing' %}
+      <div class="alert alert-warning">{{'老师正在批阅试卷，批阅完成后会以站内私信通知您批阅结果，请稍等。'|trans}}</div>
+    {% elseif paperResult.status == 'finished' %}
+      {% if paperResult.teacherSay %}
+        <div class="alert alert-success">
+          <div class=""><strong>{{'评语：'|trans}}</strong></div>
+          <div class="mtm">{{ paperResult.teacherSay|bbCode2Html|raw }}</div>
+        </div>
+      {% endif %}
+      {% if paperResult.passedStatus == 'unpassed' and target|default(null) %}
+        {% if target.doTimes|default('0') %}
+          <div class="alert alert-danger">{{ '您未通过考试'|trans }}</div>
+        {% elseif target.redoInterval|default('0') and ("now"|date("U")) < (paperResult.checkedTime + target.redoInterval * 3600) %}
+          {% set countTime = (paperResult.checkedTime + target.redoInterval * 3600)|date('Y-m-d H:i:s') %}
+          <div class="alert alert-danger">
+            {{ '您未通过考试，%countTime%后可重考，请复习'|trans({'%countTime%': '<span class="color-success">' ~ countTime ~ ' </span>'})|raw }}
+          </div>
+        {% else %}
+          <div class="alert alert-danger">
+            您未通过考试，请<a href="{{ path('testpaper_do', {lessonId:paperResult.lessonId,testId:paperResult.testId}) }}">重新参加考试</a>，或者重新学习课程。
+          </div>
+        {% endif %}
+      {% elseif paperResult.passedStatus in ['passed','good','excellent'] %}
+        <div class="alert alert-success">{{'恭喜您已通过本次考试。'|trans}}</div>
+      {% endif %}
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block paper_sidebar %}
+
+{% if (paperResult.status|default(null) in ['reviewing', 'finished'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed'  and paperResult.status|default(null) == 'finished') %}
+
+  <div class="testpaper-card {{testpaperCardClass|default('')}} {% if action|default('') is empty %}affix{% endif %}" >
+    {% if target|default(null) and not target.doTimes|default('0') and paperResult.status == 'finished' and (app.user.id|default(0) == paperResult.userId) %}
+      {% if ("now"|date("U")) < (paperResult.checkedTime + target.redoInterval * 3600) %}
+        <div class="testpaper-timer">
+          {% set redoTime = (paperResult.checkedTime + target.redoInterval * 3600) - ("now"|date("U")) %}
+          重考倒计时:
+          <span class="timer js-testpaper-redo-timer" data-time="{{ redoTime }}">00:00:00</span>
+          <a class="btn btn-success do-test" id="finishPaper" href="{% if action|default('') is not empty and task|default(null) %}{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}{% else %}{{ path('testpaper_do',{lessonId:paperResult.lessonId,testId:paperResult.testId}) }}{% endif %}" disabled="disabled">{{'再考一次'|trans}}</a>
+        </div>
+      {% else %}
+        <div class="testpaper-timer">
+          <a class="btn btn-success do-test" id="finishPaper" href="{% if action|default('') is not empty and task|default(null) %}{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}{% else %}{{ path('testpaper_do',{lessonId:paperResult.lessonId,testId:paperResult.testId}) }}{% endif %}">{{'再考一次'|trans}}</a>
+        </div>
+      {% endif %}
+    {% endif %}
+
+    <div class="panel panel-default ">
+      <div class="panel-heading">
+        {{'答题卡'|trans}}
+        {% if target|default(null) and target.doTimes|default('0') %}
+          <span class="color-danger">{{'本次考试仅一次机会'|trans}}</span>
+        {% endif %}
+        {% if paperResult|default(null) %}
+          <a class="pull-right link-medium" href="javascript:;" data-container="body" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content='<div>本次考试共<span class="color-primary">{{ paper.itemCount }}题</span>，总分<span class="color-primary">{{ paper.score }}分</span>{% if testpaperActivity.finishCondition.type|default(null) == 'score' %}，及格为<span class="color-primary">{{ testpaperActivity.finishCondition.finishScore|default(0) }}</span>分{% endif %}。{% if target.limitedTime|default(testpaper.limitedTime|default(0)) > 0 %}请在<span class="color-primary">{{ target.limitedTime|default(testpaper.limitedTime|default(0)) }}分钟</span>内作答。{% endif %}</div>'><i class="es-icon es-icon-info"></i></a>
+        {% endif %}
+      </div>
+      <div class="panel-body">
+        <div class="js-panel-card panel-card">
+          {% for type in questionTypes|default([]) %}
+            <p>{{ questionTypeDict[type] }}</p>
+            {% for question in questions[type] %}
+              {% if question.type == 'material' %}
+                {% for questionSub in question.subs|default([]) %}
+                  {% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:questionSub,seq:questionSub.seq} %}
+                {% endfor %}
+              {% else %}
+                {% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:question,seq:question.seq} %}
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+          {% include 'testpaper/part/card-choice-explain.html.twig' %}
+        </div>
+      </div>
+      <div class="panel-footer">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" id="showWrong" />
+            <span class="text-info">{{'只看错题'|trans}}</span>
+          </label>
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endif %}
+
+{% endblock %}

@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\HttpKernel\Tests\EventListener;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\EventListener\ExceptionListener;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
@@ -26,7 +27,7 @@ use Symfony\Component\HttpKernel\Tests\Logger;
  *
  * @group time-sensitive
  */
-class ExceptionListenerTest extends \PHPUnit_Framework_TestCase
+class ExceptionListenerTest extends TestCase
 {
     public function testConstruct()
     {
@@ -105,9 +106,9 @@ class ExceptionListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testSubRequestFormat()
     {
-        $listener = new ExceptionListener('foo', $this->getMock('Psr\Log\LoggerInterface'));
+        $listener = new ExceptionListener('foo', $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock());
 
-        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
         $kernel->expects($this->once())->method('handle')->will($this->returnCallback(function (Request $request) {
             return new Response($request->getRequestFormat());
         }));

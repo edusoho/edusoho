@@ -3,7 +3,7 @@
     {
         "title": "直播频道 - 首页 - 头部轮播图",
         "category": "system",
-        "templateName": "TopxiaWebBundle:Block:open_course_top_banner.template.html.twig",
+        "templateName": "block/live-top-banner.template.html.twig",
         "items": {
             "posters":
             {
@@ -70,7 +70,7 @@
     {
         "title": "公开课频道 - 首页 - 头部轮播图",
         "category": "system",
-        "templateName": "TopxiaWebBundle:Block:live_top_banner.template.html.twig",
+        "templateName": "block/open-course-top-banner.template.html.twig",
         "items": {
             "posters":
             {
