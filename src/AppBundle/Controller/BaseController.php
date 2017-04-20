@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Twig\WebExtension;
 use Biz\User\CurrentUser;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
@@ -287,7 +286,7 @@ class BaseController extends Controller
     }
 
     /**
-     * 安全的重定向
+     * 安全的重定向.
      *
      * 如果url不属于非本站域名下的，则重定向到本周首页。
      *
@@ -304,7 +303,7 @@ class BaseController extends Controller
     }
 
     /**
-     * 过滤URL
+     * 过滤URL.
      *
      * 如果url不属于非本站域名下的，则返回本站首页地址。
      *
