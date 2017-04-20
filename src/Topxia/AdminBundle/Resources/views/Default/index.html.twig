@@ -1,13 +1,13 @@
-{% extends 'admin/layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 {% block title %}{{ '管理后台'|trans }}{% endblock %}
 {% set panel = 'dashboard' %}
 {% set script_controller = 'default/index' %}
 {% block container %}
   {# 域名检查提示#}
-  {{ render(controller('AppBundle:Admin/Default:validateDomain')) }}
+  {{ render(controller('TopxiaAdminBundle:Default:validateDomain')) }}
   <div class="row">
     {% if not (setting('copyright.thirdCopyright')|default(0) == 1) %}
-      {{ render(controller('AppBundle:Admin/Default:getCloudNotices')) }}
+      {{ render(controller('TopxiaAdminBundle:Default:getCloudNotices')) }}
     {% endif %}
 
     <div class="
@@ -31,7 +31,7 @@
   <div class="panel panel-default">
     <div class="panel-heading clearfix">
       <h3 class="panel-title">
-        {{ '今日数据'|trans }}
+        {{ '今日数据'|trans }} 
         <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-today-data-popover"></span>
         <div class="popover-content hidden">
           <div class="popover-item">
@@ -70,42 +70,40 @@
       <div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>
     </div>
   </div>
-  {##}
-  {#<div class="panel panel-default panel-380">#}
-    {#<div class="panel-heading">#}
-      {#<div class="pull-right">#}
-        {#<span class="mrl text-sm js-data-switch-time">{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}</span>#}
-        {#<div class="btn-group btn-group-xs">#}
-          {#<button type="button" class="btn btn-primary js-user-switch-button"#}
-                  {#data-time="{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}"#}
-                  {#data-url="{{ path('admin_user_statistic', {period: 'week'}) }}">最近7天#}
-          {#</button>#}
-          {#<button type="button" class="btn btn-default js-user-switch-button"#}
-                  {#data-time="{{ dates.monthDate }}~{{ 'now'|date('Y-m-d') }}"#}
-                  {#data-url="{{ path('admin_user_statistic', {period: 'month'}) }}">最近30天#}
-          {#</button>#}
-        {#</div>#}
-      {#</div>#}
-      {#<h3 class="panel-title">{{ '用户统计'|trans }}#}
-        {#<span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-data-popover"></span>#}
-        {#<div class="popover-content hidden">#}
-          {#<div class="popover-item">#}
-            {#<div class="title">{{ '活跃用户数'|trans }}</div>#}
-            {#<div class="content">{{ '在30天内登录过系统的用户即为活跃用户'|trans }}</div>#}
-          {#</div>#}
-          {#<div class="popover-item">#}
-            {#<div class="title">{{ '流失用户数'|trans }}</div>#}
-            {#<div class="content">{{ '在30天内没有登录过系统的注册用户即为流失用户'|trans }}</div>#}
-          {#</div>#}
-        {#</div>#}
-      {#</h3>#}
-    {#</div>#}
-    {#<div class="panel-body js-statistic-areas" id="user-statistic"#}
-         {#data-url="{{ path('admin_user_statistic', {period: 'week'}) }}" style="height:320px;">#}
-      {#<div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>#}
-    {#</div>#}
-  {#</div>#}
-  {##}
+  <div class="panel panel-default panel-380">
+    <div class="panel-heading">
+      <div class="pull-right">
+        <span class="mrl text-sm js-data-switch-time">{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}</span>
+        <div class="btn-group btn-group-xs">
+          <button type="button" class="btn btn-primary js-user-switch-button"
+                  data-time="{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}"
+                  data-url="{{ path('admin_user_statistic', {period: 'week'}) }}">最近7天
+          </button>
+          <button type="button" class="btn btn-default js-user-switch-button"
+                  data-time="{{ dates.monthDate }}~{{ 'now'|date('Y-m-d') }}"
+                  data-url="{{ path('admin_user_statistic', {period: 'month'}) }}">最近30天
+          </button>
+        </div>
+      </div>
+      <h3 class="panel-title">{{ '用户统计'|trans }}
+        <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-data-popover"></span>
+        <div class="popover-content hidden">
+          <div class="popover-item">
+            <div class="title">{{ '活跃用户数'|trans }}</div>
+            <div class="content">{{ '在30天内登录过系统的用户即为活跃用户'|trans }}</div>
+          </div>
+          <div class="popover-item">
+            <div class="title">{{ '流失用户数'|trans }}</div>
+            <div class="content">{{ '在30天内没有登录过系统的注册用户即为流失用户'|trans }}</div>
+          </div>
+        </div>
+      </h3>
+    </div>
+    <div class="panel-body js-statistic-areas" id="user-statistic"
+         data-url="{{ path('admin_user_statistic', {period: 'week'}) }}" style="height:320px;">
+      <div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>
+    </div>
+  </div>
 
   <div class="row">
     <div class="col-md-6">
@@ -176,26 +174,26 @@
           <div class="pull-right">
             <span class="mrl text-sm js-data-switch-time">{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }} </span>
             <div class="btn-group btn-group-xs">
-              <button type="button" class="btn btn-primary js-task-switch-button"
+              <button type="button" class="btn btn-primary js-lesson-switch-button"
                       data-time="{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}"
-                      data-url="{{ path('admin_task_learn_statistic', {period: 'week'}) }}">{{ '最近7天'|trans }}</button>
-              <button type="button" class="btn btn-default js-task-switch-button"
+                      data-url="{{ path('admin_lesson_learn_statistic', {period: 'week'}) }}">{{ '最近7天'|trans }}</button>
+              <button type="button" class="btn btn-default js-lesson-switch-button"
                       data-time="{{ dates.monthDate }}~{{ 'now'|date('Y-m-d') }}"
-                      data-url="{{ path('admin_task_learn_statistic', {period: 'month'}) }}">{{ '最近30天'|trans }}</button>
+                      data-url="{{ path('admin_lesson_learn_statistic', {period: 'month'}) }}">{{ '最近30天'|trans }}</button>
             </div>
           </div>
-          <h3 class="panel-title">{{ '任务完成数'|trans }}
+          <h3 class="panel-title">{{ '课时完成数'|trans }}
             <span data-toggle="popover"
                   class="glyphicon glyphicon-question-sign color-gray text-sm js-data-popover"></span>
             <div class="popover-content hidden">
               <div class="popover-item">
-                <div class="content">{{ '点击"学过了"的任务数量'|trans }}</div>
+                <div class="content">{{ '点击"学过了"的课时数量'|trans }}</div>
               </div>
             </div>
           </h3>
         </div>
-        <div class="panel-body js-statistic-areas" id="study-task-count-statistic"
-             data-url="{{ path('admin_task_learn_statistic', {period: 'week'}) }}" style="height:360px;">
+        <div class="panel-body js-statistic-areas" id="study-lesson-count-statistic"
+             data-url="{{ path('admin_lesson_learn_statistic', {period: 'week'}) }}" style="height:360px;">
 
         </div>
       </div>
@@ -233,7 +231,7 @@
           <h3 class="panel-title">{{ '最新问答'|trans }}</h3>
         </div>
         <div class="panel-body">
-          {{ render(controller('AppBundle:Admin/Default:unsolvedQuestionsBlock')) }}
+          {{ render(controller('TopxiaAdminBundle:Default:unsolvedQuestionsBlock')) }}
         </div>
       </div>
 
@@ -247,7 +245,7 @@
           </h3>
         </div>
         <div class="panel-body">
-          {{ render(controller('AppBundle:Admin/Default:courseReview')) }}
+          {{ render(controller('TopxiaAdminBundle:Default:courseReview')) }}
         </div>
       </div>
     </div>
@@ -266,7 +264,7 @@
               <a target="_blank" href="{{ path('admin_edu_cloud_search') }}">免费接入云搜索获取热门搜索关键词</a>
             </div>
           {% else %}
-            {{ render(controller('AppBundle:Admin/Default:cloudSearchRanking')) }}
+            {{ render(controller('TopxiaAdminBundle:Default:cloudSearchRanking')) }}
           {% endif %}
         </div>
       </div>
