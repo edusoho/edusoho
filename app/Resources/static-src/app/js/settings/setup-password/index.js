@@ -12,7 +12,7 @@ if ($form.length) {
     },
     'form[confirmPassword]': {
       required: true,
-      equalTo: true,
+      equalTo: '#form_newPassword',
     }
   });
 
