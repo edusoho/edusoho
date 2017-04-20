@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/classroom/join-header/index"],[function(n,o){"use strict";$(".cancel-refund").on("click",function(){return!!confirm(Translator.trans("真的要取消退款吗？"))&&void $.post($(this).data("url"),function(){window.location.reload()})})}]);

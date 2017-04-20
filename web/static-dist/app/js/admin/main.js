@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/admin/main","admin"],[function(n,a){"use strict"}]);
