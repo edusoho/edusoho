@@ -59,8 +59,16 @@ function makeValidator(type) {
         },
         'sms_code': {
           required: true,
-          integer: true,
-          es_remote: true,
+          unsigned_integer: true,
+          rangelength: [6,6],
+          es_remote: {
+            type: 'get'
+          },
+        }
+      },
+      messages: {
+        sms_code: {
+          rangelength: Translator.trans('的长度必须等于6'),
         }
       }
     })
@@ -106,7 +114,7 @@ function makeValidator(type) {
     // });
   }
 
-  $("[type='submit']").click(()=>{
+  $("[type='submit']").click((event)=>{
     if(validator.form()) {
       $(event.currentTarget).button('loading');
       $form.submit();
