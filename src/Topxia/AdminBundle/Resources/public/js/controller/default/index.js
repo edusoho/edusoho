@@ -54,7 +54,7 @@ define(function (require, exports, module) {
     var loadAjaxData = function () {
         systemStatusData()
             .then(siteOverviewData)
-            .then(usersStatistic);
+            //.then(usersStatistic);
     }
 
     var registerSwitchEvent = function () {
