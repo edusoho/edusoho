@@ -51,6 +51,7 @@ define(function(require, exports, module) {
                 }
             })
 
+            console.log(ids);
             if(flag) {
                 $('#modal').html('');
                 $('#modal').load($(this).data('url'),{ids:ids});
