@@ -6,7 +6,6 @@ use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
-use Biz\Taxonomy\TagOwnerManager;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
@@ -780,7 +779,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
     }
 
-    public function unlockCourseSet($id)
+    public function unlockCourseSet($id, $shouldClose = false)
     {
         $courseSet = $this->tryManageCourseSet($id);
         if ($courseSet['parentId'] <= 0 || $courseSet['locked'] == 0) {
@@ -789,20 +788,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
         try {
             $this->beginTransaction();
-            $courseSet = $this->getCourseSetDao()->update(
-                $id,
-                array(
-                    'locked' => 0,
-                    'status' => 'closed',
-                )
-            );
-            $this->getCourseDao()->update(
-                $courses[0]['id'],
-                array(
-                    'locked' => 0,
-                    'status' => 'closed',
-                )
-            );
+
+            $fields = array('locked' => 0);
+            if ($shouldClose) {
+                $fields['status'] = 'closed';
+            }
+            $courseSet = $this->getCourseSetDao()->update($id, $fields);
+            $this->getCourseDao()->update($courses[0]['id'], $fields);
+
             $this->commit();
 
             return $courseSet;
