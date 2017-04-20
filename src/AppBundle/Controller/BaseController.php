@@ -4,9 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Twig\WebExtension;
 use Biz\User\CurrentUser;
-use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
-use Biz\System\Service\LogService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -282,7 +280,7 @@ class BaseController extends Controller
             'message' => $message,
             'title' => $title,
             'duration' => $duration,
-            'goto' => $goto,
+            'goto' => $this->filterRedirectUrl($goto),
         ));
     }
 
@@ -305,8 +303,46 @@ class BaseController extends Controller
     }
 
     /**
-     * @return WebExtension
+     * 安全的重定向
+     *
+     * 如果url不属于非本站域名下的，则重定向到本周首页。
+     *
+     * @param $url string 重定向url
+     * @param $status int 重定向时的HTTP状态码
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
+    public function redirectSafely($url, $status = 302)
+    {
+        $url = $this->filterRedirectUrl($url);
+
+        return $this->redirect($url, $status);
+    }
+
+    /**
+     * 过滤URL
+     *
+     * 如果url不属于非本站域名下的，则返回本站首页地址。
+     *
+     * @param $url 待过滤的$url
+     *
+     * @return string
+     */
+    public function filterRedirectUrl($url)
+    {
+        $host = $this->get('request')->getHost();
+        $safeHosts = array($host);
+
+        $parsedUrl = parse_url($url);
+        $isUnsafeHost = isset($parsedUrl['host']) && !in_array($parsedUrl['host'], $safeHosts);
+
+        if (empty($url) || $isUnsafeHost) {
+            $url = $this->generateUrl('homepage', array(), true);
+        }
+
+        return $url;
+    }
+
     protected function getWebExtension()
     {
         return $this->get('web.twig.extension');
@@ -325,7 +361,7 @@ class BaseController extends Controller
     }
 
     /**
-     * @return UserService
+     * @return \Biz\User\Service\UserService
      */
     protected function getUserService()
     {
@@ -333,7 +369,7 @@ class BaseController extends Controller
     }
 
     /**
-     * @return LogService
+     * @return \Biz\System\Service\LogService
      */
     protected function getLogService()
     {
