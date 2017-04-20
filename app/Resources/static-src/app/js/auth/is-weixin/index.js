@@ -7,6 +7,4 @@ if (ua.match(/MicroMessenger/i) == 'micromessenger') {
   }
 
   window.location.href = url;
-} else {
-  return false;
 }
