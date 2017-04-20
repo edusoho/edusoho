@@ -3,7 +3,7 @@ import notify from 'common/notify';
 let $form = $('#set-bind-new-form');
 let validator = $form.validate({
   rules: {
-    email: {
+    set_bind_emailOrMobile: {
       required: true,
       email: true,
       es_remote: {
