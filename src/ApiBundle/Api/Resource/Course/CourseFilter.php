@@ -18,13 +18,13 @@ class CourseFilter extends Filter
         'courseSet', 'learnMode', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'summary',
         'goals', 'audiences', 'isDefault', 'maxStudentNum', 'status', 'creator', 'isFree', 'price', 'originPrice',
         'vipLevelId', 'buyable', 'tryLookable', 'tryLookLength', 'watchLimit', 'services', 'ratingNum', 'rating',
-        'taskNum', 'publishedTaskNum', 'studentNum', 'teachers', 'parentId', 'createdTime', 'updatedTime', 'enableFinish'
+        'taskNum', 'publishedTaskNum', 'studentNum', 'teachers', 'parentId', 'createdTime', 'updatedTime', 'enableFinish', 'buyExpiryTime'
     );
 
     protected function publicFields(&$data)
     {
-        Converter::timestampToDate($data['expiryStartDate']);
-        Converter::timestampToDate($data['expiryEndDate']);
+        $this->learningExpiryDate($data);
+        Converter::timestampToDate($data['buyExpiryTime']);
 
         $data['services'] = ServiceToolkit::getServicesByCodes($data['services']);
 
@@ -36,5 +36,28 @@ class CourseFilter extends Filter
         $courseSetFilter = new CourseSetFilter();
         $courseSetFilter->setMode(Filter::SIMPLE_MODE);
         $courseSetFilter->filter($data['courseSet']);
+    }
+
+    private function learningExpiryDate(&$data)
+    {
+        Converter::timestampToDate($data['expiryStartDate']);
+        Converter::timestampToDate($data['expiryEndDate']);
+        $data['learningExpiryDate'] = array(
+            'expiryMode' => $data['expiryMode'],
+            'expiryStartDate' => $data['expiryStartDate'],
+            'expiryEndDate' => $data['expiryEndDate'],
+            'expiryDays' => $data['expiryDays'],
+        );
+
+        unset($data['expiryMode']);
+        unset($data['expiryStartDate']);
+        unset($data['expiryEndDate']);
+        unset($data['expiryDays']);
+
+        if ($data['learningExpiryDate']['expiryMode'] == 'forever' || $data['learningExpiryDate']['expiryMode'] == 'days') {
+            $data['learningExpiryDate']['expired'] = false;
+        } else {
+            $data['learningExpiryDate']['expired'] = time() > strtotime($data['learningExpiryDate']['expiryEndDate']);
+        }
     }
 }

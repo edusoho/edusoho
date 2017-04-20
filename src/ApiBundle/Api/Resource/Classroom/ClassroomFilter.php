@@ -11,7 +11,7 @@ use AppBundle\Common\ServiceToolkit;
 class ClassroomFilter extends Filter
 {
     protected $simpleFields = array(
-        'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price'
+        'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'studentNum'
     );
 
     protected $publicFields = array(
