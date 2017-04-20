@@ -21,6 +21,7 @@ class Course extends AbstractResource
         }
 
         $this->getOCUtil()->single($course, array('creator', 'teacherIds'));
+        $this->getOCUtil()->single($course, array('courseSetId'), 'courseSet');
 
         return $course;
     }
@@ -43,12 +44,9 @@ class Course extends AbstractResource
 
         $total = $this->service('Course:CourseService')->searchCourseCount($conditions);
 
+        $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
+        $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
+
         return $this->makePagingObject($courses, $total, $offset, $limit);
     }
-
-    public function add()
-    {
-
-    }
-
 }

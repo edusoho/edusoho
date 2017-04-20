@@ -6,6 +6,7 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Course\Service\CourseService;
 
 class CourseItem extends AbstractResource
 {
@@ -20,7 +21,14 @@ class CourseItem extends AbstractResource
             throw new ResourceNotFoundException('教学计划不存在');
         }
 
-        return array_values($this->service('Course:CourseService')->findCourseItems($courseId));
+        return array_values($this->getCourseService()->findCourseItems($courseId));
     }
 
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->service('Course:CourseService');
+    }
 }

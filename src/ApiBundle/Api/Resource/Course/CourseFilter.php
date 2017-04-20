@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\Course;
 
+use ApiBundle\Api\Resource\CourseSet\CourseSetFilter;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
 use ApiBundle\Api\Util\Converter;
@@ -14,7 +15,7 @@ class CourseFilter extends Filter
     );
 
     protected $publicFields = array(
-        'courseSetId', 'learnMode', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'summary',
+        'courseSet', 'learnMode', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'summary',
         'goals', 'audiences', 'isDefault', 'maxStudentNum', 'status', 'creator', 'isFree', 'price', 'originPrice',
         'vipLevelId', 'buyable', 'tryLookable', 'tryLookLength', 'watchLimit', 'services', 'ratingNum', 'rating',
         'taskNum', 'publishedTaskNum', 'studentNum', 'teachers', 'parentId', 'createdTime', 'updatedTime', 'enableFinish'
@@ -31,5 +32,9 @@ class CourseFilter extends Filter
         $userFilter->setMode(Filter::SIMPLE_MODE);
         $userFilter->filter($data['creator']);
         $userFilter->filters($data['teachers']);
+
+        $courseSetFilter = new CourseSetFilter();
+        $courseSetFilter->setMode(Filter::SIMPLE_MODE);
+        $courseSetFilter->filter($data['courseSet']);
     }
 }

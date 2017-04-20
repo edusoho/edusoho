@@ -10,12 +10,14 @@ class ObjectCombinationUtil
 
     private $serviceMap = array(
         'user' => 'User:UserService',
-        'course' => 'Course:CourseService'
+        'course' => 'Course:CourseService',
+        'courseSet' => 'Course:CourseSetService'
     );
 
     private $methodMap = array(
         'user' => 'findUsersByIds',
-        'course' => 'findCoursesByIds'
+        'course' => 'findCoursesByIds',
+        'courseSet' => 'findCourseSetsByIds'
     );
 
     public function __construct($biz)
