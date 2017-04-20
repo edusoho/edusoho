@@ -90,7 +90,7 @@ abstract class Filter
     protected function convertAbsoluteUrl($html)
     {
         $html = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function($matches) {
-            $absoluteUrl = AssetHelper::getFurl($matches[1]);
+            $absoluteUrl = AssetHelper::uriForPath('/'.ltrim($matches[1], '/'));
             return "src=\"{$absoluteUrl}\"";
         }, $html);
 
