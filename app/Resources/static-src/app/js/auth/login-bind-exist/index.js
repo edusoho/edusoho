@@ -1,4 +1,5 @@
 let $form = $('#bind-exist-form');
+let $btn = $form.find('[type="submit"]');
 let validator = $form.validate({
   rules: {
     emailOrMobile: {
@@ -11,8 +12,9 @@ let validator = $form.validate({
   }
 });
 
-$('[type="submit"]').click(() => {
+$btn.click(() => {
   if (validator.form()) {
+    $btn.button('loading');
     $form.submit();
   }
 })
@@ -33,5 +35,5 @@ $.validator.addMethod("email_or_mobile", function (value, element, params) {
     result = true;
   }
   return this.optional(element) || result;
-}, Translator.trans('不允许以1开头的11位纯数字'));
+}, Translator.trans('请输入正确格式的Email/手机'));
 
