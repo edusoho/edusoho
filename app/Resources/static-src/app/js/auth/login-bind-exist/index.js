@@ -1,3 +1,5 @@
+import notify from 'common/notify';
+
 let $form = $('#bind-exist-form');
 let $btn = $form.find('[type="submit"]');
 let validator = $form.validate({
@@ -15,7 +17,20 @@ let validator = $form.validate({
 $btn.click(() => {
   if (validator.form()) {
     $btn.button('loading');
-    $form.submit();
+    $("#bind-exist-form-error").hide();
+    $.post($form.attr('action'), $form.serialize(), function (response) {
+      if (!response.success) {
+        $("#bind-exist-form-error").html(response.message).show();
+        return;
+      }
+      notify('success',Translator.trans('绑定帐号成功，正在跳转至首页！'));
+      window.location.href = response._target_path;
+
+    }, 'json').fail(function () {
+      notify('danger',Translator.trans('绑定失败，帐号或密码错误。'));
+    }).always(function () {
+      $form.find('[type=submit]').button('reset');
+    });
   }
 })
 
