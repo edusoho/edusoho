@@ -6,7 +6,7 @@
   <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
   {% endif %}
 
-  <meta name="csrf_token" content="{{ csrf_token('site') }}">
+  <meta name="csrf-token" content="{{ csrf_token('site') }}">
   {% if params.activityId|default(0) > 0 and params.courseId|default(0) > 0 %}
     <meta name="trigger_url" content="{{path('task_live_trigger', {courseId: params.courseId, activityId: params.activityId})}}">
   {% endif %}
