@@ -33,7 +33,8 @@ class ExceptionListener
             if ($exception instanceof HttpExceptionInterface || $this->container->get('kernel')->isDebug()) {
                 return;
             }
-            if (empty($this->getUser())) {
+            $user = $this->getUser();
+            if (empty($user)) {
                 return new RedirectResponse($this->container->get('router')->generate('login'));
             }
             $event->setException(
