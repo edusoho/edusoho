@@ -56,7 +56,7 @@ class StudyCenterMissionsDataTag extends BaseDataTag implements DataTag
         });
         $classroomRefs = $this->getClassroomService()->findClassroomsByCoursesIds($courseIds);
         $classroomRefs = ArrayToolkit::index($classroomRefs, 'courseId');
-        $classroomIds = ArrayToolkit::column($classroomRefs,'classroomId');
+        $classroomIds = ArrayToolkit::column($classroomRefs, 'classroomId');
         $courseClassrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
 
         $classrooms = array();
