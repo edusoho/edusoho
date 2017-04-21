@@ -638,14 +638,14 @@ class TaskServiceImpl extends BaseService implements TaskService
         );
         if ($course['learnMode'] == 'freeMode') {
             $taskResults = $this->getTaskResultService()->findUserFinishedTaskResultsByCourseId($course['id']);
-            $finishTaskIds = ArrayToolkit::column($taskResults,'courseTaskId');
+            $finishTaskIds = ArrayToolkit::column($taskResults, 'courseTaskId');
             $electiveTaskIds = $this->getStartElectiveTaskIds($course['id']);
 
-            $conditions['excludeIds'] = array_merge($finishTaskIds,$electiveTaskIds);
+            $conditions['excludeIds'] = array_merge($finishTaskIds, $electiveTaskIds);
         } else {
             if ($task['isOptional']) {
                 $taskResults = $this->getTaskResultService()->findUserFinishedTaskResultsByCourseId($course['id']);
-                $finishTaskIds = ArrayToolkit::column($taskResults,'courseTaskId');
+                $finishTaskIds = ArrayToolkit::column($taskResults, 'courseTaskId');
                 $conditions['excludeIds'] = $finishTaskIds;
             } else {
                 $conditions['seq_GT'] = $task['seq'];
@@ -788,7 +788,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         $finishedTasks = $this->getTaskResultService()->findUserFinishedTaskResultsByCourseId($courseId);
 
         if (!empty($finishedTasks)) {
-            
             $taskIds = ArrayToolkit::column($finishedTasks, 'courseTaskId');
             $electiveTaskIds = $this->getStartElectiveTaskIds($courseId);
             $taskIds = array_merge($taskIds, $electiveTaskIds);
@@ -796,7 +795,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             $conditions = array(
                 'courseId' => $courseId,
                 'status' => 'published',
-                'excludeIds' => $taskIds
+                'excludeIds' => $taskIds,
             );
 
             $tasks = $this->searchTasks($conditions, array('seq' => 'ASC'), 0, 1);
@@ -812,7 +811,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getStartElectiveTaskIds($courseId)
     {
         $userTaskResults = $this->getTaskResultService()->findUserProgressingTaskResultByCourseId($courseId);
-        $userTaskIds = ArrayToolkit::column($userTaskResults,'courseTaskId');
+        $userTaskIds = ArrayToolkit::column($userTaskResults, 'courseTaskId');
 
         $conditions = array(
             'courseId' => $courseId,

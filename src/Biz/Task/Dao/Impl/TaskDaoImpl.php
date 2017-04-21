@@ -227,7 +227,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'categoryId = :categoryId',
                 'activityId = :activityId',
                 'mode = :mode',
-                'isOptional = :isOptional'
+                'isOptional = :isOptional',
             ),
         );
     }

@@ -1746,7 +1746,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createNotFoundException('User is not course member');
         }
 
-        $taskCount = $this->getTaskService()->countTasks(array('courseId' => $course['id'], 'status' => 'published','isOptional' => 0));
+        $taskCount = $this->getTaskService()->countTasks(array('courseId' => $course['id'], 'status' => 'published', 'isOptional' => 0));
 
         if (!$taskCount) {
             return array(
