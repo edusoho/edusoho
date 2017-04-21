@@ -21,7 +21,48 @@ class CourseItem extends AbstractResource
             throw new ResourceNotFoundException('教学计划不存在');
         }
 
-        return array_values($this->getCourseService()->findCourseItems($courseId));
+        return $this->convertToLeadingItems($this->getCourseService()->findCourseItems($courseId));
+    }
+
+    private function convertToLeadingItems($originItems)
+    {
+        $newItems = array();
+        foreach ($originItems as $originItem) {
+            $item = array();
+            $seq = 1;
+            if ($originItem['itemType'] == 'task') {
+                $item['type'] = 'task';
+                $item['seq'] = $seq;
+                $item['number'] = $originItem['number'];
+                $item['title'] = $originItem['title'];
+                $item['task'] = $originItem;
+                $newItems[] = $item;
+                $seq++;
+                continue;
+            }
+
+            if ($originItem['itemType'] == 'chapter' && $originItem['type'] == 'lesson') {
+                foreach ($originItem['tasks'] as $task) {
+                    $item['type'] = 'task';
+                    $item['seq'] = $seq;
+                    $item['number'] = $originItem['number'];
+                    $item['title'] = $task['title'];
+                    $item['task'] = $task;
+                    $newItems[] = $item;
+                    $seq++;
+                }
+                continue;
+            }
+
+            $item['type'] = $originItem['type'];
+            $item['seq'] = 1;
+            $item['number'] = $originItem['number'];
+            $item['title'] = $originItem['title'];
+            $item['task'] =  null;
+            $newItems[] = $item;
+        }
+
+        return $newItems;
     }
 
     /**

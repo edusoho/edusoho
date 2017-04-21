@@ -9,14 +9,12 @@ use AppBundle\Common\ServiceToolkit;
 class CourseItemFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'type', 'number', 'seq', 'title', 'tasks', 'itemType'
+        'type', 'number', 'seq', 'title', 'task', 'itemType'
     );
 
     protected function publicFields(&$data)
     {
-        if (!empty($data['tasks'])) {
-            $tasKFilter = new CourseTaskFilter();
-            $tasKFilter->filters($data['tasks']);
-        }
+        $tasKFilter = new CourseTaskFilter();
+        $tasKFilter->filter($data['task']);
     }
 }

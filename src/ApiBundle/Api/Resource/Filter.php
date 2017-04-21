@@ -31,7 +31,7 @@ abstract class Filter
 
     public function filter(&$data)
     {
-        if (empty($data)) {
+        if (!$data) {
             return null;
         }
 
