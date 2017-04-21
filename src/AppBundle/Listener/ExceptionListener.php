@@ -9,6 +9,8 @@ use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,6 +30,8 @@ class ExceptionListener
     {
         $problem = $this->container->get('Topxia.RepairProblem', ContainerInterface::NULL_ON_INVALID_REFERENCE);
         $exception = $event->getException();
+
+
         $request = $event->getRequest();
         $statusCode = $this->convertStateCode($exception);
         if (!$request->isXmlHttpRequest()) {
@@ -35,9 +39,11 @@ class ExceptionListener
                 return;
             }
             $user = $this->getUser();
-            if (empty($user)) {
-                return new RedirectResponse($this->container->get('router')->generate('login'));
+            if ($statusCode === Response::HTTP_FORBIDDEN && empty($user)) {
+                $response = new RedirectResponse($this->container->get('router')->generate('login'));
+                $event->setResponse($response);
             }
+
             $event->setException(
                 new HttpException(
                     $statusCode,
@@ -45,7 +51,6 @@ class ExceptionListener
                     $exception->getPrevious()
                 )
             );
-
             return;
         }
 
@@ -111,7 +116,9 @@ class ExceptionListener
         if ($exception instanceof NotFoundException) {
             return Response::HTTP_NOT_FOUND;
         }
-
+        if($exception instanceof NotFoundHttpException){
+            return Response::HTTP_NOT_FOUND;
+        }
         if (array_key_exists($exception->getCode(), Response::$statusTexts)) {
             return $exception->getCode();
         }
@@ -127,7 +134,7 @@ class ExceptionListener
 
         $this->logger = new Logger('AjaxExceptionListener');
         $this->logger->pushHandler(
-            new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir').'/dev.log', Logger::DEBUG)
+            new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir') . '/dev.log', Logger::DEBUG)
         );
 
         return $this->logger;
