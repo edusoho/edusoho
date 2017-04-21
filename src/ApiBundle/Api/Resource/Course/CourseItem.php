@@ -29,33 +29,31 @@ class CourseItem extends AbstractResource
         $newItems = array();
         foreach ($originItems as $originItem) {
             $item = array();
-            $seq = 1;
             if ($originItem['itemType'] == 'task') {
                 $item['type'] = 'task';
-                $item['seq'] = $seq;
+                $item['seq'] = 0;
                 $item['number'] = $originItem['number'];
                 $item['title'] = $originItem['title'];
                 $item['task'] = $originItem;
                 $newItems[] = $item;
-                $seq++;
                 continue;
             }
 
             if ($originItem['itemType'] == 'chapter' && $originItem['type'] == 'lesson') {
+                $taskSeq = 1;
                 foreach ($originItem['tasks'] as $task) {
                     $item['type'] = 'task';
-                    $item['seq'] = $seq;
+                    $item['seq'] = $taskSeq++;
                     $item['number'] = $task['number'];
                     $item['title'] = $task['title'];
                     $item['task'] = $task;
                     $newItems[] = $item;
-                    $seq++;
                 }
                 continue;
             }
 
             $item['type'] = $originItem['type'];
-            $item['seq'] = 1;
+            $item['seq'] = 0;
             $item['number'] = $originItem['number'];
             $item['title'] = $originItem['title'];
             $item['task'] =  null;
