@@ -7,7 +7,9 @@ use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -30,8 +32,11 @@ class ExceptionListener
         $request = $event->getRequest();
         $statusCode = $this->convertStateCode($exception);
         if (!$request->isXmlHttpRequest()) {
-            if ($exception instanceof HttpException || $this->container->get('kernel')->isDebug()) {
+            if ($exception instanceof HttpExceptionInterface || $this->container->get('kernel')->isDebug()) {
                 return;
+            }
+            if (empty($this->getUser())) {
+                return new RedirectResponse($this->container->get('router')->generate('login'));
             }
             $event->setException(
                 new HttpException(
