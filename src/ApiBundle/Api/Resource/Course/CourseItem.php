@@ -27,12 +27,13 @@ class CourseItem extends AbstractResource
     private function convertToLeadingItems($originItems)
     {
         $newItems = array();
+        $number = 1;
         foreach ($originItems as $originItem) {
             $item = array();
             if ($originItem['itemType'] == 'task') {
                 $item['type'] = 'task';
                 $item['seq'] = '0';
-                $item['number'] = $originItem['number'];
+                $item['number'] = $number++;
                 $item['title'] = $originItem['title'];
                 $item['task'] = $originItem;
                 $newItems[] = $item;
@@ -44,12 +45,13 @@ class CourseItem extends AbstractResource
                 foreach ($originItem['tasks'] as $task) {
                     $item['type'] = 'task';
                     $item['seq'] = strval($taskSeq);
-                    $item['number'] = $task['number'];
+                    $item['number'] = $number;
                     $item['title'] = $task['title'];
                     $item['task'] = $task;
                     $newItems[] = $item;
                     $taskSeq++;
                 }
+                $number++;
                 continue;
             }
 
