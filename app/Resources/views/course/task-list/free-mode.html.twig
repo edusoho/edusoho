@@ -47,8 +47,8 @@
                   data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
                   style="margin-top:-8px">{% include 'course/task-list/parts/list-li-title.html.twig' %}</a>
               {% endif %}
-              
-              {% include 'course/task-list/parts:task-length.html.twig' %}
+
+              {% include 'course/task-list/parts/task-length.html.twig' %}
 
               <span class="right-menu mouse-enter">
               {% if not member %}
