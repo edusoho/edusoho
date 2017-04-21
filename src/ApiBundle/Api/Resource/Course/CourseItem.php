@@ -33,7 +33,7 @@ class CourseItem extends AbstractResource
             if ($originItem['itemType'] == 'task') {
                 $item['type'] = 'task';
                 $item['seq'] = '0';
-                $item['number'] = $number++;
+                $item['number'] = strval($number++);
                 $item['title'] = $originItem['title'];
                 $item['task'] = $originItem;
                 $newItems[] = $item;
@@ -45,7 +45,7 @@ class CourseItem extends AbstractResource
                 foreach ($originItem['tasks'] as $task) {
                     $item['type'] = 'task';
                     $item['seq'] = strval($taskSeq);
-                    $item['number'] = $number;
+                    $item['number'] = strval($number);
                     $item['title'] = $task['title'];
                     $item['task'] = $task;
                     $newItems[] = $item;
