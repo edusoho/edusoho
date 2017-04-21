@@ -378,6 +378,7 @@ class CourseSetManageController extends BaseController
                 'route' => 'course_question_plumber',
                 'params' => array(
                     'courseSetId' => $courseSetId,
+                    'type' => 'import',
                 ),
             ),
             'testpaper' => array(
