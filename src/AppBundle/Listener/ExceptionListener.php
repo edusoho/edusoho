@@ -33,7 +33,8 @@ class ExceptionListener
             if ($exception instanceof HttpExceptionInterface || $this->container->get('kernel')->isDebug()) {
                 return;
             }
-            if (empty($this->getUser())) {
+            $user = $this->getUser();
+            if (empty($user)) {
                 return new RedirectResponse($this->container->get('router')->generate('login'));
             }
             $event->setException(
@@ -125,7 +126,7 @@ class ExceptionListener
 
         $this->logger = new Logger('AjaxExceptionListener');
         $this->logger->pushHandler(
-            new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir').'/dev.log', Logger::DEBUG)
+            new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir') . '/dev.log', Logger::DEBUG)
         );
 
         return $this->logger;
