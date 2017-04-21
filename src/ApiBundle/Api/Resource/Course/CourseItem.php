@@ -31,7 +31,7 @@ class CourseItem extends AbstractResource
             $item = array();
             if ($originItem['itemType'] == 'task') {
                 $item['type'] = 'task';
-                $item['seq'] = 0;
+                $item['seq'] = '0';
                 $item['number'] = $originItem['number'];
                 $item['title'] = $originItem['title'];
                 $item['task'] = $originItem;
@@ -43,7 +43,7 @@ class CourseItem extends AbstractResource
                 $taskSeq = count($originItem['tasks']) > 1 ? 1 : 0;
                 foreach ($originItem['tasks'] as $task) {
                     $item['type'] = 'task';
-                    $item['seq'] = $taskSeq;
+                    $item['seq'] = strval($taskSeq);
                     $item['number'] = $task['number'];
                     $item['title'] = $task['title'];
                     $item['task'] = $task;
@@ -54,7 +54,7 @@ class CourseItem extends AbstractResource
             }
 
             $item['type'] = $originItem['type'];
-            $item['seq'] = 0;
+            $item['seq'] = '0';
             $item['number'] = $originItem['number'];
             $item['title'] = $originItem['title'];
             $item['task'] =  null;
