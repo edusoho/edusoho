@@ -56,6 +56,8 @@ class StudyCenterMissionsDataTag extends BaseDataTag implements DataTag
         });
         $classroomRefs = $this->getClassroomService()->findClassroomsByCoursesIds($courseIds);
         $classroomRefs = ArrayToolkit::index($classroomRefs, 'courseId');
+        $classroomIds = ArrayToolkit::column($classroomRefs,'classroomId');
+        $courseClassrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
 
         $classrooms = array();
         $classroomIndex = 0;
@@ -70,7 +72,7 @@ class StudyCenterMissionsDataTag extends BaseDataTag implements DataTag
                 $classroomRef = $classroomRefs[$course['id']];
                 $classroomId = $classroomRef['classroomId'];
 
-                $classroom = $this->getClassroomService()->getClassroom($classroomId);
+                $classroom = empty($courseClassrooms[$classroomId]) ? array() : $courseClassrooms[$classroomId];
                 if (empty($classrooms['class-'.$classroomId])) {
                     $classroom['tasks'] = array();
                     $classroom['allTaskNum'] = 0;
@@ -105,18 +107,31 @@ class StudyCenterMissionsDataTag extends BaseDataTag implements DataTag
 
     public function getTaskDataInClassroomCourse($courseId, $userId)
     {
-        $tasks = $this->getTaskService()->findToLearnTasksByCourseIdForMission($courseId);
-        if (empty($tasks)) {
-            return null;
+        $finishedTasks = $this->getTaskResultService()->findUserFinishedTaskResultsByCourseId($courseId);
+
+        if (!empty($finishedTasks)) {
+            $taskIds = ArrayToolkit::column($finishedTasks, 'courseTaskId');
+            $electiveTaskIds = $this->getStartElectiveTaskIds($courseId);
+            $taskIds = array_merge($taskIds, $electiveTaskIds);
+
+            $conditions = array(
+                'courseId' => $courseId,
+                'status' => 'published',
+                'excludeIds' => $taskIds,
+            );
+
+            $tasks = $this->getTaskService()->searchTasks($conditions, array('seq' => 'ASC'), 0, 1);
+        } else {
+            $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
         }
 
-        $finishTaskCount = $this->getTaskResultService()->countTaskResults(array(
-            'userId' => $userId,
-            'courseId' => $courseId,
-            'status' => 'finish',
-        ));
+        $task = empty($tasks) ? array() : array_shift($tasks);
+        if ($task) {
+            $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+            $task['result'] = empty($taskResult) ? array() : $taskResult;
+        }
 
-        return array($tasks[0], $finishTaskCount);
+        return array($task, count($finishedTasks));
     }
 
     public function getTasksDataInCourse($course, $userId, $count)
@@ -156,6 +171,25 @@ class StudyCenterMissionsDataTag extends BaseDataTag implements DataTag
         }
 
         return $toLearnTasks;
+    }
+
+    protected function getStartElectiveTaskIds($courseId)
+    {
+        $userTaskResults = $this->getTaskResultService()->findUserProgressingTaskResultByCourseId($courseId);
+        $userTaskIds = ArrayToolkit::column($userTaskResults, 'courseTaskId');
+
+        $conditions = array(
+            'courseId' => $courseId,
+            'status' => 'published',
+            'isOptional' => 1,
+        );
+
+        $electiveTasks = $this->getTaskService()->searchTasks($conditions, null, 0, PHP_INT_MAX);
+        $electiveTaskIds = ArrayToolkit::column($electiveTasks, 'id');
+
+        $electiveIds = array_intersect($userTaskIds, $electiveTaskIds);
+
+        return empty($electiveIds) ? array() : $electiveIds;
     }
 
     protected function getClassroomService()

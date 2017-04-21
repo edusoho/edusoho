@@ -24,14 +24,17 @@
           {# {% set status = task.isLearned %} #}
           {% set lock  = task.lock|default(false) %}
           <li>
-            {# {% if status %}
-              <span class="es-icon es-icon-doing"></span>
-            {% elseif lock %} #}
-            {% if lock %}
-              <span class="es-icon es-icon-lock"></span>
-            {% else %}
-              <span class="es-icon es-icon-undone"></span>
-            {% endif %}
+            <span class="es-icon
+              {% if lock %}
+                es-icon-lock
+              {% elseif  not task.result|default(null) %}
+                es-icon-undone-check
+              {% elseif task.result.status == 'start' %}
+                es-icon-doing
+              {% elseif task.result.status == 'finish' %}
+                es-icon-iccheckcircleblack24px
+              {% endif %}
+            "></span>
 
             {% if  lock %}
               {{ '任务%number%-%title%'|trans({'%number%': task.number,'%title%': task.title}) }}
