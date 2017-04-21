@@ -4,9 +4,6 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ApiNotFoundException;
-use ApiBundle\Api\Exception\BadRequestException;
-use ApiBundle\Api\Exception\InvalidArgumentException;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseSetService;
@@ -44,7 +41,7 @@ class CourseMember extends AbstractResource
      */
     public function get(ApiRequest $request, $courseId, $userId)
     {
-        $courseMember = $this->service('Course:MemberService')->getCourseMember($courseId, $userId);
+        $courseMember = $this->getMemberService()->getCourseMember($courseId, $userId);
         $this->getOCUtil()->single($courseMember, array('userId'));
         return $courseMember;
     }
@@ -57,18 +54,13 @@ class CourseMember extends AbstractResource
             throw new ResourceNotFoundException('教学计划不存在');
         }
 
-        $joinWay = $request->request->get('joinWay', 'free');
-        $success = false;
-        if ($joinWay == 'free') {
-            $success = $this->freeJoin($course);
+        $member = $this->getMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
+
+        if (!$member) {
+            $member = $this->tryJoin($course);
         }
 
-        if ($joinWay == 'vip') {
-            $success = $this->vipJoin($course);
-        }
-
-        if ($success) {
-            $member = $this->service('Course:MemberService')->getCourseMember($courseId, $this->getCurrentUser()->getId());
+        if ($member) {
             $this->getOCUtil()->single($member, array('userId'));
             return $member;
         }
@@ -76,13 +68,23 @@ class CourseMember extends AbstractResource
         return array();
     }
 
+    private function tryJoin($course)
+    {
+        $member = $this->freeJoin($course);
+        if ($member) {
+            return $member;
+        }
+
+        return $this->vipJoin($course);
+    }
+
     private function freeJoin($course)
     {
         if ($course['isFree'] == 0) {
-            throw new BadRequestException('不是免费课程,不能直接加入', 101);
+            return null;
         }
 
-        $member = $this->service('Course:MemberService')->becomeStudent($course['id'], $this->getCurrentUser()->id);
+        $member = $this->getMemberService()->becomeStudent($course['id'], $this->getCurrentUser()->id);
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
@@ -102,21 +104,20 @@ class CourseMember extends AbstractResource
             'orderId' => $order['id']
         ));
 
-        if ($member) {
-            return true;
-        }
-
-        return false;
+        return $member;
     }
 
     private function vipJoin($course)
     {
-        list($success, $message) = $this->service('VipPlugin:Vip:VipFacadeService')->joinCourse($course['id']);
+        if (!$this->isPluginInstalled('vip')) {
+            return null;
+        }
 
+        list($success, $message) = $this->service('VipPlugin:Vip:VipFacadeService')->joinCourse($course['id']);
         if ($success) {
-            return true;
+            return $this->getMemberService()->getCourseMember($course['id'], $this->getCurrentUser()->getId());
         } else {
-            throw new BadRequestException($message, 102);
+            return null;
         }
     }
 
