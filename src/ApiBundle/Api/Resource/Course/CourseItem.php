@@ -45,7 +45,7 @@ class CourseItem extends AbstractResource
                 foreach ($originItem['tasks'] as $task) {
                     $item['type'] = 'task';
                     $item['seq'] = $seq;
-                    $item['number'] = $originItem['number'];
+                    $item['number'] = $task['number'];
                     $item['title'] = $task['title'];
                     $item['task'] = $task;
                     $newItems[] = $item;
