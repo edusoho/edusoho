@@ -45,12 +45,16 @@ class CourseFilter extends Filter
             return 1;
         }
 
-        if ($data['buyExpiryTime'] && $data['buyExpiryTime'] < time()) {
+        if (!$data['buyable']) {
             return 2;
         }
 
-        if ($data['learningExpiryDate']['expired']) {
+        if ($data['buyExpiryTime'] && $data['buyExpiryTime'] < time()) {
             return 3;
+        }
+
+        if ($data['learningExpiryDate']['expired']) {
+            return 4;
         }
 
         return 0;
