@@ -1,7 +1,7 @@
 <?php
 
 use Symfony\Component\Filesystem\Filesystem;
-use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Common\Servicebiz;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
@@ -35,6 +35,9 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function updateScheme()
     {
+        $this->getConnection()->exec('
+            UPDATE `course_v8`, `course_v8` c2 SET course_v8.parentId=0 WHERE course_v8.parentId = c2.id AND course_v8.parentId > 0 AND course_v8.courseSetId=c2.courseSetId;
+        ');
     }
 
     protected function isFieldExist($table, $filedName)
@@ -53,10 +56,11 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function isIndexExist($table, $filedName, $indexName)
     {
-        $sql    = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
+        $sql = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
         $result = $this->getConnection()->fetchAssoc($sql);
         return empty($result) ? false : true;
     }
+
 
     protected function isCrontabJobExist($code)
     {
@@ -65,6 +69,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         return empty($result) ? false : true;
     }
+
 
     private function getSettingService()
     {
@@ -75,6 +80,7 @@ class EduSohoUpgrade extends AbstractUpdater
 abstract class AbstractUpdater
 {
     protected $biz;
+
     public function __construct($biz)
     {
         $this->biz = $biz;
