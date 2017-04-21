@@ -1,8 +1,6 @@
-{% extends 'old-layout.html.twig' %}
-
-{% set script_controller = 'user/email-reset' %}
-
+{% extends 'layout.html.twig' %}
 {% block title %}{{ '重置邮箱'|trans }} - {{ parent() }}{% endblock %}
+{% do script(['libs/jquery-validation.js','app/js/user/email-reset/index.js'])%}
 
 {% block content %}
   <div class="es-section login-section">
