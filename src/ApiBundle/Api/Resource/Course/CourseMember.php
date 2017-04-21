@@ -65,7 +65,7 @@ class CourseMember extends AbstractResource
             return $member;
         }
 
-        return array();
+        return null;
     }
 
     private function tryJoin($course)
