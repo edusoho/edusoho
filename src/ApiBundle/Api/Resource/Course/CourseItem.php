@@ -40,14 +40,15 @@ class CourseItem extends AbstractResource
             }
 
             if ($originItem['itemType'] == 'chapter' && $originItem['type'] == 'lesson') {
-                $taskSeq = 1;
+                $taskSeq = count($originItem['tasks']) > 1 ? 1 : 0;
                 foreach ($originItem['tasks'] as $task) {
                     $item['type'] = 'task';
-                    $item['seq'] = $taskSeq++;
+                    $item['seq'] = $taskSeq;
                     $item['number'] = $task['number'];
                     $item['title'] = $task['title'];
                     $item['task'] = $task;
                     $newItems[] = $item;
+                    $taskSeq++;
                 }
                 continue;
             }
