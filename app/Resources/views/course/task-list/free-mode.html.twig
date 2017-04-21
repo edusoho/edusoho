@@ -48,7 +48,21 @@
                   style="margin-top:-8px">{% include 'course/task-list/parts/list-li-title.html.twig' %}</a>
               {% endif %}
               <span class="right-menu color-gray {% if not member %} mouse-leave {% endif %}">
-                {{ task.activity.length|default(0)|activity_length_format }}
+                {% if task.type == 'live' %}
+                  {% set now = date().timestamp %}
+                  {% if task.activity.ext.replayStatus != constant('Biz\\Course\\Service\\LiveReplayService::REPLAY_UNGENERATE_STATUS') %}
+                    {{ '回放'|trans }}
+                  {% elseif now < task.activity.startTime %}
+                    {{ task.activity.startTime|date('m-d H:i') }}
+                  {% elseif task.activity.startTime < now and now < task.activity.endTime %}
+                    {{ '正在直播中'|trans }}
+                  {% elseif now > task.activity.endTime %}
+                    {{ '直播结束'|trans }}
+                  {% endif %}
+                {% else %}
+                  {{ task.activity.length|default(0)|activity_length_format }}
+                {% endif %}
+
                 {% set meta = activity_meta(task.activity.mediaType) %}
                 <i class="{{ meta.icon }} color-gray ml10" data-toggle="tooltip" data-placement="top" title=""
                   data-original-title="{{ meta.name }}任务" data-container="body"></i>
