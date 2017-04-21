@@ -39,7 +39,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $fields = array(
             'recommended' => 1,
-            'recommendedSeq' => (int) $number,
+            'recommendedSeq' => (int)$number,
             'recommendedTime' => time(),
         );
 
@@ -374,7 +374,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courseSet['status'] = 'draft';
 
         $coinSetting = $this->getSettingService()->get('coin', array());
-        if (!empty($coinSetting['coin_enabled']) && (bool) $coinSetting['coin_enabled']) {
+        if (!empty($coinSetting['coin_enabled']) && (bool)$coinSetting['coin_enabled']) {
             $courseSet['maxRate'] = 100;
         }
 
@@ -386,8 +386,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         // 1. 是否创建默认教学计划应该是可配的；
         // 2. 教学计划的内容（主要是学习模式、有效期模式）也应该是可配的
         $defaultCourse = $this->generateDefaultCourse($created);
-
-        $this->getCourseService()->createCourse($defaultCourse);
+        $defaultCourse = $this->getCourseService()->createCourse($defaultCourse);
+        //update courseSet defaultId
+        $this->getCourseSetDao()->update($created['id'], array('defaultCourseId' => $defaultCourse['id']));
         $this->getLogService()->info('course', 'create', sprintf('创建课程《%s》(#%s)', $created['title'], $created['id']));
 
         return $created;

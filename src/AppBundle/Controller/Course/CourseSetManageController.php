@@ -48,7 +48,7 @@ class CourseSetManageController extends BaseController
             }
         }
         if (!$this->getCourseSetService()->hasCourseSetManageRole()) {
-            throw new \Exception('Unauthorized');
+            throw  $this->createAccessDeniedException();
         }
         $user = $this->getUser();
         $userProfile = $this->getUserService()->getUserProfile($user->getId());
