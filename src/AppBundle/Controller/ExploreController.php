@@ -223,6 +223,7 @@ class ExploreController extends BaseController
     {
         $categoryArray = array();
         $subCategory = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
+
         $thirdLevelCategory = empty($conditions['selectedthirdLevelCategory']) ? null : $conditions['selectedthirdLevelCategory'];
 
         if (!empty($conditions['subCategory']) && empty($conditions['selectedthirdLevelCategory'])) {

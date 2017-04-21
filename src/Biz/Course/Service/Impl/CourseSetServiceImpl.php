@@ -255,6 +255,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function countCourseSets(array $conditions)
     {
+        $conditions = $this->prepareConditions($conditions);
+
         return $this->getCourseSetDao()->count($conditions);
     }
 
@@ -889,6 +891,15 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $conditions['creator'] = $user ? $user['id'] : -1;
         }
 
+        if (isset($conditions['categoryId'])) {
+            $conditions['categoryIds'] = array();
+            if (!empty($conditions['categoryId'])) {
+                $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+                $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+            }
+            unset($conditions['categoryId']);
+        }
+
         return $conditions;
     }
 
@@ -1009,6 +1020,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getCourseDeleteService()
     {
         return $this->createService('Course:CourseDeleteService');
+    }
+
+    /**
+     * @return \Biz\Taxonomy\Service\CategoryService
+     */
+    protected function getCategoryService()
+    {
+        return $this->createService('Taxonomy:CategoryService');
     }
 
     /**
