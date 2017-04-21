@@ -31,7 +31,6 @@ class ExceptionListener
         $problem = $this->container->get('Topxia.RepairProblem', ContainerInterface::NULL_ON_INVALID_REFERENCE);
         $exception = $event->getException();
 
-
         $request = $event->getRequest();
         $statusCode = $this->convertStateCode($exception);
         if (!$request->isXmlHttpRequest()) {
@@ -51,6 +50,7 @@ class ExceptionListener
                     $exception->getPrevious()
                 )
             );
+
             return;
         }
 
@@ -116,7 +116,7 @@ class ExceptionListener
         if ($exception instanceof NotFoundException) {
             return Response::HTTP_NOT_FOUND;
         }
-        if($exception instanceof NotFoundHttpException){
+        if ($exception instanceof NotFoundHttpException) {
             return Response::HTTP_NOT_FOUND;
         }
         if (array_key_exists($exception->getCode(), Response::$statusTexts)) {
@@ -134,7 +134,7 @@ class ExceptionListener
 
         $this->logger = new Logger('AjaxExceptionListener');
         $this->logger->pushHandler(
-            new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir') . '/dev.log', Logger::DEBUG)
+            new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir').'/dev.log', Logger::DEBUG)
         );
 
         return $this->logger;
