@@ -377,10 +377,10 @@ $.validator.addMethod("next_day", function (value, element, params) {
 
 $.validator.addMethod("chinese_alphanumeric", function (value, element, params) {
   return this.optional(element) || /^([\u4E00-\uFA29]|[a-zA-Z0-9_.·])*$/i.test(value)
-}, jQuery.validator.format('支持中文字、英文字母、数字及_ . ·'));
+}, jQuery.validator.format('只支持中文字、英文字母、数字及_ . ·'));
 
 $.validator.addMethod("alphanumeric", function (value, element, params) {
-  return this.optional(element) ||  /^[a-zA-Z0-9_]+$/i.test(value)
+  return this.optional(element) || /^[a-zA-Z0-9_]+$/i.test(value)
 }, jQuery.validator.format('必须是英文字母、数字及下划线组成'));
 
 $.validator.addMethod("nickname", function (value, element, params) {
@@ -422,3 +422,30 @@ $.validator.addMethod('raty_star', function (value, element) {
 $.validator.addMethod('reg_inviteCode', function (value, element) {
   return this.optional(element) || /^[a-z0-9A-Z]{5}$/.test(value);
 }, Translator.trans('必须是5位数字、英文字母组成'));
+
+$.validator.addMethod('byte_minlength', function (value, element, params) {
+  let l = calculateByteLength(value);
+  let bool = l >= Number(params);
+  if (!bool) {
+    $.validator.messages.byte_minlength = `字符长度必须大于等于${params}，一个中文字算2个字符`;
+  }
+  return this.optional(element) || bool;
+}, Translator.trans('字符长度必须大于等于%min%，一个中文字算2个字符'));
+
+$.validator.addMethod('byte_maxlength', function (value, element, params) {
+  let l = calculateByteLength(value);
+  let bool = l <= Number(params);
+  if (!bool) {
+    $.validator.messages.byte_maxlength = `字符长度必须小于等于${params}，一个中文字算2个字符`;
+  }
+  return this.optional(element) || l <= Number(params);
+}, Translator.trans('字符长度必须小于等于%max%，一个中文字算2个字符'));
+
+function calculateByteLength(string) {
+  let length = string.length;
+  for (let i = 0; i < string.length; i++) {
+    if (string.charCodeAt(i) > 127)
+      length++;
+  }
+  return length;
+}
