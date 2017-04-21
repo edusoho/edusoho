@@ -42,7 +42,9 @@ class ExceptionListener
                 $response = new RedirectResponse($this->container->get('router')->generate('login'));
                 $event->setResponse($response);
             }
-
+            if (!$this->isExceptionNeedConvert($exception)) {
+                return;
+            }
             $event->setException(
                 new HttpException(
                     $statusCode,
@@ -50,7 +52,6 @@ class ExceptionListener
                     $exception->getPrevious()
                 )
             );
-
             return;
         }
 
@@ -105,6 +106,16 @@ class ExceptionListener
         return $user;
     }
 
+    private function isExceptionNeedConvert($exception)
+    {
+        if ($exception instanceof AccessDeniedException) {
+            return true;
+        }
+        if ($exception instanceof InvalidArgumentException) {
+            return false;
+        }
+    }
+
     private function convertStateCode($exception)
     {
         if ($exception instanceof AccessDeniedException) {
@@ -113,17 +124,6 @@ class ExceptionListener
         if ($exception instanceof InvalidArgumentException) {
             return Response::HTTP_FORBIDDEN;
         }
-        if ($exception instanceof NotFoundException) {
-            return Response::HTTP_NOT_FOUND;
-        }
-        if ($exception instanceof NotFoundHttpException) {
-            return Response::HTTP_NOT_FOUND;
-        }
-        if (array_key_exists($exception->getCode(), Response::$statusTexts)) {
-            return $exception->getCode();
-        }
-
-        return Response::HTTP_INTERNAL_SERVER_ERROR;
     }
 
     protected function getLogger()
@@ -134,7 +134,7 @@ class ExceptionListener
 
         $this->logger = new Logger('AjaxExceptionListener');
         $this->logger->pushHandler(
-            new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir').'/dev.log', Logger::DEBUG)
+            new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir') . '/dev.log', Logger::DEBUG)
         );
 
         return $this->logger;
