@@ -429,7 +429,7 @@ class CourseSetManageController extends BaseController
             $menuTitle = $lockedCourseSetMenus[$sideNav]['title'];
         } elseif (!empty($lockedCourseMenus[$sideNav])) {
             $menuPath = $this->generateUrl($lockedCourseMenus[$sideNav]['route'], $lockedCourseMenus[$sideNav]['params']);
-            $menuTitle = $lockedCourseMenus[$sideNav];
+            $menuTitle = $lockedCourseMenus[$sideNav]['title'];
         } else {
             throw new \Exception('Invalid Menu Key');
         }
