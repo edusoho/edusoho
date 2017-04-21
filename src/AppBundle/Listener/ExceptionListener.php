@@ -28,12 +28,12 @@ class ExceptionListener
     {
         $problem = $this->container->get('Topxia.RepairProblem', ContainerInterface::NULL_ON_INVALID_REFERENCE);
         $exception = $event->getException();
+        $statusCode = $this->getStatusCode($exception);
 
         $request = $event->getRequest();
         if (!$request->isXmlHttpRequest()) {
             $exception = $this->convertException($exception);
             $user = $this->getUser();
-            $statusCode = $this->getStatusCode($exception);
             if ($statusCode === Response::HTTP_FORBIDDEN && empty($user)) {
                 $response = new RedirectResponse($this->container->get('router')->generate('login'));
                 $event->setResponse($response);
