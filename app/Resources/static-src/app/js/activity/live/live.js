@@ -1,6 +1,5 @@
 import ActivityEmitter from "../activity-emitter";
-class LiveShow {
-
+export default class LiveShow {
   constructor() {
     this.init();
   }
@@ -158,5 +157,3 @@ class LiveShow {
     return content;
   }
 }
-
-export default  LiveShow;

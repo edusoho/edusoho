@@ -4,105 +4,105 @@ let myChart = echarts.init(document.getElementById('lesson-dashboard-container')
 
 // 指定图表的配置项和数据
 let option = {
-  tooltip: {
-    trigger: 'axis',
-    formatter: function (params) {
-      let rate = 0;
+    tooltip : {
+        trigger: 'axis',
+        formatter: function(params) {
+            var rate = 0;
 
-      //求完成率
-      let learningNum = parseInt(params[1].value);
-      let learnedNum = parseInt(params[0].value);
-      let totalNum = learnedNum + learningNum;
-      if (totalNum > 0) {
-        rate = ((learnedNum / totalNum) * 100).toFixed(1);
-      } else {
-        rate = 0;
-      }
+            //求完成率
+            var learningNum = parseInt(params[1].value);
+            var learnedNum = parseInt(params[0].value);
+            var totalNum = learnedNum + learningNum;
+            if (totalNum > 0) {
+                rate = ((learnedNum/totalNum) * 100).toFixed(1);
+            } else {
+                rate = 0;
+            }
 
-      let circle1 = '<span style="display:inline-block;margin-right:5px;'
-        + 'border-radius:10px;width:9px;height:9px;background-color:' + params[0].color + '"></span>';
-      let circle2 = '<span style="display:inline-block;margin-right:5px;'
-        + 'border-radius:10px;width:9px;height:9px;background-color:' + params[1].color + '"></span>';
-      let circle3 = '<span style="display:inline-block;margin-right:5px;'
-        + 'border-radius:10px;width:9px;height:9px;background-color:#c23531' + '"></span>';
+            var circle1 = '<span style="display:inline-block;margin-right:5px;'
+                + 'border-radius:10px;width:9px;height:9px;background-color:' + params[0].color + '"></span>';
+            var circle2 = '<span style="display:inline-block;margin-right:5px;'
+                + 'border-radius:10px;width:9px;height:9px;background-color:' + params[1].color + '"></span>';
+            var circle3 = '<span style="display:inline-block;margin-right:5px;'
+                + 'border-radius:10px;width:9px;height:9px;background-color:#c23531' + '"></span>';
 
-      let titles = $container.data('titles');
-      let remarks = $container.data('remarks');
-      let html = params[0].name + "：" + remarks[titles.indexOf(params[0].name)] + '</br>';
-      let val1 = isNaN(learnedNum) ? '-' : learnedNum;
-      let val2 = isNaN(learningNum) ? '-' : learningNum;
-      html += circle1 + params[0].seriesName + ' : ' + val1 + '</br>';
-      html += circle2 + params[1].seriesName + ' : ' + val2 + '</br>';
-      html += circle3 + '完成率 : ' + rate + '%';
-      return html;
+            var titles = $container.data('titles');
+            var remarks = $container.data('remarks');
+            var html = params[0].name + "：" + remarks[titles.indexOf(params[0].name)] + '</br>';
+            var val1 = isNaN(learnedNum)? '-' : learnedNum;
+            var val2 = isNaN(learningNum)? '-' : learningNum;
+            html += circle1+params[0].seriesName+' : '+val1+'</br>';
+            html += circle2+params[1].seriesName+' : '+val2+'</br>';
+            html += circle3+'完成率 : '+rate+'%';
+            return html;
+        },
+        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+        }
     },
-    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-      type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-    }
-  },
-  legend: {
-    data: ['已学完', '学习中']
-  },
-  grid: {
-    left: '3%',
-    right: '4%',
-    bottom: '3%',
-    containLabel: true
-  },
-  xAxis: {
-    name: '人',
-    type: 'value',
-    interval: 1
-  },
-  yAxis: [
-    {
-      name: '任务',
-      type: 'category',
-      axisLabel: {
-        margin: 15
-      },
-      data: $container.data('titles')
-    }
-  ],
-  series: [
-    {
-      name: '已学完',
-      type: 'bar',
-      stack: '总量',
-      label: {
-        normal: {
-          show: false,
-          position: 'insideRight'
-        }
-      },
-      itemStyle: {
-        normal: {
-          color: '#4CAF50'
-        }
-      },
-      data: $container.data('finishedNum')
+    legend: {
+        data: ['已学完', '学习中']
     },
-    {
-      name: '学习中',
-      type: 'bar',
-      stack: '总量',
-      label: {
-        normal: {
-          show: false,
-          position: 'insideRight',
-          formatter: function (params) {
-            return params.value == 0 ? '' : params.value;
-          }
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis:  {
+        name: '人',
+        type: 'value',
+        minInterval: 1
+    },
+    yAxis: [
+        {
+            name: '任务',
+            type: 'category',
+            axisLabel: {
+                margin: 15
+            },
+            data: $container.data('titles')
         }
-      },
-      itemStyle: {
-        normal: {
-          color: '#FFC108'
+    ],
+    series: [
+        {
+            name: '已学完',
+            type: 'bar',
+            stack: '总量',
+            label: {
+                normal: {
+                    show: false,
+                    position: 'insideRight'
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: '#4CAF50'
+                }
+            },
+            data: $container.data('finishedNum')
+        },
+        {
+            name: '学习中',
+            type: 'bar',
+            stack: '总量',
+            label: {
+                normal: {
+                    show: false,
+                    position: 'insideRight',
+                    formatter: function (params) {
+                        return params.value == 0 ? '':params.value;
+                    }
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: '#FFC108'
+                }
+            },
+            data: $container.data('learnNum')
         }
-      },
-      data: $container.data('learnNum')
-    }
-  ]
+    ]
 };
 
 // 使用刚指定的配置项和数据显示图表。

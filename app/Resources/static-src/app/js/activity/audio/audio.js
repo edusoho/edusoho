@@ -1,12 +1,19 @@
 import EsMessenger from '../../../common/messenger';
 import ActivityEmitter from '../activity-emitter';
 
-export default class VideoPlay {
-  constructor(elment) {
+export default class AudioPlay {
+  constructor(elment, recorder) {
     this.dom = $(elment);
     this.data = this.dom.data();
+    this.recorder = recorder;
     this.player = {};
     this.emitter = new ActivityEmitter();
+  }
+
+  record() {
+    this.intervalId = setInterval(() => {
+      this.recorder.addAudioPlayerCounter(this.emitter, this.player);
+    }, 1000);
   }
 
   play() {
@@ -31,6 +38,8 @@ export default class VideoPlay {
     });
 
     messenger.on("timechange", (msg) => {})
+
+    this.record();
   }
 
   _onFinishLearnTask(msg) {

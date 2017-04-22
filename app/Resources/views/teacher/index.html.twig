@@ -1,14 +1,9 @@
 {% extends 'layout.html.twig' %}
-
 {% import 'macro.html.twig' as web_macro %}
 {% block title %}{{'师资介绍'|trans}} - {{ parent() }}{% endblock %}
-
 {% block keywords %}{{'师资介绍%name%'|trans({'%name%': setting('site.name')})}} {% endblock %}
 {% block description %}{{'%name%的师资介绍。'|trans({'%name%': setting('site.name')})}}{% endblock %}
-
 {% set bodyClass = 'teacherpage bg-blank' %}
-{% do load_script('teacher/explore') %}
-
 {% do script(['app/js/teacher/index.js']) %}
 
 {% block top_content %}

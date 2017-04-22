@@ -73,7 +73,7 @@
             <span class="course-detail-title vertical-middle mb10">教学计划</span>
             <ul class="nav nav-pills nav-pills-sm nav-pills-transparent course-detail-nav">
               {% set current_course = course %}
-              {% for course in  courses %}
+              {% for course in courses if course.status == 'published' or previewAs %}
                 <li class="mb10 mr10 {% if current_course.id == course.id %} active {% endif %}">
                   <a href="{{ path('course_show',{id: course.id, previewAs: previewAs}) }}" title="{{ course.title }}">{{ course.title|sub_text(10) }}
                   </a>
