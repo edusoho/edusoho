@@ -7,7 +7,6 @@ use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Topxia\Service\Common\ServiceKernel;
@@ -33,7 +32,6 @@ class ExceptionListener
 
         $request = $event->getRequest();
         if (!$request->isXmlHttpRequest()) {
-
             $exception = $this->convertException($exception);
             $user = $this->getUser();
             if ($statusCode === Response::HTTP_FORBIDDEN && empty($user)) {
@@ -124,7 +122,7 @@ class ExceptionListener
 
         $this->logger = new Logger('AjaxExceptionListener');
         $this->logger->pushHandler(
-            new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir') . '/dev.log', Logger::DEBUG)
+            new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir').'/dev.log', Logger::DEBUG)
         );
 
         return $this->logger;
