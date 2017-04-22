@@ -250,7 +250,7 @@ interface CourseSetService
      */
     public function updateCourseSetDefaultCourseId($courseSetId);
 
-    public function unlockCourseSet($id);
+    public function unlockCourseSet($id, $shouldClose = false);
 
     public function updateMaxRate($id, $maxRate);
 

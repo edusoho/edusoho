@@ -57,6 +57,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
         $courseSets = ArrayToolkit::index($courseSets, 'id');
         $parentIds = ArrayToolkit::column($courseSets, 'parentId');
+        $parentIds = array_unique($parentIds);
+
+        // 最早一批班级中的课程是引用，不是复制。处理这种特殊情况
+        if (count($parentIds) == 1 && $parentIds[0] == 0) {
+            $parentIds = ArrayToolkit::column($courseSets, 'id');
+        }
+
         $courseNums = $this->getCourseService()->countCoursesGroupByCourseSetIds($parentIds);
         $courseNums = ArrayToolkit::index($courseNums, 'courseSetId');
 
@@ -64,7 +71,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $curCourseSet = $courseSets[$course['courseSetId']];
 
             $course['courseSet'] = $curCourseSet;
-            $course['courseNum'] = $courseNums[$curCourseSet['parentId']]['courseNum'];
+            if ($curCourseSet['parentId'] == 0) {
+                $course['courseNum'] = $courseNums[$curCourseSet['id']]['courseNum'];
+            } else {
+                $course['courseNum'] = $courseNums[$curCourseSet['parentId']]['courseNum'];
+            }
+
             $course['parentCourseSetId'] = $curCourseSet['parentId'];
         }
 
@@ -683,7 +695,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 if (empty($classroomRef)) {
                     continue;
                 }
-                $this->getCourseSetService()->unlockCourseSet($classroomRef['courseSetId']);
+                // 最早一批班级中的课程是引用，不是复制。处理这种特殊情况
+                if ($classroomRef['parentCourseId'] != 0) {
+                    $this->getCourseSetService()->unlockCourseSet($classroomRef['courseSetId'], true);
+                }
+
                 $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $courseId);
                 $this->dispatchEvent(
                     'classroom.course.delete',
