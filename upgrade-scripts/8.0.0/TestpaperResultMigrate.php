@@ -50,7 +50,7 @@ class TestpaperResultMigrate extends AbstractMigrate
             return $nextPage;
         }
 
-        $this->updateTestpaperResult();
+        //$this->updateTestpaperResult();
     }
 
     private function updateTestpaperResult()

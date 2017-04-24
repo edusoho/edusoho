@@ -97,6 +97,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'UpdateCourseChapter',
 
             'TestpaperResultMigrate',
+            'TestpaperResultUpdateOneMigrate',
+            'TestpaperResultUpdateTwoMigrate',
             'TestpaperItemResultMigrate',
             'UpdateTestpaperItemResultMigrate',
 
