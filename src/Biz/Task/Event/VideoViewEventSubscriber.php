@@ -28,6 +28,10 @@ class VideoViewEventSubscriber extends EventSubscriber implements EventSubscribe
         }
         $activityExt = $this->getActivityService()->getActivityConfig($activity['mediaType'])->get($activity['mediaId']);
 
+        if (empty($activityExt['file'])) {
+            return false;
+        }
+
         $file = $activityExt['file'];
 
         $taskViewLog = array(

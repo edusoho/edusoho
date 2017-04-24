@@ -8,7 +8,7 @@
             {{ 'now'|date('d') }}&nbsp;{{ 'now'|date('M') }}
           </span>
           {% else %}
-              <span class="date">{{ 'now'|date('m') }}{{'月'|trans}}{{ 'now'|date('d') }}{{'日'|trans}}</span>
+              <span class="date">{{ 'now'|date('m') }}{{'date.month'|trans}}{{ 'now'|date('d') }}{{'date.day'|trans}}</span>
           {% endif %}
         <!-- <br> -->
         <!-- 星期{{week}} -->
@@ -18,7 +18,7 @@
             {{ 'now'|date('d') }}&nbsp;{{ 'now'|date('M') }}
           </span>
           {% else %}
-              <span class="date">{{ 'now'|date('m') }}{{'月'|trans}}{{ 'now'|date('d') }}{{'日'|trans}}</span>
+              <span class="date">{{ 'now'|date('m') }}{{'date.month'|trans}}{{ 'now'|date('d') }}{{'date.day'|trans}}</span>
           {% endif %}
         <!-- <br>漏签<span style="color:red;">{{notSign}}</span>天 -->
       {% endif %}
@@ -26,13 +26,13 @@
         {% if not isSignedToday %}
           <div class="sign-area"  data-role="sign">
             <a class="btn-signin" href="javascript:;">
-              {{'签到'|trans}}
+              {{'classroom.member_sign'|trans}}
             </a>
           </div>
         {% else %}
           <div class="sign-area" data-role="signed" onclick="return false;" >
-            <a class="btn-signin after" >{{'已签到'|trans}}
-            <br>{{'连续%keepDays%天'|trans({'%keepDays%':userSignStatistics.keepDays})}}</a>
+            <a class="btn-signin after" >{{'classroom.member_signed'|trans}}
+            <br>{{'classroom.sign_keep_days'|trans({'%keepDays%':userSignStatistics.keepDays})}}</a>
           </div>
         {% endif %}
       </div>
@@ -48,7 +48,7 @@
           <table class="sign_succ_table ">
             <thead align="center">
               <tr class="sign_succ_canlerdar_head">
-                <td>{{'日'|trans}}</td><td>{{'一'|trans}}</td><td>{{'二'|trans}}</td><td>{{'三'|trans}}</td><td>{{'四'|trans}}</td><td>{{'五'|trans}}</td><td>{{'六'|trans}}</td>
+                <td>{{'classroom.sign_canlerdar.sun'|trans}}</td><td>{{'classroom.sign_canlerdar.mon'|trans}}</td><td>{{'classroom.sign_canlerdar.tue'|trans}}</td><td>{{'classroom.sign_canlerdar.wed'|trans}}</td><td>{{'classroom.sign_canlerdar.thu'|trans}}</td><td>{{'classroom.sign_canlerdar.fri'|trans}}</td><td>{{'classroom.sign_canlerdar.sat'|trans}}</td>
               </tr>
             </thead>
             <tbody align="center" class="sign_succ_canlerdar_days j_canlerdar_days">
@@ -57,13 +57,13 @@
         </div>
         <div class="sign_tip_boards">
           <div class="mlm mtm">
-            <p class=" color-gray">{{'签到排名：今日第'|trans}}<span class="today-rank"></span>{{'个签到'|trans}}</p>
+            <p class=" color-gray">{{ 'classroom.sign_rank_tips'|trans({'%signRank%': ''})|raw }}</p>
           </div>
           <div class="mlm">
-            <p class=" color-gray">{{'今日签到人数：'|trans}}<span class="signed-number"></span></p>
+            <p class=" color-gray">{{'classroom.today_sign_num'|trans}}：<span class="signed-number"></span></p>
           </div>
           <div class="mlm">
-            <p class=" color-gray">{{'连续签到：'|trans}}<span class="keep-days"></span>{{'天'|trans}}</p>
+            <p class=" color-gray">{{ 'classroom.sign_keep_days_tips'|trans({'%keepDays%': ''})|raw }}</p>
           </div>
         </div>
       </div>

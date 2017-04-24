@@ -37,7 +37,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
     {
         $user = $this->getUserService()->getCurrentUser();
 
-        $level = $this->getLevelService()->getLevel($fields['targetId']);
+        $level = $this->getLevelService()->getLevel($targetId);
 
         if (empty($level)) {
             throw new Exception('找不到会员等级!');
@@ -168,7 +168,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         $amount = $totalPrice;
         //优惠码优惠价格
 
-        if ($orderData['couponCode'] && trim($orderData['couponCode']) != '') {
+        if (!empty($orderData['couponCode']) && trim($orderData['couponCode']) != '') {
             $couponResult = $this->afterCouponPay(
                 $orderData['couponCode'],
                 'vip',

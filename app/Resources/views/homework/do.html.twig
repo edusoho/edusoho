@@ -16,11 +16,11 @@
 {% block paper_warning %}
   {% if app.user and app.user.id == paperResult.userId|default(null) %}
     {% if paperResult.status == 'reviewing' %}
-      <div class="alert alert-warning">{{'老师正在批阅作业，批阅完成后会以站内私信通知您批阅结果，请稍等。'|trans}}</div>
+      <div class="alert alert-warning">{{'course.plan_task.activity_manage.homework.reviewing_tips'|trans}}</div>
     {% elseif paperResult.status == 'finished' %}
       {% if paperResult.teacherSay %}
         <div class="alert alert-success">
-          <div class=""><strong>{{'评语：'|trans}}</strong></div>
+          <div class=""><strong>{{'course.plan_task.activity_manage.homework.teacher_say'|trans}}</strong></div>
           <div class="mtm">{{ paperResult.teacherSay|bbCode2Html|raw }}</div>
         </div>
       {% endif %}
@@ -31,7 +31,7 @@
 {% block paper_body %}
   <div class="panel panel-default">
     <div class="panel-heading">
-      {{ '作业'|trans }}{{'题目'|trans}} <small class="color-gray">{{ '共%itemCount%题'|trans({'%itemCount%':paper.itemCount}) }}</small>
+      {{ 'course.plan_task.activity_manage.homework.question_total'|trans({'%itemCount%':paper.itemCount})|raw }}
     </div>
 
     <div class="panel-body">
@@ -60,17 +60,17 @@
         <div class="modal-body task-state-modal">
           <div class="title font-blod">
             <i class="es-icon es-icon-zanting1 color-warning"></i>
-            {{'确认提交'|trans}}
+            {{'course.plan_task.exercise.confirm_submit'|trans}}
           </div>
           <div class="content">
             <div class="text-16">
-              {{'您真的要提交吗？'|trans}}
+              {{'course.plan_task.exercise.confirm_submit_tips'|trans}}
             </div>
           </div>
           <div class="text-right mt20">
-            <a href="javascript:;" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</a>
-            <button class="btn btn-primary" id="testpaper-finish-btn" data-loading-text="{{'正在提交, 请稍等'|trans}}..." data-role="paper-submit" data-url="{{ path('homework_finish', { resultId: paperResult.id|default(0) }) }}" data-goto="{{ path('homework_result_show', { resultId: paperResult.id|default(0) }) }}">
-              {{'确认提交'|trans}}</button>
+            <a href="javascript:;" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</a>
+            <button class="btn btn-primary" id="testpaper-finish-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" data-role="paper-submit" data-url="{{ path('homework_finish', { resultId: paperResult.id|default(0) }) }}" data-goto="{{ path('homework_result_show', { resultId: paperResult.id|default(0) }) }}">
+              {{'course.plan_task.exercise.confirm_submit'|trans}}</button>
           </div>
         </div>
       </div>

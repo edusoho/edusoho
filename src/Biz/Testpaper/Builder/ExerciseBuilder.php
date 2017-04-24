@@ -73,7 +73,7 @@ class ExerciseBuilder implements TestpaperBuilderInterface
                 );
                 $task = $this->getCourseTaskService()->searchTasks($conditions, null, 0, 1);
                 if (!$task) {
-                    break;
+                    return;
                 }
 
                 $conditions = array(

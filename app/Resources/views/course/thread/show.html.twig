@@ -1,16 +1,14 @@
 {% extends 'course/course-show.html.twig' %}
-
 {% block title %} {{thread.title}} - {{ parent() }}{% endblock %}
-
-{% do load_script('course/thread-show') %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/course/thread-show/index.js'])%}
 
 {% set nav = 'threads' %}
 
 {% block detail_content %}
 
   <ul class="breadcrumb">
-    <li><a href="{{ path('my_course_show', {id: course.id, 'tab': 'threads'}) }}">{{'讨论区'|trans}}</a></li>
-    <li class="active">{% if thread.type == 'question' %}{{'问答'|trans}}{% else %}{{'话题'|trans}}{% endif %}</li>
+    <li><a href="{{ path('my_course_show', {id: course.id, 'tab': 'threads'}) }}">{{'course.thread'|trans}}</a></li>
+    <li class="active">{% if thread.type == 'question' %}{{'thread.hover_tips.question'|trans}}{% else %}{{'thread.hover_tips.thread'|trans}}{% endif %}</li>
   </ul>
 
   <div class="thread">
@@ -18,7 +16,7 @@
       {{ web_macro.user_avatar(author, 'pull-right') }}
       <h2 class="thread-title">
         {% if thread.type == 'question' %}
-        <span class="label label-info">{{'问'|trans}}</span>
+        <span class="label label-info">{{'thread.status.question'|trans}}</span>
         {% endif %}
         {{ thread.title }}
       </h2>
@@ -27,10 +25,10 @@
         <span class="bullet mhs">•</span>
         {{ thread.createdTime|smart_time }}
         <span class="bullet mhs">•</span>
-        {{'%hitNum%次浏览'|trans({'%hitNum%': thread.hitNum})}}
+        {{'course.thread.hit_times'|trans({'%hitNum%': thread.hitNum})}}
         {% if task|default(null) %}
           <span class="bullet mhs">•</span>
-          <a class="link-primary" href="{{ path('course_task_show', {courseId: thread.courseId, id:thread.taskId}) }}" title="{{task.title}}">{{'任务%number%'|trans({'%number%': task.seq})}}</a>
+          <a class="link-primary" href="{{ path('course_task_show', {courseId: thread.courseId, id:thread.taskId}) }}" title="{{task.title}}">{{'course.thread.mission_seq'|trans({'%seq%': task.seq})}}</a>
         {% endif %}
 
       </div>
@@ -41,19 +39,19 @@
 
     {% if isManager or app.user.id == author.id %}
       <div class="thread-footer" >
-        <a href="{{ path('course_thread_edit', {courseId:thread.courseId, threadId:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> {{'编辑'|trans}}</a>
+        <a href="{{ path('course_thread_edit', {courseId:thread.courseId, threadId:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> {{'thread.edit_btn'|trans}}</a>
         {% if isManager %}
-          <a href="javascript:;" class="btn btn-link" data-url="{{ path('course_thread_delete', {courseId:course.id, threadId:thread.id}) }}" data-after-url="{{ path('my_course_show', {id:course.id, tab: 'threads'}) }}" data-role="confirm-btn" data-confirm-message="{{'您真的要删除该帖吗？'|trans}}"><span class="glyphicon glyphicon-remove-sign"></span> {{'删除'|trans}}</a>
+          <a href="javascript:;" class="btn btn-link" data-url="{{ path('course_thread_delete', {courseId:course.id, threadId:thread.id}) }}" data-after-url="{{ path('my_course_show', {id:course.id, tab: 'threads'}) }}" data-role="confirm-btn" data-confirm-message="{{'thread.delete_confirm_message'|trans}}"><span class="glyphicon glyphicon-remove-sign"></span> {{'thread.delete_btn'|trans}}</a>
           {% if thread.isStick %}
-            <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_unstick', { courseId:course.id, threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="{{'您真的要取消置顶该帖吗？'|trans}}"><span class="glyphicon glyphicon-minus-sign"></span> {{'取消置顶'|trans}}</a>
+            <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_unstick', { courseId:course.id, threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="{{'thread.stick_cancel_confirm_message'|trans}}"><span class="glyphicon glyphicon-minus-sign"></span> {{'thread.stick_cancel_btn'|trans}}</a>
           {% else %}
-            <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_stick', {courseId:course.id, threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="{{'您真的要置顶该帖吗？'|trans}}"><span class="glyphicon glyphicon-circle-arrow-up"></span> {{'置顶'|trans}}</a>
+            <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_stick', {courseId:course.id, threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="{{'thread.stick_confirm_message'|trans}}"><span class="glyphicon glyphicon-circle-arrow-up"></span> {{'thread.stick_btn'|trans}}</a>
           {% endif %}
 
           {% if thread.isElite %}
-            <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_unelite', {courseId:course.id, threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="{{'您真的要取消加精该帖吗？'|trans}}"><span class="glyphicon glyphicon-hand-right"></span> {{'取消加精'|trans}}</a>
+            <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_unelite', {courseId:course.id, threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="{{'thread.cancel_essence_confirm_message'|trans}}"><span class="glyphicon glyphicon-hand-right"></span> {{'thread.cancel_essence_btn'|trans}}</a>
           {% else %}
-            <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_elite', {courseId:course.id, threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="{{'您真的要加精该帖吗？'|trans}}"><span class="glyphicon glyphicon-thumbs-up"></span>  {{'加精'|trans}}</a>
+            <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_elite', {courseId:course.id, threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="{{'thread.set_essence_confirm_message'|trans}}"><span class="glyphicon glyphicon-thumbs-up"></span>  {{'thread.set_essence_btn'|trans}}</a>
           {% endif %}
         {% endif %}
       </div>
@@ -62,7 +60,7 @@
 
   <div class="thread-posts">
     {% if thread.type == 'question' and elitePosts %}
-      <h3 class="thread-posts-heading"><span class="glyphicon glyphicon-share-alt"></span> {{'教师的答案'|trans}}</h3>
+      <h3 class="thread-posts-heading"><span class="glyphicon glyphicon-share-alt"></span> {{'course.thread.teacher_answer'|trans}}</h3>
       <ul class="thread-post-list media-list">
         {% for post in elitePosts %}
           {% set author = users[post.userId] %}
@@ -73,7 +71,7 @@
 
     <h3 class="thread-posts-heading">
       <span class="glyphicon glyphicon-share-alt"></span>
-      <span id="thread-post-num">{{ thread.postNum }}</span> {% if thread.type == 'question' %}{{'所有答案'|trans}}{% else %}{{'回复'|trans}}{% endif %}
+      <span id="thread-post-num">{{ thread.postNum }}</span> {% if thread.type == 'question' %}{{'thread.all_answer'|trans}}{% else %}{{'thread.reply'|trans}}{% endif %}
     </h3>
 
     <ul class="thread-post-list media-list">
@@ -81,14 +79,18 @@
         {% set author = users[post.userId] %}
         {% include 'course/thread/post-list-item.html.twig' %}
       {% else %}
-        <li class="empty">{{'还没有'|trans}}{% if thread.type == 'question' %}{{'答案'|trans}}{% else %}{{'回复'|trans}}{% endif %}，{{'赶快添加一个吧！'|trans}}</li>
+        {% if thread.type == 'question' %}
+          <li class="empty">{{ 'course.thread.empty'|trans({'%thread%': 'thread.answer'|trans }) }}</li>
+        {% else %}
+          <li class="empty">{{ 'course.thread.empty'|trans({'%thread%': 'thread.reply'|trans }) }}</li>
+        {% endif %}
       {% endfor %}
     </ul>
 
     {{ web_macro.paginator(paginator) }}
 
     {% if isMemberNonExpired %}
-      <h3 class="thread-posts-heading"><span class="glyphicon glyphicon-plus"></span> {{'添加'|trans}}{% if thread.type == 'question' %}{{'答案'|trans}}{% else %}{{'回复'|trans}}{% endif %}</h3>
+      <h3 class="thread-posts-heading"><span class="glyphicon glyphicon-plus"></span> {{'thread.add_btn'|trans}}{% if thread.type == 'question' %}{{'thread.answer'|trans}}{% else %}{{'thread.reply'|trans}}{% endif %}</h3>
       {{ render(controller('AppBundle:Course/Thread:post', {courseId:course.id, threadId:thread.id})) }}
     {% endif %}
 

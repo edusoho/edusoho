@@ -45,6 +45,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     {
         $course = $event->getSubject();
         $this->getCourseSetService()->updateCourseSetMinAndMaxPublishedCoursePrice($course['courseSetId']);
+        $this->getCourseSetService()->updateCourseSetDefaultCourseId($course['courseSetId']);
     }
 
     public function onTaskCreate(Event $event)

@@ -1,9 +1,7 @@
 {% extends 'settings/layout.html.twig' %}
-
 {% block title %}{{'user.settings.email'|trans}} - {{ parent() }}{% endblock %}
 
-{% set script_controller = 'settings/email' %}
-
+{% do script(['libs/jquery-validation.js','app/js/settings/email/index.js']) %}
 {% set side_nav = 'email' %}
 
 {% block main %}

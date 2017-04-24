@@ -1,25 +1,25 @@
 {% extends 'course-manage/dashboard/layout.html.twig' %}
-
 {% set submenu = 'course_dashboard' %}
-{% do load_script('course-manage/dashboard/course') %}
+{% do script(['app/js/course-manage/dashboard/course/index.js'])%}
+
 {% block dashboard %}
   <ul class="course-dashboard-header course-dashboard-ul">
     <li>
-      <div class="title">{{ '学员数'|trans }}</div>
+      <div class="title">{{ 'course.dashboard.stunents_numbers'|trans }}</div>
       <span class="number js-student-num">{{ summary.studentNum }}</span>
     </li>
     <li>
-      <div class="title">{{ '完成人数'|trans }}</div>
+      <div class="title">{{ 'course.dashboard.finished_numbers'|trans }}</div>
       <span class="number js-finished-num">{{ summary.finishedNum }}</span>
     </li>
     <li>
-      <div class="title">{{ '完课率'|trans }}
+      <div class="title">{{ 'course.dashboard.finished_course_rate'|trans }}
         <span class="link-medium es-icon es-icon-help ml5"
               data-container="body"
               data-toggle="popover"
               data-trigger="hover"
               data-placement="top"
-              data-content="学完整个教学计划的人数 ÷ 该教学计划学员总数">
+              data-content="{{'course.dashboard.finished_course_rate_tips'|trans}}">
         </span>
       </div>
       <span class="number js-finished-rate">{{ summary.finishedRate }}%</span>
@@ -28,15 +28,15 @@
 
   <ul class="course-dashboard-footer course-dashboard-ul">
     <li>
-      <div class="title">{{ '笔记数'|trans }}</div>
+      <div class="title">{{ 'course.dashboard.notes_numbers'|trans }}</div>
       <span class="number js-note-num">{{ summary.noteNum }}</span>
     </li>
     <li>
-      <div class="title">{{ '提问数'|trans }}</div>
+      <div class="title">{{ 'course.dashboard.questions_numbers'|trans }}</div>
       <span class="number js-ask-num">{{ summary.askNum }}</span>
     </li>
     <li>
-      <div class="title">{{ '话题数'|trans }}</div>
+      <div class="title">{{ 'course.dashboard.discussions_numbers'|trans }}</div>
       <span class="number js-discussion-num">{{ summary.discussionNum }}</span>
     </li>
   </ul>

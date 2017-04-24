@@ -8,9 +8,9 @@
 <div class="panel panel-default notice-panel">
   <div class="panel-body">
     <i class="es-icon es-icon-infooutline text-primary"></i>
-    <div class="text-md mbl">尚未启用云搜索</div>
-    <div class="color-gray notice-desc">  云搜索提供强大的全文搜索引擎，帮助学员轻松、精确的搜索课程、老师、小组话题、资讯。</div>
-    <a href="" class="btn btn-primary btn-lg notice-btn">立即启用</a>
+    <div class="text-md mbl">{{'admin.edu_cloud.edu_search.no_enabled_search'|trans}}</div>
+    <div class="color-gray notice-desc">  {{'admin.edu_cloud.edu_search.search_tips'|trans}}</div>
+    <a href="" class="btn btn-primary btn-lg notice-btn">{{'admin.edu_cloud.edu_search.start_enabled_btn'|trans}}</a>
   </div>
 </div>
 
@@ -21,7 +21,9 @@
     <div class="row form-group">
       <div class="help-block">
         </br></br>
-        <p style="text-align:center;font-size:16px">{{'云搜索服务由EduSoho教育云提供'|trans}} <a href="http://open.edusoho.com/educloud" target="_blank">{{'了解详情'|trans}}</a></p>
+        <p style="text-align:center;font-size:16px">
+          {{'admin.edu_cloud.edu_search.power_by'|trans|raw}}
+        </p>
         </br>
       </div>
     </div>
@@ -32,79 +34,74 @@
       {{ render(controller('AppBundle:Admin/Default:validateDomain')) }}
       {% if data.status == 'unlink' %}
         <div class="text-center">
-          <h1 class="text-muted">{{'网络问题，无法连接'|trans}}{{ 'EduSoho'|copyright_less }}{{'开放云平台'|trans}}</h1>
+          <h1 class="text-muted">{{'admin.edu_cloud.edu_search.connect_failed_tips'|trans({'%edusoho%':'EduSoho'|copyright_less})}}</h1>
         </div>
       {% else %}
         <div class="row form-group search-button">
           {% if data.status == 'unconnect' %}
             <div class="col-md-2">
-              <button type="submit" class="btn btn-default" name="upload_mode" value="cloud" disabled="disabled">{{'启用云搜索'|trans}}
+              <button type="submit" class="btn btn-default" name="upload_mode" value="cloud" disabled="disabled">{{'admin.edu_cloud.edu_search.enable_cloud_search'|trans}}
               </button>
             </div>
             <div class="col-md-10">
-              <span class="text-danger text-sm">{{'抱歉，您尚未接入教育云，不能使用云搜索服务！'|trans}}</span>
-              <p><a href="http://open.edusoho.com/educloud" target="_blank">{{'立即接入'|trans}}</a></p>
+              <span class="text-danger text-sm">{{'admin.edu_cloud.edu_search.use_failed_tips'|trans}}</span>
+              <p><a href="http://open.edusoho.com/educloud" target="_blank">{{'admin.edu_cloud.edu_search.connect_btn'|trans}}</a></p>
             </div>
           {% elseif data.status == 'unbinded' %}
             <div class="col-md-2">
-              <button type="submit" class="btn btn-default" name="upload_mode" value="cloud" disabled="disabled">{{'启用云搜索'|trans}}
+              <button type="submit" class="btn btn-default" name="upload_mode" value="cloud" disabled="disabled">{{'admin.edu_cloud.edu_search.enable_cloud_search'|trans}}
               </button>
             </div>
             <div class="col-md-10">
-              <span class="text-danger text-sm">{{'未绑定授权域名不能开通云搜索！'|trans}}</span>
-              <p><a href="{{ path('admin_setting_cloud') }}">{{'立即设置'|trans}}</a></p>
+              <span class="text-danger text-sm">{{'admin.edu_cloud.edu_search.unbind_url_tips'|trans}}</span>
+                <p><a href="{{ path('admin_setting_cloud') }}">{{'admin.edu_cloud.edu_search.start_setup'|trans}}</a></p>
             </div>
           {% elseif data.status == 'binded_error' %}
             <div class="col-md-2">
-              <button type="submit" class="btn btn-default" name="upload_mode" value="cloud" disabled="disabled">{{'启用云搜索'|trans}}
+              <button type="submit" class="btn btn-default" name="upload_mode" value="cloud" disabled="disabled">{{'admin.edu_cloud.edu_search.enable_cloud_search'|trans}}
               </button>
             </div>
             <div class="col-md-10">
-              <span class="text-danger text-sm">{{'当前域名与授权域名不符，不能开通云搜索！'|trans}}</span>
-              <p><a href="{{ path('admin_setting_cloud') }}" target="_blank">{{'立即设置'|trans}}</a></p>
+              <span class="text-danger text-sm">{{'admin.edu_cloud.edu_search.unmatch_url_tips'|trans}}</span>
+              <p><a href="{{ path('admin_setting_cloud') }}" target="_blank">{{'admin.edu_cloud.edu_search.start_setup'|trans}}</a></p>
             </div>
           {% elseif data.status == 'closed' %}
             <div class="col-md-2">
               <a class="btn btn-primary mhs" data-toggle="modal" data-target="#modal"
-                 data-url="{{ path('admin_edu_cloud_search_clause') }}">{{'启用云搜索'|trans}}</a>
+                 data-url="{{ path('admin_edu_cloud_search_clause') }}">{{'admin.edu_cloud.edu_search.enable_cloud_search'|trans}}</a>
             </div>
 
           {% else %}
             {% if not setting('cloud_search.search_enabled') %}
               <div class="col-md-2 control-cloud">
-                <a class="btn btn-primary mhs" href="{{ path('admin_edu_cloud_search_open') }}">{{'启用云搜索'|trans}}</a>
+                <a class="btn btn-primary mhs" href="{{ path('admin_edu_cloud_search_open') }}">{{'admin.edu_cloud.edu_search.enable_cloud_search'|trans}}</a>
               </div>
             {% elseif setting('cloud_search.search_enabled') and setting('cloud_search.status') == 'waiting' %}
               <div class="col-md-10 form-group control-cloud">
-                <span class="text-warning">{{'正在索引数据，预计1～3天完成'|trans}}</span>
+                <span class="text-warning">{{'admin.edu_cloud.edu_search.index.index_tips'|trans}}</span>
               </div>
             {% elseif setting('cloud_search.search_enabled') and setting('cloud_search.status') == 'ok' %}
               <div class="col-md-2 control-cloud success">
-                <span class="text-success">{{'已启用'|trans}}</span>
+                <span class="text-success">{{'admin.edu_cloud.edu_search.search_enabled'|trans}}</span>
               </div>
               <div class="controls col-md-8 cloud-warning">
-                <a class="btn btn-default btn-sm mhs" href="{{ path('admin_edu_cloud_search_close') }}">{{'关闭'|trans}}</a>
+                <a class="btn btn-default btn-sm mhs" href="{{ path('admin_edu_cloud_search_close') }}">{{'form.btn.cancel'|trans}}</a>
               </div>
             {% endif %}
 
             {% if setting('developer.debug') %}
               <div class="col-md-2">
                 <a class="btn btn-primary mhs" data-toggle="modal" data-target="#modal"
-                   data-url="{{ path('admin_edu_cloud_search_reapply') }}">{{'重建索引'|trans}}</a>
+                   data-url="{{ path('admin_edu_cloud_search_reapply') }}">{{'admin.edu_cloud.edu_search.rebuild_index.rebuild_btn'|trans}}</a>
               </div>
             {% endif %}
           {% endif %}
         </div>
 
-        {#<div class="help-block">{{'云搜索提供强大的全文搜索引擎，帮助学员轻松、精确的搜索课程、老师、小组话题、资讯。'|trans}}</div>#}
+        {#<div class="help-block">{{'admin.edu_cloud.edu_search.search_tips'|trans}}</div>#}
 
-        <h4>{{'搜索范围说明'|trans}}</h4>
-
-        －{{'课程：包括课程标题、课程简介、课时标题等内容关键词全文搜索。'|trans}}<br>
-        －{{'教师：教师姓名、教师头衔。'|trans}}<br>
-        －{{'小组话题：包括话题标题、正文等关键词全文搜索。'|trans}}<br>
-        －{{'资讯：包括资讯标题、正文等关键词全文搜索。'|trans}}<br>
-        －{{'公开课：包括课程标题、课程简介等内容关键词全文搜索。'|trans}}<br>
+        <h4>{{'admin.edu_cloud.edu_search.rage_introduction'|trans}}</h4>
+        {{'admin.edu_cloud.edu_search.rage_introduction_content'|trans|raw}}
       {% endif %}
 
     </form>
@@ -116,15 +113,15 @@
 
 <div class="panel panel-default">
   <div class="panel-heading">
-    基本信息 
+    {{'admin.edu_cloud.edu_search.base_info'|trans}}
   </div>
   <div class="panel-body">
     <div class="pll pbl">
-      累计搜索次数：
+      {{'admin.edu_cloud.edu_search.total_search_times'|trans}}
       <span class="h3 text-primary plm prs">12345</span>次
     </div>
     <div class="pll pbm">
-      今日搜索次数：
+      {{'admin.edu_cloud.edu_search.today_total_search_times'|trans}}
       <span class="color-gray phm text-md">1700 条</span>
     </div>
   </div>
@@ -133,9 +130,9 @@
 <div class="panel panel-default panel-chart">
   <input id="flowItemData" type="hidden" value="{{flowItem|default('')}}"/>
   <div class="panel-heading">
-    搜索行为趋势
-    <span class="text-muted">（最近30天）</span>
-    <a class="pull-right" href="">更多&ensp;></a>
+    {{'admin.edu_cloud.edu_search.flow_item'|trans}}
+    <span class="text-muted">（{{'site.datagrid.filter.last_one_month'|trans}}）</span>
+    <a class="pull-right" href="">{{'admin.edu_cloud.edu_search.flow_item.more_btn'|trans}}&ensp;></a>
   </div>
   <div class="panel-body">
     <div id="searchChart" style="width: 100%;height:400px;"></div>
@@ -144,19 +141,19 @@
 
 
 <div class="page-heading">
-  搜索排行榜
-  <span class="text-muted">（最近30天）</span>
-  <a class="pull-right" href="">更多&ensp;></a>
+  {{'admin.edu_cloud.edu_search.search_rank'|trans}}
+  <span class="text-muted">（{{'site.datagrid.filter.last_one_month'|trans}}）</span>
+  <a class="pull-right" href="">{{'admin.edu_cloud.edu_search.more_btn'}}&ensp;></a>
 </div>
 <div class="row">
   <div class="col-md-6">
     <div class="panel panel-default">
       <div class="panel-heading">
-        热词排行榜
+        {{'admin.edu_cloud.edu_search.hot_words_rank'|trans}}
         <span class="text-muted">（TOP 10）
           <a href="javascript:;" class="glyphicon glyphicon-question-sign text-muted js-twig-widget-tips" class="btn btn-warning" data-trigger="hover"  data-container="body" data-toggle="popover" data-placement="top"  data-content="在云搜索中，关键词被搜索的次数"></a>
         </span>
-        <a class="pull-right" href="">更多&ensp;></a>
+        <a class="pull-right" href="">{{'admin.edu_cloud.edu_search.more_btn'}}&ensp;></a>
       </div>
       <div class="panel-body">
         <table class="table table-hover search-part-table">
@@ -199,11 +196,11 @@
   <div class="col-md-6">
     <div class="panel panel-default">
       <div class="panel-heading">
-        搜索课程落地排行榜
+        {{'admin.edu_cloud.edu_search.hot_courses_rank'|trans}}
         <span class="text-muted">（TOP 10）
           <a href="javascript:;" class="glyphicon glyphicon-question-sign text-muted js-twig-widget-tips" class="btn btn-warning" data-trigger="hover"  data-container="body" data-toggle="popover" data-placement="top"  data-content="在云搜索的结果中，点击进入课程页面的次数"></a>
         </span>
-        <a class="pull-right" href="">更多&ensp;></a>
+        <a class="pull-right" href="">{{'admin.edu_cloud.edu_search.more_btn'}}&ensp;></a>
       </div>
       <div class="panel-body">
         <table class="table table-hover search-part-table">
@@ -247,17 +244,17 @@
 
 <!-- 设置 -->
 <div class="page-heading">
-  云搜索开关
+  {{'admin.edu_cloud.edu_search.enable'|trans}}
 </div>
 <form class="form-horizontal" role="form">
   <div class="form-group">
-    <label for="" class="col-sm-3 control-label">启用云搜索：</label>
+    <label for="" class="col-sm-3 control-label">{{'admin.edu_cloud.edu_search.enable_cloud_search'|trans}}：</label>
     <div class="controls col-md-9 radios">
       <label>
-        <input type="radio" name="cloud_open" value="1"> 开启
+        <input type="radio" name="cloud_open" value="1"> {{'site.datagrid.radios.open'|trans}}
       </label>
       <label>
-        <input type="radio" name="cloud_open" value="0" checked="checked"> 关闭
+        <input type="radio" name="cloud_open" value="0" checked="checked"> {{'site.datagrid.radios.close'|trans}}
       </label>
       <div class="help-block">
         多姿多彩的教学资源，一处搜齐。<a href="">点击这里</a>了解详情。
@@ -266,15 +263,15 @@
   </div>
 </form>
 <div class="page-heading">
-  基本设置
+  {{'admin.edu_cloud.edu_search.base_setting'|trans}}
 </div>
 <form class="form-horizontal" role="form">
   <div class="form-group">
-    <label for="" class="col-sm-3 control-label" style="padding-top:12px;">重建索引：</label>
+    <label for="" class="col-sm-3 control-label" style="padding-top:12px;">{{'admin.edu_cloud.edu_search.rebuild_index'|trans}}：</label>
     <div class="controls col-md-9 radios">
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-url="{{path('admin_cloud_buildindex_modal')}}" data-target="#modal">重建索引</button>
-      <i class="es-icon es-icon-warning text-danger plm " data-trigger="hover"  data-container="body" data-toggle="popover" data-placement="right" data-html="true" data-content="警告:<li>1.如果无法通过云搜索搜索某一课程，请尝试更新课程信息后10分钟再搜索。</li><li>2.如果按照1操作后仍无法搜索该课程，再考虑使用重建索引。</li><li>3.请勿频繁使用重建索引功能</li>"></i>
-      <div class="color-gray ptm">用于重新构建云搜索的索引数据。</div>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-url="{{path('admin_cloud_buildindex_modal')}}" data-target="#modal">{{'admin.edu_cloud.edu_search.rebuild_index.rebuild_btn'|trans}}</button>
+      <i class="es-icon es-icon-warning text-danger plm " data-trigger="hover"  data-container="body" data-toggle="popover" data-placement="right" data-html="true" data-content="{{'admin.edu_cloud.edu_search.rebuild_index_tips'|trans}}"></i>
+      <div class="color-gray ptm">{{'admin.edu_cloud.edu_search.rebuild_search_data'|trans}}</div>
     </div>
   </div>
 </form>

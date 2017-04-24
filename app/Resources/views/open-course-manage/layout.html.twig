@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}{{'课程管理'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'my.teaching.open_course.course_manage'|trans}} - {{ parent() }}{% endblock %}
 
 {% block content %}
   {% include 'open-course-manage/header.html.twig' %}
@@ -11,57 +11,57 @@
         {% set side_nav = side_nav|default(null) %}
         <div class="sidenav locked">
           <ul class="list-group">
-            <li class="list-group-heading">{{'课程信息'|trans}}</li>
+            <li class="list-group-heading">{{'my.teaching.open_course.course_info'|trans}}</li>
             <li class="list-group-item {% if side_nav == 'base' %}active{% endif %}">
               <a href="{{ path('open_course_manage_base', {id:course.id}) }}">
-                <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'基本信息'|trans}}
+                <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'my.teaching.open_course.Basic_Info'|trans}}
               </a>
             </li>
             <li class="list-group-item {% if side_nav == 'picture' %}active{% endif %}">
               <a href="{{ path('open_course_manage_picture', {id:course.id}) }}">
-                <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'课程图片'|trans}}
+                <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'my.teaching.open_course.course_picture.title'|trans}}
               </a>
             </li>
             {% if course.type == 'liveOpen' %}
               <li class="list-group-item {% if side_nav == 'liveTimeSet' %}active{% endif %}">
                 <a href="{{ path('open_course_manage_live_time_set', {id:course.id}) }}">
-                  <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'直播时间设置'|trans}}
+                  <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'my.teaching.open_course.liveTimeSet.title'|trans}}
                 </a>
               </li>
               <li class="list-group-item {% if side_nav == 'replay' %}active{% endif %}" >
                 <a href="{{ path('live_open_course_manage_replay', {id:course.id}) }}">
-                <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'录播管理'|trans}}</a>
+                <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'my.teaching.open_course.live_manage'|trans}}</a>
               </li>
             {% endif %}
             {% if course.type == 'open' %}
               <li class="list-group-item {% if side_nav == 'lesson' %}active{% endif %}">
                 <a href="{{ path('open_course_manage_lesson', {id:course.id}) }}">
-                  <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'课时管理'|trans}}
+                  <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'my.teaching.open_course.lesson.manage'|trans}}
                 </a>
               </li>
               <li class="list-group-item {% if side_nav == 'files' %}active{% endif %}">
                 <a href="{{ path('open_course_manage_files', {id:course.id}) }}">
-                  <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'文件管理'|trans}}
+                  <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'my.teaching.open_course.file_manage_btn'|trans}}
                 </a>
               </li>
             {% endif %}
           </ul>
 
           <ul class="list-group">
-            <li class="list-group-heading">{{'课程设置'|trans}}</li>
+            <li class="list-group-heading">{{'my.teaching.open_course.liveTimeSet.course_setting'|trans}}</li>
             <li class="list-group-item {% if side_nav == 'marketing' %}active{% endif %}">
               <a href="{{ path('open_course_manage_marketing', {id:course.id}) }}">
-                <span></span>{{'推荐设置'|trans}}
+                <span></span>{{'my.teaching.open_course.liveTimeSet.recommend_setting'|trans}}
               </a>
             </li>
             <li class="list-group-item {% if side_nav == 'teachers' %}active{% endif %}">
               <a href="{{ path('open_course_manage_teachers', {id:course.id}) }}">
-                <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'教师设置'|trans}}
+                <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'my.teaching.open_course.teachers_setting.title'|trans}}
               </a>
             </li>
             <li class="list-group-item {% if side_nav == 'students' %}active{% endif %}">
               <a href="{{ path('open_course_manage_students', {id:course.id,userType:'login'}) }}">
-                <span></span>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% endif %}{{'管理'|trans}}
+                <span></span>{% if setting('default.user_name') %}{{setting('default.user_name')|default('site.default.student'|trans)}}{% endif %}{{'my.teaching.open_course.student_setting.manage_btn'|trans}}
               </a>
             </li>
           </ul>

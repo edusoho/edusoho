@@ -5,7 +5,7 @@
 {% set questionOptions = dict('secureQuestion') %}
 
 {% if not hasSecurityQuestions %}
-  {% set script_controller = 'settings/security-questions' %}
+  {% do script(['libs/jquery-validation.js','app/js/settings/security-questions/index.js']) %}
 {% endif %}
 
 {% block main %}

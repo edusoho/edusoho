@@ -15,4 +15,9 @@ class AudioActivityDaoImpl extends GeneralDaoImpl implements AudioActivityDao
             'serializes' => array('media' => 'json'),
         );
     }
+
+    public function findByIds($Ids)
+    {
+        return $this->findInField('id', $Ids);
+    }
 }

@@ -30,6 +30,8 @@ interface TaskService
 
     public function findTasksByCourseId($courseId);
 
+    public function findTasksByCourseSetId($courseSetId);
+
     public function findTasksByCourseIds($courseIds);
 
     public function countTasksByCourseId($courseId);

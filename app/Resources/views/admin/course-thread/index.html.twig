@@ -48,7 +48,7 @@
         <tr>
           <th width="5%"><input type="checkbox" data-role="batch-select"></th>
           <th width="50%">{{'admin.course_thread.post_th'|trans}}</th>
-          <th width="10%">{{'admin.course_thread.replay_or_review_th'|trans}}</th>
+          <th width="10%">{{'admin.course_thread.reply_or_review_th'|trans}}</th>
           <th width="10%">{{'admin.course_thread.type_th'|trans}}</th>
           <th width="15%">{{'admin.course_thread.author_th'|trans}}</th>
           <th width="10%">{{'admin.course_thread.operation_th'|trans}}</th>
@@ -76,7 +76,7 @@
               
               <div class="text-sm mts">
                 {% if courseSet %}
-                  <a href="{{ path('course_set_show', {id:courseSet.id}) }}" class="text-success" target="_blank">{{ courseSet.title }}</a>
+                  <a href="{{ path('course_show', {id:courseSet.defaultCourseId}) }}" class="text-success" target="_blank">{{ courseSet.title }}</a>
                 {% endif %}
 
                 {% if course %}

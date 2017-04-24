@@ -102,6 +102,8 @@ class OrderServiceImpl extends BaseService implements OrderService
         }
 
         $order['status'] = 'created';
+        $order['updatedTime'] = 0;
+        $order['token'] = $this->makeToken($order['sn']);
 
         $order = $this->getOrderDao()->create($order);
 
@@ -691,6 +693,17 @@ class OrderServiceImpl extends BaseService implements OrderService
         }
 
         return $conditions;
+    }
+
+    private function makeToken($sn)
+    {
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $value = '';
+        for ($i = 0; $i < 5; ++$i) {
+            $value .= $chars[mt_rand(0, strlen($chars) - 1)];
+        }
+
+        return $sn.$value;
     }
 
     public function updateOrderCashSn($id, $cashSn)

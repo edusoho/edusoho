@@ -1,12 +1,10 @@
-{% extends 'old-bootstrap-modal-layout.html.twig' %}
-
-
-
+{% extends 'bootstrap-modal-layout.html.twig' %}
 {% block title %}{{'user.account.other_invite_code.modal_title'|trans}}{% endblock %}
+{% do script(['libs/jquery-validation.js','app/js/coin/invite-code/index.js'])%}
 
 {% block body %}
 
-<form id="write-invite-code" class="form-horizontal" action="{{path('write_invitecode')}}" method="post" >
+<form id="write-invite-code" class="form-horizontal" action="{{path('write_invitecode')}}" >
   <div class="form-group">
     <div class="col-md-2 control-label"><label>{{'user.account.other_invite_code.invite_code'|trans}}</label></div>
     <div class="controls col-md-8">
@@ -15,15 +13,16 @@
       <div class="help-block">{{'user.account.other_invite_code.reward_after_custom_tips'|trans}}</div>
      {% elseif setting('invite.get_coupon_setting',1) == 0 %}
       <div class="help-block">{{'user.account.other_invite_code.reward_tips'|trans}}</div>
-     {% endif %} 
+     {% endif %}
     </div>
   </div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-  <script>app.lazyLoad = function() { app.load('coin/invite-code') };</script>
+
 {% endblock %}
 
 {% block footer %}
-  <button id="create-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#write-invite-code" data-url="{{path('receive_coupon')}}">{{'form.btn.submit'|trans}}</button>
+  <button id="create-btn"
+  data-submiting-text="{{'form.btn.submit.submiting'|trans}}"
+  type="button" class="btn btn-primary pull-right" data-target="#write-invite-code" data-url="{{path('receive_coupon')}}">{{'form.btn.submit'|trans}}</button>
 {% endblock %}

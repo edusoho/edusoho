@@ -1,9 +1,9 @@
-{% extends 'old-layout.html.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% block title %}{{ 'article.channel'|trans({'%article_name%': setting('article.name')|default('article'|trans)}) }} - {{ parent() }}{% endblock %}
 
 {% set bodyClass = 'artcile-list-page' %}
-{% set script_controller = 'article/list.js' %}
+{% do script(['app/js/article/list/index.js']) %}
 
 {% block content %}
 

@@ -1,15 +1,14 @@
-import FileChooser from '../../file-chooser/file-choose';
-import { chooserUiOpen, chooserUiClose, showChooserType } from '../widget/chooser-ui.js';
-
+import FileChooser from 'app/js/file-chooser/file-choose';
+import { chooserUiOpen, chooserUiClose, showChooserType } from 'app/js/activity-manage/widget/chooser-ui.js';
 export default class Audio {
   constructor() {
     showChooserType($('[name="ext[mediaId]"]'));
-    this.initStep2form();
+    this.initStep2Form();
     this.autoValidatorLength();
-    this.initfileChooser();
+    this.initFileChooser();
   }
 
-  initStep2form() {
+  initStep2Form() {
     var $step2_form = $('#step2-form');
     var validator = $step2_form.data('validator');
 
@@ -55,8 +54,9 @@ export default class Audio {
     });
   }
 
-  initfileChooser() {
+  initFileChooser() {
     const fileChooser = new FileChooser();
+    console.log(fileChooser);
     const onSelectFile = file => {
       chooserUiClose();
       if (file.length) {

@@ -5,7 +5,8 @@
 	{% if course.type == 'open' or course.type == 'liveOpen' %}
 		{% set showUrl = path('open_course_show',{courseId:course.id}) %}
 	{% else %}
-		{% set showUrl = path('course_set_show',{id:course.id}) %}
+		{% set courseSet =  course %}
+		{% set showUrl = path('course_show',{id:courseSet.defaultCourseId}) %}
 	{% endif %}
 
 	<li class="tab-recommand clearfix">
@@ -14,9 +15,9 @@
     </a>
 		<div class="open-course-info">
 		  <a class="title" href="{{ showUrl }}" target="_blank" title="{{ course.title }}">{{ course.title }}</a>
-		  <div class="num">{{ course.studentNum }}人在学习</div>
+		  <div class="num">{{ course.studentNum }}{{ 'my.teaching.open_course.lesson.recommend.learning_num'|trans }}</div>
 		</div>
 	</li>
 {% else %}
-	<li><div class="empty">暂无推荐课程</div></li>
+	<li><div class="empty">{{ 'my.teaching.open_course.lesson.recommend.empty'|trans }}</div></li>
 {% endfor %}

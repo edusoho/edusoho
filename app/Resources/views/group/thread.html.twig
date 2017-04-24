@@ -93,25 +93,25 @@
         {% endif %}
 
         {% if user.id==owner.id or is_granted('ROLE_ADMIN') or user.id==groupinfo.ownerId or is_groupmember==3 %}
-          <a class="btn btn-default btn-sm mrm" href="{{path('group_thread_update',{id:groupinfo.id,threadId:threadMain.id})}}"> {{'group.thread.edit_btn'|trans}}</a>
+          <a class="btn btn-default btn-sm mrm" href="{{path('group_thread_update',{id:groupinfo.id,threadId:threadMain.id})}}"> {{'thread.edit_btn'|trans}}</a>
         {% endif %}
 
         {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3 %}
           {% if threadMain.isElite==1 %}
-            <a id="elite"  title="{{'group.thread.cancel_essence_btn'|trans}}" class="btn btn-default btn-sm mrm"
+            <a id="elite"  title="{{'thread.cancel_essence_btn'|trans}}" class="btn btn-default btn-sm mrm"
               href="javascript:"
-            data-url="{{path('group_thread_removeElite',{threadId:threadMain.id})}}">{{'group.thread.cancel_essence_btn'|trans}}</a>
+            data-url="{{path('group_thread_removeElite',{threadId:threadMain.id})}}">{{'thread.cancel_essence_btn'|trans}}</a>
           {% else %}
-            <a id="elite"  title="{{'group.thread.set_essence_btn'|trans}}" class="btn btn-default btn-sm mrm"
-            href="javascript:" data-url="{{path('group_thread_setElite',{threadId:threadMain.id})}}">{{'group.thread.set_essence_btn'|trans}}</a>
+            <a id="elite"  title="{{'thread.set_essence_btn'|trans}}" class="btn btn-default btn-sm mrm"
+            href="javascript:" data-url="{{path('group_thread_setElite',{threadId:threadMain.id})}}">{{'thread.set_essence_btn'|trans}}</a>
           {% endif %}
 
           {% if threadMain.isStick==1 %}
-             <a id="stick" title="{{'group.thread.stick_cancel_btn'|trans}}" class="btn btn-default btn-sm mrm"
-            href="javascript:" data-url="{{path('group_thread_removeStick',{threadId:threadMain.id})}}"> {{'group.thread.stick_cancel_btn'|trans}}</a>
+             <a id="stick" title="{{'thread.stick_cancel_btn'|trans}}" class="btn btn-default btn-sm mrm"
+            href="javascript:" data-url="{{path('group_thread_removeStick',{threadId:threadMain.id})}}"> {{'thread.stick_cancel_btn'|trans}}</a>
           {% else %}
-            <a id="stick"  title="{{'group.thread.stick_btn'|trans}}" class="btn btn-default btn-sm mrm"
-            href="javascript:" data-url="{{path('group_thread_setStick',{threadId:threadMain.id})}}">{{'group.thread.stick_btn'|trans}}</a>
+            <a id="stick"  title="{{'thread.stick_btn'|trans}}" class="btn btn-default btn-sm mrm"
+            href="javascript:" data-url="{{path('group_thread_setStick',{threadId:threadMain.id})}}">{{'thread.stick_btn'|trans}}</a>
           {% endif %}
 
           {% if is_feature_enabled('group_reward') %}
@@ -203,7 +203,7 @@
 
               <div class="actions">
                 {% if user.id==post.userId or is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
-                  <a title="{{'group.thread.delete_tips'|trans}}" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id})}}">{{'group.thread.delete_btn'|trans}}</a>
+                  <a title="{{'group.thread.delete_tips'|trans}}" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id})}}">{{'thread.delete_btn'|trans}}</a>
                 {% endif %}
 
                 {% if is_feature_enabled('group_reward') %}
@@ -320,7 +320,7 @@
         </form>
       {% else %}
         <div class="empty">
-          {{ 'user.not_login.tips'|trans({'%loginUrl%':path('login', {goto:app.request.server.get('REQUEST_URI')}), '%registerUrl%':path('register', {goto:app.request.server.get('REQUEST_URI')})})|raw }}
+          {{ 'user.not_login.tips'|trans({'%login%':path('login', {goto:app.request.server.get('REQUEST_URI')}), '%register%': path('register', {goto:app.request.server.get('REQUEST_URI') }) })|raw }}
         </div>
       {% endif %}
     </div>

@@ -143,7 +143,7 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
     public function declares()
     {
         return array(
-            'timestamps' => array('createdTime'),
+            'timestamps' => array('createdTime', 'updatedTime'),
             'serializes' => array(
                 'role' => 'delimiter',
                 'assistantIds' => 'json',

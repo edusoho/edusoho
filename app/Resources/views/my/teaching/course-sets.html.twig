@@ -37,15 +37,15 @@
         {% for courseSet in courseSets %}
           <tr>
             <td>
-              <a class="pull-left mrm link-primary" href="{{ path('course_set_show', {id: courseSet.id}) }}">
+              <a class="pull-left mrm link-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">
                 <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}"
                      alt="{{ courseSet.title }}" width="100">
               </a>
               <div class="mlm">
                 {% if courseSet.status == 'published' %}
-                  <a class="link-primary" href="{{ path('course_set_show', {id: courseSet.id}) }}">{{ courseSet.title }}</a>
+                  <a class="link-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
                 {% else %}
-                  <a class="link-primary" href="{{ path('course_set_show', {id: courseSet.id, previewAs: 'member'}) }}">{{ courseSet.title }}</a>
+                  <a class="link-primary" href="{{ path('course_show', {id: courseSet.defaultCourseId, previewAs: 'member'}) }}">{{ courseSet.title }}</a>
                 {% endif %}
                 <br/>
                 {% if courseSet.courses|length > 1 %}
@@ -84,7 +84,7 @@
                 </a>
                 {% if courseSet.canManage|default(false) %}
                   <a href="javascript:;" type="button" class="link-primary dropdown-toggle ml10" data-toggle="dropdown">
-                    更多
+                    {{'my.teaching.course_set.more_btn'|trans}}
                     <i class="es-icon es-icon-arrowdropdown"></i>
                   </a>
                   <ul class="dropdown-menu pull-right">

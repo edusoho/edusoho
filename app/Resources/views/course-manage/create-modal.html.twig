@@ -5,15 +5,15 @@
 
 {% block title %}
   {% if course|default(false) %}
-    {{ '复制' }}{{ '"' ~ course.title ~ '"' }}{{ '为一个新的教学计划'|trans }}
+    {{'course.teaching_plan.edit.copy'|trans({'%title%':'"' ~ course.title ~ '"'})}}
   {% else %}
-    {{ '创建一个教学计划'|trans }}
+    {{ 'course.teaching_plan.create'|trans }}
   {% endif %}
 {% endblock %}
 
 {% block body %}
   <div class="course-create-editor" id="course-create-editor">
-      <form class="form-horizontal" id="course-create-form" 
+      <form class="form-horizontal" id="course-create-form"
       {% if course|default(false) %}
         action="{{path('course_set_manage_course_copy', {courseSetId: courseSet.id})}}"
       {% else %}
@@ -22,7 +22,7 @@
         method="post">
         <div class="form-group">
           <div class="col-sm-2 control-label">
-            <label for="title" class="control-label-required">{{'新计划名称'|trans}}</label>
+            <label for="title" class="control-label-required">{{'course.teaching_plan.create.new_plan_name'|trans}}</label>
           </div>
           <div class="col-sm-8">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
@@ -31,71 +31,66 @@
             <input type="hidden" name="copyCourseId" value="{{course.id|default(0)}}">
             <input type="text" id="title" name="title" class="form-control" placeholder="">
           </div>
-        </div>        
+        </div>
         <div class="form-group">
           <label for="learnMode" class="col-sm-2 control-label">
-            {{'学习模式'|trans}}
-            <a class="es-icon es-icon-help ml5 link-gray text-normal" data-trigger="hover" 
-              data-toggle="popover" data-container="body" data-placement="top" 
+            {{'course.teaching_plan.create.mode'|trans}}
+            <a class="es-icon es-icon-help ml5 link-gray text-normal" data-trigger="hover"
+              data-toggle="popover" data-container="body" data-placement="top"
               data-content="<ul class='pl10 ul-list-none'>
-              <li class='mb10'>{{'<b>自由式学习</b>：学员自由安排学习过程'|trans}}</li>
-              <li>{{'<b>解锁式学习</b>：学员根据既定顺序逐个解锁学习'|trans}}</li></ul>">
+              {{'course.teaching_plan.create.mode.free'|trans|raw}}
+              {{'course.teaching_plan.create.mode.limit'|trans|raw}}</ul>">
             </a>
           </label>
           <div class="col-sm-8 radios">
-            {{ radios('learnMode', { 'freeMode': '自由式学习'|trans, 'lockMode': '解锁式学习'|trans }, course.learnMode|default('freeMode')) }}
-            <div class="color-warning">{{'教学计划创建后“学习模式”将不能修改。'|trans}}</div>
+            {{ radios('learnMode', { 'freeMode': 'course.teaching_plan.free'|trans, 'lockMode': 'course.teaching_plan.locked'|trans }, course.learnMode|default('freeMode')) }}
+            <div class="color-warning">{{'course.teaching_plan.create.create_tips'|trans}}</div>
           </div>
         </div>
-        
+
         <div class="form-group">
             <label class="col-sm-2 control-label">
-              {{'学习有效期'|trans}}
-              <a class="es-icon es-icon-help ml5 link-gray text-normal" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" 
+              {{'course.teaching_plan.expiry_date'|trans}}
+              <a class="es-icon es-icon-help ml5 link-gray text-normal" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top"
                 data-content="<ul class='pl10 ul-list-none'>
-                  <li class='mb10'>{{'<b>随到随学：</b>有效期从学员加入的当天开始算起，截至到期当天的晚上24点整'|trans}}</li>
-                  <li class='mb10'>{{'<b>固定周期：</b>有固定的学习开始日期和结束日期'|trans}}</li>
-                  <li>{{'过期后无法继续学习，系统会在到期前10天提醒学员。'|trans}}</li>
+                  <li class='mb10'>{{'course.teaching_plan.expiry_date.anytime'|trans|raw}}</li>
+                  <li class='mb10'>{{'course.teaching_plan.expiry_date.real_time'|trans|raw}}</li>
+                  <li>{{'course.teaching_plan.expiry_date.overdue_tips'|trans}}</li>
                 </ul>">
               </a>
             </label>
             <div class="col-sm-8 radios">
-                {{ 
+                {{
                   radios(
-                    'expiryMode', 
-                    { 'forever':'永久有效'|trans, 'days': '随到随学'|trans, 'date': '固定周期'|trans },
+                    'expiryMode',
+                    { 'forever':'course.teaching_plan.expiry_date.forever_mode'|trans, 'days': 'course.teaching_plan.expiry_date.anywhere_mode'|trans, 'date': 'course.teaching_plan.expiry_date.date_mode'|trans },
                     'forever'
-                  ) 
+                  )
                 }}
                 {#随到随学#}
                 <div class="mb20 mt20 hidden" id="expiry-days">
-                  {{ 
+                  {{
                     radios(
-                      'deadlineType', 
-                      { 'end_date': '按截止日期'|trans, 'days': '按有效天数'|trans}
+                      'deadlineType',
+                      { 'end_date': 'course.teaching_plan.expiry_date.end_date_mode'|trans, 'days': 'course.teaching_plan.expiry_date.days_mode'|trans}
                     )
                   }}
                   <div class="mb20 mt20 hidden" id="deadlineType-date">
-                    {{'在'}}
-                    <input class="form-control width-150" id="deadline" name="deadline" value="">
-                    {{'前，学员可进行学习。'|trans}}
+                    {{'course.plan_task.deadline_learn_tips'|trans|raw}}
                   </div>
                   <div class="mb20 mt20" id="deadlineType-days">
-                    {{'从加入当天起，在'}}
-                    <input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays"  
-                    value="1">
-                    {{'天内可进行学习。'|trans}}
+                    {{'course.plan_task.expiry_days_learn_tips'|trans|raw}}
                   </div>
                 </div>
                 {#固定周期#}
                 <div class="mb20 mt20 hidden" id="expiry-date">
-                  {{'开始日期'|trans}}
+                  {{'course.plan_task.start_time'|trans}}
                   <input class="form-control mh10 width-150" id="expiryStartDate" type="text" name="expiryStartDate" value="">
-                  {{'结束日期'|trans}}
-                  <input class="form-control ml5 width-150 " type="text" id="expiryEndDate" name="expiryEndDate" 
+                  {{'course.plan_task.end_time'|trans}}
+                  <input class="form-control ml5 width-150 " type="text" id="expiryEndDate" name="expiryEndDate"
                   value="">
                 </div>
-                <div class="color-warning">{{'教学计划首次发布后“学习有效期”不能再修改。'|trans}}</div>
+                <div class="color-warning">{{'course.teaching_plan.expiry_date.not_change_tips'|trans}}</div>
             </div>
           </div>
       </form>
@@ -103,6 +98,6 @@
 {% endblock %}
 
 {% block footer %}
-  <button id="course-submit" type="button" class="btn btn-primary pull-right" data-loading-text="{{ '正在创建...'|trans }}">{{ '创建'|trans }}</button>
-  <button id="course-cancel" type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ '取消'|trans }}</button>
+  <button id="course-submit" type="button" class="btn btn-primary pull-right" data-loading-text="{{ 'form.btn.create.submiting'|trans }}">{{ 'form.btn.create'|trans }}</button>
+  <button id="course-cancel" type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
 {% endblock %}

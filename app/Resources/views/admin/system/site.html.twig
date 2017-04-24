@@ -9,9 +9,9 @@
 {{ web_macro.flash_messages() }}
 
 <form class="form-horizontal" id="site-form" method="post">
-  
+
   <fieldset>
-    
+
     <div class="form-group">
       <div class="col-md-2 control-label">
         <label for="name">{{'admin.setting.site.name'|trans}}</label>
@@ -23,7 +23,7 @@
 
     <div class="form-group">
       <div class="col-md-2 control-label">
-        <label for="slogan">{{'admin.setting.site.slogan'|trans}}</label> 
+        <label for="slogan">{{'admin.setting.site.slogan'|trans}}</label>
       </div>
       <div class="col-md-8 controls">
          <input type="text" id="slogan" name="slogan" class="form-control" value="{{site.slogan}}">
@@ -31,8 +31,8 @@
     </div>
 
     <div class="form-group">
-      <div class="col-md-2 control-label"> 
-        <label for="url">{{'admin.setting.site.url'|trans}}</label> 
+      <div class="col-md-2 control-label">
+        <label for="url">{{'admin.setting.site.url'|trans}}</label>
       </div>
       <div class="col-md-8 controls">
        <input type="text" id="url" name="url" class="form-control" value="{{site.url}}">
@@ -46,7 +46,7 @@
       </div>
       <div class="col-md-8 controls">
         <div id="site-logo-container">{% if site.logo %}<img src="{{ asset(site.logo) }}">{% endif %}</div>
-        <a class="btn btn-default" id="site-logo-upload" 
+        <a class="btn btn-default" id="site-logo-upload"
         data-upload-token="{{ upload_token('system', 'image') }}"
         data-goto-url="{{ path('admin_setting_logo_upload') }}">{{'form.btn.upload'|trans}}</a>
         <button class="btn btn-default" id="site-logo-remove" type="button" data-url="{{ path('admin_setting_logo_remove') }}" {% if not site.logo %}style="display:none;"{% endif %}>{{'form.btn.delete'|trans}}</button>
@@ -61,12 +61,12 @@
       </div>
       <div class="col-md-8 controls">
         <div id="site-favicon-container">{% if site.favicon %}<img src="{{ asset(site.favicon) }}">{% endif %}</div>
-        <a class="btn btn-default" 
-        id="site-favicon-upload" 
+        <a class="btn btn-default"
+        id="site-favicon-upload"
         data-upload-token="{{ upload_token('system', 'image') }}"
         data-goto-url="{{ path('admin_setting_favicon_upload') }}">{{'form.btn.upload'|trans}}</a>
-        <button class="btn btn-default" 
-        id="site-favicon-remove" 
+        <button class="btn btn-default"
+        id="site-favicon-remove"
         type="button" data-url="{{ path('admin_setting_favicon_remove') }}" {% if not site.favicon %}style="display:none;"{% endif %}>{{'form.btn.delete'|trans}}</button>
         <p class="help-block">{{'admin.setting.site.favicon.help_block'|trans}}</p>
         <input type="hidden" name="favicon" value="{{ site.favicon }}">
@@ -128,7 +128,7 @@
     <legend>{{'admin.setting.site.website_statistics_analysis'|trans}}</legend>
     <div class="form-group">
       <div class="col-md-2 control-label">
-        <label for="analytics">{{'统计分析代码'|trans}}</label>
+        <label for="analytics">{{'admin.setting.site.analytics'|trans}}</label>
       </div>
       <div class="col-md-8 controls">
 
@@ -168,7 +168,7 @@
   </div>
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-  
+
 </form>
 
 {% endblock %}

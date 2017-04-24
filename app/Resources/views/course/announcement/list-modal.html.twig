@@ -1,5 +1,5 @@
 {% extends 'announcement/announcement-modal-layout.html.twig' %}
-
+{% do script(['app/js/announcement/announcement/index.js'])%}
 {% set tab="list" %}
 
 {% block content %}
@@ -17,8 +17,8 @@
             {% if canManage %}
               <span class="editor">
                 {{ announcement.createdTime|date('Y-m-d') }}
-                <a class="mlm" data-target="#modal"  data-toggle="modal" data-url="{{ path('announcement_update',{id:announcement.id, targetType:targetType,  targetId:targetId}) }}"><i class="es-icon es-icon-edit" data-toggle="tooltip" data-placement="top" title="{{'编辑'|trans}}"></i></a>
-                <a href="javascript:;" data-role="delete" data-url="{{ path('announcement_delete',{id:announcement.id, targetType:targetType, targetId:targetId}) }}"><i class="es-icon es-icon-delete ml10" data-toggle="tooltip" data-placement="top" title="{{'删除'|trans}}"></i></a>
+                <a class="mlm" data-target="#modal"  data-toggle="modal" data-url="{{ path('announcement_update',{id:announcement.id, targetType:targetType,  targetId:targetId}) }}"><i class="es-icon es-icon-edit" data-toggle="tooltip" data-placement="top" title="{{'announcement.modal.edit_btn'|trans}}"></i></a>
+                <a href="javascript:;" data-role="delete" data-url="{{ path('announcement_delete',{id:announcement.id, targetType:targetType, targetId:targetId}) }}"><i class="es-icon es-icon-delete ml10" data-toggle="tooltip" data-placement="top" title="{{'announcement.modal.delete_btn'|trans}}"></i></a>
               </span>
             {% else %}
               <span class="data">{{ announcement.createdTime|date('Y-m-d H:i:s') }}</span>
@@ -32,13 +32,7 @@
 
     {% endfor %}
   {% else %}
-    <div class="alert alert-edit">{{'暂无公告'|trans}}</div>
+    <div class="alert alert-edit">{{'announcement.empty'|trans}}</div>
   {% endif %}
   </div>
-  
-  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-  <script>
-    app.lazyLoad = function() { app.load('announcement/announcement'); };
-  </script>
-
 {% endblock %}
