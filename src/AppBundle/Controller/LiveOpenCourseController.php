@@ -60,7 +60,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $key = "live-open-course-user-id-{$courseId}-{$lessonId}";
         $sessionValue = $request->getSession()->get($key);
         if (empty($sessionValue)) {
-            $sessionValue = $this->getMillisecond().rand(0,999);
+            $sessionValue = (int)$this->getMillisecond()*1000+rand(0,999);
             $request->getSession()->set($key, $sessionValue);
         }
 
