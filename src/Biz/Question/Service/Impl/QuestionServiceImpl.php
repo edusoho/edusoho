@@ -1,12 +1,13 @@
 <?php
+
 namespace Biz\Question\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use Biz\Task\Service\TaskService;
+use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Question\Service\QuestionService;
-use Topxia\Common\Exception\ResourceNotFoundException;
+use AppBundle\Common\Exception\ResourceNotFoundException;
 
 class QuestionServiceImpl extends BaseService implements QuestionService
 {
@@ -17,12 +18,16 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function create($fields)
     {
-        $argument         = $fields;
-        $user             = $this->getCurrentuser();
+        $argument = $fields;
+        $user = $this->getCurrentuser();
         $fields['userId'] = $user['id'];
 
+        if (isset($fields['content'])) {
+            $fields['content'] = $this->purifyHtml($fields['content'], true);
+        }
+
         $questionConfig = $this->getQuestionConfig($fields['type']);
-        $media          = $questionConfig->create($fields);
+        $media = $questionConfig->create($fields);
 
         if (!empty($media)) {
             $fields['metas']['mediaId'] = $media['id'];
@@ -30,7 +35,15 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
         $fields['createdTime'] = time();
         $fields['updatedTime'] = time();
-        $fields                = $questionConfig->filter($fields);
+        $fields = $questionConfig->filter($fields);
+
+        if (!empty($fields['parentId'])) {
+            $parentQuestion = $this->get($fields['parentId']);
+            $fields['courseId'] = $parentQuestion['courseId'];
+            $fields['lessonId'] = $parentQuestion['lessonId'];
+        }
+
+        $fields['target'] = empty($fields['courseSetId']) ? '' : 'course-'.$fields['courseSetId'];
 
         $question = $this->getQuestionDao()->create($fields);
 
@@ -57,7 +70,18 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
 
         $fields['updatedTime'] = time();
-        $fields                = $questionConfig->filter($fields);
+
+        if (isset($fields['content'])) {
+            $fields['content'] = $this->purifyHtml($fields['content'], true);
+        }
+
+        $fields = $questionConfig->filter($fields);
+
+        if (!empty($question['parentId'])) {
+            $parentQuestion = $this->get($fields['parentId']);
+            $fields['courseId'] = $parentQuestion['courseId'];
+            $fields['lessonId'] = $parentQuestion['lessonId'];
+        }
 
         $question = $this->getQuestionDao()->update($id, $fields);
 
@@ -73,8 +97,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             return false;
         }
 
-        $questionConfig = $this->getQuestionConfig($question['type']);
-        $questionConfig->delete($question['metas']['mediaId']);
+        if (!empty($question['metas']['mediaId'])) {
+            $questionConfig = $this->getQuestionConfig($question['type']);
+            $questionConfig->delete($question['metas']['mediaId']);
+        }
 
         $result = $this->getQuestionDao()->delete($id);
 
@@ -112,6 +138,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function findQuestionsByIds(array $ids)
     {
         $questions = $this->getQuestionDao()->findQuestionsByIds($ids);
+
         return ArrayToolkit::index($questions, 'id');
     }
 
@@ -120,15 +147,27 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->findQuestionsByParentId($id);
     }
 
+    public function findQuestionsByCourseSetId($courseSetId)
+    {
+        return $this->getQuestionDao()->findQuestionsByCourseSetId($courseSetId);
+    }
+
     public function search($conditions, $sort, $start, $limit)
     {
         $conditions = $this->filterQuestionFields($conditions);
-        return $this->getQuestionDao()->search($conditions, $sort, $start, $limit);
+        $questions = $this->getQuestionDao()->search($conditions, $sort, $start, $limit);
+        $that = $this;
+        array_walk($questions, function (&$question) use ($that) {
+            $question = $that->hasStemImg($question);
+        });
+
+        return $questions;
     }
 
     public function searchCount($conditions)
     {
         $conditions = $this->filterQuestionFields($conditions);
+
         return $this->getQuestionDao()->count($conditions);
     }
 
@@ -153,6 +192,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
 
         $questionConfig = $this->getQuestionConfig($question['type']);
+
         return $questionConfig->judge($question, $answer);
     }
 
@@ -169,21 +209,28 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function getQuestionCountGroupByTypes($conditions)
     {
+        $conditions = $this->filterQuestionFields($conditions);
+
         return $this->getQuestionDao()->getQuestionCountGroupByTypes($conditions);
     }
 
     /**
-     * question_favorite
+     * question_favorite.
      */
+    public function getFavoriteQuestion($favoriteId)
+    {
+        return $this->getQuestionFavoriteDao()->get($favoriteId);
+    }
 
     public function createFavoriteQuestion($fields)
     {
-        return $this->getQuestionFavoriteDao()->create($fields);
-    }
+        $user = $this->getCurrentUser();
 
-    public function updateFavoriteQuestion($id, $fields)
-    {
-        return $this->getQuestionFavoriteDao()->update($id, $fields);
+        $fields['userId'] = $user['id'];
+        $fields['target'] = $fields['targetType'].'-'.$fields['targetId'];
+        $fields['createdTime'] = time();
+
+        return $this->getQuestionFavoriteDao()->create($fields);
     }
 
     public function deleteFavoriteQuestion($id)
@@ -222,25 +269,22 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
 
         if (!empty($conditions['keyword'])) {
-            $conditions['stem'] = $conditions['keyword'];
+            $conditions['stem'] = '%'.trim($conditions['keyword']).'%';
             unset($conditions['keyword']);
-        }
-
-        if (empty($conditions['type'])) {
-            unset($conditions['type']);
-        }
-
-        if (!empty($conditions['target'])) {
-            $conditions['lessonId'] = $conditions['target'];
-            unset($conditions['target']);
-        } else {
-            unset($conditions['target']);
         }
 
         if (empty($conditions['excludeIds'])) {
             unset($conditions['excludeIds']);
         } else {
             $conditions['excludeIds'] = explode(',', $conditions['excludeIds']);
+        }
+
+        if (empty($conditions['lessonId'])) {
+            unset($conditions['lessonId']);
+        }
+
+        if (empty($conditions['courseId'])) {
+            unset($conditions['courseId']);
         }
 
         return $conditions;
@@ -253,9 +297,9 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
 
         $conditions = array(
-            'type'        => 'attachment',
+            'type' => 'attachment',
             'targetTypes' => array('question.stem', 'question.analysis'),
-            'targetIds'   => $questionIds
+            'targetIds' => $questionIds,
         );
         $attachments = $this->getUploadFileService()->searchUseFiles($conditions);
         array_walk($attachments, function (&$attachment) {
@@ -263,6 +307,17 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         });
 
         return ArrayToolkit::group($attachments, 'dkey');
+    }
+
+    public function hasStemImg($question)
+    {
+        $question['includeImg'] = false;
+
+        if (preg_match('/<img (.*?)>/', $question['stem'])) {
+            $question['includeImg'] = true;
+        }
+
+        return $question;
     }
 
     protected function getQuestionDao()
@@ -277,11 +332,14 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
-    protected function getServiceKernel()
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
     {
-        return ServiceKernel::instance();
+        return $this->createService('Task:TaskService');
     }
 }

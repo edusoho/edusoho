@@ -2,6 +2,7 @@
 
 namespace Biz\Task\Strategy\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
@@ -10,87 +11,150 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
 {
     public function createTask($field)
     {
-        $task = $this->baseCreateTask($field);
+        $task = parent::createTask($field);
 
-        $task['activity'] = $this->getActivityService()->getActivityFetchMedia($task['activityId']);
+        $task['activity'] = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
+
         return $task;
-    }
-
-    public function updateTask($id, $fields)
-    {
-        return $this->baseUpdateTask($id, $fields);
     }
 
     public function deleteTask($task)
     {
-        $that = $this;
-        $this->biz['db']->transactional(function () use ($task, $that) {
-            $that->getTaskDao()->delete($task['id']);
-            $that->getActivityService()->deleteActivity($task['activityId']); //删除该课时
-        });
+        if (empty($task)) {
+            return true;
+        }
+
+        try {
+            $this->biz['db']->beginTransaction();
+
+            $this->getTaskDao()->delete($task['id']);
+            $this->getTaskResultService()->deleteUserTaskResultByTaskId($task['id']);
+            $this->getActivityService()->deleteActivity($task['activityId']);
+
+            $this->biz['db']->commit();
+        } catch (\Exception $e) {
+            $this->biz['db']->rollback();
+            throw $e;
+        }
+
         return true;
     }
 
     /**
-     * 任务学习
+     * 任务学习.
+     *
      * @param  $task
+     *
      * @throws NotFoundException
+     *
      * @return bool
      */
     public function canLearnTask($task)
     {
         $course = $this->getCourseService()->getCourse($task['courseId']);
+
         //自由式学习 可以学习任意课时
         if ($course['learnMode'] == 'freeMode') {
             return true;
         }
-        //if the task is first return true;
-        $preTask = $this->getTaskDao()->getPreTaskByCourseIdAndSeq($task['courseId'], $task['seq']);
-        if (empty($preTask)) {
+
+        //选修任务不需要判断解锁条件
+        if ($task['isOptional']) {
             return true;
         }
 
-        if ($preTask['isOptional']) {
+        if ($task['type'] == 'live') {
             return true;
         }
 
-        $isTaskLearned = $this->getTaskService()->isTaskLearned($preTask['id']);
-        if ($isTaskLearned) {
+        if ($task['type'] == 'testpaper' && $task['startTime']) {
             return true;
         }
 
-        return false;
+        //取得下一个发布的课时
+        $conditions = array(
+            'courseId' => $task['courseId'],
+            'seq_LT' => $task['seq'],
+            'status' => 'published',
+        );
+
+        $count = $this->getTaskDao()->count($conditions);
+        $preTasks = $this->getTaskDao()->search($conditions, array('seq' => 'DESC'), 0, $count);
+
+        if (empty($preTasks)) {
+            return true;
+        }
+
+        $taskIds = ArrayToolkit::column($preTasks, 'id');
+
+        $taskResults = $this->getTaskResultService()->findUserTaskResultsByTaskIds($taskIds);
+        $taskResults = ArrayToolkit::index($taskResults, 'courseTaskId');
+        array_walk(
+            $preTasks,
+            function (&$task) use ($taskResults) {
+                $task['result'] = isset($taskResults[$task['id']]) ? $taskResults[$task['id']] : null;
+            }
+        );
+
+        return $this->getTaskService()->isPreTasksIsFinished($preTasks);
     }
 
-    public function getTasksRenderPage()
+    public function prepareCourseItems($courseId, $tasks, $limitNum)
     {
-        return 'course-manage/lock-mode/tasks.html.twig';
-    }
+        $items = array();
+        foreach ($tasks as $task) {
+            $task['itemType'] = 'task';
+            $items["task-{$task['id']}"] = $task;
+        }
 
-    public function getTaskItemRenderPage()
-    {
-        return 'task-manage/list-item-lock-mode.html.twig';
-    }
+        $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
+        foreach ($chapters as $index => $chapter) {
+            $chapter['itemType'] = 'chapter';
+            $items["chapter-{$chapter['id']}"] = $chapter;
+        }
 
-    public function findCourseItems($courseId)
-    {
-        return $this->baseFindCourseItems($courseId);
+        uasort(
+            $items,
+            function ($item1, $item2) {
+                return $item1['seq'] > $item2['seq'];
+            }
+        );
+
+        if (empty($limitNum)) {
+            return $items;
+        }
+
+        $taskCount = 0;
+        foreach ($items as $key => $item) {
+            if (strpos($key, 'task') !== false) {
+                ++$taskCount;
+            }
+            if ($taskCount > $limitNum) {
+                unset($items[$key]);
+            }
+        }
+
+        return $items;
     }
 
     public function sortCourseItems($courseId, array $itemIds)
     {
-        $parentChapters = array(
-            'lesson'  => array(),
-            'unit'    => array(),
-            'chapter' => array()
-        );
+        if (empty($itemIds)) {
+            return;
+        }
 
+        $parentChapters = array(
+            'lesson' => array(),
+            'unit' => array(),
+            'chapter' => array(),
+        );
+        $taskNumber = 0;
         $chapterTypes = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
         foreach ($itemIds as $key => $id) {
             if (strpos($id, 'chapter') === 0) {
-                $id      = str_replace('chapter-', '', $id);
+                $id = str_replace('chapter-', '', $id);
                 $chapter = $this->getChapterDao()->get($id);
-                $fields  = array('seq' => $key);
+                $fields = array('seq' => $key);
 
                 $index = $chapterTypes[$chapter['type']];
                 switch ($index) {
@@ -125,41 +189,33 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
                     }
                 }
 
-                $chapter                          = $this->getChapterDao()->update($id, $fields);
+                $chapter = $this->getCourseService()->updateChapter($courseId, $id, $fields);
+
                 $parentChapters[$chapter['type']] = $chapter;
             }
             if (strpos($id, 'task') === 0) {
                 $categoryId = empty($chapter) ? 0 : $chapter['id'];
-                $id         = str_replace('task-', '', $id);
-                $this->getTaskService()->updateSeq($id, array(
-                    'seq'        => $key,
-                    'categoryId' => $categoryId
-                ));
+                $id = str_replace('task-', '', $id);
+                ++$taskNumber;
+                $this->getTaskService()->updateSeq(
+                    $id,
+                    array(
+                        'seq' => $key,
+                        'categoryId' => $categoryId,
+                        'number' => $taskNumber,
+                    )
+                );
             }
         }
     }
 
     public function publishTask($task)
     {
-        if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
-            throw $this->createAccessDeniedException('无权发布任务');
-        }
-        if ($task['status'] == 'published') {
-            throw $this->createAccessDeniedException("task(#{$task['id']}) has been published");
-        }
-        $task = $this->getTaskDao()->update($task['id'], array('status' => 'published'));
-        return $task;
+        return $this->getTaskDao()->update($task['id'], array('status' => 'published'));
     }
 
     public function unpublishTask($task)
     {
-        if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
-            throw $this->createAccessDeniedException('无权取消发布任务');
-        }
-        if ($task['status'] == 'unpublished') {
-            throw $this->createAccessDeniedException("task(#{$task['id']}) has been  cancel published");
-        }
-        $task = $this->getTaskDao()->update($task['id'], array('status' => 'unpublished'));
-        return $task;
+        return $this->getTaskDao()->update($task['id'], array('status' => 'unpublished'));
     }
 }

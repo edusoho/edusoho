@@ -1,0 +1,53 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Feature Magic Setting - {{ parent() }}{% endblock %}
+
+{% set menu = 'admin_setting_message' %}
+
+{% block content %}
+<div class="page-header"><h1>Feature Magic Setting</h1></div>
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" novalidate>
+
+  <div class="form-group">
+    <div class="controls col-md-12">
+      <textarea class="form-control" rows="10" name="setting">{{ setting }}</textarea>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="controls col-md-12">
+      <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+<div class="alert alert-danger">
+
+    <h4>{{'注意事项'|trans}}</h4>
+    <ul>
+      <li>{{ '此功能，为开发人员调试时使用，请不要使用随意使用，不然将造成不可预知的后果！'|trans }}</li>
+      <li>{{ '视频指纹：'|trans }} {% verbatim %}"video_fingerprint": "{{company}} {{truename}} {{mobile}}"{% endverbatim %}</li>
+      <li>{{ '文档指纹：'|trans }} {% verbatim %}"doc_watermark": "{{company}} {{truename}} {{mobile}}"{% endverbatim %}</li>
+      <li>{{ 'PPT指纹：'|trans }} {% verbatim %}"ppt_watermark": "{{company}} {{truename}} {{mobile}}"{% endverbatim %}</li>
+      <li>{{ '试卷指纹：'|trans }} {% verbatim %}"testpaper_watermark": "{{company}} {{truename}} {{mobile}}"{% endverbatim %}</li>
+      <li>{{ '视频任务观看次数：'|trans }} {% verbatim %}"lesson_watch_limit": true{% endverbatim %}</li>
+      <li>{{ '购买课程前实名认证：'|trans }} {% verbatim %}"buy_before_approval": true{% endverbatim %}</li>
+      <li>{{ '是否开启web定时任务：'|trans }} {% verbatim %}"disable_web_crontab": 0{% endverbatim %}（{{ '１为关闭'|trans }}，{{ '０为启用'|trans }}）</li>
+      <li>{{ '是否开启云搜索业务：'|trans }} {% verbatim %}"cloud_search": 0{% endverbatim %}（{{ '１为启用'|trans }}，{{ '０为关闭'|trans }}）</li>
+      <li>{{ '是否关闭iOS购买功能：'|trans }} {% verbatim %}"ios_buy_disable": 0{% endverbatim %}（{{ '１为关闭'|trans }}，{{ '０为开启'|trans }}）</li>
+      <li>{{ '订单单次导出数量：'|trans }} {% verbatim %}"export_limit": 10000{% endverbatim %}（{{ '建议最大值不超过20000'|trans }}）</li>
+      <li>{{ '订单导出允许的最大数量：'|trans }} {% verbatim %}"export_allow_count": 100000{% endverbatim %}（{{ '建议最大值不超过200000'|trans }}）</li>
+      <li>{{ '是否开启组织机构：'|trans }} {% verbatim %}"enable_org": 0{% endverbatim %}（{{ '0为关闭'|trans }}，{{ '1为启用'|trans }}）</li>
+      <li>{{ '是否显示快捷支付：'|trans }} {% verbatim %}"quickpay": false{% endverbatim %}（{{ 'false为关闭'|trans }}，{{ 'true为开启'|trans }}）</li>
+      <li>{{ '是否开启phpwind设置：'|trans }} {% verbatim %}"uc_phpwind": 0{% endverbatim %}（{{ '0为关闭'|trans }}，{{ '1为开启'|trans }}）</li>
+      <li>{{ '帐号同时登陆下线设置：'|trans }} {% verbatim %}"login_limit": 0{% endverbatim %}（{{ '0为关闭'|trans }}，{{ '1为开启'|trans }}）</li>
+    </ul>
+</div>
+
+{% endblock %}

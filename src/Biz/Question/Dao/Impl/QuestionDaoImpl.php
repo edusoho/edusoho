@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Question\Dao\Impl;
 
 use Biz\Question\Dao\QuestionDao;
@@ -18,6 +19,11 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
         return $this->findInField('parentId', array($id));
     }
 
+    public function findQuestionsByCourseSetId($courseSetId)
+    {
+        return $this->findInField('courseSetId', array($courseSetId));
+    }
+
     public function deleteSubQuestions($parentId)
     {
         return $this->db()->delete($this->table(), array('parentId' => $parentId));
@@ -25,7 +31,7 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
 
     public function getQuestionCountGroupByTypes($conditions)
     {
-        $builder = $this->_createQueryBuilder($conditions)
+        $builder = $this->createQueryBuilder($conditions)
             ->select('count(id) as questionNum, type');
 
         $builder->addGroupBy('type');
@@ -37,7 +43,7 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
     {
         $declares['orderbys'] = array(
             'createdTime',
-            'updatedTime'
+            'updatedTime',
         );
 
         $declares['conditions'] = array(
@@ -50,13 +56,20 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
             'subCount <> :subCount',
             'id NOT IN ( :excludeIds )',
             'courseId = :courseId',
+            'courseId IN (:courseIds)',
+            'courseSetId = :courseSetId',
+            'courseSetId IN (:courseSetIds)',
             'lessonId = :lessonId',
-            'lessonId IN ( :lessonIds)'
+            'lessonId >= :lessonIdGT',
+            'lessonId <= :lessonIdLT',
+            'lessonId IN ( :lessonIds)',
+            'copyId = :copyId',
+            'copyId IN (:copyIds)',
         );
 
         $declares['serializes'] = array(
             'answer' => 'json',
-            'metas'  => 'json'
+            'metas' => 'json',
         );
 
         return $declares;

@@ -19,7 +19,7 @@ $twig   = new Twig_Environment($loader, array(
     'cache' => false
 ));
 
-$twig->addGlobal('edusho_version', \Topxia\System::VERSION);
+$twig->addGlobal('edusho_version', \AppBundle\System::VERSION);
 
 $step         = intval(empty($_GET['step']) ? 0 : $_GET['step']);
 $init_data    = intval(empty($_GET['init_data']) ? 0 : $_GET['init_data']);
@@ -60,7 +60,7 @@ function install_step1($init_data = 0)
     $env                        = array();
     $env['os']                  = PHP_OS;
     $env['phpVersion']          = PHP_VERSION;
-    $env['phpVersionOk']        = version_compare(PHP_VERSION, '5.3.0') >= 0;
+    $env['phpVersionOk']        = version_compare(PHP_VERSION, '5.3.10') >= 0;
     $env['pdoMysqlOk']          = extension_loaded('pdo_mysql');
     $env['uploadMaxFilesize']   = ini_get('upload_max_filesize');
     $env['uploadMaxFilesizeOk'] = intval($env['uploadMaxFilesize']) >= 2;
@@ -117,13 +117,17 @@ function install_step1($init_data = 0)
     if ($safemode == 'On') {
         $pass = false;
     }
-
+    $result = _checkWebRoot();
+    if ($result === false) {
+        $pass = false;
+    }
     echo $twig->render('step-1.html.twig', array(
         'step'     => 1,
         'env'      => $env,
         'paths'    => $checkedPaths,
         'safemode' => $safemode,
-        'pass'     => $pass
+        'pass'     => $pass,
+        'root'   => $result,
     ));
 }
 
@@ -162,13 +166,11 @@ function install_step3($init_data = 0)
     $error = null;
 
     if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
-
         $biz['db']->beginTransaction();
         $installLogFd = @fopen($biz['log_directory'] . '/install.log', 'w');
         $output = new \Symfony\Component\Console\Output\StreamOutput($installLogFd);
-        $initializer = new \Topxia\Common\SystemInitializer($output);
+        $initializer = new \AppBundle\Common\SystemInitializer($output);
         try {
-
             if (!empty($init_data)) {
                 $biz['db']->exec("delete from `user` where id=1;");
                 $biz['db']->exec("delete from `user_profile` where id=1;");
@@ -179,7 +181,7 @@ function install_step3($init_data = 0)
                 $initializer->init();
                 _init_setting($admin);
             } else {
-                $service  = ServiceKernel::instance()->createService('System.SettingService');
+                $service  = ServiceKernel::instance()->createService('System:SettingService');
                 $settings = $service->get('storage', array());
                 if (!empty($settings['cloud_key_applied'])) {
                     unset($settings['cloud_access_key']);
@@ -199,7 +201,6 @@ function install_step3($init_data = 0)
         } catch (\Exception $e) {
             echo $e->getMessage();
             $biz['db']->rollBack();
-        } finally{
             @fclose($installLogFd);
         }
     }
@@ -360,9 +361,9 @@ function _create_config($config)
 {
     $secret = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
     $server = $_SERVER['SERVER_NAME'];
-    if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'){
+    if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
         $server = 'https://' . $server;
-    }else{
+    } else {
         $server = 'http://' . $server;
     }
     $config = "parameters:
@@ -507,7 +508,7 @@ EOD;
         )
     );
 
-    $service = ServiceKernel::instance()->createService('System.SettingService');
+    $service = ServiceKernel::instance()->createService('System:SettingService');
     foreach ($settings as $key => $value) {
         $setting = $service->get($key, array());
         $setting = array_merge($setting, $value);
@@ -518,7 +519,7 @@ EOD;
 
 function _initKey()
 {
-    $settingService = ServiceKernel::instance()->createService('System.SettingService');
+    $settingService = ServiceKernel::instance()->createService('System:SettingService');
 
     $settings = $settingService->get('storage', array());
 
@@ -529,9 +530,9 @@ function _initKey()
         );
     }
 
-    $applier = new \Topxia\Service\CloudPlatform\KeyApplier();
+    $applier = new \Biz\CloudPlatform\KeyApplier();
 
-    $userService = ServiceKernel::instance()->createService('User.UserService');
+    $userService = ServiceKernel::instance()->createService('User:UserService');
     $users = $userService->searchUsers(array('roles' => 'ROLE_SUPER_ADMIN'), array('createdTime', 'DESC'), 0, 1);
 
     if (empty($users) || empty($users[0])) {
@@ -551,4 +552,14 @@ function _initKey()
     $settingService->set('storage', $settings);
 
     return $keys;
+}
+
+function _checkWebRoot()
+{
+    $host = $_SERVER["HTTP_REFERER"];
+    $hostArray = explode('/',$host);
+    if (in_array('web', $hostArray)) {
+        return false;
+    }
+    return true;
 }

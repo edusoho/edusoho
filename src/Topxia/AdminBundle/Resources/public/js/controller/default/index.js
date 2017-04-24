@@ -38,7 +38,7 @@ define(function (require, exports, module) {
         courseExplore();
         studyCountStatistic();
         payOrderStatistic();
-        studyLessonCountStatistic()
+        studyTaskCountStatistic()
 
         //事件
         registerSwitchEvent();
@@ -53,19 +53,19 @@ define(function (require, exports, module) {
 
     var loadAjaxData = function () {
         systemStatusData()
-            .then(siteOverviewData);
+            .then(siteOverviewData)
             //.then(usersStatistic);
     }
 
     var registerSwitchEvent = function () {
 
-        // DataSwitchEvent('.js-user-switch-button', usersStatistic);
+        DataSwitchEvent('.js-user-switch-button', usersStatistic);
 
         DataSwitchEvent('.js-study-switch-button', studyCountStatistic);
 
         DataSwitchEvent('.js-order-switch-button', payOrderStatistic);
 
-        DataSwitchEvent('.js-lesson-switch-button', studyLessonCountStatistic);
+        DataSwitchEvent('.js-task-switch-button', studyTaskCountStatistic);
 
         DataSwitchEvent('.js-course-switch-button', courseExplore);
 
@@ -271,8 +271,8 @@ define(function (require, exports, module) {
 
     }
 
-    var studyLessonCountStatistic = function () {
-        this.element = $("#study-lesson-count-statistic");
+    var studyTaskCountStatistic = function () {
+        this.element = $("#study-task-count-statistic");
         var chart = echarts.init(this.element.get(0));
 
         chart.showLoading();
@@ -313,10 +313,10 @@ define(function (require, exports, module) {
 
                 series: [
                     {
-                        name: '学习课时数',
+                        name: '学习任务数',
                         type: 'bar',
                         barWidth: '16',
-                        data: response.series.finishedLessonCount
+                        data: response.series.finishedTaskCount
                     }
                 ]
             };

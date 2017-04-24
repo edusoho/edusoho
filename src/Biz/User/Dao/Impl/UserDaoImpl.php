@@ -14,6 +14,11 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         return $this->getByFields(array('email' => $email));
     }
 
+    public function getUserByType($type)
+    {
+        return $this->getByFields(array('type' => $type));
+    }
+
     public function getByNickname($nickname)
     {
         return $this->getByFields(array('nickname' => $nickname));
@@ -22,6 +27,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
     public function countByMobileNotEmpty()
     {
         $sql = "SELECT COUNT(DISTINCT `mobile`) FROM `user` AS u, `user_profile` AS up WHERE u.id = up.id AND u.`locked` = 0 AND `mobile` != ''";
+
         return $this->db()->fetchColumn($sql, array(), 0);
     }
 
@@ -56,7 +62,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         return $this->wave(array($id), array($name => $number));
     }
 
-    public function clearCounterById($id, $name)
+    public function deleteCounterById($id, $name)
     {
         $names = array('newMessageNum', 'newNotificationNum');
 
@@ -65,34 +71,38 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         }
 
         $currentTime = time();
-        $sql         = "UPDATE {$this->table} SET {$name} = 0, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
+        $sql = "UPDATE {$this->table} SET {$name} = 0, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
+
         return $this->db()->executeQuery($sql, array($id));
     }
 
     public function analysisRegisterDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>=? AND `createdTime`<=? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE `createdTime`>=? AND `createdTime`<=? group by date order by date ASC ";
+
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
     }
 
-    public function analysisUserSumByTime($endTime)
+    public function countByLessThanCreatedTime($time)
     {
-        $sql = "select date, count(*) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date from user o where o.createdTime<=? ) dates group by dates.date order by date desc";
-        return $this->db()->fetchAll($sql, array($endTime));
+        $sql = "SELECT count(id) as count FROM `{$this->table()}` WHERE  `createdTime` <= ?  ";
+
+        return $this->db()->fetchColumn($sql, array($time));
     }
 
-    //replace: count(array('createdTime' => $endTime))
-    // public function countByLessThanCreatedTime($endTime)
-    // {
-    //     $sql = "SELECT count(id) as count FROM `{$this->table}` WHERE  `createdTime`<=?  ";
-    //     return $this->db()->fetchColumn($sql, array($endTime));
-    // }
-
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
-        if (isset($conditions['roles'])) {
-            $conditions['roles'] = "%{$conditions['roles']}%";
-        }
+        $conditions = array_filter($conditions, function ($value) {
+            if ($value == '0') {
+                return true;
+            }
+
+            if (empty($value)) {
+                return false;
+            }
+
+            return true;
+        });
 
         if (isset($conditions['role'])) {
             $conditions['role'] = "|{$conditions['role']}|";
@@ -111,9 +121,6 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
             if (isset($conditions['keywordUserType'])) {
                 $conditions['type'] = "%{$conditions['keywordUserType']}%";
                 unset($conditions['keywordUserType']);
-            }
-            if (isset($conditions['nickname'])) {
-                $conditions['nickname'] = "%{$conditions['nickname']}%";
             }
         }
 
@@ -137,15 +144,9 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
             }
         }
 
-        if (isset($conditions['likeOrgCode'])) {
-            $conditions['likeOrgCode'] = $conditions['likeOrgCode'].'%';
-            unset($conditions['orgCode']);
-        }
+        $conditions['verifiedMobileNull'] = '';
 
-        $conditions['verifiedMobileNull'] = "";
-
-        $builder = parent::_createQueryBuilder($conditions);
-
+        $builder = parent::createQueryBuilder($conditions);
         if (array_key_exists('hasVerifiedMobile', $conditions)) {
             $builder = $builder->andWhere('verifiedMobile != :verifiedMobileNull');
         }
@@ -156,10 +157,21 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
     public function declares()
     {
         return array(
-            'orderbys'   => array('createdTime', 'promotedTime'),
+            'serializes' => array(
+                'roles' => 'delimiter',
+            ),
+            'orderbys' => array(
+                'id',
+                'createdTime',
+                'updatedTime',
+                'promotedTime',
+                'promoted',
+                'promotedSeq',
+                'nickname',
+            ),
             'timestamps' => array(
                 'createdTime',
-                'updatedTime'
+                'updatedTime',
             ),
             'conditions' => array(
                 'mobile = :mobile',
@@ -188,9 +200,9 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
                 'inviteCode = :inviteCode',
                 'inviteCode != :NoInviteCode',
                 'id NOT IN ( :excludeIds )',
-                'orgCode LIKE :likeOrgCode',
-                'orgCode = :orgCode'
-            )
+                'orgCode PRE_LIKE :likeOrgCode',
+                'orgCode = :orgCode',
+            ),
         );
     }
 }

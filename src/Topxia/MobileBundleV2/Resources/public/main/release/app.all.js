@@ -1755,7 +1755,7 @@ directive('imgError', function($timeout) {
                   });
 
                   if ("classroom" == attributes.imgError
-                     && attributes.imgSrc.indexOf("course-large.png") != -1) {
+                     && attributes.imgSrc.indexOf("classroom.png") != -1) {
                     return;
                   }
                   $timeout(function() {

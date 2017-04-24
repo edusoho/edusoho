@@ -24,6 +24,14 @@ define(function(require, exports, module) {
             element: '#mailer-form'
         });
 
+        if($("input[name='email-setting-status']").val()=="cloud_email_crm"){
+            validator.addItem({
+                element: '[name="name"]',
+                required: true,
+                errormessageRequired: Translator.trans('请输入发信人名称')
+            });
+        }
+
         $('[name=enabled]').change(function(e) {
             var radio = e.target.value;
 

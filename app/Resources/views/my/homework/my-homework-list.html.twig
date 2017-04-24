@@ -1,0 +1,81 @@
+{% extends 'my/layout.html.twig' %}
+
+{% block title %}我的作业 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-homework' %}
+
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">我的作业</span></div>
+    <div class="panel-body">
+      <ul class="nav nav-pills mb15">
+        <li class="{% if status == 'finished' %}active{% endif %}"><a href="{{ path('my_homework_list',{status:'finished'}) }}">已批阅</a></li>
+        <li class="{% if status == 'reviewing' %}active{% endif %}"><a href="{{ path('my_homework_list',{status:'reviewing'}) }}">批阅中</a></li>
+      </ul>
+
+      {% if paperResults %}
+        <table class="table table-striped table-hover">
+          <tbody>
+            {% for paperResult in paperResults %}
+              {% set homework = homeworks[paperResult.testId]|default(null) %}
+              {% set task = tasks[paperResult.lessonId]|default(null) %}
+              {% set course = courses[paperResult.courseId]|default(null) %}
+              {% set courseSet = courseSets[paperResult.courseSetId]|default(null) %}
+
+              {% if paperResult %}
+                <tr>
+                  <td width="55%">
+                    {{ task.title|plain_text(60) }}
+                    <div>
+                      {% if courseSet|default(null) %}
+                        <small class="color-gray">{{'来自课程'|trans}}<a class="link-primary" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">《{{ courseSet.title }}》</a></small>
+                      {% endif %}
+                      {% if course|default(null) %}
+                        <small class="color-gray">{{'计划'|trans}}<a class="link-primary" href="{{ path('course_show',{id:course.id}) }}" target="_blank">《{{ course.title|default(null) }}》</a></small>
+                      {% endif %}
+                      <small class="color-gray mhs">•</small>
+                      <small class="color-gray" title="{{'开始时间'|trans}}">{{ paperResult.beginTime|date('Y年n月d日 H:i:s'|trans) }}</small>
+                    </div>
+                  </td>
+
+                  <td>
+                    {% if paperResult.status == 'reviewing' %}
+                      <span class="color-warning">{{'正在批阅'|trans}}</span>
+                    {% elseif paperResult.status == 'finished' %}
+                      <span class="color-gray">
+                        {{'做对'|trans}}<strong>{{ paperResult.rightItemCount }}</strong>{{'题'|trans}}
+                        {% if homework %}{{ ' / 共'|trans }}<strong>{{ homework.itemCount }}</strong>{{'题'|trans}}{% endif %}
+                      </span>
+                    {% else %}
+                      <span class="color-gray">{{'未提交'|trans}}</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if paperResult.status in ['doing', 'paused'] %}
+                      <a href="{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}" class="btn btn-default btn-sm">{{'继续做题'|trans}}</a>
+                    {% elseif paperResult.status == 'finished' and homework %}
+                      <a href="{{ path('homework_result_show',{resultId:paperResult.id,action:'my'}) }}" class="btn btn-link btn-sm" target="_blank">{{'查看结果'|trans}}</a>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% else %}
+                <tr>
+                  <td colspan="3">
+                    {{ paperResult.paperName }}
+                    <br>
+                    <small>{{'该作业已删除'|trans}}</small>
+                  </td>
+                </tr>
+              {% endif %}
+            {% endfor %}
+
+          </tbody>
+        </table>
+        {{ web_macro.paginator(paginator) }}
+      {% else %}
+        <div class="empty">{{'还没有做过任何作业'|trans}}</div>
+      {% endif %}
+    </div>
+  </div>
+  
+{% endblock %}

@@ -2,10 +2,9 @@
 
 namespace Biz\Question\Type;
 
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Exception\UnexpectedValueException;
+use AppBundle\Common\Exception\UnexpectedValueException;
 
-class Fill implements TypeInterface
+class Fill extends BaseQuestion implements TypeInterface
 {
     public function create($fields)
     {
@@ -26,7 +25,7 @@ class Fill implements TypeInterface
     public function judge($question, $answer)
     {
         $questionAnswers = array_values($question['answer']);
-        $answer          = array_values($answer);
+        $answer = array_values($answer);
 
         if (count($answer) != count($questionAnswers)) {
             return array('status' => 'wrong', 'score' => 0);
@@ -36,15 +35,15 @@ class Fill implements TypeInterface
         foreach ($questionAnswers as $index => $rightAnswer) {
             $expectAnswer = array();
             foreach ($rightAnswer as $key => $value) {
-                $value          = trim($value);
-                $value          = preg_replace("/([\x20\s\t]){2,}/", " ", $value);
+                $value = trim($value);
+                $value = preg_replace("/([\x20\s\t]){2,}/", ' ', $value);
                 $expectAnswer[] = $value;
             }
 
             $actualAnswer = trim($answer[$index]);
-            $actualAnswer = preg_replace("/([\x20\s\t]){2,}/", " ", $actualAnswer);
+            $actualAnswer = preg_replace("/([\x20\s\t]){2,}/", ' ', $actualAnswer);
             if (in_array($actualAnswer, $expectAnswer)) {
-                $rightCount++;
+                ++$rightCount;
             }
         }
 
@@ -52,21 +51,22 @@ class Fill implements TypeInterface
             return array('status' => 'wrong', 'score' => 0);
         } elseif ($rightCount < count($questionAnswers)) {
             $percentage = intval($rightCount / count($questionAnswers) * 100);
-            $score      = ($question['score'] * $percentage) / 100;
-            $score      = number_format($score, 1, '.', '');
+            $score = ($question['score'] * $percentage) / 100;
+            $score = number_format($score, 1, '.', '');
+
             return array('status' => 'partRight', 'percentage' => $percentage, 'score' => $score);
         } else {
             return array('status' => 'right', 'score' => $question['score']);
         }
     }
 
-    public function filter($fields)
+    public function filter(array $fields)
     {
-        $fields = $this->commonFilter($fields);
+        $fields = parent::filter($fields);
 
         preg_match_all("/\[\[(.+?)\]\]/", $fields['stem'], $answer, PREG_PATTERN_ORDER);
         if (empty($answer[1])) {
-            throw new UnexpectedValueException("This Question Answer Unexpected");
+            throw new UnexpectedValueException('This Question Answer Unexpected');
         }
 
         $fields['answer'] = array();
@@ -77,38 +77,6 @@ class Fill implements TypeInterface
             }
             $fields['answer'][] = $value;
         }
-
-        return $fields;
-    }
-
-    protected function commonFilter($fields)
-    {
-        if (!empty($fields['target']) && $fields['target'] > 0) {
-            $fields['lessonId'] = $fields['target'];
-            unset($fields['target']);
-        }
-        $fields = ArrayToolkit::parts($fields, array(
-            'type',
-            'stem',
-            'difficulty',
-            'userId',
-            'answer',
-            'analysis',
-            'metas',
-            'score',
-            'categoryId',
-            'parentId',
-            'copyId',
-            'target',
-            'courseId',
-            'lessonId',
-            'subCount',
-            'finishedTimes',
-            'passedTimes',
-            'userId',
-            'updatedTime',
-            'createdTime'
-        ));
 
         return $fields;
     }

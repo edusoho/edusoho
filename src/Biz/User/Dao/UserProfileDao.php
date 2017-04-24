@@ -2,7 +2,9 @@
 
 namespace Biz\User\Dao;
 
-interface UserProfileDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface UserProfileDao extends GeneralDaoInterface
 {
     public function findByIds(array $ids);
 

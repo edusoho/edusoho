@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Component\Echats\EchartsBuilder;
 use Topxia\Service\CloudPlatform\AppService;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\CourseService;
 use Topxia\Service\Course\ThreadService;
 use Topxia\Service\Order\OrderService;
@@ -162,6 +161,7 @@ class DefaultController extends BaseController
             'course.live_course_enabled'  => '',
             'cloud_sms.sms_enabled'       => '',
             'cloud_search.search_enabled' => '',
+            'cloud_consult.cloud_consult_setting_enabled' => 0,
             'storage.upload_mode'         => 'cloud'
         );
 
@@ -429,7 +429,7 @@ class DefaultController extends BaseController
         $dayRegisterTotal = $userAnalysis['series']['registerTotalCount'];
         $activeUserCount  = $userAnalysis['series']['activeUserCount'];
         array_walk($dayRegisterTotal, function ($value, $index) use (&$lostUserCount, $activeUserCount) {
-            $lostUserCount[] = $value - $activeUserCount[$index];
+            $lostUserCount[] = ($value - $activeUserCount[$index]) <= 0 ? 0 : ($value - $activeUserCount[$index]);
         });
 
         return $lostUserCount;
@@ -565,7 +565,7 @@ class DefaultController extends BaseController
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return $this->getServiceKernel()->createService('System.LogService');
     }
 
     /**

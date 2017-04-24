@@ -2,21 +2,23 @@
 
 namespace Biz\Taxonomy\Service\Impl;
 
-
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Dao\TagDao;
 use Biz\Taxonomy\Dao\TagGroupDao;
 use Biz\Taxonomy\Dao\TagGroupTagDao;
 use Biz\Taxonomy\Dao\TagOwnerDao;
 use Biz\Taxonomy\Service\TagService;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
 class TagServiceImpl extends BaseService implements TagService
 {
     private $allowFields
         = array(
-            'name', 'scope', 'tagNum'
+            'name',
+            'scope',
+            'tagNum',
         );
 
     public function getTag($id)
@@ -36,12 +38,16 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function getTagOwnerRelationByTagIdAndOwner($tagId, $owner)
     {
-        return $this->getTagOwnerDao()->getTagOwnerRelationByTagIdAndOwnerTypeAndOwnerId($tagId, $owner['ownerType'], $owner['ownerId']);
+        return $this->getTagOwnerDao()->getTagOwnerRelationByTagIdAndOwnerTypeAndOwnerId(
+            $tagId,
+            $owner['ownerType'],
+            $owner['ownerId']
+        );
     }
 
     public function getTagByLikeName($name)
     {
-        return $this->getTagDao()->getByLikeName($name);
+        return $this->getTagDao()->findByLikeName($name);
     }
 
     public function findAllTags($start, $limit)
@@ -96,15 +102,17 @@ class TagServiceImpl extends BaseService implements TagService
         return $this->getTagOwnerDao()->findByTagIdsAndOwnerType($tagIds, $ownerType);
     }
 
-    public function searchTags($conditions, $start, $limit)
+    public function searchTags($conditions, $sort, $start, $limit)
     {
         $conditions = $this->_prepareConditions($conditions);
-        return $this->getTagDao()->search($conditions, array(), $start, $limit);
+
+        return $this->getTagDao()->search($conditions, $sort, $start, $limit);
     }
 
     public function searchTagCount($conditions)
     {
         $conditions = $this->_prepareConditions($conditions);
+
         return $this->getTagDao()->count($conditions);
     }
 
@@ -113,7 +121,7 @@ class TagServiceImpl extends BaseService implements TagService
         $magic = $this->getSettingService()->get('magic');
 
         if (isset($magic['enable_org']) && $magic['enable_org']) {
-            $user                = $this->getCurrentUser();
+            $user = $this->getCurrentUser();
             $conditions['orgId'] = !empty($user['org']) ? $user['org']['id'] : null;
         }
 
@@ -122,7 +130,9 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function findTagsByIds(array $ids)
     {
-        return $this->getTagDao()->findByIds($ids);
+        $tags = $this->getTagDao()->findByIds($ids);
+
+        return ArrayToolkit::index($tags, 'id');
     }
 
     public function findTagsByNames(array $names)
@@ -162,11 +172,11 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function addTag(array $tag)
     {
-        $tag                = ArrayToolkit::parts($tag, array('name'));
-        $tag                = $this->filterTagFields($tag);
+        $tag = ArrayToolkit::parts($tag, array('name'));
+        $tag = $this->filterTagFields($tag);
         $tag['createdTime'] = time();
-        $tag                = $this->setTagOrg($tag);
-        $tag                = $this->getTagDao()->create($tag);
+        $tag = $this->setTagOrg($tag);
+        $tag = $this->getTagDao()->create($tag);
 
         $this->getLogService()->info('tag', 'create', "添加标签{$tag['name']}(#{$tag['id']})");
 
@@ -176,11 +186,11 @@ class TagServiceImpl extends BaseService implements TagService
     public function addTagGroup($fields)
     {
         if (empty($fields['name'])) {
-            throw $this->createServiceException("标签组名字未填写，请添加");
+            throw $this->createServiceException('标签组名字未填写，请添加');
         }
 
         if ($this->getTagGroupDao()->getByName($fields['name'])) {
-            throw $this->createServiceException("标签组名字已存在，请重新填写");
+            throw $this->createServiceException('标签组名字已存在，请重新填写');
         }
 
         $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
@@ -192,10 +202,12 @@ class TagServiceImpl extends BaseService implements TagService
         $tagGroup = $this->getTagGroupDao()->create($fields);
 
         foreach ($tagIds as $tagId) {
-            $this->getTagGroupTagDao()->create(array(
-                'tagId'   => $tagId,
-                'groupId' => $tagGroup['id'],
-            ));
+            $this->getTagGroupTagDao()->create(
+                array(
+                    'tagId' => $tagId,
+                    'groupId' => $tagGroup['id'],
+                )
+            );
         }
 
         $this->getLogService()->info('tagGroup', 'create', "添加标签组{$tagGroup['name']}(#{$tagGroup['id']})");
@@ -216,14 +228,14 @@ class TagServiceImpl extends BaseService implements TagService
             return $tag;
         }
 
-        $user       = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $currentOrg = $user['org'];
 
         if (empty($currentOrg)) {
             return $tag;
         }
 
-        $tag['orgId']   = $currentOrg['id'];
+        $tag['orgId'] = $currentOrg['id'];
         $tag['orgCode'] = $currentOrg['orgCode'];
 
         return $tag;
@@ -241,6 +253,7 @@ class TagServiceImpl extends BaseService implements TagService
         $this->filterTagFields($fields, $tag);
 
         $this->getLogService()->info('tag', 'update', "编辑标签{$fields['name']}(#{$id})");
+
         return $this->getTagDao()->update($id, $fields);
     }
 
@@ -295,7 +308,7 @@ class TagServiceImpl extends BaseService implements TagService
 
         $this->getTagDao()->delete($id);
 
-        $this->dispatchEvent("tag.delete", array('tagId' => $id));
+        $this->dispatchEvent('tag.delete', array('tagId' => $id));
         $this->getLogService()->info('tag', 'delete', "编辑标签#{$id}");
     }
 
@@ -313,13 +326,24 @@ class TagServiceImpl extends BaseService implements TagService
         return $this->getTagOwnerDao()->deleteByOwnerTypeAndOwnerId($owner['ownerType'], $owner['ownerId']);
     }
 
+    public function findTagIdsByOwnerTypeAndOwnerIds($ownerType, array $ids)
+    {
+        $tagOwnerRelations = $this->getTagOwnerDao()->findByOwnerTypeAndOwnerIds($ownerType, $ids);
+        $tagIds = ArrayToolkit::group($tagOwnerRelations, 'ownerId');
+        foreach ($tagIds as $key => $value) {
+            $tagIds[$key] = ArrayToolkit::column($value, 'tagId');
+        }
+
+        return $tagIds;
+    }
+
     protected function filterTagFields(&$tag, $relatedTag = null)
     {
         if (empty($tag['name'])) {
             throw $this->createServiceException($this->getKernel()->trans('标签名不能为空，添加失败！'));
         }
 
-        $tag['name'] = (string)$tag['name'];
+        $tag['name'] = (string) $tag['name'];
 
         $exclude = $relatedTag ? $relatedTag['name'] : null;
 
@@ -329,7 +353,6 @@ class TagServiceImpl extends BaseService implements TagService
 
         return $tag;
     }
-
 
     protected function filterTagGroupFields($fields)
     {
@@ -370,17 +393,19 @@ class TagServiceImpl extends BaseService implements TagService
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return $this->biz->service('System:SettingService');
     }
 
     protected function getKernel()
     {
         return ServiceKernel::instance();
     }
-
 }

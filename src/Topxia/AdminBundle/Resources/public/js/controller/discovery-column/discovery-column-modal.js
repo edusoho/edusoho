@@ -40,18 +40,20 @@ define(function(require, exports, module) {
             required: true,
             rule: 'minlength{min:1} maxlength{max:10} remote'
         });
+        $('.radios').on('click', "input[name=type]", function() {
+            var selectedValue = $(this).attr('value');
+            var url = $(this).data(url);
 
-        $('body').on('click', '#live', function(){
-            $('.order-form').addClass('hide');
+            $.get(url['url'], function(html){
+                $('.category-ajax').html(html);
+            });
+            if (selectedValue == 'classroom' || selectedValue == 'course') {
+                $('.order-form').removeClass('hide');
+            }
+            if (selectedValue == 'live') {
+                $('.order-form').addClass('hide');
+            }
         });
-        
-        $('body').on('click', '#course', function(){
-            $('.order-form').removeClass('hide');
-        });
-
-        $('body').on('click', '#classroom', function(){
-            $('.order-form').removeClass('hide');
-        })
     };
 
 });

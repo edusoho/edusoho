@@ -1,0 +1,14 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+      {{'您加入的班级'|trans}}<a href='{{path('classroom_threads', {classroomId:data.classroomId})}}'>《{{data.classroomTitle}}》</a>{{'将在%endtime%到期。'|trans({'%endtime%':data.endtime})}}
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>

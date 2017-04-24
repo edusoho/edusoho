@@ -2,14 +2,17 @@
 
 namespace Biz\Testpaper\Dao;
 
-interface TestpaperResultDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface TestpaperResultDao extends GeneralDaoInterface
 {
-    public function getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId);
+    public function getUserUnfinishResult($testId, $courseId, $activityId, $type, $userId);
 
-    public function getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type);
+    public function getUserFinishedResult($testId, $courseId, $activityId, $type, $userId);
 
-    public function findPaperResultsStatusNumGroupByStatus($testId);
+    public function getUserLatelyResultByTestId($userId, $testId, $courseId, $activityId, $type);
 
-    public function searchTestpapersScore($conditions);
+    public function findPaperResultsStatusNumGroupByStatus($testId, $courseIds);
 
+    public function sumScoreByParames($conditions);
 }

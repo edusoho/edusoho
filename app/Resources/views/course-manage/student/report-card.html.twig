@@ -1,0 +1,87 @@
+<div class="es-piece" style="margin-bottom:0">
+  <div class="piece-header">
+    成绩单
+  </div>
+  {% if finishedHomeworksCount or finishedTestpapersCount %}
+  <div class="report-card">
+    <div class="report-card-header">
+      <i class="es-icon es-icon-chevronright mrs"></i>
+      <span class="include">  作业:{{ finishedHomeworksCount }}/{{ homeworksCount }}&nbsp;&nbsp;&nbsp;考试：{{ finishedTestpapersCount }}
+        /{{ testpapersCount }}</span>
+    </div>
+    {% for activity in activities if allTests[activity['mediaId']]|default(null) %}
+    {% set test = allTests[activity['mediaId']]|default(null) %}
+    {% set bestTest = bestTests[activity.id]|default('') %}
+    {% set finishedResults = finishedTests[activity.id]|default('') %}
+    {% set reviewingResults = reviewingTests[activity.id]|default('') %}
+    {% set typeName = test.type == 'homework' ? '作业' : '考试' %}
+    {% set _index = 0 %}
+    {% if finishedResults %}
+    <div class="report-card-main">
+      <div class="card-main-title open"><i class="es-icon es-icon-exam mrs"></i>
+        {{ typeName }}：{{ activity.name }}
+        <span class="score hidden-xs">
+          {% if test.type == 'homework' %}
+            <span>{{ dict_text('passedStatus', bestTest.passedStatus) }}</span>
+          {% else %}
+            <span>{{ bestTest.score|default(0) }}</span>
+            分 / {{ test.score|default(0) }}分
+          {% endif %}
+        </span>
+      </div>
+      <ul class="score-list">
+        {% for result in finishedResults %}
+          {% set _index = loop.index %}
+          <li>
+            <span class="name">
+              第 {{ loop.index }} 次{{ typeName }}
+            </span>
+            <span class="date">
+              {{ result.beginTime|date('Y/m/d') }}
+            </span>
+            <span class="score">
+              {% if test.type == 'homework' %}
+                {{ dict_text('passedStatus', result.passedStatus) }}
+              {% else %}
+                {{ result.score }}
+              {% endif %}
+            </span>
+            <span class="reviews hidden-xs pull-right" data-toggle="tooltip" data-placement="top"
+              title="{% if result.teacherSay|default('') %}{{ result.teacherSay }}{% else %}暂无评语{% endif %}">评语</span>
+          </li>
+        {% endfor %}
+        {% if reviewingResults %}
+          {% for result in reviewingResults %}
+            <li>
+              <span class="name">第 {{ loop.index + _index }} 次{{ typeName }}</span>
+              <span class="date">{{ result.beginTime|date('Y/m/d') }}</span>
+              <span class="score">{{ '待批阅'|trans }}</span>
+            </li>
+          {% endfor %}
+        {% endif %}
+      </ul>
+    </div>
+  {% elseif reviewingResults %}
+    <div class="report-card-main">
+      <div class="card-main-title open"><i class="es-icon es-icon-exam mrs"></i>
+        {{ typeName }}：{{ activity.name }}
+        <span class="score hidden-xs">待批阅</span>
+      </div>
+      <ul class="score-list">
+        {% for result in reviewingResults %}
+          <li>
+            <span class="name">第 {{ loop.index }} 次{{ typeName }}</span>
+            <span class="date">{{ result.beginTime|date('Y/m/d') }}</span>
+            <span class="score">{{ '待批阅'|trans }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% endfor %}
+    </div>
+    {% else %}
+      <div class="empty">
+        暂无数据
+      </div>
+    {% endif %}
+  </div>

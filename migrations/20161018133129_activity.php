@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class Activity extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -14,7 +14,7 @@ class Activity extends Migration
         $connection->exec("CREATE TABLE `activity` (
             `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
             `title` varchar(255) NOT NULL COMMENT '标题',
-            `desc` text COMMENT '正文',
+            `remark` TEXT DEFAULT NULL COMMENT '正文',
             `mediaId` int(10) unsigned DEFAULT '0' COMMENT '教学活动详细信息Id，如：视频id, 教室id',
             `mediaType` varchar(50) NOT NULL COMMENT '活动类型',
             `content` text COMMENT '活动描述',
@@ -22,6 +22,7 @@ class Activity extends Migration
             `fromCourseId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属教学计划',
             `fromCourseSetId`  int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属的课程',
             `fromUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建者的ID',
+            `copyId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制来源activity的id',
             `startTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始时间',
             `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '结束时间',
             `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
@@ -31,12 +32,12 @@ class Activity extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("DROP TABLE IF EXISTS `activity`");
+        $connection->exec('DROP TABLE IF EXISTS `activity`');
     }
 }

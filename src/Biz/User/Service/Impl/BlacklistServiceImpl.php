@@ -1,8 +1,10 @@
 <?php
+
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use Biz\User\Dao\BlacklistDao;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\BlacklistService;
 
 class BlacklistServiceImpl extends BaseService implements BlacklistService
@@ -22,6 +24,7 @@ class BlacklistServiceImpl extends BaseService implements BlacklistService
         if (!$this->canTakeBlacklist($userId)) {
             throw $this->createAccessDeniedException('Access Denied');
         }
+
         return $this->getBlacklistDao()->findByUserId($userId);
     }
 
@@ -73,6 +76,7 @@ class BlacklistServiceImpl extends BaseService implements BlacklistService
         if ($user['id'] == $userId || $user->isAdmin()) {
             return true;
         }
+
         return false;
     }
 
@@ -81,6 +85,9 @@ class BlacklistServiceImpl extends BaseService implements BlacklistService
         return $this->biz->service('User:UserService');
     }
 
+    /**
+     * @return BlacklistDao
+     */
     protected function getBlacklistDao()
     {
         return $this->createDao('User:BlacklistDao');

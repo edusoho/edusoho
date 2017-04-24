@@ -8,7 +8,7 @@
              data-role="import-url" value="{{ activity.ext.mediaUri|default(null) }}">
       <span class="input-group-btn">
         <button type="button" class="btn btn-default js-video-import" data-role="import"
-                data-url="{{ path('course_manage_media_import', {id:courseId}) }}"
+                data-url="{{ path('media_video_import', {courseId:courseId}) }}"
                 data-loading-text="{{ '正在导入，请稍等'|trans }}">{{ '导入'|trans }}</button>
       </span>
     </div>

@@ -7,15 +7,11 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class TestpaperItemResultDaoImpl extends GeneralDaoImpl implements TestpaperItemResultDao
 {
-    protected $table = "testpaper_item_result";
+    protected $table = 'testpaper_item_result_v8';
 
-    private $serializeFields = array(
-        'answer' => 'json'
-    );
-
-    public function findItemResultsByResultId($resultId)
+    public function findItemResultsByResultId($resultId, $type)
     {
-        return $this->findInField('resultId', array($resultId));
+        return $this->findByFields(array('resultId' => $resultId, 'type' => $type));
     }
 
     public function addItemAnswers($testPaperResultId, $answers, $testPaperId, $userId)
@@ -28,8 +24,8 @@ class TestpaperItemResultDaoImpl extends GeneralDaoImpl implements TestpaperItem
             return json_encode($answer);
         }, $answers);
 
-        $mark          = "(".str_repeat('?,', 4)."? )";
-        $marks         = str_repeat($mark.',', count($answers) - 1).$mark;
+        $mark = '('.str_repeat('?,', 4).'? )';
+        $marks = str_repeat($mark.',', count($answers) - 1).$mark;
         $answersForSQL = array();
 
         foreach ($answers as $key => $value) {
@@ -52,13 +48,13 @@ class TestpaperItemResultDaoImpl extends GeneralDaoImpl implements TestpaperItem
             return json_encode($answer);
         }, $answers);
 
-        $sql           = '';
+        $sql = '';
         $answersForSQL = array();
 
         $this->db()->beginTransaction();
         try {
             foreach ($answers as $key => $value) {
-                $sql           = "UPDATE {$this->table} set `answer` = ? WHERE `questionId` = ? AND `resultId` = ?;";
+                $sql = "UPDATE {$this->table} set `answer` = ? WHERE `questionId` = ? AND `resultId` = ?;";
                 $answersForSQL = array($value, (int) $key, (int) $testPaperResultId);
                 $this->db()->executeQuery($sql, $answersForSQL);
             }
@@ -76,13 +72,13 @@ class TestpaperItemResultDaoImpl extends GeneralDaoImpl implements TestpaperItem
             return array();
         }
 
-        $sql           = '';
+        $sql = '';
         $answersForSQL = array();
 
         $this->db()->beginTransaction();
         try {
             foreach ($answers as $key => $value) {
-                $sql           = "UPDATE {$this->table} set `status` = ?, `score` = ? WHERE `questionId` = ? AND `resultId` = ?;";
+                $sql = "UPDATE {$this->table} set `status` = ?, `score` = ? WHERE `questionId` = ? AND `resultId` = ?;";
                 $answersForSQL = array($value['status'], $value['score'], (int) $key, (int) $testPaperResultId);
                 $this->db()->executeQuery($sql, $answersForSQL);
             }
@@ -100,13 +96,13 @@ class TestpaperItemResultDaoImpl extends GeneralDaoImpl implements TestpaperItem
             return array();
         }
 
-        $sql           = '';
+        $sql = '';
         $answersForSQL = array();
 
         $this->db()->beginTransaction();
         try {
             foreach ($answers as $key => $value) {
-                $sql           = "UPDATE {$this->table} set `score` = ?, `teacherSay` = ?, `status` = ? WHERE `questionId` = ? AND `resultId` = ?;";
+                $sql = "UPDATE {$this->table} set `score` = ?, `teacherSay` = ?, `status` = ? WHERE `questionId` = ? AND `resultId` = ?;";
                 $answersForSQL = array($value['score'], $value['teacherSay'], $value['status'], (int) $key, (int) $testPaperResultId);
                 $this->db()->executeQuery($sql, $answersForSQL);
             }
@@ -129,12 +125,14 @@ class TestpaperItemResultDaoImpl extends GeneralDaoImpl implements TestpaperItem
         $questionIds[] = $testPaperResultId;
 
         $sql = "SELECT * FROM {$this->table} WHERE questionId IN ({$marks}) AND resultId = ?";
+
         return $this->db()->fetchAll($sql, $questionIds) ?: array();
     }
 
     public function findRightItemCountByTestPaperResultId($testPaperResultId)
     {
         $sql = "SELECT COUNT(id) FROM {$this->table} WHERE resultId = ? AND status = 'right' ";
+
         return $this->db()->fetchColumn($sql, array($testPaperResultId));
     }
 
@@ -142,25 +140,28 @@ class TestpaperItemResultDaoImpl extends GeneralDaoImpl implements TestpaperItem
     {
         $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE `userId` = ? AND `status` in ('wrong') LIMIT {$start}, {$limit}";
+
         return $this->db()->fetchAll($sql, array($id)) ?: array();
     }
 
     public function findWrongResultCountByUserId($id)
     {
         $sql = "SELECT COUNT(id) FROM {$this->table} WHERE `userId` = ? AND `status` in ('wrong')";
+
         return $this->db()->fetchColumn($sql, array($id));
     }
 
     public function deleteTestpaperItemResultByTestpaperId($testpaperId)
     {
         $sql = "DELETE FROM {$this->table} WHERE testId = ?";
+
         return $this->db()->executeUpdate($sql, array($testpaperId));
     }
 
     public function declares()
     {
         $declares['serializes'] = array(
-            'answer' => 'json'
+            'answer' => 'json',
         );
 
         return $declares;

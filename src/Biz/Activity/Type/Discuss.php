@@ -3,6 +3,7 @@
 namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
+use Biz\Activity\Service\ActivityLearnLogService;
 
 class Discuss extends Activity
 {
@@ -14,7 +15,16 @@ class Discuss extends Activity
 
     public function isFinished($activityId)
     {
-        return true;
+        $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'finish');
+
+        return !empty($result);
     }
 
+    /**
+     * @return ActivityLearnLogService
+     */
+    protected function getActivityLearnLogService()
+    {
+        return $this->getBiz()->service('Activity:ActivityLearnLogService');
+    }
 }

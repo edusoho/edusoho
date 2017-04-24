@@ -52,24 +52,27 @@ class UserProfileDaoImpl extends GeneralDaoImpl implements UserProfileDao
             'varcharField7',
             'varcharField8',
             'varcharField9',
-            'varcharField10');
+            'varcharField10', );
 
         if (!in_array($fieldName, $fieldNames)) {
             throw new InvalidArgumentException('Invalid Arguments');
         }
 
-        $sql    = "UPDATE {$this->table} set {$fieldName} =null ";
+        $sql = "UPDATE {$this->table} set {$fieldName} =null ";
         $result = $this->db()->exec($sql);
+
         return $result;
     }
 
     public function findDistinctMobileProfiles($start, $limit)
     {
+        // @TODO SQL Inject
         $sql = "SELECT * FROM {$this->table} WHERE `mobile` <> '' GROUP BY `mobile` ORDER BY `id` ASC LIMIT {$start}, {$limit}";
+
         return $this->db()->fetchAll($sql);
     }
 
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         if (isset($conditions['mobile'])) {
             $conditions['mobile'] = "%{$conditions['mobile']}%";
@@ -87,13 +90,13 @@ class UserProfileDaoImpl extends GeneralDaoImpl implements UserProfileDao
             $conditions['idcard'] = "%{$conditions['keyword']}%";
         }
 
-        return parent::_createQueryBuilder($conditions);
+        return parent::createQueryBuilder($conditions);
     }
 
     public function declares()
     {
         return array(
-            'orderbys'   => array('id'),
+            'orderbys' => array('id'),
             'conditions' => array(
                 'mobile LIKE :mobile',
                 'truename LIKE :truename',
@@ -101,8 +104,8 @@ class UserProfileDaoImpl extends GeneralDaoImpl implements UserProfileDao
                 'id IN (:ids)',
                 'mobile = :tel',
                 'mobile <> :mobileNotEqual',
-                'qq LIKE :qq'
-            )
+                'qq LIKE :qq',
+            ),
         );
     }
 }

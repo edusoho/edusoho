@@ -2,7 +2,9 @@
 
 namespace Biz\User\Dao;
 
-interface UserBindDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface UserBindDao extends GeneralDaoInterface
 {
     public function getByFromId($fromId);
 

@@ -12,15 +12,16 @@ define(function(require, exports, module) {
     }
     exports.run = function() {
 
-        var add_btn_clicked = false;
-
-
         $('#add-btn').click(function() {
-            if (!add_btn_clicked) {
-                $('#add-btn').button('loading').addClass('disabled');
-                add_btn_clicked = true;
-            }
-            return true;
+            $(this).addClass('disabled');
+            var url = $(this).data('url');
+            $.post(url, function(data){
+                if(data.status == 'success') {
+                    window.location.reload();
+                } else {
+                    Notify.danger(data.message);
+                }
+            });
         });
 
         $("#thread-list").on('click', '.uncollect-btn, .collect-btn', function() {
@@ -309,6 +310,15 @@ define(function(require, exports, module) {
                 if (!confirm(Translator.trans('真的要退出该小组？您在该小组的信息将删除！'))) {
                     return false;
                 }
+
+                var url = $(this).data('url');
+                $.post(url, function(data){
+                    if(data.status == 'success') {
+                        window.location.reload();
+                    } else {
+                        Notify.danger(data.message);
+                    }
+                });
             })
 
         }

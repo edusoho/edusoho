@@ -1,0 +1,56 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_login_record' %}
+
+{% set script_controller = 'login-record/list' %}
+
+{% block main %}
+
+<div class="well well-sm">
+  <form id="login-record-search-form" class="form-inline" action="" method="get" novalidate> 
+    
+    {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+    
+    <div class="form-group controls">
+      <select id="keywordType" name="keywordType" class="form-control">
+        {{ select_options(dict('userKeyWordTypes'), app.request.query.get('keywordType')) }}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'关键词'|trans}}">
+    </div>
+
+    <div class="form-group">
+        <input class="form-control" type="text" id="startDate" name="startDateTime" value="{{app.request.query.get('startDateTime')}}" placeholder="{{'起始时间'|trans}}">
+    </div>
+
+    <div class="form-group">
+        <input class="form-control" type="text" id="endDate" name="endDateTime" value="{{app.request.query.get('endDateTime')}}" placeholder="{{'结束时间'|trans}}">
+    </div>
+    <span></span>
+
+    <button class="btn btn-primary">{{'搜索'|trans}}</button>
+  </form>
+</div>
+
+<table id="teacher-table" class="table table-striped table-hover" data-search-form="#user-search-form">
+  <thead>
+    <tr>
+      <th>{{'用户名'|trans}}</th>
+      {% include 'org/parts/table-thead-tr.html.twig' %}
+      <th>{{'用户邮箱'|trans}}</th>
+      <th>{{'登录时间IP'|trans}}</th>
+      <th>{{'登录地点'|trans}}</th>
+      <th width="12%">{{'查看记录'|trans}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for logRecord in logRecords %}
+      {% set user = users[logRecord.userId]|default(null) %}
+      {% include 'admin/login-record/table-tr.html.twig' with {logRecord:logRecord} %}
+    {% endfor %}
+  </tbody>
+</table>
+  {{ admin_macro.paginator(paginator) }} 
+{% endblock %}

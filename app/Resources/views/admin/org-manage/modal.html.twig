@@ -1,0 +1,52 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% set modalSize = 'large' %}
+{% block title %}{% if org.id|default(null) %}{{ '编辑组织机构'|trans }}{% else %}{{ '添加组织机构'|trans }}{% endif %}{% endblock %}
+
+{% block body %}
+  <form id="org-manage-form" class="form-horizontal"
+        action="{% if org.id|default(null) %}{{ path('admin_org_update', {id:org.id}) }}{% else %}{{ path('admin_org_create') }}{% endif %}"
+        method="post">
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="org-name-field">{{ '名称'|trans }}</label>
+      <div class="col-md-8 controls">
+        <input class="form-control" id="org-name-field" type="text" name="name" value="{{ org.name|default('') }}"
+               data-url="{{ path('admin_org_checkname',{parentId: org.parentId|default(0),exclude:org.id|default(null)}) }}"
+               tabindex="1">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="org-code-field">{{ '编码'|trans }}</label>
+      <div class="col-md-8 controls">
+        <input class="form-control" id="org-code-field" type="text" name="code" value="{{ org.code|default('') }}"
+               data-url="{{ path('admin_org_checkcode', {exclude:org.code|default(null)}) }}" tabindex="3">
+        <div class="help-block">{{ '必填，建议使用分类名称的英文单词或缩写作为编码。'|trans }}</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="org-description-field">{{ '描述'|trans }}</label>
+      <div class="col-md-8 controls">
+        <textarea class="form-control" id="org-description-field" style="height:100px;"
+                  name="description">{{ org.description |default('') }}</textarea>
+        <div class="help-block">{{ '非必填'|trans }}</div>
+      </div>
+    </div>
+    <input type="hidden" name="parentId" value="{{ org.parentId|default(0) }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}
+{% block footer %}
+  {% if org.id|default(null) %}
+    <button type="button" class="btn btn-default pull-left delete-org"
+            data-url="{{ path('admin_org_delete', {id:org.id}) }}" tabindex="5"><i
+          class="glyphicon glyphicon-trash"></i> {{ '删除'|trans }}
+    </button>
+    <span class="pull-left pts plm" style="color: #999;">{{ '会同时删除下辖组织机构'|trans }}</span>
+  {% endif %}
+  
+  <script>app.load('topxiaadminbundle/controller/orgManage/save-modal');</script>
+  <button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">{{ '取消'|trans }}</button>
+  <button id="org-create-btn" data-submiting-text="{{ '正在提交'|trans }}" type="submit" class="btn btn-primary"
+          data-toggle="form-submit" data-target="#org-manage-form" tabindex="4">{{ '保存'|trans }}</button>
+{% endblock %}

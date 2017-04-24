@@ -1,0 +1,165 @@
+<?php
+
+namespace AppBundle\Handler;
+
+use Biz\User\CurrentUser;
+use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\MemberService;
+use Biz\System\Service\SettingService;
+use Codeages\Biz\Framework\Context\Biz;
+use Biz\CloudPlatform\Service\AppService;
+use Biz\User\Service\NotificationService;
+use VipPlugin\Biz\Vip\Service\VipService;
+use Biz\Classroom\Service\ClassroomService;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+
+class GenerateNotificationHandler
+{
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    /**
+     * @var Biz
+     */
+    private $biz;
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+        $this->biz = $this->container->get('biz');
+    }
+
+    /**
+     * Do the magic.
+     *
+     * @param InteractiveLoginEvent $event
+     */
+    public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
+    {
+        $user = $this->biz['user'];
+
+        $this->sendCoursesOverdueNotification($user);
+
+        $this->sendClassroomsOverdueNotification($user);
+
+        $this->sendVipsOverdueNotification($user);
+    }
+
+    protected function sendCoursesOverdueNotification(CurrentUser $user)
+    {
+        list($courses, $courseMembers) = $this->getCourseMemberService()->findWillOverdueCourses();
+        $courseMembers = ArrayToolkit::index($courseMembers, 'courseId');
+
+        foreach ((array) $courses as $key => $course) {
+            $message = array(
+                'courseId' => $course['id'],
+                'courseTitle' => $course['title'],
+                'endtime' => date('Y-m-d', $courseMembers[$course['id']]['deadline']),
+            );
+            $this->getNotificationService()->notify($user['id'], 'course-deadline', $message);
+            $courseMemberId = $courseMembers[$course['id']]['id'];
+            $this->getCourseMemberService()->updateMember($courseMemberId, array('deadlineNotified' => 1));
+        }
+    }
+
+    protected function sendClassroomsOverdueNotification($user)
+    {
+        list($classrooms, $classroomMembers) = $this->getClassroomService()->findWillOverdueClassrooms();
+        $classroomMembers = ArrayToolkit::index($classroomMembers, 'classroomId');
+
+        foreach ($classrooms as $key => $classroom) {
+            $message = array(
+                'classroomId' => $classroom['id'],
+                'classroomTitle' => $classroom['title'],
+                'endtime' => date('Y-m-d', $classroomMembers[$classroom['id']]['deadline']),
+            );
+            $this->getNotificationService()->notify($user['id'], 'classroom-deadline', $message);
+            $classroomMemberId = $classroomMembers[$classroom['id']]['id'];
+            $this->getClassroomService()->updateMember($classroomMemberId, array('deadlineNotified' => 1));
+        }
+    }
+
+    protected function sendVipsOverdueNotification($user)
+    {
+        if (!$this->isPluginInstalled('vip')) {
+            return false;
+        }
+        $vipSetting = $this->getSettingService()->get('vip', array());
+        if (array_key_exists('deadlineNotify', $vipSetting) && $vipSetting['deadlineNotify'] == 1) {
+            $vip = $this->getVipService()->getMemberByUserId($user['id']);
+            $currentTime = time();
+            if ($vip['deadlineNotified'] != 1 && $currentTime < $vip['deadline']
+                && ($currentTime + $vipSetting['daysOfNotifyBeforeDeadline'] * 24 * 60 * 60) > $vip['deadline']
+            ) {
+                $message = array('endtime' => date('Y-m-d', $vip['deadline']));
+                $this->getNotificationService()->notify($user['id'], 'vip-deadline', $message);
+                $this->getVipService()->updateDeadlineNotified($vip['id'], 1);
+            }
+        }
+    }
+
+    public function generateUrl(
+        $route,
+        array $parameters = array(),
+        $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH
+    ) {
+        return $this->container->get('router')->generate($route, $parameters, $referenceType);
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    private function getClassroomService()
+    {
+        return $this->biz->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return NotificationService
+     */
+    private function getNotificationService()
+    {
+        return $this->biz->service('User:NotificationService');
+    }
+
+    /**
+     * @return AppService
+     */
+    private function getAppService()
+    {
+        return $this->biz->service('CloudPlatform:AppService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
+    }
+
+    /**
+     * @return VipService
+     */
+    protected function getVipService()
+    {
+        return $this->biz->service('VipPlugin:Vip:VipService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->biz->service('Course:MemberService');
+    }
+
+    protected function isPluginInstalled($pluginName)
+    {
+        return $this->container->get('kernel')->getPluginConfigurationManager()->isPluginInstalled($pluginName);
+    }
+}

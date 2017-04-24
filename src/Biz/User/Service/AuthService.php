@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\Service;
 
 interface AuthService
@@ -16,6 +17,8 @@ interface AuthService
     public function changePassword($userId, $oldPassword, $newPassword);
 
     public function changePayPassword($userId, $userLoginPassword, $newPayPassword);
+
+    public function changePayPasswordWithoutLoginPassword($userId, $newPayPassword);
 
     public function checkUsername($username, $randomName = '');
 

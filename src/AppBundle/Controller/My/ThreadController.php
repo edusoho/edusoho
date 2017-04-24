@@ -1,28 +1,86 @@
 <?php
 
-
 namespace AppBundle\Controller\My;
-
 
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\ThreadService;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Paginator;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\UserService;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 
 class ThreadController extends BaseController
 {
+    public function teachingAction(Request $request, $type)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
+
+        $myTeachingCourseCount = $this->getCourseService()->findUserTeachCourseCount(array('userId' => $user['id']), true);
+
+        if (empty($myTeachingCourseCount)) {
+            return $this->render('my/teaching/threads.html.twig', array(
+                'type' => $type,
+                'threadType' => 'course',
+                'threads' => array(),
+            ));
+        }
+
+        $myTeachingCourses = $this->getCourseService()->findUserTeachCourses(array('userId' => $user['id']), 0, $myTeachingCourseCount, true);
+
+        $conditions = array(
+            'courseIds' => ArrayToolkit::column($myTeachingCourses, 'id'),
+            'type' => $type,
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getThreadService()->searchThreadCountInCourseIds($conditions),
+            20
+        );
+
+        $threads = $this->getThreadService()->searchThreadInCourseIds(
+            $conditions,
+            'createdNotStick',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
+        $courses = ArrayToolKit::index($courses, 'id');
+
+        $setIds = ArrayToolKit::column($courses, 'courseSetId');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($setIds);
+        $courseSets = ArrayToolKit::index($courseSets, 'id');
+
+        $tasks = $this->getTaskService()->findTasksByIds(ArrayToolkit::column($threads, 'taskId'));
+
+        return $this->render('my/teaching/threads.html.twig', array(
+            'paginator' => $paginator,
+            'threads' => $threads,
+            'users' => $users,
+            'courseSets' => $courseSets,
+            'courses' => $courses,
+            'tasks' => $tasks,
+            'type' => $type,
+            'threadType' => 'course',
+        ));
+    }
 
     public function discussionsAction(Request $request)
     {
         $user = $this->getUser();
 
         $conditions = array(
-            'userId'=>$user['id'],
-            'type'=>'discussion'
+            'userId' => $user['id'],
+            'type' => 'discussion',
         );
 
         $paginator = new Paginator(
@@ -39,14 +97,22 @@ class ThreadController extends BaseController
         );
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
+        $courses = ArrayToolkit::index($courses, 'id');
+
+        $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
 
-        return $this->render('TopxiaWebBundle:MyThread:discussions.html.twig',array(
+        return $this->render('my/learning/thread/discussions.html.twig', array(
             'threadType' => 'course',
-            'courses'=>$courses,
-            'users'=>$users,
-            'threads'=>$threads,
-            'paginator' => $paginator));
+            'courses' => $courses,
+            'users' => $users,
+            'threads' => $threads,
+            'paginator' => $paginator,
+            'courseSets' => $courseSets,
+        ));
     }
 
     public function questionsAction(Request $request)
@@ -72,13 +138,29 @@ class ThreadController extends BaseController
         );
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
+        $courses = ArrayToolkit::index($courses, 'id');
+
+        $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
 
-        return $this->render('TopxiaWebBundle:MyThread:questions.html.twig',array(
-            'courses'=>$courses,
-            'users'=>$users,
-            'threads'=>$threads,
-            'paginator' => $paginator));
+        return $this->render('my/learning/thread/questions.html.twig', array(
+            'courses' => $courses,
+            'users' => $users,
+            'threads' => $threads,
+            'paginator' => $paginator,
+            'courseSets' => $courseSets,
+        ));
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 
     /**
@@ -94,7 +176,7 @@ class ThreadController extends BaseController
      */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return $this->createService('User:UserService');
     }
 
     /**
@@ -105,4 +187,11 @@ class ThreadController extends BaseController
         return $this->createService('Course:ThreadService');
     }
 
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->getBiz()->service('Course:CourseSetService');
+    }
 }

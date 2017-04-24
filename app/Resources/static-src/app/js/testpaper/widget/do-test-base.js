@@ -1,6 +1,7 @@
 import QuestionTypeBuilder from './question-type-builder';
 import CopyDeny from './copy-deny';
 import ActivityEmitter from "../../activity/activity-emitter";
+import notify from "common/notify";
 
 class DoTestBase
 {
@@ -11,44 +12,61 @@ class DoTestBase
     this.$form = $container.find('form');
     this._initEvent();
     this._initUsedTimer();
-    new CopyDeny();
+    this._isCopy();
+    this._alwaysSave();
   }
 
   _initEvent() {
-    /*if ($(".testpaper-activity-show").length > 0) {
-      $(this).perfectScrollbar();
-    }*/
-    
     this.$container.on('focusin','textarea',event=>this._showEssayInputEditor(event));
     this.$container.on('click','[data-role="test-suspend"],[data-role="paper-submit"]',event=>this._btnSubmit(event));
     this.$container.on('click','.js-testpaper-question-list li',event=>this._choiceList(event));
     this.$container.on('click','*[data-anchor]',event=>this._quick2Question(event));
     this.$container.find('.js-testpaper-question-label').on('click','input',event=>this._choiceLable(event));
-    this.$container.on('click','.js-btn-index',event=>this._clickBtnIndex(event));
-    this.$container.on('click','.js-marking-toggle',event=>this._markingToggle(event));
-    this.$container.on('click','.js-favorite-toggle',event=>this._favoriteToggle(event));
-    this.$container.on('click','.js-analysis-toggle',event=>this._analysisToggle(event));
+    this.$container.on('click','.js-marking',event=>this._markingToggle(event));
+    this.$container.on('click','.js-favorite',event=>this._favoriteToggle(event));
+    this.$container.on('click','.js-analysis',event=>this._analysisToggle(event));
+    this.$container.on('blur','[data-type="fill"]',event=>this.fillChange(event));
+  }
+
+  _isCopy() {
+    let isCopy = this.$container.find('.js-testpaper-body').data('copy');
+    if (isCopy) {
+      new CopyDeny();
+    }
+  }
+
+  fillChange(event) {
+    let $input = $(event.currentTarget);
+    this._renderBtnIndex($input.attr('name'),$input.val()? true:false);
   }
 
   _markingToggle(event) {
-    let $current = this._viewToggle(event);
-    let id = $current.closest('.testpaper-question').attr('id');
-    $(`a[data-anchor="#${id}"]`).toggleClass("have-pro");
+    let $current = $(event.currentTarget).addClass('hidden');
+    $current.siblings('.js-marking.hidden').removeClass('hidden');
+    let id = $current.closest('.js-testpaper-question').attr('id');
+    
+    $(`[data-anchor="#${id}"]`).find('.js-marking-card').toggleClass("hidden");
   }
 
   _favoriteToggle(event) {
-    let $current = this._viewToggle(event);
+    let $current = $(event.currentTarget);
+    let targetType = $current.data('targetType');
+    let targetId = $current.data('targetId');
+
+    $.post($current.data('url'),{targetType:targetType, targetId:targetId},function (response) {
+      $current.addClass('hidden').siblings('.js-favorite.hidden').data('url',response.url);  
+      $current.addClass('hidden').siblings('.js-favorite.hidden').removeClass('hidden');
+    })
+    .error(function(response){
+      notify('error', response.error.message);
+    })
   }
 
   _analysisToggle(event) {
-    let $current = this._viewToggle(event);
+    let $current = $(event.currentTarget);
+    $current.addClass('hidden');
+    $current.siblings('.js-analysis.hidden').removeClass('hidden');
     $current.closest('.js-testpaper-question').find('.js-testpaper-question-analysis').slideToggle();
-  }
-
-  _viewToggle(event) {
-    let  $this = $(event.currentTarget).toggleClass('active');
-    let  $current  =  $this.children(':hidden');
-    return $current;
   }
 
   _initUsedTimer() {
@@ -58,26 +76,48 @@ class DoTestBase
     }, 1000);
   }
 
-
-  _clickBtnIndex(event) {
-    let $current = $($(event.currentTarget).data('anchor'));
-    $(".testpaper-activity-show").scrollTop($current.offset().top);
-  }
-
   _choiceLable(event) {
-    let $inputParents = $(event.delegateTarget);
-
-    $inputParents.find('label').each(function(){
-      $(this).find('input').prop("checked") ? $(this).addClass('lump-primary-light') : $(this).removeClass('lump-primary-light');
-    });
-    let $choices = $inputParents.find('label.active');
-    this._renderBtnIndex($choices.find('input').attr('name'),$choices.length);
+    let $target = $(event.currentTarget);
+    let $lableContent = $target.closest('.js-testpaper-question-label');
+    this.changeInput($lableContent,$target);
+  }
+ 
+  _choiceList(event) {
+    let $target = $(event.currentTarget);
+    let index = $target.index();
+    let $lableContent = $target.closest('.js-testpaper-question').find('.js-testpaper-question-label');
+    let $input = $lableContent.find('label').eq(index).find('input');
+    $input.prop('checked', !$input.prop('checked')).change();
+    this.changeInput($lableContent,$input);
   }
 
-  _renderBtnIndex(id,num) {
-    num > 0 ? $showLight.addClass('lump-primary-light') : $showLight.removeClass('lump-primary-light');
+  changeInput($lableContent,$input) {
+    let num = 0;
+    $lableContent.find('label').each(function (index,item) {
+      if($(item).find('input').prop('checked')) {
+        $(item).addClass('active');
+        num ++;
+      }else {
+        $(item).removeClass('active');
+      }
+    })
+    let questionId = $input.attr('name');
+    this._renderBtnIndex(questionId,num>0?true:false)
   }
 
+   _renderBtnIndex(idNum,done = true,doing = false) {
+    let $btn = $(`[data-anchor="#question${idNum}"]`);
+    if(done) {
+      $btn.addClass('done');
+    }else {
+      $btn.removeClass('done');
+    }
+    if(doing) {
+      $btn.addClass('doing').siblings('.doing').removeClass('doing');
+    }else {
+      $btn.removeClass('doing')
+    }
+  }
   _showEssayInputEditor(event) {
     let $shortTextarea = $(event.currentTarget);
 
@@ -98,11 +138,12 @@ class DoTestBase
         filebrowserImageUploadUrl: $longTextarea.data('imageUploadUrl')
       });
 
-      editor.on('blur', function(e) {
+      editor.on('blur', e => {
         editor.updateElement();
-        setTimeout(function() {
+        setTimeout(()=>{
           $longTextarea.val(editor.getData());
           $longTextarea.change();
+          $longTextarea.val() ? this._renderBtnIndex($longTextarea.attr('name'),true) : this._renderBtnIndex($longTextarea.attr('name'),false);
         }, 1);
       });
 
@@ -137,19 +178,6 @@ class DoTestBase
     
   }
 
-  _choiceList(event) {
-    let $target = $(event.currentTarget);
-    let index = $target.index();
-    let $input = $target.closest('.testpaper-question-body').siblings('.testpaper-question-footer').find('label').eq(index).find('input');
-
-    let isChecked = $input.prop('checked');
-    $input.prop('checked', !isChecked).change();
-
-    isChecked = $input.prop('checked');
-    let questionId = $input.attr('name');
-    isChecked ? $('a[data-anchor="#question' + questionId + '"]').addClass('lump-primary-light') : $('a[data-anchor="#question' + questionId + '"]').removeClass('lump-primary-light');
-  }
-
   _quick2Question(event) {
     let $target = $(event.currentTarget); 
     let position = $($target.data('anchor')).offset();
@@ -158,10 +186,11 @@ class DoTestBase
 
   _btnSubmit(event) {
     let $target = $(event.currentTarget);
-    this._submitTest($target.data('url'));
+    $target.button('loading');
+    this._submitTest($target.data('url'), $target.data('goto'));
   }
 
-  _submitTest(url) {
+  _submitTest(url,toUrl='') {
     let values = {};
     let emitter = new ActivityEmitter();
 
@@ -172,15 +201,45 @@ class DoTestBase
       let answer = questionTypeBuilder.getAnswer(questionId);
       values[questionId] = answer;
     })
-    
+
     $.post(url,{data:values,usedTime:this.usedTime})
     .done((response) => {
       if (response.result) {
-        emitter.emit('finish');
+        emitter.emit('finish', {data: ''});
+      }
+
+      if (toUrl != '' || response.goto != '') {
+        window.location.href = toUrl;
+      } else if (response.goto != ''){
+        window.location.href = response.goto;
+      } else if (response.message != '') {
+        notify('error', response.message);
       }
     })
+    .error(function (response) {
+      notify('error', response.error.message);
+    });
+  }
+
+  _alwaysSave() {
+    if ($('input[name="testSuspend"]').length > 0) {
+      let self = this;
+      let url = $('input[name="testSuspend"]').data('url');
+      setInterval(function(){
+        self._submitTest(url);
+        let currentTime = new Date().getHours()+ ':' + new Date().getMinutes()+ ':' +new Date().getSeconds();
+        notify('success',currentTime + ' 已保存');
+      }, 5 * 60 * 1000);
+    }
   }
 
 }
+
+//临时方案，libs/vendor.js这个方法没有起作用
+/*$(document).ajaxSend(function(a, b, c) {
+  if (c.type == 'POST') {
+    b.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+  }
+});*/
 
 export default DoTestBase;

@@ -1,0 +1,54 @@
+<section class="course-freelearn-section">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="course-progress">
+        <div class="cricle-progress" id="freeprogress" data-percent="{{ progress }}">
+          <span class="percent"></span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7 hidden-xs hidden-sm">
+      <ul class="clearfix text-12 course-learn-list ">
+        <li>
+          <p class="mb15 color-gray">
+            <i class="es-icon es-icon-iccheckcircleblack24px mrm"></i>已完成
+          </p>
+          <span class="text-16"><span class="color-primary">{{ taskResultCount }}</span> / <span
+                class="mrl">{{ taskCount }}</span>
+          任务</span>
+        </li>
+        <li>
+          <p class="mb15 color-gray">
+            <i class="es-icon es-icon-today mrm"></i>学习有效期
+          </p>
+          <span class="text-16">
+            {% include 'course/header/parts/member-deadline-info.html.twig' %}
+           </span>
+        </li>
+        <li>
+          <p class="mb15 color-gray">
+            <i class="es-icon es-icon-book mrm"></i>下一学习任务
+          </p>
+          {% for toLearnTask in toLearnTasks %}
+            <a class="link-dark text-16" href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">{{ toLearnTask.title|sub_text(15) }}</a>
+          {% else %}
+            <span class="text-16">暂无学习任务</span>
+          {% endfor %}
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-2 hidden-xs hidden-sm">
+      {% for toLearnTask in toLearnTasks %}
+        <a class="btn btn-primary btn-lg mt10" 
+          href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">
+          {% if taskResultCount < 1 %}
+            开始学习
+          {% else %}
+            继续学习
+          {% endif %}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% include 'course/header/header-for-member-responsive.html.twig' %}
+</section>

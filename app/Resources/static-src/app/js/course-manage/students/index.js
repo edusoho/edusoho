@@ -2,10 +2,22 @@ import notify from 'common/notify';
 
 class Students {
   constructor() {
-    this.init();
+    this.initTooltips();
+    this.initDeleteActions();
+    this.initFollowActions();
+    this.initExportActions();
   }
 
-  init() {
+  initTooltips(){
+    $("#refund-coin-tips").popover({
+        html: true,
+        trigger: 'hover',//'hover','click'
+        placement: 'left',//'bottom',
+        content: $("#refund-coin-tips-html").html()
+    });
+  }
+
+  initDeleteActions(){
     $('body').on('click', '.js-remove-student', function(evt) {
       if (!confirm(Translator.trans('是否确定删除该学员？'))) {
         return;
@@ -18,6 +30,38 @@ class Students {
           notify('danger', '移除失败：' + data.message);
         }
       });
+    });
+  }
+
+  initFollowActions(){
+    $("#course-student-list").on('click', '.follow-student-btn, .unfollow-student-btn', function() {
+        var $this = $(this);
+        $.post($this.data('url'), function(){
+            $this.hide();
+            if ($this.hasClass('follow-student-btn')) {
+                $this.parent().find('.unfollow-student-btn').show();
+                notify('success', '关注成功');
+            } else {
+                $this.parent().find('.follow-student-btn').show();
+                notify('success', '取消关注成功');
+            }
+        });
+        
+    });
+  }
+
+  initExportActions(){
+    $('#export-students-btn').on('click', function(){
+        $(this).button('loading');
+        var self = $(this);
+        $.get($(this).data('datasUrl'), {start:0}, function(response) {
+            if (response.status === 'getData') {
+                exportStudents(response.start, response.fileName);
+            } else {
+                self.button('reset');
+                location.href = self.data('url')+'?fileName='+response.fileName;
+            }
+        });
     });
   }
 }

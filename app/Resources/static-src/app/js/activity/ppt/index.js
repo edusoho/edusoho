@@ -5,7 +5,6 @@ import ActivityEmitter from "../activity-emitter";
 let emitter = new ActivityEmitter();
 let $content = $('#activity-ppt-content');
 let watermarkUrl = $content.data('watermarkUrl');
-let finishTime = parseInt($content.data('finishDetail'));
 
 let createPPT = (watermark) => {
   let ppt = new PptPlayer({
@@ -16,15 +15,9 @@ let createPPT = (watermark) => {
 
 
   if ($content.data('finishType') === 'end') {
-    ppt.once('end', () => {
-      emitter.emit('finish');
+    ppt.once('end', (data) => {
+      emitter.emit('finish',data);
     });
-  } else {
-    emitter.receive('doing', (data) => {
-      if (data.learnedTime >= finishTime) {
-        emitter.emit('finish');
-      }
-    })
   }
 
   return ppt;

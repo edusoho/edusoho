@@ -1,0 +1,69 @@
+{% set courseSet = data('CourseSet', {id: course.courseSetId}) %}
+
+{% if not isMarketingPage|default(null) and course.courseNum|default(1) > 1 %}
+  <div class="es-piece">
+    <div class="piece-body">
+      想查看更多教学计划？
+        <a href="{{ path('course_show', {id: course.id}) }}">返回课程宣传页</a>
+    </div>
+  </div>
+{% endif %}
+
+
+<div class="es-piece">
+  <div class="piece-header">课程介绍</div>
+  <div class="piece-body p-lg clearfix">
+    {{ course.summary|default(courseSet.summary)|raw }}
+  </div>
+</div>
+
+<div class="es-piece {% if course.goals|default(courseSet.goals) is empty %} hidden {% endif %}">
+  <div class="piece-header">课程目标</div>
+  <div class="piece-body">
+    <ul class="piece-body-list">
+      {% for  goal in course.goals|default(courseSet.goals) %}
+        <li><i class="es-icon es-icon-dot mrm"></i>
+          {{ goal }}
+        </li>
+      {% else %}
+        <span class="empty">为设置目标</span>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<div class="es-piece {% if course.audiences|default(courseSet.audiences) is empty %} hidden {% endif %}">
+  <div class="piece-header">适合人群</div>
+  <div class="piece-body">
+    <ul class="piece-body-list">
+      {% for  audience in course.audiences|default(courseSet.audiences) %}
+        <li><i class="es-icon es-icon-dot mrm"></i>
+          {{ audience }}
+        </li>
+      {% else %}
+        <span class="empty">为设置目标</span>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+</section>
+
+
+{% if  isMarketingPage|default(null)  and course.taskNum > 0 %}
+
+  <div class="panel panel-default hidden-xs">
+    <div class="panel-heading ">
+      <h3 class="panel-title">目录</h3>
+    </div>
+    <div class="panel-body">
+    {% include 'course/tabs/tasks.html.twig' with {limitCount : 2} %}
+    {% if course.taskNum > 6 %}
+    <div class="text-center pt10 border-top-gray-lighter" >
+       <a href="{{path('course_show',{id: course.id, tab:'tasks'})}} " class="link-dark">查看全部  &gt;</a>  
+    </div>
+    {% endif %}
+    </div>
+  </div>
+{% endif %}
+

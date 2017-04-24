@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\UserPayAgreementDao;
@@ -33,9 +34,8 @@ class UserPayAgreementDaoImpl extends GeneralDaoImpl implements UserPayAgreement
         return array(
             'conditions' => array(
                 'userId = :userId',
-                'bankAuth = :bankAuth'
-            )
+                'bankAuth = :bankAuth',
+            ),
         );
     }
-
 }

@@ -1,0 +1,63 @@
+{% set modal_class= "modal-lg" %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'%title%课程的数据'|trans({'%title%': '《' ~ courseSet.title ~ '》'})}}{% endblock %}
+{% block body %}
+    {% if courses|default()|length > 1 %}
+        <div class="clearfix mbl">
+          <select style="width:200px;" class="form-control pull-left" name="categoryId" tabindex="-1" id = "course-select">
+            {% for course in courses %}
+              <option value="{{course.id}}" {% if courseId == course.id  %} selected {% endif %} data-url="{{ path('admin_courses_data',{courseSetId:courseSet.id,courseId:course.id}) }}">{{course.title}}</option> 
+            {% endfor %}
+          </select>
+        </div>
+    {% endif %}
+    <div class="table-responsive">
+        <table class="table table-bordered" style="word-break:break-all;text-align:center;">
+          <tr class="active">
+            <td>{{'任务名'|trans}}</td>
+            <td>{{'学习人数'|trans}}</td>
+            <td>{{'完成人数'|trans}}</td>
+            <td>{{'平均学习时长(分)'|trans}}</td>
+            <td>{{'音视频时长(分)'|trans}}</td>
+            <td>{{'音视频平均观看时长(分)'|trans}}</td>
+            <td>{{'测试平均得分'|trans}}</td>
+          </tr>
+          {% if tasks %}
+            {% for task in tasks %}
+              <tr>
+                <td>{{ task.title }}</td>
+                <td>{{task.studentNum|default() }}</td>
+                <td>{{task.finishedNum|default() }}</td>
+                <td>{% if task.studentNum|default() == 0 %}0{% else %}{{task.learnedTime|default() // task.studentNum|default()}}{% endif %}</td>
+                <td>
+                  {{ task.length|default(0) // 60 }}
+                </td>
+                <td>
+                  {% if task.type in ['video', 'audio'] %}
+                    {% if task.type == 'video' and task.activity.ext.mediaSource != 'self' %}
+                      --
+                    {% elseif  task.studentNum == 0 %}
+                      0
+                    {% else %}
+                      {{task.watchTime|default(0) // task.studentNum  }}                  
+                    {% endif %}
+                  {% else %}
+                    --
+                  {% endif %}
+                </td>
+                <td>
+                  {% if task.type in ['testpaper'] %}
+                    {{ task.score|default('0') }}
+                  {% else %}
+                    --
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          {% endif %}
+        </table>
+    </div>
+    
+    <script>app.load('course-set/data-detail.js');</script>
+{% endblock %}

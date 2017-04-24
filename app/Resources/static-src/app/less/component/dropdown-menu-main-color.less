@@ -1,0 +1,16 @@
+.dropdown-menu-main-color(@brand-primary) {
+  .dropdown-menu {
+    > li {
+      > a {
+        &:hover {
+          background: @brand-primary;
+        }
+      }
+    }
+  }
+  .dropdown-menu > .active > a,
+  .dropdown-menu > .active > a:hover, 
+  .dropdown-menu > .active > a:focus {
+    background: @brand-primary;
+  }
+}

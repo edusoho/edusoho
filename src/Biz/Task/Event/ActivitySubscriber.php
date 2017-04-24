@@ -1,6 +1,8 @@
 <?php
+
 namespace Biz\Task\Event;
 
+use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -10,22 +12,9 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
     public static function getSubscribedEvents()
     {
         return array(
-            'activity.start'    => 'onActivityStart',
-            'activity.doing'    => 'onActivityDoing',
-            'activity.operated' => 'onActivityOperated'
+            'activity.start' => 'onActivityStart',
+            'activity.doing' => 'onActivityDoing',
         );
-    }
-
-    public function onActivityOperated(Event $event)
-    {
-        if(!$event->hasArgument('taskId')) {
-            return;
-        }
-        $taskId = $event->getArgument('taskId');
-
-        if(!empty($taskId) && $this->getTaskService()->isFinished($taskId)) {
-            $this->getTaskService()->finishTaskResult($taskId);
-        }
     }
 
     public function onActivityStart(Event $event)
@@ -36,21 +25,28 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
 
     public function onActivityDoing(Event $event)
     {
-        $taskId = $event->getArgument('taskId');
-
-        if (!$event->hasArgument('timeStep')) {
+        $task = $event->getArgument('task');
+        $lastTime = $event->getArgument('lastTime');
+        $time = time() - $lastTime;
+        if ($time >= TaskService::LEARN_TIME_STEP) {
             $time = TaskService::LEARN_TIME_STEP;
-        } else {
-            $time = $event->getArgument('timeStep');
         }
 
-        if (empty($taskId)) {
+        if (empty($task)) {
             return;
         }
+        if ($time > 0) {
+            $this->getTaskService()->doTask($task['id'], $time);
+        }
 
-        $this->getTaskService()->doTask($taskId, $time);
+        if ($this->getTaskService()->isFinished($task['id'])) {
+            $this->getTaskService()->finishTaskResult($task['id']);
+        }
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->getBiz()->service('Task:TaskService');

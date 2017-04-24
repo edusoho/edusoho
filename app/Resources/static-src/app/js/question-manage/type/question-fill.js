@@ -8,7 +8,7 @@ class Fill extends QuestionFormBase {
   constructor($form) {
     super($form);
     this.titleEditorToolBarName = 'Question';
-    this.initTitleEditor();
+    this.initTitleEditor(this.validator);
     this.initAnalysisEditor();
     
     this.$titleField = $('#'+this.titleFieldId);

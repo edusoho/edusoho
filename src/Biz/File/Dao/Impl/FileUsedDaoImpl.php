@@ -2,9 +2,6 @@
 
 namespace Biz\File\Dao\Impl;
 
-
-
-
 use Biz\File\Dao\FileUsedDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
@@ -21,11 +18,11 @@ class FileUsedDaoImpl extends GeneralDaoImpl implements FileUsedDao
                 'targetType = :targetType',
                 'targetId = :targetId',
                 'targetId IN ( :targetIds )',
-                'fileId = :fileId'
+                'fileId = :fileId',
             ),
             'orderbys' => array(
-                'createdTime'
-            )
+                'createdTime',
+            ),
         );
     }
 }

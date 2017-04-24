@@ -13,5 +13,4 @@ interface CacheDao
     public function deleteByName($name);
 
     public function deleteAll();
-
 }

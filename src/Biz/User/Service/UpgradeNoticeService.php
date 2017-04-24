@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\Service;
 
 interface UpgradeNoticeService

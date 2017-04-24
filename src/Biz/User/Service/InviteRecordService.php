@@ -1,11 +1,14 @@
 <?php
+
 namespace Biz\User\Service;
 
 interface InviteRecordService
 {
     public function createInviteRecord($inviteUserId, $invitedUserId);
 
-    public function findRecordsByInviteUserId($userId); //找到有邀请码的用户,
+    public function findRecordsByInviteUserId($userId);
+
+ //找到有邀请码的用户,
 
     public function getRecordByInvitedUserId($invitedUserId);
 

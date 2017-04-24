@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Testpaper\Dao\Impl;
 
 use Biz\Testpaper\Dao\TestpaperResultDao;
@@ -6,29 +7,44 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDao
 {
-    protected $table = 'testpaper_result';
+    protected $table = 'testpaper_result_v8';
 
-    public function getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId)
+    public function getUserUnfinishResult($testId, $courseId, $activityId, $type, $userId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE testId = ? AND courseId = ? AND lessonId = ? AND type = ? AND userId = ? AND status != 'finished' ORDER BY id DESC ";
-        return $this->db()->fetchAssoc($sql, array($testId, $courseId, $lessonId, $type, $userId));
+
+        return $this->db()->fetchAssoc($sql, array($testId, $courseId, $activityId, $type, $userId)) ?: null;
     }
 
-    public function getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type)
+    public function getUserFinishedResult($testId, $courseId, $activityId, $type, $userId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND testId = ? AND courseSetId = ? AND lessonId = ? AND type = ? ORDER BY endTime DESC ";
-        return $this->db()->fetchAssoc($sql, array($userId, $testId, $courseId, $lessonId, $type));
+        $sql = "SELECT * FROM {$this->table} WHERE testId = ? AND courseId = ? AND lessonId = ? AND type = ? AND userId = ? AND status = 'finished' ORDER BY id DESC ";
+
+        return $this->db()->fetchAssoc($sql, array($testId, $courseId, $activityId, $type, $userId)) ?: null;
     }
 
-    public function findPaperResultsStatusNumGroupByStatus($testId)
+    public function getUserLatelyResultByTestId($userId, $testId, $courseId, $activityId, $type)
     {
-        $sql = "SELECT status,COUNT(id) AS num FROM {$this->table} WHERE testId=? GROUP BY status";
-        return $this->db()->fetchAll($sql, array($testId)) ?: array();
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND testId = ? AND courseId = ? AND lessonId = ? AND type = ? ORDER BY id DESC ";
+
+        return $this->db()->fetchAssoc($sql, array($userId, $testId, $courseId, $activityId, $type)) ?: null;
     }
 
-    public function searchTestpapersScore($conditions)
+    public function findPaperResultsStatusNumGroupByStatus($testId, $courseIds)
     {
-        $builder = $this->_createSearchQueryBuilder($conditions)
+        if (empty($courseIds)) {
+            return array();
+        }
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+
+        $sql = "SELECT status,COUNT(id) AS num FROM {$this->table} WHERE testId=? AND courseId IN ($marks)  GROUP BY status";
+
+        return $this->db()->fetchAll($sql, array_merge(array($testId), $courseIds)) ?: array();
+    }
+
+    public function sumScoreByParames($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
             ->select('sum(score)');
 
         return $builder->execute()->fetchColumn(0);
@@ -37,9 +53,14 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
     public function declares()
     {
         $declares['orderbys'] = array(
-            'createdTime',
+            'id',
+            'testId',
+            'courseId',
+            'lessonId',
+            'beginTime',
             'endTime',
-            'checkedTime'
+            'checkedTime',
+            'updateTime',
         );
 
         $declares['conditions'] = array(
@@ -48,12 +69,17 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
             'paperName = :paperName',
             'testId = :testId',
             'testId IN ( :testIds )',
+            'courseId = :courseId',
             'userId = :userId',
             'score = :score',
             'objectiveScore = :objectiveScore',
             'subjectiveScore = :subjectiveScore',
             'rightItemCount = :rightItemCount',
-            'status = :status'
+            'status = :status',
+            'courseId IN ( :courseIds)',
+            'type = :type',
+            'type IN ( :types )',
+            'lessonId = :lessonId',
         );
 
         return $declares;

@@ -1,0 +1,28 @@
+{% extends 'old-layout.html.twig' %}
+
+{% block title %}{{'通知'|trans}} - {{ parent() }}{% endblock %}
+{% set script_controller = 'message/notification-list' %}
+
+{% block content %}
+<div class="row row-8">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="panel panel-default panel-page">
+      <div class="panel-heading">
+        <h2> {{'通知'|trans}} </h2>
+      </div>
+
+      <ul class="media-list notification-list">
+        {% for notification in notifications %}
+          {% set notification = render_notification(notification) %}
+          {{ notification.message|raw }}
+        {% else %}
+          <li class="empty">{{'暂无通知'|trans}}</li>
+        {% endfor %}
+      </ul>
+
+      {{ web_macro.paginator(paginator) }}
+
+    </div><!-- /panel -->
+  </div>
+</div>
+{% endblock %}

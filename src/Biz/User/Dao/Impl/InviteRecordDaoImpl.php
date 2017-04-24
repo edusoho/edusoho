@@ -53,6 +53,7 @@ class InviteRecordDaoImpl extends GeneralDaoImpl implements InviteRecordDao
     public function declares()
     {
         return array(
+            'orderbys' => array('inviteTime'),
             'conditions' => array(
                 'inviteUserId = :inviteUserId',
                 'invitedUserId = :invitedUserId',
@@ -61,8 +62,8 @@ class InviteRecordDaoImpl extends GeneralDaoImpl implements InviteRecordDao
                 'invitedUserCardId <> :invitedUserCardIdNotEqual',
                 'inviteTime >= :startDateTime',
                 'invitedUserId IN ( :invitedUserIds)',
-                'inviteTime < :endDateTime'
-            )
+                'inviteTime < :endDateTime',
+            ),
         );
     }
 }

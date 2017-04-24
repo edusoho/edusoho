@@ -1,0 +1,22 @@
+framework:
+    secret:        test
+    router:        { resource: "%kernel.root_dir%/config/routing.yml" }
+    templating:    { engines: [ 'twig' ] }
+    test:          ~
+    translator:    { enabled: true }
+    validation:    { enabled: false }
+
+# Twig Configuration
+twig:
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+
+# Traduction dans JS
+bazinga_js_translation:
+    active_locales:
+        - fr
+        - en
+    active_domains:
+        - messages
+        - numerics
+        - foo

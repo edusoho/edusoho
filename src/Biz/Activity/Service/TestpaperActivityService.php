@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Activity\Service;
 
 interface TestpaperActivityService
@@ -6,6 +7,8 @@ interface TestpaperActivityService
     public function getActivity($id);
 
     public function findActivitiesByIds($ids);
+
+    public function findActivitiesByMediaIds($mediaIds);
 
     public function createActivity($fields);
 

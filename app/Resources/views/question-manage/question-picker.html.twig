@@ -17,11 +17,13 @@
     <thead>
     <tr>
       {% if not replace|default(null) %}
-        <th><input type="checkbox" data-role="item-batch-select"></th>
+        <th><input type="checkbox" data-role="batch-select"></th>
       {% endif %}
       <th width="45%">{{'题干'|trans}}</th>
       <th>{{'类型'|trans}}</th>
-      <th>{{'分值'|trans}}</th>
+      {% if targetType|default('testpaper') == 'testpaper' %}
+        <th>{{'分值'|trans}}</th>
+      {% endif %}
       <th>{{'操作'|trans}}</th>
     </tr>
     </thead>
@@ -30,7 +32,7 @@
         {% include 'question-manage/question-pick-tr.html.twig' %}
       {% else %}
         <tr>
-          <td colspan="20"><div class="empty">无题目记录,请先去<a href="{{ path('course_manage_question',{courseId:courseSet.id}) }}">创建题目</a></div>
+          <td colspan="20"><div class="empty">无题目记录,请先去<a class="link-primary" href="{{ path('course_set_manage_question',{id:courseSet.id}) }}">创建题目</a></div>
           </td>
         </tr>
       {% endfor %}
@@ -39,7 +41,7 @@
   {% if not replace %}
     <div id="item-operate">
       <label class="checkbox-inline">
-        <input type="checkbox" data-role="item-batch-select">{{'全选'|trans}}
+        <input type="checkbox" data-role="batch-select">{{'全选'|trans}}
       </label>
     </div>
   {% endif %}
@@ -49,7 +51,8 @@
 {% endblock %}
 
 {% block footer %}
-    <button type="button" class="btn btn-primary" type="button" class="btn btn-primary pull-right" data-role="batch-select-save" data-toggle="form-submit" data-target="#block-form" >确定</button>
+    <span class="color-danger pull-left js-choice-notice" style="display:none;">请选择题目</span>
+    <button type="button" class="btn btn-primary" type="button" class="btn btn-primary pull-right" data-role="batch-select-save" data-toggle="form-submit" data-target="#block-form" data-url="{{ path('course_set_manage_question_picked', {courseSetId:courseSet.id }) }}">确定</button>
 
     <button type="button" class="btn btn-link pull-right" data-dismiss="modal">关闭</button>
 {% endblock %}

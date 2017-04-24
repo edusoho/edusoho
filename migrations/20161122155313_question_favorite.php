@@ -5,12 +5,12 @@ use Phpmig\Migration\Migration;
 class QuestionFavorite extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
         $biz = $this->getContainer();
-        $db  = $biz['db'];
+        $db = $biz['db'];
         $db->exec("
             ALTER TABLE question_favorite add targetType VARCHAR(50) NOT NULL DEFAULT '' AFTER `questionId`
         ");
@@ -21,13 +21,13 @@ class QuestionFavorite extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
         $biz = $this->getContainer();
-        $db  = $biz['db'];
-        $db->exec("ALTER TABLE `question_favorite` DROP `targetType`");
-        $db->exec("ALTER TABLE `question_favorite` DROP `targetId`");
+        $db = $biz['db'];
+        $db->exec('ALTER TABLE `question_favorite` DROP `targetType`');
+        $db->exec('ALTER TABLE `question_favorite` DROP `targetId`');
     }
 }

@@ -1,20 +1,24 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
-{% do script(['libs/bootstrap-datetimepicker.js','app/js/activity-manage/live/index.js']) %}
+{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js','app/js/activity-manage/live/index.js']) %}
 
 {% block activity_content %}
   <div class="form-group expiry-day-js">
     <div class="col-sm-2 control-label">
-      <label for="startTime">{{ '直播开始时间'|trans }}</label>
+      <label for="startTime" class="control-label-required">{{ '直播开始时间'|trans }}</label>
     </div>
     <div class="col-sm-10">
-      <input id="startTime" class="form-control width-input width-input-large" type="text" name="startTime" value="{{ activity.startTime|default('') }}"></div>
+      <input id="startTime" class="form-control inline-block width-150" type="text" name="startTime" value="{{ activity.startTime|default('') }}" {% if activity.timeDisabled|default(0) %}disabled{% endif %}>
+      {% if not activity.ext.roomCreated|default(true) %}
+      <div class="color-warning">请选择有效的开始时间以便创建直播教室。</div>
+      {% endif %}
+    </div>
   </div>
   <div class="form-group">
     <div class="col-sm-2 control-label">
-      <label for="length">{{ '直播时长'|trans }}</label>
+      <label for="length" class="control-label-required">{{ '直播时长'|trans }}</label>
     </div>
     <div class="col-sm-10">
-      <input id="length" class="form-control width-input width-input-large" type="text" name="length" value="{{ activity.length|default('') }}">分钟
+      <input id="length" class="form-control width-150 mrs" type="text" name="length" value="{{ activity.length|default(60) }}" {% if activity.timeDisabled|default(0) %}disabled{% endif %}>分钟
     </div>
   </div>
   <div class="form-group">
@@ -24,10 +28,13 @@
     <div class="col-sm-10">
       <textarea class="form-control type-hidden" id="text-content-field" name="remark" rows="10" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
     >{{ activity.remark|default('') }}</textarea>
+      {% set course=data('Course',{'courseId':courseId}) %}
+      {% if course.expiryMode=='days' %}
+        <p class="help-block color-warning">{{'提示：本计划的学习加入方式为“随到随学”，加入直播活动可能会导致后来的学员无法参加，只能观看回放。'|trans}}</p>
+      {% endif %}
     </div>
   </div>
 {% endblock %}
-
 
 {% block activity_finish %}
   <div class="form-group">
@@ -35,7 +42,7 @@
       <label for="condition">{{ '完成条件'|trans }}</label>
     </div>
     <div class="col-sm-10">
-    <p class="form-control-static">进入观看过直播</p>
+    <p class="form-control-static">进入参加过直播</p>
     </div>
   </div>
 {% endblock %}

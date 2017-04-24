@@ -1,4 +1,4 @@
-{% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
+{% import 'macro.html.twig' as web_macro %}
 
 {% set resultStatus = [] %}
 {% include 'testpaper/manage/result-list-search-form.html.twig' %}
@@ -21,7 +21,14 @@
       {% set student = users[paperResult.userId]|default(null) %}
       <tr>
         <td>{% if student %}{{ student.nickname }}{% else %}{{'无'|trans}}{% endif %}</td>
-        <td>{% if paperResult.status == 'finished' %}{{ paperResult.score }}/{{ testpaper.score }}{% else %} -- {% endif %}</td>
+        <td>
+          {% if paperResult.status == 'finished' %}
+            {% if paperResult.type == 'testpaper' %}
+              {{ paperResult.score }}/{{ testpaper.score }}
+            {% elseif paperResult.type == 'homework' %}
+              {{ dict_text('passedStatus',paperResult.passedStatus) }}
+            {% endif %}
+          {% else %} -- {% endif %}</td>
         <td>{% if paperResult.status != 'doing' %}{{ paperResult.endTime|date('Y-m-d H:i:s') }}{% else %}{% endif %}</td>
         <td>
           {% if paperResult.status == 'doing' %}
@@ -41,17 +48,17 @@
 
         <td>
           {% if paperResult.status == 'finished' %}
-            <a href="{{ path(paperResult.type ~ '_result_show',{resultId:paperResult.id}) }}" id="show_testpaper_result" class="btn btn-default btn-sm" target="_blank">{{'查看结果'|trans}}</a>
+            <a class="link-primary" href="{{ path(paperResult.type ~ '_result_show',{resultId:paperResult.id,action:'check'}) }}" id="show_testpaper_result" target="_blank">{{'查看结果'|trans}}</a>
           {% elseif paperResult.status == 'reviewing' %}
             {% if isTeacher is defined and isTeacher %}
               {% if source == 'classroom' %}
-
+                {% set checkUrl = path('classroom_manage_' ~ paperResult.type ~ '_check', {id:targetId,resultId:paperResult.id,action:'check'}) %}
               {% else %}
-                {% set checkUrl = path('course_manage_' ~ paperResult.type ~ '_check', {id:targetId,resultId:paperResult.id}) %}
+                {% set checkUrl = path('course_manage_' ~ paperResult.type ~ '_check', {id:targetId,resultId:paperResult.id,action:'check'}) %}
               {% endif %}
-              <a href="{{ checkUrl }}" class="btn btn-default btn-sm " target="_blank">{{'批阅'|trans}}</a>
+              <a class="btn btn-default btn-sm " href="{{ checkUrl }}"  target="_blank">{{'批阅'|trans}}</a>
             {% else %}
-              <a href="javascript;;" class="btn btn-default btn-sm disabled" >{{'批阅'|trans}}</a>
+              <a class="btn btn-default btn-sm disabled" href="javascript;;">{{'批阅'|trans}}</a>
             {% endif %}
           {% endif %}
         </td>

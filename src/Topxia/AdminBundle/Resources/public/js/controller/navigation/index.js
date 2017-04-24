@@ -49,6 +49,10 @@ define(function(require, exports, module) {
                 _super(item, container);
             }
         });
+
+        $('.navigation-table tbody button').on('mousedown', function(e) {
+           e.stopPropagation();
+        })
     };
 
 });

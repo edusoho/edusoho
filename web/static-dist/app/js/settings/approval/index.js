@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/settings/approval/index"],[function(e,i){"use strict";var r=$("#approval-form").validate({rules:{idcard:"required idcardNumber",truename:{required:!0,chinese:!0,maxlength:25,minlength:2},faceImg:"required isImage limitSize",backImg:"required isImage limitSize"}});$("#form-submit-btn").on("click",function(){r.form()&&$("#approval-form").submit()})}]);

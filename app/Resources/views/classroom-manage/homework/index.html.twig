@@ -1,0 +1,18 @@
+{% extends 'classroom-manage/layout.html.twig' %}
+
+{% block title %}{{'作业批阅'|trans}} - {{ parent() }}{% endblock %}
+{% set side_nav = 'homework-check' %}
+
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">{{'作业批阅'|trans}}</div>
+    <div class="panel-body">
+      {% if isTeacher is defined and not isTeacher %}
+        <span class="color-danger">{{'当前用户不是本班级教师或助教，没有批阅作业的权限。'|trans}}</span>
+      {% endif %}
+
+      {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:classroom.id,targetType:'classroom',type:'homework',testpaperIds:homeworkIds})) }}
+
+    </div>
+  </div>
+{% endblock %}

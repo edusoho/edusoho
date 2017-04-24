@@ -1,50 +1,37 @@
 <?php
 
-
 namespace Biz\Activity\Type;
 
-
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
-use Topxia\Common\ArrayToolkit;
+use Biz\Activity\Dao\PptActivityDao;
+use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\ActivityLearnLogService;
 
 class Ppt extends Activity
 {
-    public function registerActions()
-    {
-        return array(
-            'edit'   => 'AppBundle:Ppt:edit',
-            'show'   => 'AppBundle:Ppt:show',
-            'create' => 'AppBundle:Ppt:create'
-        );
-    }
-
     protected function registerListeners()
     {
-
-    }
-
-    public function getMetas()
-    {
-        return array(
-            'name' => 'PPT',
-            'icon' => 'es-icon es-icon-pptclass'
-        );
     }
 
     public function isFinished($activityId)
     {
         $activity = $this->getActivityService()->getActivity($activityId);
         $ppt = $this->getPptActivityDao()->get($activity['mediaId']);
-        
-        if($ppt['finishType'] == 'time') {
-            $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
-            return !empty($result) && $result > $ppt['finishDetail'];
+
+        if ($ppt['finishType'] == 'time') {
+            $result = $this->getActivityLearnLogService()->sumMyLearnedTimeByActivityId($activityId);
+            $result /= 60;
+
+            return !empty($result) && $result >= $ppt['finishDetail'];
         }
 
-        if($ppt['finishType'] == 'end') {
-            $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'ppt.finished');
-            return !empty($result);
+        if ($ppt['finishType'] == 'end') {
+            $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'finish');
+
+            return !empty($logs);
         }
+
         return false;
     }
 
@@ -53,18 +40,44 @@ class Ppt extends Activity
         $ppt = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',
-            'finishDetail'
+            'finishDetail',
         ));
 
-        $biz                  = $this->getBiz();
+        $biz = $this->getBiz();
         $ppt['createdUserId'] = $biz['user']['id'];
-        $ppt['createdTime']   = time();
+        $ppt['createdTime'] = time();
 
         $ppt = $this->getPptActivityDao()->create($ppt);
+
         return $ppt;
     }
 
-    public function update($targetId, $fields)
+    public function copy($activity, $config = array())
+    {
+        $biz = $this->getBiz();
+        $ppt = $this->getPptActivityDao()->get($activity['mediaId']);
+        $newPpt = array(
+            'mediaId' => $ppt['mediaId'],
+            'finishType' => $ppt['finishType'],
+            'finishDetail' => $ppt['finishDetail'],
+            'createdUserId' => $biz['user']['id'],
+        );
+
+        return $this->getPptActivityDao()->create($newPpt);
+    }
+
+    public function sync($sourceActivity, $activity)
+    {
+        $sourcePpt = $this->getPptActivityDao()->get($sourceActivity['mediaId']);
+        $ppt = $this->getPptActivityDao()->get($activity['mediaId']);
+        $ppt['mediaId'] = $sourcePpt['mediaId'];
+        $ppt['finishType'] = $sourcePpt['finishType'];
+        $ppt['finishDetail'] = $sourcePpt['finishDetail'];
+
+        return $this->getPptActivityDao()->update($ppt['id'], $ppt);
+    }
+
+    public function update($targetId, &$fields, $activity)
     {
         $updateFields = ArrayToolkit::parts($fields, array(
             'mediaId',
@@ -73,6 +86,7 @@ class Ppt extends Activity
         ));
 
         $updateFields['updatedTime'] = time();
+
         return $this->getPptActivityDao()->update($targetId, $updateFields);
     }
 
@@ -86,19 +100,32 @@ class Ppt extends Activity
         return $this->getPptActivityDao()->get($targetId);
     }
 
+    public function find($targetIds)
+    {
+        return $this->getPptActivityDao()->findByIds($targetIds);
+    }
+
+    /**
+     * @return PptActivityDao
+     */
     protected function getPptActivityDao()
     {
         return $this->getBiz()->dao('Activity:PptActivityDao');
     }
 
+    /**
+     * @return ActivityLearnLogService
+     */
     protected function getActivityLearnLogService()
     {
-        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
-        return $this->getBiz()->service("Activity:ActivityService");
+        return $this->getBiz()->service('Activity:ActivityService');
     }
-
 }

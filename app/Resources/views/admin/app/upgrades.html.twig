@@ -1,0 +1,93 @@
+{% extends 'admin/cloud-app-layout.html.twig' %}
+
+{% set script_controller = 'app/upgrades' %}
+
+{% set menu = 'admin_app_upgrades' %}
+
+{% block main %}
+
+  <div class="alert alert-warning">
+    您好，为了保证网站升级顺利进行，升级过程中会出现短暂（2分钟内）网站无法访问的情况，请在学员访问少的时候进行系统升级，给您带来了不便，还望理解
+  </div>
+
+  <div class="panel">
+    {% if apps %}
+      <div class="panel-heading"><h4>{{ apps|length }}{{ '个可用更新'|trans }}</h4></div>
+    {% endif %}
+    {% if status|default(null) %}
+      <div class="alert alert-danger">{{ 'AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，'|trans }}<a
+            href="{{ path('admin_setting_cloud') }}">{{ '请修改设置。'|trans }}</a></div>
+    {% else %}
+      {% if apps %}
+        <table class="table table-striped table-hover" id="app-table-container">
+          <thead>
+
+          </thead>
+          <tbody>
+          {% for app in apps %}
+            <tr>
+              <td>
+                <img src="http://open.edusoho.com/files/product/{{ app.icon }}" class="app-img pull-left mrl mtm"/>
+              </td>
+
+              <td width="26%">
+                <div class="mtm ">
+                  <a href="#" class=""><h4><strong class="text-primary">{{ app.name }}</strong></h4>
+                  </a> {% if version_compare(app.package.edusohoMinVersion, version, ">") %}
+                    <div
+                        class="text-danger">{{ '需要主系统%edusohoMinVersion%及更高版本'|trans({'%edusohoMinVersion%': app.package.edusohoMinVersion}) }}</div>{% endif %}
+                </div>
+
+                <!-- <div class="info mtm mbm clearfix"> -->
+                <div class="left-info pull-left">
+
+                  <div class="text-muted">
+                    <small>{{ '开发者：'|trans }}{{ app.developerName }}</small>
+                  </div>
+
+                  {% if app.code == 'MAIN' %}
+                    <div class="class-rating mtm">
+                      <span class="text-muted">{{ '更新记录：'|trans }}<a href="{{ path('changelog_list') }}" class="default" target="_blank">所有更新日志</a></span>
+                    </div>
+                  {% endif %}
+
+                  <div class="class-rating mtm">
+                    <span class="text-muted">{{ '版本：'|trans }}{{ app.package.toVersion }}</span>
+                  </div>
+
+                  <div class="middle-info">
+                    <div class="text-muted">{{ '最后更新：'|trans }}{{ app.package.createdTime|date('Y-m-d') }}</div>
+                  </div>
+
+                  <!-- </div> -->
+                </div>
+
+              </td>
+
+              <td>
+                <div class="info mtm mbm clearfix">
+                  <div class="pull-left short-long-text">
+                    <div class="short-text text-muted">{{ app.package.description|plain_text(80) }} <span
+                          class="trigger">({{ '展开'|trans }})</span></div>
+                    <div class="long-text text-muted">{{ app.package.description|raw }} <span
+                          class="trigger">({{ '收起'|trans }})</span></div>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <a href="#" data-toggle="modal" data-target="#modal"
+                   data-url="{{ path('admin_app_package_update_modal', {id:app.package.id, type:'upgrade'}) }}"
+                   class="btn btn-primary {% if version_compare(app.package.edusohoMinVersion, version, ">") %}disabled{% endif %} mrl"
+                   data-keyboard="false" data-backdrop="static" style="margin-top:40px;">{{ '更新'|trans }}</a>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        {{ '当前已是最新版本!'|trans }}
+      {% endif %}
+    {% endif %}
+  </div>
+{% endblock %}

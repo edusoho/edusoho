@@ -60,7 +60,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="site"]',
             rule: 'url',
-            errormessageUrl: Translator.trans('网站地址不正确，须以http://开头。')
+            errormessageUrl: Translator.trans('网站地址不正确，须以http://或https://开头。')
         });
 
         validator.addItem({

@@ -1,0 +1,413 @@
+{% extends 'layout.html.twig' %}
+
+{% set bodyClass = 'homepage' %}
+
+{% do script(['libs/echo-js.js','autumntheme/js/default/index.js']) %}
+{% set consultDisplay = true %}
+
+{% block content %}
+  {% set top_banner = block_show('autumn:home_top_banner') %}
+
+  {% if top_banner %}
+    <div id="autumn-carousel" class="carousel slide mbl" data-ride="carousel">
+      <ol class="carousel-indicators hidden-xs"></ol>
+      <div class="carousel-inner">{{ top_banner|raw }}</div>
+      <a class="left carousel-control hidden-xs" href="#autumn-carousel" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+      </a>
+      <a class="right carousel-control hidden-xs" href="#autumn-carousel" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+      </a>
+    </div>
+  {% endif %}
+
+  <div class="row">
+    <div class="col-md-8">
+      {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
+      {% if classrooms %}
+        <div class="panel panel-autumn panel-autumn-primary">
+          <div class="panel-heading panel-heading-important">
+            <h2 class="panel-title">最新{{ setting('classroom.name')|default("班级") }} /
+              <small>Latest Class</small>
+            </h2>
+            <a class="pull-right more-autumn-primary" href="{{ path('classroom_explore') }}">More&gt;</a>
+          </div>
+          <div class="panel-body">
+            <ul class="home-class-list clearfix">
+              {% for classroom in classrooms %}
+                {% set teachers = classroom.users|default(null) %}
+                {% if loop.index <= 5 %}
+                  <li class="class-item">
+                    <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
+                      {{ lazy_img(filepath(classroom.largePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
+                    </a>
+                    <div class="class-body">
+                      <h3 class="class-title">
+                        <a href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
+                      </h3>
+                      <div class="class-metas">
+                      <span class="class-teacher">
+                        {% if teachers %}
+                          <i class="es-icon es-icon-people"></i>
+                          {% for teacher in teachers %}
+                          {% if loop.index <= 1 %}
+                            <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                          {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                      </span>
+                        <span class="class-student hidden-md"><i class="es-icon es-icon-people"></i>{{ classroom.studentNum + classroom.auditorNum }}</span>
+                        <span class="class-price">
+                          {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                            {% if classroom.price > 0 %}
+                              {{ classroom.price * setting('coin.cash_rate') }} {{ setting('coin.coin_name') }}
+                            {% else %}
+                              {{ '免费'|trans }}
+                            {% endif %}
+                          {% else %}
+                            {% if classroom.price > 0 %}
+                              {{ '%classroom.price% 元'|trans({'%classroom.price%': classroom.price}) }}
+                            {% else %}
+                              {{ '免费'|trans }}
+                            {% endif %}
+                          {% endif %}
+
+
+                      </span>
+                      </div>
+                      <div class="course-num">{{ '共%courseNum%课程'|trans({'%courseNum%': classroom.courseNum }) }}</div>
+                    </div>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+
+
+
+      {# 推荐课程 #}
+      {% set recommendCourseSets  = data('RecommendCourseSets',{ count:3 }) %}
+      {% if recommendCourseSets %}
+        <div class="panel panel-autumn panel-autumn-primary">
+          <div class="panel-heading panel-heading-important">
+            <h2 class="panel-title">{{ '推荐课程'|trans }} /
+              <small>Recommend Course</small>
+            </h2>
+            <a class="pull-right more-autumn-primary" href="{{ path('course_set_explore', {'sort':'recommendedSeq'}) }}">More&gt;</a>
+          </div>
+          <div class="panel-body">
+            <ul class="autumn-grids clearfix">
+              {% for recommendCourseSet in recommendCourseSets %}
+                {% include 'default/course-set-grid.html.twig' with { courseSet: recommendCourseSet } %}
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+
+      {# 最新课程 #}
+      {% set latestCourseSets = data('LatestCourseSets',{ count:6 }) %}
+      {% if latestCourseSets %}
+        <div class="panel panel-autumn panel-autumn-default">
+          <div class="panel-heading panel-heading-important">
+            <h2 class="panel-title">{{ '最新课程'|trans }} /
+              <small>Latest Course</small>
+            </h2>
+            <a class="pull-right more-autumn-default" href="{{ path('course_set_explore') }}">More&gt;</a>
+          </div>
+          <div class="panel-body">
+            <ul class="autumn-grids">
+              {% for latestCourseSet in latestCourseSets %}
+                {% include 'default/course-set-grid.html.twig' with { courseSet: latestCourseSet } %}
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if setting('course.live_course_enabled') %}
+        {% set recentLiveCourseSets = data('RecentLiveCourseSets', {count:4}) %}
+        {% if recentLiveCourseSets %}
+          <div class="panel panel-autumn panel-autumn-primary">
+            <div class="panel-heading panel-heading-important">
+              <h2 class="panel-title">{{ '近期直播'|trans }} /
+                <small>Live Course</small>
+              </h2>
+              {% if recentLiveCourseSets|length >= 1 %}
+                <a class="pull-right more-autumn-primary" href="{{ path('live_course_set_explore') }}">More&gt;</a>
+              {% endif %}
+            </div>
+            <div class="panel-body">
+              <ul class="autumn-grids">
+                {% for recentLiveCourseSet in recentLiveCourseSets %}
+                  {% include 'default/course-set-grid.html.twig' with { courseSet: recentLiveCourseSet } %}
+                {% else %}
+                  <div class="empty">{{ '无推荐课程，请在后台课程管理设置。'|trans }}</div>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        {% endif %}
+      {% endif %}
+
+      {# 公开课 #}
+      {% set openCourses = data('OpenCourses',{ count:6, orderBy:'recommendedSeq' }) %}
+      {% if openCourses %}
+        <div class="panel panel-autumn panel-autumn-primary">
+          <div class="panel-heading panel-heading-important">
+            <h2 class="panel-title">公开课 /
+              <small>Open Course</small>
+            </h2>
+            <a class="pull-right more-autumn-primary" href="{{ path('open_course_explore') }}">More&gt;</a>
+          </div>
+          <div class="panel-body">
+            <ul class="autumn-grids clearfix">
+              {% for course in openCourses %}
+                {% include 'default/open-course-grid.html.twig' %}
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+
+      {# 最新资讯 #}
+
+      {% set articles = data('LatestArticles',{'count':4}) %}
+      {% if articles %}
+        <div class="panel panel-autumn panel-autumn-default">
+          <div class="panel-heading panel-heading-important">
+            <h2 class="panel-title">{{ '最新%article_name%'|trans({'%article_name%': setting('article.name')|default('资讯'|trans)}) }} /
+              <small>The latest infomation</small>
+            </h2>
+            <a class="pull-right more-autumn-default" href="{{ path('article_show') }}">More&gt;</a>
+          </div>
+          <div class="panel-body news">
+            <ul class="row">
+              {% for article in articles %}
+                {% if article %}
+                  <li class="col-md-6">
+                    <em>{{ article.publishedTime|date('m-d H:i') }} </em>
+                    <a href="{{ path('article_detail', {id:article.id}) }}" title="{{ article.title }}"> {% if article.categoryId %}<span>
+                        [{{ article.category.name }}]</span>{% endif %}{{ article.title }} </a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+
+      {# 讲师团 #}
+      {% set teachers = data('RecommendTeachers',{'count':'3'}) %}
+      {% if teachers %}
+        <div class="panel panel-autumn panel-autumn-default">
+          <div class="panel-heading panel-heading-important">
+            <h2 class="panel-title">{{ '讲师团'|trans }} /
+              <small>Teacher</small>
+            </h2>
+            <a class="pull-right more-autumn-default" href="{{ path('teacher') }}">More&gt;</a>
+          </div>
+          <div class="panel-body teachers">
+            <ul class="row teacher-grids">
+              {% for teacher in teachers %}
+                {% if teacher %}
+                  <li class="col-xs-6 col-md-4 ">
+                    <div class="teachers-item">
+                      <a href="{{ path('user_show', {id:teacher.id}) }}">
+                        <img class="img-circle" src="{{ filepath(teacher.mediumAvatar, 'avatar.png') }}">
+                      </a>
+                      <span>{{ web_macro.user_link(teacher) }}</span>
+                      <i> {{ teacher.title }}</i>
+                      <p> {{ teacher.about|plain_text(50) }}</p>
+                    </div>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+
+      {# 会员专区 #}
+      {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
+        {% set levels = data('VipLevels',{'count':100}) %}
+        {% if levels %}
+          <div class="panel panel-autumn panel-autumn-primary">
+            <div class="panel-heading panel-heading-important">
+              <h2 class="panel-title">{{ '会员专区'|trans }} /
+                <small>Member Of The Zone</small>
+              </h2>
+            </div>
+            <div class="panel-body vip">
+              <ul class="vip-lists">
+                {% for level in levels %}
+                  {% if level %}
+                    <li class="vip-item">
+                      <div class="row">
+                        <div class="col-sm-3 vip-Img">
+                          <a href="{{ path('vip_course_explore', {levelId:level.id}) }}">
+                            <img class="img-responsive" src="{{ level.icon|default(asset('assets/img/default/vip-default.png')) }}"
+                              alt="{{ level.name }}">
+                          </a>
+                        </div>
+                        <div class="col-sm-6">
+                          <h3>{{ level.name }}</h3>
+                          <p>{{ level.description|plain_text(40) }}</p>
+                        </div>
+                        <div class="vip-price col-sm-3">
+                          {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                            <h4> {{ set_price((level.monthPrice) * (setting('coin.cash_rate'))) }}{{ setting('coin.coin_name', '虚拟币') }}</h4>
+                          {% else %}
+                            <h4>¥&nbsp;{{ level.monthPrice }}</h4>
+                          {% endif %}
+                          <h4><a href="{{ path('vip_buy') }}" class="btn btn-success">{{ '立即购买'|trans }}</a></h4>
+                        </div>
+                      </div>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        {% endif %}
+      {% endif %}
+
+      {# 小组 #}
+      {% if setting('group').group_show|default(1) %}
+        {% set groups = data('HotGroup', {'count':10}) %}
+        {% if groups %}
+          <div class="panel panel-autumn panel-autumn-default hot-group">
+            <div class="panel-heading panel-heading-important">
+              <h2 class="panel-title">{{ '最热小组'|trans }} /
+                <small>Hot Group</small>
+              </h2>
+              <a href="{{ path('group_search_group') }}" class="pull-right more-autumn-default">More&gt;</a></div>
+            <div class="panel-body">
+              <ul class="list-unstyled row">
+                {% for group in groups %}
+                  {% if group.status=='open' %}
+                    <li class="col-md-6">
+                      <div class="panel">
+                        <div class="media">
+                          <a href="{{ path('group_show',{id:group.id}) }}" title="{{ group.title }}" class="pull-left">
+                            {% if group.logo %}
+                              <img src="{{ filepath(group.logo, 'group.png') }}" alt="{{ group.title }}">
+                            {% else %}
+                              <img src="{{ asset('assets/img/default/group.png') }}" alt="{{ group.title }}">
+                            {% endif %}
+                          </a>
+                          <div class="media-body">
+                            <p><a href="{{ path('group_show',{id:group.id}) }}" title="{{ group.title }}">{{ group.title|sub_text(10) }}</a></p>
+                            <div class="text-muted text-normal">
+                              {{ '%memberNum%个成员'|trans({'%memberNum%': group.memberNum}) }}&nbsp;
+                              {{ '%threadNum%个话题'|trans({'%threadNum%': group.threadNum}) }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        {% endif %}
+      {% endif %}
+
+    </div>
+
+    <div class="col-md-4">
+      {# 在学课程 #}
+      {% if app.user %}
+        {#{% include 'TopxiaWebBundle:Default:member-recently-learned.html.twig' %}#}
+        {% include 'default/user-learning.html.twig' %}
+      {% endif %}
+
+      {# 热门标签 #}
+      {% set tags = data('Tags',{'count':5}) %}
+      {% if tags %}
+        <div class="panel panel-autumn panel-autumn-default">
+          <div class="panel-heading side-autumn-default">
+            <h2 class="panel-title">{{ '热门标签'|trans }} /
+              <small>Hot Tag</small>
+            </h2>
+          </div>
+          <div class="panel-body">
+            <div class="tag-list">
+              {% for tag in tags %}
+                {% if tag %}
+                  <a href="{{ path('tag_show', {name:tag.name}) }}"> {{ tag.name }}</a>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      {# 课程排行榜 #}
+      {% include 'default/course-set-rank.html.twig' %}
+
+      {# 学员动态 #}
+      {% set statuses = data('LatestStatuses', {mode:'simple', count: 5,private:0}) %}
+      {% if statuses %}
+        <div class="panel panel-autumn panel-autumn-default status-side">
+          <div class="panel-heading side-autumn-default">
+            <h2
+              class="panel-title">{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{ '学员'|trans }}{% endif %}{{ '动态'|trans }}
+              /
+              <small>Students Dynamic</small>
+            </h2>
+          </div>
+          <div class="panel-body">
+            <ul class="media-list">
+              {% for status in statuses %}
+                <li class="media">
+                  <div class="media-left">
+                    {{ web_macro.user_avatar(status.user, '','avatar-sm',true) }}
+                  </div>
+                  <div class="media-body media-middle">
+                    {{ web_macro.user_link(status.user) }}
+                    {{ status.message|raw }}
+                  </div>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+
+      {# 学员评价 #}
+      {{ render(controller('AppBundle:Default:latestReviewsBlock', {number:5})) }}
+
+      {# 最热话题 #}
+      {% if setting('group').group_show|default(1) %}
+        {% set hotThreads = data('HotThreads', {'count':11}) %}
+        {% if hotThreads %}
+          <div class="panel panel-autumn panel-autumn-default hot-threads">
+            <div class="panel-heading panel-heading-important">
+              <h2 class="panel-title">{{ '最热话题'|trans }} /
+                <small>Hot Topic</small>
+              </h2>
+            </div>
+            <div class="panel-body">
+              <ul class="text-list">
+                {% for thread in hotThreads %}
+                  {% if thread %}
+                    <li
+                      style="border-bottom:none;background:url('{{ asset('assets/img/default/triangle.png') }}') no-repeat 0 3px;padding-left:8px;padding-top:0px;margin-bottom:8px;">
+                      <a href="{{ path('group_thread_show',{id:thread.groupId,threadId:thread.id}) }}">{{ thread.title|sub_text(15) }}</a></li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        {% endif %}
+      {% endif %}
+
+    </div>
+
+  </div>
+
+{% endblock %}

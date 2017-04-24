@@ -1,6 +1,6 @@
 {% extends 'courseset-manage/layout.html.twig' %}
 
-{% block title %}{{ '课程封面'|trans }} - {{ parent() }}{% endblock %}
+{% block title %}{{ '封面图片'|trans }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'cover' %}
 {% do script(['app/js/courseset-manage/cover-crop/index.js']) %}
 {% set token = upload_token('tmp', 'image') %}
@@ -8,7 +8,7 @@
 
 <div class="panel panel-default panel-col">
   <div class="panel-heading">
-    {{'课程图片'|trans}}
+    {{'封面图片'|trans}}
   </div>
 
   <div id="courseset-picture-crop-form" class="panel-body">
@@ -30,10 +30,10 @@
           data-goto-url="{{path('open_course_manage_picture',{id: courseSet.id})}}"
           id="upload-picture-btn">{{'保存'|trans}}</button> #}
         {% else %}
-         <button class="btn btn-fat btn-primary"
+         <button class="btn btn-fat btn-primary upload-picture-btn"
           data-url="{{path('course_set_manage_cover_crop', {id: courseSet.id})}}"
           data-goto-url="{{path('course_set_manage_cover',{id: courseSet.id})}}"
-          id="upload-picture-btn">{{'保存'|trans}}</button>
+          id="upload-picture-btn" data-loading-text="{{'正在保存...'|trans}}">{{'保存'|trans}}</button>
         {% endif %}
           <a href="javascript:;" class="go-back btn btn-link">{{'重新选择图片'|trans}}</a>
         </div>

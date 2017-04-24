@@ -12,9 +12,39 @@ textarea {
   resize: none;
 }
 
+.help-block {
+  margin-bottom: 0;
+}
+
+.width-150 {
+  width: 150px !important;
+  display: inline-block;
+}
+
+.width-200 {
+  width: 200px;
+  display: inline-block;
+}
+
+.input-sm {
+  height: 30px;
+}
+
+// 弃用:等全局替换
+.width-input {
+  display: inline-block !important;
+  margin-right: 6px;
+  width: 150px;
+}
+.width-input-mini {width: 50px;}
+.width-input-small {width: 100px;}
+.width-input-large {width:200px;}
+.width-input-xlarge {width:300px;}
+.width-full {width:100%;}
+
 .radios,
 .checkboxs {
-  padding-top: 5px;
+  padding-top: 7px;
   vertical-align: middle;
 }
 
@@ -25,13 +55,12 @@ textarea {
 }
 
 .control-label span.required {
-  color: @brand-primary;
+  color: @brand-warning;
 }
 
 .form-control {
   color: @gray-dark;
   border-color: @gray-light;
-  height: 33px;
   &.form-control-lg {
     height: 40px;
   }
@@ -89,7 +118,7 @@ textarea {
 }
 
 .has-error .form-control {
-  border-color: @gray-light;
+  border-color: @brand-danger;
   &:focus {
     border-color: @gray-light;
   }
@@ -104,4 +133,15 @@ textarea {
   line-height: @form-error-message-height ;
   margin-bottom: 0;
   color: @brand-danger;
+}
+
+.control-label-required {
+  position: relative;
+  &:before {
+    content: "*";
+    color: @brand-warning;
+    position: absolute;
+    top: 4px;
+    left: -10px;
+  }
 }

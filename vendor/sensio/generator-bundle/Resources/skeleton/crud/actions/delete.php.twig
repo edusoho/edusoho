@@ -1,0 +1,50 @@
+
+    /**
+{% block phpdoc_method_header %}
+     * Deletes a {{ entity_singularized }} entity.
+{% endblock phpdoc_method_header %}
+     *
+{% block phpdoc_method_annotations %}
+{% if 'annotation' == format %}
+     * @Route("/{id}", name="{{ route_name_prefix }}_delete")
+     * @Method("DELETE")
+{% endif %}
+{% endblock phpdoc_method_annotations %}
+     */
+{% block method_definition %}
+    public function deleteAction(Request $request, {{ entity_class }} ${{ entity_singularized }})
+{% endblock method_definition %}
+    {
+{% block method_body %}
+        $form = $this->createDeleteForm(${{ entity_singularized }});
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove(${{ entity_singularized }});
+            $em->flush(${{ entity_singularized }});
+        }
+{% endblock method_body %}
+
+{% block method_return %}
+        return $this->redirectToRoute('{{ route_name_prefix }}_index');
+{% endblock method_return %}
+    }
+
+{% block form %}
+    /**
+     * Creates a form to delete a {{ entity_singularized }} entity.
+     *
+     * @param {{ entity_class }} ${{ entity_singularized }} The {{ entity_singularized }} entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createDeleteForm({{ entity_class }} ${{ entity_singularized }})
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('{{ route_name_prefix }}_delete', array('id' => ${{ entity_singularized }}->getId())))
+            ->setMethod('DELETE')
+            ->getForm()
+        ;
+    }
+{% endblock form %}

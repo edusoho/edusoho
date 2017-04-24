@@ -2,11 +2,15 @@
 
 namespace Biz\Testpaper\Dao;
 
-interface TestpaperItemDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface TestpaperItemDao extends GeneralDaoInterface
 {
     public function findItemsByIds(array $ids);
 
-    public function findItemsByTestId($testpaperId);
+    public function findItemsByTestId($testpaperId, $type);
+
+    public function findItemsByTestIds($testpaperIds);
 
     public function getItemsCountByParams(array $conditions, $groupBy = '');
 
@@ -16,7 +20,7 @@ interface TestpaperItemDao
 
     public function getItemsCountByTestIdAndQuestionType($testId, $questionType);
 
-    public function findTestpaperItemsByPIdAndLockedTestIds($pId, $testIds);
+    public function findTestpaperItemsByCopyIdAndLockedTestIds($copyId, $testIds);
 
     public function deleteItemsByParentId($id);
 
@@ -25,5 +29,4 @@ interface TestpaperItemDao
     public function deleteItemByIds(array $ids);
 
     public function updateItemsMissScoreByPaperIds(array $ids, $missScore);
-
 }

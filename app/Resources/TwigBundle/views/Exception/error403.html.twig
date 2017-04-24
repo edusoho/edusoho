@@ -10,7 +10,7 @@
       <div class="panel-body">
         <div class="well">
           <p>
-            {% if exception.message %}
+            {% if exception.message|default('') %}
               {{ exception.message }}
             {% else %}
                你没有权限访问该页面！

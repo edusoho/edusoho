@@ -1,16 +1,14 @@
 <script>
   var app = {};
-  app.version = '{{ assets_version() }}';
+  app.version = '{{ asset_version('/') }}';
   app.httpHost = '{{ app.request.getSchemeAndHttpHost() }}';
   app.basePath = '{{ app.request.getBasePath() }}';
   app.theme = '{{ setting("theme.uri"|default("default")) }}';
-  app.themeGlobalScript = '{{ theme_global_script() }}';
 
-  app.crontab = '{{ path('common_crontab') }}';
   {% set crontabNextExecutedTime = crontab_next_executed_time() %}
-  {% if crontabNextExecutedTime > 0  %}
+  {% if not setting('magic.disable_web_crontab', 0) and crontabNextExecutedTime > 0  %}
     {% if date(crontabNextExecutedTime|date('Y-m-d H:i:s')) < date() %}
-      app.scheduleCrontab = '{{ path('common_crontab') }}';
+      app.scheduleCrontab = '{{ path('crontab_web') }}';
     {% endif %}
   {% endif %}
 
@@ -23,11 +21,6 @@
         qq:{key:setting('login_bind.qq_key', '')},
         douban:{key:setting('login_bind.douban_key', '')},
         renren:{key:setting('login_bind.renren_key', '')}
-      },
-      cloud: {
-        video_player: parameter('cloud.video_player'),
-        video_player_watermark_plugin: parameter('cloud.video_player_watermark_plugin'),
-        video_player_fingerprint_plugin: parameter('cloud.video_player_fingerprint_plugin')
       },
       loading_img_path: asset('assets/img/default/loading.gif'),
     }|json_encode|raw

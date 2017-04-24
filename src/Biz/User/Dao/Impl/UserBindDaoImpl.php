@@ -32,6 +32,7 @@ class UserBindDaoImpl extends GeneralDaoImpl implements UserBindDao
     public function findByToId($toId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE toId = ? ORDER BY createdTime DESC";
+
         return $this->db()->fetchAll($sql, array($toId));
     }
 
@@ -41,8 +42,8 @@ class UserBindDaoImpl extends GeneralDaoImpl implements UserBindDao
             'conditions' => array(
                 'fromId = :fromId',
                 'toId = :toId',
-                'type = :type'
-            )
+                'type = :type',
+            ),
         );
     }
 }

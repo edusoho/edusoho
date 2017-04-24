@@ -8,11 +8,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DiscussController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function previewAction(Request $request, $task)
     {
-        $activity = $this->getActivityService()->getActivity($id);
+        return $this->render('activity/no-preview.html.twig');
+    }
+
+    public function showAction(Request $request, $activity)
+    {
         return $this->render('activity/discuss/show.html.twig', array(
-            'activity' => $activity
+            'activity' => $activity,
         ));
     }
 
@@ -21,15 +25,20 @@ class DiscussController extends BaseController implements ActivityActionInterfac
         $activity = $this->getActivityService()->getActivity($id);
 
         return $this->render('activity/discuss/modal.html.twig', array(
-            'activity' => $activity
+            'activity' => $activity,
         ));
     }
 
     public function createAction(Request $request, $courseId)
     {
         return $this->render('activity/discuss/modal.html.twig', array(
-            'courseId' => $courseId
+            'courseId' => $courseId,
         ));
+    }
+
+    public function finishConditionAction(Request $request, $activity)
+    {
+        return $this->render('activity/discuss/finish-condition.html.twig', array());
     }
 
     /**
@@ -37,6 +46,6 @@ class DiscussController extends BaseController implements ActivityActionInterfac
      */
     protected function getActivityService()
     {
-        return $this->getBiz()->service('Activity:ActivityService');
+        return $this->createService('Activity:ActivityService');
     }
 }

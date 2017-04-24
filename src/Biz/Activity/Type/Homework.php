@@ -2,9 +2,12 @@
 
 namespace Biz\Activity\Type;
 
-use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
-use Topxia\Common\Exception\InvalidArgumentException;
+use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Service\ActivityService;
+use Biz\Testpaper\Service\TestpaperService;
+use Biz\Activity\Service\ActivityLearnLogService;
+use AppBundle\Common\Exception\InvalidArgumentException;
 
 class Homework extends Activity
 {
@@ -15,7 +18,12 @@ class Homework extends Activity
 
     public function get($targetId)
     {
-        return $this->getTestpaperService()->getTestpaper($targetId);
+        return $this->getTestpaperService()->getTestpaperByIdAndType($targetId, 'homework');
+    }
+
+    public function find($targetIds)
+    {
+        return $this->getTestpaperService()->findTestpapersByIdsAndType($targetIds, 'homework');
     }
 
     public function create($fields)
@@ -25,7 +33,12 @@ class Homework extends Activity
         return $this->getTestpaperService()->buildTestpaper($fields, 'homework');
     }
 
-    public function update($targetId, $fields)
+    public function copy($activity, $config = array())
+    {
+        return null;
+    }
+
+    public function update($targetId, &$fields, $activity)
     {
         $homework = $this->get($targetId);
 
@@ -33,14 +46,34 @@ class Homework extends Activity
             throw $this->createNotFoundException('教学活动不存在');
         }
 
-        $fields = $this->filterFields($fields);
+        $filterFields = $this->filterFields($fields);
 
-        return $this->getTestpaperService()->updateTestpaper($homework['id'], $fields);
+        return $this->getTestpaperService()->updateTestpaper($homework['id'], $filterFields);
     }
 
     public function delete($targetId)
     {
-        return $this->getTestpaperService()->deleteTestpaper($targetId);
+        return $this->getTestpaperService()->deleteTestpaper($targetId, true);
+    }
+
+    public function isFinished($activityId)
+    {
+        $biz = $this->getBiz();
+        $user = $biz['user'];
+
+        $activity = $this->getActivityService()->getActivity($activityId);
+        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], 'homework');
+
+        $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $activity['mediaId'], $activity['fromCourseId'], $activity['id'], 'homework');
+        if (!$result) {
+            return false;
+        }
+
+        if ($homework['passedCondition']['type'] == 'submit' && in_array($result['status'], array('reviewing', 'finished'))) {
+            return true;
+        }
+
+        return false;
     }
 
     protected function getListeners()
@@ -51,38 +84,55 @@ class Homework extends Activity
     protected function filterFields($fields)
     {
         if (!ArrayToolkit::requireds($fields, array(
-            'finishCondition'
+            'finishCondition',
         ))
         ) {
             throw new InvalidArgumentException('homework fields is invalid');
         }
 
-        $fields = ArrayToolkit::parts($fields, array(
+        $filterFields = ArrayToolkit::parts($fields, array(
             'title',
             'description',
             'questionIds',
+            'passedCondition',
             'finishCondition',
             'fromCourseId',
-            'fromCourseSetId'
+            'fromCourseSetId',
         ));
 
-        $finishCondition = array();
-        if (!empty($fields['finishCondition'])) {
-            $finishCondition['type'] = $fields['finishCondition'];
+        if (!empty($filterFields['finishCondition'])) {
+            $filterFields['passedCondition']['type'] = $filterFields['finishCondition'];
         }
 
-        $fields['finishCondition'] = $finishCondition;
+        $filterFields['courseSetId'] = empty($filterFields['fromCourseSetId']) ? 0 : $filterFields['fromCourseSetId'];
+        $filterFields['courseId'] = empty($filterFields['fromCourseId']) ? 0 : $filterFields['fromCourseId'];
+        $filterFields['lessonId'] = 0;
+        $filterFields['name'] = empty($filterFields['title']) ? '' : $filterFields['title'];
 
-        $fields['courseSetId'] = empty($fields['fromCourseSetId']) ? 0 : $fields['fromCourseSetId'];
-        $fields['courseId']    = empty($fields['fromCourseId']) ? 0 : $fields['fromCourseId'];
-        $fields['lessonId']    = 0;
-        $fields['name']        = empty($fields['title']) ? '' : $fields['title'];
-
-        return $fields;
+        return $filterFields;
     }
 
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->getBiz()->service('Testpaper:TestpaperService');
+    }
+
+    /**
+     * @return ActivityLearnLogService
+     */
+    protected function getActivityLearnLogService()
+    {
+        return $this->getBiz()->service('Activity:ActivityLearnLogService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 }

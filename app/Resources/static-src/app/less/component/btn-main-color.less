@@ -1,0 +1,31 @@
+.btn-main-color(@brand-primary) {
+  .btn-primary {
+    border-color: darken(@brand-primary,10%);
+    background-color: @brand-primary;
+    &:hover,
+    &:focus,
+    &.focus,
+    &.active {
+      background: darken(@brand-primary, 8%);
+      border-color: darken(@brand-primary, 10%);
+    }
+  }
+  .btn-transparent {
+    border-color: @brand-primary;
+    color: @brand-primary;
+    &:after {
+      background-color: @brand-primary;
+    }
+    &:hover,
+    &.active {
+      color: #fff;
+    }
+  }
+  .btn-link {
+    &:hover, 
+    &:focus,
+    &.focus {
+      color: @brand-primary;
+    }
+  }
+}

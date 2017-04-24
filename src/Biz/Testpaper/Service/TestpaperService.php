@@ -1,28 +1,40 @@
 <?php
+
 namespace Biz\Testpaper\Service;
+
+use Biz\Testpaper\Builder\TestpaperBuilder;
 
 interface TestpaperService
 {
     public function getTestpaper($id);
 
+    public function getTestpaperByIdAndType($id, $type);
+
+    public function findTestpapersByIdsAndType($ids, $type);
+
     public function createTestpaper($fields);
 
     public function updateTestpaper($id, $fields);
 
-    public function deleteTestpaper($id);
+    public function deleteTestpaper($id, $quietly = false);
 
     public function deleteTestpapers($ids);
 
     public function findTestpapersByIds($ids);
 
+    public function getTestpaperByCopyIdAndCourseSetId($copyId, $courseSetId);
+
     public function searchTestpapers($conditions, $sort, $start, $limit);
 
     public function searchTestpaperCount($conditions);
 
-    /**
-     * testpaper_item
-     */
+    public function publishTestpaper($id);
 
+    public function closeTestpaper($id);
+
+    /**
+     * testpaper_item.
+     */
     public function getItem($id);
 
     public function createItem($fields);
@@ -37,13 +49,11 @@ interface TestpaperService
 
     public function findItemsByTestId($testpaperId);
 
+    public function findItemsByTestIds($testpaperIds);
+
     public function searchItems($conditions, $orderBy, $start, $limit);
 
     public function searchItemCount($conditions);
-
-    /*
-     * testpaper_item_result
-     */
 
     public function createItemResult($fields);
 
@@ -51,17 +61,15 @@ interface TestpaperService
 
     public function findItemResultsByResultId($resultId);
 
-    /**
-     * testpaper_result
-     */
-
     public function getTestpaperResult($id);
 
-    public function getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId);
+    public function getUserUnfinishResult($testId, $courseId, $activityId, $type, $userId);
 
-    public function getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type);
+    public function getUserFinishedResult($testId, $courseId, $activityId, $type, $userId);
 
-    public function findPaperResultsStatusNumGroupByStatus($testId);
+    public function getUserLatelyResultByTestId($userId, $testId, $courseId, $activityId, $type);
+
+    public function findPaperResultsStatusNumGroupByStatus($testId, $courseIds);
 
     public function addTestpaperResult($fields);
 
@@ -75,22 +83,37 @@ interface TestpaperService
 
     public function buildTestpaper($fields, $type);
 
-    public function publishTestpaper($id);
-
-    public function closeTestpaper($id);
-
-    public function canBuildTestpaper($builder, $options);
+    public function canBuildTestpaper($type, $options);
 
     /**
-     * 开始做试卷
-     *
-     * @param  [type] $id             [description]
-     * @return [type] [description]
+     * 开始做试卷.
      */
-    public function startTestpaper($id, $lessonId);
+    public function startTestpaper($id, $fields);
 
     public function finishTest($resultId, $formData);
 
+    public function showTestpaperItems($testId, $resultId = 0);
+
+    public function makeAccuracy($resultId);
+
+    public function checkFinish($resultId, $fields);
+
+    public function submitAnswers($id, $answers);
+
+    public function sumScore($itemResults);
+
+    public function findAttachments($testId);
+
+    public function canLookTestpaper($resultId);
+
     public function updateTestpaperItems($testpaperId, $items);
 
+    /**
+     * @param  $type
+     *
+     * @return TestpaperBuilder
+     */
+    public function getTestpaperBuilder($type);
+
+    public function countQuestionTypes($testpaper, $items);
 }

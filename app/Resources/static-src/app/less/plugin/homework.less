@@ -118,6 +118,7 @@
 }
 
 .testpaper-question {
+  position: relative;
   margin-bottom: 50px;
   font-size: 14px;
   border-top: 1px solid #ccc;
@@ -339,11 +340,11 @@
   max-width: 100%;
 }
 
-.question-set-card .panel-body,
-.testpaper-card .panel-body {
-  overflow-y: auto;
-  max-height: 450px;
-}
+// .question-set-card .panel-body,
+// .testpaper-card .panel-body {
+//   overflow-y: auto;
+//   max-height: 450px;
+// }
 
 .testpaper-card .btn-index {
   font-size: 12px;
@@ -371,10 +372,6 @@
   font-size: 20px;
 }
 
-.testpaper-card .panel-body .have-pro {
-  border: 2px solid #428bca;
-}
-
 .testpaper-card.affix {
   position: static;
   top: 0
@@ -395,7 +392,7 @@
   }
   .testpaper-card.affix {
     position: fixed;
-    top: 60px;
+    top: 0px;
   }
   .testpaper-card.affix-bottom {
     position: absolute;

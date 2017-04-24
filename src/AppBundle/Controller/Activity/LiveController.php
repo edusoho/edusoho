@@ -2,17 +2,30 @@
 
 namespace AppBundle\Controller\Activity;
 
+use AppBundle\Controller\LiveroomController;
+use Biz\Task\Service\TaskService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
+use Biz\File\Service\UploadFileService;
+use Biz\Task\Service\TaskResultService;
 use AppBundle\Controller\BaseController;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\LiveReplayService;
 use Symfony\Component\HttpFoundation\Request;
 
 class LiveController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function previewAction(Request $request, $task)
     {
-        $activity = $this->getActivityService()->getActivityFetchMedia($id);
-        $format   = 'Y-m-d H:i';
+        return $this->render('activity/no-preview.html.twig');
+    }
+
+    public function showAction(Request $request, $activity)
+    {
+        $live = $this->getActivityService()->getActivityConfig($activity['mediaType'])->get($activity['mediaId']);
+        $activity['ext'] = $live;
+
+        $format = 'Y-m-d H:i';
         if (isset($activity['startTime'])) {
             $activity['startTimeFormat'] = date($format, $activity['startTime']);
         }
@@ -20,88 +33,112 @@ class LiveController extends BaseController implements ActivityActionInterface
             $activity['endTimeFormat'] = date($format, $activity['endTime']);
         }
         $activity['nowDate'] = time();
-        //FIXME 应当判断是否是当前任务的teacher
-        $activity['isTeacher'] = $this->getUser()->isTeacher();
-        $summary               = $activity['remark'];
+
+        if ($activity['ext']['replayStatus'] == LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS) {
+            $activity['replays'] = array($this->_getLiveVideoReplay($activity));
+        } else {
+            $activity['replays'] = $this->_getLiveReplays($activity);
+        }
+
+        if ($this->getCourseMemberService()->isCourseTeacher($activity['fromCourseId'], $this->getUser()->id)) {
+            $activity['isTeacher'] = $this->getUser()->isTeacher();
+        }
+
+        $summary = $activity['remark'];
         unset($activity['remark']);
+
+        $this->freshTaskLearnStat($request, $activity['id']);
+
         return $this->render('activity/live/show.html.twig', array(
             'activity' => $activity,
-            'summary'  => $summary
+            'summary' => $summary,
         ));
     }
 
     public function editAction(Request $request, $id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->getActivity($id, true);
+
         return $this->render('activity/live/modal.html.twig', array(
-            'activity' => $this->formatTimeFields($activity)
+            'activity' => $this->formatTimeFields($activity),
+            'courseId' => $courseId,
         ));
     }
 
     public function createAction(Request $request, $courseId)
     {
         return $this->render('activity/live/modal.html.twig', array(
-            'courseId' => $courseId
+            'courseId' => $courseId,
         ));
     }
 
-    public function liveEntryAction(Request $request, $courseId, $activityId)
+    public function liveEntryAction($courseId, $activityId)
     {
         $user = $this->getUser();
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('你好像忘了登录哦？'), null, 3000, $this->generateUrl('login'));
+            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
 
-        $activity = $this->getActivityService()->getActivityFetchMedia($activityId);
+        $activity = $this->getActivityService()->getActivity($activityId, $fetchMedia = true);
 
         if (empty($activity)) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('直播任务不存在！'));
+            return $this->createMessageResponse('info', '直播任务不存在！');
         }
         if ($activity['fromCourseId'] != $courseId) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('参数非法！'));
+            return $this->createMessageResponse('info', '参数非法！');
         }
 
         if (empty($activity['ext']['liveId'])) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('直播教室不存在！'));
+            return $this->createMessageResponse('info', '直播教室不存在！');
         }
 
         if ($activity['startTime'] - time() > 7200) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('直播还没开始!'));
+            return $this->createMessageResponse('info', '直播还没开始!');
         }
 
         if ($activity['endTime'] < time()) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('直播已结束!'));
+            return $this->createMessageResponse('info', '直播已结束!');
         }
 
         $params = array();
-        if ($this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
-            $teachers = $this->getCourseService()->findCourseTeachers($courseId);
-            $teacher  = array_shift($teachers);
+        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
+            $teachers = $this->getCourseService()->findTeachersByCourseId($courseId);
+            $teacher = array_shift($teachers);
 
             if ($teacher['userId'] == $user['id']) {
                 $params['role'] = 'teacher';
             } else {
                 $params['role'] = 'speaker';
             }
-        } elseif ($this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
+        } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
             $params['role'] = 'student';
         } else {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('您不是课程学员，不能参加直播！'));
+            return $this->createMessageResponse('info', '您不是课程学员，不能参加直播！');
         }
 
-        $params['id']       = $user['id'];
+        $params['id'] = $user['id'];
         $params['nickname'] = $user['nickname'];
-        return $this->forward('WebBundle:Liveroom:_entry', array(
-            'roomId'     => $activity['ext']['liveId'],
-            'courseId'   => $courseId,
-            'activityId' => $activityId
+
+        return $this->forward('AppBundle:Liveroom:_entry', array(
+            'roomId' => $activity['ext']['liveId'],
+            'params' => array('courseId' => $courseId, 'activityId' => $activityId),
         ), $params);
+    }
+
+    public function liveReplayAction($courseId, $activityId)
+    {
+        $this->getCourseService()->tryTakeCourse($courseId);
+        $activity = $this->getActivityService()->getActivity($activityId);
+        $live = $this->getActivityService()->getActivityConfig('live')->get($activity['mediaId']);
+
+        return $this->render('activity/live/replay-player.html.twig', array(
+            'live' => $live,
+        ));
     }
 
     public function triggerAction(Request $request, $courseId, $activityId)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
-        $user = $this->getUser();
 
         $activity = $this->getActivityService()->getActivity($activityId);
         if ($activity['mediaType'] !== 'live') {
@@ -112,17 +149,126 @@ class LiveController extends BaseController implements ActivityActionInterface
             return $this->createJsonResponse(array('success' => true, 'status' => 'not_start'));
         }
 
-        // $eventName = $request->query->get('eventName', 'doing');
-        // $this->getActivityService()->trigger($activityId, $eventName, array());
-
-        //当前业务逻辑：看过即视为完成
-        $this->getActivityService()->trigger($activityId, 'finish', array());
-
         if ($activity['endTime'] < $now) {
             return $this->createJsonResponse(array('success' => true, 'status' => 'live_end'));
         }
 
+        if ($this->validTaskLearnStat($request, $activity['id'])) {
+            //当前业务逻辑：看过即视为完成
+            $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+            $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+            //如果尚未开始则标记为开始
+            if (empty($taskResult)) {
+                $this->getActivityService()->trigger($activityId, 'start', array('task' => $task));
+            } elseif ($taskResult['status'] == 'start') {
+                $this->getActivityService()->trigger($activityId, 'finish', array('taskId' => $task['id']));
+                $this->getTaskService()->finishTaskResult($task['id']);
+            }
+        }
+
         return $this->createJsonResponse(array('success' => true, 'status' => 'on_live'));
+    }
+
+    public function finishConditionAction(Request $request, $activity)
+    {
+        return $this->render('activity/live/finish-condition.html.twig', array());
+    }
+
+    private function freshTaskLearnStat(Request $request, $activityId)
+    {
+        $key = 'activity.'.$activityId;
+        $session = $request->getSession();
+        $taskStore = $session->get($key, array());
+        $taskStore['start'] = time();
+        $taskStore['lastTriggerTime'] = 0;
+
+        $session->set($key, $taskStore);
+    }
+
+    private function validTaskLearnStat(Request $request, $activityId)
+    {
+        $key = 'activity.'.$activityId;
+        $session = $request->getSession($key);
+        $taskStore = $session->get($key);
+
+        if (!empty($taskStore)) {
+            $now = time();
+            //任务连续学习超过5小时则不再统计时长
+            if ($now - $taskStore['start'] > 60 * 60 * 5) {
+                return false;
+            }
+            //任务每分钟只允许触发一次，这里用55秒作为标准判断，以应对网络延迟
+            if ($now - $taskStore['lastTriggerTime'] < 55) {
+                return false;
+            }
+            $taskStore['lastTriggerTime'] = $now;
+            $session->set($key, $taskStore);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function _getLiveVideoReplay($activity, $ssl = false)
+    {
+        if ($activity['ext']['replayStatus'] == LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS) {
+            $file = $this->getUploadFileService()->getFullFile($activity['ext']['mediaId']);
+
+            return array(
+                'url' => $this->generateUrl('task_live_replay_player', array(
+                    'activityId' => $activity['id'],
+                    'courseId' => $activity['fromCourseId'],
+                )),
+                'title' => $file['filename'],
+            );
+        } else {
+            return array();
+        }
+    }
+
+    // Refactor: redesign course_lesson_replay table
+    protected function _getLiveReplays($activity, $ssl = false)
+    {
+        if ($activity['ext']['replayStatus'] === LiveReplayService::REPLAY_GENERATE_STATUS) {
+            $copyId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
+            $sourceActivity = $this->getActivityService()->getActivity($copyId, true);
+
+            $replays = $this->getLiveReplayService()->findReplayByLessonId($copyId);
+
+            $service = $this->getLiveReplayService();
+            $fileService = $this->getUploadFileService();
+            $self = $this;
+            $replays = array_map(function ($replay) use ($service, $sourceActivity, $ssl, $self, $fileService) {
+                $result = $service->entryReplay($replay['id'], $sourceActivity['ext']['liveId'], $sourceActivity['ext']['liveProvider'], $ssl);
+
+                if (!empty($result) && !empty($result['resourceNo'])) {
+                    $replay['url'] = $self->generateUrl('es_live_room_replay_show', array(
+                        'targetType' => LiveroomController::LIVE_COURSE_TYPE,
+                        'targetId' => $sourceActivity['fromCourseId'],
+                        'replayId' => $replay['id'],
+                        'lessonId' => $sourceActivity['id'],
+                    ));
+                } elseif (!empty($result['url'])) {
+                    // Other Live
+                    $replay['url'] = $result['url'];
+                }
+
+                return $replay;
+            }, $replays);
+        } else {
+            $replays = array();
+        }
+
+        return $replays;
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 
     /**
@@ -130,17 +276,23 @@ class LiveController extends BaseController implements ActivityActionInterface
      */
     protected function getActivityService()
     {
-        return $this->getBiz()->service('Activity:ActivityService');
+        return $this->createService('Activity:ActivityService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
-    protected function getServiceKernel()
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
     {
-        return ServiceKernel::instance();
+        return $this->createService('Course:MemberService');
     }
 
     //int to datetime
@@ -148,6 +300,9 @@ class LiveController extends BaseController implements ActivityActionInterface
     {
         $format = 'Y-m-d H:i';
         if (isset($fields['startTime'])) {
+            if ($fields['startTime'] <= time() && $fields['ext']['roomCreated']) {
+                $fields['timeDisabled'] = 1;
+            }
             $fields['startTime'] = date($format, $fields['startTime']);
         }
         if (isset($fields['endTime'])) {
@@ -155,5 +310,29 @@ class LiveController extends BaseController implements ActivityActionInterface
         }
 
         return $fields;
+    }
+
+    /**
+     * @return LiveReplayService
+     */
+    protected function getLiveReplayService()
+    {
+        return $this->createService('Course:LiveReplayService');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->createService('File:UploadFileService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 }

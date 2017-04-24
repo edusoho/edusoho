@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class PptActivity extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -17,21 +17,21 @@ class PptActivity extends Migration
           `mediaId` int(11) NOT NULL,
           `finishType` varchar(32) NOT NULL DEFAULT '' COMMENT 'end, time',
           `finishDetail` varchar(32) DEFAULT '0' COMMENT '至少观看X分钟',
-          `createdTime` int(10) NOT NULL,
+          `createdTime` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '',
           `createdUserId` int(11) NOT NULL,
-          `updatedTime` int(11) DEFAULT NULL,
+          `updatedTime` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '',
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
         ");
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
         $biz = $this->getContainer();
         $db = $biz['db'];
-        $db->exec("DROP TABLE IF EXISTS `ppt_activity`");
+        $db->exec('DROP TABLE IF EXISTS `ppt_activity`');
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Question\Service;
 
 interface QuestionService
@@ -17,6 +18,8 @@ interface QuestionService
 
     public function findQuestionsByParentId($id);
 
+    public function findQuestionsByCourseSetId($courseSetId);
+
     public function search($conditions, $sort, $start, $limit);
 
     public function searchCount($conditions);
@@ -30,12 +33,11 @@ interface QuestionService
     public function getQuestionCountGroupByTypes($conditions);
 
     /**
-     * question_favorite
+     * question_favorite.
      */
+    public function getFavoriteQuestion($favoriteId);
 
     public function createFavoriteQuestion($fields);
-
-    public function updateFavoriteQuestion($id, $fields);
 
     public function deleteFavoriteQuestion($id);
 
@@ -47,4 +49,5 @@ interface QuestionService
 
     public function deleteFavoriteByQuestionId($questionId);
 
+    public function batchDeletes($ids);
 }

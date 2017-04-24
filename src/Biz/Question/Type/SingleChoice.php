@@ -2,9 +2,7 @@
 
 namespace Biz\Question\Type;
 
-use Topxia\Common\ArrayToolkit;
-
-class SingleChoice implements TypeInterface
+class SingleChoice extends BaseQuestion implements TypeInterface
 {
     public function create($fields)
     {
@@ -31,44 +29,12 @@ class SingleChoice implements TypeInterface
         return array('status' => 'wrong', 'score' => 0);
     }
 
-    public function filter($fields)
+    public function filter(array $fields)
     {
         if (!empty($fields['choices'])) {
             $fields['metas'] = array('choices' => $fields['choices']);
         }
 
-        return $this->commonFilter($fields);
-    }
-
-    protected function commonFilter($fields)
-    {
-        if (!empty($fields['target']) && $fields['target'] > 0) {
-            $fields['lessonId'] = $fields['target'];
-            unset($fields['target']);
-        }
-        $fields = ArrayToolkit::parts($fields, array(
-            'type',
-            'stem',
-            'difficulty',
-            'userId',
-            'answer',
-            'analysis',
-            'metas',
-            'score',
-            'categoryId',
-            'parentId',
-            'copyId',
-            'target',
-            'courseId',
-            'lessonId',
-            'subCount',
-            'finishedTimes',
-            'passedTimes',
-            'userId',
-            'updatedTime',
-            'createdTime'
-        ));
-
-        return $fields;
+        return parent::filter($fields);
     }
 }

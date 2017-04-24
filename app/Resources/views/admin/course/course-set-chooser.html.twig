@@ -1,0 +1,73 @@
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% set modal_class = 'modal-lg' %}
+{% block title %}{{'指定课程'|trans}}{% endblock %}
+{% block body %}
+
+<form id="message-search-form" class="form-inline well well-sm" action="{{ path('admin_course_chooser') }}" method="get" novalidate>
+	<div class="form-group">
+	  <select class="form-control" name="categoryId">
+	    {{ select_options(category_choices('courseSet'), app.request.query.get('categoryId'), '课程分类'|trans) }}
+	  </select>
+	</div>
+	<div class="form-group">
+	  <select class="form-control" name="status">
+	    {{ select_options(dict('courseStatus'), app.request.query.get('status'), '课程状态'|trans) }}
+	  </select>
+	</div>
+	<div class="form-group">
+	  <input class="form-control" type="text" placeholder="{{'标题'|trans}}" name="title" value="{{ app.request.get('title') }}">
+	</div>
+	<div class="form-group">
+	  <input class="form-control" type="text" placeholder="{{'创建者'|trans}}" name="creator" value="{{ app.request.get('creator') }}">
+	</div>
+	<button class="btn btn-primary">{{'搜索'|trans}}</button>
+</form>
+
+<table class="table table-striped table-hover" id="course-table">
+	<thead>
+		<tr>
+		 <th>{{'编号'|trans}}</th>
+	     <th width="30%">{{'名称'|trans}}</th>
+	     <th>{% if setting('default.user_name') %}{{'%user_name%数'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}{% endif %}</th>
+	     <th>{{'状态'|trans}}</th>
+	     <th>{{'创建者'|trans}}</th>
+	     <th>{{'操作'|trans}}</th>
+		</tr>
+	</thead>
+	<tbody>
+	  {% for courseSet in courseSets %}
+	  	{% set user = users[courseSet.creator]|default(null) %}
+	  	{% import "admin/macro.html.twig" as admin_macro %}
+	    {% set category = categories[courseSet.categoryId]|default(null) %}
+		<tr id="course-tr-{{ courseSet.id }}">
+		  <td>{{ courseSet.id }}</td>
+		  <td>
+		    <a href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank"><strong>{{ courseSet.title }}</strong></a>
+		    <br>
+		  </td>
+		  <td>{{ courseSet.studentNum }}</td>
+		  <td>{{ dict_macro.courseStatus(courseSet.status) }}</td>
+		  <td>
+		    {{ admin_macro.user_link(user) }}
+		    <br>
+		    <span class="text-muted text-sm">{{ courseSet.createdTime|date('Y-n-d H:i') }}</span>
+		  </td>
+		  <td>
+		 	<button type="button" class="btn btn-primary btn-sm choose-course" data-target="{{ courseSet.id }}" data-name="{{ courseSet.title}}">{{'选择'|trans}}</button>
+		  </td>
+		</tr>
+	  {% else %}
+	    <tr><td colspan="20"><div class="empty">{{'暂无课程记录'|trans}}</div></td></tr>
+	  {% endfor %}
+	</tbody>
+</table>
+
+{{ admin_macro.paginator(paginator) }}
+
+{% endblock %}
+{% block footer %}
+  <button type="button" class="btn btn-default pull-right" data-dismiss="modal">{{'关闭'|trans}}</button>
+  
+  <script>app.load('course/chooser');</script>
+{% endblock %}

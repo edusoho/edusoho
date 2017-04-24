@@ -1,0 +1,21 @@
+OAuth2\ServerBundle\Entity\Client:
+    type: entity
+    table: oauth_client
+    id:
+        client_id:
+            type:       string
+            length:     50
+    fields:
+        client_secret:
+            type:       string
+            length:     40
+            nullable:   true
+        redirect_uri:
+            type:       simple_array
+        grant_types:
+            type:       simple_array
+            nullable:   true
+        scopes:
+            type:       simple_array
+            nullable:   true
+    lifecycleCallbacks: {  }

@@ -1,0 +1,10 @@
+{% set showHeader = 0 %}
+{% set showTypeBar = 1 %}
+{% set isIframeBody = 1 %}
+
+{% if paper %}
+  {% include 'testpaper/start-do-show.html.twig' %}
+{% else %}
+  {{ '试卷已被删除'|trans }}
+{% endif %}
+

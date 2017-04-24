@@ -1,0 +1,10 @@
+{% extends 'classroom/content-layout.html.twig' %}
+{% block title %}{% if thread %}{{'编辑'|trans}}{{ dict_text('threadType', type) }}{% else %}{{'发表'|trans}}{{ dict_text('threadType', type) }}{% endif %} - {{ parent() }}{% endblock %}
+{% set thread = thread|default(null) %}
+{% set nav = 'thread' %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/course/thread-form/index.js'])%}
+
+
+{% block main %}
+    {{ render(controller('AppBundle:Thread:create', {request:app.request, target:{type:'classroom', id:classroom.id}, thread:thread, type:type})) }}
+{% endblock %}

@@ -5,15 +5,15 @@
   .highlight {
     position: absolute;
     bottom: -1px;
-    border-bottom: 2px solid @brand-primary;
+    // border-bottom: 2px solid @brand-primary;
     @media (max-width: @screen-xs-max) {
       display: none;
     }
   }
-  >li {
+  > li {
     margin-bottom: 0;
   }
-  >li >a {
+  > li > a {
     border: none;
     margin-right: 0;
     color: @gray-darker;
@@ -32,22 +32,24 @@
     &:focus {
       background: none;
     }
+    small {
+      color: @gray;
+    }
   }
-  >li.active >a,
-  >li:hover >a {
+  > li.active > a,
+  > li:hover > a {
     border: none;
-    // border-bottom: 2px solid @brand-primary;
     background: none;
-    color: @brand-primary;
+    // color: @brand-primary;
     .es-transition;
     @media (max-width: @screen-xs-max) {
       border: none;
     }
-    .text-muted {
-      color: @brand-primary;
+    small{
+      // color: @brand-primary;
     }
     .badge {
-      background-color: @brand-primary;
+      // background-color: @brand-primary;
       .es-transition;
     }
   }

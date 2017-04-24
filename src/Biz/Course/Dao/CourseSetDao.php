@@ -6,7 +6,13 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface CourseSetDao extends GeneralDaoInterface
 {
-    public function get($id, $lock = false);
+    const TABLENAME = 'course_set_v8';
 
-    public function update($id, array $fields);
+    public function findByIds(array $ids);
+
+    public function findLikeTitle($title);
+
+    public function findCourseSetsByParentIdAndLocked($parentId, $locked);
+
+    public function analysisCourseSetDataByTime($startTime, $endTime);
 }

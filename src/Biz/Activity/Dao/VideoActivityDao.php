@@ -1,8 +1,10 @@
 <?php
 
-namespace  Biz\Activity\Dao;
+namespace Biz\Activity\Dao;
 
-interface  VideoActivityDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface VideoActivityDao extends GeneralDaoInterface
 {
-
+    public function findByIds($ids);
 }

@@ -12,8 +12,8 @@ class BlacklistDaoImpl extends GeneralDaoImpl implements BlacklistDao
     public function getByUserIdAndBlackId($userId, $blackId)
     {
         return $this->getByFields(array(
-            'userId'  => $userId,
-            'blackId' => $blackId
+            'userId' => $userId,
+            'blackId' => $blackId,
         ));
     }
 

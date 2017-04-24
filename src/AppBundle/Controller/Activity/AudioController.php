@@ -2,51 +2,71 @@
 
 namespace AppBundle\Controller\Activity;
 
-
 use AppBundle\Controller\BaseController;
+use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
 class AudioController extends BaseController implements ActivityActionInterface
 {
-
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $activity)
     {
-        $activity = $this->getActivityService()->getActivityFetchMedia($id);
+        $audio = $this->getActivityService()->getActivityConfig($activity['mediaType'])->get($activity['mediaId']);
 
         return $this->render('activity/audio/show.html.twig', array(
             'activity' => $activity,
-            'courseId' => $courseId
+            'audio' => $audio,
+        ));
+    }
+
+    public function previewAction(Request $request, $task)
+    {
+        $activity = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
+
+        return $this->render('activity/audio/preview.html.twig', array(
+            'task' => $task,
+            'activity' => $activity,
+            'courseId' => $task['courseId'],
         ));
     }
 
     public function editAction(Request $request, $id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivityFetchMedia($id);
+        $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true);
         $activity = $this->fillMinuteAndSecond($activity);
+
         return $this->render('activity/audio/modal.html.twig', array(
             'activity' => $activity,
-            'courseId' => $courseId
+            'courseId' => $courseId,
         ));
     }
 
     public function createAction(Request $request, $courseId)
     {
         return $this->render('activity/audio/modal.html.twig', array(
-            'courseId' => $courseId
+            'courseId' => $courseId,
         ));
+    }
+
+    public function finishConditionAction(Request $request, $activity)
+    {
+        return $this->render('activity/audio/finish-condition.html.twig', array());
     }
 
     protected function fillMinuteAndSecond($activity)
     {
         if (!empty($activity['length'])) {
-            $activity['minute'] = intval($activity['length'] / 60);
-            $activity['second'] = intval($activity['length'] % 60);
+            $activity['minute'] = (int) ($activity['length'] / 60);
+            $activity['second'] = (int) ($activity['length'] % 60);
         }
+
         return $activity;
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
-        return $this->getBiz()->service('Activity:ActivityService');
+        return $this->createService('Activity:ActivityService');
     }
 }

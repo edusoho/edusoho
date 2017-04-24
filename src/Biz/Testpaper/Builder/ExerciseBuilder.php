@@ -1,9 +1,9 @@
 <?php
+
 namespace Biz\Testpaper\Builder;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Context\Biz;
-use Biz\Testpaper\Builder\TestpaperBuilderInterface;
 
 class ExerciseBuilder implements TestpaperBuilderInterface
 {
@@ -16,22 +16,24 @@ class ExerciseBuilder implements TestpaperBuilderInterface
 
     public function build($fields)
     {
-        $fields['type']            = 'exercise';
-        $fields['status']          = 'open';
-        $fields['pattern']         = 'questionType';
+        $fields['type'] = 'exercise';
+        $fields['status'] = 'open';
+        $fields['pattern'] = 'questionType';
         $fields['passedCondition'] = array(0);
 
         $fields = $this->filterFields($fields);
+
         return $this->getTestpaperService()->createTestpaper($fields);
     }
 
     public function canBuild($options)
     {
-        $questions     = $this->getQuestions($options);
+        $questions = $this->getQuestions($options);
         $questionCount = count($questions);
 
         if ($questionCount < $options['itemCount']) {
             $lessNum = $options['itemCount'] - $questionCount;
+
             return array('status' => 'no', 'lessNum' => $lessNum);
         } else {
             return array('status' => 'yes');
@@ -40,7 +42,7 @@ class ExerciseBuilder implements TestpaperBuilderInterface
 
     public function showTestItems($testId, $resultId = 0)
     {
-        $exercise = $this->getTestpaperService()->getTestpaper($testId);
+        $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($testId, 'exercise');
 
         $itemResults = array();
         if ($resultId) {
@@ -52,27 +54,53 @@ class ExerciseBuilder implements TestpaperBuilderInterface
 
         if ($itemResults) {
             $questionIds = ArrayToolkit::column($itemResults, 'questionId');
-            $questions   = $this->getQuestionService()->findQuestionsByIds($questionIds);
+            $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
         } else {
             $conditions = array(
-                'types'    => $exercise['metas']['questionTypes'],
-                'courseId' => $exercise['courseSetId'],
-                'parentId' => 0
+                'types' => $exercise['metas']['questionTypes'],
+                'courseSetId' => $exercise['courseSetId'],
+                'parentId' => 0,
             );
             if (!empty($exercise['metas']['difficulty'])) {
                 $conditions['difficulty'] = $exercise['metas']['difficulty'];
             }
-
+            //兼容course1.0 start
             if (!empty($exercise['metas']['range']) && $exercise['metas']['range'] == 'lesson') {
-                $conditions['lessonId'] = $exercise['lessonId'];
+                $conditions = array(
+                    'activityId' => $exercise['lessonId'],
+                    'type' => 'exercise',
+                    'courseId' => $exercise['courseId'],
+                );
+                $task = $this->getCourseTaskService()->searchTasks($conditions, null, 0, 1);
+                if (!$task) {
+                    return;
+                }
+
+                $conditions = array(
+                    'categoryId' => $task[0]['categoryId'],
+                    'mode' => 'lesson',
+                );
+                $lessonTask = $this->getCourseTaskService()->searchTasks($conditions, null, 0, 1);
+                if ($lessonTask) {
+                    $conditions['lessonId'] = $lessonTask[0]['id'];
+                }
+            }
+            //兼容course1.0 end
+
+            if (!empty($exercise['metas']['range']['courseId'])) {
+                $conditions['courseId'] = $exercise['metas']['range']['courseId'];
             }
 
-            $count     = $this->getQuestionService()->searchCount($conditions);
+            if (!empty($exercise['metas']['range']['lessonId'])) {
+                $conditions['lessonId'] = $exercise['metas']['range']['lessonId'];
+            }
+
+            $count = $this->getQuestionService()->searchCount($conditions);
             $questions = $this->getQuestionService()->search(
                 $conditions,
                 array('createdTime' => 'DESC'),
                 0,
-                $exercise['itemCount']
+                $count
             );
             shuffle($questions);
 
@@ -85,15 +113,19 @@ class ExerciseBuilder implements TestpaperBuilderInterface
     public function filterFields($fields, $mode = 'create')
     {
         if (!empty($fields['questionTypes'])) {
-            $filtedFields['metas']['questionTypes'] = $fields['questionTypes'];
+            $fields['metas']['questionTypes'] = $fields['questionTypes'];
         }
 
         if (!empty($fields['difficulty'])) {
-            $filtedFields['metas']['difficulty'] = $fields['difficulty'];
+            $fields['metas']['difficulty'] = $fields['difficulty'];
         }
 
         if (!empty($fields['range'])) {
-            $filtedFields['metas']['range'] = $fields['range'];
+            $fields['metas']['range'] = $fields['range'];
+        }
+
+        if (!empty($fields['finishCondition'])) {
+            $fields['passedCondition']['type'] = $fields['finishCondition'];
         }
 
         $fields = ArrayToolkit::parts($fields, array(
@@ -107,7 +139,7 @@ class ExerciseBuilder implements TestpaperBuilderInterface
             'pattern',
             'copyId',
             'metas',
-            'passedCondition'
+            'passedCondition',
         ));
 
         return $fields;
@@ -116,18 +148,18 @@ class ExerciseBuilder implements TestpaperBuilderInterface
     public function updateSubmitedResult($resultId, $usedTime)
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
-        $itemResults     = $this->getTestpaperService()->findItemResultsByResultId($testpaperResult['id']);
+        $itemResults = $this->getTestpaperService()->findItemResultsByResultId($testpaperResult['id']);
 
         $fields = array(
-            'status' => 'finished'
+            'status' => 'finished',
         );
 
-        $accuracy                 = $this->getTestpaperService()->sumScore($itemResults);
-        $fields['score']          = $accuracy['sumScore'];
+        $accuracy = $this->getTestpaperService()->sumScore($itemResults);
+        $fields['score'] = $accuracy['sumScore'];
         $fields['rightItemCount'] = $accuracy['rightItemCount'];
 
-        $fields['usedTime']    = $usedTime + $testpaperResult['usedTime'];
-        $fields['endTime']     = time();
+        $fields['usedTime'] = $usedTime + $testpaperResult['usedTime'];
+        $fields['endTime'] = time();
         $fields['checkedTime'] = time();
 
         return $this->getTestpaperService()->updateTestpaperResult($testpaperResult['id'], $fields);
@@ -136,7 +168,7 @@ class ExerciseBuilder implements TestpaperBuilderInterface
     protected function formatQuestions($questions, $questionResults)
     {
         $formatQuestions = array();
-        $index           = 1;
+        $index = 1;
 
         foreach ($questions as $question) {
             if (!empty($questionResults[$question['id']])) {
@@ -147,16 +179,59 @@ class ExerciseBuilder implements TestpaperBuilderInterface
 
             if ($question['subCount'] > 0) {
                 $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id']);
-
+                array_walk($subQuestions, function (&$sub) use (&$index) {
+                    $sub['seq'] = $index;
+                    ++$index;
+                });
                 $question['subs'] = $subQuestions;
+            } else {
+                ++$index;
             }
 
             $formatQuestions[$question['id']] = $question;
-
-            $index++;
         }
 
         return $formatQuestions;
+    }
+
+    protected function getQuestions($options)
+    {
+        $conditions = array();
+
+        if (!empty($options['range']) && !is_array($options['range'])) {
+            $options['range'] = (array) json_decode($options['range']);
+        }
+
+        if (!empty($options['range']) && $options['range'] == 'lesson') {
+            $conditions['lessonId'] = $options['range'];
+        }
+
+        if (!empty($options['range']['courseId'])) {
+            $conditions['courseId'] = $options['range']['courseId'];
+        }
+
+        if (!empty($options['range']['lessonId'])) {
+            $conditions['lessonId'] = $options['range']['lessonId'];
+        }
+
+        if (!empty($options['questionTypes'])) {
+            $conditions['types'] = $options['questionTypes'];
+        }
+
+        if (!empty($options['types'])) {
+            $conditions['types'] = explode(',', $options['types']);
+        }
+
+        if (!empty($options['difficulty'])) {
+            $conditions['difficulty'] = $options['difficulty'];
+        }
+
+        $conditions['courseSetId'] = $options['courseSetId'];
+        $conditions['parentId'] = 0;
+
+        $total = $this->getQuestionService()->searchCount($conditions);
+
+        return $this->getQuestionService()->search($conditions, array('createdTime' => 'DESC'), 0, $total);
     }
 
     protected function getQuestionService()
@@ -167,5 +242,10 @@ class ExerciseBuilder implements TestpaperBuilderInterface
     protected function getTestpaperService()
     {
         return $this->biz->service('Testpaper:TestpaperService');
+    }
+
+    protected function getCourseTaskService()
+    {
+        return $this->biz->service('Task:TaskService');
     }
 }

@@ -3,7 +3,11 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
 
 class MeChatroomes extends BaseResource
@@ -13,19 +17,20 @@ class MeChatroomes extends BaseResource
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 10);
 
-        $user               = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $classRoomChatrooms = $this->getClassRoomChatrooms($user['id']);
-        $courseChatrooms    = $this->getCourseChatrooms($user['id']);
+        $courseChatrooms = $this->getCourseChatrooms($user['id']);
 
         $chatrooms = array_merge($classRoomChatrooms, $courseChatrooms);
+
         return $this->wrap($this->filter($chatrooms), count($chatrooms));
     }
 
     private function getClassRoomChatrooms($userId)
     {
         $conditions = array('userId' => $userId);
-        $total      = $this->getClassroomService()->searchMemberCount($conditions);
-        $members    = $this->getClassroomService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, $total);
+        $total = $this->getClassroomService()->searchMemberCount($conditions);
+        $members = $this->getClassroomService()->searchMembers($conditions, array('createdTime' => 'DESC'), 0, $total);
 
         $classroomIds = ArrayToolkit::column($members, 'classroomId');
 
@@ -34,10 +39,10 @@ class MeChatroomes extends BaseResource
         $chatrooms = array();
         foreach ($classrooms as $classroom) {
             $chatrooms[] = array(
-                'type'    => 'classroom',
-                'id'      => $classroom['id'],
-                'title'   => $classroom['title'],
-                'picture' => $this->getFileUrl($classroom['smallPicture'])
+                'type' => 'classroom',
+                'id' => $classroom['id'],
+                'title' => $classroom['title'],
+                'picture' => $this->getFileUrl($classroom['smallPicture'], 'classroom.png'),
             );
         }
 
@@ -47,21 +52,37 @@ class MeChatroomes extends BaseResource
     private function getCourseChatrooms($userId)
     {
         $conditions = array('userId' => $userId);
-        $total      = $this->getCourseService()->searchMemberCount($conditions);
-        $members    = $this->getCourseService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, $total);
+        $total = $this->getCourseMemberService()->countMembers($conditions);
+        $members = $this->getCourseMemberService()->searchMembers(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            0,
+            $total
+        );
 
         $courseIds = ArrayToolkit::column($members, 'courseId');
-        $courses   = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $setIds = ArrayToolkit::column($courses, 'courseSetId');
+        $sets = $this->getCourseSetService()->findCourseSetsByIds($setIds);
+        $sets = ArrayToolkit::index($sets, 'id');
         $chatrooms = array();
         foreach ($courses as $course) {
             if ($course['parentId'] != 0) {
                 continue;
             }
+
+            $set = $sets[$course['courseSetId']];
+            if ($course['isDefault']) {
+                $title = $set['title'];
+            } else {
+                $title = $set['title'].'-'.$course['title'];
+            }
+            $filePath = is_null($set['cover']) ? '' : ArrayToolkit::get($set['cover'], 'small', '');
             $chatrooms[] = array(
-                'type'    => 'course',
-                'id'      => $course['id'],
-                'title'   => $course['title'],
-                'picture' => $this->getFileUrl($course['smallPicture'])
+                'type' => 'course',
+                'id' => $course['id'],
+                'title' => $title,
+                'picture' => $this->getFileUrl($filePath, 'course.png'),
             );
         }
 
@@ -73,13 +94,35 @@ class MeChatroomes extends BaseResource
         return $res;
     }
 
-    protected function getClassroomService()
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->createService('Course:CourseSetService');
     }
 
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }

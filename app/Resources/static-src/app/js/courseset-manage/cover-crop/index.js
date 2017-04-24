@@ -1,4 +1,4 @@
-import EsImageCrop from 'libs/js/es-image-crop.js';
+import EsImageCrop from 'common/es-image-crop.js';
 
 class CoverCrop {
   constructor() {
@@ -19,9 +19,9 @@ class CoverCrop {
       });
     };
 
-    $("#upload-picture-btn").click(function(e) {
-      e.stopPropagation();
-
+    $("#upload-picture-btn").click(function(event) {
+      event.stopPropagation();
+      $(event.currentTarget).button('loading');
       imageCrop.crop({
         imgs: {
           large: [480, 270],

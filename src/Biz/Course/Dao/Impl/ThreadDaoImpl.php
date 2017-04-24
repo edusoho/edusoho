@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Course\Dao\Impl;
-
 
 use Biz\Course\Dao\ThreadDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
@@ -11,16 +9,66 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
 {
     protected $table = 'course_thread';
 
+    public function deleteByCourseId($courseId)
+    {
+        return $this->db()->delete($this->table(), array('courseId' => $courseId));
+    }
+
+    protected function createQueryBuilder($conditions)
+    {
+        if (isset($conditions['title'])) {
+            $conditions['title'] = "%{$conditions['title']}%";
+        }
+
+        if (isset($conditions['content'])) {
+            $conditions['content'] = "%{$conditions['content']}%";
+        }
+
+        return parent::createQueryBuilder($conditions);
+    }
+
+    public function findLatestThreadsByType($type, $start, $limit)
+    {
+        $sql = "SELECT * FROM {$this->table()} WHERE type = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
+        return $this->db()->fetchAll($sql, array($type)) ?: array();
+    }
+
+    public function findEliteThreadsByType($type, $status, $start, $limit)
+    {
+        $sql = "SELECT * FROM {$this->table()} WHERE type = ? AND isElite = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
+        return $this->db()->fetchAll($sql, array($type, $status)) ?: array();
+    }
+
+    public function findThreadsByCourseId($courseId, $orderBy, $start, $limit)
+    {
+        $orderBy = implode(' ', $orderBy);
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
+
+        return $this->db()->fetchAll($sql, array($courseId)) ?: array();
+    }
+
+    public function findThreadsByCourseIdAndType($courseId, $type, $orderBy, $start, $limit)
+    {
+        $orderBy = implode(' ', $orderBy);
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND type = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
+
+        return $this->db()->fetchAll($sql, array($courseId, $type)) ?: array();
+    }
+
     public function declares()
     {
         return array(
-            'timestamps' => array('created_time', 'updated_time'),
+            'timestamps' => array('createdTime', 'updatedTime'),
             'serializes' => array(),
-            'orderbys'   => array('isStick', 'latestPostTime','createdTime','latestPostTime','hitNum'),
+            'orderbys' => array('isStick', 'latestPostTime', 'createdTime', 'latestPostTime', 'hitNum', 'updatedTime'),
             'conditions' => array(
                 'updatedTime >= :updatedTime_GE',
                 'courseId = :courseId',
-                'lessonId = :lessonId',
+                'courseSetId = :courseSetId',
+                'courseSetId IN (:courseSetIds) ',
+                'taskId = :taskId',
                 'userId = :userId',
                 'type = :type',
                 'type IN (:types)',
@@ -35,9 +83,8 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
                 'createdTime >= :startTimeGreaterThan',
                 'createdTime < :startTimeLessThan',
                 'createdTime >= :startCreatedTime',
-                'createdTime < :endCreatedTime'
+                'createdTime < :endCreatedTime',
             ),
         );
     }
-
 }

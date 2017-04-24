@@ -1,0 +1,24 @@
+<?php
+
+$finder = Symfony\Component\Finder\Finder::create()
+    ->files()
+    ->name('*.php')
+    ->ignoreDotFiles(true)
+    ->ignoreVCS(true)
+    ->exclude('vendor')
+    ->exclude('bin')
+    ->in(__DIR__.'/src/AppBundle')
+    ->in(__DIR__.'/src/Biz')
+    ->in(__DIR__.'/bootstrap')
+    ->in(__DIR__.'/migrations')
+    ->in(__DIR__.'/tests')
+;
+
+return PhpCsFixer\Config::create()
+    ->setCacheFile(__DIR__.'/.php_cs.cache')
+    ->setRules(array(
+        '@Symfony' => true,
+        'phpdoc_summary' => false,
+    ))
+    ->setFinder($finder)
+;

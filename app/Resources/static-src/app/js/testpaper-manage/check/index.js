@@ -1,4 +1,7 @@
 import QuestionTypeBuilder from '../../testpaper/widget/question-type-builder';
+import {
+  testpaperCardFixed,
+} from 'app/js/testpaper/widget/part';
 
 $.validator.addMethod("score",function(value,element){ 
   let isFloat = /^\d+(\.\d)?$/.test(value);
@@ -26,13 +29,14 @@ class CheckTest
     this._initEvent();
     this._init();
     this._initValidate();
+    testpaperCardFixed();
   }
 
   _initEvent() {
     this.$container.on('focusin','textarea',event=>this._showEssayInputEditor(event));
     this.$container.on('click','[data-role="check-submit"]',event=>this._submitValidate(event));
     this.$container.on('click','*[data-anchor]',event=>this._quick2Question(event));
-    this.$dialog.on('click','[type="button"]',event=>this._submit(event));
+    this.$dialog.on('click','[data-role="finish-check"]',event=>this._submit(event));
     this.$dialog.on('change','select',event=>this._teacherSayFill(event));
   }
 
@@ -128,9 +132,9 @@ class CheckTest
     let scoreTotal = 0;
 
     if (this.validator == undefined || this.validator.form()) {
-      let content = {};
       let self = this;
       $('*[data-score]').each(function(){
+        let content = {};
         let questionId = $(this).data('id');
         
         content['score'] = Number($(this).val());
@@ -156,6 +160,7 @@ class CheckTest
     let teacherSay = this.$dialog.find('textarea').val();
     let passedStatus = this.$dialog.find('[name="passedStatus"]:checked').val();
 
+    $target.button('loading');
     $.post($target.data('postUrl'), {result:this.checkContent,teacherSay:teacherSay,passedStatus:passedStatus}, function(response) {
       window.location.href = $target.data('goto');
     })
@@ -173,4 +178,4 @@ class CheckTest
   }
 }
 
-new CheckTest($('.testpaper-activity-show'));
+new CheckTest($('.container'));

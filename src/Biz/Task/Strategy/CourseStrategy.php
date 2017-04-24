@@ -2,7 +2,6 @@
 
 namespace Biz\Task\Strategy;
 
-
 interface CourseStrategy
 {
     //任务的api
@@ -18,21 +17,7 @@ interface CourseStrategy
 
     public function unpublishTask($task);
 
-    /**
-     * 任务列表管理页面
-     * @return page path
-     */
-    public function getTasksRenderPage();
-
-    /**
-     * @return 新增任务的列表片段页面
-     */
-    public function getTaskItemRenderPage();
-
-    //课时的api
-    public function findCourseItems($courseId);
+    public function prepareCourseItems($course, $tasks, $limitNum);
 
     public function sortCourseItems($courseId, array $itemIds);
-
-
 }

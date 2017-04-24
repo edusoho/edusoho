@@ -2,8 +2,11 @@
 
 namespace Biz\Activity\Type;
 
-use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
+use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Service\ActivityService;
+use Biz\Testpaper\Service\TestpaperService;
+use Biz\Activity\Service\ActivityLearnLogService;
 
 class Exercise extends Activity
 {
@@ -14,7 +17,12 @@ class Exercise extends Activity
 
     public function get($targetId)
     {
-        return $this->getTestpaperService()->getTestpaper($targetId);
+        return $this->getTestpaperService()->getTestpaperByIdAndType($targetId, 'exercise');
+    }
+
+    public function find($targetIds)
+    {
+        return $this->getTestpaperService()->findTestpapersByIdsAndType($targetIds, 'exercise');
     }
 
     public function create($fields)
@@ -24,7 +32,12 @@ class Exercise extends Activity
         return $this->getTestpaperService()->buildTestpaper($fields, 'exercise');
     }
 
-    public function update($targetId, $fields)
+    public function copy($activity, $config = array())
+    {
+        return null;
+    }
+
+    public function update($targetId, &$fields, $activity)
     {
         $exercise = $this->get($targetId);
 
@@ -32,14 +45,35 @@ class Exercise extends Activity
             throw $this->createNotFoundException('教学活动不存在');
         }
 
-        $fields = $this->filterFields($fields);
+        $filterFields = $this->filterFields($fields);
 
-        return $this->getTestpaperService()->updateTestpaper($exercise['id'], $fields);
+        return $this->getTestpaperService()->updateTestpaper($exercise['id'], $filterFields);
     }
 
     public function delete($targetId)
     {
-        return $this->getTestpaperService()->deleteTestpaper($targetId);
+        return $this->getTestpaperService()->deleteTestpaper($targetId, true);
+    }
+
+    public function isFinished($activityId)
+    {
+        $biz = $this->getBiz();
+        $user = $biz['user'];
+
+        $activity = $this->getActivityService()->getActivity($activityId);
+        $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], 'exercise');
+
+        $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $activity['mediaId'], $activity['fromCourseId'], $activity['id'], 'exercise');
+
+        if (!$result) {
+            return false;
+        }
+
+        if (!empty($exercise['passedCondition']) && $exercise['passedCondition']['type'] == 'submit' && in_array($result['status'], array('reviewing', 'finished'))) {
+            return true;
+        }
+
+        return false;
     }
 
     protected function getListeners()
@@ -49,7 +83,7 @@ class Exercise extends Activity
 
     protected function filterFields($fields)
     {
-        $fields = ArrayToolkit::parts($fields, array(
+        $filterFields = ArrayToolkit::parts($fields, array(
             'title',
             'range',
             'itemCount',
@@ -57,19 +91,38 @@ class Exercise extends Activity
             'questionTypes',
             'finishCondition',
             'fromCourseId',
-            'fromCourseSetId'
+            'fromCourseSetId',
+            'courseSetId',
         ));
 
-        $fields['courseSetId'] = empty($fields['fromCourseSetId']) ? 0 : $fields['fromCourseSetId'];
-        $fields['courseId']    = empty($fields['fromCourseId']) ? 0 : $fields['fromCourseId'];
-        $fields['lessonId']    = 0;
-        $fields['name']        = empty($fields['title']) ? '' : $fields['title'];
+        $filterFields['courseId'] = empty($filterFields['fromCourseId']) ? 0 : $filterFields['fromCourseId'];
+        $filterFields['lessonId'] = 0;
+        $filterFields['name'] = empty($filterFields['title']) ? '' : $filterFields['title'];
 
-        return $fields;
+        return $filterFields;
     }
 
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->getBiz()->service('Testpaper:TestpaperService');
+    }
+
+    /**
+     * @return ActivityLearnLogService
+     */
+    protected function getActivityLearnLogService()
+    {
+        return $this->getBiz()->service('Activity:ActivityLearnLogService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 }

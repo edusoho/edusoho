@@ -1,0 +1,72 @@
+{% extends 'admin/layout.html.twig' %}
+{% set script_controller = 'article/list' %}
+{% set menu = 'admin_operation_article_manage' %}
+
+{% block main %}
+<form class="well well-sm form-inline" action="{{ path('admin_article') }}">
+  {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+  <div class="form-group">
+    <select style="width:150px;" class="form-control" name="categoryId">
+      <option value="0">{{'--所属栏目--'|trans}}</option>
+      {% for tree in categoryTree %}
+        <option value={{ tree.id }} {% if tree.id == categoryId  %}selected{% endif%}>{% for i in 1..(tree.depth-1) if tree.depth > 1 %}　{% endfor %}{{ tree.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="form-group">
+    <input class="form-control" name="keywords" type="text" placeholder="{{'标题关键词'|trans}}" value="{{ app.request.query.get('keywords') }}">
+  </div>
+  <div class="form-group">
+    <select class="form-control" name="property">
+      {{ select_options(dict('articleProperty'), app.request.query.get('property'), '--属性--'|trans) }}
+    </select>
+  </div>
+  <div class="form-group">
+    <select class="form-control" name="status">
+      {{ select_options(dict('articleStatus'), app.request.query.get('status'), '--发布状态--'|trans) }}
+    </select>
+  </div>
+  <button class="btn btn-primary" type="submit">{{'搜索'|trans}}</button>
+</form>
+
+<div id="aticle-table-container">
+
+  <table class="table table-hover table-striped" id="article-table">
+    <thead>
+      <tr>
+        <th><input type="checkbox"  data-role="batch-select" id="batch-select"> ID</th>
+        <th width="25%">{{'资讯标题'|trans}}</th>
+        {% include 'org/parts/table-thead-tr.html.twig' %}
+        <th>{{'栏目'|trans}}</th>
+        <th>{{'更新时间'|trans}}</th>
+        <th>{{'属性'|trans}}
+          <a class="glyphicon glyphicon-question-sign text-muted pull-center " id="article-property-tips" data-toggle="tooltip" data-placement="bottom" href="javascript:" title=""></a>
+          <div id="article-property-tips-html" style="display:none;">
+          	{{ '资讯属性Tooltip'|trans|raw }}
+          </div>
+        </th>
+        <th>{{'状态'|trans}}</th>
+        <th width="10%">{{'操作'|trans}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if articles %}
+        {% for article in articles %}
+          {% set category = categories[article.categoryId]|default(null) %}
+          {% include 'admin/article/article-tr.html.twig' %}
+        {% endfor %}
+      {% else %}
+        <tr><td colspan="20"><div class="empty">{{'暂无页面记录'|trans}}</div></td></tr>
+      {% endif %}
+    </tbody>
+  </table>
+  <div>
+    <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'全选'|trans}}</label>
+    <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="{{'资讯'|trans}}" data-url="{{ path('admin_article_delete') }}">{{'删除'|trans}}</button>
+    {% include 'org/batch-update-org-btn.html.twig' with {module:'article', formId:'article-table', generate:"no-generate"} %}
+  </div>
+</div>
+
+{{ admin_macro.paginator(paginator) }}
+
+{% endblock %}

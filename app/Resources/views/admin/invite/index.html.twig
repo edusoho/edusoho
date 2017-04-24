@@ -1,0 +1,44 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_operation_invite_manage' %}
+
+{% block main %}
+	<form  class="form-inline well well-sm" action="{{path('admin_invite')}}" method="get" novalidate>
+    <input class="form-control" type="text" name="nickname" placeholder="{{'用户名'|trans}}" value="{{ app.request.query.get('nickname')}}">
+    <button class="btn btn-primary" type="submit">{{'搜索'|trans}}</button>
+	</form>
+
+  <table class="table table-hover table-striped" >
+		<thead>
+			<tr>
+				<th width="10%">{{'用户名'|trans}}</th>
+				<th width="10%">{{'邀请人数'|trans}}</th>
+				<th width="15%">{{'付费用户数'|trans}}</th>
+				<th width="20%">{{'订单消费总额'|trans}}</th>
+				<th width="15%">{{'订单虚拟币总额'|trans}}</th>
+				<th width="15%">{{'订单现金总额'|trans}}</th>
+				<th width="10%">{{'操作'|trans}}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% if inviteInformations %}
+				{% for inviteInformation in inviteInformations %}
+					<tr>
+					<td>{{inviteInformation.nickname}}</td>
+					<td>{{inviteInformation.count}}</td>
+					<td>{{inviteInformation.payingUserCount|default('0')}}</td>
+					<td>{{inviteInformation.payingUserTotalPrice|default('0')}}</td>
+					<td>{{inviteInformation.coinAmountPrice|default('0')}}</td>
+					<td>{{inviteInformation.amountPrice|default('0')}}</td>
+					<td><a href="#modal" data-toggle="modal" class="btn btn-default" data-url="{{path('admin_invite_detail',{inviteUserId:inviteInformation.id,payingUserCount:inviteInformation.payingUserCount} )}}">{{'详细'|trans}}</a>
+					</td>
+					</tr>
+				{% endfor %}
+			{% else %}
+				<tr><td colspan="20"><div class="empty">{{'暂无页面记录'|trans}}</div></td></tr>
+			{% endif %}
+		</tbody>
+	</table>
+
+{{ admin_macro.paginator(paginator) }}
+{% endblock %}

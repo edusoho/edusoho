@@ -1,0 +1,23 @@
+{% set recommendCourses = data('RecommendOpenCourses',{courseId:course.id,count:5}) %}
+
+{# course 实际是courseSet #}
+{% for course in recommendCourses if course %}
+	{% if course.type == 'open' or course.type == 'liveOpen' %}
+		{% set showUrl = path('open_course_show',{courseId:course.id}) %}
+	{% else %}
+		{% set courseSet =  course %}
+		{% set showUrl = path('course_show',{id:courseSet.defaultCourseId}) %}
+	{% endif %}
+
+	<li class="tab-recommand clearfix">
+		<a href="{{ showUrl }}" target="_blank" title="{{ course.title }}">
+      <img class="img-responsive" src="{{ filepath(course_set_cover(course, 'small')) }}" alt="{{ course.title }}">
+    </a>
+		<div class="open-course-info">
+		  <a class="title" href="{{ showUrl }}" target="_blank" title="{{ course.title }}">{{ course.title }}</a>
+		  <div class="num">{{ course.studentNum }}人在学习</div>
+		</div>
+	</li>
+{% else %}
+	<li><div class="empty">暂无推荐课程</div></li>
+{% endfor %}

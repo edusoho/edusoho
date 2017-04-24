@@ -4,46 +4,76 @@ namespace Biz\Activity\Config;
 
 use Biz\Activity\Listener\Listener;
 use Codeages\Biz\Framework\Context\Biz;
-use Topxia\Common\Exception\UnexpectedValueException;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use AppBundle\Common\Exception\UnexpectedValueException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 abstract class Activity
 {
     private $biz;
 
-    /**
-     * @inheritdoc
-     */
     public function create($fields)
     {
     }
 
     /**
-     * @inheritdoc
+     * @param int   $targetId
+     * @param array $fields   fields to update
+     * @param array $activity existed activity
      */
-    public function update($targetId, $fields)
+    public function update($targetId, &$fields, $activity)
     {
     }
 
-    /**
-     * @inheritdoc
-     */
     public function delete($targetId)
     {
     }
 
-    public function isFinished($id)
+    /**
+     * 实现Activity的复制，这里仅需要处理Activity的附属信息.
+     *
+     * @param array $activity 要复制的Activity
+     * @param array $config   : newLiveroom => true/false // 是否新建直播教室（对于直播任务）
+     *
+     * @return mixed
+     */
+    public function copy($activity, $config = array())
+    {
+        return null;
+    }
+
+    /**
+     * 实现Activity附属信息的同步.
+     *
+     * @param array $sourceActivity 源activity
+     * @param array $activity       目标activity
+     *
+     * @return mixed
+     */
+    public function sync($sourceActivity, $activity)
+    {
+        return null;
+    }
+
+    public function allowTaskAutoStart($activity)
     {
         return true;
     }
 
-    /**
-     * @inheritdoc
-     */
+    public function isFinished($id)
+    {
+        return false;
+    }
+
     public function get($targetId)
     {
+        return array();
+    }
+
+    public function find($targetIds)
+    {
+        return array();
     }
 
     final public function __construct(Biz $biz)
@@ -57,7 +87,8 @@ abstract class Activity
     abstract protected function registerListeners();
 
     /**
-     * @param  string $eventName
+     * @param string $eventName
+     *
      * @return Listener
      */
     final public function getListener($eventName)
@@ -67,16 +98,16 @@ abstract class Activity
             return null;
         }
         $reflection = new \ReflectionClass($map[$eventName]);
-        $listener   = $reflection->newInstanceArgs(array($this->getBiz()));
+        $listener = $reflection->newInstanceArgs(array($this->getBiz()));
 
         if (!$listener instanceof Listener) {
-            throw new UnexpectedValueException("listener class must be Listener Derived Class");
+            throw new UnexpectedValueException('listener class must be Listener Derived Class');
         }
 
         return $listener;
     }
 
-    protected function createNotFoundService($message = '')
+    protected function createNotFoundException($message = '')
     {
         return new NotFoundException($message);
     }
@@ -94,7 +125,7 @@ abstract class Activity
     /**
      * @return Biz
      */
-    protected final function getBiz()
+    final protected function getBiz()
     {
         return $this->biz;
     }

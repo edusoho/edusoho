@@ -1,11 +1,15 @@
 imports:
+    - { resource: biz.yml }
     - { resource: parameters_default.yml }
+    - { resource: parameters_version.yml }
     - { resource: parameters_service.yml, ignore_errors: true }
     - { resource: parameters.yml }
     - { resource: security.yml }
-    - { resource: biz.yml }
     - { resource: services.xml }
-    - { resource: "@AppBundle/Resources/config/services.yml" }
+    - { resource: service_listener.yml }
+    - { resource: session_redis.yml, ignore_errors: true }
+    - { resource: sentry.yml, ignore_errors: true }
+    - { resource: theme_jianmo_parameters.yml }
 
 framework:
     # esi:             ~
@@ -22,11 +26,11 @@ framework:
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
-        handler_id:  session.handler.factory
+        handler_id:  "%session.service_id%"
     fragments:       ~
     http_method_override: true
     assets:
-        version: '7.3.6'
+        version: '%app_version%'
 
 # Twig Configuration
 twig:
@@ -36,9 +40,8 @@ twig:
         "%kernel.root_dir%/../web/customize": customize
         "%kernel.root_dir%/../src/Topxia/WebBundle/Resources/views": topxiaweb
         "%kernel.root_dir%/../web/themes": theme
+        "%kernel.root_dir%/../plugins": plugins
         "%kernel.root_dir%/../" : root
-    globals:
-        disabled_features: "%disabled_features%"
 
 # Swiftmailer Configuration
 # swiftmailer:
@@ -62,27 +65,22 @@ parameters:
          db_user_id_col: sess_user_id
 
     topxia.disk.local_directory: "%kernel.root_dir%/data/udisk"
-    topxia.disk.cloud_video_fop: "avthumb/mp4/r/30/vb/512k/vcodec/libx264/ar/22050/ab/64k/acodec/libfaac"
     topxia.disk.upgrade_dir: "%kernel.root_dir%/data/upgrade"
     topxia.disk.update_dir: "%kernel.root_dir%/data/upgrade"
     topxia.disk.backup_dir: "%kernel.root_dir%/data/backup"
     topxia.upload.public_directory: "%kernel.root_dir%/../web/files"
     topxia.upload.public_url_path: "/files"
     topxia.upload.private_directory: "%kernel.root_dir%/data/private_files"
-    templating.asset.path_package.class: Topxia\WebBundle\Twig\Asset\PathPackage
+    permission.path_regular_expression: ['/^\/admin/']
+    router.options.matcher_dumper_class: AppBundle\SfExtend\PhpMatcherDumper
+    security.authentication.provider.dao.class: AppBundle\Handler\AuthenticationProvider
 
 services:
 
-    app.locale_listener:
-        class: Topxia\WebBundle\Listener\LocaleListener
-        arguments: ['%kernel.default_locale%']
-        tags:
-            - { name: kernel.event_subscriber }
-    app.user_locale_listener:
-        class: Topxia\WebBundle\Listener\UserLocaleListener
-        arguments: ['@session']
-        tags:
-            - { name: kernel.event_listener, event: security.interactive_login, method: onInteractiveLogin }
+    assets.path_package:
+        class: AppBundle\Twig\Asset\PathPackage
+        arguments: ["", "", "@assets.context"]
+
     session.handler.pdo.connection:
         class: PDO
         calls:
@@ -94,97 +92,19 @@ services:
             password: "%database_password%"
 
     session.handler.pdo:
-        class:     Topxia\WebBundle\Handler\UserPdoSessionHandler
+        class:     AppBundle\Handler\UserPdoSessionHandler
         arguments: ['@session.handler.pdo.connection', '%session.handler.pdo.options%', '@security.token_storage']
 
-    session.handler.redis.factory:
-        class: Topxia\Service\Common\Redis\RedisFactory
-        factory: ['Topxia\Service\Common\Redis\RedisFactory', instance]
-        arguments:
-            - "@service_container"
-
     session.handler.redis:
-        class:     Topxia\WebBundle\Handler\RedisSessionHandler
+        class:     AppBundle\Handler\RedisSessionHandler
         arguments: ['@session.handler.redis.factory', '@security.token_storage']
 
-    session.handler.factory:
-        class: SessionHandlerInterface
-        factory: ['Topxia\Service\Common\SessionHandlerFactory', getSessionHandler]
-        arguments:
-            - "@service_container"
-
-    kernel.listener.ajax_exception_listener:
-        class: Topxia\WebBundle\Listener\AjaxExceptionListener
-        arguments:    ['@service_container']
-        tags:
-            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority:255 }
-
-    kernel.listener.kernel_request_listener:
-        class: Topxia\WebBundle\Listener\KernelRequestListener
-        arguments:    ['@service_container']
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority:255 }
-
-#    kernel.listener.kernel_org_controller_listener:
-#        class: Org\OrgBundle\Listener\OrgControllerListener
-#        arguments:    ['@service_container']
-#        tags:
-#            - { name: kernel.event_listener, event: kernel.controller, method: onOrgController, priority:255 }
-
-    kernel.listener.kernel_response_listener:
-        class: Topxia\WebBundle\Listener\KernelResponseListener
-        arguments:    ['@service_container']
-        tags:
-            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority:255 }
-
-    topxia.twig.web_extension:
-        class: Topxia\WebBundle\Twig\Extension\WebExtension
-        arguments:    ['@service_container']
-        tags:
-            - { name: twig.extension }
-
-    topxia.twig.html_extension:
-        class: Topxia\WebBundle\Twig\Extension\HtmlExtension
-        arguments:    ['@service_container']
-        tags:
-            - { name: twig.extension }
-
-    topxia.twig.dictionary_extension:
-        class: Topxia\WebBundle\Twig\Extension\DictionaryExtension
-        tags:
-            - { name: twig.extension }
-
-    topxia.twig.data_extension:
-        class: Topxia\WebBundle\Twig\Extension\DataExtension
-        tags:
-            - { name: twig.extension }
-
-    topxia.twig.block_extension:
-        class: Topxia\WebBundle\Twig\Extension\BlockExtension
-        arguments:    ['@service_container']
-        tags:
-            - { name: twig.extension }
-
-    topxia.twig.uploader_extension:
-        class: Topxia\WebBundle\Twig\Extension\UploaderExtension
-        arguments:    ['@service_container']
-        tags:
-            - { name: twig.extension }
-
-    topxia.twig.theme_extension:
-        class: Topxia\WebBundle\Twig\Extension\ThemeExtension
-        arguments:    ['@service_container']
-        tags:
-            - { name: twig.extension }
-
-    topxia.twig.order_extension:
-        class: Topxia\WebBundle\Twig\Extension\OrderExtension
-        arguments:    ['@service_container']
-        tags:
-            - { name: twig.extension }
+    session.handler.redis.factory:
+        class:     AppBundle\Handler\RedisSessionFactory
+        arguments: ['@service_container']
 
     topxia.twig.file_cache:
-        class: Topxia\Service\Common\FilesystemCache
+        class: Biz\Common\FilesystemCache
         arguments:    ['@service_container']
 
     topxia.twig.cache_provider:
@@ -192,8 +112,8 @@ services:
         arguments:    ['@topxia.twig.file_cache']
 
     topxia.twig.cache_strategy:
-        class: Topxia\Service\Common\LifetimeCacheStrategy
-        arguments:    ['@topxia.twig.cache_provider']
+        class: Biz\Common\LifetimeCacheStrategy
+        arguments:    ['@biz', '@topxia.twig.cache_provider']
 
     topxia.twig.cache_extension:
         class: Asm89\Twig\CacheExtension\Extension
@@ -201,8 +121,21 @@ services:
         tags:
             - { name: twig.extension }
 
-    kernel.listener.user_login_token_listener:
-        class: Topxia\WebBundle\Listener\UserLoginTokenListener
+    ### permission
+    permission.admin_voter:
+        class: AppBundle\SfExtend\AdminVoter
+        tags:
+            - { name: security.voter }
+        public: false
+
+    permission.twig.permission_extension:
+        class: AppBundle\Twig\PermissionExtension
         arguments:    ['@service_container']
         tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onGetUserLoginListener}
+            - { name: twig.extension }
+
+    routing.loader.yml:
+        class: AppBundle\SfExtend\YamlFileLoader
+        arguments: ['@file_locator']
+        tags:
+            - {name: routing.loader}

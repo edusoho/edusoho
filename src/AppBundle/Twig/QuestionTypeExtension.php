@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Twig;
 
 class QuestionTypeExtension extends \Twig_Extension
@@ -9,7 +10,7 @@ class QuestionTypeExtension extends \Twig_Extension
     public function __construct($container, $biz)
     {
         $this->container = $container;
-        $this->biz       = $biz;
+        $this->biz = $biz;
     }
 
     public function getFilters()
@@ -22,15 +23,14 @@ class QuestionTypeExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('getQuestionTypes', array($this, 'getQuestionTypes')),
             new \Twig_SimpleFunction('getQuestionTypeTemplate', array($this, 'getQuestionTypeTemplate')),
-            new \Twig_SimpleFunction('getActivityMeta', array($this, 'getActivityMeta'))
         );
     }
 
     public function getQuestionTypes()
     {
-        $questionExtension = $this->container->get('extension.default')->getQuestionTypes();
+        $questionExtension = $this->container->get('extension.manager')->getQuestionTypes();
 
-        $types         = array();
+        $types = array();
         $questionTypes = array_walk($questionExtension, function ($value, $type) use (&$types) {
             $types[$type] = $value['name'];
         });
@@ -40,7 +40,7 @@ class QuestionTypeExtension extends \Twig_Extension
 
     public function getQuestionTypeTemplate($type, $showAction)
     {
-        $questionExtension = $this->container->get('extension.default')->getQuestionTypes();
+        $questionExtension = $this->container->get('extension.manager')->getQuestionTypes();
 
         if (empty($questionExtension[$type]) || empty($questionExtension[$type]['templates'][$showAction])) {
             return '';
@@ -48,8 +48,6 @@ class QuestionTypeExtension extends \Twig_Extension
 
         return $questionExtension[$type]['templates'][$showAction];
     }
-
-
 
     public function getName()
     {

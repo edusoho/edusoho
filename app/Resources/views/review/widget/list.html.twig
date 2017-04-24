@@ -1,0 +1,93 @@
+{% import "macro.html.twig" as web_macro %}
+{% do script(['libs/jquery-raty.js','libs/jquery-validation.js','app/js/review/list/index.js'])%}
+
+{% if member|default(false) and not ('auditor' in member.role) %}
+  <div class="clearfix">
+     <button class="btn btn-primary btn-sm pull-right js-show-review-form" {% if not userReview or (hideRereview|default(false)) %}style="display:none;"{% endif %}>{{'重新评价'|trans}}</button>
+  </div>
+  {% include 'review/widget/review-form.html.twig' with {userReview:userReview,reviewSaveUrl:reviewSaveUrl|default(null)} %}
+{% endif %}
+
+{% set canAccess = canAccess|default(false) %}
+
+{% for review in reviews if users[review.userId]|default(false) %}
+  {% set user = users[review.userId] %}
+  {% set posts = data('ReviewPosts',{reviewId:review.id, targetType:targetType|default('course'), start:0,limit:5})|default(null) %}
+
+  <div class="js-reviews">
+    <div class="media media-evaluate">
+      <div class="media-left">
+        {{ web_macro.user_avatar_link(user,'small', ['card']) }}
+      </div>
+      <div class="media-body thread-post">
+        <div class="title">{{ web_macro.user_link(user) }} 
+          {% if review.meta %}<span>{{(courseMap[review.courseId].title|default('教学计划')) ~ ' ' ~ ('完成进度'|trans)}}:{{ review.meta.learnedNum }}/{{ review.meta.lessonNum}}</span>{% endif %}&nbsp;&nbsp;
+          {{ review.createdTime|date('Y-m-d') }} 
+        </div>
+        <div class="score">
+          {{ web_macro.star(review.rating) }}
+        </div>
+        <div class="content">
+          <div class="short-content">{{ review.content|sub_text(100) }}
+            {% if review.updatedTime != review.createdTime and review.updatedTime is not null %}<span class="label label-success">{{'追评'|trans}}</span>{% endif %}
+          </div>
+          <div class="full-content" style="display:none;">{{ review.content|nl2br }}
+            {% if review.updatedTime != review.createdTime and review.updatedTime is not null %}<span class="label label-success">{{'追评'|trans}}</span>{% endif %}
+          </div>
+        </div>
+        <div class="actions clearfix">
+          <a href="javascript:;" class="show-full-btn" style="display:none;">[{{'展开全文'|trans}}]</a>
+          <a href="javascript:;" class="show-short-btn" style="display:none;">[{{'收起全文'|trans}}]</a>
+          {% if canAccess %}
+            <a href="javascript:;" class="js-reply pull-right">{% if posts is empty %}{{'回复'|trans}}{% else %}{{'收起'|trans}}{% endif %}</a>
+          {% endif %}
+        </div>
+        
+        {% set goto = goto|default(path('homepage')) %}
+        {% if targetType|default('course') == 'classroom' %}
+          {% set postReplyUrl = path('classroom_review_post',{id:review.classroomId,reviewId:review.id}) %}
+        {% else %}
+          {% set postReplyUrl = path('course_review_post',{courseId:review.courseId,reviewId:review.id}) %}
+        {% endif %}
+
+        <div class="thread-subpost-container subcomments clearfix {% if posts is empty %}hide{% endif %}">
+          <div class="thread-subpost-content">
+            {% include 'review/widget/subposts.html.twig' with {posts:posts,targetType:targetType|default('course'),canAccess:canAccess|default(false)} %}
+          </div>
+          
+          {% if canAccess %}
+            <div class="thread-subpost-morebar clearfix {% if posts is empty %}hide{% endif %}">
+              <button class="btn btn-default btn-xs pull-right js-toggle-subpost-form">{{'回复'|trans}}</button>
+            </div>
+          {% endif %}
+
+          {% if app.user %}
+            <form method="post" action="{{ postReplyUrl }}" class="thread-subpost-form {% if posts %}hide{% endif %}">
+              <div class="form-group">
+                <div class="controls">
+                  <textarea class="form-control" name="content" data-display="{{'内容'|trans}}"></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+                <button type="submit" data-loading-text="{{'正在发表'|trans}}" class="btn btn-primary btn-sm pull-right">{{'发表'|trans}}</button>
+              </div>
+            </form>
+          {% else %}
+            <div class="empty">
+              {{'你还没有登录，请先'|trans}}<a href="{{ path('login',{goto:goto}) }}">{{'登录'|trans}}</a>{{'或'|trans}}<a href="{{ path('register',{goto:goto}) }}">{{'注册'|trans}}</a>！
+            </div>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+{% else %}
+  <div class="empty">{{'暂无评价'|trans}}</div>
+{% endfor %}
+
+{% if paginator|default(null) %}
+  {{ web_macro.paginator(paginator) }}
+{% endif  %}

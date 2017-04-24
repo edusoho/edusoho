@@ -3,7 +3,7 @@
 namespace Topxia\Service\Common\Redis;
 
 use Redis;
-use Flexihash;
+use Flexihash\Flexihash;
 
 class ConsistentHashingRedis
 {

@@ -12,14 +12,14 @@ define(function (require, exports, module) {
             editbox: '.editbox',
             scalebox: '.js-scalebox',
             timepartnum: '6',
-            subject_lesson_list: '#subject-lesson-list',
-            editbox_lesson_list: "#editbox-lesson-list",
+            subject_task_list: '#subject-lesson-list',
+            editbox_task_list: "#editbox-lesson-list",
             group_list: ".gruop-lesson-list",
             isDraggable: false, //拖动时阻止滑动事件响应
             initMarkerArry: [], //初始化数据
             updateSqeArry: [],
             markers_array: new Array(), //所有标记好的时间集合
-            courseId: $('#lesson-dashboard').data("course-id"),
+            courseId: $('#task-dashboard').data("course-id"),
             addScale: function (markerJson, $marker, markers_array) {
                 return markerJson;
             },

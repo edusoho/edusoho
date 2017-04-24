@@ -2,6 +2,10 @@
 
 namespace Biz\Activity\Event;
 
+use Biz\Activity\Service\ActivityService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
+use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -11,8 +15,8 @@ class ThreadSubscriber extends EventSubscriber implements EventSubscriberInterfa
     public static function getSubscribedEvents()
     {
         return array(
-            'course.thread.create'      => 'onThreadCreate',
-            'course.thread.post.create' => 'onPostCreate'
+            'course.thread.create' => 'onThreadCreate',
+            'course.thread.post.create' => 'onPostCreate',
         );
     }
 
@@ -36,19 +40,49 @@ class ThreadSubscriber extends EventSubscriber implements EventSubscriberInterfa
         if (empty($activities)) {
             return;
         }
-        foreach ($activities as $activity) {
-            $this->getActivityService()->trigger($activity['id'], 'finish');
+        $activityIds = ArrayToolkit::column($activities, 'id');
+
+        foreach ($activityIds as $activityId) {
+            $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+            if ($task) {
+                $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+                if (empty($taskResult) || $taskResult['status'] == 'finish') {
+                    //如果任务尚未开始，或者已经完成则不必触发
+                    continue;
+                }
+                $this->getActivityService()->trigger($activityId, 'finish', array('taskId' => $task['id']));
+            }
         }
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');
     }
 
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->getBiz()->service('Task:TaskResultService');
+    }
+
     protected function getLogger($name)
     {
         $biz = $this->getBiz();
+
         return $biz['logger'];
     }
 }

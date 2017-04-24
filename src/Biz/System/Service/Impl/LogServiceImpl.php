@@ -5,8 +5,7 @@ namespace Biz\System\Service\Impl;
 use Biz\BaseService;
 use Biz\System\Dao\LogDao;
 use Biz\User\Service\UserService;
-use Topxia\Common\PluginToolkit;
-use Topxia\Service\Common\Logger;
+use Biz\Common\Logger;
 use Biz\System\Service\LogService;
 
 class LogServiceImpl extends BaseService implements LogService
@@ -57,21 +56,26 @@ class LogServiceImpl extends BaseService implements LogService
     public function searchLogCount($conditions)
     {
         $conditions = $this->prepareSearchConditions($conditions);
+
         return $this->getLogDao()->count($conditions);
     }
 
     protected function addLog($level, $module, $action, $message, array $data = null)
     {
-        return $this->getLogDao()->create(array(
-            'module'      => Logger::getModule($module),
-            'action'      => $action,
-            'message'     => $message,
-            'data'        => empty($data) ? '' : json_encode($data),
-            'userId'      => $this->getCurrentUser()->id,
-            'ip'          => $this->getCurrentUser()->currentIp,
-            'createdTime' => time(),
-            'level'       => $level
-        ));
+        $user = $this->getCurrentUser();
+
+        return $this->getLogDao()->create(
+            array(
+                'module' => Logger::getModule($module),
+                'action' => $action,
+                'message' => $message,
+                'data' => empty($data) ? '' : json_encode($data),
+                'userId' => $user['id'],
+                'ip' => $user['currentIp'],
+                'createdTime' => time(),
+                'level' => $level,
+            )
+        );
     }
 
     public function analysisLoginNumByTime($startTime, $endTime)
@@ -87,7 +91,7 @@ class LogServiceImpl extends BaseService implements LogService
     public function getLogModuleDicts()
     {
         $moduleDicts = Logger::getLogModuleDict();
-        $modules     = $this->getLogModules();
+        $modules = $this->getLogModules();
 
         $dealModuleDicts = array();
         foreach ($modules as $module) {
@@ -95,6 +99,7 @@ class LogServiceImpl extends BaseService implements LogService
                 $dealModuleDicts[$module] = $moduleDicts[$module];
             }
         }
+
         return $dealModuleDicts;
     }
 
@@ -108,6 +113,7 @@ class LogServiceImpl extends BaseService implements LogService
         if (isset($actions[$module])) {
             return $actions[$module];
         }
+
         return array();
     }
 
@@ -130,18 +136,17 @@ class LogServiceImpl extends BaseService implements LogService
     protected function prepareSearchConditions($conditions)
     {
         if (!empty($conditions['nickname'])) {
-            $existsUser           = $this->getUserService()->getUserByNickname($conditions['nickname']);
-            $userId               = $existsUser ? $existsUser['id'] : -1;
+            $existsUser = $this->getUserService()->getUserByNickname($conditions['nickname']);
+            $userId = $existsUser ? $existsUser['id'] : -1;
             $conditions['userId'] = $userId;
             unset($conditions['nickname']);
         }
 
-        if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
+        if (!empty($conditions['startDateTime'])) {
             $conditions['startDateTime'] = strtotime($conditions['startDateTime']);
-            $conditions['endDateTime']   = strtotime($conditions['endDateTime']);
-        } else {
-            unset($conditions['startDateTime']);
-            unset($conditions['endDateTime']);
+        }
+        if (!empty($conditions['endDateTime'])) {
+            $conditions['endDateTime'] = strtotime($conditions['endDateTime']);
         }
 
         if (empty($conditions['level']) || !in_array($conditions['level'], array('info', 'warning', 'error'))) {
@@ -156,20 +161,26 @@ class LogServiceImpl extends BaseService implements LogService
         $systemModules = array_keys(Logger::systemModuleConfig());
         $pluginModules = array_keys(Logger::pluginModuleConfig());
 
-        $plugins = PluginToolkit::getPlugins();
+        $rootDir = realpath($this->biz['root_directory']);
+
+        $filepath = $rootDir.'/config/plugin.php';
+
+        $plugins = array();
+        if (file_exists($filepath)) {
+            $plugins = require $filepath;
+        }
+
+        $plugins = array_map('strtolower', array_keys($plugins));
+
         if (empty($plugins)) {
             return $systemModules;
         }
-        $plugins = array_map('strtolower', array_keys($plugins));
 
         foreach ($pluginModules as $key => $module) {
             $formatModule = str_replace('_', '', $module);
             if (!in_array($formatModule, $plugins)) {
                 unset($pluginModules[$key]);
             }
-        }
-        if (in_array('homework', $plugins)) {
-            $pluginModules[] = 'exercise';
         }
 
         $modules = array_merge($systemModules, $pluginModules);

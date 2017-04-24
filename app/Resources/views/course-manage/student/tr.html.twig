@@ -1,0 +1,54 @@
+{% import "macro.html.twig" as web_macro %}
+<tr id="student-{{user.id}}-tr" class="students-item js-students-item">
+  <td class="media media-middle" >
+    <a class="pull-left js-user-card" href="/user/{{student.userId}}" data-card-url="/user/{{student.userId}}/card/show" data-user-id="{{student.userId}}">
+      {{ web_macro.user_avatar(user, 'pull-left', 'avatar-sm') }}
+    </a>
+    <a target="_blank" href="/user/{{student.userId}}">{{ user.nickname }}</a>
+
+    {% if student.remark %}
+      <span class="color-gray text-sm" title="{{student.remark}}">({{ student.remark|plain_text(16) }})</span>
+    {% endif %}
+    <div class="color-gray text-sm">{{'加入时间：%createdTime%'|trans({'%createdTime%': student.createdTime|date('Y-n-d H:i') })}}</div>
+    {% if course.expiryDays > 0 and student.deadline > 0 %}
+      <div class="color-gray text-sm">{{'有效期至：%deadline%'|trans({'%deadline%': student.deadline|date('Y-n-d H:i') })}} ({{ student.deadline|remain_time }})</div>
+    {% endif %}
+  </td>
+  <td>
+    {{ progress.percent|default(0)}}<a class="" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_process', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">（查看详情）</a>
+  </td>
+  <td>
+    <a class="mrm link-primary" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="/message/create/{{student.userId}}">{{'发私信'|trans}}</a>
+    {% if app.user.isAdmin() %}
+      <a class="mrm link-primary" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_show', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">{{'查看资料'|trans}}</a>
+    {% elseif setting("course.buy_fill_userinfo") %}
+      <a class="mrm link-primary" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_defined_show', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">{{'查看资料'|trans}}</a>
+    {% endif %}
+    <div class="btn-group vertical-top">
+      <a href="#" class="mrm link-primary dropdown-toggle" data-toggle="dropdown">
+        {{'更多'|trans}}
+        <span class="caret mls"></span>
+      </a>
+      <ul class="dropdown-menu pull-right">
+        <li>
+          <a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_remark', {courseSetId: courseSet.id, courseId: course.id, userId: student.userId})}}">{{'备注'|trans}}</a>
+        </li>
+        <li>
+          <a class="unfollow-student-btn" href="javascript:;" data-url="{{path('user_unfollow', {id : student.userId})}}" {% if not followings[student.userId]|default(null) %} style="display: none;"{% endif %}>{{'取消关注'|trans}}</a>
+          <a class="follow-student-btn" href="javascript:;" data-url="{{path('user_follow', {id : student.userId})}}" {% if followings[student.userId]|default(null) %} style="display: none;"{% endif %}>{{'关注'|trans}}</a>
+        </li>
+        {% if app.user.isAdmin() or  app.user.isTeacher() and course.expiryDays > 0 %}
+          <li>
+            <a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_expiryday', {courseSetId: course.courseSetId, courseId: course.id, userId: student.userId})}}">{{'增加有效期'|trans}}</a>
+          </li>
+        {% endif %}
+        {% if app.user.isAdmin() or setting('course.teacher_manage_student', 0) %}
+          <li>
+            <a class="js-remove-student" href="javascript:;" data-url="{{path('course_set_manage_course_students_remove', {courseSetId: courseSet.id, courseId: course.id, userId: student.userId})}}" data-user="{{'学员'|trans}}">{{'移除'|trans}}</a>
+          </li>
+        {% endif %}
+
+      </ul>
+    </div>
+  </td>
+</tr>

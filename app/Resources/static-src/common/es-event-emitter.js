@@ -1,17 +1,12 @@
-import Emitter from "es6-event-emitter";
+import Emitter from "component-emitter";
+// import Emitter from "es6-event-emitter";
 
 export default class EsEmitter extends Emitter {
-  constructor() {
-    super();
-  }
 
-  delay(event, cb, time) {
-    time = time || 0;
-
+  delay(event, cb, time = 0) {
     let delayCb = function () {
-      let args = arguments;
       setTimeout(() => {
-        cb.apply(self, [...args]);
+        cb.apply(self, [...arguments]);
       }, time);
     };
 

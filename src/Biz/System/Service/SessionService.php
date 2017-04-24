@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\System\Service;
 
 interface SessionService

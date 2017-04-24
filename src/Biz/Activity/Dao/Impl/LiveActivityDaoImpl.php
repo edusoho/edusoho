@@ -7,10 +7,14 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class LiveActivityDaoImpl extends GeneralDaoImpl implements LiveActivityDao
 {
-    protected $table = 'live_activity';
+    protected $table = 'activity_live';
 
     public function declares()
     {
     }
 
+    public function findByIds($Ids)
+    {
+        return $this->findInField('id', $Ids);
+    }
 }

@@ -1,9 +1,11 @@
 <?php
+
 namespace Biz\User;
 
-use Permission\Common\PermissionBuilder;
+use Biz\User\Service\UserService;
+use Biz\Role\Util\PermissionBuilder;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\WebBundle\Handler\AuthenticationHelper;
+use AppBundle\Handler\AuthenticationHelper;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -26,6 +28,8 @@ class UserProvider implements UserProviderInterface
 
         if (empty($user)) {
             throw new UsernameNotFoundException(sprintf('User "%s" not found.', $username));
+        } elseif (isset($user['type']) && $user['type'] == 'system') {
+            throw new UsernameNotFoundException(sprintf('User "%s" not found.', $username));
         }
 
         $request = $this->container->get('request');
@@ -36,13 +40,14 @@ class UserProvider implements UserProviderInterface
         }
 
         $user['currentIp'] = $request->getClientIp();
-        $user['org']       = $this->loadOrg($request, $user);
-        $currentUser       = new CurrentUser();
+        $user['org'] = $this->loadOrg($request, $user);
+        $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
-        $biz         = $this->container->get('biz');
+        $biz = $this->container->get('biz');
         $biz['user'] = $currentUser;
         ServiceKernel::instance()->setCurrentUser($currentUser);
+
         return $currentUser;
     }
 
@@ -68,21 +73,24 @@ class UserProvider implements UserProviderInterface
 
     public function supportsClass($class)
     {
-        return $class === 'Topxia\Service\User\CurrentUser';
+        return $class === 'Biz\User\CurrentUser';
     }
 
     protected function getRoleService()
     {
-        return ServiceKernel::instance()->createService('Permission:Role.RoleService');
+        return ServiceKernel::instance()->createService('Role:RoleService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return $this->container->get('biz')->service('User:UserService');
     }
 
     protected function getOrgService()
     {
-        return ServiceKernel::instance()->createService('Org:Org.OrgService');
+        return ServiceKernel::instance()->createService('Org:OrgService');
     }
 }

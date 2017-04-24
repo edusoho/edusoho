@@ -1,0 +1,30 @@
+{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
+
+{% block title %}{{'课程学习数据'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
+{% set side_nav = 'dashboard' %}
+
+{% block main %}
+  <div class="panel panel-default">
+    {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
+    <div class="panel-body dashboard-panel">
+      <ul class="nav nav-pills mbl">
+        <li class="{% if submenu|default() == 'course_dashboard' %}active{% endif %}">
+          <a href="{{ path('course_set_manage_course_dashboard',{courseSetId: course.courseSetId, courseId:course.id, tab: 'course'}) }}">{{ '数据概览'|trans }}
+          </a>
+        </li>
+
+        <li class="{% if submenu|default() == 'task_dashboard' %}active{% endif %}">
+          <a href="{{ path('course_set_manage_course_dashboard',{courseSetId: course.courseSetId, courseId:course.id, tab: 'task'}) }}">{{ '任务完成率'|trans }}
+          </a>
+        </li>
+
+        <li class="{% if submenu|default() == 'task_learn_dashboard' %}active{% endif %}">
+          <a href="{{ path('course_set_manage_course_dashboard',{courseSetId: course.courseSetId, courseId:course.id, tab: 'task-detail'}) }}">{{ '任务学习详情'|trans }}
+          </a>
+        </li>
+
+      </ul>
+      {% block dashboard %}{% endblock %}
+    </div>
+  </div>
+{% endblock %}

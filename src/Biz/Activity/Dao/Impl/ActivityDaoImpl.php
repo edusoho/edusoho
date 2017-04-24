@@ -11,7 +11,8 @@ class ActivityDaoImpl extends GeneralDaoImpl implements ActivityDao
 
     public function findByCourseId($courseId)
     {
-        $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? LIMIT 1";
+        $sql = "SELECT * FROM {$this->table()} WHERE fromCourseId = ?";
+
         return $this->db()->fetchAll($sql, array($courseId)) ?: array();
     }
 
@@ -20,14 +21,21 @@ class ActivityDaoImpl extends GeneralDaoImpl implements ActivityDao
         return $this->findInField('id', $ids);
     }
 
+    public function getByCopyIdAndCourseSetId($copyId, $courseSetId)
+    {
+        return $this->getByFields(array('copyId' => $copyId, 'fromCourseSetId' => $courseSetId));
+    }
+
     public function declares()
     {
         $declares['conditions'] = array(
             'fromCourseId = :fromCourseId',
-            'mediaType = :mediaType'
+            'mediaType = :mediaType',
+            'fromCourseId IN (:courseIds)',
+            'mediaType IN (:mediaTypes)',
+            'mediaId = :mediaId',
         );
 
         return $declares;
     }
-
 }

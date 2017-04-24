@@ -1,6 +1,8 @@
-<?php 
+<?php
+
 namespace Biz\Taxonomy;
 
+use Biz\Taxonomy\Service\TagService;
 use Topxia\Service\Common\ServiceKernel;
 
 class TagOwnerManager
@@ -13,20 +15,20 @@ class TagOwnerManager
     public function __construct($ownerType, $ownerId, $tagIds = array(), $userId = null)
     {
         $this->ownerType = $ownerType;
-        $this->ownerId   = $ownerId;
-        $this->tagIds    = $tagIds;
-        $this->userId    = $userId;
+        $this->ownerId = $ownerId;
+        $this->tagIds = $tagIds;
+        $this->userId = $userId;
     }
 
     public function create()
     {
         foreach ($this->tagIds as $tagId) {
             $this->getTagService()->addTagOwnerRelation(array(
-                'ownerType'   => $this->ownerType,
-                'ownerId'     => $this->ownerId,
-                'tagId'       => $tagId,
-                'userId'      => $this->userId,
-                'createdTime' => time()
+                'ownerType' => $this->ownerType,
+                'ownerId' => $this->ownerId,
+                'tagId' => $tagId,
+                'userId' => $this->userId,
+                'createdTime' => time(),
             ));
         }
     }
@@ -35,7 +37,7 @@ class TagOwnerManager
     {
         $this->delete();
 
-        $this->create();    
+        $this->create();
     }
 
     public function delete()
@@ -43,8 +45,11 @@ class TagOwnerManager
         $this->getTagService()->deleteTagOwnerRelationsByOwner(array('ownerType' => $this->ownerType, 'ownerId' => $this->ownerId));
     }
 
+    /**
+     * @return TagService
+     */
     protected function getTagService()
     {
-        return ServiceKernel::instance()->createService('Taxonomy.TagService');
+        return ServiceKernel::instance()->getBiz()->service('Taxonomy:TagService');
     }
 }

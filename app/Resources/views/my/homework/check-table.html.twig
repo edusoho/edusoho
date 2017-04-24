@@ -1,0 +1,49 @@
+<table class="table table-striped table-hover">
+  <tbody>
+    {% if paperResults|default(null) %}
+      {% for key,paperResult in paperResults %}
+        {% set homework = testpapers[paperResult.testId]|default(null) %}
+        {% set user = users[paperResult.userId]|default(null) %}
+        {% set task = tasks[paperResult.lessonId]|default(null) %}
+        {% set course = courses[paperResult.courseId]|default(null) %}
+        {% set courseSet = courseSets[paperResult.courseSetId]|default(null) %}
+
+        <tr>
+          <td width="55%">
+            {{ task.title|plain_text(60) }}
+            <div>
+              {% if courseSet|default(null) %}
+                <small class="color-gray">{{'来自课程'|trans}}<a class="link-primary" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">《{{ courseSet.title }}》</a></small>
+              {% endif %}
+              {% if course|default(null) %}
+                <small class="color-gray">{{'计划'|trans}}<a class="link-primary" href="{{ path('course_show',{id:course.id}) }}" target="_blank">《{{ course.title|default(null) }}》</a></small>
+              {% endif %}
+              <small class="color-gray mhs">•</small>
+              <small class="color-gray" title="{{'开始时间'|trans}}">{{ paperResult.beginTime|date('Y年n月d日 H:i:s'|trans) }}</small>
+            </div>
+          </td>
+          <td>
+            <td width="20%" class="vertical-middle">
+              {{ web_macro.user_link(user) }} <br>
+              <small class="color-gray">{{ paperResult.endTime|date("Y-n-d H:i") }} {{'交卷'|trans}}</small>
+            </td>
+          </td>
+          <td>
+            {% if status == 'reviewing' %}
+              <a class="link-primary" href="{{ path('course_manage_homework_check', {id:paperResult.courseId,resultId:paperResult.id,source:source|default('course'),targetId:targetId|default(0),action:'check' }) }}" target="_blank">{{'批阅'|trans}}</a>
+            {% else %}
+              <a class="link-primary" href="{{ path('homework_result_show',{resultId:paperResult.id,action:'check' }) }}" target="_blank" >{{'查看'|trans}}</a>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    {% else %}
+      {% if status == 'reviewing' %}
+        <div class="empty">{{'没有需要批阅的作业'|trans}}</div>
+      {% else %}
+        <div class="empty">{{'没有已批阅的作业'|trans}}</div>
+      {% endif %}
+    {% endif  %}
+  </tbody>
+</table>
+{{ web_macro.paginator(paginator) }}

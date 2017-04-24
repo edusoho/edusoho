@@ -1,24 +1,28 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 
 class ExerciseManageController extends BaseController
 {
-    public function buildCheckAction(Request $request, $courseId, $lessonId)
+    public function buildCheckAction(Request $request, $courseId)
     {
-        $course = $this->getCourseService()->getCourse($courseId);
-        $course = $this->getCourseService()->tryManageCourse($course['id'], $course['courseSetId']);
+        $course = $this->getCourseService()->tryManageCourse($courseId);
 
         $fields = $request->request->all();
 
-        $fields['courseId']                   = $course['id'];
-        $fields['lessonId']                   = 0;
+        $fields['courseSetId'] = $course['courseSetId'];
         $fields['excludeUnvalidatedMaterial'] = 1;
 
         $result = $this->getTestpaperService()->canBuildTestpaper('exercise', $fields);
 
-        return $this->createJsonResponse($result);
+        $status = false;
+        if ($result['status'] == 'yes') {
+            $status = true;
+        }
+
+        return $this->createJsonResponse($status);
     }
 
     protected function getTestpaperService()

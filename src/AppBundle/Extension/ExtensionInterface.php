@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Extension;
 
 interface ExtensionInterface
@@ -8,4 +9,6 @@ interface ExtensionInterface
     public function getPayments();
 
     public function getActivities();
+
+    public function getCallbacks();
 }

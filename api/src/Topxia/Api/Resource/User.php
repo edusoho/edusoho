@@ -12,7 +12,7 @@ class User extends BaseResource
     );
 
     private $_publicFields = array(
-        'id', 'nickname', 'title', 'point', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'createdTime', 'updatedTime'
+        'id', 'nickname', 'title', 'point', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'createdTime', 'updatedTime', 'roles'
     );
 
     private $_publicProfileFields = array(
@@ -70,11 +70,12 @@ class User extends BaseResource
                 $returnRes[$key] = $res[$key];
             }
 
-            // if (in_array('ROLE_TEACHER', $returnRes['roles'])) {
-            //     $returnRes['roles'] = array('ROLE_TEACHER');
-            // } else {
-            //     $returnRes['roles'] = array('ROLE_USER');
-            // }
+            if (in_array('ROLE_TEACHER', $returnRes['roles'])) {
+                $returnRes['roles'] = array('ROLE_TEACHER');
+            } else {
+                $returnRes['roles'] = array('ROLE_USER');
+            }
+
             if (!empty($res['profile'])) {
                 foreach ($this->_publicProfileFields as $key) {
                     $returnRes[$key] = $res['profile'][$key];
@@ -115,16 +116,16 @@ class User extends BaseResource
 
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return $this->createService('User:TokenService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getSmsService()
     {
-        return $this->getServiceKernel()->createService('Sms.SmsService');
+        return $this->createService('Sms:SmsService');
     }
 }

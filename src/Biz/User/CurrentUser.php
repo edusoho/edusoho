@@ -1,7 +1,8 @@
 <?php
+
 namespace Biz\User;
 
-use Permission\Common\PermissionBuilder;
+use Biz\Role\Util\PermissionBuilder;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
@@ -27,11 +28,9 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
 
     public function __set($name, $value)
     {
-        if (array_key_exists($name, $this->data)) {
-            $this->data[$name] = $value;
-        }
+        $this->data[$name] = $value;
 
-        throw new \RuntimeException("{$name} is not exist in CurrentUser.");
+        return $this;
     }
 
     public function __get($name)
@@ -161,10 +160,8 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
     public function isAdmin()
     {
         $permissions = $this->getPermissions();
-        if (!empty($permissions) && in_array('admin', array_keys($permissions))) {
-            return true;
-        }
-        return false;
+
+        return !empty($permissions) && array_key_exists('admin', $permissions);
     }
 
     public function isSuperAdmin()
@@ -172,18 +169,21 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         if (count(array_intersect($this->getRoles(), array('ROLE_SUPER_ADMIN'))) > 0) {
             return true;
         }
+
         return false;
     }
 
     public function isTeacher()
     {
         $permissions = $this->getPermissions();
+
         return in_array('web', array_keys($permissions));
     }
 
     public function getCurrentOrgId()
     {
         $currentOrg = $this->getCurrentOrg();
+
         return $currentOrg['id'];
     }
 
@@ -205,32 +205,36 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
     public function getOrgCode()
     {
         $org = $this->getOrg();
+
         return $org['orgCode'];
     }
 
     public function getOrgId()
     {
         $org = $this->getOrg();
+
         return $org['id'];
     }
 
     public function getSelectOrgCode()
     {
         $selectOrg = $this->getSelectOrg();
+
         return $selectOrg['orgCode'];
     }
 
     public function getSelectOrgId()
     {
         $selectOrg = $this->getSelectOrg();
+
         return $selectOrg['id'];
     }
 
     public function fromArray(array $user)
     {
         if (empty($user['org'])) {
-            $user['org']     = array('id' => $this->rootOrgId, 'orgCode' => $this->rootOrgCode);
-            $user['orgId']   = $this->rootOrgId;
+            $user['org'] = array('id' => $this->rootOrgId, 'orgCode' => $this->rootOrgCode);
+            $user['orgId'] = $this->rootOrgId;
             $user['orgCode'] = $this->rootOrgCode;
         }
         $this->data = $user;
@@ -246,6 +250,7 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
     public function setPermissions($permissions)
     {
         $this->permissions = $permissions;
+
         return $this;
     }
 
@@ -255,7 +260,8 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
     }
 
     /**
-     * @param  string $code 权限编码
+     * @param string $code 权限编码
+     *
      * @return bool
      */
     public function hasPermission($code)
@@ -266,7 +272,7 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
             return true;
         }
 
-        $tree     = PermissionBuilder::instance()->getOriginPermissionTree(true);
+        $tree = PermissionBuilder::instance()->getOriginPermissionTree(true);
         $codeTree = $tree->find(function ($tree) use ($code) {
             return $tree->data['code'] === $code;
         });

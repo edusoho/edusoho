@@ -1,0 +1,152 @@
+{% extends 'admin/layout.html.twig' %}
+{% set script_controller = 'system/mailer' %}
+{% set script_arguments = { registerEmailVerified: setting('auth.email_enabled','closed') } %}
+{% set menu = 'admin_setting_mailer' %}
+{% block main %}
+  {% if is_trial() %}
+    <div class="row form-group">
+      <div class="help-block">
+        </br></br>
+        <script>
+          var _hmt = _hmt || [];
+        </script>
+        <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        <p style = "text-align:center;font-size:16px">{{'当前版本为试⽤版,不能进⾏邮件服务设置。如需购买授权版,请联系销售人员。'|trans}}
+          {{'电话：'|trans}}4008041114 {{'或'|trans}}
+          <span id="BizQQWPA" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])"><a id="BizQQWPA" href="javascript:" style='text-decoration:none;'>QQ：800023860 </a>。</span>
+        </p>
+        <script type="text/javascript">
+          BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 800023860, selector: 'BizQQWPA'});
+        </script>
+        </br>
+      </div>
+    </div>
+  {% else %}
+    {{ web_macro.flash_messages() }}
+    <form class="form-horizontal" method="post" id="mailer-form" {#hidden="hidden"#}novalidate data-user-setting="{{ path('admin_setting_auth') }}">
+      {% if status == 'cloud_email_crm' %}
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label >{{'云邮件'|trans}}</label>
+          </div>
+          <div class="controls col-md-8 mts">
+            <span class="text-success">已启用</span>
+            <p class="help-block">邮件营销，本应如此简单。<a href="{{ path('admin_edu_cloud_email') }}">点击这里</a>查看云邮件使用情况</p>
+          </div>
+        </div>
+      {% else %}
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label>{{ '云邮件'|trans }}</label>
+          </div>
+          <div class="controls col-md-8 mts">
+            <a href="{{ path('admin_edu_cloud_email') }}" class="prl">使用云邮件</a>
+            <a href="http://open.edusoho.com/show/cloud/email" target="_blank">了解云邮件优势</a>
+            <p class="help-block">
+              {{ '不限制每日邮件发送量，想发多少发多少。'|trans}}
+            </p>
+            <p class="help-block">
+              {{ '99%到达率，毫秒级响应，让你快速安全的与学员保持沟通。'|trans }}
+            </p>
+            <p class="help-block">
+              {{ '完善的数据分析能力，让您更从容地管理邮件。'|trans }}
+            </p>
+            <p class="help-block">
+              {{ '与EduSoho无缝整合，无需技术对接即可享受高质量的EDM服务。'|trans }}
+            </p>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label >{{'邮件发送'|trans}}</label>
+          </div>
+          <div class="controls col-md-8 radios">
+            {{ radios('enabled', {1:'开启'|trans, 0:'关闭'|trans}, mailer.enabled) }}
+            <p class="help-block">{{'需要登录邮箱，并在邮箱设置中开启smtp服务才能发送验证邮件'|trans}}</p>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label for="host">SMTP{{'服务器地址'|trans}}</label>
+          </div>
+          <div class="controls col-md-8">
+            <input type="text" id="host" name="host" class="form-control" value="{{mailer.host}}">
+            <p class="help-block">
+              {{'每种邮箱的地址都不相同，请根据使用的邮箱类型，查找邮箱服务器地址，如：smtp.yourmail.com'|trans}}
+              {% if not setting('copyright.owned') or setting('copyright.thirdCopyright') == "2" %}
+                <a href="http://www.qiqiuyu.com/article/785" target="_blank">{{'常用邮箱配置文档'|trans}}</a>
+              {% endif %}
+            </p>
+          </div>
+        </div>
+        <p></p>
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label for="port">{{'SMTP端口号'|trans}}</label>
+          </div>
+          <div class="controls col-md-8">
+            <input type="text" id="port" name="port" class="form-control" value="{{mailer.port}}">
+            <p class="help-block">{{'通常端口号为'|trans}}25</p>
+          </div>
+        </div>
+        <p></p>
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label for="username" >{{'SMTP用户名'|trans}}</label>
+          </div>
+          <div class="controls col-md-8">
+            <input type="text" id="username" name="username" class="form-control" value="{{mailer.username}}">
+            <p class="help-block">{{'正确格式应为'|trans}}abc@mail.com</p>
+          </div>
+        </div>
+        <p></p>
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label for="password" >{{'SMTP密码'|trans}}</label>
+          </div>
+          <div class="controls col-md-8">
+            <input type="password" id="password" name="password" class="form-control" value="{{mailer.password}}">
+            <p class="help-block">{{'smtp密码：即邮箱密码/客户端授权密码'|trans}}</p>
+          </div>
+        </div>
+        <p></p>
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label for="from" >{{'发信人地址'|trans}}</label>
+          </div>
+          <div class="controls col-md-8">
+            <input type="text" id="from" name="from" class="form-control" value="{{mailer.from}}">
+            <p class="help-block">{{'正确格式应为'|trans}}abc@mail.com</p>
+          </div>
+        </div>
+        <p></p>
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label for="name" >{{'发信人名称'|trans}}</label>
+          </div>
+          <div class="controls col-md-8">
+            <input type="text" id="name" name="name" class="form-control" value="{{mailer.name}}">
+          </div>
+        </div>
+        <p></p>
+        <div class="row form-group">
+          <div class="col-md-3 control-label"></div>
+          <div class="controls col-md-8">
+            <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>
+            {% if mailer.enabled %}
+              <a class="btn btn-primary js-self-test" data-url="{{ path('admin_setting_mailer_test') }}" href="javascript:;">{{'验证'|trans}}</a>
+              <div class="mtl ptm">
+                <div class="alert alert-info" role="alert">
+                  {{'验证时会给当前用户发送验证邮件，请确保当前用户邮箱为正确邮箱且邮箱服务器设置已提交保存。'|trans}}
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+      <input type="hidden" name="email-setting-status" value="{{status}}">
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  {% endif %}
+{% endblock %}

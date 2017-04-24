@@ -1,13 +1,20 @@
 import notify from "common/notify";
+
+$('#chapter-title-field').on('keypress', function (e) {
+  if ((e.keyCode || e.which) === 13) {
+    e.preventDefault();
+  }
+});
+
 let sortList = function ($list) {
   let data = $list.sortable("serialize").get();
 
-  $.post($list.data('sortUrl'), { ids: data }, function(response) {
+  $.post($list.data('sortUrl'), { ids: data }, function (response) {
     let lessonNum = 0;
     let chapterNum = 0;
     let unitNum = 0;
 
-    $list.find('.task-manage-unit, .task-manage-chapter').each(function() {
+    $list.find('.task-manage-unit, .task-manage-chapter').each(function () {
       let $item = $(this);
       if ($item.hasClass('item-lesson')) {
         lessonNum++;
@@ -25,24 +32,26 @@ let sortList = function ($list) {
 };
 
 
-$('#course-chapter-btn').on('click', function() {
+$('#course-chapter-btn').on('click', function () {
   let $this = $(this);
+  let _this = this;
   let $form = $('#course-chapter-form');
-
   let validator = $form.validate({
     rules: {
       title: 'required'
     },
     ajax: true,
     currentDom: $this,
-    submitSuccess: function(html) {
+    submitSuccess: function (html) {
       $this.closest('.modal').modal('hide');
-
+      if (!$('.js-task-empty').hasClass('hidden')) {
+        $('.js-task-empty').addClass('hidden');
+      }
       let $item = $('#' + $(html).attr('id'));
 
       if ($item.length) {
         $item.replaceWith(html);
-        notify('success',Translator.trans('信息已保存'));
+        notify('success', Translator.trans('信息已保存'));
       } else {
         let $parent = $('#' + $form.data('parentid'));
         if ($parent.length) {

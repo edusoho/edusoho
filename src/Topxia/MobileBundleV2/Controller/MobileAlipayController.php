@@ -2,7 +2,7 @@
 
 namespace Topxia\MobileBundleV2\Controller;
 
-use Topxia\Component\Payment\Payment;
+use AppBundle\Component\Payment\Payment;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Alipay\AlipayNotify;
@@ -14,16 +14,17 @@ class MobileAlipayController extends MobileBaseController
     public function payAction(Request $request)
     {
         $alipayRequest = new MobileAlipayRequest($request);
-        return new Response($alipayRequest->getRequestForm("edusoho"));
+
+        return new Response($alipayRequest->getRequestForm('edusoho'));
     }
 
     public function payNotifyAction(Request $request, $name)
     {
-        $this->getLogService()->info('notify', 'create', "paynotify action");
-        $alipayNotify  = new AlipayNotify(MobileAlipayConfig::getAlipayConfig("edusoho"));
+        $this->getLogService()->info('notify', 'create', 'paynotify action');
+        $alipayNotify = new AlipayNotify(MobileAlipayConfig::getAlipayConfig('edusoho'));
         $verify_result = $alipayNotify->verifyNotify();
 
-        $status = "fail";
+        $status = 'fail';
 
         if ($verify_result) {
             //验证成功
@@ -34,8 +35,8 @@ class MobileAlipayController extends MobileBaseController
             }
         } else {
             //验证失败
-            $status = "fail";
-            $this->getLogService()->info('notify', 'check_fail', "paynotify action");
+            $status = 'fail';
+            $this->getLogService()->info('notify', 'check_fail', 'paynotify action');
         }
 
         return new Response($status);
@@ -43,28 +44,42 @@ class MobileAlipayController extends MobileBaseController
 
     public function payMerchantAction(Request $request)
     {
-        return new Response("<p>请点击返回按钮关闭!</p>");
+        return new Response('<p>请点击返回按钮关闭!</p>');
     }
 
     public function payCallBackAction(Request $request, $name)
     {
-        $status   = $this->doPayNotify($request, $name);
+        $status = 'success';
         $callback = "<script type='text/javascript'>window.location='objc://alipayCallback?".$status."';</script>";
+
         return new Response($callback);
     }
 
     //支付校验
     protected function doPayNotify(Request $request, $name)
     {
+        // $response = $this->forward('TopxiaWebBundle:PayCenter:payNotify', array(
+        //     'request' => $request,
+        //     'name' => $name
+        // ));
+
+        // $this->getLogger('Mobile2DoPayNotify')->info('response code '.$response->getStatusCode());
+
+        // if($response->getContent() == 'success') {
+        //     return 'success';
+        // }
+
+        // return "fail";
+
         $requestParams = array();
 
-        if ($request->getMethod() == "GET") {
-            $requestParams              = $request->query->all();
-            $order                      = $this->getOrderService()->getOrderBySn($requestParams['out_trade_no']);
+        if ($request->getMethod() == 'GET') {
+            $requestParams = $request->query->all();
+            $order = $this->getOrderService()->getOrderBySn($requestParams['out_trade_no']);
             $requestParams['total_fee'] = $order['amount'];
         } else {
-            $doc           = simplexml_load_string($_POST['notify_data']);
-            $doc           = (array) $doc;
+            $doc = simplexml_load_string($_POST['notify_data']);
+            $doc = (array) $doc;
             $requestParams = array();
 
             if (!empty($doc['out_trade_no'])) {
@@ -74,8 +89,8 @@ class MobileAlipayController extends MobileBaseController
                 $requestParams['trade_no'] = $doc['trade_no'];
                 //交易状态
                 $requestParams['trade_status'] = $doc['trade_status'];
-                $requestParams['total_fee']    = $doc['total_fee'];
-                $requestParams['gmt_payment']  = $doc['gmt_payment'];
+                $requestParams['total_fee'] = $doc['total_fee'];
+                $requestParams['gmt_payment'] = $doc['gmt_payment'];
             }
         }
 
@@ -84,17 +99,18 @@ class MobileAlipayController extends MobileBaseController
 
         try {
             list($success, $order) = $this->getPayCenterService()->pay($payData);
-            return "success";
+
+            return 'success';
         } catch (\Exception $e) {
-            return "fail";
+            return 'fail';
         }
     }
 
     private function createPaymentResponse($params)
     {
-        $data            = array();
+        $data = array();
         $data['payment'] = 'alipay';
-        $data['sn']      = $params['out_trade_no'];
+        $data['sn'] = $params['out_trade_no'];
 
         if (!empty($params['trade_status'])) {
             $data['status'] = in_array($params['trade_status'], array('TRADE_SUCCESS', 'TRADE_FINISHED')) ? 'success' : 'unknown';
@@ -113,6 +129,7 @@ class MobileAlipayController extends MobileBaseController
         }
 
         $data['raw'] = $params;
+
         return $data;
     }
 
@@ -123,9 +140,9 @@ class MobileAlipayController extends MobileBaseController
 
         $requestParams = array_merge($requestParams, array(
             'orderSn' => $order['sn'],
-            'title'   => $order['title'],
+            'title' => $order['title'],
             'summary' => '',
-            'amount'  => $order['amount']
+            'amount' => $order['amount'],
         ));
 
         return $request->setParams($requestParams);
@@ -140,7 +157,7 @@ class MobileAlipayController extends MobileBaseController
         }
 
         if (empty($settings['enabled'])) {
-            throw new \RuntimeException("支付模块未开启，请先开启。");
+            throw new \RuntimeException('支付模块未开启，请先开启。');
         }
 
         if (empty($settings[$payment.'_enabled'])) {
@@ -152,9 +169,9 @@ class MobileAlipayController extends MobileBaseController
         }
 
         $options = array(
-            'key'    => $settings["{$payment}_key"],
+            'key' => $settings["{$payment}_key"],
             'secret' => $settings["{$payment}_secret"],
-            'type'   => $settings["{$payment}_type"]
+            'type' => $settings["{$payment}_type"],
         );
 
         return $options;
@@ -162,11 +179,11 @@ class MobileAlipayController extends MobileBaseController
 
     protected function getPayCenterService()
     {
-        return $this->getServiceKernel()->createService('PayCenter.PayCenterService');
+        return $this->createService('PayCenter:PayCenterService');
     }
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->createService('Order:OrderService');
     }
 }

@@ -36,13 +36,19 @@
           <div class="form-group">
             <div class="col-md-2 control-label"><label>{{'从属'|trans}}</label></div>
             <div class="col-md-8 controls">
-              <select class="form-control width-input width-input-large" name="target" data-role="target">
-                <option value="0" {% if not question.lessonId|default(0) %}selected{% endif %}>{{'本课程'|trans}}</option>
-                {% for courseTask in courseTasks if courseTask%}
-                  <option value="{{ courseTask.id }}" {% if question.lessonId|default(0) == courseTask.id %}selected{% endif %}>{{ courseTask.title }}</option>
+              <select class="form-control width-150" name="courseId" data-role="courseId" data-url="{{ path('course_set_manage_show_tasks',{courseSetId:courseSet.id})}}">
+                <option value="0" {% if not question.courseId|default(0) %}selected{% endif %}>{{'本课程'|trans}}</option>
+                {% for course in courses if course %}
+                  <option value="{{ course.id }}" {% if question.courseId|default(0) == course.id %}selected{% endif %}>{{ course.title }}</option>
                 {% endfor %}
               </select>
-              <div class="help-block">{{'可以针对本课程或者某个课时出题'|trans}}</div>
+              <select class="form-control width-150" {% if not question.id|default(0) > 0 or not question.courseId|default(0) %}style="display:none;"{% endif %} name="lessonId" data-role="lessonId">
+                <option value="0" {% if not question.lessonId|default(0) %}selected{% endif %}>{{'请选择'|trans}}</option>
+                {% for task in courseTasks|default([]) if task %}
+                  <option value="{{ task.id }}" {% if question.lessonId|default(0) == task.id %}selected{% endif %}>{{ task.title }}</option>
+                {% endfor %}
+              </select>
+              <div class="help-block">{{'可以针对本课程、某个教学计划或者某个学习任务出题'|trans}}</div>
             </div>
           </div>
         {% endif %}
@@ -55,7 +61,7 @@
         </div>
 
         <div class="form-group">
-          <div class="col-md-2 control-label"><label for="question-stem-field">{{ question_stem_label|default('题干'|trans) }}</label></div>
+          <div class="col-md-2 control-label"><label for="question-stem-field" class="control-label-required">{{ question_stem_label|default('题干'|trans) }}</label></div>
           <div class="col-md-8 controls">
             <textarea class="form-control" id="question-stem-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"  data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" name="stem" style="height:180px;">{{question.stem | default('')}}</textarea>
             {% set question_stem_help = question_stem_help|default('') %}
@@ -69,7 +75,7 @@
 
         <div class="form-group">
           <div class="col-md-8 col-md-offset-2 controls ">
-              <a href="javascript:;" data-toggle="collapse" data-role="advanced-collapse" data-target="#advanced-collapse" class="text-success collapsed">&raquo; {{'显示/隐藏 高级选项'|trans}} ...</a>
+              <a href="javascript:;" data-toggle="collapse" data-role="advanced-collapse" data-target="#advanced-collapse" class="color-success collapsed">&raquo; {{'显示/隐藏 高级选项'|trans}} ...</a>
           </div>
         </div>
 
@@ -80,8 +86,7 @@
                 <textarea class="form-control" id="question-analysis-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" name="analysis" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ question.analysis|default('') }}</textarea>
             </div>
           </div>
-           {{ render(controller('TopxiaWebBundle:Attachment:formFields',{targetType: 'question.analysis', targetId: question.id|default(0)},{ useType:true,})) }}
-
+           {{ render(controller('AppBundle:File/Attachment:formFields',{targetType: 'question.analysis', targetId: question.id|default(0)},{ useType:true,})) }}
           <div class="form-group">
             <div class="col-md-2 control-label"><label for="question-score-field">{{'分值'|trans}}</label></div>
             <div class="col-md-4 controls">
@@ -94,9 +99,9 @@
           <div class="col-md-8 col-md-offset-2 controls">
             {% block question_buttons %}
               {% if not question|default(null) %}
-                <button type="submit" data-role="submit" class="btn btn-primary submit-btn" data-submission="continue" data-loading-text="{{'正在保存'|trans}}...">{{'保存并继续添加'|trans}}</button>
+                <button type="button" data-role="submit" class="btn btn-primary submit-btn" data-submission="continue" data-loading-text="{{'正在保存'|trans}}...">{{'保存并继续添加'|trans}}</button>
               {% endif %}
-              <button type="submit" data-role="submit" class="btn btn-primary submit-btn" data-submission="submit" data-loading-text="{{'正在保存'|trans}}...">{{'保存'|trans}}</button>
+              <button type="button" data-role="submit" class="btn btn-primary submit-btn" data-submission="submit" data-loading-text="{{'正在保存'|trans}}...">{{'保存'|trans}}</button>
             {% endblock %}
             <a href="{{ path('course_set_manage_question', {id:courseSet.id, parentId:parentQuestion.id|default(0)}) }}" class="btn btn-link">{{'返回'|trans}}</a>
           </div>

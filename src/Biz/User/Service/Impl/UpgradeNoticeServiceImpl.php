@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
@@ -19,6 +20,7 @@ class UpgradeNoticeServiceImpl extends BaseService implements UpgradeNoticeServi
     public function addNotice($fields)
     {
         $fields['createdTime'] = time();
+
         return $this->getUpgradeNoticeDao()->create($fields);
     }
 

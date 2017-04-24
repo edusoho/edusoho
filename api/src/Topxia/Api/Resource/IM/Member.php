@@ -11,7 +11,7 @@ class Member extends BaseResource
     public function post(Application $app, Request $request)
     {
         $requiredFields = array('targetId', 'targetType');
-        $fields         = $this->checkRequiredFields($requiredFields, $request->request->all());
+        $fields = $this->checkRequiredFields($requiredFields, $request->request->all());
 
         $conversation = $this->getConversationService()->getConversationByTarget($fields['targetId'], $fields['targetType']);
 
@@ -30,7 +30,7 @@ class Member extends BaseResource
 
     protected function entryCourseConversation($courseId, $convNo)
     {
-        $user   = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
 
         if ($convNo) {
@@ -40,7 +40,7 @@ class Member extends BaseResource
                 return array('convNo' => $convMember['convNo']);
             }
 
-            $courseMember = $this->getCourseService()->getCourseMember($courseId, $user['id']);
+            $courseMember = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
             if (!$courseMember) {
                 return $this->error('700003', '学员未加入课程');
             }
@@ -56,7 +56,7 @@ class Member extends BaseResource
                 return $this->error($e->getCode(), $e->getMessage());
             }
         } else {
-            $courseMember = $this->getCourseService()->getCourseMember($courseId, $user['id']);
+            $courseMember = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
             if (!$courseMember) {
                 return $this->error('700003', '学员未加入课程');
             }
@@ -71,7 +71,7 @@ class Member extends BaseResource
 
     protected function entryClassroomConversation($classroomId, $convNo)
     {
-        $user      = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         if ($convNo) {
@@ -103,7 +103,7 @@ class Member extends BaseResource
             }
 
             $conversation = $this->getConversationService()->createConversation($classroom['title'], 'classroom', $classroom['id'], array($user));
-            $res          = array('convNo' => $conversation['no']);
+            $res = array('convNo' => $conversation['no']);
         }
 
         return $res;
@@ -111,21 +111,21 @@ class Member extends BaseResource
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getConversationService()
     {
-        return $this->getServiceKernel()->createService('IM.ConversationService');
+        return $this->getServiceKernel()->createService('IM:ConversationService');
     }
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 
-    private function getSettingService()
+    protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

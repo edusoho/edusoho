@@ -2,7 +2,6 @@
 
 namespace Biz\Activity\Listener;
 
-
 use Codeages\Biz\Framework\Context\Biz;
 
 abstract class Listener
@@ -12,20 +11,18 @@ abstract class Listener
      */
     private $biz;
 
-
     public function __construct(Biz $biz)
     {
         $this->biz = $biz;
     }
 
-    public abstract function handle($activity, $data);
+    abstract public function handle($activity, $data);
 
     /**
      * @return Biz
      */
-    protected final function getBiz()
+    final protected function getBiz()
     {
         return $this->biz;
     }
-
 }

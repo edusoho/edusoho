@@ -1,11 +1,13 @@
-import QuestionFormBase from './form-base';
+import QuestionChoice from './question-choice';
+import ReactDOM from 'react-dom';
+import React from 'react';
+import QuestionOptions from 'app/common/component/question-options';
 
-class SingleChoice extends QuestionFormBase {
-  constructor($form) {
-    super($form);
-    
-    this.initTitleEditor();
-    this.initAnalysisEditor();
+class SingleChoice extends QuestionChoice {
+  initOptions() {
+    ReactDOM.render( <QuestionOptions imageUploadUrl={this.imageUploadUrl} imageDownloadUrl={this.imageDownloadUrl} dataSource={this.dataSource} dataAnswer={this.dataAnswer}  isRadio={true}/>,
+      document.getElementById('question-options')
+    );
   }
 }
 

@@ -2,7 +2,9 @@
 
 namespace Biz\Question\Dao;
 
-interface QuestionFavoriteDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface QuestionFavoriteDao extends GeneralDaoInterface
 {
     public function findUserFavoriteQuestions($userId);
 

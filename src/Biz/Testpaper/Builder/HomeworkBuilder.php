@@ -1,11 +1,10 @@
 <?php
+
 namespace Biz\Testpaper\Builder;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Service\Common\ServiceKernel;
-use Biz\Testpaper\Builder\TestpaperBuilderInterface;
-use Topxia\Common\Exception\InvalidArgumentException;
 
 class HomeworkBuilder implements TestpaperBuilderInterface
 {
@@ -23,9 +22,9 @@ class HomeworkBuilder implements TestpaperBuilderInterface
         }
         $questionIds = $fields['questionIds'];
 
-        $fields['status']  = 'open';
+        $fields['status'] = 'open';
         $fields['pattern'] = 'questionType';
-        $fields['type']    = 'homework';
+        $fields['type'] = 'homework';
 
         $fields = $this->filterFields($fields);
 
@@ -38,14 +37,15 @@ class HomeworkBuilder implements TestpaperBuilderInterface
 
     public function canBuild($options)
     {
-        $questions      = $this->getQuestions($options);
+        $questions = $this->getQuestions($options);
         $typedQuestions = ArrayToolkit::group($questions, 'type');
+
         return $this->canBuildWithQuestions($options, $typedQuestions);
     }
 
     public function showTestItems($testId, $resultId = 0)
     {
-        $test  = $this->getTestpaperService()->getTestpaper($testId);
+        $test = $this->getTestpaperService()->getTestpaperByIdAndType($testId, 'homework');
         $items = $this->getTestpaperService()->findItemsByTestId($test['id']);
         if (!$items) {
             return array();
@@ -60,19 +60,19 @@ class HomeworkBuilder implements TestpaperBuilderInterface
         }
 
         $questionIds = ArrayToolkit::column($items, 'questionId');
-        $questions   = $this->getQuestionService()->findQuestionsByIds($questionIds);
+        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
         $formatQuestions = array();
         foreach ($items as $questionId => $item) {
             $question = empty($questions[$questionId]) ? array() : $questions[$questionId];
             if (empty($question)) {
                 $question = array(
-                    'id'        => $item['questionId'],
+                    'id' => $item['questionId'],
                     'isDeleted' => true,
-                    'stem'      => $this->getServiceKernel()->trans('此题已删除'),
-                    'score'     => 0,
-                    'answer'    => '',
-                    'type'      => $item['questionType']
+                    'stem' => $this->getServiceKernel()->trans('此题已删除'),
+                    'score' => 0,
+                    'answer' => '',
+                    'type' => $item['questionType'],
                 );
             }
 
@@ -80,8 +80,8 @@ class HomeworkBuilder implements TestpaperBuilderInterface
                 $question['testResult'] = $itemResults[$questionId];
             }
 
-            $question['score']     = $item['score'];
-            $question['seq']       = $item['seq'];
+            $question['score'] = $item['score'];
+            $question['seq'] = $item['seq'];
             $question['missScore'] = $item['missScore'];
 
             if ($item['parentId'] > 0) {
@@ -96,10 +96,6 @@ class HomeworkBuilder implements TestpaperBuilderInterface
 
     public function filterFields($fields, $mode = 'create')
     {
-        if (!empty($fields['correctPercent'])) {
-            $fields['passedCondition'] = $fields['correctPercent'];
-        }
-
         if (!empty($fields['questionIds'])) {
             $fields['itemCount'] = count($fields['questionIds']);
         }
@@ -118,7 +114,7 @@ class HomeworkBuilder implements TestpaperBuilderInterface
             'itemCount',
             'copyId',
             'pattern',
-            'metas'
+            'metas',
         ));
 
         return $fields;
@@ -126,9 +122,9 @@ class HomeworkBuilder implements TestpaperBuilderInterface
 
     public function updateSubmitedResult($resultId, $usedTime)
     {
-        $result      = $this->getTestpaperService()->getTestpaperResult($resultId);
-        $homework    = $this->getTestpaperService()->getTestpaper($result['testId']);
-        $items       = $this->getTestpaperService()->findItemsByTestId($result['testId']);
+        $result = $this->getTestpaperService()->getTestpaperResult($resultId);
+        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($result['testId'], $result['type']);
+        $items = $this->getTestpaperService()->findItemsByTestId($result['testId']);
         $itemResults = $this->getTestpaperService()->findItemResultsByResultId($result['id']);
 
         $questionIds = ArrayToolkit::column($items, 'questionId');
@@ -136,10 +132,10 @@ class HomeworkBuilder implements TestpaperBuilderInterface
         $hasEssay = $this->getQuestionService()->hasEssay($questionIds);
 
         $fields = array(
-            'status' => $hasEssay ? 'reviewing' : 'finished'
+            'status' => $hasEssay ? 'reviewing' : 'finished',
         );
 
-        $accuracy                 = $this->getTestpaperService()->sumScore($itemResults);
+        $accuracy = $this->getTestpaperService()->sumScore($itemResults);
         $fields['objectiveScore'] = $accuracy['sumScore'];
         $fields['rightItemCount'] = $accuracy['rightItemCount'];
 
@@ -148,12 +144,12 @@ class HomeworkBuilder implements TestpaperBuilderInterface
         if (!$hasEssay) {
             $fields['score'] = $fields['objectiveScore'];
 
-            $rightPercent           = number_format($accuracy['rightItemCount'] / $homework['itemCount'], 2) * 100;
+            $rightPercent = number_format($accuracy['rightItemCount'] / $homework['itemCount'], 2) * 100;
             $fields['passedStatus'] = $this->getPassedStatus($rightPercent, $homework);
         }
 
         $fields['usedTime'] = $usedTime + $result['usedTime'];
-        $fields['endTime']  = time();
+        $fields['endTime'] = time();
 
         return $this->getTestpaperService()->updateTestpaperResult($result['id'], $fields);
     }
@@ -182,33 +178,30 @@ class HomeworkBuilder implements TestpaperBuilderInterface
     protected function createQuestionItems($homeworkId, $questionIds)
     {
         $homeworkItems = array();
-        $index         = 1;
+        $index = 0;
 
         $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
-        foreach ($questions as $key => $question) {
-            $questionSubs = $this->getQuestionService()->findQuestionsByParentId($question['id']);
-
-            $items['seq']          = $index++;
-            $items['questionId']   = $question['id'];
-            $items['questionType'] = $question['type'];
-            $items['testId']       = $homeworkId;
-            $items['parentId']     = 0;
-            $homeworkItems[]       = $this->getTestpaperService()->createItem($items);
-
-            if (!empty($questionSubs)) {
-                $i = 1;
-
-                foreach ($questionSubs as $key => $questionSub) {
-                    $items['seq']          = $i++;
-                    $items['questionId']   = $questionSub['id'];
-                    $items['questionType'] = $questionSub['type'];
-                    $items['testId']       = $homeworkId;
-                    $items['parentId']     = $questionSub['parentId'];
-                    $homeworkItems[]       = $this->getTestpaperService()->createItem($items);
-                }
+        foreach ($questionIds as $questionId) {
+            $question = empty($questions[$questionId]) ? array() : $questions[$questionId];
+            if (empty($question)) {
+                continue;
             }
+
+            if ($question['type'] != 'material') {
+                ++$index;
+            }
+
+            $items['seq'] = $index;
+            $items['questionId'] = $question['id'];
+            $items['questionType'] = $question['type'];
+            $items['testId'] = $homeworkId;
+            $items['parentId'] = $question['parentId'];
+            $items['type'] = 'homework';
+            $homeworkItems[] = $this->getTestpaperService()->createItem($items);
         }
+
+        $this->getTestpaperService()->updateTestpaper($homeworkId, array('itemCount' => $index));
 
         return $homeworkItems;
     }
@@ -227,15 +220,15 @@ class HomeworkBuilder implements TestpaperBuilderInterface
                 $missing[$type] = $needCount;
                 continue;
             }
-            if ($type == "material") {
+            if ($type == 'material') {
                 $validatedMaterialQuestionNum = 0;
-                foreach ($questions["material"] as $materialQuestion) {
+                foreach ($questions['material'] as $materialQuestion) {
                     if ($materialQuestion['subCount'] > 0) {
                         $validatedMaterialQuestionNum += 1;
                     }
                 }
                 if ($validatedMaterialQuestionNum < $needCount) {
-                    $missing["material"] = $needCount - $validatedMaterialQuestionNum;
+                    $missing['material'] = $needCount - $validatedMaterialQuestionNum;
                 }
                 continue;
             }
@@ -253,10 +246,10 @@ class HomeworkBuilder implements TestpaperBuilderInterface
 
     protected function getQuestions($options)
     {
-        $conditions        = array();
+        $conditions = array();
         $options['ranges'] = array_filter($options['ranges']);
 
-        $conditions['courseId'] = $options['courseId'];
+        $conditions['courseSetId'] = $options['courseSetId'];
 
         if (!empty($options['ranges'])) {
             $conditions['lessonIds'] = $options['ranges'];
@@ -266,18 +259,18 @@ class HomeworkBuilder implements TestpaperBuilderInterface
 
         $total = $this->getQuestionService()->searchCount($conditions);
 
-        return $this->getQuestionService()->search($conditions, array('createdTime', 'DESC'), 0, $total);
+        return $this->getQuestionService()->search($conditions, array('createdTime' => 'DESC'), 0, $total);
     }
 
     protected function makeItem($homeworkId, $question)
     {
         return array(
-            'testId'       => $homeworkId,
-            'questionId'   => $question['id'],
+            'testId' => $homeworkId,
+            'questionId' => $question['id'],
             'questionType' => $question['type'],
-            'parentId'     => $question['parentId'],
-            'score'        => $question['score'],
-            'missScore'    => 0
+            'parentId' => $question['parentId'],
+            'score' => $question['score'],
+            'missScore' => 0,
         );
     }
 

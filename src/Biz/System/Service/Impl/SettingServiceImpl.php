@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\System\Service\Impl;
 
 use Biz\BaseService;
@@ -6,7 +7,7 @@ use Biz\System\Service\SettingService;
 
 class SettingServiceImpl extends BaseService implements SettingService
 {
-    const CACHE_NAME         = 'settings';
+    const CACHE_NAME = 'settings';
     const NAME_SPACE_DEFAULT = 'default';
 
     private $cached;
@@ -15,8 +16,8 @@ class SettingServiceImpl extends BaseService implements SettingService
     {
         $this->getSettingDao()->deleteByName($name);
         $setting = array(
-            'name'  => $name,
-            'value' => serialize($value)
+            'name' => $name,
+            'value' => serialize($value),
         );
         $this->getSettingDao()->create($setting);
         $this->clearCache();
@@ -36,9 +37,9 @@ class SettingServiceImpl extends BaseService implements SettingService
             }
         }
 
-        $namespace  = $this->getNameSpace();
+        $namespace = $this->getNameSpace();
         $defaultSet = isset($this->cached[self::NAME_SPACE_DEFAULT.'-'.$name]) ? unserialize($this->cached[self::NAME_SPACE_DEFAULT.'-'.$name]) : $default;
-        $orgSet     = isset($this->cached[$namespace.'-'.$name]) ? unserialize($this->cached[$namespace.'-'.$name]) : $default;
+        $orgSet = isset($this->cached[$namespace.'-'.$name]) ? unserialize($this->cached[$namespace.'-'.$name]) : $default;
 
         return empty($orgSet) ? $defaultSet : $this->mergeSetting($defaultSet, $orgSet);
     }
@@ -63,8 +64,8 @@ class SettingServiceImpl extends BaseService implements SettingService
         $this->getSettingDao()->deleteByNamespaceAndName($namespace, $name);
         $setting = array(
             'namespace' => $namespace,
-            'name'      => $name,
-            'value'     => serialize($value)
+            'name' => $name,
+            'value' => serialize($value),
         );
         $this->getSettingDao()->create($setting);
         $this->clearCache();
@@ -99,6 +100,7 @@ class SettingServiceImpl extends BaseService implements SettingService
             if (empty($user['selectedOrgId']) || $user['selectedOrgId'] === 1) {
                 return 'default';
             }
+
             return 'org-'.$user['selectedOrgId'];
         } catch (\RuntimeException $e) {
             return 'default';

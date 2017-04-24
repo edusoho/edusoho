@@ -22,7 +22,8 @@ define(function(require, exports, module) {
             },
             enablePlaybackRates: false,
             videoHeaderLength: 0,
-            textTrack: ''
+            textTrack: '',
+            autoplay: true
         },
 
         events: {},
@@ -62,6 +63,12 @@ define(function(require, exports, module) {
                 })
             }
 
+            if(self.get('autoplay') == false) {
+                extConfig = $.extend(extConfig, {
+                    autoplay: self.get('autoplay')
+                })
+            }
+
             if(self.get('timelimit') != '') {
                 extConfig = $.extend(extConfig, {
                     pluck: {
@@ -77,7 +84,8 @@ define(function(require, exports, module) {
                     playbackRates: {
                         enable : true,
                         source : 'hls',
-                        src : self.get('url')
+                        src : self.get('url'),
+                        rates: [1,1.25,1.5,2]
                     }
                 });
             }

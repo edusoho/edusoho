@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Question\Type;
 
 interface TypeInterface
@@ -13,5 +14,5 @@ interface TypeInterface
 
     public function judge($question, $answer);
 
-    public function filter($fields);
+    public function filter(array $fields);
 }

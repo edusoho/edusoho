@@ -1,0 +1,69 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}<span class="color-gray">{{ '任务预览'|trans }}:</span> {{ task.title }}{% endblock %}
+
+{% do script(['app/js/task/preview/index.js']) %}
+
+{% block body %}
+  {% set eventReportParams = {'user-id': app.user.id|default(0)} %}
+  {% include 'event_report.html.twig' with{ 'eventName':'course.preview', 'subjectType':'course', 'subjectId': course.id, 'eventReportParams':eventReportParams, 'eventId':'modal-event-report'} %}
+  <iframe src="{{ path('course_task_content_preview',{courseId:task.courseId, id:task.id}) }}" id="viewerIframe" width="100%" allowfullscreen="" webkitallowfullscreen="" height="400px" style="border:0px"></iframe>
+{% endblock %}
+
+{% block footer %}
+  <span class="es-qrcode bottom mrl" data-url="{{ path('course_task_qrcode',{courseId: task.courseId,id: task.id}) }}">
+    <i class="es-icon es-icon-qrcode"></i>
+    <span class="qrcode-popover">
+      <img src="" alt="">
+      {{ '扫二维码继续学习'|trans }}
+      {{ '二维码时效为半小时'|trans }}
+    </span>
+  </span>
+  {% if course.buyable %}
+    {% if task.status == 'published' and course.parentId == '0' %}
+
+      {% if course.price == '0.00' %}
+        <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn"
+            {% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') %}
+              href="#login-modal"
+              data-toggle="modal"
+              data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+            {% else %}
+              href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+            {% endif %}
+
+        >
+          {% if user.id|default(null) %}
+            {{ '免费加入学习'|trans }}
+          {% else %}
+            {{ '登录后加入学习'|trans }}
+          {% endif %}
+        </a>
+      {% else %}
+        <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn"
+            {% if (setting("course.buy_fill_userinfo")|default(false) or vipStatus|default(null) == 'ok' or (course.approval and app.user and app.user.approvalStatus != 'approved')) %}
+              href="#login-modal"
+              data-toggle="modal"
+              data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+            {% else %}
+              href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+            {% endif %}
+        >
+          {% if user.id|default(null) %}
+            {% if vipStatus|default(null) == 'ok' %}
+              {{ '觉得不错？点击加入此课程'|trans }}
+            {% else %}
+              {{ '觉得不错？点击购买此课程'|trans }}（{{ '%price%元'|trans({'%price%': course.price }) }}）
+            {% endif %}
+          {% else %}
+            {{ '登录后购买学习完整的课程'|trans }}
+          {% endif %}
+        </a>
+      {% endif %}
+    {% endif %}
+  {% endif %}
+{% endblock %}
+

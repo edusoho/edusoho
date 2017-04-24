@@ -5,12 +5,13 @@
  * =======================
  * Start/Stop/Resume a time in any HTML element
  */
-
+/* eslint-disable */
 (function(root, factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['jquery'], factory);
+        // define(['jquery'], factory);
+        factory($);
     } else {
-        factory(root.jQuery);
+        factory($);
     }
 }(this, function($) {
     if (!Array.prototype.forEach) {
@@ -469,3 +470,4 @@
     };
 
 }));
+/* eslint-enable */

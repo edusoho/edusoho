@@ -1,7 +1,8 @@
 <?php
+
 namespace Biz\User\Job;
 
-use Topxia\Service\Crontab\Job;
+use Biz\Crontab\Service\Job;
 use Topxia\Service\Common\ServiceKernel;
 
 class DeleteSessionJob implements Job
@@ -9,13 +10,13 @@ class DeleteSessionJob implements Job
     public function execute($params)
     {
         $retentionTime = time() - 7200;
-        $limit         = 500;
+        $limit = 500;
         //$number = $this->getSessionService()->deleteInvalidSession($retentionTime, $limit);
     }
 
     protected function getSessionService()
     {
-        return $this->getServiceKernel()->createService('System.SessionService');
+        return $this->getServiceKernel()->createService('System:SessionService');
     }
 
     protected function getServiceKernel()
@@ -25,6 +26,6 @@ class DeleteSessionJob implements Job
 
     protected function getLogService()
     {
-        return $this->getServiceKernel()->createService('Log.LogService');
+        return $this->getServiceKernel()->createService('Log:LogService');
     }
 }

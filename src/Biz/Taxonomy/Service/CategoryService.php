@@ -2,7 +2,6 @@
 
 namespace Biz\Taxonomy\Service;
 
-
 interface CategoryService
 {
     public function findCategoriesByGroupIdAndParentId($groupId, $parentId);
@@ -52,4 +51,6 @@ interface CategoryService
     public function deleteGroup($id);
 
     public function sortCategories($ids);
+
+    public function isCategoryCodeAvaliable($code, $exclude = null);
 }

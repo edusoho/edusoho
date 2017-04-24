@@ -1,16 +1,15 @@
 <?php
 
-
 namespace Biz\Common;
 
-
+use Biz\System\Service\SettingService;
+use Biz\Util\HTMLPurifierFactory;
 use Codeages\Biz\Framework\Context\Biz;
-use Topxia\Service\Util\HTMLPurifierFactory;
 
 class HTMLHelper
 {
     /**
-     * @var $biz Biz
+     * @var Biz
      */
     protected $biz;
 
@@ -19,19 +18,51 @@ class HTMLHelper
         $this->biz = $biz;
     }
 
-    public function purify($html, $trusted=false)
+    public function purify($html, $trusted = false)
     {
-        if (empty($html)) {
+        if (!isset($html)) {
             return '';
         }
 
+        $security = $this->getSettingService()->get('safe_iframe_domains');
+
+        if (!empty($security['safe_iframe_domains'])) {
+            $safeDomains = $security['safe_iframe_domains'];
+        } else {
+            $safeDomains = array();
+        }
+
         $config = array(
-            'cacheDir' => $this->biz['cache_directory'] . '/htmlpurifier'
+            'cacheDir' => $this->biz['cache_directory'].'/htmlpurifier',
+            'safeIframeDomains' => $safeDomains,
         );
 
-        $factory  = new HTMLPurifierFactory($config);
-        $purifier = $factory->create($trusted);
+        $factory = new HTMLPurifierFactory($config);
+        $purifier = $factory->create($config);
 
-        return $purifier->purify($html);
+        $html = $purifier->purify($html);
+        if (!$trusted) {
+            return $html;
+        }
+
+        $styles = $purifier->context->get('StyleBlocks');
+        if ($styles) {
+            $html = implode("\n", array(
+                '<style type="text/css">',
+                implode("\n", $styles),
+                '</style>',
+                $html,
+            ));
+        }
+
+        return $html;
+    }
+
+    /**
+     * @return SettingService
+     */
+    private function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 }

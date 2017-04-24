@@ -2,8 +2,10 @@
 
 namespace AppBundle\Controller;
 
-use Topxia\Common\Paginator;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 
 class HomeworkManageController extends BaseController
@@ -14,6 +16,7 @@ class HomeworkManageController extends BaseController
 
         $conditions = $request->query->all();
 
+        $conditions['courseSetId'] = $courseSet['id'];
         $conditions['parentId'] = 0;
 
         $paginator = new Paginator(
@@ -29,38 +32,51 @@ class HomeworkManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $user = $this->getUser();
+        $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSet['id']);
+
         return $this->render('homework/manage/question-picker.html.twig', array(
-            'courseSet'     => $courseSet,
-            'questions'     => $questions,
-            'replace'       => empty($conditions['replace']) ? '' : $conditions['replace'],
-            'paginator'     => $paginator,
-            'targetChoices' => $this->getQuestionRanges($courseSet),
-            'conditions'    => $conditions,
-            'target'        => $request->query->get('target', 'testpaper')
+            'courseSet' => $courseSet,
+            'questions' => $questions,
+            'replace' => empty($conditions['replace']) ? '' : $conditions['replace'],
+            'paginator' => $paginator,
+            'courseTasks' => $this->getQuestionRanges($request->query->get('courseId', 0)),
+            'conditions' => $conditions,
+            'targetType' => $request->query->get('targetType', 'testpaper'),
+            'courses' => $manageCourses,
         ));
     }
 
-    public function pickedQuestionAction(Request $request, $courseSetId, $questionId)
+    public function pickedQuestionAction(Request $request, $courseSetId)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
-        $question = $this->getQuestionService()->get($questionId);
+        $questionIds = $request->request->get('questionIds', array(0));
 
-        if (empty($question)) {
-            throw $this->createResourceNotFoundException('question', $questionId);
+        if (!$questionIds) {
+            return $this->createJsonResponse(array('result' => 'error', 'message' => '请先选择题目'));
         }
 
-        $subQuestions = array();
-        if ($question['subCount'] > 0) {
-            $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id']);
+        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+
+        foreach ($questions as &$question) {
+            if ($question['subCount'] > 0) {
+                $question['subs'] = $this->getQuestionService()->findQuestionsByParentId($question['id']);
+            }
         }
+
+        $user = $this->getUser();
+        $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSet['id']);
+        $taskIds = ArrayToolkit::column($questions, 'lessonId');
+        $courseTasks = $this->getCourseTaskService()->findTasksByIds($taskIds);
+        $courseTasks = ArrayToolkit::index($courseTasks, 'id');
 
         return $this->render('homework/manage/question-picked.html.twig', array(
-            'courseSet'    => $courseSet,
-            'question'     => $question,
-            'subQuestions' => $subQuestions,
-            'type'         => $question['type'],
-            'target'       => $request->query->get('target', 'testpaper')
+            'courseSet' => $courseSet,
+            'questions' => $questions,
+            'targetType' => $request->query->get('targetType', 'testpaper'),
+            'courseTasks' => $courseTasks,
+            'courses' => $manageCourses,
         ));
     }
 
@@ -69,12 +85,17 @@ class HomeworkManageController extends BaseController
         $result = $this->getTestpaperService()->getTestpaperResult($resultId);
 
         if (!$result) {
-            throw $this->createResourceNotFoundException('homeworkResult', $resultId);
+            return $this->createMessageResponse('error', '该作业结果不存在');
         }
 
-        $homework = $this->getTestpaperService()->getTestpaper($result['testId']);
+        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($result['testId'], $result['type']);
         if (!$homework) {
-            throw $this->createResourceNotFoundException('homework', $result['id']);
+            return $this->createMessageResponse('error', '该作业不存在');
+        }
+
+        $canCheck = $this->getTestpaperService()->canLookTestpaper($result['id']);
+        if (!$canCheck) {
+            return $this->createMessageResponse('warning', '没有权限查看');
         }
 
         if ($result['status'] != 'reviewing') {
@@ -95,15 +116,16 @@ class HomeworkManageController extends BaseController
         $student = $this->getUserService()->getUser($result['userId']);
 
         return $this->render('homework/manage/teacher-check.html.twig', array(
-            'paper'         => $homework,
-            'paperResult'   => $result,
-            'questions'     => $essayQuestions,
-            'student'       => $student,
+            'paper' => $homework,
+            'paperResult' => $result,
+            'questions' => $essayQuestions,
+            'student' => $student,
             'questionTypes' => array('essay', 'material'),
-            'source'        => $source,
-            'targetId'      => $targetId,
-            'isTeacher'     => true,
-            'total'         => array()
+            'source' => $source,
+            'targetId' => $targetId,
+            'isTeacher' => true,
+            'total' => array(),
+            'action' => $request->query->get('action', ''),
         ));
     }
 
@@ -125,11 +147,15 @@ class HomeworkManageController extends BaseController
         return $essayQuestions;
     }
 
-    protected function getQuestionRanges($course, $includeCourse = false)
+    protected function getQuestionRanges($courseId)
     {
-        $ranges = array('本课程');
+        if (empty($courseId)) {
+            return array();
+        }
 
-        return $ranges;
+        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseId);
+
+        return ArrayToolkit::index($courseTasks, 'id');
     }
 
     protected function sortType($types)
@@ -146,6 +172,9 @@ class HomeworkManageController extends BaseController
         return $newTypes;
     }
 
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
@@ -166,9 +195,14 @@ class HomeworkManageController extends BaseController
         return $this->createService('Course:CourseService');
     }
 
+    protected function getCourseTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getServiceKernel()

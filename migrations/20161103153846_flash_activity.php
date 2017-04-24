@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class FlashActivity extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -21,17 +21,17 @@ class FlashActivity extends Migration
           `createdUserId` int(11) NOT NULL,
           `updatedTime` int(11) DEFAULT NULL,
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
         ");
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
         $biz = $this->getContainer();
         $db = $biz['db'];
-        $db->exec("DROP TABLE IF EXISTS `flash_activity`");
+        $db->exec('DROP TABLE IF EXISTS `flash_activity`');
     }
 }

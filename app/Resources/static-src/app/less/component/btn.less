@@ -1,5 +1,8 @@
-// 按钮组件
+a.btn.disabled, fieldset[disabled] a.btn {
+  pointer-events: none;
+}
 
+// 按钮组件
 .btn {
   .es-transition;
   &:hover,
@@ -9,8 +12,15 @@
     .es-transition;
     text-decoration: none;
   }
+  &.btn-sm {
+    
+  }
+  &.btn-md {
+    // padding: 10px 16px;
+  }
   &.btn-lg {
     font-size: 14px;
+    padding: 12px 35px;
   }
   &.btn-xlg {
     font-size: 14px;
@@ -40,7 +50,6 @@
   &:hover, 
   &:focus,
   &.focus {
-    color: @brand-primary;
     text-decoration: none;
   }
 }
@@ -85,15 +94,15 @@
 }
 
 .btn-primary {
-  border-color: darken(@brand-primary,10%);
-  background-color: @brand-primary;
+  // border-color: darken(@brand-primary,10%);
+  // background-color: @brand-primary;
   color: #fff;
   &:hover,
   &:focus,
   &.focus,
   &.active {
     color: #fff;
-    background-color: darken(@brand-primary,8%);
+    // background-color: @brand-primary-darker;
   }
 }
 
@@ -106,7 +115,8 @@
   &.focus,
   &.active {
     color: #fff;
-    background-color: darken(@brand-success,8%);
+    background-color: darken(@brand-primary,10%);
+    // background-color: @brand-success-darker;
   }
 }
 
@@ -119,7 +129,7 @@
   &.focus,
   &.active {
     color: #fff;
-    background-color: darken(@brand-info,8%);
+    background-color:darken(@brand-info,10%);
   }
 }
 
@@ -132,7 +142,7 @@
   &.focus,
   &.active {
     color: #fff;
-    background-color: darken(@brand-warning,8%);
+    background-color:darken(@brand-warning,10%);
   }
 }
 
@@ -145,7 +155,7 @@
   &.focus,
   &.active {
     color: #fff;
-    background-color: darken(@brand-danger,8%);
+    background-color:darken( @brand-danger,10%);
   }
 }
 
@@ -251,8 +261,8 @@
 
 .btn-transparent {
   position: relative;
-  border-color: @brand-primary;
-  color: @brand-primary;
+  // border-color: @brand-primary;
+  // color: @brand-primary;
   background-color: transparent;
   &:after {
     content: '';
@@ -261,7 +271,7 @@
     top:0;
     height: 100%;
     width: 0;
-    background-color: @brand-primary;
+    // background-color: @brand-primary;
     .es-transition;
   }
   &:hover,
@@ -274,8 +284,6 @@
     }
   }
 }
-
-
 
 // 将会弃用
 .btn-fat {

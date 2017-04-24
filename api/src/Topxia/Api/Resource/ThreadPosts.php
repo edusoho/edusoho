@@ -3,33 +3,41 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
 
 class ThreadPosts extends BaseResource
 {
-	public function get(Application $app, Request $request, $threadId)
+    public function get(Application $app, Request $request, $threadId)
     {
         $type = $request->query->get('type', 'course');
         $courseId = $request->query->get('courseId', 0);
         $posts = array();
-        if ($type == "course") {
+        if ($type == 'course') {
             if ($courseId == 0) {
                 $thread = $this->getCourseThreadService()->getThread($courseId, $threadId);
                 $courseId = $thread['courseId'];
             }
 
+            $conditions = array(
+                'threadId' => $threadId,
+            );
             $total = $this->getCourseThreadService()->getThreadPostCount($courseId, $threadId);
-            $posts = $this->getCourseThreadService()->findThreadPosts($courseId, $threadId, 'elite', 0, $total);
+            $posts = $this->getCourseThreadService()->searchThreadPosts(
+                $conditions,
+                'elite',
+                0,
+                $total
+            );
         } else {
             $conditions = array(
                 'threadId' => $threadId,
-                'parentId' => 0
+                'parentId' => 0,
             );
             $total = $this->getThreadService()->searchPostsCount($conditions);
             $posts = $this->getThreadService()->searchPosts(
                 $conditions,
-                array('createdTime', 'asc'),
+                array('createdTime' => 'ASC'),
                 0,
                 $total
             );
@@ -52,16 +60,16 @@ class ThreadPosts extends BaseResource
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Thread.ThreadService');
+        return $this->getServiceKernel()->createService('Thread:ThreadService');
     }
 
     protected function getCourseThreadService()
     {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
+        return $this->getServiceKernel()->createService('Course:ThreadService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->createService('User:UserService');
     }
 }

@@ -1,78 +1,116 @@
 .task-list {
   list-style: none;
   padding: 0;
+  margin-bottom: 0;
   .task-item {
     position: relative;
-    padding: 12px 0 12px 30px;
-    line-height: 1;
-    cursor: pointer;
-    color: @gray;
-    .border-radius(4px);
-    &:hover,
-    &.active{
-      .title,
-      .left-menu{
-        color: @brand-primary
+    background-color: transparent;
+    margin-bottom: 10px;
+    &.task-content {
+      &:hover,
+      &.active{
+        background-color: #f3fee8;
       }
-    }
-    &.task-title {
-      color: @gray;
-      cursor: default;
       .title {
-        color: @gray;
-        cursor: default;
-      }
-      &:hover {
-        >a,
-        .left-menu
-         {
-          color:@gray;
-        }
+        color: @gray-dark;
       }
     }
     .title {
-      display: inline-block;
-      max-width: 280px;
-      color: @gray;
+      display: block;
+      word-wrap: break-word;
+      word-break: break-all;
+      padding: 12px 90px 12px 50px;
     }
     .left-menu {
       position: absolute;
-      left: 0;
-      top: 11px;
+      left: 20px;
+      top: 14px;
     }
     .right-menu {
       position: absolute;
-      top:14px;
-      right: 0;
+      top:12px;
+      right: 20px;
+    }
+    .btn-learn {
+      margin-top: -6px;
     }
   }
-}
-
-.task-list.task-list-detail {
-  .task-item {
-    background-color: #f8f8f8;
-    margin-bottom: 15px;
-    padding: 16px 0 16px 40px;
-    padding-left: 40px;
-    color: @gray;
-    &:hover,
-    &.active{
-      .title,
-      .left-menu{
-        color: @gray;
+  &.task-list-gray{
+    .task-item{
+      background-color: #f8f8f8;
+    }
+  }
+  &.task-list-md {
+    .task-item{ 
+      margin-bottom: 10px;
+    }
+    .title {
+      padding: 15px 100px 15px 45px;
+    }
+    .left-menu {
+      left: 20px;
+      top: 17px;
+    }
+    .right-menu {
+      right: 20px;
+      top: 15px;
+    }
+  }
+  &.task-list-hover {
+    .task-item.task-content {
+      &:hover {
+        background-color: #f3fee8;
       }
     }
   }
-  .left-menu {
-    left: 15px;
-    top: 16px;
+  &.task-show {
+    //学习页
+    .task-item {
+      &:hover,
+      &.active {
+        &.task-content {
+          .title,
+          .left-menu{
+            // color: @brand-primary;
+          }
+        }
+      }
+    }
   }
-  .right-menu {
-    right: 10px;
-    top: 15px;
-  }
-  .btn-learn {
-    margin-top: -6px;
+  &.task-chart {
+    margin-right: -18px;
+    .task-item {
+      float: left;
+      width: 33.2%;
+      margin-bottom: 20px;
+      background-color: #f8f8f8;
+      border-right:20px solid #fff;
+      &.half {
+        width: 50%;
+      }
+      .title {
+        color: #616161;
+        padding: 18px 80px 28px 45px;
+        .task-overflow{
+          display: block;
+          overflow: hidden;
+          line-height: 20px;
+          height: 40px;
+        }
+      }
+      .left-menu {
+        top: 20px;
+      }
+      .right-menu {
+        top:18px;
+      }
+      .task-type-icon {
+        font-size: 48px;
+        margin-right: -5px;
+        margin-top: -6px;
+        color: #e9eaea;
+      }
+    }
   }
 }
 
@@ -88,11 +126,18 @@
     margin-bottom: 15px;
     margin-left: 20px;
     cursor: move;
+    word-wrap: break-word;
+    word-break: break-all;
     &:hover,
     &.active {
       background: #f3f3f3;
       .item-actions {
         visibility: visible;;
+      }
+    }
+    &.active {
+      .item-default-header  {
+        border-color: @gray-medium;
       }
     }
   }
@@ -141,10 +186,12 @@
       text-decoration: none;
     }
   }
+  .item-default-header {
+    border-bottom: 1px solid transparent;
+  }
   .settings-list {
     padding: 0;
-    margin: 42px 0 0;
-    border-top: 1px solid @gray-medium;
+    // border-top: 1px solid @gray-medium;
     display: none;
     list-style: none;
     background-color: #f3f3f3;
@@ -155,16 +202,13 @@
       >a {
         color: @gray;
         line-height: 58px;
-      }
-      &:hover,
-      &.active {
-        >a {
+        &:hover {
           color: @brand-success;
         }
       }
       &.active {
         >a {
-          cursor: default;
+          color: @brand-success;
         }
       }
       .after {

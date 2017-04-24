@@ -271,9 +271,7 @@ input.LargeInput {width: 600px;}
   height: 420px;
 }
 
-.color-gray {
-  color: #999;
-}
+
 
 .search-count {
  height: 10px;
@@ -367,7 +365,7 @@ input.LargeInput {width: 600px;}
   top:100%;
   left: -50px;
   width: 170px;
-  height: 180px;
+  min-height: 180px;
   background: #fff;
   border-radius: 4px;
   border: 1px solid #f1f1f1;

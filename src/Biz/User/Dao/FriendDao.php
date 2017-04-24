@@ -2,7 +2,9 @@
 
 namespace Biz\User\Dao;
 
-interface FriendDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface FriendDao extends GeneralDaoInterface
 {
     public function updateByFromIdAndToId($fromId, $toId, $fields);
 
@@ -19,6 +21,4 @@ interface FriendDao
     public function searchByToId($toId, $start, $limit);
 
     public function searchByUserId($userId, $start, $limit);
-
-    public function countByUserId($userId);
 }

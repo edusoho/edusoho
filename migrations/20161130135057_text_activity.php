@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class TextActivity extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -25,12 +25,12 @@ class TextActivity extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
         $biz = $this->getContainer();
         $db = $biz['db'];
-        $db->exec("DROP TABLE IF EXISTS `text_activity`");
+        $db->exec('DROP TABLE IF EXISTS `text_activity`');
     }
 }

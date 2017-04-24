@@ -2,7 +2,6 @@
 
 namespace Biz\Taxonomy\Service;
 
-
 interface TagService
 {
     //tag_owner
@@ -15,7 +14,6 @@ interface TagService
     public function getTagOwnerRelationByTagIdAndOwner($tagId, $owner);
 
     public function deleteTagOwnerRelationsByOwner(array $owner);
-    //
 
     public function getTag($id);
 
@@ -37,7 +35,7 @@ interface TagService
 
     public function getAllTagCount();
 
-    public function searchTags($conditions, $start, $limit);
+    public function searchTags($conditions, $sort, $start, $limit);
 
     public function searchTagCount($conditions);
 
@@ -60,4 +58,6 @@ interface TagService
     public function deleteTag($id);
 
     public function deleteTagGroup($id);
+
+    public function findTagIdsByOwnerTypeAndOwnerIds($ownerType, array $ids);
 }

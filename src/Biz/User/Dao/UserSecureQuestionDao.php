@@ -2,7 +2,9 @@
 
 namespace Biz\User\Dao;
 
-interface UserSecureQuestionDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface UserSecureQuestionDao extends GeneralDaoInterface
 {
     public function findByUserId($userId);
 }

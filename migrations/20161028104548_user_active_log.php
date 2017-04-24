@@ -5,11 +5,11 @@ use Phpmig\Migration\Migration;
 class UserActiveLog extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
-        $biz        = $this->getContainer();
+        $biz = $this->getContainer();
         $connection = $biz['db'];
         $connection->exec("
            CREATE TABLE `user_active_log` (
@@ -22,16 +22,15 @@ class UserActiveLog extends Migration
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='活跃用户记录表';
             INSERT INTO user_active_log (userid, activeTime,createdTime) SELECT `sess_user_id`, FROM_UNIXTIME(`sess_time`, '%Y%m%d'),`sess_time` FROM `sessions`;
         ");
-        
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
-        $biz        = $this->getContainer();
+        $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("DROP TABLE IF EXISTS `user_active_log`;");
+        $connection->exec('DROP TABLE IF EXISTS `user_active_log`;');
     }
 }

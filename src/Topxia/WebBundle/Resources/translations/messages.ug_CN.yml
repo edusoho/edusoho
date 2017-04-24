@@ -791,7 +791,7 @@ flash课程: 'flash دەرسلىك'
 导入网络视频: 导入网络视频
 视频转码类型：: 视频转码类型：
 选择你要上传的视频文件：: 选择你要上传的视频文件：
-'<li>支持<strong>mp4, avi, flv, wmv, mov, m4v</strong>格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。</li>': '<li>支持<strong>mp4, avi, flv, wmv, mov, m4v</strong>格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。</li>'
+'<li>支持<strong>mp4, avi, flv, wmv, mov, m4v, mpg</strong>格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。</li>': '<li>支持<strong>mp4, avi, flv, wmv, mov, m4v, mpg</strong>格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。</li>'
 '<li>视频将上传到<strong>云视频服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>': '<li>视频将上传到<strong>云视频服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>'
 暂无视频文件，请先上传。: 暂无视频文件，请先上传。
 支持优酷、土豆、腾讯、网易公开课的视频页面地址导入: 支持优酷、土豆、腾讯、网易公开课的视频页面地址导入
@@ -1763,7 +1763,7 @@ MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无�
 '感谢对 %site.name% 的支持！': '感谢对 %site.name% 的支持！'
 正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。: 正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。
 转换完成后将以站内消息通知您。: 转换完成后将以站内消息通知您。
-'mp4, avi, flv, wmv, mov, m4v': 'mp4, avi, flv, wmv, mov, m4v'
+'mp4, avi, flv, wmv, mov, m4v, mpg': 'mp4, avi, flv, wmv, mov, m4v, mpg'
 '格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。': '格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。'
 ，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。: ，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。
 mp4: mp4

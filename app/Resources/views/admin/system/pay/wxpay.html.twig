@@ -1,0 +1,81 @@
+<fieldset>
+  <legend>微信支付</legend>
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>接口状态</label>
+    </div>
+    <div class="controls col-md-3 radios">
+      {{ radios('wxpay_enabled', {1:'开启', 0:'关闭'}, payment.wxpay_enabled) }}
+    </div>
+    <div class="controls col-md-4 radios">
+      <a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html">简单申请介绍</a>
+    </div>
+  </div>
+
+  <div class="form-group" style="margin-top: -15px;">
+     <div class="col-md-3 help-block">
+    </div>
+    <div class="col-md-9 help-block">
+      仅支持配置微信<a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html">公众号支付</a>，配置后，可在PC端和微信APP内选择微信支付。
+      <div class="alert alert-info text-left" role="alert">
+        使用前提：
+        <p>1、填写支付授权目录，路径：微信公众平台【微信支付】-【开发配置】-【支付授权目录】，目录地址为：网站域名/pay/center/  ；</p>
+        <p>2、绑定网页授权域名，路径：微信公众平台【接口权限】-【网页授权】-【修改】-【网页授权域名】。<br><a target="_blank" href="http://www.qiqiuyu.com/article/892">【查看教程】</a></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label for="wxpay_appid">AppID</label>
+    </div>
+    <div class="controls col-md-8">
+      <input type="text" id="wxpay_appid" name="wxpay_appid" class="form-control" value="{{payment.wxpay_appid}}">
+      <div class="help-block">AppID来自<a target="_blank" href="https://mp.weixin.qq.com/">微信公众平台</a>内左侧栏【开发】-【基本配置】</div>
+    </div>
+  </div>
+   <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label for="wxpay_secret">AppSecret</label>
+    </div>
+    <div class="controls col-md-8">
+      <input type="text" id="wxpay_secret" name="wxpay_secret" class="form-control" value="{{payment.wxpay_secret}}">
+      <div class="help-block">
+        <div class="help-block">如需支持微信内购买，必须填写。AppSecret来自<a target="_blank" href="https://mp.weixin.qq.com/">微信公众平台</a>内左侧栏【开发】-【基本配置】</div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label for="wxpay_secret">MP文件验证码</label>
+    </div>
+    <div class="controls col-md-8">
+      <input type="text" id="wxpay_secret" name="wxpay_mp_secret" class="form-control" value="{{payment.wxpay_mp_secret|default()}}">
+      <div class="help-block">
+        <div class="help-block">{{'请填写微信提供的MP_verify文件中的内容'|trans}}</div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label for="wxpay_account">商户号</label>
+    </div>
+    <div class="controls col-md-8">
+      <input type="text" id="wxpay_account" name="wxpay_account" class="form-control" value="{{payment.wxpay_account}}">
+      <div class="help-block">商户号来自<a target="_blank" href="https://mp.weixin.qq.com/">微信公众平台</a>内左侧栏【微信支付】-【商户信息】</div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label for="wxpay_key">微信商户平台API密钥</label>
+    </div>
+    <div class="controls col-md-8">
+      <input type="text" id="wxpay_key" name="wxpay_key" class="form-control" value="{{payment.wxpay_key}}">
+      <div class="help-block">
+        微信商户平台API密钥需要登录<a href="https://pay.weixin.qq.com/service_provider/index.shtml" target="_blank">微信商户平台</a>，在【账户设置】-【API安全】中设置密匙。
+      </div>
+    </div>
+  </div>
+ 
+
+</fieldset>

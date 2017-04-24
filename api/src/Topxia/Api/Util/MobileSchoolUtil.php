@@ -2,14 +2,15 @@
 
 namespace Topxia\Api\Util;
 
+use Biz\System\Service\SettingService;
 use Topxia\Service\Common\ServiceKernel;
 
 class MobileSchoolUtil
 {
     private function getSchoolApps()
     {
-        $mobile  = ServiceKernel::instance()->createService('System.SettingService')->get('mobile');
-        $site    = ServiceKernel::instance()->createService('System.SettingService')->get('site');
+        $mobile  = $this->getSettingService()->get('mobile');
+        $site    = $this->getSettingService()->get('site');
         $apps[1] = array(
             'id'       => "1",
             'code'     => 'global',
@@ -54,5 +55,13 @@ class MobileSchoolUtil
     {
         $apps = $this->getSchoolApps();
         return $apps[1];
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }

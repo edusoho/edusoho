@@ -1,35 +1,37 @@
 <?php
+
 namespace Biz\File\Service;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface FileImplementor
 {
+    const CONVERT_STATUS_PENDING = 'waiting';
+    const CONVERT_STATUS_SUCCESS = 'success';
+    const CONVERT_STATUS_NOT = 'none';
+    const CONVERT_STATUS_ERROR = 'error';
+
     public function getFile($file);
 
     public function getFullFile($file);
 
-    public function addFile($targetType, $targetId, array $fileInfo = array(), UploadedFile $originalFile = null);
+    public function getDefaultHumbnails($globalId);
 
-    public function convertFile($file, $status, $result = null, $callback = null);
+    public function getThumbnail($globalId, $options);
+
+    public function getStatistics($options);
+
+    public function player($globalId, $ssl = false);
+
+    public function addFile($targetType, $targetId, array $fileInfo = array(), UploadedFile $originalFile = null);
 
     public function reconvert($globalId, $options);
 
     public function getUploadAuth($params);
 
-    public function reconvertOldFile($file, $convertCallback, $pipeline = null);
-
-    public function saveConvertResult($file, array $result = array());
-
     public function deleteFile($file);
 
     public function moveFile($targetType, $targetId, UploadedFile $originalFile = null, $data = array());
-
-    public function makeUploadParams($params);
-
-    public function reconvertFile($file, $convertCallback, $pipeline = null);
-
-    public function getMediaInfo($key, $mediaType);
 
     //FileImplementor2
     public function getFileByGlobalId($globalId);
@@ -42,7 +44,7 @@ interface FileImplementor
 
     public function updateFile($file, $fields);
 
-    public function getDownloadFile($id);
+    public function getDownloadFile($id, $ssl = false);
 
     public function findFiles($files, $conditions);
 
@@ -50,6 +52,5 @@ interface FileImplementor
 
     public function search($conditions);
 
-    public function synData($conditions);
-
+    public function download($globalId);
 }

@@ -1,0 +1,14 @@
+--TEST--
+Test @media aspect-ratio directive
+--CSS--
+@media(aspect-ratio:600/300){
+	body{border:0}
+}
+--PRINT--
+@media(aspect-ratio:600/300) {
+body{border:0}
+}
+--SETTINGS--
+template='high'
+sort_properties=false
+sort_selectors=false

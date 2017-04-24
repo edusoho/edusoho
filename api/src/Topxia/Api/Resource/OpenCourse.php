@@ -3,6 +3,9 @@
 
 namespace Topxia\Api\Resource;
 
+use Topxia\Api\Util\TagUtil;
+
+use Topxia\Service\Common\ServiceKernel;
 
 class OpenCourse extends BaseResource
 {
@@ -22,11 +25,12 @@ class OpenCourse extends BaseResource
             $res[$key] = $this->getFileUrl($res[$key]);
         }
 
+        $res['tags']   = TagUtil::buildTags('openCourse', $res['id']);
         return $res;
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }

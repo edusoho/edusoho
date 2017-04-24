@@ -1,0 +1,31 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{ '%article_name%频道'|trans({'%article_name%': setting('article.name')|default('资讯'|trans)}) }} - {{ parent() }}{% endblock %}
+
+{% set bodyClass = 'artcile-list-page' %}
+{% do script(['app/js/article/list/index.js']) %}
+
+{% block content %}
+
+  <div class="es-tabs article-list-header">
+    <div class="tab-header">
+      {% include 'article/part/list-header-nav.html.twig' %}
+    </div>
+  </div>
+
+  <!-- 资讯头部 -->
+  {% include 'article/part/list-header.html.twig' %}
+
+  <div class="article-list-body row">
+    <!-- list主内容-->
+    <div class="col-md-8 article-list-main">
+      {% include 'article/part/list-main.html.twig' with {articles:latestArticles} %}
+    </div>
+
+    <aside class="col-md-4 article-sidebar">
+      {% include 'article/widget/sidebar.html.twig' %}
+    </aside>
+  </div>
+
+
+{% endblock %}

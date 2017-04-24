@@ -1,0 +1,76 @@
+{% import "macro.html.twig" as web_macro %}
+{% set quality = "" %}
+{% if courseSet.type in ['open','liveOpen'] %}
+  {% set fileShowUrl = path('open_course_manage_file_show',{id:courseSet.id,fileId:uploadFile.id}) %}
+  {% set convertUrl = path('open_course_manage_file_convert',{id:courseSet.id, fileId:uploadFile.id})%}
+{% else %}
+  {% set fileShowUrl = path('course_set_manage_file_show',{id:courseSet.id,fileId:uploadFile.id}) %}
+  {% set convertUrl = path('course_set_manage_file_convert',{id:courseSet.id, fileId:uploadFile.id})%}
+{% endif %}
+
+<tr id="upload-file-tr-{{uploadFile.id}}" data-role="item" data-convertHash="{{uploadFile.convertHash}}">
+  <td><input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" ></td>
+  <td>
+    <a class="link-dark" href="{{ fileShowUrl }}" target="_blank" rel="tooltip" title data-original-title="{{ uploadFile.filename }}"  >
+      {% if uploadFile.storage == 'cloud' %}
+        <i class="glyphicon glyphicon-cloud color-gray" title="{{'云文件'|trans}}"></i>
+      {% endif %}
+      {{ uploadFile.filename|sub_text(30) }}
+    </a>
+    {% if setting('developer.debug') and uploadFile.storage == 'cloud' and uploadFile.type in ['video', 'ppt', 'document'] %}
+      <a href="javascript:;" data-url="{{ convertUrl }}" class="convert-file-btn ml5">{{'重新转换(调试模式)'|trans}}</a>
+    {% endif %}
+    <br>
+  </td>
+  <td>
+    {{ dict_text('fileType', uploadFile.type) }}
+  </td>
+  <td>{{ web_macro.bytesToSize(uploadFile.fileSize) }}</td>
+  <td>
+    {% set fileQuotes = filesQuote[uploadFile.id]|default(null) %}
+    {# {% if 'courselesson' in fileQuotes or 'opencourselesson' in fileQuotes %}
+      <span class="label label-success tip">{{'任务'|trans}}</span>
+    {% endif %}
+
+    {% if 'coursetask' in fileQuotes %}
+      <span class="label label-success tip">{{'任务'|trans}}</span>
+    {% endif %}
+
+    {% if 'coursematerial' in fileQuotes or 'opencoursematerial' in fileQuotes %}
+      <span class="label label-success tip">{{'资料'|trans}}</span>
+    {% endif %}
+
+    {% if not fileQuotes %}
+      <span class="label label-default tip">{{'未使用'|trans}}</span>
+    {% endif %} #}
+
+    {# 暂时只需要区分使用和未使用 #}
+    {% if not fileQuotes %}
+      <span class="label label-default tip">{{'未使用'|trans}}</span>
+    {% else %}
+      <span class="label label-success tip">{{'使用中'|trans}}</span>
+    {% endif %}
+  </td>
+  <td>
+    <span class="text-sm">{{ web_macro.user_link(users[uploadFile.updatedUserId]|default(null)) }}</span>
+    <br>
+    <span class="color-gray text-sm">
+      {% if not uploadFile.updatedTime %}
+        {{ uploadFile.createdTime|date('Y-n-d H:i')}}
+      {% else %}
+        {{ uploadFile.updatedTime|date('Y-n-d H:i')}}
+      {% endif %}
+    </span>
+  </td>
+  <td>
+    {% if uploadFile.storage == "cloud" and uploadFile.type == 'video' %}
+      {% if courseSet.type == 'open' %}
+        {% set goto = path('open_course_manage_files', {id:courseSet.id}) %}
+      {% else %}
+        {% set goto = path('course_set_manage_files', {id:courseSet.id}) %}
+      {% endif %}
+    <a href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id, goto:goto}) }}">字幕管理</a>
+    {% endif %}
+  </td>
+
+</tr>

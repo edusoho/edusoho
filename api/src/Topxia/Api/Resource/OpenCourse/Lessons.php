@@ -18,13 +18,13 @@ class Lessons extends BaseResource
         if (isset($conditions['cursor'])) {
             $conditions['status']         = 'published';
             $conditions['updatedTime_GE'] = $conditions['cursor'];
-            $lessons                      = $this->getOpenCourseService()->searchLessons($conditions, array('createdTime', 'ASC'), $start, $limit);
+            $lessons                      = $this->getOpenCourseService()->searchLessons($conditions, array('createdTime'=> 'ASC'), $start, $limit);
             $next                         = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $lessons);
             return $this->wrap($this->filter($lessons), $next);
         } else {
-            $total   = $this->getOpenCourseService()->searchLessonCount($conditions);
+            $total   = $this->getOpenCourseService()->countLessons($conditions);
             $start   = $start == -1 ? rand(0, $total - 1) : $start;
-            $lessons = $this->getOpenCourseService()->searchLessons($conditions, array('createdTime', 'ASC'), $start, $limit);
+            $lessons = $this->getOpenCourseService()->searchLessons($conditions, array('createdTime'=> 'ASC'), $start, $limit);
             return $this->wrap($this->filter($lessons), $total);
         }
     }
@@ -49,6 +49,6 @@ class Lessons extends BaseResource
      */
     protected function getOpenCourseService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
+        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseService');
     }
 }

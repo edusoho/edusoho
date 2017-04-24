@@ -1,32 +1,54 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import MultiInput from '../../../common/widget/multi-input';
-import sortList from 'common/sortable';
+import MultiInput from 'app/common/component/multi-input';
+import postal from 'postal';
 
+class detail {
+  constructor() {
+    this.init();
+  }
 
+  init() {
+    this.initCkeditor();
+    this.renderMultiGroupComponent('course-goals', 'goals');
+    this.renderMultiGroupComponent('intended-students', 'audiences');
+    this.submitForm();
+  }
 
-CKEDITOR.replace('summary', {
-  allowedContent: true,
-  toolbar: 'Detail',
-  filebrowserImageUploadUrl: $('#summary').data('imageUploadUrl')
-});
+  initCkeditor() {
+    CKEDITOR.replace('summary', {
+      allowedContent: true,
+      toolbar: 'Detail',
+      filebrowserImageUploadUrl: $('#courseset-summary-field').data('imageUploadUrl')
+    });
+  }
 
-$('#courseset-submit').click(function(evt) {
-  console.log($('#courseset-detail-form').serializeArray());
-  $(evt.currentTarget).button('loading');
-  $('#courseset-detail-form').submit();
-});
+  renderMultiGroupComponent(elementId, name) {
+    let datas = $('#' + elementId).data('init-value');
+    ReactDOM.render(<MultiInput
+      blurIsAdd={true}
+      sortable={true}
+      dataSource={datas}
+      inputName={name + "[]"}
+      outputDataElement={name} />,
+      document.getElementById(elementId)
+    );
+  }
 
+  submitForm() {
+    $('#courseset-submit').click((event) => {
+      this.publishAddMessage();
+      $(event.currentTarget).button('loading');
+      $('#courseset-detail-form').submit();
+    });
+  }
 
-function renderMultiGroupComponent(elementId,name){
-  let datas = $('#'+elementId).data('init-value');
-  console.log(datas);
-  ReactDOM.render( <MultiInput dataSource= {datas}  outputDataElement={name}  sortable={true}/>,
-    document.getElementById(elementId)
-  );
+  publishAddMessage() {
+    postal.publish({
+      channel: "courseInfoMultiInput",
+      topic: "addMultiInput",
+    });
+  }
 }
 
-renderMultiGroupComponent('course-goals','goals');
-renderMultiGroupComponent('intended-students','audiences');
-
-
+new detail();

@@ -1,4 +1,4 @@
-import EsWebUploader from 'libs/js/es-webuploader.js';
+import EsWebUploader from 'common/es-webuploader.js';
 import notify from 'common/notify';
 
 class Cover {
@@ -12,7 +12,6 @@ class Cover {
       onUploadSuccess: function(file, response) {
         let url = $("#upload-picture-btn").data("gotoUrl");
         notify('success', Translator.trans('上传成功！'), 1);
-
         document.location.href = url;
       }
     });

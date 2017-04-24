@@ -1,0 +1,67 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% do script(['libs/jquery-validation.js','app/js/classroom-manage/students-create/index.js'])%}
+{% set modalSize = 'large' %}
+
+{% block title %}{{'添加学员'|trans}}{% endblock %}
+{% block body %}
+
+<form id="student-create-form" class="form-horizontal" method="post" action="{{ path('classroom_manage_student_create', {id:classroom.id}) }}">
+  {% if classroom.status == 'published' %}
+  	<div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="student-nickname">{{'学员'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="student-nickname" name="queryfield" class="form-control" 
+        data-url="{{ path('classroom_manage_student_check',{id:classroom.id})}}" placeholder="{{'邮箱/手机/用户名'|trans}}" >
+      	<div class="help-block">{{'只能添加系统中已注册的用户'|trans}}</div>
+    	</div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="buy-price">{{'购买价格'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <div class="input-group">
+          <input type="text" id="buy-price" name="price" value="{{ classroom.price }}" class="form-control">
+          <div class="input-group-addon">{{ '元'|trans }}</div>
+        </div>
+        <div class="help-block">
+          {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+            {% set price = classroom.price * setting('coin.cash_rate') %}
+            {% set price_unit = setting('coin.coin_name') %}
+          {% else %}
+            {% set price = classroom.price %}
+            {% set price_unit = '元'|trans %}
+          {% endif %}
+          本{{ setting('classroom.name', '班级') }}的价格为{{ price }}{{ price_unit }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="student-remark">{{'备注'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="student-remark" name="remark" class="form-control">
+        <div class="help-block">{{'选填'|trans}}</div>
+      </div>
+    </div>
+  {% else %}
+    <div class="empty">{{'%status%%name%不能添加学员，请%classroomName%发布后再添加。'|trans({'%status%':dict_text('classroomStatus', classroom.status),'%name%':setting('classroom.name')|default('班级'|trans),'%classroomName%':setting('classroom.name')|default('班级'|trans)})}}</div>
+  {% endif %}
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+{% endblock %}
+
+{% block footer %}
+  {% if classroom.status == 'published' %}
+    <button id="student-create-form-submit" type="button" class="btn btn-primary pull-right">{{'保存'|trans}}</button>
+  {% endif %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
+{% endblock %}

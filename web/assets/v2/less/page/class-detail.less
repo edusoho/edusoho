@@ -318,7 +318,7 @@
     .class-operation {
       float: left;
       width: 430px;
-      background-color: @gray-lighter;
+      background-color: @bg-color;
       .border-top-right-radius();
       .border-bottom-right-radius();
       @media (max-width: @screen-md-max) {
@@ -377,7 +377,17 @@
         }
       }
     }
-    
+    .class-deadline{
+      margin: 74px 20px;
+      text-align: center;
+      @media (max-width: @screen-sm-max) {
+       display: none;
+      }
+      @media (max-width: @screen-xs-max) {
+       display: block;
+       margin:20px;
+      }
+    }
   }
   &.after.auditor {
     .class-data {

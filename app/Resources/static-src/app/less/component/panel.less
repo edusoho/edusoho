@@ -7,13 +7,12 @@
   >.panel-heading {
     position: relative;
     font-size: 16px;
-    padding: 15px 0;
+    padding: 10px 0;
+    line-height: 30px;
     background: #fff;
     border-bottom: 1px solid @gray-lighter;
-    @media(max-width:@screen-xs-max) {
-      padding: 10px 0;
-    }
     .panel-title {
+      padding: 5px 0;
       color: @gray-darker;
       >i {
         display: none;
@@ -21,7 +20,7 @@
     }
     .more {
       position: absolute;
-      top: 13px;
+      top: 8px;
       right: 0;
       display: block;
       color: @gray;
@@ -53,7 +52,7 @@
 
 .panel-primary {
   >.panel-heading {
-    background-color: @brand-primary;
+    // background-color: @brand-primary;
     color: #fff;
   }
   >.panel-body {
@@ -67,10 +66,9 @@
   .box-shadow( 0 2px 4px rgba(0,0,0,.08));
   >.panel-heading {
     background-color: @gray-lighter;
-    color: @gray;
+    color: @gray-darker;
   }
   >.panel-body {
-    color: @gray;
     background: #fff;
     .border-bottom-left-radius();
     .border-bottom-right-radius();

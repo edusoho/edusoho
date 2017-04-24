@@ -1,0 +1,32 @@
+{% extends 'layout.html.twig' %}
+{% import 'macro.html.twig' as web_macro %}
+{% block title %}{{'师资介绍'|trans}} - {{ parent() }}{% endblock %}
+{% block keywords %}{{'师资介绍%name%'|trans({'%name%': setting('site.name')})}} {% endblock %}
+{% block description %}{{'%name%的师资介绍。'|trans({'%name%': setting('site.name')})}}{% endblock %}
+{% set bodyClass = 'teacherpage bg-blank' %}
+{% do script(['app/js/teacher/index.js']) %}
+
+{% block top_content %}
+  <div class="es-banner">
+    <div class="container">
+      <div class="title">
+        <i class="es-icon es-icon-permcontactcal"></i>{{'所有教师'|trans}}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="teacher-list row">
+    {% for teacher in teachers %}
+    {% set profile = profiles[teacher.id] %}
+    {% set isFollowed = (teacher.id in Myfollowings)|default(false) %}
+      <div class="col-lg-3 col-md-4 col-xs-6">
+        {% include 'teacher/teacher-item.html.twig' %}
+      </div>
+    {% endfor %}
+  </div>
+  <nav class="text-center">
+    {{ web_macro.paginator(paginator) }}
+  </nav>
+{% endblock %}

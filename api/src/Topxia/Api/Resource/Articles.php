@@ -4,7 +4,7 @@ namespace Topxia\Api\Resource;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class Articles extends BaseResource
 {
@@ -15,18 +15,10 @@ class Articles extends BaseResource
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 20);
 
-        if (isset($conditions['cursor'])) {
-            $conditions['status'] = 'published';
-            $conditions['updatedTime_GE'] = $conditions['cursor'];
-            $articles = $this->getArticleService()->searchArticles($conditions, array('updatedTime', 'ASC'), $start, $limit);
-            $articles = $this->assemblyArticles($articles);
-            $next = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $articles);
-            return $this->wrap($this->filter($articles), $next);
-        } else {
-            $total = $this->getArticleService()->searchArticlesCount($conditions);
-            $articles = $this->getArticleService()->searchArticles($conditions, array('publishedTime', 'DESC'), $start, $limit);
-            return $this->wrap($this->filter($articles), $total);
-        }
+        $total = $this->getArticleService()->countArticles($conditions);
+        $articles = $this->getArticleService()->searchArticles($conditions, array('publishedTime' => 'DESC'), $start, $limit);
+        $articles = $this->assemblyArticles($articles);
+        return $this->wrap($this->filter($articles), $total);
     }
 
     public function filter($res)
@@ -36,32 +28,8 @@ class Articles extends BaseResource
 
     protected function assemblyArticles(&$articles)
     {
-        $tagIds = array();
-        foreach ($articles as $article) {
-            $tempTagIds = $this->getTagIdsByArticle($article);
-            $tagIds = array_merge($tagIds, $tempTagIds);
-        }
-
-        $tags = $this->getTagService()->findTagsByIds($tagIds);
-
         $categoryIds = ArrayToolkit::column($articles, 'categoryId');
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
-
-        foreach ($articles as &$article) {
-            $article['tags'] = array();
-            if (empty($article['tagIds'])) {
-                continue;
-            }
-            foreach ($article['tagIds'] as $tagId) {
-                if (empty($tags[$tagId])) {
-                    continue;
-                }
-                $article['tags'][] = array(
-                    'id' => $tagId,
-                    'name' => $tags[$tagId]['name'],
-                );
-            }
-        }
 
         foreach ($articles as &$article) {
             if (isset($categories[$article['categoryId']])) {
@@ -85,25 +53,18 @@ class Articles extends BaseResource
         return $res;
     }
 
-    protected function getTagIdsByArticle($article)
-    {
-        $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'article', 'ownerId' => $article['id']));
-
-        return ArrayToolkit::column($tags, 'id');
-    }
-
     protected function getArticleService()
     {
-        return $this->getServiceKernel()->createService('Article.ArticleService');
+        return $this->getServiceKernel()->createService('Article:ArticleService');
     }
 
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        return $this->getServiceKernel()->createService('Taxonomy:TagService');
     }
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 }

@@ -1,7 +1,7 @@
 {% for path in script()  %}
-  {% if path starts with 'http://' %}
-    {% if 'js-sdk/uploader' in path %}
-      <script src="{{ path ~ '?' ~ random(date().timestamp / 1000) }}"></script>
+  {% if '//' in path %}
+    {% if 'js-sdk' in path %}
+      <script src="{{ path ~ '?' ~ (date().timestamp / 100)|round }}"></script>
     {% else %}
       <script src="{{ path ~ '?' ~ asset_version('')}}"></script>
     {% endif %}

@@ -1,7 +1,8 @@
 <?php
+
 namespace Biz\File\Event;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
 use Codeages\Biz\Framework\Event\Event;
@@ -14,27 +15,27 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
     public static function getSubscribedEvents()
     {
         return array(
-            'question.create'           => 'onQuestionCreate',
-            'question.update'           => 'onQuestionUpdate',
-            'question.delete'           => 'onQuestionDelete',
+            'question.create' => 'onQuestionCreate',
+            'question.update' => 'onQuestionUpdate',
+            'question.delete' => 'onQuestionDelete',
 
-            'course.delete'             => 'onCourseDelete',
+            'course.delete' => 'onCourseDelete',
             //'course.lesson.create' => 'onCourseLessonCreate',
-            'course.lesson.delete'      => 'onCourseLessonDelete',
-            'course.material.create'    => 'onMaterialCreate',
-            'course.material.update'    => 'onMaterialUpdate',
-            'course.material.delete'    => 'onMaterialDelete',
+            'course.lesson.delete' => 'onCourseLessonDelete',
+            'course.material.create' => 'onMaterialCreate',
+            'course.material.update' => 'onMaterialUpdate',
+            'course.material.delete' => 'onMaterialDelete',
 
             'open.course.lesson.delete' => 'onOpenCourseLessonDelete',
-            'open.course.delete'        => 'onOpenCourseDelete',
+            'open.course.delete' => 'onOpenCourseDelete',
 
-            'article.delete'            => 'onArticleDelete',
-            'group.thread.post.delete'  => 'onGroupThreadPostDelete',
-            'group.thread.delete'       => 'onGroupThreadDelete',
-            'course.thread.delete'      => 'onCourseThreadDelete',
+            'article.delete' => 'onArticleDelete',
+            'group.thread.post.delete' => 'onGroupThreadPostDelete',
+            'group.thread.delete' => 'onGroupThreadDelete',
+            'course.thread.delete' => 'onCourseThreadDelete',
             'course.thread.post.delete' => 'onCourseThreadPostDelete',
-            'thread.delete'             => 'onThreadDelete',
-            'thread.post.delete'        => 'onThreadPostDelete'
+            'thread.delete' => 'onThreadDelete',
+            'thread.post.delete' => 'onThreadPostDelete',
         );
     }
 
@@ -46,6 +47,10 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
             return;
         }
         $argument = $event->getArgument('argument');
+
+        if (empty($argument['attachment'])) {
+            return;
+        }
 
         $attachment = $argument['attachment'];
 
@@ -154,7 +159,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
         $lessons = $this->getCourseService()->getCourse($course['id']);
 
         if (!empty($lessons)) {
-            $fileIds = ArrayToolkit::column($lessons, "mediaId");
+            $fileIds = ArrayToolkit::column($lessons, 'mediaId');
 
             if (!empty($fileIds)) {
                 foreach ($fileIds as $fileId) {
@@ -167,7 +172,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
     public function onCourseLessonCreate(Event $event)
     {
         $context = $event->getSubject();
-        $lesson  = $context['lesson'];
+        $lesson = $context['lesson'];
 
         if (in_array($lesson['type'], array('video', 'audio', 'ppt', 'document', 'flash'))) {
             $this->getUploadFileService()->waveUsedCount($lesson['mediaId'], 1);
@@ -177,7 +182,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
     public function onCourseLessonDelete(Event $event)
     {
         $context = $event->getSubject();
-        $lesson  = $context['lesson'];
+        $lesson = $context['lesson'];
 
         if (!empty($lesson['mediaId'])) {
             $this->getUploadFileService()->waveUsedCount($lesson['mediaId'], -1);
@@ -186,8 +191,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
 
     public function onMaterialCreate(Event $event)
     {
-        $context  = $event->getSubject();
-        $material = $context['material'];
+        $material = $event->getSubject();
 
         if (!empty($material['fileId'])) {
             $this->getUploadFileService()->waveUsedCount($material['fileId'], 1);
@@ -196,10 +200,9 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
 
     public function onMaterialUpdate(Event $event)
     {
-        $context        = $event->getSubject();
-        $argument       = $context['argument'];
-        $material       = $context['material'];
-        $sourceMaterial = $context['sourceMaterial'];
+        $material = $event->getSubject();
+        $argument = $event->getArgument('argument');
+        $sourceMaterial = $event->getArgument('sourceMaterial');
 
         if (!$material['lessonId'] && $sourceMaterial['lessonId']) {
             $this->getUploadFileService()->waveUsedCount($material['fileId'], -1);
@@ -235,10 +238,13 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
     public function onOpenCourseLessonDelete(Event $event)
     {
         $context = $event->getSubject();
-        $lesson  = $context['lesson'];
+        $lesson = $context['lesson'];
 
         if (!empty($lesson['mediaId'])) {
-            $this->getUploadFileService()->waveUsedCount($lesson['mediaId'], -1);
+            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            if ($file['usedCount'] > 0) {
+                $this->getUploadFileService()->waveUsedCount($lesson['mediaId'], -1);
+            }
         }
     }
 
@@ -249,7 +255,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
         $lessons = $this->getOpenCourseService()->findLessonsByCourseId($course['id']);
 
         if (!empty($lessons)) {
-            $fileIds = ArrayToolkit::column($lessons, "mediaId");
+            $fileIds = ArrayToolkit::column($lessons, 'mediaId');
 
             if (!empty($fileIds)) {
                 foreach ($fileIds as $fileId) {
@@ -264,7 +270,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
      */
     protected function getUploadFileService()
     {
-        return $this->getBiz()->service('File:UploadFileService');
+        return $this->getServiceKernel()->createService('File:UploadFileService');
     }
 
     /**
@@ -272,11 +278,16 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
      */
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getOpenCourseService()
     {
-        return ServiceKernel::instance()->createService('OpenCourse.OpenCourseService');
+        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseService');
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

@@ -1,52 +1,65 @@
 <?php
+
 namespace AppBundle\Controller\Activity;
 
+use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
-use Biz\Course\Service\CourseService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ActivityController extends BaseController
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction($task, $preview)
     {
-        $activity = $this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         if (empty($activity)) {
             throw $this->createNotFoundException('activity not found');
         }
-        $actionConfig   = $this->getActivityActionConfig($activity['mediaType']);
-        $showController = $actionConfig['show'];
-        return $this->forward($showController, array(
-            'id'       => $id,
+        $actionConfig = $this->getActivityConfig($activity['mediaType']);
+
+        return $this->forward($actionConfig['controller'].':show', array(
+            'activity' => $activity,
+            'preview' => $preview,
+        ));
+    }
+
+    public function previewAction($task)
+    {
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        if (empty($activity)) {
+            throw $this->createNotFoundException('activity not found');
+        }
+        $actionConfig = $this->getActivityConfig($activity['mediaType']);
+
+        return $this->forward($actionConfig['controller'].':preview', array(
+            'task' => $task,
+        ));
+    }
+
+    public function updateAction($id, $courseId)
+    {
+        $activity = $this->getActivityService()->getActivity($id);
+        $actionConfig = $this->getActivityConfig($activity['mediaType']);
+
+        return $this->forward($actionConfig['controller'].':edit', array(
+            'id' => $activity['id'],
             'courseId' => $courseId,
         ));
     }
 
-    public function updateAction(Request $request, $id, $courseId)
+    public function createAction($type, $courseId)
     {
-        $activity       = $this->getActivityService()->getActivity($id);
-        $actionConfig   = $this->getActivityActionConfig($activity['mediaType']);
-        $editController = $actionConfig['edit'];
-        return $this->forward($editController, array(
-            'id'       => $activity['id'],
-            'courseId' => $courseId
-        ));
-    }
+        $actionConfig = $this->getActivityConfig($type);
 
-    public function createAction(Request $request, $type, $courseId)
-    {
-        $actionConfig     = $this->getActivityActionConfig($type);
-        $createController = $actionConfig['create'];
-        return $this->forward($createController, array(
-            'courseId' => $courseId
+        return $this->forward($actionConfig['controller'].':create', array(
+            'courseId' => $courseId,
         ));
     }
 
     public function triggerAction(Request $request, $courseId, $activityId)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
-
 
         $activity = $this->getActivityService()->getActivity($activityId);
 
@@ -66,20 +79,15 @@ class ActivityController extends BaseController
 
         return $this->createJsonResponse(array(
             'event' => $eventName,
-            'data'  => $data
+            'data' => $data,
         ));
     }
 
-
-    protected function getActivityConfig()
+    protected function getActivityConfig($type)
     {
-        return $this->get('extension.default')->getActivities();
-    }
+        $config = $this->get('extension.manager')->getActivities();
 
-    protected function getActivityActionConfig($type)
-    {
-        $config = $this->getActivityConfig();
-        return $config[$type]['actions'];
+        return $config[$type];
     }
 
     /**

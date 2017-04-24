@@ -1,4 +1,4 @@
-(function () { 
+(function() {
   $(document).on('click.modal.data-api', '[data-toggle="modal"]', function(e) {
     var imgUrl = app.config.loading_img_path;
     var $this = $(this),
@@ -11,7 +11,7 @@
       $target.load(url);
     }
   });
-  //同时存在多个modal时，关闭时还有其他modal存在，防止无法上下拖动
+  // 同时存在多个modal时，关闭时还有其他modal存在，防止无法上下拖动
   $(document).on("hidden.bs.modal", "#attachment-modal", function() {
     if ($("#modal").attr('aria-hidden')) $(document.body).addClass("modal-open");
     if ($('#material-preview-player').length > 0) $('#material-preview-player').html("");
@@ -26,10 +26,7 @@
     e.preventDefault();
     var $modal = $(e.delegateTarget);
     $.get($(this).attr('href'), function(html) {
-        $modal.html(html);
+      $modal.html(html);
     });
   });
 }());
-
-
-

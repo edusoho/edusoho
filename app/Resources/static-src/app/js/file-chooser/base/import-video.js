@@ -53,7 +53,7 @@ class VideoImport extends Chooser {
   _onChange(file) {
     // this._close();
     var value = file ? JSON.stringify(file) : '';
-    this.trigger('file.select', file);
+    this.emit('file.select', file);
     $('[data-role="placeholder"]').html(file.name);
   }
 }

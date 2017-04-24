@@ -7,12 +7,17 @@ use Biz\Activity\Dao\VideoActivityDao;
 
 class VideoActivityDaoImpl extends GeneralDaoImpl implements VideoActivityDao
 {
-    protected $table = 'video_activity';
+    protected $table = 'activity_video';
 
     public function declares()
     {
         return array(
             'serializes' => array('media' => 'json'),
         );
+    }
+
+    public function findByIds($ids)
+    {
+        return $this->findInField('id', $ids);
     }
 }

@@ -1,0 +1,57 @@
+<script>
+  var app = {};
+  app.debug = {% if app.debug %}true{% else %}false{% endif %};
+  app.version = '{{ asset_version('/') }}';
+  app.httpHost = '{{ app.request.getSchemeAndHttpHost() }}';
+  app.basePath = '{{ cdn() }}';
+  app.theme = '{{ setting("theme.uri"|default("default")) }}';
+  app.jsPaths = {{ js_paths()|json_encode|raw }};
+
+  {% set crontabNextExecutedTime = crontab_next_executed_time() %}
+  {% if not setting('magic.disable_web_crontab', 0) and crontabNextExecutedTime > 0 %}
+    {% if date(crontabNextExecutedTime|date('Y-m-d H:i:s')) < date() %}
+      app.scheduleCrontab = '{{ path('crontab_web') }}';
+    {% endif %}
+  {% endif %}
+
+  window.CKEDITOR_BASEPATH = app.basePath + '/assets/libs/ckeditor/4.6.7/';
+  window.CLOUD_FILE_SERVER = "{{ setting('developer.cloud_file_server', '') }}"; 
+
+  app.config = {{
+    {
+      api:{
+        weibo:{key:setting('login_bind.weibo_key', '')},
+        qq:{key:setting('login_bind.qq_key', '')},
+        douban:{key:setting('login_bind.douban_key', '')},
+        renren:{key:setting('login_bind.renren_key', '')}
+      },
+      loading_img_path: asset('assets/img/default/loading.gif'),
+    }|json_encode|raw
+  }};
+
+  app.arguments = {};
+  {% if script_controller is defined %}
+    app.controller = '{{ script_controller }}';
+  {% endif %}
+  {% if script_arguments is defined %}
+    app.arguments = {{ script_arguments|json_encode|raw }};
+  {% endif %}
+  
+  app.scripts = {{ export_scripts()|default(null)|json_encode|raw }};
+  
+  app.uploadUrl = '{{path("file_upload")}}';
+  app.imgCropUrl = '{{path("file_img_crop")}}';
+  app.lessonCopyEnabled = '{{setting("course.copy_enabled","0")}}';
+  app.cloudSdkCdn = '{{ setting("developer.cloud_sdk_cdn") }}';
+  app.mainScript = '{{ script_main }}';
+  app.lang = '{{ app.request.locale }}';
+</script>
+<script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
+<script src="{{ url('bazinga_jstranslation_js', {'domain': 'js'}) }}"></script>
+<script src="{{ asset('assets/libs/seajs/seajs/2.2.1/sea.js') }}"></script>
+<script src="{{ asset('assets/libs/seajs/seajs-style/1.0.2/seajs-style.js') }}"></script>
+<script src="{{ asset('assets/libs/seajs/seajs-text/1.1.1/seajs-text.min.js') }}"></script>
+<script src="{{ asset('assets/libs/seajs-global-config.js') }}"></script>
+<script>
+  seajs.use(app.mainScript);
+</script>

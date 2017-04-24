@@ -1,9 +1,9 @@
 <?php
+
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
-use Topxia\Common\FileToolkit;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\CloudClientFactory;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\LessonProcessor;
@@ -13,14 +13,14 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 {
     public function getVideoMediaUrl()
     {
-        $courseId = $this->request->get("courseId");
-        $lessonId = $this->request->get("lessonId");
+        $courseId = $this->request->get('courseId');
+        $lessonId = $this->request->get('lessonId');
 
         if (empty($courseId)) {
             return $this->createErrorResponse('not_courseId', '课程信息不存在！');
         }
 
-        $user   = $this->controller->getUserByToken($this->request);
+        $user = $this->controller->getUserByToken($this->request);
         $lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson)) {
@@ -29,7 +29,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         if ($lesson['free'] == 1) {
             if ($user->isLogin()) {
-                if ($this->controller->getCourseService()->isCourseStudent($courseId, $user['id'])) {
+                if ($this->controller->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
                     $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
                 }
             }
@@ -37,7 +37,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             $lesson = $this->coverLesson($lesson);
 
             if ($lesson['mediaSource'] == 'self') {
-                $response = $this->curlRequest("GET", $lesson['mediaUri'], null);
+                $response = $this->curlRequest('GET', $lesson['mediaUri'], null);
+
                 return new Response($response);
             }
 
@@ -49,14 +50,15 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         }
 
         $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
-        $member = $this->controller->getCourseService()->getCourseMember($courseId, $user['id']);
+        $member = $this->controller->getCourseMemberService()->getCourseMember($courseId, $user['id']);
         $member = $this->previewAsMember($member, $courseId, $user);
 
-        if ($member && in_array($member['role'], array("teacher", "student"))) {
+        if ($member && in_array($member['role'], array('teacher', 'student'))) {
             $lesson = $this->coverLesson($lesson);
 
             if ($lesson['mediaSource'] == 'self') {
-                $response = $this->curlRequest("GET", $lesson['mediaUri'], null);
+                $response = $this->curlRequest('GET', $lesson['mediaUri'], null);
+
                 return new Response($response);
             }
 
@@ -64,7 +66,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         }
 
         if ($lesson['mediaSource'] == 'self') {
-            $response = $this->curlRequest("GET", $lesson['mediaUri'], null);
+            $response = $this->curlRequest('GET', $lesson['mediaUri'], null);
+
             return new Response($response);
         }
 
@@ -73,25 +76,26 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     public function getLessonMaterial()
     {
-        $lessonId        = $this->getParam("lessonId");
-        $start           = (int) $this->getParam("start", 0);
-        $limit           = (int) $this->getParam("limit", 10);
+        $lessonId = $this->getParam('lessonId');
+        $start = (int) $this->getParam('start', 0);
+        $limit = (int) $this->getParam('limit', 10);
         $lessonMaterials = $this->controller->getMaterialService()->searchMaterials(
             array(
                 'lessonId' => $lessonId,
-                'source'   => 'coursematerial',
-                'type'     => 'course'
+                'source' => 'coursematerial',
+                'type' => 'course',
             ),
             array('createdTime', 'DESC'),
-            0, 1000
+            0,
+            1000
         );
         $files = $this->controller->getUploadFileService()->findFilesByIds(ArrayToolkit::column($lessonMaterials, 'fileId'));
 
         return array(
-            "start" => $start,
-            "limit" => $limit,
-            "total" => 1000,
-            "data"  => $this->filterMaterial($lessonMaterials, $files)
+            'start' => $start,
+            'limit' => $limit,
+            'total' => 1000,
+            'data' => $this->filterMaterial($lessonMaterials, $files),
         );
     }
 
@@ -105,38 +109,39 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         return array_map(function ($lessonMaterial) use ($newFiles) {
             $lessonMaterial['createdTime'] = date('c', $lessonMaterial['createdTime']);
-            $field                         = $lessonMaterial['fileId'];
-            $lessonMaterial['fileMime']    = $newFiles[$field]['type'];
+            $field = $lessonMaterial['fileId'];
+            $lessonMaterial['fileMime'] = $newFiles[$field]['type'];
+
             return $lessonMaterial;
         }, $lessonMaterials);
     }
 
     public function downMaterial()
     {
-        $courseId   = $this->request->get("courseId");
-        $materialId = $this->request->get("materialId");
-        $user       = $this->controller->getUserByToken($this->request);
+        $courseId = $this->request->get('courseId');
+        $materialId = $this->request->get('materialId');
+        $user = $this->controller->getUserByToken($this->request);
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录！");
+            return $this->createErrorResponse('not_login', '您尚未登录！');
         }
 
         list($course, $member) = $this->controller->getCourseService()->tryTakeCourse($courseId);
 
-        if ($member && !$this->controller->getCourseService()->isMemberNonExpired($course, $member)) {
-            return "course_materials";
+        if ($member && !$this->controller->getCourseMemberService()->isMemberNonExpired($course, $member)) {
+            return 'course_materials';
         }
 
         if ($member && $member['levelId'] > 0) {
             if ($this->controller->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok') {
-                return "course_show";
+                return 'course_show';
             }
         }
 
         $material = $this->controller->getMaterialService()->getMaterial($courseId, $materialId);
 
         if (empty($material)) {
-            throw new \RuntimeException("资料不存在");
+            throw new \RuntimeException('资料不存在');
         }
 
         return $this->controller->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $material['fileId']));
@@ -144,40 +149,52 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     public function learnLesson()
     {
-        $courseId = $this->getParam("courseId");
-        $lessonId = $this->getParam("lessonId");
-        $user     = $this->controller->getuserByToken($this->request);
+        $courseId = $this->getParam('courseId');
+        $lessonId = $this->getParam('lessonId');
+        $user = $this->controller->getuserByToken($this->request);
+        $task = $this->getTaskService()->getTask($lessonId);
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录！");
+            return $this->createErrorResponse('not_login', '您尚未登录！');
         }
 
-        $this->controller->getCourseService()->finishLearnLesson($courseId, $lessonId);
+        try {
+            if ($this->canStartTask($task)) {
+                $this->getActivityService()->trigger($task['activityId'], 'start', array(
+                    'task' => $task,
+                ));
+            }
 
-        return "finished";
+            $this->getTaskService()->finishTaskResult($task['id']);
+        } catch (\Exception $e) {
+            return $this->createErrorResponse('404', $e->getMessage());
+        }
+
+        return 'finished';
     }
 
     public function getLessonStatus()
     {
-        $user     = $this->controller->getuserByToken($this->request);
-        $courseId = $this->getParam("courseId");
-        $lessonId = $this->getParam("lessonId");
+        $user = $this->controller->getuserByToken($this->request);
+        $courseId = $this->getParam('courseId');
+        $lessonId = $this->getParam('lessonId');
 
         if ($user->isLogin()) {
-            $learnStatus     = $this->controller->getCourseService()->getUserLearnLessonStatus($user['id'], $courseId, $lessonId);
-            $lessonMaterials = $this->controller->getMaterialService()->searchMaterials(
-                array(
-                    'lessonId' => $lessonId,
-                    'source'   => 'coursematerial',
-                    'type'     => 'course'
-                ),
-                array('createdTime', 'DESC'),
-                0, 1
+            $learnStatus = $this->getTaskResultService()->getUserTaskResultByTaskId($lessonId);
+            if ($learnStatus) {
+                $learnStatus['lessonId'] = $lessonId;
+            }
+
+            $conditions = array(
+                'lessonId' => $lessonId,
+                'source' => 'courseactivity',
+                'type' => 'course',
             );
+            $lessonMaterialCount = $this->getMaterialService()->countMaterials($conditions);
 
             return array(
-                "learnStatus" => $learnStatus,
-                "hasMaterial" => empty($lessonMaterials) ? false : true
+                'learnStatus' => $learnStatus,
+                'hasMaterial' => empty($lessonMaterialCount) ? false : true,
             );
         }
 
@@ -186,11 +203,22 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     public function getLearnStatus()
     {
-        $user     = $this->controller->getuserByToken($this->request);
-        $courseId = $this->getParam("courseId");
+        $user = $this->controller->getuserByToken($this->request);
+        $courseId = $this->getParam('courseId');
 
-        if ($user->isLogin()) {
-            $learnStatuses = $this->controller->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
+        if ($user->isLogin() && !empty($courseId)) {
+            $taskResults = $this->controller->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
+            $learnStatuses = array();
+            foreach ($taskResults as $result) {
+                if ($result['status'] === 'finish') {
+                    $status = 'finished';
+                } elseif ($result['status'] === 'start') {
+                    $status = 'learning';
+                } else {
+                    continue;
+                }
+                $learnStatuses[$result['courseTaskId']] = $status;
+            }
         } else {
             $learnStatuses = array();
         }
@@ -200,80 +228,115 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     public function unLearnLesson()
     {
-        $courseId = $this->getParam("courseId");
-        $lessonId = $this->getParam("lessonId");
-        $user     = $this->controller->getuserByToken($this->request);
+        $courseId = $this->getParam('courseId');
+        $lessonId = $this->getParam('lessonId');
+        $user = $this->controller->getuserByToken($this->request);
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录！");
+            return $this->createErrorResponse('not_login', '您尚未登录！');
         }
 
         $this->controller->getCourseService()->cancelLearnLesson($courseId, $lessonId);
 
-        return "learning";
+        return 'learning';
     }
 
     public function getCourseDownLessons()
     {
-        $token    = $this->controller->getUserToken($this->request);
-        $user     = $this->controller->getUser();
-        $courseId = $this->getParam("courseId");
+        $courseId = $this->getParam('courseId');
+        $user = $this->controller->getuserByToken($this->request);
 
-        $course  = $this->controller->getCourseService()->getCourse($courseId);
-        $lessons = $this->controller->getCourseService()->getCourseItems($courseId);
-        $lessons = $this->controller->filterItems($lessons);
-        if ($user->isLogin()) {
-            $learnStatuses = $this->controller->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
-        } else {
-            $learnStatuses = null;
+        if (!$this->controller->getCourseService()->canTakeCourse($courseId)) {
+            return $this->createErrorResponse('403', 'Access Denied');
         }
-        // $files = $this->getUploadFiles($courseId);
+        $course = $this->controller->getCourseService()->getCourse($courseId);
+        $lessons = $this->controller->getCourseService()->findCourseTasksAndChapters($courseId);
+
+        $lessons = $this->controller->filterItems($lessons);
+
         $fileIds = ArrayToolkit::column($lessons, 'mediaId');
-        $files   = ArrayToolkit::index($this->getUploadFileService()->findFilesByIds($fileIds), 'id');
-        $files   = array_map(function ($file) {
+
+        $files = ArrayToolkit::index($this->getUploadFileService()->findFilesByIds($fileIds), 'id');
+        $files = array_map(function ($file) {
             $file['convertParams'] = null; //过滤convertParams防止移动端报错
             return $file;
         }, $files);
+
         $lessons = $this->filterLessons($lessons, $files);
+
         return array(
-            "lessons" => array_values($lessons),
-            "course"  => $this->controller->filterCourse($course)
+            'lessons' => array_values($lessons),
+            'course' => $this->controller->filterCourse($course),
         );
     }
 
     public function getCourseLessons()
     {
-        $token    = $this->controller->getUserToken($this->request);
-        $user     = $this->controller->getUser();
-        $courseId = $this->getParam("courseId");
+        $user = $this->controller->getuserByToken($this->request);
+        $courseId = $this->getParam('courseId');
 
-        $lessons = $this->controller->getCourseService()->getCourseItems($courseId);
+        $lessons = $this->controller->getCourseService()->findCourseTasksAndChapters($courseId);
         $lessons = $this->controller->filterItems($lessons);
 
         if ($user->isLogin()) {
-            $learnStatuses = $this->controller->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
+            $learnStatuses = $this->_findUserLearnTaskStatus($courseId);
         } else {
             $learnStatuses = null;
         }
 
-        $files   = $this->getUploadFiles($courseId);
+        $files = $this->getUploadFiles($courseId);
         $lessons = $this->filterLessons($lessons, $files);
+
         return array(
-            "lessons"       => array_values($lessons),
-            "learnStatuses" => empty($learnStatuses) ? array("-1" => "learning") : $learnStatuses
+            'lessons' => array_values($lessons),
+            'learnStatuses' => empty($learnStatuses) ? array('-1' => 'learning') : $learnStatuses,
         );
+    }
+
+    private function makeTryLookVideoUrl($lessons, $courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        foreach ($lessons as $key => $lesson) {
+            if ($lesson['type'] == 'video') {
+                $lessonFree = $this->isLessonFree($lesson);
+                $courseTryLookAble = $this->isCourseTryLookAble($course);
+
+                if ($lessonFree) {
+                    $lessons[$key] = $this->getVideoLesson($lesson);
+                }
+
+                if ($courseTryLookAble && !$lessonFree) {
+                    $tryLookTime = $course['tryLookTime'];
+                    $options = array('watchTimeLimit' => $tryLookTime * 60);
+                    $lessons[$key] = $this->getVideoLesson($lesson, $options);
+                }
+            }
+        }
+
+        return $lessons;
+    }
+
+    private function isCourseTryLookAble($course)
+    {
+        return empty($course['tryLookable']) ? false : true;
+    }
+
+    private function isLessonFree($lesson)
+    {
+        return empty($lesson['free']) ? false : true;
     }
 
     private function getUploadFiles($courseId)
     {
         $conditions = array(
-            'targetType' => "courselesson",
-            'targetId'   => $courseId
+            'targetType' => 'courselesson',
+            'targetId' => $courseId,
         );
 
         $files = $this->getUploadFileService()->searchFiles(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             0,
             100
         );
@@ -281,11 +344,11 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $uploadFiles = array();
 
         foreach ($files as $key => $file) {
-            unset($file["metas"]);
-            unset($file["metas2"]);
-            unset($file["hashId"]);
-            unset($file["etag"]);
-            $uploadFiles[$file["id"]] = $file;
+            unset($file['metas']);
+            unset($file['metas2']);
+            unset($file['hashId']);
+            unset($file['etag']);
+            $uploadFiles[$file['id']] = $file;
         }
 
         return $uploadFiles;
@@ -293,15 +356,18 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     public function getLesson()
     {
-        $courseId = $this->getParam("courseId");
-        $lessonId = $this->getParam("lessonId");
+        $courseId = $this->getParam('courseId');
+        $lessonId = $this->getParam('lessonId');
 
-        if (empty($courseId)) {
+        $course = $this->getCourseService()->getCourse($courseId);
+        if (empty($course)) {
             return $this->createErrorResponse('not_courseId', '课程信息不存在！');
         }
 
-        $user   = $this->controller->getUserByToken($this->request);
-        $lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $user = $this->controller->getUserByToken($this->request);
+        $lesson = $this->getTaskService()->getTask($lessonId);
+        $lessons = $this->getCourseService()->convertTasks(array($lesson), $course);
+        $lesson = $lessons[0];
 
         if (empty($lesson)) {
             return $this->createErrorResponse('not_courseId', '课时信息不存在！');
@@ -309,8 +375,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         if ($lesson['free'] == 1) {
             if ($user->isLogin()) {
-                if ($this->controller->getCourseService()->isCourseStudent($courseId, $user['id'])) {
-                    $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
+                if ($this->controller->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
+                    $this->getTaskService()->startTask($lesson['id']);
                 }
             }
 
@@ -321,14 +387,14 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
         }
 
-        if ($this->controller->getCourseService()->isCourseStudent($courseId, $user['id'])) {
-            $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
+        if ($this->controller->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
+            $this->getTaskService()->startTask($lesson['id']);
         }
 
-        $member = $this->controller->getCourseService()->getCourseMember($courseId, $user['id']);
+        $member = $this->controller->getCourseMemberService()->getCourseMember($courseId, $user['id']);
         $member = $this->previewAsMember($member, $courseId, $user);
 
-        if ($member && in_array($member['role'], array("teacher", "student"))) {
+        if ($member && in_array($member['role'], array('teacher', 'student'))) {
             return $this->coverLesson($lesson);
         }
 
@@ -338,7 +404,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
     private function getTestpaperLesson($lesson)
     {
         $user = $this->controller->getUser();
-        $id   = $lesson['mediaId'];
+        $id = $lesson['mediaId'];
 
         $testpaper = $this->getTestpaperService()->getTestpaper($id);
 
@@ -346,10 +412,10 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             return $this->createErrorResponse('error', '试卷不存在!');
         }
 
-        $testResult        = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($id, $user['id']);
+        $testResult = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($id, $user['id']);
         $lesson['content'] = array(
-            'status'   => empty($testResult) ? 'nodo' : $testResult['status'],
-            'resultId' => empty($testResult) ? 0 : $testResult['id']
+            'status' => empty($testResult) ? 'nodo' : $testResult['status'],
+            'resultId' => empty($testResult) ? 0 : $testResult['id'],
         );
 
         return $lesson;
@@ -357,7 +423,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     public function getTestpaperInfo()
     {
-        $id   = $this->getParam("testId");
+        $id = $this->getParam('testId');
         $user = $this->controller->getUserByToken($this->request);
 
         if (!$user->isLogin()) {
@@ -370,10 +436,12 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             return $this->createErrorResponse('error', '试卷已删除，请联系管理员。!');
         }
 
-        $items = $this->getTestpaperService()->getTestpaperItems($id);
+        $items = $this->getTestpaperService()->showTestpaperItems($id);
+        $testpaper['metas']['question_type_seq'] = array_keys($items);
+
         return array(
             'testpaper' => $testpaper,
-            'items'     => $this->filterTestpaperItems($items)
+            'items' => $this->filterTestpaperItems($items),
         );
     }
 
@@ -381,15 +449,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
     {
         $itemArray = array();
 
-        foreach ($items as $key => $item) {
-            $type = $item['questionType'];
-
-            if (isset($itemArray[$type])) {
-                $count            = $itemArray[$type];
-                $itemArray[$type] = $count + 1;
-            } else {
-                $itemArray[$type] = 1;
-            }
+        foreach ($items as $questionType => $item) {
+            $itemArray[$questionType] = count($item);
         }
 
         return $itemArray;
@@ -416,14 +477,25 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         return $lesson;
     }
 
-    private function getVideoLesson($lesson)
+    protected function makeTokenData($fields)
     {
-        $token       = $this->controller->getUserToken($this->request);
-        $mediaId     = $lesson['mediaId'];
+        $options = array();
+        if (!empty($fields['options'])) {
+            $options = $fields['options'];
+            unset($fields['options']);
+        }
+
+        return array_merge($fields, $options);
+    }
+
+    private function getVideoLesson($lesson, $options = null)
+    {
+        $token = $this->controller->getUserToken($this->request);
+        $mediaId = $lesson['mediaId'];
         $mediaSource = $lesson['mediaSource'];
-        $mediaUri    = $lesson['mediaUri'];
+        $mediaUri = $lesson['mediaUri'];
         if ($lesson['length'] > 0) {
-            $lesson['length'] = $this->getContainer()->get('topxia.twig.web_extension')->durationFilter($lesson['length']);
+            $lesson['length'] = $this->getContainer()->get('web.twig.extension')->durationFilter($lesson['length']);
         } else {
             $lesson['length'] = '';
         }
@@ -433,63 +505,53 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
-                    $enablePlayRate = $this->controller->setting('storage.enable_playback_rates');
-                    if ($enablePlayRate && $file['mcStatus'] && $file['mcStatus'] == 'yes') {
-                        $player = $this->controller->getMaterialLibService()->player($file['globalId']);
-                        if (isset($player['mp4url'])) {
-                            $lesson['mediaUri'] = $player['mp4url'];
-                            return $lesson;
-                        }
-                    }
-
-                    //do mp4
                     $lesson['mediaConvertStatus'] = $file['status'];
-
                     if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
                             $headLeaderInfo = $this->getHeadLeaderInfo();
 
                             if ($headLeaderInfo) {
                                 $token = $this->getTokenService()->makeToken('hls.playlist', array(
-                                    'data'     => array(
-                                        'id'      => $headLeaderInfo['id'],
-                                        'fromApi' => true
+                                    'data' => array(
+                                        'id' => $headLeaderInfo['id'],
+                                        'fromApi' => true,
                                     ),
-                                    'times'    => 2,
-                                    'duration' => 3600
+                                    'times' => 2,
+                                    'duration' => 3600,
                                 ));
 
                                 $headUrl = array(
                                     'url' => $this->controller->generateUrl('hls_playlist', array(
-                                        'id'            => $headLeaderInfo['id'],
-                                        'token'         => $token['token'],
-                                        'line'          => $this->request->get('line'),
-                                        'hideBeginning' => 1
-                                    ), true)
+                                        'id' => $headLeaderInfo['id'],
+                                        'token' => $token['token'],
+                                        'line' => $this->request->get('line'),
+                                        'hideBeginning' => 1,
+                                    ), true),
                                 );
 
                                 $lesson['headUrl'] = $headUrl['url'];
                             }
 
                             $token = $this->getTokenService()->makeToken('hls.playlist', array(
-                                'data'     => array(
-                                    'id'      => $file['id'],
-                                    'fromApi' => true
-                                ),
-                                'times'    => 2,
-                                'duration' => 3600
+                                'data' => $this->makeTokenData(array(
+                                    'id' => $file['id'],
+                                    'fromApi' => true,
+                                    'options' => $options,
+                                )),
+                                'times' => 2,
+                                'duration' => 3600,
                             ));
 
                             $url = array(
                                 'url' => $this->controller->generateUrl('hls_playlist', array(
-                                    'id'            => $file['id'],
-                                    'token'         => $token['token'],
-                                    'line'          => $this->request->get('line'),
-                                    'hideBeginning' => 1
-                                ), true)
+                                    'id' => $file['id'],
+                                    'token' => $token['token'],
+                                    'line' => $this->request->get('line'),
+                                    'hideBeginning' => 1,
+                                ), true),
                             );
                         } else {
-                            $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
+                            throw new \RuntimeException('当前视频不支持播放！');
                         }
 
                         $lesson['mediaUri'] = (isset($url) && is_array($url) && !empty($url['url'])) ? $url['url'] : '';
@@ -505,7 +567,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                         }
 
                         if ($key) {
-                            $result             = $this->controller->getMaterialLibService()->player($file['globalId']);
+                            $result = $this->controller->getMaterialLibService()->player($file['globalId']);
                             $lesson['mediaUri'] = $result['url'];
                         } else {
                             $lesson['mediaUri'] = '';
@@ -542,17 +604,17 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     public function getLocalVideo()
     {
-        $fileId = $this->getParam("targetId");
-        $user   = $this->controller->getuserByToken($this->request);
+        $fileId = $this->getParam('targetId');
+        $user = $this->controller->getuserByToken($this->request);
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录！");
+            return $this->createErrorResponse('not_login', '您尚未登录！');
         }
 
         $file = $this->getUploadFileService()->getFile($fileId);
 
         if (empty($file)) {
-            return $this->createErrorResponse('error', "视频文件不存在!");
+            return $this->createErrorResponse('error', '视频文件不存在!');
         }
 
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
@@ -576,7 +638,6 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         if ($file['convertStatus'] != 'success') {
             if ($file['convertStatus'] == 'error') {
-                $url = $this->controller->generateUrl('course_manage_files', array('id' => $courseId));
                 return $this->createErrorResponse('not_ppt', 'PPT文档转换失败，请到课程文件管理中，重新转换!');
             } else {
                 return $this->createErrorResponse('not_ppt', 'PPT文档还在转换中，还不能查看，请稍等。!');
@@ -585,53 +646,13 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         $ppt = $this->controller->getMaterialLibService()->player($file['globalId']);
 
-        if (isset($ppt["convertStatus"])) {
+        if (isset($ppt['convertStatus'])) {
             $ppt = array();
         }
 
         $lesson['content'] = $ppt['images'];
 
         return $lesson;
-    }
-
-    public function test()
-    {
-        $user   = $this->controller->getUserByToken($this->request);
-        $lesson = $this->controller->getCourseService()->getCourseLesson(11, 185);
-
-        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
-
-        if (empty($file)) {
-            return $this->createErrorResponse('not_document', '文档还在转换中，还不能查看，请稍等。!');
-        }
-
-        if ($file['convertStatus'] != 'success') {
-            if ($file['convertStatus'] == 'error') {
-                return $this->createErrorResponse('not_document', '文档转换失败，请联系管理员!');
-            } else {
-                return $this->createErrorResponse('not_document', '文档还在转换中，还不能查看，请稍等!');
-            }
-        }
-
-        $factory = new CloudClientFactory();
-        $client  = $factory->createClient();
-
-        $metas2 = $file['metas2'];
-        $url    = $client->generateFileUrl($metas2['pdf']['key'], 3600);
-        $pdfUri = $url['url'];
-        $url    = $client->generateFileUrl($metas2['swf']['key'], 3600);
-        $swfUri = $url['url'];
-
-        $content = $lesson['content'];
-        $content = $this->controller->convertAbsoluteUrl($this->request, $content);
-        $render  = $this->controller->render('TopxiaMobileBundleV2:Course:document.html.twig', array(
-            'pdfUri' => $pdfUri,
-            'swfUri' => $swfUri,
-            'title'  => $lesson['title']
-        ));
-
-        $lesson['content'] = $render->getContent();
-        return $render;
     }
 
     private function getDocumentLesson($lesson)
@@ -654,10 +675,10 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         $content = $lesson['content'];
         $content = $this->controller->convertAbsoluteUrl($this->request, $content);
-        $render  = $this->controller->render('TopxiaMobileBundleV2:Course:document.html.twig', array(
+        $render = $this->controller->render('TopxiaMobileBundleV2:Course:document.html.twig', array(
             'pdfUri' => $file['pdf'],
             'swfUri' => $file['swf'],
-            'title'  => $lesson['title']
+            'title' => $lesson['title'],
         ));
 
         $lesson['content'] = $render->getContent();
@@ -667,10 +688,11 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     private function getHeadLeaderInfo()
     {
-        $storage = $this->controller->getSettingService()->get("storage");
+        $storage = $this->controller->getSettingService()->get('storage');
 
-        if (!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]) {
+        if (!empty($storage) && array_key_exists('video_header', $storage) && $storage['video_header']) {
             $file = $this->controller->getUploadFileService()->getFileByTargetType('headLeader');
+
             return $file;
         }
 
@@ -682,7 +704,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $content = $this->controller->convertAbsoluteUrl($this->request, $content);
 
         $render = $this->controller->render('TopxiaMobileBundleV2:Content:index.html.twig', array(
-            'content' => $content
+            'content' => $content,
         ));
 
         return $render->getContent();
@@ -691,13 +713,63 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
     private function filterLessons($lessons, $files)
     {
         return array_map(function ($lesson) use ($files) {
-            $lesson['content'] = "";
+            $lesson['content'] = '';
 
-            if (isset($lesson["mediaId"])) {
-                $lesson["uploadFile"] = isset($files[$lesson["mediaId"]]) ? $files[$lesson["mediaId"]] : null;
+            if (isset($lesson['mediaId'])) {
+                $file = isset($files[$lesson['mediaId']]) ? $files[$lesson['mediaId']] : null;
+                $lesson['uploadFile'] = $file;
+                $lesson['mediaName'] = isset($file['filename']) ? $file['filename'] : '';
             }
+
+            unset($lesson['tags']);
 
             return $lesson;
         }, $lessons);
+    }
+
+    private function _findUserLearnTaskStatus($courseId)
+    {
+        $taskResults = $this->controller->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
+        $learnStatuses = array();
+        foreach ($taskResults as $result) {
+            if ($result['status'] === 'finish') {
+                $status = 'finished';
+            } elseif ($result['status'] === 'start') {
+                $status = 'learning';
+            } else {
+                continue;
+            }
+            $learnStatuses[$result['courseTaskId']] = $status;
+        }
+
+        return $learnStatuses;
+    }
+
+    private function canStartTask($task)
+    {
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        $config = $this->getActivityService()->getActivityConfig($activity['mediaType']);
+
+        return $config->allowTaskAutoStart($activity);
+    }
+
+    protected function getActivityService()
+    {
+        return $this->controller->getService('Activity:ActivityService');
+    }
+
+    protected function getTaskResultService()
+    {
+        return $this->controller->getService('Task:TaskResultService');
+    }
+
+    protected function getMaterialService()
+    {
+        return $this->controller->getService('Course:MaterialService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->controller->getService('Task:TaskService');
     }
 }

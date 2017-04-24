@@ -1,0 +1,14 @@
+<phpunit bootstrap="../../vendor/autoload.php">
+    
+    <testsuites>
+        <testsuite name="functional">
+            <directory>Tests/</directory>
+        </testsuite>
+    </testsuites>
+    
+    <php>
+        <env name="SELENIUM_SERVER_URL" value="http://localhost:4444/wd/hub" />
+        <env name="TEST_SITE_HOST" value="http://try6.edusoho.cn" />
+        <env name="BROWSER_NAME" value="chrome" />
+    </php>
+</phpunit>

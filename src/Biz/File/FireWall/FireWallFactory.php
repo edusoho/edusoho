@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\File\FireWall;
 
 use Codeages\Biz\Framework\Context\Biz;
@@ -17,16 +18,17 @@ class FireWallFactory
      * @param $targetType
      *
      * @return FireWallInterface
+     *
      * @throws InvalidArgumentException
      */
     public function create($targetType)
     {
         if (empty($targetType)) {
-            throw new InvalidArgumentException("Resource  targetType  argument missing.");
+            throw new InvalidArgumentException('Resource  targetType  argument missing.');
         }
 
         $targetTypes = explode('.', $targetType);
-        $class       = __NAMESPACE__."\\".ucfirst($targetTypes[0]).'FileFireWall';
+        $class = __NAMESPACE__.'\\'.ucfirst($targetTypes[0]).'FileFireWall';
 
         return new $class($this->biz);
     }

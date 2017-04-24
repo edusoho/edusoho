@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\UserApprovalDao;
@@ -11,6 +12,7 @@ class UserApprovalDaoImpl extends GeneralDaoImpl implements UserApprovalDao
     public function getLastestByUserIdAndStatus($userId, $status)
     {
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND status = ? ORDER BY createdTime DESC LIMIT 1";
+
         return $this->db()->fetchAssoc($sql, array($userId, $status));
     }
 
@@ -19,7 +21,7 @@ class UserApprovalDaoImpl extends GeneralDaoImpl implements UserApprovalDao
         return $this->findInField('userId', $userIds);
     }
 
-    protected function _createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         if (isset($conditions['keywordType']) && isset($conditions['keyword']) && $conditions['keywordType'] == 'truename') {
             $conditions['truename'] = "%{$conditions['keyword']}%";
@@ -29,18 +31,19 @@ class UserApprovalDaoImpl extends GeneralDaoImpl implements UserApprovalDao
             $conditions['idcard'] = "%{$conditions['keyword']}%";
         }
 
-        return parent::_createQueryBuilder($conditions);
+        return parent::createQueryBuilder($conditions);
     }
 
     public function declares()
     {
         return array(
+            'orderbys' => array('id'),
             'conditions' => array(
                 'truename LIKE :truename',
                 'createTime >=:startTime',
                 'createTime <=:endTime',
-                'idcard LIKE :idcard'
-            )
+                'idcard LIKE :idcard',
+            ),
         );
     }
 }

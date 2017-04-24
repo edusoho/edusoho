@@ -1,0 +1,10 @@
+{% set course = courses[question.courseId]|default(null) %}
+{% set task = courseTasks[question.lessonId]|default(null) %}
+<small class="text-muted">
+  {{'从属于'|trans}}
+  {% if course|default(null) %}{{ course.title }}{% endif %}
+  {% if task|default(task) %} • {{ task.title }}{% endif %}
+  {% if not question.courseId and not question.lessonId %}
+    {{'本课程'|trans}}
+  {% endif %}
+</small>

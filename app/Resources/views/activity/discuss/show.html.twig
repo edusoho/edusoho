@@ -1,12 +1,17 @@
-{% extends 'TopxiaWebBundle::blank-layout.html.twig' %}
+{% extends "activity/content-layout.html.twig" %}
 
-{% block content %} 
-	<div style="margin-left: 30px; margin-top: 30px;">
-		<span style="font-weight: bold; font-size:1.5em;">讨论主题：</span><br/>
-		<pre style="padding-left: 30px; font-size: 1.2em;">{{activity.content|raw}}</pre>
-		<div style="margin-top: 30px;">
-			{# 如果任务未完成： #}
-			<a href="{{path('course_thread_create', {id: activity.fromCourseId, type: 'discussion'})}}" style="text-decoration: none;" target="_blank">前往课程讨论区</a>发表或回复话题吧
-		</div>
+{% block body %}
+	<div class="iframe-parent-content ph20 pv20">
+    <div class="lesson-content-text-body">
+      <div class="live-show-item">
+        <p class="title">
+          讨论主题
+        </p>
+        {{activity.content|raw}}
+      </div>
+      <div class="live-show-item">
+        <a class="btn btn-primary" href="{{path('course_thread_create', {courseId: activity.fromCourseId, type: 'discussion'})}}" target="_blank">前往课程讨论区</a>
+      </div>
+    </div>
 	</div>
 {% endblock %}

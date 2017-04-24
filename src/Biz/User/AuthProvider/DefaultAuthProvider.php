@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\AuthProvider;
 
 class DefaultAuthProvider implements AuthProvider

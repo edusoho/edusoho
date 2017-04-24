@@ -1,0 +1,40 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}<span class="text-muted">{{ '资料预览'|trans }}</span>{% endblock %}
+
+{% block body %}
+    {# {{ render(controller('AppBundle:FileWatch:modalBody', {file:file})) }} #}
+
+  {% if file.type in ['video', 'audio', 'ppt', 'document', 'image', 'flash'] %}
+    {% if file.type in ['video', 'ppt', 'document'] and file.processStatus != "ok" %}
+      <div class="text-center">
+        {{'该文件暂不支持预览'|trans}}
+
+      </div>
+    {% else %}
+      <div id="material-preview-player"
+          style="height:500px;overflow:hidden;"
+          data-url="{{path('material_lib_file_player', {fileId: file.id})}}"
+      ></div>
+    {% endif %}
+  {% else %}
+    <div class="text-center">
+      {{'该文件暂不支持预览'|trans}}
+    </div>
+
+  {% endif %}
+  
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script>
+    app.lazyLoad = function() { app.load('topxiawebbundle/controller/material-lib/preview') };
+  </script>
+{% endblock %}
+
+{% block footer %}
+  <div class="text-muted pull-left" style="font-size:10px">
+      {{ '资源编号：'|trans }}{{file.no}}
+  </div>
+	<button type="button" class="btn btn-primary" data-dismiss="modal">{{ '关闭'|trans }}</button>
+{% endblock %}

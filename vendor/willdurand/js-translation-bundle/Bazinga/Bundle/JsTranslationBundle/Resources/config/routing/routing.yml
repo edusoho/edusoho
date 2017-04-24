@@ -1,0 +1,10 @@
+bazinga_jstranslation_js:
+    path:  /translations/{domain}.{_format}
+    defaults: { _controller: bazinga.jstranslation.controller:getTranslationsAction, domain: "messages", _format: "js" }
+    methods:  [ GET ]
+    options:
+        i18n: false
+        expose: true
+    requirements:
+        _format: js|json
+        domain: "[\\w]+"
