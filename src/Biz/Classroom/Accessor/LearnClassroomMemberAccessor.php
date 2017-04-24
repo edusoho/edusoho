@@ -1,14 +1,13 @@
 <?php
 
-namespace Biz\Course\Accessor;
+namespace Biz\Classroom\Accessor;
 
 use Biz\Accessor\AccessorAdapter;
-use Biz\Accessor\AccessorInterface;
-use Biz\Course\Service\MemberService;
+use Biz\Classroom\Service\ClassroomService;
 
-class LearnCourseMemberAccessor extends AccessorAdapter implements AccessorInterface
+class LearnClassroomMemberAccessor extends AccessorAdapter
 {
-    public function access($course)
+    public function access($classroom)
     {
         $user = $this->getCurrentUser();
         if (empty($user) || !$user->isLogin()) {
@@ -19,8 +18,7 @@ class LearnCourseMemberAccessor extends AccessorAdapter implements AccessorInter
             return $this->buildResult('user.locked');
         }
 
-        $member = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
-
+        $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
         if (empty($member)) {
             return $this->buildResult('member.not_exist');
         }
@@ -33,10 +31,10 @@ class LearnCourseMemberAccessor extends AccessorAdapter implements AccessorInter
     }
 
     /**
-     * @return MemberService
+     * @return ClassroomService
      */
-    protected function getMemberService()
+    protected function getClassroomService()
     {
-        return $this->biz->service('Course:MemberService');
+        return $this->biz->service('Classroom:ClassroomService');
     }
 }

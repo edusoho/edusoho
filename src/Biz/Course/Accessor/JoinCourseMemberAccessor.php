@@ -2,10 +2,21 @@
 
 namespace Biz\Course\Accessor;
 
-class JoinCourseMemberAccessor extends AccessorAdapter implements AccessorInterface
+use Biz\Accessor\AccessorAdapter;
+
+class JoinCourseMemberAccessor extends AccessorAdapter
 {
     public function access($course)
     {
-        //get current user
+        $user = $this->getCurrentUser();
+        if (empty($user) || !$user->isLogin()) {
+            return $this->buildResult('user.not_login');
+        }
+
+        if ($user['locked']) {
+            return $this->buildResult('user.locked');
+        }
+
+        return true;
     }
 }

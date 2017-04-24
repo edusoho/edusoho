@@ -2,7 +2,9 @@
 
 namespace Biz\Course\Accessor;
 
-class JoinCourseAccessor extends AccessorAdapter implements AccessorInterface
+use Biz\Accessor\AccessorAdapter;
+
+class JoinCourseAccessor extends AccessorAdapter
 {
     public function access($course)
     {
@@ -14,7 +16,7 @@ class JoinCourseAccessor extends AccessorAdapter implements AccessorInterface
             return $this->buildResult('course.closed');
         }
 
-        if ($this->isExpiried($course)) {
+        if ($this->isExpired($course)) {
             return $this->buildResult('course.expiried');
         }
         if ($course['buyExpiryTime'] && time() > $course['buyExpiryTime']) {
@@ -24,7 +26,7 @@ class JoinCourseAccessor extends AccessorAdapter implements AccessorInterface
         return true;
     }
 
-    private function isExpiried($course)
+    private function isExpired($course)
     {
         $expiryMode = $course['expiryMode'];
         if ($expiryMode === 'forever') {
