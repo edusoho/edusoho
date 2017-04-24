@@ -6,7 +6,7 @@ export default class LiveShow {
 
   init() {
 
-    let hasRoom = $('#lesson-live-content').data('hasRoom') == 'true';
+    let hasRoom = $('#lesson-live-content').data('hasRoom') == '1';
     if(!hasRoom){
       $("#lesson-live-content").find('.lesson-content-text-body').html(
         `<div class='live-show-item'>
