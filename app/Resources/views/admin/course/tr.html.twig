@@ -28,13 +28,7 @@
   {% include 'org/parts/table-body-td.html.twig' with {orgCode: courseSet.orgCode}%}
   {% if filter != 'open' and filter != 'liveOpen' %}
     <td>
-      {% if  courseSet.serializeMode =="none" %}
-      <span class="text-info">{{'非连载课程'|trans}}</span>
-      {% elseif courseSet.serializeMode =="serialize" %}
-      <span class="text-info">{{'连载中'|trans}}</span>
-      {% elseif courseSet.serializeMode =="finished" %}
-      <span class="text-info">{{'已完结'|trans}}</span>
-      {% endif %}
+      <span class="text-info">{{ dict_text('courseSerializeMode',courseSet.serializeMode) }}</span>
     </td>
     {% if filter == 'classroom' %}
     <td>
