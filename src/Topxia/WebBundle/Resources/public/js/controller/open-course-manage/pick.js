@@ -46,7 +46,7 @@ define(function(require, exports, module) {
 
             if(event.keyCode == 13){
                 $.get($searchForm.data('url'),$searchForm.serialize(),function(data){
-                    $('.courses-list').html(data);
+                   $('#modal').html(data);
                 });
 
                return false;
