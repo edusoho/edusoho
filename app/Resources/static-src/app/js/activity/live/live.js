@@ -5,6 +5,19 @@ export default class LiveShow {
   }
 
   init() {
+
+    let hasRoom = $('#lesson-live-content').data('hasRoom') == 'true';
+    if(!hasRoom){
+      $("#lesson-live-content").find('.lesson-content-text-body').html(
+        `<div class='live-show-item'>
+        <p class='title'>直播说明</p>
+        <p>直播教室尚未创建！</p>
+        </div>`
+      );
+      $("#lesson-live-content").show();
+      return;
+    }
+
     let activityData = JSON.parse($('#activity-data').html());
     let startTime = parseInt(activityData.startTime);
     let endTime = parseInt(activityData.endTime);
