@@ -4,83 +4,81 @@ let myChart = echarts.init(document.getElementById('course-dashboard-container')
 
 // 指定图表的配置项和数据
 let option = {
-  tooltip: {
-    trigger: 'axis',
-    formatter: formatter
-  },
-  legend: {
-    data: ['学员数', '完成数', '完课率']
-  },
-  grid: {
-    left: '3%',
-    right: '4%',
-    bottom: '3%',
-    containLabel: true
-  },
-  xAxis: {
-    type: 'category',
-    boundaryGap: false,
-    data: $container.data('days')
-  },
-  yAxis: [
-    {
-      name: '人数',
-      type: 'value',
-      // minInterval: 1,
-      interval: 1
+    tooltip: {
+        trigger: 'axis',
+        formatter: formatter
     },
-    {
-      name: '完课率',
-      type: 'value',
-      minInterval: 1,
-      min: 0,
-      max: 100,
-      axisLabel: {
-        formatter: '{value}%'
-      },
-    }
-  ],
-  series: [
-    {
-      name: '学员数',
-      type: 'line',
-      yAxisIndex: 0,
-      showSymbol: false,
-      smooth: true,
-      itemStyle: {
-        normal: {
-          color: '#FFC108'
-        }
-      },
-      data: $container.data('studentNum')
+    legend: {
+        data: ['学员数', '完成数', '完课率']
     },
-    {
-      name: '完成数',
-      type: 'line',
-      yAxisIndex: 0,
-      showSymbol: false,
-      smooth: true,
-      itemStyle: {
-        normal: {
-          color: '#4CAF50'
-        }
-      },
-      data: $container.data('finishedNum')
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
     },
-    {
-      name: '完课率',
-      type: 'line',
-      yAxisIndex: 1,
-      showSymbol: false,
-      smooth: true,
-      itemStyle: {
-        normal: {
-          color: '#2096F3'
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: $container.data('days')
+    },
+    yAxis: [
+        {
+            name: '人数',
+            type: 'value',
+            minInterval: 1
+        },
+        {
+            name: '完课率',
+            type: 'value',
+            minInterval: 1,
+            max: 100,
+            axisLabel: {
+                formatter: '{value}%' 
+            },
         }
-      },
-      data: $container.data('finishedRate')
-    }
-  ],
+    ],
+    series: [
+        {
+            name:'学员数',
+            type:'line',
+            yAxisIndex: 0,
+            showSymbol: false,
+            smooth: true,
+            itemStyle: {
+                normal: {
+                    color: '#FFC108'
+                }
+            },
+            data:$container.data('studentNum')
+        },
+        {
+            name:'完成数',
+            type:'line',
+            yAxisIndex: 0,
+            showSymbol: false,
+            smooth: true,
+            itemStyle: {
+                normal: {
+                    color: '#4CAF50'
+                }
+            },
+            data:$container.data('finishedNum')
+        },
+        {
+            name:'完课率',
+            type:'line',
+            yAxisIndex: 1,
+            showSymbol: false,
+            smooth: true,
+            itemStyle: {
+                normal: {
+                    color: '#2096F3'
+                }
+            },
+            data:$container.data('finishedRate')
+        }
+    ],
 };
 
 function formatter(params) {

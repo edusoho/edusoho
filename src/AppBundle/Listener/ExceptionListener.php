@@ -3,13 +3,12 @@
 namespace AppBundle\Listener;
 
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -29,23 +28,17 @@ class ExceptionListener
     {
         $problem = $this->container->get('Topxia.RepairProblem', ContainerInterface::NULL_ON_INVALID_REFERENCE);
         $exception = $event->getException();
-        $request = $event->getRequest();
-        $statusCode = $this->convertStateCode($exception);
-        if (!$request->isXmlHttpRequest()) {
-            if ($exception instanceof HttpExceptionInterface || $this->container->get('kernel')->isDebug()) {
-                return;
-            }
+        $statusCode = $this->getStatusCode($exception);
 
-            if (empty($this->getUser())) {
-                return new RedirectResponse($this->container->get('router')->generate('login'));
+        $request = $event->getRequest();
+        if (!$request->isXmlHttpRequest()) {
+            $exception = $this->convertException($exception);
+            $user = $this->getUser();
+            if ($statusCode === Response::HTTP_FORBIDDEN && empty($user)) {
+                $response = new RedirectResponse($this->container->get('router')->generate('login'));
+                $event->setResponse($response);
             }
-            $event->setException(
-                new HttpException(
-                    $statusCode,
-                    $exception->getMessage(),
-                    $exception->getPrevious()
-                )
-            );
+            $event->setException($exception);
 
             return;
         }
@@ -70,7 +63,6 @@ class ExceptionListener
         } else {
             $this->getLogger()->error($exception->__toString());
         }
-
         if ($statusCode === 403) {
             $user = $this->getUser($event);
             if ($user) {
@@ -101,23 +93,25 @@ class ExceptionListener
         return $user;
     }
 
-    private function convertStateCode($exception)
+    private function convertException($exception)
     {
         if ($exception instanceof AccessDeniedException) {
-            return Response::HTTP_FORBIDDEN;
-        }
-        if ($exception instanceof InvalidArgumentException) {
-            return Response::HTTP_FORBIDDEN;
+            return new AccessDeniedHttpException($exception->getMessage(), $exception);
         }
         if ($exception instanceof NotFoundException) {
-            return Response::HTTP_NOT_FOUND;
+            return new NotFoundHttpException($exception->getMessage(), $exception);
         }
 
-        if (array_key_exists($exception->getCode(), Response::$statusTexts)) {
-            return $exception->getCode();
+        return $exception;
+    }
+
+    private function getStatusCode($exception)
+    {
+        if (method_exists($exception, 'getStatusCode')) {
+            return $exception->getStatusCode();
         }
 
-        return Response::HTTP_INTERNAL_SERVER_ERROR;
+        return $exception->getCode();
     }
 
     protected function getLogger()

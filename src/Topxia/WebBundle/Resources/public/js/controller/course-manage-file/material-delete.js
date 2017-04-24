@@ -10,7 +10,7 @@ define(function(require, exports, module) {
             $('[data-role=batch-item]:checked').each(function(){
                 ids.push(this.value);
             })
-
+            
             var isDeleteFile = $form.find('input[name="isDeleteFile"]:checked').val();
             $.post($form.attr('action'), {ids:ids, isDeleteFile:isDeleteFile}, function(){
                 window.location.reload();

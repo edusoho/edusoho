@@ -5,7 +5,7 @@
       {% for path in script() %}
         {% if '//' in path %}
           {% if 'js-sdk' in path %}
-            "{{ path ~ '?' ~ random(date().timestamp / 1000) }}",
+            "{{ path ~ '?' ~ (date().timestamp / 100)|round }}",
           {% else %}
             "{{ path ~ '?' ~ asset_version('')}}",
           {% endif %}
