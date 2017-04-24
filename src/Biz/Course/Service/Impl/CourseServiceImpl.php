@@ -1746,7 +1746,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createNotFoundException('User is not course member');
         }
 
-        $taskCount = $this->getTaskService()->countTasks(array('courseId' => $course['id'], 'status' => 'published'));
+        $taskCount = $this->getTaskService()->countTasks(array('courseId' => $course['id'], 'status' => 'published', 'isOptional' => 0));
 
         if (!$taskCount) {
             return array(
@@ -1782,7 +1782,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $planProgressProgress = empty($taskCount) ? 0 : round($planStudyTaskCount / $taskCount, 2) * 100;
 
         return array(
-            'taskCount' => $taskCount,
+            'taskCount' => $course['publishedTaskNum'],
             'progress' => $progress,
             'taskResultCount' => $taskResultCount,
             'toLearnTasks' => $toLearnTasks,
