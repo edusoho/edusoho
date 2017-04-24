@@ -9,13 +9,12 @@ use ApiBundle\Api\Util\AssetHelper;
 class CourseSetFilter extends Filter
 {
     protected $simpleFields = array(
-        'id', 'title', 'subtitle', 'type', 'cover', 'studentNum', 'maxCoursePrice', 'minCoursePrice', 'discount'
+        'id', 'title', 'subtitle', 'type', 'cover', 'studentNum', 'maxCoursePrice', 'minCoursePrice', 'discount', 'maxOriginPrice', 'minOriginPrice'
     );
 
     protected $publicFields = array(
         'tags', 'category', 'serializeMode', 'status', 'summary', 'goals', 'audiences', 'ratingNum', 'rating', 'noteNum',
-        'recommended', 'recommendedSeq', 'recommendedTime', 'orgId', 'orgCode', 'discountId',
-        'discount', 'maxRate', 'hitNum', 'materialNum', 'parentId', 'locked', 'maxCoursePrice', 'minCoursePrice', 'teachers', 'creator', 'createdTime', 'updatedTime'
+        'recommended', 'recommendedSeq', 'recommendedTime', 'orgId', 'orgCode', 'discountId', 'discount', 'maxRate', 'hitNum', 'materialNum', 'parentId', 'locked', 'maxCoursePrice', 'minCoursePrice', 'teachers', 'creator', 'createdTime', 'updatedTime'
     );
 
     protected function simpleFields(&$data)

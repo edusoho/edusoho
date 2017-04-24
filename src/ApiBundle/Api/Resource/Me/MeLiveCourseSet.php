@@ -4,7 +4,6 @@ namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\Classroom\Service\ClassroomService;
 use ApiBundle\Api\Annotation\ApiFilter;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;

@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ApiConf;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 
 class CourseSet extends AbstractResource
@@ -22,6 +23,8 @@ class CourseSet extends AbstractResource
         }
 
         $this->getOCUtil()->single($courseSet, array('creator', 'teacherIds'));
+
+        $this->appendMaxOriginPriceAndMinOriginPrice($courseSet);
 
         return $courseSet;
     }
@@ -47,6 +50,38 @@ class CourseSet extends AbstractResource
         $total = $this->getCourseSetService()->countCourseSets($conditions);
 
         return $this->makePagingObject($courseSets, $total, $offset, $limit);
+    }
+
+    private function appendMaxOriginPriceAndMinOriginPrice(&$courseSet)
+    {
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+
+        $maxOriginPrice = 0;
+        $minOriginPrice = 0;
+        foreach ($courses as $course) {
+            if ($course['originPrice'] > $maxOriginPrice) {
+                $maxOriginPrice = $course['originPrice'];
+            }
+
+            if (!$minOriginPrice) {
+                $minOriginPrice = $course['originPrice'];
+            }
+
+            if ($course['originPrice'] < $minOriginPrice) {
+                $minOriginPrice = $course['originPrice'];
+            }
+        }
+
+        $courseSet['maxOriginPrice'] = $maxOriginPrice;
+        $courseSet['minOriginPrice'] = $minOriginPrice;
+    }
+
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->service('Course:CourseService');
     }
 
     /**
