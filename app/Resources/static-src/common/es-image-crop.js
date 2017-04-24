@@ -35,6 +35,7 @@ class EsImageCrop {
   }
 
   crop(postData = {}) {
+    console.log('crop');
     let self = this;
     let cropImgUrl = app.imgCropUrl;
 

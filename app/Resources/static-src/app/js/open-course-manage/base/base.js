@@ -4,6 +4,7 @@ export default class Base {
     this.initSelect2();
     this.initCkeditor();
     this.initValidator();
+    this.initCategory();
   }
 
   initSelect2() {
@@ -50,6 +51,9 @@ export default class Base {
       formatResult: function (item) {
         return item.name;
       },
+      formatSearching: function () {
+        return Translator.trans('搜索中...');
+      },
       width: 'off',
       multiple: true,
       maximumSelectionSize: 20,
@@ -62,7 +66,7 @@ export default class Base {
       maximumSelectionSize: 20
     });
   }
-  
+
   initValidator() {
     let $form = $('#course-form');
     let validator = $form.validate({
@@ -77,9 +81,9 @@ export default class Base {
       }
     })
 
-    $('#course-create-btn').click(()=> {
-      if(validator.form()) {
-        $from.submit();
+    $('#course-create-btn').click(() => {
+      if (validator.form()) {
+        $form.submit();
       }
     })
   }
@@ -94,4 +98,13 @@ export default class Base {
     }
   }
 
+  initCategory() {
+    $('[data-role="tree-select"], [name="categoryId"]').select2({
+      treeview: true,
+      dropdownAutoWidth: true,
+      treeviewInitState: 'collapsed',
+      placeholderOption: 'first'
+      // treeviewInitState: 'expanded'
+    });
+  }
 }
