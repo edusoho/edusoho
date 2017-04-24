@@ -101,7 +101,6 @@ class ExceptionListener
         if ($exception instanceof NotFoundException) {
             return new NotFoundHttpException($exception->getMessage(), $exception);
         }
-
         return $exception;
     }
 
@@ -110,8 +109,11 @@ class ExceptionListener
         if (method_exists($exception, 'getStatusCode')) {
             return $exception->getStatusCode();
         }
-
-        return $exception->getCode();
+        $statusCode = $exception->getCode();
+        if (in_array($statusCode, array_keys(Response::$statusTexts))) {
+            return $statusCode;
+        }
+        return Response::HTTP_INTERNAL_SERVER_ERROR;
     }
 
     protected function getLogger()
@@ -122,7 +124,7 @@ class ExceptionListener
 
         $this->logger = new Logger('AjaxExceptionListener');
         $this->logger->pushHandler(
-            new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir').'/dev.log', Logger::DEBUG)
+            new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir') . '/dev.log', Logger::DEBUG)
         );
 
         return $this->logger;
