@@ -11,10 +11,11 @@ class CoverCrop {
       cropedWidth: 480,
       cropedHeight: 270
     });
+
     imageCrop.afterCrop = function(response) {
       let url = $("#upload-picture-btn").data("url");
       console.log('afterCrop');
-      $.post(url, { images: JSON.stringify(response) }, function() {
+      $.post(url, { images: response}, function() {
         console.log($("#upload-picture-btn").data("gotoUrl"));
         document.location.href = $("#upload-picture-btn").data("gotoUrl");
       });
