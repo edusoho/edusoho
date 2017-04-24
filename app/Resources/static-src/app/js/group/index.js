@@ -27,7 +27,7 @@ $('#add-btn').click(function () {
 
 if ($('#exit-btn').length > 0) {
   $('#exit-btn').click(function () {
-    if (!confirm(Translator.trans('真的要退出该小组？您在该小组的信息将删除！'))) {
+    if (!confirm(Translator.trans('真的要退出该小组？您在该小组的信息将删除'))) {
       return false;
     }
 
@@ -65,7 +65,7 @@ if ($('.group-post-list').length > 0) {
     $('#fromUserIdDiv').html('<input type="hidden" id="fromUserId" value="' + fromUserId + '">');
     $('#li-' + postId).show();
     $('#reply-content-' + postId).focus();
-    $('#reply-content-' + postId).val(Translator.trans('回复 ') + $(this).attr('postName') + ':');
+    $('#reply-content-' + postId).val(Translator.trans('回复') + ' ' + $(this).attr('postName') + ':');
 
   });
 
@@ -146,7 +146,7 @@ if ($('#post-action').length > 0) {
   $('#post-action').on('click', '#closeThread', function () {
 
     var $trigger = $(this);
-    if (!confirm($trigger.attr('title') + '？')) {
+    if (!confirm($trigger.attr('title') + '?')) {
       return false;
     }
 
@@ -173,7 +173,7 @@ if ($('.actions').length > 0) {
   $('.group-post-list').on('click', '.post-delete-btn,.post-adopt-btn', function () {
 
     var $trigger = $(this);
-    if (!confirm($trigger.attr('title') + '？')) {
+    if (!confirm($trigger.attr('title') + '?')) {
       return false;
     }
 

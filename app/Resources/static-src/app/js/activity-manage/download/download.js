@@ -24,8 +24,8 @@ export default class DownLoad {
         materials: 'required',
       },
       messages: {
-        link: "链接地址不正确",
-        materials: '请上传或选择%display%'
+        link: Translator.trans("activity.download_manage.link_error_hint"),
+        materials: Translator.trans('activity.download_manage.materials_error_hint')
       }
     });
     this.$form.data('validator', validator2);
@@ -114,7 +114,7 @@ export default class DownLoad {
     let items = this.isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
 
     if (!this.isEmpty(items) && items[media.id]) {
-      $('.js-danger-redmine').text(Translator.trans('该文件已添加，请重新选择')).show();
+      $('.js-danger-redmine').text(Translator.trans('activity.download_manage.materials_exist_error_hint')).show();
       setTimeout(function () {
         $('.js-danger-redmine').slideUp();
       }, 3000);
@@ -129,7 +129,7 @@ export default class DownLoad {
     }
 
     if (addToList && this.isEmpty(media)) {
-      $('.js-danger-redmine').text(Translator.trans('请上传或选择要添加的资料')).show();
+      $('.js-danger-redmine').text(Translator.trans('activity.download_manage.materials_error_hint')).show();
       $('.js-current-file').text('');
       setTimeout(function () {
         $('.js-danger-redmine').slideUp();
@@ -158,15 +158,15 @@ export default class DownLoad {
       item_tpl = `
     <li class="download-item " data-id="${media.link}">
         <a class="gray-primary" href="${ media.link}" target="_blank">${media.name}</a>
-        <a class="gray-primary phm btn-delete  js-btn-delete"  href="javascript:;"  data-url="" data-toggle="tooltip" data-placement="top" title="{{ '删除'|trans }}"><i class="es-icon es-icon-delete"></i></a>
-        <span class="glyphicon glyphicon-new-window text-muted text-sm" title="${Translator.trans('删除')}"></span>
+        <a class="gray-primary phm btn-delete  js-btn-delete"  href="javascript:;"  data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="es-icon es-icon-delete"></i></a>
+        <span class="glyphicon glyphicon-new-window text-muted text-sm" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"></span>
     </li>
   `;
     } else {
       item_tpl = `
     <li class="download-item " data-id="${media.id}">
       <a class="gray-primary" href="/materiallib/${ media.id}/download">${media.name}</a>
-      <a class="gray-primary phm  btn-delete js-btn-delete" href="javascript:;"  data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('删除')}"><i class="es-icon es-icon-delete"></i></a>
+      <a class="gray-primary phm  btn-delete js-btn-delete" href="javascript:;"  data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="es-icon es-icon-delete"></i></a>
     </li>
   `;
     }
@@ -174,7 +174,7 @@ export default class DownLoad {
     $('[data-toggle="tooltip"]').tooltip();
     $('.file-browser-item').removeClass('active');
     $('.js-danger-redmine').hide();
-    $('.js-success-redmine').text(Translator.trans('添加成功，可继续选择资料添加或点击下一步！')).show();
+    $('.js-success-redmine').text(Translator.trans('activity.download_manage.materials_add_success_hint！')).show();
     setTimeout(function () {
       $('.js-success-redmine').slideUp();
     }, 3000);

@@ -50,7 +50,7 @@ export default class {
               'post[content]': 'required'
             },
             messages: {
-              'post[content]': "请输入回复内容"
+              'post[content]': Translator.trans("请输入回复内容")
             }
           });
 

@@ -27,7 +27,7 @@ class SubtitleDialog {
       let $elem = $(this);
       $.post($elem.data('subtitleDeleteUrl'), function (data) {
         if (data) {
-          notify('success', '删除字幕成功');
+          notify('success', Translator.trans('activity.video_manage.delete_success_hint'));
           $elem.parent().remove();
           $('#' + self.upload_id).show();
         }
@@ -90,11 +90,11 @@ class SubtitleDialog {
         "mediaId": mediaId
       }).success(function (data) {
         let convertStatus = {
-          waiting: '等待转码',
-          doing: '正在转码',
-          success: '转码成功',
-          error: '转码失败',
-          none: '等待转码'
+          waiting: Translator.trans('activity.video_manage.convert_status_waiting'),
+          doing: Translator.trans('activity.video_manage.convert_status_doing'),
+          success: Translator.trans('activity.video_manage.convert_status_success'),
+          error: Translator.trans('activity.video_manage.convert_status_error'),
+          none: Translator.trans('activity.video_manage.convert_status_none')
         };
         $('.js-media-subtitle-list').append('<li class="pvs">' +
           '<span class="subtitle-name prl">' + data.name + '</span>' +
@@ -104,7 +104,7 @@ class SubtitleDialog {
         if ($('.js-media-subtitle-list li').length > 3) {
           $('#' + self.upload_id).hide();
         }
-        notify('success', '字幕上传成功！');
+        notify('success', 'activity.video_manage.subtitle_upload_success_hint！');
       }).error(function (data) {
         notify('danger', data.responseJSON.error.message);
       });

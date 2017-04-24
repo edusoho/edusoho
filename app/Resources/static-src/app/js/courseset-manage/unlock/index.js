@@ -11,11 +11,11 @@ class Unlock {
 		 	$.post($form.attr('action'), $form.serialize(), function(resp){
 		 		console.log(resp);
 		        if(resp.success){
-		        	notify('success', '解除同步成功！');
+		        	notify('success', Translator.trans('解除同步成功！'));
 		        	$('#modal').modal('hide');
 		        	location.reload();
 		        }else{
-		        	notify('danger', '解除同步失败：'+ resp.message);
+		        	notify('danger', Translator.trans('解除同步失败：')+ resp.message);
 		        }
 		    });
 		});

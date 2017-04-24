@@ -32,6 +32,10 @@ framework:
     assets:
         version: '%app_version%'
 
+bazinga_js_translation:
+    locale_fallback: "%locale%"
+    default_domain: "js"
+
 # Twig Configuration
 twig:
     debug:            "%kernel.debug%"

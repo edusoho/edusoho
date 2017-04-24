@@ -86,7 +86,7 @@ export default class QuestionManage{
     let isOk = true;
 
     if (this.$element.find('[name="scores[]"]').length == 0) {
-        notify('danger','请选择题目。');
+        notify('danger',Translator.trans('请选择题目'));
         isOk = false;
     }
 
@@ -94,12 +94,12 @@ export default class QuestionManage{
         var score = $(this).val();
 
         if (score == '0') {
-            notify('danger','题目分值不能为0。');
+            notify('danger','题目分值不能为0');
             isOk = false;
         }
 
         if (!/^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test(score)) {
-            notify('danger','题目分值只能填写数字，并且在3位数以内，保留一位小数。');
+            notify('danger', Translator.trans('题目分值只能填写数字，并且在3位数以内，保留一位小数'));
             $(this).focus();
             isOk = false;
         }
@@ -142,7 +142,7 @@ export default class QuestionManage{
         });
     });
 
-    let total = {name:Translator.trans('总计'), count:0, score:0};
+    let total = {name:Translator.trans(Translator.trans('总计')), count:0, score:0};
     $.each(stats, function(index, statsItem) {
         total.count += statsItem.count;
         total.score += statsItem.score;
