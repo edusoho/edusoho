@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use Biz\Task\Service\TaskService;
 
 class MeCourse extends AbstractResource
 {
@@ -26,7 +27,7 @@ class MeCourse extends AbstractResource
 
         $courses = $this->getCourseService()->findCoursesByIds(array_column($members, 'courseId'));
 
-        $courses = $this->appendLearnedNumAndOrder($courses, $members);
+        $courses = $this->appendAttrAndOrder($courses, $members);
 
         $total = $this->getCourseMemberService()->countMembers($conditions);
 
@@ -35,12 +36,17 @@ class MeCourse extends AbstractResource
         return $this->makePagingObject($courses, $total, $offset, $limit);
     }
 
-    private function appendLearnedNumAndOrder($courses, $members)
+    private function appendAttrAndOrder($courses, $members)
     {
         $orderedCourses = array();
         foreach ($members as $member) {
-            if (!empty($courses[$member['courseId']])) {
-                $courses[$member['courseId']]['learnedNum'] = $member['learnedNum'];
+            $courseId = $member['courseId'];
+            if (!empty($courses[$courseId])) {
+                $courses[$courseId]['learnedNum'] = $member['learnedNum'];
+                $courses[$courseId]['publishedTaskNum'] = $this->getTaskService()->countTasks(array(
+                    'status' => 'published',
+                    'courseId' => $courseId
+                ));
                 $orderedCourses[] = $courses[$member['courseId']];
             }
         }
@@ -62,5 +68,13 @@ class MeCourse extends AbstractResource
     private function getCourseService()
     {
         return $this->service('Course:CourseService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    private function getTaskService()
+    {
+        return $this->service('Task:TaskService');
     }
 }
