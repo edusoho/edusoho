@@ -19,7 +19,7 @@
               </a>
               <div class="course-body">
                 <h4 class="course-title"><a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
-                  {% if courseSet.serializeMode=='serialize' %}
+                  {% if courseSet.serializeMode=='serialized' %}
                     <span class="label label-success ">{{'更新中'|trans}}</span>
                   {% elseif courseSet.serializeMode=='finished' %}
                     <span class="label label-warning ">{{'已完结'|trans}}</span>
