@@ -26,6 +26,8 @@ interface TaskResultService
 
     public function findUserProgressingTaskResultByCourseId($courseId);
 
+    public function findUserFinishedTaskResultsByCourseId($courseId);
+
     public function getUserLatestFinishedTaskResultByCourseId($courseId);
 
     public function findUserTaskResultsByTaskIds($taskIds);

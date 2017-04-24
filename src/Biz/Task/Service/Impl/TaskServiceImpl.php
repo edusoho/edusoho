@@ -630,12 +630,29 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function getNextTask($taskId)
     {
         $task = $this->getTask($taskId);
-        //取得下一个发布的课时
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+
         $conditions = array(
             'courseId' => $task['courseId'],
             'status' => 'published',
-            'seq_GT' => $task['seq'],
         );
+        if ($course['learnMode'] == 'freeMode') {
+            $taskResults = $this->getTaskResultService()->findUserFinishedTaskResultsByCourseId($course['id']);
+            $finishTaskIds = ArrayToolkit::column($taskResults, 'courseTaskId');
+            $electiveTaskIds = $this->getStartElectiveTaskIds($course['id']);
+
+            $conditions['excludeIds'] = array_merge($finishTaskIds, $electiveTaskIds);
+        } else {
+            if ($task['isOptional']) {
+                $taskResults = $this->getTaskResultService()->findUserFinishedTaskResultsByCourseId($course['id']);
+                $finishTaskIds = ArrayToolkit::column($taskResults, 'courseTaskId');
+                $conditions['excludeIds'] = $finishTaskIds;
+            } else {
+                $conditions['seq_GT'] = $task['seq'];
+            }
+        }
+
+        //取得下一个发布的课时
         $nextTasks = $this->getTaskDao()->search($conditions, array('seq' => 'ASC'), 0, 1);
 
         if (empty($nextTasks)) {
@@ -768,42 +785,46 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     protected function getToLearnTaskWithFreeMode($courseId)
     {
-        $taskResults = $this->getTaskResultService()->findUserProgressingTaskResultByCourseId($courseId);
+        $finishedTasks = $this->getTaskResultService()->findUserFinishedTaskResultsByCourseId($courseId);
 
-        if (empty($taskResults)) {
-            $tasks = $this->getTaskDao()->findByCourseId($courseId);
-            $taskResults = $this->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
+        if (!empty($finishedTasks)) {
+            $taskIds = ArrayToolkit::column($finishedTasks, 'courseTaskId');
+            $electiveTaskIds = $this->getStartElectiveTaskIds($courseId);
+            $taskIds = array_merge($taskIds, $electiveTaskIds);
 
-            $finishedTaskIds = ArrayToolkit::column($taskResults, 'courseTaskId');
-
-            $tasks = array_filter(
-                $tasks,
-                function ($task) use ($finishedTaskIds) {
-                    return !in_array($task['id'], $finishedTaskIds);
-                }
-            );
-            if (empty($tasks)) {
-                //任务已全部完成
-                return array();
-            }
-            $toLearnTask = array_shift($tasks);
-        } else {
-            $latestTaskResult = array_shift($taskResults);
-            $latestLearnTask = $this->getTask($latestTaskResult['courseTaskId']); //获取最新学习未学完的课程
             $conditions = array(
-                'seq_GE' => $latestLearnTask['seq'],
                 'courseId' => $courseId,
                 'status' => 'published',
+                'excludeIds' => $taskIds,
             );
 
-            $tasks = $this->getTaskDao()->search($conditions, array('seq' => 'ASC'), 0, 2);
-            $toLearnTask = array_pop($tasks); //如果当正在学习的是最后一个，则取当前在学的任务
-            if (empty($toLearnTask)) {
-                $toLearnTask = $latestLearnTask;
-            }
+            $tasks = $this->searchTasks($conditions, array('seq' => 'ASC'), 0, 1);
+
+            return empty($tasks) ? array() : array_shift($tasks);
         }
 
-        return $toLearnTask;
+        $tasks = $this->findTasksByCourseId($courseId);
+
+        return array_shift($tasks);
+    }
+
+    protected function getStartElectiveTaskIds($courseId)
+    {
+        $userTaskResults = $this->getTaskResultService()->findUserProgressingTaskResultByCourseId($courseId);
+        $userTaskIds = ArrayToolkit::column($userTaskResults, 'courseTaskId');
+
+        $conditions = array(
+            'courseId' => $courseId,
+            'status' => 'published',
+            'isOptional' => 1,
+        );
+
+        $electiveTasks = $this->searchTasks($conditions, null, 0, PHP_INT_MAX);
+        $electiveTaskIds = ArrayToolkit::column($electiveTasks, 'id');
+
+        $electiveIds = array_intersect($userTaskIds, $electiveTaskIds);
+
+        return empty($electiveIds) ? array() : $electiveIds;
     }
 
     protected function getToLearnTasksWithLockMode($courseId)
