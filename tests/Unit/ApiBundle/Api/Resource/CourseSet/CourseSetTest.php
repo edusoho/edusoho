@@ -19,6 +19,8 @@ class CourseSetTest extends ApiTestCase
             'createdTime' => $createdTime,
             'recommendedTime' => $createdTime,
             'updatedTime' => $createdTime,
+            'maxOriginPrice' => 0,
+            'minOriginPrice' => 0,
         );
 
         $this->mockBiz('Course:CourseSetService', array(
