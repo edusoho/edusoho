@@ -80,7 +80,7 @@ class CourseMember extends AbstractResource
 
     private function freeJoin($course)
     {
-        if ($course['isFree'] == 0) {
+        if ($course['isFree'] == 0 || $course['price'] == 0) {
             return null;
         }
 
