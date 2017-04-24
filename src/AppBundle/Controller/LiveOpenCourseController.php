@@ -55,6 +55,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         return $sessionValue;
     }
 
+    
     protected function getRandomUserId(Request $request, $courseId, $lessonId)
     {
         $key = "live-open-course-user-id-{$courseId}-{$lessonId}";
