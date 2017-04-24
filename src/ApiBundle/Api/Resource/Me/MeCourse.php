@@ -19,29 +19,33 @@ class MeCourse extends AbstractResource
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $members = $this->getCourseMemberService()->searchMembers(
             $conditions,
-            array('lastViewTime' => 'DESC'),
+            array('lastLearnTime' => 'DESC'),
             $offset,
             $limit
         );
 
         $courses = $this->getCourseService()->findCoursesByIds(array_column($members, 'courseId'));
 
-        $this->appendLearnedNum($courses, $members);
+        $courses = $this->appendLearnedNumAndOrder($courses, $members);
 
         $total = $this->getCourseMemberService()->countMembers($conditions);
 
         $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
 
-        return $this->makePagingObject(array_values($courses), $total, $offset, $limit);
+        return $this->makePagingObject($courses, $total, $offset, $limit);
     }
 
-    private function appendLearnedNum(&$courses, $members)
+    private function appendLearnedNumAndOrder($courses, $members)
     {
+        $orderedCourses = array();
         foreach ($members as $member) {
             if (!empty($courses[$member['courseId']])) {
                 $courses[$member['courseId']]['learnedNum'] = $member['learnedNum'];
+                $orderedCourses[] = $courses[$member['courseId']];
             }
         }
+
+        return $orderedCourses;
     }
 
     /**
