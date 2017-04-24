@@ -4,6 +4,8 @@ class TestpaperResultUpdateOneMigrate extends AbstractMigrate
 {
     public function update($page)
     {
+        //$this->perPageCount = 5000;
+
         $nextPage = $this->updateTestpaperResult($page);
         if (!empty($nextPage)) {
             return $nextPage;
@@ -37,6 +39,7 @@ class TestpaperResultUpdateOneMigrate extends AbstractMigrate
 
             $this->getConnection()->exec($sql);
 
+            //用户再次做的记录里target为空
             $sql = "UPDATE testpaper_result_v8 SET
                 courseId = {$courseId},
                 courseSetId = {$courseId},
@@ -51,8 +54,5 @@ class TestpaperResultUpdateOneMigrate extends AbstractMigrate
         }
 
         return $nextPage;
-
-        $sql = "UPDATE testpaper_result_v8 AS tr, course_task as ct SET tr.lessonId = ct.activityId WHERE tr.lessonId = ct.id AND ct.type = 'testpaper' AND tr.type='testpaper'";
-        $this->getConnection()->exec($sql);
     }
 }
