@@ -193,17 +193,30 @@ class EduSohoUpgrade extends AbstractUpdater
         $stepCount = count($steps);
         $rate = ceil($index/$stepCount*100);
 
+        $themeSetting = $this->getSettingService()->get('theme');
+        if(empty($themeSetting['uri'])){
+            $theme = 'jianmo';
+        }else{
+            $theme = $themeSetting['uri'];
+        }
+
+        if(!in_array($theme, array('jianmo', 'autumn', 'default', 'default-b'))){
+            $message = "数据升级中，已升级{$rate}%...<br/>(为了保证平稳升级，升级后主题将会被默认设置为“简墨”主题，请注意及时切换回原来的主题)";
+        }else{
+            $message = "数据升级中，已升级{$rate}%...";
+        }
+
         if (!empty($nextPage)) {
             return array(
                 'index' => $this->setIndexAndPage($index, $nextPage),
-                'message' => "数据升级中，已升级{$rate}%...",
+                'message' => $message,
                 'progress' => 0,
             );
         }
 
         return array(
             'index' => $this->setIndexAndPage($index + 1, 1),
-            'message' => "数据升级中，已升级{$rate}%...",
+            'message' => $message,
             'progress' => 0,
         );
     }
